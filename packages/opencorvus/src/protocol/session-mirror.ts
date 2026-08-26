@@ -2,7 +2,7 @@ import { Bus } from "@/bus"
 import { PermissionAuthority } from "@/permission/authority"
 import { ProtocolStore } from "@/protocol/store"
 import { Question } from "@/question"
-import { Message, Session, SessionStatus } from "@/session"
+import { Message, Session } from "@/session"
 import { sessionRole, taskIDForSession } from "@/engine/task-session-lineage"
 import { originSourceFromMessageExtra, overlayMeta } from "@/orchestrator/protocol/message-bridge"
 import { Database, eq } from "@/storage/db"
@@ -177,23 +177,6 @@ export function mapSessionBusEvent(
   if (!sessionID) return
   if (sessionID !== input.sessionID) return
 
-  if (event.type === SessionStatus.Event.Status.type) {
-    const payload = stampSessionEventPayload(sessionID, props)
-    const status = props.status
-    const statusType =
-      status && typeof status === "object" && typeof (status as Record<string, unknown>).type === "string"
-        ? String((status as Record<string, unknown>).type)
-        : "unknown"
-    const reason =
-      status && typeof status === "object" && typeof (status as Record<string, unknown>).reason === "string"
-        ? String((status as Record<string, unknown>).reason)
-        : ""
-    return {
-      type: "agent.execution.lifecycle",
-      summary: reason ? `execution lifecycle: ${statusType} (${reason})` : `execution lifecycle: ${statusType}`,
-      payload,
-    }
-  }
   if (event.type === Session.Event.Diff.type) {
     const payload = stampSessionEventPayload(sessionID, props)
     return {
@@ -207,14 +190,6 @@ export function mapSessionBusEvent(
     return {
       type: "config.changed",
       summary: "Session config changed",
-      payload,
-    }
-  }
-  if (event.type === Session.Event.Error.type) {
-    const payload = stampSessionEventPayload(sessionID, props)
-    return {
-      type: "session.error",
-      summary: "Session error",
       payload,
     }
   }

@@ -378,9 +378,12 @@ export function listConversationAgentSessionsForSessionTree(input: {
                AND wtd_newer.id > wtd.id
             )
           )
-       )
+      )
       LEFT JOIN protocol_event pe
-        ON pe.session_id = s.id
+        ON (
+         (pe.aggregate_type = 'session' AND pe.aggregate_id = s.id)
+         OR pe.session_id = s.id
+       )
        AND pe.type = 'agent.execution.lifecycle'
        AND (
          wtd.id IS NULL
@@ -389,7 +392,10 @@ export function listConversationAgentSessionsForSessionTree(input: {
        )
        AND NOT EXISTS (
          SELECT 1 FROM protocol_event pe_newer
-         WHERE pe_newer.session_id = pe.session_id
+         WHERE (
+           (pe_newer.aggregate_type = 'session' AND pe_newer.aggregate_id = s.id)
+           OR pe_newer.session_id = s.id
+         )
            AND pe_newer.type = 'agent.execution.lifecycle'
            AND (
              wtd.id IS NULL
@@ -400,7 +406,7 @@ export function listConversationAgentSessionsForSessionTree(input: {
              pe_newer.emitted_at > pe.emitted_at
              OR (
                pe_newer.emitted_at = pe.emitted_at
-               AND pe_newer.seq > pe.seq
+               AND pe_newer.id > pe.id
              )
            )
        )

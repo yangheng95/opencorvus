@@ -28,6 +28,8 @@ A hint may be lost or duplicated. Reconciliation always rereads facts before exe
 
 `protocol_event` is the sole Task lifecycle authority. Task aggregate identity is stored once as `(aggregate_type='task', aggregate_id=task_id)`; `protocol_event.task_id` is `NULL` for Task aggregate events and is reserved for correlation from non-Task aggregates.
 
+Execution lifecycle and Session error projections originate once from their real Bus participant and persist through one protocol bridge. A Task-owned Session keeps the Task aggregate above with immutable `session_id` correlation; a Session with no explicit or durable Task lineage uses `(aggregate_type='session', aggregate_id=session_id)` and leaves `session_id` null by the aggregate identity rule. The public Session event stream subscribes to all Session-aggregate public events plus only `agent.execution.lifecycle` and `session.error` from Task aggregates, then applies immutable Project/Session-lineage filtering. Connection cutover replays at most the latest terminal lifecycle and latest error for each Session in the selected tree, using the same immutable event IDs as live delivery; its overlap set is discarded after buffered events flush. Cross-aggregate latest selection orders by `emitted_at` and globally comparable event ID, never aggregate-local sequence. The process-local Session mirror does not publish either durable event type, so reconnect and live delivery observe the same fact rather than parallel projections. Process-local physical lifecycle wins for every Session in the tree: after restart, historical `streaming` or `retry` cannot project a live owner, while a durable terminal may restore the last settled occurrence.
+
 The lifecycle event family is:
 
 ```text

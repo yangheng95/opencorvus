@@ -140,16 +140,27 @@ async function sessionConversationTailProjection(session: ActiveProjectSession, 
     sessionID,
     projectID: session.projectID,
   })
-  const rootLifecycle = resolveSessionLifecycleSnapshot(sessionID)
-  const hydratedAgentSessions = agentSessions.map((entry) =>
-    entry.sessionID === sessionID
-      ? {
-          ...entry,
-          latestStatus: rootLifecycle.status,
-          latestStatusEmittedAt: rootLifecycle.observedAt,
-        }
-      : entry,
-  )
+  // Physical ownership is process-local for every Session in the tree, not
+  // only the selected root. Historical streaming/retry cannot prove an owner
+  // survived restart; a durable terminal can still restore the last exact
+  // input occurrence after the process-local latch is gone.
+  const hydratedAgentSessions = agentSessions.map((entry) => {
+    const physical = resolveSessionLifecycleSnapshot(entry.sessionID)
+    const durableTerminal =
+      entry.latestStatus?.type === "terminal" ? SessionStatus.Info.parse(entry.latestStatus) : undefined
+    const lifecycle =
+      physical.status.type === "idle" && durableTerminal
+        ? {
+            status: durableTerminal,
+            observedAt: entry.latestStatusEmittedAt!,
+          }
+        : physical
+    return {
+      ...entry,
+      latestStatus: lifecycle.status,
+      latestStatusEmittedAt: lifecycle.observedAt,
+    }
+  })
   const view = projectConversationView({
     transcript: historyWindow.transcript,
     ledgerSessions: hydratedAgentSessions,
@@ -1076,6 +1087,7 @@ export const SessionRoutes = lazy(() =>
           let writes = Promise.resolve()
           let bufferingProtocolEvents = true
           const bufferedProtocolEvents: string[] = []
+          const seenProtocolEventIDs = new Set<string>()
           const writeData = (data: string) => {
             writes = writes
               .then(() => {
@@ -1088,28 +1100,39 @@ export const SessionRoutes = lazy(() =>
             return writes
           }
           const sessionTreeIDs = new Set([sessionID])
-          stopProtocol = ProtocolStore.subscribeEvents(
-            bind((event) => {
-              if (
-                !includeSessionTreeEvent(
-                  {
-                    sessionTreeIDs,
-                    selectedSessionID: sessionID,
-                    projectID: session.projectID,
-                  },
-                  event,
-                )
+          const receiveProtocolEvent = bind((event: Parameters<typeof protocolSessionEvent>[0]) => {
+            if (
+              !includeSessionTreeEvent(
+                {
+                  sessionTreeIDs,
+                  selectedSessionID: sessionID,
+                  projectID: session.projectID,
+                },
+                event,
               )
-                return
-              const data = JSON.stringify(protocolSessionEvent(event))
-              if (bufferingProtocolEvents) {
-                bufferedProtocolEvents.push(data)
-                return
-              }
-              void writeData(data)
-            }),
-            { aggregate: "session", types: SessionProtocolEventType.options },
-          )
+            )
+              return
+            const data = JSON.stringify(protocolSessionEvent(event))
+            if (bufferingProtocolEvents) {
+              if (seenProtocolEventIDs.has(event.id)) return
+              seenProtocolEventIDs.add(event.id)
+              bufferedProtocolEvents.push(data)
+              return
+            }
+            void writeData(data)
+          })
+          const stopSessionProtocol = ProtocolStore.subscribeEvents(receiveProtocolEvent, {
+            aggregate: "session",
+            types: SessionProtocolEventType.options,
+          })
+          const stopTaskLifecycleProtocol = ProtocolStore.subscribeEvents(receiveProtocolEvent, {
+            aggregate: "task",
+            types: ["agent.execution.lifecycle", "session.error"],
+          })
+          stopProtocol = () => {
+            stopSessionProtocol()
+            stopTaskLifecycleProtocol()
+          }
           // The message and part tables are the canonical Session transcript.
           // Subscribe first, then read their bounded tail: a message committed
           // before this subscription is in the snapshot, while one committed
@@ -1158,10 +1181,24 @@ export const SessionRoutes = lazy(() =>
               }),
             ),
           )
+          const reconnectEvents = [...sessionTreeIDs]
+            .flatMap((treeSessionID) => {
+              const lifecycle = ProtocolStore.latestSessionEvent(treeSessionID, "agent.execution.lifecycle")
+              const status = lifecycle?.payload?.status
+              const terminalLifecycle =
+                status && typeof status === "object" && (status as { type?: unknown }).type === "terminal"
+                  ? lifecycle
+                  : undefined
+              const error = ProtocolStore.latestSessionEvent(treeSessionID, "session.error")
+              return [terminalLifecycle, error].filter((event) => event !== undefined)
+            })
+            .sort((left, right) => left.time.emitted - right.time.emitted || left.id.localeCompare(right.id))
+          for (const event of reconnectEvents) receiveProtocolEvent(event)
           for (const event of pendingQuestionEvents) await writeData(JSON.stringify(event))
           for (const event of pendingPermissionEvents) await writeData(JSON.stringify(event))
           bufferingProtocolEvents = false
           const releaseWrites = bufferedProtocolEvents.splice(0).map(writeData)
+          seenProtocolEventIDs.clear()
           if (releaseWrites.length > 0) await releaseWrites[releaseWrites.length - 1]
           if (closed) {
             await writes

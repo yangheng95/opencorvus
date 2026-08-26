@@ -686,7 +686,8 @@ function durableBridgePayload(input: Record<string, unknown>): Record<string, un
 }
 
 function appendBridgePersistFailure(input: {
-  taskID: string
+  aggregate: "task" | "session"
+  aggregateID: string
   sessionID: string
   type: string
   error: string
@@ -696,10 +697,10 @@ function appendBridgePersistFailure(input: {
   return ProtocolStore.appendEvent({
     kind: "event",
     type: "session.bridge.persist_failed",
-    aggregate: "task",
-    aggregate_id: input.taskID,
+    aggregate: input.aggregate,
+    aggregate_id: input.aggregateID,
     task_id: null,
-    session_id: input.sessionID,
+    session_id: input.aggregate === "task" ? input.sessionID : null,
     interaction_id: null,
     stream_id: null,
     source: "session.bridge",
@@ -719,7 +720,8 @@ function appendBridgePersistFailure(input: {
 async function appendBridgeEvent(
   input: {
     type: string
-    taskID: string
+    aggregate: "task" | "session"
+    aggregateID: string
     sessionID: string
     orderKey?: string
     payload: Record<string, unknown>
@@ -731,10 +733,10 @@ async function appendBridgeEvent(
     await ProtocolStore.appendEvent({
       kind: "event",
       type: input.type,
-      aggregate: "task",
-      aggregate_id: input.taskID,
+      aggregate: input.aggregate,
+      aggregate_id: input.aggregateID,
       task_id: null,
-      session_id: input.sessionID,
+      session_id: input.aggregate === "task" ? input.sessionID : null,
       interaction_id: null,
       stream_id: null,
       source: "session.bridge",
@@ -751,7 +753,8 @@ async function appendBridgeEvent(
     log.warn("bridge: session event persist failed", { type: input.type, error: detail })
     try {
       await appendBridgePersistFailure({
-        taskID: input.taskID,
+        aggregate: input.aggregate,
+        aggregateID: input.aggregateID,
         sessionID: input.sessionID,
         type: input.type,
         error: detail,
@@ -785,18 +788,15 @@ async function appendBridgePreparationFailure(input: {
     })
     return
   }
-  const taskID = taskIDForSession(sessionID)
-  if (!taskID) {
-    log.warn("bridge: cannot persist bridge preparation failure for non-task-owned session", {
-      type: input.type,
-      sessionID,
-      error: input.error,
-    })
-    return
-  }
+  const lineageTaskID = taskIDForSession(sessionID)
+  const explicitTaskID = typeof input.properties.taskID === "string" ? input.properties.taskID : undefined
+  // A persisted lineage is authoritative for diagnostics too; a conflicting
+  // caller value is the preparation failure and must not redirect its receipt.
+  const taskID = lineageTaskID ?? explicitTaskID
   try {
     await appendBridgePersistFailure({
-      taskID,
+      aggregate: taskID ? "task" : "session",
+      aggregateID: taskID ?? sessionID,
       sessionID,
       type: input.type,
       error: input.error,
@@ -862,19 +862,20 @@ function bridgeDiagnosticPropertiesForType(
  * MB by re-snapshotting the full message on every update.
  */
 /**
- * Push one occurrence-bound execution lifecycle event through Server-Sent Events (SSE)
- * AND persist it in `protocol_event`. Unlike message events, lifecycle events
+ * Persist one occurrence-bound execution lifecycle event in `protocol_event`
+ * and dispatch it through ProtocolStore's Server-Sent Events (SSE) subscribers.
+ * Unlike message events, lifecycle events
  * are tiny (sessionID + status enum + optional reason/error) and benefit from
  * persistence: an overlay reconnect replays from `protocol_event`, so cards
  * reload with their last terminal status instead of falling back to the
  * default `running` and re-spinning forever.
  *
- * Single source of truth for session lifecycle, per
- * `specs/current/architecture/07-panel-reactivity.md`. Physical prompt
- * ownership remains in SessionPromptState and is never inferred from these
- * historical lifecycle facts.
+ * Task-owned Sessions retain the Task aggregate that scheduling consumes;
+ * every other Session uses its own aggregate. This is the single durable
+ * projection owner for either shape. Physical prompt ownership remains in
+ * SessionPromptState and is never inferred from these historical facts.
  */
-export async function persistTaskSessionLifecycle(type: string, properties: Record<string, unknown>) {
+async function persistSessionLifecycle(type: string, properties: Record<string, unknown>) {
   let event!: Parameters<typeof appendBridgeEvent>[0]
   try {
     const sessionID = sessionFromProperties(properties)
@@ -891,10 +892,16 @@ export async function persistTaskSessionLifecycle(type: string, properties: Reco
       )
     }
     const taskID = explicitTaskID ?? lineageTaskID
-    if (!taskID) return
     const orderKey = executionLifecycleOrderKey(sessionID, inputMessageID)
     const enriched = enrichLifecycleProperties(properties, sessionID, { orderKey })
-    event = { type, taskID, sessionID, orderKey, payload: enriched }
+    event = {
+      type,
+      aggregate: taskID ? "task" : "session",
+      aggregateID: taskID ?? sessionID,
+      sessionID,
+      orderKey,
+      payload: enriched,
+    }
   } catch (err) {
     const error = err instanceof Error ? err.message : String(err)
     await appendBridgePreparationFailure({ type, properties, error })
@@ -904,62 +911,18 @@ export async function persistTaskSessionLifecycle(type: string, properties: Reco
   await appendBridgeEvent(event, { required: true })
 }
 
-async function persistPublishedTaskSessionLifecycle(type: string, properties: Record<string, unknown>) {
+async function persistPublishedSessionLifecycle(type: string, properties: Record<string, unknown>) {
   const sessionID = sessionFromProperties(properties)
   if (!sessionID) throw new Error(`published execution lifecycle ${type} has no session identity`)
   const hostDirectory = hostProjectDirectoryForSession(sessionID)
   if (Project.samePath(Instance.directory, hostDirectory)) {
-    await persistTaskSessionLifecycle(type, properties)
+    await persistSessionLifecycle(type, properties)
     return
   }
   await enqueueCrossInstanceBridge(type, properties, hostDirectory, Instance.directory, async (props) => {
-    await persistTaskSessionLifecycle(type, props)
+    await persistSessionLifecycle(type, props)
   })
   await awaitTaskMessageProtocolBridgeIdle()
-}
-
-/**
- * Persist one task-owned Session lifecycle fact as part of the caller's
- * active database transaction. This is the exact synchronous counterpart of
- * `persistTaskSessionLifecycle`; preparation failures are allowed to abort the
- * surrounding unit of work instead of being converted into a later diagnostic.
- */
-export function persistTaskSessionLifecycleInTransaction(type: string, properties: Record<string, unknown>) {
-  const sessionID = sessionFromProperties(properties)
-  if (!sessionID) throw new Error(`session lifecycle ${type} has no session identity`)
-  if (typeof properties.inputMessageID !== "string" || properties.inputMessageID.length === 0) {
-    throw new Error(`execution lifecycle ${sessionID} has no input message identity`)
-  }
-  const inputMessageID = properties.inputMessageID
-  const lineageTaskID = taskIDForSession(sessionID)
-  const explicitTaskID = typeof properties.taskID === "string" ? properties.taskID : undefined
-  if (explicitTaskID && lineageTaskID && explicitTaskID !== lineageTaskID) {
-    throw new Error(
-      `session lifecycle ${sessionID} explicit task ${explicitTaskID} conflicts with lineage task ${lineageTaskID}`,
-    )
-  }
-  const taskID = explicitTaskID ?? lineageTaskID
-  if (!taskID) throw new Error(`session lifecycle ${sessionID} has no task lineage`)
-  const orderKey = executionLifecycleOrderKey(sessionID, inputMessageID)
-  const payload = enrichLifecycleProperties(properties, sessionID, { orderKey })
-  return ProtocolStore.appendEventInTransaction({
-    kind: "event",
-    type,
-    aggregate: "task",
-    aggregate_id: taskID,
-    task_id: null,
-    session_id: sessionID,
-    interaction_id: null,
-    stream_id: null,
-    source: "session.bridge",
-    target: null,
-    correlation_id: null,
-    causation_id: null,
-    reply_to: null,
-    emitted_at: Date.now(),
-    order_key: orderKey,
-    payload: durableBridgePayload(payload),
-  })
 }
 
 function sessionErrorSummary(properties: Record<string, unknown>): string {
@@ -986,12 +949,12 @@ async function bridgeSessionError(type: string, properties: Record<string, unkno
     const sessionID = sessionFromProperties(properties)
     if (!sessionID) return
     const taskID = taskIDForSession(sessionID)
-    if (!taskID) return
     const orderKey = sessionLifecycleOrderKey(sessionID)
     const enriched = enrichSessionErrorProperties(properties, sessionID, { orderKey })
     event = {
       type,
-      taskID,
+      aggregate: taskID ? "task" : "session",
+      aggregateID: taskID ?? sessionID,
       sessionID,
       orderKey,
       payload: {
@@ -1237,7 +1200,7 @@ export function ensureTaskMessageProtocolBridge() {
       await bridgeTodoUpdated(event.properties)
     })
     Bus.subscribe(SessionStatus.Event.Status, async (event) => {
-      await persistPublishedTaskSessionLifecycle(SessionStatus.Event.Status.type, event.properties)
+      await persistPublishedSessionLifecycle(SessionStatus.Event.Status.type, event.properties)
     })
     Bus.subscribe(Bus.InstanceDisposed, (event) => {
       initializedLocalDirectories.delete(event.properties.directory)

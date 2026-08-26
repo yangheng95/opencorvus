@@ -8,11 +8,14 @@ import {
   SessionStreamEvent,
 } from "@/engine/model"
 import { Identifier } from "@/id/id"
+import { listConversationAgentSessionsForSessionTree } from "@/orchestrator/task-event"
 import { Instance } from "@/project/instance"
 import { SchedulerMessagePayload } from "@/protocol/schema"
 import { ProtocolStore } from "@/protocol/store"
 import { Server } from "@/server/server"
-import { Session } from "@/session"
+import { Message, Session, SessionStatus } from "@/session"
+import { publishSessionStatus } from "@/session/status-publication"
+import { executionLifecycleOrderKey, sessionLifecycleOrderKey } from "@/session/status"
 import { SessionEventStreamTestHooks } from "@/server/routes/session"
 import { Database } from "@/storage/db"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
@@ -206,6 +209,345 @@ test("Session stream projects a non-message Session diff through Bus and Protoco
           channel: "assistant",
           orderKey: expect.any(String),
         },
+      })
+    },
+  })
+}, 30_000)
+
+test("Session stream receives durable lifecycle and error facts for a non-Task Session", async () => {
+  await using project = await memoryProject()
+  await Instance.provide({
+    directory: project.path,
+    fn: async () => {
+      const work = await createRightSidebarConversationSession("work")
+      const input = await Session.updateMessage({
+        id: Identifier.ascending("message"),
+        sessionID: work.id,
+        role: "user",
+        author: "user",
+        time: { created: Date.now() },
+        agent: "work",
+        model: { providerID: "test", modelID: "test" },
+        extra: {
+          surface: "right-sidebar",
+          source: RIGHT_SIDEBAR_CONVERSATION_SOURCE,
+          experience: "work",
+        },
+      })
+      await Session.updatePart({
+        id: Identifier.ascending("part"),
+        sessionID: work.id,
+        messageID: input.id,
+        type: "text",
+        text: "Reconnect this settled non-Task Session.",
+      })
+      const abort = new AbortController()
+      const response = await Server.App().request(`/session/${work.id}/events`, {
+        headers: { "x-opencorvus-directory": project.path },
+        signal: abort.signal,
+      })
+      expect(response.status).toBe(200)
+      const events = sessionEventReader(response)
+      await events.next("session.connected")
+
+      await publishSessionStatus(work, { type: "terminal", reason: "completed" }, { inputMessageID: input.id })
+      const lifecycle = await events.next("agent.execution.lifecycle")
+      const durable = ProtocolStore.latestSessionOccurrenceEvent(work.id, "agent.execution.lifecycle", input.id)
+
+      await Bus.publish(Session.Event.Error, {
+        sessionID: work.id,
+        orderKey: sessionLifecycleOrderKey(work.id),
+        error: Message.fromError(new Error("non-Task provider incident"), { providerID: "test" }),
+      })
+      const streamedError = await events.next("session.error")
+      const durableError = ProtocolStore.latestSessionEvent(work.id, "session.error")
+      await events.cancel()
+      abort.abort()
+
+      expect({
+        streamed: SessionProtocolEvent.parse(lifecycle),
+        durable: durable && {
+          id: durable.id,
+          aggregate: durable.aggregate,
+          aggregateID: durable.aggregateID,
+          taskID: durable.taskID,
+          sessionID: durable.sessionID,
+          payload: durable.payload,
+        },
+        streamedError: SessionProtocolEvent.parse(streamedError),
+        durableError: durableError && {
+          id: durableError.id,
+          aggregate: durableError.aggregate,
+          aggregateID: durableError.aggregateID,
+          taskID: durableError.taskID,
+          sessionID: durableError.sessionID,
+          payload: durableError.payload,
+        },
+      }).toEqual({
+        streamed: expect.objectContaining({
+          event_id: durable?.id,
+          session_id: work.id,
+          type: "agent.execution.lifecycle",
+          payload: expect.objectContaining({
+            inputMessageID: input.id,
+            status: { type: "terminal", reason: "completed" },
+            channel: "assistant",
+          }),
+        }),
+        durable: {
+          id: durable?.id,
+          aggregate: "session",
+          aggregateID: work.id,
+          taskID: undefined,
+          sessionID: work.id,
+          payload: expect.objectContaining({
+            inputMessageID: input.id,
+            status: { type: "terminal", reason: "completed" },
+            channel: "assistant",
+          }),
+        },
+        streamedError: expect.objectContaining({
+          event_id: durableError?.id,
+          session_id: work.id,
+          type: "session.error",
+          payload: expect.objectContaining({
+            channel: "assistant",
+            summary: "Error: non-Task provider incident",
+          }),
+        }),
+        durableError: {
+          id: durableError?.id,
+          aggregate: "session",
+          aggregateID: work.id,
+          taskID: undefined,
+          sessionID: work.id,
+          payload: expect.objectContaining({
+            channel: "assistant",
+            summary: "Error: non-Task provider incident",
+          }),
+        },
+      })
+
+      const createChildOccurrence = async (title: string, text: string) => {
+        const child = await Session.create({ kind: "assistant", parentID: work.id, title })
+        const childInput = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: child.id,
+          role: "user",
+          author: "user",
+          time: { created: Date.now() },
+          agent: "assistant",
+          model: { providerID: "test", modelID: "test" },
+          extra: {
+            surface: "right-sidebar",
+            source: RIGHT_SIDEBAR_CONVERSATION_SOURCE,
+            experience: "work",
+          },
+        })
+        await Session.updatePart({
+          id: Identifier.ascending("part"),
+          sessionID: child.id,
+          messageID: childInput.id,
+          type: "text",
+          text,
+        })
+        return { child, input: childInput }
+      }
+      const historicalChild = await createChildOccurrence(
+        "Historical streaming child",
+        "This process-local stream will be released.",
+      )
+      const settledChild = await createChildOccurrence(
+        "Durably settled child",
+        "This terminal occurrence should survive reconnect.",
+      )
+      await publishSessionStatus(
+        historicalChild.child,
+        { type: "streaming" },
+        { inputMessageID: historicalChild.input.id },
+      )
+      await publishSessionStatus(
+        settledChild.child,
+        { type: "terminal", reason: "completed" },
+        { inputMessageID: settledChild.input.id },
+      )
+
+      // Model a new backend process: no process-local execution latch exists
+      // before the public stream reconnects, while the database remains exact.
+      SessionStatus.release(work.id)
+      SessionStatus.release(historicalChild.child.id)
+      SessionStatus.release(settledChild.child.id)
+      expect(SessionStatus.get(work.id)).toEqual({ type: "idle" })
+      expect(
+        listConversationAgentSessionsForSessionTree({
+          sessionID: work.id,
+          projectID: work.projectID,
+        }).find((entry) => entry.sessionID === work.id),
+      ).toMatchObject({
+        latestStatus: { type: "terminal", reason: "completed" },
+        latestInputMessageID: input.id,
+      })
+      const hydrationResponse = await Server.App().request(`/session/${work.id}/conversation`, {
+        headers: { "x-opencorvus-directory": project.path },
+      })
+      expect(hydrationResponse.status).toBe(200)
+      const hydration = await hydrationResponse.json()
+      const reconnectAbort = new AbortController()
+      const reconnectResponse = await Server.App().request(`/session/${work.id}/events`, {
+        headers: { "x-opencorvus-directory": project.path },
+        signal: reconnectAbort.signal,
+      })
+      expect(reconnectResponse.status).toBe(200)
+      const reconnectEvents = sessionEventReader(reconnectResponse)
+      const reconnected = await reconnectEvents.next("session.connected")
+      const replayedLifecycle = await reconnectEvents.next("agent.execution.lifecycle")
+      const replayedError = await reconnectEvents.next("session.error")
+      await reconnectEvents.cancel()
+      reconnectAbort.abort()
+      expect({
+        connectedSessionIDs: reconnected.payload.conversationSnapshot.view.sessions.map(
+          (entry: { sessionID?: string }) => entry.sessionID,
+        ),
+        rootProjection: hydration.agentView.sessions.find(
+          (entry: { sessionID?: string }) => entry.sessionID === work.id,
+        ),
+        historicalChildProjection: hydration.agentView.sessions.find(
+          (entry: { sessionID?: string }) => entry.sessionID === historicalChild.child.id,
+        ),
+        settledChildProjection: hydration.agentView.sessions.find(
+          (entry: { sessionID?: string }) => entry.sessionID === settledChild.child.id,
+        ),
+        replayedLifecycleID: replayedLifecycle.event_id,
+        replayedErrorID: replayedError.event_id,
+      }).toEqual({
+        connectedSessionIDs: expect.arrayContaining([work.id, historicalChild.child.id, settledChild.child.id]),
+        rootProjection: expect.objectContaining({
+          sessionID: work.id,
+          status: "completed",
+        }),
+        historicalChildProjection: expect.objectContaining({
+          sessionID: historicalChild.child.id,
+          status: "idle",
+        }),
+        settledChildProjection: expect.objectContaining({
+          sessionID: settledChild.child.id,
+          status: "completed",
+        }),
+        replayedLifecycleID: durable?.id,
+        replayedErrorID: durableError?.id,
+      })
+    },
+  })
+}, 30_000)
+
+test("Session reconnect selects the globally newest lifecycle across Session and Task aggregates", async () => {
+  await using project = await memoryProject()
+  await Instance.provide({
+    directory: project.path,
+    fn: async () => {
+      const work = await createRightSidebarConversationSession("work")
+      const input = await Session.updateMessage({
+        id: Identifier.ascending("message"),
+        sessionID: work.id,
+        role: "user",
+        author: "user",
+        time: { created: Date.now() },
+        agent: "work",
+        model: { providerID: "test", modelID: "test" },
+        extra: {
+          surface: "right-sidebar",
+          source: RIGHT_SIDEBAR_CONVERSATION_SOURCE,
+          experience: "work",
+        },
+      })
+      await Session.updatePart({
+        id: Identifier.ascending("part"),
+        sessionID: work.id,
+        messageID: input.id,
+        type: "text",
+        text: "Select one globally ordered lifecycle fact.",
+      })
+      const emittedAt = Date.now()
+      const olderID = Identifier.ascending("protocol_event")
+      const newerID = Identifier.ascending("protocol_event")
+      const orderKey = executionLifecycleOrderKey(work.id, input.id)
+      await ProtocolStore.appendEvent({
+        id: olderID,
+        kind: "event",
+        type: "agent.execution.lifecycle",
+        aggregate: "session",
+        aggregate_id: work.id,
+        session_id: null,
+        source: "test.session-lifecycle-order",
+        emitted_at: emittedAt,
+        order_key: orderKey,
+        seq: 9,
+        payload: { inputMessageID: input.id, status: { type: "streaming" } },
+      })
+      await ProtocolStore.appendEvent({
+        id: newerID,
+        kind: "event",
+        type: "agent.execution.lifecycle",
+        aggregate: "task",
+        aggregate_id: Identifier.ascending("task"),
+        session_id: work.id,
+        source: "test.session-lifecycle-order",
+        emitted_at: emittedAt,
+        order_key: orderKey,
+        seq: 1,
+        payload: { inputMessageID: input.id, status: { type: "terminal", reason: "completed" } },
+      })
+
+      const latest = ProtocolStore.latestSessionEvent(work.id, "agent.execution.lifecycle")
+      const latestOccurrence = ProtocolStore.latestSessionOccurrenceEvent(
+        work.id,
+        "agent.execution.lifecycle",
+        input.id,
+      )
+      const ledger = listConversationAgentSessionsForSessionTree({
+        sessionID: work.id,
+        projectID: work.projectID,
+      }).find((entry) => entry.sessionID === work.id)
+      const hydrationResponse = await Server.App().request(`/session/${work.id}/conversation`, {
+        headers: { "x-opencorvus-directory": project.path },
+      })
+      expect(hydrationResponse.status).toBe(200)
+      const hydration = await hydrationResponse.json()
+      const abort = new AbortController()
+      const response = await Server.App().request(`/session/${work.id}/events`, {
+        headers: { "x-opencorvus-directory": project.path },
+        signal: abort.signal,
+      })
+      expect(response.status).toBe(200)
+      const events = sessionEventReader(response)
+      const connected = await events.next("session.connected")
+      const replayed = await events.next("agent.execution.lifecycle")
+      await events.cancel()
+      abort.abort()
+
+      expect({
+        idOrder: newerID > olderID,
+        latestID: latest?.id,
+        latestOccurrenceID: latestOccurrence?.id,
+        ledger,
+        connectedSessionIDs: connected.payload.conversationSnapshot.view.sessions.map(
+          (entry: { sessionID?: string }) => entry.sessionID,
+        ),
+        lifecycleProjection: hydration.agentView.sessions.find(
+          (entry: { sessionID?: string }) => entry.sessionID === work.id,
+        ),
+        replayedID: replayed.event_id,
+      }).toEqual({
+        idOrder: true,
+        latestID: newerID,
+        latestOccurrenceID: newerID,
+        ledger: expect.objectContaining({
+          latestStatus: { type: "terminal", reason: "completed" },
+          latestInputMessageID: input.id,
+        }),
+        connectedSessionIDs: [work.id],
+        lifecycleProjection: expect.objectContaining({ sessionID: work.id, status: "completed" }),
+        replayedID: newerID,
       })
     },
   })
