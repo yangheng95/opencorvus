@@ -1150,18 +1150,12 @@ export const shutdownBrowserSessions = async () => {
   browserConnection = null
   browserLaunch = null
 }
-process.on("exit", () => {
-  void browserConnection?.close().catch(() => {})
-})
-process.on("SIGINT", async () => {
-  await shutdownBrowserSessions().catch((error) => {
-    log(`SIGINT shutdown failed  ${error instanceof Error ? error.message : String(error)}`)
-  })
-  process.exit(0)
-})
-process.on("SIGTERM", async () => {
-  await shutdownBrowserSessions().catch((error) => {
-    log(`SIGTERM shutdown failed  ${error instanceof Error ? error.message : String(error)}`)
-  })
-  process.exit(0)
-})
+// This module owns Browser resources, never process termination. Its
+// signal handlers used to run `shutdownBrowserSessions()` and then
+// `process.exit(0)` directly, which killed the process while the transport,
+// the MCP server and the monitor listener were still closing — and reported
+// success no matter what those had done. The composition root that owns the
+// process (`serveStdio`/`serveHttp`) now installs the only signal handlers
+// and awaits one cleanup receipt, of which this function is a part. The
+// former `process.on("exit")` hook is gone with them: an exit handler cannot
+// await an asynchronous close, so it never cleaned anything up.
