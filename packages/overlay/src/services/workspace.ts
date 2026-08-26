@@ -218,7 +218,6 @@ export function clearProjectScopeData(): void {
     specPreview: "",
     taskSequence: 0,
     boardEtag: "",
-    boardSyncPending: false,
     boardQueued: false,
     snapshotVersion: "",
     tasksError: "",
@@ -552,7 +551,6 @@ function clearSelectedWorkItem(): void {
     taskSwitching: false,
     taskSequence: 0,
     boardEtag: "",
-    boardSyncPending: false,
     boardQueued: false,
     snapshotVersion: "",
   })

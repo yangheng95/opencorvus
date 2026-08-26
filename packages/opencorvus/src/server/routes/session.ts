@@ -56,6 +56,8 @@ import {
   SessionConversationHydration,
   SessionConnectedEvent,
   SessionEvent,
+  SessionProtocolEvent,
+  SessionProtocolEventType,
   SessionStreamEvent,
 } from "@/engine/model"
 import {
@@ -478,7 +480,7 @@ export function protocolSessionEvent(event: ReturnType<typeof ProtocolStore.list
       "session",
     )
   }
-  return {
+  return SessionProtocolEvent.parse({
     event_id: event.id,
     session_id: event.sessionID,
     orderKey,
@@ -489,10 +491,10 @@ export function protocolSessionEvent(event: ReturnType<typeof ProtocolStore.list
     summary: event.summary,
     payload,
     ...(notify ? { notify } : {}),
-  }
+  })
 }
 
-function pendingQuestionSessionEvent(request: Question.Request): z.output<typeof SessionEvent> {
+function pendingQuestionSessionEvent(request: Question.Request): z.output<typeof SessionProtocolEvent> {
   const orderKey = timelineOrderKey({
     domain: "interaction",
     time: request.timeCreated,
@@ -508,7 +510,7 @@ function pendingQuestionSessionEvent(request: Question.Request): z.output<typeof
   if (!mapped?.summary || !mapped.payload) {
     throw new Error(`pendingQuestionSessionEvent: failed to map pending question ${request.id}`)
   }
-  return {
+  return SessionProtocolEvent.parse({
     event_id: `pending-question-${request.id}`,
     session_id: request.sessionID,
     orderKey,
@@ -518,17 +520,19 @@ function pendingQuestionSessionEvent(request: Question.Request): z.output<typeof
     sequence: 0,
     summary: mapped.summary,
     payload: mapped.payload,
-  }
+  })
 }
 
-function pendingPermissionProtocolSessionEvent(request: PermissionAuthority.Request): z.output<typeof SessionEvent> {
+function pendingPermissionProtocolSessionEvent(
+  request: PermissionAuthority.Request,
+): z.output<typeof SessionProtocolEvent> {
   const orderKey = timelineOrderKey({
     domain: "interaction",
     time: request.timeCreated,
     id: request.id,
   })
   const mapped = pendingPermissionSessionEvent(request)
-  return {
+  return SessionProtocolEvent.parse({
     event_id: `pending-permission-${request.id}`,
     session_id: request.sessionID,
     orderKey,
@@ -538,7 +542,7 @@ function pendingPermissionProtocolSessionEvent(request: PermissionAuthority.Requ
     sequence: 0,
     summary: mapped.summary!,
     payload: { ...mapped.payload!, orderKey },
-  }
+  })
 }
 
 const SessionConfigResponse = z
@@ -1104,6 +1108,7 @@ export const SessionRoutes = lazy(() =>
               }
               void writeData(data)
             }),
+            { aggregate: "session", types: SessionProtocolEventType.options },
           )
           // The message and part tables are the canonical Session transcript.
           // Subscribe first, then read their bounded tail: a message committed
@@ -1167,21 +1172,23 @@ export const SessionRoutes = lazy(() =>
               const now = Date.now()
               const eventID = `session-heartbeat-${now}`
               void writeData(
-                JSON.stringify({
-                  event_id: eventID,
-                  session_id: sessionID,
-                  orderKey: timelineOrderKey({
-                    domain: "session",
-                    time: session.time.created,
-                    id: sessionID,
+                JSON.stringify(
+                  SessionProtocolEvent.parse({
+                    event_id: eventID,
+                    session_id: sessionID,
+                    orderKey: timelineOrderKey({
+                      domain: "session",
+                      time: session.time.created,
+                      id: sessionID,
+                    }),
+                    type: "session.heartbeat",
+                    emittedAt: now,
+                    timestamp: now,
+                    sequence: 0,
+                    summary: "Session event stream heartbeat",
+                    payload: { sessionID },
                   }),
-                  type: "session.heartbeat",
-                  emittedAt: now,
-                  timestamp: now,
-                  sequence: 0,
-                  summary: "Session event stream heartbeat",
-                  payload: { sessionID },
-                }),
+                ),
               )
             }),
             10_000,

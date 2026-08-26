@@ -1054,7 +1054,35 @@ export const SessionConnectedEvent = SessionEventEnvelope.extend({
   }),
 }).meta({ ref: "SessionConnectedEvent" })
 
-export const SessionStreamEvent = z.union([SessionConnectedEvent, SessionEvent]).meta({ ref: "SessionStreamEvent" })
+export const SessionProtocolEventType = z.enum([
+  "agent.execution.lifecycle",
+  "config.changed",
+  "message.updated",
+  "message.moved",
+  "message.removed",
+  "message.part.updated",
+  "message.part.delta",
+  "message.part.removed",
+  "permission.asked",
+  "permission.replied",
+  "question.asked",
+  "question.replied",
+  "question.rejected",
+  "question.expired",
+  "question.abandoned",
+  "session.diff",
+  "session.error",
+  "session.heartbeat",
+])
+
+export const SessionProtocolEvent = SessionEventEnvelope.extend({
+  type: SessionProtocolEventType,
+  payload: z.record(z.string(), z.any()),
+}).meta({ ref: "SessionProtocolEvent" })
+
+export const SessionStreamEvent = z
+  .discriminatedUnion("type", [SessionConnectedEvent, SessionProtocolEvent])
+  .meta({ ref: "SessionStreamEvent" })
 
 export const SessionConversationHydration = z.object({
   board: SessionBoardEnvelope,

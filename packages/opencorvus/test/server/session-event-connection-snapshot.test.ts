@@ -1,11 +1,20 @@
 import { afterEach, expect, test } from "bun:test"
+import { Bus } from "@/bus"
 import { createRightSidebarConversationSession, RIGHT_SIDEBAR_CONVERSATION_SOURCE } from "@/chat/session"
-import { SessionConnectedEvent, SessionConversationConnectionSnapshot } from "@/engine/model"
+import {
+  SessionConnectedEvent,
+  SessionConversationConnectionSnapshot,
+  SessionProtocolEvent,
+  SessionStreamEvent,
+} from "@/engine/model"
 import { Identifier } from "@/id/id"
 import { Instance } from "@/project/instance"
+import { SchedulerMessagePayload } from "@/protocol/schema"
+import { ProtocolStore } from "@/protocol/store"
 import { Server } from "@/server/server"
 import { Session } from "@/session"
 import { SessionEventStreamTestHooks } from "@/server/routes/session"
+import { Database } from "@/storage/db"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
 
 afterEach(async () => {
@@ -55,6 +64,152 @@ function sessionEventReader(response: Response) {
     cancel: () => reader.cancel(),
   }
 }
+
+test("Session stream schema classifies connection snapshots and ordinary protocol events by type", () => {
+  const envelope = {
+    event_id: "event-1",
+    session_id: "session-1",
+    orderKey: "session:0000000000001:event-1",
+    emittedAt: 1,
+    timestamp: 1,
+    sequence: 0,
+    summary: "schema classification",
+  }
+  const connected = SessionStreamEvent.parse({
+    ...envelope,
+    type: "session.connected",
+    payload: {
+      sessionID: "session-1",
+      conversationSnapshot: {
+        transcript: [],
+        view: { topLevelSessionIDs: [], sessions: [], messages: [] },
+        history: {
+          oldestTimestamp: null,
+          oldestOrderKey: null,
+          oldestMessageID: null,
+          hasMore: false,
+          limit: 80,
+        },
+      },
+    },
+  })
+  const heartbeat = SessionStreamEvent.parse({
+    ...envelope,
+    event_id: "event-2",
+    type: "session.heartbeat",
+    payload: { sessionID: "session-1" },
+  })
+
+  expect({
+    connectedType: connected.type,
+    connectedTranscriptLength:
+      connected.type === "session.connected" ? connected.payload.conversationSnapshot.transcript.length : undefined,
+    protocolType: heartbeat.type,
+    protocolSchema: SessionProtocolEvent.safeParse(heartbeat).success,
+  }).toEqual({
+    connectedType: "session.connected",
+    connectedTranscriptLength: 0,
+    protocolType: "session.heartbeat",
+    protocolSchema: true,
+  })
+})
+
+test("Session stream schema reports malformed connection frames as a Zod contract error", () => {
+  const parsed = SessionStreamEvent.safeParse({
+    event_id: "event-malformed",
+    session_id: "session-1",
+    orderKey: "session:0000000000001:event-malformed",
+    emittedAt: 1,
+    timestamp: 1,
+    sequence: 0,
+    summary: "missing connection snapshot",
+    type: "session.connected",
+    payload: { sessionID: "session-1" },
+  })
+
+  expect(
+    parsed.success
+      ? { result: "parsed" }
+      : {
+          result: "contract-error",
+          errorName: parsed.error.name,
+          issuePath: parsed.error.issues[0]?.path.join("."),
+        },
+  ).toEqual({
+    result: "contract-error",
+    errorName: "ZodError",
+    issuePath: "payload.conversationSnapshot",
+  })
+})
+
+test("Session stream projects a non-message Session diff through Bus and ProtocolStore", async () => {
+  await using project = await memoryProject()
+  await Instance.provide({
+    directory: project.path,
+    fn: async () => {
+      const work = await createRightSidebarConversationSession("work")
+      const abort = new AbortController()
+      const response = await Server.App().request(`/session/${work.id}/events`, {
+        headers: { "x-opencorvus-directory": project.path },
+        signal: abort.signal,
+      })
+      expect(response.status).toBe(200)
+      const events = sessionEventReader(response)
+      await events.next("session.connected")
+
+      const schedulerPayload = SchedulerMessagePayload.parse({
+        protocol: "scheduler-message-v3",
+        invocation_id: "session-stream-public-vocabulary",
+        message_kind: "notification",
+        thread_id: "session-stream-contract",
+        source_terminal_event_id: Identifier.ascending("protocol_event"),
+        source_task_execution_epoch: null,
+        target_task_execution_epoch: null,
+        source_body_sha256: "0".repeat(64),
+        subject: "Internal scheduler control",
+      })
+      const internalControl = await ProtocolStore.appendEvent({
+        kind: "event",
+        type: "scheduler.message",
+        aggregate: "session",
+        aggregate_id: work.id,
+        session_id: null,
+        source: "scheduler.message",
+        payload: schedulerPayload,
+      })
+      expect(internalControl).toMatchObject({
+        kind: "event",
+        type: "scheduler.message",
+        aggregate: "session",
+        aggregateID: work.id,
+        sessionID: work.id,
+        source: "scheduler.message",
+        payload: schedulerPayload,
+      })
+      await Database.awaitEffectIdle(5_000)
+
+      await Bus.publish(Session.Event.Diff, {
+        sessionID: work.id,
+        diff: [],
+      })
+      const diff = await events.next("session.diff")
+      await events.cancel()
+      abort.abort()
+
+      expect(SessionProtocolEvent.parse(diff)).toMatchObject({
+        session_id: work.id,
+        type: "session.diff",
+        summary: "Session diff updated",
+        payload: {
+          sessionID: work.id,
+          diff: [],
+          channel: "assistant",
+          orderKey: expect.any(String),
+        },
+      })
+    },
+  })
+}, 30_000)
 
 test("session.connected converges the persisted first Work prompt at the stream cutover", async () => {
   await using project = await memoryProject()

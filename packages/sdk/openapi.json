@@ -16443,6 +16443,104 @@
         ],
         "type": "object"
       },
+      "SessionProtocolEvent": {
+        "properties": {
+          "emittedAt": {
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991,
+            "type": "integer"
+          },
+          "event_id": {
+            "type": "string"
+          },
+          "notify": {
+            "properties": {
+              "badge": {
+                "type": "boolean"
+              },
+              "tier": {
+                "anyOf": [
+                  {
+                    "const": 1,
+                    "type": "number"
+                  },
+                  {
+                    "const": 2,
+                    "type": "number"
+                  },
+                  {
+                    "const": 3,
+                    "type": "number"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "tier"
+            ],
+            "type": "object"
+          },
+          "orderKey": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "payload": {
+            "additionalProperties": {},
+            "propertyNames": {
+              "type": "string"
+            },
+            "type": "object"
+          },
+          "sequence": {
+            "maximum": 9007199254740991,
+            "minimum": 0,
+            "type": "integer"
+          },
+          "session_id": {
+            "type": "string"
+          },
+          "summary": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "number"
+          },
+          "type": {
+            "enum": [
+              "agent.execution.lifecycle",
+              "config.changed",
+              "message.updated",
+              "message.moved",
+              "message.removed",
+              "message.part.updated",
+              "message.part.delta",
+              "message.part.removed",
+              "permission.asked",
+              "permission.replied",
+              "question.asked",
+              "question.replied",
+              "question.rejected",
+              "question.expired",
+              "question.abandoned",
+              "session.diff",
+              "session.error",
+              "session.heartbeat"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "event_id",
+          "session_id",
+          "orderKey",
+          "emittedAt",
+          "timestamp",
+          "summary",
+          "type",
+          "payload"
+        ],
+        "type": "object"
+      },
       "SessionStatus": {
         "anyOf": [
           {
@@ -16521,87 +16619,12 @@
         ]
       },
       "SessionStreamEvent": {
-        "anyOf": [
+        "oneOf": [
           {
             "$ref": "#/components/schemas/SessionConnectedEvent"
           },
           {
-            "properties": {
-              "emittedAt": {
-                "exclusiveMinimum": 0,
-                "maximum": 9007199254740991,
-                "type": "integer"
-              },
-              "event_id": {
-                "type": "string"
-              },
-              "notify": {
-                "properties": {
-                  "badge": {
-                    "type": "boolean"
-                  },
-                  "tier": {
-                    "anyOf": [
-                      {
-                        "const": 1,
-                        "type": "number"
-                      },
-                      {
-                        "const": 2,
-                        "type": "number"
-                      },
-                      {
-                        "const": 3,
-                        "type": "number"
-                      }
-                    ]
-                  }
-                },
-                "required": [
-                  "tier"
-                ],
-                "type": "object"
-              },
-              "orderKey": {
-                "minLength": 1,
-                "type": "string"
-              },
-              "payload": {
-                "additionalProperties": {},
-                "propertyNames": {
-                  "type": "string"
-                },
-                "type": "object"
-              },
-              "sequence": {
-                "maximum": 9007199254740991,
-                "minimum": 0,
-                "type": "integer"
-              },
-              "session_id": {
-                "type": "string"
-              },
-              "summary": {
-                "type": "string"
-              },
-              "timestamp": {
-                "type": "number"
-              },
-              "type": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "event_id",
-              "session_id",
-              "orderKey",
-              "emittedAt",
-              "timestamp",
-              "summary",
-              "type",
-              "payload"
-            ],
-            "type": "object"
+            "$ref": "#/components/schemas/SessionProtocolEvent"
           }
         ]
       },
@@ -20600,6 +20623,14 @@
         "operationId": "attachment.get",
         "parameters": [
           {
+            "description": "Serve a derived rendition of the attachment instead of the stored bytes.",
+            "in": "query",
+            "name": "variant",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "in": "path",
             "name": "projectID",
             "required": true,
@@ -21045,6 +21076,22 @@
         "description": "Read a previously created temporary channel attachment by signed URL.",
         "operationId": "channel.attachment.get",
         "parameters": [
+          {
+            "description": "Expiry the signature covers; the URL is unauthorized once it passes.",
+            "in": "query",
+            "name": "e",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Signature authorizing this attachment read.",
+            "in": "query",
+            "name": "s",
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "in": "path",
             "name": "id",
@@ -107693,6 +107740,22 @@
         "operationId": "task.conversation.session",
         "parameters": [
           {
+            "description": "Resume the live transcript after this sequence.",
+            "in": "query",
+            "name": "after_live_sequence",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "The live projection epoch the after_live_sequence cursor belongs to.",
+            "in": "query",
+            "name": "after_live_epoch",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "in": "path",
             "name": "taskID",
             "required": true,
@@ -109056,6 +109119,38 @@
             "required": true,
             "schema": {
               "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Resume after this durable task-event sequence.",
+            "in": "query",
+            "name": "after",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Resume live projection after this sequence; omit to skip live replay.",
+            "in": "query",
+            "name": "after_live",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "The live projection epoch the after_live cursor belongs to.",
+            "in": "query",
+            "name": "after_live_epoch",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Resume message projection after this watermark.",
+            "in": "query",
+            "name": "after_message_watermark",
+            "schema": {
               "type": "string"
             }
           }

@@ -4774,6 +4774,42 @@ export type SessionConversationConnectionSnapshot = {
   }
 }
 
+export type SessionProtocolEvent = {
+  emittedAt: number
+  event_id: string
+  notify?: {
+    badge?: boolean
+    tier: 1 | 2 | 3
+  }
+  orderKey: string
+  payload: {
+    [key: string]: unknown
+  }
+  sequence?: number
+  session_id: string
+  summary: string
+  timestamp: number
+  type:
+    | "agent.execution.lifecycle"
+    | "config.changed"
+    | "message.updated"
+    | "message.moved"
+    | "message.removed"
+    | "message.part.updated"
+    | "message.part.delta"
+    | "message.part.removed"
+    | "permission.asked"
+    | "permission.replied"
+    | "question.asked"
+    | "question.replied"
+    | "question.rejected"
+    | "question.expired"
+    | "question.abandoned"
+    | "session.diff"
+    | "session.error"
+    | "session.heartbeat"
+}
+
 export type SessionStatus =
   | {
       type: "idle"
@@ -4793,25 +4829,7 @@ export type SessionStatus =
       type: "terminal"
     }
 
-export type SessionStreamEvent =
-  | SessionConnectedEvent
-  | {
-      emittedAt: number
-      event_id: string
-      notify?: {
-        badge?: boolean
-        tier: 1 | 2 | 3
-      }
-      orderKey: string
-      payload: {
-        [key: string]: unknown
-      }
-      sequence?: number
-      session_id: string
-      summary: string
-      timestamp: number
-      type: string
-    }
+export type SessionStreamEvent = SessionConnectedEvent | SessionProtocolEvent
 
 export type SignalChannelConfig = {
   /**
@@ -6112,7 +6130,12 @@ export type AttachmentGetData = {
     projectID: string
     name: string
   }
-  query?: never
+  query?: {
+    /**
+     * Serve a derived rendition of the attachment instead of the stored bytes.
+     */
+    variant?: string
+  }
   url: "/attachment/{projectID}/{name}"
 }
 
@@ -6288,7 +6311,16 @@ export type ChannelAttachmentGetData = {
   path: {
     id: string
   }
-  query?: never
+  query?: {
+    /**
+     * Expiry the signature covers; the URL is unauthorized once it passes.
+     */
+    e?: string
+    /**
+     * Signature authorizing this attachment read.
+     */
+    s?: string
+  }
   url: "/channel/attachment/{id}"
 }
 
@@ -31811,7 +31843,16 @@ export type TaskConversationSessionData = {
     taskID: string
     sessionID: string
   }
-  query?: never
+  query?: {
+    /**
+     * Resume the live transcript after this sequence.
+     */
+    after_live_sequence?: string
+    /**
+     * The live projection epoch the after_live_sequence cursor belongs to.
+     */
+    after_live_epoch?: string
+  }
   url: "/task/{taskID}/conversation/session/{sessionID}"
 }
 
@@ -32147,7 +32188,24 @@ export type TaskEventsData = {
   path: {
     taskID: string
   }
-  query?: never
+  query?: {
+    /**
+     * Resume after this durable task-event sequence.
+     */
+    after?: string
+    /**
+     * Resume live projection after this sequence; omit to skip live replay.
+     */
+    after_live?: string
+    /**
+     * The live projection epoch the after_live cursor belongs to.
+     */
+    after_live_epoch?: string
+    /**
+     * Resume message projection after this watermark.
+     */
+    after_message_watermark?: string
+  }
   url: "/task/{taskID}/events"
 }
 
