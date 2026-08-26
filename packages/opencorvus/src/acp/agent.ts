@@ -32,6 +32,7 @@ import { pathToFileURL } from "bun"
 import { ACPSessionManager } from "./session"
 import type { ACPConfig, ACPSessionState } from "./types"
 import { Provider } from "../provider/provider"
+import { Identifier } from "../id/id"
 import { PrimaryAssistantRegistry } from "@/agent/primary-assistant-registry"
 import { Installation } from "@/installation"
 import { Message, Todo } from "@/session"
@@ -1634,6 +1635,7 @@ export namespace ACP {
       if (!cmd) {
         const response = await this.sdk.session.prompt({
           sessionID,
+          messageID: Identifier.ascending("message"),
           model: {
             providerID: model.providerID,
             modelID: model.modelID,
@@ -1660,6 +1662,7 @@ export namespace ACP {
       if (command) {
         const response = await this.sdk.session.command({
           sessionID,
+          messageID: Identifier.ascending("message"),
           command: command.name,
           arguments: cmd.args,
           model: model.providerID + "/" + model.modelID,
