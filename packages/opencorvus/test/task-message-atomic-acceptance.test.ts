@@ -1,8 +1,16 @@
-import { afterEach, describe, expect, spyOn, test } from "bun:test"
+import { afterEach, describe, expect, test } from "bun:test"
+import { sql } from "drizzle-orm"
+import { BusPublicationOutboxTable } from "../src/bus/bus.sql"
+import { EngineTaskRootIngressTable, EngineTaskTable } from "../src/engine/engine.sql"
+import { rewindTask, taskRewindCursor } from "../src/engine/rewind"
+import { taskLifecycleProjection } from "../src/engine/task-lifecycle"
 import { Identifier } from "../src/id/id"
 import { Instance } from "../src/project/instance"
 import { Config } from "../src/config/config"
+import { ProtocolEventTable } from "../src/protocol/protocol.sql"
+import { ProtocolStore } from "../src/protocol/store"
 import { Session } from "../src/session"
+import { Database, and, eq } from "../src/storage/db"
 import { EngineService } from "../src/task-api"
 import { TestHooks as TaskControlTestHooks } from "../src/engine/task-root-ingress-delivery"
 import { InstanceBootstrap } from "../src/project/bootstrap"
@@ -61,36 +69,83 @@ describe("Task operator message acceptance is one transaction", () => {
         const baselineMessages = await userMessageCount()
         expect(await overlayModel()).toBe("firmware/gpt-5")
 
-        // An injected failure at the Message persist: the whole acceptance —
-        // overlay included — must leave nothing behind. The injection is
-        // selective (this task root Session, this exact text) so the Task's
-        // own background orchestrator persists are untouched.
-        const originalPersist = Session.persistMessageWithCommit
-        const persist = spyOn(Session, "persistMessageWithCommit").mockImplementation((bundle: any, ...rest: any[]) => {
-          const text = Array.isArray(bundle?.parts)
-            ? bundle.parts.map((part: any) => (typeof part?.text === "string" ? part.text : "")).join("")
-            : ""
-          if (bundle?.info?.sessionID === task.sessionID && text.includes("switch models and continue")) {
-            throw new Error("injected acceptance commit failure")
-          }
-          return (originalPersist as any)(bundle, ...rest)
+        const rewindAt = Date.now() + 10
+        await rewindTask({ taskID, anchor: { kind: "cursorTime", cursorTime: rewindAt } })
+        Database.transaction(() => {
+          ProtocolStore.appendEventInTransaction({
+            kind: "event",
+            type: "task.completed",
+            aggregate: "task",
+            aggregate_id: taskID,
+            task_id: null,
+            session_id: task.sessionID!,
+            source: "test.task-message-atomic-acceptance",
+            emitted_at: Date.now(),
+            payload: { execution_epoch: 1 },
+          })
         })
+        await Database.awaitEffectIdle(5_000)
+
+        const footprint = async () => {
+          const currentTask = Database.use((db) =>
+            db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, taskID)).get(),
+          )!
+          return {
+            overlay: await overlayModel(),
+            attachments: currentTask.attachments ?? [],
+            userMessages: await userMessageCount(),
+            ingress: Database.use((db) =>
+              db.select().from(EngineTaskRootIngressTable).where(eq(EngineTaskRootIngressTable.task_id, taskID)).all(),
+            ),
+            taskEvents: Database.use((db) =>
+              db
+                .select()
+                .from(ProtocolEventTable)
+                .where(and(eq(ProtocolEventTable.aggregate_type, "task"), eq(ProtocolEventTable.aggregate_id, taskID)))
+                .all(),
+            ),
+            lifecycle: taskLifecycleProjection(taskID),
+            rewindCursor: taskRewindCursor(taskID),
+            outbox: Database.use((db) => db.select().from(BusPublicationOutboxTable).all()),
+          }
+        }
+        const before = await footprint()
+
+        // The trigger fires at the last durable acceptance fact. By then the
+        // Message/Parts, model overlay, attachment reference, reopened epoch,
+        // rewind-clear fact, TaskMessageRecorded event and ingress policy are
+        // all inside the transaction and publication effects are queued.
+        Database.use((db) =>
+          db.run(
+            sql.raw(`
+            CREATE TEMP TRIGGER arc011_fail_after_message_ingress
+            AFTER INSERT ON engine_task_root_ingress
+            WHEN NEW.source = 'message' AND NEW.task_id = '${taskID}'
+            BEGIN
+              SELECT RAISE(ABORT, 'injected acceptance commit failure');
+            END
+          `),
+          ),
+        )
+        const attachment = {
+          data: Buffer.from("atomic operator attachment", "utf8").toString("base64"),
+          mime: "text/plain",
+          filename: "atomic.txt",
+        }
         try {
           await expect(
             EngineService.handleTaskMessage(taskID, {
               source: "api",
-              source: "api",
-          text: "switch models and continue",
+              text: "switch models and continue",
               model: "overlay-test-provider/overlay-test-model",
+              attachments: [attachment],
             }),
           ).rejects.toThrow("injected acceptance commit failure")
         } finally {
-          persist.mockRestore()
+          Database.use((db) => db.run(sql.raw("DROP TRIGGER arc011_fail_after_message_ingress")))
         }
-        expect({ overlay: await overlayModel(), userMessages: await userMessageCount() }).toEqual({
-          overlay: "firmware/gpt-5",
-          userMessages: baselineMessages,
-        })
+        await Database.awaitEffectIdle(5_000)
+        expect(await footprint()).toEqual(before)
 
         // The retried message commits the Message, its ingress and the
         // overlay together.
@@ -98,17 +153,36 @@ describe("Task operator message acceptance is one transaction", () => {
           source: "api",
           text: "switch models and continue",
           model: "overlay-test-provider/overlay-test-model",
+          attachments: [attachment],
         })
+        await Database.awaitEffectIdle(5_000)
+        const committed = await footprint()
+        const committedMessageID = note.user_message.info.id
+        const committedIngress = committed.ingress.find(
+          (row) => row.source === "message" && row.source_id === committedMessageID,
+        )
         expect({
-          overlay: await overlayModel(),
-          userMessages: await userMessageCount(),
+          overlay: committed.overlay,
+          userMessages: committed.userMessages,
           hasIngress: typeof (note as { ingress_id?: string }).ingress_id === "string",
           messageRole: note.user_message.info.role,
+          attachment: committed.attachments[0] && {
+            filename: committed.attachments[0].filename,
+            intent: committed.attachments[0].intent,
+            source: committed.attachments[0].source,
+          },
+          lifecycle: { epoch: committed.lifecycle.epoch, status: committed.lifecycle.status },
+          rewindCursor: committed.rewindCursor,
+          ingressEpoch: committedIngress?.execution_epoch,
         }).toEqual({
           overlay: "overlay-test-provider/overlay-test-model",
           userMessages: baselineMessages + 1,
           hasIngress: true,
           messageRole: "user",
+          attachment: { filename: "atomic.txt", intent: "task_input", source: "user-upload" },
+          lifecycle: { epoch: 2, status: "active" },
+          rewindCursor: null,
+          ingressEpoch: 2,
         })
       },
     })
