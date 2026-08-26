@@ -2,6 +2,8 @@
 
 Latest Session conversation history visibility repair: [`2026-08-26-session-conversation-history-visibility-repair.md`](records/2026-08/2026-08-26-session-conversation-history-visibility-repair.md).
 
+Latest runtime Skill Market search and exact-install plan: [`2026-08-26-runtime-skill-market-search-install.md`](records/2026-08/2026-08-26-runtime-skill-market-search-install.md).
+
 Latest OpenCorvus paper-production internal evidence foundation: [`2026-08-26-opencorvus-paper-foundation-evidence.md`](records/2026-08/2026-08-26-opencorvus-paper-foundation-evidence.md), with the canonical machine-readable bundle under [`artifacts/opencorvus-paper/`](artifacts/opencorvus-paper/).
 
 Latest bounded `search_code` execution repair: [`2026-08-26-search-code-bounded-execution-repair.md`](records/2026-08/2026-08-26-search-code-bounded-execution-repair.md).

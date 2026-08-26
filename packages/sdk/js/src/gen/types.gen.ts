@@ -4650,6 +4650,13 @@ export type SignalChannelConfig = {
   service?: string
 }
 
+export type SkillMarketUpstreamError = {
+  data: {
+    [key: string]: unknown
+  }
+  name: "SkillMarketUpstreamError"
+}
+
 export type SlackChannelConfig = {
   /**
    * Slack app token for Socket Mode
@@ -18112,6 +18119,10 @@ export type GlobalSkillMarketDetailErrors = {
    * Bad request
    */
   400: BadRequestError
+  /**
+   * Upstream service failure
+   */
+  502: SkillMarketUpstreamError
 }
 
 export type GlobalSkillMarketDetailError = GlobalSkillMarketDetailErrors[keyof GlobalSkillMarketDetailErrors]
@@ -18165,6 +18176,10 @@ export type GlobalSkillMarketInstallErrors = {
    * Bad request
    */
   400: BadRequestError
+  /**
+   * Upstream service failure
+   */
+  502: SkillMarketUpstreamError
 }
 
 export type GlobalSkillMarketInstallError = GlobalSkillMarketInstallErrors[keyof GlobalSkillMarketInstallErrors]
@@ -18202,6 +18217,10 @@ export type GlobalSkillMarketSearchErrors = {
    * Bad request
    */
   400: BadRequestError
+  /**
+   * Upstream service failure
+   */
+  502: SkillMarketUpstreamError
 }
 
 export type GlobalSkillMarketSearchError = GlobalSkillMarketSearchErrors[keyof GlobalSkillMarketSearchErrors]
@@ -26755,6 +26774,19 @@ export type SkillMarketDetailData = {
   url: "/skill/market/detail"
 }
 
+export type SkillMarketDetailErrors = {
+  /**
+   * Bad request
+   */
+  400: BadRequestError
+  /**
+   * Upstream service failure
+   */
+  502: SkillMarketUpstreamError
+}
+
+export type SkillMarketDetailError = SkillMarketDetailErrors[keyof SkillMarketDetailErrors]
+
 export type SkillMarketDetailResponses = {
   /**
    * Validated Skill Market candidate detail
@@ -26804,6 +26836,19 @@ export type SkillMarketInstallData = {
   url: "/skill/market/install"
 }
 
+export type SkillMarketInstallErrors = {
+  /**
+   * Bad request
+   */
+  400: BadRequestError
+  /**
+   * Upstream service failure
+   */
+  502: SkillMarketUpstreamError
+}
+
+export type SkillMarketInstallError = SkillMarketInstallErrors[keyof SkillMarketInstallErrors]
+
 export type SkillMarketInstallResponses = {
   /**
    * Installed Skill Market candidate
@@ -26834,6 +26879,19 @@ export type SkillMarketSearchData = {
   }
   url: "/skill/market/search"
 }
+
+export type SkillMarketSearchErrors = {
+  /**
+   * Bad request
+   */
+  400: BadRequestError
+  /**
+   * Upstream service failure
+   */
+  502: SkillMarketUpstreamError
+}
+
+export type SkillMarketSearchError = SkillMarketSearchErrors[keyof SkillMarketSearchErrors]
 
 export type SkillMarketSearchResponses = {
   /**

@@ -62,10 +62,19 @@ hook 面，专用触发器只执行内置 Provider/Auth owner。其输入携带�
 Provider 明确拒绝的字段，也不能覆盖 Provider 必需 header。helper 路径直接进入同一物理层，不建立
 Provider 特判或第二套请求实现。
 
-普通 Skill 市场和 git/URL Skill source 安装属于用户全局配置面。`/global/skill/market` 与项目
-`/skill/market` 只投影同一个 `SkillManager.market` 内置 catalog owner；不存在不可配置的远端 registry
-或网络失败 fallback。`/global/skill/install` 与项目安装路由仍调用同一个 `SkillManager.install` owner。
-Skill mount matrix、project-local
+普通 Skill 市场和 git/URL Skill source 安装属于用户全局配置面。skills.sh 是当前唯一 Skill Market
+authority；全局与项目限定路由共用 `SkillManager` 的 provider、搜索、详情和精确安装契约。Market 搜索返回
+稳定候选 identity 和实时 installed projection；详情下载并校验精确候选 bundle；安装必须携带详情 digest，
+原子发布单个带 provenance 的 managed Skill，更新全局配置并失效 Skill discovery。运行时 Primary Agent 和
+Settings 共用该服务。不存在可配置的 fallback registry，也不通过 Market 路径安装整个 repository；普通
+path、URL index 和 git source import 保持为独立高级入口。Market identity 统一为小写并逐段映射到
+`skills-market/skills-sh/<owner>/<repository>/<skill>`，替换或删除前必须由目标 manifest 证明同一 identity；
+上游网络、HTTP 或响应校验故障统一发布 `SkillMarketUpstreamError` 与 HTTP 502，不能退化为匿名 500。
+
+运行时 `skill_market` Tool 提供搜索、检查和精确安装。搜索与检查是 network read；安装是经普通 Tool
+permission authority 单独授权的 local write。新安装 Skill 只在后续 turn 可被 mount；当前 turn 已冻结的
+Skill Tool surface 不热更新。`/global/skill/install` 与项目安装路由仍调用同一个通用
+`SkillManager.install` owner。Skill mount matrix、project-local
 file/folder/ZIP import 和 MCP（Model Context Protocol，模型上下文协议）仍要求明确项目目录，不能因
 市场全局化而变成第二份全局投影。
 

@@ -54,9 +54,9 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | POST | `/global/providers/{providerID}/test` | Test a global Provider connection 请求体: `modelID`; 错误: `AuthReadError`, `BadRequestError`. | `global.providers.test` |
 | POST | `/global/skill/install` | Install a global Skill market source 请求体: `kind`, `policy`, `value`; 错误: `BadRequestError`. | `global.skill.install` |
 | GET | `/global/skill/market` | List the global Skill market | `global.skill.market` |
-| GET | `/global/skill/market/detail` | Inspect a global Skill Market candidate 错误: `BadRequestError`. | `global.skill.market.detail` |
-| POST | `/global/skill/market/install` | Install an inspected global Skill Market candidate 请求体: `expected_hash`, `id`, `policy`; 错误: `BadRequestError`. | `global.skill.market.install` |
-| GET | `/global/skill/market/search` | Search the global Skill Market 错误: `BadRequestError`. | `global.skill.market.search` |
+| GET | `/global/skill/market/detail` | Inspect a global Skill Market candidate 错误: `BadRequestError`, `SkillMarketUpstreamError`. | `global.skill.market.detail` |
+| POST | `/global/skill/market/install` | Install an inspected global Skill Market candidate 请求体: `expected_hash`, `id`, `policy`; 错误: `BadRequestError`, `SkillMarketUpstreamError`. | `global.skill.market.install` |
+| GET | `/global/skill/market/search` | Search the global Skill Market 错误: `BadRequestError`, `SkillMarketUpstreamError`. | `global.skill.market.search` |
 | GET | `/global/tasks` | List tasks across projects | `task.global.list` |
 | POST | `/global/tasks` | Create a task in an implicit project 请求体: `artifactSources`, `attachments`, `budget`, `channelBinding`, `checks`, `directory`, `expectedPackageDigest`, `metadata`, `model`, `priority`, `productPillar`, `project`, `promptProfile`, `request`, `requestID`, `source`, `title`; 错误: `BadRequestError`, `ExternalChildTaskLineageError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCreationIdempotencyConflictError`, `TaskCreatorAuthorityError`, `TaskCreatorSessionError`, `TaskExpectedPackageDigestConflictError`, `TaskPackageRevisionBindingError`. | `task.global.create` |
 | GET | `/global/usage` | Get natural-period Provider usage 错误: `BadRequestError`. | `global.usage` |
@@ -343,9 +343,9 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | GET | `/skill/installed` | List installed skills | `skill.installed` |
 | GET | `/skill/issues` | List Skill catalog issues | `skill.issues` |
 | GET | `/skill/market` | List skill markets | `skill.market` |
-| GET | `/skill/market/detail` | Inspect a Skill Market candidate | `skill.market.detail` |
-| POST | `/skill/market/install` | Install an inspected Skill Market candidate 请求体: `expected_hash`, `id`, `policy`. | `skill.market.install` |
-| GET | `/skill/market/search` | Search the Skill Market | `skill.market.search` |
+| GET | `/skill/market/detail` | Inspect a Skill Market candidate 错误: `BadRequestError`, `SkillMarketUpstreamError`. | `skill.market.detail` |
+| POST | `/skill/market/install` | Install an inspected Skill Market candidate 请求体: `expected_hash`, `id`, `policy`; 错误: `BadRequestError`, `SkillMarketUpstreamError`. | `skill.market.install` |
+| GET | `/skill/market/search` | Search the Skill Market 错误: `BadRequestError`, `SkillMarketUpstreamError`. | `skill.market.search` |
 | PATCH | `/skill/mount` | Set a qualified skill mount override 请求体: `agentID`, `defaultSkillRef`, `expertSquadID`, `override`, `scope`, `sessionID`. | `skill.setMountOverride` |
 | GET | `/skill/mounts` | List agent skill mounts | `skill.mounts` |
 | POST | `/skill/policy` | Set skill permission policy 请求体: `action`, `name`. | `skill.policy` |

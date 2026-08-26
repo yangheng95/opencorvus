@@ -870,16 +870,67 @@ export const GlobalRoutes = lazy(() =>
       "/skill/market",
       describeRoute({
         summary: "List the global Skill market",
-        description: "List global Skill market entries without requiring an active project.",
+        description: "List the single current Skill Market provider without requiring an active project.",
         operationId: "global.skill.market",
         responses: {
           200: {
             description: "Skill market entries",
-            content: { "application/json": { schema: resolver(SkillManager.MarketEntry.array()) } },
+            content: { "application/json": { schema: resolver(SkillManager.MarketProvider.array()) } },
           },
         },
       }),
       async (c) => c.json(await SkillManager.market()),
+    )
+    .get(
+      "/skill/market/search",
+      describeRoute({
+        summary: "Search the global Skill Market",
+        description: "Search exact Skill candidates and project live global installation status.",
+        operationId: "global.skill.market.search",
+        responses: {
+          200: {
+            description: "Skill Market candidates",
+            content: { "application/json": { schema: resolver(SkillManager.MarketEntry.array()) } },
+          },
+          ...errors(400, 502),
+        },
+      }),
+      validator("query", SkillManager.MarketSearchInput),
+      async (c) => c.json(await SkillManager.searchMarket(c.req.valid("query"))),
+    )
+    .get(
+      "/skill/market/detail",
+      describeRoute({
+        summary: "Inspect a global Skill Market candidate",
+        description: "Download and validate one exact candidate bundle without installing it.",
+        operationId: "global.skill.market.detail",
+        responses: {
+          200: {
+            description: "Validated Skill Market candidate detail",
+            content: { "application/json": { schema: resolver(SkillManager.MarketDetail) } },
+          },
+          ...errors(400, 502),
+        },
+      }),
+      validator("query", SkillManager.MarketInspectInput),
+      async (c) => c.json(await SkillManager.inspectMarket(c.req.valid("query"))),
+    )
+    .post(
+      "/skill/market/install",
+      describeRoute({
+        summary: "Install an inspected global Skill Market candidate",
+        description: "Install exactly one candidate only when its current content matches the inspected digest.",
+        operationId: "global.skill.market.install",
+        responses: {
+          200: {
+            description: "Installed Skill Market candidate",
+            content: { "application/json": { schema: resolver(SkillManager.MarketInstallResult) } },
+          },
+          ...errors(400, 502),
+        },
+      }),
+      validator("json", SkillManager.MarketInstallInput),
+      async (c) => c.json(await SkillManager.installMarket(c.req.valid("json"))),
     )
     .post(
       "/skill/install",

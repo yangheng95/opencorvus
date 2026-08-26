@@ -44,6 +44,7 @@ export function namedErrorStatus(err: { name: string }): ContentfulStatusCode {
   if (err.name === "WorktreeOwnershipObservationError") return 503
   if (err.name === "DatabaseUnavailableError") return 503
   if (err.name === "AuthReadError") return 503
+  if (err.name === "SkillMarketUpstreamError") return 502
   if (err.name === "LogFileNotFoundError") return 404
   if (err.name === "ProviderModelNotFoundError") return 400
   if (err.name === "DirectoryRequiredError") return 400

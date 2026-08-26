@@ -2,6 +2,8 @@
 
 - [2026-08-26-session-conversation-history-visibility-repair.md](2026-08-26-session-conversation-history-visibility-repair.md) connects the existing bounded Session tail to its canonical older-history route so Mission and ordinary conversation prefixes remain reachable through the shared Overlay writer.
 
+- [2026-08-26-runtime-skill-market-search-install.md](2026-08-26-runtime-skill-market-search-install.md) replaces the navigational Skill directory list with one runtime-searchable, hash-pinned, exact-install Market chain shared by Agents, HTTP, and Settings.
+
 - [2026-08-26-opencorvus-paper-foundation-evidence.md](2026-08-26-opencorvus-paper-foundation-evidence.md) establishes the paper-production material boundaries and a machine/human-consumable internal claims, AutomationBench, seven-role process, Expert Squad, self-evolution, and figure-input evidence foundation.
 
 - [2026-08-26-search-code-bounded-execution-repair.md](2026-08-26-search-code-bounded-execution-repair.md) reconstructs the live repository-wide ripgrep stall and restores ignored-tree, wall-clock, output, cancellation, and process-settlement bounds to the shared `search_code` Tool.

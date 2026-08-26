@@ -66,7 +66,26 @@ All `**/SKILL.md` under each path load (`src/skill/skill.ts`).
 
 OpenCorvus fetches `{url}/index.json` (`{ skills: [{ name, description, files[] }] }`), downloads each file, caches under `<runtime-root>/cache/skills/`, loads `SKILL.md` (`src/skill/discovery.ts`).
 
-Built-in marketplace entries (`src/skill/manager.ts`): `openai-skills`, `anthropic-skills` (official); `skills-sh`, `skillstore` (curated); `skills-pub` (community).
+Remote URL indexes are an advanced source-import mechanism. They are separate from the exact Skill Market flow.
+
+## Searching and installing from the Skill Market
+
+skills.sh is the single current Skill Market authority. The Settings Skill page and runtime primary Agents use the same OpenCorvus service:
+
+1. Search by capability text. Results include a stable `owner/repository/skill` identity, repository, install count, detail URL, and live installed status.
+2. Inspect one result. OpenCorvus downloads exactly that Skill, validates its root `SKILL.md` and file paths, then returns its OpenCorvus SHA-256 content digest, upstream hash, included files, trust, risk, and recommended policy. Inspection does not install anything.
+3. Install with the exact inspection digest. OpenCorvus downloads the candidate again, rejects changed content, atomically publishes one managed directory, records provenance in `.opencorvus-skill-source.json`, updates global configuration, and refreshes the catalog.
+
+Canonical lowercase identity segments map to `<runtime-root>/config/skills-market/skills-sh/<owner>/<repository>/<skill>/`. Replacement and removal verify that the target provenance still owns the same identity. Network, HTTP, malformed JSON, and invalid upstream bundle responses return the visible `SkillMarketUpstreamError` HTTP 502 contract.
+
+Runtime Agents use the `skill_market` Tool. `search` and `inspect` are network reads; `install` is a separately authorized local write. A successful install becomes eligible for mounting on a subsequent turn because the current turn's mounted Skill surface is frozen.
+
+The public routes are available in both project-qualified and global forms:
+
+- `GET /skill/market` and `GET /global/skill/market`
+- `GET /skill/market/search?query=...` and `GET /global/skill/market/search?query=...`
+- `GET /skill/market/detail?id=...` and `GET /global/skill/market/detail?id=...`
+- `POST /skill/market/install` and `POST /global/skill/market/install` with `id`, `expected_hash`, and optional `policy`
 
 ## Installing from Git
 
@@ -75,7 +94,7 @@ opencorvus skill install --git https://github.com/owner/repo.git
 # shorthand: opencorvus skill install owner/repo
 ```
 
-Clones into `<runtime-root>/config/skills-market/<slug>/`, appends to `skills.paths`, writes `.opencorvus-skill-source.json` (`src/skill/manager.ts`). The runtime root follows [Environment variables](../reference/env/).
+Clones into `<runtime-root>/config/skills-market/<slug>/`, appends to `skills.paths`, writes `.opencorvus-skill-source.json` (`src/skill/manager.ts`). This whole-repository import remains an advanced direct-source path and is not the Skill Market installer. The runtime root follows [Environment variables](../reference/env/).
 
 ## Permission config
 

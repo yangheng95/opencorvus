@@ -508,9 +508,12 @@ import type {
   SkillInstalledResponses,
   SkillInstallResponses,
   SkillIssuesResponses,
+  SkillMarketDetailErrors,
   SkillMarketDetailResponses,
+  SkillMarketInstallErrors,
   SkillMarketInstallResponses,
   SkillMarketResponses,
+  SkillMarketSearchErrors,
   SkillMarketSearchResponses,
   SkillMountsResponses,
   SkillPolicyResponses,
@@ -12568,7 +12571,7 @@ export class Market2 extends HeyApiClient {
         },
       ],
     )
-    return (options?.client ?? this.client).get<SkillMarketDetailResponses, unknown, ThrowOnError>({
+    return (options?.client ?? this.client).get<SkillMarketDetailResponses, SkillMarketDetailErrors, ThrowOnError>({
       url: "/skill/market/detail",
       ...options,
       ...params,
@@ -12602,7 +12605,7 @@ export class Market2 extends HeyApiClient {
         },
       ],
     )
-    return (options?.client ?? this.client).post<SkillMarketInstallResponses, unknown, ThrowOnError>({
+    return (options?.client ?? this.client).post<SkillMarketInstallResponses, SkillMarketInstallErrors, ThrowOnError>({
       url: "/skill/market/install",
       ...options,
       ...params,
@@ -12639,7 +12642,7 @@ export class Market2 extends HeyApiClient {
         },
       ],
     )
-    return (options?.client ?? this.client).get<SkillMarketSearchResponses, unknown, ThrowOnError>({
+    return (options?.client ?? this.client).get<SkillMarketSearchResponses, SkillMarketSearchErrors, ThrowOnError>({
       url: "/skill/market/search",
       ...options,
       ...params,

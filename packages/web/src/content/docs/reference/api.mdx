@@ -54,9 +54,9 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 | POST | `/global/providers/{providerID}/test` | Test a global Provider connection Body: `modelID`; Errors: `AuthReadError`, `BadRequestError`. | `global.providers.test` |
 | POST | `/global/skill/install` | Install a global Skill market source Body: `kind`, `policy`, `value`; Errors: `BadRequestError`. | `global.skill.install` |
 | GET | `/global/skill/market` | List the global Skill market | `global.skill.market` |
-| GET | `/global/skill/market/detail` | Inspect a global Skill Market candidate Errors: `BadRequestError`. | `global.skill.market.detail` |
-| POST | `/global/skill/market/install` | Install an inspected global Skill Market candidate Body: `expected_hash`, `id`, `policy`; Errors: `BadRequestError`. | `global.skill.market.install` |
-| GET | `/global/skill/market/search` | Search the global Skill Market Errors: `BadRequestError`. | `global.skill.market.search` |
+| GET | `/global/skill/market/detail` | Inspect a global Skill Market candidate Errors: `BadRequestError`, `SkillMarketUpstreamError`. | `global.skill.market.detail` |
+| POST | `/global/skill/market/install` | Install an inspected global Skill Market candidate Body: `expected_hash`, `id`, `policy`; Errors: `BadRequestError`, `SkillMarketUpstreamError`. | `global.skill.market.install` |
+| GET | `/global/skill/market/search` | Search the global Skill Market Errors: `BadRequestError`, `SkillMarketUpstreamError`. | `global.skill.market.search` |
 | GET | `/global/tasks` | List tasks across projects | `task.global.list` |
 | POST | `/global/tasks` | Create a task in an implicit project Body: `artifactSources`, `attachments`, `budget`, `channelBinding`, `checks`, `directory`, `expectedPackageDigest`, `metadata`, `model`, `priority`, `productPillar`, `project`, `promptProfile`, `request`, `requestID`, `source`, `title`; Errors: `BadRequestError`, `ExternalChildTaskLineageError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCreationIdempotencyConflictError`, `TaskCreatorAuthorityError`, `TaskCreatorSessionError`, `TaskExpectedPackageDigestConflictError`, `TaskPackageRevisionBindingError`. | `task.global.create` |
 | GET | `/global/usage` | Get natural-period Provider usage Errors: `BadRequestError`. | `global.usage` |
@@ -343,9 +343,9 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 | GET | `/skill/installed` | List installed skills | `skill.installed` |
 | GET | `/skill/issues` | List Skill catalog issues | `skill.issues` |
 | GET | `/skill/market` | List skill markets | `skill.market` |
-| GET | `/skill/market/detail` | Inspect a Skill Market candidate | `skill.market.detail` |
-| POST | `/skill/market/install` | Install an inspected Skill Market candidate Body: `expected_hash`, `id`, `policy`. | `skill.market.install` |
-| GET | `/skill/market/search` | Search the Skill Market | `skill.market.search` |
+| GET | `/skill/market/detail` | Inspect a Skill Market candidate Errors: `BadRequestError`, `SkillMarketUpstreamError`. | `skill.market.detail` |
+| POST | `/skill/market/install` | Install an inspected Skill Market candidate Body: `expected_hash`, `id`, `policy`; Errors: `BadRequestError`, `SkillMarketUpstreamError`. | `skill.market.install` |
+| GET | `/skill/market/search` | Search the Skill Market Errors: `BadRequestError`, `SkillMarketUpstreamError`. | `skill.market.search` |
 | PATCH | `/skill/mount` | Set a qualified skill mount override Body: `agentID`, `defaultSkillRef`, `expertSquadID`, `override`, `scope`, `sessionID`. | `skill.setMountOverride` |
 | GET | `/skill/mounts` | List agent skill mounts | `skill.mounts` |
 | POST | `/skill/policy` | Set skill permission policy Body: `action`, `name`. | `skill.policy` |

@@ -15798,6 +15798,26 @@
         },
         "type": "object"
       },
+      "SkillMarketUpstreamError": {
+        "properties": {
+          "data": {
+            "additionalProperties": {},
+            "propertyNames": {
+              "type": "string"
+            },
+            "type": "object"
+          },
+          "name": {
+            "const": "SkillMarketUpstreamError",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "data"
+        ],
+        "type": "object"
+      },
       "SlackChannelConfig": {
         "additionalProperties": false,
         "properties": {
@@ -63360,7 +63380,7 @@
             "name": "id",
             "required": true,
             "schema": {
-              "minLength": 1,
+              "pattern": "^[a-z0-9_.-]+\\/[a-z0-9_.-]+\\/[a-z0-9_.-]+$",
               "type": "string"
             }
           }
@@ -63509,6 +63529,16 @@
               }
             },
             "description": "Bad request"
+          },
+          "502": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SkillMarketUpstreamError"
+                }
+              }
+            },
+            "description": "Upstream service failure"
           }
         },
         "summary": "Inspect a global Skill Market candidate",
@@ -63535,7 +63565,7 @@
                     "type": "string"
                   },
                   "id": {
-                    "minLength": 1,
+                    "pattern": "^[a-z0-9_.-]+\\/[a-z0-9_.-]+\\/[a-z0-9_.-]+$",
                     "type": "string"
                   },
                   "policy": {
@@ -63617,6 +63647,16 @@
               }
             },
             "description": "Bad request"
+          },
+          "502": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SkillMarketUpstreamError"
+                }
+              }
+            },
+            "description": "Upstream service failure"
           }
         },
         "summary": "Install an inspected global Skill Market candidate",
@@ -63718,6 +63758,16 @@
               }
             },
             "description": "Bad request"
+          },
+          "502": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SkillMarketUpstreamError"
+                }
+              }
+            },
+            "description": "Upstream service failure"
           }
         },
         "summary": "Search the global Skill Market",
@@ -89261,7 +89311,7 @@
             "name": "id",
             "required": true,
             "schema": {
-              "minLength": 1,
+              "pattern": "^[a-z0-9_.-]+\\/[a-z0-9_.-]+\\/[a-z0-9_.-]+$",
               "type": "string"
             }
           }
@@ -89400,6 +89450,26 @@
               }
             },
             "description": "Validated Skill Market candidate detail"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestError"
+                }
+              }
+            },
+            "description": "Bad request"
+          },
+          "502": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SkillMarketUpstreamError"
+                }
+              }
+            },
+            "description": "Upstream service failure"
           }
         },
         "summary": "Inspect a Skill Market candidate",
@@ -89437,7 +89507,7 @@
                     "type": "string"
                   },
                   "id": {
-                    "minLength": 1,
+                    "pattern": "^[a-z0-9_.-]+\\/[a-z0-9_.-]+\\/[a-z0-9_.-]+$",
                     "type": "string"
                   },
                   "policy": {
@@ -89509,6 +89579,26 @@
               }
             },
             "description": "Installed Skill Market candidate"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestError"
+                }
+              }
+            },
+            "description": "Bad request"
+          },
+          "502": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SkillMarketUpstreamError"
+                }
+              }
+            },
+            "description": "Upstream service failure"
           }
         },
         "summary": "Install an inspected Skill Market candidate",
@@ -89609,6 +89699,26 @@
               }
             },
             "description": "Skill Market candidates"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestError"
+                }
+              }
+            },
+            "description": "Bad request"
+          },
+          "502": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SkillMarketUpstreamError"
+                }
+              }
+            },
+            "description": "Upstream service failure"
           }
         },
         "summary": "Search the Skill Market",

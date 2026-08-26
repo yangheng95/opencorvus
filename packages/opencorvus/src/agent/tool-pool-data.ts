@@ -9,6 +9,7 @@ import {
   GLOBAL_TOOL_IDS,
   GLOBAL_TOOL_ID_SET,
   PLATFORM_CAPABILITY_DISCOVERY_TOOL_IDS,
+  SKILL_MARKET_TOOL_ID,
   TASK_ARTIFACT_SCHEDULER_TOOL_IDS,
   WORKER_COMMUNICATION_TOOL_IDS,
 } from "@/tool/tool-id-catalog"
@@ -160,7 +161,7 @@ const primaryExecutionGlobal = [
   "batch",
 ] as const
 
-const codingGlobal = ["delegate_agent", ...primaryExecutionGlobal] as const
+const codingGlobal = ["delegate_agent", SKILL_MARKET_TOOL_ID, ...primaryExecutionGlobal] as const
 
 const taskBuildGlobal = [
   ...primaryExecutionGlobal,
@@ -299,7 +300,7 @@ export const roleAssignments = Object.freeze({
     private: ORCHESTRATOR_PRIVATE_TOOL_IDS,
   }),
   mission: createToolPool({
-    global: [...primaryExecutionGlobal, "mission_skill", "panel", "scheduler_message", "wait"],
+    global: [SKILL_MARKET_TOOL_ID, ...primaryExecutionGlobal, "mission_skill", "panel", "scheduler_message", "wait"],
   }),
 } satisfies Record<AgentRoleID, ToolPoolAssignment>)
 

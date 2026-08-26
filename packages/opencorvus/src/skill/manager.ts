@@ -21,6 +21,7 @@ import { PackageUpdateClient } from "@/package-update/client"
 import { withSkillCatalogMutation, withSkillSourceMutation, withSkillSourceMutations } from "./reference-lock"
 import { Log } from "@/util/log"
 import { createInstanceState } from "@/project/instance-state"
+import { SkillMarket } from "./market"
 
 const MANIFEST = ".opencorvus-skill-source.json"
 const log = Log.create({ service: "skill-manager" })
@@ -37,8 +38,21 @@ export namespace SkillManager {
 
   export const Installed = Skill.Info.extend({
     dir: z.string().optional(),
-    source_type: z.enum(["builtin", "managed_git", "config_path", "config_url", "external", "unknown"]),
+    source_type: z.enum([
+      "builtin",
+      "managed_market",
+      "managed_git",
+      "config_path",
+      "config_url",
+      "external",
+      "unknown",
+    ]),
     source: z.string().optional(),
+    market_id: z.string().optional(),
+    market_hash: z
+      .string()
+      .regex(/^[a-f0-9]{64}$/)
+      .optional(),
     trust: Trust,
     risk: Risk,
     recommended_policy: Policy,
@@ -47,22 +61,53 @@ export namespace SkillManager {
     writable: z.boolean(),
   })
 
-  const MarketListing = z.object({
-    id: z.string(),
-    name: z.string(),
-    provider: z.string(),
-    description: z.string(),
-    homepage: z.string().url(),
-    source: z.string().optional(),
-    install_kind: z.enum(["git", "url", "manual"]),
-    trust: z.enum(["official", "curated", "community"]),
-    recommended_policy: Policy,
-    notes: z.string().optional(),
-  })
+  export const MarketProvider = SkillMarket.Provider
+  export const MarketSearchInput = SkillMarket.SearchInput
 
-  export const MarketEntry = MarketListing.extend({
+  export const MarketEntry = SkillMarket.Candidate.extend({
     installed: z.boolean(),
   })
+
+  export const MarketDetail = z
+    .object({
+      id: z.string(),
+      skill_id: z.string(),
+      name: SkillNameSchema,
+      description: z.string(),
+      source: z.string(),
+      homepage: z.string().url(),
+      repository: z.string().url(),
+      hash: z.string().regex(/^[a-f0-9]{64}$/),
+      upstream_hash: z.string().optional(),
+      files: z.object({ path: z.string(), size: z.number().int().nonnegative() }).array(),
+      trust: Trust,
+      risk: Risk,
+      recommended_policy: Policy,
+      installed: z.boolean(),
+    })
+    .strict()
+
+  export const MarketInstallInput = z
+    .object({
+      id: SkillMarket.Identity,
+      expected_hash: z.string().regex(/^[a-f0-9]{64}$/),
+      policy: Policy.optional(),
+    })
+    .strict()
+
+  export const MarketInspectInput = z.object({ id: SkillMarket.Identity }).strict()
+
+  export const MarketInstallResult = z
+    .object({
+      id: z.string(),
+      name: SkillNameSchema,
+      source: z.string(),
+      path: z.string(),
+      hash: z.string().regex(/^[a-f0-9]{64}$/),
+      policy: Policy,
+      available: z.literal("next_turn"),
+    })
+    .strict()
 
   export const Directories = z.object({
     global_config: z.string(),
@@ -101,7 +146,7 @@ export namespace SkillManager {
 
   export const RemoveInput = z.object({
     source: z.string().min(1),
-    kind: z.enum(["path", "url", "git"]).optional(),
+    kind: z.enum(["path", "url", "git", "market"]).optional(),
   })
 
   export const PolicyInput = z.object({
@@ -137,81 +182,91 @@ export namespace SkillManager {
     })
   }
 
-  /** 内置默认市场条目 */
-  const BUILTIN_MARKET: z.input<typeof MarketListing>[] = [
-    {
-      id: "openai-skills",
-      name: "OpenAI Skills",
-      provider: "OpenAI",
-      description: "Official public repository for Agent Skills and related skill plugins.",
-      homepage: "https://github.com/openai/skills",
-      source: "https://github.com/openai/skills.git",
-      install_kind: "git",
-      trust: "official",
-      recommended_policy: "allow",
-      notes: "Installable as a Git source; review individual skills before allowing always.",
-    },
-    {
-      id: "anthropic-skills",
-      name: "Anthropic Skills",
-      provider: "Anthropic",
-      description: "Official skill repository curated for Claude-style agent workflows.",
-      homepage: "https://github.com/anthropics/skills",
-      source: "https://github.com/anthropics/skills.git",
-      install_kind: "git",
-      trust: "official",
-      recommended_policy: "allow",
-      notes: "Official source, but still prefer ask-by-default for script-bearing skills.",
-    },
-    {
-      id: "skills-sh",
-      name: "skills.sh",
-      provider: "skills.sh",
-      description: "Large searchable skill directory with repo-based install flows and popularity signals.",
-      homepage: "https://skills.sh",
-      install_kind: "manual",
-      trust: "curated",
-      recommended_policy: "allow",
-      notes: "Best used to discover repo URLs, then install via Git source in OpenCorvus.",
-    },
-    {
-      id: "skillstore",
-      name: "Skillstore",
-      provider: "Skillstore",
-      description: "Marketplace focused on install guides, packaging patterns, and skill submission review.",
-      homepage: "https://skillstore.io",
-      install_kind: "manual",
-      trust: "curated",
-      recommended_policy: "allow",
-      notes: "Useful discovery surface; installation method depends on the linked repository.",
-    },
-    {
-      id: "skills-pub",
-      name: "skills.pub",
-      provider: "skills.pub",
-      description: "High-volume community index covering hundreds of public skills across ecosystems.",
-      homepage: "https://skills.pub",
-      install_kind: "manual",
-      trust: "community",
-      recommended_policy: "allow",
-      notes: "Community directory only; import the referenced repo or path after review.",
-    },
-  ]
-
-  /** Returns the built-in market catalog with live installation projection. */
+  /** Returns the single current Skill Market provider authority. */
   export async function market() {
-    const entries = [...BUILTIN_MARKET]
-    const global = await Config.getGlobal()
+    return [SkillMarket.provider()]
+  }
 
+  export async function searchMarket(raw: z.input<typeof SkillMarket.SearchInput>) {
+    const candidates = await SkillMarket.search(raw)
+    const installedIDs = await installedMarketIDs()
     return MarketEntry.array().parse(
-      await Promise.all(
-        entries.map(async (entry) => {
-          return {
-            ...entry,
-            installed: await marketEntryInstalled(entry, global),
-          }
-        }),
-      ),
+      candidates.map((candidate) => ({ ...candidate, installed: installedIDs.has(candidate.id) })),
+    )
+  }
+
+  export async function inspectMarket(raw: z.input<typeof MarketInspectInput>) {
+    const input = MarketInspectInput.parse(raw)
+    const inspected = await inspectMarketBundle(input.id)
+    const installedIDs = await installedMarketIDs()
+    return MarketDetail.parse({ ...inspected.detail, installed: installedIDs.has(inspected.detail.id) })
+  }
+
+  export async function installMarket(raw: z.input<typeof MarketInstallInput>) {
+    const input = MarketInstallInput.parse(raw)
+    const identity = SkillMarket.identity(input.id)
+    const target = managedMarketTarget(identity.id)
+    return withSkillCatalogMutation(() =>
+      withSkillSourceMutation(`market:${identity.id}`, async () => {
+        const inspected = await inspectMarketBundle(identity.id)
+        if (inspected.detail.hash !== input.expected_hash) {
+          throw new Error(
+            `Skill Market bundle changed after inspection: expected ${input.expected_hash}, received ${inspected.detail.hash}`,
+          )
+        }
+        await assertMarketTargetOwnership(target, identity.id)
+        const policy = input.policy ?? inspected.detail.recommended_policy
+        Config.global.reset()
+        await Config.state.resetAll()
+        await resetInstalledDiscoveryState()
+        const targetSkillFile = path.join(path.resolve(target), "SKILL.md")
+        const existing = await configuredGlobalSkillDefinition(inspected.root.info.name, target)
+        if (existing) {
+          throw new Skill.InvalidError({
+            path: targetSkillFile,
+            message: `Skill name ${JSON.stringify(inspected.root.info.name)} is already defined by ${existing}.`,
+          })
+        }
+
+        const manifest = {
+          kind: "market",
+          market_id: identity.id,
+          hash: inspected.detail.hash,
+          upstream_hash: inspected.detail.upstream_hash,
+          source: inspected.detail.repository,
+          installed_at: Date.now(),
+        }
+        const root: ParsedSkillRoot = {
+          ...inspected.root,
+          files: [
+            ...inspected.root.files,
+            {
+              sourcePath: MANIFEST,
+              relativePath: MANIFEST,
+              bytes: new TextEncoder().encode(`${JSON.stringify(manifest, null, 2)}\n`),
+            },
+          ],
+        }
+        await replaceSkillDirectories([{ targetDir: target, root }], false, async () => {
+          await patchGlobal((next) => {
+            next.skills = next.skills || {}
+            next.skills.paths = dedupe([...(next.skills.paths ?? []), target])
+            applyPolicyToConfig(next, [root.info.name], policy)
+          })
+          Config.global.reset()
+          await Config.state.resetAll()
+          await resetInstalledDiscoveryState()
+        })
+        return MarketInstallResult.parse({
+          id: identity.id,
+          name: root.info.name,
+          source: inspected.detail.repository,
+          path: target,
+          hash: inspected.detail.hash,
+          policy,
+          available: "next_turn",
+        })
+      }),
     )
   }
 
@@ -232,9 +287,9 @@ export namespace SkillManager {
             ? "builtin"
             : remoteSource
               ? "config_url"
-            : dir
-              ? sourceTypeFor(dir, configuredPaths, cache, manifest?.kind)
-              : "builtin"
+              : dir
+                ? sourceTypeFor(dir, configuredPaths, cache, manifest?.kind)
+                : "builtin"
           const trust = trustFor(skill, remoteSource ?? manifest?.source)
           const risk = skill.builtin
             ? Skill.builtinRisk(skill.name)
@@ -251,18 +306,23 @@ export namespace SkillManager {
             ...skill,
             dir,
             source_type:
-              manifest?.kind === "git"
-                ? ("managed_git" as const)
-                : manifest?.kind === "url"
-                  ? ("config_url" as const)
-                  : sourceType,
+              manifest?.kind === "market"
+                ? ("managed_market" as const)
+                : manifest?.kind === "git"
+                  ? ("managed_git" as const)
+                  : manifest?.kind === "url"
+                    ? ("config_url" as const)
+                    : sourceType,
             source:
+              (manifest?.kind === "market" ? manifest.market_id : undefined) ??
               remoteSource ??
               manifest?.source ??
               (sourceType === "config_path"
                 ? configuredPaths.find((item) => Filesystem.contains(item, dir!))
                 : undefined) ??
               (sourceType === "config_url" && configuredUrls.length === 1 ? configuredUrls[0] : undefined),
+            market_id: manifest?.kind === "market" ? manifest.market_id : undefined,
+            market_hash: manifest?.kind === "market" ? manifest.hash : undefined,
             trust,
             risk,
             recommended_policy: recommendedPolicy(trust, risk),
@@ -295,7 +355,7 @@ export namespace SkillManager {
 
   export async function refreshDiscoveryState() {
     Config.global.reset()
-    await Config.state.reset()
+    await Config.state.resetAll()
     await resetInstalledDiscoveryState()
   }
 
@@ -448,8 +508,10 @@ export namespace SkillManager {
 
   export async function remove(raw: z.input<typeof RemoveInput>) {
     const input = RemoveInput.parse(raw)
-    const source =
-      input.kind === "git"
+    const marketID = input.kind === "market" ? SkillMarket.identity(input.source).id : undefined
+    const source = marketID
+      ? managedMarketTarget(marketID)
+      : input.kind === "git"
         ? managedGitTarget(normalizeGit(input.source))
         : input.kind === "url"
           ? input.source
@@ -457,14 +519,17 @@ export namespace SkillManager {
 
     return withSkillCatalogMutation(() =>
       withSkillSourceMutation(source, async () => {
+        if (marketID) await assertMarketTargetOwnership(source, marketID)
+        const configuredPath = (value: string) =>
+          input.kind === "market" || input.kind === "git" ? resolveGlobalConfiguredPath(value) : resolveSource(value)
         await patchGlobal((next) => {
           next.skills = next.skills || {}
-          next.skills.paths = (next.skills.paths ?? []).filter((item) => resolveSource(item) !== source)
+          next.skills.paths = (next.skills.paths ?? []).filter((item) => configuredPath(item) !== source)
           next.skills.urls = (next.skills.urls ?? []).filter((item) => item !== input.source)
         })
         const effective = await Config.getGlobal()
         const stillConfigured =
-          (effective.skills?.paths ?? []).some((item) => resolveSource(item) === source) ||
+          (effective.skills?.paths ?? []).some((item) => configuredPath(item) === source) ||
           (effective.skills?.urls ?? []).includes(input.source)
         if (stillConfigured) {
           throw new Error(`Skill source is owned by a lower-priority global config file: ${input.source}`)
@@ -474,7 +539,7 @@ export namespace SkillManager {
           await rm(source, { recursive: true, force: true })
         }
 
-        await Config.state.reset()
+        await Config.state.resetAll()
         await resetInstalledDiscoveryState()
 
         return true
@@ -535,6 +600,40 @@ export namespace SkillManager {
   }
 }
 
+async function installedMarketIDs() {
+  const config = await Config.getGlobal()
+  const result = new Set<string>()
+  for (const configured of config.skills?.paths ?? []) {
+    const expanded = configured.startsWith("~/") ? path.join(Global.Path.home, configured.slice(2)) : configured
+    if (!path.isAbsolute(expanded)) continue
+    const dir = path.normalize(expanded)
+    if (!Filesystem.contains(SkillManager.managedRoot(), dir) || !(await Filesystem.isDir(dir))) continue
+    const manifest = await readManifest(dir, SkillManager.managedRoot())
+    if (manifest?.kind === "market" && manifest.market_id) result.add(manifest.market_id)
+  }
+  return result
+}
+
+function resolveGlobalConfiguredPath(configured: string) {
+  const expanded = configured.startsWith("~/") ? path.join(Global.Path.home, configured.slice(2)) : configured
+  return path.isAbsolute(expanded) ? path.normalize(expanded) : undefined
+}
+
+async function configuredGlobalSkillDefinition(name: string, target: string) {
+  if (Skill.hasBuiltin(name)) return "builtin"
+  const config = await Config.getGlobal()
+  for (const configured of config.skills?.paths ?? []) {
+    const expanded = configured.startsWith("~/") ? path.join(Global.Path.home, configured.slice(2)) : configured
+    if (!path.isAbsolute(expanded)) continue
+    const dir = path.normalize(expanded)
+    if (path.resolve(dir) === path.resolve(target) || !(await Filesystem.isDir(dir))) continue
+    const definitions = await validateSkillDirectory(dir)
+    const existing = definitions.find((definition) => definition.name === name)
+    if (existing) return dir
+  }
+  return undefined
+}
+
 function resolveSource(value: string) {
   const expanded = value.startsWith("~/") ? path.join(Global.Path.home, value.slice(2)) : value
   return path.isAbsolute(expanded) ? expanded : path.resolve(Instance.directory, expanded)
@@ -559,23 +658,67 @@ function normalizeGit(value: string) {
   return trimmed
 }
 
-async function marketEntryInstalled(
-  entry: { source?: string; install_kind: "git" | "url" | "manual" },
-  config: z.infer<typeof Config.Info>,
-): Promise<boolean> {
-  if (!entry.source || entry.install_kind === "manual") return false
-  if (entry.install_kind === "url") {
-    const source = normalizeUrl(entry.source)
-    return (config.skills?.urls ?? []).some((configured) => normalizeUrl(configured) === source)
+async function inspectMarketBundle(rawID: string) {
+  const identity = SkillMarket.identity(rawID)
+  const bundle = await SkillMarket.download(identity.id)
+  try {
+    const roots = await readImportSkillRoots({
+      sourceName: identity.id,
+      files: bundle.files.map((file) => ({ path: file.path, content: file.content })),
+    })
+    if (roots.length !== 1) throw new Error(`Skill Market bundle must define exactly one Skill: ${identity.id}`)
+    const root = roots[0]!
+    const repository = `https://github.com/${identity.source}`
+    const trust = trustForSource(repository)
+    const risk = riskForMarketFiles(root.files, trust)
+    return {
+      root,
+      detail: {
+        id: identity.id,
+        skill_id: identity.skillID,
+        name: root.info.name,
+        description: root.info.description,
+        source: identity.source,
+        homepage: `${SkillMarket.ORIGIN}/${identity.id}`,
+        repository,
+        hash: bundle.hash,
+        upstream_hash: bundle.upstream_hash,
+        files: bundle.files.map((file) => ({ path: file.path, size: Buffer.byteLength(file.content, "utf8") })),
+        trust,
+        risk,
+        recommended_policy: recommendedPolicy(trust, risk),
+      },
+    }
+  } catch (error) {
+    throw SkillMarket.invalidBundleError(identity.id, error)
   }
-  const target = path.normalize(managedGitTarget(normalizeGit(entry.source)))
-  const configured = (config.skills?.paths ?? []).some((configuredPath) => {
-    const expanded = configuredPath.startsWith("~/")
-      ? path.join(Global.Path.home, configuredPath.slice(2))
-      : configuredPath
-    return path.isAbsolute(expanded) && path.normalize(expanded) === target
-  })
-  return configured && (await Filesystem.isDir(target))
+}
+
+function riskForMarketFiles(
+  files: readonly ParsedSkillRoot["files"][number][],
+  trust: z.infer<typeof SkillManager.Trust>,
+) {
+  const paths = files.map((file) => file.relativePath.toLowerCase())
+  const inDirectory = (names: readonly string[]) =>
+    paths.some((file) => names.some((name) => file === name || file.startsWith(`${name}/`)))
+  const hasScripts = inDirectory(["script", "scripts"])
+  const hasAgents = inDirectory(["agent", "agents"])
+  const hasReferences = inDirectory(["reference", "references"])
+  const hasTemplates = inDirectory(["template", "templates", "asset", "assets"])
+  const level = hasScripts
+    ? "high"
+    : trust === "community" || trust === "unknown" || trust === "external"
+      ? "medium"
+      : hasAgents || hasReferences
+        ? "medium"
+        : "low"
+  return {
+    level,
+    has_scripts: hasScripts,
+    has_agents: hasAgents,
+    has_references: hasReferences,
+    has_templates: hasTemplates,
+  } as const
 }
 
 function slug(value: string) {
@@ -605,6 +748,37 @@ function managedGitTarget(source: string) {
     throw new Error(`Invalid git skill source slug: ${source}`)
   }
   return target
+}
+
+function managedMarketTarget(rawID: string) {
+  const identity = SkillMarket.identity(rawID)
+  const root = path.join(SkillManager.managedRoot(), SkillMarket.ID)
+  const target = path.resolve(root, identity.owner, identity.repository, identity.skillID)
+  if (target === path.resolve(root) || !Filesystem.contains(root, target)) {
+    throw new Error(`Invalid Skill Market target identity: ${rawID}`)
+  }
+  return target
+}
+
+async function assertMarketTargetOwnership(target: string, expectedID: string) {
+  if (!(await Filesystem.isDir(target))) return
+  const manifest = await Filesystem.readJson<{
+    kind?: string
+    market_id?: string
+  }>(path.join(target, MANIFEST)).catch(() => undefined)
+  let observedID: string | undefined
+  if (manifest?.kind === "market" && manifest.market_id) {
+    try {
+      observedID = SkillMarket.identity(manifest.market_id).id
+    } catch {
+      observedID = undefined
+    }
+  }
+  if (observedID !== expectedID) {
+    throw new Error(
+      `Skill Market target ownership mismatch: expected ${expectedID}, received ${observedID ?? "unowned"}`,
+    )
+  }
 }
 
 async function ensureManagedRepo(source: string, dest: string) {
@@ -677,6 +851,7 @@ function applyPolicyToConfig(
 }
 
 function sourceTypeFor(dir: string, configuredPaths: string[], _cache: string, kind?: string) {
+  if (kind === "market") return "managed_market"
   if (kind === "git") return "managed_git"
   if (kind === "url") return "config_url"
   if (Filesystem.contains(SkillManager.managedRoot(), dir)) return "managed_git"
@@ -726,7 +901,11 @@ function trustForSource(source: string): z.infer<typeof SkillManager.Trust> {
   if (scp) return trustForGitHubRepository(scp[1]!, scp[2]!)
 
   const authorityStart = source.indexOf("://") + 3
-  const authorityEnd = [source.indexOf("/", authorityStart), source.indexOf("?", authorityStart), source.indexOf("#", authorityStart)]
+  const authorityEnd = [
+    source.indexOf("/", authorityStart),
+    source.indexOf("?", authorityStart),
+    source.indexOf("#", authorityStart),
+  ]
     .filter((index) => index !== -1)
     .sort((left, right) => left - right)[0]
   const authority = source.slice(authorityStart, authorityEnd)
@@ -830,7 +1009,13 @@ async function readManifest(dir: string, ...roots: string[]) {
   let current = dir
   while (true) {
     const file = path.join(current, MANIFEST)
-    const manifest = await Filesystem.readJson<{ kind?: string; source?: string }>(file).catch(() => undefined)
+    const manifest = await Filesystem.readJson<{
+      kind?: string
+      source?: string
+      market_id?: string
+      hash?: string
+      upstream_hash?: string
+    }>(file).catch(() => undefined)
     if (manifest) return manifest
     const parent = path.dirname(current)
     if (parent === current) return undefined
