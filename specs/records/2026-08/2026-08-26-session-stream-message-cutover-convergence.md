@@ -155,7 +155,7 @@ The bounded snapshot is intentionally additive. It repairs missed creation event
 - [x] Focused route/projection/history/origin tests, package typechecks, documentation checks, architecture index, diff check, SDK generation/typecheck, and Overlay production build passed.
 - [x] Real-page rendering acceptance completed against an isolated runtime; screenshot: [`../../artifacts/session-stream/2026-08-26-work-first-message-visible.png`](../../artifacts/session-stream/2026-08-26-work-first-message-visible.png). DOM and screenshot show `User` / `第一条 Work 用户消息应该完整显示`, followed by `work` / `这是 Work Agent 的消息；它应显示在用户消息之后。`; browser warning/error log was empty. This is rendering evidence only; the route test proves the connection race.
 - [x] Independent review complete with no unresolved finding. The repeat review found no production or test defect and one P3 stale evidence count; after correction, the final uninvolved read-only rereview passed with no unresolved P0-P3 finding.
-- [ ] Corrective commit created, upstream merged, complete push set verified, and pushed to `origin/arch-debt-remediation`.
+- [x] Corrective commit `4e2b1f456` created, the complete pending set reviewed, pre-push verification passed, and the source branch pushed through `702e030d4` to `origin/arch-debt-remediation`.
 
 ## Verification evidence
 

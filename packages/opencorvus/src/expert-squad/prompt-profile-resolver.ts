@@ -719,8 +719,7 @@ export namespace PromptProfileResolver {
           `Expert squad ${input.active.profileID} skill_mounts references undeclared dynamic agent ${JSON.stringify(agentID)}.`,
         )
       }
-      const skillMountable =
-        baseRole === "orchestrator" ? true : RuntimeTemplateRegistry.get(baseRole).skillMountable
+      const skillMountable = baseRole === "orchestrator" ? true : RuntimeTemplateRegistry.get(baseRole).skillMountable
       if (!skillMountable) {
         throw new Error(
           `Expert squad ${input.active.profileID} agent ${agentID} uses base role ${baseRole}, which does not allow operator skill mounts.`,
@@ -3947,11 +3946,7 @@ export namespace PromptProfileResolver {
     namespace?: string
     workflowCursor?: string
   }): Promise<ExpertSquadCatalogInspection | undefined> {
-    if (
-      input.installationScope &&
-      input.installationScope !== "built_in" &&
-      !input.namespace
-    ) {
+    if (input.installationScope && input.installationScope !== "built_in" && !input.namespace) {
       throw new Error("Installed expert squad inspection requires namespace.")
     }
     const inventory = await catalogInventory(input.projectDirectory)
@@ -3987,7 +3982,8 @@ export namespace PromptProfileResolver {
           node_count: Object.keys(workflow.nodes).length,
         }))
       catalogWorkflowSummaries.set(workflowCacheKey, workflows)
-      if (catalogWorkflowSummaries.size > 64) catalogWorkflowSummaries.delete(catalogWorkflowSummaries.keys().next().value!)
+      if (catalogWorkflowSummaries.size > 64)
+        catalogWorkflowSummaries.delete(catalogWorkflowSummaries.keys().next().value!)
     }
     const nextOffset = Math.min(offset + 20, workflowCount)
     return catalogInspectionFromPackage({
