@@ -59,6 +59,21 @@ const HTML_ERROR = (error: string) => `<!DOCTYPE html>
 </body>
 </html>`
 
+/**
+ * A project's durable owner of OAuth flows.
+ *
+ * The listener is an adapter over a port: it has no opinion about which flows
+ * exist. Whether a state names a live flow, and what finishing one means, are
+ * answered here — by the same durable credential store that outlives the
+ * in-process waiter this listener registers.
+ */
+interface CallbackAuthorityContract {
+  /** The flow this state belongs to in this project, or undefined. */
+  resolveState(oauthState: string): Promise<{ mcpName: string } | undefined>
+  /** Complete the flow. Admission is single-use inside the credential store. */
+  finish(input: { mcpName: string; authorizationCode: string; oauthState: string }): Promise<void>
+}
+
 interface PendingAuth {
   resolve: (code: string) => void
   reject: (error: Error) => void
@@ -68,16 +83,23 @@ interface PendingAuth {
 }
 
 export namespace McpOAuthCallback {
+  export type CallbackAuthority = CallbackAuthorityContract
+
   let server: ReturnType<typeof Bun.serve> | undefined
   // The pending owner key is project-scoped for MCP auth flows
   // (`projectID:mcpName`) so two active projects can authenticate the same
   // server name without sharing callback cancellation state.
   const pendingAuths = new Map<string, PendingAuth>()
   const mcpNameToState = new Map<string, string>()
+  // Flow authorities are project-scoped for the same reason the pending map
+  // is. One shared slot would be last-writer-wins: a legitimate callback for
+  // the first project would be resolved under the second project's identity
+  // and refused. Each registered project answers only for its own flows.
+  const flowAuthorities = new Map<string, CallbackAuthorityContract>()
 
   const CALLBACK_TIMEOUT_MS = 5 * 60 * 1000 // 5 minutes
 
-  export function handleRequest(req: Request): Response {
+  export async function handleRequest(req: Request): Promise<Response> {
     const url = new URL(req.url)
 
     if (url.pathname !== OAUTH_CALLBACK_PATH) {
@@ -105,7 +127,27 @@ export namespace McpOAuthCallback {
       })
     }
 
+    // A callback no caller in this process is waiting on is not thereby
+    // forged: the waiter may have timed out, its flow may have been cancelled
+    // and re-minted, or the listener may have outlived the call that started
+    // it. Legitimacy is the durable store's answer, never this map's
+    // emptiness. With no project registered, no authority claims the state and
+    // the refusal below is reached exactly as before.
+    let durableOwner: { authority: CallbackAuthorityContract; mcpName: string } | undefined
     if (!callbackOwner) {
+      try {
+        durableOwner = await resolveDurableOwner(state)
+      } catch (error) {
+        const errorMsg = error instanceof Error ? error.message : String(error)
+        log.error("oauth callback could not resolve its flow", { correlationID, error: errorMsg })
+        return new Response(HTML_ERROR(errorMsg), {
+          status: 500,
+          headers: { "Content-Type": "text/html" },
+        })
+      }
+    }
+
+    if (!callbackOwner && !durableOwner) {
       const errorMsg = "Invalid or expired state parameter - potential CSRF attack"
       log.error(
         "oauth callback with invalid state",
@@ -119,38 +161,80 @@ export namespace McpOAuthCallback {
 
     if (error) {
       const errorMsg = errorDescription || error
-      clearTimeout(callbackOwner.timeout)
-      pendingAuths.delete(state)
-      if (callbackOwner.mcpName) mcpNameToState.delete(callbackOwner.mcpName)
-      callbackOwner.reject(new Error(errorMsg))
+      settleLocally(state, callbackOwner, (pending) => pending.reject(new Error(errorMsg)))
       return new Response(HTML_ERROR(errorMsg), {
+        status: callbackOwner ? 200 : 400,
         headers: { "Content-Type": "text/html" },
       })
     }
 
     if (!code) {
       const errorMsg = "No authorization code provided"
-      clearTimeout(callbackOwner.timeout)
-      pendingAuths.delete(state)
-      if (callbackOwner.mcpName) mcpNameToState.delete(callbackOwner.mcpName)
-      callbackOwner.reject(new Error(errorMsg))
+      settleLocally(state, callbackOwner, (pending) => pending.reject(new Error(errorMsg)))
       return new Response(HTML_ERROR(errorMsg), {
         status: 400,
         headers: { "Content-Type": "text/html" },
       })
     }
 
-    clearTimeout(callbackOwner.timeout)
-    pendingAuths.delete(state)
-    if (callbackOwner.mcpName) mcpNameToState.delete(callbackOwner.mcpName)
-    callbackOwner.resolve(code)
+    if (callbackOwner) {
+      // The caller that opened this flow is waiting in this process and
+      // finishes it itself. This branch answers the browser on handoff rather
+      // than on the exchange's outcome — the contract it has always had.
+      settleLocally(state, callbackOwner, (pending) => pending.resolve(code))
+      return new Response(HTML_SUCCESS, {
+        headers: { "Content-Type": "text/html" },
+      })
+    }
+
+    try {
+      await durableOwner!.authority.finish({
+        mcpName: durableOwner!.mcpName,
+        authorizationCode: code,
+        oauthState: state,
+      })
+    } catch (finishError) {
+      const errorMsg = finishError instanceof Error ? finishError.message : String(finishError)
+      log.error("oauth callback failed to finish an unattended flow", { correlationID, error: errorMsg })
+      return new Response(HTML_ERROR(errorMsg), {
+        status: 400,
+        headers: { "Content-Type": "text/html" },
+      })
+    }
 
     return new Response(HTML_SUCCESS, {
       headers: { "Content-Type": "text/html" },
     })
   }
 
-  export async function ensureRunning(): Promise<void> {
+  /** Ask each registered project whether this state names one of its flows. */
+  async function resolveDurableOwner(
+    oauthState: string,
+  ): Promise<{ authority: CallbackAuthorityContract; mcpName: string } | undefined> {
+    for (const authority of flowAuthorities.values()) {
+      const owner = await authority.resolveState(oauthState)
+      if (owner) return { authority, mcpName: owner.mcpName }
+    }
+    return undefined
+  }
+
+  function settleLocally(
+    state: string,
+    pending: PendingAuth | undefined,
+    settle: (pending: PendingAuth) => void,
+  ): void {
+    if (!pending) return
+    clearTimeout(pending.timeout)
+    pendingAuths.delete(state)
+    if (pending.mcpName) mcpNameToState.delete(pending.mcpName)
+    settle(pending)
+  }
+
+  export async function ensureRunning(input?: {
+    projectID: string
+    authority: CallbackAuthorityContract
+  }): Promise<void> {
+    if (input) flowAuthorities.set(input.projectID, input.authority)
     if (server) return
 
     try {
@@ -167,11 +251,7 @@ export namespace McpOAuthCallback {
     log.info("oauth callback server started", { port: OAUTH_CALLBACK_PORT })
   }
 
-  function waitForCallback(
-    oauthState: string,
-    mcpName: string | undefined,
-    correlationID: string,
-  ): Promise<string> {
+  function waitForCallback(oauthState: string, mcpName: string | undefined, correlationID: string): Promise<string> {
     return new Promise((resolve, reject) => {
       const timeout = setTimeout(() => {
         if (pendingAuths.has(oauthState)) {
@@ -217,6 +297,7 @@ export namespace McpOAuthCallback {
     if (server) {
       server.stop()
       server = undefined
+      flowAuthorities.clear()
       log.info("oauth callback server stopped")
     }
 

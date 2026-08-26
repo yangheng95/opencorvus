@@ -13,12 +13,12 @@ describe("P0 security runtime paths", () => {
     const owner = "project:mcp"
     const callback = McpOAuthCallback.waitForCallbackSettlement(validState, owner, "flow-correlation-id")
 
-    const invalid = McpOAuthCallback.handleRequest(
+    const invalid = await McpOAuthCallback.handleRequest(
       new Request(`http://127.0.0.1${OAUTH_CALLBACK_PATH}?state=expired&error=access_denied`),
     )
     expect(invalid.status).toBe(400)
 
-    const valid = McpOAuthCallback.handleRequest(
+    const valid = await McpOAuthCallback.handleRequest(
       new Request(`http://127.0.0.1${OAUTH_CALLBACK_PATH}?state=${validState}&code=authorization-code`),
     )
     expect(valid.status).toBe(200)
@@ -26,7 +26,7 @@ describe("P0 security runtime paths", () => {
 
     const malformedState = "malformed-oauth-state"
     const malformed = McpOAuthCallback.waitForCallbackSettlement(malformedState, owner, "malformed-correlation-id")
-    const malformedResponse = McpOAuthCallback.handleRequest(
+    const malformedResponse = await McpOAuthCallback.handleRequest(
       new Request(`http://127.0.0.1${OAUTH_CALLBACK_PATH}?state=${malformedState}`),
     )
     expect(malformedResponse.status).toBe(400)

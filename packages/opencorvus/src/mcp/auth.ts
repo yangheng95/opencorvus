@@ -87,11 +87,7 @@ export namespace McpAuth {
     return data[authKey]?.revision ?? INITIAL_REVISION
   }
 
-  function assertRevisionInStore(
-    data: Record<string, Entry>,
-    authKey: string,
-    expected?: Revision,
-  ) {
+  function assertRevisionInStore(data: Record<string, Entry>, authKey: string, expected?: Revision) {
     if (expected === undefined) return
     // The empty generation is the absence of a lease, never a lease. A caller
     // presenting it skipped `beginCredentialLease`, and admitting it is what
@@ -417,6 +413,39 @@ export namespace McpAuth {
       },
       expectedRevision,
     )
+  }
+
+  /**
+   * Spend an OAuth state, exactly once.
+   *
+   * The comparison and the clear are one read-modify-write inside the
+   * cross-process lock, so of any number of callbacks bearing the same state
+   * exactly one observes it present and gets `true`. That is what makes an
+   * authorization code single-use: a duplicate callback — an identity
+   * provider's double redirect, a browser retry, a link prefetcher — cannot
+   * drive a second token exchange for a code the first exchange already
+   * redeemed, which on a compliant authorization server would revoke the
+   * credentials the flow just obtained.
+   *
+   * Returns false when the state is absent, already spent, or superseded.
+   */
+  export async function spendOAuthState(
+    authKey: string,
+    oauthState: string,
+    expectedRevision: Revision,
+  ): Promise<boolean> {
+    let spent = false
+    await updateStore(
+      authKey,
+      (entry) => {
+        if (!entry || entry.oauthState !== oauthState) return entry
+        delete entry.oauthState
+        spent = true
+        return entry
+      },
+      expectedRevision,
+    )
+    return spent
   }
 
   export async function clearOAuthStateIfOwned(authKey: string, expectedRevision: Revision): Promise<boolean> {
