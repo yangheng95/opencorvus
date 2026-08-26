@@ -783,6 +783,21 @@ The fourteenth independent review returned **Reject** with fourteen findings. Ev
 - Focused tests: an untouched project's configuration declares the builtin provider itself, and configuration turning the provider off decides the projection where assignment alone previously resurrected it. Both verified by restoring the synthesis and watching them go red.
 - Still open, and separate: ARC-008's context budget — the default Chat/Work assignment projects the whole Browser/Computer tool surface every turn. That is a projection-volume decision, not an authority one, and this repair neither widens nor narrows it.
 
+## Ledger gaps found by auditing this record against the audit
+
+Every ARC finding in scope was checked for a section here. Two have none, and neither is repaired. Recording them as open is the honest state; claiming stage 6 closed them would not be.
+
+### ARC-003 — Conversation Browser sessions are still ownerless (P1, open)
+
+- Verified against current source, not inferred: `conversation/capability.ts` disposes exactly one runtime — `disconnectRuntimeMcp` closes the session's Computer connection owner and `ComputerHostRuntime.destroy(runtimeScope)` tears down its host scope. There is no Browser counterpart on that path, and `mcp/browser/sessions.ts` keeps its sessions in a module-level `Map<string, Session>` whose `Session` carries no owner field at all. So a Conversation's Browser sessions survive the Conversation and belong to the Project, exactly as the audit says.
+- Why it is not repaired here: the Browser MCP runs as a separate local process, so an owner has to reach it the way Computer's does — as a runtime scope in the launched environment, tagged onto each session, destroyed by scope on Conversation dispose. `BrowserMCPBuiltin.localConfig` has no scope parameter and there is no `withRuntimeScope` equivalent for Browser. That is the same shape as the Computer work, not a smaller one, and it deserves its own change and review round rather than being appended to ARC-001's.
+- Note on stage 6's claim: "Browser and Computer share one launch/ownership policy" is true of launch policy, which ARC-002/ARC-004 converged. It is not true of cleanup ownership, and that half is what ARC-003 names.
+
+### ARC-008 — the default assignment's context budget (P2, open)
+
+- The default Chat/Work assignment still projects the whole Browser/Computer tool surface every Turn. The audit points at the 2026-08-14 Tool-block plan as the correct on-demand direction and says plainly that it is not the current runtime; nothing in this campaign changed that.
+- ARC-001 neither widened nor narrowed this: it settled which authority declares the Computer provider, not how many tools a Turn projects.
+
 ## Stage log
 
 - Stage 3 (ARC-010 through ARC-013): complete. Production repair and the 52-file fixture migration are committed in `7786b642d`, `32d6aae01` and `1df9e2f4b`. The post-review evidence repair runs real late-transaction SQLite aborts and is verified by four focused files (**6 pass, 0 fail, 16 assertions**), `packages/opencorvus` typecheck, Prettier and `git diff --check`. The repeat uninvolved read-only review returned **PASS with no unresolved finding**; the pre-existing red suites remain bisected and recorded above.
