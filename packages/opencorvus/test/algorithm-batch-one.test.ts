@@ -842,7 +842,6 @@ describe("prompt ownership termination", () => {
           session.id,
           { type: "streaming" },
           {
-            publish: false,
             inputMessageID: input.id,
             promptGenerationOwner: owner,
           },

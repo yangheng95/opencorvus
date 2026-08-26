@@ -6,6 +6,7 @@ import { fn } from "@/util/fn"
 import type { AuthHook, AuthOAuthResult, AuthPromptRule } from "@opencorvus-ai/plugin"
 import { NamedError } from "@opencorvus-ai/util/error"
 import { Auth } from "@/auth"
+import { ProviderOAuthFlowStore } from "@/provider/oauth-flow-store"
 import { lazy } from "@/util/lazy"
 
 export namespace ProviderAuth {
@@ -19,14 +20,47 @@ export namespace ProviderAuth {
       map((x) => [x.auth!.provider, x.auth!] as const),
       fromEntries(),
     )
-    return { methods, pending: {} as Record<string, AuthOAuthResult> }
+    // Keyed by flow occurrence ID, never by provider: the executor is the
+    // plugin's live closure (PKCE material a restart cannot resurrect), and
+    // the durable occurrence in ProviderOAuthFlowStore is what identifies it.
+    return { methods, executors: new Map<string, AuthOAuthResult>() }
   }
 
   const projectState = createInstanceState(() => Plugin.list().then(createState), undefined, "provider-auth")
   const globalState = lazy(() => Plugin.listGlobalProviderHooks().then(createState))
+  let globalStateOverrideForTest: ReturnType<typeof createState> | undefined
 
   function state(scope: Scope = "project") {
+    if (scope === "global" && globalStateOverrideForTest) return globalStateOverrideForTest
     return scope === "global" ? globalState() : projectState()
+  }
+
+  /**
+   * Hold a flow's live executor, releasing every executor whose flow is no
+   * longer pending. The open that minted this flow superseded any previous
+   * pending occurrence for the provider and scope; without the sweep the
+   * superseded closure (and its PKCE material) would live as long as the
+   * scope's state — for the global scope, the life of the process.
+   */
+  async function holdExecutor(scope: Scope, flowID: string, executor: AuthOAuthResult) {
+    const executors = await state(scope).then((s) => s.executors)
+    for (const id of [...executors.keys()]) {
+      const record = await ProviderOAuthFlowStore.get(id)
+      if (!record || record.state !== "pending") executors.delete(id)
+    }
+    executors.set(flowID, executor)
+  }
+
+  export const TestHooks = {
+    installGlobalAuthHooksForTest(hooks: Parameters<typeof createState>[0]): Disposable {
+      const override = createState(hooks)
+      globalStateOverrideForTest = override
+      return {
+        [Symbol.dispose]() {
+          if (globalStateOverrideForTest === override) globalStateOverrideForTest = undefined
+        },
+      }
+    },
   }
 
   export const Method = z
@@ -58,6 +92,8 @@ export namespace ProviderAuth {
       url: z.string(),
       method: z.union([z.literal("auto"), z.literal("code")]),
       instructions: z.string(),
+      /** The durable flow occurrence this authorization opened. */
+      flowID: z.string(),
     })
     .meta({
       ref: "ProviderAuthAuthorization",
@@ -76,11 +112,22 @@ export namespace ProviderAuth {
       const method = auth.methods[input.method]
       if (method.type === "oauth") {
         const result = await method.authorize(input.inputs)
-        await state(input.scope).then((s) => (s.pending[input.providerID] = result))
+        // The durable occurrence supersedes any pending flow for this
+        // provider and scope — an explicit fact of the old flow, not a silent
+        // replacement — and the live executor is held under the occurrence's
+        // own identity.
+        const flow = await ProviderOAuthFlowStore.open({
+          providerID: input.providerID,
+          scope: input.scope ?? "project",
+          method: input.method,
+          inputsDigest: ProviderOAuthFlowStore.digestInputs(input.inputs),
+        })
+        await holdExecutor(input.scope ?? "project", flow.id, result)
         return {
           url: result.url,
           method: result.method,
           instructions: result.instructions,
+          flowID: flow.id,
         }
       }
     },
@@ -91,23 +138,79 @@ export namespace ProviderAuth {
       providerID: z.string(),
       method: z.number(),
       code: z.string().optional(),
+      /** The exact flow this code belongs to. Omitted, the current pending
+       *  occurrence for the provider and scope is resolved — and must still
+       *  match the declared method. */
+      flowID: z.string().optional(),
       scope: Scope.optional(),
     }),
     async (input) => {
-      const match = await state(input.scope).then((s) => s.pending[input.providerID])
-      if (!match) throw new OauthMissing({ providerID: input.providerID })
+      const scope = input.scope ?? "project"
+      const flow = input.flowID
+        ? await ProviderOAuthFlowStore.get(input.flowID)
+        : await ProviderOAuthFlowStore.pendingFor(input.providerID, scope)
+      if (!flow || flow.state === "superseded") throw new OauthMissing({ providerID: input.providerID })
+      if (flow.state !== "pending") {
+        throw new OauthFlowAlreadySettled({ providerID: input.providerID, flowID: flow.id, state: flow.state })
+      }
+      if (flow.providerID !== input.providerID || flow.scope !== scope || flow.method !== input.method) {
+        // The code in hand was produced by a different flow than the one the
+        // caller believes it is finishing. Refusing here is what binds the
+        // method to the occurrence — the old slot compared only provider IDs.
+        throw new OauthFlowMismatch({
+          providerID: input.providerID,
+          flowID: flow.id,
+          expectedMethod: flow.method,
+          method: input.method,
+        })
+      }
+      // Claim the executor exactly once; a concurrent second callback for the
+      // same occurrence finds it gone.
+      const executors = await state(scope).then((s) => s.executors)
+      const match = executors.get(flow.id)
+      executors.delete(flow.id)
+      if (!match) {
+        // The occurrence is durable but its executor lived in a process that
+        // is gone — or another caller is finishing it right now. Either way
+        // this caller cannot finish it, and the reason is exact.
+        throw new OauthFlowNotExecutable({ providerID: input.providerID, flowID: flow.id })
+      }
       let result
 
-      if (match.method === "code") {
-        if (!input.code) throw new OauthCodeMissing({ providerID: input.providerID })
-        result = await match.callback(input.code)
-      }
+      try {
+        if (match.method === "code") {
+          if (!input.code) throw new OauthCodeMissing({ providerID: input.providerID })
+          result = await match.callback(input.code)
+        }
 
-      if (match.method === "auto") {
-        result = await match.callback()
+        if (match.method === "auto") {
+          result = await match.callback()
+        }
+      } catch (error) {
+        await ProviderOAuthFlowStore.settle({
+          id: flow.id,
+          state: "failed",
+          error: error instanceof Error ? error.message : String(error),
+        })
+        throw error
       }
 
       if (result?.type === "success") {
+        // Consuming the occurrence before the credential write makes the
+        // write single-shot: a concurrent callback that lost the settle race
+        // must not write a second credential for the same flow.
+        const consumed = await ProviderOAuthFlowStore.settle({ id: flow.id, state: "consumed" })
+        if (!consumed) {
+          // Losing the settle means another writer got there first — for a
+          // claimed executor that can only be a supersession, so no
+          // credential was written. Report the flow's real durable state.
+          const settled = await ProviderOAuthFlowStore.get(flow.id)
+          throw new OauthFlowAlreadySettled({
+            providerID: input.providerID,
+            flowID: flow.id,
+            state: settled?.state ?? "superseded",
+          })
+        }
         if ("key" in result) {
           await Auth.set(input.providerID, {
             type: "api",
@@ -133,6 +236,11 @@ export namespace ProviderAuth {
         return
       }
 
+      await ProviderOAuthFlowStore.settle({
+        id: flow.id,
+        state: "failed",
+        error: "Provider OAuth callback returned no credential",
+      })
       throw new OauthCallbackFailed({})
     },
   )
@@ -258,7 +366,13 @@ export namespace ProviderAuth {
 
       if (method.type === "oauth") {
         const result = await method.authorize(input.inputs)
-        await state(input.scope).then((s) => (s.pending[input.providerID] = result))
+        const flow = await ProviderOAuthFlowStore.open({
+          providerID: input.providerID,
+          scope: input.scope ?? "project",
+          method: input.method,
+          inputsDigest: ProviderOAuthFlowStore.digestInputs(input.inputs),
+        })
+        await holdExecutor(input.scope ?? "project", flow.id, result)
         return
       }
     },
@@ -301,4 +415,24 @@ export namespace ProviderAuth {
   )
 
   export const OauthCallbackFailed = NamedError.create("ProviderAuthOauthCallbackFailed", z.object({}))
+
+  export const OauthFlowMismatch = NamedError.create(
+    "ProviderAuthOauthFlowMismatch",
+    z.object({
+      providerID: z.string(),
+      flowID: z.string(),
+      expectedMethod: z.number(),
+      method: z.number(),
+    }),
+  )
+
+  export const OauthFlowAlreadySettled = NamedError.create(
+    "ProviderAuthOauthFlowAlreadySettled",
+    z.object({ providerID: z.string(), flowID: z.string(), state: z.string() }),
+  )
+
+  export const OauthFlowNotExecutable = NamedError.create(
+    "ProviderAuthOauthFlowNotExecutable",
+    z.object({ providerID: z.string(), flowID: z.string() }),
+  )
 }

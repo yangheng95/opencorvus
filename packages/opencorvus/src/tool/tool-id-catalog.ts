@@ -12,15 +12,13 @@ import { WORK_ARTIFACT_TOOL_IDS } from "@/work-artifact/profile-registry"
 export { WORK_ARTIFACT_TOOL_IDS } from "@/work-artifact/profile-registry"
 
 export const BATCH_TOOL_ID = "batch" as const
+export const SKILL_MARKET_TOOL_ID = "skill_market" as const
 export const PLATFORM_CAPABILITY_DISCOVERY_TOOL_IDS = ["capability_search"] as const
 
 export const WORKER_COMMUNICATION_TOOL_IDS = ["request_orchestrator_decision", "send_mailbox_message"] as const
 export const TASK_ARTIFACT_DISCOVERY_TOOL_IDS = PLATFORM_ARTIFACT_DISCOVERY_TOOL_IDS
 export const TASK_ARTIFACT_PUBLISH_TOOL_IDS = PLATFORM_ARTIFACT_PUBLISH_TOOL_IDS
-export const TASK_ARTIFACT_SCHEDULER_TOOL_IDS = [
-  ...TASK_ARTIFACT_DISCOVERY_TOOL_IDS,
-  "artifact_snapshot",
-] as const
+export const TASK_ARTIFACT_SCHEDULER_TOOL_IDS = [...TASK_ARTIFACT_DISCOVERY_TOOL_IDS, "artifact_snapshot"] as const
 export const TASK_ARTIFACT_TOOL_IDS = PLATFORM_ARTIFACT_TOOL_IDS
 
 export const GLOBAL_TOOL_IDS = [
@@ -31,6 +29,7 @@ export const GLOBAL_TOOL_IDS = [
   "browser_preview_capture",
   "browser_preview_capture_interaction_state",
   ...PLATFORM_CAPABILITY_DISCOVERY_TOOL_IDS,
+  SKILL_MARKET_TOOL_ID,
   ...TASK_ARTIFACT_TOOL_IDS,
   "publish_interactive_artifact",
   ...WORK_ARTIFACT_TOOL_IDS,

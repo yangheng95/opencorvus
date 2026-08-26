@@ -73,6 +73,7 @@ async function loadBuiltInGlobalTools(): Promise<readonly Tool.Info[]> {
     { ArtifactSearchTool, ArtifactReadTool, ArtifactSelectTool, ArtifactSnapshotTool, ArtifactPublishTool },
     { ExpertSquadAuthorTool },
     { CapabilitySearchTool },
+    { SkillMarketTool },
   ] = await Promise.all([
     import("./delegate-agent"),
     import("./question"),
@@ -102,6 +103,7 @@ async function loadBuiltInGlobalTools(): Promise<readonly Tool.Info[]> {
     import("./artifact-catalog"),
     import("./expert-squad-author"),
     import("./capability-search"),
+    import("./skill-market"),
   ])
   const [ScheduleTool, PanelTool, WaitTool, RequestOrchestratorDecisionTool, SendMailboxMessageTool] =
     await Promise.all([
@@ -150,6 +152,7 @@ async function loadBuiltInGlobalTools(): Promise<readonly Tool.Info[]> {
     ArtifactPublishTool,
     ExpertSquadAuthorTool,
     CapabilitySearchTool,
+    SkillMarketTool,
     PublishInteractiveArtifactTool,
     WorkArtifactInspectTool,
     WorkArtifactAuthorTool,

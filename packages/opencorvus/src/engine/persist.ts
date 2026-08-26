@@ -1,4 +1,5 @@
 import { Identifier } from "@/id/id"
+import { currentControlLeaseInTransaction, releaseControlLeaseInTransaction } from "./control-lease"
 import { isDeepStrictEqual } from "node:util"
 import { Database, and, desc, eq, inArray, sql } from "@/storage/db"
 import { Log } from "@/util/log"
@@ -1726,6 +1727,12 @@ export function recordTaskLevelBuildHostObservation(input: {
   diffs?: BuildFileObservation[]
   observedArtifactLocators?: ArtifactReadLocator[]
   sourceArtifactLocators?: ArtifactReadLocator[]
+  /**
+   * The caller's build-cleanup activation, if it holds one. The `retained`
+   * receipt written here is terminal for that cleanup, so the activation ends
+   * with it — but only the exact activation the caller holds.
+   */
+  cleanupActivation?: { leaseID: string; ownerOccurrenceID: string }
   now?: number
 }): string {
   const now = input.now ?? Date.now()
@@ -1786,6 +1793,19 @@ export function recordTaskLevelBuildHostObservation(input: {
       error: null,
       time_created: now,
     }).onConflictDoNothing().run()
+    // `retained` is terminal for this cleanup, so the caller's activation is
+    // done. Only the caller's own activation may be ended here: reading the
+    // current lease and releasing it with its own id and owner would end
+    // whoever happens to hold it, which is a steal rather than a handback.
+    if (input.cleanupActivation) {
+      releaseControlLeaseInTransaction(db, {
+        target: "build_cleanup",
+        targetID: observationID,
+        leaseID: input.cleanupActivation.leaseID,
+        ownerOccurrenceID: input.cleanupActivation.ownerOccurrenceID,
+        now,
+      })
+    }
   })
   return observationID
 }

@@ -263,7 +263,13 @@ import type {
   GlobalProvidersTestResponses,
   GlobalSkillInstallErrors,
   GlobalSkillInstallResponses,
+  GlobalSkillMarketDetailErrors,
+  GlobalSkillMarketDetailResponses,
+  GlobalSkillMarketInstallErrors,
+  GlobalSkillMarketInstallResponses,
   GlobalSkillMarketResponses,
+  GlobalSkillMarketSearchErrors,
+  GlobalSkillMarketSearchResponses,
   GlobalUsageErrors,
   GlobalUsageResponses,
   GlobalWorkCreateErrors,
@@ -440,6 +446,8 @@ import type {
   QuestionReplyResponses,
   QuicknoteCreateErrors,
   QuicknoteCreateResponses,
+  ServerLifecycleErrors,
+  ServerLifecycleResponses,
   ServerRestartErrors,
   ServerRestartResponses,
   ServerShutdownErrors,
@@ -500,7 +508,13 @@ import type {
   SkillInstalledResponses,
   SkillInstallResponses,
   SkillIssuesResponses,
+  SkillMarketDetailErrors,
+  SkillMarketDetailResponses,
+  SkillMarketInstallErrors,
+  SkillMarketInstallResponses,
   SkillMarketResponses,
+  SkillMarketSearchErrors,
+  SkillMarketSearchResponses,
   SkillMountsResponses,
   SkillPolicyResponses,
   SkillRemoveResponses,
@@ -6145,6 +6159,7 @@ export class Oauth extends HeyApiClient {
     parameters: {
       providerID: string
       code?: string
+      flowID?: string
       method: number
     },
     options?: Options<never, ThrowOnError>,
@@ -6156,6 +6171,7 @@ export class Oauth extends HeyApiClient {
           args: [
             { in: "path", key: "providerID" },
             { in: "body", key: "code" },
+            { in: "body", key: "flowID" },
             { in: "body", key: "method" },
           ],
         },
@@ -6301,6 +6317,106 @@ export class Providers extends HeyApiClient {
   }
 }
 
+export class Market extends HeyApiClient {
+  /**
+   * Inspect a global Skill Market candidate
+   *
+   * Download and validate one exact candidate bundle without installing it.
+   */
+  public detail<ThrowOnError extends boolean = false>(
+    parameters: {
+      id: string
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams([parameters], [{ args: [{ in: "query", key: "id" }] }])
+    return (options?.client ?? this.client).get<
+      GlobalSkillMarketDetailResponses,
+      GlobalSkillMarketDetailErrors,
+      ThrowOnError
+    >({
+      url: "/global/skill/market/detail",
+      ...options,
+      ...params,
+    })
+  }
+
+  /**
+   * Install an inspected global Skill Market candidate
+   *
+   * Install exactly one candidate only when its current content matches the inspected digest.
+   */
+  public install<ThrowOnError extends boolean = false>(
+    parameters: {
+      expected_hash: string
+      id: string
+      policy?: "allow" | "deny"
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "body", key: "expected_hash" },
+            { in: "body", key: "id" },
+            { in: "body", key: "policy" },
+          ],
+        },
+      ],
+    )
+    return (options?.client ?? this.client).post<
+      GlobalSkillMarketInstallResponses,
+      GlobalSkillMarketInstallErrors,
+      ThrowOnError
+    >({
+      url: "/global/skill/market/install",
+      ...options,
+      ...params,
+      headers: {
+        "Content-Type": "application/json",
+        ...options?.headers,
+        ...params.headers,
+      },
+    })
+  }
+
+  /**
+   * Search the global Skill Market
+   *
+   * Search exact Skill candidates and project live global installation status.
+   */
+  public search<ThrowOnError extends boolean = false>(
+    parameters: {
+      query: string
+      limit?: number
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "query", key: "query" },
+            { in: "query", key: "limit" },
+          ],
+        },
+      ],
+    )
+    return (options?.client ?? this.client).get<
+      GlobalSkillMarketSearchResponses,
+      GlobalSkillMarketSearchErrors,
+      ThrowOnError
+    >({
+      url: "/global/skill/market/search",
+      ...options,
+      ...params,
+    })
+  }
+}
+
 export class Skill extends HeyApiClient {
   /**
    * Install a global Skill market source
@@ -6342,13 +6458,18 @@ export class Skill extends HeyApiClient {
   /**
    * List the global Skill market
    *
-   * List global Skill market entries without requiring an active project.
+   * List the single current Skill Market provider without requiring an active project.
    */
   public market<ThrowOnError extends boolean = false>(options?: Options<never, ThrowOnError>) {
     return (options?.client ?? this.client).get<GlobalSkillMarketResponses, unknown, ThrowOnError>({
       url: "/global/skill/market",
       ...options,
     })
+  }
+
+  private _market?: Market
+  get market2(): Market {
+    return (this._market ??= new Market({ client: this.client }))
   }
 }
 
@@ -8340,6 +8461,51 @@ export class Interaction extends HeyApiClient {
         ...options?.headers,
         ...params.headers,
       },
+    })
+  }
+}
+
+export class Server extends HeyApiClient {
+  /**
+   * Get a server lifecycle occurrence
+   *
+   * Return the state of an admitted shutdown or restart occurrence. A completed shutdown is unobservable from inside the process, so `executing` is the last state a successful one shows.
+   */
+  public lifecycle<ThrowOnError extends boolean = false>(
+    parameters: {
+      occurrenceID: string
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams([parameters], [{ args: [{ in: "path", key: "occurrenceID" }] }])
+    return (options?.client ?? this.client).get<ServerLifecycleResponses, ServerLifecycleErrors, ThrowOnError>({
+      url: "/lifecycle/{occurrenceID}",
+      ...options,
+      ...params,
+    })
+  }
+
+  /**
+   * Restart the server
+   *
+   * Spawn a new server process with the same arguments, then exit.
+   */
+  public restart<ThrowOnError extends boolean = false>(options?: Options<never, ThrowOnError>) {
+    return (options?.client ?? this.client).post<ServerRestartResponses, ServerRestartErrors, ThrowOnError>({
+      url: "/restart",
+      ...options,
+    })
+  }
+
+  /**
+   * Shutdown the server
+   *
+   * Gracefully abort live execution state and stop the current process.
+   */
+  public shutdown<ThrowOnError extends boolean = false>(options?: Options<never, ThrowOnError>) {
+    return (options?.client ?? this.client).post<ServerShutdownResponses, ServerShutdownErrors, ThrowOnError>({
+      url: "/shutdown",
+      ...options,
     })
   }
 }
@@ -10555,6 +10721,7 @@ export class Oauth2 extends HeyApiClient {
       providerID: string
       directory?: string
       code?: string
+      flowID?: string
       method: number
     },
     options?: Options<never, ThrowOnError>,
@@ -10567,6 +10734,7 @@ export class Oauth2 extends HeyApiClient {
             { in: "path", key: "providerID" },
             { in: "query", key: "directory" },
             { in: "body", key: "code" },
+            { in: "body", key: "flowID" },
             { in: "body", key: "method" },
           ],
         },
@@ -11055,32 +11223,6 @@ export class Question extends HeyApiClient {
         ...options?.headers,
         ...params.headers,
       },
-    })
-  }
-}
-
-export class Server extends HeyApiClient {
-  /**
-   * Restart the server
-   *
-   * Spawn a new server process with the same arguments, then exit.
-   */
-  public restart<ThrowOnError extends boolean = false>(options?: Options<never, ThrowOnError>) {
-    return (options?.client ?? this.client).post<ServerRestartResponses, ServerRestartErrors, ThrowOnError>({
-      url: "/restart",
-      ...options,
-    })
-  }
-
-  /**
-   * Shutdown the server
-   *
-   * Gracefully abort live execution state and stop the current process.
-   */
-  public shutdown<ThrowOnError extends boolean = false>(options?: Options<never, ThrowOnError>) {
-    return (options?.client ?? this.client).post<ServerShutdownResponses, ServerShutdownErrors, ThrowOnError>({
-      url: "/shutdown",
-      ...options,
     })
   }
 }
@@ -11659,7 +11801,7 @@ export class Session4 extends HeyApiClient {
       agent?: string
       arguments: string
       command: string
-      messageID?: string
+      messageID: string
       model?: string
       parts?: Array<{
         filename?: string
@@ -11918,7 +12060,7 @@ export class Session4 extends HeyApiClient {
       directory?: string
       agent?: string
       format?: OutputFormat
-      messageID?: string
+      messageID: string
       model?: {
         modelID: string
         providerID: string
@@ -12036,6 +12178,7 @@ export class Session4 extends HeyApiClient {
       directory?: string
       agent: string
       command: string
+      messageID: string
       model?: {
         modelID: string
         providerID: string
@@ -12052,6 +12195,7 @@ export class Session4 extends HeyApiClient {
             { in: "query", key: "directory" },
             { in: "body", key: "agent" },
             { in: "body", key: "command" },
+            { in: "body", key: "messageID" },
             { in: "body", key: "model" },
           ],
         },
@@ -12403,6 +12547,109 @@ export class Part extends HeyApiClient {
   }
 }
 
+export class Market2 extends HeyApiClient {
+  /**
+   * Inspect a Skill Market candidate
+   *
+   * Download and validate the exact candidate bundle without installing it.
+   */
+  public detail<ThrowOnError extends boolean = false>(
+    parameters: {
+      directory?: string
+      id: string
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "query", key: "directory" },
+            { in: "query", key: "id" },
+          ],
+        },
+      ],
+    )
+    return (options?.client ?? this.client).get<SkillMarketDetailResponses, SkillMarketDetailErrors, ThrowOnError>({
+      url: "/skill/market/detail",
+      ...options,
+      ...params,
+    })
+  }
+
+  /**
+   * Install an inspected Skill Market candidate
+   *
+   * Install exactly one candidate only when its current content matches the inspected digest.
+   */
+  public install<ThrowOnError extends boolean = false>(
+    parameters: {
+      directory?: string
+      expected_hash: string
+      id: string
+      policy?: "allow" | "deny"
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "query", key: "directory" },
+            { in: "body", key: "expected_hash" },
+            { in: "body", key: "id" },
+            { in: "body", key: "policy" },
+          ],
+        },
+      ],
+    )
+    return (options?.client ?? this.client).post<SkillMarketInstallResponses, SkillMarketInstallErrors, ThrowOnError>({
+      url: "/skill/market/install",
+      ...options,
+      ...params,
+      headers: {
+        "Content-Type": "application/json",
+        ...options?.headers,
+        ...params.headers,
+      },
+    })
+  }
+
+  /**
+   * Search the Skill Market
+   *
+   * Search the current Skill Market and project live installation status for exact candidates.
+   */
+  public search<ThrowOnError extends boolean = false>(
+    parameters: {
+      directory?: string
+      query: string
+      limit?: number
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "query", key: "directory" },
+            { in: "query", key: "query" },
+            { in: "query", key: "limit" },
+          ],
+        },
+      ],
+    )
+    return (options?.client ?? this.client).get<SkillMarketSearchResponses, SkillMarketSearchErrors, ThrowOnError>({
+      url: "/skill/market/search",
+      ...options,
+      ...params,
+    })
+  }
+}
+
 export class Skill2 extends HeyApiClient {
   /**
    * Get skill directories
@@ -12552,7 +12799,7 @@ export class Skill2 extends HeyApiClient {
   /**
    * List skill markets
    *
-   * Get curated skill marketplaces and official registries relevant to OpenCorvus imports.
+   * Get the single current Skill Market provider used by OpenCorvus.
    */
   public market<ThrowOnError extends boolean = false>(
     parameters?: {
@@ -12697,7 +12944,7 @@ export class Skill2 extends HeyApiClient {
   public remove<ThrowOnError extends boolean = false>(
     parameters: {
       directory?: string
-      kind?: "path" | "url" | "git"
+      kind?: "path" | "url" | "git" | "market"
       source: string
     },
     options?: Options<never, ThrowOnError>,
@@ -12761,6 +13008,11 @@ export class Skill2 extends HeyApiClient {
         ...params.headers,
       },
     })
+  }
+
+  private _market?: Market2
+  get market2(): Market2 {
+    return (this._market ??= new Market2({ client: this.client }))
   }
 }
 
@@ -13747,6 +13999,11 @@ export class OpenCorvusClient extends HeyApiClient {
     return (this._interaction ??= new Interaction({ client: this.client }))
   }
 
+  private _server?: Server
+  get server(): Server {
+    return (this._server ??= new Server({ client: this.client }))
+  }
+
   private _log?: Log
   get log(): Log {
     return (this._log ??= new Log({ client: this.client }))
@@ -13810,11 +14067,6 @@ export class OpenCorvusClient extends HeyApiClient {
   private _question?: Question
   get question(): Question {
     return (this._question ??= new Question({ client: this.client }))
-  }
-
-  private _server?: Server
-  get server(): Server {
-    return (this._server ??= new Server({ client: this.client }))
   }
 
   private _session?: Session4

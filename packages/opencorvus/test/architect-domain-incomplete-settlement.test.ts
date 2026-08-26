@@ -69,14 +69,15 @@ afterAll(async () => {
 async function createTask(title: string) {
   const taskID = Identifier.ascending("task")
   const now = Date.now()
-  const root = await Session.create({
+  const root = Session.prepareRootNext({
     kind: "root",
+    directory: Instance.directory,
     title,
     metadata: { configOverlay: { prompt_profile: { active: packageRevision.id } } },
   })
   persistTask({
     taskID,
-    sessionID: root.id,
+    rootSession: root,
     now,
     title,
     request: "Persist an accepted GoalGraph before implementation",

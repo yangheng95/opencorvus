@@ -103,13 +103,13 @@ describe("Mission status snapshot", () => {
           productPillar: "work",
           heldExpertSquadIDs: ["base"],
         })
-        const taskSession = await Session.create({ kind: "root", title: "Terminal Work Ledger Task" })
+        const taskSession = Session.prepareRootNext({ kind: "root", directory: Instance.directory, title: "Terminal Work Ledger Task" })
         const taskID = Identifier.ascending("task")
         const started = Date.now()
         const completed = started + 10
         persistEstablishedTask({
           taskID,
-          sessionID: taskSession.id,
+          rootSession: taskSession,
           now: started,
           title: "Terminal Work Ledger Task",
           request: "Project one atomic terminal timing snapshot",
@@ -155,12 +155,12 @@ describe("Mission status snapshot", () => {
     await Instance.provide({
       directory: project.path,
       fn: async () => {
-        const session = await Session.create({ kind: "root", title: "Archived failed Work Ledger Task" })
+        const session = Session.prepareRootNext({ kind: "root", directory: Instance.directory, title: "Archived failed Work Ledger Task" })
         const taskID = Identifier.ascending("task")
         const started = Date.now()
         persistEstablishedTask({
           taskID,
-          sessionID: session.id,
+          rootSession: session,
           now: started,
           title: "Archived failed Work Ledger Task",
           request: "Keep the terminal timing in the archived projection",

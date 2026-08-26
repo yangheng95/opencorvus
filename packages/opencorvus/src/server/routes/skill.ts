@@ -5,6 +5,7 @@ import { Skill } from "@/skill/skill"
 import { SkillManager } from "@/skill/manager"
 import { SkillMount } from "@/skill/mounts"
 import { assertActiveProjectSession } from "../active-project-session"
+import { errors } from "../error"
 
 async function assertInputSessionInActiveProject(input: object): Promise<void> {
   if ("sessionID" in input && typeof input.sessionID === "string") {
@@ -141,14 +142,14 @@ export function SkillRoutes() {
       "/market",
       describeRoute({
         summary: "List skill markets",
-        description: "Get curated skill marketplaces and official registries relevant to OpenCorvus imports.",
+        description: "Get the single current Skill Market provider used by OpenCorvus.",
         operationId: "skill.market",
         responses: {
           200: {
             description: "Skill market entries",
             content: {
               "application/json": {
-                schema: resolver(SkillManager.MarketEntry.array()),
+                schema: resolver(SkillManager.MarketProvider.array()),
               },
             },
           },
@@ -157,6 +158,57 @@ export function SkillRoutes() {
       async (c) => {
         return c.json(await SkillManager.market())
       },
+    )
+    .get(
+      "/market/search",
+      describeRoute({
+        summary: "Search the Skill Market",
+        description: "Search the current Skill Market and project live installation status for exact candidates.",
+        operationId: "skill.market.search",
+        responses: {
+          200: {
+            description: "Skill Market candidates",
+            content: { "application/json": { schema: resolver(SkillManager.MarketEntry.array()) } },
+          },
+          ...errors(400, 502),
+        },
+      }),
+      validator("query", SkillManager.MarketSearchInput),
+      async (c) => c.json(await SkillManager.searchMarket(c.req.valid("query"))),
+    )
+    .get(
+      "/market/detail",
+      describeRoute({
+        summary: "Inspect a Skill Market candidate",
+        description: "Download and validate the exact candidate bundle without installing it.",
+        operationId: "skill.market.detail",
+        responses: {
+          200: {
+            description: "Validated Skill Market candidate detail",
+            content: { "application/json": { schema: resolver(SkillManager.MarketDetail) } },
+          },
+          ...errors(400, 502),
+        },
+      }),
+      validator("query", SkillManager.MarketInspectInput),
+      async (c) => c.json(await SkillManager.inspectMarket(c.req.valid("query"))),
+    )
+    .post(
+      "/market/install",
+      describeRoute({
+        summary: "Install an inspected Skill Market candidate",
+        description: "Install exactly one candidate only when its current content matches the inspected digest.",
+        operationId: "skill.market.install",
+        responses: {
+          200: {
+            description: "Installed Skill Market candidate",
+            content: { "application/json": { schema: resolver(SkillManager.MarketInstallResult) } },
+          },
+          ...errors(400, 502),
+        },
+      }),
+      validator("json", SkillManager.MarketInstallInput),
+      async (c) => c.json(await SkillManager.installMarket(c.req.valid("json"))),
     )
     .get(
       "/directories",

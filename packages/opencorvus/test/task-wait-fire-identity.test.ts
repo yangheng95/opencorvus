@@ -2,7 +2,7 @@ import { afterAll, describe, expect, test } from "bun:test"
 import { EngineTaskRootIngressTable } from "../src/engine/engine.sql"
 import { configureTaskIngressRunner, waitForIngressDeliveryHooksForTest } from "../src/engine/task-root-ingress-delivery"
 import { prepareTaskProcessBinding } from "../src/engine/task-execution-capsule-binding"
-import { acquireControlLease, renewControlLease } from "../src/engine/control-lease"
+import { acquireControlLease, currentControlLeaseInTransaction, renewControlLease } from "../src/engine/control-lease"
 import { Identifier } from "../src/id/id"
 import { Instance } from "../src/project/instance"
 import { AutomationDefinitionTombstoneTable, AutomationRunTable, AutomationTable } from "../src/scheduler/automation.sql"
@@ -25,12 +25,12 @@ describe("delayed Task-wait immutable occurrence", () => {
       directory: project.path,
       fn: async () => {
         const taskID = Identifier.ascending("task")
-        const root = await Session.create({ kind: "root", title: "Task wait schedule" })
+        const root = Session.prepareRootNext({ kind: "root", directory: Instance.directory, title: "Task wait schedule" })
         const mission = await Session.create({ kind: "root", title: "Session wait schedule" })
         const now = Date.now()
         const packageRevision = { scope: "built_in" as const, projectID: null, namespace: "builtin", id: "base", version: "2026.08.09.1", packageDigest: "b".repeat(64) }
         persistEstablishedTask({
-          taskID, sessionID: root.id, now, title: "Task wait schedule", request: "Resume later", productPillar: "code",
+          taskID, rootSession: root, now, title: "Task wait schedule", request: "Resume later", productPillar: "code",
           source: "test", priority: "normal", metadata: { actor: "user" }, projectID: Instance.project.id, packageRevision,
           executionCapsuleBinding: await prepareTaskProcessBinding({ mode: "native", taskID, projectID: Instance.project.id, rootDirectory: Instance.directory, packageRevisionSHA256: packageRevision.packageDigest, timeCreated: now }),
         })
@@ -180,11 +180,11 @@ describe("delayed Task-wait immutable occurrence", () => {
       fn: async () => {
         configureTaskIngressRunner(async () => ({}))
         const taskID = Identifier.ascending("task")
-        const root = await Session.create({ kind: "root", title: "Task wait facts" })
+        const root = Session.prepareRootNext({ kind: "root", directory: Instance.directory, title: "Task wait facts" })
         const now = Date.now()
         const packageRevision = { scope: "built_in" as const, projectID: null, namespace: "builtin", id: "base", version: "2026.08.09.1", packageDigest: "a".repeat(64) }
         persistEstablishedTask({
-          taskID, sessionID: root.id, now, title: "Task wait facts", request: "Resume once", productPillar: "code",
+          taskID, rootSession: root, now, title: "Task wait facts", request: "Resume once", productPillar: "code",
           source: "test", priority: "normal", metadata: { actor: "user" }, projectID: Instance.project.id, packageRevision,
           executionCapsuleBinding: await prepareTaskProcessBinding({ mode: "native", taskID, projectID: Instance.project.id, rootDirectory: Instance.directory, packageRevisionSHA256: packageRevision.packageDigest, timeCreated: now }),
         })
@@ -200,6 +200,10 @@ describe("delayed Task-wait immutable occurrence", () => {
         expect(run?.fire_id).toBe(taskWaitFireID(scheduled.id))
         const ingress = Database.use((db) => db.select().from(EngineTaskRootIngressTable).where(eq(EngineTaskRootIngressTable.source_id, run!.id)).get())
         expect(ingress).toMatchObject({ task_id: taskID, source: "automation_run", inline_payload: null })
+        // The one-shot terminal transaction writes the succeeded receipt, the
+        // tombstone and the end of the fire's lease as one fact.
+        const settledLease = Database.use((db) => currentControlLeaseInTransaction(db, "automation", scheduled.id))!
+        expect(settledLease.expires_at).toBeLessThanOrEqual(Date.now())
         expect(
           AutomationService.pendingDelayedWakeSchedule({
             projectID: Instance.project.id,

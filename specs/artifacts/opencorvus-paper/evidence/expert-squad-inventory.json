@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "layers": [
+    {"id":"embedded-default","count":4,"identities":["base","advanced","research-studio","squad-sdk"],"status":"已实现","authority":["specs/current/architecture/04-extensions.md:79-85","packages/opencorvus/src/expert-squad/builtin/index.ts:74-164","command:bun load getLoadedBuiltInPackages"]},
+    {"id":"repository-author-sources","count":116,"identities":"not enumerated here; canonical tracked manifests remain the identity authority","status":"已实现","authority":["command:git ls-files expert-squads/*/*/expert-squad.jsonc | wc -l"],"warning":"Author sources are distribution inputs, not embedded or installed packages."},
+    {"id":"project-installed","count":0,"identities":[],"status":"部分实现","authority":["source-investigation artifact: project .opencorvus/expert-squads absent"],"warning":"This is an investigation-time observation, not a permanent repository property."},
+    {"id":"user-global-installed","count":3,"identities":["builtin/deep-research","builtin/equity-research","local-e2e/release-readiness"],"status":"部分实现","authority":["source-investigation artifact: canonical global manifest count"],"warning":"Manifest presence does not prove current Registry validity without safe initialized catalog readback."},
+    {"id":"historical-demo-install","count":115,"identities":"historical isolated payload","status":"部分实现","authority":["specs/records/2026-08/2026-08-22-website-data-analysis-expert-squad-demo.md:42-45"],"warning":"Historical isolated environment only; not current install state."},
+    {"id":"paper-thirty-plus-target","count":null,"target_minimum":30,"identities":"undefined","status":"概念设计","authority":["user request"],"warning":"Requires an approved mission-oriented taxonomy; 116 author sources cannot be substituted."}
+  ]
+}

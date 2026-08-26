@@ -96,8 +96,9 @@ async function createTask(input: {
   title: string
   revision: { namespace: string; id: string; version: string; packageDigest: string }
 }) {
-  const session = await Session.create({
+  const session = Session.prepareRootNext({
     kind: "root",
+    directory: Instance.directory,
     title: input.title,
     metadata: {
       configOverlay: {
@@ -110,7 +111,7 @@ async function createTask(input: {
   const now = Date.now()
   persistTask({
     taskID,
-    sessionID: session.id,
+    rootSession: session,
     now,
     title: input.title,
     request: input.title,

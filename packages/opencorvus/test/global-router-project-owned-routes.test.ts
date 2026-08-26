@@ -56,11 +56,11 @@ test("pins and unpins a Mission row and its Task through the real Work Ledger ro
         productPillar: "code",
         heldExpertSquadIDs: ["base"],
       })
-      const root = await Session.create({ kind: "root", title: "Work Ledger item pin" })
+      const root = Session.prepareRootNext({ kind: "root", directory: Instance.directory, title: "Work Ledger item pin" })
       const id = Identifier.ascending("task")
       persistEstablishedTask({
         taskID: id,
-        sessionID: root.id,
+        rootSession: root,
         now: created,
         title: "Work Ledger item pin",
         request: "Keep the Work Ledger pin inside its owning Project",

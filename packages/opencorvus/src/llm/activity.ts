@@ -203,7 +203,9 @@ export interface LLMActivityPolicy {
   firstByteMs: number
 
   /** Per-class retry caps. Classes this policy does not grant retryability to
-   *  ignore these — the runner hard-rejects them before consulting a cap. */
+   *  ignore these — the runner hard-rejects them before consulting a cap.
+   *  A transport-only idle uses the first-byte cap because no semantic
+   *  progress has yet distinguished it from a request that never began. */
   maxRetries: Partial<Record<ErrorClass, number>> & { default: number }
 
   classify(err: unknown, ctx: ClassifyContext): ErrorClass
@@ -403,7 +405,9 @@ export const DefaultLLMActivityPolicy: LLMActivityPolicy = {
   idleMs: 180_000,
   maxPauseMs: 15 * 60_000,
   firstByteMs: 90_000,
-  maxRetries: { default: 5, rate_limit: 15, idle: 1, first_byte: 1 },
+  // Semantic mid-stream idle uses the shared transient budget. First-byte and
+  // transport-only idle both keep the one-retry request-start boundary.
+  maxRetries: { default: 5, rate_limit: 15, first_byte: 1 },
   classify,
   isRetryable,
   backoffMs,
@@ -737,7 +741,11 @@ export async function withLLMActivity<T>(
           emitTerminal("failed", cls, err)
           throw new LLMActivityError(cls, attempt, err)
         }
-        const cap = policy.maxRetries[cls] ?? policy.maxRetries.default
+        const configuredCap = policy.maxRetries[cls] ?? policy.maxRetries.default
+        const cap =
+          cls === "idle" && lastHeartbeat?.kind === "first-byte"
+            ? (policy.maxRetries.first_byte ?? configuredCap)
+            : configuredCap
         if (attempt >= cap) {
           emitTerminal("failed", cls, err)
           throw new LLMActivityError(cls, attempt, err)

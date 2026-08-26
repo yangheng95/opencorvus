@@ -171,21 +171,6 @@ export async function stopChatRequest(): Promise<boolean> {
   return true
 }
 
-// ── Public: takeChatMetadata ──
-
-/**
- * Consume and return any pending metadata set via window.__ocNextChatMetadata.
- */
-export function takeChatMetadata(): Record<string, unknown> | undefined {
-  const win = window as any
-  const meta =
-    win.__ocNextChatMetadata && typeof win.__ocNextChatMetadata === "object" && !Array.isArray(win.__ocNextChatMetadata)
-      ? (win.__ocNextChatMetadata as Record<string, unknown>)
-      : undefined
-  delete win.__ocNextChatMetadata
-  return meta
-}
-
 function sessionPromptParts(text: string, attachments: any[], metadata: any): any[] {
   const parts: any[] = [
     {

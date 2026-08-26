@@ -20,11 +20,15 @@ export function hasServerShutdownHandler() {
   return shutdownHandler !== null
 }
 
-export function requestServerShutdown(request: ServerShutdownRequest) {
+/**
+ * Invoke the registered shutdown handler and hand its outcome to the caller.
+ *
+ * Returning `false` when no handler is registered lets the caller treat a
+ * cleared handler as the failure it is; swallowing the handler's rejection
+ * here would let an admitted shutdown fail with nothing but a console line.
+ */
+export function requestServerShutdown(request: ServerShutdownRequest): Promise<void> | false {
   const handler = shutdownHandler
   if (!handler) return false
-  void Promise.resolve(handler(request)).catch((error) => {
-    console.error("[server.shutdown] request failed:", error)
-  })
-  return true
+  return Promise.resolve(handler(request))
 }

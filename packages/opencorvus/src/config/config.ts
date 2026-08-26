@@ -1,5 +1,5 @@
 import { Log } from "../util/log"
-import { acquireProcessLock } from "@/util/process-lock"
+import { acquireProcessLock, withSharedJsonFactLock } from "@/util/process-lock"
 import path from "path"
 import { pathToFileURL } from "url"
 import os from "os"
@@ -1672,7 +1672,13 @@ export namespace Config {
             modify(original, [field], undefined, { formattingOptions: { insertSpaces: true, tabSize: 2 } }),
           )
         }
-        await Bun.write(options.path, original)
+        // Deliberately unlocked. `loadFile` runs inside `writeConfigFile`'s
+        // own commit hook, so taking the write lock here would deadlock
+        // against the write that is calling it. Atomic replacement is what
+        // this rewrite can guarantee on its own: the file is never torn, and
+        // the migration is idempotent, so a concurrent writer that loses it
+        // re-applies it on its next load.
+        await Filesystem.writeAtomic(options.path, original)
       }
     }
 
@@ -1680,10 +1686,17 @@ export namespace Config {
 
     const parsed = Info.safeParse(data)
     if (parsed.success) {
-      if (!parsed.data.$schema && isFile && loadOptions?.writeSchema !== false) {
+      // A file that holds nothing but the empty object is either untouched or
+      // freshly provisioned by the write lock. Injecting a `$schema` into it
+      // would turn a read into a write, and would put content into a file the
+      // user never created.
+      const isEmptyObjectFile = original.trim() === "{}"
+      if (!parsed.data.$schema && isFile && !isEmptyObjectFile && loadOptions?.writeSchema !== false) {
         parsed.data.$schema = "https://opencorvus.ai/config.json"
         const updated = original.replace(/^\s*\{/, '{\n  "$schema": "https://opencorvus.ai/config.json",')
-        await Bun.write(options.path, updated)
+        // Unlocked for the same reason as the migration rewrite above, and
+        // idempotent: the next load re-injects it if a concurrent writer wins.
+        await Filesystem.writeAtomic(options.path, updated)
       }
       return parsed.data
     }
@@ -1830,14 +1843,28 @@ export namespace Config {
   }
 
   export async function writeMcpConfigEntry(name: string, mcpConfig: Mcp, configPath: string) {
-    const text = await Filesystem.readText(configPath).catch((error: NodeJS.ErrnoException) => {
-      if (error.code === "ENOENT") return "{}"
-      throw error
-    })
-    const edits = modify(text, ["mcp", name], mcpConfig, {
-      formattingOptions: { tabSize: 2, insertSpaces: true },
-    })
-    await Filesystem.write(configPath, applyEdits(text, edits))
+    // A read-modify-write of the same file `writeConfigFile` owns, so it takes
+    // the same lock and replaces the file atomically. A global MCP write must
+    // first converge and own the Skill catalog: global config is part of a
+    // Skill replacement occurrence, so every global writer shares the exact
+    // catalog-owner -> config-file-owner order.
+    const write = () =>
+      withConfigFileLock(configPath, async () => {
+        const text = await Filesystem.readText(configPath).catch((error: NodeJS.ErrnoException) => {
+          if (error.code === "ENOENT") return "{}"
+          throw error
+        })
+        const edits = modify(text, ["mcp", name], mcpConfig, {
+          formattingOptions: { tabSize: 2, insertSpaces: true },
+        })
+        await Filesystem.writeAtomic(configPath, applyEdits(text, edits))
+      })
+    if (Filesystem.resolve(configPath) === Filesystem.resolve(globalConfigFile())) {
+      const { SkillManager } = await import("@/skill/manager")
+      await SkillManager.withCatalogMutationOwner(write)
+    } else {
+      await write()
+    }
     return configPath
   }
 
@@ -1893,9 +1920,7 @@ export namespace Config {
               }),
               import("@/mcp").then(({ MCP }) => MCP.reconcileProjectConfig(committedTransition)),
             ])
-            const failures = projections.flatMap((result) =>
-              result.status === "rejected" ? [result.reason] : [],
-            )
+            const failures = projections.flatMap((result) => (result.status === "rejected" ? [result.reason] : []))
             if (failures.length > 0) {
               throw new ProjectConfigCommittedReconcileError(failures, committedTransition.after)
             }
@@ -2067,6 +2092,17 @@ export namespace Config {
   // project file and the global file get independent locks.
   const writeConfigLocks = new Map<string, Promise<unknown>>()
 
+  /** Every writer of a config file takes the same cross-process lock. */
+  function withConfigFileLock<T>(filepath: string, run: () => Promise<T>): Promise<T> {
+    return withSharedJsonFactLock({
+      locks: writeConfigLocks,
+      filepath,
+      // Exactly what `loadFile` synthesizes for a missing file.
+      empty: "{}",
+      run,
+    })
+  }
+
   async function writeConfigFile(
     filepath: string,
     config: unknown | ((existing: Info) => unknown | Promise<unknown>),
@@ -2076,7 +2112,12 @@ export namespace Config {
       onWritten?(merged: Info): Promise<void>
     },
   ) {
-    return withKeyedLock(writeConfigLocks, filepath, async () => {
+    // The read has to happen inside the cross-process lock. Two backends over
+    // one data root would otherwise read the same "before" snapshot, patch
+    // different keys, and let the later atomic replacement discard the
+    // earlier override — the same lost update the in-process queue already
+    // prevents between two requests to this process.
+    return withConfigFileLock(filepath, async () => {
       const before = await Filesystem.readText(filepath).catch((err: NodeJS.ErrnoException) => {
         if (err.code === "ENOENT") return "{}"
         throw new JsonError({ path: filepath }, { cause: err })
@@ -2235,22 +2276,26 @@ export namespace Config {
 
   async function writeGlobalMutation(patch: unknown | ((existing: Info) => unknown | Promise<unknown>)) {
     await ConfigPaths.assertCanonicalDirectory(Global.Path.config, ["config.json"])
-    const [{ withConversationCapabilityReferenceMutation }, { withSkillCatalogMutation }] = await Promise.all([
-      import("@/conversation/capability-transaction"),
-      import("@/skill/reference-lock"),
-    ])
+    const [{ withConversationCapabilityReferenceMutation }, { withSkillCatalogMutation }, { SkillManager }] =
+      await Promise.all([
+        import("@/conversation/capability-transaction"),
+        import("@/skill/reference-lock"),
+        import("@/skill/manager"),
+      ])
     return withSkillCatalogMutation(() =>
-      withConversationCapabilityReferenceMutation(async () => {
-        let transitions: GlobalProjectTransition[] = []
-        return writeConfigFile(globalConfigFile(), patch, {
-          async commit(merged, _appliedPatch, persist) {
-            transitions = await commitGlobalCandidate(merged, persist)
-          },
-          async onWritten() {
-            await reconcileGlobalProjectTransitions(transitions)
-          },
-        })
-      }),
+      SkillManager.withCatalogMutationOwner(() =>
+        withConversationCapabilityReferenceMutation(async () => {
+          let transitions: GlobalProjectTransition[] = []
+          return writeConfigFile(globalConfigFile(), patch, {
+            async commit(merged, _appliedPatch, persist) {
+              transitions = await commitGlobalCandidate(merged, persist)
+            },
+            async onWritten() {
+              await reconcileGlobalProjectTransitions(transitions)
+            },
+          })
+        }),
+      ),
     )
   }
 

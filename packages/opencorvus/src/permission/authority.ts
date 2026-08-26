@@ -21,7 +21,7 @@ import {
   ToolInvocationProviderKind,
 } from "./invocation"
 import { PermissionExecutionResultTable, PermissionLedgerTable, PermissionPolicyTable } from "./permission.sql"
-import { acquireControlLease, assertControlLeaseInTransaction, renewControlLease } from "@/engine/control-lease"
+import { acquireControlLease, assertControlLeaseInTransaction, releaseControlLeaseInTransaction, releaseControlLeaseOnErrorPath, renewControlLease } from "@/engine/control-lease"
 import { PermissionDecision } from "./decision"
 // Type-only: the value import stays dynamic so the runtime module cycle with
 // SessionLoop is never created.
@@ -330,6 +330,31 @@ export namespace PermissionAuthority {
     }
   }
 
+  /**
+   * Give up ownership of an attempt this process is no longer executing.
+   *
+   * An attempt can end without a terminal receipt: the durable MCP task is
+   * still open, so the effect outcome is genuinely unknown and must stay
+   * recoverable. What must not survive is this process's claim on it — the
+   * lease otherwise keeps the exact attempt unclaimable for its full duration,
+   * and recovery in the next process waits on an owner that no longer exists.
+   */
+  function abandonEffectLease(lease: EffectLease): void {
+    const handback = releaseControlLeaseOnErrorPath({
+      target: "effect",
+      targetID: lease.targetID,
+      leaseID: lease.id,
+      ownerOccurrenceID: lease.ownerOccurrenceID,
+      now: Date.now(),
+    })
+    if (handback.error) {
+      log.warn("permission effect lease could not be handed back", {
+        attempt: lease.targetID,
+        error: handback.error instanceof Error ? handback.error.message : String(handback.error),
+      })
+    }
+  }
+
   function appendEffectOutcome(
     request: Request,
     eventType: "execution_failed" | "outcome_unknown" | "execution_reconciled",
@@ -344,14 +369,22 @@ export namespace PermissionAuthority {
       ...extra,
     } satisfies typeof PermissionLedgerTable.$inferInsert
     Database.immediateTransaction((db) => {
+      const settledAt = Date.now()
       if (lease) assertControlLeaseInTransaction(db, {
         target: "effect",
         targetID: lease.targetID,
         leaseID: lease.id,
         ownerOccurrenceID: lease.ownerOccurrenceID,
-        now: Date.now(),
+        now: settledAt,
       })
       db.insert(PermissionLedgerTable).values(row).run()
+      if (lease) releaseControlLeaseInTransaction(db, {
+        target: "effect",
+        targetID: lease.targetID,
+        leaseID: lease.id,
+        ownerOccurrenceID: lease.ownerOccurrenceID,
+        now: settledAt,
+      })
     })
     return row as LedgerRow
   }
@@ -397,18 +430,19 @@ export namespace PermissionAuthority {
       time_created: Date.now(),
     }
     Database.immediateTransaction((db) => {
+      const settledAt = Date.now()
       if (input.lease) assertControlLeaseInTransaction(db, {
         target: "effect",
         targetID: input.lease.targetID,
         leaseID: input.lease.id,
         ownerOccurrenceID: input.lease.ownerOccurrenceID,
-        now: Date.now(),
+        now: settledAt,
       })
       db.insert(PermissionExecutionResultTable)
         .values({
           attempt_id: input.attempt,
           result: durable.payload,
-          time_created: Date.now(),
+          time_created: settledAt,
         })
         .onConflictDoNothing()
         .run()
@@ -431,6 +465,16 @@ export namespace PermissionAuthority {
           })
           .run()
       }
+      // The durable result is the terminal receipt for this attempt. Its lease
+      // ends with it, so nothing else has to wait out the remaining duration.
+      // The fence above already proved this owner holds it at `settledAt`.
+      if (input.lease) releaseControlLeaseInTransaction(db, {
+        target: "effect",
+        targetID: input.lease.targetID,
+        leaseID: input.lease.id,
+        ownerOccurrenceID: input.lease.ownerOccurrenceID,
+        now: settledAt,
+      })
     })
     return input.result
   }
@@ -905,7 +949,10 @@ export namespace PermissionAuthority {
             )
           } catch (error) {
             const latest = currentTaskForAttempt(attempt)
-            if (latest && ["working", "input_required"].includes(latest.status)) throw error
+            if (latest && ["working", "input_required"].includes(latest.status)) {
+              abandonEffectLease(lease)
+              throw error
+            }
             appendEffectOutcome(request, "execution_failed", {
               attempt_id: attempt,
               outcome_slot: attempt,
@@ -976,8 +1023,12 @@ export namespace PermissionAuthority {
       const task = currentTaskForAttempt(attempt)
       // Once the server has returned a protocol task identity, transport loss
       // or process shutdown is not a failed external effect. Leave the attempt
-      // open so recovery reconnects and queries this exact task.
-      if (task && !["completed", "failed", "cancelled"].includes(task.status)) throw error
+      // open so recovery reconnects and queries this exact task — but release
+      // the effect owner, because this process is not the one that will.
+      if (task && !["completed", "failed", "cancelled"].includes(task.status)) {
+        abandonEffectLease(lease)
+        throw error
+      }
       appendEffectOutcome(request, "execution_failed", {
         attempt_id: attempt,
         outcome_slot: attempt,

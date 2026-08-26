@@ -161,6 +161,28 @@ export function currentRuntimeProcessOccurrence(): RuntimeProcessOccurrenceInfo 
   return { ...runtimeProcessOccurrence }
 }
 
+/**
+ * The occurrence of another process that is alive right now.
+ *
+ * A supervisor's PID alone is not an identity — the operating system reuses
+ * process numbers — so a child that must outlive nothing binds to the
+ * fingerprint observed while its host is demonstrably running. A platform
+ * that cannot fingerprint returns undefined, and the caller keeps the weaker
+ * liveness answer rather than inventing one.
+ */
+/** Bare process-number liveness. Only for hosts this platform cannot
+ *  fingerprint, where a weaker answer is honest and a fabricated occurrence
+ *  identity would be a false one. */
+export function isProcessNumberAlive(pid: number): boolean {
+  return isProcessAlive(pid)
+}
+
+export function observedProcessOccurrence(pid: number): RuntimeProcessOccurrenceInfo | undefined {
+  const instanceID = processInstanceID(pid)
+  if (!instanceID) return undefined
+  return { pid, processInstanceID: instanceID, occurrenceID: randomUUID() }
+}
+
 export function observeRuntimeProcessOccurrence(
   owner: RuntimeProcessOccurrenceInfo,
 ): RuntimeProcessOccurrenceObservation {

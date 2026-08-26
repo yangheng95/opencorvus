@@ -30,7 +30,8 @@
     "version:check": "bun ./script/sync-version.ts --check",
     "prepare": "husky",
     "test": "echo 'do not run tests from root' && exit 1",
-    "check:expert-squad-types": "bunx tsc -p expert-squads/tsconfig.json"
+    "check:expert-squad-types": "bunx tsc -p expert-squads/tsconfig.json",
+    "check:control-lease-owners": "bun run --cwd packages/opencorvus check:control-lease-owners"
   },
   "workspaces": {
     "packages": [

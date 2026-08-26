@@ -1,5 +1,6 @@
 import z from "zod"
 import { Global } from "../global"
+import { PackageInstallReceipt } from "./install-receipt"
 import { Log } from "../util/log"
 import path from "node:path"
 import { Filesystem } from "../util/filesystem"
@@ -84,16 +85,22 @@ export namespace BunProc {
       return installed
     }
 
+    // A cached tree is usable only when its completeness receipt exists. A
+    // killed install leaves node_modules and a readable manifest behind, and
+    // treating those as proof of installation is what made every later load
+    // fail persistently against an incomplete tree instead of completing it.
     if (!modExists || !cachedVersion) {
       // continue to install
     } else if (version !== "latest" && cachedVersion === version) {
       await installedVersion(cachedVersion)
-      return mod
+      if (await PackageInstallReceipt.isPublished(pkg, cachedVersion)) return mod
+      log.info("cached package has no completeness receipt, reinstalling", { pkg, cachedVersion })
     } else if (version === "latest") {
       await installedVersion(cachedVersion)
+      const published = await PackageInstallReceipt.isPublished(pkg, cachedVersion)
       const isOutdated = await PackageRegistry.isOutdated(pkg, cachedVersion, Global.Path.cache)
-      if (!isOutdated) return mod
-      log.info("Cached version is outdated, proceeding with install", { pkg, cachedVersion })
+      if (published && !isOutdated) return mod
+      log.info("proceeding with install", { pkg, cachedVersion, published, isOutdated })
     }
 
     // Build command arguments
@@ -117,22 +124,41 @@ export namespace BunProc {
       version,
     })
 
-    await BunProc.run(args, {
-      cwd: Global.Path.cache,
-    }).catch((e) => {
-      throw new InstallFailedError(
-        { pkg, version },
-        {
-          cause: e,
-        },
-      )
-    })
+    // The occurrence is durable BEFORE the tree is mutated, so an install
+    // killed halfway leaves an unsettled occurrence — never a receipt.
+    const occurrenceID = await PackageInstallReceipt.begin({ package: pkg, requestedVersion: version })
+    try {
+      await BunProc.run(args, {
+        cwd: Global.Path.cache,
+      }).catch((e) => {
+        throw new InstallFailedError(
+          { pkg, version },
+          {
+            cause: e,
+          },
+        )
+      })
 
-    // The installed package metadata, not the requested selector, owns the cached version.
-    const resolvedVersion = await installedVersion()
+      // The installed package metadata, not the requested selector, owns the cached version.
+      const resolvedVersion = await installedVersion()
 
-    parsed.dependencies[pkg] = resolvedVersion
-    await Filesystem.writeJson(pkgjsonPath, parsed)
-    return mod
+      parsed.dependencies[pkg] = resolvedVersion
+      await Filesystem.writeJson(pkgjsonPath, parsed)
+      // Readiness is published only after the resolved tree verifies.
+      await PackageInstallReceipt.verifyAndPublish({
+        occurrenceID,
+        package: pkg,
+        requestedVersion: version,
+        resolvedVersion,
+        moduleDirectory: mod,
+      })
+      return mod
+    } catch (error) {
+      await PackageInstallReceipt.rollback(
+        occurrenceID,
+        error instanceof Error ? error.message : String(error),
+      ).catch(() => undefined)
+      throw error
+    }
   }
 }

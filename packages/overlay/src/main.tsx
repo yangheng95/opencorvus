@@ -50,9 +50,7 @@ import { closeFileEditor, fileEditorRevealRevision, fileWorkbenchOpen } from "./
 import type { DiffTarget } from "./services/diff"
 import { initApp } from "./services/init"
 import {
-  loadTasks,
   boardStore,
-  loadBoard,
   activeBrowserPreviewTaskID,
   activeTaskID,
   activeSessionID,
@@ -79,7 +77,6 @@ import { loadAllLocales, localeTag, setLocale } from "./utils/i18n"
 import { apiJson, configure as configureApi } from "./services/api"
 import type { AutomationRunSession } from "./services/automations"
 import { t } from "./utils/i18n"
-import { renderMarkdown } from "./utils/markdown"
 import {
   elementFileReference,
   FILE_REFERENCE_PATH_ATTRIBUTE,
@@ -90,7 +87,6 @@ import {
   applyZoom,
   handleZoomHotkey,
   installSystemThemeListener,
-  stepZoom,
   toggleDevtools,
 } from "./services/theme"
 import { bumpWorkspaceEpoch, settingsStore, setSettingsStore, saveSettings } from "./store/settings"
@@ -1451,30 +1447,11 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return !!value && typeof value === "object" && !Array.isArray(value)
 }
 
-/** Open the workspace panel. */
-function openWorkspace(): void {
-  setWorkspaceOpen(true)
-  setFileChangesActiveView("diff")
-  showRightDockForExplicitAction()
-  openCenterWorkbenchPanel("diff")
-}
-
 /** Close the workspace panel. */
 function closeWorkspace(): void {
   setWorkspaceOpen(false)
   closeCenterWorkbenchPanel("diff")
 }
-
-/** Open (or switch to) a diff file in the workspace. */
-async function openWorkspaceDiff(target: DiffTarget): Promise<void> {
-  if (!(await closeFileEditor())) return
-  setWorkspaceTarget(target)
-  openWorkspace()
-}
-
-// Exposed for services and window-level bridges that need to trigger the
-// workspace from outside this module (e.g. ChangesPanel clicks).
-;(window as any).openWorkspaceDiff = openWorkspaceDiff
 
 // Delegate clicks on rendered-markdown file links (see utils/markdown.ts —
 // codespans that look like file paths are emitted with data-file-path).
@@ -1603,34 +1580,6 @@ document.addEventListener(
 )
 
 window.addEventListener("acceptance:focus-changes", requestReviewPanel, listenerOpts)
-
-function installGlobalBridges(): void {
-  ;(window as any).renderMarkdown = renderMarkdown
-  ;(window as any).persistOverlaySettings = async () => {
-    await saveSettings()
-  }
-  ;(window as any).stepZoom = (delta: number) => {
-    const next = stepZoom(delta)
-    setSettingsStore("zoom", next)
-    persistMainSettings("settings.persist-step-zoom")
-  }
-  // Test hook: snapshot the current card tree as a flat JSON shape. Used by
-  // Playwright / integration tests to read the live store-backed tree.
-  ;(window as any).renderConversation = () => cardTreeStore.order.map((id) => cardTreeStore.cards[id]).filter(Boolean)
-  ;(window as any).cardTree = cardTreeStore
-  // Benchmark hook: expose named stores so external probes do not depend on
-  // the legacy aggregate `state` bridge.
-  ;(window as any).appStore = appStore
-  ;(window as any).boardStore = boardStore
-  ;(window as any).settingsStore = settingsStore
-  ;(window as any).applyDirectory = applyDirectory
-  ;(window as any).loadTasks = loadTasks
-  ;(window as any).selectTask = (taskID: string, options?: { directory?: string }) =>
-    selectTaskWithUILifecycle(taskID, options?.directory?.trim() || activeDirectory())
-  ;(window as any).loadBoard = loadBoard
-}
-
-installGlobalBridges()
 
 // Components call strict `t()` at render time. Load the locale bundles before
 // mounting any Solid surface so early hosts do not render against an empty
@@ -2762,7 +2711,6 @@ window.addEventListener("beforeunload", () => {
 installSystemThemeListener(() => applyTheme(settingsStore.theme))
 
 // ── Init ──
-;(window as any).__overlayInitSettled = false
 runMainAsync("initApp", async () => {
   try {
     await initApp({
@@ -2783,6 +2731,5 @@ runMainAsync("initApp", async () => {
     } catch (error) {
       console.error("[initApp] failed to drain overlay logs", error)
     }
-    ;(window as any).__overlayInitSettled = true
   }
 })

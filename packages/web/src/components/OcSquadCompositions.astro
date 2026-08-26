@@ -4,7 +4,11 @@
 import "../styles/tokens.css"
 import { landingCopy } from "../content/landing-copy"
 import type { PublicLocale } from "../content/public-market"
-import { featuredComposition, otherCompositions } from "../lib/landing-compositions"
+import {
+  featuredComposition,
+  otherCompositions,
+  selfPaperComposition,
+} from "../lib/landing-compositions"
 
 /**
  * The published Expert Squad combinations, rendered inside documentation.
@@ -17,18 +21,18 @@ import { featuredComposition, otherCompositions } from "../lib/landing-compositi
 
 type Props = {
   locale: PublicLocale
-  /** `case` renders the featured chain stage by stage; `others` renders the shorter combinations. */
-  variant: "case" | "others"
+  /** Detailed long Missions render stage by stage; `others` renders the shorter combinations. */
+  variant: "case" | "paper" | "others"
 }
 
 const { locale, variant } = Astro.props
 const copy = landingCopy[locale].compose
-const study = featuredComposition(locale)
+const study = variant === "paper" ? selfPaperComposition(locale) : featuredComposition(locale)
 const others = otherCompositions(locale)
 ---
 
 {
-  variant === "case" && (
+  variant !== "others" && (
     <div class="oc-doc-composition">
       <p class="oc-doc-composition-total">
         <strong>
@@ -39,6 +43,30 @@ const others = otherCompositions(locale)
           {study.roleCount} {copy.rolesUnit}
         </strong>
       </p>
+
+      {study.requirements && (
+        <div class="oc-doc-composition-requirements">
+          <strong>{copy.requirementsLabel}</strong>
+          <ol>
+            {study.requirements.map((requirement) => <li>{requirement}</li>)}
+          </ol>
+        </div>
+      )}
+
+      {study.prompt && (
+        <blockquote class="oc-doc-composition-prompt">
+          <strong>{copy.missionPromptLabel}</strong>
+          <p>{study.prompt}</p>
+        </blockquote>
+      )}
+
+      {study.artifacts && (
+        <p class="oc-doc-composition-artifacts">
+          {study.artifacts.map((artifact) => (
+            <a href={artifact.href} target="_blank" rel="noopener noreferrer">{artifact.label} ↗</a>
+          ))}
+        </p>
+      )}
 
       <table>
         <thead>
@@ -126,5 +154,25 @@ const others = otherCompositions(locale)
 
   .oc-doc-composition-extras {
     margin-top: var(--oc-space-4);
+  }
+
+  .oc-doc-composition-artifacts {
+    margin-block: var(--oc-space-4);
+  }
+
+  .oc-doc-composition-prompt {
+    margin-block: var(--oc-space-4);
+  }
+
+  .oc-doc-composition-prompt p {
+    margin-bottom: 0;
+  }
+
+  .oc-doc-composition-requirements {
+    margin-block: var(--oc-space-4);
+  }
+
+  .oc-doc-composition-requirements ol {
+    margin-top: var(--oc-space-2);
   }
 </style>

@@ -32,11 +32,8 @@ export class UnsupportedLocaleError extends Error {
 }
 
 function firstRuntimeLocaleCandidate(): string | undefined {
-  const values = [
-    typeof globalThis !== "undefined" ? (globalThis as any).__OPENCORVUS_LOCALE__ : "",
-    typeof navigator !== "undefined" ? navigator.language : "",
-  ]
-  return values.map((item) => String(item || "").trim()).find(Boolean)
+  const value = typeof navigator !== "undefined" ? String(navigator.language || "").trim() : ""
+  return value || undefined
 }
 
 export function supportedLocaleFromRuntime(value: unknown): SupportedLocale {

@@ -29,4 +29,4 @@ An optional field or a documented `unknown` value is not itself a failure. Judge
 
 After OpenCorvus reaches a terminal result, run the deliverable's own verification command independently, inspect visual screenshots, reload the product UI, and confirm the same Task status and evidence from the persistent database. A mocked contract test, canned report, or static screenshot is not end-to-end acceptance.
 
-For focused visual investigation, use the maintained headed Node-sidecar tools such as `visual-diff.ts` and `review-deliverable.ts`. They are probes, not Mission orchestration wrappers.
+For focused visual investigation, use the current `node packages/opencorvus/script/screenshot-overlay.mjs <out.png> [url] [w] [h]`, which drives a real page with Node.js Playwright. It is a manual review probe, not a Mission orchestration wrapper.

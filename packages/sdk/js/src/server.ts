@@ -1,4 +1,6 @@
 import { spawn, execSync, type ChildProcess } from "node:child_process"
+import { randomUUID } from "node:crypto"
+import { createStartupReceiptChannel } from "./startup-receipt.js"
 import { type ConfigGetResponse } from "./gen/types.gen.js"
 import { DEFAULT_SERVER_HOST, DEFAULT_SERVER_PORT } from "./defaults.js"
 import { StartupOutputObserver } from "./server-startup-observer.js"
@@ -41,7 +43,17 @@ export async function createOpenCorvusServer(options?: ServerOptions): Promise<O
     options ?? {},
   )
 
-  const args = [`serve`, `--hostname=${options.hostname}`, `--port=${options.port}`]
+  // Readiness is a framed receipt this launcher owns, never a line of the
+  // server's human output.
+  const startupOccurrenceID = randomUUID()
+  const receipt = await createStartupReceiptChannel(startupOccurrenceID)
+  const args = [
+    `serve`,
+    `--hostname=${options.hostname}`,
+    `--port=${options.port}`,
+    `--startup-receipt=${receipt.path}`,
+    `--startup-occurrence=${startupOccurrenceID}`,
+  ]
   if (options.config?.logLevel) args.push(`--log-level=${options.config.logLevel}`)
   const config = options.config === undefined ? process.env.OPENCORVUS_CONFIG_CONTENT : JSON.stringify(options.config)
 
@@ -62,12 +74,14 @@ export async function createOpenCorvusServer(options?: ServerOptions): Promise<O
   const url = await new Promise<string>((resolve, reject) => {
     let state: "pending" | "stopping_failure" | "ready" | "failed" = "pending"
     const observer = new StartupOutputObserver()
+    let pollReceipt: ReturnType<typeof setInterval> | undefined
     const drainOutput = () => {
       proc.stdout?.resume()
       proc.stderr?.resume()
     }
     const cleanupStartup = () => {
       clearTimeout(id)
+      if (pollReceipt) clearInterval(pollReceipt)
       if (abortListener) options.signal?.removeEventListener("abort", abortListener)
       proc.stdout?.removeListener("data", onStdout)
       proc.stderr?.removeListener("data", onStderr)
@@ -97,23 +111,27 @@ export async function createOpenCorvusServer(options?: ServerOptions): Promise<O
       drainOutput()
       resolve(serverUrl)
     }
+    // Server output is retained for diagnostics only; it decides nothing.
     const onStdout = (chunk: Buffer) => {
-      for (const line of observer.appendStdout(chunk)) {
-        if (!line.includes("server listening")) continue
-        const match = line.match(/on\s+(https?:\/\/[^\s]+)/)
-        if (!match) {
-          failStartupAfterCleanup(new Error(`Failed to parse server url from output: ${line}`))
-          return
-        }
-        finishStartup(match[1]!)
-        return
-      }
+      observer.appendStdout(chunk)
     }
     const onStderr = (chunk: Buffer) => observer.appendStderr(chunk)
     let abortListener: (() => void) | undefined
     const id = setTimeout(() => {
       failStartupAfterCleanup(new Error(`Timeout waiting for server to start after ${options.timeout}ms`))
     }, options.timeout)
+    pollReceipt = setInterval(() => {
+      if (state !== "pending") return
+      void receipt.read().then(
+        (published: Awaited<ReturnType<typeof receipt.read>>) => {
+          if (!published || state !== "pending") return
+          if (published.outcome === "listening") finishStartup(published.url)
+          else failStartupAfterCleanup(new Error(published.error))
+        },
+        (error: unknown) => failStartupAfterCleanup(error instanceof Error ? error : new Error(String(error))),
+      )
+    }, 20)
+    if (typeof pollReceipt.unref === "function") pollReceipt.unref()
     proc.stdout?.on("data", onStdout)
     proc.stderr?.on("data", onStderr)
     proc.on("exit", (code) => {
@@ -138,6 +156,8 @@ export async function createOpenCorvusServer(options?: ServerOptions): Promise<O
       else options.signal.addEventListener("abort", abortListener)
     }
   })
+
+  await receipt.dispose()
 
   return {
     url,

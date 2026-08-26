@@ -1,6 +1,6 @@
 ---
 title: Squad composition
-description: Why the longest work is several Expert Squads rather than one team running longer, worked through from research sources to a submitted paper.
+description: Why the longest work is several Expert Squads rather than one team running longer, shown through DeBERTa research engineering and an OpenCorvus self-paper Mission.
 ---
 
 import OcSquadCompositions from "../../../components/OcSquadCompositions.astro"
@@ -23,22 +23,41 @@ revision plus its selected workflow, fixed for that Task's lifetime.
 So composition happens at the Mission level, and ownership stays at the Task level. Nothing about
 combining squads dilutes who is responsible for a given delivery.
 
-## The case: from research sources to a submitted paper
+## The case: DeBERTa from model card to published repository
 
-This is the full chain, as declared by the shipped packages. Every count below is resolved from the
-catalog rather than written into this page.
+The readable chain has six complete deliveries: model and data; a CUDA-only training system with a
+live monitor and inference page; architecture evidence; an ACL-style short paper; independent paper
+review; and the Mission repository. Every count below is resolved from the catalog rather than
+written into this page.
 
 <OcSquadCompositions locale="root" variant="case" />
 
-Read the shape of it rather than the individual stages. Four of the six squads in that chain carry a
-role whose entire job is to disbelieve work it did not do — Deep Research's citation reviewer, Data
-Analysis's fact-checker, Research Studio's own fact-checker, and Academic Paper Review's
-citation-and-hallucination auditor. That is the property a single long-running team cannot have,
-regardless of how carefully it is prompted.
+Read the shape rather than the individual model choice. The landing page can unfold the same Mission
+from six deliveries into eighteen squad-owned Tasks: source and dataset lineage, CUDA runtime,
+training campaigns, metric reconciliation, a real monitoring and inference page, figures, related
+work, manuscript audit, clean-room reproduction, repository hardening, and publication. The scope
+gets larger without making one team author, test, review, and approve its own work.
+
+## The case: OpenCorvus researches and introduces itself
+
+The second long Mission does not ask the system to write product copy from memory. It requires an
+evidence chain from the source tree, current architecture specifications, release artifacts,
+version history, empirical evaluation, and inspected related work, followed by a systems paper with
+at least 30 pages of substantive main text. References and appendices do not count, and repeated
+background, generic prose, oversized figures, or loose layout cannot be used as padding.
+
+<OcSquadCompositions locale="root" variant="paper" />
+
+The writing stage must use Research Studio's `analysis-report-quality` Skill to build one validated
+evidence model. Every figure is redrawn from accepted data with a conclusion-led title, units,
+sample size, uncertainty, provenance, and accessible encodings; raw notebook output, chart-library
+defaults, clipped labels, and decorative garbage are rejected. Academic Paper Review then audits
+literature, novelty, logic, methods, statistics, facts, citation hallucinations, and presentation,
+and every critical or major finding must be resolved.
 
 ## Other combinations that already ship
 
-The same shape, in three other domains:
+The same shape, in three shorter domains:
 
 <OcSquadCompositions locale="root" variant="others" />
 

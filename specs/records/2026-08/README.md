@@ -1,5 +1,27 @@
 # August 2026 Records
 
+- [2026-08-26-extensible-inspect-benchmark-framework.md](2026-08-26-extensible-inspect-benchmark-framework.md) evolves the OpenCorvus Inspect adapter into a versioned benchmark registry with deterministic manifests, frozen scorer provenance, and attributed Apodex BrowseComp and FrontierScience integrations without importing a second runner or Agent runtime.
+
+- [2026-08-26-session-conversation-history-visibility-repair.md](2026-08-26-session-conversation-history-visibility-repair.md) connects the existing bounded Session tail to its canonical older-history route so Mission and ordinary conversation prefixes remain reachable through the shared Overlay writer.
+
+- [2026-08-26-runtime-skill-market-search-install.md](2026-08-26-runtime-skill-market-search-install.md) replaces the navigational Skill directory list with one runtime-searchable, hash-pinned, exact-install Market chain shared by Agents, HTTP, and Settings.
+
+- [2026-08-26-opencorvus-paper-foundation-evidence.md](2026-08-26-opencorvus-paper-foundation-evidence.md) establishes the paper-production material boundaries and a machine/human-consumable internal claims, AutomationBench, seven-role process, Expert Squad, self-evolution, and figure-input evidence foundation.
+
+- [2026-08-26-search-code-bounded-execution-repair.md](2026-08-26-search-code-bounded-execution-repair.md) reconstructs the live repository-wide ripgrep stall and restores ignored-tree, wall-clock, output, cancellation, and process-settlement bounds to the shared `search_code` Tool.
+
+- [2026-08-26-mission-stream-interruption-retry-budget.md](2026-08-26-mission-stream-interruption-retry-budget.md) reconstructs the real `idle -> network -> idle` Mission failure and restores mid-stream semantic idle to the shared bounded transient-retry budget while preserving first-byte, total-deadline, cancellation, and post-side-effect safety contracts.
+
+- [2026-08-26-inspect-ai-benchmark-adapter.md](2026-08-26-inspect-ai-benchmark-adapter.md) defines a model-free Inspect AI solver that maps ordinary evaluation Samples onto the public OpenCorvus Task lifecycle and projects the exact Completion Decision Message back into Inspect logs and scorers.
+
+- [2026-08-25-open-pull-request-triage.md](2026-08-25-open-pull-request-triage.md) classifies the stale release and Dependabot backlog against current package-family, runtime, UI, and GitHub Actions contracts before any remote merge or closure.
+
+- [2026-08-25-architecture-debt-remediation.md](2026-08-25-architecture-debt-remediation.md) carries the staged repair of the whole-repository architecture-debt saturation audit, starting with renderer privilege containment and advancing through the recorded dependency order.
+
+- [2026-08-25-landing-automationbench-proof.md](2026-08-25-landing-automationbench-proof.md) adapts the current 100-case AutomationBench result into a bilingual native landing proof with an explicit 8.07% Luna baseline, 34.00% OpenCorvus strict pass rate, derived lift, and cross-sample comparison boundary.
+
+- [2026-08-25-landing-deberta-mission-scale.md](2026-08-25-landing-deberta-mission-scale.md) replaces the featured long-horizon landing example with a catalog-bound DeBERTa research-engineering Mission and an accessible six-to-eighteen-stage magical expansion.
+
 - [2026-08-25-v0.0.54-beta-release.md](2026-08-25-v0.0.54-beta-release.md) freezes, validates, publishes, and integrates the `0.0.54-beta` application and website release from the reviewed post-`0.0.53-beta` runtime and download-selection repairs.
 
 - [2026-08-25-website-version-bound-download.md](2026-08-25-website-version-bound-download.md) binds the landing-page primary action to the current manifest asset on single-architecture Windows, exposes the exact version/file selection, and makes ambiguous platforms choose explicitly.

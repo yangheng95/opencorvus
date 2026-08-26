@@ -45,6 +45,7 @@ OpenCorvus 是一个面向 AI 编码代理的开发编排工具。它把用户�
 | `@opencorvus-ai/util` | `packages/util` | 通用工具函数，如二进制路径、错误类型、lazy、node runtime、slug 等。 |
 | `@opencorvus-ai/script` | `packages/script` | 小型共享脚本工具包，目前导出 `src/index.ts` 和版本辅助。 |
 | `@opencorvus/web` | `packages/web` | OpenCorvus 公共文档站，使用 Astro + Starlight。产品文档位于 `packages/web/src/content/docs/**`。 |
+| `opencorvus-inspect` | `packages/inspect-benchmark` | Python Inspect AI 扩展。把 Inspect Sample 映射到公开 OpenCorvus Task API，并将持久终态、Completion Decision Message 和追踪标识投影回 Inspect 日志与 scorer；通过 `pyproject.toml` 独立打包，不进入 Turbo 任务图。 |
 
 ## 4. 核心包 `packages/opencorvus`
 

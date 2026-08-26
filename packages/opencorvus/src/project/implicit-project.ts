@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto"
 import * as fs from "node:fs/promises"
 import path from "node:path"
+import { isDeepStrictEqual } from "node:util"
 import z from "zod"
 import { NamedError } from "@opencorvus-ai/util/error"
 import { GlobalBus } from "@/bus/global"
@@ -9,27 +10,19 @@ import { Database, eq } from "@/storage/db"
 import { Session } from "@/session"
 import { SessionTable } from "@/session/session.sql"
 import { Filesystem } from "@/util/filesystem"
+import { PromotionDatabaseSnapshot, PromotionJournal } from "./promotion-journal"
 import { Project } from "./project"
-import { ProjectTable } from "./project.sql"
+import { ProjectMaintenanceFenceTable, ProjectTable } from "./project.sql"
+import {
+  ensureProjectPromotionFenceInTransaction,
+  releaseProjectMaintenanceFencesInTransaction,
+} from "./deletion-registry"
 
 function calendarSegment(value: number): string {
   return String(value).padStart(2, "0")
 }
 
 export namespace ImplicitProject {
-  type PromotionDatabaseSnapshot = {
-    project: {
-      worktree: string
-      name: string | null
-      sandboxes: string[]
-    }
-    sessions: Array<{
-      id: string
-      directory: string
-      metadata: Record<string, unknown> | null
-    }>
-  }
-
   export type PromotionRollbackResidue = {
     sourceExists: boolean | null
     destinationExists: boolean | null
@@ -102,33 +95,125 @@ export namespace ImplicitProject {
     return path.join(destination, path.relative(source, value))
   }
 
+  function promotionDatabaseSnapshotInTransaction(db: Database.TxOrDb, projectID: string): PromotionDatabaseSnapshot {
+    const project = db
+      .select({
+        worktree: ProjectTable.worktree,
+        name: ProjectTable.name,
+        sandboxes: ProjectTable.sandboxes,
+        generation: ProjectTable.generation,
+        timeUpdated: ProjectTable.time_updated,
+      })
+      .from(ProjectTable)
+      .where(eq(ProjectTable.id, projectID))
+      .get()
+    if (!project) throw new Error(`Project not found while preparing anonymous promotion: ${projectID}`)
+    const sessions = db
+      .select({
+        id: SessionTable.id,
+        directory: SessionTable.directory,
+        metadata: SessionTable.metadata,
+        timeUpdated: SessionTable.time_updated,
+      })
+      .from(SessionTable)
+      .where(eq(SessionTable.project_id, projectID))
+      .all()
+    return PromotionDatabaseSnapshot.parse({ project, sessions })
+  }
+
   function promotionDatabaseSnapshot(projectID: string): PromotionDatabaseSnapshot {
-    return Database.use((db) => {
-      const project = db
-        .select({
-          worktree: ProjectTable.worktree,
-          name: ProjectTable.name,
-          sandboxes: ProjectTable.sandboxes,
-        })
-        .from(ProjectTable)
-        .where(eq(ProjectTable.id, projectID))
-        .get()
-      if (!project) throw new Error(`Project not found while preparing anonymous promotion: ${projectID}`)
-      const sessions = db
-        .select({
-          id: SessionTable.id,
-          directory: SessionTable.directory,
-          metadata: SessionTable.metadata,
-        })
-        .from(SessionTable)
-        .where(eq(SessionTable.project_id, projectID))
-        .all()
-      return { project, sessions }
-    })
+    return Database.use((db) => promotionDatabaseSnapshotInTransaction(db, projectID))
+  }
+
+  function mappedMetadata(
+    metadata: Record<string, unknown> | null,
+    source: string,
+    destination: string,
+  ): Record<string, unknown> | null {
+    if (!metadata) return metadata
+    const mission = metadata.mission
+    if (!mission || typeof mission !== "object" || Array.isArray(mission)) return metadata
+    const cwd = (mission as Record<string, unknown>).cwd
+    if (typeof cwd !== "string" || !Filesystem.contains(source, cwd)) return metadata
+    return {
+      ...metadata,
+      mission: { ...(mission as Record<string, unknown>), cwd: mappedDirectory(cwd, source, destination) },
+    }
+  }
+
+  function assertJournalPaths(entry: PromotionJournal.Entry): void {
+    const paths = [entry.source, entry.physicalSource, entry.quarantine, entry.staging, entry.destination]
+    if (paths.some((candidate) => !path.isAbsolute(candidate))) {
+      throw new Error(`Promotion journal ${entry.operationID} contains a non-absolute path`)
+    }
+    const expectedQuarantine = path.join(
+      path.dirname(entry.physicalSource),
+      `.${path.basename(entry.physicalSource)}.promoting-${entry.operationID}`,
+    )
+    const expectedStaging = path.join(path.dirname(entry.destination), `.opencorvus-promoting-${entry.operationID}`)
+    if (!Project.samePath(entry.quarantine, expectedQuarantine) || !Project.samePath(entry.staging, expectedStaging)) {
+      throw new Error(`Promotion journal ${entry.operationID} path ownership does not match its operation identity`)
+    }
+    if (!Project.samePath(entry.destination, path.join(path.dirname(entry.destination), entry.name))) {
+      throw new Error(`Promotion journal ${entry.operationID} destination does not match its exact name`)
+    }
+    const owned = [entry.physicalSource, entry.quarantine, entry.staging, entry.destination]
+    for (let left = 0; left < owned.length; left++) {
+      for (let right = left + 1; right < owned.length; right++) {
+        if (Filesystem.overlaps(owned[left]!, owned[right]!)) {
+          throw new Error(`Promotion journal ${entry.operationID} contains overlapping owned paths`)
+        }
+      }
+    }
+  }
+
+  async function assertDigest(label: string, directory: string, expected: string): Promise<void> {
+    const actual = await PromotionJournal.digestDirectory(directory)
+    if (actual !== expected) throw new Error(`${label} digest mismatch: expected ${expected}, received ${actual}`)
+  }
+
+  function assertDatabaseProjection(entry: PromotionJournal.Entry, side: "source" | "destination"): void {
+    const current = promotionDatabaseSnapshot(entry.projectID)
+    const before = entry.database
+    const expectedProject =
+      side === "source"
+        ? before.project
+        : {
+            ...before.project,
+            worktree: entry.destination,
+            name: entry.name,
+            sandboxes: before.project.sandboxes.map((item) => mappedDirectory(item, entry.source, entry.destination)),
+          }
+    if (
+      current.project.generation !== expectedProject.generation ||
+      !Project.samePath(current.project.worktree, expectedProject.worktree) ||
+      current.project.name !== expectedProject.name ||
+      !sameJson(current.project.sandboxes, expectedProject.sandboxes)
+    ) {
+      throw new Error(`Promotion journal Project ${side} database projection changed`)
+    }
+    const currentByID = new Map(current.sessions.map((session) => [session.id, session]))
+    if (currentByID.size !== before.sessions.length) {
+      throw new Error(`Promotion journal Project ${side} session set changed`)
+    }
+    for (const session of before.sessions) {
+      const actual = currentByID.get(session.id)
+      const expectedDirectory =
+        side === "source" ? session.directory : mappedDirectory(session.directory, entry.source, entry.destination)
+      const expectedMetadata =
+        side === "source" ? session.metadata : mappedMetadata(session.metadata, entry.source, entry.destination)
+      if (
+        !actual ||
+        !Project.samePath(actual.directory, expectedDirectory) ||
+        !sameJson(actual.metadata, expectedMetadata)
+      ) {
+        throw new Error(`Promotion journal Project ${side} session ${session.id} changed`)
+      }
+    }
   }
 
   function sameJson(left: unknown, right: unknown): boolean {
-    return JSON.stringify(left) === JSON.stringify(right)
+    return isDeepStrictEqual(left, right)
   }
 
   async function inspectPath(label: string, target: string, rollbackFailures: unknown[]): Promise<boolean | null> {
@@ -151,25 +236,31 @@ export namespace ImplicitProject {
     staging: string
     quarantine: string
     published: boolean
+    operationID: string
   }): Promise<never> {
     const rollbackFailures: unknown[] = []
-    const attempt = async (label: string, operation: () => Promise<void>) => {
-      try {
-        await operation()
-      } catch (cause) {
-        rollbackFailures.push(new Error(`Anonymous project promotion rollback failed to ${label}`, { cause }))
+    try {
+      const entry = await PromotionJournal.get(input.projectID)
+      if (!entry || entry.operationID !== input.operationID) {
+        throw new Error(`Promotion rollback lost its exact journal occurrence ${input.operationID}`)
       }
+      assertJournalPaths(entry)
+      if (input.published && (await Filesystem.exists(entry.destination))) {
+        if (!entry.destinationDigest) throw new Error("Published promotion has no prepared digest")
+        await assertDigest("Promotion rollback destination", entry.destination, entry.destinationDigest)
+        const current = promotionDatabaseSnapshot(entry.projectID)
+        if (!Project.samePath(current.project.worktree, entry.source)) {
+          throw new Error("Promotion rollback cannot remove a destination after the database identity changed")
+        }
+        await fs.rm(entry.destination, { recursive: true, force: false })
+      }
+      const outcome = await convergePromotionJournalEntry(entry)
+      if (outcome !== "backward") throw new Error(`Promotion rollback converged ${outcome} instead of backward`)
+      throw input.cause
+    } catch (cause) {
+      if (cause === input.cause) throw cause
+      rollbackFailures.push(cause)
     }
-
-    await attempt("remove the staging directory", () => fs.rm(input.staging, { recursive: true, force: true }))
-    if (input.published) {
-      await attempt("remove the published destination", () =>
-        fs.rm(input.destination, { recursive: true, force: true }),
-      )
-    }
-    await attempt("restore the quarantined source", () =>
-      Filesystem.renameAfterTransientContention(input.quarantine, input.physicalSource),
-    )
 
     const [sourceExists, destinationExists, stagingExists, quarantineExists] = await Promise.all([
       inspectPath("source", input.physicalSource, rollbackFailures),
@@ -219,9 +310,257 @@ export namespace ImplicitProject {
     })
   }
 
-  export async function promote(
+  /** Converge one Project's open promotion occurrence. The promote path calls
+   *  this before it opens a new occurrence; the startup sweep calls it for
+   *  every Project that has one. */
+  export async function recoverPromotionJournalEntry(projectID: string): Promise<"absent" | "forward" | "backward"> {
+    return PromotionJournal.withProjectOwner(projectID, async () => {
+      const entry = await PromotionJournal.get(projectID)
+      if (!entry) return "absent"
+      return convergePromotionJournalEntry(entry)
+    })
+  }
+
+  async function convergePromotionJournalEntry(entry: PromotionJournal.Entry): Promise<"forward" | "backward"> {
+    assertJournalPaths(entry)
+    const authority = Database.immediateTransaction((db) => {
+      const project = db.select().from(ProjectTable).where(eq(ProjectTable.id, entry.projectID)).get()
+      if (project && project.generation !== entry.projectGeneration) return project
+      if (project && !entry.terminal) {
+        const fence = db
+          .select()
+          .from(ProjectMaintenanceFenceTable)
+          .where(eq(ProjectMaintenanceFenceTable.project_id, entry.projectID))
+          .get()
+        if (!fence) {
+          const current = promotionDatabaseSnapshotInTransaction(db, entry.projectID)
+          if (!sameJson(current, entry.database) || !Project.samePath(current.project.worktree, entry.source)) {
+            throw new Error(
+              `Promotion journal Project/Session snapshot changed before recovery fencing: ${entry.projectID}`,
+            )
+          }
+        }
+        ensureProjectPromotionFenceInTransaction(db, { project, operationID: entry.operationID })
+      } else if (project) {
+        const fence = db
+          .select()
+          .from(ProjectMaintenanceFenceTable)
+          .where(eq(ProjectMaintenanceFenceTable.project_id, entry.projectID))
+          .get()
+        if (
+          fence?.kind !== "promotion" ||
+          fence.operation_id !== entry.operationID ||
+          fence.project_generation !== entry.projectGeneration
+        ) {
+          throw new Error(`Settled promotion ${entry.operationID} no longer owns its Project fence`)
+        }
+      }
+      return project
+    })
+    if (!authority) throw new Error(`Promotion journal references a missing Project: ${entry.projectID}`)
+    if (authority.generation !== entry.projectGeneration) {
+      throw new Error(
+        `Promotion journal Project generation mismatch for ${entry.projectID}: ` +
+          `expected ${entry.projectGeneration}, received ${authority.generation}`,
+      )
+    }
+    const mappedWorktree = Filesystem.normalizePath(authority.worktree)
+    if (
+      mappedWorktree !== Filesystem.normalizePath(entry.source) &&
+      mappedWorktree !== Filesystem.normalizePath(entry.destination)
+    ) {
+      throw new Error(`Promotion journal Project mapping is outside its source/destination occurrence`)
+    }
+    const destinationExists = await Filesystem.exists(entry.destination)
+    if (entry.terminal === "committed" && !destinationExists) {
+      throw new Error(`Committed promotion destination is missing: ${entry.destination}`)
+    }
+    if (entry.terminal === "rolled_back" && destinationExists) {
+      throw new Error(`Rolled-back promotion still has a destination: ${entry.destination}`)
+    }
+    if (destinationExists) {
+      if (!entry.destinationDigest) {
+        throw new Error(`Promotion journal destination has no prepared content digest: ${entry.destination}`)
+      }
+      const relocated = !Project.samePath(authority.worktree, entry.source)
+      if (relocated) assertDatabaseProjection(entry, "destination")
+      else {
+        await assertDigest("Promotion prepared destination", entry.destination, entry.destinationDigest)
+        assertDatabaseProjection(entry, "source")
+        Database.transaction((db) => {
+          Project.beginPromotionCommit(
+            { projectID: entry.projectID, operationID: entry.operationID, expectedGeneration: entry.projectGeneration },
+            db,
+          )
+          Project.relocate(
+            {
+              projectID: entry.projectID,
+              operationID: entry.operationID,
+              expectedGeneration: entry.projectGeneration,
+              expectedWorktree: entry.source,
+              worktree: entry.destination,
+              name: entry.name,
+              sandboxes: entry.database.project.sandboxes.map((item) =>
+                mappedDirectory(item, entry.source, entry.destination),
+              ),
+            },
+            db,
+          )
+          Session.relocateProject(
+            {
+              projectID: entry.projectID,
+              sourceDirectory: entry.source,
+              destinationDirectory: entry.destination,
+            },
+            db,
+          )
+          Project.finishPromotionCommit(
+            { projectID: entry.projectID, operationID: entry.operationID, expectedGeneration: entry.projectGeneration },
+            db,
+          )
+        })
+      }
+      await fs.rm(entry.staging, { recursive: true, force: true })
+      if (await Filesystem.exists(entry.physicalSource)) {
+        throw new Error(
+          `Promotion recovery found an unknown source beside the published destination: ${entry.physicalSource}`,
+        )
+      }
+      if (await Filesystem.exists(entry.quarantine)) {
+        await assertDigest("Promotion quarantine", entry.quarantine, entry.sourceDigest)
+        await fs.rm(entry.quarantine, { recursive: true, force: false })
+      }
+      if (!entry.terminal) {
+        await PromotionJournal.settle(entry.operationID, "committed", {
+          projectID: entry.projectID,
+          projectGeneration: entry.projectGeneration,
+          destinationDigest: entry.destinationDigest,
+        })
+      }
+      Database.transaction((db) => releaseProjectMaintenanceFencesInTransaction(db, { operationID: entry.operationID }))
+      const project = Project.get(entry.projectID)
+      if (project) {
+        GlobalBus.emit("event", {
+          payload: { type: Project.Event.Updated.type, properties: project },
+        })
+      }
+      return "forward"
+    }
+    // The destination never published: the exact original source wins. Both
+    // possible source locations are content-bound before any destructive step.
+    await fs.rm(entry.staging, { recursive: true, force: true })
+    const sourceExists = await Filesystem.exists(entry.physicalSource)
+    const quarantineExists = await Filesystem.exists(entry.quarantine)
+    if (sourceExists && quarantineExists) {
+      throw new Error(
+        `Promotion recovery found both source and quarantine; ownership is ambiguous and both were preserved`,
+      )
+    }
+    if (!sourceExists) {
+      if (!quarantineExists) {
+        throw new Error(
+          `Promotion recovery for ${entry.projectID} found neither source ${entry.physicalSource} nor quarantine ${entry.quarantine}`,
+        )
+      }
+      await assertDigest("Promotion quarantine", entry.quarantine, entry.sourceDigest)
+      await Filesystem.renameAfterTransientContention(entry.quarantine, entry.physicalSource)
+    } else {
+      await assertDigest("Promotion source", entry.physicalSource, entry.sourceDigest)
+    }
+    const relocated = Project.samePath(authority.worktree, entry.destination)
+    if (relocated) assertDatabaseProjection(entry, "destination")
+    else assertDatabaseProjection(entry, "source")
+    if (relocated) {
+      Database.transaction((db) => {
+        Project.beginPromotionCommit(
+          { projectID: entry.projectID, operationID: entry.operationID, expectedGeneration: entry.projectGeneration },
+          db,
+        )
+        Project.restoreRelocation(
+          {
+            projectID: entry.projectID,
+            operationID: entry.operationID,
+            expectedGeneration: entry.projectGeneration,
+            expectedWorktree: entry.destination,
+            worktree: entry.database.project.worktree,
+            name: entry.database.project.name,
+            sandboxes: entry.database.project.sandboxes,
+            timeUpdated: entry.database.project.timeUpdated,
+          },
+          db,
+        )
+        Session.restoreProjectRelocation(
+          {
+            projectID: entry.projectID,
+            sourceDirectory: entry.source,
+            destinationDirectory: entry.destination,
+            snapshot: entry.database.sessions,
+          },
+          db,
+        )
+        Project.finishPromotionCommit(
+          { projectID: entry.projectID, operationID: entry.operationID, expectedGeneration: entry.projectGeneration },
+          db,
+        )
+      })
+    }
+    if (!entry.terminal) {
+      await PromotionJournal.settle(entry.operationID, "rolled_back", {
+        projectID: entry.projectID,
+        projectGeneration: entry.projectGeneration,
+      })
+    }
+    Database.transaction((db) => releaseProjectMaintenanceFencesInTransaction(db, { operationID: entry.operationID }))
+    return "backward"
+  }
+
+  /** Converge every unsettled promotion occurrence — the startup owner. Runs
+   *  before any Project directory is exposed to recovery or opening. */
+  export async function recoverPromotions(): Promise<{ forward: number; backward: number; failures: string[] }> {
+    const entries = await PromotionJournal.all()
+    const fences = Database.use((db) =>
+      db.select().from(ProjectMaintenanceFenceTable).where(eq(ProjectMaintenanceFenceTable.kind, "promotion")).all(),
+    )
+    const fencedOperations = new Set(fences.map((fence) => fence.operation_id))
+    let forward = 0
+    let backward = 0
+    const failures: string[] = []
+    for (const entry of entries) {
+      // A historical terminal with no matching fence is already published and
+      // may have changed legitimately. Only the exact terminal->database crash
+      // window retains its promotion fence and requires replay.
+      if (entry.terminal && !fencedOperations.has(entry.operationID)) continue
+      try {
+        const outcome = await PromotionJournal.withProjectOwner(entry.projectID, async () => {
+          const current = entry.terminal
+            ? await PromotionJournal.read(entry.operationID)
+            : await PromotionJournal.get(entry.projectID)
+          if (!current) return "absent" as const
+          return convergePromotionJournalEntry(current)
+        })
+        if (outcome === "absent") continue
+        if (outcome === "forward") forward += 1
+        else backward += 1
+      } catch (error) {
+        failures.push(`${entry.projectID}: ${error instanceof Error ? error.message : String(error)}`)
+      }
+    }
+    const operations = new Set(entries.map((entry) => entry.operationID))
+    for (const fence of fences) {
+      if (!operations.has(fence.operation_id)) {
+        failures.push(`${fence.project_id}: promotion fence ${fence.operation_id} has no durable journal occurrence`)
+      }
+    }
+    return { forward, backward, failures }
+  }
+
+  async function promoteOwned(
     input: z.infer<typeof PromotionInput> & { project: Project.Info; beforeMove?: () => Promise<void> },
   ) {
+    const recovered = await recoverPromotionJournalEntry(input.project.id)
+    if (recovered === "forward") {
+      throw new Error(`Project ${input.project.id} already completed an earlier anonymous promotion`)
+    }
     const configuredSource = path.resolve(input.project.worktree)
     const physicalSource = await fs.realpath(configuredSource)
     const source = configuredSource
@@ -279,23 +618,110 @@ export namespace ImplicitProject {
     }
 
     await input.beforeMove?.()
+    const operationID = randomUUID()
     const quarantine = path.join(
       path.dirname(physicalSource),
-      `.${path.basename(physicalSource)}.promoting-${randomUUID()}`,
+      `.${path.basename(physicalSource)}.promoting-${operationID}`,
     )
-    const staging = path.join(destinationParent, `.opencorvus-promoting-${randomUUID()}`)
+    const staging = path.join(destinationParent, `.opencorvus-promoting-${operationID}`)
     const database = promotionDatabaseSnapshot(input.project.id)
+    if (!Project.samePath(database.project.worktree, source)) {
+      throw new Error(`Anonymous Project identity changed before promotion intent was recorded: ${input.project.id}`)
+    }
+    const sourceDigest = await PromotionJournal.digestDirectory(physicalSource)
     let published = false
-    await Filesystem.renameAfterTransientContention(physicalSource, quarantine)
+    // The durable occurrence commits BEFORE the first rename: from this point
+    // a process death leaves a journal whose recovery converges the physical
+    // and database identities to exactly one side.
+    await PromotionJournal.record({
+      operationID,
+      projectID: input.project.id,
+      projectGeneration: database.project.generation,
+      source,
+      physicalSource,
+      quarantine,
+      staging,
+      destination,
+      name: input.name,
+      sourceDigest,
+      database,
+      time_created: Date.now(),
+    })
     try {
+      Database.immediateTransaction((db) => {
+        const current = promotionDatabaseSnapshotInTransaction(db, input.project.id)
+        if (!sameJson(current, database) || !Project.samePath(current.project.worktree, source)) {
+          throw new Error(`Anonymous Project identity changed before promotion fencing: ${input.project.id}`)
+        }
+        const project = db.select().from(ProjectTable).where(eq(ProjectTable.id, input.project.id)).get()
+        if (!project || project.generation !== database.project.generation) {
+          throw new Error(`Project generation changed before promotion fencing: ${input.project.id}`)
+        }
+        ensureProjectPromotionFenceInTransaction(db, { project, operationID })
+      })
+    } catch (cause) {
+      await PromotionJournal.settle(operationID, "rolled_back", {
+        projectID: input.project.id,
+        projectGeneration: database.project.generation,
+        reason: "promotion admission changed before filesystem publication",
+      })
+      throw cause
+    }
+    try {
+      await Filesystem.renameAfterTransientContention(physicalSource, quarantine)
       await fs.cp(quarantine, staging, { recursive: true, force: false, errorOnExist: true, preserveTimestamps: true })
+      await PromotionJournal.markPrepared(operationID, await PromotionJournal.digestDirectory(staging))
       await Filesystem.renameAfterTransientContention(staging, destination)
       published = true
+      await PromotionJournal.markPublished(operationID)
+    } catch (cause) {
+      return rollbackPromotion({
+        cause,
+        projectID: input.project.id,
+        database,
+        physicalSource,
+        destination,
+        staging,
+        quarantine,
+        published,
+        operationID,
+      })
+    }
 
+    let preparedDigest: string
+    try {
+      const prepared = await PromotionJournal.get(input.project.id)
+      if (!prepared?.destinationDigest) {
+        throw new Error(`Published promotion has no prepared destination digest: ${destination}`)
+      }
+      preparedDigest = prepared.destinationDigest
+      await assertDigest("Promotion prepared destination", destination, preparedDigest)
+    } catch (cause) {
+      return rollbackPromotion({
+        cause,
+        projectID: input.project.id,
+        database,
+        physicalSource,
+        destination,
+        staging,
+        quarantine,
+        published,
+        operationID,
+      })
+    }
+
+    try {
       Database.transaction((db) => {
-        const relocated = Project.relocate(
+        Project.beginPromotionCommit(
+          { projectID: input.project.id, operationID, expectedGeneration: database.project.generation },
+          db,
+        )
+        Project.relocate(
           {
             projectID: input.project.id,
+            operationID,
+            expectedGeneration: database.project.generation,
+            expectedWorktree: source,
             worktree: destination,
             name: input.name,
             sandboxes: input.project.sandboxes.map((item) => mappedDirectory(item, source, destination)),
@@ -310,7 +736,10 @@ export namespace ImplicitProject {
           },
           db,
         )
-        return relocated
+        Project.finishPromotionCommit(
+          { projectID: input.project.id, operationID, expectedGeneration: database.project.generation },
+          db,
+        )
       })
     } catch (cause) {
       return rollbackPromotion({
@@ -322,13 +751,18 @@ export namespace ImplicitProject {
         staging,
         quarantine,
         published,
+        operationID,
       })
     }
 
-    const cleanupPending = await fs.rm(quarantine, { recursive: true, force: true }).then(
-      () => false,
-      () => true,
-    )
+    await assertDigest("Promotion quarantine", quarantine, sourceDigest)
+    await fs.rm(quarantine, { recursive: true, force: false })
+    await PromotionJournal.settle(operationID, "committed", {
+      projectID: input.project.id,
+      projectGeneration: database.project.generation,
+      destinationDigest: preparedDigest,
+    })
+    Database.transaction((db) => releaseProjectMaintenanceFencesInTransaction(db, { operationID }))
     const project = Project.get(input.project.id)
     if (!project) throw new Error(`Promoted project row disappeared: ${input.project.id}`)
     GlobalBus.emit("event", {
@@ -337,8 +771,18 @@ export namespace ImplicitProject {
         properties: project,
       },
     })
-    return PromotionResult.parse({ project, sourceDirectory: source, directory: destination, cleanupPending })
+    return PromotionResult.parse({ project, sourceDirectory: source, directory: destination, cleanupPending: false })
   }
+
+  export function promote(
+    input: z.infer<typeof PromotionInput> & { project: Project.Info; beforeMove?: () => Promise<void> },
+  ) {
+    return PromotionJournal.withProjectOwner(input.project.id, () => promoteOwned(input))
+  }
+
+  /** The exact production snapshot builder, for tests that construct the
+   *  durable state a crash leaves behind. */
+  export const PromotionTestHooks = { promotionDatabaseSnapshot }
 
   export const Anonymous = z
     .object({

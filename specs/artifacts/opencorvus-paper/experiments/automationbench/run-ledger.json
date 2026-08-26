@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "runs":[
+    {"id":"AB-DISPLAY-001","purpose":"website typed constant and arithmetic projection","cwd":"D:/myhexin-local/opencorvus","environment":{"os":"Windows x64","bun":"1.3.14","credentials":"none"},"configuration":"packages/web/src/content/landing-benchmark.ts","input":"packages/web/test/landing-benchmark.test.ts","command":"bun test packages/web/test/landing-benchmark.test.ts","raw_output":"bun test v1.3.14 (0d9b296a)\n\n 1 pass\n 0 fail\n 1 expect() calls\nRan 1 test across 1 file. [2.80s]","result":"passed","proves":"display constants and derived arithmetic only","does_not_prove":"AutomationBench reproduction"}
+  ],
+  "unrun":[{"id":"AB-SCIENTIFIC-001","reason":"authoritative version, cases, evaluator, per-case outputs, repeats and statistics are absent","result":"blocked by evidence, not a toolchain failure"}]
+}

@@ -236,7 +236,7 @@ describe("Omnichannel Distribution Expert Squad package", () => {
         }
 
         await ensureGitProjectMetadata()
-        const session = await Session.create({ kind: "root", title: "Omnichannel typed chain" })
+        const session = Session.prepareRootNext({ kind: "root", directory: Instance.directory, title: "Omnichannel typed chain" })
         const taskID = Identifier.ascending("task")
         const started = Date.now()
         const binding = await prepareTaskProcessBinding({
@@ -249,7 +249,7 @@ describe("Omnichannel Distribution Expert Squad package", () => {
         })
         persistTask({
           taskID,
-          sessionID: session.id,
+          rootSession: session,
           now: started,
           title: "Omnichannel typed chain",
           request: "Publish exact distribution evidence",

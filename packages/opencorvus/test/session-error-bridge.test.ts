@@ -43,15 +43,16 @@ test("persists a session-scoped provider error without execution input-message a
     directory: project.path,
     fn: async () => {
       const taskID = Identifier.ascending("task")
-      const root = await Session.create({
+      const root = Session.prepareRootNext({
         kind: "root",
+        directory: Instance.directory,
         title: "Session error bridge",
         metadata: { configOverlay: { prompt_profile: { active: packageRevision.id } } },
       })
       const now = Date.now()
       persistTask({
         taskID,
-        sessionID: root.id,
+        rootSession: root,
         now,
         title: "Session error bridge",
         request: "Persist the exact provider retry incident",
@@ -106,8 +107,9 @@ test("persists terminal lifecycle after the publishing caller lease is released"
     directory: project.path,
     fn: async () => {
       taskID = Identifier.ascending("task")
-      const root = await Session.create({
+      const root = Session.prepareRootNext({
         kind: "root",
+        directory: Instance.directory,
         title: "Released lifecycle publisher",
         metadata: { configOverlay: { prompt_profile: { active: packageRevision.id } } },
       })
@@ -115,7 +117,7 @@ test("persists terminal lifecycle after the publishing caller lease is released"
       const now = Date.now()
       persistTask({
         taskID,
-        sessionID: root.id,
+        rootSession: root,
         now,
         title: "Released lifecycle publisher",
         request: "Persist terminal lifecycle from detached ownership",
@@ -208,12 +210,12 @@ test("persists one projected worker error from its managed worktree with exact r
         })
         projectID = Instance.project.id
         taskID = Identifier.ascending("task")
-        const root = await Session.create({ kind: "root", title: "Managed worker error root" })
+        const root = Session.prepareRootNext({ kind: "root", directory: Instance.directory, title: "Managed worker error root" })
         rootSessionID = root.id
         const now = Date.now()
         persistTask({
           taskID,
-          sessionID: root.id,
+          rootSession: root,
           now,
           title: "Managed worker error",
           request: "Persist one exact worktree provider error",

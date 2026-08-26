@@ -50,15 +50,19 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 | POST | `/global/providers/{providerID}/auth/execute` | Execute global Provider auth Body: `inputs`, `method`; Errors: `AuthReadError`, `BadRequestError`. | `global.providers.auth.execute` |
 | POST | `/global/providers/{providerID}/auth/prompts` | Get global Provider auth prompts Body: `inputs`, `method`; Errors: `BadRequestError`. | `global.providers.auth.prompts` |
 | POST | `/global/providers/{providerID}/oauth/authorize` | Authorize a global Provider subscription Body: `inputs`, `method`; Errors: `BadRequestError`. | `global.providers.oauth.authorize` |
-| POST | `/global/providers/{providerID}/oauth/callback` | Complete global Provider subscription authorization Body: `code`, `method`; Errors: `AuthReadError`, `BadRequestError`. | `global.providers.oauth.callback` |
+| POST | `/global/providers/{providerID}/oauth/callback` | Complete global Provider subscription authorization Body: `code`, `flowID`, `method`; Errors: `AuthReadError`, `BadRequestError`. | `global.providers.oauth.callback` |
 | POST | `/global/providers/{providerID}/test` | Test a global Provider connection Body: `modelID`; Errors: `AuthReadError`, `BadRequestError`. | `global.providers.test` |
 | POST | `/global/skill/install` | Install a global Skill market source Body: `kind`, `policy`, `value`; Errors: `BadRequestError`. | `global.skill.install` |
 | GET | `/global/skill/market` | List the global Skill market | `global.skill.market` |
+| GET | `/global/skill/market/detail` | Inspect a global Skill Market candidate Errors: `BadRequestError`, `SkillMarketUpstreamError`. | `global.skill.market.detail` |
+| POST | `/global/skill/market/install` | Install an inspected global Skill Market candidate Body: `expected_hash`, `id`, `policy`; Errors: `BadRequestError`, `SkillMarketUpstreamError`. | `global.skill.market.install` |
+| GET | `/global/skill/market/search` | Search the global Skill Market Errors: `BadRequestError`, `SkillMarketUpstreamError`. | `global.skill.market.search` |
 | GET | `/global/tasks` | List tasks across projects | `task.global.list` |
 | POST | `/global/tasks` | Create a task in an implicit project Body: `artifactSources`, `attachments`, `budget`, `channelBinding`, `checks`, `directory`, `expectedPackageDigest`, `metadata`, `model`, `priority`, `productPillar`, `project`, `promptProfile`, `request`, `requestID`, `source`, `title`; Errors: `BadRequestError`, `ExternalChildTaskLineageError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCreationIdempotencyConflictError`, `TaskCreatorAuthorityError`, `TaskCreatorSessionError`, `TaskExpectedPackageDigestConflictError`, `TaskPackageRevisionBindingError`. | `task.global.create` |
 | GET | `/global/usage` | Get natural-period Provider usage Errors: `BadRequestError`. | `global.usage` |
 | POST | `/global/work` | Create Work in a temporary project Body: `model`; Errors: `BadRequestError`. | `global.work.create` |
 | POST | `/instance/dispose` | Dispose instance Errors: `OwnedPromptControllersError`. | `instance.dispose` |
+| GET | `/lifecycle/{occurrenceID}` | Get a server lifecycle occurrence | `server.lifecycle` |
 | GET | `/log` | Read logs Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `log.read` |
 | POST | `/log` | Write log batch Body: `entries`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `app.log` |
 | GET | `/log/export` | Export log support bundle | `log.export` |
@@ -192,7 +196,7 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 | PATCH | `/session/{sessionID}` | Update session Body: `time`, `title`; Errors: `BadRequestError`, `LogFileNotFoundError`, `MissionSessionAuthorityError`, `NotFoundError`. | `session.update` |
 | POST | `/session/{sessionID}/abort` | Abort session Errors: `BadRequestError`, `LogFileNotFoundError`, `MissionSessionAuthorityError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `session.abort` |
 | GET | `/session/{sessionID}/children` | Get session children Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.children` |
-| POST | `/session/{sessionID}/command` | Send command Body: `agent`, `arguments`, `command`, `messageID`, `model`, `parts`, `variant`; Errors: `BadRequestError`, `LogFileNotFoundError`, `MissionSessionAuthorityError`, `NotFoundError`. | `session.command` |
+| POST | `/session/{sessionID}/command` | Send command Body: `agent`, `arguments`, `command`, `messageID`, `model`, `parts`, `variant`; Errors: `BadRequestError`, `LogFileNotFoundError`, `MissionSessionAuthorityError`, `NotFoundError`, `PublicSessionPromptIdentityConflictError`. | `session.command` |
 | GET | `/session/{sessionID}/config` | Get session effective configuration Errors: `AuthReadError`, `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.config.get` |
 | PATCH | `/session/{sessionID}/config` | Update session configuration overlay Body: `agent`, `expert_squads`, `model`, `prompt`, `prompt_profile`, `runtime_templates`, `skill_mounts`; Errors: `AuthReadError`, `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskPackageRevisionBindingError`, `TaskPromptProfileImmutableError`. | `session.config.update` |
 | GET | `/session/{sessionID}/conversation` | Hydrate session conversation state Errors: `LogFileNotFoundError`, `NotFoundError`. | `session.conversation` |
@@ -200,7 +204,7 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 | GET | `/session/{sessionID}/diff` | Get message diff | `session.diff` |
 | GET | `/session/{sessionID}/events` | Subscribe to session events | `session.events` |
 | POST | `/session/{sessionID}/fork` | Fork session Body: `messageID`; Errors: `MissionSessionAuthorityError`. | `session.fork` |
-| POST | `/session/{sessionID}/init` | Initialize session Body: `messageID`, `modelID`, `providerID`; Errors: `BadRequestError`, `LogFileNotFoundError`, `MissionSessionAuthorityError`, `NotFoundError`. | `session.init` |
+| POST | `/session/{sessionID}/init` | Initialize session Body: `messageID`, `modelID`, `providerID`; Errors: `BadRequestError`, `LogFileNotFoundError`, `MissionSessionAuthorityError`, `NotFoundError`, `PublicSessionPromptIdentityConflictError`. | `session.init` |
 | GET | `/session/{sessionID}/interactive-artifact/{artifactID}` | Read session interactive artifact Errors: `BadRequestError`, `InteractiveArtifactCorruptionError`, `LogFileNotFoundError`, `NotFoundError`. | `interactiveArtifact.readSessionArtifact` |
 | GET | `/session/{sessionID}/interactive-artifact/{artifactID}/mcp-app/events` | Subscribe to MCP App capability changes Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `interactiveArtifact.eventsMcpApp` |
 | POST | `/session/{sessionID}/interactive-artifact/{artifactID}/mcp-app/request` | Forward an MCP App request Errors: `BadRequestError`, `LogFileNotFoundError`, `McpAppHostForbiddenError`, `NotFoundError`, `UnknownError`. | `interactiveArtifact.requestMcpApp` |
@@ -210,7 +214,7 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 | GET | `/session/{sessionID}/message/{messageID}` | Get message Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.message` |
 | DELETE | `/session/{sessionID}/message/{messageID}/part/{partID}` | (no summary) Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `part.delete` |
 | PATCH | `/session/{sessionID}/message/{messageID}/part/{partID}` | (no summary) Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `part.update` |
-| POST | `/session/{sessionID}/shell` | Run shell command Body: `agent`, `command`, `model`; Errors: `BadRequestError`, `LogFileNotFoundError`, `MissionSessionAuthorityError`, `NotFoundError`. | `session.shell` |
+| POST | `/session/{sessionID}/shell` | Run shell command Body: `agent`, `command`, `messageID`, `model`; Errors: `BadRequestError`, `LogFileNotFoundError`, `MissionSessionAuthorityError`, `NotFoundError`, `PublicSessionPromptIdentityConflictError`. | `session.shell` |
 | POST | `/session/{sessionID}/summarize` | Summarize session Body: `auto`, `focus`, `modelID`, `providerID`; Errors: `BadRequestError`, `LogFileNotFoundError`, `MissionSessionAuthorityError`, `NotFoundError`. | `session.summarize` |
 | GET | `/session/{sessionID}/todo` | Get session todos Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.todo` |
 | GET | `/session/{sessionID}/trace` | Get session AgentTrace events | `session.trace` |
@@ -339,6 +343,9 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 | GET | `/skill/installed` | List installed skills | `skill.installed` |
 | GET | `/skill/issues` | List Skill catalog issues | `skill.issues` |
 | GET | `/skill/market` | List skill markets | `skill.market` |
+| GET | `/skill/market/detail` | Inspect a Skill Market candidate Errors: `BadRequestError`, `SkillMarketUpstreamError`. | `skill.market.detail` |
+| POST | `/skill/market/install` | Install an inspected Skill Market candidate Body: `expected_hash`, `id`, `policy`; Errors: `BadRequestError`, `SkillMarketUpstreamError`. | `skill.market.install` |
+| GET | `/skill/market/search` | Search the Skill Market Errors: `BadRequestError`, `SkillMarketUpstreamError`. | `skill.market.search` |
 | PATCH | `/skill/mount` | Set a qualified skill mount override Body: `agentID`, `defaultSkillRef`, `expertSquadID`, `override`, `scope`, `sessionID`. | `skill.setMountOverride` |
 | GET | `/skill/mounts` | List agent skill mounts | `skill.mounts` |
 | POST | `/skill/policy` | Set skill permission policy Body: `action`, `name`. | `skill.policy` |
@@ -404,7 +411,7 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 | POST | `/provider/{providerID}/auth/execute` | Execute auth method Body: `inputs`, `method`; Errors: `AuthReadError`, `BadRequestError`. | `provider.auth.execute` |
 | POST | `/provider/{providerID}/auth/prompts` | Get auth prompts Body: `inputs`, `method`; Errors: `BadRequestError`. | `provider.auth.prompts` |
 | POST | `/provider/{providerID}/oauth/authorize` | OAuth authorize Body: `inputs`, `method`; Errors: `BadRequestError`. | `provider.oauth.authorize` |
-| POST | `/provider/{providerID}/oauth/callback` | OAuth callback Body: `code`, `method`; Errors: `AuthReadError`, `BadRequestError`. | `provider.oauth.callback` |
+| POST | `/provider/{providerID}/oauth/callback` | OAuth callback Body: `code`, `flowID`, `method`; Errors: `AuthReadError`, `BadRequestError`. | `provider.oauth.callback` |
 | POST | `/provider/{providerID}/test` | Test provider connection Body: `modelID`; Errors: `AuthReadError`, `BadRequestError`. | `provider.test` |
 
 ### Question

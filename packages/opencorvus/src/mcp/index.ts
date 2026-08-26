@@ -1842,6 +1842,14 @@ export namespace MCP {
 
   const state = createInstanceState(
     async () => {
+      // A configure that died between its definition commit and its promotion
+      // left a staged secret; settling it here is what makes startup — not an
+      // arbitrary later config commit — the crash owner, and it runs before
+      // any status or connection is projected from the configuration below.
+      await settleStagedCredentials({
+        projectAuthPrefix: `${Instance.project.id}:`,
+        definitions: ((await Config.getProject()).mcp ?? {}) as NonNullable<Config.Info["mcp"]>,
+      })
       const cfg = await Config.get()
       const config = (cfg.mcp ?? {}) as NonNullable<Config.Info["mcp"]>
       const clients: Record<string, MCPClient> = {}
@@ -2335,48 +2343,49 @@ export namespace MCP {
         ? McpAuth.StaticCredential.parse({ secret: parsed.credentialSecret })
         : undefined
       const authKey = mcpAuthKey(parsed.name)
-      const previousProject = await Config.getProject()
-      const previousMcp = previousProject.mcp?.[parsed.name]
-      const previousAuth = await McpAuth.get(authKey)
 
+      // The secret is STAGED before the definition commits and promoted to the
+      // active credential after it — the active credential the previous
+      // definition serves is never destroyed ahead of the commit that retires
+      // it. Every interruption converges: a crash before the definition
+      // commit leaves a staged secret matching no committed definition, which
+      // reconciliation drops; a crash between commit and promotion leaves a
+      // staged secret matching the committed definition, which reconciliation
+      // promotes. No window leaves an enabled definition whose secret is
+      // durably absent.
+      const stagedIdentity =
+        parsed.config.type === "remote" && parsed.config.credential && staticCredential
+          ? { serverUrl: parsed.config.url, credentialIdentity: configuredCredentialIdentity(parsed.config)! }
+          : undefined
+      if (stagedIdentity && staticCredential) {
+        await McpAuth.stageStaticCredential(
+          authKey,
+          staticCredential.secret,
+          stagedIdentity.serverUrl,
+          stagedIdentity.credentialIdentity,
+        )
+      }
       try {
         await Config.updateProjectPatchAtomic(() => ({
           mcp: {
             [parsed.name]: parsed.config,
           },
         }))
-        if (parsed.config.type === "remote" && parsed.config.credential && staticCredential) {
-          await McpAuth.setStaticCredential(
-            authKey,
-            staticCredential.secret,
-            parsed.config.url,
-            configuredCredentialIdentity(parsed.config)!,
-          )
-        }
       } catch (error) {
-        const rollbackFailures: unknown[] = []
+        // The definition never committed; the staged secret is dropped and
+        // the previously active credential was never touched.
         try {
-          await Config.updateProjectPatchAtomic(() => ({
-            mcp: {
-              [parsed.name]: previousMcp ?? null,
-            },
-          }))
+          if (stagedIdentity) await McpAuth.clearStagedStaticCredential(authKey)
         } catch (rollbackError) {
-          rollbackFailures.push(rollbackError)
-        }
-        try {
-          if (previousAuth) await McpAuth.set(authKey, previousAuth)
-          else await McpAuth.remove(authKey)
-        } catch (rollbackError) {
-          rollbackFailures.push(rollbackError)
-        }
-        if (rollbackFailures.length > 0) {
           throw new AggregateError(
-            [error, ...rollbackFailures],
-            `MCP server ${parsed.name} credential storage and rollback failed`,
+            [error, rollbackError],
+            `MCP server ${parsed.name} definition commit and staged credential drop failed`,
           )
         }
         throw error
+      }
+      if (stagedIdentity) {
+        await McpAuth.promoteStagedStaticCredential(authKey, stagedIdentity)
       }
 
       if (staticCredential) {
@@ -2534,6 +2543,42 @@ export namespace MCP {
     for (const name of names) s.cleanupPending.delete(name)
   }
 
+  /**
+   * Settle staged configure secrets against the committed project
+   * configuration. This is the crash owner: a configure that died between its
+   * definition commit and its promotion leaves a staged secret whose identity
+   * matches the committed definition, and nothing else would promote it until
+   * an unrelated config commit happened to arrive.
+   */
+  async function settleStagedCredentials(input: {
+    projectAuthPrefix: string
+    definitions: NonNullable<Config.Info["mcp"]>
+    names?: ReadonlySet<string>
+  }) {
+    const entries = await McpAuth.all()
+    for (const [authKey, entry] of Object.entries(entries)) {
+      if (!authKey.startsWith(input.projectAuthPrefix) || !entry.stagedStaticCredential) continue
+      const stagedName = authKey.slice(input.projectAuthPrefix.length)
+      if (input.names && !input.names.has(stagedName)) continue
+      const definition = input.definitions[stagedName]
+      const nextIdentity = configuredCredentialIdentity(definition)
+      const nextUrl = definition && "type" in definition && definition.type === "remote" ? definition.url : undefined
+      if (
+        nextIdentity &&
+        nextUrl &&
+        entry.stagedStaticCredential.serverUrl === nextUrl &&
+        entry.stagedStaticCredential.credentialIdentity === nextIdentity
+      ) {
+        await McpAuth.promoteStagedStaticCredential(authKey, {
+          serverUrl: nextUrl,
+          credentialIdentity: nextIdentity,
+        })
+      } else {
+        await McpAuth.clearStagedStaticCredential(authKey)
+      }
+    }
+  }
+
   export async function reconcileProjectConfig(input: { before: Config.Info; after: Config.Info }) {
     const before = (input.before.mcp ?? {}) as NonNullable<Config.Info["mcp"]>
     const after = (input.after.mcp ?? {}) as NonNullable<Config.Info["mcp"]>
@@ -2553,7 +2598,6 @@ export namespace MCP {
       if (!previous || !next) return previous !== next
       return mcpConfigIdentity(previous) !== mcpConfigIdentity(next)
     })
-    const authRemovalNames: string[] = []
     const removedNames: string[] = []
     for (const name of changed) {
       s.reconcilePending.add(name)
@@ -2571,11 +2615,16 @@ export namespace MCP {
       delete s.clients[name]
       queueConnectionCleanup(s, name, connection)
       if (authIdentity(previous) !== authIdentity(next) && authIdentity(previous)) {
-        authRemovalNames.push(name)
+        // Live flow state dies with the identity it was opened under. The
+        // stored credential's retirement is NOT decided here: the durable
+        // store's own identity, compared against the committed definition
+        // after staged settlement below, is the single authority — deciding
+        // it from the config diff instead deleted the very secret a
+        // completed identity-changing configure had just promoted.
         McpOAuthCallback.cancelPending(mcpAuthKey(name))
         pendingOAuthFlows.delete(mcpAuthKey(name))
       } else if (authIdentity(previous)) {
-        McpAuth.invalidate(mcpAuthKey(name))
+        await McpAuth.invalidate(mcpAuthKey(name))
       }
       if (!next) {
         s.cleanupPending.add(name)
@@ -2593,6 +2642,18 @@ export namespace MCP {
       s.statusIdentity[name] = mcpConfigIdentity(next)
     }
     const projectAuthPrefix = `${s.projectID}:`
+    // Settle staged configure secrets BEFORE computing orphans and stale
+    // credentials: a staged secret whose identity matches the committed
+    // definition is a crash-interrupted configure's missing promotion; any
+    // other staged secret belongs to no committed definition and is dropped.
+    // Running this first keeps the stale-credential sweep from removing an
+    // entry whose promotion would have made it current.
+    // A staged secret is settled only by the commit that changed its own
+    // definition — otherwise an unrelated project-config commit landing
+    // between a configure's stage and its definition commit would drop a
+    // secret that is still in flight. Whatever a crash leaves behind is
+    // settled by the startup owner.
+    await settleStagedCredentials({ projectAuthPrefix, definitions: after, names: new Set(changed) })
     const authEntries = await McpAuth.all()
     const projectAuthNames = Object.keys(authEntries)
       .filter((authKey) => authKey.startsWith(projectAuthPrefix))
@@ -2615,7 +2676,10 @@ export namespace MCP {
     const retryNames = names.filter(
       (name) => !changedNames.has(name) && (s.cleanupPending.has(name) || authOrphans.has(name)) && !after[name],
     )
-    const credentialRetryNames = names.filter((name) => !changedNames.has(name) && staleCredentials.has(name))
+    // Every credential the durable store proves stale against the committed
+    // definition is retired here, whether or not this commit changed that
+    // definition — one authority, no config-diff second opinion.
+    const credentialRetryNames = names.filter((name) => staleCredentials.has(name))
     if (
       changed.length === 0 &&
       retryNames.length === 0 &&
@@ -2625,9 +2689,6 @@ export namespace MCP {
     )
       return
     const cleanupTasks: Promise<void>[] = []
-    if (authRemovalNames.length > 0) {
-      cleanupTasks.push(McpAuth.removeMany(authRemovalNames.map((name) => mcpAuthKey(name))))
-    }
     if (credentialRetryNames.length > 0) {
       cleanupTasks.push(McpAuth.removeMany(credentialRetryNames.map((name) => mcpAuthKey(name))))
     }
@@ -2731,7 +2792,9 @@ export namespace MCP {
               // Store the URL - actual browser opening is handled by startAuth
             },
           },
-          McpAuth.revision(authKey),
+          // A connection reads; it must not revoke a flow to do so. Over a
+          // never-leased credential its refresh writes stay unfenced.
+          await McpAuth.revision(authKey).then((generation) => (generation === "" ? undefined : generation)),
           () => assertCredentialIdentity(key, mcp),
           undefined,
           correlationID,
@@ -3502,8 +3565,6 @@ export namespace MCP {
     const previousFlow = pendingOAuthFlows.get(authKey)
     if (previousFlow) McpOAuthCallback.cancelPending(authKey)
     pendingOAuthFlows.delete(authKey)
-    McpAuth.invalidate(authKey)
-    const authRevision = McpAuth.revision(authKey)
     await assertCredentialIdentity(mcpName, mcpConfig)
     const oauthConfig = typeof mcpConfig.oauth === "object" ? mcpConfig.oauth : undefined
     const oauthProviderConfig = {
@@ -3511,6 +3572,17 @@ export namespace MCP {
       clientSecret: oauthConfig?.clientSecret,
       scope: oauthConfig?.scope,
     }
+    // Revoking the previous flow and establishing this one's lease is one
+    // store write, so no competitor can read the superseded generation as
+    // current in between. The lease carries the server identity from the
+    // start: a bare entry with no serverUrl sits in credential
+    // reconciliation's stale class, and any concurrent project-config commit
+    // would collect it out from under the flow.
+    const authRevision = await McpAuth.beginCredentialLease(
+      authKey,
+      mcpConfig.url,
+      McpOAuthProvider.credentialIdentity(mcpConfig.url, oauthProviderConfig),
+    )
     await McpAuth.updateOAuthState(
       authKey,
       oauthState,
@@ -3571,7 +3643,7 @@ export namespace MCP {
       if (error instanceof UnauthorizedError && capturedUrl) {
         try {
           await assertCurrentOAuthOwner("before the OAuth authorization flow was published")
-          if (McpAuth.revision(authKey) !== authRevision) {
+          if ((await McpAuth.revision(authKey)) !== authRevision) {
             throw new Error(`MCP auth lease was revoked: ${authKey}`)
           }
           pendingOAuthFlows.set(authKey, { state: oauthState, revision: authRevision, correlationID })
@@ -3614,7 +3686,7 @@ export namespace MCP {
         if (retainOAuthState) {
           const pending = pendingOAuthFlows.get(authKey)
           if (
-            McpAuth.revision(authKey) !== authRevision ||
+            (await McpAuth.revision(authKey)) !== authRevision ||
             pending?.revision !== authRevision ||
             pending.state !== oauthState
           ) {
@@ -3722,8 +3794,35 @@ export namespace MCP {
     return finishAuthCallback(mcpName, callback.code, oauthState)
   }
 
+  /**
+   * Rebuild a flow owner from the durable credential entry.
+   *
+   * The flow's facts — its OAuth state, its PKCE verifier and its lease
+   * generation — are all durable; only the in-process owner record is not. A
+   * process restart between authorize and callback therefore used to reject a
+   * completion whose every durable fact matched. The rebuilt owner carries the
+   * durable lease generation, so all of its writes stay exactly as fenced as
+   * the original flow's.
+   */
+  async function rebuildPendingOAuthFlowFromDurableFacts(authKey: string): Promise<PendingOAuthFlow | undefined> {
+    const entry = await McpAuth.get(authKey)
+    if (!entry?.oauthState || !entry.codeVerifier || !entry.revision) return undefined
+    return { state: entry.oauthState, revision: entry.revision, correlationID: crypto.randomUUID() }
+  }
+
   async function assertOAuthState(mcpName: string, authKey: string, oauthState: string): Promise<PendingOAuthFlow> {
-    const owner = pendingOAuthFlows.get(authKey)
+    let owner = pendingOAuthFlows.get(authKey)
+    if (owner && owner.state !== oauthState) {
+      // A stale in-memory owner must not veto the durable fact another
+      // process minted since: if the durable state matches the callback, the
+      // durable flow is the current one and the local record is dropped.
+      const rebuilt = await rebuildPendingOAuthFlowFromDurableFacts(authKey)
+      if (rebuilt?.state === oauthState) {
+        if (pendingOAuthFlows.get(authKey) === owner) pendingOAuthFlows.delete(authKey)
+        owner = rebuilt
+      }
+    }
+    owner ??= await rebuildPendingOAuthFlowFromDurableFacts(authKey)
     if (!owner) {
       throw new OAuthStateError({ mcpName, message: "OAuth flow is no longer current" })
     }
@@ -3768,22 +3867,22 @@ export namespace MCP {
   }
 
   /**
-   * Complete OAuth authentication with the authorization code.
+   * Complete OAuth authentication with the authorization code. Private and
+   * flow-required: the ONLY finish path is finishAuthCallback, whose
+   * assertOAuthState resolves the owner — live or rebuilt from the durable
+   * facts — under the state fence. There is no second, weaker finish.
    */
-  export async function finishAuth(
+  async function finishAuth(
     mcpName: string,
     authorizationCode: string,
-    flow?: PendingOAuthFlow,
+    flow: PendingOAuthFlow,
   ): Promise<Status> {
     const cfg = await Config.get()
     const config = (cfg.mcp ?? {}) as NonNullable<Config.Info["mcp"]>
     const mcpConfig = requireMcpEntry(config, mcpName)
     const authKey = mcpAuthKey(mcpName)
 
-    const owner = flow ?? pendingOAuthFlows.get(authKey)
-    if (!owner || pendingOAuthFlows.get(authKey) !== owner) {
-      throw new Error(`No pending OAuth flow for MCP server: ${mcpName}`)
-    }
+    const owner = flow
     if (!isMcpConfigured(mcpConfig)) {
       throw new Error(`MCP server ${mcpName} is disabled or missing configuration`)
     }

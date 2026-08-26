@@ -11,11 +11,7 @@ import { Database, and, eq, sql } from "@/storage/db"
 import { Identifier } from "@/id/id"
 import { withKeyedLock } from "@/util/lock"
 import { NamedError } from "@opencorvus-ai/util/error"
-import {
-  acquireControlLease,
-  assertControlLeaseInTransaction,
-  renewControlLease,
-} from "@/engine/control-lease"
+import { acquireControlLease, assertControlLeaseInTransaction, releaseControlLeaseInTransaction, releaseControlLeaseOnErrorPath, renewControlLease } from "@/engine/control-lease"
 
 export const MISSION_EXECUTION_CLOSURE_EVENT_TYPES = {
   opened: "mission.execution.opened",
@@ -463,30 +459,60 @@ export function closeMissionExecutionOperation(input: {
       }
     }, 40_000)
     renewal.unref()
+    let settled = false
     try {
       await input.close(owner.signal)
       if (renewalFailure) throw renewalFailure
-      return Database.immediateTransaction((db) => {
+      const closed = Database.immediateTransaction((db) => {
+        const settledAt = Date.now()
         assertControlLeaseInTransaction(db, {
+          target: "lifecycle",
+          targetID,
+          leaseID: acquired.lease.id,
+          ownerOccurrenceID,
+          now: settledAt,
+        })
+        const current = currentMissionExecutionClosure(closing.sessionID)
+        const result =
+          current?.state === "closed"
+            ? current
+            : appendMissionExecutionClosureInTransaction({
+                missionID: closing.missionID,
+                sessionID: closing.sessionID,
+                operationID: closing.operationID,
+                state: "closed",
+                source: closing.source,
+                requestID: closing.requestID,
+              })
+        // The closure fact is terminal, so this owner is finished. The next
+        // closure waits for the lease by polling every 10-100 ms, which means
+        // an unreleased lease turns the next close into a busy wait for the
+        // full lease duration.
+        releaseControlLeaseInTransaction(db, {
+          target: "lifecycle",
+          targetID,
+          leaseID: acquired.lease.id,
+          ownerOccurrenceID,
+          now: settledAt,
+        })
+        return result
+      })
+      settled = true
+      return closed
+    } finally {
+      clearInterval(renewal)
+      // A close that ended without a closure fact leaves the Mission open for
+      // another attempt. That attempt cannot start while this dead owner still
+      // holds the lease.
+      if (!settled) {
+        releaseControlLeaseOnErrorPath({
           target: "lifecycle",
           targetID,
           leaseID: acquired.lease.id,
           ownerOccurrenceID,
           now: Date.now(),
         })
-        const current = currentMissionExecutionClosure(closing.sessionID)
-        if (current?.state === "closed") return current
-        return appendMissionExecutionClosureInTransaction({
-          missionID: closing.missionID,
-          sessionID: closing.sessionID,
-          operationID: closing.operationID,
-          state: "closed",
-          source: closing.source,
-          requestID: closing.requestID,
-        })
-      })
-    } finally {
-      clearInterval(renewal)
+      }
     }
   })()
   activeCloseOperations.set(input.sessionID, operation)

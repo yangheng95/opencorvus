@@ -23,6 +23,7 @@ import { InternalGitCommitSubject } from "@/engine/internal-git-commit-subject"
 import { SessionPromptState } from "@/session/prompt/state"
 import { ProjectGitLock } from "@/worktree/git-lock"
 import { WorktreeOwnershipCriticalSection } from "@/worktree/ownership-critical-section"
+import { WorktreeReadiness } from "./readiness"
 import { activeTaskProcessBindingRoots } from "@/engine/task-execution-capsule-binding"
 import { Ownership } from "@/engine/ownership"
 import { findTask } from "@/engine/store"
@@ -1736,12 +1737,32 @@ export namespace Worktree {
       return undefined
     })()
 
+    const extra = input?.startCommand?.trim()
+    const populateWorktree = async (target: Info) => {
+      const populated = await runGit(["reset", "--hard"], {
+        cwd: target.directory,
+        timeoutProfile: "default",
+      })
+      if (populated.exitCode !== 0) {
+        const message = errorText(populated) || "Failed to populate worktree"
+        log.error("worktree checkout failed", { directory: target.directory, message })
+        throw new CreateFailedError({ message })
+      }
+
+      await initializeSubmodules({ sourceRoot: primaryDir, targetRoot: target.directory })
+
+      const started = await runStartScripts(target.directory, { projectID, extra })
+      if (!started) {
+        throw new StartCommandFailedError({ message: `Worktree startup scripts failed: ${target.directory}` })
+      }
+    }
+
     // Optional fast path: caller asked to reuse a previously-created worktree
     // with the same deterministic name (resumed Build Session that
     // produced files but skipped merge_back). Only honoured when the existing
-    // dir + git linkage is still healthy via isValid(); otherwise continue to
-    // the regular candidate/reclaim path so the unhealthy state cannot be
-    // silently propagated.
+    // dir + git linkage is still healthy via isValid() AND the durable ready
+    // receipt exists; a registered tree without its receipt is an incomplete
+    // population and is resumed to convergence before anything reuses it.
     if (base && input?.reuseIfValid) {
       const directory = scopedInfo?.directory ?? path.join(root, base)
       const branch = scopedInfo?.branch ?? `opencorvus/${base}`
@@ -1763,6 +1784,23 @@ export namespace Worktree {
           return { validity, info }
         })
         if (reused.info) {
+          if (!(await WorktreeReadiness.isReady(reused.info.directory))) {
+            // Registration is not readiness: this tree's population never
+            // committed (a create killed after `git worktree add`, or a tree
+            // that predates the receipt). Resume population to convergence
+            // before the checkout is exposed.
+            const readinessID = await WorktreeReadiness.resume({
+              projectID,
+              directory: reused.info.directory,
+              branch: reused.info.branch,
+              name: reused.info.name,
+              primaryBranch: primary.branch,
+            })
+            await populateWorktree(reused.info)
+            await WorktreeReadiness.markPopulated(readinessID)
+            await WorktreeReadiness.commitReady(readinessID)
+            log.info("worktree reuse: resumed population to readiness", { directory: reused.info.directory })
+          }
           log.info("worktree reuse: existing valid worktree, skipping create", { name: base, directory, branch })
           publishCreateReady(projectDirectory, reused.info)
           return reused.info
@@ -1788,27 +1826,8 @@ export namespace Worktree {
     const ownership = WorktreeOwnershipCriticalSection.acquire(intendedInfo.directory)
     let info = intendedInfo
 
-    const extra = input?.startCommand?.trim()
-    const populate = async () => {
-      const populated = await runGit(["reset", "--hard"], {
-        cwd: info.directory,
-        timeoutProfile: "default",
-      })
-      if (populated.exitCode !== 0) {
-        const message = errorText(populated) || "Failed to populate worktree"
-        log.error("worktree checkout failed", { directory: info.directory, message })
-        throw new CreateFailedError({ message })
-      }
-
-      await initializeSubmodules({ sourceRoot: primaryDir, targetRoot: info.directory })
-
-      const started = await runStartScripts(info.directory, { projectID, extra })
-      if (!started) {
-        throw new StartCommandFailedError({ message: `Worktree startup scripts failed: ${info.directory}` })
-      }
-    }
-
     let createdByCall = false
+    let readinessID: string | undefined
     try {
       // All git operations serialized to prevent concurrent corruption
       await Worktree.withGitLock(async () => {
@@ -1836,6 +1855,16 @@ export namespace Worktree {
           })
         }
 
+        // The readiness occurrence is durable BEFORE the git mutation: a
+        // death from here on leaves an open occurrence whose reuse path
+        // resumes population instead of trusting bare git linkage.
+        readinessID = await WorktreeReadiness.begin({
+          projectID,
+          directory: info.directory,
+          branch: info.branch,
+          name: info.name,
+          primaryBranch: primary.branch,
+        })
         const created = await runGit(
           ["worktree", "add", "--no-checkout", "-b", info.branch, info.directory, primary.branch],
           { cwd: primaryDir, timeoutProfile: "default" },
@@ -1844,6 +1873,7 @@ export namespace Worktree {
           throw new CreateFailedError({ message: errorText(created) || "Failed to create git worktree" })
         }
         createdByCall = true
+        await WorktreeReadiness.markCreated(readinessID!)
         await Project.addSandbox(projectID, info.directory)
         if (input?.taskID && input.sessionID) {
           await Ownership.Worktree.record({
@@ -1854,8 +1884,16 @@ export namespace Worktree {
           })
         }
       })
-      await populate()
+      await populateWorktree(info)
+      await WorktreeReadiness.markPopulated(readinessID!)
+      await WorktreeReadiness.commitReady(readinessID!)
     } catch (error) {
+      if (readinessID) {
+        await WorktreeReadiness.rollback(
+          readinessID,
+          error instanceof Error ? error.message : String(error),
+        ).catch(() => undefined)
+      }
       const failure = createdByCall
         ? await convergeFailedCreate({
             info,
@@ -2018,6 +2056,7 @@ export namespace Worktree {
           await stop(input.directory.requested)
           await clean(input.directory.requested)
         }
+        await WorktreeReadiness.forget(input.directory.requested)
         return
       }
 
@@ -2025,6 +2064,9 @@ export namespace Worktree {
         await stop(entry.path)
         await clean(entry.path)
       }
+      // A removed worktree has no readiness: the receipt goes with the tree,
+      // before the registry prune so a death here leaves no stale READY fact.
+      await WorktreeReadiness.forget(entry.path)
 
       const pruned = await runGit(["worktree", "prune"], {
         cwd: Instance.worktree,

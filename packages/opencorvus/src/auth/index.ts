@@ -2,7 +2,7 @@ import path from "path"
 import { Global } from "../global"
 import z from "zod"
 import { Filesystem } from "../util/filesystem"
-import { withKeyedLock } from "../util/lock"
+import { withSharedJsonFactLock } from "../util/process-lock"
 import { NamedError } from "@opencorvus-ai/util/error"
 
 function isEnoent(error: unknown): boolean {
@@ -131,15 +131,25 @@ export namespace Auth {
     )
   }
 
+  /**
+   * Read, change and replace the credential store under one cross-process
+   * lock. Two backends over the same data root otherwise read the same
+   * snapshot, set different providers, and the later replacement drops the
+   * earlier credential entirely.
+   */
+  function mutate<T>(run: () => Promise<T>): Promise<T> {
+    return withSharedJsonFactLock({ locks: mutationLocks, filepath, empty: "{}", mode: 0o600, run })
+  }
+
   export async function set(key: string, info: Info) {
-    await withKeyedLock(mutationLocks, filepath, async () => {
+    await mutate(async () => {
       const data = await all()
       await Filesystem.writeAtomic(filepath, JSON.stringify({ ...data, [key]: info }, null, 2), 0o600)
     })
   }
 
   export async function remove(key: string) {
-    await withKeyedLock(mutationLocks, filepath, async () => {
+    await mutate(async () => {
       const data = await all()
       delete data[key]
       await Filesystem.writeAtomic(filepath, JSON.stringify(data, null, 2), 0o600)

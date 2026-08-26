@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "definition":"Operator-authorized experimentation on an installed Expert Squad revision, not autonomous unrestricted self-modification.",
+  "mechanism_status":"部分实现",
+  "effectiveness_status":"概念设计",
+  "objects":["candidate package text and descriptive behavior","immutable package revision","campaign evidence and comparison"],
+  "triggers":["typed opportunity and failure-attribution evidence","explicit campaign","explicit mutation authorization"],
+  "signals":["predeclared two-arm metrics","evaluation result","independent integrity review","comparison recommendation"],
+  "safety_boundaries":["metrics do not dispatch","unavailable is not scored as zero","no silent promotion or restoration","Task pins exact package digest","capability grants and workflow topology stay frozen","mutation uses explicit authorization and compare-and-swap"],
+  "implementation_paths":["expert-squads/builtin/evolution-lab/expert-squad.jsonc","packages/opencorvus/src/expert-squad/evolution-mutation.ts","packages/opencorvus/src/expert-squad/evolution-history.ts","packages/opencorvus/src/server/routes/expert-squad.ts:915-985"],
+  "checks":[
+    {"command":"bun test packages/opencorvus/test/evolution-comparison.test.ts","result":"6 pass, 0 fail, 20 expects","meaning":"deterministic comparison contract only"},
+    {"command":"bun test packages/opencorvus/test/evolution-lab-package-projection.test.ts","result":"0 pass, 1 fail","failure":"expected 2026.08.18.1; installed package is 2026.08.19.1","meaning":"current projection suite drifts; read-only package path not repaired by this task"}
+  ],
+  "forbidden_claims":["OpenCorvus autonomously rewrites itself without operator authorization.","Self-evolution has been shown to improve performance reproducibly."],
+  "closure_conditions":["single package-version authority for projection test","predeclared baseline and candidate","repeated real runs","stable evaluator","variance and effect size","independent review","explicit accepted promotion recommendation"]
+}

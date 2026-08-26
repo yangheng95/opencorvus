@@ -1,10 +1,11 @@
 import { afterAll, describe, expect, test } from "bun:test"
-import { acquireControlLease } from "../src/engine/control-lease"
+import { acquireControlLease, currentControlLeaseInTransaction } from "../src/engine/control-lease"
+import { EngineControlActivationLeaseTable } from "../src/engine/engine.sql"
 import { Identifier } from "../src/id/id"
 import { Instance } from "../src/project/instance"
 import { AutomationDefinitionTombstoneTable, AutomationRunReceiptTable, AutomationRunTable, AutomationTable } from "../src/scheduler/automation.sql"
 import { AutomationRunningConflictError, AutomationService } from "../src/scheduler/automation-service"
-import { Database, eq } from "../src/storage/db"
+import { Database, and, eq } from "../src/storage/db"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
 afterAll(resetMemoryDatabase)
@@ -45,6 +46,86 @@ describe("scheduler immutable definition and fire identity", () => {
       expect(AutomationService.list().some((row) => row.id === created.id)).toBe(false)
     } })
   })
+
+  test("a claim publishes the lease it took and a refused claim leaves the first owner in place", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({ directory: project.path, fn: async () => {
+      const automation = await AutomationService.create({ name: "fenced", target: { scope: "project", projectIds: [Instance.project.id] }, recurrence: "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY", prompt: "run" })
+      const now = Date.now()
+      const claimed = AutomationService.TestHooks.claim(automation.id, "owner:first", now, true)
+      const current = Database.use((db) => db.select().from(AutomationTable).where(eq(AutomationTable.definition_id, automation.id)).orderBy(AutomationTable.revision).all()).at(-1)!
+      expect(claimed).toMatchObject({
+        id: automation.id,
+        revision_id: current.id,
+        revision: current.revision,
+        lease_owner: "owner:first",
+        lease_until: now + 2 * 60 * 1000,
+      })
+      expect(AutomationService.TestHooks.claim(automation.id, "owner:second", now, true)).toBeUndefined()
+      expect(Database.use((db) => currentControlLeaseInTransaction(db, "automation", automation.id)))
+        .toMatchObject({ owner_occurrence_id: "owner:first", expires_at: now + 2 * 60 * 1000 })
+      expect(Database.use((db) => db.select().from(EngineControlActivationLeaseTable)
+        .where(and(eq(EngineControlActivationLeaseTable.target, "automation"), eq(EngineControlActivationLeaseTable.target_id, automation.id))).all()))
+        .toHaveLength(1)
+    } })
+  })
+
+  test("a completed fire ends its execution lease with its terminal receipt, so the definition is immediately mutable", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({ directory: project.path, fn: async () => {
+      const automation = await AutomationService.create({ name: "settling", target: { scope: "project", projectIds: [Instance.project.id] }, recurrence: "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY", prompt: "run" })
+      using _wake = AutomationService.TestHooks.installWakeExecutor(async (input) => ({
+        sessionID: input.sessionID!,
+        messageID: input.messageID!,
+        activation: Promise.resolve({ owner: new AbortController().signal }),
+        completion: Promise.resolve({ ok: true as const }),
+      }))
+      const runs = await AutomationService.runNow(automation.id)
+      expect(runs.map((run) => run.outcome)).toEqual(["succeeded"])
+      const settled = Database.use((db) => currentControlLeaseInTransaction(db, "automation", automation.id))!
+      expect(settled.expires_at).toBeLessThanOrEqual(Date.now())
+      expect(AutomationService.remove(automation.id)).toEqual({ id: automation.id, name: "settling" })
+    } })
+  }, 30_000)
+
+  test("a failed fire ends its execution lease with its retry receipt, so the recorded retry time is the only deferral", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({ directory: project.path, fn: async () => {
+      const automation = await AutomationService.create({ name: "retrying", target: { scope: "project", projectIds: [Instance.project.id] }, recurrence: "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY", prompt: "run" })
+      using _wake = AutomationService.TestHooks.installWakeExecutor(async (input) => ({
+        sessionID: input.sessionID!,
+        messageID: input.messageID!,
+        activation: Promise.resolve({ owner: new AbortController().signal }),
+        completion: Promise.resolve({ ok: false as const, error: "wake refused" }),
+      }))
+      const runs = await AutomationService.runNow(automation.id)
+      expect(runs.map((run) => run.outcome)).toEqual(["retry_wait"])
+      const settled = Database.use((db) => currentControlLeaseInTransaction(db, "automation", automation.id))!
+      expect(settled.expires_at).toBeLessThanOrEqual(Date.now())
+      expect(AutomationService.remove(automation.id)).toEqual({ id: automation.id, name: "retrying" })
+    } })
+  }, 30_000)
+
+  test("a fire that throws hands back its lease with its failure receipt", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({ directory: project.path, fn: async () => {
+      const automation = await AutomationService.create({ name: "throwing", target: { scope: "project", projectIds: [Instance.project.id] }, recurrence: "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY", prompt: "run" })
+      const now = Date.now()
+      const owner = `manual:${process.pid}:${now}`
+      const job = AutomationService.TestHooks.claim(automation.id, owner, now, true)!
+      expect(job).toBeDefined()
+      await expect(
+        AutomationService.TestHooks.executeWithRuntimeSettlement(job, owner, now, false, async () => {
+          throw new Error("fire refused")
+        }),
+      ).rejects.toThrow("fire refused")
+      const settled = Database.use((db) => currentControlLeaseInTransaction(db, "automation", automation.id))!
+      expect(settled.expires_at).toBeLessThanOrEqual(Date.now())
+      // The failure receipt owns the retry time, so the definition is mutable
+      // immediately instead of waiting out the lease.
+      expect(AutomationService.remove(automation.id)).toEqual({ id: automation.id, name: "throwing" })
+    } })
+  }, 30_000)
 
   test("a live execution lease atomically rejects definition mutation", async () => {
     await using project = await memoryProject()

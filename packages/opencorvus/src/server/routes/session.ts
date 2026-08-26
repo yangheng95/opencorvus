@@ -121,6 +121,10 @@ function errorMessage(error: unknown): string {
   return String(error)
 }
 
+// Every public Session execution mutation requires the caller-visible stable
+// request occurrence — the input Message identity. A retry that lost its
+// response replays the same identity and converges on the first attempt's
+// occurrence instead of starting a second Turn with repeated Tool effects.
 const PublicSessionPromptInput = SessionPrompt.PromptInput.omit({
   sessionID: true,
   author: true,
@@ -129,8 +133,24 @@ const PublicSessionPromptInput = SessionPrompt.PromptInput.omit({
   includeMcpTools: true,
   extra: true,
   byteMaterializationProjectID: true,
+}).extend({
+  messageID: Identifier.schema("message").meta({
+    description: "Caller-minted stable identity of the input Message; retries with the same identity converge on the first attempt",
+  }),
 })
 type SessionPromptRouteBody = z.infer<typeof PublicSessionPromptInput>
+
+const PublicSessionCommandInput = SessionPrompt.CommandInput.omit({ sessionID: true, extra: true }).extend({
+  messageID: Identifier.schema("message").meta({
+    description: "Caller-minted stable identity of the input Message; retries with the same identity converge on the first attempt",
+  }),
+})
+
+const PublicSessionShellInput = SessionPrompt.ShellInput.omit({ sessionID: true, extra: true }).extend({
+  messageID: Identifier.schema("message").meta({
+    description: "Caller-minted stable identity of the input Message; a retry with the same identity returns the durable occurrence instead of running the command again",
+  }),
+})
 
 const PublicSessionPromptIdentity = z
   .object({
@@ -148,10 +168,116 @@ const PublicSessionPromptIdentityConflictError = NamedError.create(
   }),
 )
 
-const publicSessionPromptOperations = new Map<string, { fingerprint: string; operation: Promise<Message.WithParts> }>()
+const publicSessionExecutionOperations = new Map<
+  string,
+  { fingerprint: string; operation: Promise<Message.WithParts> }
+>()
 
-function publicSessionPromptFingerprint(prompt: SessionPromptRouteBody): string {
-  return createHash("sha256").update(JSON.stringify(prompt)).digest("hex")
+function publicSessionExecutionFingerprint(body: unknown): string {
+  return createHash("sha256").update(JSON.stringify(body)).digest("hex")
+}
+
+/**
+ * The one replay-identity implementation for every public Session execution
+ * mutation (prompt, command, shell). The caller-minted input Message identity
+ * is the request occurrence: a request whose Message is already durable and
+ * carries the same body fingerprint converges through the operation's own
+ * `converge` policy; a different body presenting the same identity is refused;
+ * only an unseen identity executes.
+ */
+async function executePublicSessionExecution(input: {
+  sessionID: string
+  messageID: string
+  fingerprint: string
+  execute: () => Promise<Message.WithParts>
+  converge: (existing: Message.WithParts) => Promise<Message.WithParts>
+}): Promise<Message.WithParts> {
+  const { sessionID, messageID, fingerprint } = input
+  const operationKey = `${sessionID}\0${messageID}`
+  const active = publicSessionExecutionOperations.get(operationKey)
+  if (active) {
+    if (active.fingerprint !== fingerprint) {
+      throw new PublicSessionPromptIdentityConflictError({
+        sessionID,
+        messageID,
+        message: `Message ${messageID} is already bound to a different public Session execution`,
+      })
+    }
+    return active.operation
+  }
+  const operation = (async () => {
+    const existing = await MessageStore.get({ sessionID, messageID }).catch((error) => {
+      if (NotFoundError.isInstance(error as Error)) return undefined
+      throw error
+    })
+    if (!existing) return input.execute()
+    if (existing.info.role !== "user") {
+      throw new PublicSessionPromptIdentityConflictError({
+        sessionID,
+        messageID,
+        message: `Message ${messageID} is already bound to a non-user Session message`,
+      })
+    }
+    const persistedIdentity = PublicSessionPromptIdentity.safeParse(existing.info.extra?.publicSessionPromptIdentity)
+    if (!persistedIdentity.success || persistedIdentity.data.fingerprint !== fingerprint) {
+      throw new PublicSessionPromptIdentityConflictError({
+        sessionID,
+        messageID,
+        message: `Message ${messageID} is already bound to a different public Session execution`,
+      })
+    }
+    return input.converge(existing)
+  })()
+  publicSessionExecutionOperations.set(operationKey, { fingerprint, operation })
+  try {
+    return await operation
+  } finally {
+    if (publicSessionExecutionOperations.get(operationKey)?.operation === operation) {
+      publicSessionExecutionOperations.delete(operationKey)
+    }
+  }
+}
+
+/**
+ * Replay convergence for occurrences that end in a model Turn (prompt and
+ * command): return the completed assistant reply if one is durable, otherwise
+ * re-drive the Session loop against the durable input Message — the same
+ * recovery any process can perform.
+ */
+async function convergePromptTurn(sessionID: string, messageID: string): Promise<Message.WithParts> {
+  const completed = await completedAssistantReplyForUserMessage(sessionID, messageID)
+  if (completed) return completed
+  const session = await Session.get(sessionID)
+  return SessionContext.provide(session, () =>
+    provideInitializedProjectExecution({
+      directory: session.directory,
+      fn: () =>
+        SessionPrompt.loop({
+          sessionID,
+          reply_to_message_id: messageID,
+          retry_failed_reply: true,
+        }),
+    }),
+  )
+}
+
+/**
+ * Replay convergence for shell occurrences: a shell command must never run
+ * twice for one identity, so the replay returns the occurrence's durable
+ * assistant Message in whatever state it reached. An occurrence whose input
+ * Message is durable but whose assistant Message never committed ran nothing
+ * — the command starts only after both are durable — and is refused so the
+ * caller re-runs under a fresh identity.
+ */
+async function convergeShellExecution(sessionID: string, messageID: string): Promise<Message.WithParts> {
+  for await (const candidate of MessageStore.stream(sessionID)) {
+    if (candidate.info.role === "assistant" && candidate.info.parentID === messageID) return candidate
+  }
+  throw new PublicSessionPromptIdentityConflictError({
+    sessionID,
+    messageID,
+    message: `Message ${messageID} is bound to a shell execution that never started; mint a new message identity to run it`,
+  })
 }
 
 async function completedAssistantReplyForUserMessage(
@@ -179,78 +305,17 @@ async function executePublicSessionPrompt(
   prompt: SessionPrompt.PromptInput,
 ): Promise<Message.WithParts> {
   if (!prompt.messageID) {
-    throw new Error(`Public Session prompt for ${sessionID} is missing its Host-minted input Message identity`)
+    throw new Error(`Public Session prompt for ${sessionID} is missing its caller-minted input Message identity`)
   }
+  const messageID = prompt.messageID
   const expectedIdentity = PublicSessionPromptIdentity.parse(prompt.extra?.publicSessionPromptIdentity)
-  const operationKey = `${sessionID}\0${prompt.messageID}`
-  const active = publicSessionPromptOperations.get(operationKey)
-  if (active) {
-    if (active.fingerprint !== expectedIdentity.fingerprint) {
-      throw new PublicSessionPromptIdentityConflictError({
-        sessionID,
-        messageID: prompt.messageID,
-        message: `Message ${prompt.messageID} is already bound to a different public Session prompt`,
-      })
-    }
-    return active.operation
-  }
-  const operation = executePublicSessionPromptOperation(
+  return executePublicSessionExecution({
     sessionID,
-    { ...prompt, messageID: prompt.messageID },
-    expectedIdentity,
-  )
-  publicSessionPromptOperations.set(operationKey, {
+    messageID,
     fingerprint: expectedIdentity.fingerprint,
-    operation,
+    execute: () => SessionPrompt.prompt({ ...prompt, messageID }),
+    converge: () => convergePromptTurn(sessionID, messageID),
   })
-  try {
-    return await operation
-  } finally {
-    if (publicSessionPromptOperations.get(operationKey)?.operation === operation) {
-      publicSessionPromptOperations.delete(operationKey)
-    }
-  }
-}
-
-async function executePublicSessionPromptOperation(
-  sessionID: string,
-  prompt: SessionPrompt.PromptInput & { messageID: string },
-  expectedIdentity: z.infer<typeof PublicSessionPromptIdentity>,
-): Promise<Message.WithParts> {
-  const existing = await MessageStore.get({ sessionID, messageID: prompt.messageID }).catch((error) => {
-    if (NotFoundError.isInstance(error as Error)) return undefined
-    throw error
-  })
-  if (!existing) return SessionPrompt.prompt(prompt)
-  if (existing.info.role !== "user") {
-    throw new PublicSessionPromptIdentityConflictError({
-      sessionID,
-      messageID: prompt.messageID,
-      message: `Message ${prompt.messageID} is already bound to a non-user Session message`,
-    })
-  }
-  const persistedIdentity = PublicSessionPromptIdentity.safeParse(existing.info.extra?.publicSessionPromptIdentity)
-  if (!persistedIdentity.success || persistedIdentity.data.fingerprint !== expectedIdentity.fingerprint) {
-    throw new PublicSessionPromptIdentityConflictError({
-      sessionID,
-      messageID: prompt.messageID,
-      message: `Message ${prompt.messageID} is already bound to a different public Session prompt`,
-    })
-  }
-  const completed = await completedAssistantReplyForUserMessage(sessionID, prompt.messageID)
-  if (completed) return completed
-  const session = await Session.get(sessionID)
-  return SessionContext.provide(session, () =>
-    provideInitializedProjectExecution({
-      directory: session.directory,
-      fn: () =>
-        SessionPrompt.loop({
-          sessionID,
-          reply_to_message_id: prompt.messageID,
-          retry_failed_reply: true,
-        }),
-    }),
-  )
 }
 
 function projectedWorkerPublicPromptRejection(sessionID: string): string | undefined {
@@ -293,13 +358,10 @@ async function preparePublicSessionPrompt(
     }
   }
   const runtimeContract = SessionPrompt.getSessionRuntimeContract(sessionID)
-  const identifiedPrompt = {
-    ...prompt,
-    messageID: prompt.messageID ?? Identifier.ascending("message"),
-  }
+  const identifiedPrompt = prompt
   const publicSessionPromptIdentity = {
     version: 1 as const,
-    fingerprint: publicSessionPromptFingerprint(identifiedPrompt),
+    fingerprint: publicSessionExecutionFingerprint(identifiedPrompt),
   }
   const authoredPrompt: Omit<SessionPrompt.PromptInput, "sessionID"> = {
     ...identifiedPrompt,
@@ -1273,7 +1335,11 @@ export const SessionRoutes = lazy(() =>
         responses: {
           200: { description: "200", content: { "application/json": { schema: resolver(z.boolean()) } } },
           ...errors(400, 404),
-          409: MissionSessionAuthorityConflict,
+          409: namedErrorResponse(
+            "Mission authority conflict, or the message identity is already bound to another public Session execution",
+            "MissionSessionAuthorityError",
+            "PublicSessionPromptIdentityConflictError",
+          ),
         },
       }),
       validator(
@@ -1282,13 +1348,25 @@ export const SessionRoutes = lazy(() =>
           sessionID: z.string().meta({ description: "Session ID" }),
         }),
       ),
-      validator("json", SessionInitializer.initialize.schema.omit({ sessionID: true })),
+      validator("json", SessionInitializer.initialize.schema.omit({ sessionID: true, extra: true })),
       async (c) => {
         const sessionID = c.req.valid("param").sessionID
         const body = c.req.valid("json")
         const session = await assertActiveProjectSession(sessionID)
         assertPublicSessionOperationAuthority(session, "session.init")
-        await SessionInitializer.initialize({ ...body, sessionID })
+        const fingerprint = publicSessionExecutionFingerprint(body)
+        await executePublicSessionExecution({
+          sessionID,
+          messageID: body.messageID,
+          fingerprint,
+          execute: () =>
+            SessionInitializer.initialize({
+              ...body,
+              sessionID,
+              extra: { publicSessionPromptIdentity: { version: 1, fingerprint } },
+            }),
+          converge: () => convergePromptTurn(sessionID, body.messageID),
+        })
         return c.json(true)
       },
     )
@@ -1714,7 +1792,11 @@ export const SessionRoutes = lazy(() =>
             },
           },
           ...errors(400, 404),
-          409: MissionSessionAuthorityConflict,
+          409: namedErrorResponse(
+            "Mission authority conflict, or the message identity is already bound to another public Session execution",
+            "MissionSessionAuthorityError",
+            "PublicSessionPromptIdentityConflictError",
+          ),
         },
       }),
       validator(
@@ -1723,7 +1805,7 @@ export const SessionRoutes = lazy(() =>
           sessionID: z.string().meta({ description: "Session ID" }),
         }),
       ),
-      validator("json", SessionPrompt.CommandInput.omit({ sessionID: true })),
+      validator("json", PublicSessionCommandInput),
       async (c) => {
         const sessionID = c.req.valid("param").sessionID
         const body = c.req.valid("json")
@@ -1731,7 +1813,19 @@ export const SessionRoutes = lazy(() =>
         assertPublicSessionOperationAuthority(session, "session.command")
         const rejection = projectedWorkerPublicPromptRejection(sessionID)
         if (rejection) return c.json(badRequestBody(rejection), 400)
-        const msg = await SessionPrompt.command({ ...body, sessionID })
+        const fingerprint = publicSessionExecutionFingerprint(body)
+        const msg = await executePublicSessionExecution({
+          sessionID,
+          messageID: body.messageID,
+          fingerprint,
+          execute: () =>
+            SessionPrompt.command({
+              ...body,
+              sessionID,
+              extra: { publicSessionPromptIdentity: { version: 1, fingerprint } },
+            }),
+          converge: () => convergePromptTurn(sessionID, body.messageID),
+        })
         return c.json(msg)
       },
     )
@@ -1747,12 +1841,21 @@ export const SessionRoutes = lazy(() =>
             description: "Created message",
             content: {
               "application/json": {
-                schema: resolver(Message.Assistant.safeExtend({ orderKey: z.string().min(1) })),
+                schema: resolver(
+                  z.object({
+                    info: Message.Assistant,
+                    parts: Message.VisiblePart.array(),
+                  }),
+                ),
               },
             },
           },
           ...errors(400, 404),
-          409: MissionSessionAuthorityConflict,
+          409: namedErrorResponse(
+            "Mission authority conflict, or the message identity is already bound to another public Session execution",
+            "MissionSessionAuthorityError",
+            "PublicSessionPromptIdentityConflictError",
+          ),
         },
       }),
       validator(
@@ -1761,7 +1864,7 @@ export const SessionRoutes = lazy(() =>
           sessionID: z.string().meta({ description: "Session ID" }),
         }),
       ),
-      validator("json", SessionPrompt.ShellInput.omit({ sessionID: true })),
+      validator("json", PublicSessionShellInput),
       async (c) => {
         const sessionID = c.req.valid("param").sessionID
         const body = c.req.valid("json")
@@ -1769,7 +1872,19 @@ export const SessionRoutes = lazy(() =>
         assertPublicSessionOperationAuthority(session, "session.shell")
         const rejection = projectedWorkerPublicPromptRejection(sessionID)
         if (rejection) return c.json(badRequestBody(rejection), 400)
-        const msg = await SessionPrompt.shell({ ...body, sessionID })
+        const fingerprint = publicSessionExecutionFingerprint(body)
+        const msg = await executePublicSessionExecution({
+          sessionID,
+          messageID: body.messageID,
+          fingerprint,
+          execute: () =>
+            SessionPrompt.shell({
+              ...body,
+              sessionID,
+              extra: { publicSessionPromptIdentity: { version: 1, fingerprint } },
+            }),
+          converge: () => convergeShellExecution(sessionID, body.messageID),
+        })
         return c.json(msg)
       },
     ),

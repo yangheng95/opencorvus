@@ -97,12 +97,12 @@ describe("Browser Model Context Protocol Node sidecar bundle", () => {
             toolName,
           }
         })
-        const taskRoot = await Session.create({ kind: "root", title: "Scoped Browser Task authority" })
+        const taskRoot = Session.prepareRootNext({ kind: "root", directory: Instance.directory, title: "Scoped Browser Task authority" })
         const taskID = Identifier.ascending("task")
         const now = Date.now()
         persistTask({
           taskID,
-          sessionID: taskRoot.id,
+          rootSession: taskRoot,
           now,
           title: "Scoped Browser Task authority",
           request: "Initialize the exact projected Browser MCP tool through Task process authority.",

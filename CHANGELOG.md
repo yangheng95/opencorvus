@@ -4,6 +4,33 @@
 
 ## 未发布
 
+### Security
+
+- 桌面端渲染进程不再向 `window` 暴露实时设置、应用和看板 store、明文服务器密码，以及目录切换、任务加载/选择、看板加载和设置持久化等业务写入入口；相关生产代码改为直接使用类型化模块导入。渲染进程中的任意脚本或开发者工具表达式因此无法再读取服务器密码或触发这些业务写入。
+
+### Added
+
+- 新增 `GET /lifecycle/{occurrenceID}`：`server.shutdown` 与 `server.restart` 现在同步受理为一次带稳定标识的生命周期 occurrence，响应携带 `occurrenceID`；受理后处理器被清除或失败会把该 occurrence 结算为 `failed` 并附精确错误，重复请求收敛到在途 occurrence，冲突的另一种转换以 409 拒绝并返回在途 occurrence 标识。关机成功即进程退出，无法自证，故没有 `succeeded` 状态。
+
+### Changed
+
+- MCP（Model Context Protocol，模型上下文协议）OAuth 凭据引入持久化租约代：一次授权流程在开始时建立租约，流程内的多次写入共用这一代；吊销或新流程铸新代后，旧持有者的写入被精确拒绝，包括由同一数据根上另一后端执行的吊销。删除后重建的凭据不再可能被删除前的持有者写入。
+- 调度器、总线、权限、构建清理、会话控制、任务取消收敛等全部控制租约持有方现在与其结算收据同事务归还租约；新增 `check:control-lease-owners` 守卫（pre-push 运行），任何新增取租约位置必须声明其释放路径。
+- 共享 JSON 事实文件（全局/项目配置、Provider 凭据、MCP 凭据、专家团配置）的读改写迁移到跨进程锁内，多后端并发写不再丢失更新。
+- Provider OAuth 授权成为持久化流程 occurrence：`ProviderAuthAuthorization` 新增必填 `flowID`，两个回调路由接受可选 `flowID` 以精确结算对应流程；新授权显式取代（supersede）同 provider 同作用域的在途流程，回调对方法不匹配、已结算、不可执行分别返回具名错误（`ProviderAuthOauthFlowMismatch`、`ProviderAuthOauthFlowAlreadySettled`、`ProviderAuthOauthFlowNotExecutable`）。
+- 公共 Session 执行变更（`session.prompt`、`session.command`、`session.shell`）现在必须携带调用方铸造的稳定请求 occurrence——输入消息标识 `messageID`（`session.shell` 的公共 schema 新增该字段）；服务器不再在省略时代铸标识。相同标识与指纹的重试收敛到首次 occurrence：prompt/command 返回或续跑既有回合，shell 直接返回持久 occurrence、绝不重复执行命令；同一标识配不同请求体以 409 `PublicSessionPromptIdentityConflictError` 拒绝（command/shell 路由新增该冲突响应）。`session.shell` 的响应 schema 修正为与实际一致的 `{info, parts}`。
+
+### Fixed
+
+- 修复全局任务创建的请求重放会重复分配项目与任务的问题：请求身份现在在项目分配之前全局解析，重放返回首次提交的同一 `{task_id, project_id, directory}`，冲突重放由既有的项目内幂等检查拒绝。
+- 修复 MCP `configure` 被打断会留下"有定义无凭据"的半配置服务器的问题：密钥现在先暂存（staged）、定义提交后再晋升为生效凭据，前一定义正在使用的密钥在其退役提交之前绝不被销毁；任何窗口的崩溃都由下一次项目配置提交的凭据对账收敛——匹配已提交定义的暂存密钥被晋升，不匹配的被丢弃。
+- 修复 MCP OAuth 授权发起进程死亡后回调无法完成的问题：回调进程现在可仅凭持久事实（凭据租约、OAuth state、PKCE verifier）重建流程并完成兑换，全部写入仍以原租约代为栅栏。
+- 修复会话回合执行期间发送的用户消息持久化失败（HTTP 500）的问题：飞行中标记 `pendingDelivery` 此前写在深冻结的物化快照上而抛出 TypeError，现在写在持久化副本上；回合中到达的消息重新可以入队并在回合边界投递。
+
+### Removed
+
+- 移除渲染进程遗留的全局诊断 ABI（Application Binary Interface，应用程序二进制接口）：`window.__ocNextChatMetadata` 聊天元数据注入入口、`window.__overlayTest` 与 `window.__ocOverlayTiming` 超时覆盖、`window.__overlayInitSettled` 就绪标记、`window.__ocMarkdownRenderPrewarmPending` 预热计数、无调用方的 `window.openWorkspaceDiff`，以及由 `?acceptance-locale` 查询参数写入、可在正式版本中覆盖界面语言的 `__OPENCORVUS_LOCALE__` 入口。这些入口在当前仓库中已无任何写入方或读取方。渲染进程现在只保留一个显式声明的全局（启动接管握手），并由 `bun run --cwd packages/overlay check:renderer-surface` 作为构建后的正向契约守卫。
+
 ## 0.0.54beta - 2026-08-25
 
 本版本为共享 LLM 流停滞恢复增加明确上限，并修复公开网站“页面显示新版、主按钮却未绑定精确新版安装包”的下载交互；桌面端、命令行二进制和网站使用同一份 `0.0.54-beta` 发布事实。

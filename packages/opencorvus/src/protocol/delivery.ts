@@ -15,7 +15,7 @@ import { and, asc, Database, eq, inArray, sql } from "@/storage/db"
 import { TaskCreatorMetadata } from "@/task-api/task-creator"
 import { ProtocolDeliveryReceiptTable, ProtocolEventTable, ProtocolInboxTable } from "./protocol.sql"
 import { projectProtocolDeliveryInTransaction, type ProtocolDeliveryRow } from "./delivery-projection"
-import { acquireControlLease, currentControlLeaseInTransaction, releaseControlLease, renewControlLease } from "@/engine/control-lease"
+import { acquireControlLease, currentControlLeaseInTransaction, releaseControlLeaseInTransaction, renewControlLease } from "@/engine/control-lease"
 import {
   ProtocolInboxDeliveryResult,
   SchedulerEndpoint,
@@ -1005,7 +1005,7 @@ export function rescheduleSchedulerDelivery(input: {
     // `DELIVERY_LEASE_MS` the real retry period and the caller's backoff dead
     // code, so a failure the caller wanted to retry in half a second waits two
     // minutes instead.
-    releaseControlLease({ target: "protocol_delivery", targetID: input.inboxID, ownerOccurrenceID: input.ownerID, now })
+    releaseControlLeaseInTransaction(db, { target: "protocol_delivery", targetID: input.inboxID, leaseID: lease.id, ownerOccurrenceID: input.ownerID, now })
     return parseDeliveryRow(projectProtocolDeliveryInTransaction(db, current, now))
   })
 }

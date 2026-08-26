@@ -75,12 +75,10 @@ const facts = shippedPackages
     return leftIdentity.localeCompare(rightIdentity)
   })
 
-const distribution = await generateExpertSquadDistribution(
-  undefined,
-  undefined,
-  undefined,
-  { sources: shippedSources, embeddedIdentities: embeddedIDs },
-)
+const distribution = await generateExpertSquadDistribution(undefined, undefined, undefined, {
+  sources: shippedSources,
+  embeddedIdentities: embeddedIDs,
+})
 const archivesByIdentity = new Map<string, (typeof distribution.catalog.packages)[number]>(
   distribution.catalog.packages.map((entry) => [`${entry.namespace}/${entry.id}`, entry] as const),
 )
@@ -209,16 +207,23 @@ function resolveCompositionSquad(squadId: string, compositionID: string) {
 const compositions = Object.fromEntries(
   squadCompositions.map((composition) => {
     const squads = composition.steps.map((step) => resolveCompositionSquad(step.squadId, composition.id))
+    const expanded = (composition.expandedSteps ?? []).map((step) =>
+      resolveCompositionSquad(step.squadId, composition.id),
+    )
     const extras = (composition.extras?.squadIds ?? []).map((id) => resolveCompositionSquad(id, composition.id))
     const roleCount = squads.reduce((sum, squad) => sum + squad.agentCount, 0)
+    const expandedRoleCount = expanded.reduce((sum, squad) => sum + squad.agentCount, 0)
     const extraRoleCount = extras.reduce((sum, squad) => sum + squad.agentCount, 0)
     return [
       composition.id,
       {
         squads,
+        expanded,
         extras,
         squadCount: squads.length,
         roleCount,
+        expandedSquadCount: expanded.length,
+        expandedRoleCount,
         withExtrasSquadCount: squads.length + extras.length,
         withExtrasRoleCount: roleCount + extraRoleCount,
       },
@@ -239,15 +244,18 @@ await writeFile(
     "export type GeneratedCompositionSquad = {",
     "  readonly namespace: string",
     "  readonly id: string",
-    "  readonly displayLabel: { readonly root: string; readonly \"zh-cn\": string }",
+    '  readonly displayLabel: { readonly root: string; readonly "zh-cn": string }',
     "  readonly agentCount: number",
     "}",
     "",
     "export type GeneratedComposition = {",
     "  readonly squads: readonly GeneratedCompositionSquad[]",
+    "  readonly expanded: readonly GeneratedCompositionSquad[]",
     "  readonly extras: readonly GeneratedCompositionSquad[]",
     "  readonly squadCount: number",
     "  readonly roleCount: number",
+    "  readonly expandedSquadCount: number",
+    "  readonly expandedRoleCount: number",
     "  readonly withExtrasSquadCount: number",
     "  readonly withExtrasRoleCount: number",
     "}",

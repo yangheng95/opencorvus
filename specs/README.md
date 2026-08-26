@@ -1,10 +1,34 @@
 # Specs Storage Index
 
+Latest extensible Inspect AI benchmark framework and Apodex-family integration: [`2026-08-26-extensible-inspect-benchmark-framework.md`](records/2026-08/2026-08-26-extensible-inspect-benchmark-framework.md).
+
+Latest Session conversation history visibility repair: [`2026-08-26-session-conversation-history-visibility-repair.md`](records/2026-08/2026-08-26-session-conversation-history-visibility-repair.md).
+
+Latest runtime Skill Market search and exact-install plan: [`2026-08-26-runtime-skill-market-search-install.md`](records/2026-08/2026-08-26-runtime-skill-market-search-install.md).
+
+Latest OpenCorvus paper-production internal evidence foundation: [`2026-08-26-opencorvus-paper-foundation-evidence.md`](records/2026-08/2026-08-26-opencorvus-paper-foundation-evidence.md), with the canonical machine-readable bundle under [`artifacts/opencorvus-paper/`](artifacts/opencorvus-paper/).
+
+Latest bounded `search_code` execution repair: [`2026-08-26-search-code-bounded-execution-repair.md`](records/2026-08/2026-08-26-search-code-bounded-execution-repair.md).
+
+Latest Inspect AI benchmark platform and OpenCorvus Task adapter: [`2026-08-26-inspect-ai-benchmark-adapter.md`](records/2026-08/2026-08-26-inspect-ai-benchmark-adapter.md).
+
+Latest Mission stream-interruption retry-budget repair: [`2026-08-26-mission-stream-interruption-retry-budget.md`](records/2026-08/2026-08-26-mission-stream-interruption-retry-budget.md).
+
+Latest open pull request triage: [`2026-08-25-open-pull-request-triage.md`](records/2026-08/2026-08-25-open-pull-request-triage.md).
+
+Latest landing AutomationBench proof: [`2026-08-25-landing-automationbench-proof.md`](records/2026-08/2026-08-25-landing-automationbench-proof.md).
+
+Landing AutomationBench visual evidence: [`light`](artifacts/landing-benchmark/automationbench-light.png) and [`dark`](artifacts/landing-benchmark/automationbench-dark.png).
+
+Latest landing DeBERTa Mission scale expansion: [`2026-08-25-landing-deberta-mission-scale.md`](records/2026-08/2026-08-25-landing-deberta-mission-scale.md).
+
 Latest `v0.0.54-beta` application and website release: [`2026-08-25-v0.0.54-beta-release.md`](records/2026-08/2026-08-25-v0.0.54-beta-release.md).
 
 Latest public-site version-bound download repair: [`2026-08-25-website-version-bound-download.md`](records/2026-08/2026-08-25-website-version-bound-download.md).
 
 Latest `v0.0.53-beta` application and website release: [`2026-08-24-v0.0.53-beta-release.md`](records/2026-08/2026-08-24-v0.0.53-beta-release.md).
+
+Latest architecture-debt remediation campaign: [`2026-08-25-architecture-debt-remediation.md`](records/2026-08/2026-08-25-architecture-debt-remediation.md).
 
 Latest full-repository architecture-debt saturation audit: [`2026-08-24-repository-architecture-debt-saturation-audit.md`](records/2026-08/2026-08-24-repository-architecture-debt-saturation-audit.md).
 

@@ -31,11 +31,23 @@ Git template、子进程和第三方临时写入均在该树内嵌套，结束�
 由用户明确授权的 maintenance 操作整体处置；普通启动和本路径重构不迁移或重建数据库。
 
 SQLite 数据库与 data root 不拥有单后端启动锁；不同监听端口的多个后端可以同时打开同一
-数据库。物理执行由各领域的 durable lease 协调。破坏性 Project 删除和 identity convergence
-仅通过 `project_maintenance_fence` 隔离其涉及的 Project occurrence：fence 与 Project generation、
-维护 operation 和拥有它的 PID/进程启动指纹绑定，Task/Session 新建及 Task-root lease 的取得/续租
-在各自写事务内读取该 fence。启动恢复只在物理观察证明 owner occurrence 已死亡或 PID 已复用后
-删除对应 Project fence；它不得升级为 database path 或 data root 的排他 owner。
+数据库。物理执行由各领域的 durable lease 协调。破坏性 Project 删除、identity convergence
+和匿名 Project promotion 仅通过 `project_maintenance_fence` 隔离其涉及的 Project occurrence：
+fence 与 Project generation、维护 operation 和拥有它的 PID/进程启动指纹绑定，Task/Session
+新建及 Task-root lease 的取得/续租在各自写事务内读取该 fence。删除和 identity convergence
+的启动恢复只在物理观察证明 owner occurrence 已死亡或 PID 已复用后删除对应 fence；promotion
+fence 只能由同一 operation/generation 的 durable publication occurrence 收敛并释放，通用死亡
+owner sweep 不得释放它。任何 fence 都不得升级为 database path 或 data root 的排他 owner。
+
+匿名 Project promotion 的唯一 Ready 决策是 durable publication terminal receipt。完整的
+Project/Session before-snapshot 和 source digest 先写入 immutable occurrence；随后一个 SQLite
+write transaction 重读并核对完整 snapshot、取得 promotion fence，首个 filesystem rename 只能
+发生在两者之后。外部 Project/Session writer 由 SQLite trigger 在 persistent `promotion` fence
+期间拒绝；精确 relocation/rollback transaction 临时使用 `promotion_commit`，并在 commit 前恢复
+`promotion`。Project projection 隐藏 fenced row，只有 terminal 已落盘且 exact fence 已释放后才
+发布 Project event 和 caller success。启动必须在 listener bind 前收敛所有 open occurrence 和
+仍持有 exact fence 的 settled occurrence；未知路径、pre-relocation digest、generation 或双 source/quarantine
+不允许猜测所有权或删除数据。
 
 ## engine 域
 

@@ -44,7 +44,13 @@ export class McpOAuthProvider implements OAuthClientProvider {
     private serverUrl: string,
     private config: McpOAuthConfig,
     private callbacks: McpOAuthCallbacks,
-    private authRevision: McpAuth.Revision,
+    /**
+     * The lease this provider writes under. `undefined` for a connection over
+     * a credential no flow has ever leased — its refresh writes are unfenced,
+     * exactly as they were before leases existed, because a connection must
+     * not revoke a flow to read.
+     */
+    private authRevision: McpAuth.Revision | undefined,
     private assertCurrent?: () => Promise<void>,
     private ownedOAuthState?: string,
     private correlationID: string = crypto.randomUUID(),
@@ -181,7 +187,7 @@ export class McpOAuthProvider implements OAuthClientProvider {
 
   async state(): Promise<string> {
     if (this.ownedOAuthState !== undefined) {
-      if (McpAuth.revision(this.authKey) !== this.authRevision) {
+      if (this.authRevision !== undefined && (await McpAuth.revision(this.authKey)) !== this.authRevision) {
         throw new Error(`MCP auth lease was revoked: ${this.authKey}`)
       }
       return this.ownedOAuthState

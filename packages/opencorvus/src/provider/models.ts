@@ -1,5 +1,5 @@
 import { Global } from "../global"
-import { withProcessLock } from "@/util/process-lock"
+import { CROSS_PROCESS_LOCK_RETRY, withProcessLock } from "@/util/process-lock"
 import { Log } from "../util/log"
 import path from "path"
 import fs from "fs/promises"
@@ -223,7 +223,7 @@ export namespace ModelsDev {
     if (source === catalogPath() && Flag.OPENCORVUS_MODELS_PATH) return false
     await fs.mkdir(path.dirname(source), { recursive: true })
     return withKeyedLock(catalogWriterLocks, source, async () => {
-      return withProcessLock(source, { realpath: false }, async () => {
+      return withProcessLock(source, { realpath: false, retries: CROSS_PROCESS_LOCK_RETRY }, async () => {
         const current = parseCatalog(await Filesystem.readJson<unknown>(source), source, false)
         if (current.opencorvus) return false
         const next = parseCatalog(migrateDefaultCatalog(current), source)
@@ -241,7 +241,7 @@ export namespace ModelsDev {
     await migrateDefaultCatalogFile()
     await fs.mkdir(path.dirname(source), { recursive: true })
     return withKeyedLock(catalogWriterLocks, source, async () => {
-      return withProcessLock(source, { realpath: false }, async () => {
+      return withProcessLock(source, { realpath: false, retries: CROSS_PROCESS_LOCK_RETRY }, async () => {
         const current = parseCatalog(await Filesystem.readJson<unknown>(source), source)
         const next = parseCatalog(update(current), source)
         await Filesystem.writeAtomic(source, JSON.stringify(next, null, 2), 0o600)

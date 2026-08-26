@@ -1,4 +1,6 @@
 import { Server } from "../../server/server"
+import * as fsp from "node:fs/promises"
+import { observedProcessOccurrence } from "@/runtime/process-occurrence"
 import path from "node:path"
 import { cmd } from "./cmd"
 import { withNetworkOptions, resolveNetworkOptions, type NetworkOptions } from "../network"
@@ -47,6 +49,8 @@ function hideConsoleWindow() {
 
 type ServeOptions = NetworkOptions & {
   "project-dir"?: string
+  "startup-receipt"?: string
+  "startup-occurrence"?: string
   "parent-pid"?: number
   "watchdog-interval-ms"?: number
 }
@@ -57,6 +61,14 @@ const serveBuilder = (yargs: Parameters<typeof withNetworkOptions>[0]) =>
     .option("project-dir", {
       type: "string",
       describe: "default project directory for all task operations (sandbox)",
+    })
+    .option("startup-receipt", {
+      type: "string",
+      describe: "path a framed machine startup receipt is published to",
+    })
+    .option("startup-occurrence", {
+      type: "string",
+      describe: "identity of the launch occurrence the startup receipt settles",
     })
     .option("parent-pid", {
       type: "number",
@@ -71,9 +83,31 @@ function managedLifecycleInput(args: ArgumentsCamelCase<ServeOptions>) {
   const rawParentPid = args["parent-pid"]
   if (rawParentPid === undefined) return undefined
   if (!Number.isInteger(rawParentPid) || rawParentPid <= 0) throw new Error("Managed serve requires a positive --parent-pid")
+  // The host is alive at this instant — it just launched this process — so the
+  // fingerprint observed now IS the occurrence this backend is bound to. A
+  // later reuse of the same process number cannot match it.
+  const parent = observedProcessOccurrence(rawParentPid) ?? { pid: rawParentPid }
   return {
-    parentPid: rawParentPid,
+    parent,
     watchdogIntervalMilliseconds: args["watchdog-interval-ms"],
+  }
+}
+
+async function publishStartupReceipt(
+  args: ArgumentsCamelCase<ServeOptions>,
+  fact: { outcome: "listening"; url: string; pid: number } | { outcome: "failed"; error: string },
+) {
+  const target = args["startup-receipt"]
+  const occurrenceID = args["startup-occurrence"]
+  if (!target || !occurrenceID) return
+  const body = JSON.stringify({ schemaVersion: 1, occurrenceID, ...fact })
+  const temporary = `${target}.${process.pid}.tmp`
+  try {
+    await fsp.writeFile(temporary, body, "utf8")
+    await fsp.rename(temporary, target)
+  } catch (error) {
+    await fsp.rm(temporary, { force: true }).catch(() => undefined)
+    console.error("[serve] failed to publish the startup receipt:", error)
   }
 }
 
@@ -130,6 +164,12 @@ export async function handleServeCommand(args: ArgumentsCamelCase<ServeOptions>)
         childHandoff,
       )
     }
+    // A launcher waiting on the receipt learns the terminal failure now
+    // instead of waiting out its timeout.
+    await publishStartupReceipt(args, {
+      outcome: "failed",
+      error: recoveryError instanceof Error ? recoveryError.message : String(recoveryError),
+    })
     throw recoveryError
   }
   const observeStartedTaskRecovery = (recovery: Promise<void>) => {
@@ -145,6 +185,9 @@ export async function handleServeCommand(args: ArgumentsCamelCase<ServeOptions>)
   // Publish actual server URL so ChannelSupervisor can connect channel runtime to it
   process.env.OPENCORVUS_SERVER_URL = serverUrl
   console.log(`opencorvus server listening on ${serverUrl}`)
+  // The launcher's readiness protocol: a framed fact, published atomically,
+  // so console wording is diagnostics and never a contract.
+  await publishStartupReceipt(args, { outcome: "listening", url: serverUrl, pid: process.pid })
   console.log(`overlay UI available at ${serverUrl}/ui/`)
 
   let shutdownPromise: Promise<void> | null = null

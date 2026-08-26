@@ -102,15 +102,16 @@ async function createProductionFixture(projectPath: string, title: string) {
   })
   if (workflow.kind !== "virtual_workflow") throw new Error("Expected Base planner-parallel-delivery workflow")
   const taskID = Identifier.ascending("task")
-  const root = await Session.create({
+  const root = Session.prepareRootNext({
     kind: "root",
+    directory: Instance.directory,
     title,
     metadata: { configOverlay: { prompt_profile: { active: packageRevision.id } } },
   })
   const now = Date.now()
   persistTask({
     taskID,
-    sessionID: root.id,
+    rootSession: root,
     now,
     title,
     request: "Produce one durable Build terminal fact",

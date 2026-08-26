@@ -223,6 +223,14 @@ describe("createOpenCorvusServer", () => {
           `const child = spawn(process.execPath, ["-e", "process.on('SIGTERM', () => {}); setInterval(() => {}, 1000)"], { stdio: ["ignore", "ignore", "ignore"] })`,
           "child.unref()",
           "fs.writeFileSync(process.env.OPENCORVUS_FAKE_CHILD_PID_FILE, String(child.pid))",
+          "const receiptArg = process.argv.find((value) => value.startsWith(\"--startup-receipt=\"))",
+          "const occurrenceArg = process.argv.find((value) => value.startsWith(\"--startup-occurrence=\"))",
+          "if (receiptArg && occurrenceArg) {",
+          "  const target = receiptArg.slice(\"--startup-receipt=\".length)",
+          "  const occurrenceID = occurrenceArg.slice(\"--startup-occurrence=\".length)",
+          "  fs.writeFileSync(target + \".tmp\", JSON.stringify({ schemaVersion: 1, occurrenceID, outcome: \"listening\", url: \"http://127.0.0.1:43210\", pid: process.pid }))",
+          "  fs.renameSync(target + \".tmp\", target)",
+          "}",
           'console.log("server listening on http://127.0.0.1:43210")',
           "setInterval(() => {}, 10_000)",
           "",
@@ -267,7 +275,7 @@ describe("createOpenCorvusServer", () => {
   })
 
   test.serial(
-    "drains stdout and stderr after split readiness until close",
+    "drains stdout and stderr after the startup receipt settles, until close",
     async () => {
       const tempDir = mkdtempSync(path.join(tmpdir(), "opencorvus-sdk-server-drain-"))
       const completionFile = path.join(tempDir, "drain-complete")
@@ -280,9 +288,16 @@ describe("createOpenCorvusServer", () => {
         path.join(tempDir, "serve"),
         [
           'const fs = require("node:fs")',
+          "const receiptArg = process.argv.find((value) => value.startsWith(\"--startup-receipt=\"))",
+          "const occurrenceArg = process.argv.find((value) => value.startsWith(\"--startup-occurrence=\"))",
+          "if (receiptArg && occurrenceArg) {",
+          "  const target = receiptArg.slice(\"--startup-receipt=\".length)",
+          "  const occurrenceID = occurrenceArg.slice(\"--startup-occurrence=\".length)",
+          "  fs.writeFileSync(target + \".tmp\", JSON.stringify({ schemaVersion: 1, occurrenceID, outcome: \"listening\", url: \"http://127.0.0.1:43210\", pid: process.pid }))",
+          "  fs.renameSync(target + \".tmp\", target)",
+          "}",
           'process.stdout.write("opencorvus server listening")',
           "setTimeout(() => {",
-          '  process.stdout.write(" on http://127.0.0.1:43211\\n")',
           '  const flood = Buffer.alloc(2 * 1024 * 1024, "x")',
           "  process.stdout.write(flood, () => {",
           "    process.stderr.write(flood, () => {",
@@ -300,7 +315,8 @@ describe("createOpenCorvusServer", () => {
       process.env.OPENCORVUS_FAKE_COMPLETION_FILE = completionFile
       try {
         server = await createOpenCorvusServer({ timeout: 2_000, port: 0 })
-        expect(server.url).toBe("http://127.0.0.1:43211")
+        // The receipt is the readiness fact; console output decides nothing.
+        expect(server.url).toBe("http://127.0.0.1:43210")
         await waitForPidFile(completionFile, 4_000)
         expect(readFileSync(completionFile, "utf8")).toBe("drained")
         await server.close()

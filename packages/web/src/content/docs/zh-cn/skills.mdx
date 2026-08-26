@@ -78,32 +78,43 @@ Frontmatter 字段（`src/skill/skill.ts`）：
 远程文件会缓存在本地；更新远程 skill 时需要手动清缓存或运行 `opencorvus skill remove --url <url>`。
 :::
 
-内置 Skill Market 条目（`src/skill/manager.ts`）：
+远程 URL index 是高级 source import 机制，与精确 Skill Market 链路彼此独立。
 
-| ID                 | 来源                         | 信任等级  |
-| ------------------ | ---------------------------- | --------- |
-| `openai-skills`    | github.com/openai/skills     | official  |
-| `anthropic-skills` | github.com/anthropics/skills | official  |
-| `skills-sh`        | skills.sh                    | curated   |
-| `skillstore`       | skillstore.io                | curated   |
-| `skills-pub`       | skills.pub                   | community |
+## 5. 从 Skill Market 搜索并安装
 
-## 5. 通过 Git 安装
+skills.sh 是当前唯一 Skill Market authority。设置页的 Skill 页面与运行时 Primary Agent 共用同一 OpenCorvus 服务：
+
+1. 按能力文本搜索。结果包含稳定的 `owner/repository/skill` identity、来源仓库、安装次数、详情 URL 和实时安装状态。
+2. 检查单个结果。OpenCorvus 只下载该 Skill，验证根 `SKILL.md` 与所有文件路径，并返回 OpenCorvus 计算的 SHA-256 内容 digest、上游 hash、文件清单、信任、风险和推荐策略。检查不会安装任何内容。
+3. 使用检查阶段得到的精确 digest 安装。OpenCorvus 会再次下载候选；内容改变即拒绝；匹配后原子发布一个 managed Skill，在 `.opencorvus-skill-source.json` 写入 provenance，更新全局配置并刷新 catalog。
+
+规范 identity 统一为小写，并映射到 `<runtime-root>/config/skills-market/skills-sh/<owner>/<repository>/<skill>/`。替换与删除前会验证目标 provenance 仍由同一 identity 持有。上游网络、HTTP、JSON 或 bundle 校验失败统一返回可见的 `SkillMarketUpstreamError` HTTP 502 契约。
+
+运行时 Agent 使用 `skill_market` Tool。`search` 与 `inspect` 是网络读取，`install` 是需要单独授权的本地写入。安装成功后从下一轮起可挂载，因为当前轮的 Skill surface 已冻结。
+
+项目限定与全局公共路由均可用：
+
+- `GET /skill/market` 与 `GET /global/skill/market`
+- `GET /skill/market/search?query=...` 与 `GET /global/skill/market/search?query=...`
+- `GET /skill/market/detail?id=...` 与 `GET /global/skill/market/detail?id=...`
+- `POST /skill/market/install` 与 `POST /global/skill/market/install`，请求体包含 `id`、`expected_hash` 和可选 `policy`
+
+## 6. 通过 Git 安装
 
 ```bash
 opencorvus skill install --git https://github.com/owner/repo.git
 # 简写：opencorvus skill install owner/repo
 ```
 
-Git 方式克隆到 `<runtime-root>/config/skills-market/<slug>/` 并自动追加到 `skills.paths`；`.opencorvus-skill-source.json` 记录来源（`src/skill/manager.ts`）。runtime root 遵循[环境变量](../reference/env/)。
+Git 方式克隆到 `<runtime-root>/config/skills-market/<slug>/` 并自动追加到 `skills.paths`；`.opencorvus-skill-source.json` 记录来源（`src/skill/manager.ts`）。这是 whole-repository 高级直接来源导入，不是 Skill Market 精确安装器。runtime root 遵循[环境变量](../reference/env/)。
 
-## 6. Skill ↔ Agent 调用关系
+## 7. Skill ↔ Agent 调用关系
 
 Session 初始化时会提供 Skill Policy 与可用 skill 摘要。Agent 需要通过 `skill` 工具搜索或按精确名称加载 `SKILL.md`，然后执行其中的工作流。加载 skill 是会话历史中的可见工具调用。
 
 `auto_detect` 仅作为发现 / 排序 / 后续 UI 辅助的元数据。Skill 正文通过可见的 `skill` 工具加载；`required_tools` 是 skill 搜索结果中的描述性提示；真正的证据要求由加载后的 skill 文档说明。
 
-## 7. Permission 配置
+## 8. Permission 配置
 
 ```jsonc
 {
@@ -119,20 +130,20 @@ Session 初始化时会提供 Skill Policy 与可用 skill 摘要。Agent 需要
 
 推荐策略：内置 `allow`；社区来源 `ask`；含 `scripts/` 目录的视为高风险（`src/skill/manager.ts`）。
 
-## 8. 信任等级与风险
+## 9. 信任等级与风险
 
 | 等级        | 来源                               |
 | ----------- | ---------------------------------- |
 | `builtin`   | 随二进制打包                       |
 | `official`  | openai/skills 或 anthropics/skills |
-| `curated`   | skills.sh / skillstore.io          |
-| `community` | skills.pub                         |
+| `curated`   | Skill Market provider              |
+| `community` | community source                   |
 | `local`     | 本地路径                           |
 | `external`  | `.claude/` 或 `.agents/` 目录发现  |
 
 风险评估：目录含 `scripts/` → 高风险；含 `agents/` 或 `references/` → 中等（`src/skill/manager.ts`）。
 
-## 9. 禁用外部 Skills
+## 10. 禁用外部 Skills
 
 ```bash
 OPENCORVUS_DISABLE_EXTERNAL_SKILLS=1

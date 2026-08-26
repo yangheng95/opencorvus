@@ -50,15 +50,19 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | POST | `/global/providers/{providerID}/auth/execute` | Execute global Provider auth 请求体: `inputs`, `method`; 错误: `AuthReadError`, `BadRequestError`. | `global.providers.auth.execute` |
 | POST | `/global/providers/{providerID}/auth/prompts` | Get global Provider auth prompts 请求体: `inputs`, `method`; 错误: `BadRequestError`. | `global.providers.auth.prompts` |
 | POST | `/global/providers/{providerID}/oauth/authorize` | Authorize a global Provider subscription 请求体: `inputs`, `method`; 错误: `BadRequestError`. | `global.providers.oauth.authorize` |
-| POST | `/global/providers/{providerID}/oauth/callback` | Complete global Provider subscription authorization 请求体: `code`, `method`; 错误: `AuthReadError`, `BadRequestError`. | `global.providers.oauth.callback` |
+| POST | `/global/providers/{providerID}/oauth/callback` | Complete global Provider subscription authorization 请求体: `code`, `flowID`, `method`; 错误: `AuthReadError`, `BadRequestError`. | `global.providers.oauth.callback` |
 | POST | `/global/providers/{providerID}/test` | Test a global Provider connection 请求体: `modelID`; 错误: `AuthReadError`, `BadRequestError`. | `global.providers.test` |
 | POST | `/global/skill/install` | Install a global Skill market source 请求体: `kind`, `policy`, `value`; 错误: `BadRequestError`. | `global.skill.install` |
 | GET | `/global/skill/market` | List the global Skill market | `global.skill.market` |
+| GET | `/global/skill/market/detail` | Inspect a global Skill Market candidate 错误: `BadRequestError`, `SkillMarketUpstreamError`. | `global.skill.market.detail` |
+| POST | `/global/skill/market/install` | Install an inspected global Skill Market candidate 请求体: `expected_hash`, `id`, `policy`; 错误: `BadRequestError`, `SkillMarketUpstreamError`. | `global.skill.market.install` |
+| GET | `/global/skill/market/search` | Search the global Skill Market 错误: `BadRequestError`, `SkillMarketUpstreamError`. | `global.skill.market.search` |
 | GET | `/global/tasks` | List tasks across projects | `task.global.list` |
 | POST | `/global/tasks` | Create a task in an implicit project 请求体: `artifactSources`, `attachments`, `budget`, `channelBinding`, `checks`, `directory`, `expectedPackageDigest`, `metadata`, `model`, `priority`, `productPillar`, `project`, `promptProfile`, `request`, `requestID`, `source`, `title`; 错误: `BadRequestError`, `ExternalChildTaskLineageError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCreationIdempotencyConflictError`, `TaskCreatorAuthorityError`, `TaskCreatorSessionError`, `TaskExpectedPackageDigestConflictError`, `TaskPackageRevisionBindingError`. | `task.global.create` |
 | GET | `/global/usage` | Get natural-period Provider usage 错误: `BadRequestError`. | `global.usage` |
 | POST | `/global/work` | Create Work in a temporary project 请求体: `model`; 错误: `BadRequestError`. | `global.work.create` |
 | POST | `/instance/dispose` | Dispose instance 错误: `OwnedPromptControllersError`. | `instance.dispose` |
+| GET | `/lifecycle/{occurrenceID}` | Get a server lifecycle occurrence | `server.lifecycle` |
 | GET | `/log` | Read logs 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `log.read` |
 | POST | `/log` | Write log batch 请求体: `entries`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `app.log` |
 | GET | `/log/export` | Export log support bundle | `log.export` |
@@ -192,7 +196,7 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | PATCH | `/session/{sessionID}` | Update session 请求体: `time`, `title`; 错误: `BadRequestError`, `LogFileNotFoundError`, `MissionSessionAuthorityError`, `NotFoundError`. | `session.update` |
 | POST | `/session/{sessionID}/abort` | Abort session 错误: `BadRequestError`, `LogFileNotFoundError`, `MissionSessionAuthorityError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `session.abort` |
 | GET | `/session/{sessionID}/children` | Get session children 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.children` |
-| POST | `/session/{sessionID}/command` | Send command 请求体: `agent`, `arguments`, `command`, `messageID`, `model`, `parts`, `variant`; 错误: `BadRequestError`, `LogFileNotFoundError`, `MissionSessionAuthorityError`, `NotFoundError`. | `session.command` |
+| POST | `/session/{sessionID}/command` | Send command 请求体: `agent`, `arguments`, `command`, `messageID`, `model`, `parts`, `variant`; 错误: `BadRequestError`, `LogFileNotFoundError`, `MissionSessionAuthorityError`, `NotFoundError`, `PublicSessionPromptIdentityConflictError`. | `session.command` |
 | GET | `/session/{sessionID}/config` | Get session effective configuration 错误: `AuthReadError`, `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.config.get` |
 | PATCH | `/session/{sessionID}/config` | Update session configuration overlay 请求体: `agent`, `expert_squads`, `model`, `prompt`, `prompt_profile`, `runtime_templates`, `skill_mounts`; 错误: `AuthReadError`, `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskPackageRevisionBindingError`, `TaskPromptProfileImmutableError`. | `session.config.update` |
 | GET | `/session/{sessionID}/conversation` | Hydrate session conversation state 错误: `LogFileNotFoundError`, `NotFoundError`. | `session.conversation` |
@@ -200,7 +204,7 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | GET | `/session/{sessionID}/diff` | Get message diff | `session.diff` |
 | GET | `/session/{sessionID}/events` | Subscribe to session events | `session.events` |
 | POST | `/session/{sessionID}/fork` | Fork session 请求体: `messageID`; 错误: `MissionSessionAuthorityError`. | `session.fork` |
-| POST | `/session/{sessionID}/init` | Initialize session 请求体: `messageID`, `modelID`, `providerID`; 错误: `BadRequestError`, `LogFileNotFoundError`, `MissionSessionAuthorityError`, `NotFoundError`. | `session.init` |
+| POST | `/session/{sessionID}/init` | Initialize session 请求体: `messageID`, `modelID`, `providerID`; 错误: `BadRequestError`, `LogFileNotFoundError`, `MissionSessionAuthorityError`, `NotFoundError`, `PublicSessionPromptIdentityConflictError`. | `session.init` |
 | GET | `/session/{sessionID}/interactive-artifact/{artifactID}` | Read session interactive artifact 错误: `BadRequestError`, `InteractiveArtifactCorruptionError`, `LogFileNotFoundError`, `NotFoundError`. | `interactiveArtifact.readSessionArtifact` |
 | GET | `/session/{sessionID}/interactive-artifact/{artifactID}/mcp-app/events` | Subscribe to MCP App capability changes 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `interactiveArtifact.eventsMcpApp` |
 | POST | `/session/{sessionID}/interactive-artifact/{artifactID}/mcp-app/request` | Forward an MCP App request 错误: `BadRequestError`, `LogFileNotFoundError`, `McpAppHostForbiddenError`, `NotFoundError`, `UnknownError`. | `interactiveArtifact.requestMcpApp` |
@@ -210,7 +214,7 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | GET | `/session/{sessionID}/message/{messageID}` | Get message 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.message` |
 | DELETE | `/session/{sessionID}/message/{messageID}/part/{partID}` | （无说明） 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `part.delete` |
 | PATCH | `/session/{sessionID}/message/{messageID}/part/{partID}` | （无说明） 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `part.update` |
-| POST | `/session/{sessionID}/shell` | Run shell command 请求体: `agent`, `command`, `model`; 错误: `BadRequestError`, `LogFileNotFoundError`, `MissionSessionAuthorityError`, `NotFoundError`. | `session.shell` |
+| POST | `/session/{sessionID}/shell` | Run shell command 请求体: `agent`, `command`, `messageID`, `model`; 错误: `BadRequestError`, `LogFileNotFoundError`, `MissionSessionAuthorityError`, `NotFoundError`, `PublicSessionPromptIdentityConflictError`. | `session.shell` |
 | POST | `/session/{sessionID}/summarize` | Summarize session 请求体: `auto`, `focus`, `modelID`, `providerID`; 错误: `BadRequestError`, `LogFileNotFoundError`, `MissionSessionAuthorityError`, `NotFoundError`. | `session.summarize` |
 | GET | `/session/{sessionID}/todo` | Get session todos 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.todo` |
 | GET | `/session/{sessionID}/trace` | Get session AgentTrace events | `session.trace` |
@@ -339,6 +343,9 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | GET | `/skill/installed` | List installed skills | `skill.installed` |
 | GET | `/skill/issues` | List Skill catalog issues | `skill.issues` |
 | GET | `/skill/market` | List skill markets | `skill.market` |
+| GET | `/skill/market/detail` | Inspect a Skill Market candidate 错误: `BadRequestError`, `SkillMarketUpstreamError`. | `skill.market.detail` |
+| POST | `/skill/market/install` | Install an inspected Skill Market candidate 请求体: `expected_hash`, `id`, `policy`; 错误: `BadRequestError`, `SkillMarketUpstreamError`. | `skill.market.install` |
+| GET | `/skill/market/search` | Search the Skill Market 错误: `BadRequestError`, `SkillMarketUpstreamError`. | `skill.market.search` |
 | PATCH | `/skill/mount` | Set a qualified skill mount override 请求体: `agentID`, `defaultSkillRef`, `expertSquadID`, `override`, `scope`, `sessionID`. | `skill.setMountOverride` |
 | GET | `/skill/mounts` | List agent skill mounts | `skill.mounts` |
 | POST | `/skill/policy` | Set skill permission policy 请求体: `action`, `name`. | `skill.policy` |
@@ -404,7 +411,7 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | POST | `/provider/{providerID}/auth/execute` | Execute auth method 请求体: `inputs`, `method`; 错误: `AuthReadError`, `BadRequestError`. | `provider.auth.execute` |
 | POST | `/provider/{providerID}/auth/prompts` | Get auth prompts 请求体: `inputs`, `method`; 错误: `BadRequestError`. | `provider.auth.prompts` |
 | POST | `/provider/{providerID}/oauth/authorize` | OAuth authorize 请求体: `inputs`, `method`; 错误: `BadRequestError`. | `provider.oauth.authorize` |
-| POST | `/provider/{providerID}/oauth/callback` | OAuth callback 请求体: `code`, `method`; 错误: `AuthReadError`, `BadRequestError`. | `provider.oauth.callback` |
+| POST | `/provider/{providerID}/oauth/callback` | OAuth callback 请求体: `code`, `flowID`, `method`; 错误: `AuthReadError`, `BadRequestError`. | `provider.oauth.callback` |
 | POST | `/provider/{providerID}/test` | Test provider connection 请求体: `modelID`; 错误: `AuthReadError`, `BadRequestError`. | `provider.test` |
 
 ### Question

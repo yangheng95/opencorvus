@@ -14,26 +14,20 @@ export type GeneratedCompositionSquad = {
 
 export type GeneratedComposition = {
   readonly squads: readonly GeneratedCompositionSquad[]
+  readonly expanded: readonly GeneratedCompositionSquad[]
   readonly extras: readonly GeneratedCompositionSquad[]
   readonly squadCount: number
   readonly roleCount: number
+  readonly expandedSquadCount: number
+  readonly expandedRoleCount: number
   readonly withExtrasSquadCount: number
   readonly withExtrasRoleCount: number
 }
 
 export const generatedSquadCompositions: Readonly<Record<string, GeneratedComposition>> =
 {
-  "research-to-paper": {
+  "deberta-absa-research-engineering": {
     "squads": [
-      {
-        "namespace": "builtin",
-        "id": "scientific-research-design",
-        "displayLabel": {
-          "root": "Scientific Research Design",
-          "zh-cn": "科学研究设计"
-        },
-        "agentCount": 4
-      },
       {
         "namespace": "builtin",
         "id": "deep-research",
@@ -42,6 +36,15 @@ export const generatedSquadCompositions: Readonly<Record<string, GeneratedCompos
           "zh-cn": "深度研究"
         },
         "agentCount": 6
+      },
+      {
+        "namespace": "builtin",
+        "id": "advanced",
+        "displayLabel": {
+          "root": "Advanced",
+          "zh-cn": "Advanced"
+        },
+        "agentCount": 14
       },
       {
         "namespace": "builtin",
@@ -72,23 +75,86 @@ export const generatedSquadCompositions: Readonly<Record<string, GeneratedCompos
       },
       {
         "namespace": "builtin",
-        "id": "office-delivery",
+        "id": "base",
         "displayLabel": {
-          "root": "Office Delivery",
-          "zh-cn": "Office 交付"
-        },
-        "agentCount": 3
-      }
-    ],
-    "extras": [
-      {
-        "namespace": "builtin",
-        "id": "patent-landscape-prior-art",
-        "displayLabel": {
-          "root": "Patent Landscape and Prior Art",
-          "zh-cn": "专利格局与现有技术"
+          "root": "Base",
+          "zh-cn": "Base"
         },
         "agentCount": 4
+      }
+    ],
+    "expanded": [
+      {
+        "namespace": "builtin",
+        "id": "deep-research",
+        "displayLabel": {
+          "root": "Deep Research",
+          "zh-cn": "深度研究"
+        },
+        "agentCount": 6
+      },
+      {
+        "namespace": "builtin",
+        "id": "data-engineering-reliability",
+        "displayLabel": {
+          "root": "Data Engineering Reliability",
+          "zh-cn": "数据工程可靠性"
+        },
+        "agentCount": 4
+      },
+      {
+        "namespace": "builtin",
+        "id": "ai-model-governance-evaluation",
+        "displayLabel": {
+          "root": "AI Model Governance and Evaluation",
+          "zh-cn": "AI 模型治理与评估"
+        },
+        "agentCount": 5
+      },
+      {
+        "namespace": "builtin",
+        "id": "cloud-platform-architecture",
+        "displayLabel": {
+          "root": "Cloud Platform Architecture",
+          "zh-cn": "云平台架构"
+        },
+        "agentCount": 4
+      },
+      {
+        "namespace": "builtin",
+        "id": "advanced",
+        "displayLabel": {
+          "root": "Advanced",
+          "zh-cn": "Advanced"
+        },
+        "agentCount": 14
+      },
+      {
+        "namespace": "builtin",
+        "id": "evolution-lab",
+        "displayLabel": {
+          "root": "Evolution Lab",
+          "zh-cn": "演进实验室"
+        },
+        "agentCount": 7
+      },
+      {
+        "namespace": "builtin",
+        "id": "data-analysis",
+        "displayLabel": {
+          "root": "Data Analysis & Business Insights",
+          "zh-cn": "数据分析与商业洞察"
+        },
+        "agentCount": 7
+      },
+      {
+        "namespace": "builtin",
+        "id": "frontend-innovate",
+        "displayLabel": {
+          "root": "Frontend Innovate",
+          "zh-cn": "前端创新"
+        },
+        "agentCount": 9
       },
       {
         "namespace": "builtin",
@@ -101,18 +167,186 @@ export const generatedSquadCompositions: Readonly<Record<string, GeneratedCompos
       },
       {
         "namespace": "builtin",
-        "id": "localization-adaptation",
+        "id": "scientific-research-design",
         "displayLabel": {
-          "root": "Localization & Adaptation",
-          "zh-cn": "本地化与适配"
+          "root": "Scientific Research Design",
+          "zh-cn": "科学研究设计"
+        },
+        "agentCount": 4
+      },
+      {
+        "namespace": "builtin",
+        "id": "product-management",
+        "displayLabel": {
+          "root": "Product Management",
+          "zh-cn": "产品管理"
+        },
+        "agentCount": 4
+      },
+      {
+        "namespace": "builtin",
+        "id": "office-delivery",
+        "displayLabel": {
+          "root": "Office Delivery",
+          "zh-cn": "Office 交付"
+        },
+        "agentCount": 3
+      },
+      {
+        "namespace": "builtin",
+        "id": "patent-landscape-prior-art",
+        "displayLabel": {
+          "root": "Patent Landscape and Prior Art",
+          "zh-cn": "专利格局与现有技术"
+        },
+        "agentCount": 4
+      },
+      {
+        "namespace": "builtin",
+        "id": "research-studio",
+        "displayLabel": {
+          "root": "Research Studio",
+          "zh-cn": "研究工作室"
+        },
+        "agentCount": 5
+      },
+      {
+        "namespace": "builtin",
+        "id": "academic-paper-review",
+        "displayLabel": {
+          "root": "Academic Paper Review",
+          "zh-cn": "学术论文审查"
+        },
+        "agentCount": 8
+      },
+      {
+        "namespace": "builtin",
+        "id": "review-debug",
+        "displayLabel": {
+          "root": "Review & Debug",
+          "zh-cn": "审查与调试"
+        },
+        "agentCount": 4
+      },
+      {
+        "namespace": "builtin",
+        "id": "cybersecurity-assurance",
+        "displayLabel": {
+          "root": "Cybersecurity Assurance",
+          "zh-cn": "网络安全保障"
+        },
+        "agentCount": 4
+      },
+      {
+        "namespace": "builtin",
+        "id": "base",
+        "displayLabel": {
+          "root": "Base",
+          "zh-cn": "Base"
         },
         "agentCount": 4
       }
     ],
+    "extras": [],
     "squadCount": 6,
-    "roleCount": 33,
-    "withExtrasSquadCount": 9,
+    "roleCount": 44,
+    "expandedSquadCount": 18,
+    "expandedRoleCount": 99,
+    "withExtrasSquadCount": 6,
     "withExtrasRoleCount": 44
+  },
+  "opencorvus-self-paper": {
+    "squads": [
+      {
+        "namespace": "builtin",
+        "id": "scientific-research-design",
+        "displayLabel": {
+          "root": "Scientific Research Design",
+          "zh-cn": "科学研究设计"
+        },
+        "agentCount": 4
+      },
+      {
+        "namespace": "builtin",
+        "id": "deep-research",
+        "displayLabel": {
+          "root": "Deep Research",
+          "zh-cn": "深度研究"
+        },
+        "agentCount": 6
+      },
+      {
+        "namespace": "builtin",
+        "id": "advanced",
+        "displayLabel": {
+          "root": "Advanced",
+          "zh-cn": "Advanced"
+        },
+        "agentCount": 14
+      },
+      {
+        "namespace": "builtin",
+        "id": "data-analysis",
+        "displayLabel": {
+          "root": "Data Analysis & Business Insights",
+          "zh-cn": "数据分析与商业洞察"
+        },
+        "agentCount": 7
+      },
+      {
+        "namespace": "builtin",
+        "id": "review-debug",
+        "displayLabel": {
+          "root": "Review & Debug",
+          "zh-cn": "审查与调试"
+        },
+        "agentCount": 4
+      },
+      {
+        "namespace": "builtin",
+        "id": "patent-landscape-prior-art",
+        "displayLabel": {
+          "root": "Patent Landscape and Prior Art",
+          "zh-cn": "专利格局与现有技术"
+        },
+        "agentCount": 4
+      },
+      {
+        "namespace": "builtin",
+        "id": "office-delivery",
+        "displayLabel": {
+          "root": "Office Delivery",
+          "zh-cn": "Office 交付"
+        },
+        "agentCount": 3
+      },
+      {
+        "namespace": "builtin",
+        "id": "research-studio",
+        "displayLabel": {
+          "root": "Research Studio",
+          "zh-cn": "研究工作室"
+        },
+        "agentCount": 5
+      },
+      {
+        "namespace": "builtin",
+        "id": "academic-paper-review",
+        "displayLabel": {
+          "root": "Academic Paper Review",
+          "zh-cn": "学术论文审查"
+        },
+        "agentCount": 8
+      }
+    ],
+    "expanded": [],
+    "extras": [],
+    "squadCount": 9,
+    "roleCount": 55,
+    "expandedSquadCount": 0,
+    "expandedRoleCount": 0,
+    "withExtrasSquadCount": 9,
+    "withExtrasRoleCount": 55
   },
   "deal-due-diligence": {
     "squads": [
@@ -162,9 +396,12 @@ export const generatedSquadCompositions: Readonly<Record<string, GeneratedCompos
         "agentCount": 5
       }
     ],
+    "expanded": [],
     "extras": [],
     "squadCount": 5,
     "roleCount": 29,
+    "expandedSquadCount": 0,
+    "expandedRoleCount": 0,
     "withExtrasSquadCount": 5,
     "withExtrasRoleCount": 29
   },
@@ -207,9 +444,12 @@ export const generatedSquadCompositions: Readonly<Record<string, GeneratedCompos
         "agentCount": 4
       }
     ],
+    "expanded": [],
     "extras": [],
     "squadCount": 4,
     "roleCount": 18,
+    "expandedSquadCount": 0,
+    "expandedRoleCount": 0,
     "withExtrasSquadCount": 4,
     "withExtrasRoleCount": 18
   },
@@ -261,9 +501,12 @@ export const generatedSquadCompositions: Readonly<Record<string, GeneratedCompos
         "agentCount": 4
       }
     ],
+    "expanded": [],
     "extras": [],
     "squadCount": 5,
     "roleCount": 26,
+    "expandedSquadCount": 0,
+    "expandedRoleCount": 0,
     "withExtrasSquadCount": 5,
     "withExtrasRoleCount": 26
   }

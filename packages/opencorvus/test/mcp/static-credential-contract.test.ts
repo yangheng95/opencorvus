@@ -91,14 +91,16 @@ describe("remote MCP static credential contract", () => {
     const serverUrl = "https://mcp.zapier.com/api/v1/connect"
     const credentialIdentity = "query-token-identity"
     try {
-      await McpAuth.setStaticCredential(authKey, "initial-secret", serverUrl, credentialIdentity)
+      await McpAuth.stageStaticCredential(authKey, "initial-secret", serverUrl, credentialIdentity)
+        await McpAuth.promoteStagedStaticCredential(authKey, { serverUrl: serverUrl, credentialIdentity: credentialIdentity })
       expect(await McpAuth.getForUrl(authKey, serverUrl, credentialIdentity)).toEqual({
         staticCredential: { secret: "initial-secret" },
         serverUrl,
         credentialIdentity,
       })
 
-      await McpAuth.setStaticCredential(authKey, "rotated-secret", serverUrl, credentialIdentity)
+      await McpAuth.stageStaticCredential(authKey, "rotated-secret", serverUrl, credentialIdentity)
+        await McpAuth.promoteStagedStaticCredential(authKey, { serverUrl: serverUrl, credentialIdentity: credentialIdentity })
       expect(await McpAuth.getForUrl(authKey, serverUrl, credentialIdentity)).toEqual({
         staticCredential: { secret: "rotated-secret" },
         serverUrl,

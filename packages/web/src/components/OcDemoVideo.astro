@@ -1,20 +1,5 @@
 ---
-/**
- * The recorded run under the hero.
- *
- * This slot used to hold a twenty-frame screenshot carousel, one still per artifact renderer. The
- * stills were real captures, but they asked the reader to assemble a run out of pictures, and the
- * claim worth making — one prompt carries all the way to a finished file — is a claim about time,
- * which a still cannot carry. So it is a recording of a single run instead.
- *
- * The file lives in public/ rather than src/assets because Astro's asset pipeline is for images;
- * a video wants a plain URL the browser can range-request. Provenance is in
- * public/media/captured.json, and test/lander-assets.test.ts holds the two in agreement.
- *
- * The recording carries no audio track at all — it was captured with a dead system-audio channel —
- * so there is nothing to unmute and the caption says so rather than leaving a reader hunting for a
- * volume control.
- */
+/** Locale selects a complete narrated master: screen copy, voice and subtitles stay in agreement. */
 import { landingCopy } from "../content/landing-copy"
 import type { PublicLocale } from "../content/public-market"
 
@@ -23,8 +8,9 @@ type Props = { locale: PublicLocale }
 const { locale } = Astro.props
 const copy = landingCopy[locale].demo
 const base = import.meta.env.BASE_URL.replace(/\/$/, "")
-const videoSrc = `${base}/media/opencorvus-demo.mp4`
-const posterSrc = `${base}/media/opencorvus-demo-poster.jpg`
+const mediaLocale = locale === "zh-cn" ? "zh-CN" : "en-US"
+const videoSrc = `${base}/media/opencorvus-mission-v5r-${mediaLocale}.mp4`
+const posterSrc = `${base}/media/opencorvus-mission-v5r-${mediaLocale}-poster.jpg`
 ---
 
 <section class="oc-demo oc-anchor" id="demo" aria-labelledby="oc-demo-title">
@@ -36,24 +22,17 @@ const posterSrc = `${base}/media/opencorvus-demo-poster.jpg`
     </div>
 
     <figure class="oc-demo-figure oc-reveal">
-      {/*
-        preload="none" is the whole no-JavaScript story: the poster paints, the native controls are
-        real, and not one byte of the recording is fetched until either the reader presses play or
-        the script below decides the section is actually on screen. `controls` stays because this
-        is a hundred seconds of real work — people want to scrub it, not just watch it drift past.
-      */}
+      {/* The poster paints without JavaScript; the reader explicitly starts this narrated story. */}
       <video
         class="oc-demo-video"
-        data-oc-demo-video
         src={videoSrc}
         poster={posterSrc}
         width="1920"
         height="1080"
-        preload="none"
-        muted
-        loop
+        preload="metadata"
         playsinline
         controls
+        lang={mediaLocale}
         aria-label={copy.label}></video>
       <figcaption class="oc-text-xs oc-text-description oc-demo-caption">{copy.caption}</figcaption>
     </figure>
@@ -94,46 +73,3 @@ const posterSrc = `${base}/media/opencorvus-demo-poster.jpg`
     text-align: center;
   }
 </style>
-
-<script>
-  /**
-   * Play it where a reader can see it, and stop deciding as soon as they touch the controls.
-   *
-   * The same rule the hero recordings follow: autoplay is a convenience, so it yields. Scrolling
-   * away pauses, a hidden tab pauses, reduced-motion never starts — and any press on the player
-   * hands the decision over for good, because a reader who paused a hundred-second recording did
-   * not mean "until I scroll".
-   */
-  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)")
-
-  for (const video of document.querySelectorAll<HTMLVideoElement>("[data-oc-demo-video]")) {
-    // Autoplay policy reads the property, not the attribute, when play() comes from a script.
-    video.muted = true
-
-    let readerOwns = false
-    const surrender = () => (readerOwns = true)
-    video.addEventListener("pointerdown", surrender)
-    video.addEventListener("keydown", surrender)
-
-    const play = () => {
-      if (readerOwns || reduced.matches || document.hidden) return
-      // Rejects when the policy declines; there is nothing to recover, the poster is already right.
-      void video.play().catch(() => {})
-    }
-    const pause = () => {
-      if (readerOwns || video.paused) return
-      video.pause()
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) (entry.isIntersecting ? play : pause)()
-      },
-      { threshold: 0.4 },
-    )
-    observer.observe(video)
-
-    document.addEventListener("visibilitychange", () => document.hidden && pause())
-    reduced.addEventListener("change", (event) => event.matches && pause())
-  }
-</script>

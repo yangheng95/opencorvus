@@ -312,6 +312,40 @@ export function listMissionTasks(input: { projectID: string; missionID: string; 
       .all()))
 }
 
+/**
+ * Resolve a global Task create replay to the Task its request already
+ * committed, before any new Project is allocated for it.
+ *
+ * A global create allocates its carrying anonymous Project first, so a
+ * per-project request lookup can never see the first attempt — the retry is
+ * scoped to the Project it just allocated. The request identity of a global
+ * create is therefore global: any live Task carrying the request ID whose
+ * root Session still lives in an anonymous Project directory is that
+ * request's Task. A Project promoted out of the anonymous root stops
+ * matching; a replay arriving after the user adopted the Project would
+ * allocate anew, which is the pre-existing behavior for every replay and is
+ * recorded as this lookup's boundary.
+ */
+export function findGlobalTaskByRequest(requestID: string, isAnonymousDirectory: (directory: string) => boolean) {
+  return Database.use((db) => {
+    const rows = db
+      .select({ task: EngineTaskTable, directory: SessionTable.directory })
+      .from(EngineTaskTable)
+      .leftJoin(SessionTable, eq(EngineTaskTable.session_id, SessionTable.id))
+      .where(eq(EngineTaskTable.request_id, requestID))
+      // Deterministic resolution if the request ever left more than one
+      // live candidate: every replay resolves the earliest commit.
+      .orderBy(EngineTaskTable.time_created, EngineTaskTable.id)
+      .all()
+    for (const row of rows) {
+      if (!row.directory || !isAnonymousDirectory(row.directory)) continue
+      if (taskDeletedInTransaction(db, row.task.id)) continue
+      return { task: projectTaskRowInTransaction(db, row.task), directory: row.directory }
+    }
+    return undefined
+  })
+}
+
 export function findTaskByRequest(projectID: string, requestID: string) {
   return Database.use((db) => {
     const row = db

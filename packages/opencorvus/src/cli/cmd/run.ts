@@ -8,6 +8,7 @@ import { bootstrap } from "../bootstrap"
 import { EOL } from "os"
 import { Filesystem } from "../../util/filesystem"
 import { createOpenCorvusClient, type OpenCorvusClient, type ToolPart } from "@opencorvus-ai/sdk"
+import { Identifier } from "../../id/id"
 import { Provider } from "../../provider/provider"
 import { PrimaryAssistantRegistry } from "../../agent/primary-assistant-registry"
 import { CapabilityRules } from "../../capability/rules"
@@ -616,6 +617,7 @@ export const RunCommand = cmd({
         try {
           await sdk.session.command({
             sessionID,
+            messageID: Identifier.ascending("message"),
             agent,
             model: args.model,
             command: args.command,
@@ -630,6 +632,7 @@ export const RunCommand = cmd({
         try {
           await sdk.session.prompt({
             sessionID,
+            messageID: Identifier.ascending("message"),
             agent,
             model,
             variant: args.variant,

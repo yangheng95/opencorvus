@@ -224,6 +224,259 @@
         ],
         "type": "object"
       },
+      "AssistantMessage": {
+        "properties": {
+          "activationID": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "agent": {
+            "type": "string"
+          },
+          "author": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "billing": {
+            "$ref": "#/components/schemas/BillingCoverage"
+          },
+          "convergenceFailure": {
+            "additionalProperties": false,
+            "properties": {
+              "failure_occurrence": {
+                "additionalProperties": false,
+                "properties": {
+                  "assistant_message_id": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "error_name": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "session_id": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "session_id",
+                  "assistant_message_id",
+                  "error_name"
+                ],
+                "type": "object"
+              },
+              "inspection_error": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "unconverged_part_ids": {
+                "items": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "write_errors": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "message": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "part_id": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "part_id",
+                    "message"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              }
+            },
+            "required": [
+              "failure_occurrence",
+              "unconverged_part_ids",
+              "write_errors"
+            ],
+            "type": "object"
+          },
+          "cost": {
+            "type": "number"
+          },
+          "error": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ProviderAuthError"
+              },
+              {
+                "$ref": "#/components/schemas/UnknownError"
+              },
+              {
+                "$ref": "#/components/schemas/MessageOutputLengthError"
+              },
+              {
+                "$ref": "#/components/schemas/MessageAbortedError"
+              },
+              {
+                "$ref": "#/components/schemas/StructuredOutputPayloadError"
+              },
+              {
+                "$ref": "#/components/schemas/SnapshotIntegrityError"
+              },
+              {
+                "$ref": "#/components/schemas/SnapshotEmptyTreeError"
+              },
+              {
+                "$ref": "#/components/schemas/ContextOverflowError"
+              },
+              {
+                "$ref": "#/components/schemas/CompactionContinuationMissingError"
+              },
+              {
+                "$ref": "#/components/schemas/PromptBudgetOverflowError"
+              },
+              {
+                "$ref": "#/components/schemas/ToolSchemaBudgetError"
+              },
+              {
+                "$ref": "#/components/schemas/ModelImageInputTooLargeError"
+              },
+              {
+                "$ref": "#/components/schemas/APIError"
+              }
+            ]
+          },
+          "failureOccurrence": {
+            "additionalProperties": false,
+            "properties": {
+              "assistant_message_id": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "error_name": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "session_id": {
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "session_id",
+              "assistant_message_id",
+              "error_name"
+            ],
+            "type": "object"
+          },
+          "finish": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "modelID": {
+            "type": "string"
+          },
+          "observationFailures": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "message": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "phase": {
+                  "const": "snapshot_patch",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "phase",
+                "message"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "orderKey": {
+            "type": "string"
+          },
+          "parentID": {
+            "type": "string"
+          },
+          "path": {
+            "properties": {
+              "cwd": {
+                "type": "string"
+              },
+              "root": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "cwd",
+              "root"
+            ],
+            "type": "object"
+          },
+          "providerID": {
+            "type": "string"
+          },
+          "role": {
+            "const": "assistant",
+            "type": "string"
+          },
+          "sessionID": {
+            "type": "string"
+          },
+          "structured": {},
+          "summary": {
+            "type": "boolean"
+          },
+          "time": {
+            "properties": {
+              "completed": {
+                "type": "number"
+              },
+              "created": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "created"
+            ],
+            "type": "object"
+          },
+          "tokens": {
+            "$ref": "#/components/schemas/TokenUsage"
+          },
+          "variant": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "sessionID",
+          "author",
+          "role",
+          "time",
+          "parentID",
+          "modelID",
+          "providerID",
+          "agent",
+          "path",
+          "cost",
+          "tokens"
+        ],
+        "type": "object"
+      },
       "Auth": {
         "oneOf": [
           {
@@ -597,6 +850,13 @@
                     "managed": {
                       "type": "boolean"
                     },
+                    "market_hash": {
+                      "pattern": "^[a-f0-9]{64}$",
+                      "type": "string"
+                    },
+                    "market_id": {
+                      "type": "string"
+                    },
                     "metadata": {
                       "additionalProperties": {
                         "type": "string"
@@ -686,6 +946,7 @@
                     "source_type": {
                       "enum": [
                         "builtin",
+                        "managed_market",
                         "managed_git",
                         "config_path",
                         "config_url",
@@ -14047,6 +14308,9 @@
       },
       "ProviderAuthAuthorization": {
         "properties": {
+          "flowID": {
+            "type": "string"
+          },
           "instructions": {
             "type": "string"
           },
@@ -14069,7 +14333,8 @@
         "required": [
           "url",
           "method",
-          "instructions"
+          "instructions",
+          "flowID"
         ],
         "type": "object"
       },
@@ -15239,6 +15504,40 @@
         },
         "type": "object"
       },
+      "ServerLifecycleOccurrence": {
+        "properties": {
+          "error": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "shutdown",
+              "restart"
+            ],
+            "type": "string"
+          },
+          "state": {
+            "enum": [
+              "executing",
+              "failed"
+            ],
+            "type": "string"
+          },
+          "timeAdmitted": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "state",
+          "timeAdmitted"
+        ],
+        "type": "object"
+      },
       "Session": {
         "properties": {
           "directory": {
@@ -15497,6 +15796,26 @@
             "type": "string"
           }
         },
+        "type": "object"
+      },
+      "SkillMarketUpstreamError": {
+        "properties": {
+          "data": {
+            "additionalProperties": {},
+            "propertyNames": {
+              "type": "string"
+            },
+            "type": "object"
+          },
+          "name": {
+            "const": "SkillMarketUpstreamError",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "data"
+        ],
         "type": "object"
       },
       "SlackChannelConfig": {
@@ -18843,6 +19162,13 @@
                     "managed": {
                       "type": "boolean"
                     },
+                    "market_hash": {
+                      "pattern": "^[a-f0-9]{64}$",
+                      "type": "string"
+                    },
+                    "market_id": {
+                      "type": "string"
+                    },
                     "metadata": {
                       "additionalProperties": {
                         "type": "string"
@@ -18932,6 +19258,7 @@
                     "source_type": {
                       "enum": [
                         "builtin",
+                        "managed_market",
                         "managed_git",
                         "config_path",
                         "config_url",
@@ -62683,6 +63010,9 @@
                   "code": {
                     "type": "string"
                   },
+                  "flowID": {
+                    "type": "string"
+                  },
                   "method": {
                     "type": "number"
                   }
@@ -62960,7 +63290,7 @@
     },
     "/global/skill/market": {
       "get": {
-        "description": "List global Skill market entries without requiring an active project.",
+        "description": "List the single current Skill Market provider without requiring an active project.",
         "operationId": "global.skill.market",
         "responses": {
           "200": {
@@ -62968,53 +63298,45 @@
               "application/json": {
                 "schema": {
                   "items": {
+                    "additionalProperties": false,
                     "properties": {
+                      "api_origin": {
+                        "const": "https://skills.sh",
+                        "type": "string"
+                      },
                       "description": {
                         "type": "string"
                       },
+                      "exact_install": {
+                        "const": true,
+                        "type": "boolean"
+                      },
                       "homepage": {
-                        "format": "uri",
+                        "const": "https://skills.sh",
                         "type": "string"
                       },
                       "id": {
+                        "const": "skills-sh",
                         "type": "string"
-                      },
-                      "install_kind": {
-                        "enum": [
-                          "git",
-                          "url",
-                          "manual"
-                        ],
-                        "type": "string"
-                      },
-                      "installed": {
-                        "type": "boolean"
                       },
                       "name": {
-                        "type": "string"
-                      },
-                      "notes": {
+                        "const": "skills.sh",
                         "type": "string"
                       },
                       "provider": {
+                        "const": "skills.sh",
                         "type": "string"
                       },
                       "recommended_policy": {
-                        "enum": [
-                          "allow",
-                          "deny"
-                        ],
+                        "const": "deny",
                         "type": "string"
                       },
-                      "source": {
-                        "type": "string"
+                      "searchable": {
+                        "const": true,
+                        "type": "boolean"
                       },
                       "trust": {
-                        "enum": [
-                          "official",
-                          "curated",
-                          "community"
-                        ],
+                        "const": "curated",
                         "type": "string"
                       }
                     },
@@ -63024,10 +63346,11 @@
                       "provider",
                       "description",
                       "homepage",
-                      "install_kind",
+                      "api_origin",
+                      "searchable",
+                      "exact_install",
                       "trust",
-                      "recommended_policy",
-                      "installed"
+                      "recommended_policy"
                     ],
                     "type": "object"
                   },
@@ -63043,6 +63366,415 @@
           {
             "lang": "js",
             "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.global.skill.market({\n  ...\n})"
+          }
+        ]
+      }
+    },
+    "/global/skill/market/detail": {
+      "get": {
+        "description": "Download and validate one exact candidate bundle without installing it.",
+        "operationId": "global.skill.market.detail",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "pattern": "^[a-z0-9_.-]+\\/[a-z0-9_.-]+\\/[a-z0-9_.-]+$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "description": {
+                      "type": "string"
+                    },
+                    "files": {
+                      "items": {
+                        "properties": {
+                          "path": {
+                            "type": "string"
+                          },
+                          "size": {
+                            "maximum": 9007199254740991,
+                            "minimum": 0,
+                            "type": "integer"
+                          }
+                        },
+                        "required": [
+                          "path",
+                          "size"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "hash": {
+                      "pattern": "^[a-f0-9]{64}$",
+                      "type": "string"
+                    },
+                    "homepage": {
+                      "format": "uri",
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "installed": {
+                      "type": "boolean"
+                    },
+                    "name": {
+                      "minLength": 1,
+                      "pattern": "^[^/\\\\\\r\\n]+$",
+                      "type": "string"
+                    },
+                    "recommended_policy": {
+                      "enum": [
+                        "allow",
+                        "deny"
+                      ],
+                      "type": "string"
+                    },
+                    "repository": {
+                      "format": "uri",
+                      "type": "string"
+                    },
+                    "risk": {
+                      "properties": {
+                        "has_agents": {
+                          "type": "boolean"
+                        },
+                        "has_references": {
+                          "type": "boolean"
+                        },
+                        "has_scripts": {
+                          "type": "boolean"
+                        },
+                        "has_templates": {
+                          "type": "boolean"
+                        },
+                        "level": {
+                          "enum": [
+                            "low",
+                            "medium",
+                            "high"
+                          ],
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "level",
+                        "has_scripts",
+                        "has_agents",
+                        "has_references",
+                        "has_templates"
+                      ],
+                      "type": "object"
+                    },
+                    "skill_id": {
+                      "type": "string"
+                    },
+                    "source": {
+                      "type": "string"
+                    },
+                    "trust": {
+                      "enum": [
+                        "builtin",
+                        "official",
+                        "curated",
+                        "community",
+                        "local",
+                        "external",
+                        "unknown"
+                      ],
+                      "type": "string"
+                    },
+                    "upstream_hash": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "skill_id",
+                    "name",
+                    "description",
+                    "source",
+                    "homepage",
+                    "repository",
+                    "hash",
+                    "files",
+                    "trust",
+                    "risk",
+                    "recommended_policy",
+                    "installed"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validated Skill Market candidate detail"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestError"
+                }
+              }
+            },
+            "description": "Bad request"
+          },
+          "502": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SkillMarketUpstreamError"
+                }
+              }
+            },
+            "description": "Upstream service failure"
+          }
+        },
+        "summary": "Inspect a global Skill Market candidate",
+        "x-codeSamples": [
+          {
+            "lang": "js",
+            "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.global.skill.market2.detail({\n  ...\n})"
+          }
+        ]
+      }
+    },
+    "/global/skill/market/install": {
+      "post": {
+        "description": "Install exactly one candidate only when its current content matches the inspected digest.",
+        "operationId": "global.skill.market.install",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "expected_hash": {
+                    "pattern": "^[a-f0-9]{64}$",
+                    "type": "string"
+                  },
+                  "id": {
+                    "pattern": "^[a-z0-9_.-]+\\/[a-z0-9_.-]+\\/[a-z0-9_.-]+$",
+                    "type": "string"
+                  },
+                  "policy": {
+                    "enum": [
+                      "allow",
+                      "deny"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id",
+                  "expected_hash"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "available": {
+                      "const": "next_turn",
+                      "type": "string"
+                    },
+                    "hash": {
+                      "pattern": "^[a-f0-9]{64}$",
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "minLength": 1,
+                      "pattern": "^[^/\\\\\\r\\n]+$",
+                      "type": "string"
+                    },
+                    "path": {
+                      "type": "string"
+                    },
+                    "policy": {
+                      "enum": [
+                        "allow",
+                        "deny"
+                      ],
+                      "type": "string"
+                    },
+                    "source": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "name",
+                    "source",
+                    "path",
+                    "hash",
+                    "policy",
+                    "available"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Installed Skill Market candidate"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestError"
+                }
+              }
+            },
+            "description": "Bad request"
+          },
+          "502": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SkillMarketUpstreamError"
+                }
+              }
+            },
+            "description": "Upstream service failure"
+          }
+        },
+        "summary": "Install an inspected global Skill Market candidate",
+        "x-codeSamples": [
+          {
+            "lang": "js",
+            "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.global.skill.market2.install({\n  ...\n})"
+          }
+        ]
+      }
+    },
+    "/global/skill/market/search": {
+      "get": {
+        "description": "Search exact Skill candidates and project live global installation status.",
+        "operationId": "global.skill.market.search",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "query",
+            "required": true,
+            "schema": {
+              "maxLength": 120,
+              "minLength": 2,
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "default": 10,
+              "maximum": 20,
+              "minimum": 1,
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "homepage": {
+                        "format": "uri",
+                        "type": "string"
+                      },
+                      "id": {
+                        "type": "string"
+                      },
+                      "installed": {
+                        "type": "boolean"
+                      },
+                      "installs": {
+                        "maximum": 9007199254740991,
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "repository": {
+                        "format": "uri",
+                        "type": "string"
+                      },
+                      "skill_id": {
+                        "type": "string"
+                      },
+                      "source": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "skill_id",
+                      "name",
+                      "source",
+                      "installs",
+                      "homepage",
+                      "repository",
+                      "installed"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Skill Market candidates"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestError"
+                }
+              }
+            },
+            "description": "Bad request"
+          },
+          "502": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SkillMarketUpstreamError"
+                }
+              }
+            },
+            "description": "Upstream service failure"
+          }
+        },
+        "summary": "Search the global Skill Market",
+        "x-codeSamples": [
+          {
+            "lang": "js",
+            "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.global.skill.market2.search({\n  ...\n})"
           }
         ]
       }
@@ -65469,6 +66201,59 @@
           {
             "lang": "js",
             "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.interaction.reply({\n  ...\n})"
+          }
+        ]
+      }
+    },
+    "/lifecycle/{occurrenceID}": {
+      "get": {
+        "description": "Return the state of an admitted shutdown or restart occurrence. A completed shutdown is unobservable from inside the process, so `executing` is the last state a successful one shows.",
+        "operationId": "server.lifecycle",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "occurrenceID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServerLifecycleOccurrence"
+                }
+              }
+            },
+            "description": "Lifecycle occurrence state"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "ok": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "ok"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Unknown lifecycle occurrence"
+          }
+        },
+        "summary": "Get a server lifecycle occurrence",
+        "x-codeSamples": [
+          {
+            "lang": "js",
+            "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.server.lifecycle({\n  ...\n})"
           }
         ]
       }
@@ -75886,6 +76671,10 @@
                     "description": "OAuth authorization code",
                     "type": "string"
                   },
+                  "flowID": {
+                    "description": "Exact authorization flow occurrence to finish",
+                    "type": "string"
+                  },
                   "method": {
                     "description": "Auth method index",
                     "type": "number"
@@ -77073,6 +77862,9 @@
               "application/json": {
                 "schema": {
                   "properties": {
+                    "occurrenceID": {
+                      "type": "string"
+                    },
                     "ok": {
                       "type": "boolean"
                     }
@@ -77084,7 +77876,28 @@
                 }
               }
             },
-            "description": "Restart initiated"
+            "description": "Restart admitted"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "occurrenceID": {
+                      "type": "string"
+                    },
+                    "ok": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "ok"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "A live lifecycle occurrence owns the process"
           },
           "503": {
             "content": {
@@ -78333,6 +79146,7 @@
                     "type": "string"
                   },
                   "messageID": {
+                    "description": "Caller-minted stable identity of the input Message; retries with the same identity converge on the first attempt",
                     "pattern": "^msg.*",
                     "type": "string"
                   },
@@ -78387,6 +79201,7 @@
                   }
                 },
                 "required": [
+                  "messageID",
                   "arguments",
                   "command"
                 ],
@@ -78739,28 +79554,52 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "properties": {
-                    "data": {
-                      "additionalProperties": {},
-                      "propertyNames": {
-                        "type": "string"
+                  "anyOf": [
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "MissionSessionAuthorityError",
+                          "type": "string"
+                        }
                       },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
                       "type": "object"
                     },
-                    "name": {
-                      "const": "MissionSessionAuthorityError",
-                      "type": "string"
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "PublicSessionPromptIdentityConflictError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
                     }
-                  },
-                  "required": [
-                    "name",
-                    "data"
-                  ],
-                  "type": "object"
+                  ]
                 }
               }
             },
-            "description": "Mission execution and lifecycle are owned by the canonical Mission API"
+            "description": "Mission authority conflict, or the message identity is already bound to another public Session execution"
           }
         },
         "summary": "Send command",
@@ -84112,28 +84951,52 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "properties": {
-                    "data": {
-                      "additionalProperties": {},
-                      "propertyNames": {
-                        "type": "string"
+                  "anyOf": [
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "MissionSessionAuthorityError",
+                          "type": "string"
+                        }
                       },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
                       "type": "object"
                     },
-                    "name": {
-                      "const": "MissionSessionAuthorityError",
-                      "type": "string"
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "PublicSessionPromptIdentityConflictError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
                     }
-                  },
-                  "required": [
-                    "name",
-                    "data"
-                  ],
-                  "type": "object"
+                  ]
                 }
               }
             },
-            "description": "Mission execution and lifecycle are owned by the canonical Mission API"
+            "description": "Mission authority conflict, or the message identity is already bound to another public Session execution"
           }
         },
         "summary": "Initialize session",
@@ -84715,6 +85578,7 @@
                     "$ref": "#/components/schemas/OutputFormat"
                   },
                   "messageID": {
+                    "description": "Caller-minted stable identity of the input Message; retries with the same identity converge on the first attempt",
                     "pattern": "^msg.*",
                     "type": "string"
                   },
@@ -84751,6 +85615,7 @@
                   }
                 },
                 "required": [
+                  "messageID",
                   "parts"
                 ],
                 "type": "object"
@@ -85689,6 +86554,11 @@
                   "command": {
                     "type": "string"
                   },
+                  "messageID": {
+                    "description": "Caller-minted stable identity of the input Message; a retry with the same identity returns the durable occurrence instead of running the command again",
+                    "pattern": "^msg.*",
+                    "type": "string"
+                  },
                   "model": {
                     "properties": {
                       "modelID": {
@@ -85706,6 +86576,7 @@
                   }
                 },
                 "required": [
+                  "messageID",
                   "agent",
                   "command"
                 ],
@@ -85721,256 +86592,19 @@
               "application/json": {
                 "schema": {
                   "properties": {
-                    "activationID": {
-                      "minLength": 1,
-                      "type": "string"
+                    "info": {
+                      "$ref": "#/components/schemas/AssistantMessage"
                     },
-                    "agent": {
-                      "type": "string"
-                    },
-                    "author": {
-                      "minLength": 1,
-                      "type": "string"
-                    },
-                    "billing": {
-                      "$ref": "#/components/schemas/BillingCoverage"
-                    },
-                    "convergenceFailure": {
-                      "additionalProperties": false,
-                      "properties": {
-                        "failure_occurrence": {
-                          "additionalProperties": false,
-                          "properties": {
-                            "assistant_message_id": {
-                              "minLength": 1,
-                              "type": "string"
-                            },
-                            "error_name": {
-                              "minLength": 1,
-                              "type": "string"
-                            },
-                            "session_id": {
-                              "minLength": 1,
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "session_id",
-                            "assistant_message_id",
-                            "error_name"
-                          ],
-                          "type": "object"
-                        },
-                        "inspection_error": {
-                          "minLength": 1,
-                          "type": "string"
-                        },
-                        "unconverged_part_ids": {
-                          "items": {
-                            "minLength": 1,
-                            "type": "string"
-                          },
-                          "type": "array"
-                        },
-                        "write_errors": {
-                          "items": {
-                            "additionalProperties": false,
-                            "properties": {
-                              "message": {
-                                "minLength": 1,
-                                "type": "string"
-                              },
-                              "part_id": {
-                                "minLength": 1,
-                                "type": "string"
-                              }
-                            },
-                            "required": [
-                              "part_id",
-                              "message"
-                            ],
-                            "type": "object"
-                          },
-                          "type": "array"
-                        }
-                      },
-                      "required": [
-                        "failure_occurrence",
-                        "unconverged_part_ids",
-                        "write_errors"
-                      ],
-                      "type": "object"
-                    },
-                    "cost": {
-                      "type": "number"
-                    },
-                    "error": {
-                      "oneOf": [
-                        {
-                          "$ref": "#/components/schemas/ProviderAuthError"
-                        },
-                        {
-                          "$ref": "#/components/schemas/UnknownError"
-                        },
-                        {
-                          "$ref": "#/components/schemas/MessageOutputLengthError"
-                        },
-                        {
-                          "$ref": "#/components/schemas/MessageAbortedError"
-                        },
-                        {
-                          "$ref": "#/components/schemas/StructuredOutputPayloadError"
-                        },
-                        {
-                          "$ref": "#/components/schemas/SnapshotIntegrityError"
-                        },
-                        {
-                          "$ref": "#/components/schemas/SnapshotEmptyTreeError"
-                        },
-                        {
-                          "$ref": "#/components/schemas/ContextOverflowError"
-                        },
-                        {
-                          "$ref": "#/components/schemas/CompactionContinuationMissingError"
-                        },
-                        {
-                          "$ref": "#/components/schemas/PromptBudgetOverflowError"
-                        },
-                        {
-                          "$ref": "#/components/schemas/ToolSchemaBudgetError"
-                        },
-                        {
-                          "$ref": "#/components/schemas/ModelImageInputTooLargeError"
-                        },
-                        {
-                          "$ref": "#/components/schemas/APIError"
-                        }
-                      ]
-                    },
-                    "failureOccurrence": {
-                      "additionalProperties": false,
-                      "properties": {
-                        "assistant_message_id": {
-                          "minLength": 1,
-                          "type": "string"
-                        },
-                        "error_name": {
-                          "minLength": 1,
-                          "type": "string"
-                        },
-                        "session_id": {
-                          "minLength": 1,
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "session_id",
-                        "assistant_message_id",
-                        "error_name"
-                      ],
-                      "type": "object"
-                    },
-                    "finish": {
-                      "type": "string"
-                    },
-                    "id": {
-                      "type": "string"
-                    },
-                    "modelID": {
-                      "type": "string"
-                    },
-                    "observationFailures": {
+                    "parts": {
                       "items": {
-                        "additionalProperties": false,
-                        "properties": {
-                          "message": {
-                            "minLength": 1,
-                            "type": "string"
-                          },
-                          "phase": {
-                            "const": "snapshot_patch",
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "phase",
-                          "message"
-                        ],
-                        "type": "object"
+                        "$ref": "#/components/schemas/VisibleMessagePart"
                       },
                       "type": "array"
-                    },
-                    "orderKey": {
-                      "minLength": 1,
-                      "type": "string"
-                    },
-                    "parentID": {
-                      "type": "string"
-                    },
-                    "path": {
-                      "properties": {
-                        "cwd": {
-                          "type": "string"
-                        },
-                        "root": {
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "cwd",
-                        "root"
-                      ],
-                      "type": "object"
-                    },
-                    "providerID": {
-                      "type": "string"
-                    },
-                    "role": {
-                      "const": "assistant",
-                      "type": "string"
-                    },
-                    "sessionID": {
-                      "type": "string"
-                    },
-                    "structured": {},
-                    "summary": {
-                      "type": "boolean"
-                    },
-                    "time": {
-                      "properties": {
-                        "completed": {
-                          "type": "number"
-                        },
-                        "created": {
-                          "type": "number"
-                        }
-                      },
-                      "required": [
-                        "created"
-                      ],
-                      "type": "object"
-                    },
-                    "tokens": {
-                      "$ref": "#/components/schemas/TokenUsage"
-                    },
-                    "variant": {
-                      "type": "string"
                     }
                   },
                   "required": [
-                    "id",
-                    "sessionID",
-                    "orderKey",
-                    "author",
-                    "role",
-                    "time",
-                    "parentID",
-                    "modelID",
-                    "providerID",
-                    "agent",
-                    "path",
-                    "cost",
-                    "tokens"
+                    "info",
+                    "parts"
                   ],
                   "type": "object"
                 }
@@ -86043,28 +86677,52 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "properties": {
-                    "data": {
-                      "additionalProperties": {},
-                      "propertyNames": {
-                        "type": "string"
+                  "anyOf": [
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "MissionSessionAuthorityError",
+                          "type": "string"
+                        }
                       },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
                       "type": "object"
                     },
-                    "name": {
-                      "const": "MissionSessionAuthorityError",
-                      "type": "string"
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "PublicSessionPromptIdentityConflictError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
                     }
-                  },
-                  "required": [
-                    "name",
-                    "data"
-                  ],
-                  "type": "object"
+                  ]
                 }
               }
             },
-            "description": "Mission execution and lifecycle are owned by the canonical Mission API"
+            "description": "Mission authority conflict, or the message identity is already bound to another public Session execution"
           }
         },
         "summary": "Run shell command",
@@ -87630,6 +88288,9 @@
               "application/json": {
                 "schema": {
                   "properties": {
+                    "occurrenceID": {
+                      "type": "string"
+                    },
                     "ok": {
                       "type": "boolean"
                     }
@@ -87641,13 +88302,16 @@
                 }
               }
             },
-            "description": "Shutdown initiated"
+            "description": "Shutdown admitted"
           },
           "409": {
             "content": {
               "application/json": {
                 "schema": {
                   "properties": {
+                    "occurrenceID": {
+                      "type": "string"
+                    },
                     "ok": {
                       "type": "boolean"
                     }
@@ -87659,7 +88323,7 @@
                 }
               }
             },
-            "description": "Supervisor process occurrence does not own this backend"
+            "description": "Supervisor identity mismatch, or a live lifecycle occurrence owns the process"
           },
           "503": {
             "content": {
@@ -88316,6 +88980,13 @@
                       "managed": {
                         "type": "boolean"
                       },
+                      "market_hash": {
+                        "pattern": "^[a-f0-9]{64}$",
+                        "type": "string"
+                      },
+                      "market_id": {
+                        "type": "string"
+                      },
                       "metadata": {
                         "additionalProperties": {
                           "type": "string"
@@ -88405,6 +89076,7 @@
                       "source_type": {
                         "enum": [
                           "builtin",
+                          "managed_market",
                           "managed_git",
                           "config_path",
                           "config_url",
@@ -88529,7 +89201,7 @@
     },
     "/skill/market": {
       "get": {
-        "description": "Get curated skill marketplaces and official registries relevant to OpenCorvus imports.",
+        "description": "Get the single current Skill Market provider used by OpenCorvus.",
         "operationId": "skill.market",
         "parameters": [
           {
@@ -88548,53 +89220,45 @@
               "application/json": {
                 "schema": {
                   "items": {
+                    "additionalProperties": false,
                     "properties": {
+                      "api_origin": {
+                        "const": "https://skills.sh",
+                        "type": "string"
+                      },
                       "description": {
                         "type": "string"
                       },
+                      "exact_install": {
+                        "const": true,
+                        "type": "boolean"
+                      },
                       "homepage": {
-                        "format": "uri",
+                        "const": "https://skills.sh",
                         "type": "string"
                       },
                       "id": {
+                        "const": "skills-sh",
                         "type": "string"
-                      },
-                      "install_kind": {
-                        "enum": [
-                          "git",
-                          "url",
-                          "manual"
-                        ],
-                        "type": "string"
-                      },
-                      "installed": {
-                        "type": "boolean"
                       },
                       "name": {
-                        "type": "string"
-                      },
-                      "notes": {
+                        "const": "skills.sh",
                         "type": "string"
                       },
                       "provider": {
+                        "const": "skills.sh",
                         "type": "string"
                       },
                       "recommended_policy": {
-                        "enum": [
-                          "allow",
-                          "deny"
-                        ],
+                        "const": "deny",
                         "type": "string"
                       },
-                      "source": {
-                        "type": "string"
+                      "searchable": {
+                        "const": true,
+                        "type": "boolean"
                       },
                       "trust": {
-                        "enum": [
-                          "official",
-                          "curated",
-                          "community"
-                        ],
+                        "const": "curated",
                         "type": "string"
                       }
                     },
@@ -88604,10 +89268,11 @@
                       "provider",
                       "description",
                       "homepage",
-                      "install_kind",
+                      "api_origin",
+                      "searchable",
+                      "exact_install",
                       "trust",
-                      "recommended_policy",
-                      "installed"
+                      "recommended_policy"
                     ],
                     "type": "object"
                   },
@@ -88623,6 +89288,444 @@
           {
             "lang": "js",
             "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.skill.market({\n  ...\n})"
+          }
+        ]
+      }
+    },
+    "/skill/market/detail": {
+      "get": {
+        "description": "Download and validate the exact candidate bundle without installing it.",
+        "operationId": "skill.market.detail",
+        "parameters": [
+          {
+            "description": "Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.",
+            "in": "query",
+            "name": "directory",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "pattern": "^[a-z0-9_.-]+\\/[a-z0-9_.-]+\\/[a-z0-9_.-]+$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "description": {
+                      "type": "string"
+                    },
+                    "files": {
+                      "items": {
+                        "properties": {
+                          "path": {
+                            "type": "string"
+                          },
+                          "size": {
+                            "maximum": 9007199254740991,
+                            "minimum": 0,
+                            "type": "integer"
+                          }
+                        },
+                        "required": [
+                          "path",
+                          "size"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "hash": {
+                      "pattern": "^[a-f0-9]{64}$",
+                      "type": "string"
+                    },
+                    "homepage": {
+                      "format": "uri",
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "installed": {
+                      "type": "boolean"
+                    },
+                    "name": {
+                      "minLength": 1,
+                      "pattern": "^[^/\\\\\\r\\n]+$",
+                      "type": "string"
+                    },
+                    "recommended_policy": {
+                      "enum": [
+                        "allow",
+                        "deny"
+                      ],
+                      "type": "string"
+                    },
+                    "repository": {
+                      "format": "uri",
+                      "type": "string"
+                    },
+                    "risk": {
+                      "properties": {
+                        "has_agents": {
+                          "type": "boolean"
+                        },
+                        "has_references": {
+                          "type": "boolean"
+                        },
+                        "has_scripts": {
+                          "type": "boolean"
+                        },
+                        "has_templates": {
+                          "type": "boolean"
+                        },
+                        "level": {
+                          "enum": [
+                            "low",
+                            "medium",
+                            "high"
+                          ],
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "level",
+                        "has_scripts",
+                        "has_agents",
+                        "has_references",
+                        "has_templates"
+                      ],
+                      "type": "object"
+                    },
+                    "skill_id": {
+                      "type": "string"
+                    },
+                    "source": {
+                      "type": "string"
+                    },
+                    "trust": {
+                      "enum": [
+                        "builtin",
+                        "official",
+                        "curated",
+                        "community",
+                        "local",
+                        "external",
+                        "unknown"
+                      ],
+                      "type": "string"
+                    },
+                    "upstream_hash": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "skill_id",
+                    "name",
+                    "description",
+                    "source",
+                    "homepage",
+                    "repository",
+                    "hash",
+                    "files",
+                    "trust",
+                    "risk",
+                    "recommended_policy",
+                    "installed"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validated Skill Market candidate detail"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestError"
+                }
+              }
+            },
+            "description": "Bad request"
+          },
+          "502": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SkillMarketUpstreamError"
+                }
+              }
+            },
+            "description": "Upstream service failure"
+          }
+        },
+        "summary": "Inspect a Skill Market candidate",
+        "x-codeSamples": [
+          {
+            "lang": "js",
+            "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.skill.market2.detail({\n  ...\n})"
+          }
+        ]
+      }
+    },
+    "/skill/market/install": {
+      "post": {
+        "description": "Install exactly one candidate only when its current content matches the inspected digest.",
+        "operationId": "skill.market.install",
+        "parameters": [
+          {
+            "description": "Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.",
+            "in": "query",
+            "name": "directory",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "expected_hash": {
+                    "pattern": "^[a-f0-9]{64}$",
+                    "type": "string"
+                  },
+                  "id": {
+                    "pattern": "^[a-z0-9_.-]+\\/[a-z0-9_.-]+\\/[a-z0-9_.-]+$",
+                    "type": "string"
+                  },
+                  "policy": {
+                    "enum": [
+                      "allow",
+                      "deny"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id",
+                  "expected_hash"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "available": {
+                      "const": "next_turn",
+                      "type": "string"
+                    },
+                    "hash": {
+                      "pattern": "^[a-f0-9]{64}$",
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "minLength": 1,
+                      "pattern": "^[^/\\\\\\r\\n]+$",
+                      "type": "string"
+                    },
+                    "path": {
+                      "type": "string"
+                    },
+                    "policy": {
+                      "enum": [
+                        "allow",
+                        "deny"
+                      ],
+                      "type": "string"
+                    },
+                    "source": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "name",
+                    "source",
+                    "path",
+                    "hash",
+                    "policy",
+                    "available"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Installed Skill Market candidate"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestError"
+                }
+              }
+            },
+            "description": "Bad request"
+          },
+          "502": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SkillMarketUpstreamError"
+                }
+              }
+            },
+            "description": "Upstream service failure"
+          }
+        },
+        "summary": "Install an inspected Skill Market candidate",
+        "x-codeSamples": [
+          {
+            "lang": "js",
+            "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.skill.market2.install({\n  ...\n})"
+          }
+        ]
+      }
+    },
+    "/skill/market/search": {
+      "get": {
+        "description": "Search the current Skill Market and project live installation status for exact candidates.",
+        "operationId": "skill.market.search",
+        "parameters": [
+          {
+            "description": "Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.",
+            "in": "query",
+            "name": "directory",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "query",
+            "required": true,
+            "schema": {
+              "maxLength": 120,
+              "minLength": 2,
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "default": 10,
+              "maximum": 20,
+              "minimum": 1,
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "homepage": {
+                        "format": "uri",
+                        "type": "string"
+                      },
+                      "id": {
+                        "type": "string"
+                      },
+                      "installed": {
+                        "type": "boolean"
+                      },
+                      "installs": {
+                        "maximum": 9007199254740991,
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "repository": {
+                        "format": "uri",
+                        "type": "string"
+                      },
+                      "skill_id": {
+                        "type": "string"
+                      },
+                      "source": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "skill_id",
+                      "name",
+                      "source",
+                      "installs",
+                      "homepage",
+                      "repository",
+                      "installed"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Skill Market candidates"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestError"
+                }
+              }
+            },
+            "description": "Bad request"
+          },
+          "502": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SkillMarketUpstreamError"
+                }
+              }
+            },
+            "description": "Upstream service failure"
+          }
+        },
+        "summary": "Search the Skill Market",
+        "x-codeSamples": [
+          {
+            "lang": "js",
+            "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.skill.market2.search({\n  ...\n})"
           }
         ]
       }
@@ -89095,6 +90198,13 @@
                           "managed": {
                             "type": "boolean"
                           },
+                          "market_hash": {
+                            "pattern": "^[a-f0-9]{64}$",
+                            "type": "string"
+                          },
+                          "market_id": {
+                            "type": "string"
+                          },
                           "metadata": {
                             "additionalProperties": {
                               "type": "string"
@@ -89194,6 +90304,7 @@
                           "source_type": {
                             "enum": [
                               "builtin",
+                              "managed_market",
                               "managed_git",
                               "config_path",
                               "config_url",
@@ -89724,6 +90835,13 @@
                           "managed": {
                             "type": "boolean"
                           },
+                          "market_hash": {
+                            "pattern": "^[a-f0-9]{64}$",
+                            "type": "string"
+                          },
+                          "market_id": {
+                            "type": "string"
+                          },
                           "metadata": {
                             "additionalProperties": {
                               "type": "string"
@@ -89823,6 +90941,7 @@
                           "source_type": {
                             "enum": [
                               "builtin",
+                              "managed_market",
                               "managed_git",
                               "config_path",
                               "config_url",
@@ -90057,7 +91176,8 @@
                     "enum": [
                       "path",
                       "url",
-                      "git"
+                      "git",
+                      "market"
                     ],
                     "type": "string"
                   },

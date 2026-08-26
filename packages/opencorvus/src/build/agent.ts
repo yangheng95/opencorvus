@@ -779,8 +779,23 @@ export namespace BuildAgent {
       const cleanupOwner = beginBuildObservationCleanup({ observationID, taskID: task.id, gitDir: observationGitDir })
       const cleanupActivation = cleanupOwner.activation
       if (!cleanupActivation) throw new Error(`Build observation cleanup ${observationID} has no physical activation`)
-      const cleanupRenewal = setInterval(() => {
-        renewBuildObservationCleanupActivation(observationID, cleanupActivation)
+      const cleanupRenewal: ReturnType<typeof setInterval> = setInterval(() => {
+        // The settle transaction ends this lease as part of writing its
+        // receipt, so a tick can land after the lease is already over. Renewal
+        // throws on a lost fence, and this is a timer callback: an unguarded
+        // throw here is an unhandled exception, not a caught one.
+        try {
+          renewBuildObservationCleanupActivation(observationID, cleanupActivation)
+        } catch (error) {
+          // Either this build's own settlement already ended the lease, or
+          // another owner took it while this build is still running. The
+          // second case has no later fence to surface it, so say so.
+          log.warn("build observation cleanup lease renewal ended", {
+            observationID,
+            error: error instanceof Error ? error.message : String(error),
+          })
+          clearInterval(cleanupRenewal)
+        }
       }, 40_000)
       cleanupRenewal.unref()
       using _cleanupActivation = { [Symbol.dispose]() { clearInterval(cleanupRenewal) } }
@@ -1005,6 +1020,9 @@ export namespace BuildAgent {
           diffs,
           observedArtifactLocators: provenance.observedArtifactLocators,
           sourceArtifactLocators: provenance.sourceArtifactLocators,
+          // The retained receipt this publication writes is terminal for the
+          // cleanup, so it ends this build's own activation with it.
+          cleanupActivation,
         },
         observationErrors,
       }

@@ -11,14 +11,18 @@ export namespace SessionInitializer {
       modelID: z.string(),
       providerID: z.string(),
       messageID: Identifier.schema("message"),
+      /** Caller-owned durable facts merged onto the input Message (never part
+       *  of the public route schema). */
+      extra: z.record(z.string(), z.any()).optional(),
     }),
     async (input) => {
-      await SessionPrompt.command({
+      return SessionPrompt.command({
         sessionID: input.sessionID,
         messageID: input.messageID,
         model: input.providerID + "/" + input.modelID,
         command: Command.Default.INIT,
         arguments: "",
+        extra: input.extra,
       })
     },
   )

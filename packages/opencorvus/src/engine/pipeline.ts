@@ -28,7 +28,7 @@ import {
   type TaskProcessBindingPayload,
 } from "./task-execution-capsule-binding"
 import type { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
-import { SessionTable } from "@/session/session.sql"
+import { Session } from "@/session"
 import { ProjectMemory } from "@/memory/project-memory"
 import { acceptTaskRootIngressInTransaction, DEFAULT_TASK_ROOT_INGRESS_POLICY } from "./task-root-fact-store"
 import { appendTaskOpenedInTransaction } from "./task-lifecycle"
@@ -51,7 +51,7 @@ type ChannelBindingInput = z.infer<typeof CreateTaskInput>["channelBinding"]
 
 export function persistTask(input: {
   taskID: string
-  sessionID: string
+  rootSession: Session.Info
   now: number
   title: string
   request: string
@@ -88,22 +88,25 @@ export function persistTask(input: {
   const summary = "Task started"
   const source = "pipeline.active"
   return Database.transaction((db) => {
-    const rootSession = db.select().from(SessionTable).where(eq(SessionTable.id, input.sessionID)).get()
-    if (!rootSession || rootSession.project_id !== input.projectID) {
+    if (input.rootSession.projectID !== input.projectID) {
       throw new Error(`Task ${input.taskID} root Session conflicts with its creation Project`)
     }
+    // The root Session and the Task aggregate commit in this one transaction:
+    // an interrupted Task request can never leave a visible ownerless root
+    // Session behind, and the Session events publish only after this commit.
+    Session.persistPreparedNextInTransaction(db, input.rootSession)
     assertTaskProcessBindingCreation({
       payload: input.executionCapsuleBinding,
       taskID: input.taskID,
       projectID: input.projectID,
-      rootDirectory: rootSession.directory,
+      rootDirectory: input.rootSession.directory,
       packageRevisionSHA256: input.packageRevision.packageDigest,
       timeCreated: input.now,
     })
     insertEngineTask(db, {
       taskID: input.taskID,
       projectID: input.projectID,
-      sessionID: input.sessionID,
+      sessionID: input.rootSession.id,
       requestID: input.requestID,
       source: input.source ?? "api",
       productPillar: input.productPillar,
@@ -120,7 +123,7 @@ export function persistTask(input: {
         occurrenceKind: "task_create",
         occurrenceID: input.taskID,
         projectID: input.projectID,
-        sessionID: input.sessionID,
+        sessionID: input.rootSession.id,
         taskID: input.taskID,
         surface: "task.create",
         timeCreated: input.now,
@@ -157,7 +160,7 @@ export function persistTask(input: {
     appendTaskOpenedInTransaction({
       db,
       taskID: input.taskID,
-      sessionID: input.sessionID,
+      sessionID: input.rootSession.id,
       now: input.now,
       source: "engine.pipeline",
     })

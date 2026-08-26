@@ -6,6 +6,7 @@ import { PrimaryAssistantRegistry } from "../../src/agent/primary-assistant-regi
 import { Config } from "../../src/config/config"
 import { EngineConfig } from "../../src/engine/config"
 import { Identifier } from "../../src/id/id"
+import { DefaultLLMActivityPolicy } from "../../src/llm/activity"
 import { Instance } from "../../src/project/instance"
 import type { Provider } from "../../src/provider/provider"
 import { Session } from "../../src/session"
@@ -42,7 +43,7 @@ afterEach(async () => {
 })
 
 describe("SessionProcessor semantic LLM activity retry", () => {
-  test("removes an abandoned tool-input draft before the recovered attempt is persisted", async () => {
+  test("persists one recovered answer after the observed idle, network, idle sequence", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
@@ -81,17 +82,42 @@ describe("SessionProcessor semantic LLM activity retry", () => {
           ...EngineConfig.defaults,
           activity: { ...EngineConfig.defaults.activity, session_llm_idle_ms: 250 },
         })
+        const backoffSpy = spyOn(DefaultLLMActivityPolicy, "backoffMs").mockReturnValue(0)
         let attempts = 0
         const streamSpy = spyOn(LLM, "stream").mockImplementation(async (streamInput) => {
           attempts += 1
           if (attempts === 1) {
             const fullStream = (async function* () {
+              yield { type: "start" }
+              yield { type: "tool-input-start", id: "call_abandoned", toolName: "write" }
+              while (!streamInput.abort.aborted) {
+                yield { type: "tool-input-delta", id: "call_abandoned", delta: "" }
+              }
+            })()
+            return {
+              fullStream: abortableIterable(fullStream, streamInput.abort),
+            } as Awaited<ReturnType<typeof LLM.stream>>
+          }
+          if (attempts === 2) {
+            return {
+              fullStream: (async function* () {
                 yield { type: "start" }
-                yield { type: "tool-input-start", id: "call_abandoned", toolName: "write" }
-                while (!streamInput.abort.aborted) {
-                  yield { type: "tool-input-delta", id: "call_abandoned", delta: "" }
-                }
-              })()
+                yield { type: "text-start", id: "network-draft" }
+                yield { type: "text-delta", id: "network-draft", text: "Abandoned before network failure." }
+                throw new Error("Cannot connect to API: The socket connection was closed unexpectedly")
+              })(),
+            } as Awaited<ReturnType<typeof LLM.stream>>
+          }
+          if (attempts === 3) {
+            const fullStream = (async function* () {
+              yield { type: "start" }
+              yield { type: "text-start", id: "second-idle-draft" }
+              yield { type: "text-delta", id: "second-idle-draft", text: "Abandoned before a second idle." }
+              while (!streamInput.abort.aborted) {
+                await new Promise((resolve) => setTimeout(resolve, 25))
+                yield { type: "start" }
+              }
+            })()
             return {
               fullStream: abortableIterable(fullStream, streamInput.abort),
             } as Awaited<ReturnType<typeof LLM.stream>>
@@ -100,17 +126,17 @@ describe("SessionProcessor semantic LLM activity retry", () => {
             fullStream: (async function* () {
               yield { type: "start" }
               yield { type: "text-start", id: "recovered" }
-              yield { type: "text-delta", id: "recovered", text: "Recovered after semantic idle." }
+              yield { type: "text-delta", id: "recovered", text: "Recovered after repeated transient stalls." }
               yield { type: "text-end", id: "recovered" }
               yield {
                 type: "finish-step",
                 finishReason: "stop",
-                usage: { inputTokens: 1, outputTokens: 5, totalTokens: 6 },
+                usage: { inputTokens: 1, outputTokens: 6, totalTokens: 7 },
               }
               yield {
                 type: "finish",
                 finishReason: "stop",
-                totalUsage: { inputTokens: 1, outputTokens: 5, totalTokens: 6 },
+                totalUsage: { inputTokens: 1, outputTokens: 6, totalTokens: 7 },
               }
             })(),
           } as Awaited<ReturnType<typeof LLM.stream>>
@@ -130,6 +156,7 @@ describe("SessionProcessor semantic LLM activity retry", () => {
           })
         } finally {
           streamSpy.mockRestore()
+          backoffSpy.mockRestore()
           idleSpy.mockRestore()
         }
 
@@ -145,11 +172,11 @@ describe("SessionProcessor semantic LLM activity retry", () => {
                 : { type: part.type },
           ),
         }).toMatchObject({
-          attempts: 2,
-          info: { finish: "stop", tokens: { total: 6, input: 1, output: 5 } },
+          attempts: 4,
+          info: { finish: "stop", tokens: { total: 7, input: 1, output: 6 } },
           parts: [
-            { type: "text", text: "Recovered after semantic idle." },
-            { type: "step-finish", reason: "stop", tokens: { total: 6, input: 1, output: 5 } },
+            { type: "text", text: "Recovered after repeated transient stalls." },
+            { type: "step-finish", reason: "stop", tokens: { total: 7, input: 1, output: 6 } },
           ],
         })
       },

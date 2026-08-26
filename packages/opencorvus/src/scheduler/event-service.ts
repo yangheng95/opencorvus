@@ -1,7 +1,7 @@
 import { Bus } from "@/bus"
 import { Instance } from "@/project/instance"
 import { createInstanceState } from "@/project/instance-state"
-import { Database, and, eq, sql } from "@/storage/db"
+import { Database, and, eq, inArray, sql } from "@/storage/db"
 import { Log } from "@/util/log"
 import { Session } from "@/session"
 import { MessageTable, SessionTable } from "@/session/session.sql"
@@ -13,7 +13,7 @@ import { isDeepStrictEqual } from "node:util"
 import { EventJobDefinitionTombstoneTable, EventJobFireReceiptTable, EventJobFireTable, EventJobTable, EventOccurrenceTable, type EventJobFireCausationEntry } from "./event.sql"
 import { BusPublicationOutboxTable } from "@/bus/bus.sql"
 import { projectEventFireInTransaction, projectEventJobInTransaction, type EventJobFireRow, type EventJobRow } from "./event-projection"
-import { acquireControlLease, currentControlLeaseInTransaction, renewControlLease } from "@/engine/control-lease"
+import { acquireControlLeaseInTransaction, currentControlLeaseInTransaction, releaseControlLeaseInTransaction, renewControlLease } from "@/engine/control-lease"
 import { RuntimeExecutionAdmissionClosedError, RuntimeExecutionSettlement } from "@/runtime/execution-settlement"
 import { Project } from "@/project/project"
 import { runWithInitializedIndependentProject } from "@/project/independent-project-owner"
@@ -82,6 +82,18 @@ type AfterEventFireClaimHook = (input: {
 export namespace EventService {
   const log = Log.create({ service: "event-service" })
   const FIRE_LEASE_MS = 30_000
+  /**
+   * A recovery timer floor. A row whose retry time has already passed while a
+   * lease is still live would otherwise re-enter claim every millisecond until
+   * that lease expires, which is a hot loop rather than a wait.
+   */
+  const FIRE_RECOVERY_MIN_DELAY_MS = 250
+  /**
+   * How often a queued fire re-checks a head that is live in another runtime.
+   * The head's own settlement wakes only its runtime, so this poll is what
+   * hands the queue over here; the head's full lease is the crash bound.
+   */
+  const FIRE_RUNNING_HEAD_POLL_MS = 2_500
   const FIRE_LEASE_RENEW_MS = 5_000
   const FIRE_RETRY_BASE_MS = 1_000
   const FIRE_RETRY_MAX_MS = 60_000
@@ -643,35 +655,46 @@ export namespace EventService {
     } finally {
       clearInterval(renewTimer)
       // Every nonterminal claim exit retains a same-identity recovery owner.
-      // Terminal rows make this a no-op; retry_wait and deferred/lost claims
-      // retain their existing lease as the next attempt's durable schedule.
+      // Terminal rows make this a no-op. A retry_wait receipt now ends its own
+      // lease, so its recovery schedule is the receipt's `retry_at`; a
+      // deferred or lost claim still rides the current owner's lease.
       scheduleLeaseRecovery(claimed.id)
     }
   }
 
+  /**
+   * Take the fire owner for the exact fire that is still at the head of its
+   * job's queue.
+   *
+   * Head-of-queue validation and lease acquisition share one write
+   * transaction. Split apart, another process can settle or supersede the fire
+   * between the two, and this claim then holds a lease over a fire it never
+   * validated.
+   */
   function claimFire(fireID: string, ownerID: string): EventJobFire | undefined {
     const now = Date.now()
-    const candidate = Database.use((db) => {
+    return Database.immediateTransaction((db) => {
       const candidate = db.select().from(EventJobFireTable).where(eq(EventJobFireTable.id, fireID)).get()
       if (!candidate) return undefined
       const projected = projectEventFireInTransaction(db, candidate, now)
-      const projectedCandidate = projectEventFireInTransaction(db, candidate, now)
+      if (projected.status !== "pending") return undefined
       const head = db.select().from(EventJobFireTable).orderBy(EventJobFireTable.time_created, EventJobFireTable.id).all()
-        .map((row) => projectEventFireInTransaction(db, row, now)).find((row) => row.event_job_id === projectedCandidate.event_job_id && ["pending", "running", "retry_wait"].includes(row.status))
-      return head?.id === fireID && projected.status === "pending" ? projected : undefined
+        .map((row) => projectEventFireInTransaction(db, row, now)).find((row) => row.event_job_id === projected.event_job_id && ["pending", "running", "retry_wait"].includes(row.status))
+      if (head?.id !== fireID) return undefined
+      const acquired = acquireControlLeaseInTransaction(db, {
+        target: "event_fire",
+        targetID: fireID,
+        ownerOccurrenceID: ownerID,
+        now,
+        leaseMilliseconds: FIRE_LEASE_MS,
+      })
+      if (!acquired.acquired) return undefined
+      // Re-project inside the same transaction. `attempt` and `time_started`
+      // are derived from the lease rows, so a projection taken before the
+      // acquire under-counts this very attempt — and `attempt` is the retry
+      // backoff exponent.
+      return projectEventFireInTransaction(db, candidate, now)
     })
-    if (!candidate) return undefined
-    const supersedeLeaseID = Database.use((db) => {
-      const lease = currentControlLeaseInTransaction(db, "event_fire", fireID)
-      if (!lease || lease.expires_at <= now) return undefined
-      const latest = db.select().from(EventJobFireReceiptTable).where(eq(EventJobFireReceiptTable.fire_id, fireID))
-        .orderBy(sql`${EventJobFireReceiptTable.time_created} DESC`, sql`${EventJobFireReceiptTable.id} DESC`).get()
-      return latest?.outcome === "retry_wait" && latest.time_created >= lease.time_activated && (latest.retry_at ?? 0) <= now
-        ? lease.id
-        : undefined
-    })
-    const acquired = acquireControlLease({ target: "event_fire", targetID: fireID, ownerOccurrenceID: ownerID, now, leaseMilliseconds: FIRE_LEASE_MS, supersedeLeaseID })
-    return acquired.acquired ? Database.use((db) => projectEventFireInTransaction(db, db.select().from(EventJobFireTable).where(eq(EventJobFireTable.id, fireID)).get()!, now)) : undefined
   }
 
   function enqueueNextFireForJob(jobID: string): void {
@@ -687,8 +710,37 @@ export namespace EventService {
       row = Database.use((db) => {
         const persisted = db.select().from(EventJobFireTable).where(eq(EventJobFireTable.id, fireID)).get()
         if (!persisted) return undefined
-        const fire = projectEventFireInTransaction(db, persisted, Date.now())
-        return { jobID: fire.event_job_id, status: fire.status, lease: fire.retry_at ?? fire.lease_until }
+        const now = Date.now()
+        const fire = projectEventFireInTransaction(db, persisted, now)
+        // The deadline belongs to whatever is actually deferring this fire.
+        // `retry_at` survives as a past value on every attempt after the
+        // first, so a running fire waits on its lease, a retry waits on its
+        // retry time — and a pending fire that is not the head of its job's
+        // queue waits on the HEAD's deadline, because nothing about the
+        // pending row itself will change until the head settles.
+        let deadline = fire.status === "running" ? fire.lease_until : (fire.retry_at ?? fire.lease_until)
+        if (fire.status === "pending" && deadline <= now) {
+          // Bounded to this fire's own job: projecting every fire of every
+          // job to find one head is a full-table scan on every scheduling.
+          const revisions = db.select({ id: EventJobTable.id }).from(EventJobTable)
+            .where(eq(EventJobTable.definition_id, fire.event_job_id)).all().map((row) => row.id)
+          const head = (revisions.length === 0 ? [] : db.select().from(EventJobFireTable)
+            .where(inArray(EventJobFireTable.event_job_revision_id, revisions))
+            .orderBy(EventJobFireTable.time_created, EventJobFireTable.id).all())
+            .map((row) => projectEventFireInTransaction(db, row, now))
+            .find((row) => ["pending", "running", "retry_wait"].includes(row.status))
+          if (head && head.id !== fire.id) {
+            // A retry head's deadline is exact. A running head normally
+            // settles well before its lease expires and nothing else wakes
+            // this runtime when it does, so waiting the whole lease is only
+            // right when its owner crashed — poll it instead.
+            deadline =
+              head.status === "running"
+                ? Math.min(head.lease_until, now + FIRE_RUNNING_HEAD_POLL_MS)
+                : (head.retry_at ?? head.lease_until)
+          }
+        }
+        return { jobID: fire.event_job_id, status: fire.status, lease: deadline }
       })
     } catch (error) {
       log.warn("event fire recovery metadata read failed", { fireID, error: errorMessage(error) })
@@ -710,7 +762,13 @@ export namespace EventService {
           scheduleRecoveryControlRetry(s, fireID)
         }
       },
-      Math.max(1, row.lease - Date.now() + 1),
+      // A row with no deadline of its own was refused by something else —
+      // usually a head-of-queue fire running in another runtime — and this
+      // timer is the only thing that will ask again. Re-asking immediately is
+      // a poll for the whole of that other attempt, so every refused claim
+      // backs off. The head-of-queue handoff inside this runtime does not come
+      // through here; `enqueueNextFireForJob` drives it directly.
+      Math.max(FIRE_RECOVERY_MIN_DELAY_MS, row.lease - Date.now() + 1),
     )
     s.recoveryTimers.set(fireID, timer)
   }
@@ -889,6 +947,7 @@ export namespace EventService {
       const lease = currentControlLeaseInTransaction(db, "event_fire", fire.id)
       if (!lease || lease.owner_occurrence_id !== ownerID || lease.expires_at <= now || fire.target_session_id !== sessionID) throw new Error(`Event fire ${fire.id} owner is no longer authoritative at success`)
       db.insert(EventJobFireReceiptTable).values({ id: Identifier.ascending("call"), fire_id: fire.id, outcome: "succeeded", disposition: null, message_id: messageID, retry_at: null, error: null, time_created: now }).run()
+      releaseControlLeaseInTransaction(db, { target: "event_fire", targetID: fire.id, leaseID: lease.id, ownerOccurrenceID: ownerID, now })
     })
     enqueueNextFireForJob(fire.event_job_id)
     log.info("event job fire settled", {
@@ -918,13 +977,14 @@ export namespace EventService {
       const lease = currentControlLeaseInTransaction(db, "event_fire", fire.id)
       if (!lease || lease.owner_occurrence_id !== ownerID || lease.expires_at <= now) return false
       db.insert(EventJobFireReceiptTable).values({ id: Identifier.ascending("call"), fire_id: fire.id, outcome: "disposition", disposition, message_id: null, retry_at: null, error, time_created: now }).run()
+      releaseControlLeaseInTransaction(db, { target: "event_fire", targetID: fire.id, leaseID: lease.id, ownerOccurrenceID: ownerID, now })
       return true
     })
     if (settled) enqueueNextFireForJob(fire.event_job_id)
   }
 
   function deferFire(fire: EventJobFire, ownerID: string, error: unknown): void {
-    log.info("event fire deferred until its immutable lease expires", { fireID: fire.id, ownerID, error: errorMessage(error) })
+    log.info("event fire deferred to its current owner", { fireID: fire.id, ownerID, error: errorMessage(error) })
   }
 
   function scheduleRetry(fire: EventJobFire, job: EventJob | undefined, ownerID: string, error: unknown): void {
@@ -935,6 +995,9 @@ export namespace EventService {
       const lease = currentControlLeaseInTransaction(db, "event_fire", fire.id)
       if (!lease || lease.owner_occurrence_id !== ownerID || lease.expires_at <= now) return false
       db.insert(EventJobFireReceiptTable).values({ id: Identifier.ascending("call"), fire_id: fire.id, outcome: "retry_wait", disposition: null, message_id: null, retry_at: retryAt, error: message, time_created: now }).run()
+      // The receipt owns the retry time. Holding the lease past it would make
+      // the lease duration the retry period instead.
+      releaseControlLeaseInTransaction(db, { target: "event_fire", targetID: fire.id, leaseID: lease.id, ownerOccurrenceID: ownerID, now })
       return true
     })
     if (settled) scheduleLeaseRecovery(fire.id)

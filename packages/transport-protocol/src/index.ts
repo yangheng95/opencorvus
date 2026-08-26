@@ -868,7 +868,17 @@ export const PROJECT_DIRECTORY_BYPASS_PATHS = [
  * global reader with project-owned writers, so their global members are listed
  * above and in `GLOBAL_MIXED_ROUTER_ROUTES` one route at a time.
  */
-export const PROJECT_DIRECTORY_BYPASS_PREFIXES = ["/global/", "/auth/", "/ui/", "/log/", "/mailbox/"] as const
+export const PROJECT_DIRECTORY_BYPASS_PREFIXES = [
+  "/global/",
+  "/auth/",
+  "/ui/",
+  "/log/",
+  "/mailbox/",
+  // A lifecycle occurrence is state of the process itself. Its whole point is
+  // to be readable while the process is shutting down, which is exactly when
+  // a project bootstrap can be refused.
+  "/lifecycle/",
+] as const
 
 /**
  * Global routes that live on a router whose other routes are project-owned.

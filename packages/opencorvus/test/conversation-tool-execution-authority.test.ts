@@ -31,12 +31,7 @@ describe("conversation Tool execution authority", () => {
     await Instance.provide({
       directory: project.path,
       fn: async () => {
-        const taskSession = await Session.create({ kind: "root", title: "Task authority bootstrap root" })
-        const workerSession = await Session.create({
-          kind: "assistant",
-          title: "Task authority bootstrap worker",
-          parentID: taskSession.id,
-        })
+        const taskSession = Session.prepareRootNext({ kind: "root", directory: Instance.directory, title: "Task authority bootstrap root" })
         const taskID = Identifier.ascending("task")
         const packageRevision = {
           scope: "built_in" as const,
@@ -49,7 +44,7 @@ describe("conversation Tool execution authority", () => {
         const now = Date.now()
         persistTask({
           taskID,
-          sessionID: taskSession.id,
+          rootSession: taskSession,
           now,
           title: "Task authority bootstrap",
           request: "Materialize the exact Task-owned worker input",
@@ -65,6 +60,11 @@ describe("conversation Tool execution authority", () => {
             packageRevisionSHA256: packageRevision.packageDigest,
             timeCreated: now,
           }),
+        })
+        const workerSession = await Session.create({
+          kind: "assistant",
+          title: "Task authority bootstrap worker",
+          parentID: taskSession.id,
         })
         const prompt = {
           sessionID: workerSession.id,

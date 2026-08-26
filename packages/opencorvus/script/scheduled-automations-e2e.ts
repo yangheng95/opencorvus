@@ -335,6 +335,7 @@ try {
     findings.push("pause/resume did not converge")
 
   const busyPrompt = post(`/session/${session.id}/message`, {
+    messageID: `msg_busy_${Date.now().toString(36)}${Math.random().toString(36).slice(2, 10)}`,
     model: { providerID, modelID },
     agent: "chat",
     parts: [{ type: "text", text: "SCHEDULED_E2E_BUSY_HOLD" }],

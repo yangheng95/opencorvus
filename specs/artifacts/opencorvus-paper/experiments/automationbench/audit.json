@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "lead":{"benchmark":"AutomationBench","cases":100,"model":"openai/gpt-5.6-luna","system":"OpenCorvus Mission Base","baseline_percent":8.07,"mission_percent":34.0,"percentage_point_lift":25.93,"relative_lift":4.21,"evidence_class":"website-display-lead"},
+  "verified":["typed constants exist","derived arithmetic is internally consistent","focused constant projection test passes"],
+  "missing":[
+    {"field":"benchmark_version","impact":"cannot identify the evaluated task population","closure":"immutable benchmark release/version authority"},
+    {"field":"case_data","impact":"cannot inspect or rerun the 100 cases","closure":"licensed case IDs and bodies plus split identity"},
+    {"field":"protocol","impact":"cannot reconstruct workspace, tool, timeout, isolation or success rules","closure":"versioned case-level protocol"},
+    {"field":"evaluator","impact":"strict pass cannot be independently recomputed","closure":"evaluator implementation, rubric and adjudication"},
+    {"field":"per_case_results","impact":"aggregate 34% cannot be audited","closure":"baseline and Mission result for every case"},
+    {"field":"environment_and_config","impact":"model/provider and OpenCorvus execution cannot be reproduced","closure":"commit/package revision, model revision, parameters and non-secret config"},
+    {"field":"raw_logs_and_artifacts","impact":"failures and provenance cannot be traced","closure":"run logs and immutable Artifact locators"},
+    {"field":"repeated_runs","impact":"run-to-run variance is unknown","closure":"predeclared repeats and random seeds"},
+    {"field":"statistics","impact":"uncertainty and significance are unknown","closure":"confidence intervals, effect size and hypothesis test"}
+  ],
+  "allowed_conclusion":"The current website source displays a user-corrected 100-case strict-pass comparison of 8.07% and 34.00%, and its derived arithmetic is internally consistent.",
+  "forbidden_conclusions":["OpenCorvus reproducibly achieves publication-grade 34% on a named AutomationBench version.","OpenCorvus significantly outperforms the baseline.","The 100-case result ranks against official held-out references that use different samples."],
+  "generic_adapter_note":"packages/inspect-benchmark can exercise arbitrary JSON/JSONL through Task APIs, but cannot reconstruct AutomationBench without authoritative data and scorer."
+}

@@ -1,4 +1,5 @@
 import z from "zod"
+import { Config } from "@/config/config"
 import { Buffer } from "node:buffer"
 import { randomBytes } from "node:crypto"
 import { Tool } from "./tool"
@@ -1059,26 +1060,33 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
           projectDirectory: capabilityProjectDirectory,
           productPillar: rightSidebarConversationExperience(callerSession) === "work" ? "work" : "code",
         })
+        // The title and model overlay are resolved BEFORE the Session exists
+        // and commit in its insert, so a Mission Session is never published
+        // carrying the base model with its real one still unwritten.
+        const callerModel = await resolveConfiguredModelRef({ sessionID: callerSession.id })
+        const intendedModel = `${callerModel.providerID}/${callerModel.modelID}`
+        const intendedOverlay = Config.Overlay.parse({ model: intendedModel, prompt_profile: null })
         const missionSession = await ensureMissionSession({
           missionID,
           defaultCwd: callerSession.directory,
           productPillar: rightSidebarConversationExperience(callerSession) === "work" ? "work" : "code",
           heldExpertSquadIDs,
+          initialTitle: params.title,
+          initialConfigOverlay: intendedOverlay,
         })
-        if (params.title) {
-          await Session.setTitle({
+        // A Session that already existed keeps its own facts until this
+        // request's intent differs from them.
+        const storedMetadata = (missionSession.metadata ?? {}) as Record<string, unknown>
+        const storedOverlay = (storedMetadata.configOverlay ?? {}) as Record<string, unknown>
+        if (storedOverlay.model !== intendedModel) {
+          await Session.mergeConfigOverlay({
             sessionID: missionSession.id,
-            title: params.title,
+            patch: { model: intendedModel, prompt_profile: null },
           })
         }
-        const callerModel = await resolveConfiguredModelRef({ sessionID: callerSession.id })
-        await Session.mergeConfigOverlay({
-          sessionID: missionSession.id,
-          patch: {
-            model: `${callerModel.providerID}/${callerModel.modelID}`,
-            prompt_profile: null,
-          },
-        })
+        if (params.title && missionSession.title !== params.title) {
+          await Session.setTitle({ sessionID: missionSession.id, title: params.title })
+        }
         const attachedMissionSession = await attachMissionCaller({
           missionSessionID: missionSession.id,
           callerSession,

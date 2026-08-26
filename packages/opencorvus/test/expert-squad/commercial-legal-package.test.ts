@@ -306,15 +306,16 @@ describe("Commercial Legal Expert Squad", () => {
       directory: project.path,
       fn: async () => {
         const loaded = await ExpertSquadRegistry.loadSourcePackage(packageRoot)
-        const session = await Session.create({
+        const session = Session.prepareRootNext({
           kind: "root",
+          directory: Instance.directory,
           title: "Commercial Legal typed Application Binary Interface",
         })
         const taskID = Identifier.ascending("task")
         const started = Date.now()
         persistTask({
           taskID,
-          sessionID: session.id,
+          rootSession: session,
           now: started,
           title: "Commercial Legal typed Application Binary Interface",
           request: "Publish a typed commercial legal evidence chain",

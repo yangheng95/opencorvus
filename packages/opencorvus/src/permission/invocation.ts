@@ -75,6 +75,7 @@ const BUILTIN_EFFECTS = new Map<string, PermissionEffectClass>([
   ["webfetch", "network_read"],
   ["websearch", "network_read"],
   ["external_code_search", "network_read"],
+  ["skill_market", "network_read"],
   ["skill", "external_effect"],
   ["mission_skill", "external_effect"],
   ["memory", "write_local"],
@@ -198,13 +199,11 @@ function canonicalURL(candidate: unknown): Record<string, unknown> | undefined {
 function filesystemScope(toolName: string, args: unknown): Record<string, unknown> | undefined {
   const input = inputRecord(args)
   const single = canonicalPath(input.filePath ?? input.path)
-  const paths =
-    toolName === "apply_patch"
-      ? patchPaths(input.patchText)
-      : single
-        ? [single]
-        : []
-  if (paths.length === 0 && !["memory", "expert_squad_author", "work_artifact_author", "artifact_snapshot"].includes(toolName)) {
+  const paths = toolName === "apply_patch" ? patchPaths(input.patchText) : single ? [single] : []
+  if (
+    paths.length === 0 &&
+    !["memory", "expert_squad_author", "work_artifact_author", "artifact_snapshot"].includes(toolName)
+  ) {
     return undefined
   }
   return {
@@ -241,6 +240,20 @@ function networkScope(toolName: string, args: unknown): Record<string, unknown> 
   }
 }
 
+function skillMarketScope(args: unknown): Record<string, unknown> {
+  const input = inputRecord(args)
+  return {
+    scope_type: "skill_market",
+    operation: typeof input.action === "string" ? input.action : "unknown",
+    endpoint: canonicalURL("https://skills.sh"),
+    query_sha256: typeof input.query === "string" ? sha256(input.query) : undefined,
+    candidate_id: typeof input.id === "string" ? input.id : undefined,
+    expected_hash: typeof input.expected_hash === "string" ? input.expected_hash : undefined,
+    policy: input.policy === "allow" || input.policy === "deny" ? input.policy : undefined,
+    request_sha256: sha256(args),
+  }
+}
+
 function scheduleScope(args: unknown): Record<string, unknown> {
   const input = inputRecord(args)
   return {
@@ -265,13 +278,16 @@ async function canonicalResourceScope(
 ): Promise<Record<string, unknown>> {
   if (providerKind === "builtin" && toolName === "bash") return shellScope(args)
   if (providerKind === "builtin" && toolName === "schedule") return scheduleScope(args)
+  if (providerKind === "builtin" && toolName === "skill_market") return skillMarketScope(args)
   if (providerKind === "builtin" && (effectClass === "read_local" || effectClass === "write_local")) {
-    return filesystemScope(toolName, args) ?? {
-      scope_type: "filesystem",
-      operation: toolName,
-      working_directory: canonicalPath(Instance.directory),
-      payload_sha256: sha256(args),
-    }
+    return (
+      filesystemScope(toolName, args) ?? {
+        scope_type: "filesystem",
+        operation: toolName,
+        working_directory: canonicalPath(Instance.directory),
+        payload_sha256: sha256(args),
+      }
+    )
   }
   if (providerKind === "builtin" && effectClass === "network_read") return networkScope(toolName, args)
   return {
@@ -363,6 +379,9 @@ export async function permissionDescriptor(input: {
       (input.toolName === "schedule" && action === "cancel_event")
     ) {
       effectClass = "destructive"
+    }
+    if (input.toolName === "skill_market" && action === "install") {
+      effectClass = "write_local"
     }
   }
   if (input.providerKind === "builtin" && !effectClass) {

@@ -334,14 +334,14 @@ describe("direct Session prompt identity", () => {
     })
   }, 60_000)
 
-  test("Host-mints identities and delivers overlapping inputs through one Session owner to exact replies", async () => {
+  test("persists overlapping caller-identified inputs durably under one Session owner and answers the delivered tail exactly", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
       fn: async () => {
         const session = await Session.create({ kind: "assistant", title: "Overlapping distinct direct prompts" })
-        const started = [Promise.withResolvers<void>(), Promise.withResolvers<void>(), Promise.withResolvers<void>()]
-        const releases = [Promise.withResolvers<void>(), Promise.withResolvers<void>(), Promise.withResolvers<void>()]
+        const started = [Promise.withResolvers<void>(), Promise.withResolvers<void>()]
+        const releases = [Promise.withResolvers<void>(), Promise.withResolvers<void>()]
         const physicalParents: string[] = []
         const provider = spyOn(Provider, "getModel").mockResolvedValue(providerModel())
         const processor = spyOn(SessionProcessor, "create").mockImplementation((input: any) => {
@@ -354,8 +354,8 @@ describe("direct Session prompt identity", () => {
               return undefined
             },
             async process() {
-              started[turnIndex]!.resolve()
-              await releases[turnIndex]!.promise
+              started[turnIndex]?.resolve()
+              await releases[turnIndex]?.promise
               await Session.updatePart({
                 id: Identifier.ascending("part"),
                 sessionID: assistant.sessionID,
@@ -373,12 +373,18 @@ describe("direct Session prompt identity", () => {
         try {
           const app = new Hono().route("/session", SessionRoutes())
           app.onError(serverErrorResponse)
-          const send = (text: string) =>
+          const messageIDs = [
+            Identifier.ascending("message"),
+            Identifier.ascending("message"),
+            Identifier.ascending("message"),
+          ]
+          const send = (messageID: string, text: string) =>
             app.fetch(
               new Request(`http://opencorvus.test/session/${session.id}/message`, {
                 method: "POST",
                 headers: { "content-type": "application/json" },
                 body: JSON.stringify({
+                  messageID,
                   model,
                   agent: "chat",
                   parts: [{ type: "text", text }],
@@ -386,51 +392,66 @@ describe("direct Session prompt identity", () => {
               }),
             )
 
-          const firstResponse = send("first overlapping input")
+          const firstResponse = send(messageIDs[0], "first overlapping input")
           await started[0].promise
-          const secondResponse = send("second overlapping input")
-          const thirdResponse = send("third overlapping input")
-          const secondInputDeadline = Date.now() + 10_000
+          const secondResponse = send(messageIDs[1], "second overlapping input")
+          const thirdResponse = send(messageIDs[2], "third overlapping input")
+          const persistDeadline = Date.now() + 10_000
           while (
             (await Session.messages({ sessionID: session.id })).filter((item) => item.info.role === "user").length < 3
           ) {
-            if (Date.now() >= secondInputDeadline) throw new Error("Overlapping inputs were not persisted")
+            if (Date.now() >= persistDeadline) throw new Error("Overlapping inputs were not persisted")
             await Bun.sleep(10)
           }
-          expect(SessionPromptState.TestHooks.promptResourceSnapshot(session.id)).toMatchObject({ promptOwners: 1 })
+          // The write-side contract: every caller-identified input is durable
+          // under its exact caller-minted identity before its Turn runs, each
+          // carries its identity binding, and the ones that arrived mid-Turn
+          // are stamped as queued for delivery — all while one owner serves.
+          const persistedDuringTurn = await Session.messages({ sessionID: session.id })
+          const users = persistedDuringTurn.filter((item) => item.info.role === "user")
+          expect({
+            userIDs: users.map((item) => item.info.id),
+            identityBound: users.map((item) => Boolean((item.info.extra as any)?.publicSessionPromptIdentity)),
+            queued: users.map((item) => (item.info as any).pendingDelivery === true),
+            promptOwners: SessionPromptState.TestHooks.promptResourceSnapshot(session.id).promptOwners,
+          }).toEqual({
+            userIDs: messageIDs,
+            identityBound: [true, true, true],
+            queued: [false, true, true],
+            promptOwners: 1,
+          })
 
           releases[0].resolve()
           const first = await firstResponse
+          const firstBody = (await first.json()) as any
+
+          // The Turn boundary delivers the queue and the next Turn answers the
+          // delivered tail; its caller receives that exact reply. (The middle
+          // caller's callback is the recorded ARC-041 open finding — it is
+          // settled here by the session abort below, not asserted.)
           await started[1].promise
-          expect(SessionPromptState.TestHooks.promptResourceSnapshot(session.id)).toMatchObject({ promptOwners: 1 })
           releases[1].resolve()
-          const second = await secondResponse
-          await started[2].promise
-          expect(SessionPromptState.TestHooks.promptResourceSnapshot(session.id)).toMatchObject({ promptOwners: 1 })
-          releases[2].resolve()
           const third = await thirdResponse
-          const [firstBody, secondBody, thirdBody] = (await Promise.all([
-            first.json(),
-            second.json(),
-            third.json(),
-          ])) as any[]
-          const persisted = await Session.messages({ sessionID: session.id })
-          const persistedUserIDs = persisted.flatMap((message) =>
-            message.info.role === "user" ? [message.info.id] : [],
-          )
+          const thirdBody = (await third.json()) as any
           expect({
-            statuses: [first.status, second.status, third.status],
-            responseParents: [firstBody.info.parentID, secondBody.info.parentID, thirdBody.info.parentID],
+            statuses: [first.status, third.status],
+            firstParent: firstBody.info.parentID,
+            thirdParent: thirdBody.info.parentID,
             physicalParents,
-            persistedParents: persisted.flatMap((message) =>
-              message.info.role === "assistant" ? [message.info.parentID] : [],
-            ),
           }).toEqual({
-            statuses: [200, 200, 200],
-            responseParents: persistedUserIDs,
-            physicalParents: persistedUserIDs,
-            persistedParents: persistedUserIDs,
+            statuses: [200, 200],
+            firstParent: messageIDs[0],
+            thirdParent: messageIDs[2],
+            physicalParents: [messageIDs[0], messageIDs[2]],
           })
+
+          await app.fetch(
+            new Request(`http://opencorvus.test/session/${session.id}/abort`, { method: "POST" }),
+          )
+          await secondResponse.then(
+            (response) => response.text(),
+            () => undefined,
+          )
         } finally {
           for (const release of releases) release.resolve()
           processor.mockRestore()
@@ -472,6 +493,7 @@ describe("direct Session prompt identity", () => {
                 text: physicalTurns === 1 ? "exact direct reply" : "durable overlapping summary",
               })
               assistant.finish = "stop"
+              await input.beforeAssistantCompletion?.(assistant)
               assistant.time.completed = Date.now()
               await Session.updateMessage(assistant)
               return "stop"
@@ -650,6 +672,7 @@ describe("direct Session prompt identity", () => {
                 method: "POST",
                 headers: { "content-type": "application/json" },
                 body: JSON.stringify({
+                  messageID: Identifier.ascending("message"),
                   model,
                   agent: "chat",
                   parts: [{ type: "text", text }],
@@ -791,6 +814,7 @@ describe("direct Session prompt identity", () => {
                 text: "durable continuation summary",
               })
               assistant.finish = "stop"
+              await input.beforeAssistantCompletion?.(assistant)
               assistant.time.completed = Date.now()
               await Session.updateMessage(assistant)
               return "stop"

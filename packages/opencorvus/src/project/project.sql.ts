@@ -32,7 +32,7 @@ export const ProjectMaintenanceFenceTable = sqliteTable("project_maintenance_fen
     .references(() => ProjectTable.id, { onDelete: "cascade" }),
   project_generation: text().notNull(),
   operation_id: text().notNull(),
-  kind: text({ enum: ["delete", "identity_convergence"] }).notNull(),
+  kind: text({ enum: ["delete", "identity_convergence", "promotion", "promotion_commit"] }).notNull(),
   owner_occurrence_id: text().notNull(),
   owner_pid: integer().notNull(),
   owner_process_instance_id: text().notNull(),

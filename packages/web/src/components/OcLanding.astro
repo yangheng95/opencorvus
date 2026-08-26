@@ -2,12 +2,17 @@
 import OcLayout from "./OcLayout.astro"
 import OcHeroBackdrop from "./OcHeroBackdrop.astro"
 import OcDemoVideo from "./OcDemoVideo.astro"
+import OcAutomationBench from "./OcAutomationBench.astro"
+import OcMissionCase from "./OcMissionCase.astro"
 import { landingCopy } from "../content/landing-copy"
-import { platformFacts } from "../content/platform-facts"
 import { publicPath, type PublicLocale } from "../content/public-market"
 import config from "../../config.mjs"
 import type { FeaturedSquad } from "../lib/landing-featured-squads"
-import { featuredComposition, otherCompositions } from "../lib/landing-compositions"
+import {
+  featuredComposition,
+  otherCompositions,
+  selfPaperComposition,
+} from "../lib/landing-compositions"
 import { readDownloadManifest, formatBytes } from "../lib/landing-downloads"
 
 type Props = {
@@ -35,10 +40,10 @@ const downloads = readDownloadManifest()
 // The case study and the shorter chains beside it. Counts come from the generated catalog facts;
 // see lib/landing-compositions.ts.
 const caseStudy = featuredComposition(locale)
+const paperStudy = selfPaperComposition(locale)
+const detailedCases = [caseStudy, paperStudy]
 const combinations = otherCompositions(locale)
 
-// Only generated facts are allowed to be the largest thing on the page. See platform-facts.ts.
-const featurableSquadTotal = platformFacts.squadTotal
 ---
 
 <OcLayout
@@ -208,7 +213,10 @@ const featurableSquadTotal = platformFacts.squadTotal
   */}
   <OcDemoVideo {locale} />
 
-  {/* -------------------------------------------------- 3 · long-horizon */}
+  {/* ----------------------------------------------------- 3 · benchmark */}
+  <OcAutomationBench copy={copy.benchmark} />
+
+  {/* -------------------------------------------------- 4 · long-horizon */}
   {/*
     Named failures before named mechanisms. Borrowed from LongHorizon-Harness, which opens on
     compounding errors, context rot, task-state loss and unverified premises rather than on its
@@ -238,7 +246,7 @@ const featurableSquadTotal = platformFacts.squadTotal
     </div>
   </section>
 
-  {/* ---------------------------------------------------- 4 · composition */}
+  {/* ---------------------------------------------------- 5 · composition */}
   {/*
     The case study is the argument for combining squads, so it is shown as a real chain rather than
     described: every stage names the squad that owns it, how many roles that squad declares, and
@@ -251,52 +259,15 @@ const featurableSquadTotal = platformFacts.squadTotal
       <h2 class="oc-text-h1 oc-cjk-spacing oc-section-title oc-reveal">{copy.compose.title}</h2>
       <p class="oc-text-body oc-text-description oc-section-lead oc-reveal">{copy.compose.lead}</p>
 
-      <div class="oc-card-raised oc-case oc-reveal">
-        <div class="oc-case-head">
-          <div class="oc-case-head-copy">
-            <p class="oc-eyebrow">{copy.compose.caseLabel}</p>
-            <h3 class="oc-text-title oc-cjk-spacing">{caseStudy.title}</h3>
-            <p class="oc-text-caption oc-text-description">{caseStudy.lead}</p>
-          </div>
-          <p class="oc-case-total">
-            <span class="oc-case-total-value">{caseStudy.squadCount}</span>
-            <span class="oc-text-xs oc-text-description">{copy.compose.squadsUnit}</span>
-            <span class="oc-case-total-value">{caseStudy.roleCount}</span>
-            <span class="oc-text-xs oc-text-description">{copy.compose.rolesUnit}</span>
-          </p>
-        </div>
-
-        <ol class="oc-case-chain">
-          {
-            caseStudy.steps.map((step) => (
-              <li class="oc-case-step">
-                <p class="oc-case-stage">{step.stage}</p>
-                <p class="oc-case-squad">
-                  <a class="oc-link" href={step.href}>
-                    {step.squadLabel}
-                  </a>
-                  <span class="oc-text-xs oc-text-description">
-                    {step.agentCount} {copy.compose.rolesUnit}
-                  </span>
-                </p>
-                <p class="oc-text-caption oc-text-description oc-case-handoff">{step.handoff}</p>
-              </li>
-            ))
-          }
-        </ol>
-
-        {
-          caseStudy.extras && (
-            <p class="oc-text-caption oc-text-secondary oc-case-extras">
-              {caseStudy.extras.lead}{" "}
-              <span class="oc-case-extras-total">
-                {caseStudy.extras.squadCount} {copy.compose.squadsUnit} · {caseStudy.extras.roleCount}{" "}
-                {copy.compose.rolesUnit}
-              </span>
-            </p>
-          )
-        }
-      </div>
+      {
+        detailedCases.map((study, caseIndex) => (
+          <OcMissionCase
+            {study}
+            caseLabel={caseIndex === 0 ? copy.compose.caseLabel : copy.compose.paperCaseLabel}
+            copy={copy.compose}
+          />
+        ))
+      }
 
       <p class="oc-eyebrow oc-combo-label oc-reveal">{copy.compose.moreLabel}</p>
       <ul class="oc-combo-grid">
@@ -329,7 +300,7 @@ const featurableSquadTotal = platformFacts.squadTotal
     </div>
   </section>
 
-  {/* ------------------------------------------------------ 5 · evolution */}
+  {/* ------------------------------------------------------ 6 · evolution */}
   <section class="oc-section-tight oc-anchor" id="evolve">
     <div class="oc-container">
       <p class="oc-eyebrow oc-reveal">{copy.evolve.eyebrow}</p>
@@ -359,7 +330,7 @@ const featurableSquadTotal = platformFacts.squadTotal
     </div>
   </section>
 
-  {/* ------------------------------------------------------------- 6 · why */}
+  {/* ------------------------------------------------------------- 7 · why */}
   <section class="oc-section oc-anchor" id="why">
     <div class="oc-container">
       <p class="oc-eyebrow oc-reveal">{copy.why.eyebrow}</p>
@@ -444,7 +415,7 @@ const featurableSquadTotal = platformFacts.squadTotal
     </div>
   </section>
 
-  {/* --------------------------------------------------------- 7 · squads */}
+  {/* --------------------------------------------------------- 8 · squads */}
   {/*
     A funnel, not a second market. Six static cards and a link out. The filtering, search and
     segment browsing all live on /market/ — duplicating them here would mean two implementations
@@ -484,7 +455,7 @@ const featurableSquadTotal = platformFacts.squadTotal
     </div>
   </section>
 
-  {/* ---------------------------------------------------------- 8 · start */}
+  {/* ---------------------------------------------------------- 9 · start */}
   <section class="oc-section oc-anchor" id="start">
     <div class="oc-container">
       <p class="oc-eyebrow oc-reveal">{copy.start.eyebrow}</p>
@@ -547,7 +518,7 @@ const featurableSquadTotal = platformFacts.squadTotal
     </div>
   </section>
 
-  {/* ------------------------------------------------------------ 9 · faq */}
+  {/* ----------------------------------------------------------- 10 · faq */}
   {/*
     Native <details>. An accordion is the one place a section can hold six answers without costing
     six answers' worth of scroll, and the disclosure widget browsers already ship is keyboard
@@ -577,7 +548,7 @@ const featurableSquadTotal = platformFacts.squadTotal
     </div>
   </section>
 
-  {/* ---------------------------------------------------------- 10 · join */}
+  {/* ---------------------------------------------------------- 11 · join */}
   <section class="oc-section-tight oc-anchor" id="join">
     <div class="oc-container">
       <div class="oc-cta-block oc-join oc-reveal">
@@ -940,124 +911,7 @@ const featurableSquadTotal = platformFacts.squadTotal
     color: var(--oc-color-text-primary);
   }
 
-  /* ------------------------------------------------------ composition */
-
-  .oc-case {
-    margin-top: var(--oc-space-8);
-    padding: var(--oc-space-6);
-  }
-
-  .oc-case-head {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: var(--oc-space-5);
-    padding-bottom: var(--oc-space-5);
-    border-bottom: 1px solid var(--oc-color-border-subtle);
-  }
-
-  .oc-case-head-copy {
-    display: flex;
-    flex-direction: column;
-    gap: var(--oc-space-2);
-    max-width: 46ch;
-  }
-
-  .oc-case-total {
-    display: flex;
-    align-items: baseline;
-    gap: var(--oc-space-2);
-    margin: 0;
-  }
-
-  .oc-case-total-value {
-    font-family: var(--oc-font-display);
-    font-size: 30px;
-    font-weight: 500;
-    letter-spacing: -0.02em;
-    line-height: 1;
-    color: var(--oc-color-text-primary);
-  }
-
-  /* The chain reads top to bottom on narrow screens and as a stage grid from three columns up.
-     `counter` numbering rather than list markers, so the stage name stays the loudest thing. */
-  .oc-case-chain {
-    list-style: none;
-    counter-reset: oc-case;
-    margin: var(--oc-space-5) 0 0;
-    padding: 0;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--oc-space-5);
-  }
-
-  /* Two rows of three rather than what auto-fit does with six items, which is four and a ragged
-     two. The handoff column is prose and needs the width. */
-  @media (min-width: 640px) {
-    .oc-case-chain {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .oc-case-chain {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-  }
-
-  .oc-case-step {
-    counter-increment: oc-case;
-    display: flex;
-    flex-direction: column;
-    gap: var(--oc-space-2);
-    padding-top: var(--oc-space-4);
-    border-top: 1px solid var(--oc-color-border-subtle);
-  }
-
-  .oc-case-stage {
-    margin: 0;
-    font-family: var(--oc-font-display);
-    font-size: 13px;
-    font-weight: 500;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--oc-color-text-description);
-  }
-
-  .oc-case-stage::before {
-    content: counter(oc-case, decimal-leading-zero) " · ";
-    color: var(--oc-color-text-primary);
-  }
-
-  /* The role count sits on its own line in every stage. Letting it wrap only where it did not fit
-     made three of the six stages look different from the other three for no reason a reader could
-     see. */
-  .oc-case-squad {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--oc-space-1);
-    margin: 0;
-    font-size: 16px;
-    line-height: 1.35;
-  }
-
-  .oc-case-handoff {
-    margin: 0;
-  }
-
-  .oc-case-extras {
-    margin: var(--oc-space-6) 0 0;
-    padding-top: var(--oc-space-5);
-    border-top: 1px solid var(--oc-color-border-subtle);
-  }
-
-  .oc-case-extras-total {
-    color: var(--oc-color-text-primary);
-    white-space: nowrap;
-  }
-
+  /* Detailed Mission visualization styles live beside their markup in OcMissionCase.astro. */
   .oc-combo-label {
     margin-top: var(--oc-space-8);
   }
@@ -1475,6 +1329,24 @@ const featurableSquadTotal = platformFacts.squadTotal
       revealTargets.forEach((element) => observer.observe(element))
     }
   }
+
+  /* ----------------------------------------------- Mission scale disclosure */
+
+  const reducedMissionMotion = window.matchMedia("(prefers-reduced-motion: reduce)")
+  document.querySelectorAll<HTMLDetailsElement>("[data-oc-mission-scale]").forEach((scale) => {
+    let burstTimer = 0
+    scale.addEventListener("toggle", () => {
+      window.clearTimeout(burstTimer)
+      delete scale.dataset.burst
+      if (!scale.open || reducedMissionMotion.matches) return
+      // Restarting on a new frame lets repeated opens replay one finite burst without leaving an
+      // ambient animation running around eighteen paragraphs of actual work.
+      requestAnimationFrame(() => {
+        scale.dataset.burst = "true"
+        burstTimer = window.setTimeout(() => delete scale.dataset.burst, 950)
+      })
+    })
+  })
 
   /* ------------------------------------------------------------- tab groups */
 

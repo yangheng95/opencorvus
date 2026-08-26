@@ -923,7 +923,7 @@ describe("Project directory integrity", () => {
         await SessionStatus.set(
           created.id,
           { type: "streaming" },
-          { publish: false, inputMessageID: input.id, promptGenerationOwner: owner },
+          { inputMessageID: input.id, promptGenerationOwner: owner },
         )
         return { created, owner }
       },

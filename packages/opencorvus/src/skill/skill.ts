@@ -808,44 +808,70 @@ export namespace Skill {
     }
   }
 
+  async function publicationRevision() {
+    const { SkillManager } = await import("./manager")
+    return SkillManager.prepareCatalogProjection()
+  }
+
+  async function withPublicationProjection<T>(project: (revision: string) => Promise<T>) {
+    const { SkillManager } = await import("./manager")
+    return SkillManager.withCatalogProjection(project)
+  }
+
   export const state = createInstanceState(
-    () =>
-      loadCatalogState({
-        directory: Instance.directory,
-        worktree: Instance.worktree,
-      }),
+    async () => {
+      const revision = await publicationRevision()
+      return {
+        ...(await loadCatalogState({
+          directory: Instance.directory,
+          worktree: Instance.worktree,
+        })),
+        publicationRevision: revision,
+      }
+    },
     undefined,
     "skill",
   )
 
+  async function catalogState() {
+    return withPublicationProjection(async (revision) => {
+      const current = await state()
+      if (current.publicationRevision === revision) return current
+      await state.reset()
+      return state()
+    })
+  }
+
   export async function get(name: string) {
-    return state().then((x) => x.skills[name])
+    return catalogState().then((x) => x.skills[name])
   }
 
   export async function all() {
-    return state().then((x) => Object.values(x.skills))
+    return catalogState().then((x) => Object.values(x.skills))
   }
 
   export async function globalSummaries(): Promise<{ skills: Summary[]; issues: Warning[] }> {
-    const snapshot = await loadCatalogState()
-    return {
-      skills: Object.values(snapshot.skills)
-        .sort((left, right) => left.name.localeCompare(right.name))
-        .map((skill) =>
-          Summary.parse({
-            name: skill.name,
-            description: skill.description,
-          }),
-        ),
-      issues: snapshot.warnings,
-    }
+    return withPublicationProjection(async () => {
+      const snapshot = await loadCatalogState()
+      return {
+        skills: Object.values(snapshot.skills)
+          .sort((left, right) => left.name.localeCompare(right.name))
+          .map((skill) =>
+            Summary.parse({
+              name: skill.name,
+              description: skill.description,
+            }),
+          ),
+        issues: snapshot.warnings,
+      }
+    })
   }
 
   export async function dirs() {
-    return state().then((x) => x.dirs)
+    return catalogState().then((x) => x.dirs)
   }
 
   export async function warnings() {
-    return state().then((x) => x.warnings)
+    return catalogState().then((x) => x.warnings)
   }
 }
