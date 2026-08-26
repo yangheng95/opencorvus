@@ -42,12 +42,27 @@ export class LocalCLIProvider implements STTProvider {
       // and splitting on whitespace afterwards tore any value containing a
       // space into several arguments — and the media path is a temporary
       // directory, which on Windows always contains one.
-      const parts = parseCommandTemplate(this.command!).map((argument) =>
-        argument
-          .replaceAll("{{MediaPath}}", mediaPath)
-          .replaceAll("{{OutputDir}}", outputDir)
-          .replaceAll("{{Language}}", options?.language ?? ""),
-      )
+      // A placeholder with no value is dropped together with the flag it
+      // belongs to. Substituting an empty string handed the CLI an empty
+      // argument for a flag that requires a value — one silent malformation
+      // traded for another — and leaving the literal token was no better.
+      const language = options?.language?.trim()
+      const templateArguments = parseCommandTemplate(this.command!)
+      const parts: string[] = []
+      for (let index = 0; index < templateArguments.length; index += 1) {
+        const argument = templateArguments[index]!
+        if (!language && argument.includes("{{Language}}")) {
+          // Drop the preceding flag this value belongs to, if there is one.
+          if (parts.length > 0 && parts[parts.length - 1]!.startsWith("-")) parts.pop()
+          continue
+        }
+        parts.push(
+          argument
+            .replaceAll("{{MediaPath}}", mediaPath)
+            .replaceAll("{{OutputDir}}", outputDir)
+            .replaceAll("{{Language}}", language ?? ""),
+        )
+      }
       const result = await runCommand(parts, outputDir, this.timeoutMs)
 
       if (result.timedOut) {
@@ -110,9 +125,11 @@ export function parseCommandTemplate(commandLine: string): string[] {
       continue
     }
     const next = commandLine[index + 1]
-    if (character === "\\" && quote !== "'" && (next === '"' || next === "'" || next === "\\")) {
-      // A backslash escapes only a quote or another backslash. Treating it as
-      // a general escape would eat the separators out of every Windows path.
+    if (character === "\\" && quote !== "'" && (next === '"' || next === "'")) {
+      // A backslash is special ONLY immediately before a quote. Consuming a
+      // doubled backslash as an escape ate the leading separator out of every
+      // UNC path (\\\\server\\share), which is a Windows path exactly as much as
+      // a drive path is.
       current += next
       started = true
       index += 1

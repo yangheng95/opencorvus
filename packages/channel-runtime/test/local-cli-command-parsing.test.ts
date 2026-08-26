@@ -39,6 +39,22 @@ describe("configured CLI commands are parsed as command lines", () => {
     expect(parseCommandTemplate('cli "" x')).toEqual(["cli", "", "x"])
   })
 
+  test("a UNC path keeps both of its leading separators", () => {
+    // A backslash is special only immediately before a quote; consuming a
+    // doubled backslash ate the leading separator out of every UNC path.
+    // The template below is literally: \\server\share\whisper.exe --model base
+    expect(parseCommandTemplate("\\\\server\\share\\whisper.exe --model base")).toEqual([
+      "\\\\server\\share\\whisper.exe",
+      "--model",
+      "base",
+    ])
+  })
+
+  test("an escaped quote is still an escape", () => {
+    // Literally: cli a\"b
+    expect(parseCommandTemplate('cli a\\"b')).toEqual(["cli", 'a"b'])
+  })
+
   test("an unterminated quote is refused instead of silently reinterpreted", () => {
     expect(() => parseCommandTemplate('cli "unterminated')).toThrow("unterminated")
   })
