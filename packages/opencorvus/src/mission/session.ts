@@ -409,6 +409,11 @@ async function ensureMissionSessionInner(input: {
   directory: string
   productPillar: ProductPillar
   heldExpertSquadIDs: MissionVisibleExpertSquadIDs
+  /** Committed in the Session insert, never patched in afterwards: a Mission
+   *  Session must carry its title and model overlay from its first durable
+   *  instant, or a death right after publication runs it on the base model. */
+  initialTitle?: string
+  initialConfigOverlay?: Record<string, unknown>
 }) {
   const missionID = input.missionID
   const session = Database.immediateTransaction((db) => {
@@ -435,9 +440,12 @@ async function ensureMissionSessionInner(input: {
     }
     return Session.persistPreparedNextInTransaction(db, Session.prepareRootNext({
       directory: input.directory,
-      title: MISSION_CONTROL_DEFAULT_TITLE,
+      title: input.initialTitle ?? MISSION_CONTROL_DEFAULT_TITLE,
       kind: "mission",
-      metadata: canonicalMissionMetadata(input),
+      metadata: {
+        ...canonicalMissionMetadata(input),
+        ...(input.initialConfigOverlay ? { configOverlay: input.initialConfigOverlay } : {}),
+      },
     }))
   })
   if (missionProductPillar(session) !== input.productPillar) {
@@ -453,6 +461,8 @@ export async function ensureMissionSession(input: {
   defaultCwd: string
   productPillar: ProductPillar
   heldExpertSquadIDs: MissionVisibleExpertSquadIDs
+  initialTitle?: string
+  initialConfigOverlay?: Record<string, unknown>
 }) {
   const missionID = MissionID.parse(input.missionID)
   const directory = normalizeDirectory(input.defaultCwd)
@@ -472,6 +482,8 @@ export async function ensureMissionSession(input: {
     directory,
     productPillar: input.productPillar,
     heldExpertSquadIDs: input.heldExpertSquadIDs,
+    initialTitle: input.initialTitle,
+    initialConfigOverlay: input.initialConfigOverlay,
   }).finally(() => locks.delete(lockKey))
   locks.set(lockKey, promise)
   return promise
