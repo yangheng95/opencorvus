@@ -43,6 +43,7 @@ import { formatErrorDetails } from "./diagnostics"
 import { AppLog } from "../utils/log"
 import { isSubagentActivityRecord } from "../utils/subagent-presentation"
 import { conversationEventOwner } from "./event-policy"
+import { conversationHistoryPath } from "./conversation-history-path"
 
 type EventReplay = {
   cursor: number
@@ -872,7 +873,6 @@ export function canLoadOlderConversationHistory(source: BoardSource | null = boa
   return (
     !!source &&
     sourceMatches(source, historySource) &&
-    source.kind === "task" &&
     historyState.hasMore &&
     historyState.oldestTimestamp !== null &&
     historyState.oldestOrderKey !== null &&
@@ -905,8 +905,7 @@ export function conversationCardContainsMessage(cardID: string, messageID: strin
 export async function loadOlderConversationHistory(
   source: BoardSource | null = boardStore.selectedSource,
 ): Promise<boolean> {
-  if (!source || source.kind !== "task") return false
-  const selectedTaskID = String(source.id || "")
+  if (!source) return false
   if (!canLoadOlderConversationHistory(source)) return false
   const directory = conversationSourceDirectory(source)
   const before = historyState.oldestTimestamp
@@ -921,7 +920,13 @@ export async function loadOlderConversationHistory(
   try {
     assertActiveHistory(source, epoch, controller.signal)
     const page = await apiJson(
-      `task/${encodeURIComponent(selectedTaskID)}/conversation/history?directory=${encodeURIComponent(directory)}&before=${encodeURIComponent(String(before))}&before_order_key=${encodeURIComponent(beforeOrderKey)}${beforeID ? `&before_id=${encodeURIComponent(beforeID)}` : ""}&limit=${encodeURIComponent(String(CONVERSATION_HISTORY_PAGE_LIMIT))}`,
+      conversationHistoryPath(source, {
+        directory,
+        before,
+        beforeOrderKey,
+        beforeID,
+        limit: CONVERSATION_HISTORY_PAGE_LIMIT,
+      }),
       { signal: controller.signal },
     )
     assertActiveHistory(source, epoch, controller.signal)
@@ -957,7 +962,7 @@ export async function loadOlderConversationHistory(
   } catch (error) {
     if (!(error instanceof DOMException && error.name === "AbortError")) {
       logConversationAsyncError("older history load failed", error, {
-        taskID: selectedTaskID,
+        ...(source.kind === "task" ? { taskID: source.id } : { sessionID: source.id }),
         source: "older-history",
       })
     }
