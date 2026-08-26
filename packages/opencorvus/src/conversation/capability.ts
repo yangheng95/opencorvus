@@ -52,6 +52,14 @@ function browserConnectionOwnerID(sessionID: string): string {
   return `conversation:${trimmed}:browser`
 }
 
+/** The builtin runtimes a Conversation can own. */
+type ConversationRuntimeKind = "computer" | "browser"
+
+/** The one spelling of a Conversation runtime owner's key. */
+function conversationConnectionOwnerKey(kind: ConversationRuntimeKind, sessionID: string): string {
+  return `${kind}:${sessionID}`
+}
+
 function conversationConnectionOwner(key: string, ownerID: string): MCP.ScopedConnectionOwner {
   const owners = conversationConnectionOwners()
   const current = owners.get(key)
@@ -62,11 +70,17 @@ function conversationConnectionOwner(key: string, ownerID: string): MCP.ScopedCo
 }
 
 function computerConnectionOwner(sessionID: string): MCP.ScopedConnectionOwner {
-  return conversationConnectionOwner(`computer:${sessionID}`, computerConnectionOwnerID(sessionID))
+  return conversationConnectionOwner(
+    conversationConnectionOwnerKey("computer", sessionID),
+    computerConnectionOwnerID(sessionID),
+  )
 }
 
 function browserConnectionOwner(sessionID: string): MCP.ScopedConnectionOwner {
-  return conversationConnectionOwner(`browser:${sessionID}`, browserConnectionOwnerID(sessionID))
+  return conversationConnectionOwner(
+    conversationConnectionOwnerKey("browser", sessionID),
+    browserConnectionOwnerID(sessionID),
+  )
 }
 
 type AssignmentSeed = {
@@ -344,11 +358,11 @@ export namespace ConversationCapability {
     return browserConnectionOwnerID(sessionID)
   }
 
-  async function settleRuntimeMcpOwners(sessionID: string, kinds: readonly ("computer" | "browser")[]): Promise<void> {
+  async function settleRuntimeMcpOwners(sessionID: string, kinds: readonly ConversationRuntimeKind[]): Promise<void> {
     const owners = conversationConnectionOwners()
     const results = await Promise.allSettled(
       kinds.flatMap((kind) => {
-        const key = `${kind}:${sessionID}`
+        const key = conversationConnectionOwnerKey(kind, sessionID)
         const owner = owners.get(key)
         if (!owner) return []
         owners.delete(key)

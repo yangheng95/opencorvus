@@ -437,17 +437,31 @@ export namespace McpAuth {
     expectedRevision: Revision,
   ): Promise<boolean> {
     let spent = false
-    await updateStore(
-      authKey,
-      (entry) => {
-        if (!entry || entry.oauthState !== oauthState) return entry
-        delete entry.oauthState
-        spent = true
-        return entry
-      },
-      expectedRevision,
-    )
+    try {
+      await updateStore(
+        authKey,
+        (entry) => {
+          if (!entry || entry.oauthState !== oauthState) return entry
+          delete entry.oauthState
+          spent = true
+          return entry
+        },
+        expectedRevision,
+      )
+    } catch (error) {
+      // A lease that was revoked or a credential that was removed between
+      // authorize and callback are both answers to the question this asks —
+      // "is this state still current?" — and the answer is no. Letting the
+      // store's raw revocation error escape made a stale flow a 500 from an
+      // UnknownError where a spent one is a typed 400, for the same fact.
+      if (!isLeaseRevokedError(error)) throw error
+      return false
+    }
     return spent
+  }
+
+  function isLeaseRevokedError(error: unknown): boolean {
+    return error instanceof Error && error.message.startsWith("MCP auth lease was revoked:")
   }
 
   /**

@@ -727,16 +727,35 @@ export namespace MCP {
    * The shared-connection projection enumerates whatever the server actually
    * exposes; an owned projection must enumerate the same thing, or moving a
    * server onto an owner would silently narrow the model's tool surface to
-   * whatever list the caller happened to hold.
+   * whatever list the caller happened to hold. Names are sanitized the same
+   * way too, so the same server yields the same tool identifiers either way.
+   *
+   * A server that will not connect contributes nothing and does not fail the
+   * caller's whole projection, which is how the shared path already behaves —
+   * one unavailable builtin must not cost a Session every other tool it has.
    */
   export async function scopedToolsForServer(input: Omit<ScopedToolInput, "toolName">): Promise<Record<string, Tool>> {
-    const names = await withScopedClient(
-      input,
-      async (_client, _timeout, connection): Promise<string[]> =>
-        connection.tools.filter((item) => !isToolVisibilityAppOnly(item)).map((item) => item.name),
-    )
+    const sanitize = (value: string) => value.replace(/[^a-zA-Z0-9_-]/g, "_")
+    let names: string[]
+    try {
+      names = await withScopedClient(
+        input,
+        async (_client, _timeout, connection): Promise<string[]> =>
+          connection.tools.filter((item) => !isToolVisibilityAppOnly(item)).map((item) => item.name),
+      )
+    } catch (error) {
+      log.error("scoped MCP server did not list its tools", {
+        key: input.key,
+        connectionIdentity: input.connectionIdentity,
+        error: error instanceof Error ? error.message : String(error),
+      })
+      return {}
+    }
     const entries = await Promise.all(
-      names.map(async (toolName) => [`${input.key}_${toolName}`, await scopedTool({ ...input, toolName })] as const),
+      names.map(
+        async (toolName) =>
+          [`${sanitize(input.key)}_${sanitize(toolName)}`, await scopedTool({ ...input, toolName })] as const,
+      ),
     )
     return Object.fromEntries(entries)
   }
@@ -3890,16 +3909,6 @@ export namespace MCP {
   }
 
   /**
-   * Rebuild a flow owner from the durable credential entry.
-   *
-   * The flow's facts — its OAuth state, its PKCE verifier and its lease
-   * generation — are all durable; only the in-process owner record is not. A
-   * process restart between authorize and callback therefore used to reject a
-   * completion whose every durable fact matched. The rebuilt owner carries the
-   * durable lease generation, so all of its writes stay exactly as fenced as
-   * the original flow's.
-   */
-  /**
    * One project's durable owner of OAuth flows.
    *
    * A callback can arrive with no caller waiting for it in this process: the
@@ -3961,6 +3970,16 @@ export namespace MCP {
     if (pendingOAuthFlows.get(authKey) === localOwner) pendingOAuthFlows.delete(authKey)
   }
 
+  /**
+   * Rebuild a flow owner from the durable credential entry.
+   *
+   * The flow's facts — its OAuth state, its PKCE verifier and its lease
+   * generation — are all durable; only the in-process owner record is not. A
+   * process restart between authorize and callback therefore used to reject a
+   * completion whose every durable fact matched. The rebuilt owner carries the
+   * durable lease generation, so all of its writes stay exactly as fenced as
+   * the original flow's.
+   */
   async function rebuildPendingOAuthFlowFromDurableFacts(authKey: string): Promise<PendingOAuthFlow | undefined> {
     const entry = await McpAuth.get(authKey)
     if (!entry?.oauthState || !entry.codeVerifier || !entry.revision) return undefined
@@ -4080,9 +4099,13 @@ export namespace MCP {
       // Call finishAuth on the transport
       await transport.finishAuth(authorizationCode)
 
-      // Clear the code verifier after successful auth
+      // Clear the code verifier after successful auth. The OAuth state is not
+      // cleared here: admission already spent it, and clearing it again is a
+      // second owner of one fact that can only fail. A competing flow minting
+      // a new lease during the exchange makes this throw "lease was revoked"
+      // AFTER the tokens are in hand, reporting a completed authentication as
+      // a failure.
       await McpAuth.clearCodeVerifier(authKey, authRevision)
-      await McpAuth.clearOAuthState(authKey, authRevision)
 
       // Re-add the MCP server to establish connection
       if (pendingOAuthFlows.get(authKey) === owner) pendingOAuthFlows.delete(authKey)

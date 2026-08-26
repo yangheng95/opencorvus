@@ -62,6 +62,23 @@ describe("an OAuth state is spendable exactly once", () => {
     })
   }, 60_000)
 
+  test("a revoked lease answers 'not current' instead of escaping as an untyped failure", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const { authKey, revision } = await durableFlow()
+
+        // Credentials revoked between authorize and callback. The question the
+        // spend asks is "is this state still current?", and the answer is no —
+        // which is a typed refusal, not an unknown server failure.
+        await McpAuth.invalidate(authKey)
+
+        expect(await McpAuth.spendOAuthState(authKey, "single-use-state", revision)).toBe(false)
+      },
+    })
+  }, 60_000)
+
   test("a state that does not match the stored flow is refused and leaves the flow intact", async () => {
     await using project = await memoryProject()
     await Instance.provide({
