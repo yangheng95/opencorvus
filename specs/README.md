@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest AutomationBench Sol Mission/Base completion run: [`2026-08-26-automationbench-sol-base-completion.md`](records/2026-08/2026-08-26-automationbench-sol-base-completion.md).
+
 Latest Sol Base restricted-shell authority repair: [`2026-08-24-sol-base-restricted-shell-authority-repair.md`](records/2026-08/2026-08-24-sol-base-restricted-shell-authority-repair.md).
 
 Latest long-running Tool durable-progress convergence and fresh Mission rerun: [`2026-08-23-tool-pause-durable-progress-convergence.md`](records/2026-08/2026-08-23-tool-pause-durable-progress-convergence.md).

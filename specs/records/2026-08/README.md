@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-26-automationbench-sol-base-completion.md](2026-08-26-automationbench-sol-base-completion.md) resumes the authoritative Sol Mission/Base 50-case AutomationBench primary round from zero eligible slots, preserving prior invalid evidence and requiring exact source/environment identity, timed monitoring, final verification, visual dashboard review, and independent delivery review.
+
 - [2026-08-25-workbuddybench-luna-mission-base-code.md](2026-08-25-workbuddybench-luna-mission-base-code.md) defines the official WorkBuddy Bench Code Luna Mission/Base experiment, mandatory answer-free runtime Skill projection/load evidence, Harbor adapter boundary, immutable evidence contract, and Docker-gated chain proof.
 
 - [2026-08-24-sol-base-restricted-shell-authority-repair.md](2026-08-24-sol-base-restricted-shell-authority-repair.md) repairs the impossible fresh 1–50 restricted-shell authority contract, preserves historical and extended digests, and requires prelaunch identity proof before resuming the Sol Mission/Base round.
