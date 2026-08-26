@@ -143,7 +143,7 @@ function generationStore(packageRoot: string): DurablePublicationStore {
 }
 
 function generationSubject(packageRoot: string): string {
-  return `sdk-generation:${packageRoot}`
+  return `sdk-generation:${path.resolve(packageRoot)}`
 }
 
 type GenerationArtifact = {
@@ -168,18 +168,23 @@ type GenerationArtifact = {
  * and restores every target from that backup, so a build always starts from
  * one whole generation.
  */
-async function convergeUnsettledGeneration(store: DurablePublicationStore, packageRoot: string): Promise<boolean> {
+async function convergeUnsettledGeneration(store: DurablePublicationStore, packageRoot: string): Promise<void> {
   // A journal that cannot be read is not an empty journal. Swallowing the
   // fault here would report "nothing to recover" and let the caller delete the
   // backup — which is the exact hole this transaction exists to close.
   // `listOpen` already answers [] for a journal that does not exist yet.
   const open = await store.listOpen(GENERATION_KIND)
-  if (open.length === 0) return false
+  if (open.length === 0) return
   for (const occurrence of open) {
     const restored = RestorePayload.safeParse(occurrence.intent.payload)
     if (!restored.success) {
       throw new Error(
         `SDK generation journal ${occurrence.intent.occurrenceID} carries an unreadable intent; resolve it by hand`,
+      )
+    }
+    if (path.resolve(restored.data.packageRoot) !== path.resolve(packageRoot)) {
+      throw new Error(
+        `SDK generation journal ${occurrence.intent.occurrenceID} belongs to ${restored.data.packageRoot}, not ${packageRoot}; resolve it by hand`,
       )
     }
     for (const target of restored.data.targets) {
@@ -198,7 +203,6 @@ async function convergeUnsettledGeneration(store: DurablePublicationStore, packa
     })
     await store.removeSettled(GENERATION_KIND, occurrence.intent.occurrenceID).catch(() => undefined)
   }
-  return true
 }
 
 export async function replaceGeneratedArtifactsAfterSuccessfulBuild(input: {

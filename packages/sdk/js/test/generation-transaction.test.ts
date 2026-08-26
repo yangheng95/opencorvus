@@ -150,6 +150,53 @@ describe("a generation publishes all of its outputs or none", () => {
     })
   }, 60_000)
 
+  test("a journal naming a different tree is refused instead of rolled back from", async () => {
+    const root = await packageRoot()
+    const backupRoot = path.join(root, ".staging-backup")
+    await mkdir(backupRoot, { recursive: true })
+    await writeFile(path.join(backupRoot, "first.txt"), "another-tree-gen-1")
+    await writeFile(path.join(root, "first.txt"), "this-tree-content")
+
+    // A journal that arrived with a copied checkout: it names a tree that is
+    // not this one, so its backups describe a different generation entirely.
+    const journal = path.join(root, ".generation-journal", "sdk-generation", "foreign-generation")
+    await mkdir(journal, { recursive: true })
+    await writeFile(
+      path.join(journal, "intent.json"),
+      JSON.stringify({
+        schemaVersion: 1,
+        occurrenceID: "foreign-generation",
+        kind: "sdk-generation",
+        subject: `sdk-generation:${root}`,
+        payload: {
+          packageRoot: path.join(root, "..", "some-other-checkout"),
+          targets: [
+            {
+              targetRelative: "first.txt",
+              backupRelative: path.join(".staging-backup", "first.txt"),
+              kind: "file",
+              existed: true,
+            },
+          ],
+        },
+        timeCreated: Date.now(),
+      }),
+    )
+
+    await expect(
+      replaceGeneratedArtifactsAfterSuccessfulBuild({
+        packageRoot: root,
+        stagingRelative: ".staging",
+        artifacts,
+        build: (staging) => build(staging, "gen-x-first", "gen-x-second"),
+      }),
+    ).rejects.toThrow("belongs to")
+
+    // The build stopped before staging anything, so this tree is exactly as it
+    // was rather than wearing another tree's generation.
+    expect(await readFile(path.join(root, "first.txt"), "utf8")).toBe("this-tree-content")
+  }, 60_000)
+
   test("convergence leaves a target the abandoned generation never named untouched", async () => {
     const root = await packageRoot()
     const backupRoot = path.join(root, ".staging-backup")
