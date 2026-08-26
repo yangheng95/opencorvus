@@ -246,6 +246,8 @@ export type ChatCapabilitySettings = {
       license?: string
       location: string
       managed: boolean
+      market_hash?: string
+      market_id?: string
       metadata?: {
         [key: string]: string
       }
@@ -263,7 +265,7 @@ export type ChatCapabilitySettings = {
         level: "low" | "medium" | "high"
       }
       source?: string
-      source_type: "builtin" | "managed_git" | "config_path" | "config_url" | "external" | "unknown"
+      source_type: "builtin" | "managed_market" | "managed_git" | "config_path" | "config_url" | "external" | "unknown"
       trust: "builtin" | "official" | "curated" | "community" | "local" | "external" | "unknown"
       writable: boolean
     }>
@@ -5695,6 +5697,8 @@ export type WorkCapabilitySettings = {
       license?: string
       location: string
       managed: boolean
+      market_hash?: string
+      market_id?: string
       metadata?: {
         [key: string]: string
       }
@@ -5712,7 +5716,7 @@ export type WorkCapabilitySettings = {
         level: "low" | "medium" | "high"
       }
       source?: string
-      source_type: "builtin" | "managed_git" | "config_path" | "config_url" | "external" | "unknown"
+      source_type: "builtin" | "managed_market" | "managed_git" | "config_path" | "config_url" | "external" | "unknown"
       trust: "builtin" | "official" | "curated" | "community" | "local" | "external" | "unknown"
       writable: boolean
     }>
@@ -18079,21 +18083,146 @@ export type GlobalSkillMarketResponses = {
    * Skill market entries
    */
   200: Array<{
+    api_origin: "https://skills.sh"
     description: string
-    homepage: string
-    id: string
-    install_kind: "git" | "url" | "manual"
-    installed: boolean
-    name: string
-    notes?: string
-    provider: string
-    recommended_policy: "allow" | "deny"
-    source?: string
-    trust: "official" | "curated" | "community"
+    exact_install: true
+    homepage: "https://skills.sh"
+    id: "skills-sh"
+    name: "skills.sh"
+    provider: "skills.sh"
+    recommended_policy: "deny"
+    searchable: true
+    trust: "curated"
   }>
 }
 
 export type GlobalSkillMarketResponse = GlobalSkillMarketResponses[keyof GlobalSkillMarketResponses]
+
+export type GlobalSkillMarketDetailData = {
+  body?: never
+  path?: never
+  query: {
+    id: string
+  }
+  url: "/global/skill/market/detail"
+}
+
+export type GlobalSkillMarketDetailErrors = {
+  /**
+   * Bad request
+   */
+  400: BadRequestError
+}
+
+export type GlobalSkillMarketDetailError = GlobalSkillMarketDetailErrors[keyof GlobalSkillMarketDetailErrors]
+
+export type GlobalSkillMarketDetailResponses = {
+  /**
+   * Validated Skill Market candidate detail
+   */
+  200: {
+    description: string
+    files: Array<{
+      path: string
+      size: number
+    }>
+    hash: string
+    homepage: string
+    id: string
+    installed: boolean
+    name: string
+    recommended_policy: "allow" | "deny"
+    repository: string
+    risk: {
+      has_agents: boolean
+      has_references: boolean
+      has_scripts: boolean
+      has_templates: boolean
+      level: "low" | "medium" | "high"
+    }
+    skill_id: string
+    source: string
+    trust: "builtin" | "official" | "curated" | "community" | "local" | "external" | "unknown"
+    upstream_hash?: string
+  }
+}
+
+export type GlobalSkillMarketDetailResponse = GlobalSkillMarketDetailResponses[keyof GlobalSkillMarketDetailResponses]
+
+export type GlobalSkillMarketInstallData = {
+  body: {
+    expected_hash: string
+    id: string
+    policy?: "allow" | "deny"
+  }
+  path?: never
+  query?: never
+  url: "/global/skill/market/install"
+}
+
+export type GlobalSkillMarketInstallErrors = {
+  /**
+   * Bad request
+   */
+  400: BadRequestError
+}
+
+export type GlobalSkillMarketInstallError = GlobalSkillMarketInstallErrors[keyof GlobalSkillMarketInstallErrors]
+
+export type GlobalSkillMarketInstallResponses = {
+  /**
+   * Installed Skill Market candidate
+   */
+  200: {
+    available: "next_turn"
+    hash: string
+    id: string
+    name: string
+    path: string
+    policy: "allow" | "deny"
+    source: string
+  }
+}
+
+export type GlobalSkillMarketInstallResponse =
+  GlobalSkillMarketInstallResponses[keyof GlobalSkillMarketInstallResponses]
+
+export type GlobalSkillMarketSearchData = {
+  body?: never
+  path?: never
+  query: {
+    query: string
+    limit?: number
+  }
+  url: "/global/skill/market/search"
+}
+
+export type GlobalSkillMarketSearchErrors = {
+  /**
+   * Bad request
+   */
+  400: BadRequestError
+}
+
+export type GlobalSkillMarketSearchError = GlobalSkillMarketSearchErrors[keyof GlobalSkillMarketSearchErrors]
+
+export type GlobalSkillMarketSearchResponses = {
+  /**
+   * Skill Market candidates
+   */
+  200: Array<{
+    homepage: string
+    id: string
+    installed: boolean
+    installs: number
+    name: string
+    repository: string
+    skill_id: string
+    source: string
+  }>
+}
+
+export type GlobalSkillMarketSearchResponse = GlobalSkillMarketSearchResponses[keyof GlobalSkillMarketSearchResponses]
 
 export type TaskGlobalListData = {
   body?: never
@@ -25142,14 +25271,21 @@ export type SessionInitErrors = {
         name: "LogFileNotFoundError"
       }
   /**
-   * Mission execution and lifecycle are owned by the canonical Mission API
+   * Mission authority conflict, or the message identity is already bound to another public Session execution
    */
-  409: {
-    data: {
-      [key: string]: unknown
-    }
-    name: "MissionSessionAuthorityError"
-  }
+  409:
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "MissionSessionAuthorityError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "PublicSessionPromptIdentityConflictError"
+      }
 }
 
 export type SessionInitError = SessionInitErrors[keyof SessionInitErrors]
@@ -26513,6 +26649,8 @@ export type SkillInstalledResponses = {
     license?: string
     location: string
     managed: boolean
+    market_hash?: string
+    market_id?: string
     metadata?: {
       [key: string]: string
     }
@@ -26530,7 +26668,7 @@ export type SkillInstalledResponses = {
       level: "low" | "medium" | "high"
     }
     source?: string
-    source_type: "builtin" | "managed_git" | "config_path" | "config_url" | "external" | "unknown"
+    source_type: "builtin" | "managed_market" | "managed_git" | "config_path" | "config_url" | "external" | "unknown"
     trust: "builtin" | "official" | "curated" | "community" | "local" | "external" | "unknown"
     writable: boolean
   }>
@@ -26589,21 +26727,131 @@ export type SkillMarketResponses = {
    * Skill market entries
    */
   200: Array<{
+    api_origin: "https://skills.sh"
     description: string
-    homepage: string
-    id: string
-    install_kind: "git" | "url" | "manual"
-    installed: boolean
-    name: string
-    notes?: string
-    provider: string
-    recommended_policy: "allow" | "deny"
-    source?: string
-    trust: "official" | "curated" | "community"
+    exact_install: true
+    homepage: "https://skills.sh"
+    id: "skills-sh"
+    name: "skills.sh"
+    provider: "skills.sh"
+    recommended_policy: "deny"
+    searchable: true
+    trust: "curated"
   }>
 }
 
 export type SkillMarketResponse = SkillMarketResponses[keyof SkillMarketResponses]
+
+export type SkillMarketDetailData = {
+  body?: never
+  path?: never
+  query: {
+    /**
+     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
+     */
+    directory?: string
+    id: string
+  }
+  url: "/skill/market/detail"
+}
+
+export type SkillMarketDetailResponses = {
+  /**
+   * Validated Skill Market candidate detail
+   */
+  200: {
+    description: string
+    files: Array<{
+      path: string
+      size: number
+    }>
+    hash: string
+    homepage: string
+    id: string
+    installed: boolean
+    name: string
+    recommended_policy: "allow" | "deny"
+    repository: string
+    risk: {
+      has_agents: boolean
+      has_references: boolean
+      has_scripts: boolean
+      has_templates: boolean
+      level: "low" | "medium" | "high"
+    }
+    skill_id: string
+    source: string
+    trust: "builtin" | "official" | "curated" | "community" | "local" | "external" | "unknown"
+    upstream_hash?: string
+  }
+}
+
+export type SkillMarketDetailResponse = SkillMarketDetailResponses[keyof SkillMarketDetailResponses]
+
+export type SkillMarketInstallData = {
+  body: {
+    expected_hash: string
+    id: string
+    policy?: "allow" | "deny"
+  }
+  path?: never
+  query?: {
+    /**
+     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
+     */
+    directory?: string
+  }
+  url: "/skill/market/install"
+}
+
+export type SkillMarketInstallResponses = {
+  /**
+   * Installed Skill Market candidate
+   */
+  200: {
+    available: "next_turn"
+    hash: string
+    id: string
+    name: string
+    path: string
+    policy: "allow" | "deny"
+    source: string
+  }
+}
+
+export type SkillMarketInstallResponse = SkillMarketInstallResponses[keyof SkillMarketInstallResponses]
+
+export type SkillMarketSearchData = {
+  body?: never
+  path?: never
+  query: {
+    /**
+     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
+     */
+    directory?: string
+    query: string
+    limit?: number
+  }
+  url: "/skill/market/search"
+}
+
+export type SkillMarketSearchResponses = {
+  /**
+   * Skill Market candidates
+   */
+  200: Array<{
+    homepage: string
+    id: string
+    installed: boolean
+    installs: number
+    name: string
+    repository: string
+    skill_id: string
+    source: string
+  }>
+}
+
+export type SkillMarketSearchResponse = SkillMarketSearchResponses[keyof SkillMarketSearchResponses]
 
 export type SkillSetMountOverrideData = {
   body:
@@ -26718,6 +26966,8 @@ export type SkillSetMountOverrideResponses = {
       license?: string
       location: string
       managed: boolean
+      market_hash?: string
+      market_id?: string
       metadata?: {
         [key: string]: string
       }
@@ -26737,7 +26987,7 @@ export type SkillSetMountOverrideResponses = {
         level: "low" | "medium" | "high"
       }
       source?: string
-      source_type: "builtin" | "managed_git" | "config_path" | "config_url" | "external" | "unknown"
+      source_type: "builtin" | "managed_market" | "managed_git" | "config_path" | "config_url" | "external" | "unknown"
       trust: "builtin" | "official" | "curated" | "community" | "local" | "external" | "unknown"
       writable: boolean
     }>
@@ -26861,6 +27111,8 @@ export type SkillMountsResponses = {
       license?: string
       location: string
       managed: boolean
+      market_hash?: string
+      market_id?: string
       metadata?: {
         [key: string]: string
       }
@@ -26880,7 +27132,7 @@ export type SkillMountsResponses = {
         level: "low" | "medium" | "high"
       }
       source?: string
-      source_type: "builtin" | "managed_git" | "config_path" | "config_url" | "external" | "unknown"
+      source_type: "builtin" | "managed_market" | "managed_git" | "config_path" | "config_url" | "external" | "unknown"
       trust: "builtin" | "official" | "curated" | "community" | "local" | "external" | "unknown"
       writable: boolean
     }>
@@ -26929,7 +27181,7 @@ export type SkillPolicyResponse = SkillPolicyResponses[keyof SkillPolicyResponse
 
 export type SkillRemoveData = {
   body: {
-    kind?: "path" | "url" | "git"
+    kind?: "path" | "url" | "git" | "market"
     source: string
   }
   path?: never

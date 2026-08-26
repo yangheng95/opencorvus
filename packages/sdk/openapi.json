@@ -850,6 +850,13 @@
                     "managed": {
                       "type": "boolean"
                     },
+                    "market_hash": {
+                      "pattern": "^[a-f0-9]{64}$",
+                      "type": "string"
+                    },
+                    "market_id": {
+                      "type": "string"
+                    },
                     "metadata": {
                       "additionalProperties": {
                         "type": "string"
@@ -939,6 +946,7 @@
                     "source_type": {
                       "enum": [
                         "builtin",
+                        "managed_market",
                         "managed_git",
                         "config_path",
                         "config_url",
@@ -19134,6 +19142,13 @@
                     "managed": {
                       "type": "boolean"
                     },
+                    "market_hash": {
+                      "pattern": "^[a-f0-9]{64}$",
+                      "type": "string"
+                    },
+                    "market_id": {
+                      "type": "string"
+                    },
                     "metadata": {
                       "additionalProperties": {
                         "type": "string"
@@ -19223,6 +19238,7 @@
                     "source_type": {
                       "enum": [
                         "builtin",
+                        "managed_market",
                         "managed_git",
                         "config_path",
                         "config_url",
@@ -63254,7 +63270,7 @@
     },
     "/global/skill/market": {
       "get": {
-        "description": "List global Skill market entries without requiring an active project.",
+        "description": "List the single current Skill Market provider without requiring an active project.",
         "operationId": "global.skill.market",
         "responses": {
           "200": {
@@ -63262,53 +63278,45 @@
               "application/json": {
                 "schema": {
                   "items": {
+                    "additionalProperties": false,
                     "properties": {
+                      "api_origin": {
+                        "const": "https://skills.sh",
+                        "type": "string"
+                      },
                       "description": {
                         "type": "string"
                       },
+                      "exact_install": {
+                        "const": true,
+                        "type": "boolean"
+                      },
                       "homepage": {
-                        "format": "uri",
+                        "const": "https://skills.sh",
                         "type": "string"
                       },
                       "id": {
+                        "const": "skills-sh",
                         "type": "string"
-                      },
-                      "install_kind": {
-                        "enum": [
-                          "git",
-                          "url",
-                          "manual"
-                        ],
-                        "type": "string"
-                      },
-                      "installed": {
-                        "type": "boolean"
                       },
                       "name": {
-                        "type": "string"
-                      },
-                      "notes": {
+                        "const": "skills.sh",
                         "type": "string"
                       },
                       "provider": {
+                        "const": "skills.sh",
                         "type": "string"
                       },
                       "recommended_policy": {
-                        "enum": [
-                          "allow",
-                          "deny"
-                        ],
+                        "const": "deny",
                         "type": "string"
                       },
-                      "source": {
-                        "type": "string"
+                      "searchable": {
+                        "const": true,
+                        "type": "boolean"
                       },
                       "trust": {
-                        "enum": [
-                          "official",
-                          "curated",
-                          "community"
-                        ],
+                        "const": "curated",
                         "type": "string"
                       }
                     },
@@ -63318,10 +63326,11 @@
                       "provider",
                       "description",
                       "homepage",
-                      "install_kind",
+                      "api_origin",
+                      "searchable",
+                      "exact_install",
                       "trust",
-                      "recommended_policy",
-                      "installed"
+                      "recommended_policy"
                     ],
                     "type": "object"
                   },
@@ -63337,6 +63346,385 @@
           {
             "lang": "js",
             "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.global.skill.market({\n  ...\n})"
+          }
+        ]
+      }
+    },
+    "/global/skill/market/detail": {
+      "get": {
+        "description": "Download and validate one exact candidate bundle without installing it.",
+        "operationId": "global.skill.market.detail",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "minLength": 1,
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "description": {
+                      "type": "string"
+                    },
+                    "files": {
+                      "items": {
+                        "properties": {
+                          "path": {
+                            "type": "string"
+                          },
+                          "size": {
+                            "maximum": 9007199254740991,
+                            "minimum": 0,
+                            "type": "integer"
+                          }
+                        },
+                        "required": [
+                          "path",
+                          "size"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "hash": {
+                      "pattern": "^[a-f0-9]{64}$",
+                      "type": "string"
+                    },
+                    "homepage": {
+                      "format": "uri",
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "installed": {
+                      "type": "boolean"
+                    },
+                    "name": {
+                      "minLength": 1,
+                      "pattern": "^[^/\\\\\\r\\n]+$",
+                      "type": "string"
+                    },
+                    "recommended_policy": {
+                      "enum": [
+                        "allow",
+                        "deny"
+                      ],
+                      "type": "string"
+                    },
+                    "repository": {
+                      "format": "uri",
+                      "type": "string"
+                    },
+                    "risk": {
+                      "properties": {
+                        "has_agents": {
+                          "type": "boolean"
+                        },
+                        "has_references": {
+                          "type": "boolean"
+                        },
+                        "has_scripts": {
+                          "type": "boolean"
+                        },
+                        "has_templates": {
+                          "type": "boolean"
+                        },
+                        "level": {
+                          "enum": [
+                            "low",
+                            "medium",
+                            "high"
+                          ],
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "level",
+                        "has_scripts",
+                        "has_agents",
+                        "has_references",
+                        "has_templates"
+                      ],
+                      "type": "object"
+                    },
+                    "skill_id": {
+                      "type": "string"
+                    },
+                    "source": {
+                      "type": "string"
+                    },
+                    "trust": {
+                      "enum": [
+                        "builtin",
+                        "official",
+                        "curated",
+                        "community",
+                        "local",
+                        "external",
+                        "unknown"
+                      ],
+                      "type": "string"
+                    },
+                    "upstream_hash": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "skill_id",
+                    "name",
+                    "description",
+                    "source",
+                    "homepage",
+                    "repository",
+                    "hash",
+                    "files",
+                    "trust",
+                    "risk",
+                    "recommended_policy",
+                    "installed"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validated Skill Market candidate detail"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestError"
+                }
+              }
+            },
+            "description": "Bad request"
+          }
+        },
+        "summary": "Inspect a global Skill Market candidate",
+        "x-codeSamples": [
+          {
+            "lang": "js",
+            "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.global.skill.market2.detail({\n  ...\n})"
+          }
+        ]
+      }
+    },
+    "/global/skill/market/install": {
+      "post": {
+        "description": "Install exactly one candidate only when its current content matches the inspected digest.",
+        "operationId": "global.skill.market.install",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "expected_hash": {
+                    "pattern": "^[a-f0-9]{64}$",
+                    "type": "string"
+                  },
+                  "id": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "policy": {
+                    "enum": [
+                      "allow",
+                      "deny"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id",
+                  "expected_hash"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "available": {
+                      "const": "next_turn",
+                      "type": "string"
+                    },
+                    "hash": {
+                      "pattern": "^[a-f0-9]{64}$",
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "minLength": 1,
+                      "pattern": "^[^/\\\\\\r\\n]+$",
+                      "type": "string"
+                    },
+                    "path": {
+                      "type": "string"
+                    },
+                    "policy": {
+                      "enum": [
+                        "allow",
+                        "deny"
+                      ],
+                      "type": "string"
+                    },
+                    "source": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "name",
+                    "source",
+                    "path",
+                    "hash",
+                    "policy",
+                    "available"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Installed Skill Market candidate"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestError"
+                }
+              }
+            },
+            "description": "Bad request"
+          }
+        },
+        "summary": "Install an inspected global Skill Market candidate",
+        "x-codeSamples": [
+          {
+            "lang": "js",
+            "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.global.skill.market2.install({\n  ...\n})"
+          }
+        ]
+      }
+    },
+    "/global/skill/market/search": {
+      "get": {
+        "description": "Search exact Skill candidates and project live global installation status.",
+        "operationId": "global.skill.market.search",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "query",
+            "required": true,
+            "schema": {
+              "maxLength": 120,
+              "minLength": 2,
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "default": 10,
+              "maximum": 20,
+              "minimum": 1,
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "homepage": {
+                        "format": "uri",
+                        "type": "string"
+                      },
+                      "id": {
+                        "type": "string"
+                      },
+                      "installed": {
+                        "type": "boolean"
+                      },
+                      "installs": {
+                        "maximum": 9007199254740991,
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "repository": {
+                        "format": "uri",
+                        "type": "string"
+                      },
+                      "skill_id": {
+                        "type": "string"
+                      },
+                      "source": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "skill_id",
+                      "name",
+                      "source",
+                      "installs",
+                      "homepage",
+                      "repository",
+                      "installed"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Skill Market candidates"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestError"
+                }
+              }
+            },
+            "description": "Bad request"
+          }
+        },
+        "summary": "Search the global Skill Market",
+        "x-codeSamples": [
+          {
+            "lang": "js",
+            "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.global.skill.market2.search({\n  ...\n})"
           }
         ]
       }
@@ -84513,28 +84901,52 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "properties": {
-                    "data": {
-                      "additionalProperties": {},
-                      "propertyNames": {
-                        "type": "string"
+                  "anyOf": [
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "MissionSessionAuthorityError",
+                          "type": "string"
+                        }
                       },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
                       "type": "object"
                     },
-                    "name": {
-                      "const": "MissionSessionAuthorityError",
-                      "type": "string"
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "PublicSessionPromptIdentityConflictError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
                     }
-                  },
-                  "required": [
-                    "name",
-                    "data"
-                  ],
-                  "type": "object"
+                  ]
                 }
               }
             },
-            "description": "Mission execution and lifecycle are owned by the canonical Mission API"
+            "description": "Mission authority conflict, or the message identity is already bound to another public Session execution"
           }
         },
         "summary": "Initialize session",
@@ -88518,6 +88930,13 @@
                       "managed": {
                         "type": "boolean"
                       },
+                      "market_hash": {
+                        "pattern": "^[a-f0-9]{64}$",
+                        "type": "string"
+                      },
+                      "market_id": {
+                        "type": "string"
+                      },
                       "metadata": {
                         "additionalProperties": {
                           "type": "string"
@@ -88607,6 +89026,7 @@
                       "source_type": {
                         "enum": [
                           "builtin",
+                          "managed_market",
                           "managed_git",
                           "config_path",
                           "config_url",
@@ -88731,7 +89151,7 @@
     },
     "/skill/market": {
       "get": {
-        "description": "Get curated skill marketplaces and official registries relevant to OpenCorvus imports.",
+        "description": "Get the single current Skill Market provider used by OpenCorvus.",
         "operationId": "skill.market",
         "parameters": [
           {
@@ -88750,53 +89170,45 @@
               "application/json": {
                 "schema": {
                   "items": {
+                    "additionalProperties": false,
                     "properties": {
+                      "api_origin": {
+                        "const": "https://skills.sh",
+                        "type": "string"
+                      },
                       "description": {
                         "type": "string"
                       },
+                      "exact_install": {
+                        "const": true,
+                        "type": "boolean"
+                      },
                       "homepage": {
-                        "format": "uri",
+                        "const": "https://skills.sh",
                         "type": "string"
                       },
                       "id": {
+                        "const": "skills-sh",
                         "type": "string"
-                      },
-                      "install_kind": {
-                        "enum": [
-                          "git",
-                          "url",
-                          "manual"
-                        ],
-                        "type": "string"
-                      },
-                      "installed": {
-                        "type": "boolean"
                       },
                       "name": {
-                        "type": "string"
-                      },
-                      "notes": {
+                        "const": "skills.sh",
                         "type": "string"
                       },
                       "provider": {
+                        "const": "skills.sh",
                         "type": "string"
                       },
                       "recommended_policy": {
-                        "enum": [
-                          "allow",
-                          "deny"
-                        ],
+                        "const": "deny",
                         "type": "string"
                       },
-                      "source": {
-                        "type": "string"
+                      "searchable": {
+                        "const": true,
+                        "type": "boolean"
                       },
                       "trust": {
-                        "enum": [
-                          "official",
-                          "curated",
-                          "community"
-                        ],
+                        "const": "curated",
                         "type": "string"
                       }
                     },
@@ -88806,10 +89218,11 @@
                       "provider",
                       "description",
                       "homepage",
-                      "install_kind",
+                      "api_origin",
+                      "searchable",
+                      "exact_install",
                       "trust",
-                      "recommended_policy",
-                      "installed"
+                      "recommended_policy"
                     ],
                     "type": "object"
                   },
@@ -88825,6 +89238,384 @@
           {
             "lang": "js",
             "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.skill.market({\n  ...\n})"
+          }
+        ]
+      }
+    },
+    "/skill/market/detail": {
+      "get": {
+        "description": "Download and validate the exact candidate bundle without installing it.",
+        "operationId": "skill.market.detail",
+        "parameters": [
+          {
+            "description": "Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.",
+            "in": "query",
+            "name": "directory",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "minLength": 1,
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "description": {
+                      "type": "string"
+                    },
+                    "files": {
+                      "items": {
+                        "properties": {
+                          "path": {
+                            "type": "string"
+                          },
+                          "size": {
+                            "maximum": 9007199254740991,
+                            "minimum": 0,
+                            "type": "integer"
+                          }
+                        },
+                        "required": [
+                          "path",
+                          "size"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "hash": {
+                      "pattern": "^[a-f0-9]{64}$",
+                      "type": "string"
+                    },
+                    "homepage": {
+                      "format": "uri",
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "installed": {
+                      "type": "boolean"
+                    },
+                    "name": {
+                      "minLength": 1,
+                      "pattern": "^[^/\\\\\\r\\n]+$",
+                      "type": "string"
+                    },
+                    "recommended_policy": {
+                      "enum": [
+                        "allow",
+                        "deny"
+                      ],
+                      "type": "string"
+                    },
+                    "repository": {
+                      "format": "uri",
+                      "type": "string"
+                    },
+                    "risk": {
+                      "properties": {
+                        "has_agents": {
+                          "type": "boolean"
+                        },
+                        "has_references": {
+                          "type": "boolean"
+                        },
+                        "has_scripts": {
+                          "type": "boolean"
+                        },
+                        "has_templates": {
+                          "type": "boolean"
+                        },
+                        "level": {
+                          "enum": [
+                            "low",
+                            "medium",
+                            "high"
+                          ],
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "level",
+                        "has_scripts",
+                        "has_agents",
+                        "has_references",
+                        "has_templates"
+                      ],
+                      "type": "object"
+                    },
+                    "skill_id": {
+                      "type": "string"
+                    },
+                    "source": {
+                      "type": "string"
+                    },
+                    "trust": {
+                      "enum": [
+                        "builtin",
+                        "official",
+                        "curated",
+                        "community",
+                        "local",
+                        "external",
+                        "unknown"
+                      ],
+                      "type": "string"
+                    },
+                    "upstream_hash": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "skill_id",
+                    "name",
+                    "description",
+                    "source",
+                    "homepage",
+                    "repository",
+                    "hash",
+                    "files",
+                    "trust",
+                    "risk",
+                    "recommended_policy",
+                    "installed"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validated Skill Market candidate detail"
+          }
+        },
+        "summary": "Inspect a Skill Market candidate",
+        "x-codeSamples": [
+          {
+            "lang": "js",
+            "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.skill.market2.detail({\n  ...\n})"
+          }
+        ]
+      }
+    },
+    "/skill/market/install": {
+      "post": {
+        "description": "Install exactly one candidate only when its current content matches the inspected digest.",
+        "operationId": "skill.market.install",
+        "parameters": [
+          {
+            "description": "Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.",
+            "in": "query",
+            "name": "directory",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "expected_hash": {
+                    "pattern": "^[a-f0-9]{64}$",
+                    "type": "string"
+                  },
+                  "id": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "policy": {
+                    "enum": [
+                      "allow",
+                      "deny"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id",
+                  "expected_hash"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "available": {
+                      "const": "next_turn",
+                      "type": "string"
+                    },
+                    "hash": {
+                      "pattern": "^[a-f0-9]{64}$",
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "minLength": 1,
+                      "pattern": "^[^/\\\\\\r\\n]+$",
+                      "type": "string"
+                    },
+                    "path": {
+                      "type": "string"
+                    },
+                    "policy": {
+                      "enum": [
+                        "allow",
+                        "deny"
+                      ],
+                      "type": "string"
+                    },
+                    "source": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "name",
+                    "source",
+                    "path",
+                    "hash",
+                    "policy",
+                    "available"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Installed Skill Market candidate"
+          }
+        },
+        "summary": "Install an inspected Skill Market candidate",
+        "x-codeSamples": [
+          {
+            "lang": "js",
+            "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.skill.market2.install({\n  ...\n})"
+          }
+        ]
+      }
+    },
+    "/skill/market/search": {
+      "get": {
+        "description": "Search the current Skill Market and project live installation status for exact candidates.",
+        "operationId": "skill.market.search",
+        "parameters": [
+          {
+            "description": "Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.",
+            "in": "query",
+            "name": "directory",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "query",
+            "required": true,
+            "schema": {
+              "maxLength": 120,
+              "minLength": 2,
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "default": 10,
+              "maximum": 20,
+              "minimum": 1,
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "homepage": {
+                        "format": "uri",
+                        "type": "string"
+                      },
+                      "id": {
+                        "type": "string"
+                      },
+                      "installed": {
+                        "type": "boolean"
+                      },
+                      "installs": {
+                        "maximum": 9007199254740991,
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "repository": {
+                        "format": "uri",
+                        "type": "string"
+                      },
+                      "skill_id": {
+                        "type": "string"
+                      },
+                      "source": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "skill_id",
+                      "name",
+                      "source",
+                      "installs",
+                      "homepage",
+                      "repository",
+                      "installed"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Skill Market candidates"
+          }
+        },
+        "summary": "Search the Skill Market",
+        "x-codeSamples": [
+          {
+            "lang": "js",
+            "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.skill.market2.search({\n  ...\n})"
           }
         ]
       }
@@ -89297,6 +90088,13 @@
                           "managed": {
                             "type": "boolean"
                           },
+                          "market_hash": {
+                            "pattern": "^[a-f0-9]{64}$",
+                            "type": "string"
+                          },
+                          "market_id": {
+                            "type": "string"
+                          },
                           "metadata": {
                             "additionalProperties": {
                               "type": "string"
@@ -89396,6 +90194,7 @@
                           "source_type": {
                             "enum": [
                               "builtin",
+                              "managed_market",
                               "managed_git",
                               "config_path",
                               "config_url",
@@ -89926,6 +90725,13 @@
                           "managed": {
                             "type": "boolean"
                           },
+                          "market_hash": {
+                            "pattern": "^[a-f0-9]{64}$",
+                            "type": "string"
+                          },
+                          "market_id": {
+                            "type": "string"
+                          },
                           "metadata": {
                             "additionalProperties": {
                               "type": "string"
@@ -90025,6 +90831,7 @@
                           "source_type": {
                             "enum": [
                               "builtin",
+                              "managed_market",
                               "managed_git",
                               "config_path",
                               "config_url",
@@ -90259,7 +91066,8 @@
                     "enum": [
                       "path",
                       "url",
-                      "git"
+                      "git",
+                      "market"
                     ],
                     "type": "string"
                   },

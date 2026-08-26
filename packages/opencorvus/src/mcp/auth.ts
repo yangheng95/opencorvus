@@ -30,6 +30,21 @@ export namespace McpAuth {
     tokens: Tokens.optional(),
     clientInfo: ClientInfo.optional(),
     staticCredential: StaticCredential.optional(),
+    /**
+     * A configure's uncommitted secret. It is staged BEFORE the definition
+     * commits — without destroying the active credential the previous
+     * definition still serves — and settled by exactly one owner: the
+     * configure call promotes it on success or drops it on failure, and
+     * credential reconciliation promotes-or-drops it after a crash by
+     * comparing its identity to the committed definition. Never served.
+     */
+    stagedStaticCredential: z
+      .object({
+        secret: z.string().min(1),
+        serverUrl: z.string(),
+        credentialIdentity: z.string(),
+      })
+      .optional(),
     codeVerifier: z.string().optional(),
     oauthState: z.string().optional(),
     serverUrl: z.string().optional(), // Track the URL these credentials are for
@@ -210,6 +225,56 @@ export namespace McpAuth {
       undefined,
       credentialIdentity,
     )
+  }
+
+  export async function stageStaticCredential(
+    authKey: string,
+    secret: string,
+    serverUrl: string,
+    credentialIdentity: string,
+  ): Promise<void> {
+    await updateStore(authKey, (entry) => ({
+      ...(entry ?? {}),
+      stagedStaticCredential: { secret, serverUrl, credentialIdentity },
+    }))
+  }
+
+  /**
+   * Promote the staged secret to the active credential iff it matches the
+   * committed definition's identity; a staged secret for any other identity
+   * is dropped. Returns whether a promotion happened.
+   */
+  export async function promoteStagedStaticCredential(
+    authKey: string,
+    expected: { serverUrl: string; credentialIdentity: string },
+  ): Promise<boolean> {
+    let promoted = false
+    await updateStore(authKey, (entry) => {
+      if (!entry?.stagedStaticCredential) return entry
+      const { stagedStaticCredential: staged, ...rest } = entry
+      if (staged.serverUrl !== expected.serverUrl || staged.credentialIdentity !== expected.credentialIdentity) {
+        const { revision: _revision, ...material } = rest
+        return Object.keys(material).length > 0 ? rest : undefined
+      }
+      promoted = true
+      return {
+        ...rest,
+        staticCredential: StaticCredential.parse({ secret: staged.secret }),
+        serverUrl: staged.serverUrl,
+        credentialIdentity: staged.credentialIdentity,
+      }
+    })
+    return promoted
+  }
+
+  /** Drop an unpromoted staged secret; the active credential is untouched. */
+  export async function clearStagedStaticCredential(authKey: string): Promise<void> {
+    await updateStore(authKey, (entry) => {
+      if (!entry?.stagedStaticCredential) return entry
+      const { stagedStaticCredential: _staged, ...rest } = entry
+      const { revision: _revision, ...material } = rest
+      return Object.keys(material).length > 0 ? rest : undefined
+    })
   }
 
   export async function remove(authKey: string): Promise<void> {

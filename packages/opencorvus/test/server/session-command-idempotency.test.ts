@@ -141,4 +141,62 @@ describe("public Session command identity", () => {
       },
     })
   }, 60_000)
+
+  test("a replayed init converges on the first occurrence's Turn", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const session = await Session.create({ kind: "assistant", title: "Init replay identity" })
+        const messageID = Identifier.ascending("message")
+        let physicalTurns = 0
+        const provider = spyOn(Provider, "getModel").mockResolvedValue(providerModel())
+        const processor = spyOn(SessionProcessor, "create").mockImplementation((input: any) => {
+          const assistant = input.assistantMessage
+          return {
+            message: assistant,
+            partFromToolCall() {
+              return undefined
+            },
+            async process() {
+              physicalTurns += 1
+              await Session.updatePart({
+                id: Identifier.ascending("part"),
+                sessionID: assistant.sessionID,
+                messageID: assistant.id,
+                type: "text",
+                text: "one durable init reply",
+              })
+              assistant.finish = "stop"
+              assistant.time.completed = Date.now()
+              await Session.updateMessage(assistant)
+              return "stop"
+            },
+          } as any
+        })
+        try {
+          const app = new Hono().route("/session", SessionRoutes())
+          app.onError(serverErrorResponse)
+          const body = { messageID, providerID: model.providerID, modelID: model.modelID }
+          const send = () =>
+            app.fetch(
+              new Request(`http://opencorvus.test/session/${session.id}/init`, {
+                method: "POST",
+                headers: { "content-type": "application/json" },
+                body: JSON.stringify(body),
+              }),
+            )
+
+          const first = await send()
+          expect({ status: first.status, physicalTurns }).toEqual({ status: 200, physicalTurns: 1 })
+
+          const retry = await send()
+          expect({ status: retry.status, physicalTurns }).toEqual({ status: 200, physicalTurns: 1 })
+        } finally {
+          processor.mockRestore()
+          provider.mockRestore()
+        }
+      },
+    })
+  }, 60_000)
 })

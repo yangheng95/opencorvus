@@ -1335,7 +1335,11 @@ export const SessionRoutes = lazy(() =>
         responses: {
           200: { description: "200", content: { "application/json": { schema: resolver(z.boolean()) } } },
           ...errors(400, 404),
-          409: MissionSessionAuthorityConflict,
+          409: namedErrorResponse(
+            "Mission authority conflict, or the message identity is already bound to another public Session execution",
+            "MissionSessionAuthorityError",
+            "PublicSessionPromptIdentityConflictError",
+          ),
         },
       }),
       validator(
@@ -1344,13 +1348,25 @@ export const SessionRoutes = lazy(() =>
           sessionID: z.string().meta({ description: "Session ID" }),
         }),
       ),
-      validator("json", SessionInitializer.initialize.schema.omit({ sessionID: true })),
+      validator("json", SessionInitializer.initialize.schema.omit({ sessionID: true, extra: true })),
       async (c) => {
         const sessionID = c.req.valid("param").sessionID
         const body = c.req.valid("json")
         const session = await assertActiveProjectSession(sessionID)
         assertPublicSessionOperationAuthority(session, "session.init")
-        await SessionInitializer.initialize({ ...body, sessionID })
+        const fingerprint = publicSessionExecutionFingerprint(body)
+        await executePublicSessionExecution({
+          sessionID,
+          messageID: body.messageID,
+          fingerprint,
+          execute: () =>
+            SessionInitializer.initialize({
+              ...body,
+              sessionID,
+              extra: { publicSessionPromptIdentity: { version: 1, fingerprint } },
+            }),
+          converge: () => convergePromptTurn(sessionID, body.messageID),
+        })
         return c.json(true)
       },
     )
