@@ -665,14 +665,32 @@ The twelfth uninvolved read-only review of seven commits found one critical defe
 ### ARC-029 — the Board's freshness promise is deleted, not ignored
 
 - Root cause as audited: the Board routes accepted a `sync` option that every caller could pass and no implementation ever read — both service functions named it `_input` and returned the same projection either way.
-- The repair: the parameter is gone from the service functions and from the route that read it out of the query string. Reading a Board is read-only by contract; the poll loop advances state and reading never does. A public promise of freshness-on-demand that does nothing is worse than not offering it.
+- The first repair deleted the parameter from the service functions and route, but independent review found the Overlay still retained `LoadBoardOptions.sync`, `boardSyncPending`, `?sync=1`, and callers that described a normal read as a freshness boundary. That left the false protocol's client half intact.
+- The corrective repair must delete that option, pending state, URL parameter, retry propagation, and all call-site claims. Reading a Board is read-only by contract; `requireFresh` may bypass client cache/coalescing, but only the poll loop and explicit mutation settlement advance canonical state. A public promise of server synchronization that does nothing must not survive on either side.
 - Not addressed here: the audit's second ARC-029 half, the red `check:dead-code` gate (six Overlay files, one unused dependency, two unlisted `ps` binary uses). Open.
 
 ### ARC-032 — the endpoints that could only answer empty are gone
 
 - Root cause as audited: the LSP server map is created empty and has no writer, and `status()` returns early on an empty map, so `GET /lsp` and `GET /find/symbol` were structurally incapable of returning anything — both documented themselves as "Compatibility endpoint … returns an empty array".
 - The repair removes the two public contracts, which had no consumer in the Overlay or the SDK. The subsystem implementation and its initialization-lifecycle tests are untouched.
+- Independent review found the dedicated English and Chinese LSP pages still claimed both deleted endpoints remained compatibility surfaces. The corrective documentation change must state that the public HTTP endpoints are removed while preserving the open internal-subsystem decision below.
 - Open decision recorded rather than settled by a tail-end deletion: whether to delete the LSP subsystem outright or restore one configured runtime owner. The zombie public API — the part the audit named as forbidden — is gone either way.
+
+### Stage 7 independent review disposition
+
+The uninvolved read-only review of `b0e7f3b87..b7cf9284a` rejected the stage with one Session-contract P1 and three P2 findings. For this campaign, ARC-029's Overlay half and ARC-032's bilingual semantic documentation are valid and are being repaired as described above. The Session public-union and prohibited-test-plan findings are recorded and repaired in the Session cutover record. No UI automation may be added or run; the Overlay protocol deletion is verified by type/build checks and real-page manual acceptance only.
+
+### ARC-031 — one Channel composition root, consumed as a package
+
+- Root cause as audited: the Channel runtime had two composition roots. The package's own entry assembled environment, providers, adapters and readiness, and OpenCorvus assembled the same thing again by reaching across the workspace into the package's private `src` with relative imports — so the supported adapter set, the STT and Vision wiring and the "is anything configured" answer could disagree between an in-process runtime and a spawned one, while the package boundary existed only on paper.
+- The repair: `bootstrapChannelRuntime` is that single root, owning the environment it is handed, the DashScope/STT/Vision providers, adapter registration and the configured-adapter answer, and reporting its steps through a diagnostic callback so rendering stays the host's decision. Both owners call it — the package entry directly, and OpenCorvus through the `@opencorvus-ai/channel-runtime` dependency it now declares rather than a relative path into private source.
+- Focused tests assert the boundary itself: the bootstrap is reachable from the package export, the package entry composes through it and no longer registers adapters or builds a Vision pipeline itself, OpenCorvus imports the package rather than `../../../channel-runtime/src/`, and an environment configuring no channel yields no adapters plus the shared hint.
+- Environment note: the workspace link for the new dependency was created by hand because the registry was unreachable for `bun install` in this environment; the declaration in `package.json` is the durable fact.
+
+### Verification blocked in this environment
+
+- `check:dead-code` (the second half of ARC-029) cannot run here: it fetches `knip` at invocation and the registry is unreachable. The gate's six Overlay files, one unused dependency and two unlisted `ps` binary uses are therefore neither confirmed nor repaired, and remain open.
+- `test/mcp/browser-signal-ownership.test.ts` now requires a real Chrome for Testing binary, which is not installed here.
 
 ## Stage log
 
