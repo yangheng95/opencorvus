@@ -107,11 +107,46 @@ async function publishStartupReceipt(
     await fsp.rename(temporary, target)
   } catch (error) {
     await fsp.rm(temporary, { force: true }).catch(() => undefined)
-    console.error("[serve] failed to publish the startup receipt:", error)
+    // The receipt IS the readiness protocol for a managed launch. A publish
+    // that fails silently leaves the launcher polling a file that will never
+    // appear until it times out and kills a server that is actually serving,
+    // so the failure is terminal for this launch rather than a log line.
+    throw new Error(
+      `Failed to publish the server startup receipt to ${target}: ${
+        error instanceof Error ? error.message : String(error)
+      }`,
+      { cause: error },
+    )
+  }
+}
+
+/** Settle a managed launch that is failing before it ever bound. */
+async function publishStartupFailure(args: ArgumentsCamelCase<ServeOptions>, error: unknown) {
+  try {
+    await publishStartupReceipt(args, {
+      outcome: "failed",
+      error: error instanceof Error ? error.message : String(error),
+    })
+  } catch (publishError) {
+    console.error("[serve] failed to publish the terminal startup receipt:", publishError)
   }
 }
 
 export async function handleServeCommand(args: ArgumentsCamelCase<ServeOptions>) {
+  // A launcher waiting on the receipt must learn about EVERY terminal
+  // outcome, including the ones that happen before a listener is attempted:
+  // an invalid managed argument, network option resolution, the restart
+  // handoff. Without this, those failures were indistinguishable from a
+  // server that was simply slow.
+  try {
+    return await handleServeCommandInner(args)
+  } catch (error) {
+    await publishStartupFailure(args, error)
+    throw error
+  }
+}
+
+async function handleServeCommandInner(args: ArgumentsCamelCase<ServeOptions>) {
   // When launched as default entry (double-click), hide console window
   const isDefaultMode = !process.argv.slice(2).some((a) => a === "serve")
   if (isDefaultMode) {

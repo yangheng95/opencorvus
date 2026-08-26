@@ -233,11 +233,12 @@ export namespace BrowserMCP {
           resolveClosed()
         },
         (error) => {
-          console.error(
-            `[browser-mcp] stdio shutdown failed: ${error instanceof Error ? error.message : String(error)}`,
-          )
+          // A failed shutdown is the same fact on this path as on the stdin
+          // and transport paths, which reject. Resolving here would have let
+          // the composition root return cleanly with nothing but a mutable
+          // process.exitCode as evidence.
           process.exitCode = 1
-          resolveClosed()
+          rejectClosed(error)
         },
       )
     }
