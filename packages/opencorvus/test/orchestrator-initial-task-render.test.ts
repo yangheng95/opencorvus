@@ -143,7 +143,25 @@ test("a fresh typed Task ingress installs runtime authority before creator and c
       const retainedDecisionGaps: boolean[] = []
       const decisionRepairPrompts: boolean[] = []
       const promptSystemAudits: Array<{ countMatch: boolean; runtimeLabels: string[] }> = []
+      const atomicCreatorCuts: Array<{ creatorID: string; controlIDs: string[] }> = []
       let providerSteps = 0
+      const unsubscribeCreated = Bus.subscribe(Message.Event.Created, async (event) => {
+        const info = event.properties.info
+        if (info.role !== "user" || info.agent !== "orchestrator" || info.author !== "user") return
+        const creatorExtra = info.extra as { orchestrator_control_ingress?: unknown } | undefined
+        if (creatorExtra?.orchestrator_control_ingress) return
+        const visible = await Session.messages({ sessionID: info.sessionID })
+        atomicCreatorCuts.push({
+          creatorID: info.id,
+          controlIDs: visible
+            .filter(
+              (item) =>
+                item.info.role === "user" &&
+                Boolean((item.info.extra as { orchestrator_control_ingress?: unknown } | undefined)?.orchestrator_control_ingress),
+            )
+            .map((item) => item.info.id),
+        })
+      })
       const processorSpy = spyOn(SessionProcessor, "create").mockImplementation((input: any) => {
         const assistant = input.assistantMessage as Message.Assistant
         assistantMessageIDs.push(assistant.id)
@@ -317,8 +335,21 @@ test("a fresh typed Task ingress installs runtime authority before creator and c
           ],
         })
         expect(new Set(assistantMessageIDs).size).toBe(1)
+        const [creator, control, assistant] = messages
+        expect({
+          atomicCreatorCuts,
+          creatorBeforeControl: creator!.info.time.created < control!.info.time.created,
+          assistantParentID: assistant!.info.role === "assistant" ? assistant!.info.parentID : undefined,
+          controlID: control!.info.id,
+        }).toEqual({
+          atomicCreatorCuts: [{ creatorID: creator!.info.id, controlIDs: [control!.info.id] }],
+          creatorBeforeControl: true,
+          assistantParentID: control!.info.id,
+          controlID: control!.info.id,
+        })
         await SessionPrompt.waitForFinish(child!.id, project.path)
       } finally {
+        unsubscribeCreated()
         await Database.awaitEffectIdle(30_000)
         gitCompleteSpy.mockRestore()
         gitPrepareSpy.mockRestore()
