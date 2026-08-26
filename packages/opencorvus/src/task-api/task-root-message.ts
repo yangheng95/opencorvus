@@ -76,7 +76,7 @@ export async function deliverTaskRootMessageToOrchestratorSession(input: {
     throw new Error(`Orchestrator Session ${input.orchestratorSessionID} is outside Task ${input.task.id} lineage.`)
   }
   const sourceSessionID = message.info.sessionID
-  Database.transaction((db) => {
+  Database.immediateTransaction((db) => {
     const current = db
       .select({ data: MessageTable.data, sessionID: MessageTable.session_id })
       .from(MessageTable)

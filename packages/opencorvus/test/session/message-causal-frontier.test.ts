@@ -1,10 +1,14 @@
 import { afterEach, expect, test } from "bun:test"
+import fs from "node:fs/promises"
+import path from "node:path"
+import { createManagedTemporaryDirectory, removeManagedDirectoryTree } from "@opencorvus-ai/util/runtime-directories"
 import { Identifier } from "@/id/id"
 import { Instance } from "@/project/instance"
 import { Session } from "@/session"
 import { SessionPrompt } from "@/session/prompt"
 import { MessageTable, PartTable } from "@/session/session.sql"
 import { Database, eq } from "@/storage/db"
+import { timelineMessageOrderKey, timelinePartOrderKey } from "@/timeline/order"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
 
 afterEach(async () => {
@@ -64,6 +68,14 @@ test("allocates one monotonic persisted Message frontier when the caller clock m
         secondCreated: second.time.created,
         persistedMessages: persisted.messages,
         partAtOrAfterParent: (persisted.part?.created ?? 0) >= second.time.created,
+        returnedMessageOrderKeys: [first.orderKey, second.orderKey],
+        canonicalMessageOrderKeys: [
+          timelineMessageOrderKey({ info: first }),
+          timelineMessageOrderKey({ info: second }),
+        ],
+        messageOrderIncreases: first.orderKey < second.orderKey,
+        returnedPartOrderKey: part.orderKey,
+        canonicalPartOrderKey: timelinePartOrderKey({ id: part.id, timeCreated: persisted.part!.created }),
       }).toEqual({
         firstCreated: requestedFrontier,
         secondCreated: requestedFrontier + 1,
@@ -72,6 +84,17 @@ test("allocates one monotonic persisted Message frontier when the caller clock m
           { id: second.id, created: requestedFrontier + 1 },
         ],
         partAtOrAfterParent: true,
+        returnedMessageOrderKeys: [
+          timelineMessageOrderKey({ info: first }),
+          timelineMessageOrderKey({ info: second }),
+        ],
+        canonicalMessageOrderKeys: [
+          timelineMessageOrderKey({ info: first }),
+          timelineMessageOrderKey({ info: second }),
+        ],
+        messageOrderIncreases: true,
+        returnedPartOrderKey: timelinePartOrderKey({ id: part.id, timeCreated: persisted.part!.created }),
+        canonicalPartOrderKey: timelinePartOrderKey({ id: part.id, timeCreated: persisted.part!.created }),
       })
     },
   })
@@ -147,3 +170,76 @@ test("retries an interrupted participant sequence as one complete durable cut", 
     },
   })
 })
+
+test("serializes two composite owner processes onto one persisted Session Message frontier", async () => {
+  await using project = await memoryProject()
+  const processRoot = process.env.OPENCORVUS_TEST_PROCESS_ROOT
+  if (!processRoot) throw new Error("Message frontier process test requires the repository test runtime")
+  const sharedRuntime = await createManagedTemporaryDirectory(processRoot, "message-frontier-runtime-")
+  const barrier = await createManagedTemporaryDirectory(processRoot, "message-frontier-barrier-")
+  const worker = path.join(import.meta.dir, "..", "fixture", "message-causal-frontier-process-worker.ts")
+  const environment = {
+    ...process.env,
+    OPENCORVUS_HOME: sharedRuntime,
+    OPENCORVUS_TEST_PROCESS_ROOT: processRoot,
+  }
+  const children: ReturnType<typeof Bun.spawn>[] = []
+  const spawn = (args: string[]) => {
+    const child = Bun.spawn(
+      [process.execPath, `--config=${path.join(import.meta.dir, "..", "empty-bunfig.toml")}`, worker, ...args],
+      {
+        cwd: path.join(import.meta.dir, "..", ".."),
+        env: environment,
+        stdout: "pipe",
+        stderr: "pipe",
+      },
+    )
+    children.push(child)
+    return child
+  }
+  const read = async (child: ReturnType<typeof spawn>) => {
+    const [stdout, stderr, exitCode] = await Promise.all([
+      new Response(child.stdout).text(),
+      new Response(child.stderr).text(),
+      child.exited,
+    ])
+    expect(exitCode, stderr).toBe(0)
+    return JSON.parse(stdout.trim()) as { sessionID?: string; id?: string; created?: number }
+  }
+
+  try {
+    const initialized = await read(spawn(["init", project.path, barrier]))
+    expect(initialized.sessionID).toBeString()
+    const requestedCreated = Date.now() + 60_000
+    const first = spawn(["race", project.path, barrier, initialized.sessionID!, String(requestedCreated)])
+    const second = spawn(["race", project.path, barrier, initialized.sessionID!, String(requestedCreated)])
+    const deadline = Date.now() + 30_000
+    while ((await fs.readdir(barrier)).filter((entry) => entry.endsWith(".ready")).length < 2) {
+      for (const child of [first, second]) {
+        if (child.exitCode !== null) {
+          const [stdout, stderr] = await Promise.all([
+            new Response(child.stdout).text(),
+            new Response(child.stderr).text(),
+          ])
+          throw new Error(`Message frontier worker exited before barrier (${child.exitCode}): ${stderr || stdout}`)
+        }
+      }
+      if (Date.now() >= deadline) throw new Error("Message frontier workers did not reach the barrier")
+      await Bun.sleep(5)
+    }
+    await fs.writeFile(path.join(barrier, "go"), "go")
+    const raced = await Promise.all([read(first), read(second)])
+    expect(raced.map((item) => item.created).sort((left, right) => left! - right!)).toEqual([
+      requestedCreated,
+      requestedCreated + 1,
+    ])
+    expect(new Set(raced.map((item) => item.id)).size).toBe(2)
+  } finally {
+    for (const child of children) {
+      if (child.exitCode === null) child.kill()
+    }
+    await Promise.allSettled(children.map((child) => child.exited))
+    await removeManagedDirectoryTree(sharedRuntime)
+    await removeManagedDirectoryTree(barrier)
+  }
+}, 60_000)

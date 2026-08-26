@@ -1559,7 +1559,7 @@ async function runAgentSessionInner<C>(input: RunAgentSessionInput<C>): Promise<
           let persistedUserMessageCompletion!: ReturnType<typeof persistMaterializedUserMessageInTransaction>
           let continuationPrepared!: ReturnType<typeof rebindPreparedUserMessageInput>
           let continuationPromptArgs!: Parameters<typeof SessionPrompt.prompt>[0]
-          Database.transaction(() => {
+          Database.immediateTransaction(() => {
             if (input.signal?.aborted) {
               throw new AgentRunError(kind, "aborted before initial dispatch authority commit")
             }

@@ -84,6 +84,10 @@ There is no persisted ingress disposition, delivery result, semantic attempt, ac
 
 ## Decision-gap continuation
 
+Session Message causality is allocated by the Session persistence boundary, not by caller wall-clock order. A new Message obtains SQLite's writer reservation before reading its exact Session frontier and persists `time.created = max(requested_created, latest_session_created + 1)`; existing Message creation time remains immutable. Moving a real Task-root participant Message into its Orchestrator Session obtains the same writer reservation before allocating that target Session's next frontier. Message events, timeline order keys and child Parts use the persisted frontier, and a Part cannot precede its parent Message. The frontier is scoped to one Session, so concurrent projects and Sessions do not share a global sequence.
+
+A fresh typed Task occurrence requires both the real task-creator Message and its deterministic Orchestrator control Message. The Session prompt writer prepares them under one runtime-contract write claim and commits both bundles in one immediate transaction before arming the runtime wake. Observers therefore see either the complete creator/control cut or neither participant; replay validates the existing deterministic control identity and never synthesizes or reorders a Message after visibility.
+
 A prose-only Provider step is visible content, not a business completion. While the current live activation is otherwise safe to continue, it remains inside the same assistant Message and activation:
 
 ```text
@@ -192,6 +196,8 @@ mission.execution.closed
 ```
 
 The payload contains only `missionID` and `requestID`. Session identity, operation identity, source, state, and event time come from the Protocol envelope and event type; they are not repeated in payload. Close callers join one process-local operation while the durable event remains authoritative across restart.
+
+A lifecycle-lease owner rereads the closure reduction immediately after acquisition and before invoking the physical close. If a prior owner has already committed `closed`, the successor releases its redundant lease and returns that fact without repeating the external effect; only the owner that still observes the same `closing` operation may close and append the terminal fact.
 
 When closing starts, unanswered scheduler wakes receive exact closure receipts. Non-operator wake admission cannot open or reopen a Mission occurrence. A draft, closing, or closed occurrence produces its typed domain outcome without a parallel Mission status row.
 

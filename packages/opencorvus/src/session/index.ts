@@ -426,7 +426,7 @@ export namespace Session {
         clones.push({ info: clonedInfo, parts: clonedParts })
       }
 
-      return Database.transaction((db) => {
+      return Database.immediateTransaction((db) => {
         const session = persistPreparedNextInTransaction(db, prepared)
         for (const clone of clones) {
           persistMessageWithCommitInTransaction(clone, () => undefined)
@@ -1309,7 +1309,7 @@ export namespace Session {
     },
   ): Message.VisibleInfo {
     let persisted: Message.VisibleInfo | undefined
-    Database.transaction((db) => {
+    Database.immediateTransaction((db) => {
       const existing = db
         .select({ time_created: MessageTable.time_created, data: MessageTable.data })
         .from(MessageTable)
@@ -1440,7 +1440,7 @@ export namespace Session {
     }
     let info: Message.VisibleInfo | undefined
     let part: Message.CompactionPart | undefined
-    Database.transaction((db) => {
+    Database.immediateTransaction((db) => {
       const parent = db
         .select({ data: MessageTable.data })
         .from(MessageTable)
@@ -1535,7 +1535,7 @@ export namespace Session {
         )
       }
     }
-    Database.transaction((db) => {
+    Database.immediateTransaction((db) => {
       preflightBundle?.()
       const existing = db
         .select({ id: MessageTable.id, timeCreated: MessageTable.time_created })
@@ -2151,7 +2151,7 @@ export namespace Session {
       ),
     }),
     async (input) => {
-      Database.transaction((db) => {
+      Database.immediateTransaction((db) => {
         Project.assertDurableAdmissionOpen(db, input.info.projectID)
         const sessionRow = toRow(input.info)
         const { id: _sessionID, ...sessionSet } = sessionRow
