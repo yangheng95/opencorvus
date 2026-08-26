@@ -67,6 +67,53 @@ describe("bundled env", () => {
     expect(state.first_used_at).toBe(now)
   })
 
+  test("a partially invalid bundle is refused before it can spend the one-shot window", async () => {
+    const data = await fixture()
+    // One valid line and one malformed line. The malformed line used to be
+    // skipped silently, so the bundle still looked usable — and the bounded
+    // secret window was signed before the caller learned anything was wrong.
+    await writeFile(data.file, "BUNDLE_TOKEN=trial-token\nthis line has no assignment\n")
+    const now = Date.parse("2026-03-03T08:00:00.000Z")
+
+    const result = await applyBundledEnv(now)
+
+    expect({
+      enabled: result.enabled,
+      applied: result.applied,
+      skipped: result.skipped,
+      reason: result.reason,
+      applied_to_env: process.env.BUNDLE_TOKEN,
+      stateWritten: await readFile(data.state, "utf8").then(
+        () => true,
+        () => false,
+      ),
+    }).toEqual({
+      enabled: false,
+      applied: 0,
+      skipped: 1,
+      reason: "invalid_bundle",
+      applied_to_env: undefined,
+      stateWritten: false,
+    })
+  })
+
+  test("an invalid variable name is an invalid bundle, not a skipped line", async () => {
+    const data = await fixture()
+    await writeFile(data.file, "BUNDLE_TOKEN=trial-token\n1INVALID=nope\n")
+    const result = await applyBundledEnv(Date.parse("2026-03-03T08:00:00.000Z"))
+    expect({ enabled: result.enabled, reason: result.reason, skipped: result.skipped }).toEqual({
+      enabled: false,
+      reason: "invalid_bundle",
+      skipped: 1,
+    })
+    expect(
+      await readFile(data.state, "utf8").then(
+        () => true,
+        () => false,
+      ),
+    ).toBe(false)
+  })
+
   test("keeps user env as higher priority than bundled env", async () => {
     const data = await fixture()
     await writeFile(data.file, "BUNDLE_TOKEN=trial-token\nBUNDLE_ONLY=from-bundle\n")
