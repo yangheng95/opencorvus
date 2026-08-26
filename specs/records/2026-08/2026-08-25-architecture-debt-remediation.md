@@ -666,7 +666,8 @@ The twelfth uninvolved read-only review of seven commits found one critical defe
 
 - Root cause as audited: the Board routes accepted a `sync` option that every caller could pass and no implementation ever read — both service functions named it `_input` and returned the same projection either way.
 - The first repair deleted the parameter from the service functions and route, but independent review found the Overlay still retained `LoadBoardOptions.sync`, `boardSyncPending`, `?sync=1`, and callers that described a normal read as a freshness boundary. That left the false protocol's client half intact.
-- The corrective repair must delete that option, pending state, URL parameter, retry propagation, and all call-site claims. Reading a Board is read-only by contract; `requireFresh` may bypass client cache/coalescing, but only the poll loop and explicit mutation settlement advance canonical state. A public promise of server synchronization that does nothing must not survive on either side.
+- The corrective repair deletes that option, pending state, URL parameter, retry propagation, and all call-site claims. Reading a Board is read-only by contract; `requireFresh` only waits for an older in-flight read before issuing the caller's own reload, while the poll loop and explicit mutation settlement advance canonical state. A public promise of server synchronization that does nothing no longer survives on either side.
+- Evidence: the repository contains no remaining Board `sync` query, option, pending state or propagation. A second zero-caller Board retry/snapshot implementation in `services/sync.ts` is also deleted; `store/board.ts` is the single retry owner and `stopTimers` retains only its live SSE shutdown responsibility. The focused task-path contract is green (**5 pass, 0 fail**), Overlay typecheck and full production build pass, and an isolated real `/ui` page renders the selected Project shell Online with an empty warning/error console. Screenshot: [`../../artifacts/session-stream/2026-08-26-board-refresh-real-ui.png`](../../artifacts/session-stream/2026-08-26-board-refresh-real-ui.png). This visual evidence proves the changed UI path still renders; the focused contract and source audit prove the false query was removed.
 - Not addressed here: the audit's second ARC-029 half, the red `check:dead-code` gate (six Overlay files, one unused dependency, two unlisted `ps` binary uses). Open.
 
 ### ARC-032 — the endpoints that could only answer empty are gone
@@ -676,12 +677,12 @@ The twelfth uninvolved read-only review of seven commits found one critical defe
 - Stated plainly, because the thirteenth review is right that the previous wording understated it: those two routes were the LSP namespace's ONLY production callers, so the deletion made roughly 3,585 lines (`index.ts`, `client.ts`, `server.ts`, `language.ts`) reachable from nothing but `test/lsp-initialize-lifecycle.test.ts` — a suite that now tests only itself. The audit's ARC-032 objection is therefore not fully discharged: it has moved from "a public API that cannot answer" to "a subsystem no production path reaches".
 - That dead surface also carries the ARC-021 defect shape in bulk — ten `Filesystem.exists` gates in `lsp/server.ts` treat a downloaded launcher's existence as proof of installation — so restoring a runtime owner would re-import that defect on day one and must repair it in the same change.
 
-- Independent review found the dedicated English and Chinese LSP pages still claimed both deleted endpoints remained compatibility surfaces. The corrective documentation change must state that the public HTTP endpoints are removed while preserving the open internal-subsystem decision below.
+- Independent review found the dedicated English and Chinese LSP pages still claimed both deleted endpoints remained compatibility surfaces. Both pages now state that the public HTTP endpoints are removed while preserving the open internal-subsystem decision below; `docs:check` and `api:routes-check` pass.
 - Open decision recorded rather than settled by a tail-end deletion: whether to delete the LSP subsystem outright or restore one configured runtime owner. The zombie public API — the part the audit named as forbidden — is gone either way.
 
 ### Stage 7 independent review disposition
 
-The uninvolved read-only review of `b0e7f3b87..b7cf9284a` rejected the stage with one Session-contract P1 and three P2 findings. For this campaign, ARC-029's Overlay half and ARC-032's bilingual semantic documentation are valid and are being repaired as described above. The Session public-union and prohibited-test-plan findings are recorded and repaired in the Session cutover record. No UI automation may be added or run; the Overlay protocol deletion is verified by type/build checks and real-page manual acceptance only.
+The uninvolved read-only review of `b0e7f3b87..b7cf9284a` rejected the stage with one Session-contract P1 and three P2 findings. ARC-029's Overlay half and ARC-032's bilingual semantic documentation are repaired as described above. The Session public-union and prohibited-test-plan findings are recorded and repaired in the Session cutover record. No UI automation was added or run; the Overlay protocol deletion is verified by type/build checks and real-page manual acceptance. Repeat independent review is pending.
 
 ### ARC-031 — one Channel composition root, consumed as a package
 
@@ -726,6 +727,22 @@ The thirteenth uninvolved read-only review of four code commits found no critica
 - In the local channel the resolved-revision receipt is published and never queried, because the config reader only ever asks under the `"*"` selector.
 - The occurrence is opened just before the rollback-protected region, so a failure writing `package.json` or `.gitignore` leaks an unsettled occurrence. Recovery still converges — the receipt gate makes the next check reinstall — but the "rolls the occurrence back on failure" claim is narrower than it sounds.
 - Undeclared-but-read query parameters survive on several routes (`after`, `after_live`, `variant`, `directory`, `init-git`): the inverse of ARC-029's declared-but-ignored parameter, functional but invisible to OpenAPI, the SDK and `api:routes-check`.
+
+### ARC-034 — a generation publishes all of its outputs or none
+
+- Root cause as audited: a generation publishes several final targets — the SDK client, the OpenAPI document, the generated route policy — and copied them one at a time with an in-memory record of which had existed, so a process death partway through left a MIXED generation on disk. The next build then opened by deleting the backup directory, which was the only evidence of what the last complete generation had been.
+- The repair reuses the stage-4 primitive: recovery runs FIRST, before any backup is deleted, and restores every target the abandoned intent named; the occurrence commits after the backups exist and before the first final target is written; it settles committed only once every target is published, and a settled generation removes its own journal.
+- This became possible without a new dependency because ARC-028 had already made `@opencorvus-ai/util` a declared dependency of the SDK package.
+- Focused tests: a completed generation replaces every target and leaves no journal, a generation that fails while publishing restores the previous complete generation whole, and an abandoned occurrence is converged by the next build before it stages anything.
+
+### Round-13 recorded gaps, closed
+
+- The install occurrence now opens where its rollback begins, so a failure writing `package.json` or `.gitignore` settles it instead of leaking an unsettled occurrence past a restore it never covered.
+- One spelling of the channel's install target serves the writer and the reader, so the receipt key and the manifest entry cannot drift; that also retires a registry round trip the local channel could not learn anything from, because `isOutdated` can only answer "no" for a wildcard spec.
+- The version re-read states what it proves — a tree rewritten between two reads, not a wrong version.
+- The task-event stream declares the four resume cursors it reads on every request. ARC-029 removed a parameter that was declared and ignored; this is its mirror image, parameters that were read and undocumented, and the resume protocol every live client depends on is now visible to OpenAPI, the SDK and the route inventory.
+
+**Corrected against the review**: the thirteenth review read the resolved-revision receipt as a fact nothing reads. That holds for the per-config reader but not for the shared cache, which records the resolved version in its own manifest and asks under it even after a `latest` install. Restricting the publication to non-wildcard selectors broke that path and its own test caught it; the publication is restored and the code now states which reader needs which key.
 
 ## Stage log
 
