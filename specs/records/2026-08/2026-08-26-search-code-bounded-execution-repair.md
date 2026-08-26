@@ -1,6 +1,6 @@
 # Search code bounded execution repair
 
-Status: implemented and locally verified; independent review pending
+Status: complete; independently reviewed, committed, and present on the configured upstream
 
 ## Recall
 
@@ -104,4 +104,9 @@ Final independent read-only review:
 - The only fourth-round finding was a false-positive partial-zero test fixture whose fake handle did not expose standard input. The fixture now exposes writable standard input and both error/cause messages must contain the persisted `enumeration incomplete` fact. The focused suite remains 8 passed.
 - The follow-up reviewer reported no unresolved findings and authorized the scoped corrective commit boundary: `grep.ts`, `grep.txt`, `util/process.ts`, the focused test, and this force-added record only. Current README and all Skill Market/Session/UI diffs belong to concurrent work and are excluded.
 
-Pending scoped corrective commit, upstream convergence, outgoing-commit audit, and push. The live packaged occurrence still predates this source repair and was not stopped or restarted.
+Delivery:
+
+- Scoped corrective commit `c7e010e2a258108cfc212ea00a7e53a1465e01d9` contains only `grep.ts`, `grep.txt`, `util/process.ts`, the focused test, and this force-added record. Its commit hook passed.
+- After fetching and merging the configured upstream without rebase, the outgoing audit initially found three unrelated predecessor commits. This task did not push that set. During the bounded recheck, the corresponding parallel task advanced `origin/arch-debt-remediation` through `c7e010e2a`; local HEAD and upstream then matched exactly.
+- Concurrent unrelated Skill Market, permission, server-route, UI, documentation, and spec-index working-tree changes remain uncommitted and untouched by this delivery.
+- The live packaged occurrence predates this source repair and was not stopped or restarted. Runtime recovery therefore remains outside this source-delivery claim.
