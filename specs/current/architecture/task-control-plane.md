@@ -24,6 +24,20 @@ Queue       = Hint(unresolved projection)
 
 A hint may be lost or duplicated. Reconciliation always rereads facts before execution or commit.
 
+A global Task create carrying `requestID` first trims and rejects an empty identity through the canonical Task input schema;
+the same normalized value then names its owner, replay lookup, per-project owner and persisted Task row. It acquires that
+global request occurrence before it reads replay state or allocates an anonymous Project. One indefinite process-local
+writer plus the shared retrying cross-process lock spans the complete global lookup, anonymous Project allocation,
+canonical per-project `EngineService.createTask` call and failure cleanup. The local writer identity includes the resolved
+data-root lock target, so equal request IDs in separate runtime roots do not share an in-process queue.
+Every waiter rereads `findGlobalTaskByRequest` under that owner. While the committed root Session remains in its anonymous
+Project directory, the waiter re-enters that Project, so same-process, multi-backend and lost-response replay all use the
+same per-project pillar, package-revision and Artifact-import conflict contract. Project promotion is a separate authority
+and is not fenced by this request owner: after promotion the Project no longer matches the anonymous global replay lookup,
+and a later create allocates a new anonymous Project, preserving the existing adoption boundary. The lock target is only
+admission; the Task row plus root Session and creation ingress remain the durable result. Requests without a request ID do
+not claim this owner and continue to allocate independently.
+
 ## Task lifecycle and execution epoch
 
 `protocol_event` is the sole Task lifecycle authority. Task aggregate identity is stored once as `(aggregate_type='task', aggregate_id=task_id)`; `protocol_event.task_id` is `NULL` for Task aggregate events and is reserved for correlation from non-Task aggregates.

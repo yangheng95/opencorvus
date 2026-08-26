@@ -7,17 +7,28 @@ import { Instance } from "@/project/instance"
 import { EngineService } from "./index"
 import { deleteProject } from "@/project/delete"
 import { randomUUID } from "node:crypto"
+import { withGlobalTaskRequestOwner } from "@/engine/task-creation-owner"
 
 export namespace GlobalTaskService {
+  let afterReplayLookupForTest: ((input: { requestID: string; committed: boolean }) => Promise<void>) | undefined
+
   export async function create(raw: z.input<typeof CreateTaskInput>) {
     const input = CreateTaskInput.parse(raw)
     // The request identity must resolve BEFORE a Project is allocated: a
     // retry that allocates first can never find the first attempt, because
     // the per-project lookup is scoped to the Project it just created — a
     // lost response then duplicated the Project and the Task.
-    const requestID = input.requestID?.trim() || undefined
+    const requestID = input.requestID
+    if (requestID) {
+      return withGlobalTaskRequestOwner(requestID, () => createOwned(input, requestID))
+    }
+    return createOwned(input, undefined)
+  }
+
+  async function createOwned(input: z.infer<typeof CreateTaskInput>, requestID: string | undefined) {
     if (requestID) {
       const committed = findGlobalTaskByRequest(requestID, ImplicitProject.isAnonymousDirectory)
+      await afterReplayLookupForTest?.({ requestID, committed: committed !== undefined })
       if (committed) {
         // Re-entering the owning Project runs the same per-project replay
         // path every create uses — one idempotency implementation, including
@@ -59,6 +70,20 @@ export namespace GlobalTaskService {
         reason: "Discard failed global Task Project creation",
       })
       throw error
+    }
+  }
+
+  export namespace TestHooks {
+    export function replaceAfterReplayLookup(
+      hook: (input: { requestID: string; committed: boolean }) => Promise<void>,
+    ): Disposable {
+      const previous = afterReplayLookupForTest
+      afterReplayLookupForTest = hook
+      return {
+        [Symbol.dispose]() {
+          afterReplayLookupForTest = previous
+        },
+      }
     }
   }
 }

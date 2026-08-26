@@ -155,7 +155,7 @@ export const CreateTaskInput = z
      * is bound to this exact registered directory.
      */
     directory: z.string().trim().min(1).optional(),
-    requestID: z.string().optional(),
+    requestID: z.string().trim().min(1).optional(),
     artifactSources: CrossTaskArtifactSourceListSchema.optional(),
     source: z.string().optional(),
     productPillar: ProductPillarSchema,
