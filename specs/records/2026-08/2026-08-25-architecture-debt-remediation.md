@@ -589,6 +589,31 @@ The eleventh uninvolved read-only review verified the Stage-3 aggregate work as 
 - The repair: the launcher mints a launch occurrence, hands the server a private receipt path, and settles on the framed fact published there — atomically, carrying the bound URL, or an exact terminal startup error so a failed launch settles immediately instead of waiting out the timeout. A receipt from another occurrence or an unsupported schema is refused rather than adopted; a partially written file is simply not settled yet. Server output is retained for diagnostics only, and the log-parsing path is deleted.
 - The existing SDK test whose premise was a readiness line split across stdout chunks is rewritten to the contract it now proves.
 
+### ARC-005 — one signal owner per process, one cleanup receipt
+
+- Root cause as audited: the Browser session module installed its own SIGINT/SIGTERM handlers that ran browser cleanup and then called `process.exit(0)`. In stdio mode that killed the process while the transport, the MCP server and the monitor listener were still closing; in HTTP mode it raced the transport's own handler. Either way it reported success regardless of what that cleanup had done.
+- The repair: the resource module exposes `shutdownBrowserSessions()` and owns no process termination at all, and the stdio composition root installs the only signal handlers for its process, setting the exit status from the same single `close()` receipt the HTTP root already used. The module's `process.on("exit")` hook went with them — an exit handler cannot await an asynchronous close, so it never cleaned anything up.
+
+### ARC-004 — crossing into an isolated browser is a stated policy
+
+- Root cause as audited: attached and isolated are different browser identities (different cookies, different signed-in state), but runtime caught a Chrome DevTools Protocol failure and launched an isolated browser anyway, while the architecture document promised no implicit downgrade.
+- The repair: the crossing is the caller's to state. The default `OPENCORVUS_BROWSER_MODE=chrome` fails with the exact reason Chrome was unattachable and names the setting that would permit the other identity; only `chrome_or_isolated` takes it, logging the policy it acted on. Choosing `isolated` outright remains its own mode and an unknown mode is still refused. The architecture document now records the boundary it always claimed.
+- Behavior change: a deployment that silently relied on the fallback now fails loudly until it states the policy — which is the point of the repair.
+
+### ARC-002 — a scoped owner settles the Computer session it owns
+
+- Root cause as audited: a scoped MCP owner's id is its Computer runtime scope, but closing the owner only closed MCP connections and `HostComputerBackend.close()` is a no-op, so the desktop session, its driver authorization and its preserved state outlived the Session until the whole Project Instance was disposed.
+- The repair: the owner's settlement invokes the sole destroy primitive for its scope, so every worker, orchestrator and conversation owner tears its own Computer session down and Project disposal is the outer safety net it was meant to be. A scope that never took a session destroys nothing; a failed teardown is recorded without failing the MCP close that already settled.
+
+### ARC-024 (bounded slice) — a configured command is parsed, not split
+
+- The local speech-to-text provider substituted its placeholders into the configured command string and then split on whitespace, so any value containing a space became several arguments — and the media path it substitutes is a temporary directory, which on Windows always contains one. The template is now parsed into argv first, honouring quotes, with placeholders substituted inside each argument; a backslash escapes only a quote or another backslash, which keeps Windows path separators intact, and an unterminated quote is refused.
+- The wider ARC-024 convergence — one runtime-neutral process facade owning argv, streaming, deadlines, occurrence identity and tree termination across the Plugin ABI, the SDK and this provider — remains open.
+
+### ARC-035 — every current architecture authority is reachable
+
+- The index listed 7 documents while the directory held 26, and nothing checked it: `docs:check` validates the GENERATED API markdown, not the hand-written authority graph. The index now enumerates every current document grouped by the plane it governs, and `check:architecture-index` (wired into pre-push) fails on any document the index does not reach and on any link that does not resolve to a live file. The gate was verified by removing one index entry and observing the failure.
+
 ## Stage log
 
 - Stage 3 (ARC-010 through ARC-013): complete. Production repair and the 52-file fixture migration are committed in `7786b642d`, `32d6aae01` and `1df9e2f4b`. The post-review evidence repair runs real late-transaction SQLite aborts and is verified by four focused files (**6 pass, 0 fail, 16 assertions**), `packages/opencorvus` typecheck, Prettier and `git diff --check`. The repeat uninvolved read-only review returned **PASS with no unresolved finding**; the pre-existing red suites remain bisected and recorded above.
