@@ -4616,6 +4616,188 @@ export type SessionConfig = {
   }
 }
 
+export type SessionConnectedEvent = {
+  emittedAt: number
+  event_id: string
+  notify?: {
+    badge?: boolean
+    tier: 1 | 2 | 3
+  }
+  orderKey: string
+  payload: {
+    conversationSnapshot: SessionConversationConnectionSnapshot
+    sessionID: string
+  }
+  sequence?: number
+  session_id: string
+  summary: string
+  timestamp: number
+  type: "session.connected"
+}
+
+export type SessionConversationConnectionSnapshot = {
+  history: {
+    hasMore: boolean
+    limit: number
+    oldestMessageID?: string | null
+    oldestOrderKey: string | null
+    oldestTimestamp: number | null
+  }
+  transcript: Array<{
+    info: VisibleMessage & {
+      agentID: string
+      channel: string
+      originSource: string
+      parentSessionID?: string
+      participantEvidence?: unknown
+      resolvedRole: string
+      sessionAgentID: string
+    }
+    parts: Array<VisibleMessagePart>
+  }>
+  view: {
+    messages: Array<{
+      agentID: string
+      inputMessageID: string
+      messageID: string
+      orderKey: string
+      parentSessionID?: string
+      placement: "top_level"
+      sessionAgentID: string
+      sessionID: string
+      stage: string
+      time: number
+    }>
+    sessions: Array<
+      | {
+          activity: Array<
+            | {
+                id: string
+                orderKey: string
+                text: string
+                type: "text"
+              }
+            | {
+                callID?: string
+                id: string
+                orderKey: string
+                state: {
+                  [key: string]: unknown
+                }
+                tool: string
+                type: "tool"
+              }
+            | {
+                files: Array<unknown>
+                id: string
+                orderKey: string
+                type: "patch"
+              }
+            | {
+                filename: string
+                id: string
+                orderKey: string
+                type: "file"
+              }
+            | {
+                id: string
+                message: string
+                orderKey: string
+                title?: string
+                type: "part-error"
+              }
+          >
+          agentID: string
+          errorReason?: string
+          executionID: string
+          firstMessageTime: number
+          firstObservedAt?: number
+          inputMessageID: string
+          inputPreview?: {
+            messageID: string
+            observedAt: number
+            source: "user_message"
+            text: string
+          }
+          lastDisplayMessageID?: string
+          lastMessageTime: number
+          lastObservedAt?: number
+          messageIDs: Array<string>
+          orderKey: string
+          parentSessionID?: string
+          placement: "top_level"
+          sessionID: string
+          stage: string
+          status?: "pending" | "running" | "idle" | "completed" | "error" | "skipped"
+          todoUpdatedAt: number
+          todos: Array<Todo>
+        }
+      | {
+          activity: Array<
+            | {
+                id: string
+                orderKey: string
+                text: string
+                type: "text"
+              }
+            | {
+                callID?: string
+                id: string
+                orderKey: string
+                state: {
+                  [key: string]: unknown
+                }
+                tool: string
+                type: "tool"
+              }
+            | {
+                files: Array<unknown>
+                id: string
+                orderKey: string
+                type: "patch"
+              }
+            | {
+                filename: string
+                id: string
+                orderKey: string
+                type: "file"
+              }
+            | {
+                id: string
+                message: string
+                orderKey: string
+                title?: string
+                type: "part-error"
+              }
+          >
+          agentID: string
+          errorReason?: string
+          firstMessageTime: number
+          firstObservedAt?: number
+          inputPreview?: {
+            messageID: string
+            observedAt: number
+            source: "user_message"
+            text: string
+          }
+          lastDisplayMessageID?: string
+          lastMessageTime: number
+          lastObservedAt?: number
+          messageIDs: Array<string>
+          orderKey: string
+          parentSessionID?: string
+          placement: "top_level"
+          sessionID: string
+          stage: string
+          status?: "pending" | "running" | "idle" | "completed" | "error" | "skipped"
+          todoUpdatedAt: number
+          todos: Array<Todo>
+        }
+    >
+    topLevelSessionIDs: Array<string>
+  }
+}
+
 export type SessionStatus =
   | {
       type: "idle"
@@ -4633,6 +4815,26 @@ export type SessionStatus =
       error?: string
       reason: "completed" | "coordinated" | "error" | "aborted"
       type: "terminal"
+    }
+
+export type SessionStreamEvent =
+  | SessionConnectedEvent
+  | {
+      emittedAt: number
+      event_id: string
+      notify?: {
+        badge?: boolean
+        tier: 1 | 2 | 3
+      }
+      orderKey: string
+      payload: {
+        [key: string]: unknown
+      }
+      sequence?: number
+      session_id: string
+      summary: string
+      timestamp: number
+      type: string
     }
 
 export type SignalChannelConfig = {
@@ -25187,23 +25389,7 @@ export type SessionEventsResponses = {
   /**
    * Session event stream
    */
-  200: {
-    emittedAt: number
-    event_id: string
-    notify?: {
-      badge?: boolean
-      tier: 1 | 2 | 3
-    }
-    orderKey: string
-    payload: {
-      [key: string]: unknown
-    }
-    sequence?: number
-    session_id: string
-    summary: string
-    timestamp: number
-    type: string
-  }
+  200: SessionStreamEvent
 }
 
 export type SessionEventsResponse = SessionEventsResponses[keyof SessionEventsResponses]

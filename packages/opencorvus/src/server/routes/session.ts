@@ -54,7 +54,9 @@ import {
   ConversationTurnArtifactSummary,
   SessionConversationHistoryPage,
   SessionConversationHydration,
+  SessionConnectedEvent,
   SessionEvent,
+  SessionStreamEvent,
 } from "@/engine/model"
 import {
   applyRightSidebarConversationPromptOverlay,
@@ -89,6 +91,7 @@ import {
   ConversationHydrationQuery,
   conversationHistoryWindow,
 } from "@/conversation/history-window"
+import { sessionLineageIdentity } from "@/engine/task-session-lineage"
 
 const log = Log.create({ service: "server" })
 const MissionSessionAuthorityConflict = namedErrorResponse(
@@ -99,18 +102,26 @@ const MissionSessionAuthorityConflict = namedErrorResponse(
 type ActiveProjectSession = Awaited<ReturnType<typeof getActiveProjectSession>>
 
 export function includeSessionTreeEvent(
-  sessionTreeIDs: Set<string>,
-  event: { sessionID?: string; payload?: Record<string, unknown> },
+  input: {
+    sessionTreeIDs: Set<string>
+    selectedSessionID: string
+    projectID: string
+  },
+  event: { sessionID?: string },
 ): boolean {
   const eventSessionID = event.sessionID
   if (!eventSessionID) return false
-  if (sessionTreeIDs.has(eventSessionID)) return true
-  const parentSessionID =
-    event.payload && typeof event.payload.parentSessionID === "string" ? event.payload.parentSessionID : undefined
-  if (!parentSessionID || !sessionTreeIDs.has(parentSessionID)) return false
-  sessionTreeIDs.add(eventSessionID)
+  const lineage = sessionLineageIdentity(eventSessionID)
+  if (!lineage || lineage.projectID !== input.projectID) return false
+  const selectedIndex = lineage.sessionIDs.indexOf(input.selectedSessionID)
+  if (selectedIndex < 0) return false
+  for (const sessionID of lineage.sessionIDs.slice(0, selectedIndex + 1)) input.sessionTreeIDs.add(sessionID)
   return true
 }
+
+export const SessionEventStreamTestHooks: {
+  afterConversationSnapshotRead?: (input: { sessionID: string }) => void | Promise<void>
+} = {}
 
 async function sessionConversationTailProjection(session: ActiveProjectSession, tailLimit: number) {
   const sessionID = session.id
@@ -1017,7 +1028,7 @@ export const SessionRoutes = lazy(() =>
             description: "Session event stream",
             content: {
               "text/event-stream": {
-                schema: resolver(SessionEvent),
+                schema: resolver(SessionStreamEvent),
               },
             },
           },
@@ -1059,6 +1070,8 @@ export const SessionRoutes = lazy(() =>
             finishStream = resolve
           })
           let writes = Promise.resolve()
+          let bufferingProtocolEvents = true
+          const bufferedProtocolEvents: string[] = []
           const writeData = (data: string) => {
             writes = writes
               .then(() => {
@@ -1073,19 +1086,36 @@ export const SessionRoutes = lazy(() =>
           const sessionTreeIDs = new Set([sessionID])
           stopProtocol = ProtocolStore.subscribeEvents(
             bind((event) => {
-              if (!includeSessionTreeEvent(sessionTreeIDs, event)) return
-              void writeData(JSON.stringify(protocolSessionEvent(event)))
+              if (
+                !includeSessionTreeEvent(
+                  {
+                    sessionTreeIDs,
+                    selectedSessionID: sessionID,
+                    projectID: session.projectID,
+                  },
+                  event,
+                )
+              )
+                return
+              const data = JSON.stringify(protocolSessionEvent(event))
+              if (bufferingProtocolEvents) {
+                bufferedProtocolEvents.push(data)
+                return
+              }
+              void writeData(data)
             }),
           )
           // The message and part tables are the canonical Session transcript.
           // Subscribe first, then read their bounded tail: a message committed
           // before this subscription is in the snapshot, while one committed
           // afterwards is delivered by ProtocolStore. Stable message/part IDs
-          // make the intentional overlap idempotent in the overlay projection.
+          // are buffered until the older snapshot is sent, then replayed in
+          // arrival order so newer content always wins for a stable identity.
           const connectionConversation = await sessionConversationTailProjection(
             session,
             CONVERSATION_TAIL_MESSAGE_LIMIT,
           )
+          await SessionEventStreamTestHooks.afterConversationSnapshotRead?.({ sessionID })
           for (const treeSessionID of connectionConversation.sessionIDs) sessionTreeIDs.add(treeSessionID)
           const conversationSnapshot = {
             transcript: connectionConversation.transcript,
@@ -1097,31 +1127,37 @@ export const SessionRoutes = lazy(() =>
           // snapshot; one created afterwards arrives through ProtocolStore.
           // The overlap can repeat the same request ID, which the overlay
           // interaction projection intentionally upserts idempotently.
-          for (const request of readPendingQuestions().filter((item) => sessionTreeIDs.has(item.sessionID))) {
-            await writeData(JSON.stringify(pendingQuestionSessionEvent(request)))
-          }
-          for (const request of (await PermissionAuthority.list()).filter((item) =>
-            sessionTreeIDs.has(item.sessionID),
-          )) {
-            await writeData(JSON.stringify(pendingPermissionProtocolSessionEvent(request)))
-          }
+          const pendingQuestionEvents = readPendingQuestions()
+            .filter((item) => sessionTreeIDs.has(item.sessionID))
+            .map(pendingQuestionSessionEvent)
+          const pendingPermissionEvents = (await PermissionAuthority.list())
+            .filter((item) => sessionTreeIDs.has(item.sessionID))
+            .map(pendingPermissionProtocolSessionEvent)
+          const connectedAt = Date.now()
           await writeData(
-            JSON.stringify({
-              event_id: `session-connected-${Date.now()}`,
-              session_id: sessionID,
-              orderKey: timelineOrderKey({
-                domain: "session",
-                time: session.time.created,
-                id: sessionID,
+            JSON.stringify(
+              SessionConnectedEvent.parse({
+                event_id: `session-connected-${connectedAt}`,
+                session_id: sessionID,
+                orderKey: timelineOrderKey({
+                  domain: "session",
+                  time: session.time.created,
+                  id: sessionID,
+                }),
+                type: "session.connected",
+                emittedAt: connectedAt,
+                timestamp: connectedAt,
+                sequence: 0,
+                summary: "Session event stream connected",
+                payload: { sessionID, conversationSnapshot },
               }),
-              type: "session.connected",
-              emittedAt: Date.now(),
-              timestamp: Date.now(),
-              sequence: 0,
-              summary: "Session event stream connected",
-              payload: { sessionID, conversationSnapshot },
-            }),
+            ),
           )
+          for (const event of pendingQuestionEvents) await writeData(JSON.stringify(event))
+          for (const event of pendingPermissionEvents) await writeData(JSON.stringify(event))
+          bufferingProtocolEvents = false
+          const releaseWrites = bufferedProtocolEvents.splice(0).map(writeData)
+          if (releaseWrites.length > 0) await releaseWrites[releaseWrites.length - 1]
           if (closed) {
             await writes
             return

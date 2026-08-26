@@ -398,7 +398,7 @@ export const EngineRoutes = lazy(() =>
       }),
       validator("param", z.object({ taskID: Task.shape.id })),
       async (c) => {
-        const board = await EngineService.getBoard(c.req.valid("param").taskID, { sync: false })
+        const board = await EngineService.getBoard(c.req.valid("param").taskID)
         return c.json(taskStatusDetailFromBoard(board))
       },
     )
@@ -1327,8 +1327,7 @@ export const EngineRoutes = lazy(() =>
       validator("param", z.object({ taskID: Task.shape.id })),
       async (c) => {
         const taskID = c.req.valid("param").taskID
-        const sync = c.req.query("sync") !== "0"
-        const etag = await EngineService.getBoardTag(taskID, { sync })
+        const etag = await EngineService.getBoardTag(taskID)
         if (c.req.header("if-none-match") === etag) {
           return new Response(null, {
             status: 304,
@@ -1338,7 +1337,7 @@ export const EngineRoutes = lazy(() =>
           })
         }
         c.header("ETag", etag)
-        return c.json(await EngineService.getBoard(taskID, { sync: false }))
+        return c.json(await EngineService.getBoard(taskID))
       },
     )
     .get(

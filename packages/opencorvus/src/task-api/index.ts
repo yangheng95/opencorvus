@@ -2089,8 +2089,15 @@ export namespace EngineService {
     })
   }
 
-  export async function getBoard(taskID: string, _input?: { sync?: boolean }) {
-    // Read-only — poll loop handles state advancement asynchronously.
+  /**
+   * The Board projection of a Task.
+   *
+   * Read-only by contract: the poll loop advances state, and reading never
+   * does. This used to accept a `sync` option that every caller could pass
+   * and no implementation ever read — a public promise of freshness-on-demand
+   * that did nothing. The parameter is gone rather than silently ignored.
+   */
+  export async function getBoard(taskID: string) {
     requireTaskInCurrentProject(taskID)
     return compileBoard({ taskID })
   }
@@ -2142,8 +2149,8 @@ export namespace EngineService {
     })
   }
 
-  export async function getBoardTag(taskID: string, _input?: { sync?: boolean }) {
-    // Read-only — poll loop handles state advancement asynchronously.
+  /** The Board projection's ETag. Read-only for the same reason getBoard is. */
+  export async function getBoardTag(taskID: string) {
     requireTaskInCurrentProject(taskID)
     return boardTag({ taskID })
   }

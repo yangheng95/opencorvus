@@ -11,7 +11,13 @@ import { executionLifecycleOrderKey, SessionStatus, sessionLifecycleOrderKey } f
 import { Log } from "@/util/log"
 import { Database, and, eq } from "@/storage/db"
 import { MessageTable, PartTable, SessionTable, ToolPartRequestTable, type SessionKind } from "@/session/session.sql"
-import { taskIDForSession, taskSession, sessionRole, sessionParentID } from "@/engine/task-session-lineage"
+import {
+  taskIDForSession,
+  taskSession,
+  sessionRole,
+  sessionParentID,
+  sessionLineageIdentity,
+} from "@/engine/task-session-lineage"
 import { timelineMessageOrderKey, timelineOrderKey, timelinePartOrderKey } from "@/timeline/order"
 import { persistedSessionAgentID } from "@/agent/persisted-session-identity"
 import { HelperAgentRegistry } from "@/agent/helper-agent-registry"
@@ -1011,16 +1017,22 @@ async function bridgeEvent(type: string, properties: Record<string, unknown>) {
     const sessionID = sessionFromProperties(properties)
     if (!sessionID) return
     const taskID = taskIDForSession(sessionID)
-    if (!taskID) return
     const enriched = enrichMessageEventProperties(type, properties, sessionID, taskID)
+    const lineage = sessionLineageIdentity(sessionID)
+    if (!lineage) throw new Error(`bridge: message event Session ${sessionID} has no durable lineage`)
     ProtocolStore.dispatchEphemeral({
       type,
-      aggregate: "task",
-      taskID,
+      aggregate: taskID ? "task" : "session",
+      ...(taskID ? { taskID } : {}),
       sessionID,
       source: "session.bridge",
       orderKey: ephemeralEnvelopeOrderKey(type, enriched),
-      payload: enriched,
+      payload: {
+        ...enriched,
+        projectID: lineage.projectID,
+        rootSessionID: lineage.rootSessionID,
+        sessionLineage: lineage.sessionIDs,
+      },
     })
   } catch (err) {
     const error = err instanceof Error ? err.message : String(err)
@@ -1033,16 +1045,22 @@ async function bridgeMovedEvent(properties: Record<string, unknown>) {
   const sessionID = sessionFromProperties(properties)
   if (!sessionID) throw new Error("bridge: message.moved has no target Session identity")
   const taskID = taskIDForSession(sessionID)
-  if (!taskID) throw new Error(`bridge: message.moved target Session ${sessionID} has no owning Task`)
   const enriched = enrichMessageEventProperties(Message.Event.Moved.type, properties, sessionID, taskID)
+  const lineage = sessionLineageIdentity(sessionID)
+  if (!lineage) throw new Error(`bridge: message.moved target Session ${sessionID} has no durable lineage`)
   ProtocolStore.dispatchEphemeral({
     type: Message.Event.Moved.type,
-    aggregate: "task",
-    taskID,
+    aggregate: taskID ? "task" : "session",
+    ...(taskID ? { taskID } : {}),
     sessionID,
     source: "session.bridge",
     orderKey: ephemeralEnvelopeOrderKey(Message.Event.Moved.type, enriched),
-    payload: enriched,
+    payload: {
+      ...enriched,
+      projectID: lineage.projectID,
+      rootSessionID: lineage.rootSessionID,
+      sessionLineage: lineage.sessionIDs,
+    },
   })
 }
 

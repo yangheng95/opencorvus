@@ -1,7 +1,7 @@
 # Session Stream Message Cutover Convergence
 
 Date: 2026-08-26
-Status: delivered in `12ec09780`
+Status: repair in progress after independent review rejected `12ec09780`
 Owner: Codex
 
 ## Recall
@@ -65,7 +65,11 @@ The search found one selected-source stream owner in Overlay. Task and Session s
 
 ### Independent agent feedback
 
-None before implementation. The first mandatory read-only review found four valid issues: an in-flight older-history request could overwrite the connection cursor; the document overstated a bounded additive cutover snapshot as full deletion/mutation reconciliation; the controlled persisted-row screenshot did not prove a Provider-backed fresh submission or reconnect timing; and the status line was stale. The history request is now explicitly aborted and invalidated before the snapshot cursor is installed, with a delayed-response check. The contract and evidence below are narrowed to the actual missed-creation-event repair; disconnected deletion and mutation outside the returned tail remain excluded rather than being mislabeled as converged. The screenshot is retained only as real rendering evidence, while the production route check owns the cutover-timing proof. The same uninvolved reviewer performed the required second read-only review after correction, reran the focused Overlay and backend checks, and reported no unresolved finding.
+None before implementation. A later mandatory read-only review rejected commit `12ec09780` with five P1 findings. The production bridge does not emit Message/Part events for a non-Task worker child in a standalone Session tree; live events can be queued before an older connection snapshot and then be overwritten by that snapshot; dynamic child admission trusts a global event payload without canonical Project/root lineage; `session.connected` is not represented by the route/OpenAPI/generated Software Development Kit contract; and the added Overlay Card Tree test is prohibited UI state automation. The earlier review status and delivery claim were therefore incorrect.
+
+The repair must use one production path: every Message lifecycle event is stamped from durable Session lineage and dispatched to its Task aggregate when one exists or to its Session aggregate otherwise; the stream admits new members only from that canonical project/root identity; events received during snapshot construction are buffered until the typed `session.connected` envelope is written, then released in arrival order. The typed event must be used by the route and regenerated public closure. The prohibited Overlay test must be deleted and must not be run. Focused backend tests must exercise the real Bus -> bridge -> ProtocolStore -> SSE path after `session.connected`, including a non-Task child and two-project isolation, and a cutover fault injection must prove newer live Part content wins over the older snapshot. A fresh uninvolved read-only review is required after all checks pass.
+
+The implementation now follows that repair. The focused production-route test opens both Project streams, waits for each typed connection event, creates a non-Task `orchestrator` child in each durable tree, and persists its Message and Part through the real Bus/bridge/ProtocolStore/SSE flow; each stream receives the exact identities from its own canonical Project lineage. A snapshot-read hook updates the same persisted Part after the older snapshot is materialized, and the SSE sequence proves `session.connected` precedes the newer live Part value. Generated SDK types now name the connection event, snapshot, and stream union. The prohibited Overlay test is deleted and was not run during the repair. Repeat independent review remains pending.
 
 ## Problem depth and impact
 
@@ -115,7 +119,9 @@ Extend the existing `session.connected` handshake with one bounded connection sn
 4. Let Overlay validate and merge it through `prepareConversationView` / `commitPreparedConversationView` without clearing the Card Tree.
 5. Permit overlap between the snapshot and already queued live events; stable Message, Part, card, and `orderKey` identities make the merge idempotent.
 6. Abort and invalidate any older in-flight history request before replacing the selected Session history cursor with the cursor from the same connection window. If a disconnect accumulated more messages than the snapshot limit, the latest tail becomes visible immediately and older-page loading can continue from that tail to recover the middle segment. Stable message IDs make overlap with already loaded history idempotent.
-7. Keep one live membership set for the selected Session tree. Seed it from the canonical tree snapshot and admit a newly attached child when its event carries a parent already in the set, so Mission/assistant child messages and pending Question/Permission rows follow the same tree boundary instead of being silently restricted to the root Session ID.
+7. Keep one live membership set for the selected Session tree. Seed it from the canonical tree snapshot and resolve every event Session against the request Project's durable ancestor chain. Admit a new child only when that canonical chain contains the selected Session and carries the exact Project ID; payload parent claims are not authority.
+8. Make the message bridge the one live owner for every Message lifecycle event. It publishes against a Task aggregate when durable Task lineage exists and otherwise against the Session aggregate; the Session mirror no longer duplicates Message mapping.
+9. Validate the production handshake with `SessionConnectedEvent`, expose the route as `SessionStreamEvent`, and regenerate the named OpenAPI and JavaScript Software Development Kit types.
 
 This uses one message authority, one connection handshake, one writer, and one current implementation. It does not add a second event replay store or a client-created message.
 
@@ -137,19 +143,26 @@ The bounded snapshot is intentionally additive. It repairs missed creation event
 - [x] Repair design recorded before implementation.
 - [x] Backend subscribe-before-snapshot handshake implemented.
 - [x] Overlay snapshot merge and history-cursor convergence implemented, including invalidation of an older in-flight history request.
-- [x] Focused route/projection/history/origin tests, package typechecks, documentation checks, architecture index, diff check, and Overlay production build passed.
+- [x] Message live ownership covers both Task and non-Task Session aggregates without a duplicate Session-mirror implementation.
+- [x] Cutover live events are buffered until the typed connection snapshot is emitted, then released in arrival order.
+- [x] Dynamic Session admission resolves the exact request Project's durable ancestor chain instead of trusting event payload lineage.
+- [x] OpenAPI and JavaScript SDK generation closure includes named `SessionConnectedEvent`, `SessionConversationConnectionSnapshot`, and `SessionStreamEvent` contracts.
+- [x] Prohibited Overlay Card Tree automation removed and not run during repair.
+- [x] Focused route/projection/history/origin tests, package typechecks, documentation checks, architecture index, diff check, SDK generation/typecheck, and Overlay production build passed.
 - [x] Real-page rendering acceptance completed against an isolated runtime; screenshot: [`../../artifacts/session-stream/2026-08-26-work-first-message-visible.png`](../../artifacts/session-stream/2026-08-26-work-first-message-visible.png). DOM and screenshot show `User` / `第一条 Work 用户消息应该完整显示`, followed by `work` / `这是 Work Agent 的消息；它应显示在用户消息之后。`; browser warning/error log was empty. This is rendering evidence only; the route test proves the connection race.
-- [x] Independent review complete with no unresolved finding.
-- [x] Scoped commit `12ec09780` created, upstream merged, complete push set verified, and pushed to `origin/arch-debt-remediation`.
+- [ ] Independent review complete with no unresolved finding. The mandatory review rejected `12ec09780` with five P1 findings; repair and repeat review are in progress.
+- [ ] Corrective commit created, upstream merged, complete push set verified, and pushed to `origin/arch-debt-remediation`.
 
 ## Verification evidence
 
-- `bun test test/server/session-event-connection-snapshot.test.ts` in `packages/opencorvus`: 3 passed (first Work prompt, 82-message reconnect window, and dynamic child-Session membership).
-- `bun test test/session-connection-snapshot.test.ts` in `packages/overlay`: 2 passed, including rejection of a delayed history response after a newer connection cursor is installed.
-- `bun test test/server/session-conversation-history.test.ts test/mission-message-origin-projection.test.ts` in `packages/opencorvus`: 4 passed.
+- `bun test test/server/session-event-connection-snapshot.test.ts` in `packages/opencorvus`: 4 passed (first Work prompt, 82-message reconnect window, older-snapshot/newer-live Part ordering, and exact two-Project non-Task child Message/Part delivery).
+- `packages/overlay/test/session-connection-snapshot.test.ts` was identified as prohibited UI state automation. Its earlier execution is not accepted as evidence; the file is removed by this repair and is not run again.
+- `bun test test/server/session-event-connection-snapshot.test.ts test/server/session-conversation-history.test.ts test/mission-message-origin-projection.test.ts test/protocol-session-config-mirror.test.ts test/task-event-projection-contract.test.ts` in `packages/opencorvus`: 11 passed, 23 assertions.
 - `bun run typecheck` in `packages/opencorvus`: passed.
 - `bun run typecheck` in `packages/overlay`: passed.
+- `bun run build` and `bun run typecheck` in `packages/sdk/js`: passed; generated `SessionEventsResponses[200]` is `SessionStreamEvent` rather than an untyped payload-only object.
 - `bun run build:vite` in `packages/overlay`: passed (existing Rollup chunk-size and mixed static/dynamic-import warnings only).
+- `bun run api:routes-check`: passed across 34 route files.
 - `bun run docs:check`: passed, 338 operations and 25 groups.
 - `bun run check:architecture-index`: passed, 26 current documents indexed.
 - Prettier passed for both newly added focused test files, `packages/opencorvus/src/engine/model.ts`, and `packages/overlay/src/services/conversation.ts`. The pre-existing `packages/opencorvus/src/server/routes/session.ts` and `packages/overlay/src/services/sse.ts` are not whole-file Prettier-clean; unrelated formatting hunks were deliberately not retained.
