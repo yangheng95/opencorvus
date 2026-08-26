@@ -535,10 +535,7 @@ export const EngineRoutes = lazy(() =>
       validator(
         "query",
         z.object({
-          after: z
-            .string()
-            .optional()
-            .meta({ description: "Resume after this durable task-event sequence." }),
+          after: z.string().optional().meta({ description: "Resume after this durable task-event sequence." }),
           after_live: z
             .string()
             .optional()
@@ -1088,6 +1085,19 @@ export const EngineRoutes = lazy(() =>
           ...errors(404),
         },
       }),
+      validator(
+        "query",
+        z.object({
+          after_live_sequence: z
+            .string()
+            .optional()
+            .meta({ description: "Resume the live transcript after this sequence." }),
+          after_live_epoch: z
+            .string()
+            .optional()
+            .meta({ description: "The live projection epoch the after_live_sequence cursor belongs to." }),
+        }),
+      ),
       validator("param", z.object({ taskID: Task.shape.id, sessionID: z.string().min(1) })),
       async (c) => {
         const { taskID, sessionID } = c.req.valid("param")

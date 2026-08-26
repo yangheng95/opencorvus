@@ -175,6 +175,15 @@ export const AttachmentRoutes = lazy(() =>
           404: { description: "Not found" },
         },
       }),
+      validator(
+        "query",
+        z.object({
+          variant: z
+            .string()
+            .optional()
+            .meta({ description: "Serve a derived rendition of the attachment instead of the stored bytes." }),
+        }),
+      ),
       async (c) => {
         const projectID = c.req.param("projectID")
         const name = c.req.param("name")
