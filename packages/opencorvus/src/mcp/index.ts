@@ -32,7 +32,7 @@ import { runWithIndependentProjectIdentity } from "../project/independent-projec
 import { createInstanceState } from "../project/instance-state"
 import { Installation } from "../installation"
 import { McpOAuthProvider } from "./oauth-provider"
-import { McpOAuthCallback } from "./oauth-callback"
+import { McpOAuthCallback, type CallbackResolution } from "./oauth-callback"
 import { oauthAuthorizationLogFields } from "./oauth-log"
 import { McpAuth } from "./auth"
 import { BrowserMCPBuiltin } from "./browser/builtin"
@@ -1137,6 +1137,74 @@ export namespace MCP {
     correlationID: string
   }
   const pendingOAuthFlows = new Map<string, PendingOAuthFlow>()
+  type PendingOAuthFinish = {
+    authKey: string
+    oauthState: string
+    operation: Promise<Status>
+    joiners: number
+  }
+  const pendingOAuthFinishes = new Map<string, PendingOAuthFinish>()
+  type OAuthTerminalClaim = {
+    key: string
+    finish?: { mcpName: string; operation: Promise<Status> }
+  }
+  const oauthTerminalClaims = new Map<string, Set<OAuthTerminalClaim>>()
+
+  function oauthFinishKey(authKey: string, oauthState: string): string {
+    return JSON.stringify([authKey, oauthState])
+  }
+
+  function pendingOAuthFinishForProject(
+    projectID: string,
+    oauthState: string,
+  ): { mcpName: string; finish: PendingOAuthFinish } | undefined {
+    const prefix = `${projectID}:`
+    for (const finish of pendingOAuthFinishes.values()) {
+      if (finish.oauthState === oauthState && finish.authKey.startsWith(prefix)) {
+        return { mcpName: finish.authKey.slice(prefix.length), finish }
+      }
+    }
+    return undefined
+  }
+
+  function oauthTerminalClaimKey(projectID: string, oauthState: string): string {
+    return JSON.stringify([projectID, oauthState])
+  }
+
+  function registerOAuthTerminalClaim(projectID: string, oauthState: string): OAuthTerminalClaim {
+    const key = oauthTerminalClaimKey(projectID, oauthState)
+    const inFlight = pendingOAuthFinishForProject(projectID, oauthState)
+    const claim: OAuthTerminalClaim = {
+      key,
+      ...(inFlight ? { finish: { mcpName: inFlight.mcpName, operation: inFlight.finish.operation } } : {}),
+    }
+    const claims = oauthTerminalClaims.get(key) ?? new Set<OAuthTerminalClaim>()
+    claims.add(claim)
+    oauthTerminalClaims.set(key, claims)
+    return claim
+  }
+
+  function publishOAuthFinish(
+    projectID: string,
+    oauthState: string,
+    mcpName: string,
+    operation: Promise<Status>,
+  ): void {
+    for (const claim of oauthTerminalClaims.get(oauthTerminalClaimKey(projectID, oauthState)) ?? []) {
+      claim.finish ??= { mcpName, operation }
+    }
+  }
+
+  function releaseOAuthTerminalClaim(claim: OAuthTerminalClaim): void {
+    const claims = oauthTerminalClaims.get(claim.key)
+    if (!claims) return
+    claims.delete(claim)
+    if (claims.size === 0) oauthTerminalClaims.delete(claim.key)
+  }
+
+  function capturedOAuthFinish(claim: OAuthTerminalClaim): OAuthTerminalClaim["finish"] {
+    return claim.finish
+  }
 
   // Prompt cache types
   export type PromptInfo = Awaited<ReturnType<MCPClient["listPrompts"]>>["prompts"][number]
@@ -3609,8 +3677,24 @@ export namespace MCP {
   }
 
   export namespace TestHooks {
-    export async function registerOAuthCallbackAuthority(authority: McpOAuthCallback.CallbackAuthority) {
+    export async function registerOAuthCallbackAuthority(authority?: McpOAuthCallback.CallbackAuthority) {
       await registerOAuthCallbackAuthorityForInstance(authority)
+    }
+
+    export async function rethrowRejectedOAuthCallback(input: {
+      authKey: string
+      revision: McpAuth.Revision
+      callbackError: Error
+    }): Promise<never> {
+      return throwRejectedOAuthCallback(input.authKey, input.revision, input.callbackError)
+    }
+
+    export function oauthFinishJoinCount(mcpName: string, oauthState: string): number {
+      return pendingOAuthFinishes.get(oauthFinishKey(mcpAuthKey(mcpName), oauthState))?.joiners ?? 0
+    }
+
+    export function oauthFinishInFlight(mcpName: string, oauthState: string): boolean {
+      return pendingOAuthFinishes.has(oauthFinishKey(mcpAuthKey(mcpName), oauthState))
     }
   }
 
@@ -3901,11 +3985,27 @@ export namespace MCP {
       // A flow this caller abandoned must not leave a spendable state behind.
       // Every other exit from this function clears it; the settlement failure
       // path did not, which left a live acceptance window with no waiter.
-      await McpAuth.clearOAuthStateIfOwned(authKey, flow.revision)
-      throw callback.error
+      return throwRejectedOAuthCallback(authKey, flow.revision, callback.error)
     }
 
-    return finishAuthCallback(mcpName, callback.code, oauthState)
+    return callback.result
+  }
+
+  async function throwRejectedOAuthCallback(
+    authKey: string,
+    revision: McpAuth.Revision,
+    callbackError: Error,
+  ): Promise<never> {
+    try {
+      await McpAuth.clearOAuthStateIfOwned(authKey, revision)
+    } catch (cleanupError) {
+      throw new AggregateError(
+        [callbackError, cleanupError],
+        `MCP OAuth callback failed and state cleanup also failed for ${authKey}`,
+        { cause: callbackError },
+      )
+    }
+    throw callbackError
   }
 
   /**
@@ -3919,6 +4019,8 @@ export namespace MCP {
    * redeem the same authorization code twice.
    */
   function durableFlowAuthority(directory: string, projectID: string): McpOAuthCallback.CallbackAuthority {
+    const resolutions = new WeakMap<CallbackResolution, OAuthTerminalClaim>()
+
     async function inProject<R>(label: string, fn: () => Promise<R>): Promise<R> {
       const outcome = await reenterActiveInstance({ directory, fn: async () => ({ value: await fn() }) })
       if (!outcome) throw new Error(`Cannot ${label}: project ${directory} is no longer active`)
@@ -3926,34 +4028,120 @@ export namespace MCP {
     }
 
     return {
-      resolveState(oauthState) {
-        return inProject("resolve the OAuth callback's flow", async () => {
-          const prefix = `${projectID}:`
-          for (const [authKey, entry] of Object.entries(await McpAuth.all())) {
-            if (!authKey.startsWith(prefix) || entry.oauthState !== oauthState) continue
-            return { mcpName: authKey.slice(prefix.length) }
+      async resolveState(oauthState) {
+        // Register before the first durable read. A finish that starts and
+        // completes while resolution is suspended publishes its exact Promise
+        // into this callback-owned receipt, so later map cleanup cannot erase
+        // the answer from a contender that was already in flight.
+        const claim = registerOAuthTerminalClaim(projectID, oauthState)
+        try {
+          const resolution = await inProject("resolve the OAuth callback's flow", async () => {
+            const existingFinish = capturedOAuthFinish(claim)
+            if (existingFinish) {
+              return { mcpName: existingFinish.mcpName, phase: "finishing" as const }
+            }
+            const prefix = `${projectID}:`
+            const entries = Object.entries(await McpAuth.all())
+            const concurrentFinish = capturedOAuthFinish(claim)
+            if (concurrentFinish) {
+              return { mcpName: concurrentFinish.mcpName, phase: "finishing" as const }
+            }
+            for (const [authKey, entry] of entries) {
+              if (!authKey.startsWith(prefix) || entry.oauthState !== oauthState) continue
+              return { mcpName: authKey.slice(prefix.length), phase: "pending" as const }
+            }
+            const finishAfterRead = capturedOAuthFinish(claim)
+            return finishAfterRead ? { mcpName: finishAfterRead.mcpName, phase: "finishing" as const } : undefined
+          })
+          if (!resolution) {
+            releaseOAuthTerminalClaim(claim)
+            return undefined
           }
-          return undefined
-        })
+          resolutions.set(resolution, claim)
+          return resolution
+        } catch (error) {
+          releaseOAuthTerminalClaim(claim)
+          throw error
+        }
       },
       async finish(input) {
-        await inProject("finish the OAuth flow", () =>
-          finishAuthCallback(input.mcpName, input.authorizationCode, input.oauthState),
-        )
+        const claim = resolutions.get(input.resolution)
+        if (!claim) throw new Error("OAuth callback resolution is no longer owned")
+        try {
+          if (claim.finish) {
+            const current = pendingOAuthFinishes.get(
+              oauthFinishKey(McpAuth.scopedKey({ projectID, mcpName: claim.finish.mcpName }), input.oauthState),
+            )
+            if (current?.operation === claim.finish.operation) current.joiners++
+            return await claim.finish.operation
+          }
+          return await inProject("finish the OAuth flow", () =>
+            finishAuthCallbackWithClaim(input.resolution.mcpName, input.authorizationCode, input.oauthState, claim),
+          )
+        } finally {
+          releaseOAuthTerminalClaim(claim)
+        }
+      },
+      async joinFinish(input) {
+        const claim = resolutions.get(input.resolution)
+        if (!claim?.finish) {
+          throw new OAuthStateError({
+            mcpName: input.resolution.mcpName,
+            message: "OAuth finish is no longer owned by this callback",
+          })
+        }
+        try {
+          const current = pendingOAuthFinishes.get(
+            oauthFinishKey(McpAuth.scopedKey({ projectID, mcpName: claim.finish.mcpName }), input.oauthState),
+          )
+          if (current?.operation === claim.finish.operation) current.joiners++
+          return await claim.finish.operation
+        } finally {
+          releaseOAuthTerminalClaim(claim)
+        }
       },
       async abandon(input) {
-        await inProject("terminalize the rejected OAuth flow", () =>
-          abandonAuthCallback(input.mcpName, input.oauthState),
-        )
+        const claim = resolutions.get(input.resolution)
+        if (!claim) throw new Error("OAuth callback resolution is no longer owned")
+        try {
+          if (claim.finish) {
+            const current = pendingOAuthFinishes.get(
+              oauthFinishKey(McpAuth.scopedKey({ projectID, mcpName: claim.finish.mcpName }), input.oauthState),
+            )
+            if (current?.operation === claim.finish.operation) current.joiners++
+            return { outcome: "joined", status: await claim.finish.operation }
+          }
+          return await inProject("terminalize the rejected OAuth flow", () =>
+            abandonAuthCallback(input.resolution.mcpName, input.oauthState, claim),
+          )
+        } finally {
+          releaseOAuthTerminalClaim(claim)
+        }
       },
     }
   }
 
-  async function abandonAuthCallback(mcpName: string, oauthState: string): Promise<void> {
+  async function abandonAuthCallback(
+    mcpName: string,
+    oauthState: string,
+    claim: OAuthTerminalClaim,
+  ): Promise<{ outcome: "abandoned" } | { outcome: "joined"; status: Status }> {
     const authKey = mcpAuthKey(mcpName)
+    const joinWinner = () => {
+      const finish = claim.finish
+      if (!finish) return undefined
+      const current = pendingOAuthFinishes.get(oauthFinishKey(authKey, oauthState))
+      if (current?.operation === finish.operation) current.joiners++
+      return finish.operation.then((status) => ({ outcome: "joined" as const, status }))
+    }
+    const existingWinner = joinWinner()
+    if (existingWinner) return existingWinner
+
     const localOwner = pendingOAuthFlows.get(authKey)
     const durable = await McpAuth.get(authKey)
     if (!durable?.revision || durable.oauthState !== oauthState) {
+      const concurrentWinner = joinWinner()
+      if (concurrentWinner) return concurrentWinner
       throw new OAuthStateError({
         mcpName,
         message: "OAuth state is not current - it was already used, superseded, or never issued",
@@ -3961,6 +4149,12 @@ export namespace MCP {
     }
     const abandoned = await McpAuth.abandonOAuthState(authKey, oauthState, durable.revision)
     if (!abandoned) {
+      // resolveState and durable abandon are necessarily separated by awaits.
+      // A code callback can create and spend the canonical finish between
+      // them. Losing that terminal admission is not a rejection: join the
+      // exact in-process winner and publish its one outcome.
+      const concurrentWinner = joinWinner()
+      if (concurrentWinner) return concurrentWinner
       if (pendingOAuthFlows.get(authKey) === localOwner) pendingOAuthFlows.delete(authKey)
       throw new OAuthStateError({
         mcpName,
@@ -3968,6 +4162,7 @@ export namespace MCP {
       })
     }
     if (pendingOAuthFlows.get(authKey) === localOwner) pendingOAuthFlows.delete(authKey)
+    return { outcome: "abandoned" }
   }
 
   /**
@@ -4029,10 +4224,56 @@ export namespace MCP {
     return owner
   }
 
-  export async function finishAuthCallback(
+  export function finishAuthCallback(mcpName: string, authorizationCode: string, oauthState: string): Promise<Status> {
+    return finishAuthCallbackWithClaim(mcpName, authorizationCode, oauthState)
+  }
+
+  function finishAuthCallbackWithClaim(
     mcpName: string,
     authorizationCode: string,
     oauthState: string,
+    claim?: OAuthTerminalClaim,
+  ): Promise<Status> {
+    const authKey = mcpAuthKey(mcpName)
+    const key = oauthFinishKey(authKey, oauthState)
+    if (claim?.finish) {
+      const captured = claim.finish.operation
+      const current = pendingOAuthFinishes.get(key)
+      if (current?.operation === captured) current.joiners++
+      return captured
+    }
+    const current = pendingOAuthFinishes.get(key)
+    if (current) {
+      current.joiners++
+      return current.operation
+    }
+
+    const owned = finishAuthCallbackOwned(mcpName, authorizationCode, oauthState, authKey)
+    const operation = owned
+      .then(
+        (status) => {
+          McpOAuthCallback.resolvePendingFinish(oauthState, status)
+          return status
+        },
+        (cause) => {
+          const error = cause instanceof Error ? cause : new Error(String(cause))
+          McpOAuthCallback.rejectPendingFinish(oauthState, error)
+          throw error
+        },
+      )
+      .finally(() => {
+        if (pendingOAuthFinishes.get(key)?.operation === operation) pendingOAuthFinishes.delete(key)
+      })
+    pendingOAuthFinishes.set(key, { authKey, oauthState, operation, joiners: 0 })
+    publishOAuthFinish(Instance.project.id, oauthState, mcpName, operation)
+    return operation
+  }
+
+  async function finishAuthCallbackOwned(
+    mcpName: string,
+    authorizationCode: string,
+    oauthState: string,
+    authKey: string,
   ): Promise<Status> {
     const cfg = await Config.get()
     const config = (cfg.mcp ?? {}) as NonNullable<Config.Info["mcp"]>
@@ -4043,7 +4284,6 @@ export namespace MCP {
     if (mcpConfig.type !== "remote") {
       throw new Error(`MCP server ${mcpName} is not a remote server`)
     }
-    const authKey = mcpAuthKey(mcpName)
     const owner = await assertOAuthState(mcpName, authKey, oauthState)
     try {
       return await finishAuth(mcpName, authorizationCode, owner)

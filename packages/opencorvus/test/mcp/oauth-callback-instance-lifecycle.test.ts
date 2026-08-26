@@ -19,12 +19,22 @@ function authority(input: {
   return {
     async resolveState(oauthState) {
       const mcpName = input.flows?.[oauthState]
-      return mcpName ? { mcpName } : undefined
+      return mcpName ? { mcpName, phase: "pending" } : undefined
     },
     async finish(finishInput) {
-      input.finished?.push(finishInput)
+      input.finished?.push({
+        mcpName: finishInput.resolution.mcpName,
+        authorizationCode: finishInput.authorizationCode,
+        oauthState: finishInput.oauthState,
+      })
+      return { status: "connected" }
     },
-    async abandon() {},
+    async joinFinish() {
+      throw new Error("No finish is in flight in this authority fixture")
+    },
+    async abandon() {
+      return { outcome: "abandoned" }
+    },
   }
 }
 

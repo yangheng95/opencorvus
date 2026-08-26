@@ -513,6 +513,30 @@ tool、permission、feature flag、Project state、Execution Capsule descriptor 
 OpenCorvus 作为 client / host 接入外部或 package-scoped MCP server，并把 active projection
 授予的工具暴露给 Agent。`mcp browser` 是内置浏览器 MCP 的独立 stdio 入口，Task 调度只使用
 内部 projected-agent runtime。Browser MCP 的 Playwright Page 是浏览、截图、诊断和用户观看的唯一页面事实源。
+
+MCP OAuth callback listener 是本地 redirect 的唯一 finish 与 HTTP answer owner。无论当前进程是否仍有
+interactive waiter，listener 都先通过 project-scoped durable authority 解析 state，再进入同一个
+`finishAuthCallback`；后者通过 credential store 内的 compare-and-clear 单次 spend 完成唯一 admission。
+interactive `authenticate` 不再次 exchange authorization code，只接收 listener 那次 finish 返回的 canonical
+`MCP.Status`。`finishAuthCallback` 为同一 runtime 内精确 `authKey + state` 保持一个 in-flight operation；listener
+duplicate 与公开 SDK callback route 都加入它，operation 自己把唯一 status/error 结算给本地 waiter。精确 callback
+到达后，本地 waiter 进入 finishing phase 并停止独立 timeout/cancel/stop settlement；listener 只在 durable finish
+成功或失败后回答浏览器。winner 即使已经 spend、仍在慢速 provider exchange，loser 也只能等待 canonical operation，
+不能抢先把 waiter 投影成失败。每个已进入 authority resolution 的 callback 持有一个 callback-owned terminal receipt；
+receipt 在首次 durable read 前注册，finish 在 operation 创建时把精确 Promise 发布给所有已入场 receipt。live operation
+map 可在 canonical settlement 后立即清理，但已入场 callback 仍通过自己的 receipt 得到同一结果，不存在 completed-result
+cache 或第二 durable owner。durable authority 对 exact state 明确返回 `pending` 或 `finishing`；命中后者的
+provider-error、missing-code 与 code duplicate 都加入 canonical operation，不能把已 spend 的 state 重新解释为
+abandon 请求。只有仍为 `pending` 的 provider rejection 和 missing-code callback 才尝试在 HTTP response 与本地
+rejection 之前 durable abandon exact state 与 verifier；`pending` resolution 只是快照，若 code finish 在其后抢先
+spend，authority 必须在 abandon 的原子结果边界通过 callback receipt 加入同一 runtime 的 exact operation，而不能把
+loser 的 already-spent 结果投影给 waiter。只有没有 canonical finish 可加入的真实 abandon 失败才以同一个错误结算
+HTTP 与 waiter。callback
+原错之后的 state cleanup 若也失败，返回保留 callback error 为 cause 且同时携带两者的 `AggregateError`。
+共享 listener 解析多项目 authority 时先同步启动全部当前 authority 的 resolution，再按注册顺序消费结果；因此每个
+项目的 callback receipt 都在等待任一 non-owner durable read 前入场。前置慢项目不能让真实 owner 错过同一 runtime
+winner 的 Promise，单个 authority 失败仍仅在没有任何 authority 声明 owner 时进入原有聚合错误契约。
+
 本地运行默认连接用户已打开的稳定版 Google Chrome。BrowserRuntime 读取其默认 profile 发布的
 `DevToolsActivePort`，经 Chrome DevTools Protocol (CDP) 连接 default context，并仅创建和关闭 MCP 自己的 Page。
 若 Chrome 尚未授权，runtime 返回包含 `chrome://inspect/#remote-debugging` 的稳定操作指引，由用户在正在使用的
