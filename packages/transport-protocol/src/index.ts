@@ -4,10 +4,10 @@
  * lifecycle, settings, and native-command validation from drifting.
  */
 import { z } from "zod"
-import { ProductPillarSchema } from "@opencorvus-ai/sdk/expert-squad-manifest-v1"
+import { ProductPillarSchema } from "@opencorvus-ai/util/product-pillar"
 
 export { ProductPillarSchema }
-export type { ProductPillar } from "@opencorvus-ai/sdk/expert-squad-manifest-v1"
+export type { ProductPillar } from "@opencorvus-ai/util/product-pillar"
 
 export const ConversationTargetSchema = z.enum(["chat", "mission"])
 export type ConversationTarget = z.output<typeof ConversationTargetSchema>

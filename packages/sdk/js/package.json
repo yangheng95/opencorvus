@@ -77,6 +77,7 @@
     "@typescript/native-preview": "catalog:"
   },
   "dependencies": {
+    "@opencorvus-ai/util": "workspace:*",
     "zod": "catalog:"
   }
 }

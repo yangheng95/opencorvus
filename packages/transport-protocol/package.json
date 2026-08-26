@@ -17,7 +17,7 @@
     "@types/node": "catalog:"
   },
   "dependencies": {
-    "@opencorvus-ai/sdk": "workspace:*",
+    "@opencorvus-ai/util": "workspace:*",
     "zod": "catalog:"
   }
 }

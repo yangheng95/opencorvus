@@ -23,6 +23,7 @@ bun run api:routes-check
 bun run docs:check
 bun run check:control-lease-owners
 bun run check:architecture-index
+bun run check:package-topology
 # Block in-tree secrets before they reach a remote branch. The script exits 1 on any hit and prints
 # the file:line + pattern id; deliberate test fixtures should mark the
 # offending line with `// secret-scan: ignore`.
