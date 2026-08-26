@@ -224,81 +224,23 @@ async function startInProcess(
   current: State,
   channelProtocol: boolean,
 ): Promise<InProcessRuntime> {
-  // Dynamic import to avoid loading channel-runtime when not needed
-  const { ChannelRuntime } = await import("../../../channel-runtime/src/core")
-  const { registerAdapters, ADAPTER_HINT } = await import("../../../channel-runtime/src/registry")
-  const { SlackAdapter } = await import("../../../channel-runtime/src/adapters/slack")
-  const { TelegramAdapter } = await import("../../../channel-runtime/src/adapters/telegram")
-  const { DiscordAdapter } = await import("../../../channel-runtime/src/adapters/discord")
-  const { FeishuAdapter } = await import("../../../channel-runtime/src/adapters/feishu")
-  const { WhatsappAdapter } = await import("../../../channel-runtime/src/adapters/whatsapp")
-  const { GoogleChatAdapter } = await import("../../../channel-runtime/src/adapters/googlechat")
-  const { MSTeamsAdapter } = await import("../../../channel-runtime/src/adapters/msteams")
-  const { LineAdapter } = await import("../../../channel-runtime/src/adapters/line")
-  const { MatrixAdapter } = await import("../../../channel-runtime/src/adapters/matrix")
-  const { MattermostAdapter } = await import("../../../channel-runtime/src/adapters/mattermost")
-  const { SignalAdapter } = await import("../../../channel-runtime/src/adapters/signal")
-  const { WeComAdapter } = await import("../../../channel-runtime/src/adapters/wecom")
-  const { DingTalkAdapter } = await import("../../../channel-runtime/src/adapters/dingtalk")
-  const { applyDashscopeRuntime } = await import("../../../channel-runtime/src/dashscope")
-  const { createConfiguredSTT } = await import("../../../channel-runtime/src/stt/setup")
-  const { VisionPipeline } = await import("../../../channel-runtime/src/vision")
+  // The Channel runtime's own composition root, consumed through the declared
+  // package boundary. OpenCorvus used to reach across the workspace into this
+  // package's private `src` with relative imports and assemble providers,
+  // adapters and readiness a second time, so an in-process runtime and a
+  // spawned one could disagree about what "configured" means.
+  const { bootstrapChannelRuntime, ADAPTER_HINT } = await import("@opencorvus-ai/channel-runtime")
 
-  const dashscope = await applyDashscopeRuntime()
-  const serverUrl = env.OPENCORVUS_CHANNEL_SERVER_URL
-
-  const runtime = new ChannelRuntime({
-    baseUrl: serverUrl,
-    directory: env.OPENCORVUS_PROJECT_DIR,
-    channelProtocol,
-    sharedMode: process.env.OPENCORVUS_SHARED_SESSION_MODE === "1",
-    sharedFile: process.env.OPENCORVUS_SHARED_SESSION_FILE,
+  const { runtime, adapterNames } = await bootstrapChannelRuntime({
+    env: { ...env, OPENCORVUS_CHANNEL_PROTOCOL: channelProtocol ? "1" : env.OPENCORVUS_CHANNEL_PROTOCOL },
+    onDiagnostic: (message) => log.info("channel runtime", { message }),
   })
 
-  const sttPipeline = await createConfiguredSTT(env)
-  if (sttPipeline) {
-    runtime.setSTT(sttPipeline)
-  }
-
-  // Vision pipeline (optional)
-  if (dashscope.key && process.env.OPENCORVUS_VISION_MODEL) {
-    try {
-      runtime.setVision(
-        new VisionPipeline({
-          apiKey: dashscope.key,
-          baseURL: dashscope.baseURL,
-          model: process.env.OPENCORVUS_VISION_MODEL,
-        }),
-      )
-    } catch {
-      /* Vision optional */
-    }
-  }
-
-  // Register adapters
-  const adapters = registerAdapters(runtime, env, {
-    slack: (opts: any) => new SlackAdapter(opts),
-    telegram: (opts: any) => new TelegramAdapter(opts),
-    discord: (opts: any) => new DiscordAdapter(opts),
-    feishu: (opts: any) => new FeishuAdapter(opts),
-    whatsapp: (opts: any) => new WhatsappAdapter(opts),
-    googlechat: (opts: any) => new GoogleChatAdapter(opts),
-    msteams: (opts: any) => new MSTeamsAdapter(opts),
-    line: (opts: any) => new LineAdapter(opts),
-    matrix: (opts: any) => new MatrixAdapter(opts),
-    mattermost: (opts: any) => new MattermostAdapter(opts),
-    signal: (opts: any) => new SignalAdapter(opts),
-    wecom: (opts: any) => new WeComAdapter(opts),
-    dingtalk: (opts: any) => new DingTalkAdapter(opts),
-  })
-  for (const warn of adapters.warns) {
-    log.warn("channel adapter skip", { message: warn })
-  }
-  if (adapters.names.length === 0) {
+  if (adapterNames.length === 0) {
     throw new Error(`No chat channel configured. ${ADAPTER_HINT}`)
   }
-  log.info("channel runtime starting", { channels: adapters.names })
-  for (const name of adapters.names) {
+  log.info("channel runtime starting", { channels: adapterNames })
+  for (const name of adapterNames) {
     appendLog(current, `Registered: ${name}`)
   }
 
@@ -313,7 +255,7 @@ async function startInProcess(
       current.cleanupPending.add(owner)
       throw new AggregateError(
         [startupError, cleanupError],
-        `Channel runtime startup and rollback failed for ${adapters.names.join(", ")}`,
+        `Channel runtime startup and rollback failed for ${adapterNames.join(", ")}`,
       )
     }
     throw startupError
