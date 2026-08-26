@@ -1,6 +1,6 @@
 # OpenCorvus 论文生产前置证据基础包
 
-Status: implementation package complete; independent workflow review and Git delivery pending
+Status: implementation package committed; independent workflow review pending; push blocked by unrelated outgoing commit
 
 ## Recall
 
@@ -92,4 +92,8 @@ Status: implementation package complete; independent workflow review and Git del
 
 ### 独立审查与 Git
 
-本实施节点不能代替所选 Advanced workflow 的独立测试与 integrity reviewer。完整实现证据已准备供下游节点只读消费；当前不宣称 REQ-10 已完成。提交、upstream 合并、待推送集合审计和 push 仍待本记录后续更新，不以文件存在冒充验收完成。
+本实施节点不能代替所选 Advanced workflow 的独立测试与 integrity reviewer。完整实现证据已准备供下游节点只读消费；当前不宣称 REQ-10 已完成。
+
+基础包提交为 `c2a8c07a65f6242c4d639ea8e9d85a3dace07958`。`git fetch origin` 成功，随后 `git merge --no-edit origin/arch-debt-remediation` 报告 already up to date。`origin/arch-debt-remediation..HEAD` 含本任务提交及其未推送前驱 `7786b642d7ed4572ed31ed6a0710521a6a89239d`；后者修改 6 个无关 `packages/opencorvus` 源码/测试文件，未经本任务授权、验证或独立审查。推送 HEAD 会连带发布该提交，故未执行 push，也未使用 reset、rebase、force 或另建分支绕过。后续动作是由 `7786b642d` 所有者先验证并推送；本任务随后 fetch、重新审计 `upstream..HEAD`、复验并推送论文提交。
+
+结束前工作区另有 5 个并发无关修改：`packages/opencorvus/src/engine/pipeline.ts`、`packages/opencorvus/src/tool/grep.ts`、`packages/opencorvus/src/tool/grep.txt`、`packages/opencorvus/src/util/process.ts`、`packages/opencorvus/test/tool/search-code-bounded-execution.test.ts`。它们保持 unstaged、未编辑、未提交。

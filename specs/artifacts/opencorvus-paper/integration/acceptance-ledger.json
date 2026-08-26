@@ -12,7 +12,7 @@
     {"id":"REQ-8","status":"passed-for-authorized-scope","evidence":["focused command ledger","JSON parse","docs checker","diff checker"]},
     {"id":"REQ-9","status":"passed","evidence":["figures/architecture-inputs.json","figures/experiment-inputs.json"]},
     {"id":"REQ-10","status":"pending-independent-workflow-review","evidence":["implementation checks complete; downstream test and integrity nodes have not yet produced review evidence"]},
-    {"id":"REQ-11","status":"pending-git-delivery","evidence":[]},
+    {"id":"REQ-11","status":"committed-push-blocked-by-unrelated-outgoing-commit","evidence":["foundation commit c2a8c07a65f6242c4d639ea8e9d85a3dace07958","fetch and non-rebase upstream merge: already up to date","unrelated outgoing predecessor 7786b642d7ed4572ed31ed6a0710521a6a89239d prevents safe push"]},
     {"id":"REQ-12","status":"implementation-package-complete","evidence":["foundation-manifest.json","citation classes and closure conditions"]}
   ],
   "commands":[
@@ -27,6 +27,7 @@
     {"command":"git diff --check -- task paths","cwd":"D:/myhexin-local/opencorvus","environment":"Git worktree","input":"two indexes, dated record and opencorvus-paper subtree","raw_output":"empty","result":"passed"}
   ],
   "review":{"independent_reviewer":"pending downstream Advanced workflow nodes","unresolved_findings":null,"rule":"No final Task acceptance is claimed until independent review evidence exists."},
+  "git_delivery":{"foundation_commit":"c2a8c07a65f6242c4d639ea8e9d85a3dace07958","upstream":"origin/arch-debt-remediation","fetch":"passed","merge":"already up to date","outgoing_commits":["c2a8c07a65f6242c4d639ea8e9d85a3dace07958","7786b642d7ed4572ed31ed6a0710521a6a89239d"],"push":"blocked","blocker":"7786b642d is an unrelated packages/opencorvus change set not authorized or independently verified by this Task; pushing HEAD would publish it too.","next_action":"The owner of 7786b642d must verify and push it, after which this Task can fetch, recheck upstream..HEAD, rerun affected checks and push the paper commits without history rewriting."},
   "known_blockers":[
     {"subject":"AutomationBench scientific reproduction","cause":"missing immutable version, cases, protocol, evaluator, per-case outcomes, repetitions and statistics"},
     {"subject":"self-evolution effectiveness","cause":"no repeated accepted campaign; current package projection test drifts"},
