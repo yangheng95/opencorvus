@@ -5,7 +5,8 @@
 - Use this tool FIRST for repo-local questions: locating files, symbols, imports, config keys, tests, error strings, and existing behavior
 - Prefer this over external code search whenever the answer may already exist in the current project
 - Supports full regex syntax (eg. "log.*Error", "function\s+\w+", etc.)
-- Filter returned files by pattern with the include parameter (eg. "*.js", "*.{ts,tsx}"); include does not override repository ignore rules, so use an explicit path when you intentionally need an ignored target
+- Filter the ignore-aware candidate file list by pattern with the include parameter (eg. "*.js", "*.{ts,tsx}"); include does not override repository ignore rules
+- Directory searches always exclude Git metadata. Use an explicit path when you intentionally need another ignored file or subtree
 - Execution has a hard deadline and output-memory limit; after a bounded-execution error, narrow the path or pattern before retrying
 - Returns file paths and line numbers with at least one match sorted by modification time
 - Use this tool when you need to find files containing specific patterns

@@ -21,6 +21,8 @@ export namespace Process {
   }
 
   export interface RunOptions extends Omit<Options, "stdout" | "stderr"> {
+    /** Stable process-supervisor owner used for diagnostic attribution and ownership observability. */
+    owner?: string
     nothrow?: boolean
     inactivityTimeoutMs?: number
     inactivityTimeoutMessage?: string
@@ -263,6 +265,7 @@ export namespace Process {
       cwd: opts.cwd,
       env: opts.exactEnv ?? (opts.env === null ? {} : opts.env ? { ...process.env, ...opts.env } : undefined),
       stdin: opts.input || opts.stdin === "pipe" ? "pipe" : "ignore",
+      owner: opts.owner,
     })
     try {
       opts.onSpawned?.()
@@ -329,7 +332,8 @@ export namespace Process {
     const onProcessActivity = () => refreshInactivityTimer()
     let outputBytes = 0
     const acceptBytes = (bytes: number) => {
-      const retained = opts.maxOutputBytes === undefined ? bytes : Math.max(0, Math.min(bytes, opts.maxOutputBytes - outputBytes))
+      const retained =
+        opts.maxOutputBytes === undefined ? bytes : Math.max(0, Math.min(bytes, opts.maxOutputBytes - outputBytes))
       outputBytes += bytes
       if (opts.maxOutputBytes !== undefined && outputBytes > opts.maxOutputBytes && !outputLimitExceeded) {
         outputLimitExceeded = true
@@ -392,7 +396,8 @@ export namespace Process {
       stderr = Buffer.concat([stderr, Buffer.from(`${separator}${inactivityTimeoutMessage}`)])
     }
     if (wallClockTimedOut) throw new Error(`Process timed out after ${opts.timeoutMs}ms: ${command.join(" ")}`)
-    if (outputLimitExceeded) throw new Error(`Process output exceeded ${opts.maxOutputBytes} bytes: ${command.join(" ")}`)
+    if (outputLimitExceeded)
+      throw new Error(`Process output exceeded ${opts.maxOutputBytes} bytes: ${command.join(" ")}`)
     const out = {
       code,
       stdout,
