@@ -9,6 +9,7 @@ import { Database, eq } from "@/storage/db"
 import { Session } from "@/session"
 import { SessionTable } from "@/session/session.sql"
 import { Filesystem } from "@/util/filesystem"
+import { PromotionJournal } from "./promotion-journal"
 import { Project } from "./project"
 import { ProjectTable } from "./project.sql"
 
@@ -22,6 +23,7 @@ export namespace ImplicitProject {
       worktree: string
       name: string | null
       sandboxes: string[]
+      generation: string
     }
     sessions: Array<{
       id: string
@@ -109,6 +111,7 @@ export namespace ImplicitProject {
           worktree: ProjectTable.worktree,
           name: ProjectTable.name,
           sandboxes: ProjectTable.sandboxes,
+          generation: ProjectTable.generation,
         })
         .from(ProjectTable)
         .where(eq(ProjectTable.id, projectID))
@@ -151,6 +154,7 @@ export namespace ImplicitProject {
     staging: string
     quarantine: string
     published: boolean
+    operationID: string
   }): Promise<never> {
     const rollbackFailures: unknown[] = []
     const attempt = async (label: string, operation: () => Promise<void>) => {
@@ -210,13 +214,138 @@ export namespace ImplicitProject {
       quarantineExists === false &&
       projectMappingChanged === false &&
       changedSessionIDs?.length === 0
-    if (rollbackFailures.length === 0 && restored) throw input.cause
+    if (rollbackFailures.length === 0 && restored) {
+      await attempt("settle the promotion journal rollback", () =>
+        PromotionJournal.settle(input.operationID, "rolled_back", { projectID: input.projectID }),
+      )
+      if (rollbackFailures.length === 0) throw input.cause
+    }
     throw new PromotionRollbackError(input.cause, rollbackFailures, residue, {
       source: input.physicalSource,
       destination: input.destination,
       staging: input.staging,
       quarantine: input.quarantine,
     })
+  }
+
+  async function recoverPromotionJournalEntry(projectID: string): Promise<"absent" | "forward" | "backward"> {
+    const entry = await PromotionJournal.get(projectID)
+    if (!entry) return "absent"
+    return convergePromotionJournalEntry(entry)
+  }
+
+  async function convergePromotionJournalEntry(entry: PromotionJournal.Entry): Promise<"forward" | "backward"> {
+    const authority = Database.use((db) =>
+      db
+        .select({
+          generation: ProjectTable.generation,
+          worktree: ProjectTable.worktree,
+          sandboxes: ProjectTable.sandboxes,
+        })
+        .from(ProjectTable)
+        .where(eq(ProjectTable.id, entry.projectID))
+        .get(),
+    )
+    if (!authority) throw new Error(`Promotion journal references a missing Project: ${entry.projectID}`)
+    if (authority.generation !== entry.projectGeneration) {
+      throw new Error(
+        `Promotion journal Project generation mismatch for ${entry.projectID}: ` +
+          `expected ${entry.projectGeneration}, received ${authority.generation}`,
+      )
+    }
+    const mappedWorktree = Filesystem.normalizePath(authority.worktree)
+    if (
+      mappedWorktree !== Filesystem.normalizePath(entry.source) &&
+      mappedWorktree !== Filesystem.normalizePath(entry.destination)
+    ) {
+      throw new Error(`Promotion journal Project mapping is outside its source/destination occurrence`)
+    }
+    const destinationExists = await Filesystem.exists(entry.destination)
+    if (destinationExists) {
+      if (!entry.destinationDigest) {
+        throw new Error(`Promotion journal destination has no prepared content digest: ${entry.destination}`)
+      }
+      const destinationDigest = await PromotionJournal.digestDirectory(entry.destination)
+      if (destinationDigest !== entry.destinationDigest) {
+        throw new Error(
+          `Promotion journal destination digest mismatch: expected ${entry.destinationDigest}, received ${destinationDigest}`,
+        )
+      }
+      // The destination was published: the new identity wins. Completing the
+      // database relocation is idempotent — a crash after the commit but
+      // before the journal cleared re-runs it as a no-op.
+      Database.transaction((db) => {
+        Project.relocate(
+          {
+            projectID: entry.projectID,
+            worktree: entry.destination,
+            name: entry.name,
+            sandboxes: authority.sandboxes.map((item) => mappedDirectory(item, entry.source, entry.destination)),
+          },
+          db,
+        )
+        Session.relocateProject(
+          {
+            projectID: entry.projectID,
+            sourceDirectory: entry.source,
+            destinationDirectory: entry.destination,
+          },
+          db,
+        )
+      })
+      await fs.rm(entry.staging, { recursive: true, force: true })
+      await fs.rm(entry.quarantine, { recursive: true, force: true })
+      await PromotionJournal.settle(entry.operationID, "committed", {
+        projectID: entry.projectID,
+        projectGeneration: entry.projectGeneration,
+        destinationDigest,
+      })
+      const project = Project.get(entry.projectID)
+      if (project) {
+        GlobalBus.emit("event", {
+          payload: { type: Project.Event.Updated.type, properties: project },
+        })
+      }
+      return "forward"
+    }
+    // The destination never published: the old identity wins. The staging tree
+    // is discarded and the quarantined source moves back.
+    await fs.rm(entry.staging, { recursive: true, force: true })
+    const sourceExists = await Filesystem.exists(entry.physicalSource)
+    if (!sourceExists) {
+      if (!(await Filesystem.exists(entry.quarantine))) {
+        throw new Error(
+          `Promotion recovery for ${entry.projectID} found neither source ${entry.physicalSource} nor quarantine ${entry.quarantine}`,
+        )
+      }
+      await Filesystem.renameAfterTransientContention(entry.quarantine, entry.physicalSource)
+    } else {
+      await fs.rm(entry.quarantine, { recursive: true, force: true })
+    }
+    await PromotionJournal.settle(entry.operationID, "rolled_back", {
+      projectID: entry.projectID,
+      projectGeneration: entry.projectGeneration,
+    })
+    return "backward"
+  }
+
+  /** Converge every unsettled promotion occurrence — the startup owner. Runs
+   *  before any Project directory is exposed to recovery or opening. */
+  export async function recoverPromotions(): Promise<{ forward: number; backward: number; failures: string[] }> {
+    const entries = await PromotionJournal.all()
+    let forward = 0
+    let backward = 0
+    const failures: string[] = []
+    for (const entry of entries) {
+      try {
+        const outcome = await convergePromotionJournalEntry(entry)
+        if (outcome === "forward") forward += 1
+        else backward += 1
+      } catch (error) {
+        failures.push(`${entry.projectID}: ${error instanceof Error ? error.message : String(error)}`)
+      }
+    }
+    return { forward, backward, failures }
   }
 
   export async function promote(
@@ -278,6 +407,9 @@ export namespace ImplicitProject {
       })
     }
 
+    // A crash-interrupted earlier promotion of this Project converges first;
+    // its journal entry is the durable authority on which identity survives.
+    await recoverPromotionJournalEntry(input.project.id)
     await input.beforeMove?.()
     const quarantine = path.join(
       path.dirname(physicalSource),
@@ -285,12 +417,30 @@ export namespace ImplicitProject {
     )
     const staging = path.join(destinationParent, `.opencorvus-promoting-${randomUUID()}`)
     const database = promotionDatabaseSnapshot(input.project.id)
+    const operationID = randomUUID()
     let published = false
-    await Filesystem.renameAfterTransientContention(physicalSource, quarantine)
+    // The durable occurrence commits BEFORE the first rename: from this point
+    // a process death leaves a journal whose recovery converges the physical
+    // and database identities to exactly one side.
+    await PromotionJournal.record({
+      operationID,
+      projectID: input.project.id,
+      projectGeneration: database.project.generation,
+      source,
+      physicalSource,
+      quarantine,
+      staging,
+      destination,
+      name: input.name,
+      time_created: Date.now(),
+    })
     try {
+      await Filesystem.renameAfterTransientContention(physicalSource, quarantine)
       await fs.cp(quarantine, staging, { recursive: true, force: false, errorOnExist: true, preserveTimestamps: true })
+      await PromotionJournal.markPrepared(operationID, await PromotionJournal.digestDirectory(staging))
       await Filesystem.renameAfterTransientContention(staging, destination)
       published = true
+      await PromotionJournal.markPublished(operationID)
 
       Database.transaction((db) => {
         const relocated = Project.relocate(
@@ -322,6 +472,7 @@ export namespace ImplicitProject {
         staging,
         quarantine,
         published,
+        operationID,
       })
     }
 
@@ -329,6 +480,13 @@ export namespace ImplicitProject {
       () => false,
       () => true,
     )
+    if (!cleanupPending) {
+      await PromotionJournal.settle(operationID, "committed", {
+        projectID: input.project.id,
+        projectGeneration: database.project.generation,
+        destinationDigest: await PromotionJournal.digestDirectory(destination),
+      })
+    }
     const project = Project.get(input.project.id)
     if (!project) throw new Error(`Promoted project row disappeared: ${input.project.id}`)
     GlobalBus.emit("event", {
