@@ -179,6 +179,58 @@ export namespace Session {
     }
   }
 
+  export type ProjectRelocationSnapshot = Array<{
+    id: string
+    directory: string
+    metadata: Record<string, unknown> | null
+    timeUpdated: number
+  }>
+
+  /** Restore exactly the session fields changed by Project relocation. The
+   * current rows must still be the deterministic forward projection, so this
+   * rollback never overwrites a concurrent session mutation. */
+  export function restoreProjectRelocation(
+    input: {
+      projectID: string
+      sourceDirectory: string
+      destinationDirectory: string
+      snapshot: ProjectRelocationSnapshot
+    },
+    db: Database.TxOrDb,
+  ): void {
+    const current = db
+      .select({
+        id: SessionTable.id,
+        directory: SessionTable.directory,
+        metadata: SessionTable.metadata,
+      })
+      .from(SessionTable)
+      .where(eq(SessionTable.project_id, input.projectID))
+      .all()
+    if (current.length !== input.snapshot.length) {
+      throw new Error(`Project session rollback fence rejected ${input.projectID}: session set changed`)
+    }
+    const byID = new Map(current.map((row) => [row.id, row]))
+    for (const before of input.snapshot) {
+      const row = byID.get(before.id)
+      const expectedDirectory = relocatedDirectory(before.directory, input.sourceDirectory, input.destinationDirectory)
+      const expectedMetadata = relocatedMetadata(before.metadata, input.sourceDirectory, input.destinationDirectory)
+      if (
+        !row ||
+        !Project.samePath(row.directory, expectedDirectory) ||
+        !isDeepStrictEqual(row.metadata, expectedMetadata)
+      ) {
+        throw new Error(`Project session rollback fence rejected ${input.projectID}: session ${before.id} changed`)
+      }
+    }
+    for (const before of input.snapshot) {
+      db.update(SessionTable)
+        .set({ directory: before.directory, metadata: before.metadata, time_updated: before.timeUpdated })
+        .where(and(eq(SessionTable.id, before.id), eq(SessionTable.project_id, input.projectID)))
+        .run()
+    }
+  }
+
   export function toRow(info: Info) {
     return {
       id: info.id,

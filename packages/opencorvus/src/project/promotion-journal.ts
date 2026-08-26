@@ -56,6 +56,7 @@ export namespace PromotionJournal {
       .regex(/^[a-f0-9]{64}$/)
       .optional(),
     published: z.boolean(),
+    terminal: z.enum(["committed", "rolled_back"]).optional(),
   })
   export type Entry = z.infer<typeof Entry>
 
@@ -95,6 +96,7 @@ export namespace PromotionJournal {
       time_created: occurrence.intent.timeCreated,
       destinationDigest: preparedPayload?.destinationDigest,
       published: Boolean(published),
+      terminal: occurrence.terminal?.outcome,
     })
   }
 
@@ -113,15 +115,19 @@ export namespace PromotionJournal {
   }
 
   export async function all(): Promise<Entry[]> {
-    return (await store().listOpen(KIND)).map(fromOccurrence)
+    return (await store().list(KIND)).map(fromOccurrence)
+  }
+
+  export async function read(operationID: string): Promise<Entry> {
+    return fromOccurrence(await store().read(KIND, operationID))
   }
 
   export async function get(projectID: string): Promise<Entry | undefined> {
     return exactOpen(projectID)
   }
 
-  export async function record(input: Omit<Entry, "destinationDigest" | "published">): Promise<void> {
-    const entry = Entry.parse({ ...input, published: false })
+  export async function record(input: Omit<Entry, "destinationDigest" | "published" | "terminal">): Promise<void> {
+    const entry = Entry.parse({ ...input, published: false, terminal: undefined })
     await withProjectOwner(entry.projectID, async () => {
       const existing = await exactOpen(entry.projectID)
       if (existing) {

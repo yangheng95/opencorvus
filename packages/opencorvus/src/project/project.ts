@@ -2,8 +2,8 @@ import z from "zod"
 import { Filesystem } from "../util/filesystem"
 import path from "path"
 import { randomUUID } from "crypto"
-import { Database, eq, NotFoundError } from "../storage/db"
-import { ProjectTable } from "./project.sql"
+import { and, Database, eq, notExists, NotFoundError } from "../storage/db"
+import { ProjectMaintenanceFenceTable, ProjectTable } from "./project.sql"
 import { Log } from "../util/log"
 import { Flag } from "@/flag/flag"
 import { fn } from "@opencorvus-ai/util/fn"
@@ -585,6 +585,19 @@ export namespace Project {
       db
         .select()
         .from(ProjectTable)
+        .where(
+          notExists(
+            db
+              .select({ projectID: ProjectMaintenanceFenceTable.project_id })
+              .from(ProjectMaintenanceFenceTable)
+              .where(
+                and(
+                  eq(ProjectMaintenanceFenceTable.project_id, ProjectTable.id),
+                  eq(ProjectMaintenanceFenceTable.kind, "promotion"),
+                ),
+              ),
+          ),
+        )
         .all()
         .map((row) => fromRow(row)),
     )
@@ -593,13 +606,16 @@ export namespace Project {
   export function relocate(
     input: {
       projectID: string
+      operationID: string
+      expectedGeneration: string
+      expectedWorktree: string
       worktree: string
       name: string
       sandboxes: string[]
     },
     db: Database.TxOrDb,
   ) {
-    assertRegistryAdmissionOpen(db, input.projectID)
+    assertPromotionFenceOwned(db, input, "promotion_commit")
     const projects = db
       .select()
       .from(ProjectTable)
@@ -616,11 +632,113 @@ export namespace Project {
         sandboxes: input.sandboxes,
         time_updated: Date.now(),
       })
-      .where(eq(ProjectTable.id, input.projectID))
+      .where(
+        and(
+          eq(ProjectTable.id, input.projectID),
+          eq(ProjectTable.generation, input.expectedGeneration),
+          eq(ProjectTable.worktree, input.expectedWorktree),
+        ),
+      )
       .returning()
       .get()
-    if (!row) throw new Error(`Project not found: ${input.projectID}`)
+    if (!row)
+      throw new Error(`Project relocation fence rejected ${input.projectID}: generation or expected worktree changed`)
     return fromRow(row)
+  }
+
+  export function restoreRelocation(
+    input: {
+      projectID: string
+      operationID: string
+      expectedGeneration: string
+      expectedWorktree: string
+      worktree: string
+      name: string | null
+      sandboxes: string[]
+      timeUpdated: number
+    },
+    db: Database.TxOrDb,
+  ) {
+    assertPromotionFenceOwned(db, input, "promotion_commit")
+    const projects = db
+      .select()
+      .from(ProjectTable)
+      .all()
+      .map((candidate) => fromRow(candidate))
+    for (const directory of [input.worktree, ...input.sandboxes]) {
+      assertRegisteredDirectoryAvailable(input.projectID, directory, projects)
+    }
+    const row = db
+      .update(ProjectTable)
+      .set({
+        worktree: input.worktree,
+        name: input.name,
+        sandboxes: input.sandboxes,
+        time_updated: input.timeUpdated,
+      })
+      .where(
+        and(
+          eq(ProjectTable.id, input.projectID),
+          eq(ProjectTable.generation, input.expectedGeneration),
+          eq(ProjectTable.worktree, input.expectedWorktree),
+        ),
+      )
+      .returning()
+      .get()
+    if (!row)
+      throw new Error(`Project rollback fence rejected ${input.projectID}: generation or expected worktree changed`)
+    return fromRow(row)
+  }
+
+  function assertPromotionFenceOwned(
+    db: Database.TxOrDb,
+    input: { projectID: string; operationID: string; expectedGeneration: string },
+    kind: "promotion" | "promotion_commit" = "promotion",
+  ): void {
+    const fence = db
+      .select()
+      .from(ProjectMaintenanceFenceTable)
+      .where(eq(ProjectMaintenanceFenceTable.project_id, input.projectID))
+      .get()
+    if (
+      fence?.kind === kind &&
+      fence.operation_id === input.operationID &&
+      fence.project_generation === input.expectedGeneration
+    )
+      return
+    throw new Error(`Project promotion fence rejected ${input.projectID}: occurrence ownership changed`)
+  }
+
+  export function beginPromotionCommit(
+    input: { projectID: string; operationID: string; expectedGeneration: string },
+    db: Database.TxOrDb,
+  ): void {
+    assertPromotionFenceOwned(db, input)
+    db.update(ProjectMaintenanceFenceTable)
+      .set({ kind: "promotion_commit" })
+      .where(
+        and(
+          eq(ProjectMaintenanceFenceTable.project_id, input.projectID),
+          eq(ProjectMaintenanceFenceTable.operation_id, input.operationID),
+        ),
+      )
+      .run()
+  }
+
+  export function finishPromotionCommit(
+    input: { projectID: string; operationID: string; expectedGeneration: string },
+    db: Database.TxOrDb,
+  ): void {
+    assertPromotionFenceOwned(db, input, "promotion_commit")
+    db.update(ProjectMaintenanceFenceTable)
+      .set({ kind: "promotion" })
+      .where(
+        and(
+          eq(ProjectMaintenanceFenceTable.project_id, input.projectID),
+          eq(ProjectMaintenanceFenceTable.operation_id, input.operationID),
+        ),
+      )
+      .run()
   }
 
   export function registeredDirectories(): string[] {
@@ -767,7 +885,28 @@ export namespace Project {
   }
 
   export function get(id: string): Info | undefined {
-    const row = Database.use((db) => db.select().from(ProjectTable).where(eq(ProjectTable.id, id)).get())
+    const row = Database.use((db) =>
+      db
+        .select()
+        .from(ProjectTable)
+        .where(
+          and(
+            eq(ProjectTable.id, id),
+            notExists(
+              db
+                .select({ projectID: ProjectMaintenanceFenceTable.project_id })
+                .from(ProjectMaintenanceFenceTable)
+                .where(
+                  and(
+                    eq(ProjectMaintenanceFenceTable.project_id, ProjectTable.id),
+                    eq(ProjectMaintenanceFenceTable.kind, "promotion"),
+                  ),
+                ),
+            ),
+          ),
+        )
+        .get(),
+    )
     if (!row) return undefined
     return fromRow(row)
   }

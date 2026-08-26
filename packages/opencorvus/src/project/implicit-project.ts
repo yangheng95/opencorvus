@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto"
 import * as fs from "node:fs/promises"
 import path from "node:path"
+import { isDeepStrictEqual } from "node:util"
 import z from "zod"
 import { NamedError } from "@opencorvus-ai/util/error"
 import { GlobalBus } from "@/bus/global"
@@ -11,7 +12,11 @@ import { SessionTable } from "@/session/session.sql"
 import { Filesystem } from "@/util/filesystem"
 import { PromotionDatabaseSnapshot, PromotionJournal } from "./promotion-journal"
 import { Project } from "./project"
-import { ProjectTable } from "./project.sql"
+import { ProjectMaintenanceFenceTable, ProjectTable } from "./project.sql"
+import {
+  ensureProjectPromotionFenceInTransaction,
+  releaseProjectMaintenanceFencesInTransaction,
+} from "./deletion-registry"
 
 function calendarSegment(value: number): string {
   return String(value).padStart(2, "0")
@@ -90,32 +95,34 @@ export namespace ImplicitProject {
     return path.join(destination, path.relative(source, value))
   }
 
+  function promotionDatabaseSnapshotInTransaction(db: Database.TxOrDb, projectID: string): PromotionDatabaseSnapshot {
+    const project = db
+      .select({
+        worktree: ProjectTable.worktree,
+        name: ProjectTable.name,
+        sandboxes: ProjectTable.sandboxes,
+        generation: ProjectTable.generation,
+        timeUpdated: ProjectTable.time_updated,
+      })
+      .from(ProjectTable)
+      .where(eq(ProjectTable.id, projectID))
+      .get()
+    if (!project) throw new Error(`Project not found while preparing anonymous promotion: ${projectID}`)
+    const sessions = db
+      .select({
+        id: SessionTable.id,
+        directory: SessionTable.directory,
+        metadata: SessionTable.metadata,
+        timeUpdated: SessionTable.time_updated,
+      })
+      .from(SessionTable)
+      .where(eq(SessionTable.project_id, projectID))
+      .all()
+    return PromotionDatabaseSnapshot.parse({ project, sessions })
+  }
+
   function promotionDatabaseSnapshot(projectID: string): PromotionDatabaseSnapshot {
-    return Database.use((db) => {
-      const project = db
-        .select({
-          worktree: ProjectTable.worktree,
-          name: ProjectTable.name,
-          sandboxes: ProjectTable.sandboxes,
-          generation: ProjectTable.generation,
-          timeUpdated: ProjectTable.time_updated,
-        })
-        .from(ProjectTable)
-        .where(eq(ProjectTable.id, projectID))
-        .get()
-      if (!project) throw new Error(`Project not found while preparing anonymous promotion: ${projectID}`)
-      const sessions = db
-        .select({
-          id: SessionTable.id,
-          directory: SessionTable.directory,
-          metadata: SessionTable.metadata,
-          timeUpdated: SessionTable.time_updated,
-        })
-        .from(SessionTable)
-        .where(eq(SessionTable.project_id, projectID))
-        .all()
-      return PromotionDatabaseSnapshot.parse({ project, sessions })
-    })
+    return Database.use((db) => promotionDatabaseSnapshotInTransaction(db, projectID))
   }
 
   function mappedMetadata(
@@ -206,7 +213,7 @@ export namespace ImplicitProject {
   }
 
   function sameJson(left: unknown, right: unknown): boolean {
-    return JSON.stringify(left) === JSON.stringify(right)
+    return isDeepStrictEqual(left, right)
   }
 
   async function inspectPath(label: string, target: string, rollbackFailures: unknown[]): Promise<boolean | null> {
@@ -303,7 +310,10 @@ export namespace ImplicitProject {
     })
   }
 
-  async function recoverPromotionJournalEntry(projectID: string): Promise<"absent" | "forward" | "backward"> {
+  /** Converge one Project's open promotion occurrence. The promote path calls
+   *  this before it opens a new occurrence; the startup sweep calls it for
+   *  every Project that has one. */
+  export async function recoverPromotionJournalEntry(projectID: string): Promise<"absent" | "forward" | "backward"> {
     return PromotionJournal.withProjectOwner(projectID, async () => {
       const entry = await PromotionJournal.get(projectID)
       if (!entry) return "absent"
@@ -313,17 +323,40 @@ export namespace ImplicitProject {
 
   async function convergePromotionJournalEntry(entry: PromotionJournal.Entry): Promise<"forward" | "backward"> {
     assertJournalPaths(entry)
-    const authority = Database.use((db) =>
-      db
-        .select({
-          generation: ProjectTable.generation,
-          worktree: ProjectTable.worktree,
-          sandboxes: ProjectTable.sandboxes,
-        })
-        .from(ProjectTable)
-        .where(eq(ProjectTable.id, entry.projectID))
-        .get(),
-    )
+    const authority = Database.immediateTransaction((db) => {
+      const project = db.select().from(ProjectTable).where(eq(ProjectTable.id, entry.projectID)).get()
+      if (project && project.generation !== entry.projectGeneration) return project
+      if (project && !entry.terminal) {
+        const fence = db
+          .select()
+          .from(ProjectMaintenanceFenceTable)
+          .where(eq(ProjectMaintenanceFenceTable.project_id, entry.projectID))
+          .get()
+        if (!fence) {
+          const current = promotionDatabaseSnapshotInTransaction(db, entry.projectID)
+          if (!sameJson(current, entry.database) || !Project.samePath(current.project.worktree, entry.source)) {
+            throw new Error(
+              `Promotion journal Project/Session snapshot changed before recovery fencing: ${entry.projectID}`,
+            )
+          }
+        }
+        ensureProjectPromotionFenceInTransaction(db, { project, operationID: entry.operationID })
+      } else if (project) {
+        const fence = db
+          .select()
+          .from(ProjectMaintenanceFenceTable)
+          .where(eq(ProjectMaintenanceFenceTable.project_id, entry.projectID))
+          .get()
+        if (
+          fence?.kind !== "promotion" ||
+          fence.operation_id !== entry.operationID ||
+          fence.project_generation !== entry.projectGeneration
+        ) {
+          throw new Error(`Settled promotion ${entry.operationID} no longer owns its Project fence`)
+        }
+      }
+      return project
+    })
     if (!authority) throw new Error(`Promotion journal references a missing Project: ${entry.projectID}`)
     if (authority.generation !== entry.projectGeneration) {
       throw new Error(
@@ -339,22 +372,30 @@ export namespace ImplicitProject {
       throw new Error(`Promotion journal Project mapping is outside its source/destination occurrence`)
     }
     const destinationExists = await Filesystem.exists(entry.destination)
+    if (entry.terminal === "committed" && !destinationExists) {
+      throw new Error(`Committed promotion destination is missing: ${entry.destination}`)
+    }
+    if (entry.terminal === "rolled_back" && destinationExists) {
+      throw new Error(`Rolled-back promotion still has a destination: ${entry.destination}`)
+    }
     if (destinationExists) {
       if (!entry.destinationDigest) {
         throw new Error(`Promotion journal destination has no prepared content digest: ${entry.destination}`)
       }
-      const destinationDigest = await PromotionJournal.digestDirectory(entry.destination)
-      if (destinationDigest !== entry.destinationDigest) {
-        throw new Error(
-          `Promotion journal destination digest mismatch: expected ${entry.destinationDigest}, received ${destinationDigest}`,
-        )
-      }
-      if (Project.samePath(authority.worktree, entry.source)) {
+      const relocated = !Project.samePath(authority.worktree, entry.source)
+      if (relocated) assertDatabaseProjection(entry, "destination")
+      else {
+        await assertDigest("Promotion prepared destination", entry.destination, entry.destinationDigest)
         assertDatabaseProjection(entry, "source")
         Database.transaction((db) => {
+          Project.beginPromotionCommit(
+            { projectID: entry.projectID, operationID: entry.operationID, expectedGeneration: entry.projectGeneration },
+            db,
+          )
           Project.relocate(
             {
               projectID: entry.projectID,
+              operationID: entry.operationID,
               expectedGeneration: entry.projectGeneration,
               expectedWorktree: entry.source,
               worktree: entry.destination,
@@ -373,24 +414,30 @@ export namespace ImplicitProject {
             },
             db,
           )
+          Project.finishPromotionCommit(
+            { projectID: entry.projectID, operationID: entry.operationID, expectedGeneration: entry.projectGeneration },
+            db,
+          )
         })
-      } else {
-        assertDatabaseProjection(entry, "destination")
       }
       await fs.rm(entry.staging, { recursive: true, force: true })
       if (await Filesystem.exists(entry.physicalSource)) {
-        throw new Error(`Promotion recovery found an unknown source beside the published destination: ${entry.physicalSource}`)
+        throw new Error(
+          `Promotion recovery found an unknown source beside the published destination: ${entry.physicalSource}`,
+        )
       }
       if (await Filesystem.exists(entry.quarantine)) {
         await assertDigest("Promotion quarantine", entry.quarantine, entry.sourceDigest)
         await fs.rm(entry.quarantine, { recursive: true, force: false })
       }
-      await assertDigest("Promotion committed destination", entry.destination, entry.destinationDigest)
-      await PromotionJournal.settle(entry.operationID, "committed", {
-        projectID: entry.projectID,
-        projectGeneration: entry.projectGeneration,
-        destinationDigest,
-      })
+      if (!entry.terminal) {
+        await PromotionJournal.settle(entry.operationID, "committed", {
+          projectID: entry.projectID,
+          projectGeneration: entry.projectGeneration,
+          destinationDigest: entry.destinationDigest,
+        })
+      }
+      Database.transaction((db) => releaseProjectMaintenanceFencesInTransaction(db, { operationID: entry.operationID }))
       const project = Project.get(entry.projectID)
       if (project) {
         GlobalBus.emit("event", {
@@ -420,12 +467,19 @@ export namespace ImplicitProject {
     } else {
       await assertDigest("Promotion source", entry.physicalSource, entry.sourceDigest)
     }
-    if (Project.samePath(authority.worktree, entry.destination)) {
-      assertDatabaseProjection(entry, "destination")
+    const relocated = Project.samePath(authority.worktree, entry.destination)
+    if (relocated) assertDatabaseProjection(entry, "destination")
+    else assertDatabaseProjection(entry, "source")
+    if (relocated) {
       Database.transaction((db) => {
+        Project.beginPromotionCommit(
+          { projectID: entry.projectID, operationID: entry.operationID, expectedGeneration: entry.projectGeneration },
+          db,
+        )
         Project.restoreRelocation(
           {
             projectID: entry.projectID,
+            operationID: entry.operationID,
             expectedGeneration: entry.projectGeneration,
             expectedWorktree: entry.destination,
             worktree: entry.database.project.worktree,
@@ -444,14 +498,19 @@ export namespace ImplicitProject {
           },
           db,
         )
+        Project.finishPromotionCommit(
+          { projectID: entry.projectID, operationID: entry.operationID, expectedGeneration: entry.projectGeneration },
+          db,
+        )
       })
-    } else {
-      assertDatabaseProjection(entry, "source")
     }
-    await PromotionJournal.settle(entry.operationID, "rolled_back", {
-      projectID: entry.projectID,
-      projectGeneration: entry.projectGeneration,
-    })
+    if (!entry.terminal) {
+      await PromotionJournal.settle(entry.operationID, "rolled_back", {
+        projectID: entry.projectID,
+        projectGeneration: entry.projectGeneration,
+      })
+    }
+    Database.transaction((db) => releaseProjectMaintenanceFencesInTransaction(db, { operationID: entry.operationID }))
     return "backward"
   }
 
@@ -459,13 +518,23 @@ export namespace ImplicitProject {
    *  before any Project directory is exposed to recovery or opening. */
   export async function recoverPromotions(): Promise<{ forward: number; backward: number; failures: string[] }> {
     const entries = await PromotionJournal.all()
+    const fences = Database.use((db) =>
+      db.select().from(ProjectMaintenanceFenceTable).where(eq(ProjectMaintenanceFenceTable.kind, "promotion")).all(),
+    )
+    const fencedOperations = new Set(fences.map((fence) => fence.operation_id))
     let forward = 0
     let backward = 0
     const failures: string[] = []
     for (const entry of entries) {
+      // A historical terminal with no matching fence is already published and
+      // may have changed legitimately. Only the exact terminal->database crash
+      // window retains its promotion fence and requires replay.
+      if (entry.terminal && !fencedOperations.has(entry.operationID)) continue
       try {
         const outcome = await PromotionJournal.withProjectOwner(entry.projectID, async () => {
-          const current = await PromotionJournal.get(entry.projectID)
+          const current = entry.terminal
+            ? await PromotionJournal.read(entry.operationID)
+            : await PromotionJournal.get(entry.projectID)
           if (!current) return "absent" as const
           return convergePromotionJournalEntry(current)
         })
@@ -476,12 +545,22 @@ export namespace ImplicitProject {
         failures.push(`${entry.projectID}: ${error instanceof Error ? error.message : String(error)}`)
       }
     }
+    const operations = new Set(entries.map((entry) => entry.operationID))
+    for (const fence of fences) {
+      if (!operations.has(fence.operation_id)) {
+        failures.push(`${fence.project_id}: promotion fence ${fence.operation_id} has no durable journal occurrence`)
+      }
+    }
     return { forward, backward, failures }
   }
 
   async function promoteOwned(
     input: z.infer<typeof PromotionInput> & { project: Project.Info; beforeMove?: () => Promise<void> },
   ) {
+    const recovered = await recoverPromotionJournalEntry(input.project.id)
+    if (recovered === "forward") {
+      throw new Error(`Project ${input.project.id} already completed an earlier anonymous promotion`)
+    }
     const configuredSource = path.resolve(input.project.worktree)
     const physicalSource = await fs.realpath(configuredSource)
     const source = configuredSource
@@ -538,9 +617,6 @@ export namespace ImplicitProject {
       })
     }
 
-    // A crash-interrupted earlier promotion of this Project converges first;
-    // its journal entry is the durable authority on which identity survives.
-    await recoverPromotionJournalEntry(input.project.id)
     await input.beforeMove?.()
     const operationID = randomUUID()
     const quarantine = path.join(
@@ -550,7 +626,7 @@ export namespace ImplicitProject {
     const staging = path.join(destinationParent, `.opencorvus-promoting-${operationID}`)
     const database = promotionDatabaseSnapshot(input.project.id)
     if (!Project.samePath(database.project.worktree, source)) {
-      throw new Error(`Anonymous Project identity changed before promotion ownership was acquired: ${input.project.id}`)
+      throw new Error(`Anonymous Project identity changed before promotion intent was recorded: ${input.project.id}`)
     }
     const sourceDigest = await PromotionJournal.digestDirectory(physicalSource)
     let published = false
@@ -572,17 +648,78 @@ export namespace ImplicitProject {
       time_created: Date.now(),
     })
     try {
+      Database.immediateTransaction((db) => {
+        const current = promotionDatabaseSnapshotInTransaction(db, input.project.id)
+        if (!sameJson(current, database) || !Project.samePath(current.project.worktree, source)) {
+          throw new Error(`Anonymous Project identity changed before promotion fencing: ${input.project.id}`)
+        }
+        const project = db.select().from(ProjectTable).where(eq(ProjectTable.id, input.project.id)).get()
+        if (!project || project.generation !== database.project.generation) {
+          throw new Error(`Project generation changed before promotion fencing: ${input.project.id}`)
+        }
+        ensureProjectPromotionFenceInTransaction(db, { project, operationID })
+      })
+    } catch (cause) {
+      await PromotionJournal.settle(operationID, "rolled_back", {
+        projectID: input.project.id,
+        projectGeneration: database.project.generation,
+        reason: "promotion admission changed before filesystem publication",
+      })
+      throw cause
+    }
+    try {
       await Filesystem.renameAfterTransientContention(physicalSource, quarantine)
       await fs.cp(quarantine, staging, { recursive: true, force: false, errorOnExist: true, preserveTimestamps: true })
       await PromotionJournal.markPrepared(operationID, await PromotionJournal.digestDirectory(staging))
       await Filesystem.renameAfterTransientContention(staging, destination)
       published = true
       await PromotionJournal.markPublished(operationID)
+    } catch (cause) {
+      return rollbackPromotion({
+        cause,
+        projectID: input.project.id,
+        database,
+        physicalSource,
+        destination,
+        staging,
+        quarantine,
+        published,
+        operationID,
+      })
+    }
 
+    let preparedDigest: string
+    try {
+      const prepared = await PromotionJournal.get(input.project.id)
+      if (!prepared?.destinationDigest) {
+        throw new Error(`Published promotion has no prepared destination digest: ${destination}`)
+      }
+      preparedDigest = prepared.destinationDigest
+      await assertDigest("Promotion prepared destination", destination, preparedDigest)
+    } catch (cause) {
+      return rollbackPromotion({
+        cause,
+        projectID: input.project.id,
+        database,
+        physicalSource,
+        destination,
+        staging,
+        quarantine,
+        published,
+        operationID,
+      })
+    }
+
+    try {
       Database.transaction((db) => {
-        const relocated = Project.relocate(
+        Project.beginPromotionCommit(
+          { projectID: input.project.id, operationID, expectedGeneration: database.project.generation },
+          db,
+        )
+        Project.relocate(
           {
             projectID: input.project.id,
+            operationID,
             expectedGeneration: database.project.generation,
             expectedWorktree: source,
             worktree: destination,
@@ -599,7 +736,10 @@ export namespace ImplicitProject {
           },
           db,
         )
-        return relocated
+        Project.finishPromotionCommit(
+          { projectID: input.project.id, operationID, expectedGeneration: database.project.generation },
+          db,
+        )
       })
     } catch (cause) {
       return rollbackPromotion({
@@ -617,16 +757,12 @@ export namespace ImplicitProject {
 
     await assertDigest("Promotion quarantine", quarantine, sourceDigest)
     await fs.rm(quarantine, { recursive: true, force: false })
-    const committedDigest = await PromotionJournal.digestDirectory(destination)
-    const prepared = await PromotionJournal.get(input.project.id)
-    if (!prepared?.destinationDigest || prepared.destinationDigest !== committedDigest) {
-      throw new Error(`Promotion destination changed before its committed receipt: ${destination}`)
-    }
     await PromotionJournal.settle(operationID, "committed", {
       projectID: input.project.id,
       projectGeneration: database.project.generation,
-      destinationDigest: committedDigest,
+      destinationDigest: preparedDigest,
     })
+    Database.transaction((db) => releaseProjectMaintenanceFencesInTransaction(db, { operationID }))
     const project = Project.get(input.project.id)
     if (!project) throw new Error(`Promoted project row disappeared: ${input.project.id}`)
     GlobalBus.emit("event", {

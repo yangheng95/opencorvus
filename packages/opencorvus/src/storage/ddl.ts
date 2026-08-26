@@ -211,6 +211,61 @@ BEGIN
   SELECT RAISE(ABORT, 'project: generation is immutable');
 END;
 
+CREATE TRIGGER IF NOT EXISTS project_promotion_fence_update
+BEFORE UPDATE ON project
+FOR EACH ROW
+WHEN EXISTS (
+  SELECT 1 FROM project_maintenance_fence
+  WHERE project_id = OLD.id AND kind = 'promotion'
+)
+BEGIN
+  SELECT RAISE(ABORT, 'project_promotion_fenced');
+END;
+
+CREATE TRIGGER IF NOT EXISTS project_promotion_fence_delete
+BEFORE DELETE ON project
+FOR EACH ROW
+WHEN EXISTS (
+  SELECT 1 FROM project_maintenance_fence
+  WHERE project_id = OLD.id AND kind = 'promotion'
+)
+BEGIN
+  SELECT RAISE(ABORT, 'project_promotion_fenced');
+END;
+
+CREATE TRIGGER IF NOT EXISTS session_project_promotion_fence_insert
+BEFORE INSERT ON session
+FOR EACH ROW
+WHEN EXISTS (
+  SELECT 1 FROM project_maintenance_fence
+  WHERE project_id = NEW.project_id AND kind = 'promotion'
+)
+BEGIN
+  SELECT RAISE(ABORT, 'project_promotion_fenced');
+END;
+
+CREATE TRIGGER IF NOT EXISTS session_project_promotion_fence_update
+BEFORE UPDATE ON session
+FOR EACH ROW
+WHEN EXISTS (
+  SELECT 1 FROM project_maintenance_fence
+  WHERE project_id IN (OLD.project_id, NEW.project_id) AND kind = 'promotion'
+)
+BEGIN
+  SELECT RAISE(ABORT, 'project_promotion_fenced');
+END;
+
+CREATE TRIGGER IF NOT EXISTS session_project_promotion_fence_delete
+BEFORE DELETE ON session
+FOR EACH ROW
+WHEN EXISTS (
+  SELECT 1 FROM project_maintenance_fence
+  WHERE project_id = OLD.project_id AND kind = 'promotion'
+)
+BEGIN
+  SELECT RAISE(ABORT, 'project_promotion_fenced');
+END;
+
 -- A Mission Session is a complete durable domain identity at its first
 -- observable commit. Mutable Mission state may be added later, but the launch
 -- identity cannot be manufactured or rewritten afterward. cwd may move only

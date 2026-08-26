@@ -311,10 +311,12 @@
       "name": "@opencorvus-ai/util",
       "version": "0.0.55-beta",
       "dependencies": {
+        "proper-lockfile": "4.1.2",
         "zod": "catalog:",
       },
       "devDependencies": {
         "@types/bun": "catalog:",
+        "@types/proper-lockfile": "4.1.4",
         "typescript": "catalog:",
       },
     },
