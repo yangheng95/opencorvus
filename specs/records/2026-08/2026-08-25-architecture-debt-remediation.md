@@ -692,6 +692,16 @@ The uninvolved read-only review of `b0e7f3b87..b7cf9284a` rejected the stage wit
 - `check:dead-code` (the second half of ARC-029) cannot run here: it fetches `knip` at invocation and the registry is unreachable. The gate's six Overlay files, one unused dependency and two unlisted `ps` binary uses are therefore neither confirmed nor repaired, and remain open.
 - `test/mcp/browser-signal-ownership.test.ts` now requires a real Chrome for Testing binary, which is not installed here.
 
+### ARC-028 — the SDK/transport topology cycle is broken
+
+- Root cause as audited: `transport-protocol` depended on `@opencorvus-ai/sdk` for one shared schema, while the SDK's own build read and sliced the Transport Protocol's private TypeScript source to generate route policy. Neither edge is visible to a package manager as a cycle, so clean build order and contract generation depended on incidental workspace state.
+- The repair: the shared fact moves down to the package with no opinion about either side. `@opencorvus-ai/util` owns the product pillar; the SDK re-exports it rather than defining a second copy; the Transport Protocol takes it from the same lower owner and no longer depends on the SDK at all.
+- `check:package-topology` (wired into pre-push) fails on any workspace dependency cycle and on the SDK build slicing a package that depends on the SDK — the generation-order cycle a package manager cannot see. Verified by restoring the old dependency edge and observing the failure.
+
+### Stage 7 status
+
+All four of the stage's P2 findings are repaired: ARC-028 (topology cycle), ARC-029's public no-op half (the Board's `sync` promise), ARC-032's zombie public contract half (the two endpoints that could only answer empty), and ARC-035 (the architecture authority graph, now gated). Two halves remain open and are recorded where they belong: ARC-029's `check:dead-code` gate, which cannot run in this environment, and ARC-032's product decision between deleting the LSP subsystem and restoring a configured runtime owner.
+
 ## Stage log
 
 - Stage 3 (ARC-010 through ARC-013): complete. Production repair and the 52-file fixture migration are committed in `7786b642d`, `32d6aae01` and `1df9e2f4b`. The post-review evidence repair runs real late-transaction SQLite aborts and is verified by four focused files (**6 pass, 0 fail, 16 assertions**), `packages/opencorvus` typecheck, Prettier and `git diff --check`. The repeat uninvolved read-only review returned **PASS with no unresolved finding**; the pre-existing red suites remain bisected and recorded above.
