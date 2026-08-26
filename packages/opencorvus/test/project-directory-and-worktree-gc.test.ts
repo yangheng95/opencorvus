@@ -294,11 +294,12 @@ describe("Project directory integrity", () => {
     })
   }, 90_000)
 
-  test("commits Project deletion through immutable permission evidence and an admitted workflow node", async () => {
+  test("commits Project deletion while retaining immutable permission evidence and removing an admitted workflow node", async () => {
     await using project = await memoryProject()
     const registered = await Project.fromDirectory(project.path)
     const projectID = registered.project.id
     const taskID = Identifier.ascending("task")
+    const permissionRequestID = Identifier.ascending("permission")
     let policySessionID!: string
     let childSessionID!: string
     await Instance.provide({
@@ -321,7 +322,7 @@ describe("Project directory integrity", () => {
             source: "test",
             productPillar: "work",
             title: "Workflow node owner",
-            request: "Retire immutable permission evidence together with its Project.",
+            request: "Retain immutable permission evidence after deleting its Project.",
             priority: 0,
             metadata: {},
             timeCreated: now,
@@ -347,7 +348,6 @@ describe("Project directory integrity", () => {
               time_created: now,
             })
             .run()
-          const permissionRequestID = Identifier.ascending("permission")
           db.insert(PermissionLedgerTable)
             .values({
               id: Identifier.ascending("permission"),
@@ -429,8 +429,13 @@ describe("Project directory integrity", () => {
         sessions: db.select().from(SessionTable).where(eq(SessionTable.project_id, projectID)).all().length,
         policies: db.select().from(PermissionPolicyTable).where(eq(PermissionPolicyTable.project_id, projectID)).all()
           .length,
-        ledger: db.select().from(PermissionLedgerTable).where(eq(PermissionLedgerTable.project_id, projectID)).all()
-          .length,
+        ledger: db
+          .select()
+          .from(PermissionLedgerTable)
+          .where(eq(PermissionLedgerTable.request_id, permissionRequestID))
+          .all()
+          .map((row) => row.event_type)
+          .sort(),
         occurrences: db
           .select()
           .from(EngineWorkflowNodeOccurrenceTable)
@@ -448,7 +453,7 @@ describe("Project directory integrity", () => {
         residue: [],
       },
       projects: 0,
-      remaining: { tasks: 0, sessions: 0, policies: 0, ledger: 0, occurrences: 0 },
+      remaining: { tasks: 0, sessions: 0, policies: 0, ledger: ["denied", "requested"], occurrences: 0 },
     })
   }, 90_000)
 

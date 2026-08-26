@@ -6,6 +6,7 @@ import { deleteDecisionLogsForTasks } from "@/decision-log"
 import { assertSessionPromptSubtreeFinished, cancelSessionPromptInScope } from "@/engine/cancellation-scope"
 import { createTaskCancellationIncomplete } from "@/engine/cancellation-error"
 import { EngineTaskTable } from "@/engine/engine.sql"
+import { expireProjectPermissionGrantsInTransaction } from "@/permission/project-authority"
 import { deleteProjectNotes } from "@/quicknote/service"
 import { SessionTable } from "@/session/session.sql"
 import { CANCEL_INGRESS_SETTLE_INACTIVITY_MS, EngineService } from "@/task-api"
@@ -243,6 +244,11 @@ function deleteProjectRows(admission: ProjectDeletionRegistryAdmission, projectI
     }
     deleteDecisionLogsForTasks(taskIDs, db)
     deleteProjectNotes({ projectID }, db)
+    expireProjectPermissionGrantsInTransaction({
+      db,
+      projectID,
+      reason: `Project ${projectID} generation ${admission.snapshot.generation} was deleted`,
+    })
     // Task rows must go before the Project row. Both the Task subtree and the
     // Session subtree reach engine_workflow_node_occurrence, whose
     // child_session_id restricts Session deletion so a live workflow node can

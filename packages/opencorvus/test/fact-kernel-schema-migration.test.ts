@@ -1,7 +1,10 @@
 import { Database as SQLite } from "bun:sqlite"
 import { describe, expect, test } from "bun:test"
+import { mkdtempSync, rmSync } from "node:fs"
+import { tmpdir } from "node:os"
+import path from "node:path"
 import { SCHEMA_DDL } from "@/storage/ddl"
-import { migrateFactKernelSchema } from "@/storage/fact-kernel-migration"
+import { migrateFactKernelSchema, migratePermissionLedgerProjectRetentionSchema } from "@/storage/fact-kernel-migration"
 import { findSchemaDrift } from "@/storage/schema-contract"
 
 function all<T>(sqlite: SQLite, sql: string, ...parameters: unknown[]): T[] {
@@ -20,6 +23,41 @@ function get<T>(sqlite: SQLite, sql: string, ...parameters: unknown[]): T | null
   } finally {
     statement.finalize()
   }
+}
+
+function installCascadingPermissionLedgerFixture(sqlite: SQLite): void {
+  sqlite.exec("PRAGMA legacy_alter_table=ON")
+  const definition = get<{ sql: string }>(
+    sqlite,
+    "SELECT sql FROM sqlite_schema WHERE type='table' AND name='permission_ledger'",
+  )?.sql
+  if (!definition) throw new Error("Current Permission ledger definition is unavailable")
+  const cascading = definition.replace(
+    '  CONSTRAINT "permission_ledger_request_owner_shape"',
+    '  FOREIGN KEY ("project_id") REFERENCES "project"("id") ON DELETE CASCADE,\n  CONSTRAINT "permission_ledger_request_owner_shape"',
+  )
+  if (cascading === definition) throw new Error("Permission ledger fixture could not add the historical cascade")
+  const triggers = all<{ name: string; sql: string }>(
+    sqlite,
+    "SELECT name,sql FROM sqlite_schema WHERE type='trigger' AND tbl_name='permission_ledger' AND sql IS NOT NULL",
+  )
+  const indexes = all<{ name: string; sql: string }>(
+    sqlite,
+    "SELECT name,sql FROM sqlite_schema WHERE type='index' AND tbl_name='permission_ledger' AND sql IS NOT NULL",
+  )
+  for (const row of triggers) sqlite.exec(`DROP TRIGGER "${row.name}"`)
+  for (const row of indexes) sqlite.exec(`DROP INDEX "${row.name}"`)
+  sqlite.exec('ALTER TABLE "permission_ledger" RENAME TO "__permission_ledger_fixture_current"')
+  sqlite.exec(cascading)
+  const columns = all<{ name: string }>(sqlite, 'PRAGMA table_info("permission_ledger")').map((row) => `"${row.name}"`)
+  const projection = columns.join(",")
+  sqlite.exec(
+    `INSERT INTO "permission_ledger" (${projection}) SELECT ${projection} FROM "__permission_ledger_fixture_current"`,
+  )
+  sqlite.exec('DROP TABLE "__permission_ledger_fixture_current"')
+  for (const row of indexes) sqlite.exec(row.sql)
+  for (const row of triggers) sqlite.exec(row.sql)
+  sqlite.exec("PRAGMA legacy_alter_table=OFF")
 }
 
 function installLegacyControlSchema(sqlite: SQLite): void {
@@ -89,6 +127,115 @@ function insertLegacyArtifact(sqlite: SQLite, input: {
 }
 
 describe("fact-kernel schema migration", () => {
+  test("removes the Permission Project cascade while preserving the complete ledger chain", () => {
+    const sqlite = new SQLite(":memory:")
+    try {
+      sqlite.exec(SCHEMA_DDL)
+      installCascadingPermissionLedgerFixture(sqlite)
+      sqlite.exec(`
+        INSERT INTO project (id,worktree,name,icon_url,icon_color,time_created,time_updated,time_pinned,time_initialized,sandboxes,commands,generation)
+        VALUES ('project:permission-retention','D:/permission-retention','permission-retention',NULL,NULL,1,1,NULL,NULL,'[]',NULL,'6d68d8c3-d9d2-40fb-bef1-a41d6fd58e7e');
+        INSERT INTO permission_ledger(
+          id,request_id,project_id,session_id,task_id,message_id,tool_call_id,event_type,mode,policy_revision,
+          provider_kind,provider_id,provider_digest,tool_name,effect_class,scope_version,scope,fingerprint,summary,
+          metadata,time_created
+        ) VALUES (
+          'permission:retained:request','permission:retained','project:permission-retention','session:retained',NULL,
+          'message:retained','call:retained','requested','full_access','policy:retained','builtin','builtin',
+          'digest:retained','read','filesystem_read','2','{"resource":{"path":"README.md"}}','fingerprint:retained',
+          'Read retained evidence','{"choices":["allow_once"]}',2
+        );
+        INSERT INTO permission_ledger(id,request_id,event_type,decision_scope,decision_slot,actor_id,time_created)
+        VALUES ('permission:retained:decision','permission:retained','allowed_once','invocation','permission:retained','policy',3);
+        INSERT INTO permission_ledger(id,request_id,event_type,attempt_id,source_event_id,time_created)
+        VALUES ('permission:retained:start','permission:retained','execution_started','permission:retained:attempt','permission:retained:decision',4);
+        INSERT INTO permission_ledger(id,request_id,event_type,attempt_id,outcome_slot,time_created)
+        VALUES ('permission:retained:success','permission:retained','execution_succeeded','permission:retained:attempt','permission:retained:attempt',5);
+        INSERT INTO permission_ledger(id,request_id,event_type,source_event_id,reason,time_created)
+        VALUES ('permission:retained:stale','permission:retained','stale','permission:retained:success','settled',6);
+        UPDATE permission_ledger SET rowid=CASE id
+          WHEN 'permission:retained:request' THEN 10
+          WHEN 'permission:retained:decision' THEN 30
+          WHEN 'permission:retained:start' THEN 50
+          WHEN 'permission:retained:success' THEN 70
+          WHEN 'permission:retained:stale' THEN 90
+        END WHERE request_id='permission:retained';
+      `)
+      const before = all<Record<string, unknown>>(
+        sqlite,
+        "SELECT rowid,* FROM permission_ledger WHERE request_id='permission:retained' ORDER BY rowid",
+      )
+
+      expect(migratePermissionLedgerProjectRetentionSchema(sqlite)).toBe(true)
+      expect({
+        rows: all<Record<string, unknown>>(
+          sqlite,
+          "SELECT rowid,* FROM permission_ledger WHERE request_id='permission:retained' ORDER BY rowid",
+        ),
+        foreignKeys: all(sqlite, 'PRAGMA foreign_key_list("permission_ledger")'),
+        legacyAlterTable: get<{ legacy_alter_table: number }>(sqlite, "PRAGMA legacy_alter_table"),
+        drift: findSchemaDrift(sqlite),
+      }).toEqual({ rows: before, foreignKeys: [], legacyAlterTable: { legacy_alter_table: 0 }, drift: undefined })
+
+      sqlite.exec("DELETE FROM project WHERE id='project:permission-retention'")
+      expect(all<{ id: string; event_type: string }>(
+        sqlite,
+        "SELECT id,event_type FROM permission_ledger WHERE request_id='permission:retained' ORDER BY time_created,id",
+      )).toEqual([
+        { id: "permission:retained:request", event_type: "requested" },
+        { id: "permission:retained:decision", event_type: "allowed_once" },
+        { id: "permission:retained:start", event_type: "execution_started" },
+        { id: "permission:retained:success", event_type: "execution_succeeded" },
+        { id: "permission:retained:stale", event_type: "stale" },
+      ])
+    } finally {
+      sqlite.close(true)
+    }
+  })
+
+  test("a second database opener settles an admitted historical shape against the first opener's migration", () => {
+    const directory = mkdtempSync(path.join(tmpdir(), "opencorvus-permission-migration-race-"))
+    const databasePath = path.join(directory, "opencorvus.db")
+    const first = new SQLite(databasePath, { create: true })
+    let second: SQLite | undefined
+    try {
+      first.exec(SCHEMA_DDL)
+      installCascadingPermissionLedgerFixture(first)
+      first.exec(`
+        INSERT INTO project (id,worktree,name,icon_url,icon_color,time_created,time_updated,time_pinned,time_initialized,sandboxes,commands,generation)
+        VALUES ('project:permission-race','D:/permission-race','permission-race',NULL,NULL,1,1,NULL,NULL,'[]',NULL,'f5897d90-470c-4a9a-87c0-8f7f77807aa0');
+        INSERT INTO permission_ledger(
+          rowid,id,request_id,project_id,session_id,message_id,tool_call_id,event_type,mode,policy_revision,
+          provider_kind,provider_id,provider_digest,tool_name,effect_class,scope_version,scope,fingerprint,summary,time_created
+        ) VALUES (
+          40,'permission:race:request','permission:race','project:permission-race','session:race','message:race',
+          'call:race','requested','ask','policy:race','builtin','builtin','digest:race','webfetch','network_read','2',
+          '{"resource":{"url":"https://example.test"}}','fingerprint:race','Race-safe request',2
+        );
+      `)
+      second = new SQLite(databasePath)
+      second.run("PRAGMA busy_timeout=5000")
+      const settled = migratePermissionLedgerProjectRetentionSchema(first, {
+        beforeWriteLockForTest: () => expect(migratePermissionLedgerProjectRetentionSchema(second!)).toBe(true),
+      })
+      expect({
+        settled,
+        row: get<{ rowid: number; id: string }>(first, "SELECT rowid,id FROM permission_ledger"),
+        foreignKeys: all(first, 'PRAGMA foreign_key_list("permission_ledger")'),
+        drift: findSchemaDrift(first),
+      }).toEqual({
+        settled: false,
+        row: { rowid: 40, id: "permission:race:request" },
+        foreignKeys: [],
+        drift: undefined,
+      })
+    } finally {
+      second?.close(true)
+      first.close(true)
+      rmSync(directory, { recursive: true, force: true })
+    }
+  })
+
   test("upgrades the Provider activity index for multiple streamed steps in one assistant Turn", () => {
     const sqlite = new SQLite(":memory:")
     try {

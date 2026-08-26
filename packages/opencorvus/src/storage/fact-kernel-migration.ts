@@ -251,6 +251,127 @@ function createCurrentTable(target: RawDatabase, reference: RawDatabase, table: 
   }
 }
 
+function createCurrentTableTriggers(target: RawDatabase, reference: RawDatabase, table: string): void {
+  for (const trigger of rows<{ sql: string | null }>(
+    reference,
+    `SELECT sql FROM sqlite_schema WHERE type='trigger' AND tbl_name=${literal(table)} ORDER BY name`,
+  )) {
+    if (trigger.sql) target.exec(trigger.sql)
+  }
+}
+
+function normalizedSchemaSql(value: string): string {
+  return value.replace(/\s+/g, " ").trim()
+}
+
+function tableOwnedSchemaObjects(db: RawDatabase, table: string): { type: string; name: string; sql: string }[] {
+  return rows<{ type: string; name: string; sql: string }>(
+    db,
+    `SELECT type,name,sql FROM sqlite_schema
+     WHERE tbl_name=${literal(table)} AND type IN ('index','trigger') AND sql IS NOT NULL
+     ORDER BY type,name`,
+  ).map((row) => ({ ...row, sql: normalizedSchemaSql(row.sql) }))
+}
+
+function matchesHistoricalPermissionLedgerProjectCascade(db: RawDatabase, reference: RawDatabase): boolean {
+  const table = "permission_ledger"
+  if (!exists(db, table)) return false
+  if (!tableDefinition(db, table).includes("permission_ledger_request_owner_shape")) return false
+  const cascadingProjectForeignKey = rows<{
+    table: string
+    from: string
+    to: string
+    on_delete: string
+  }>(db, `PRAGMA foreign_key_list(${quote(table)})`).some(
+    (row) =>
+      row.table === "project" &&
+      row.from === "project_id" &&
+      row.to === "id" &&
+      row.on_delete.toUpperCase() === "CASCADE",
+  )
+  if (!cascadingProjectForeignKey) return false
+  const currentDefinition = tableDefinition(reference, table)
+  const expectedCascadingDefinition = currentDefinition.replace(
+    '  CONSTRAINT "permission_ledger_request_owner_shape"',
+    '  FOREIGN KEY ("project_id") REFERENCES "project"("id") ON DELETE CASCADE,\n  CONSTRAINT "permission_ledger_request_owner_shape"',
+  )
+  return (
+    expectedCascadingDefinition !== currentDefinition &&
+    normalizedSchemaSql(tableDefinition(db, table)) === normalizedSchemaSql(expectedCascadingDefinition) &&
+    JSON.stringify(tableOwnedSchemaObjects(db, table)) === JSON.stringify(tableOwnedSchemaObjects(reference, table))
+  )
+}
+
+/**
+ * Replace the normalized Permission ledger's accidental Project cascade with
+ * retention-safe current DDL. This migration is deliberately narrower than
+ * the fact-kernel cutover: every existing ledger byte, including already
+ * unowned residue, is copied unchanged. No request owner can be reconstructed
+ * after a historical cascade, and none is fabricated here.
+ */
+export function migratePermissionLedgerProjectRetentionSchema(
+  db: RawDatabase,
+  options: { beforeWriteLockForTest?: () => void } = {},
+): boolean {
+  if (!exists(db, "permission_ledger")) return false
+  const reference = currentSchema()
+  const table = "permission_ledger"
+  const legacy = "__permission_ledger_project_cascade"
+  const legacyAlterTable = rows<{ legacy_alter_table: number }>(db, "PRAGMA legacy_alter_table")[0]?.legacy_alter_table ?? 0
+  let transactionActive = false
+  let pragmaChanged = false
+  try {
+    if (!matchesHistoricalPermissionLedgerProjectCascade(db, reference)) return false
+    options.beforeWriteLockForTest?.()
+    db.exec("PRAGMA legacy_alter_table=ON")
+    pragmaChanged = true
+    db.exec("BEGIN IMMEDIATE")
+    transactionActive = true
+    if (!matchesHistoricalPermissionLedgerProjectCascade(db, reference)) {
+      db.exec("COMMIT")
+      transactionActive = false
+      return false
+    }
+    if (exists(db, legacy)) throw new Error(`Permission ledger retention migration found stale table ${legacy}`)
+    const before = rows<{ count: number }>(db, `SELECT count(*) AS count FROM ${quote(table)}`)[0]?.count ?? 0
+    for (const index of rows<{ name: string }>(
+      db,
+      `SELECT name FROM sqlite_schema WHERE type='index' AND tbl_name=${literal(table)} AND sql IS NOT NULL`,
+    )) db.exec(`DROP INDEX ${quote(index.name)}`)
+    for (const trigger of rows<{ name: string }>(
+      db,
+      `SELECT name FROM sqlite_schema WHERE type='trigger' AND tbl_name=${literal(table)}`,
+    )) db.exec(`DROP TRIGGER ${quote(trigger.name)}`)
+    db.exec(`ALTER TABLE ${quote(table)} RENAME TO ${quote(legacy)}`)
+    createCurrentTable(db, reference, table, false)
+    const currentColumns = columns(db, table)
+    const legacyColumns = new Set(columns(db, legacy))
+    if (!currentColumns.every((column) => legacyColumns.has(column))) {
+      throw new Error("Permission ledger retention migration cannot preserve every current column")
+    }
+    const projection = currentColumns.map(quote).join(",")
+    db.exec(
+      `INSERT INTO ${quote(table)} (rowid,${projection}) ` +
+        `SELECT rowid,${projection} FROM ${quote(legacy)} ORDER BY rowid`,
+    )
+    const after = rows<{ count: number }>(db, `SELECT count(*) AS count FROM ${quote(table)}`)[0]?.count ?? 0
+    if (after !== before) {
+      throw new Error(`Permission ledger retention migration copied ${after} of ${before} rows`)
+    }
+    db.exec(`DROP TABLE ${quote(legacy)}`)
+    createCurrentTableTriggers(db, reference, table)
+    db.exec("COMMIT")
+    transactionActive = false
+    return true
+  } catch (error) {
+    if (transactionActive) db.exec("ROLLBACK")
+    throw error
+  } finally {
+    if (pragmaChanged) db.exec(`PRAGMA legacy_alter_table=${legacyAlterTable ? "ON" : "OFF"}`)
+    reference.close(true)
+  }
+}
+
 function rebuildTable(target: RawDatabase, reference: RawDatabase, table: string): void {
   if (!exists(target, table)) {
     createCurrentTable(target, reference, table, false)

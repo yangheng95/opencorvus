@@ -23,6 +23,7 @@ import {
 import { PermissionExecutionResultTable, PermissionLedgerTable, PermissionPolicyTable } from "./permission.sql"
 import { acquireControlLease, assertControlLeaseInTransaction, releaseControlLeaseInTransaction, releaseControlLeaseOnErrorPath, renewControlLease } from "@/engine/control-lease"
 import { PermissionDecision } from "./decision"
+import { permissionRequestOwnerBelongsToProject } from "./project-authority"
 // Type-only: the value import stays dynamic so the runtime module cycle with
 // SessionLoop is never created.
 import type { SessionLoop } from "@/session/loop"
@@ -700,7 +701,10 @@ export namespace PermissionAuthority {
       db
         .select()
         .from(PermissionLedgerTable)
-        .where(eq(PermissionLedgerTable.event_type, "grant_created"))
+        .where(and(
+          eq(PermissionLedgerTable.event_type, "grant_created"),
+          permissionRequestOwnerBelongsToProject(request.projectID),
+        ))
         .orderBy(desc(sql`rowid`))
         .all(),
     )
@@ -1316,8 +1320,8 @@ export namespace PermissionAuthority {
 
   export async function history(projectID = Instance.project.id): Promise<LedgerRow[]> {
     return Database.use((db) => db.select().from(PermissionLedgerTable)
-      .orderBy(desc(sql`rowid`)).all()
-      .filter((row) => requestFromRow(row).projectID === projectID))
+      .where(permissionRequestOwnerBelongsToProject(projectID))
+      .orderBy(desc(sql`rowid`)).all())
   }
 
   export async function grants(projectID = Instance.project.id): Promise<LedgerRow[]> {

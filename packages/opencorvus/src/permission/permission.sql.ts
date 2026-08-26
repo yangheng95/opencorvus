@@ -40,7 +40,10 @@ export const PermissionLedgerTable = sqliteTable(
   {
     id: text().primaryKey(),
     request_id: text().notNull(),
-    project_id: text().references(() => ProjectTable.id, { onDelete: "cascade" }),
+    // Append-only authorization evidence outlives mutable Project retention.
+    // Project ownership is derived from the canonical requested row; deleting
+    // the Project must never remove that owner while leaving its delta rows.
+    project_id: text(),
     // Intentionally not a foreign key: authorization evidence outlives the
     // Session row it describes.
     session_id: text(),

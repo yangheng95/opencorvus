@@ -21,7 +21,7 @@ import {
   reconcileSchemaTriggers,
   schemaObjectFingerprint,
 } from "./schema-contract"
-import { migrateFactKernelSchema } from "./fact-kernel-migration"
+import { migrateFactKernelSchema, migratePermissionLedgerProjectRetentionSchema } from "./fact-kernel-migration"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
 import { Identifier } from "@/id/id"
 import {
@@ -1080,6 +1080,7 @@ export namespace Database {
       let sqlite = openOwnedSqlite(dbPath, { configure: false })
       if (hasApplicationSchema(sqlite)) {
         migrateProjectMaintenanceFenceSchema(sqlite)
+        migratePermissionLedgerProjectRetentionSchema(sqlite)
         migrateFactKernelSchema(sqlite)
         const reconciledTriggers = reconcileSchemaTriggers(sqlite)
         if (reconciledTriggers.length > 0) {
