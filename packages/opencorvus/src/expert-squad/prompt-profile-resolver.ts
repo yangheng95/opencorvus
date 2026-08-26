@@ -1063,8 +1063,17 @@ export namespace PromptProfileResolver {
       const { serverName } = defaultMcpTypedPartsFromRef(ref)
       const server = config.mcp?.[serverName]
       if (!server) throw new Error(`Active expert squad projects missing default MCP server default/mcp/${serverName}.`)
-      result[serverName] =
-        serverName === ComputerMCPBuiltin.ServerName ? ComputerMCPBuiltin.localConfig() : Config.Mcp.parse(server)
+      // Projection reports the configured provider; it does not substitute one.
+      // A squad that names a server configuration has turned off is a real
+      // disagreement, and saying so is the only answer that keeps
+      // configuration, assignment, status and execution describing the same
+      // capability.
+      if (!("type" in server)) {
+        throw new Error(
+          `Active expert squad projects default MCP server default/mcp/${serverName}, which configuration has disabled.`,
+        )
+      }
+      result[serverName] = Config.Mcp.parse(server)
     }
     return result
   }

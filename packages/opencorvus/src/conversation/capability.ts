@@ -344,13 +344,19 @@ export namespace ConversationCapability {
     const ordinaryTools = await MCP.toolsForServers(config, ordinaryServerRefs)
     if (!selected.mcp_server_refs.includes(ComputerMCPBuiltin.ServerName)) return ordinaryTools
 
+    // The configured declaration is the provider; this only binds the runtime
+    // this session executes it under. Synthesizing the entry here made the
+    // projection a second authority that could disagree with what
+    // configuration, assignment and status all reported.
+    const configured = config.mcp?.[ComputerMCPBuiltin.ServerName]
+    if (!configured || configured.enabled === false || configured.type !== "local") return ordinaryTools
+
     const owner = computerConnectionOwner(sessionID)
-    const hostAdapter = ComputerHostRuntime.adapter({
-      runtimeScope: owner.id,
-    })
-    const mcp = ComputerMCPBuiltin.localConfig({
-      hostAdapter,
-    })
+    const mcp = ComputerMCPBuiltin.withRuntimeScope(
+      configured,
+      owner.id,
+      ComputerHostRuntime.adapter({ runtimeScope: owner.id }),
+    )
     const entries = await Promise.all(
       ComputerMCPBuiltin.ImportableToolNames.map(
         async (toolName) =>

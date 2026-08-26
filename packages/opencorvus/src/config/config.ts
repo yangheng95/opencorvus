@@ -593,7 +593,7 @@ export namespace Config {
       mcp: {
         ...(config.mcp ?? {}),
         ...(browser ? {} : { [BrowserMCPBuiltin.ServerName]: BrowserMCPBuiltin.localConfig() }),
-        ...(computer ? {} : { [ComputerMCPBuiltin.ServerName]: { enabled: false as const } }),
+        ...(computer ? {} : { [ComputerMCPBuiltin.ServerName]: ComputerMCPBuiltin.localConfig() }),
       },
     }
   }
