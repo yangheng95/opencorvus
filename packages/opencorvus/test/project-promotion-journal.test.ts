@@ -33,12 +33,12 @@ describe("anonymous Project promotion journal", () => {
     const destinationParent = path.join(Global.Path.data, "promotion-recovery-destinations")
     await fs.mkdir(destinationParent, { recursive: true })
     const destination = path.join(destinationParent, "recovered-forward")
+    const operationID = randomUUID()
     const quarantine = path.join(
       path.dirname(physicalSource),
-      `.${path.basename(physicalSource)}.promoting-${randomUUID()}`,
+      `.${path.basename(physicalSource)}.promoting-${operationID}`,
     )
-    const staging = path.join(destinationParent, `.opencorvus-promoting-${randomUUID()}`)
-    const operationID = randomUUID()
+    const staging = path.join(destinationParent, `.opencorvus-promoting-${operationID}`)
     const projectGeneration = Database.use((db) =>
       db
         .select({ generation: ProjectTable.generation })
@@ -60,6 +60,8 @@ describe("anonymous Project promotion journal", () => {
       staging,
       destination,
       name: "recovered-forward",
+      sourceDigest: await PromotionJournal.digestDirectory(physicalSource),
+      database: ImplicitProject.PromotionTestHooks.promotionDatabaseSnapshot(anonymous.project.id),
       time_created: Date.now(),
     })
     await fs.rename(physicalSource, quarantine)
@@ -101,12 +103,12 @@ describe("anonymous Project promotion journal", () => {
     const destinationParent = path.join(Global.Path.data, "promotion-recovery-destinations")
     await fs.mkdir(destinationParent, { recursive: true })
     const destination = path.join(destinationParent, "never-published")
+    const operationID = randomUUID()
     const quarantine = path.join(
       path.dirname(physicalSource),
-      `.${path.basename(physicalSource)}.promoting-${randomUUID()}`,
+      `.${path.basename(physicalSource)}.promoting-${operationID}`,
     )
-    const staging = path.join(destinationParent, `.opencorvus-promoting-${randomUUID()}`)
-    const operationID = randomUUID()
+    const staging = path.join(destinationParent, `.opencorvus-promoting-${operationID}`)
     const projectGeneration = Database.use((db) =>
       db
         .select({ generation: ProjectTable.generation })
@@ -128,6 +130,8 @@ describe("anonymous Project promotion journal", () => {
       staging,
       destination,
       name: "never-published",
+      sourceDigest: await PromotionJournal.digestDirectory(physicalSource),
+      database: ImplicitProject.PromotionTestHooks.promotionDatabaseSnapshot(anonymous.project.id),
       time_created: Date.now(),
     })
     await fs.rename(physicalSource, quarantine)
@@ -192,9 +196,9 @@ describe("anonymous Project promotion journal", () => {
     const destination = path.join(destinationParent, "foreign-generation")
     const quarantine = path.join(
       path.dirname(physicalSource),
-      `.${path.basename(physicalSource)}.promoting-${randomUUID()}`,
+      `.${path.basename(physicalSource)}.promoting-${operationID}`,
     )
-    const staging = path.join(destinationParent, `.opencorvus-promoting-${randomUUID()}`)
+    const staging = path.join(destinationParent, `.opencorvus-promoting-${operationID}`)
 
     await PromotionJournal.record({
       operationID,
@@ -206,6 +210,8 @@ describe("anonymous Project promotion journal", () => {
       staging,
       destination,
       name: "foreign-generation",
+      sourceDigest: await PromotionJournal.digestDirectory(physicalSource),
+      database: ImplicitProject.PromotionTestHooks.promotionDatabaseSnapshot(anonymous.project.id),
       time_created: Date.now(),
     })
 

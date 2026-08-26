@@ -9,6 +9,27 @@ import { Global } from "../global"
 
 const KIND = "project-promotion"
 
+export const PromotionDatabaseSnapshot = z
+  .object({
+    project: z.object({
+      worktree: z.string(),
+      name: z.string().nullable(),
+      sandboxes: z.array(z.string()),
+      generation: z.string().uuid(),
+      timeUpdated: z.number().int().nonnegative(),
+    }),
+    sessions: z.array(
+      z.object({
+        id: z.string(),
+        directory: z.string(),
+        metadata: z.record(z.string(), z.json()).nullable(),
+        timeUpdated: z.number().int().nonnegative(),
+      }),
+    ),
+  })
+  .strict()
+export type PromotionDatabaseSnapshot = z.infer<typeof PromotionDatabaseSnapshot>
+
 const IntentPayload = z
   .object({
     projectID: z.string().min(1),
@@ -19,6 +40,8 @@ const IntentPayload = z
     staging: z.string().min(1),
     destination: z.string().min(1),
     name: z.string().min(1),
+    sourceDigest: z.string().regex(/^[a-f0-9]{64}$/),
+    database: PromotionDatabaseSnapshot,
   })
   .strict()
 
@@ -50,6 +73,8 @@ export namespace PromotionJournal {
       staging: entry.staging,
       destination: entry.destination,
       name: entry.name,
+      sourceDigest: entry.sourceDigest,
+      database: entry.database,
     })
   }
 
@@ -79,6 +104,14 @@ export namespace PromotionJournal {
     return matches[0]
   }
 
+  function subject(projectID: string): string {
+    return `project:${projectID}`
+  }
+
+  export function withProjectOwner<T>(projectID: string, run: () => Promise<T>): Promise<T> {
+    return store().withSubjectLock(KIND, subject(projectID), run)
+  }
+
   export async function all(): Promise<Entry[]> {
     return (await store().listOpen(KIND)).map(fromOccurrence)
   }
@@ -89,16 +122,18 @@ export namespace PromotionJournal {
 
   export async function record(input: Omit<Entry, "destinationDigest" | "published">): Promise<void> {
     const entry = Entry.parse({ ...input, published: false })
-    const existing = await exactOpen(entry.projectID)
-    if (existing) {
-      throw new Error(`Project ${entry.projectID} already has unconverged promotion ${existing.operationID}`)
-    }
-    await store().create({
-      occurrenceID: entry.operationID,
-      kind: KIND,
-      subject: `project:${entry.projectID}:${entry.projectGeneration}`,
-      payload: intentPayload(entry),
-      timeCreated: entry.time_created,
+    await withProjectOwner(entry.projectID, async () => {
+      const existing = await exactOpen(entry.projectID)
+      if (existing) {
+        throw new Error(`Project ${entry.projectID} already has unconverged promotion ${existing.operationID}`)
+      }
+      await store().create({
+        occurrenceID: entry.operationID,
+        kind: KIND,
+        subject: subject(entry.projectID),
+        payload: intentPayload(entry),
+        timeCreated: entry.time_created,
+      })
     })
   }
 

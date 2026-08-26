@@ -1,6 +1,8 @@
-import { createHash } from "node:crypto"
-import { lstat, mkdir, open, readdir, readFile, readlink, rm } from "node:fs/promises"
+import { AsyncLocalStorage } from "node:async_hooks"
+import { createHash, randomUUID } from "node:crypto"
+import { link, lstat, mkdir, mkdtemp, open, readdir, readFile, readlink, rename, rm } from "node:fs/promises"
 import path from "node:path"
+import lockfile from "proper-lockfile"
 import z from "zod"
 
 const SEGMENT = /^[A-Za-z0-9][A-Za-z0-9._-]*$/
@@ -97,21 +99,68 @@ function stable(value: unknown): string {
   return JSON.stringify(value)
 }
 
-async function writeExclusive(file: string, value: unknown): Promise<void> {
-  const body = `${JSON.stringify(value, null, 2)}\n`
-  let handle
+type DurablePublicationCut =
+  | "occurrence-staging-created"
+  | "occurrence-published"
+  | "intent-temp-synced"
+  | "intent-published"
+  | "phase-temp-synced"
+  | "phase-published"
+  | "terminal-temp-synced"
+  | "terminal-published"
+
+let testCutHook: ((cut: DurablePublicationCut) => void | Promise<void>) | undefined
+
+/** Test-only crash injection used by child-process durability acceptance. */
+export function setDurablePublicationTestCutHook(hook?: (cut: DurablePublicationCut) => void | Promise<void>): void {
+  testCutHook = hook
+}
+
+async function cut(name: DurablePublicationCut): Promise<void> {
+  await testCutHook?.(name)
+}
+
+async function syncDirectory(directory: string): Promise<void> {
+  const handle = await open(directory, process.platform === "win32" ? "r+" : "r")
   try {
-    handle = await open(file, "wx", 0o600)
+    await handle.sync()
+  } finally {
+    await handle.close()
+  }
+}
+
+async function writeExclusive(
+  file: string,
+  value: unknown,
+  fact: "intent" | "phase" | "terminal",
+): Promise<void> {
+  const body = `${JSON.stringify(value, null, 2)}\n`
+  const temporary = path.join(path.dirname(file), `.tmp-${path.basename(file)}-${randomUUID()}`)
+  let published = false
+  let handle: Awaited<ReturnType<typeof open>> | undefined
+  try {
+    handle = await open(temporary, "wx", 0o600)
     await handle.writeFile(body, "utf8")
     await handle.sync()
-  } catch (error) {
-    if ((error as NodeJS.ErrnoException).code !== "EEXIST") throw error
-    const existing = JSON.parse(await readFile(file, "utf8")) as unknown
-    if (stable(existing) !== stable(value)) {
-      throw new Error(`Durable publication fact already exists with different content: ${file}`, { cause: error })
+    await handle.close()
+    handle = undefined
+    await cut(`${fact}-temp-synced`)
+    try {
+      await link(temporary, file)
+      published = true
+      await cut(`${fact}-published`)
+      await syncDirectory(path.dirname(file))
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code !== "EEXIST") throw error
+      const existing = JSON.parse(await readFile(file, "utf8")) as unknown
+      if (stable(existing) !== stable(value)) {
+        throw new Error(`Durable publication fact already exists with different content: ${file}`, { cause: error })
+      }
     }
   } finally {
-    await handle?.close()
+    await handle?.close().catch(() => undefined)
+    await rm(temporary, { force: true }).catch(() => undefined)
+    if (published) await syncDirectory(path.dirname(file))
   }
 }
 
@@ -134,6 +183,8 @@ async function readOptional(file: string): Promise<unknown | undefined> {
  * Physical existence is never interpreted as completion by this layer.
  */
 export class DurablePublicationStore {
+  private static readonly heldSubjects = new AsyncLocalStorage<Set<string>>()
+
   constructor(readonly root: string) {
     if (!path.isAbsolute(root)) throw new Error(`Durable publication root must be absolute: ${root}`)
   }
@@ -142,46 +193,108 @@ export class DurablePublicationStore {
     return path.join(this.root, segment(kind, "publication kind"), segment(occurrenceID, "publication occurrence"))
   }
 
+  async withSubjectLock<T>(kind: string, subject: string, run: () => Promise<T>): Promise<T> {
+    segment(kind, "publication kind")
+    if (!subject) throw new Error("Durable publication subject must not be empty")
+    const key = createHash("sha256").update(`${kind}\0${subject}`).digest("hex")
+    const held = DurablePublicationStore.heldSubjects.getStore()
+    if (held?.has(key)) return run()
+    const lockDirectory = path.join(this.root, ".locks")
+    await mkdir(lockDirectory, { recursive: true })
+    const target = path.join(lockDirectory, key)
+    const provision = await open(target, "a", 0o600)
+    await provision.close()
+    let compromised: unknown
+    const release = await lockfile.lock(target, {
+      realpath: false,
+      retries: { forever: true, factor: 1.2, minTimeout: 25, maxTimeout: 250, randomize: true },
+      onCompromised(error) {
+        compromised ??= error
+      },
+    })
+    const next = new Set(held ?? [])
+    next.add(key)
+    try {
+      const result = await DurablePublicationStore.heldSubjects.run(next, run)
+      if (compromised) throw new Error(`Durable publication subject lock was compromised: ${subject}`, { cause: compromised })
+      return result
+    } finally {
+      await release().catch((error) => {
+        if (!compromised) throw error
+      })
+    }
+  }
+
   async create(input: Omit<DurablePublicationIntent, "schemaVersion">): Promise<DurablePublicationOccurrence> {
     const intent = DurablePublicationIntent.parse({ schemaVersion: 1, ...input })
-    const directory = this.occurrenceDirectory(intent.kind, intent.occurrenceID)
-    await mkdir(directory, { recursive: true })
-    await writeExclusive(path.join(directory, "intent.json"), intent)
-    return this.read(intent.kind, intent.occurrenceID)
+    return this.withSubjectLock(intent.kind, intent.subject, async () => {
+      const directory = this.occurrenceDirectory(intent.kind, intent.occurrenceID)
+      const kindDirectory = path.dirname(directory)
+      const stagingRoot = path.join(this.root, ".staging", intent.kind)
+      await mkdir(kindDirectory, { recursive: true })
+      await mkdir(stagingRoot, { recursive: true })
+      const staging = await mkdtemp(path.join(stagingRoot, `${intent.occurrenceID}-`))
+      try {
+        await cut("occurrence-staging-created")
+        await writeExclusive(path.join(staging, "intent.json"), intent, "intent")
+        await syncDirectory(staging)
+        try {
+          await rename(staging, directory)
+          await cut("occurrence-published")
+          await syncDirectory(kindDirectory)
+        } catch (error) {
+          if ((error as NodeJS.ErrnoException).code !== "EEXIST") throw error
+          const existing = await this.read(intent.kind, intent.occurrenceID)
+          if (stable(existing.intent) !== stable(intent)) {
+            throw new Error(`Durable publication occurrence already exists with different intent: ${directory}`)
+          }
+        }
+      } finally {
+        await rm(staging, { recursive: true, force: true }).catch(() => undefined)
+      }
+      return this.read(intent.kind, intent.occurrenceID)
+    })
   }
 
   async appendPhase(
     kind: string,
     input: Omit<DurablePublicationPhase, "schemaVersion">,
   ): Promise<DurablePublicationOccurrence> {
-    const occurrence = await this.read(kind, input.occurrenceID)
-    if (occurrence.terminal) {
-      throw new Error(`Durable publication ${input.occurrenceID} is already ${occurrence.terminal.outcome}`)
-    }
-    const phase = DurablePublicationPhase.parse({ schemaVersion: 1, ...input })
-    const previous = occurrence.phases.at(-1)
-    if (previous && phase.sequence <= previous.sequence) {
-      const replay = occurrence.phases.find((item) => item.sequence === phase.sequence)
-      if (replay && stable(replay) === stable(phase)) return occurrence
-      throw new Error(
-        `Durable publication ${phase.occurrenceID} phase sequence ${phase.sequence} does not advance ${previous.sequence}`,
-      )
-    }
-    const phases = path.join(occurrence.directory, "phases")
-    await mkdir(phases, { recursive: true })
-    const filename = `${String(phase.sequence).padStart(6, "0")}-${segment(phase.name, "publication phase")}.json`
-    await writeExclusive(path.join(phases, filename), phase)
-    return this.read(kind, phase.occurrenceID)
+    const initial = await this.read(kind, input.occurrenceID)
+    return this.withSubjectLock(kind, initial.intent.subject, async () => {
+      const occurrence = await this.read(kind, input.occurrenceID)
+      if (occurrence.terminal) {
+        throw new Error(`Durable publication ${input.occurrenceID} is already ${occurrence.terminal.outcome}`)
+      }
+      const phase = DurablePublicationPhase.parse({ schemaVersion: 1, ...input })
+      const previous = occurrence.phases.at(-1)
+      if (previous && phase.sequence <= previous.sequence) {
+        const replay = occurrence.phases.find((item) => item.sequence === phase.sequence)
+        if (replay && stable(replay) === stable(phase)) return occurrence
+        throw new Error(
+          `Durable publication ${phase.occurrenceID} phase sequence ${phase.sequence} does not advance ${previous.sequence}`,
+        )
+      }
+      const phases = path.join(occurrence.directory, "phases")
+      await mkdir(phases, { recursive: true })
+      await syncDirectory(occurrence.directory)
+      const filename = `${String(phase.sequence).padStart(6, "0")}-${segment(phase.name, "publication phase")}.json`
+      await writeExclusive(path.join(phases, filename), phase, "phase")
+      return this.read(kind, phase.occurrenceID)
+    })
   }
 
   async settle(
     kind: string,
     input: Omit<DurablePublicationTerminal, "schemaVersion">,
   ): Promise<DurablePublicationOccurrence> {
-    const occurrence = await this.read(kind, input.occurrenceID)
-    const terminal = DurablePublicationTerminal.parse({ schemaVersion: 1, ...input })
-    await writeExclusive(path.join(occurrence.directory, "terminal.json"), terminal)
-    return this.read(kind, terminal.occurrenceID)
+    const initial = await this.read(kind, input.occurrenceID)
+    return this.withSubjectLock(kind, initial.intent.subject, async () => {
+      const occurrence = await this.read(kind, input.occurrenceID)
+      const terminal = DurablePublicationTerminal.parse({ schemaVersion: 1, ...input })
+      await writeExclusive(path.join(occurrence.directory, "terminal.json"), terminal, "terminal")
+      return this.read(kind, terminal.occurrenceID)
+    })
   }
 
   async read(kind: string, occurrenceID: string): Promise<DurablePublicationOccurrence> {
@@ -198,7 +311,7 @@ export class DurablePublicationStore {
       throw error
     })
     const phases: DurablePublicationPhase[] = []
-    for (const name of names.sort()) {
+    for (const name of names.filter((name) => !name.startsWith(".tmp-")).sort()) {
       if (!name.endsWith(".json")) throw new Error(`Unexpected durable publication phase entry: ${name}`)
       const phase = DurablePublicationPhase.parse(JSON.parse(await readFile(path.join(phaseDirectory, name), "utf8")))
       if (phase.occurrenceID !== occurrenceID) {

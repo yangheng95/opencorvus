@@ -67,4 +67,41 @@ describe("durable publication fact store", () => {
       open: [],
     })
   })
+
+  test("a killed writer leaves only a complete old or new intent, phase and terminal fact", async () => {
+    const fixture = path.join(import.meta.dir, "fixture", "durable-publication-child.ts")
+    const cases = [
+      ["intent", "occurrence-staging-created", 0, false],
+      ["intent", "intent-temp-synced", 0, false],
+      ["intent", "occurrence-published", 0, false],
+      ["phase", "phase-temp-synced", 0, false],
+      ["phase", "phase-published", 1, false],
+      ["terminal", "terminal-temp-synced", 1, false],
+      ["terminal", "terminal-published", 1, true],
+    ] as const
+
+    for (const [action, cut, expectedPhases, expectedTerminal] of cases) {
+      const root = await mkdtemp(path.join(os.tmpdir(), `opencorvus-publication-crash-${action}-`))
+      roots.push(root)
+      const child = Bun.spawn([process.execPath, fixture, root, action, cut], {
+        cwd: path.join(import.meta.dir, ".."),
+        stdout: "pipe",
+        stderr: "pipe",
+      })
+      const exitCode = await child.exited
+      expect(exitCode).not.toBe(0)
+
+      const store = new DurablePublicationStore(root)
+      const listed = await store.list("test-publication")
+      if (action === "intent" && expectedPhases === 0 && !expectedTerminal) {
+        expect(listed.length).toBe(cut === "occurrence-published" ? 1 : 0)
+        if (listed.length === 0) continue
+      }
+      const occurrence = await store.read("test-publication", "occurrence-crash-proof")
+      expect({ phases: occurrence.phases.length, terminal: Boolean(occurrence.terminal) }).toEqual({
+        phases: expectedPhases,
+        terminal: expectedTerminal,
+      })
+    }
+  }, 60_000)
 })

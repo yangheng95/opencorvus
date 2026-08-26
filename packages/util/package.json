@@ -11,9 +11,11 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "proper-lockfile": "4.1.2",
     "zod": "catalog:"
   },
   "devDependencies": {
+    "@types/proper-lockfile": "4.1.4",
     "typescript": "catalog:",
     "@types/bun": "catalog:"
   }
