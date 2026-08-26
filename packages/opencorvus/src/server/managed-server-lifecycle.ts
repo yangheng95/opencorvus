@@ -2,7 +2,8 @@ import { ParentWatchdog } from "./parent-watchdog"
 
 export namespace ManagedServerLifecycle {
   export interface StartInput {
-    parentPid: number
+    /** The exact host occurrence, not a reusable process number. */
+    parent: { pid: number; processInstanceID?: string; occurrenceID?: string }
     onParentExit: (reason: string) => void
     watchdogIntervalMilliseconds?: number
   }
@@ -15,7 +16,7 @@ export namespace ManagedServerLifecycle {
    * database, data directory, listener port or global sidecar scope. */
   export function start(input: StartInput): Handle {
     const watchdog = ParentWatchdog.start({
-      parentPid: input.parentPid,
+      parent: input.parent,
       intervalMs: input.watchdogIntervalMilliseconds,
       onOrphan: input.onParentExit,
     })

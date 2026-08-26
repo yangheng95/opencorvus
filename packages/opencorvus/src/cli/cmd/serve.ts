@@ -1,4 +1,5 @@
 import { Server } from "../../server/server"
+import { observedProcessOccurrence } from "@/runtime/process-occurrence"
 import path from "node:path"
 import { cmd } from "./cmd"
 import { withNetworkOptions, resolveNetworkOptions, type NetworkOptions } from "../network"
@@ -71,8 +72,12 @@ function managedLifecycleInput(args: ArgumentsCamelCase<ServeOptions>) {
   const rawParentPid = args["parent-pid"]
   if (rawParentPid === undefined) return undefined
   if (!Number.isInteger(rawParentPid) || rawParentPid <= 0) throw new Error("Managed serve requires a positive --parent-pid")
+  // The host is alive at this instant — it just launched this process — so the
+  // fingerprint observed now IS the occurrence this backend is bound to. A
+  // later reuse of the same process number cannot match it.
+  const parent = observedProcessOccurrence(rawParentPid) ?? { pid: rawParentPid }
   return {
-    parentPid: rawParentPid,
+    parent,
     watchdogIntervalMilliseconds: args["watchdog-interval-ms"],
   }
 }
