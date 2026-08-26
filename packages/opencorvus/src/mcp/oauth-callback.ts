@@ -59,21 +59,6 @@ const HTML_ERROR = (error: string) => `<!DOCTYPE html>
 </body>
 </html>`
 
-/**
- * The durable owner of OAuth flows.
- *
- * The listener is an adapter: it receives bytes on a port and has no opinion
- * about which flows exist. Whether a state names a live flow, and what
- * finishing that flow means, are both answered here — by the same durable
- * authority that survives the restart this listener does not.
- */
-interface CallbackAuthorityContract {
-  /** The flow this state belongs to, or undefined when no durable flow claims it. */
-  resolveState(oauthState: string): Promise<{ mcpName: string } | undefined>
-  /** Complete the flow. The one finish path, shared with a waiting caller. */
-  finish(input: { mcpName: string; authorizationCode: string; oauthState: string }): Promise<void>
-}
-
 interface PendingAuth {
   resolve: (code: string) => void
   reject: (error: Error) => void
@@ -83,10 +68,7 @@ interface PendingAuth {
 }
 
 export namespace McpOAuthCallback {
-  export type CallbackAuthority = CallbackAuthorityContract
-
   let server: ReturnType<typeof Bun.serve> | undefined
-  let flowAuthority: CallbackAuthorityContract | undefined
   // The pending owner key is project-scoped for MCP auth flows
   // (`projectID:mcpName`) so two active projects can authenticate the same
   // server name without sharing callback cancellation state.
@@ -95,7 +77,7 @@ export namespace McpOAuthCallback {
 
   const CALLBACK_TIMEOUT_MS = 5 * 60 * 1000 // 5 minutes
 
-  export async function handleRequest(req: Request): Promise<Response> {
+  export function handleRequest(req: Request): Response {
     const url = new URL(req.url)
 
     if (url.pathname !== OAUTH_CALLBACK_PATH) {
@@ -123,15 +105,7 @@ export namespace McpOAuthCallback {
       })
     }
 
-    // A callback whose flow no process is waiting on is not thereby forged.
-    // The listener that receives it need not be the listener that started the
-    // flow — a restart between the authorization redirect and the callback
-    // rebinds this port to a process with an empty map, and every fact the
-    // completion needs is durable. Legitimacy is the durable authority's
-    // answer, never this map's emptiness.
-    const durableOwner = callbackOwner ? undefined : await requireAuthority().resolveState(state)
-
-    if (!callbackOwner && !durableOwner) {
+    if (!callbackOwner) {
       const errorMsg = "Invalid or expired state parameter - potential CSRF attack"
       log.error(
         "oauth callback with invalid state",
@@ -145,7 +119,10 @@ export namespace McpOAuthCallback {
 
     if (error) {
       const errorMsg = errorDescription || error
-      settleLocally(state, callbackOwner, (pending) => pending.reject(new Error(errorMsg)))
+      clearTimeout(callbackOwner.timeout)
+      pendingAuths.delete(state)
+      if (callbackOwner.mcpName) mcpNameToState.delete(callbackOwner.mcpName)
+      callbackOwner.reject(new Error(errorMsg))
       return new Response(HTML_ERROR(errorMsg), {
         headers: { "Content-Type": "text/html" },
       })
@@ -153,61 +130,27 @@ export namespace McpOAuthCallback {
 
     if (!code) {
       const errorMsg = "No authorization code provided"
-      settleLocally(state, callbackOwner, (pending) => pending.reject(new Error(errorMsg)))
+      clearTimeout(callbackOwner.timeout)
+      pendingAuths.delete(state)
+      if (callbackOwner.mcpName) mcpNameToState.delete(callbackOwner.mcpName)
+      callbackOwner.reject(new Error(errorMsg))
       return new Response(HTML_ERROR(errorMsg), {
         status: 400,
         headers: { "Content-Type": "text/html" },
       })
     }
 
-    if (callbackOwner) {
-      // The caller that opened this flow is still waiting in this process; it
-      // finishes through the same authority the branch below calls directly.
-      settleLocally(state, callbackOwner, (pending) => pending.resolve(code))
-      return new Response(HTML_SUCCESS, {
-        headers: { "Content-Type": "text/html" },
-      })
-    }
-
-    try {
-      await requireAuthority().finish({
-        mcpName: durableOwner!.mcpName,
-        authorizationCode: code,
-        oauthState: state,
-      })
-    } catch (finishError) {
-      const errorMsg = finishError instanceof Error ? finishError.message : String(finishError)
-      log.error("oauth callback failed to finish an unattended flow", { correlationID, error: errorMsg })
-      return new Response(HTML_ERROR(errorMsg), {
-        status: 400,
-        headers: { "Content-Type": "text/html" },
-      })
-    }
+    clearTimeout(callbackOwner.timeout)
+    pendingAuths.delete(state)
+    if (callbackOwner.mcpName) mcpNameToState.delete(callbackOwner.mcpName)
+    callbackOwner.resolve(code)
 
     return new Response(HTML_SUCCESS, {
       headers: { "Content-Type": "text/html" },
     })
   }
 
-  function requireAuthority(): CallbackAuthorityContract {
-    if (!flowAuthority) throw new Error("OAuth callback listener was started without its flow authority")
-    return flowAuthority
-  }
-
-  function settleLocally(
-    state: string,
-    pending: PendingAuth | undefined,
-    settle: (pending: PendingAuth) => void,
-  ): void {
-    if (!pending) return
-    clearTimeout(pending.timeout)
-    pendingAuths.delete(state)
-    if (pending.mcpName) mcpNameToState.delete(pending.mcpName)
-    settle(pending)
-  }
-
-  export async function ensureRunning(authority: CallbackAuthorityContract): Promise<void> {
-    flowAuthority = authority
+  export async function ensureRunning(): Promise<void> {
     if (server) return
 
     try {
@@ -224,7 +167,11 @@ export namespace McpOAuthCallback {
     log.info("oauth callback server started", { port: OAUTH_CALLBACK_PORT })
   }
 
-  function waitForCallback(oauthState: string, mcpName: string | undefined, correlationID: string): Promise<string> {
+  function waitForCallback(
+    oauthState: string,
+    mcpName: string | undefined,
+    correlationID: string,
+  ): Promise<string> {
     return new Promise((resolve, reject) => {
       const timeout = setTimeout(() => {
         if (pendingAuths.has(oauthState)) {
@@ -270,7 +217,6 @@ export namespace McpOAuthCallback {
     if (server) {
       server.stop()
       server = undefined
-      flowAuthority = undefined
       log.info("oauth callback server stopped")
     }
 
