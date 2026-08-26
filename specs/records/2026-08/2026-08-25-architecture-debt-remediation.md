@@ -593,11 +593,6 @@ The eleventh uninvolved read-only review verified the Stage-3 aggregate work as 
 - The repair: the launcher mints a launch occurrence, hands the server a private receipt path, and settles on the framed fact published there — atomically, carrying the bound URL, or an exact terminal startup error so a failed launch settles immediately instead of waiting out the timeout. A receipt from another occurrence or an unsupported schema is refused rather than adopted; a partially written file is simply not settled yet. Server output is retained for diagnostics only, and the log-parsing path is deleted.
 - The existing SDK test whose premise was a readiness line split across stdout chunks is rewritten to the contract it now proves.
 
-### ARC-005 — one signal owner per process, one cleanup receipt
-
-- Root cause as audited: the Browser session module installed its own SIGINT/SIGTERM handlers that ran browser cleanup and then called `process.exit(0)`. In stdio mode that killed the process while the transport, the MCP server and the monitor listener were still closing; in HTTP mode it raced the transport's own handler. Either way it reported success regardless of what that cleanup had done.
-- The repair: the resource module exposes `shutdownBrowserSessions()` and owns no process termination at all, and the stdio composition root installs the only signal handlers for its process, setting the exit status from the same single `close()` receipt the HTTP root already used. The module's `process.on("exit")` hook went with them — an exit handler cannot await an asynchronous close, so it never cleaned anything up.
-
 ### ARC-004 — crossing into an isolated browser is a stated policy
 
 - Root cause as audited: attached and isolated are different browser identities (different cookies, different signed-in state), but runtime caught a Chrome DevTools Protocol failure and launched an isolated browser anyway, while the architecture document promised no implicit downgrade.
@@ -617,6 +612,42 @@ The eleventh uninvolved read-only review verified the Stage-3 aggregate work as 
 ### ARC-035 — every current architecture authority is reachable
 
 - The index listed 7 documents while the directory held 26, and nothing checked it: `docs:check` validates the GENERATED API markdown, not the hand-written authority graph. The index now enumerates every current document grouped by the plane it governs, and `check:architecture-index` (wired into pre-push) fails on any document the index does not reach and on any link that does not resolve to a live file. The gate was verified by removing one index entry and observing the failure.
+
+### ARC-006 / ARC-007 — result semantics come from the provider
+
+- Root cause as audited: Computer and Browser result materialization was chosen by matching the shape of `structuredContent`, so a generic or package MCP server whose payload happened to match received another provider's permission, result and UI treatment.
+- The repair: the provider identity travels with the result. Only the server that IS the builtin gets that builtin's materialization, and a caller that cannot name its provider gets neither. Every call site passes the identity it already held — the package tool projections their `providerName`, the interactive artifact host its server id, and the Session loop the same identity the invocation was recorded under rather than a second shape guess.
+- Recorded open: the invocation-side half of ARC-006 (deriving `providerKind` from runtime-name prefixes at the Session loop's permission gate) still infers from names; the result envelope no longer does.
+
+### Stage 4/5/6 twelfth independent review disposition
+
+The twelfth uninvolved read-only review of seven commits found one critical defect, twelve medium and six low. It confirmed ARC-023, ARC-025 and ARC-035 sound within their stated scope, that no live code still parses `server listening` as readiness, that no process running Browser sessions is left without a signal owner, that the ARC-004 refusal is complete and needs no downstream mode changes, and that ARC-024's slice is honest about being a slice.
+
+**Repaired**
+
+- **Critical**: installation verification resolved every declared dependency at one hardcoded flat cache path, so a dependency legitimately NESTED by a version conflict was reported unresolved — no receipt was ever published and every later load reinstalled and failed again against a tree that was correct. Resolution now follows Node's own order from the dependent package upward to the cache root.
+- Verification PARSES each dependency manifest instead of stat-ing its path: a zero-byte or truncated `package.json` is exactly what a killed install leaves behind, so treating existence as proof reproduced the defect the receipt exists to remove.
+- `begin()`'s read, supersede, remove and create became one mutation under the subject lock — split across it, a second backend could replace the occurrence a first was installing under, and the first would then commit its receipt into the second's occurrence mid-install. `removeSettled` takes that lock too, and the catch that read every failure as "no prior occurrence" is narrowed to the missing-intent case.
+- The store's already-published replay branch no longer spans the post-rename directory fsync, so a failed fsync surfaces instead of being read as someone else's publication.
+- The SDK disposes its startup receipt channel on every exit path; a timeout, a dead child, a spawn error and an abort each left a temp directory holding the bound URL behind.
+- Every terminal exit of a managed serve settles its receipt, including the failures before a listener is attempted, and a receipt that cannot be published is itself terminal — leaving it silent meant the launcher polled a file that would never appear and then killed a server that was actually serving.
+- The Browser stdio composition root rejects its close promise when shutdown fails, exactly as its stdin and transport siblings do; resolving there let the root return cleanly with nothing but a mutable `process.exitCode` as evidence.
+- **Shared-mechanism duty for ARC-023**: the identical PID-only liveness defect survived in the durable worktree ownership marker, where a reused process number made a dead owner's worktree permanently unreleasable. The marker now carries the owner's process-instance fingerprint and liveness is observed through the same occurrence primitive; a marker without one keeps the weaker number-only answer rather than a fabricated identity.
+- An unconfigured `{{Language}}` was substituted as an empty string, handing the CLI an empty argument for a flag that requires a value; an unsubstituted placeholder is now dropped together with its flag. The backslash rule no longer consumes a doubled backslash, so UNC paths keep both leading separators.
+- The architecture-index gate parses real markdown links instead of testing for a substring, skips fenced examples, scans subdirectories, and sweeps `specs/README.md`'s links into the directory. Strengthening it immediately caught twelve genuinely dead pointers in `specs/README.md` — the audit's second ARC-035 half — which are removed. The gate was verified by replacing one index link with a plain-text mention and observing the failure.
+- CHANGELOG entries for the two user-visible breaking changes (the Browser identity policy and the SDK/binary startup-receipt pairing).
+- One duplicate ARC-005 section removed from this record; the fuller one is retained.
+
+**Corrected in review**
+
+- The review read the dual install receipt as dead state because the selector receipt is never consulted. The roles are the other way round: the occurrence is keyed by the SELECTOR because that is all that is known before resolution, and the RESOLVED-revision receipt is what every reader asks about. Removing it broke the `latest` path outright; it is restored with both roles stated in the code.
+
+**Recorded open**
+
+- Cross-process install exclusion: `bun/index.ts` still serializes with a process-local lock, and `Config.needsInstall` — the second owner the audit named — still decides readiness from `existsSync` plus a version string with no receipt.
+- The watchdog observes the parent fingerprint at child start rather than proving the parent was alive at that instant, and collapses "never fingerprintable" with "fingerprint has since disappeared" into one `unknown_live` answer.
+- The SDK startup observer still carries the line-splitting machinery of the deleted log-parsing protocol.
+- Verification still ignores transitive dependencies, version-range satisfaction and the package's own entrypoint files.
 
 ## Stage log
 

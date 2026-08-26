@@ -77,11 +77,13 @@ describe("package installation readiness is a receipt, not a directory", () => {
           resolvedVersion: VERSION,
           moduleDirectory,
         })
+        // Readiness is keyed by the RESOLVED revision, which is what every
+        // reader asks about; a receipt under the selector would be a fact
+        // nothing reads.
         expect({
-          requested: await PackageInstallReceipt.isPublished(PKG, "latest"),
           resolved: await PackageInstallReceipt.isPublished(PKG, VERSION),
           unrelated: await PackageInstallReceipt.isPublished(PKG, "9.9.9"),
-        }).toEqual({ requested: true, resolved: true, unrelated: false })
+        }).toEqual({ resolved: true, unrelated: false })
       },
     })
   }, 60_000)

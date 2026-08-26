@@ -19,6 +19,8 @@
 - 共享 JSON 事实文件（全局/项目配置、Provider 凭据、MCP 凭据、专家团配置）的读改写迁移到跨进程锁内，多后端并发写不再丢失更新。
 - Provider OAuth 授权成为持久化流程 occurrence：`ProviderAuthAuthorization` 新增必填 `flowID`，两个回调路由接受可选 `flowID` 以精确结算对应流程；新授权显式取代（supersede）同 provider 同作用域的在途流程，回调对方法不匹配、已结算、不可执行分别返回具名错误（`ProviderAuthOauthFlowMismatch`、`ProviderAuthOauthFlowAlreadySettled`、`ProviderAuthOauthFlowNotExecutable`）。
 - 公共 Session 执行变更（`session.prompt`、`session.command`、`session.shell`）现在必须携带调用方铸造的稳定请求 occurrence——输入消息标识 `messageID`（`session.shell` 的公共 schema 新增该字段）；服务器不再在省略时代铸标识。相同标识与指纹的重试收敛到首次 occurrence：prompt/command 返回或续跑既有回合，shell 直接返回持久 occurrence、绝不重复执行命令；同一标识配不同请求体以 409 `PublicSessionPromptIdentityConflictError` 拒绝（command/shell 路由新增该冲突响应）。`session.shell` 的响应 schema 修正为与实际一致的 `{info, parts}`。
+- Browser 附着失败不再隐式降级到独立浏览器：附着与独立是两个浏览器身份（不同 Cookie、不同登录态），跨越这条边界现在必须由配置显式声明。默认的 `OPENCORVUS_BROWSER_MODE=chrome` 在 Chrome 不可附着时以具名错误失败并给出精确原因；接受在另一身份下工作需设置 `OPENCORVUS_BROWSER_MODE=chrome_or_isolated`；直接选择 `isolated` 仍是独立模式。此前依赖静默回退的部署会明确失败，直到声明策略。
+- 托管服务器就绪改为机器可读的启动收据：SDK 通过 `--startup-receipt`/`--startup-occurrence` 向服务器交付一次性收据通道，并只依据其中的框架化事实结算启动（绑定 URL 或精确的终态错误），标准输出仅作诊断。SDK `0.0.55-beta` 与不认识这两个参数的旧版 `opencorvus` 二进制不兼容，需成对升级。
 
 ### Fixed
 

@@ -272,6 +272,10 @@ type BrowserMcpConnection = {
 export const browserMcpIsolatedFallbackPermitted = (env: NodeJS.ProcessEnv = process.env): boolean =>
   env.OPENCORVUS_BROWSER_MODE?.trim().toLowerCase() === "chrome_or_isolated"
 
+/** The crossing permission this process resolved, from the same snapshot the
+ *  connection config came from — one environment read, one answer. */
+const ISOLATED_FALLBACK_PERMITTED = browserMcpIsolatedFallbackPermitted()
+
 export const resolveBrowserMcpConnectionConfig = (
   env: NodeJS.ProcessEnv = process.env,
   platform: NodeJS.Platform = process.platform,
@@ -343,7 +347,7 @@ const acquireBrowser = async (): Promise<BrowserMcpConnection> => {
         // Isolated is a different browser identity, not a degraded one. Only a
         // caller that asked for the crossing gets it; everyone else gets the
         // exact reason the attached browser was unreachable.
-        if (!browserMcpIsolatedFallbackPermitted()) {
+        if (!ISOLATED_FALLBACK_PERMITTED) {
           const reason = attachFailure instanceof Error ? attachFailure.message : String(attachFailure)
           throw new Error(
             `Chrome is not attachable, and this configuration does not permit working in an isolated browser: ${reason}. ` +

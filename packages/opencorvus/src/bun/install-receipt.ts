@@ -181,8 +181,12 @@ export namespace PackageInstallReceipt {
       payload: { resolvedVersion: input.resolvedVersion },
       timeCreated: Date.now(),
     })
-    // The requested selector and the resolved revision are both entry points
-    // for the next reader; publish the resolved one too when they differ.
+    // Two facts with two roles. The occurrence just settled is keyed by the
+    // SELECTOR the caller asked for, because that is all that is known before
+    // the install resolves — it is the in-flight intent. Readiness is asked
+    // about the RESOLVED revision, which is what every reader has in hand
+    // afterwards, so that receipt is published too whenever the selector was
+    // not already the exact version.
     if (input.requestedVersion !== input.resolvedVersion) {
       if (await isPublished(input.package, input.resolvedVersion)) return
       const resolvedID = await begin({ package: input.package, requestedVersion: input.resolvedVersion })

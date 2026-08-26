@@ -343,23 +343,15 @@ Latest architecture debt remediation plan: [`2026-08-09-architecture-debt-remedi
 
 Paused backend algorithm test/debug loop evidence: [`2026-08-09-backend-algorithm-test-loop.md`](records/2026-08/2026-08-09-backend-algorithm-test-loop.md).
 
-Latest backend algorithm real-path debug loop: [`2026-08-09-backend-algorithm-e2e-loop.md`](records/2026-08/2026-08-09-backend-algorithm-e2e-loop.md).
 
-Latest Agent analysis, independent-review, and automatic-push guideline: [`2026-08-09-agent-guideline-analysis-review-push.md`](records/2026-08/2026-08-09-agent-guideline-analysis-review-push.md).
 
-Latest NVIDIA Chinese equity-research real end-to-end acceptance: [`2026-08-09-nvda-equity-research-e2e.md`](records/2026-08/2026-08-09-nvda-equity-research-e2e.md).
 
-Latest root README AI-slop removal: [`2026-08-09-readme-ai-slop-removal.md`](records/2026-08/2026-08-09-readme-ai-slop-removal.md).
 
-Latest repository-local package build runtime root repair: [`2026-08-08-package-build-runtime-root.md`](records/2026-08/2026-08-08-package-build-runtime-root.md).
 
 Latest `v0.0.38-beta` release plan and evidence: [`2026-08-09-v0.0.38-beta-release.md`](records/2026-08/2026-08-09-v0.0.38-beta-release.md).
 
-Latest first-open locale language selection: [`2026-08-08-first-open-locale-language-selection.md`](records/2026-08/2026-08-08-first-open-locale-language-selection.md).
 
-Latest repaired Task-process bootstrap local GUI repackage: [`2026-08-08-task-process-bootstrap-local-gui-repackage.md`](records/2026-08/2026-08-08-task-process-bootstrap-local-gui-repackage.md).
 
-Latest Task process deployment bootstrap repair: [`2026-08-08-task-process-deployment-bootstrap-repair.md`](records/2026-08/2026-08-08-task-process-deployment-bootstrap-repair.md).
 
 Latest signed desktop hot-update design: [`2026-08-08-signed-desktop-hot-update-design.md`](records/2026-08/2026-08-08-signed-desktop-hot-update-design.md).
 
@@ -461,7 +453,6 @@ Latest transactional schema migration plan: [`2026-08-06-transactional-schema-mi
 
 Latest Conversation bottom turn control and per-model usage plan: [`2026-08-06-conversation-turn-control-and-model-usage.md`](records/2026-08/2026-08-06-conversation-turn-control-and-model-usage.md).
 
-专家团自进化 benchmark 的不可变 Case 清单与生成说明：[`expert-squad-evolution-benchmark/README.md`](artifacts/expert-squad-evolution-benchmark/README.md)。
 
 Latest VCS model-context and remote-action repair: [`2026-08-06-vcs-model-context-and-remote-actions-repair.md`](records/2026-08/2026-08-06-vcs-model-context-and-remote-actions-repair.md), with [`no-remote`](artifacts/vcs-no-remote-actions.png) and [`configured-remote`](artifacts/vcs-remote-actions.png) visual evidence.
 
@@ -805,11 +796,8 @@ Latest root README Agent Harness positioning: [`2026-08-07-readme-agent-harness-
 
 August 2026 records: [`specs/records/2026-08/README.md`](records/2026-08/README.md).
 
-Latest AI 编程工具选型研究报告（采购决策，六章）: [`ai-coding-tools-selection-report.md`](artifacts/ai-coding-tools-selection-report.md)，配套结构化数据 [`ai-coding-tools-selection-data.json`](artifacts/ai-coding-tools-selection-data.json)。
 
-Latest AI 编程工具选型复核（2026-08-02，12/12 官方 URL 一致）: [`ai-coding-tools-selection-review-2026-08-02.md`](artifacts/ai-coding-tools-selection-review-2026-08-02.md)。
 
-Latest AI 编程工具采购决策网站（Phase 02，可本地运行的参数化决策站点）: [`ai-coding-tool-decision-site/`](artifacts/ai-coding-tool-decision-site/)，运行说明见其 [`README.md`](artifacts/ai-coding-tool-decision-site/README.md)。
 
 Latest general Mission Skill catalog restoration: [`2026-07-31-general-mission-skill-catalog-restoration.md`](records/2026-07/2026-07-31-general-mission-skill-catalog-restoration.md).
 
