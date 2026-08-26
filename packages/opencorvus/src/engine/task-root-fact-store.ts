@@ -374,6 +374,8 @@ export function acquireTaskRootIngressLease(input: {
   now: number
   leaseMilliseconds: number
   readEvidence?: TaskRootIngressEvidenceReader
+  /** Runtime-owner safety fences must commit atomically with activation. */
+  assertControlOwnerInTransaction: (db: Database.TxOrDb) => void
 }): AcquireTaskRootIngressLeaseResult {
   if (!Number.isSafeInteger(input.leaseMilliseconds) || input.leaseMilliseconds <= 0) {
     throw new Error("Task-root lease duration must be a positive safe integer")
@@ -411,6 +413,7 @@ export function acquireTaskRootIngressLease(input: {
       }
     }
     const activationID = Identifier.ascending("activity")
+    input.assertControlOwnerInTransaction(db)
     const acquired = acquireControlLeaseInTransaction(db, {
       target: "task_root_ingress",
       targetID: input.ingressID,

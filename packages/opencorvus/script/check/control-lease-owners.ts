@@ -65,7 +65,7 @@ const DECLARED_OWNERS: Record<string, Declaration> = {
     targets: ["runtime_process"],
     sites: 1,
     release:
-      "Deliberately none. This lease IS the liveness fact: a process is live exactly while its lease is unexpired, so releasing it would assert the process had exited. It ends by expiry, and expireProcessLivenessLease ends it explicitly on a recorded exit.",
+      "One process-wide ref-counted owner delegates physical acquire, renew and assertion to the shared primitive. Intermediate Project disposal leaves it live; the final reference releases the exact fence as the graceful-exit fact.",
   },
   "engine/task-completion-closure.ts": {
     targets: ["lifecycle"],

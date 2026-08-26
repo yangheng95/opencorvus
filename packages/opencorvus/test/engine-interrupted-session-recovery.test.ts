@@ -91,6 +91,7 @@ async function persistCrashedProviderActivityTask(input: { projectPath: string; 
     ownerOccurrenceID: `${input.label}-dead-owner`,
     now: startedAt + 2,
     leaseMilliseconds: 60_000,
+    assertControlOwnerInTransaction: () => undefined,
   })
   if (!lease.acquired) throw new Error("Expected a Task-root activation lease fixture")
   const control = currentOrchestratorControlMessage({ taskCreation: { taskID } }, taskID, ingress.id, ingress.id)

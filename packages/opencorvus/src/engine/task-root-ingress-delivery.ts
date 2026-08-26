@@ -76,13 +76,7 @@ import {
 } from "./task-root-ingress-reducer"
 import { TaskControlDriver, type TaskControlScanContext, type TaskControlScanResult } from "./task-control-driver"
 import { TaskRootIngressIntegrityError } from "./task-root-ingress-integrity"
-import {
-  assertProcessLivenessLease,
-  expireProcessLivenessLease,
-  isProcessOccurrenceLive,
-  PROCESS_LIVENESS_LEASE_MS,
-  PROCESS_LIVENESS_RENEWAL_MS,
-} from "./process-liveness"
+import { isProcessOccurrenceLive, joinProcessLivenessLease, PROCESS_LIVENESS_LEASE_MS } from "./process-liveness"
 import { TaskRootIngressError, taskRootDirectory } from "./task-directory"
 import { listDispatchLineage } from "./dispatch-lineage"
 import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
@@ -948,12 +942,14 @@ async function activate(input: { taskID: string; ingressID: string }): Promise<A
       return faulted
     }
     const ownerID = ownerOccurrenceID()
+    const liveness = driverState().liveness
     const acquired = acquireTaskRootIngressLease({
       ingressID: input.ingressID,
       ownerOccurrenceID: ownerID,
       now,
       leaseMilliseconds,
       readEvidence: readTaskRootIngressEvidence,
+      assertControlOwnerInTransaction: (db) => liveness.assertOwnedInTransaction(db, ownerID, Date.now()),
     })
     if (!acquired.acquired) {
       reservation.settle()
@@ -1591,25 +1587,16 @@ async function scanTaskControlPlane(
 const driverState = createInstanceState(
   () => {
     const directory = Filesystem.resolve(Instance.directory)
-    const claimLiveness = () => {
-      try {
-        assertProcessLivenessLease(ownerOccurrenceID())
-      } catch (error) {
-        log.error("Could not renew this runtime's liveness lease", { error })
-      }
-    }
-    // Recovery in every process reads this row to decide whether our
-    // dispatches are still owned, so the claim exists before any scan can run.
-    claimLiveness()
-    const livenessTimer = setInterval(() => {
-      void reenterActiveInstance({ directory, fn: async () => claimLiveness() }).catch((error) => {
-        log.error("Runtime liveness renewal could not re-enter its project", { error })
-      })
-    }, PROCESS_LIVENESS_RENEWAL_MS)
-    ;(livenessTimer as { unref?: () => void }).unref?.()
+    // Every Project driver joins one process-wide owner. Recovery in another
+    // backend reads this row before it may settle our dispatches, so joining
+    // and asserting the exact occurrence precedes every scan.
+    const liveness = joinProcessLivenessLease(ownerOccurrenceID())
     return {
       driver: new TaskControlDriver({
-        scan: scanTaskControlPlane,
+        scan: async (taskID, context) => {
+          liveness.assertOwned(ownerOccurrenceID())
+          return scanTaskControlPlane(taskID, context)
+        },
         liveTasks: () => {
           try {
             return currentSweepProjectTaskIDs()
@@ -1622,19 +1609,14 @@ const driverState = createInstanceState(
           await reenterActiveInstance({ directory, fn })
         },
       }),
-      livenessTimer,
+      liveness,
     }
   },
   async (state) => {
-    clearInterval(state.livenessTimer)
-    try {
-      // Release the claim so peers can recover this process's work at once
-      // instead of waiting out the full lease.
-      expireProcessLivenessLease(ownerOccurrenceID())
-    } catch (error) {
-      log.warn("Could not expire this runtime's liveness lease on shutdown", { error })
-    }
     state.driver.dispose()
+    // Intermediate Project disposal leaves the process fact live. Only the
+    // final Project reference publishes graceful process exit.
+    state.liveness.release()
   },
   "task-control-driver",
 )
@@ -1646,7 +1628,9 @@ const driverState = createInstanceState(
  * request isolates each Task so one faulted Task cannot starve the rest.
  */
 export async function reconcileTaskControlPlane(taskID?: string): Promise<number> {
-  const driver = driverState().driver
+  const state = driverState()
+  state.liveness.assertOwned(ownerOccurrenceID())
+  const driver = state.driver
   if (taskID) return driver.request(taskID, { propagateFailure: true })
   // A project-wide request only has to *start* every Task. Awaiting them in
   // sequence would make each Task's whole Orchestrator Turn a prerequisite of
