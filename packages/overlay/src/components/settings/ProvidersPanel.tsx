@@ -231,10 +231,7 @@ export default function ProvidersPanel() {
         setLastModelsRefreshedAt(null)
         setProviderRefreshError(null)
         setModelRefreshError(null)
-        void (async () => {
-          await refreshProviderCatalog(directory)
-          if (activeDirectory().trim() === directory) await reloadProviderInfo(directory)
-        })()
+        void reloadProviderInfo(directory)
       },
     ),
   )
@@ -984,11 +981,7 @@ export default function ProvidersPanel() {
           {(issue) => (
             <SettingsState tone="error">
               {t("provider.load.failed", {
-                owner: [
-                  t(`provider.load.resource.${issue.resource}`),
-                  issue.providerID,
-                  issue.phase,
-                ]
+                owner: [t(`provider.load.resource.${issue.resource}`), issue.providerID, issue.phase]
                   .filter(Boolean)
                   .join(" · "),
                 reason: issue.message,
