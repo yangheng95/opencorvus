@@ -671,8 +671,11 @@ The twelfth uninvolved read-only review of seven commits found one critical defe
 
 ### ARC-032 — the endpoints that could only answer empty are gone
 
-- Root cause as audited: the LSP server map is created empty and has no writer, and `status()` returns early on an empty map, so `GET /lsp` and `GET /find/symbol` were structurally incapable of returning anything — both documented themselves as "Compatibility endpoint … returns an empty array".
-- The repair removes the two public contracts, which had no consumer in the Overlay or the SDK. The subsystem implementation and its initialization-lifecycle tests are untouched.
+- Root cause as audited: the LSP server map is created empty and its only writer is a test hook, and `getClients` (`lsp/index.ts:213`) returns immediately on an empty server map. `state.clients` is populated only through `getClients`, so `status()` iterated a permanently empty client list and `workspaceSymbol` filtered the same empty list: `GET /lsp` and `GET /find/symbol` were structurally incapable of returning anything, and both documented themselves as "Compatibility endpoint … returns an empty array".
+- The repair removes the two public contracts, which had no consumer in the Overlay or the SDK, and both locales of the hand-written `lsp.mdx` now say so rather than advertising the removed endpoints.
+- Stated plainly, because the thirteenth review is right that the previous wording understated it: those two routes were the LSP namespace's ONLY production callers, so the deletion made roughly 3,585 lines (`index.ts`, `client.ts`, `server.ts`, `language.ts`) reachable from nothing but `test/lsp-initialize-lifecycle.test.ts` — a suite that now tests only itself. The audit's ARC-032 objection is therefore not fully discharged: it has moved from "a public API that cannot answer" to "a subsystem no production path reaches".
+- That dead surface also carries the ARC-021 defect shape in bulk — ten `Filesystem.exists` gates in `lsp/server.ts` treat a downloaded launcher's existence as proof of installation — so restoring a runtime owner would re-import that defect on day one and must repair it in the same change.
+
 - Independent review found the dedicated English and Chinese LSP pages still claimed both deleted endpoints remained compatibility surfaces. The corrective documentation change must state that the public HTTP endpoints are removed while preserving the open internal-subsystem decision below.
 - Open decision recorded rather than settled by a tail-end deletion: whether to delete the LSP subsystem outright or restore one configured runtime owner. The zombie public API — the part the audit named as forbidden — is gone either way.
 
@@ -701,6 +704,28 @@ The uninvolved read-only review of `b0e7f3b87..b7cf9284a` rejected the stage wit
 ### Stage 7 status
 
 All four of the stage's P2 findings are repaired: ARC-028 (topology cycle), ARC-029's public no-op half (the Board's `sync` promise), ARC-032's zombie public contract half (the two endpoints that could only answer empty), and ARC-035 (the architecture authority graph, now gated). Two halves remain open and are recorded where they belong: ARC-029's `check:dead-code` gate, which cannot run in this environment, and ARC-032's product decision between deleting the LSP subsystem and restoring a configured runtime owner.
+
+### Stage 7 thirteenth independent review disposition
+
+The thirteenth uninvolved read-only review of four code commits found no critical defect and confirmed that none of them regresses a working path: the config readiness gate cannot loop, its receipt key spaces line up in both channels, the nested dependency walk terminates on the hoisted path, the bundle refusal genuinely precedes every side effect, the `sync` deletion is behaviour-neutral and fully propagated, and the two LSP endpoints really were structurally empty and are cleanly removed from OpenAPI, the SDK and the generated docs. Nineteen findings; the substantive ones are repaired:
+
+**Repaired**
+
+- A comments-only bundle — the exact shape of the shipped `.env.bundle.example` — was reported `invalid_bundle`, telling operators their own example file was broken. Nothing unparseable can reach that branch any more, so it is unconditionally `empty_bundle` and the second `raw.trim()` authority is gone. A test now parses the shipped example itself.
+- The invalid lines a refused bundle carries reach the caller and the runtime prints them; they had been computed, counted and dropped while the record claimed the refusal carried "the exact lines".
+- The per-config install certifies every dependency its manifest declares rather than only the plugin's own closure: `bun install` installs all of them, so a tree whose user-declared extra dependency never completed could publish a receipt and read as installed forever.
+- The shared-cache install holds a cross-process lock across the whole span from opening its occurrence to publishing the receipt. The in-process mutex alone let a second backend supersede the occurrence a first was installing under, after which the first committed its receipt into the second's occurrence mid-install.
+- `discardTaskRootIngress` and `discardAcceptedTaskRootIngressForRequest` were exported functions that took parameters and did nothing — the shape ARC-029 removed from the Board. The zero-caller one is deleted; the immutability invariant states itself at the two real call sites.
+- Both locales of the hand-written `lsp.mdx`, which still advertised the deleted endpoints as live compatibility surfaces.
+- A standalone "does not exist" assertion folded into its positive contract, and the formatting the reviewed commits had drifted.
+
+**Recorded, not repaired**
+
+- Commit `1f52b298a` carries an unrelated session-protocol delivery (~1,700 lines, including a deleted Overlay test and a new architecture document) alongside its 22-line ARC-029 change, and its message credits that regeneration to ARC-029. The ARC-029 change produced no generated-artifact delta at all, because `sync` was read straight off the query string and never appeared in `openapi.json`. History is not rewritten; the mis-attribution is corrected here.
+- `verifyAndPublish`'s version check compares a manifest field against a value both callers derived from that same file, so it can only fire on a rewrite between two reads. It reads as a guarantee and is not one.
+- In the local channel the resolved-revision receipt is published and never queried, because the config reader only ever asks under the `"*"` selector.
+- The occurrence is opened just before the rollback-protected region, so a failure writing `package.json` or `.gitignore` leaks an unsettled occurrence. Recovery still converges — the receipt gate makes the next check reinstall — but the "rolls the occurrence back on failure" claim is narrower than it sounds.
+- Undeclared-but-read query parameters survive on several routes (`after`, `after_live`, `variant`, `directory`, `init-git`): the inverse of ARC-029's declared-but-ignored parameter, functional but invisible to OpenAPI, the SDK and `api:routes-check`.
 
 ## Stage log
 
