@@ -176,6 +176,10 @@ export namespace PackageInstallReceipt {
       })
       .passthrough()
       .parse(await Filesystem.readJson(path.join(input.moduleDirectory, "package.json")))
+    // Both callers read this same manifest to derive `resolvedVersion`, so
+    // this compares one read against another: it catches a tree rewritten
+    // between them, not a wrong version. Keeping it is cheap; calling it a
+    // version guarantee would not be true.
     if (manifest.version !== input.resolvedVersion) {
       throw new Error(
         `Installed ${input.package} reports version ${manifest.version}, expected ${input.resolvedVersion}`,
@@ -209,9 +213,10 @@ export namespace PackageInstallReceipt {
     // Two facts with two roles. The occurrence just settled is keyed by the
     // SELECTOR the caller asked for, because that is all that is known before
     // the install resolves — it is the in-flight intent. Readiness is asked
-    // about the RESOLVED revision, which is what every reader has in hand
-    // afterwards, so that receipt is published too whenever the selector was
-    // not already the exact version.
+    // about the RESOLVED revision, because that is what a reader has in hand
+    // afterwards: the shared cache records the resolved version in its own
+    // manifest and asks under it even for a `latest` install. So the resolved
+    // receipt is published whenever the selector was not already that version.
     if (input.requestedVersion !== input.resolvedVersion) {
       if (await isPublished({ root: input.root, package: input.package, version: input.resolvedVersion })) return
       const resolvedID = await begin({

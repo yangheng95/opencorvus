@@ -56,6 +56,10 @@ export namespace Config {
   /** The one dependency a config tree is installed for. */
   const PLUGIN_DEPENDENCY = "@opencorvus-ai/plugin"
 
+  /** The version spec this channel installs and reads back. One spelling, so
+   *  the receipt key and the manifest entry cannot drift apart. */
+  const installTargetVersion = () => (Installation.isLocal() ? "*" : Installation.VERSION)
+
   export const ModelId = z
     .string()
     .refine(isModelReference, {
@@ -417,17 +421,9 @@ export namespace Config {
         // while this owner waited. Re-check under both the process-local and
         // cross-process directory owner before changing canonical files.
         if (!(await needsInstall(dir))) return
-        // The occurrence is durable BEFORE the tree is mutated, so an install
-        // killed halfway leaves an unsettled occurrence and never a receipt.
-        const installOccurrenceID = await PackageInstallReceipt.begin({
-          root: dir,
-          package: PLUGIN_DEPENDENCY,
-          requestedVersion: Installation.isLocal() ? "*" : Installation.VERSION,
-        })
-
         const pkg = path.join(dir, "package.json")
         const gitignore = path.join(dir, ".gitignore")
-        const targetVersion = Installation.isLocal() ? "*" : Installation.VERSION
+        const targetVersion = installTargetVersion()
         const packageSchema = z.object({ dependencies: z.record(z.string(), z.string()).optional() }).passthrough()
         const previousPackage = await Filesystem.readText(pkg).catch((error: NodeJS.ErrnoException) => {
           if (error.code === "ENOENT") return undefined
@@ -444,6 +440,15 @@ export namespace Config {
           gitignore,
           ["node_modules", "package.json", "bun.lock", ".gitignore"].join("\n"),
         )
+
+        // The occurrence opens where its rollback begins, so the two cover the
+        // same region: the canonical metadata written above is restored by the
+        // catch below, and every failure from here on settles the occurrence.
+        const installOccurrenceID = await PackageInstallReceipt.begin({
+          root: dir,
+          package: PLUGIN_DEPENDENCY,
+          requestedVersion: targetVersion,
+        })
 
         try {
           // Install any additional dependencies defined in package.json so
@@ -466,7 +471,7 @@ export namespace Config {
             occurrenceID: installOccurrenceID,
             root: dir,
             package: PLUGIN_DEPENDENCY,
-            requestedVersion: Installation.isLocal() ? "*" : Installation.VERSION,
+            requestedVersion: targetVersion,
             resolvedVersion: installedVersion,
             moduleDirectory: path.join(dir, "node_modules", PLUGIN_DEPENDENCY),
             // `bun install` installed everything this config declares, so the
@@ -535,18 +540,13 @@ export namespace Config {
       const depVersion = parsed.dependencies?.["@opencorvus-ai/plugin"]
       if (!depVersion) required = true
       else {
-        const targetVersion = Installation.isLocal() ? "latest" : Installation.VERSION
-        if (targetVersion === "latest") {
-          required = await PackageRegistry.isOutdated("@opencorvus-ai/plugin", depVersion, dir)
-          if (required) {
-            log.info("Cached version is outdated, proceeding with install", {
-              pkg: "@opencorvus-ai/plugin",
-              cachedVersion: depVersion,
-            })
-          }
-        } else {
-          required = depVersion !== targetVersion
-        }
+        // The spec the install writes is the spec this compares against — one
+        // spelling of the channel's target, so the receipt key and the manifest
+        // entry cannot drift apart. The local channel's spec is a wildcard,
+        // which `isOutdated` can only ever answer "no" for, so asking the
+        // registry about it was a network round trip that could not change the
+        // answer this comparison already gives.
+        required = depVersion !== installTargetVersion()
       }
       if (!required) {
         const published = await PackageInstallReceipt.isPublished({
