@@ -532,6 +532,27 @@ export const EngineRoutes = lazy(() =>
         },
       }),
       validator("param", z.object({ taskID: Task.shape.id })),
+      validator(
+        "query",
+        z.object({
+          after: z
+            .string()
+            .optional()
+            .meta({ description: "Resume after this durable task-event sequence." }),
+          after_live: z
+            .string()
+            .optional()
+            .meta({ description: "Resume live projection after this sequence; omit to skip live replay." }),
+          after_live_epoch: z
+            .string()
+            .optional()
+            .meta({ description: "The live projection epoch the after_live cursor belongs to." }),
+          after_message_watermark: z
+            .string()
+            .optional()
+            .meta({ description: "Resume message projection after this watermark." }),
+        }),
+      ),
       async (c) => {
         const taskID = c.req.valid("param").taskID
         taskPrimaryProjectRoot(taskID, { activeProjectID: Instance.current()?.project.id })
