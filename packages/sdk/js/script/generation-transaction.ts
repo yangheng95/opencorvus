@@ -3,12 +3,27 @@ import { randomUUID } from "node:crypto"
 import { z } from "zod"
 import { DurablePublicationStore } from "@opencorvus-ai/util/durable-publication"
 
+/** One final target of a generation, described completely enough that the
+ *  intent alone can restore it. */
+const RestoreTarget = z
+  .object({
+    targetRelative: z.string().min(1),
+    backupRelative: z.string().min(1),
+    kind: z.enum(["directory", "file"]),
+    /** Whether the target existed before this generation, and therefore has a
+     *  backup to restore from. */
+    existed: z.boolean(),
+  })
+  .strict()
+
 const RestorePayload = z
   .object({
     packageRoot: z.string().min(1),
-    /** The targets that existed before this generation, and therefore have a
-     *  backup to restore from. */
-    existingTargets: z.array(z.string()),
+    /** Every target this generation publishes. Recovery reads the set from
+     *  here and never from the build that happens to be running: the two lists
+     *  drift as artifacts are added or renamed, and a target the abandoned
+     *  generation never touched must not be deleted by its rollback. */
+    targets: z.array(RestoreTarget).min(1),
   })
   .strict()
 import path from "node:path"
@@ -121,46 +136,21 @@ async function mirrorDirectory(source: string, target: string) {
   }
 }
 
-export async function replaceDirectoryAfterSuccessfulBuild(input: {
-  packageRoot: string
-  stagingRelative: string
-  targetRelative: string
-  build: (stagingDir: string) => Promise<void>
-}) {
-  const stagingDir = resolveWithinPackage(input.packageRoot, input.stagingRelative)
-  const targetDir = resolveWithinPackage(input.packageRoot, input.targetRelative)
-  const backupDir = resolveWithinPackage(input.packageRoot, `${input.stagingRelative}-backup`)
-
-  await removeWithRetry(stagingDir)
-  await removeWithRetry(backupDir)
-  try {
-    await input.build(stagingDir)
-  } catch (error) {
-    await removeWithRetry(stagingDir).catch(() => undefined)
-    throw error
-  }
-
-  const hadTarget = await pathExists(targetDir)
-  if (hadTarget) await copyDirectoryWithRetry(targetDir, backupDir)
-  try {
-    await mirrorDirectory(stagingDir, targetDir)
-  } catch (error) {
-    await removeWithRetry(targetDir).catch(() => undefined)
-    if (hadTarget) await copyDirectoryWithRetry(backupDir, targetDir)
-    throw error
-  }
-  await removeWithRetry(stagingDir)
-  await removeWithRetry(backupDir)
-}
-
 const GENERATION_KIND = "sdk-generation"
 
 function generationStore(packageRoot: string): DurablePublicationStore {
   return new DurablePublicationStore(path.join(packageRoot, ".generation-journal"))
 }
 
+function generationSubject(packageRoot: string): string {
+  return `sdk-generation:${packageRoot}`
+}
+
 type GenerationArtifact = {
+  stagingRelative: string
   targetRelative: string
+  backupRelative: string
+  stagingPath: string
   targetPath: string
   backupPath: string
   kind: "directory" | "file"
@@ -178,9 +168,12 @@ type GenerationArtifact = {
  * and restores every target from that backup, so a build always starts from
  * one whole generation.
  */
-async function convergeUnsettledGeneration(packageRoot: string, artifacts: GenerationArtifact[]): Promise<boolean> {
-  const store = generationStore(packageRoot)
-  const open = await store.listOpen(GENERATION_KIND).catch(() => [])
+async function convergeUnsettledGeneration(store: DurablePublicationStore, packageRoot: string): Promise<boolean> {
+  // A journal that cannot be read is not an empty journal. Swallowing the
+  // fault here would report "nothing to recover" and let the caller delete the
+  // backup — which is the exact hole this transaction exists to close.
+  // `listOpen` already answers [] for a journal that does not exist yet.
+  const open = await store.listOpen(GENERATION_KIND)
   if (open.length === 0) return false
   for (const occurrence of open) {
     const restored = RestorePayload.safeParse(occurrence.intent.payload)
@@ -189,11 +182,12 @@ async function convergeUnsettledGeneration(packageRoot: string, artifacts: Gener
         `SDK generation journal ${occurrence.intent.occurrenceID} carries an unreadable intent; resolve it by hand`,
       )
     }
-    for (const artifact of artifacts) {
-      const hadTarget = restored.data.existingTargets.includes(artifact.targetRelative)
-      await removeWithRetry(artifact.targetPath).catch(() => undefined)
-      if (hadTarget && (await pathExists(artifact.backupPath))) {
-        await copyEntryWithRetry(artifact.backupPath, artifact.targetPath, artifact.kind)
+    for (const target of restored.data.targets) {
+      const targetPath = resolveWithinPackage(packageRoot, target.targetRelative)
+      const backupPath = resolveWithinPackage(packageRoot, target.backupRelative)
+      await removeWithRetry(targetPath).catch(() => undefined)
+      if (target.existed && (await pathExists(backupPath))) {
+        await copyEntryWithRetry(backupPath, targetPath, target.kind)
       }
     }
     await store.settle(GENERATION_KIND, {
@@ -223,15 +217,36 @@ export async function replaceGeneratedArtifactsAfterSuccessfulBuild(input: {
 
   const artifacts = input.artifacts.map((artifact) => ({
     ...artifact,
+    backupRelative: path.join(`${input.stagingRelative}-backup`, artifact.targetRelative),
     stagingPath: resolveWithinPackage(input.packageRoot, path.join(input.stagingRelative, artifact.stagingRelative)),
     targetPath: resolveWithinPackage(input.packageRoot, artifact.targetRelative),
-    backupPath: resolveWithinPackage(input.packageRoot, path.join(`${input.stagingRelative}-backup`, artifact.targetRelative)),
+    backupPath: resolveWithinPackage(
+      input.packageRoot,
+      path.join(`${input.stagingRelative}-backup`, artifact.targetRelative),
+    ),
   }))
+
+  const store = generationStore(input.packageRoot)
+  return store.withSubjectLock(GENERATION_KIND, generationSubject(input.packageRoot), () =>
+    runGeneration({ ...input, stagingRoot, backupRoot, artifacts, store }),
+  )
+}
+
+async function runGeneration(input: {
+  packageRoot: string
+  stagingRelative: string
+  stagingRoot: string
+  backupRoot: string
+  artifacts: GenerationArtifact[]
+  store: DurablePublicationStore
+  build: (stagingRoot: string) => Promise<void>
+}) {
+  const { stagingRoot, backupRoot, artifacts, store } = input
 
   // A generation left unsettled by an earlier death is converged BEFORE its
   // backup is deleted — deleting it first destroyed the only evidence of the
   // last complete generation.
-  await convergeUnsettledGeneration(input.packageRoot, artifacts)
+  await convergeUnsettledGeneration(store, input.packageRoot)
 
   await removeWithRetry(stagingRoot)
   await removeWithRetry(backupRoot)
@@ -252,17 +267,19 @@ export async function replaceGeneratedArtifactsAfterSuccessfulBuild(input: {
   // The occurrence commits AFTER the backups exist and BEFORE the first final
   // target is written, so every death from here on is recoverable from the
   // backups this intent names.
-  const store = generationStore(input.packageRoot)
   const occurrenceID = randomUUID()
   await store.create({
     occurrenceID,
     kind: GENERATION_KIND,
-    subject: `sdk-generation:${input.packageRoot}`,
+    subject: generationSubject(input.packageRoot),
     payload: RestorePayload.parse({
       packageRoot: input.packageRoot,
-      existingTargets: artifacts
-        .filter((artifact) => existingTargets.get(artifact.targetRelative))
-        .map((artifact) => artifact.targetRelative),
+      targets: artifacts.map((artifact) => ({
+        targetRelative: artifact.targetRelative,
+        backupRelative: artifact.backupRelative,
+        kind: artifact.kind,
+        existed: existingTargets.get(artifact.targetRelative) ?? false,
+      })),
     }),
     timeCreated: Date.now(),
   })

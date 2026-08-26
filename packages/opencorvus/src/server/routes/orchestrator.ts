@@ -553,14 +553,15 @@ export const EngineRoutes = lazy(() =>
       async (c) => {
         const taskID = c.req.valid("param").taskID
         taskPrimaryProjectRoot(taskID, { activeProjectID: Instance.current()?.project.id })
-        const after = Math.max(0, parseInt(c.req.query("after") ?? "0", 10) || 0)
-        const afterLiveRaw = c.req.query("after_live")
+        const cursors = c.req.valid("query")
+        const after = Math.max(0, parseInt(cursors.after ?? "0", 10) || 0)
+        const afterLiveRaw = cursors.after_live
         const shouldReplayLive = afterLiveRaw !== undefined
         const afterLive = shouldReplayLive ? Math.max(0, parseInt(afterLiveRaw ?? "0", 10) || 0) : 0
-        const afterLiveEpochRaw = c.req.query("after_live_epoch")
+        const afterLiveEpochRaw = cursors.after_live_epoch
         const afterLiveEpoch =
           afterLiveEpochRaw === undefined ? undefined : Math.max(0, parseInt(afterLiveEpochRaw, 10) || 0)
-        const afterMessageWatermark = Math.max(0, parseInt(c.req.query("after_message_watermark") ?? "0", 10) || 0)
+        const afterMessageWatermark = Math.max(0, parseInt(cursors.after_message_watermark ?? "0", 10) || 0)
         c.header("X-Accel-Buffering", "no")
         c.header("X-Content-Type-Options", "nosniff")
         return streamGlobalSSE(c, async (stream, bind) => {
@@ -1103,15 +1104,14 @@ export const EngineRoutes = lazy(() =>
         const { taskID, sessionID } = c.req.valid("param")
         requireTask(taskID)
         const rewindCursor = taskRewindCursor(taskID)
-        const afterLiveSequenceRaw = c.req.query("after_live_sequence")
-        const afterLiveSequence = Math.max(0, Number.parseInt(afterLiveSequenceRaw ?? "0", 10) || 0)
-        const afterLiveEpochRaw = c.req.query("after_live_epoch")
-        const afterLiveEpoch = Math.max(0, Number.parseInt(afterLiveEpochRaw ?? "0", 10) || 0)
+        const cursors = c.req.valid("query")
+        const afterLiveSequence = Math.max(0, Number.parseInt(cursors.after_live_sequence ?? "0", 10) || 0)
+        const afterLiveEpoch = Math.max(0, Number.parseInt(cursors.after_live_epoch ?? "0", 10) || 0)
         const liveEpoch = ProtocolStore.currentTaskLiveEpoch()
         const lastLiveSequence = ProtocolStore.currentTaskLiveSequence(taskID)
-        if (afterLiveSequenceRaw !== undefined) {
+        if (cursors.after_live_sequence !== undefined) {
           const replay =
-            afterLiveEpochRaw === undefined || afterLiveSequence > lastLiveSequence
+            cursors.after_live_epoch === undefined || afterLiveSequence > lastLiveSequence
               ? { expired: true as const }
               : ProtocolStore.listTaskLiveEventsAfter(taskID, afterLiveSequence, { liveEpoch: afterLiveEpoch })
           if (replay.expired) {

@@ -441,9 +441,12 @@ export namespace Config {
           ["node_modules", "package.json", "bun.lock", ".gitignore"].join("\n"),
         )
 
-        // The occurrence opens where its rollback begins, so the two cover the
-        // same region: the canonical metadata written above is restored by the
-        // catch below, and every failure from here on settles the occurrence.
+        // The occurrence opens immediately before the try whose catch restores
+        // the tree, so it can never leak unsettled: every failure from here on
+        // settles it. The two canonical writes above sit outside it — the catch
+        // still restores them, and failing in them settles nothing because no
+        // occurrence exists yet. The rollback covers strictly more than the
+        // occurrence does, which is the safe direction for the pair.
         const installOccurrenceID = await PackageInstallReceipt.begin({
           root: dir,
           package: PLUGIN_DEPENDENCY,
@@ -542,10 +545,10 @@ export namespace Config {
       else {
         // The spec the install writes is the spec this compares against — one
         // spelling of the channel's target, so the receipt key and the manifest
-        // entry cannot drift apart. The local channel's spec is a wildcard,
-        // which `isOutdated` can only ever answer "no" for, so asking the
-        // registry about it was a network round trip that could not change the
-        // answer this comparison already gives.
+        // entry cannot drift apart. The local channel's spec is a wildcard, and
+        // every version satisfies a wildcard, so asking the registry whether it
+        // was outdated was a network round trip whose only possible answer was
+        // the one this comparison already gives.
         required = depVersion !== installTargetVersion()
       }
       if (!required) {

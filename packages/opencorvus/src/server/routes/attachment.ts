@@ -190,7 +190,7 @@ export const AttachmentRoutes = lazy(() =>
         if (!projectID || !name || name.includes("/") || name.includes("\\")) {
           return c.text("Not found", 404)
         }
-        const variant = c.req.query("variant") ?? ""
+        const variant = c.req.valid("query").variant ?? ""
         if (variant) {
           if (variant !== AttachmentStore.SCREENSHOT_BROWSER_THUMBNAIL_VARIANT) return c.text("Not found", 404)
           const sourceAbs = AttachmentStore.resolveAbsolute(projectID, name)

@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, test } from "bun:test"
-import { mkdtemp, mkdir, readFile, rm, writeFile } from "node:fs/promises"
+import { mkdtemp, mkdir, readdir, readFile, rm, writeFile } from "node:fs/promises"
 import { tmpdir } from "node:os"
 import path from "node:path"
 import { replaceGeneratedArtifactsAfterSuccessfulBuild } from "../script/generation-transaction"
@@ -34,8 +34,42 @@ async function published(root: string) {
   }
 }
 
+/** The occurrences the journal still holds. A settled generation leaves none. */
+async function openOccurrences(root: string): Promise<string[]> {
+  return readdir(path.join(root, ".generation-journal", "sdk-generation")).catch(() => [])
+}
+
+/**
+ * Write the exact durable state a death mid-publication leaves: an occurrence
+ * naming the generation's whole target set, with the backups still holding the
+ * previous generation.
+ */
+async function abandonGeneration(root: string, targets: { targetRelative: string; existed: boolean }[]): Promise<void> {
+  const journal = path.join(root, ".generation-journal", "sdk-generation", "abandoned-generation")
+  await mkdir(journal, { recursive: true })
+  await writeFile(
+    path.join(journal, "intent.json"),
+    JSON.stringify({
+      schemaVersion: 1,
+      occurrenceID: "abandoned-generation",
+      kind: "sdk-generation",
+      subject: `sdk-generation:${root}`,
+      payload: {
+        packageRoot: root,
+        targets: targets.map((target) => ({
+          targetRelative: target.targetRelative,
+          backupRelative: path.join(".staging-backup", target.targetRelative),
+          kind: "file",
+          existed: target.existed,
+        })),
+      },
+      timeCreated: Date.now(),
+    }),
+  )
+}
+
 describe("a generation publishes all of its outputs or none", () => {
-  test("a completed generation replaces every target and leaves no journal", async () => {
+  test("a completed generation replaces every target and settles its occurrence", async () => {
     const root = await packageRoot()
     await replaceGeneratedArtifactsAfterSuccessfulBuild({
       packageRoot: root,
@@ -43,13 +77,11 @@ describe("a generation publishes all of its outputs or none", () => {
       artifacts,
       build: (staging) => build(staging, "gen-1-first", "gen-1-second"),
     })
-    expect({
-      ...(await published(root)),
-      journal: await readFile(path.join(root, ".generation-journal", "sdk-generation"), "utf8").then(
-        () => "present",
-        () => "absent",
-      ),
-    }).toEqual({ first: "gen-1-first", second: "gen-1-second", journal: "absent" })
+    expect({ ...(await published(root)), occurrences: await openOccurrences(root) }).toEqual({
+      first: "gen-1-first",
+      second: "gen-1-second",
+      occurrences: [],
+    })
   }, 60_000)
 
   test("a generation that fails while publishing restores the previous complete generation", async () => {
@@ -77,50 +109,74 @@ describe("a generation publishes all of its outputs or none", () => {
       }),
     ).rejects.toThrow()
 
-    // Neither half of generation 2 survives.
-    expect(await published(root)).toEqual({ first: "gen-1-first", second: "gen-1-second" })
+    // Neither half of generation 2 survives, and the failed occurrence settled.
+    expect({ ...(await published(root)), occurrences: await openOccurrences(root) }).toEqual({
+      first: "gen-1-first",
+      second: "gen-1-second",
+      occurrences: [],
+    })
   }, 60_000)
 
-  test("an unsettled generation is converged by the next build before it stages anything", async () => {
+  test("the next build converges an abandoned generation before it stages anything", async () => {
     const root = await packageRoot()
-    await replaceGeneratedArtifactsAfterSuccessfulBuild({
-      packageRoot: root,
-      stagingRelative: ".staging",
-      artifacts,
-      build: (staging) => build(staging, "gen-1-first", "gen-1-second"),
-    })
-
-    // The exact durable state a death mid-publication leaves: one target
-    // already overwritten, the backups still holding the previous generation,
-    // and an open occurrence naming what existed.
     const backupRoot = path.join(root, ".staging-backup")
     await mkdir(backupRoot, { recursive: true })
     await writeFile(path.join(backupRoot, "first.txt"), "gen-1-first")
     await writeFile(path.join(backupRoot, "second.txt"), "gen-1-second")
     await writeFile(path.join(root, "first.txt"), "gen-2-first-partial")
-    const journal = path.join(root, ".generation-journal", "sdk-generation", "abandoned-generation")
-    await mkdir(journal, { recursive: true })
-    await writeFile(
-      path.join(journal, "intent.json"),
-      JSON.stringify({
-        schemaVersion: 1,
-        occurrenceID: "abandoned-generation",
-        kind: "sdk-generation",
-        subject: `sdk-generation:${root}`,
-        payload: { packageRoot: root, existingTargets: ["first.txt", "second.txt"] },
-        timeCreated: Date.now(),
+    await writeFile(path.join(root, "second.txt"), "gen-1-second")
+    await abandonGeneration(root, [
+      { targetRelative: "first.txt", existed: true },
+      { targetRelative: "second.txt", existed: true },
+    ])
+
+    // This build's own publication never runs, so the only thing that can put
+    // generation 1 back on disk is convergence.
+    await expect(
+      replaceGeneratedArtifactsAfterSuccessfulBuild({
+        packageRoot: root,
+        stagingRelative: ".staging",
+        artifacts,
+        build: async () => {
+          throw new Error("generation 3 never built")
+        },
       }),
-    )
+    ).rejects.toThrow("generation 3 never built")
 
-    await replaceGeneratedArtifactsAfterSuccessfulBuild({
-      packageRoot: root,
-      stagingRelative: ".staging",
-      artifacts,
-      build: (staging) => build(staging, "gen-3-first", "gen-3-second"),
+    expect({ ...(await published(root)), occurrences: await openOccurrences(root) }).toEqual({
+      first: "gen-1-first",
+      second: "gen-1-second",
+      occurrences: [],
     })
+  }, 60_000)
 
-    // The abandoned generation was rolled back to generation 1 first, then
-    // generation 3 published whole over it.
-    expect(await published(root)).toEqual({ first: "gen-3-first", second: "gen-3-second" })
+  test("convergence leaves a target the abandoned generation never named untouched", async () => {
+    const root = await packageRoot()
+    const backupRoot = path.join(root, ".staging-backup")
+    await mkdir(backupRoot, { recursive: true })
+    await writeFile(path.join(backupRoot, "first.txt"), "gen-1-first")
+    await writeFile(path.join(root, "first.txt"), "gen-2-first-partial")
+
+    // A tracked file that a later build learned to generate. The abandoned
+    // generation predates it and never touched it, so its rollback must not
+    // reach it — the build's own artifact list is not the rollback's authority.
+    await writeFile(path.join(root, "second.txt"), "tracked-and-never-generated")
+    await abandonGeneration(root, [{ targetRelative: "first.txt", existed: true }])
+
+    await expect(
+      replaceGeneratedArtifactsAfterSuccessfulBuild({
+        packageRoot: root,
+        stagingRelative: ".staging",
+        artifacts,
+        build: async () => {
+          throw new Error("the build after the artifact list grew")
+        },
+      }),
+    ).rejects.toThrow("the build after the artifact list grew")
+
+    expect(await published(root)).toEqual({
+      first: "gen-1-first",
+      second: "tracked-and-never-generated",
+    })
   }, 60_000)
 })
