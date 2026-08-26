@@ -649,6 +649,31 @@ The twelfth uninvolved read-only review of seven commits found one critical defe
 - The SDK startup observer still carries the line-splitting machinery of the deleted log-parsing protocol.
 - Verification still ignores transitive dependencies, version-range satisfaction and the package's own entrypoint files.
 
+## Stage 7 — Package and public-contract cleanup (in progress)
+
+### ARC-021's second owner — both install owners share one readiness authority
+
+- The audit named two places that decide whether a dependency tree is installed, and only the shared registry cache had been repaired. `Config.needsInstall` still answered from `existsSync(node_modules)` plus a package.json version string — exactly the two facts a killed `bun install` leaves behind — so every later load used the incomplete tree forever.
+- The completeness receipt is now keyed by the TREE an install lands in rather than one hardcoded cache path, because the shared registry cache and each per-config dependency directory are different trees and a receipt is only ever about the one it names. Both owners use it: the per-config install opens its occurrence before mutating the tree, verifies the resolved tree, publishes the receipt and rolls the occurrence back on failure; `needsInstall` requires that receipt before calling a tree ready.
+- Focused tests: a tree left by a killed install is not read as installed, the same tree with its receipt is ready, and a receipt for another tree does not make this one ready.
+
+### ARC-033 — a bundle is parsed whole before its window is claimed
+
+- Root cause as audited: invalid non-empty lines were skipped silently, so a partially malformed bundle still looked usable — and because the one-shot secret window is signed before the result is reported, a bundle the operator could never receive in full permanently consumed their bounded TTL.
+- The repair: the complete input is parsed into a typed valid/invalid result before any TTL claim or environment mutation. A bundle is either wholly parseable or refused, carrying the exact lines that are not, with nothing claimed and nothing applied.
+
+### ARC-029 — the Board's freshness promise is deleted, not ignored
+
+- Root cause as audited: the Board routes accepted a `sync` option that every caller could pass and no implementation ever read — both service functions named it `_input` and returned the same projection either way.
+- The repair: the parameter is gone from the service functions and from the route that read it out of the query string. Reading a Board is read-only by contract; the poll loop advances state and reading never does. A public promise of freshness-on-demand that does nothing is worse than not offering it.
+- Not addressed here: the audit's second ARC-029 half, the red `check:dead-code` gate (six Overlay files, one unused dependency, two unlisted `ps` binary uses). Open.
+
+### ARC-032 — the endpoints that could only answer empty are gone
+
+- Root cause as audited: the LSP server map is created empty and has no writer, and `status()` returns early on an empty map, so `GET /lsp` and `GET /find/symbol` were structurally incapable of returning anything — both documented themselves as "Compatibility endpoint … returns an empty array".
+- The repair removes the two public contracts, which had no consumer in the Overlay or the SDK. The subsystem implementation and its initialization-lifecycle tests are untouched.
+- Open decision recorded rather than settled by a tail-end deletion: whether to delete the LSP subsystem outright or restore one configured runtime owner. The zombie public API — the part the audit named as forbidden — is gone either way.
+
 ## Stage log
 
 - Stage 3 (ARC-010 through ARC-013): complete. Production repair and the 52-file fixture migration are committed in `7786b642d`, `32d6aae01` and `1df9e2f4b`. The post-review evidence repair runs real late-transaction SQLite aborts and is verified by four focused files (**6 pass, 0 fail, 16 assertions**), `packages/opencorvus` typecheck, Prettier and `git diff --check`. The repeat uninvolved read-only review returned **PASS with no unresolved finding**; the pre-existing red suites remain bisected and recorded above.
