@@ -27,7 +27,7 @@ import { Log } from "../util/log"
 import { NamedError } from "@opencorvus-ai/util/error"
 import z from "zod/v4"
 import { Database, NotFoundError } from "../storage/db"
-import { Instance } from "../project/instance"
+import { Instance, reenterActiveInstance } from "../project/instance"
 import { runWithIndependentProjectIdentity } from "../project/independent-project-owner"
 import { createInstanceState } from "../project/instance-state"
 import { Installation } from "../installation"
@@ -75,9 +75,10 @@ export namespace MCP {
       kind: "task",
       taskID,
       cwd,
-      runtimeIdentity: binding.protocol === TASK_EXECUTION_CAPSULE_BINDING_PROTOCOL
-        ? binding.runtime_identity_sha256
-        : `native:${binding.project_id}:${binding.workspace_root}`,
+      runtimeIdentity:
+        binding.protocol === TASK_EXECUTION_CAPSULE_BINDING_PROTOCOL
+          ? binding.runtime_identity_sha256
+          : `native:${binding.project_id}:${binding.workspace_root}`,
     })
   }
 
@@ -357,7 +358,9 @@ export namespace MCP {
   }
 
   export function toolDefinitionDigest(tool: MCPToolDef): string {
-    return createHash("sha256").update(JSON.stringify(canonicalConfigValue(tool))).digest("hex")
+    return createHash("sha256")
+      .update(JSON.stringify(canonicalConfigValue(tool)))
+      .digest("hex")
   }
 
   export function copyAppToolBinding(source: object, target: object): void {
@@ -437,13 +440,19 @@ export namespace MCP {
   }
 
   function scopedConnectionOwnerKey(input: ScopedConnectionInput, identity: string): string {
-    return createHash("sha256").update(JSON.stringify(canonicalConfigValue({
-      identity,
-      cwd: input.cwd,
-      processAuthority: input.processAuthority,
-      mcp: input.mcp,
-      globalTimeout: input.globalTimeout ?? null,
-    }))).digest("hex")
+    return createHash("sha256")
+      .update(
+        JSON.stringify(
+          canonicalConfigValue({
+            identity,
+            cwd: input.cwd,
+            processAuthority: input.processAuthority,
+            mcp: input.mcp,
+            globalTimeout: input.globalTimeout ?? null,
+          }),
+        ),
+      )
+      .digest("hex")
   }
 
   type InternalScopedConnectionOwner = ScopedConnectionOwner & {
@@ -454,7 +463,7 @@ export namespace MCP {
     ): Promise<T>
   }
 
-/**
+  /**
    * Tear down the Computer logical session this owner's scope names.
    *
    * A scoped owner's id IS its Computer runtime scope — both are derived from
@@ -522,17 +531,19 @@ export namespace MCP {
             globalTimeout: input.globalTimeout,
             onCleanupPending: (connection) => cleanupPending.add(connection),
             ...options,
-          }).then((result) => {
-            if (!result.mcpConnection) {
-              const status = result.status
-              const detail = "error" in status ? `: ${status.error}` : `: ${status.status}`
-              throw new Error(`Scoped MCP server ${input.key} did not connect${detail}`)
-            }
-            return result.mcpConnection
-          }).catch((error) => {
-            if (entries.get(ownerKey) === candidate) entries.delete(ownerKey)
-            throw error
           })
+            .then((result) => {
+              if (!result.mcpConnection) {
+                const status = result.status
+                const detail = "error" in status ? `: ${status.error}` : `: ${status.status}`
+                throw new Error(`Scoped MCP server ${input.key} did not connect${detail}`)
+              }
+              return result.mcpConnection
+            })
+            .catch((error) => {
+              if (entries.get(ownerKey) === candidate) entries.delete(ownerKey)
+              throw error
+            })
           candidate = {
             identity,
             key: identity,
@@ -1119,9 +1130,7 @@ export namespace MCP {
   function credentialSafeErrorMessage(error: unknown, credentialSecret?: string) {
     const message = errorMessage(error)
     if (!credentialSecret) return message
-    const formEncoded = new URLSearchParams({ credential: credentialSecret })
-      .toString()
-      .slice("credential=".length)
+    const formEncoded = new URLSearchParams({ credential: credentialSecret }).toString().slice("credential=".length)
     return [...new Set([credentialSecret, encodeURIComponent(credentialSecret), formEncoded])]
       .filter(Boolean)
       .reduce((safe, sensitive) => safe.replaceAll(sensitive, "[redacted]"), message)
@@ -1198,7 +1207,9 @@ export namespace MCP {
         }),
       )
     }
-    throw new Error(`MCP task ${current.taskId} ended as ${current.status}: ${current.statusMessage ?? "no status message"}`)
+    throw new Error(
+      `MCP task ${current.taskId} ended as ${current.status}: ${current.statusMessage ?? "no status message"}`,
+    )
   }
 
   /** Execute one MCP Tool only from inside PermissionAuthority, resuming its protocol Task when present. */
@@ -1367,12 +1378,13 @@ export namespace MCP {
         stdin: "pipe" as const,
         owner: "mcp-stdio",
       }
-      const handle = this.processAuthority.kind === "task"
-        ? await ProcessSupervisor.spawnTaskCommand(
-            { taskID: this.processAuthority.taskID, cwd: this.processAuthority.cwd },
-            command,
-          )
-        : await ProcessSupervisor.spawnHostCommand({ ...command, cwd: this.processAuthority.cwd })
+      const handle =
+        this.processAuthority.kind === "task"
+          ? await ProcessSupervisor.spawnTaskCommand(
+              { taskID: this.processAuthority.taskID, cwd: this.processAuthority.cwd },
+              command,
+            )
+          : await ProcessSupervisor.spawnHostCommand({ ...command, cwd: this.processAuthority.cwd })
       this.handle = handle
       this.lastHandle = handle
       handle.stdout?.on("data", (chunk: Buffer) => {
@@ -2349,18 +2361,17 @@ export namespace MCP {
     })
     .strict()
 
-  export const ConfigureInput = ConfigureRequest
-    .superRefine((input, context) => {
-      const hasStaticCredential = input.config.type === "remote" && !!input.config.credential
-      if (hasStaticCredential === !!input.credentialSecret) return
-      context.addIssue({
-        code: "custom",
-        path: ["credentialSecret"],
-        message: hasStaticCredential
-          ? "Static MCP credential secret is required"
-          : "MCP credential secret requires a static credential descriptor",
-      })
+  export const ConfigureInput = ConfigureRequest.superRefine((input, context) => {
+    const hasStaticCredential = input.config.type === "remote" && !!input.config.credential
+    if (hasStaticCredential === !!input.credentialSecret) return
+    context.addIssue({
+      code: "custom",
+      path: ["credentialSecret"],
+      message: hasStaticCredential
+        ? "Static MCP credential secret is required"
+        : "MCP credential secret requires a static credential descriptor",
     })
+  })
 
   export async function configure(name: string, mcp: Config.Mcp, credentialSecret?: string) {
     const parsed = ConfigureInput.parse({ name, config: mcp, credentialSecret })
@@ -2811,11 +2822,14 @@ export namespace MCP {
           },
           {
             onRedirect: async (url) => {
-              log.info("oauth redirect requested", oauthAuthorizationLogFields({
-                mcpName: key,
-                authorizationUrl: url,
-                correlationID,
-              }))
+              log.info(
+                "oauth redirect requested",
+                oauthAuthorizationLogFields({
+                  mcpName: key,
+                  authorizationUrl: url,
+                  correlationID,
+                }),
+              )
               // Store the URL - actual browser opening is handled by startAuth
             },
           },
@@ -3170,8 +3184,7 @@ export namespace MCP {
         scopedConnecting,
       ),
       failedAwaitingReconnect: states.reduce(
-        (total, project) =>
-          total + objectValues(project.status).filter((status) => status.status === "failed").length,
+        (total, project) => total + objectValues(project.status).filter((status) => status.status === "failed").length,
         0,
       ),
     }
@@ -3366,10 +3379,7 @@ export namespace MCP {
   }
 
   export async function toolsForServers(configSnapshot: Config.Info, serverIDs: readonly string[]) {
-    const config = exactConfiguredServers(
-      (configSnapshot.mcp ?? {}) as NonNullable<Config.Info["mcp"]>,
-      serverIDs,
-    )
+    const config = exactConfiguredServers((configSnapshot.mcp ?? {}) as NonNullable<Config.Info["mcp"]>, serverIDs)
     return toolsForConfig(config, configSnapshot.experimental?.mcp_timeout, {
       kind: "host",
       cwd: Instance.directory,
@@ -3578,8 +3588,10 @@ export namespace MCP {
     await assertCurrentOAuthOwner("while OAuth cleanup was settling")
     const authTimeout = effectiveTimeout(mcpConfig, cfg.experimental?.mcp_timeout)
 
-    // Start the callback server
-    await McpOAuthCallback.ensureRunning()
+    // Start the callback server. It is an adapter over a port; the durable
+    // credential store, not the listener's own map, decides which states name
+    // live flows and what finishing one means.
+    await McpOAuthCallback.ensureRunning(durableFlowAuthority(Instance.directory))
     await assertCurrentOAuthOwner("while the OAuth callback server was starting")
 
     // Generate and store a cryptographically secure state parameter BEFORE creating the provider
@@ -3775,11 +3787,14 @@ export namespace MCP {
 
     // The SDK has already added the state parameter to the authorization URL
     // We just need to open the browser
-    log.info("opening browser for oauth", oauthAuthorizationLogFields({
-      mcpName,
-      authorizationUrl,
-      correlationID: flow.correlationID,
-    }))
+    log.info(
+      "opening browser for oauth",
+      oauthAuthorizationLogFields({
+        mcpName,
+        authorizationUrl,
+        correlationID: flow.correlationID,
+      }),
+    )
 
     // Register the callback BEFORE opening the browser to avoid race condition
     // when the IdP has an active SSO session and redirects immediately
@@ -3831,6 +3846,42 @@ export namespace MCP {
    * durable lease generation, so all of its writes stay exactly as fenced as
    * the original flow's.
    */
+  /**
+   * The durable owner of this project's OAuth flows.
+   *
+   * A callback can arrive with no caller waiting for it in this process — the
+   * waiter timed out, its flow was cancelled and re-minted, or the listener
+   * outlived the `authenticate` call that started it. None of that makes the
+   * callback forged, and every fact the completion needs is already durable.
+   * The listener asks here instead of reading its own map's emptiness as
+   * evidence of an attack.
+   */
+  function durableFlowAuthority(directory: string): McpOAuthCallback.CallbackAuthority {
+    async function inProject<R>(label: string, fn: () => Promise<R>): Promise<R> {
+      const outcome = await reenterActiveInstance({ directory, fn: async () => ({ value: await fn() }) })
+      if (!outcome) throw new Error(`Cannot ${label}: project ${directory} is no longer active`)
+      return outcome.value
+    }
+
+    return {
+      resolveState(oauthState) {
+        return inProject("resolve the OAuth callback's flow", async () => {
+          const prefix = `${Instance.project.id}:`
+          for (const [authKey, entry] of Object.entries(await McpAuth.all())) {
+            if (!authKey.startsWith(prefix) || entry.oauthState !== oauthState) continue
+            return { mcpName: authKey.slice(prefix.length) }
+          }
+          return undefined
+        })
+      },
+      async finish(input) {
+        await inProject("finish the OAuth flow", () =>
+          finishAuthCallback(input.mcpName, input.authorizationCode, input.oauthState),
+        )
+      },
+    }
+  }
+
   async function rebuildPendingOAuthFlowFromDurableFacts(authKey: string): Promise<PendingOAuthFlow | undefined> {
     const entry = await McpAuth.get(authKey)
     if (!entry?.oauthState || !entry.codeVerifier || !entry.revision) return undefined
@@ -3899,11 +3950,7 @@ export namespace MCP {
    * assertOAuthState resolves the owner — live or rebuilt from the durable
    * facts — under the state fence. There is no second, weaker finish.
    */
-  async function finishAuth(
-    mcpName: string,
-    authorizationCode: string,
-    flow: PendingOAuthFlow,
-  ): Promise<Status> {
+  async function finishAuth(mcpName: string, authorizationCode: string, flow: PendingOAuthFlow): Promise<Status> {
     const cfg = await Config.get()
     const config = (cfg.mcp ?? {}) as NonNullable<Config.Info["mcp"]>
     const mcpConfig = requireMcpEntry(config, mcpName)
@@ -4033,5 +4080,4 @@ export namespace MCP {
       client: (resource as { client?: string }).client ?? key.split("_")[0] ?? key,
     }))
   }
-
 }
