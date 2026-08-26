@@ -1,7 +1,7 @@
 # Session Stream Message Cutover Convergence
 
 Date: 2026-08-26
-Status: implementation, focused acceptance, and independent review complete; delivery pending
+Status: delivered in `12ec09780`
 Owner: Codex
 
 ## Recall
@@ -140,7 +140,7 @@ The bounded snapshot is intentionally additive. It repairs missed creation event
 - [x] Focused route/projection/history/origin tests, package typechecks, documentation checks, architecture index, diff check, and Overlay production build passed.
 - [x] Real-page rendering acceptance completed against an isolated runtime; screenshot: [`../../artifacts/session-stream/2026-08-26-work-first-message-visible.png`](../../artifacts/session-stream/2026-08-26-work-first-message-visible.png). DOM and screenshot show `User` / `第一条 Work 用户消息应该完整显示`, followed by `work` / `这是 Work Agent 的消息；它应显示在用户消息之后。`; browser warning/error log was empty. This is rendering evidence only; the route test proves the connection race.
 - [x] Independent review complete with no unresolved finding.
-- [ ] Scoped commit created, upstream merged, complete push set verified, and push completed.
+- [x] Scoped commit `12ec09780` created, upstream merged, complete push set verified, and pushed to `origin/arch-debt-remediation`.
 
 ## Verification evidence
 
