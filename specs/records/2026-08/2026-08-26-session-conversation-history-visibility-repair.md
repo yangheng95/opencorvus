@@ -1,7 +1,7 @@
 # Session Conversation History Visibility Repair
 
 Date: 2026-08-26
-Status: implemented, verified, and independently reviewed; delivery pending
+Status: implemented, verified, independently reviewed, and committed
 Owner: Codex
 
 ## Recall
@@ -127,7 +127,7 @@ Generalize the one existing Overlay history loader over `BoardSource`:
 - [x] Incident bundle, repository contracts, history endpoints, Overlay loader, card debug semantics, and shared impact audited.
 - [x] Root cause and repair design recorded before implementation.
 - [x] Implementation complete: the shared history predicate accepts active Task and Session sources, and one source-aware path resolver selects the existing canonical backend route.
-- [x] Focused and package verification complete: Overlay path tests (2 pass), OpenCorvus Session route test (1 pass), Overlay typecheck, production build plus renderer-surface check, root docs check, and diff whitespace check passed.
+- [x] Focused and package verification complete: Overlay path tests (2 pass), OpenCorvus Session route test (1 pass), Overlay typecheck, production build plus renderer-surface check, the initial root docs check, and target diff whitespace check passed. A final root docs-check rerun later detected only a concurrently introduced, uncommitted Skill Market API-generation delta outside this repair; those owner files were preserved and excluded rather than absorbed into this delivery.
 - [x] Real-page manual visual acceptance complete: an isolated Mission Session contained 96 persisted messages; initial hydration rendered messages 017-096, real PageUp interaction loaded messages 001-016, and the final rendered sequence contained exactly 96 unique messages in chronological order from 001 through 096. The reviewed screenshot showed the Mission at the restored oldest content without layout corruption.
 - [x] Independent review reports no unresolved finding; the reviewer independently reran the Overlay path test, OpenCorvus Session route test, and target diff check.
-- [ ] Scoped commit, upstream merge, final verification, and push complete.
+- [x] Scoped implementation commit `0f0150c0f` created after final verification; the configured upstream was fetched and confirmed current before delivery. The push result is evidenced by remote Git history rather than predeclared in this plan.
