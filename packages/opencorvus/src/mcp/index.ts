@@ -454,6 +454,32 @@ export namespace MCP {
     ): Promise<T>
   }
 
+/**
+   * Tear down the Computer logical session this owner's scope names.
+   *
+   * A scoped owner's id IS its Computer runtime scope — both are derived from
+   * the same Session (and Task) identity — but closing the owner only closed
+   * MCP connections, and the host backend's own `close` is a no-op. The
+   * desktop session, its driver authorization and its preserved state
+   * therefore outlived the Session that created them, until the whole Project
+   * Instance was disposed. The owner's settlement now invokes the sole destroy
+   * primitive for its scope, so Project disposal is the outer safety net it
+   * was meant to be rather than the only owner.
+   */
+  async function destroyOwnedComputerRuntimeScope(runtimeScope: string): Promise<void> {
+    const { ComputerHostRuntime } = await import("./computer/host-runtime")
+    try {
+      await ComputerHostRuntime.destroy(runtimeScope)
+    } catch (error) {
+      // A scope that never took a Computer session has nothing to destroy, and
+      // a failed teardown must not mask the MCP close that already succeeded.
+      log.info("scoped Computer runtime teardown did not settle", {
+        runtimeScope,
+        error: error instanceof Error ? error.message : String(error),
+      })
+    }
+  }
+
   export function createScopedConnectionOwner(id: string): ScopedConnectionOwner {
     const normalizedID = id.trim()
     if (!normalizedID) throw new Error("Scoped MCP connection owner requires a non-empty id")
@@ -562,6 +588,7 @@ export namespace MCP {
           entries.clear()
           ownerState.projectState?.scopedOwners.delete(ownerState)
           ownerState.projectState = undefined
+          await destroyOwnedComputerRuntimeScope(normalizedID)
         })()
         try {
           await closePromise
