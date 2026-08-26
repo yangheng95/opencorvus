@@ -491,6 +491,14 @@ partial snapshot；键入和菜单导航不发起网络请求。
 固定 profile Task 协调面；它不声明领域 workflow、Expert Squad 偏好、自动选择、隐藏状态、alias 或
 fallback。项目与 user-global Mission Skill 继续通过同一严格 catalog 添加更具体的显式编排合同。
 
+## Language Server Protocol removal
+
+Language Server Protocol（LSP）子系统已删除：生产代码没有 LSP client、server supervisor、language catalog、
+tool、permission、feature flag、Project state、Execution Capsule descriptor field 或公开 HTTP route。严格配置会拒绝
+`lsp` 键，旧的 disable/experimental 环境变量不再存在。Session Message 继续拥有通用 `Range` 数据结构；该结构位于
+`session/range.ts`，不代表或启动语言服务。保留的 VS Code protocol package 只允许作为其他产品依赖的传递依赖，
+不得重新投影为 OpenCorvus LSP 能力。
+
 ## MCP —— Model Context Protocol
 
 **代码**：`src/mcp/`
@@ -536,6 +544,13 @@ Playwright transport，不关闭外部 Chrome 或其 BrowserContext。`session_c
 Page 的只读 Live View；Live View 不创建第二个 Browser、BrowserContext、Page 或可变状态，也不复用 Task
 Browser Preview WebView。
 
+直接 Chat/Work 为每个 Conversation Session 的 Browser 投影创建独立 scoped MCP connection owner，并在该 owner
+下枚举 server 当前暴露的完整 model-visible tool 集合；切到 scoped owner 不得缩窄工具面。只有配置和 assignment
+都接纳 Browser 后才创建 owner。Browser 的 Page、Cookie 和 storage 状态位于该 owner 持有的 Browser MCP 进程中，
+Conversation disposal 会 await 该 owner 的 close 回执再完成，因此不需要在 Browser 内另建 Session tag、host 侧
+销毁路由或 Project 共享的影子 owner。Computer takeover 只替换同 Conversation 的 Computer adapter owner；它不会
+关闭 Browser owner，Browser 状态持续到 Conversation disposal。
+
 ### Computer Use
 
 `default/mcp/computer` 是平台内置的 host-native Computer Use MCP，
@@ -550,7 +565,8 @@ MCP tool 完整集合，重复 owner 继续失败关闭。`tool` 与 `mcp_tool` 
 只决定能力投影，不替代 permission；server 与其 tool 必须在同一 snapshot 中一致为 `visible`。
 
 每个 Conversation Session 拥有独立的 Computer scoped MCP connection owner；不同 Session 不共享
-controller、CUA Driver logical session 或 observation authority，删除 Session 会关闭精确 owner。每次 `observe`
+controller、CUA Driver logical session 或 observation authority，删除 Session 会关闭精确 owner，而 takeover 只关闭
+Computer owner 并保留上文独立的 Browser owner。每次 `observe`
 形成一个绑定 computer、display、observation、digest 与像素边界的单次 capability；动作在第一次异步
 backend 调用前原子消费它。create、input 与 destroy 都是 effect operation，派发后响应丢失统一返回
 `COMPUTER_OUTCOME_UNKNOWN`，不得 retry、reconnect replay 或切换 transport。

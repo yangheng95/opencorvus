@@ -344,10 +344,11 @@ export namespace ConversationCapability {
     return browserConnectionOwnerID(sessionID)
   }
 
-  export async function disconnectRuntimeMcp(sessionID: string): Promise<void> {
+  async function settleRuntimeMcpOwners(sessionID: string, kinds: readonly ("computer" | "browser")[]): Promise<void> {
     const owners = conversationConnectionOwners()
     const results = await Promise.allSettled(
-      [`computer:${sessionID}`, `browser:${sessionID}`].flatMap((key) => {
+      kinds.flatMap((kind) => {
+        const key = `${kind}:${sessionID}`
         const owner = owners.get(key)
         if (!owner) return []
         owners.delete(key)
@@ -359,10 +360,17 @@ export namespace ConversationCapability {
     if (failures.length > 1) throw new AggregateError(failures, "Conversation builtin MCP disconnect failed")
   }
 
+  /** Human takeover replaces only the Computer adapter generation. The
+   *  Conversation's Browser process is an independent owner and keeps its
+   *  pages, cookies and storage until the Conversation itself is disposed. */
+  export async function disconnectRuntimeMcp(sessionID: string): Promise<void> {
+    await settleRuntimeMcpOwners(sessionID, ["computer"])
+  }
+
   export async function disposeRuntimeMcp(sessionID: string): Promise<void> {
     const runtimeScope = computerConnectionOwnerID(sessionID)
     const results = await Promise.allSettled([
-      disconnectRuntimeMcp(sessionID),
+      settleRuntimeMcpOwners(sessionID, ["computer", "browser"]),
       ComputerHostRuntime.destroy(runtimeScope),
     ])
     const failures = results.flatMap((result) => (result.status === "rejected" ? [result.reason] : []))
@@ -381,7 +389,7 @@ export namespace ConversationCapability {
           config,
           sessionID,
           serverName: BrowserMCPBuiltin.ServerName,
-          owner: browserConnectionOwner(sessionID),
+          connectionOwner: () => browserConnectionOwner(sessionID),
           bindRuntime: (declaration) => declaration,
         })
       : {}
@@ -398,14 +406,13 @@ export namespace ConversationCapability {
     const declaration = ComputerMCPBuiltin.configuredDeclaration(configured)
     if (declaration.status === "disabled") return owned
 
-    const owner = computerConnectionOwner(sessionID)
     const computerTools = await ownedBuiltinTools({
       config,
       sessionID,
       serverName: ComputerMCPBuiltin.ServerName,
       toolNames: ComputerMCPBuiltin.ImportableToolNames,
-      owner,
-      bindRuntime: (entry) =>
+      connectionOwner: () => computerConnectionOwner(sessionID),
+      bindRuntime: (entry, owner) =>
         ComputerMCPBuiltin.withRuntimeScope(
           entry as typeof declaration.config,
           owner.id,
@@ -432,20 +439,21 @@ export namespace ConversationCapability {
      *  the shared-connection path does — an owned projection must not narrow
      *  the model's tool surface just by moving onto an owner. */
     toolNames?: readonly string[]
-    owner: MCP.ScopedConnectionOwner
-    bindRuntime: (declaration: Config.Mcp) => Config.Mcp
+    connectionOwner: () => MCP.ScopedConnectionOwner
+    bindRuntime: (declaration: Config.Mcp, owner: MCP.ScopedConnectionOwner) => Config.Mcp
   }) {
     const configured = input.config.mcp?.[input.serverName]
     if (!configured || !("type" in configured) || configured.enabled === false) return {}
-    const mcp = input.bindRuntime(configured)
+    const owner = input.connectionOwner()
+    const mcp = input.bindRuntime(configured, owner)
     const scope = {
       key: input.serverName,
       mcp,
       cwd: Instance.directory,
       processAuthority: { kind: "host", cwd: Instance.directory } as const,
       globalTimeout: input.config.experimental?.mcp_timeout,
-      connectionOwner: input.owner,
-      connectionIdentity: input.owner.id,
+      connectionOwner: owner,
+      connectionIdentity: owner.id,
     }
     if (!input.toolNames) return MCP.scopedToolsForServer(scope)
     const entries = await Promise.all(

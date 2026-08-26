@@ -39,6 +39,19 @@ async function openOccurrences(root: string): Promise<string[]> {
   return readdir(path.join(root, ".generation-journal", "sdk-generation")).catch(() => [])
 }
 
+async function waitForPath(target: string) {
+  const deadline = Date.now() + 30_000
+  while (
+    !(await readFile(target).then(
+      () => true,
+      () => false,
+    ))
+  ) {
+    if (Date.now() >= deadline) throw new Error(`timed out waiting for ${target}`)
+    await Bun.sleep(10)
+  }
+}
+
 /**
  * Write the exact durable state a death mid-publication leaves: an occurrence
  * naming the generation's whole target set, with the backups still holding the
@@ -69,6 +82,58 @@ async function abandonGeneration(root: string, targets: { targetRelative: string
 }
 
 describe("a generation publishes all of its outputs or none", () => {
+  test("equivalent package-root spellings serialize two process publishers onto one generation lock", async () => {
+    const root = await packageRoot()
+    const barrier = await mkdtemp(path.join(tmpdir(), "sdk-generation-lock-barrier-"))
+    roots.push(barrier)
+    const worker = path.join(import.meta.dir, "fixture", "generation-transaction-process-worker.ts")
+    const equivalentRoot = `${root}${path.sep}..${path.sep}${path.basename(root)}`
+    const children: ReturnType<typeof Bun.spawn>[] = []
+    const spawn = (packageRootSpelling: string, label: "first" | "second") => {
+      const child = Bun.spawn([process.execPath, worker, packageRootSpelling, barrier, label], {
+        cwd: path.join(import.meta.dir, ".."),
+        stdout: "pipe",
+        stderr: "pipe",
+      })
+      children.push(child)
+      return child
+    }
+    const read = async (child: ReturnType<typeof spawn>) => {
+      const [stdout, stderr, exitCode] = await Promise.all([
+        new Response(child.stdout).text(),
+        new Response(child.stderr).text(),
+        child.exited,
+      ])
+      expect(exitCode, stderr).toBe(0)
+      return JSON.parse(stdout.trim()) as {
+        label: "first" | "second"
+        previousGenerationAtEntry?: { first?: string; second?: string }
+      }
+    }
+
+    const first = spawn(root, "first")
+    try {
+      await waitForPath(path.join(barrier, "first-entered"))
+      const second = spawn(equivalentRoot, "second")
+      const results = await Promise.all([read(first), read(second)])
+      const secondResult = results.find((result) => result.label === "second")
+      expect({
+        generationAtSecondEntry: secondResult?.previousGenerationAtEntry,
+        artifacts: await published(root),
+        occurrences: await openOccurrences(root),
+      }).toEqual({
+        generationAtSecondEntry: { first: "first-first", second: "first-second" },
+        artifacts: { first: "second-first", second: "second-second" },
+        occurrences: [],
+      })
+    } finally {
+      for (const child of children) {
+        if (child.exitCode === null) child.kill()
+      }
+      await Promise.allSettled(children.map((child) => child.exited))
+    }
+  }, 60_000)
+
   test("a completed generation replaces every target and settles its occurrence", async () => {
     const root = await packageRoot()
     await replaceGeneratedArtifactsAfterSuccessfulBuild({

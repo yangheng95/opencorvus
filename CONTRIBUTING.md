@@ -69,7 +69,7 @@ Then run it with:
 Replace `<platform>` with your platform (e.g., `darwin-arm64`, `linux-x64`).
 
 - Core pieces:
-  - `packages/opencorvus`: Core business logic, server, agents, tools, LSP
+  - `packages/opencorvus`: Core business logic, server, agents, tools, and MCP
   - `packages/sdk`: JavaScript SDK (`@opencorvus-ai/sdk`)
   - `packages/channel-runtime`: Channel runtime adapters (Slack, Telegram, Discord, Feishu, WhatsApp, Google Chat, Microsoft Teams, LINE, Matrix, Mattermost, Signal, WeCom, DingTalk)
   - `packages/plugin`: Plugin system (`@opencorvus-ai/plugin`)

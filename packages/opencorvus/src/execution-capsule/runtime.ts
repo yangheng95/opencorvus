@@ -32,7 +32,6 @@ export const ExecutionCapsuleRuntimeDescriptorSchema = z
       .refine((items) => new Set(items).size === items.length),
     child_environment_names: z.array(z.string().regex(/^[A-Za-z_][A-Za-z0-9_]*$/)).length(0),
     network: z.object({ default: z.literal("none") }).strict(),
-    lsp: z.object({ server_ids: z.array(z.never()).length(0) }).strict(),
     resources: z
       .object({
         memory_max_bytes: z.number().int().positive(),
@@ -132,7 +131,6 @@ export async function activeExecutionCapsuleRuntimeFact() {
     browserPlaywrightRequirePath: "/opt/opencorvus-browser/node_modules/playwright/index.js",
     browserExecutablePath: "/opt/opencorvus-browser/chromium/chrome-headless-shell",
     packageToolInactivityMs: loaded.descriptor.package_tool_inactivity_ms,
-    lspServerIDs: loaded.descriptor.lsp.server_ids,
   })
 }
 

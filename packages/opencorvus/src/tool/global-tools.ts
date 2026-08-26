@@ -21,7 +21,6 @@ export function builtInToolProviderState(
       ? "available"
       : "unavailable"
   }
-  if (toolID === "lsp") return "unavailable"
   return "available"
 }
 

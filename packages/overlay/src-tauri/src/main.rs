@@ -1091,7 +1091,7 @@ fn install_overlay_window_geometry_constraints<R: Runtime>(
 //
 // When the overlay exits (even on crash), closing the last handle to the job
 // object causes Windows to terminate every process in the job — including all
-// grandchildren spawned by the Bun server (LSP servers, PTY shells, etc.).
+// grandchildren spawned by the Bun server (PTY shells, JSON-RPC helpers, etc.).
 #[cfg(windows)]
 mod job_object {
     use std::ffi::c_void;
@@ -4119,7 +4119,7 @@ fn stop_server_state(server: &Server) -> Result<(), String> {
     }
 
     // Unix: SIGKILL the entire process group — reaches direct child and all
-    // grandchildren that inherited the group (LSP servers, PTY shells, etc.).
+    // grandchildren that inherited the group (PTY shells, JSON-RPC helpers, etc.).
     #[cfg(unix)]
     if let Some(pgid) = lock.pgid.take() {
         if forced_termination && pgid > 1 {
@@ -4733,7 +4733,7 @@ fn start_prepared_server<R: Runtime>(
     #[cfg(windows)]
     cmd.creation_flags(CREATE_NO_WINDOW);
     // Unix: move child into its own process group so kill(-pgid) reaches all
-    // grandchildren (LSP servers, PTY shells, JSON-RPC processes, etc.).
+    // grandchildren (PTY shells, JSON-RPC helpers, etc.).
     #[cfg(unix)]
     {
         use std::os::unix::process::CommandExt;

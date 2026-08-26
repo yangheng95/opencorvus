@@ -35,8 +35,6 @@ const TREE_WRITER_NOOP_TYPES = new Set([
   "pty.updated",
   "pty.exited",
   "pty.deleted",
-  "lsp.client.diagnostics",
-  "lsp.updated",
   "mcp.tools.changed",
   "mcp.auth.required",
   "mcp.browser.open.failed",

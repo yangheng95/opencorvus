@@ -287,8 +287,10 @@ export namespace McpAuth {
     const generation = crypto.randomUUID()
     await mutate(async () => {
       const data = await all()
+      const current = data[authKey]
+      const { oauthState: _oauthState, codeVerifier: _codeVerifier, ...retained } = current ?? {}
       data[authKey] = Entry.parse({
-        ...(data[authKey] ?? {}),
+        ...retained,
         ...(serverUrl ? { serverUrl } : {}),
         ...(credentialIdentity ? { credentialIdentity } : {}),
         revision: generation,
@@ -446,6 +448,33 @@ export namespace McpAuth {
       expectedRevision,
     )
     return spent
+  }
+
+  /**
+   * Terminalize a rejected OAuth flow in one durable write.
+   *
+   * State and PKCE verifier are one flow identity. Clearing only the state
+   * lets a later lease that dies after writing its new state be reconstructed
+   * with the rejected flow's verifier.
+   */
+  export async function abandonOAuthState(
+    authKey: string,
+    oauthState: string,
+    expectedRevision: Revision,
+  ): Promise<boolean> {
+    let abandoned = false
+    await updateStore(
+      authKey,
+      (entry) => {
+        if (!entry || entry.oauthState !== oauthState) return entry
+        delete entry.oauthState
+        delete entry.codeVerifier
+        abandoned = true
+        return entry
+      },
+      expectedRevision,
+    )
+    return abandoned
   }
 
   export async function clearOAuthStateIfOwned(authKey: string, expectedRevision: Revision): Promise<boolean> {

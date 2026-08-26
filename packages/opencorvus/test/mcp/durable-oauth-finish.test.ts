@@ -121,4 +121,45 @@ describe("MCP OAuth finish from durable facts", () => {
       server.stop(true)
     }
   }, 60_000)
+
+  test("a new state without its own verifier is not rebuilt from the previous lease", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const url = "https://incomplete-oauth-flow.invalid/mcp"
+        await Config.updateProjectPatchAtomic(() => ({
+          mcp: {
+            [SERVER]: {
+              type: "remote" as const,
+              transport: "streamable-http" as const,
+              url,
+              oauth: { clientId: CLIENT_ID },
+            },
+          },
+        }))
+        const authKey = McpAuth.scopedKey({ projectID: Instance.project.id, mcpName: SERVER })
+        const identity = McpOAuthProvider.credentialIdentity(url, {
+          clientId: CLIENT_ID,
+          clientSecret: undefined,
+          scope: undefined,
+        })
+        const firstRevision = await McpAuth.beginCredentialLease(authKey, url, identity)
+        await McpAuth.updateOAuthState(authKey, "first-state", firstRevision, url, identity)
+        await McpAuth.updateCodeVerifier(authKey, "first-verifier", firstRevision)
+
+        const secondRevision = await McpAuth.beginCredentialLease(authKey, url, identity)
+        await McpAuth.updateOAuthState(authKey, "second-state", secondRevision, url, identity)
+
+        await expect(MCP.finishAuthCallback(SERVER, "second-code", "second-state")).rejects.toThrow(
+          "OAuth flow is no longer current",
+        )
+        const entry = await McpAuth.get(authKey)
+        expect({ state: entry?.oauthState, revision: entry?.revision }).toEqual({
+          state: "second-state",
+          revision: secondRevision,
+        })
+      },
+    })
+  }, 60_000)
 })

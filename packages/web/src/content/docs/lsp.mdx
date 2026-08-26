@@ -1,12 +1,12 @@
 ---
-title: LSP status
-description: Language Server Protocol runtimes are disabled in OpenCorvus 0.0.38.
+title: LSP removed
+description: The Language Server Protocol subsystem was removed in OpenCorvus 0.0.55 beta.
 ---
 
-Language Server Protocol (LSP) runtimes are completely disabled in OpenCorvus 0.0.38. OpenCorvus does not discover, download, start, or retain language-server processes.
+The Language Server Protocol (LSP) subsystem was removed in OpenCorvus 0.0.55 beta. OpenCorvus does not discover, download, start, or retain language-server processes.
 
-The agent has no `lsp` tool. Reading, writing, editing, applying patches, opening projects, and attaching file ranges do not initialize an LSP runtime or request diagnostics. Experimental environment variables and `opencorvus.jsonc` LSP entries cannot enable one.
+The agent has no `lsp` tool. Reading, writing, editing, applying patches, opening projects, and attaching file ranges do not initialize an LSP runtime or request diagnostics. The strict `opencorvus.jsonc` schema rejects the removed `lsp` key, and no LSP environment flag remains.
 
-The public `/lsp` and `/find/symbol` HTTP endpoints were removed because no runtime owned them and they could only return empty arrays. The internal LSP subsystem remains inactive while its runtime ownership is decided.
+The public `/lsp` and `/find/symbol` HTTP endpoints and the internal client/server subsystem were deleted because no production runtime owned them. This is a breaking removal, not a disabled compatibility surface.
 
 [Formatters](../formatters/) remain available and operate independently after file writes.

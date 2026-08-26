@@ -1512,6 +1512,7 @@ export namespace MCP {
     durableIdentity: Record<string, string | undefined>
     durableGeneration: Record<string, number | undefined>
     connectionAttempts: Set<Promise<void>>
+    oauthCallbackAuthority?: McpOAuthCallback.CallbackAuthorityRegistration
     cleanupPending: Set<string>
     connectionCleanupPending: Map<string, Set<McpConnection>>
     scopedOwners: Set<ScopedConnectionOwnerState>
@@ -1943,7 +1944,7 @@ export namespace MCP {
         status[key] = mcp.enabled === false ? { status: "disabled" } : { status: "disconnected" }
         statusIdentity[key] = mcpConfigIdentity(mcp)
       }
-      const snapshot = {
+      const snapshot: McpState = {
         projectID: Instance.project.id,
         status,
         statusIdentity,
@@ -1954,6 +1955,7 @@ export namespace MCP {
         durableIdentity,
         durableGeneration,
         connectionAttempts,
+        oauthCallbackAuthority: undefined,
         cleanupPending,
         connectionCleanupPending,
         scopedOwners,
@@ -1964,6 +1966,8 @@ export namespace MCP {
       return snapshot
     },
     async (state) => {
+      state.oauthCallbackAuthority?.unregister()
+      state.oauthCallbackAuthority = undefined
       const connecting = [...state.connectionAttempts]
       const settledConnections = await Promise.allSettled(connecting)
       await Promise.all([...state.scopedOwners].map((owner) => owner.close?.()))
@@ -3568,6 +3572,29 @@ export namespace MCP {
    * Start OAuth authentication flow for an MCP server.
    * Returns the authorization URL that should be opened in a browser.
    */
+  async function registerOAuthCallbackAuthorityForInstance(
+    authority = durableFlowAuthority(Instance.directory, Instance.project.id),
+  ): Promise<void> {
+    const callbackAuthority = await McpOAuthCallback.ensureRunning({
+      projectID: Instance.project.id,
+      authority,
+    })
+    if (!callbackAuthority) return
+    const currentState = await state()
+    if (!callbackAuthority.isCurrent()) {
+      callbackAuthority.unregister()
+      return
+    }
+    currentState.oauthCallbackAuthority?.unregister()
+    currentState.oauthCallbackAuthority = callbackAuthority
+  }
+
+  export namespace TestHooks {
+    export async function registerOAuthCallbackAuthority(authority: McpOAuthCallback.CallbackAuthority) {
+      await registerOAuthCallbackAuthorityForInstance(authority)
+    }
+  }
+
   async function startAuthFlow(mcpName: string): Promise<{ authorizationUrl: string; flow?: PendingOAuthFlow }> {
     const cfg = await Config.get()
     const config = (cfg.mcp ?? {}) as NonNullable<Config.Info["mcp"]>
@@ -3611,10 +3638,7 @@ export namespace MCP {
     // Start the callback server, and register this project as an owner of
     // flows it may receive callbacks for. The listener is an adapter over a
     // port; the durable credential store decides which states name live flows.
-    await McpOAuthCallback.ensureRunning({
-      projectID: Instance.project.id,
-      authority: durableFlowAuthority(Instance.directory, Instance.project.id),
-    })
+    await registerOAuthCallbackAuthorityForInstance()
     await assertCurrentOAuthOwner("while the OAuth callback server was starting")
 
     // Generate and store a cryptographically secure state parameter BEFORE creating the provider
@@ -3908,7 +3932,33 @@ export namespace MCP {
           finishAuthCallback(input.mcpName, input.authorizationCode, input.oauthState),
         )
       },
+      async abandon(input) {
+        await inProject("terminalize the rejected OAuth flow", () =>
+          abandonAuthCallback(input.mcpName, input.oauthState),
+        )
+      },
     }
+  }
+
+  async function abandonAuthCallback(mcpName: string, oauthState: string): Promise<void> {
+    const authKey = mcpAuthKey(mcpName)
+    const localOwner = pendingOAuthFlows.get(authKey)
+    const durable = await McpAuth.get(authKey)
+    if (!durable?.revision || durable.oauthState !== oauthState) {
+      throw new OAuthStateError({
+        mcpName,
+        message: "OAuth state is not current - it was already used, superseded, or never issued",
+      })
+    }
+    const abandoned = await McpAuth.abandonOAuthState(authKey, oauthState, durable.revision)
+    if (!abandoned) {
+      if (pendingOAuthFlows.get(authKey) === localOwner) pendingOAuthFlows.delete(authKey)
+      throw new OAuthStateError({
+        mcpName,
+        message: "OAuth state is not current - it was already used, superseded, or never issued",
+      })
+    }
+    if (pendingOAuthFlows.get(authKey) === localOwner) pendingOAuthFlows.delete(authKey)
   }
 
   async function rebuildPendingOAuthFlowFromDurableFacts(authKey: string): Promise<PendingOAuthFlow | undefined> {
@@ -3917,7 +3967,11 @@ export namespace MCP {
     return { state: entry.oauthState, revision: entry.revision, correlationID: crypto.randomUUID() }
   }
 
-  async function assertOAuthState(mcpName: string, authKey: string, oauthState: string): Promise<PendingOAuthFlow> {
+  async function resolveOAuthStateOwner(
+    mcpName: string,
+    authKey: string,
+    oauthState: string,
+  ): Promise<PendingOAuthFlow> {
     let owner = pendingOAuthFlows.get(authKey)
     if (owner && owner.state !== oauthState) {
       // A stale in-memory owner must not veto the durable fact another
@@ -3936,6 +3990,11 @@ export namespace MCP {
     if (owner.state !== oauthState) {
       throw new OAuthStateError({ mcpName, message: "OAuth state mismatch - potential CSRF attack" })
     }
+    return owner
+  }
+
+  async function assertOAuthState(mcpName: string, authKey: string, oauthState: string): Promise<PendingOAuthFlow> {
+    const owner = await resolveOAuthStateOwner(mcpName, authKey, oauthState)
     // Spending the state IS the admission: the comparison and the clear happen
     // together inside the credential store's lock, so exactly one caller can
     // proceed to redeem this authorization code. Reading the state and

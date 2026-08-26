@@ -309,7 +309,7 @@ export namespace Filesystem {
 
   /**
    * On Windows, normalize a path to its canonical casing using the filesystem.
-   * This is needed because Windows paths are case-insensitive but LSP servers
+   * This is needed because Windows paths are case-insensitive but external tools
    * may return paths with different casing than what we send them.
    */
   export function normalizePath(p: string): string {

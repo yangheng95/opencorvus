@@ -111,7 +111,6 @@ OpenCorvus 是一个面向 AI 编码代理的开发编排工具。它把用户�
 | `src/browser/*`, `src/browser-preview/*` | Browser Preview、截图/布局证据、target、viewport、region comparison、dev-server 命令等。 |
 | `src/mcp/*` | MCP 鉴权、OAuth callback、materialize、provider 接入。MCP 是 Model Context Protocol，用于外部工具/资源协议。 |
 | `src/acp/*` | ACP 相关实现。ACP 是 Agent Client Protocol，用于 agent client 交互协议。 |
-| `src/lsp/*` | LSP 支持。LSP 是 Language Server Protocol，用于语言服务能力。 |
 
 ### 4.7 产品域与扩展
 

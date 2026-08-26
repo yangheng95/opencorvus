@@ -18,15 +18,28 @@ describe("a Conversation owns the Browser runtime it creates", () => {
       directory: project.path,
       fn: async () => {
         const owned: { key: string; connectionIdentity: string | undefined }[] = []
+        const browserTools = {
+          browser_navigate: { description: "Navigate through the owned Browser connection" } as never,
+          browser_tabs: { description: "List tabs through the owned Browser connection" } as never,
+        }
         const projected = spyOn(MCP, "scopedToolsForServer")
         projected.mockImplementation(async (input) => {
           owned.push({ key: input.key, connectionIdentity: input.connectionIdentity })
-          return {}
+          return browserTools
         })
         try {
-          const config = await Config.get()
-          await ConversationCapability.runtimeMcpTools(config, "chat", "session-browser-owner-first")
-          await ConversationCapability.runtimeMcpTools(config, "chat", "session-browser-owner-second")
+          const base = await Config.get()
+          const config: Config.Info = {
+            ...base,
+            primary_assistant_capabilities: {
+              ...base.primary_assistant_capabilities,
+              chat: { skill_refs: [], mcp_server_refs: [BrowserMCPBuiltin.ServerName] },
+            },
+          }
+          const first = await ConversationCapability.runtimeMcpTools(config, "chat", "session-browser-owner-first")
+          const second = await ConversationCapability.runtimeMcpTools(config, "chat", "session-browser-owner-second")
+          expect(first).toEqual(browserTools)
+          expect(second).toEqual(browserTools)
         } finally {
           projected.mockRestore()
         }
@@ -48,27 +61,61 @@ describe("a Conversation owns the Browser runtime it creates", () => {
     })
   }, 120_000)
 
-  test("disposing a Conversation settles the Browser owner it held", async () => {
+  test("Computer takeover replaces its adapter while Browser stays owned until Conversation disposal", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
       fn: async () => {
-        const sessionID = "session-browser-owner-dispose"
-        const identity = ConversationCapability.browserRuntimeMcpOwnerIdentity(sessionID)
-        const created: string[] = []
+        const sessionID = "session-builtin-owner-lifecycle"
+        const browserIdentity = ConversationCapability.browserRuntimeMcpOwnerIdentity(sessionID)
+        const computerIdentity = ConversationCapability.runtimeMcpOwnerIdentity(sessionID)
+        const generations = new Map<string, number>()
+        const created: { id: string; generation: number }[] = []
+        const settled: { id: string; generation: number }[] = []
+        const timeline: string[] = []
+        const closeGates = new Map<string, { promise: Promise<void>; release: () => void }>()
         const create = spyOn(MCP, "createScopedConnectionOwner")
         create.mockImplementation((id: string) => {
-          created.push(id)
-          return { id, use: async () => ({}), close: async () => {} } as never
+          const generation = (generations.get(id) ?? 0) + 1
+          generations.set(id, generation)
+          const receipt = { id, generation }
+          const gateKey = `${id}#${generation}`
+          const needsDisposeGate =
+            (id === browserIdentity && generation === 1) || (id === computerIdentity && generation === 2)
+          if (needsDisposeGate) {
+            let release = () => {}
+            const promise = new Promise<void>((resolve) => {
+              release = resolve
+            })
+            closeGates.set(gateKey, { promise, release })
+          }
+          created.push(receipt)
+          return {
+            id,
+            use: async () => ({}),
+            close: async () => {
+              await closeGates.get(gateKey)?.promise
+              settled.push(receipt)
+              timeline.push(`closed:${gateKey}`)
+            },
+          } as never
         })
         const projected = spyOn(MCP, "scopedToolsForServer")
-        projected.mockImplementation(async () => ({}))
+        projected.mockImplementation(async () => ({ browser_tabs: {} as never }))
         const single = spyOn(MCP, "scopedTool")
         single.mockImplementation(async () => ({}) as never)
         try {
           const config = await Config.get()
           await ConversationCapability.runtimeMcpTools(config, "chat", sessionID)
-          await ConversationCapability.disposeRuntimeMcp(sessionID)
+          await ConversationCapability.disconnectRuntimeMcp(sessionID)
+          await ConversationCapability.runtimeMcpTools(config, "chat", sessionID)
+          const disposal = ConversationCapability.disposeRuntimeMcp(sessionID).then(() => {
+            timeline.push("disposed")
+          })
+          await new Promise<void>((resolve) => setTimeout(resolve, 0))
+          closeGates.get(`${computerIdentity}#2`)?.release()
+          closeGates.get(`${browserIdentity}#1`)?.release()
+          await disposal
           await ConversationCapability.runtimeMcpTools(config, "chat", sessionID)
         } finally {
           single.mockRestore()
@@ -76,10 +123,24 @@ describe("a Conversation owns the Browser runtime it creates", () => {
           create.mockRestore()
         }
 
-        // Two owners for one Conversation: the first was settled and dropped
-        // by disposal, so the second projection had to mint a fresh one. A
-        // Browser runtime that survived disposal would have been reused.
-        expect(created.filter((id) => id === identity)).toEqual([identity, identity])
+        expect(created).toEqual([
+          { id: browserIdentity, generation: 1 },
+          { id: computerIdentity, generation: 1 },
+          { id: computerIdentity, generation: 2 },
+          { id: browserIdentity, generation: 2 },
+          { id: computerIdentity, generation: 3 },
+        ])
+        expect(settled).toEqual([
+          { id: computerIdentity, generation: 1 },
+          { id: computerIdentity, generation: 2 },
+          { id: browserIdentity, generation: 1 },
+        ])
+        expect(timeline).toEqual([
+          `closed:${computerIdentity}#1`,
+          `closed:${computerIdentity}#2`,
+          `closed:${browserIdentity}#1`,
+          "disposed",
+        ])
       },
     })
   }, 120_000)

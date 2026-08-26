@@ -199,7 +199,7 @@ Every layer runs the moment you install, and every layer is a configuration surf
 | Layer                 | Ships working                                                                                   | Replace via                              |
 | --------------------- | ----------------------------------------------------------------------------------------------- | ---------------------------------------- |
 | **Agent loop**        | Five primary roles on a streaming loop with typed tool results.                                 | `agent`, prompt overrides                |
-| **Tools**             | 43 built-in tools plus Model Context Protocol (MCP) servers and Language Server Protocol (LSP). | `tools`, `mcp`, `lsp`, `plugin`          |
+| **Tools**             | 43 built-in tools plus Model Context Protocol (MCP) servers and plugins.                        | `tools`, `mcp`, `plugin`                 |
 | **Models**            | 87 providers, 2,579 models, one bundled catalog.                                                | `model`, `small_model`, `provider`       |
 | **Context**           | Automatic compaction and per-turn context budgeting keep long runs inside the window.           | model and budget configuration           |
 | **Memory**            | Project and session memory with search, organization, and explicit injection.                   | `instructions`, memory configuration     |
@@ -290,7 +290,7 @@ project file; everything below is opt-in.
 | You want to…                          | Configure                                                            |
 | ------------------------------------- | -------------------------------------------------------------------- |
 | Use a different model or provider     | `model`, `small_model`, `provider`                                   |
-| Add or restrict capabilities          | `tools`, `mcp`, `lsp`, `plugin`                                      |
+| Add or restrict capabilities          | `tools`, `mcp`, `plugin`                                             |
 | Change who may do what                | `permission` rules (allow / ask / deny) and shell scope              |
 | Redefine an agent's behavior          | `agent` with `prompt` or `prompt_append`                             |
 | Swap or override an Expert Squad      | `expert_squads`                                                      |
