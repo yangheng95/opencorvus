@@ -213,7 +213,7 @@ describe("Browser MCP Live View contract", () => {
       headless: false,
     })
     expect(() => resolveBrowserMcpConnectionConfig({ OPENCORVUS_BROWSER_MODE: "unknown" }, "linux")).toThrow(
-      "Invalid OPENCORVUS_BROWSER_MODE: unknown. Expected chrome or isolated.",
+      "Invalid OPENCORVUS_BROWSER_MODE: unknown. Expected chrome, chrome_or_isolated or isolated.",
     )
     expect(BROWSER_MCP_ATTACHED_PROFILE_ID).toBe("prof_cdp_attached")
   })

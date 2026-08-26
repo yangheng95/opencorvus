@@ -519,6 +519,11 @@ Page，不关闭 Chrome、BrowserContext 或无关 tab。
 Chrome；桌面默认 headed 可见，无图形显示的 Linux 自动 headless，也可用 `BROWSER_HEADLESS=true` 显式选择。
 该模式为明确配置而非 CDP 授权失败后的 fallback，profile 随进程结束，不承诺跨运行保存登录态。
 
+附着与独立是两个**浏览器身份**（不同 Cookie、不同登录态），不是同一能力的两个档次，所以跨越这条边界只能由调用方
+显式声明，不能由 runtime 在 CDP 失败时代为决定：默认的 `OPENCORVUS_BROWSER_MODE=chrome` 在 Chrome 不可附着时以
+具名错误失败并给出精确原因；只有 `OPENCORVUS_BROWSER_MODE=chrome_or_isolated` 表示操作者接受在另一个浏览器身份下
+工作，此时才会退到独立浏览器，并在日志中记录所依据的策略与原因。
+
 设置 `OPENCORVUS_BROWSER_CDP_ENDPOINT` 时，runtime 不再解析 Chrome channel 或 launch，而是经 Chrome DevTools Protocol
 (CDP) 显式附着已有 Chromium 系浏览器的 default context，并只新建、关闭 MCP 自己的 Page；shutdown 只断开
 Playwright transport，不关闭外部 Chrome 或其 BrowserContext。`session_create` 返回 `browserMode`、

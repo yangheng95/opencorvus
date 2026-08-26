@@ -229,6 +229,21 @@ type BrowserMcpConnection = {
   close: () => Promise<void>
 }
 
+/**
+ * Whether this configuration permits crossing from the attached browser to an
+ * isolated one.
+ *
+ * Attached and isolated are different browser IDENTITIES — different cookies,
+ * different signed-in state — not two grades of the same capability. Runtime
+ * used to catch a Chrome DevTools Protocol failure and launch an isolated
+ * browser anyway, so an agent could be working in a browser the operator never
+ * chose and could not tell apart. The crossing is now a policy the caller
+ * states: `chrome` means the attached browser or a typed failure, and
+ * `chrome_or_isolated` means the operator accepts the other identity.
+ */
+export const browserMcpIsolatedFallbackPermitted = (env: NodeJS.ProcessEnv = process.env): boolean =>
+  env.OPENCORVUS_BROWSER_MODE?.trim().toLowerCase() === "chrome_or_isolated"
+
 export const resolveBrowserMcpConnectionConfig = (
   env: NodeJS.ProcessEnv = process.env,
   platform: NodeJS.Platform = process.platform,
@@ -237,8 +252,10 @@ export const resolveBrowserMcpConnectionConfig = (
   if (endpointURL) return { mode: "cdp", endpointURL }
   const mode = env.OPENCORVUS_BROWSER_MODE?.trim().toLowerCase()
   if (mode === "isolated") return { mode: "isolated", headless: resolveBrowserMcpHeadless(env, platform) }
-  if (mode && mode !== "chrome") {
-    throw new Error(`Invalid OPENCORVUS_BROWSER_MODE: ${mode}. Expected chrome or isolated.`)
+  if (mode && mode !== "chrome" && mode !== "chrome_or_isolated") {
+    throw new Error(
+      `Invalid OPENCORVUS_BROWSER_MODE: ${mode}. Expected chrome, chrome_or_isolated or isolated.`,
+    )
   }
   return { mode: "cdp", channel: "chrome" }
 }
@@ -282,14 +299,10 @@ const acquireBrowser = async (): Promise<BrowserMcpConnection> => {
         }
       }
       if (CONNECTION_CONFIG.mode === "cdp") {
+        let attachFailure: unknown
         const attached = await BrowserRuntime.connectPlaywrightBrowserToChromeChannelInNodeProcess().catch(
           (error: unknown) => {
-            // Chrome CDP is the default, so failing hard here used to take every
-            // browser tool down with it. An isolated browser is a worse profile,
-            // not a worse capability; session_create reports which one you got.
-            log(
-              `chrome CDP unavailable, falling back to an isolated browser  ${error instanceof Error ? error.message : String(error)}`,
-            )
+            attachFailure = error
             return undefined
           },
         )
@@ -301,6 +314,21 @@ const acquireBrowser = async (): Promise<BrowserMcpConnection> => {
             close: () => attached.close(),
           }
         }
+        // Isolated is a different browser identity, not a degraded one. Only a
+        // caller that asked for the crossing gets it; everyone else gets the
+        // exact reason the attached browser was unreachable.
+        if (!browserMcpIsolatedFallbackPermitted()) {
+          const reason = attachFailure instanceof Error ? attachFailure.message : String(attachFailure)
+          throw new Error(
+            `Chrome is not attachable, and this configuration does not permit working in an isolated browser: ${reason}. ` +
+              `Start the managed Chrome, or set OPENCORVUS_BROWSER_MODE=chrome_or_isolated to accept a different browser identity.`,
+          )
+        }
+        log(
+          `chrome CDP unavailable, the configured policy permits an isolated browser  ${
+            attachFailure instanceof Error ? attachFailure.message : String(attachFailure)
+          }`,
+        )
       }
       const launched = await BrowserRuntime.launchPlaywrightBrowserInNodeProcess({
         headless: CONNECTION_CONFIG.mode === "isolated" ? CONNECTION_CONFIG.headless : resolveBrowserMcpHeadless(),
