@@ -2,6 +2,8 @@
 
 Latest extensible Inspect AI benchmark framework and Apodex-family integration: [`2026-08-26-extensible-inspect-benchmark-framework.md`](records/2026-08/2026-08-26-extensible-inspect-benchmark-framework.md).
 
+Latest Session stream message cutover convergence: [`2026-08-26-session-stream-message-cutover-convergence.md`](records/2026-08/2026-08-26-session-stream-message-cutover-convergence.md).
+
 Latest Session conversation history visibility repair: [`2026-08-26-session-conversation-history-visibility-repair.md`](records/2026-08/2026-08-26-session-conversation-history-visibility-repair.md).
 
 Latest runtime Skill Market search and exact-install plan: [`2026-08-26-runtime-skill-market-search-install.md`](records/2026-08/2026-08-26-runtime-skill-market-search-install.md).

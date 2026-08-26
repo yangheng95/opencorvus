@@ -453,6 +453,34 @@ export function conversationSourceDirectory(source: BoardSource): string {
   return directory
 }
 
+export function mergeSessionConnectionSnapshot(
+  source: Extract<BoardSource, { kind: "session" }>,
+  payload: unknown,
+): void {
+  const envelope = requireObject(payload, "session.connected payload")
+  const sessionID = String(envelope.sessionID || "")
+  if (sessionID !== source.id) {
+    throw new Error(`session.connected payload belongs to ${sessionID || "<missing>"}, expected ${source.id}`)
+  }
+  const snapshot = requireObject(envelope.conversationSnapshot, "session.connected conversationSnapshot")
+  const transcript = requireArray(snapshot.transcript, "session.connected conversationSnapshot.transcript")
+  const view = requireObject(snapshot.view, "session.connected conversationSnapshot.view")
+  const history = parseHistoryState(snapshot.history)
+  const preparedConversation = prepareConversationView(view, transcript)
+  historyEpoch += 1
+  historyAbort?.abort(new DOMException("Session connection snapshot superseded older history", "AbortError"))
+  historyAbort = null
+  historyLoading = false
+  batch(() => {
+    deferConversationTreeProjection(() => {
+      commitPreparedConversationView(preparedConversation)
+    })
+  })
+  prewarmTranscriptMarkdown(transcript)
+  historySource = source
+  historyState = history
+}
+
 function activeSourceMatches(source: BoardSource): boolean {
   return source.kind === "task" ? activeTaskID() === source.id : activeSessionID() === source.id
 }

@@ -96,6 +96,60 @@ const MissionSessionAuthorityConflict = namedErrorResponse(
   "MissionSessionAuthorityError",
 )
 
+type ActiveProjectSession = Awaited<ReturnType<typeof getActiveProjectSession>>
+
+export function includeSessionTreeEvent(
+  sessionTreeIDs: Set<string>,
+  event: { sessionID?: string; payload?: Record<string, unknown> },
+): boolean {
+  const eventSessionID = event.sessionID
+  if (!eventSessionID) return false
+  if (sessionTreeIDs.has(eventSessionID)) return true
+  const parentSessionID =
+    event.payload && typeof event.payload.parentSessionID === "string" ? event.payload.parentSessionID : undefined
+  if (!parentSessionID || !sessionTreeIDs.has(parentSessionID)) return false
+  sessionTreeIDs.add(eventSessionID)
+  return true
+}
+
+async function sessionConversationTailProjection(session: ActiveProjectSession, tailLimit: number) {
+  const sessionID = session.id
+  const sessionIDs = await Session.treeInProject({ sessionID, projectID: session.projectID })
+  const latestMessages = await MessageStore.latestAcrossSessions({ sessionIDs, limit: tailLimit + 1 })
+  const truncated = latestMessages.length > tailLimit
+  const visibleMessages = truncated ? latestMessages.slice(latestMessages.length - tailLimit) : latestMessages
+  const transcript = enrichStandaloneSessionTranscript(visibleMessages)
+    .filter(conversationMessageHasDisplay)
+    .sort(conversationTranscriptMessageOrder)
+  const historyWindow = conversationHistoryWindow(transcript, { tailLimit })
+  const history = { ...historyWindow.history, hasMore: truncated || historyWindow.history.hasMore }
+  const agentSessions = listConversationAgentSessionsForSessionTree({
+    sessionID,
+    projectID: session.projectID,
+  })
+  const rootLifecycle = resolveSessionLifecycleSnapshot(sessionID)
+  const hydratedAgentSessions = agentSessions.map((entry) =>
+    entry.sessionID === sessionID
+      ? {
+          ...entry,
+          latestStatus: rootLifecycle.status,
+          latestStatusEmittedAt: rootLifecycle.observedAt,
+        }
+      : entry,
+  )
+  const view = projectConversationView({
+    transcript: historyWindow.transcript,
+    ledgerSessions: hydratedAgentSessions,
+  })
+  return {
+    sessionIDs,
+    transcript: historyWindow.transcript,
+    history,
+    view,
+    hydratedAgentSessions,
+  }
+}
+
 export function latestSummarizableUser(messages: Message.WithParts[]): Message.User | undefined {
   return messages.findLast(
     (message): message is Message.WithParts & { info: Message.User } => message.info.role === "user",
@@ -846,16 +900,9 @@ export const SessionRoutes = lazy(() =>
         const sessionID = c.req.valid("param").sessionID
         const query = c.req.valid("query")
         const session = await getActiveProjectSession(sessionID)
-        const sessionIDs = await Session.treeInProject({ sessionID, projectID: Instance.project.id })
         const tailLimit = query.tail_limit ?? CONVERSATION_TAIL_MESSAGE_LIMIT
-        const latestMessages = await MessageStore.latestAcrossSessions({ sessionIDs, limit: tailLimit + 1 })
-        const truncated = latestMessages.length > tailLimit
-        const visibleMessages = truncated ? latestMessages.slice(latestMessages.length - tailLimit) : latestMessages
-        const transcript = enrichStandaloneSessionTranscript(visibleMessages)
-          .filter(conversationMessageHasDisplay)
-          .sort(conversationTranscriptMessageOrder)
-        const historyWindow = conversationHistoryWindow(transcript, { tailLimit })
-        const history = { ...historyWindow.history, hasMore: truncated || historyWindow.history.hasMore }
+        const conversation = await sessionConversationTailProjection(session, tailLimit)
+        const { sessionIDs, transcript, history, view, hydratedAgentSessions } = conversation
         const rootMessages = await MessageStore.earliestInSession({ sessionID, limit: 20 })
         const sessionIDSet = new Set(sessionIDs)
         const pendingQuestions = (await Question.list())
@@ -883,28 +930,10 @@ export const SessionRoutes = lazy(() =>
               }
             : {}),
         }
-        const agentSessions = listConversationAgentSessionsForSessionTree({
-          sessionID: session.id,
-          projectID: Instance.project.id,
-        })
-        const rootLifecycle = resolveSessionLifecycleSnapshot(sessionID)
-        const hydratedAgentSessions = agentSessions.map((entry) =>
-          entry.sessionID === sessionID
-            ? {
-                ...entry,
-                latestStatus: rootLifecycle.status,
-                latestStatusEmittedAt: rootLifecycle.observedAt,
-              }
-            : entry,
-        )
-        const view = projectConversationView({
-          transcript: historyWindow.transcript,
-          ledgerSessions: hydratedAgentSessions,
-        })
         const turnArtifacts =
           session.kind === "mission"
             ? await projectMissionTurnArtifacts({
-                transcript: historyWindow.transcript,
+                transcript,
                 view,
               })
             : []
@@ -913,7 +942,7 @@ export const SessionRoutes = lazy(() =>
             ? taskExecutionProjectionForTask(board.selectedTaskID)
             : undefined
         const agentView = projectConversationAgentView(
-          historyWindow.transcript,
+          transcript,
           executionProjection ? executionProjectionLifecycleEvents(executionProjection) : [],
           hydratedAgentSessions,
           new Map(),
@@ -923,7 +952,7 @@ export const SessionRoutes = lazy(() =>
         return c.json({
           board,
           pendingQuestions,
-          transcript: historyWindow.transcript,
+          transcript,
           events: [],
           view,
           turnArtifacts,
@@ -1041,22 +1070,39 @@ export const SessionRoutes = lazy(() =>
               })
             return writes
           }
+          const sessionTreeIDs = new Set([sessionID])
           stopProtocol = ProtocolStore.subscribeEvents(
             bind((event) => {
-              if (event.sessionID !== sessionID) return
+              if (!includeSessionTreeEvent(sessionTreeIDs, event)) return
               void writeData(JSON.stringify(protocolSessionEvent(event)))
             }),
-            { sessionID },
           )
+          // The message and part tables are the canonical Session transcript.
+          // Subscribe first, then read their bounded tail: a message committed
+          // before this subscription is in the snapshot, while one committed
+          // afterwards is delivered by ProtocolStore. Stable message/part IDs
+          // make the intentional overlap idempotent in the overlay projection.
+          const connectionConversation = await sessionConversationTailProjection(
+            session,
+            CONVERSATION_TAIL_MESSAGE_LIMIT,
+          )
+          for (const treeSessionID of connectionConversation.sessionIDs) sessionTreeIDs.add(treeSessionID)
+          const conversationSnapshot = {
+            transcript: connectionConversation.transcript,
+            view: connectionConversation.view,
+            history: connectionConversation.history,
+          }
           // Subscribe before reading the canonical pending-question state. A
           // question created before the subscription is present in this
           // snapshot; one created afterwards arrives through ProtocolStore.
           // The overlap can repeat the same request ID, which the overlay
           // interaction projection intentionally upserts idempotently.
-          for (const request of readPendingQuestions().filter((item) => item.sessionID === sessionID)) {
+          for (const request of readPendingQuestions().filter((item) => sessionTreeIDs.has(item.sessionID))) {
             await writeData(JSON.stringify(pendingQuestionSessionEvent(request)))
           }
-          for (const request of (await PermissionAuthority.list()).filter((item) => item.sessionID === sessionID)) {
+          for (const request of (await PermissionAuthority.list()).filter((item) =>
+            sessionTreeIDs.has(item.sessionID),
+          )) {
             await writeData(JSON.stringify(pendingPermissionProtocolSessionEvent(request)))
           }
           await writeData(
@@ -1073,7 +1119,7 @@ export const SessionRoutes = lazy(() =>
               timestamp: Date.now(),
               sequence: 0,
               summary: "Session event stream connected",
-              payload: { sessionID },
+              payload: { sessionID, conversationSnapshot },
             }),
           )
           if (closed) {

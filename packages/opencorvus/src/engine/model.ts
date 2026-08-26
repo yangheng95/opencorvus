@@ -1019,6 +1019,12 @@ export const SessionEvent = z.object({
   notify: BusEvent.NotifyDescriptorSchema.optional(),
 })
 
+export const SessionConversationConnectionSnapshot = z.object({
+  transcript: MessageVisibleWithPartsArray,
+  view: TaskConversationView,
+  history: TaskConversationHistoryState,
+})
+
 export const SessionConversationHydration = z.object({
   board: SessionBoardEnvelope,
   pendingQuestions: SessionPendingQuestion.array(),
