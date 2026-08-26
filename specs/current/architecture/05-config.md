@@ -125,6 +125,25 @@ opencorvus.jsonc ──→ Config.get() ──→ Zod 验证 + 层级合并 ─�
 2. Config 变更后 SSE 推送，所有 Overlay 自动 `setAppStore("config", newConfig)`
 3. `scaffoldProjectConfig` 直接导入 `EngineConfig.defaults`，不硬编码
 
+## Plugin 依赖树 generation owner
+
+项目、用户全局和显式 config directory 中的本地 Plugin 文件需要同目录
+`node_modules`。`Config.get()` 仍异步投影配置；发现本地 Plugin 后，它总是为该目录调度
+`installDependencies`，而 `Plugin` 在 import 前通过 `Config.waitForDependencies()` 等待这些安装结果。
+单目录失败原样抛出，多目录失败聚合为 `AggregateError`。
+
+每个依赖目录只有一个 generation owner：规范化绝对路径进入无固定安装时长上限的进程内写锁，
+随后通过可重试的跨进程目录锁串行化完整 readiness read 与 install。owner 内的私有 reader 是
+manifest、物理 tree 和 durable receipt 的唯一 readiness 判定；公开 `needsInstall` 也必须先加入同一
+owner，不存在 lock 外 check-then-act gate。
+
+`PackageInstallReceipt` 是每个精确目录 tree 与目标 selector 的唯一 durable completeness authority。
+安装必须先打开 target occurrence，再写 target manifest 或调用 Bun 改写物理 tree；只有完整解析目标
+package manifest 及所有声明依赖后才提交 receipt。begin 失败不会改变 canonical generation；begin 成功后
+发生写入失败、Bun 失败或进程终止时，target occurrence 保持 rolled-back 或 unsettled，且 target selector
+不倒退到可能拥有历史 committed receipt 的旧 revision。下一 owner 因此必须重装 partial tree，不能把旧
+receipt 与新 bytes 拼成 Ready。
+
 ## 并发策略
 
 **不做 ETag / 乐观锁** — 单用户本地工具，并发竞态概率极低，避免过度工程化。

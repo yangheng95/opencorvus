@@ -1,6 +1,6 @@
 import { Log } from "../util/log"
 import { PackageInstallReceipt } from "@/bun/install-receipt"
-import { acquireProcessLock, withSharedJsonFactLock } from "@/util/process-lock"
+import { CROSS_PROCESS_LOCK_RETRY, withProcessLock, withSharedJsonFactLock } from "@/util/process-lock"
 import path from "path"
 import { pathToFileURL } from "url"
 import os from "os"
@@ -31,11 +31,10 @@ import { GlobalBus } from "@/bus/global"
 import { Glob } from "../util/glob"
 import { PackageRegistry } from "@/bun/registry"
 import { proxied } from "@/util/proxied"
-import { iife } from "@/util/iife"
 import { ConfigPaths } from "./paths"
 import { Filesystem } from "@/util/filesystem"
 import { ChannelCatalog, buildChannelSchema } from "@/channel/catalog"
-import { withKeyedLock } from "@/util/lock"
+import { Lock } from "@/util/lock"
 import { AgentRoleContract } from "@/agent/role-contract"
 import { PromptProfileConfigSchema, PromptProfileOverlaySchema } from "@/agent/prompt-profile"
 import { isModelReference } from "@/provider/model-ref"
@@ -67,7 +66,6 @@ export namespace Config {
     .meta({ $ref: "https://models.dev/model-schema.json#/$defs/Model" })
   export const DEFAULT_MODEL = "openai/gpt-5.5"
   const log = Log.create({ service: "config" })
-  const dependencyInstallLocks = new Map<string, Promise<unknown>>()
   type LoadStateOptions = {
     readOnly?: boolean
     directory?: string
@@ -332,10 +330,10 @@ export namespace Config {
       // gemini-task scaffold merge failure.
       const localPlugins = await loadPlugin(dir)
       if (!options.readOnly && (isProjectResourceDir || isNonProjectConfigDir) && localPlugins.length > 0) {
-        const operation = iife(async () => {
-          const shouldInstall = await needsInstall(dir)
-          if (shouldInstall) await installDependencies(dir)
-        })
+        // Readiness is meaningful only while holding the directory generation
+        // owner. Always join it; the owned reader decides whether this caller
+        // installs or observes the generation another backend just published.
+        const operation = installDependencies(dir)
         deps.push(
           operation.then<DependencyOutcome, DependencyOutcome>(
             () => ({ ok: true }),
@@ -410,107 +408,97 @@ export namespace Config {
     if (errors.length > 1) throw new AggregateError(errors, "Multiple config dependency installations failed")
   }
 
+  async function withDependencyInstallOwner<T>(dir: string, fn: (ownedDirectory: string) => Promise<T>): Promise<T> {
+    const ownedDirectory = Filesystem.resolve(dir)
+    const key = `config-dependency-install:${Filesystem.normalizePath(ownedDirectory)}`
+    await fs.mkdir(ownedDirectory, { recursive: true })
+    // Dependency installation has no fixed wall-clock bound: registry access,
+    // extraction and lifecycle scripts may all make legitimate progress for
+    // longer than the generic keyed mutex's 30-second queue. Join the current
+    // directory owner without inventing a shorter admission timeout, then use
+    // the same retrying process lock as the other shared installation owners.
+    using _directoryOwner = await Lock.write(key)
+    return await withProcessLock(ownedDirectory, { realpath: false, retries: CROSS_PROCESS_LOCK_RETRY }, () =>
+      fn(ownedDirectory),
+    )
+  }
+
   export async function installDependencies(dir: string) {
-    const key = Filesystem.normalizePath(Filesystem.resolve(dir))
-    return withKeyedLock(dependencyInstallLocks, key, async () => {
-      await fs.mkdir(dir, { recursive: true })
-      const release = await acquireProcessLock(dir, { realpath: false })
+    return withDependencyInstallOwner(dir, async (dir) => {
+      // A second project Instance may have completed the shared installation
+      // while this owner waited. Re-check under both the process-local and
+      // cross-process directory owner before changing canonical files.
+      if (!(await needsInstallOwned(dir))) return
+      const pkg = path.join(dir, "package.json")
+      const gitignore = path.join(dir, ".gitignore")
+      const targetVersion = installTargetVersion()
+      const packageSchema = z.object({ dependencies: z.record(z.string(), z.string()).optional() }).passthrough()
+      const previousPackage = await Filesystem.readText(pkg).catch((error: NodeJS.ErrnoException) => {
+        if (error.code === "ENOENT") return undefined
+        throw error
+      })
+      const json =
+        previousPackage === undefined ? { dependencies: {} } : packageSchema.parse(JSON.parse(previousPackage))
+      json.dependencies = {
+        ...json.dependencies,
+        "@opencorvus-ai/plugin": targetVersion,
+      }
+
+      // Open the target generation before any canonical mutation. This
+      // retires a historical target receipt first, so a crash can never pair
+      // that receipt with bytes from this attempt and report them Ready.
+      const installOccurrenceID = await PackageInstallReceipt.begin({
+        root: dir,
+        package: PLUGIN_DEPENDENCY,
+        requestedVersion: targetVersion,
+      })
+
       try {
-        // A second project Instance may have completed the shared installation
-        // while this owner waited. Re-check under both the process-local and
-        // cross-process directory owner before changing canonical files.
-        if (!(await needsInstall(dir))) return
-        const pkg = path.join(dir, "package.json")
-        const gitignore = path.join(dir, ".gitignore")
-        const targetVersion = installTargetVersion()
-        const packageSchema = z.object({ dependencies: z.record(z.string(), z.string()).optional() }).passthrough()
-        const previousPackage = await Filesystem.readText(pkg).catch((error: NodeJS.ErrnoException) => {
-          if (error.code === "ENOENT") return undefined
-          throw error
-        })
-        const json =
-          previousPackage === undefined ? { dependencies: {} } : packageSchema.parse(JSON.parse(previousPackage))
-        json.dependencies = {
-          ...json.dependencies,
-          "@opencorvus-ai/plugin": targetVersion,
-        }
+        // Once the occurrence is open, advance the selector to the desired
+        // generation and never roll it back independently of the physical
+        // tree. A failed `bun install` may already have rewritten node_modules;
+        // retaining the target selector beside a rolled-back/unsettled target
+        // receipt makes the next owner reinstall. Restoring an old selector
+        // would let its historical committed receipt bless that partial tree.
         await Filesystem.writeAtomic(pkg, JSON.stringify(json, null, 2))
-        const createdGitignore = await Filesystem.writeAtomicIfAbsent(
+        await Filesystem.writeAtomicIfAbsent(
           gitignore,
           ["node_modules", "package.json", "bun.lock", ".gitignore"].join("\n"),
         )
-
-        // The occurrence opens immediately before the try whose catch restores
-        // the tree, so it can never leak unsettled: every failure from here on
-        // settles it. The two canonical writes above sit outside it — the catch
-        // still restores them, and failing in them settles nothing because no
-        // occurrence exists yet. The rollback covers strictly more than the
-        // occurrence does, which is the safe direction for the pair.
-        const installOccurrenceID = await PackageInstallReceipt.begin({
+        // Install any additional dependencies defined in package.json so
+        // local plugins can use their declared external packages.
+        await BunProc.run(
+          [
+            "install",
+            // TODO: get rid of this case (see: https://github.com/oven-sh/bun/issues/19936)
+            ...(proxied() || process.env.CI ? ["--no-cache"] : []),
+          ],
+          { cwd: dir },
+        )
+        // Readiness is published only after the resolved tree verifies, so a
+        // killed install can never be read back as an installed one.
+        const installedVersion = z
+          .object({ version: z.string().min(1) })
+          .passthrough()
+          .parse(await Filesystem.readJson(path.join(dir, "node_modules", PLUGIN_DEPENDENCY, "package.json"))).version
+        await PackageInstallReceipt.verifyAndPublish({
+          occurrenceID: installOccurrenceID,
           root: dir,
           package: PLUGIN_DEPENDENCY,
           requestedVersion: targetVersion,
+          resolvedVersion: installedVersion,
+          moduleDirectory: path.join(dir, "node_modules", PLUGIN_DEPENDENCY),
+          // `bun install` installed everything this config declares, so the
+          // receipt has to certify all of it: a tree whose user-declared
+          // extra dependency never completed must not read as installed.
+          additionalDependencies: Object.keys(json.dependencies ?? {}),
         })
-
-        try {
-          // Install any additional dependencies defined in package.json so
-          // local plugins can use their declared external packages.
-          await BunProc.run(
-            [
-              "install",
-              // TODO: get rid of this case (see: https://github.com/oven-sh/bun/issues/19936)
-              ...(proxied() || process.env.CI ? ["--no-cache"] : []),
-            ],
-            { cwd: dir },
-          )
-          // Readiness is published only after the resolved tree verifies, so a
-          // killed install can never be read back as an installed one.
-          const installedVersion = z
-            .object({ version: z.string().min(1) })
-            .passthrough()
-            .parse(await Filesystem.readJson(path.join(dir, "node_modules", PLUGIN_DEPENDENCY, "package.json"))).version
-          await PackageInstallReceipt.verifyAndPublish({
-            occurrenceID: installOccurrenceID,
-            root: dir,
-            package: PLUGIN_DEPENDENCY,
-            requestedVersion: targetVersion,
-            resolvedVersion: installedVersion,
-            moduleDirectory: path.join(dir, "node_modules", PLUGIN_DEPENDENCY),
-            // `bun install` installed everything this config declares, so the
-            // receipt has to certify all of it: a tree whose user-declared
-            // extra dependency never completed must not read as installed.
-            additionalDependencies: Object.keys(json.dependencies ?? {}),
-          })
-        } catch (cause) {
-          await PackageInstallReceipt.rollback(
-            installOccurrenceID,
-            cause instanceof Error ? cause.message : String(cause),
-          ).catch(() => undefined)
-          const rollbackFailures: unknown[] = []
-          try {
-            if (previousPackage === undefined) await fs.rm(pkg, { force: true })
-            else await Filesystem.writeAtomic(pkg, previousPackage)
-          } catch (rollbackFailure) {
-            rollbackFailures.push(rollbackFailure)
-          }
-          if (createdGitignore) {
-            try {
-              await fs.rm(gitignore, { force: true })
-            } catch (rollbackFailure) {
-              rollbackFailures.push(rollbackFailure)
-            }
-          }
-          if (rollbackFailures.length > 0) {
-            throw new AggregateError(
-              [cause, ...rollbackFailures],
-              `Config dependency installation failed and canonical metadata rollback was incomplete for ${dir}`,
-              { cause },
-            )
-          }
-          throw cause
-        }
-      } finally {
-        await release()
+      } catch (cause) {
+        await PackageInstallReceipt.rollback(
+          installOccurrenceID,
+          cause instanceof Error ? cause.message : String(cause),
+        ).catch(() => undefined)
+        throw cause
       }
     })
   }
@@ -524,7 +512,7 @@ export namespace Config {
     }
   }
 
-  export async function needsInstall(dir: string) {
+  async function needsInstallOwned(dir: string) {
     const nodeModules = path.join(dir, "node_modules")
     const pkg = path.join(dir, "package.json")
     const pkgExists = await Filesystem.exists(pkg)
@@ -567,6 +555,10 @@ export namespace Config {
       throw new Error(`Config dependency installation is required but the directory is not writable: ${dir}`)
     }
     return true
+  }
+
+  export async function needsInstall(dir: string) {
+    return withDependencyInstallOwner(dir, needsInstallOwned)
   }
 
   function rel(item: string, patterns: string[]) {
