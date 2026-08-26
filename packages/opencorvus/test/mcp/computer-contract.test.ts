@@ -494,6 +494,7 @@ describe("Computer Use exact control contract", () => {
         const observationDigest = "a".repeat(64)
         const result = await materializeMcpToolResult({
           projectID: Instance.project.id,
+          serverName: ComputerMCPBuiltin.ServerName,
           result: {
             content: [{ type: "image", data: pngBase64(8, 6), mimeType: "image/png" }],
             structuredContent: {
@@ -530,6 +531,7 @@ describe("Computer Use exact control contract", () => {
         expect(
           await materializeMcpToolResult({
             projectID: Instance.project.id,
+            serverName: ComputerMCPBuiltin.ServerName,
             result: {
               content: [
                 {

@@ -2130,6 +2130,7 @@ export namespace PromptProfileResolver {
         const materialized = await materializeMcpToolResult({
           projectID: scope.projectID,
           result,
+          serverName: input.providerName,
         })
         const truncated = await Truncate.output(
           materialized.text,
@@ -2227,6 +2228,7 @@ export namespace PromptProfileResolver {
         const materialized = await materializeMcpToolResult({
           projectID: scope.projectID,
           result,
+          serverName: input.providerName,
         })
         const truncated = await Truncate.output(
           materialized.text,
