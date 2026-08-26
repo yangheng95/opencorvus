@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "case_id":"seven-role-data-analysis-2026-08-22",
+  "source":"specs/records/2026-08/2026-08-22-website-data-analysis-expert-squad-demo.md",
+  "task":{"id":"tsk_g00VT1zzwK00dT8jO1lF","terminal_time_ms":1787407086486,"status":"completed"},
+  "mission":{"id":"bfedbd3b000b31c7","terminal_time_ms":1787407191597,"status":"completed"},
+  "occurrences":[
+    {"role":"planner","session":"ses_-zUWxzdsuzzDR6QMq0Kf","created_time_ms":null,"terminal_time_ms":1787404924657},
+    {"role":"data-steward","session":"ses_-zUWxyslLzzT4TV9w3jv","created_time_ms":null,"terminal_time_ms":1787405321749},
+    {"role":"performance-analyst","session":"ses_-zUWxxHEKzzf9zP6cfHg","created_time_ms":1787405356810,"terminal_time_ms":1787405932062},
+    {"role":"segment-analyst","session":"ses_-zUWxxF2TzzcCvbS3ubK","created_time_ms":1787405365254,"terminal_time_ms":1787405950927},
+    {"role":"insight-synthesizer","session":"ses_-zUWxugH8zz2JcelM0e7","created_time_ms":null,"terminal_time_ms":1787406229066},
+    {"role":"fact-checker","session":"ses_-zUWxuXAqzzUIE3YM7FK","created_time_ms":1787406010572,"terminal_time_ms":1787406107459},
+    {"role":"report-writer","session":"ses_-zUWxtymTzzsNQmuWEbq","created_time_ms":1787406146516,"terminal_time_ms":1787407048517}
+  ],
+  "parallel_interval":{"roles":["performance-analyst","segment-analyst"],"start_ms":1787405365254,"end_ms":1787405932062,"overlap_ms":566808},
+  "violations":[
+    {"role":"fact-checker","required_predecessor":"insight-synthesizer","created_before_predecessor_terminal_ms":218494,"effect":"audited early progress and returned a zero-claim clean review"},
+    {"role":"report-writer","required_predecessor":"fact-checker via synthesizer chain","created_before_synthesizer_terminal_ms":82968,"effect":"initial typed publication lacked six exact typed predecessors and was rejected; later generic publication completed"}
+  ],
+  "outputs":{"git_report":{"path":"artifacts/data-analysis/report.md","bytes_lf":4676,"sha256":"70afe8672943ce457baac96748aec8e84dc7e30fb22b7890956e6d1d09bfe193"},"typed_report_artifact":"art_hU2TIpiENjGcaj93s5xL","interactive_document_artifact":"art_g0VT29gid00W3B9U496a"},
+  "evidence_gap":"The isolated historical SQLite database and complete Artifact bodies are outside this repository; exact replay requires preservation/import of that runtime."
+}

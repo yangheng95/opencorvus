@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "authority": "specs/records/2026-08/2026-08-26-opencorvus-paper-foundation-evidence.md",
+  "parallel_rule": "Only disjoint task-specific subtrees may be written in parallel after shared inputs are complete; shared indexes and integration are serial.",
+  "materials": [
+    {"id":"plan-record","path":"specs/records/2026-08/2026-08-26-opencorvus-paper-foundation-evidence.md","owner":"foundation-integrator","stage":"foundation","mode":"serial","handoff":"read-only input to later research and production"},
+    {"id":"internal-evidence","path":"specs/artifacts/opencorvus-paper/evidence/**","owner":"evidence-producer","stage":"foundation","mode":"parallel-disjoint","handoff":"immutable input to figures and integration"},
+    {"id":"automationbench","path":"specs/artifacts/opencorvus-paper/experiments/automationbench/**","owner":"automationbench-producer","stage":"foundation","mode":"parallel-disjoint","handoff":"immutable input to figures and integration"},
+    {"id":"seven-role-case","path":"specs/artifacts/opencorvus-paper/cases/seven-role-data-analysis/**","owner":"case-producer","stage":"foundation","mode":"parallel-disjoint","handoff":"immutable input to figures and integration"},
+    {"id":"figure-facts","path":"specs/artifacts/opencorvus-paper/figures/**","owner":"figure-input-producer","stage":"foundation","mode":"after-evidence-experiment-case","handoff":"facts only; later visual producer owns editable figures"},
+    {"id":"integration","path":"specs/artifacts/opencorvus-paper/integration/**","owner":"foundation-integrator","stage":"foundation","mode":"serial-join","handoff":"canonical foundation manifest and acceptance evidence"},
+    {"id":"current-architecture","path":"specs/current/architecture/**","owner":"architecture-owner","stage":"current-system","mode":"read-only-for-this-task","handoff":"current internal contract authority"},
+    {"id":"external-literature","path":"later-stage-owned","owner":"research-stage","stage":"later","mode":"exclusive","handoff":"citations and related-work synthesis"},
+    {"id":"paper-source","path":"later-stage-owned","owner":"scientific-synthesis-stage","stage":"later","mode":"exclusive","handoff":"complete paper and terminology"},
+    {"id":"thirty-plus-catalog","path":"later-stage-owned","owner":"squad-design-stage","stage":"later","mode":"exclusive","handoff":"formal taxonomy, permissions and coverage mapping"},
+    {"id":"final-figures","path":"later-stage-owned","owner":"visual-production-stage","stage":"later","mode":"exclusive","handoff":"editable, polished publication graphics"}
+  ],
+  "serial_conflict_surfaces": ["specs/README.md","specs/records/2026-08/README.md","claim registry","experiment aggregate statistics","figure numbering and style registry","final paper source","bibliography"],
+  "protected_read_only_prefixes": ["packages/web/","packages/opencorvus/","expert-squads/","specs/current/architecture/"]
+}

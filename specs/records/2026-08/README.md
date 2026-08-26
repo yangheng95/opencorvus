@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-26-opencorvus-paper-foundation-evidence.md](2026-08-26-opencorvus-paper-foundation-evidence.md) establishes the paper-production material boundaries and a machine/human-consumable internal claims, AutomationBench, seven-role process, Expert Squad, self-evolution, and figure-input evidence foundation.
+
 - [2026-08-26-search-code-bounded-execution-repair.md](2026-08-26-search-code-bounded-execution-repair.md) reconstructs the live repository-wide ripgrep stall and restores ignored-tree, wall-clock, output, cancellation, and process-settlement bounds to the shared `search_code` Tool.
 
 - [2026-08-26-mission-stream-interruption-retry-budget.md](2026-08-26-mission-stream-interruption-retry-budget.md) reconstructs the real `idle -> network -> idle` Mission failure and restores mid-stream semantic idle to the shared bounded transient-retry budget while preserving first-byte, total-deadline, cancellation, and post-side-effect safety contracts.
