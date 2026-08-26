@@ -129,11 +129,7 @@ async function syncDirectory(directory: string): Promise<void> {
   }
 }
 
-async function writeExclusive(
-  file: string,
-  value: unknown,
-  fact: "intent" | "phase" | "terminal",
-): Promise<void> {
+async function writeExclusive(file: string, value: unknown, fact: "intent" | "phase" | "terminal"): Promise<void> {
   const body = `${JSON.stringify(value, null, 2)}\n`
   const temporary = path.join(path.dirname(file), `.tmp-${path.basename(file)}-${randomUUID()}`)
   let published = false
@@ -216,7 +212,8 @@ export class DurablePublicationStore {
     next.add(key)
     try {
       const result = await DurablePublicationStore.heldSubjects.run(next, run)
-      if (compromised) throw new Error(`Durable publication subject lock was compromised: ${subject}`, { cause: compromised })
+      if (compromised)
+        throw new Error(`Durable publication subject lock was compromised: ${subject}`, { cause: compromised })
       return result
     } finally {
       await release().catch((error) => {
@@ -243,7 +240,11 @@ export class DurablePublicationStore {
           await cut("occurrence-published")
           await syncDirectory(kindDirectory)
         } catch (error) {
-          if ((error as NodeJS.ErrnoException).code !== "EEXIST") throw error
+          // Renaming onto an existing directory reports EEXIST or ENOTEMPTY on
+          // POSIX and EPERM on Windows; all three mean the occurrence is
+          // already published, which is the replay this branch settles.
+          const code = (error as NodeJS.ErrnoException).code
+          if (code !== "EEXIST" && code !== "ENOTEMPTY" && code !== "EPERM") throw error
           const existing = await this.read(intent.kind, intent.occurrenceID)
           if (stable(existing.intent) !== stable(intent)) {
             throw new Error(`Durable publication occurrence already exists with different intent: ${directory}`)
