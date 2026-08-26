@@ -544,28 +544,6 @@ export type Config = {
   locale?: "en-US" | "zh-CN"
   logLevel?: LogLevel
   /**
-   * Deprecated compatibility field. Language Server Protocol runtimes are disabled and this value is ignored.
-   */
-  lsp?:
-    | false
-    | {
-        [key: string]:
-          | {
-              disabled: true
-            }
-          | {
-              command: Array<string>
-              disabled?: boolean
-              env?: {
-                [key: string]: string
-              }
-              extensions?: Array<string>
-              initialization?: {
-                [key: string]: unknown
-              }
-            }
-      }
-  /**
    * MCP (Model Context Protocol) server configurations
    */
   mcp?: {
@@ -3884,7 +3862,6 @@ export type PermissionConfig =
       external_directory?: PermissionRuleConfig
       glob?: PermissionRuleConfig
       list?: PermissionRuleConfig
-      lsp?: PermissionRuleConfig
       question?: PermissionActionConfig
       read?: PermissionRuleConfig
       search_code?: PermissionRuleConfig

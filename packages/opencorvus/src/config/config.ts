@@ -23,7 +23,6 @@ import {
 } from "jsonc-parser"
 import { createInstanceState } from "../project/instance-state"
 import { ProjectInstanceContext } from "../project/instance-context"
-import { LSP_BUILTIN_SERVER_IDS } from "../lsp/catalog"
 import { BunProc } from "@/bun"
 import { Installation } from "@/installation"
 import { ConfigMarkdown } from "./markdown"
@@ -751,7 +750,6 @@ export namespace Config {
           webfetch: PermissionAction.optional(),
           websearch: PermissionAction.optional(),
           external_code_search: PermissionAction.optional(),
-          lsp: PermissionRule.optional(),
           doom_loop: PermissionAction.optional(),
           skill: PermissionRule.optional(),
         })
@@ -1414,43 +1412,6 @@ export namespace Config {
           ),
         ])
         .optional(),
-      lsp: z
-        .union([
-          z.literal(false),
-          z.record(
-            z.string(),
-            z.union([
-              z.object({
-                disabled: z.literal(true),
-              }),
-              z.object({
-                command: z.array(z.string()),
-                extensions: z.array(z.string()).optional(),
-                disabled: z.boolean().optional(),
-                env: z.record(z.string(), z.string()).optional(),
-                initialization: z.record(z.string(), z.any()).optional(),
-              }),
-            ]),
-          ),
-        ])
-        .optional()
-        .refine(
-          (data) => {
-            if (!data) return true
-            if (typeof data === "boolean") return true
-            return Object.entries(data).every(([id, config]) => {
-              if (config.disabled) return true
-              if (LSP_BUILTIN_SERVER_IDS.has(id)) return true
-              return Boolean(config.extensions)
-            })
-          },
-          {
-            error: "For custom LSP servers, 'extensions' array is required.",
-          },
-        )
-        .describe(
-          "Deprecated compatibility field. Language Server Protocol runtimes are disabled and this value is ignored.",
-        ),
       prompt: z
         .record(z.string(), z.string())
         .optional()

@@ -1622,76 +1622,6 @@
           "logLevel": {
             "$ref": "#/components/schemas/LogLevel"
           },
-          "lsp": {
-            "anyOf": [
-              {
-                "const": false,
-                "type": "boolean"
-              },
-              {
-                "additionalProperties": {
-                  "anyOf": [
-                    {
-                      "properties": {
-                        "disabled": {
-                          "const": true,
-                          "type": "boolean"
-                        }
-                      },
-                      "required": [
-                        "disabled"
-                      ],
-                      "type": "object"
-                    },
-                    {
-                      "properties": {
-                        "command": {
-                          "items": {
-                            "type": "string"
-                          },
-                          "type": "array"
-                        },
-                        "disabled": {
-                          "type": "boolean"
-                        },
-                        "env": {
-                          "additionalProperties": {
-                            "type": "string"
-                          },
-                          "propertyNames": {
-                            "type": "string"
-                          },
-                          "type": "object"
-                        },
-                        "extensions": {
-                          "items": {
-                            "type": "string"
-                          },
-                          "type": "array"
-                        },
-                        "initialization": {
-                          "additionalProperties": {},
-                          "propertyNames": {
-                            "type": "string"
-                          },
-                          "type": "object"
-                        }
-                      },
-                      "required": [
-                        "command"
-                      ],
-                      "type": "object"
-                    }
-                  ]
-                },
-                "propertyNames": {
-                  "type": "string"
-                },
-                "type": "object"
-              }
-            ],
-            "description": "Deprecated compatibility field. Language Server Protocol runtimes are disabled and this value is ignored."
-          },
           "mcp": {
             "additionalProperties": {
               "anyOf": [
@@ -13626,9 +13556,6 @@
                 "$ref": "#/components/schemas/PermissionRuleConfig"
               },
               "list": {
-                "$ref": "#/components/schemas/PermissionRuleConfig"
-              },
-              "lsp": {
                 "$ref": "#/components/schemas/PermissionRuleConfig"
               },
               "question": {
