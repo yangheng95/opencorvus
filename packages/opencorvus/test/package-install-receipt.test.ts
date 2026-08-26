@@ -19,7 +19,11 @@ async function writeCachedTree(input: { dependencies?: Record<string, string>; i
   await fs.mkdir(moduleDirectory, { recursive: true })
   await fs.writeFile(
     path.join(moduleDirectory, "package.json"),
-    JSON.stringify({ name: PKG, version: VERSION, ...(input.dependencies ? { dependencies: input.dependencies } : {}) }),
+    JSON.stringify({
+      name: PKG,
+      version: VERSION,
+      ...(input.dependencies ? { dependencies: input.dependencies } : {}),
+    }),
   )
   for (const dependency of input.installDeps ?? []) {
     const directory = path.join(Global.Path.cache, "node_modules", dependency)
@@ -41,7 +45,11 @@ describe("package installation readiness is a receipt, not a directory", () => {
         const moduleDirectory = await writeCachedTree({
           dependencies: { "receipt-probe-dependency": "^1.0.0" },
         })
-        const occurrenceID = await PackageInstallReceipt.begin({ root: Global.Path.cache, package: PKG, requestedVersion: VERSION })
+        const occurrenceID = await PackageInstallReceipt.begin({
+          root: Global.Path.cache,
+          package: PKG,
+          requestedVersion: VERSION,
+        })
 
         await expect(
           PackageInstallReceipt.verifyAndPublish({
@@ -56,7 +64,9 @@ describe("package installation readiness is a receipt, not a directory", () => {
 
         // Nothing is Ready: the next load reinstalls instead of failing
         // forever against the incomplete tree.
-        expect(await PackageInstallReceipt.isPublished({ root: Global.Path.cache, package: PKG, version: VERSION })).toBe(false)
+        expect(
+          await PackageInstallReceipt.isPublished({ root: Global.Path.cache, package: PKG, version: VERSION }),
+        ).toBe(false)
       },
     })
   }, 60_000)
@@ -70,7 +80,11 @@ describe("package installation readiness is a receipt, not a directory", () => {
           dependencies: { "receipt-probe-dependency": "^1.0.0" },
           installDeps: ["receipt-probe-dependency"],
         })
-        const occurrenceID = await PackageInstallReceipt.begin({ root: Global.Path.cache, package: PKG, requestedVersion: "latest" })
+        const occurrenceID = await PackageInstallReceipt.begin({
+          root: Global.Path.cache,
+          package: PKG,
+          requestedVersion: "latest",
+        })
         await PackageInstallReceipt.verifyAndPublish({
           occurrenceID,
           root: Global.Path.cache,
@@ -83,8 +97,16 @@ describe("package installation readiness is a receipt, not a directory", () => {
         // reader asks about; a receipt under the selector would be a fact
         // nothing reads.
         expect({
-          resolved: await PackageInstallReceipt.isPublished({ root: Global.Path.cache, package: PKG, version: VERSION }),
-          unrelated: await PackageInstallReceipt.isPublished({ root: Global.Path.cache, package: PKG, version: "9.9.9" }),
+          resolved: await PackageInstallReceipt.isPublished({
+            root: Global.Path.cache,
+            package: PKG,
+            version: VERSION,
+          }),
+          unrelated: await PackageInstallReceipt.isPublished({
+            root: Global.Path.cache,
+            package: PKG,
+            version: "9.9.9",
+          }),
         }).toEqual({ resolved: true, unrelated: false })
       },
     })
@@ -110,7 +132,11 @@ describe("package installation readiness is a receipt, not a directory", () => {
           JSON.stringify({ name: "receipt-probe-dependency", version: "2.1.0" }),
         )
 
-        const occurrenceID = await PackageInstallReceipt.begin({ root: Global.Path.cache, package: PKG, requestedVersion: VERSION })
+        const occurrenceID = await PackageInstallReceipt.begin({
+          root: Global.Path.cache,
+          package: PKG,
+          requestedVersion: VERSION,
+        })
         await PackageInstallReceipt.verifyAndPublish({
           occurrenceID,
           root: Global.Path.cache,
@@ -119,7 +145,9 @@ describe("package installation readiness is a receipt, not a directory", () => {
           resolvedVersion: VERSION,
           moduleDirectory,
         })
-        expect(await PackageInstallReceipt.isPublished({ root: Global.Path.cache, package: PKG, version: VERSION })).toBe(true)
+        expect(
+          await PackageInstallReceipt.isPublished({ root: Global.Path.cache, package: PKG, version: VERSION }),
+        ).toBe(true)
       },
     })
   }, 60_000)
@@ -139,7 +167,11 @@ describe("package installation readiness is a receipt, not a directory", () => {
         await fs.mkdir(flat, { recursive: true })
         await fs.writeFile(path.join(flat, "package.json"), '{"name": "receipt-probe-trunc')
 
-        const occurrenceID = await PackageInstallReceipt.begin({ root: Global.Path.cache, package: PKG, requestedVersion: VERSION })
+        const occurrenceID = await PackageInstallReceipt.begin({
+          root: Global.Path.cache,
+          package: PKG,
+          requestedVersion: VERSION,
+        })
         await expect(
           PackageInstallReceipt.verifyAndPublish({
             occurrenceID,
@@ -150,7 +182,9 @@ describe("package installation readiness is a receipt, not a directory", () => {
             moduleDirectory,
           }),
         ).rejects.toThrow("unresolved receipt-probe-truncated")
-        expect(await PackageInstallReceipt.isPublished({ root: Global.Path.cache, package: PKG, version: VERSION })).toBe(false)
+        expect(
+          await PackageInstallReceipt.isPublished({ root: Global.Path.cache, package: PKG, version: VERSION }),
+        ).toBe(false)
       },
     })
   }, 60_000)
@@ -161,8 +195,16 @@ describe("package installation readiness is a receipt, not a directory", () => {
       directory: project.path,
       fn: async () => {
         const moduleDirectory = await writeCachedTree({ installDeps: [] })
-        const abandoned = await PackageInstallReceipt.begin({ root: Global.Path.cache, package: PKG, requestedVersion: VERSION })
-        const retried = await PackageInstallReceipt.begin({ root: Global.Path.cache, package: PKG, requestedVersion: VERSION })
+        const abandoned = await PackageInstallReceipt.begin({
+          root: Global.Path.cache,
+          package: PKG,
+          requestedVersion: VERSION,
+        })
+        const retried = await PackageInstallReceipt.begin({
+          root: Global.Path.cache,
+          package: PKG,
+          requestedVersion: VERSION,
+        })
         expect(retried).toBe(abandoned)
 
         await PackageInstallReceipt.verifyAndPublish({
@@ -173,7 +215,9 @@ describe("package installation readiness is a receipt, not a directory", () => {
           resolvedVersion: VERSION,
           moduleDirectory,
         })
-        expect(await PackageInstallReceipt.isPublished({ root: Global.Path.cache, package: PKG, version: VERSION })).toBe(true)
+        expect(
+          await PackageInstallReceipt.isPublished({ root: Global.Path.cache, package: PKG, version: VERSION }),
+        ).toBe(true)
       },
     })
   }, 60_000)

@@ -469,6 +469,10 @@ export namespace Config {
             requestedVersion: Installation.isLocal() ? "*" : Installation.VERSION,
             resolvedVersion: installedVersion,
             moduleDirectory: path.join(dir, "node_modules", PLUGIN_DEPENDENCY),
+            // `bun install` installed everything this config declares, so the
+            // receipt has to certify all of it: a tree whose user-declared
+            // extra dependency never completed must not read as installed.
+            additionalDependencies: Object.keys(json.dependencies ?? {}),
           })
         } catch (cause) {
           await PackageInstallReceipt.rollback(

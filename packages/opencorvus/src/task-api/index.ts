@@ -120,7 +120,6 @@ import { orchestratorState } from "@/engine/orchestrator-state"
 import { writeTaskChecks } from "@/engine/checks"
 import {
   deliverTaskRootIngress,
-  discardTaskRootIngress,
   dispatchPersistedTaskLoop,
   dispatchTaskLoop,
   persistTaskRootMessageIngressInTransaction,
@@ -2381,7 +2380,8 @@ export namespace EngineService {
       executionCancellationOrigin,
     )
     try {
-      discardTaskRootIngress(taskID)
+      // Ingress facts are immutable: explicit Task deletion cascades them, and
+      // ordinary cancellation never rewrites or deletes accepted history.
       if (!isTaskTerminal(task)) {
         if (!options?.origin) {
           throw new Error(`deleteTask requires cancellation origin while task ${taskID} is non-terminal.`)
@@ -2453,7 +2453,8 @@ export namespace EngineService {
         executionCancellationOrigin,
       )
       try {
-        discardTaskRootIngress(taskID)
+        // Ingress facts are immutable: explicit Task deletion cascades them, and
+      // ordinary cancellation never rewrites or deletes accepted history.
         if (!isTaskTerminal(task)) {
           if (!options?.origin) {
             throw new Error(`setTaskArchived requires cancellation origin while task ${taskID} is non-terminal.`)

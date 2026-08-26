@@ -18,14 +18,8 @@ const PLUGIN = "@opencorvus-ai/plugin"
  *  node_modules directory and a package.json naming the right version. */
 async function writeKilledInstallTree(dir: string, version: string) {
   await fs.mkdir(path.join(dir, "node_modules", PLUGIN), { recursive: true })
-  await fs.writeFile(
-    path.join(dir, "package.json"),
-    JSON.stringify({ dependencies: { [PLUGIN]: version } }, null, 2),
-  )
-  await fs.writeFile(
-    path.join(dir, "node_modules", PLUGIN, "package.json"),
-    JSON.stringify({ name: PLUGIN, version }),
-  )
+  await fs.writeFile(path.join(dir, "package.json"), JSON.stringify({ dependencies: { [PLUGIN]: version } }, null, 2))
+  await fs.writeFile(path.join(dir, "node_modules", PLUGIN, "package.json"), JSON.stringify({ name: PLUGIN, version }))
 }
 
 const VERSION = "0.0.55-beta"

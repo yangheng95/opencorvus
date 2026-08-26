@@ -12,7 +12,10 @@ if (bundled.expired) {
     `[ChannelRuntime] Bundled env active until ${bundled.expireAt} (applied ${bundled.applied}, user overrides ${bundled.skipped}).`,
   )
 } else if (bundled.reason === "invalid_bundle") {
-  console.warn(`[ChannelRuntime] Ignore invalid bundled env file: ${bundled.file}`)
+  console.warn(`[ChannelRuntime] Refused invalid bundled env file: ${bundled.file}`)
+  for (const invalid of bundled.invalidLines ?? []) {
+    console.warn(`[ChannelRuntime]   line ${invalid.line}: ${invalid.text}`)
+  }
 }
 
 const runtimeConfig = resolveRuntimeConfig(

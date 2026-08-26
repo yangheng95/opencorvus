@@ -1,5 +1,7 @@
 import z from "zod"
 import { Global } from "../global"
+import { acquireProcessLock } from "../util/process-lock"
+import fs from "node:fs/promises"
 import { PackageInstallReceipt } from "./install-receipt"
 import { Log } from "../util/log"
 import path from "node:path"
@@ -58,9 +60,24 @@ export namespace BunProc {
   )
 
   export async function install(pkg: string, version = "latest") {
-    // Use lock to ensure only one install at a time
+    // Use lock to ensure only one install at a time in this process...
     using _ = await Lock.write("bun-install")
+    // ...and one across processes for the whole span from opening the
+    // occurrence to publishing its receipt. The in-process mutex alone let a
+    // second backend supersede the occurrence a first was installing under —
+    // the occurrence ID is deterministic per revision — after which the first
+    // committed its receipt into the second's occurrence while that install
+    // was still rewriting the shared tree.
+    await fs.mkdir(Global.Path.cache, { recursive: true })
+    const releaseCacheOwner = await acquireProcessLock(Global.Path.cache, { realpath: false })
+    try {
+      return await installOwned(pkg, version)
+    } finally {
+      await releaseCacheOwner()
+    }
+  }
 
+  async function installOwned(pkg: string, version: string) {
     const mod = path.join(Global.Path.cache, "node_modules", pkg)
     const pkgjsonPath = path.join(Global.Path.cache, "package.json")
     const packageSchema = z.object({ dependencies: z.record(z.string(), z.string()).optional() }).passthrough()
@@ -164,10 +181,9 @@ export namespace BunProc {
       })
       return mod
     } catch (error) {
-      await PackageInstallReceipt.rollback(
-        occurrenceID,
-        error instanceof Error ? error.message : String(error),
-      ).catch(() => undefined)
+      await PackageInstallReceipt.rollback(occurrenceID, error instanceof Error ? error.message : String(error)).catch(
+        () => undefined,
+      )
       throw error
     }
   }

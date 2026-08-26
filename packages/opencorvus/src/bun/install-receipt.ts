@@ -60,11 +60,7 @@ export namespace PackageInstallReceipt {
    * for the same revision is rolled back and replaced: its tree is exactly
    * what this attempt is about to complete.
    */
-  export async function begin(input: {
-    root: string
-    package: string
-    requestedVersion: string
-  }): Promise<string> {
+  export async function begin(input: { root: string; package: string; requestedVersion: string }): Promise<string> {
     const id = occurrenceID(input.root, input.package, input.requestedVersion)
     const subject = `package:${path.resolve(input.root)}:${input.package}`
     // Reading the prior occurrence, superseding it, removing it and opening
@@ -111,7 +107,7 @@ export namespace PackageInstallReceipt {
     }
   }
 
-/**
+  /**
    * Whether one declared dependency resolves to a manifest this runtime can
    * actually read.
    *
@@ -162,6 +158,16 @@ export namespace PackageInstallReceipt {
     requestedVersion: string
     resolvedVersion: string
     moduleDirectory: string
+    /**
+     * The dependency set this receipt certifies, when the install covers more
+     * than the named package's own closure.
+     *
+     * A per-config `bun install` installs everything that config's manifest
+     * declares, so certifying only the named package's dependencies would
+     * publish a receipt for a tree whose other declared dependencies were
+     * never completed — the same defect one level out.
+     */
+    additionalDependencies?: readonly string[]
   }): Promise<void> {
     const manifest = z
       .object({
@@ -175,7 +181,9 @@ export namespace PackageInstallReceipt {
         `Installed ${input.package} reports version ${manifest.version}, expected ${input.resolvedVersion}`,
       )
     }
-    const dependencies = Object.keys(manifest.dependencies ?? {})
+    const dependencies = [
+      ...new Set([...Object.keys(manifest.dependencies ?? {}), ...(input.additionalDependencies ?? [])]),
+    ]
     const missing: string[] = []
     for (const dependency of dependencies) {
       if (!(await resolvesToAReadableManifest(input.root, input.moduleDirectory, dependency))) missing.push(dependency)
