@@ -162,13 +162,32 @@ export const withBrowserMcpOperation = async <T>(operation: () => Promise<T>): P
 
 const pendingOwnedPages = new Set<Page>()
 
+function throwBrowserMcpCleanupFailures(failures: unknown[], message: string): void {
+  if (failures.length === 1) throw failures[0]
+  if (failures.length > 1) throw new AggregateError(failures, message)
+}
+
+export const closeBrowserMcpPages = async (
+  pages: Iterable<Pick<Page, "close">>,
+  message = "Browser MCP page cleanup failed",
+): Promise<void> => {
+  const results = await Promise.allSettled([...new Set(pages)].map(async (page) => page.close()))
+  throwBrowserMcpCleanupFailures(
+    results.flatMap((result) => (result.status === "rejected" ? [result.reason] : [])),
+    message,
+  )
+}
+
 export const trackPendingBrowserMcpPageWithGate = (
   page: Pick<Page, "close">,
   gate: Pick<ReturnType<typeof createBrowserMcpOperationGate>, "isAccepting">,
   ownedPages: Set<Pick<Page, "close">> = pendingOwnedPages,
 ): (() => void) => {
   if (!gate.isAccepting()) {
-    void page.close().catch(() => {})
+    // The operation that created this page still attempts its immediate close,
+    // but the shutdown owner retains it until the late-page phase. A rejected
+    // immediate close therefore remains part of the one terminal receipt.
+    ownedPages.add(page)
     return () => {}
   }
   ownedPages.add(page)
@@ -195,12 +214,21 @@ export const runBrowserMcpShutdownSequence = async (input: {
   closeProfiles: () => Promise<void>
   disconnect: () => Promise<void>
 }): Promise<void> => {
-  input.stop()
-  await input.closeCurrentPages()
-  await input.waitForOperations()
-  await input.closeLatePages()
-  await input.closeProfiles()
-  await input.disconnect()
+  const failures: unknown[] = []
+  const settle = async (operation: () => void | Promise<void>) => {
+    try {
+      await operation()
+    } catch (error) {
+      failures.push(error)
+    }
+  }
+  await settle(input.stop)
+  await settle(input.closeCurrentPages)
+  await settle(input.waitForOperations)
+  await settle(input.closeLatePages)
+  await settle(input.closeProfiles)
+  await settle(input.disconnect)
+  throwBrowserMcpCleanupFailures(failures, "Browser MCP shutdown failed")
 }
 
 const log = (msg: string) => console.error(`[browser-mcp] ${new Date().toISOString()} ${msg}`)
@@ -253,9 +281,7 @@ export const resolveBrowserMcpConnectionConfig = (
   const mode = env.OPENCORVUS_BROWSER_MODE?.trim().toLowerCase()
   if (mode === "isolated") return { mode: "isolated", headless: resolveBrowserMcpHeadless(env, platform) }
   if (mode && mode !== "chrome" && mode !== "chrome_or_isolated") {
-    throw new Error(
-      `Invalid OPENCORVUS_BROWSER_MODE: ${mode}. Expected chrome, chrome_or_isolated or isolated.`,
-    )
+    throw new Error(`Invalid OPENCORVUS_BROWSER_MODE: ${mode}. Expected chrome, chrome_or_isolated or isolated.`)
   }
   return { mode: "cdp", channel: "chrome" }
 }
@@ -427,16 +453,24 @@ const closeProfileLocked = async (profileId: string, expectedProfile?: Profile) 
   if (profile.ownership === "managed") {
     await profile.context.close()
   } else {
-    await Promise.allSettled(
-      [...profile.sessionIds].map(async (sessionId) => {
-        const session = sessions.get(sessionId)
-        if (!session) return
-        intentionalSessionClose.add(sessionId)
-        await session.page.close().catch(() => {
-          intentionalSessionClose.delete(sessionId)
-        })
-      }),
-    )
+    const sessionIDs = [...profile.sessionIds]
+    const pages = sessionIDs.flatMap((sessionID) => {
+      const session = sessions.get(sessionID)
+      if (!session) return []
+      intentionalSessionClose.add(sessionID)
+      return [session.page]
+    })
+    try {
+      await closeBrowserMcpPages(pages, `Browser MCP attached profile ${profileId} page cleanup failed`)
+    } finally {
+      for (const sessionID of sessionIDs) intentionalSessionClose.delete(sessionID)
+      for (const sessionID of sessionIDs) {
+        sessions.delete(sessionID)
+        sessionOperationLocks.delete(sessionID)
+      }
+      if (profiles.get(profileId) === profile) profiles.delete(profileId)
+    }
+    return true
   }
   for (const sessionId of [...profile.sessionIds]) {
     sessions.delete(sessionId)
@@ -1154,29 +1188,51 @@ setInterval(() => {
 export const shutdownBrowserSessions = async () => {
   browserShutdownGeneration++
   const pendingLaunch = browserLaunch
-  await runBrowserMcpShutdownSequence({
-    stop: browserMcpOperationGate.stop,
-    closeCurrentPages: async () => {
-      const pages = new Set<Page>([...pendingOwnedPages, ...[...sessions.values()].map((session) => session.page)])
-      await Promise.allSettled([...pages].map((page) => page.close()))
-    },
-    waitForOperations: browserMcpOperationGate.wait,
-    closeLatePages: async () => {
-      await Promise.allSettled([...pendingOwnedPages].map((page) => page.close()))
-      pendingOwnedPages.clear()
-    },
-    closeProfiles: async () => {
-      await Promise.all([...profiles.keys()].map(closeProfile))
-    },
-    disconnect: async () => {
-      const launched = await pendingLaunch?.catch(() => undefined)
-      if (launched && launched !== browserConnection) await launched.close()
-      if (browserConnection) await browserConnection.close()
-    },
-  })
-  browser = null
-  browserConnection = null
-  browserLaunch = null
+  try {
+    await runBrowserMcpShutdownSequence({
+      stop: browserMcpOperationGate.stop,
+      closeCurrentPages: async () => {
+        const pages = new Set<Page>([...pendingOwnedPages, ...[...sessions.values()].map((session) => session.page)])
+        await closeBrowserMcpPages(pages, "Browser MCP current page cleanup failed")
+      },
+      waitForOperations: browserMcpOperationGate.wait,
+      closeLatePages: async () => {
+        try {
+          await closeBrowserMcpPages(pendingOwnedPages, "Browser MCP late page cleanup failed")
+        } finally {
+          pendingOwnedPages.clear()
+        }
+      },
+      closeProfiles: async () => {
+        const results = await Promise.allSettled([...profiles.keys()].map(closeProfile))
+        throwBrowserMcpCleanupFailures(
+          results.flatMap((result) => (result.status === "rejected" ? [result.reason] : [])),
+          "Browser MCP profile cleanup failed",
+        )
+      },
+      disconnect: async () => {
+        const launched = await pendingLaunch?.catch(() => undefined)
+        const connections = new Set<BrowserMcpConnection>()
+        if (launched) connections.add(launched)
+        if (browserConnection) connections.add(browserConnection)
+        const results = await Promise.allSettled([...connections].map(async (connection) => connection.close()))
+        throwBrowserMcpCleanupFailures(
+          results.flatMap((result) => (result.status === "rejected" ? [result.reason] : [])),
+          "Browser MCP connection cleanup failed",
+        )
+      },
+    })
+  } finally {
+    pendingOwnedPages.clear()
+    sessions.clear()
+    profiles.clear()
+    profileLocks.clear()
+    sessionOperationLocks.clear()
+    intentionalSessionClose.clear()
+    browser = null
+    browserConnection = null
+    browserLaunch = null
+  }
 }
 // This module owns Browser resources, never process termination. Its
 // signal handlers used to run `shutdownBrowserSessions()` and then

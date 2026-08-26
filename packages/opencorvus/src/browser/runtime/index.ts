@@ -16,7 +16,15 @@ export namespace BrowserRuntime {
 
   type PlaywrightModule = {
     chromium: {
-      launch(input: { executablePath: string; headless: boolean; args: string[]; timeout: number }): Promise<any>
+      launch(input: {
+        executablePath: string
+        headless: boolean
+        args: string[]
+        timeout: number
+        handleSIGHUP: false
+        handleSIGINT: false
+        handleSIGTERM: false
+      }): Promise<any>
       connectOverCDP(endpointURL: string, input: { timeout: number }): Promise<any>
     }
   }
@@ -95,8 +103,7 @@ export namespace BrowserRuntime {
           ? "BrowserRuntime could not connect to the running Google Chrome instance."
           : "BrowserRuntime could not connect to the configured CDP endpoint.",
       checkedCandidates: [],
-      recoveryCommand:
-        target === "chrome" ? CHROME_CHANNEL_RECOVERY_COMMAND : CDP_ENDPOINT_RECOVERY_COMMAND,
+      recoveryCommand: target === "chrome" ? CHROME_CHANNEL_RECOVERY_COMMAND : CDP_ENDPOINT_RECOVERY_COMMAND,
     }
   }
 
@@ -287,6 +294,12 @@ export namespace BrowserRuntime {
         headless: input.headless,
         args: input.args ?? defaultLaunchArgs({ proxyServer: input.proxyServer }),
         timeout: resolveBrowserLaunchTimeoutMs(input.timeoutMs),
+        // The HTTP/stdio composition root owns the process signal and its one
+        // terminal cleanup receipt. Playwright's default handlers would be a
+        // second owner racing Browser Session settlement and process exit.
+        handleSIGHUP: false,
+        handleSIGINT: false,
+        handleSIGTERM: false,
       })
     } catch (error) {
       const detail = error instanceof Error ? error.message : String(error)
