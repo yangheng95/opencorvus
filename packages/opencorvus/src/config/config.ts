@@ -1,4 +1,5 @@
 import { Log } from "../util/log"
+import { PackageInstallReceipt } from "@/bun/install-receipt"
 import { acquireProcessLock, withSharedJsonFactLock } from "@/util/process-lock"
 import path from "path"
 import { pathToFileURL } from "url"
@@ -52,6 +53,9 @@ import {
 } from "@/agent/runtime-override"
 
 export namespace Config {
+  /** The one dependency a config tree is installed for. */
+  const PLUGIN_DEPENDENCY = "@opencorvus-ai/plugin"
+
   export const ModelId = z
     .string()
     .refine(isModelReference, {
@@ -413,6 +417,13 @@ export namespace Config {
         // while this owner waited. Re-check under both the process-local and
         // cross-process directory owner before changing canonical files.
         if (!(await needsInstall(dir))) return
+        // The occurrence is durable BEFORE the tree is mutated, so an install
+        // killed halfway leaves an unsettled occurrence and never a receipt.
+        const installOccurrenceID = await PackageInstallReceipt.begin({
+          root: dir,
+          package: PLUGIN_DEPENDENCY,
+          requestedVersion: Installation.isLocal() ? "*" : Installation.VERSION,
+        })
 
         const pkg = path.join(dir, "package.json")
         const gitignore = path.join(dir, ".gitignore")
@@ -445,7 +456,25 @@ export namespace Config {
             ],
             { cwd: dir },
           )
+          // Readiness is published only after the resolved tree verifies, so a
+          // killed install can never be read back as an installed one.
+          const installedVersion = z
+            .object({ version: z.string().min(1) })
+            .passthrough()
+            .parse(await Filesystem.readJson(path.join(dir, "node_modules", PLUGIN_DEPENDENCY, "package.json"))).version
+          await PackageInstallReceipt.verifyAndPublish({
+            occurrenceID: installOccurrenceID,
+            root: dir,
+            package: PLUGIN_DEPENDENCY,
+            requestedVersion: Installation.isLocal() ? "*" : Installation.VERSION,
+            resolvedVersion: installedVersion,
+            moduleDirectory: path.join(dir, "node_modules", PLUGIN_DEPENDENCY),
+          })
         } catch (cause) {
+          await PackageInstallReceipt.rollback(
+            installOccurrenceID,
+            cause instanceof Error ? cause.message : String(cause),
+          ).catch(() => undefined)
           const rollbackFailures: unknown[] = []
           try {
             if (previousPackage === undefined) await fs.rm(pkg, { force: true })
@@ -488,6 +517,11 @@ export namespace Config {
     const nodeModules = path.join(dir, "node_modules")
     const pkg = path.join(dir, "package.json")
     const pkgExists = await Filesystem.exists(pkg)
+    // Physical existence is not readiness. A killed `bun install` leaves a
+    // node_modules tree and a package.json naming the right version behind,
+    // and reading those as proof made every later load use an incomplete tree
+    // forever. The completeness receipt for this exact tree and revision is
+    // the authority, exactly as it is for the shared registry cache.
     let required = !existsSync(nodeModules) || !pkgExists
     if (!required) {
       const parsed = z
@@ -508,6 +542,17 @@ export namespace Config {
           }
         } else {
           required = depVersion !== targetVersion
+        }
+      }
+      if (!required) {
+        const published = await PackageInstallReceipt.isPublished({
+          root: dir,
+          package: PLUGIN_DEPENDENCY,
+          version: depVersion!,
+        })
+        if (!published) {
+          log.info("config dependency tree has no completeness receipt, reinstalling", { dir, depVersion })
+          required = true
         }
       }
     }

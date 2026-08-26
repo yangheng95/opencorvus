@@ -23,6 +23,9 @@ export namespace PackageInstallReceipt {
     .object({
       package: z.string().min(1),
       requestedVersion: z.string().min(1),
+      /** The tree this revision is installed into. The shared registry cache
+       *  and each per-config dependency directory are different trees, and a
+       *  receipt is only ever about the one it names. */
       cacheRoot: z.string().min(1),
     })
     .strict()
@@ -38,13 +41,18 @@ export namespace PackageInstallReceipt {
     return new DurablePublicationStore(path.join(Global.Path.data, "durable-publications"))
   }
 
-  /** One occurrence per cache root and exact package revision. */
-  function occurrenceID(pkg: string, version: string): string {
-    return createHash("sha256").update(`${Global.Path.cache}\0${pkg}\0${version}`).digest("hex").slice(0, 40)
+  /** One occurrence per tree and exact package revision. */
+  function occurrenceID(root: string, pkg: string, version: string): string {
+    return createHash("sha256")
+      .update(`${path.resolve(root)}\0${pkg}\0${version}`)
+      .digest("hex")
+      .slice(0, 40)
   }
 
-  export async function isPublished(pkg: string, version: string): Promise<boolean> {
-    return (await readOccurrence(occurrenceID(pkg, version)))?.terminal?.outcome === "committed"
+  export async function isPublished(input: { root: string; package: string; version: string }): Promise<boolean> {
+    return (
+      (await readOccurrence(occurrenceID(input.root, input.package, input.version)))?.terminal?.outcome === "committed"
+    )
   }
 
   /**
@@ -52,9 +60,13 @@ export namespace PackageInstallReceipt {
    * for the same revision is rolled back and replaced: its tree is exactly
    * what this attempt is about to complete.
    */
-  export async function begin(input: { package: string; requestedVersion: string }): Promise<string> {
-    const id = occurrenceID(input.package, input.requestedVersion)
-    const subject = `package:${Global.Path.cache}:${input.package}`
+  export async function begin(input: {
+    root: string
+    package: string
+    requestedVersion: string
+  }): Promise<string> {
+    const id = occurrenceID(input.root, input.package, input.requestedVersion)
+    const subject = `package:${path.resolve(input.root)}:${input.package}`
     // Reading the prior occurrence, superseding it, removing it and opening
     // the new one is ONE mutation of this subject. Split across the lock, a
     // second backend could replace the occurrence a first was installing
@@ -80,7 +92,7 @@ export namespace PackageInstallReceipt {
         payload: IntentPayload.parse({
           package: input.package,
           requestedVersion: input.requestedVersion,
-          cacheRoot: Global.Path.cache,
+          cacheRoot: path.resolve(input.root),
         }),
         timeCreated: Date.now(),
       })
@@ -112,8 +124,12 @@ export namespace PackageInstallReceipt {
    * leaves behind, so treating its path's existence as proof would reproduce
    * the defect this receipt exists to remove.
    */
-  async function resolvesToAReadableManifest(moduleDirectory: string, dependency: string): Promise<boolean> {
-    const cacheRoot = path.resolve(Global.Path.cache)
+  async function resolvesToAReadableManifest(
+    root: string,
+    moduleDirectory: string,
+    dependency: string,
+  ): Promise<boolean> {
+    const cacheRoot = path.resolve(root)
     let directory = path.resolve(moduleDirectory)
     for (;;) {
       const candidate = path.join(directory, "node_modules", dependency, "package.json")
@@ -141,6 +157,7 @@ export namespace PackageInstallReceipt {
    */
   export async function verifyAndPublish(input: {
     occurrenceID: string
+    root: string
     package: string
     requestedVersion: string
     resolvedVersion: string
@@ -161,7 +178,7 @@ export namespace PackageInstallReceipt {
     const dependencies = Object.keys(manifest.dependencies ?? {})
     const missing: string[] = []
     for (const dependency of dependencies) {
-      if (!(await resolvesToAReadableManifest(input.moduleDirectory, dependency))) missing.push(dependency)
+      if (!(await resolvesToAReadableManifest(input.root, input.moduleDirectory, dependency))) missing.push(dependency)
     }
     if (missing.length > 0) {
       throw new Error(
@@ -188,8 +205,12 @@ export namespace PackageInstallReceipt {
     // afterwards, so that receipt is published too whenever the selector was
     // not already the exact version.
     if (input.requestedVersion !== input.resolvedVersion) {
-      if (await isPublished(input.package, input.resolvedVersion)) return
-      const resolvedID = await begin({ package: input.package, requestedVersion: input.resolvedVersion })
+      if (await isPublished({ root: input.root, package: input.package, version: input.resolvedVersion })) return
+      const resolvedID = await begin({
+        root: input.root,
+        package: input.package,
+        requestedVersion: input.resolvedVersion,
+      })
       await store().appendPhase(KIND, {
         occurrenceID: resolvedID,
         sequence: 1,

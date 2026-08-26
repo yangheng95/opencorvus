@@ -93,11 +93,16 @@ export namespace BunProc {
       // continue to install
     } else if (version !== "latest" && cachedVersion === version) {
       await installedVersion(cachedVersion)
-      if (await PackageInstallReceipt.isPublished(pkg, cachedVersion)) return mod
+      if (await PackageInstallReceipt.isPublished({ root: Global.Path.cache, package: pkg, version: cachedVersion }))
+        return mod
       log.info("cached package has no completeness receipt, reinstalling", { pkg, cachedVersion })
     } else if (version === "latest") {
       await installedVersion(cachedVersion)
-      const published = await PackageInstallReceipt.isPublished(pkg, cachedVersion)
+      const published = await PackageInstallReceipt.isPublished({
+        root: Global.Path.cache,
+        package: pkg,
+        version: cachedVersion,
+      })
       const isOutdated = await PackageRegistry.isOutdated(pkg, cachedVersion, Global.Path.cache)
       if (published && !isOutdated) return mod
       log.info("proceeding with install", { pkg, cachedVersion, published, isOutdated })
@@ -126,7 +131,11 @@ export namespace BunProc {
 
     // The occurrence is durable BEFORE the tree is mutated, so an install
     // killed halfway leaves an unsettled occurrence — never a receipt.
-    const occurrenceID = await PackageInstallReceipt.begin({ package: pkg, requestedVersion: version })
+    const occurrenceID = await PackageInstallReceipt.begin({
+      root: Global.Path.cache,
+      package: pkg,
+      requestedVersion: version,
+    })
     try {
       await BunProc.run(args, {
         cwd: Global.Path.cache,
@@ -147,6 +156,7 @@ export namespace BunProc {
       // Readiness is published only after the resolved tree verifies.
       await PackageInstallReceipt.verifyAndPublish({
         occurrenceID,
+        root: Global.Path.cache,
         package: pkg,
         requestedVersion: version,
         resolvedVersion,
