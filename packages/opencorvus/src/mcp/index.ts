@@ -1842,6 +1842,14 @@ export namespace MCP {
 
   const state = createInstanceState(
     async () => {
+      // A configure that died between its definition commit and its promotion
+      // left a staged secret; settling it here is what makes startup — not an
+      // arbitrary later config commit — the crash owner, and it runs before
+      // any status or connection is projected from the configuration below.
+      await settleStagedCredentials({
+        projectAuthPrefix: `${Instance.project.id}:`,
+        definitions: ((await Config.getProject()).mcp ?? {}) as NonNullable<Config.Info["mcp"]>,
+      })
       const cfg = await Config.get()
       const config = (cfg.mcp ?? {}) as NonNullable<Config.Info["mcp"]>
       const clients: Record<string, MCPClient> = {}
@@ -2535,6 +2543,42 @@ export namespace MCP {
     for (const name of names) s.cleanupPending.delete(name)
   }
 
+  /**
+   * Settle staged configure secrets against the committed project
+   * configuration. This is the crash owner: a configure that died between its
+   * definition commit and its promotion leaves a staged secret whose identity
+   * matches the committed definition, and nothing else would promote it until
+   * an unrelated config commit happened to arrive.
+   */
+  async function settleStagedCredentials(input: {
+    projectAuthPrefix: string
+    definitions: NonNullable<Config.Info["mcp"]>
+    names?: ReadonlySet<string>
+  }) {
+    const entries = await McpAuth.all()
+    for (const [authKey, entry] of Object.entries(entries)) {
+      if (!authKey.startsWith(input.projectAuthPrefix) || !entry.stagedStaticCredential) continue
+      const stagedName = authKey.slice(input.projectAuthPrefix.length)
+      if (input.names && !input.names.has(stagedName)) continue
+      const definition = input.definitions[stagedName]
+      const nextIdentity = configuredCredentialIdentity(definition)
+      const nextUrl = definition && "type" in definition && definition.type === "remote" ? definition.url : undefined
+      if (
+        nextIdentity &&
+        nextUrl &&
+        entry.stagedStaticCredential.serverUrl === nextUrl &&
+        entry.stagedStaticCredential.credentialIdentity === nextIdentity
+      ) {
+        await McpAuth.promoteStagedStaticCredential(authKey, {
+          serverUrl: nextUrl,
+          credentialIdentity: nextIdentity,
+        })
+      } else {
+        await McpAuth.clearStagedStaticCredential(authKey)
+      }
+    }
+  }
+
   export async function reconcileProjectConfig(input: { before: Config.Info; after: Config.Info }) {
     const before = (input.before.mcp ?? {}) as NonNullable<Config.Info["mcp"]>
     const after = (input.after.mcp ?? {}) as NonNullable<Config.Info["mcp"]>
@@ -2554,7 +2598,6 @@ export namespace MCP {
       if (!previous || !next) return previous !== next
       return mcpConfigIdentity(previous) !== mcpConfigIdentity(next)
     })
-    const authRemovalNames: string[] = []
     const removedNames: string[] = []
     for (const name of changed) {
       s.reconcilePending.add(name)
@@ -2572,7 +2615,12 @@ export namespace MCP {
       delete s.clients[name]
       queueConnectionCleanup(s, name, connection)
       if (authIdentity(previous) !== authIdentity(next) && authIdentity(previous)) {
-        authRemovalNames.push(name)
+        // Live flow state dies with the identity it was opened under. The
+        // stored credential's retirement is NOT decided here: the durable
+        // store's own identity, compared against the committed definition
+        // after staged settlement below, is the single authority — deciding
+        // it from the config diff instead deleted the very secret a
+        // completed identity-changing configure had just promoted.
         McpOAuthCallback.cancelPending(mcpAuthKey(name))
         pendingOAuthFlows.delete(mcpAuthKey(name))
       } else if (authIdentity(previous)) {
@@ -2600,27 +2648,12 @@ export namespace MCP {
     // other staged secret belongs to no committed definition and is dropped.
     // Running this first keeps the stale-credential sweep from removing an
     // entry whose promotion would have made it current.
-    const stagedEntries = await McpAuth.all()
-    for (const [authKey, entry] of Object.entries(stagedEntries)) {
-      if (!authKey.startsWith(projectAuthPrefix) || !entry.stagedStaticCredential) continue
-      const stagedName = authKey.slice(projectAuthPrefix.length)
-      const definition = after[stagedName]
-      const nextIdentity = configuredCredentialIdentity(definition)
-      const nextUrl = definition && "type" in definition && definition.type === "remote" ? definition.url : undefined
-      if (
-        nextIdentity &&
-        nextUrl &&
-        entry.stagedStaticCredential.serverUrl === nextUrl &&
-        entry.stagedStaticCredential.credentialIdentity === nextIdentity
-      ) {
-        await McpAuth.promoteStagedStaticCredential(authKey, {
-          serverUrl: nextUrl,
-          credentialIdentity: nextIdentity,
-        })
-      } else {
-        await McpAuth.clearStagedStaticCredential(authKey)
-      }
-    }
+    // A staged secret is settled only by the commit that changed its own
+    // definition — otherwise an unrelated project-config commit landing
+    // between a configure's stage and its definition commit would drop a
+    // secret that is still in flight. Whatever a crash leaves behind is
+    // settled by the startup owner.
+    await settleStagedCredentials({ projectAuthPrefix, definitions: after, names: new Set(changed) })
     const authEntries = await McpAuth.all()
     const projectAuthNames = Object.keys(authEntries)
       .filter((authKey) => authKey.startsWith(projectAuthPrefix))
@@ -2643,7 +2676,10 @@ export namespace MCP {
     const retryNames = names.filter(
       (name) => !changedNames.has(name) && (s.cleanupPending.has(name) || authOrphans.has(name)) && !after[name],
     )
-    const credentialRetryNames = names.filter((name) => !changedNames.has(name) && staleCredentials.has(name))
+    // Every credential the durable store proves stale against the committed
+    // definition is retired here, whether or not this commit changed that
+    // definition — one authority, no config-diff second opinion.
+    const credentialRetryNames = names.filter((name) => staleCredentials.has(name))
     if (
       changed.length === 0 &&
       retryNames.length === 0 &&
@@ -2653,9 +2689,6 @@ export namespace MCP {
     )
       return
     const cleanupTasks: Promise<void>[] = []
-    if (authRemovalNames.length > 0) {
-      cleanupTasks.push(McpAuth.removeMany(authRemovalNames.map((name) => mcpAuthKey(name))))
-    }
     if (credentialRetryNames.length > 0) {
       cleanupTasks.push(McpAuth.removeMany(credentialRetryNames.map((name) => mcpAuthKey(name))))
     }

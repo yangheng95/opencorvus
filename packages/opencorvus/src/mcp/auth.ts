@@ -210,23 +210,6 @@ export namespace McpAuth {
     )
   }
 
-  export async function setStaticCredential(
-    authKey: string,
-    secret: string,
-    serverUrl: string,
-    credentialIdentity: string,
-  ): Promise<void> {
-    await set(
-      authKey,
-      {
-        staticCredential: StaticCredential.parse({ secret }),
-      },
-      serverUrl,
-      undefined,
-      credentialIdentity,
-    )
-  }
-
   export async function stageStaticCredential(
     authKey: string,
     secret: string,

@@ -72,7 +72,8 @@ describe("MCP credential lease generation", () => {
     await McpAuth.updateTokens(AUTH_KEY, { accessToken: "first" }, "https://example.test", preRemoval)
 
     await McpAuth.remove(AUTH_KEY)
-    await McpAuth.setStaticCredential(AUTH_KEY, "brand-new-secret", "https://example.test", "identity-2")
+    await McpAuth.stageStaticCredential(AUTH_KEY, "brand-new-secret", "https://example.test", "identity-2")
+        await McpAuth.promoteStagedStaticCredential(AUTH_KEY, { serverUrl: "https://example.test", credentialIdentity: "identity-2" })
 
     await expect(McpAuth.updateTokens(AUTH_KEY, { accessToken: "stale" }, "https://example.test", preRemoval)).rejects.toThrow(
       `MCP auth lease was revoked: ${AUTH_KEY}`,
@@ -85,7 +86,8 @@ describe("MCP credential lease generation", () => {
     // generation. A holder presenting that value skipped establishing a lease,
     // and admitting it is what let a value captured before a removal write
     // into a recreated credential.
-    await McpAuth.setStaticCredential(AUTH_KEY, "configured-secret", "https://example.test", "identity-1")
+    await McpAuth.stageStaticCredential(AUTH_KEY, "configured-secret", "https://example.test", "identity-1")
+        await McpAuth.promoteStagedStaticCredential(AUTH_KEY, { serverUrl: "https://example.test", credentialIdentity: "identity-1" })
     expect(await McpAuth.revision(AUTH_KEY)).toBe("")
 
     await expect(McpAuth.updateTokens(AUTH_KEY, { accessToken: "stale" }, "https://example.test", "")).rejects.toThrow(
