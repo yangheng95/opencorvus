@@ -88,8 +88,9 @@ function packageDefinition(version: string): ExpertSquadPackageDefinition {
 }
 
 async function createTask(revision: { namespace: string; id: string; version: string; packageDigest: string }) {
-  const session = await Session.create({
+  const session = Session.prepareRootNext({
     kind: "root",
+    directory: Instance.directory,
     title: "feedback revision",
     metadata: { configOverlay: { model: "firmware/gpt-5", prompt_profile: { active: revision.id } } },
   })
@@ -97,7 +98,7 @@ async function createTask(revision: { namespace: string; id: string; version: st
   const now = Date.now()
   persistTask({
     taskID,
-    sessionID: session.id,
+    rootSession: session,
     now,
     title: "feedback revision",
     request: "feedback revision",

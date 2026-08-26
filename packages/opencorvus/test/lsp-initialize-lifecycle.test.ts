@@ -35,7 +35,7 @@ describe("Language Server Protocol initialization lifecycle", () => {
             "process.stdin.on('data',(chunk)=>{bytes=Buffer.concat([bytes,chunk]);for(;;){const split=bytes.indexOf('\\r\\n\\r\\n');if(split<0)return;const header=bytes.subarray(0,split).toString();const match=/Content-Length: (\\d+)/i.exec(header);if(!match)throw new Error('missing content length');const length=Number(match[1]);if(bytes.length<split+4+length)return;const message=JSON.parse(bytes.subarray(split+4,split+4+length).toString());bytes=bytes.subarray(split+4+length);if(message.method==='initialize')send({jsonrpc:'2.0',id:message.id,result:{capabilities:{textDocumentSync:1}}});else if(message.method==='shutdown')send({jsonrpc:'2.0',id:message.id,result:null});else if(message.method==='exit')process.exit(0)}});",
           ].join("\n"),
         )
-        const session = await Session.create({ kind: "root", title: "Task LSP authority" })
+        const session = Session.prepareRootNext({ kind: "root", directory: Instance.directory, title: "Task LSP authority" })
         const taskID = Identifier.ascending("task")
         const now = Date.now()
         const packageRevision = {
@@ -48,7 +48,7 @@ describe("Language Server Protocol initialization lifecycle", () => {
         }
         persistTask({
           taskID,
-          sessionID: session.id,
+          rootSession: session,
           now,
           title: "Task LSP authority",
           request: "Start the exact Task-owned language server",

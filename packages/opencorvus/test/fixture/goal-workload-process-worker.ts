@@ -73,14 +73,15 @@ async function createFixture(label: string, publish = false) {
   const now = Date.now()
   const taskID = Identifier.ascending("task")
   const request = `Verify ${label}`
-  const root = await Session.create({
+  const root = Session.prepareRootNext({
     kind: "root",
+    directory: Instance.directory,
     title: label,
     metadata: { configOverlay: { prompt_profile: { active: packageRevision.id } } },
   })
   persistEstablishedTask({
     taskID,
-    sessionID: root.id,
+    rootSession: root,
     now,
     title: label,
     request,

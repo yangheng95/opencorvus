@@ -9,7 +9,7 @@ export async function createEngineGitCheckpointTask(input: {
   title: string
   packageDigestCharacter?: string
 }) {
-  const session = await Session.create({ kind: "root", title: input.title })
+  const session = Session.prepareRootNext({ kind: "root", directory: Instance.directory, title: input.title })
   const taskID = Identifier.ascending("task")
   const now = Date.now()
   const packageRevision = {
@@ -22,7 +22,7 @@ export async function createEngineGitCheckpointTask(input: {
   }
   persistTask({
     taskID,
-    sessionID: session.id,
+    rootSession: session,
     now,
     title: input.title,
     request: `Checkpoint ${input.title}`,

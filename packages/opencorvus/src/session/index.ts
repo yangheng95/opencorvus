@@ -615,13 +615,21 @@ export namespace Session {
 
   const configOverlayLocks = new Map<string, Promise<unknown>>()
 
-  export const mergeConfigOverlayInProject = fn(
-    MergeConfigOverlayInput.extend({
-      projectID: z.string().min(1),
-    }),
-    async (input) => {
-      const lockKey = `${input.projectID}:${input.sessionID}`
-      return withKeyedLock(configOverlayLocks, lockKey, async () => {
+  type PreparedConfigOverlayMerge = { commitInTransaction(db: Database.TxOrDb): Info }
+
+  /**
+   * Validate an overlay merge and hand back its synchronous commit, so a
+   * caller can bind the overlay write into ITS OWN transaction — the
+   * task-message acceptance commits the overlay together with the Message,
+   * ingress, attachments and reopen epoch. The commit re-checks the stored
+   * overlay inside the transaction, so a prepared merge that lost a race
+   * fails the caller's whole transaction instead of committing a stale view.
+   */
+  export async function prepareConfigOverlayMergeInProject(input: {
+    sessionID: string
+    projectID: string
+    patch: z.output<typeof MergeConfigOverlayInput>["patch"]
+  }): Promise<PreparedConfigOverlayMerge> {
         const initialRow = Database.use((db) =>
           db
             .select()
@@ -675,7 +683,8 @@ export namespace Session {
             packageRevision: initialTask ? requireTaskResolvedPackageRevision(initialTask.id) : undefined,
           })
         }
-        return Database.transaction((db) => {
+        return {
+          commitInTransaction(db: Database.TxOrDb): Info {
           const row = db
             .select()
             .from(SessionTable)
@@ -721,7 +730,19 @@ export namespace Session {
           Bus.publishOwnedInTransaction(Event.Updated, { info })
           Bus.publishOwnedInTransaction(Event.ConfigChanged, { sessionID: input.sessionID })
           return info
-        })
+          },
+        }
+  }
+
+  export const mergeConfigOverlayInProject = fn(
+    MergeConfigOverlayInput.extend({
+      projectID: z.string().min(1),
+    }),
+    async (input) => {
+      const lockKey = `${input.projectID}:${input.sessionID}`
+      return withKeyedLock(configOverlayLocks, lockKey, async () => {
+        const prepared = await prepareConfigOverlayMergeInProject(input)
+        return Database.transaction((db) => prepared.commitInTransaction(db))
       })
     },
   )

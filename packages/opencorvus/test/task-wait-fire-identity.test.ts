@@ -25,12 +25,12 @@ describe("delayed Task-wait immutable occurrence", () => {
       directory: project.path,
       fn: async () => {
         const taskID = Identifier.ascending("task")
-        const root = await Session.create({ kind: "root", title: "Task wait schedule" })
+        const root = Session.prepareRootNext({ kind: "root", directory: Instance.directory, title: "Task wait schedule" })
         const mission = await Session.create({ kind: "root", title: "Session wait schedule" })
         const now = Date.now()
         const packageRevision = { scope: "built_in" as const, projectID: null, namespace: "builtin", id: "base", version: "2026.08.09.1", packageDigest: "b".repeat(64) }
         persistEstablishedTask({
-          taskID, sessionID: root.id, now, title: "Task wait schedule", request: "Resume later", productPillar: "code",
+          taskID, rootSession: root, now, title: "Task wait schedule", request: "Resume later", productPillar: "code",
           source: "test", priority: "normal", metadata: { actor: "user" }, projectID: Instance.project.id, packageRevision,
           executionCapsuleBinding: await prepareTaskProcessBinding({ mode: "native", taskID, projectID: Instance.project.id, rootDirectory: Instance.directory, packageRevisionSHA256: packageRevision.packageDigest, timeCreated: now }),
         })
@@ -180,11 +180,11 @@ describe("delayed Task-wait immutable occurrence", () => {
       fn: async () => {
         configureTaskIngressRunner(async () => ({}))
         const taskID = Identifier.ascending("task")
-        const root = await Session.create({ kind: "root", title: "Task wait facts" })
+        const root = Session.prepareRootNext({ kind: "root", directory: Instance.directory, title: "Task wait facts" })
         const now = Date.now()
         const packageRevision = { scope: "built_in" as const, projectID: null, namespace: "builtin", id: "base", version: "2026.08.09.1", packageDigest: "a".repeat(64) }
         persistEstablishedTask({
-          taskID, sessionID: root.id, now, title: "Task wait facts", request: "Resume once", productPillar: "code",
+          taskID, rootSession: root, now, title: "Task wait facts", request: "Resume once", productPillar: "code",
           source: "test", priority: "normal", metadata: { actor: "user" }, projectID: Instance.project.id, packageRevision,
           executionCapsuleBinding: await prepareTaskProcessBinding({ mode: "native", taskID, projectID: Instance.project.id, rootDirectory: Instance.directory, packageRevisionSHA256: packageRevision.packageDigest, timeCreated: now }),
         })

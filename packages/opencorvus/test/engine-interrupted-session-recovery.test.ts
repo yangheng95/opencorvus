@@ -275,17 +275,12 @@ describe("interrupted prepared Worker Turn recovery", () => {
     await Instance.provide({
       directory: project.path,
       fn: async () => {
-        const root = await Session.create({ kind: "root", title: "Interrupted recovery root" })
-        const worker = await Session.create({
-          kind: "delegated-worker",
-          parentID: root.id,
-          title: "Interrupted prepared worker",
-        })
+        const root = Session.prepareRootNext({ kind: "root", directory: Instance.directory, title: "Interrupted recovery root" })
         const taskID = Identifier.ascending("task")
         const now = Date.now()
         persistTask({
           taskID,
-          sessionID: root.id,
+          rootSession: root,
           now,
           title: "Interrupted prepared worker",
           request: "Recover the exact prepared Worker Turn",
@@ -303,6 +298,11 @@ describe("interrupted prepared Worker Turn recovery", () => {
             packageRevisionSHA256: packageRevision.packageDigest,
             timeCreated: now,
           }),
+        })
+        const worker = await Session.create({
+          kind: "delegated-worker",
+          parentID: root.id,
+          title: "Interrupted prepared worker",
         })
         const message = await Session.updateMessage({
           id: Identifier.ascending("message"),

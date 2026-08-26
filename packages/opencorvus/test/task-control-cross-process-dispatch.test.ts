@@ -43,15 +43,16 @@ async function seedPeerOwnedDispatch(projectPath: string, owner: string | null) 
     agentID: "base-developer",
   })
   const taskID = Identifier.ascending("task")
-  const root = await Session.create({
+  const root = Session.prepareRootNext({
     kind: "root",
+    directory: Instance.directory,
     title: "Cross-process dispatch",
     metadata: { configOverlay: { prompt_profile: { active: scheduler.packageRevision.id } } },
   })
   const now = Date.now()
   persistTask({
     taskID,
-    sessionID: root.id,
+    rootSession: root,
     now,
     title: "Cross-process dispatch",
     request: "Prove a peer backend's live worker is never settled as abandoned",

@@ -165,12 +165,12 @@ describe("Mission terminal Task authority", () => {
           productPillar: "work",
           heldExpertSquadIDs: ["base"],
         })
-        const taskSession = await Session.create({ kind: "root", title: "Paged terminal child" })
+        const taskSession = Session.prepareRootNext({ kind: "root", directory: Instance.directory, title: "Paged terminal child" })
         const taskID = Identifier.ascending("task")
         const now = Date.now()
         persistTask({
           taskID,
-          sessionID: taskSession.id,
+          rootSession: taskSession,
           now,
           title: "Paged terminal child",
           request: "Publish a multi-page evidence catalog",
@@ -447,12 +447,12 @@ describe("Mission terminal Task authority", () => {
           productPillar: "work",
           heldExpertSquadIDs: ["base"],
         })
-        const taskSession = await Session.create({ kind: "root", title: "Terminal child" })
+        const taskSession = Session.prepareRootNext({ kind: "root", directory: Instance.directory, title: "Terminal child" })
         const taskID = Identifier.ascending("task")
         const now = Date.now()
         persistTask({
           taskID,
-          sessionID: taskSession.id,
+          rootSession: taskSession,
           now,
           title: "Terminal child",
           request: "Publish accepted evidence",

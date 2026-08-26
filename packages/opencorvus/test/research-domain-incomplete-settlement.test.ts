@@ -75,14 +75,15 @@ afterAll(async () => {
 async function createTask(mode: Mode) {
   const taskID = Identifier.ascending("task")
   const now = Date.now()
-  const root = await Session.create({
+  const root = Session.prepareRootNext({
     kind: "root",
+    directory: Instance.directory,
     title: `${mode} Research settlement`,
     metadata: { configOverlay: { prompt_profile: { active: packageRevision.id } } },
   })
   persistTask({
     taskID,
-    sessionID: root.id,
+    rootSession: root,
     now,
     title: `${mode} Research settlement`,
     request: "Publish complete research evidence before the consumer starts",

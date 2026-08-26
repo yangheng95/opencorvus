@@ -41,7 +41,7 @@ test("uses the exact managed-worktree Session directory for pending, durable, an
     fn: async () => {
       projectID = Instance.project.id
       taskID = Identifier.ascending("task")
-      const root = await Session.create({ kind: "root", title: "Managed authority Task root" })
+      const root = Session.prepareRootNext({ kind: "root", directory: Instance.directory, title: "Managed authority Task root" })
       const orchestrator = await Session.create({
         kind: "orchestrator",
         parentID: root.id,
@@ -50,7 +50,7 @@ test("uses the exact managed-worktree Session directory for pending, durable, an
       const now = Date.now()
       persistTask({
         taskID,
-        sessionID: root.id,
+        rootSession: root,
         now,
         title: "Managed Session authority",
         request: "Execute one real file effect in the Task-owned managed worktree",

@@ -70,12 +70,12 @@ describe("explicit conversation and Task execution authority", () => {
     await Instance.provide({
       directory: project.path,
       fn: async () => {
-        const session = await Session.create({ kind: "root", title: "Process authority contract" })
+        const session = Session.prepareRootNext({ kind: "root", directory: Instance.directory, title: "Process authority contract" })
         const taskID = Identifier.ascending("task")
         const now = Date.now()
         persistTask({
           taskID,
-          sessionID: session.id,
+          rootSession: session,
           now,
           title: "Process authority contract",
           request: "Execute exact Host and Task process contracts",

@@ -121,15 +121,16 @@ async function initializeCut(): Promise<never> {
         config,
       })
       const taskID = Identifier.ascending("task")
-      const root = await Session.create({
+      const root = Session.prepareRootNext({
         kind: "root",
+        directory: Instance.directory,
         title: "Cross-process Tool-result control root",
         metadata: { configOverlay: { prompt_profile: { active: schedulerCapability.expertSquadID } } },
       })
       const now = Date.now()
       persistEstablishedTask({
         taskID,
-        sessionID: root.id,
+        rootSession: root,
         now,
         title: "Cross-process Tool-result control root",
         request: "Verify exact permission recovery across operating-system processes",

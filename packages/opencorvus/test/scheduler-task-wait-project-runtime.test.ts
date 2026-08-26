@@ -21,14 +21,15 @@ describe("scheduled Task wait project runtime", () => {
         config: Config.Info.parse({ prompt_profile: { active: "base" } }),
       })
       const taskID = Identifier.ascending("task")
-      const root = await Session.create({
+      const root = Session.prepareRootNext({
         kind: "root",
+        directory: Instance.directory,
         title: "Task wait authority",
         metadata: { configOverlay: { prompt_profile: { active: capability.packageRevision.id } } },
       })
       const now = Date.now()
       persistEstablishedTask({
-        taskID, sessionID: root.id, now, title: "Task wait authority", request: "Resume once",
+        taskID, rootSession: root, now, title: "Task wait authority", request: "Resume once",
         productPillar: "code", source: "test", priority: "normal", metadata: { actor: "user" },
         projectID: Instance.project.id, packageRevision: capability.packageRevision,
         executionCapsuleBinding: await prepareTaskProcessBinding({

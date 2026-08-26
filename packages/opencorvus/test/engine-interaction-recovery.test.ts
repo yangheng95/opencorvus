@@ -38,12 +38,12 @@ afterEach(async () => {
 })
 
 async function createTaskFixture(title: string) {
-  const root = await Session.create({ kind: "root", title })
+  const root = Session.prepareRootNext({ kind: "root", directory: Instance.directory, title })
   const taskID = Identifier.ascending("task")
   const now = Date.now()
   persistTask({
     taskID,
-    sessionID: root.id,
+    rootSession: root,
     now,
     title,
     request: `Exercise ${title}`,

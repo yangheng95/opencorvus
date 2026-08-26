@@ -138,7 +138,7 @@ import {
   type ApplyGoalGraphMutationInput,
 } from "@/engine/persist"
 import { EngineInteraction } from "@/engine/interaction"
-import { terminalTask, updateTask } from "@/engine/state"
+import { terminalTask, updateTask, writeTaskUpdateInTransaction } from "@/engine/state"
 import { findTaskCompletionDecisionForTerminalTime } from "@/engine/completion-decision"
 import {
   requireCurrentTerminalLifecycleReference,
@@ -1061,8 +1061,9 @@ async function continueTaskMessage(
   source: string,
   attachments: AttachmentStore.Reference[] = [],
   metadata?: Record<string, unknown>,
+  acceptanceEffects?: (db: Database.TxOrDb) => void,
 ) {
-  const wake = await appendAndWakeTaskOperatorMessage({ taskID, text, attachments, source, metadata })
+  const wake = await appendAndWakeTaskOperatorMessage({ taskID, text, attachments, source, metadata, acceptanceEffects })
 
   return {
     mode: "scheduler" as const,
@@ -1079,6 +1080,10 @@ async function appendAndWakeTaskOperatorMessage(input: {
   attachments?: AttachmentStore.Reference[]
   source: string
   metadata?: Record<string, unknown>
+  /** Caller-prepared durable facts that belong to this message's acceptance —
+   *  model overlay, attachment references, reopen epoch — committed in the
+   *  same transaction as the Message and its ingress. */
+  acceptanceEffects?: (db: Database.TxOrDb) => void
 }): Promise<{
   task: TaskRow
   userMessage: ProjectedTaskMessage<Message.User>
@@ -1101,6 +1106,7 @@ async function appendAndWakeTaskOperatorMessage(input: {
   const persisted = await Session.persistMessageWithCommit(bundle, () => {
     Database.use((db) => {
       const now = bundle.info.time.created
+      input.acceptanceEffects?.(db)
       appendTaskRewindClearedInTransaction(task.id, now, "service.message")
       EngineProtocol.emitInTransaction(
         Event.TaskMessageRecorded,
@@ -1903,13 +1909,9 @@ export namespace EngineService {
    * downstream multimodal loading to ENOENT-crash on every retry. Failing
    * at the registration boundary keeps the bad state out of the database.
    */
-  async function mergeTaskFileRef(
-    taskID: string,
-    column: FileRefColumn,
-    file: FileRef,
-    merge: (prev: FileRef[], canonical: FileRef) => { next: FileRef[]; reason: string } | null,
-  ): Promise<FileRef[]> {
-    const task = requireTaskInCurrentProject(taskID)
+  /** The async half of a task file-reference merge: resolve and verify the
+   *  canonical AttachmentStore metadata for one reference. No durable write. */
+  async function canonicalTaskFileRef(task: TaskRow, column: FileRefColumn, file: FileRef): Promise<FileRef> {
     const located = AttachmentStore.nameFromUrl(file.url)
     if (!located) {
       throw new Error(`${column}: file.url is not a valid /attachment/<projectID>/<name> reference: ${file.url}`)
@@ -1938,7 +1940,7 @@ export namespace EngineService {
         `${column}: file metadata does not match canonical AttachmentStore metadata (${metadataMismatches.join(", ")}): ${file.url}`,
       )
     }
-    const canonical: FileRef = {
+    return {
       sha: reference.sha,
       url: reference.url,
       mime: reference.mime,
@@ -1947,11 +1949,55 @@ export namespace EngineService {
       ...(file.intent ? { intent: file.intent } : {}),
       ...(file.source ? { source: file.source } : {}),
     }
+  }
+
+  async function mergeTaskFileRef(
+    taskID: string,
+    column: FileRefColumn,
+    file: FileRef,
+    merge: (prev: FileRef[], canonical: FileRef) => { next: FileRef[]; reason: string } | null,
+  ): Promise<FileRef[]> {
+    const task = requireTaskInCurrentProject(taskID)
+    const canonical = await canonicalTaskFileRef(task, column, file)
     const prev = Array.isArray((task as any)[column]) ? ((task as any)[column] as FileRef[]) : []
     const result = merge(prev, canonical)
     if (!result) return prev
     await updateTask(task, { [column]: result.next } as any, result.reason)
     return result.next
+  }
+
+  /**
+   * Canonicalize the operator message's attachments (the async half of
+   * appendTaskAttachment) and hand back the synchronous column commits for
+   * the acceptance transaction: the references land on the Task row in the
+   * same transaction that persists the Message and its ingress.
+   */
+  export async function prepareTaskAttachmentAppends(taskID: string, attachments: readonly TaskInputFileRef[]) {
+    const task = requireTaskInCurrentProject(taskID)
+    const canonicals: FileRef[] = []
+    for (const attachment of attachments) {
+      if (attachment.intent !== "task_input" || attachment.source !== "user-upload") {
+        throw new Error("appendTaskAttachment accepts only neutral task_input/user-upload references")
+      }
+      canonicals.push(await canonicalTaskFileRef(task, "attachments", attachment))
+    }
+    return {
+      commitInTransaction(db: Database.TxOrDb): void {
+        for (const canonical of canonicals) {
+          const row = db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, taskID)).get()
+          if (!row) throw new NotFoundError({ message: `Task not found: ${taskID}` })
+          const prev = Array.isArray((row as any).attachments) ? ((row as any).attachments as FileRef[]) : []
+          if (prev.some((a) => a?.sha === canonical.sha)) continue
+          writeTaskUpdateInTransaction({
+            db,
+            taskID,
+            values: { attachments: [...prev, canonical] } as any,
+            summary: `attachments appended: ${canonical.filename ?? canonical.sha}`,
+            now: Date.now(),
+          })
+        }
+      },
+    }
   }
 
   /** Register a neutral user upload. Domain adapters assign semantics through explicit contracts. */
@@ -3541,14 +3587,16 @@ export namespace EngineService {
    * epoch bump for a message that is then refused.
    */
   function reopenTerminalTaskForOperatorMessage(taskID: string): void {
-    Database.transaction((db) => {
-      const persisted = db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, taskID)).get()
-      if (!persisted) throw new NotFoundError({ message: `Task not found: ${taskID}` })
-      if (taskDeletedInTransaction(db, taskID)) return
-      const current = projectTaskRowInTransaction(db, persisted)
-      if (!isTaskTerminal(current)) return
-      openTaskForContinuationInTransaction({ db, taskID, now: Date.now() })
-    })
+    Database.transaction((db) => reopenTerminalTaskForOperatorMessageInTransaction(db, taskID))
+  }
+
+  function reopenTerminalTaskForOperatorMessageInTransaction(db: Database.TxOrDb, taskID: string): void {
+    const persisted = db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, taskID)).get()
+    if (!persisted) throw new NotFoundError({ message: `Task not found: ${taskID}` })
+    if (taskDeletedInTransaction(db, taskID)) return
+    const current = projectTaskRowInTransaction(db, persisted)
+    if (!isTaskTerminal(current)) return
+    openTaskForContinuationInTransaction({ db, taskID, now: Date.now() })
   }
 
   /** The reopen rule is the whole contract of this change and is asserted
@@ -3588,6 +3636,7 @@ export namespace EngineService {
         return typeof model === "string" ? [[agentID, model] as const] : []
       }),
     )
+    let preparedOverlay: Awaited<ReturnType<typeof Session.prepareConfigOverlayMergeInProject>> | undefined
     if (input.model) {
       const agentModelClearPatch = Object.fromEntries(
         Object.keys(previousAgentModelOverlay).map((agentID) => [agentID, { model: null }]),
@@ -3599,24 +3648,25 @@ export namespace EngineService {
       const previousConfig = await EffectiveConfig.effective({ sessionID: rootSession.id })
       const modelPreviewConfig = Config.mergeOverlay(previousConfig, modelPatch)
       await validateConfigModelReferences(modelPreviewConfig, "taskMessage.configOverlay")
-      await Session.mergeConfigOverlay({
+      preparedOverlay = await Session.prepareConfigOverlayMergeInProject({
         sessionID: rootSession.id,
-        patch: modelPatch,
+        projectID: Instance.project.id,
+        patch: Config.Overlay.parse(modelPatch),
       })
     }
-    try {
-      // Validate once and attach the neutral task_input reference to both the
-      // visible message and task record. Domain adapters assign semantics only
-      // through their explicit contracts.
-      for (const attachment of attachmentRefs) {
-        await appendTaskAttachment(taskID, attachment)
-      }
-
-      reopenTerminalTaskForOperatorMessage(taskID)
-
-      // Natural-language user messages are recorded once as visible task-root
-      // user messages, which are the authoritative follow-up conversation.
-      const note = await continueTaskMessage(taskID, input.text, input.source, attachmentRefs, input.metadata)
+    const preparedAttachments =
+      attachmentRefs.length > 0 ? await prepareTaskAttachmentAppends(taskID, attachmentRefs) : undefined
+    {
+      // Every durable fact of this operator message — model overlay,
+      // attachment references, reopen epoch, the Message itself and its
+      // ingress — commits in ONE transaction. A process death leaves either
+      // the whole accepted occurrence or nothing; the next Turn can never
+      // observe overlay/attachment/reopen state for which no Message exists.
+      const note = await continueTaskMessage(taskID, input.text, input.source, attachmentRefs, input.metadata, (db) => {
+        preparedOverlay?.commitInTransaction(db)
+        preparedAttachments?.commitInTransaction(db)
+        reopenTerminalTaskForOperatorMessageInTransaction(db, taskID)
+      })
       const ingressID = Database.use(
         (db) =>
           db
@@ -3641,20 +3691,6 @@ export namespace EngineService {
         ...(ingressID ? { ingress_id: ingressID } : {}),
         user_message: note.user_message,
       }
-    } catch (error) {
-      if (input.model) {
-        const agentModelRestorePatch = Object.fromEntries(
-          Object.entries(previousAgentModelOverlay).map(([agentID, model]) => [agentID, { model }]),
-        )
-        await Session.mergeConfigOverlay({
-          sessionID: rootSession.id,
-          patch: {
-            model: previousModelOverlay,
-            ...(Object.keys(agentModelRestorePatch).length > 0 ? { agent: agentModelRestorePatch } : {}),
-          },
-        })
-      }
-      throw error
     }
   }
 

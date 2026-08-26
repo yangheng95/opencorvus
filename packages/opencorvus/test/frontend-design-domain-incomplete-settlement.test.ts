@@ -71,14 +71,15 @@ afterAll(async () => {
 async function createTask(input: { title: string }) {
   const taskID = Identifier.ascending("task")
   const now = Date.now()
-  const root = await Session.create({
+  const root = Session.prepareRootNext({
     kind: "root",
+    directory: Instance.directory,
     title: input.title,
     metadata: { configOverlay: { prompt_profile: { active: packageRevision.id } } },
   })
   persistTask({
     taskID,
-    sessionID: root.id,
+    rootSession: root,
     now,
     title: input.title,
     request: "Produce complete frontend design evidence before implementation",

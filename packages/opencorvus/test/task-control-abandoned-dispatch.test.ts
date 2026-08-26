@@ -58,15 +58,16 @@ describe("abandoned dispatch recovery", () => {
           agentID: "base-developer",
         })
         const taskID = Identifier.ascending("task")
-        const root = await Session.create({
+        const root = Session.prepareRootNext({
           kind: "root",
+          directory: Instance.directory,
           title: "Abandoned dispatch recovery",
           metadata: { configOverlay: { prompt_profile: { active: scheduler.packageRevision.id } } },
         })
         const now = Date.now()
         persistTask({
           taskID,
-          sessionID: root.id,
+          rootSession: root,
           now,
           title: "Abandoned dispatch recovery",
           request: "Prove an abandoned worker is settled and handed back to the Orchestrator",
@@ -209,15 +210,16 @@ describe("abandoned dispatch recovery", () => {
           agentID: "base-developer",
         })
         const taskID = Identifier.ascending("task")
-        const root = await Session.create({
+        const root = Session.prepareRootNext({
           kind: "root",
+          directory: Instance.directory,
           title: "Budget-silenced recovery",
           metadata: { configOverlay: { prompt_profile: { active: scheduler.packageRevision.id } } },
         })
         const now = Date.now()
         persistTask({
           taskID,
-          sessionID: root.id,
+          rootSession: root,
           now,
           title: "Budget-silenced recovery",
           request: "Prove the settled-undelivered sweep honours the epoch infrastructure budget",

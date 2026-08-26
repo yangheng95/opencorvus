@@ -76,8 +76,9 @@ async function taskFixture(
   channelBinding?: { platform: "slack"; channel: string; thread: string },
   configOverlay?: Config.Overlay,
 ) {
-  const root = await Session.create({
+  const root = Session.prepareRootNext({
     kind: "root",
+    directory: Instance.directory,
     title,
     ...(configOverlay ? { metadata: { configOverlay } } : {}),
   })
@@ -85,7 +86,7 @@ async function taskFixture(
   const now = Date.now()
   persistTask({
     taskID,
-    sessionID: root.id,
+    rootSession: root,
     now,
     title,
     request: `Create ${title}`,

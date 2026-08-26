@@ -30,12 +30,12 @@ describe("native Task package-tool process authority", () => {
         const prepared = loaded.packageToolBundles.get(publisherRef)
         if (!prepared) throw new Error(`Missing prepared package tool ${publisherRef}`)
 
-        const session = await Session.create({ kind: "root", title: "Native package-tool authority" })
+        const session = Session.prepareRootNext({ kind: "root", directory: Instance.directory, title: "Native package-tool authority" })
         const taskID = Identifier.ascending("task")
         const now = Date.now()
         persistTask({
           taskID,
-          sessionID: session.id,
+          rootSession: session,
           now,
           title: "Native package-tool authority",
           request: "Introspect the exact frozen package tool",

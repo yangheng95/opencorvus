@@ -223,12 +223,12 @@ test("hydrates nested wake provenance through the Task conversation route", asyn
   await Instance.provide({
     directory: project.path,
     fn: async () => {
-      const root = await Session.create({ kind: "root", title: "Task wake provenance" })
+      const root = Session.prepareRootNext({ kind: "root", directory: Instance.directory, title: "Task wake provenance" })
       const taskID = Identifier.ascending("task")
       const created = Date.now()
       persistEstablishedTask({
         taskID,
-        sessionID: root.id,
+        rootSession: root,
         now: created,
         title: "Task wake provenance",
         request: "Keep hydrate and live provenance equal",

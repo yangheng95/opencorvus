@@ -269,7 +269,7 @@ describe("provider Artifact references", () => {
     await Instance.provide({
       directory: project.path,
       fn: async () => {
-        const session = await Session.create({ kind: "root", title: "Provider reference facts" })
+        const session = Session.prepareRootNext({ kind: "root", directory: Instance.directory, title: "Provider reference facts" })
         const now = Date.now()
         const taskID = Identifier.ascending("task")
         const packageRevision = {
@@ -282,7 +282,7 @@ describe("provider Artifact references", () => {
         }
         persistTask({
           taskID,
-          sessionID: session.id,
+          rootSession: session,
           now,
           title: "Provider reference facts",
           request: "Prove short reference provenance.",

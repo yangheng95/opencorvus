@@ -53,11 +53,11 @@ describe("settled terminal publication", () => {
       directory: project.path,
       fn: async () => {
         const taskID = Identifier.ascending("task")
-        const root = await Session.create({ kind: "root", title: "Settled terminal" })
+        const root = Session.prepareRootNext({ kind: "root", directory: Instance.directory, title: "Settled terminal" })
         const now = Date.now()
         persistEstablishedTask({
           taskID,
-          sessionID: root.id,
+          rootSession: root,
           now,
           title: "Settled terminal",
           request: "settle",
@@ -128,11 +128,11 @@ describe("settled terminal publication", () => {
       directory: project.path,
       fn: async () => {
         const taskID = Identifier.ascending("task")
-        const root = await Session.create({ kind: "root", title: "Historical settlement" })
+        const root = Session.prepareRootNext({ kind: "root", directory: Instance.directory, title: "Historical settlement" })
         const now = Date.now()
         persistEstablishedTask({
           taskID,
-          sessionID: root.id,
+          rootSession: root,
           now,
           title: "Historical settlement",
           request: "settle",
