@@ -1,9 +1,10 @@
-import { lstat, mkdir, mkdtemp, rename, rm } from "fs/promises"
-import { randomUUID } from "node:crypto"
+import { lstat, mkdir, readFile, rename, rm } from "fs/promises"
+import { createHash, randomUUID } from "node:crypto"
 import path from "path"
 import z from "zod"
 import { Config } from "@/config/config"
 import { ConfigMarkdown } from "@/config/markdown"
+import { ConfigPaths } from "@/config/paths"
 import { updateGlobalConfigPatchAtomic } from "@/config/update-global"
 import { Global } from "@/global"
 import { CapabilityRules } from "@/capability/rules"
@@ -21,11 +22,33 @@ import { PackageUpdateClient } from "@/package-update/client"
 import { withSkillCatalogMutation, withSkillSourceMutation, withSkillSourceMutations } from "./reference-lock"
 import { Log } from "@/util/log"
 import { createInstanceState } from "@/project/instance-state"
+import { Context } from "@/util/context"
 import { SkillMarket } from "./market"
+import { SkillCatalogConfigurationEffect, SkillReplacementPublication } from "./replacement-publication"
 
 const MANIFEST = ".opencorvus-skill-source.json"
 const log = Log.create({ service: "skill-manager" })
+const replacementContext = Context.create<boolean>("skill-catalog-replacement")
+type SkillReplacementCut =
+  | "intent-published"
+  | "target-backed-up"
+  | "target-installed"
+  | "catalog-published"
+  | "configuration-published"
+let replacementCutHook: ((cut: SkillReplacementCut, targetIndex?: number) => void | Promise<void>) | undefined
+
+async function replacementCut(cut: SkillReplacementCut, targetIndex?: number) {
+  await replacementCutHook?.(cut, targetIndex)
+}
+
 export namespace SkillManager {
+  /** Test-only process-death injection for exact catalog publication cuts. */
+  export namespace ReplacementTestHooks {
+    export function setCutHook(hook?: (cut: SkillReplacementCut, targetIndex?: number) => void | Promise<void>): void {
+      replacementCutHook = hook
+    }
+  }
+
   export const Policy = CapabilityRules.Action
   export const Trust = z.enum(["builtin", "official", "curated", "community", "local", "external", "unknown"])
   export const Risk = z.object({
@@ -247,15 +270,11 @@ export namespace SkillManager {
             },
           ],
         }
-        await replaceSkillDirectories([{ targetDir: target, root }], false, async () => {
-          await patchGlobal((next) => {
-            next.skills = next.skills || {}
-            next.skills.paths = dedupe([...(next.skills.paths ?? []), target])
-            applyPolicyToConfig(next, [root.info.name], policy)
-          })
-          Config.global.reset()
-          await Config.state.resetAll()
-          await resetInstalledDiscoveryState()
+        await replaceSkillDirectories([{ targetDir: target, root }], false, {
+          kind: "market_install",
+          target,
+          names: [root.info.name],
+          policy,
         })
         return MarketInstallResult.parse({
           id: identity.id,
@@ -335,6 +354,8 @@ export namespace SkillManager {
     undefined,
     "installed-skill-inventory",
   )
+  let installedPublicationRevision: string | undefined
+  let observedCatalogPublicationRevision: string | undefined
 
   async function resetInstalledDiscoveryState() {
     await Skill.state.resetAll()
@@ -342,21 +363,70 @@ export namespace SkillManager {
   }
 
   export async function installed() {
-    const global = await Config.getGlobal()
-    const rules = CapabilityRules.fromConfig({ skill: global.skill_policy ?? {} })
+    return withCatalogProjection(async (publicationRevision) => {
+      if (installedPublicationRevision !== publicationRevision) {
+        await installedInventoryState.resetAll()
+        installedPublicationRevision = publicationRevision
+      }
+      const global = await Config.getGlobal()
+      const rules = CapabilityRules.fromConfig({ skill: global.skill_policy ?? {} })
 
-    return Installed.array().parse(
-      (await installedInventoryState()).map((skill) => ({
-        ...skill,
-        policy: CapabilityRules.evaluate("skill", skill.name, rules).action,
-      })),
-    )
+      return Installed.array().parse(
+        (await installedInventoryState()).map((skill) => ({
+          ...skill,
+          policy: CapabilityRules.evaluate("skill", skill.name, rules).action,
+        })),
+      )
+    })
   }
 
   export async function refreshDiscoveryState() {
     Config.global.reset()
     await Config.state.resetAll()
     await resetInstalledDiscoveryState()
+  }
+
+  /** The global-config writer and Skill replacement share this exact lock
+   * order: catalog owner, then config-file owner. Open replacement recovery
+   * runs before a later global config mutation can inspect or change Skills. */
+  export async function withCatalogMutationOwner<T>(mutate: () => Promise<T>): Promise<T> {
+    if (replacementContext.tryUse()) return mutate()
+    return SkillReplacementPublication.withCatalogOwner(() =>
+      replacementContext.provide(true, async () => {
+        await recoverOpenSkillReplacement()
+        return mutate()
+      }),
+    )
+  }
+
+  async function observeCatalogPublicationRevision(revision: string) {
+    if (observedCatalogPublicationRevision !== revision) {
+      Config.global.reset()
+      await Config.state.resetAll()
+      observedCatalogPublicationRevision = revision
+    }
+    return revision
+  }
+
+  /** Converge the one cross-process Skill catalog publication and keep its
+   * owner through the reader's complete filesystem/config projection. */
+  export async function withCatalogProjection<T>(project: (revision: string) => Promise<T>): Promise<T> {
+    if (replacementContext.tryUse()) {
+      return project(await observeCatalogPublicationRevision(await SkillReplacementPublication.revision()))
+    }
+    return SkillReplacementPublication.withCatalogOwner(() =>
+      replacementContext.provide(true, async () => {
+        await recoverOpenSkillReplacement()
+        const revision = await observeCatalogPublicationRevision(await SkillReplacementPublication.revision())
+        return project(revision)
+      }),
+    )
+  }
+
+  /** Return the terminal catalog revision after recovery. Callers that read
+   * catalog bytes must use withCatalogProjection so the owner spans the read. */
+  export function prepareCatalogProjection(): Promise<string> {
+    return withCatalogProjection(async (revision) => revision)
   }
 
   export async function install(raw: z.input<typeof InstallInput>) {
@@ -478,16 +548,17 @@ export namespace SkillManager {
               })
             }
           }
-          await replaceSkillDirectories(targets, false, async () => {
-            await Config.state.reset()
-            await resetInstalledDiscoveryState()
-            if (input.policy) {
-              await applyPolicyToNames(
-                targets.map((item) => item.root.info.name),
-                input.policy,
-              )
-            }
-          })
+          await replaceSkillDirectories(
+            targets,
+            false,
+            input.policy
+              ? {
+                  kind: "policy",
+                  names: targets.map((item) => item.root.info.name),
+                  policy: input.policy,
+                }
+              : { kind: "none" },
+          )
           const imported = targets.map(({ targetDir, root }) => ({
             name: root.info.name,
             source: path.join(targetDir, "SKILL.md"),
@@ -832,12 +903,6 @@ async function patchGlobal(mutator: (next: z.infer<typeof Config.Info>) => void)
   })
 }
 
-async function applyPolicyToNames(names: string[], policy: z.infer<typeof SkillManager.Policy>) {
-  await patchGlobal((next) => {
-    applyPolicyToConfig(next, names, policy)
-  })
-}
-
 function applyPolicyToConfig(
   next: z.infer<typeof Config.Info>,
   names: string[],
@@ -1047,125 +1112,317 @@ async function replaceSkillDirectory(targetDir: string, root: ParsedSkillRoot) {
 }
 
 type SkillDirectoryReplacement = {
-  target: string
   root: ParsedSkillRoot
-  staging: string
-  backup: string
-  targetMoved: boolean
-  targetInstalled: boolean
+} & SkillReplacementPublication.Target
+
+type SkillTreeState = { kind: "absent" } | { kind: "directory"; digest: string }
+
+async function skillTreeState(target: string): Promise<SkillTreeState> {
+  let stat
+  try {
+    stat = await lstat(target)
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === "ENOENT") return { kind: "absent" }
+    throw error
+  }
+  if (stat.isSymbolicLink() || !stat.isDirectory()) {
+    throw new Error(`Skill replacement path is not a regular directory: ${target}`)
+  }
+  return { kind: "directory", digest: await SkillReplacementPublication.digest(target) }
+}
+
+function stateHasDigest(state: SkillTreeState, digest: string | null): boolean {
+  return digest === null ? state.kind === "absent" : state.kind === "directory" && state.digest === digest
+}
+
+function replacementStaging(target: string, operationID: string, index: number) {
+  return path.join(path.dirname(target), `.skill-update-${operationID}-${index}`)
+}
+
+function replacementBackup(target: string, operationID: string, index: number) {
+  return path.join(path.dirname(target), `.skill-replace-${operationID}-${index}`)
+}
+
+function assertReplacementEntryPaths(entry: SkillReplacementPublication.Entry) {
+  const targets = new Set<string>()
+  entry.targets.forEach((item, index) => {
+    const target = path.resolve(item.target)
+    if (target !== item.target || targets.has(Filesystem.normalizePath(target))) {
+      throw new Error(`Skill replacement ${entry.operationID} has a non-canonical or duplicate target`)
+    }
+    targets.add(Filesystem.normalizePath(target))
+    if (
+      item.staging !== replacementStaging(target, entry.operationID, index) ||
+      item.backup !== replacementBackup(target, entry.operationID, index)
+    ) {
+      throw new Error(`Skill replacement ${entry.operationID} scratch paths do not match their occurrence identity`)
+    }
+    for (const owned of [item.staging, item.backup]) {
+      if (!Filesystem.contains(path.dirname(target), owned) || Filesystem.overlaps(target, owned)) {
+        throw new Error(`Skill replacement ${entry.operationID} contains an unsafe scratch path`)
+      }
+    }
+  })
+  for (let left = 0; left < entry.targets.length; left++) {
+    for (let right = left + 1; right < entry.targets.length; right++) {
+      if (Filesystem.overlaps(entry.targets[left]!.target, entry.targets[right]!.target)) {
+        throw new Error(`Skill replacement ${entry.operationID} contains overlapping catalog targets`)
+      }
+    }
+  }
+}
+
+async function globalConfigRevision() {
+  const file = path.join(Global.Path.config, ConfigPaths.CANONICAL_FILE_NAME)
+  try {
+    return createHash("sha256")
+      .update(await readFile(file))
+      .digest("hex")
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === "ENOENT") return "absent"
+    throw error
+  }
+}
+
+function configurationEffectSatisfied(effect: SkillCatalogConfigurationEffect, config: z.infer<typeof Config.Info>) {
+  if (effect.kind === "none") return true
+  if (effect.kind === "market_install") {
+    const configured = (config.skills?.paths ?? []).some(
+      (candidate) => resolveGlobalConfiguredPath(candidate) === path.normalize(effect.target),
+    )
+    if (!configured) return false
+  }
+  return effect.names.every((name) => config.skill_policy?.[name] === effect.policy)
+}
+
+async function readConfigurationEffect(effect: SkillCatalogConfigurationEffect) {
+  Config.global.reset()
+  await Config.state.resetAll()
+  const config = await Config.getGlobal()
+  return {
+    revision: await globalConfigRevision(),
+    satisfied: configurationEffectSatisfied(effect, config),
+  }
+}
+
+async function applyConfigurationEffect(effect: SkillCatalogConfigurationEffect) {
+  if (effect.kind === "none") return
+  await patchGlobal((next) => {
+    next.skills = next.skills || {}
+    if (effect.kind === "market_install") {
+      next.skills.paths = dedupe([...(next.skills.paths ?? []), effect.target])
+    }
+    applyPolicyToConfig(next, effect.names, effect.policy)
+  })
+  await SkillManager.refreshDiscoveryState()
+}
+
+async function validatePublishedReplacement(entry: SkillReplacementPublication.Entry) {
+  for (const target of entry.targets) {
+    const definitions = await validateSkillDirectory(target.target)
+    if (definitions.length !== 1 || definitions[0]!.name !== target.name) {
+      throw new Error(`Skill replacement target identity changed: ${target.name}`)
+    }
+  }
+}
+
+async function convergeSkillReplacement(entry: SkillReplacementPublication.Entry): Promise<"forward" | "backward"> {
+  assertReplacementEntryPaths(entry)
+  const states = await Promise.all(
+    entry.targets.map(async (target) => ({
+      target: await skillTreeState(target.target),
+      staging: await skillTreeState(target.staging),
+      backup: await skillTreeState(target.backup),
+    })),
+  )
+  const allAfter = states.every((state, index) => stateHasDigest(state.target, entry.targets[index]!.afterDigest))
+  if (entry.published && !allAfter) {
+    throw new Error(`Published Skill replacement ${entry.operationID} no longer has its complete target set`)
+  }
+  if (allAfter) {
+    await validatePublishedReplacement(entry)
+    if (!entry.published) {
+      await SkillReplacementPublication.markPublished(entry.operationID, entry.targets.length)
+      await replacementCut("catalog-published")
+    }
+    let configuredRevision = entry.configuredRevision
+    let configuration = await readConfigurationEffect(entry.configuration)
+    if (configuredRevision) {
+      if (configuration.revision !== configuredRevision || !configuration.satisfied) {
+        throw new Error(`Skill replacement ${entry.operationID} configured revision no longer matches its effect`)
+      }
+    } else {
+      if (!configuration.satisfied) {
+        if (configuration.revision !== entry.globalConfigBeforeRevision) {
+          throw new Error(`Skill replacement ${entry.operationID} global config changed before its effect committed`)
+        }
+        await applyConfigurationEffect(entry.configuration)
+        configuration = await readConfigurationEffect(entry.configuration)
+      }
+      if (!configuration.satisfied) {
+        throw new Error(`Skill replacement ${entry.operationID} configuration effect did not commit`)
+      }
+      configuredRevision = configuration.revision
+      await SkillReplacementPublication.markConfigured(entry.operationID, configuredRevision)
+      await replacementCut("configuration-published")
+    }
+    configuration = await readConfigurationEffect(entry.configuration)
+    if (configuration.revision !== configuredRevision || !configuration.satisfied) {
+      throw new Error(`Skill replacement ${entry.operationID} lost its exact configured revision`)
+    }
+    for (const [index, target] of entry.targets.entries()) {
+      const staging = await skillTreeState(target.staging)
+      if (!stateHasDigest(staging, null) && !stateHasDigest(staging, target.afterDigest)) {
+        throw new Error(`Skill replacement ${entry.operationID} staging content changed`)
+      }
+      if (staging.kind === "directory") await rm(target.staging, { recursive: true, force: false })
+      const backup = await skillTreeState(target.backup)
+      if (!stateHasDigest(backup, null) && !stateHasDigest(backup, target.beforeDigest)) {
+        throw new Error(`Skill replacement ${entry.operationID} backup content changed at target ${index}`)
+      }
+      if (backup.kind === "directory") await rm(target.backup, { recursive: true, force: false })
+    }
+    await SkillReplacementPublication.settle(entry.operationID, "committed")
+    await SkillManager.refreshDiscoveryState()
+    return "forward"
+  }
+
+  const configuration = await readConfigurationEffect(entry.configuration)
+  if (configuration.revision !== entry.globalConfigBeforeRevision) {
+    throw new Error(`Skill replacement ${entry.operationID} global config changed before catalog rollback`)
+  }
+  for (let index = entry.targets.length - 1; index >= 0; index--) {
+    const target = entry.targets[index]!
+    const currentTarget = await skillTreeState(target.target)
+    const currentBackup = await skillTreeState(target.backup)
+    if (target.beforeDigest === null) {
+      if (!stateHasDigest(currentBackup, null)) {
+        throw new Error(`New Skill replacement ${entry.operationID} unexpectedly owns a backup`)
+      }
+      if (stateHasDigest(currentTarget, target.afterDigest)) {
+        await rm(target.target, { recursive: true, force: false })
+      } else if (!stateHasDigest(currentTarget, null)) {
+        throw new Error(`New Skill replacement ${entry.operationID} target content changed`)
+      }
+    } else if (stateHasDigest(currentTarget, target.beforeDigest) && stateHasDigest(currentBackup, null)) {
+      // This target had not moved yet, or was already restored by an earlier recovery.
+    } else if (
+      (stateHasDigest(currentTarget, null) || stateHasDigest(currentTarget, target.afterDigest)) &&
+      stateHasDigest(currentBackup, target.beforeDigest)
+    ) {
+      if (currentTarget.kind === "directory") await rm(target.target, { recursive: true, force: false })
+      await rename(target.backup, target.target)
+    } else {
+      throw new Error(`Skill replacement ${entry.operationID} cannot prove rollback ownership for ${target.target}`)
+    }
+    const staging = await skillTreeState(target.staging)
+    if (stateHasDigest(staging, target.afterDigest)) {
+      await rm(target.staging, { recursive: true, force: false })
+    } else if (!stateHasDigest(staging, null)) {
+      throw new Error(`Skill replacement ${entry.operationID} staging content changed`)
+    }
+  }
+  await SkillReplacementPublication.settle(entry.operationID, "rolled_back")
+  await SkillManager.refreshDiscoveryState()
+  return "backward"
+}
+
+async function recoverOpenSkillReplacement() {
+  const entry = await SkillReplacementPublication.open()
+  return entry ? convergeSkillReplacement(entry) : "absent"
 }
 
 async function replaceSkillDirectories(
   entries: readonly { targetDir: string; root: ParsedSkillRoot }[],
   requireExisting = false,
-  afterInstall?: () => Promise<void>,
+  configuration: SkillCatalogConfigurationEffect = { kind: "none" },
 ) {
-  const replacements: SkillDirectoryReplacement[] = []
-  let committedReconcileError: Config.GlobalConfigCommittedReconcileError | undefined
-  try {
-    for (const { targetDir, root } of entries) {
-      const target = path.resolve(targetDir)
-      const parent = path.dirname(target)
-      await mkdir(parent, { recursive: true })
-      const staging = await mkdtemp(path.join(parent, `.skill-update-${slug(root.info.name)}-`))
-      const replacement: SkillDirectoryReplacement = {
-        target,
-        root,
-        staging,
-        backup: path.join(parent, `.skill-replace-${slug(root.info.name)}-${randomUUID()}`),
-        targetMoved: false,
-        targetInstalled: false,
-      }
-      replacements.push(replacement)
-      for (const file of root.files) {
-        const destination = path.join(staging, ...file.relativePath.split("/"))
-        if (!Filesystem.contains(staging, destination)) {
-          throw new Error(`Skill update file escapes staging directory: ${file.relativePath}`)
-        }
-        await Filesystem.write(destination, file.bytes)
-      }
-      const definitions = await validateSkillDirectory(staging)
-      if (definitions.length !== 1 || definitions[0]!.name !== root.info.name) {
-        throw new Error(`Skill update staging identity changed: ${root.info.name}`)
-      }
-    }
-
-    for (const replacement of replacements) {
-      let targetState
+  return SkillReplacementPublication.withCatalogOwner(() =>
+    replacementContext.provide(true, async () => {
+      await recoverOpenSkillReplacement()
+      const operationID = randomUUID()
+      const replacements: SkillDirectoryReplacement[] = []
+      const preparedScratch: string[] = []
       try {
-        targetState = await lstat(replacement.target)
+        for (const [index, { targetDir, root }] of entries.entries()) {
+          const target = path.resolve(targetDir)
+          const parent = path.dirname(target)
+          await mkdir(parent, { recursive: true })
+          const staging = replacementStaging(target, operationID, index)
+          const backup = replacementBackup(target, operationID, index)
+          const before = await skillTreeState(target)
+          if (requireExisting && before.kind === "absent") {
+            throw new Error(`Skill update target is not a regular directory: ${target}`)
+          }
+          if (before.kind === "directory") {
+            const definitions = await validateSkillDirectory(target)
+            if (definitions.length !== 1 || definitions[0]!.name !== root.info.name) {
+              throw new Error(`Skill import target identity differs from ${JSON.stringify(root.info.name)}`)
+            }
+          }
+          await mkdir(staging, { recursive: false })
+          preparedScratch.push(staging)
+          for (const file of root.files) {
+            const destination = path.join(staging, ...file.relativePath.split("/"))
+            if (!Filesystem.contains(staging, destination)) {
+              throw new Error(`Skill update file escapes staging directory: ${file.relativePath}`)
+            }
+            await Filesystem.write(destination, file.bytes)
+          }
+          const definitions = await validateSkillDirectory(staging)
+          if (definitions.length !== 1 || definitions[0]!.name !== root.info.name) {
+            throw new Error(`Skill update staging identity changed: ${root.info.name}`)
+          }
+          replacements.push({
+            target,
+            root,
+            staging,
+            backup,
+            name: root.info.name,
+            beforeDigest: before.kind === "directory" ? before.digest : null,
+            afterDigest: await SkillReplacementPublication.digest(staging),
+          })
+        }
+        await SkillReplacementPublication.record({
+          operationID,
+          timeCreated: Date.now(),
+          targets: replacements.map(({ root: _root, ...replacement }) => replacement),
+          requireExisting,
+          configuration: SkillCatalogConfigurationEffect.parse(configuration),
+          globalConfigBeforeRevision: await globalConfigRevision(),
+        })
+        await replacementCut("intent-published")
       } catch (error) {
-        if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error
+        await Promise.all(preparedScratch.map((staging) => rm(staging, { recursive: true, force: true })))
+        throw error
       }
-      if (targetState) {
-        if (targetState.isSymbolicLink() || !targetState.isDirectory()) {
-          throw new Error(`Skill update target is not a regular directory: ${replacement.target}`)
-        }
-        const definitions = await validateSkillDirectory(replacement.target)
-        if (definitions.length !== 1 || definitions[0]!.name !== replacement.root.info.name) {
-          throw new Error(`Skill import target identity differs from ${JSON.stringify(replacement.root.info.name)}`)
-        }
-        await rename(replacement.target, replacement.backup)
-        replacement.targetMoved = true
-      } else if (requireExisting) {
-        throw new Error(`Skill update target is not a regular directory: ${replacement.target}`)
-      }
-      await rename(replacement.staging, replacement.target)
-      replacement.targetInstalled = true
-    }
 
-    await Promise.all(replacements.map((replacement) => validateSkillDirectory(replacement.target)))
-    await afterInstall?.()
-  } catch (error) {
-    if (error instanceof Config.GlobalConfigCommittedReconcileError) {
-      committedReconcileError = error
-    } else {
-      const cleanupFailures: unknown[] = []
-      for (const replacement of [...replacements].reverse()) {
-        if (replacement.targetInstalled) {
-          try {
-            await rm(replacement.target, { recursive: true, force: true })
-          } catch (cleanupError) {
-            cleanupFailures.push(cleanupError)
+      try {
+        for (const [index, replacement] of replacements.entries()) {
+          if (replacement.beforeDigest !== null) {
+            await rename(replacement.target, replacement.backup)
+            await replacementCut("target-backed-up", index)
           }
+          await rename(replacement.staging, replacement.target)
+          await replacementCut("target-installed", index)
         }
-        if (replacement.targetMoved) {
-          try {
-            await rename(replacement.backup, replacement.target)
-          } catch (cleanupError) {
-            cleanupFailures.push(cleanupError)
-          }
+        const entry = await SkillReplacementPublication.open()
+        if (!entry || entry.operationID !== operationID) {
+          throw new Error(`Skill replacement lost its exact durable occurrence ${operationID}`)
         }
-        try {
-          await rm(replacement.staging, { recursive: true, force: true })
-        } catch (cleanupError) {
-          cleanupFailures.push(cleanupError)
-        }
+        await convergeSkillReplacement(entry)
+      } catch (error) {
+        const entry = await SkillReplacementPublication.open()
+        if (!entry || entry.operationID !== operationID) throw error
+        const outcome = await convergeSkillReplacement(entry).catch((recoveryError) => {
+          throw new AggregateError([error, recoveryError], "Skill replacement and recovery both failed", {
+            cause: error,
+          })
+        })
+        if (outcome === "backward" || error instanceof Config.GlobalConfigCommittedReconcileError) throw error
       }
-      if (cleanupFailures.length > 0) {
-        throw new AggregateError(
-          [error, ...cleanupFailures],
-          "Skill update failed and atomic directory restoration also failed",
-          { cause: error },
-        )
-      }
-      throw error
-    }
-  }
-  const backupCleanup = await Promise.allSettled(
-    replacements
-      .filter((replacement) => replacement.targetMoved)
-      .map((replacement) => rm(replacement.backup, { recursive: true, force: true })),
+    }),
   )
-  const backupCleanupFailures = backupCleanup.filter(
-    (result): result is PromiseRejectedResult => result.status === "rejected",
-  )
-  if (backupCleanupFailures.length > 0) {
-    log.warn("Skill directory replacement committed with backup cleanup failures", {
-      failures: backupCleanupFailures.map((failure) => String(failure.reason)),
-    })
-  }
-  if (committedReconcileError) throw committedReconcileError
 }
 
 async function readImportSkillRoots(input: z.infer<typeof SkillManager.ImportFileInput>): Promise<ParsedSkillRoot[]> {

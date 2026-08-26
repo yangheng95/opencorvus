@@ -333,9 +333,20 @@ JavaScript 对象表示法）信封；kind、identity、canonical base64 与 SHA
 Squad 还要求信封 `version` 与归档 `expert-squad.jsonc` 的 version 完全一致。当前没有部署默认服务器，
 未配置 `package_updates.server_url` 时 server 更新明确失败，不存在隐含公共地址。
 
-两类目录更新都使用同目标父目录内的 staging/backup/rename 原子替换路径：新归档先完成解析、身份与
-内容校验，随后才移动旧目录；安装后校验失败会恢复 backup。Overlay 只展示来源明确的更新按钮，
-调用成功后重新读取 catalog/market 或 canonical Skill mount matrix，不维护本地 shadow 状态。
+Expert Squad 目录更新使用同目标父目录内的 staging/backup/rename 原子替换路径：新归档先完成解析、
+身份与内容校验，随后才移动旧目录；安装后校验失败会恢复 backup。普通 Skill 的 Market 安装、文件导入
+和 writable server update 则共用一个以完整 catalog 为 subject 的 durable publication occurrence：在第一次
+authority rename 前持久化有序目标集合、每个目录的 before/after digest、由 occurrence ID 确定性派生的
+staging/backup 路径、更新类型和 global config revision。全部目标精确达到 after digest 后才发布 catalog
+phase，再幂等提交同一 occurrence 记录的 path/policy 语义并发布 configured phase，最后写 committed receipt；
+未形成完整 after catalog 的 occurrence 只能按精确 digest 恢复完整 before catalog 并写 rolled-back receipt，
+任何 foreign bytes 都保留并阻断恢复。所有 Skill catalog projection 先在跨进程 catalog owner 下收敛 open
+occurrence，并以全部 terminal receipt identity 的稳定集合摘要作为进程内 Skill/global-config/inventory cache
+revision，因此另一个 backend 不能继续投影 mixed 或 stale catalog。所有 global config writer 使用同一个 `catalog owner → config
+file owner` 锁序，并在修改配置前先收敛 open Skill replacement；replacement 的 before/configured revision
+会对真实磁盘配置和语义 effect 重新校验。每增加一个终态都必然改变 cache revision，不依赖 caller wall clock
+或 UUID 顺序。Overlay 只展示来源明确的更新按钮，调用成功后重新读取
+catalog/market 或 canonical Skill mount matrix，不维护本地 shadow 状态。
 
 Expert Squad Market 只从严格 bundled declaration 和已安装 package identity/location 投影
 `installation_scope`，不把 boolean installed 与 scope 维护成两个来源。Market、builtin install/update、

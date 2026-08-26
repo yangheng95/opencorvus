@@ -1844,17 +1844,27 @@ export namespace Config {
 
   export async function writeMcpConfigEntry(name: string, mcpConfig: Mcp, configPath: string) {
     // A read-modify-write of the same file `writeConfigFile` owns, so it takes
-    // the same lock and replaces the file atomically.
-    await withConfigFileLock(configPath, async () => {
-      const text = await Filesystem.readText(configPath).catch((error: NodeJS.ErrnoException) => {
-        if (error.code === "ENOENT") return "{}"
-        throw error
+    // the same lock and replaces the file atomically. A global MCP write must
+    // first converge and own the Skill catalog: global config is part of a
+    // Skill replacement occurrence, so every global writer shares the exact
+    // catalog-owner -> config-file-owner order.
+    const write = () =>
+      withConfigFileLock(configPath, async () => {
+        const text = await Filesystem.readText(configPath).catch((error: NodeJS.ErrnoException) => {
+          if (error.code === "ENOENT") return "{}"
+          throw error
+        })
+        const edits = modify(text, ["mcp", name], mcpConfig, {
+          formattingOptions: { tabSize: 2, insertSpaces: true },
+        })
+        await Filesystem.writeAtomic(configPath, applyEdits(text, edits))
       })
-      const edits = modify(text, ["mcp", name], mcpConfig, {
-        formattingOptions: { tabSize: 2, insertSpaces: true },
-      })
-      await Filesystem.writeAtomic(configPath, applyEdits(text, edits))
-    })
+    if (Filesystem.resolve(configPath) === Filesystem.resolve(globalConfigFile())) {
+      const { SkillManager } = await import("@/skill/manager")
+      await SkillManager.withCatalogMutationOwner(write)
+    } else {
+      await write()
+    }
     return configPath
   }
 
@@ -1910,9 +1920,7 @@ export namespace Config {
               }),
               import("@/mcp").then(({ MCP }) => MCP.reconcileProjectConfig(committedTransition)),
             ])
-            const failures = projections.flatMap((result) =>
-              result.status === "rejected" ? [result.reason] : [],
-            )
+            const failures = projections.flatMap((result) => (result.status === "rejected" ? [result.reason] : []))
             if (failures.length > 0) {
               throw new ProjectConfigCommittedReconcileError(failures, committedTransition.after)
             }
@@ -2268,22 +2276,26 @@ export namespace Config {
 
   async function writeGlobalMutation(patch: unknown | ((existing: Info) => unknown | Promise<unknown>)) {
     await ConfigPaths.assertCanonicalDirectory(Global.Path.config, ["config.json"])
-    const [{ withConversationCapabilityReferenceMutation }, { withSkillCatalogMutation }] = await Promise.all([
-      import("@/conversation/capability-transaction"),
-      import("@/skill/reference-lock"),
-    ])
+    const [{ withConversationCapabilityReferenceMutation }, { withSkillCatalogMutation }, { SkillManager }] =
+      await Promise.all([
+        import("@/conversation/capability-transaction"),
+        import("@/skill/reference-lock"),
+        import("@/skill/manager"),
+      ])
     return withSkillCatalogMutation(() =>
-      withConversationCapabilityReferenceMutation(async () => {
-        let transitions: GlobalProjectTransition[] = []
-        return writeConfigFile(globalConfigFile(), patch, {
-          async commit(merged, _appliedPatch, persist) {
-            transitions = await commitGlobalCandidate(merged, persist)
-          },
-          async onWritten() {
-            await reconcileGlobalProjectTransitions(transitions)
-          },
-        })
-      }),
+      SkillManager.withCatalogMutationOwner(() =>
+        withConversationCapabilityReferenceMutation(async () => {
+          let transitions: GlobalProjectTransition[] = []
+          return writeConfigFile(globalConfigFile(), patch, {
+            async commit(merged, _appliedPatch, persist) {
+              transitions = await commitGlobalCandidate(merged, persist)
+            },
+            async onWritten() {
+              await reconcileGlobalProjectTransitions(transitions)
+            },
+          })
+        }),
+      ),
     )
   }
 
