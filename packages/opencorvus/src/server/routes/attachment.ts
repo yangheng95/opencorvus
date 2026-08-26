@@ -175,13 +175,22 @@ export const AttachmentRoutes = lazy(() =>
           404: { description: "Not found" },
         },
       }),
+      validator(
+        "query",
+        z.object({
+          variant: z
+            .string()
+            .optional()
+            .meta({ description: "Serve a derived rendition of the attachment instead of the stored bytes." }),
+        }),
+      ),
       async (c) => {
         const projectID = c.req.param("projectID")
         const name = c.req.param("name")
         if (!projectID || !name || name.includes("/") || name.includes("\\")) {
           return c.text("Not found", 404)
         }
-        const variant = c.req.query("variant") ?? ""
+        const variant = c.req.valid("query").variant ?? ""
         if (variant) {
           if (variant !== AttachmentStore.SCREENSHOT_BROWSER_THUMBNAIL_VARIANT) return c.text("Not found", 404)
           const sourceAbs = AttachmentStore.resolveAbsolute(projectID, name)

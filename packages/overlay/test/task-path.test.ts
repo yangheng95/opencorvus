@@ -24,8 +24,8 @@ describe("taskScopedPath", () => {
   })
 
   test("directoryScopedPath appends directory to existing query parameters", () => {
-    expect(directoryScopedPath("task/tsk_1/board?sync=1", "D:/repo", "loadBoard")).toBe(
-      "task/tsk_1/board?sync=1&directory=D%3A%2Frepo",
+    expect(directoryScopedPath("run/run_1/acceptance?format=patch", "D:/repo", "acceptance diff")).toBe(
+      "run/run_1/acceptance?format=patch&directory=D%3A%2Frepo",
     )
   })
 })

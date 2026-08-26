@@ -281,8 +281,17 @@ html[data-native-titlebar="macos"] .titlebar-menubar .oc-button[data-ui="titleba
   display: inline-flex;
   align-items: center;
   min-width: 0;
+  border-radius: var(--oc-radius-soft);
   text-align: left;
+  text-decoration: none;
   user-select: none;
+  cursor: pointer;
+  -webkit-app-region: no-drag;
+}
+
+.titlebar-brand-identity:focus-visible {
+  outline: calc(2px * var(--ui-scale)) solid color-mix(in srgb, var(--accent) 60%, transparent);
+  outline-offset: calc(2px * var(--ui-scale));
 }
 
 .titlebar-brand-identity__copy {

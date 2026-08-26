@@ -32,6 +32,8 @@ import { Instance } from "../project/instance"
 import { InstanceLifecycleContext } from "../project/instance-lifecycle-context"
 import { AttachmentStore } from "@/storage/attachment-store"
 import { materializeMcpToolResult, materializedMcpAttachmentsToFileParts } from "@/mcp/materialize"
+import { BrowserMCPBuiltin } from "@/mcp/browser/builtin"
+import { ComputerMCPBuiltin } from "@/mcp/computer/builtin"
 import { Bus } from "../bus"
 import { ProviderTransform } from "../provider/transform"
 import { ProviderSchema } from "../provider/schema"
@@ -3164,6 +3166,14 @@ export namespace SessionLoop {
               const materialized = await materializeMcpToolResult({
                 projectID: Instance.project.id,
                 result,
+                // The provider this result came from, taken from the same
+                // identity the invocation was recorded under — not guessed
+                // again from the payload's shape.
+                serverName: browserPermissionKey
+                  ? BrowserMCPBuiltin.ServerName
+                  : computerPermissionKey
+                    ? ComputerMCPBuiltin.ServerName
+                    : (mcpAuthorityBinding?.serverID ?? undefined),
               })
 
               const truncated = await Truncate.output(

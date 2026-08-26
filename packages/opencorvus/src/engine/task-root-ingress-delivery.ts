@@ -1917,11 +1917,6 @@ export function requireTaskCreationIngressID(taskID: string): string {
   return ingress.id
 }
 
-/** Ingress facts are immutable. Explicit Task deletion cascades them; ordinary
- * cancellation/discard never rewrites or deletes accepted history. */
-export function discardTaskRootIngress(_taskID: string): void {}
-export function discardAcceptedTaskRootIngressForRequest(_input: { taskID: string; requestID: string }): void {}
-
 export function taskCwd(taskID: string): string {
   const task = findTask(taskID)
   if (!task) throw new TaskRootIngressError(`Task ${taskID} does not exist`, "task_not_found", taskID)

@@ -19,7 +19,7 @@ export class LocalCLIProvider implements STTProvider {
 
   async isAvailable(): Promise<boolean> {
     if (!this.command) return false
-    const bin = this.command.split(/\s+/)[0]
+    const bin = parseCommandTemplate(this.command)[0]
     try {
       const result = await runCommand(["which", bin], process.cwd(), 5_000)
       return result.exitCode === 0
@@ -37,13 +37,32 @@ export class LocalCLIProvider implements STTProvider {
     await Bun.write(mediaPath, audio.data)
 
     try {
-      let cmd = this.command!.replace("{{MediaPath}}", mediaPath).replace("{{OutputDir}}", outputDir)
-
-      if (options?.language) {
-        cmd = cmd.replace("{{Language}}", options.language)
+      // The template is split into arguments FIRST, honouring quotes, and the
+      // placeholders are substituted inside each argument. Substituting first
+      // and splitting on whitespace afterwards tore any value containing a
+      // space into several arguments — and the media path is a temporary
+      // directory, which on Windows always contains one.
+      // A placeholder with no value is dropped together with the flag it
+      // belongs to. Substituting an empty string handed the CLI an empty
+      // argument for a flag that requires a value — one silent malformation
+      // traded for another — and leaving the literal token was no better.
+      const language = options?.language?.trim()
+      const templateArguments = parseCommandTemplate(this.command!)
+      const parts: string[] = []
+      for (let index = 0; index < templateArguments.length; index += 1) {
+        const argument = templateArguments[index]!
+        if (!language && argument.includes("{{Language}}")) {
+          // Drop the preceding flag this value belongs to, if there is one.
+          if (parts.length > 0 && parts[parts.length - 1]!.startsWith("-")) parts.pop()
+          continue
+        }
+        parts.push(
+          argument
+            .replaceAll("{{MediaPath}}", mediaPath)
+            .replaceAll("{{OutputDir}}", outputDir)
+            .replaceAll("{{Language}}", language ?? ""),
+        )
       }
-
-      const parts = cmd.split(/\s+/)
       const result = await runCommand(parts, outputDir, this.timeoutMs)
 
       if (result.timedOut) {
@@ -71,6 +90,59 @@ type CommandResult = {
   exitCode: number | null
   timedOut: boolean
   stderr: string
+}
+
+/**
+ * Split one configured command line into executable and arguments.
+ *
+ * A configured command is a command LINE, so a quoted segment is one argument
+ * no matter how much whitespace it contains, and a backslash escapes the next
+ * character outside single quotes. This is the argv a process facade needs;
+ * whitespace splitting is not a parser.
+ */
+export function parseCommandTemplate(commandLine: string): string[] {
+  const argv: string[] = []
+  let current = ""
+  let started = false
+  let quote: '"' | "'" | undefined
+  for (let index = 0; index < commandLine.length; index += 1) {
+    const character = commandLine[index]!
+    if (quote === undefined && /\s/.test(character)) {
+      if (started) {
+        argv.push(current)
+        current = ""
+        started = false
+      }
+      continue
+    }
+    if (quote === undefined && (character === '"' || character === "'")) {
+      quote = character
+      started = true
+      continue
+    }
+    if (quote !== undefined && character === quote) {
+      quote = undefined
+      continue
+    }
+    const next = commandLine[index + 1]
+    if (character === "\\" && quote !== "'" && (next === '"' || next === "'")) {
+      // A backslash is special ONLY immediately before a quote. Consuming a
+      // doubled backslash as an escape ate the leading separator out of every
+      // UNC path (\\\\server\\share), which is a Windows path exactly as much as
+      // a drive path is.
+      current += next
+      started = true
+      index += 1
+      continue
+    }
+    current += character
+    started = true
+  }
+  if (quote !== undefined) {
+    throw new Error(`Configured command has an unterminated ${quote} quote: ${commandLine}`)
+  }
+  if (started) argv.push(current)
+  return argv
 }
 
 async function runCommand(command: string[], cwd: string, timeoutMs: number): Promise<CommandResult> {

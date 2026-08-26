@@ -19,7 +19,11 @@ async function writeCachedTree(input: { dependencies?: Record<string, string>; i
   await fs.mkdir(moduleDirectory, { recursive: true })
   await fs.writeFile(
     path.join(moduleDirectory, "package.json"),
-    JSON.stringify({ name: PKG, version: VERSION, ...(input.dependencies ? { dependencies: input.dependencies } : {}) }),
+    JSON.stringify({
+      name: PKG,
+      version: VERSION,
+      ...(input.dependencies ? { dependencies: input.dependencies } : {}),
+    }),
   )
   for (const dependency of input.installDeps ?? []) {
     const directory = path.join(Global.Path.cache, "node_modules", dependency)
@@ -41,11 +45,16 @@ describe("package installation readiness is a receipt, not a directory", () => {
         const moduleDirectory = await writeCachedTree({
           dependencies: { "receipt-probe-dependency": "^1.0.0" },
         })
-        const occurrenceID = await PackageInstallReceipt.begin({ package: PKG, requestedVersion: VERSION })
+        const occurrenceID = await PackageInstallReceipt.begin({
+          root: Global.Path.cache,
+          package: PKG,
+          requestedVersion: VERSION,
+        })
 
         await expect(
           PackageInstallReceipt.verifyAndPublish({
             occurrenceID,
+            root: Global.Path.cache,
             package: PKG,
             requestedVersion: VERSION,
             resolvedVersion: VERSION,
@@ -55,7 +64,9 @@ describe("package installation readiness is a receipt, not a directory", () => {
 
         // Nothing is Ready: the next load reinstalls instead of failing
         // forever against the incomplete tree.
-        expect(await PackageInstallReceipt.isPublished(PKG, VERSION)).toBe(false)
+        expect(
+          await PackageInstallReceipt.isPublished({ root: Global.Path.cache, package: PKG, version: VERSION }),
+        ).toBe(false)
       },
     })
   }, 60_000)
@@ -69,19 +80,111 @@ describe("package installation readiness is a receipt, not a directory", () => {
           dependencies: { "receipt-probe-dependency": "^1.0.0" },
           installDeps: ["receipt-probe-dependency"],
         })
-        const occurrenceID = await PackageInstallReceipt.begin({ package: PKG, requestedVersion: "latest" })
+        const occurrenceID = await PackageInstallReceipt.begin({
+          root: Global.Path.cache,
+          package: PKG,
+          requestedVersion: "latest",
+        })
         await PackageInstallReceipt.verifyAndPublish({
           occurrenceID,
+          root: Global.Path.cache,
           package: PKG,
           requestedVersion: "latest",
           resolvedVersion: VERSION,
           moduleDirectory,
         })
+        // Readiness is keyed by the RESOLVED revision, which is what every
+        // reader asks about; a receipt under the selector would be a fact
+        // nothing reads.
         expect({
-          requested: await PackageInstallReceipt.isPublished(PKG, "latest"),
-          resolved: await PackageInstallReceipt.isPublished(PKG, VERSION),
-          unrelated: await PackageInstallReceipt.isPublished(PKG, "9.9.9"),
-        }).toEqual({ requested: true, resolved: true, unrelated: false })
+          resolved: await PackageInstallReceipt.isPublished({
+            root: Global.Path.cache,
+            package: PKG,
+            version: VERSION,
+          }),
+          unrelated: await PackageInstallReceipt.isPublished({
+            root: Global.Path.cache,
+            package: PKG,
+            version: "9.9.9",
+          }),
+        }).toEqual({ resolved: true, unrelated: false })
+      },
+    })
+  }, 60_000)
+
+  test("a dependency resolved by nesting is a complete install, not a missing one", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        // A version conflict with something already in the shared cache is
+        // resolved by NESTING the dependency under the package that needs it.
+        // Reading only the hoisted flat path called that correct tree
+        // incomplete, so no receipt was ever published and every later load
+        // reinstalled and failed again.
+        const moduleDirectory = await writeCachedTree({
+          dependencies: { "receipt-probe-dependency": "^2.0.0" },
+        })
+        const nested = path.join(moduleDirectory, "node_modules", "receipt-probe-dependency")
+        await fs.mkdir(nested, { recursive: true })
+        await fs.writeFile(
+          path.join(nested, "package.json"),
+          JSON.stringify({ name: "receipt-probe-dependency", version: "2.1.0" }),
+        )
+
+        const occurrenceID = await PackageInstallReceipt.begin({
+          root: Global.Path.cache,
+          package: PKG,
+          requestedVersion: VERSION,
+        })
+        await PackageInstallReceipt.verifyAndPublish({
+          occurrenceID,
+          root: Global.Path.cache,
+          package: PKG,
+          requestedVersion: VERSION,
+          resolvedVersion: VERSION,
+          moduleDirectory,
+        })
+        expect(
+          await PackageInstallReceipt.isPublished({ root: Global.Path.cache, package: PKG, version: VERSION }),
+        ).toBe(true)
+      },
+    })
+  }, 60_000)
+
+  test("a dependency whose manifest is truncated is not a readable manifest", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        // The same killed install that leaves a partial tree also leaves
+        // zero-byte and truncated manifests; a path that merely exists is not
+        // proof that anything is installed.
+        const moduleDirectory = await writeCachedTree({
+          dependencies: { "receipt-probe-truncated": "^1.0.0" },
+        })
+        const flat = path.join(Global.Path.cache, "node_modules", "receipt-probe-truncated")
+        await fs.mkdir(flat, { recursive: true })
+        await fs.writeFile(path.join(flat, "package.json"), '{"name": "receipt-probe-trunc')
+
+        const occurrenceID = await PackageInstallReceipt.begin({
+          root: Global.Path.cache,
+          package: PKG,
+          requestedVersion: VERSION,
+        })
+        await expect(
+          PackageInstallReceipt.verifyAndPublish({
+            occurrenceID,
+            root: Global.Path.cache,
+            package: PKG,
+            requestedVersion: VERSION,
+            resolvedVersion: VERSION,
+            moduleDirectory,
+          }),
+        ).rejects.toThrow("unresolved receipt-probe-truncated")
+        expect(
+          await PackageInstallReceipt.isPublished({ root: Global.Path.cache, package: PKG, version: VERSION }),
+        ).toBe(false)
       },
     })
   }, 60_000)
@@ -92,18 +195,29 @@ describe("package installation readiness is a receipt, not a directory", () => {
       directory: project.path,
       fn: async () => {
         const moduleDirectory = await writeCachedTree({ installDeps: [] })
-        const abandoned = await PackageInstallReceipt.begin({ package: PKG, requestedVersion: VERSION })
-        const retried = await PackageInstallReceipt.begin({ package: PKG, requestedVersion: VERSION })
+        const abandoned = await PackageInstallReceipt.begin({
+          root: Global.Path.cache,
+          package: PKG,
+          requestedVersion: VERSION,
+        })
+        const retried = await PackageInstallReceipt.begin({
+          root: Global.Path.cache,
+          package: PKG,
+          requestedVersion: VERSION,
+        })
         expect(retried).toBe(abandoned)
 
         await PackageInstallReceipt.verifyAndPublish({
           occurrenceID: retried,
+          root: Global.Path.cache,
           package: PKG,
           requestedVersion: VERSION,
           resolvedVersion: VERSION,
           moduleDirectory,
         })
-        expect(await PackageInstallReceipt.isPublished(PKG, VERSION)).toBe(true)
+        expect(
+          await PackageInstallReceipt.isPublished({ root: Global.Path.cache, package: PKG, version: VERSION }),
+        ).toBe(true)
       },
     })
   }, 60_000)

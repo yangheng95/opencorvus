@@ -4,11 +4,7 @@ import { ProtocolStore } from "@/protocol/store"
 import { Question } from "@/question"
 import { Message, Session, SessionStatus } from "@/session"
 import { sessionRole, taskIDForSession } from "@/engine/task-session-lineage"
-import {
-  enrichMessageEventProperties,
-  originSourceFromMessageExtra,
-  overlayMeta,
-} from "@/orchestrator/protocol/message-bridge"
+import { originSourceFromMessageExtra, overlayMeta } from "@/orchestrator/protocol/message-bridge"
 import { Database, eq } from "@/storage/db"
 import { SessionTable } from "@/session/session.sql"
 import { timelineInteractionResponseOrderKey, timelineMessageOrderKey, timelineOrderKey } from "@/timeline/order"
@@ -211,56 +207,6 @@ export function mapSessionBusEvent(
     return {
       type: "config.changed",
       summary: "Session config changed",
-      payload,
-    }
-  }
-  if (event.type === Message.Event.Updated.type) {
-    const payload = enrichMessageEventProperties(event.type, props, sessionID)
-    const info = payload.info as Record<string, unknown>
-    return {
-      type: "message.updated",
-      summary: typeof info.role === "string" ? `Message updated: ${info.role}` : "Message updated",
-      payload,
-    }
-  }
-  if (event.type === Message.Event.Moved.type) {
-    const payload = enrichMessageEventProperties(event.type, props, sessionID)
-    return {
-      type: "message.moved",
-      summary: "Message moved",
-      payload,
-    }
-  }
-  if (event.type === Message.Event.PartUpdated.type) {
-    const payload = enrichMessageEventProperties(event.type, props, sessionID)
-    const part = payload.part as Record<string, unknown>
-    return {
-      type: "message.part.updated",
-      summary: typeof part.type === "string" ? `Part updated: ${part.type}` : "Part updated",
-      payload,
-    }
-  }
-  if (event.type === Message.Event.PartDelta.type) {
-    const payload = enrichMessageEventProperties(event.type, props, sessionID)
-    return {
-      type: "message.part.delta",
-      summary: typeof props.field === "string" ? `Delta: ${props.field}` : "Message delta",
-      payload,
-    }
-  }
-  if (event.type === Message.Event.Removed.type) {
-    const payload = stampSessionEventPayload(sessionID, props)
-    return {
-      type: "message.removed",
-      summary: "Message removed",
-      payload,
-    }
-  }
-  if (event.type === Message.Event.PartRemoved.type) {
-    const payload = stampSessionEventPayload(sessionID, props)
-    return {
-      type: "message.part.removed",
-      summary: "Part removed",
       payload,
     }
   }

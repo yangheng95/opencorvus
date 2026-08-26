@@ -3,8 +3,6 @@ import { describeRoute, validator, resolver } from "hono-openapi"
 import z from "zod"
 import { File } from "../../file"
 import { Ripgrep } from "../../file/ripgrep"
-import { LSP } from "../../lsp"
-import { SymbolSchema } from "../../lsp/schema"
 import { Instance } from "../../project/instance"
 import { badRequestOrNamedErrorResponse, errors, namedErrorResponse } from "../error"
 import { lazy } from "../../util/lazy"
@@ -84,35 +82,6 @@ export const FileRoutes = lazy(() =>
           type,
         })
         return c.json(results)
-      },
-    )
-    .get(
-      "/find/symbol",
-      describeRoute({
-        summary: "Find symbols",
-        description: "Compatibility endpoint. Language Server Protocol runtimes are disabled, so this returns an empty array.",
-        operationId: "find.symbols",
-        responses: {
-          200: {
-            description: "Symbols",
-            content: {
-              "application/json": {
-                schema: resolver(SymbolSchema.array()),
-              },
-            },
-          },
-        },
-      }),
-      validator(
-        "query",
-        z.object({
-          query: z.string(),
-        }),
-      ),
-      async (c) => {
-        const query = c.req.valid("query").query
-        const result = await LSP.Host.workspaceSymbol(query)
-        return c.json(result)
       },
     )
     .get(

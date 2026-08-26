@@ -970,7 +970,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
       try {
         await syncWorktrees({ requireFresh: true })
         if (!ownsWorktreeOperation(projectDirectory)) return
-        await loadBoard({ sync: true, requireFresh: true })
+        await loadBoard({ requireFresh: true })
         if (!ownsWorktreeOperation(projectDirectory)) return
       } catch (err) {
         if (!ownsWorktreeOperation(projectDirectory)) return
@@ -1031,7 +1031,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
         setWorktrees((current) => current.filter((candidate) => !directories.includes(candidate.directory)))
         await syncWorktrees({ requireFresh: true })
         if (!ownsWorktreeOperation(projectDirectory)) return
-        await loadBoard({ sync: true, requireFresh: true })
+        await loadBoard({ requireFresh: true })
       } catch (err) {
         if (!ownsWorktreeOperation(projectDirectory)) return
         const message = errorMessage(err)

@@ -1,3 +1,5 @@
+export { bootstrapChannelRuntime } from "./bootstrap"
+export type { ChannelBootstrap, ChannelBootstrapInput } from "./bootstrap"
 export { ChannelRuntime } from "./core"
 export type { ChannelRuntimeOptions } from "./core"
 export type { ChannelAdapter, IncomingMessage, MessageHandler } from "./adapter"

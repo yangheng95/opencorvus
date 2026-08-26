@@ -196,7 +196,6 @@ import type {
   FileWriteResponses,
   FindFilesErrors,
   FindFilesResponses,
-  FindSymbolsResponses,
   FindTextErrors,
   FindTextResponses,
   FormatterStatusResponses,
@@ -297,7 +296,6 @@ import type {
   LogReadResponses,
   LogTailErrors,
   LogTailResponses,
-  LspStatusResponses,
   MailboxAcknowledgeErrors,
   MailboxAcknowledgeResponses,
   MailboxDeleteErrors,
@@ -879,6 +877,7 @@ export class Attachment extends HeyApiClient {
     parameters: {
       projectID: string
       name: string
+      variant?: string
     },
     options?: Options<never, ThrowOnError>,
   ) {
@@ -889,6 +888,7 @@ export class Attachment extends HeyApiClient {
           args: [
             { in: "path", key: "projectID" },
             { in: "path", key: "name" },
+            { in: "query", key: "variant" },
           ],
         },
       ],
@@ -1009,10 +1009,23 @@ export class Attachment2 extends HeyApiClient {
   public get<ThrowOnError extends boolean = false>(
     parameters: {
       id: string
+      e?: string
+      s?: string
     },
     options?: Options<never, ThrowOnError>,
   ) {
-    const params = buildClientParams([parameters], [{ args: [{ in: "path", key: "id" }] }])
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "path", key: "id" },
+            { in: "query", key: "e" },
+            { in: "query", key: "s" },
+          ],
+        },
+      ],
+    )
     return (options?.client ?? this.client).get<
       ChannelAttachmentGetResponses,
       ChannelAttachmentGetErrors,
@@ -4435,36 +4448,6 @@ export class Find extends HeyApiClient {
       ...params,
     })
   }
-
-  /**
-   * Find symbols
-   *
-   * Compatibility endpoint. Language Server Protocol runtimes are disabled, so this returns an empty array.
-   */
-  public symbols<ThrowOnError extends boolean = false>(
-    parameters: {
-      directory?: string
-      query: string
-    },
-    options?: Options<never, ThrowOnError>,
-  ) {
-    const params = buildClientParams(
-      [parameters],
-      [
-        {
-          args: [
-            { in: "query", key: "directory" },
-            { in: "query", key: "query" },
-          ],
-        },
-      ],
-    )
-    return (options?.client ?? this.client).get<FindSymbolsResponses, unknown, ThrowOnError>({
-      url: "/find/symbol",
-      ...options,
-      ...params,
-    })
-  }
 }
 
 export class Formatter extends HeyApiClient {
@@ -7045,6 +7028,8 @@ export class Conversation extends HeyApiClient {
     parameters: {
       taskID: string
       sessionID: string
+      after_live_sequence?: string
+      after_live_epoch?: string
     },
     options?: Options<never, ThrowOnError>,
   ) {
@@ -7055,6 +7040,8 @@ export class Conversation extends HeyApiClient {
           args: [
             { in: "path", key: "taskID" },
             { in: "path", key: "sessionID" },
+            { in: "query", key: "after_live_sequence" },
+            { in: "query", key: "after_live_epoch" },
           ],
         },
       ],
@@ -7848,10 +7835,27 @@ export class Task extends HeyApiClient {
   public events<ThrowOnError extends boolean = false>(
     parameters: {
       taskID: string
+      after?: string
+      after_live?: string
+      after_live_epoch?: string
+      after_message_watermark?: string
     },
     options?: Options<never, ThrowOnError, TaskEventsResponse>,
   ) {
-    const params = buildClientParams([parameters], [{ args: [{ in: "path", key: "taskID" }] }])
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "path", key: "taskID" },
+            { in: "query", key: "after" },
+            { in: "query", key: "after_live" },
+            { in: "query", key: "after_live_epoch" },
+            { in: "query", key: "after_message_watermark" },
+          ],
+        },
+      ],
+    )
     return (options?.client ?? this.client).sse.get<TaskEventsResponses, unknown, ThrowOnError>({
       url: "/task/{taskID}/events",
       ...options,
@@ -8579,27 +8583,6 @@ export class Log extends HeyApiClient {
     const params = buildClientParams([parameters], [{ args: [{ in: "query", key: "n" }] }])
     return (options?.client ?? this.client).get<LogTailResponses, LogTailErrors, ThrowOnError>({
       url: "/log/tail",
-      ...options,
-      ...params,
-    })
-  }
-}
-
-export class Lsp extends HeyApiClient {
-  /**
-   * Get LSP status
-   *
-   * Compatibility endpoint. Language Server Protocol runtimes are disabled, so this returns an empty array.
-   */
-  public status<ThrowOnError extends boolean = false>(
-    parameters?: {
-      directory?: string
-    },
-    options?: Options<never, ThrowOnError>,
-  ) {
-    const params = buildClientParams([parameters], [{ args: [{ in: "query", key: "directory" }] }])
-    return (options?.client ?? this.client).get<LspStatusResponses, unknown, ThrowOnError>({
-      url: "/lsp",
       ...options,
       ...params,
     })
@@ -14007,11 +13990,6 @@ export class OpenCorvusClient extends HeyApiClient {
   private _log?: Log
   get log(): Log {
     return (this._log ??= new Log({ client: this.client }))
-  }
-
-  private _lsp?: Lsp
-  get lsp(): Lsp {
-    return (this._lsp ??= new Lsp({ client: this.client }))
   }
 
   private _mailbox?: Mailbox

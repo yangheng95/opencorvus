@@ -1006,18 +1006,83 @@ export const SessionPendingQuestion = QuestionRequest.extend({
   orderKey: z.string().min(1),
 })
 
-export const SessionEvent = z.object({
+const SessionEventEnvelope = z.object({
   event_id: z.string(),
   session_id: z.string(),
   orderKey: z.string().min(1),
-  type: z.string(),
   emittedAt: z.number().int().positive(),
   timestamp: z.number(),
   sequence: z.number().int().nonnegative().optional(),
   summary: z.string(),
-  payload: z.record(z.string(), z.any()),
   notify: BusEvent.NotifyDescriptorSchema.optional(),
 })
+
+export const SessionEvent = SessionEventEnvelope.extend({
+  type: z.string(),
+  payload: z.record(z.string(), z.any()),
+})
+
+export const SessionConversationConnectionSnapshot = z
+  .object({
+    transcript: z.array(
+      z.object({
+        info: z.intersection(
+          Message.VisibleInfo,
+          z.object({
+            channel: z.string(),
+            resolvedRole: z.string(),
+            agentID: z.string(),
+            sessionAgentID: z.string(),
+            originSource: z.string(),
+            parentSessionID: z.string().optional(),
+            participantEvidence: z.any().optional(),
+          }),
+        ),
+        parts: z.array(Message.VisiblePart),
+      }),
+    ),
+    view: TaskConversationView,
+    history: TaskConversationHistoryState,
+  })
+  .meta({ ref: "SessionConversationConnectionSnapshot" })
+
+export const SessionConnectedEvent = SessionEventEnvelope.extend({
+  type: z.literal("session.connected"),
+  payload: z.object({
+    sessionID: z.string(),
+    conversationSnapshot: SessionConversationConnectionSnapshot,
+  }),
+}).meta({ ref: "SessionConnectedEvent" })
+
+export const SessionProtocolEventType = z.enum([
+  "agent.execution.lifecycle",
+  "config.changed",
+  "message.updated",
+  "message.moved",
+  "message.removed",
+  "message.part.updated",
+  "message.part.delta",
+  "message.part.removed",
+  "permission.asked",
+  "permission.replied",
+  "question.asked",
+  "question.replied",
+  "question.rejected",
+  "question.expired",
+  "question.abandoned",
+  "session.diff",
+  "session.error",
+  "session.heartbeat",
+])
+
+export const SessionProtocolEvent = SessionEventEnvelope.extend({
+  type: SessionProtocolEventType,
+  payload: z.record(z.string(), z.any()),
+}).meta({ ref: "SessionProtocolEvent" })
+
+export const SessionStreamEvent = z
+  .discriminatedUnion("type", [SessionConnectedEvent, SessionProtocolEvent])
+  .meta({ ref: "SessionStreamEvent" })
 
 export const SessionConversationHydration = z.object({
   board: SessionBoardEnvelope,

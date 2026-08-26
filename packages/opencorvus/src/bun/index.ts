@@ -1,5 +1,7 @@
 import z from "zod"
 import { Global } from "../global"
+import { acquireProcessLock } from "../util/process-lock"
+import fs from "node:fs/promises"
 import { PackageInstallReceipt } from "./install-receipt"
 import { Log } from "../util/log"
 import path from "node:path"
@@ -58,9 +60,24 @@ export namespace BunProc {
   )
 
   export async function install(pkg: string, version = "latest") {
-    // Use lock to ensure only one install at a time
+    // Use lock to ensure only one install at a time in this process...
     using _ = await Lock.write("bun-install")
+    // ...and one across processes for the whole span from opening the
+    // occurrence to publishing its receipt. The in-process mutex alone let a
+    // second backend supersede the occurrence a first was installing under —
+    // the occurrence ID is deterministic per revision — after which the first
+    // committed its receipt into the second's occurrence while that install
+    // was still rewriting the shared tree.
+    await fs.mkdir(Global.Path.cache, { recursive: true })
+    const releaseCacheOwner = await acquireProcessLock(Global.Path.cache, { realpath: false })
+    try {
+      return await installOwned(pkg, version)
+    } finally {
+      await releaseCacheOwner()
+    }
+  }
 
+  async function installOwned(pkg: string, version: string) {
     const mod = path.join(Global.Path.cache, "node_modules", pkg)
     const pkgjsonPath = path.join(Global.Path.cache, "package.json")
     const packageSchema = z.object({ dependencies: z.record(z.string(), z.string()).optional() }).passthrough()
@@ -93,11 +110,16 @@ export namespace BunProc {
       // continue to install
     } else if (version !== "latest" && cachedVersion === version) {
       await installedVersion(cachedVersion)
-      if (await PackageInstallReceipt.isPublished(pkg, cachedVersion)) return mod
+      if (await PackageInstallReceipt.isPublished({ root: Global.Path.cache, package: pkg, version: cachedVersion }))
+        return mod
       log.info("cached package has no completeness receipt, reinstalling", { pkg, cachedVersion })
     } else if (version === "latest") {
       await installedVersion(cachedVersion)
-      const published = await PackageInstallReceipt.isPublished(pkg, cachedVersion)
+      const published = await PackageInstallReceipt.isPublished({
+        root: Global.Path.cache,
+        package: pkg,
+        version: cachedVersion,
+      })
       const isOutdated = await PackageRegistry.isOutdated(pkg, cachedVersion, Global.Path.cache)
       if (published && !isOutdated) return mod
       log.info("proceeding with install", { pkg, cachedVersion, published, isOutdated })
@@ -126,7 +148,11 @@ export namespace BunProc {
 
     // The occurrence is durable BEFORE the tree is mutated, so an install
     // killed halfway leaves an unsettled occurrence — never a receipt.
-    const occurrenceID = await PackageInstallReceipt.begin({ package: pkg, requestedVersion: version })
+    const occurrenceID = await PackageInstallReceipt.begin({
+      root: Global.Path.cache,
+      package: pkg,
+      requestedVersion: version,
+    })
     try {
       await BunProc.run(args, {
         cwd: Global.Path.cache,
@@ -147,6 +173,7 @@ export namespace BunProc {
       // Readiness is published only after the resolved tree verifies.
       await PackageInstallReceipt.verifyAndPublish({
         occurrenceID,
+        root: Global.Path.cache,
         package: pkg,
         requestedVersion: version,
         resolvedVersion,
@@ -154,10 +181,9 @@ export namespace BunProc {
       })
       return mod
     } catch (error) {
-      await PackageInstallReceipt.rollback(
-        occurrenceID,
-        error instanceof Error ? error.message : String(error),
-      ).catch(() => undefined)
+      await PackageInstallReceipt.rollback(occurrenceID, error instanceof Error ? error.message : String(error)).catch(
+        () => undefined,
+      )
       throw error
     }
   }

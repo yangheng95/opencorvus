@@ -518,6 +518,16 @@ Page，不关闭 Chrome、BrowserContext 或无关 tab。
 设置 `OPENCORVUS_BROWSER_MODE=isolated` 时，Browser MCP 通过同一个 BrowserRuntime 启动独立、未登录的系统
 Chrome；桌面默认 headed 可见，无图形显示的 Linux 自动 headless，也可用 `BROWSER_HEADLESS=true` 显式选择。
 该模式为明确配置而非 CDP 授权失败后的 fallback，profile 随进程结束，不承诺跨运行保存登录态。
+Playwright launch 不注册自己的 `SIGHUP`、`SIGINT` 或 `SIGTERM` handler；当前 HTTP 或 stdio composition root 是
+Browser Node 进程的唯一信号 owner。两种 root 都把外部信号、正常 transport/stdio 关闭和显式 close 收敛到同一个
+幂等终态回执：停止接纳操作，尝试关闭当前 Page，等待已接纳操作，尝试关闭迟到 Page 和 profile，最后断开 browser
+connection。每个安全阶段都要执行，Page/profile 关闭失败在 connection 断开后聚合上抛；仅全部成功时使用对应信号
+退出码，任一清理失败统一退出 1。Browser resource 层不直接终止进程，也不安装异步 `exit` handler。
+
+附着与独立是两个**浏览器身份**（不同 Cookie、不同登录态），不是同一能力的两个档次，所以跨越这条边界只能由调用方
+显式声明，不能由 runtime 在 CDP 失败时代为决定：默认的 `OPENCORVUS_BROWSER_MODE=chrome` 在 Chrome 不可附着时以
+具名错误失败并给出精确原因；只有 `OPENCORVUS_BROWSER_MODE=chrome_or_isolated` 表示操作者接受在另一个浏览器身份下
+工作，此时才会退到独立浏览器，并在日志中记录所依据的策略与原因。
 
 设置 `OPENCORVUS_BROWSER_CDP_ENDPOINT` 时，runtime 不再解析 Chrome channel 或 launch，而是经 Chrome DevTools Protocol
 (CDP) 显式附着已有 Chromium 系浏览器的 default context，并只新建、关闭 MCP 自己的 Page；shutdown 只断开

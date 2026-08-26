@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-26-session-stream-message-cutover-convergence.md](2026-08-26-session-stream-message-cutover-convergence.md) closes first-connect and reconnect gaps for newly created messages in Work, Chat, Mission, and ordinary Sessions by merging a subscribe-before-snapshot handshake through the canonical conversation writer.
+
 - [2026-08-26-extensible-inspect-benchmark-framework.md](2026-08-26-extensible-inspect-benchmark-framework.md) evolves the OpenCorvus Inspect adapter into a versioned benchmark registry with deterministic manifests, frozen scorer provenance, and attributed Apodex BrowseComp and FrontierScience integrations without importing a second runner or Agent runtime.
 
 - [2026-08-26-session-conversation-history-visibility-repair.md](2026-08-26-session-conversation-history-visibility-repair.md) connects the existing bounded Session tail to its canonical older-history route so Mission and ordinary conversation prefixes remain reachable through the shared Overlay writer.

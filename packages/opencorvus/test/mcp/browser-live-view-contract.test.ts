@@ -8,6 +8,7 @@ import {
   browserMcpIsolatedLaunchArgs,
   browserMcpProductFromExecutable,
   cancelAndDrainBrowserMcpOperations,
+  closeBrowserMcpPages,
   createBrowserMcpOperationGate,
   resolveBrowserMcpConnectionConfig,
   resolveBrowserMcpHeadless,
@@ -77,18 +78,19 @@ describe("Browser MCP Live View contract", () => {
     expect(order).toEqual(["pages-closed", "operation-settled", "shutdown-drained"])
   })
 
-  test("immediately closes a pending page created after shutdown admission stops", async () => {
+  test("hands a post-admission page to the terminal late-page owner", async () => {
     const gate = createBrowserMcpOperationGate()
     gate.stop()
+    const latePages = new Set<{ close: () => Promise<void> }>()
     let closed = false
     const page = {
       close: async () => {
         closed = true
       },
     }
-    trackPendingBrowserMcpPageWithGate(page, gate)
-    await Promise.resolve()
-    expect(closed).toBe(true)
+    trackPendingBrowserMcpPageWithGate(page, gate, latePages)
+    await closeBrowserMcpPages(latePages)
+    expect({ closed, latePages: latePages.size }).toEqual({ closed: true, latePages: 1 })
   })
 
   test("closes late registered sessions before detaching from Chrome", async () => {
@@ -119,6 +121,71 @@ describe("Browser MCP Live View contract", () => {
       "profiles-closed",
       "cdp-detached",
     ])
+  })
+
+  test("settles every ordered shutdown stage before publishing its aggregate failure", async () => {
+    const order: string[] = []
+    const pageFailure = new Error("current-page-close-failed")
+    const profileFailure = new Error("profile-close-failed")
+    let receipt: unknown
+    try {
+      await runBrowserMcpShutdownSequence({
+        stop: () => order.push("admission-stopped"),
+        closeCurrentPages: async () => {
+          order.push("current-pages-attempted")
+          throw pageFailure
+        },
+        waitForOperations: async () => {
+          order.push("operations-drained")
+        },
+        closeLatePages: async () => {
+          order.push("late-pages-attempted")
+        },
+        closeProfiles: async () => {
+          order.push("profiles-attempted")
+          throw profileFailure
+        },
+        disconnect: async () => {
+          order.push("browser-disconnected")
+        },
+      })
+    } catch (error) {
+      receipt = error
+    }
+    expect(order).toEqual([
+      "admission-stopped",
+      "current-pages-attempted",
+      "operations-drained",
+      "late-pages-attempted",
+      "profiles-attempted",
+      "browser-disconnected",
+    ])
+    expect(receipt).toBeInstanceOf(AggregateError)
+    expect((receipt as AggregateError).errors).toEqual([pageFailure, profileFailure])
+  })
+
+  test("attempts every page close and publishes the exact failed close receipt", async () => {
+    const order: string[] = []
+    const failure = new Error("page-close-failed")
+    let receipt: unknown
+    try {
+      await closeBrowserMcpPages([
+        {
+          close: () => {
+            order.push("first-page")
+            throw failure
+          },
+        },
+        {
+          close: async () => {
+            order.push("second-page")
+          },
+        },
+      ])
+    } catch (error) {
+      receipt = error
+    }
+    expect({ order, receipt }).toEqual({ order: ["first-page", "second-page"], receipt: failure })
   })
 
   test("rejects an admitted create operation at its post-launch shutdown checkpoint", () => {
@@ -213,7 +280,7 @@ describe("Browser MCP Live View contract", () => {
       headless: false,
     })
     expect(() => resolveBrowserMcpConnectionConfig({ OPENCORVUS_BROWSER_MODE: "unknown" }, "linux")).toThrow(
-      "Invalid OPENCORVUS_BROWSER_MODE: unknown. Expected chrome or isolated.",
+      "Invalid OPENCORVUS_BROWSER_MODE: unknown. Expected chrome, chrome_or_isolated or isolated.",
     )
     expect(BROWSER_MCP_ATTACHED_PROFILE_ID).toBe("prof_cdp_attached")
   })
@@ -253,9 +320,9 @@ describe("Browser MCP Live View contract", () => {
   })
 
   test("keeps the managed CDP profile off the directory Chrome refuses to debug", () => {
-    expect(
-      BrowserRuntime.resolveManagedChromeUserDataDir({ platform: "darwin", env: {}, homeDir: "/Users/me" }),
-    ).toBe("/Users/me/Library/Application Support/opencorvus/data/chrome-cdp-profile")
+    expect(BrowserRuntime.resolveManagedChromeUserDataDir({ platform: "darwin", env: {}, homeDir: "/Users/me" })).toBe(
+      "/Users/me/Library/Application Support/opencorvus/data/chrome-cdp-profile",
+    )
     expect(BrowserRuntime.resolveManagedChromeUserDataDir({ platform: "linux", env: {}, homeDir: "/home/me" })).toBe(
       "/home/me/.local/share/opencorvus/data/chrome-cdp-profile",
     )

@@ -494,6 +494,7 @@ describe("Computer Use exact control contract", () => {
         const observationDigest = "a".repeat(64)
         const result = await materializeMcpToolResult({
           projectID: Instance.project.id,
+          serverName: ComputerMCPBuiltin.ServerName,
           result: {
             content: [{ type: "image", data: pngBase64(8, 6), mimeType: "image/png" }],
             structuredContent: {
@@ -530,6 +531,7 @@ describe("Computer Use exact control contract", () => {
         expect(
           await materializeMcpToolResult({
             projectID: Instance.project.id,
+            serverName: ComputerMCPBuiltin.ServerName,
             result: {
               content: [
                 {
@@ -610,7 +612,11 @@ describe("Computer Use exact control contract", () => {
           })
           const config = Config.Info.parse({
             prompt_profile: { active: profileID },
-            mcp: { [ComputerMCPBuiltin.ServerName]: { enabled: false } },
+            // The builtin Computer provider is a configured declaration, the
+            // same one `materializeBuiltinMcp` writes for a project that has
+            // not customized it. The squad projects that declaration; it does
+            // not substitute a runtime of its own.
+            mcp: { [ComputerMCPBuiltin.ServerName]: ComputerMCPBuiltin.localConfig() },
           })
           const capability = await PromptProfileResolver.resolveSchedulerCapability({
             projectDirectory: project.path,

@@ -138,7 +138,7 @@ export async function recoverSelectedTaskConversation(
     if (!replayLive) resetSelectedLiveCursor()
     if (replayLive) cancelConversationReplay()
     if (options.requireFreshBoard === true) {
-      await loadBoard({ sync: true, requireFresh: true })
+      await loadBoard({ requireFresh: true })
       assertCurrentRecovery(taskID, generation, controller.signal)
     }
     if (!replayLive) {

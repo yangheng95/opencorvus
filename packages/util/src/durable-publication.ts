@@ -235,10 +235,10 @@ export class DurablePublicationStore {
         await cut("occurrence-staging-created")
         await writeExclusive(path.join(staging, "intent.json"), intent, "intent")
         await syncDirectory(staging)
+        let published = false
         try {
           await rename(staging, directory)
-          await cut("occurrence-published")
-          await syncDirectory(kindDirectory)
+          published = true
         } catch (error) {
           // Renaming onto an existing directory reports EEXIST or ENOTEMPTY on
           // POSIX and EPERM on Windows; all three mean the occurrence is
@@ -249,6 +249,13 @@ export class DurablePublicationStore {
           if (stable(existing.intent) !== stable(intent)) {
             throw new Error(`Durable publication occurrence already exists with different intent: ${directory}`)
           }
+        }
+        // The durability of the publication is not part of the replay branch:
+        // a failed directory fsync must surface, not be read as "someone else
+        // already published this".
+        if (published) {
+          await cut("occurrence-published")
+          await syncDirectory(kindDirectory)
         }
       } finally {
         await rm(staging, { recursive: true, force: true }).catch(() => undefined)
@@ -352,8 +359,14 @@ export class DurablePublicationStore {
   }
 
   async removeSettled(kind: string, occurrenceID: string): Promise<void> {
-    const occurrence = await this.read(kind, occurrenceID)
-    if (!occurrence.terminal) throw new Error(`Cannot remove unsettled durable publication ${occurrenceID}`)
-    await rm(occurrence.directory, { recursive: true, force: false })
+    const initial = await this.read(kind, occurrenceID)
+    // Removal mutates the occurrence directory like create/appendPhase/settle,
+    // so it takes the same subject lock: without it a peer could delete an
+    // occurrence between another writer's read and its write.
+    await this.withSubjectLock(kind, initial.intent.subject, async () => {
+      const occurrence = await this.read(kind, occurrenceID)
+      if (!occurrence.terminal) throw new Error(`Cannot remove unsettled durable publication ${occurrenceID}`)
+      await rm(occurrence.directory, { recursive: true, force: false })
+    })
   }
 }

@@ -1,4 +1,6 @@
 import type { CallToolResult } from "@modelcontextprotocol/sdk/types.js"
+import { BrowserMCPBuiltin } from "@/mcp/browser/builtin"
+import { ComputerMCPBuiltin } from "@/mcp/computer/builtin"
 import { AttachmentStore } from "@/storage/attachment-store"
 import { decodeRawBase64Payload } from "@/session/text-mime"
 import { Identifier } from "@/id/id"
@@ -47,6 +49,18 @@ export async function materializeMcpToolResult(input: {
   projectID: string
   result: CallToolResult & { metadata?: unknown }
   imageFilename?: string
+  /**
+   * The MCP server this result came from.
+   *
+   * Computer and Browser result semantics carry permission, result and UI
+   * treatment, and they used to be guessed from the shape of
+   * `structuredContent` alone — so a generic or package MCP server whose
+   * payload happened to match got another provider's treatment. The provider
+   * identity travels with the result instead: only the server that IS the
+   * builtin gets that builtin's materialization. An omitted identity is a
+   * caller that cannot name its provider, and receives neither.
+   */
+  serverName?: string
 }): Promise<MaterializedMcpToolResult> {
   const textParts: string[] = []
   const attachments: AttachmentStore.Reference[] = []
@@ -97,13 +111,14 @@ export async function materializeMcpToolResult(input: {
     input.result.metadata && typeof input.result.metadata === "object" && !Array.isArray(input.result.metadata)
       ? (input.result.metadata as Record<string, unknown>)
       : {}
-  const computer = computerResultMetadata(
-    (input.result as { structuredContent?: unknown }).structuredContent,
-    attachments,
-  )
-  const browser = computer
-    ? undefined
-    : browserObservationMetadata((input.result as { structuredContent?: unknown }).structuredContent, attachments)
+  const computer =
+    input.serverName === ComputerMCPBuiltin.ServerName
+      ? computerResultMetadata((input.result as { structuredContent?: unknown }).structuredContent, attachments)
+      : undefined
+  const browser =
+    input.serverName === BrowserMCPBuiltin.ServerName
+      ? browserObservationMetadata((input.result as { structuredContent?: unknown }).structuredContent, attachments)
+      : undefined
 
   return {
     text: textParts.join("\n\n"),

@@ -23,6 +23,8 @@
     "typecheck:fresh": "bun run ./script/clean-cache.ts && bun run typecheck",
     "docs:api": "bun run ./packages/opencorvus/script/docs/render-api-md.ts",
     "docs:check": "bun run ./packages/opencorvus/script/docs/render-api-md.ts --check",
+    "check:package-topology": "bun run ./packages/opencorvus/script/check/package-topology.ts",
+    "check:architecture-index": "bun run ./packages/opencorvus/script/check/architecture-index.ts",
     "api:routes-check": "bun run ./packages/opencorvus/script/check/routes.ts",
     "check:task-control-real": "bun run ./packages/opencorvus/script/task-control-check.ts",
     "check:control-state-redundancy": "bun run --cwd packages/opencorvus check:control-state-redundancy",

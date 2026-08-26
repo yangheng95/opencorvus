@@ -53,15 +53,13 @@ export const [boardStore, setBoardStore] = createStore({
   pendingTasks: [] as any[],
   /** Monotonic counter incremented on each tasks-list refresh */
   tasksSeq: 0,
-  // ── Board sync internals (mirrors state.boardEtag / state.boardQueued / etc.) ──
+  // ── Board refresh internals (mirrors state.boardEtag / state.boardQueued / etc.) ──
   /** ETag of the last board response, used for conditional fetches */
   boardEtag: "" as string,
   /** Whether a board reload is currently queued (debounce guard) */
   boardQueued: false,
   /** Retry attempt counter for board fetch failures */
   boardRetryCount: 0,
-  /** Whether an in-flight board sync is pending */
-  boardSyncPending: false,
   /** Snapshot version string returned by the server with the board payload */
   snapshotVersion: "" as string,
   // ── VCS state (mirrors state.path / state.vcs) ──
@@ -98,8 +96,7 @@ export const [boardStore, setBoardStore] = createStore({
 // ── Loaders ──
 
 export interface LoadBoardOptions {
-  sync?: boolean
-  /** Require the current board reload to finish successfully and reject on failure. */
+  /** Wait for any older request, then issue this caller's own board reload and reject on failure. */
   requireFresh?: boolean
 }
 
@@ -309,14 +306,13 @@ function clearBoardRetry(): void {
   setBoardRetryCount(0)
 }
 
-function retryBoard(sync: boolean): void {
+function retryBoard(): void {
   if (!activeTaskID() || _boardRetryTimer) return
-  if (sync) setBoardSyncPending(true)
   const delay = Math.min(1000 * Math.pow(2, Math.min(boardStore.boardRetryCount, 4)), 15000)
   setBoardRetryCount(boardStore.boardRetryCount + 1)
   _boardRetryTimer = setTimeout(() => {
     _boardRetryTimer = null
-    observeScheduledBoardLoad("retry", loadBoard({ sync: boardStore.boardSyncPending }))
+    observeScheduledBoardLoad("retry", loadBoard())
   }, delay)
 }
 
@@ -333,12 +329,10 @@ export async function loadBoard(options: LoadBoardOptions = {}): Promise<void> {
     setSnapshotVersion("")
     return
   }
-  if (options.sync) setBoardSyncPending(true)
   while (_boardLoading) {
     const inFlightBeforeCall = _boardLoading
     if (!options.requireFresh) {
       _boardQueued = true
-      if (options.sync) setBoardSyncPending(true)
       return inFlightBeforeCall
     }
     try {
@@ -354,25 +348,18 @@ export async function loadBoard(options: LoadBoardOptions = {}): Promise<void> {
     setSnapshotVersion("")
     return
   }
-  const sync = options.sync === true || boardStore.boardSyncPending
-  if (sync) setBoardSyncPending(true)
   const loading = (async () => {
     let failed = false
     try {
       const headers: Record<string, string> = {}
       if (boardStore.boardEtag) headers["If-None-Match"] = boardStore.boardEtag
       const directory = selectedTaskOwningDirectory(taskID)
-      const boardPath = directoryScopedPath(
-        `task/${encodeURIComponent(taskID)}/board?sync=${sync ? "1" : "0"}`,
-        directory,
-        "loadBoard",
-      )
+      const boardPath = directoryScopedPath(`task/${encodeURIComponent(taskID)}/board`, directory, "loadBoard")
       const res = await apiRequest<any>(boardPath, {
         headers,
         signal: AbortSignal.timeout(10000),
       })
       if (taskID !== activeTaskID()) return
-      setBoardSyncPending(false)
       if (res.status === 304) {
         clearBoardRetry()
         return
@@ -417,7 +404,7 @@ export async function loadBoard(options: LoadBoardOptions = {}): Promise<void> {
           diagnosticDetails: formatErrorDetails(e),
         })
       }
-      if (taskID === activeTaskID() && !options.requireFresh) retryBoard(sync)
+      if (taskID === activeTaskID() && !options.requireFresh) retryBoard()
       if (options.requireFresh) throw e
     } finally {
       _boardLoading = null
@@ -427,7 +414,7 @@ export async function loadBoard(options: LoadBoardOptions = {}): Promise<void> {
         setBoardQueued(false)
         if (!failed && !_boardRetryTimer) {
           queueMicrotask(() => {
-            observeScheduledBoardLoad("queued", loadBoard({ sync: boardStore.boardSyncPending }))
+            observeScheduledBoardLoad("queued", loadBoard())
           })
         }
       }
@@ -654,7 +641,7 @@ function taskPageFromResponse(
 
 /**
  * Clear all task-scoped board state on task switch.
- * Cancels pending retry timers and resets all per-task sync machinery so that
+ * Cancels pending retry timers and resets all per-task reload machinery so that
  * the next loadBoard() call starts from a clean slate.
  */
 export function clearBoard(): void {
@@ -669,7 +656,6 @@ export function clearBoard(): void {
     board: null,
     taskSequence: 0,
     boardEtag: "",
-    boardSyncPending: false,
     boardQueued: false,
     snapshotVersion: "",
     changes: [],
@@ -715,7 +701,6 @@ const BOARD_MAX_DELAY_MS = 2000
  * @param delay Delay in milliseconds before calling loadBoard. Defaults to 0.
  */
 export function scheduleBoard(delay = 0): void {
-  setBoardSyncPending(true)
   clearBoardRetry()
   const now = Date.now()
   // First scheduling in a burst: set deadline
@@ -733,7 +718,7 @@ export function scheduleBoard(delay = 0): void {
   boardLoadTimer = setTimeout(() => {
     boardLoadTimer = null
     boardLoadDeadline = 0
-    observeScheduledBoardLoad("debounced", loadBoard({ sync: true }))
+    observeScheduledBoardLoad("debounced", loadBoard())
   }, effectiveDelay)
 }
 
@@ -819,7 +804,7 @@ export function setChanges(changes: any[]): void {
   setBoardStore("changes", Array.isArray(changes) ? changes : [])
 }
 
-// ── Board sync state setters ──
+// ── Board refresh state setters ──
 
 export function setBoardEtag(etag: string): void {
   setBoardStore("boardEtag", typeof etag === "string" ? etag : "")
@@ -831,10 +816,6 @@ export function setBoardQueued(queued: boolean): void {
 
 export function setBoardRetryCount(count: number): void {
   setBoardStore("boardRetryCount", typeof count === "number" ? count : 0)
-}
-
-export function setBoardSyncPending(pending: boolean): void {
-  setBoardStore("boardSyncPending", pending)
 }
 
 export function setSnapshotVersion(version: string): void {

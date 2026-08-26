@@ -1,4 +1,5 @@
 import { Log } from "../util/log"
+import { PackageInstallReceipt } from "@/bun/install-receipt"
 import { acquireProcessLock, withSharedJsonFactLock } from "@/util/process-lock"
 import path from "path"
 import { pathToFileURL } from "url"
@@ -52,6 +53,13 @@ import {
 } from "@/agent/runtime-override"
 
 export namespace Config {
+  /** The one dependency a config tree is installed for. */
+  const PLUGIN_DEPENDENCY = "@opencorvus-ai/plugin"
+
+  /** The version spec this channel installs and reads back. One spelling, so
+   *  the receipt key and the manifest entry cannot drift apart. */
+  const installTargetVersion = () => (Installation.isLocal() ? "*" : Installation.VERSION)
+
   export const ModelId = z
     .string()
     .refine(isModelReference, {
@@ -413,10 +421,9 @@ export namespace Config {
         // while this owner waited. Re-check under both the process-local and
         // cross-process directory owner before changing canonical files.
         if (!(await needsInstall(dir))) return
-
         const pkg = path.join(dir, "package.json")
         const gitignore = path.join(dir, ".gitignore")
-        const targetVersion = Installation.isLocal() ? "*" : Installation.VERSION
+        const targetVersion = installTargetVersion()
         const packageSchema = z.object({ dependencies: z.record(z.string(), z.string()).optional() }).passthrough()
         const previousPackage = await Filesystem.readText(pkg).catch((error: NodeJS.ErrnoException) => {
           if (error.code === "ENOENT") return undefined
@@ -434,6 +441,18 @@ export namespace Config {
           ["node_modules", "package.json", "bun.lock", ".gitignore"].join("\n"),
         )
 
+        // The occurrence opens immediately before the try whose catch restores
+        // the tree, so it can never leak unsettled: every failure from here on
+        // settles it. The two canonical writes above sit outside it — the catch
+        // still restores them, and failing in them settles nothing because no
+        // occurrence exists yet. The rollback covers strictly more than the
+        // occurrence does, which is the safe direction for the pair.
+        const installOccurrenceID = await PackageInstallReceipt.begin({
+          root: dir,
+          package: PLUGIN_DEPENDENCY,
+          requestedVersion: targetVersion,
+        })
+
         try {
           // Install any additional dependencies defined in package.json so
           // local plugins can use their declared external packages.
@@ -445,7 +464,29 @@ export namespace Config {
             ],
             { cwd: dir },
           )
+          // Readiness is published only after the resolved tree verifies, so a
+          // killed install can never be read back as an installed one.
+          const installedVersion = z
+            .object({ version: z.string().min(1) })
+            .passthrough()
+            .parse(await Filesystem.readJson(path.join(dir, "node_modules", PLUGIN_DEPENDENCY, "package.json"))).version
+          await PackageInstallReceipt.verifyAndPublish({
+            occurrenceID: installOccurrenceID,
+            root: dir,
+            package: PLUGIN_DEPENDENCY,
+            requestedVersion: targetVersion,
+            resolvedVersion: installedVersion,
+            moduleDirectory: path.join(dir, "node_modules", PLUGIN_DEPENDENCY),
+            // `bun install` installed everything this config declares, so the
+            // receipt has to certify all of it: a tree whose user-declared
+            // extra dependency never completed must not read as installed.
+            additionalDependencies: Object.keys(json.dependencies ?? {}),
+          })
         } catch (cause) {
+          await PackageInstallReceipt.rollback(
+            installOccurrenceID,
+            cause instanceof Error ? cause.message : String(cause),
+          ).catch(() => undefined)
           const rollbackFailures: unknown[] = []
           try {
             if (previousPackage === undefined) await fs.rm(pkg, { force: true })
@@ -488,6 +529,11 @@ export namespace Config {
     const nodeModules = path.join(dir, "node_modules")
     const pkg = path.join(dir, "package.json")
     const pkgExists = await Filesystem.exists(pkg)
+    // Physical existence is not readiness. A killed `bun install` leaves a
+    // node_modules tree and a package.json naming the right version behind,
+    // and reading those as proof made every later load use an incomplete tree
+    // forever. The completeness receipt for this exact tree and revision is
+    // the authority, exactly as it is for the shared registry cache.
     let required = !existsSync(nodeModules) || !pkgExists
     if (!required) {
       const parsed = z
@@ -497,17 +543,23 @@ export namespace Config {
       const depVersion = parsed.dependencies?.["@opencorvus-ai/plugin"]
       if (!depVersion) required = true
       else {
-        const targetVersion = Installation.isLocal() ? "latest" : Installation.VERSION
-        if (targetVersion === "latest") {
-          required = await PackageRegistry.isOutdated("@opencorvus-ai/plugin", depVersion, dir)
-          if (required) {
-            log.info("Cached version is outdated, proceeding with install", {
-              pkg: "@opencorvus-ai/plugin",
-              cachedVersion: depVersion,
-            })
-          }
-        } else {
-          required = depVersion !== targetVersion
+        // The spec the install writes is the spec this compares against — one
+        // spelling of the channel's target, so the receipt key and the manifest
+        // entry cannot drift apart. The local channel's spec is a wildcard, and
+        // every version satisfies a wildcard, so asking the registry whether it
+        // was outdated was a network round trip whose only possible answer was
+        // the one this comparison already gives.
+        required = depVersion !== installTargetVersion()
+      }
+      if (!required) {
+        const published = await PackageInstallReceipt.isPublished({
+          root: dir,
+          package: PLUGIN_DEPENDENCY,
+          version: depVersion!,
+        })
+        if (!published) {
+          log.info("config dependency tree has no completeness receipt, reinstalling", { dir, depVersion })
+          required = true
         }
       }
     }
@@ -541,7 +593,7 @@ export namespace Config {
       mcp: {
         ...(config.mcp ?? {}),
         ...(browser ? {} : { [BrowserMCPBuiltin.ServerName]: BrowserMCPBuiltin.localConfig() }),
-        ...(computer ? {} : { [ComputerMCPBuiltin.ServerName]: { enabled: false as const } }),
+        ...(computer ? {} : { [ComputerMCPBuiltin.ServerName]: ComputerMCPBuiltin.localConfig() }),
       },
     }
   }
