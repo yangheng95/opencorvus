@@ -721,6 +721,26 @@ export namespace MCP {
     return tool
   }
 
+  /**
+   * Every tool a server exposes, projected under a scoped connection owner.
+   *
+   * The shared-connection projection enumerates whatever the server actually
+   * exposes; an owned projection must enumerate the same thing, or moving a
+   * server onto an owner would silently narrow the model's tool surface to
+   * whatever list the caller happened to hold.
+   */
+  export async function scopedToolsForServer(input: Omit<ScopedToolInput, "toolName">): Promise<Record<string, Tool>> {
+    const names = await withScopedClient(
+      input,
+      async (_client, _timeout, connection): Promise<string[]> =>
+        connection.tools.filter((item) => !isToolVisibilityAppOnly(item)).map((item) => item.name),
+    )
+    const entries = await Promise.all(
+      names.map(async (toolName) => [`${input.key}_${toolName}`, await scopedTool({ ...input, toolName })] as const),
+    )
+    return Object.fromEntries(entries)
+  }
+
   export async function scopedToolInfo(input: ScopedToolInput): Promise<MCPToolDef> {
     return withScopedClient(input, async (_client, _timeout, connection) => {
       const mcpTool = connection.tools.find((item) => item.name === input.toolName)

@@ -5,7 +5,7 @@ export namespace BrowserMCPBuiltin {
 
   // MCP means Model Context Protocol. This is the canonical Browser MCP subset that
   // imported expert squads may project after an explicit evidence-backed replacement.
-  const ImportableToolNames = [
+  export const ImportableToolNames = [
     "session_create",
     "session_destroy",
     "viewport_set",
