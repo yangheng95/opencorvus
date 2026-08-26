@@ -1,6 +1,11 @@
 /** Filesystem ownership evidence for task worktrees. */
 
 import fs from "fs/promises"
+import {
+  currentRuntimeProcessOccurrence,
+  observedProcessOccurrence,
+  observeRuntimeProcessOccurrence,
+} from "@/runtime/process-occurrence"
 import path from "path"
 import z from "zod"
 import { NamedError } from "@opencorvus-ai/util/error"
@@ -16,6 +21,12 @@ export namespace Ownership {
     sessionID: string
     cwd: string
     ownerPid: number
+    /** The owner's process-instance fingerprint. A PID alone is reused by the
+     *  operating system, so a marker identified only by its number keeps a
+     *  dead owner "alive" and its worktree unreleasable forever. Absent only
+     *  for markers written before this fact existed, or on a platform that
+     *  cannot fingerprint a process. */
+    ownerProcessInstanceID?: string
     createdAt: number
     kind: "worktree"
   }
@@ -174,6 +185,32 @@ export namespace Ownership {
       if (code === "ESRCH") return { status: "dead" }
       return { status: "unobservable", cause: error }
     }
+  }
+
+  /**
+   * Observe the owner OCCURRENCE a marker names.
+   *
+   * A process number is not an identity: once the owner dies and the operating
+   * system hands its number to something unrelated, a number-only probe answers
+   * "alive" forever and the worktree it guards can never be released. When the
+   * marker carries the owner's fingerprint, a mismatch is as terminal as an
+   * exit. A marker without one — written before this fact existed, or on a
+   * platform that cannot fingerprint — keeps the weaker number-only answer
+   * rather than a fabricated identity.
+   */
+  export function observeOwner(
+    marker: { ownerPid: number; ownerProcessInstanceID?: string },
+    probe?: (pid: number) => void,
+  ): PidObservation {
+    if (!marker.ownerProcessInstanceID) return observePid(marker.ownerPid, probe)
+    const observation = observeRuntimeProcessOccurrence({
+      pid: marker.ownerPid,
+      processInstanceID: marker.ownerProcessInstanceID,
+      occurrenceID: "",
+    })
+    if (observation === "exact_live") return { status: "alive" }
+    if (observation === "dead_or_reused") return { status: "dead" }
+    return observePid(marker.ownerPid, probe)
   }
 
   async function writeMarker(filePath: string, marker: Marker): Promise<void> {
@@ -449,6 +486,7 @@ export namespace Ownership {
       taskID: string
       sessionID: string
       ownerPid?: number
+      ownerProcessInstanceID?: string
       now?: number
     }
 
@@ -458,6 +496,11 @@ export namespace Ownership {
         sessionID: input.sessionID,
         cwd: path.resolve(input.worktreeDir),
         ownerPid: input.ownerPid ?? process.pid,
+        ownerProcessInstanceID:
+          input.ownerProcessInstanceID ??
+          (input.ownerPid === undefined || input.ownerPid === process.pid
+            ? currentRuntimeProcessOccurrence().processInstanceID
+            : observedProcessOccurrence(input.ownerPid)?.processInstanceID),
         createdAt: input.now ?? Date.now(),
         kind: "worktree",
       }
@@ -579,7 +622,7 @@ export namespace Ownership {
           !(await sameWorktree(entry.marker.cwd, input.worktreeDir, "compare-owner-proof"))
         )
           continue
-        const pid = (input.observeOwnerPid ?? observePid)(entry.marker.ownerPid)
+        const pid = (input.observeOwnerPid ? input.observeOwnerPid(entry.marker.ownerPid) : observeOwner(entry.marker))
         if (pid.status === "unobservable") {
           throw observationError({
             operation: "observe-owner-process",
@@ -673,7 +716,7 @@ export namespace Ownership {
           })
           continue
         }
-        const pid = (input.observeOwnerPid ?? observePid)(entry.marker.ownerPid)
+        const pid = (input.observeOwnerPid ? input.observeOwnerPid(entry.marker.ownerPid) : observeOwner(entry.marker))
         if (pid.status === "unobservable") {
           throw observationError({
             operation: "observe-owner-process",
@@ -711,7 +754,7 @@ export namespace Ownership {
         if (entry.status !== "valid") continue
         let releasable = (await targetStatus(entry.marker.cwd)) === "missing"
         if (!releasable) {
-          const pid = (input.observeOwnerPid ?? observePid)(entry.marker.ownerPid)
+          const pid = (input.observeOwnerPid ? input.observeOwnerPid(entry.marker.ownerPid) : observeOwner(entry.marker))
           if (pid.status === "unobservable") {
             const issue = unobservableIntegrity({
               operation: "observe-owner-process",
