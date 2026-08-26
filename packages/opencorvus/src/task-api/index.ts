@@ -1770,7 +1770,7 @@ export namespace EngineService {
     // "see the intent bundle §3" point at nothing — the
     // executor either misses the reference or hallucinates a body. See
     // `src/intent/bundle.ts` header for the full rationale.
-    let session!: Awaited<ReturnType<typeof Session.create>>
+    let session!: Session.Info
     let initialIngressID: string | undefined
     try {
       const preparedArtifactSources =
@@ -1810,8 +1810,11 @@ export namespace EngineService {
           active: input.promptProfile ?? taskConfigSnapshot.prompt_profile.active,
         },
       })
-      session = await Session.create({
+      // Prepared only: the root Session inserts inside persistTask's
+      // transaction, together with the Task aggregate it belongs to.
+      session = Session.prepareRootNext({
         kind: "root",
+        directory: Instance.directory,
         title,
         permission: overrides.length > 0 ? overrides : undefined,
         metadata: {
@@ -1824,7 +1827,7 @@ export namespace EngineService {
       // only after every imported resource snapshot is durable.
       initialIngressID = persistTask({
         taskID,
-        sessionID: session.id,
+        rootSession: session,
         now,
         title,
         request: input.request,
