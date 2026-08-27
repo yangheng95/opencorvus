@@ -1171,41 +1171,61 @@ export namespace McpAuth {
     leaseExpiresAt: number,
   ): Promise<boolean> {
     if (leaseExpiresAt <= Date.now()) throw new Error("MCP OAuth finishing renewal must extend into the future")
-    let renewed = false
-    try {
-      await updateStore(
-        authKey,
-        (entry) => {
-          const current = entry?.oauthFinishing
-          if (
-            !entry ||
-            !current ||
-            current.oauthState !== oauthState ||
-            current.ownerID !== ownerID ||
-            current.leaseExpiresAt <= Date.now()
-          ) {
+    for (let attempt = 0; attempt < EXACT_MUTATION_ATTEMPTS; attempt += 1) {
+      let renewed = false
+      await waitForExactMutationRetry(attempt)
+      try {
+        await updateStore(
+          authKey,
+          (entry) => {
+            const current = entry?.oauthFinishing
+            if (
+              !entry ||
+              !current ||
+              current.oauthState !== oauthState ||
+              current.ownerID !== ownerID ||
+              current.leaseExpiresAt <= Date.now()
+            ) {
+              return entry
+            }
+            current.leaseExpiresAt = leaseExpiresAt
+            renewed = true
             return entry
+          },
+          expectedRevision,
+          { oauthState, ownerID },
+        )
+        return renewed
+      } catch (error) {
+        let current: Entry | undefined
+        try {
+          current = await get(authKey)
+        } catch (readError) {
+          if (attempt === EXACT_MUTATION_ATTEMPTS - 1) {
+            throw new AggregateError(
+              [error, readError],
+              `MCP OAuth finishing renewal could not be reconciled: ${authKey}`,
+            )
           }
-          current.leaseExpiresAt = leaseExpiresAt
-          renewed = true
-          return entry
-        },
-        expectedRevision,
-        { oauthState, ownerID },
-      )
-    } catch (error) {
-      const current = await get(authKey)
-      if (
-        current?.revision === expectedRevision &&
-        current.oauthFinishing?.oauthState === oauthState &&
-        current.oauthFinishing.ownerID === ownerID &&
-        current.oauthFinishing.leaseExpiresAt >= leaseExpiresAt
-      ) {
-        return true
+          continue
+        }
+        if (
+          current?.revision === expectedRevision &&
+          current.oauthFinishing?.oauthState === oauthState &&
+          current.oauthFinishing.ownerID === ownerID &&
+          current.oauthFinishing.leaseExpiresAt >= leaseExpiresAt
+        ) {
+          return true
+        }
+        const ownerIsStillExact =
+          current?.revision === expectedRevision &&
+          current.oauthFinishing?.oauthState === oauthState &&
+          current.oauthFinishing.ownerID === ownerID &&
+          current.oauthFinishing.leaseExpiresAt > Date.now()
+        if (!ownerIsStillExact || attempt === EXACT_MUTATION_ATTEMPTS - 1) throw error
       }
-      throw error
     }
-    return renewed
+    return false
   }
 
   export async function settleExpiredOAuthFinishing(

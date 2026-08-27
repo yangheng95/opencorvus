@@ -15,6 +15,7 @@ import { McpOAuthProvider } from "@/mcp/oauth-provider"
 import { McpDebugCommand } from "@/cli/cmd/mcp"
 import { Filesystem } from "@/util/filesystem"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
+import { currentTestChildEnvironment } from "../fixture/current-test-child-environment"
 
 afterEach(async () => {
   await McpOAuthCallback.stop()
@@ -60,6 +61,16 @@ function startOAuthMcpServer(input?: {
   rejectRefreshWithDescription?: string
 }) {
   const tokenRequests: Record<string, string>[] = []
+  const events: Array<
+    | { kind: "authorization_code_token_issued" }
+    | {
+        kind: "mcp_request"
+        method: string
+        credential: "accepted" | "rejected" | "absent"
+        rpcMethod: string | undefined
+        responseStatus: number
+      }
+  > = []
   const server = Bun.serve({
     port: 0,
     fetch: async (request, bunServer) => {
@@ -99,6 +110,7 @@ function startOAuthMcpServer(input?: {
             { status: 400 },
           )
         }
+        if (fields.grant_type === "authorization_code") events.push({ kind: "authorization_code_token_issued" })
         return Response.json({
           access_token: "durable-finish-access-token",
           token_type: "Bearer",
@@ -108,18 +120,38 @@ function startOAuthMcpServer(input?: {
       }
       if (url.pathname === "/mcp") {
         const authorization = request.headers.get("authorization")
+        let rpcMethod: string | undefined
+        if (request.method === "POST") {
+          const payload = await request
+            .clone()
+            .json()
+            .catch(() => undefined)
+          if (payload && typeof payload === "object" && !Array.isArray(payload)) {
+            const method = (payload as Record<string, unknown>).method
+            if (typeof method === "string") rpcMethod = method
+          }
+        }
         const hasBearerCredential = authorization?.startsWith("Bearer ") === true
         const acceptedBearerCredential = input?.acceptedBearerToken
           ? authorization === `Bearer ${input.acceptedBearerToken}`
           : hasBearerCredential
+        const credential = acceptedBearerCredential ? "accepted" : hasBearerCredential ? "rejected" : "absent"
         if (input?.requireAuthentication && !acceptedBearerCredential) {
           const base = `http://127.0.0.1:${bunServer.port}`
-          return new Response("authorization required", {
+          const response = new Response("authorization required", {
             status: 401,
             headers: {
               "WWW-Authenticate": `Bearer resource_metadata="${base}/.well-known/oauth-protected-resource"`,
             },
           })
+          events.push({
+            kind: "mcp_request",
+            method: request.method,
+            credential,
+            rpcMethod,
+            responseStatus: response.status,
+          })
+          return response
         }
         if (input?.rejectAuthenticatedMcp && tokenRequests.some((item) => item.grant_type === "authorization_code")) {
           const base = `http://127.0.0.1:${bunServer.port}`
@@ -137,12 +169,20 @@ function startOAuthMcpServer(input?: {
           enableJsonResponse: true,
         })
         await mcp.connect(transport)
-        return transport.handleRequest(request)
+        const response = await transport.handleRequest(request)
+        events.push({
+          kind: "mcp_request",
+          method: request.method,
+          credential,
+          rpcMethod,
+          responseStatus: response.status,
+        })
+        return response
       }
       return new Response("not found", { status: 404 })
     },
   })
-  return { server, tokenRequests }
+  return { server, tokenRequests, events }
 }
 
 describe("MCP OAuth finish from durable facts", () => {
@@ -622,10 +662,14 @@ describe("MCP OAuth finish from durable facts", () => {
 
   test("a peer broker finishes a durable flow and settles the initiating backend waiter", async () => {
     await using project = await memoryProject()
-    const { server, tokenRequests } = startOAuthMcpServer()
+    const { server, tokenRequests, events } = startOAuthMcpServer({
+      requireAuthentication: true,
+      acceptedBearerToken: "durable-finish-access-token",
+    })
     const bindingOutput = path.join(project.path, "broker-binding.json")
     const broker = Bun.spawn([process.execPath, brokerWorker, Global.Path.root, bindingOutput], {
       cwd: path.join(import.meta.dir, "../.."),
+      env: currentTestChildEnvironment(),
       stdout: "pipe",
       stderr: "pipe",
     })
@@ -667,6 +711,9 @@ describe("MCP OAuth finish from durable facts", () => {
             response: response.status,
             waiter,
             exchange: tokenRequests.find((form) => form.grant_type === "authorization_code"),
+            eventCount: events.length,
+            issuedEvent: events[0],
+            mcpEvents: events.slice(1),
           }).toEqual({
             response: 200,
             waiter: { status: "fulfilled", result: { status: "connected" } },
@@ -675,6 +722,38 @@ describe("MCP OAuth finish from durable facts", () => {
               code_verifier: "peer-broker-verifier",
               redirect_uri: callbackBinding.redirectUrl,
             }),
+            eventCount: 5,
+            issuedEvent: { kind: "authorization_code_token_issued" },
+            mcpEvents: expect.arrayContaining([
+              {
+                kind: "mcp_request",
+                method: "POST",
+                credential: "accepted",
+                rpcMethod: "initialize",
+                responseStatus: 200,
+              },
+              {
+                kind: "mcp_request",
+                method: "POST",
+                credential: "accepted",
+                rpcMethod: "notifications/initialized",
+                responseStatus: 202,
+              },
+              {
+                kind: "mcp_request",
+                method: "GET",
+                credential: "accepted",
+                rpcMethod: undefined,
+                responseStatus: 200,
+              },
+              {
+                kind: "mcp_request",
+                method: "POST",
+                credential: "accepted",
+                rpcMethod: "tools/list",
+                responseStatus: 200,
+              },
+            ]),
           })
         },
       })
@@ -726,6 +805,7 @@ describe("MCP OAuth finish from durable facts", () => {
             [process.execPath, waiterWorker, Global.Path.root, authKey, oauthState, "ambiguous-peer", peerOutput],
             {
               cwd: path.join(import.meta.dir, "../.."),
+              env: currentTestChildEnvironment(),
               stdout: "pipe",
               stderr: "pipe",
             },
@@ -850,6 +930,7 @@ describe("MCP OAuth finish from durable facts", () => {
               ],
               {
                 cwd: path.join(import.meta.dir, "../.."),
+                env: currentTestChildEnvironment(),
                 stdout: "pipe",
                 stderr: "pipe",
               },
@@ -954,6 +1035,7 @@ describe("MCP OAuth finish from durable facts", () => {
             [process.execPath, waiterWorker, Global.Path.root, authKey, oauthState, "uncertain-peer", peerOutput],
             {
               cwd: path.join(import.meta.dir, "../.."),
+              env: currentTestChildEnvironment(),
               stdout: "pipe",
               stderr: "pipe",
             },
@@ -1038,6 +1120,7 @@ describe("MCP OAuth finish from durable facts", () => {
             ],
             {
               cwd: path.join(import.meta.dir, "../.."),
+              env: currentTestChildEnvironment(),
               stdout: "pipe",
               stderr: "pipe",
             },
@@ -1049,6 +1132,7 @@ describe("MCP OAuth finish from durable facts", () => {
             [process.execPath, terminalWorker, Global.Path.root, authKey, oauthState, revision],
             {
               cwd: path.join(import.meta.dir, "../.."),
+              env: currentTestChildEnvironment(),
               stdout: "pipe",
               stderr: "pipe",
             },
@@ -1175,6 +1259,7 @@ describe("MCP OAuth finish from durable facts", () => {
       ],
       {
         cwd: path.join(import.meta.dir, "../.."),
+        env: currentTestChildEnvironment(),
         stdout: "pipe",
         stderr: "pipe",
       },
@@ -1553,6 +1638,7 @@ describe("MCP OAuth finish from durable facts", () => {
             ],
             {
               cwd: path.join(import.meta.dir, "../.."),
+              env: currentTestChildEnvironment(),
               stdout: "pipe",
               stderr: "pipe",
             },
@@ -2123,13 +2209,23 @@ describe("MCP OAuth finish from durable facts", () => {
             const output = path.join(project.path, `${item.state}.json`)
             const finisher = Bun.spawn(
               [process.execPath, finishingWorker, Global.Path.root, authKey, item.state, revision, output, "10000"],
-              { cwd: path.join(import.meta.dir, "../.."), stdout: "pipe", stderr: "pipe" },
+              {
+                cwd: path.join(import.meta.dir, "../.."),
+                env: currentTestChildEnvironment(),
+                stdout: "pipe",
+                stderr: "pipe",
+              },
             )
             children.push(finisher)
             await waitForJson(output)
             const terminal = Bun.spawn(
               [process.execPath, terminalWorker, Global.Path.root, authKey, item.state, revision, item.outcome],
-              { cwd: path.join(import.meta.dir, "../.."), stdout: "pipe", stderr: "pipe" },
+              {
+                cwd: path.join(import.meta.dir, "../.."),
+                env: currentTestChildEnvironment(),
+                stdout: "pipe",
+                stderr: "pipe",
+              },
             )
             children.push(terminal)
             const terminalExit = await terminal.exited

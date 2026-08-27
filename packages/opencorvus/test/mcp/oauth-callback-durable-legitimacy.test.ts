@@ -1,6 +1,5 @@
 import { afterEach, describe, expect, spyOn, test } from "bun:test"
 import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises"
-import os from "node:os"
 import path from "node:path"
 import { Global } from "@/global"
 import { McpAuth } from "@/mcp/auth"
@@ -8,6 +7,7 @@ import { McpOAuthCallback } from "@/mcp/oauth-callback"
 import { McpOAuthProvider } from "@/mcp/oauth-provider"
 import { Filesystem } from "@/util/filesystem"
 import { auth } from "@modelcontextprotocol/sdk/client/auth.js"
+import { currentTestChildEnvironment } from "../fixture/current-test-child-environment"
 
 const worker = path.join(import.meta.dir, "../fixture/mcp-oauth-callback-broker-worker.ts")
 const stallingWorker = path.join(import.meta.dir, "../fixture/mcp-oauth-callback-stalling-broker-worker.ts")
@@ -20,7 +20,7 @@ afterEach(async () => {
 })
 
 async function temporaryRoot(label: string) {
-  return mkdtemp(path.join(os.tmpdir(), `opencorvus-mcp-broker-${label}-`))
+  return mkdtemp(path.join(Global.Path.temporary, `mcp-broker-${label}-`))
 }
 
 async function waitForJson<T>(filepath: string, timeout = 10_000): Promise<T> {
@@ -38,6 +38,7 @@ async function waitForJson<T>(filepath: string, timeout = 10_000): Promise<T> {
 function spawnHolder(root: string, output: string) {
   return Bun.spawn([process.execPath, worker, root, output], {
     cwd: path.join(import.meta.dir, "../.."),
+    env: currentTestChildEnvironment(),
     stdout: "pipe",
     stderr: "pipe",
   })
@@ -64,6 +65,7 @@ function spawnStallingHolder(
     ],
     {
       cwd: path.join(import.meta.dir, "../.."),
+      env: currentTestChildEnvironment(),
       stdout: "pipe",
       stderr: "pipe",
     },
@@ -117,6 +119,7 @@ describe("the durable MCP OAuth callback broker", () => {
       )
       const publisher = Bun.spawn([process.execPath, terminalWorker, root, authKey, oauthState, revision], {
         cwd: path.join(import.meta.dir, "../.."),
+        env: currentTestChildEnvironment(),
         stdout: "pipe",
         stderr: "pipe",
       })
@@ -139,6 +142,7 @@ describe("the durable MCP OAuth callback broker", () => {
     const output = path.join(root, "binding.json")
     const child = Bun.spawn([process.execPath, oneShotWorker, root, output], {
       cwd: path.join(import.meta.dir, "../.."),
+      env: currentTestChildEnvironment(),
       stdout: "pipe",
       stderr: "pipe",
     })
@@ -1410,6 +1414,7 @@ describe("the durable MCP OAuth callback broker", () => {
       })
       child = Bun.spawn([process.execPath, finishingWorker, root, authKey, oauthState, revision, output, "300"], {
         cwd: path.join(import.meta.dir, "../.."),
+        env: currentTestChildEnvironment(),
         stdout: "pipe",
         stderr: "pipe",
       })
@@ -1490,7 +1495,7 @@ describe("the durable MCP OAuth callback broker", () => {
     }
   }, 15_000)
 
-  test("ambiguous finishing admission and renewal retain the exact owner fence", async () => {
+  test("finishing admission and renewal converge to the exact owner across committed and uncommitted writes", async () => {
     const root = await temporaryRoot("finishing-ambiguity")
     const authKey = "project_finishing_ambiguity:server"
     const oauthState = "ambiguous-finishing-state"
@@ -1504,7 +1509,12 @@ describe("the durable MCP OAuth callback broker", () => {
       })
       const originalWrite = Filesystem.writeAtomic.bind(Filesystem)
       let ambiguousWrites = 2
+      let uncommittedWrites = 0
       write = spyOn(Filesystem, "writeAtomic").mockImplementation(async (...args) => {
+        if (uncommittedWrites > 0) {
+          uncommittedWrites--
+          throw new Error("finishing write failed before rename")
+        }
         await originalWrite(...args)
         if (ambiguousWrites > 0) {
           ambiguousWrites--
@@ -1524,10 +1534,17 @@ describe("the durable MCP OAuth callback broker", () => {
           McpAuth.renewOAuthFinishing(authKey, oauthState, revision, ownerID, renewedExpiry),
         ),
       ).toBe(true)
+      uncommittedWrites = 1
+      const retriedExpiry = renewedExpiry + 30_000
+      expect(
+        await Global.provideRoot(root, () =>
+          McpAuth.renewOAuthFinishing(authKey, oauthState, revision, ownerID, retriedExpiry),
+        ),
+      ).toBe(true)
       expect(await Global.provideRoot(root, () => McpAuth.get(authKey))).toEqual(
         expect.objectContaining({
           revision,
-          oauthFinishing: { oauthState, ownerID, leaseExpiresAt: renewedExpiry },
+          oauthFinishing: { oauthState, ownerID, leaseExpiresAt: retriedExpiry },
         }),
       )
     } finally {

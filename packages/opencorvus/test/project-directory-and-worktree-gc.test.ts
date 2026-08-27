@@ -804,8 +804,17 @@ describe("Project directory integrity", () => {
       selected()
       await releasePromise
     })
+    // This contract requires convergence to select the Project root before
+    // deletion closes admission. Make the sandbox the retained MRU entry
+    // explicitly so prior cache activity in this file cannot change the target.
+    await Instance.provideProjectIdentity({ directory: cacheSandbox, fn: () => undefined })
     const convergence = Instance.converge({ maximumRetained: 1 })
-    await selectedPromise
+    await Promise.race([
+      selectedPromise,
+      Bun.sleep(5_000).then(() => {
+        throw new Error("Project root was not selected for convergence disposal")
+      }),
+    ])
     const deletion = deleteProject(registered.project, {
       actor: "user",
       source: "project.delete",
@@ -854,8 +863,18 @@ describe("Project directory integrity", () => {
         selected()
         await releasePromise
       })
+      // The contract below is about a selected root entry blocking deletion
+      // admission. Make the sandbox the retained MRU entry explicitly; without
+      // this touch, convergence may validly evict the sandbox and leave the
+      // root retained, in which case the hook this test waits for never runs.
+      await Instance.provideProjectIdentity({ directory: cacheSandbox, fn: () => undefined })
       const convergence = Instance.converge({ maximumRetained: 1 })
-      await selectedPromise
+      await Promise.race([
+        selectedPromise,
+        Bun.sleep(5_000).then(() => {
+          throw new Error("Project root was not selected for convergence disposal")
+        }),
+      ])
       const error = await Instance.closeProjectAdmission({
         projectID: registered.project.id,
         directories: [project.path, cacheSandbox],

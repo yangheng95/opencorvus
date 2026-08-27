@@ -92,7 +92,7 @@ function assertTestRuntimeIsolation(input: OpenCorvusRuntimePathInput, root: str
   const relative = paths.relative(normalizedProcessRoot, root)
   if (!relative || relative.startsWith("..") || paths.isAbsolute(relative)) {
     throw new OpenCorvusTestRuntimeIsolationError(
-      `Test runtime root must be a child of OPENCORVUS_TEST_PROCESS_ROOT: ${root}`,
+      `Test runtime root ${root} must be a child of OPENCORVUS_TEST_PROCESS_ROOT ${normalizedProcessRoot}`,
     )
   }
 }
