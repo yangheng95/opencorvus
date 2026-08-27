@@ -18,7 +18,7 @@ import { t } from "../utils/i18n"
 import { directoryScopedPath } from "./task-path"
 
 export type WorkLedgerItemRow = WorkLedgerMissionRow | WorkLedgerTaskRow | WorkLedgerChatRow
-export type WorkLedgerTopLevelItemRow = WorkLedgerMissionRow | WorkLedgerChatRow
+export type WorkLedgerTopLevelItemRow = WorkLedgerMissionRow | WorkLedgerTaskRow | WorkLedgerChatRow
 export type WorkLedgerKind = WorkLedgerItemRow["kind"]
 export type WorkLedgerChatStatus = WorkLedgerChatRow["status"]
 export type WorkLedgerPresentationStatus = "active" | "inactive"

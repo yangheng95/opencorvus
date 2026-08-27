@@ -399,11 +399,16 @@ export const WorkLedgerChatRow = z
   })
   .strict()
 
-export const WorkLedgerRow = z.discriminatedUnion("kind", [
+const WorkLedgerRowObject = z.discriminatedUnion("kind", [
   WorkLedgerProjectRow,
   WorkLedgerMissionRow,
+  WorkLedgerTaskRowObject,
   WorkLedgerChatRow,
 ])
+
+export const WorkLedgerRow = WorkLedgerRowObject.superRefine((row, context) => {
+  if (row.kind === "task") validateWorkLedgerTaskTiming(row, context)
+})
 
 const WorkLedgerArchiveRowObject = z.discriminatedUnion("kind", [
   WorkLedgerMissionRow,

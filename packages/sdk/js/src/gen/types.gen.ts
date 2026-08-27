@@ -34507,6 +34507,28 @@ export type WorkLedgerListResponses = {
           updated: number
         }
       | {
+          activityStatus: "running" | "inactive"
+          archived?: number
+          cancellationStatus: "none" | "cancelling" | "cancelled"
+          completed?: number
+          created: number
+          description: string
+          directory: string
+          id: string
+          kind: "task"
+          lifecycleStatus: "active" | "completed" | "failed" | "cancelled"
+          missionID?: string
+          missionSessionID?: string
+          pendingInteractions: number
+          pinned: boolean
+          priority: "critical" | "high" | "normal" | "low"
+          productPillar: "code" | "work"
+          source: string
+          started: number
+          title: string
+          updated: number
+        }
+      | {
           archived?: number
           created: number
           directory: string

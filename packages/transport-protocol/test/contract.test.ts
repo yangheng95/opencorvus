@@ -136,7 +136,7 @@ describe("canonical Server-Sent Events payload contracts", () => {
 })
 
 describe("canonical Work Ledger and Project Worktree response contracts", () => {
-  test("parses the complete Mission-owned Work Ledger hierarchy", () => {
+  test("parses Mission-owned and unowned Task Work Ledger hierarchy", () => {
     const task = {
       kind: "task",
       id: "task-1",
@@ -174,7 +174,18 @@ describe("canonical Work Ledger and Project Worktree response contracts", () => 
       pendingInteractions: 0,
       tasks: [task],
     }
-    const value = { rows: [mission], nextCursor: { pinned: false, updated: 2, rowKey: "mission:mission-1" } }
+    const unownedTask = {
+      ...task,
+      id: "task-unowned",
+      title: "Unowned Task",
+      source: "operator",
+      missionID: undefined,
+      missionSessionID: undefined,
+    }
+    const value = {
+      rows: [mission, unownedTask],
+      nextCursor: { pinned: false, updated: 2, rowKey: "task:task-unowned" },
+    }
     expect(WorkLedgerList.parse(value)).toEqual(value)
   })
 

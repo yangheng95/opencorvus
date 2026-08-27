@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-27-work-ledger-unowned-task-visibility.md](2026-08-27-work-ledger-unowned-task-visibility.md) restores unarchived Tasks without a valid Mission root to the active Work Ledger while keeping Mission-owned Tasks nested exactly once.
+
 - [2026-08-26-mission-task-causal-order-and-close-convergence.md](2026-08-26-mission-task-causal-order-and-close-convergence.md) makes fresh Task creator/control publication one atomic Session cut, gives every Session Message a persisted monotonic causal frontier, and re-reduces Mission closure after lifecycle-lease acquisition before any physical close.
 
 - [2026-08-26-session-stream-message-cutover-convergence.md](2026-08-26-session-stream-message-cutover-convergence.md) closes first-connect and reconnect gaps for newly created messages in Work, Chat, Mission, and ordinary Sessions by merging a subscribe-before-snapshot handshake through the canonical conversation writer.

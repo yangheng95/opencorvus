@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest Work Ledger unowned Task visibility repair: [`2026-08-27-work-ledger-unowned-task-visibility.md`](records/2026-08/2026-08-27-work-ledger-unowned-task-visibility.md).
+
 Latest Mission Task causal-order and close convergence repair: [`2026-08-26-mission-task-causal-order-and-close-convergence.md`](records/2026-08/2026-08-26-mission-task-causal-order-and-close-convergence.md).
 
 Latest extensible Inspect AI benchmark framework and Apodex-family integration: [`2026-08-26-extensible-inspect-benchmark-framework.md`](records/2026-08/2026-08-26-extensible-inspect-benchmark-framework.md).

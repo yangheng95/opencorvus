@@ -116335,7 +116335,7 @@
     },
     "/work-ledger": {
       "get": {
-        "description": "Return one unified Mission and Chat/Work ledger projection. Tasks are visible only inside their owning Mission row.",
+        "description": "Return one unified Mission, Task, and Chat/Work ledger projection. Tasks with an exact Mission root are nested inside that Mission; unarchived Tasks without a resolvable Mission root are returned as top-level rows.",
         "operationId": "workLedger.list",
         "parameters": [
           {
@@ -116676,6 +116676,121 @@
                               "taskStats",
                               "pendingInteractions",
                               "tasks"
+                            ],
+                            "type": "object"
+                          },
+                          {
+                            "additionalProperties": false,
+                            "properties": {
+                              "activityStatus": {
+                                "enum": [
+                                  "running",
+                                  "inactive"
+                                ],
+                                "type": "string"
+                              },
+                              "archived": {
+                                "type": "number"
+                              },
+                              "cancellationStatus": {
+                                "enum": [
+                                  "none",
+                                  "cancelling",
+                                  "cancelled"
+                                ],
+                                "type": "string"
+                              },
+                              "completed": {
+                                "type": "number"
+                              },
+                              "created": {
+                                "type": "number"
+                              },
+                              "description": {
+                                "type": "string"
+                              },
+                              "directory": {
+                                "type": "string"
+                              },
+                              "id": {
+                                "type": "string"
+                              },
+                              "kind": {
+                                "const": "task",
+                                "type": "string"
+                              },
+                              "lifecycleStatus": {
+                                "enum": [
+                                  "active",
+                                  "completed",
+                                  "failed",
+                                  "cancelled"
+                                ],
+                                "type": "string"
+                              },
+                              "missionID": {
+                                "maxLength": 64,
+                                "minLength": 1,
+                                "pattern": "^[a-z0-9-]+$",
+                                "type": "string"
+                              },
+                              "missionSessionID": {
+                                "type": "string"
+                              },
+                              "pendingInteractions": {
+                                "maximum": 9007199254740991,
+                                "minimum": 0,
+                                "type": "integer"
+                              },
+                              "pinned": {
+                                "type": "boolean"
+                              },
+                              "priority": {
+                                "enum": [
+                                  "critical",
+                                  "high",
+                                  "normal",
+                                  "low"
+                                ],
+                                "type": "string"
+                              },
+                              "productPillar": {
+                                "enum": [
+                                  "code",
+                                  "work"
+                                ],
+                                "type": "string"
+                              },
+                              "source": {
+                                "type": "string"
+                              },
+                              "started": {
+                                "type": "number"
+                              },
+                              "title": {
+                                "type": "string"
+                              },
+                              "updated": {
+                                "type": "number"
+                              }
+                            },
+                            "required": [
+                              "kind",
+                              "id",
+                              "title",
+                              "description",
+                              "directory",
+                              "created",
+                              "started",
+                              "updated",
+                              "pinned",
+                              "lifecycleStatus",
+                              "cancellationStatus",
+                              "activityStatus",
+                              "priority",
+                              "source",
+                              "productPillar",
+                              "pendingInteractions"
                             ],
                             "type": "object"
                           },

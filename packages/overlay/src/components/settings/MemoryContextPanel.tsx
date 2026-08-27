@@ -42,6 +42,7 @@ function memoryTaskOptions(rows: readonly WorkLedgerRow[]): MemoryTaskOption[] {
   const remember = (task: WorkLedgerTaskRow) => tasks.set(memoryTaskKey(task), task)
   for (const row of rows) {
     if (row.kind === "mission") row.tasks.forEach(remember)
+    if (row.kind === "task") remember(row)
   }
   return [...tasks.values()]
     .map((task) => {

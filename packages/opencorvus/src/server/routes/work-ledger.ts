@@ -440,7 +440,7 @@ export function WorkLedgerRoutes() {
       describeRoute({
         summary: "List Work Ledger rows",
         description:
-          "Return one unified Mission and Chat/Work ledger projection. Tasks are visible only inside their owning Mission row.",
+          "Return one unified Mission, Task, and Chat/Work ledger projection. Tasks with an exact Mission root are nested inside that Mission; unarchived Tasks without a resolvable Mission root are returned as top-level rows.",
         operationId: "workLedger.list",
         responses: {
           200: {

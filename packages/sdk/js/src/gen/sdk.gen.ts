@@ -13608,7 +13608,7 @@ export class WorkLedger extends HeyApiClient {
   /**
    * List Work Ledger rows
    *
-   * Return one unified Mission and Chat/Work ledger projection. Tasks are visible only inside their owning Mission row.
+   * Return one unified Mission, Task, and Chat/Work ledger projection. Tasks with an exact Mission root are nested inside that Mission; unarchived Tasks without a resolvable Mission root are returned as top-level rows.
    */
   public list<ThrowOnError extends boolean = false>(
     parameters?: {

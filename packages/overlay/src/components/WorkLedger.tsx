@@ -73,13 +73,14 @@ type WorkLedgerGroup = {
 
 type RenderKey = { renderKey: string }
 type RenderWorkLedgerProjectRow = WorkLedgerProjectRow & RenderKey
-type RenderWorkLedgerTaskRow = WorkLedgerMissionTaskRow & RenderKey
+type RenderWorkLedgerTaskRow = WorkLedgerTaskRow & RenderKey
+type RenderWorkLedgerMissionTaskRow = WorkLedgerMissionTaskRow & RenderKey
 type RenderWorkLedgerMissionRow = Omit<WorkLedgerMissionRow, "tasks"> &
   RenderKey & {
-    tasks: RenderWorkLedgerTaskRow[]
+    tasks: RenderWorkLedgerMissionTaskRow[]
   }
 type RenderWorkLedgerChatRow = WorkLedgerChatRow & RenderKey
-type RenderWorkLedgerTopLevelItemRow = RenderWorkLedgerMissionRow | RenderWorkLedgerChatRow
+type RenderWorkLedgerTopLevelItemRow = RenderWorkLedgerMissionRow | RenderWorkLedgerTaskRow | RenderWorkLedgerChatRow
 type RenderWorkLedgerRow = RenderWorkLedgerProjectRow | RenderWorkLedgerTopLevelItemRow
 
 export interface WorkLedgerProps {
@@ -162,6 +163,7 @@ const WORK_LEDGER_PRIORITY_ORDER: Record<WorkLedgerTaskRow["priority"], number> 
 
 function ledgerItemPriority(row: RenderWorkLedgerTopLevelItemRow): number {
   if (row.kind === "chat") return WORK_LEDGER_PRIORITY_ORDER.normal
+  if (row.kind === "task") return WORK_LEDGER_PRIORITY_ORDER[row.priority]
   if (row.tasks.length === 0) return WORK_LEDGER_PRIORITY_ORDER.normal
   return row.tasks.reduce(
     (priority, task) => Math.min(priority, WORK_LEDGER_PRIORITY_ORDER[task.priority]),

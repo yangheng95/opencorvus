@@ -67,7 +67,7 @@ function paletteLedgerRows(rows: readonly WorkLedgerRow[]): PaletteLedgerRow[] {
   const entries: PaletteLedgerRow[] = []
   for (const row of rows) {
     if (row.kind === "mission") entries.push(...row.tasks)
-    if (row.kind === "chat") entries.push(row)
+    if (row.kind === "task" || row.kind === "chat") entries.push(row)
   }
   return entries
 }

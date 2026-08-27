@@ -11,6 +11,7 @@ import { Session } from "@/session"
 import { SessionStatus } from "@/session/status"
 import { Database } from "@/storage/db"
 import { missionStatusSnapshot } from "@/status/task-status-snapshot"
+import { EngineService } from "@/task-api"
 import { listArchivedWorkLedger, listWorkLedger } from "@/work-ledger/projection"
 import { resetDatabase } from "./fixture/db"
 import { persistEstablishedTask } from "./fixture/engine-task"
@@ -23,6 +24,31 @@ const packageRevision = {
   id: "base",
   version: "2026.08.13.1",
   packageDigest: "a".repeat(64),
+}
+
+async function persistUnownedTask(title: string, now = Date.now()) {
+  const taskID = Identifier.ascending("task")
+  persistEstablishedTask({
+    taskID,
+    rootSession: Session.prepareRootNext({ kind: "root", directory: Instance.directory, title }),
+    now,
+    title,
+    request: `Keep ${title} visible without a Mission root`,
+    productPillar: "work",
+    source: "right-sidebar-conversation",
+    metadata: { actor: "user" },
+    projectID: Instance.project.id,
+    packageRevision,
+    executionCapsuleBinding: await prepareTaskProcessBinding({
+      mode: "native",
+      taskID,
+      projectID: Instance.project.id,
+      rootDirectory: Instance.directory,
+      packageRevisionSHA256: packageRevision.packageDigest,
+      timeCreated: now,
+    }),
+  })
+  return taskID
 }
 
 afterEach(async () => {
@@ -103,10 +129,13 @@ describe("Mission status snapshot", () => {
           productPillar: "work",
           heldExpertSquadIDs: ["base"],
         })
-        const taskSession = Session.prepareRootNext({ kind: "root", directory: Instance.directory, title: "Terminal Work Ledger Task" })
+        const taskSession = Session.prepareRootNext({
+          kind: "root",
+          directory: Instance.directory,
+          title: "Terminal Work Ledger Task",
+        })
         const taskID = Identifier.ascending("task")
         const started = Date.now()
-        const completed = started + 10
         persistEstablishedTask({
           taskID,
           rootSession: taskSession,
@@ -127,11 +156,13 @@ describe("Mission status snapshot", () => {
             timeCreated: started,
           }),
         })
-        await terminalTask(
+        const terminal = await terminalTask(
           requireTask(taskID),
-          { status: "completed", time_started: started, time_completed: completed },
+          { status: "completed", time_started: started, time_completed: started + 10 },
           "Terminal timing projected",
         )
+        const completed = terminal.time_completed
+        if (completed === null) throw new Error("Terminal Task did not publish its completion time")
 
         const ledger = await listWorkLedger()
         const missionRow = ledger.rows.find((row) => row.kind === "mission" && row.missionID === mission.missionID)
@@ -146,6 +177,116 @@ describe("Mission status snapshot", () => {
             },
           ],
         })
+        expect(
+          ledger.rows.flatMap((row) => {
+            if (row.kind === "mission") {
+              return row.tasks
+                .filter((task) => task.id === taskID)
+                .map((task) => ({ placement: "mission-child", missionID: row.missionID, taskID: task.id }))
+            }
+            if (row.kind === "task" && row.id === taskID) {
+              return [{ placement: "top-level", taskID: row.id }]
+            }
+            return []
+          }),
+        ).toEqual([
+          {
+            placement: "mission-child",
+            missionID: mission.missionID,
+            taskID,
+          },
+        ])
+      },
+    })
+  })
+
+  test("projects an unowned active Task as a top-level Work Ledger item", async () => {
+    await using project = await tmpdir({ git: true })
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const taskID = await persistUnownedTask("Visible unowned Task")
+
+        const ledger = await listWorkLedger({ directory: project.path })
+        expect(ledger.rows.find((row) => row.kind === "task" && row.id === taskID)).toMatchObject({
+          kind: "task",
+          id: taskID,
+          title: "Visible unowned Task",
+          directory: project.path,
+          lifecycleStatus: "active",
+          activityStatus: "running",
+          source: "right-sidebar-conversation",
+          productPillar: "work",
+        })
+      },
+    })
+  })
+
+  test("paginates a lifecycle-updated unowned Task with one stable public cursor order", async () => {
+    await using project = await tmpdir({ git: true })
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const search = "unowned-task-cursor-contract"
+        const trailingTaskID = await persistUnownedTask(`${search} trailing`, Date.now() - 100)
+        const boundaryCreated = Date.now()
+        const boundaryTaskID = await persistUnownedTask(`${search} boundary`, boundaryCreated)
+        await terminalTask(
+          requireTask(boundaryTaskID),
+          { status: "failed", error: "expected cursor fixture" },
+          "Cursor timing projected",
+          {
+            terminalAt: boundaryCreated + 10,
+            preExecutionInfrastructureFailure: {
+              code: "IMMUTABLE_CREATION_WORKSPACE_MISMATCH",
+              initialTreeSHA256: "b".repeat(64),
+              executionTreeSHA256: "c".repeat(64),
+            },
+          },
+        )
+
+        const first = await listWorkLedger({ directory: project.path, search, limit: 1 })
+        expect(first.rows.map((row) => row.id)).toEqual([boundaryTaskID])
+        if (!first.nextCursor) throw new Error("First Work Ledger page did not return its continuation cursor")
+
+        const second = await listWorkLedger({
+          directory: project.path,
+          search,
+          limit: 1,
+          cursorUpdated: first.nextCursor.updated,
+          cursorPinned: first.nextCursor.pinned,
+          cursorRowKey: first.nextCursor.rowKey,
+        })
+        expect([...first.rows, ...second.rows].map((row) => row.id)).toEqual([boundaryTaskID, trailingTaskID])
+        expect(second.nextCursor).toBeNull()
+      },
+    })
+  })
+
+  test("keeps returning durable Work Ledger rows after another Task is deleted", async () => {
+    await using project = await tmpdir({ git: true })
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const search = "deleted-task-list-convergence"
+        const survivorTaskID = await persistUnownedTask(`${search} survivor`, Date.now() - 100)
+        const deletedTaskID = await persistUnownedTask(`${search} deleted`)
+        await terminalTask(
+          requireTask(deletedTaskID),
+          { status: "failed", error: "expected deletion fixture" },
+          "Deletion fixture settled",
+          {
+            preExecutionInfrastructureFailure: {
+              code: "IMMUTABLE_CREATION_WORKSPACE_MISMATCH",
+              initialTreeSHA256: "d".repeat(64),
+              executionTreeSHA256: "e".repeat(64),
+            },
+          },
+        )
+        expect(await EngineService.deleteTask(deletedTaskID)).toBe(true)
+
+        const ledger = await listWorkLedger({ directory: project.path, search })
+        expect(ledger.rows.map((row) => row.id)).toEqual([survivorTaskID])
       },
     })
   })
@@ -155,7 +296,11 @@ describe("Mission status snapshot", () => {
     await Instance.provide({
       directory: project.path,
       fn: async () => {
-        const session = Session.prepareRootNext({ kind: "root", directory: Instance.directory, title: "Archived failed Work Ledger Task" })
+        const session = Session.prepareRootNext({
+          kind: "root",
+          directory: Instance.directory,
+          title: "Archived failed Work Ledger Task",
+        })
         const taskID = Identifier.ascending("task")
         const started = Date.now()
         persistEstablishedTask({
@@ -178,11 +323,13 @@ describe("Mission status snapshot", () => {
             timeCreated: started,
           }),
         })
-        await terminalTask(
+        const terminal = await terminalTask(
           requireTask(taskID),
           { status: "failed", error: "expected terminal fixture", time_started: started, time_completed: started },
           "Failed timing projected",
         )
+        const completed = terminal.time_completed
+        if (completed === null) throw new Error("Failed Task did not publish its completion time")
         Database.transaction((db) =>
           setEngineTaskArchived(db, { taskID, timeArchived: started + 1, timeUpdated: started + 1 }),
         )
@@ -193,7 +340,7 @@ describe("Mission status snapshot", () => {
           lifecycleStatus: "failed",
           activityStatus: "inactive",
           started,
-          completed: started,
+          completed,
           archived: started + 1,
         })
       },
