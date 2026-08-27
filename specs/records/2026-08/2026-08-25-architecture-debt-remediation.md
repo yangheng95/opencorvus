@@ -795,12 +795,12 @@ The fourteenth independent review returned **Reject** with fourteen findings. Ev
 
 ## Ledger gaps found by auditing this record against the audit
 
-Every ARC finding in scope was checked for a section here. The two findings previously missing from the stage ledger are now explicitly dispositioned: ARC-003 is repaired in its dedicated authoritative section below, while ARC-008 remains open. The stage cannot be called complete while that context-budget debt remains.
+Every ARC finding in scope was checked for a section here. The two findings previously missing from the stage ledger are now explicitly dispositioned: ARC-003 is repaired in its dedicated authoritative section below, and ARC-008 is closed by the bounded 2026-08-28 implementation record.
 
-### ARC-008 — the default assignment's context budget (P2, open)
+### ARC-008 — the default assignment's context budget (P2, closed)
 
-- The default Chat/Work assignment still projects the whole Browser/Computer tool surface every Turn. The audit points at the 2026-08-14 Tool-block plan as the correct on-demand direction and says plainly that it is not the current runtime; nothing in this campaign changed that.
-- ARC-001 neither widened nor narrowed this: it settled which authority declares the Computer provider, not how many tools a Turn projects.
+- The repair deletes the shared Browser/Computer default assignment. Configured declarations remain inventory; default Chat and Work runtime materialization now yields the exact zero-tool, zero-schema payload, and only the existing project-owned explicit assignment activates either provider.
+- Explicit assignment still projects the complete 53-tool Browser/Computer catalog through the same provider, permission and scoped Session-owner contracts. The implementation, Recall, verification and independent-review evidence are owned by [2026-08-28-arc-008-conversation-mcp-context-budget.md](2026-08-28-arc-008-conversation-mcp-context-budget.md).
 
 ### Round-15 review, dispositioned — ARC-018's listener half reverted
 

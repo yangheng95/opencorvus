@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, test } from "bun:test"
 import { Config } from "@/config/config"
 import { ConversationCapability } from "@/conversation/capability"
+import { BrowserMCPBuiltin } from "@/mcp/browser/builtin"
 import { ComputerMCPBuiltin } from "@/mcp/computer/builtin"
 import { Instance } from "@/project/instance"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
@@ -33,6 +34,11 @@ describe("the configured declaration is the Computer provider", () => {
     await Instance.provide({
       directory: project.path,
       fn: async () => {
+        await ConversationCapability.update("work", {
+          kind: "mcp_server",
+          ref: BrowserMCPBuiltin.ServerName,
+          assigned: true,
+        })
         await ConversationCapability.update("work", {
           kind: "mcp_server",
           ref: ComputerMCPBuiltin.ServerName,

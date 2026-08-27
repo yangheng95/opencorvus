@@ -3,6 +3,7 @@ import { Config } from "@/config/config"
 import { ConversationCapability } from "@/conversation/capability"
 import { MCP } from "@/mcp"
 import { BrowserMCPBuiltin } from "@/mcp/browser/builtin"
+import { ComputerMCPBuiltin } from "@/mcp/computer/builtin"
 import { Instance } from "@/project/instance"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
 
@@ -105,7 +106,17 @@ describe("a Conversation owns the Browser runtime it creates", () => {
         const single = spyOn(MCP, "scopedTool")
         single.mockImplementation(async () => ({}) as never)
         try {
-          const config = await Config.get()
+          const base = await Config.get()
+          const config: Config.Info = {
+            ...base,
+            primary_assistant_capabilities: {
+              ...base.primary_assistant_capabilities,
+              chat: {
+                skill_refs: [],
+                mcp_server_refs: [BrowserMCPBuiltin.ServerName, ComputerMCPBuiltin.ServerName],
+              },
+            },
+          }
           await ConversationCapability.runtimeMcpTools(config, "chat", sessionID)
           await ConversationCapability.disconnectRuntimeMcp(sessionID)
           await ConversationCapability.runtimeMcpTools(config, "chat", sessionID)

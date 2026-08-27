@@ -40,8 +40,9 @@ experimental: auto_question · batch_tool · disable_paste_summary · continue_l
 >
 > **Computer runtime contract**：Computer Use 没有顶级 runtime 配置。OpenCorvus 随应用分发固定版本的
 > `@trycua/cua-driver` 并在 Host 进程内控制当前桌面；用户不配置 VM、image、viewer、daemon、Python、`PATH`
-> executable 或 cloud runtime。`default/mcp/computer` 仍默认不分配，只有直接 Conversation assignment 或
-> active Harness exact projection 决定可见执行面；二者使用同一个 host authority 与八工具契约。
+> executable 或 cloud runtime。`default/mcp/browser` 与 `default/mcp/computer` 都默认不分配；配置声明只进入
+> inventory，只有直接 Conversation 的显式 project-owned assignment 或 active Harness exact projection
+> 决定可见执行面。Computer 的两种入口使用同一个 host authority 与八工具契约。
 >
 > **已删除 schema 字段**：以下旧 schema 字段已删除，不再存在：
 >

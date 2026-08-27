@@ -4,6 +4,7 @@ import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
 import { Instance } from "../../src/project/instance"
 import { Config } from "../../src/config/config"
 import { ConversationCapability } from "../../src/conversation/capability"
+import { BrowserMCPBuiltin } from "../../src/mcp/browser/builtin"
 import { ComputerMCPBuiltin } from "../../src/mcp/computer/builtin"
 import { SessionLoop } from "../../src/session/loop"
 
@@ -13,7 +14,7 @@ afterEach(async () => {
 })
 
 describe("native conversation capability routes", () => {
-  test("reads default Browser and Computer assignments for native Chat and Work", async () => {
+  test("separates configured MCP inventory from default native Chat and Work assignments", async () => {
     await using project = await memoryProject()
     const headers = { "x-opencorvus-directory": project.path }
     const [workResponse, chatResponse] = await Promise.all([
@@ -38,11 +39,11 @@ describe("native conversation capability routes", () => {
       scope: { kind: "project", directory: project.path },
       agent_id: "work",
       skills: { assigned_refs: ["work-artifacts"] },
-      mcp: { assigned_server_refs: ["browser", "computer"] },
+      mcp: { assigned_server_refs: [] },
     })
     expect(chatSettings).toMatchObject({
       agent_id: "chat",
-      mcp: { assigned_server_refs: ["browser", "computer"] },
+      mcp: { assigned_server_refs: [] },
     })
     expect(workSettings.skills.installed.map((skill) => skill.name)).toContain("work-artifacts")
     expect(workSettings.mcp.configured_server_refs).toEqual(expect.arrayContaining(["browser", "computer"]))
@@ -56,9 +57,29 @@ describe("native conversation capability routes", () => {
         "work_artifact_deliver",
       ]),
     )
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const config = await Config.get()
+        const payloads = await Promise.all(
+          (["chat", "work"] as const).map(async (agentID) => {
+            const tools = await ConversationCapability.runtimeMcpTools(config, agentID, `default-${agentID}-catalog`)
+            return {
+              agentID,
+              toolNames: Object.keys(tools),
+              schemaChars: SessionLoop.estimateToolPayloadChars(tools),
+            }
+          }),
+        )
+        expect(payloads).toEqual([
+          { agentID: "chat", toolNames: [], schemaChars: 0 },
+          { agentID: "work", toolNames: [], schemaChars: 0 },
+        ])
+      },
+    })
   }, 90_000)
 
-  test("persists an explicit project-owned Work MCP assignment", async () => {
+  test("persists explicit project-owned Work MCP assignments", async () => {
     await using project = await memoryProject()
     const headers = {
       "content-type": "application/json",
@@ -68,7 +89,7 @@ describe("native conversation capability routes", () => {
       const update = await Server.App().request("/work/capability", {
         method: "PATCH",
         headers,
-        body: JSON.stringify({ kind: "mcp_server", ref, assigned: false }),
+        body: JSON.stringify({ kind: "mcp_server", ref, assigned: true }),
       })
       expect(update.status).toBe(200)
     }
@@ -78,24 +99,39 @@ describe("native conversation capability routes", () => {
     expect(await read.json()).toEqual(
       expect.objectContaining({
         agent_id: "work",
-        mcp: expect.objectContaining({ assigned_server_refs: [] }),
+        mcp: expect.objectContaining({ assigned_server_refs: ["browser", "computer"] }),
       }),
     )
   }, 90_000)
 
-  test("projects the default Browser and Computer tool catalogs into Work", async () => {
+  test("projects explicitly assigned Browser and Computer tool catalogs into Work", async () => {
     await using project = await memoryProject()
+    const headers = {
+      "content-type": "application/json",
+      "x-opencorvus-directory": project.path,
+    }
+    for (const ref of ["browser", "computer"]) {
+      const update = await Server.App().request("/work/capability", {
+        method: "PATCH",
+        headers,
+        body: JSON.stringify({ kind: "mcp_server", ref, assigned: true }),
+      })
+      expect(update.status).toBe(200)
+    }
     await Instance.provide({
       directory: project.path,
       fn: async () => {
         const sessionID = "default-browser-computer-catalog"
         try {
           const tools = await ConversationCapability.runtimeMcpTools(await Config.get(), "work", sessionID)
-          const toolNames = Object.keys(tools)
-          expect(toolNames).toEqual(expect.arrayContaining(["browser_navigate", "browser_observe"]))
-          expect(toolNames).toEqual(
-            expect.arrayContaining(ComputerMCPBuiltin.ImportableToolNames.map((name) => `computer_${name}`)),
-          )
+          const toolNames = Object.keys(tools).sort()
+          const browserToolNames = toolNames.filter((name) => name.startsWith(`${BrowserMCPBuiltin.ServerName}_`))
+          const computerToolNames = toolNames.filter((name) => name.startsWith(`${ComputerMCPBuiltin.ServerName}_`))
+          expect({ total: toolNames.length, browser: browserToolNames.length, computer: computerToolNames }).toEqual({
+            total: 53,
+            browser: 45,
+            computer: ComputerMCPBuiltin.ImportableToolNames.map((name) => `computer_${name}`).sort(),
+          })
           const schemaChars = SessionLoop.estimateToolPayloadChars(tools)
           expect(schemaChars).toBeGreaterThan(0)
         } finally {

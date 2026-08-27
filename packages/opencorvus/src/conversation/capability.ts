@@ -18,13 +18,12 @@ import { ComputerMCPBuiltin } from "@/mcp/computer/builtin"
 import { computerRuntimeScopeIdentity } from "@/mcp/computer/runtime-scope"
 import { createInstanceState } from "@/project/instance-state"
 import { ComputerHostRuntime } from "@/mcp/computer/host-runtime"
-import { DEFAULT_INTERACTIVE_MCP_SERVER_REFS } from "@/conversation/default-capability"
 
 const CHAT_AGENT_ID = "chat" as const
 export const CONVERSATION_AGENT_IDS = ["chat", "work"] as const
 export type ConversationAgentID = (typeof CONVERSATION_AGENT_IDS)[number]
 const DEFAULT_ASSIGNMENTS: Readonly<Record<ConversationAgentID, Readonly<AssignmentSeed>>> = Object.freeze({
-  chat: Object.freeze({ skill_refs: [], mcp_server_refs: DEFAULT_INTERACTIVE_MCP_SERVER_REFS }),
+  chat: Object.freeze({ skill_refs: [], mcp_server_refs: [] }),
   work: WORK_DEFAULT_CAPABILITY_ASSIGNMENT,
 })
 

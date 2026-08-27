@@ -597,7 +597,8 @@ The concrete context rules are:
 
 - Chat and Work use their fixed native role Tool pool. Their project
   `primary_assistant_capabilities` assignment adds only exact installed Skill
-  refs and configured MCP server refs. A message may reference an attached
+  refs and configured MCP server refs. Their default MCP assignment is empty:
+  configured inventory never activates a provider by itself. A message may reference an attached
   Skill explicitly, but the same resolver revalidates installation,
   eligibility, Tool requirements, switches, and permission.
 - Mission receives only Mission management Tools and Mission Skills. Catalog

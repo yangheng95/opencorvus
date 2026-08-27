@@ -715,14 +715,15 @@ Conversation disposal 会 await 该 owner 的 close 回执再完成，因此不�
 ### Computer Use
 
 `default/mcp/computer` 是平台内置的 host-native Computer Use MCP，
-不是 Expert Squad、Mission workflow 或 Browser 的别名。直接 Chat/Work 默认同时 assignment Browser 与 Computer；
-Project 可通过显式 `primary_assistant_capabilities.<agent>.mcp_server_refs` 覆盖该默认值并关闭任一能力。active Expert Squad 只能通过
+不是 Expert Squad、Mission workflow 或 Browser 的别名。Browser 与 Computer 的已配置声明都只是 capability inventory；
+直接 Chat/Work 的默认 MCP assignment 为空，Project 只有通过显式
+`primary_assistant_capabilities.<agent>.mcp_server_refs` 才激活精确 provider。active Expert Squad 只能通过
 Harness 中精确的 `default/mcp/computer/tool/*` refs 投影同一组平台工具。两种入口都保留相同的八个
 `mcp_tool` identity 和四类 Session permission；Harness visibility 不授予 permission。
 
 Conversation capability catalog 由唯一 `mcp-config` owner 一次发布 configured server 与当前精确投影的
 MCP tool 完整集合，重复 owner 继续失败关闭。`tool` 与 `mcp_tool` 是不同 canonical kind；跨类型搜索使用
-`next_owner_kinds:["call_tool"]`，禁止 generic source merge、kind alias 或隐藏扩展。默认或显式 assignment
+`next_owner_kinds:["call_tool"]`，禁止 generic source merge、kind alias 或隐藏扩展。显式 assignment
 只决定能力投影，不替代 permission；server 与其 tool 必须在同一 snapshot 中一致为 `visible`。
 
 每个 Conversation Session 拥有独立的 Computer scoped MCP connection owner；不同 Session 不共享

@@ -2,7 +2,6 @@ import PROMPT_CODING from "@/agent/prompt/coding.txt"
 import { CHAT_INTERACTIVE_ARTIFACT_GUIDANCE } from "@/prompt/fragments/interactive-artifact-guidance"
 import { TASK_REQUEST_SCOPE_GUIDANCE } from "@/prompt/fragments/task-request-scope"
 import PROMPT_SYSTEM from "@/session/prompt/system.txt"
-import { DEFAULT_INTERACTIVE_MCP_SERVER_REFS } from "@/conversation/default-capability"
 
 export const WORK_AGENT_ID = "work" as const
 
@@ -17,7 +16,7 @@ import { WORK_ARTIFACT_PARENT_ONLY_TOOL_IDS, WORK_ARTIFACT_TOOL_IDS } from "@/wo
 
 export const WORK_DEFAULT_CAPABILITY_ASSIGNMENT = Object.freeze({
   skill_refs: ["work-artifacts"] as readonly string[],
-  mcp_server_refs: DEFAULT_INTERACTIVE_MCP_SERVER_REFS,
+  mcp_server_refs: [] as readonly string[],
 })
 
 export const WORK_RUNTIME_PROMPT = [
