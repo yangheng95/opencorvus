@@ -483,6 +483,8 @@ import type {
   SessionListGlobalResponses,
   SessionListResponses,
   SessionMessageErrors,
+  SessionMessagePartErrors,
+  SessionMessagePartResponses,
   SessionMessageResponses,
   SessionMessagesErrors,
   SessionMessagesResponses,
@@ -7838,7 +7840,6 @@ export class Task extends HeyApiClient {
       after?: string
       after_live?: string
       after_live_epoch?: string
-      after_message_watermark?: string
     },
     options?: Options<never, ThrowOnError, TaskEventsResponse>,
   ) {
@@ -7851,7 +7852,6 @@ export class Task extends HeyApiClient {
             { in: "query", key: "after" },
             { in: "query", key: "after_live" },
             { in: "query", key: "after_live_epoch" },
-            { in: "query", key: "after_message_watermark" },
           ],
         },
       ],
@@ -12145,6 +12145,40 @@ export class Session4 extends HeyApiClient {
     )
     return (options?.client ?? this.client).get<SessionMessageResponses, SessionMessageErrors, ThrowOnError>({
       url: "/session/{sessionID}/message/{messageID}",
+      ...options,
+      ...params,
+    })
+  }
+
+  /**
+   * Get message part
+   *
+   * Retrieve one exact persisted part from a specific session message.
+   */
+  public messagePart<ThrowOnError extends boolean = false>(
+    parameters: {
+      sessionID: string
+      messageID: string
+      partID: string
+      directory?: string
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "path", key: "sessionID" },
+            { in: "path", key: "messageID" },
+            { in: "path", key: "partID" },
+            { in: "query", key: "directory" },
+          ],
+        },
+      ],
+    )
+    return (options?.client ?? this.client).get<SessionMessagePartResponses, SessionMessagePartErrors, ThrowOnError>({
+      url: "/session/{sessionID}/message/{messageID}/part/{partID}",
       ...options,
       ...params,
     })

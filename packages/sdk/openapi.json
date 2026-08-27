@@ -3826,6 +3826,14 @@
               "partID": {
                 "type": "string"
               },
+              "partType": {
+                "enum": [
+                  "text",
+                  "reasoning",
+                  "tool"
+                ],
+                "type": "string"
+              },
               "sessionID": {
                 "type": "string"
               }
@@ -3834,6 +3842,7 @@
               "sessionID",
               "messageID",
               "partID",
+              "partType",
               "field",
               "delta"
             ],
@@ -3860,6 +3869,10 @@
               "partID": {
                 "type": "string"
               },
+              "partType": {
+                "minLength": 1,
+                "type": "string"
+              },
               "sessionID": {
                 "type": "string"
               }
@@ -3867,7 +3880,8 @@
             "required": [
               "sessionID",
               "messageID",
-              "partID"
+              "partID",
+              "partType"
             ],
             "type": "object"
           },
@@ -87436,6 +87450,128 @@
           }
         ]
       },
+      "get": {
+        "description": "Retrieve one exact persisted part from a specific session message.",
+        "operationId": "session.messagePart",
+        "parameters": [
+          {
+            "description": "Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.",
+            "in": "query",
+            "name": "directory",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Session ID",
+            "in": "path",
+            "name": "sessionID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Message ID",
+            "in": "path",
+            "name": "messageID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Part ID",
+            "in": "path",
+            "name": "partID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VisibleMessagePart"
+                }
+              }
+            },
+            "description": "Message part"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestError"
+                }
+              }
+            },
+            "description": "Bad request"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "NotFoundError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "LogFileNotFoundError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "Not found"
+          }
+        },
+        "summary": "Get message part",
+        "x-codeSamples": [
+          {
+            "lang": "js",
+            "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.session.messagePart({\n  ...\n})"
+          }
+        ]
+      },
       "patch": {
         "description": "Update a part in a message",
         "operationId": "part.update",
@@ -105119,10 +105255,6 @@
                       "minimum": 0,
                       "type": "integer"
                     },
-                    "messageWatermark": {
-                      "minimum": 0,
-                      "type": "number"
-                    },
                     "transcript": {
                       "items": {
                         "$ref": "#/components/schemas/VisibleMessageWithParts"
@@ -106832,7 +106964,6 @@
                   },
                   "required": [
                     "lastSequence",
-                    "messageWatermark",
                     "board",
                     "transcript",
                     "events",
@@ -109512,14 +109643,6 @@
             "description": "The live projection epoch the after_live cursor belongs to.",
             "in": "query",
             "name": "after_live_epoch",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "Resume message projection after this watermark.",
-            "in": "query",
-            "name": "after_message_watermark",
             "schema": {
               "type": "string"
             }

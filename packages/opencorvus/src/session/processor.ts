@@ -546,6 +546,7 @@ export namespace SessionProcessor {
                 sessionID: part.sessionID,
                 messageID: part.messageID,
                 partID: part.id,
+                partType: "reasoning",
                 field: "text",
                 delta,
               })
@@ -830,6 +831,7 @@ export namespace SessionProcessor {
                           sessionID: match.sessionID,
                           messageID: match.messageID,
                           partID: match.id,
+                          partType: "tool",
                           field: "raw",
                           delta,
                         })
@@ -1140,6 +1142,7 @@ export namespace SessionProcessor {
                           sessionID: currentText.sessionID,
                           messageID: currentText.messageID,
                           partID: currentText.id,
+                          partType: "text",
                           field: "text",
                           delta: value.text,
                         })

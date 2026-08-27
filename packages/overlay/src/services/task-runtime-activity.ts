@@ -32,12 +32,6 @@ function eventTaskID(event: any): string {
 
 export function selectedTaskSseActivityAt(event: any): number {
   const type = String(event?.type || "")
-  const properties = eventProperties(event)
-  if (type === "task.messages.changed") {
-    const watermark = Number(properties.watermark)
-    if (Number.isFinite(watermark) && watermark > 0) return watermark
-    throw new Error("task.messages.changed missing positive payload.watermark")
-  }
   const emittedAt = Number(event?.emittedAt || event?.emitted_at || event?.timestamp || 0)
   if (Number.isFinite(emittedAt) && emittedAt > 0) return emittedAt
   throw new Error(`selected-task SSE event ${type || "<unknown>"} missing positive emittedAt/timestamp`)

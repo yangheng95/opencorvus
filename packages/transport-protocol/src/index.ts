@@ -602,6 +602,42 @@ export function conversationMessageDisplayStage(origin: ConversationMessageOrigi
   return channel
 }
 
+/**
+ * Conversation HTTP/SSE responses keep collapsed large Tool state out of the
+ * first-paint payload. The exact persisted Part remains available through the
+ * project-scoped Session/Message/Part read route when the disclosure is opened.
+ */
+export const CONVERSATION_DEFERRED_TOOL_STATE_METADATA_KEY = "opencorvus_conversation_tool_state" as const
+export const CONVERSATION_INLINE_TOOL_STATE_MAX_BYTES = 4 * 1024
+
+export interface ConversationDeferredToolState {
+  kind: "deferred"
+  outputBytes: number
+  stateBytes: number
+  stateSha256: string
+}
+
+export function conversationDeferredToolState(value: unknown): ConversationDeferredToolState | undefined {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return undefined
+  const marker = (value as Record<string, unknown>)[CONVERSATION_DEFERRED_TOOL_STATE_METADATA_KEY]
+  if (!marker || typeof marker !== "object" || Array.isArray(marker)) return undefined
+  const kind = (marker as Record<string, unknown>).kind
+  const outputBytes = Number((marker as Record<string, unknown>).outputBytes)
+  const stateBytes = Number((marker as Record<string, unknown>).stateBytes)
+  const stateSha256 = String((marker as Record<string, unknown>).stateSha256 || "")
+  if (
+    kind !== "deferred" ||
+    !Number.isInteger(outputBytes) ||
+    outputBytes < 0 ||
+    !Number.isInteger(stateBytes) ||
+    stateBytes <= CONVERSATION_INLINE_TOOL_STATE_MAX_BYTES ||
+    !/^[a-f0-9]{64}$/.test(stateSha256)
+  ) {
+    return undefined
+  }
+  return { kind, outputBytes, stateBytes, stateSha256 }
+}
+
 // ── Attachment resource variants ──
 
 export const SCREENSHOT_BROWSER_THUMBNAIL_VARIANT = "screenshot-browser-thumbnail" as const

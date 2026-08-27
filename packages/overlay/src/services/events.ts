@@ -25,7 +25,7 @@ import { markSessionConfigStale } from "./config"
 import { refreshActiveComposerModelFromSession } from "./composer-model"
 import { markExpertSquadCatalogStale } from "./expert-squad"
 import { applyEvent as applyTreeWriterEvent, isProjectionPrerequisiteError } from "./tree-writer"
-import { refreshConversationTurnArtifacts, scheduleLatestConversationTailMerge } from "./conversation"
+import { refreshConversationTurnArtifacts } from "./conversation"
 import { publishSubagentConversationLiveEvent } from "./subagent-conversation"
 import { isBrowserPreviewUpdateEvent, observeBrowserPreviewUpdateEvent } from "./browser-preview"
 import { bumpFileWorkbenchRevision } from "./file-workbench"
@@ -259,15 +259,6 @@ export function routeSSEEvent(event: any, recovery: SelectedTaskRecoverySchedule
   }
 
   if (type === "task.live_replay_expired") {
-    markHandledSelectedLiveEvent(event)
-    return true
-  }
-
-  if (type === "task.messages.changed") {
-    const taskID = eventTaskID(event) || activeTaskID() || ""
-    if (taskID && taskID === activeTaskID()) {
-      scheduleLatestConversationTailMerge(taskID)
-    }
     markHandledSelectedLiveEvent(event)
     return true
   }

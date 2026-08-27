@@ -22,6 +22,11 @@ writer. Board-only control-plane events such as `artifact.persisted` invalidate
 the Board without entering the message tree; hydration replay and the live Task
 stream use the same ownership decision, while events with no declared owner
 still fail explicitly.
+Task Message lifecycle has one exact live bridge. Initial hydrate supplies the
+persisted tail; reconnect resumes the bounded Task live sequence in its exact
+process epoch. Replay expiry or an epoch change first replaces the canonical
+persisted tail and only then opens a new stream. There is no parallel timestamp
+watermark poll or coarse `task.messages.changed` projection.
 Standalone session hydration also carries the current `Question` pending
 snapshot for the selected session tree. The backend stamps each request with
 the same interaction `orderKey` used by the live `question.asked` bridge, and
@@ -108,6 +113,15 @@ contiguous Tool and Patch parts in an Activity disclosure; it must render those
 runs in place and may not hoist narrative or boundaries across them by splitting
 a whole card into type buckets. Reasoning parts remain runtime evidence but are
 not message-card display content.
+
+Every Task and Session hydrate, history page, connection snapshot and live
+Message event passes through the same bounded display-transport projection.
+It omits Reasoning and replaces a completed Tool state above the inline byte
+budget with a compact identity-preserving marker containing exact state/output
+bytes and a state SHA-256. The canonical Part remains unchanged in persistence.
+Only mounting an expanded Tool body may read that exact project-scoped
+Session/Message/Part; the renderer verifies identity, byte counts and digest and
+keeps a bounded identity/digest cache for collapse/reopen.
 
 A visible interaction owns two chronological positions after resolution: the
 request keeps its creation `orderKey`, while the backend projects a distinct

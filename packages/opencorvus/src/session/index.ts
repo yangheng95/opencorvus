@@ -1780,7 +1780,7 @@ export namespace Session {
               eq(PartTable.message_id, input.messageID),
             ),
           )
-          .returning({ id: PartTable.id })
+          .returning({ id: PartTable.id, data: PartTable.data })
           .get()
         const removedTool = removed
           ? undefined
@@ -1789,10 +1789,13 @@ export namespace Session {
               eq(ToolPartRequestTable.message_id, input.messageID),
             )).returning({ id: ToolPartRequestTable.id }).get()
         if (!removed && !removedTool) throw new NotFoundError({ message: `Part not found: ${input.partID}` })
+        const partType = removed ? String((removed.data as { type?: unknown }).type || "") : "tool"
+        if (!partType) throw new HostProcessingFaultError(`Removed Part ${input.partID} is missing its persisted type`)
         Bus.publishOwnedInTransaction(Message.Event.PartRemoved, {
           sessionID: input.sessionID,
           messageID: input.messageID,
           partID: input.partID,
+          partType,
         })
       })
       return input.partID
@@ -2353,6 +2356,7 @@ export namespace Session {
       sessionID: z.string(),
       messageID: z.string(),
       partID: z.string(),
+      partType: Message.DeltaPartType,
       field: z.string(),
       delta: z.string(),
     }),

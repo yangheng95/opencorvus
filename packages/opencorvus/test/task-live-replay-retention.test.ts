@@ -16,8 +16,12 @@ function dispatchDelta(taskID: string, index: number): void {
     source: "test.task-live-replay-retention",
     orderKey: `live/${String(index).padStart(4, "0")}`,
     payload: {
-      part: { id: `prt_${index}`, type: "text", messageID: "msg_live_replay", sessionID: `ses_${taskID}` },
-      text: `delta ${index}`,
+      sessionID: `ses_${taskID}`,
+      messageID: "msg_live_replay",
+      partID: `prt_${index}`,
+      partType: "text",
+      field: "text",
+      delta: `delta ${index}`,
     },
   })
 }

@@ -971,7 +971,6 @@ export const TaskConversationHistoryState = z.object({
 
 export const TaskConversationHydration = z.object({
   lastSequence: z.number().int().nonnegative(),
-  messageWatermark: z.number().nonnegative(),
   board: TaskBoard,
   transcript: MessageVisibleWithPartsArray,
   events: TaskEvent.array(),

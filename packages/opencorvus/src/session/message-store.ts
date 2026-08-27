@@ -339,6 +339,42 @@ export namespace MessageStore {
     return partsByMessageIDs([messageID]).get(messageID) ?? []
   })
 
+  export const part = fn(
+    z.object({
+      sessionID: Identifier.schema("session"),
+      messageID: Identifier.schema("message"),
+      partID: Identifier.schema("part"),
+    }),
+    async (input): Promise<Message.Part> => {
+      return Database.use((db) => {
+        const message = db
+          .select({ id: MessageTable.id })
+          .from(MessageTable)
+          .where(and(eq(MessageTable.id, input.messageID), eq(MessageTable.session_id, input.sessionID)))
+          .get()
+        if (!message) throw new NotFoundError({ message: `Message not found: ${input.messageID}` })
+
+        const persisted = db
+          .select()
+          .from(PartTable)
+          .where(and(eq(PartTable.id, input.partID), eq(PartTable.message_id, input.messageID)))
+          .get()
+        if (persisted) return loadedPart(db, { kind: "part", row: persisted })
+
+        const tool = db
+          .select()
+          .from(ToolPartRequestTable)
+          .where(and(eq(ToolPartRequestTable.id, input.partID), eq(ToolPartRequestTable.message_id, input.messageID)))
+          .get()
+        if (tool) return loadedPart(db, { kind: "tool", row: tool })
+
+        throw new NotFoundError({
+          message: `Part not found: ${input.partID} in message ${input.messageID}`,
+        })
+      })
+    },
+  )
+
   export const get = fn(
     z.object({
       sessionID: Identifier.schema("session"),

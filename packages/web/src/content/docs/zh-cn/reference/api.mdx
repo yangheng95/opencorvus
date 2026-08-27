@@ -213,6 +213,7 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | DELETE | `/session/{sessionID}/message/{messageID}` | Delete message 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.deleteMessage` |
 | GET | `/session/{sessionID}/message/{messageID}` | Get message 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.message` |
 | DELETE | `/session/{sessionID}/message/{messageID}/part/{partID}` | （无说明） 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `part.delete` |
+| GET | `/session/{sessionID}/message/{messageID}/part/{partID}` | Get message part 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.messagePart` |
 | PATCH | `/session/{sessionID}/message/{messageID}/part/{partID}` | （无说明） 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `part.update` |
 | POST | `/session/{sessionID}/shell` | Run shell command 请求体: `agent`, `command`, `messageID`, `model`; 错误: `BadRequestError`, `LogFileNotFoundError`, `MissionSessionAuthorityError`, `NotFoundError`, `PublicSessionPromptIdentityConflictError`. | `session.shell` |
 | POST | `/session/{sessionID}/summarize` | Summarize session 请求体: `auto`, `focus`, `modelID`, `providerID`; 错误: `BadRequestError`, `LogFileNotFoundError`, `MissionSessionAuthorityError`, `NotFoundError`. | `session.summarize` |

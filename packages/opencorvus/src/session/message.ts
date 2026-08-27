@@ -770,6 +770,9 @@ export namespace Message {
     })
   export type VisibleInfo = z.infer<typeof VisibleInfo>
 
+  export const DeltaPartType = z.enum(["text", "reasoning", "tool"])
+  export type DeltaPartType = z.infer<typeof DeltaPartType>
+
   export const Event = {
     Created: BusEvent.define(
       "message.created",
@@ -816,6 +819,7 @@ export namespace Message {
         sessionID: z.string(),
         messageID: z.string(),
         partID: z.string(),
+        partType: DeltaPartType,
         field: z.string(),
         delta: z.string(),
       }),
@@ -827,6 +831,7 @@ export namespace Message {
         sessionID: z.string(),
         messageID: z.string(),
         partID: z.string(),
+        partType: z.string().min(1),
       }),
       { tier: 3 },
     ),

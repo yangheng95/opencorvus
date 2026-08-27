@@ -99,6 +99,11 @@ import {
   conversationHistoryWindow,
 } from "@/conversation/history-window"
 import { sessionLineageIdentity } from "@/engine/task-session-lineage"
+import {
+  conversationTransportEventDisposition,
+  projectConversationTransportEventPayload,
+  projectConversationTransportTranscript,
+} from "@/conversation/transport"
 
 const log = Log.create({ service: "server" })
 const MissionSessionAuthorityConflict = namedErrorResponse(
@@ -542,7 +547,7 @@ export function protocolSessionEvent(event: ReturnType<typeof ProtocolStore.list
     throw new Error(`protocolSessionEvent: event ${event.id} missing time.emitted (schema-invariant violated)`)
   }
   const notify = BusEvent.resolveNotify(event.type, event.payload ?? {})
-  const payload = event.payload || {}
+  const payload = projectConversationTransportEventPayload(event.type, event.payload || {})
   const orderKey = typeof event.orderKey === "string" && event.orderKey.length > 0 ? event.orderKey : undefined
   if (!orderKey) {
     throw new Error(`protocolSessionEvent: event ${event.id} (${event.type}) missing orderKey`)
@@ -1041,7 +1046,7 @@ export const SessionRoutes = lazy(() =>
         return c.json({
           board,
           pendingQuestions,
-          transcript,
+          transcript: projectConversationTransportTranscript(transcript),
           events: [],
           view,
           turnArtifacts,
@@ -1089,7 +1094,7 @@ export const SessionRoutes = lazy(() =>
           projectID: Instance.project.id,
         })
         return c.json({
-          transcript: historyWindow.transcript,
+          transcript: projectConversationTransportTranscript(historyWindow.transcript),
           events: [],
           view: projectConversationView({ transcript: historyWindow.transcript, ledgerSessions: agentSessions }),
           history,
@@ -1175,6 +1180,7 @@ export const SessionRoutes = lazy(() =>
               )
             )
               return
+            if (conversationTransportEventDisposition(event.type, event.payload) === "omit") return
             const data = JSON.stringify(protocolSessionEvent(event))
             if (bufferingProtocolEvents) {
               if (seenProtocolEventIDs.has(event.id)) return
@@ -1209,7 +1215,7 @@ export const SessionRoutes = lazy(() =>
           await SessionEventStreamTestHooks.afterConversationSnapshotRead?.({ sessionID })
           for (const treeSessionID of connectionConversation.sessionIDs) sessionTreeIDs.add(treeSessionID)
           const conversationSnapshot = {
-            transcript: connectionConversation.transcript,
+            transcript: projectConversationTransportTranscript(connectionConversation.transcript),
             view: connectionConversation.view,
             history: connectionConversation.history,
           }
@@ -1800,6 +1806,38 @@ export const SessionRoutes = lazy(() =>
         const params = c.req.valid("param")
         await assertActiveProjectSession(params.sessionID)
         return c.json(await MessageStore.get({ sessionID: params.sessionID, messageID: params.messageID }))
+      },
+    )
+    .get(
+      "/:sessionID/message/:messageID/part/:partID",
+      describeRoute({
+        summary: "Get message part",
+        description: "Retrieve one exact persisted part from a specific session message.",
+        operationId: "session.messagePart",
+        responses: {
+          200: {
+            description: "Message part",
+            content: {
+              "application/json": {
+                schema: resolver(Message.VisiblePart),
+              },
+            },
+          },
+          ...errors(400, 404),
+        },
+      }),
+      validator(
+        "param",
+        z.object({
+          sessionID: z.string().meta({ description: "Session ID" }),
+          messageID: z.string().meta({ description: "Message ID" }),
+          partID: z.string().meta({ description: "Part ID" }),
+        }),
+      ),
+      async (c) => {
+        const params = c.req.valid("param")
+        await assertActiveProjectSession(params.sessionID)
+        return c.json(await MessageStore.part(params))
       },
     )
     .delete(

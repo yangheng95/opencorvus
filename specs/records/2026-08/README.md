@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-27-message-panel-stream-and-payload-convergence.md](2026-08-27-message-panel-stream-and-payload-convergence.md) removes the duplicate Task message watermark authority, converges main Task/Mission/Session messages on exact live replay or subscribe-before-snapshot, and defers large collapsed Tool state from first-paint transport with exact verified Part reads on expansion.
+
 - [2026-08-27-work-ledger-unowned-task-visibility.md](2026-08-27-work-ledger-unowned-task-visibility.md) restores unarchived Tasks without a valid Mission root to the active Work Ledger while keeping Mission-owned Tasks nested exactly once.
 
 - [2026-08-26-mission-task-causal-order-and-close-convergence.md](2026-08-26-mission-task-causal-order-and-close-convergence.md) makes fresh Task creator/control publication one atomic Session cut, gives every Session Message a persisted monotonic causal frontier, and re-reduces Mission closure after lifecycle-lease acquisition before any physical close.

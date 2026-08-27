@@ -1,6 +1,6 @@
 import { afterEach, expect, test } from "bun:test"
 import { EngineTaskTable } from "@/engine/engine.sql"
-import { taskExecutionProjectionForTask, taskMessageWatermarkCursor } from "@/orchestrator/task-event"
+import { taskExecutionProjectionForTask } from "@/orchestrator/task-event"
 import { Identifier } from "@/id/id"
 import { Instance } from "@/project/instance"
 import { ProtocolStore } from "@/protocol/store"
@@ -8,6 +8,7 @@ import { ProtocolEventTable } from "@/protocol/protocol.sql"
 import { protocolTaskEvent } from "@/server/routes/orchestrator"
 import { protocolSessionEvent } from "@/server/routes/session"
 import { Session } from "@/session"
+import { MessageStore } from "@/session/message-store"
 import { Database, eq } from "@/storage/db"
 import { timelineOrderKey } from "@/timeline/order"
 import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
@@ -59,7 +60,7 @@ test("projects normalized Part ownership and Protocol envelope identity into con
         type: "text",
         text: "Normalized Part is reached through its Message owner.",
       })
-      const cursor = taskMessageWatermarkCursor(taskID)
+      const persistedMessage = await MessageStore.get({ sessionID: child.id, messageID: message.id })
 
       const event = Database.transaction((db) => ProtocolStore.appendEventInTransaction({
         kind: "event",
@@ -87,15 +88,18 @@ test("projects normalized Part ownership and Protocol envelope identity into con
       )
 
       expect({
-        watermark: cursor.watermark,
-        signature: cursor.signature,
+        persistedPart: persistedMessage.parts.find((candidate) => candidate.id === part.id),
         taskEvent: protocolTaskEvent(durable),
         sessionEvent: protocolSessionEvent(durable),
         execution,
         persistedPayload,
       }).toMatchObject({
-        watermark: expect.any(Number),
-        signature: expect.stringContaining(`part:${part.id}:`),
+        persistedPart: {
+          id: part.id,
+          sessionID: child.id,
+          messageID: message.id,
+          text: "Normalized Part is reached through its Message owner.",
+        },
         taskEvent: {
           event_id: event.id,
           task_id: taskID,
@@ -138,7 +142,6 @@ test("projects normalized Part ownership and Protocol envelope identity into con
           status: { type: "terminal", reason: "completed" },
         },
       })
-      expect(cursor.watermark).toBeGreaterThan(0)
     },
   })
 })

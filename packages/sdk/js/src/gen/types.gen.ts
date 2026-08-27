@@ -1226,6 +1226,7 @@ export type EventMessagePartDelta = {
     field: string
     messageID: string
     partID: string
+    partType: "text" | "reasoning" | "tool"
     sessionID: string
   }
   type: "message.part.delta"
@@ -1235,6 +1236,7 @@ export type EventMessagePartRemoved = {
   properties: {
     messageID: string
     partID: string
+    partType: string
     sessionID: string
   }
   type: "message.part.removed"
@@ -26108,6 +26110,65 @@ export type PartDeleteResponses = {
 
 export type PartDeleteResponse = PartDeleteResponses[keyof PartDeleteResponses]
 
+export type SessionMessagePartData = {
+  body?: never
+  path: {
+    /**
+     * Session ID
+     */
+    sessionID: string
+    /**
+     * Message ID
+     */
+    messageID: string
+    /**
+     * Part ID
+     */
+    partID: string
+  }
+  query?: {
+    /**
+     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
+     */
+    directory?: string
+  }
+  url: "/session/{sessionID}/message/{messageID}/part/{partID}"
+}
+
+export type SessionMessagePartErrors = {
+  /**
+   * Bad request
+   */
+  400: BadRequestError
+  /**
+   * Not found
+   */
+  404:
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "NotFoundError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "LogFileNotFoundError"
+      }
+}
+
+export type SessionMessagePartError = SessionMessagePartErrors[keyof SessionMessagePartErrors]
+
+export type SessionMessagePartResponses = {
+  /**
+   * Message part
+   */
+  200: VisibleMessagePart
+}
+
+export type SessionMessagePartResponse = SessionMessagePartResponses[keyof SessionMessagePartResponses]
+
 export type PartUpdateData = {
   body: Part
   path: {
@@ -31297,7 +31358,6 @@ export type TaskConversationResponses = {
       oldestTimestamp: number | null
     }
     lastSequence: number
-    messageWatermark: number
     transcript: Array<VisibleMessageWithParts>
     turnArtifacts: Array<{
       catalogComplete: boolean
@@ -32308,10 +32368,6 @@ export type TaskEventsData = {
      * The live projection epoch the after_live cursor belongs to.
      */
     after_live_epoch?: string
-    /**
-     * Resume message projection after this watermark.
-     */
-    after_message_watermark?: string
   }
   url: "/task/{taskID}/events"
 }
