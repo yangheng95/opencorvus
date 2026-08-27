@@ -328,8 +328,14 @@ class OpenCorvusClient:
         params: Mapping[str, str] | None = None,
         json: Mapping[str, Any] | None = None,
         request_id: str | None = None,
+        timeout_seconds: float | None = None,
     ) -> Mapping[str, Any]:
         headers = {"x-opencorvus-request-id": request_id} if request_id else None
+        request_timeout = (
+            self._client.timeout
+            if timeout_seconds is None
+            else httpx.Timeout(timeout_seconds, connect=min(10, timeout_seconds))
+        )
         try:
             response = await self._client.request(
                 method,
@@ -337,6 +343,7 @@ class OpenCorvusClient:
                 params=params,
                 json=json,
                 headers=headers,
+                timeout=request_timeout,
             )
         except httpx.HTTPError as error:
             raise OpenCorvusAPIError(
@@ -373,7 +380,16 @@ class OpenCorvusClient:
         sample_id: str,
         sample_uuid: str,
         epoch: int,
+        deadline: float | None = None,
     ) -> Mapping[str, Any]:
+        remaining = self.config.timeout_seconds if deadline is None else deadline - time.monotonic()
+        if remaining <= 0:
+            raise OpenCorvusAPIError(
+                method="POST",
+                path="/task",
+                status_code=None,
+                request_id=request_id,
+            )
         body: dict[str, Any] = {
             "request": request,
             "requestID": request_id,
@@ -392,16 +408,28 @@ class OpenCorvusClient:
             body["model"] = self.config.model
         if self.config.prompt_profile:
             body["promptProfile"] = self.config.prompt_profile
-        return await self._request_json(
-            "POST",
-            "/task",
-            params={
-                "directory": self.config.project_dir,
-                "init-git": "true" if self.config.init_git else "false",
-            },
-            json=body,
-            request_id=request_id,
-        )
+        try:
+            return await asyncio.wait_for(
+                self._request_json(
+                    "POST",
+                    "/task",
+                    params={
+                        "directory": self.config.project_dir,
+                        "init-git": "true" if self.config.init_git else "false",
+                    },
+                    json=body,
+                    request_id=request_id,
+                    timeout_seconds=remaining,
+                ),
+                timeout=remaining,
+            )
+        except asyncio.TimeoutError as error:
+            raise OpenCorvusAPIError(
+                method="POST",
+                path="/task",
+                status_code=None,
+                request_id=request_id,
+            ) from error
 
     async def task_status(self, task_id: str) -> Mapping[str, Any]:
         return await self._request_json(
@@ -473,6 +501,7 @@ class OpenCorvusClient:
         sample_uuid: str,
         epoch: int,
     ) -> TaskResult:
+        deadline = time.monotonic() + self.config.timeout_seconds
         accepted = await self.create_task(
             request=request,
             request_id=request_id,
@@ -480,11 +509,11 @@ class OpenCorvusClient:
             sample_id=sample_id,
             sample_uuid=sample_uuid,
             epoch=epoch,
+            deadline=deadline,
         )
         task_id = _required_string(accepted.get("task_id"), label="task.create.task_id")
         project_id = _required_string(accepted.get("project_id"), label="task.create.project_id")
         directory = _required_string(accepted.get("directory"), label="task.create.directory")
-        deadline = time.monotonic() + self.config.timeout_seconds
         terminal_status = await self.wait_for_terminal(task_id, deadline=deadline)
         observed_lifecycle = _required_string(
             terminal_status.get("lifecycleStatus"), label="task.status.lifecycleStatus"

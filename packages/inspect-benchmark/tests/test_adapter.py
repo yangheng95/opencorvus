@@ -8,6 +8,7 @@ import pytest
 
 from opencorvus_inspect.adapter import (
     AdapterConfig,
+    OpenCorvusAPIError,
     OpenCorvusClient,
     OpenCorvusTaskTimeout,
 )
@@ -24,6 +25,7 @@ async def test_public_task_lifecycle_returns_exact_completion_decision_message()
             seen_create["query"] = dict(request.url.params)
             seen_create["body"] = json.loads(request.content)
             seen_create["request_id"] = request.headers["x-opencorvus-request-id"]
+            seen_create["read_timeout"] = request.extensions["timeout"]["read"]
             return httpx.Response(
                 202,
                 headers={"x-opencorvus-request-id": "server-request"},
@@ -103,6 +105,10 @@ async def test_public_task_lifecycle_returns_exact_completion_decision_message()
             epoch=1,
         )
 
+    read_timeout = seen_create.pop("read_timeout")
+    assert isinstance(read_timeout, float)
+    assert 0 < read_timeout <= config.timeout_seconds
+    assert read_timeout == pytest.approx(config.timeout_seconds, abs=0.1)
     assert seen_create == {
         "query": {"directory": "D:/bench", "init-git": "false"},
         "body": {
@@ -134,6 +140,43 @@ async def test_public_task_lifecycle_returns_exact_completion_decision_message()
         "catalog_revision": 1,
         "expected_sha256": "a" * 64,
     }
+
+
+@pytest.mark.asyncio
+async def test_task_creation_deadline_returns_typed_api_observation_failure() -> None:
+    async def handler(request: httpx.Request) -> httpx.Response:
+        assert request.method == "POST"
+        assert request.url.path == "/task"
+        await asyncio.sleep(1)
+        return httpx.Response(
+            202,
+            json={
+                "task_id": "task-too-late",
+                "project_id": "project-too-late",
+                "directory": "D:/bench",
+            },
+        )
+
+    config = AdapterConfig.resolve(
+        base_url="http://opencorvus.test",
+        project_dir="D:/bench",
+        timeout_seconds=0.01,
+    )
+    async with OpenCorvusClient(config, transport=httpx.MockTransport(handler)) as client:
+        with pytest.raises(OpenCorvusAPIError) as raised:
+            await client.run_task(
+                request="create within the observation budget",
+                request_id="inspect:create-timeout",
+                title="Inspect creation timeout sample",
+                sample_id="create-timeout",
+                sample_uuid="create-timeout",
+                epoch=1,
+            )
+
+    assert raised.value.method == "POST"
+    assert raised.value.path == "/task"
+    assert raised.value.status_code is None
+    assert raised.value.request_id == "inspect:create-timeout"
 
 
 @pytest.mark.asyncio

@@ -70,7 +70,7 @@ The solver accepts explicit arguments and equivalent environment defaults:
 | `model` | `OPENCORVUS_INSPECT_MODEL` | none | Optional exact OpenCorvus `provider/model`; omission uses normal project resolution. |
 | `prompt_profile` | `OPENCORVUS_INSPECT_PROMPT_PROFILE` | none | Optional exact installed Expert Squad selection. |
 | `product_pillar` | `OPENCORVUS_INSPECT_PRODUCT_PILLAR` | `code` | Existing `code | work` Task contract. |
-| `timeout` | `OPENCORVUS_INSPECT_TIMEOUT_SECONDS` | `1800` | Maximum adapter observation time. It does not cancel the product Task. |
+| `timeout` | `OPENCORVUS_INSPECT_TIMEOUT_SECONDS` | `1800` | Maximum end-to-end adapter observation time beginning before Task creation. It does not cancel the product Task. |
 | `poll_interval` | `OPENCORVUS_INSPECT_POLL_SECONDS` | `2` | Timed public status snapshot cadence. |
 | `init_git` | `OPENCORVUS_INSPECT_INIT_GIT` | `false` | Explicit opt-in to OpenCorvus project initialization. |
 
@@ -94,7 +94,14 @@ Existing `OPENCORVUS_SERVER_USERNAME` and `OPENCORVUS_SERVER_PASSWORD` values pr
 ### Timeout and interruption
 
 - Network/protocol errors raise typed adapter errors containing method, path, HTTP status, and OpenCorvus request ID where available.
-- Observation timeout raises a typed timeout containing the Task ID and last lifecycle snapshot.
+- The observation deadline begins before `POST /task`; Task creation receives
+  the remaining budget and is bounded by that wall-clock duration rather than
+  relying only on per-network-stage timeouts. The public route may await the
+  control plane's first owner turn before returning its durable receipt. After
+  acceptance, deadline exhaustion raises a typed timeout containing the Task ID
+  and last lifecycle snapshot. Pre-acceptance deadline exhaustion remains a
+  typed API observation failure because no Task receipt is yet available to the
+  adapter.
 - Timeout, Inspect cancellation, or process interruption never calls the OpenCorvus cancellation or deletion route. The product Task remains owned by OpenCorvus and can be inspected or cancelled explicitly by its operator.
 
 ## Package And Files

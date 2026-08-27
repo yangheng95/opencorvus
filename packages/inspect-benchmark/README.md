@@ -220,6 +220,11 @@ inspect eval your_eval.py \
 
 - Adapter timeout stops observing the sample; it does not cancel or delete the
   still-owned OpenCorvus Task.
+- The adapter timeout is one end-to-end observation deadline beginning before
+  Task creation. The `POST /task` acceptance request is wall-clock bounded by
+  the remaining deadline, in addition to per-network-stage timeouts, because
+  OpenCorvus may await the Task control plane's first owner turn before
+  returning its durable `202` receipt.
 - Inspect sample concurrency is real OpenCorvus/Provider concurrency. Set
   Inspect's connection limit to a value the service and Provider can sustain.
 - `project_isolation=shared` implies shared mutable state and is never accepted

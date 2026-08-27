@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest Inspect BrowseComp GPT-5.6 Luna smoke: [`2026-08-28-inspect-browsecomp-luna-smoke.md`](records/2026-08/2026-08-28-inspect-browsecomp-luna-smoke.md).
+
 Latest Right Dock component lifecycle and Conversation virtual-bottom convergence: [`2026-08-27-right-dock-lifecycle-and-virtual-bottom-convergence.md`](records/2026-08/2026-08-27-right-dock-lifecycle-and-virtual-bottom-convergence.md).
 
 Latest message-panel Agent activity and type-density convergence: [`2026-08-27-message-panel-agent-activity-and-type-density.md`](records/2026-08/2026-08-27-message-panel-agent-activity-and-type-density.md).

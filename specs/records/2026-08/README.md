@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-28-inspect-browsecomp-luna-smoke.md](2026-08-28-inspect-browsecomp-luna-smoke.md) exercises the new Inspect-owned benchmark framework against one official BrowseComp row with exact GPT-5.6 Luna system identity, isolated Task execution, frozen membership, and fail-closed judge coverage.
+
 - [2026-08-27-right-dock-lifecycle-and-virtual-bottom-convergence.md](2026-08-27-right-dock-lifecycle-and-virtual-bottom-convergence.md) makes the Right Dock mount only its visible tab body and converges dynamic virtual-row measurement with the outer transcript bottom while fencing retired Virtualizer cleanup.
 
 - [2026-08-27-message-panel-agent-activity-and-type-density.md](2026-08-27-message-panel-agent-activity-and-type-density.md) converges live and hydrated child-Agent activity on exact execution occurrences and restores message prose/card title typography to their canonical density.
