@@ -8,6 +8,15 @@ import { NamedError } from "@opencorvus-ai/util/error"
 import { Auth } from "@/auth"
 import { ProviderOAuthFlowStore } from "@/provider/oauth-flow-store"
 import { lazy } from "@/util/lazy"
+import { ProviderCredentialExchange } from "@/provider/credential-exchange"
+import crypto from "node:crypto"
+
+type OAuthExecutor = {
+  result: AuthOAuthResult
+  ownerID: string
+  stopRenewal(): void
+  dispose(): Promise<void>
+}
 
 export namespace ProviderAuth {
   export const Scope = z.enum(["project", "global"])
@@ -23,10 +32,38 @@ export namespace ProviderAuth {
     // Keyed by flow occurrence ID, never by provider: the executor is the
     // plugin's live closure (PKCE material a restart cannot resurrect), and
     // the durable occurrence in ProviderOAuthFlowStore is what identifies it.
-    return { methods, executors: new Map<string, AuthOAuthResult>() }
+    return { methods, executors: new Map<string, OAuthExecutor>() }
   }
 
-  const projectState = createInstanceState(() => Plugin.list().then(createState), undefined, "provider-auth")
+  async function disposeState(current: Awaited<ReturnType<typeof createState>>): Promise<void> {
+    await Promise.all(
+      [...current.executors.entries()].map(async ([flowID, executor]) => {
+        executor.stopRenewal()
+        let settlementFailure: unknown
+        try {
+          await ProviderOAuthFlowStore.failPending({
+            id: flowID,
+            ownerID: executor.ownerID,
+            error: "Provider OAuth executor owner ended with its Project Instance",
+          })
+        } catch (error) {
+          settlementFailure = error
+        }
+        try {
+          await executor.dispose()
+        } catch (disposeFailure) {
+          throw new AggregateError(
+            [settlementFailure, disposeFailure].filter((error) => error !== undefined),
+            `Provider OAuth executor ${flowID} disposal failed`,
+          )
+        }
+        if (settlementFailure) throw settlementFailure
+      }),
+    )
+    current.executors.clear()
+  }
+
+  const projectState = createInstanceState(() => Plugin.list().then(createState), disposeState, "provider-auth")
   const globalState = lazy(() => Plugin.listGlobalProviderHooks().then(createState))
   let globalStateOverrideForTest: ReturnType<typeof createState> | undefined
   let projectStateOverrideForTest: ReturnType<typeof createState> | undefined
@@ -38,22 +75,60 @@ export namespace ProviderAuth {
   }
 
   /**
-   * Hold a flow's live executor, releasing every executor whose flow is no
-   * longer pending. The open that minted this flow superseded any previous
-   * pending occurrence for the provider and scope; without the sweep the
-   * superseded closure (and its PKCE material) would live as long as the
-   * scope's state — for the global scope, the life of the process.
+   * Dispose every executor whose durable flow has already settled before a
+   * new occurrence or plugin authorization side effect is created. A live
+   * pending owner is never replaced by another authorize request.
    */
-  async function holdExecutor(scope: Scope, flowID: string, executor: AuthOAuthResult) {
-    const executors = await state(scope).then((s) => s.executors)
+  async function disposeSettledExecutors(executors: Map<string, OAuthExecutor>) {
     for (const id of [...executors.keys()]) {
       const record = await ProviderOAuthFlowStore.get(id)
-      if (!record || record.state !== "pending") executors.delete(id)
+      if (!record || record.state !== "pending") {
+        const settled = executors.get(id)
+        settled?.stopRenewal()
+        await settled?.dispose()
+        executors.delete(id)
+      }
     }
-    executors.set(flowID, executor)
+  }
+
+  function renewPendingOwner(flowID: string, ownerID: string, onLost: () => Promise<void>): () => void {
+    let running = false
+    let stopped = false
+    let lost = false
+    const timer = setInterval(
+      () => {
+        if (running || stopped || lost) return
+        running = true
+        void ProviderOAuthFlowStore.renewPending({ id: flowID, ownerID })
+          .then(async (renewed) => {
+            if (renewed || stopped || lost) return
+            await onLost()
+            lost = true
+            clearInterval(timer)
+          })
+          // A transient shared-file or lock error does not revoke this owner.
+          // The next interval retries until the durable lease itself says the
+          // exact owner is gone.
+          .catch(() => undefined)
+          .finally(() => {
+            running = false
+          })
+      },
+      TestHooks.pendingRenewalIntervalMs ?? ProviderOAuthFlowStore.EXCHANGE_LEASE_MS / 3,
+    )
+    timer.unref()
+    return () => {
+      stopped = true
+      clearInterval(timer)
+    }
   }
 
   export const TestHooks = {
+    pendingRenewalIntervalMs: undefined as number | undefined,
+    async disposeProjectAuthStateForTest(): Promise<void> {
+      if (!projectStateOverrideForTest) throw new Error("Project Provider auth test state is not installed")
+      await disposeState(await projectStateOverrideForTest)
+    },
     installGlobalAuthHooksForTest(hooks: Parameters<typeof createState>[0]): Disposable {
       const override = createState(hooks)
       globalStateOverrideForTest = override
@@ -119,7 +194,9 @@ export namespace ProviderAuth {
       scope: Scope.optional(),
     }),
     async (input): Promise<Authorization> => {
-      const auth = await state(input.scope).then((s) => s.methods[input.providerID])
+      const scope = input.scope ?? "project"
+      const currentState = await state(scope)
+      const auth = currentState.methods[input.providerID]
       if (!auth) throw new ProviderNotFound({ providerID: input.providerID })
       const method = auth.methods[input.method]
       if (!method) throw new MethodNotFound({ providerID: input.providerID, method: input.method })
@@ -131,18 +208,80 @@ export namespace ProviderAuth {
           actual: method.type,
         })
       }
-      const result = await method.authorize(input.inputs)
-      // The durable occurrence supersedes any pending flow for this
-      // provider and scope — an explicit fact of the old flow, not a silent
-      // replacement — and the live executor is held under the occurrence's
-      // own identity.
+      // Dispose settled plugin resources before opening the next durable
+      // owner. If disposal is transiently unavailable, no new occurrence or
+      // authorization side effect is created and the caller can retry.
+      await disposeSettledExecutors(currentState.executors)
+      const credentialProviderID = method.credentialProvider ?? input.providerID
+      const observed = await Auth.observe(credentialProviderID)
+      const ownerID = crypto.randomUUID()
       const flow = await ProviderOAuthFlowStore.open({
         providerID: input.providerID,
-        scope: input.scope ?? "project",
+        credentialProviderID,
+        expectedCredentialGeneration: observed.generation,
+        ownerID,
+        scope,
         method: input.method,
         inputsDigest: ProviderOAuthFlowStore.digestInputs(input.inputs),
       })
-      await holdExecutor(input.scope ?? "project", flow.id, result)
+      let executor: OAuthExecutor | undefined
+      const stopRenewal = renewPendingOwner(flow.id, ownerID, async () => {
+        const current = await ProviderOAuthFlowStore.get(flow.id)
+        if (current?.state === "pending") {
+          if (current.exchangeOwnerID !== ownerID || (current.exchangeLeaseExpiresAt ?? 0) > Date.now()) return
+          await ProviderOAuthFlowStore.settleExpiredPending({ id: flow.id, ownerID })
+        }
+        if (currentState.executors.get(flow.id) !== executor) return
+        await executor?.dispose()
+        currentState.executors.delete(flow.id)
+      })
+      let result: AuthOAuthResult | undefined
+      try {
+        result = await method.authorize(input.inputs)
+        const renewed = await ProviderOAuthFlowStore.renewPending({ id: flow.id, ownerID }).catch(() => "transient")
+        if (!renewed) throw new Error("Provider OAuth authorization occurrence lost its executor owner")
+      } catch (error) {
+        stopRenewal()
+        const cleanupFailures: unknown[] = []
+        try {
+          await ProviderOAuthFlowStore.failPending({
+            id: flow.id,
+            ownerID,
+            error: "Provider OAuth authorization preparation failed",
+          })
+        } catch (failure) {
+          cleanupFailures.push(failure)
+        }
+        try {
+          await result?.dispose?.()
+        } catch (failure) {
+          cleanupFailures.push(failure)
+        }
+        if (cleanupFailures.length > 0) {
+          throw new AggregateError(
+            [error, ...cleanupFailures],
+            `Provider OAuth authorization ${flow.id} preparation and cleanup failed`,
+          )
+        }
+        throw error
+      }
+      let disposal: Promise<void> | undefined
+      executor = {
+        result,
+        ownerID,
+        stopRenewal,
+        async dispose() {
+          if (disposal) return disposal
+          disposal = Promise.resolve().then(() => result.dispose?.())
+          try {
+            await disposal
+          } catch (error) {
+            disposal = undefined
+            throw error
+          }
+        },
+      }
+      currentState.executors.set(flow.id, executor)
       return {
         url: result.url,
         method: result.method,
@@ -183,81 +322,73 @@ export namespace ProviderAuth {
       // same occurrence finds it gone.
       const executors = await state(scope).then((s) => s.executors)
       const match = executors.get(flow.id)
-      executors.delete(flow.id)
       if (!match) {
         // The occurrence is durable but its executor lived in a process that
         // is gone — or another caller is finishing it right now. Either way
         // this caller cannot finish it, and the reason is exact.
         throw new OauthFlowNotExecutable({ providerID: input.providerID, flowID: flow.id })
       }
-      let result
-
+      if (match.result.method === "code" && !input.code) {
+        throw new OauthCodeMissing({ providerID: input.providerID })
+      }
+      let exchangeClaimed = false
+      let exchangeFailure: unknown
       try {
-        if (match.method === "code") {
-          if (!input.code) throw new OauthCodeMissing({ providerID: input.providerID })
-          result = await match.callback(input.code)
-        }
+        await ProviderCredentialExchange.authorization({
+          flowID: flow.id,
+          ownerID: match.ownerID,
+          providerID: input.providerID,
+          credentialProviderID: flow.credentialProviderID,
+          claimed: async (mode) => {
+            match.stopRenewal()
+            if (mode === "exchange") {
+              exchangeClaimed = true
+              return
+            }
+            await match.dispose()
+            if (executors.get(flow.id) === match) executors.delete(flow.id)
+          },
+          exchange: async () => {
+            const result =
+              match.result.method === "code" ? await match.result.callback(input.code!) : await match.result.callback()
+            if (result.type !== "success") throw new OauthCallbackFailed({})
 
-        if (match.method === "auto") {
-          result = await match.callback()
-        }
-      } catch (error) {
-        await ProviderOAuthFlowStore.settle({
-          id: flow.id,
-          state: "failed",
-          error: error instanceof Error ? error.message : String(error),
+            let credential: Auth.Info
+            if ("key" in result) {
+              credential = { type: "api", key: result.key, metadata: result.metadata }
+            } else {
+              credential = {
+                type: "oauth",
+                access: result.access,
+                refresh: result.refresh,
+                expires: result.expires,
+                ...(result.accountId ? { accountId: result.accountId } : {}),
+                ...(result.enterpriseUrl ? { enterpriseUrl: result.enterpriseUrl } : {}),
+              }
+            }
+            return credential
+          },
         })
-        throw error
+      } catch (error) {
+        exchangeFailure = error
       }
-
-      if (result?.type === "success") {
-        // Consuming the occurrence before the credential write makes the
-        // write single-shot: a concurrent callback that lost the settle race
-        // must not write a second credential for the same flow.
-        const consumed = await ProviderOAuthFlowStore.settle({ id: flow.id, state: "consumed" })
-        if (!consumed) {
-          // Losing the settle means another writer got there first — for a
-          // claimed executor that can only be a supersession, so no
-          // credential was written. Report the flow's real durable state.
-          const settled = await ProviderOAuthFlowStore.get(flow.id)
-          throw new OauthFlowAlreadySettled({
-            providerID: input.providerID,
-            flowID: flow.id,
-            state: settled?.state ?? "superseded",
-          })
+      let disposeFailure: unknown
+      if (exchangeClaimed) {
+        try {
+          await match.dispose()
+          if (executors.get(flow.id) === match) executors.delete(flow.id)
+        } catch (error) {
+          disposeFailure = error
         }
-        const credentialProvider = result.provider ?? input.providerID
-        if ("key" in result) {
-          await Auth.set(credentialProvider, {
-            type: "api",
-            key: result.key,
-            metadata: result.metadata,
-          })
-        }
-        if ("refresh" in result) {
-          const info: Auth.Info = {
-            type: "oauth",
-            access: result.access,
-            refresh: result.refresh,
-            expires: result.expires,
-          }
-          if (result.accountId) {
-            info.accountId = result.accountId
-          }
-          if (result.enterpriseUrl) {
-            info.enterpriseUrl = result.enterpriseUrl
-          }
-          await Auth.set(credentialProvider, info)
-        }
-        return
       }
-
-      await ProviderOAuthFlowStore.settle({
-        id: flow.id,
-        state: "failed",
-        error: "Provider OAuth callback returned no credential",
-      })
-      throw new OauthCallbackFailed({})
+      if (exchangeFailure && disposeFailure) {
+        throw new AggregateError(
+          [exchangeFailure, disposeFailure],
+          `Provider OAuth callback ${flow.id} failed and could not dispose`,
+        )
+      }
+      if (exchangeFailure) throw exchangeFailure
+      if (disposeFailure) throw disposeFailure
     },
   )
 

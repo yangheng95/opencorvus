@@ -4,6 +4,7 @@ import z from "zod"
 import { Filesystem } from "../util/filesystem"
 import { withSharedJsonFactLock } from "../util/process-lock"
 import { NamedError } from "@opencorvus-ai/util/error"
+import crypto from "node:crypto"
 
 function isEnoent(error: unknown): boolean {
   return (
@@ -71,6 +72,9 @@ export namespace Auth {
   export type Info = z.infer<typeof Info>
 
   const File = z.record(z.string(), z.unknown())
+  const Entry = z.object({ generation: z.string().uuid(), info: Info.optional() })
+  type Entry = z.infer<typeof Entry>
+  export type Observation = { generation: string; info?: Info }
 
   const filepath = path.join(Global.Path.data, "auth.json")
   const mutationLocks = new Map<string, Promise<unknown>>()
@@ -80,7 +84,7 @@ export namespace Auth {
     return auth[providerID]
   }
 
-  export async function all(): Promise<Record<string, Info>> {
+  async function readEntries(): Promise<{ entries: Record<string, Entry>; legacyKeys: Set<string> }> {
     let data: Record<string, unknown>
     try {
       data = await Filesystem.readJson<Record<string, unknown>>(filepath)
@@ -111,23 +115,42 @@ export namespace Auth {
         { cause: file.error },
       )
     }
-    return Object.entries(file.data).reduce(
+    const legacyKeys = new Set<string>()
+    const entries = Object.entries(file.data).reduce(
       (acc, [key, value]) => {
-        const parsed = Info.safeParse(value)
-        if (!parsed.success) {
+        const entry = Entry.safeParse(value)
+        if (entry.success) {
+          acc[key] = entry.data
+          return acc
+        }
+        const legacy = Info.safeParse(value)
+        if (!legacy.success) {
           throw new ReadError(
             {
               operation: "read_saved_credentials",
               reason: "invalid_credential",
               message: "Saved Provider credentials do not satisfy the credential schema",
             },
-            { cause: parsed.error },
+            { cause: entry.error },
           )
         }
-        acc[key] = parsed.data
+        legacyKeys.add(key)
+        acc[key] = { generation: crypto.randomUUID(), info: legacy.data }
         return acc
       },
-      {} as Record<string, Info>,
+      {} as Record<string, Entry>,
+    )
+    return { entries, legacyKeys }
+  }
+
+  async function writeEntries(entries: Record<string, Entry>): Promise<void> {
+    await Filesystem.writeAtomic(filepath, JSON.stringify(entries, null, 2), 0o600)
+  }
+
+  export async function all(): Promise<Record<string, Info>> {
+    const { entries } = await readEntries()
+    return Object.fromEntries(
+      Object.entries(entries).flatMap(([key, entry]) => (entry.info ? [[key, entry.info] as const] : [])),
     )
   }
 
@@ -142,17 +165,88 @@ export namespace Auth {
   }
 
   export async function set(key: string, info: Info) {
+    await setWithGeneration(key, info, crypto.randomUUID())
+  }
+
+  export async function setWithGeneration(key: string, info: Info, generation: string): Promise<void> {
     await mutate(async () => {
-      const data = await all()
-      await Filesystem.writeAtomic(filepath, JSON.stringify({ ...data, [key]: info }, null, 2), 0o600)
+      const { entries } = await readEntries()
+      entries[key] = Entry.parse({ generation, info })
+      await writeEntries(entries)
+    })
+  }
+
+  /**
+   * Establish a durable generation before starting an external credential
+   * exchange. Missing credentials become generation-bearing tombstones so an
+   * absent -> value -> absent ABA cannot make a stale exchange look current.
+   */
+  export async function observe(key: string): Promise<Observation> {
+    return mutate(async () => {
+      const { entries, legacyKeys } = await readEntries()
+      let entry = entries[key]
+      if (!entry) {
+        entry = { generation: crypto.randomUUID() }
+        entries[key] = entry
+      }
+      if (legacyKeys.size > 0 || !entry.info) await writeEntries(entries)
+      return { generation: entry.generation, info: entry.info }
+    })
+  }
+
+  /** Read the current durable generation without creating or migrating one. */
+  export async function inspect(key: string): Promise<Observation | undefined> {
+    const { entries, legacyKeys } = await readEntries()
+    if (legacyKeys.has(key)) return undefined
+    const entry = entries[key]
+    return entry ? { generation: entry.generation, info: entry.info } : undefined
+  }
+
+  /** Commit only while the exact observed credential generation is current. */
+  export async function setIfGeneration(
+    key: string,
+    expectedGeneration: string,
+    info: Info,
+    generation: string,
+  ): Promise<boolean> {
+    return mutate(async () => {
+      const { entries } = await readEntries()
+      if (entries[key]?.generation !== expectedGeneration) return false
+      entries[key] = Entry.parse({ generation, info })
+      await writeEntries(entries)
+      return true
+    })
+  }
+
+  /**
+   * Replace only the metadata of the exact API credential a caller observed.
+   * A concurrent credential replacement wins; stale metadata must never
+   * restore its old key or overwrite a newly authorized OAuth credential.
+   */
+  export async function updateApiMetadata(
+    key: string,
+    current: Extract<Info, { type: "api" }>,
+    metadata: Record<string, string>,
+  ): Promise<void> {
+    await mutate(async () => {
+      const { entries } = await readEntries()
+      const latest = entries[key]?.info
+      if (latest?.type !== "api" || latest.key !== current.key) return
+      const updated: Extract<Info, { type: "api" }> = {
+        type: "api",
+        key: latest.key,
+        metadata: { ...(latest.metadata ?? {}), ...metadata },
+      }
+      entries[key] = { generation: crypto.randomUUID(), info: updated }
+      await writeEntries(entries)
     })
   }
 
   export async function remove(key: string) {
     await mutate(async () => {
-      const data = await all()
-      delete data[key]
-      await Filesystem.writeAtomic(filepath, JSON.stringify(data, null, 2), 0o600)
+      const { entries } = await readEntries()
+      entries[key] = { generation: crypto.randomUUID() }
+      await writeEntries(entries)
     })
   }
 }

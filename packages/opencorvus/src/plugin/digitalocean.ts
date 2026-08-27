@@ -202,7 +202,7 @@ function waitForOAuthCallback(state: string, lease: object): OAuthCallbackLease<
       timeoutMs: 5 * 60 * 1000,
       supersededError: () => new Error("Superseded by a newer DigitalOcean authorize request"),
       timeoutError: () => new Error("OAuth callback timeout - authorization took too long"),
-      onTimeout: () => void stopOAuthServer(lease),
+      onTimeout: () => stopOAuthServer(lease),
     },
   )
 }
@@ -284,9 +284,10 @@ export async function DigitalOceanAuthPlugin(input: PluginInput): Promise<Hooks>
             routers: JSON.stringify(routers.map((r) => ({ name: r.name, uuid: r.uuid, description: r.description }))),
             routers_fetched_at: String(Date.now()),
           }
-          await input.client.auth.set({
+          await input.credentials.updateApiMetadata({
             providerID: "digitalocean",
-            auth: { type: "api", key: ctx.auth.key, metadata: updated },
+            current: { type: "api", key: ctx.auth.key, metadata },
+            metadata: updated,
           })
         }
 
@@ -324,13 +325,17 @@ export async function DigitalOceanAuthPlugin(input: PluginInput): Promise<Hooks>
               instructions:
                 "Sign in to DigitalOcean in your browser. OpenCode will use your DigitalOcean API token directly for inference and load your Inference Routers. Re-run /connect to refresh routers later.",
               method: "auto" as const,
+              async dispose() {
+                callback.reject(new Error("DigitalOcean OAuth authorization occurrence ended"))
+                await callback.promise.catch(() => undefined)
+                await stopOAuthServer(lease)
+              },
               async callback() {
                 try {
                   const tokens = await callback.promise
                   const routers = await listRouters(tokens.access_token)
                   return {
                     type: "success" as const,
-                    provider: "digitalocean",
                     key: tokens.access_token,
                     metadata: {
                       oauth_access: tokens.access_token,

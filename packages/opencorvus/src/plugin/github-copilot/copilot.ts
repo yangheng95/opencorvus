@@ -40,8 +40,7 @@ function imgMsg(msg: any): boolean {
   if (typeof content === "string") return content === SYNTHETIC_ATTACHMENT_PROMPT
   if (!Array.isArray(content)) return false
   return content.some(
-    (part: any) =>
-      (part?.type === "text" || part?.type === "input_text") && part.text === SYNTHETIC_ATTACHMENT_PROMPT,
+    (part: any) => (part?.type === "text" || part?.type === "input_text") && part.text === SYNTHETIC_ATTACHMENT_PROMPT,
   )
 }
 
@@ -57,7 +56,6 @@ function fix(model: Model, url: string): Model {
 }
 
 export async function CopilotAuthPlugin(input: PluginInput): Promise<Hooks & PhysicalProviderHooks> {
-  const sdk = input.client
   return {
     provider: {
       id: "github-copilot",
@@ -78,12 +76,11 @@ export async function CopilotAuthPlugin(input: PluginInput): Promise<Hooks & Phy
             "X-GitHub-Api-Version": API_VERSION,
           },
           provider.models,
-        )
-          .then((result) => {
-            return Object.fromEntries(
-              Object.entries(result.models).filter(([, model]) => result.pickerEnabled.has(model.api.id)),
-            )
-          })
+        ).then((result) => {
+          return Object.fromEntries(
+            Object.entries(result.models).filter(([, model]) => result.pickerEnabled.has(model.api.id)),
+          )
+        })
       },
     },
     auth: {
@@ -100,53 +97,53 @@ export async function CopilotAuthPlugin(input: PluginInput): Promise<Hooks & Phy
 
             const url = request instanceof URL ? request.href : typeof request === "string" ? request : request.url
             const { isVision, isAgent } = iife(() => {
-                const body = typeof init?.body === "string" ? JSON.parse(init.body) : init?.body
+              const body = typeof init?.body === "string" ? JSON.parse(init.body) : init?.body
 
-                // Completions API
-                if (body?.messages && url.includes("completions")) {
-                  const last = body.messages[body.messages.length - 1]
-                  return {
-                    isVision: body.messages.some(
-                      (msg: any) =>
-                        Array.isArray(msg.content) && msg.content.some((part: any) => part.type === "image_url"),
-                    ),
-                    isAgent: last?.role !== "user" || imgMsg(last),
-                  }
+              // Completions API
+              if (body?.messages && url.includes("completions")) {
+                const last = body.messages[body.messages.length - 1]
+                return {
+                  isVision: body.messages.some(
+                    (msg: any) =>
+                      Array.isArray(msg.content) && msg.content.some((part: any) => part.type === "image_url"),
+                  ),
+                  isAgent: last?.role !== "user" || imgMsg(last),
                 }
+              }
 
-                // Responses API
-                if (body?.input) {
-                  const last = body.input[body.input.length - 1]
-                  return {
-                    isVision: body.input.some(
-                      (item: any) =>
-                        Array.isArray(item?.content) && item.content.some((part: any) => part.type === "input_image"),
-                    ),
-                    isAgent: last?.role !== "user" || imgMsg(last),
-                  }
+              // Responses API
+              if (body?.input) {
+                const last = body.input[body.input.length - 1]
+                return {
+                  isVision: body.input.some(
+                    (item: any) =>
+                      Array.isArray(item?.content) && item.content.some((part: any) => part.type === "input_image"),
+                  ),
+                  isAgent: last?.role !== "user" || imgMsg(last),
                 }
+              }
 
-                // Messages API
-                if (body?.messages) {
-                  const last = body.messages[body.messages.length - 1]
-                  const hasNonToolCalls =
-                    Array.isArray(last?.content) && last.content.some((part: any) => part?.type !== "tool_result")
-                  return {
-                    isVision: body.messages.some(
-                      (item: any) =>
-                        Array.isArray(item?.content) &&
-                        item.content.some(
-                          (part: any) =>
-                            part?.type === "image" ||
-                            // images can be nested inside tool_result content
-                            (part?.type === "tool_result" &&
-                              Array.isArray(part?.content) &&
-                              part.content.some((nested: any) => nested?.type === "image")),
-                        ),
-                    ),
-                    isAgent: !(last?.role === "user" && hasNonToolCalls) || imgMsg(last),
-                  }
+              // Messages API
+              if (body?.messages) {
+                const last = body.messages[body.messages.length - 1]
+                const hasNonToolCalls =
+                  Array.isArray(last?.content) && last.content.some((part: any) => part?.type !== "tool_result")
+                return {
+                  isVision: body.messages.some(
+                    (item: any) =>
+                      Array.isArray(item?.content) &&
+                      item.content.some(
+                        (part: any) =>
+                          part?.type === "image" ||
+                          // images can be nested inside tool_result content
+                          (part?.type === "tool_result" &&
+                            Array.isArray(part?.content) &&
+                            part.content.some((nested: any) => nested?.type === "image")),
+                      ),
+                  ),
+                  isAgent: !(last?.role === "user" && hasNonToolCalls) || imgMsg(last),
                 }
+              }
               return { isVision: false, isAgent: false }
             })
 
@@ -286,7 +283,6 @@ export async function CopilotAuthPlugin(input: PluginInput): Promise<Hooks & Phy
                       refresh: string
                       access: string
                       expires: number
-                      provider?: string
                       enterpriseUrl?: string
                     } = {
                       type: "success",
@@ -362,17 +358,13 @@ export async function CopilotAuthPlugin(input: PluginInput): Promise<Hooks & Phy
       }
 
       if (incoming.message) {
-        const parts = await sdk.session.message(
-          {
-            sessionID: incoming.message.sessionID,
-            messageID: incoming.message.id,
-            directory: input.directory,
-          },
-          { throwOnError: true },
-        )
+        const message = await input.sessions.message({
+          sessionID: incoming.message.sessionID,
+          messageID: incoming.message.id,
+        })
 
         if (
-          parts?.data.parts?.some(
+          message.parts.some(
             (part) =>
               part.type === "compaction" ||
               // Auto-compaction resumes via a synthetic user text part. Treat only
@@ -385,14 +377,8 @@ export async function CopilotAuthPlugin(input: PluginInput): Promise<Hooks & Phy
         }
       }
 
-      const session = await sdk.session.get(
-        {
-          sessionID: incoming.sessionID,
-          directory: input.directory,
-        },
-        { throwOnError: true },
-      )
-      if (!session || !session.data.parentID) return
+      const session = await input.sessions.get({ sessionID: incoming.sessionID })
+      if (!session.parentID) return
       // mark subagent sessions as agent initiated matching standard that other copilot tools have
       output.headers["x-initiator"] = "agent"
     },

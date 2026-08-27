@@ -1,18 +1,40 @@
-import type {
-  Event,
-  createOpenCorvusClient,
-  Project,
-  Model,
-  Provider,
-  VisibleMessage,
-  Part,
-  Auth,
-  Config,
-} from "@opencorvus-ai/sdk"
+import type { Event, Project, Model, Provider, VisibleMessage, Part, Auth, Config } from "@opencorvus-ai/sdk"
 import type { Hono } from "hono"
 
 import type { BunShell } from "./shell"
 export * from "./tool"
+
+type OAuthCredential = Extract<Auth, { type: "oauth" }>
+type ApiCredential = Extract<Auth, { type: "api" }>
+
+export type PluginCredentials = {
+  /**
+   * Run a remote OAuth refresh through the engine-owned durable exchange
+   * occurrence and credential commit. The closure must perform exactly one
+   * token-endpoint exchange and return the resulting credential.
+   */
+  refresh(input: {
+    providerID: string
+    current: OAuthCredential
+    exchange(): Promise<OAuthCredential>
+  }): Promise<OAuthCredential>
+  /** Update non-secret API credential metadata without exposing auth.set. */
+  updateApiMetadata(input: {
+    providerID: string
+    current: ApiCredential
+    metadata: Record<string, string>
+  }): Promise<void>
+}
+
+/**
+ * Read-only session facts needed by Provider request decorators. Plugins do
+ * not receive the engine SDK client: that client also exposes credential and
+ * other mutation routes that are outside a Provider plugin's authority.
+ */
+export type PluginSessions = {
+  message(input: { sessionID: string; messageID: string }): Promise<{ parts: Part[] }>
+  get(input: { sessionID: string }): Promise<{ parentID?: string }>
+}
 
 export type ProviderContext = {
   source: "env" | "config" | "custom" | "api"
@@ -23,7 +45,8 @@ export type ProviderContext = {
 type UserMessage = Extract<VisibleMessage, { role: "user" }>
 
 export type PluginInput = {
-  client: ReturnType<typeof createOpenCorvusClient>
+  credentials: PluginCredentials
+  sessions: PluginSessions
   project: Project
   directory: string
   worktree: string
@@ -85,6 +108,8 @@ export type AuthHook = {
         type: "oauth"
         label: string
         preferred?: boolean
+        /** Canonical credential key when it differs from auth.provider. */
+        credentialProvider?: string
         prompts?: Array<
           | {
               type: "text"
@@ -150,13 +175,12 @@ export type AuthHook = {
   )[]
 }
 
-export type AuthOAuthResult = { url: string; instructions: string } & (
+export type AuthOAuthResult = { url: string; instructions: string; dispose?: () => Promise<void> } & (
   | {
       method: "auto"
       callback(): Promise<
         | ({
             type: "success"
-            provider?: string
           } & (
             | {
                 refresh: string
@@ -177,7 +201,6 @@ export type AuthOAuthResult = { url: string; instructions: string } & (
       callback(code: string): Promise<
         | ({
             type: "success"
-            provider?: string
           } & (
             | {
                 refresh: string

@@ -20,7 +20,7 @@ Plugin 是 OpenCorvus 的进程级扩展机制。与 Skill（通过 `skill` 工�
 
 ### Provider Auth（内部）
 
-Provider Auth 插件编译进运行时（`src/plugin/index.ts`）。GitLab 与 Poe 分别静态导入上游 `opencode-gitlab-auth`、`opencode-poe-auth` 包；OpenAI Codex、GitHub Copilot、Cloudflare、Azure、DigitalOcean、Snowflake Cortex 与 xAI 使用仓库内已同步实现。它们不是用户 `plugin` 配置项。
+Provider Auth 插件编译进运行时（`src/plugin/index.ts`）。Poe 静态导入上游 `opencode-poe-auth` 包；GitLab、OpenAI Codex、GitHub Copilot、Cloudflare、Azure、DigitalOcean、Snowflake Cortex 与 xAI 使用仓库内已同步实现。GitLab adapter 的初次 OAuth credential 与运行期 refresh 都进入引擎持有的持久 credential exchange。它们不是用户 `plugin` 配置项。
 
 第三方 npm 插件只在 `plugin` 配置数组中显式声明后加载。
 

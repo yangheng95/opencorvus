@@ -271,25 +271,52 @@ Project `MEMORY.MD` Organizer 是固定身份中的显式例外：配置 schema 
 
 ### Provider Auth occurrence authority
 
-`ProviderAuth` 是 plugin 认证 method 执行和 credential 写入的唯一 owner。HTTP project/global route、Overlay 和
+`ProviderAuth` 是 plugin 认证 method 执行的唯一 owner；`ProviderCredentialExchange` 是所有远端 Provider
+credential exchange 与 credential commit 的唯一 owner。HTTP project/global route、Overlay 和
 `opencorvus auth login` 都只通过它的 `execute`、`authorize` 和 `callback` 进入；`execute` 只接受 API
 credential method，OAuth 只能通过 `authorize` 开始。CLI 只负责 method/prompt
 呈现和输入收集，不得直接调用 plugin `authorize` / OAuth callback closure，也不得解释 callback result 后自行
 写 `Auth`。CLI 在当前 Project `Instance` 中使用 project scope，因而保留 installed project plugin catalog；它
 不能改用只包含 built-in hooks 的 global scope。
 
-每次 OAuth authorize 都先由 plugin 创建 live executor，再由 `ProviderOAuthFlowStore` 持久化 exact flow occurrence
-并以 `flowID` 绑定 executor。callback 必须携带该 `flowID`，先 exact-claim executor，再把 occurrence 从
-`pending` 单次结算为 `consumed` 或 `failed`；所有 callback caller 必须回传 authorize 返回的 exact `flowID`，
-不存在按 provider/scope 查找当前 pending flow 的后备路径。superseded、method/scope mismatch、settled 和 executor 丢失均使用
-typed refusal。callback 成功返回的 provider alias、API credential metadata、OAuth account ID 和 enterprise URL
-由同一个 ProviderAuth writer 投影到 `Auth`。Flow store 是 admission/terminal fact；PKCE callback closure 仍是
-process-local live capability，restart 后不可伪造恢复。
+每次 OAuth authorize 先从 method-level `credentialProvider` 得到静态 credential target，为其建立/读取持久化
+Auth generation，并由 `ProviderOAuthFlowStore` 在任何 loopback server、browser open 或 device-code request 之前持久化
+exact flow occurrence。pending executor 自身持有 Provider-wide renewable owner；同 source 或 target 的另一授权/refresh
+在其存活期间得到 typed 409，不能替换 executor 或让其资源失去结算路径。plugin executor 创建成功后才以 `flowID`
+绑定；callback 必须携带该 exact `flowID` 和 owner，不存在按 provider/scope 查找 current flow 的后备路径。
+method/scope mismatch、settled、generation replacement 和 executor 丢失均使用 typed refusal。
+Project `Instance` 释放时，Provider auth state 先停止 owner renewal，再把仍属该 exact owner 的 pending occurrence 结算为
+`failed` 并释放 plugin executor；loopback listener 等 process-local 资源由 OAuth result 的 `dispose` 生命周期统一回收。
+同一 executor 的并发清理共享一条 disposal Promise，失败后才允许后续重试；清理旧 settled executor 在新 durable
+occurrence 和新 plugin side effect 之前完成。pending owner 过期后的结算与资源回收会在瞬态文件锁或 disposer 故障后重试。
+code method 缺少 code 时返回 typed refusal 且不 claim/settle flow，因此调用者可携带 code 完成同一 occurrence。
+
+callback 在调用 token endpoint 前核对 authorize 时绑定的 `expectedCredentialGeneration`。远端调用前 occurrence 从
+`pending` 进入 `exchanging`，返回 credential 后先写 `credential_ready`、credential digest 和预铸的 output generation，
+再以 compare-and-swap 提交 `auth.json`，只有该 generation 的 credential commit 成功后才能进入 `consumed`。
+普通 API/CLI writer、remove 后的 tombstone 以及值相同但 generation 不同的 ABA 都会赢过陈旧 exchange。
+owner 过期时，已落盘 credential 的 generation 与 digest 同时相符才收敛为 `consumed`；否则进入
+`exchange_uncertain`。Project、global 和 runtime refresh 共用 Provider ID fence，因为 `auth.json` 是 data-root-global。
+credential alias 是 OAuth method 的静态声明，因此 source 与 target 在任何 plugin side effect 前共同参与 admission。
+Flow store 是 admission/phase/terminal fact；PKCE callback closure 仍是 process-local live capability，restart 后不可伪造恢复。
+pending/exchange renewal 遇到 thrown file-lock 或 I/O observation 时继续重试，只有 store 返回 exact owner 已不存在才视为
+owner loss。journal 的 `error` 只写阶段化固定诊断，不持久化 plugin、token endpoint 或任意 exception message；这些文本可能
+含 `refresh_token`、`access_token`、client secret 或响应 body，不能依赖通用日志 redactor 后落盘。
+
+运行期 OAuth refresh 通过 `PluginInput.credentials.refresh` 进入同一 exchange owner；OpenAI account usage 也复用该
+primitive。plugin 不获得完整 SDK client，只获得受管 credential 能力和 Provider header 装饰所需的窄只读 Session facts，
+不能通过公开 transport 或反射在 token endpoint 返回后自行写 credential。
+并发 refresh 等待 live owner 并返回其已提交 credential；过期且无法由 digest 证明已提交的 refresh 拒绝自动 replay，
+refresh closure 的网络/协议异常同样视为远端结果不确定；该 fence 在其 expected Auth generation 仍是当前代时不按
+24 小时 terminal retention 淘汰，只有显式 credential generation 前进后才能回收。非网络 API credential metadata 只允许
+`PluginInput.credentials.updateApiMetadata` 对 observed API key 做 compare-and-update，不能发布 OAuth token 或恢复陈旧 key。
 
 `authorize` 是 total OAuth-only contract：未知 Provider、未知 method index 和 API method 误入分别返回具名的
 `ProviderAuthProviderNotFound`、`ProviderAuthMethodNotFound` 和
 `ProviderAuthMethodAuthorizationTypeMismatch`，成功则总是返回非空 `ProviderAuthAuthorization`，不存在 undefined
-成功响应。所有 `ProviderAuth*` 具名拒绝在 HTTP 边界映射为 400，而不是泄漏为通用 500。
+成功响应。普通 `ProviderAuth*` 具名拒绝在 HTTP 边界映射为 400；live exchange owner 冲突明确映射为 409，
+而不是泄漏为通用 500。authorize 在创建 occurrence 前读取 generation，因此 malformed、schema-invalid 或不可读取的
+saved Auth authority 与 callback 一样投影 typed `AuthReadError` 503；Project/global OpenAPI 都必须声明该响应。
 
 ## Provider 故障隔离
 

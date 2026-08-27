@@ -14,16 +14,19 @@
 
 ### Changed
 
+- Provider plugin 的能力改为最小权限 ABI：运行期 OAuth refresh 必须通过 `PluginInput.credentials.refresh` 进入引擎持久化 exchange occurrence；plugin 不再获得完整 SDK client，只获得受管 credential 操作与只读 Session facts。非网络 API credential metadata 只通过带 observed-key 比较的窄更新接口写入。OAuth credential alias 从 callback success 的动态 `provider` 字段迁移为 method-level 静态 `credentialProvider` 声明；外部 plugin 必须在 authorize 前声明真实 credential target。
 - MCP（Model Context Protocol，模型上下文协议）OAuth 凭据引入持久化租约代：一次授权流程在开始时建立租约，流程内的多次写入共用这一代；吊销或新流程铸新代后，旧持有者的写入被精确拒绝，包括由同一数据根上另一后端执行的吊销。删除后重建的凭据不再可能被删除前的持有者写入。
 - 调度器、总线、权限、构建清理、会话控制、任务取消收敛等全部控制租约持有方现在与其结算收据同事务归还租约；新增 `check:control-lease-owners` 守卫（pre-push 运行），任何新增取租约位置必须声明其释放路径。
 - 共享 JSON 事实文件（全局/项目配置、Provider 凭据、MCP 凭据、专家团配置）的读改写迁移到跨进程锁内，多后端并发写不再丢失更新。
-- Provider OAuth 授权成为持久化流程 occurrence：`ProviderAuthAuthorization` 新增必填 `flowID`，CLI、Overlay 与两个回调路由都必须携带它以精确结算对应流程；新授权显式取代（supersede）同 provider 同作用域的在途流程，回调对方法不匹配、已结算、不可执行分别返回具名错误（`ProviderAuthOauthFlowMismatch`、`ProviderAuthOauthFlowAlreadySettled`、`ProviderAuthOauthFlowNotExecutable`）。CLI 不再直接执行 plugin callback 或写凭据，`auth/execute` 也只接受 API credential method。
+- Provider OAuth 授权成为持久化流程 occurrence：`ProviderAuthAuthorization` 新增必填 `flowID`，CLI、Overlay 与两个回调路由都必须携带它以精确结算对应流程；pending executor 持有可续租的 Provider-wide owner，另一授权在其存活期间得到 409 而不会替换或泄漏其 loopback/device executor。回调对方法不匹配、已结算、不可执行分别返回具名错误（`ProviderAuthOauthFlowMismatch`、`ProviderAuthOauthFlowAlreadySettled`、`ProviderAuthOauthFlowNotExecutable`）。CLI 不再直接执行 plugin callback 或写凭据，`auth/execute` 也只接受 API credential method。
 - 公共 Session 执行变更（`session.prompt`、`session.command`、`session.shell`）现在必须携带调用方铸造的稳定请求 occurrence——输入消息标识 `messageID`（`session.shell` 的公共 schema 新增该字段）；服务器不再在省略时代铸标识。相同标识与指纹的重试收敛到首次 occurrence：prompt/command 返回或续跑既有回合，shell 直接返回持久 occurrence、绝不重复执行命令；同一标识配不同请求体以 409 `PublicSessionPromptIdentityConflictError` 拒绝（command/shell 路由新增该冲突响应）。`session.shell` 的响应 schema 修正为与实际一致的 `{info, parts}`。
 - Browser 附着失败不再隐式降级到独立浏览器：附着与独立是两个浏览器身份（不同 Cookie、不同登录态），跨越这条边界现在必须由配置显式声明。默认的 `OPENCORVUS_BROWSER_MODE=chrome` 在 Chrome 不可附着时以具名错误失败并给出精确原因；接受在另一身份下工作需设置 `OPENCORVUS_BROWSER_MODE=chrome_or_isolated`；直接选择 `isolated` 仍是独立模式。此前依赖静默回退的部署会明确失败，直到声明策略。
 - 托管服务器就绪改为机器可读的启动收据：SDK 通过 `--startup-receipt`/`--startup-occurrence` 向服务器交付一次性收据通道，并只依据其中的框架化事实结算启动（绑定 URL 或精确的终态错误），标准输出仅作诊断。SDK `0.0.55-beta` 与不认识这两个参数的旧版 `opencorvus` 二进制不兼容，需成对升级。
 
 ### Fixed
 
+- GitLab Provider auth 不再加载会自行刷新并写入 OpenCode `auth.json` 的旧 npm plugin；仓库内适配器把 OAuth 首次交换、运行期 refresh 与 Personal Access Token（PAT，个人访问令牌）提交全部交还中央 Provider auth authority，并保留原 MIT 来源声明。错误 state 的 loopback 请求只得到固定 400，不会终止合法的在途授权。
+- 修复 Provider 初次 OAuth 授权与运行期 token refresh 在远端交换成功、`auth.json` 提交前进程退出时丢失 minted credential 且无精确事实的问题：Project、global、CLI、内置 plugin 与 account-usage 共用 Provider-wide renewable owner，按 `exchanging → credential_ready → consumed` 持久化；`auth.json` 的 generation/tombstone 与输出 digest 同时证明精确提交并阻止 ABA 覆盖，owner 过期时收敛为成功或 `exchange_uncertain`。结果不确定的 rotating refresh fence 在原 credential generation 仍有效时不按时间淘汰，因此不会在 24 小时后重新交换同一 refresh token。
 - 修复全局任务创建的请求重放会重复分配项目与任务的问题：请求身份现在在项目分配之前全局解析，重放返回首次提交的同一 `{task_id, project_id, directory}`，冲突重放由既有的项目内幂等检查拒绝。
 - 修复 MCP `configure` 被打断会留下"有定义无凭据"的半配置服务器的问题：密钥现在先暂存（staged）、定义提交后再晋升为生效凭据，前一定义正在使用的密钥在其退役提交之前绝不被销毁；任何窗口的崩溃都由下一次项目配置提交的凭据对账收敛——匹配已提交定义的暂存密钥被晋升，不匹配的被丢弃。
 - 修复 MCP OAuth 授权发起进程死亡后回调无法完成的问题：回调进程现在可仅凭持久事实（凭据租约、OAuth state、PKCE verifier）重建流程并完成兑换，全部写入仍以原租约代为栅栏。

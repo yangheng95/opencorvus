@@ -431,6 +431,11 @@ export const ProviderRoutes = lazy(() =>
             "ProviderAuthMethodNotFound",
             "ProviderAuthMethodAuthorizationTypeMismatch",
           ),
+          409: badRequestOrNamedErrorResponse(
+            "Provider OAuth exchange is already active",
+            "ProviderAuthOAuthExchangeActiveError",
+          ),
+          503: AuthReadUnavailableResponse,
         },
       }),
       validator(
@@ -473,6 +478,13 @@ export const ProviderRoutes = lazy(() =>
             },
           },
           ...errors(400),
+          409: badRequestOrNamedErrorResponse(
+            "Provider OAuth callback occurrence conflicts with the current credential or settlement",
+            "ProviderCredentialExchangeReplacedError",
+            "ProviderCredentialExchangeFailedError",
+            "ProviderAuthOAuthExchangeActiveError",
+            "ProviderAuthOAuthExchangeUncertainError",
+          ),
           503: AuthReadUnavailableResponse,
         },
       }),

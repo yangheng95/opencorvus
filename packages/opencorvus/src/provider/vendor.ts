@@ -365,9 +365,11 @@ export const CUSTOM_LOADERS: Record<string, CustomLoader> = {
     }
   },
   gitlab: async (input, context) => {
-    const instanceUrl = Env.get("GITLAB_INSTANCE_URL") || "https://gitlab.com"
-
     const auth = await Auth.get(input.id)
+    const instanceUrl =
+      (auth?.type === "oauth" ? auth.enterpriseUrl : auth?.type === "api" ? auth.metadata?.instanceUrl : undefined) ||
+      Env.get("GITLAB_INSTANCE_URL") ||
+      "https://gitlab.com"
     const apiKey = await (async () => {
       if (auth?.type === "oauth") return auth.access
       if (auth?.type === "api") return auth.key
@@ -410,8 +412,7 @@ export const CUSTOM_LOADERS: Record<string, CustomLoader> = {
     if (input.options?.baseURL) return { autoload: false }
 
     const auth = await Auth.get(input.id)
-    const accountId =
-      Env.get("CLOUDFLARE_ACCOUNT_ID") || (auth?.type === "api" ? auth.metadata?.accountId : undefined)
+    const accountId = Env.get("CLOUDFLARE_ACCOUNT_ID") || (auth?.type === "api" ? auth.metadata?.accountId : undefined)
     if (!accountId) {
       return {
         autoload: false,
@@ -447,10 +448,8 @@ export const CUSTOM_LOADERS: Record<string, CustomLoader> = {
     if (input.options?.baseURL) return { autoload: false }
 
     const auth = await Auth.get(input.id)
-    const accountId =
-      Env.get("CLOUDFLARE_ACCOUNT_ID") || (auth?.type === "api" ? auth.metadata?.accountId : undefined)
-    const gateway =
-      Env.get("CLOUDFLARE_GATEWAY_ID") || (auth?.type === "api" ? auth.metadata?.gatewayId : undefined)
+    const accountId = Env.get("CLOUDFLARE_ACCOUNT_ID") || (auth?.type === "api" ? auth.metadata?.accountId : undefined)
+    const gateway = Env.get("CLOUDFLARE_GATEWAY_ID") || (auth?.type === "api" ? auth.metadata?.gatewayId : undefined)
 
     if (!accountId || !gateway) {
       const missing = [!accountId ? "CLOUDFLARE_ACCOUNT_ID" : undefined, !gateway ? "CLOUDFLARE_GATEWAY_ID" : undefined]

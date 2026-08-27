@@ -268,7 +268,7 @@ function waitForOAuthCallback(
       timeoutMs: OAUTH_TIMEOUT_MS,
       supersededError: () => new Error("Superseded by a newer Snowflake authorize request"),
       timeoutError: () => new Error("Snowflake OAuth callback timeout - authorization took too long"),
-      onTimeout: () => void stopOAuthServer(lease),
+      onTimeout: () => stopOAuthServer(lease),
     },
   )
 }
@@ -294,7 +294,7 @@ export async function SnowflakeCortexAuthPlugin(_input: PluginInput): Promise<Ho
     auth: {
       provider: "snowflake-cortex",
       async loader(getAuth, _provider) {
-        let auth = await getAuth()
+        const auth = await getAuth()
         if (auth.type !== "oauth") return {}
 
         let refreshPromise:
@@ -308,17 +308,18 @@ export async function SnowflakeCortexAuthPlugin(_input: PluginInput): Promise<Ho
         const oauth = auth as typeof auth & { refresh: string; access: string; expires: number; accountId?: string }
 
         if (oauth.accountId && oauth.refresh && oauth.expires && oauth.expires <= Date.now()) {
-          const tokens = await refreshAccessToken(oauth.accountId, oauth.refresh)
-          const refreshedRefresh = tokens.refresh_token || oauth.refresh
-          const refreshedExpires = Date.now() + (tokens.expires_in ?? 600) * 1000
-          await _input.client.auth.set({
+          await _input.credentials.refresh({
             providerID: "snowflake-cortex",
-            auth: {
-              type: "oauth",
-              access: tokens.access_token,
-              refresh: refreshedRefresh,
-              expires: refreshedExpires,
-              accountId: oauth.accountId,
+            current: oauth,
+            exchange: async () => {
+              const tokens = await refreshAccessToken(oauth.accountId!, oauth.refresh)
+              return {
+                type: "oauth",
+                access: tokens.access_token,
+                refresh: tokens.refresh_token || oauth.refresh,
+                expires: Date.now() + (tokens.expires_in ?? 600) * 1000,
+                accountId: oauth.accountId,
+              }
             },
           })
         }
@@ -341,24 +342,26 @@ export async function SnowflakeCortexAuthPlugin(_input: PluginInput): Promise<Ho
             const refresh = async () => {
               if (!refreshPromise) {
                 const refreshToken = currentOauth.refresh
-                refreshPromise = refreshAccessToken(accountId, refreshToken)
-                  .then(async (tokens) => {
-                    const refreshedRefresh = tokens.refresh_token || refreshToken
-                    const refreshedExpires = Date.now() + (tokens.expires_in ?? 600) * 1000
-                    await _input.client.auth.set({
-                      providerID: "snowflake-cortex",
-                      auth: {
+                refreshPromise = _input.credentials
+                  .refresh({
+                    providerID: "snowflake-cortex",
+                    current: currentOauth,
+                    exchange: async () => {
+                      const tokens = await refreshAccessToken(accountId, refreshToken)
+                      return {
                         type: "oauth",
                         access: tokens.access_token,
-                        refresh: refreshedRefresh,
-                        expires: refreshedExpires,
+                        refresh: tokens.refresh_token || refreshToken,
+                        expires: Date.now() + (tokens.expires_in ?? 600) * 1000,
                         ...(accountId && { accountId }),
-                      },
-                    })
+                      }
+                    },
+                  })
+                  .then(async (credential) => {
                     return {
-                      access: tokens.access_token,
-                      refresh: refreshedRefresh,
-                      expires: refreshedExpires,
+                      access: credential.access,
+                      refresh: credential.refresh,
+                      expires: credential.expires,
                     }
                   })
                   .finally(() => {
@@ -467,6 +470,11 @@ export async function SnowflakeCortexAuthPlugin(_input: PluginInput): Promise<Ho
               instructions:
                 "Complete Snowflake sign-in in your browser. OpenCode will capture the OAuth callback and store the bearer token automatically.",
               method: "auto" as const,
+              async dispose() {
+                callback.reject(new Error("Snowflake OAuth authorization occurrence ended"))
+                await callback.promise.catch(() => undefined)
+                await stopOAuthServer(lease)
+              },
               async callback() {
                 try {
                   const tokens = await callback.promise

@@ -9,7 +9,7 @@ describe("OpenAI Codex credential authority", () => {
     try {
       await resolveOpenAICodexOAuthCredential({
         getAuth: async () => undefined,
-        setAuth: async () => undefined,
+        refresh: async ({ exchange }) => exchange(),
       })
     } catch (cause) {
       error = cause

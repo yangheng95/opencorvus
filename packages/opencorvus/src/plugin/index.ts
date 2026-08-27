@@ -14,7 +14,6 @@ import { BunProc } from "../bun"
 import { Instance } from "../project/instance"
 import { createInstanceState } from "../project/instance-state"
 import { NamedError } from "@opencorvus-ai/util/error"
-import { gitlabAuthPlugin as GitlabAuthPlugin } from "opencode-gitlab-auth"
 import { PoeAuthPlugin } from "opencode-poe-auth"
 import { AzureAuthPlugin } from "./azure"
 import { CloudflareAIGatewayAuthPlugin, CloudflareWorkersAuthPlugin } from "./cloudflare"
@@ -23,12 +22,17 @@ import { CopilotAuthPlugin } from "./github-copilot/copilot"
 import { DigitalOceanAuthPlugin } from "./digitalocean"
 import { SnowflakeCortexAuthPlugin } from "./snowflake-cortex"
 import { XaiAuthPlugin } from "./xai"
-import { IN_PROCESS_BASE_URL, createInProcessFetch } from "@/server/in-process-client"
+import { GitlabAuthPlugin } from "./gitlab"
+import { IN_PROCESS_BASE_URL } from "@/server/in-process-client"
 import { readFile } from "node:fs/promises"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
 import z from "zod"
 import { lazy } from "@/util/lazy"
+import { Auth } from "@/auth"
+import { ProviderCredentialExchange } from "@/provider/credential-exchange"
+import { Session } from "@/session"
+import { MessageStore } from "@/session/message-store"
 
 export type ChatParamsOutput = Parameters<Required<Hooks>["chat.params"]>[1]
 type ChatHeadersOutput = Parameters<Required<Hooks>["chat.headers"]>[1]
@@ -113,13 +117,11 @@ export namespace Plugin {
     ),
   })
 
-  // Built-in plugins that are directly imported (not installed from npm)
-  // GitlabAuthPlugin is compiled against an older plugin interface version
-  // whose OpenCorvusClient type is a strict subset of the current one.
+  // Built-in plugins that are directly imported (not installed from npm).
   const INTERNAL_PLUGINS: PluginInstance[] = [
     CodexAuthPlugin,
     CopilotAuthPlugin,
-    GitlabAuthPlugin as unknown as PluginInstance,
+    GitlabAuthPlugin,
     PoeAuthPlugin as unknown as PluginInstance,
     CloudflareWorkersAuthPlugin,
     CloudflareAIGatewayAuthPlugin,
@@ -129,15 +131,37 @@ export namespace Plugin {
     XaiAuthPlugin,
   ]
 
-  type GlobalProviderPluginInput = Pick<PluginInput, "client" | "serverUrl" | "$" | "resources">
+  const credentials: PluginInput["credentials"] = {
+    refresh: ProviderCredentialExchange.refresh,
+    updateApiMetadata: async (input) => {
+      await Auth.updateApiMetadata(input.providerID, input.current, input.metadata)
+    },
+  }
+
+  const sessions: PluginInput["sessions"] = {
+    async message(input) {
+      return MessageStore.get(input)
+    },
+    async get(input) {
+      return Session.get(input.sessionID)
+    },
+  }
+
+  const unavailableSessions: PluginInput["sessions"] = {
+    async message() {
+      throw new Error("Session facts are unavailable while loading global Provider auth hooks")
+    },
+    async get() {
+      throw new Error("Session facts are unavailable while loading global Provider auth hooks")
+    },
+  }
+
+  type GlobalProviderPluginInput = Pick<PluginInput, "credentials" | "sessions" | "serverUrl" | "$" | "resources">
 
   const globalProviderHooks = lazy(async () => {
-    const { createOpenCorvusClient } = await import("@opencorvus-ai/sdk")
     const input: GlobalProviderPluginInput = {
-      client: createOpenCorvusClient({
-        baseUrl: IN_PROCESS_BASE_URL,
-        fetch: createInProcessFetch(),
-      }),
+      credentials,
+      sessions: unavailableSessions,
       serverUrl: new URL(IN_PROCESS_BASE_URL),
       $: Bun.$,
       resources: emptyResources(),
@@ -210,16 +234,11 @@ export namespace Plugin {
 
   const state = createInstanceState(
     async () => {
-      const { createOpenCorvusClient } = await import("@opencorvus-ai/sdk")
-      const client = createOpenCorvusClient({
-        baseUrl: IN_PROCESS_BASE_URL,
-        directory: Instance.directory,
-        fetch: createInProcessFetch(),
-      })
       const config = await Config.get()
       const hooks: HookEntry[] = []
       const baseInput = {
-        client,
+        credentials,
+        sessions,
         project: Instance.project,
         worktree: Instance.worktree,
         directory: Instance.directory,

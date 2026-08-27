@@ -18123,6 +18123,21 @@ export type GlobalProvidersOauthAuthorizeErrors = {
         }
         name: "ProviderAuthMethodAuthorizationTypeMismatch"
       }
+  /**
+   * Provider OAuth exchange is already active
+   */
+  409:
+    | BadRequestError
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "ProviderAuthOAuthExchangeActiveError"
+      }
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
 }
 
 export type GlobalProvidersOauthAuthorizeError =
@@ -18156,6 +18171,35 @@ export type GlobalProvidersOauthCallbackErrors = {
    * Bad request
    */
   400: BadRequestError
+  /**
+   * Provider OAuth callback occurrence conflicts with the current credential or settlement
+   */
+  409:
+    | BadRequestError
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "ProviderCredentialExchangeReplacedError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "ProviderCredentialExchangeFailedError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "ProviderAuthOAuthExchangeActiveError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "ProviderAuthOAuthExchangeUncertainError"
+      }
   /**
    * Saved Provider credentials could not be observed safely
    */
@@ -23006,6 +23050,21 @@ export type ProviderOauthAuthorizeErrors = {
         }
         name: "ProviderAuthMethodAuthorizationTypeMismatch"
       }
+  /**
+   * Provider OAuth exchange is already active
+   */
+  409:
+    | BadRequestError
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "ProviderAuthOAuthExchangeActiveError"
+      }
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
 }
 
 export type ProviderOauthAuthorizeError = ProviderOauthAuthorizeErrors[keyof ProviderOauthAuthorizeErrors]
@@ -23054,6 +23113,35 @@ export type ProviderOauthCallbackErrors = {
    * Bad request
    */
   400: BadRequestError
+  /**
+   * Provider OAuth callback occurrence conflicts with the current credential or settlement
+   */
+  409:
+    | BadRequestError
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "ProviderCredentialExchangeReplacedError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "ProviderCredentialExchangeFailedError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "ProviderAuthOAuthExchangeActiveError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "ProviderAuthOAuthExchangeUncertainError"
+      }
   /**
    * Saved Provider credentials could not be observed safely
    */
