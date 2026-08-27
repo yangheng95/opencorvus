@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-27-automationbench-luna-base-600-completion.md](2026-08-27-automationbench-luna-base-600-completion.md) resumes the user-authorized Luna Mission/Base unique-case AutomationBench round from the locally verifiable 75/600 frontier, reconciles stale derived evidence without rewriting sealed attempts, and defines timed monitoring through exact 600/600 verification and reviewed delivery.
+
 - [2026-08-26-automationbench-sol-base-completion.md](2026-08-26-automationbench-sol-base-completion.md) resumes the authoritative Sol Mission/Base 50-case AutomationBench primary round from zero eligible slots, preserving prior invalid evidence and requiring exact source/environment identity, timed monitoring, final verification, visual dashboard review, and independent delivery review.
 
 - [2026-08-25-workbuddybench-luna-mission-base-code.md](2026-08-25-workbuddybench-luna-mission-base-code.md) defines the official WorkBuddy Bench Code Luna Mission/Base experiment, mandatory answer-free runtime Skill projection/load evidence, Harbor adapter boundary, immutable evidence contract, and Docker-gated chain proof.

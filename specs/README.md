@@ -1,6 +1,8 @@
 # Specs Storage Index
 
-Latest AutomationBench Sol Mission/Base completion run: [`2026-08-26-automationbench-sol-base-completion.md`](records/2026-08/2026-08-26-automationbench-sol-base-completion.md).
+Latest AutomationBench Luna Mission/Base 600-case completion run: [`2026-08-27-automationbench-luna-base-600-completion.md`](records/2026-08/2026-08-27-automationbench-luna-base-600-completion.md).
+
+Stopped AutomationBench Sol Mission/Base 50-case run: [`2026-08-26-automationbench-sol-base-completion.md`](records/2026-08/2026-08-26-automationbench-sol-base-completion.md).
 
 Latest Sol Base restricted-shell authority repair: [`2026-08-24-sol-base-restricted-shell-authority-repair.md`](records/2026-08/2026-08-24-sol-base-restricted-shell-authority-repair.md).
 
