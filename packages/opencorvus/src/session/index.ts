@@ -1307,6 +1307,7 @@ export namespace Session {
       publishCreated: boolean
       publishUpdated: boolean
     },
+    commit?: (db: Database.TxOrDb) => void,
   ): Message.VisibleInfo {
     let persisted: Message.VisibleInfo | undefined
     Database.immediateTransaction((db) => {
@@ -1363,6 +1364,7 @@ export namespace Session {
             role: prior.role,
             author: prior.author,
             parentID: prior.parentID,
+            acceptedInputMessageIDs: Message.acceptedInputMessageIDs(prior),
             activationID: prior.activationID,
             agent: prior.agent,
             modelID: prior.modelID,
@@ -1373,6 +1375,7 @@ export namespace Session {
             role: persistedMessage.role,
             author: persistedMessage.author,
             parentID: persistedMessage.parentID,
+            acceptedInputMessageIDs: Message.acceptedInputMessageIDs(persistedMessage),
             activationID: persistedMessage.activationID,
             agent: persistedMessage.agent,
             modelID: persistedMessage.modelID,
@@ -1402,6 +1405,7 @@ export namespace Session {
       persisted = persistedMessage
       const time_created = persistedMessage.time.created
       const { id, sessionID, ...data } = persistedMessage
+      commit?.(db)
       db.insert(MessageTable)
         .values({
           id,
@@ -1424,6 +1428,46 @@ export namespace Session {
 
   export const updateMessage = fn(Message.Info, async (msg) => {
     return upsertMessageRow(msg, { publishCreated: true, publishUpdated: true })
+  })
+
+  /** Persist one assistant Turn and consume its accepted delivery batch atomically. */
+  export const beginAssistantReply = fn(Message.Assistant, async (msg) => {
+    const acceptedInputMessageIDs = msg.acceptedInputMessageIDs
+    if (!acceptedInputMessageIDs) {
+      throw new Error(`New assistant Message ${msg.id} is missing its accepted input Message identities`)
+    }
+    return upsertMessageRow(msg, { publishCreated: true, publishUpdated: true }, (db) => {
+      for (const messageID of acceptedInputMessageIDs) {
+        const row = db
+          .select({ data: MessageTable.data, sessionID: MessageTable.session_id, timeCreated: MessageTable.time_created })
+          .from(MessageTable)
+          .where(eq(MessageTable.id, messageID))
+          .get()
+        if (!row || row.sessionID !== msg.sessionID) {
+          throw new Error(`Assistant Message ${msg.id} accepted missing Session input ${messageID}`)
+        }
+        const input = Message.Info.parse({ ...row.data, id: messageID, sessionID: row.sessionID })
+        if (input.role !== "user") {
+          throw new Error(`Assistant Message ${msg.id} accepted non-user Message ${messageID}`)
+        }
+        if (input.pendingDelivery !== true) continue
+        // This narrow queue-to-accepted transition changes no authored input
+        // data. The loop commits it before execution-status publication; the
+        // database's causal-fact trigger remains authoritative if an earlier
+        // owner has already frozen the Message.
+        const delivered = { ...input }
+        delete delivered.pendingDelivery
+        const persisted = messageWithPersistedCreated(delivered, row.timeCreated)
+        // Preserve the stored authored payload byte-for-field: schema parsing
+        // supplies validation and the visible event projection, but must not
+        // strip historical extension fields while consuming this one marker.
+        const { pendingDelivery: _pendingDelivery, ...data } = row.data as typeof row.data & {
+          pendingDelivery?: boolean
+        }
+        db.update(MessageTable).set({ data }).where(eq(MessageTable.id, messageID)).run()
+        Bus.publishOwnedInTransaction(Message.Event.Updated, { info: persisted })
+      }
+    })
   })
 
   const PublishCompactionCheckpointInput = z.object({

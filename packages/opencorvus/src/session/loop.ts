@@ -227,6 +227,15 @@ function visibleChatSkillNames(messages: readonly Message.WithParts[]): string[]
 }
 
 export namespace SessionLoop {
+  export const FailedReplyReplayAdvancedError = NamedError.create(
+    "FailedReplyReplayAdvancedError",
+    z.object({
+      sessionID: z.string(),
+      messageID: z.string(),
+      failedAssistantMessageID: z.string(),
+    }),
+  )
+
   async function resolveToolExecutionAuthority(input: {
     sessionID: string
     projectID: string
@@ -1278,6 +1287,49 @@ export namespace SessionLoop {
     return { visible: msgs, deliver: pending }
   }
 
+  function failedAcceptedInputBatch(
+    msgs: Message.WithParts[],
+    attachedTargets: ReadonlySet<string>,
+    tailMessageID: string,
+  ): readonly string[] | undefined {
+    for (let index = msgs.length - 1; index >= 0; index--) {
+      const message = msgs[index]!
+      if (
+        message.info.role !== "assistant" ||
+        message.info.summary === true ||
+        message.info.parentID !== tailMessageID ||
+        message.info.time.completed === undefined ||
+        (message.info.finish !== "error" && message.info.error === undefined)
+      ) {
+        continue
+      }
+      const accepted = Message.acceptedInputMessageIDs(message.info)
+      if (accepted.some((messageID) => attachedTargets.has(messageID))) return accepted
+    }
+  }
+
+  async function advancedFailedReplyForAttachedInput(
+    sessionID: string,
+    messageID: string,
+  ): Promise<(Message.WithParts & { info: Message.Assistant }) | undefined> {
+    const newerMessages: Message.WithParts[] = []
+    for await (const candidate of MessageStore.stream(sessionID)) {
+      if (
+        candidate.info.role === "assistant" &&
+        Message.acceptsInputMessage(candidate.info, messageID) &&
+        candidate.info.time.completed !== undefined &&
+        candidate.info.summary !== true &&
+        (candidate.info.finish === "error" || candidate.info.error !== undefined)
+      ) {
+        if (!newerMessages.some((message) => message.info.role === "user" && message.info.pendingDelivery !== true)) {
+          return
+        }
+        return candidate as Message.WithParts & { info: Message.Assistant }
+      }
+      newerMessages.push(candidate)
+    }
+  }
+
   function isCompletedReplyToUserMessage(
     message: Message.WithParts,
     userMessageID: string,
@@ -1301,7 +1353,7 @@ export namespace SessionLoop {
     )
     return (
       message.info.role === "assistant" &&
-      message.info.parentID === userMessageID &&
+      Message.acceptsInputMessage(message.info, userMessageID) &&
       message.info.time.completed !== undefined &&
       Boolean(message.info.finish) &&
       (message.info.finish !== "tool-calls" || committedTurnControl) &&
@@ -1438,6 +1490,7 @@ export namespace SessionLoop {
     msgs: Message.WithParts[]
     lastUser: Message.User
     lastFinished: Message.Assistant | undefined
+    acceptedInputMessageIDs: readonly string[]
     model: Provider.Model
     abort: AbortSignal
   }) {
@@ -1503,13 +1556,17 @@ export namespace SessionLoop {
         `Task-root activation ${taskRootActivation} open assistant ${openTaskRootAssistant.info.id} identity changed before its next Provider step`,
       )
     }
-    const assistantMessage =
-      openTaskRootAssistant?.info ??
-      ((await Session.updateMessage({
+    const assistantMessage = openTaskRootAssistant
+      ? ({
+          ...openTaskRootAssistant.info,
+          acceptedInputMessageIDs: [...input.acceptedInputMessageIDs],
+        } as Message.Assistant)
+      : ((await Session.beginAssistantReply({
         id: taskRootActivation
           ? Identifier.deterministic("message", `task-root-assistant-v1\0${input.lastUser.id}`)
           : Identifier.ascending("message"),
         parentID: input.lastUser.id,
+        acceptedInputMessageIDs: [...input.acceptedInputMessageIDs],
         role: "assistant",
         author: input.lastUser.agent,
         agent: input.lastUser.agent,
@@ -1534,7 +1591,16 @@ export namespace SessionLoop {
         },
         sessionID: input.sessionID,
       })) as Message.Assistant)
+    if (
+      openTaskRootAssistant &&
+      JSON.stringify(Message.acceptedInputMessageIDs(openTaskRootAssistant.info)) !==
+        JSON.stringify(input.acceptedInputMessageIDs)
+    ) {
+      throw new Error(`Task-root assistant ${assistantMessage.id} accepted input identities changed within one activation`)
+    }
+    if (openTaskRootAssistant) await Session.beginAssistantReply(assistantMessage)
     SessionPromptState.bindMessageOwner(input.sessionID, assistantMessage.id, input.abort)
+    await SessionStatus.set(input.sessionID, { type: "streaming" }, { promptGenerationOwner: input.abort })
     const processor = SessionProcessor.create({
       assistantMessage,
       sessionID: input.sessionID,
@@ -2261,12 +2327,34 @@ export namespace SessionLoop {
           startedOwner && input.retry_failed_reply !== true,
         )
         if (persistedReply) {
-          flushCallbacks(sessionID, persistedReply, directory, "reply", input.reply_to_message_id)
+          flushCallbacks(sessionID, persistedReply, directory, "reply")
           consumeRuntimeContractTurn(sessionID)
           if (startedOwner) {
             await finish(sessionID, abort, directory)
             SessionRuntimeContractStore.settleConsumedWake(sessionID)
             return firstResult
+          }
+        }
+        if (input.retry_failed_reply === true) {
+          const advancedFailure = await advancedFailedReplyForAttachedInput(sessionID, input.reply_to_message_id)
+          if (advancedFailure) {
+            const replayError = new FailedReplyReplayAdvancedError({
+              sessionID,
+              messageID: input.reply_to_message_id,
+              failedAssistantMessageID: advancedFailure.info.id,
+            })
+            SessionPromptState.rejectAttachedCallbacks(
+              sessionID,
+              replayError,
+              directory,
+              resultMode,
+              input.reply_to_message_id,
+            )
+            // An attached stale caller exits without crossing the owner's
+            // runtime-contract failure path. If the stale retry itself won
+            // ownership between N's input commit and owner admission, retain
+            // that owner to serve the already-accepted newer Turn.
+            if (!startedOwner) return firstResult
           }
         }
       }
@@ -2304,7 +2392,7 @@ export namespace SessionLoop {
         if (!reply) {
           throw new Error(`Session ${sessionID} completed without a durable reply to ${replyToMessageID}`)
         }
-        flushCallbacks(sessionID, reply, directory, "reply", replyToMessageID)
+        flushCallbacks(sessionID, reply, directory, "reply")
         return
       }
       await flushPromptFinalMessage({ sessionID, abort, resultMode, directory })
@@ -2350,6 +2438,7 @@ export namespace SessionLoop {
         while (true) {
           const runActiveTurn = async () => {
             let finalizedTerminalTurn = false
+            let acceptedInputMessageIDs: readonly string[] | undefined
             while (true) {
               touch(sessionID, directory)
               log.info("loop", { step, sessionID })
@@ -2357,15 +2446,7 @@ export namespace SessionLoop {
               const durableMessages = await Message.filterCompacted(MessageStore.stream(sessionID))
               const attachedTargets = new Set(attachedReplyTargets(sessionID, directory))
               const { visible, deliver } = partitionPendingDelivery(durableMessages, attachedTargets)
-              for (const queued of deliver) {
-                if (queued.info.role !== "user") continue
-                delete queued.info.pendingDelivery
-                await Session.updateMessage(queued.info)
-              }
               const msgs = visible
-              const replyTarget = msgs.find(
-                (message) => message.info.role === "user" && attachedTargets.has(message.info.id),
-              )?.info.id
               const { lastUser, lastAssistant, lastFinished, lastFinishedRequestTokens } = collectLoopState(msgs)
               const pendingControls = SessionControl.pending(sessionID)
               for (const control of pendingControls) {
@@ -2403,7 +2484,6 @@ export namespace SessionLoop {
               }
 
               SessionStatus.beginExecutionOccurrence(sessionID, lastUser.id, abort)
-              await SessionStatus.set(sessionID, { type: "streaming" }, { promptGenerationOwner: abort })
 
               step++
               if (step === 1) {
@@ -2583,6 +2663,10 @@ export namespace SessionLoop {
                   }
                 }
 
+                acceptedInputMessageIDs ??=
+                  deliver.length > 0
+                    ? deliver.map((message) => message.info.id)
+                    : (failedAcceptedInputBatch(msgs, attachedTargets, lastUser.id) ?? [lastUser.id])
                 turn = await processTurn({
                   step,
                   sessionID,
@@ -2590,6 +2674,7 @@ export namespace SessionLoop {
                   msgs,
                   lastUser,
                   lastFinished,
+                  acceptedInputMessageIDs,
                   model,
                   abort,
                 })
@@ -2607,6 +2692,7 @@ export namespace SessionLoop {
                   hasAttachedPromptWork(sessionID, directory) ||
                   SessionControl.pending(sessionID).some(isActionableSessionControl)
                 ) {
+                  acceptedInputMessageIDs = undefined
                   step = 0
                   continue
                 }
@@ -4193,6 +4279,7 @@ export namespace SessionLoop {
   export const TestHooks = {
     collectLoopState,
     partitionPendingDelivery,
+    failedAcceptedInputBatch,
     consumeCompletedCompactionControl,
     executeCompactionControl,
     isSettledReplyToUserMessage,

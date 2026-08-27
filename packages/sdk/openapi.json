@@ -226,6 +226,14 @@
       },
       "AssistantMessage": {
         "properties": {
+          "acceptedInputMessageIDs": {
+            "items": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "minItems": 1,
+            "type": "array"
+          },
           "activationID": {
             "minLength": 1,
             "type": "string"
@@ -18599,6 +18607,14 @@
           },
           {
             "properties": {
+              "acceptedInputMessageIDs": {
+                "items": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
               "activationID": {
                 "minLength": 1,
                 "type": "string"
@@ -80035,6 +80051,14 @@
                   "properties": {
                     "info": {
                       "properties": {
+                        "acceptedInputMessageIDs": {
+                          "items": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "minItems": 1,
+                          "type": "array"
+                        },
                         "activationID": {
                           "minLength": 1,
                           "type": "string"
@@ -86373,6 +86397,14 @@
                   "properties": {
                     "info": {
                       "properties": {
+                        "acceptedInputMessageIDs": {
+                          "items": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "minItems": 1,
+                          "type": "array"
+                        },
                         "activationID": {
                           "minLength": 1,
                           "type": "string"

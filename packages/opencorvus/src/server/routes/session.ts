@@ -22,6 +22,7 @@ import { NativeAgentRegistryLifecycle } from "@/agent/native-agent-registry-life
 import { PromptProfile } from "@/agent/prompt-profile"
 import { Provider } from "@/provider/provider"
 import { SessionPrompt } from "../../session/prompt"
+import { SessionLoop } from "../../session/loop"
 import { Instance } from "@/project/instance"
 import { provideInitializedProjectExecution } from "@/project/independent-project-owner"
 import { clearRewindCursorForSession } from "@/engine/rewind"
@@ -326,17 +327,29 @@ async function convergePromptTurn(sessionID: string, messageID: string): Promise
   const completed = await completedAssistantReplyForUserMessage(sessionID, messageID)
   if (completed) return completed
   const session = await Session.get(sessionID)
-  return SessionContext.provide(session, () =>
-    provideInitializedProjectExecution({
-      directory: session.directory,
-      fn: () =>
-        SessionPrompt.loop({
-          sessionID,
-          reply_to_message_id: messageID,
-          retry_failed_reply: true,
-        }),
-    }),
-  )
+  try {
+    return await SessionContext.provide(session, () =>
+      provideInitializedProjectExecution({
+        directory: session.directory,
+        fn: () =>
+          SessionPrompt.loop({
+            sessionID,
+            reply_to_message_id: messageID,
+            retry_failed_reply: true,
+          }),
+      }),
+    )
+  } catch (error) {
+    if (!SessionLoop.FailedReplyReplayAdvancedError.isInstance(error as Error)) throw error
+    const advanced = error as { data: { failedAssistantMessageID: string } }
+    throw new PublicSessionPromptIdentityConflictError({
+      sessionID,
+      messageID,
+      message:
+        `Message ${messageID} belongs to failed assistant ${advanced.data.failedAssistantMessageID}, but Session ` +
+        `${sessionID} has accepted a newer user Turn; mint a new message identity to retry`,
+    })
+  }
 }
 
 /**
@@ -365,7 +378,7 @@ async function completedAssistantReplyForUserMessage(
   for await (const candidate of MessageStore.stream(sessionID)) {
     if (
       candidate.info.role === "assistant" &&
-      candidate.info.parentID === messageID &&
+      Message.acceptsInputMessage(candidate.info, messageID) &&
       candidate.info.time.completed !== undefined &&
       Boolean(candidate.info.finish) &&
       candidate.info.finish !== "error" &&

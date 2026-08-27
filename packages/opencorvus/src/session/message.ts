@@ -668,6 +668,10 @@ export namespace Message {
     convergenceFailure: ToolPersistenceConvergenceFailure.optional(),
     observationFailures: z.array(ProcessorObservationFailure).optional(),
     parentID: z.string(),
+    /** Ordered user Messages accepted by this physical reply Turn. The tail
+     *  remains `parentID`; older Messages are co-consumed inputs from the same
+     *  delivery batch and resolve to this one canonical assistant reply. */
+    acceptedInputMessageIDs: z.array(z.string().min(1)).min(1).optional(),
     modelID: z.string(),
     providerID: z.string(),
     agent: z.string(),
@@ -687,6 +691,22 @@ export namespace Message {
     activationID: z.string().min(1).optional(),
   })
     .superRefine((value, ctx) => {
+      if (value.acceptedInputMessageIDs) {
+        if (new Set(value.acceptedInputMessageIDs).size !== value.acceptedInputMessageIDs.length) {
+          ctx.addIssue({
+            code: "custom",
+            message: "Assistant accepted input Message identities must be unique",
+            path: ["acceptedInputMessageIDs"],
+          })
+        }
+        if (value.acceptedInputMessageIDs.at(-1) !== value.parentID) {
+          ctx.addIssue({
+            code: "custom",
+            message: "Assistant parent must be the tail accepted input Message",
+            path: ["acceptedInputMessageIDs"],
+          })
+        }
+      }
       const occurrence = value.failureOccurrence
       if (!occurrence) {
         if (value.convergenceFailure || value.observationFailures?.length) {
@@ -722,6 +742,18 @@ export namespace Message {
       ref: "AssistantMessage",
     })
   export type Assistant = z.infer<typeof Assistant>
+
+  /**
+   * One durable reply-acceptance authority. Historical assistant Messages
+   * predate delivery batching and therefore accept exactly their parent.
+   */
+  export function acceptedInputMessageIDs(message: Assistant): readonly string[] {
+    return message.acceptedInputMessageIDs ?? [message.parentID]
+  }
+
+  export function acceptsInputMessage(message: Assistant, messageID: string): boolean {
+    return acceptedInputMessageIDs(message).includes(messageID)
+  }
 
   export const Info = z.discriminatedUnion("role", [User, Assistant]).meta({
     ref: "Message",

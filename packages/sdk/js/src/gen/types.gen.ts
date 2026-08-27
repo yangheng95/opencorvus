@@ -70,6 +70,7 @@ export type ApiAuth = {
 }
 
 export type AssistantMessage = {
+  acceptedInputMessageIDs?: Array<string>
   activationID?: string
   agent: string
   author: string
@@ -5475,6 +5476,7 @@ export type VisibleMessage =
       variant?: string
     }
   | {
+      acceptedInputMessageIDs?: Array<string>
       activationID?: string
       agent: string
       author: string
@@ -24176,6 +24178,7 @@ export type SessionCommandResponses = {
    */
   200: {
     info: {
+      acceptedInputMessageIDs?: Array<string>
       activationID?: string
       agent: string
       author: string
@@ -25773,6 +25776,7 @@ export type SessionPromptResponses = {
    */
   200: {
     info: {
+      acceptedInputMessageIDs?: Array<string>
       activationID?: string
       agent: string
       agentID: string

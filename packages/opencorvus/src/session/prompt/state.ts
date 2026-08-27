@@ -1004,7 +1004,6 @@ export namespace SessionPromptState {
     result: Message.WithParts,
     directory?: string,
     resultMode: ResultMode = "reply",
-    replayedReplyToMessageID?: string,
   ): number {
     const s = existingStateEntryForSession(sessionID, directory).promptState?.[sessionID]
     if (!s) return 0
@@ -1013,12 +1012,9 @@ export namespace SessionPromptState {
       if (callback.resultMode !== resultMode) return false
       if (resultMode !== "reply") return true
       if (result.info.role !== "assistant") return false
-      if (replayedReplyToMessageID !== undefined) {
-        return (
-          callback.replyToMessageID === replayedReplyToMessageID && result.info.parentID === replayedReplyToMessageID
-        )
-      }
-      return callback.replyToMessageID === undefined || result.info.parentID === callback.replyToMessageID
+      return (
+        callback.replyToMessageID === undefined || Message.acceptsInputMessage(result.info, callback.replyToMessageID)
+      )
     }
     const matching = s.callbacks.filter(matches)
     s.callbacks = s.callbacks.filter((callback) => !matches(callback))

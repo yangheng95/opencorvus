@@ -246,6 +246,20 @@ Session/Trace 是持久化历史与身份容器；Turn/Attempt 是一次模型�
 协议）连接、tool instance、callback 与 Promise。服务重启只销毁 Runtime，
 不能使 Session、message、descriptor 或 durable coordination request 失效。
 
+空闲 Session 的一个 Turn 可以按顺序接受该 Turn 开始时完整的待投递 user Message
+批次。新 assistant Message 持久化完整的 accepted input Message identity 集合，且
+`parentID` 等于集合尾项；删除这些输入的 `pendingDelivery` 标记与插入 assistant
+Message 必须属于同一个 SQLite transaction，并发生在 streaming status 发布与
+Provider 请求之前。进程内 callback 与公开请求 replay 都按该持久化集合的成员关系
+收敛到同一 assistant Message。Session 尚未接受更新 user Turn 时，失败重试选择与
+当前调用方 identity 相交的最新失败批次；一旦 Session 已接受更新 user Turn，旧失败
+identity 的公开 replay 返回 typed conflict 并要求新 identity，不能用更新 transcript
+重驱旧批次。该最终判定必须发生在真实 Session owner 准入之后：旧 replay 附着到更新
+owner 时只拒绝旧 callback；旧 replay 因竞态先成为 owner 时也只拒绝自身 callback，并由
+该 owner 继续处理已接受的更新 Turn。后续成功回复保持唯一权威；没有显式集合的历史
+assistant Message 只接受其 `parentID`。该事务只消费投递标记，不得重写其余 authored
+payload；已冻结的 Task-root causal fact 仍由数据库不可变约束拒绝修改。
+
 **去掉的字段 / 索引**（旧文档还在提，代码已清理）：
 
 - ~~`session.channel_key`~~ — Gateway 单例概念删除
