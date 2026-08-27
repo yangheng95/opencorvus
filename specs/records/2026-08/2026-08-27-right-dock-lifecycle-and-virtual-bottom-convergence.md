@@ -250,10 +250,10 @@ replacement adds an instance-generation race to that split ownership.
   architecture contract changed by this task is
   `specs/current/architecture/07-panel-reactivity.md`, which records selected-only
   mounting and owner-fenced Browser navigation.
-- The shared Git index already contains another task's staged deletions. This
-  task will construct and review its commit from an isolated temporary index,
-  then update only its seven committed index entries, preserving every existing
-  staged entry and overlapping unstaged edit.
+- The shared Git index already contained another task's staged deletions. This
+  task constructed and reviewed its seven-file implementation commit from an
+  isolated temporary index, then updated only those committed index entries,
+  preserving every existing staged entry and overlapping unstaged edit.
 - The third read-only review re-read the repaired source and exact clean closure
   and reported `no unresolved findings` across lifecycle, selection, pending
   navigation, virtual scrolling, identity, documentation, and staging safety.
@@ -284,4 +284,5 @@ replacement adds an instance-generation race to that split ownership.
   explicitly required static repair without Computer Use; pre-repair native
   evidence and this boundary are recorded above.
 - [x] Independent review completed with no unresolved findings.
-- [ ] Exact-path commit, upstream merge, outgoing-set verification, and push completed.
+- [x] Exact-path delivery closure created; remote equality is verified in the
+  handoff evidence rather than recorded as mutable architecture state.
