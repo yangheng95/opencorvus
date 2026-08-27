@@ -25,9 +25,10 @@ memory, permissions, recovery, scheduling. It is built for work that runs long.
 When a long task dies halfway, people blame the model. Usually it is not the model. A capable
 model inside a runtime that loses task state still stops short.
 
-So: **the same `openai/gpt-5.6-luna` scores 8.07 % on AutomationBench on its own, and 34.00 %
-inside OpenCorvus Mission.** 100 frozen cases, strict pass criteria, 4.21×. Same model, same
-cases, same scoring — the whole difference is the layer around it.
+Published project evidence reports a **34.00 % strict pass rate for an OpenCorvus Mission run
+over 100 AutomationBench cases**. The displayed **8.07 %** Luna baseline comes from an external
+reference, not a matched run whose dataset, evaluator, and case results are versioned in this
+repository; treat the two numbers as context, not as a controlled 4.21× comparison.
 
 ## Run it
 
@@ -85,8 +86,10 @@ These are the rules the codebase is actually held to, not aspirations.
 
 - **No fallbacks.** Fix the source, not the consumer. One capability, one implementation, one
   source of truth — no shadow state, no compatibility layer, no "just get it running".
-- **No absolute timeouts.** Every timeout counts from inactivity, never from process start.
-  Nobody knows how long a model needs to think, and a wall-clock kill lands mid-reasoning.
+- **No guessed total runtime limit for open-ended agent work.** Model and Task execution is not
+  killed because an arbitrary wall clock expired; liveness is based on observable inactivity.
+  Bounded sub-operations — network requests, startup, benchmark observation, and cleanup — still
+  own explicit wall-clock deadlines.
 - **Sub-agents are agents.** Each gets its own model, tools, and reasoning loop. They are not
   host function calls dressed up as delegation.
 - **No keyword rules standing in for real work.** Nothing routes an agent or fakes a sandbox by
