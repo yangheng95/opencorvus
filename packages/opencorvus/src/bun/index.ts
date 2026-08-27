@@ -7,7 +7,6 @@ import { Log } from "../util/log"
 import path from "node:path"
 import { Filesystem } from "../util/filesystem"
 import { NamedError } from "@opencorvus-ai/util/error"
-import { text } from "node:stream/consumers"
 import { Lock } from "../util/lock"
 import { PackageRegistry } from "./registry"
 import { proxied } from "@/util/proxied"
@@ -23,7 +22,7 @@ export namespace BunProc {
       cmd: [executable, ...cmd],
       ...options,
     })
-    const result = Process.spawnHost([executable, ...cmd], {
+    const result = await Process.spawnHost([executable, ...cmd], {
       ...options,
       stdout: "pipe",
       stderr: "pipe",
@@ -34,8 +33,8 @@ export namespace BunProc {
       },
     })
     const code = await result.exited
-    const stdout = result.stdout ? await text(result.stdout) : undefined
-    const stderr = result.stderr ? await text(result.stderr) : undefined
+    const stdout = result.stdout ? await Process.readText(result.stdout) : undefined
+    const stderr = result.stderr ? await Process.readText(result.stderr) : undefined
     log.info("done", {
       code,
       stdout,

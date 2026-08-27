@@ -1368,7 +1368,7 @@ async function collectExecutionDiffs(
 async function gitObjectSizes(input: { worktreeDir: string; objectIDs: string[] }): Promise<Map<string, number>> {
   const sizes = new Map<string, number>()
   if (input.objectIDs.length === 0) return sizes
-  const process = Process.spawnHost(
+  const process = await Process.spawnHost(
     gitProcessArgs(["cat-file", "--batch-check=%(objectname) %(objecttype) %(objectsize)"]),
     {
       cwd: input.worktreeDir,
@@ -1379,11 +1379,11 @@ async function gitObjectSizes(input: { worktreeDir: string; objectIDs: string[] 
     },
   )
   if (!process.stdin) throw new Error("git cat-file size batch has no stdin")
-  process.stdin.write(`${input.objectIDs.join("\n")}\n`)
-  process.stdin.end()
+  await process.stdin.write(new TextEncoder().encode(`${input.objectIDs.join("\n")}\n`))
+  await process.stdin.close()
   const [stdout, stderr, exitCode] = await Promise.all([
-    new Response(process.stdout as unknown as ReadableStream<Uint8Array>).text(),
-    new Response(process.stderr as unknown as ReadableStream<Uint8Array>).text(),
+    Process.readText(process.stdout),
+    Process.readText(process.stderr),
     process.exited,
   ])
   if (exitCode !== 0) throw new Error(`git cat-file size batch failed in ${input.worktreeDir}: ${stderr.trim()}`)

@@ -1,6 +1,5 @@
 import { NamedError } from "@opencorvus-ai/util/error"
 import z from "zod"
-import { BrowserMCPNodeLauncher } from "./node-launcher"
 
 export namespace BrowserMCPBuiltin {
   export const ServerName = "browser"
@@ -106,6 +105,10 @@ export namespace BrowserMCPBuiltin {
   }
 
   export async function resolveStdioProcess(input: { env?: NodeJS.ProcessEnv } = {}) {
+    // Configuration imports this module while ProcessSupervisor is still being
+    // initialized. Keep the physical launcher behind the capability boundary
+    // so provider identity never evaluates the process-control graph.
+    const { BrowserMCPNodeLauncher } = await import("./node-launcher")
     const runtime = await BrowserMCPNodeLauncher.resolveRuntime({ transport: "stdio" })
     return Object.freeze({
       executable: runtime.node,

@@ -2,7 +2,7 @@
 import { createHash } from "node:crypto"
 import { z } from "zod"
 import type { ExpertSquadProjectionResourcesSchema } from "@opencorvus-ai/sdk/expert-squad-manifest-v1"
-import { InspectedExpertSquadPackageSchema } from "./expert-squad-package"
+import { InspectedExpertSquadPackageSchema } from "./expert-squad-package.js"
 
 /**
  * Candidate integrity lives in the ABI because two callers must reach exactly
@@ -182,10 +182,7 @@ const CAPABILITY_GRANT_LIST_FIELDS = [
   "package_mcp_resource_refs",
 ] as const satisfies readonly CapabilityGrantListField[]
 
-type MissingCapabilityGrantField = Exclude<
-  CapabilityGrantListField,
-  (typeof CAPABILITY_GRANT_LIST_FIELDS)[number]
->
+type MissingCapabilityGrantField = Exclude<CapabilityGrantListField, (typeof CAPABILITY_GRANT_LIST_FIELDS)[number]>
 
 /**
  * Resolves while the list above covers every projection resource field. When

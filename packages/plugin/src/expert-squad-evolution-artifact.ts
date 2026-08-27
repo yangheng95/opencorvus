@@ -1,13 +1,13 @@
 // ABI means Application Binary Interface. ID means Identifier.
 import { z } from "zod"
-import { ArtifactReadLocatorSchema, EngineArtifactLocatorSchema } from "./artifact-catalog"
-import { EvolutionExactRevisionSchema, EvolutionPromotionReceiptSchema } from "./expert-squad-evolution"
-import { MetricScorerSpecSchema } from "./metric-evaluation"
+import { ArtifactReadLocatorSchema, EngineArtifactLocatorSchema } from "./artifact-catalog.js"
+import { EvolutionExactRevisionSchema, EvolutionPromotionReceiptSchema } from "./expert-squad-evolution.js"
+import { MetricScorerSpecSchema } from "./metric-evaluation.js"
 import {
   TaskArtifactMediaTypeSchema,
   TaskArtifactPortableSegmentSchema,
   TaskArtifactRelativePathSchema,
-} from "./task-artifact"
+} from "./task-artifact.js"
 
 const sha256 = z.string().regex(/^[a-f0-9]{64}$/)
 const portableIdentity = TaskArtifactPortableSegmentSchema

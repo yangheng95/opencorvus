@@ -540,7 +540,8 @@ describe("ProcessSupervisor control-plane authority", () => {
         args: ["-e", "await Bun.sleep(300); console.log('trigger'); await Bun.sleep(1000)"],
         owner: "process-supervisor-deterministic-output-failure",
       })
-      await Bun.sleep(500)
+      const injectionDeadline = Date.now() + 2_000
+      while (!injected && Date.now() < injectionDeadline) await Bun.sleep(20)
       expect(injected).toBe(true)
       await expect(handle.outputSettled).rejects.toThrow("deterministic Windows output abort")
       await Bun.sleep(20)

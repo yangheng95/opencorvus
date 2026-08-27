@@ -1,8 +1,8 @@
 import { BusEvent } from "@/bus/bus-event"
 import path from "path"
-import { $ } from "bun"
 import z from "zod"
 import { NamedError } from "@opencorvus-ai/util/error"
+import { NodeProcess } from "@opencorvus-ai/util/process-node"
 import { valid as validSemver } from "semver"
 import { Log } from "../util/log"
 import { Flag } from "../flag/flag"
@@ -112,33 +112,40 @@ export namespace Installation {
     stdin?: string
   }): Promise<UpgradeCommandObservation> {
     if (input.stage === "installer_download") {
-      const result = await $`curl -fsSL https://opencorvus.ai/install`.quiet().throws(false)
+      const result = await NodeProcess.run({
+        command: { executable: "curl", args: ["-fsSL", "https://opencorvus.ai/install"] },
+        nothrow: true,
+      })
       return {
-        exitCode: result.exitCode,
-        stdout: result.stdout.toString("utf8"),
-        stderr: result.stderr.toString("utf8"),
+        exitCode: result.receipt.exitCode ?? 1,
+        stdout: new TextDecoder().decode(result.stdout),
+        stderr: new TextDecoder().decode(result.stderr),
       }
     }
     if (input.stage === "installer") {
       if (input.stdin === undefined) throw new Error("Native installer script is missing")
-      const process = Bun.spawn(["bash"], {
+      const result = await NodeProcess.run({
+        command: { executable: "bash", args: [] },
         env: { ...globalThis.process.env, VERSION: input.target },
-        stdin: new TextEncoder().encode(input.stdin),
-        stdout: "pipe",
-        stderr: "pipe",
+        input: (async function* () {
+          yield new TextEncoder().encode(input.stdin!)
+        })(),
+        nothrow: true,
       })
-      const [exitCode, stdout, stderr] = await Promise.all([
-        process.exited,
-        new Response(process.stdout).text(),
-        new Response(process.stderr).text(),
-      ])
-      return { exitCode, stdout, stderr }
+      return {
+        exitCode: result.receipt.exitCode ?? 1,
+        stdout: new TextDecoder().decode(result.stdout),
+        stderr: new TextDecoder().decode(result.stderr),
+      }
     }
-    const result = await $`${input.executable} --version`.quiet().throws(false)
+    const result = await NodeProcess.run({
+      command: { executable: input.executable, args: ["--version"] },
+      nothrow: true,
+    })
     return {
-      exitCode: result.exitCode,
-      stdout: result.stdout.toString("utf8"),
-      stderr: result.stderr.toString("utf8"),
+      exitCode: result.receipt.exitCode ?? 1,
+      stdout: new TextDecoder().decode(result.stdout),
+      stderr: new TextDecoder().decode(result.stderr),
     }
   }
 

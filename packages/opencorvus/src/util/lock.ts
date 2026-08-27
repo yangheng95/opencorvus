@@ -137,6 +137,60 @@ export namespace Lock {
     })
   }
 
+  export function reserveRead(key: string, onAcquire?: () => void): { acquired: Promise<Disposable>; cancel(): void } {
+    const lock = get(key)
+    let acquiredLease: Disposable | undefined
+    let cancelled = false
+    let resolveAcquired!: (lease: Disposable) => void
+    let rejectAcquired!: (error: unknown) => void
+    const acquired = new Promise<Disposable>((resolve, reject) => {
+      resolveAcquired = resolve
+      rejectAcquired = reject
+    })
+    const noop: Disposable = { [Symbol.dispose]: () => undefined }
+    const acquire = () => {
+      if (cancelled) {
+        resolveAcquired(noop)
+        process(key)
+        return
+      }
+      lock.readers++
+      let released = false
+      acquiredLease = {
+        [Symbol.dispose]: () => {
+          if (released) return
+          released = true
+          lock.readers--
+          process(key)
+        },
+      }
+      try {
+        onAcquire?.()
+        resolveAcquired(acquiredLease)
+      } catch (error) {
+        acquiredLease[Symbol.dispose]()
+        rejectAcquired(error)
+      }
+    }
+    if (!lock.writer && lock.waitingWriters.length === 0) acquire()
+    else lock.waitingReaders.push(acquire)
+    return {
+      acquired,
+      cancel() {
+        if (cancelled) return
+        cancelled = true
+        if (acquiredLease) {
+          acquiredLease[Symbol.dispose]()
+          return
+        }
+        const index = lock.waitingReaders.indexOf(acquire)
+        if (index >= 0) lock.waitingReaders.splice(index, 1)
+        resolveAcquired(noop)
+        process(key)
+      },
+    }
+  }
+
   export function reserveWrite(key: string): { acquired: Promise<Disposable>; cancel(): void } {
     const lock = get(key)
     let acquiredLease: Disposable | undefined

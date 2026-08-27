@@ -50,6 +50,42 @@ lineage；Delivery Slice 不记录、复用或回收 workspace。
 - 运行时注入 `Plugin.state`，暴露 `Bus` / `Session` / `Config` / `Server` 给 plugin
 - installed plugin 是显式信任的进程内可执行扩展，不是 sandbox，并遵循严格失败契约。安装、加载、config 与 service 注册失败会终止项目启动；其他 hook 失败会终止触发它的 LLM、命令、工具或事件操作，不会继续消费未修改或部分修改的结果
 
+Plugin receives one runtime-neutral structured process capability, not a Bun shell object. Its command is always an
+explicit executable plus argv; the public contract expresses environment as strings, I/O as asynchronous byte
+sources/sinks, signals as strings, a caller-visible occurrence identity, abort/deadline settlement and one terminal
+receipt. Plugin initialization and hooks receive a **host-owned** facade: the OpenCorvus host adapts it to
+`ProcessSupervisor`, so those children participate in the live host-owner registry and Windows native process-tree
+cleanup, but they do not acquire a Task lease or claim Task-cancellation settlement. Explicit Task command callers bind
+the same contract through the separate Task-scoped adapter and lease. One occurrence-level control lease derives the
+physical admission signal, caller abort and wall-clock deadline from the coordinator's shared `Atomics.waitAsync` clock;
+the host adapter forwards that signal and does not create a second timer. The SDK releases this startup-only lease after
+accepting the framed readiness receipt, so the admitted server is thereafter owned only by `close()`. Inactivity uses the
+same clock. A no-op keepalive exists only while entries are outstanding; parallel process occurrences do not each create
+a polling clock.
+
+`@opencorvus-ai/util/process` is a publishable package and owns only the host-neutral contract and execution coordinator;
+`@opencorvus-ai/util/process-node` is its explicit Node adapter for the JavaScript SDK and Channel runtime. Windows
+`owned_tree` admission launches the repository's native supervisor helper, assigns the target to a Job at creation, and
+does not settle until the helper publishes an exact occurrence marker with `active_processes: 0`; cleanup therefore does
+not infer identity from a reusable Process Identifier (PID) or depend on the root remaining alive. Node obtains the owner
+creation-time identity through an abortable asynchronous helper probe; the supervisor opens the owner and verifies that
+same identity before target creation. Bare executables are resolved through an equally abortable asynchronous PATH probe.
+POSIX `owned_tree`
+uses a dedicated process group and likewise settles only after group disappearance. Core host and Task trees continue to
+use `ProcessSupervisor`'s durable occurrence/helper identity fence. A detached Browser or system-terminal launcher states
+that ownership explicitly and unrefs only after successful spawn. PTY, Execution Capsule and process-occurrence probes
+remain below this facade as platform adapters; they are not an alternate public command capability.
+
+`public-package-release.ts` is the sole util → SDK → Plugin release orchestrator. It builds and stages each package,
+removes workspace-only export conditions, resolves `workspace:`/`catalog:` versions, inspects each packed manifest, and
+publishes only those exact archives in dependency order. Its Windows helper is built from the locked Cargo graph. Both
+check and publish modes run the same preparation and isolated consumer verification before publish can perform an external
+write. `check:process-package-publication`
+then lets offline npm resolve and install the archives one at a time in that order before the Node runtime import and
+deadline check; manually copying all three packages into one `node_modules` tree is not release evidence. The SDK observes
+its atomic startup receipt through an abortable directory watcher; the receipt remains the only readiness fact and its
+positive safe-integer PID must equal the spawned root before acceptance releases the startup control lease.
+
 Plugin 提供生命周期回调、auth 和 rewrite 能力，不承担 Task 调度身份。OpenAI Codex 和
 GitHub Copilot Provider Auth Plugin 把订阅 OAuth（Open Authorization，开放授权）、模型目录和
 流式 Provider 请求投影进 OpenCorvus 的统一 LLM（Large Language Model，大语言模型）链路。

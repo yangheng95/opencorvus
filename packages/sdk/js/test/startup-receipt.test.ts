@@ -31,6 +31,21 @@ describe("server startup readiness is a framed receipt", () => {
     expect(parsed).toMatchObject({ outcome: "failed", error: "port in use" })
   })
 
+  test("a listening receipt binds readiness to a positive safe-integer process identity", () => {
+    expect(() =>
+      parseStartupReceipt(
+        JSON.stringify({
+          schemaVersion: 1,
+          occurrenceID: "launch-1",
+          outcome: "listening",
+          url: "http://127.0.0.1:4096",
+          pid: 0,
+        }),
+        "launch-1",
+      ),
+    ).toThrow("positive safe-integer pid")
+  })
+
   test("a partially written receipt is simply not settled yet", () => {
     expect(parseStartupReceipt('{"schemaVersion":1,"occ', "launch-1")).toBeUndefined()
     expect(parseStartupReceipt("", "launch-1")).toBeUndefined()
@@ -47,7 +62,10 @@ describe("server startup readiness is a framed receipt", () => {
 
   test("an unsupported schema is refused rather than guessed", () => {
     expect(() =>
-      parseStartupReceipt(JSON.stringify({ schemaVersion: 2, occurrenceID: "launch-1", outcome: "listening" }), "launch-1"),
+      parseStartupReceipt(
+        JSON.stringify({ schemaVersion: 2, occurrenceID: "launch-1", outcome: "listening" }),
+        "launch-1",
+      ),
     ).toThrow("Unsupported server startup receipt schema")
   })
 
@@ -67,6 +85,28 @@ describe("server startup readiness is a framed receipt", () => {
       )
       expect(await channel.read()).toMatchObject({ outcome: "listening", url: "http://127.0.0.1:5000" })
     } finally {
+      await channel.dispose()
+    }
+  })
+
+  test("the channel observes a receipt published after waiting begins", async () => {
+    const channel = await createStartupReceiptChannel("launch-10")
+    const controller = new AbortController()
+    try {
+      const waiting = channel.wait(controller.signal)
+      await writeFile(
+        channel.path,
+        JSON.stringify({
+          schemaVersion: 1,
+          occurrenceID: "launch-10",
+          outcome: "listening",
+          url: "http://127.0.0.1:5001",
+          pid: 8,
+        }),
+      )
+      expect(await waiting).toMatchObject({ outcome: "listening", url: "http://127.0.0.1:5001" })
+    } finally {
+      controller.abort()
       await channel.dispose()
     }
   })

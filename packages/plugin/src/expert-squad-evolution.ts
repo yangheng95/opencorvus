@@ -1,6 +1,6 @@
 import { z } from "zod"
-import { EngineArtifactLocatorSchema, ArtifactReadLocatorSchema } from "./artifact-catalog"
-import { ArtifactSHA256Schema } from "./artifact-producer"
+import { EngineArtifactLocatorSchema, ArtifactReadLocatorSchema } from "./artifact-catalog.js"
+import { ArtifactSHA256Schema } from "./artifact-producer.js"
 
 export function canonicalEvolutionJSON(value: unknown): string {
   if (value === null || typeof value === "boolean" || typeof value === "string") return JSON.stringify(value)
@@ -8,7 +8,10 @@ export function canonicalEvolutionJSON(value: unknown): string {
   if (Array.isArray(value)) return `[${value.map(canonicalEvolutionJSON).join(",")}]`
   if (typeof value === "object") {
     const record = value as Record<string, unknown>
-    return `{${Object.keys(record).sort().map((key) => `${JSON.stringify(key)}:${canonicalEvolutionJSON(record[key])}`).join(",")}}`
+    return `{${Object.keys(record)
+      .sort()
+      .map((key) => `${JSON.stringify(key)}:${canonicalEvolutionJSON(record[key])}`)
+      .join(",")}}`
   }
   throw new Error("Evolution identity contains a non-canonical JSON value")
 }
@@ -60,7 +63,9 @@ export const EvolutionInstalledPackageRevisionSchema = z
   .strict()
 
 export const EvolutionManagerMutationReceiptSchema = z.discriminatedUnion("operation", [
-  z.object({ operation: z.literal("installed"), before: z.null(), after: EvolutionInstalledPackageRevisionSchema }).strict(),
+  z
+    .object({ operation: z.literal("installed"), before: z.null(), after: EvolutionInstalledPackageRevisionSchema })
+    .strict(),
   z
     .object({
       operation: z.enum(["unchanged", "replaced", "restored"]),

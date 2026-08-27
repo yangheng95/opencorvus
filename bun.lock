@@ -261,6 +261,7 @@
       "name": "@opencorvus-ai/plugin",
       "version": "0.0.55-beta",
       "dependencies": {
+        "@types/node": "catalog:",
         "@opencorvus-ai/sdk": "workspace:*",
         "hono": "catalog:",
         "property-information": "7.2.0",
@@ -283,6 +284,7 @@
       "name": "@opencorvus-ai/sdk",
       "version": "0.0.55-beta",
       "dependencies": {
+        "@opencorvus-ai/util": "workspace:*",
         "zod": "catalog:",
       },
       "devDependencies": {
@@ -309,6 +311,7 @@
       "name": "@opencorvus-ai/util",
       "version": "0.0.55-beta",
       "dependencies": {
+        "@types/node": "catalog:",
         "proper-lockfile": "4.1.2",
         "zod": "catalog:",
       },

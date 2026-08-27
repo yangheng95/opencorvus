@@ -11,12 +11,10 @@ import { requireRuntimePackage } from "@/runtime/package-require"
 import { OFFICE_PRESENTATION_PROFILE_LIMITS, WorkArtifactProfileRegistry } from "@/work-artifact/profile-registry"
 import { Uint8ArrayReader, ZipReader } from "@zip.js/zip.js"
 import { createHash } from "node:crypto"
-import { execFile } from "node:child_process"
 import fs from "node:fs/promises"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
 import z from "zod"
-import { promisify } from "node:util"
 import {
   officeCliRuntimeIdentity,
   officeCliRuntime,
@@ -62,7 +60,6 @@ const MAX_IMAGE_DIMENSION = 10_000
 const MAX_IMAGE_PIXELS = 40_000_000
 const sharp = requireRuntimePackage<typeof import("sharp")>("sharp")
 declare const OPENCORVUS_LIBC: string | undefined
-const execFileAsync = promisify(execFile)
 let windowsUserSid: Promise<string> | undefined
 
 function windowsSystemExecutable(name: "whoami.exe" | "icacls.exe"): string {
@@ -73,11 +70,10 @@ function windowsSystemExecutable(name: "whoami.exe" | "icacls.exe"): string {
 
 async function currentWindowsUserSid(): Promise<string> {
   if (!windowsUserSid) {
-    windowsUserSid = execFileAsync(windowsSystemExecutable("whoami.exe"), ["/user", "/fo", "csv", "/nh"], {
-      timeout: 10_000,
-      windowsHide: true,
-    }).then(({ stdout }) => {
-      const sid = stdout.match(/S-\d-(?:\d+-)+\d+/)?.[0]
+    windowsUserSid = Process.runHost([windowsSystemExecutable("whoami.exe"), "/user", "/fo", "csv", "/nh"], {
+      timeoutMs: 10_000,
+    }).then((result) => {
+      const sid = result.stdout.toString("utf8").match(/S-\d-(?:\d+-)+\d+/)?.[0]
       if (!sid) throw new Error("Unable to resolve the current Windows user SID for Work Artifact ACL isolation")
       return sid
     })
@@ -91,10 +87,10 @@ export async function secureWorkArtifactPrivateDirectory(directory: string): Pro
     return
   }
   const sid = await currentWindowsUserSid()
-  await execFileAsync(windowsSystemExecutable("icacls.exe"), [directory, "/inheritance:r", "/grant:r", `*${sid}:(OI)(CI)F`], {
-    timeout: 10_000,
-    windowsHide: true,
-  })
+  await Process.runHost(
+    [windowsSystemExecutable("icacls.exe"), directory, "/inheritance:r", "/grant:r", `*${sid}:(OI)(CI)F`],
+    { timeoutMs: 10_000 },
+  )
 }
 
 const Color = z.string().regex(/^#[0-9A-Fa-f]{6}$/)

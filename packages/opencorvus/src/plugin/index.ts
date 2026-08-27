@@ -14,6 +14,7 @@ import { BunProc } from "../bun"
 import { Instance } from "../project/instance"
 import { createInstanceState } from "../project/instance-state"
 import { NamedError } from "@opencorvus-ai/util/error"
+import { supervisedHostProcessFacade } from "@/util/process-facade"
 import { PoeAuthPlugin } from "opencode-poe-auth"
 import { AzureAuthPlugin } from "./azure"
 import { CloudflareAIGatewayAuthPlugin, CloudflareWorkersAuthPlugin } from "./cloudflare"
@@ -156,20 +157,20 @@ export namespace Plugin {
     },
   }
 
-  type GlobalProviderPluginInput = Pick<PluginInput, "credentials" | "sessions" | "serverUrl" | "$" | "resources">
+  type GlobalProviderPluginInput = Pick<PluginInput, "credentials" | "sessions" | "serverUrl" | "process" | "resources">
 
   const globalProviderHooks = lazy(async () => {
-    const input: GlobalProviderPluginInput = {
-      credentials,
-      sessions: unavailableSessions,
-      serverUrl: new URL(IN_PROCESS_BASE_URL),
-      $: Bun.$,
-      resources: emptyResources(),
-    }
     const hooks: Hooks[] = []
     for (const plugin of INTERNAL_PLUGINS) {
       const specifier = `internal:${plugin.name || "anonymous"}`
       try {
+        const input: GlobalProviderPluginInput = {
+          credentials,
+          sessions: unavailableSessions,
+          serverUrl: new URL(IN_PROCESS_BASE_URL),
+          process: supervisedHostProcessFacade(`plugin:${specifier}`),
+          resources: emptyResources(),
+        }
         const hook = await (plugin as unknown as (input: GlobalProviderPluginInput) => Promise<Hooks>)(input)
         if (hook.auth) hooks.push(hook)
       } catch (cause) {
@@ -243,12 +244,12 @@ export namespace Plugin {
         worktree: Instance.worktree,
         directory: Instance.directory,
         serverUrl: new URL(IN_PROCESS_BASE_URL),
-        $: Bun.$,
       }
 
-      function pluginInput(resources: PluginResources = emptyResources()): PluginInput {
+      function pluginInput(resources: PluginResources = emptyResources(), specifier = "anonymous"): PluginInput {
         return {
           ...baseInput,
+          process: supervisedHostProcessFacade(`plugin:${specifier}`),
           resources,
         }
       }
@@ -257,7 +258,11 @@ export namespace Plugin {
         log.info("loading internal plugin", { name: plugin.name })
         const specifier = `internal:${plugin.name || "anonymous"}`
         try {
-          hooks.push({ owner: "internal", specifier, hook: (await plugin(pluginInput())) as RuntimeHooks })
+          hooks.push({
+            owner: "internal",
+            specifier,
+            hook: (await plugin(pluginInput(emptyResources(), specifier))) as RuntimeHooks,
+          })
         } catch (cause) {
           throw pluginFailure("initialization", specifier, cause)
         }
@@ -290,7 +295,7 @@ export namespace Plugin {
               owner: "project",
               specifier: diagnosticSpecifier,
               serviceID,
-              hook: await fn(pluginInput(resources)),
+              hook: await fn(pluginInput(resources, diagnosticSpecifier)),
             })
           }
           if (loaded.length === 0) throw new Error("Plugin module does not export a plugin factory")

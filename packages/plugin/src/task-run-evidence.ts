@@ -1,6 +1,6 @@
 import { z } from "zod"
-import { ArtifactProducerSchema } from "./artifact-producer"
-import { TaskArtifactSnapshotIdentitySchema } from "./task-artifact"
+import { ArtifactProducerSchema } from "./artifact-producer.js"
+import { TaskArtifactSnapshotIdentitySchema } from "./task-artifact.js"
 
 const SHA256Schema = z.string().regex(/^[a-f0-9]{64}$/)
 const TerminalLifecycleReferenceSchema = z

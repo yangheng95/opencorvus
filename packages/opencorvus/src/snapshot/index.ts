@@ -614,7 +614,7 @@ export namespace Snapshot {
     const timeoutMs = 90_000
     const timer = setTimeout(() => controller.abort(), timeoutMs)
     try {
-      const proc = Process.spawnHost(gitProcessArgs(["--git-dir", git, "cat-file", "--batch"]), {
+      const proc = await Process.spawnHost(gitProcessArgs(["--git-dir", git, "cat-file", "--batch"]), {
         cwd: currentProject().worktree,
         stdin: "pipe",
         stdout: "pipe",
@@ -622,11 +622,11 @@ export namespace Snapshot {
         abort: controller.signal,
       })
       if (!proc.stdin) throw new Error("snapshot cat-file: stdin not available")
-      proc.stdin.write(`${objects.join("\n")}\n`)
-      proc.stdin.end()
+      await proc.stdin.write(new TextEncoder().encode(`${objects.join("\n")}\n`))
+      await proc.stdin.close()
       const [stdout, stderr, exitCode] = await Promise.all([
-        new Response(proc.stdout as unknown as ReadableStream<Uint8Array>).arrayBuffer(),
-        new Response(proc.stderr as unknown as ReadableStream<Uint8Array>).text(),
+        Process.readBytes(proc.stdout),
+        Process.readText(proc.stderr),
         proc.exited,
       ])
       if (exitCode !== 0) {
@@ -636,7 +636,7 @@ export namespace Snapshot {
         throw new Error(`snapshot cat-file failed: ${stderr.trim()}`)
       }
 
-      const bytes = new Uint8Array(stdout)
+      const bytes = stdout
       const decoder = new TextDecoder()
       let offset = 0
       while (offset < bytes.length) {

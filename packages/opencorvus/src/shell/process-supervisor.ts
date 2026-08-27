@@ -83,6 +83,8 @@ export namespace ProcessSupervisor {
     stderr: NodeJS.ReadableStream | null
     /** Physical process exit. Output collectors must separately await outputSettled. */
     exited: Promise<number>
+    /** Original host exit fact when the adapter can distinguish exit code and signal. */
+    terminalFact?: Promise<{ exitCode: number | null; signal: NodeJS.Signals | null }>
     /** Completion of stdout/stderr delivery after physical exit. */
     outputSettled?: Promise<void>
     /** One authoritative settlement: physical exit, output closure, and
@@ -163,6 +165,22 @@ export namespace ProcessSupervisor {
   const taskLeaseKey = (taskID: string, role: TaskCancellationRole) => `task-process:${taskID}:${role}`
   const RUNTIME_MANDATORY_SPAWN_LEASE_KEY = "runtime-task-process:mandatory"
 
+  async function awaitSpawnAdmission(operation: Promise<Handle>, signal?: AbortSignal): Promise<Handle> {
+    try {
+      return await awaitWithAbort(operation, signal)
+    } catch (primaryError) {
+      try {
+        const handle = await operation
+        await disposeAndWaitForExit(handle, "late process admission")
+      } catch (cleanupError) {
+        if (cleanupError !== primaryError && cleanupError !== signal?.reason) {
+          throw combineFailures("Process admission and late-handle cleanup failed", [primaryError, cleanupError])
+        }
+      }
+      throw primaryError
+    }
+  }
+
   function registerTaskSpawn(leaseKey: string): () => void {
     let settle!: () => void
     const registration = new Promise<void>((resolve) => (settle = resolve))
@@ -176,14 +194,18 @@ export namespace ProcessSupervisor {
     }
   }
 
-  async function taskProcessReadLease(taskID: string, role: TaskCancellationRole) {
-    const runtimeAdmission = role === "mandatory" ? await Lock.read(RUNTIME_MANDATORY_SPAWN_LEASE_KEY) : undefined
+  async function taskProcessReadLease(taskID: string, role: TaskCancellationRole, signal?: AbortSignal) {
+    const runtimeReservation = role === "mandatory" ? Lock.reserveRead(RUNTIME_MANDATORY_SPAWN_LEASE_KEY) : undefined
+    let runtimeAdmission: Disposable | undefined
     let finishRegistration: (() => void) | undefined
     const leaseKey = taskLeaseKey(taskID, role)
+    let reservation: ReturnType<typeof Lock.reserveRead> | undefined
     try {
-      const lease = await Lock.read(leaseKey, () => {
+      runtimeAdmission = runtimeReservation ? await awaitWithAbort(runtimeReservation.acquired, signal) : undefined
+      reservation = Lock.reserveRead(leaseKey, () => {
         finishRegistration = registerTaskSpawn(leaseKey)
       })
+      const lease = await awaitWithAbort(reservation.acquired, signal)
       return {
         lease,
         finishRegistration: () => {
@@ -192,6 +214,8 @@ export namespace ProcessSupervisor {
         },
       }
     } catch (error) {
+      reservation?.cancel()
+      runtimeReservation?.cancel()
       runtimeAdmission?.[Symbol.dispose]()
       throw error
     }
@@ -201,18 +225,24 @@ export namespace ProcessSupervisor {
     identity: TaskProcessIdentity,
     opts: Omit<SpawnOptions, "cwd">,
   ): Promise<Handle> {
-    const spawn = await taskProcessReadLease(identity.taskID, opts.taskCancellationRole ?? "mandatory")
+    const spawn = await taskProcessReadLease(identity.taskID, opts.taskCancellationRole ?? "mandatory", opts.signal)
     try {
-      const execution = await resolveTaskProcessExecution(identity)
+      const execution = await awaitWithAbort(resolveTaskProcessExecution(identity), opts.signal)
+      opts.signal?.throwIfAborted()
       const handle =
         execution.kind === "task_capsule"
-          ? await spawnTaskCapsuleCommand({
-              command: { executable: opts.shell, args: ["-c", opts.command], env: opts.env },
-              capsule: execution.capsule,
-              stdin: opts.stdin,
-              gracefulTerminationMs: opts.gracefulTerminationMs,
-            })
-          : await (factory ?? defaultSpawnShell)({ ...opts, cwd: identity.cwd })
+          ? await awaitSpawnAdmission(
+              spawnTaskCapsuleCommand({
+                command: { executable: opts.shell, args: ["-c", opts.command], env: opts.env },
+                capsule: execution.capsule,
+                stdin: opts.stdin,
+                gracefulTerminationMs: opts.gracefulTerminationMs,
+                signal: opts.signal,
+                deadlineAt: opts.deadlineAt,
+              }),
+              opts.signal,
+            )
+          : await awaitSpawnAdmission((factory ?? defaultSpawnShell)({ ...opts, cwd: identity.cwd }), opts.signal)
       const tracked = trackLiveHandle({ ...opts, cwd: identity.cwd }, handle, identity.taskID)
       spawn.finishRegistration()
       void waitForOwnedPhysicalSettlement(tracked)
@@ -235,28 +265,37 @@ export namespace ProcessSupervisor {
     opts: Omit<SpawnOptions, "cwd" | "stdin">,
     admit: ShellStartAdmission,
   ): Promise<Handle> {
-    const spawn = await taskProcessReadLease(identity.taskID, opts.taskCancellationRole ?? "mandatory")
+    const spawn = await taskProcessReadLease(identity.taskID, opts.taskCancellationRole ?? "mandatory", opts.signal)
     try {
-      const execution = await resolveTaskProcessExecution(identity)
+      const execution = await awaitWithAbort(resolveTaskProcessExecution(identity), opts.signal)
+      opts.signal?.throwIfAborted()
       const handle =
         execution.kind === "task_capsule"
-          ? await spawnTaskCapsuleCommand({
-              command: {
-                executable: "/bin/sh",
-                args: [
-                  "-c",
-                  'IFS= read -r __opencorvus_gate || exit 125; [ "$__opencorvus_gate" = start ] || exit 125; exec "$1" -c "$2"',
-                  "opencorvus-shell-gate",
-                  opts.shell,
-                  opts.command,
-                ],
-                env: opts.env,
-              },
-              capsule: execution.capsule,
-              stdin: "pipe",
-              gracefulTerminationMs: opts.gracefulTerminationMs,
-            })
-          : await (commandFactory ?? defaultSpawnCommand)(gatedRuntimeShellCommand({ ...opts, cwd: identity.cwd }))
+          ? await awaitSpawnAdmission(
+              spawnTaskCapsuleCommand({
+                command: {
+                  executable: "/bin/sh",
+                  args: [
+                    "-c",
+                    'IFS= read -r __opencorvus_gate || exit 125; [ "$__opencorvus_gate" = start ] || exit 125; exec "$1" -c "$2"',
+                    "opencorvus-shell-gate",
+                    opts.shell,
+                    opts.command,
+                  ],
+                  env: opts.env,
+                },
+                capsule: execution.capsule,
+                stdin: "pipe",
+                gracefulTerminationMs: opts.gracefulTerminationMs,
+                signal: opts.signal,
+                deadlineAt: opts.deadlineAt,
+              }),
+              opts.signal,
+            )
+          : await awaitSpawnAdmission(
+              (commandFactory ?? defaultSpawnCommand)(gatedRuntimeShellCommand({ ...opts, cwd: identity.cwd })),
+              opts.signal,
+            )
       const tracked = trackLiveHandle({ ...opts, cwd: identity.cwd }, handle, identity.taskID)
       await openShellStartGate(tracked, admit)
       spawn.finishRegistration()
@@ -286,18 +325,27 @@ export namespace ProcessSupervisor {
     if (opts.detached) {
       throw new Error("Task Execution Capsule commands cannot detach from their systemd lifecycle owner")
     }
-    const spawn = await taskProcessReadLease(identity.taskID, opts.taskCancellationRole ?? "mandatory")
+    const spawn = await taskProcessReadLease(identity.taskID, opts.taskCancellationRole ?? "mandatory", opts.signal)
     try {
-      const execution = await resolveTaskProcessExecution(identity)
+      const execution = await awaitWithAbort(resolveTaskProcessExecution(identity), opts.signal)
+      opts.signal?.throwIfAborted()
       const handle =
         execution.kind === "task_capsule"
-          ? await spawnTaskCapsuleCommand({
-              command: { executable: opts.executable, args: opts.args, env: opts.env },
-              capsule: execution.capsule,
-              stdin: opts.stdin,
-              gracefulTerminationMs: opts.gracefulTerminationMs,
-            })
-          : await (commandFactory ?? defaultSpawnCommand)({ ...opts, cwd: identity.cwd })
+          ? await awaitSpawnAdmission(
+              spawnTaskCapsuleCommand({
+                command: { executable: opts.executable, args: opts.args, env: opts.env },
+                capsule: execution.capsule,
+                stdin: opts.stdin,
+                gracefulTerminationMs: opts.gracefulTerminationMs,
+                signal: opts.signal,
+                deadlineAt: opts.deadlineAt,
+              }),
+              opts.signal,
+            )
+          : await awaitSpawnAdmission(
+              (commandFactory ?? defaultSpawnCommand)({ ...opts, cwd: identity.cwd }),
+              opts.signal,
+            )
       const tracked = trackLiveHandle({ ...opts, cwd: identity.cwd }, handle, identity.taskID)
       spawn.finishRegistration()
       void waitForOwnedPhysicalSettlement(tracked)
@@ -348,8 +396,14 @@ export namespace ProcessSupervisor {
     capsule: TaskExecutionCapsuleRequest
     stdin?: "ignore" | "pipe"
     gracefulTerminationMs?: number
+    signal?: AbortSignal
+    deadlineAt?: number
   }): Promise<Handle> {
-    const wrapped = await wrapTaskCapsuleCommand({ capsule: input.capsule, command: input.command })
+    const wrapped = await awaitWithAbort(
+      wrapTaskCapsuleCommand({ capsule: input.capsule, command: input.command }),
+      input.signal,
+    )
+    input.signal?.throwIfAborted()
     const base = await defaultSpawnCommand({
       executable: wrapped.executable,
       args: [...wrapped.args],
@@ -357,6 +411,8 @@ export namespace ProcessSupervisor {
       env: wrapped.env,
       stdin: input.stdin,
       gracefulTerminationMs: input.gracefulTerminationMs,
+      signal: input.signal,
+      deadlineAt: input.deadlineAt,
     })
     let settled = false
     void base.exited
@@ -998,6 +1054,7 @@ process.stdin.resume()
       stdout: handle.stdout,
       stderr: handle.stderr,
       exited: handle.exited,
+      terminalFact: handle.terminalFact,
       outputSettled: handle.outputSettled,
       settled,
       terminate: () => handle.terminate(),
@@ -1347,7 +1404,6 @@ process.stdin.resume()
       stdin: opts.stdin,
       env: opts.env ?? process.env,
       signal: opts.signal,
-      deadlineAt: opts.deadlineAt,
       request: (readyPath, requestID) => ({
         kind: "shell",
         command: opts.command,
@@ -1367,7 +1423,6 @@ process.stdin.resume()
       stdin: opts.stdin,
       env,
       signal: opts.signal,
-      deadlineAt: opts.deadlineAt,
       request: (readyPath, requestID) => ({
         kind: "command",
         executable,
@@ -1392,7 +1447,6 @@ process.stdin.resume()
     stdin?: "ignore" | "pipe"
     env: NodeJS.ProcessEnv
     signal?: AbortSignal
-    deadlineAt?: number
     request: (readyPath: string, requestID: string) => Record<string, unknown>
   }): Promise<Handle> {
     const helper = await resolveWindowsHelper()
@@ -1583,7 +1637,6 @@ process.stdin.resume()
         startupDetails,
         outputFailures: () => outputFailures,
         signal: opts.signal,
-        deadlineAt: opts.deadlineAt,
       })
       readyTargetPID = pid
     } catch (error) {
@@ -1710,6 +1763,8 @@ process.stdin.resume()
       if (failures.length > 0) throw combineFailures("Windows process supervisor settlement failed", failures)
     })()
     void settled.catch(() => undefined)
+    const terminalFact = exited.then((exitCode) => ({ exitCode, signal: null }))
+    void terminalFact.catch(() => undefined)
 
     return {
       ...helperHandle,
@@ -1717,6 +1772,7 @@ process.stdin.resume()
       stdout,
       stderr,
       exited,
+      terminalFact,
       outputSettled,
       settled,
       terminate,
@@ -1733,15 +1789,16 @@ process.stdin.resume()
     let termination: Promise<void> | undefined
     let physicallyExited = false
     const controlFailures: unknown[] = []
-    const exited = new Promise<number>((resolve, reject) => {
+    const terminalFact = new Promise<{ exitCode: number | null; signal: NodeJS.Signals | null }>((resolve) => {
       proc.once("exit", (code, signal) => {
         physicallyExited = true
-        resolve(code ?? (signal ? 1 : 0))
+        resolve({ exitCode: code, signal })
       })
       proc.once("error", (error) => {
         controlFailures.push(error)
       })
     })
+    const exited = terminalFact.then(({ exitCode, signal }) => exitCode ?? (signal ? 1 : 0))
     const outputSettled = new Promise<void>((resolve, reject) => {
       proc.once("close", () => {
         if (controlFailures.length === 1) reject(controlFailures[0])
@@ -1796,6 +1853,7 @@ process.stdin.resume()
       stdout: proc.stdout,
       stderr: proc.stderr,
       exited,
+      terminalFact,
       outputSettled,
       settled,
       terminate,
@@ -2128,9 +2186,7 @@ process.stdin.resume()
     startupDetails: () => string
     outputFailures: () => readonly Error[]
     signal?: AbortSignal
-    deadlineAt?: number
   }): Promise<number> {
-    const deadline = Math.min(input.deadlineAt ?? Number.POSITIVE_INFINITY, Date.now() + 5_000)
     const startupIdentity = `request_id=${input.requestID} helper_pid=${input.helperPID} helper_path=${input.helperPath} ready_path=${input.readyPath}`
     let exitCode: number | undefined
     let exitError: unknown
@@ -2165,7 +2221,7 @@ process.stdin.resume()
         throw new AggregateError(streamFailures, "Windows process supervisor output streams failed during startup")
       }
     }
-    while (Date.now() < deadline) {
+    while (!exitObserved) {
       input.signal?.throwIfAborted()
       throwStreamFailures()
       const marker = await readReadyMarker()
@@ -2189,9 +2245,7 @@ process.stdin.resume()
         `Windows process supervisor exited before publishing readiness for command '${input.command}' (exit=${exitCode}; ${startupIdentity})${suffix}`,
       )
     }
-    throw new Error(
-      `Windows process supervisor did not publish readiness for command '${input.command}' (${startupIdentity})${suffix}`,
-    )
+    throw new Error(`Windows process supervisor readiness ended without a terminal fact (${startupIdentity})${suffix}`)
   }
 
   async function resolveWindowsHelper(): Promise<string | undefined> {

@@ -1,6 +1,6 @@
 import { z } from "zod"
-import { ArtifactProducerSchema } from "./artifact-producer"
-import { ProjectRelativePathSchema } from "./project-path"
+import { ArtifactProducerSchema } from "./artifact-producer.js"
+import { ProjectRelativePathSchema } from "./project-path.js"
 
 // UUID means Universally Unique Identifier; SHA-256 means Secure Hash Algorithm 256-bit.
 // RFC means Request for Comments; media type names use the registered restricted-name grammar from RFC 6838.

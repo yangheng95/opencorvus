@@ -1,8 +1,17 @@
-import type { Event, Project, Model, Provider, VisibleMessage, Part, Auth, Config } from "@opencorvus-ai/sdk"
+import type {
+  Event,
+  Project,
+  Model,
+  Provider,
+  VisibleMessage,
+  Part,
+  Auth,
+  Config,
+  ProcessFacade,
+} from "@opencorvus-ai/sdk"
 import type { Hono } from "hono"
 
-import type { BunShell } from "./shell"
-export * from "./tool"
+export * from "./tool.js"
 
 type OAuthCredential = Extract<Auth, { type: "oauth" }>
 type ApiCredential = Extract<Auth, { type: "api" }>
@@ -51,7 +60,7 @@ export type PluginInput = {
   directory: string
   worktree: string
   serverUrl: URL
-  $: BunShell
+  process: ProcessFacade
   resources: PluginResources
 }
 

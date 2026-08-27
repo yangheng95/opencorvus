@@ -1,6 +1,6 @@
 import { z } from "zod"
-import { ProjectRelativePathSchema } from "./project-path"
-import { TaskArtifactResourceSetLocatorSchema } from "./task-artifact"
+import { ProjectRelativePathSchema } from "./project-path.js"
+import { TaskArtifactResourceSetLocatorSchema } from "./task-artifact.js"
 
 const SHA256Schema = z.string().regex(/^[a-f0-9]{64}$/)
 

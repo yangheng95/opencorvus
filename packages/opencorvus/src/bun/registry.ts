@@ -1,11 +1,10 @@
 import { semver } from "bun"
-import { text } from "node:stream/consumers"
 import { Process } from "../util/process"
 import { BunExecutable } from "./executable"
 
 export namespace PackageRegistry {
   export async function info(pkg: string, field: string, cwd?: string): Promise<string> {
-    const result = Process.spawnHost([BunExecutable.resolve(), "info", pkg, field], {
+    const result = await Process.spawnHost([BunExecutable.resolve(), "info", pkg, field], {
       cwd,
       stdout: "pipe",
       stderr: "pipe",
@@ -16,8 +15,8 @@ export namespace PackageRegistry {
     })
 
     const code = await result.exited
-    const stdout = result.stdout ? await text(result.stdout) : ""
-    const stderr = result.stderr ? await text(result.stderr) : ""
+    const stdout = await Process.readText(result.stdout)
+    const stderr = await Process.readText(result.stderr)
 
     if (code !== 0) {
       const detail = stderr.trim()
