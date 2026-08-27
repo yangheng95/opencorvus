@@ -79,6 +79,10 @@ export function acquireControlLease(input: AcquireControlLeaseInput): ControlLea
   return Database.immediateTransaction((db) => acquireControlLeaseInTransaction(db, input))
 }
 
+export function currentControlLease(target: EngineControlActivationTarget, targetID: string): ControlLease | undefined {
+  return Database.use((db) => currentControlLeaseInTransaction(db, target, targetID))
+}
+
 export function assertControlLeaseInTransaction(db: Database.TxOrDb, input: {
   target: EngineControlActivationTarget
   targetID: string

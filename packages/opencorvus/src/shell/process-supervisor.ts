@@ -16,10 +16,7 @@ import {
 import { resolveTaskProcessExecution } from "@/engine/task-execution-capsule-binding"
 import { Lock } from "@/util/lock"
 import { awaitWithAbort } from "@/util/abort"
-import {
-  cachedRuntimeProcessOccurrenceObserver,
-  currentRuntimeProcessOccurrence,
-} from "@/runtime/process-occurrence"
+import { cachedRuntimeProcessOccurrenceObserver, currentRuntimeProcessOccurrence } from "@/runtime/process-occurrence"
 import type { RuntimeProcessOccurrenceObserver } from "@/runtime/process-occurrence"
 
 const SIGKILL_TIMEOUT_MS = 200
@@ -77,6 +74,7 @@ export namespace ProcessSupervisor {
   }
 
   export type TaskProcessIdentity = Readonly<{ taskID: string; cwd: string }>
+  export type ShellStartAdmission = (handle: Handle) => Promise<void>
 
   export interface Handle {
     pid: number
@@ -230,6 +228,55 @@ export namespace ProcessSupervisor {
 
   export async function spawnHostShell(opts: SpawnOptions): Promise<Handle> {
     return trackLiveHandle(opts, await (factory ?? defaultSpawnShell)(opts))
+  }
+
+  export async function spawnTaskShellGated(
+    identity: TaskProcessIdentity,
+    opts: Omit<SpawnOptions, "cwd" | "stdin">,
+    admit: ShellStartAdmission,
+  ): Promise<Handle> {
+    const spawn = await taskProcessReadLease(identity.taskID, opts.taskCancellationRole ?? "mandatory")
+    try {
+      const execution = await resolveTaskProcessExecution(identity)
+      const handle =
+        execution.kind === "task_capsule"
+          ? await spawnTaskCapsuleCommand({
+              command: {
+                executable: "/bin/sh",
+                args: [
+                  "-c",
+                  'IFS= read -r __opencorvus_gate || exit 125; [ "$__opencorvus_gate" = start ] || exit 125; exec "$1" -c "$2"',
+                  "opencorvus-shell-gate",
+                  opts.shell,
+                  opts.command,
+                ],
+                env: opts.env,
+              },
+              capsule: execution.capsule,
+              stdin: "pipe",
+              gracefulTerminationMs: opts.gracefulTerminationMs,
+            })
+          : await (commandFactory ?? defaultSpawnCommand)(gatedRuntimeShellCommand({ ...opts, cwd: identity.cwd }))
+      const tracked = trackLiveHandle({ ...opts, cwd: identity.cwd }, handle, identity.taskID)
+      await openShellStartGate(tracked, admit)
+      spawn.finishRegistration()
+      void waitForOwnedPhysicalSettlement(tracked)
+        .then(() => spawn.lease[Symbol.dispose]())
+        .catch(() => undefined)
+      return tracked
+    } catch (error) {
+      spawn.finishRegistration()
+      spawn.lease[Symbol.dispose]()
+      throw error
+    }
+  }
+
+  export async function spawnHostShellGated(
+    opts: Omit<SpawnOptions, "stdin">,
+    admit: ShellStartAdmission,
+  ): Promise<Handle> {
+    const tracked = trackLiveHandle(opts, await (commandFactory ?? defaultSpawnCommand)(gatedRuntimeShellCommand(opts)))
+    return openShellStartGate(tracked, admit)
   }
 
   export async function spawnTaskCommand(
@@ -657,8 +704,7 @@ export namespace ProcessSupervisor {
       unreconciled: [],
     }
     if (process.platform !== "win32") return result
-    const observeProcessOccurrence =
-      input.observeProcessOccurrence ?? cachedRuntimeProcessOccurrenceObserver()
+    const observeProcessOccurrence = input.observeProcessOccurrence ?? cachedRuntimeProcessOccurrenceObserver()
     const budgetDeadline = Date.now() + (input.totalBudgetMilliseconds ?? ORPHAN_RECOVERY_TOTAL_BUDGET_MS)
     const entries = await fs.readdir(Global.Path.temporary, { withFileTypes: true }).catch((error) => {
       if (errorCode(error) === "ENOENT") return []
@@ -834,6 +880,71 @@ export namespace ProcessSupervisor {
     posixProcessSnapshot = next ?? defaultPosixProcessSnapshot
     return () => {
       posixProcessSnapshot = previous
+    }
+  }
+
+  const GATED_RUNTIME_SHELL_SCRIPT = String.raw`
+const { spawn } = require("node:child_process")
+const shell = process.argv[1]
+const command = process.argv[2]
+let admitted = false
+process.stdin.once("data", (chunk) => {
+  if (admitted) return
+  admitted = true
+  if (chunk.toString("utf8").trim() !== "start") process.exit(125)
+  const child = spawn(command, {
+    shell,
+    cwd: process.cwd(),
+    env: process.env,
+    stdio: ["ignore", "inherit", "inherit"],
+  })
+  child.once("error", (error) => {
+    console.error(error instanceof Error ? error.message : String(error))
+    process.exit(126)
+  })
+  child.once("exit", (code, signal) => process.exit(code ?? (signal ? 1 : 0)))
+})
+process.stdin.once("end", () => {
+  if (!admitted) process.exit(125)
+})
+process.stdin.resume()
+`
+
+  function gatedRuntimeShellCommand(opts: Omit<SpawnOptions, "stdin"> & { cwd?: string }): CommandSpawnOptions {
+    return {
+      executable: process.execPath,
+      args: ["-e", GATED_RUNTIME_SHELL_SCRIPT, opts.shell, opts.command],
+      cwd: opts.cwd,
+      env: opts.env,
+      stdin: "pipe",
+      gracefulTerminationMs: opts.gracefulTerminationMs,
+      owner: opts.owner,
+      taskCancellationRole: opts.taskCancellationRole,
+      signal: opts.signal,
+      deadlineAt: opts.deadlineAt,
+    }
+  }
+
+  async function openShellStartGate(handle: Handle, admit: ShellStartAdmission): Promise<Handle> {
+    try {
+      if (!handle.stdin) throw new Error(`Gated shell process ${handle.pid} has no start-gate input`)
+      await admit(handle)
+      await new Promise<void>((resolve, reject) => {
+        const onError = (error: Error) => reject(error)
+        handle.stdin!.once("error", onError)
+        handle.stdin!.end("start\n", () => {
+          handle.stdin!.removeListener("error", onError)
+          resolve()
+        })
+      })
+      return handle
+    } catch (error) {
+      try {
+        await disposeAndWaitForExit(handle, "gated shell admission")
+      } catch (cleanupError) {
+        throw combineFailures("Gated shell admission and cleanup failed", [error, cleanupError])
+      }
+      throw error
     }
   }
 

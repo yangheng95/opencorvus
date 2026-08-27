@@ -115,6 +115,12 @@ const DECLARED_OWNERS: Record<string, Declaration> = {
     release:
       "SessionControl.settle releases with the terminal event and when it finds the control already settled; a renewal failure hands ownership back.",
   },
+  "session/shell-exec.ts": {
+    targets: ["session_shell"],
+    sites: 1,
+    release:
+      "The shell owner renews its exact execution lease while the command is open and releases it after physical settlement plus durable Tool/assistant settlement; a hard crash leaves a bounded lease for replay recovery.",
+  },
   "task-api/index.ts": {
     targets: ["lifecycle"],
     sites: 1,

@@ -23,6 +23,8 @@ import { PromptProfile } from "@/agent/prompt-profile"
 import { Provider } from "@/provider/provider"
 import { SessionPrompt } from "../../session/prompt"
 import { SessionLoop } from "../../session/loop"
+import { SessionShell } from "../../session/shell-exec"
+import { SessionPromptState } from "../../session/prompt/state"
 import { Instance } from "@/project/instance"
 import { provideInitializedProjectExecution } from "@/project/independent-project-owner"
 import { clearRewindCursorForSession } from "@/engine/rewind"
@@ -69,6 +71,8 @@ import {
 } from "@/chat/session"
 import { awaitSessionPromptFinishedInScope, cancelSessionPromptInScope } from "@/engine/cancellation-scope"
 import { requireTimelineOrderKeyDomain, timelineOrderKey } from "@/timeline/order"
+import { currentRuntimeProcessOccurrence, observeRuntimeProcessOccurrence } from "@/runtime/process-occurrence"
+import { currentControlLease } from "@/engine/control-lease"
 import { resolveSessionMessageIdentity } from "@/session/message-identity"
 import { resolveSessionActivityStatus, resolveSessionLifecycleSnapshot } from "@/session/lifecycle"
 import { assertActiveProjectSession, getActiveProjectSession } from "../active-project-session"
@@ -272,6 +276,24 @@ async function executePublicSessionExecution(input: {
   converge: (existing: Message.WithParts) => Promise<Message.WithParts>
 }): Promise<Message.WithParts> {
   const { sessionID, messageID, fingerprint } = input
+  const convergeExisting = async (existing: Message.WithParts) => {
+    if (existing.info.role !== "user") {
+      throw new PublicSessionPromptIdentityConflictError({
+        sessionID,
+        messageID,
+        message: `Message ${messageID} is already bound to a non-user Session message`,
+      })
+    }
+    const persistedIdentity = PublicSessionPromptIdentity.safeParse(existing.info.extra?.publicSessionPromptIdentity)
+    if (!persistedIdentity.success || persistedIdentity.data.fingerprint !== fingerprint) {
+      throw new PublicSessionPromptIdentityConflictError({
+        sessionID,
+        messageID,
+        message: `Message ${messageID} is already bound to a different public Session execution`,
+      })
+    }
+    return input.converge(existing)
+  }
   const operationKey = `${sessionID}\0${messageID}`
   const active = publicSessionExecutionOperations.get(operationKey)
   if (active) {
@@ -289,23 +311,21 @@ async function executePublicSessionExecution(input: {
       if (NotFoundError.isInstance(error as Error)) return undefined
       throw error
     })
-    if (!existing) return input.execute()
-    if (existing.info.role !== "user") {
-      throw new PublicSessionPromptIdentityConflictError({
-        sessionID,
-        messageID,
-        message: `Message ${messageID} is already bound to a non-user Session message`,
-      })
+    if (existing) return convergeExisting(existing)
+    try {
+      return await input.execute()
+    } catch (error) {
+      if (!(error instanceof Session.MessageOccurrenceClaimConflictError)) throw error
+      if (error.existingSessionID !== sessionID) {
+        throw new PublicSessionPromptIdentityConflictError({
+          sessionID,
+          messageID,
+          message: `Message ${messageID} is already bound to another Session`,
+        })
+      }
+      const claimed = await MessageStore.get({ sessionID, messageID })
+      return convergeExisting(claimed)
     }
-    const persistedIdentity = PublicSessionPromptIdentity.safeParse(existing.info.extra?.publicSessionPromptIdentity)
-    if (!persistedIdentity.success || persistedIdentity.data.fingerprint !== fingerprint) {
-      throw new PublicSessionPromptIdentityConflictError({
-        sessionID,
-        messageID,
-        message: `Message ${messageID} is already bound to a different public Session execution`,
-      })
-    }
-    return input.converge(existing)
   })()
   publicSessionExecutionOperations.set(operationKey, { fingerprint, operation })
   try {
@@ -354,15 +374,45 @@ async function convergePromptTurn(sessionID: string, messageID: string): Promise
 
 /**
  * Replay convergence for shell occurrences: a shell command must never run
- * twice for one identity, so the replay returns the occurrence's durable
- * assistant Message in whatever state it reached. An occurrence whose input
- * Message is durable but whose assistant Message never committed ran nothing
- * — the command starts only after both are durable — and is refused so the
- * caller re-runs under a fresh identity.
+ * twice for one identity. A live exact child or exact shell lease keeps the
+ * same in-flight assistant; an abandoned occurrence terminalizes that exact
+ * Tool Part and assistant without re-execution.
  */
 async function convergeShellExecution(sessionID: string, messageID: string): Promise<Message.WithParts> {
+  const session = await Session.get(sessionID)
   for await (const candidate of MessageStore.stream(sessionID)) {
-    if (candidate.info.role === "assistant" && candidate.info.parentID === messageID) return candidate
+    if (candidate.info.role !== "assistant" || !Message.acceptsInputMessage(candidate.info, messageID)) continue
+    const openShellParts = candidate.parts.filter(
+      (part): part is Message.ToolPart =>
+        part.type === "tool" &&
+        part.tool === "bash" &&
+        (part.state.status === "pending" || part.state.status === "running"),
+    )
+    if (candidate.info.time.completed !== undefined && openShellParts.length === 0) return candidate
+
+    const currentOwner = currentRuntimeProcessOccurrence()
+    const now = Date.now()
+    const remainsLive = openShellParts.some((part) => {
+      const ownership = SessionShell.processOwnership(part)
+      if (!ownership) return false
+      const isCurrentOwner =
+        ownership.owner.occurrenceID === currentOwner.occurrenceID &&
+        ownership.owner.pid === currentOwner.pid &&
+        ownership.owner.processInstanceID === currentOwner.processInstanceID
+      if (ownership.child && observeRuntimeProcessOccurrence(ownership.child) !== "dead_or_reused") return true
+      const lease = currentControlLease("session_shell", part.id)
+      const exactLeaseLive =
+        lease?.id === ownership.leaseID &&
+        lease.owner_occurrence_id === ownership.leaseOwnerOccurrenceID &&
+        lease.expires_at > now
+      if (!exactLeaseLive) return false
+      return isCurrentOwner ? SessionPromptState.hasOwnedPrompt(sessionID, session.directory) : true
+    })
+    if (remainsLive) return candidate
+    return SessionShell.terminalizeInterruptedOccurrence({
+      sessionID,
+      assistantMessageID: candidate.info.id,
+    })
   }
   throw new PublicSessionPromptIdentityConflictError({
     sessionID,

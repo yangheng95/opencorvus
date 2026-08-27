@@ -1645,6 +1645,64 @@ export namespace Session {
 
   export const persistMessage = fn(PersistMessageInput, async (input) => persistMessageBundle(input))
 
+  export class MessageOccurrenceClaimConflictError extends Error {
+    override readonly name = "MessageOccurrenceClaimConflictError"
+
+    constructor(
+      readonly sessionID: string,
+      readonly messageID: string,
+      readonly existingSessionID: string,
+    ) {
+      super(`Message occurrence ${messageID} is already claimed by Session ${existingSessionID}`)
+    }
+  }
+
+  function assertMessageOccurrenceUnclaimed(input: { sessionID: string; messageID: string }) {
+    const existing = Database.use((db) =>
+      db
+        .select({ id: MessageTable.id, sessionID: MessageTable.session_id })
+        .from(MessageTable)
+        .where(eq(MessageTable.id, input.messageID))
+        .get(),
+    )
+    if (existing) {
+      throw new MessageOccurrenceClaimConflictError(input.sessionID, input.messageID, existing.sessionID)
+    }
+  }
+
+  /** Claim an input occurrence and publish its dependent execution Message in
+   * one cross-process writer transaction. A losing peer can therefore always
+   * join a complete durable execution graph; it never observes the claimed
+   * input without the assistant/Tool owner that owes the effect. */
+  export async function persistClaimedMessagePair(input: {
+    claim: PersistMessageInput
+    dependent: PersistMessageInput
+    commit?: () => void
+  }) {
+    const claim = PersistMessageInput.parse(input.claim)
+    const dependent = PersistMessageInput.parse(input.dependent)
+    if (claim.info.sessionID !== dependent.info.sessionID) {
+      throw new Error(`Claimed Message pair crosses Sessions ${claim.info.sessionID} and ${dependent.info.sessionID}`)
+    }
+    let claimed!: ReturnType<typeof persistMessageWithCommitInTransaction>
+    let persistedDependent!: ReturnType<typeof persistMessageWithCommitInTransaction>
+    Database.immediateTransaction(() => {
+      claimed = persistMessageWithCommitInTransaction(
+        claim,
+        () => undefined,
+        undefined,
+        () => {
+          assertMessageOccurrenceUnclaimed({ sessionID: claim.info.sessionID, messageID: claim.info.id })
+        },
+      )
+      persistedDependent = persistMessageWithCommitInTransaction(dependent, input.commit ?? (() => undefined))
+    })
+    return {
+      claim: await claimed.complete(),
+      dependent: await persistedDependent.complete(),
+    }
+  }
+
   /**
    * Persist a message bundle and one synchronous owner commit in the same
    * SQLite transaction. The callback is for durable facts whose validity is
@@ -1845,12 +1903,15 @@ export namespace Session {
       message: "Tool progress requires a title or metadata payload",
     })
 
-  /** Append a real, durable progress fact for one still-running Tool request. */
-  export const appendToolProgress = fn(AppendToolProgressInput, async (input) => {
-    const publishAfterCommit = Database.hasActiveTransaction()
+  async function appendToolProgressBundle(
+    input: z.infer<typeof AppendToolProgressInput>,
+    beforeWrite?: (db: Database.TxOrDb) => void,
+  ) {
+    let publishAfterCommit = Database.hasActiveTransaction()
     let projected: Message.ToolPart | undefined
     let orderKey = ""
-    const persisted = Database.use((db) => {
+    const write = (db: Database.TxOrDb) => {
+      beforeWrite?.(db)
       const request = db.select().from(ToolPartRequestTable).where(eq(ToolPartRequestTable.id, input.partID)).get()
       if (!request || request.message_id !== input.messageID) {
         throw new NotFoundError({ message: `Tool request Part not found: ${input.partID}` })
@@ -1905,13 +1966,31 @@ export namespace Session {
         Bus.publishOwnedInTransaction(Message.Event.PartUpdated, { orderKey, part: projected as Message.VisiblePart })
       }
       return true
-    })
+    }
+    const persisted = beforeWrite
+      ? Database.immediateTransaction((db) => {
+          publishAfterCommit = true
+          return write(db)
+        })
+      : Database.use(write)
     if (!projected) throw new HostProcessingFaultError(`Tool request Part ${input.partID} cannot be projected`)
     if (persisted && !publishAfterCommit) {
       await Bus.publish(Message.Event.PartUpdated, { orderKey, part: projected as Message.VisiblePart })
     }
     return { part: projected, persisted }
+  }
+
+  /** Append a real, durable progress fact for one still-running Tool request. */
+  export const appendToolProgress = fn(AppendToolProgressInput, async (input) => {
+    return appendToolProgressBundle(input)
   })
+
+  export async function appendToolProgressWithCommit(
+    input: z.infer<typeof AppendToolProgressInput>,
+    beforeWrite: (db: Database.TxOrDb) => void,
+  ) {
+    return appendToolProgressBundle(AppendToolProgressInput.parse(input), beforeWrite)
+  }
 
   function updatePartRow(
     part: Message.Part,
@@ -2147,6 +2226,32 @@ export namespace Session {
   ): { outputPart: Message.Part; wrotePart: boolean } {
     Database.requireActiveTransaction("Session.writePartInTransaction")
     return updatePartRow(part, options, db)
+  }
+
+  /** Atomically publish one Part update and its parent Message update while a
+   * caller-owned durable fence is valid. `beforeWrite` validates the exact
+   * owner inside the writer transaction; `afterWrite` may consume that owner
+   * only after both Session facts have been accepted by their canonical
+   * writers. */
+  export function updateMessageAndPartWithCommit(
+    input: { info: Message.Info; part: Message.Part },
+    beforeWrite: (db: Database.TxOrDb) => void,
+    afterWrite?: (db: Database.TxOrDb) => void,
+  ): { info: Message.VisibleInfo; part: Message.Part } {
+    const info = Message.Info.parse(input.info)
+    const part = Message.Part.parse(input.part)
+    if (part.sessionID !== info.sessionID || part.messageID !== info.id) {
+      throw new Error(`Part ${part.id} does not belong to Message ${info.id}`)
+    }
+    let persistedInfo!: Message.VisibleInfo
+    let persistedPart!: Message.Part
+    Database.immediateTransaction((db) => {
+      beforeWrite(db)
+      persistedPart = writePartInTransaction(db, part, { publish: true }).outputPart
+      persistedInfo = upsertMessageRow(info, { publishCreated: true, publishUpdated: true })
+      afterWrite?.(db)
+    })
+    return { info: persistedInfo, part: persistedPart }
   }
 
   export const updatePart = fn(UpdatePartInput, async (part) => {

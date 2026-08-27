@@ -280,6 +280,25 @@ Session message 表按 Session writer 分层写入：`part` 的唯一直接表�
 `Session.updatePart` / `Session.updatePartData` / `Session.persistMessage` 等 Session writer API
 创建或修正 part row，不能直接写 `PartTable`。
 
+公开 Session shell 以调用方创建的 user Message ID 作为执行 occurrence（执行轮次）身份，
+同一身份永不重新执行命令。input user Message、assistant、running `bash` Tool request、当前 backend
+process occurrence 与该 Tool 的 `session_shell` execution lease 必须在一个 SQLite writer transaction
+内原子持久化。跨 backend 竞争的失败方只能读取这一完整执行图，不得观察到只有 input 的中间状态。
+spawn 创建的是等待 start admission 的 gated child；只有 child 的精确 process occurrence 已写入可变
+Tool progress fact 后才打开闸门并启动真实命令。该初始 progress writer 必须在同一 transaction 内
+assert exact shell lease 且确认确实新增 running progress；outcome 已存在时返回的 no-op 不构成 start
+admission。child occurrence 不得回写不可变 request metadata。owner 在命令存活期间续租该 Tool 的
+精确 lease；正常、abort 和 caught failure 均等待物理进程收敛，再在一个 writer transaction 内 assert
+exact lease、按 Tool terminal → assistant terminal 的顺序写入，并以同一 transaction 释放该 lease。
+fence loss 的旧 owner 不得写 success/failure terminal，而是从 durable graph 收敛同一 interruption outcome。
+
+replay 只读取该 occurrence：精确 child 仍存活，或同一 Tool 的精确未过期 lease 仍有效时，返回同一
+in-flight assistant；backend PID（Process Identifier，进程标识符）存活本身不证明该 shell 仍被拥有。
+child 已死亡/被复用且精确 lease 已释放、过期或丢失时，把同一 open Tool 写成 deterministic typed
+`process-execution-interrupted` error 并收敛同一 assistant，绝不生成替代 Message 或重跑命令。
+旧版本遗留的 completed assistant 加 open Tool 仍须 terminalize 该 Tool；completed assistant 已是不可变
+事实，不得为修饰历史状态而重写。
+
 ## 控制 / 工作区
 
 | 表                | 文件                         | 作用                                                                              |
@@ -294,6 +313,12 @@ Work Ledger 的置顶状态由各耐久领域拥有：Project 使用
 `time_pinned` 并发布既有更新事件，不改写 `time_updated`；统一 Work Ledger
 投影按 `pinned DESC, updated DESC, rowKey DESC` 排序和游标分页，Overlay 不保存
 第二份置顶状态。
+
+活动 Work Ledger 在服务端按精确 Mission 根划分 Task 层级：只有能解析到同一
+Project 中精确 Mission Session 的 Task 才进入该 Mission 的子列表；未归档且没有
+这条根关系的 Task 是 Mission、Chat/Work 的普通顶层同级项，复用同一 Task 选择和
+耐久操作契约。该划分发生在搜索、排序和游标分页之前，Overlay 不过滤或重建层级，
+同一 Task 也不跨层重复投影。
 
 Control Agent 的文本、tool call 与 tool result 只写普通 Session message/part；
 不存在独立 `control_message` timeline。轻量辅助域仍按领域 writer 分层写入：
