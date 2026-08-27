@@ -398,15 +398,20 @@ export namespace ConversationCapability {
     const ordinaryServerRefs = selected.mcp_server_refs.filter((ref) => !ownedServerRefs.has(ref))
     const ordinaryTools = await MCP.toolsForServers(config, ordinaryServerRefs)
 
-    const browserTools = selected.mcp_server_refs.includes(BrowserMCPBuiltin.ServerName)
-      ? await ownedBuiltinTools({
-          config,
-          sessionID,
-          serverName: BrowserMCPBuiltin.ServerName,
-          connectionOwner: () => browserConnectionOwner(sessionID),
-          bindRuntime: (declaration) => declaration,
-        })
-      : {}
+    const configuredBrowser = config.mcp?.[BrowserMCPBuiltin.ServerName]
+    const browserDeclaration = configuredBrowser
+      ? BrowserMCPBuiltin.configuredDeclaration(configuredBrowser)
+      : undefined
+    const browserTools =
+      selected.mcp_server_refs.includes(BrowserMCPBuiltin.ServerName) && browserDeclaration?.status === "enabled"
+        ? await ownedBuiltinTools({
+            config,
+            sessionID,
+            serverName: BrowserMCPBuiltin.ServerName,
+            connectionOwner: () => browserConnectionOwner(sessionID),
+            bindRuntime: (declaration) => declaration,
+          })
+        : {}
     const owned = { ...ordinaryTools, ...browserTools }
 
     if (!selected.mcp_server_refs.includes(ComputerMCPBuiltin.ServerName)) return owned

@@ -513,6 +513,13 @@ tool、permission、feature flag、Project state、Execution Capsule descriptor 
 OpenCorvus 作为 client / host 接入外部或 package-scoped MCP server，并把 active projection
 授予的工具暴露给 Agent。`mcp browser` 是内置浏览器 MCP 的独立 stdio 入口，Task 调度只使用
 内部 projected-agent runtime。Browser MCP 的 Playwright Page 是浏览、截图、诊断和用户观看的唯一页面事实源。
+`browser` 是该内置 provider 的保留 server identity：配置缺省时注入内置 local declaration，严格
+`{ enabled: false }` override 可将其关闭；显式 typed declaration 只有 command 与当前内置 provider 精确一致时
+才可调整 environment、timeout 或 enabled 等 local options。remote 或其他 local command 必须在配置解析时以
+稳定的 `mcp.browser.type` / `mcp.browser.command` custom issue 拒绝，不能继承 Browser 的 connection ownership、
+permission ledger 和 result materialization 语义，也不能被 host 静默替换。内部唯一
+`configuredDeclaration` 以 `BrowserMCPConfigurationError` 表达原因；`Config.Info` 把它映射为上述 Zod issue，
+配置文件 loader 再通过 `Config.InvalidError` 投影同一 issue，而不把内部 NamedError 作为公共配置错误冒充出去。
 
 MCP OAuth callback broker 是本地 redirect 的唯一 finish 与 HTTP answer adapter。每个 data root 在
 `mcp-oauth-callback-broker.json` 保存 mode-`0600` 的稳定 positive loopback port（1–65535）、随机 generation 与 proof secret；文件只描述

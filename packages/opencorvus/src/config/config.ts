@@ -1748,6 +1748,19 @@ export namespace Config {
     })
     .strict()
     .superRefine((config, ctx) => {
+      const browser = config.mcp?.[BrowserMCPBuiltin.ServerName]
+      if (browser) {
+        try {
+          BrowserMCPBuiltin.configuredDeclaration(browser)
+        } catch (error) {
+          if (!BrowserMCPBuiltin.ConfigurationError.isInstance(error)) throw error
+          ctx.addIssue({
+            code: "custom",
+            path: ["mcp", BrowserMCPBuiltin.ServerName, error.data.providerType === "local" ? "command" : "type"],
+            message: error.data.message,
+          })
+        }
+      }
       const computer = config.mcp?.[ComputerMCPBuiltin.ServerName]
       if (computer) {
         try {
