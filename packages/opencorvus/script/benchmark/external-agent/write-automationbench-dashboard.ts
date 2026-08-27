@@ -367,6 +367,7 @@ const summaries = profiles.map((profile) => {
   return {
     profile,
     rows,
+    pendingRows: currentResults.filter((record) => record.opencorvus.profile === profile),
     strictPasses,
     strictRate: rows.length ? strictPasses / rows.length : 0,
     partialMean: mean((record) => Number(record.benchmark.metrics?.partial_credit ?? 0)),
@@ -451,6 +452,7 @@ const html = `<!doctype html>
     .metric { background:#fff; border:1px solid #e3e7ee; border-radius:10px; padding:15px; }
     .metric span { display:block; color:#667085; font-size:12px; }
     .metric strong { display:block; margin-top:6px; font-size:22px; font-variant-numeric:tabular-nums; }
+    .catalog-state { margin:16px 0 0; padding:12px 14px; border:1px solid #bfdbfe; border-radius:10px; background:#eff6ff; color:#1e3a5f; font-size:13px; }
     .progress { height:10px; overflow:hidden; border-radius:999px; background:#e5e9f0; }
     .progress > div { height:100%; width:${Math.min(100, targetSlots ? (coverage / targetSlots) * 100 : 0)}%; background:#2563eb; }
     .bars { display:grid; gap:9px; }
@@ -474,6 +476,7 @@ const html = `<!doctype html>
       :root { background:#0f141d; color:#eef2f8; }
       .subtle, .metric span { color:#98a2b3; }
       .metric, .table-wrap { background:#161d28; border-color:#2a3443; }
+      .catalog-state { border-color:#315786; background:#162a43; color:#c6dcff; }
       th { color:#cbd5e1; background:#1b2431; }
       th, td { border-color:#293343; }
       .progress, .track { background:#2b3545; }
@@ -507,10 +510,11 @@ const html = `<!doctype html>
   </header>
   <h1>AutomationBench · OpenCorvus Mission ${profiles.map((profile) => escapeHTML(profile)).join(" + ")} / ${escapeHTML(model)}</h1>
   <div class="subtle">Primary profiles: ${profiles.map(escapeHTML).join(" + ")} · target ${targetCases} unique cases · updated ${new Date(generatedAt).toISOString()}</div>
+  ${currentResults.length > 0 ? `<div class="catalog-state"><strong>Catalog verification pending.</strong> ${currentResults.length} manifest-sealed result${currentResults.length === 1 ? " is" : "s are"} awaiting final catalog reconciliation. Verified coverage remains ${coverage} / ${targetSlots} until that evidence audit completes.</div>` : ""}
   <section class="metrics" aria-label="Profile benchmark summary">
     ${summaries
       .flatMap((summary) => [
-        `<div class="metric"><span>${escapeHTML(summary.profile)} verified coverage</span><strong>${summary.rows.length} / ${targetCases}</strong></div>`,
+        `<div class="metric"><span>${escapeHTML(summary.profile)} verified coverage</span><strong>${summary.rows.length} / ${targetCases}</strong>${summary.pendingRows.length > 0 ? `<span>${summary.pendingRows.length} sealed · pending catalog verification</span>` : ""}</div>`,
         `<div class="metric"><span>${escapeHTML(summary.profile)} strict pass rate</span><strong>${percent(summary.strictRate)}</strong></div>`,
         `<div class="metric"><span>${escapeHTML(summary.profile)} mean partial · usage</span><strong>${percent(summary.partialMean)}</strong><span>${integer(summary.tokensTotal)} total tokens · ${integer(summary.tokensMean)} mean</span><span>${integer(summary.modelCallsTotal)} model calls · ${integer(summary.modelCallsMean)} mean</span></div>`,
       ])
@@ -551,7 +555,7 @@ const html = `<!doctype html>
       <span>官网 · <a href="https://opencorvus.com">https://opencorvus.com</a></span>
       <span>项目 · <a href="https://github.com/yangheng95/opencorvus">https://github.com/yangheng95/opencorvus</a></span>
     </div>
-    <div class="evidence-footer">Verified ${coverage} / ${targetSlots} · remaining ${Math.max(0, targetSlots - coverage)} · indexed attempts ${integer(catalog?.attempts?.length ?? 0)} · source: <a href="${escapeHTML(catalog?.public_context?.source ?? "https://github.com/zapier/AutomationBench")}">AutomationBench official leaderboard</a>${catalog?.public_context?.snapshot_date ? ` · snapshot ${escapeHTML(catalog.public_context.snapshot_date)}` : ""}</div>
+    <div class="evidence-footer">Verified ${coverage} / ${targetSlots} · sealed pending ${currentResults.length} · remaining after verified ${Math.max(0, targetSlots - coverage)} · indexed attempts ${integer(catalog?.attempts?.length ?? 0)} · source: <a href="${escapeHTML(catalog?.public_context?.source ?? "https://github.com/zapier/AutomationBench")}">AutomationBench official leaderboard</a>${catalog?.public_context?.snapshot_date ? ` · snapshot ${escapeHTML(catalog.public_context.snapshot_date)}` : ""}</div>
   </footer>
 </main>
 </body>

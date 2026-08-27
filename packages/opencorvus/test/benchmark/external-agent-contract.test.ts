@@ -58,11 +58,59 @@ import {
   normalizeTrajectory,
   renderTrajectorySVG,
   summarizeTranscriptUsage,
+  mapSettledWithBoundedConcurrency,
   type ProviderUsageRow,
   type AutomationBenchTrialLease,
 } from "../../script/benchmark/external-agent/contract"
 
 describe("external agent benchmark contract", () => {
+  test("settles independent work with bounded concurrency and preserves input order", async () => {
+    let active = 0
+    let peak = 0
+    const started: number[] = []
+    let release!: () => void
+    const gate = new Promise<void>((resolve) => {
+      release = resolve
+    })
+    const mapped = mapSettledWithBoundedConcurrency([0, 1, 2, 3, 4, 5], 3, async (value) => {
+      active += 1
+      peak = Math.max(peak, active)
+      started.push(value)
+      await gate
+      active -= 1
+      return value * 10
+    })
+
+    expect({ started, peak }).toEqual({ started: [0, 1, 2], peak: 3 })
+    release()
+    expect(await mapped).toEqual(
+      [0, 10, 20, 30, 40, 50].map((value) => ({ status: "fulfilled", value })),
+    )
+    expect(peak).toBe(3)
+  })
+
+  test("settles mapper failures by input slot after every bounded worker is quiescent", async () => {
+    const completed: number[] = []
+    const outcomes = await mapSettledWithBoundedConcurrency([0, 1, 2, 3], 2, async (value) => {
+      await Bun.sleep(value % 2)
+      if (value === 1) throw new Error("scorer_replay_failed")
+      completed.push(value)
+      return value * 10
+    })
+
+    expect(completed.sort((left, right) => left - right)).toEqual([0, 2, 3])
+    expect(
+      outcomes.map((outcome) =>
+        outcome.status === "fulfilled" ? outcome : { status: outcome.status, reason: (outcome.reason as Error).message },
+      ),
+    ).toEqual([
+      { status: "fulfilled", value: 0 },
+      { status: "rejected", reason: "scorer_replay_failed" },
+      { status: "fulfilled", value: 20 },
+      { status: "fulfilled", value: 30 },
+    ])
+  })
+
   test("reconciles a sanitized Provider diagnostic batch-receipt redaction chain", () => {
     const batchRunID = "367ae713-7598-4422-be04-37634d5e958a"
     const targetFileName = `batch-05-${batchRunID}-receipt.json`

@@ -7,6 +7,34 @@ import { ProviderError } from "../../../src/provider/error"
 
 export const EXTERNAL_BENCHMARK_SCHEMA_VERSION = 1 as const
 
+export async function mapSettledWithBoundedConcurrency<Input, Output>(
+  values: readonly Input[],
+  concurrency: number,
+  mapper: (value: Input, index: number) => Promise<Output>,
+) {
+  if (!Number.isSafeInteger(concurrency) || concurrency < 1) {
+    throw new Error("Bounded concurrency must be a positive safe integer")
+  }
+  const results = new Array<PromiseSettledResult<Output>>(values.length)
+  let nextIndex = 0
+  const workerCount = Math.min(concurrency, values.length)
+  await Promise.all(
+    Array.from({ length: workerCount }, async () => {
+      while (true) {
+        const index = nextIndex
+        nextIndex += 1
+        if (index >= values.length) return
+        try {
+          results[index] = { status: "fulfilled", value: await mapper(values[index]!, index) }
+        } catch (reason) {
+          results[index] = { status: "rejected", reason }
+        }
+      }
+    }),
+  )
+  return results
+}
+
 export function auditBatchReceiptRedaction(input: {
   redactionFileName: string
   redactionReceipt: unknown

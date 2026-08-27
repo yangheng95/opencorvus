@@ -26,10 +26,12 @@ import {
   summarizeBenchmarkToolEvents,
   summarizeProviderUsageRows,
   providerUsageMatchesModel,
+  mapSettledWithBoundedConcurrency,
   type ProviderUsageRow,
 } from "./contract"
 
 const EXPECTED_PACKAGE_TREE_SHA256 = "cc7a63f9444814c7029e325dacbdf1c2e870430d08aaf8d4ecf5c0e44fe829d4"
+const SCORER_REPLAY_CONCURRENCY = 5
 
 type Profile = "base" | "advanced"
 
@@ -310,6 +312,7 @@ async function inspectRawRunEvidence(
     baseCaseCount: number
     extendedCaseCount: number
     legacyTraceRunIDs: Set<string>
+    independentReplay: PromiseSettledResult<unknown> | undefined
   },
 ) {
   if (!result) return { required: false, passed: true }
@@ -492,11 +495,13 @@ async function inspectRawRunEvidence(
       toolAudit.failed === result.benchmark.tool_failed &&
       result.benchmark.tool_calls === result.benchmark.tool_attempts
     const requestPassed = requestHash === result.benchmark.harness_request_sha256
-    const independentReplay = await replayScorer(directory, result, input.python)
+    if (!input.independentReplay || input.independentReplay.status !== "fulfilled") {
+      throw input.independentReplay?.reason ?? new Error("independent_scorer_replay_missing")
+    }
     const replayPassed =
       scorerReplay.passed === true &&
       scorerReplay.example_id === (result.benchmark as any).example_id &&
-      JSON.stringify(independentReplay) === JSON.stringify(scorerReplay)
+      JSON.stringify(input.independentReplay.value) === JSON.stringify(scorerReplay)
     const expectedAgentUID = 60_000 + Number((result.benchmark as any).case_index)
     const restrictedShellAuthority = automationBenchRestrictedShellAuthority({
       caseIndex: (result.benchmark as any).case_index,
@@ -703,19 +708,36 @@ if ((legacyTraceAttestation.runs?.length ?? 0) > 0 && !legacyTraceAttestationAud
 const legacyTraceRunIDs = new Set(legacyTraceAttestationAudit.run_ids)
 const files = await walk(root)
 const records: Array<Record<string, any>> = []
-const terminalDirectories = new Set(
+const terminalDirectorySet = new Set(
   files
     .filter((item) => ["result.json", "failure.json"].includes(path.basename(item)))
     .map((item) => path.dirname(item)),
 )
+const terminalDirectories = [...terminalDirectorySet].sort()
+const terminalEntries = await Promise.all(
+  terminalDirectories.map(async (directory) => {
+    const hasResult = files.includes(path.join(directory, "result.json"))
+    const hasFailure = files.includes(path.join(directory, "failure.json"))
+    const terminalAmbiguous = hasResult && hasFailure
+    const file = path.join(directory, terminalAmbiguous || !hasResult ? "failure.json" : "result.json")
+    const payload = JSON.parse(await fs.readFile(file, "utf8")) as Result | Failure
+    const isResult = !terminalAmbiguous && path.basename(file) === "result.json"
+    return { directory, payload, isResult, terminalAmbiguous }
+  }),
+)
+const scoredEntries = terminalEntries.filter(
+  (entry): entry is (typeof terminalEntries)[number] & { payload: Result; isResult: true } => entry.isResult,
+)
+const replayOutcomes = await mapSettledWithBoundedConcurrency(
+  scoredEntries,
+  SCORER_REPLAY_CONCURRENCY,
+  async ({ directory, payload }) => replayScorer(directory, payload, cli.python),
+)
+const independentReplayByDirectory = new Map(
+  scoredEntries.map((entry, index) => [entry.directory, replayOutcomes[index]!] as const),
+)
 
-for (const directory of terminalDirectories) {
-  const hasResult = files.includes(path.join(directory, "result.json"))
-  const hasFailure = files.includes(path.join(directory, "failure.json"))
-  const terminalAmbiguous = hasResult && hasFailure
-  const file = path.join(directory, terminalAmbiguous || !hasResult ? "failure.json" : "result.json")
-  const payload = JSON.parse(await fs.readFile(file, "utf8")) as Result | Failure
-  const isResult = !terminalAmbiguous && path.basename(file) === "result.json"
+for (const { directory, payload, isResult, terminalAmbiguous } of terminalEntries) {
   const result = isResult ? (payload as Result) : undefined
   const failure = isResult ? undefined : (payload as Failure)
   const disposition = payload.run.id ? dispositions.runs[payload.run.id] : undefined
@@ -732,6 +754,7 @@ for (const directory of terminalDirectories) {
     extendedWrapperSHA256: extendedRestrictedShellSHA256,
     baseCaseCount: baseCaseSet.selection.count,
     extendedCaseCount: caseSet.selection.count,
+    independentReplay: independentReplayByDirectory.get(directory),
   })
   const caseSetAuthority = result
     ? automationBenchCaseSetAuthority({
@@ -891,7 +914,7 @@ for (const directory of terminalDirectories) {
 }
 
 for (const file of files.filter(
-  (item) => path.basename(item) === "run-start.json" && !terminalDirectories.has(path.dirname(item)),
+  (item) => path.basename(item) === "run-start.json" && !terminalDirectorySet.has(path.dirname(item)),
 )) {
   const directory = path.dirname(file)
   const started = JSON.parse(await fs.readFile(file, "utf8")) as Failure
