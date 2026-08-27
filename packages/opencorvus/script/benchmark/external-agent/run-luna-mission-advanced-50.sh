@@ -64,12 +64,17 @@ terminate_supervisor() {
 }
 trap terminate_supervisor INT TERM HUP
 
+pending_batches=()
 for batch_index in {1..10}; do
   if batch_is_complete "$batch_index"; then
     continue
   fi
-  printf '{"event":"luna_advanced_batch_start","batch_index":%s,"started_at":%s}\n' \
-    "$batch_index" "$(date +%s%3N)"
+  pending_batches+=("$batch_index")
+done
+if [[ "${#pending_batches[@]}" -gt 0 ]]; then
+  batch_indices="$(IFS=,; printf '%s' "${pending_batches[*]}")"
+  printf '{"event":"luna_advanced_queue_start","batch_indices":"%s","started_at":%s}\n' \
+    "$batch_indices" "$(date +%s%3N)"
   /root/.bun/bin/bun \
     packages/opencorvus/script/benchmark/external-agent/run-automationbench-batch.ts \
     --python /var/lib/opencorvus-benchmark/evaluator-venv/bin/python \
@@ -78,17 +83,20 @@ for batch_index in {1..10}; do
     --restricted-shell /var/lib/opencorvus-benchmark/restricted-agent-shell-base \
     --control-root "$control_root" \
     --dashboard "$dashboard_root/index.html" \
-    --batch-index "$batch_index" \
+    --batch-index "$batch_indices" \
     --repetition 1 \
     --model openai/gpt-5.6-luna \
     --profiles advanced \
+    --queue-concurrency 5 \
     --inactivity-ms 600000 &
   active_coordinator=$!
-  wait "$active_coordinator"
+  if ! wait "$active_coordinator"; then
+    exit 1
+  fi
   active_coordinator=""
-  printf '{"event":"luna_advanced_batch_complete","batch_index":%s,"completed_at":%s}\n' \
-    "$batch_index" "$(date +%s%3N)"
-done
+  printf '{"event":"luna_advanced_queue_complete","batch_indices":"%s","completed_at":%s}\n' \
+    "$batch_indices" "$(date +%s%3N)"
+fi
 
 /root/.bun/bin/bun \
   packages/opencorvus/script/benchmark/external-agent/verify-automationbench-evidence.ts \

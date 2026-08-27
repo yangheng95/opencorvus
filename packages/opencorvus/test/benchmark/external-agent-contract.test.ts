@@ -44,7 +44,6 @@ import {
   automationBenchBatchPlanIdentity,
   automationBenchBatchPlanMatches,
   automationBenchCoordinatorBatchIndexes,
-  automationBenchCoordinatorSettlement,
   activeAutomationBenchBatchRunIDs,
   executeRollingBatchChains,
   failureObservationReceipt,
@@ -53,11 +52,13 @@ import {
   reconcileAutomationBenchBatchCandidates,
   reusableBatchCandidateRunIDs,
   plannedAutomationBenchSlotState,
+  rollingDashboardPlanPaths,
   rollingBatchChains,
   paperEvidenceChecks,
   normalizeTrajectory,
   renderTrajectorySVG,
   summarizeTranscriptUsage,
+  createRestartableDrain,
   mapSettledWithBoundedConcurrency,
   type ProviderUsageRow,
   type AutomationBenchTrialLease,
@@ -109,6 +110,55 @@ describe("external agent benchmark contract", () => {
       { status: "fulfilled", value: 20 },
       { status: "fulfilled", value: 30 },
     ])
+  })
+
+  test("settles in-flight work and fences later queue admission at the shared framework boundary", async () => {
+    let admit = true
+    const started: number[] = []
+    const outcomes = await mapSettledWithBoundedConcurrency(
+      [0, 1, 2, 3, 4],
+      2,
+      async (value) => {
+        started.push(value)
+        if (value === 1) admit = false
+        await Bun.sleep(1)
+        return value
+      },
+      { shouldStart: () => admit },
+    )
+
+    expect({
+      started: started.sort((left, right) => left - right),
+      fulfilled: outcomes.filter((outcome) => outcome.status === "fulfilled").length,
+      fenced: outcomes.filter(
+        (outcome) => outcome.status === "rejected" && (outcome.reason as Error).message.includes("admission stopped"),
+      ).length,
+    }).toEqual({
+      started: [0, 1],
+      fulfilled: 2,
+      fenced: 3,
+    })
+  })
+
+  test("restarts the single settlement drain when work arrives during its exit boundary", async () => {
+    const drained: number[] = []
+    const pending: number[] = [1]
+    let drain!: ReturnType<typeof createRestartableDrain>
+    drain = createRestartableDrain({
+      hasWork: () => pending.length > 0,
+      drain: async () => {
+        drained.push(pending.shift()!)
+        if (drained.length === 1) {
+          await Promise.resolve()
+          pending.push(2)
+          drain.wake()
+        }
+      },
+    })
+
+    drain.wake()
+    await drain.waitForIdle()
+    expect({ drained, pending, failure: drain.failure() }).toEqual({ drained: [1, 2], pending: [], failure: undefined })
   })
 
   test("reconciles a sanitized Provider diagnostic batch-receipt redaction chain", () => {
@@ -2082,35 +2132,33 @@ describe("external agent benchmark contract", () => {
     )
   })
 
-  test("maps one or two missing manifest batches onto one coordinator invocation", () => {
+  test("maps an ascending pending manifest frontier onto one coordinator invocation", () => {
     expect(automationBenchCoordinatorBatchIndexes("14")).toEqual([14])
     expect(automationBenchCoordinatorBatchIndexes("14,15")).toEqual([14, 15])
-    expect(automationBenchCoordinatorBatchIndexes("14,16")).toEqual([14, 16])
+    expect(automationBenchCoordinatorBatchIndexes("14,16,19,23")).toEqual([14, 16, 19, 23])
     expect(() => automationBenchCoordinatorBatchIndexes("15,14")).toThrow(
-      "Batch coordinator requires one positive batch or two ascending distinct batches",
+      "Batch coordinator requires one to 120 ascending distinct positive batches",
     )
     expect(() => automationBenchCoordinatorBatchIndexes("14,14")).toThrow(
-      "Batch coordinator requires one positive batch or two ascending distinct batches",
+      "Batch coordinator requires one to 120 ascending distinct positive batches",
     )
   })
 
-  test("settles sibling receipts independently and keeps both plans anchored on the dashboard", () => {
-    expect(
-      automationBenchCoordinatorSettlement([
-        { batch_index: 14, complete: true },
-        { batch_index: 15, complete: false },
-      ]),
-    ).toEqual({
-      complete: false,
-      failed_batch_indexes: [15],
-      status_by_batch: { 14: "completed", 15: "failed" },
-    })
+  test("keeps every active rolling plan anchored on the dashboard", () => {
     expect(
       activeAutomationBenchBatchRunIDs(
         [{ batch_run_id: "batch-14" }],
         [{ batch_run_id: "batch-14" }, { batch_run_id: "batch-15" }],
       ),
     ).toEqual(new Set(["batch-14", "batch-15"]))
+    expect(
+      rollingDashboardPlanPaths([
+        { planPath: "queued", authorizationStarted: false, receiptWritten: false, receiptPublished: false },
+        { planPath: "active", authorizationStarted: true, receiptWritten: false, receiptPublished: false },
+        { planPath: "settling", authorizationStarted: true, receiptWritten: true, receiptPublished: false },
+        { planPath: "terminal", authorizationStarted: true, receiptWritten: true, receiptPublished: true },
+      ]),
+    ).toEqual(["active", "settling"])
   })
 
   test("admits two independent five-case batches up to ten shared trial leases", () => {
@@ -2555,6 +2603,12 @@ describe("external agent benchmark contract", () => {
       signalSettlement: [solBase, lunaExtended, lunaAdvanced].map((script) =>
         script.includes("trap - INT TERM HUP") && script.includes("trap terminate_supervisor INT TERM HUP"),
       ),
+      exactResumeIdentity: [solBase, lunaExtended, lunaAdvanced].map(
+        (script) =>
+          script.includes("automationBenchBatchPlanMatches(plan") &&
+          script.includes('schedule_mode: "rolling_case_slots_v1"') &&
+          script.includes("case_count: 5"),
+      ),
       solBaseAuthority: Array.from(solBase.matchAll(/--restricted-shell (.+)$/gm), ([, value]) => value),
       lunaExtendedAuthority: Array.from(lunaExtended.matchAll(/--restricted-shell (.+)$/gm), ([, value]) => value),
       lunaAdvancedAuthority: Array.from(lunaAdvanced.matchAll(/--restricted-shell (.+)$/gm), ([, value]) => value),
@@ -2570,6 +2624,7 @@ describe("external agent benchmark contract", () => {
       installationCalls: [true, true, true],
       installationAfterSupervisorLock: [true, true, true],
       signalSettlement: [true, true, true],
+      exactResumeIdentity: [true, true, true],
       solBaseAuthority: Array(2).fill("/var/lib/opencorvus-benchmark/restricted-agent-shell-base \\"),
       lunaExtendedAuthority: Array(2).fill("/var/lib/opencorvus-benchmark/restricted-agent-shell \\"),
       lunaAdvancedAuthority: Array(2).fill("/var/lib/opencorvus-benchmark/restricted-agent-shell-base \\"),
@@ -2612,10 +2667,15 @@ describe("external agent benchmark contract", () => {
       caseSet: assignment("case_set"),
       supervisorLock: script.match(/^exec 9>"(.+)"$/m)?.[1],
       batchRange: script.includes("for batch_index in {11..120}; do"),
-      groupedBatchLimit: script.match(/-eq ([0-9]+) \]\]; then/)?.[1],
+      workConservingQueue: script.includes('pending_batches+=("$batch_index")') && !script.includes('-eq 2'),
       singleCoordinator: script.includes('active_coordinator="$!"') && !script.includes("active_coordinators=("),
       batchScopedAuthorization: coordinator.includes("`active-batch-${selected.batchIndex}.json`"),
-      allPlansAnchored: coordinator.includes('contexts.map((context) => context.planPath).join(",")'),
+      rollingPlansAnchored: coordinator.includes("rollingDashboardPlanPaths("),
+      terminalDashboardRefresh:
+        coordinator.lastIndexOf("fs.rm(context.activeAuthorizationPath") <
+          coordinator.lastIndexOf("for (const context of contexts) context.receiptPublished = true") &&
+        coordinator.lastIndexOf("for (const context of contexts) context.receiptPublished = true") <
+          coordinator.lastIndexOf("await queueDashboardWrite()"),
       serializedCatalog: coordinator.includes('path.join(controlRoot, "catalog.lock")'),
       catalogLockWaits: coordinator.includes("retries: { retries: 900, factor: 1, minTimeout: 1_000, maxTimeout: 1_000 }"),
       invocations,
@@ -2627,10 +2687,11 @@ describe("external agent benchmark contract", () => {
       caseSet: "packages/opencorvus/script/benchmark/external-agent/automationbench-case-set-600.json",
       supervisorLock: "$control_root/supervisor.lock",
       batchRange: true,
-      groupedBatchLimit: "2",
+      workConservingQueue: true,
       singleCoordinator: true,
       batchScopedAuthorization: true,
-      allPlansAnchored: true,
+      rollingPlansAnchored: true,
+      terminalDashboardRefresh: true,
       serializedCatalog: true,
       catalogLockWaits: true,
       invocations: [
@@ -2648,6 +2709,7 @@ describe("external agent benchmark contract", () => {
             repetition: "1",
             model: "openai/gpt-5.6-luna",
             profiles: "base",
+            "queue-concurrency": "10",
             "inactivity-ms": "600000",
           },
         },
@@ -2701,8 +2763,8 @@ describe("external agent benchmark contract", () => {
       dashboardRoot: assignment("dashboard_root"),
       invocations,
       batchRange: script.match(/^for batch_index in (.+); do$/m)?.[1],
-      startEvent: script.includes('"event":"luna_advanced_batch_start"'),
-      completionEvent: script.includes('"event":"luna_advanced_batch_complete"'),
+      startEvent: script.includes('"event":"luna_advanced_queue_start"'),
+      completionEvent: script.includes('"event":"luna_advanced_queue_complete"'),
       resumeIdentityOwner: script.includes("automationBenchBatchPlanMatches(plan"),
     }).toEqual({
       evidenceRoot: "/var/lib/opencorvus-benchmark/evidence-luna-mission-advanced-v20260824-r1",
@@ -2718,10 +2780,11 @@ describe("external agent benchmark contract", () => {
             "restricted-shell": "/var/lib/opencorvus-benchmark/restricted-agent-shell-base",
             "control-root": '"$control_root"',
             dashboard: '"$dashboard_root/index.html"',
-            "batch-index": '"$batch_index"',
+            "batch-index": '"$batch_indices"',
             repetition: "1",
             model: "openai/gpt-5.6-luna",
             profiles: "advanced",
+            "queue-concurrency": "5",
             "inactivity-ms": "600000",
           },
         },

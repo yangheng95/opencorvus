@@ -6,11 +6,11 @@ import { ProviderError } from "../../../src/provider/error"
 import {
   auditBenchmarkBunRuntime,
   automationBenchCoordinatorBatchIndexes,
-  automationBenchCoordinatorSettlement,
-  executeRollingBatchChains,
+  createRestartableDrain,
+  mapSettledWithBoundedConcurrency,
   reconcileAutomationBenchBatchCandidates,
   reusableProfileRuns,
-  rollingBatchChains,
+  rollingDashboardPlanPaths,
 } from "./contract"
 
 type FrozenCase = {
@@ -61,6 +61,10 @@ const model =
     throw new Error("--model is required")
   })()
 const inactivityMs = values.get("inactivity-ms") ?? "600000"
+const queueConcurrency = Number(values.get("queue-concurrency") ?? "10")
+if (!Number.isSafeInteger(queueConcurrency) || queueConcurrency < 1 || queueConcurrency > 10) {
+  throw new Error("--queue-concurrency must be a positive integer no greater than ten")
+}
 const profile = values.get("profiles")
 if (profile !== "base" && profile !== "advanced") {
   throw new Error("--profiles must name exactly one execution profile: base or advanced")
@@ -141,9 +145,15 @@ const planDirectory = path.join(output, "batch-plans")
 type BatchContext = (typeof selectedBatches)[number] & {
   batchRunID: string
   planPath: string
+  planSHA256?: string
   receiptPath: string
   activeAuthorizationPath: string
+  authorizationPromise?: Promise<void>
   receiptWritten: boolean
+  receiptPublished?: boolean
+  remainingSlots?: number
+  launchedByWave?: Array<Array<Awaited<ReturnType<typeof runTrial>>>>
+  complete?: boolean
   preexistingByProfile?: Record<Profile, Map<number, Record<string, any>>>
   batchOutcomes?: Array<{
     launched: Array<Awaited<ReturnType<typeof runTrial>>>
@@ -320,23 +330,28 @@ async function refreshCatalog() {
 
 async function writeDashboard() {
   if (!dashboard) return
-  const child = Bun.spawn(
-    [
-      process.execPath,
-      path.join(import.meta.dir, "write-automationbench-dashboard.ts"),
-      "--root",
-      output,
-      "--dashboard",
-      dashboard,
-      "--batch-plan",
-      contexts.map((context) => context.planPath).join(","),
-      "--model",
-      model,
-      "--profiles",
-      profiles.join(","),
-    ],
-    { cwd: process.cwd(), stdout: "pipe", stderr: "pipe" },
+  const anchoredPlans = rollingDashboardPlanPaths(
+    contexts.map((context) => ({
+      planPath: context.planPath,
+      authorizationStarted: Boolean(context.authorizationPromise),
+      receiptWritten: context.receiptWritten,
+      receiptPublished: context.receiptPublished === true,
+    })),
   )
+  const args = [
+    process.execPath,
+    path.join(import.meta.dir, "write-automationbench-dashboard.ts"),
+    "--root",
+    output,
+    "--dashboard",
+    dashboard,
+    "--model",
+    model,
+    "--profiles",
+    profiles.join(","),
+  ]
+  if (anchoredPlans.length > 0) args.push("--batch-plan", anchoredPlans.join(","))
+  const child = Bun.spawn(args, { cwd: process.cwd(), stdout: "pipe", stderr: "pipe" })
   let timedOut = false
   const terminateTimer = setTimeout(() => {
     timedOut = true
@@ -430,6 +445,27 @@ function waveCandidateByCase(
   })
 }
 
+async function ensureBatchAuthorization(context: BatchContext) {
+  if (!context.planSHA256) throw new Error(`Batch ${context.batchIndex} plan identity is unavailable`)
+  context.authorizationPromise ??= fs.writeFile(
+    context.activeAuthorizationPath,
+    JSON.stringify(
+      {
+        batch_run_id: context.batchRunID,
+        batch_index: context.batchIndex,
+        output_root: output,
+        batch_plan: context.planPath,
+        batch_plan_sha256: context.planSHA256,
+        coordinator_pid: process.pid,
+      },
+      null,
+      2,
+    ) + "\n",
+    { encoding: "utf8", flag: "wx" },
+  )
+  await context.authorizationPromise
+}
+
 async function runTrial(context: BatchContext, item: FrozenCase, profile: Profile, waveIndex: number) {
   const args = [
     process.execPath,
@@ -503,37 +539,6 @@ async function runTrial(context: BatchContext, item: FrozenCase, profile: Profil
   }
 }
 
-async function launchRollingBatch(context: BatchContext, catalogBefore: Awaited<ReturnType<typeof refreshCatalog>>) {
-  if (terminationSignal) throw new Error(`Batch coordinator received ${terminationSignal}`)
-  const existing = context.preexistingByProfile
-  if (!existing) throw new Error(`Batch ${context.batchIndex} preexisting candidate selection is unavailable`)
-  const launchedByWave: Array<Array<Awaited<ReturnType<typeof runTrial>>>> = context.waves.map(() => [])
-  await executeRollingBatchChains({
-    chains: rollingBatchChains(context.waves),
-    shouldRun: (slot) => !existing[slot.profile].has(slot.case_index),
-    run: async (slot, waveIndex) => {
-      if (terminationSignal) throw new Error(`Batch coordinator received ${terminationSignal}`)
-      const outcome = await runTrial(
-        context,
-        context.cases.find((item) => item.case_index === slot.case_index)!,
-        slot.profile,
-        waveIndex,
-      ).catch((error) => ({
-        case_index: slot.case_index,
-        profile: slot.profile,
-        exit_code: -1,
-        run_id: null,
-        run_status: "coordinator_failed",
-        stderr_tail: ProviderError.redactSensitiveProviderText(error instanceof Error ? error.message : String(error)).slice(-2000),
-      }))
-      launchedByWave[waveIndex - 1]!.push(outcome)
-      void queueDashboardWrite()
-      return outcome
-    },
-  })
-  return launchedByWave
-}
-
 function batchOutcomes(
   context: BatchContext,
   launchedByWave: Array<Array<Awaited<ReturnType<typeof runTrial>>>>,
@@ -559,6 +564,76 @@ function batchOutcomes(
       outcomes.every((outcome) => outcome.eligible.length === 5),
     outcomes,
   }
+}
+
+const settlementRequests = new Set<BatchContext>()
+const receiptPublicationPending = new Set<BatchContext>()
+
+async function writeBatchReceipt(
+  context: BatchContext,
+  rolling: ReturnType<typeof batchOutcomes>,
+) {
+  context.batchOutcomes = rolling.outcomes
+  context.complete = rolling.complete
+  await fs.writeFile(
+    context.receiptPath,
+    JSON.stringify(
+      {
+        schema_version: 1,
+        batch_run_id: context.batchRunID,
+        batch_index: context.batchIndex,
+        status: rolling.complete ? "completed" : "failed",
+        finished_at: Date.now(),
+        signal: rolling.complete ? undefined : terminationSignal ?? null,
+        ...Object.fromEntries(rolling.outcomes.map((outcome, index) => [`wave_${index + 1}`, outcome])),
+        error: rolling.complete
+          ? undefined
+          : { name: "Error", message: `Rolling batch ${context.batchIndex} contains a failed, invalid, or unsealed trial` },
+      },
+      null,
+      2,
+    ) + "\n",
+    { encoding: "utf8", flag: "wx" },
+  )
+  context.receiptWritten = true
+  await fs.rm(context.activeAuthorizationPath, { force: true })
+  receiptPublicationPending.add(context)
+}
+
+const settlementDrain = createRestartableDrain({
+  hasWork: () => settlementRequests.size > 0 || receiptPublicationPending.size > 0,
+  drain: async () => {
+    await new Promise<void>((resolve) => {
+      setTimeout(resolve, 250)
+    })
+    const catalog = await refreshCatalog()
+    for (const published of receiptPublicationPending) {
+      if (published.complete) {
+        const finalizedSlots = published.waves
+          .flat()
+          .filter((slot) => eligibleByCase(catalog, slot.profile).has(slot.case_index))
+        if (finalizedSlots.length !== published.waves.flat().length) {
+          throw new Error(`Completed receipt did not finalize every selected batch ${published.batchIndex} slot`)
+        }
+      }
+      published.receiptPublished = true
+      receiptPublicationPending.delete(published)
+    }
+    const ready = [...settlementRequests].filter((candidate) => !candidate.receiptWritten)
+    for (const candidate of ready) settlementRequests.delete(candidate)
+    for (const candidate of ready) {
+      if (!candidate.launchedByWave) {
+        throw new Error(`Batch ${candidate.batchIndex} launch outcomes are unavailable at settlement`)
+      }
+      await writeBatchReceipt(candidate, batchOutcomes(candidate, candidate.launchedByWave, catalog))
+    }
+    await queueDashboardWrite()
+  },
+})
+
+function queueBatchSettlement(context: BatchContext) {
+  settlementRequests.add(context)
+  settlementDrain.wake()
 }
 
 try {
@@ -597,75 +672,69 @@ try {
     }
     const planBytes = JSON.stringify(plan, null, 2) + "\n"
     await fs.writeFile(context.planPath, planBytes, { encoding: "utf8", flag: "wx" })
-    await fs.writeFile(
-      context.activeAuthorizationPath,
-      JSON.stringify(
-        {
-          batch_run_id: context.batchRunID,
-          batch_index: context.batchIndex,
-          output_root: output,
-          batch_plan: context.planPath,
-          batch_plan_sha256: crypto.createHash("sha256").update(planBytes).digest("hex"),
-          coordinator_pid: process.pid,
-        },
-        null,
-        2,
-      ) + "\n",
-      { encoding: "utf8", flag: "wx" },
+    context.planSHA256 = crypto.createHash("sha256").update(planBytes).digest("hex")
+    context.launchedByWave = context.waves.map(() => [])
+  }
+  const queuedTrials = contexts.flatMap((context) => {
+    const existing = context.preexistingByProfile
+    if (!existing) throw new Error(`Batch ${context.batchIndex} preexisting candidate selection is unavailable`)
+    const missing = context.waves.flatMap((wave, waveOffset) =>
+      wave
+        .filter((slot) => !existing[slot.profile].has(slot.case_index))
+        .map((slot) => ({
+          context,
+          item: context.cases.find((item) => item.case_index === slot.case_index)!,
+          profile: slot.profile,
+          waveIndex: waveOffset + 1,
+        })),
     )
-  }
+    context.remainingSlots = missing.length
+    if (missing.length === 0) void queueBatchSettlement(context)
+    return missing
+  })
   await queueDashboardWrite()
-  const launched = await Promise.all(contexts.map((context) => launchRollingBatch(context, preexistingCatalog)))
-  const trialCatalog = await refreshCatalog()
-  const rolling = contexts.map((context, index) => batchOutcomes(context, launched[index]!, trialCatalog))
-  for (const [index, context] of contexts.entries()) {
-    context.batchOutcomes = rolling[index]!.outcomes
-  }
-  const settlement = automationBenchCoordinatorSettlement(
-    contexts.map((context, index) => ({ batch_index: context.batchIndex, complete: rolling[index]!.complete })),
+  let schedulingFailure: Error | undefined
+  const scheduled = await mapSettledWithBoundedConcurrency(
+    queuedTrials,
+    queueConcurrency,
+    async ({ context, item, profile, waveIndex }) => {
+      if (terminationSignal) throw new Error(`Batch coordinator received ${terminationSignal}`)
+      try {
+        await ensureBatchAuthorization(context)
+      } catch (error) {
+        schedulingFailure = error instanceof Error ? error : new Error(String(error))
+        throw schedulingFailure
+      }
+      const outcome = await runTrial(context, item, profile, waveIndex).catch((error) => ({
+        case_index: item.case_index,
+        profile,
+        exit_code: -1,
+        run_id: null,
+        run_status: "coordinator_failed",
+        stderr_tail: ProviderError.redactSensitiveProviderText(error instanceof Error ? error.message : String(error)).slice(-2000),
+      }))
+      context.launchedByWave![waveIndex - 1]!.push(outcome)
+      context.remainingSlots = (context.remainingSlots ?? 1) - 1
+      if (context.remainingSlots === 0) void queueBatchSettlement(context)
+      void queueDashboardWrite()
+      return outcome
+    },
+    { shouldStart: () => !terminationSignal && !schedulingFailure && !settlementDrain.failure() },
   )
-  for (const [index, context] of contexts.entries()) {
-    const complete = settlement.status_by_batch[context.batchIndex] === "completed"
-    await fs.writeFile(
-      context.receiptPath,
-      JSON.stringify(
-        {
-          schema_version: 1,
-          batch_run_id: context.batchRunID,
-          batch_index: context.batchIndex,
-          status: complete ? "completed" : "failed",
-          finished_at: Date.now(),
-          signal: complete ? undefined : terminationSignal ?? null,
-          ...Object.fromEntries(context.batchOutcomes!.map((outcome, index) => [`wave_${index + 1}`, outcome])),
-          error: complete
-            ? undefined
-            : { name: "Error", message: `Rolling batch ${context.batchIndex} contains a failed, invalid, or unsealed trial` },
-        },
-        null,
-        2,
-      ) + "\n",
-      { encoding: "utf8", flag: "wx" },
-    )
-    context.receiptWritten = true
+  await settlementDrain.waitForIdle()
+  const unstarted = scheduled.filter((outcome) => outcome.status === "rejected").length
+  if (schedulingFailure || settlementDrain.failure() || unstarted > 0) {
+    throw schedulingFailure ?? settlementDrain.failure() ?? new Error(`${unstarted} queued AutomationBench trials were not started`)
   }
-  const finalCatalog = await refreshCatalog()
-  await queueDashboardWrite()
-  for (const [index, context] of contexts.entries()) {
-    if (!rolling[index]!.complete) continue
-    const finalizedSlots = context.waves
-      .flat()
-      .filter((slot) => eligibleByCase(finalCatalog, slot.profile).has(slot.case_index))
-    if (finalizedSlots.length !== context.waves.flat().length) {
-      throw new Error(`Completed receipt did not finalize every selected batch ${context.batchIndex} slot`)
-    }
-  }
-  if (!settlement.complete) {
-    throw new Error(`Rolling batches ${settlement.failed_batch_indexes.join(",")} contain failed, invalid, or unsealed trials`)
+  const failedBatchIndexes = contexts.filter((context) => context.complete !== true).map((context) => context.batchIndex)
+  if (failedBatchIndexes.length > 0) {
+    throw new Error(`Rolling batches ${failedBatchIndexes.join(",")} contain failed, invalid, or unsealed trials`)
   }
   process.stdout.write(
     JSON.stringify({
       ok: true,
       batch_indices: contexts.map((context) => context.batchIndex),
+      queue_concurrency: queueConcurrency,
       receipts: contexts.map((context) => context.receiptPath),
       dashboard_warning: dashboardFailure?.message,
     }) + "\n",
@@ -697,14 +766,17 @@ try {
       .catch((writeError: NodeJS.ErrnoException) => {
         if (writeError.code !== "EEXIST") throw writeError
       })
+    context.receiptWritten = true
+    context.receiptPublished = true
   }
-  await queueDashboardWrite()
   throw error
 } finally {
   for (const child of activeChildren) child.kill("SIGTERM")
   await Promise.all([...activeChildren].map((child) => stopChild(child)))
   if (forcedTerminationTimer) clearTimeout(forcedTerminationTimer)
   await Promise.all(contexts.map((context) => fs.rm(context.activeAuthorizationPath, { force: true })))
+  for (const context of contexts) context.receiptPublished = true
+  await queueDashboardWrite()
   process.removeListener("SIGINT", onSIGINT)
   process.removeListener("SIGTERM", onSIGTERM)
   await Promise.all(releaseCoordinators.toReversed().map((release) => release()))

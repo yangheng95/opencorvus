@@ -11,6 +11,7 @@ export async function mapSettledWithBoundedConcurrency<Input, Output>(
   values: readonly Input[],
   concurrency: number,
   mapper: (value: Input, index: number) => Promise<Output>,
+  options: { shouldStart?: () => boolean } = {},
 ) {
   if (!Number.isSafeInteger(concurrency) || concurrency < 1) {
     throw new Error("Bounded concurrency must be a positive safe integer")
@@ -21,6 +22,17 @@ export async function mapSettledWithBoundedConcurrency<Input, Output>(
   await Promise.all(
     Array.from({ length: workerCount }, async () => {
       while (true) {
+        if (options.shouldStart && !options.shouldStart()) {
+          while (nextIndex < values.length) {
+            const stoppedIndex = nextIndex
+            nextIndex += 1
+            results[stoppedIndex] = {
+              status: "rejected",
+              reason: new Error("Bounded concurrency admission stopped before mapper start"),
+            }
+          }
+          return
+        }
         const index = nextIndex
         nextIndex += 1
         if (index >= values.length) return
@@ -33,6 +45,37 @@ export async function mapSettledWithBoundedConcurrency<Input, Output>(
     }),
   )
   return results
+}
+
+export function createRestartableDrain(input: { hasWork: () => boolean; drain: () => Promise<void> }) {
+  let failure: Error | undefined
+  let running: Promise<void> | undefined
+  const start = () => {
+    if (failure || running || !input.hasWork()) return
+    const settled = Promise.resolve()
+      .then(input.drain)
+      .catch((error) => {
+        failure = error instanceof Error ? error : new Error(String(error))
+      })
+    const tracked = settled.finally(() => {
+      if (running === tracked) running = undefined
+      start()
+    })
+    running = tracked
+  }
+  return {
+    wake: start,
+    failure: () => failure,
+    waitForIdle: async () => {
+      while (running || input.hasWork()) {
+        if (failure) throw failure
+        start()
+        const current = running
+        if (current) await current
+      }
+      if (failure) throw failure
+    },
+  }
 }
 
 export function auditBatchReceiptRedaction(input: {
@@ -1364,32 +1407,14 @@ export function automationBenchCoordinatorBatchIndexes(value: string) {
   const batchIndexes = value.split(",").map((item) => Number(item))
   if (
     batchIndexes.length < 1 ||
-    batchIndexes.length > 2 ||
+    batchIndexes.length > 120 ||
     batchIndexes.some((batchIndex) => !Number.isInteger(batchIndex) || batchIndex < 1) ||
     new Set(batchIndexes).size !== batchIndexes.length ||
-    (batchIndexes.length === 2 && batchIndexes[1]! < batchIndexes[0]!)
+    batchIndexes.some((batchIndex, index) => index > 0 && batchIndex <= batchIndexes[index - 1]!)
   ) {
-    throw new Error("Batch coordinator requires one positive batch or two ascending distinct batches")
+    throw new Error("Batch coordinator requires one to 120 ascending distinct positive batches")
   }
   return batchIndexes
-}
-
-export function automationBenchCoordinatorSettlement(
-  batches: Array<{ batch_index: number; complete: boolean }>,
-) {
-  if (
-    batches.length < 1 ||
-    batches.length > 2 ||
-    batches.some((batch) => !Number.isInteger(batch.batch_index) || batch.batch_index < 1) ||
-    new Set(batches.map((batch) => batch.batch_index)).size !== batches.length
-  ) {
-    throw new Error("Batch coordinator settlement requires one or two distinct positive batches")
-  }
-  const statusByBatch = Object.fromEntries(
-    batches.map((batch) => [batch.batch_index, batch.complete ? "completed" : "failed"] as const),
-  ) as Record<number, "completed" | "failed">
-  const failedBatchIndexes = batches.filter((batch) => !batch.complete).map((batch) => batch.batch_index)
-  return { complete: failedBatchIndexes.length === 0, failed_batch_indexes: failedBatchIndexes, status_by_batch: statusByBatch }
 }
 
 export function activeAutomationBenchBatchRunIDs(
@@ -1401,6 +1426,19 @@ export function activeAutomationBenchBatchRunIDs(
       (batchRunID): batchRunID is string => typeof batchRunID === "string" && batchRunID.length > 0,
     ),
   )
+}
+
+export function rollingDashboardPlanPaths(
+  contexts: Array<{
+    planPath: string
+    authorizationStarted: boolean
+    receiptWritten: boolean
+    receiptPublished: boolean
+  }>,
+) {
+  return contexts
+    .filter((context) => (context.authorizationStarted || context.receiptWritten) && !context.receiptPublished)
+    .map((context) => context.planPath)
 }
 
 export function reconcileAutomationBenchBatchCandidates(input: {

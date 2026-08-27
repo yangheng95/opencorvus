@@ -89,6 +89,7 @@ run_pending_batches() {
     --repetition 1 \
     --model openai/gpt-5.6-luna \
     --profiles base \
+    --queue-concurrency 10 \
     --inactivity-ms 600000 &
   active_coordinator="$!"
   if wait "$active_coordinator"; then
@@ -107,12 +108,11 @@ for batch_index in {11..120}; do
     continue
   fi
   pending_batches+=("$batch_index")
-  if [[ "${#pending_batches[@]}" -eq 2 ]]; then
-    run_pending_batches
-  fi
 done
 if [[ "${#pending_batches[@]}" -gt 0 ]]; then
-  run_pending_batches
+  if ! run_pending_batches; then
+    exit 1
+  fi
 fi
 
 /root/.bun/bin/bun \
