@@ -1,9 +1,11 @@
 import path from "node:path"
 import { createHash } from "node:crypto"
+import fs from "node:fs/promises"
 import z from "zod"
 import { DurablePublicationStore } from "@opencorvus-ai/util/durable-publication"
 import { Global } from "../global"
 import { Filesystem } from "../util/filesystem"
+import { cachedRuntimeProcessOccurrenceObserver, currentRuntimeProcessOccurrence } from "../runtime/process-occurrence"
 
 /**
  * The completeness receipt of one installed package revision in the shared
@@ -27,6 +29,15 @@ export namespace PackageInstallReceipt {
        *  and each per-config dependency directory are different trees, and a
        *  receipt is only ever about the one it names. */
       cacheRoot: z.string().min(1),
+      preparationRoot: z.string().min(1).optional(),
+      owner: z
+        .object({
+          pid: z.number().int().positive(),
+          processInstanceID: z.string().min(1),
+          occurrenceID: z.string().min(1),
+        })
+        .strict()
+        .optional(),
     })
     .strict()
 
@@ -60,7 +71,15 @@ export namespace PackageInstallReceipt {
    * for the same revision is rolled back and replaced: its tree is exactly
    * what this attempt is about to complete.
    */
-  export async function begin(input: { root: string; package: string; requestedVersion: string }): Promise<string> {
+  export async function begin(input: {
+    root: string
+    package: string
+    requestedVersion: string
+    preparationRoot?: string
+  }): Promise<string> {
+    const preparationRoot = input.preparationRoot
+      ? preparationBinding(input.root, input.preparationRoot).preparationRoot
+      : undefined
     const id = occurrenceID(input.root, input.package, input.requestedVersion)
     const subject = `package:${path.resolve(input.root)}:${input.package}`
     // Reading the prior occurrence, superseding it, removing it and opening
@@ -89,11 +108,88 @@ export namespace PackageInstallReceipt {
           package: input.package,
           requestedVersion: input.requestedVersion,
           cacheRoot: path.resolve(input.root),
+          ...(preparationRoot
+            ? {
+                preparationRoot,
+                owner: currentRuntimeProcessOccurrence(),
+              }
+            : {}),
         }),
         timeCreated: Date.now(),
       })
     })
     return id
+  }
+
+  function isInside(root: string, candidate: string): boolean {
+    const relative = path.relative(path.resolve(root), path.resolve(candidate))
+    return relative.length > 0 && !relative.startsWith("..") && !path.isAbsolute(relative)
+  }
+
+  const GENERATION_ID = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+
+  function samePath(left: string, right: string): boolean {
+    const a = path.resolve(left)
+    const b = path.resolve(right)
+    return process.platform === "win32" ? a.toLowerCase() === b.toLowerCase() : a === b
+  }
+
+  function preparationBinding(cacheRoot: string, preparationRoot: string) {
+    const finalRoot = path.resolve(cacheRoot)
+    const preparation = path.resolve(preparationRoot)
+    const generationID = path.basename(preparation)
+    const packageRoot = path.dirname(path.dirname(path.dirname(finalRoot)))
+    const stagingRoot = path.join(packageRoot, "staging")
+    const valid =
+      GENERATION_ID.test(generationID) &&
+      path.basename(finalRoot).toLowerCase() === generationID.toLowerCase() &&
+      samePath(path.dirname(preparation), stagingRoot)
+    if (!valid) {
+      throw new Error(
+        "Package installation preparation must be the direct staging child bound to the final generation identity",
+      )
+    }
+    return { packageRoot, preparationRoot: preparation }
+  }
+
+  /**
+   * Reclaim preparation trees only when their durable owner is terminal or
+   * its exact OS process occurrence is proven dead. A compromised lock can
+   * admit a second live installer, so lock ownership alone is never evidence
+   * that another generation is abandoned.
+   */
+  export async function recoverAbandonedPreparations(input: { packageRoot: string; package: string }): Promise<void> {
+    const stagingRoot = path.join(input.packageRoot, "staging")
+    const preparations = new Map<string, Awaited<ReturnType<DurablePublicationStore["list"]>>>()
+    for (const occurrence of await store().list(KIND)) {
+      const intent = IntentPayload.safeParse(occurrence.intent.payload)
+      if (!intent.success || intent.data.package !== input.package || !intent.data.preparationRoot) continue
+      const binding = preparationBinding(intent.data.cacheRoot, intent.data.preparationRoot)
+      if (!samePath(binding.packageRoot, input.packageRoot) || !isInside(stagingRoot, binding.preparationRoot)) {
+        throw new Error(
+          `Package installation preparation path is outside its package staging root: ${intent.data.preparationRoot}`,
+        )
+      }
+      const groupKey = process.platform === "win32" ? binding.preparationRoot.toLowerCase() : binding.preparationRoot
+      const matches = preparations.get(groupKey) ?? []
+      matches.push(occurrence)
+      preparations.set(groupKey, matches)
+    }
+    const observe = cachedRuntimeProcessOccurrenceObserver()
+    for (const [preparationRoot, occurrences] of preparations) {
+      const live = occurrences.some((occurrence) => {
+        if (occurrence.terminal) return false
+        const intent = IntentPayload.parse(occurrence.intent.payload)
+        return !intent.owner || observe(intent.owner) !== "dead_or_reused"
+      })
+      if (live) continue
+      for (const occurrence of occurrences) {
+        if (!occurrence.terminal) {
+          await rollback(occurrence.intent.occurrenceID, "preparation owner process is no longer live")
+        }
+      }
+      await fs.rm(preparationRoot, { recursive: true, force: true })
+    }
   }
 
   /** The occurrence for this revision, or undefined when there is none. Any
@@ -120,26 +216,135 @@ export namespace PackageInstallReceipt {
    * leaves behind, so treating its path's existence as proof would reproduce
    * the defect this receipt exists to remove.
    */
-  async function resolvesToAReadableManifest(
+  function dependencyPath(dependency: string): string[] {
+    const parts = dependency.split("/")
+    const valid =
+      (parts.length === 1 && !dependency.startsWith("@")) ||
+      (parts.length === 2 && parts[0]?.startsWith("@") && parts[0].length > 1)
+    if (!valid || parts.some((part) => !part || part === "." || part === ".." || part.includes("\\"))) {
+      throw new Error(`Installed dependency has an invalid package identity: ${dependency}`)
+    }
+    return parts
+  }
+
+  function expectedManifestIdentity(dependency: string, spec: string | undefined): string {
+    if (!spec?.startsWith("npm:")) return dependency
+    const match = /^npm:((?:@[^/@]+\/)?[^/@]+)(?:@.+)?$/.exec(spec)
+    if (!match?.[1]) throw new Error(`Installed dependency ${dependency} has an invalid npm alias specifier`)
+    return match[1]
+  }
+
+  async function resolveReadableManifest(
     root: string,
     moduleDirectory: string,
     dependency: string,
-  ): Promise<boolean> {
+    spec: string | undefined,
+  ): Promise<
+    | { directory: string; manifest: { name: string; version: string; dependencies?: Record<string, string> } }
+    | undefined
+  > {
     const cacheRoot = path.resolve(root)
     let directory = path.resolve(moduleDirectory)
+    const expectedName = expectedManifestIdentity(dependency, spec)
+    const segments = dependencyPath(dependency)
     for (;;) {
-      const candidate = path.join(directory, "node_modules", dependency, "package.json")
-      const manifest = await Filesystem.readJson<unknown>(candidate).catch(() => undefined)
-      if (manifest && typeof manifest === "object" && typeof (manifest as { name?: unknown }).name === "string") {
-        return true
+      const candidateDirectory = path.join(directory, "node_modules", ...segments)
+      const candidateStat = await fs.stat(candidateDirectory).then(
+        (stat) => stat,
+        (error: NodeJS.ErrnoException) => {
+          if (error.code === "ENOENT") return undefined
+          throw error
+        },
+      )
+      if (candidateStat && !candidateStat.isDirectory()) {
+        throw new Error(`Installed dependency ${dependency} resolves first to a non-directory package entry`)
       }
-      if (directory === cacheRoot) return false
+      if (candidateStat) {
+        const candidate = path.join(candidateDirectory, "package.json")
+        const manifest = z
+          .object({
+            name: z.literal(expectedName),
+            version: z.string().min(1),
+            dependencies: z.record(z.string(), z.string()).optional(),
+          })
+          .passthrough()
+          .safeParse(await Filesystem.readJson<unknown>(candidate).catch(() => undefined))
+        if (!manifest.success) {
+          throw new Error(
+            `Installed dependency ${dependency} resolves first to a package with an unreadable or mismatched manifest`,
+          )
+        }
+        return { directory: candidateDirectory, manifest: manifest.data }
+      }
+      if (directory === cacheRoot) return undefined
       const parent = path.dirname(directory)
-      if (parent === directory) return false
+      if (parent === directory) return undefined
       // Never walk above the cache this installation owns.
-      if (!path.resolve(parent).startsWith(cacheRoot) && path.resolve(parent) !== cacheRoot) return false
+      if (!path.resolve(parent).startsWith(cacheRoot) && path.resolve(parent) !== cacheRoot) return undefined
       directory = parent
     }
+  }
+
+  export async function verifyTree(input: {
+    root: string
+    package: string
+    resolvedVersion: string
+    moduleDirectory: string
+    additionalDependencies?: readonly string[]
+  }): Promise<readonly string[]> {
+    const manifest = z
+      .object({
+        name: z.literal(input.package),
+        version: z.string().min(1),
+        dependencies: z.record(z.string(), z.string()).optional(),
+      })
+      .passthrough()
+      .parse(await Filesystem.readJson(path.join(input.moduleDirectory, "package.json")))
+    if (manifest.version !== input.resolvedVersion) {
+      throw new Error(
+        `Installed ${input.package} reports version ${manifest.version}, expected ${input.resolvedVersion}`,
+      )
+    }
+    const pending = [
+      ...Object.entries(manifest.dependencies ?? {}).map(([dependency, spec]) => ({
+        dependency,
+        spec,
+        from: input.moduleDirectory,
+      })),
+      ...(input.additionalDependencies ?? []).map((dependency) => ({
+        dependency,
+        spec: undefined,
+        from: input.moduleDirectory,
+      })),
+    ]
+    const dependencies: string[] = []
+    const visited = new Set<string>()
+    const missing: string[] = []
+    while (pending.length > 0) {
+      const next = pending.shift()!
+      const resolved = await resolveReadableManifest(input.root, next.from, next.dependency, next.spec)
+      if (!resolved) {
+        missing.push(next.dependency)
+        continue
+      }
+      const identity = path.resolve(resolved.directory)
+      if (visited.has(identity)) continue
+      visited.add(identity)
+      dependencies.push(next.dependency)
+      pending.push(
+        ...Object.entries(resolved.manifest.dependencies ?? {}).map(([dependency, spec]) => ({
+          dependency,
+          spec,
+          from: resolved.directory,
+        })),
+      )
+    }
+    if (missing.length > 0) {
+      throw new Error(
+        `Installed ${input.package}@${input.resolvedVersion} is incomplete: unresolved ${missing.join(", ")}`,
+      )
+    }
+    return dependencies.sort()
   }
 
   /**
@@ -169,45 +374,12 @@ export namespace PackageInstallReceipt {
      */
     additionalDependencies?: readonly string[]
   }): Promise<void> {
-    const manifest = z
-      .object({
-        version: z.string().min(1),
-        dependencies: z.record(z.string(), z.string()).optional(),
-      })
-      .passthrough()
-      .parse(await Filesystem.readJson(path.join(input.moduleDirectory, "package.json")))
-    // Both callers read this same manifest to derive `resolvedVersion`, so
-    // this compares one read against another: it catches a tree rewritten
-    // between them, not a wrong version. Keeping it is cheap; calling it a
-    // version guarantee would not be true.
-    if (manifest.version !== input.resolvedVersion) {
-      throw new Error(
-        `Installed ${input.package} reports version ${manifest.version}, expected ${input.resolvedVersion}`,
-      )
-    }
-    const dependencies = [
-      ...new Set([...Object.keys(manifest.dependencies ?? {}), ...(input.additionalDependencies ?? [])]),
-    ]
-    const missing: string[] = []
-    for (const dependency of dependencies) {
-      if (!(await resolvesToAReadableManifest(input.root, input.moduleDirectory, dependency))) missing.push(dependency)
-    }
-    if (missing.length > 0) {
-      throw new Error(
-        `Installed ${input.package}@${input.resolvedVersion} is incomplete: unresolved ${missing.join(", ")}`,
-      )
-    }
+    const dependencies = await verifyTree(input)
     await store().appendPhase(KIND, {
       occurrenceID: input.occurrenceID,
       sequence: 1,
       name: "verified",
       payload: VerifiedPayload.parse({ resolvedVersion: input.resolvedVersion, dependencies }),
-      timeCreated: Date.now(),
-    })
-    await store().settle(KIND, {
-      occurrenceID: input.occurrenceID,
-      outcome: "committed",
-      payload: { resolvedVersion: input.resolvedVersion },
       timeCreated: Date.now(),
     })
     // Two facts with two roles. The occurrence just settled is keyed by the
@@ -218,26 +390,37 @@ export namespace PackageInstallReceipt {
     // manifest and asks under it even for a `latest` install. So the resolved
     // receipt is published whenever the selector was not already that version.
     if (input.requestedVersion !== input.resolvedVersion) {
-      if (await isPublished({ root: input.root, package: input.package, version: input.resolvedVersion })) return
-      const resolvedID = await begin({
-        root: input.root,
-        package: input.package,
-        requestedVersion: input.resolvedVersion,
-      })
-      await store().appendPhase(KIND, {
-        occurrenceID: resolvedID,
-        sequence: 1,
-        name: "verified",
-        payload: VerifiedPayload.parse({ resolvedVersion: input.resolvedVersion, dependencies }),
-        timeCreated: Date.now(),
-      })
-      await store().settle(KIND, {
-        occurrenceID: resolvedID,
-        outcome: "committed",
-        payload: { resolvedVersion: input.resolvedVersion },
-        timeCreated: Date.now(),
-      })
+      let resolvedID: string | undefined
+      try {
+        resolvedID = await begin({
+          root: input.root,
+          package: input.package,
+          requestedVersion: input.resolvedVersion,
+        })
+        await store().appendPhase(KIND, {
+          occurrenceID: resolvedID,
+          sequence: 1,
+          name: "verified",
+          payload: VerifiedPayload.parse({ resolvedVersion: input.resolvedVersion, dependencies }),
+          timeCreated: Date.now(),
+        })
+        await store().settle(KIND, {
+          occurrenceID: resolvedID,
+          outcome: "committed",
+          payload: { resolvedVersion: input.resolvedVersion },
+          timeCreated: Date.now(),
+        })
+      } catch (error) {
+        if (resolvedID) await rollback(resolvedID, error instanceof Error ? error.message : String(error))
+        throw error
+      }
     }
+    await store().settle(KIND, {
+      occurrenceID: input.occurrenceID,
+      outcome: "committed",
+      payload: { resolvedVersion: input.resolvedVersion },
+      timeCreated: Date.now(),
+    })
   }
 
   export async function rollback(occurrenceID: string, reason: string): Promise<void> {

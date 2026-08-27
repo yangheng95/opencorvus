@@ -569,12 +569,12 @@ The eleventh uninvolved read-only review verified the Stage-3 aggregate work as 
 - Pre-existing and preserved by the fork rewrite: an assistant whose parent is excluded by the cut keeps its original cross-session `parentID`, and cloned user messages are re-captured into project memory under their new IDs. Both are byte-identical to the pre-change loop; recorded rather than silently changed.
 - `ImplicitProject.create` remains a journal-less filesystem publication (mkdir + initGit with catch-only cleanup) inside the module that now owns the promotion journal. Open.
 
-### ARC-021 — a cached package is Ready only with its completeness receipt
+### ARC-021 — immutable package publication plus completeness receipt (closed)
 
 - Root cause as audited: a killed `bun add` leaves a `node_modules` tree and a readable package manifest, and every consumer that read those as proof of installation then failed persistently against the incomplete tree instead of completing it.
 - The repair reuses the stage-4 primitive: an install occurrence commits before the tree is mutated; the resolved tree is verified (its manifest reports the resolved version, and every dependency it declares resolves to a readable manifest in the same cache); only then is the receipt published, under both the requested selector and the resolved revision. A cached tree without its receipt is reinstalled; an install killed halfway leaves an unsettled occurrence and never a receipt.
 - Also fixed in the shared store: renaming an occurrence's staging directory onto an existing one reports `EPERM` on Windows rather than `EEXIST`, so the already-published replay branch was unreachable there.
-- Recorded open: the audit's full boundary (install into an isolated tree under a cross-process lease, then atomically publish an immutable revision) is not reached — the receipt makes readiness durable and verified, but the install still writes into the shared cache directory in place.
+- Final closure: the bounded [2026-08-28 ARC-021 record](2026-08-28-arc-021-immutable-package-publication.md) replaces the shared flat cache with package-scoped staging, pre-publication dependency verification, atomic whole-generation rename, resolved-version immutable paths, post-publication verification and durable receipts under one retrying cross-process owner. Plugin and Provider readers receive only committed revision paths; the legacy cache layout has no fallback. This supersedes later historical queue text that still called the isolated-generation residual open.
 
 ## Stage 5 — Process capability and lifecycle (in progress)
 

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest ARC-021 immutable shared-package publication: [`2026-08-28-arc-021-immutable-package-publication.md`](records/2026-08/2026-08-28-arc-021-immutable-package-publication.md).
+
 Latest ARC-008 Conversation MCP context-budget convergence: [`2026-08-28-arc-008-conversation-mcp-context-budget.md`](records/2026-08/2026-08-28-arc-008-conversation-mcp-context-budget.md).
 
 Latest Inspect BrowseComp GPT-5.6 Luna smoke: [`2026-08-28-inspect-browsecomp-luna-smoke.md`](records/2026-08/2026-08-28-inspect-browsecomp-luna-smoke.md).

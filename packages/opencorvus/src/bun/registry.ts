@@ -1,4 +1,3 @@
-import { semver } from "bun"
 import { Process } from "../util/process"
 import { BunExecutable } from "./executable"
 
@@ -30,13 +29,5 @@ export namespace PackageRegistry {
     const value = stdout.trim()
     if (!value) throw new Error(`bun info returned an empty ${field} value for ${pkg}`)
     return value
-  }
-
-  export async function isOutdated(pkg: string, cachedVersion: string, cwd?: string): Promise<boolean> {
-    const latestVersion = await info(pkg, "version", cwd)
-    const isRange = /[\s^~*xX<>|=]/.test(cachedVersion)
-    if (isRange) return !semver.satisfies(latestVersion, cachedVersion)
-
-    return semver.order(cachedVersion, latestVersion) === -1
   }
 }

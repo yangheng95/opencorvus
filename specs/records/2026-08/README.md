@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-28-arc-021-immutable-package-publication.md](2026-08-28-arc-021-immutable-package-publication.md) replaces the mutable shared Bun package cache with verified, atomically published immutable package revisions.
+
 - [2026-08-28-arc-008-conversation-mcp-context-budget.md](2026-08-28-arc-008-conversation-mcp-context-budget.md) separates configured Browser/Computer inventory from explicit Chat/Work MCP activation so an unassigned conversation carries no implicit full-provider schema payload.
 
 - [2026-08-28-inspect-browsecomp-luna-smoke.md](2026-08-28-inspect-browsecomp-luna-smoke.md) exercises the new Inspect-owned benchmark framework against one official BrowseComp row with exact GPT-5.6 Luna system identity, isolated Task execution, frozen membership, and fail-closed judge coverage.

@@ -185,6 +185,22 @@ package manifest 及所有声明依赖后才提交 receipt。begin 失败不会�
 不倒退到可能拥有历史 committed receipt 的旧 revision。下一 owner 因此必须重装 partial tree，不能把旧
 receipt 与新 bytes 拼成 Ready。
 
+共享 registry package 不在 `cache/node_modules` 原地更新。每个 package 由其规范名摘要取得独立的
+跨进程 publication owner；Bun 只写同文件系统 staging generation，完整解析 resolved manifest 与依赖闭包后，
+整棵 generation 原子 rename 到由 package identity、resolved version 与唯一 generation identity 共同派生的
+不可变 revision 路径。
+final tree 再验证且 completeness receipt committed 后才把 module directory 返回给 Plugin/Provider reader。
+dependency resolution 区分“候选目录不存在”与“首个候选存在但 manifest 损坏或 identity 错误”：只有前者
+继续查找祖先 `node_modules`。`npm:` alias 仍按 dependency key 定位目录，但按其 target package identity
+校验 manifest；递归队列保留每条声明的 key 与 spec。
+新版本和同版本恢复都发布到相邻 generation，不改写、删除或覆盖任何已经返回的 revision；没有 receipt
+或闭包重新验证失败的 generation 只会被旁路，不能成为 reader 结果。跨进程锁只负责避免重复工作，失锁的
+owner 也只能发布自己的唯一 generation，不能破坏另一 owner 已返回的 bytes。旧 flat cache 不参与读取或 fallback。
+staging intent 在创建目录或运行 Bun 前持久化，并记录精确 staging path 与操作系统进程 occurrence。
+该 path 必须是 `staging/<generation UUID>` 的直接 child，且 UUID 与 final revision generation identity 完全相同；
+恢复按规范化后的精确 generation path 分组，不能用祖先、后代或另一 final generation 的 intent 扩大删除范围。
+恢复只回收已经终态或精确进程 occurrence 被证明死亡的 preparation；失锁但仍存活的 owner 不会被误删。
+
 ## 并发策略
 
 不使用 ETag 或乐观锁。写入者在共享 canonical-file owner 内读取、合并并原子替换；读取者以 canonical

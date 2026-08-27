@@ -1,6 +1,7 @@
 import z from "zod"
+import { createHash, randomUUID } from "node:crypto"
 import { Global } from "../global"
-import { acquireProcessLock } from "../util/process-lock"
+import { CROSS_PROCESS_LOCK_RETRY, withProcessLock } from "../util/process-lock"
 import fs from "node:fs/promises"
 import { PackageInstallReceipt } from "./install-receipt"
 import { Log } from "../util/log"
@@ -59,72 +60,84 @@ export namespace BunProc {
   )
 
   export async function install(pkg: string, version = "latest") {
-    // Use lock to ensure only one install at a time in this process...
-    using _ = await Lock.write("bun-install")
-    // ...and one across processes for the whole span from opening the
-    // occurrence to publishing its receipt. The in-process mutex alone let a
-    // second backend supersede the occurrence a first was installing under —
-    // the occurrence ID is deterministic per revision — after which the first
-    // committed its receipt into the second's occurrence while that install
-    // was still rewriting the shared tree.
-    await fs.mkdir(Global.Path.cache, { recursive: true })
-    const releaseCacheOwner = await acquireProcessLock(Global.Path.cache, { realpath: false })
-    try {
-      return await installOwned(pkg, version)
-    } finally {
-      await releaseCacheOwner()
-    }
+    const packageRoot = packagePublicationRoot(pkg)
+    using _ = await Lock.write(`bun-install:${packageRoot}`)
+    await fs.mkdir(packageRoot, { recursive: true })
+    return withProcessLock(packageRoot, { realpath: false, retries: CROSS_PROCESS_LOCK_RETRY }, () =>
+      installOwned(pkg, version, packageRoot),
+    )
   }
 
-  async function installOwned(pkg: string, version: string) {
-    const mod = path.join(Global.Path.cache, "node_modules", pkg)
-    const pkgjsonPath = path.join(Global.Path.cache, "package.json")
-    const packageSchema = z.object({ dependencies: z.record(z.string(), z.string()).optional() }).passthrough()
-    const parsed = (await Filesystem.exists(pkgjsonPath))
-      ? packageSchema.parse(await Filesystem.readJson(pkgjsonPath))
-      : { dependencies: {} as Record<string, string> }
-    if (!parsed.dependencies) parsed.dependencies = {} as Record<string, string>
-    const dependencies = parsed.dependencies
-    const modExists = await Filesystem.exists(mod)
-    const cachedVersion = dependencies[pkg]
+  function identitySegment(value: string) {
+    return createHash("sha256").update(value).digest("hex")
+  }
 
-    async function installedVersion(expected?: string) {
-      const installed = z
-        .object({ version: z.string().min(1) })
-        .passthrough()
-        .parse(await Filesystem.readJson(path.join(mod, "package.json"))).version
-      if (expected !== undefined && installed !== expected) {
-        throw new Error(
-          `Cached package version mismatch for ${pkg}: cache records ${expected}, installed package reports ${installed}`,
-        )
-      }
-      return installed
+  function packagePublicationRoot(pkg: string) {
+    return path.join(Global.Path.cache, "package-installations", identitySegment(pkg))
+  }
+
+  function revisionParent(packageRoot: string, version: string) {
+    return path.join(packageRoot, "revisions", identitySegment(version))
+  }
+
+  async function installedVersion(moduleDirectory: string, pkg: string, expected?: string) {
+    const installed = z
+      .object({ version: z.string().min(1) })
+      .passthrough()
+      .parse(await Filesystem.readJson(path.join(moduleDirectory, "package.json"))).version
+    if (expected !== undefined && installed !== expected) {
+      throw new Error(
+        `Published package version mismatch for ${pkg}: revision records ${expected}, installed package reports ${installed}`,
+      )
     }
+    return installed
+  }
 
-    // A cached tree is usable only when its completeness receipt exists. A
-    // killed install leaves node_modules and a readable manifest behind, and
-    // treating those as proof of installation is what made every later load
-    // fail persistently against an incomplete tree instead of completing it.
-    if (!modExists || !cachedVersion) {
-      // continue to install
-    } else if (version !== "latest" && cachedVersion === version) {
-      await installedVersion(cachedVersion)
-      if (await PackageInstallReceipt.isPublished({ root: Global.Path.cache, package: pkg, version: cachedVersion }))
-        return mod
-      log.info("cached package has no completeness receipt, reinstalling", { pkg, cachedVersion })
-    } else if (version === "latest") {
-      await installedVersion(cachedVersion)
-      const published = await PackageInstallReceipt.isPublished({
-        root: Global.Path.cache,
+  async function readyRevision(packageRoot: string, pkg: string, resolvedVersion: string) {
+    const parent = revisionParent(packageRoot, resolvedVersion)
+    const generations = await fs.readdir(parent, { withFileTypes: true }).catch((error: NodeJS.ErrnoException) => {
+      if (error.code === "ENOENT") return []
+      throw error
+    })
+    for (const generation of generations
+      .filter((entry) => entry.isDirectory())
+      .map((entry) => entry.name)
+      .sort()) {
+      const root = path.join(parent, generation)
+      const moduleDirectory = path.join(root, "node_modules", pkg)
+      if (!(await PackageInstallReceipt.isPublished({ root, package: pkg, version: resolvedVersion }))) continue
+      const valid = await PackageInstallReceipt.verifyTree({
+        root,
         package: pkg,
-        version: cachedVersion,
-      })
-      const isOutdated = await PackageRegistry.isOutdated(pkg, cachedVersion, Global.Path.cache)
-      if (published && !isOutdated) return mod
-      log.info("proceeding with install", { pkg, cachedVersion, published, isOutdated })
+        resolvedVersion,
+        moduleDirectory,
+      }).then(
+        () => true,
+        () => false,
+      )
+      if (valid) return moduleDirectory
     }
+    return undefined
+  }
 
-    // Build command arguments
+  function exactVersion(selector: string) {
+    return /^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$/.test(selector) ? selector : undefined
+  }
+
+  async function resolveVersion(pkg: string, selector: string, cwd: string) {
+    return exactVersion(selector) ?? PackageRegistry.info(`${pkg}@${selector}`, "version", cwd)
+  }
+
+  async function installOwned(pkg: string, version: string, packageRoot: string) {
+    await PackageInstallReceipt.recoverAbandonedPreparations({ packageRoot, package: pkg })
+    const candidateVersion = await resolveVersion(pkg, version, packageRoot)
+    const ready = await readyRevision(packageRoot, pkg, candidateVersion)
+    if (ready) return ready
+
+    const stagingParent = path.join(packageRoot, "staging")
+    const generationID = randomUUID()
+    const stagingRoot = path.join(stagingParent, generationID)
+
     const args = [
       "add",
       "--force",
@@ -132,7 +145,7 @@ export namespace BunProc {
       // Workaround for bun issue oven-sh/bun#19936: --no-cache required under proxy/CI.
       ...(proxied() || process.env.CI ? ["--no-cache"] : []),
       "--cwd",
-      Global.Path.cache,
+      stagingRoot,
       pkg + "@" + version,
     ]
 
@@ -147,14 +160,21 @@ export namespace BunProc {
 
     // The occurrence is durable BEFORE the tree is mutated, so an install
     // killed halfway leaves an unsettled occurrence — never a receipt.
-    const occurrenceID = await PackageInstallReceipt.begin({
-      root: Global.Path.cache,
+    const finalRootFor = (resolvedVersion: string) =>
+      path.join(revisionParent(packageRoot, resolvedVersion), generationID)
+    let occurrenceRoot = finalRootFor(candidateVersion)
+    let occurrenceID = await PackageInstallReceipt.begin({
+      root: occurrenceRoot,
       package: pkg,
       requestedVersion: version,
+      preparationRoot: stagingRoot,
     })
     try {
+      await fs.mkdir(stagingParent, { recursive: true })
+      await fs.mkdir(stagingRoot, { recursive: false })
+      await Filesystem.writeJson(path.join(stagingRoot, "package.json"), { private: true, dependencies: {} })
       await BunProc.run(args, {
-        cwd: Global.Path.cache,
+        cwd: stagingRoot,
       }).catch((e) => {
         throw new InstallFailedError(
           { pkg, version },
@@ -165,24 +185,51 @@ export namespace BunProc {
       })
 
       // The installed package metadata, not the requested selector, owns the cached version.
-      const resolvedVersion = await installedVersion()
+      const stagedModule = path.join(stagingRoot, "node_modules", pkg)
+      const resolvedVersion = await installedVersion(stagedModule, pkg)
+      await PackageInstallReceipt.verifyTree({
+        root: stagingRoot,
+        package: pkg,
+        resolvedVersion,
+        moduleDirectory: stagedModule,
+      })
 
-      parsed.dependencies[pkg] = resolvedVersion
-      await Filesystem.writeJson(pkgjsonPath, parsed)
-      // Readiness is published only after the resolved tree verifies.
+      const finalRoot = finalRootFor(resolvedVersion)
+      const finalModule = path.join(finalRoot, "node_modules", pkg)
+      const existingReady = await readyRevision(packageRoot, pkg, resolvedVersion)
+      if (existingReady) {
+        await fs.rm(stagingRoot, { recursive: true, force: true })
+        await PackageInstallReceipt.rollback(occurrenceID, "resolved revision already published")
+        return existingReady
+      }
+      if (finalRoot !== occurrenceRoot) {
+        const priorOccurrenceID = occurrenceID
+        occurrenceRoot = finalRoot
+        occurrenceID = await PackageInstallReceipt.begin({
+          root: occurrenceRoot,
+          package: pkg,
+          requestedVersion: version,
+          preparationRoot: stagingRoot,
+        })
+        await PackageInstallReceipt.rollback(priorOccurrenceID, "registry resolution changed during installation")
+      }
+      await fs.mkdir(path.dirname(finalRoot), { recursive: true })
+      await fs.rename(stagingRoot, finalRoot)
+
       await PackageInstallReceipt.verifyAndPublish({
         occurrenceID,
-        root: Global.Path.cache,
+        root: finalRoot,
         package: pkg,
         requestedVersion: version,
         resolvedVersion,
-        moduleDirectory: mod,
+        moduleDirectory: finalModule,
       })
-      return mod
+      return finalModule
     } catch (error) {
       await PackageInstallReceipt.rollback(occurrenceID, error instanceof Error ? error.message : String(error)).catch(
         () => undefined,
       )
+      await fs.rm(stagingRoot, { recursive: true, force: true }).catch(() => undefined)
       throw error
     }
   }
