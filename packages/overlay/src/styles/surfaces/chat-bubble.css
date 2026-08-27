@@ -171,7 +171,7 @@
   min-width: 0;
   overflow: hidden;
   color: var(--text);
-  font-size: var(--ui-font-title);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-body);
   line-height: var(--ui-line-height-relaxed);
   overflow-wrap: anywhere;
@@ -546,7 +546,7 @@
 
 .chat-bubble-row[data-kind="agent"] .msg-text,
 .chat-bubble-row[data-role="user"] .msg-text {
-  font-size: var(--ui-font-title);
+  font-size: var(--ui-font-body);
   line-height: var(--ui-line-height-relaxed);
 }
 

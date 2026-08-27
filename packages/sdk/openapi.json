@@ -3929,6 +3929,9 @@
         "properties": {
           "properties": {
             "properties": {
+              "info": {
+                "$ref": "#/components/schemas/VisibleMessage"
+              },
               "messageID": {
                 "type": "string"
               },
@@ -3938,7 +3941,8 @@
             },
             "required": [
               "sessionID",
-              "messageID"
+              "messageID",
+              "info"
             ],
             "type": "object"
           },
@@ -15833,6 +15837,10 @@
                                     "minLength": 1,
                                     "type": "string"
                                   },
+                                  "messageID": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
                                   "orderKey": {
                                     "minLength": 1,
                                     "type": "string"
@@ -15848,6 +15856,7 @@
                                 },
                                 "required": [
                                   "id",
+                                  "messageID",
                                   "orderKey",
                                   "type",
                                   "text"
@@ -15861,6 +15870,10 @@
                                     "type": "string"
                                   },
                                   "id": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "messageID": {
                                     "minLength": 1,
                                     "type": "string"
                                   },
@@ -15886,6 +15899,7 @@
                                 },
                                 "required": [
                                   "id",
+                                  "messageID",
                                   "orderKey",
                                   "type",
                                   "tool",
@@ -15903,6 +15917,10 @@
                                     "minLength": 1,
                                     "type": "string"
                                   },
+                                  "messageID": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
                                   "orderKey": {
                                     "minLength": 1,
                                     "type": "string"
@@ -15914,6 +15932,7 @@
                                 },
                                 "required": [
                                   "id",
+                                  "messageID",
                                   "orderKey",
                                   "type",
                                   "files"
@@ -15930,6 +15949,10 @@
                                     "minLength": 1,
                                     "type": "string"
                                   },
+                                  "messageID": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
                                   "orderKey": {
                                     "minLength": 1,
                                     "type": "string"
@@ -15941,6 +15964,7 @@
                                 },
                                 "required": [
                                   "id",
+                                  "messageID",
                                   "orderKey",
                                   "type",
                                   "filename"
@@ -15954,6 +15978,10 @@
                                     "type": "string"
                                   },
                                   "message": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "messageID": {
                                     "minLength": 1,
                                     "type": "string"
                                   },
@@ -15972,6 +16000,7 @@
                                 },
                                 "required": [
                                   "id",
+                                  "messageID",
                                   "orderKey",
                                   "type",
                                   "message"
@@ -16111,6 +16140,10 @@
                                     "minLength": 1,
                                     "type": "string"
                                   },
+                                  "messageID": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
                                   "orderKey": {
                                     "minLength": 1,
                                     "type": "string"
@@ -16126,6 +16159,7 @@
                                 },
                                 "required": [
                                   "id",
+                                  "messageID",
                                   "orderKey",
                                   "type",
                                   "text"
@@ -16139,6 +16173,10 @@
                                     "type": "string"
                                   },
                                   "id": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "messageID": {
                                     "minLength": 1,
                                     "type": "string"
                                   },
@@ -16164,6 +16202,7 @@
                                 },
                                 "required": [
                                   "id",
+                                  "messageID",
                                   "orderKey",
                                   "type",
                                   "tool",
@@ -16181,6 +16220,10 @@
                                     "minLength": 1,
                                     "type": "string"
                                   },
+                                  "messageID": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
                                   "orderKey": {
                                     "minLength": 1,
                                     "type": "string"
@@ -16192,6 +16235,7 @@
                                 },
                                 "required": [
                                   "id",
+                                  "messageID",
                                   "orderKey",
                                   "type",
                                   "files"
@@ -16208,6 +16252,10 @@
                                     "minLength": 1,
                                     "type": "string"
                                   },
+                                  "messageID": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
                                   "orderKey": {
                                     "minLength": 1,
                                     "type": "string"
@@ -16219,6 +16267,7 @@
                                 },
                                 "required": [
                                   "id",
+                                  "messageID",
                                   "orderKey",
                                   "type",
                                   "filename"
@@ -16232,6 +16281,10 @@
                                     "type": "string"
                                   },
                                   "message": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "messageID": {
                                     "minLength": 1,
                                     "type": "string"
                                   },
@@ -16250,6 +16303,7 @@
                                 },
                                 "required": [
                                   "id",
+                                  "messageID",
                                   "orderKey",
                                   "type",
                                   "message"
@@ -82125,6 +82179,10 @@
                                               "minLength": 1,
                                               "type": "string"
                                             },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
                                             "orderKey": {
                                               "minLength": 1,
                                               "type": "string"
@@ -82140,6 +82198,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "text"
@@ -82153,6 +82212,10 @@
                                               "type": "string"
                                             },
                                             "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
                                               "minLength": 1,
                                               "type": "string"
                                             },
@@ -82178,6 +82241,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "tool",
@@ -82195,6 +82259,10 @@
                                               "minLength": 1,
                                               "type": "string"
                                             },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
                                             "orderKey": {
                                               "minLength": 1,
                                               "type": "string"
@@ -82206,6 +82274,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "files"
@@ -82222,6 +82291,10 @@
                                               "minLength": 1,
                                               "type": "string"
                                             },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
                                             "orderKey": {
                                               "minLength": 1,
                                               "type": "string"
@@ -82233,6 +82306,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "filename"
@@ -82246,6 +82320,10 @@
                                               "type": "string"
                                             },
                                             "message": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
                                               "minLength": 1,
                                               "type": "string"
                                             },
@@ -82264,6 +82342,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "message"
@@ -82403,6 +82482,10 @@
                                               "minLength": 1,
                                               "type": "string"
                                             },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
                                             "orderKey": {
                                               "minLength": 1,
                                               "type": "string"
@@ -82418,6 +82501,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "text"
@@ -82431,6 +82515,10 @@
                                               "type": "string"
                                             },
                                             "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
                                               "minLength": 1,
                                               "type": "string"
                                             },
@@ -82456,6 +82544,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "tool",
@@ -82473,6 +82562,10 @@
                                               "minLength": 1,
                                               "type": "string"
                                             },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
                                             "orderKey": {
                                               "minLength": 1,
                                               "type": "string"
@@ -82484,6 +82577,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "files"
@@ -82500,6 +82594,10 @@
                                               "minLength": 1,
                                               "type": "string"
                                             },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
                                             "orderKey": {
                                               "minLength": 1,
                                               "type": "string"
@@ -82511,6 +82609,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "filename"
@@ -82524,6 +82623,10 @@
                                               "type": "string"
                                             },
                                             "message": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
                                               "minLength": 1,
                                               "type": "string"
                                             },
@@ -82542,6 +82645,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "message"
@@ -84166,6 +84270,10 @@
                                               "minLength": 1,
                                               "type": "string"
                                             },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
                                             "orderKey": {
                                               "minLength": 1,
                                               "type": "string"
@@ -84181,6 +84289,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "text"
@@ -84194,6 +84303,10 @@
                                               "type": "string"
                                             },
                                             "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
                                               "minLength": 1,
                                               "type": "string"
                                             },
@@ -84219,6 +84332,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "tool",
@@ -84236,6 +84350,10 @@
                                               "minLength": 1,
                                               "type": "string"
                                             },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
                                             "orderKey": {
                                               "minLength": 1,
                                               "type": "string"
@@ -84247,6 +84365,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "files"
@@ -84263,6 +84382,10 @@
                                               "minLength": 1,
                                               "type": "string"
                                             },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
                                             "orderKey": {
                                               "minLength": 1,
                                               "type": "string"
@@ -84274,6 +84397,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "filename"
@@ -84287,6 +84411,10 @@
                                               "type": "string"
                                             },
                                             "message": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
                                               "minLength": 1,
                                               "type": "string"
                                             },
@@ -84305,6 +84433,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "message"
@@ -84444,6 +84573,10 @@
                                               "minLength": 1,
                                               "type": "string"
                                             },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
                                             "orderKey": {
                                               "minLength": 1,
                                               "type": "string"
@@ -84459,6 +84592,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "text"
@@ -84472,6 +84606,10 @@
                                               "type": "string"
                                             },
                                             "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
                                               "minLength": 1,
                                               "type": "string"
                                             },
@@ -84497,6 +84635,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "tool",
@@ -84514,6 +84653,10 @@
                                               "minLength": 1,
                                               "type": "string"
                                             },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
                                             "orderKey": {
                                               "minLength": 1,
                                               "type": "string"
@@ -84525,6 +84668,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "files"
@@ -84541,6 +84685,10 @@
                                               "minLength": 1,
                                               "type": "string"
                                             },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
                                             "orderKey": {
                                               "minLength": 1,
                                               "type": "string"
@@ -84552,6 +84700,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "filename"
@@ -84565,6 +84714,10 @@
                                               "type": "string"
                                             },
                                             "message": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
                                               "minLength": 1,
                                               "type": "string"
                                             },
@@ -84583,6 +84736,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "message"
@@ -85066,6 +85220,10 @@
                                               "minLength": 1,
                                               "type": "string"
                                             },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
                                             "orderKey": {
                                               "minLength": 1,
                                               "type": "string"
@@ -85081,6 +85239,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "text"
@@ -85094,6 +85253,10 @@
                                               "type": "string"
                                             },
                                             "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
                                               "minLength": 1,
                                               "type": "string"
                                             },
@@ -85119,6 +85282,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "tool",
@@ -85136,6 +85300,10 @@
                                               "minLength": 1,
                                               "type": "string"
                                             },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
                                             "orderKey": {
                                               "minLength": 1,
                                               "type": "string"
@@ -85147,6 +85315,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "files"
@@ -85163,6 +85332,10 @@
                                               "minLength": 1,
                                               "type": "string"
                                             },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
                                             "orderKey": {
                                               "minLength": 1,
                                               "type": "string"
@@ -85174,6 +85347,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "filename"
@@ -85187,6 +85361,10 @@
                                               "type": "string"
                                             },
                                             "message": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
                                               "minLength": 1,
                                               "type": "string"
                                             },
@@ -85205,6 +85383,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "message"
@@ -85344,6 +85523,10 @@
                                               "minLength": 1,
                                               "type": "string"
                                             },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
                                             "orderKey": {
                                               "minLength": 1,
                                               "type": "string"
@@ -85359,6 +85542,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "text"
@@ -85372,6 +85556,10 @@
                                               "type": "string"
                                             },
                                             "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
                                               "minLength": 1,
                                               "type": "string"
                                             },
@@ -85397,6 +85585,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "tool",
@@ -85414,6 +85603,10 @@
                                               "minLength": 1,
                                               "type": "string"
                                             },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
                                             "orderKey": {
                                               "minLength": 1,
                                               "type": "string"
@@ -85425,6 +85618,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "files"
@@ -85441,6 +85635,10 @@
                                               "minLength": 1,
                                               "type": "string"
                                             },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
                                             "orderKey": {
                                               "minLength": 1,
                                               "type": "string"
@@ -85452,6 +85650,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "filename"
@@ -85465,6 +85664,10 @@
                                               "type": "string"
                                             },
                                             "message": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
                                               "minLength": 1,
                                               "type": "string"
                                             },
@@ -85483,6 +85686,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "message"
@@ -101877,6 +102081,10 @@
                                               "minLength": 1,
                                               "type": "string"
                                             },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
                                             "orderKey": {
                                               "minLength": 1,
                                               "type": "string"
@@ -101892,6 +102100,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "text"
@@ -101905,6 +102114,10 @@
                                               "type": "string"
                                             },
                                             "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
                                               "minLength": 1,
                                               "type": "string"
                                             },
@@ -101930,6 +102143,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "tool",
@@ -101947,6 +102161,10 @@
                                               "minLength": 1,
                                               "type": "string"
                                             },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
                                             "orderKey": {
                                               "minLength": 1,
                                               "type": "string"
@@ -101958,6 +102176,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "files"
@@ -101974,6 +102193,10 @@
                                               "minLength": 1,
                                               "type": "string"
                                             },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
                                             "orderKey": {
                                               "minLength": 1,
                                               "type": "string"
@@ -101985,6 +102208,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "filename"
@@ -101998,6 +102222,10 @@
                                               "type": "string"
                                             },
                                             "message": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
                                               "minLength": 1,
                                               "type": "string"
                                             },
@@ -102016,6 +102244,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "message"
@@ -102155,6 +102384,10 @@
                                               "minLength": 1,
                                               "type": "string"
                                             },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
                                             "orderKey": {
                                               "minLength": 1,
                                               "type": "string"
@@ -102170,6 +102403,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "text"
@@ -102183,6 +102417,10 @@
                                               "type": "string"
                                             },
                                             "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
                                               "minLength": 1,
                                               "type": "string"
                                             },
@@ -102208,6 +102446,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "tool",
@@ -102225,6 +102464,10 @@
                                               "minLength": 1,
                                               "type": "string"
                                             },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
                                             "orderKey": {
                                               "minLength": 1,
                                               "type": "string"
@@ -102236,6 +102479,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "files"
@@ -102252,6 +102496,10 @@
                                               "minLength": 1,
                                               "type": "string"
                                             },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
                                             "orderKey": {
                                               "minLength": 1,
                                               "type": "string"
@@ -102263,6 +102511,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "filename"
@@ -102276,6 +102525,10 @@
                                               "type": "string"
                                             },
                                             "message": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
                                               "minLength": 1,
                                               "type": "string"
                                             },
@@ -102294,6 +102547,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "message"
@@ -106409,6 +106663,10 @@
                                               "minLength": 1,
                                               "type": "string"
                                             },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
                                             "orderKey": {
                                               "minLength": 1,
                                               "type": "string"
@@ -106424,6 +106682,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "text"
@@ -106437,6 +106696,10 @@
                                               "type": "string"
                                             },
                                             "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
                                               "minLength": 1,
                                               "type": "string"
                                             },
@@ -106462,6 +106725,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "tool",
@@ -106479,6 +106743,10 @@
                                               "minLength": 1,
                                               "type": "string"
                                             },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
                                             "orderKey": {
                                               "minLength": 1,
                                               "type": "string"
@@ -106490,6 +106758,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "files"
@@ -106506,6 +106775,10 @@
                                               "minLength": 1,
                                               "type": "string"
                                             },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
                                             "orderKey": {
                                               "minLength": 1,
                                               "type": "string"
@@ -106517,6 +106790,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "filename"
@@ -106530,6 +106804,10 @@
                                               "type": "string"
                                             },
                                             "message": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
                                               "minLength": 1,
                                               "type": "string"
                                             },
@@ -106548,6 +106826,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "message"
@@ -106687,6 +106966,10 @@
                                               "minLength": 1,
                                               "type": "string"
                                             },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
                                             "orderKey": {
                                               "minLength": 1,
                                               "type": "string"
@@ -106702,6 +106985,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "text"
@@ -106715,6 +106999,10 @@
                                               "type": "string"
                                             },
                                             "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
                                               "minLength": 1,
                                               "type": "string"
                                             },
@@ -106740,6 +107028,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "tool",
@@ -106757,6 +107046,10 @@
                                               "minLength": 1,
                                               "type": "string"
                                             },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
                                             "orderKey": {
                                               "minLength": 1,
                                               "type": "string"
@@ -106768,6 +107061,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "files"
@@ -106784,6 +107078,10 @@
                                               "minLength": 1,
                                               "type": "string"
                                             },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
                                             "orderKey": {
                                               "minLength": 1,
                                               "type": "string"
@@ -106795,6 +107093,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "filename"
@@ -106808,6 +107107,10 @@
                                               "type": "string"
                                             },
                                             "message": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
                                               "minLength": 1,
                                               "type": "string"
                                             },
@@ -106826,6 +107129,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "message"
@@ -107609,6 +107913,10 @@
                                               "minLength": 1,
                                               "type": "string"
                                             },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
                                             "orderKey": {
                                               "minLength": 1,
                                               "type": "string"
@@ -107624,6 +107932,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "text"
@@ -107637,6 +107946,10 @@
                                               "type": "string"
                                             },
                                             "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
                                               "minLength": 1,
                                               "type": "string"
                                             },
@@ -107662,6 +107975,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "tool",
@@ -107679,6 +107993,10 @@
                                               "minLength": 1,
                                               "type": "string"
                                             },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
                                             "orderKey": {
                                               "minLength": 1,
                                               "type": "string"
@@ -107690,6 +108008,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "files"
@@ -107706,6 +108025,10 @@
                                               "minLength": 1,
                                               "type": "string"
                                             },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
                                             "orderKey": {
                                               "minLength": 1,
                                               "type": "string"
@@ -107717,6 +108040,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "filename"
@@ -107730,6 +108054,10 @@
                                               "type": "string"
                                             },
                                             "message": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
                                               "minLength": 1,
                                               "type": "string"
                                             },
@@ -107748,6 +108076,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "message"
@@ -107887,6 +108216,10 @@
                                               "minLength": 1,
                                               "type": "string"
                                             },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
                                             "orderKey": {
                                               "minLength": 1,
                                               "type": "string"
@@ -107902,6 +108235,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "text"
@@ -107915,6 +108249,10 @@
                                               "type": "string"
                                             },
                                             "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
                                               "minLength": 1,
                                               "type": "string"
                                             },
@@ -107940,6 +108278,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "tool",
@@ -107957,6 +108296,10 @@
                                               "minLength": 1,
                                               "type": "string"
                                             },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
                                             "orderKey": {
                                               "minLength": 1,
                                               "type": "string"
@@ -107968,6 +108311,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "files"
@@ -107984,6 +108328,10 @@
                                               "minLength": 1,
                                               "type": "string"
                                             },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
                                             "orderKey": {
                                               "minLength": 1,
                                               "type": "string"
@@ -107995,6 +108343,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "filename"
@@ -108008,6 +108357,10 @@
                                               "type": "string"
                                             },
                                             "message": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
                                               "minLength": 1,
                                               "type": "string"
                                             },
@@ -108026,6 +108379,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "message"
@@ -108539,6 +108893,10 @@
                                               "minLength": 1,
                                               "type": "string"
                                             },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
                                             "orderKey": {
                                               "minLength": 1,
                                               "type": "string"
@@ -108554,6 +108912,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "text"
@@ -108567,6 +108926,10 @@
                                               "type": "string"
                                             },
                                             "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
                                               "minLength": 1,
                                               "type": "string"
                                             },
@@ -108592,6 +108955,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "tool",
@@ -108609,6 +108973,10 @@
                                               "minLength": 1,
                                               "type": "string"
                                             },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
                                             "orderKey": {
                                               "minLength": 1,
                                               "type": "string"
@@ -108620,6 +108988,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "files"
@@ -108636,6 +109005,10 @@
                                               "minLength": 1,
                                               "type": "string"
                                             },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
                                             "orderKey": {
                                               "minLength": 1,
                                               "type": "string"
@@ -108647,6 +109020,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "filename"
@@ -108660,6 +109034,10 @@
                                               "type": "string"
                                             },
                                             "message": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
                                               "minLength": 1,
                                               "type": "string"
                                             },
@@ -108678,6 +109056,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "message"
@@ -108817,6 +109196,10 @@
                                               "minLength": 1,
                                               "type": "string"
                                             },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
                                             "orderKey": {
                                               "minLength": 1,
                                               "type": "string"
@@ -108832,6 +109215,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "text"
@@ -108845,6 +109229,10 @@
                                               "type": "string"
                                             },
                                             "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
                                               "minLength": 1,
                                               "type": "string"
                                             },
@@ -108870,6 +109258,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "tool",
@@ -108887,6 +109276,10 @@
                                               "minLength": 1,
                                               "type": "string"
                                             },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
                                             "orderKey": {
                                               "minLength": 1,
                                               "type": "string"
@@ -108898,6 +109291,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "files"
@@ -108914,6 +109308,10 @@
                                               "minLength": 1,
                                               "type": "string"
                                             },
+                                            "messageID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
                                             "orderKey": {
                                               "minLength": 1,
                                               "type": "string"
@@ -108925,6 +109323,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "filename"
@@ -108938,6 +109337,10 @@
                                               "type": "string"
                                             },
                                             "message": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "messageID": {
                                               "minLength": 1,
                                               "type": "string"
                                             },
@@ -108956,6 +109359,7 @@
                                           },
                                           "required": [
                                             "id",
+                                            "messageID",
                                             "orderKey",
                                             "type",
                                             "message"

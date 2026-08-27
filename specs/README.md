@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest message-panel Agent activity and type-density convergence: [`2026-08-27-message-panel-agent-activity-and-type-density.md`](records/2026-08/2026-08-27-message-panel-agent-activity-and-type-density.md).
+
 Latest message-panel stream and payload convergence repair: [`2026-08-27-message-panel-stream-and-payload-convergence.md`](records/2026-08/2026-08-27-message-panel-stream-and-payload-convergence.md).
 
 Latest Work Ledger unowned Task visibility repair: [`2026-08-27-work-ledger-unowned-task-visibility.md`](records/2026-08/2026-08-27-work-ledger-unowned-task-visibility.md).

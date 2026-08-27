@@ -1745,6 +1745,16 @@ export namespace Session {
       // CASCADE delete handles parts automatically
       Database.transaction((db) => {
         assertTaskRootMessageMutable(db, input.messageID)
+        const current = db
+          .select({ data: MessageTable.data, timeCreated: MessageTable.time_created })
+          .from(MessageTable)
+          .where(and(eq(MessageTable.id, input.messageID), eq(MessageTable.session_id, input.sessionID)))
+          .get()
+        if (!current) throw new NotFoundError({ message: `Message not found: ${input.messageID}` })
+        const info = messageWithPersistedCreated(
+          { ...current.data, id: input.messageID, sessionID: input.sessionID } as Message.Info,
+          current.timeCreated,
+        )
         const removed = db
           .delete(MessageTable)
           .where(and(eq(MessageTable.id, input.messageID), eq(MessageTable.session_id, input.sessionID)))
@@ -1754,6 +1764,7 @@ export namespace Session {
         Bus.publishOwnedInTransaction(Message.Event.Removed, {
           sessionID: input.sessionID,
           messageID: input.messageID,
+          info,
         })
       })
       return input.messageID

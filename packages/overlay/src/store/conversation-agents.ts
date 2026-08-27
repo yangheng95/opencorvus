@@ -3,7 +3,11 @@ import { batch } from "solid-js"
 import type { AgentActivityRecord, AgentActivityStatus } from "../utils/agent-activity"
 import { normalizeAgentRole } from "../utils/message"
 import type { BoardSource } from "./board"
-import { conversationUserInputTextForMessage, renderedConversationCardTargetForMessage } from "../services/tree-writer"
+import {
+  conversationUserInputTextForMessage,
+  projectedConversationPartSnapshot,
+  renderedConversationCardTargetForMessage,
+} from "../services/tree-writer"
 import {
   compareTimelineOrderKeys,
   requireTimelineOrderKey,
@@ -120,6 +124,19 @@ const pendingTargetsBySource = new Map<string, Map<string, ConversationAgentTarg
 const pendingInputPreviewsBySource = new Map<string, Map<string, NonNullable<AgentActivityRecord["inputPreview"]>>>()
 type AgentTodoSnapshot = Pick<AgentActivityRecord, "todos" | "todoUpdatedAt">
 const pendingTodosBySource = new Map<string, Map<string, AgentTodoSnapshot>>()
+const LIVE_ACTIVITY_PART_LIMIT = 512
+const LIVE_ACTIVITY_PART_DELTA_FLUSH_INTERVAL_MS = 50
+type LiveActivityPartSnapshot = {
+  sourceKey: string
+  sessionID: string
+  messageID: string
+  partID: string
+  part: Record<string, unknown>
+  observedAt: number
+}
+const liveActivityParts = new Map<string, LiveActivityPartSnapshot>()
+const pendingLiveActivityPartKeys = new Set<string>()
+let liveActivityPartDeltaTimer: ReturnType<typeof setTimeout> | null = null
 
 type AgentRenderedTarget = Pick<AgentActivityRecord, "cardID" | "renderedCardID">
 type AgentProjectedRecordTarget = {
@@ -418,6 +435,118 @@ function mergeConversationAgentActivity(
   return [...byID.values()]
     .sort((first, second) => compareTimelineOrderKeys(first.orderKey, second.orderKey, "conversation agent activity"))
     .slice(-CONVERSATION_AGENT_ACTIVITY_LIMIT)
+}
+
+function liveActivityPartKey(sourceKey: string, sessionID: string, messageID: string, partID: string): string {
+  return `${sourceKey}\u0000${sessionID}\u0000${messageID}\u0000${partID}`
+}
+
+function liveActivityPartFromCurrentStore(
+  sourceKey: string,
+  sessionID: string,
+  messageID: string,
+  partID: string,
+): Record<string, unknown> | undefined {
+  if (conversationAgentStore.taskID !== sourceKey) return undefined
+  const exactIndex = conversationAgentIndexForOccurrence(conversationAgentStore.records, { sessionID, messageID })
+  const fallbackIndex = conversationAgentStore.records.findIndex(
+    (record) => record.sessionID === sessionID &&
+      record.activity.some((item) => item.id === partID && item.messageID === messageID),
+  )
+  const index = exactIndex ?? (fallbackIndex >= 0 ? fallbackIndex : undefined)
+  if (index === undefined) return undefined
+  const activity = conversationAgentStore.records[index]?.activity.find(
+    (item) => item.id === partID && item.type === "text",
+  )
+  if (!activity || activity.type !== "text" || activity.messageID !== messageID) return undefined
+  return {
+    id: activity.id,
+    orderKey: activity.orderKey,
+    type: "text",
+    text: activity.text,
+    sessionID,
+    messageID: activity.messageID,
+  }
+}
+
+function rememberLiveActivityPart(sourceKey: string, part: Record<string, unknown>, observedAt = 0): string | undefined {
+  const sessionID = String(part.sessionID || "")
+  const messageID = String(part.messageID || "")
+  const partID = String(part.id || "")
+  if (!sessionID || !messageID || !partID) return undefined
+  const key = liveActivityPartKey(sourceKey, sessionID, messageID, partID)
+  liveActivityParts.delete(key)
+  liveActivityParts.set(key, { sourceKey, sessionID, messageID, partID, part: { ...part }, observedAt })
+  while (liveActivityParts.size > LIVE_ACTIVITY_PART_LIMIT) {
+    const oldest = liveActivityParts.keys().next().value
+    if (typeof oldest !== "string") break
+    liveActivityParts.delete(oldest)
+    pendingLiveActivityPartKeys.delete(oldest)
+  }
+  return key
+}
+
+function forgetLiveActivityPart(sourceKey: string, sessionID: string, messageID: string, partID: string): void {
+  const key = liveActivityPartKey(sourceKey, sessionID, messageID, partID)
+  liveActivityParts.delete(key)
+  pendingLiveActivityPartKeys.delete(key)
+}
+
+function forgetLiveActivityMessage(sourceKey: string, sessionID: string, messageID: string): void {
+  for (const [key, snapshot] of liveActivityParts) {
+    if (
+      snapshot.sourceKey !== sourceKey ||
+      snapshot.sessionID !== sessionID ||
+      snapshot.messageID !== messageID
+    ) continue
+    liveActivityParts.delete(key)
+    pendingLiveActivityPartKeys.delete(key)
+  }
+}
+
+function clearLiveActivityParts(sourceKey?: string): void {
+  if (!sourceKey) {
+    liveActivityParts.clear()
+    pendingLiveActivityPartKeys.clear()
+    if (liveActivityPartDeltaTimer !== null) clearTimeout(liveActivityPartDeltaTimer)
+    liveActivityPartDeltaTimer = null
+    return
+  }
+  for (const [key, snapshot] of liveActivityParts) {
+    if (snapshot.sourceKey !== sourceKey) continue
+    liveActivityParts.delete(key)
+    pendingLiveActivityPartKeys.delete(key)
+  }
+}
+
+export function flushLiveConversationAgentPartDeltas(): void {
+  if (liveActivityPartDeltaTimer !== null) clearTimeout(liveActivityPartDeltaTimer)
+  liveActivityPartDeltaTimer = null
+  const keys = [...pendingLiveActivityPartKeys]
+  pendingLiveActivityPartKeys.clear()
+  batch(() => {
+    for (const key of keys) {
+      const snapshot = liveActivityParts.get(key)
+      if (!snapshot || !(snapshot.observedAt > 0)) continue
+      const activity = projectConversationAgentActivityPart(snapshot.part)
+      if (!activity) continue
+      applyConversationAgentActivityToStore(
+        snapshot.sourceKey,
+        snapshot.sessionID,
+        activity,
+        snapshot.observedAt,
+        snapshot.messageID,
+      )
+    }
+  })
+}
+
+function scheduleLiveConversationAgentPartDeltaFlush(): void {
+  if (liveActivityPartDeltaTimer !== null) return
+  liveActivityPartDeltaTimer = setTimeout(
+    flushLiveConversationAgentPartDeltas,
+    LIVE_ACTIVITY_PART_DELTA_FLUSH_INTERVAL_MS,
+  )
 }
 
 function applyConversationAgentActivityToStore(
@@ -906,6 +1035,7 @@ export function resetConversationAgentView(): void {
   pendingTargetsBySource.clear()
   pendingInputPreviewsBySource.clear()
   pendingTodosBySource.clear()
+  clearLiveActivityParts()
   setConversationAgentStore({ taskID: "", records: [] })
 }
 
@@ -1205,7 +1335,6 @@ export function applyLiveConversationAgentPartUpdated(sourceKeyInput: string, ev
   const properties = liveEventProperties(event)
   const part = properties?.part
   if (!part || typeof part !== "object" || Array.isArray(part)) return
-  if (!livePartHasDisplay(part)) return
   const messageID = String(part.messageID || "")
   const sessionID = String(part.sessionID || "")
   if (!messageID || !sessionID) throw new Error("conversation agent live view part missing messageID/sessionID")
@@ -1222,6 +1351,11 @@ export function applyLiveConversationAgentPartUpdated(sourceKeyInput: string, ev
   }
   const rawStage = liveRawStageFromMessageInfo({ channel, role })
   if (!rawStage) return
+  if (role !== "user") {
+    forgetLiveActivityPart(sourceKey, sessionID, messageID, String(part.id || ""))
+    rememberLiveActivityPart(sourceKey, part)
+  }
+  if (!livePartHasDisplay(part)) return
   const observedAt = liveEventObservedAt(event)
   if (!(observedAt > 0)) {
     throw new Error("conversation agent live view message.part.updated missing emitted time")
@@ -1304,6 +1438,138 @@ export function applyLiveConversationAgentPartUpdated(sourceKeyInput: string, ev
     }
     if (activity) applyConversationAgentActivityToStore(sourceKey, sessionID, activity, observedAt, messageID)
   })
+}
+
+export function applyLiveConversationAgentMessageRemoved(
+  sourceKeyInput: string,
+  event: any,
+): void {
+  const sourceKey = String(sourceKeyInput || "").trim()
+  if (!sourceKey) throw new Error("conversation agent live view requires a source key")
+  const properties = liveEventProperties(event)
+  const sessionID = String(properties?.sessionID || "")
+  const messageID = String(properties?.messageID || "")
+  if (!sessionID || !messageID) {
+    throw new Error("conversation agent live Message removal missing sessionID/messageID")
+  }
+  const info = properties?.info
+  if (!info || typeof info !== "object" || Array.isArray(info)) {
+    throw new Error("conversation agent live Message removal missing canonical info")
+  }
+  if (String(info.id || "") !== messageID || String(info.sessionID || "") !== sessionID) {
+    throw new Error(`conversation agent live Message removal ${messageID} info identity drift`)
+  }
+  const role = String(info.role || "")
+  if (role !== "user" && role !== "assistant") {
+    throw new Error(`conversation agent live Message removal ${messageID} missing canonical role`)
+  }
+  forgetLiveActivityMessage(sourceKey, sessionID, messageID)
+  if (conversationAgentStore.taskID !== sourceKey) return
+  if (role === "user") {
+    const index = conversationAgentIndexForOccurrence(conversationAgentStore.records, {
+      sessionID,
+      inputMessageID: messageID,
+    })
+    if (index === undefined) return
+    const record = conversationAgentStore.records[index]
+    if (!record) return
+    for (const occurrenceMessageID of new Set([messageID, ...(record.messageIDs ?? [])])) {
+      forgetLiveActivityMessage(sourceKey, sessionID, occurrenceMessageID)
+    }
+    forgetPendingTargets(sourceKey, new Set([messageID]))
+    pendingInputPreviewsBySource.get(sourceKey)?.delete(messageID)
+    setConversationAgentStore("records", (records) => records.filter((_, candidateIndex) => candidateIndex !== index))
+    return
+  }
+  const observedAt = liveEventObservedAt(event)
+  setConversationAgentStore("records", (records) => records.map((record) => {
+    if (record.sessionID !== sessionID) return record
+    const ownsMessage = record.messageIDs?.includes(messageID) === true
+    const ownsActivity = record.activity.some((item) => item.messageID === messageID)
+    if (!ownsMessage && !ownsActivity) return record
+    return {
+      ...record,
+      lastObservedAt: observedAt > 0 ? Math.max(record.lastObservedAt, observedAt) : record.lastObservedAt,
+      messageIDs: record.messageIDs?.filter((candidate) => candidate !== messageID),
+      activity: record.activity.filter((item) => item.messageID !== messageID),
+    }
+  }))
+}
+
+export function applyLiveConversationAgentPartDelta(sourceKeyInput: string, event: any): void {
+  const sourceKey = String(sourceKeyInput || "").trim()
+  if (!sourceKey) throw new Error("conversation agent live view requires a source key")
+  const properties = liveEventProperties(event)
+  const partType = String(properties?.partType || "")
+  const field = String(properties?.field || "")
+  const delta = typeof properties?.delta === "string" ? properties.delta : ""
+  if (partType !== "text" || field !== "text" || !delta) return
+  const channel = typeof properties?.channel === "string" ? properties.channel.trim() : ""
+  const role = typeof properties?.role === "string" ? properties.role.trim() : ""
+  const rawStage = liveRawStageFromMessageInfo({ channel, role })
+  if (!rawStage || role === "user") return
+  const sessionID = String(properties?.sessionID || "")
+  const messageID = String(properties?.messageID || "")
+  const partID = String(properties?.partID || "")
+  if (!sessionID || !messageID || !partID) {
+    throw new Error("conversation agent live text delta missing sessionID/messageID/partID")
+  }
+  const key = liveActivityPartKey(sourceKey, sessionID, messageID, partID)
+  const snapshot = liveActivityParts.get(key)
+  const initialPart = snapshot?.part ??
+    projectedConversationPartSnapshot(sessionID, partID) ??
+    liveActivityPartFromCurrentStore(sourceKey, sessionID, messageID, partID)
+  if (!initialPart) {
+    throw new Error(`conversation agent live text delta ${partID} missing initial Part snapshot`)
+  }
+  if (
+    String(initialPart.id || "") !== partID ||
+    String(initialPart.sessionID || "") !== sessionID ||
+    String(initialPart.messageID || "") !== messageID ||
+    initialPart.type !== "text"
+  ) {
+    throw new Error(`conversation agent live text delta ${partID} initial Part identity drift`)
+  }
+  const observedAt = liveEventObservedAt(event)
+  if (!(observedAt > 0)) throw new Error("conversation agent live text delta missing emitted time")
+  const nextPart = {
+    ...initialPart,
+    text: `${typeof initialPart.text === "string" ? initialPart.text : ""}${delta}`,
+  }
+  rememberLiveActivityPart(sourceKey, nextPart, observedAt)
+  pendingLiveActivityPartKeys.add(key)
+  scheduleLiveConversationAgentPartDeltaFlush()
+}
+
+export function applyLiveConversationAgentPartRemoved(sourceKeyInput: string, event: any): void {
+  const sourceKey = String(sourceKeyInput || "").trim()
+  if (!sourceKey) throw new Error("conversation agent live view requires a source key")
+  const properties = liveEventProperties(event)
+  const sessionID = String(properties?.sessionID || "")
+  const messageID = String(properties?.messageID || "")
+  const partID = String(properties?.partID || "")
+  if (!sessionID || !messageID || !partID) {
+    throw new Error("conversation agent live Part removal missing sessionID/messageID/partID")
+  }
+  forgetLiveActivityPart(sourceKey, sessionID, messageID, partID)
+  if (conversationAgentStore.taskID !== sourceKey) return
+  let index = conversationAgentIndexForOccurrence(conversationAgentStore.records, { sessionID, messageID })
+  if (index === undefined) {
+    const matches = conversationAgentStore.records
+      .map((record, candidateIndex) => ({ record, candidateIndex }))
+      .filter(({ record }) => record.sessionID === sessionID && record.activity.some((item) => item.id === partID))
+    if (matches.length > 1) {
+      throw new Error(`conversation agent live Part removal ${partID} spans multiple execution occurrences`)
+    }
+    index = matches[0]?.candidateIndex
+  }
+  if (index === undefined) return
+  const observedAt = liveEventObservedAt(event)
+  setConversationAgentStore("records", index, (record) => ({
+    ...record,
+    lastObservedAt: observedAt > 0 ? Math.max(record.lastObservedAt, observedAt) : record.lastObservedAt,
+    activity: record.activity.filter((item) => item.id !== partID),
+  }))
 }
 
 export function applyLiveConversationAgentTodoUpdated(sourceKeyInput: string, event: any): void {

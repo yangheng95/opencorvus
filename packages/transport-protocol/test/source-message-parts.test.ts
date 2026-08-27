@@ -10,6 +10,7 @@ describe("conversation source message parts", () => {
     const sourceParts = [
       {
         id: "source-url-part",
+        messageID: "message_source",
         orderKey: "0001",
         type: "source-url",
         sourceId: "source-url-id",
@@ -18,6 +19,7 @@ describe("conversation source message parts", () => {
       },
       {
         id: "source-document-part",
+        messageID: "message_source",
         orderKey: "0002",
         type: "source-document",
         sourceId: "source-document-id",
@@ -27,6 +29,7 @@ describe("conversation source message parts", () => {
       },
       {
         id: "source-file-part",
+        messageID: "message_source",
         orderKey: "0003",
         type: "source-file",
         sourceId: "source-file-id",
@@ -49,6 +52,7 @@ describe("conversation source message parts", () => {
         renderable: true,
         activity: {
           id: "source-url-part",
+          messageID: "message_source",
           orderKey: "0001",
           type: "source-url",
           sourceId: "source-url-id",
@@ -62,6 +66,7 @@ describe("conversation source message parts", () => {
         renderable: true,
         activity: {
           id: "source-document-part",
+          messageID: "message_source",
           orderKey: "0002",
           type: "source-document",
           sourceId: "source-document-id",
@@ -76,6 +81,7 @@ describe("conversation source message parts", () => {
         renderable: true,
         activity: {
           id: "source-file-part",
+          messageID: "message_source",
           orderKey: "0003",
           type: "source-file",
           sourceId: "source-file-id",

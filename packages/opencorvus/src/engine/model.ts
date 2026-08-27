@@ -825,12 +825,14 @@ export const TaskEvent = z.object({
 export const TaskConversationAgentActivityItem = z.discriminatedUnion("type", [
   z.object({
     id: z.string().min(1),
+    messageID: z.string().min(1),
     orderKey: z.string().min(1),
     type: z.literal("text"),
     text: z.string().min(1),
   }),
   z.object({
     id: z.string().min(1),
+    messageID: z.string().min(1),
     orderKey: z.string().min(1),
     type: z.literal("tool"),
     tool: z.string().min(1),
@@ -839,18 +841,21 @@ export const TaskConversationAgentActivityItem = z.discriminatedUnion("type", [
   }),
   z.object({
     id: z.string().min(1),
+    messageID: z.string().min(1),
     orderKey: z.string().min(1),
     type: z.literal("patch"),
     files: z.array(z.unknown()),
   }),
   z.object({
     id: z.string().min(1),
+    messageID: z.string().min(1),
     orderKey: z.string().min(1),
     type: z.literal("file"),
     filename: z.string().min(1),
   }),
   z.object({
     id: z.string().min(1),
+    messageID: z.string().min(1),
     orderKey: z.string().min(1),
     type: z.literal("part-error"),
     title: z.string().min(1).optional(),

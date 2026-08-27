@@ -1252,6 +1252,7 @@ export type EventMessagePartUpdated = {
 
 export type EventMessageRemoved = {
   properties: {
+    info: VisibleMessage
     messageID: string
     sessionID: string
   }
@@ -4629,6 +4630,7 @@ export type SessionConversationConnectionSnapshot = {
           activity: Array<
             | {
                 id: string
+                messageID: string
                 orderKey: string
                 text: string
                 type: "text"
@@ -4636,6 +4638,7 @@ export type SessionConversationConnectionSnapshot = {
             | {
                 callID?: string
                 id: string
+                messageID: string
                 orderKey: string
                 state: {
                   [key: string]: unknown
@@ -4646,18 +4649,21 @@ export type SessionConversationConnectionSnapshot = {
             | {
                 files: Array<unknown>
                 id: string
+                messageID: string
                 orderKey: string
                 type: "patch"
               }
             | {
                 filename: string
                 id: string
+                messageID: string
                 orderKey: string
                 type: "file"
               }
             | {
                 id: string
                 message: string
+                messageID: string
                 orderKey: string
                 title?: string
                 type: "part-error"
@@ -4692,6 +4698,7 @@ export type SessionConversationConnectionSnapshot = {
           activity: Array<
             | {
                 id: string
+                messageID: string
                 orderKey: string
                 text: string
                 type: "text"
@@ -4699,6 +4706,7 @@ export type SessionConversationConnectionSnapshot = {
             | {
                 callID?: string
                 id: string
+                messageID: string
                 orderKey: string
                 state: {
                   [key: string]: unknown
@@ -4709,18 +4717,21 @@ export type SessionConversationConnectionSnapshot = {
             | {
                 files: Array<unknown>
                 id: string
+                messageID: string
                 orderKey: string
                 type: "patch"
               }
             | {
                 filename: string
                 id: string
+                messageID: string
                 orderKey: string
                 type: "file"
               }
             | {
                 id: string
                 message: string
+                messageID: string
                 orderKey: string
                 title?: string
                 type: "part-error"
@@ -24638,6 +24649,7 @@ export type SessionConversationResponses = {
             activity: Array<
               | {
                   id: string
+                  messageID: string
                   orderKey: string
                   text: string
                   type: "text"
@@ -24645,6 +24657,7 @@ export type SessionConversationResponses = {
               | {
                   callID?: string
                   id: string
+                  messageID: string
                   orderKey: string
                   state: {
                     [key: string]: unknown
@@ -24655,18 +24668,21 @@ export type SessionConversationResponses = {
               | {
                   files: Array<unknown>
                   id: string
+                  messageID: string
                   orderKey: string
                   type: "patch"
                 }
               | {
                   filename: string
                   id: string
+                  messageID: string
                   orderKey: string
                   type: "file"
                 }
               | {
                   id: string
                   message: string
+                  messageID: string
                   orderKey: string
                   title?: string
                   type: "part-error"
@@ -24701,6 +24717,7 @@ export type SessionConversationResponses = {
             activity: Array<
               | {
                   id: string
+                  messageID: string
                   orderKey: string
                   text: string
                   type: "text"
@@ -24708,6 +24725,7 @@ export type SessionConversationResponses = {
               | {
                   callID?: string
                   id: string
+                  messageID: string
                   orderKey: string
                   state: {
                     [key: string]: unknown
@@ -24718,18 +24736,21 @@ export type SessionConversationResponses = {
               | {
                   files: Array<unknown>
                   id: string
+                  messageID: string
                   orderKey: string
                   type: "patch"
                 }
               | {
                   filename: string
                   id: string
+                  messageID: string
                   orderKey: string
                   type: "file"
                 }
               | {
                   id: string
                   message: string
+                  messageID: string
                   orderKey: string
                   title?: string
                   type: "part-error"
@@ -25064,6 +25085,7 @@ export type SessionConversationResponses = {
             activity: Array<
               | {
                   id: string
+                  messageID: string
                   orderKey: string
                   text: string
                   type: "text"
@@ -25071,6 +25093,7 @@ export type SessionConversationResponses = {
               | {
                   callID?: string
                   id: string
+                  messageID: string
                   orderKey: string
                   state: {
                     [key: string]: unknown
@@ -25081,18 +25104,21 @@ export type SessionConversationResponses = {
               | {
                   files: Array<unknown>
                   id: string
+                  messageID: string
                   orderKey: string
                   type: "patch"
                 }
               | {
                   filename: string
                   id: string
+                  messageID: string
                   orderKey: string
                   type: "file"
                 }
               | {
                   id: string
                   message: string
+                  messageID: string
                   orderKey: string
                   title?: string
                   type: "part-error"
@@ -25127,6 +25153,7 @@ export type SessionConversationResponses = {
             activity: Array<
               | {
                   id: string
+                  messageID: string
                   orderKey: string
                   text: string
                   type: "text"
@@ -25134,6 +25161,7 @@ export type SessionConversationResponses = {
               | {
                   callID?: string
                   id: string
+                  messageID: string
                   orderKey: string
                   state: {
                     [key: string]: unknown
@@ -25144,18 +25172,21 @@ export type SessionConversationResponses = {
               | {
                   files: Array<unknown>
                   id: string
+                  messageID: string
                   orderKey: string
                   type: "patch"
                 }
               | {
                   filename: string
                   id: string
+                  messageID: string
                   orderKey: string
                   type: "file"
                 }
               | {
                   id: string
                   message: string
+                  messageID: string
                   orderKey: string
                   title?: string
                   type: "part-error"
@@ -25279,6 +25310,7 @@ export type SessionConversationHistoryResponses = {
             activity: Array<
               | {
                   id: string
+                  messageID: string
                   orderKey: string
                   text: string
                   type: "text"
@@ -25286,6 +25318,7 @@ export type SessionConversationHistoryResponses = {
               | {
                   callID?: string
                   id: string
+                  messageID: string
                   orderKey: string
                   state: {
                     [key: string]: unknown
@@ -25296,18 +25329,21 @@ export type SessionConversationHistoryResponses = {
               | {
                   files: Array<unknown>
                   id: string
+                  messageID: string
                   orderKey: string
                   type: "patch"
                 }
               | {
                   filename: string
                   id: string
+                  messageID: string
                   orderKey: string
                   type: "file"
                 }
               | {
                   id: string
                   message: string
+                  messageID: string
                   orderKey: string
                   title?: string
                   type: "part-error"
@@ -25342,6 +25378,7 @@ export type SessionConversationHistoryResponses = {
             activity: Array<
               | {
                   id: string
+                  messageID: string
                   orderKey: string
                   text: string
                   type: "text"
@@ -25349,6 +25386,7 @@ export type SessionConversationHistoryResponses = {
               | {
                   callID?: string
                   id: string
+                  messageID: string
                   orderKey: string
                   state: {
                     [key: string]: unknown
@@ -25359,18 +25397,21 @@ export type SessionConversationHistoryResponses = {
               | {
                   files: Array<unknown>
                   id: string
+                  messageID: string
                   orderKey: string
                   type: "patch"
                 }
               | {
                   filename: string
                   id: string
+                  messageID: string
                   orderKey: string
                   type: "file"
                 }
               | {
                   id: string
                   message: string
+                  messageID: string
                   orderKey: string
                   title?: string
                   type: "part-error"
@@ -30460,6 +30501,7 @@ export type TaskConversationResponses = {
             activity: Array<
               | {
                   id: string
+                  messageID: string
                   orderKey: string
                   text: string
                   type: "text"
@@ -30467,6 +30509,7 @@ export type TaskConversationResponses = {
               | {
                   callID?: string
                   id: string
+                  messageID: string
                   orderKey: string
                   state: {
                     [key: string]: unknown
@@ -30477,18 +30520,21 @@ export type TaskConversationResponses = {
               | {
                   files: Array<unknown>
                   id: string
+                  messageID: string
                   orderKey: string
                   type: "patch"
                 }
               | {
                   filename: string
                   id: string
+                  messageID: string
                   orderKey: string
                   type: "file"
                 }
               | {
                   id: string
                   message: string
+                  messageID: string
                   orderKey: string
                   title?: string
                   type: "part-error"
@@ -30523,6 +30569,7 @@ export type TaskConversationResponses = {
             activity: Array<
               | {
                   id: string
+                  messageID: string
                   orderKey: string
                   text: string
                   type: "text"
@@ -30530,6 +30577,7 @@ export type TaskConversationResponses = {
               | {
                   callID?: string
                   id: string
+                  messageID: string
                   orderKey: string
                   state: {
                     [key: string]: unknown
@@ -30540,18 +30588,21 @@ export type TaskConversationResponses = {
               | {
                   files: Array<unknown>
                   id: string
+                  messageID: string
                   orderKey: string
                   type: "patch"
                 }
               | {
                   filename: string
                   id: string
+                  messageID: string
                   orderKey: string
                   type: "file"
                 }
               | {
                   id: string
                   message: string
+                  messageID: string
                   orderKey: string
                   title?: string
                   type: "part-error"
@@ -31584,6 +31635,7 @@ export type TaskConversationResponses = {
             activity: Array<
               | {
                   id: string
+                  messageID: string
                   orderKey: string
                   text: string
                   type: "text"
@@ -31591,6 +31643,7 @@ export type TaskConversationResponses = {
               | {
                   callID?: string
                   id: string
+                  messageID: string
                   orderKey: string
                   state: {
                     [key: string]: unknown
@@ -31601,18 +31654,21 @@ export type TaskConversationResponses = {
               | {
                   files: Array<unknown>
                   id: string
+                  messageID: string
                   orderKey: string
                   type: "patch"
                 }
               | {
                   filename: string
                   id: string
+                  messageID: string
                   orderKey: string
                   type: "file"
                 }
               | {
                   id: string
                   message: string
+                  messageID: string
                   orderKey: string
                   title?: string
                   type: "part-error"
@@ -31647,6 +31703,7 @@ export type TaskConversationResponses = {
             activity: Array<
               | {
                   id: string
+                  messageID: string
                   orderKey: string
                   text: string
                   type: "text"
@@ -31654,6 +31711,7 @@ export type TaskConversationResponses = {
               | {
                   callID?: string
                   id: string
+                  messageID: string
                   orderKey: string
                   state: {
                     [key: string]: unknown
@@ -31664,18 +31722,21 @@ export type TaskConversationResponses = {
               | {
                   files: Array<unknown>
                   id: string
+                  messageID: string
                   orderKey: string
                   type: "patch"
                 }
               | {
                   filename: string
                   id: string
+                  messageID: string
                   orderKey: string
                   type: "file"
                 }
               | {
                   id: string
                   message: string
+                  messageID: string
                   orderKey: string
                   title?: string
                   type: "part-error"
@@ -31876,6 +31937,7 @@ export type TaskConversationHistoryResponses = {
             activity: Array<
               | {
                   id: string
+                  messageID: string
                   orderKey: string
                   text: string
                   type: "text"
@@ -31883,6 +31945,7 @@ export type TaskConversationHistoryResponses = {
               | {
                   callID?: string
                   id: string
+                  messageID: string
                   orderKey: string
                   state: {
                     [key: string]: unknown
@@ -31893,18 +31956,21 @@ export type TaskConversationHistoryResponses = {
               | {
                   files: Array<unknown>
                   id: string
+                  messageID: string
                   orderKey: string
                   type: "patch"
                 }
               | {
                   filename: string
                   id: string
+                  messageID: string
                   orderKey: string
                   type: "file"
                 }
               | {
                   id: string
                   message: string
+                  messageID: string
                   orderKey: string
                   title?: string
                   type: "part-error"
@@ -31939,6 +32005,7 @@ export type TaskConversationHistoryResponses = {
             activity: Array<
               | {
                   id: string
+                  messageID: string
                   orderKey: string
                   text: string
                   type: "text"
@@ -31946,6 +32013,7 @@ export type TaskConversationHistoryResponses = {
               | {
                   callID?: string
                   id: string
+                  messageID: string
                   orderKey: string
                   state: {
                     [key: string]: unknown
@@ -31956,18 +32024,21 @@ export type TaskConversationHistoryResponses = {
               | {
                   files: Array<unknown>
                   id: string
+                  messageID: string
                   orderKey: string
                   type: "patch"
                 }
               | {
                   filename: string
                   id: string
+                  messageID: string
                   orderKey: string
                   type: "file"
                 }
               | {
                   id: string
                   message: string
+                  messageID: string
                   orderKey: string
                   title?: string
                   type: "part-error"
@@ -32102,6 +32173,7 @@ export type TaskConversationSessionResponses = {
             activity: Array<
               | {
                   id: string
+                  messageID: string
                   orderKey: string
                   text: string
                   type: "text"
@@ -32109,6 +32181,7 @@ export type TaskConversationSessionResponses = {
               | {
                   callID?: string
                   id: string
+                  messageID: string
                   orderKey: string
                   state: {
                     [key: string]: unknown
@@ -32119,18 +32192,21 @@ export type TaskConversationSessionResponses = {
               | {
                   files: Array<unknown>
                   id: string
+                  messageID: string
                   orderKey: string
                   type: "patch"
                 }
               | {
                   filename: string
                   id: string
+                  messageID: string
                   orderKey: string
                   type: "file"
                 }
               | {
                   id: string
                   message: string
+                  messageID: string
                   orderKey: string
                   title?: string
                   type: "part-error"
@@ -32165,6 +32241,7 @@ export type TaskConversationSessionResponses = {
             activity: Array<
               | {
                   id: string
+                  messageID: string
                   orderKey: string
                   text: string
                   type: "text"
@@ -32172,6 +32249,7 @@ export type TaskConversationSessionResponses = {
               | {
                   callID?: string
                   id: string
+                  messageID: string
                   orderKey: string
                   state: {
                     [key: string]: unknown
@@ -32182,18 +32260,21 @@ export type TaskConversationSessionResponses = {
               | {
                   files: Array<unknown>
                   id: string
+                  messageID: string
                   orderKey: string
                   type: "patch"
                 }
               | {
                   filename: string
                   id: string
+                  messageID: string
                   orderKey: string
                   type: "file"
                 }
               | {
                   id: string
                   message: string
+                  messageID: string
                   orderKey: string
                   title?: string
                   type: "part-error"

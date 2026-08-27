@@ -17,6 +17,9 @@ import { pruneCardsAfterCursor } from "../store/card-tree"
 import {
   advanceLiveConversationAgentTranscriptSequence,
   applyLiveConversationAgentMessageUpdated,
+  applyLiveConversationAgentMessageRemoved,
+  applyLiveConversationAgentPartDelta,
+  applyLiveConversationAgentPartRemoved,
   applyLiveConversationAgentPartUpdated,
   applyLiveConversationAgentSessionStatus,
   applyLiveConversationAgentTodoUpdated,
@@ -24,7 +27,10 @@ import {
 import { markSessionConfigStale } from "./config"
 import { refreshActiveComposerModelFromSession } from "./composer-model"
 import { markExpertSquadCatalogStale } from "./expert-squad"
-import { applyEvent as applyTreeWriterEvent, isProjectionPrerequisiteError } from "./tree-writer"
+import {
+  applyEvent as applyTreeWriterEvent,
+  isProjectionPrerequisiteError,
+} from "./tree-writer"
 import { refreshConversationTurnArtifacts } from "./conversation"
 import { publishSubagentConversationLiveEvent } from "./subagent-conversation"
 import { isBrowserPreviewUpdateEvent, observeBrowserPreviewUpdateEvent } from "./browser-preview"
@@ -47,8 +53,14 @@ function writeSelectedMessageToTree(event: any, sourceEvent: any = event): void 
   publishSubagentConversationLiveEvent(event)
   if (event?.type === "message.updated") {
     applyLiveConversationAgentMessageUpdated(sourceKey, event)
+  } else if (event?.type === "message.removed") {
+    applyLiveConversationAgentMessageRemoved(sourceKey, event)
   } else if (event?.type === "message.part.updated") {
     applyLiveConversationAgentPartUpdated(sourceKey, event)
+  } else if (event?.type === "message.part.delta") {
+    applyLiveConversationAgentPartDelta(sourceKey, event)
+  } else if (event?.type === "message.part.removed") {
+    applyLiveConversationAgentPartRemoved(sourceKey, event)
   }
   if (event?.type !== "message.part.delta") {
     advanceLiveConversationAgentTranscriptSequence(sourceKey, event)

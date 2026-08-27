@@ -595,18 +595,21 @@ describe("conversation message part projection", () => {
     expect(
       projectConversationAgentActivityPart({
         id: "part_text",
+        messageID: "message_activity",
         orderKey: "v1:0000000000000100:0000000000000030:0000000000000000:part:part_text",
         type: "text",
         text: "  Inspecting\n\n the current layout  ",
       }),
     ).toEqual({
       id: "part_text",
+      messageID: "message_activity",
       orderKey: "v1:0000000000000100:0000000000000030:0000000000000000:part:part_text",
       type: "text",
       text: "Inspecting the current layout",
     })
     const tool = projectConversationAgentActivityPart({
       id: "part_tool",
+      messageID: "message_activity",
       orderKey: "v1:0000000000000102:0000000000000030:0000000000000000:part:part_tool",
       type: "tool",
       tool: "read_file",
@@ -618,6 +621,7 @@ describe("conversation message part projection", () => {
     })
     expect(tool).toMatchObject({
       id: "part_tool",
+      messageID: "message_activity",
       type: "tool",
       tool: "read_file",
       state: {

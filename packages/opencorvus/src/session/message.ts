@@ -793,6 +793,7 @@ export namespace Message {
       z.object({
         sessionID: z.string(),
         messageID: z.string(),
+        info: VisibleInfo,
       }),
       { tier: 3 },
     ),

@@ -672,6 +672,7 @@ export const CONVERSATION_AGENT_ACTIVITY_LIMIT = 24 as const
 
 interface ConversationAgentActivityBase {
   id: string
+  messageID: string
   orderKey: string
 }
 
@@ -756,11 +757,13 @@ export function projectConversationAgentActivityPart(value: unknown): Conversati
   if (!value || typeof value !== "object" || Array.isArray(value)) return null
   const part = value as Record<string, unknown>
   const id = typeof part.id === "string" ? part.id.trim() : ""
+  const messageID = typeof part.messageID === "string" ? part.messageID.trim() : ""
   const orderKey = typeof part.orderKey === "string" ? part.orderKey.trim() : ""
-  if (!id || !orderKey) return null
+  if (!id || !messageID || !orderKey) return null
+  const base = { id, messageID, orderKey }
   if (part.type === "text") {
     const text = compactConversationAgentActivityText(part.text, 360)
-    return text ? { id, orderKey, type: "text", text } : null
+    return text ? { ...base, type: "text", text } : null
   }
   if (part.type === "tool") {
     const tool = compactConversationAgentActivityText(part.tool, 120)
@@ -771,8 +774,7 @@ export function projectConversationAgentActivityPart(value: unknown): Conversati
         : {}
     const callID = compactConversationAgentActivityText(part.callID, 120)
     return {
-      id,
-      orderKey,
+      ...base,
       type: "tool",
       tool,
       ...(callID ? { callID } : {}),
@@ -781,19 +783,18 @@ export function projectConversationAgentActivityPart(value: unknown): Conversati
   }
   if (part.type === "patch") {
     const files = Array.isArray(part.files) ? (boundedConversationAgentActivityValue(part.files) as unknown[]) : []
-    return files.length > 0 ? { id, orderKey, type: "patch", files } : null
+    return files.length > 0 ? { ...base, type: "patch", files } : null
   }
   if (part.type === "file") {
     const filename = compactConversationAgentActivityText(part.filename ?? part.name ?? part.url, 180)
-    return filename ? { id, orderKey, type: "file", filename } : null
+    return filename ? { ...base, type: "file", filename } : null
   }
   if (part.type === "part-error") {
     const title = compactConversationAgentActivityText(part.title, 160)
     const message = compactConversationAgentActivityText(part.message ?? part.title, 360)
     return message
       ? {
-          id,
-          orderKey,
+          ...base,
           type: "part-error",
           ...(title ? { title } : {}),
           message,
@@ -805,7 +806,7 @@ export function projectConversationAgentActivityPart(value: unknown): Conversati
     const url = compactConversationAgentActivityText(part.url, 2048)
     const title = compactConversationAgentActivityText(part.title, 240)
     return sourceId && /^https?:\/\//i.test(url)
-      ? { id, orderKey, type: "source-url", sourceId, url, ...(title ? { title } : {}) }
+      ? { ...base, type: "source-url", sourceId, url, ...(title ? { title } : {}) }
       : null
   }
   if (part.type === "source-document") {
@@ -815,8 +816,7 @@ export function projectConversationAgentActivityPart(value: unknown): Conversati
     const filename = compactConversationAgentActivityText(part.filename, 240)
     return sourceId && mediaType && title
       ? {
-          id,
-          orderKey,
+          ...base,
           type: "source-document",
           sourceId,
           mediaType,
@@ -837,7 +837,7 @@ export function projectConversationAgentActivityPart(value: unknown): Conversati
         ? { startLine, endLine }
         : undefined
     return sourceId && path && title
-      ? { id, orderKey, type: "source-file", sourceId, path, title, ...(range ? { range } : {}) }
+      ? { ...base, type: "source-file", sourceId, path, title, ...(range ? { range } : {}) }
       : null
   }
   return null
