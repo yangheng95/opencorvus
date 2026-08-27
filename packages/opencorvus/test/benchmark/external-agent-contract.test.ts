@@ -59,7 +59,11 @@ import {
   renderTrajectorySVG,
   summarizeTranscriptUsage,
   createRestartableDrain,
+  EmptySuccessfulJsonResponseError,
   mapSettledWithBoundedConcurrency,
+  parseRequiredJsonResponse,
+  retryReadOnlyProjection,
+  settlePendingSnapshotAfterRefresh,
   type ProviderUsageRow,
   type AutomationBenchTrialLease,
 } from "../../script/benchmark/external-agent/contract"
@@ -159,6 +163,96 @@ describe("external agent benchmark contract", () => {
     drain.wake()
     await drain.waitForIdle()
     expect({ drained, pending, failure: drain.failure() }).toEqual({ drained: [1, 2], pending: [], failure: undefined })
+  })
+
+  test("settles only the pending batches captured before each catalog refresh", async () => {
+    const pending = new Set(["batch-19"])
+    const settled: Array<{ items: readonly string[]; catalog: number }> = []
+    let catalog = 0
+    await settlePendingSnapshotAfterRefresh({
+      pending,
+      refresh: async () => {
+        pending.add("batch-20")
+        catalog += 1
+        return catalog
+      },
+      settle: async (items, snapshot) => {
+        settled.push({ items, catalog: snapshot })
+      },
+    })
+    await settlePendingSnapshotAfterRefresh({
+      pending,
+      refresh: async () => {
+        catalog += 1
+        return catalog
+      },
+      settle: async (items, snapshot) => {
+        settled.push({ items, catalog: snapshot })
+      },
+    })
+
+    expect({ settled, pending: [...pending] }).toEqual({
+      settled: [
+        { items: ["batch-19"], catalog: 1 },
+        { items: ["batch-20"], catalog: 2 },
+      ],
+      pending: [],
+    })
+  })
+
+  test("retries a successful empty read-only projection and returns the next complete snapshot", async () => {
+    let attempts = 0
+    const delays: number[] = []
+    const snapshot = await retryReadOnlyProjection({
+      read: async () => {
+        attempts += 1
+        if (attempts === 1) return parseRequiredJsonResponse("", "/task/tsk_example/trace")
+        return parseRequiredJsonResponse<{ enabled: boolean }>(JSON.stringify({ enabled: true }), "/task/tsk_example/trace")
+      },
+      deadline: 1_000,
+      now: () => 0,
+      delay: async (milliseconds) => {
+        delays.push(milliseconds)
+      },
+    })
+
+    expect({ snapshot, attempts, delays }).toEqual({ snapshot: { enabled: true }, attempts: 2, delays: [250] })
+    expect(new EmptySuccessfulJsonResponseError("/task/tsk_example/trace").name).toBe(
+      "EmptySuccessfulJsonResponseError",
+    )
+  })
+
+  test("returns the typed empty-projection deadline result without admitting another read", async () => {
+    let now = 999
+    let attempts = 0
+    const outcome = await retryReadOnlyProjection({
+      read: async () => {
+        attempts += 1
+        return parseRequiredJsonResponse("", "/task/tsk_example/trace")
+      },
+      deadline: 1_000,
+      now: () => now,
+      delay: async (milliseconds) => {
+        now += milliseconds
+      },
+    }).then(
+      () => ({ kind: "unexpected_success" as const }),
+      (error) => ({
+        kind: "deadline" as const,
+        name: error instanceof Error ? error.name : "UnknownError",
+        route: error instanceof EmptySuccessfulJsonResponseError ? error.route : null,
+      }),
+    )
+
+    expect({ attempts, now, outcome }).toEqual({
+      attempts: 1,
+      now: 1_000,
+      outcome: {
+        kind: "deadline",
+        name: "EmptySuccessfulJsonResponseError",
+        route: "/task/tsk_example/trace",
+      },
+    })
   })
 
   test("reconciles a sanitized Provider diagnostic batch-receipt redaction chain", () => {

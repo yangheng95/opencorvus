@@ -7,6 +7,52 @@ import { ProviderError } from "../../../src/provider/error"
 
 export const EXTERNAL_BENCHMARK_SCHEMA_VERSION = 1 as const
 
+export class EmptySuccessfulJsonResponseError extends Error {
+  constructor(readonly route: string) {
+    super(`Successful JSON response for ${route} had an empty body`)
+    this.name = "EmptySuccessfulJsonResponseError"
+  }
+}
+
+export function parseRequiredJsonResponse<T>(body: string, route: string): T {
+  if (!body) throw new EmptySuccessfulJsonResponseError(route)
+  return JSON.parse(body) as T
+}
+
+export async function retryReadOnlyProjection<T>(input: {
+  read: () => Promise<T>
+  deadline: number
+  delayMs?: number
+  now?: () => number
+  delay?: (milliseconds: number) => Promise<void>
+}): Promise<T> {
+  const now = input.now ?? Date.now
+  const delay = input.delay ?? ((milliseconds: number) => Bun.sleep(milliseconds))
+  const delayMs = input.delayMs ?? 250
+  while (true) {
+    try {
+      return await input.read()
+    } catch (error) {
+      if (!(error instanceof EmptySuccessfulJsonResponseError) || now() >= input.deadline) throw error
+      await delay(Math.min(delayMs, Math.max(0, input.deadline - now())))
+      if (now() >= input.deadline) throw error
+    }
+  }
+}
+
+export async function settlePendingSnapshotAfterRefresh<Pending, Snapshot>(input: {
+  pending: Set<Pending>
+  include?: (item: Pending) => boolean
+  refresh: () => Promise<Snapshot>
+  settle: (items: readonly Pending[], snapshot: Snapshot) => Promise<void>
+}) {
+  const items = [...input.pending].filter((item) => input.include?.(item) ?? true)
+  for (const item of items) input.pending.delete(item)
+  const snapshot = await input.refresh()
+  await input.settle(items, snapshot)
+  return items
+}
+
 export async function mapSettledWithBoundedConcurrency<Input, Output>(
   values: readonly Input[],
   concurrency: number,

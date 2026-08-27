@@ -11,6 +11,7 @@ import {
   reconcileAutomationBenchBatchCandidates,
   reusableProfileRuns,
   rollingDashboardPlanPaths,
+  settlePendingSnapshotAfterRefresh,
 } from "./contract"
 
 type FrozenCase = {
@@ -606,27 +607,31 @@ const settlementDrain = createRestartableDrain({
     await new Promise<void>((resolve) => {
       setTimeout(resolve, 250)
     })
-    const catalog = await refreshCatalog()
-    for (const published of receiptPublicationPending) {
-      if (published.complete) {
-        const finalizedSlots = published.waves
-          .flat()
-          .filter((slot) => eligibleByCase(catalog, slot.profile).has(slot.case_index))
-        if (finalizedSlots.length !== published.waves.flat().length) {
-          throw new Error(`Completed receipt did not finalize every selected batch ${published.batchIndex} slot`)
+    await settlePendingSnapshotAfterRefresh({
+      pending: settlementRequests,
+      include: (candidate) => !candidate.receiptWritten,
+      refresh: refreshCatalog,
+      settle: async (ready, catalog) => {
+        for (const published of receiptPublicationPending) {
+          if (published.complete) {
+            const finalizedSlots = published.waves
+              .flat()
+              .filter((slot) => eligibleByCase(catalog, slot.profile).has(slot.case_index))
+            if (finalizedSlots.length !== published.waves.flat().length) {
+              throw new Error(`Completed receipt did not finalize every selected batch ${published.batchIndex} slot`)
+            }
+          }
+          published.receiptPublished = true
+          receiptPublicationPending.delete(published)
         }
-      }
-      published.receiptPublished = true
-      receiptPublicationPending.delete(published)
-    }
-    const ready = [...settlementRequests].filter((candidate) => !candidate.receiptWritten)
-    for (const candidate of ready) settlementRequests.delete(candidate)
-    for (const candidate of ready) {
-      if (!candidate.launchedByWave) {
-        throw new Error(`Batch ${candidate.batchIndex} launch outcomes are unavailable at settlement`)
-      }
-      await writeBatchReceipt(candidate, batchOutcomes(candidate, candidate.launchedByWave, catalog))
-    }
+        for (const candidate of ready) {
+          if (!candidate.launchedByWave) {
+            throw new Error(`Batch ${candidate.batchIndex} launch outcomes are unavailable at settlement`)
+          }
+          await writeBatchReceipt(candidate, batchOutcomes(candidate, candidate.launchedByWave, catalog))
+        }
+      },
+    })
     await queueDashboardWrite()
   },
 })

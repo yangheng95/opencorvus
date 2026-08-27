@@ -42,6 +42,8 @@ import {
   automationBenchRestrictedShellAuthority,
   automationBenchRestrictedShellSourceFile,
   failureObservationReceipt,
+  parseRequiredJsonResponse,
+  retryReadOnlyProjection,
   type ProviderUsageRow,
   type BenchmarkScheduledWake,
   type SkillMountMatrix,
@@ -1025,7 +1027,7 @@ async function requestJSON<T>(route: string, init: RequestInit = {}, projectScop
   } as BunFetchRequestInit)
   const body = await response.text()
   if (!response.ok) throw new Error(`${init.method ?? "GET"} ${url.pathname} failed ${response.status}: ${body}`)
-  return body ? (JSON.parse(body) as T) : (undefined as T)
+  return parseRequiredJsonResponse<T>(body, url.pathname)
 }
 
 /**
@@ -1102,7 +1104,7 @@ let latestObservationAt: number | undefined
 
 const orderedMessages = canonicalTranscriptOrder
 
-async function observations() {
+async function collectObservations() {
   if (!missionID || !missionSessionID) throw new Error("Mission has not been created")
   if (typeof missionSessionReceipt?.projectID !== "string" || !missionSessionReceipt.projectID) {
     throw new Error("Mission Session project identity is unavailable for delayed-wake observation")
@@ -1211,6 +1213,13 @@ async function observations() {
   return current
 }
 
+async function observations(deadline = Date.now() + arguments_.inactivityMs) {
+  return retryReadOnlyProjection({
+    read: collectObservations,
+    deadline,
+  })
+}
+
 function missionActivitySignature(current: Awaited<ReturnType<typeof observations>>) {
   return benchmarkActivitySignature({
     board: current.board,
@@ -1276,7 +1285,7 @@ async function waitForTerminal() {
   while (true) {
     throwIfTerminationRequested()
     throwIfMissionSchedulerDrainFailed()
-    current = await observations()
+    current = await observations(inactivityDeadline)
     const status = String(current.missionStatus.status ?? "")
     if (
       current.missionRecord.completion &&
@@ -1388,7 +1397,7 @@ async function waitForTerminalQuiescence(initial: Awaited<ReturnType<typeof obse
       if (currentMissionSchedulerSettlement()?.passed === false) {
         requestMissionSchedulerDrain()
         await Bun.sleep(1000)
-        const next = await observations()
+        const next = await observations(inactivityDeadline)
         const nextSignature = missionActivitySignature(next)
         if (nextSignature !== signature) inactivityDeadline = Date.now() + arguments_.inactivityMs
         current = next
@@ -1401,7 +1410,7 @@ async function waitForTerminalQuiescence(initial: Awaited<ReturnType<typeof obse
         "Mission protocol delivery settlement",
       )
       await Bun.sleep(2_000)
-      const confirmed = await observations()
+      const confirmed = await observations(inactivityDeadline)
       const confirmedSignature = missionActivitySignature(confirmed)
       const confirmedAudit = auditMissionQuiescence({
         missionRecord: confirmed.missionRecord,
@@ -1417,7 +1426,7 @@ async function waitForTerminalQuiescence(initial: Awaited<ReturnType<typeof obse
       continue
     }
     await Bun.sleep(1000)
-    const next = await observations()
+    const next = await observations(inactivityDeadline)
     const nextSignature = missionActivitySignature(next)
     if (nextSignature !== signature) {
       signature = nextSignature
@@ -2297,7 +2306,7 @@ try {
   }
   if (backend) {
     try {
-      await within(backend.stop(true), CLEANUP_TIMEOUT_MS, "Server cleanup")
+      await backend.stop(true)
     } catch (error) {
       failures.push(error)
     }
