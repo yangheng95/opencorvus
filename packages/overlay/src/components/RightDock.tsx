@@ -87,6 +87,8 @@ export function rightDockPanelMeta(id: RightDockPanel): RightDockPanelMeta {
 export interface RightDockProps {
   /** Open tool tabs, in tab order (active tab is last). */
   tabs: Accessor<RightDockTab[]>
+  /** Whether the Dock body subtree is mounted. Tab metadata remains available while closed. */
+  open: Accessor<boolean>
   /** Currently active (visible) tab. */
   active: Accessor<string | null>
   onSelect: (tabID: string) => void
@@ -99,7 +101,7 @@ export interface RightDockProps {
   overflowMenuOpen: Accessor<boolean>
   onOverflowMenuOpenChange: (open: boolean) => void
   titleForTab?: (tab: RightDockTab) => string | undefined
-  /** Panel view bodies (kept mounted; Kobalte owns selected visibility). */
+  /** Panel view bodies. Kobalte mounts only the selected body. */
   children: JSX.Element
 }
 
@@ -231,6 +233,7 @@ export function RightDock(props: RightDockProps): JSX.Element {
       nextBlankBrowserTab().id,
     ]
   }
+  const tabsValue = () => props.active() ?? nextBlankBrowserTab().id
   const tabForID = (tabID: string): RightDockTab => {
     const openTab = props.tabs().find((tab) => tab.id === tabID)
     if (openTab) return openTab
@@ -259,7 +262,7 @@ export function RightDock(props: RightDockProps): JSX.Element {
   }
 
   return (
-    <Tabs class="right-dock-tabs-root" value={props.active() ?? ""} onValueChange={props.onSelect}>
+    <Tabs class="right-dock-tabs-root" value={tabsValue()} onValueChange={props.onSelect}>
       <div class="right-dock-tabs">
         <TabList
           class="right-dock-tab-strip"
@@ -452,29 +455,33 @@ export function RightDock(props: RightDockProps): JSX.Element {
       </div>
 
       <div class="right-dock-body" id="rightDockBody">
-        <div class="right-dock-empty" data-active={String(props.tabs().length === 0)}>
-          <div class="right-dock-empty__list" aria-label={t("right_dock.open_tools")}>
-            <For each={RIGHT_DOCK_CATALOG}>
-              {(meta) => (
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="md"
-                  tone="neutral"
-                  class="right-dock-empty__item"
-                  data-ui={`right-dock-empty-${meta.id}`}
-                  onClick={() =>
-                    meta.id === "browser" ? props.onNewBrowserTab(nextBlankBrowserTab().id) : props.onOpen(meta.id)
-                  }
-                >
-                  <Icon name={meta.icon} />
-                  <span>{t(meta.labelKey)}</span>
-                </Button>
-              )}
-            </For>
+        <Show when={props.open()}>
+          <div class="right-dock-empty" data-active={String(props.tabs().length === 0)}>
+            <div class="right-dock-empty__list" aria-label={t("right_dock.open_tools")}>
+              <For each={RIGHT_DOCK_CATALOG}>
+                {(meta) => (
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="md"
+                    tone="neutral"
+                    class="right-dock-empty__item"
+                    data-ui={`right-dock-empty-${meta.id}`}
+                    onClick={() =>
+                      meta.id === "browser"
+                        ? props.onNewBrowserTab(nextBlankBrowserTab().id)
+                        : props.onOpen(meta.id)
+                    }
+                  >
+                    <Icon name={meta.icon} />
+                    <span>{t(meta.labelKey)}</span>
+                  </Button>
+                )}
+              </For>
+            </div>
           </div>
-        </div>
-        {props.children}
+          {props.children}
+        </Show>
       </div>
     </Tabs>
   )

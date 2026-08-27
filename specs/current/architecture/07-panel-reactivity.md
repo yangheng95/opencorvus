@@ -146,6 +146,26 @@ sub-agent grid membership change publishes a new projection. A live stream
 therefore updates the existing card DOM instead of remounting unchanged rows
 on every publication.
 
+The Card Tree generation owns one captured Virtualizer handle. A retiring
+generation may clear the shared handle only when it still owns that exact
+handle. While transcript follow mode is armed, the virtual-root measurement
+callback anchors the exact last item and synchronously writes the outer
+Conversation scroll owner to its current bottom in the same frame. This is one
+presentation convergence path, not a second message state; preserved history
+and operator-released follow mode do not perform the bottom write.
+
+The Right Dock tab strip retains metadata independently of component lifetime.
+When the Dock is open, Kobalte mounts only the selected tab body; closing the
+Dock, changing selection, or closing a tab disposes the prior component through
+the normal Solid lifecycle. Panel-owned requests, observers, Server-Sent Events,
+native surfaces, and controllers cannot remain active behind an unselected tab.
+Closing the selected Dock tab moves the canonical selection to the adjacent
+remaining Dock tab, preferring the preceding tab, and returns to Conversation
+only when no Dock tab remains. A missing Dock selection uses a reserved metadata
+identity that cannot mount an arbitrary retained body.
+An HTTP(S) message link may select an unmounted Browser body first and transfers
+its pending URL to that body when its controller mounts.
+
 Provider-facing `role=user` does not by itself create a user-owned display
 card. A delegated prompt in a non-main session is owned by the receiving
 agent's canonical channel and agent identity, remains collapsed by its exact
@@ -242,8 +262,11 @@ target in a newly selected task scope is a no-interruption presentation
 baseline.
 
 Conversation HTTP(S) link activation is a separate operator navigation event.
-It sends the URL to the mounted fixed Browser controller and reveals that tab;
-it does not require Task scope or invalidate Browser Preview target discovery.
+It selects and reveals the fixed Browser tab. When that selected body is not
+yet mounted, one owner-fenced pending navigation transfers the latest URL to
+the controller that actually mounts; a retired controller or stale microtask
+cannot consume or overwrite it. This event does not require Task scope or
+invalidate Browser Preview target discovery.
 
 ## Verification
 

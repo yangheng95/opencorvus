@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-27-right-dock-lifecycle-and-virtual-bottom-convergence.md](2026-08-27-right-dock-lifecycle-and-virtual-bottom-convergence.md) makes the Right Dock mount only its visible tab body and converges dynamic virtual-row measurement with the outer transcript bottom while fencing retired Virtualizer cleanup.
+
 - [2026-08-27-message-panel-agent-activity-and-type-density.md](2026-08-27-message-panel-agent-activity-and-type-density.md) converges live and hydrated child-Agent activity on exact execution occurrences and restores message prose/card title typography to their canonical density.
 
 - [2026-08-27-message-panel-stream-and-payload-convergence.md](2026-08-27-message-panel-stream-and-payload-convergence.md) removes the duplicate Task message watermark authority, converges main Task/Mission/Session messages on exact live replay or subscribe-before-snapshot, and defers large collapsed Tool state from first-paint transport with exact verified Part reads on expansion.
