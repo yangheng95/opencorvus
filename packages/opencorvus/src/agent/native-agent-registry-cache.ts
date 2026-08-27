@@ -99,21 +99,36 @@ export function nativeAgentConfigSource(config: Config.Info): {
 export class NativeAgentRegistryCache<State> {
   readonly #label: string
   readonly #build: (config: Config.Info) => Promise<State>
-  readonly #defaultState: ReturnType<typeof createInstanceState<Promise<State>>>
   readonly #explicitStates = new CanonicalCache<Promise<State>>()
+  readonly #defaultState: ReturnType<
+    typeof createInstanceState<{
+      current?: Readonly<{ source: CanonicalDigestSource; state: Promise<State> }>
+    }>
+  >
 
   constructor(input: { label: string; build: (config: Config.Info) => Promise<State> }) {
     this.#label = input.label
     this.#build = input.build
-    this.#defaultState = createInstanceState(
-      async () => this.#build(Config.Info.parse(await Config.get())),
-      undefined,
-      input.label,
-    )
+    this.#defaultState = createInstanceState(() => ({}), undefined, input.label)
   }
 
   get(config?: Config.Info): Promise<State> {
-    if (!config) return this.#defaultState()
+    if (!config) {
+      const holder = this.#defaultState()
+      return Config.get().then((current) => {
+        const { snapshot, source } = nativeAgentConfigSource(current)
+        if (!source) return this.#build(snapshot)
+        const existing = holder.current
+        if (existing?.source.sha256 === source.sha256 && existing.source.bytes === source.bytes) return existing.state
+        const state = this.#build(snapshot)
+        const entry = { source, state }
+        holder.current = entry
+        void state.catch(() => {
+          if (holder.current === entry) delete holder.current
+        })
+        return state
+      })
+    }
     const { snapshot, source } = nativeAgentConfigSource(config)
     if (!source) return this.#build(snapshot)
     const existing = this.#explicitStates.get(source)
@@ -131,7 +146,9 @@ export class NativeAgentRegistryCache<State> {
     const explicitEntriesDetached = this.#explicitStates.clear()
     const defaultProjectStatesDetached = this.#defaultState
       .inspectAll()
-      .some((entry) => entry.key === currentProjectDirectory()) ? 1 : 0
+      .some((entry) => entry.key === currentProjectDirectory())
+      ? 1
+      : 0
     await this.#defaultState.reset()
     return {
       registry: this.#label,

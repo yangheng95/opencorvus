@@ -147,9 +147,7 @@ export namespace Provider {
 
   export function mergeModelCost(
     existing: Model["cost"] | undefined,
-    configured:
-      | { input?: number; output?: number; cache_read?: number; cache_write?: number }
-      | undefined,
+    configured: { input?: number; output?: number; cache_read?: number; cache_write?: number } | undefined,
   ): Model["cost"] {
     return {
       available: configured !== undefined || existing?.available === true,
@@ -626,9 +624,9 @@ export namespace Provider {
     }
   }
 
-  const state = createInstanceState(async () => buildState(Config.Info.parse(await Config.get())), undefined, "provider")
   const scopedStates = new Map<string, CanonicalCache<Promise<ProviderState>>>()
   const globalScopedStates = new CanonicalCache<Promise<ProviderState>>()
+  const defaultStates = createInstanceState(() => new CanonicalCache<Promise<ProviderState>>(), undefined, "provider")
 
   function configStateSource(config: Config.Info) {
     const snapshot = Config.Info.parse(config)
@@ -653,11 +651,13 @@ export namespace Provider {
     return next
   }
 
-  function stateFor(config?: Config.Info): Promise<ProviderState> {
-    if (!config) return state()
+  async function stateFor(config?: Config.Info): Promise<ProviderState> {
+    const isDefault = !config
+    if (!config) config = await Config.get()
     const snapshot = Config.Info.parse(config)
     if (containsRuntimeCapability(snapshot)) return buildState(snapshot)
     const { source } = configStateSource(snapshot)
+    if (isDefault) return cachedState(defaultStates(), source, () => buildState(snapshot))
     const directory = currentProjectDirectory()
     const states = scopedStates.get(directory) ?? new CanonicalCache<Promise<ProviderState>>()
     scopedStates.set(directory, states)
@@ -685,13 +685,13 @@ export namespace Provider {
 
   export async function reset(): Promise<void> {
     scopedStates.delete(currentProjectDirectory())
-    await state.reset()
+    await defaultStates.reset()
   }
 
   export async function resetAll(): Promise<void> {
     scopedStates.clear()
     globalScopedStates.clear()
-    await state.resetAll()
+    await defaultStates.resetAll()
   }
 
   export type RefreshCatalogResult = Awaited<ReturnType<typeof ModelsDev.refresh>>
@@ -859,13 +859,14 @@ export namespace Provider {
       const proxyUrl = customFetch ? undefined : resolveFetchProxy(config)
       const declarativeOptions = { ...options }
       delete declarativeOptions["fetch"]
-      const sdkSource = customFetch || containsRuntimeCapability(declarativeOptions)
-        ? undefined
-        : canonicalDigestSource("opencorvus.provider.sdk-instance.v1", {
-            providerID: model.providerID,
-            npm: model.api.npm,
-            options: declarativeOptions,
-          })
+      const sdkSource =
+        customFetch || containsRuntimeCapability(declarativeOptions)
+          ? undefined
+          : canonicalDigestSource("opencorvus.provider.sdk-instance.v1", {
+              providerID: model.providerID,
+              npm: model.api.npm,
+              options: declarativeOptions,
+            })
       const existing = sdkSource ? s.sdk.get(sdkSource) : undefined
       if (existing) return existing
 

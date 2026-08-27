@@ -111,12 +111,12 @@ EngineInteraction 持久化；进程恢复复用同一 Request 创建时间与�
 ## 当前数据流
 
 ```
-opencorvus.jsonc ──→ Config.get() ──→ Zod 验证 + 层级合并 ──→ 缓存
+opencorvus.jsonc ──→ Config.get() ──→ Zod 验证 + 层级合并 ──→ 带 source revision 的缓存
                       │
                       ├─→ EngineConfig.get()     合并 DEFAULTS，返回完整 typed config
                       ├─→ GET  /config                  → Overlay appStore.config (reactive)
-                      ├─→ PATCH /config {partial diff}  → mergeDeep → 写文件 → 重置缓存
-                      └─→ Bus "config.changed"          → SSE → 所有 Overlay 实例刷新
+                      ├─→ PATCH /config {partial diff}  → mergeDeep → 原子替换 canonical file
+                      └─→ 本 backend "config.changed"   → SSE → 该 backend 的 Overlay 实例刷新
 ```
 
 **关键变化**：
@@ -124,6 +124,46 @@ opencorvus.jsonc ──→ Config.get() ──→ Zod 验证 + 层级合并 ─�
 1. Overlay 不再 `GET→clone→mutate→PATCH` 全量，只发变化字段
 2. Config 变更后 SSE 推送，所有 Overlay 自动 `setAppStore("config", newConfig)`
 3. `scaffoldProjectConfig` 直接导入 `EngineConfig.defaults`，不硬编码
+
+## 跨进程 reader generation 与 runtime projection
+
+Project 和 global JSONC 文件是唯一配置事实；不存在 revision sidecar、影子配置、第二事件协议或
+路由专用 refresh。每个缓存 generation 记录它实际解析的全部 canonical 文件 UTF-8 文本的
+SHA-256（Secure Hash Algorithm 256-bit，256 位安全散列算法）；缺失文件使用独立的缺失态 digest。
+parser 必须消费生成该 digest 的同一份 snapshot；完成层级合并后重新读取完整 source revision 集合，
+只有集合未变化时该 generation 才可发布，否则从头读取，禁止把两个物理 generation 拼成一个配置。
+显式 writer 在 canonical-file owner 内一次性写入最终 `$schema` 与配置正文，读取路径不得再把已提交的
+业务配置拆成第二个 schema generation。
+
+`Config.get()`、`Config.getGlobal()` 与本进程 Project/global writer 共享一个 generation
+read/write owner；writer 从 candidate、canonical replace、cache reset、runtime projection 到事件确认均在
+同一 write generation 内。写 generation 中自然产生的嵌套读取会被登记并在释放前排空；继承 context 但在
+generation 结束后才运行的读取必须重新取得 owner；嵌套 mutation 以
+`ConfigGenerationReentrantMutationError` 拒绝，不能逃逸或自锁。reader 的进程内顺序是 generation →
+Project state lifecycle → source-cache owner。writer 的顺序是 generation → catalog/reference owners →
+canonical-file owner，并在 commit hook 内取得 state-lifecycle owner 完成 reset；canonical-file owner 不与
+reader 的 source-cache owner 混称为同一把锁。进程内 generation read/write fence 排除这两条路径并发，
+state-lifecycle owner 又不跨进程，因此不存在一条伪造的统一锁序契约。
+
+进程内 convergence monitor 只轮询“已经成功加载且其 Project Instance 仍活跃”的 Project state；显式
+reset 只失效 cache，不丢失仍活跃 reader 的观察资格，Instance 释放才移除资格。monitor 的 interval 使用
+`unref()`，它可以在已有 backend 生命周期中推进收敛，但不能成为短命 CLI/worker 的进程 owner。只加载过
+global config、尚无 Project state 的 backend 也会比较 global revision，并在 peer commit 后发布原有
+`global.disposed`。global writer 可以为已注册 Project 使用 identity lease 做 runtime settlement，但只对
+此前已加载且仍活跃的 Project rewarm Config state，不能让 inactive Project 泄漏新的 cache owner。
+
+peer backend 替换 Project/global 文件后，owner 加载稳定 generation，并统一结算 MCP（Model Context
+Protocol，模型上下文协议）、Provider、native Agent 与 Channel projection；全部 projection 成功后才通过
+该 backend 原有的 `config.changed` 事件刷新客户端。本地 writer 的 direct transition 也登记在同一个在途
+状态机中，因此事件回调里的并发读取不会重复发布同一 target。projection 或事件失败保留 exact
+before/after transition 供重试；较新的 canonical generation 只更新 queued latest target，前一 transition
+成功后才构造 `previous.after → latest`。本地 direct settlement 完成后仅 rewarm 活跃 state；若 canonical
+source 已由另一生产 writer 推进，则显式结算 `direct.after → current`，不以 reset 丢失最新 generation。
+
+Provider 与 native Agent 的默认读取先取得当前 `Config.get()` snapshot，再以 canonical config digest
+选择各 Project 的内容寻址缓存；缓存 holder 仍由 Project Instance state 生命周期拥有。显式 config
+snapshot 继续走原有 canonical cache。由此正确性不依赖 writer 进程能否向 peer 进程广播 reset，
+同时 Project 释放会清理它拥有的默认 derived cache。
 
 ## Plugin 依赖树 generation owner
 
@@ -146,7 +186,9 @@ receipt 与新 bytes 拼成 Ready。
 
 ## 并发策略
 
-**不做 ETag / 乐观锁** — 单用户本地工具，并发竞态概率极低，避免过度工程化。
+不使用 ETag 或乐观锁。写入者在共享 canonical-file owner 内读取、合并并原子替换；读取者以 canonical
+bytes 派生 revision 并只发布稳定 generation。两者共同覆盖同机多 backend 的真实并发，不以“单用户”
+假设降低一致性要求。
 
 ## 相关文档
 

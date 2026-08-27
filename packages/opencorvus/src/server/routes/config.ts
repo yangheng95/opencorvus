@@ -5,10 +5,8 @@ import { Config } from "../../config/config"
 import { ConfigCandidateValidationError } from "@/config/candidate-validation"
 import { EffectiveConfig } from "@/config/effective"
 import { EngineConfig } from "../../engine/config"
-import { ChannelSupervisor } from "@/channel/supervisor"
 import { ConversationCapability } from "@/conversation/capability"
 import { Provider } from "../../provider/provider"
-import { NativeAgentRegistryLifecycle } from "@/agent/native-agent-registry-lifecycle"
 import { PromptCatalog } from "../../config/prompt-catalog"
 import { Instance } from "@/project/instance"
 import { mapValues } from "remeda"
@@ -117,17 +115,6 @@ export const ConfigRoutes = lazy(() =>
             return c.json(badRequestBody(`config: ${message}`), 400)
           }
           throw error
-        }
-        const updated = await Config.get()
-        try {
-          await Provider.reset()
-          await NativeAgentRegistryLifecycle.reset()
-          await ChannelSupervisor.sync(updated)
-        } catch (error) {
-          return c.json(
-            Config.committedMutationReceipt(new Config.ProjectConfigCommittedReconcileError([error], updated)),
-            409,
-          )
         }
         return c.json(await configResponse())
       },

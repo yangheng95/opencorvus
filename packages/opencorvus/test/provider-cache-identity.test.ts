@@ -3,11 +3,7 @@ import { mkdir, readFile, writeFile } from "node:fs/promises"
 import path from "node:path"
 import { Provider } from "@/provider/provider"
 import { CanonicalCache } from "@/util/canonical-cache"
-import {
-  CanonicalDigestContractError,
-  canonicalDigestSource,
-  sha256Text,
-} from "@/util/canonical-digest"
+import { CanonicalDigestContractError, canonicalDigestSource, sha256Text } from "@/util/canonical-digest"
 import { Global } from "@/global"
 import { Config } from "@/config/config"
 import { BUNDLED_PROVIDERS } from "@/provider/bundled"
@@ -40,25 +36,34 @@ describe.serial("Provider cache identity", () => {
   })
 
   test("validated Provider config and declarative SDK options use canonical exact identities", () => {
-    const leftConfig = canonicalDigestSource("opencorvus.provider.config-state.v1", Config.Info.parse({
-      provider: {
-        fixture: {
-          name: "Fixture",
-          options: { headers: { z: "last", a: "first" }, baseURL: "https://left.invalid/v1" },
+    const leftConfig = canonicalDigestSource(
+      "opencorvus.provider.config-state.v1",
+      Config.Info.parse({
+        provider: {
+          fixture: {
+            name: "Fixture",
+            options: { headers: { z: "last", a: "first" }, baseURL: "https://left.invalid/v1" },
+          },
         },
-      },
-    }))
-    const equivalentConfig = canonicalDigestSource("opencorvus.provider.config-state.v1", Config.Info.parse({
-      provider: {
-        fixture: {
-          options: { baseURL: "https://left.invalid/v1", headers: { a: "first", z: "last" } },
-          name: "Fixture",
+      }),
+    )
+    const equivalentConfig = canonicalDigestSource(
+      "opencorvus.provider.config-state.v1",
+      Config.Info.parse({
+        provider: {
+          fixture: {
+            options: { baseURL: "https://left.invalid/v1", headers: { a: "first", z: "last" } },
+            name: "Fixture",
+          },
         },
-      },
-    }))
-    const changedConfig = canonicalDigestSource("opencorvus.provider.config-state.v1", Config.Info.parse({
-      provider: { fixture: { name: "Fixture", options: { baseURL: "https://right.invalid/v1" } } },
-    }))
+      }),
+    )
+    const changedConfig = canonicalDigestSource(
+      "opencorvus.provider.config-state.v1",
+      Config.Info.parse({
+        provider: { fixture: { name: "Fixture", options: { baseURL: "https://right.invalid/v1" } } },
+      }),
+    )
     expect({ equivalentConfig, changed: changedConfig.sha256 === leftConfig.sha256 }).toEqual({
       equivalentConfig: leftConfig,
       changed: false,
@@ -212,6 +217,96 @@ describe.serial("Provider cache identity", () => {
           await Provider.resetAll()
         }
       },
+    })
+  })
+
+  test("default Provider generations are Project-owned and follow current Config lifecycle", async () => {
+    await using firstProject = await memoryProject()
+    await using secondProject = await memoryProject()
+    const providerConfig = (api: string) => ({
+      enabled_providers: ["kilo"],
+      provider: {
+        kilo: {
+          name: "Project-owned Provider fixture",
+          npm: "@ai-sdk/openai-compatible",
+          api,
+          options: { apiKey: "fixture" },
+          models: { fixture: { headers: { "x-fixture": "project-owned" } } },
+        },
+      },
+    })
+
+    for (const project of [firstProject, secondProject]) {
+      await Instance.provide({
+        directory: project.path,
+        fn: () => Config.updateProjectPatch(providerConfig("https://initial.invalid/v1")),
+      })
+    }
+
+    const readProject = (directory: string) =>
+      Instance.provide({
+        directory,
+        fn: async () => {
+          const config = await Config.get()
+          const [defaultFirst, defaultSecond, explicitFirst, explicitSecond] = await Promise.all([
+            Provider.catalog(),
+            Provider.catalog(),
+            Provider.catalog({ config }),
+            Provider.catalog({ config }),
+          ])
+          return { defaultFirst, defaultSecond, explicitFirst, explicitSecond }
+        },
+      })
+
+    const firstInitial = await readProject(firstProject.path)
+    const secondInitial = await readProject(secondProject.path)
+    const firstChanged = await Instance.provide({
+      directory: firstProject.path,
+      fn: async () => {
+        await Config.updateProjectPatch({ provider: { kilo: { api: "https://changed.invalid/v1" } } })
+        const config = await Config.get()
+        return {
+          defaultCatalog: await Provider.catalog(),
+          explicitCatalog: await Provider.catalog({ config }),
+        }
+      },
+    })
+
+    await Instance.provide({ directory: firstProject.path, fn: () => Provider.reset() })
+    const firstAfterReset = await readProject(firstProject.path)
+    const secondAfterReset = await readProject(secondProject.path)
+    await Instance.provide({ directory: firstProject.path, fn: () => Instance.dispose() })
+    const firstAfterDispose = await Instance.provide({
+      directory: firstProject.path,
+      fn: () => Provider.catalog(),
+    })
+
+    expect({
+      sameProjectDefaultReuse: firstInitial.defaultFirst.database === firstInitial.defaultSecond.database,
+      sameProjectExplicitReuse: firstInitial.explicitFirst.database === firstInitial.explicitSecond.database,
+      defaultProjectIsolation: firstInitial.defaultFirst.database === secondInitial.defaultFirst.database,
+      explicitProjectIsolation: firstInitial.explicitFirst.database === secondInitial.explicitFirst.database,
+      changedDefaultGeneration: firstInitial.defaultFirst.database === firstChanged.defaultCatalog.database,
+      changedExplicitGeneration: firstInitial.explicitFirst.database === firstChanged.explicitCatalog.database,
+      changedAPI: firstChanged.defaultCatalog.database.kilo?.models.fixture?.api.url,
+      resetCurrentDefault: firstChanged.defaultCatalog.database === firstAfterReset.defaultFirst.database,
+      resetCurrentExplicit: firstChanged.explicitCatalog.database === firstAfterReset.explicitFirst.database,
+      preservedPeerDefault: secondInitial.defaultFirst.database === secondAfterReset.defaultFirst.database,
+      preservedPeerExplicit: secondInitial.explicitFirst.database === secondAfterReset.explicitFirst.database,
+      disposedDefaultHolder: firstAfterReset.defaultFirst.database === firstAfterDispose.database,
+    }).toEqual({
+      sameProjectDefaultReuse: true,
+      sameProjectExplicitReuse: true,
+      defaultProjectIsolation: false,
+      explicitProjectIsolation: false,
+      changedDefaultGeneration: false,
+      changedExplicitGeneration: false,
+      changedAPI: "https://changed.invalid/v1",
+      resetCurrentDefault: false,
+      resetCurrentExplicit: false,
+      preservedPeerDefault: true,
+      preservedPeerExplicit: true,
+      disposedDefaultHolder: false,
     })
   })
 
