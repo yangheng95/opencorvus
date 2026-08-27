@@ -17,6 +17,7 @@ import { which } from "@/util/which"
 import { NamedError } from "@opencorvus-ai/util/error"
 import { assertProjectDurableAdmissionOpen, ProjectDurableAdmissionClosedError } from "./deletion-registry"
 import { Identifier } from "@/id/id"
+import { assertProjectDeletionCleanupAdmissionOpen } from "./deletion-cleanup-admission"
 
 export namespace Project {
   export const DurableAdmissionClosedError = ProjectDurableAdmissionClosedError
@@ -462,8 +463,7 @@ export namespace Project {
     // transaction. The transaction re-reads the current authority and unions
     // this candidate into that latest row; it never writes a stale snapshot.
     const proposedSandbox =
-      data.sandbox !== data.worktree &&
-      !(await sameFilesystemLocation(data.sandbox, data.worktree))
+      data.sandbox !== data.worktree && !(await sameFilesystemLocation(data.sandbox, data.worktree))
         ? data.sandbox
         : undefined
     if (options.blockedProjectIDs?.has(data.id)) {
@@ -472,6 +472,7 @@ export namespace Project {
         message: `Project ${data.id} discovery was admitted while deletion was in progress`,
       })
     }
+    await assertProjectDeletionCleanupAdmissionOpen(data.id)
     Database.use((db) => assertRegistryAdmissionOpen(db, data.id))
     await beforeDiscoveryCommit?.({ projectID: data.id, directory, proposedSandbox })
 
@@ -491,13 +492,14 @@ export namespace Project {
       if (proposedSandbox && !sandboxes.includes(proposedSandbox)) sandboxes.push(proposedSandbox)
       const changed =
         !currentRow || current.worktree !== data.worktree || !sameDirectoryList(current.sandboxes, sandboxes)
+      const generation = currentRow?.generation ?? randomUUID()
       const result: Info = {
         ...current,
         worktree: data.worktree,
         sandboxes,
         time: { ...current.time, updated: changed ? resolvedAt : current.time.updated },
       }
-      if (!changed) return { result, changed }
+      if (!changed) return { result, changed, generation }
 
       const projects = db
         .select()
@@ -516,7 +518,7 @@ export namespace Project {
         db.insert(ProjectTable)
           .values({
             id: result.id,
-            generation: randomUUID(),
+            generation,
             worktree: result.worktree,
             name: result.name,
             icon_url: result.icon?.url,
@@ -530,18 +532,18 @@ export namespace Project {
           })
           .run()
       }
-      return { result, changed }
+      return { result, changed, generation }
     })
     const result = committed.result
     if (Flag.OPENCORVUS_EXPERIMENTAL_ICON_DISCOVERY) discover(result)
-    if (!committed.changed) return { project: result, sandbox: data.sandbox }
+    if (!committed.changed) return { project: result, sandbox: data.sandbox, generation: committed.generation }
     GlobalBus.emit("event", {
       payload: {
         type: Event.Updated.type,
         properties: result,
       },
     })
-    return { project: result, sandbox: data.sandbox }
+    return { project: result, sandbox: data.sandbox, generation: committed.generation }
   }
 
   export async function discover(input: Info) {
@@ -884,7 +886,7 @@ export namespace Project {
     return Discovery.parse({ root, defaultDirectory, projects: [...projects.values()] })
   }
 
-  export function get(id: string): Info | undefined {
+  export function occurrence(id: string): { project: Info; generation: string } | undefined {
     const row = Database.use((db) =>
       db
         .select()
@@ -908,7 +910,11 @@ export namespace Project {
         .get(),
     )
     if (!row) return undefined
-    return fromRow(row)
+    return { project: fromRow(row), generation: row.generation }
+  }
+
+  export function get(id: string): Info | undefined {
+    return occurrence(id)?.project
   }
 
   export async function initGit(directory: string) {

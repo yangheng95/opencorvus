@@ -159,7 +159,9 @@ function projectDeletionInstanceDirectories(project: Project.Info): string[] {
   for (const session of projectPromptSessions(project.id)) {
     const directory = Filesystem.resolve(session.directory)
     if (!roots.some((root) => Filesystem.contains(root, directory))) {
-      throw new Error(`Project ${project.id} Session ${session.id} directory escapes its registered roots: ${directory}`)
+      throw new Error(
+        `Project ${project.id} Session ${session.id} directory escapes its registered roots: ${directory}`,
+      )
     }
     directories.add(directory)
   }
@@ -296,16 +298,18 @@ export async function deleteProject(
     await Instance.disposeProjectEntries(projectID, CANCEL_INGRESS_SETTLE_INACTIVITY_MS)
     stage = "filesystem-quarantine"
     const rootPlans = await projectRootRemovalPlans(directory)
-    if (rootPlans.length > 0) {
-      cleanupPlan = await createProjectDeletionCleanupPlan({
-        projectID,
-        directory,
-        sources: rootPlans.map((plan) => plan.source),
-        operationID: registryAdmission.operationID,
-      })
-      for (const plan of cleanupPlan.manifest.targets) {
-        if (await stageProjectRootRemoval(plan)) stagedPlans.push(plan)
-      }
+    // The durable cleanup owner exists even when the Project has no filesystem
+    // root: it also owns post-commit retirement of every project-scoped MCP
+    // credential. A committed deletion can therefore report residue and let
+    // startup recovery retry it instead of orphaning secrets in a global file.
+    cleanupPlan = await createProjectDeletionCleanupPlan({
+      projectID,
+      directory,
+      sources: rootPlans.map((plan) => plan.source),
+      operationID: registryAdmission.operationID,
+    })
+    for (const plan of cleanupPlan.manifest.targets) {
+      if (await stageProjectRootRemoval(plan)) stagedPlans.push(plan)
     }
     const finalTaskIDs = projectTaskIDs(projectID)
     if (finalTaskIDs.length !== taskIDs.length || finalTaskIDs.some((taskID) => !taskIDs.includes(taskID))) {

@@ -1,5 +1,12 @@
+import path from "node:path"
+import { createHmac, timingSafeEqual } from "node:crypto"
+import z from "zod"
+import { Global } from "../global"
+import { Filesystem } from "../util/filesystem"
+import { CROSS_PROCESS_LOCK_RETRY, withProcessLock } from "../util/process-lock"
 import { Log } from "../util/log"
-import { OAUTH_CALLBACK_PORT, OAUTH_CALLBACK_PATH } from "./oauth-provider"
+import { OAUTH_CALLBACK_PATH, type McpOAuthCallbackBinding } from "./oauth-provider"
+import { McpAuth } from "./auth"
 import type { MCP } from "./index"
 import {
   oauthCallbackInvalidStateLogFields,
@@ -82,45 +89,109 @@ interface CallbackAuthorityContract {
   abandon(input: {
     resolution: CallbackResolution
     oauthState: string
-    reason: string
-  }): Promise<{ outcome: "abandoned" } | { outcome: "joined"; status: MCP.Status }>
+    outcome: "provider_rejected" | "missing_code"
+  }): Promise<
+    | { outcome: "abandoned" }
+    | { outcome: "joined"; status: MCP.Status }
+    | { outcome: "terminal"; terminal: McpAuth.OAuthCallbackTerminal }
+  >
 }
 
 export interface CallbackResolution {
   mcpName: string
   phase: "pending" | "finishing"
+  revision: McpAuth.Revision
 }
 
 interface PendingAuth {
   resolve: (status: MCP.Status) => void
   reject: (error: Error) => void
   timeout: ReturnType<typeof setTimeout>
+  terminalPoll: ReturnType<typeof setInterval>
+  pollingTerminal: boolean
+  terminalReadFailures: number
   mcpName?: string
   correlationID: string
   phase: "waiting" | "finishing"
 }
 
+type DurableCallbackOwner =
+  | {
+      authority: CallbackAuthorityContract
+      resolution: CallbackResolution
+      mcpName: string
+      phase: "pending" | "finishing"
+    }
+  | { terminal: McpAuth.OAuthCallbackTerminal }
+
 export namespace McpOAuthCallback {
   export type CallbackAuthority = CallbackAuthorityContract
-  export type CallbackAuthorityRegistration = { isCurrent(): boolean; unregister(): void }
 
-  let server: ReturnType<typeof Bun.serve> | undefined
+  const BROKER_PROTOCOL = 1
+  const INITIAL_CALLBACK_PORT = 19876
+  const BROKER_PROOF_PATH = "/mcp/oauth/broker-proof"
+  const BROKER_MONITOR_INTERVAL_MS = 500
+  const BrokerIdentityFields = {
+    protocol: z.literal(BROKER_PROTOCOL),
+    generation: z.string().min(1),
+    secret: z.string().regex(/^[0-9a-f]{64}$/),
+  }
+  const BrokerIdentity = z.object({
+    ...BrokerIdentityFields,
+    port: z.number().int().positive().max(65_535),
+  })
+  const BrokerBindingRequest = z.object({
+    ...BrokerIdentityFields,
+    port: z.number().int().nonnegative().max(65_535),
+  })
+  type BrokerIdentity = z.infer<typeof BrokerIdentity>
+  type BrokerBindingRequest = z.infer<typeof BrokerBindingRequest>
+  type BrokerRuntime = {
+    identity: BrokerIdentity
+    server?: ReturnType<typeof Bun.serve>
+    monitor?: ReturnType<typeof setInterval>
+    takeover?: Promise<void>
+    retired?: boolean
+  }
+  const brokers = new Map<string, BrokerRuntime>()
+  const brokerStarts = new Map<string, Promise<McpOAuthCallbackBinding>>()
+  let brokerStopEpoch = 0
+  let brokersStopping = false
+  let brokerStop: Promise<void> | undefined
   // The pending owner key is project-scoped for MCP auth flows
   // (`projectID:mcpName`) so two active projects can authenticate the same
   // server name without sharing callback cancellation state.
   const pendingAuths = new Map<string, PendingAuth>()
   const mcpNameToState = new Map<string, string>()
-  // Flow authorities are project-scoped for the same reason the pending map
-  // is. One shared slot would be last-writer-wins: a legitimate callback for
-  // the first project would be resolved under the second project's identity
-  // and refused. Each registered project answers only for its own flows.
-  const flowAuthorities = new Map<string, { generation: symbol; authority: CallbackAuthorityContract }>()
   let afterOwnerResolutionForTest: (() => Promise<void>) | undefined
+  let beforeBrokerProbeForTest: (() => Promise<void>) | undefined
+  let afterUnreachableTakeoverRefusalForTest: (() => Promise<void>) | undefined
 
   const CALLBACK_TIMEOUT_MS = 5 * 60 * 1000 // 5 minutes
 
-  export async function handleRequest(req: Request): Promise<Response> {
+  function pendingAuthKey(state: string, root = Global.Path.root): string {
+    return JSON.stringify([root, state])
+  }
+
+  function pendingMcpKey(authKey: string, root = Global.Path.root): string {
+    return JSON.stringify([root, authKey])
+  }
+
+  export async function handleRequest(req: Request, binding?: BrokerIdentity): Promise<Response> {
     const url = new URL(req.url)
+
+    const currentBinding = binding ?? (await readBrokerIdentity(Global.Path.root))
+    if (url.pathname === BROKER_PROOF_PATH) {
+      const challenge = url.searchParams.get("challenge")
+      if (!challenge || !currentBinding) return new Response("Invalid broker proof request", { status: 400 })
+      return Response.json(
+        {
+          generation: currentBinding.generation,
+          proof: brokerProof(currentBinding, challenge),
+        },
+        { headers: { Connection: "close" } },
+      )
+    }
 
     if (url.pathname !== OAUTH_CALLBACK_PATH) {
       return new Response("Not found", { status: 404 })
@@ -129,8 +200,7 @@ export namespace McpOAuthCallback {
     const code = url.searchParams.get("code")
     const state = url.searchParams.get("state")
     const error = url.searchParams.get("error")
-    const errorDescription = url.searchParams.get("error_description")
-    const callbackOwner = state ? pendingAuths.get(state) : undefined
+    const callbackOwner = state ? pendingAuths.get(pendingAuthKey(state)) : undefined
     const correlationID = callbackOwner?.correlationID ?? crypto.randomUUID()
 
     log.info("received oauth callback", oauthCallbackReceivedLogFields({ code, error, correlationID }))
@@ -162,16 +232,9 @@ export namespace McpOAuthCallback {
     // Rejected callbacks also resolve the durable owner even when a local
     // waiter exists, so the state is spent before this request responds. The
     // caller's later cleanup is not the crash-safety boundary.
-    let durableOwner:
-      | {
-          authority: CallbackAuthorityContract
-          resolution: CallbackResolution
-          mcpName: string
-          phase: "pending" | "finishing"
-        }
-      | undefined
+    let durableOwner: DurableCallbackOwner | undefined
     try {
-      durableOwner = await resolveDurableOwner(state)
+      durableOwner = currentBinding ? await resolveDurableOwner(state, currentBinding.generation) : undefined
     } catch (error) {
       const ownerError = error instanceof Error ? error : new Error(String(error))
       log.error("oauth callback could not resolve its flow", { correlationID, error: ownerError.message })
@@ -190,6 +253,20 @@ export namespace McpOAuthCallback {
       )
       settleLocally(state, callbackOwner, (pending) => pending.reject(new Error(errorMsg)))
       return new Response(HTML_ERROR(errorMsg), {
+        status: 400,
+        headers: { "Content-Type": "text/html" },
+      })
+    }
+
+    if ("terminal" in durableOwner) {
+      if (durableOwner.terminal.outcome === "connected") {
+        const status = { status: "connected" as const }
+        settleLocally(state, callbackOwner, (pending) => pending.resolve(status))
+        return new Response(HTML_SUCCESS, { headers: { "Content-Type": "text/html" } })
+      }
+      const terminalError = McpAuth.oauthCallbackTerminalMessage(durableOwner.terminal.outcome)
+      settleLocally(state, callbackOwner, (pending) => pending.reject(new Error(terminalError)))
+      return new Response(HTML_ERROR(terminalError), {
         status: 400,
         headers: { "Content-Type": "text/html" },
       })
@@ -219,8 +296,7 @@ export namespace McpOAuthCallback {
     }
 
     if (error) {
-      const errorMsg = errorDescription || error
-      const abandonment = await abandonDurableOwner(durableOwner, state, errorMsg, correlationID)
+      const abandonment = await abandonDurableOwner(durableOwner, state, "provider_rejected", correlationID)
       if (abandonment instanceof Error) {
         settleLocally(state, callbackOwner, (pending) => pending.reject(abandonment))
         return new Response(HTML_ERROR(abandonment.message), {
@@ -232,16 +308,19 @@ export namespace McpOAuthCallback {
         settleLocally(state, callbackOwner, (pending) => pending.resolve(abandonment.status))
         return new Response(HTML_SUCCESS, { headers: { "Content-Type": "text/html" } })
       }
-      settleLocally(state, callbackOwner, (pending) => pending.reject(new Error(errorMsg)))
-      return new Response(HTML_ERROR(errorMsg), {
-        status: callbackOwner ? 200 : 400,
+      if (abandonment.outcome === "terminal") {
+        return projectTerminalResponse(state, callbackOwner, abandonment.terminal)
+      }
+      const terminalError = McpAuth.oauthCallbackTerminalMessage("provider_rejected")
+      settleLocally(state, callbackOwner, (pending) => pending.reject(new Error(terminalError)))
+      return new Response(HTML_ERROR(terminalError), {
+        status: 400,
         headers: { "Content-Type": "text/html" },
       })
     }
 
     if (!code) {
-      const errorMsg = "No authorization code provided"
-      const abandonment = await abandonDurableOwner(durableOwner, state, errorMsg, correlationID)
+      const abandonment = await abandonDurableOwner(durableOwner, state, "missing_code", correlationID)
       if (abandonment instanceof Error) {
         settleLocally(state, callbackOwner, (pending) => pending.reject(abandonment))
         return new Response(HTML_ERROR(abandonment.message), {
@@ -253,8 +332,12 @@ export namespace McpOAuthCallback {
         settleLocally(state, callbackOwner, (pending) => pending.resolve(abandonment.status))
         return new Response(HTML_SUCCESS, { headers: { "Content-Type": "text/html" } })
       }
-      settleLocally(state, callbackOwner, (pending) => pending.reject(new Error(errorMsg)))
-      return new Response(HTML_ERROR(errorMsg), {
+      if (abandonment.outcome === "terminal") {
+        return projectTerminalResponse(state, callbackOwner, abandonment.terminal)
+      }
+      const terminalError = McpAuth.oauthCallbackTerminalMessage("missing_code")
+      settleLocally(state, callbackOwner, (pending) => pending.reject(new Error(terminalError)))
+      return new Response(HTML_ERROR(terminalError), {
         status: 400,
         headers: { "Content-Type": "text/html" },
       })
@@ -269,7 +352,7 @@ export namespace McpOAuthCallback {
       settleLocally(state, callbackOwner, (pending) => pending.resolve(status))
     } catch (finishError) {
       const errorMsg = finishError instanceof Error ? finishError.message : String(finishError)
-      log.error("oauth callback failed to finish its flow", { correlationID, error: errorMsg })
+      log.error("oauth callback failed to finish its flow", { correlationID })
       settleLocally(state, callbackOwner, (pending) =>
         pending.reject(finishError instanceof Error ? finishError : new Error(errorMsg)),
       )
@@ -284,40 +367,245 @@ export namespace McpOAuthCallback {
     })
   }
 
-  /** Ask each registered project whether this state names one of its flows. */
-  async function resolveDurableOwner(oauthState: string): Promise<
-    | {
-        authority: CallbackAuthorityContract
-        resolution: CallbackResolution
-        mcpName: string
-        phase: "pending" | "finishing"
-      }
-    | undefined
-  > {
-    const failures: unknown[] = []
-    // Invoke every current authority before awaiting any one of them. Default
-    // authorities register their callback-owned terminal receipt synchronously
-    // at invocation, so a slow non-owner project cannot delay the true owner's
-    // admission until after its canonical finish has already retired.
-    const attempts = [...flowAuthorities.values()].map(({ authority }) => ({
-      authority,
-      outcome: authority.resolveState(oauthState).then(
-        (resolution) => ({ status: "fulfilled" as const, resolution }),
-        (reason) => ({ status: "rejected" as const, reason }),
-      ),
+  /** Resolve the exact project owner from the one durable MCP auth store. */
+  async function resolveDurableOwner(
+    oauthState: string,
+    callbackGeneration: string,
+  ): Promise<DurableCallbackOwner | undefined> {
+    const { MCP } = await import("./index")
+    return MCP.resolveOAuthCallbackOwner(oauthState, callbackGeneration)
+  }
+
+  function brokerPaths(root: string) {
+    return Global.provideRoot(root, () => ({
+      identity: path.join(Global.Path.data, "mcp-oauth-callback-broker.json"),
+      lock: path.join(Global.Path.data, "mcp-oauth-callback-broker-owner"),
     }))
-    for (const { authority, outcome } of attempts) {
-      const settled = await outcome
-      if (settled.status === "fulfilled") {
-        const owner = settled.resolution
-        if (owner) return { authority, resolution: owner, mcpName: owner.mcpName, phase: owner.phase }
-      } else {
-        failures.push(settled.reason)
-      }
+  }
+
+  async function readBrokerIdentity(root: string): Promise<BrokerIdentity | undefined> {
+    try {
+      return BrokerIdentity.parse(await Filesystem.readJson<unknown>(brokerPaths(root).identity))
+    } catch (error) {
+      const code = typeof error === "object" && error && "code" in error ? String(error.code) : ""
+      if (code === "ENOENT" || code === "ENOTDIR") return undefined
+      throw error
     }
-    if (failures.length === 1) throw failures[0]
-    if (failures.length > 1) throw new AggregateError(failures, "No registered project could resolve the OAuth flow")
-    return undefined
+  }
+
+  function brokerProof(identity: BrokerIdentity, challenge: string): string {
+    return createHmac("sha256", Buffer.from(identity.secret, "hex"))
+      .update(`${BROKER_PROTOCOL}:${identity.generation}:${challenge}`)
+      .digest("hex")
+  }
+
+  function sameIdentity(left: BrokerIdentity | undefined, right: BrokerIdentity | undefined): boolean {
+    return (
+      !!left &&
+      !!right &&
+      left.port === right.port &&
+      left.generation === right.generation &&
+      left.secret === right.secret
+    )
+  }
+
+  function publicBinding(identity: BrokerIdentity): McpOAuthCallbackBinding {
+    return {
+      redirectUrl: `http://127.0.0.1:${identity.port}${OAUTH_CALLBACK_PATH}`,
+      generation: identity.generation,
+    }
+  }
+
+  async function probeBroker(identity: BrokerIdentity): Promise<"verified" | "foreign" | "unreachable"> {
+    await beforeBrokerProbeForTest?.()
+    const challenge = crypto.randomUUID()
+    let response: Response
+    try {
+      response = await fetch(
+        `http://127.0.0.1:${identity.port}${BROKER_PROOF_PATH}?challenge=${encodeURIComponent(challenge)}`,
+        { headers: { Connection: "close" }, signal: AbortSignal.timeout(750) },
+      )
+    } catch {
+      return "unreachable"
+    }
+    if (!response.ok) return "foreign"
+    let payload: string
+    try {
+      payload = await response.text()
+    } catch {
+      return "unreachable"
+    }
+    let body: { generation?: unknown; proof?: unknown }
+    try {
+      body = JSON.parse(payload) as { generation?: unknown; proof?: unknown }
+    } catch {
+      return "foreign"
+    }
+    if (body.generation !== identity.generation || typeof body.proof !== "string") return "foreign"
+    const expected = Buffer.from(brokerProof(identity, challenge), "hex")
+    const received = Buffer.from(body.proof, "hex")
+    return expected.length === received.length && timingSafeEqual(expected, received) ? "verified" : "foreign"
+  }
+
+  function newBrokerIdentity(port: number): BrokerBindingRequest {
+    return BrokerBindingRequest.parse({
+      protocol: BROKER_PROTOCOL,
+      port,
+      generation: crypto.randomUUID(),
+      secret: Buffer.from(crypto.getRandomValues(new Uint8Array(32))).toString("hex"),
+    })
+  }
+
+  function bindBroker(root: string, identity: BrokerBindingRequest): BrokerRuntime | undefined {
+    let currentIdentity: BrokerIdentity | undefined
+    try {
+      const server = Bun.serve({
+        hostname: "127.0.0.1",
+        port: identity.port,
+        reusePort: false,
+        fetch: (request) =>
+          currentIdentity
+            ? Global.provideRoot(root, () => handleRequest(request, currentIdentity!))
+            : new Response("MCP OAuth callback broker is starting", { status: 503 }),
+      })
+      server.unref()
+      currentIdentity = BrokerIdentity.parse({ ...identity, port: server.port })
+      return { identity: currentIdentity, server }
+    } catch {
+      return undefined
+    }
+  }
+
+  function bindFreshBroker(root: string, preferredPort: number): BrokerRuntime {
+    const preferred = bindBroker(root, newBrokerIdentity(preferredPort))
+    if (preferred) return preferred
+    const dynamic = bindBroker(root, newBrokerIdentity(0))
+    if (!dynamic) throw new Error("Cannot allocate a loopback port for the MCP OAuth callback broker")
+    return dynamic
+  }
+
+  async function monitorPeerBroker(root: string, identity: BrokerIdentity): Promise<BrokerRuntime> {
+    const existing = brokers.get(root)
+    if (existing?.monitor && !existing.retired && sameIdentity(existing.identity, identity)) return existing
+    if (existing) await retireBrokerRuntime(existing)
+    const runtime: BrokerRuntime = { identity }
+    runtime.monitor = setInterval(() => {
+      if (runtime.retired || runtime.takeover) return
+      runtime.takeover = (async () => {
+        const persisted = await readBrokerIdentity(root).catch(() => undefined)
+        if (runtime.retired) return
+        if (!sameIdentity(persisted, runtime.identity) || (await probeBroker(runtime.identity)) !== "verified") {
+          await ensureRunningForRoot(root).catch((error) => {
+            log.warn("oauth callback broker takeover did not settle", {
+              error: error instanceof Error ? error.message : String(error),
+            })
+          })
+        }
+      })().finally(() => {
+        runtime.takeover = undefined
+      })
+    }, BROKER_MONITOR_INTERVAL_MS)
+    ;(runtime.monitor as ReturnType<typeof setInterval> & { unref?: () => void }).unref?.()
+    brokers.set(root, runtime)
+    return runtime
+  }
+
+  async function startBrokerForRoot(root: string): Promise<McpOAuthCallbackBinding> {
+    const paths = brokerPaths(root)
+    await Filesystem.writeAtomicIfAbsent(paths.lock, "mcp oauth callback broker owner\n", 0o600)
+    return withProcessLock(paths.lock, { realpath: false, retries: CROSS_PROCESS_LOCK_RETRY }, async () => {
+      const persisted = await readBrokerIdentity(root)
+      const local = brokers.get(root)
+      if (local?.server && !local.retired && sameIdentity(local.identity, persisted)) {
+        await Global.provideRoot(root, () => McpAuth.settleCallbackGeneration(local.identity.generation))
+        return publicBinding(local.identity)
+      }
+
+      const proof = persisted ? await probeBroker(persisted) : undefined
+      if (persisted && proof === "verified") {
+        await Global.provideRoot(root, () => McpAuth.settleCallbackGeneration(persisted.generation))
+        return publicBinding((await monitorPeerBroker(root, persisted)).identity)
+      }
+
+      let replacement: BrokerRuntime
+      if (!persisted) {
+        replacement = bindFreshBroker(root, INITIAL_CALLBACK_PORT)
+      } else {
+        const takeover = bindBroker(root, persisted)
+        if (takeover) {
+          replacement = takeover
+        } else if (proof === "foreign") {
+          replacement = bindFreshBroker(root, 0)
+        } else {
+          await afterUnreachableTakeoverRefusalForTest?.()
+          throw new Error(
+            `MCP OAuth callback broker on port ${persisted.port} is temporarily unreachable but still owns the port; refusing destructive identity rotation`,
+          )
+        }
+      }
+      try {
+        await Filesystem.writeAtomic(paths.identity, JSON.stringify(replacement.identity, null, 2), 0o600)
+      } catch (error) {
+        if (!sameIdentity(await readBrokerIdentity(root).catch(() => undefined), replacement.identity)) {
+          await replacement.server?.stop(true)
+          throw error
+        }
+      }
+      try {
+        await Global.provideRoot(root, () => McpAuth.settleCallbackGeneration(replacement.identity.generation))
+      } catch (error) {
+        await replacement.server?.stop(true)
+        throw error
+      }
+      if (local) {
+        await retireBrokerRuntime(local)
+      }
+      brokers.set(root, replacement)
+      log.info("oauth callback broker active", {
+        port: replacement.identity.port,
+      })
+      return publicBinding(replacement.identity)
+    })
+  }
+
+  async function retireBrokerRuntime(runtime: BrokerRuntime): Promise<void> {
+    runtime.retired = true
+    if (runtime.monitor) {
+      clearInterval(runtime.monitor)
+      runtime.monitor = undefined
+    }
+    if (runtime.server) {
+      const server = runtime.server
+      runtime.server = undefined
+      await server.stop(true)
+    }
+  }
+
+  async function retireBrokerRoot(root: string): Promise<void> {
+    const runtime = brokers.get(root)
+    if (!runtime) return
+    brokers.delete(root)
+    await retireBrokerRuntime(runtime)
+  }
+
+  function ensureRunningForRoot(root: string): Promise<McpOAuthCallbackBinding> {
+    if (brokersStopping) return Promise.reject(new Error("MCP OAuth callback brokers are stopping"))
+    const current = brokerStarts.get(root)
+    if (current) return current
+    const epoch = brokerStopEpoch
+    const start = startBrokerForRoot(root)
+      .then(async (binding) => {
+        if (brokersStopping || brokerStopEpoch !== epoch) {
+          await retireBrokerRoot(root)
+          throw new Error("MCP OAuth callback broker startup was retired by stop")
+        }
+        return binding
+      })
+      .finally(() => {
+        if (brokerStarts.get(root) === start) brokerStarts.delete(root)
+      })
+    brokerStarts.set(root, start)
+    return start
   }
 
   async function abandonDurableOwner(
@@ -330,91 +618,160 @@ export namespace McpOAuthCallback {
         }
       | undefined,
     oauthState: string,
-    reason: string,
+    outcome: "provider_rejected" | "missing_code",
     correlationID: string,
-  ): Promise<{ outcome: "abandoned" } | { outcome: "joined"; status: MCP.Status } | Error> {
+  ): Promise<
+    | { outcome: "abandoned" }
+    | { outcome: "joined"; status: MCP.Status }
+    | { outcome: "terminal"; terminal: McpAuth.OAuthCallbackTerminal }
+    | Error
+  > {
     if (!owner) return new Error("OAuth flow owner is unavailable")
     try {
-      return await owner.authority.abandon({ resolution: owner.resolution, oauthState, reason })
+      return await owner.authority.abandon({ resolution: owner.resolution, oauthState, outcome })
     } catch (error) {
       const abandonmentError = error instanceof Error ? error : new Error(String(error))
       log.error("oauth callback could not terminalize its rejected flow", {
         correlationID,
-        error: abandonmentError.message,
       })
       return abandonmentError
     }
+  }
+
+  function projectTerminalResponse(
+    state: string,
+    pending: PendingAuth | undefined,
+    terminal: McpAuth.OAuthCallbackTerminal,
+  ): Response {
+    if (terminal.outcome === "connected") {
+      const status = { status: "connected" as const }
+      settleLocally(state, pending, (current) => current.resolve(status))
+      return new Response(HTML_SUCCESS, { headers: { "Content-Type": "text/html" } })
+    }
+    const message = McpAuth.oauthCallbackTerminalMessage(terminal.outcome)
+    settleLocally(state, pending, (current) => current.reject(new Error(message)))
+    return new Response(HTML_ERROR(message), {
+      status: 400,
+      headers: { "Content-Type": "text/html" },
+    })
   }
 
   function settleLocally(
     state: string,
     pending: PendingAuth | undefined,
     settle: (pending: PendingAuth) => void,
+    root = Global.Path.root,
   ): void {
-    if (!pending || pendingAuths.get(state) !== pending) return
+    const stateKey = pendingAuthKey(state, root)
+    if (!pending || pendingAuths.get(stateKey) !== pending) return
     clearTimeout(pending.timeout)
-    pendingAuths.delete(state)
-    if (pending.mcpName && mcpNameToState.get(pending.mcpName) === state) mcpNameToState.delete(pending.mcpName)
+    clearInterval(pending.terminalPoll)
+    pendingAuths.delete(stateKey)
+    const mcpKey = pending.mcpName ? pendingMcpKey(pending.mcpName, root) : undefined
+    if (mcpKey && mcpNameToState.get(mcpKey) === state) mcpNameToState.delete(mcpKey)
     settle(pending)
   }
 
   function beginLocalSettlement(state: string, pending: PendingAuth | undefined): void {
-    if (!pending || pendingAuths.get(state) !== pending) return
+    if (!pending || pendingAuths.get(pendingAuthKey(state)) !== pending) return
     pending.phase = "finishing"
     clearTimeout(pending.timeout)
-    if (pending.mcpName && mcpNameToState.get(pending.mcpName) === state) mcpNameToState.delete(pending.mcpName)
+    clearInterval(pending.terminalPoll)
+    const mcpKey = pending.mcpName ? pendingMcpKey(pending.mcpName) : undefined
+    if (mcpKey && mcpNameToState.get(mcpKey) === state) mcpNameToState.delete(mcpKey)
   }
 
-  export async function ensureRunning(input?: {
-    projectID: string
-    authority: CallbackAuthorityContract
-  }): Promise<CallbackAuthorityRegistration | undefined> {
-    if (!server) {
-      try {
-        server = Bun.serve({
-          port: OAUTH_CALLBACK_PORT,
-          fetch: handleRequest,
-        })
-      } catch {
-        throw new Error(
-          `OAuth callback port ${OAUTH_CALLBACK_PORT} is already in use by another process; cannot receive process-local OAuth callbacks.`,
-        )
-      }
-      log.info("oauth callback server started", { port: OAUTH_CALLBACK_PORT })
-    }
-    if (!input) return undefined
-    const generation = Symbol(input.projectID)
-    flowAuthorities.set(input.projectID, { generation, authority: input.authority })
-    let registered = true
-    return {
-      isCurrent() {
-        return registered && flowAuthorities.get(input.projectID)?.generation === generation
-      },
-      unregister() {
-        if (!registered) return
-        registered = false
-        if (flowAuthorities.get(input.projectID)?.generation === generation) flowAuthorities.delete(input.projectID)
-      },
+  export async function ensureRunning(): Promise<McpOAuthCallbackBinding> {
+    return ensureRunningForRoot(Global.Path.root)
+  }
+
+  export async function assertCurrent(binding: McpOAuthCallbackBinding): Promise<void> {
+    const current = await readBrokerIdentity(Global.Path.root)
+    if (!current) throw new Error("MCP OAuth callback broker identity is unavailable")
+    const actual = publicBinding(current)
+    if (actual.generation !== binding.generation || actual.redirectUrl !== binding.redirectUrl) {
+      throw new Error("MCP OAuth callback broker identity changed while the authorization flow was active")
     }
   }
 
   function waitForCallback(
     oauthState: string,
-    mcpName: string | undefined,
+    authKey: string | undefined,
     correlationID: string,
   ): Promise<MCP.Status> {
+    const root = Global.Path.root
+    const stateKey = pendingAuthKey(oauthState, root)
+    const mcpKey = authKey ? pendingMcpKey(authKey, root) : undefined
     return new Promise((resolve, reject) => {
       const timeout = setTimeout(() => {
-        const pending = pendingAuths.get(oauthState)
+        const pending = pendingAuths.get(stateKey)
         if (pending?.timeout === timeout && pending.phase === "waiting") {
-          pendingAuths.delete(oauthState)
-          if (mcpName && mcpNameToState.get(mcpName) === oauthState) mcpNameToState.delete(mcpName)
+          clearInterval(pending.terminalPoll)
+          pendingAuths.delete(stateKey)
+          if (mcpKey && mcpNameToState.get(mcpKey) === oauthState) mcpNameToState.delete(mcpKey)
           reject(new Error("OAuth callback timeout - authorization took too long"))
         }
       }, CALLBACK_TIMEOUT_MS)
 
-      pendingAuths.set(oauthState, { resolve, reject, timeout, mcpName, correlationID, phase: "waiting" })
-      if (mcpName) mcpNameToState.set(mcpName, oauthState)
+      const observeTerminal = async () => {
+        const pending = pendingAuths.get(stateKey)
+        if (!pending || pending.phase !== "waiting" || pending.pollingTerminal || !authKey) return
+        pending.pollingTerminal = true
+        try {
+          let terminal = await McpAuth.getOAuthCallbackTerminal(authKey, oauthState)
+          if (!terminal) {
+            const entry = await McpAuth.get(authKey)
+            if (
+              entry?.revision &&
+              entry.oauthFinishing?.oauthState === oauthState &&
+              entry.oauthFinishing.leaseExpiresAt <= Date.now()
+            ) {
+              terminal = await McpAuth.settleExpiredOAuthFinishing(authKey, oauthState, entry.revision)
+            }
+          }
+          pending.terminalReadFailures = 0
+          if (!terminal) return
+          if (terminal.outcome === "connected") {
+            settleLocally(oauthState, pending, (current) => current.resolve({ status: "connected" }), root)
+            return
+          }
+          const failureOutcome = terminal.outcome
+          settleLocally(
+            oauthState,
+            pending,
+            (current) => current.reject(new Error(McpAuth.oauthCallbackTerminalMessage(failureOutcome))),
+            root,
+          )
+        } catch {
+          pending.terminalReadFailures++
+          if (pending.terminalReadFailures >= 3) {
+            settleLocally(
+              oauthState,
+              pending,
+              (current) => current.reject(new Error("MCP OAuth callback terminal could not be read durably")),
+              root,
+            )
+          }
+        } finally {
+          const current = pendingAuths.get(stateKey)
+          if (current === pending) current.pollingTerminal = false
+        }
+      }
+      const terminalPoll = setInterval(() => void observeTerminal(), 100)
+      ;(terminalPoll as ReturnType<typeof setInterval> & { unref?: () => void }).unref?.()
+      pendingAuths.set(stateKey, {
+        resolve,
+        reject,
+        timeout,
+        terminalPoll,
+        pollingTerminal: false,
+        terminalReadFailures: 0,
+        mcpName: authKey,
+        correlationID,
+        phase: "waiting",
+      })
+      if (mcpKey) mcpNameToState.set(mcpKey, oauthState)
+      void observeTerminal()
     })
   }
 
@@ -430,63 +787,91 @@ export namespace McpOAuthCallback {
   }
 
   export function cancelPending(mcpName: string): void {
-    const oauthState = mcpNameToState.get(mcpName)
+    const mcpKey = pendingMcpKey(mcpName)
+    const oauthState = mcpNameToState.get(mcpKey)
     if (!oauthState) return
-    const pending = pendingAuths.get(oauthState)
+    const stateKey = pendingAuthKey(oauthState)
+    const pending = pendingAuths.get(stateKey)
     if (pending?.phase === "waiting") {
       clearTimeout(pending.timeout)
-      pendingAuths.delete(oauthState)
-      mcpNameToState.delete(mcpName)
+      clearInterval(pending.terminalPoll)
+      pendingAuths.delete(stateKey)
+      mcpNameToState.delete(mcpKey)
       pending.reject(new Error("Authorization cancelled"))
     } else {
       // Index pointed at a state that's no longer pending (already
       // resolved / timed out). Clean up the orphan index entry.
-      mcpNameToState.delete(mcpName)
+      mcpNameToState.delete(mcpKey)
     }
   }
 
-  export async function stop(): Promise<void> {
-    if (server) {
-      server.stop()
-      server = undefined
-      log.info("oauth callback server stopped")
-    }
-    flowAuthorities.clear()
+  export function stop(): Promise<void> {
+    if (brokerStop) return brokerStop
+    brokersStopping = true
+    brokerStopEpoch++
+    brokerStop = (async () => {
+      try {
+        const runtimes = [...brokers.values()]
+        await Promise.all([...brokers.keys()].map((root) => retireBrokerRoot(root)))
+        await Promise.allSettled([
+          ...brokerStarts.values(),
+          ...runtimes.flatMap((runtime) => (runtime.takeover ? [runtime.takeover] : [])),
+        ])
+        await Promise.all([...brokers.keys()].map((root) => retireBrokerRoot(root)))
+        log.info("oauth callback brokers stopped")
 
-    for (const [state, pending] of pendingAuths) {
-      clearTimeout(pending.timeout)
-      // An accepted callback owns the only remaining outcome. Stopping the
-      // listener prevents new requests but must not report failure to a waiter
-      // whose already-running durable finish may still succeed.
-      if (pending.phase === "waiting") {
-        pendingAuths.delete(state)
-        pending.reject(new Error("OAuth callback server stopped"))
+        for (const [state, pending] of pendingAuths) {
+          clearTimeout(pending.timeout)
+          clearInterval(pending.terminalPoll)
+          // An accepted callback owns the only remaining outcome. Stopping the
+          // listener prevents new requests but must not report failure to a waiter
+          // whose already-running durable finish may still succeed.
+          if (pending.phase === "waiting") {
+            pendingAuths.delete(state)
+            pending.reject(new Error("OAuth callback server stopped"))
+          }
+        }
+        mcpNameToState.clear()
+        afterOwnerResolutionForTest = undefined
+        beforeBrokerProbeForTest = undefined
+        afterUnreachableTakeoverRefusalForTest = undefined
+      } finally {
+        await Promise.all([...brokers.keys()].map((root) => retireBrokerRoot(root)))
+        brokersStopping = false
+        brokerStop = undefined
       }
-    }
-    mcpNameToState.clear()
-    afterOwnerResolutionForTest = undefined
+    })()
+    return brokerStop
   }
 
   /** Settle an interactive waiter from the canonical finish owner. This is
    * also called by the SDK callback path, so a same-process SDK winner and the
    * browser listener publish one outcome instead of racing two answers. */
   export function resolvePendingFinish(oauthState: string, status: MCP.Status): void {
-    const pending = pendingAuths.get(oauthState)
+    const pending = pendingAuths.get(pendingAuthKey(oauthState))
     settleLocally(oauthState, pending, (current) => current.resolve(status))
   }
 
   export function rejectPendingFinish(oauthState: string, error: Error): void {
-    const pending = pendingAuths.get(oauthState)
+    const pending = pendingAuths.get(pendingAuthKey(oauthState))
     settleLocally(oauthState, pending, (current) => current.reject(error))
   }
 
   export function isRunning(): boolean {
-    return server !== undefined
+    return [...brokers.values()].some((runtime) => runtime.server !== undefined)
   }
 
   export namespace TestHooks {
     export function setAfterOwnerResolution(hook: (() => Promise<void>) | undefined): void {
       afterOwnerResolutionForTest = hook
+    }
+
+    export function setBeforeBrokerProbe(hook: (() => Promise<void>) | undefined): void {
+      beforeBrokerProbeForTest = hook
+    }
+
+    export function setAfterUnreachableTakeoverRefusal(hook: (() => Promise<void>) | undefined): void {
+      afterUnreachableTakeoverRefusalForTest = hook
     }
   }
 }

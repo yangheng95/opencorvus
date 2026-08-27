@@ -514,28 +514,122 @@ OpenCorvus 作为 client / host 接入外部或 package-scoped MCP server，并�
 授予的工具暴露给 Agent。`mcp browser` 是内置浏览器 MCP 的独立 stdio 入口，Task 调度只使用
 内部 projected-agent runtime。Browser MCP 的 Playwright Page 是浏览、截图、诊断和用户观看的唯一页面事实源。
 
-MCP OAuth callback listener 是本地 redirect 的唯一 finish 与 HTTP answer owner。无论当前进程是否仍有
-interactive waiter，listener 都先通过 project-scoped durable authority 解析 state，再进入同一个
-`finishAuthCallback`；后者通过 credential store 内的 compare-and-clear 单次 spend 完成唯一 admission。
-interactive `authenticate` 不再次 exchange authorization code，只接收 listener 那次 finish 返回的 canonical
-`MCP.Status`。`finishAuthCallback` 为同一 runtime 内精确 `authKey + state` 保持一个 in-flight operation；listener
-duplicate 与公开 SDK callback route 都加入它，operation 自己把唯一 status/error 结算给本地 waiter。精确 callback
-到达后，本地 waiter 进入 finishing phase 并停止独立 timeout/cancel/stop settlement；listener 只在 durable finish
-成功或失败后回答浏览器。winner 即使已经 spend、仍在慢速 provider exchange，loser 也只能等待 canonical operation，
-不能抢先把 waiter 投影成失败。每个已进入 authority resolution 的 callback 持有一个 callback-owned terminal receipt；
-receipt 在首次 durable read 前注册，finish 在 operation 创建时把精确 Promise 发布给所有已入场 receipt。live operation
-map 可在 canonical settlement 后立即清理，但已入场 callback 仍通过自己的 receipt 得到同一结果，不存在 completed-result
-cache 或第二 durable owner。durable authority 对 exact state 明确返回 `pending` 或 `finishing`；命中后者的
-provider-error、missing-code 与 code duplicate 都加入 canonical operation，不能把已 spend 的 state 重新解释为
-abandon 请求。只有仍为 `pending` 的 provider rejection 和 missing-code callback 才尝试在 HTTP response 与本地
-rejection 之前 durable abandon exact state 与 verifier；`pending` resolution 只是快照，若 code finish 在其后抢先
-spend，authority 必须在 abandon 的原子结果边界通过 callback receipt 加入同一 runtime 的 exact operation，而不能把
-loser 的 already-spent 结果投影给 waiter。只有没有 canonical finish 可加入的真实 abandon 失败才以同一个错误结算
-HTTP 与 waiter。callback
-原错之后的 state cleanup 若也失败，返回保留 callback error 为 cause 且同时携带两者的 `AggregateError`。
-共享 listener 解析多项目 authority 时先同步启动全部当前 authority 的 resolution，再按注册顺序消费结果；因此每个
-项目的 callback receipt 都在等待任一 non-owner durable read 前入场。前置慢项目不能让真实 owner 错过同一 runtime
-winner 的 Promise，单个 authority 失败仍仅在没有任何 authority 声明 owner 时进入原有聚合错误契约。
+MCP OAuth callback broker 是本地 redirect 的唯一 finish 与 HTTP answer adapter。每个 data root 在
+`mcp-oauth-callback-broker.json` 保存 mode-`0600` 的稳定 positive loopback port（1–65535）、随机 generation 与 proof secret；文件只描述
+broker identity，不描述 OAuth flow。第一个 backend 绑定该 port，peer 通过随机 challenge 的 HMAC
+（Hash-based Message Authentication Code，基于哈希的消息认证码）响应验证它确属同一 data root，并在 owner 退出后
+重绑同一 port。peer probe/takeover 在每个 runtime 内 single-flight；identity handoff 会先停止旧 local server，再替换
+runtime handle。listener 已 `unref`，因此复用它的 backend 正常存活时 callback 可达，而一次性 CLI 不会因 listener
+悬挂。proof timeout、连接失败或 response body 读取失败是 `unreachable`，不是身份否定：若旧 port 仍被占用，peer 明确拒绝破坏性轮换；
+收到完整 HTTP response 后，非 2xx、JSON/shape 解析失败或 generation/proof/HMAC 认证失败都把 owner 判为 `foreign`、选择新 port/generation 并结算旧 generation 的
+pending flow。broker identity 或 generation settlement 的 atomic rename 若返回不确定结果，owner 重读 exact identity/flow facts；
+一次 `unreachable` takeover refusal 不 retire 当前 peer monitor；只有 replacement 已成功 bind、publish identity 并结算 generation，
+或显式 stop，才替换/退役原 runtime。短暂 stall 恢复后 monitor 继续验证同一 owner，owner 随后退出仍自动接管同一 URI。
+proof 请求与响应都使用 `Connection: close`，runtime 退役则等待 `server.stop(true)` 完成；因此接管判断不会复用旧 owner 的
+keep-alive 连接，显式 stop 返回时旧 listener 及其存量连接都已退出。
+每条 ensure 路径在返回 binding 前重试 generation settlement。不同 data root 不共享 secret，因而不能把另一 root 的
+listener 误认成自己的 broker。
+port `0` 只允许作为进程内动态 bind 请求，不能发布为 durable identity；schema-valid broker 必须已经携带实际 listener port，
+损坏 identity 以 typed parse failure fail closed，不 probe、bind 或结算其 generation。
+每个 root 的 broker startup 也在进程内 single-flight，并登记在 stop owner 下；stop 与并发 stop 共享一个 settlement，递增 stop epoch，
+等待 startup/peer takeover 后再次 retire 全部 runtime。任何跨越 stop epoch 才完成的 startup 都只返回固定 retired error，不能复活
+listener 或 monitor；stop 完成后下一次显式 ensure 才能重新启动 broker。
+
+`mcp-auth.json` 是 flow、PKCE（Proof Key for Code Exchange，授权码交换证明密钥）、dynamic client 与 credential 的唯一
+事实源。pending state 同时绑定 authorize-time server URL、OAuth client credential identity、callback generation 与完整 redirect URI；dynamic client registration
+使用独立的 client callback binding，不能被后来 state 写入伪装成已为新 URI 注册。callback broker 按 exact state 扫描
+store，解析 canonical `projectID:mcpName`，从 SQLite Project owner 映射 worktree，再通过
+`runWithInitializedIndependentProject` 进入该 Project；不扫描 active Instance，也没有 process-local Project authority
+registration。升级前没有 generation 的 pending state/verifier/client facts 在首个 broker generation 下原子结算，token
+与 static credential 保留。token commit 同时快照它实际使用的 dynamic client；broker rotation 可删除仅供未来 authorize
+使用的旧 client registration，但 refresh token 仍使用该 token snapshot，直至 token set 本身被 invalidate。
+每个 OAuth provider connection admission 都通过 store lock 为 absent 或 upgrade-era material entry 初始化一个 non-empty revision；
+初始化不 supersede/clear flow，但此后所有 refresh/client/token writes 都携带该 exact revision。显式 remove 之后，已捕获的 legacy
+refresh writer 不能以 `expectedRevision=undefined` 复活 credential。
+OAuth provider 的 authority 显式分成 `connection` 与 `authorization`。普通 startup/admission 的 connection provider 只读取或
+刷新已存在的 credential；没有有效 token 时在第一个 interactive SDK boundary 返回 `UnauthorizedError` 并投影 `needs_auth`，
+不能 dynamic-register client、读写 state/PKCE verifier 或 redirect，也不能借用另一个 pending occurrence。只有显式 authorize、
+finish 和用户主动运行的 OAuth debug probe 取得 authorization authority。connection refresh 记录本次 SDK attempt 实际读取的
+token 与 selected client snapshot；save 以及 SDK 对 `tokens`/`client`/`all` 的 invalidation 都在 store lock 内比较 snapshot。
+`clientInformation()` 与 `tokens()` 两次 SDK await 之间会在返回 refresh token 前重读 exact token、selected client 和 durable revision，
+并再次验证 canonical Project MCP definition；same-value revision replacement 或配置提交都在任何远端 refresh side effect 前中止旧
+attempt。callback 或另一 refresh 已提交新输入时，旧 attempt 不能向旧端点发送 token/client、覆盖或删除 winner。普通 `MCP.add`
+不等待 callback broker，也不给 connection provider callback binding；broker maintenance 是 stop-tracked background work，因此有效 token 的
+连接和 refresh 不依赖 callback listener 可达。authorization provider 不读取旧 token/token client；首个 broker generation 会在删除旧
+client registration 前把 legacy `tokens + clientInfo` 快照为 `tokenClientInfo`，保留 refresh 所需的真实 client owner。
+
+`finishAuthCallback` 在 spend 前先要求当前 canonical MCP definition 与 authorize-time server/client identity 精确一致；不一致时
+通过 exact revision + state（finishing 时再含 owner）compare-and-swap 发布 terminal；若新 flow 已先取得 auth key，只读取旧 state
+的 `superseded`，绝不撤销新 lease。不匹配的当前 occurrence 发布 `revoked` terminal，不构造 token transport。已进入 exchange 后，唯一 transport 仍从 durable authorize-time server/client
+identity 与 redirect binding 构造；configuration 在途变化不能把旧 code、verifier 或 redirect URI 送往 replacement endpoint。
+若 provider write/renew/reconnect identity fence 观察到 mismatch，已 spend occurrence 收敛为 `exchange_uncertain`；若 old endpoint
+在 fence 再次运行前先返回网络或 exchange error，则收敛为固定 `failed`。每次 provider write 与 post-exchange connection
+publication 都重新验证当前 identity。
+`finishAuthCallback` 通过 credential store 内 compare-and-clear 的单次 spend 完成唯一 admission，并把 pending state
+原子移动到随机 owner、credential revision 与 expiry 共同 fencing 的 `oauthFinishing` occurrence。live owner 在 exchange 和
+post-auth connection 期间续租，每个 token write 也在 store lock 内验证 exact owner 与未过期 lease；broker 轮换不能改写
+或清除 finishing occurrence 的 authorize-time generation、redirect、client 与 verifier。live finishing 阻止新 credential
+lease；owner 消失或停顿越过 expiry 后只发布 `exchange_uncertain` 并清理 flow material，永不重放 authorization code。
+成功、provider rejection、missing code、exchange failure、pending-generation rotation 与新 flow supersession 分别发布
+exact-state durable callback terminal。terminals 是按 state 保存的 occurrence history，至少保留 24 小时；新 lease 不删除旧
+terminal，pending 被替代时先发布 `superseded`。terminal publication 清理 finishing state/verifier/binding，但不复制
+authorization code、token、provider error text 或其他 secret；tombstone 只额外保留当次非敏感 callback generation，使完成后、
+Project 删除后到达的 HTTP duplicate 可由 `state + generation` 精确投影同一 terminal，而无需保留 spendable state。atomic write 的
+不确定结果通过重读 exact state/outcome 收敛。
+authorization-code token commit 也保存本次写入的 exact token/client/server/credential target；rename 后报错仅在 revision、live
+finishing owner 与完整 target footprint 重读一致时视为成功。terminal publish 与 pending abandon 在 rename 前瞬时失败时，仅在
+同一 revision 和 exact pending/finishing owner 仍 live 的边界内受限重试同一幂等 mutation；owner 或 outcome 改变时立即停止，
+不会把本地成功/失败与 peer waiter 的 durable outcome 分裂。若 authorization server 已成功返回 token，但所有 token-store
+pre-rename 写入均失败，唯一 occurrence 发布固定 `exchange_uncertain`，listener/local/peer 都拒绝重放 authorization code。
+若 successful 或 failed exchange 的 terminal publication 在 exact owner 上耗尽全部有界重试，owner 停止续租并等待该 lease
+到期，再由同一 `settleExpiredOAuthFinishing` owner 发布/读取 canonical `exchange_uncertain`；listener、local waiter、peer waiter
+和 duplicate 不得先投影 process-local publication error。
+
+同一进程的 OAuth owner、finish、terminal claim、interactive waiter 与 auth-key-to-state 索引都把 exact `Global.Path.root` 纳入 key；
+相同 Project ID、MCP 名和 state 在两个 data root 中仍是两个独立 occurrence。一个 root 的 start/cancel/remove/finish 只能命中该 root
+的内存 owner，并由该 root 的 durable credential store 与 callback generation 决定结果。
+
+interactive `authenticate` 不再次 exchange authorization code。发起进程保留 process-local waiter fast path，同时按
+`authKey + state` 观察同一个 durable callback terminal；callback 落到 peer broker 时，peer 完成 exchange/terminal write，
+发起进程据此立即得到 connected 或固定 typed failure，而不是等待本地 Map timeout。`finishAuthCallback` 在同一 runtime
+仍为精确 `authKey + state` 保持一个 in-flight operation：listener duplicate 与公开 SDK callback route 加入同一 Promise，
+已进入 resolution 的 callback 通过 callback-owned receipt 穿过 live-map cleanup。命中 durable `finishing` 但没有本进程
+operation 的 callback 不得重放 authorization code；它等待 live lease 的 durable terminal，lease 到期则原子发布并返回
+固定 `exchange_uncertain` failure。只有 exact `connected` status 可发布成功；`disabled`、`disconnected`、`connecting`、
+`failed`、`needs_auth` 与 `needs_client_registration` 都发布同一个固定 failed terminal，因此 listener 与 peer waiter 不会
+对同一 exchange 得出不同结论。provider-controlled error description 与 process-local exchange exception 只作内部 cause；只要
+durable terminal 已发布，listener response、local finisher、local waiter 与 peer waiter 都投影同一个固定 terminal message。
+terminal poll 的 I/O rejection 被计数并在 waiter 边界转换为固定 durable-read failure，
+不会形成 unhandled rejection。
+`mcp debug` 复用 canonical streaming SDK authorization probe，不另建一套 provider 流程；它以 reject-pending admission 保留已有交互授权，
+并在只读探测结束时按捕获 revision terminalize 自己未完成的 state/PKCE occurrence、撤销该 lease，保留允许复用的 dynamic client facts。
+公开 SDK callback 入口遵循相同 join 规则：若 peer 已把 exact state 移入 `oauthFinishing`，本进程忽略 duplicate code 并等待
+canonical terminal。若 durable state 的 scoped Project row 已删除，broker 以 exact occurrence CAS 结算：pending 发布 `revoked`，
+finishing 发布 `exchange_uncertain`，并直接投影该 terminal；listener、本地 waiter 与 peer waiter 不等待 timeout。credential retirement 保留 terminal-only tombstone 时为每个 key
+预生成新的 revision；atomic rename 的 ambiguous catch 只有重读到 exact absent/tombstone footprint 才能视为提交，旧 revision 不能
+在 pre-rename failure 后复活 credential。Project 删除在 SQLite commit 前耐久发布唯一 v4 active cleanup manifest；commit 后同一个
+cleanup owner 才在一个 auth-store lock/read/write 中选择并退役该 `projectID` 下全部 MCP auth keys，再清理 quarantine；key enumeration
+不在 lock 外形成 TOCTOU window。同 Project 的 token/client/static/staged material 一并清除，
+其他 Project 的同名 key 保持完整。退役 publication 对 exact pre-rename failure 有界重试；连续失败返回
+`committed_with_residue` 并保留 active manifest，startup recovery 重试同一清理。active residue 关闭相同确定性 Project ID 的再准入，
+避免新 generation 与旧 credential 共用 key；completed ledger 只重试旧 quarantine，不再退役 MCP credential，因而不能删除重建
+Project 的新 token/client。已发布 v3 manifest 通过 fsync 完整新字节和 atomic write-through replace 一次性迁移为 v4；ambiguous
+replace 重读 exact current fact，迁移后只有 v4 是当前事实。退役为仍活跃的 callback 保留上述 terminal tombstone。
+Instance 初始化在公共 `Project.Info` 之外捕获不可复用的 SQLite Project-row generation。所有 project-scoped OAuth lease admission、
+static credential stage/promote/rollback、reconcile invalidate/remove 与 stale-credential cleanup 都在 auth-store mutation 内复核 exact
+Project ID、worktree 和该 generation；删除前先获 auth lock 的 writer 会被后续 prefix cleanup 包含，删除后或 same-ID 重建后的旧 Instance
+writer 则在写入前被拒。Project deletion cleanup 是唯一不走该 ordinary admission fence 的 project-wide credential retirement owner。
+`Instance.refresh` 原地切换 Project context 时同步替换这个 generation；刷新后的 context 可写入新 occurrence，而刷新前捕获的旧 writer
+仍由 store 内 fence 拒绝。
+OAuth callback 和 dynamic-client 日志只投影 correlation/presence 等固定字段；connection failure 只投影 endpoint presence，不记录 URL、
+userinfo/query、provider query error、client id、token SDK error 或 broker proof material。已向远端披露 stored refresh token 后的
+`UnauthorizedError` 属于固定 failed connection，不重新解释为首次 interactive `needs_auth`。
+只有仍为 `pending` 的 provider rejection 和 missing-code callback 才能在一个 store write 中同时 abandon state/verifier 并
+发布 terminal；若 code finish 在其后抢先 spend，先加入 callback receipt 捕获的同 runtime operation；若 peer process 已将 exact
+state 移入 finishing，则等待 durable terminal，若 peer 已发布 terminal 则直接投影其真实 outcome。connected 与任一固定 failure
+都不能被当前 provider-error/missing-code query 重新解释。interactive caller 观察 callback
+rejection 后会 best-effort clear 仍由自己 revision 拥有的 pending state；若该 cleanup 本身失败，返回保留 callback error 为 cause
+且同时携带 callback/cleanup errors 的 `AggregateError`。
 
 本地运行默认连接用户已打开的稳定版 Google Chrome。BrowserRuntime 读取其默认 profile 发布的
 `DevToolsActivePort`，经 Chrome DevTools Protocol (CDP) 连接 default context，并仅创建和关闭 MCP 自己的 Page。

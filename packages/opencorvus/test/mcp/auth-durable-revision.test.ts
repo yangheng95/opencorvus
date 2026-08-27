@@ -3,6 +3,7 @@ import fs from "node:fs/promises"
 import path from "node:path"
 import { Global } from "../../src/global"
 import { McpAuth } from "../../src/mcp/auth"
+import { McpOAuthProvider } from "../../src/mcp/oauth-provider"
 
 const AUTH_KEY = "project-durable:remote-server"
 
@@ -73,11 +74,14 @@ describe("MCP credential lease generation", () => {
 
     await McpAuth.remove(AUTH_KEY)
     await McpAuth.stageStaticCredential(AUTH_KEY, "brand-new-secret", "https://example.test", "identity-2")
-        await McpAuth.promoteStagedStaticCredential(AUTH_KEY, { serverUrl: "https://example.test", credentialIdentity: "identity-2" })
+    await McpAuth.promoteStagedStaticCredential(AUTH_KEY, {
+      serverUrl: "https://example.test",
+      credentialIdentity: "identity-2",
+    })
 
-    await expect(McpAuth.updateTokens(AUTH_KEY, { accessToken: "stale" }, "https://example.test", preRemoval)).rejects.toThrow(
-      `MCP auth lease was revoked: ${AUTH_KEY}`,
-    )
+    await expect(
+      McpAuth.updateTokens(AUTH_KEY, { accessToken: "stale" }, "https://example.test", preRemoval),
+    ).rejects.toThrow(`MCP auth lease was revoked: ${AUTH_KEY}`)
     expect((await McpAuth.get(AUTH_KEY))?.staticCredential?.secret).toBe("brand-new-secret")
   })
 
@@ -87,12 +91,121 @@ describe("MCP credential lease generation", () => {
     // and admitting it is what let a value captured before a removal write
     // into a recreated credential.
     await McpAuth.stageStaticCredential(AUTH_KEY, "configured-secret", "https://example.test", "identity-1")
-        await McpAuth.promoteStagedStaticCredential(AUTH_KEY, { serverUrl: "https://example.test", credentialIdentity: "identity-1" })
+    await McpAuth.promoteStagedStaticCredential(AUTH_KEY, {
+      serverUrl: "https://example.test",
+      credentialIdentity: "identity-1",
+    })
     expect(await McpAuth.revision(AUTH_KEY)).toBe("")
 
     await expect(McpAuth.updateTokens(AUTH_KEY, { accessToken: "stale" }, "https://example.test", "")).rejects.toThrow(
       `MCP auth write presented an unestablished lease: ${AUTH_KEY}`,
     )
     expect((await McpAuth.get(AUTH_KEY))?.staticCredential?.secret).toBe("configured-secret")
+  })
+
+  test("legacy token admission mints a fence that rejects its refresh writer after removal", async () => {
+    const serverUrl = "https://legacy-token.example.test/mcp"
+    const credentialIdentity = McpOAuthProvider.credentialIdentity(serverUrl, { clientId: "legacy-client" })
+    await McpAuth.set(
+      AUTH_KEY,
+      {
+        tokens: { accessToken: "legacy-access", refreshToken: "legacy-refresh" },
+        clientInfo: { clientId: "legacy-client" },
+      },
+      serverUrl,
+      undefined,
+      credentialIdentity,
+    )
+    const admittedRevision = await McpAuth.ensureRevision(AUTH_KEY)
+    const capturedRefreshWriter = new McpOAuthProvider(
+      "remote-server",
+      AUTH_KEY,
+      serverUrl,
+      { clientId: "legacy-client" },
+      "connection",
+      { generation: "legacy-binding", redirectUrl: "http://127.0.0.1:19876/mcp/oauth/callback" },
+      { onRedirect: () => {} },
+      admittedRevision,
+    )
+    await capturedRefreshWriter.tokens()
+
+    await McpAuth.remove(AUTH_KEY)
+    const staleRefresh = await capturedRefreshWriter
+      .saveTokens({ access_token: "stale-refresh-access", token_type: "Bearer" })
+      .catch((error) => error)
+    expect({
+      admittedRevision,
+      staleRefresh: staleRefresh instanceof Error ? staleRefresh.message : staleRefresh,
+    }).toEqual({
+      admittedRevision: expect.any(String),
+      staleRefresh: `MCP auth lease was revoked: ${AUTH_KEY}`,
+    })
+  })
+
+  test("a refresh that read the pending flow's old token cannot overwrite or invalidate its connected token", async () => {
+    const serverUrl = "https://refresh-cas.example.test/mcp"
+    const credentialIdentity = McpOAuthProvider.credentialIdentity(serverUrl, { clientId: "refresh-client" })
+    const revision = await McpAuth.beginCredentialLease(AUTH_KEY, serverUrl, credentialIdentity)
+    await McpAuth.updateClientInfo(
+      AUTH_KEY,
+      { clientId: "refresh-client" },
+      serverUrl,
+      revision,
+      credentialIdentity,
+      "refresh-generation",
+      "http://127.0.0.1:19876/mcp/oauth/callback",
+    )
+    await McpAuth.updateTokens(
+      AUTH_KEY,
+      { accessToken: "old-access", refreshToken: "old-refresh" },
+      serverUrl,
+      revision,
+      credentialIdentity,
+    )
+    const oauthState = "pending-refresh-cas-state"
+    await McpAuth.updateOAuthState(AUTH_KEY, oauthState, revision)
+    const staleRefresh = new McpOAuthProvider(
+      "remote-server",
+      AUTH_KEY,
+      serverUrl,
+      { clientId: "refresh-client" },
+      "connection",
+      { generation: "refresh-generation", redirectUrl: "http://127.0.0.1:19876/mcp/oauth/callback" },
+      { onRedirect: () => {} },
+      revision,
+    )
+    await staleRefresh.clientInformation()
+    expect(await staleRefresh.tokens()).toEqual(
+      expect.objectContaining({ access_token: "old-access", refresh_token: "old-refresh" }),
+    )
+
+    const ownerID = "callback-token-winner"
+    expect(await McpAuth.spendOAuthState(AUTH_KEY, oauthState, revision, ownerID, Date.now() + 60_000)).toBe(true)
+    await McpAuth.updateTokens(
+      AUTH_KEY,
+      { accessToken: "callback-access", refreshToken: "callback-refresh" },
+      serverUrl,
+      revision,
+      credentialIdentity,
+      { oauthState, ownerID },
+    )
+    await McpAuth.publishOAuthCallbackTerminal(AUTH_KEY, oauthState, "connected", revision, ownerID)
+
+    const staleSave = await staleRefresh
+      .saveTokens({ access_token: "stale-refresh-access", token_type: "Bearer" })
+      .catch((error) => error)
+    const staleInvalidation = await staleRefresh.invalidateCredentials("tokens").catch((error) => error)
+    const current = await McpAuth.get(AUTH_KEY)
+    expect({
+      staleSave: staleSave instanceof Error ? staleSave.message : staleSave,
+      staleInvalidation: staleInvalidation instanceof Error ? staleInvalidation.message : staleInvalidation,
+      tokens: current?.tokens,
+      terminal: current?.oauthCallbackTerminals?.[oauthState],
+    }).toEqual({
+      staleSave: `MCP OAuth refresh input changed before token commit: ${AUTH_KEY}`,
+      staleInvalidation: `MCP OAuth credential input changed before invalidation: ${AUTH_KEY}`,
+      tokens: expect.objectContaining({ accessToken: "callback-access", refreshToken: "callback-refresh" }),
+      terminal: expect.objectContaining({ outcome: "connected" }),
+    })
   })
 })

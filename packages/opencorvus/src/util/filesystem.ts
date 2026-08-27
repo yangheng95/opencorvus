@@ -13,6 +13,7 @@ import { traceSync } from "./debug-trace"
 import {
   renameNoReplace as nativeRenameNoReplace,
   renameNoReplaceWriteThrough as nativeRenameNoReplaceWriteThrough,
+  renameReplaceWriteThrough as nativeRenameReplaceWriteThrough,
 } from "./rename-no-replace"
 import { Flag } from "@/flag/flag"
 
@@ -131,6 +132,30 @@ export namespace Filesystem {
     } catch (err) {
       await rm(tmp, { force: true }).catch(() => {})
       throw err
+    }
+  }
+
+  /** Atomically replace a durable fact after syncing the complete new bytes. */
+  export async function writeDurableAtomic(
+    p: string,
+    content: string | Buffer | Uint8Array,
+    mode?: number,
+  ): Promise<void> {
+    const dir = dirname(p)
+    await mkdirDurable(dir)
+    const tmp = temporaryPath(p, "durable-replace")
+    const handle = await open(tmp, "wx", mode)
+    try {
+      await handle.writeFile(content)
+      await handle.sync()
+    } finally {
+      await handle.close()
+    }
+    try {
+      await nativeRenameReplaceWriteThrough(tmp, p)
+      await syncDirectoryMetadata(dir)
+    } finally {
+      await rm(tmp, { force: true }).catch(() => {})
     }
   }
 

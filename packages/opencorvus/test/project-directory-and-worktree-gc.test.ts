@@ -42,6 +42,8 @@ import { GlobalBus } from "@/bus/global"
 import { Provider } from "@/provider/provider"
 import type { Provider as ProviderType } from "@/provider/provider"
 import { ProtocolStore } from "@/protocol/store"
+import { McpAuth } from "@/mcp/auth"
+import { ProjectDeletionCleanupAdmissionTestHooks } from "@/project/deletion-cleanup-admission"
 
 let rejectDeletionProbeDisposal = false
 let holdDeletionProbeDisposal: Promise<void> | undefined
@@ -110,6 +112,17 @@ function sessionLoopDeletionProviderModel(): ProviderType.Model {
     status: "active",
     release_date: "2026-08-14",
   } as ProviderType.Model
+}
+
+async function convergeExactDirectoryFromInstanceCache(target: string, retainedDirectory: string) {
+  const disposed: string[] = []
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    await Instance.provideProjectIdentity({ directory: retainedDirectory, fn: () => undefined })
+    const convergence = await Instance.converge({ maximumRetained: 1 })
+    disposed.push(...convergence.disposed)
+    if (disposed.includes(target)) return { disposed }
+  }
+  throw new Error(`Instance convergence did not dispose the requested directory: ${target}`)
 }
 
 afterEach(async () => {
@@ -690,7 +703,7 @@ describe("Project directory integrity", () => {
     await fs.mkdir(cacheSandbox)
     await Project.addSandbox(registered.project.id, cacheSandbox)
     await Instance.provide({ directory: cacheSandbox, init: InstanceBootstrap, fn: () => undefined })
-    const convergence = await Instance.converge({ maximumRetained: 1 })
+    const convergence = await convergeExactDirectoryFromInstanceCache(project.path, cacheSandbox)
     expect(convergence.disposed).toContain(project.path)
 
     const result = await deleteProject(registered.project, {
@@ -752,7 +765,7 @@ describe("Project directory integrity", () => {
     await fs.mkdir(cacheSandbox)
     await Project.addSandbox(registered.project.id, cacheSandbox)
     await Instance.provide({ directory: cacheSandbox, init: InstanceBootstrap, fn: () => undefined })
-    const convergence = await Instance.converge({ maximumRetained: 1 })
+    const convergence = await convergeExactDirectoryFromInstanceCache(project.path, cacheSandbox)
     expect(convergence.disposed).toContain(project.path)
 
     const result = await deleteProject(registered.project, {
@@ -933,8 +946,7 @@ describe("Project directory integrity", () => {
         return { created, owner }
       },
     })
-    await Instance.provideProjectIdentity({ directory: sandbox, fn: () => undefined })
-    const convergence = await Instance.converge({ maximumRetained: 1 })
+    const convergence = await convergeExactDirectoryFromInstanceCache(project.path, sandbox)
     expect(convergence.disposed).toContain(project.path)
     const promptSettled = new Promise<void>((resolve, reject) => {
       child.owner.addEventListener(
@@ -1691,6 +1703,69 @@ describe("Project directory integrity", () => {
     })
   }, 90_000)
 
+  test("Project credential cleanup and stale peer admission share one exact deletion boundary", async () => {
+    await using project = await memoryProject()
+    const registered = await Project.fromDirectory(project.path)
+    const oldAuthKey = McpAuth.scopedKey({ projectID: registered.project.id, mcpName: "old-server" })
+    const oldRevision = await McpAuth.beginCredentialLease(oldAuthKey, "https://old.invalid/mcp", "old-identity")
+    await McpAuth.updateTokens(
+      oldAuthKey,
+      { accessToken: "old-project-token" },
+      "https://old.invalid/mcp",
+      oldRevision,
+      "old-identity",
+    )
+
+    const cleanupRead = Promise.withResolvers<void>()
+    const releaseCleanup = Promise.withResolvers<void>()
+    McpAuth.TestHooks.setAfterProjectRemovalRead(async () => {
+      cleanupRead.resolve()
+      await releaseCleanup.promise
+    })
+    try {
+      const deletion = deleteProject(registered.project, {
+        actor: "user",
+        source: "project.delete",
+        surface: "api",
+        requestID: "request_project_credential_cleanup_admission_race",
+        reason: "Delete Project while a stale backend attempts another MCP credential admission",
+      })
+      await cleanupRead.promise
+      const staleAuthKey = McpAuth.scopedKey({ projectID: registered.project.id, mcpName: "stale-peer-server" })
+      const staleAdmission = McpAuth.beginCredentialLease(
+        staleAuthKey,
+        "https://stale.invalid/mcp",
+        "stale-identity",
+        async () => {
+          const current = Project.occurrence(registered.project.id)
+          if (!current || current.generation !== registered.generation) {
+            throw new Error("stale Project generation is no longer admitted")
+          }
+        },
+      ).catch((error) => error)
+      releaseCleanup.resolve()
+
+      const [receipt, admission] = await Promise.all([deletion, staleAdmission])
+      const residue = Object.entries(await McpAuth.all()).filter(
+        ([authKey, entry]) =>
+          McpAuth.parseScopedKey(authKey)?.projectID === registered.project.id &&
+          McpAuth.hasCredentialOrFlowMaterial(entry),
+      )
+      expect({
+        deletion: receipt,
+        staleAdmission: admission instanceof Error ? admission.message : admission,
+        residue,
+      }).toEqual({
+        deletion: expect.objectContaining({ ok: true, status: "committed" }),
+        staleAdmission: "stale Project generation is no longer admitted",
+        residue: [],
+      })
+    } finally {
+      releaseCleanup.resolve()
+      McpAuth.TestHooks.setAfterProjectRemovalRead(undefined)
+    }
+  }, 90_000)
+
   test("commits cleanup after the quarantined root parent is already absent", async () => {
     await using project = await memoryProject()
     const registered = await Project.fromDirectory(project.path)
@@ -1742,6 +1817,32 @@ describe("Project directory integrity", () => {
     await recoverProjectDeletionCleanup()
     await fs.mkdir(quarantine, { recursive: true })
     await fs.writeFile(path.join(quarantine, "power-loss-residue.txt"), "reappeared namespace entry")
+    Database.use((db) =>
+      db
+        .insert(ProjectTable)
+        .values({
+          id: registered.project.id,
+          worktree: project.path,
+          sandboxes: [],
+          generation: crypto.randomUUID(),
+          time_created: registered.project.time.created,
+          time_updated: registered.project.time.created,
+        })
+        .run(),
+    )
+    const recreatedAuthKey = McpAuth.scopedKey({ projectID: registered.project.id, mcpName: "recreated-server" })
+    const recreatedRevision = await McpAuth.beginCredentialLease(
+      recreatedAuthKey,
+      "https://recreated.invalid/mcp",
+      "recreated-identity",
+    )
+    await McpAuth.updateTokens(
+      recreatedAuthKey,
+      { accessToken: "recreated-completed-ledger-token" },
+      "https://recreated.invalid/mcp",
+      recreatedRevision,
+      "recreated-identity",
+    )
     const replacementDatabaseInstanceID = crypto.randomUUID()
     Database.use((db) =>
       db
@@ -1762,10 +1863,12 @@ describe("Project directory integrity", () => {
         () => "present" as const,
         (error: NodeJS.ErrnoException) => (error.code === "ENOENT" ? ("missing" as const) : Promise.reject(error)),
       ),
+      recreatedCredential: (await McpAuth.get(recreatedAuthKey))?.tokens?.accessToken,
     }).toEqual({
       databaseInstanceID: replacementDatabaseInstanceID,
       oldCompletedLedger: [path.basename(plan.manifestPath)],
       quarantine: "missing",
+      recreatedCredential: "recreated-completed-ledger-token",
     })
   }, 90_000)
 
@@ -1797,6 +1900,19 @@ describe("Project directory integrity", () => {
     })
     await fs.mkdir(source, { recursive: true })
     await fs.writeFile(path.join(source, "authority.txt"), "new-generation")
+    const recreatedAuthKey = McpAuth.scopedKey({ projectID: registered.project.id, mcpName: "new-generation-server" })
+    const recreatedRevision = await McpAuth.beginCredentialLease(
+      recreatedAuthKey,
+      "https://new-generation.invalid/mcp",
+      "new-generation-identity",
+    )
+    await McpAuth.updateTokens(
+      recreatedAuthKey,
+      { accessToken: "new-generation-token" },
+      "https://new-generation.invalid/mcp",
+      recreatedRevision,
+      "new-generation-identity",
+    )
     await recoverProjectDeletionCleanup()
 
     expect({
@@ -1812,11 +1928,117 @@ describe("Project directory integrity", () => {
           .where(eq(ProjectTable.id, registered.project.id))
           .get(),
       )?.generation,
+      recreatedCredential: (await McpAuth.get(recreatedAuthKey))?.tokens?.accessToken,
     }).toEqual({
       source: "new-generation",
       quarantine: "missing",
       projectGeneration: expect.not.stringMatching(new RegExp(`^${plan.manifest.projectGeneration}$`)),
+      recreatedCredential: "new-generation-token",
     })
+  }, 90_000)
+
+  test("migrates active and completed v3 deletion facts before recovery", async () => {
+    await using project = await memoryProject()
+    const registered = await Project.fromDirectory(project.path)
+    const source = ProjectRuntimePaths.projectConfigRoot(project.path)
+    await fs.mkdir(source, { recursive: true })
+    const activePlan = await createProjectDeletionCleanupPlan({
+      projectID: registered.project.id,
+      directory: project.path,
+      sources: [source],
+    })
+    const quarantine = activePlan.manifest.targets[0]!.quarantine
+    await fs.rename(source, quarantine)
+    await fs.writeFile(
+      activePlan.manifestPath,
+      `${JSON.stringify({ ...activePlan.manifest, format: "opencorvus.project-deletion-cleanup.v3" }, null, 2)}\n`,
+    )
+    Database.use((db) => db.delete(ProjectTable).where(eq(ProjectTable.id, registered.project.id)).run())
+    const actualDurableWrite = Filesystem.writeDurableAtomic.bind(Filesystem)
+    let injectedAmbiguity = true
+    const durableWrite = spyOn(Filesystem, "writeDurableAtomic").mockImplementation(async (...args) => {
+      await actualDurableWrite(...args)
+      if (injectedAmbiguity && path.resolve(String(args[0])) === path.resolve(activePlan.manifestPath)) {
+        injectedAmbiguity = false
+        throw new Error("ambiguous v3 migration after durable rename")
+      }
+    })
+    try {
+      await recoverProjectDeletionCleanup()
+    } finally {
+      durableWrite.mockRestore()
+    }
+    const completedPath = path.join(
+      ProjectDeletionCleanupTestHooks.completedRoot(activePlan.manifest.databaseInstanceID),
+      path.basename(activePlan.manifestPath),
+    )
+    const migratedActive = JSON.parse(await fs.readFile(completedPath, "utf8")) as { format: string }
+    await fs.mkdir(quarantine, { recursive: true })
+    await fs.writeFile(
+      completedPath,
+      `${JSON.stringify({ ...activePlan.manifest, format: "opencorvus.project-deletion-cleanup.v3" }, null, 2)}\n`,
+    )
+    await recoverProjectDeletionCleanup()
+    const migratedCompleted = JSON.parse(await fs.readFile(completedPath, "utf8")) as { format: string }
+
+    expect({
+      activeFormat: migratedActive.format,
+      migrationPublication: injectedAmbiguity ? "not-observed" : "reconciled",
+      completedFormat: migratedCompleted.format,
+      completedResidue: await fs.stat(quarantine).then(
+        () => "present" as const,
+        (error: NodeJS.ErrnoException) => (error.code === "ENOENT" ? ("retired" as const) : Promise.reject(error)),
+      ),
+    }).toEqual({
+      activeFormat: "opencorvus.project-deletion-cleanup.v4",
+      migrationPublication: "reconciled",
+      completedFormat: "opencorvus.project-deletion-cleanup.v4",
+      completedResidue: "retired",
+    })
+  }, 90_000)
+
+  test("Project admission tolerates a concurrently completed cleanup manifest scan", async () => {
+    await using project = await memoryProject()
+    const registered = await Project.fromDirectory(project.path)
+    const source = ProjectRuntimePaths.projectConfigRoot(project.path)
+    await fs.mkdir(source, { recursive: true })
+    const plan = await createProjectDeletionCleanupPlan({
+      projectID: registered.project.id,
+      directory: project.path,
+      sources: [source],
+    })
+    await fs.rename(source, plan.manifest.targets[0]!.quarantine)
+    Database.use((db) => db.delete(ProjectTable).where(eq(ProjectTable.id, registered.project.id)).run())
+    let scanObserved!: () => void
+    let releaseScan!: () => void
+    const observed = new Promise<void>((resolve) => {
+      scanObserved = resolve
+    })
+    const gate = new Promise<void>((resolve) => {
+      releaseScan = resolve
+    })
+    ProjectDeletionCleanupAdmissionTestHooks.setBeforeManifestRead(async (manifestPath) => {
+      if (path.resolve(manifestPath) !== path.resolve(plan.manifestPath)) return
+      scanObserved()
+      await gate
+    })
+    try {
+      const admission = Project.fromDirectory(project.path)
+      await observed
+      await recoverProjectDeletionCleanup()
+      releaseScan()
+      const recreated = await admission
+      expect({
+        projectID: recreated.project.id,
+        cleanup: await fs.readdir(ProjectDeletionCleanupTestHooks.root()),
+      }).toEqual({
+        projectID: registered.project.id,
+        cleanup: [],
+      })
+    } finally {
+      releaseScan?.()
+      ProjectDeletionCleanupAdmissionTestHooks.setBeforeManifestRead(undefined)
+    }
   }, 90_000)
 
   test("fails closed when a cleanup manifest belongs to another database instance", async () => {

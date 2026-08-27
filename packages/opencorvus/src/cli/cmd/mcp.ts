@@ -1,11 +1,8 @@
 import { cmd } from "./cmd"
-import { Client } from "@modelcontextprotocol/sdk/client/index.js"
-import { UnauthorizedError } from "@modelcontextprotocol/sdk/client/auth.js"
 import * as prompts from "@clack/prompts"
 import { UI } from "../ui"
 import { MCP } from "../../mcp"
 import { McpAuth } from "../../mcp/auth"
-import { McpOAuthProvider } from "../../mcp/oauth-provider"
 import { Config } from "../../config/config"
 import { Instance } from "../../project/instance"
 import { Project } from "../../project/project"
@@ -734,75 +731,17 @@ export const McpDebugCommand = cmd({
           if (response.status === 401) {
             prompts.log.warn("Server returned 401 Unauthorized")
 
-            // Try to discover OAuth metadata
-            const oauthConfig = typeof serverConfig.oauth === "object" ? serverConfig.oauth : undefined
-            const authKey = currentMcpAuthKey(serverName)
-            const authProvider = new McpOAuthProvider(
-              serverName,
-              authKey,
-              serverConfig.url,
-              {
-                clientId: oauthConfig?.clientId,
-                clientSecret: oauthConfig?.clientSecret,
-                scope: oauthConfig?.scope,
-              },
-              {
-                onRedirect: async () => {},
-              },
-              // The lease carries the server identity from the start, so the
-              // entry it establishes is never in credential reconciliation's
-              // stale class. Note this debug probe deliberately revokes any
-              // pending interactive flow on this credential: its SDK callbacks
-              // write registration and state, and a writer needs the lease.
-              await McpAuth.beginCredentialLease(
-                authKey,
-                serverConfig.url,
-                McpOAuthProvider.credentialIdentity(serverConfig.url, {
-                  clientId: oauthConfig?.clientId,
-                  clientSecret: oauthConfig?.clientSecret,
-                  scope: oauthConfig?.scope,
-                }),
-              ),
-            )
-
             prompts.log.info("Testing OAuth flow (without completing authorization)...")
-
-            // Try creating the configured remote transport with auth provider to trigger discovery.
-            const { name: transportName, transport } = MCP.createRemoteTransport(
-              serverConfig,
-              authProvider,
-              MCP.mcpFetchRequestInit(debugTimeout),
-            )
-
-            let client: Client | undefined
             try {
-              client = new Client({
-                name: "opencorvus-debug",
-                version: Installation.VERSION,
-              })
-              await client.connect(transport, MCP.mcpRequestOptions(debugTimeout))
-              prompts.log.success(`Connection successful via ${transportName} (already authenticated)`)
-            } catch (error) {
-              if (error instanceof UnauthorizedError) {
-                prompts.log.info(`OAuth flow triggered: ${error.message}`)
-
-                // Check if dynamic registration would be attempted
-                const clientInfo = await authProvider.clientInformation()
-                prompts.log.info(mcpDebugClientInformationLine(clientInfo))
+              const probe = await MCP.debugAuthProbe(serverName)
+              if (probe.status === "already_authenticated") {
+                prompts.log.success("Connection successful (already authenticated)")
               } else {
-                prompts.log.error(`Connection error: ${error instanceof Error ? error.message : String(error)}`)
+                prompts.log.info("OAuth authorization is required")
+                prompts.log.info(mcpDebugClientInformationLine(probe.clientInformation))
               }
-            } finally {
-              await client?.close().catch((closeError) => {
-                prompts.log.error(
-                  `Failed to close debug MCP client: ${closeError instanceof Error ? closeError.message : String(closeError)}`,
-                )
-              })
-              await transport.close().catch((closeError) => {
-                prompts.log.error(
-                  `Failed to close debug MCP transport: ${closeError instanceof Error ? closeError.message : String(closeError)}`,
-                )
-              })
+            } catch (error) {
+              prompts.log.error(`Connection error: ${error instanceof Error ? error.message : String(error)}`)
             }
           } else if (response.status >= 200 && response.status < 300) {
             prompts.log.success("Server responded successfully (no auth required or already authenticated)")

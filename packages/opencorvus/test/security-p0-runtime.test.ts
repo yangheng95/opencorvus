@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, test } from "bun:test"
 import { mcpDebugClientInformationLine } from "../src/cli/cmd/mcp"
 import { McpOAuthCallback } from "../src/mcp/oauth-callback"
+import { oauthCallbackReceivedLogFields, oauthConnectionFailureLogFields } from "../src/mcp/oauth-log"
 import { OAUTH_CALLBACK_PATH } from "../src/mcp/oauth-provider"
 import { Instance } from "../src/project/instance"
 import { publicUnknownErrorMessage } from "../src/server/error-handler"
@@ -12,51 +13,48 @@ afterEach(async () => {
 })
 
 describe("P0 security runtime paths", () => {
-  test("OAuth callback validates state before handling provider errors", async () => {
-    const validState = "valid-oauth-state"
-    const malformedState = "malformed-oauth-state"
-    const owner = "project:mcp"
-    const flows = new Set([validState, malformedState])
-    await McpOAuthCallback.ensureRunning({
-      projectID: "security-project",
-      authority: {
-        resolveState: async (state) => (flows.has(state) ? { mcpName: "mcp", phase: "pending" } : undefined),
-        async finish({ oauthState }) {
-          flows.delete(oauthState)
-          return { status: "connected" }
-        },
-        async joinFinish() {
-          throw new Error("No finish is in flight in this authority fixture")
-        },
-        async abandon({ oauthState }) {
-          flows.delete(oauthState)
-          return { outcome: "abandoned" }
-        },
-      },
+  test("OAuth callback validates durable state before interpreting provider-controlled errors", async () => {
+    await McpOAuthCallback.ensureRunning()
+    const missing = await McpOAuthCallback.handleRequest(
+      new Request(`http://127.0.0.1${OAUTH_CALLBACK_PATH}?error=access_denied`),
+    )
+    const forged = await McpOAuthCallback.handleRequest(
+      new Request(`http://127.0.0.1${OAUTH_CALLBACK_PATH}?state=expired&error=provider-secret-text`),
+    )
+
+    expect({
+      missing: { status: missing.status, body: (await missing.text()).includes("Missing required state parameter") },
+      forged: { status: forged.status, body: (await forged.text()).includes("Invalid or expired state parameter") },
+    }).toEqual({
+      missing: { status: 400, body: true },
+      forged: { status: 400, body: true },
     })
-    const callback = McpOAuthCallback.waitForCallbackSettlement(validState, owner, "flow-correlation-id")
+  })
 
-    const invalid = await McpOAuthCallback.handleRequest(
-      new Request(`http://127.0.0.1${OAUTH_CALLBACK_PATH}?state=expired&error=access_denied`),
-    )
-    expect(invalid.status).toBe(400)
+  test("OAuth callback logging projects only fixed presence facts for provider-controlled input", () => {
+    expect(
+      oauthCallbackReceivedLogFields({
+        code: "private-authorization-code",
+        error: "provider-sentinel-secret",
+        correlationID: "callback-correlation",
+      }),
+    ).toEqual({ correlationID: "callback-correlation", hasCode: true, hasError: true })
+  })
 
-    const valid = await McpOAuthCallback.handleRequest(
-      new Request(`http://127.0.0.1${OAUTH_CALLBACK_PATH}?state=${validState}&code=authorization-code`),
-    )
-    expect(valid.status).toBe(200)
-    expect(await callback).toEqual({ status: "fulfilled", result: { status: "connected" } })
-
-    const malformed = McpOAuthCallback.waitForCallbackSettlement(malformedState, owner, "malformed-correlation-id")
-    const malformedResponse = await McpOAuthCallback.handleRequest(
-      new Request(`http://127.0.0.1${OAUTH_CALLBACK_PATH}?state=${malformedState}`),
-    )
-    expect(malformedResponse.status).toBe(400)
-    const malformedResult = await malformed
-    expect(malformedResult.status).toBe("rejected")
-    if (malformedResult.status === "rejected") {
-      expect(malformedResult.error.message).toBe("No authorization code provided")
-    }
+  test("OAuth connection failure logging is a fixed non-secret projection", () => {
+    expect(
+      oauthConnectionFailureLogFields({
+        mcpName: "private-server-name",
+        transport: "Streamable HTTP",
+        serverUrl: "https://private-user:private-password@example.test/mcp?api_key=private-api-key",
+      }),
+    ).toEqual({
+      mcpName: "private-server-name",
+      transport: "Streamable HTTP",
+      endpointPresent: true,
+      oauthFailure: true,
+      error: "MCP OAuth connection failed",
+    })
   })
 
   test("VCS stream failures write the generic public event and retain private diagnostics", async () => {

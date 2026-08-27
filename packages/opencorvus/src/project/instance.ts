@@ -125,6 +125,7 @@ type InstanceApi = {
   readonly directory: string
   readonly worktree: string
   readonly project: Project.Info
+  readonly projectGeneration: string
   current(): Context | undefined
   refresh(directory?: string): Promise<Context>
   containsPath(filepath: string): boolean
@@ -161,8 +162,10 @@ function getOrCreateCacheEntry(directory: string, key: string): CacheEntry {
   const blockedProjectIDs = new Set(closedProjectAdmissions.keys())
   let created!: CacheEntry
   const contextPromise = iife(async () => {
-    const { project, sandbox } = await ProjectOpenLifecycle.stage("project.from-directory", { directory }, () =>
-      Project.fromDirectory(directory, { blockedProjectIDs }),
+    const { project, sandbox, generation } = await ProjectOpenLifecycle.stage(
+      "project.from-directory",
+      { directory },
+      () => Project.fromDirectory(directory, { blockedProjectIDs }),
     )
     created.projectID = project.id
     settleIdentity()
@@ -183,7 +186,7 @@ function getOrCreateCacheEntry(directory: string, key: string): CacheEntry {
           `Move or delete these runtime directories before starting; new task/session state lives under ${ProjectRuntimePaths.relativeRuntimeRoot()}.`,
       )
     }
-    return refreshedContext(directory, { project, sandbox })
+    return refreshedContext(directory, { project, sandbox, generation })
   }).catch((error) => {
     settleIdentity()
     throw lifecycleError(error, `Instance project discovery for ${directory}`)
@@ -292,6 +295,7 @@ function createCacheEntry(contextPromise: Promise<Context>, identityKnown: Promi
 function seedProjectDeletionIdentity(
   directory: string,
   project: Project.Info,
+  projectGeneration: string,
 ): { key: string; entry: CacheEntry } | undefined {
   const resolved = Filesystem.resolve(directory)
   const key = instanceCacheKey(resolved)
@@ -302,6 +306,7 @@ function seedProjectDeletionIdentity(
     // remains the registered repository root. This matches refreshedContext.
     worktree: resolved,
     project,
+    projectGeneration,
     git: Project.isGitRepo(project.worktree),
   }
   const entry = createCacheEntry(Promise.resolve(context), Promise.resolve())
@@ -1030,6 +1035,7 @@ function refreshedContext(directory: string, next: Awaited<ReturnType<typeof Pro
     directory,
     worktree: next.sandbox,
     project: next.project,
+    projectGeneration: next.generation,
     git: Project.isGitRepo(next.project.worktree),
   }
 }
@@ -1037,6 +1043,7 @@ function refreshedContext(directory: string, next: Awaited<ReturnType<typeof Pro
 function applyContext(current: Context, next: Awaited<ReturnType<typeof Project.fromDirectory>>) {
   current.worktree = next.sandbox
   current.project = next.project
+  current.projectGeneration = next.generation
   current.git = Project.isGitRepo(next.project.worktree)
 }
 
@@ -1115,10 +1122,7 @@ function cancelInstanceBackgroundWork(entry: CacheEntry, reason: string): void {
  * and dropped here; whatever durable state the work maintains is what the
  * next trigger resumes from.
  */
-export function runInstanceBackgroundWork(
-  label: string,
-  work: (signal: AbortSignal) => Promise<void>,
-): void {
+export function runInstanceBackgroundWork(label: string, work: (signal: AbortSignal) => Promise<void>): void {
   // Only the instance context is required: schedulers such as a durable Bus
   // delivery replayed from the outbox run with a project identity but no
   // lease of their own, and background work must be schedulable from exactly
@@ -1556,12 +1560,12 @@ export const Instance: InstanceApi = {
           new InstanceSettlementInactivityError(labels, Flag.OPENCORVUS_PROJECT_RUNTIME_DISPOSAL_TIMEOUT_MS),
       })
       await Promise.resolve()
-      const project = Project.get(input.projectID)
-      if (!project) {
+      const occurrence = Project.occurrence(input.projectID)
+      if (!occurrence) {
         throw new Error(`Project ${input.projectID} disappeared while closing deletion admission`)
       }
       for (const directory of directories) {
-        const seeded = seedProjectDeletionIdentity(directory, project)
+        const seeded = seedProjectDeletionIdentity(directory, occurrence.project, occurrence.generation)
         if (seeded) seededEntries.push(seeded)
       }
       const authority: ProjectDeletionAdmission = {
@@ -1630,11 +1634,7 @@ export const Instance: InstanceApi = {
             inactivityError: (labels) => new InstanceSettlementInactivityError(labels, inactivityTimeoutMilliseconds),
           })
         await waitForLeaseSettlement()
-        let release = await acquireEntryTurnWithin(
-          entry,
-          `project-instance-lock:${key}`,
-          inactivityTimeoutMilliseconds,
-        )
+        let release = await acquireEntryTurnWithin(entry, `project-instance-lock:${key}`, inactivityTimeoutMilliseconds)
         // A serving handle admitted between the settlement wait and the turn
         // grant still owns the shared context; hand the turn back and wait it
         // out under the same inactivity budget.
@@ -1701,6 +1701,9 @@ export const Instance: InstanceApi = {
   },
   get project() {
     return ProjectInstanceContext.use().project
+  },
+  get projectGeneration() {
+    return ProjectInstanceContext.use().projectGeneration
   },
   current() {
     return ProjectInstanceContext.tryUse()

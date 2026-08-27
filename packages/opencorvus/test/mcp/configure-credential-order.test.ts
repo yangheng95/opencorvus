@@ -1,6 +1,9 @@
 import { afterEach, describe, expect, spyOn, test } from "bun:test"
 import { Config } from "@/config/config"
 import { Instance } from "@/project/instance"
+import { Project } from "@/project/project"
+import { ProjectTable } from "@/project/project.sql"
+import { Database, eq } from "@/storage/db"
 import { MCP } from "@/mcp"
 import { McpAuth } from "@/mcp/auth"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
@@ -25,6 +28,132 @@ function remoteConfig() {
 }
 
 describe("MCP configure commits the credential before the definition", () => {
+  test("a refreshed Instance admits credentials for the recreated Project occurrence", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const projectID = Instance.project.id
+        const oldGeneration = Instance.projectGeneration
+        const recreatedGeneration = crypto.randomUUID()
+        Database.use((db) => {
+          const row = db.select().from(ProjectTable).where(eq(ProjectTable.id, projectID)).get()
+          if (!row) throw new Error("Expected the old Project occurrence")
+          db.delete(ProjectTable).where(eq(ProjectTable.id, projectID)).run()
+          db.insert(ProjectTable)
+            .values({ ...row, generation: recreatedGeneration })
+            .run()
+        })
+
+        await Instance.refresh(project.path)
+        await MCP.configure(SERVER, remoteConfig(), "replacement-secret")
+
+        expect({
+          generations: {
+            old: oldGeneration,
+            instance: Instance.projectGeneration,
+            durable: Project.occurrence(projectID)?.generation,
+          },
+          credential: (await McpAuth.get(`${projectID}:${SERVER}`))?.staticCredential?.secret,
+        }).toEqual({
+          generations: {
+            old: expect.not.stringMatching(new RegExp(`^${recreatedGeneration}$`)),
+            instance: recreatedGeneration,
+            durable: recreatedGeneration,
+          },
+          credential: "replacement-secret",
+        })
+      },
+    })
+  }, 60_000)
+
+  test("a stale static configure cannot persist a secret after its Project occurrence is deleted", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const projectID = Instance.project.id
+        const entered = Promise.withResolvers<void>()
+        const release = Promise.withResolvers<void>()
+        MCP.TestHooks.setAfterStaticConfigureRuntimeAdmission(async () => {
+          entered.resolve()
+          await release.promise
+        })
+        try {
+          const configure = MCP.configure(SERVER, remoteConfig(), "stale-secret").catch((error) => error)
+          await entered.promise
+          Database.use((db) => db.delete(ProjectTable).where(eq(ProjectTable.id, projectID)).run())
+          await McpAuth.removeProject(projectID)
+          release.resolve()
+
+          const result = await configure
+          expect({
+            result: result instanceof Error ? result.message : result,
+            credential: await McpAuth.get(`${projectID}:${SERVER}`),
+          }).toEqual({
+            result: expect.stringContaining("MCP Project owner changed while staging"),
+            credential: undefined,
+          })
+        } finally {
+          release.resolve()
+          MCP.TestHooks.setAfterStaticConfigureRuntimeAdmission(undefined)
+        }
+      },
+    })
+  }, 60_000)
+
+  test("a stale reconcile cannot remove a credential owned by a recreated Project occurrence", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        await MCP.configure(SERVER, remoteConfig(), "old-secret")
+        const before = await Config.getProject()
+        const authKey = `${Instance.project.id}:${SERVER}`
+        const oldGeneration = Instance.projectGeneration
+        const recreatedGeneration = crypto.randomUUID()
+        Database.use((db) => {
+          const row = db.select().from(ProjectTable).where(eq(ProjectTable.id, Instance.project.id)).get()
+          if (!row) throw new Error("Expected the old Project occurrence")
+          db.delete(ProjectTable).where(eq(ProjectTable.id, row.id)).run()
+          db.insert(ProjectTable)
+            .values({ ...row, generation: recreatedGeneration })
+            .run()
+        })
+        await McpAuth.stageStaticCredential(authKey, "recreated-secret", URL, "recreated-identity")
+        await McpAuth.promoteStagedStaticCredential(authKey, {
+          serverUrl: URL,
+          credentialIdentity: "recreated-identity",
+        })
+
+        const replacementDefinition = {
+          ...remoteConfig(),
+          credential: { type: "header" as const, name: "X-Recreated-Key" },
+        }
+        const result = await MCP.reconcileProjectConfig({
+          before,
+          after: { ...before, mcp: { [SERVER]: replacementDefinition } },
+        }).catch((error) => error)
+        expect({
+          result: result instanceof Error ? result.message : result,
+          causes:
+            result instanceof AggregateError
+              ? result.errors.map((error) => (error instanceof Error ? error.message : String(error)))
+              : [],
+          generations: { old: oldGeneration, current: Project.occurrence(Instance.project.id)?.generation },
+          credential: (await McpAuth.get(authKey))?.staticCredential?.secret,
+          identity: (await McpAuth.get(authKey))?.credentialIdentity,
+        }).toEqual({
+          result: "MCP configuration committed, but runtime cleanup did not fully settle",
+          causes: [expect.stringContaining("MCP Project owner changed while")],
+          generations: { old: oldGeneration, current: recreatedGeneration },
+          credential: "recreated-secret",
+          identity: "recreated-identity",
+        })
+      },
+    })
+  }, 60_000)
+
   test("a definition-commit failure hands the credential store back and leaves no half-configured server", async () => {
     await using project = await memoryProject()
     await Instance.provide({
@@ -57,7 +186,10 @@ describe("MCP configure commits the credential before the definition", () => {
         // definition declares.
         const authKey = `${Instance.project.id}:${SERVER}`
         await McpAuth.stageStaticCredential(authKey, "orphaned-secret", URL, "identity-from-dead-configure")
-        await McpAuth.promoteStagedStaticCredential(authKey, { serverUrl: URL, credentialIdentity: "identity-from-dead-configure" })
+        await McpAuth.promoteStagedStaticCredential(authKey, {
+          serverUrl: URL,
+          credentialIdentity: "identity-from-dead-configure",
+        })
         expect(await McpAuth.get(authKey)).toBeDefined()
 
         // Any project-config commit runs credential reconciliation; the next
@@ -182,11 +314,7 @@ describe("MCP configure commits the credential before the definition", () => {
       fn: async () => {
         await MCP.configure(SERVER, remoteConfig(), "live-secret")
         expect((await Config.getProject()).mcp?.[SERVER]).toMatchObject({ type: "remote", url: URL })
-        const stored = await McpAuth.getForUrl(
-          `${Instance.project.id}:${SERVER}`,
-          URL,
-          undefined as never,
-        )
+        const stored = await McpAuth.getForUrl(`${Instance.project.id}:${SERVER}`, URL, undefined as never)
         expect((await McpAuth.get(`${Instance.project.id}:${SERVER}`))?.staticCredential?.secret).toBe("live-secret")
         void stored
       },
