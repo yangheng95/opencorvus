@@ -136,7 +136,9 @@ import {
   type ApplyGoalGraphMutationInput,
 } from "@/engine/persist"
 import { EngineInteraction } from "@/engine/interaction"
-import { terminalTask, updateTask, writeTaskUpdateInTransaction } from "@/engine/state"
+import { terminalTask } from "@/engine/state"
+import { prepareTaskAttachmentAppends, type TaskInputFileRef } from "@/engine/task-file-reference"
+import { requireTaskInCurrentProject } from "@/engine/task-project-read"
 import { findTaskCompletionDecisionForTerminalTime } from "@/engine/completion-decision-read"
 import {
   requireCurrentTerminalLifecycleReference,
@@ -405,29 +407,6 @@ function assertNoCallerSuppliedChildTaskLineage(input: z.infer<typeof CreateTask
       "metadata.parent_task_id is retired server metadata. Task creation callers must keep repair and continuation work inside the existing Task.",
     source: input.source,
   })
-}
-
-function assertTaskProjectIsConcrete(task: TaskRow) {
-  if (task.project_id !== "global") return
-  throw new TaskGlobalProjectBindingError({
-    message: `Task ${task.id} is bound to project global. Task execution requires a concrete Git project; recreate the task after initializing the directory as a Git repository.`,
-    taskID: task.id,
-    projectID: task.project_id,
-  })
-}
-
-function assertTaskBelongsToCurrentProject(task: TaskRow) {
-  assertTaskProjectIsConcrete(task)
-  const current = Instance.current()
-  if (!current) return
-  if (task.project_id === current.project.id) return
-  throw new NotFoundError({ message: `Task not found: ${task.id}` })
-}
-
-function requireTaskInCurrentProject(taskID: string): TaskRow {
-  const task = requireTask(taskID)
-  assertTaskBelongsToCurrentProject(task)
-  return task
 }
 
 async function assertTaskRootSessionLineageInCurrentProject(task: TaskRow): Promise<Session.Info> {
@@ -1363,18 +1342,6 @@ export class PlannerFailureError extends Error {
   }
 }
 
-type FileRef = {
-  sha: string
-  url: string
-  mime: string
-  size: number
-  filename?: string
-  intent?: string
-  source?: string
-}
-type TaskInputFileRef = FileRef & { intent: "task_input"; source: "user-upload" }
-type FileRefColumn = "attachments" | "system_artifacts"
-
 type ApiAttachmentInput = NonNullable<z.infer<typeof CreateTaskInput>["attachments"]>[number]
 async function materializeApiAttachments(input: {
   attachments: ApiAttachmentInput[] | undefined
@@ -1875,163 +1842,6 @@ export namespace EngineService {
     const task = requireTaskInCurrentProject(taskID)
     const item = listTaskRows([task])[0]
     return viewTask(task, { directory: item?.directory })
-  }
-
-  /**
-   * Validate that a FileRef points at a real on-disk attachment, then merge
-   * it into one of the task's two file-reference columns. The merge strategy
-   * (`append-dedup-by-sha` vs `replace-by-intent`) is supplied by the caller
-   * — keeping both behind one validator guarantees the on-disk-existence
-   * rule stays a single source of truth even as new merge modes are added.
-   *
-   * Throws on a dangling URL: registered-but-missing files would cause
-   * downstream multimodal loading to ENOENT-crash on every retry. Failing
-   * at the registration boundary keeps the bad state out of the database.
-   */
-  /** The async half of a task file-reference merge: resolve and verify the
-   *  canonical AttachmentStore metadata for one reference. No durable write. */
-  async function canonicalTaskFileRef(task: TaskRow, column: FileRefColumn, file: FileRef): Promise<FileRef> {
-    const located = AttachmentStore.nameFromUrl(file.url)
-    if (!located) {
-      throw new Error(`${column}: file.url is not a valid /attachment/<projectID>/<name> reference: ${file.url}`)
-    }
-    if (located.projectID !== task.project_id) {
-      throw new Error(
-        `${column}: file.url belongs to project ${located.projectID}, expected task project ${task.project_id}: ${file.url}`,
-      )
-    }
-    let reference: AttachmentStore.Reference
-    try {
-      reference = await AttachmentStore.readReference(located.projectID, located.name)
-    } catch (error) {
-      const message = error instanceof Error ? error.message : String(error)
-      throw new Error(
-        `${column}: cannot read canonical attachment metadata for project ${located.projectID}/${located.name}: ${message}`,
-      )
-    }
-    const metadataMismatches = [
-      file.sha !== reference.sha ? "sha" : "",
-      file.mime !== reference.mime ? "mime" : "",
-      file.size !== reference.size ? "size" : "",
-    ].filter(Boolean)
-    if (metadataMismatches.length > 0) {
-      throw new Error(
-        `${column}: file metadata does not match canonical AttachmentStore metadata (${metadataMismatches.join(", ")}): ${file.url}`,
-      )
-    }
-    return {
-      sha: reference.sha,
-      url: reference.url,
-      mime: reference.mime,
-      size: reference.size,
-      ...(reference.filename ? { filename: reference.filename } : {}),
-      ...(file.intent ? { intent: file.intent } : {}),
-      ...(file.source ? { source: file.source } : {}),
-    }
-  }
-
-  async function mergeTaskFileRef(
-    taskID: string,
-    column: FileRefColumn,
-    file: FileRef,
-    merge: (prev: FileRef[], canonical: FileRef) => { next: FileRef[]; reason: string } | null,
-  ): Promise<FileRef[]> {
-    const task = requireTaskInCurrentProject(taskID)
-    const canonical = await canonicalTaskFileRef(task, column, file)
-    const prev = Array.isArray((task as any)[column]) ? ((task as any)[column] as FileRef[]) : []
-    const result = merge(prev, canonical)
-    if (!result) return prev
-    await updateTask(task, { [column]: result.next } as any, result.reason)
-    return result.next
-  }
-
-  /**
-   * Canonicalize the operator message's attachments (the async half of
-   * appendTaskAttachment) and hand back the synchronous column commits for
-   * the acceptance transaction: the references land on the Task row in the
-   * same transaction that persists the Message and its ingress.
-   */
-  export async function prepareTaskAttachmentAppends(taskID: string, attachments: readonly TaskInputFileRef[]) {
-    const task = requireTaskInCurrentProject(taskID)
-    const canonicals: FileRef[] = []
-    for (const attachment of attachments) {
-      if (attachment.intent !== "task_input" || attachment.source !== "user-upload") {
-        throw new Error("appendTaskAttachment accepts only neutral task_input/user-upload references")
-      }
-      canonicals.push(await canonicalTaskFileRef(task, "attachments", attachment))
-    }
-    return {
-      commitInTransaction(db: Database.TxOrDb): void {
-        for (const canonical of canonicals) {
-          const row = db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, taskID)).get()
-          if (!row) throw new NotFoundError({ message: `Task not found: ${taskID}` })
-          const prev = Array.isArray((row as any).attachments) ? ((row as any).attachments as FileRef[]) : []
-          if (prev.some((a) => a?.sha === canonical.sha)) continue
-          writeTaskUpdateInTransaction({
-            db,
-            taskID,
-            values: { attachments: [...prev, canonical] } as any,
-            summary: `attachments appended: ${canonical.filename ?? canonical.sha}`,
-            now: Date.now(),
-          })
-        }
-      },
-    }
-  }
-
-  /** Register a neutral user upload. Domain adapters assign semantics through explicit contracts. */
-  export async function appendTaskAttachment(taskID: string, attachment: TaskInputFileRef) {
-    if (attachment.intent !== "task_input" || attachment.source !== "user-upload") {
-      throw new Error("appendTaskAttachment accepts only neutral task_input/user-upload references")
-    }
-    return mergeTaskFileRef(taskID, "attachments", attachment, (prev, canonical) => {
-      if (prev.some((a) => a?.sha === canonical.sha)) return null
-      return {
-        next: [...prev, canonical],
-        reason: `attachments appended: ${canonical.filename ?? canonical.sha}`,
-      }
-    })
-  }
-
-  /**
-   * Register a SYSTEM-GENERATED artifact on a task. Use for evidence the
-   * orchestrator/agents produced on the user's behalf, including materialized
-   * design resources and rendered evidence. Consumers read these only through
-   * their explicit artifact contracts. Idempotent on sha collision.
-   */
-  export async function appendTaskSystemArtifact(taskID: string, artifact: FileRef) {
-    return mergeTaskFileRef(taskID, "system_artifacts", artifact, (prev, canonical) => {
-      if (prev.some((a) => a?.sha === canonical.sha)) return null
-      return {
-        next: [...prev, canonical],
-        reason: `system_artifacts appended: ${canonical.filename ?? canonical.sha}`,
-      }
-    })
-  }
-
-  /**
-   * Replace all system artifacts carrying a given `intent` with a single new
-   * artifact. Use when each rerun should supersede the previous output for
-   * that semantic slot (e.g. acceptance rendered_output: keeping every prior
-   * rendered.png would balloon the task and confuse the visual diff).
-   */
-  export async function replaceTaskSystemArtifactByIntent(
-    taskID: string,
-    intent: string,
-    artifact: FileRef,
-  ): Promise<FileRef[]> {
-    if (artifact.intent !== intent) {
-      throw new Error(
-        `replaceTaskSystemArtifactByIntent: intent mismatch — slot=${intent} artifact.intent=${artifact.intent}`,
-      )
-    }
-    return mergeTaskFileRef(taskID, "system_artifacts", artifact, (prev, canonical) => {
-      const purged = prev.filter((a) => a?.intent !== intent)
-      return {
-        next: [...purged, canonical],
-        reason: `system_artifacts replaced [intent=${intent}]: ${canonical.filename ?? canonical.sha}`,
-      }
-    })
   }
 
   export async function getProgress(taskID: string) {

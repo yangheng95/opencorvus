@@ -11,14 +11,13 @@ const sourcePrefix = "packages/opencorvus/src/"
 const retainedComponentBudgets = [
   {
     name: "session-orchestration",
-    maximumSize: 20,
+    maximumSize: 19,
     members: new Set<string>([
       "packages/opencorvus/src/build/agent.ts",
       "packages/opencorvus/src/chat/global-chat-service.ts",
       "packages/opencorvus/src/expert-squad/evolution-mutation.ts",
       "packages/opencorvus/src/orchestrator/agent.ts",
       "packages/opencorvus/src/orchestrator/build-tool.ts",
-      "packages/opencorvus/src/orchestrator/frontend-design-tool.ts",
       "packages/opencorvus/src/orchestrator/loop.ts",
       "packages/opencorvus/src/orchestrator/runtime-repair-tools.ts",
       "packages/opencorvus/src/orchestrator/tools.ts",

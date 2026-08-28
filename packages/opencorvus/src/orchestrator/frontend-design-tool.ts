@@ -4,7 +4,7 @@ import { tool } from "ai"
 import type z from "zod"
 import { DispatchOutcome } from "@/agent/dispatch-outcome"
 import { isAgentCoordinationHandoffResult } from "@/agent/runner"
-import { EngineService } from "@/task-api"
+import { appendTaskSystemArtifact } from "@/engine/task-file-reference"
 import type { TaskRow } from "@/engine/store"
 import {
   createDesignResourceManifest,
@@ -207,7 +207,7 @@ export function createFrontendDesignTool(dependencies: FrontendDesignToolDepende
               intent: material.intent,
               source: "material" as const,
             }
-            await EngineService.appendTaskSystemArtifact(taskID, resource)
+            await appendTaskSystemArtifact(taskID, resource)
             designResources.push(resource)
             log.info("frontend_design: material materialized", {
               taskID,
