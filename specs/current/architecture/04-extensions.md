@@ -842,6 +842,6 @@ update / uninstall 在写成功后直接推进它；Task 内执行的 Multica �
 
 ## 相关文档
 
-- [01-agents.md](01-agents.md) — Orchestrator 如何通过 tools 调度动态 Agent
+- [17-code-work-agent-platform.md](17-code-work-agent-platform.md) — Orchestrator 如何通过 tools 调度动态 Agent
 - [03-control.md](03-control.md) — ACP 作为入站入口与 channel/control 的关系
 - [06-provider.md](06-provider.md) — LLM Provider（另一条独立扩展轴）

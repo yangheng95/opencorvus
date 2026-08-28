@@ -540,5 +540,5 @@ harvest。
 
 ## 相关文档
 
-- [01-agents.md](01-agents.md) — 动态 Agent 投影、runtime template 与 typed adapter 的职责边界
+- [17-code-work-agent-platform.md](17-code-work-agent-platform.md) — 动态 Agent 投影、runtime template 与 typed adapter 的职责边界
 - [03-control.md](03-control.md) — Trace/Bus 如何流向 overlay

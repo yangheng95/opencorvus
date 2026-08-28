@@ -399,5 +399,5 @@ CUSTOM_LOADERS["new-provider"] = {
 
 ## 相关文档
 
-- [01-agents.md](01-agents.md) — 哪些 agent 消费 Provider
+- [17-code-work-agent-platform.md](17-code-work-agent-platform.md) — 哪些 Agent 消费 Provider
 - [04-extensions.md](04-extensions.md) — Provider 与 Expert Squad/Plugin/MCP/ACP 的独立关系
