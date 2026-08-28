@@ -76,7 +76,8 @@ import { toolGuard } from "@/util/tool-guard"
 import { createOrchestratorTools } from "./tools"
 import { attachmentPromptSection } from "@/agent/prompt-projection"
 import { renderUserRequestSection } from "@/intent/request-prompt"
-import { requireTask, terminalTask } from "@/engine"
+import { requireTask, type TaskRow } from "@/engine/store"
+import { terminalTask } from "@/engine/state"
 import { Database, NotFoundError, eq } from "@/storage/db"
 import { MessageTable, PartTable } from "@/session/session.sql"
 import { recordTaskInfrastructureError } from "@/engine/persist"
@@ -84,7 +85,6 @@ import { taskRootIngressSourceKind, type TaskRootIngressSourceKind } from "@/eng
 import { describeProcessRecoveryFact, describeTask, renderTaskDescription, type TaskDesc } from "@/engine/describe"
 import { deriveTaskStatus, isTaskTerminal } from "@/engine/task-status"
 import { resolvePinnedTaskSchedulerTurnProjection } from "@/engine/task-package-projection"
-import type { TaskRow } from "@/engine"
 import { TaskCreatorMetadata } from "@/task-api/task-creator"
 import {
   deliverTaskRootMessageToOrchestratorSession,

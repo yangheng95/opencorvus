@@ -11,12 +11,10 @@ const sourcePrefix = "packages/opencorvus/src/"
 const retainedComponentBudgets = [
   {
     name: "session-orchestration",
-    maximumSize: 31,
+    maximumSize: 26,
     members: new Set<string>([
-      "packages/opencorvus/src/acceptance/checks/discovery.ts",
       "packages/opencorvus/src/build/agent.ts",
       "packages/opencorvus/src/chat/global-chat-service.ts",
-      "packages/opencorvus/src/engine/index.ts",
       "packages/opencorvus/src/engine/state.ts",
       "packages/opencorvus/src/expert-squad/evolution-mutation.ts",
       "packages/opencorvus/src/mission/execution-closure.ts",
@@ -33,7 +31,6 @@ const retainedComponentBudgets = [
       "packages/opencorvus/src/protocol/delivery.ts",
       "packages/opencorvus/src/protocol/scheduler-message.ts",
       "packages/opencorvus/src/protocol/session-wake-state.ts",
-      "packages/opencorvus/src/requirements/agent.ts",
       "packages/opencorvus/src/scheduler/automation-service.ts",
       "packages/opencorvus/src/scheduler/event-service.ts",
       "packages/opencorvus/src/session/loop.ts",
@@ -42,8 +39,6 @@ const retainedComponentBudgets = [
       "packages/opencorvus/src/task-api/index.ts",
       "packages/opencorvus/src/tool/expert-squad-feedback-revision-tool.ts",
       "packages/opencorvus/src/tool/wait.ts",
-      "packages/opencorvus/src/workbench/board.ts",
-      "packages/opencorvus/src/workbench/brief.ts",
     ]),
   },
 ] as const
