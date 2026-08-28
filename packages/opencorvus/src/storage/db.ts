@@ -106,6 +106,24 @@ CREATE INDEX IF NOT EXISTS "project_maintenance_fence_operation_idx" ON "project
 CREATE INDEX IF NOT EXISTS "project_maintenance_fence_owner_idx" ON "project_maintenance_fence" ("owner_occurrence_id");`)
 }
 
+function migrateProjectDirectoryAdmissionSchema(sqlite: BunDatabase): void {
+  sqlite.exec(`
+CREATE TABLE IF NOT EXISTS "project_directory_admission" (
+  "directory_key" text PRIMARY KEY NOT NULL,
+  "directory" text NOT NULL,
+  "generation" text NOT NULL,
+  "operation_id" text NOT NULL,
+  "kind" text NOT NULL,
+  "owner_occurrence_id" text NOT NULL,
+  "owner_pid" integer NOT NULL,
+  "owner_process_instance_id" text NOT NULL,
+  "time_created" integer NOT NULL
+);
+CREATE UNIQUE INDEX IF NOT EXISTS "project_directory_admission_generation_idx" ON "project_directory_admission" ("generation");
+CREATE INDEX IF NOT EXISTS "project_directory_admission_operation_idx" ON "project_directory_admission" ("operation_id");
+CREATE INDEX IF NOT EXISTS "project_directory_admission_owner_idx" ON "project_directory_admission" ("owner_occurrence_id");`)
+}
+
 const SQLITE_UNAVAILABLE_CODE_PREFIXES = ["SQLITE_IOERR", "SQLITE_CANTOPEN", "SQLITE_CORRUPT", "SQLITE_READONLY"]
 const SQLITE_UNAVAILABLE_CODES = new Set(["SQLITE_NOTADB", "SQLITE_FULL"])
 
@@ -267,10 +285,7 @@ function cancellationEventView(
  * exact same pure event-chain projection used by normal Task reads before the
  * database becomes available to any route.
  */
-function assertGoalWorkloadCoverageIntegrity(
-  db: SQLiteBunDatabase<typeof ApplicationSchema>,
-  dbPath: string,
-): void {
+function assertGoalWorkloadCoverageIntegrity(db: SQLiteBunDatabase<typeof ApplicationSchema>, dbPath: string): void {
   const rows = db
     .select()
     .from(EngineArtifactTable)
@@ -675,8 +690,7 @@ function assertCurrentDataIntegrity(
   )[0]
   if (malformedTaskIngress) {
     throw new DatabaseUnavailableError({
-      message:
-        `OpenCorvus database contains malformed root ingress fact ${malformedTaskIngress.id} at ${dbPath}.`,
+      message: `OpenCorvus database contains malformed root ingress fact ${malformedTaskIngress.id} at ${dbPath}.`,
       path: dbPath,
       operation: "Database.Client.dataIntegrity.taskIngressOccurrenceEpoch",
       code: "DATA_INTEGRITY_RESET_REQUIRED",
@@ -1080,6 +1094,7 @@ export namespace Database {
       let sqlite = openOwnedSqlite(dbPath, { configure: false })
       if (hasApplicationSchema(sqlite)) {
         migrateProjectMaintenanceFenceSchema(sqlite)
+        migrateProjectDirectoryAdmissionSchema(sqlite)
         migratePermissionLedgerProjectRetentionSchema(sqlite)
         migrateFactKernelSchema(sqlite)
         const reconciledTriggers = reconcileSchemaTriggers(sqlite)

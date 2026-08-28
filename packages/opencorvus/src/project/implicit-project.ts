@@ -10,6 +10,8 @@ import { Database, eq } from "@/storage/db"
 import { Session } from "@/session"
 import { SessionTable } from "@/session/session.sql"
 import { Filesystem } from "@/util/filesystem"
+import { Log } from "@/util/log"
+import { ImplicitProjectCreation } from "./implicit-project-creation"
 import { PromotionDatabaseSnapshot, PromotionJournal } from "./promotion-journal"
 import { Project } from "./project"
 import { ProjectMaintenanceFenceTable, ProjectTable } from "./project.sql"
@@ -17,12 +19,44 @@ import {
   ensureProjectPromotionFenceInTransaction,
   releaseProjectMaintenanceFencesInTransaction,
 } from "./deletion-registry"
+import { ProjectDirectoryAdmission } from "./directory-admission"
+import type { RuntimeProcessOccurrenceObserver } from "@/runtime/process-occurrence"
 
 function calendarSegment(value: number): string {
   return String(value).padStart(2, "0")
 }
 
 export namespace ImplicitProject {
+  const log = Log.create({ service: "implicit-project" })
+  type CreationCompensationHook = (directory: string) => void | Promise<void>
+  let beforeCreationCompensationLookup: CreationCompensationHook | undefined
+  let beforeCreationCompensationRemoval: CreationCompensationHook | undefined
+  let afterPromotionSourceRestore: (() => void | Promise<void>) | undefined
+  let afterPromotionAdmissions: (() => void | Promise<void>) | undefined
+  let afterPromotionPrepared: (() => void | Promise<void>) | undefined
+
+  export namespace TestHooks {
+    export function installCreationCompensation(input: {
+      beforeLookup?: CreationCompensationHook
+      beforeRemoval?: CreationCompensationHook
+    }) {
+      const previousLookup = beforeCreationCompensationLookup
+      const previousRemoval = beforeCreationCompensationRemoval
+      beforeCreationCompensationLookup = input.beforeLookup
+      beforeCreationCompensationRemoval = input.beforeRemoval
+      return {
+        [Symbol.dispose]() {
+          if (beforeCreationCompensationLookup === input.beforeLookup) {
+            beforeCreationCompensationLookup = previousLookup
+          }
+          if (beforeCreationCompensationRemoval === input.beforeRemoval) {
+            beforeCreationCompensationRemoval = previousRemoval
+          }
+        },
+      }
+    }
+  }
+
   export type PromotionRollbackResidue = {
     sourceExists: boolean | null
     destinationExists: boolean | null
@@ -378,6 +412,61 @@ export namespace ImplicitProject {
     if (entry.terminal === "rolled_back" && destinationExists) {
       throw new Error(`Rolled-back promotion still has a destination: ${entry.destination}`)
     }
+    const acquireUnownedPromotionPath = async (
+      directory: string,
+      kind: "promotion_publish" | "promotion_workspace",
+    ) => {
+      const ownership = await captureProjectOwningInfo(directory)
+      const admission = await ProjectDirectoryAdmission.acquire({
+        directory,
+        operationID: entry.operationID,
+        kind,
+        findOwner: ownership.findOwner,
+      })
+      if (admission.outcome === "owned") {
+        return { owner: admission.owner.project, token: undefined, revalidatePhysical: undefined }
+      }
+      return { owner: undefined, token: admission.token, revalidatePhysical: ownership.revalidatePhysical }
+    }
+    const acquiredRecoveryTokens: ProjectDirectoryAdmission.Token[] = []
+    let stagingAdmission!: Awaited<ReturnType<typeof acquireUnownedPromotionPath>>
+    let quarantineAdmission!: Awaited<ReturnType<typeof acquireUnownedPromotionPath>>
+    let destinationAdmission!: Awaited<ReturnType<typeof acquireUnownedPromotionPath>>
+    try {
+      stagingAdmission = await acquireUnownedPromotionPath(entry.staging, "promotion_workspace")
+      if (stagingAdmission.owner) {
+        throw new Error(`Promotion staging ${entry.staging} is owned by Project ${stagingAdmission.owner.id}`)
+      }
+      acquiredRecoveryTokens.push(stagingAdmission.token!)
+      quarantineAdmission = await acquireUnownedPromotionPath(entry.quarantine, "promotion_workspace")
+      if (quarantineAdmission.owner) {
+        throw new Error(`Promotion quarantine ${entry.quarantine} is owned by Project ${quarantineAdmission.owner.id}`)
+      }
+      acquiredRecoveryTokens.push(quarantineAdmission.token!)
+      destinationAdmission = await acquireUnownedPromotionPath(entry.destination, "promotion_publish")
+      if (
+        destinationAdmission.owner &&
+        (destinationAdmission.owner.id !== entry.projectID || !Project.samePath(authority.worktree, entry.destination))
+      ) {
+        throw new Error(
+          `Promotion destination ${entry.destination} is owned by Project ${destinationAdmission.owner.id}`,
+        )
+      }
+      if (destinationAdmission.token) acquiredRecoveryTokens.push(destinationAdmission.token)
+      for (const admission of [stagingAdmission, quarantineAdmission, destinationAdmission]) {
+        await admission.revalidatePhysical?.()
+      }
+    } catch (error) {
+      if (acquiredRecoveryTokens.length === 0) throw error
+      try {
+        ProjectDirectoryAdmission.settleMany(acquiredRecoveryTokens, () => undefined)
+      } catch (cleanupError) {
+        throw new AggregateError([error, cleanupError], "Promotion recovery admission cleanup failed", {
+          cause: error,
+        })
+      }
+      throw error
+    }
     if (destinationExists) {
       if (!entry.destinationDigest) {
         throw new Error(`Promotion journal destination has no prepared content digest: ${entry.destination}`)
@@ -387,7 +476,10 @@ export namespace ImplicitProject {
       else {
         await assertDigest("Promotion prepared destination", entry.destination, entry.destinationDigest)
         assertDatabaseProjection(entry, "source")
-        Database.transaction((db) => {
+        if (!destinationAdmission.token) {
+          throw new Error(`Promotion destination ${entry.destination} has no publish admission`)
+        }
+        ProjectDirectoryAdmission.settle(destinationAdmission.token, (db) => {
           Project.beginPromotionCommit(
             { projectID: entry.projectID, operationID: entry.operationID, expectedGeneration: entry.projectGeneration },
             db,
@@ -403,6 +495,7 @@ export namespace ImplicitProject {
               sandboxes: entry.database.project.sandboxes.map((item) =>
                 mappedDirectory(item, entry.source, entry.destination),
               ),
+              directoryAdmission: destinationAdmission.token!,
             },
             db,
           )
@@ -437,6 +530,11 @@ export namespace ImplicitProject {
           destinationDigest: entry.destinationDigest,
         })
       }
+      ProjectDirectoryAdmission.settle(stagingAdmission.token!, () => undefined)
+      ProjectDirectoryAdmission.settle(quarantineAdmission.token!, () => undefined)
+      if (destinationAdmission.token && relocated) {
+        ProjectDirectoryAdmission.settle(destinationAdmission.token, () => undefined)
+      }
       Database.transaction((db) => releaseProjectMaintenanceFencesInTransaction(db, { operationID: entry.operationID }))
       const project = Project.get(entry.projectID)
       if (project) {
@@ -446,32 +544,46 @@ export namespace ImplicitProject {
       }
       return "forward"
     }
-    // The destination never published: the exact original source wins. Both
-    // possible source locations are content-bound before any destructive step.
-    await fs.rm(entry.staging, { recursive: true, force: true })
-    const sourceExists = await Filesystem.exists(entry.physicalSource)
-    const quarantineExists = await Filesystem.exists(entry.quarantine)
-    if (sourceExists && quarantineExists) {
-      throw new Error(
-        `Promotion recovery found both source and quarantine; ownership is ambiguous and both were preserved`,
-      )
-    }
-    if (!sourceExists) {
-      if (!quarantineExists) {
+    return ProjectDirectoryAdmission.run(async () => {
+      const admission = await ProjectDirectoryAdmission.acquire({
+        directory: entry.physicalSource,
+        operationID: entry.operationID,
+        kind: "promotion_restore",
+      })
+      if (admission.outcome === "owned") {
+        throw new Error(`Promotion restore ${entry.operationID} unexpectedly resolved as Project-owned admission`)
+      }
+
+      // The destination never published: the exact original source wins. Both
+      // possible source locations are content-bound before any destructive step.
+      // The durable directory admission remains owned across the filesystem
+      // rename and the database restore, so creation recovery cannot observe
+      // the transitional source as abandoned.
+      await fs.rm(entry.staging, { recursive: true, force: true })
+      const sourceExists = await Filesystem.exists(entry.physicalSource)
+      const quarantineExists = await Filesystem.exists(entry.quarantine)
+      if (sourceExists && quarantineExists) {
         throw new Error(
-          `Promotion recovery for ${entry.projectID} found neither source ${entry.physicalSource} nor quarantine ${entry.quarantine}`,
+          `Promotion recovery found both source and quarantine; ownership is ambiguous and both were preserved`,
         )
       }
-      await assertDigest("Promotion quarantine", entry.quarantine, entry.sourceDigest)
-      await Filesystem.renameAfterTransientContention(entry.quarantine, entry.physicalSource)
-    } else {
-      await assertDigest("Promotion source", entry.physicalSource, entry.sourceDigest)
-    }
-    const relocated = Project.samePath(authority.worktree, entry.destination)
-    if (relocated) assertDatabaseProjection(entry, "destination")
-    else assertDatabaseProjection(entry, "source")
-    if (relocated) {
-      Database.transaction((db) => {
+      if (!sourceExists) {
+        if (!quarantineExists) {
+          throw new Error(
+            `Promotion recovery for ${entry.projectID} found neither source ${entry.physicalSource} nor quarantine ${entry.quarantine}`,
+          )
+        }
+        await assertDigest("Promotion quarantine", entry.quarantine, entry.sourceDigest)
+        await Filesystem.renameAfterTransientContention(entry.quarantine, entry.physicalSource)
+      } else {
+        await assertDigest("Promotion source", entry.physicalSource, entry.sourceDigest)
+      }
+      await afterPromotionSourceRestore?.()
+      const relocated = Project.samePath(authority.worktree, entry.destination)
+      if (relocated) assertDatabaseProjection(entry, "destination")
+      else assertDatabaseProjection(entry, "source")
+      ProjectDirectoryAdmission.settle(admission.token, (db) => {
+        if (!relocated) return
         Project.beginPromotionCommit(
           { projectID: entry.projectID, operationID: entry.operationID, expectedGeneration: entry.projectGeneration },
           db,
@@ -486,6 +598,7 @@ export namespace ImplicitProject {
             name: entry.database.project.name,
             sandboxes: entry.database.project.sandboxes,
             timeUpdated: entry.database.project.timeUpdated,
+            directoryAdmission: admission.token,
           },
           db,
         )
@@ -503,15 +616,20 @@ export namespace ImplicitProject {
           db,
         )
       })
-    }
-    if (!entry.terminal) {
-      await PromotionJournal.settle(entry.operationID, "rolled_back", {
-        projectID: entry.projectID,
-        projectGeneration: entry.projectGeneration,
-      })
-    }
-    Database.transaction((db) => releaseProjectMaintenanceFencesInTransaction(db, { operationID: entry.operationID }))
-    return "backward"
+      if (!entry.terminal) {
+        await PromotionJournal.settle(entry.operationID, "rolled_back", {
+          projectID: entry.projectID,
+          projectGeneration: entry.projectGeneration,
+        })
+      }
+      ProjectDirectoryAdmission.settle(stagingAdmission.token!, () => undefined)
+      ProjectDirectoryAdmission.settle(quarantineAdmission.token!, () => undefined)
+      if (destinationAdmission.token) {
+        ProjectDirectoryAdmission.settle(destinationAdmission.token, () => undefined)
+      }
+      Database.transaction((db) => releaseProjectMaintenanceFencesInTransaction(db, { operationID: entry.operationID }))
+      return "backward" as const
+    })
   }
 
   /** Converge every unsettled promotion occurrence — the startup owner. Runs
@@ -647,6 +765,60 @@ export namespace ImplicitProject {
       database,
       time_created: Date.now(),
     })
+    const promotionAdmissions: ProjectDirectoryAdmission.Token[] = []
+    const promotionPhysicalRevalidations: (() => Promise<void>)[] = []
+    let destinationAdmission!: ProjectDirectoryAdmission.Token
+    let quarantineAdmission!: ProjectDirectoryAdmission.Token
+    let stagingAdmission!: ProjectDirectoryAdmission.Token
+    try {
+      const destinationOwnership = await captureProjectOwningInfo(destination)
+      const decision = await ProjectDirectoryAdmission.acquire({
+        directory: destination,
+        operationID,
+        kind: "promotion_publish",
+        findOwner: destinationOwnership.findOwner,
+      })
+      if (decision.outcome === "owned") {
+        throw new Project.RegisteredDirectoryConflictError({
+          directory: destination,
+          projectIDs: [input.project.id, decision.owner.project.id].sort(),
+          message: `Promotion destination ${destination} is owned by Project ${decision.owner.project.id}`,
+        })
+      }
+      destinationAdmission = decision.token
+      promotionAdmissions.push(destinationAdmission)
+      promotionPhysicalRevalidations.push(destinationOwnership.revalidatePhysical)
+      for (const [directory, assign] of [
+        [quarantine, (token: ProjectDirectoryAdmission.Token) => (quarantineAdmission = token)],
+        [staging, (token: ProjectDirectoryAdmission.Token) => (stagingAdmission = token)],
+      ] as const) {
+        const workspaceOwnership = await captureProjectOwningInfo(directory)
+        const workspace = await ProjectDirectoryAdmission.acquire({
+          directory,
+          operationID,
+          kind: "promotion_workspace",
+          findOwner: workspaceOwnership.findOwner,
+        })
+        if (workspace.outcome === "owned") {
+          throw new Error(`Promotion workspace ${directory} is owned by Project ${workspace.owner.project.id}`)
+        }
+        assign(workspace.token)
+        promotionAdmissions.push(workspace.token)
+        promotionPhysicalRevalidations.push(workspaceOwnership.revalidatePhysical)
+      }
+      await afterPromotionAdmissions?.()
+      for (const revalidate of promotionPhysicalRevalidations) await revalidate()
+    } catch (cause) {
+      for (const token of promotionAdmissions.reverse()) {
+        ProjectDirectoryAdmission.settle(token, () => undefined)
+      }
+      await PromotionJournal.settle(operationID, "rolled_back", {
+        projectID: input.project.id,
+        projectGeneration: database.project.generation,
+        reason: "promotion destination admission is closed",
+      })
+      throw cause
+    }
     try {
       Database.immediateTransaction((db) => {
         const current = promotionDatabaseSnapshotInTransaction(db, input.project.id)
@@ -660,6 +832,9 @@ export namespace ImplicitProject {
         ensureProjectPromotionFenceInTransaction(db, { project, operationID })
       })
     } catch (cause) {
+      for (const token of promotionAdmissions.reverse()) {
+        ProjectDirectoryAdmission.settle(token, () => undefined)
+      }
       await PromotionJournal.settle(operationID, "rolled_back", {
         projectID: input.project.id,
         projectGeneration: database.project.generation,
@@ -668,9 +843,11 @@ export namespace ImplicitProject {
       throw cause
     }
     try {
+      for (const revalidate of promotionPhysicalRevalidations) await revalidate()
       await Filesystem.renameAfterTransientContention(physicalSource, quarantine)
       await fs.cp(quarantine, staging, { recursive: true, force: false, errorOnExist: true, preserveTimestamps: true })
       await PromotionJournal.markPrepared(operationID, await PromotionJournal.digestDirectory(staging))
+      await afterPromotionPrepared?.()
       await Filesystem.renameAfterTransientContention(staging, destination)
       published = true
       await PromotionJournal.markPublished(operationID)
@@ -711,7 +888,7 @@ export namespace ImplicitProject {
     }
 
     try {
-      Database.transaction((db) => {
+      ProjectDirectoryAdmission.settle(destinationAdmission, (db) => {
         Project.beginPromotionCommit(
           { projectID: input.project.id, operationID, expectedGeneration: database.project.generation },
           db,
@@ -725,6 +902,7 @@ export namespace ImplicitProject {
             worktree: destination,
             name: input.name,
             sandboxes: input.project.sandboxes.map((item) => mappedDirectory(item, source, destination)),
+            directoryAdmission: destinationAdmission,
           },
           db,
         )
@@ -762,6 +940,8 @@ export namespace ImplicitProject {
       projectGeneration: database.project.generation,
       destinationDigest: preparedDigest,
     })
+    ProjectDirectoryAdmission.settle(stagingAdmission, () => undefined)
+    ProjectDirectoryAdmission.settle(quarantineAdmission, () => undefined)
     Database.transaction((db) => releaseProjectMaintenanceFencesInTransaction(db, { operationID }))
     const project = Project.get(input.project.id)
     if (!project) throw new Error(`Promoted project row disappeared: ${input.project.id}`)
@@ -782,7 +962,36 @@ export namespace ImplicitProject {
 
   /** The exact production snapshot builder, for tests that construct the
    *  durable state a crash leaves behind. */
-  export const PromotionTestHooks = { promotionDatabaseSnapshot }
+  export const PromotionTestHooks = {
+    promotionDatabaseSnapshot,
+    installAfterSourceRestore(hook: () => void | Promise<void>) {
+      const previous = afterPromotionSourceRestore
+      afterPromotionSourceRestore = hook
+      return {
+        [Symbol.dispose]() {
+          if (afterPromotionSourceRestore === hook) afterPromotionSourceRestore = previous
+        },
+      }
+    },
+    installAfterAdmissions(hook: () => void | Promise<void>) {
+      const previous = afterPromotionAdmissions
+      afterPromotionAdmissions = hook
+      return {
+        [Symbol.dispose]() {
+          if (afterPromotionAdmissions === hook) afterPromotionAdmissions = previous
+        },
+      }
+    },
+    installAfterPrepared(hook: () => void | Promise<void>) {
+      const previous = afterPromotionPrepared
+      afterPromotionPrepared = hook
+      return {
+        [Symbol.dispose]() {
+          if (afterPromotionPrepared === hook) afterPromotionPrepared = previous
+        },
+      }
+    },
+  }
 
   export const Anonymous = z
     .object({
@@ -791,7 +1000,165 @@ export namespace ImplicitProject {
     })
     .meta({ ref: "AnonymousProject" })
 
+  /**
+   * Capture physical ownership outside SQLite, then revalidate the complete
+   * ownership projection in the admission transaction. Registration tokens
+   * cover a writer until its row commit; a committed alias/junction is found
+   * through realpath keys, and any intervening row change makes deletion
+   * undecidable rather than allowing a stale negative answer.
+   */
+  async function captureProjectOwningInfo(directory: string) {
+    const rows = Database.runOutsideContext(() => Database.use((db) => db.select().from(ProjectTable).all()))
+    const expected = Project.ownershipProjection(rows)
+    const registered = rows
+      .flatMap((row) => [
+        { projectID: row.id, kind: "worktree" as const, directory: row.worktree },
+        ...row.sandboxes.map((sandbox) => ({ projectID: row.id, kind: "sandbox" as const, directory: sandbox })),
+      ])
+      .sort((left, right) =>
+        `${left.projectID}\0${left.kind}\0${left.directory}`.localeCompare(
+          `${right.projectID}\0${right.kind}\0${right.directory}`,
+        ),
+      )
+    const capturePhysical = async () => ({
+      targetKey: await ProjectDirectoryAdmission.key(directory),
+      registered: await Promise.all(
+        registered.map(async (entry) => ({
+          ...entry,
+          directoryKey: await ProjectDirectoryAdmission.key(entry.directory),
+        })),
+      ),
+    })
+    const physical = await capturePhysical()
+    const ownerIDs = [
+      ...new Set(
+        physical.registered
+          .filter((entry) => ProjectDirectoryAdmission.overlaps(physical.targetKey, entry.directoryKey))
+          .map((entry) => entry.projectID),
+      ),
+    ].sort()
+    if (ownerIDs.length > 1) {
+      throw new Project.RegisteredDirectoryConflictError({
+        directory: path.resolve(directory),
+        projectIDs: ownerIDs,
+        message: `Physical directory ownership is ambiguous across Projects ${ownerIDs.join(", ")}`,
+      })
+    }
+    const ownerID = ownerIDs[0]
+    const exactWorktree = physical.registered.some(
+      (entry) => entry.projectID === ownerID && entry.kind === "worktree" && entry.directoryKey === physical.targetKey,
+    )
+    return {
+      findOwner(db: Database.TxOrDb): { project: Project.Info; relation: "worktree_exact" | "overlap" } | undefined {
+        const currentRows = db.select().from(ProjectTable).all()
+        if (!sameJson(Project.ownershipProjection(currentRows), expected)) {
+          throw new Error(`Project directory ownership changed while admission was being prepared: ${directory}`)
+        }
+        const owner = currentRows.find((row) => row.id === ownerID)
+        return owner
+          ? { project: Project.fromRow(owner), relation: exactWorktree ? "worktree_exact" : "overlap" }
+          : undefined
+      },
+      async revalidatePhysical() {
+        const current = await capturePhysical()
+        if (!sameJson(current, physical)) {
+          throw new Error(`Physical Project directory ownership changed while admission was held: ${directory}`)
+        }
+      },
+    }
+  }
+
+  /** Reclaim anonymous directories a dead process left without a Project row. */
+  export async function convergeCreations(observe?: RuntimeProcessOccurrenceObserver) {
+    return ImplicitProjectCreation.converge({
+      isAnonymousDirectory,
+      prepareProjectFor: async (directory) => {
+        const ownership = await captureProjectOwningInfo(directory)
+        return {
+          findOwner: (db) => {
+            const owner = ownership.findOwner(db)
+            return owner ? { projectID: owner.project.id, relation: owner.relation } : undefined
+          },
+          revalidatePhysical: ownership.revalidatePhysical,
+        }
+      },
+      observe,
+    })
+  }
+
+  async function compensateCreation(input: {
+    directory: string
+    occurrenceID: string
+    cause: unknown
+  }): Promise<{ outcome: "committed"; project: Project.Info } | { outcome: "rolled_back" }> {
+    return ProjectDirectoryAdmission.run(async () => {
+      await beforeCreationCompensationLookup?.(input.directory)
+      const ownership = await captureProjectOwningInfo(input.directory)
+      const decision = await ProjectDirectoryAdmission.acquire({
+        directory: input.directory,
+        operationID: input.occurrenceID,
+        kind: "reclamation",
+        findOwner: ownership.findOwner,
+      })
+      if (decision.outcome === "owned") {
+        try {
+          await ownership.revalidatePhysical()
+        } catch {
+          throw input.cause
+        }
+        if (decision.owner.relation !== "worktree_exact") throw input.cause
+        const project = decision.owner.project
+        // Project.initGit may throw from work performed after fromDirectory has
+        // committed. The durable row is business success; publish the missing
+        // receipt when possible and return the canonical Project rather than
+        // reporting failure or deleting its worktree.
+        await ImplicitProjectCreation.commit(input.occurrenceID, project.id).catch((error) => {
+          log.error("anonymous project creation receipt was not published during compensation", {
+            directory: input.directory,
+            projectID: project.id,
+            error,
+          })
+        })
+        return { outcome: "committed", project }
+      }
+
+      try {
+        await ownership.revalidatePhysical()
+      } catch (cause) {
+        try {
+          ProjectDirectoryAdmission.settle(decision.token, () => undefined)
+        } catch (cleanupError) {
+          throw new AggregateError([cause, cleanupError], "Project compensation admission cleanup failed", {
+            cause,
+          })
+        }
+        throw cause
+      }
+      await beforeCreationCompensationRemoval?.(input.directory)
+      ProjectDirectoryAdmission.assertOwnedNow(decision.token)
+      await fs.rm(input.directory, { recursive: true, force: true })
+      ProjectDirectoryAdmission.assertOwnedNow(decision.token)
+      ProjectDirectoryAdmission.settle(decision.token, () => undefined)
+      // A rolled-back receipt is true only after the physical effect succeeds.
+      // If removal or this write fails, the occurrence stays open for a later
+      // backend to converge instead of losing its only recovery owner.
+      await ImplicitProjectCreation.rollback(
+        input.occurrenceID,
+        input.cause instanceof Error ? input.cause.message : String(input.cause),
+      )
+      return { outcome: "rolled_back" }
+    })
+  }
+
   export async function create() {
+    // A creation killed before its Project row committed leaves a directory
+    // nothing refers to. Sweep those first — but reclamation must never veto
+    // creation. A journal directory this sweep cannot read (a corrupt intent,
+    // a foreign entry, a directory Windows will not let it remove) would
+    // otherwise make every later anonymous Project creation fail permanently.
+    await convergeCreations().catch((error) => {
+      log.error("anonymous project creation sweep failed", { error })
+    })
     const now = new Date()
     const parent = path.join(
       Global.Path.data,
@@ -801,17 +1168,58 @@ export namespace ImplicitProject {
       calendarSegment(now.getDate()),
     )
     const directory = path.join(parent, randomUUID())
-    await fs.mkdir(parent, { recursive: true })
-    await fs.mkdir(directory)
+    // The intent is durable before the directory exists: physical existence is
+    // never the record that a creation started.
+    const occurrenceID = await ImplicitProjectCreation.begin(directory)
+    // Compensation may only undo a directory no Project row claims. Bounding
+    // it by position is not enough: `Project.initGit` keeps working after
+    // `fromDirectory` commits the row — it parses the result — so a throw from
+    // that tail would delete the worktree of a Project that is already
+    // durable. The row itself is the condition, checked when the compensation
+    // actually runs, so no statement added later can quietly widen it.
+    let initialized: Awaited<ReturnType<typeof Project.initGit>>
     try {
-      const initialized = await Project.initGit(directory)
-      return {
-        directory: initialized.project.worktree,
-        project: initialized.project,
-      }
+      await fs.mkdir(parent, { recursive: true })
+      await fs.mkdir(directory)
+      // Phases are diagnostic: `converge` decides from the payload, the owner
+      // observation and the Project row, never from them. A journal hiccup
+      // here must not send a healthy creation into the compensation path and
+      // fail the user's request, exactly as it must not for `git_initialized`.
+      await ImplicitProjectCreation.markDirectoryCreated(occurrenceID).catch((error) => {
+        log.error("anonymous project creation phase was not recorded", { directory, error })
+      })
+      initialized = await Project.initGit(directory)
     } catch (error) {
-      await fs.rm(directory, { recursive: true, force: true })
+      try {
+        const compensation = await compensateCreation({ directory, occurrenceID, cause: error })
+        if (compensation.outcome === "committed") {
+          return { directory: compensation.project.worktree, project: compensation.project }
+        }
+      } catch (compensationError) {
+        // A failed lookup or removal is undecidable, so retain both directory
+        // and open occurrence. The original creation error remains the caller
+        // contract; the compensation failure is durable through that journal
+        // and visible in logs for the next convergence attempt.
+        log.error("anonymous project creation compensation deferred", {
+          directory,
+          error: compensationError,
+          cause: error,
+        })
+      }
       throw error
+    }
+    // The row is durable; the receipt only records that fact. A failure here
+    // leaves an open occurrence whose directory a later sweep resolves through
+    // its Project row, so it must not fail the creation either.
+    await ImplicitProjectCreation.markGitInitialized(occurrenceID).catch((error) => {
+      log.error("anonymous project creation phase was not recorded", { directory, error })
+    })
+    await ImplicitProjectCreation.commit(occurrenceID, initialized.project.id).catch((error) => {
+      log.error("anonymous project creation receipt was not published", { directory, error })
+    })
+    return {
+      directory: initialized.project.worktree,
+      project: initialized.project,
     }
   }
 }

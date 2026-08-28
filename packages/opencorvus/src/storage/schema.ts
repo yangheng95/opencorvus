@@ -1,7 +1,13 @@
 import type { AnySQLiteTable } from "drizzle-orm/sqlite-core"
 import { ControlAccountTable } from "../control/control.sql"
 import { DatabaseAuthorityTable } from "./database.sql"
-import { BusPublicationAttemptReceiptTable, BusPublicationDeliveryReceiptTable, BusPublicationDeliveryTable, BusPublicationOutboxTable, BusPublicationPhaseReceiptTable } from "../bus/bus.sql"
+import {
+  BusPublicationAttemptReceiptTable,
+  BusPublicationDeliveryReceiptTable,
+  BusPublicationDeliveryTable,
+  BusPublicationOutboxTable,
+  BusPublicationPhaseReceiptTable,
+} from "../bus/bus.sql"
 import { ChannelIngressAcceptedTable, ChannelIngressOutcomeTable } from "../channel/channel.sql"
 import {
   SessionTable,
@@ -19,13 +25,29 @@ import {
   TodoTable,
   TodoSnapshotTable,
 } from "../session/session.sql"
-import { PermissionExecutionResultTable, PermissionLedgerTable, PermissionPolicyTable } from "../permission/permission.sql"
+import {
+  PermissionExecutionResultTable,
+  PermissionLedgerTable,
+  PermissionPolicyTable,
+} from "../permission/permission.sql"
 import { SessionShareTable } from "../share/share.sql"
-import { ProjectMaintenanceFenceTable, ProjectTable } from "../project/project.sql"
+import { ProjectDirectoryAdmissionTable, ProjectMaintenanceFenceTable, ProjectTable } from "../project/project.sql"
 import { WorkspaceTable } from "../workspace/workspace.sql"
 import { MemoryFileTable, MemoryChunkTable, MemoryEmbeddingTable } from "../memory/memory.sql"
-import { AutomationDefinitionTombstoneTable, AutomationProjectTargetTable, AutomationRunReceiptTable, AutomationRunTable, AutomationTable } from "../scheduler/automation.sql"
-import { EventJobDefinitionTombstoneTable, EventJobFireReceiptTable, EventJobFireTable, EventJobTable, EventOccurrenceTable } from "../scheduler/event.sql"
+import {
+  AutomationDefinitionTombstoneTable,
+  AutomationProjectTargetTable,
+  AutomationRunReceiptTable,
+  AutomationRunTable,
+  AutomationTable,
+} from "../scheduler/automation.sql"
+import {
+  EventJobDefinitionTombstoneTable,
+  EventJobFireReceiptTable,
+  EventJobFireTable,
+  EventJobTable,
+  EventOccurrenceTable,
+} from "../scheduler/event.sql"
 import { TaskPlanTable } from "../memory/task-plan.sql"
 import { WorkbenchBriefSnapshotTable } from "../workbench/workbench.sql"
 import {
@@ -84,6 +106,7 @@ export {
   SessionShareTable,
   ProjectTable,
   ProjectMaintenanceFenceTable,
+  ProjectDirectoryAdmissionTable,
   WorkspaceTable,
   MemoryFileTable,
   MemoryChunkTable,
@@ -158,6 +181,7 @@ export const ApplicationSchema = {
   SessionShareTable,
   ProjectTable,
   ProjectMaintenanceFenceTable,
+  ProjectDirectoryAdmissionTable,
   WorkspaceTable,
   MemoryFileTable,
   MemoryChunkTable,

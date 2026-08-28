@@ -2,7 +2,7 @@ import { access, chmod, link, mkdir, open, readFile, rename, rm, stat as statAsy
 import { createWriteStream, existsSync, statSync } from "fs"
 import { lookup } from "mime-types"
 import { realpathSync } from "fs"
-import { basename, dirname, isAbsolute, join, parse, relative, resolve as pathResolve, normalize } from "path"
+import { basename, dirname, isAbsolute, join, parse, relative, resolve as pathResolve, normalize, sep } from "path"
 import { homedir } from "os"
 import { Readable } from "stream"
 import { pipeline } from "stream/promises"
@@ -469,7 +469,7 @@ export namespace Filesystem {
     if (parentRoot && childRoot && parentRoot !== childRoot) return false
 
     const rel = relative(normalizedParent, normalizedChild)
-    return rel !== "" && !rel.startsWith("..") && !isAbsolute(rel)
+    return rel !== "" && rel !== ".." && !rel.startsWith(`..${sep}`) && !isAbsolute(rel)
   }
 
   export async function findUp(target: string, start: string, stop?: string) {

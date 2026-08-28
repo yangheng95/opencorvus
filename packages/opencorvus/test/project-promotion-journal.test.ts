@@ -6,6 +6,7 @@ import { Instance } from "../src/project/instance"
 import { ImplicitProject } from "../src/project/implicit-project"
 import { PromotionJournal } from "../src/project/promotion-journal"
 import { Project } from "../src/project/project"
+import { ProjectDirectoryAdmission } from "../src/project/directory-admission"
 import { ProjectTable } from "../src/project/project.sql"
 import { ensureProjectPromotionFenceInTransaction } from "../src/project/deletion-registry"
 import { releaseProjectMaintenanceFencesInTransaction } from "../src/project/deletion-registry"
@@ -21,6 +22,19 @@ afterEach(async () => {
   await Instance.disposeAll()
   await resetMemoryDatabase()
 })
+
+async function removeRuntimeRootAfterWindowsContention(target: string) {
+  const deadline = Date.now() + 30_000
+  while (true) {
+    try {
+      await fs.rm(target, { recursive: true, force: true })
+      return
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code !== "EBUSY" || Date.now() >= deadline) throw error
+      await Bun.sleep(250)
+    }
+  }
+}
 
 describe("anonymous Project promotion journal", () => {
   test("two backend processes publish exactly one terminal promotion for one Project generation", async () => {
@@ -203,6 +217,331 @@ describe("anonymous Project promotion journal", () => {
     })
     await fs.rm(runtimeRoot, { recursive: true, force: true })
   }, 90_000)
+
+  test("backward recovery keeps restored source closed to creation reclamation across file-lock compromise", async () => {
+    const runtimeRoot = await fs.mkdtemp(path.join(path.dirname(Global.Path.temporary), "promotion-source-admission-"))
+    const destinationParent = path.join(runtimeRoot, "destinations")
+    const promotionFixture = path.join(import.meta.dir, "fixture", "project-promotion-child.ts")
+    const creationFixture = path.join(import.meta.dir, "fixture", "implicit-project-creation-child.ts")
+    const env = { ...process.env, OPENCORVUS_HOME: runtimeRoot }
+    delete env.OPENCORVUS_TEST_HOME
+    delete env.OPENCORVUS_TEST_PROCESS_ROOT
+    const start = (fixture: string, args: string[]) =>
+      Bun.spawn([process.execPath, fixture, ...args], {
+        cwd: path.join(import.meta.dir, ".."),
+        env,
+        stdout: "pipe",
+        stderr: "pipe",
+      })
+    const collect = async (child: ReturnType<typeof start>) => {
+      const [exitCode, stdout] = await Promise.all([child.exited, new Response(child.stdout).text()])
+      const stderr = await new Response(child.stderr).text()
+      const last = stdout.trim().split(/\r?\n/).at(-1)
+      return { exitCode, value: exitCode === 0 && last ? JSON.parse(last) : undefined, stderr }
+    }
+    const waitForFile = async (target: string) => {
+      const deadline = Date.now() + 30_000
+      while (!(await Filesystem.exists(target))) {
+        if (Date.now() >= deadline) throw new Error(`timed out waiting for ${target}`)
+        await Bun.sleep(10)
+      }
+    }
+
+    try {
+      const setup = await collect(start(promotionFixture, ["setup-backward-window", "-", destinationParent]))
+      expect(setup.exitCode).toBe(0)
+      const prepared = setup.value as { projectID: string; source: string; destination: string }
+      const recoveryInside = path.join(runtimeRoot, "recovery-inside")
+      const recoveryRelease = path.join(runtimeRoot, "recovery-release")
+      const recovery = start(promotionFixture, [
+        "recover-held",
+        prepared.projectID,
+        destinationParent,
+        recoveryInside,
+        recoveryRelease,
+      ])
+      await waitForFile(recoveryInside)
+
+      // Simulate the concrete proper-lockfile compromise: a peer can enter the
+      // callback while the original callback is still alive. SQLite admission,
+      // rather than that queue lock, remains the destructive safety authority.
+      await fs.rm(path.join(runtimeRoot, "data", "project-directory-admission.json.lock"), {
+        recursive: true,
+        force: true,
+      })
+      const refused = await collect(start(creationFixture, ["converge"]))
+      expect({
+        exitCode: refused.exitCode,
+        failure: refused.value?.result.failures[0],
+        sourceState: (await Filesystem.exists(prepared.source)) ? "protected" : "removed",
+      }).toEqual({
+        exitCode: 0,
+        failure: expect.stringContaining("is owned by promotion_restore operation"),
+        sourceState: "protected",
+      })
+
+      await fs.writeFile(recoveryRelease, "release")
+      await collect(recovery)
+      const converged = await collect(start(creationFixture, ["converge"]))
+      const inspected = await collect(start(creationFixture, ["inspect"]))
+      const project = inspected.value?.projects.find((candidate: { id: string }) => candidate.id === prepared.projectID)
+      expect({
+        convergence: converged.value?.result.retained.map((entry: { reason: string }) => entry.reason),
+        sourceState: (await Filesystem.exists(prepared.source)) ? "owned" : "removed",
+        destinationState: (await Filesystem.exists(prepared.destination)) ? "published" : "absent",
+        worktree: project?.worktree,
+        openCreations: inspected.value?.open.length,
+        openAdmissions: inspected.value?.admissions.length,
+      }).toEqual({
+        convergence: ["project_exists"],
+        sourceState: "owned",
+        destinationState: "absent",
+        worktree: prepared.source,
+        openCreations: 0,
+        openAdmissions: 0,
+      })
+    } finally {
+      await fs.rm(runtimeRoot, { recursive: true, force: true })
+    }
+  }, 120_000)
+
+  test("forward promotion refuses a destination under active parent reclamation after file-lock compromise", async () => {
+    const runtimeRoot = await fs.mkdtemp(
+      path.join(path.dirname(Global.Path.temporary), "promotion-destination-admission-"),
+    )
+    const destinationParent = path.join(runtimeRoot, "destinations")
+    const promotionFixture = path.join(import.meta.dir, "fixture", "project-promotion-child.ts")
+    const creationFixture = path.join(import.meta.dir, "fixture", "implicit-project-creation-child.ts")
+    const env = { ...process.env, OPENCORVUS_HOME: runtimeRoot }
+    delete env.OPENCORVUS_TEST_HOME
+    delete env.OPENCORVUS_TEST_PROCESS_ROOT
+    const start = (fixture: string, args: string[]) =>
+      Bun.spawn([process.execPath, fixture, ...args], {
+        cwd: path.join(import.meta.dir, ".."),
+        env,
+        stdout: "pipe",
+        stderr: "pipe",
+      })
+    const collect = async (child: ReturnType<typeof start>) => {
+      const [exitCode, stdout] = await Promise.all([child.exited, new Response(child.stdout).text()])
+      const stderr = await new Response(child.stderr).text()
+      const last = stdout.trim().split(/\r?\n/).at(-1)
+      return { exitCode, value: exitCode === 0 && last ? JSON.parse(last) : undefined, stderr }
+    }
+    const waitForFile = async (target: string) => {
+      const deadline = Date.now() + 30_000
+      while (!(await Filesystem.exists(target))) {
+        if (Date.now() >= deadline) throw new Error(`timed out waiting for ${target}`)
+        await Bun.sleep(10)
+      }
+    }
+
+    try {
+      const setup = await collect(start(promotionFixture, ["setup", "-", destinationParent]))
+      expect(setup.exitCode).toBe(0)
+      const source = setup.value as { projectID: string; source: string }
+      const intent = await collect(start(creationFixture, ["prepare-intent"]))
+      expect(intent.exitCode).toBe(0)
+      const destination = intent.value.directory as string
+      const reclaimInside = path.join(runtimeRoot, "reclaim-inside")
+      const reclaimRelease = path.join(runtimeRoot, "reclaim-release")
+      const reclaimer = start(creationFixture, ["converge-held", reclaimInside, reclaimRelease])
+      await waitForFile(reclaimInside)
+      await fs.rm(path.join(runtimeRoot, "data", "project-directory-admission.json.lock"), {
+        recursive: true,
+        force: true,
+      })
+
+      const promotion = await collect(
+        start(promotionFixture, ["promote", source.projectID, path.dirname(destination), path.basename(destination)]),
+      )
+      const beforeRelease = await collect(start(promotionFixture, ["inspect", source.projectID, destinationParent]))
+      expect({
+        promotion: promotion.exitCode === 0 ? "accepted" : "refused",
+        sourceState: (await Filesystem.exists(source.source)) ? "owned" : "removed",
+        destinationState: (await Filesystem.exists(destination)) ? "published" : "absent",
+        worktree: beforeRelease.value?.project.worktree,
+        promotionFences: beforeRelease.value?.promotionFences.length,
+      }).toEqual({
+        promotion: "refused",
+        sourceState: "owned",
+        destinationState: "absent",
+        worktree: source.source,
+        promotionFences: 0,
+      })
+
+      await fs.writeFile(reclaimRelease, "release")
+      await collect(reclaimer)
+      const inspected = await collect(start(creationFixture, ["inspect"]))
+      expect({
+        openCreations: inspected.value?.open.length,
+        openAdmissions: inspected.value?.admissions.length,
+      }).toEqual({ openCreations: 0, openAdmissions: 0 })
+    } finally {
+      await fs.rm(runtimeRoot, { recursive: true, force: true })
+    }
+  }, 120_000)
+
+  test("startup takes over and releases destination and workspace admissions after promotion owner death", async () => {
+    const runtimeRoot = await fs.mkdtemp(path.join(path.dirname(Global.Path.temporary), "promotion-admission-death-"))
+    const destinationParent = path.join(runtimeRoot, "destinations")
+    const promotionFixture = path.join(import.meta.dir, "fixture", "project-promotion-child.ts")
+    const creationFixture = path.join(import.meta.dir, "fixture", "implicit-project-creation-child.ts")
+    const env = { ...process.env, OPENCORVUS_HOME: runtimeRoot }
+    delete env.OPENCORVUS_TEST_HOME
+    delete env.OPENCORVUS_TEST_PROCESS_ROOT
+    const start = (fixture: string, args: string[]) =>
+      Bun.spawn([process.execPath, fixture, ...args], {
+        cwd: path.join(import.meta.dir, ".."),
+        env,
+        stdout: "pipe",
+        stderr: "pipe",
+      })
+    const collect = async (child: ReturnType<typeof start>) => {
+      const [exitCode, stdout] = await Promise.all([child.exited, new Response(child.stdout).text()])
+      const stderr = await new Response(child.stderr).text()
+      const last = stdout.trim().split(/\r?\n/).at(-1)
+      return { exitCode, value: exitCode === 0 && last ? JSON.parse(last) : undefined, stderr }
+    }
+    const waitForFile = async (target: string) => {
+      const deadline = Date.now() + 30_000
+      while (!(await Filesystem.exists(target))) {
+        if (Date.now() >= deadline) throw new Error(`timed out waiting for ${target}`)
+        await Bun.sleep(10)
+      }
+    }
+
+    try {
+      const setup = await collect(start(promotionFixture, ["setup", "-", destinationParent]))
+      expect(setup.exitCode).toBe(0)
+      const prepared = setup.value as { projectID: string; source: string }
+      const started = path.join(runtimeRoot, "admissions-owned")
+      const neverReleased = path.join(runtimeRoot, "never-release")
+      const killed = start(promotionFixture, [
+        "promote-held-admission",
+        prepared.projectID,
+        destinationParent,
+        "recovered-admission",
+        started,
+        neverReleased,
+      ])
+      await waitForFile(started)
+      killed.kill()
+      await collect(killed)
+      const before = await collect(start(creationFixture, ["inspect"]))
+      expect(before.value?.admissions.map((row: { kind: string }) => row.kind).sort()).toEqual([
+        "promotion_publish",
+        "promotion_workspace",
+        "promotion_workspace",
+      ])
+
+      const recovery = await collect(start(promotionFixture, ["recover", prepared.projectID, destinationParent]))
+      const after = await collect(start(creationFixture, ["inspect"]))
+      expect({
+        recovery: recovery.value?.recovered,
+        worktree: recovery.value?.project.worktree,
+        sourceState: (await Filesystem.exists(prepared.source)) ? "owned" : "removed",
+        admissionCount: after.value?.admissions.length,
+      }).toEqual({
+        recovery: { forward: 0, backward: 1, failures: [] },
+        worktree: prepared.source,
+        sourceState: "owned",
+        admissionCount: 0,
+      })
+    } finally {
+      await fs.rm(runtimeRoot, { recursive: true, force: true })
+    }
+  }, 120_000)
+
+  test("prepared promotion workspace admissions refuse durable sandbox ownership before cleanup", async () => {
+    const runtimeRoot = await fs.mkdtemp(path.join(path.dirname(Global.Path.temporary), "promotion-workspace-owner-"))
+    const destinationParent = path.join(runtimeRoot, "destinations")
+    const promotionFixture = path.join(import.meta.dir, "fixture", "project-promotion-child.ts")
+    const creationFixture = path.join(import.meta.dir, "fixture", "implicit-project-creation-child.ts")
+    const env = { ...process.env, OPENCORVUS_HOME: runtimeRoot }
+    delete env.OPENCORVUS_TEST_HOME
+    delete env.OPENCORVUS_TEST_PROCESS_ROOT
+    const start = (fixture: string, args: string[]) =>
+      Bun.spawn([process.execPath, fixture, ...args], {
+        cwd: path.join(import.meta.dir, ".."),
+        env,
+        stdout: "pipe",
+        stderr: "pipe",
+      })
+    const collect = async (child: ReturnType<typeof start>) => {
+      const [exitCode, stdout] = await Promise.all([child.exited, new Response(child.stdout).text()])
+      const stderr = await new Response(child.stderr).text()
+      const last = stdout.trim().split(/\r?\n/).at(-1)
+      return { exitCode, value: exitCode === 0 && last ? JSON.parse(last) : undefined, stderr }
+    }
+    const waitForFile = async (target: string) => {
+      const deadline = Date.now() + 30_000
+      while (!(await Filesystem.exists(target))) {
+        if (Date.now() >= deadline) throw new Error(`timed out waiting for ${target}`)
+        await Bun.sleep(10)
+      }
+    }
+
+    try {
+      const setup = await collect(start(promotionFixture, ["setup", "-", destinationParent]))
+      expect(setup.exitCode).toBe(0)
+      const prepared = setup.value as { projectID: string; source: string }
+      const started = path.join(runtimeRoot, "prepared")
+      const release = path.join(runtimeRoot, "prepared-release")
+      const promotion = start(promotionFixture, [
+        "promote-held-prepared",
+        prepared.projectID,
+        destinationParent,
+        "workspace-protected",
+        started,
+        release,
+      ])
+      await waitForFile(started)
+      const inspected = await collect(start(creationFixture, ["inspect"]))
+      const workspaces = inspected.value?.admissions
+        .filter((row: { kind: string }) => row.kind === "promotion_workspace")
+        .map((row: { directory: string }) => row.directory)
+        .sort() as string[]
+      expect(workspaces).toHaveLength(2)
+      const outcomes = []
+      for (const [index, workspace] of workspaces.entries()) {
+        const queued = path.join(runtimeRoot, `workspace-${index}-queued`)
+        const registration = await collect(
+          start(creationFixture, ["sandbox-register", prepared.projectID, workspace, queued]),
+        )
+        outcomes.push({
+          outcome: registration.value?.outcome,
+          errorName: registration.value?.errorName,
+          errorMessage: registration.value?.errorMessage,
+        })
+      }
+      expect(outcomes).toEqual([
+        {
+          outcome: "registration_refused",
+          errorName: "ProjectDirectoryAdmissionClosedError",
+          errorMessage: expect.any(String),
+        },
+        {
+          outcome: "registration_refused",
+          errorName: "ProjectDirectoryAdmissionClosedError",
+          errorMessage: expect.any(String),
+        },
+      ])
+
+      await fs.writeFile(release, "release")
+      const completed = await collect(promotion)
+      const after = await collect(start(creationFixture, ["inspect"]))
+      expect({
+        promotion: completed.exitCode === 0 ? "committed" : "failed",
+        destinationState: (await Filesystem.exists(path.join(destinationParent, "workspace-protected")))
+          ? "owned"
+          : "missing",
+        admissionCount: after.value?.admissions.length,
+      }).toEqual({ promotion: "committed", destinationState: "owned", admissionCount: 0 })
+    } finally {
+      await removeRuntimeRootAfterWindowsContention(runtimeRoot)
+    }
+  }, 120_000)
 
   test("a promotion that died after publication converges forward at recovery", async () => {
     await using _anchor = await memoryProject()
@@ -429,7 +768,13 @@ describe("anonymous Project promotion journal", () => {
       time_created: Date.now(),
     })
     await fs.rename(physicalSource, quarantine)
-    Database.immediateTransaction((db) => {
+    const destinationAdmission = await ProjectDirectoryAdmission.acquire({
+      directory: destination,
+      operationID,
+      kind: "promotion_publish",
+    })
+    if (destinationAdmission.outcome === "owned") throw new Error("fixture destination unexpectedly owned")
+    ProjectDirectoryAdmission.settle(destinationAdmission.token, (db) => {
       const row = db.select().from(ProjectTable).where(eq(ProjectTable.id, anonymous.project.id)).get()!
       ensureProjectPromotionFenceInTransaction(db, { project: row, operationID })
       Project.beginPromotionCommit(
@@ -445,6 +790,7 @@ describe("anonymous Project promotion journal", () => {
           worktree: destination,
           name: "database-was-forward",
           sandboxes: [],
+          directoryAdmission: destinationAdmission.token,
         },
         db,
       )

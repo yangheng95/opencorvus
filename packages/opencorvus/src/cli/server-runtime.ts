@@ -65,6 +65,18 @@ export async function prepareServerRuntimeForListener(input: {
         "Project promotion recovery did not converge every open occurrence",
       )
     }
+    // Anonymous creation residue is reclamation, not authority: a backend that
+    // died mid-creation whose user never creates another anonymous Project
+    // would otherwise keep that directory forever, because `create` is the
+    // only other trigger. It reports rather than throws — a directory this
+    // sweep cannot remove must not stop the listener from binding.
+    const creations = await ImplicitProject.convergeCreations()
+    if (creations.reclaimed.length > 0) {
+      log.info("anonymous project creation recovery completed", { reclaimed: creations.reclaimed.length })
+    }
+    for (const failure of creations.failures) {
+      log.error("anonymous project creation occurrence could not be settled", { detail: failure })
+    }
     const observeProcessOccurrence = cachedRuntimeProcessOccurrenceObserver()
     const requestRecovery = await ProcessSupervisor.recoverOrphanedWindowsRequests({
       currentOccurrenceID: occurrence.occurrenceID,

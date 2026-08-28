@@ -1,6 +1,6 @@
 import { AsyncLocalStorage } from "node:async_hooks"
 import { createHash, randomUUID } from "node:crypto"
-import { link, lstat, mkdir, mkdtemp, open, readdir, readFile, readlink, rename, rm } from "node:fs/promises"
+import { link, lstat, mkdir, mkdtemp, open, readdir, readFile, readlink, realpath, rename, rm } from "node:fs/promises"
 import path from "node:path"
 import lockfile from "proper-lockfile"
 import z from "zod"
@@ -109,15 +109,20 @@ type DurablePublicationCut =
   | "terminal-temp-synced"
   | "terminal-published"
 
-let testCutHook: ((cut: DurablePublicationCut) => void | Promise<void>) | undefined
+let testCutHook: ((cut: DurablePublicationCut, kind: string) => void | Promise<void>) | undefined
 
 /** Test-only crash injection used by child-process durability acceptance. */
-export function setDurablePublicationTestCutHook(hook?: (cut: DurablePublicationCut) => void | Promise<void>): void {
+export function setDurablePublicationTestCutHook(
+  hook?: (cut: DurablePublicationCut, kind: string) => void | Promise<void>,
+): void {
   testCutHook = hook
 }
 
-async function cut(name: DurablePublicationCut): Promise<void> {
-  await testCutHook?.(name)
+async function cut(name: DurablePublicationCut, kind: string): Promise<void> {
+  // The kind travels with the cut. Several subsystems share one store root, so
+  // a hook that counted cuts by name alone would fire at whichever
+  // publication reached that point first, not at the one under test.
+  await testCutHook?.(name, kind)
 }
 
 async function syncDirectory(directory: string): Promise<void> {
@@ -129,7 +134,12 @@ async function syncDirectory(directory: string): Promise<void> {
   }
 }
 
-async function writeExclusive(file: string, value: unknown, fact: "intent" | "phase" | "terminal"): Promise<void> {
+async function writeExclusive(
+  file: string,
+  value: unknown,
+  fact: "intent" | "phase" | "terminal",
+  kind: string,
+): Promise<void> {
   const body = `${JSON.stringify(value, null, 2)}\n`
   const temporary = path.join(path.dirname(file), `.tmp-${path.basename(file)}-${randomUUID()}`)
   let published = false
@@ -140,11 +150,11 @@ async function writeExclusive(file: string, value: unknown, fact: "intent" | "ph
     await handle.sync()
     await handle.close()
     handle = undefined
-    await cut(`${fact}-temp-synced`)
+    await cut(`${fact}-temp-synced`, kind)
     try {
       await link(temporary, file)
       published = true
-      await cut(`${fact}-published`)
+      await cut(`${fact}-published`, kind)
       await syncDirectory(path.dirname(file))
     } catch (error) {
       if ((error as NodeJS.ErrnoException).code !== "EEXIST") throw error
@@ -179,7 +189,8 @@ async function readOptional(file: string): Promise<unknown | undefined> {
  * Physical existence is never interpreted as completion by this layer.
  */
 export class DurablePublicationStore {
-  private static readonly heldSubjects = new AsyncLocalStorage<Set<string>>()
+  private static readonly heldSubjects = new AsyncLocalStorage<Map<string, string>>()
+  private static readonly activeSubjectLeases = new Map<string, string>()
 
   constructor(readonly root: string) {
     if (!path.isAbsolute(root)) throw new Error(`Durable publication root must be absolute: ${root}`)
@@ -192,12 +203,22 @@ export class DurablePublicationStore {
   async withSubjectLock<T>(kind: string, subject: string, run: () => Promise<T>): Promise<T> {
     segment(kind, "publication kind")
     if (!subject) throw new Error("Durable publication subject must not be empty")
-    const key = createHash("sha256").update(`${kind}\0${subject}`).digest("hex")
-    const held = DurablePublicationStore.heldSubjects.getStore()
-    if (held?.has(key)) return run()
     const lockDirectory = path.join(this.root, ".locks")
     await mkdir(lockDirectory, { recursive: true })
-    const target = path.join(lockDirectory, key)
+    const physicalLockDirectory = await realpath(lockDirectory)
+    const rootKey =
+      process.platform === "win32"
+        ? path
+            .resolve(physicalLockDirectory)
+            .replace(/^\\\\\?\\/, "")
+            .toLowerCase()
+        : path.resolve(physicalLockDirectory)
+    const subjectKey = createHash("sha256").update(`${kind}\0${subject}`).digest("hex")
+    const leaseKey = `${rootKey}\0${subjectKey}`
+    const held = DurablePublicationStore.heldSubjects.getStore()
+    const inheritedLease = held?.get(leaseKey)
+    if (inheritedLease && DurablePublicationStore.activeSubjectLeases.get(leaseKey) === inheritedLease) return run()
+    const target = path.join(lockDirectory, subjectKey)
     const provision = await open(target, "a", 0o600)
     await provision.close()
     let compromised: unknown
@@ -208,14 +229,19 @@ export class DurablePublicationStore {
         compromised ??= error
       },
     })
-    const next = new Set(held ?? [])
-    next.add(key)
+    const lease = randomUUID()
+    DurablePublicationStore.activeSubjectLeases.set(leaseKey, lease)
+    const next = new Map(held ?? [])
+    next.set(leaseKey, lease)
     try {
       const result = await DurablePublicationStore.heldSubjects.run(next, run)
       if (compromised)
         throw new Error(`Durable publication subject lock was compromised: ${subject}`, { cause: compromised })
       return result
     } finally {
+      if (DurablePublicationStore.activeSubjectLeases.get(leaseKey) === lease) {
+        DurablePublicationStore.activeSubjectLeases.delete(leaseKey)
+      }
       await release().catch((error) => {
         if (!compromised) throw error
       })
@@ -232,8 +258,8 @@ export class DurablePublicationStore {
       await mkdir(stagingRoot, { recursive: true })
       const staging = await mkdtemp(path.join(stagingRoot, `${intent.occurrenceID}-`))
       try {
-        await cut("occurrence-staging-created")
-        await writeExclusive(path.join(staging, "intent.json"), intent, "intent")
+        await cut("occurrence-staging-created", intent.kind)
+        await writeExclusive(path.join(staging, "intent.json"), intent, "intent", intent.kind)
         await syncDirectory(staging)
         let published = false
         try {
@@ -254,7 +280,7 @@ export class DurablePublicationStore {
         // a failed directory fsync must surface, not be read as "someone else
         // already published this".
         if (published) {
-          await cut("occurrence-published")
+          await cut("occurrence-published", intent.kind)
           await syncDirectory(kindDirectory)
         }
       } finally {
@@ -287,7 +313,7 @@ export class DurablePublicationStore {
       await mkdir(phases, { recursive: true })
       await syncDirectory(occurrence.directory)
       const filename = `${String(phase.sequence).padStart(6, "0")}-${segment(phase.name, "publication phase")}.json`
-      await writeExclusive(path.join(phases, filename), phase, "phase")
+      await writeExclusive(path.join(phases, filename), phase, "phase", kind)
       return this.read(kind, phase.occurrenceID)
     })
   }
@@ -300,7 +326,7 @@ export class DurablePublicationStore {
     return this.withSubjectLock(kind, initial.intent.subject, async () => {
       const occurrence = await this.read(kind, input.occurrenceID)
       const terminal = DurablePublicationTerminal.parse({ schemaVersion: 1, ...input })
-      await writeExclusive(path.join(occurrence.directory, "terminal.json"), terminal, "terminal")
+      await writeExclusive(path.join(occurrence.directory, "terminal.json"), terminal, "terminal", kind)
       return this.read(kind, terminal.occurrenceID)
     })
   }

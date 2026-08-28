@@ -11,6 +11,121 @@ afterEach(async () => {
 })
 
 describe("durable publication fact store", () => {
+  test("an inherited subject lease queues again after its outer owner releases", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "opencorvus-publication-lease-"))
+    roots.push(root)
+    const store = new DurablePublicationStore(root)
+    const events: string[] = []
+    let startDescendant!: () => void
+    const descendantStart = new Promise<void>((resolve) => (startDescendant = resolve))
+    let descendantRequested!: () => void
+    const requested = new Promise<void>((resolve) => (descendantRequested = resolve))
+    let releaseOwner!: () => void
+    const ownerRelease = new Promise<void>((resolve) => (releaseOwner = resolve))
+    let ownerStarted!: () => void
+    const started = new Promise<void>((resolve) => (ownerStarted = resolve))
+    let descendant!: Promise<void>
+
+    await store.withSubjectLock("test-publication", "lease:test", async () => {
+      events.push("outer")
+      descendant = (async () => {
+        await descendantStart
+        events.push("descendant-request")
+        descendantRequested()
+        await store.withSubjectLock("test-publication", "lease:test", async () => {
+          events.push("descendant-enter")
+        })
+      })()
+    })
+
+    const owner = store.withSubjectLock("test-publication", "lease:test", async () => {
+      events.push("owner-enter")
+      ownerStarted()
+      await ownerRelease
+      events.push("owner-release")
+    })
+    await started
+    startDescendant()
+    await requested
+    releaseOwner()
+    await Promise.all([owner, descendant])
+
+    expect(events).toEqual(["outer", "owner-enter", "descendant-request", "owner-release", "descendant-enter"])
+  })
+
+  test("subject leases remain isolated across durable publication roots", async () => {
+    const [rootA, rootB] = await Promise.all([
+      mkdtemp(path.join(os.tmpdir(), "opencorvus-publication-root-a-")),
+      mkdtemp(path.join(os.tmpdir(), "opencorvus-publication-root-b-")),
+    ])
+    roots.push(rootA, rootB)
+    const storeA = new DurablePublicationStore(rootA)
+    const storeB = new DurablePublicationStore(rootB)
+    const events: string[] = []
+    let releaseB!: () => void
+    const bRelease = new Promise<void>((resolve) => (releaseB = resolve))
+    let bStarted!: () => void
+    const started = new Promise<void>((resolve) => (bStarted = resolve))
+    let nestedRequested!: () => void
+    const requested = new Promise<void>((resolve) => (nestedRequested = resolve))
+
+    const ownerB = storeB.withSubjectLock("test-publication", "cross-root:test", async () => {
+      events.push("b-owner-enter")
+      bStarted()
+      await bRelease
+      events.push("b-owner-release")
+    })
+    await started
+    const nested = storeA.withSubjectLock("test-publication", "cross-root:test", async () => {
+      events.push("a-enter")
+      const attempt = storeB.withSubjectLock("test-publication", "cross-root:test", async () => {
+        events.push("b-nested-enter")
+      })
+      events.push("b-nested-request")
+      nestedRequested()
+      await attempt
+    })
+    await requested
+    releaseB()
+    await Promise.all([ownerB, nested])
+
+    expect(events).toEqual(["b-owner-enter", "a-enter", "b-nested-request", "b-owner-release", "b-nested-enter"])
+  })
+
+  test("alternate spellings of one root compete on the same subject lock", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "opencorvus-publication-same-root-"))
+    roots.push(root)
+    const canonical = new DurablePublicationStore(root)
+    const alternate = new DurablePublicationStore(`${root}${path.sep}`)
+    const events: string[] = []
+    let releaseOwner!: () => void
+    const ownerRelease = new Promise<void>((resolve) => (releaseOwner = resolve))
+    let ownerStarted!: () => void
+    const started = new Promise<void>((resolve) => (ownerStarted = resolve))
+    let contenderRequested!: () => void
+    const requested = new Promise<void>((resolve) => (contenderRequested = resolve))
+
+    const owner = canonical.withSubjectLock("test-publication", "same-root:test", async () => {
+      events.push("owner-enter")
+      ownerStarted()
+      await ownerRelease
+      events.push("owner-release")
+    })
+    await started
+    const contender = (async () => {
+      events.push("contender-request")
+      contenderRequested()
+      await alternate.withSubjectLock("test-publication", "same-root:test", async () => {
+        events.push("contender-enter")
+      })
+    })()
+    await requested
+    releaseOwner()
+    await Promise.all([owner, contender])
+
+    expect(events).toEqual(["owner-enter", "contender-request", "owner-release", "contender-enter"])
+  })
+
   test("reloads one immutable intent, ordered phases and terminal receipt", async () => {
     const root = await mkdtemp(path.join(os.tmpdir(), "opencorvus-publication-"))
     roots.push(root)
