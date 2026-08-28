@@ -58,6 +58,7 @@ async function validateInstanceConversationCapabilities() {
 export const InstanceBootstrap = markConversationCapabilityTransactionalInit(async function InstanceBootstrap() {
   Log.Default.info("bootstrapping", { directory: Instance.directory })
   installDefaultControlPlaneToolLoaders()
+  EngineService.bindTaskExecutionDirectoryInitializer(InstanceBootstrap)
   SchedulerMessageDeliveryService.bindSessionWake(SessionWake)
   SchedulerMessageDeliveryService.bindTaskDeliveryMaterializer(EngineService.materializeClaimedSchedulerMessageToTask)
   configureTaskIngressRunner(runTaskLoop)

@@ -44,7 +44,7 @@ import { EngineProtocol } from "@/engine/protocol"
 import { ensureGitProjectMetadata } from "@/engine/git-project-metadata"
 import { Instance } from "@/project/instance"
 import type { ProjectDeletionAdmission } from "@/project/instance"
-import { InstanceBootstrap } from "@/project/bootstrap"
+import type { InstanceInit } from "@/project/instance-context"
 import {
   runWithInitializedIndependentProject,
   runWithProjectDeletionIdentity,
@@ -1392,7 +1392,35 @@ function applyOperatorGoalMutation(input: { mutation: ApplyGoalGraphMutationInpu
   return Database.transaction((db) => applyGoalGraphMutationInTransaction(db, { ...input.mutation, now }))
 }
 
+let taskExecutionDirectoryInitializer: InstanceInit | undefined
+
+function requireTaskExecutionDirectoryInitializer(): InstanceInit {
+  if (!taskExecutionDirectoryInitializer) {
+    throw new Error("Task execution directory initializer is not bound by Project bootstrap.")
+  }
+  return taskExecutionDirectoryInitializer
+}
+
+export const TaskExecutionDirectoryInitializerTestHooks = {
+  replace(initializer: InstanceInit | undefined): Disposable {
+    const prior = taskExecutionDirectoryInitializer
+    taskExecutionDirectoryInitializer = initializer
+    return {
+      [Symbol.dispose]() {
+        taskExecutionDirectoryInitializer = prior
+      },
+    }
+  },
+}
+
 export namespace EngineService {
+  export function bindTaskExecutionDirectoryInitializer(initializer: InstanceInit): void {
+    if (taskExecutionDirectoryInitializer && taskExecutionDirectoryInitializer !== initializer) {
+      throw new Error("Task execution directory initializer is already bound to another implementation.")
+    }
+    taskExecutionDirectoryInitializer = initializer
+  }
+
   export function init() {
     const current = orchestratorState()
     if (!current.booted) {
@@ -1577,11 +1605,12 @@ export namespace EngineService {
     }
 
     const projectID = Instance.project.id
+    const initializeExecutionDirectory = requireTaskExecutionDirectoryInitializer()
     return Worktree.withSandboxAdmission(directory, async () => {
       await Project.registerExecutionDirectory(projectID, directory)
       return Instance.provide({
         directory,
-        init: InstanceBootstrap,
+        init: initializeExecutionDirectory,
         fn: async () => {
           if (Instance.project.id !== projectID) {
             throw new Error(

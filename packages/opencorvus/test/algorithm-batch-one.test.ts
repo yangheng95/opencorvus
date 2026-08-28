@@ -25,8 +25,9 @@ import { Bus } from "../src/bus"
 import { Database, eq } from "../src/storage/db"
 import { ProjectTable } from "../src/project/project.sql"
 import { Project } from "../src/project/project"
-import { EngineService } from "../src/task-api"
-import { configureTaskIngressRunner } from "../src/engine/task-root-ingress-delivery"
+import { EngineService, TaskExecutionDirectoryInitializerTestHooks } from "../src/task-api"
+import { TestHooks as TaskControlTestHooks } from "../src/engine/task-root-ingress-delivery"
+import { InstanceBootstrap } from "../src/project/bootstrap"
 
 async function validWorktreeOwners(primaryWorktreeDir: string) {
   const snapshot = await Ownership.Worktree.list(primaryWorktreeDir)
@@ -508,9 +509,52 @@ describe("worktree ownership critical section", () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
+      init: InstanceBootstrap,
       fn: async () => {
+        const projectID = Instance.project.id
+        const unboundWorktree = await Worktree.create({ name: `delete-admission-unbound-${Date.now()}` })
+        await Project.removeSandbox(projectID, unboundWorktree.directory)
+        const sandboxesBeforeUnboundCreation = Project.get(projectID)!.sandboxes
+        {
+          using _unboundInitializer = TaskExecutionDirectoryInitializerTestHooks.replace(undefined)
+          await expect(
+            EngineService.createTask(
+              {
+                requestID: `directory-admission-unbound-${Identifier.ascending("artifact")}`,
+                request: "Reject an uncomposed external-directory Task before durable registration",
+                directory: unboundWorktree.directory,
+                productPillar: "code",
+                model: "firmware/gpt-5",
+                promptProfile: "base",
+              },
+              { actor: "user" },
+            ),
+          ).rejects.toThrow("Task execution directory initializer is not bound by Project bootstrap.")
+        }
+        expect(Project.get(projectID)!.sandboxes).toEqual(sandboxesBeforeUnboundCreation)
+        await Worktree.removeManagedProjectWorktreeDirectory({
+          projectID,
+          directory: unboundWorktree.directory,
+          releaseSandboxOwnership: true,
+        })
+
         const worktree = await Worktree.create({ name: `delete-admission-${Date.now()}` })
-        configureTaskIngressRunner(async () => {})
+        let initializerCalls = 0
+        let ingressRunnerCalls = 0
+        let targetIngressRunner: Disposable | undefined
+        using _initializer = TaskExecutionDirectoryInitializerTestHooks.replace(async () => {
+          initializerCalls += 1
+          {
+            using _bootstrapBinding = TaskExecutionDirectoryInitializerTestHooks.replace(InstanceBootstrap)
+            await InstanceBootstrap()
+          }
+          targetIngressRunner = TaskControlTestHooks.replaceTaskIngressRunner({
+            runner: async () => {
+              ingressRunnerCalls += 1
+              return {}
+            },
+          })
+        })
         const originalRegister = Project.registerExecutionDirectory
         let releaseRegistration!: () => void
         let registrationOwned!: () => void
@@ -547,27 +591,43 @@ describe("worktree ownership critical section", () => {
           ])
           releaseRegistration()
           const taskID = await creation
-          const duringRegistration = await deletion
-          const afterBinding = await Worktree.removeManagedProjectWorktreeDirectory({
+          const task = await EngineService.getTask(taskID)
+          const registrationRelease = await deletion
+          const replayedRelease = await Worktree.removeManagedProjectWorktreeDirectory({
             projectID: Instance.project.id,
             directory: worktree.directory,
             releaseSandboxOwnership: true,
           })
 
           expect({
+            initializerCalls,
+            ingressRunnerCalls,
             taskKind: Identifier.schema("task").parse(taskID) === taskID,
+            taskDirectory: task.directory,
             settledBeforeRelease,
-            duringRegistration,
-            afterBinding,
+            registrationRelease,
+            replayedRelease,
           }).toEqual({
+            initializerCalls: 1,
+            ingressRunnerCalls: 1,
             taskKind: true,
+            taskDirectory: worktree.directory,
             settledBeforeRelease: "pending",
-            duringRegistration: { directory: worktree.directory, removed: false, proof: "owned" },
-            afterBinding: { directory: worktree.directory, removed: false, proof: "owned" },
+            registrationRelease: {
+              directory: worktree.directory,
+              removed: false,
+              proof: "owned",
+            },
+            replayedRelease: {
+              directory: worktree.directory,
+              removed: false,
+              proof: "owned",
+            },
           })
         } finally {
           releaseRegistration()
           register.mockRestore()
+          targetIngressRunner?.[Symbol.dispose]()
         }
       },
     })
