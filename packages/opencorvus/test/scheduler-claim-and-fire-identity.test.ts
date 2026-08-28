@@ -1,8 +1,14 @@
-import { afterAll, describe, expect, test } from "bun:test"
+import { afterAll, describe, expect, spyOn, test } from "bun:test"
+import { randomUUID } from "node:crypto"
 import { acquireControlLease, currentControlLeaseInTransaction } from "../src/engine/control-lease"
 import { EngineControlActivationLeaseTable } from "../src/engine/engine.sql"
 import { Identifier } from "../src/id/id"
 import { Instance } from "../src/project/instance"
+import { Project } from "../src/project/project"
+import { deleteProject } from "../src/project/delete"
+import { Session } from "../src/session"
+import { Server } from "../src/server/server"
+import { GlobalConversationService } from "../src/chat/global-chat-service"
 import { AutomationDefinitionTombstoneTable, AutomationRunReceiptTable, AutomationRunTable, AutomationTable } from "../src/scheduler/automation.sql"
 import { AutomationRunningConflictError, AutomationService } from "../src/scheduler/automation-service"
 import { Database, and, eq } from "../src/storage/db"
@@ -136,4 +142,94 @@ describe("scheduler immutable definition and fire identity", () => {
       expect(Database.use((db) => db.select().from(AutomationTable).where(eq(AutomationTable.definition_id, created.id)).all())).toHaveLength(1)
     } })
   })
+
+  test("a global fire uses the process runtime creator and wakes its exact canonical Session", async () => {
+    await using project = await memoryProject()
+    let carryingProjectID: string | undefined
+    try {
+      await Instance.provide({ directory: project.path, fn: async () => {
+      const outerProjectID = Instance.project.id
+      const outerDirectory = Instance.directory
+      const creatorInputs: Array<{ experience: string; model?: string; sessionID?: string }> = []
+      const wakeContexts: Array<{ sessionID: string; projectID: string; directory: string }> = []
+      const originalCreate = GlobalConversationService.create
+      const createGlobalConversation = spyOn(GlobalConversationService, "create").mockImplementation(
+        async (input) => {
+          creatorInputs.push(input)
+          const created = await originalCreate(input)
+          carryingProjectID = created.session.projectID
+          return created
+        },
+      )
+      using _creatorState = AutomationService.TestHooks.preserveGlobalConversationCreator()
+      try {
+        Server.initializeGlobalAutomation()
+        Server.initializeGlobalAutomation()
+        expect(() =>
+          AutomationService.initGlobal({ createGlobalConversation: async (input) => originalCreate(input) }),
+        ).toThrow("Global Automation conversation creator is already bound to another implementation.")
+        using _wake = AutomationService.TestHooks.installWakeExecutor(async (input) => {
+          wakeContexts.push({
+            sessionID: input.sessionID!,
+            projectID: Instance.project.id,
+            directory: Instance.directory,
+          })
+          return {
+            sessionID: input.sessionID!,
+            messageID: input.messageID!,
+            activation: Promise.resolve({ owner: new AbortController().signal }),
+            completion: Promise.resolve({ ok: true as const }),
+          }
+        })
+        const automation = await AutomationService.create({
+          name: "global-runtime-composition",
+          target: { scope: "global" },
+          recurrence: "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY",
+          prompt: "wake the canonical global conversation",
+        })
+
+        const runs = await AutomationService.runNow(automation.id)
+        const canonicalSession = await Session.get(runs[0]!.session!.id)
+        carryingProjectID = canonicalSession.projectID
+
+        expect(creatorInputs).toEqual([
+          { experience: "chat", model: undefined, sessionID: canonicalSession.id },
+        ])
+        expect({
+          projectChanged: canonicalSession.projectID !== outerProjectID,
+          directoryChanged: canonicalSession.directory !== outerDirectory,
+        }).toEqual({ projectChanged: true, directoryChanged: true })
+        expect(wakeContexts).toEqual([
+          {
+            sessionID: canonicalSession.id,
+            projectID: canonicalSession.projectID,
+            directory: canonicalSession.directory,
+          },
+        ])
+        expect(runs).toMatchObject([
+          {
+            automationId: automation.id,
+            targetScope: "global",
+            targetProjectId: null,
+            outcome: "succeeded",
+            session: { id: canonicalSession.id, directory: canonicalSession.directory, kind: "assistant" },
+          },
+        ])
+      } finally {
+        createGlobalConversation.mockRestore()
+      }
+      } })
+    } finally {
+      const carryingProject = carryingProjectID ? Project.get(carryingProjectID) : undefined
+      if (carryingProject) {
+        await deleteProject(carryingProject, {
+          actor: "user",
+          source: "project.delete",
+          surface: "api",
+          requestID: randomUUID(),
+          reason: "Clean up the global Automation composition contract Project",
+        })
+      }
+    }
+  }, 30_000)
 })

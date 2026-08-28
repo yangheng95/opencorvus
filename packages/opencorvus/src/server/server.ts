@@ -37,6 +37,7 @@ import { PersistedProjectContext } from "@/server/persisted-project-context"
 import { AutomationService } from "@/scheduler/automation-service"
 import { SchedulerMessageDeliveryService } from "@/protocol/scheduler-message"
 import { Scheduler } from "@/scheduler"
+import { GlobalConversationService } from "@/chat/global-chat-service"
 
 muteAISdkWarnings()
 
@@ -941,6 +942,10 @@ export namespace Server {
     }
   }
 
+  export function initializeGlobalAutomation() {
+    AutomationService.initGlobal({ createGlobalConversation: GlobalConversationService.create })
+  }
+
   function bind(opts: ListenOptions, initializeGlobalServices: boolean) {
     /**
      * When true, port=0 maps directly to OS-assigned random port without
@@ -953,7 +958,7 @@ export namespace Server {
       bindOverlayUiSource(opts.overlayUiSource)
       configureCorsOrigins(opts.cors)
       if (initializeGlobalServices) {
-        AutomationService.initGlobal()
+        initializeGlobalAutomation()
         SchedulerMessageDeliveryService.initGlobal()
       }
 

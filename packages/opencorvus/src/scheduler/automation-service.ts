@@ -49,7 +49,6 @@ import { rightSidebarConversationExperience, type ConversationExperience } from 
 import { NamedError } from "@opencorvus-ai/util/error"
 import { ProjectTable } from "@/project/project.sql"
 import { runWithInitializedIndependentProject } from "@/project/independent-project-owner"
-import { GlobalConversationService } from "@/chat/global-chat-service"
 import { ProjectInstanceContext } from "@/project/instance-context"
 import { Filesystem } from "@/util/filesystem"
 import z from "zod"
@@ -144,6 +143,12 @@ export type ConsumedAutomationWaits = {
   jobIDs: string[]
 }
 
+export type GlobalConversationCreator = (input: {
+  experience: ConversationExperience
+  model?: string
+  sessionID?: string
+}) => Promise<{ session: Session.Info }>
+
 export const AutomationRunningConflictError = NamedError.create(
   "AutomationRunningConflictError",
   z.object({
@@ -163,6 +168,7 @@ export const AutomationRunningConflictError = NamedError.create(
  */
 export namespace AutomationService {
   let wakeSessionForTest: typeof SessionWake.wakeWithReceipt | undefined
+  let globalConversationCreator: GlobalConversationCreator | undefined
   const log = Log.create({ service: "automation-service" })
 
   const POLL_INTERVAL_MS = 1_000
@@ -240,12 +246,15 @@ export namespace AutomationService {
   }
 
   export function init() {
-    initGlobal()
     installActivitySubscriptions()
     log.info("automation project hooks initialized", { projectID: Instance.project.id })
   }
 
-  export function initGlobal() {
+  export function initGlobal(input: { createGlobalConversation: GlobalConversationCreator }) {
+    if (globalConversationCreator && globalConversationCreator !== input.createGlobalConversation) {
+      throw new Error("Global Automation conversation creator is already bound to another implementation.")
+    }
+    globalConversationCreator = input.createGlobalConversation
     Scheduler.register({
       id: "automation-service.poll",
       interval: POLL_INTERVAL_MS,
@@ -257,6 +266,13 @@ export namespace AutomationService {
 
   export async function runDueNow() {
     await poll()
+  }
+
+  function requireGlobalConversationCreator(): GlobalConversationCreator {
+    if (!globalConversationCreator) {
+      throw new Error("Global Automation conversation creator is not bound by the process runtime.")
+    }
+    return globalConversationCreator
   }
 
   export function list(): AutomationView[] {
@@ -579,6 +595,14 @@ export namespace AutomationService {
   export const TestHooks = {
     runNowWithExecutor,
     claim,
+    preserveGlobalConversationCreator(): Disposable {
+      const prior = globalConversationCreator
+      return {
+        [Symbol.dispose]() {
+          globalConversationCreator = prior
+        },
+      }
+    },
     executeClaimedDueOccurrence(input: {
       job: typeof AutomationTable.$inferSelect
       owner: string
@@ -1509,7 +1533,7 @@ export namespace AutomationService {
       })
       if (!globalSession) {
         try {
-          const created = await GlobalConversationService.create({
+          const created = await requireGlobalConversationCreator()({
             experience: "chat",
             model: job.model_provider_id && job.model_id ? `${job.model_provider_id}/${job.model_id}` : undefined,
             sessionID: targetSessionID,

@@ -8,17 +8,7 @@ import ts from "typescript"
 
 const repositoryRoot = path.resolve(import.meta.dir, "..", "..", "..", "..")
 const sourcePrefix = "packages/opencorvus/src/"
-const retainedComponentBudgets = [
-  {
-    name: "global-conversation-automation",
-    maximumSize: 3,
-    members: new Set<string>([
-      "packages/opencorvus/src/chat/global-chat-service.ts",
-      "packages/opencorvus/src/project/bootstrap.ts",
-      "packages/opencorvus/src/scheduler/automation-service.ts",
-    ]),
-  },
-] as const
+const retainedComponentBudgets = [] as const
 const cleanImportEntrypoints = [
   "packages/opencorvus/src/project/implicit-project.ts",
   "packages/opencorvus/src/mcp/browser/builtin.ts",

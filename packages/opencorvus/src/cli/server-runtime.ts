@@ -1,4 +1,3 @@
-import { AutomationService } from "@/scheduler/automation-service"
 import { SchedulerMessageDeliveryService } from "@/protocol/scheduler-message"
 import { Server } from "@/server/server"
 import {
@@ -92,7 +91,7 @@ export async function prepareServerRuntimeForListener(input: {
     reportUnreconciledFailures("project deletion cleanup", deletionRecovery.unreconciled)
     const fenceRecovery = recoverProjectMaintenanceFences(observeProcessOccurrence)
     reportUnreconciledFailures("project maintenance fence", fenceRecovery.unreconciled)
-    AutomationService.initGlobal()
+    Server.initializeGlobalAutomation()
     return { occurrence }
   } catch (preparationError) {
     try {
