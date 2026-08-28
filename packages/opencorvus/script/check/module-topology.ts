@@ -96,7 +96,6 @@ const retainedComponentBudgets = [
     ]),
   },
 ] as const
-const allowedSelfReferences = new Set(["packages/opencorvus/src/plugin/github-copilot/models.ts"])
 const cleanImportEntrypoints = [
   "packages/opencorvus/src/project/implicit-project.ts",
   "packages/opencorvus/src/mcp/browser/builtin.ts",
@@ -402,9 +401,8 @@ async function main() {
         )
       }
     }
-    const unknownSelfReferences = selfReferences.filter((module) => !allowedSelfReferences.has(module))
-    if (unknownSelfReferences.length > 0) {
-      failures.push(`unknown self-references: ${unknownSelfReferences.join(", ")}`)
+    if (selfReferences.length > 0) {
+      failures.push(`self-references: ${selfReferences.join(", ")}`)
     }
     failures.push(...(await checkCleanImports(snapshot.root)))
 

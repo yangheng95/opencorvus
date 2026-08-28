@@ -254,4 +254,4 @@ export async function get(
   }
 }
 
-export * as CopilotModels from "./models"
+export const CopilotModels = { schema, get } as const
