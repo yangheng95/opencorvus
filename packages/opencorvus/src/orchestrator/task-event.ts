@@ -1,6 +1,7 @@
 import { EngineTaskTable } from "@/engine/engine.sql"
 import { sessionParentID, taskIDForSession } from "@/engine/task-session-lineage"
-import { PersistedWorkerTurnDescriptorIncompatibleError, WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
+import { PersistedWorkerTurnDescriptorIncompatibleError } from "@/agent/worker-turn-descriptor-facts"
+import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
 import { persistedSessionAgentID } from "@/agent/persisted-session-identity"
 import { RuntimeTemplateRegistry } from "@/agent/runtime-template-registry"
 import { MessageTable, type SessionKind } from "@/session/session.sql"

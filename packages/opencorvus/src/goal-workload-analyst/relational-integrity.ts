@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto"
 import { isDeepStrictEqual } from "node:util"
 import { artifactProvenanceForAgentTurn } from "@/agent/artifact-read-facts"
-import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
+import { findWorkerTurnDescriptorForDispatchInTransaction } from "@/agent/worker-turn-descriptor-facts"
 import { resolveDeliverySliceRevisionIdentity } from "@/engine/delivery-slice"
 import { resolveGoalGraphMembershipBeforeCatalogRevision } from "@/engine/delivery-slice-membership-facts"
 import { findDispatchLineageByDispatchIDInTransaction } from "@/engine/dispatch-lineage-facts"
@@ -88,7 +88,7 @@ export function validateGoalWorkloadArtifactRelationalIntegrity(input: {
   if (!orchestratorInTaskTree) {
     throw new Error(`Goal Workload ${input.row.id} producer Session does not descend from its Task root`)
   }
-  const descriptor = WorkerTurnDescriptor.findForDispatchInDatabase(input.db, {
+  const descriptor = findWorkerTurnDescriptorForDispatchInTransaction(input.db, {
     sessionID: payload.producer.session_id,
     dispatchID: payload.dispatch.dispatch_id,
   })
