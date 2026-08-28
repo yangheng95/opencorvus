@@ -2583,7 +2583,7 @@ overlayAppHost.replaceChildren()
 disposers.push(render(() => <OverlayRoot />, overlayAppHost))
 await firstPaintedFrame()
 await showOverlayWindow()
-disposers.push(await installExpertSquadInstallHandoffBridge())
+disposers.push(installExpertSquadInstallHandoffBridge())
 const clipboardApiKeyPrompt = installClipboardApiKeyPrompt()
 disposers.push(() => clipboardApiKeyPrompt.dispose())
 

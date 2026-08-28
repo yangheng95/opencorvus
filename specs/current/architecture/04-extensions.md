@@ -171,7 +171,10 @@ package 后通过可见 handoff 返回 Overlay，Overlay 校验 archive/package 
 operator 输入的 Expert Squad 查询交给同一 Market 模糊检索；排序输入包括 manifest selector、package-owned Skill 与
 Agent prompt 的 bounded discovery text，并只返回未安装建议。每条建议提供精确 public Market 页面和显式 project-scope
 安装动作。该建议面不是第二个可浏览目录；安装完成后只刷新 picker catalog，不会把打开或安装动作写成 Squad 选择或
-激活 profile，也不会自动覆盖现有安装。旧版本可能留下
+激活 profile，也不会自动覆盖现有安装。Native argv、single-instance 与 deep-link producer 只更新一个 latest pending
+handoff；renderer listener 在全局启动 readiness barrier 之外异步安装，event 只负责唤醒同一个 reconciliation
+consumer。只有 handoff 已完成解析、窗口展示与可见安装面打开后，renderer 才 compare-and-acknowledge 同一 pending
+value；失败、重载或更新值竞态不得 destructive read、丢失 receipt 或阻塞 Settings/API/health 初始化。旧版本可能留下
 `.opencorvus/.r/project/expert-squad-payload-provisioning.json`，它不再被读取、写入或作为更新/删除权限；
 旧版本已经安装的 package 原样保留，后续只通过普通显式安装、更新与卸载生命周期管理。普通 package
 replacement 在移动旧 target 前保存 `.package-replacement-<id>.json` 持久 intent；进程在任一 rename

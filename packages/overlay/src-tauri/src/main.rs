@@ -1306,6 +1306,25 @@ struct Server {
 #[derive(Default)]
 struct PendingExpertSquadInstallHandoff(Mutex<Option<String>>);
 
+impl PendingExpertSquadInstallHandoff {
+    fn replace(&self, raw: String) {
+        *self.0.lock().unwrap() = Some(raw);
+    }
+
+    fn current(&self) -> Option<String> {
+        self.0.lock().unwrap().clone()
+    }
+
+    fn acknowledge(&self, expected: &str) -> bool {
+        let mut pending = self.0.lock().unwrap();
+        if pending.as_deref() != Some(expected) {
+            return false;
+        }
+        *pending = None;
+        true
+    }
+}
+
 fn accept_expert_squad_install_handoff<R: Runtime>(app: &AppHandle<R>, raw: &str) {
     let parsed = match tauri::Url::parse(raw) {
         Ok(value)
@@ -1318,10 +1337,8 @@ fn accept_expert_squad_install_handoff<R: Runtime>(app: &AppHandle<R>, raw: &str
         _ => return,
     };
     let raw = parsed.to_string();
-    *app.state::<PendingExpertSquadInstallHandoff>()
-        .0
-        .lock()
-        .unwrap() = Some(raw.clone());
+    app.state::<PendingExpertSquadInstallHandoff>()
+        .replace(raw.clone());
     let _ = app.emit_to("main", EXPERT_SQUAD_INSTALL_HANDOFF_EVENT, raw);
     if let Some(window) = app.get_webview_window("main") {
         show_window(&window);
@@ -1772,10 +1789,18 @@ fn overlay_settings_save<R: Runtime>(
 }
 
 #[tauri::command]
-fn overlay_expert_squad_install_handoff_take(
+fn overlay_expert_squad_install_handoff_current(
     pending: tauri::State<'_, PendingExpertSquadInstallHandoff>,
 ) -> Option<String> {
-    pending.0.lock().unwrap().take()
+    pending.current()
+}
+
+#[tauri::command]
+fn overlay_expert_squad_install_handoff_acknowledge(
+    pending: tauri::State<'_, PendingExpertSquadInstallHandoff>,
+    raw: String,
+) -> bool {
+    pending.acknowledge(&raw)
 }
 
 #[tauri::command]
@@ -1931,7 +1956,8 @@ fn overlay_open_project_editor<R: Runtime>(
     }
 
     if let Some(line) = line.filter(|line| *line >= 1) {
-        match spawn_project_editor_at_line(editor, path, line, column.filter(|column| *column >= 1)) {
+        match spawn_project_editor_at_line(editor, path, line, column.filter(|column| *column >= 1))
+        {
             Ok(()) => return Ok(true),
             Err(err) => {
                 eprintln!(
@@ -5784,7 +5810,8 @@ fn main() {
         overlay_settings_save,
         overlay_clipboard_read_text,
         overlay_clipboard_write_text,
-        overlay_expert_squad_install_handoff_take,
+        overlay_expert_squad_install_handoff_current,
+        overlay_expert_squad_install_handoff_acknowledge,
         overlay_server_info,
         overlay_server_restart,
         overlay_startup_retry,
@@ -5817,7 +5844,8 @@ fn main() {
         overlay_settings_save,
         overlay_clipboard_read_text,
         overlay_clipboard_write_text,
-        overlay_expert_squad_install_handoff_take,
+        overlay_expert_squad_install_handoff_current,
+        overlay_expert_squad_install_handoff_acknowledge,
         overlay_server_info,
         overlay_server_restart,
         overlay_startup_retry,
@@ -6101,6 +6129,26 @@ fn create_tray_icon() -> tauri::image::Image<'static> {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn expert_squad_install_handoff_acknowledges_the_exact_current_receipt() {
+        let pending = PendingExpertSquadInstallHandoff::default();
+        pending.replace("opencorvus://expert-squad/install?receipt=first".to_string());
+
+        assert_eq!(
+            pending.current().as_deref(),
+            Some("opencorvus://expert-squad/install?receipt=first")
+        );
+
+        pending.replace("opencorvus://expert-squad/install?receipt=second".to_string());
+        assert!(!pending.acknowledge("opencorvus://expert-squad/install?receipt=first"));
+        assert_eq!(
+            pending.current().as_deref(),
+            Some("opencorvus://expert-squad/install?receipt=second")
+        );
+        assert!(pending.acknowledge("opencorvus://expert-squad/install?receipt=second"));
+        assert_eq!(pending.current(), None);
+    }
 
     #[derive(Deserialize)]
     #[serde(rename_all = "camelCase")]

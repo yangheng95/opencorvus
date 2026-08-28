@@ -103,6 +103,19 @@ function invokeTauri(command: string, args?: Record<string, unknown>): Promise<u
   return fn(command, args)
 }
 
+export async function currentExpertSquadInstallHandoff(): Promise<string | null> {
+  const value = await invokeTauri("overlay_expert_squad_install_handoff_current")
+  if (value === null) return null
+  if (typeof value === "string") return value
+  throw new Error("Native Expert Squad install handoff current command returned an invalid value")
+}
+
+export async function acknowledgeExpertSquadInstallHandoff(raw: string): Promise<boolean> {
+  const value = await invokeTauri("overlay_expert_squad_install_handoff_acknowledge", { raw })
+  if (typeof value === "boolean") return value
+  throw new Error("Native Expert Squad install handoff acknowledge command returned an invalid value")
+}
+
 function webNotificationApiAvailable(): boolean {
   return typeof window !== "undefined" && "Notification" in window
 }
