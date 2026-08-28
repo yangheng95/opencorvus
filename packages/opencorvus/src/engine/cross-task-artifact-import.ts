@@ -15,7 +15,7 @@ import {
 } from "@opencorvus-ai/plugin/artifact-catalog"
 import type { TaskArtifactRef } from "@opencorvus-ai/plugin/task-artifact"
 import { createHash } from "node:crypto"
-import { requireEngineArtifactByLocator } from "@/artifact-catalog"
+import { requireEngineArtifactByLocator } from "./engine-artifact-version-facts"
 import { Identifier } from "@/id/id"
 import { taskPrimaryProjectRoot } from "@/project/task-runtime-root"
 import { Database, and, eq, sql } from "@/storage/db"

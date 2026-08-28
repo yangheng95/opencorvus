@@ -17,7 +17,8 @@ import {
   requireTaskCompletionDecisionArtifact,
 } from "@/engine/completion-decision-read"
 import { requireTerminalLifecycleReferenceEvent, resolveTerminalLifecycleReference } from "@/engine/terminal-lifecycle-reference"
-import { artifactCatalogAuthority, requireEngineArtifactByLocator } from "@/artifact-catalog"
+import { artifactCatalogAuthority } from "@/artifact-catalog"
+import { requireEngineArtifactByLocator } from "@/engine/engine-artifact-version-facts"
 import { readTaskArtifactSnapshotManifest, taskArtifactSnapshotResourceRefs } from "@/task-artifact/store"
 import { engineArtifactUsesTransportEnvelope } from "@/engine/artifact-catalog-metadata"
 import { SchedulerMessagePayload } from "@/protocol/schema"

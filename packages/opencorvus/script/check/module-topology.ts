@@ -10,16 +10,6 @@ const repositoryRoot = path.resolve(import.meta.dir, "..", "..", "..", "..")
 const sourcePrefix = "packages/opencorvus/src/"
 const retainedComponentBudgets = [
   {
-    name: "engine-storage",
-    maximumSize: 4,
-    members: new Set<string>([
-      "packages/opencorvus/src/artifact-catalog/index.ts",
-      "packages/opencorvus/src/engine/store.ts",
-      "packages/opencorvus/src/project/task-runtime-root.ts",
-      "packages/opencorvus/src/task-artifact/store.ts",
-    ]),
-  },
-  {
     name: "session-orchestration",
     maximumSize: 31,
     members: new Set<string>([

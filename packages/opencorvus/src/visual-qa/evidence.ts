@@ -3,7 +3,8 @@ import {
   type ArtifactReadLocator,
 } from "@opencorvus-ai/plugin/artifact-catalog"
 import { z } from "zod"
-import { artifactCatalogAuthority, readTaskArtifact, requireEngineArtifactByLocator } from "@/artifact-catalog"
+import { artifactCatalogAuthority, readTaskArtifact } from "@/artifact-catalog"
+import { requireEngineArtifactByLocator } from "@/engine/engine-artifact-version-facts"
 import {
   BROWSER_PREVIEW_EVIDENCE_ARTIFACT_TYPE,
   BROWSER_PREVIEW_EVIDENCE_KIND,

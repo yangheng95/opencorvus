@@ -70,7 +70,7 @@ import {
   type ArtifactReadLocator,
   type EngineArtifactLocator,
 } from "@opencorvus-ai/plugin/artifact-catalog"
-import { requireEngineArtifactByLocator } from "@/artifact-catalog"
+import { requireEngineArtifactByLocator } from "./engine-artifact-version-facts"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
 import type { TaskArtifactRef } from "@opencorvus-ai/plugin/task-artifact"
 import { FRONTEND_RESEARCH_BRIEF_ARTIFACT_TYPE, FRONTEND_RESEARCH_BRIEF_PRODUCER } from "./artifact-catalog-constants"

@@ -8,7 +8,7 @@ import {
   resolveGoalMembershipContextForProjectionArtifact,
   type TaskRow,
 } from "@/engine/store"
-import { requireEngineArtifactByLocator } from "@/artifact-catalog"
+import { requireEngineArtifactByLocator } from "@/engine/engine-artifact-version-facts"
 import { Database } from "@/storage/db"
 import { Log } from "@/util/log"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"

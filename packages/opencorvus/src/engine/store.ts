@@ -55,7 +55,7 @@ import {
   type ArtifactReadLocator,
   type EngineArtifactLocator,
 } from "@opencorvus-ai/plugin/artifact-catalog"
-import { requireEngineArtifactByLocator } from "@/artifact-catalog"
+import { requireEngineArtifactByLocator } from "./engine-artifact-version-facts"
 import {
   ArchitectContractGraphArtifactPayloadSchema,
   type ArchitectContractGraphArtifactPayload,

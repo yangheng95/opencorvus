@@ -15,7 +15,7 @@ import {
   type EvolutionCampaignHistoryRecord,
   type EvolutionHistoryListResponse,
 } from "@opencorvus-ai/plugin"
-import { requireEngineArtifactByLocator } from "@/artifact-catalog"
+import { requireEngineArtifactByLocator } from "@/engine/engine-artifact-version-facts"
 import {
   EngineArtifactCatalogRevisionTable,
   EngineArtifactTable,

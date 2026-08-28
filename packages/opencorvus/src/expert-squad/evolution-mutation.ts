@@ -16,7 +16,8 @@ import {
   type EvolutionPromotionReceipt,
   type EngineArtifactLocator,
 } from "@opencorvus-ai/plugin"
-import { exactEngineArtifactLocator, requireEngineArtifactByLocator } from "@/artifact-catalog"
+import { exactEngineArtifactLocator } from "@/artifact-catalog"
+import { requireEngineArtifactByLocator } from "@/engine/engine-artifact-version-facts"
 import { insertEngineArtifact } from "@/engine/artifact"
 import { EngineArtifactTable } from "@/engine/engine.sql"
 import { Instance } from "@/project/instance"
