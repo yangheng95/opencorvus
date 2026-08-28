@@ -28,7 +28,7 @@ import { NamedError } from "@opencorvus-ai/util/error"
 import z from "zod"
 import { ExpertSquadPackageLocations } from "./locations"
 import { ExpertSquadRegistry } from "./registry"
-import { evolutionMutationConfirmationText } from "./evolution-mutation"
+import { evolutionMutationConfirmationText } from "./evolution-mutation-intent"
 import { FEEDBACK_REVISION_COMPONENT_ID } from "./feedback-revision"
 
 type InstallationScope = "project" | "global"

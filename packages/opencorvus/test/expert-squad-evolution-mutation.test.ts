@@ -13,9 +13,9 @@ import { prepareTaskProcessBinding } from "../src/engine/task-execution-capsule-
 import { requireTaskPackageRevisionBinding } from "../src/engine/task-package-revision-binding"
 import {
   authorizeEvolutionPackageMutation,
-  evolutionMutationConfirmationText,
   executeEvolutionPackageMutation,
 } from "../src/expert-squad/evolution-mutation"
+import { evolutionMutationConfirmationText } from "../src/expert-squad/evolution-mutation-intent"
 import { ExpertSquadPackageManager } from "../src/expert-squad/manager"
 import { readEvolutionCampaignDetail, readEvolutionHistory } from "../src/expert-squad/evolution-history"
 import { PromptProfileResolver } from "../src/expert-squad/prompt-profile-resolver"
