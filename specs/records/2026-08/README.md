@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-29-light-expert-squad.md](2026-08-29-light-expert-squad.md) adds the two-role, read-only Light Expert Squad for consultation, investigation, and clarifying questions with variable same-role direct-dispatch fan-out.
+
 - [2026-08-28-mission-acceptance-delta-closure.md](2026-08-28-mission-acceptance-delta-closure.md) makes Mission acceptance repair a structured evidence delta with an append-only Task ledger, epoch-boundary compaction, affected-lineage continuation, and dispatch-step settlement without a synthetic `no_action` call.
 
 - [2026-08-28-overlay-expert-squad-handoff-startup-convergence.md](2026-08-28-overlay-expert-squad-handoff-startup-convergence.md) removes the Expert Squad install handoff from the renderer startup barrier and replaces destructive pending-value consumption with successful conditional acknowledgement.
