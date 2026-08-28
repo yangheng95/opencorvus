@@ -27,6 +27,17 @@ def _events(path: Path) -> list[dict[str, Any]]:
     return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
 
 
+def _canonical_world_bytes(world: WorldState) -> bytes:
+    return json.dumps(
+        world.model_dump(mode="json"), ensure_ascii=False, sort_keys=True, separators=(",", ":")
+    ).encode("utf-8")
+
+
+def _assert_scorer_world_stable(before: bytes, world: WorldState) -> None:
+    if _canonical_world_bytes(world) != before:
+        raise RuntimeError("replay scorer mutated the parsed final world")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--domain", required=True)
@@ -70,6 +81,7 @@ def main() -> None:
         object.__setattr__(world.google_sheets, "_updated_row_keys", set(updated_row_keys))
     elif scorer_state_schema != 1:
         raise RuntimeError(f"unsupported scorer-state schema: {scorer_state_schema}")
+    parsed_world_before_scorer = _canonical_world_bytes(world)
     accepted = [event for event in events[:score_index] if event.get("kind") in {"tool", "tool_error"}]
     replayed_stateful = 0
     replayed_non_stateful = 0
@@ -104,9 +116,7 @@ def main() -> None:
     scoring_state: dict[str, Any] = {"info": info, "world": world, "initial_state": copy.deepcopy(initial)}
     partial = partial_credit(scoring_state)
     strict = task_completed_correctly(scoring_state)
-    end_state_sha256 = hashlib.sha256(
-        json.dumps(world.model_dump(mode="json"), ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
-    ).hexdigest()
+    _assert_scorer_world_stable(parsed_world_before_scorer, world)
     assertions = scoring_state.get("_assertion_results", [])
     attempts = len(accepted)
     succeeded_count = sum(1 for event in accepted if event.get("kind") == "tool")
@@ -115,7 +125,8 @@ def main() -> None:
         "partial_credit": partial == expected.get("partial_credit"),
         "task_completed_correctly": strict == expected.get("task_completed_correctly"),
         "assertion_results": assertions == expected.get("assertion_results"),
-        "end_state_sha256": end_state_sha256 == expected.get("end_state_sha256"),
+        "end_state_sha256": final_world_sha256 == expected.get("end_state_sha256"),
+        "scorer_world_stable": True,
         "tool_attempts": attempts == expected.get("tool_attempts"),
         "tool_succeeded": succeeded_count == expected.get("tool_succeeded"),
         "tool_failed": failed_count == expected.get("tool_failed"),
