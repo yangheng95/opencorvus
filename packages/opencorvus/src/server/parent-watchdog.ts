@@ -1,9 +1,5 @@
 import { Log } from "../util/log"
-import {
-  isProcessNumberAlive,
-  observeRuntimeProcessOccurrence,
-  type RuntimeProcessOccurrenceInfo,
-} from "../runtime/process-occurrence"
+import { observeRuntimeProcessOccurrence, type RuntimeProcessOccurrenceInfo } from "../runtime/process-occurrence"
 
 const log = Log.create({ service: "parent-watchdog" })
 
@@ -23,10 +19,8 @@ export namespace ParentWatchdog {
    * shutting down for legitimate reasons.
    */
   export function start(opts: {
-    /** The host occurrence. `processInstanceID` is absent only where the
-     *  platform cannot fingerprint a process, and the watch then keeps the
-     *  weaker process-number liveness rather than a fabricated identity. */
-    parent: { pid: number; processInstanceID?: string; occurrenceID?: string }
+    /** The exact host occurrence established by the launcher before spawn. */
+    parent: RuntimeProcessOccurrenceInfo
     intervalMs?: number
     onOrphan: (reason: string) => void
     observe?: (owner: RuntimeProcessOccurrenceInfo) => "exact_live" | "dead_or_reused" | "unknown_live"
@@ -54,23 +48,15 @@ export namespace ParentWatchdog {
 
     const tick = () => {
       if (stopped || fired) return
-      const fingerprint = opts.parent.processInstanceID
-      const observation = fingerprint
-        ? observe({
-            pid: opts.parent.pid,
-            processInstanceID: fingerprint,
-            occurrenceID: opts.parent.occurrenceID ?? "",
-          })
-        : isProcessNumberAlive(opts.parent.pid)
-          ? ("unknown_live" as const)
-          : ("dead_or_reused" as const)
-      if (observation === "dead_or_reused") {
-        orphan("parent-watchdog: parent process occurrence exited or its identifier was reused")
+      const observation = observe(opts.parent)
+      if (observation !== "exact_live") {
+        orphan(
+          observation === "dead_or_reused"
+            ? "parent-watchdog: parent process occurrence exited or its identifier was reused"
+            : "parent-watchdog: parent process occurrence can no longer be observed exactly",
+        )
         return
       }
-      // "exact_live" is the host still running; "unknown_live" is a process
-      // this platform cannot fingerprint, which stays the pre-existing
-      // liveness answer rather than a false orphan.
     }
 
     const handle = setInterval(tick, intervalMs)

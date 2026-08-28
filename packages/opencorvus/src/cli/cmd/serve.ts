@@ -1,6 +1,5 @@
 import { Server } from "../../server/server"
 import * as fsp from "node:fs/promises"
-import { observedProcessOccurrence } from "@/runtime/process-occurrence"
 import path from "node:path"
 import { cmd } from "./cmd"
 import { withNetworkOptions, resolveNetworkOptions, type NetworkOptions } from "../network"
@@ -52,6 +51,7 @@ type ServeOptions = NetworkOptions & {
   "startup-receipt"?: string
   "startup-occurrence"?: string
   "parent-pid"?: number
+  "parent-process-instance-id"?: string
   "watchdog-interval-ms"?: number
 }
 const SERVE_STOP_TIMEOUT_MILLISECONDS = 5000
@@ -74,23 +74,26 @@ const serveBuilder = (yargs: Parameters<typeof withNetworkOptions>[0]) =>
       type: "number",
       describe: "managed host process identifier",
     })
+    .option("parent-process-instance-id", {
+      type: "string",
+      describe: "managed host operating-system process-instance fingerprint",
+    })
     .option("watchdog-interval-ms", {
       type: "number",
       describe: "managed parent watchdog interval in milliseconds",
     })
 
 function managedLifecycleInput(args: ArgumentsCamelCase<ServeOptions>) {
-  const rawParentPid = args["parent-pid"]
-  if (rawParentPid === undefined) return undefined
-  if (!Number.isInteger(rawParentPid) || rawParentPid <= 0) throw new Error("Managed serve requires a positive --parent-pid")
-  // The host is alive at this instant — it just launched this process — so the
-  // fingerprint observed now IS the occurrence this backend is bound to. A
-  // later reuse of the same process number cannot match it.
-  const parent = observedProcessOccurrence(rawParentPid) ?? { pid: rawParentPid }
-  return {
-    parent,
-    watchdogIntervalMilliseconds: args["watchdog-interval-ms"],
-  }
+  const parent = ManagedServerLifecycle.parentInput({
+    pid: args["parent-pid"],
+    processInstanceID: args["parent-process-instance-id"],
+  })
+  return (
+    parent && {
+      ...parent,
+      watchdogIntervalMilliseconds: args["watchdog-interval-ms"],
+    }
+  )
 }
 
 async function publishStartupReceipt(

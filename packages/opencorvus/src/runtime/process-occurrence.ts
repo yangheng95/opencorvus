@@ -57,6 +57,26 @@ export type RuntimeProcessOccurrenceObserver = (
 
 let runtimeProcessOccurrence: RuntimeProcessOccurrenceInfo | undefined
 
+const DOTNET_EPOCH_OFFSET_TICKS = 504_911_232_000_000_000n
+
+function windowsProcessInstanceIDFromFiletime(filetimeTicks: bigint): string {
+  return `win32:${filetimeTicks + DOTNET_EPOCH_OFFSET_TICKS}`
+}
+
+function linuxProcessInstanceIDFromStat(stat: string): string | undefined {
+  const fields = stat
+    .slice(stat.lastIndexOf(")") + 2)
+    .trim()
+    .split(/\s+/)
+  const startTicks = fields[19]
+  return startTicks ? `linux:${startTicks}` : undefined
+}
+
+function posixProcessInstanceIDFromStart(platform: string, started: string): string | undefined {
+  const value = started.trim()
+  return value ? `${platform}:${value}` : undefined
+}
+
 function isProcessAlive(pid: number): boolean {
   try {
     process.kill(pid, 0)
@@ -93,8 +113,7 @@ function windowsProcessInstanceID(pid: number): string | undefined {
       ptr(kernelTime),
       ptr(userTime),
     )
-    const dotNetEpochOffset = 504_911_232_000_000_000n
-    return succeeded ? `win32:${creationTime.readBigUInt64LE() + dotNetEpochOffset}` : undefined
+    return succeeded ? windowsProcessInstanceIDFromFiletime(creationTime.readBigUInt64LE()) : undefined
   } finally {
     kernel32.symbols.CloseHandle(processHandle)
     kernel32.close()
@@ -105,22 +124,23 @@ function processInstanceID(pid: number): string | undefined {
   try {
     if (process.platform === "linux") {
       const stat = fs.readFileSync(`/proc/${pid}/stat`, "utf8")
-      const fields = stat
-        .slice(stat.lastIndexOf(")") + 2)
-        .trim()
-        .split(/\s+/)
-      const startTicks = fields[19]
-      return startTicks ? `linux:${startTicks}` : undefined
+      return linuxProcessInstanceIDFromStat(stat)
     }
     if (process.platform === "win32") return windowsProcessInstanceID(pid)
     const value = execFileSync("ps", ["-o", "lstart=", "-p", String(pid)], {
       encoding: "utf8",
       stdio: ["ignore", "pipe", "ignore"],
     }).trim()
-    return value ? `${os.platform()}:${value}` : undefined
+    return posixProcessInstanceIDFromStart(os.platform(), value)
   } catch {
     return undefined
   }
+}
+
+export namespace ProcessInstanceIDTestHooks {
+  export const windows = windowsProcessInstanceIDFromFiletime
+  export const linux = linuxProcessInstanceIDFromStat
+  export const posix = posixProcessInstanceIDFromStart
 }
 
 let occurrenceOverrideForTest: string | undefined
@@ -170,13 +190,6 @@ export function currentRuntimeProcessOccurrence(): RuntimeProcessOccurrenceInfo 
  * that cannot fingerprint returns undefined, and the caller keeps the weaker
  * liveness answer rather than inventing one.
  */
-/** Bare process-number liveness. Only for hosts this platform cannot
- *  fingerprint, where a weaker answer is honest and a fabricated occurrence
- *  identity would be a false one. */
-export function isProcessNumberAlive(pid: number): boolean {
-  return isProcessAlive(pid)
-}
-
 export function observedProcessOccurrence(pid: number): RuntimeProcessOccurrenceInfo | undefined {
   const instanceID = processInstanceID(pid)
   if (!instanceID) return undefined

@@ -1,7 +1,4 @@
-import { StringDecoder } from "node:string_decoder"
-
 export const SERVER_STARTUP_DIAGNOSTIC_LIMIT_BYTES = 64 * 1024
-const SERVER_STARTUP_PARTIAL_LINE_LIMIT_BYTES = 64 * 1024
 
 function trimUtf8TextToLastBytes(value: string, limit: number): string {
   const encoded = Buffer.from(value, "utf8")
@@ -9,6 +6,8 @@ function trimUtf8TextToLastBytes(value: string, limit: number): string {
   return new TextDecoder().decode(encoded.subarray(encoded.length - limit)).replace(/^�/, "")
 }
 
+/** One byte-bounded diagnostic tail shared by stdout and stderr. Human output
+ * is evidence for startup failures only; framed receipts own readiness. */
 export class BoundedDiagnosticTail {
   #bytes = Buffer.alloc(0)
   #truncated = false
@@ -47,29 +46,5 @@ export class BoundedDiagnosticTail {
       truncated: this.#truncated,
       retainedBytes: Buffer.byteLength(text, "utf8"),
     }
-  }
-}
-
-export class StartupOutputObserver {
-  readonly diagnostics = new BoundedDiagnosticTail()
-  readonly #stdoutDecoder = new StringDecoder("utf8")
-  #partialLine = ""
-
-  appendStdout(chunk: Buffer | Uint8Array | string): string[] {
-    this.diagnostics.append(chunk)
-    const decoded = typeof chunk === "string" ? chunk : this.#stdoutDecoder.write(Buffer.from(chunk))
-    this.#partialLine += decoded
-    const lines = this.#partialLine.split("\n")
-    this.#partialLine = trimUtf8TextToLastBytes(lines.pop() ?? "", SERVER_STARTUP_PARTIAL_LINE_LIMIT_BYTES)
-    return lines
-  }
-
-  appendStderr(chunk: Buffer | Uint8Array | string): void {
-    this.diagnostics.append(chunk)
-  }
-
-  clear(): void {
-    this.diagnostics.clear()
-    this.#partialLine = ""
   }
 }

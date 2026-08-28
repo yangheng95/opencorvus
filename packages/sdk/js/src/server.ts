@@ -4,7 +4,7 @@ import { NodeProcess } from "@opencorvus-ai/util/process-node"
 import { createStartupReceiptChannel } from "./startup-receipt.js"
 import { type ConfigGetResponse } from "./gen/types.gen.js"
 import { DEFAULT_SERVER_HOST, DEFAULT_SERVER_PORT } from "./defaults.js"
-import { StartupOutputObserver } from "./server-startup-observer.js"
+import { BoundedDiagnosticTail } from "./server-diagnostic-tail.js"
 
 type Config = ConfigGetResponse
 
@@ -107,7 +107,7 @@ export async function createOpenCorvusServer(options?: ServerOptions): Promise<O
 
     const url = await new Promise<string>((resolve, reject) => {
       let state: "pending" | "stopping_failure" | "ready" | "failed" = "pending"
-      const observer = new StartupOutputObserver()
+      const diagnostics = new BoundedDiagnosticTail()
       const receiptObservation = new AbortController()
       const cleanupStartup = () => {
         receiptObservation.abort()
@@ -144,7 +144,7 @@ export async function createOpenCorvusServer(options?: ServerOptions): Promise<O
         }
         state = "ready"
         cleanupStartup()
-        observer.clear()
+        diagnostics.clear()
         // The caller signal and timeout own startup admission only. Once the
         // framed readiness receipt is accepted, normal server lifetime is
         // governed exclusively by `close()`.
@@ -175,8 +175,8 @@ export async function createOpenCorvusServer(options?: ServerOptions): Promise<O
         },
       )
       outputObservationSettled = Promise.all([
-        observeOutput(proc.stdout, (chunk) => observer.appendStdout(Buffer.from(chunk))),
-        observeOutput(proc.stderr, (chunk) => observer.appendStderr(Buffer.from(chunk))),
+        observeOutput(proc.stdout, (chunk) => diagnostics.append(chunk)),
+        observeOutput(proc.stderr, (chunk) => diagnostics.append(chunk)),
       ]).then(() => undefined)
       void outputObservationSettled.catch((error) =>
         failStartupAfterCleanup(error instanceof Error ? error : new Error(String(error))),
@@ -192,7 +192,7 @@ export async function createOpenCorvusServer(options?: ServerOptions): Promise<O
             failStartupAfterCleanup(new Error("Aborted"))
             return
           }
-          const diagnostic = observer.diagnostics.snapshot()
+          const diagnostic = diagnostics.snapshot()
           let msg = `Server exited with code ${terminal.exitCode}`
           if (diagnostic.text.trim()) {
             msg += diagnostic.truncated

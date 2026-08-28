@@ -63,6 +63,12 @@ accepting the framed readiness receipt, so the admitted server is thereafter own
 same clock. A no-op keepalive exists only while entries are outstanding; parallel process occurrences do not each create
 a polling clock.
 
+The native Overlay launcher binds its managed backend to the launcher's exact operating-system process occurrence before
+spawn. It passes both the positive Process Identifier (PID) and the platform process-instance fingerprint; managed
+`serve` admission requires the complete pair and never reconstructs or falls back to PID-only identity in the child.
+The watchdog keeps serving only while that exact occurrence is observable. Exit, PID reuse, or loss of exact
+observability converges once through the normal backend shutdown owner.
+
 `@opencorvus-ai/util/process` is a publishable package and owns only the host-neutral contract and execution coordinator;
 `@opencorvus-ai/util/process-node` is its explicit Node adapter for the JavaScript SDK and Channel runtime. Windows
 `owned_tree` admission launches the repository's native supervisor helper, assigns the target to a Job at creation, and

@@ -3,7 +3,7 @@ import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "no
 import { tmpdir } from "node:os"
 import path from "node:path"
 import { combineServerStartupFailures, createOpenCorvusServer } from "../src/server"
-import { BoundedDiagnosticTail, SERVER_STARTUP_DIAGNOSTIC_LIMIT_BYTES } from "../src/server-startup-observer"
+import { BoundedDiagnosticTail, SERVER_STARTUP_DIAGNOSTIC_LIMIT_BYTES } from "../src/server-diagnostic-tail"
 
 function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms))
