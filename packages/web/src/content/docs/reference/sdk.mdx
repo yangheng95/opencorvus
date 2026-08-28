@@ -83,6 +83,31 @@ for await (const event of stream) {
 
 Useful SSE options: `signal`, `onSseEvent`, `onSseError`, `sseDefaultRetryDelay`, `sseMaxRetryDelay`, and `sseMaxRetryAttempts`.
 
+## Start a Chat
+
+Use `global.chat.start` when one API call should both create a visible Chat and durably accept its first user message. Supply a caller-owned `requestID`; retrying the same ID with the same payload returns the same Session and message instead of creating a duplicate turn. Initial attachments use inline base64 `data`, because the new anonymous Project has no pre-existing project-owned attachment references.
+
+```typescript
+const started = await client.global.chat.start({
+  requestID: crypto.randomUUID(),
+  text: "Review the authentication flow and propose the smallest safe fix.",
+})
+
+if (started.error) throw started.error
+const { session, messageID } = started.data
+
+const { stream } = client.session.events({
+  sessionID: session.id,
+  directory: session.directory,
+})
+
+for await (const event of stream) {
+  console.log(messageID, event.type, event)
+}
+```
+
+The start request returns HTTP 202 after the first user turn is durably admitted and its canonical wake is scheduled. Assistant output remains on the canonical Session Server-Sent Events (SSE) stream; the start response does not buffer a completed model reply. Use `client.global.chat.create()` only when an intentionally empty Chat is needed.
+
 ## Embedded Server
 
 Use `createOpenCorvus()` when the caller should launch an OpenCorvus server process and receive a connected client.
@@ -121,16 +146,16 @@ If `OPENCORVUS_SERVER_PASSWORD` is set, `createOpenCorvus()` passes it into the 
 
 The SDK follows OpenAPI `operationId` names. Dotted segments become namespaces and snake_case method names become camelCase. For example, `session.prompt` becomes `client.session.prompt()`.
 
-| Namespace                                | Examples                                                   |
-| ---------------------------------------- | ---------------------------------------------------------- |
-| `client.global.*`                        | `health`, `event`, `config.get`, `db.reset`                |
-| `client.task.*`                          | `create`, `list`, `message`, `retry`, `replan`, `followup` |
-| `client.session.*`                       | `create`, `prompt`, `events`, `trace`, `summarize`         |
-| `client.goal.*`                          | Delivery Slice creation, immutable revision, and derived-progress routes |
-| `client.channel.*`                       | Channel runtime and attachment routes                      |
-| `client.mcp.*`                           | MCP server lifecycle and auth routes                       |
-| `client.permission.*`                    | Permission reply/reject routes                             |
-| `client.provider.*`                      | Provider model, auth, and refresh routes                   |
+| Namespace             | Examples                                                                 |
+| --------------------- | ------------------------------------------------------------------------ |
+| `client.global.*`     | `health`, `event`, `chat.start`, `config.get`, `db.reset`                |
+| `client.task.*`       | `create`, `list`, `message`, `retry`, `replan`, `followup`               |
+| `client.session.*`    | `create`, `prompt`, `events`, `trace`, `summarize`                       |
+| `client.goal.*`       | Delivery Slice creation, immutable revision, and derived-progress routes |
+| `client.channel.*`    | Channel runtime and attachment routes                                    |
+| `client.mcp.*`        | MCP server lifecycle and auth routes                                     |
+| `client.permission.*` | Permission reply/reject routes                                           |
+| `client.provider.*`   | Provider model, auth, and refresh routes                                 |
 
 Use [HTTP API reference](../api/) as the exhaustive operation list; each `operationId` maps directly to the SDK namespace/method shape above.
 

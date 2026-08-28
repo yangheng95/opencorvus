@@ -28,6 +28,7 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 | POST | `/global/automations/{id}/run` | Run a scheduled automation now Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `global.automations.run` |
 | GET | `/global/automations/{id}/runs` | List scheduled automation runs Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `global.automations.runs` |
 | POST | `/global/chat` | Create Chat in a temporary project Body: `model`; Errors: `BadRequestError`. | `global.chat.create` |
+| POST | `/global/chat/start` | Start a global Chat Body: `attachments`, `model`, `requestID`, `text`; Errors: `AuthReadError`, `BadRequestError`, `GlobalChatStartIdentityConflictError`. | `global.chat.start` |
 | GET | `/global/composer-expert-squads` | Search global Composer expert squads Errors: `BadRequestError`, `UnknownError`. | `global.composerExpertSquads` |
 | GET | `/global/composer-references` | List global Composer references Errors: `UnknownError`. | `global.composerReferences` |
 | GET | `/global/config` | Get global configuration Errors: `NonCanonicalConfigFileError`. | `global.config.get` |

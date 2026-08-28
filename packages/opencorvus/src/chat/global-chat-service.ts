@@ -8,7 +8,12 @@ import { deleteProject } from "@/project/delete"
 import { randomUUID } from "node:crypto"
 
 export namespace GlobalConversationService {
-  export async function create(input: { experience: ConversationExperience; model?: string; sessionID?: string }) {
+  export async function create(input: {
+    experience: ConversationExperience
+    model?: string
+    sessionID?: string
+    creationMetadata?: Record<string, unknown>
+  }) {
     const carryingProject = await ImplicitProject.create()
     try {
       return await Instance.provide({
@@ -26,6 +31,7 @@ export namespace GlobalConversationService {
           const session = await createRightSidebarConversationSession(input.experience, {
             id: input.sessionID,
             configOverlay: initialOverlay,
+            creationMetadata: input.creationMetadata,
           })
           return { session }
         },

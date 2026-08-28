@@ -219,6 +219,8 @@ import type {
   GlobalAutomationsUpdateResponses,
   GlobalChatCreateErrors,
   GlobalChatCreateResponses,
+  GlobalChatStartErrors,
+  GlobalChatStartResponses,
   GlobalComposerExpertSquadsErrors,
   GlobalComposerExpertSquadsResponses,
   GlobalComposerReferencesErrors,
@@ -5773,6 +5775,49 @@ export class Chat3 extends HeyApiClient {
     const params = buildClientParams([parameters], [{ args: [{ in: "body", key: "model" }] }])
     return (options?.client ?? this.client).post<GlobalChatCreateResponses, GlobalChatCreateErrors, ThrowOnError>({
       url: "/global/chat",
+      ...options,
+      ...params,
+      headers: {
+        "Content-Type": "application/json",
+        ...options?.headers,
+        ...params.headers,
+      },
+    })
+  }
+
+  /**
+   * Start a global Chat
+   *
+   * Create one visible global Chat, durably accept and schedule its first user message, and return canonical Session streaming coordinates. Retry the same requestID to converge on the same Chat turn.
+   */
+  public start<ThrowOnError extends boolean = false>(
+    parameters: {
+      attachments?: Array<{
+        data: string
+        filename?: string
+        mime: string
+      }>
+      model?: string
+      requestID: string
+      text: string
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "body", key: "attachments" },
+            { in: "body", key: "model" },
+            { in: "body", key: "requestID" },
+            { in: "body", key: "text" },
+          ],
+        },
+      ],
+    )
+    return (options?.client ?? this.client).post<GlobalChatStartResponses, GlobalChatStartErrors, ThrowOnError>({
+      url: "/global/chat/start",
       ...options,
       ...params,
       headers: {

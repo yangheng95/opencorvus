@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-28-global-chat-start-api.md](2026-08-28-global-chat-start-api.md) adds one idempotent, asynchronous global Chat start that creates the visible Session, persists the first real user Message, and exposes canonical Session streaming coordinates.
+
 - [2026-08-28-arc-021-immutable-package-publication.md](2026-08-28-arc-021-immutable-package-publication.md) replaces the mutable shared Bun package cache with verified, atomically published immutable package revisions.
 
 - [2026-08-28-arc-008-conversation-mcp-context-budget.md](2026-08-28-arc-008-conversation-mcp-context-budget.md) separates configured Browser/Computer inventory from explicit Chat/Work MCP activation so an unassigned conversation carries no implicit full-provider schema payload.

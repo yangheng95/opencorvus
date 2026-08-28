@@ -28,6 +28,7 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | POST | `/global/automations/{id}/run` | Run a scheduled automation now 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `global.automations.run` |
 | GET | `/global/automations/{id}/runs` | List scheduled automation runs 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `global.automations.runs` |
 | POST | `/global/chat` | Create Chat in a temporary project 请求体: `model`; 错误: `BadRequestError`. | `global.chat.create` |
+| POST | `/global/chat/start` | Start a global Chat 请求体: `attachments`, `model`, `requestID`, `text`; 错误: `AuthReadError`, `BadRequestError`, `GlobalChatStartIdentityConflictError`. | `global.chat.start` |
 | GET | `/global/composer-expert-squads` | Search global Composer expert squads 错误: `BadRequestError`, `UnknownError`. | `global.composerExpertSquads` |
 | GET | `/global/composer-references` | List global Composer references 错误: `UnknownError`. | `global.composerReferences` |
 | GET | `/global/config` | Get global configuration 错误: `NonCanonicalConfigFileError`. | `global.config.get` |

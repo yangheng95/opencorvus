@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest global Chat start API convergence: [`2026-08-28-global-chat-start-api.md`](records/2026-08/2026-08-28-global-chat-start-api.md).
+
 Latest ARC-021 immutable shared-package publication: [`2026-08-28-arc-021-immutable-package-publication.md`](records/2026-08/2026-08-28-arc-021-immutable-package-publication.md).
 
 Latest ARC-008 Conversation MCP context-budget convergence: [`2026-08-28-arc-008-conversation-mcp-context-budget.md`](records/2026-08/2026-08-28-arc-008-conversation-mcp-context-budget.md).

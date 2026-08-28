@@ -61985,6 +61985,150 @@
         ]
       }
     },
+    "/global/chat/start": {
+      "post": {
+        "description": "Create one visible global Chat, durably accept and schedule its first user message, and return canonical Session streaming coordinates. Retry the same requestID to converge on the same Chat turn.",
+        "operationId": "global.chat.start",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "attachments": {
+                    "items": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "data": {
+                          "type": "string"
+                        },
+                        "filename": {
+                          "type": "string"
+                        },
+                        "mime": {
+                          "minLength": 1,
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "mime",
+                        "data"
+                      ],
+                      "type": "object"
+                    },
+                    "maxItems": 13,
+                    "type": "array"
+                  },
+                  "model": {
+                    "type": "string"
+                  },
+                  "requestID": {
+                    "maxLength": 200,
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "text": {
+                    "maxLength": 32000,
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "requestID",
+                  "text"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "messageID": {
+                      "pattern": "^msg.*",
+                      "type": "string"
+                    },
+                    "requestID": {
+                      "type": "string"
+                    },
+                    "session": {
+                      "$ref": "#/components/schemas/Session"
+                    }
+                  },
+                  "required": [
+                    "requestID",
+                    "session",
+                    "messageID"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Global Chat start accepted"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestError"
+                }
+              }
+            },
+            "description": "Bad request"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "data": {
+                      "additionalProperties": {},
+                      "propertyNames": {
+                        "type": "string"
+                      },
+                      "type": "object"
+                    },
+                    "name": {
+                      "const": "GlobalChatStartIdentityConflictError",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "data"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Global Chat start request identity is already bound to another payload"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthReadError"
+                }
+              }
+            },
+            "description": "Saved Provider credentials could not be observed safely"
+          }
+        },
+        "summary": "Start a global Chat",
+        "x-codeSamples": [
+          {
+            "lang": "js",
+            "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.global.chat.start({\n  ...\n})"
+          }
+        ]
+      }
+    },
     "/global/composer-expert-squads": {
       "get": {
         "description": "Returns a bounded page of built-in and user-global Expert Squads without creating a Project or Session.",
@@ -65504,6 +65648,7 @@
                               "type": "string"
                             },
                             "mime": {
+                              "minLength": 1,
                               "type": "string"
                             }
                           },
@@ -70919,6 +71064,7 @@
                               "type": "string"
                             },
                             "mime": {
+                              "minLength": 1,
                               "type": "string"
                             }
                           },
@@ -92972,6 +93118,7 @@
                               "type": "string"
                             },
                             "mime": {
+                              "minLength": 1,
                               "type": "string"
                             }
                           },
@@ -110593,6 +110740,7 @@
                               "type": "string"
                             },
                             "mime": {
+                              "minLength": 1,
                               "type": "string"
                             }
                           },

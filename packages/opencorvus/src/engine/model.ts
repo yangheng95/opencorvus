@@ -62,10 +62,10 @@ import { AcceptanceSpecSchema } from "@/acceptance/types"
  * The orchestrator decodes them exactly once at task-creation time, writes them
  * to AttachmentStore, and never carries base64 further into the system.
  */
-const UserUploadBytesInput = z
+export const UserUploadBytesInput = z
   .object({
     /** MIME type, e.g. "image/png", "application/pdf", "audio/mpeg" */
-    mime: z.string(),
+    mime: z.string().min(1),
     /** Base64-encoded file bytes (no data-URL prefix) */
     data: z.string(),
     /** Optional display name shown in the overlay message and LLM file part */
@@ -101,24 +101,36 @@ const UserUploadReferenceInput = z
  */
 export const UserUploadInput = z.union([UserUploadReferenceInput, UserUploadBytesInput])
 
-export const UserUploadList = UserUploadInput.array()
-  .max(COMPOSER_FILE_ATTACHMENT_LIMIT + COMPOSER_FOLDER_ATTACHMENT_LIMIT)
-  .superRefine((attachments, ctx) => {
-    const folderCount = attachments.filter((attachment) => attachment.mime === DIRECTORY_REFERENCE_MIME).length
-    const fileCount = attachments.length - folderCount
-    if (fileCount > COMPOSER_FILE_ATTACHMENT_LIMIT) {
-      ctx.addIssue({
-        code: "custom",
-        message: `No more than ${COMPOSER_FILE_ATTACHMENT_LIMIT} file attachments are allowed`,
-      })
-    }
-    if (folderCount > COMPOSER_FOLDER_ATTACHMENT_LIMIT) {
-      ctx.addIssue({
-        code: "custom",
-        message: `No more than ${COMPOSER_FOLDER_ATTACHMENT_LIMIT} folder attachments are allowed`,
-      })
-    }
-  })
+function userUploadList<T extends z.ZodType<{ mime: string }>>(item: T) {
+  return item
+    .array()
+    .max(COMPOSER_FILE_ATTACHMENT_LIMIT + COMPOSER_FOLDER_ATTACHMENT_LIMIT)
+    .superRefine((attachments, ctx) => {
+      const folderCount = attachments.filter((attachment) => attachment.mime === DIRECTORY_REFERENCE_MIME).length
+      const fileCount = attachments.length - folderCount
+      if (fileCount > COMPOSER_FILE_ATTACHMENT_LIMIT) {
+        ctx.addIssue({
+          code: "custom",
+          message: `No more than ${COMPOSER_FILE_ATTACHMENT_LIMIT} file attachments are allowed`,
+        })
+      }
+      if (folderCount > COMPOSER_FOLDER_ATTACHMENT_LIMIT) {
+        ctx.addIssue({
+          code: "custom",
+          message: `No more than ${COMPOSER_FOLDER_ATTACHMENT_LIMIT} folder attachments are allowed`,
+        })
+      }
+    })
+}
+
+export const UserUploadList = userUploadList(UserUploadInput)
+
+/**
+ * A one-call ingress that allocates its Project cannot consume a previously
+ * uploaded project-owned reference because that Project does not exist yet.
+ * It accepts inline bytes only and materializes them after allocation.
+ */
+export const UserUploadBytesList = userUploadList(UserUploadBytesInput)
 
 /**
  * Persisted attachment reference. Once the bytes live in AttachmentStore

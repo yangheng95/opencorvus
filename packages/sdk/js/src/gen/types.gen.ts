@@ -17381,6 +17381,57 @@ export type GlobalChatCreateResponses = {
 
 export type GlobalChatCreateResponse = GlobalChatCreateResponses[keyof GlobalChatCreateResponses]
 
+export type GlobalChatStartData = {
+  body: {
+    attachments?: Array<{
+      data: string
+      filename?: string
+      mime: string
+    }>
+    model?: string
+    requestID: string
+    text: string
+  }
+  path?: never
+  query?: never
+  url: "/global/chat/start"
+}
+
+export type GlobalChatStartErrors = {
+  /**
+   * Bad request
+   */
+  400: BadRequestError
+  /**
+   * Global Chat start request identity is already bound to another payload
+   */
+  409: {
+    data: {
+      [key: string]: unknown
+    }
+    name: "GlobalChatStartIdentityConflictError"
+  }
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
+}
+
+export type GlobalChatStartError = GlobalChatStartErrors[keyof GlobalChatStartErrors]
+
+export type GlobalChatStartResponses = {
+  /**
+   * Global Chat start accepted
+   */
+  202: {
+    messageID: string
+    requestID: string
+    session: Session
+  }
+}
+
+export type GlobalChatStartResponse = GlobalChatStartResponses[keyof GlobalChatStartResponses]
+
 export type GlobalComposerExpertSquadsData = {
   body?: never
   path?: never

@@ -32,6 +32,7 @@ import {
 } from "../error"
 import { GlobalConversationService } from "@/chat/global-chat-service"
 import { RightSidebarConversationSessionResponse } from "@/chat/session"
+import { GlobalChatStartInput, GlobalChatStartResponse, startGlobalChat } from "@/chat/global-chat-start"
 import { ImplicitProject } from "@/project/implicit-project"
 import { SkillManager } from "@/skill/manager"
 import {
@@ -304,6 +305,29 @@ export const GlobalRoutes = lazy(() =>
           }),
           201,
         ),
+    )
+    .post(
+      "/chat/start",
+      describeRoute({
+        summary: "Start a global Chat",
+        description:
+          "Create one visible global Chat, durably accept and schedule its first user message, and return canonical Session streaming coordinates. Retry the same requestID to converge on the same Chat turn.",
+        operationId: "global.chat.start",
+        responses: {
+          202: {
+            description: "Global Chat start accepted",
+            content: { "application/json": { schema: resolver(GlobalChatStartResponse) } },
+          },
+          ...errors(400),
+          409: namedErrorResponse(
+            "Global Chat start request identity is already bound to another payload",
+            "GlobalChatStartIdentityConflictError",
+          ),
+          503: AuthReadUnavailableResponse,
+        },
+      }),
+      validator("json", GlobalChatStartInput),
+      async (c) => c.json(await startGlobalChat(c.req.valid("json")), 202),
     )
     .post(
       "/work",

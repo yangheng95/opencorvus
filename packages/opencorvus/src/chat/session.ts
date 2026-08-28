@@ -50,7 +50,7 @@ export const RightSidebarConversationSessionResponse = z.object({
 
 export async function createRightSidebarConversationSession(
   experience: ConversationExperience,
-  options?: { id?: string; configOverlay?: Record<string, unknown> },
+  options?: { id?: string; configOverlay?: Record<string, unknown>; creationMetadata?: Record<string, unknown> },
 ) {
   // The validated initial overlay is part of the creation input and commits
   // in the Session insert itself — a published conversation Session carries
@@ -62,6 +62,7 @@ export async function createRightSidebarConversationSession(
     directory: Instance.directory,
     title: rightSidebarConversationDefaultTitle(experience),
     metadata: {
+      ...(options?.creationMetadata ?? {}),
       ...rightSidebarConversationMetadata(experience),
       ...(options?.configOverlay ? { configOverlay: options.configOverlay } : {}),
     },

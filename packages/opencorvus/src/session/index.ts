@@ -1657,6 +1657,14 @@ export namespace Session {
     }
   }
 
+  /** Return the Session that durably owns one globally unique Message occurrence. */
+  export function messageOccurrenceSessionID(messageID: string): string | undefined {
+    const id = Identifier.schema("message").parse(messageID)
+    return Database.use((db) =>
+      db.select({ sessionID: MessageTable.session_id }).from(MessageTable).where(eq(MessageTable.id, id)).get(),
+    )?.sessionID
+  }
+
   function assertMessageOccurrenceUnclaimed(input: { sessionID: string; messageID: string }) {
     const existing = Database.use((db) =>
       db

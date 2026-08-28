@@ -69,6 +69,13 @@ export namespace SessionWake {
     }),
     z
       .object({
+        source: z.literal("api.chat"),
+        requestID: z.string().trim().min(1).max(200),
+        requestFingerprint: z.string().regex(/^[0-9a-f]{64}$/),
+      })
+      .strict(),
+    z
+      .object({
         source: z.literal("scheduler.message"),
         eventID: Identifier.schema("protocol_event"),
         inboxID: Identifier.schema("protocol_inbox"),
@@ -386,14 +393,13 @@ export namespace SessionWake {
       activationSettled = true
       resolveActivation({ owner })
     }
-    const operation = Promise.resolve().then(() => {
+    const operation = Promise.resolve().then(async () => {
+      await beforeWakeLoopActivationForTest?.()
       if (wakeLoopExecutorForTest) {
-        return Promise.resolve(beforeWakeLoopActivationForTest?.()).then(() => {
-          activated(reservation.signal)
-          return wakeLoopExecutorForTest!({
-            ...input,
-            signal: reservation.signal,
-          })
+        activated(reservation.signal)
+        return wakeLoopExecutorForTest({
+          ...input,
+          signal: reservation.signal,
         })
       }
       return executeWakeLoop({

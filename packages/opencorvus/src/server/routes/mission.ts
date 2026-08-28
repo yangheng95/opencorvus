@@ -33,15 +33,14 @@ import { validateConfigModelReferences } from "@/config/model-reference-validati
 import { MissionStatusSnapshot } from "@/status/task-status-snapshot"
 import { Session } from "@/session"
 import { SessionWake } from "@/session/wake"
-import { decodeRawBase64Payload } from "@/session/text-mime"
 import { enrichStandaloneSessionTranscript } from "@/protocol/session-mirror"
 import { isModelReference } from "@/provider/model-ref"
 import { Provider } from "@/provider/provider"
 import { resolveAgentModel } from "@/agent/model"
 import { buildMissionProjectArchive, ProjectArchiveUnsupportedProjectError } from "@/engine/task-project-archive"
 import { EngineService } from "@/task-api"
-import { UserUploadInput, UserUploadList } from "@/engine/model"
-import { AttachmentStore } from "@/storage/attachment-store"
+import { UserUploadList } from "@/engine/model"
+import { materializeUserUploadParts } from "@/engine/user-upload-parts"
 import { awaitSessionPromptFinishedInScope, cancelSessionPromptInScope } from "@/engine/cancellation-scope"
 import { createTaskCancellationIncomplete } from "@/engine/cancellation-error"
 import {
@@ -141,38 +140,6 @@ const ProjectArchiveUnsupportedProjectResponse = z.object({
 })
 
 type MissionSessionRecord = Awaited<ReturnType<typeof getMissionSessionByDirectory>>
-
-async function missionWakeAttachmentParts(
-  attachments: z.infer<typeof UserUploadInput>[] | undefined,
-): Promise<NonNullable<SessionWake.WakeInput["parts"]>> {
-  const parts: NonNullable<SessionWake.WakeInput["parts"]> = []
-  for (const attachment of attachments ?? []) {
-    const reference =
-      "data" in attachment
-        ? await AttachmentStore.write(
-            Instance.project.id,
-            decodeRawBase64Payload(
-              attachment.data,
-              `mission wake attachment ${attachment.filename ?? attachment.mime}`,
-            ),
-            attachment.mime,
-            attachment.filename,
-          )
-        : await AttachmentStore.requireReference({
-            projectID: Instance.project.id,
-            url: attachment.url,
-            mime: attachment.mime,
-          })
-    parts.push({
-      type: "file",
-      mime: reference.mime,
-      url: reference.url,
-      presentation: "attachment-index",
-      ...((attachment.filename ?? reference.filename) ? { filename: attachment.filename ?? reference.filename } : {}),
-    })
-  }
-  return parts
-}
 
 function missionRouteSession(missionID: string): Promise<MissionSessionRecord> {
   return getMissionSessionByDirectory({ missionID, directory: Instance.directory })
@@ -743,7 +710,7 @@ export function MissionRoutes() {
           if (error instanceof MissionExpertSquadSnapshotMismatchError) return c.json(error.toObject(), 400)
           throw error
         }
-        const attachmentParts = await missionWakeAttachmentParts(input.attachments)
+        const attachmentParts = await materializeUserUploadParts(input.attachments, "mission wake attachment")
         await openMissionExecutionWithWake({
           missionID,
           sessionID: session.id,
