@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest Overlay panel typography convergence: [`2026-08-28-overlay-panel-typography-convergence.md`](records/2026-08/2026-08-28-overlay-panel-typography-convergence.md).
+
 Latest global Chat start API convergence: [`2026-08-28-global-chat-start-api.md`](records/2026-08/2026-08-28-global-chat-start-api.md).
 
 Latest remaining architecture-debt closure and Mission acceptance plan: [`2026-08-28-remaining-architecture-debt-closure.md`](records/2026-08/2026-08-28-remaining-architecture-debt-closure.md).

@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-28-overlay-panel-typography-convergence.md](2026-08-28-overlay-panel-typography-convergence.md) collapses application-panel typography to one bounded 16/14/12 scale plus 13px code, removes component-local font aliases and outliers, and makes the existing CSS checker enforce the role contract.
+
 - [2026-08-28-global-chat-start-api.md](2026-08-28-global-chat-start-api.md) adds one idempotent, asynchronous global Chat start that creates the visible Session, persists the first real user Message, and exposes canonical Session streaming coordinates.
 
 - [2026-08-28-remaining-architecture-debt-closure.md](2026-08-28-remaining-architecture-debt-closure.md) reconciles the final recorded-open architecture boundaries and orders their repair before one real Mission scheduling-trajectory acceptance.
