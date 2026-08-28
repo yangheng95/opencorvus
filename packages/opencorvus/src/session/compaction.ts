@@ -1017,6 +1017,13 @@ export namespace SessionCompaction {
     auto: z.boolean(),
     overflow: z.boolean().optional(),
     focus: z.string().optional(),
+    controlLineage: z
+      .object({
+        logicalID: z.string().min(1),
+        attempt: z.number().int().positive(),
+      })
+      .strict()
+      .optional(),
   })
 
   async function createCompaction(input: z.infer<typeof CreateInput>) {
@@ -1035,6 +1042,12 @@ export namespace SessionCompaction {
         ...(input.model !== undefined ? { model: input.model } : {}),
         overflow: input.overflow === true,
         ...(input.focus !== undefined ? { focus: input.focus } : {}),
+        ...(input.controlLineage !== undefined
+          ? {
+              logical_checkpoint_id: input.controlLineage.logicalID,
+              checkpoint_attempt: input.controlLineage.attempt,
+            }
+          : {}),
       },
     })
   }

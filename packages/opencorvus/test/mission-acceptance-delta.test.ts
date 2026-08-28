@@ -1,14 +1,25 @@
+import { createHash } from "node:crypto"
 import { afterEach, describe, expect, test } from "bun:test"
-import { materializeMissionAcceptanceGap, renderMissionAcceptanceRepairMessage } from "@/mission/acceptance-gap"
-import { createAcceptanceEpochCheckpoint } from "@/mission/acceptance-checkpoint"
+import {
+  materializeMissionAcceptanceGap,
+  renderMissionAcceptanceRepairMessage,
+  type MissionAcceptanceGap,
+  type MissionAcceptanceOpenCriterion,
+} from "@/mission/acceptance-gap"
+import {
+  createAcceptanceEpochCheckpoint,
+  currentAcceptanceEpochCheckpoint,
+} from "@/mission/acceptance-checkpoint"
 import {
   affectedAcceptanceWorkflowNodes,
+  dispatchConsumesAcceptanceCriterion,
   readLatestTaskAcceptanceLedger,
   validateTaskAcceptanceLedgerTransition,
   workflowNodeConsumesAcceptanceCriterion,
   type TaskAcceptanceLedgerProjection,
 } from "@/mission/acceptance-ledger"
 import type { SelectedWorkflowBinding } from "@/engine/workflow-binding"
+import type { DispatchLineageRow } from "@/engine/dispatch-lineage-facts"
 import { recordEngineArtifact } from "@/engine/artifact"
 import { EngineArtifactTable } from "@/engine/engine.sql"
 import { requireTask } from "@/engine/store"
@@ -22,14 +33,20 @@ import {
   renderDispatchContinuationTurn,
   DispatchTurnSchema,
 } from "@/orchestrator/dispatch-turn-projection"
-import { renderTaskProjectionContext, renderTaskProjectionDelta } from "@/orchestrator/agent"
+import {
+  applyTaskProjectionDelta,
+  renderTaskProjectionContext,
+  renderTaskProjectionDelta,
+} from "@/orchestrator/agent"
 import type { TaskDesc } from "@/engine/describe"
 import { Identifier } from "@/id/id"
 import { ensureMissionSession } from "@/mission/session"
 import { Instance } from "@/project/instance"
 import { Session } from "@/session"
+import { SessionControl } from "@/session/control"
 import { Database, eq } from "@/storage/db"
 import { EngineService } from "@/task-api"
+import { canonicalJSONValue } from "@/util/canonical-digest"
 import { persistEstablishedTask } from "./fixture/engine-task"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
@@ -46,23 +63,30 @@ const secondLocator = {
   catalog_revision: 2,
   expected_sha256: "b".repeat(64),
 }
-const preservedLocator = {
+const thirdLocator = {
   source: "engine_artifact" as const,
-  artifact_id: "art_acceptance_preserved",
+  artifact_id: "art_acceptance_third",
   catalog_revision: 3,
   expected_sha256: "c".repeat(64),
+}
+const fourthLocator = {
+  source: "engine_artifact" as const,
+  artifact_id: "art_acceptance_fourth",
+  catalog_revision: 4,
+  expected_sha256: "d".repeat(64),
+}
+const packageRevision = {
+  scope: "built_in" as const,
+  project_id: null,
+  namespace: "@opencorvus-ai",
+  id: "acceptance-repair",
+  version: "1.0.0",
+  package_digest: "e".repeat(64),
 }
 const workflowBinding = {
   kind: "virtual_workflow",
   workflow_id: "repair",
-  package_revision: {
-    scope: "built_in",
-    project_id: null,
-    namespace: "@opencorvus-ai",
-    id: "acceptance-repair",
-    version: "1.0.0",
-    package_digest: "e".repeat(64),
-  },
+  package_revision: packageRevision,
   nodes: [
     { node_id: "planner", agent_id: "planner", depends_on: [] },
     { node_id: "builder", agent_id: "builder", depends_on: ["planner"] },
@@ -70,43 +94,114 @@ const workflowBinding = {
     { node_id: "publisher", agent_id: "publisher", depends_on: ["tester"] },
   ],
 } satisfies SelectedWorkflowBinding
+const builderResponsibility = {
+  kind: "workflow_node" as const,
+  workflow_id: workflowBinding.workflow_id,
+  workflow_node_id: "builder",
+}
+
+function repairAction(sequence: number) {
+  return {
+    operation: "correct_artifact",
+    target: "build-receipt",
+    expected_evidence_kind: "verified-receipt",
+    parameters: { sequence },
+  }
+}
+
+function repairActionIdentity(sequence: number) {
+  const action = repairAction(sequence)
+  return {
+    ...action,
+    identity_sha256: createHash("sha256")
+      .update(canonicalJSONValue(action, "mission-acceptance-repair-action-v1"))
+      .digest("hex"),
+  }
+}
+
+function openCriterion(input: {
+  observation?: typeof firstLocator[]
+  repair?: typeof firstLocator[]
+  resolution?: typeof firstLocator[]
+  invalidating?: typeof firstLocator[]
+  irreducibleBlocker?: typeof firstLocator[]
+  actionSequence?: number
+  disposition?: "failed" | "unresolved" | "stale_evidence"
+  criterionID?: string
+  responsibility?: MissionAcceptanceOpenCriterion["responsibility"]
+} = {}): MissionAcceptanceOpenCriterion {
+  return {
+    criterion_id: input.criterionID ?? "receipt",
+    state: "open",
+    disposition: input.disposition ?? "failed",
+    finding: "The current receipt does not satisfy the acceptance contract.",
+    responsibility: input.responsibility ?? builderResponsibility,
+    observation_evidence_locators: input.observation ?? [firstLocator],
+    repair_evidence_locators: input.repair ?? [],
+    resolution_evidence_locators: input.resolution ?? [],
+    invalidating_evidence_locators: input.invalidating ?? [],
+    irreducible_blocker_evidence_locators: input.irreducibleBlocker ?? [],
+    repair_action: repairActionIdentity(input.actionSequence ?? 1),
+  }
+}
+
+function gap(criteria: MissionAcceptanceGap["criteria"], gapID = "gap-acceptance"): MissionAcceptanceGap {
+  return { gap_id: gapID, reviewed_terminal_lifecycle_reference: terminal, criteria }
+}
+
+function ledgerProjection(criteria: MissionAcceptanceGap["criteria"]): TaskAcceptanceLedgerProjection {
+  return {
+    artifactID: "art_acceptance_ledger_r1",
+    revision: {
+      protocol: "task-acceptance-ledger-v2",
+      revision: 1,
+      task_id: "tsk_acceptance",
+      execution_epoch: 2,
+      previous_revision_artifact_id: null,
+      gap: gap(criteria, "gap-r1"),
+      time_recorded: 1,
+    },
+  }
+}
 
 afterEach(async () => {
   await resetMemoryDatabase()
 })
 
-describe("Mission acceptance delta closure", () => {
-  test("materializes one visible repair Message from exact read references", () => {
-    const gap = materializeMissionAcceptanceGap({
+describe("Mission acceptance baseline readiness", () => {
+  test("materializes one visible typed repair state from exact read references", () => {
+    const materialized = materializeMissionAcceptanceGap({
       gap: {
         gap_id: "gap-builder-receipt",
         current_ledger_revision_artifact_id: null,
         criteria: [
           {
             criterion_id: "receipt",
+            state: "open",
             disposition: "failed",
             finding: "The receipt contradicts the canonical build output.",
-            relied_evidence_read_refs: ["ar_acceptance_first"],
-            contradictory_evidence_read_refs: [],
-            responsible_workflow_node_id: "builder",
-            required_new_evidence_kind: "corrected-receipt",
+            responsibility: builderResponsibility,
+            observation_evidence_read_refs: ["ar_acceptance_first"],
+            repair_evidence_read_refs: [],
+            resolution_evidence_read_refs: [],
+            invalidating_evidence_read_refs: [],
+            irreducible_blocker_evidence_read_refs: [],
+            repair_action: repairAction(1),
           },
         ],
-        preserved_acceptances: [],
-        requested_next_action: "Correct only the receipt and publish its next canonical revision.",
       },
       reviewedTerminalLifecycleReference: terminal,
       evidenceByReadReference: new Map([["ar_acceptance_first", firstLocator]]),
     })
-    expect({ gap, message: renderMissionAcceptanceRepairMessage(gap) }).toMatchObject({
+    expect({ gap: materialized, message: renderMissionAcceptanceRepairMessage(materialized) }).toMatchObject({
       gap: {
-        gap_id: "gap-builder-receipt",
-        reviewed_terminal_lifecycle_reference: terminal,
         criteria: [
           {
             criterion_id: "receipt",
-            responsible_workflow_node_id: "builder",
-            relied_evidence_locators: [firstLocator],
+            state: "open",
+            responsibility: builderResponsibility,
+            observation_evidence_locators: [firstLocator],
+            repair_action: { identity_sha256: expect.stringMatching(/^[a-f0-9]{64}$/) },
           },
         ],
       },
@@ -114,129 +209,133 @@ describe("Mission acceptance delta closure", () => {
     })
   })
 
-  test("admits a repeated criterion with new evidence and retains the workflow verification closure", () => {
-    const priorGap = {
-      gap_id: "gap-builder-r1",
-      reviewed_terminal_lifecycle_reference: terminal,
-      criteria: [
+  test("reduces open criteria through new-evidence, accepted, blocked, and stale-reopen transitions", () => {
+    const repeated = validateTaskAcceptanceLedgerTransition({
+      taskID: "tsk_acceptance",
+      previous: ledgerProjection([openCriterion()]),
+      workflowBinding,
+      gap: gap([openCriterion({ observation: [firstLocator, secondLocator], actionSequence: 1 })], "gap-r2"),
+    })
+    expect([...affectedAcceptanceWorkflowNodes(workflowBinding, repeated)].sort()).toEqual([
+      "builder",
+      "publisher",
+      "tester",
+    ])
+    expect(workflowNodeConsumesAcceptanceCriterion(workflowBinding, "builder", "tester")).toBe(true)
+
+    const accepted = {
+      criterion_id: "receipt",
+      state: "accepted" as const,
+      finding: "The corrected receipt is verified.",
+      responsibility: builderResponsibility,
+      observation_evidence_locators: [firstLocator],
+      repair_evidence_locators: [],
+      resolution_evidence_locators: [secondLocator],
+      invalidating_evidence_locators: [],
+      irreducible_blocker_evidence_locators: [],
+    }
+    const sentinel = openCriterion({ criterionID: "publication", responsibility: { ...builderResponsibility, workflow_node_id: "publisher" }, observation: [thirdLocator] })
+    const acceptedGap = validateTaskAcceptanceLedgerTransition({
+      taskID: "tsk_acceptance",
+      previous: ledgerProjection([openCriterion()]),
+      workflowBinding,
+      gap: gap([accepted, sentinel], "gap-accepted"),
+    })
+    const stale = openCriterion({
+      observation: [firstLocator],
+      resolution: [secondLocator],
+      invalidating: [fourthLocator],
+      disposition: "stale_evidence",
+      actionSequence: 2,
+    })
+    const reopened = validateTaskAcceptanceLedgerTransition({
+      taskID: "tsk_acceptance",
+      previous: ledgerProjection(acceptedGap.criteria),
+      workflowBinding,
+      gap: gap(
+        [
+          stale,
+          openCriterion({
+            criterionID: "publication",
+            responsibility: { ...builderResponsibility, workflow_node_id: "publisher" },
+            observation: [thirdLocator],
+            actionSequence: 2,
+          }),
+        ],
+        "gap-stale",
+      ),
+    })
+    expect(reopened.criteria[0]).toMatchObject({ state: "open", disposition: "stale_evidence" })
+
+    const blocked = validateTaskAcceptanceLedgerTransition({
+      taskID: "tsk_acceptance",
+      previous: ledgerProjection([openCriterion()]),
+      workflowBinding,
+      gap: gap([
         {
           criterion_id: "receipt",
-          disposition: "failed" as const,
-          finding: "The first receipt is incomplete.",
-          relied_evidence_locators: [firstLocator],
-          contradictory_evidence_locators: [],
-          responsible_workflow_node_id: "builder",
-          required_new_evidence_kind: "corrected-receipt",
+          state: "blocked",
+          finding: "The upstream signed source is permanently unavailable.",
+          responsibility: builderResponsibility,
+          observation_evidence_locators: [firstLocator],
+          repair_evidence_locators: [],
+          resolution_evidence_locators: [],
+          invalidating_evidence_locators: [],
+          irreducible_blocker_evidence_locators: [secondLocator],
         },
-      ],
-      preserved_acceptances: [{ criterion_id: "plan", evidence_locators: [preservedLocator] }],
-      requested_next_action: "Publish the first corrected receipt.",
+        sentinel,
+      ]),
+    })
+    expect(blocked.criteria[0]).toMatchObject({ state: "blocked", irreducible_blocker_evidence_locators: [secondLocator] })
+  })
+
+  test("binds a direct acceptance criterion to its exact immutable dispatch lineage", () => {
+    const directBinding = { kind: "direct" as const, package_revision: packageRevision }
+    const responsibility = {
+      kind: "direct_dispatch" as const,
+      package_revision: packageRevision,
+      agent_id: "builder",
+      dispatch_lineage_id: "art_direct_lineage",
     }
-    const previous = {
-      artifactID: "art_acceptance_ledger_r1",
-      revision: {
-        protocol: "task-acceptance-ledger-v1",
-        revision: 1,
-        task_id: "tsk_acceptance",
-        execution_epoch: 2,
-        previous_revision_artifact_id: null,
-        gap: priorGap,
-        time_recorded: 1,
-      },
-    } satisfies TaskAcceptanceLedgerProjection
-    const nextGap = validateTaskAcceptanceLedgerTransition({
+    const lineage = {
+      artifactID: responsibility.dispatch_lineage_id,
       taskID: "tsk_acceptance",
-      previous,
-      workflowBinding,
-      gap: {
-        ...priorGap,
-        gap_id: "gap-builder-r2",
-        criteria: [
-          {
-            ...priorGap.criteria[0],
-            finding: "The second receipt still lacks the verifier digest.",
-            relied_evidence_locators: [firstLocator, secondLocator],
-            repeat_disposition: "repairable_with_new_evidence",
-          },
-        ],
-        requested_next_action: "Add the verifier digest to the current canonical receipt revision.",
+      dispatchID: "dispatch-direct",
+      timeCreated: 1,
+      payload: {
+        target_agent_id: responsibility.agent_id,
+        workflow_node_id: null,
+        workflow_binding: directBinding,
       },
+    } as DispatchLineageRow
+    const directGap = validateTaskAcceptanceLedgerTransition({
+      taskID: "tsk_acceptance",
+      previous: undefined,
+      workflowBinding: directBinding,
+      gap: gap([openCriterion({ responsibility })]),
+      dispatchLineageByArtifactID: (artifactID) => (artifactID === lineage.artifactID ? lineage : undefined),
     })
     expect({
-      gapID: nextGap.gap_id,
-      affected: [...affectedAcceptanceWorkflowNodes(workflowBinding, nextGap)].sort(),
-      testerConsumes: workflowNodeConsumesAcceptanceCriterion(workflowBinding, "builder", "tester"),
-    }).toEqual({
-      gapID: "gap-builder-r2",
-      affected: ["builder", "publisher", "tester"],
-      testerConsumes: true,
-    })
+      admitted: directGap.criteria[0].responsibility,
+      exact: dispatchConsumesAcceptanceCriterion({
+        binding: directBinding,
+        responsibility,
+        candidateWorkflowNodeID: null,
+        sourceDispatchLineageArtifactID: lineage.artifactID,
+        targetAgentID: "builder",
+      }),
+      foreign: dispatchConsumesAcceptanceCriterion({
+        binding: directBinding,
+        responsibility,
+        candidateWorkflowNodeID: null,
+        sourceDispatchLineageArtifactID: "art_foreign_lineage",
+        targetAgentID: "builder",
+      }),
+    }).toEqual({ admitted: responsibility, exact: true, foreign: false })
   })
 
-  test("moves every prior open criterion into an evidence-preserving accepted or repeated state", () => {
-    const priorGap = {
-      gap_id: "gap-receipt-open",
-      reviewed_terminal_lifecycle_reference: terminal,
-      criteria: [
-        {
-          criterion_id: "receipt",
-          disposition: "failed" as const,
-          finding: "The receipt is incomplete.",
-          relied_evidence_locators: [firstLocator],
-          contradictory_evidence_locators: [],
-          responsible_workflow_node_id: "builder",
-          required_new_evidence_kind: "corrected-receipt",
-        },
-      ],
-      preserved_acceptances: [{ criterion_id: "plan", evidence_locators: [preservedLocator] }],
-      requested_next_action: "Correct the receipt.",
-    }
-    const next = validateTaskAcceptanceLedgerTransition({
-      taskID: "tsk_acceptance",
-      workflowBinding,
-      previous: {
-        artifactID: "art_acceptance_ledger_open",
-        revision: {
-          protocol: "task-acceptance-ledger-v1",
-          revision: 1,
-          task_id: "tsk_acceptance",
-          execution_epoch: 2,
-          previous_revision_artifact_id: null,
-          gap: priorGap,
-          time_recorded: 1,
-        },
-      },
-      gap: {
-        gap_id: "gap-publisher-open",
-        reviewed_terminal_lifecycle_reference: terminal,
-        criteria: [
-          {
-            criterion_id: "publication",
-            disposition: "unresolved",
-            finding: "The accepted receipt has not been published.",
-            relied_evidence_locators: [secondLocator],
-            contradictory_evidence_locators: [],
-            responsible_workflow_node_id: "publisher",
-            required_new_evidence_kind: "publication-receipt",
-          },
-        ],
-        preserved_acceptances: [
-          { criterion_id: "plan", evidence_locators: [preservedLocator] },
-          { criterion_id: "receipt", evidence_locators: [firstLocator] },
-        ],
-        requested_next_action: "Publish the accepted receipt.",
-      },
-    })
-    expect(next).toMatchObject({
-      criteria: [{ criterion_id: "publication" }],
-      preserved_acceptances: [
-        { criterion_id: "plan", evidence_locators: [preservedLocator] },
-        { criterion_id: "receipt", evidence_locators: [firstLocator] },
-      ],
-    })
-  })
-
-  test("renders a criterion-bound continuation and a cursor-bound canonical Task delta", () => {
+  test("renders an open criterion continuation and applies the exact canonical Task delta", () => {
+    const criterion = openCriterion({ observation: [secondLocator] })
     const turn = DispatchTurnSchema.parse({
       kind: "continuation",
       current_dispatch_id: "dispatch_builder_r2",
@@ -258,45 +357,32 @@ describe("Mission acceptance delta closure", () => {
         gap_id: "gap-builder-r2",
         ledger_revision_artifact_id: "art_acceptance_ledger_r2",
         execution_epoch: 3,
-        criteria: [
-          {
-            criterion_id: "receipt",
-            disposition: "failed",
-            finding: "The receipt still lacks the verifier digest.",
-            relied_evidence_locators: [secondLocator],
-            contradictory_evidence_locators: [],
-            responsible_workflow_node_id: "builder",
-            required_new_evidence_kind: "verified-receipt",
-          },
-        ],
+        criteria: [criterion],
         checkpoint_required: true,
       },
     })
-    const continuation = renderDispatchContinuationTurn({
-      turn,
-      guidance: "Add the verifier digest to the canonical receipt revision.",
-    })
+    const continuation = renderDispatchContinuationTurn({ turn, guidance: "Add the verifier digest." })
     const before = { id: "tsk_acceptance", status: "active", goals: [] } as unknown as TaskDesc
     const after = {
       id: "tsk_acceptance",
       status: "active",
       goals: [{ id: "goal_receipt", title: "Receipt", revision: 2 }],
     } as unknown as TaskDesc
+    const delta = renderTaskProjectionDelta(before, after)
     expect({
       continuation,
-      repairEvidence:
-        turn.kind === "continuation" && turn.acceptance_repair
-          ? acceptanceRepairEvidenceLocators(turn.acceptance_repair)
-          : [],
-      delta: renderTaskProjectionDelta(before, after),
+      repairEvidence: turn.kind === "continuation" && turn.acceptance_repair ? acceptanceRepairEvidenceLocators(turn.acceptance_repair) : [],
+      baseline: JSON.parse(renderTaskProjectionContext(undefined, before).parts[0]!),
+      applied: applyTaskProjectionDelta(before, delta),
     }).toEqual({
       continuation: expect.stringContaining("criterion_ids: receipt"),
       repairEvidence: [secondLocator],
-      delta: expect.stringContaining('"op":"append","path":"/goals"'),
+      baseline: before,
+      applied: after,
     })
   })
 
-  test("keeps the frozen full Task baseline visible beside every later canonical delta", () => {
+  test("keeps baseline plus an applicable delta on the first and every later Provider step", () => {
     const baseline = {
       id: "tsk_acceptance",
       title: "Acceptance repair",
@@ -306,29 +392,31 @@ describe("Mission acceptance delta closure", () => {
       goals: [],
       budget: { max_executor_groups: 4 },
     } satisfies TaskDesc
-    const current = {
-      ...baseline,
-      status: "failed",
-    } satisfies TaskDesc
+    const current = { ...baseline, status: "failed" } satisfies TaskDesc
     const first = renderTaskProjectionContext(undefined, baseline)
     const second = renderTaskProjectionContext(first.baseline, current)
-    expect({ first: first.labels, second: second.labels, secondParts: second.parts }).toEqual({
-      first: ["runtime:orchestrator-live-task-render"],
-      second: ["runtime:orchestrator-live-task-baseline", "runtime:orchestrator-live-task-delta"],
-      secondParts: [
-        expect.stringContaining("projection_mode: full"),
-        expect.stringContaining('"op":"replace","path":"/status"'),
-      ],
+    expect({
+      firstLabels: first.labels,
+      firstParts: first.parts.length,
+      firstApplied: applyTaskProjectionDelta(JSON.parse(first.parts[0]!), first.parts[1]!),
+      secondLabels: second.labels,
+      secondApplied: applyTaskProjectionDelta(JSON.parse(second.parts[0]!), second.parts[1]!),
+    }).toEqual({
+      firstLabels: ["runtime:orchestrator-live-task-baseline", "runtime:orchestrator-live-task-delta"],
+      firstParts: 2,
+      firstApplied: baseline,
+      secondLabels: ["runtime:orchestrator-live-task-baseline", "runtime:orchestrator-live-task-delta"],
+      secondApplied: current,
     })
   })
 
-  test("reuses one immutable epoch checkpoint across later worker continuation Messages", async () => {
+  test("creates a new immutable checkpoint attempt after failure and projects the successful binding", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
       fn: async () => {
         const session = await Session.create({ kind: "root", title: "Acceptance checkpoint worker" })
-        const firstSource = await Session.updateMessage({
+        const source = await Session.updateMessage({
           id: Identifier.ascending("message"),
           sessionID: session.id,
           role: "user",
@@ -337,66 +425,43 @@ describe("Mission acceptance delta closure", () => {
           agent: "base",
           model: { providerID: "firmware", modelID: "gpt-5" },
         })
-        const secondSource = await Session.updateMessage({
-          id: Identifier.ascending("message"),
-          sessionID: session.id,
-          role: "user",
-          author: "orchestrator",
-          time: { created: Date.now() + 1 },
-          agent: "base",
-          model: { providerID: "firmware", modelID: "gpt-5" },
-        })
-        const gap = materializeMissionAcceptanceGap({
-          gap: {
-            gap_id: "gap-checkpoint-r1",
-            current_ledger_revision_artifact_id: null,
-            criteria: [
-              {
-                criterion_id: "receipt",
-                disposition: "failed",
-                finding: "The receipt is incomplete.",
-                relied_evidence_read_refs: ["ar_acceptance_first"],
-                contradictory_evidence_read_refs: [],
-                responsible_workflow_node_id: "builder",
-                required_new_evidence_kind: "corrected-receipt",
-              },
-            ],
-            preserved_acceptances: [{ criterion_id: "plan", evidence_read_refs: ["ar_acceptance_preserved"] }],
-            requested_next_action: "Correct the receipt.",
-          },
-          reviewedTerminalLifecycleReference: terminal,
-          evidenceByReadReference: new Map([
-            ["ar_acceptance_first", firstLocator],
-            ["ar_acceptance_preserved", preservedLocator],
-          ]),
-        })
         const common = {
           sessionID: session.id,
           taskID: "tsk_acceptance_checkpoint",
           ledgerRevisionArtifactID: "art_acceptance_ledger_checkpoint",
-          gap,
+          gap: gap([openCriterion()]),
           executionEpoch: 2,
           workflowNodeID: "builder",
         }
-        const first = await createAcceptanceEpochCheckpoint({ ...common, source: firstSource })
-        const second = await createAcceptanceEpochCheckpoint({ ...common, source: secondSource })
+        const first = await createAcceptanceEpochCheckpoint({ ...common, source })
+        SessionControl.fail({ id: first.control.id, sessionID: session.id, error: "provider interrupted" })
+        const second = await createAcceptanceEpochCheckpoint({ ...common, source })
+        SessionControl.consume({
+          id: second.control.id,
+          sessionID: session.id,
+          payload: { ...second.control.payload, result_summary_message_id: "msg_acceptance_summary" },
+        })
+        const current = currentAcceptanceEpochCheckpoint({
+          sessionID: session.id,
+          logicalCheckpointID: first.logicalCheckpointID,
+        })
+        const reused = await createAcceptanceEpochCheckpoint({ ...common, source })
         expect({
-          ids: [first.id, second.id],
-          originalSource: second.payload.source_user_message_id,
-          focus: JSON.parse(String(second.payload.focus)),
+          logical: [first.logicalCheckpointID, second.logicalCheckpointID],
+          attempts: [first.attempt, second.attempt],
+          ids: [first.control.id, second.control.id, reused.control.id],
+          current,
         }).toMatchObject({
-          ids: [first.id, first.id],
-          originalSource: firstSource.id,
-          focus: {
-            preserved_acceptances: [{ criterion_id: "plan", evidence_locators: [preservedLocator] }],
-            open_criteria: [{ criterion_id: "receipt", relied_evidence_locators: [firstLocator] }],
-          },
+          logical: [first.logicalCheckpointID, first.logicalCheckpointID],
+          attempts: [1, 2],
+          ids: [first.control.id, second.control.id, second.control.id],
+          current: { attempt: 2, control: { status: "consumed" }, successfulSummaryMessageID: "msg_acceptance_summary" },
         })
       },
     })
   })
 
-  test("atomically opens the next epoch with its visible Mission Message and first acceptance ledger revision", async () => {
+  test("atomically opens the next epoch with its Mission Message and v2 ledger revision", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
@@ -415,12 +480,12 @@ describe("Mission acceptance delta closure", () => {
           metadata: { configOverlay: { model: "firmware/gpt-5", prompt_profile: { active: "base" } } },
         })
         const now = Date.now()
-        const packageRevision = {
+        const revision = {
           scope: "built_in" as const,
           projectID: null,
           namespace: "builtin",
           id: "base",
-          version: "2026.08.28.1",
+          version: "2026.08.29.1",
           packageDigest: "f".repeat(64),
         }
         persistEstablishedTask({
@@ -433,13 +498,13 @@ describe("Mission acceptance delta closure", () => {
           source: "mission",
           metadata: { actor: "mission", mission: { id: mission.missionID, session_id: mission.id } },
           projectID: Instance.project.id,
-          packageRevision,
+          packageRevision: revision,
           executionCapsuleBinding: await prepareTaskProcessBinding({
             mode: "native",
             taskID,
             projectID: Instance.project.id,
             rootDirectory: Instance.directory,
-            packageRevisionSHA256: packageRevision.packageDigest,
+            packageRevisionSHA256: revision.packageDigest,
             timeCreated: now,
           }),
         })
@@ -451,8 +516,8 @@ describe("Mission acceptance delta closure", () => {
             project_id: null,
             namespace: "builtin",
             id: "base",
-            version: packageRevision.version,
-            package_digest: packageRevision.packageDigest,
+            version: revision.version,
+            package_digest: revision.packageDigest,
           },
           nodes: [{ node_id: "builder", agent_id: "base", depends_on: [] }],
         }
@@ -485,22 +550,22 @@ describe("Mission acceptance delta closure", () => {
           "Initial delivery failed acceptance",
         )
         const terminalReference = requireCurrentTerminalLifecycleReference(taskID)
-        const gap = {
+        const acceptanceGap = {
           gap_id: "gap-transaction-r1",
           reviewed_terminal_lifecycle_reference: terminalReference,
           criteria: [
             {
-              criterion_id: "receipt",
-              disposition: "failed" as const,
+              ...openCriterion({
+                observation: [evidenceLocator as typeof firstLocator],
+                responsibility: {
+                  kind: "workflow_node" as const,
+                  workflow_id: boundWorkflow.workflow_id,
+                  workflow_node_id: "builder",
+                },
+              }),
               finding: "The reviewed receipt is incomplete.",
-              relied_evidence_locators: [evidenceLocator],
-              contradictory_evidence_locators: [],
-              responsible_workflow_node_id: "builder",
-              required_new_evidence_kind: "corrected-receipt",
             },
           ],
-          preserved_acceptances: [],
-          requested_next_action: "Publish the corrected receipt and its new evidence locator.",
         }
         using _ingressRunner = TaskControlTestHooks.replaceTaskIngressRunner({ runner: async () => ({}) })
         const result = await EngineService.resumeMissionTask({
@@ -513,7 +578,7 @@ describe("Mission acceptance delta closure", () => {
           },
           reviewedTerminalLifecycleReference: terminalReference,
           expectedAcceptanceLedgerArtifactID: null,
-          acceptanceGap: gap,
+          acceptanceGap,
           completeEvidenceLocators: [evidenceLocator],
           toolPartID: "prt_acceptance_resume",
         })
@@ -521,38 +586,15 @@ describe("Mission acceptance delta closure", () => {
         const messages = await Session.messages({ sessionID: rootSession.id })
         const repairMessage = messages.find((message) => message.info.id === result.message_id)
         expect({
-          result: {
-            kind: result.kind,
-            ledgerArtifactID: result.acceptance_ledger_revision_artifact_id,
-            wakeStatus: result.wake_status,
-          },
+          result,
           lifecycle: taskLifecycleProjection(taskID),
           ledger,
-          repairMessage: repairMessage && {
-            role: repairMessage.info.role,
-            author: repairMessage.info.author,
-            text: repairMessage.parts.find((part) => part.type === "text")?.text,
-          },
+          repairText: repairMessage?.parts.find((part) => part.type === "text")?.text,
         }).toMatchObject({
-          result: {
-            kind: "resumed",
-            ledgerArtifactID: ledger?.artifactID,
-          },
+          result: { kind: "resumed", acceptance_ledger_revision_artifact_id: ledger?.artifactID },
           lifecycle: { status: "active", epoch: 2 },
-          ledger: {
-            revision: {
-              protocol: "task-acceptance-ledger-v1",
-              revision: 1,
-              execution_epoch: 2,
-              previous_revision_artifact_id: null,
-              gap: { gap_id: gap.gap_id },
-            },
-          },
-          repairMessage: {
-            role: "user",
-            author: "mission",
-            text: expect.stringContaining("# Mission acceptance repair"),
-          },
+          ledger: { revision: { protocol: "task-acceptance-ledger-v2", revision: 1, execution_epoch: 2 } },
+          repairText: expect.stringContaining("# Mission acceptance repair"),
         })
       },
     })

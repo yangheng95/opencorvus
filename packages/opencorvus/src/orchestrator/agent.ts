@@ -95,6 +95,7 @@ import { SchedulerMessagePayload } from "@/protocol/schema"
 import { NamedError } from "@opencorvus-ai/util/error"
 import { isDeepStrictEqual } from "node:util"
 import { createHash } from "node:crypto"
+import { canonicalJSONValue } from "@/util/canonical-digest"
 import type { OrchestratorEvent } from "./event"
 import type { TerminalConversationAuthority } from "./terminal-conversation-authority"
 import type { OrchestratorTaskErrorEnvelope } from "./error-envelope"
@@ -1487,13 +1488,48 @@ function renderCurrentOccurrenceDecisionObligation(): string {
 /** Static instructions that never change between invocations. */
 export const ORCHESTRATOR_INSTRUCTIONS = withParticipantMessageLanguage(withObservableWorkNarrative(ORCHESTRATOR_CORE))
 
-type TaskProjectionChange =
+export type TaskProjectionChange =
   | { op: "replace"; path: string; value: unknown }
   | { op: "append"; path: string; values: unknown[] }
   | { op: "remove"; path: string }
 
+const TaskProjectionPointerSchema = z.string().refine(
+  (path) => path === "" || (path.startsWith("/") && !/~(?:[^01]|$)/.test(path)),
+  "Task projection operation path must be a strict JSON Pointer.",
+)
+const TaskProjectionChangeSchema = z.discriminatedUnion("op", [
+  z.object({ op: z.literal("replace"), path: TaskProjectionPointerSchema, value: z.unknown() }).strict(),
+  z.object({ op: z.literal("append"), path: TaskProjectionPointerSchema, values: z.array(z.unknown()) }).strict(),
+  z.object({ op: z.literal("remove"), path: TaskProjectionPointerSchema }).strict(),
+])
+const TaskProjectionDeltaSchema = z
+  .object({
+    protocol: z.literal("task-projection-delta-v1"),
+    previous_task_projection_cursor: z.string().regex(/^[a-f0-9]{64}$/),
+    task_projection_cursor: z.string().regex(/^[a-f0-9]{64}$/),
+    operations: z.array(TaskProjectionChangeSchema),
+  })
+  .strict()
+  .superRefine((delta, context) => {
+    for (const [index, operation] of delta.operations.entries()) {
+      if (operation.op === "replace" && !Object.hasOwn(operation, "value")) {
+        context.addIssue({
+          code: "custom",
+          path: ["operations", index, "value"],
+          message: "A replace operation requires a canonical JSON value.",
+        })
+      }
+    }
+  })
+
+function normalizeTaskProjection(snapshot: TaskDesc): TaskDesc {
+  return JSON.parse(JSON.stringify(snapshot)) as TaskDesc
+}
+
 function taskProjectionCursor(snapshot: TaskDesc): string {
-  return createHash("sha256").update(JSON.stringify(snapshot)).digest("hex")
+  return createHash("sha256")
+    .update(canonicalJSONValue(normalizeTaskProjection(snapshot), "task-projection-v1"))
+    .digest("hex")
 }
 
 function projectionPath(parent: string, key: string): string {
@@ -1506,14 +1542,14 @@ function isProjectionRecord(value: unknown): value is Record<string, unknown> {
 }
 
 function taskProjectionChanges(previous: unknown, current: unknown, path = ""): TaskProjectionChange[] {
-  if (JSON.stringify(previous) === JSON.stringify(current)) return []
+  if (canonicalJSONValue(previous) === canonicalJSONValue(current)) return []
   if (Array.isArray(previous) && Array.isArray(current)) {
     const isAppend =
       current.length >= previous.length &&
-      previous.every((value, index) => JSON.stringify(value) === JSON.stringify(current[index]))
+      previous.every((value, index) => canonicalJSONValue(value) === canonicalJSONValue(current[index]))
     return isAppend
-      ? [{ op: "append", path: path || "/", values: current.slice(previous.length) }]
-      : [{ op: "replace", path: path || "/", value: current }]
+      ? [{ op: "append", path, values: current.slice(previous.length) }]
+      : [{ op: "replace", path, value: current }]
   }
   if (isProjectionRecord(previous) && isProjectionRecord(current)) {
     const changes: TaskProjectionChange[] = []
@@ -1529,32 +1565,88 @@ function taskProjectionChanges(previous: unknown, current: unknown, path = ""): 
     }
     return changes
   }
-  return [{ op: "replace", path: path || "/", value: current }]
+  return [{ op: "replace", path, value: current }]
 }
 
 export function renderTaskProjectionFull(snapshot: TaskDesc): string {
-  return [
-    "# Canonical Task projection",
-    "",
-    `task_projection_cursor: ${taskProjectionCursor(snapshot)}`,
-    "projection_mode: full",
-    "",
-    renderTaskDescription(snapshot),
-  ].join("\n")
+  return canonicalJSONValue(normalizeTaskProjection(snapshot), "task-projection-baseline-v1")
 }
 
 export function renderTaskProjectionDelta(previous: TaskDesc, current: TaskDesc): string {
-  const changes = taskProjectionChanges(previous, current)
-  return [
-    "# Canonical Task projection delta",
-    "",
-    `previous_task_projection_cursor: ${taskProjectionCursor(previous)}`,
-    `task_projection_cursor: ${taskProjectionCursor(current)}`,
-    "projection_mode: json-pointer-delta",
-    "Apply these operations to the preceding canonical Task projection. Values are direct canonical facts, not a summary.",
-    "",
-    ...(changes.length > 0 ? changes.map((change) => JSON.stringify(change)) : ["(no canonical Task facts changed)"]),
-  ].join("\n")
+  const changes = taskProjectionChanges(normalizeTaskProjection(previous), normalizeTaskProjection(current))
+  return canonicalJSONValue(
+    {
+      protocol: "task-projection-delta-v1",
+      previous_task_projection_cursor: taskProjectionCursor(previous),
+      task_projection_cursor: taskProjectionCursor(current),
+      operations: changes,
+    },
+    "task-projection-delta-v1",
+  )
+}
+
+function taskProjectionPointer(path: string): string[] {
+  if (path === "") return []
+  if (!path.startsWith("/")) throw new Error(`Task projection path ${path} is not a JSON Pointer.`)
+  return path
+    .slice(1)
+    .split("/")
+    .map((token) => token.replaceAll("~1", "/").replaceAll("~0", "~"))
+}
+
+function taskProjectionParent(root: unknown, path: string): { parent: Record<string, unknown>; key: string } {
+  const tokens = taskProjectionPointer(path)
+  const key = tokens.pop()
+  if (key === undefined) throw new Error("A root Task projection operation has no parent.")
+  let current = root
+  for (const token of tokens) {
+    if (!isProjectionRecord(current) || !(token in current)) {
+      throw new Error(`Task projection path ${path} does not exist in the canonical baseline.`)
+    }
+    current = current[token]
+  }
+  if (!isProjectionRecord(current)) throw new Error(`Task projection parent for ${path} is not an object.`)
+  return { parent: current, key }
+}
+
+export function applyTaskProjectionDelta(previous: TaskDesc, renderedDelta: string): TaskDesc {
+  const raw = TaskProjectionDeltaSchema.parse(JSON.parse(renderedDelta))
+  if (raw.previous_task_projection_cursor !== taskProjectionCursor(previous)) {
+    throw new Error("Task projection delta does not apply to the supplied canonical baseline.")
+  }
+  let result: unknown = normalizeTaskProjection(previous)
+  for (const operation of raw.operations) {
+    if (operation.path === "") {
+      if (operation.op !== "replace") throw new Error("Only replace may target the root Task projection.")
+      result = structuredClone(operation.value)
+      continue
+    }
+    if (operation.op === "append") {
+      let target: unknown = result
+      for (const token of taskProjectionPointer(operation.path)) {
+        if (!isProjectionRecord(target) || !(token in target)) {
+          throw new Error(`Task projection append path ${operation.path} does not exist.`)
+        }
+        target = target[token]
+      }
+      if (!Array.isArray(target)) throw new Error(`Task projection append path ${operation.path} is not an array.`)
+      target.push(...structuredClone(operation.values))
+      continue
+    }
+    const { parent, key } = taskProjectionParent(result, operation.path)
+    if (operation.op === "remove") {
+      if (!(key in parent)) throw new Error(`Task projection remove path ${operation.path} does not exist.`)
+      delete parent[key]
+    } else if (operation.op === "replace") {
+      parent[key] = structuredClone(operation.value)
+    } else {
+      throw new Error(`Unsupported Task projection operation ${(operation as { op: string }).op}.`)
+    }
+  }
+  if (raw.task_projection_cursor !== taskProjectionCursor(result as TaskDesc)) {
+    throw new Error("Applied Task projection does not match the delta result cursor.")
+  }
+  return result as TaskDesc
 }
 
 export function renderTaskProjectionContext(baseline: TaskDesc | undefined, current: TaskDesc) {
@@ -1562,8 +1654,8 @@ export function renderTaskProjectionContext(baseline: TaskDesc | undefined, curr
     const frozenBaseline = structuredClone(current)
     return {
       baseline: frozenBaseline,
-      parts: [renderTaskProjectionFull(frozenBaseline)],
-      labels: ["runtime:orchestrator-live-task-render"],
+      parts: [renderTaskProjectionFull(frozenBaseline), renderTaskProjectionDelta(frozenBaseline, frozenBaseline)],
+      labels: ["runtime:orchestrator-live-task-baseline", "runtime:orchestrator-live-task-delta"],
     }
   }
   return {

@@ -5,12 +5,20 @@ import { EngineArtifactTable } from "@/engine/engine.sql"
 import { insertEngineArtifact } from "@/engine/artifact"
 import { taskLifecycleProjectionInTransaction } from "@/engine/task-lifecycle"
 import { readTaskWorkflowBindingInTransaction } from "@/engine/workflow-binding-facts"
-import type { SelectedWorkflowBinding } from "@/engine/workflow-binding"
-import { MissionAcceptanceGapSchema, type MissionAcceptanceGap } from "./acceptance-gap"
+import { sameSelectedWorkflowBinding, type SelectedWorkflowBinding } from "@/engine/workflow-binding"
+import { dispatchLineageRow, type DispatchLineageRow } from "@/engine/dispatch-lineage-facts"
+import { canonicalJSONValue } from "@/util/canonical-digest"
+import {
+  MissionAcceptanceGapSchema,
+  type MissionAcceptanceCriterion,
+  type MissionAcceptanceCriterionResponsibility,
+  type MissionAcceptanceGap,
+  type MissionAcceptanceOpenCriterion,
+} from "./acceptance-gap"
 
 export const TaskAcceptanceLedgerRevisionSchema = z
   .object({
-    protocol: z.literal("task-acceptance-ledger-v1"),
+    protocol: z.literal("task-acceptance-ledger-v2"),
     revision: z.number().int().positive(),
     task_id: z.string().min(1),
     execution_epoch: z.number().int().positive(),
@@ -100,23 +108,51 @@ export function readTaskAcceptanceLedgerArtifact(taskID: string, artifactID: str
   })
 }
 
-function locatorIdentitySet(locators: MissionAcceptanceGap["criteria"][number]["relied_evidence_locators"]) {
-  return new Set(locators.map(artifactReadLocatorKey))
+const evidenceRoleFields = [
+  "observation_evidence_locators",
+  "repair_evidence_locators",
+  "resolution_evidence_locators",
+  "invalidating_evidence_locators",
+  "irreducible_blocker_evidence_locators",
+] as const
+
+type EvidenceRoleField = (typeof evidenceRoleFields)[number]
+
+function locatorIdentitySet(criterion: MissionAcceptanceCriterion, role: EvidenceRoleField) {
+  return new Set(criterion[role].map(artifactReadLocatorKey))
 }
 
-function sameLocatorSet(
-  left: MissionAcceptanceGap["criteria"][number]["relied_evidence_locators"],
-  right: MissionAcceptanceGap["criteria"][number]["relied_evidence_locators"],
-) {
-  const leftKeys = [...locatorIdentitySet(left)].sort()
-  const rightKeys = [...locatorIdentitySet(right)].sort()
-  return leftKeys.length === rightKeys.length && leftKeys.every((key, index) => key === rightKeys[index])
+function hasNewLocatorInRole(
+  current: MissionAcceptanceCriterion,
+  prior: MissionAcceptanceCriterion,
+  role: EvidenceRoleField,
+): boolean {
+  const priorEvidence = locatorIdentitySet(prior, role)
+  return current[role].some((locator) => !priorEvidence.has(artifactReadLocatorKey(locator)))
 }
 
-function requireGapWorkflowNodes(input: {
+function hasNewLocator(current: MissionAcceptanceCriterion, prior: MissionAcceptanceCriterion): boolean {
+  return evidenceRoleFields.some((role) => hasNewLocatorInRole(current, prior, role))
+}
+
+function retainsAllLocatorsByRole(current: MissionAcceptanceCriterion, prior: MissionAcceptanceCriterion): boolean {
+  return evidenceRoleFields.every((role) => {
+    const currentEvidence = locatorIdentitySet(current, role)
+    return prior[role].every((locator) => currentEvidence.has(artifactReadLocatorKey(locator)))
+  })
+}
+
+function sameCanonicalValue(left: unknown, right: unknown): boolean {
+  return canonicalJSONValue(left) === canonicalJSONValue(right)
+}
+
+type DispatchLineageLookup = (artifactID: string) => DispatchLineageRow | undefined
+
+function requireCriterionResponsibilities(input: {
   taskID: string
   gap: MissionAcceptanceGap
   binding: SelectedWorkflowBinding | undefined
+  dispatchLineageByArtifactID?: DispatchLineageLookup
 }) {
   if (!input.binding) {
     throw new MissionAcceptanceGapIntegrityError(
@@ -124,103 +160,157 @@ function requireGapWorkflowNodes(input: {
       `Task ${input.taskID} has no immutable workflow binding for Mission acceptance repair.`,
     )
   }
-  if (input.binding.kind !== "virtual_workflow") {
-    throw new MissionAcceptanceGapIntegrityError(
-      input.taskID,
-      `Task ${input.taskID} has a direct workflow binding and therefore no workflow node that can own an acceptance gap.`,
-    )
-  }
-  const nodeIDs = new Set(input.binding.nodes.map((node) => node.node_id))
   for (const criterion of input.gap.criteria) {
-    if (!nodeIDs.has(criterion.responsible_workflow_node_id)) {
-      throw new MissionAcceptanceGapIntegrityError(
-        input.taskID,
-        `Acceptance criterion ${criterion.criterion_id} references unknown workflow node ${criterion.responsible_workflow_node_id}.`,
-      )
-    }
-  }
-}
-
-function requirePreservedAcceptanceContinuity(input: {
-  taskID: string
-  previous: TaskAcceptanceLedgerProjection | undefined
-  gap: MissionAcceptanceGap
-}) {
-  if (!input.previous) return
-  const current = new Map(input.gap.preserved_acceptances.map((acceptance) => [acceptance.criterion_id, acceptance]))
-  for (const prior of input.previous.revision.gap.preserved_acceptances) {
-    const preserved = current.get(prior.criterion_id)
-    if (!preserved || !sameLocatorSet(prior.evidence_locators, preserved.evidence_locators)) {
-      throw new MissionAcceptanceGapIntegrityError(
-        input.taskID,
-        `Previously accepted criterion ${prior.criterion_id} must retain its exact immutable evidence locators.`,
-      )
-    }
-  }
-}
-
-function requireRepeatedGapProgress(input: {
-  taskID: string
-  previous: TaskAcceptanceLedgerProjection | undefined
-  gap: MissionAcceptanceGap
-}) {
-  if (!input.previous) return
-  const priorCriteria = new Map(
-    input.previous.revision.gap.criteria.map((criterion) => [criterion.criterion_id, criterion]),
-  )
-  for (const criterion of input.gap.criteria) {
-    const prior = priorCriteria.get(criterion.criterion_id)
-    if (!prior) continue
-    if (criterion.repeat_disposition !== "repairable_with_new_evidence") {
-      throw new MissionAcceptanceGapIntegrityError(
-        input.taskID,
-        `Repeated criterion ${criterion.criterion_id} must explicitly choose repairable_with_new_evidence to open another repair epoch.`,
-      )
-    }
-    const priorEvidence = locatorIdentitySet([
-      ...prior.relied_evidence_locators,
-      ...prior.contradictory_evidence_locators,
-    ])
-    const hasNewEvidence = [...criterion.relied_evidence_locators, ...criterion.contradictory_evidence_locators].some(
-      (locator) => !priorEvidence.has(artifactReadLocatorKey(locator)),
-    )
-    const hasNewAction = input.gap.requested_next_action !== input.previous.revision.gap.requested_next_action
-    if (!hasNewEvidence && !hasNewAction) {
-      throw new MissionAcceptanceGapIntegrityError(
-        input.taskID,
-        `Repeated criterion ${criterion.criterion_id} cites neither a new fact nor a previously untried requested action.`,
-      )
-    }
-  }
-}
-
-function requirePriorOpenCriterionDisposition(input: {
-  taskID: string
-  previous: TaskAcceptanceLedgerProjection | undefined
-  gap: MissionAcceptanceGap
-}) {
-  if (!input.previous) return
-  const currentOpen = new Set(input.gap.criteria.map((criterion) => criterion.criterion_id))
-  const currentPreserved = new Map(
-    input.gap.preserved_acceptances.map((acceptance) => [acceptance.criterion_id, acceptance]),
-  )
-  for (const prior of input.previous.revision.gap.criteria) {
-    if (currentOpen.has(prior.criterion_id)) continue
-    const accepted = currentPreserved.get(prior.criterion_id)
-    if (!accepted) {
-      throw new MissionAcceptanceGapIntegrityError(
-        input.taskID,
-        `Previously open criterion ${prior.criterion_id} must remain open or move to preserved acceptance; it cannot disappear from the append-only ledger.`,
-      )
-    }
-    const acceptedEvidence = locatorIdentitySet(accepted.evidence_locators)
-    for (const locator of [...prior.relied_evidence_locators, ...prior.contradictory_evidence_locators]) {
-      if (!acceptedEvidence.has(artifactReadLocatorKey(locator))) {
+    const responsibility = criterion.responsibility
+    if (responsibility.kind === "workflow_node") {
+      if (input.binding.kind !== "virtual_workflow" || input.binding.workflow_id !== responsibility.workflow_id) {
         throw new MissionAcceptanceGapIntegrityError(
           input.taskID,
-          `Accepted criterion ${prior.criterion_id} must retain every evidence locator from its prior open revision.`,
+          `Acceptance criterion ${criterion.criterion_id} workflow responsibility does not match the Task binding.`,
         )
       }
+      if (!input.binding.nodes.some((node) => node.node_id === responsibility.workflow_node_id)) {
+        throw new MissionAcceptanceGapIntegrityError(
+          input.taskID,
+          `Acceptance criterion ${criterion.criterion_id} references unknown workflow node ${responsibility.workflow_node_id}.`,
+        )
+      }
+      continue
+    }
+    if (input.binding.kind !== "direct" || !sameCanonicalValue(input.binding.package_revision, responsibility.package_revision)) {
+      throw new MissionAcceptanceGapIntegrityError(
+        input.taskID,
+        `Acceptance criterion ${criterion.criterion_id} direct responsibility does not match the Task package revision.`,
+      )
+    }
+    const lineage = input.dispatchLineageByArtifactID?.(responsibility.dispatch_lineage_id)
+    if (!lineage) {
+      throw new MissionAcceptanceGapIntegrityError(
+        input.taskID,
+        `Acceptance criterion ${criterion.criterion_id} direct dispatch lineage ${responsibility.dispatch_lineage_id} does not exist.`,
+      )
+    }
+    if (
+      lineage.taskID !== input.taskID ||
+      lineage.payload.target_agent_id !== responsibility.agent_id ||
+      lineage.payload.workflow_node_id !== null ||
+      !sameSelectedWorkflowBinding(lineage.payload.workflow_binding, input.binding)
+    ) {
+      throw new MissionAcceptanceGapIntegrityError(
+        input.taskID,
+        `Acceptance criterion ${criterion.criterion_id} direct responsibility does not match immutable dispatch lineage ${lineage.artifactID}.`,
+      )
+    }
+  }
+}
+
+function requireSameResponsibility(
+  taskID: string,
+  prior: MissionAcceptanceCriterion,
+  current: MissionAcceptanceCriterion,
+) {
+  if (!sameCanonicalValue(prior.responsibility, current.responsibility)) {
+    throw new MissionAcceptanceGapIntegrityError(
+      taskID,
+      `Acceptance criterion ${prior.criterion_id} cannot change its immutable responsibility.`,
+    )
+  }
+}
+
+function requireOpenTransition(
+  taskID: string,
+  prior: MissionAcceptanceOpenCriterion,
+  current: MissionAcceptanceCriterion,
+) {
+  if (!retainsAllLocatorsByRole(current, prior)) {
+    throw new MissionAcceptanceGapIntegrityError(
+      taskID,
+      `Acceptance criterion ${prior.criterion_id} must retain every prior evidence locator in its original role.`,
+    )
+  }
+  if (current.state === "open") {
+    if (!hasNewLocator(current, prior) && current.repair_action.identity_sha256 === prior.repair_action.identity_sha256) {
+      throw new MissionAcceptanceGapIntegrityError(
+        taskID,
+        `Repeated criterion ${prior.criterion_id} requires new evidence or a changed canonical repair action.`,
+      )
+    }
+    return
+  }
+  if (current.state === "accepted") {
+    if (!hasNewLocatorInRole(current, prior, "resolution_evidence_locators")) {
+      throw new MissionAcceptanceGapIntegrityError(
+        taskID,
+        `Acceptance criterion ${prior.criterion_id} requires new resolution evidence before it can be accepted.`,
+      )
+    }
+    return
+  }
+  if (!hasNewLocatorInRole(current, prior, "irreducible_blocker_evidence_locators")) {
+    throw new MissionAcceptanceGapIntegrityError(
+      taskID,
+      `Acceptance criterion ${prior.criterion_id} requires new irreducible-blocker evidence before it can be blocked.`,
+    )
+  }
+}
+
+function requireAcceptedTransition(
+  taskID: string,
+  prior: Extract<MissionAcceptanceCriterion, { state: "accepted" }>,
+  current: MissionAcceptanceCriterion,
+) {
+  if (current.state === "accepted") {
+    if (!sameCanonicalValue(prior, current)) {
+      throw new MissionAcceptanceGapIntegrityError(
+        taskID,
+        `Accepted criterion ${prior.criterion_id} must retain its exact immutable evidence and finding.`,
+      )
+    }
+    return
+  }
+  if (
+    current.state !== "open" ||
+    current.disposition !== "stale_evidence" ||
+    !retainsAllLocatorsByRole(current, prior)
+  ) {
+    throw new MissionAcceptanceGapIntegrityError(
+      taskID,
+      `Accepted criterion ${prior.criterion_id} can reopen only as stale_evidence while retaining prior evidence.`,
+    )
+  }
+  if (!hasNewLocatorInRole(current, prior, "invalidating_evidence_locators")) {
+    throw new MissionAcceptanceGapIntegrityError(
+      taskID,
+      `Accepted criterion ${prior.criterion_id} requires new contradictory evidence before reopening.`,
+    )
+  }
+}
+
+function requireCriterionStateContinuity(input: {
+  taskID: string
+  previous: TaskAcceptanceLedgerProjection | undefined
+  gap: MissionAcceptanceGap
+}) {
+  if (!input.previous) return
+  const currentByID = new Map(input.gap.criteria.map((criterion) => [criterion.criterion_id, criterion]))
+  for (const prior of input.previous.revision.gap.criteria) {
+    const current = currentByID.get(prior.criterion_id)
+    if (!current) {
+      throw new MissionAcceptanceGapIntegrityError(
+        input.taskID,
+        `Acceptance criterion ${prior.criterion_id} cannot disappear from the append-only ledger.`,
+      )
+    }
+    requireSameResponsibility(input.taskID, prior, current)
+    if (prior.state === "open") {
+      requireOpenTransition(input.taskID, prior, current)
+    } else if (prior.state === "accepted") {
+      requireAcceptedTransition(input.taskID, prior, current)
+    } else if (!sameCanonicalValue(prior, current)) {
+      throw new MissionAcceptanceGapIntegrityError(
+        input.taskID,
+        `Irreducibly blocked criterion ${prior.criterion_id} must retain its exact evidence-backed state.`,
+      )
     }
   }
 }
@@ -230,12 +320,16 @@ export function validateTaskAcceptanceLedgerTransition(input: {
   previous: TaskAcceptanceLedgerProjection | undefined
   gap: MissionAcceptanceGap
   workflowBinding: SelectedWorkflowBinding | undefined
+  dispatchLineageByArtifactID?: DispatchLineageLookup
 }) {
   const gap = MissionAcceptanceGapSchema.parse(input.gap)
-  requireGapWorkflowNodes({ taskID: input.taskID, gap, binding: input.workflowBinding })
-  requirePreservedAcceptanceContinuity({ taskID: input.taskID, previous: input.previous, gap })
-  requirePriorOpenCriterionDisposition({ taskID: input.taskID, previous: input.previous, gap })
-  requireRepeatedGapProgress({ taskID: input.taskID, previous: input.previous, gap })
+  requireCriterionResponsibilities({
+    taskID: input.taskID,
+    gap,
+    binding: input.workflowBinding,
+    dispatchLineageByArtifactID: input.dispatchLineageByArtifactID,
+  })
+  requireCriterionStateContinuity({ taskID: input.taskID, previous: input.previous, gap })
   return gap
 }
 
@@ -271,9 +365,23 @@ export function appendTaskAcceptanceLedgerRevisionInTransaction(input: {
     gap,
     workflowBinding: readTaskWorkflowBindingInTransaction(input.db, input.taskID),
     previous,
+    dispatchLineageByArtifactID: (artifactID) => {
+      const row = input.db
+        .select()
+        .from(EngineArtifactTable)
+        .where(
+          and(
+            eq(EngineArtifactTable.id, artifactID),
+            eq(EngineArtifactTable.task_id, input.taskID),
+            eq(EngineArtifactTable.kind, "dispatch_lineage"),
+          ),
+        )
+        .get()
+      return row ? dispatchLineageRow(row) : undefined
+    },
   })
   const revision = TaskAcceptanceLedgerRevisionSchema.parse({
-    protocol: "task-acceptance-ledger-v1",
+    protocol: "task-acceptance-ledger-v2",
     revision: (previous?.revision.revision ?? 0) + 1,
     task_id: input.taskID,
     execution_epoch: input.executionEpoch,
@@ -292,12 +400,20 @@ export function appendTaskAcceptanceLedgerRevisionInTransaction(input: {
   return { artifactID: input.artifactID, revision }
 }
 
+export function openAcceptanceCriteria(gap: MissionAcceptanceGap): MissionAcceptanceOpenCriterion[] {
+  return gap.criteria.filter((criterion): criterion is MissionAcceptanceOpenCriterion => criterion.state === "open")
+}
+
 export function affectedAcceptanceWorkflowNodes(
   binding: SelectedWorkflowBinding,
   gap: MissionAcceptanceGap,
 ): Set<string> {
   if (binding.kind !== "virtual_workflow") return new Set()
-  const affected = new Set(gap.criteria.map((criterion) => criterion.responsible_workflow_node_id))
+  const affected = new Set(
+    openAcceptanceCriteria(gap).flatMap((criterion) =>
+      criterion.responsibility.kind === "workflow_node" ? [criterion.responsibility.workflow_node_id] : [],
+    ),
+  )
   let changed = true
   while (changed) {
     changed = false
@@ -330,6 +446,34 @@ export function workflowNodeConsumesAcceptanceCriterion(
     pending.push(...node.depends_on)
   }
   return false
+}
+
+export function dispatchConsumesAcceptanceCriterion(input: {
+  binding: SelectedWorkflowBinding
+  responsibility: MissionAcceptanceCriterionResponsibility
+  candidateWorkflowNodeID: string | null
+  sourceDispatchLineageArtifactID: string
+  targetAgentID: string
+}): boolean {
+  if (input.responsibility.kind === "workflow_node") {
+    return (
+      input.candidateWorkflowNodeID !== null &&
+      input.binding.kind === "virtual_workflow" &&
+      input.binding.workflow_id === input.responsibility.workflow_id &&
+      workflowNodeConsumesAcceptanceCriterion(
+        input.binding,
+        input.responsibility.workflow_node_id,
+        input.candidateWorkflowNodeID,
+      )
+    )
+  }
+  return (
+    input.binding.kind === "direct" &&
+    input.candidateWorkflowNodeID === null &&
+    input.responsibility.dispatch_lineage_id === input.sourceDispatchLineageArtifactID &&
+    input.responsibility.agent_id === input.targetAgentID &&
+    sameCanonicalValue(input.binding.package_revision, input.responsibility.package_revision)
+  )
 }
 
 export function currentTaskAcceptanceRepair(taskID: string): ActiveTaskAcceptanceRepair | undefined {

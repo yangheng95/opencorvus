@@ -910,7 +910,11 @@ type ActivationAttempt =
   /** The exact projection that refused activation, for wake-instant pacing. */
   | { activated: false; projection: TaskRootIngressProjection }
 
-async function activate(input: { taskID: string; ingressID: string }): Promise<ActivationAttempt> {
+async function activate(input: {
+  taskID: string
+  ingressID: string
+  runWithActivationOwner?: <T>(run: () => Promise<T>) => Promise<T>
+}): Promise<ActivationAttempt> {
   let reservation: RuntimeExecutionReservation | undefined
   let bound = false
   reservation = RuntimeExecutionSettlement.reserve(
@@ -962,14 +966,18 @@ async function activate(input: { taskID: string; ingressID: string }): Promise<A
       // `ready` would arm no timer at all and strand the Task.
       return { activated: false, projection: acquired.projection }
     }
-    const operation = runner()({
-      taskID: input.taskID,
-      event,
-      signal: reservation.signal,
-      wakeID: ingress.id,
-      activationID: acquired.activationID,
-      predecessorID: predecessorFor(projection, ingress.id, evidence),
-    })
+    const runActivation = () =>
+      runner()({
+        taskID: input.taskID,
+        event,
+        signal: reservation.signal,
+        wakeID: ingress.id,
+        activationID: acquired.activationID,
+        predecessorID: predecessorFor(projection, ingress.id, evidence),
+      })
+    const operation = input.runWithActivationOwner
+      ? input.runWithActivationOwner(runActivation)
+      : runActivation()
     reservation.settleWith(operation)
     bound = true
     let renewalFailure: unknown
@@ -1562,7 +1570,11 @@ async function scanTaskControlPlane(
         break
       }
       if (projection.state === "ready") {
-        const attempt = await activate({ taskID, ingressID: ingress.id })
+        const attempt = await activate({
+          taskID,
+          ingressID: ingress.id,
+          runWithActivationOwner: context.runWithActivationOwner,
+        })
         if (attempt.activated) {
           activated += 1
           continue
@@ -1631,11 +1643,19 @@ const driverState = createInstanceState(
  * A single-Task request reports its owner's first-pass fault; a project-wide
  * request isolates each Task so one faulted Task cannot starve the rest.
  */
-export async function reconcileTaskControlPlane(taskID?: string): Promise<number> {
+export async function reconcileTaskControlPlane(
+  taskID?: string,
+  options?: { runWithActivationOwner?: <T>(run: () => Promise<T>) => Promise<T> },
+): Promise<number> {
   const state = driverState()
   state.liveness.assertOwned(ownerOccurrenceID())
   const driver = state.driver
-  if (taskID) return driver.request(taskID, { propagateFailure: true })
+  if (taskID) {
+    return driver.request(taskID, {
+      propagateFailure: true,
+      runWithActivationOwner: options?.runWithActivationOwner,
+    })
+  }
   // A project-wide request only has to *start* every Task. Awaiting them in
   // sequence would make each Task's whole Orchestrator Turn a prerequisite of
   // the next Task's first scan — at startup that serializes recovery for the
@@ -1820,6 +1840,7 @@ export function dispatchTaskLoopInBackground(input: DispatchTaskLoopInput, opera
 export async function dispatchPersistedTaskLoop(
   taskID: string,
   expectedWakeID?: string,
+  options?: { runWithActivationOwner?: <T>(run: () => Promise<T>) => Promise<T> },
 ): Promise<"accepted" | "ignored"> {
   if (expectedWakeID) {
     const exists = Database.use((db) =>
@@ -1831,7 +1852,7 @@ export async function dispatchPersistedTaskLoop(
     )
     if (!exists) throw new Error(`Task ${taskID} has no persisted ingress ${expectedWakeID}`)
   }
-  await reconcileTaskControlPlane(taskID)
+  await reconcileTaskControlPlane(taskID, options)
   return "accepted"
 }
 

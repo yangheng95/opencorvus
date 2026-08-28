@@ -251,7 +251,8 @@ test("a fresh typed Task ingress installs runtime authority before creator and c
               runtimeLabels: [
                 "runtime:orchestrator-instructions",
                 "runtime:orchestrator-wake-and-capabilities",
-                "runtime:orchestrator-live-task-render",
+                "runtime:orchestrator-live-task-baseline",
+                "runtime:orchestrator-live-task-delta",
                 "runtime:orchestrator-current-ingress",
               ],
             },

@@ -2,6 +2,8 @@
 
 Latest Light consultation and investigation Expert Squad: [`2026-08-29-light-expert-squad.md`](records/2026-08/2026-08-29-light-expert-squad.md).
 
+Latest Mission acceptance Luna-baseline readiness closure: [`2026-08-29-mission-acceptance-baseline-readiness.md`](records/2026-08/2026-08-29-mission-acceptance-baseline-readiness.md).
+
 Latest Mission acceptance delta, ledger, epoch-checkpoint, and dispatch-settlement closure: [`2026-08-28-mission-acceptance-delta-closure.md`](records/2026-08/2026-08-28-mission-acceptance-delta-closure.md).
 
 Latest Overlay Expert Squad handoff startup convergence: [`2026-08-28-overlay-expert-squad-handoff-startup-convergence.md`](records/2026-08/2026-08-28-overlay-expert-squad-handoff-startup-convergence.md).

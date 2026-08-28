@@ -1655,15 +1655,16 @@ export namespace SessionLoop {
       runtimeIdentity?.identityKind === "projected-scheduler" && runtimeIdentity.taskIngressID
         ? runtimeIdentity.taskIngressActivationID
         : undefined
-    const openTaskRootAssistant = taskRootActivation
+    const taskRootAssistant = taskRootActivation
       ? input.msgs.findLast(
           (message): message is Message.WithParts & { info: Message.Assistant } =>
             message.info.role === "assistant" &&
             message.info.parentID === input.lastUser.id &&
-            message.info.activationID === taskRootActivation &&
-            message.info.time.completed === undefined,
+            message.info.activationID === taskRootActivation,
         )
       : undefined
+    if (taskRootAssistant?.info.time.completed !== undefined) return "stop" as const
+    const openTaskRootAssistant = taskRootAssistant
     const taskRootDecisionGapCount = openTaskRootAssistant
       ? taskRootDecisionGapStepIDs(openTaskRootAssistant).length
       : 0
@@ -1734,14 +1735,18 @@ export namespace SessionLoop {
       model: input.model,
       abort: input.abort,
       retainAssistantOnToolContinuation: Boolean(taskRootActivation),
+      stopAfterAssistantCompletion: Boolean(taskRootActivation),
       retainAssistantForNextProviderStep:
         taskRootActivation && taskRootSemanticTurnLimit !== undefined
-          ? async () => {
+          ? async (message) => {
               const persisted = await MessageStore.get({
                 sessionID: input.sessionID,
                 messageID: assistantMessage.id,
               })
-              if (taskRootAssistantHasDecisionReceipt(persisted)) return false
+              if (taskRootAssistantHasDecisionReceipt(persisted)) {
+                message.finish = "stop"
+                return false
+              }
               return taskRootDecisionGapStepIDs(persisted).length < taskRootSemanticTurnLimit
             }
           : undefined,

@@ -35,9 +35,11 @@ test("Mission acceptance resume projects current message authority and real-deci
         criteria: [
           {
             criterion_id: "audit-receipt",
+            state: "open",
             disposition: "failed",
             finding: "The audit receipt is inconsistent with the canonical output.",
-            relied_evidence_locators: [
+            responsibility: { kind: "workflow_node", workflow_id: "repair", workflow_node_id: "builder" },
+            observation_evidence_locators: [
               {
                 source: "engine_artifact",
                 artifact_id: "art_reviewed_acceptance_evidence",
@@ -45,13 +47,19 @@ test("Mission acceptance resume projects current message authority and real-deci
                 expected_sha256: "a".repeat(64),
               },
             ],
-            contradictory_evidence_locators: [],
-            responsible_workflow_node_id: "builder",
-            required_new_evidence_kind: "corrected-audit-receipt",
+            repair_evidence_locators: [],
+            resolution_evidence_locators: [],
+            invalidating_evidence_locators: [],
+            irreducible_blocker_evidence_locators: [],
+            repair_action: {
+              operation: "correct_artifact",
+              target: "audit-receipt",
+              expected_evidence_kind: "corrected-audit-receipt",
+              parameters: {},
+              identity_sha256: "b".repeat(64),
+            },
           },
         ],
-        preserved_acceptances: [],
-        requested_next_action: "Correct the audit receipt and publish its canonical revision.",
       },
     },
   })

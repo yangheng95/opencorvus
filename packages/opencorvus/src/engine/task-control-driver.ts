@@ -69,6 +69,8 @@ export type TaskControlScanContext = {
    * idempotent per scan rather than per pass — recovery sweeps in particular —
    * runs only on pass 0. */
   pass: number
+  /** Delegates only one physical activation's completion after its durable lease exists. */
+  runWithActivationOwner?: <T>(run: () => Promise<T>) => Promise<T>
 }
 
 export type TaskControlScan = (taskID: string, context: TaskControlScanContext) => Promise<TaskControlScanResult>
@@ -180,13 +182,16 @@ export class TaskControlDriver {
    * caller, preserving the visible error contract of an explicit single-Task
    * request. Later passes were not requested by that caller and only log.
    */
-  async request(taskID: string, options?: { propagateFailure?: boolean }): Promise<number> {
+  async request(
+    taskID: string,
+    options?: { propagateFailure?: boolean; runWithActivationOwner?: <T>(run: () => Promise<T>) => Promise<T> },
+  ): Promise<number> {
     if (this.disposed) return 0
     const entry = this.entry(taskID)
     entry.revision += 1
     if (entry.running) return 0
     entry.running = true
-    return this.own(taskID, entry, options?.propagateFailure === true)
+    return this.own(taskID, entry, options?.propagateFailure === true, options?.runWithActivationOwner)
   }
 
   /** Pending re-arm and fault state, for diagnostics only. */
@@ -259,7 +264,12 @@ export class TaskControlDriver {
     return created
   }
 
-  private async own(taskID: string, entry: Entry, propagateFailure: boolean): Promise<number> {
+  private async own(
+    taskID: string,
+    entry: Entry,
+    propagateFailure: boolean,
+    runWithActivationOwner: (<T>(run: () => Promise<T>) => Promise<T>) | undefined,
+  ): Promise<number> {
     let activated = 0
     let wakeAt: number | undefined
     let failure: unknown
@@ -270,7 +280,7 @@ export class TaskControlDriver {
         this.decayFailures(entry)
         let result: TaskControlScanResult
         try {
-          result = await this.scan(taskID, { pass })
+          result = await this.scan(taskID, { pass, ...(runWithActivationOwner ? { runWithActivationOwner } : {}) })
         } catch (error) {
           wakeAt = minDefined(wakeAt, this.penalize(entry))
           log.error("Task-control scan faulted; re-armed under backoff", {

@@ -3,7 +3,10 @@ import z from "zod"
 import { Identifier } from "@/id/id"
 import { SelectedWorkflowBindingSchema } from "@/engine/workflow-binding"
 import { EvidenceLocatorListSchema, type EvidenceLocator } from "@opencorvus-ai/plugin/artifact-catalog"
-import { MissionAcceptanceCriterionSchema } from "@/mission/acceptance-gap"
+import {
+  acceptanceCriterionEvidenceLocators,
+  MissionAcceptanceOpenCriterionSchema,
+} from "@/mission/acceptance-gap"
 
 export const ControlTextPartAuthoritySchema = z
   .object({
@@ -74,7 +77,7 @@ export const AcceptanceRepairDispatchSchema = z
     gap_id: z.string().min(1),
     ledger_revision_artifact_id: Identifier.schema("artifact"),
     execution_epoch: z.number().int().positive(),
-    criteria: z.array(MissionAcceptanceCriterionSchema).min(1).max(64),
+    criteria: z.array(MissionAcceptanceOpenCriterionSchema).min(1).max(64),
     checkpoint_required: z.literal(true),
   })
   .strict()
@@ -95,10 +98,7 @@ export type AcceptanceRepairDispatch = z.infer<typeof AcceptanceRepairDispatchSc
 
 export function acceptanceRepairEvidenceLocators(repair: AcceptanceRepairDispatch): EvidenceLocator[] {
   const parsed = AcceptanceRepairDispatchSchema.parse(repair)
-  const locators = parsed.criteria.flatMap((criterion) => [
-    ...criterion.relied_evidence_locators,
-    ...criterion.contradictory_evidence_locators,
-  ])
+  const locators = parsed.criteria.flatMap(acceptanceCriterionEvidenceLocators)
   return [...new Map(locators.map((locator) => [JSON.stringify(locator), locator])).values()]
 }
 
@@ -156,12 +156,17 @@ export function renderDispatchContinuationTurn(input: {
           `- criterion_ids: ${turn.acceptance_repair.criteria.map((criterion) => criterion.criterion_id).join(", ")}`,
           ...turn.acceptance_repair.criteria.flatMap((criterion) => [
             `### ${criterion.criterion_id}`,
+            `- state: ${criterion.state}`,
             `- disposition: ${criterion.disposition}`,
             `- finding: ${criterion.finding}`,
-            `- responsible_workflow_node_id: ${criterion.responsible_workflow_node_id}`,
-            `- required_new_evidence_kind: ${criterion.required_new_evidence_kind}`,
-            `- relied_evidence_locators: ${JSON.stringify(criterion.relied_evidence_locators)}`,
-            `- contradictory_evidence_locators: ${JSON.stringify(criterion.contradictory_evidence_locators)}`,
+            `- responsibility: ${JSON.stringify(criterion.responsibility)}`,
+            `- expected_evidence_kind: ${criterion.repair_action.expected_evidence_kind}`,
+            `- observation_evidence_locators: ${JSON.stringify(criterion.observation_evidence_locators)}`,
+            `- repair_evidence_locators: ${JSON.stringify(criterion.repair_evidence_locators)}`,
+            `- invalidating_evidence_locators: ${JSON.stringify(criterion.invalidating_evidence_locators)}`,
+            `- resolution_evidence_locators: ${JSON.stringify(criterion.resolution_evidence_locators)}`,
+            `- irreducible_blocker_evidence_locators: ${JSON.stringify(criterion.irreducible_blocker_evidence_locators)}`,
+            `- repair_action: ${JSON.stringify(criterion.repair_action)}`,
           ]),
           "- Recheck only these criteria. Preserve every acceptance not named here and publish delta evidence in the canonical Artifact lineage.",
         ]

@@ -16414,26 +16414,106 @@ export type GatewayControlActionData = {
          * Exact failed or unresolved criteria, preserved acceptances, current ledger revision, workflow ownership, and completely read evidence for the next execution epoch. The Host renders the visible Mission repair Message from this single structure.
          */
         acceptance_gap: {
-          criteria: Array<{
-            contradictory_evidence_read_refs: Array<string>
-            criterion_id: string
-            disposition: "failed" | "unresolved" | "stale_evidence"
-            finding: string
-            relied_evidence_read_refs: Array<string>
-            repeat_disposition?:
-              | "repairable_with_new_evidence"
-              | "accepted_from_existing_evidence"
-              | "irreducible_blocker"
-            required_new_evidence_kind: string
-            responsible_workflow_node_id: string
-          }>
+          criteria: Array<
+            | {
+                criterion_id: string
+                disposition: "failed" | "unresolved" | "stale_evidence"
+                finding: string
+                invalidating_evidence_read_refs: Array<string>
+                irreducible_blocker_evidence_read_refs: Array<string>
+                observation_evidence_read_refs: Array<string>
+                repair_action: {
+                  expected_evidence_kind: string
+                  operation: string
+                  parameters: {
+                    [key: string]: unknown
+                  }
+                  target: string
+                }
+                repair_evidence_read_refs: Array<string>
+                resolution_evidence_read_refs: Array<string>
+                responsibility:
+                  | {
+                      kind: "workflow_node"
+                      workflow_id: string
+                      workflow_node_id: string
+                    }
+                  | {
+                      agent_id: string
+                      dispatch_lineage_id: string
+                      kind: "direct_dispatch"
+                      package_revision: {
+                        id: string
+                        namespace: string
+                        package_digest: string
+                        project_id: string | null
+                        scope: "built_in" | "project" | "global"
+                        version: string
+                      }
+                    }
+                state: "open"
+              }
+            | {
+                criterion_id: string
+                finding: string
+                invalidating_evidence_read_refs: Array<string>
+                irreducible_blocker_evidence_read_refs: Array<string>
+                observation_evidence_read_refs: Array<string>
+                repair_evidence_read_refs: Array<string>
+                resolution_evidence_read_refs: Array<string>
+                responsibility:
+                  | {
+                      kind: "workflow_node"
+                      workflow_id: string
+                      workflow_node_id: string
+                    }
+                  | {
+                      agent_id: string
+                      dispatch_lineage_id: string
+                      kind: "direct_dispatch"
+                      package_revision: {
+                        id: string
+                        namespace: string
+                        package_digest: string
+                        project_id: string | null
+                        scope: "built_in" | "project" | "global"
+                        version: string
+                      }
+                    }
+                state: "accepted"
+              }
+            | {
+                criterion_id: string
+                finding: string
+                invalidating_evidence_read_refs: Array<string>
+                irreducible_blocker_evidence_read_refs: Array<string>
+                observation_evidence_read_refs: Array<string>
+                repair_evidence_read_refs: Array<string>
+                resolution_evidence_read_refs: Array<string>
+                responsibility:
+                  | {
+                      kind: "workflow_node"
+                      workflow_id: string
+                      workflow_node_id: string
+                    }
+                  | {
+                      agent_id: string
+                      dispatch_lineage_id: string
+                      kind: "direct_dispatch"
+                      package_revision: {
+                        id: string
+                        namespace: string
+                        package_digest: string
+                        project_id: string | null
+                        scope: "built_in" | "project" | "global"
+                        version: string
+                      }
+                    }
+                state: "blocked"
+              }
+          >
           current_ledger_revision_artifact_id: string | null
           gap_id: string
-          preserved_acceptances: Array<{
-            criterion_id: string
-            evidence_read_refs: Array<string>
-          }>
-          requested_next_action: string
         }
         action: "resume_task"
         /**

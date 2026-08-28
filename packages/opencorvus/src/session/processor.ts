@@ -191,6 +191,11 @@ export namespace SessionProcessor {
      * streamed Parts and Tool outcomes are durable and only while the Turn is
      * otherwise safe to continue. */
     retainAssistantForNextProviderStep?: (message: Message.Assistant) => boolean | Promise<boolean>
+    /** Stop the owning Session loop after this processor performs the immutable
+     * assistant completion write. Task-root activations use one deterministic
+     * assistant Message as their physical decision boundary, so starting a new
+     * loop iteration after that completion would reopen the same identity. */
+    stopAfterAssistantCompletion?: boolean
   }) {
     const toolcalls: Record<string, Message.ToolPart> = {}
     const mcpAppToolLifecycles = new Map<string, McpAppToolLifecycleController>()
@@ -1424,6 +1429,7 @@ export namespace SessionProcessor {
             finishIncludesTool: input.assistantMessage.finish.includes("tool"),
             ownedContinuationDecision,
           }).retainAssistant
+          const completedOwnerBoundary = !retainAssistantForNextProviderStep && input.stopAfterAssistantCompletion === true
           if (!retainAssistantForNextProviderStep) {
             await input.beforeAssistantCompletion?.(input.assistantMessage)
             input.assistantMessage.time.completed = Date.now()
@@ -1443,7 +1449,12 @@ export namespace SessionProcessor {
           // not: in the observed loop every iteration was its own completed
           // message, so resetting here would make the bound unreachable.
           const stopping =
-            needsCompaction || blocked || parkAfterToolResult || coordinationHandoff || !!input.assistantMessage.error
+            completedOwnerBoundary ||
+            needsCompaction ||
+            blocked ||
+            parkAfterToolResult ||
+            coordinationHandoff ||
+            !!input.assistantMessage.error
           if (stopping) forgetRepeatedToolCalls(input.sessionID)
           if (needsCompaction) return "compact"
           if (blocked) return "stop"

@@ -168,8 +168,12 @@ import { createVisualQaStageDispatcher } from "./visual-qa-stage"
 import { createWorkloadAnalysisTool } from "./workload-analysis-tool"
 import { ORCHESTRATOR_DECISION_TOOL_NAMES, orchestratorDecisionToolCompletionEffect } from "./decision-tool-names"
 import { sameSelectedWorkflowBinding, workflowProjectionFromProjectedAgents } from "@/engine/workflow-binding"
-import { currentTaskAcceptanceRepair, workflowNodeConsumesAcceptanceCriterion } from "@/mission/acceptance-ledger"
-import type { MissionAcceptanceGap } from "@/mission/acceptance-gap"
+import {
+  currentTaskAcceptanceRepair,
+  dispatchConsumesAcceptanceCriterion,
+  openAcceptanceCriteria,
+} from "@/mission/acceptance-ledger"
+import type { MissionAcceptanceOpenCriterion } from "@/mission/acceptance-gap"
 import {
   acceptanceRepairEvidenceLocators,
   DispatchTurnSchema,
@@ -2174,6 +2178,7 @@ export function createOrchestratorTools(input: {
       }
       let coordinationBinding: ReturnType<typeof requireAgentCoordinationRedispatchBindingForRequest> | undefined
       let coordinationSourceSessionID: string | undefined
+      let sourceDispatchLineageArtifactID: string | undefined
       let exactWorkflowBinding = workflowBinding
       let exactWorkflowNodeID = workflowNodeID
       let exactWorkflowOccurrenceID: string | undefined
@@ -2231,6 +2236,7 @@ export function createOrchestratorTools(input: {
         exactDeliverySliceRevisionIDs = coordinationBinding.deliverySliceRevisionIDs
         exactAdapterInput = { ...sourceLineage.payload.adapter_input }
         existingSessionID = coordinationSourceSessionID
+        sourceDispatchLineageArtifactID = sourceLineage.artifactID
       } else if (continuationDispatchID) {
         const sourceLineage = findDispatchLineageByDispatchID({
           taskID: ownershipTaskID,
@@ -2264,6 +2270,7 @@ export function createOrchestratorTools(input: {
         exactDeliverySliceRevisionIDs = sourceLineage.payload.delivery_slice_revision_ids
         existingSessionID = sourceLineage.payload.child_session_id
         exactAdapterInput = { ...sourceLineage.payload.adapter_input }
+        sourceDispatchLineageArtifactID = sourceLineage.artifactID
       } else if (!exactWorkflowBinding || exactWorkflowNodeID === undefined) {
         throw new Error(`dispatch_agent ${targetAgentID} initial dispatch has no workflow binding`)
       }
@@ -2274,9 +2281,9 @@ export function createOrchestratorTools(input: {
       let canonicalAcceptanceRepair: AcceptanceRepairDispatch | undefined
       let acceptanceEvidenceLocators: EvidenceLocator[] = []
       if (activeAcceptanceRepair) {
-        if (!existingSessionID || !exactWorkflowNodeID || !acceptanceRepair) {
+        if (!existingSessionID || !sourceDispatchLineageArtifactID || !acceptanceRepair) {
           throw new Error(
-            `Acceptance gap ${activeAcceptanceRepair.revision.gap.gap_id} requires an existing workflow-node continuation.`,
+            `Acceptance gap ${activeAcceptanceRepair.revision.gap.gap_id} requires an existing dispatch-lineage continuation.`,
           )
         }
         if (
@@ -2287,23 +2294,25 @@ export function createOrchestratorTools(input: {
           throw new Error(`dispatch_agent acceptance-repair authority does not match the current Task ledger revision.`)
         }
         const criteria = new Map(
-          activeAcceptanceRepair.revision.gap.criteria.map((criterion) => [criterion.criterion_id, criterion]),
+          openAcceptanceCriteria(activeAcceptanceRepair.revision.gap).map((criterion) => [criterion.criterion_id, criterion]),
         )
-        const selectedCriteria: MissionAcceptanceGap["criteria"] = []
+        const selectedCriteria: MissionAcceptanceOpenCriterion[] = []
         for (const criterionID of acceptanceRepair.criterion_ids) {
           const criterion = criteria.get(criterionID)
           if (!criterion) {
             throw new Error(`Acceptance gap ${acceptanceRepair.gap_id} has no open criterion ${criterionID}.`)
           }
           if (
-            !workflowNodeConsumesAcceptanceCriterion(
-              activeAcceptanceRepair.workflowBinding,
-              criterion.responsible_workflow_node_id,
-              exactWorkflowNodeID,
-            )
+            !dispatchConsumesAcceptanceCriterion({
+              binding: activeAcceptanceRepair.workflowBinding,
+              responsibility: criterion.responsibility,
+              candidateWorkflowNodeID: exactWorkflowNodeID,
+              sourceDispatchLineageArtifactID,
+              targetAgentID,
+            })
           ) {
             throw new Error(
-              `Workflow node ${exactWorkflowNodeID} does not own or verify acceptance criterion ${criterionID}.`,
+              `Dispatch continuation ${sourceDispatchLineageArtifactID} does not own or verify acceptance criterion ${criterionID}.`,
             )
           }
           selectedCriteria.push(criterion)

@@ -674,9 +674,7 @@ export namespace EventService {
       if (existingMessageID) {
         const session = await Session.get(claimed.target_session_id)
         throwIfAborted(signal)
-        await inactivityFence.runDelegated("resume durable wake", () =>
-          resumeEventWake({ session, messageID: existingMessageID }),
-        )
+        await resumeEventWake({ session, messageID: existingMessageID })
         settleSuccess(claimed, job, s.ownerID, claimed.target_session_id, existingMessageID)
         return
       }
@@ -691,14 +689,12 @@ export namespace EventService {
 
       const activeJob = job
       inactivityFence.touch("wake dispatch")
-      const result = await inactivityFence.runDelegated("wake Provider/Tool execution", () =>
-        Bus.withCausation(
-          {
-            source: "scheduler.event",
-            occurrenceID: claimed.id,
-          },
-          () => (wakeExecutorForTest ?? executeWake)({ fire: claimed, job: activeJob, ownerID: s.ownerID, signal }),
-        ),
+      const result = await Bus.withCausation(
+        {
+          source: "scheduler.event",
+          occurrenceID: claimed.id,
+        },
+        () => (wakeExecutorForTest ?? executeWake)({ fire: claimed, job: activeJob, ownerID: s.ownerID, signal }),
       )
       throwIfAborted(signal)
       inactivityFence.touch("durable success settlement")

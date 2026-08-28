@@ -24,6 +24,7 @@ import { Scheduler } from "./index"
 import { Session } from "@/session"
 import { SessionWake } from "@/session/wake"
 import { createSchedulerExecutionInactivityFence } from "./execution-inactivity"
+import type { SchedulerExecutionInactivityFence } from "./execution-inactivity"
 import { taskWaitFireID } from "./task-wait-fire-identity"
 import { EngineTaskTable } from "@/engine/engine.sql"
 import {
@@ -1268,9 +1269,7 @@ export namespace AutomationService {
             .run()
         })
         inactivityFence.touch("delayed wake dispatch")
-        const outcome = await inactivityFence.runDelegated("delayed wake Provider/Tool execution", () =>
-          executeDelayedWake(job, fireID, runID, owner, executionSignal),
-        )
+        const outcome = await executeDelayedWake(job, fireID, runID, owner, executionSignal, inactivityFence)
         const completedAt = Date.now()
         // One terminal transaction: the succeeded receipt, the one-shot
         // tombstone and the end of this fire's lease are the same fact, so a
@@ -1375,14 +1374,10 @@ export namespace AutomationService {
             const existing = findAutomationWake(job.id, fireID, target)
             if (existing) {
               return {
-                sessionID: await inactivityFence.runDelegated("resume durable target wake", () =>
-                  resumeAutomationWake(existing),
-                ),
+                sessionID: await resumeAutomationWake(existing, inactivityFence),
               }
             }
-            return inactivityFence.runDelegated("target wake Provider/Tool execution", () =>
-              executePublicWake(job, target, fireID, runIDs[index]!, owner, executionSignal),
-            )
+            return executePublicWake(job, target, fireID, runIDs[index]!, owner, executionSignal, inactivityFence)
           } finally {
             inactivityFence.touch(`target ${index + 1}/${targets.length} settled`)
           }
@@ -1527,7 +1522,10 @@ export namespace AutomationService {
     return admitMissionExecutionWake({ missionID: mission.missionID, sessionID: mission.id, wake })
   }
 
-  async function resumeAutomationWake(existing: { sessionID: string; messageID: string }): Promise<string> {
+  async function resumeAutomationWake(
+    existing: { sessionID: string; messageID: string },
+    inactivityFence: SchedulerExecutionInactivityFence,
+  ): Promise<string> {
     const session = await Session.get(existing.sessionID)
     const receipt = await admitAutomationSessionWake(session, () =>
       SessionWake.resumePersistedWakeWithReceipt({
@@ -1537,7 +1535,8 @@ export namespace AutomationService {
         retryFailedReply: true,
       }),
     )
-    const completion = await receipt.completion
+    await receipt.activation
+    const completion = await inactivityFence.runDelegated("Session owner reply completion", () => receipt.completion)
     assertWakeCompleted(completion)
     return existing.sessionID
   }
@@ -1591,6 +1590,7 @@ export namespace AutomationService {
     runID: string,
     owner: string,
     signal: AbortSignal,
+    inactivityFence: SchedulerExecutionInactivityFence,
   ): Promise<{ sessionID: string }> {
     const targetSessionID = automationTargetSessionID(target, runID)
     if (target.scope === "global") {
@@ -1614,7 +1614,9 @@ export namespace AutomationService {
       }
       return await runInTargetProject({
         directory: globalSession.directory,
-        fn: async () => ({ sessionID: await wakeSession(job, fireID, globalSession.id, runID, runID, owner, signal) }),
+          fn: async () => ({
+            sessionID: await wakeSession(job, fireID, globalSession.id, runID, runID, owner, signal, inactivityFence),
+          }),
       })
     }
     if (!target.directory) throw new Error(`Automation target ${target.projectID ?? target.scope} has no directory`)
@@ -1623,7 +1625,9 @@ export namespace AutomationService {
       fn: async () => {
         if (target.scope === "session") {
           if (!target.sessionID) throw new Error(`Session automation ${job.id} has no session target`)
-          return { sessionID: await wakeSession(job, fireID, target.sessionID, runID, runID, owner, signal) }
+          return {
+            sessionID: await wakeSession(job, fireID, target.sessionID, runID, runID, owner, signal, inactivityFence),
+          }
         }
         if (job.execution_mode === "worktree") {
           const worktree = await Worktree.create({ name: `automation-${job.id}`, reuseIfValid: true })
@@ -1631,12 +1635,16 @@ export namespace AutomationService {
             directory: worktree.directory,
             fn: async () => {
               await ensureAutomationTargetSession(targetSessionID, job.prompt)
-              return { sessionID: await wakeSession(job, fireID, targetSessionID, runID, runID, owner, signal) }
+              return {
+                sessionID: await wakeSession(job, fireID, targetSessionID, runID, runID, owner, signal, inactivityFence),
+              }
             },
           })
         }
         await ensureAutomationTargetSession(targetSessionID, job.prompt)
-        return { sessionID: await wakeSession(job, fireID, targetSessionID, runID, runID, owner, signal) }
+        return {
+          sessionID: await wakeSession(job, fireID, targetSessionID, runID, runID, owner, signal, inactivityFence),
+        }
       },
     })
   }
@@ -1668,6 +1676,7 @@ export namespace AutomationService {
     runID: string | undefined,
     owner: string,
     signal: AbortSignal,
+    inactivityFence: SchedulerExecutionInactivityFence,
   ): Promise<string> {
     const scope = job.kind === "delay" ? "session" : job.scope
     if (!scope) throw new Error(`Automation ${job.id} has no execution scope`)
@@ -1705,7 +1714,8 @@ export namespace AutomationService {
         },
       }),
     )
-    const completion = await receipt.completion
+    await receipt.activation
+    const completion = await inactivityFence.runDelegated("Session owner reply completion", () => receipt.completion)
     assertWakeCompleted(completion)
     return receipt.sessionID
   }
@@ -1754,6 +1764,7 @@ export namespace AutomationService {
     runID: string,
     owner: string,
     signal: AbortSignal,
+    inactivityFence: SchedulerExecutionInactivityFence,
   ): Promise<{
     sessionID?: string
     taskID?: string
@@ -1799,7 +1810,10 @@ export namespace AutomationService {
             return persistedWakeID
           })
           try {
-            const dispatchResult = await dispatchPersistedTaskLoop(job.task_id!)
+            const dispatchResult = await dispatchPersistedTaskLoop(job.task_id!, wakeID, {
+              runWithActivationOwner: (completion) =>
+                inactivityFence.runDelegated("durable Task ingress execution", completion),
+            })
             return { taskID: job.task_id!, wakeID, dispatchResult, automationConsumed: true as const }
           } catch (error) {
             const dispatchError = error instanceof Error ? error.message : String(error)
@@ -1835,7 +1849,7 @@ export namespace AutomationService {
       sessionID: session.id,
       messageID: deterministicAutomationID("msg", identityID),
     })
-    if (existing) return { sessionID: await resumeAutomationWake(existing) }
+    if (existing) return { sessionID: await resumeAutomationWake(existing, inactivityFence) }
     const project = Database.use((db) =>
       db
         .select({ worktree: ProjectTable.worktree })
@@ -1846,7 +1860,7 @@ export namespace AutomationService {
     if (!project) throw new NotFoundError({ message: `Delayed wake project not found: ${job.project_id}` })
     const sessionID = await runInTargetProject({
       directory: session.directory ?? project.worktree,
-      fn: () => wakeSession(job, fireID, session.id, identityID, undefined, owner, signal),
+      fn: () => wakeSession(job, fireID, session.id, identityID, undefined, owner, signal, inactivityFence),
     })
     return { sessionID }
   }

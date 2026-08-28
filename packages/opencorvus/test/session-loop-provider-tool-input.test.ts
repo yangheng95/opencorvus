@@ -52,16 +52,23 @@ function acceptanceGap(readReference = "ar_1234567890abcdef") {
     criteria: [
       {
         criterion_id: "audit-receipt",
+        state: "open" as const,
         disposition: "failed" as const,
         finding: "The published audit receipt does not match the accepted output.",
-        relied_evidence_read_refs: [readReference],
-        contradictory_evidence_read_refs: [],
-        responsible_workflow_node_id: "builder",
-        required_new_evidence_kind: "corrected-audit-receipt",
+        responsibility: { kind: "workflow_node" as const, workflow_id: "repair", workflow_node_id: "builder" },
+        observation_evidence_read_refs: [readReference],
+        repair_evidence_read_refs: [],
+        resolution_evidence_read_refs: [],
+        invalidating_evidence_read_refs: [],
+        irreducible_blocker_evidence_read_refs: [],
+        repair_action: {
+          operation: "correct_artifact",
+          target: "audit-receipt",
+          expected_evidence_kind: "corrected-audit-receipt",
+          parameters: {},
+        },
       },
     ],
-    preserved_acceptances: [],
-    requested_next_action: "Correct only the audit receipt and publish its new canonical revision.",
   }
 }
 

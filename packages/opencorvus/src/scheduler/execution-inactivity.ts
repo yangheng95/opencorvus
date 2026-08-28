@@ -14,12 +14,19 @@ export class SchedulerExecutionInactivityError extends Error {
   }
 }
 
+export interface SchedulerExecutionInactivityFence {
+  signal: AbortSignal
+  touch(nextPhase: string): void
+  runDelegated<T>(nextPhase: string, run: () => Promise<T>): Promise<T>
+  [Symbol.dispose](): void
+}
+
 export async function createSchedulerExecutionInactivityFence(input: {
   occurrence: string
   signals: readonly AbortSignal[]
   initialPhase: string
   configurationOwner: "global" | "project"
-}) {
+}): Promise<SchedulerExecutionInactivityFence> {
   const configured = (await (input.configurationOwner === "global" ? EngineConfig.getGlobal() : EngineConfig.get()))
     .activity.execution_progress_idle_ms
   if (!Number.isInteger(configured) || configured <= 0) {
