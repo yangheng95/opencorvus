@@ -26,7 +26,6 @@
   --session-scrollbar-size: calc(12px * var(--ui-scale));
   --ui-left-rail-scrollbar-gutter-x: 0px;
 
-  --ui-font-label: var(--ui-font-meta);
   --ui-titlebar-padding-x: calc(8px * var(--ui-scale));
   --ui-brand-logo-size: calc(14px * var(--ui-scale));
   --ui-input-padding-y: calc(5px * var(--ui-scale));
@@ -66,9 +65,8 @@
   --ui-chat-message-padding-x: calc(22px * var(--ui-scale));
   --ui-chat-scrollbar-gutter-x: var(--session-scrollbar-size);
   --ui-select-padding-right: calc(28px * var(--ui-scale));
-  /* --title-size / --subhead-size aliases retired 2026-05-04 (Step 5
-   * v3, rule 8). Consumers reference --ui-font-title / --ui-font-
-   * control directly. */
+  /* Components consume the canonical application typography roles directly;
+   * local font-size aliases are not part of the cascade contract. */
 }
 
 *,
@@ -142,6 +140,10 @@ input,
 textarea,
 select {
   font: inherit;
+}
+
+:where(strong, b) {
+  font-weight: var(--ui-font-weight-strong);
 }
 
 a {

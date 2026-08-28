@@ -25,8 +25,8 @@
    * collapsing onto them moved 802 of 1350 declarations by 0px.
    *
    * Sizes above 32px are structural dimensions (dialog widths, rail insets),
-   * not rhythm steps, and stay as literals. See
-   * script/migrate-spacing-ladder.ts.
+   * not rhythm steps, and stay as literals. The <=32px consumer boundary is
+   * enforced by script/check-css-token-usage.ts.
    *
    * Lives here rather than in cascade/base.css because native-menu.html
    * loads design-language.css but not base.css — the ladder is design
@@ -79,11 +79,10 @@
    * shifts (width/translate). timing is always `ease` — no cubic-bezier
    * noise. Animation loop tokens are named by the visible motion role
    * because spinner, pulse, progress, and shimmer cycles do not share a
-   * single interaction scale. Any value outside this set is rejected by
-   * `test/design-token-invariants.test.ts`, which also pins durations to
-   * plain tokens: zoom changes how large things are, never how long they
-   * take. (It replaces flat-redesign-motion-coverage.test.ts, deleted at
-   * some point before 2026-08-24 and cited here long after.) */
+   * single interaction scale. Durations remain plain, theme-independent
+   * tokens: zoom changes how large things are, never how long they take. */
+  /* script/check-css-token-usage.ts rejects perceptible motion literals
+   * outside this scale and durations multiplied by --ui-scale. */
   --ui-duration-instant: 0s;
   --ui-duration-fast: 80ms;
   --ui-duration-base: 120ms;
@@ -129,8 +128,8 @@
   --ui-opacity-full: 1;
 
   /* Letter-spacing — semantic tightness levels. Larger type needs
-   * tighter tracking to hold together: the scale tops out at
-   * `tighter` for --ui-font-display and `tight` for --ui-font-heading.
+   * tighter tracking to hold together: application emphasis can use
+   * `tighter`, while ordinary headings use `tight`.
    * `tight` moved -0.01em -> -0.015em when `tighter` was added, so the
    * two negative steps stay distinguishable. */
   --ui-letter-spacing-tighter: -0.025em;
@@ -150,13 +149,6 @@
   --oc-header-padding-x: calc(6px * var(--ui-scale, 1));
   --oc-header-padding-y: 0;
   --oc-header-gap: calc(6px * var(--ui-scale, 1));
-  --oc-header-title-font: var(--ui-font-weight-medium) var(--ui-font-title) var(--font, sans-serif);
-  /* Was a flat 1. A 1.0 line box is shorter than Noto Sans SC's
-   * ascent + descent, so Chinese glyph ink clipped against the header's
-   * overflow: hidden; Latin descenders had the same exposure. The header
-   * height is fixed and centres its content, so the taller line box costs
-   * nothing. */
-  --oc-header-title-line-height: var(--ui-line-height-tight);
   --oc-header-title-letter-spacing: 0;
   --oc-header-title-transform: none;
   --oc-header-border: 0 solid transparent;
@@ -183,10 +175,9 @@
    * `cascade/*.css` now hold *only* palette tokens scoped to specific
    * `body[data-theme="..."]` selectors.
    *
-   * Font families, font sizes, title/subhead weight + tracking, and
-   * the panel/rail layout dimensions are theme-independent (zh-CN
-   * vs en-US copy might want different sizes, but that's a locale
-   * concern, not a theme concern). */
+   * Font-family composition, font roles, weight, tracking, and panel/rail
+   * layout dimensions are theme- and locale-independent. Locale changes copy
+   * and glyph coverage; it cannot redefine application typography roles. */
   /* SC means Simplified Chinese. The paired families compose Latin and Chinese
    * glyph coverage from locally packaged WOFF2 (Web Open Font Format 2) assets. */
   --font: "Geist Variable", "Noto Sans SC Variable";
@@ -198,45 +189,26 @@
    * Consumers now reference `--ui-font-weight-strong` and `0`/literal
    * tracking directly. */
 
-  /* Typography scale — 4-tier hierarchy: display > heading > title >= body.
-   * Restores visual structure after iter48 capped all four to 12px
-   * (2026-05-03 feedback superseded by 2026-05-04 reference design request).
-   * Raised 2026-07-08 to a Codex app style 14px body baseline without
-   * changing layout density tokens or --ui-scale.
-   * display: major empty-state headings, onboarding copy.
-   * heading: panel / section titles, dialog headers.
-   * title:   card titles, sidebar item titles, menu items.
-   * body:    body text, message content. */
-  --ui-font-display: calc(26px * var(--ui-scale));
-  --ui-font-heading: calc(21px * var(--ui-scale));
-  --ui-font-title: calc(17px * var(--ui-scale));
-  --ui-font-brand: calc(18px * var(--ui-scale));
+  /* Application typography has three proportional roles and one code role.
+   * A component chooses a role; it cannot mint a local size alias or derive
+   * an intermediate size. Hierarchy within one role comes from weight,
+   * colour, spacing, and containment rather than another one-pixel tier.
+   * Interactive Artifact content owns its internal typography separately;
+   * the surrounding OpenCorvus chrome still consumes this scale. */
+  --ui-font-emphasis: calc(16px * var(--ui-scale));
   --ui-font-body: calc(14px * var(--ui-scale));
-  --ui-font-control: calc(14px * var(--ui-scale));
-  --ui-font-compact-row: calc(var(--ui-font-control) - calc(1px * var(--ui-scale)));
-  --ui-font-meta: calc(12px * var(--ui-scale));
-  --ui-font-small: calc(12px * var(--ui-scale));
-  --ui-font-tiny: calc(11px * var(--ui-scale));
   --ui-font-code: calc(13px * var(--ui-scale));
-  --ui-font-navigation: var(--ui-font-body);
-  /* Line-height — five rungs. `flat` is functional rather than
-   * typographic: the single-line centering used by icons, badges and
-   * button labels, where any leading at all breaks vertical centering.
-   * `snug` covers dense rows and compact headings, `tight` covers UI
-   * controls and single-line labels, `normal` covers code and compact
-   * prose, and `relaxed` is the CJK body setting — Chinese copy has no
-   * ascender/descender rhythm, so it needs more leading than Latin to
-   * read open, and the mixed zh/en transcript is the primary reading
-   * surface.
-   *
-   * `snug` exists because 45 literals sat at 1.2-1.3; folding them up
-   * into `tight` would have added 12% leading to the densest rows in
-   * the app. See script/migrate-line-height-ladder.ts. */
+  --ui-font-caption: calc(12px * var(--ui-scale));
+
+  /* Line-height is independent from size but equally bounded. `flat` is
+   * functional single-line centering, `tight` is application chrome,
+   * `normal` is compact prose/code, and `reading` preserves comfortable
+   * leading for transcript and other sustained reading. Components do not
+   * define a private rung. */
   --ui-line-height-flat: 1;
-  --ui-line-height-snug: 1.25;
   --ui-line-height-tight: 1.35;
   --ui-line-height-normal: 1.5;
-  --ui-line-height-relaxed: 1.68;
+  --ui-line-height-reading: 1.68;
 
   --ui-titlebar-height: calc(36px * var(--ui-scale));
   --ui-panel-header-height: calc(40px * var(--ui-scale));
@@ -244,9 +216,7 @@
   /* UI (User Interface) Workbench contour uses wider low-alpha coverage so
      its diagonal stays continuous at fractional desktop display scales while
      retaining the perceived weight of the shared one-pixel border. */
-  --ui-workspace-contour:
-    calc(1.5px * var(--ui-scale)) solid
-      color-mix(in srgb, var(--border-strong) 68%, transparent);
+  --ui-workspace-contour: calc(1.5px * var(--ui-scale)) solid color-mix(in srgb, var(--border-strong) 68%, transparent);
   --ui-header-control-height: var(--oc-density-icon-button);
   --ui-panel-padding-x: calc(10px * var(--ui-scale));
   --ui-panel-padding-y: calc(8px * var(--ui-scale));

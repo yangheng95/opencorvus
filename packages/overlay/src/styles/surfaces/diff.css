@@ -11,7 +11,7 @@
   text-transform: none;
   letter-spacing: var(--ui-letter-spacing-normal);
   font-weight: var(--ui-font-weight-strong);
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-caption);
 }
 
 .diff-dialog-stat[data-tone="add"] {
@@ -26,7 +26,7 @@
   display: flex;
   flex-direction: column;
   font-family: var(--mono);
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-caption);
   line-height: var(--ui-line-height-normal);
 }
 

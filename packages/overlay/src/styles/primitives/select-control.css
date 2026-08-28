@@ -25,7 +25,7 @@
   color: var(--text-strong);
   box-shadow: none;
   font: inherit;
-  font-size: var(--ui-font-control);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-body);
   text-align: left;
   cursor: pointer;
@@ -77,7 +77,7 @@
   padding: var(--ui-gap-sm) var(--ui-gap-md);
   border-radius: var(--oc-radius-soft);
   color: var(--text-strong);
-  font-size: var(--ui-font-control);
+  font-size: var(--ui-font-body);
   line-height: var(--ui-line-height-tight);
   cursor: default;
   transition:
@@ -145,7 +145,7 @@
   background: transparent;
   color: inherit;
   box-shadow: none;
-  font-size: var(--ui-font-control);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-medium);
   line-height: var(--ui-line-height-flat);
 }
@@ -190,7 +190,7 @@
   gap: var(--ui-gap-md);
   min-height: calc(34px * var(--ui-scale));
   padding-block: var(--ui-gap-xs);
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-body);
 }
 
 .oc-select-option[data-variant="composer"] .oc-select-indicator {

@@ -74,7 +74,7 @@ html[data-native-titlebar="macos"] .titlebar-menubar .oc-button[data-ui="titleba
   --oc-button-height: 22px;
 
   height: 22px;
-  font-size: 13px;
+  font-size: var(--ui-font-body);
 }
 
 .workspace-contextbar {
@@ -302,7 +302,7 @@ html[data-native-titlebar="macos"] .titlebar-menubar .oc-button[data-ui="titleba
 
 .titlebar-brand-identity__wordmark {
   color: var(--text-strong);
-  font-size: var(--ui-font-brand);
+  font-size: var(--ui-font-emphasis);
   font-weight: var(--ui-font-weight-strong);
   letter-spacing: var(--ui-letter-spacing-tight);
   line-height: var(--ui-line-height-flat);
@@ -315,7 +315,7 @@ html[data-native-titlebar="macos"] .titlebar-menubar .oc-button[data-ui="titleba
   --oc-button-color: var(--oc-titlebar-menu-text);
 
   height: calc(22px * var(--ui-scale));
-  font-size: var(--ui-font-navigation);
+  font-size: var(--ui-font-body);
   white-space: nowrap;
 }
 
@@ -409,8 +409,8 @@ html[data-native-titlebar="macos"] .titlebar-menubar .oc-button[data-ui="titleba
 
 .titlebar-menubar-item-title {
   color: var(--text-strong);
-  font-size: var(--ui-font-navigation);
-  line-height: var(--ui-line-height-snug);
+  font-size: var(--ui-font-body);
+  line-height: var(--ui-line-height-tight);
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -419,8 +419,8 @@ html[data-native-titlebar="macos"] .titlebar-menubar .oc-button[data-ui="titleba
 
 .titlebar-menubar-item-meta {
   color: var(--text-soft);
-  font-size: var(--ui-font-small);
-  line-height: var(--ui-line-height-snug);
+  font-size: var(--ui-font-caption);
+  line-height: var(--ui-line-height-tight);
   flex: 0 0 auto;
   max-width: 46%;
   overflow: hidden;
@@ -449,7 +449,7 @@ html[data-native-titlebar="macos"] .titlebar-menubar .oc-button[data-ui="titleba
 
 .titlebar-menubar-range-value {
   color: var(--text-muted);
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-caption);
   font-variant-numeric: tabular-nums;
   line-height: var(--ui-line-height-flat);
   text-align: right;

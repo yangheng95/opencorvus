@@ -23,7 +23,7 @@
   color: var(--text-strong);
   border: var(--oc-border-width) solid color-mix(in srgb, var(--bad) 56%, transparent);
   box-shadow: 0 calc(18px * var(--ui-scale)) calc(40px * var(--ui-scale)) var(--ui-shadow-tone);
-  font-size: var(--ui-font-control);
+  font-size: var(--ui-font-body);
   pointer-events: auto;
 }
 
@@ -83,7 +83,7 @@
   flex: 1;
   display: grid;
   gap: var(--ui-gap-xs);
-  font-size: var(--ui-font-control);
+  font-size: var(--ui-font-body);
 }
 
 .memory-banner__content > span {

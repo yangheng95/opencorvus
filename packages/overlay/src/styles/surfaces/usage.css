@@ -29,7 +29,7 @@
 .usage-eyebrow {
   margin-bottom: var(--ui-gap-md);
   color: var(--accent);
-  font: var(--ui-font-weight-strong) var(--ui-font-small) var(--font);
+  font: var(--ui-font-weight-strong) var(--ui-font-body) / var(--ui-line-height-tight) var(--font);
   letter-spacing: var(--ui-letter-spacing-loose);
   text-transform: uppercase;
 }
@@ -68,7 +68,7 @@
 
 .usage-total__label {
   color: var(--text-muted);
-  font: var(--ui-font-weight-medium) var(--ui-font-small) var(--font);
+  font: var(--ui-font-weight-medium) var(--ui-font-caption) / var(--ui-line-height-tight) var(--font);
   letter-spacing: var(--ui-letter-spacing-loose);
   text-transform: uppercase;
 }
@@ -76,8 +76,8 @@
 .usage-total > strong {
   margin-top: var(--ui-gap-md);
   color: var(--text-strong);
-  font: var(--ui-font-weight-medium) clamp(48px, calc(68px * var(--ui-scale)), 78px) / var(--ui-line-height-flat) var(--font);
-  letter-spacing: calc(-2.5px * var(--ui-scale));
+  font: var(--ui-font-weight-medium) var(--ui-font-emphasis) / var(--ui-line-height-tight) var(--font);
+  letter-spacing: var(--ui-letter-spacing-tight);
   font-variant-numeric: tabular-nums;
 }
 
@@ -87,7 +87,7 @@
   border: var(--oc-border-width) solid var(--divider-soft);
   border-radius: var(--oc-radius-pill);
   color: var(--text-soft);
-  font: var(--ui-font-weight-medium) var(--ui-font-small) var(--font);
+  font: var(--ui-font-weight-medium) var(--ui-font-caption) / var(--ui-line-height-tight) var(--font);
 }
 
 .usage-period-meta {
@@ -98,7 +98,7 @@
   gap: var(--ui-gap-md);
   margin-top: var(--ui-gap-lg);
   color: var(--text-muted);
-  font: var(--ui-font-weight-body) var(--ui-font-small) var(--font);
+  font: var(--ui-font-weight-body) var(--ui-font-caption) / var(--ui-line-height-tight) var(--font);
 }
 
 .usage-period-meta span {
@@ -148,7 +148,7 @@
   max-width: 100%;
   overflow: hidden;
   color: var(--text-strong);
-  font: var(--ui-font-weight-medium) clamp(17px, calc(20px * var(--ui-scale)), 24px) / var(--ui-line-height-snug) var(--font);
+  font: var(--ui-font-weight-medium) var(--ui-font-emphasis) / var(--ui-line-height-tight) var(--font);
   text-overflow: ellipsis;
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
@@ -157,7 +157,7 @@
 .usage-metric__label {
   margin-top: var(--ui-gap-sm);
   color: var(--text-muted);
-  font: var(--ui-font-weight-body) var(--ui-font-small) var(--font);
+  font: var(--ui-font-weight-body) var(--ui-font-caption) / var(--ui-line-height-tight) var(--font);
 }
 
 .usage-official-grid {
@@ -194,17 +194,21 @@
 .usage-official-card > header strong {
   overflow: hidden;
   color: var(--text-strong);
-  font: var(--ui-font-weight-strong) var(--ui-font-body) var(--font);
+  font: var(--ui-font-weight-strong) var(--ui-font-body) / var(--ui-line-height-tight) var(--font);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.usage-official-card > header div > span,
+.usage-official-card > header div > span {
+  color: var(--text-muted);
+  font: var(--ui-font-weight-body) var(--ui-font-caption) / var(--ui-line-height-normal) var(--font);
+}
+
 .usage-official-card > p,
 .usage-official-card > footer,
 .usage-official-card__message {
   color: var(--text-muted);
-  font: var(--ui-font-weight-body) var(--ui-font-small) / var(--ui-line-height-normal) var(--font);
+  font: var(--ui-font-weight-body) var(--ui-font-body) / var(--ui-line-height-normal) var(--font);
 }
 
 .usage-official-card > p {
@@ -218,7 +222,7 @@
   border-radius: var(--oc-radius-pill);
   background: var(--surface-elevated);
   color: var(--text-soft);
-  font: var(--ui-font-weight-medium) var(--ui-font-small) var(--font);
+  font: var(--ui-font-weight-medium) var(--ui-font-caption) / var(--ui-line-height-tight) var(--font);
 }
 
 .usage-official-card[data-status="available"] .usage-official-card__status {
@@ -253,7 +257,7 @@
   border-radius: var(--oc-radius-soft);
   background: var(--settings-surface-base);
   color: var(--text-muted);
-  font: var(--ui-font-weight-body) var(--ui-font-small) var(--font);
+  font: var(--ui-font-weight-body) var(--ui-font-caption) / var(--ui-line-height-tight) var(--font);
   font-variant-numeric: tabular-nums;
 }
 
@@ -269,7 +273,7 @@
 .usage-official-card__facts dt {
   overflow: hidden;
   color: var(--text-muted);
-  font: var(--ui-font-weight-body) var(--ui-font-small) var(--font);
+  font: var(--ui-font-weight-body) var(--ui-font-caption) / var(--ui-line-height-tight) var(--font);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -278,7 +282,7 @@
   margin: var(--ui-gap-xs) 0 0;
   overflow: hidden;
   color: var(--text-strong);
-  font: var(--ui-font-weight-medium) var(--ui-font-body) var(--font);
+  font: var(--ui-font-weight-medium) var(--ui-font-body) / var(--ui-line-height-tight) var(--font);
   text-overflow: ellipsis;
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
@@ -292,7 +296,7 @@
   padding-top: var(--ui-gap-lg);
   border-top: var(--oc-border-width) solid var(--divider-soft);
   color: var(--text-muted);
-  font: var(--ui-font-weight-body) var(--ui-font-small) var(--font);
+  font: var(--ui-font-weight-body) var(--ui-font-caption) / var(--ui-line-height-tight) var(--font);
 }
 
 .usage-official-card__reconciliation strong {
@@ -338,7 +342,7 @@
   margin: 0;
   padding: 0 var(--ui-gap-2xl) var(--ui-gap-xl);
   color: var(--text-muted);
-  font: var(--ui-font-weight-body) var(--ui-font-small) / var(--ui-line-height-normal) var(--font);
+  font: var(--ui-font-weight-body) var(--ui-font-body) / var(--ui-line-height-normal) var(--font);
 }
 
 .usage-section {
@@ -372,12 +376,12 @@
 .usage-section__head h2 {
   margin: 0 0 var(--ui-gap-xs);
   color: var(--text-strong);
-  font: var(--ui-font-weight-strong) var(--ui-font-heading) / var(--ui-line-height-snug) var(--font);
+  font: var(--ui-font-weight-strong) var(--ui-font-emphasis) / var(--ui-line-height-tight) var(--font);
   letter-spacing: var(--ui-letter-spacing-tight);
 }
 
 .usage-section__head p {
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-body);
 }
 
 .usage-section__meta {
@@ -389,7 +393,7 @@
   border-radius: var(--oc-radius-pill);
   background: var(--surface-inset);
   color: var(--text-muted);
-  font: var(--ui-font-weight-medium) var(--ui-font-small) var(--font);
+  font: var(--ui-font-weight-medium) var(--ui-font-caption) / var(--ui-line-height-tight) var(--font);
 }
 
 .usage-activity {
@@ -498,7 +502,7 @@
   height: calc(25px * var(--ui-scale));
   margin-top: var(--ui-gap-md);
   color: var(--text-muted);
-  font: var(--ui-font-weight-body) var(--ui-font-small) var(--font);
+  font: var(--ui-font-weight-body) var(--ui-font-caption) / var(--ui-line-height-tight) var(--font);
 }
 
 .usage-activity__labels span {
@@ -521,7 +525,7 @@
   justify-content: flex-end;
   gap: var(--ui-gap-sm);
   color: var(--text-muted);
-  font: var(--ui-font-weight-body) var(--ui-font-small) var(--font);
+  font: var(--ui-font-weight-body) var(--ui-font-caption) / var(--ui-line-height-tight) var(--font);
 }
 
 .usage-activity__legend .usage-activity__cell {
@@ -585,7 +589,7 @@
   gap: var(--ui-gap-md);
   min-width: 0;
   color: var(--text-muted);
-  font: var(--ui-font-weight-body) var(--ui-font-small) var(--font);
+  font: var(--ui-font-weight-body) var(--ui-font-caption) / var(--ui-line-height-tight) var(--font);
 }
 
 .usage-composition__item strong {
@@ -621,13 +625,13 @@
 
 .usage-provider-row__identity strong {
   color: var(--text-strong);
-  font: var(--ui-font-weight-medium) var(--ui-font-body) var(--font);
+  font: var(--ui-font-weight-medium) var(--ui-font-body) / var(--ui-line-height-tight) var(--font);
 }
 
 .usage-provider-row__identity span,
 .usage-provider-row__measure {
   color: var(--text-muted);
-  font: var(--ui-font-weight-body) var(--ui-font-small) var(--font);
+  font: var(--ui-font-weight-body) var(--ui-font-caption) / var(--ui-line-height-tight) var(--font);
 }
 
 .usage-provider-row__measure {
@@ -674,13 +678,13 @@
   align-items: center;
   gap: var(--ui-gap-md);
   color: var(--text-muted);
-  font: var(--ui-font-weight-body) var(--ui-font-small) var(--font);
+  font: var(--ui-font-weight-body) var(--ui-font-caption) / var(--ui-line-height-tight) var(--font);
 }
 
 .usage-coverage-list dd {
   margin: 0;
   color: var(--text-strong);
-  font: var(--ui-font-weight-medium) var(--ui-font-body) var(--font);
+  font: var(--ui-font-weight-medium) var(--ui-font-body) / var(--ui-line-height-tight) var(--font);
   font-variant-numeric: tabular-nums;
 }
 
@@ -700,7 +704,7 @@
 .usage-coverage-note {
   margin: calc(-10px * var(--ui-scale)) 0 0;
   color: var(--text-muted);
-  font: var(--ui-font-weight-body) var(--ui-font-small) / var(--ui-line-height-normal) var(--font);
+  font: var(--ui-font-weight-body) var(--ui-font-body) / var(--ui-line-height-normal) var(--font);
 }
 
 .usage-model-table-wrap {
@@ -711,7 +715,7 @@
   width: 100%;
   border-collapse: collapse;
   color: var(--text-soft);
-  font: var(--ui-font-weight-body) var(--ui-font-small) var(--font);
+  font: var(--ui-font-weight-body) var(--ui-font-caption) / var(--ui-line-height-tight) var(--font);
 }
 
 .usage-model-table th,
@@ -748,7 +752,7 @@
   max-width: calc(420px * var(--ui-scale));
   overflow: hidden;
   color: var(--text-strong);
-  font: var(--ui-font-weight-medium) var(--ui-font-body) var(--font);
+  font: var(--ui-font-weight-medium) var(--ui-font-body) / var(--ui-line-height-tight) var(--font);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -777,7 +781,7 @@
 
 .usage-empty strong {
   color: var(--text-strong);
-  font: var(--ui-font-weight-medium) var(--ui-font-heading) var(--font);
+  font: var(--ui-font-weight-medium) var(--ui-font-emphasis) / var(--ui-line-height-tight) var(--font);
 }
 
 .usage-empty span {
@@ -788,13 +792,13 @@
 .usage-loading {
   min-height: calc(320px * var(--ui-scale));
   flex-direction: row;
-  font: var(--ui-font-weight-medium) var(--ui-font-body) var(--font);
+  font: var(--ui-font-weight-medium) var(--ui-font-body) / var(--ui-line-height-tight) var(--font);
 }
 
 .usage-list-empty {
   padding: var(--ui-gap-4xl) 0;
   color: var(--text-muted);
-  font: var(--ui-font-weight-body) var(--ui-font-body) var(--font);
+  font: var(--ui-font-weight-body) var(--ui-font-body) / var(--ui-line-height-tight) var(--font);
   text-align: center;
 }
 

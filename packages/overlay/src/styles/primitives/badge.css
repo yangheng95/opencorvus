@@ -16,9 +16,9 @@
   background: var(--surface-inset);
   color: var(--text-soft);
   font-family: var(--font);
-  font-size: var(--ui-font-meta);
+  font-size: var(--ui-font-caption);
   font-weight: var(--ui-font-weight-medium);
-  line-height: var(--ui-line-height-snug);
+  line-height: var(--ui-line-height-tight);
   letter-spacing: var(--ui-letter-spacing-normal);
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
@@ -26,7 +26,7 @@
 
 .oc-badge[data-size="sm"] {
   padding: var(--ui-gap-3xs) var(--ui-gap-sm);
-  font-size: var(--ui-font-tiny);
+  font-size: var(--ui-font-caption);
   font-weight: var(--ui-font-weight-strong);
 }
 

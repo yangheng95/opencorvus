@@ -55,10 +55,10 @@
 
 .oc-section__title,
 .oc-section-heading {
-  font-size: var(--ui-font-title);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-medium);
   letter-spacing: var(--ui-letter-spacing-normal);
-  line-height: var(--ui-line-height-snug);
+  line-height: var(--ui-line-height-tight);
 }
 
 .oc-section__title {
@@ -81,7 +81,7 @@
   padding: var(--ui-pill-padding-y) var(--ui-pill-padding-x);
   border-radius: var(--oc-radius-pill);
   color: var(--text-soft);
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-caption);
   font-weight: var(--ui-font-weight-strong);
   letter-spacing: var(--ui-letter-spacing-loose);
   white-space: nowrap;

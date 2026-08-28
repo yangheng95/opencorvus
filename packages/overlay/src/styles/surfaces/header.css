@@ -35,8 +35,6 @@
   --oc-header-height: var(--ui-panel-header-height);
   --oc-header-padding-x: var(--ui-chat-header-padding-x);
   --oc-header-gap: calc(10px * var(--ui-scale));
-  --oc-header-title-font: var(--ui-font-weight-strong) var(--ui-font-title) var(--font);
-
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   background: var(--chat-canvas);
@@ -103,9 +101,16 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font: var(--oc-header-title-font);
-  line-height: var(--oc-header-title-line-height);
+  font-family: var(--font);
+  font-size: var(--ui-font-emphasis);
+  font-weight: var(--ui-font-weight-medium);
+  line-height: var(--ui-line-height-tight);
   letter-spacing: var(--ui-letter-spacing-normal);
   text-transform: var(--oc-header-title-transform);
   color: var(--text-strong);
+}
+
+.chat-header .oc-surface-header__title {
+  font-size: var(--ui-font-body);
+  font-weight: var(--ui-font-weight-strong);
 }

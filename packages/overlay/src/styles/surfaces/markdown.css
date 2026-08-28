@@ -22,7 +22,7 @@
 .md-content table {
   border-collapse: collapse;
   margin: var(--ui-gap-sm) 0;
-  font-size: var(--ui-font-control);
+  font-size: var(--ui-font-body);
   border: var(--oc-border-width) solid var(--border);
   border-radius: var(--oc-radius-soft);
   overflow: hidden;
@@ -79,7 +79,7 @@
   height: var(--oc-border-width);
   /* A thematic break inside prose is a pause, not a wall: soft divider
    * tone plus extra leading, instead of the strong chrome border. */
-  margin: calc(16px * var(--ui-scale)) 0;
+  margin: var(--ui-gap-xl) 0;
   background: var(--divider-soft);
 }
 
@@ -102,23 +102,23 @@
 }
 .msg-text h1,
 .md-content h1 {
-  font-size: var(--ui-font-display);
+  font-size: var(--ui-font-emphasis);
   letter-spacing: var(--ui-letter-spacing-tighter);
 }
 .msg-text h2,
 .md-content h2 {
-  font-size: var(--ui-font-heading);
+  font-size: var(--ui-font-emphasis);
   letter-spacing: var(--ui-letter-spacing-tight);
 }
 .msg-text h3,
 .md-content h3 {
-  font-size: var(--ui-font-title);
+  font-size: var(--ui-font-body);
 }
 
 .msg-text p,
 .md-content p {
   margin: var(--ui-gap-sm) 0;
-  line-height: var(--ui-line-height-relaxed);
+  line-height: var(--ui-line-height-reading);
 }
 
 .md-active-text {
@@ -132,7 +132,7 @@
 .md-content ol {
   margin: var(--ui-gap-sm) 0;
   padding-left: var(--ui-gap-2xl);
-  line-height: var(--ui-line-height-relaxed);
+  line-height: var(--ui-line-height-reading);
 }
 .msg-text li,
 .md-content li {
@@ -254,7 +254,7 @@
   pointer-events: auto;
 }
 .md-code-lang {
-  font-size: var(--ui-font-control);
+  font-size: var(--ui-font-body);
   font-variant-numeric: tabular-nums;
   letter-spacing: var(--ui-letter-spacing-loose);
   text-transform: uppercase;
@@ -304,7 +304,7 @@
   width: 100%;
   border-collapse: collapse;
   margin: var(--ui-gap-md) 0;
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-caption);
 }
 .md-content th,
 .md-content td,

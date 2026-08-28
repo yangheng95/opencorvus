@@ -11,7 +11,7 @@
   background: var(--surface-elevated);
   color: var(--text-strong);
   font-family: var(--font);
-  font-size: var(--ui-font-tiny);
+  font-size: var(--ui-font-caption);
   line-height: var(--ui-line-height-tight);
   white-space: normal;
   overflow-wrap: anywhere;
@@ -28,7 +28,7 @@
 
 .oc-tooltip-explainer__heading {
   color: var(--text-strong);
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-strong);
   line-height: var(--ui-line-height-tight);
 }

@@ -184,7 +184,7 @@
 .screenshot-browser-group__header small {
   flex: 0 0 auto;
   color: var(--text-muted);
-  font-size: var(--ui-font-meta);
+  font-size: var(--ui-font-caption);
   font-weight: var(--ui-font-weight-body);
   font-variant-numeric: tabular-nums;
 }
@@ -236,8 +236,8 @@
   cursor: default;
   color: var(--bad);
   background: color-mix(in srgb, var(--bad-dim) 72%, var(--surface-inset));
-  font-size: var(--ui-font-tiny);
-  line-height: var(--ui-line-height-snug);
+  font-size: var(--ui-font-caption);
+  line-height: var(--ui-line-height-tight);
   text-align: center;
 }
 
@@ -265,13 +265,17 @@
   flex-direction: column;
   gap: var(--ui-gap-3xs);
   padding: var(--ui-gap-sm);
-  font-size: var(--ui-font-meta);
+  font-size: var(--ui-font-body);
   line-height: var(--ui-line-height-tight);
 }
 
 .screenshot-browser-card__body strong {
   color: var(--text-strong);
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-body);
+}
+
+.screenshot-browser-card__body time {
+  font-size: var(--ui-font-caption);
 }
 
 .screenshot-browser-card__body span,

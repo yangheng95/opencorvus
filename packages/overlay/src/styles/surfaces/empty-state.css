@@ -12,7 +12,7 @@
 
 .empty-hint {
   display: block;
-  font-size: var(--ui-font-control);
+  font-size: var(--ui-font-body);
   color: var(--text-muted);
   line-height: var(--ui-line-height-tight);
   padding: var(--ui-gap-3xs) 0;

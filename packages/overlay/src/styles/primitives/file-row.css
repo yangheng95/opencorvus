@@ -81,13 +81,13 @@
 .oc-file-row__name {
   min-width: 0;
   color: currentColor;
-  font-size: var(--ui-font-control);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-body);
 }
 
 :is(.oc-file-row__detail, .oc-file-row__prefix) {
   color: var(--text-soft);
-  font-size: var(--ui-font-meta);
+  font-size: var(--ui-font-caption);
 }
 
 .oc-file-row__trailing {
@@ -97,5 +97,5 @@
   justify-content: flex-end;
   gap: var(--ui-gap-sm);
   color: var(--text-muted);
-  font-size: var(--ui-font-meta);
+  font-size: var(--ui-font-caption);
 }

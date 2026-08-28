@@ -27,7 +27,7 @@
   letter-spacing: var(--ui-letter-spacing-loose);
   font-weight: var(--ui-font-weight-strong);
   flex-shrink: 0;
-  font-size: var(--ui-font-tiny);
+  font-size: var(--ui-font-caption);
   text-transform: uppercase;
   color: var(--warn);
 }

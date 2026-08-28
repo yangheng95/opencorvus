@@ -17,7 +17,7 @@
 
 .oc-text-field__label {
   color: var(--text-soft);
-  font-size: var(--ui-font-control);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-strong);
 }
 
@@ -38,7 +38,7 @@
   color: var(--text-strong);
   box-shadow: none;
   font: inherit;
-  font-size: var(--ui-font-control);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-body);
   line-height: var(--ui-line-height-tight);
   transition:
@@ -63,8 +63,8 @@
   border-color: transparent;
   background: transparent;
   padding: var(--ui-gap-sm) var(--ui-gap-sm) var(--ui-gap-xs);
-  font-size: var(--chat-composer-font-size);
-  line-height: var(--chat-textarea-line-height);
+  font-size: var(--ui-font-body);
+  line-height: var(--ui-line-height-tight);
 }
 
 .oc-text-field__textarea[data-surface="composer"]:focus-visible {
@@ -132,7 +132,7 @@
 .oc-text-field__description,
 .oc-text-field__error {
   color: var(--text-muted);
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-body);
 }
 
 .oc-text-field__error {

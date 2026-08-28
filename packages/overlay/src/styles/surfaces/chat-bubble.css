@@ -173,7 +173,7 @@
   color: var(--text);
   font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-body);
-  line-height: var(--ui-line-height-relaxed);
+  line-height: var(--ui-line-height-reading);
   overflow-wrap: anywhere;
   text-align: left;
   white-space: pre-wrap;
@@ -233,9 +233,9 @@
   flex: 0 1 auto;
   overflow: hidden;
   color: var(--text-soft);
-  font-size: var(--ui-font-control);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-medium);
-  line-height: var(--ui-line-height-snug);
+  line-height: var(--ui-line-height-tight);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -246,10 +246,10 @@
   overflow: hidden;
   overflow-wrap: normal;
   color: var(--text-strong);
-  font-size: var(--ui-font-title);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-strong);
   letter-spacing: var(--ui-letter-spacing-loose);
-  line-height: var(--ui-line-height-snug);
+  line-height: var(--ui-line-height-tight);
   text-overflow: ellipsis;
   text-transform: uppercase;
   white-space: nowrap;
@@ -350,7 +350,7 @@
   min-width: 0;
   height: calc(24px * var(--ui-scale));
   border-radius: var(--oc-radius-soft);
-  font-size: var(--ui-font-compact-row);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-medium);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
@@ -368,10 +368,10 @@
 .conversation-turn-control__time {
   padding-inline: var(--ui-gap-sm);
   color: var(--text-muted);
-  font-size: var(--ui-font-compact-row);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-body);
   font-variant-numeric: tabular-nums;
-  line-height: var(--ui-line-height-snug);
+  line-height: var(--ui-line-height-tight);
   white-space: nowrap;
 }
 
@@ -390,13 +390,13 @@
 
 .conversation-turn-usage-popover__heading strong {
   color: var(--text-strong);
-  font-size: var(--ui-font-title);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-strong);
 }
 
 .conversation-turn-usage-popover__heading span {
   color: var(--text-soft);
-  font-size: var(--ui-font-control);
+  font-size: var(--ui-font-body);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
@@ -437,7 +437,7 @@
 .conversation-turn-usage-popover__rows dd {
   min-width: 0;
   margin: 0;
-  font-size: var(--ui-font-control);
+  font-size: var(--ui-font-body);
 }
 
 .conversation-turn-usage-popover__rows dt {
@@ -455,7 +455,7 @@
   min-width: 0;
   width: 100%;
   color: var(--text);
-  line-height: var(--ui-line-height-relaxed);
+  line-height: var(--ui-line-height-reading);
 }
 
 .chat-bubble__body-inner {
@@ -547,12 +547,12 @@
 .chat-bubble-row[data-kind="agent"] .msg-text,
 .chat-bubble-row[data-role="user"] .msg-text {
   font-size: var(--ui-font-body);
-  line-height: var(--ui-line-height-relaxed);
+  line-height: var(--ui-line-height-reading);
 }
 
 .chat-bubble-row[data-kind="agent"] .msg-text :is(p, ul, ol),
 .chat-bubble-row[data-role="user"] .msg-text :is(p, ul, ol) {
-  line-height: var(--ui-line-height-relaxed);
+  line-height: var(--ui-line-height-reading);
 }
 
 .chat-bubble .card-message-run + .card-message-run {
@@ -609,8 +609,7 @@
 }
 
 .chat-bubble__child[data-kind="agent"] {
-  padding: var(--ui-gap-lg) var(--ui-gap-lg) var(--ui-gap-lg)
-    var(--ui-gap-xl);
+  padding: var(--ui-gap-lg) var(--ui-gap-lg) var(--ui-gap-lg) var(--ui-gap-xl);
   border-radius: var(--oc-radius-soft);
   background: color-mix(in srgb, var(--surface-inset) 72%, var(--surface));
 }

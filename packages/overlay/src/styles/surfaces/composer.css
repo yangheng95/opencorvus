@@ -3,8 +3,6 @@
 .chat-composer-stack {
   --chat-composer-min-height: calc(112px * var(--ui-scale));
   --chat-textarea-height: calc(56px * var(--ui-scale));
-  --chat-composer-font-size: var(--ui-font-control);
-  --chat-textarea-line-height: 1.34;
   --chat-composer-action-size: var(--oc-density-icon-button);
   --chat-compose-scale: 1;
 
@@ -42,7 +40,7 @@
   border: 0;
   border-radius: var(--oc-radius-soft);
   padding: var(--ui-gap-xs) var(--ui-gap-md);
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-caption);
   color: var(--text-soft);
   max-width: calc(220px * var(--ui-scale));
   overflow: hidden;
@@ -86,7 +84,7 @@
   height: calc(28px * var(--ui-scale));
   background: color-mix(in srgb, var(--surface-strong) 84%, transparent);
   border-radius: var(--oc-radius-soft);
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-caption);
   font-weight: var(--ui-font-weight-strong);
   color: var(--text-muted);
   flex-shrink: 0;
@@ -202,9 +200,9 @@
   border: var(--oc-border-width) solid transparent;
   color: var(--text-strong);
   font: inherit;
-  font-size: var(--chat-composer-font-size);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-body);
-  line-height: var(--chat-textarea-line-height);
+  line-height: var(--ui-line-height-tight);
   overflow-wrap: break-word;
   pointer-events: none;
   white-space: pre-wrap;
@@ -256,7 +254,7 @@
   min-width: 0;
   overflow: hidden;
   color: var(--text-muted);
-  font-size: var(--ui-font-tiny);
+  font-size: var(--ui-font-caption);
   font-weight: var(--ui-font-weight-body);
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -287,7 +285,7 @@
   border-top: var(--oc-border-width) solid var(--divider-soft);
   background: var(--menu-panel-bg);
   color: var(--text-muted);
-  font-size: var(--ui-font-tiny);
+  font-size: var(--ui-font-caption);
   font-weight: var(--ui-font-weight-medium);
   letter-spacing: var(--ui-letter-spacing-loose);
 }
@@ -346,13 +344,18 @@
 
 .composer-mention-option-label {
   color: inherit;
-  font-size: var(--ui-font-control);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-strong);
 }
 
-:is(.composer-mention-option-description, .composer-mention-option-kind) {
+.composer-mention-option-description {
   color: var(--text-muted);
-  font-size: var(--ui-font-tiny);
+  font-size: var(--ui-font-body);
+}
+
+.composer-mention-option-kind {
+  color: var(--text-muted);
+  font-size: var(--ui-font-caption);
 }
 
 .composer-mention-option-kind {
@@ -371,7 +374,7 @@
 .composer-mention-empty {
   padding: var(--ui-gap-2xl) var(--ui-gap-lg);
   color: var(--text-muted);
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-body);
   text-align: center;
 }
 
@@ -384,8 +387,8 @@
   inset: 0;
   padding: calc(5px * var(--ui-scale) * var(--chat-compose-scale))
     calc(8px * var(--ui-scale) * var(--chat-compose-scale));
-  font-size: var(--chat-composer-font-size);
-  line-height: var(--chat-textarea-line-height);
+  font-size: var(--ui-font-body);
+  line-height: var(--ui-line-height-tight);
   color: var(--text-muted);
   pointer-events: none;
   overflow: hidden;
@@ -484,7 +487,7 @@
   min-width: 0;
   padding: var(--ui-gap-xs) var(--ui-gap-sm);
   color: var(--warn);
-  font-size: var(--ui-font-meta);
+  font-size: var(--ui-font-caption);
   line-height: var(--ui-line-height-tight);
 }
 
@@ -557,8 +560,8 @@
   min-width: 0;
   overflow: hidden;
   color: var(--text-muted);
-  font-size: var(--ui-font-meta);
-  line-height: var(--ui-line-height-snug);
+  font-size: var(--ui-font-caption);
+  line-height: var(--ui-line-height-tight);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -609,7 +612,7 @@
 .composer-runtime-menu-value {
   min-width: calc(20px * var(--ui-scale));
   color: var(--text-strong);
-  font-size: var(--chat-composer-font-size);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-strong);
   font-variant-numeric: tabular-nums;
   text-align: right;
@@ -632,7 +635,7 @@
   justify-content: space-between;
   gap: var(--ui-gap-lg);
   color: var(--text-strong);
-  font-size: var(--chat-composer-font-size);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-medium);
 }
 
@@ -643,7 +646,7 @@
 .composer-parallelism-slider p {
   margin: 0;
   color: var(--text-muted);
-  font-size: var(--ui-font-meta);
+  font-size: var(--ui-font-body);
   line-height: var(--ui-line-height-tight);
 }
 
@@ -665,7 +668,7 @@
   gap: var(--ui-gap-sm);
   min-width: 0;
   color: var(--text-strong);
-  font-size: var(--chat-composer-font-size);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-medium);
   line-height: var(--ui-line-height-flat);
 }
@@ -703,7 +706,7 @@
   padding-inline: var(--ui-gap-md);
   border: var(--oc-border-width) solid color-mix(in srgb, var(--border) 48%, transparent);
   background: transparent;
-  font-size: var(--chat-composer-font-size);
+  font-size: var(--ui-font-body);
   overflow: hidden;
 }
 
@@ -762,7 +765,7 @@
 .composer-reference-trigger-label {
   min-width: 0;
   overflow: hidden;
-  font-size: var(--chat-composer-font-size);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-medium);
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -778,7 +781,7 @@
   border-radius: var(--oc-radius-pill);
   background: color-mix(in srgb, var(--accent) 14%, var(--surface-inset));
   color: var(--accent);
-  font-size: var(--ui-font-tiny);
+  font-size: var(--ui-font-caption);
   font-variant-numeric: tabular-nums;
   line-height: var(--ui-line-height-flat);
 }
@@ -799,7 +802,7 @@
 
 .composer-reference-popover-heading > :last-child {
   color: var(--text-muted);
-  font-size: var(--ui-font-tiny);
+  font-size: var(--ui-font-caption);
   line-height: var(--ui-line-height-tight);
 }
 
@@ -825,7 +828,7 @@
   display: block;
   padding: var(--ui-gap-3xs) var(--ui-gap-md) var(--ui-gap-sm);
   color: var(--text-muted);
-  font-size: var(--ui-font-tiny);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-strong);
   letter-spacing: 0.02em;
   text-transform: uppercase;
@@ -943,7 +946,7 @@
   flex: 0 0 auto;
   overflow: hidden;
   color: var(--text-strong);
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-medium);
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -952,10 +955,14 @@
 :is(.composer-reference-option-meta, .composer-reference-option-description) {
   overflow: hidden;
   color: var(--text-muted);
-  font-size: var(--ui-font-tiny);
+  font-size: var(--ui-font-caption);
   line-height: var(--ui-line-height-tight);
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.composer-reference-option-description {
+  font-size: var(--ui-font-body);
 }
 
 .composer-reference-option-meta {
@@ -966,7 +973,7 @@
 .composer-reference-empty {
   padding: var(--ui-gap-2xl) var(--ui-gap-lg);
   color: var(--text-muted);
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-body);
   text-align: center;
 }
 
@@ -984,13 +991,13 @@
   gap: var(--ui-gap-sm);
   padding: var(--ui-gap-xs) var(--ui-gap-lg);
   color: var(--text-muted);
-  font-size: var(--ui-font-meta);
+  font-size: var(--ui-font-caption);
 }
 
 .composer-reference-market-error {
   padding: var(--ui-gap-xs) var(--ui-gap-lg);
   color: var(--bad);
-  font-size: var(--ui-font-meta);
+  font-size: var(--ui-font-body);
   overflow-wrap: anywhere;
 }
 
@@ -1069,7 +1076,7 @@
   min-width: 0;
   overflow: hidden;
   color: var(--text-strong);
-  font-size: var(--chat-composer-font-size);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-medium);
   line-height: var(--ui-line-height-flat);
   text-overflow: ellipsis;
@@ -1099,14 +1106,14 @@
 .composer-model-usage-label,
 .composer-model-usage-message {
   color: var(--text-muted);
-  font-size: var(--ui-font-control);
+  font-size: var(--ui-font-body);
   line-height: var(--ui-line-height-tight);
 }
 
 .composer-model-usage-value {
   justify-self: end;
   color: var(--text-strong);
-  font-size: var(--ui-font-control);
+  font-size: var(--ui-font-body);
   font-variant-numeric: tabular-nums;
   font-weight: var(--ui-font-weight-strong);
   line-height: var(--ui-line-height-tight);
@@ -1153,15 +1160,15 @@ div:has(> .composer-model-selector-popover) {
 
 .composer-model-configure-provider-copy > :first-child {
   animation: composer-discovery-color-pulse var(--ui-duration-loop-pulse) var(--ui-timing-standard) infinite;
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-medium);
 }
 
 .composer-model-configure-provider-copy small {
   overflow: hidden;
   color: var(--text-muted);
-  font-size: var(--ui-font-tiny);
-  line-height: var(--ui-line-height-snug);
+  font-size: var(--ui-font-body);
+  line-height: var(--ui-line-height-tight);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -1247,7 +1254,7 @@ div:has(> .composer-model-selector-popover) {
 .model-selector-popover-empty {
   padding: var(--ui-gap-lg);
   color: var(--text-muted);
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-body);
   line-height: var(--ui-line-height-tight);
 }
 
@@ -1280,7 +1287,7 @@ div:has(> .composer-model-selector-popover) {
   gap: var(--ui-gap-md);
   padding: var(--ui-gap-3xs) var(--ui-gap-xs) var(--ui-gap-sm);
   color: var(--text-muted);
-  font-size: var(--ui-font-tiny);
+  font-size: var(--ui-font-caption);
   font-weight: var(--ui-font-weight-strong);
 }
 
@@ -1293,7 +1300,7 @@ div:has(> .composer-model-selector-popover) {
   border-radius: var(--oc-radius-soft);
   background: color-mix(in srgb, var(--accent) 14%, var(--surface-inset));
   color: var(--accent);
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-caption);
 }
 
 .model-selector-popover-group-copy {
@@ -1311,7 +1318,7 @@ div:has(> .composer-model-selector-popover) {
 
 :is(.model-selector-popover-group-id, .model-selector-popover-group-count) {
   color: var(--text-muted);
-  font-size: var(--ui-font-tiny);
+  font-size: var(--ui-font-caption);
   font-weight: var(--ui-font-weight-medium);
 }
 
@@ -1342,7 +1349,7 @@ div:has(> .composer-model-selector-popover) {
   min-height: calc(34px * var(--ui-scale));
   padding-block: var(--ui-gap-xs);
   justify-content: flex-start;
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-body);
 }
 
 .composer-picker-option-icon {
@@ -1375,7 +1382,7 @@ div:has(> .composer-model-selector-popover) {
   min-width: 0;
   overflow: hidden;
   color: var(--text-muted);
-  font-size: var(--ui-font-tiny);
+  font-size: var(--ui-font-caption);
   text-overflow: ellipsis;
   white-space: nowrap;
 }

@@ -166,7 +166,7 @@
   max-width: 100%;
   margin: 0;
   text-align: center;
-  font-size: var(--ui-font-display);
+  font-size: var(--ui-font-emphasis);
   line-height: var(--ui-line-height-tight);
   font-weight: var(--ui-font-weight-body);
   letter-spacing: var(--ui-letter-spacing-tighter);
@@ -266,9 +266,9 @@
 
 .chat-home-notice-copy strong {
   color: var(--text-strong);
-  font-size: var(--ui-font-title);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-strong);
-  line-height: var(--ui-line-height-snug);
+  line-height: var(--ui-line-height-tight);
   white-space: nowrap;
 }
 
@@ -407,8 +407,8 @@
   margin: var(--ui-gap-xl) 0;
   padding-inline: var(--ui-gap-xl);
   color: var(--text-muted);
-  font-size: var(--ui-font-title);
-  line-height: var(--ui-line-height-relaxed);
+  font-size: var(--ui-font-body);
+  line-height: var(--ui-line-height-reading);
 }
 
 .conversation-thinking__text {
@@ -474,9 +474,8 @@
   --oc-button-bg: color-mix(in srgb, var(--text-strong) 14%, transparent);
   --oc-button-border: var(--oc-border-width) solid color-mix(in srgb, var(--text-strong) 18%, transparent);
   --oc-button-color: var(--text-strong);
-  --oc-button-shadow:
-    0 calc(8px * var(--ui-scale)) calc(18px * var(--ui-scale))
-      color-mix(in srgb, var(--ui-shadow-tone) 24%, transparent);
+  --oc-button-shadow: 0 calc(8px * var(--ui-scale)) calc(18px * var(--ui-scale))
+    color-mix(in srgb, var(--ui-shadow-tone) 24%, transparent);
 
   width: var(--oc-button-height);
   min-width: var(--oc-button-height);
@@ -722,7 +721,7 @@
 
 .conversation-agent-rail-tooltip__section > span {
   color: var(--text-muted);
-  font-size: var(--ui-font-tiny);
+  font-size: var(--ui-font-caption);
 }
 
 .conversation-agent-rail-tooltip__section {
@@ -739,7 +738,7 @@
   overflow: hidden;
   overflow-wrap: anywhere;
   color: var(--text-strong);
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-body);
   line-height: var(--ui-line-height-normal);
   white-space: pre-wrap;
 }
@@ -856,14 +855,14 @@
 .conversation-artifact-summary__eyebrow {
   flex-basis: 100%;
   color: var(--text-muted);
-  font-size: var(--ui-font-tiny);
-  line-height: var(--ui-line-height-snug);
+  font-size: var(--ui-font-caption);
+  line-height: var(--ui-line-height-tight);
 }
 
 .conversation-artifact-summary__identity strong {
   overflow: hidden;
   color: var(--text-strong);
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-body);
   line-height: var(--ui-line-height-tight);
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -871,7 +870,7 @@
 
 .conversation-artifact-summary__file-total {
   color: var(--text-muted);
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-caption);
   line-height: var(--ui-line-height-tight);
 }
 
@@ -904,13 +903,13 @@
   gap: var(--ui-gap-xs);
   padding: var(--ui-gap-lg) var(--ui-gap-lg);
   color: var(--text-muted);
-  font-size: var(--ui-font-tiny);
+  font-size: var(--ui-font-body);
   line-height: var(--ui-line-height-tight);
 }
 
 .conversation-artifact-summary__outcome strong {
   color: var(--text-strong);
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-body);
 }
 
 .conversation-artifact-summary__outcome[data-status="failed"] {
@@ -925,7 +924,7 @@
 .conversation-artifact-summary__empty {
   padding: var(--ui-gap-lg) var(--ui-gap-lg);
   color: var(--text-muted);
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-body);
   line-height: var(--ui-line-height-tight);
 }
 
@@ -938,8 +937,8 @@
 .conversation-artifact-summary__section-label {
   padding: var(--ui-gap-md) var(--ui-gap-lg) var(--ui-gap-xs);
   color: var(--text-muted);
-  font-size: var(--ui-font-tiny);
-  line-height: var(--ui-line-height-snug);
+  font-size: var(--ui-font-caption);
+  line-height: var(--ui-line-height-tight);
 }
 
 .conversation-artifact-summary__artifacts,
@@ -1018,7 +1017,7 @@
   border-radius: var(--oc-radius-large);
   color: var(--text-muted);
   background: var(--surface-inset);
-  font-size: var(--ui-font-tiny);
+  font-size: var(--ui-font-caption);
 }
 
 .conversation-artifact-inspector__status[role="alert"] {
@@ -1044,7 +1043,7 @@
   flex-wrap: wrap;
   gap: var(--ui-gap-sm) var(--ui-gap-md);
   color: var(--text-muted);
-  font-size: var(--ui-font-tiny);
+  font-size: var(--ui-font-caption);
 }
 
 .conversation-artifact-inspector__metadata code {
@@ -1059,7 +1058,7 @@
   justify-content: space-between;
   gap: var(--ui-gap-lg);
   color: var(--text-muted);
-  font-size: var(--ui-font-tiny);
+  font-size: var(--ui-font-caption);
 }
 
 .conversation-artifact-inspector__toolbar .oc-search-field {
@@ -1109,7 +1108,7 @@
 .conversation-artifact-inspector__resource-copy span,
 .conversation-artifact-inspector__resource > span:last-child {
   color: var(--text-muted);
-  font-size: var(--ui-font-tiny);
+  font-size: var(--ui-font-caption);
 }
 
 .conversation-artifact-inspector__binary {
@@ -1119,7 +1118,7 @@
   gap: var(--ui-gap-md);
   padding: var(--ui-gap-lg);
   color: var(--text-muted);
-  font-size: var(--ui-font-tiny);
+  font-size: var(--ui-font-caption);
 }
 
 .conversation-artifact-inspector__binary .oc-button {
@@ -1150,7 +1149,7 @@
 
 .conversation-artifact-summary__artifact-copy strong {
   color: var(--text);
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-strong);
   line-height: var(--ui-line-height-tight);
 }
@@ -1158,8 +1157,8 @@
 .conversation-artifact-summary__artifact-copy span,
 .conversation-artifact-summary__artifact-meta {
   color: var(--text-muted);
-  font-size: var(--ui-font-tiny);
-  line-height: var(--ui-line-height-snug);
+  font-size: var(--ui-font-caption);
+  line-height: var(--ui-line-height-tight);
 }
 
 .conversation-artifact-summary__artifact-meta {
@@ -1175,7 +1174,7 @@
   flex: 1 1 auto;
   overflow: hidden;
   color: var(--text);
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-caption);
   line-height: var(--ui-line-height-tight);
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -1183,7 +1182,7 @@
 
 .conversation-artifact-summary__file-stats {
   flex: 0 0 auto;
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-caption);
 }
 
 .conversation-artifact-summary__errors {
@@ -1192,7 +1191,7 @@
   padding: var(--ui-gap-md) var(--ui-gap-lg);
   border-block-start: var(--oc-border-width) solid var(--divider-soft);
   color: var(--bad);
-  font-size: var(--ui-font-tiny);
+  font-size: var(--ui-font-body);
   line-height: var(--ui-line-height-tight);
 }
 
@@ -1413,7 +1412,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: var(--ui-font-control);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-medium);
   line-height: var(--ui-line-height-tight);
 }
@@ -1453,14 +1452,14 @@
 }
 
 .chat-task-status .status-label {
-  font-size: var(--ui-font-meta);
+  font-size: var(--ui-font-caption);
   text-transform: none;
   letter-spacing: var(--ui-letter-spacing-loose);
   line-height: var(--ui-line-height-flat);
 }
 
 .chat-task-status .elapsed {
-  font-size: var(--ui-font-meta);
+  font-size: var(--ui-font-caption);
   line-height: var(--ui-line-height-flat);
 }
 
@@ -1519,13 +1518,13 @@
 
 .chat-empty-kicker {
   color: var(--text-muted);
-  font-size: var(--ui-font-meta);
-  line-height: var(--ui-line-height-snug);
+  font-size: var(--ui-font-caption);
+  line-height: var(--ui-line-height-tight);
 }
 
 .chat-empty-title {
   color: var(--text-strong);
-  font-size: var(--ui-font-heading);
+  font-size: var(--ui-font-emphasis);
   font-weight: var(--ui-font-weight-strong);
   line-height: var(--ui-line-height-tight);
   overflow: hidden;
@@ -1539,7 +1538,7 @@
   gap: var(--ui-gap-md);
   min-width: 0;
   color: var(--text-muted);
-  font-size: var(--ui-font-meta);
+  font-size: var(--ui-font-caption);
 }
 
 .chat-empty-status {
@@ -1577,7 +1576,7 @@
 .chat-empty-error-details {
   margin: 0;
   color: var(--text-muted);
-  font-size: var(--ui-font-meta);
+  font-size: var(--ui-font-caption);
   line-height: var(--ui-line-height-normal);
   overflow-wrap: anywhere;
 }
@@ -1610,7 +1609,7 @@
   gap: var(--ui-gap-sm);
   width: 100%;
   min-width: 0;
-  font-size: var(--ui-font-meta);
+  font-size: var(--ui-font-caption);
 }
 
 .task-cwd {
@@ -1732,7 +1731,6 @@
     var(--project-runtime-text-axis) - var(--project-runtime-info-inline-inset) -
       var(--project-runtime-leading-icon-column)
   );
-  --project-runtime-menu-type-size: var(--ui-font-compact-row);
   --project-runtime-icon-size: calc(16px * var(--ui-scale));
   --project-runtime-trailing-control-size: calc(22px * var(--ui-scale));
   --project-runtime-divider-color: color-mix(in srgb, var(--border) 70%, transparent);
@@ -1762,13 +1760,13 @@
     .project-runtime-source-head,
     .project-runtime-source-row
   ) {
-  font-size: var(--project-runtime-menu-type-size);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-body);
   line-height: var(--ui-line-height-tight);
 }
 
 .project-runtime-panel-head .project-runtime-panel-title {
-  font-size: var(--project-runtime-menu-type-size);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-body);
   line-height: var(--ui-line-height-tight);
 }
@@ -1890,7 +1888,7 @@
   flex: 0 1 auto;
   margin-inline-start: 0;
   color: var(--text-muted);
-  font-size: var(--project-runtime-menu-type-size);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-body);
 }
 
@@ -1984,7 +1982,7 @@
 .project-runtime-category-summary {
   margin-left: auto;
   color: var(--text-soft);
-  font-size: var(--project-runtime-menu-type-size);
+  font-size: var(--ui-font-body);
   font-variant-numeric: tabular-nums;
   text-align: right;
 }
@@ -1992,7 +1990,7 @@
 .task-progress.project-runtime-goals-category .oc-button.task-progress__heading {
   --oc-button-height: var(--project-runtime-category-row-height);
 
-  font-size: var(--project-runtime-menu-type-size);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-body);
 }
 
@@ -2111,7 +2109,7 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   color: var(--text-strong);
-  font-size: var(--project-runtime-menu-type-size);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-body);
   line-height: var(--ui-line-height-tight);
 }
@@ -2166,7 +2164,7 @@
   border-radius: var(--oc-radius-large);
   color: var(--bad);
   background: color-mix(in srgb, var(--bad) 9%, transparent);
-  font-size: var(--project-runtime-menu-type-size);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-body);
   line-height: var(--ui-line-height-tight);
 }
@@ -2226,7 +2224,7 @@
 
 .project-runtime-tool-shortcut-summary {
   color: var(--text-muted);
-  font-size: calc(11px * var(--ui-scale));
+  font-size: var(--ui-font-body);
   font-variant-numeric: tabular-nums;
   margin-left: auto;
   text-align: right;
@@ -2307,7 +2305,7 @@
   min-height: calc(24px * var(--ui-scale));
   padding: 0 var(--ui-gap-sm);
   color: var(--text-strong);
-  font-size: var(--ui-font-control);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-medium);
   white-space: nowrap;
   transition:
@@ -2338,7 +2336,7 @@
   min-width: calc(18px * var(--ui-scale));
   height: calc(24px * var(--ui-scale));
   color: var(--text-muted);
-  font-size: var(--ui-font-meta);
+  font-size: var(--ui-font-caption);
   transition:
     background var(--ui-duration-fast),
     color var(--ui-duration-fast);
@@ -2417,7 +2415,7 @@
 }
 
 .status-label {
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-caption);
   font-weight: var(--ui-font-weight-strong);
   color: var(--text-strong);
   text-transform: uppercase;
@@ -2425,7 +2423,7 @@
 }
 
 .elapsed {
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-caption);
   color: var(--text-soft);
   font-variant-numeric: tabular-nums;
 }
@@ -2754,7 +2752,7 @@
   gap: var(--project-runtime-info-leading-gap);
   padding: 0 var(--project-runtime-info-inline-inset);
   color: var(--text-strong);
-  font-size: var(--project-runtime-menu-type-size);
+  font-size: var(--ui-font-body);
 }
 
 .project-runtime-info-action.oc-button {
@@ -2918,7 +2916,7 @@
 
 .dialog-form.project-runtime-git-dialog-form .dialog-title {
   min-width: 0;
-  font-size: calc(15px * var(--ui-scale));
+  font-size: var(--ui-font-emphasis);
   font-weight: var(--ui-font-weight-body);
   color: var(--text-muted);
 }
@@ -3004,7 +3002,7 @@
 .project-runtime-git-empty,
 .project-runtime-git-notice {
   color: var(--text-muted);
-  font-size: var(--ui-font-control);
+  font-size: var(--ui-font-body);
   line-height: var(--ui-line-height-normal);
   padding: var(--ui-gap-md) var(--ui-gap-lg);
 }
@@ -3038,7 +3036,7 @@
   align-items: center;
   gap: var(--project-runtime-leading-gap);
   color: var(--text-muted);
-  font-size: var(--project-runtime-menu-type-size);
+  font-size: var(--ui-font-body);
 }
 
 .project-runtime-source-row > span {
@@ -3212,7 +3210,7 @@
   align-items: center;
   gap: var(--ui-gap-sm);
   color: var(--text-muted);
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-caption);
 }
 
 .subagent-progress-event > svg {
@@ -3250,7 +3248,7 @@
 .subagent-progress-card__waiting {
   margin: auto 0;
   color: var(--text-muted);
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-caption);
 }
 
 .subagent-progress-card__activation.oc-button {
@@ -3280,7 +3278,7 @@
   min-width: 0;
   display: grid;
   gap: var(--ui-gap-sm);
-  font-size: var(--ui-font-tiny);
+  font-size: var(--ui-font-caption);
 }
 
 .todo-progress--subagent .todo-progress__summary {
@@ -3288,7 +3286,7 @@
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
   gap: var(--ui-gap-md);
-  line-height: var(--ui-line-height-snug);
+  line-height: var(--ui-line-height-tight);
 }
 
 .todo-progress--subagent .todo-progress__count {
@@ -3296,7 +3294,7 @@
   grid-row: 1;
   justify-self: end;
   color: var(--text-muted);
-  font-size: var(--ui-font-tiny);
+  font-size: var(--ui-font-caption);
   font-weight: var(--ui-font-weight-strong);
 }
 
@@ -3305,7 +3303,7 @@
   grid-row: 1;
   display: block;
   color: var(--text-soft);
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-caption);
   font-weight: var(--ui-font-weight-medium);
 }
 
@@ -3351,14 +3349,14 @@
 
 .computer-control-surface__identity span {
   color: var(--text-muted);
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-caption);
 }
 
 .computer-control-surface__identity strong {
   overflow: hidden;
   color: var(--text);
   font-family: var(--mono);
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-caption);
   font-weight: var(--ui-font-weight-medium);
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -3369,7 +3367,7 @@
   align-items: center;
   gap: var(--ui-gap-md);
   color: var(--text-soft);
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-caption);
 }
 
 .computer-control-surface__status-dot {
@@ -3395,7 +3393,7 @@
 .computer-control-surface__notice {
   padding: var(--ui-gap-md);
   border-radius: var(--oc-radius-soft);
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-body);
   line-height: var(--ui-line-height-normal);
 }
 

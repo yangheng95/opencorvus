@@ -1,10 +1,9 @@
 /* Flat-redesign 2026-05-04: button typography is the single-source for
  * every button family in the overlay. Font-size routes through
- * `--ui-font-control` — the value the retired legacy class family used;
- * oc-button previously inherited `--oc-header-title-font` which carries
- * a different scale, producing the "按钮字体大小不一样" the user flagged.
- * Primitive now owns the
- * typography contract; other button surfaces inherit from it.
+ * `--ui-font-body` — the value the retired legacy class family used;
+ * oc-button previously inherited a header-specific composite scale,
+ * producing the "按钮字体大小不一样" the user flagged. Primitive now owns
+ * the typography contract; other button surfaces inherit from it.
  *
  * Resting border is transparent so neighbouring chrome doesn't fight
  * with the button. Hover/focus changes background only — the hover
@@ -34,7 +33,7 @@
   color: var(--oc-button-color);
   box-shadow: var(--oc-button-shadow);
   font-family: var(--font);
-  font-size: var(--ui-font-control);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-medium);
   line-height: var(--ui-line-height-flat);
   letter-spacing: var(--ui-letter-spacing-normal);
@@ -52,7 +51,7 @@
   --oc-button-height: var(--oc-density-chip-height);
   --oc-button-padding-x: var(--ui-btn-mini-padding-x);
   --oc-button-padding-y: var(--ui-btn-mini-padding-y);
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-caption);
 }
 
 .oc-button[data-size="sm"] {
@@ -359,6 +358,6 @@
   justify-content: flex-start;
   margin-top: var(--ui-gap-xs);
   color: var(--text-muted);
-  font-size: var(--ui-font-control);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-body);
 }

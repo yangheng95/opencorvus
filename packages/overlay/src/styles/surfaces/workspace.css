@@ -35,7 +35,7 @@
 
 /* File-scope context label inside the diff preview header. */
 .diff-preview-scope {
-  font-size: var(--ui-font-control);
+  font-size: var(--ui-font-body);
   color: var(--text-soft);
 }
 
@@ -45,7 +45,7 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   font-family: var(--mono);
-  font-size: var(--ui-font-code);
+  font-size: var(--ui-font-body);
   color: var(--text-strong);
 }
 
@@ -58,7 +58,7 @@
 
 .diff-preview-body {
   /* flex:1 and overflow:auto removed — oc-panel__body handles those */
-  padding: calc(6px * var(--ui-scale));
+  padding: var(--ui-gap-sm);
 }
 
 .diff-preview-empty {
@@ -264,7 +264,7 @@ code .file-link:focus-visible {
   align-items: center;
   gap: var(--ui-gap-xs);
   font-family: var(--mono);
-  font-size: calc(12px * var(--ui-scale));
+  font-size: var(--ui-font-body);
   color: var(--text-strong);
 }
 
@@ -284,7 +284,7 @@ code .file-link:focus-visible {
   --oc-button-height: calc(24px * var(--ui-scale));
   --oc-button-padding-x: calc(8px * var(--ui-scale));
 
-  font-size: var(--ui-font-control);
+  font-size: var(--ui-font-body);
 }
 
 .file-editor-header .oc-button[data-ui="file-editor-save"]:not([data-dirty="true"]) {
@@ -381,7 +381,7 @@ code .file-link:focus-visible {
   padding: var(--ui-gap-sm) var(--ui-gap-lg);
   background: var(--bad-dim);
   color: var(--bad);
-  font-size: var(--ui-font-control);
+  font-size: var(--ui-font-body);
 }
 
 .pane-resizer {
@@ -645,7 +645,7 @@ body[data-resizing="true"] .pane-resizer::after {
   padding: 0 calc(var(--right-dock-control-height) + var(--ui-gap-sm)) 0 var(--ui-gap-lg);
   border-radius: var(--right-dock-tab-radius);
   background: transparent;
-  font: var(--ui-font-weight-body) var(--ui-font-small) var(--font);
+  font: var(--ui-font-weight-body) var(--ui-font-body) / var(--ui-line-height-tight) var(--font);
 }
 
 .right-dock-tab.oc-tab[data-selected] {

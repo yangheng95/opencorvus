@@ -28,7 +28,7 @@
   border-radius: var(--oc-radius-pill);
   background: transparent;
   color: var(--text-soft);
-  font: var(--ui-font-weight-medium) var(--ui-font-control) var(--font);
+  font: var(--ui-font-weight-medium) var(--ui-font-body) / var(--ui-line-height-tight) var(--font);
   line-height: var(--ui-line-height-flat);
   white-space: nowrap;
   cursor: pointer;

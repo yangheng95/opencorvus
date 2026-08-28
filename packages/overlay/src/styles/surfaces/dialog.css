@@ -124,11 +124,11 @@
 }
 
 .dialog-title {
-  font-size: clamp(calc(18px * var(--ui-scale)), calc(19px * var(--ui-scale)), calc(22px * var(--ui-scale)));
+  font-size: var(--ui-font-emphasis);
   font-weight: var(--ui-font-weight-strong);
   color: var(--text-strong);
   letter-spacing: var(--ui-letter-spacing-loose);
-  line-height: var(--ui-line-height-snug);
+  line-height: var(--ui-line-height-tight);
   margin: 0;
 }
 
@@ -224,7 +224,7 @@
 }
 
 .app-dialog-form .dialog-title {
-  font-size: var(--ui-font-heading);
+  font-size: var(--ui-font-emphasis);
   line-height: var(--ui-line-height-tight);
   letter-spacing: var(--ui-letter-spacing-tight);
 }
@@ -265,7 +265,7 @@
   word-break: break-word;
   line-height: var(--ui-line-height-normal);
   color: var(--text);
-  font-size: var(--ui-font-control);
+  font-size: var(--ui-font-body);
 }
 
 .app-dialog-input {
@@ -287,6 +287,6 @@
 .app-dialog-link-error {
   margin: var(--ui-gap-3xs) 0 0;
   color: var(--bad);
-  font-size: var(--ui-font-meta);
-  line-height: var(--ui-line-height-snug);
+  font-size: var(--ui-font-body);
+  line-height: var(--ui-line-height-tight);
 }

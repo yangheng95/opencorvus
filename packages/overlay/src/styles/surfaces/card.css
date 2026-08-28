@@ -23,9 +23,6 @@
   --card-pad-x: calc(13px * var(--ui-scale, 1));
   --card-pad-y: calc(10px * var(--ui-scale, 1));
   --card-indent: calc(12px * var(--ui-scale, 1));
-  --card-title-size: var(--ui-font-title);
-  --card-sub-size: var(--ui-font-control);
-  --card-meta-size: var(--ui-font-meta);
 }
 
 /* Card surface + tone aliases — declared on `body` so the var()
@@ -147,7 +144,7 @@ body {
 .card[data-depth="0"] > .card__body {
   padding: calc(var(--card-pad-y) + var(--ui-gap-xs)) calc(var(--card-pad-x) + var(--ui-gap-3xs))
     calc(var(--card-pad-y) + var(--ui-gap-sm));
-  line-height: var(--ui-line-height-relaxed);
+  line-height: var(--ui-line-height-reading);
 }
 
 .card[data-depth="0"] > .card__body > .card__children {
@@ -229,7 +226,7 @@ body {
   padding: var(--card-pad-y) var(--card-pad-x);
   background: transparent;
   border-bottom: var(--oc-border-width) solid transparent;
-  font-size: var(--card-title-size);
+  font-size: var(--ui-font-body);
   color: var(--text-strong);
   user-select: none;
   cursor: default;
@@ -375,14 +372,14 @@ body {
 
 .card-error-reason-tooltip strong {
   color: var(--bad);
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-body);
 }
 
 .card-error-reason-tooltip pre {
   margin: 0;
   color: var(--text-strong);
   font-family: var(--mono);
-  font-size: var(--ui-font-tiny);
+  font-size: var(--ui-font-code);
   line-height: var(--ui-line-height-normal);
   overflow-wrap: anywhere;
   white-space: pre-wrap;
@@ -435,7 +432,7 @@ body {
 }
 
 .card__icon {
-  font-size: calc(var(--card-title-size) + calc(1px * var(--ui-scale)));
+  font-size: var(--ui-font-body);
   opacity: var(--ui-opacity-subtle);
   flex: none;
   line-height: var(--ui-line-height-flat);
@@ -447,7 +444,7 @@ body {
 
 .card__round {
   font-variant-numeric: tabular-nums;
-  font-size: var(--card-meta-size);
+  font-size: var(--ui-font-caption);
   color: var(--text-soft);
   flex: none;
   padding: var(--ui-gap-3xs) var(--ui-gap-sm);
@@ -478,7 +475,7 @@ body {
   flex: 0 1 auto;
   min-width: 0;
   max-width: 50%;
-  font-size: var(--card-sub-size);
+  font-size: var(--ui-font-body);
   color: var(--text-muted);
   white-space: nowrap;
   overflow: hidden;
@@ -499,7 +496,7 @@ body {
   flex: 1 1 auto;
   min-width: 0;
   width: 100%;
-  font-size: var(--card-sub-size);
+  font-size: var(--ui-font-body);
   color: color-mix(in srgb, var(--text-muted) 92%, transparent);
   font-weight: var(--ui-font-weight-body);
   /* Hard cap at 3 lines — pinboard with 10+ cards × 10 lines becomes a
@@ -541,7 +538,7 @@ body {
   border-radius: var(--oc-radius-pill);
   background: color-mix(in srgb, var(--card-stage, var(--accent)) 14%, var(--surface));
   color: color-mix(in srgb, var(--card-stage, var(--accent)) 82%, var(--text));
-  font-size: var(--ui-font-tiny);
+  font-size: var(--ui-font-caption);
   font-weight: var(--ui-font-weight-strong);
   letter-spacing: var(--ui-letter-spacing-normal);
   line-height: var(--ui-line-height-flat);
@@ -551,7 +548,7 @@ body {
 .card__agent-summary-text {
   min-width: 0;
   color: color-mix(in srgb, var(--text) 92%, transparent);
-  font-size: var(--card-sub-size);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-body);
   line-height: var(--ui-line-height-normal);
   display: -webkit-box;
@@ -626,7 +623,7 @@ body {
   align-items: center;
   gap: var(--ui-gap-lg);
   margin-top: var(--ui-gap-xs);
-  font-size: var(--card-sub-size);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-body);
 }
 
@@ -642,7 +639,7 @@ body {
 .todo-progress--card .todo-progress__count {
   grid-column: 2;
   grid-row: 1;
-  font-size: calc(var(--card-sub-size) - calc(1px * var(--ui-scale)));
+  font-size: var(--ui-font-caption);
   opacity: var(--ui-opacity-subtle);
 }
 
@@ -669,7 +666,7 @@ body {
   gap: var(--ui-gap-xs);
   padding: var(--ui-gap-sm) var(--ui-gap-lg);
   border-top: var(--oc-border-width) solid color-mix(in srgb, var(--card-border) 60%, transparent);
-  font-size: calc(var(--card-sub-size) - calc(1px * var(--ui-scale, 1)));
+  font-size: var(--ui-font-caption);
   color: color-mix(in srgb, var(--text-muted) 92%, transparent);
   font-variant-numeric: tabular-nums;
 }
@@ -702,7 +699,7 @@ body {
 }
 
 .card__stat-label {
-  font-size: calc(var(--card-sub-size) - calc(1px * var(--ui-scale)));
+  font-size: var(--ui-font-caption);
   font-weight: var(--ui-font-weight-medium);
   color: color-mix(in srgb, var(--text-soft) 88%, transparent);
   line-height: var(--ui-line-height-flat);
@@ -723,7 +720,7 @@ body {
   width: calc(22px * var(--ui-scale, 1));
   min-width: calc(22px * var(--ui-scale, 1));
   opacity: var(--ui-opacity-disabled);
-  font-size: calc(14px * var(--ui-scale));
+  font-size: var(--ui-font-body);
   transition:
     opacity var(--ui-duration-base) var(--ui-timing-standard),
     --oc-button-color var(--ui-duration-base) var(--ui-timing-standard),
@@ -848,7 +845,7 @@ body {
   max-width: 100%;
   font-family: var(--mono);
   font-weight: var(--ui-font-weight-body);
-  font-size: var(--card-sub-size);
+  font-size: var(--ui-font-body);
   line-height: var(--ui-line-height-normal);
   white-space: nowrap;
   overflow: hidden;
@@ -875,7 +872,7 @@ body {
   overflow-wrap: normal;
   word-break: normal;
   font-family: var(--mono);
-  font-size: var(--card-sub-size);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-body);
   line-height: var(--ui-line-height-normal);
   padding-left: 0;
@@ -904,7 +901,7 @@ body {
   overflow-wrap: normal;
   word-break: normal;
   font-family: var(--mono);
-  font-size: var(--card-sub-size);
+  font-size: var(--ui-font-body);
   line-height: var(--ui-line-height-normal);
 }
 
@@ -914,14 +911,13 @@ body {
   padding: var(--ui-gap-lg) var(--card-pad-x);
   border-top: 0 solid transparent;
   background: transparent;
-  font-size: var(--card-sub-size);
+  font-size: var(--ui-font-body);
   color: var(--text-strong);
   line-height: var(--ui-line-height-normal);
   min-width: 0;
 }
 .card:not([data-depth="0"]) > .card__body {
-  padding: var(--ui-gap-sm) var(--ui-gap-md) var(--ui-gap-md)
-    var(--ui-gap-lg);
+  padding: var(--ui-gap-sm) var(--ui-gap-md) var(--ui-gap-md) var(--ui-gap-lg);
   border-top: none;
 }
 
@@ -952,7 +948,7 @@ body {
   border-radius: 0;
   background: transparent;
   color: var(--text-muted);
-  font-size: var(--ui-font-tiny);
+  font-size: var(--ui-font-caption);
   font-weight: var(--ui-font-weight-medium);
   letter-spacing: var(--ui-letter-spacing-loose);
   text-transform: none;
@@ -961,8 +957,8 @@ body {
 .card__goal-desc-text,
 .card__goal-desc-text .msg-text {
   color: var(--text);
-  font-size: var(--ui-font-small);
-  line-height: var(--ui-line-height-relaxed);
+  font-size: var(--ui-font-body);
+  line-height: var(--ui-line-height-reading);
 }
 
 :is(.card__goal-desc-text .msg-text, .card__goal-desc-text .md-frozen-block, .card__goal-desc-text .md-active-text) {
@@ -1018,7 +1014,7 @@ body {
   grid-template-columns: max-content minmax(0, 1fr);
   align-items: baseline;
   gap: var(--ui-gap-xl);
-  font-size: var(--ui-font-control);
+  font-size: var(--ui-font-body);
 }
 
 .card-metadata-tooltip__row dt,
@@ -1050,7 +1046,7 @@ body {
 
 .card__tool-start-time {
   flex: 0 0 auto;
-  font-size: var(--ui-font-control);
+  font-size: var(--ui-font-body);
   font-variant-numeric: tabular-nums;
   letter-spacing: var(--ui-letter-spacing-loose);
   color: var(--text-muted);
@@ -1069,7 +1065,7 @@ body {
 .card__duration {
   flex: 0 0 auto;
   padding: 0 var(--ui-gap-xs);
-  font-size: var(--ui-font-control);
+  font-size: var(--ui-font-body);
   font-variant-numeric: tabular-nums;
   letter-spacing: var(--ui-letter-spacing-loose);
   color: var(--text-muted);
@@ -1101,7 +1097,7 @@ body {
   border-left: calc(3px * var(--ui-scale, 1)) solid var(--card-stage, var(--card-stage-info));
   padding: var(--ui-gap-lg) var(--card-pad-x);
   margin: var(--card-gap) 0;
-  font-size: var(--card-title-size);
+  font-size: var(--ui-font-body);
   color: var(--text);
   box-sizing: border-box;
   box-shadow: none;
@@ -1121,7 +1117,7 @@ body {
   align-items: center;
   min-inline-size: 0;
   gap: var(--ui-gap-sm);
-  font-size: var(--card-title-size);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-strong);
   color: var(--card-stage);
   margin-bottom: var(--ui-gap-sm);
@@ -1142,7 +1138,7 @@ body {
 }
 
 .interaction-card__body {
-  font-size: var(--card-sub-size);
+  font-size: var(--ui-font-body);
   color: var(--text);
   margin-bottom: var(--ui-gap-md);
   word-break: break-word;
@@ -1152,14 +1148,14 @@ body {
 
 .interaction-card__error {
   min-inline-size: 0;
-  font-size: var(--card-sub-size);
+  font-size: var(--ui-font-body);
   color: var(--bad);
   overflow-wrap: anywhere;
   margin-bottom: var(--ui-gap-sm);
 }
 .interaction-card__status {
   min-inline-size: 0;
-  font-size: var(--card-meta-size);
+  font-size: var(--ui-font-caption);
   color: var(--text-muted);
   overflow-wrap: anywhere;
   margin-bottom: var(--ui-gap-sm);
@@ -1184,7 +1180,7 @@ body {
   display: block;
   min-inline-size: 0;
   padding: 0;
-  font-size: var(--card-sub-size);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-strong);
   color: var(--text);
   overflow-wrap: anywhere;
@@ -1199,7 +1195,7 @@ body {
   align-items: baseline;
   min-inline-size: 0;
   gap: var(--ui-gap-sm);
-  font-size: var(--card-sub-size);
+  font-size: var(--ui-font-body);
   color: var(--text);
   cursor: pointer;
 }
@@ -1211,7 +1207,7 @@ body {
 .interaction-card__option-desc {
   min-inline-size: 0;
   color: var(--text-muted);
-  font-size: var(--card-meta-size);
+  font-size: var(--ui-font-body);
   overflow-wrap: anywhere;
 }
 .interaction-card__actions {
@@ -1222,7 +1218,7 @@ body {
 }
 .interaction-card__actions .oc-button {
   padding: var(--ui-gap-xs) var(--ui-gap-lg);
-  font-size: var(--card-sub-size);
+  font-size: var(--ui-font-body);
 }
 .interaction-card__option:focus-within {
   outline: calc(2px * var(--ui-scale)) solid color-mix(in srgb, var(--accent) 56%, transparent);
@@ -1281,7 +1277,7 @@ body {
 }
 
 .interaction-dialog-form > .dialog-header .dialog-title {
-  font-size: var(--ui-font-title);
+  font-size: var(--ui-font-body);
   line-height: var(--ui-line-height-tight);
   letter-spacing: var(--ui-letter-spacing-normal);
 }
@@ -1317,7 +1313,7 @@ body {
   gap: var(--ui-gap-lg);
   margin: 0 0 var(--ui-gap-2xl);
   color: var(--text-strong);
-  font-size: var(--ui-font-title);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-strong);
   line-height: var(--ui-line-height-normal);
 }
@@ -1333,8 +1329,8 @@ body {
 .interaction-dialog-form .interaction-card__body {
   margin: 0;
   color: var(--text);
-  font-size: var(--ui-font-control);
-  line-height: var(--ui-line-height-relaxed);
+  font-size: var(--ui-font-body);
+  line-height: var(--ui-line-height-reading);
 }
 
 .interaction-dialog-form .interaction-card__questions {
@@ -1347,9 +1343,9 @@ body {
 }
 
 .interaction-dialog-form .interaction-card__question-text {
-  font-size: var(--ui-font-control);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-medium);
-  line-height: var(--ui-line-height-relaxed);
+  line-height: var(--ui-line-height-reading);
   color: var(--text-strong);
 }
 
@@ -1370,7 +1366,7 @@ body {
   box-sizing: border-box;
   padding: var(--ui-gap-lg) var(--ui-gap-lg);
   border-radius: var(--oc-radius-large);
-  font-size: var(--ui-font-control);
+  font-size: var(--ui-font-body);
   line-height: var(--ui-line-height-normal);
   transition:
     background-color var(--ui-duration-fast) var(--ui-timing-standard),
@@ -1417,7 +1413,7 @@ body {
   grid-column: 2;
   grid-row: 2;
   color: var(--text-muted);
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-body);
   line-height: var(--ui-line-height-normal);
 }
 
@@ -1435,7 +1431,7 @@ body {
 .interaction-dialog-form .interaction-card__actions .oc-button {
   min-width: calc(88px * var(--ui-scale));
   padding-inline: var(--ui-gap-xl);
-  font-size: var(--ui-font-control);
+  font-size: var(--ui-font-body);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1509,8 +1505,7 @@ body {
   max-height: calc(58px * var(--ui-scale));
   border: var(--oc-border-width) solid var(--border);
   border-radius: var(--oc-radius-soft);
-  padding: var(--ui-gap-md) calc(104px * var(--ui-scale)) var(--ui-gap-md)
-    var(--ui-gap-lg);
+  padding: var(--ui-gap-md) calc(104px * var(--ui-scale)) var(--ui-gap-md) var(--ui-gap-lg);
   color: var(--text);
   background: color-mix(in srgb, var(--surface) 92%, transparent);
   font: inherit;
@@ -1555,7 +1550,7 @@ body {
   --oc-button-padding-x: calc(10px * var(--ui-scale));
   --oc-button-gap: calc(5px * var(--ui-scale));
 
-  font-size: var(--card-sub-size);
+  font-size: var(--ui-font-body);
   box-shadow: 0 calc(2px * var(--ui-scale)) calc(8px * var(--ui-scale))
     color-mix(in srgb, var(--accent) 24%, transparent);
 }
@@ -1577,7 +1572,7 @@ body {
   background: var(--bad-dim);
   border: var(--oc-border-width) solid color-mix(in srgb, var(--bad) 36%, transparent);
   color: var(--bad);
-  font-size: var(--card-sub-size);
+  font-size: var(--ui-font-body);
   line-height: var(--ui-line-height-tight);
 }
 .card__agent-reply-error-msg {
@@ -1599,7 +1594,7 @@ body {
   border: var(--oc-border-width) solid var(--border);
   border-radius: var(--oc-radius-soft);
   background: var(--surface-inset);
-  font-size: calc(12px * var(--ui-scale));
+  font-size: var(--ui-font-caption);
   color: var(--text);
   /* display:flex flex-direction:column removed — oc-panel provides those */
   max-height: calc(480px * var(--ui-scale));
@@ -1632,7 +1627,7 @@ body {
 
   width: calc(22px * var(--ui-scale));
   min-width: calc(22px * var(--ui-scale));
-  font-size: calc(12px * var(--ui-scale));
+  font-size: var(--ui-font-caption);
 }
 
 /* Hover-only here left keyboard focus on the primitive's fainter
@@ -1661,19 +1656,19 @@ body {
 }
 .trace-panel-empty {
   padding: var(--ui-gap-lg) var(--ui-gap-xl);
-  font-size: calc(12px * var(--ui-scale));
+  font-size: var(--ui-font-body);
   color: var(--text-muted);
 }
 .trace-panel-empty code {
   font-family: var(--mono);
-  font-size: calc(11px * var(--ui-scale));
+  font-size: var(--ui-font-code);
   background: var(--subtle-2);
   padding: var(--ui-gap-3xs) var(--ui-gap-xs);
   border-radius: var(--oc-radius-soft);
 }
 .trace-panel-body {
   /* overflow-y:auto removed — oc-panel__body handles that */
-  padding: calc(4px * var(--ui-scale)) 0;
+  padding: var(--ui-gap-xs) 0;
 }
 
 .trace-event {
@@ -1693,7 +1688,7 @@ body {
   justify-content: flex-start;
   color: var(--text);
   font-family: var(--mono);
-  font-size: calc(11.5px * var(--ui-scale));
+  font-size: var(--ui-font-code);
   font-weight: var(--ui-font-weight-body);
   line-height: var(--ui-line-height-tight);
   text-align: left;
@@ -1713,7 +1708,7 @@ body {
 .trace-event-sid {
   color: var(--text-muted);
   flex: none;
-  font-size: calc(11px * var(--ui-scale));
+  font-size: var(--ui-font-caption);
 }
 .trace-event[data-kind="llm_request"] .trace-event-kind {
   color: var(--accent);
@@ -1733,14 +1728,13 @@ body {
 .trace-event-chevron {
   color: var(--text-muted);
   flex: none;
-  font-size: calc(10px * var(--ui-scale));
+  font-size: var(--ui-font-caption);
 }
 .trace-event-body {
   margin: 0;
-  padding: var(--ui-gap-sm) var(--ui-gap-lg) var(--ui-gap-lg)
-    var(--ui-gap-4xl);
+  padding: var(--ui-gap-sm) var(--ui-gap-lg) var(--ui-gap-lg) var(--ui-gap-4xl);
   font-family: var(--mono);
-  font-size: calc(11px * var(--ui-scale));
+  font-size: var(--ui-font-code);
   line-height: var(--ui-line-height-normal);
   color: var(--text);
   white-space: pre-wrap;
@@ -1772,7 +1766,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: var(--ui-gap-sm);
-  font-size: var(--card-meta-size);
+  font-size: var(--ui-font-caption);
   color: var(--text-soft);
   box-sizing: border-box;
 }
@@ -1806,13 +1800,13 @@ body {
   letter-spacing: var(--ui-letter-spacing-normal);
   text-transform: none;
   color: var(--text-muted);
-  font-size: var(--card-meta-size);
+  font-size: var(--ui-font-body);
 }
 .task-progress__summary {
   margin-left: auto;
   font-variant-numeric: tabular-nums;
   color: var(--text-muted);
-  font-size: var(--ui-font-title);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-body);
   line-height: var(--ui-line-height-tight);
 }
@@ -1866,7 +1860,7 @@ body {
   --oc-button-color: var(--text-soft);
   --oc-button-shadow: none;
 
-  font-size: calc(var(--card-meta-size) - calc(0.5px * var(--ui-scale)));
+  font-size: var(--ui-font-caption);
   display: grid;
   grid-column: 1 / -1;
   grid-template-columns: subgrid;
@@ -1904,7 +1898,7 @@ body {
   font-variant-numeric: tabular-nums;
   font-weight: var(--ui-font-weight-strong);
   letter-spacing: var(--ui-letter-spacing-loose);
-  font-size: calc(var(--card-meta-size) - calc(1px * var(--ui-scale)));
+  font-size: var(--ui-font-caption);
   color: color-mix(in srgb, var(--text-muted) 92%, var(--text-soft));
 }
 .task-progress__pill-title {

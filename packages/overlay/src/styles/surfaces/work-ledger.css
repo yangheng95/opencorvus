@@ -112,14 +112,14 @@
   border-radius: var(--oc-radius-soft);
   background: var(--surface);
   color: var(--text);
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-body);
 }
 
 .work-ledger-section-title {
   margin: var(--ui-gap-md) var(--ui-left-rail-section-inline-inset) var(--ui-gap-xs);
   color: var(--text-muted);
   font-weight: var(--ui-font-weight-medium);
-  line-height: var(--ui-line-height-snug);
+  line-height: var(--ui-line-height-tight);
 }
 
 .work-ledger-pinned-groups {
@@ -135,8 +135,6 @@
 }
 
 .work-row {
-  --work-row-font-size: var(--ui-font-navigation);
-  --work-row-line-height: var(--ui-line-height-tight);
   --task-row-actions-width: calc(42px * var(--ui-scale));
   --work-row-action-size: calc(18px * var(--ui-scale));
   --work-row-action-gap: calc(2px * var(--ui-scale));
@@ -167,7 +165,7 @@
 }
 
 .work-row .oc-button[data-ui="ledger-row-main"] .work-row-title {
-  font-size: var(--work-row-font-size);
+  font-size: var(--ui-font-body);
 }
 
 .work-row .oc-button[data-ui="ledger-row-main"] {
@@ -236,9 +234,9 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: var(--work-row-font-size);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-body);
-  line-height: var(--work-row-line-height);
+  line-height: var(--ui-line-height-tight);
 }
 
 .work-row-title {
@@ -287,9 +285,9 @@
   gap: var(--ui-gap-3xs);
   padding-inline: var(--ui-gap-xs);
   color: color-mix(in srgb, var(--text-muted) 72%, transparent);
-  font-size: var(--work-row-font-size);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-body);
-  line-height: var(--work-row-line-height);
+  line-height: var(--ui-line-height-tight);
   font-variant-numeric: tabular-nums;
   flex: 0 0 auto;
 }
@@ -480,7 +478,7 @@
 
 .work-row-summary-tooltip__headline time {
   color: var(--text-muted);
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-caption);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
@@ -491,7 +489,7 @@
   grid-template-columns: max-content minmax(0, 1fr);
   align-items: baseline;
   gap: var(--ui-gap-md);
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-caption);
   line-height: var(--ui-line-height-tight);
 }
 
@@ -547,7 +545,7 @@
 
 .project-group-summary-tooltip__path .work-ledger-tooltip__fact-value {
   font-family: var(--mono);
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-caption);
   line-height: var(--ui-line-height-tight);
   overflow-wrap: anywhere;
   white-space: normal;

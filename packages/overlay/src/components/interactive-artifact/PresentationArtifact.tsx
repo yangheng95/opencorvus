@@ -1,6 +1,7 @@
 import Reveal, { type RevealApi } from "reveal.js"
 import "reveal.js/reveal.css"
 import "reveal.js/theme/serif.css"
+import "./PresentationArtifact.css"
 import { For, Show, onCleanup, onMount } from "solid-js"
 import type { InteractiveArtifactPayload } from "../../services/interactive-artifact"
 import { FilePart } from "../FilePart"

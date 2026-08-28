@@ -40,6 +40,7 @@ file.
 - [07 — Overlay panels and Task evidence](07-panel.md)
 - [07-panel-reactivity — Overlay reactive projection](07-panel-reactivity.md)
 - [12 — Overlay card system](12-overlay-card-system.md)
+- [Overlay typography](overlay-typography.md)
 - [Public website and Registry](public-website.md)
 
 ## Boundaries, verification, and principles

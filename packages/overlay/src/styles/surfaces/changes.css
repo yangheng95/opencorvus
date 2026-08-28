@@ -30,7 +30,7 @@
   gap: var(--ui-gap-sm);
   flex-wrap: wrap;
   margin-bottom: var(--ui-gap-3xs);
-  font-size: var(--ui-font-control);
+  font-size: var(--ui-font-body);
   color: var(--text-soft);
 }
 
@@ -165,8 +165,8 @@
 .changes-status-strip .oc-segmented__item[data-ui="file-changes-status-filter-option"] {
   padding-inline: var(--ui-gap-md);
   gap: var(--ui-gap-xs);
-  font: var(--ui-font-weight-medium) var(--ui-font-control) var(--font);
-  font-size: var(--ui-font-control);
+  font: var(--ui-font-weight-medium) var(--ui-font-body) / var(--ui-line-height-tight) var(--font);
+  font-size: var(--ui-font-body);
   text-transform: none;
 }
 
@@ -211,8 +211,8 @@
   min-height: calc(22px * var(--ui-scale));
   padding: 0 var(--ui-gap-md);
   color: var(--text-muted);
-  font-size: var(--ui-font-control);
-  line-height: var(--ui-line-height-snug);
+  font-size: var(--ui-font-body);
+  line-height: var(--ui-line-height-tight);
   white-space: nowrap;
 }
 
@@ -361,7 +361,7 @@
   text-transform: none;
   letter-spacing: var(--ui-letter-spacing-normal);
   font-weight: var(--ui-font-weight-strong);
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-caption);
 }
 
 /* The three chips below carry their tone through background + text only,
@@ -391,7 +391,7 @@
 }
 
 .file-changes-panel .empty-hint {
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-body);
 }
 
 /* ─────────────────────────────────────────────────────────────

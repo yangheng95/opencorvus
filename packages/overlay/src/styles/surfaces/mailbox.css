@@ -53,9 +53,9 @@
   min-width: 0;
   flex: 0 1 auto;
   overflow: hidden;
-  font-size: var(--ui-font-control);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-strong);
-  line-height: var(--ui-line-height-snug);
+  line-height: var(--ui-line-height-tight);
   text-overflow: ellipsis;
 }
 
@@ -89,9 +89,9 @@
 
 .mailbox-panel__inbox-count {
   min-width: calc(22px * var(--ui-scale));
-  font-size: var(--ui-font-control);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-strong);
-  line-height: var(--ui-line-height-snug);
+  line-height: var(--ui-line-height-tight);
   font-variant-numeric: tabular-nums;
 }
 
@@ -176,7 +176,7 @@
   min-width: 0;
   padding: 0 var(--ui-gap-md);
   color: var(--text-muted);
-  line-height: calc(22px * var(--ui-scale));
+  line-height: var(--ui-line-height-normal);
   cursor: pointer;
 }
 .mailbox-project-group__name {
@@ -192,14 +192,14 @@
   flex: 1 1 auto;
   min-width: 0;
   overflow: hidden;
-  font-size: var(--ui-font-meta);
+  font-size: var(--ui-font-caption);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 .mailbox-project-group__count {
   flex: 0 0 auto;
   color: var(--text-muted);
-  font-size: var(--ui-font-tiny);
+  font-size: var(--ui-font-caption);
   font-variant-numeric: tabular-nums;
 }
 .mailbox-project-group__content {
@@ -338,7 +338,7 @@
   flex: 1 1 auto;
   overflow: hidden;
   color: var(--text-muted);
-  font-size: var(--ui-font-meta);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-medium);
   line-height: var(--ui-line-height-tight);
   text-overflow: ellipsis;
@@ -353,7 +353,7 @@
 .mailbox-item__time {
   flex: 0 0 auto;
   color: var(--text-muted);
-  font-size: var(--ui-font-tiny);
+  font-size: var(--ui-font-caption);
   line-height: var(--ui-line-height-flat);
   white-space: nowrap;
 }
@@ -367,7 +367,7 @@
   display: -webkit-box;
   overflow: hidden;
   color: var(--text-soft);
-  font-size: var(--ui-font-tiny);
+  font-size: var(--ui-font-body);
   line-height: var(--ui-line-height-tight);
   overflow-wrap: anywhere;
   -webkit-box-orient: vertical;
@@ -419,8 +419,8 @@
   gap: var(--ui-gap-xs);
   overflow: hidden;
   color: var(--text-muted);
-  font-size: var(--ui-font-tiny);
-  line-height: var(--ui-line-height-snug);
+  font-size: var(--ui-font-caption);
+  line-height: var(--ui-line-height-tight);
 }
 
 .mailbox-item__meta .oc-badge {
@@ -482,7 +482,7 @@
   min-height: calc(180px * var(--ui-scale));
   padding: var(--ui-gap-2xl);
   color: var(--text-muted);
-  font-size: var(--ui-font-meta);
+  font-size: var(--ui-font-body);
   text-align: center;
 }
 
@@ -501,7 +501,7 @@
 
 .mailbox-panel__empty-title {
   color: var(--text-strong);
-  font-size: var(--ui-font-title);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-strong);
 }
 

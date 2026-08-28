@@ -42,7 +42,7 @@
         display: flex;
         flex: 1 1 auto;
         flex-direction: column;
-        font: var(--ui-font-weight-body) var(--ui-font-body) / 1.5 var(--font);
+        font: var(--ui-font-weight-body) var(--ui-font-body) / var(--ui-line-height-normal) var(--font);
         justify-content: center;
         min-height: 100%;
         overflow: hidden;
@@ -104,16 +104,16 @@
       }
 
       .oc-startup-surface__title {
-        font-size: clamp(calc(30px * var(--ui-scale)), 3.25vw, calc(42px * var(--ui-scale)));
+        font-size: var(--ui-font-emphasis);
         font-weight: var(--ui-font-weight-strong);
         letter-spacing: var(--ui-letter-spacing-tight);
-        line-height: 1.14;
+        line-height: var(--ui-line-height-tight);
         margin: 0;
       }
 
       .oc-startup-surface__description {
         color: var(--text-soft);
-        font-size: clamp(var(--ui-font-body), 1.65vw, calc(20px * var(--ui-scale)));
+        font-size: var(--ui-font-body);
         font-weight: var(--ui-font-weight-body);
         margin: calc(14px * var(--ui-scale)) 0 0;
         max-width: calc(920px * var(--ui-scale));
@@ -161,7 +161,7 @@
 
       .oc-startup-surface__status {
         color: var(--text-muted);
-        font-size: var(--ui-font-small);
+        font-size: var(--ui-font-caption);
         grid-column: 2;
         letter-spacing: var(--ui-letter-spacing-normal);
         margin: 0;
@@ -170,7 +170,7 @@
       .oc-startup-surface__detail {
         color: var(--text-soft);
         display: none;
-        font-size: var(--ui-font-small);
+        font-size: var(--ui-font-caption);
         grid-column: 3;
         justify-self: end;
         margin: 0;
@@ -209,7 +209,7 @@
         color: var(--bad);
         display: block;
         font-size: var(--ui-font-body);
-        line-height: 1.45;
+        line-height: var(--ui-line-height-normal);
         max-height: calc(108px * var(--ui-scale));
         overflow: auto;
         overflow-wrap: anywhere;

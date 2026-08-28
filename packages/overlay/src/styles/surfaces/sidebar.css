@@ -100,7 +100,7 @@ body .sidebar-header.oc-surface-header {
   justify-items: start;
   width: 100%;
   color: var(--text-soft);
-  font-size: var(--ui-font-navigation);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-body);
   text-align: left;
 }
@@ -132,7 +132,7 @@ body .sidebar-header.oc-surface-header {
   border-radius: var(--oc-radius-pill);
   background: color-mix(in srgb, var(--text-strong) 8%, transparent);
   color: var(--text-muted);
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-caption);
   line-height: var(--ui-line-height-flat);
   padding: var(--ui-gap-xs) var(--ui-gap-md);
 }
@@ -160,7 +160,7 @@ body .sidebar-header.oc-surface-header {
   padding: var(--ui-gap-lg) var(--ui-gap-xl);
   border-top: var(--oc-border-width) solid var(--divider-soft);
   color: var(--text-muted);
-  font-size: var(--ui-font-tiny);
+  font-size: var(--ui-font-caption);
   min-width: 0;
   overflow: hidden;
 }
@@ -173,7 +173,7 @@ body .sidebar-header.oc-surface-header {
   gap: var(--ui-gap-lg);
   min-width: 0;
   color: var(--text-soft);
-  line-height: var(--ui-line-height-snug);
+  line-height: var(--ui-line-height-tight);
   overflow: hidden;
 }
 
@@ -218,7 +218,7 @@ body .sidebar-header.oc-surface-header {
    * there while dark and vscode-dark (whose --text-on-strong is black) sat at
    * 7.23 and 6.96. Black holds 11.23 / 7.23 / 6.96 across all three. */
   color: black;
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-caption);
   font-weight: var(--ui-font-weight-strong);
 }
 
@@ -231,12 +231,12 @@ body .sidebar-header.oc-surface-header {
 
 .chat-version-name {
   color: var(--text-strong);
-  font-size: calc(13px * var(--ui-scale));
+  font-size: var(--ui-font-body);
 }
 
 .chat-version-plan {
   color: var(--text-muted);
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-caption);
 }
 
 .sidebar-connection {
@@ -249,7 +249,7 @@ body .sidebar-header.oc-surface-header {
 
   flex: 0 0 auto;
   width: calc(28px * var(--ui-scale));
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-body);
 }
 
 .sidebar-update__icon {
@@ -268,7 +268,7 @@ body .sidebar-header.oc-surface-header {
   align-items: center;
   gap: var(--ui-gap-sm);
   padding: var(--ui-gap-sm) var(--ui-gap-md);
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-caption);
   font-weight: var(--ui-font-weight-medium);
   letter-spacing: var(--ui-letter-spacing-normal);
   user-select: none;
@@ -367,8 +367,7 @@ body .sidebar-header.oc-surface-header {
   width: 100%;
   min-width: 0;
   box-sizing: border-box;
-  padding: var(--ui-gap-3xs) var(--ui-gap-sm) var(--ui-gap-3xs)
-    var(--ui-left-rail-row-control-inline-inset);
+  padding: var(--ui-gap-3xs) var(--ui-gap-sm) var(--ui-gap-3xs) var(--ui-left-rail-row-control-inline-inset);
   border: var(--oc-border-width) solid transparent;
   position: relative;
   overflow: hidden;
@@ -425,7 +424,7 @@ body .sidebar-header.oc-surface-header {
   display: block;
   font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-medium);
-  line-height: var(--ui-line-height-snug);
+  line-height: var(--ui-line-height-tight);
   letter-spacing: var(--ui-letter-spacing-normal);
   color: var(--text-soft);
   min-width: 0;
@@ -440,7 +439,7 @@ body .sidebar-header.oc-surface-header {
   display: block;
   margin-left: auto;
   flex-shrink: 0;
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-caption);
   line-height: var(--ui-line-height-flat);
   white-space: nowrap;
   overflow: hidden;
@@ -589,7 +588,7 @@ body .sidebar-header.oc-surface-header {
   border-radius: var(--oc-radius-large);
   background: color-mix(in srgb, var(--bad) 7%, var(--surface-strong));
   box-shadow: none;
-  font-size: var(--ui-font-control);
+  font-size: var(--ui-font-body);
   color: var(--text-soft);
 }
 .task-list-error-msg {
@@ -744,7 +743,7 @@ body .sidebar-header.oc-surface-header {
   gap: var(--ui-left-rail-row-label-gap);
   height: var(--oc-density-navigation-row);
   min-height: var(--oc-density-navigation-row);
-  font-size: var(--ui-font-navigation);
+  font-size: var(--ui-font-body);
   text-align: left;
   transition:
     background var(--ui-duration-base),
@@ -830,7 +829,7 @@ body .sidebar-header.oc-surface-header {
 
 .project-group-name {
   display: block;
-  font-size: var(--ui-font-navigation);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-body);
   line-height: var(--ui-line-height-tight);
   letter-spacing: var(--ui-letter-spacing-normal);
@@ -844,7 +843,7 @@ body .sidebar-header.oc-surface-header {
 
 .project-group-parent {
   display: none;
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-caption);
   color: color-mix(in srgb, var(--text-muted) 92%, var(--text-soft));
   opacity: var(--ui-opacity-subtle);
   overflow: hidden;
@@ -862,8 +861,8 @@ body .sidebar-header.oc-surface-header {
   border: var(--oc-border-width) solid color-mix(in srgb, var(--border) 86%, transparent);
   border-radius: var(--oc-radius-pill);
   color: var(--text-muted);
-  font-size: var(--ui-font-meta);
-  line-height: calc(17px * var(--ui-scale));
+  font-size: var(--ui-font-caption);
+  line-height: var(--ui-line-height-tight);
   text-align: center;
   font-variant-numeric: tabular-nums;
 }

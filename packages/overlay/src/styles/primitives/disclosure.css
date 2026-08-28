@@ -66,7 +66,7 @@
 .oc-disclosure[data-size="sm"] > .oc-disclosure__trigger {
   min-height: var(--oc-density-chip-height);
   padding: 0 var(--ui-gap-sm);
-  font-size: var(--ui-font-control);
+  font-size: var(--ui-font-body);
 }
 
 .oc-disclosure[data-size="md"] > .oc-disclosure__trigger {
