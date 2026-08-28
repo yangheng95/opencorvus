@@ -22,6 +22,7 @@ import {
   schemaObjectFingerprint,
 } from "./schema-contract"
 import { migrateFactKernelSchema, migratePermissionLedgerProjectRetentionSchema } from "./fact-kernel-migration"
+import { migrateSessionPromptOwnerSchema } from "./session-prompt-owner-migration"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
 import { Identifier } from "@/id/id"
 import {
@@ -1095,6 +1096,7 @@ export namespace Database {
       if (hasApplicationSchema(sqlite)) {
         migrateProjectMaintenanceFenceSchema(sqlite)
         migrateProjectDirectoryAdmissionSchema(sqlite)
+        migrateSessionPromptOwnerSchema(sqlite)
         migratePermissionLedgerProjectRetentionSchema(sqlite)
         migrateFactKernelSchema(sqlite)
         const reconciledTriggers = reconcileSchemaTriggers(sqlite)

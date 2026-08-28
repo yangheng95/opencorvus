@@ -193,7 +193,11 @@ describe("Session MEMORY.MD compaction checkpoint", () => {
           sessionID: session.id,
           run: async () => {
             executions++
-            return "continue"
+            return {
+              status: "completed",
+              disposition: "continue",
+              summaryMessageID: Identifier.ascending("message"),
+            }
           },
         })
         if (typeof first !== "object") throw new Error("Contended compaction did not enter lease standby")
@@ -210,7 +214,11 @@ describe("Session MEMORY.MD compaction checkpoint", () => {
           sessionID: session.id,
           run: async () => {
             executions++
-            return "continue"
+            return {
+              status: "completed",
+              disposition: "continue",
+              summaryMessageID: Identifier.ascending("message"),
+            }
           },
         })
         const leases = Database.use((db) =>
@@ -455,7 +463,7 @@ describe("Session MEMORY.MD compaction checkpoint", () => {
         })
 
         try {
-          expect(await SessionCompaction.process(
+          const compaction = await SessionCompaction.process(
             {
               parentID: compactSource.id,
               messages: await Session.messages({ sessionID: session.id }),
@@ -473,11 +481,17 @@ describe("Session MEMORY.MD compaction checkpoint", () => {
                 throw new Error("Compaction must emit a natural summary")
               },
             },
-          )).toBe("stop")
+          )
+          expect(compaction).toEqual({
+            status: "completed",
+            disposition: "stop",
+            summaryMessageID: expect.any(String),
+          })
 
           const document = await SessionMemory.read(session.id)
           expect(document).toEqual(expect.objectContaining({
             filename: "MEMORY.MD",
+            sourceMessageID: compaction.status === "completed" ? compaction.summaryMessageID : undefined,
             content: "# Generated checkpoint\n\n- implementation verified\n- next: inspect release evidence",
           }))
           const nextCompactionContext = await SessionCompaction.TestHooks.runtimeContext({
@@ -1042,7 +1056,14 @@ describe("Session MEMORY.MD compaction checkpoint", () => {
 
         const observations: Array<{ id: string; error?: { message: string; cause?: unknown } }> = []
         for (const occurrence of [
-          { control: failedWinner, run: async () => "stop" as const },
+          {
+            control: failedWinner,
+            run: async () => ({
+              status: "completed" as const,
+              disposition: "stop" as const,
+              summaryMessageID: Identifier.ascending("message"),
+            }),
+          },
           {
             control: consumedWinner,
             run: async () => ({ status: "failed" as const, error: new Error("Local provider failure") }),

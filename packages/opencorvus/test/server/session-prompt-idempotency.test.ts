@@ -497,13 +497,16 @@ describe("direct Session prompt identity", () => {
           // are stamped as queued for delivery — all while one owner serves.
           const persistedDuringTurn = await Session.messages({ sessionID: session.id })
           const users = persistedDuringTurn.filter((item) => item.info.role === "user")
+          const queuedMessageIDs = users.slice(1).map((item) => item.info.id)
           expect({
             userIDs: users.map((item) => item.info.id),
+            queuedIdentitySet: [...queuedMessageIDs].sort(),
             identityBound: users.map((item) => Boolean((item.info.extra as any)?.publicSessionPromptIdentity)),
             queued: users.map((item) => (item.info as any).pendingDelivery === true),
             promptOwners: SessionPromptState.TestHooks.promptResourceSnapshot(session.id).promptOwners,
           }).toEqual({
-            userIDs: messageIDs,
+            userIDs: [messageIDs[0], ...queuedMessageIDs],
+            queuedIdentitySet: [messageIDs[1], messageIDs[2]].sort(),
             identityBound: [true, true, true],
             queued: [false, true, true],
             promptOwners: 1,
@@ -528,8 +531,8 @@ describe("direct Session prompt identity", () => {
             completed: activeAssistant?.info.role === "assistant" ? activeAssistant.info.time.completed : undefined,
           }).toEqual({
             queued: [false, false, false],
-            parent: messageIDs[2],
-            accepted: [messageIDs[1], messageIDs[2]],
+            parent: queuedMessageIDs.at(-1),
+            accepted: queuedMessageIDs,
             completed: undefined,
           })
           releases[1].resolve()
@@ -552,12 +555,12 @@ describe("direct Session prompt identity", () => {
             firstParent: messageIDs[0],
             firstAccepted: [messageIDs[0]],
             secondReplyID: thirdBody.info.id,
-            secondParent: messageIDs[2],
-            secondAccepted: [messageIDs[1], messageIDs[2]],
+            secondParent: queuedMessageIDs.at(-1),
+            secondAccepted: queuedMessageIDs,
             thirdReplyID: thirdBody.info.id,
-            thirdParent: messageIDs[2],
-            thirdAccepted: [messageIDs[1], messageIDs[2]],
-            physicalParents: [messageIDs[0], messageIDs[2]],
+            thirdParent: queuedMessageIDs.at(-1),
+            thirdAccepted: queuedMessageIDs,
+            physicalParents: [messageIDs[0], queuedMessageIDs.at(-1)],
           })
 
           // The in-process occurrence has settled and released. Replaying the
@@ -573,8 +576,8 @@ describe("direct Session prompt identity", () => {
           }).toEqual({
             status: 200,
             replyID: thirdBody.info.id,
-            accepted: [messageIDs[1], messageIDs[2]],
-            physicalParents: [messageIDs[0], messageIDs[2]],
+            accepted: queuedMessageIDs,
+            physicalParents: [messageIDs[0], queuedMessageIDs.at(-1)],
           })
         } finally {
           for (const release of releases) release.resolve()
@@ -668,6 +671,12 @@ describe("direct Session prompt identity", () => {
             if (Date.now() >= persistDeadline) throw new Error("Failed batch inputs were not persisted")
             await Bun.sleep(10)
           }
+          const durableFailedBatch = (await Session.messages({ sessionID: session.id }))
+            .filter(
+              (item) =>
+                item.info.role === "user" && (item.info.id === messageIDs[1] || item.info.id === messageIDs[2]),
+            )
+            .map((item) => item.info.id)
           releaseFirst.resolve()
           const [occupying, failedHead, failedTail] = await Promise.all([
             occupyingResponse,
@@ -701,7 +710,7 @@ describe("direct Session prompt identity", () => {
           }).toEqual({
             initialStatuses: [200, 200, 200, 200],
             sharedFailedReply: true,
-            failedAccepted: [messageIDs[1], messageIDs[2]],
+            failedAccepted: durableFailedBatch,
             newerFinish: "stop",
             replayStatus: 409,
             replayBody: {
@@ -712,7 +721,7 @@ describe("direct Session prompt identity", () => {
                 message: expect.stringContaining("has accepted a newer user Turn"),
               },
             },
-            physicalParents: [messageIDs[0], messageIDs[2], messageIDs[3]],
+            physicalParents: [messageIDs[0], durableFailedBatch.at(-1), messageIDs[3]],
           })
         } finally {
           releaseFirst.resolve()
@@ -809,6 +818,7 @@ describe("direct Session prompt identity", () => {
           ])
           const failedHeadBody = (await failedHead.json()) as any
           const failedTailBody = (await failedTail.json()) as any
+          const durableFailedBatch = failedHeadBody.info.acceptedInputMessageIDs as string[]
 
           const realLoop = SessionLoop.loop
           loopSpy = spyOn(SessionLoop, "loop").mockImplementation(async (input) => {
@@ -860,7 +870,7 @@ describe("direct Session prompt identity", () => {
             newerStatus: 200,
             newerParent: messageIDs[3],
             newerFinish: "stop",
-            physicalParents: [messageIDs[0], messageIDs[2], messageIDs[3]],
+            physicalParents: [messageIDs[0], durableFailedBatch.at(-1), messageIDs[3]],
           })
         } finally {
           releaseFirst.resolve()

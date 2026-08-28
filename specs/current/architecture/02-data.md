@@ -222,7 +222,7 @@ Metrics 域沿用 `engine_*` 表名承载评分流水，但写入边界归属 me
 `engine_metric_spec`、`engine_metric_result` 和 `engine_iteration` 的唯一直接表写入文件
 是 `metrics/store.ts`。任务、agent、engine 或 UI 层不得直接写这些 metrics 表。
 
-## session 域（8 表）
+## session 域（9 表）
 
 `src/session/session.sql.ts`：
 
@@ -233,6 +233,7 @@ Metrics 域沿用 `engine_*` 表名承载评分流水，但写入边界归属 me
 | `part`                   | 消息分片（tool call / text / reasoning / …）                                                                                           |
 | `interactive_artifact`   | Session 内可交互 artifact                                                                                                              |
 | `session_control_record` | durable compaction / summarize 等控制请求；记录请求事实，不证明当前 Runtime 存活                                                       |
+| `session_prompt_owner`   | Session 唯一物理 prompt loop 的 generation 与精确 OS process occurrence；仅在该 occurrence 已死或 PID 已复用后允许原子接管             |
 | `worker_turn_descriptor` | Projected worker 的不可变 Turn identity、模型、tool projection、Task、dispatch lineage、精确 package revision 与哈希；restart 恢复真源 |
 | `todo`                   | session 内 todo                                                                                                                        |
 | `permission`             | 权限请求（project 级全量规则集）                                                                                                       |
@@ -242,16 +243,27 @@ Metrics 域沿用 `engine_*` 表名承载评分流水，但写入边界归属 me
 运行身份来自持久化 worker descriptor，不来自 SessionKind。
 
 Session/Trace 是持久化历史与身份容器；Turn/Attempt 是一次模型执行；Runtime
-只包含当前进程中的 stream、取消句柄、MCP（Model Context Protocol，模型上下文
-协议）连接、tool instance、callback 与 Promise。服务重启只销毁 Runtime，
-不能使 Session、message、descriptor 或 durable coordination request 失效。
+中的 stream、取消句柄、MCP（Model Context Protocol，模型上下文协议）连接、
+tool instance、callback 与 Promise 仍只属于当前进程。`session_prompt_owner` 不复制
+这些资源，只用 generation 加 PID、process-instance identity 与 occurrence identity
+证明哪个物理进程可以产生 Provider/Tool effect。它在 standby 期间继续存在，并持续
+观察 durable user Message、runtime wake 与 `session_control_record`；进程内事件只用于
+降低唤醒延迟。reply peer 通过 accepted input Message identity 加入，summary peer 先按
+本次 exact Session control ID 加入其 consumed/failed 终态；consumed terminal 必须与
+该 control durable payload 中的 exact summary Message ID 绑定在同一个 immediate transaction。
+新 compaction 直接使用 checkpoint publisher 返回的 Message ID，禁止按 source、时间或排序
+重新查找；首次没有可压缩材料且没有已有 summary 时写入 typed failed terminal。已有 summary 且
+没有 post-summary material 的幂等 no-op 显式绑定已有 summary；local callback 与 peer 只从
+该 receipt 投影，不按 source 或 wall-clock 猜测。只有 OS 证明原 occurrence `dead_or_reused` 后才原子替换并
+终态化废弃 assistant。服务重启只销毁 Runtime，不能使 Session、message、descriptor
+或 durable coordination request 失效。
 
 空闲 Session 的一个 Turn 可以按顺序接受该 Turn 开始时完整的待投递 user Message
 批次。新 assistant Message 持久化完整的 accepted input Message identity 集合，且
 `parentID` 等于集合尾项；删除这些输入的 `pendingDelivery` 标记与插入 assistant
 Message 必须属于同一个 SQLite transaction，并发生在 streaming status 发布与
-Provider 请求之前。进程内 callback 与公开请求 replay 都按该持久化集合的成员关系
-收敛到同一 assistant Message。Session 尚未接受更新 user Turn 时，失败重试选择与
+Provider 请求之前。进程内 callback 与跨进程公开请求 replay 都按该持久化集合的成员关系
+收敛到同一 assistant Message；peer 不得创建第二个本地 prompt loop。Session 尚未接受更新 user Turn 时，失败重试选择与
 当前调用方 identity 相交的最新失败批次；一旦 Session 已接受更新 user Turn，旧失败
 identity 的公开 replay 返回 typed conflict 并要求新 identity，不能用更新 transcript
 重驱旧批次。该最终判定必须发生在真实 Session owner 准入之后：旧 replay 附着到更新

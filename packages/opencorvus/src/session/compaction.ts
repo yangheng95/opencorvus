@@ -61,6 +61,14 @@ export namespace SessionCompaction {
     error: Error
   }
 
+  export type ProcessSuccess = {
+    status: "completed"
+    disposition: "continue" | "stop"
+    summaryMessageID: string
+  }
+
+  export type ProcessResult = ProcessSuccess | ProcessFailure
+
   type CompactionStep = {
     text: string
     toolCalls: readonly unknown[]
@@ -795,13 +803,16 @@ export namespace SessionCompaction {
       throw new Error(`Compaction parent must be a user message: ${input.parentID}`)
     }
     const userMessage = parent.info as Message.User
-    const compactionPart = input.messages.findLast(
+    const completedSummary = input.messages.findLast(
       (message): message is Message.WithParts & { info: Message.Assistant } =>
         message.info.role === "assistant" &&
         message.info.parentID === input.parentID &&
         CompactionHandoff.isValidSummaryMessage(message.info) &&
         message.parts.some((part) => part.type === "compaction"),
-    )?.parts.find((part): part is Message.CompactionPart => part.type === "compaction")
+    )
+    const compactionPart = completedSummary?.parts.find(
+      (part): part is Message.CompactionPart => part.type === "compaction",
+    )
     const config = await EffectiveConfig.effective({ sessionID: input.sessionID })
     const agent = await HelperAgentRegistry.get("compaction", { config })
     if (!agent.steps) throw new Error("Compaction helper must declare a positive provider-step limit")
@@ -818,11 +829,22 @@ export namespace SessionCompaction {
         overflow: input.overflow === true,
       }))
     if (selected.head.length === 0) {
+      if (completedSummary) {
+        return {
+          status: "completed",
+          disposition: input.auto ? "continue" : "stop",
+          summaryMessageID: completedSummary.info.id,
+        } satisfies ProcessSuccess
+      }
       log.info("skipping compaction because no post-anchor head is compactable", {
         sessionID: input.sessionID,
         parentID: input.parentID,
       })
-      return "stop"
+      const error = new Error(
+        `Session ${input.sessionID} has no compactable material or reusable summary for source ${input.parentID}`,
+      )
+      error.name = "SessionCompactionMaterialUnavailableError"
+      return { status: "failed", error } satisfies ProcessFailure
     }
     const dispatchAnchorMessage = selected.anchor_id
       ? history.find((msg) => msg.info.id === selected.anchor_id)
@@ -983,7 +1005,11 @@ export namespace SessionCompaction {
 
     await Bus.publish(Event.Compacted, { sessionID: input.sessionID })
 
-    return input.auto ? "continue" : "stop"
+    return {
+      status: "completed",
+      disposition: input.auto ? "continue" : "stop",
+      summaryMessageID: processor.message.id,
+    } satisfies ProcessSuccess
   }
 
   const CreateInput = z.object({
@@ -1007,7 +1033,7 @@ export namespace SessionCompaction {
       )
     }
     await Session.get(input.sessionID)
-    SessionControl.create({
+    return SessionControl.create({
       sessionID: input.sessionID,
       kind: input.auto ? "compaction_request" : "manual_summarize",
       payload: {

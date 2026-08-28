@@ -1724,7 +1724,7 @@ export const SessionRoutes = lazy(() =>
               if (!source) {
                 throw new Error(`Cannot compact session ${sessionID}: no real user message found`)
               }
-              await SessionCompaction.create({
+              const control = await SessionCompaction.create({
                 sessionID,
                 source,
                 model: { providerID: body.providerID, modelID: body.modelID },
@@ -1732,7 +1732,12 @@ export const SessionRoutes = lazy(() =>
                 overflow: false,
                 focus: body.focus,
               })
-              return SessionPrompt.loop(body.auto ? { sessionID } : { sessionID, result_mode: "summary" })
+              return SessionPrompt.loop({
+                sessionID,
+                result_mode: "summary",
+                summary_source_message_id: source.id,
+                summary_control_id: control.id,
+              })
             },
           }),
         )

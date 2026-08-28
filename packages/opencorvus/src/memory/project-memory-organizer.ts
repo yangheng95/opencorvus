@@ -407,7 +407,7 @@ export namespace ProjectMemoryOrganizer {
       )
       unsubs.push(
         Bus.subscribe(Session.Event.ConfigChanged, () =>
-          Database.transaction((db) => {
+          Database.immediateTransaction((db) => {
             ProjectMemory.invalidateOrganizerAvailabilityInTransaction(db, { projectID })
             ProjectMemory.requestOrganizationInTransaction(db, { projectID })
           }),
@@ -415,14 +415,14 @@ export namespace ProjectMemoryOrganizer {
       )
       const projectConfigListener = (event: { directory?: string; payload?: { type?: string } }) => {
         if (event.directory !== directory || event.payload?.type !== "config.changed") return
-        Database.transaction((db) => {
+        Database.immediateTransaction((db) => {
           ProjectMemory.invalidateOrganizerAvailabilityInTransaction(db, { projectID })
           ProjectMemory.requestOrganizationInTransaction(db, { projectID })
         })
       }
       GlobalBus.on("event", projectConfigListener)
       unsubs.push(() => GlobalBus.off("event", projectConfigListener))
-      Database.transaction((db) => ProjectMemory.requestOrganizationInTransaction(db, { projectID }))
+      Database.immediateTransaction((db) => ProjectMemory.requestOrganizationInTransaction(db, { projectID }))
     } catch (error) {
       if (state.unsub === dispose) state.unsub = undefined
       dispose()

@@ -16,6 +16,7 @@ import {
   type ManagedWorktreeSessionOwnerAuthority,
 } from "@/worktree/managed-session-owner"
 import { awaitWithAbort } from "@/util/abort"
+import { SessionPromptOwner } from "./owner"
 
 export class SessionPromptLoopFinishedError extends Error {
   constructor(public readonly sessionID: string) {
@@ -59,6 +60,7 @@ export namespace SessionPromptState {
         reject(reason?: any): void
         resultMode: ResultMode
         replyToMessageID?: string
+        summaryControlID?: string
       }[]
       finished: Promise<void>
       finish(error?: unknown): void
@@ -70,6 +72,7 @@ export namespace SessionPromptState {
       timeUpdated: number
       timeCancelled?: number
       cancellation?: ExecutionCancellationError
+      durableOwner: SessionPromptOwner.Authority
       directoryOwnership: Disposable
       worktreeOwnerAuthority: ManagedWorktreeSessionOwnerAuthority
     }
@@ -195,7 +198,12 @@ export namespace SessionPromptState {
     if (existingStateEntryBySessionID(sessionID)) throw new BusyError(sessionID)
   }
 
-  export function start(sessionID: string, directory?: string) {
+  type StartAdmission =
+    | { type: "owner"; abort: AbortSignal }
+    | { type: "local" }
+    | { type: "peer"; authority: SessionPromptOwner.Authority }
+
+  function admitStart(sessionID: string, directory?: string): StartAdmission {
     if (processSettlementGate) throw new Error("Cannot start a Session prompt during runtime settlement")
     const priorCancellation = cancellationReceipts.get(sessionID)
     if (priorCancellation?.outcome === "succeeded" && !priorCancellation.settlementRequired) {
@@ -209,12 +217,41 @@ export namespace SessionPromptState {
     if (priorCancellation?.settlementRequired) throw new BusyError(sessionID)
     const existing = existingStateEntryBySessionID(sessionID)?.promptState[sessionID]
     if (existing?.terminating) throw new BusyError(sessionID)
-    if (existing) return
+    if (existing) return { type: "local" }
     if (promptStartReservations.has(sessionID) || promptSettlementReservations.has(sessionID)) {
       throw new BusyError(sessionID)
     }
     const { key, promptState: s } = stateEntry(directory)
-    const directoryOwnership = WorktreeOwnershipCriticalSection.acquire(key)
+    const durableAdmission = SessionPromptOwner.acquire({
+      sessionID,
+      projectID: Instance.project.id,
+      directory: key,
+    })
+    if (!durableAdmission.acquired) {
+      deleteDirectoryIfEmpty(key, s)
+      return { type: "peer", authority: durableAdmission.authority }
+    }
+    const releaseDurableAdmission = (cause: unknown): never => {
+      try {
+        if (!SessionPromptOwner.release(durableAdmission.authority)) {
+          throw new Error(`Session ${sessionID} prompt owner generation changed during failed local admission`)
+        }
+      } catch (releaseError) {
+        throw new AggregateError(
+          [cause, releaseError],
+          `Session ${sessionID} failed local prompt admission and durable owner cleanup`,
+        )
+      }
+      throw cause
+    }
+    const directoryOwnership = (() => {
+      try {
+        return WorktreeOwnershipCriticalSection.acquire(key)
+      } catch (error) {
+        deleteDirectoryIfEmpty(key, s)
+        return releaseDurableAdmission(error)
+      }
+    })()
     const controller = new AbortController()
     const finished = createFinishSignal()
     const settlement = createFinishSignal()
@@ -228,6 +265,7 @@ export namespace SessionPromptState {
       reuse: settlement.finish,
       timeCreated: now,
       timeUpdated: now,
+      durableOwner: durableAdmission.authority,
       directoryOwnership,
       worktreeOwnerAuthority: {
         projectID: Instance.project.id,
@@ -242,12 +280,23 @@ export namespace SessionPromptState {
     } catch (error) {
       delete s[sessionID]
       messageOwnersBySession.delete(sessionID)
-      directoryOwnership[Symbol.dispose]()
       deleteDirectoryIfEmpty(key, s)
-      throw error
+      try {
+        directoryOwnership[Symbol.dispose]()
+      } catch (releaseError) {
+        releaseDurableAdmission(
+          new AggregateError([error, releaseError], `Session ${sessionID} failed prompt status and worktree cleanup`),
+        )
+      }
+      releaseDurableAdmission(error)
     }
     publishPromptOwnerCapture(sessionID, controller.signal)
-    return controller.signal
+    return { type: "owner", abort: controller.signal }
+  }
+
+  export function start(sessionID: string, directory?: string) {
+    const admission = admitStart(sessionID, directory)
+    return admission.type === "owner" ? admission.abort : undefined
   }
 
   export function claimPromptStartReservation(sessionIDs: readonly string[]): Disposable {
@@ -355,6 +404,7 @@ export namespace SessionPromptState {
     directory?: string,
     resultMode: ResultMode = "reply",
     replyToMessageID?: string,
+    summaryControlID?: string,
   ): Promise<Message.WithParts> {
     const match = existingStateEntryForSession(sessionID, directory).promptState?.[sessionID]
     if (!match) {
@@ -370,7 +420,7 @@ export namespace SessionPromptState {
     }
     touch(sessionID, directory)
     return new Promise<Message.WithParts>((resolve, reject) => {
-      match.callbacks.push({ resolve, reject, resultMode, replyToMessageID })
+      match.callbacks.push({ resolve, reject, resultMode, replyToMessageID, summaryControlID })
     })
   }
 
@@ -393,7 +443,15 @@ export namespace SessionPromptState {
     resumeExisting: boolean
     resultMode: ResultMode
     replyToMessageID?: string
-  }): Promise<{ abort: AbortSignal | undefined; startedOwner: boolean; firstResult: Promise<Message.WithParts> }> {
+    summaryControlID?: string
+  }): Promise<
+    | {
+        abort: AbortSignal | undefined
+        startedOwner: boolean
+        firstResult: Promise<Message.WithParts>
+      }
+    | { peerOwner: SessionPromptOwner.Authority }
+  > {
     while (true) {
       const match = existingStateEntryForSession(input.sessionID, input.directory).promptState?.[input.sessionID]
       if (match?.terminating) {
@@ -411,13 +469,33 @@ export namespace SessionPromptState {
         await receipt.reusable
         continue
       }
-      const abort = input.resumeExisting
-        ? resume(input.sessionID, input.directory)
-        : start(input.sessionID, input.directory)
+      if (!input.resumeExisting) {
+        const admission = admitStart(input.sessionID, input.directory)
+        if (admission.type === "peer") return { peerOwner: admission.authority }
+        const abort = admission.type === "owner" ? admission.abort : undefined
+        return {
+          abort,
+          startedOwner: admission.type === "owner",
+          firstResult: attach(
+            input.sessionID,
+            input.directory,
+            input.resultMode,
+            input.replyToMessageID,
+            input.summaryControlID,
+          ),
+        }
+      }
+      const abort = resume(input.sessionID, input.directory)
       return {
         abort,
-        startedOwner: !input.resumeExisting && abort !== undefined,
-        firstResult: attach(input.sessionID, input.directory, input.resultMode, input.replyToMessageID),
+        startedOwner: false,
+        firstResult: attach(
+          input.sessionID,
+          input.directory,
+          input.resultMode,
+          input.replyToMessageID,
+          input.summaryControlID,
+        ),
       }
     }
   }
@@ -904,6 +982,26 @@ export namespace SessionPromptState {
     },
   }
 
+  async function releaseDurableOwnerUntilSettled(
+    authority: SessionPromptOwner.Authority,
+  ): Promise<"released" | "superseded"> {
+    let attempts = 0
+    while (true) {
+      attempts += 1
+      try {
+        return SessionPromptOwner.release(authority) ? "released" : "superseded"
+      } catch (error) {
+        log.warn("retrying exact durable Session prompt owner release", {
+          sessionID: authority.session_id,
+          generation: authority.generation,
+          attempts,
+          error: error instanceof Error ? error.message : String(error),
+        })
+        await Bun.sleep(250)
+      }
+    }
+  }
+
   async function terminatePromptResources(input: {
     sessionID: string
     abort?: AbortSignal
@@ -952,6 +1050,13 @@ export namespace SessionPromptState {
         } catch (releaseError) {
           worktreeReleaseError = releaseError
           errors.push(releaseError)
+        }
+        const durableOwnerRelease = await releaseDurableOwnerUntilSettled(match.durableOwner)
+        if (durableOwnerRelease === "superseded") {
+          log.warn("Session prompt owner release settled after generation was superseded", {
+            sessionID: input.sessionID,
+            generation: match.durableOwner.generation,
+          })
         }
         delete promptState[input.sessionID]
         deleteDirectoryIfEmpty(key, promptState)
@@ -1004,13 +1109,14 @@ export namespace SessionPromptState {
     result: Message.WithParts,
     directory?: string,
     resultMode: ResultMode = "reply",
+    summaryControlID?: string,
   ): number {
     const s = existingStateEntryForSession(sessionID, directory).promptState?.[sessionID]
     if (!s) return 0
     s.timeUpdated = Date.now()
     const matches = (callback: (typeof s.callbacks)[number]) => {
       if (callback.resultMode !== resultMode) return false
-      if (resultMode !== "reply") return true
+      if (resultMode === "summary") return callback.summaryControlID === summaryControlID
       if (result.info.role !== "assistant") return false
       return (
         callback.replyToMessageID === undefined || Message.acceptsInputMessage(result.info, callback.replyToMessageID)
@@ -1028,11 +1134,14 @@ export namespace SessionPromptState {
     directory: string | undefined,
     resultMode: ResultMode,
     replyToMessageID: string | undefined,
+    summaryControlID?: string,
   ): number {
     const s = existingStateEntryForSession(sessionID, directory).promptState?.[sessionID]
     if (!s) return 0
     const matches = (callback: (typeof s.callbacks)[number]) =>
-      callback.resultMode === resultMode && callback.replyToMessageID === replyToMessageID
+      callback.resultMode === resultMode &&
+      callback.replyToMessageID === replyToMessageID &&
+      callback.summaryControlID === summaryControlID
     const matching = s.callbacks.filter(matches)
     s.callbacks = s.callbacks.filter((callback) => !matches(callback))
     for (const callback of matching) callback.reject(error)

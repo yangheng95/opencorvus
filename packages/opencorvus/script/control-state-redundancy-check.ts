@@ -141,6 +141,12 @@ const CONTROL_STATE_INVENTORY = {
     identity: ["id", "control_id"],
     receipt: ["kind", "payload", "time_created"],
   }),
+  SessionPromptOwnerTable: inventory({
+    identity: ["session_id", "generation"],
+    causal: ["project_id", "owner_pid", "owner_process_instance_id", "owner_occurrence_id"],
+    input: ["directory"],
+    lease: ["time_acquired"],
+  }),
   AutomationTable: inventory({
     identity: ["id", "definition_id", "revision", "project_id", "session_id", "task_id"],
     input: [
@@ -312,6 +318,7 @@ try {
     key.startsWith("EngineGitCheckpoint") ||
     key === "SessionControlRecordTable" ||
     key === "SessionControlEventTable" ||
+    key === "SessionPromptOwnerTable" ||
     key === "MessageTable" ||
     key === "PartTable" ||
     key === "ToolPartRequestTable" ||

@@ -141,7 +141,12 @@ export namespace SessionControl {
 
   type SettlementLease = { leaseID: string; ownerOccurrenceID: string; now: number }
 
-  export function consume(input: { id: string; sessionID: string; lease?: SettlementLease }): Record | undefined {
+  export function consume(input: {
+    id: string
+    sessionID: string
+    payload?: z.input<typeof PersistedPayload>
+    lease?: SettlementLease
+  }): Record | undefined {
     return settle({ ...input, kind: "consumed" })
   }
 
@@ -172,8 +177,18 @@ export namespace SessionControl {
         ownerOccurrenceID: input.lease.ownerOccurrenceID,
         now: input.lease.now,
       })
+      const now = Date.now()
+      if (input.kind === "consumed" && input.payload !== undefined) {
+        db.insert(SessionControlEventTable).values({
+          id: Identifier.ascending("session_control"),
+          control_id: input.id,
+          kind: "amended",
+          payload: PersistedPayload.parse(input.payload),
+          time_created: now,
+        }).run()
+      }
       const payload = input.kind === "failed" ? (input.payload ?? {}) : null
-      db.insert(SessionControlEventTable).values({ id: Identifier.deterministic("session_control", `terminal\0${input.id}`), control_id: input.id, kind: input.kind, payload, time_created: Date.now() }).run()
+      db.insert(SessionControlEventTable).values({ id: Identifier.deterministic("session_control", `terminal\0${input.id}`), control_id: input.id, kind: input.kind, payload, time_created: now }).run()
       // Terminal is terminal: this control never runs again, so its execution
       // owner ends with the event that settled it.
       if (input.lease) releaseControlLeaseInTransaction(db, {
