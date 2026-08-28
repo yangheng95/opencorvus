@@ -1,0 +1,431 @@
+#!/usr/bin/env bun
+import { spawnSync } from "node:child_process"
+import { mkdtemp, readFile, rm, symlink } from "node:fs/promises"
+import os from "node:os"
+import path from "node:path"
+import { pathToFileURL } from "node:url"
+import ts from "typescript"
+
+const repositoryRoot = path.resolve(import.meta.dir, "..", "..", "..", "..")
+const sourcePrefix = "packages/opencorvus/src/"
+const retainedComponentBudgets = [
+  {
+    name: "engine-storage",
+    maximumSize: 43,
+    members: new Set<string>([
+      "packages/opencorvus/src/agent/artifact-read-facts.ts",
+      "packages/opencorvus/src/agent/worker-turn-descriptor.ts",
+      "packages/opencorvus/src/artifact-catalog/index.ts",
+      "packages/opencorvus/src/bus/index.ts",
+      "packages/opencorvus/src/engine/artifact.ts",
+      "packages/opencorvus/src/engine/cancellation-projection.ts",
+      "packages/opencorvus/src/engine/completion-decision.ts",
+      "packages/opencorvus/src/engine/control-lease.ts",
+      "packages/opencorvus/src/engine/delivery-slice-membership-facts.ts",
+      "packages/opencorvus/src/engine/dispatch-lineage.ts",
+      "packages/opencorvus/src/engine/evidence-locator.ts",
+      "packages/opencorvus/src/engine/git-process.ts",
+      "packages/opencorvus/src/engine/producer-turn.ts",
+      "packages/opencorvus/src/engine/protocol.ts",
+      "packages/opencorvus/src/engine/store.ts",
+      "packages/opencorvus/src/engine/task-completion-closure.ts",
+      "packages/opencorvus/src/engine/task-directory.ts",
+      "packages/opencorvus/src/engine/task-execution-capsule-binding.ts",
+      "packages/opencorvus/src/engine/task-lifecycle.ts",
+      "packages/opencorvus/src/engine/task-package-revision-binding.ts",
+      "packages/opencorvus/src/engine/task-session-lineage.ts",
+      "packages/opencorvus/src/engine/terminal-lifecycle-reference.ts",
+      "packages/opencorvus/src/engine/workflow-binding-facts.ts",
+      "packages/opencorvus/src/engine/workflow-node-occurrence.ts",
+      "packages/opencorvus/src/execution-capsule/runtime.ts",
+      "packages/opencorvus/src/execution-capsule/tree-digest.ts",
+      "packages/opencorvus/src/goal-workload-analyst/publication.ts",
+      "packages/opencorvus/src/project/deletion-registry.ts",
+      "packages/opencorvus/src/project/directory-admission.ts",
+      "packages/opencorvus/src/project/instance.ts",
+      "packages/opencorvus/src/project/project.ts",
+      "packages/opencorvus/src/project/task-runtime-root.ts",
+      "packages/opencorvus/src/protocol/lifecycle-projection.ts",
+      "packages/opencorvus/src/protocol/store.ts",
+      "packages/opencorvus/src/session/prompt/owner.ts",
+      "packages/opencorvus/src/session/prompt/state.ts",
+      "packages/opencorvus/src/session/runtime-contract.ts",
+      "packages/opencorvus/src/session/status.ts",
+      "packages/opencorvus/src/session/tool-part-facts.ts",
+      "packages/opencorvus/src/shell/process-supervisor.ts",
+      "packages/opencorvus/src/storage/db.ts",
+      "packages/opencorvus/src/task-artifact/store.ts",
+      "packages/opencorvus/src/util/git.ts",
+    ]),
+  },
+  {
+    name: "session-orchestration",
+    maximumSize: 31,
+    members: new Set<string>([
+      "packages/opencorvus/src/acceptance/checks/discovery.ts",
+      "packages/opencorvus/src/build/agent.ts",
+      "packages/opencorvus/src/chat/global-chat-service.ts",
+      "packages/opencorvus/src/engine/index.ts",
+      "packages/opencorvus/src/engine/state.ts",
+      "packages/opencorvus/src/expert-squad/evolution-mutation.ts",
+      "packages/opencorvus/src/mission/execution-closure.ts",
+      "packages/opencorvus/src/orchestrator/agent.ts",
+      "packages/opencorvus/src/orchestrator/build-tool.ts",
+      "packages/opencorvus/src/orchestrator/frontend-design-tool.ts",
+      "packages/opencorvus/src/orchestrator/loop.ts",
+      "packages/opencorvus/src/orchestrator/requirements-stage.ts",
+      "packages/opencorvus/src/orchestrator/runtime-repair-tools.ts",
+      "packages/opencorvus/src/orchestrator/task-lifecycle-tools.ts",
+      "packages/opencorvus/src/orchestrator/tools.ts",
+      "packages/opencorvus/src/project/bootstrap.ts",
+      "packages/opencorvus/src/project/delete.ts",
+      "packages/opencorvus/src/protocol/delivery.ts",
+      "packages/opencorvus/src/protocol/scheduler-message.ts",
+      "packages/opencorvus/src/protocol/session-wake-state.ts",
+      "packages/opencorvus/src/requirements/agent.ts",
+      "packages/opencorvus/src/scheduler/automation-service.ts",
+      "packages/opencorvus/src/scheduler/event-service.ts",
+      "packages/opencorvus/src/session/loop.ts",
+      "packages/opencorvus/src/session/prompt/index.ts",
+      "packages/opencorvus/src/session/wake.ts",
+      "packages/opencorvus/src/task-api/index.ts",
+      "packages/opencorvus/src/tool/expert-squad-feedback-revision-tool.ts",
+      "packages/opencorvus/src/tool/wait.ts",
+      "packages/opencorvus/src/workbench/board.ts",
+      "packages/opencorvus/src/workbench/brief.ts",
+    ]),
+  },
+] as const
+const allowedSelfReferences = new Set(["packages/opencorvus/src/plugin/github-copilot/models.ts"])
+const cleanImportEntrypoints = [
+  "packages/opencorvus/src/project/implicit-project.ts",
+  "packages/opencorvus/src/mcp/browser/builtin.ts",
+  "packages/opencorvus/src/session/loop.ts",
+  "packages/opencorvus/src/config/config.ts",
+] as const
+const snapshotMaterializationPaths = [
+  "packages/opencorvus/src",
+  "packages/opencorvus/generated",
+  "packages/opencorvus/tsconfig.json",
+  "packages/opencorvus/package.json",
+  "expert-squads",
+] as const
+
+type Graph = Map<string, ReadonlySet<string>>
+type SnapshotRequest = {
+  treeish: string
+  label: string
+}
+type MaterializedSnapshot = {
+  root: string
+  label: string
+  productionModules: string[]
+}
+
+function gitOutput(args: readonly string[]): string {
+  const result = Bun.spawnSync(["git", ...args], {
+    cwd: repositoryRoot,
+    stdout: "pipe",
+    stderr: "pipe",
+  })
+  if (result.exitCode !== 0) {
+    throw new Error(`git ${args.join(" ")} failed: ${result.stderr.toString().trim()}`)
+  }
+  return result.stdout.toString()
+}
+
+function productionModulesFromListing(listed: string): string[] {
+  return listed
+    .split(/\r?\n/)
+    .filter(
+      (file) =>
+        (file.endsWith(".ts") || file.endsWith(".tsx")) &&
+        !file.endsWith(".d.ts") &&
+        !file.includes("/skill/builtin/"),
+    )
+    .sort()
+}
+
+async function linkSnapshotDependencies(snapshotRoot: string): Promise<void> {
+  for (const relative of ["node_modules", "packages/opencorvus/node_modules"]) {
+    const source = path.join(repositoryRoot, relative)
+    const target = path.join(snapshotRoot, relative)
+    await symlink(source, target, process.platform === "win32" ? "junction" : "dir")
+  }
+}
+
+function snapshotRequest(args: readonly string[]): SnapshotRequest {
+  if (args.length === 0) {
+    const commit = gitOutput(["rev-parse", "--verify", "HEAD^{commit}"]).trim()
+    return { treeish: commit, label: `head:${commit.slice(0, 12)}` }
+  }
+  if (args.length === 1 && args[0] === "--index") {
+    const tree = gitOutput(["write-tree"]).trim()
+    return { treeish: tree, label: `index:${tree.slice(0, 12)}` }
+  }
+  if (args.length === 2 && args[0] === "--treeish") {
+    const commit = gitOutput(["rev-parse", "--verify", `${args[1]}^{commit}`]).trim()
+    return { treeish: commit, label: `treeish:${commit.slice(0, 12)}` }
+  }
+  throw new Error("Usage: module-topology.ts [--index | --treeish <commit-ish>]")
+}
+
+async function materializeSnapshot(request: SnapshotRequest): Promise<MaterializedSnapshot> {
+  const snapshotRoot = await mkdtemp(path.join(repositoryRoot, ".module-topology-"))
+  try {
+    const productionModules = productionModulesFromListing(
+      gitOutput(["ls-tree", "-r", "--name-only", request.treeish, "--", sourcePrefix]),
+    )
+    const archivePath = path.join(snapshotRoot, "snapshot.tar")
+    const archive = Bun.spawnSync(
+      [
+        "git",
+        "archive",
+        "--format=tar",
+        `--output=${archivePath}`,
+        request.treeish,
+        "--",
+        ...snapshotMaterializationPaths,
+      ],
+      { cwd: repositoryRoot, stdout: "pipe", stderr: "pipe" },
+    )
+    if (archive.exitCode !== 0) {
+      throw new Error(`git archive failed: ${archive.stderr.toString().trim()}`)
+    }
+    extractSnapshotArchive(snapshotRoot, path.basename(archivePath))
+    await rm(archivePath, { force: true })
+    await linkSnapshotDependencies(snapshotRoot)
+    return { root: snapshotRoot, label: request.label, productionModules }
+  } catch (error) {
+    await rm(snapshotRoot, { recursive: true, force: true })
+    throw error
+  }
+}
+
+export function extractSnapshotArchive(snapshotRoot: string, archiveName: string): void {
+  if (path.basename(archiveName) !== archiveName) {
+    throw new Error(`snapshot archive must be addressed by basename: ${archiveName}`)
+  }
+  const extract = spawnSync("tar", ["-xf", archiveName, "-C", "."], {
+    cwd: snapshotRoot,
+    encoding: "utf8",
+    windowsHide: true,
+  })
+  if (extract.error) throw extract.error
+  if (extract.status !== 0) {
+    throw new Error(`tar extraction failed: ${extract.stderr.trim()}`)
+  }
+}
+
+function runtimeModuleSpecifier(statement: ts.Statement): string | undefined {
+  if (ts.isImportDeclaration(statement) && ts.isStringLiteral(statement.moduleSpecifier)) {
+    const clause = statement.importClause
+    if (!clause) return statement.moduleSpecifier.text
+    if (clause.isTypeOnly) return undefined
+    if (clause.name) return statement.moduleSpecifier.text
+    const bindings = clause.namedBindings
+    if (bindings && ts.isNamespaceImport(bindings)) return statement.moduleSpecifier.text
+    if (bindings && ts.isNamedImports(bindings) && bindings.elements.some((element) => !element.isTypeOnly)) {
+      return statement.moduleSpecifier.text
+    }
+    return undefined
+  }
+  if (ts.isExportDeclaration(statement) && statement.moduleSpecifier && ts.isStringLiteral(statement.moduleSpecifier)) {
+    if (statement.isTypeOnly) return undefined
+    const clause = statement.exportClause
+    if (!clause || ts.isNamespaceExport(clause)) return statement.moduleSpecifier.text
+    if (ts.isNamedExports(clause) && clause.elements.some((element) => !element.isTypeOnly)) {
+      return statement.moduleSpecifier.text
+    }
+  }
+  return undefined
+}
+
+function resolveProductionModule(from: string, specifier: string, modules: ReadonlySet<string>): string | undefined {
+  let unresolved: string
+  if (specifier.startsWith("@/")) {
+    unresolved = `${sourcePrefix}${specifier.slice(2)}`
+  } else if (specifier.startsWith(".")) {
+    unresolved = path.posix.normalize(path.posix.join(path.posix.dirname(from), specifier))
+  } else {
+    return undefined
+  }
+
+  const bases = [unresolved]
+  if (/\.(?:c|m)?jsx?$/.test(unresolved)) bases.push(unresolved.replace(/\.(?:c|m)?jsx?$/, ""))
+  for (const base of bases) {
+    for (const candidate of [base, `${base}.ts`, `${base}.tsx`, `${base}/index.ts`, `${base}/index.tsx`]) {
+      if (modules.has(candidate)) return candidate
+    }
+  }
+  return undefined
+}
+
+async function runtimeGraph(
+  snapshotRoot: string,
+  files: readonly string[],
+): Promise<{ graph: Graph; edgeCount: number }> {
+  const modules = new Set(files)
+  const graph = new Map<string, Set<string>>(files.map((file) => [file, new Set()]))
+  for (const file of files) {
+    const source = await readFile(path.join(snapshotRoot, file), "utf8")
+    const sourceFile = ts.createSourceFile(
+      file,
+      source,
+      ts.ScriptTarget.Latest,
+      true,
+      file.endsWith(".tsx") ? ts.ScriptKind.TSX : ts.ScriptKind.TS,
+    )
+    for (const statement of sourceFile.statements) {
+      const specifier = runtimeModuleSpecifier(statement)
+      if (!specifier) continue
+      const target = resolveProductionModule(file, specifier, modules)
+      if (target) graph.get(file)!.add(target)
+    }
+  }
+  return {
+    graph,
+    edgeCount: [...graph.values()].reduce((total, targets) => total + targets.size, 0),
+  }
+}
+
+function stronglyConnectedComponents(graph: Graph): string[][] {
+  let nextIndex = 0
+  const indices = new Map<string, number>()
+  const lowLinks = new Map<string, number>()
+  const stack: string[] = []
+  const onStack = new Set<string>()
+  const components: string[][] = []
+
+  const visit = (node: string) => {
+    indices.set(node, nextIndex)
+    lowLinks.set(node, nextIndex)
+    nextIndex += 1
+    stack.push(node)
+    onStack.add(node)
+
+    for (const target of graph.get(node) ?? []) {
+      if (!indices.has(target)) {
+        visit(target)
+        lowLinks.set(node, Math.min(lowLinks.get(node)!, lowLinks.get(target)!))
+      } else if (onStack.has(target)) {
+        lowLinks.set(node, Math.min(lowLinks.get(node)!, indices.get(target)!))
+      }
+    }
+
+    if (lowLinks.get(node) !== indices.get(node)) return
+    const component: string[] = []
+    let member: string
+    do {
+      member = stack.pop()!
+      onStack.delete(member)
+      component.push(member)
+    } while (member !== node)
+    components.push(component.sort())
+  }
+
+  for (const node of graph.keys()) {
+    if (!indices.has(node)) visit(node)
+  }
+  return components
+}
+
+function componentDiagnostic(component: readonly string[], graph: Graph): string {
+  const members = new Set(component)
+  const edges = component.flatMap((source) =>
+    [...(graph.get(source) ?? [])]
+      .filter((target) => members.has(target))
+      .sort()
+      .map((target) => `    ${source} -> ${target}`),
+  )
+  return [`  component (${component.length})`, ...component.map((member) => `    ${member}`), "  internal edges", ...edges].join(
+    "\n",
+  )
+}
+
+async function checkCleanImports(snapshotRoot: string): Promise<string[]> {
+  const failures: string[] = []
+  const runtimeRoot = await mkdtemp(path.join(os.tmpdir(), "opencorvus-module-topology-"))
+  try {
+    for (const entrypoint of cleanImportEntrypoints) {
+      const url = pathToFileURL(path.join(snapshotRoot, entrypoint)).href
+      const result = Bun.spawnSync(
+        [process.execPath, "--eval", `await import(${JSON.stringify(url)}); process.exit(0)`],
+        {
+          cwd: snapshotRoot,
+          env: { ...process.env, OPENCORVUS_HOME: runtimeRoot },
+          stdout: "pipe",
+          stderr: "pipe",
+          timeout: 60_000,
+        },
+      )
+      if (result.exitCode !== 0) {
+        failures.push(
+          `clean import failed for ${entrypoint}: ${result.stderr.toString().trim() || `exit ${result.exitCode}`}`,
+        )
+      }
+    }
+  } finally {
+    await rm(runtimeRoot, { recursive: true, force: true })
+  }
+  return failures
+}
+
+async function main() {
+  const args = process.argv.slice(2)
+  const snapshot = await materializeSnapshot(snapshotRequest(args))
+  try {
+    const files = snapshot.productionModules
+    const { graph, edgeCount } = await runtimeGraph(snapshot.root, files)
+    const allComponents = stronglyConnectedComponents(graph)
+    const multiModuleComponents = allComponents
+      .filter((component) => component.length > 1)
+      .sort((a, b) => b.length - a.length)
+    const selfReferences = allComponents
+      .filter((component) => component.length === 1 && graph.get(component[0]!)?.has(component[0]!))
+      .map((component) => component[0]!)
+      .sort()
+    const failures: string[] = []
+
+    const componentSizes = multiModuleComponents.map((component) => component.length)
+    for (const component of multiModuleComponents) {
+      const budget = retainedComponentBudgets.find((candidate) =>
+        component.every((member) => candidate.members.has(member)),
+      )
+      if (!budget) {
+        failures.push(`multi-module component contains an unknown or cross-boundary cycle (${component.length} modules)`)
+        continue
+      }
+      if (component.length > budget.maximumSize) {
+        failures.push(
+          `${budget.name} component exceeds its retained ceiling ${budget.maximumSize}: received ${component.length}`,
+        )
+      }
+    }
+    const unknownSelfReferences = selfReferences.filter((module) => !allowedSelfReferences.has(module))
+    if (unknownSelfReferences.length > 0) {
+      failures.push(`unknown self-references: ${unknownSelfReferences.join(", ")}`)
+    }
+    failures.push(...(await checkCleanImports(snapshot.root)))
+
+    if (failures.length > 0) {
+      for (const failure of failures) console.error(`module-topology: ${failure}`)
+      for (const component of multiModuleComponents) console.error(componentDiagnostic(component, graph))
+      for (const selfReference of selfReferences) console.error(`  self-reference: ${selfReference}`)
+      console.error(`module-topology FAILED (${failures.length} problem${failures.length === 1 ? "" : "s"})`)
+      process.exitCode = 1
+      return
+    }
+
+    console.log(
+      `module-topology ok (${snapshot.label}) — ${files.length} modules, ${edgeCount} runtime edges, retained SCC sizes ${[
+        ...componentSizes,
+        ...selfReferences.map(() => 1),
+      ].join(", ")}; ${cleanImportEntrypoints.length} clean imports passed`,
+    )
+  } finally {
+    await rm(snapshot.root, { recursive: true, force: true })
+  }
+}
+
+if (import.meta.main) await main()

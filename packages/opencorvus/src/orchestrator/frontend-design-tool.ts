@@ -10,10 +10,10 @@ import {
   createDesignResourceManifest,
   designResourceManifestFileRefs,
   type DesignResourceFileRef,
-  type DesignResourceIntent,
   frontendDesignMaterialMime,
   recordDesignResourceManifest,
 } from "@/frontend-design/design-resource-manifest"
+import type { DesignResourceIntent } from "@/protocol/design-resource-intent"
 import { FrontendDesignAgent } from "@/frontend-design/agent"
 import { recordPartialFrontendDesignFacts } from "@/frontend-design/partial-artifact"
 import { recordFrontendDesignArtifact } from "@/frontend-design/artifact"

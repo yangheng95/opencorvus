@@ -2,6 +2,7 @@ import { z } from "zod"
 import { EngineArtifactTable } from "@/engine/engine.sql"
 import { recordEngineArtifact } from "@/engine/artifact"
 import { Identifier } from "@/id/id"
+import { DesignResourceIntentSchema, type DesignResourceIntent } from "@/protocol/design-resource-intent"
 import { Database, and, eq } from "@/storage/db"
 
 export const DesignResourceKindSchema = z.enum([
@@ -14,16 +15,6 @@ export const DesignResourceKindSchema = z.enum([
   "browser_preview_evidence",
 ])
 export type DesignResourceKind = z.infer<typeof DesignResourceKindSchema>
-
-export const DesignResourceIntentSchema = z.enum([
-  "visual_reference",
-  "design_source",
-  "interaction_reference",
-  "design_tokens",
-  "implementation_reference",
-  "verification_evidence",
-])
-export type DesignResourceIntent = z.infer<typeof DesignResourceIntentSchema>
 
 export const DesignResourceOriginSchema = z.enum([
   "attachment",
