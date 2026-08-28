@@ -17,7 +17,7 @@ import {
 } from "@/engine/task-root-ingress-delivery"
 import { currentOrchestratorControlMessage } from "@/orchestrator/agent"
 import { Message } from "@/session/message"
-import type { TaskRootMessageProvenance } from "@/task-api/task-root-message"
+import type { TaskRootMessageProvenance } from "@/protocol/task-root-message-schema"
 import { recordProviderActivityEvent } from "@/session/provider-activity-facts"
 import { ProviderActivityOutcomeTable } from "@/session/session.sql"
 import { Database, eq } from "@/storage/db"

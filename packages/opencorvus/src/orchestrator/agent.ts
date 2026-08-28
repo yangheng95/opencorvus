@@ -87,10 +87,10 @@ import { resolvePinnedTaskSchedulerTurnProjection } from "@/engine/task-package-
 import type { TaskRow } from "@/engine"
 import { TaskCreatorMetadata } from "@/task-api/task-creator"
 import {
-  TaskRootMessageProvenance,
   deliverTaskRootMessageToOrchestratorSession,
   getTaskRootMessage,
 } from "@/task-api/task-root-message"
+import { TaskRootMessageProvenance } from "@/protocol/task-root-message-schema"
 import { AgentTrace } from "@/trace"
 import { ProtocolStore } from "@/protocol/store"
 import { SchedulerMessagePayload } from "@/protocol/schema"

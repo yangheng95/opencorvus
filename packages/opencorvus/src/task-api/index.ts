@@ -164,7 +164,8 @@ import {
   TaskRootMessageKind,
   TaskRootMessageProvenance,
   type SchedulerDeliveryReference as SchedulerDeliveryReferenceValue,
-} from "./task-root-message"
+} from "@/protocol/task-root-message-schema"
+import { deliverTaskRootMessageToOrchestratorSession, getTaskRootMessage } from "./task-root-message"
 import {
   assertNoCallerSuppliedTaskCreatorMetadata,
   assertTaskCreatorExpertSquadAuthority,

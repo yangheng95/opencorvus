@@ -93,12 +93,13 @@ import { ProjectRuntimePaths } from "@/project/runtime-paths"
 import { taskPrimaryProjectRoot } from "@/project/task-runtime-root"
 import { Session } from "@/session"
 import { MessageStore } from "@/session/message-store"
-import { SessionPrompt } from "@/session/prompt"
+import type { TaskRootMessageKind } from "@/protocol/task-root-message-schema"
 import {
   isProjectedWorkerRuntimeContract,
   SessionRuntimeContractStore,
   type ProjectedWorkerRuntimeContract,
 } from "@/session/runtime-contract"
+import { validateSessionRuntimeContractForContinuation } from "@/session/runtime-contract-validation"
 import { sessionLifecycleOrderKey, SessionStatus } from "@/session/status"
 import { withImmediateParkToolResultControl } from "@/session/tool-result-control"
 import { bindToolDecisionDeclaration, bindToolExecutionMode } from "@/tool/execution-mode"
@@ -438,11 +439,11 @@ function assertDirectReplySessionKind(input: { taskID: string; sessionID: string
   if (!kind) {
     throw new Error(`Session ${input.sessionID} has no task agent kind`)
   }
-  const installed = SessionPrompt.getSessionRuntimeContract(input.sessionID)
+  const installed = SessionRuntimeContractStore.get(input.sessionID)
   if (!installed || installed.identity.identityKind !== "projected-worker") {
     throw new Error(`Session ${input.sessionID} has no projected worker runtime identity for agent control`)
   }
-  const runtimeContract = SessionPrompt.validateSessionRuntimeContractForContinuation({
+  const runtimeContract = validateSessionRuntimeContractForContinuation({
     sessionID: input.sessionID,
     expectedSessionKind: kind,
     expectedTaskID: input.taskID,
@@ -597,7 +598,7 @@ function requireInstalledAgentCoordinationWorkerBinding(input: {
   sessionID: string
   binding: ProjectedWorkerBinding
 }): { binding: ProjectedWorkerBinding; runtimeContract: ProjectedWorkerRuntimeContract } {
-  const runtimeContract = SessionPrompt.getSessionRuntimeContract(input.sessionID)
+  const runtimeContract = SessionRuntimeContractStore.get(input.sessionID)
   if (!runtimeContract || !isProjectedWorkerRuntimeContract(runtimeContract)) {
     throw new Error(`agent coordination session ${input.sessionID} has no projected worker runtime binding`)
   }
@@ -859,7 +860,7 @@ export function createOrchestratorTools(input: {
   dispatchAgents: readonly PromptProfileResolver.ResolvedProjectedAgent[]
   rootMessage?: {
     messageID: string
-    kind: "operator" | "orchestrator" | "mission"
+    kind: TaskRootMessageKind
   }
   missionAcceptanceResume?: {
     messageID: string
@@ -1527,7 +1528,7 @@ export function createOrchestratorTools(input: {
             request,
             binding: request.payload.worker_binding,
           })
-          const installedRuntimeContract = SessionPrompt.getSessionRuntimeContract(request.payload.session_id)
+          const installedRuntimeContract = SessionRuntimeContractStore.get(request.payload.session_id)
           const runtimeContract = installedRuntimeContract
             ? requireInstalledAgentCoordinationWorkerBinding({
                 sessionID: request.payload.session_id,

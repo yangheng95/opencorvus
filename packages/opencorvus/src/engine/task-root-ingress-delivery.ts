@@ -36,7 +36,11 @@ import { projectToolPartInTransaction } from "@/session/tool-part-facts"
 import { Database, and, asc, eq, inArray, sql } from "@/storage/db"
 import { Log } from "@/util/log"
 import { Filesystem } from "@/util/filesystem"
-import { TaskRootMessageProvenance } from "@/task-api/task-root-message"
+import {
+  TaskRootMessageProvenance,
+  type SchedulerDeliveryReference,
+  type TaskRootMessageKind,
+} from "@/protocol/task-root-message-schema"
 import {
   EngineControlActivationLeaseTable,
   EngineInteractionRequestTable,
@@ -251,8 +255,8 @@ export function persistTaskRootMessageIngressInTransaction(
   input: {
     task: TaskRow
     messageID: string
-    kind: "operator" | "orchestrator" | "mission"
-    schedulerDelivery?: import("@/task-api/task-root-message").SchedulerDeliveryReference
+    kind: TaskRootMessageKind
+    schedulerDelivery?: SchedulerDeliveryReference
     now: number
   },
 ): string {
