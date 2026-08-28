@@ -37,10 +37,10 @@ import {
 } from "./completion-decision"
 import {
   requireCurrentTerminalLifecycleReference,
-  sameTerminalLifecycleReference,
   terminalLifecycleReferenceMatchesTaskRow,
   type TerminalLifecycleReference,
 } from "./terminal-lifecycle-reference"
+import { sameTerminalLifecycleReference } from "./terminal-lifecycle-reference-schema"
 
 export const CROSS_TASK_PLAIN_ENGINE_ARTIFACT_TYPE = "opencorvus/imported-engine-artifact"
 export const CROSS_TASK_TASK_ARTIFACT_SNAPSHOT_TYPE = "opencorvus/imported-task-artifact-snapshot"

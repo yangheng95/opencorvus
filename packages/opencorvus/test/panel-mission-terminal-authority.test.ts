@@ -2,10 +2,8 @@ import { afterEach, describe, expect, spyOn, test } from "bun:test"
 import { reviewedTerminalLifecycleReferenceBeforePanelAction } from "@/agent/task-review-facts"
 import { ArtifactReferenceResolutionError } from "@/agent/artifact-read-facts"
 import { recordEngineArtifact } from "@/engine/artifact"
-import {
-  requireCurrentTerminalLifecycleReference,
-  sameTerminalLifecycleReference,
-} from "@/engine/terminal-lifecycle-reference"
+import { requireCurrentTerminalLifecycleReference } from "@/engine/terminal-lifecycle-reference"
+import { sameTerminalLifecycleReference } from "@/engine/terminal-lifecycle-reference-schema"
 import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
 import { requireTask } from "@/engine/store"

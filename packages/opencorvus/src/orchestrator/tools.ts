@@ -73,10 +73,8 @@ import { Event as EngineEvent } from "@/engine/model"
 import { EngineProtocol } from "@/engine/protocol"
 import { findGoal, findInteractionByExternal, listGoals, requireTask, type TaskRow } from "@/engine/store"
 import { resolveSessionExecutionAuthority, sessionRole, taskIDForSession } from "@/engine/task-session-lineage"
-import {
-  requireCurrentTerminalLifecycleReference,
-  sameTerminalLifecycleReference,
-} from "@/engine/terminal-lifecycle-reference"
+import { requireCurrentTerminalLifecycleReference } from "@/engine/terminal-lifecycle-reference"
+import { sameTerminalLifecycleReference } from "@/engine/terminal-lifecycle-reference-schema"
 import type { DesignResourceManifest } from "@/frontend-design/design-resource-manifest"
 import { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
 import { Identifier } from "@/id/id"

@@ -4,9 +4,9 @@ import { OrchestratorEventSchema, type OrchestratorEvent } from "./event"
 import {
   requireCurrentTerminalLifecycleReference,
   resolveTerminalLifecycleReference,
-  sameTerminalLifecycleReference,
   TerminalLifecycleReferenceSchema,
 } from "@/engine/terminal-lifecycle-reference"
+import { sameTerminalLifecycleReference } from "@/engine/terminal-lifecycle-reference-schema"
 
 export const TerminalConversationAuthoritySchema = z
   .object({

@@ -140,10 +140,10 @@ import { terminalTask, updateTask, writeTaskUpdateInTransaction } from "@/engine
 import { findTaskCompletionDecisionForTerminalTime } from "@/engine/completion-decision"
 import {
   requireCurrentTerminalLifecycleReference,
-  sameTerminalLifecycleReference,
   TerminalLifecycleReferenceSchema,
   type TerminalLifecycleReference,
 } from "@/engine/terminal-lifecycle-reference"
+import { sameTerminalLifecycleReference } from "@/engine/terminal-lifecycle-reference-schema"
 import {
   deriveTaskStatus,
   isTaskActive,

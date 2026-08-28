@@ -68,10 +68,12 @@ import { MissionCompletionReceipt, MissionCompletionTaskAcceptance } from "@/mis
 import {
   requireCurrentTerminalLifecycleReference,
   resolveTerminalLifecycleReference,
-  sameTerminalLifecycleReference,
   type TerminalLifecycleReference,
 } from "@/engine/terminal-lifecycle-reference"
-import { TerminalLifecycleReferenceSchema } from "@/engine/terminal-lifecycle-reference-schema"
+import {
+  sameTerminalLifecycleReference,
+  TerminalLifecycleReferenceSchema,
+} from "@/engine/terminal-lifecycle-reference-schema"
 import {
   PanelQueryTaskErrorRow,
   PanelQueryTaskOutput,

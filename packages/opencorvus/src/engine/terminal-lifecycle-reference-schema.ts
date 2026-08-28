@@ -7,3 +7,10 @@ export const TerminalLifecycleReferenceSchema = z
   .strict()
 
 export type TerminalLifecycleReference = z.infer<typeof TerminalLifecycleReferenceSchema>
+
+export function sameTerminalLifecycleReference(
+  left: TerminalLifecycleReference,
+  right: TerminalLifecycleReference,
+): boolean {
+  return left.terminalEventID === right.terminalEventID
+}

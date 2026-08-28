@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto"
 import { isDeepStrictEqual } from "node:util"
-import { artifactProvenanceForAgentTurn } from "@/agent/artifact-read-facts"
+import { artifactProvenanceForAgentTurnInTransaction } from "@/agent/artifact-provenance-facts"
 import { findWorkerTurnDescriptorForDispatchInTransaction } from "@/agent/worker-turn-descriptor-facts"
 import { resolveDeliverySliceRevisionIdentity } from "@/engine/delivery-slice"
 import { resolveGoalGraphMembershipBeforeCatalogRevision } from "@/engine/delivery-slice-membership-facts"
@@ -150,7 +150,11 @@ export function validateGoalWorkloadArtifactRelationalIntegrity(input: {
   if (!isDeepStrictEqual(payload.selected_subjects, selectedSubjects)) {
     throw new Error(`Goal Workload ${input.row.id} selected subjects differ from its dispatch lineage`)
   }
-  const provenance = artifactProvenanceForAgentTurn(payload.producer.session_id, payload.producer.final_message_id)
+  const provenance = artifactProvenanceForAgentTurnInTransaction(
+    input.db,
+    payload.producer.session_id,
+    payload.producer.final_message_id,
+  )
   if (
     !isDeepStrictEqual(payload.observed_artifact_locators, provenance.observedArtifactLocators) ||
     !isDeepStrictEqual(payload.source_artifact_locators, provenance.sourceArtifactLocators)
