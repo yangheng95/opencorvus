@@ -11,7 +11,7 @@ const sourcePrefix = "packages/opencorvus/src/"
 const retainedComponentBudgets = [
   {
     name: "engine-storage",
-    maximumSize: 43,
+    maximumSize: 38,
     members: new Set<string>([
       "packages/opencorvus/src/agent/artifact-read-facts.ts",
       "packages/opencorvus/src/agent/worker-turn-descriptor.ts",
@@ -24,7 +24,6 @@ const retainedComponentBudgets = [
       "packages/opencorvus/src/engine/delivery-slice-membership-facts.ts",
       "packages/opencorvus/src/engine/dispatch-lineage.ts",
       "packages/opencorvus/src/engine/evidence-locator.ts",
-      "packages/opencorvus/src/engine/git-process.ts",
       "packages/opencorvus/src/engine/producer-turn.ts",
       "packages/opencorvus/src/engine/protocol.ts",
       "packages/opencorvus/src/engine/store.ts",
@@ -37,8 +36,6 @@ const retainedComponentBudgets = [
       "packages/opencorvus/src/engine/terminal-lifecycle-reference.ts",
       "packages/opencorvus/src/engine/workflow-binding-facts.ts",
       "packages/opencorvus/src/engine/workflow-node-occurrence.ts",
-      "packages/opencorvus/src/execution-capsule/runtime.ts",
-      "packages/opencorvus/src/execution-capsule/tree-digest.ts",
       "packages/opencorvus/src/goal-workload-analyst/publication.ts",
       "packages/opencorvus/src/project/deletion-registry.ts",
       "packages/opencorvus/src/project/directory-admission.ts",
@@ -52,10 +49,8 @@ const retainedComponentBudgets = [
       "packages/opencorvus/src/session/runtime-contract.ts",
       "packages/opencorvus/src/session/status.ts",
       "packages/opencorvus/src/session/tool-part-facts.ts",
-      "packages/opencorvus/src/shell/process-supervisor.ts",
       "packages/opencorvus/src/storage/db.ts",
       "packages/opencorvus/src/task-artifact/store.ts",
-      "packages/opencorvus/src/util/git.ts",
     ]),
   },
   {
