@@ -5,7 +5,7 @@ import { Database, and, eq, inArray, sql } from "@/storage/db"
 import { Log } from "@/util/log"
 import { Session } from "@/session"
 import { MessageTable, SessionTable } from "@/session/session.sql"
-import { SessionWake } from "@/session/wake"
+import type { SessionWake } from "@/session/wake"
 import { Wildcard } from "@/util/wildcard"
 import { Identifier } from "@/id/id"
 import { createHash, randomUUID } from "node:crypto"
@@ -41,6 +41,7 @@ import {
   MissionExecutionWakeClosedError,
   MissionExecutionWakeNotOpenedError,
 } from "@/mission/execution-closure"
+import { SchedulerEventWakeReason, schedulerEventWakeReasonJSONPath } from "@/protocol/scheduler-event-wake-reason"
 
 type Match = Record<string, string | number | boolean>
 type EventEnvelope = Bus.Envelope
@@ -84,6 +85,7 @@ type EventWakeExecutor = (input: {
   ownerID: string
   signal: AbortSignal
 }) => Promise<{ sessionID: string; messageID: string }>
+type EventSessionWakePort = Pick<typeof SessionWake, "resumePersistedWakeWithReceipt" | "wakeWithReceipt">
 type EventFireAcceptedHook = (fire: EventJobFire) => void | Promise<void>
 type BeforeSessionWakeHook = (input: {
   fire: EventJobFire
@@ -184,6 +186,7 @@ export namespace EventService {
       recoveryTimers: new Map<string, ReturnType<typeof setTimeout>>(),
       recoveryOperations: new Set<Promise<void>>(),
       runtimeReopen: undefined as Disposable | undefined,
+      sessionWake: undefined as EventSessionWakePort | undefined,
     }),
     async (s) => {
       s.unsub?.()
@@ -196,14 +199,21 @@ export namespace EventService {
       while (s.recoveryOperations.size > 0) await Promise.allSettled([...s.recoveryOperations])
       while (s.running.size > 0) await Promise.allSettled([...s.running.values()])
       s.jobTails.clear()
+      s.sessionWake = undefined
     },
     "event-service",
   )
 
-  export function init() {
+  export function init(input: { sessionWake: EventSessionWakePort }) {
     const s = state()
-    if (s.unsub) return
+    if (s.unsub) {
+      if (s.sessionWake !== input.sessionWake) {
+        throw new Error("EventService is already initialized with a different Session wake owner")
+      }
+      return
+    }
     if (s.lifecycle.signal.aborted) throw new Error("EventService cannot initialize while its Instance is disposing")
+    s.sessionWake = input.sessionWake
     s.unsub = Bus.subscribeAll(
       async (event: EventEnvelope) => {
         await accept(event)
@@ -536,11 +546,11 @@ export namespace EventService {
     return parent ? causationFromParent(parent) : { ancestry: [] }
   }
 
-  function eventWakeReason(event: EventEnvelope): SessionWake.WakeReason | undefined {
+  function eventWakeReason(event: EventEnvelope): SchedulerEventWakeReason | undefined {
     const properties = objectRecord(event.properties)
     const info = objectRecord(properties?.info)
     const extra = objectRecord(info?.extra)
-    const parsed = SessionWake.WakeReason.safeParse(extra?.wake_reason)
+    const parsed = SchedulerEventWakeReason.safeParse(extra?.wake_reason)
     return parsed.success ? parsed.data : undefined
   }
 
@@ -629,7 +639,7 @@ export namespace EventService {
 
   async function resumeEventWake(input: { session: Session.Info; messageID: string }): Promise<void> {
     await admitEventSessionWake(input.session, () =>
-      SessionWake.resumePersistedWakeWithReceipt({
+      requireSessionWake().resumePersistedWakeWithReceipt({
         sessionID: input.session.id,
         messageID: input.messageID,
         directory: input.session.directory,
@@ -960,7 +970,7 @@ export namespace EventService {
     throwIfAborted(input.signal)
     const session = await Session.get(input.fire.target_session_id)
     const receipt = await admitEventSessionWake(session, () =>
-      SessionWake.wakeWithReceipt({
+      requireSessionWake().wakeWithReceipt({
         sessionID: input.fire.target_session_id,
         messageID,
         textPartID,
@@ -1025,8 +1035,8 @@ export namespace EventService {
         .where(
           and(
             eq(MessageTable.session_id, fire.target_session_id),
-            sql`json_extract(${MessageTable.data}, ${SessionWake.reasonJSONPath("source")}) = 'scheduler.event'`,
-            sql`json_extract(${MessageTable.data}, ${SessionWake.reasonJSONPath("fireID")}) = ${fire.id}`,
+            sql`json_extract(${MessageTable.data}, ${schedulerEventWakeReasonJSONPath("source")}) = 'scheduler.event'`,
+            sql`json_extract(${MessageTable.data}, ${schedulerEventWakeReasonJSONPath("fireID")}) = ${fire.id}`,
           ),
         )
         .orderBy(MessageTable.time_created, MessageTable.id)
@@ -1210,6 +1220,12 @@ export namespace EventService {
   function throwIfAborted(signal: AbortSignal): void {
     if (!signal.aborted) return
     throw signal.reason instanceof Error ? signal.reason : new Error("Event fire execution aborted")
+  }
+
+  function requireSessionWake(): EventSessionWakePort {
+    const sessionWake = state().sessionWake
+    if (!sessionWake) throw new Error("EventService has no configured Session wake owner")
+    return sessionWake
   }
 
   function errorMessage(error: unknown): string {

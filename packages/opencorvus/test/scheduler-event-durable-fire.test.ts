@@ -4,12 +4,94 @@ import { EventService } from "../src/scheduler/event-service"
 import { Instance } from "../src/project/instance"
 import { Database, eq } from "../src/storage/db"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
+import { Config } from "@/config/config"
+import { provideInitializedProjectExecution } from "@/project/independent-project-owner"
+import { Session } from "@/session"
+import { SessionWake } from "@/session/wake"
 
 afterAll(resetMemoryDatabase)
 
 const TYPE = "test.scheduler.event.fact"
 
 describe("Event Job durable fact authority", () => {
+  test("the configured production wake owner persists and activates the exact Event fire Message", async () => {
+    await using project = await memoryProject()
+    const model = { providerID: "scheduler-event-test", modelID: "wake-model" }
+    await Instance.provide({
+      directory: project.path,
+      fn: () => Config.updateProjectPatch({
+        model: `${model.providerID}/${model.modelID}`,
+        provider: {
+          [model.providerID]: {
+            name: "Scheduler Event test provider",
+            npm: "@ai-sdk/openai-compatible",
+            api: "http://127.0.0.1:1/v1",
+            models: {
+              [model.modelID]: {
+                name: "Scheduler Event wake model",
+                tool_call: true,
+                modalities: { input: ["text"], output: ["text"] },
+                limit: { context: 32_000, output: 4_096 },
+              },
+            },
+          },
+        },
+      }),
+    })
+    await provideInitializedProjectExecution({
+      directory: project.path,
+      fn: async () => {
+        let resolveActivation!: (value: { sessionID: string; messageID: string }) => void
+        const activation = new Promise<{ sessionID: string; messageID: string }>((resolve) => { resolveActivation = resolve })
+        using _loop = SessionWake.TestHooks.installWakeLoopExecutor(async ({ sessionID, messageID }) => {
+          resolveActivation({ sessionID, messageID })
+        })
+        const job = await EventService.create({
+          name: "production wake",
+          eventType: TYPE,
+          prompt: "wake through the configured Session owner",
+          projectId: Instance.project.id,
+          oneShot: true,
+        })
+        await EventService.TestHooks.acceptEnvelope({
+          occurrenceID: "event:production-wake:1",
+          type: TYPE,
+          properties: { value: "exact" },
+        })
+        await EventService.TestHooks.waitForIdle()
+        const fire = EventService.TestHooks.fires(Instance.project.id)[0]!
+        expect(fire).toMatchObject({
+          event_job_id: job.id,
+          event_occurrence_id: "event:production-wake:1",
+          status: "succeeded",
+        })
+        const activated = await activation
+        const message = (await Session.messages({ sessionID: fire.target_session_id })).find((entry) => entry.info.id === activated.messageID)
+        expect({ fire, activated, message }).toMatchObject({
+          fire: { target_session_id: activated.sessionID },
+          message: {
+            info: {
+              id: activated.messageID,
+              role: "user",
+              author: "orchestrator",
+              extra: {
+                wake_reason: {
+                  source: "scheduler.event",
+                  jobID: job.id,
+                  jobName: "production wake",
+                  fireID: fire.id,
+                  eventType: TYPE,
+                  oneShot: true,
+                },
+              },
+            },
+            parts: [expect.objectContaining({ type: "text", text: "wake through the configured Session owner" })],
+          },
+        })
+      },
+    })
+  }, 60_000)
+
   test("persists a transient Bus input once and binds one successful fire to the exact definition revision", async () => {
     await using project = await memoryProject()
     await Instance.provide({ directory: project.path, fn: async () => {

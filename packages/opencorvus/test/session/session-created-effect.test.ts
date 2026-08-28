@@ -4,6 +4,7 @@ import { Instance } from "@/project/instance"
 import { EventService } from "@/scheduler/event-service"
 import { Session } from "@/session"
 import { Database } from "@/storage/db"
+import { SessionWake } from "@/session/wake"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
 
 afterEach(async () => {
@@ -16,7 +17,7 @@ describe("Session Created post-commit lifecycle", () => {
     await Instance.provide({
       directory: project.path,
       fn: async () => {
-        EventService.init()
+        EventService.init({ sessionWake: SessionWake })
         const received: Array<{ directory?: string; payload: unknown }> = []
         let resolveCreated!: () => void
         const created = new Promise<void>((resolve) => (resolveCreated = resolve))

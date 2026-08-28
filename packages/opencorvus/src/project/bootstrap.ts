@@ -35,6 +35,7 @@ import { markConversationCapabilityTransactionalInit } from "@/conversation/capa
 import { PermissionAuthority } from "@/permission/authority"
 import { ProjectMemoryOrganizer } from "@/memory/project-memory-organizer"
 import { reconcileBuildObservationCleanups } from "@/engine/build-observation-cleanup"
+import { SessionWake } from "@/session/wake"
 
 async function validateInstanceConversationCapabilities() {
   const lifecycleContext = {
@@ -56,7 +57,7 @@ async function validateInstanceConversationCapabilities() {
 export const InstanceBootstrap = markConversationCapabilityTransactionalInit(async function InstanceBootstrap() {
   Log.Default.info("bootstrapping", { directory: Instance.directory })
   installDefaultControlPlaneToolLoaders()
-    configureTaskIngressRunner(runTaskLoop)
+  configureTaskIngressRunner(runTaskLoop)
   const lifecycleContext = {
     directory: Instance.directory,
     worktree: Instance.worktree,
@@ -90,7 +91,7 @@ export const InstanceBootstrap = markConversationCapabilityTransactionalInit(asy
   WorktreeGC.init()
   Truncate.init()
   AutomationService.init()
-  EventService.init()
+  EventService.init({ sessionWake: SessionWake })
   ProjectMemoryOrganizer.init()
   // Durable subscribers must exist before any persisted outbox occurrence is
   // resumed. In particular, message.moved is the single source/target

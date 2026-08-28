@@ -25,6 +25,7 @@ import { RuntimeExecutionSettlement } from "@/runtime/execution-settlement"
 import { createExecutionCancellationOrigin } from "./prompt/cancellation"
 import { ProjectMemory } from "@/memory/project-memory"
 import { SchedulerMessageWakeReason } from "@/protocol/scheduler-message-wake-reason"
+import { SchedulerEventWakeReason } from "@/protocol/scheduler-event-wake-reason"
 
 /**
  * Session wake mechanism.
@@ -83,14 +84,7 @@ export namespace SessionWake {
       scope: z.enum(["session", "project", "global"]),
       recurrence: z.string().nullable(),
     }),
-    z.object({
-      source: z.literal("scheduler.event"),
-      jobID: z.string(),
-      jobName: z.string(),
-      fireID: z.string(),
-      eventType: z.string(),
-      oneShot: z.boolean(),
-    }),
+    SchedulerEventWakeReason,
   ])
   export type WakeReason = z.infer<typeof WakeReason>
 
