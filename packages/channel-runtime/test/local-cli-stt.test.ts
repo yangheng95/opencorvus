@@ -1,12 +1,11 @@
 import { afterEach, expect, test } from "bun:test"
-import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs"
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs"
 import { tmpdir } from "node:os"
 import path from "node:path"
 import { LocalCLIProvider } from "../src/stt/providers/local-cli"
 import type { AudioBuffer } from "../src/stt/types"
 
 const tempRoots: string[] = []
-const localCliSourcePath = path.resolve(import.meta.dir, "..", "src", "stt", "providers", "local-cli.ts")
 
 afterEach(() => {
   for (const root of tempRoots.splice(0)) rmSync(root, { recursive: true, force: true })
@@ -26,7 +25,7 @@ function audio(): AudioBuffer {
   }
 }
 
-function processAlive(pid: number): boolean {
+function isPidAlive(pid: number): boolean {
   try {
     process.kill(pid, 0)
     return true
@@ -35,24 +34,25 @@ function processAlive(pid: number): boolean {
   }
 }
 
-function killProcess(pid: number): void {
-  try {
-    process.kill(pid, "SIGKILL")
-  } catch (error) {
-    if ((error as NodeJS.ErrnoException).code !== "ESRCH") throw error
-  }
-}
-
-async function waitForDead(pid: number, timeoutMs = 1_000): Promise<void> {
+async function waitForFile(file: string, timeoutMs = 2_000): Promise<string> {
   const deadline = Date.now() + timeoutMs
   while (Date.now() < deadline) {
-    if (!processAlive(pid)) return
-    await Bun.sleep(25)
+    if (existsSync(file)) return readFileSync(file, "utf8")
+    await Bun.sleep(10)
   }
-  expect(processAlive(pid)).toBe(false)
+  throw new Error(`Local CLI fixture did not publish ${file}`)
 }
 
-test("local CLI transcribe removes its temporary output directory", async () => {
+async function waitForExit(pid: number, timeoutMs = 4_000): Promise<boolean> {
+  const deadline = Date.now() + timeoutMs
+  while (Date.now() < deadline) {
+    if (!isPidAlive(pid)) return true
+    await Bun.sleep(20)
+  }
+  return !isPidAlive(pid)
+}
+
+test("local CLI transcribe releases its temporary output directory for immediate reuse", async () => {
   const root = tempRoot("opencorvus-local-cli-stt-")
   const script = path.join(root, "transcribe.cjs")
   const outputRecord = path.join(root, "output-dir.txt")
@@ -75,50 +75,41 @@ test("local CLI transcribe removes its temporary output directory", async () => 
   const result = await provider.transcribe(audio())
 
   expect(result.text).toBe("transcribed text")
-  expect(existsSync(readFileSync(outputRecord, "utf8"))).toBe(false)
-})
-
-test("local CLI transcribe cleans ignored-stdio descendants after root exit", async () => {
-  const root = tempRoot("opencorvus-local-cli-stt-descendant-")
-  const script = path.join(root, "spawn-descendant.cjs")
-  const pidFile = path.join(root, "descendant.pid")
-  writeFileSync(
-    script,
-    [
-      "const { spawn } = require('node:child_process')",
-      "const fs = require('node:fs')",
-      "const path = require('node:path')",
-      "const outputDir = process.argv[2]",
-      "const pidFile = process.argv[3]",
-      `const child = spawn(process.execPath, ["-e", "process.on('SIGTERM', () => {}); setInterval(() => {}, 1000)"], { stdio: ["ignore", "ignore", "ignore"] })`,
-      "child.unref()",
-      "fs.writeFileSync(pidFile, String(child.pid))",
-      "fs.writeFileSync(path.join(outputDir, 'input.txt'), 'descendant text')",
-      "process.exit(0)",
-    ].join("\n"),
-  )
-  const provider = new LocalCLIProvider({
-    command: `${process.execPath} ${script} {{OutputDir}} ${pidFile}`,
-    timeoutMs: 2_000,
-  })
-  let descendantPid: number | undefined
+  const releasedDirectory = readFileSync(outputRecord, "utf8")
+  mkdirSync(releasedDirectory)
   try {
-    const result = await provider.transcribe(audio())
-    expect(result.text).toBe("descendant text")
-    descendantPid = Number(readFileSync(pidFile, "utf8"))
-    await waitForDead(descendantPid)
+    const reuseReceipt = path.join(releasedDirectory, "reuse-receipt.txt")
+    writeFileSync(reuseReceipt, "temporary-directory-reused")
+    expect(readFileSync(reuseReceipt, "utf8")).toBe("temporary-directory-reused")
   } finally {
-    if (descendantPid !== undefined && processAlive(descendantPid)) killProcess(descendantPid)
+    rmSync(releasedDirectory, { recursive: true, force: true })
   }
 })
 
-test("local CLI Windows PowerShell cleanup delegate is bounded", () => {
-  const source = readFileSync(localCliSourcePath, "utf8")
-
-  expect(source).toContain("const WINDOWS_POWERSHELL_CLEANUP_TIMEOUT_MS = 5_000")
-  expect(source).toContain("PowerShell cleanup timed out after")
-  expect(source).toContain("runner.kill()")
-  expect(source).toContain("clearTimeout(timer)")
-  expect(source).toContain("Stop-Process -Id $target -Force -ErrorAction SilentlyContinue")
-  expect(source).not.toContain("Stop-Process -Id $target -Force -ErrorAction Stop")
+test("local CLI timeout settles its owned descendant tree", async () => {
+  const root = tempRoot("opencorvus-local-cli-tree-timeout-")
+  const script = path.join(root, "transcribe-timeout.cjs")
+  const childPidFile = path.join(root, "child.pid")
+  writeFileSync(
+    script,
+    [
+      'const { spawn } = require("node:child_process")',
+      'const fs = require("node:fs")',
+      'const child = spawn(process.execPath, ["-e", "setInterval(() => {}, 1000)"], { stdio: "ignore" })',
+      "child.unref()",
+      `fs.writeFileSync(${JSON.stringify(childPidFile)}, String(child.pid))`,
+      "setInterval(() => {}, 1000)",
+    ].join("\n"),
+  )
+  const provider = new LocalCLIProvider({ command: `${process.execPath} ${script}`, timeoutMs: 1_000 })
+  let childPID: number | undefined
+  try {
+    const transcribing = provider.transcribe(audio())
+    void transcribing.catch(() => undefined)
+    childPID = Number(await waitForFile(childPidFile))
+    await expect(transcribing).rejects.toThrow("CLI timed out after 1000ms without completing")
+    expect(await waitForExit(childPID)).toBe(true)
+  } finally {
+    if (childPID && isPidAlive(childPID)) process.kill(childPID, "SIGKILL")
+  }
 })

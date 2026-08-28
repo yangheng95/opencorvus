@@ -2,8 +2,8 @@ import z from "zod"
 import { Filesystem } from "../util/filesystem"
 import path from "path"
 import { randomUUID } from "crypto"
-import { Database, eq, NotFoundError } from "../storage/db"
-import { ProjectTable } from "./project.sql"
+import { and, Database, eq, notExists, NotFoundError } from "../storage/db"
+import { ProjectMaintenanceFenceTable, ProjectTable } from "./project.sql"
 import { Log } from "../util/log"
 import { Flag } from "@/flag/flag"
 import { fn } from "@opencorvus-ai/util/fn"
@@ -17,6 +17,8 @@ import { which } from "@/util/which"
 import { NamedError } from "@opencorvus-ai/util/error"
 import { assertProjectDurableAdmissionOpen, ProjectDurableAdmissionClosedError } from "./deletion-registry"
 import { Identifier } from "@/id/id"
+import { assertProjectDeletionCleanupAdmissionOpen } from "./deletion-cleanup-admission"
+import { ProjectDirectoryAdmission } from "./directory-admission"
 
 export namespace Project {
   export const DurableAdmissionClosedError = ProjectDurableAdmissionClosedError
@@ -45,6 +47,7 @@ export namespace Project {
     proposedSandbox?: string
   }) => void | Promise<void>
   let beforeDiscoveryCommit: DiscoveryCommitHook | undefined
+  let afterDiscoveryAdmission: DiscoveryCommitHook | undefined
 
   export namespace TestHooks {
     export function installBeforeDiscoveryCommit(hook: DiscoveryCommitHook) {
@@ -56,6 +59,126 @@ export namespace Project {
         },
       }
     }
+
+    export function installAfterDiscoveryAdmission(hook: DiscoveryCommitHook) {
+      const previous = afterDiscoveryAdmission
+      afterDiscoveryAdmission = hook
+      return {
+        [Symbol.dispose]() {
+          if (afterDiscoveryAdmission === hook) afterDiscoveryAdmission = previous
+        },
+      }
+    }
+  }
+
+  async function acquireRegistrationAdmissions(directories: readonly string[]) {
+    const canonical = await Promise.all(
+      directories.map(async (directory) => ({ directory, key: await ProjectDirectoryAdmission.key(directory) })),
+    )
+    const ordered = [...new Map(canonical.map((entry) => [entry.key, entry])).values()]
+      .sort((left, right) => left.key.length - right.key.length || left.key.localeCompare(right.key))
+      .filter(
+        (entry, index, entries) =>
+          !entries.slice(0, index).some((ancestor) => Filesystem.contains(ancestor.key, entry.key)),
+      )
+    const operationID = randomUUID()
+    const tokens: ProjectDirectoryAdmission.Token[] = []
+    try {
+      for (const entry of ordered) {
+        const registration = await ProjectDirectoryAdmission.acquire({
+          directory: entry.directory,
+          operationID,
+          kind: "registration",
+        })
+        if (registration.outcome === "owned") {
+          throw new Error("Project registration unexpectedly resolved as owned")
+        }
+        tokens.push(registration.token)
+      }
+      return tokens
+    } catch (error) {
+      if (tokens.length > 0) ProjectDirectoryAdmission.settleMany(tokens, () => undefined)
+      throw error
+    }
+  }
+
+  export function ownershipProjection(rows: readonly Row[]) {
+    return rows
+      .map(({ id, generation, worktree, sandboxes, time_updated }) => ({
+        id,
+        generation,
+        worktree,
+        sandboxes,
+        time_updated,
+      }))
+      .sort((left, right) => left.id.localeCompare(right.id))
+  }
+
+  async function capturePhysicalRegistrationAuthority(projectID: string, directories: readonly string[]) {
+    const rows = Database.runOutsideContext(() => Database.use((db) => db.select().from(ProjectTable).all()))
+    const expected = ownershipProjection(rows)
+    const candidates = await Promise.all(
+      directories.map(async (directory) => ({ directory, key: await ProjectDirectoryAdmission.key(directory) })),
+    )
+    const registered = await Promise.all(
+      rows.flatMap((row) =>
+        [row.worktree, ...row.sandboxes].map(async (directory) => ({
+          projectID: row.id,
+          directory,
+          key: await ProjectDirectoryAdmission.key(directory),
+        })),
+      ),
+    )
+    const conflictingProjectIDs = [
+      ...new Set(
+        registered
+          .filter(
+            (entry) => entry.projectID !== projectID && candidates.some((candidate) => candidate.key === entry.key),
+          )
+          .map((entry) => entry.projectID),
+      ),
+    ].sort()
+    if (conflictingProjectIDs.length > 0) {
+      throw new RegisteredDirectoryConflictError({
+        directory: path.resolve(candidates[0]?.directory ?? ""),
+        projectIDs: [projectID, ...conflictingProjectIDs].sort(),
+        message: `Cannot register a physical directory already owned by Project${conflictingProjectIDs.length === 1 ? "" : "s"} ${conflictingProjectIDs.join(", ")}`,
+      })
+    }
+    return {
+      async revalidate() {
+        const [currentCandidates, currentRegistered] = await Promise.all([
+          Promise.all(
+            candidates.map(async ({ directory }) => ({
+              directory,
+              key: await ProjectDirectoryAdmission.key(directory),
+            })),
+          ),
+          Promise.all(
+            registered.map(async ({ projectID: ownerProjectID, directory }) => ({
+              projectID: ownerProjectID,
+              directory,
+              key: await ProjectDirectoryAdmission.key(directory),
+            })),
+          ),
+        ])
+        if (
+          JSON.stringify(currentCandidates) !== JSON.stringify(candidates) ||
+          JSON.stringify(currentRegistered) !== JSON.stringify(registered)
+        ) {
+          throw new DirectoryOccurrenceChangedError({
+            directory: path.resolve(directories[0] ?? ""),
+            message: "Project physical directory ownership changed while registration waited for admission",
+          })
+        }
+      },
+      validate(db: Database.TxOrDb) {
+        const current = ownershipProjection(db.select().from(ProjectTable).all())
+        if (JSON.stringify(current) !== JSON.stringify(expected)) {
+          throw new Error("Project physical directory ownership changed while registration was being admitted")
+        }
+      },
+    }
   }
 
   export const DirectoryIntegrityError = NamedError.create(
@@ -63,6 +186,14 @@ export namespace Project {
     z.object({
       directory: z.string(),
       reason: z.enum(["missing", "not-directory"]),
+      message: z.string(),
+    }),
+  )
+
+  export const DirectoryOccurrenceChangedError = NamedError.create(
+    "ProjectDirectoryOccurrenceChangedError",
+    z.object({
+      directory: z.string(),
       message: z.string(),
     }),
   )
@@ -395,153 +526,207 @@ export namespace Project {
   export async function fromDirectory(directory: string, options: { blockedProjectIDs?: ReadonlySet<string> } = {}) {
     await assertDirectoryIntegrity(directory)
     log.info("fromDirectory", { directory })
+    const discoveredOccurrence = await ProjectDirectoryAdmission.observeDirectory(directory)
 
-    const data = await iife(async () => {
-      const registered = findByRegisteredSandbox(directory)
-      if (registered) {
-        await findExactWorktreeRow(registered.project.worktree)
-        return {
-          id: registered.project.id,
-          sandbox: registered.directory,
-          worktree: registered.project.worktree,
+    const discoverIdentity = () =>
+      iife(async () => {
+        const registered = findByRegisteredSandbox(directory)
+        if (registered) {
+          await findExactWorktreeRow(registered.project.worktree)
+          return {
+            id: registered.project.id,
+            sandbox: registered.directory,
+            worktree: registered.project.worktree,
+          }
         }
-      }
-      const gitBinary = which("git")
-      const dotgit = path.join(directory, ".git")
-      const local = await Filesystem.exists(dotgit)
+        const gitBinary = which("git")
+        const dotgit = path.join(directory, ".git")
+        const local = await Filesystem.exists(dotgit)
 
-      if (!gitBinary) {
-        return resolveNonGitDirectoryIdentity({ directory, dotgit, local })
-      }
-
-      // Note (W2-V32): a previous version auto-ran `git init` here when the
-      // directory was a non-git subfolder of an existing parent repo (the old
-      // `(await initRepo(directory))` branch). That silently materialized a
-      // sub-repo as a side effect of *any* request reaching Project.fromDirectory
-      // — which violated rule 7 (no fallback) and made the darwin 500-storm
-      // possible (cwd-fallback sites would init repos in unintended locations).
-      // We now leave non-git subfolders as non-git: callers that need a
-      // working tree throw WorktreeNotGitError and the overlay drives an
-      // explicit user-confirmed init via POST /project/current/init-git.
-      const hasLocalGit = local
-
-      if (hasLocalGit) {
-        let sandbox = directory
-        const top = await text(["rev-parse", "--show-toplevel"], sandbox)
-        if (top) {
-          sandbox = await displayGitTop(directory, gitpath(sandbox, top))
+        if (!gitBinary) {
+          return resolveNonGitDirectoryIdentity({ directory, dotgit, local })
         }
 
-        const commonText = await text(["rev-parse", "--git-common-dir"], sandbox)
-        const common = commonText ? gitpath(sandbox, commonText) : undefined
-        const resolvedCommon = common || path.join(sandbox, ".git")
-        const rawWorktree = !common || common === sandbox ? sandbox : path.dirname(common)
-        const worktree = await displayGitTop(directory, rawWorktree)
-        const id = await identify(resolvedCommon, worktree)
+        // Note (W2-V32): a previous version auto-ran `git init` here when the
+        // directory was a non-git subfolder of an existing parent repo (the old
+        // `(await initRepo(directory))` branch). That silently materialized a
+        // sub-repo as a side effect of *any* request reaching Project.fromDirectory
+        // — which violated rule 7 (no fallback) and made the darwin 500-storm
+        // possible (cwd-fallback sites would init repos in unintended locations).
+        // We now leave non-git subfolders as non-git: callers that need a
+        // working tree throw WorktreeNotGitError and the overlay drives an
+        // explicit user-confirmed init via POST /project/current/init-git.
+        const hasLocalGit = local
 
-        return {
-          id,
-          sandbox,
-          worktree,
+        if (hasLocalGit) {
+          let sandbox = directory
+          const top = await text(["rev-parse", "--show-toplevel"], sandbox)
+          if (top) {
+            sandbox = await displayGitTop(directory, gitpath(sandbox, top))
+          }
+
+          const commonText = await text(["rev-parse", "--git-common-dir"], sandbox)
+          const common = commonText ? gitpath(sandbox, commonText) : undefined
+          const resolvedCommon = common || path.join(sandbox, ".git")
+          const rawWorktree = !common || common === sandbox ? sandbox : path.dirname(common)
+          const worktree = await displayGitTop(directory, rawWorktree)
+          const id = await identify(resolvedCommon, worktree)
+
+          return {
+            id,
+            sandbox,
+            worktree,
+          }
         }
-      }
 
-      return resolveNonGitDirectoryIdentity({ directory, dotgit, local: false })
-    })
-
-    const row = Database.use((db) => db.select().from(ProjectTable).where(eq(ProjectTable.id, data.id)).get())
-    if (row && !samePath(row.worktree, data.worktree) && !(await sameFilesystemLocation(row.worktree, data.worktree))) {
-      throw new WorktreeIdentityConflictError({
-        projectID: data.id,
-        existingWorktree: row.worktree,
-        nextWorktree: data.worktree,
+        return resolveNonGitDirectoryIdentity({ directory, dotgit, local: false })
       })
-    }
-    // Durable sandbox membership is ownership, not a reachability cache.
-    // Resolve only the candidate introduced by this request outside the DB
-    // transaction. The transaction re-reads the current authority and unions
-    // this candidate into that latest row; it never writes a stale snapshot.
+    const data = await discoverIdentity()
     const proposedSandbox =
-      data.sandbox !== data.worktree &&
-      !(await sameFilesystemLocation(data.sandbox, data.worktree))
+      data.sandbox !== data.worktree && !(await sameFilesystemLocation(data.sandbox, data.worktree))
         ? data.sandbox
         : undefined
-    if (options.blockedProjectIDs?.has(data.id)) {
-      throw new DurableAdmissionClosedError({
-        projectID: data.id,
-        message: `Project ${data.id} discovery was admitted while deletion was in progress`,
-      })
-    }
-    Database.use((db) => assertRegistryAdmissionOpen(db, data.id))
+    // This hook models a peer registry writer between the initial discovery
+    // and admission. It is deliberately outside the non-reentrant lock; the
+    // lock-internal hook below exists for tests that must hold exact admission.
     await beforeDiscoveryCommit?.({ projectID: data.id, directory, proposedSandbox })
+    const physicalRegistration = await capturePhysicalRegistrationAuthority(data.id, [
+      data.worktree,
+      ...(proposedSandbox ? [proposedSandbox] : []),
+    ])
 
-    const committed = Database.transaction((db) => {
-      assertRegistryAdmissionOpen(db, data.id)
-      const currentRow = db.select().from(ProjectTable).where(eq(ProjectTable.id, data.id)).get()
-      const resolvedAt = Date.now()
-      const current: Info = currentRow
-        ? fromRow(currentRow)
-        : {
-            id: data.id,
-            worktree: data.worktree,
-            sandboxes: [],
-            time: { created: resolvedAt, updated: resolvedAt },
-          }
-      const sandboxes = [...current.sandboxes]
-      if (proposedSandbox && !sandboxes.includes(proposedSandbox)) sandboxes.push(proposedSandbox)
-      const changed =
-        !currentRow || current.worktree !== data.worktree || !sameDirectoryList(current.sandboxes, sandboxes)
-      const result: Info = {
-        ...current,
-        worktree: data.worktree,
-        sandboxes,
-        time: { ...current.time, updated: changed ? resolvedAt : current.time.updated },
-      }
-      if (!changed) return { result, changed }
-
-      const projects = db
-        .select()
-        .from(ProjectTable)
-        .all()
-        .map((candidate) => fromRow(candidate))
-      for (const directory of [result.worktree, ...result.sandboxes]) {
-        assertRegisteredDirectoryAvailable(result.id, directory, projects)
-      }
-      if (currentRow) {
-        db.update(ProjectTable)
-          .set({ worktree: result.worktree, time_updated: result.time.updated, sandboxes: result.sandboxes })
-          .where(eq(ProjectTable.id, result.id))
-          .run()
-      } else {
-        db.insert(ProjectTable)
-          .values({
-            id: result.id,
-            generation: randomUUID(),
-            worktree: result.worktree,
-            name: result.name,
-            icon_url: result.icon?.url,
-            icon_color: result.icon?.color,
-            time_created: result.time.created,
-            time_updated: result.time.updated,
-            time_pinned: result.time.pinned,
-            time_initialized: result.time.initialized,
-            sandboxes: result.sandboxes,
-            commands: result.commands,
+    return ProjectDirectoryAdmission.run(async () => {
+      const registrations = await acquireRegistrationAdmissions([
+        directory,
+        data.worktree,
+        ...(proposedSandbox ? [proposedSandbox] : []),
+      ])
+      let settled = false
+      try {
+        await physicalRegistration.revalidate()
+        // Identity discovery may perform git IO before admission, but every fact
+        // that authorizes the durable row is revalidated after this backend owns
+        // the same cross-process lock as abandoned-directory reclamation.
+        await assertDirectoryIntegrity(directory)
+        const [admittedOccurrence, admittedIdentity] = await Promise.all([
+          ProjectDirectoryAdmission.observeDirectory(directory),
+          discoverIdentity(),
+        ])
+        if (
+          !ProjectDirectoryAdmission.sameOccurrence(discoveredOccurrence, admittedOccurrence) ||
+          admittedIdentity.id !== data.id ||
+          !samePath(admittedIdentity.sandbox, data.sandbox) ||
+          !samePath(admittedIdentity.worktree, data.worktree)
+        ) {
+          throw new DirectoryOccurrenceChangedError({
+            directory,
+            message: `Project directory occurrence or Git identity changed while discovery waited for admission: ${directory}`,
           })
-          .run()
+        }
+        const row = Database.use((db) => db.select().from(ProjectTable).where(eq(ProjectTable.id, data.id)).get())
+        if (
+          row &&
+          !samePath(row.worktree, data.worktree) &&
+          !(await sameFilesystemLocation(row.worktree, data.worktree))
+        ) {
+          throw new WorktreeIdentityConflictError({
+            projectID: data.id,
+            existingWorktree: row.worktree,
+            nextWorktree: data.worktree,
+          })
+        }
+        // Durable sandbox membership is ownership, not a reachability cache.
+        // Resolve only the candidate introduced by this request outside the DB
+        // transaction. The transaction re-reads the current authority and unions
+        // this candidate into that latest row; it never writes a stale snapshot.
+        if (options.blockedProjectIDs?.has(data.id)) {
+          throw new DurableAdmissionClosedError({
+            projectID: data.id,
+            message: `Project ${data.id} discovery was admitted while deletion was in progress`,
+          })
+        }
+        await assertProjectDeletionCleanupAdmissionOpen(data.id)
+        Database.use((db) => assertRegistryAdmissionOpen(db, data.id))
+        await afterDiscoveryAdmission?.({ projectID: data.id, directory, proposedSandbox })
+
+        let committed!: { result: Info; changed: boolean; generation: string }
+        ProjectDirectoryAdmission.settleMany(registrations, (db) => {
+          physicalRegistration.validate(db)
+          assertRegistryAdmissionOpen(db, data.id)
+          const currentRow = db.select().from(ProjectTable).where(eq(ProjectTable.id, data.id)).get()
+          const resolvedAt = Date.now()
+          const current: Info = currentRow
+            ? fromRow(currentRow)
+            : {
+                id: data.id,
+                worktree: data.worktree,
+                sandboxes: [],
+                time: { created: resolvedAt, updated: resolvedAt },
+              }
+          const sandboxes = [...current.sandboxes]
+          if (proposedSandbox && !sandboxes.includes(proposedSandbox)) sandboxes.push(proposedSandbox)
+          const changed =
+            !currentRow || current.worktree !== data.worktree || !sameDirectoryList(current.sandboxes, sandboxes)
+          const generation = currentRow?.generation ?? randomUUID()
+          const result: Info = {
+            ...current,
+            worktree: data.worktree,
+            sandboxes,
+            time: { ...current.time, updated: changed ? resolvedAt : current.time.updated },
+          }
+          if (!changed) {
+            committed = { result, changed, generation }
+            return
+          }
+
+          const projects = db
+            .select()
+            .from(ProjectTable)
+            .all()
+            .map((candidate) => fromRow(candidate))
+          for (const directory of [result.worktree, ...result.sandboxes]) {
+            assertRegisteredDirectoryAvailable(result.id, directory, projects)
+          }
+          if (currentRow) {
+            db.update(ProjectTable)
+              .set({ worktree: result.worktree, time_updated: result.time.updated, sandboxes: result.sandboxes })
+              .where(eq(ProjectTable.id, result.id))
+              .run()
+          } else {
+            db.insert(ProjectTable)
+              .values({
+                id: result.id,
+                generation,
+                worktree: result.worktree,
+                name: result.name,
+                icon_url: result.icon?.url,
+                icon_color: result.icon?.color,
+                time_created: result.time.created,
+                time_updated: result.time.updated,
+                time_pinned: result.time.pinned,
+                time_initialized: result.time.initialized,
+                sandboxes: result.sandboxes,
+                commands: result.commands,
+              })
+              .run()
+          }
+          committed = { result, changed, generation }
+        })
+        settled = true
+        const result = committed.result
+        if (Flag.OPENCORVUS_EXPERIMENTAL_ICON_DISCOVERY) discover(result)
+        if (!committed.changed) return { project: result, sandbox: data.sandbox, generation: committed.generation }
+        GlobalBus.emit("event", {
+          payload: {
+            type: Event.Updated.type,
+            properties: result,
+          },
+        })
+        return { project: result, sandbox: data.sandbox, generation: committed.generation }
+      } finally {
+        if (!settled) ProjectDirectoryAdmission.settleMany(registrations, () => undefined)
       }
-      return { result, changed }
     })
-    const result = committed.result
-    if (Flag.OPENCORVUS_EXPERIMENTAL_ICON_DISCOVERY) discover(result)
-    if (!committed.changed) return { project: result, sandbox: data.sandbox }
-    GlobalBus.emit("event", {
-      payload: {
-        type: Event.Updated.type,
-        properties: result,
-      },
-    })
-    return { project: result, sandbox: data.sandbox }
   }
 
   export async function discover(input: Info) {
@@ -585,6 +770,19 @@ export namespace Project {
       db
         .select()
         .from(ProjectTable)
+        .where(
+          notExists(
+            db
+              .select({ projectID: ProjectMaintenanceFenceTable.project_id })
+              .from(ProjectMaintenanceFenceTable)
+              .where(
+                and(
+                  eq(ProjectMaintenanceFenceTable.project_id, ProjectTable.id),
+                  eq(ProjectMaintenanceFenceTable.kind, "promotion"),
+                ),
+              ),
+          ),
+        )
         .all()
         .map((row) => fromRow(row)),
     )
@@ -593,13 +791,21 @@ export namespace Project {
   export function relocate(
     input: {
       projectID: string
+      operationID: string
+      expectedGeneration: string
+      expectedWorktree: string
       worktree: string
       name: string
       sandboxes: string[]
+      directoryAdmission: ProjectDirectoryAdmission.Token
     },
     db: Database.TxOrDb,
   ) {
-    assertRegistryAdmissionOpen(db, input.projectID)
+    assertPromotionFenceOwned(db, input, "promotion_commit")
+    ProjectDirectoryAdmission.assertOwned(db, input.directoryAdmission)
+    if (!samePath(input.directoryAdmission.directory, input.worktree)) {
+      throw new Error(`Project relocation directory admission does not own ${input.worktree}`)
+    }
     const projects = db
       .select()
       .from(ProjectTable)
@@ -616,11 +822,118 @@ export namespace Project {
         sandboxes: input.sandboxes,
         time_updated: Date.now(),
       })
-      .where(eq(ProjectTable.id, input.projectID))
+      .where(
+        and(
+          eq(ProjectTable.id, input.projectID),
+          eq(ProjectTable.generation, input.expectedGeneration),
+          eq(ProjectTable.worktree, input.expectedWorktree),
+        ),
+      )
       .returning()
       .get()
-    if (!row) throw new Error(`Project not found: ${input.projectID}`)
+    if (!row)
+      throw new Error(`Project relocation fence rejected ${input.projectID}: generation or expected worktree changed`)
     return fromRow(row)
+  }
+
+  export function restoreRelocation(
+    input: {
+      projectID: string
+      operationID: string
+      expectedGeneration: string
+      expectedWorktree: string
+      worktree: string
+      name: string | null
+      sandboxes: string[]
+      timeUpdated: number
+      directoryAdmission: ProjectDirectoryAdmission.Token
+    },
+    db: Database.TxOrDb,
+  ) {
+    assertPromotionFenceOwned(db, input, "promotion_commit")
+    ProjectDirectoryAdmission.assertOwned(db, input.directoryAdmission)
+    if (!samePath(input.directoryAdmission.directory, input.worktree)) {
+      throw new Error(`Project relocation restore admission does not own ${input.worktree}`)
+    }
+    const projects = db
+      .select()
+      .from(ProjectTable)
+      .all()
+      .map((candidate) => fromRow(candidate))
+    for (const directory of [input.worktree, ...input.sandboxes]) {
+      assertRegisteredDirectoryAvailable(input.projectID, directory, projects)
+    }
+    const row = db
+      .update(ProjectTable)
+      .set({
+        worktree: input.worktree,
+        name: input.name,
+        sandboxes: input.sandboxes,
+        time_updated: input.timeUpdated,
+      })
+      .where(
+        and(
+          eq(ProjectTable.id, input.projectID),
+          eq(ProjectTable.generation, input.expectedGeneration),
+          eq(ProjectTable.worktree, input.expectedWorktree),
+        ),
+      )
+      .returning()
+      .get()
+    if (!row)
+      throw new Error(`Project rollback fence rejected ${input.projectID}: generation or expected worktree changed`)
+    return fromRow(row)
+  }
+
+  function assertPromotionFenceOwned(
+    db: Database.TxOrDb,
+    input: { projectID: string; operationID: string; expectedGeneration: string },
+    kind: "promotion" | "promotion_commit" = "promotion",
+  ): void {
+    const fence = db
+      .select()
+      .from(ProjectMaintenanceFenceTable)
+      .where(eq(ProjectMaintenanceFenceTable.project_id, input.projectID))
+      .get()
+    if (
+      fence?.kind === kind &&
+      fence.operation_id === input.operationID &&
+      fence.project_generation === input.expectedGeneration
+    )
+      return
+    throw new Error(`Project promotion fence rejected ${input.projectID}: occurrence ownership changed`)
+  }
+
+  export function beginPromotionCommit(
+    input: { projectID: string; operationID: string; expectedGeneration: string },
+    db: Database.TxOrDb,
+  ): void {
+    assertPromotionFenceOwned(db, input)
+    db.update(ProjectMaintenanceFenceTable)
+      .set({ kind: "promotion_commit" })
+      .where(
+        and(
+          eq(ProjectMaintenanceFenceTable.project_id, input.projectID),
+          eq(ProjectMaintenanceFenceTable.operation_id, input.operationID),
+        ),
+      )
+      .run()
+  }
+
+  export function finishPromotionCommit(
+    input: { projectID: string; operationID: string; expectedGeneration: string },
+    db: Database.TxOrDb,
+  ): void {
+    assertPromotionFenceOwned(db, input, "promotion_commit")
+    db.update(ProjectMaintenanceFenceTable)
+      .set({ kind: "promotion" })
+      .where(
+        and(
+          eq(ProjectMaintenanceFenceTable.project_id, input.projectID),
+          eq(ProjectMaintenanceFenceTable.operation_id, input.operationID),
+        ),
+      )
+      .run()
   }
 
   export function registeredDirectories(): string[] {
@@ -766,10 +1079,35 @@ export namespace Project {
     return Discovery.parse({ root, defaultDirectory, projects: [...projects.values()] })
   }
 
-  export function get(id: string): Info | undefined {
-    const row = Database.use((db) => db.select().from(ProjectTable).where(eq(ProjectTable.id, id)).get())
+  export function occurrence(id: string): { project: Info; generation: string } | undefined {
+    const row = Database.use((db) =>
+      db
+        .select()
+        .from(ProjectTable)
+        .where(
+          and(
+            eq(ProjectTable.id, id),
+            notExists(
+              db
+                .select({ projectID: ProjectMaintenanceFenceTable.project_id })
+                .from(ProjectMaintenanceFenceTable)
+                .where(
+                  and(
+                    eq(ProjectMaintenanceFenceTable.project_id, ProjectTable.id),
+                    eq(ProjectMaintenanceFenceTable.kind, "promotion"),
+                  ),
+                ),
+            ),
+          ),
+        )
+        .get(),
+    )
     if (!row) return undefined
-    return fromRow(row)
+    return { project: fromRow(row), generation: row.generation }
+  }
+
+  export function get(id: string): Info | undefined {
+    return occurrence(id)?.project
   }
 
   export async function initGit(directory: string) {
@@ -882,37 +1220,63 @@ export namespace Project {
     return valid
   }
 
-  function addSandboxRow(id: string, target: string) {
-    const result = Database.transaction((db) => {
-      assertRegistryAdmissionOpen(db, id)
-      const rows = db.select().from(ProjectTable).all()
-      const row = rows.find((candidate) => candidate.id === id)
-      if (!row) throw new Error(`Project not found: ${id}`)
-      const projects = rows.map((candidate) => fromRow(candidate))
-      assertRegisteredDirectoryAvailable(id, target, projects)
-      const matches = registeredDirectoryMatches(target, projects)
-      if (matches.some((match) => match.project.id === id)) return fromRow(row)
-      return fromRow(
-        db
-          .update(ProjectTable)
-          .set({ sandboxes: [...row.sandboxes, target], time_updated: Date.now() })
-          .where(eq(ProjectTable.id, id))
-          .returning()
-          .get(),
-      )
-    })
-    GlobalBus.emit("event", {
-      payload: {
-        type: Event.Updated.type,
-        properties: result,
-      },
-    })
-    return result
+  function addSandboxRow(db: Database.TxOrDb, id: string, target: string) {
+    assertRegistryAdmissionOpen(db, id)
+    const rows = db.select().from(ProjectTable).all()
+    const row = rows.find((candidate) => candidate.id === id)
+    if (!row) throw new Error(`Project not found: ${id}`)
+    const projects = rows.map((candidate) => fromRow(candidate))
+    assertRegisteredDirectoryAvailable(id, target, projects)
+    const matches = registeredDirectoryMatches(target, projects)
+    if (matches.some((match) => match.project.id === id)) return fromRow(row)
+    return fromRow(
+      db
+        .update(ProjectTable)
+        .set({ sandboxes: [...row.sandboxes, target], time_updated: Date.now() })
+        .where(eq(ProjectTable.id, id))
+        .returning()
+        .get(),
+    )
   }
 
   export async function addSandbox(id: string, directory: string) {
     const target = Filesystem.resolve(directory)
-    return addSandboxRow(id, target)
+    return addSandboxWithValidation(id, target)
+  }
+
+  async function addSandboxWithValidation(id: string, target: string, validate?: () => void | Promise<void>) {
+    const discoveredOccurrence = await ProjectDirectoryAdmission.observeDirectory(target)
+    const physicalRegistration = await capturePhysicalRegistrationAuthority(id, [target])
+    return ProjectDirectoryAdmission.run(async () => {
+      const registrations = await acquireRegistrationAdmissions([target])
+      let settled = false
+      try {
+        await physicalRegistration.revalidate()
+        const admittedOccurrence = await ProjectDirectoryAdmission.observeDirectory(target)
+        if (!ProjectDirectoryAdmission.sameOccurrence(discoveredOccurrence, admittedOccurrence)) {
+          throw new DirectoryOccurrenceChangedError({
+            directory: target,
+            message: `Project sandbox occurrence changed while registration waited for admission: ${target}`,
+          })
+        }
+        await validate?.()
+        let result!: Info
+        ProjectDirectoryAdmission.settleMany(registrations, (db) => {
+          physicalRegistration.validate(db)
+          result = addSandboxRow(db, id, target)
+        })
+        settled = true
+        GlobalBus.emit("event", {
+          payload: {
+            type: Event.Updated.type,
+            properties: result,
+          },
+        })
+        return result
+      } finally {
+        if (!settled) ProjectDirectoryAdmission.settleMany(registrations, () => undefined)
+      }
+    })
   }
 
   /**
@@ -923,8 +1287,10 @@ export namespace Project {
    */
   export async function registerExecutionDirectory(projectID: string, directory: string) {
     const target = Filesystem.resolve(directory)
-    const owner = get(projectID)
-    if (!owner) throw new Error(`Project not found: ${projectID}`)
+    const ownerExists = Database.use((db) =>
+      db.select({ id: ProjectTable.id }).from(ProjectTable).where(eq(ProjectTable.id, projectID)).get(),
+    )
+    if (!ownerExists) throw new Error(`Project not found: ${projectID}`)
     const registered = findByRegisteredDirectory(target)
     if (registered) {
       if (registered.project.id !== projectID) {
@@ -934,10 +1300,9 @@ export namespace Project {
       }
       return target
     }
-    if (!isGitRepo(target)) {
-      throw new Error(`Task execution directory is not a git repository: ${target}`)
-    }
-    await addSandbox(projectID, target)
+    await addSandboxWithValidation(projectID, target, () => {
+      if (!isGitRepo(target)) throw new Error(`Task execution directory is not a git repository: ${target}`)
+    })
     return target
   }
 

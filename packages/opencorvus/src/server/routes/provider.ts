@@ -7,8 +7,9 @@ import { Provider } from "../../provider/provider"
 import { discoverProviderModels, testProviderConnection } from "../../provider/operations"
 import { NativeAgentRegistryLifecycle } from "@/agent/native-agent-registry-lifecycle"
 import { ProviderAuth } from "../../provider/auth"
+import { ProviderOAuthFlowStore } from "../../provider/oauth-flow-store"
 import { ProviderRemovalReceipt, removeProvider } from "../../provider/removal"
-import { AuthReadUnavailableResponse, errors } from "../error"
+import { AuthReadUnavailableResponse, badRequestOrNamedErrorResponse, errors } from "../error"
 import { lazy } from "../../util/lazy"
 import { settleCanonicalProviderCatalogInvalidation, settleProviderRefreshInvalidation } from "../provider-refresh"
 import { ProviderAccountUsage } from "../../provider/account-usage"
@@ -369,8 +370,8 @@ export const ProviderRoutes = lazy(() =>
     .post(
       "/:providerID/auth/execute",
       describeRoute({
-        summary: "Execute auth method",
-        description: "Execute an authentication method with collected inputs.",
+        summary: "Execute Provider API auth method",
+        description: "Execute an API credential method with collected inputs.",
         operationId: "provider.auth.execute",
         responses: {
           200: {
@@ -420,11 +421,21 @@ export const ProviderRoutes = lazy(() =>
             description: "Authorization URL and method",
             content: {
               "application/json": {
-                schema: resolver(ProviderAuth.Authorization.optional()),
+                schema: resolver(ProviderAuth.Authorization),
               },
             },
           },
-          ...errors(400),
+          400: badRequestOrNamedErrorResponse(
+            "Provider OAuth authorization request rejected",
+            "ProviderAuthProviderNotFound",
+            "ProviderAuthMethodNotFound",
+            "ProviderAuthMethodAuthorizationTypeMismatch",
+          ),
+          409: badRequestOrNamedErrorResponse(
+            "Provider OAuth exchange is already active",
+            "ProviderAuthOAuthExchangeActiveError",
+          ),
+          503: AuthReadUnavailableResponse,
         },
       }),
       validator(
@@ -467,6 +478,13 @@ export const ProviderRoutes = lazy(() =>
             },
           },
           ...errors(400),
+          409: badRequestOrNamedErrorResponse(
+            "Provider OAuth callback occurrence conflicts with the current credential or settlement",
+            "ProviderCredentialExchangeReplacedError",
+            "ProviderCredentialExchangeFailedError",
+            "ProviderAuthOAuthExchangeActiveError",
+            "ProviderAuthOAuthExchangeUncertainError",
+          ),
           503: AuthReadUnavailableResponse,
         },
       }),
@@ -481,15 +499,17 @@ export const ProviderRoutes = lazy(() =>
         z.object({
           method: z.number().meta({ description: "Auth method index" }),
           code: z.string().optional().meta({ description: "OAuth authorization code" }),
+          flowID: ProviderOAuthFlowStore.FlowID.meta({ description: "Exact authorization flow occurrence to finish" }),
         }),
       ),
       async (c) => {
         const providerID = c.req.valid("param").providerID
-        const { method, code } = c.req.valid("json")
+        const { method, code, flowID } = c.req.valid("json")
         await ProviderAuth.callback({
           providerID,
           method,
           code,
+          flowID,
         })
         const issues = await settleProviderRefreshInvalidation([
           { phase: "cache.provider", run: Provider.reset },

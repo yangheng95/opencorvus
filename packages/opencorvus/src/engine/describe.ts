@@ -26,12 +26,13 @@ import { Database, and, asc, desc, eq, isNotNull, or, sql } from "@/storage/db"
 import { listAgentCoordinationResponses, listPendingAgentCoordinationRequests } from "./agent-coordination"
 import { listRecentTaskMailboxMessages, type MailboxSchedulerMessage } from "./mailbox"
 import { EngineArtifactTable } from "./engine.sql"
-import { findDispatchLineageByArtifactID, parseDispatchLineagePayload } from "./dispatch-lineage"
+import { findDispatchLineageByArtifactID } from "./dispatch-lineage"
+import { parseDispatchLineagePayload } from "./dispatch-lineage-facts"
 import { findDispatchSettlementByDispatchID } from "./dispatch-settlement"
 import { type SelectedWorkflowBinding } from "./workflow-binding"
 import { readTaskWorkflowBinding } from "./workflow-binding-facts"
 import { taskExecutionProjectionForTask } from "@/orchestrator/task-event"
-import { findTaskCompletionDecisionForTerminalTime } from "./completion-decision"
+import { findTaskCompletionDecisionForTerminalTime } from "./completion-decision-read"
 import { parseProcessRecoveryFactContext, type ProcessRecoveryFactContext } from "./process-recovery-fact"
 import { validateProcessPhysicalEvidence } from "@/runtime/process-occurrence"
 
@@ -42,10 +43,10 @@ import {
   listOrchestratorStreamErrorArtifacts,
   listTaskInfrastructureErrorArtifacts,
   listToolExecuteErrorArtifacts,
-  listOwnedPromptSessionsForTask,
   type GoalRow,
   type TaskRow,
 } from "./store"
+import { listOwnedPromptSessionsForTask } from "./runtime"
 import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
 import { AgentRoleContract } from "@/agent/role-contract"
 import { MessageTable, SessionTable } from "@/session/session.sql"

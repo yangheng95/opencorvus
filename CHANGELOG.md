@@ -4,6 +4,67 @@
 
 ## 未发布
 
+### Security
+
+- 桌面端渲染进程不再向 `window` 暴露实时设置、应用和看板 store、明文服务器密码，以及目录切换、任务加载/选择、看板加载和设置持久化等业务写入入口；相关生产代码改为直接使用类型化模块导入。渲染进程中的任意脚本或开发者工具表达式因此无法再读取服务器密码或触发这些业务写入。
+
+### Added
+
+- 新增 `GET /lifecycle/{occurrenceID}`：`server.shutdown` 与 `server.restart` 现在同步受理为一次带稳定标识的生命周期 occurrence，响应携带 `occurrenceID`；受理后处理器被清除或失败会把该 occurrence 结算为 `failed` 并附精确错误，重复请求收敛到在途 occurrence，冲突的另一种转换以 409 拒绝并返回在途 occurrence 标识。关机成功即进程退出，无法自证，故没有 `succeeded` 状态。
+
+### Changed
+
+- Provider plugin 的能力改为最小权限 ABI：运行期 OAuth refresh 必须通过 `PluginInput.credentials.refresh` 进入引擎持久化 exchange occurrence；plugin 不再获得完整 SDK client，只获得受管 credential 操作与只读 Session facts。非网络 API credential metadata 只通过带 observed-key 比较的窄更新接口写入。OAuth credential alias 从 callback success 的动态 `provider` 字段迁移为 method-level 静态 `credentialProvider` 声明；外部 plugin 必须在 authorize 前声明真实 credential target。
+- MCP（Model Context Protocol，模型上下文协议）OAuth 凭据引入持久化租约代：一次授权流程在开始时建立租约，流程内的多次写入共用这一代；吊销或新流程铸新代后，旧持有者的写入被精确拒绝，包括由同一数据根上另一后端执行的吊销。删除后重建的凭据不再可能被删除前的持有者写入。
+- 调度器、总线、权限、构建清理、会话控制、任务取消收敛等全部控制租约持有方现在与其结算收据同事务归还租约；新增 `check:control-lease-owners` 守卫（pre-push 运行），任何新增取租约位置必须声明其释放路径。
+- 共享 JSON 事实文件（全局/项目配置、Provider 凭据、MCP 凭据、专家团配置）的读改写迁移到跨进程锁内，多后端并发写不再丢失更新。
+- Provider OAuth 授权成为持久化流程 occurrence：`ProviderAuthAuthorization` 新增必填 `flowID`，CLI、Overlay 与两个回调路由都必须携带它以精确结算对应流程；pending executor 持有可续租的 Provider-wide owner，另一授权在其存活期间得到 409 而不会替换或泄漏其 loopback/device executor。回调对方法不匹配、已结算、不可执行分别返回具名错误（`ProviderAuthOauthFlowMismatch`、`ProviderAuthOauthFlowAlreadySettled`、`ProviderAuthOauthFlowNotExecutable`）。CLI 不再直接执行 plugin callback 或写凭据，`auth/execute` 也只接受 API credential method。
+- 公共 Session 执行变更（`session.prompt`、`session.command`、`session.shell`）现在必须携带调用方铸造的稳定请求 occurrence——输入消息标识 `messageID`（`session.shell` 的公共 schema 新增该字段）；服务器不再在省略时代铸标识。相同标识与指纹的重试收敛到首次 occurrence：prompt/command 返回或续跑既有回合，shell 直接返回持久 occurrence、绝不重复执行命令；同一标识配不同请求体以 409 `PublicSessionPromptIdentityConflictError` 拒绝（command/shell 路由新增该冲突响应）。`session.shell` 的响应 schema 修正为与实际一致的 `{info, parts}`。
+- Browser 附着失败不再隐式降级到独立浏览器：附着与独立是两个浏览器身份（不同 Cookie、不同登录态），跨越这条边界现在必须由配置显式声明。默认的 `OPENCORVUS_BROWSER_MODE=chrome` 在 Chrome 不可附着时以具名错误失败并给出精确原因；接受在另一身份下工作需设置 `OPENCORVUS_BROWSER_MODE=chrome_or_isolated`；直接选择 `isolated` 仍是独立模式。此前依赖静默回退的部署会明确失败，直到声明策略。
+- 托管服务器就绪改为机器可读的启动收据：SDK 通过 `--startup-receipt`/`--startup-occurrence` 向服务器交付一次性收据通道，并只依据其中的框架化事实结算启动（绑定 URL 或精确的终态错误），标准输出仅作诊断。SDK `0.0.55-beta` 与不认识这两个参数的旧版 `opencorvus` 二进制不兼容，需成对升级。
+
+### Fixed
+
+- GitLab Provider auth 不再加载会自行刷新并写入 OpenCode `auth.json` 的旧 npm plugin；仓库内适配器把 OAuth 首次交换、运行期 refresh 与 Personal Access Token（PAT，个人访问令牌）提交全部交还中央 Provider auth authority，并保留原 MIT 来源声明。错误 state 的 loopback 请求只得到固定 400，不会终止合法的在途授权。
+- 修复 Provider 初次 OAuth 授权与运行期 token refresh 在远端交换成功、`auth.json` 提交前进程退出时丢失 minted credential 且无精确事实的问题：Project、global、CLI、内置 plugin 与 account-usage 共用 Provider-wide renewable owner，按 `exchanging → credential_ready → consumed` 持久化；`auth.json` 的 generation/tombstone 与输出 digest 同时证明精确提交并阻止 ABA 覆盖，owner 过期时收敛为成功或 `exchange_uncertain`。结果不确定的 rotating refresh fence 在原 credential generation 仍有效时不按时间淘汰，因此不会在 24 小时后重新交换同一 refresh token。
+- 修复全局任务创建的请求重放会重复分配项目与任务的问题：请求身份现在在项目分配之前全局解析，重放返回首次提交的同一 `{task_id, project_id, directory}`，冲突重放由既有的项目内幂等检查拒绝。
+- 修复 MCP `configure` 被打断会留下"有定义无凭据"的半配置服务器的问题：密钥现在先暂存（staged）、定义提交后再晋升为生效凭据，前一定义正在使用的密钥在其退役提交之前绝不被销毁；任何窗口的崩溃都由下一次项目配置提交的凭据对账收敛——匹配已提交定义的暂存密钥被晋升，不匹配的被丢弃。
+- 修复 MCP OAuth 授权发起进程死亡后回调无法完成的问题：回调进程现在可仅凭持久事实（凭据租约、OAuth state、PKCE verifier）重建流程并完成兑换，全部写入仍以原租约代为栅栏。
+- 修复会话回合执行期间发送的用户消息持久化失败（HTTP 500）的问题：飞行中标记 `pendingDelivery` 此前写在深冻结的物化快照上而抛出 TypeError，现在写在持久化副本上；回合中到达的消息重新可以入队并在回合边界投递。
+
+### Removed
+
+- 移除渲染进程遗留的全局诊断 ABI（Application Binary Interface，应用程序二进制接口）：`window.__ocNextChatMetadata` 聊天元数据注入入口、`window.__overlayTest` 与 `window.__ocOverlayTiming` 超时覆盖、`window.__overlayInitSettled` 就绪标记、`window.__ocMarkdownRenderPrewarmPending` 预热计数、无调用方的 `window.openWorkspaceDiff`，以及由 `?acceptance-locale` 查询参数写入、可在正式版本中覆盖界面语言的 `__OPENCORVUS_LOCALE__` 入口。这些入口在当前仓库中已无任何写入方或读取方。渲染进程现在只保留一个显式声明的全局（启动接管握手），并由 `bun run --cwd packages/overlay check:renderer-surface` 作为构建后的正向契约守卫。
+
+## 0.0.54beta - 2026-08-25
+
+本版本为共享 LLM 流停滞恢复增加明确上限，并修复公开网站“页面显示新版、主按钮却未绑定精确新版安装包”的下载交互；桌面端、命令行二进制和网站使用同一份 `0.0.54-beta` 发布事实。
+
+### Changed
+
+- LLM 首字节等待缩短为 90 秒；首字节或流式空闲超时各只重试一次，使同一停滞请求链在十分钟内以具名错误收敛，不再重复等待长超时。
+- 网站下载菜单逐项显示架构、格式、当前版本和精确文件名；Windows 主按钮明确标出 EXE，避免与同架构 MSI 混淆。
+
+### Fixed
+
+- 修复首次标题生成在执行轮次开始后、主会话处理器启动前可能无限等待的问题；标题、项目记忆整理和提交信息生成现在统一使用共享的首字节、语义空闲与总时限契约。标题继承所属执行轮次的取消信号，项目记忆整理和提交信息生成继承各自调用方的取消信号。
+- 修复浏览器不提供高熵架构提示时，Windows 主按钮仍停留在 GitHub Release 页面、却显示为直接下载的问题；当发布清单证明该平台只有一个架构时，按钮现在绑定清单排序的当前 EXE。
+- 修复无法安全判定平台或架构时仍把 Release 链接包装成下载动作的问题；此时主按钮会展开当前版本的显式选择菜单。
+
+## 0.0.53beta - 2026-08-24
+
+本版本修复长时间运行任务的唤醒、活动续期与恢复终态收敛，同时恢复桌面端右侧工作区、工作台重命名和工具详情交互，并同步发布桌面端、命令行二进制和公开网站。
+
+### Changed
+
+- 延迟唤醒现在公开稳定的持久化结算事实；长时间 Tool 执行会根据真实流式输出和持久化进度续期，不再被固定的绝对暂停时限误判为失活。
+- 临时 Provider 诊断在进入持久化日志和错误边界前统一脱敏，避免上游请求上下文被意外记录。
+
+### Fixed
+
+- 修复恢复执行的 Task occurrence 在子 Session 已终止后仍无法收敛父级终态的问题。
+- 修复 Overlay 右侧 Dock 的切换与新增菜单交互、Work Ledger 双击重命名，以及工具披露需要点击两次才能展开的问题。
+
 ## 0.0.52beta - 2026-08-22
 
 本版本收敛专家团工作流的公开投影、交付结算与独立验收权威链路，并同步发布桌面端、命令行二进制和公开网站。

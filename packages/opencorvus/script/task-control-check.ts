@@ -238,7 +238,6 @@ async function runPhaseProcess(
   })
   let stdout = ""
   let stderr = ""
-  let lastActivity = Date.now()
   let mirroredStdoutRemainder = ""
   const mirrorTaskControlLines = (text: string) => {
     const lines = (mirroredStdoutRemainder + text).split(/\r?\n/)
@@ -254,7 +253,6 @@ async function runPhaseProcess(
   ) => {
     const decoder = new TextDecoder()
     for await (const chunk of stream) {
-      lastActivity = Date.now()
       const text = decoder.decode(chunk, { stream: true })
       append(text)
       mirror(text)
@@ -268,25 +266,8 @@ async function runPhaseProcess(
       () => undefined,
     ),
   ]
-  let exitCode: number | undefined
-  void child.exited.then((code) => (exitCode = code))
-  let inactivityFailure: Error | undefined
-  while (exitCode === undefined) {
-    if (Date.now() - lastActivity > INACTIVITY_MS) {
-      child.kill()
-      inactivityFailure = new Error(`Task-control ${phase} phase was inactive for ${INACTIVITY_MS}ms`)
-      break
-    }
-    await Bun.sleep(100)
-  }
-  if (inactivityFailure) await child.exited.catch(() => undefined)
+  const exitCode = await child.exited
   await Promise.all(readers)
-  if (inactivityFailure) {
-    const output = [`[task-control ${phase} stdout]`, stdout, `[task-control ${phase} stderr]`, stderr]
-      .join("\n")
-      .slice(-65_536)
-    throw new Error(`${inactivityFailure.message}: ${output}`)
-  }
   if (exitCode !== 0) {
     const output = [`[task-control ${phase} stdout]`, stdout, `[task-control ${phase} stderr]`, stderr].join("\n")
     const evidenceMarker = output.lastIndexOf("[task-control failure evidence]")
@@ -372,7 +353,8 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
     { ProcessSupervisor },
     { ProtocolStore },
     { Session },
-    { listOwnedPromptSessionsForTask, listStartedIncompleteTaskIDs },
+    { listOwnedPromptSessionsForTask },
+    { listStartedIncompleteTaskIDs },
   ] = await Promise.all([
     import("@/cli/server-runtime"),
     import("@/engine/host-recovery"),
@@ -381,15 +363,18 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
     import("@/shell/process-supervisor"),
     import("@/protocol/store"),
     import("@/session"),
+    import("@/engine/runtime"),
     import("@/engine/store"),
   ])
-  const preparedServer = await requireRecoveredServerRuntime(await listenWithRecoveredServerRuntime({
-    options: { hostname: "127.0.0.1", port: 0, randomPort: true },
-    recover: async () => {
-      assertStartedTaskProjectRecoverySucceeded(await recoverStartedTaskExecutions())
-    },
-    disposeInstances: () => Instance.disposeAll(),
-  }))
+  const preparedServer = await requireRecoveredServerRuntime(
+    await listenWithRecoveredServerRuntime({
+      options: { hostname: "127.0.0.1", port: 0, randomPort: true },
+      recover: async () => {
+        assertStartedTaskProjectRecoverySucceeded(await recoverStartedTaskExecutions())
+      },
+      disposeInstances: () => Instance.disposeAll(),
+    }),
+  )
   process.stdout.write(`[task-control phase] ${phase} production recovery ready\n`)
   const server = preparedServer.server
   const base = server.url.toString().replace(/\/$/, "")

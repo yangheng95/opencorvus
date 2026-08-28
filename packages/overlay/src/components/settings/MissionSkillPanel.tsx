@@ -2,12 +2,18 @@ import type { MissionSkillSettingsResponse } from "@opencorvus-ai/sdk"
 import { For, Show, createEffect, createMemo, createSignal } from "solid-js"
 import { expertSquadSettingsScope, type ExpertSquadCatalogScopeState } from "../../services/expert-squad-scope"
 import { ensureMissionSkillDirectory, loadMissionSkillSettings } from "../../services/mission-skill"
-import { nativeOpen } from "../../utils/native"
+import {
+  pathRevealFailureText,
+  pathRevealLabelKey,
+  pathRevealNoticeKey,
+  revealPath,
+} from "../../services/workspace"
 import { t, tc } from "../../utils/i18n"
 import { Badge, type BadgeTone } from "../ui/Badge"
 import { Button } from "../ui/Button"
 import { Icon } from "../ui/Icon"
 import { SearchField } from "../ui/SearchField"
+import { copyText } from "../../services/clipboard"
 import {
   SettingsEmpty,
   SettingsGroup,
@@ -154,12 +160,17 @@ export default function MissionSkillPanel() {
   async function openPath(target: string, skillName: string): Promise<void> {
     const owner = beginOperation(skillName)
     try {
-      const opened = await nativeOpen(target)
-      if (!opened) throw new Error("native open returned false")
+      const outcome = await revealPath(target)
+      if (!owner.owns()) return
+      const notice = pathRevealNoticeKey(outcome)
+      if (notice) {
+        setNoticeTone("active")
+        setNotice(t(notice, { path: target }))
+      }
     } catch (cause) {
       if (!owner.owns()) return
       setNoticeTone("error")
-      setNotice(t("mission_skill.open_failed", { error: cause instanceof Error ? cause.message : String(cause) }))
+      setNotice(pathRevealFailureText(cause))
     }
   }
 
@@ -170,19 +181,24 @@ export default function MissionSkillPanel() {
     try {
       const target = await ensureMissionSkillDirectory(scope, source)
       if (!owner.owns()) return
-      const opened = await nativeOpen(target)
-      if (!opened) throw new Error("native open returned false")
+      const outcome = await revealPath(target)
+      if (!owner.owns()) return
+      const notice = pathRevealNoticeKey(outcome)
+      if (notice) {
+        setNoticeTone("active")
+        setNotice(t(notice, { path: target }))
+      }
     } catch (cause) {
       if (!owner.owns()) return
       setNoticeTone("error")
-      setNotice(t("mission_skill.open_failed", { error: cause instanceof Error ? cause.message : String(cause) }))
+      setNotice(pathRevealFailureText(cause))
     }
   }
 
   async function copyInvocation(skill: MissionSkillSettingsItem): Promise<void> {
     const owner = beginOperation(skill.name)
     try {
-      await navigator.clipboard.writeText(invocation(skill.name))
+      await copyText(invocation(skill.name))
       if (!owner.owns()) return
       setNoticeTone("active")
       setNotice(t("mission_skill.copied", { name: skill.name }))
@@ -380,7 +396,7 @@ export default function MissionSkillPanel() {
                                   onClick={() => void openPath(location(), skill().name)}
                                 >
                                   <Icon name="folder-open" />
-                                  {t("mission_skill.open_source")}
+                                  {t(pathRevealLabelKey())}
                                 </Button>
                               </div>
                             )}
@@ -416,7 +432,7 @@ export default function MissionSkillPanel() {
                     onClick={() => void openRoot("project")}
                   >
                     <Icon name="folder-open" />
-                    {t("common.open")}
+                    {t(pathRevealLabelKey())}
                   </Button>
                 }
               />
@@ -433,7 +449,7 @@ export default function MissionSkillPanel() {
                     onClick={() => void openRoot("global")}
                   >
                     <Icon name="folder-open" />
-                    {t("common.open")}
+                    {t(pathRevealLabelKey())}
                   </Button>
                 }
               />

@@ -33,7 +33,6 @@ import {
   type ConversationAgentView,
   validateConversationAgentView,
 } from "../store/conversation-agents"
-import { markSelectedMessageWatermark } from "./selected-stream-cursor"
 import {
   recordSelectedTaskSseEventActivity,
   recordSelectedTaskSseSnapshot,
@@ -43,6 +42,7 @@ import { formatErrorDetails } from "./diagnostics"
 import { AppLog } from "../utils/log"
 import { isSubagentActivityRecord } from "../utils/subagent-presentation"
 import { conversationEventOwner } from "./event-policy"
+import { conversationHistoryPath } from "./conversation-history-path"
 
 type EventReplay = {
   cursor: number
@@ -61,7 +61,6 @@ type HistoryState = {
 }
 
 const INITIAL_CONVERSATION_TAIL_LIMIT = 80
-const LIVE_MESSAGE_CHANGE_TAIL_LIMIT = 32
 const CONVERSATION_HISTORY_PAGE_LIMIT = 160
 const MARKDOWN_PREWARM_MESSAGE_LIMIT = 24
 
@@ -72,9 +71,6 @@ let historyAbort: AbortController | null = null
 let tailMergeEpoch = 0
 let tailMergeAbort: AbortController | null = null
 let historySource: BoardSource | null = null
-let scheduledTailMergeTaskID = ""
-let scheduledTailMergeRunning = false
-let scheduledTailMergeAgain = false
 let historyState: HistoryState = {
   oldestTimestamp: null,
   oldestOrderKey: null,
@@ -119,9 +115,6 @@ export function cancelConversationReplay(): void {
   replayAbort = null
   historyAbort = null
   tailMergeAbort = null
-  scheduledTailMergeTaskID = ""
-  scheduledTailMergeRunning = false
-  scheduledTailMergeAgain = false
   historyLoading = false
   historySource = null
   historyState = {
@@ -314,14 +307,6 @@ function requireNonnegativeInteger(raw: any, name: string): number {
   return value
 }
 
-function parseMessageWatermark(raw: any): number {
-  const value = Number(raw ?? 0)
-  if (!Number.isFinite(value) || value < 0) {
-    throw new Error(`conversation messageWatermark invalid: ${JSON.stringify(raw)}`)
-  }
-  return Math.floor(value)
-}
-
 function parseRewindCursor(raw: any): number | null {
   if (raw === null || raw === undefined) return null
   const value = Number(raw)
@@ -343,8 +328,20 @@ function eventTaskID(event: any): string {
   )
 }
 
-function selectedTaskActivityTimestamp(input: { events: any[]; messageWatermark: number; taskID: string }): number {
-  let activityAt = input.messageWatermark
+function transcriptActivityTimestamp(transcript: any[]): number {
+  let activityAt = 0
+  for (const message of transcript) {
+    const messageTime = message?.info?.time
+    activityAt = Math.max(activityAt, Number(messageTime?.completed || messageTime?.created || 0))
+    for (const part of Array.isArray(message?.parts) ? message.parts : []) {
+      activityAt = Math.max(activityAt, Number(part?.time?.end || part?.time?.start || 0))
+    }
+  }
+  return activityAt
+}
+
+function selectedTaskActivityTimestamp(input: { events: any[]; transcript: any[]; taskID: string }): number {
+  let activityAt = transcriptActivityTimestamp(input.transcript)
   for (const event of input.events) {
     const taskID = eventTaskID(event)
     if (taskID && taskID !== input.taskID) continue
@@ -356,7 +353,7 @@ function selectedTaskActivityTimestamp(input: { events: any[]; messageWatermark:
 function recordHydratedSelectedTaskActivity(input: {
   board: Record<string, unknown>
   events: any[]
-  messageWatermark: number
+  transcript: any[]
   taskID: string
 }): void {
   const task = (input.board as any).task
@@ -450,6 +447,34 @@ export function conversationSourceDirectory(source: BoardSource): string {
   const directory = optionalConversationSourceDirectory(source)
   if (!directory) throw new Error(`conversation source ${sourceKey(source)} has no project directory`)
   return directory
+}
+
+export function mergeSessionConnectionSnapshot(
+  source: Extract<BoardSource, { kind: "session" }>,
+  payload: unknown,
+): void {
+  const envelope = requireObject(payload, "session.connected payload")
+  const sessionID = String(envelope.sessionID || "")
+  if (sessionID !== source.id) {
+    throw new Error(`session.connected payload belongs to ${sessionID || "<missing>"}, expected ${source.id}`)
+  }
+  const snapshot = requireObject(envelope.conversationSnapshot, "session.connected conversationSnapshot")
+  const transcript = requireArray(snapshot.transcript, "session.connected conversationSnapshot.transcript")
+  const view = requireObject(snapshot.view, "session.connected conversationSnapshot.view")
+  const history = parseHistoryState(snapshot.history)
+  const preparedConversation = prepareConversationView(view, transcript)
+  historyEpoch += 1
+  historyAbort?.abort(new DOMException("Session connection snapshot superseded older history", "AbortError"))
+  historyAbort = null
+  historyLoading = false
+  batch(() => {
+    deferConversationTreeProjection(() => {
+      commitPreparedConversationView(preparedConversation)
+    })
+  })
+  prewarmTranscriptMarkdown(transcript)
+  historySource = source
+  historyState = history
 }
 
 function activeSourceMatches(source: BoardSource): boolean {
@@ -665,7 +690,6 @@ export async function hydrateConversation(
         ? parseEventReplay(data?.eventReplay)
         : { cursor: 0, latestSequence: 0, complete: true, limit: CONVERSATION_HISTORY_PAGE_LIMIT, sinceTimestamp: null }
     const history = parseHistoryState(data?.history)
-    const messageWatermark = parseMessageWatermark(data?.messageWatermark)
     const rewindCursor = parseRewindCursor((board as any).rewindCursor)
     const lastSequence = source.kind === "task" ? requireNonnegativeInteger(data?.lastSequence, "lastSequence") : 0
     const preparedQuestions = prepareStandaloneQuestionInteractions(pendingQuestions)
@@ -697,7 +721,6 @@ export async function hydrateConversation(
           commitPreparedConversationView(preparedConversation)
           hydrateConversationAgentView(sourceKey(source), agentView, { validated: true })
           setHydratedRewindCursor(rewindCursor)
-          markSelectedMessageWatermark(messageWatermark)
           commitConversationEvents({
             events,
             ...(source.kind === "task" ? { taskID: source.id } : {}),
@@ -718,7 +741,7 @@ export async function hydrateConversation(
       recordHydratedSelectedTaskActivity({
         board,
         events,
-        messageWatermark,
+        transcript,
         taskID: source.id,
       })
     }
@@ -779,7 +802,6 @@ export async function mergeLatestConversationTail(
     const agentView = requireObject(data?.agentView, "agentView") as unknown as ConversationAgentView
     const turnArtifacts = parseConversationTurnArtifacts(data?.turnArtifacts)
     const history = parseHistoryState(data?.history)
-    const messageWatermark = parseMessageWatermark(data?.messageWatermark)
     const rewindCursor = parseRewindCursor((board as any).rewindCursor)
     requireNonnegativeInteger(data?.lastSequence, "lastSequence")
     const preparedConversation = prepareConversationView(view, transcript)
@@ -801,7 +823,6 @@ export async function mergeLatestConversationTail(
           commitPreparedConversationView(preparedConversation)
           hydrateConversationAgentView(sourceKey({ kind: "task", id: selectedTaskID }), agentView, { validated: true })
           setHydratedRewindCursor(rewindCursor)
-          markSelectedMessageWatermark(messageWatermark)
           commitConversationEvents({
             events,
             taskID: selectedTaskID,
@@ -821,7 +842,7 @@ export async function mergeLatestConversationTail(
     recordHydratedSelectedTaskActivity({
       board,
       events,
-      messageWatermark,
+      transcript,
       taskID: selectedTaskID,
     })
   } finally {
@@ -829,50 +850,10 @@ export async function mergeLatestConversationTail(
   }
 }
 
-export function scheduleLatestConversationTailMerge(taskID: string): void {
-  const selectedTaskID = String(taskID || "")
-  if (!selectedTaskID) return
-  scheduledTailMergeTaskID = selectedTaskID
-  if (scheduledTailMergeRunning) {
-    scheduledTailMergeAgain = true
-    return
-  }
-  scheduledTailMergeRunning = true
-  const run = async (): Promise<void> => {
-    while (scheduledTailMergeTaskID) {
-      const nextTaskID = scheduledTailMergeTaskID
-      scheduledTailMergeTaskID = ""
-      scheduledTailMergeAgain = false
-      try {
-        await mergeLatestConversationTail(nextTaskID, {
-          tailLimit: LIVE_MESSAGE_CHANGE_TAIL_LIMIT,
-        })
-      } catch (error) {
-        if (error instanceof DOMException && error.name === "AbortError") continue
-        logConversationAsyncError("scheduled tail merge failed", error, {
-          taskID: nextTaskID,
-          source: "scheduled-tail-merge",
-        })
-      }
-      if (!scheduledTailMergeAgain) break
-    }
-    scheduledTailMergeRunning = false
-    if (scheduledTailMergeTaskID) scheduleLatestConversationTailMerge(scheduledTailMergeTaskID)
-  }
-  void run().catch((error) => {
-    scheduledTailMergeRunning = false
-    logConversationAsyncError("scheduled tail merge owner failed", error, {
-      taskID: scheduledTailMergeTaskID,
-      source: "scheduled-tail-merge",
-    })
-  })
-}
-
 export function canLoadOlderConversationHistory(source: BoardSource | null = boardStore.selectedSource): boolean {
   return (
     !!source &&
     sourceMatches(source, historySource) &&
-    source.kind === "task" &&
     historyState.hasMore &&
     historyState.oldestTimestamp !== null &&
     historyState.oldestOrderKey !== null &&
@@ -905,8 +886,7 @@ export function conversationCardContainsMessage(cardID: string, messageID: strin
 export async function loadOlderConversationHistory(
   source: BoardSource | null = boardStore.selectedSource,
 ): Promise<boolean> {
-  if (!source || source.kind !== "task") return false
-  const selectedTaskID = String(source.id || "")
+  if (!source) return false
   if (!canLoadOlderConversationHistory(source)) return false
   const directory = conversationSourceDirectory(source)
   const before = historyState.oldestTimestamp
@@ -921,7 +901,13 @@ export async function loadOlderConversationHistory(
   try {
     assertActiveHistory(source, epoch, controller.signal)
     const page = await apiJson(
-      `task/${encodeURIComponent(selectedTaskID)}/conversation/history?directory=${encodeURIComponent(directory)}&before=${encodeURIComponent(String(before))}&before_order_key=${encodeURIComponent(beforeOrderKey)}${beforeID ? `&before_id=${encodeURIComponent(beforeID)}` : ""}&limit=${encodeURIComponent(String(CONVERSATION_HISTORY_PAGE_LIMIT))}`,
+      conversationHistoryPath(source, {
+        directory,
+        before,
+        beforeOrderKey,
+        beforeID,
+        limit: CONVERSATION_HISTORY_PAGE_LIMIT,
+      }),
       { signal: controller.signal },
     )
     assertActiveHistory(source, epoch, controller.signal)
@@ -957,7 +943,7 @@ export async function loadOlderConversationHistory(
   } catch (error) {
     if (!(error instanceof DOMException && error.name === "AbortError")) {
       logConversationAsyncError("older history load failed", error, {
-        taskID: selectedTaskID,
+        ...(source.kind === "task" ? { taskID: source.id } : { sessionID: source.id }),
         source: "older-history",
       })
     }

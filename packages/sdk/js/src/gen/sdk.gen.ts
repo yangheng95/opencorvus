@@ -196,7 +196,6 @@ import type {
   FileWriteResponses,
   FindFilesErrors,
   FindFilesResponses,
-  FindSymbolsResponses,
   FindTextErrors,
   FindTextResponses,
   FormatterStatusResponses,
@@ -220,6 +219,8 @@ import type {
   GlobalAutomationsUpdateResponses,
   GlobalChatCreateErrors,
   GlobalChatCreateResponses,
+  GlobalChatStartErrors,
+  GlobalChatStartResponses,
   GlobalComposerExpertSquadsErrors,
   GlobalComposerExpertSquadsResponses,
   GlobalComposerReferencesErrors,
@@ -263,7 +264,13 @@ import type {
   GlobalProvidersTestResponses,
   GlobalSkillInstallErrors,
   GlobalSkillInstallResponses,
+  GlobalSkillMarketDetailErrors,
+  GlobalSkillMarketDetailResponses,
+  GlobalSkillMarketInstallErrors,
+  GlobalSkillMarketInstallResponses,
   GlobalSkillMarketResponses,
+  GlobalSkillMarketSearchErrors,
+  GlobalSkillMarketSearchResponses,
   GlobalUsageErrors,
   GlobalUsageResponses,
   GlobalWorkCreateErrors,
@@ -291,7 +298,6 @@ import type {
   LogReadResponses,
   LogTailErrors,
   LogTailResponses,
-  LspStatusResponses,
   MailboxAcknowledgeErrors,
   MailboxAcknowledgeResponses,
   MailboxDeleteErrors,
@@ -440,6 +446,8 @@ import type {
   QuestionReplyResponses,
   QuicknoteCreateErrors,
   QuicknoteCreateResponses,
+  ServerLifecycleErrors,
+  ServerLifecycleResponses,
   ServerRestartErrors,
   ServerRestartResponses,
   ServerShutdownErrors,
@@ -477,6 +485,8 @@ import type {
   SessionListGlobalResponses,
   SessionListResponses,
   SessionMessageErrors,
+  SessionMessagePartErrors,
+  SessionMessagePartResponses,
   SessionMessageResponses,
   SessionMessagesErrors,
   SessionMessagesResponses,
@@ -500,7 +510,13 @@ import type {
   SkillInstalledResponses,
   SkillInstallResponses,
   SkillIssuesResponses,
+  SkillMarketDetailErrors,
+  SkillMarketDetailResponses,
+  SkillMarketInstallErrors,
+  SkillMarketInstallResponses,
   SkillMarketResponses,
+  SkillMarketSearchErrors,
+  SkillMarketSearchResponses,
   SkillMountsResponses,
   SkillPolicyResponses,
   SkillRemoveResponses,
@@ -865,6 +881,7 @@ export class Attachment extends HeyApiClient {
     parameters: {
       projectID: string
       name: string
+      variant?: string
     },
     options?: Options<never, ThrowOnError>,
   ) {
@@ -875,6 +892,7 @@ export class Attachment extends HeyApiClient {
           args: [
             { in: "path", key: "projectID" },
             { in: "path", key: "name" },
+            { in: "query", key: "variant" },
           ],
         },
       ],
@@ -995,10 +1013,23 @@ export class Attachment2 extends HeyApiClient {
   public get<ThrowOnError extends boolean = false>(
     parameters: {
       id: string
+      e?: string
+      s?: string
     },
     options?: Options<never, ThrowOnError>,
   ) {
-    const params = buildClientParams([parameters], [{ args: [{ in: "path", key: "id" }] }])
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "path", key: "id" },
+            { in: "query", key: "e" },
+            { in: "query", key: "s" },
+          ],
+        },
+      ],
+    )
     return (options?.client ?? this.client).get<
       ChannelAttachmentGetResponses,
       ChannelAttachmentGetErrors,
@@ -4421,36 +4452,6 @@ export class Find extends HeyApiClient {
       ...params,
     })
   }
-
-  /**
-   * Find symbols
-   *
-   * Compatibility endpoint. Language Server Protocol runtimes are disabled, so this returns an empty array.
-   */
-  public symbols<ThrowOnError extends boolean = false>(
-    parameters: {
-      directory?: string
-      query: string
-    },
-    options?: Options<never, ThrowOnError>,
-  ) {
-    const params = buildClientParams(
-      [parameters],
-      [
-        {
-          args: [
-            { in: "query", key: "directory" },
-            { in: "query", key: "query" },
-          ],
-        },
-      ],
-    )
-    return (options?.client ?? this.client).get<FindSymbolsResponses, unknown, ThrowOnError>({
-      url: "/find/symbol",
-      ...options,
-      ...params,
-    })
-  }
 }
 
 export class Formatter extends HeyApiClient {
@@ -5024,19 +5025,116 @@ export class Control extends HeyApiClient {
             user_id?: string
           }
         | {
-            action: "resume_task"
             /**
-             * Host-minted references returned by complete source Task reads earlier in this Mission Turn.
+             * Exact failed or unresolved criteria, preserved acceptances, current ledger revision, workflow ownership, and completely read evidence for the next execution epoch. The Host renders the visible Mission repair Message from this single structure.
              */
-            evidence_read_refs: Array<string>
+            acceptance_gap: {
+              criteria: Array<
+                | {
+                    criterion_id: string
+                    disposition: "failed" | "unresolved" | "stale_evidence"
+                    finding: string
+                    invalidating_evidence_read_refs: Array<string>
+                    irreducible_blocker_evidence_read_refs: Array<string>
+                    observation_evidence_read_refs: Array<string>
+                    repair_action: {
+                      expected_evidence_kind: string
+                      operation: string
+                      parameters: {
+                        [key: string]: unknown
+                      }
+                      target: string
+                    }
+                    repair_evidence_read_refs: Array<string>
+                    resolution_evidence_read_refs: Array<string>
+                    responsibility:
+                      | {
+                          kind: "workflow_node"
+                          workflow_id: string
+                          workflow_node_id: string
+                        }
+                      | {
+                          agent_id: string
+                          dispatch_lineage_id: string
+                          kind: "direct_dispatch"
+                          package_revision: {
+                            id: string
+                            namespace: string
+                            package_digest: string
+                            project_id: string | null
+                            scope: "built_in" | "project" | "global"
+                            version: string
+                          }
+                        }
+                    state: "open"
+                  }
+                | {
+                    criterion_id: string
+                    finding: string
+                    invalidating_evidence_read_refs: Array<string>
+                    irreducible_blocker_evidence_read_refs: Array<string>
+                    observation_evidence_read_refs: Array<string>
+                    repair_evidence_read_refs: Array<string>
+                    resolution_evidence_read_refs: Array<string>
+                    responsibility:
+                      | {
+                          kind: "workflow_node"
+                          workflow_id: string
+                          workflow_node_id: string
+                        }
+                      | {
+                          agent_id: string
+                          dispatch_lineage_id: string
+                          kind: "direct_dispatch"
+                          package_revision: {
+                            id: string
+                            namespace: string
+                            package_digest: string
+                            project_id: string | null
+                            scope: "built_in" | "project" | "global"
+                            version: string
+                          }
+                        }
+                    state: "accepted"
+                  }
+                | {
+                    criterion_id: string
+                    finding: string
+                    invalidating_evidence_read_refs: Array<string>
+                    irreducible_blocker_evidence_read_refs: Array<string>
+                    observation_evidence_read_refs: Array<string>
+                    repair_evidence_read_refs: Array<string>
+                    resolution_evidence_read_refs: Array<string>
+                    responsibility:
+                      | {
+                          kind: "workflow_node"
+                          workflow_id: string
+                          workflow_node_id: string
+                        }
+                      | {
+                          agent_id: string
+                          dispatch_lineage_id: string
+                          kind: "direct_dispatch"
+                          package_revision: {
+                            id: string
+                            namespace: string
+                            package_digest: string
+                            project_id: string | null
+                            scope: "built_in" | "project" | "global"
+                            version: string
+                          }
+                        }
+                    state: "blocked"
+                  }
+              >
+              current_ledger_revision_artifact_id: string | null
+              gap_id: string
+            }
+            action: "resume_task"
             /**
              * Completed or failed source Task in the current Mission lineage.
              */
             taskID: string
-            /**
-             * Visible Mission-authored repair request describing the observed acceptance gap.
-             */
-            text: string
           }
         | {
             action: "reply_interaction"
@@ -5783,6 +5881,49 @@ export class Chat3 extends HeyApiClient {
       },
     })
   }
+
+  /**
+   * Start a global Chat
+   *
+   * Create one visible global Chat, durably accept and schedule its first user message, and return canonical Session streaming coordinates. Retry the same requestID to converge on the same Chat turn.
+   */
+  public start<ThrowOnError extends boolean = false>(
+    parameters: {
+      attachments?: Array<{
+        data: string
+        filename?: string
+        mime: string
+      }>
+      model?: string
+      requestID: string
+      text: string
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "body", key: "attachments" },
+            { in: "body", key: "model" },
+            { in: "body", key: "requestID" },
+            { in: "body", key: "text" },
+          ],
+        },
+      ],
+    )
+    return (options?.client ?? this.client).post<GlobalChatStartResponses, GlobalChatStartErrors, ThrowOnError>({
+      url: "/global/chat/start",
+      ...options,
+      ...params,
+      headers: {
+        "Content-Type": "application/json",
+        ...options?.headers,
+        ...params.headers,
+      },
+    })
+  }
 }
 
 export class Config2 extends HeyApiClient {
@@ -6006,9 +6147,9 @@ export class Account extends HeyApiClient {
 
 export class Auth2 extends HeyApiClient {
   /**
-   * Execute global Provider auth
+   * Execute global Provider API auth
    *
-   * Execute a built-in Provider authentication method without a project.
+   * Execute a built-in Provider API credential method without a project.
    */
   public execute<ThrowOnError extends boolean = false>(
     parameters: {
@@ -6145,6 +6286,7 @@ export class Oauth extends HeyApiClient {
     parameters: {
       providerID: string
       code?: string
+      flowID: string
       method: number
     },
     options?: Options<never, ThrowOnError>,
@@ -6156,6 +6298,7 @@ export class Oauth extends HeyApiClient {
           args: [
             { in: "path", key: "providerID" },
             { in: "body", key: "code" },
+            { in: "body", key: "flowID" },
             { in: "body", key: "method" },
           ],
         },
@@ -6301,6 +6444,106 @@ export class Providers extends HeyApiClient {
   }
 }
 
+export class Market extends HeyApiClient {
+  /**
+   * Inspect a global Skill Market candidate
+   *
+   * Download and validate one exact candidate bundle without installing it.
+   */
+  public detail<ThrowOnError extends boolean = false>(
+    parameters: {
+      id: string
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams([parameters], [{ args: [{ in: "query", key: "id" }] }])
+    return (options?.client ?? this.client).get<
+      GlobalSkillMarketDetailResponses,
+      GlobalSkillMarketDetailErrors,
+      ThrowOnError
+    >({
+      url: "/global/skill/market/detail",
+      ...options,
+      ...params,
+    })
+  }
+
+  /**
+   * Install an inspected global Skill Market candidate
+   *
+   * Install exactly one candidate only when its current content matches the inspected digest.
+   */
+  public install<ThrowOnError extends boolean = false>(
+    parameters: {
+      expected_hash: string
+      id: string
+      policy?: "allow" | "deny"
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "body", key: "expected_hash" },
+            { in: "body", key: "id" },
+            { in: "body", key: "policy" },
+          ],
+        },
+      ],
+    )
+    return (options?.client ?? this.client).post<
+      GlobalSkillMarketInstallResponses,
+      GlobalSkillMarketInstallErrors,
+      ThrowOnError
+    >({
+      url: "/global/skill/market/install",
+      ...options,
+      ...params,
+      headers: {
+        "Content-Type": "application/json",
+        ...options?.headers,
+        ...params.headers,
+      },
+    })
+  }
+
+  /**
+   * Search the global Skill Market
+   *
+   * Search exact Skill candidates and project live global installation status.
+   */
+  public search<ThrowOnError extends boolean = false>(
+    parameters: {
+      query: string
+      limit?: number
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "query", key: "query" },
+            { in: "query", key: "limit" },
+          ],
+        },
+      ],
+    )
+    return (options?.client ?? this.client).get<
+      GlobalSkillMarketSearchResponses,
+      GlobalSkillMarketSearchErrors,
+      ThrowOnError
+    >({
+      url: "/global/skill/market/search",
+      ...options,
+      ...params,
+    })
+  }
+}
+
 export class Skill extends HeyApiClient {
   /**
    * Install a global Skill market source
@@ -6342,13 +6585,18 @@ export class Skill extends HeyApiClient {
   /**
    * List the global Skill market
    *
-   * List global Skill market entries without requiring an active project.
+   * List the single current Skill Market provider without requiring an active project.
    */
   public market<ThrowOnError extends boolean = false>(options?: Options<never, ThrowOnError>) {
     return (options?.client ?? this.client).get<GlobalSkillMarketResponses, unknown, ThrowOnError>({
       url: "/global/skill/market",
       ...options,
     })
+  }
+
+  private _market?: Market
+  get market2(): Market {
+    return (this._market ??= new Market({ client: this.client }))
   }
 }
 
@@ -6924,6 +7172,8 @@ export class Conversation extends HeyApiClient {
     parameters: {
       taskID: string
       sessionID: string
+      after_live_sequence?: string
+      after_live_epoch?: string
     },
     options?: Options<never, ThrowOnError>,
   ) {
@@ -6934,6 +7184,8 @@ export class Conversation extends HeyApiClient {
           args: [
             { in: "path", key: "taskID" },
             { in: "path", key: "sessionID" },
+            { in: "query", key: "after_live_sequence" },
+            { in: "query", key: "after_live_epoch" },
           ],
         },
       ],
@@ -7727,10 +7979,25 @@ export class Task extends HeyApiClient {
   public events<ThrowOnError extends boolean = false>(
     parameters: {
       taskID: string
+      after?: string
+      after_live?: string
+      after_live_epoch?: string
     },
     options?: Options<never, ThrowOnError, TaskEventsResponse>,
   ) {
-    const params = buildClientParams([parameters], [{ args: [{ in: "path", key: "taskID" }] }])
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "path", key: "taskID" },
+            { in: "query", key: "after" },
+            { in: "query", key: "after_live" },
+            { in: "query", key: "after_live_epoch" },
+          ],
+        },
+      ],
+    )
     return (options?.client ?? this.client).sse.get<TaskEventsResponses, unknown, ThrowOnError>({
       url: "/task/{taskID}/events",
       ...options,
@@ -8344,6 +8611,51 @@ export class Interaction extends HeyApiClient {
   }
 }
 
+export class Server extends HeyApiClient {
+  /**
+   * Get a server lifecycle occurrence
+   *
+   * Return the state of an admitted shutdown or restart occurrence. A completed shutdown is unobservable from inside the process, so `executing` is the last state a successful one shows.
+   */
+  public lifecycle<ThrowOnError extends boolean = false>(
+    parameters: {
+      occurrenceID: string
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams([parameters], [{ args: [{ in: "path", key: "occurrenceID" }] }])
+    return (options?.client ?? this.client).get<ServerLifecycleResponses, ServerLifecycleErrors, ThrowOnError>({
+      url: "/lifecycle/{occurrenceID}",
+      ...options,
+      ...params,
+    })
+  }
+
+  /**
+   * Restart the server
+   *
+   * Spawn a new server process with the same arguments, then exit.
+   */
+  public restart<ThrowOnError extends boolean = false>(options?: Options<never, ThrowOnError>) {
+    return (options?.client ?? this.client).post<ServerRestartResponses, ServerRestartErrors, ThrowOnError>({
+      url: "/restart",
+      ...options,
+    })
+  }
+
+  /**
+   * Shutdown the server
+   *
+   * Gracefully abort live execution state and stop the current process.
+   */
+  public shutdown<ThrowOnError extends boolean = false>(options?: Options<never, ThrowOnError>) {
+    return (options?.client ?? this.client).post<ServerShutdownResponses, ServerShutdownErrors, ThrowOnError>({
+      url: "/shutdown",
+      ...options,
+    })
+  }
+}
+
 export class Log extends HeyApiClient {
   /**
    * Read logs
@@ -8413,27 +8725,6 @@ export class Log extends HeyApiClient {
     const params = buildClientParams([parameters], [{ args: [{ in: "query", key: "n" }] }])
     return (options?.client ?? this.client).get<LogTailResponses, LogTailErrors, ThrowOnError>({
       url: "/log/tail",
-      ...options,
-      ...params,
-    })
-  }
-}
-
-export class Lsp extends HeyApiClient {
-  /**
-   * Get LSP status
-   *
-   * Compatibility endpoint. Language Server Protocol runtimes are disabled, so this returns an empty array.
-   */
-  public status<ThrowOnError extends boolean = false>(
-    parameters?: {
-      directory?: string
-    },
-    options?: Options<never, ThrowOnError>,
-  ) {
-    const params = buildClientParams([parameters], [{ args: [{ in: "query", key: "directory" }] }])
-    return (options?.client ?? this.client).get<LspStatusResponses, unknown, ThrowOnError>({
-      url: "/lsp",
       ...options,
       ...params,
     })
@@ -10413,9 +10704,9 @@ export class Account2 extends HeyApiClient {
 
 export class Auth4 extends HeyApiClient {
   /**
-   * Execute auth method
+   * Execute Provider API auth method
    *
-   * Execute an authentication method with collected inputs.
+   * Execute an API credential method with collected inputs.
    */
   public execute<ThrowOnError extends boolean = false>(
     parameters: {
@@ -10555,6 +10846,7 @@ export class Oauth2 extends HeyApiClient {
       providerID: string
       directory?: string
       code?: string
+      flowID: string
       method: number
     },
     options?: Options<never, ThrowOnError>,
@@ -10567,6 +10859,7 @@ export class Oauth2 extends HeyApiClient {
             { in: "path", key: "providerID" },
             { in: "query", key: "directory" },
             { in: "body", key: "code" },
+            { in: "body", key: "flowID" },
             { in: "body", key: "method" },
           ],
         },
@@ -11055,32 +11348,6 @@ export class Question extends HeyApiClient {
         ...options?.headers,
         ...params.headers,
       },
-    })
-  }
-}
-
-export class Server extends HeyApiClient {
-  /**
-   * Restart the server
-   *
-   * Spawn a new server process with the same arguments, then exit.
-   */
-  public restart<ThrowOnError extends boolean = false>(options?: Options<never, ThrowOnError>) {
-    return (options?.client ?? this.client).post<ServerRestartResponses, ServerRestartErrors, ThrowOnError>({
-      url: "/restart",
-      ...options,
-    })
-  }
-
-  /**
-   * Shutdown the server
-   *
-   * Gracefully abort live execution state and stop the current process.
-   */
-  public shutdown<ThrowOnError extends boolean = false>(options?: Options<never, ThrowOnError>) {
-    return (options?.client ?? this.client).post<ServerShutdownResponses, ServerShutdownErrors, ThrowOnError>({
-      url: "/shutdown",
-      ...options,
     })
   }
 }
@@ -11659,7 +11926,7 @@ export class Session4 extends HeyApiClient {
       agent?: string
       arguments: string
       command: string
-      messageID?: string
+      messageID: string
       model?: string
       parts?: Array<{
         filename?: string
@@ -11918,7 +12185,7 @@ export class Session4 extends HeyApiClient {
       directory?: string
       agent?: string
       format?: OutputFormat
-      messageID?: string
+      messageID: string
       model?: {
         modelID: string
         providerID: string
@@ -12026,6 +12293,40 @@ export class Session4 extends HeyApiClient {
   }
 
   /**
+   * Get message part
+   *
+   * Retrieve one exact persisted part from a specific session message.
+   */
+  public messagePart<ThrowOnError extends boolean = false>(
+    parameters: {
+      sessionID: string
+      messageID: string
+      partID: string
+      directory?: string
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "path", key: "sessionID" },
+            { in: "path", key: "messageID" },
+            { in: "path", key: "partID" },
+            { in: "query", key: "directory" },
+          ],
+        },
+      ],
+    )
+    return (options?.client ?? this.client).get<SessionMessagePartResponses, SessionMessagePartErrors, ThrowOnError>({
+      url: "/session/{sessionID}/message/{messageID}/part/{partID}",
+      ...options,
+      ...params,
+    })
+  }
+
+  /**
    * Run shell command
    *
    * Execute a shell command within a standalone or Coding Assistant session context and return the AI's response. Mission execution uses mission.wake; projected worker guidance uses the task-scoped operator-steer route.
@@ -12036,6 +12337,7 @@ export class Session4 extends HeyApiClient {
       directory?: string
       agent: string
       command: string
+      messageID: string
       model?: {
         modelID: string
         providerID: string
@@ -12052,6 +12354,7 @@ export class Session4 extends HeyApiClient {
             { in: "query", key: "directory" },
             { in: "body", key: "agent" },
             { in: "body", key: "command" },
+            { in: "body", key: "messageID" },
             { in: "body", key: "model" },
           ],
         },
@@ -12403,6 +12706,109 @@ export class Part extends HeyApiClient {
   }
 }
 
+export class Market2 extends HeyApiClient {
+  /**
+   * Inspect a Skill Market candidate
+   *
+   * Download and validate the exact candidate bundle without installing it.
+   */
+  public detail<ThrowOnError extends boolean = false>(
+    parameters: {
+      directory?: string
+      id: string
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "query", key: "directory" },
+            { in: "query", key: "id" },
+          ],
+        },
+      ],
+    )
+    return (options?.client ?? this.client).get<SkillMarketDetailResponses, SkillMarketDetailErrors, ThrowOnError>({
+      url: "/skill/market/detail",
+      ...options,
+      ...params,
+    })
+  }
+
+  /**
+   * Install an inspected Skill Market candidate
+   *
+   * Install exactly one candidate only when its current content matches the inspected digest.
+   */
+  public install<ThrowOnError extends boolean = false>(
+    parameters: {
+      directory?: string
+      expected_hash: string
+      id: string
+      policy?: "allow" | "deny"
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "query", key: "directory" },
+            { in: "body", key: "expected_hash" },
+            { in: "body", key: "id" },
+            { in: "body", key: "policy" },
+          ],
+        },
+      ],
+    )
+    return (options?.client ?? this.client).post<SkillMarketInstallResponses, SkillMarketInstallErrors, ThrowOnError>({
+      url: "/skill/market/install",
+      ...options,
+      ...params,
+      headers: {
+        "Content-Type": "application/json",
+        ...options?.headers,
+        ...params.headers,
+      },
+    })
+  }
+
+  /**
+   * Search the Skill Market
+   *
+   * Search the current Skill Market and project live installation status for exact candidates.
+   */
+  public search<ThrowOnError extends boolean = false>(
+    parameters: {
+      directory?: string
+      query: string
+      limit?: number
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "query", key: "directory" },
+            { in: "query", key: "query" },
+            { in: "query", key: "limit" },
+          ],
+        },
+      ],
+    )
+    return (options?.client ?? this.client).get<SkillMarketSearchResponses, SkillMarketSearchErrors, ThrowOnError>({
+      url: "/skill/market/search",
+      ...options,
+      ...params,
+    })
+  }
+}
+
 export class Skill2 extends HeyApiClient {
   /**
    * Get skill directories
@@ -12552,7 +12958,7 @@ export class Skill2 extends HeyApiClient {
   /**
    * List skill markets
    *
-   * Get curated skill marketplaces and official registries relevant to OpenCorvus imports.
+   * Get the single current Skill Market provider used by OpenCorvus.
    */
   public market<ThrowOnError extends boolean = false>(
     parameters?: {
@@ -12697,7 +13103,7 @@ export class Skill2 extends HeyApiClient {
   public remove<ThrowOnError extends boolean = false>(
     parameters: {
       directory?: string
-      kind?: "path" | "url" | "git"
+      kind?: "path" | "url" | "git" | "market"
       source: string
     },
     options?: Options<never, ThrowOnError>,
@@ -12761,6 +13167,11 @@ export class Skill2 extends HeyApiClient {
         ...params.headers,
       },
     })
+  }
+
+  private _market?: Market2
+  get market2(): Market2 {
+    return (this._market ??= new Market2({ client: this.client }))
   }
 }
 
@@ -13373,7 +13784,7 @@ export class WorkLedger extends HeyApiClient {
   /**
    * List Work Ledger rows
    *
-   * Return one unified Mission and Chat/Work ledger projection. Tasks are visible only inside their owning Mission row.
+   * Return one unified Mission, Task, and Chat/Work ledger projection. Tasks with an exact Mission root are nested inside that Mission; unarchived Tasks without a resolvable Mission root are returned as top-level rows.
    */
   public list<ThrowOnError extends boolean = false>(
     parameters?: {
@@ -13747,14 +14158,14 @@ export class OpenCorvusClient extends HeyApiClient {
     return (this._interaction ??= new Interaction({ client: this.client }))
   }
 
+  private _server?: Server
+  get server(): Server {
+    return (this._server ??= new Server({ client: this.client }))
+  }
+
   private _log?: Log
   get log(): Log {
     return (this._log ??= new Log({ client: this.client }))
-  }
-
-  private _lsp?: Lsp
-  get lsp(): Lsp {
-    return (this._lsp ??= new Lsp({ client: this.client }))
   }
 
   private _mailbox?: Mailbox
@@ -13810,11 +14221,6 @@ export class OpenCorvusClient extends HeyApiClient {
   private _question?: Question
   get question(): Question {
     return (this._question ??= new Question({ client: this.client }))
-  }
-
-  private _server?: Server
-  get server(): Server {
-    return (this._server ??= new Server({ client: this.client }))
   }
 
   private _session?: Session4

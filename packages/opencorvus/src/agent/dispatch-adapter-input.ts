@@ -1,6 +1,6 @@
 import { isHttpWebpageUrl } from "@/util/web-url"
 import { z } from "zod"
-import { DesignResourceIntentSchema } from "@/frontend-design/design-resource-manifest"
+import { DesignResourceIntentSchema } from "@/protocol/design-resource-intent"
 
 const DeliverySliceRevisionSubjectsSchema = z
   .array(z.string().min(1))

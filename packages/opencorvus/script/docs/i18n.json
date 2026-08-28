@@ -61,6 +61,7 @@
     "log": { "title_en": "Global", "title_zh": "Global", "merge_into": "global" },
     "shutdown": { "title_en": "Global", "title_zh": "Global", "merge_into": "global" },
     "restart": { "title_en": "Global", "title_zh": "Global", "merge_into": "global" },
+    "lifecycle": { "title_en": "Global", "title_zh": "Global", "merge_into": "global" },
     "path": { "title_en": "Configuration", "title_zh": "Configuration", "merge_into": "config" },
     "formatter": { "title_en": "Configuration", "title_zh": "Configuration", "merge_into": "config" },
     "command": { "title_en": "Configuration", "title_zh": "Configuration", "merge_into": "config" },
@@ -69,7 +70,6 @@
     "mission": { "title_en": "Task / Orchestrator", "title_zh": "Task / Orchestrator", "merge_into": "task" },
     "work-ledger": { "title_en": "Task / Orchestrator", "title_zh": "Task / Orchestrator", "merge_into": "task" },
     "mailbox": { "title_en": "Task / Orchestrator", "title_zh": "Task / Orchestrator", "merge_into": "task" },
-    "delivery-slice": { "title_en": "Task / Orchestrator", "title_zh": "Task / Orchestrator", "merge_into": "task" },
-    "lsp": { "title_en": "File / Search", "title_zh": "File / Search", "merge_into": "find" }
+    "delivery-slice": { "title_en": "Task / Orchestrator", "title_zh": "Task / Orchestrator", "merge_into": "task" }
   }
 }

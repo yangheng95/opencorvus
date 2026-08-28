@@ -15,7 +15,6 @@ export function nativeAgentPermissionProfiles(config: Config.Info) {
     webfetch: "allow",
     websearch: "allow",
     external_code_search: "allow",
-    lsp: "allow",
     memory: "allow",
     skill: "allow",
     panel: "allow",

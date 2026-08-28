@@ -196,7 +196,7 @@ export const SessionListCommand = cmd({
       const shouldPaginate = process.stdout.isTTY && !args.maxCount && args.format === "table"
 
       if (shouldPaginate) {
-        const proc = Process.spawnHost(pagerCmd(), {
+        const proc = await Process.spawnHost(pagerCmd(), {
           stdin: "pipe",
           stdout: "inherit",
           stderr: "inherit",
@@ -207,8 +207,8 @@ export const SessionListCommand = cmd({
           return
         }
 
-        proc.stdin.write(output)
-        proc.stdin.end()
+        await proc.stdin.write(new TextEncoder().encode(output))
+        await proc.stdin.close()
         await proc.exited
       } else {
         console.log(output)

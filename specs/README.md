@@ -6,6 +6,76 @@ Stopped AutomationBench Sol Mission/Base 50-case run: [`2026-08-26-automationben
 
 Latest Sol Base restricted-shell authority repair: [`2026-08-24-sol-base-restricted-shell-authority-repair.md`](records/2026-08/2026-08-24-sol-base-restricted-shell-authority-repair.md).
 
+Latest Light consultation and investigation Expert Squad: [`2026-08-29-light-expert-squad.md`](records/2026-08/2026-08-29-light-expert-squad.md).
+
+Latest Mission acceptance Luna-baseline readiness closure: [`2026-08-29-mission-acceptance-baseline-readiness.md`](records/2026-08/2026-08-29-mission-acceptance-baseline-readiness.md).
+
+Latest Mission acceptance delta, ledger, epoch-checkpoint, and dispatch-settlement closure: [`2026-08-28-mission-acceptance-delta-closure.md`](records/2026-08/2026-08-28-mission-acceptance-delta-closure.md).
+
+Latest Overlay Expert Squad handoff startup convergence: [`2026-08-28-overlay-expert-squad-handoff-startup-convergence.md`](records/2026-08/2026-08-28-overlay-expert-squad-handoff-startup-convergence.md).
+
+Latest Overlay panel typography convergence: [`2026-08-28-overlay-panel-typography-convergence.md`](records/2026-08/2026-08-28-overlay-panel-typography-convergence.md).
+
+Latest global Chat start API convergence: [`2026-08-28-global-chat-start-api.md`](records/2026-08/2026-08-28-global-chat-start-api.md).
+
+Latest remaining architecture-debt closure and Mission acceptance plan: [`2026-08-28-remaining-architecture-debt-closure.md`](records/2026-08/2026-08-28-remaining-architecture-debt-closure.md).
+
+Latest ARC-021 immutable shared-package publication: [`2026-08-28-arc-021-immutable-package-publication.md`](records/2026-08/2026-08-28-arc-021-immutable-package-publication.md).
+
+Latest ARC-008 Conversation MCP context-budget convergence: [`2026-08-28-arc-008-conversation-mcp-context-budget.md`](records/2026-08/2026-08-28-arc-008-conversation-mcp-context-budget.md).
+
+Latest Inspect BrowseComp GPT-5.6 Luna smoke: [`2026-08-28-inspect-browsecomp-luna-smoke.md`](records/2026-08/2026-08-28-inspect-browsecomp-luna-smoke.md).
+
+Latest Right Dock component lifecycle and Conversation virtual-bottom convergence: [`2026-08-27-right-dock-lifecycle-and-virtual-bottom-convergence.md`](records/2026-08/2026-08-27-right-dock-lifecycle-and-virtual-bottom-convergence.md).
+
+Latest message-panel Agent activity and type-density convergence: [`2026-08-27-message-panel-agent-activity-and-type-density.md`](records/2026-08/2026-08-27-message-panel-agent-activity-and-type-density.md).
+
+Latest message-panel stream and payload convergence repair: [`2026-08-27-message-panel-stream-and-payload-convergence.md`](records/2026-08/2026-08-27-message-panel-stream-and-payload-convergence.md).
+
+Latest Work Ledger unowned Task visibility repair: [`2026-08-27-work-ledger-unowned-task-visibility.md`](records/2026-08/2026-08-27-work-ledger-unowned-task-visibility.md).
+
+Latest Mission Task causal-order and close convergence repair: [`2026-08-26-mission-task-causal-order-and-close-convergence.md`](records/2026-08/2026-08-26-mission-task-causal-order-and-close-convergence.md).
+
+Latest extensible Inspect AI benchmark framework and Apodex-family integration: [`2026-08-26-extensible-inspect-benchmark-framework.md`](records/2026-08/2026-08-26-extensible-inspect-benchmark-framework.md).
+
+Latest Session stream message cutover convergence: [`2026-08-26-session-stream-message-cutover-convergence.md`](records/2026-08/2026-08-26-session-stream-message-cutover-convergence.md).
+
+Latest Session conversation history visibility repair: [`2026-08-26-session-conversation-history-visibility-repair.md`](records/2026-08/2026-08-26-session-conversation-history-visibility-repair.md).
+
+Latest runtime Skill Market search and exact-install plan: [`2026-08-26-runtime-skill-market-search-install.md`](records/2026-08/2026-08-26-runtime-skill-market-search-install.md).
+
+Latest OpenCorvus paper-production internal evidence foundation: [`2026-08-26-opencorvus-paper-foundation-evidence.md`](records/2026-08/2026-08-26-opencorvus-paper-foundation-evidence.md), with the canonical machine-readable bundle under [`artifacts/opencorvus-paper/`](artifacts/opencorvus-paper/).
+
+Latest bounded `search_code` execution repair: [`2026-08-26-search-code-bounded-execution-repair.md`](records/2026-08/2026-08-26-search-code-bounded-execution-repair.md).
+
+Latest Inspect AI benchmark platform and OpenCorvus Task adapter: [`2026-08-26-inspect-ai-benchmark-adapter.md`](records/2026-08/2026-08-26-inspect-ai-benchmark-adapter.md).
+
+Latest Mission stream-interruption retry-budget repair: [`2026-08-26-mission-stream-interruption-retry-budget.md`](records/2026-08/2026-08-26-mission-stream-interruption-retry-budget.md).
+
+Latest open pull request triage: [`2026-08-25-open-pull-request-triage.md`](records/2026-08/2026-08-25-open-pull-request-triage.md).
+
+Latest landing AutomationBench proof: [`2026-08-25-landing-automationbench-proof.md`](records/2026-08/2026-08-25-landing-automationbench-proof.md).
+
+Landing AutomationBench visual evidence: [`light`](artifacts/landing-benchmark/automationbench-light.png) and [`dark`](artifacts/landing-benchmark/automationbench-dark.png).
+
+Latest landing DeBERTa Mission scale expansion: [`2026-08-25-landing-deberta-mission-scale.md`](records/2026-08/2026-08-25-landing-deberta-mission-scale.md).
+
+Latest `v0.0.54-beta` application and website release: [`2026-08-25-v0.0.54-beta-release.md`](records/2026-08/2026-08-25-v0.0.54-beta-release.md).
+
+Latest public-site version-bound download repair: [`2026-08-25-website-version-bound-download.md`](records/2026-08/2026-08-25-website-version-bound-download.md).
+
+Latest `v0.0.53-beta` application and website release: [`2026-08-24-v0.0.53-beta-release.md`](records/2026-08/2026-08-24-v0.0.53-beta-release.md).
+
+Latest architecture-debt remediation campaign: [`2026-08-25-architecture-debt-remediation.md`](records/2026-08/2026-08-25-architecture-debt-remediation.md).
+
+Latest full-repository architecture-debt saturation audit: [`2026-08-24-repository-architecture-debt-saturation-audit.md`](records/2026-08/2026-08-24-repository-architecture-debt-saturation-audit.md).
+
+Latest Work Ledger double-click rename repair: [`2026-08-24-work-ledger-double-click-rename-repair.md`](records/2026-08/2026-08-24-work-ledger-double-click-rename-repair.md).
+
+Latest Right Dock child-agent navigation and Add-tool menu repair: [`2026-08-24-right-dock-subagent-navigation-and-add-menu.md`](records/2026-08/2026-08-24-right-dock-subagent-navigation-and-add-menu.md).
+
+Latest single-owner Tool disclosure repair: [`2026-08-23-tool-disclosure-single-owner-repair.md`](records/2026-08/2026-08-23-tool-disclosure-single-owner-repair.md).
+
 Latest long-running Tool durable-progress convergence and fresh Mission rerun: [`2026-08-23-tool-pause-durable-progress-convergence.md`](records/2026-08/2026-08-23-tool-pause-durable-progress-convergence.md).
 
 Latest `v0.0.52-beta` application and website release: [`2026-08-22-v0.0.52-beta-release.md`](records/2026-08/2026-08-22-v0.0.52-beta-release.md).
@@ -313,23 +383,15 @@ Latest architecture debt remediation plan: [`2026-08-09-architecture-debt-remedi
 
 Paused backend algorithm test/debug loop evidence: [`2026-08-09-backend-algorithm-test-loop.md`](records/2026-08/2026-08-09-backend-algorithm-test-loop.md).
 
-Latest backend algorithm real-path debug loop: [`2026-08-09-backend-algorithm-e2e-loop.md`](records/2026-08/2026-08-09-backend-algorithm-e2e-loop.md).
 
-Latest Agent analysis, independent-review, and automatic-push guideline: [`2026-08-09-agent-guideline-analysis-review-push.md`](records/2026-08/2026-08-09-agent-guideline-analysis-review-push.md).
 
-Latest NVIDIA Chinese equity-research real end-to-end acceptance: [`2026-08-09-nvda-equity-research-e2e.md`](records/2026-08/2026-08-09-nvda-equity-research-e2e.md).
 
-Latest root README AI-slop removal: [`2026-08-09-readme-ai-slop-removal.md`](records/2026-08/2026-08-09-readme-ai-slop-removal.md).
 
-Latest repository-local package build runtime root repair: [`2026-08-08-package-build-runtime-root.md`](records/2026-08/2026-08-08-package-build-runtime-root.md).
 
 Latest `v0.0.38-beta` release plan and evidence: [`2026-08-09-v0.0.38-beta-release.md`](records/2026-08/2026-08-09-v0.0.38-beta-release.md).
 
-Latest first-open locale language selection: [`2026-08-08-first-open-locale-language-selection.md`](records/2026-08/2026-08-08-first-open-locale-language-selection.md).
 
-Latest repaired Task-process bootstrap local GUI repackage: [`2026-08-08-task-process-bootstrap-local-gui-repackage.md`](records/2026-08/2026-08-08-task-process-bootstrap-local-gui-repackage.md).
 
-Latest Task process deployment bootstrap repair: [`2026-08-08-task-process-deployment-bootstrap-repair.md`](records/2026-08/2026-08-08-task-process-deployment-bootstrap-repair.md).
 
 Latest signed desktop hot-update design: [`2026-08-08-signed-desktop-hot-update-design.md`](records/2026-08/2026-08-08-signed-desktop-hot-update-design.md).
 
@@ -431,7 +493,6 @@ Latest transactional schema migration plan: [`2026-08-06-transactional-schema-mi
 
 Latest Conversation bottom turn control and per-model usage plan: [`2026-08-06-conversation-turn-control-and-model-usage.md`](records/2026-08/2026-08-06-conversation-turn-control-and-model-usage.md).
 
-专家团自进化 benchmark 的不可变 Case 清单与生成说明：[`expert-squad-evolution-benchmark/README.md`](artifacts/expert-squad-evolution-benchmark/README.md)。
 
 Latest VCS model-context and remote-action repair: [`2026-08-06-vcs-model-context-and-remote-actions-repair.md`](records/2026-08/2026-08-06-vcs-model-context-and-remote-actions-repair.md), with [`no-remote`](artifacts/vcs-no-remote-actions.png) and [`configured-remote`](artifacts/vcs-remote-actions.png) visual evidence.
 
@@ -775,11 +836,8 @@ Latest root README Agent Harness positioning: [`2026-08-07-readme-agent-harness-
 
 August 2026 records: [`specs/records/2026-08/README.md`](records/2026-08/README.md).
 
-Latest AI 编程工具选型研究报告（采购决策，六章）: [`ai-coding-tools-selection-report.md`](artifacts/ai-coding-tools-selection-report.md)，配套结构化数据 [`ai-coding-tools-selection-data.json`](artifacts/ai-coding-tools-selection-data.json)。
 
-Latest AI 编程工具选型复核（2026-08-02，12/12 官方 URL 一致）: [`ai-coding-tools-selection-review-2026-08-02.md`](artifacts/ai-coding-tools-selection-review-2026-08-02.md)。
 
-Latest AI 编程工具采购决策网站（Phase 02，可本地运行的参数化决策站点）: [`ai-coding-tool-decision-site/`](artifacts/ai-coding-tool-decision-site/)，运行说明见其 [`README.md`](artifacts/ai-coding-tool-decision-site/README.md)。
 
 Latest general Mission Skill catalog restoration: [`2026-07-31-general-mission-skill-catalog-restoration.md`](records/2026-07/2026-07-31-general-mission-skill-catalog-restoration.md).
 

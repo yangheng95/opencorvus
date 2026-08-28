@@ -3,7 +3,7 @@
   align-items: center;
   justify-content: center;
   min-height: calc(16px * var(--ui-scale));
-  padding: 0 calc(5px * var(--ui-scale));
+  padding: 0 var(--ui-gap-sm);
   border-radius: var(--oc-radius-soft);
   border: 0;
   background: transparent;
@@ -11,7 +11,7 @@
   text-transform: none;
   letter-spacing: var(--ui-letter-spacing-normal);
   font-weight: var(--ui-font-weight-strong);
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-caption);
 }
 
 .diff-dialog-stat[data-tone="add"] {
@@ -26,8 +26,8 @@
   display: flex;
   flex-direction: column;
   font-family: var(--mono);
-  font-size: var(--ui-font-small);
-  line-height: 1.5;
+  font-size: var(--ui-font-caption);
+  line-height: var(--ui-line-height-normal);
 }
 
 .diff-row {
@@ -50,18 +50,18 @@
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  padding: calc(3px * var(--ui-scale)) 0;
+  padding: var(--ui-gap-xs) 0;
   user-select: none;
 }
 
 .diff-num {
-  padding: calc(3px * var(--ui-scale)) var(--ui-input-padding-x);
+  padding: var(--ui-gap-xs) var(--ui-input-padding-x);
   text-align: right;
   user-select: none;
 }
 
 .diff-code {
-  padding: calc(3px * var(--ui-scale)) var(--ui-section-padding-x);
+  padding: var(--ui-gap-xs) var(--ui-section-padding-x);
   white-space: pre-wrap;
   word-break: break-word;
   color: var(--text);

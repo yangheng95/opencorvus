@@ -34,6 +34,10 @@ export const PROJECT_DIRECTORY_BYPASS_PREFIXES = [
   "/ui/",
   "/log/",
   "/mailbox/",
+  // A lifecycle occurrence is state of the process itself. Its whole point is
+  // to be readable while the process is shutting down, which is exactly when
+  // a project bootstrap can be refused.
+  "/lifecycle/",
 ] as const
 
 /**

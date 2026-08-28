@@ -34,9 +34,9 @@ import {
 } from "@/goal-workload-analyst/types"
 import {
   GoalWorkloadPublicationConflictError,
-  goalWorkloadPublicationArtifactID,
   publishGoalWorkload,
 } from "@/goal-workload-analyst/publication"
+import { goalWorkloadPublicationArtifactID } from "@/goal-workload-analyst/relational-integrity"
 import { Instance } from "@/project/instance"
 import { taskRequestSHA256 } from "@/orchestrator/dispatch-turn-projection"
 import { createDispatchAgentTool, type DispatchAdapterExecutors } from "@/orchestrator/dispatch-agent-tool"
@@ -135,14 +135,15 @@ async function createTaskFixture(title: string) {
   const taskID = Identifier.ascending("task")
   const request = `Verify ${title}`
   const now = Date.now()
-  const root = await Session.create({
+  const root = Session.prepareRootNext({
     kind: "root",
+    directory: Instance.directory,
     title,
     metadata: { configOverlay: { prompt_profile: { active: packageRevision.id } } },
   })
   persistEstablishedTask({
     taskID,
-    sessionID: root.id,
+    rootSession: root,
     now,
     title,
     request,
@@ -971,14 +972,15 @@ describe("Goal Workload coverage contract", () => {
         const dispatchID = Identifier.ascending("artifact")
         const request = "Persist exact empty Workload coverage"
         const now = Date.now()
-        const root = await Session.create({
+        const root = Session.prepareRootNext({
           kind: "root",
+          directory: Instance.directory,
           title: "Empty Workload coverage",
           metadata: { configOverlay: { prompt_profile: { active: packageRevision.id } } },
         })
         persistEstablishedTask({
           taskID,
-          sessionID: root.id,
+          rootSession: root,
           now,
           title: "Empty Workload coverage",
           request,
@@ -1689,15 +1691,15 @@ describe("Goal Workload coverage contract", () => {
       fn: async () => {
         const taskID = Identifier.ascending("task")
         const now = Date.now()
-        const root = await Session.create({
+        const root = Session.prepareRootNext({
           kind: "root",
+          directory: Instance.directory,
           title: "Settlement winner",
           metadata: { configOverlay: { prompt_profile: { active: packageRevision.id } } },
         })
-        const child = await Session.create({ kind: "goal-workload-analyst", parentID: root.id, title: "Workload" })
         persistEstablishedTask({
           taskID,
-          sessionID: root.id,
+          rootSession: root,
           now,
           title: "Settlement winner",
           request: "Preserve the first durable outcome",
@@ -1716,6 +1718,7 @@ describe("Goal Workload coverage contract", () => {
             timeCreated: now,
           }),
         })
+        const child = await Session.create({ kind: "goal-workload-analyst", parentID: root.id, title: "Workload" })
         const dispatchID = Identifier.ascending("artifact")
         recordDispatchLineage({
           origin: createDispatchLineageOrigin({

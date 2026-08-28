@@ -4,10 +4,10 @@
  * lifecycle, settings, and native-command validation from drifting.
  */
 import { z } from "zod"
-import { ProductPillarSchema } from "@opencorvus-ai/sdk/expert-squad-manifest-v1"
+import { ProductPillarSchema } from "@opencorvus-ai/util/product-pillar"
 
 export { ProductPillarSchema }
-export type { ProductPillar } from "@opencorvus-ai/sdk/expert-squad-manifest-v1"
+export type { ProductPillar } from "@opencorvus-ai/util/product-pillar"
 
 export const ConversationTargetSchema = z.enum(["chat", "mission"])
 export type ConversationTarget = z.output<typeof ConversationTargetSchema>
@@ -19,6 +19,32 @@ export const ComposerIntentSchema = z
   })
   .strict()
 export type ComposerIntent = z.output<typeof ComposerIntentSchema>
+
+export const ToolFailureClassification = z.enum([
+  "tool-input-invalid",
+  "tool-execution",
+  "llm-activity",
+  "processor-contract",
+])
+export type ToolFailureClassification = z.infer<typeof ToolFailureClassification>
+
+export const ToolFailureCause = z
+  .object({
+    kind: z.string().min(1),
+    name: z.string().min(1),
+    message: z.string().min(1),
+    originSite: z.string().min(1),
+    classification: ToolFailureClassification,
+    data: z.record(z.string(), z.unknown()).optional(),
+  })
+  .meta({ ref: "ToolFailureCause" })
+export type ToolFailureCause = z.infer<typeof ToolFailureCause>
+
+export function renderToolFailureCause(cause: ToolFailureCause): string {
+  const prefix = `${cause.kind}/${cause.name}`
+  const data = cause.data ? `; data=${JSON.stringify(cause.data)}` : ""
+  return `${prefix} at ${cause.originSite}: ${cause.message}${data}`
+}
 
 export const DEFAULT_COMPOSER_INTENT: ComposerIntent = {
   productPillar: "work",
@@ -373,11 +399,16 @@ export const WorkLedgerChatRow = z
   })
   .strict()
 
-export const WorkLedgerRow = z.discriminatedUnion("kind", [
+const WorkLedgerRowObject = z.discriminatedUnion("kind", [
   WorkLedgerProjectRow,
   WorkLedgerMissionRow,
+  WorkLedgerTaskRowObject,
   WorkLedgerChatRow,
 ])
+
+export const WorkLedgerRow = WorkLedgerRowObject.superRefine((row, context) => {
+  if (row.kind === "task") validateWorkLedgerTaskTiming(row, context)
+})
 
 const WorkLedgerArchiveRowObject = z.discriminatedUnion("kind", [
   WorkLedgerMissionRow,
@@ -571,6 +602,42 @@ export function conversationMessageDisplayStage(origin: ConversationMessageOrigi
   return channel
 }
 
+/**
+ * Conversation HTTP/SSE responses keep collapsed large Tool state out of the
+ * first-paint payload. The exact persisted Part remains available through the
+ * project-scoped Session/Message/Part read route when the disclosure is opened.
+ */
+export const CONVERSATION_DEFERRED_TOOL_STATE_METADATA_KEY = "opencorvus_conversation_tool_state" as const
+export const CONVERSATION_INLINE_TOOL_STATE_MAX_BYTES = 4 * 1024
+
+export interface ConversationDeferredToolState {
+  kind: "deferred"
+  outputBytes: number
+  stateBytes: number
+  stateSha256: string
+}
+
+export function conversationDeferredToolState(value: unknown): ConversationDeferredToolState | undefined {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return undefined
+  const marker = (value as Record<string, unknown>)[CONVERSATION_DEFERRED_TOOL_STATE_METADATA_KEY]
+  if (!marker || typeof marker !== "object" || Array.isArray(marker)) return undefined
+  const kind = (marker as Record<string, unknown>).kind
+  const outputBytes = Number((marker as Record<string, unknown>).outputBytes)
+  const stateBytes = Number((marker as Record<string, unknown>).stateBytes)
+  const stateSha256 = String((marker as Record<string, unknown>).stateSha256 || "")
+  if (
+    kind !== "deferred" ||
+    !Number.isInteger(outputBytes) ||
+    outputBytes < 0 ||
+    !Number.isInteger(stateBytes) ||
+    stateBytes <= CONVERSATION_INLINE_TOOL_STATE_MAX_BYTES ||
+    !/^[a-f0-9]{64}$/.test(stateSha256)
+  ) {
+    return undefined
+  }
+  return { kind, outputBytes, stateBytes, stateSha256 }
+}
+
 // ── Attachment resource variants ──
 
 export const SCREENSHOT_BROWSER_THUMBNAIL_VARIANT = "screenshot-browser-thumbnail" as const
@@ -605,6 +672,7 @@ export const CONVERSATION_AGENT_ACTIVITY_LIMIT = 24 as const
 
 interface ConversationAgentActivityBase {
   id: string
+  messageID: string
   orderKey: string
 }
 
@@ -689,11 +757,13 @@ export function projectConversationAgentActivityPart(value: unknown): Conversati
   if (!value || typeof value !== "object" || Array.isArray(value)) return null
   const part = value as Record<string, unknown>
   const id = typeof part.id === "string" ? part.id.trim() : ""
+  const messageID = typeof part.messageID === "string" ? part.messageID.trim() : ""
   const orderKey = typeof part.orderKey === "string" ? part.orderKey.trim() : ""
-  if (!id || !orderKey) return null
+  if (!id || !messageID || !orderKey) return null
+  const base = { id, messageID, orderKey }
   if (part.type === "text") {
     const text = compactConversationAgentActivityText(part.text, 360)
-    return text ? { id, orderKey, type: "text", text } : null
+    return text ? { ...base, type: "text", text } : null
   }
   if (part.type === "tool") {
     const tool = compactConversationAgentActivityText(part.tool, 120)
@@ -704,8 +774,7 @@ export function projectConversationAgentActivityPart(value: unknown): Conversati
         : {}
     const callID = compactConversationAgentActivityText(part.callID, 120)
     return {
-      id,
-      orderKey,
+      ...base,
       type: "tool",
       tool,
       ...(callID ? { callID } : {}),
@@ -714,19 +783,18 @@ export function projectConversationAgentActivityPart(value: unknown): Conversati
   }
   if (part.type === "patch") {
     const files = Array.isArray(part.files) ? (boundedConversationAgentActivityValue(part.files) as unknown[]) : []
-    return files.length > 0 ? { id, orderKey, type: "patch", files } : null
+    return files.length > 0 ? { ...base, type: "patch", files } : null
   }
   if (part.type === "file") {
     const filename = compactConversationAgentActivityText(part.filename ?? part.name ?? part.url, 180)
-    return filename ? { id, orderKey, type: "file", filename } : null
+    return filename ? { ...base, type: "file", filename } : null
   }
   if (part.type === "part-error") {
     const title = compactConversationAgentActivityText(part.title, 160)
     const message = compactConversationAgentActivityText(part.message ?? part.title, 360)
     return message
       ? {
-          id,
-          orderKey,
+          ...base,
           type: "part-error",
           ...(title ? { title } : {}),
           message,
@@ -738,7 +806,7 @@ export function projectConversationAgentActivityPart(value: unknown): Conversati
     const url = compactConversationAgentActivityText(part.url, 2048)
     const title = compactConversationAgentActivityText(part.title, 240)
     return sourceId && /^https?:\/\//i.test(url)
-      ? { id, orderKey, type: "source-url", sourceId, url, ...(title ? { title } : {}) }
+      ? { ...base, type: "source-url", sourceId, url, ...(title ? { title } : {}) }
       : null
   }
   if (part.type === "source-document") {
@@ -748,8 +816,7 @@ export function projectConversationAgentActivityPart(value: unknown): Conversati
     const filename = compactConversationAgentActivityText(part.filename, 240)
     return sourceId && mediaType && title
       ? {
-          id,
-          orderKey,
+          ...base,
           type: "source-document",
           sourceId,
           mediaType,
@@ -770,7 +837,7 @@ export function projectConversationAgentActivityPart(value: unknown): Conversati
         ? { startLine, endLine }
         : undefined
     return sourceId && path && title
-      ? { id, orderKey, type: "source-file", sourceId, path, title, ...(range ? { range } : {}) }
+      ? { ...base, type: "source-file", sourceId, path, title, ...(range ? { range } : {}) }
       : null
   }
   return null
@@ -848,6 +915,10 @@ export const PROJECT_DIRECTORY_BYPASS_PREFIXES = [
   "/ui/",
   "/log/",
   "/mailbox/",
+  // A lifecycle occurrence is state of the process itself. Its whole point is
+  // to be readable while the process is shutting down, which is exactly when
+  // a project bootstrap can be refused.
+  "/lifecycle/",
 ] as const
 
 /**

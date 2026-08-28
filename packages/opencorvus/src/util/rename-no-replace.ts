@@ -94,6 +94,22 @@ async function renameWindows(source: string, target: string, writeThrough: boole
   }
 }
 
+async function replaceWindows(source: string, target: string): Promise<void> {
+  const { dlopen } = await import("bun:ffi")
+  const library = dlopen("kernel32.dll", {
+    MoveFileExW: { args: ["ptr", "ptr", "u32"], returns: "bool" },
+    GetLastError: { args: [], returns: "u32" },
+  })
+  try {
+    // MOVEFILE_REPLACE_EXISTING | MOVEFILE_WRITE_THROUGH
+    if (library.symbols.MoveFileExW(wideString(source), wideString(target), 0x00000001 | 0x00000008)) return
+    const error = library.symbols.GetLastError()
+    throw nativeError(`MoveFileExW replace failed for ${source} -> ${target}`, `WIN32_${error}`, error)
+  } finally {
+    library.close()
+  }
+}
+
 /**
  * Perform one operating-system rename that fails when the destination exists.
  * No existence check, destination reservation, copy, or replace fallback is
@@ -116,4 +132,16 @@ export async function renameNoReplaceWriteThrough(source: string, target: string
   if (process.platform === "linux") return renameLinux(source, target)
   if (process.platform === "win32") return renameWindows(source, target, true)
   throw new Error(`Durable atomic rename-no-replace is unsupported on ${process.platform}`)
+}
+
+/** Atomically replace one same-volume target. Windows requests write-through;
+ * POSIX callers fsync the affected directories after this namespace change. */
+export async function renameReplaceWriteThrough(source: string, target: string): Promise<void> {
+  if (process.platform === "win32") return replaceWindows(source, target)
+  if (process.platform === "darwin" || process.platform === "linux") {
+    const { rename } = await import("node:fs/promises")
+    await rename(source, target)
+    return
+  }
+  throw new Error(`Durable atomic rename-replace is unsupported on ${process.platform}`)
 }

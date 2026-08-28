@@ -39,14 +39,18 @@ function persistedPartCorruption(row: typeof PartTable.$inferSelect, sessionID: 
   }
 }
 
-function persistedPart(db: Database.TxOrDb, row: typeof PartTable.$inferSelect): Message.Part {
-  const message = db.select({ sessionID: MessageTable.session_id }).from(MessageTable)
-    .where(eq(MessageTable.id, row.message_id)).get()
-  if (!message) throw new Error(`Part ${row.id} has no parent Message`)
+function persistedPart(
+  db: Database.TxOrDb,
+  row: typeof PartTable.$inferSelect,
+  knownSessionID?: string,
+): Message.Part {
+  const sessionID = knownSessionID || db.select({ sessionID: MessageTable.session_id }).from(MessageTable)
+    .where(eq(MessageTable.id, row.message_id)).get()?.sessionID
+  if (!sessionID) throw new Error(`Part ${row.id} has no parent Message`)
   const part = {
     ...row.data,
     id: row.id,
-    sessionID: message.sessionID,
+    sessionID,
     messageID: row.message_id,
     orderKey: timelineOrderKey({
       domain: "part",
@@ -56,7 +60,7 @@ function persistedPart(db: Database.TxOrDb, row: typeof PartTable.$inferSelect):
   }
   const parsed = Message.VisiblePart.safeParse(part)
   if (!parsed.success) {
-    return persistedPartCorruption(row, message.sessionID, parsed.error)
+    return persistedPartCorruption(row, sessionID, parsed.error)
   }
   return parsed.data
 }
@@ -64,6 +68,39 @@ function persistedPart(db: Database.TxOrDb, row: typeof PartTable.$inferSelect):
 type LoadedPartRow =
   | { kind: "part"; row: typeof PartTable.$inferSelect }
   | { kind: "tool"; row: typeof ToolPartRequestTable.$inferSelect }
+
+type ConversationActivityQueryRow = {
+  executionID: string
+  sessionID: string
+  id: string
+  message_id: string
+  time_created: number
+  time_updated?: number
+  data: unknown
+}
+
+type ConversationActivityQueryScope = {
+  executionID: string
+  sessionID: string
+  inputMessageID?: string
+  cursor?: { timeCreated: number; id: string }
+}
+
+type ConversationActivityMessageScope = {
+  executionID: string
+  sessionID: string
+  messageID: string
+}
+
+const CONVERSATION_ACTIVITY_QUERY_SCOPE_CHUNK_SIZE = 64
+
+function conversationActivityChunks<T>(items: T[]): T[][] {
+  const chunks: T[][] = []
+  for (let index = 0; index < items.length; index += CONVERSATION_ACTIVITY_QUERY_SCOPE_CHUNK_SIZE) {
+    chunks.push(items.slice(index, index + CONVERSATION_ACTIVITY_QUERY_SCOPE_CHUNK_SIZE))
+  }
+  return chunks
+}
 
 function loadPartRows(db: Database.TxOrDb, messageIDs: readonly string[]): LoadedPartRow[] {
   if (messageIDs.length === 0) return []
@@ -100,6 +137,148 @@ function partsByMessageIDs(messageIDs: readonly string[]): Map<string, Message.P
     }
     return result
   })
+}
+
+function conversationActivityMessageScopes(
+  scopes: ConversationActivityQueryScope[],
+): ConversationActivityMessageScope[] {
+  if (scopes.length === 0) return []
+  return Database.use((db) => conversationActivityChunks(scopes).flatMap((chunk) => {
+    const requestedScopes = sql.join(
+      chunk.map((scope) => sql`(${scope.executionID}, ${scope.sessionID}, ${scope.inputMessageID ?? null})`),
+      sql`, `,
+    )
+    return db.all<ConversationActivityMessageScope>(sql`
+      WITH requested_scope(execution_id, session_id, input_message_id) AS (
+        VALUES ${requestedScopes}
+      )
+      SELECT
+        scope.execution_id AS executionID,
+        scope.session_id AS sessionID,
+        m.id AS messageID
+      FROM requested_scope scope
+      JOIN message m ON m.session_id = scope.session_id
+      WHERE
+        scope.input_message_id IS NULL OR
+        m.id = scope.input_message_id OR
+        json_extract(m.data, '$.parentID') = scope.input_message_id
+      ORDER BY scope.execution_id, m.time_created, m.id
+    `)
+  }))
+}
+
+function conversationActivityRowsPage(input: {
+  scopes: ConversationActivityQueryScope[]
+  messagesByExecution: Map<string, ConversationActivityMessageScope[]>
+  type: string
+  beforeOrAt?: number | null
+}): ConversationActivityQueryRow[] {
+  if (input.scopes.length === 0) return []
+  const requestedParts = input.scopes.flatMap((scope) =>
+    (input.messagesByExecution.get(scope.executionID) ?? []).map((message) => ({ scope, message })),
+  )
+  if (requestedParts.length === 0) return []
+  const rows = Database.use((db) => conversationActivityChunks(requestedParts).flatMap((chunk) => {
+    const requestedScopes = sql.join(
+      chunk.map(({ scope, message }) => sql`(
+        ${message.executionID},
+        ${message.sessionID},
+        ${message.messageID},
+        ${scope.cursor?.timeCreated ?? null},
+        ${scope.cursor?.id ?? null}
+      )`),
+      sql`, `,
+    )
+    const rewind = typeof input.beforeOrAt === "number" ? sql`AND p.time_created <= ${input.beforeOrAt}` : sql.empty()
+    const source = input.type === VISIBLE_PART_TYPE.tool
+      ? sql`
+          SELECT
+            scope.execution_id,
+            scope.session_id,
+            p.id,
+            p.message_id,
+            p.time_created,
+            NULL AS time_updated,
+            p.data,
+            ROW_NUMBER() OVER (
+              PARTITION BY scope.execution_id
+              ORDER BY p.time_created DESC, p.id DESC
+            ) AS page_rank
+          FROM requested_scope scope
+          JOIN tool_part_request p ON p.message_id = scope.message_id
+          WHERE 1 = 1
+            ${rewind}
+            AND (
+              scope.cursor_time IS NULL OR
+              p.time_created < scope.cursor_time OR
+              (p.time_created = scope.cursor_time AND p.id < scope.cursor_id)
+            )
+        `
+      : sql`
+          SELECT
+            scope.execution_id,
+            scope.session_id,
+            p.id,
+            p.message_id,
+            p.time_created,
+            p.time_updated,
+            p.data,
+            ROW_NUMBER() OVER (
+              PARTITION BY scope.execution_id
+              ORDER BY p.time_created DESC, p.id DESC
+            ) AS page_rank
+          FROM requested_scope scope
+          JOIN part p ON p.message_id = scope.message_id
+          WHERE json_extract(p.data, '$.type') = ${input.type}
+            ${rewind}
+            AND (
+              scope.cursor_time IS NULL OR
+              p.time_created < scope.cursor_time OR
+              (p.time_created = scope.cursor_time AND p.id < scope.cursor_id)
+            )
+        `
+    return db.all<ConversationActivityQueryRow>(sql`
+      WITH requested_scope(execution_id, session_id, message_id, cursor_time, cursor_id) AS (
+        VALUES ${requestedScopes}
+      ), ranked AS (${source})
+      SELECT
+        execution_id AS executionID,
+        session_id AS sessionID,
+        id,
+        message_id,
+        time_created,
+        time_updated,
+        data
+      FROM ranked
+      WHERE page_rank <= ${CONVERSATION_AGENT_ACTIVITY_LIMIT}
+      ORDER BY execution_id, time_created DESC, id DESC
+    `)
+  }))
+  const rowsByExecution = new Map<string, ConversationActivityQueryRow[]>()
+  for (const row of rows) {
+    const group = rowsByExecution.get(row.executionID)
+    if (group) group.push(row)
+    else rowsByExecution.set(row.executionID, [row])
+  }
+  return [...rowsByExecution.values()].flatMap((group) => group
+    .sort((left, right) => right.time_created - left.time_created || right.id.localeCompare(left.id))
+    .slice(0, CONVERSATION_AGENT_ACTIVITY_LIMIT))
+}
+
+function projectConversationActivityRows(
+  rows: ConversationActivityQueryRow[],
+  type: string,
+): Array<{ executionID: string; activity: ConversationAgentActivityItem | null }> {
+  return Database.use((db) => rows.map((row) => {
+    const data = typeof row.data === "string" ? JSON.parse(row.data) : row.data
+    const part = type === VISIBLE_PART_TYPE.tool
+      ? projectToolPartInTransaction(db, { ...row, data } as typeof ToolPartRequestTable.$inferSelect)
+      : persistedPart(db, { ...row, data } as typeof PartTable.$inferSelect, row.sessionID)
+    return {
+      executionID: row.executionID,
+      activity: part ? projectConversationAgentActivityPart(part) : null,
+    }
+  }))
 }
 
 export namespace MessageStore {
@@ -275,59 +454,61 @@ export namespace MessageStore {
       VISIBLE_PART_TYPE.sourceDocument,
       VISIBLE_PART_TYPE.sourceFile,
     ]
-    for (const [executionID, scope] of scopes) {
-      const candidates: ConversationAgentActivityItem[] = []
-      const rewind = typeof input.beforeOrAt === "number" ? sql`AND p.time_created <= ${input.beforeOrAt}` : sql.empty()
-      const occurrence = scope.inputMessageID
-        ? sql`AND (p.message_id = ${scope.inputMessageID} OR json_extract(m.data, '$.parentID') = ${scope.inputMessageID})`
-        : sql.empty()
-      for (const type of activityTypes) {
-        const projected: ConversationAgentActivityItem[] = []
-        let cursor: { timeCreated: number; id: string } | undefined
-        while (projected.length < CONVERSATION_AGENT_ACTIVITY_LIMIT) {
-          const page = cursor
-            ? sql`AND (p.time_created < ${cursor.timeCreated} OR (p.time_created = ${cursor.timeCreated} AND p.id < ${cursor.id}))`
-            : sql.empty()
-          const rows = type === VISIBLE_PART_TYPE.tool
-            ? Database.use((db) => db.all<typeof ToolPartRequestTable.$inferSelect>(sql`
-                SELECT p.id, p.message_id, p.time_created, p.data
-                FROM tool_part_request p
-                JOIN message m ON m.id = p.message_id
-                WHERE m.session_id = ${scope.sessionID}
-                  ${occurrence}
-                  ${rewind}
-                  ${page}
-                ORDER BY p.time_created DESC, p.id DESC
-                LIMIT ${CONVERSATION_AGENT_ACTIVITY_LIMIT}
-              `))
-            : Database.use((db) => db.all<typeof PartTable.$inferSelect>(sql`
-                SELECT p.id, p.message_id, p.time_created, p.time_updated, p.data
-                FROM part p
-                JOIN message m ON m.id = p.message_id
-                WHERE m.session_id = ${scope.sessionID}
-                  AND json_extract(p.data, '$.type') = ${type}
-                  ${occurrence}
-                  ${rewind}
-                  ${page}
-                ORDER BY p.time_created DESC, p.id DESC
-                LIMIT ${CONVERSATION_AGENT_ACTIVITY_LIMIT}
-              `))
-          for (const row of rows) {
-            const data = typeof row.data === "string" ? JSON.parse(row.data) : row.data
-            const part = type === VISIBLE_PART_TYPE.tool
-              ? Database.use((db) => projectToolPartInTransaction(db, { ...row, data } as typeof ToolPartRequestTable.$inferSelect))
-              : Database.use((db) => persistedPart(db, { ...row, data } as typeof PartTable.$inferSelect))
-            const activity = part ? projectConversationAgentActivityPart(part) : undefined
-            if (activity) projected.push(activity)
-            if (projected.length >= CONVERSATION_AGENT_ACTIVITY_LIMIT) break
-          }
-          const last = rows.at(-1)
-          if (last) cursor = { timeCreated: last.time_created, id: last.id }
-          if (rows.length < CONVERSATION_AGENT_ACTIVITY_LIMIT) break
+    const candidatesByExecution = new Map<string, ConversationAgentActivityItem[]>()
+    for (const executionID of scopes.keys()) candidatesByExecution.set(executionID, [])
+    const messagesByExecution = new Map<string, ConversationActivityMessageScope[]>()
+    for (const message of conversationActivityMessageScopes(
+      [...scopes].map(([executionID, scope]) => ({ executionID, ...scope })),
+    )) {
+      const group = messagesByExecution.get(message.executionID)
+      if (group) group.push(message)
+      else messagesByExecution.set(message.executionID, [message])
+    }
+    for (const type of activityTypes) {
+      const projectedByExecution = new Map<string, ConversationAgentActivityItem[]>()
+      let pending: ConversationActivityQueryScope[] = [...scopes].map(([executionID, scope]) => ({
+        executionID,
+        ...scope,
+      }))
+      while (pending.length > 0) {
+        const rows = conversationActivityRowsPage({
+          scopes: pending,
+          messagesByExecution,
+          type,
+          beforeOrAt: input.beforeOrAt,
+        })
+        const rowsByExecution = new Map<string, ConversationActivityQueryRow[]>()
+        for (const row of rows) {
+          const group = rowsByExecution.get(row.executionID)
+          if (group) group.push(row)
+          else rowsByExecution.set(row.executionID, [row])
         }
-        candidates.push(...projected)
+        for (const projected of projectConversationActivityRows(rows, type)) {
+          if (!projected.activity) continue
+          const group = projectedByExecution.get(projected.executionID)
+          if (group) group.push(projected.activity)
+          else projectedByExecution.set(projected.executionID, [projected.activity])
+        }
+        const nextPending: ConversationActivityQueryScope[] = []
+        for (const scope of pending) {
+          const page = rowsByExecution.get(scope.executionID) ?? []
+          const projected = projectedByExecution.get(scope.executionID) ?? []
+          if (projected.length >= CONVERSATION_AGENT_ACTIVITY_LIMIT) continue
+          const last = page.at(-1)
+          if (!last || page.length < CONVERSATION_AGENT_ACTIVITY_LIMIT) continue
+          nextPending.push({
+            ...scope,
+            cursor: { timeCreated: last.time_created, id: last.id },
+          })
+        }
+        pending = nextPending
       }
-      const activity = candidates
+      for (const [executionID, projected] of projectedByExecution) {
+        candidatesByExecution.get(executionID)?.push(...projected.slice(0, CONVERSATION_AGENT_ACTIVITY_LIMIT))
+      }
+    }
+    for (const executionID of scopes.keys()) {
+      const activity = (candidatesByExecution.get(executionID) ?? [])
         .sort((left, right) => compareTimelineOrderKeys(left.orderKey, right.orderKey))
         .slice(-CONVERSATION_AGENT_ACTIVITY_LIMIT)
       result.set(executionID, activity)
@@ -338,6 +519,42 @@ export namespace MessageStore {
   export const parts = fn(Identifier.schema("message"), async (messageID) => {
     return partsByMessageIDs([messageID]).get(messageID) ?? []
   })
+
+  export const part = fn(
+    z.object({
+      sessionID: Identifier.schema("session"),
+      messageID: Identifier.schema("message"),
+      partID: Identifier.schema("part"),
+    }),
+    async (input): Promise<Message.Part> => {
+      return Database.use((db) => {
+        const message = db
+          .select({ id: MessageTable.id })
+          .from(MessageTable)
+          .where(and(eq(MessageTable.id, input.messageID), eq(MessageTable.session_id, input.sessionID)))
+          .get()
+        if (!message) throw new NotFoundError({ message: `Message not found: ${input.messageID}` })
+
+        const persisted = db
+          .select()
+          .from(PartTable)
+          .where(and(eq(PartTable.id, input.partID), eq(PartTable.message_id, input.messageID)))
+          .get()
+        if (persisted) return loadedPart(db, { kind: "part", row: persisted })
+
+        const tool = db
+          .select()
+          .from(ToolPartRequestTable)
+          .where(and(eq(ToolPartRequestTable.id, input.partID), eq(ToolPartRequestTable.message_id, input.messageID)))
+          .get()
+        if (tool) return loadedPart(db, { kind: "tool", row: tool })
+
+        throw new NotFoundError({
+          message: `Part not found: ${input.partID} in message ${input.messageID}`,
+        })
+      })
+    },
+  )
 
   export const get = fn(
     z.object({

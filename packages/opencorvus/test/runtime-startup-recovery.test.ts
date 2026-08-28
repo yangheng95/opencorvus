@@ -11,6 +11,7 @@ import { RuntimeExecutionSettlement } from "@/runtime/execution-settlement"
 import { Server } from "@/server/server"
 import { ProcessSupervisor } from "@/shell/process-supervisor"
 import * as IsolatedCheckWorkspace from "@/project/isolated-check-workspace"
+import { ImplicitProject } from "@/project/implicit-project"
 import * as SchedulerMessage from "@/protocol/scheduler-message"
 import { recoverStartedTaskProjects } from "@/engine/host-recovery"
 import { restartReplacementEnvironment } from "@/server/restart-handoff"
@@ -69,6 +70,10 @@ describe("runtime startup recovery", () => {
       return originalListen(options)
     })
     let sharedOccurrenceObserver: unknown
+    const promotions = spyOn(ImplicitProject, "recoverPromotions").mockImplementation(async () => {
+      order.push("project-promotions-recovered")
+      return { forward: 0, backward: 0, failures: [] }
+    })
     const requests = spyOn(ProcessSupervisor, "recoverOrphanedWindowsRequests").mockImplementation(async (input) => {
       expect(input.currentOccurrenceID).toBe(currentRuntimeProcessOccurrence().occurrenceID)
       sharedOccurrenceObserver = input.observeProcessOccurrence
@@ -120,6 +125,7 @@ describe("runtime startup recovery", () => {
         status: 200,
         body: expect.objectContaining({ healthy: true }),
         order: [
+          "project-promotions-recovered",
           "orphan-requests-recovered",
           "orphan-workspaces-recovered",
           "bind",
@@ -130,6 +136,7 @@ describe("runtime startup recovery", () => {
       releaseRecovery()
       await within(prepared.recovery, "application recovery completion")
       expect(order).toEqual([
+        "project-promotions-recovered",
         "orphan-requests-recovered",
         "orphan-workspaces-recovered",
         "bind",
@@ -141,6 +148,7 @@ describe("runtime startup recovery", () => {
       releaseRecovery()
       await prepared.server.stop(true)
       listen.mockRestore()
+      promotions.mockRestore()
       requests.mockRestore()
       workspaces.mockRestore()
       scheduler.mockRestore()

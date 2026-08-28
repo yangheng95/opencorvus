@@ -61,6 +61,14 @@ export namespace SessionCompaction {
     error: Error
   }
 
+  export type ProcessSuccess = {
+    status: "completed"
+    disposition: "continue" | "stop"
+    summaryMessageID: string
+  }
+
+  export type ProcessResult = ProcessSuccess | ProcessFailure
+
   type CompactionStep = {
     text: string
     toolCalls: readonly unknown[]
@@ -485,9 +493,7 @@ export namespace SessionCompaction {
       JSON.stringify(todos, null, 2),
       input.focus ? ["", "Manual compaction focus:", input.focus].join("\n") : "",
       taskPlan ? ["", "Current task plan:", taskPlan].join("\n") : "",
-      sessionMemory
-        ? ["", `Current Session ${SessionMemory.filename}:`, sessionMemory.content].join("\n")
-        : "",
+      sessionMemory ? ["", `Current Session ${SessionMemory.filename}:`, sessionMemory.content].join("\n") : "",
       patches ? ["", patches].join("\n") : "",
       "</compaction-projection>",
     ]
@@ -557,9 +563,7 @@ export namespace SessionCompaction {
     overflow: boolean
   }): Promise<SelectedCompactionInput> {
     const limit = input.config.compaction?.tail_turns ?? ContextBudget.DEFAULT_TAIL_TURNS
-    const firstUserIdx = input.messages.findIndex(
-      (msg) => msg.info.role === "user",
-    )
+    const firstUserIdx = input.messages.findIndex((msg) => msg.info.role === "user")
     if (firstUserIdx < 0) return { head: [] }
     const anchor_id = input.messages[firstUserIdx].info.id
     if (input.overflow) {
@@ -656,7 +660,7 @@ export namespace SessionCompaction {
     }
     const anchorIndex = markerPart.anchor_id
       ? messages.findIndex((message) => message.info.id === markerPart.anchor_id)
-        : messages.findIndex((message) => message.info.role === "user")
+      : messages.findIndex((message) => message.info.role === "user")
     if (anchorIndex < 0) {
       return { status: "invalid_boundary", reason: "compaction anchor message is missing" }
     }
@@ -669,8 +673,7 @@ export namespace SessionCompaction {
         return { status: "invalid_boundary", reason: "compaction tail boundary is missing or is not a user message" }
       }
     }
-    const markerOnAnchor =
-      marker.info.role === "assistant" && markerPart.anchor_id === marker.info.parentID
+    const markerOnAnchor = marker.info.role === "assistant" && markerPart.anchor_id === marker.info.parentID
     const endIndex = tailIndex >= 0 ? tailIndex : markerOnAnchor ? latest.assistantIndex : latest.userIndex
     if (endIndex <= anchorIndex + 1) return { status: "no_covered_history" }
     return {
@@ -795,13 +798,16 @@ export namespace SessionCompaction {
       throw new Error(`Compaction parent must be a user message: ${input.parentID}`)
     }
     const userMessage = parent.info as Message.User
-    const compactionPart = input.messages.findLast(
+    const completedSummary = input.messages.findLast(
       (message): message is Message.WithParts & { info: Message.Assistant } =>
         message.info.role === "assistant" &&
         message.info.parentID === input.parentID &&
         CompactionHandoff.isValidSummaryMessage(message.info) &&
         message.parts.some((part) => part.type === "compaction"),
-    )?.parts.find((part): part is Message.CompactionPart => part.type === "compaction")
+    )
+    const compactionPart = completedSummary?.parts.find(
+      (part): part is Message.CompactionPart => part.type === "compaction",
+    )
     const config = await EffectiveConfig.effective({ sessionID: input.sessionID })
     const agent = await HelperAgentRegistry.get("compaction", { config })
     if (!agent.steps) throw new Error("Compaction helper must declare a positive provider-step limit")
@@ -818,11 +824,22 @@ export namespace SessionCompaction {
         overflow: input.overflow === true,
       }))
     if (selected.head.length === 0) {
+      if (completedSummary) {
+        return {
+          status: "completed",
+          disposition: input.auto ? "continue" : "stop",
+          summaryMessageID: completedSummary.info.id,
+        } satisfies ProcessSuccess
+      }
       log.info("skipping compaction because no post-anchor head is compactable", {
         sessionID: input.sessionID,
         parentID: input.parentID,
       })
-      return "stop"
+      const error = new Error(
+        `Session ${input.sessionID} has no compactable material or reusable summary for source ${input.parentID}`,
+      )
+      error.name = "SessionCompactionMaterialUnavailableError"
+      return { status: "failed", error } satisfies ProcessFailure
     }
     const dispatchAnchorMessage = selected.anchor_id
       ? history.find((msg) => msg.info.id === selected.anchor_id)
@@ -944,10 +961,7 @@ export namespace SessionCompaction {
       system: [],
       messages: providerMessages,
       model,
-      stopWhen: [
-        ({ steps }) => compactionStepDisposition(steps.at(-1)) === "summary_ready",
-        stepCountIs(agent.steps),
-      ],
+      stopWhen: [({ steps }) => compactionStepDisposition(steps.at(-1)) === "summary_ready", stepCountIs(agent.steps)],
     })
 
     if (result === "compact") {
@@ -983,10 +997,15 @@ export namespace SessionCompaction {
 
     await Bus.publish(Event.Compacted, { sessionID: input.sessionID })
 
-    return input.auto ? "continue" : "stop"
+    return {
+      status: "completed",
+      disposition: input.auto ? "continue" : "stop",
+      summaryMessageID: processor.message.id,
+    } satisfies ProcessSuccess
   }
 
   const CreateInput = z.object({
+    id: Identifier.schema("session_control").optional(),
     sessionID: Identifier.schema("session"),
     source: Message.User,
     model: z
@@ -998,6 +1017,13 @@ export namespace SessionCompaction {
     auto: z.boolean(),
     overflow: z.boolean().optional(),
     focus: z.string().optional(),
+    controlLineage: z
+      .object({
+        logicalID: z.string().min(1),
+        attempt: z.number().int().positive(),
+      })
+      .strict()
+      .optional(),
   })
 
   async function createCompaction(input: z.infer<typeof CreateInput>) {
@@ -1007,7 +1033,8 @@ export namespace SessionCompaction {
       )
     }
     await Session.get(input.sessionID)
-    SessionControl.create({
+    return SessionControl.create({
+      ...(input.id ? { id: input.id } : {}),
       sessionID: input.sessionID,
       kind: input.auto ? "compaction_request" : "manual_summarize",
       payload: {
@@ -1015,6 +1042,12 @@ export namespace SessionCompaction {
         ...(input.model !== undefined ? { model: input.model } : {}),
         overflow: input.overflow === true,
         ...(input.focus !== undefined ? { focus: input.focus } : {}),
+        ...(input.controlLineage !== undefined
+          ? {
+              logical_checkpoint_id: input.controlLineage.logicalID,
+              checkpoint_attempt: input.controlLineage.attempt,
+            }
+          : {}),
       },
     })
   }

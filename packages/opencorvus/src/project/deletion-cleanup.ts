@@ -12,6 +12,8 @@ import { ProjectMaintenanceFenceTable } from "./project.sql"
 import type { RuntimeProcessOccurrenceObserver } from "@/runtime/process-occurrence"
 import { ImplicitProject } from "./implicit-project"
 import { ProjectRuntimePaths } from "./runtime-paths"
+import { McpAuth } from "@/mcp/auth"
+import { projectDeletionCleanupRoot } from "./deletion-cleanup-admission"
 
 const CleanupTarget = z.object({
   source: z.string().min(1),
@@ -19,14 +21,19 @@ const CleanupTarget = z.object({
 })
 
 const CleanupManifest = z.object({
-  format: z.literal("opencorvus.project-deletion-cleanup.v3"),
+  format: z.literal("opencorvus.project-deletion-cleanup.v4"),
   operationID: z.string().uuid(),
   databaseInstanceID: z.string().uuid(),
   projectID: z.string().min(1),
   projectGeneration: z.string().uuid(),
   directory: z.string().min(1),
-  targets: z.array(CleanupTarget).min(1),
+  targets: z.array(CleanupTarget).max(1),
   timeCreated: z.number().int().nonnegative(),
+})
+
+const LegacyCleanupManifestV3 = CleanupManifest.omit({ format: true, targets: true }).extend({
+  format: z.literal("opencorvus.project-deletion-cleanup.v3"),
+  targets: z.array(CleanupTarget).length(1),
 })
 
 export type ProjectDeletionCleanupManifest = z.infer<typeof CleanupManifest>
@@ -46,10 +53,6 @@ export const ProjectDeletionCleanupDatabaseMismatchError = NamedError.create(
     message: z.string(),
   }),
 )
-
-function cleanupRoot(): string {
-  return path.join(Global.Path.data, "maintenance", "project-deletion-cleanup", "active")
-}
 
 function completedCleanupBaseRoot(): string {
   return path.join(Global.Path.data, "maintenance", "project-deletion-cleanup", "completed")
@@ -93,15 +96,40 @@ function parseManifest(
   value: unknown,
   manifestPath: string,
   state: "active" | "completed",
-): ProjectDeletionCleanupManifest {
-  const manifest = CleanupManifest.parse(value)
-  if (manifest.targets.length !== 1) throw new Error("Project deletion cleanup must own exactly one root")
+): { manifest: ProjectDeletionCleanupManifest; migrated: boolean } {
+  const current = CleanupManifest.safeParse(value)
+  const legacy = current.success ? undefined : LegacyCleanupManifestV3.parse(value)
+  const manifest = current.success
+    ? current.data
+    : CleanupManifest.parse({ ...legacy, format: "opencorvus.project-deletion-cleanup.v4" })
+  if (manifest.targets.length > 1) throw new Error("Project deletion cleanup can own at most one root")
   manifest.targets.forEach((target, index) => validateTarget(manifest, target, index))
-  const root = state === "active" ? cleanupRoot() : completedCleanupRoot(manifest.databaseInstanceID)
+  const root = state === "active" ? projectDeletionCleanupRoot() : completedCleanupRoot(manifest.databaseInstanceID)
   if (!samePath(manifestPath, path.join(root, `${manifest.operationID}.json`))) {
     throw new Error(`Project deletion cleanup manifest path does not match operation ${manifest.operationID}`)
   }
-  return manifest
+  return { manifest, migrated: !current.success }
+}
+
+async function migrateManifestIfRequired(
+  manifestPath: string,
+  state: "active" | "completed",
+  parsed: { manifest: ProjectDeletionCleanupManifest; migrated: boolean },
+): Promise<ProjectDeletionCleanupManifest> {
+  if (!parsed.migrated) return parsed.manifest
+  const target = `${JSON.stringify(parsed.manifest, null, 2)}\n`
+  try {
+    await Filesystem.writeDurableAtomic(manifestPath, target, 0o600)
+  } catch (error) {
+    try {
+      const reread = parseManifest(JSON.parse(await fs.readFile(manifestPath, "utf8")), manifestPath, state)
+      if (!reread.migrated && sameManifest(reread.manifest, parsed.manifest)) return reread.manifest
+    } catch {
+      // Preserve the original migration failure as the recovery diagnostic.
+    }
+    throw error
+  }
+  return parsed.manifest
 }
 
 async function pathState(target: string): Promise<"present" | "absent"> {
@@ -123,7 +151,7 @@ async function completedManifestMatches(plan: ProjectDeletionCleanupPlan, comple
   if ((await pathState(plan.manifestPath)) !== "absent") return false
   try {
     const completed = parseManifest(JSON.parse(await fs.readFile(completedPath, "utf8")), completedPath, "completed")
-    return sameManifest(completed, plan.manifest)
+    return sameManifest(completed.manifest, plan.manifest)
   } catch (error) {
     const code = typeof error === "object" && error && "code" in error ? String(error.code) : ""
     if (code === "ENOENT" || code === "ENOTDIR") return false
@@ -137,7 +165,7 @@ export async function createProjectDeletionCleanupPlan(input: {
   sources: string[]
   operationID?: string
 }): Promise<ProjectDeletionCleanupPlan> {
-  if (input.sources.length !== 1) throw new Error("Project deletion cleanup must own exactly one root")
+  if (input.sources.length > 1) throw new Error("Project deletion cleanup can own at most one root")
   const authority = Database.use((db) =>
     db
       .select({ generation: ProjectTable.generation })
@@ -153,7 +181,7 @@ export async function createProjectDeletionCleanupPlan(input: {
     quarantine: `${path.resolve(source)}.deleting-${operationID}-${index}`,
   }))
   const manifest = CleanupManifest.parse({
-    format: "opencorvus.project-deletion-cleanup.v3",
+    format: "opencorvus.project-deletion-cleanup.v4",
     operationID,
     databaseInstanceID: Database.Identity(),
     projectID: input.projectID,
@@ -163,7 +191,7 @@ export async function createProjectDeletionCleanupPlan(input: {
     timeCreated: Date.now(),
   })
   manifest.targets.forEach((target, index) => validateTarget(manifest, target, index))
-  const manifestPath = path.join(cleanupRoot(), `${operationID}.json`)
+  const manifestPath = path.join(projectDeletionCleanupRoot(), `${operationID}.json`)
   await Filesystem.writeDurableAtomicIfAbsent(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`, 0o600).then(
     (created) => {
       if (!created) throw new Error(`Project deletion cleanup operation already exists: ${operationID}`)
@@ -179,8 +207,19 @@ export async function removeProjectDeletionCleanupPlan(plan: ProjectDeletionClea
 
 export async function cleanupCommittedProjectDeletion(
   plan: ProjectDeletionCleanupPlan,
+  options: { retireMcpAuth?: boolean } = {},
 ): Promise<Array<{ path: string; message: string }>> {
   const residue: Array<{ path: string; message: string }> = []
+  if (options.retireMcpAuth !== false) {
+    try {
+      await McpAuth.removeProject(plan.manifest.projectID)
+    } catch (error) {
+      residue.push({
+        path: path.join(Global.Path.data, "mcp-auth.json"),
+        message: error instanceof Error ? error.message : String(error),
+      })
+    }
+  }
   for (const target of plan.manifest.targets) {
     try {
       await fs.rm(target.quarantine, { recursive: true, force: true })
@@ -233,7 +272,11 @@ async function recoverManifest(
     if (state === "active" && (code === "ENOENT" || code === "ENOTDIR")) return
     throw error
   }
-  const manifest = parseManifest(JSON.parse(serialized), manifestPath, state)
+  const manifest = await migrateManifestIfRequired(
+    manifestPath,
+    state,
+    parseManifest(JSON.parse(serialized), manifestPath, state),
+  )
   const currentDatabaseInstanceID = Database.Identity()
   if (state === "active" && currentDatabaseInstanceID !== manifest.databaseInstanceID) {
     throw new ProjectDeletionCleanupDatabaseMismatchError({
@@ -304,7 +347,10 @@ async function recoverManifest(
     return
   }
 
-  const residue = await cleanupCommittedProjectDeletion({ manifest, manifestPath })
+  const residue = await cleanupCommittedProjectDeletion(
+    { manifest, manifestPath },
+    { retireMcpAuth: state === "active" && !project },
+  )
   if (residue.length > 0) {
     throw new AggregateError(
       residue.map((item) => new Error(`${item.path}: ${item.message}`)),
@@ -342,7 +388,7 @@ export async function recoverProjectDeletionCleanup(
       }
     }
   }
-  await recoverRoot(cleanupRoot(), "active")
+  await recoverRoot(projectDeletionCleanupRoot(), "active")
   let databaseRoots: Dirent[]
   try {
     databaseRoots = await fs.readdir(completedCleanupBaseRoot(), { withFileTypes: true })
@@ -364,6 +410,6 @@ export async function recoverProjectDeletionCleanup(
 }
 
 export const ProjectDeletionCleanupTestHooks = {
-  root: cleanupRoot,
+  root: projectDeletionCleanupRoot,
   completedRoot: completedCleanupRoot,
 }

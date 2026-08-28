@@ -54,7 +54,6 @@ import { MCP } from "@/mcp"
 import { computerRuntimeScopeIdentity } from "@/mcp/computer/runtime-scope"
 import { resolveAgentModel } from "@/agent/model"
 import { HostAgentRegistry } from "@/agent/host-agent-registry"
-import { EngineConfig } from "@/engine"
 import { appendSchedulerProjectSourceBoundary } from "@/prompt/scoped-project-source-boundary"
 import { AgentRunError, buildHardErrorFromFinalMessage, recordToolExecuteErrorsForFinalMessage } from "@/agent/runner"
 import { Session } from "@/session"
@@ -65,6 +64,8 @@ import { SessionStatus } from "@/session/status"
 import { publishSessionStatus, publishSettledSessionTerminalStatus } from "@/session/status-publication"
 import { Message } from "@/session/message"
 import { MessageStore } from "@/session/message-store"
+import { createAcceptanceEpochCheckpoint } from "@/mission/acceptance-checkpoint"
+import { currentTaskAcceptanceRepair } from "@/mission/acceptance-ledger"
 import { Bus } from "@/bus"
 import { Instance } from "@/project/instance"
 import { provideInitializedProjectExecution } from "@/project/independent-project-owner"
@@ -76,7 +77,8 @@ import { toolGuard } from "@/util/tool-guard"
 import { createOrchestratorTools } from "./tools"
 import { attachmentPromptSection } from "@/agent/prompt-projection"
 import { renderUserRequestSection } from "@/intent/request-prompt"
-import { requireTask, terminalTask } from "@/engine"
+import { requireTask, type TaskRow } from "@/engine/store"
+import { terminalTask } from "@/engine/state"
 import { Database, NotFoundError, eq } from "@/storage/db"
 import { MessageTable, PartTable } from "@/session/session.sql"
 import { recordTaskInfrastructureError } from "@/engine/persist"
@@ -84,18 +86,16 @@ import { taskRootIngressSourceKind, type TaskRootIngressSourceKind } from "@/eng
 import { describeProcessRecoveryFact, describeTask, renderTaskDescription, type TaskDesc } from "@/engine/describe"
 import { deriveTaskStatus, isTaskTerminal } from "@/engine/task-status"
 import { resolvePinnedTaskSchedulerTurnProjection } from "@/engine/task-package-projection"
-import type { TaskRow } from "@/engine"
 import { TaskCreatorMetadata } from "@/task-api/task-creator"
-import {
-  TaskRootMessageProvenance,
-  deliverTaskRootMessageToOrchestratorSession,
-  getTaskRootMessage,
-} from "@/task-api/task-root-message"
+import { deliverTaskRootMessageToOrchestratorSession, getTaskRootMessage } from "@/task-api/task-root-message"
+import { TaskRootMessageProvenance } from "@/protocol/task-root-message-schema"
 import { AgentTrace } from "@/trace"
 import { ProtocolStore } from "@/protocol/store"
 import { SchedulerMessagePayload } from "@/protocol/schema"
 import { NamedError } from "@opencorvus-ai/util/error"
 import { isDeepStrictEqual } from "node:util"
+import { createHash } from "node:crypto"
+import { canonicalJSONValue } from "@/util/canonical-digest"
 import type { OrchestratorEvent } from "./event"
 import type { TerminalConversationAuthority } from "./terminal-conversation-authority"
 import type { OrchestratorTaskErrorEnvelope } from "./error-envelope"
@@ -318,118 +318,7 @@ async function settleOrchestratorExecutionFailure(input: {
   )
 }
 
-class OrchestratorPromptInactiveError extends Error {
-  constructor(input: { taskID: string; sessionID: string; inactivityMs: number }) {
-    super(
-      `Orchestrator prompt ${input.sessionID} for task ${input.taskID} produced no activity for ${input.inactivityMs}ms`,
-    )
-    this.name = "OrchestratorPromptInactiveError"
-  }
-}
-
-async function runOrchestratorPromptWithInactivity<T>(input: {
-  taskID: string
-  session: Session.Info
-  run: () => Promise<T>
-}): Promise<T> {
-  const timeout = (await EngineConfig.get()).activity.execution_progress_idle_ms
-  if (!Number.isFinite(timeout) || timeout <= 0) {
-    throw new Error(`Invalid assistant.activity.execution_progress_idle_ms: ${timeout}`)
-  }
-
-  const pollMs = Math.min(1_000, Math.max(50, Math.floor(timeout / 20)))
-  let timer: ReturnType<typeof setTimeout> | undefined
-  let tickInFlight: Promise<void> | undefined
-  let settled = false
-  let lastSignature = ""
-  let idleDeadline = Date.now() + timeout
-
-  const activitySignature = async () => {
-    const sessionIDs = [...new Set([input.session.id, ...(await Session.tree(input.session.id))])]
-    let pausedTool = false
-    const signature = sessionIDs
-      .map((sessionID) => {
-        const promptActivity = SessionPrompt.ownerActivity(sessionID)
-        const streamActivity = SessionStatus.getActivity(sessionID)
-        const status = SessionStatus.get(sessionID)
-        if (streamActivity?.paused) {
-          pausedTool = true
-        }
-        return [
-          sessionID,
-          JSON.stringify(status),
-          promptActivity?.timeUpdated ?? 0,
-          promptActivity?.timeCancelled ?? 0,
-          streamActivity?.last_activity_at ?? 0,
-          streamActivity?.paused ?? false,
-        ].join(":")
-      })
-      .join("|")
-    return { signature, pausedTool }
-  }
-
-  const inactive = new Promise<never>((_, reject) => {
-    const tick = async () => {
-      if (settled) return
-      const activity = await activitySignature()
-      if (settled) return
-      if (activity.signature !== lastSignature || activity.pausedTool) {
-        lastSignature = activity.signature
-        idleDeadline = Date.now() + timeout
-      }
-      if (Date.now() > idleDeadline) {
-        try {
-          SessionPrompt.cancel(
-            input.session.id,
-            input.session.directory,
-            createExecutionCancellationOrigin({
-              actor: "scheduler",
-              source: "orchestrator.inactivity",
-              surface: "orchestrator",
-              reason: `Orchestrator Session ${input.session.id} inactive`,
-              targetSessionID: input.session.id,
-              taskID: input.taskID,
-            }),
-          )
-        } catch (error) {
-          log.warn("orchestrator prompt inactivity cancellation failed", {
-            taskID: input.taskID,
-            sessionID: input.session.id,
-            error: error instanceof Error ? error.message : String(error),
-          })
-        }
-        reject(
-          new OrchestratorPromptInactiveError({
-            taskID: input.taskID,
-            sessionID: input.session.id,
-            inactivityMs: timeout,
-          }),
-        )
-        return
-      }
-      timer = setTimeout(runTick, pollMs)
-    }
-    function runTick() {
-      const active = tick().catch(reject)
-      tickInFlight = active
-      void active.then(() => {
-        if (tickInFlight === active) tickInFlight = undefined
-      })
-    }
-    timer = setTimeout(runTick, pollMs)
-  })
-
-  try {
-    return await Promise.race([input.run(), inactive])
-  } finally {
-    settled = true
-    if (timer) clearTimeout(timer)
-    await tickInFlight
-  }
-}
-
 export const OrchestratorTestHooks = {
-  runPromptWithInactivity: runOrchestratorPromptWithInactivity,
   renderTaskAttachmentInventory,
 }
 
@@ -622,6 +511,8 @@ export namespace Orchestrator {
         schedulerDispatchAgents,
         schedulerProjectDirectory,
       )
+      const stableSystemPrefix = systemContext.parts.slice(0, 2)
+      let baselineTaskProjection: TaskDesc | undefined
       const appendUserMessage = !(await sessionHasCreatorMessage(agentSession.id))
       const hasTypedControlOccurrence = Boolean(event && wakeID && isCurrentWakeIngress(event) && !event.rootMessage)
       const materializeCreatorBeforeTypedControl = appendUserMessage && hasTypedControlOccurrence
@@ -647,19 +538,21 @@ export namespace Orchestrator {
       const enrichedUserText = appendCreatorMessage ? userText + inventoryText : ""
       const wakeProvenanceNotice = renderWakeProvenanceNotice(event, taskID, wakeID)
       const hasCurrentWakeIngress = isCurrentWakeIngress(event)
-      const currentControlMessage = hasCurrentWakeIngress && wakeID
-        ? currentOrchestratorControlMessage(event, taskID, wakeID, predecessorID)
-        : undefined
+      const currentControlMessage =
+        hasCurrentWakeIngress && wakeID
+          ? currentOrchestratorControlMessage(event, taskID, wakeID, predecessorID)
+          : undefined
       const currentSchedulerInputMessageID = event?.rootMessage ? event.rootMessage.messageID : undefined
       const currentVisibleInputMessageID = currentControlMessage?.messageID ?? currentSchedulerInputMessageID
       const resolveRuntimeSystem = async () => {
-        systemContext = await buildSystemParts(
-          requireTask(taskID),
-          event,
-          schedulerCapability,
-          schedulerDispatchAgents,
-          schedulerProjectDirectory,
-        )
+        requireTask(taskID)
+        const liveTaskProjection = await describeTask(taskID)
+        const taskProjection = renderTaskProjectionContext(baselineTaskProjection, liveTaskProjection)
+        baselineTaskProjection = taskProjection.baseline
+        systemContext = {
+          parts: [...stableSystemPrefix, ...taskProjection.parts],
+          snapshot: liveTaskProjection,
+        }
         const currentIngressSystemNotice = currentControlMessage
           ? "The last visible input Message is the exact current Orchestrator-authored control occurrence. Resolve that Message before using older conversation history; its durable identities and facts are authoritative for this decision pass."
           : currentSchedulerInputMessageID
@@ -668,7 +561,7 @@ export namespace Orchestrator {
         const baseLabels = [
           "runtime:orchestrator-instructions",
           "runtime:orchestrator-wake-and-capabilities",
-          "runtime:orchestrator-live-task-render",
+          ...taskProjection.labels,
         ]
         const projection = systemContext.parts.map((text, index) => ({
           label: baseLabels[index] ?? `runtime:orchestrator-system[${index}]`,
@@ -825,12 +718,12 @@ export namespace Orchestrator {
               taskID,
               contractKind: "orchestrator-wake",
               ...(wakeID && event
-                  ? {
-                      taskIngressID: wakeID,
-                      taskIngressActivationID: activationID,
-                      taskIngressPredecessorID: predecessorID,
-                    }
-                  : {}),
+                ? {
+                    taskIngressID: wakeID,
+                    taskIngressActivationID: activationID,
+                    taskIngressPredecessorID: predecessorID,
+                  }
+                : {}),
               ...(currentVisibleInputMessageID ? { inputMessageID: currentVisibleInputMessageID } : {}),
               installedAt: Date.now(),
             },
@@ -864,19 +757,47 @@ export namespace Orchestrator {
               `Fresh Orchestrator creator Message cannot be materialized while Session ${agentSession.id} has a prompt owner`,
             )
           }
-          await SessionPrompt.prompt({
-            sessionID: agentSession.id,
-            author: taskCreator.actor,
-            model: { providerID: model.providerID, modelID: model.api.id },
-            agent: "orchestrator",
-            byteMaterializationProjectID: agentSession.projectID,
-            noReply: true,
-            parts: creatorPartsWithIds,
-          })
+          if (!currentControlMessage) {
+            throw new Error(`Fresh typed Orchestrator creator requires an exact control occurrence`)
+          }
+          assertSessionCreatorMessageAbsent(agentSession.id)
+          assertOrchestratorControlIdentityUnoccupied(currentControlMessage)
+          const published = await SessionPrompt.persistNoReplySequence([
+            {
+              input: {
+                sessionID: agentSession.id,
+                author: taskCreator.actor,
+                model: { providerID: model.providerID, modelID: model.api.id },
+                agent: "orchestrator",
+                byteMaterializationProjectID: agentSession.projectID,
+                noReply: true,
+                parts: creatorPartsWithIds,
+              },
+              hooks: {
+                preflightBundle: () => assertSessionCreatorMessageAbsent(agentSession.id),
+              },
+            },
+            {
+              input: orchestratorControlPromptInput({
+                session: agentSession,
+                model: { providerID: model.providerID, modelID: model.api.id },
+                control: currentControlMessage,
+              }),
+              hooks: {
+                preflightBundle: () => assertOrchestratorControlIdentityUnoccupied(currentControlMessage),
+                beforeVisibilityEffects: () =>
+                  Database.effect(() => {
+                    SessionPrompt.armSessionRuntimeContractWake(agentSession.id, runtimeContract)
+                    runtimeWakeArmed = true
+                  }),
+              },
+            },
+          ])
+          assertExactOrchestratorControlMessage(published[1]!, currentControlMessage)
         }
         schedulerMcpOwnerTransferred = true
         promptInFlight = true
-        if (currentControlMessage) {
+        if (currentControlMessage && !materializeCreatorBeforeTypedControl) {
           const materialized = await materializeOrReuseCurrentOrchestratorControlMessage({
             session: agentSession,
             model: { providerID: model.providerID, modelID: model.api.id },
@@ -916,6 +837,34 @@ export namespace Orchestrator {
           SessionPrompt.armSessionRuntimeContractWake(agentSession.id, runtimeContract)
           runtimeWakeArmed = true
         }
+        if (event?.missionAcceptanceResume) {
+          if (!currentControlMessage) {
+            throw new Error(`Mission acceptance resume has no current Orchestrator control Message.`)
+          }
+          const repair = currentTaskAcceptanceRepair(taskID)
+          if (
+            !repair ||
+            repair.artifactID !== event.missionAcceptanceResume.acceptanceLedgerRevisionArtifactID ||
+            repair.revision.gap.gap_id !== event.missionAcceptanceResume.acceptanceGap.gap_id
+          ) {
+            throw new Error(`Mission acceptance resume does not match the current Task acceptance ledger.`)
+          }
+          const source = await MessageStore.get({
+            sessionID: agentSession.id,
+            messageID: currentControlMessage.messageID,
+          })
+          if (source.info.role !== "user") {
+            throw new Error(`Mission acceptance checkpoint source ${source.info.id} must be a user Message.`)
+          }
+          await createAcceptanceEpochCheckpoint({
+            sessionID: agentSession.id,
+            source: source.info,
+            taskID,
+            ledgerRevisionArtifactID: repair.artifactID,
+            gap: repair.revision.gap,
+            executionEpoch: repair.executionEpoch,
+          })
+        }
         finalMessage = await SessionPrompt.withPromptOwnerCapture(
           agentSession.id,
           (owner) => {
@@ -928,36 +877,26 @@ export namespace Orchestrator {
             SessionContext.provide(agentSession, () =>
               provideInitializedProjectExecution({
                 directory: agentSession.directory,
-                fn: () =>
-                  runOrchestratorPromptWithInactivity({
-                    taskID,
-                    session: agentSession,
-                    run: async () => {
-                      promptInvocationStarted = true
-                      const result = appendCreatorMessage
-                        ? ((await SessionPrompt.prompt({
-                            sessionID: agentSession.id,
-                            author: taskCreator.actor,
-                            model: { providerID: model.providerID, modelID: model.api.id },
-                            agent: "orchestrator",
-                            byteMaterializationProjectID: agentSession.projectID,
-                            parts: partsWithIds,
-                          })) as Message.WithParts)
-                        : ((await SessionPrompt.loop({
-                            sessionID: agentSession.id,
-                            ...(currentVisibleInputMessageID
-                              ? { reply_to_message_id: currentVisibleInputMessageID }
-                              : {}),
-                          })) as Message.WithParts)
-                      if (runtimeContract.runOnce) {
-                        await SessionPrompt.waitForSessionRuntimeContractWakeSettlement(
-                          agentSession.id,
-                          runtimeContract,
-                        )
-                      }
-                      return result
-                    },
-                  }),
+                fn: async () => {
+                  promptInvocationStarted = true
+                  const result = appendCreatorMessage
+                    ? ((await SessionPrompt.prompt({
+                        sessionID: agentSession.id,
+                        author: taskCreator.actor,
+                        model: { providerID: model.providerID, modelID: model.api.id },
+                        agent: "orchestrator",
+                        byteMaterializationProjectID: agentSession.projectID,
+                        parts: partsWithIds,
+                      })) as Message.WithParts)
+                    : ((await SessionPrompt.loop({
+                        sessionID: agentSession.id,
+                        ...(currentVisibleInputMessageID ? { reply_to_message_id: currentVisibleInputMessageID } : {}),
+                      })) as Message.WithParts)
+                  if (runtimeContract.runOnce) {
+                    await SessionPrompt.waitForSessionRuntimeContractWakeSettlement(agentSession.id, runtimeContract)
+                  }
+                  return result
+                },
               }),
             ),
         )
@@ -1203,17 +1142,28 @@ export namespace Orchestrator {
 }
 
 async function sessionHasCreatorMessage(sessionID: string): Promise<boolean> {
-  for await (const item of MessageStore.stream(sessionID)) {
-    if (item.info.role !== "user") continue
-    const extra = item.info.extra as
-      | {
-          task_root_message?: unknown
-          orchestrator_control_ingress?: unknown
-        }
-      | undefined
-    if (!extra?.task_root_message && !extra?.orchestrator_control_ingress) return true
+  return Database.use((db) => hasSessionCreatorMessage(db, sessionID))
+}
+
+function hasSessionCreatorMessage(db: Database.TxOrDb, sessionID: string): boolean {
+  const rows = db
+    .select({ data: MessageTable.data })
+    .from(MessageTable)
+    .where(eq(MessageTable.session_id, sessionID))
+    .all()
+  return rows.some((row) => {
+    const info = row.data as {
+      role?: string
+      extra?: { task_root_message?: unknown; orchestrator_control_ingress?: unknown }
+    }
+    return info.role === "user" && !info.extra?.task_root_message && !info.extra?.orchestrator_control_ingress
+  })
+}
+
+function assertSessionCreatorMessageAbsent(sessionID: string): void {
+  if (Database.use((db) => hasSessionCreatorMessage(db, sessionID))) {
+    throw new Error(`Orchestrator Session ${sessionID} already has a creator Message`)
   }
-  return false
 }
 
 export function orchestratorUserText(task: Pick<TaskRow, "request"> & Partial<Pick<TaskRow, "id">>): string {
@@ -1273,8 +1223,9 @@ export function renderWakeProvenanceNotice(event?: OrchestratorEvent, taskID?: s
     lines.push(
       `Current missionAcceptanceResume: mission_id=${resume.missionID}; mission_session_id=${resume.missionSessionID}; ` +
         `message_id=${resume.messageID}; reviewed_terminal_event=${resume.reviewedTerminalLifecycleReference.terminalEventID}; ` +
-        `evidence_locators=${JSON.stringify(resume.evidenceLocators)}. ` +
-        `This exact Mission-authored acceptance gap opened a new non-terminal execution occurrence for the same Task. Use the real Message identified above when deciding, without a Host-prescribed retrieval tool. If a successor needs a session_message evidence locator, pair this Message with its actual Task-root Session authority; mission_session_id is origin provenance, not the producing Session. Preserve the Task's fixed Expert Squad and existing workflow binding, then use current Task and Artifact evidence to choose the responsible existing lineage for repair and fresh review. Because this acceptance resume opened a non-terminal repair occurrence, no_action alone cannot settle it: dispatch the responsible existing lineage, or make the evidence-backed complete/fail lifecycle decision when current evidence proves closure or irreducible force majeure. The Host does not prescribe a worker, verdict, or completion outcome.`,
+        `acceptance_ledger_revision_artifact_id=${resume.acceptanceLedgerRevisionArtifactID}; ` +
+        `acceptance_gap=${JSON.stringify(resume.acceptanceGap)}. ` +
+        `This exact Mission-authored acceptance gap opened a new non-terminal execution occurrence for the same Task. Use the real Message and canonical ledger identified above. Preserve every listed acceptance and dispatch only continuation obligations for the named responsible workflow nodes and their affected verification closure. Because this acceptance resume opened a non-terminal repair occurrence, no_action alone cannot settle it: consume this gap through a scoped continuation, or make the evidence-backed complete/fail lifecycle decision when current evidence proves closure or irreducible force majeure. The Host does not prescribe a worker, verdict, or completion outcome.`,
       renderCurrentOccurrenceDecisionObligation(),
     )
   }
@@ -1385,35 +1336,76 @@ export function currentOrchestratorControlMessage(
   }
 }
 
+function orchestratorControlPromptInput(input: {
+  session: Session.Info
+  model: { providerID: string; modelID: string }
+  control: CurrentOrchestratorControlMessage
+}): SessionPrompt.PromptInput {
+  return {
+    sessionID: input.session.id,
+    messageID: input.control.messageID,
+    author: "orchestrator",
+    model: input.model,
+    agent: "orchestrator",
+    byteMaterializationProjectID: input.session.projectID,
+    noReply: true,
+    extra: input.control.extra,
+    parts: [
+      {
+        id: input.control.partID,
+        type: "text",
+        text: input.control.text,
+        kind: "control",
+        source: "system",
+      },
+    ],
+  }
+}
+
+function assertOrchestratorControlIdentityUnoccupied(control: CurrentOrchestratorControlMessage): void {
+  const messageRow = Database.use((db) =>
+    db.select().from(MessageTable).where(eq(MessageTable.id, control.messageID)).get(),
+  )
+  const partRow = Database.use((db) => db.select().from(PartTable).where(eq(PartTable.id, control.partID)).get())
+  if (!messageRow && !partRow) return
+  throw new OrchestratorControlIdentityConflictError({
+    message: `Orchestrator control occurrence for ingress ${control.extra.orchestrator_control_ingress.ingress_id} is already occupied.`,
+    wakeID: control.extra.orchestrator_control_ingress.ingress_id,
+  })
+}
+
+function assertExactOrchestratorControlMessage(
+  existing: Message.WithParts,
+  control: CurrentOrchestratorControlMessage,
+): void {
+  const part = existing.parts[0]
+  const valid =
+    existing.info.role === "user" &&
+    existing.info.author === "orchestrator" &&
+    existing.info.agent === "orchestrator" &&
+    isDeepStrictEqual(existing.info.extra, control.extra) &&
+    existing.parts.length === 1 &&
+    part?.id === control.partID &&
+    part.type === "text" &&
+    part.text === control.text &&
+    part.kind === "control" &&
+    part.source === "system" &&
+    part.metadata === undefined
+  if (valid) return
+  throw new OrchestratorControlIdentityConflictError({
+    message:
+      `Orchestrator control Message ${control.messageID} does not match exact ingress ` +
+      `${control.extra.orchestrator_control_ingress.ingress_id}`,
+    wakeID: control.extra.orchestrator_control_ingress.ingress_id,
+  })
+}
+
 export async function materializeOrReuseCurrentOrchestratorControlMessage(input: {
   session: Session.Info
   model: { providerID: string; modelID: string }
   control: CurrentOrchestratorControlMessage
   beforeVisibilityEffects?: () => void
 }): Promise<"created" | "reused"> {
-  const assertExact = (existing: Message.WithParts) => {
-    const part = existing.parts[0]
-    const valid =
-      existing.info.role === "user" &&
-      existing.info.author === "orchestrator" &&
-      existing.info.agent === "orchestrator" &&
-      isDeepStrictEqual(existing.info.extra, input.control.extra) &&
-      existing.parts.length === 1 &&
-      part?.id === input.control.partID &&
-      part.type === "text" &&
-      part.text === input.control.text &&
-      part.kind === "control" &&
-      part.source === "system" &&
-      part.metadata === undefined
-    if (!valid) {
-      throw new OrchestratorControlIdentityConflictError({
-        message:
-          `Orchestrator control Message ${input.control.messageID} does not match exact ingress ` +
-          `${input.control.extra.orchestrator_control_ingress.ingress_id}`,
-        wakeID: input.control.extra.orchestrator_control_ingress.ingress_id,
-      })
-    }
-  }
   let existing: Message.WithParts | undefined
   let disposition: "created" | "reused" = "reused"
   try {
@@ -1422,52 +1414,18 @@ export async function materializeOrReuseCurrentOrchestratorControlMessage(input:
     if (!NotFoundError.isInstance(error as Error)) throw error
   }
   if (!existing) {
-    const assertUnoccupied = () => {
-      const messageRow = Database.use((db) =>
-        db.select().from(MessageTable).where(eq(MessageTable.id, input.control.messageID)).get(),
-      )
-      const partRow = Database.use((db) =>
-        db.select().from(PartTable).where(eq(PartTable.id, input.control.partID)).get(),
-      )
-      if (!messageRow && !partRow) return
-      throw new OrchestratorControlIdentityConflictError({
-        message: `Orchestrator control occurrence for ingress ${input.control.extra.orchestrator_control_ingress.ingress_id} is already occupied.`,
-        wakeID: input.control.extra.orchestrator_control_ingress.ingress_id,
-      })
-    }
     // Reject a known compact-ID occupant before prompt preparation. The same
     // check runs again in the persistence transaction to fence a concurrent
     // occupant created after this read.
-    assertUnoccupied()
+    assertOrchestratorControlIdentityUnoccupied(input.control)
     disposition = "created"
-    await SessionPrompt.prompt(
-      {
-        sessionID: input.session.id,
-        messageID: input.control.messageID,
-        author: "orchestrator",
-        model: input.model,
-        agent: "orchestrator",
-        byteMaterializationProjectID: input.session.projectID,
-        noReply: true,
-        extra: input.control.extra,
-        parts: [
-          {
-            id: input.control.partID,
-            type: "text",
-            text: input.control.text,
-            kind: "control",
-            source: "system",
-          },
-        ],
-      },
-      {
-        beforeVisibilityEffects: input.beforeVisibilityEffects,
-        preflightBundle: assertUnoccupied,
-      },
-    )
+    await SessionPrompt.prompt(orchestratorControlPromptInput(input), {
+      beforeVisibilityEffects: input.beforeVisibilityEffects,
+      preflightBundle: () => assertOrchestratorControlIdentityUnoccupied(input.control),
+    })
     existing = await MessageStore.get({ sessionID: input.session.id, messageID: input.control.messageID })
   }
-  assertExact(existing)
+  assertExactOrchestratorControlMessage(existing, input.control)
   return disposition
 }
 
@@ -1528,9 +1486,184 @@ function renderCurrentOccurrenceDecisionObligation(): string {
 // ---------------------------------------------------------------------------
 
 /** Static instructions that never change between invocations. */
-export const ORCHESTRATOR_INSTRUCTIONS = withParticipantMessageLanguage(
-  withObservableWorkNarrative(ORCHESTRATOR_CORE),
+export const ORCHESTRATOR_INSTRUCTIONS = withParticipantMessageLanguage(withObservableWorkNarrative(ORCHESTRATOR_CORE))
+
+export type TaskProjectionChange =
+  | { op: "replace"; path: string; value: unknown }
+  | { op: "append"; path: string; values: unknown[] }
+  | { op: "remove"; path: string }
+
+const TaskProjectionPointerSchema = z.string().refine(
+  (path) => path === "" || (path.startsWith("/") && !/~(?:[^01]|$)/.test(path)),
+  "Task projection operation path must be a strict JSON Pointer.",
 )
+const TaskProjectionChangeSchema = z.discriminatedUnion("op", [
+  z.object({ op: z.literal("replace"), path: TaskProjectionPointerSchema, value: z.unknown() }).strict(),
+  z.object({ op: z.literal("append"), path: TaskProjectionPointerSchema, values: z.array(z.unknown()) }).strict(),
+  z.object({ op: z.literal("remove"), path: TaskProjectionPointerSchema }).strict(),
+])
+const TaskProjectionDeltaSchema = z
+  .object({
+    protocol: z.literal("task-projection-delta-v1"),
+    previous_task_projection_cursor: z.string().regex(/^[a-f0-9]{64}$/),
+    task_projection_cursor: z.string().regex(/^[a-f0-9]{64}$/),
+    operations: z.array(TaskProjectionChangeSchema),
+  })
+  .strict()
+  .superRefine((delta, context) => {
+    for (const [index, operation] of delta.operations.entries()) {
+      if (operation.op === "replace" && !Object.hasOwn(operation, "value")) {
+        context.addIssue({
+          code: "custom",
+          path: ["operations", index, "value"],
+          message: "A replace operation requires a canonical JSON value.",
+        })
+      }
+    }
+  })
+
+function normalizeTaskProjection(snapshot: TaskDesc): TaskDesc {
+  return JSON.parse(JSON.stringify(snapshot)) as TaskDesc
+}
+
+function taskProjectionCursor(snapshot: TaskDesc): string {
+  return createHash("sha256")
+    .update(canonicalJSONValue(normalizeTaskProjection(snapshot), "task-projection-v1"))
+    .digest("hex")
+}
+
+function projectionPath(parent: string, key: string): string {
+  const escaped = key.replaceAll("~", "~0").replaceAll("/", "~1")
+  return `${parent}/${escaped}`
+}
+
+function isProjectionRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value)
+}
+
+function taskProjectionChanges(previous: unknown, current: unknown, path = ""): TaskProjectionChange[] {
+  if (canonicalJSONValue(previous) === canonicalJSONValue(current)) return []
+  if (Array.isArray(previous) && Array.isArray(current)) {
+    const isAppend =
+      current.length >= previous.length &&
+      previous.every((value, index) => canonicalJSONValue(value) === canonicalJSONValue(current[index]))
+    return isAppend
+      ? [{ op: "append", path, values: current.slice(previous.length) }]
+      : [{ op: "replace", path, value: current }]
+  }
+  if (isProjectionRecord(previous) && isProjectionRecord(current)) {
+    const changes: TaskProjectionChange[] = []
+    for (const key of [...new Set([...Object.keys(previous), ...Object.keys(current)])].sort()) {
+      const childPath = projectionPath(path, key)
+      if (!(key in current)) {
+        changes.push({ op: "remove", path: childPath })
+      } else if (!(key in previous)) {
+        changes.push({ op: "replace", path: childPath, value: current[key] })
+      } else {
+        changes.push(...taskProjectionChanges(previous[key], current[key], childPath))
+      }
+    }
+    return changes
+  }
+  return [{ op: "replace", path, value: current }]
+}
+
+export function renderTaskProjectionFull(snapshot: TaskDesc): string {
+  return canonicalJSONValue(normalizeTaskProjection(snapshot), "task-projection-baseline-v1")
+}
+
+export function renderTaskProjectionDelta(previous: TaskDesc, current: TaskDesc): string {
+  const changes = taskProjectionChanges(normalizeTaskProjection(previous), normalizeTaskProjection(current))
+  return canonicalJSONValue(
+    {
+      protocol: "task-projection-delta-v1",
+      previous_task_projection_cursor: taskProjectionCursor(previous),
+      task_projection_cursor: taskProjectionCursor(current),
+      operations: changes,
+    },
+    "task-projection-delta-v1",
+  )
+}
+
+function taskProjectionPointer(path: string): string[] {
+  if (path === "") return []
+  if (!path.startsWith("/")) throw new Error(`Task projection path ${path} is not a JSON Pointer.`)
+  return path
+    .slice(1)
+    .split("/")
+    .map((token) => token.replaceAll("~1", "/").replaceAll("~0", "~"))
+}
+
+function taskProjectionParent(root: unknown, path: string): { parent: Record<string, unknown>; key: string } {
+  const tokens = taskProjectionPointer(path)
+  const key = tokens.pop()
+  if (key === undefined) throw new Error("A root Task projection operation has no parent.")
+  let current = root
+  for (const token of tokens) {
+    if (!isProjectionRecord(current) || !(token in current)) {
+      throw new Error(`Task projection path ${path} does not exist in the canonical baseline.`)
+    }
+    current = current[token]
+  }
+  if (!isProjectionRecord(current)) throw new Error(`Task projection parent for ${path} is not an object.`)
+  return { parent: current, key }
+}
+
+export function applyTaskProjectionDelta(previous: TaskDesc, renderedDelta: string): TaskDesc {
+  const raw = TaskProjectionDeltaSchema.parse(JSON.parse(renderedDelta))
+  if (raw.previous_task_projection_cursor !== taskProjectionCursor(previous)) {
+    throw new Error("Task projection delta does not apply to the supplied canonical baseline.")
+  }
+  let result: unknown = normalizeTaskProjection(previous)
+  for (const operation of raw.operations) {
+    if (operation.path === "") {
+      if (operation.op !== "replace") throw new Error("Only replace may target the root Task projection.")
+      result = structuredClone(operation.value)
+      continue
+    }
+    if (operation.op === "append") {
+      let target: unknown = result
+      for (const token of taskProjectionPointer(operation.path)) {
+        if (!isProjectionRecord(target) || !(token in target)) {
+          throw new Error(`Task projection append path ${operation.path} does not exist.`)
+        }
+        target = target[token]
+      }
+      if (!Array.isArray(target)) throw new Error(`Task projection append path ${operation.path} is not an array.`)
+      target.push(...structuredClone(operation.values))
+      continue
+    }
+    const { parent, key } = taskProjectionParent(result, operation.path)
+    if (operation.op === "remove") {
+      if (!(key in parent)) throw new Error(`Task projection remove path ${operation.path} does not exist.`)
+      delete parent[key]
+    } else if (operation.op === "replace") {
+      parent[key] = structuredClone(operation.value)
+    } else {
+      throw new Error(`Unsupported Task projection operation ${(operation as { op: string }).op}.`)
+    }
+  }
+  if (raw.task_projection_cursor !== taskProjectionCursor(result as TaskDesc)) {
+    throw new Error("Applied Task projection does not match the delta result cursor.")
+  }
+  return result as TaskDesc
+}
+
+export function renderTaskProjectionContext(baseline: TaskDesc | undefined, current: TaskDesc) {
+  if (!baseline) {
+    const frozenBaseline = structuredClone(current)
+    return {
+      baseline: frozenBaseline,
+      parts: [renderTaskProjectionFull(frozenBaseline), renderTaskProjectionDelta(frozenBaseline, frozenBaseline)],
+      labels: ["runtime:orchestrator-live-task-baseline", "runtime:orchestrator-live-task-delta"],
+    }
+  }
+  return {
+    baseline,
+    parts: [renderTaskProjectionFull(baseline), renderTaskProjectionDelta(baseline, current)],
+    labels: ["runtime:orchestrator-live-task-baseline", "runtime:orchestrator-live-task-delta"],
+  }
+}
 
 /**
  * Build the orchestrator system prompt as a two-part array:

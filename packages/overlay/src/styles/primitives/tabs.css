@@ -50,10 +50,10 @@
   min-height: var(--oc-density-control-height);
   height: auto;
   justify-content: flex-start;
-  padding: calc(5px * var(--ui-scale)) calc(7px * var(--ui-scale));
+  padding: var(--ui-gap-sm) var(--ui-gap-md);
   border: var(--oc-border-width) solid transparent;
   border-radius: var(--oc-radius-soft);
-  font: var(--ui-font-weight-body) var(--ui-font-control) var(--font);
+  font: var(--ui-font-weight-body) var(--ui-font-body) / var(--ui-line-height-tight) var(--font);
   text-align: left;
   text-transform: none;
   white-space: normal;
@@ -75,7 +75,10 @@
   border-radius: 0;
   background: var(--oc-tab-bg);
   color: var(--oc-tab-color);
-  font: var(--oc-header-title-font);
+  font-family: var(--font);
+  font-size: var(--ui-font-body);
+  font-weight: var(--ui-font-weight-medium);
+  line-height: var(--ui-line-height-tight);
   letter-spacing: var(--ui-letter-spacing-normal);
   text-transform: var(--oc-header-title-transform);
   white-space: nowrap;

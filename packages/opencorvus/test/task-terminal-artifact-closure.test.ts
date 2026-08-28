@@ -25,7 +25,10 @@ import {
   resolveCrossTaskArtifactSources,
   sameCrossTaskArtifactImportSet,
 } from "@/engine/cross-task-artifact-import"
-import { findTaskCompletionDecisionForTerminalTime } from "@/engine/completion-decision"
+import {
+  findTaskCompletionDecisionForTerminalTime,
+  requireTaskCompletionDecisionArtifact,
+} from "@/engine/completion-decision-read"
 import { EngineGit } from "@/engine/git"
 import {
   acquireTaskCompletionClosureInTransaction,
@@ -37,6 +40,7 @@ import { insertTaskPackageRevisionBinding } from "@/engine/task-package-revision
 import { Identifier } from "@/id/id"
 import { ensureMissionSession } from "@/mission/session"
 import { Instance } from "@/project/instance"
+import { InstanceBootstrap } from "@/project/bootstrap"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
 import { ProjectTable } from "@/project/project.sql"
 import { Project } from "@/project/project"
@@ -270,10 +274,19 @@ test("seals every terminal workflow worker Artifact into the completion decision
       expect(await completeFixtureTask(task, project.path, [first.locator], "derived", workflow)).toMatchObject({
         title: "Task Completed",
       })
+      const timeCompleted = requireTask(task.taskID).time_completed!
       const decision = findTaskCompletionDecisionForTerminalTime({
         taskID: task.taskID,
-        timeCompleted: requireTask(task.taskID).time_completed!,
+        timeCompleted,
       })
+      expect(decision).toBeDefined()
+      expect(
+        requireTaskCompletionDecisionArtifact({
+          taskID: task.taskID,
+          artifactID: decision!.id,
+          timeCompleted,
+        }),
+      ).toEqual(decision)
       expect(decision?.payload.deliverable_artifact_locators).toEqual([first.locator])
       // The derivation orders by artifact id under SQLite's binary collation, so the expectation
       // uses the same comparison rather than a locale-aware one.
@@ -488,6 +501,7 @@ test("closes continuation admission before the real completion checkpoint and im
   await using project = await memoryProject()
   await Instance.provide({
     directory: project.path,
+    init: InstanceBootstrap,
     fn: async () => {
       const task = await taskFixture(project.path)
       const childSessionID = Identifier.ascending("session")

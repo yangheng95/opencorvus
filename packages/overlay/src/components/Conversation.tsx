@@ -165,6 +165,7 @@ function VirtualizedConversationItem(props: {
 function VirtualizedConversationCards(props: {
   container: HTMLElement
   pinnedCardID: () => string | null
+  tracking: () => boolean
   onMeasuredContentChanged: () => void
   onCardScrollRequest: () => void
   onOpenSubagentConversation: (sessionID: string) => void
@@ -242,6 +243,18 @@ function VirtualizedConversationCards(props: {
     return scrollTargetElement(cardID)
   }
 
+  function convergeMeasuredContent(): void {
+    if (props.tracking()) {
+      const lastIndex = order().length - 1
+      if (lastIndex >= 0) {
+        virtualizer?.scrollToIndex(lastIndex, { align: "end", smooth: false })
+      }
+    }
+    props.onMeasuredContentChanged()
+  }
+
+  const measuredContentChangedOnFrame = createAnimationFrameScheduler(convergeMeasuredContent)
+
   const highlightCard = (cardID: string) => {
     const target = props.container.querySelector<HTMLElement>(`[data-card-id="${CSS.escape(cardID)}"]`)
     if (!target) return
@@ -295,7 +308,6 @@ function VirtualizedConversationCards(props: {
   }
 
   onMount(() => {
-    const measuredContentChangedOnFrame = createAnimationFrameScheduler(props.onMeasuredContentChanged)
     const ro = new ResizeObserver(measuredContentChangedOnFrame.schedule)
     virtualRootResizeObserver = ro
     ro.observe(props.container)
@@ -324,33 +336,45 @@ function VirtualizedConversationCards(props: {
 
   return (
     <For each={visibleTreeGenerations()}>
-      {() => (
-        <Virtualizer
-          ref={(handle) => {
-            virtualizer = handle
-          }}
-          data={order()}
-          scrollRef={props.container}
-          bufferSize={VIRTUAL_BUFFER_PIXELS}
-          itemSize={ESTIMATED_CARD_HEIGHT}
-          keepMounted={pinnedIndexes()}
-          as={VirtualWindowShell}
-        >
-          {(id) => {
-            const currentItem = (): SubagentConversationItem => {
-              const item = itemByID().get(id)
-              if (!item) throw new Error(`conversation virtualizer missing projected item ${id}`)
-              return item
-            }
-            return (
-              <VirtualizedConversationItem
-                item={currentItem}
-                onOpenSubagentConversation={props.onOpenSubagentConversation}
-              />
-            )
-          }}
-        </Virtualizer>
-      )}
+      {() => {
+        let ownedHandle: VirtualizerHandle | undefined
+        onCleanup(() => {
+          if (virtualizer === ownedHandle) virtualizer = undefined
+        })
+        return (
+          <Virtualizer
+            ref={(handle) => {
+              if (handle) {
+                ownedHandle = handle
+                virtualizer = handle
+                measuredContentChangedOnFrame.schedule()
+                return
+              }
+              if (virtualizer === ownedHandle) virtualizer = undefined
+            }}
+            data={order()}
+            scrollRef={props.container}
+            bufferSize={VIRTUAL_BUFFER_PIXELS}
+            itemSize={ESTIMATED_CARD_HEIGHT}
+            keepMounted={pinnedIndexes()}
+            as={VirtualWindowShell}
+          >
+            {(id) => {
+              const currentItem = (): SubagentConversationItem => {
+                const item = itemByID().get(id)
+                if (!item) throw new Error(`conversation virtualizer missing projected item ${id}`)
+                return item
+              }
+              return (
+                <VirtualizedConversationItem
+                  item={currentItem}
+                  onOpenSubagentConversation={props.onOpenSubagentConversation}
+                />
+              )
+            }}
+          </Virtualizer>
+        )
+      }}
     </For>
   )
 }
@@ -761,7 +785,14 @@ export function Conversation(props: {
       <VirtualizedConversationCards
         container={el}
         pinnedCardID={historyAnchorPinID}
-        onMeasuredContentChanged={() => scrollController?.contentChanged()}
+        tracking={tracking}
+        onMeasuredContentChanged={() => {
+          if (tracking()) {
+            scrollController?.scrollToBottom()
+            return
+          }
+          scrollController?.contentChanged()
+        }}
         onCardScrollRequest={() => setTracking(false)}
         onOpenSubagentConversation={props.onOpenSubagentConversation}
       />

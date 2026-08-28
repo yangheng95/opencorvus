@@ -4,7 +4,7 @@ import z from "zod"
 import { DIRECTORY_REFERENCE_MIME } from "@opencorvus-ai/transport-protocol"
 import { NamedError } from "@opencorvus-ai/util/error"
 import { APICallError, convertToModelMessages, LoadAPIKeyError, type ModelMessage, type UIMessage } from "ai"
-import { RangeSchema } from "../lsp/schema"
+import { RangeSchema } from "./range"
 import { formatPatchEvidence } from "@/snapshot/types"
 import { SnapshotEmptyTreeError, SnapshotIntegrityError } from "@/snapshot/errors"
 import { fn } from "@/util/fn"
@@ -668,6 +668,10 @@ export namespace Message {
     convergenceFailure: ToolPersistenceConvergenceFailure.optional(),
     observationFailures: z.array(ProcessorObservationFailure).optional(),
     parentID: z.string(),
+    /** Ordered user Messages accepted by this physical reply Turn. The tail
+     *  remains `parentID`; older Messages are co-consumed inputs from the same
+     *  delivery batch and resolve to this one canonical assistant reply. */
+    acceptedInputMessageIDs: z.array(z.string().min(1)).min(1).optional(),
     modelID: z.string(),
     providerID: z.string(),
     agent: z.string(),
@@ -687,6 +691,22 @@ export namespace Message {
     activationID: z.string().min(1).optional(),
   })
     .superRefine((value, ctx) => {
+      if (value.acceptedInputMessageIDs) {
+        if (new Set(value.acceptedInputMessageIDs).size !== value.acceptedInputMessageIDs.length) {
+          ctx.addIssue({
+            code: "custom",
+            message: "Assistant accepted input Message identities must be unique",
+            path: ["acceptedInputMessageIDs"],
+          })
+        }
+        if (value.acceptedInputMessageIDs.at(-1) !== value.parentID) {
+          ctx.addIssue({
+            code: "custom",
+            message: "Assistant parent must be the tail accepted input Message",
+            path: ["acceptedInputMessageIDs"],
+          })
+        }
+      }
       const occurrence = value.failureOccurrence
       if (!occurrence) {
         if (value.convergenceFailure || value.observationFailures?.length) {
@@ -723,6 +743,18 @@ export namespace Message {
     })
   export type Assistant = z.infer<typeof Assistant>
 
+  /**
+   * One durable reply-acceptance authority. Historical assistant Messages
+   * predate delivery batching and therefore accept exactly their parent.
+   */
+  export function acceptedInputMessageIDs(message: Assistant): readonly string[] {
+    return message.acceptedInputMessageIDs ?? [message.parentID]
+  }
+
+  export function acceptsInputMessage(message: Assistant, messageID: string): boolean {
+    return acceptedInputMessageIDs(message).includes(messageID)
+  }
+
   export const Info = z.discriminatedUnion("role", [User, Assistant]).meta({
     ref: "Message",
   })
@@ -737,6 +769,9 @@ export namespace Message {
       ref: "VisibleMessage",
     })
   export type VisibleInfo = z.infer<typeof VisibleInfo>
+
+  export const DeltaPartType = z.enum(["text", "reasoning", "tool"])
+  export type DeltaPartType = z.infer<typeof DeltaPartType>
 
   export const Event = {
     Created: BusEvent.define(
@@ -758,6 +793,7 @@ export namespace Message {
       z.object({
         sessionID: z.string(),
         messageID: z.string(),
+        info: VisibleInfo,
       }),
       { tier: 3 },
     ),
@@ -784,6 +820,7 @@ export namespace Message {
         sessionID: z.string(),
         messageID: z.string(),
         partID: z.string(),
+        partType: DeltaPartType,
         field: z.string(),
         delta: z.string(),
       }),
@@ -795,6 +832,7 @@ export namespace Message {
         sessionID: z.string(),
         messageID: z.string(),
         partID: z.string(),
+        partType: z.string().min(1),
       }),
       { tier: 3 },
     ),

@@ -1,5 +1,3 @@
-import { invoke } from "@tauri-apps/api/core"
-import { listen } from "@tauri-apps/api/event"
 import { createSignal } from "solid-js"
 import { openConfigDialog } from "./config-dialog-control"
 import { apiJson } from "./api"
@@ -9,6 +7,11 @@ import {
   type ExpertSquadInstallationScope,
 } from "./expert-squad"
 import { getHostTransport } from "./host-transport-runtime"
+import {
+  acknowledgeExpertSquadInstallHandoff,
+  currentExpertSquadInstallHandoff,
+  listenTauriEvent,
+} from "./tauri-transport"
 import { showOverlayWindow } from "./window"
 import {
   parseExpertSquadInstallHandoff,
@@ -66,18 +69,69 @@ async function acceptExpertSquadInstallHandoff(raw: string): Promise<void> {
   const current = expertSquadInstallHandoffValue()
   if (current && sameExpertSquadInstallHandoff(current, parsed)) return
   setExpertSquadInstallHandoffValue(parsed)
-  await showOverlayWindow()
-  await openConfigDialog("expert-squad-install")
+  try {
+    await showOverlayWindow()
+    await openConfigDialog("expert-squad-install")
+  } catch (error) {
+    clearExpertSquadInstallHandoff(parsed)
+    throw error
+  }
 }
 
-export async function installExpertSquadInstallHandoffBridge(): Promise<() => void> {
+function reportExpertSquadInstallHandoffError(error: unknown): void {
+  console.error("[expert-squad-install-handoff] rejected", error)
+}
+
+export function installExpertSquadInstallHandoffBridge(): () => void {
   if (getHostTransport().kind !== "tauri") return () => undefined
-  const unlisten = await listen<string>(EXPERT_SQUAD_INSTALL_HANDOFF_EVENT, ({ payload }) => {
-    void acceptExpertSquadInstallHandoff(payload).catch((error) => {
-      console.error("[expert-squad-install-handoff] rejected", error)
-    })
-  })
-  const pending = await invoke<string | null>("overlay_expert_squad_install_handoff_take")
-  if (pending) await acceptExpertSquadInstallHandoff(pending)
-  return unlisten
+
+  let disposed = false
+  let unlisten: (() => void) | undefined
+  let reconciliation: Promise<void> | undefined
+  let reconciliationRequested = false
+
+  const reconcilePendingHandoff = async (): Promise<void> => {
+    while (!disposed) {
+      reconciliationRequested = false
+      const pending = await currentExpertSquadInstallHandoff()
+      if (!pending || disposed) return
+
+      await acceptExpertSquadInstallHandoff(pending)
+      if (disposed) return
+
+      const acknowledged = await acknowledgeExpertSquadInstallHandoff(pending)
+      if (acknowledged && !reconciliationRequested) return
+    }
+  }
+
+  const requestReconciliation = (): void => {
+    if (disposed) return
+    if (reconciliation) {
+      reconciliationRequested = true
+      return
+    }
+    reconciliation = reconcilePendingHandoff()
+      .catch(reportExpertSquadInstallHandoffError)
+      .finally(() => {
+        reconciliation = undefined
+        if (reconciliationRequested && !disposed) requestReconciliation()
+      })
+  }
+
+  void listenTauriEvent<string>(EXPERT_SQUAD_INSTALL_HANDOFF_EVENT, () => {
+    requestReconciliation()
+  }).then((registeredUnlisten) => {
+    if (disposed) {
+      registeredUnlisten()
+      return
+    }
+    unlisten = registeredUnlisten
+    requestReconciliation()
+  }, reportExpertSquadInstallHandoffError)
+
+  return () => {
+    disposed = true
+    unlisten?.()
+    unlisten = undefined
+  }
 }

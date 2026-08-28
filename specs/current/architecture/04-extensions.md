@@ -50,6 +50,48 @@ lineage；Delivery Slice 不记录、复用或回收 workspace。
 - 运行时注入 `Plugin.state`，暴露 `Bus` / `Session` / `Config` / `Server` 给 plugin
 - installed plugin 是显式信任的进程内可执行扩展，不是 sandbox，并遵循严格失败契约。安装、加载、config 与 service 注册失败会终止项目启动；其他 hook 失败会终止触发它的 LLM、命令、工具或事件操作，不会继续消费未修改或部分修改的结果
 
+Plugin receives one runtime-neutral structured process capability, not a Bun shell object. Its command is always an
+explicit executable plus argv; the public contract expresses environment as strings, I/O as asynchronous byte
+sources/sinks, signals as strings, a caller-visible occurrence identity, abort/deadline settlement and one terminal
+receipt. Plugin initialization and hooks receive a **host-owned** facade: the OpenCorvus host adapts it to
+`ProcessSupervisor`, so those children participate in the live host-owner registry and Windows native process-tree
+cleanup, but they do not acquire a Task lease or claim Task-cancellation settlement. Explicit Task command callers bind
+the same contract through the separate Task-scoped adapter and lease. One occurrence-level control lease derives the
+physical admission signal, caller abort and wall-clock deadline from the coordinator's shared `Atomics.waitAsync` clock;
+the host adapter forwards that signal and does not create a second timer. The SDK releases this startup-only lease after
+accepting the framed readiness receipt, so the admitted server is thereafter owned only by `close()`. Inactivity uses the
+same clock. A no-op keepalive exists only while entries are outstanding; parallel process occurrences do not each create
+a polling clock.
+
+The native Overlay launcher binds its managed backend to the launcher's exact operating-system process occurrence before
+spawn. It passes both the positive Process Identifier (PID) and the platform process-instance fingerprint; managed
+`serve` admission requires the complete pair and never reconstructs or falls back to PID-only identity in the child.
+The watchdog keeps serving only while that exact occurrence is observable. Exit, PID reuse, or loss of exact
+observability converges once through the normal backend shutdown owner.
+
+`@opencorvus-ai/util/process` is a publishable package and owns only the host-neutral contract and execution coordinator;
+`@opencorvus-ai/util/process-node` is its explicit Node adapter for the JavaScript SDK and Channel runtime. Windows
+`owned_tree` admission launches the repository's native supervisor helper, assigns the target to a Job at creation, and
+does not settle until the helper publishes an exact occurrence marker with `active_processes: 0`; cleanup therefore does
+not infer identity from a reusable Process Identifier (PID) or depend on the root remaining alive. Node obtains the owner
+creation-time identity through an abortable asynchronous helper probe; the supervisor opens the owner and verifies that
+same identity before target creation. Bare executables are resolved through an equally abortable asynchronous PATH probe.
+POSIX `owned_tree`
+uses a dedicated process group and likewise settles only after group disappearance. Core host and Task trees continue to
+use `ProcessSupervisor`'s durable occurrence/helper identity fence. A detached Browser or system-terminal launcher states
+that ownership explicitly and unrefs only after successful spawn. PTY, Execution Capsule and process-occurrence probes
+remain below this facade as platform adapters; they are not an alternate public command capability.
+
+`public-package-release.ts` is the sole util → SDK → Plugin release orchestrator. It builds and stages each package,
+removes workspace-only export conditions, resolves `workspace:`/`catalog:` versions, inspects each packed manifest, and
+publishes only those exact archives in dependency order. Its Windows helper is built from the locked Cargo graph. Both
+check and publish modes run the same preparation and isolated consumer verification before publish can perform an external
+write. `check:process-package-publication`
+then lets offline npm resolve and install the archives one at a time in that order before the Node runtime import and
+deadline check; manually copying all three packages into one `node_modules` tree is not release evidence. The SDK observes
+its atomic startup receipt through an abortable directory watcher; the receipt remains the only readiness fact and its
+positive safe-integer PID must equal the spawned root before acceptance releases the startup control lease.
+
 Plugin 提供生命周期回调、auth 和 rewrite 能力，不承担 Task 调度身份。OpenAI Codex 和
 GitHub Copilot Provider Auth Plugin 把订阅 OAuth（Open Authorization，开放授权）、模型目录和
 流式 Provider 请求投影进 OpenCorvus 的统一 LLM（Large Language Model，大语言模型）链路。
@@ -62,10 +104,19 @@ hook 面，专用触发器只执行内置 Provider/Auth owner。其输入携带�
 Provider 明确拒绝的字段，也不能覆盖 Provider 必需 header。helper 路径直接进入同一物理层，不建立
 Provider 特判或第二套请求实现。
 
-普通 Skill 市场和 git/URL Skill source 安装属于用户全局配置面。`/global/skill/market` 与项目
-`/skill/market` 只投影同一个 `SkillManager.market` 内置 catalog owner；不存在不可配置的远端 registry
-或网络失败 fallback。`/global/skill/install` 与项目安装路由仍调用同一个 `SkillManager.install` owner。
-Skill mount matrix、project-local
+普通 Skill 市场和 git/URL Skill source 安装属于用户全局配置面。skills.sh 是当前唯一 Skill Market
+authority；全局与项目限定路由共用 `SkillManager` 的 provider、搜索、详情和精确安装契约。Market 搜索返回
+稳定候选 identity 和实时 installed projection；详情下载并校验精确候选 bundle；安装必须携带详情 digest，
+原子发布单个带 provenance 的 managed Skill，更新全局配置并失效 Skill discovery。运行时 Primary Agent 和
+Settings 共用该服务。不存在可配置的 fallback registry，也不通过 Market 路径安装整个 repository；普通
+path、URL index 和 git source import 保持为独立高级入口。Market identity 统一为小写并逐段映射到
+`skills-market/skills-sh/<owner>/<repository>/<skill>`，替换或删除前必须由目标 manifest 证明同一 identity；
+上游网络、HTTP 或响应校验故障统一发布 `SkillMarketUpstreamError` 与 HTTP 502，不能退化为匿名 500。
+
+运行时 `skill_market` Tool 提供搜索、检查和精确安装。搜索与检查是 network read；安装是经普通 Tool
+permission authority 单独授权的 local write。新安装 Skill 只在后续 turn 可被 mount；当前 turn 已冻结的
+Skill Tool surface 不热更新。`/global/skill/install` 与项目安装路由仍调用同一个通用
+`SkillManager.install` owner。Skill mount matrix、project-local
 file/folder/ZIP import 和 MCP（Model Context Protocol，模型上下文协议）仍要求明确项目目录，不能因
 市场全局化而变成第二份全局投影。
 
@@ -120,7 +171,10 @@ package 后通过可见 handoff 返回 Overlay，Overlay 校验 archive/package 
 operator 输入的 Expert Squad 查询交给同一 Market 模糊检索；排序输入包括 manifest selector、package-owned Skill 与
 Agent prompt 的 bounded discovery text，并只返回未安装建议。每条建议提供精确 public Market 页面和显式 project-scope
 安装动作。该建议面不是第二个可浏览目录；安装完成后只刷新 picker catalog，不会把打开或安装动作写成 Squad 选择或
-激活 profile，也不会自动覆盖现有安装。旧版本可能留下
+激活 profile，也不会自动覆盖现有安装。Native argv、single-instance 与 deep-link producer 只更新一个 latest pending
+handoff；renderer listener 在全局启动 readiness barrier 之外异步安装，event 只负责唤醒同一个 reconciliation
+consumer。只有 handoff 已完成解析、窗口展示与可见安装面打开后，renderer 才 compare-and-acknowledge 同一 pending
+value；失败、重载或更新值竞态不得 destructive read、丢失 receipt 或阻塞 Settings/API/health 初始化。旧版本可能留下
 `.opencorvus/.r/project/expert-squad-payload-provisioning.json`，它不再被读取、写入或作为更新/删除权限；
 旧版本已经安装的 package 原样保留，后续只通过普通显式安装、更新与卸载生命周期管理。普通 package
 replacement 在移动旧 target 前保存 `.package-replacement-<id>.json` 持久 intent；进程在任一 rename
@@ -324,9 +378,20 @@ JavaScript 对象表示法）信封；kind、identity、canonical base64 与 SHA
 Squad 还要求信封 `version` 与归档 `expert-squad.jsonc` 的 version 完全一致。当前没有部署默认服务器，
 未配置 `package_updates.server_url` 时 server 更新明确失败，不存在隐含公共地址。
 
-两类目录更新都使用同目标父目录内的 staging/backup/rename 原子替换路径：新归档先完成解析、身份与
-内容校验，随后才移动旧目录；安装后校验失败会恢复 backup。Overlay 只展示来源明确的更新按钮，
-调用成功后重新读取 catalog/market 或 canonical Skill mount matrix，不维护本地 shadow 状态。
+Expert Squad 目录更新使用同目标父目录内的 staging/backup/rename 原子替换路径：新归档先完成解析、
+身份与内容校验，随后才移动旧目录；安装后校验失败会恢复 backup。普通 Skill 的 Market 安装、文件导入
+和 writable server update 则共用一个以完整 catalog 为 subject 的 durable publication occurrence：在第一次
+authority rename 前持久化有序目标集合、每个目录的 before/after digest、由 occurrence ID 确定性派生的
+staging/backup 路径、更新类型和 global config revision。全部目标精确达到 after digest 后才发布 catalog
+phase，再幂等提交同一 occurrence 记录的 path/policy 语义并发布 configured phase，最后写 committed receipt；
+未形成完整 after catalog 的 occurrence 只能按精确 digest 恢复完整 before catalog 并写 rolled-back receipt，
+任何 foreign bytes 都保留并阻断恢复。所有 Skill catalog projection 先在跨进程 catalog owner 下收敛 open
+occurrence，并以全部 terminal receipt identity 的稳定集合摘要作为进程内 Skill/global-config/inventory cache
+revision，因此另一个 backend 不能继续投影 mixed 或 stale catalog。所有 global config writer 使用同一个 `catalog owner → config
+file owner` 锁序，并在修改配置前先收敛 open Skill replacement；replacement 的 before/configured revision
+会对真实磁盘配置和语义 effect 重新校验。每增加一个终态都必然改变 cache revision，不依赖 caller wall clock
+或 UUID 顺序。Overlay 只展示来源明确的更新按钮，调用成功后重新读取
+catalog/market 或 canonical Skill mount matrix，不维护本地 shadow 状态。
 
 Expert Squad Market 只从严格 bundled declaration 和已安装 package identity/location 投影
 `installation_scope`，不把 boolean installed 与 scope 维护成两个来源。Market、builtin install/update、
@@ -471,6 +536,14 @@ partial snapshot；键入和菜单导航不发起网络请求。
 固定 profile Task 协调面；它不声明领域 workflow、Expert Squad 偏好、自动选择、隐藏状态、alias 或
 fallback。项目与 user-global Mission Skill 继续通过同一严格 catalog 添加更具体的显式编排合同。
 
+## Language Server Protocol removal
+
+Language Server Protocol（LSP）子系统已删除：生产代码没有 LSP client、server supervisor、language catalog、
+tool、permission、feature flag、Project state、Execution Capsule descriptor field 或公开 HTTP route。严格配置会拒绝
+`lsp` 键，旧的 disable/experimental 环境变量不再存在。Session Message 继续拥有通用 `Range` 数据结构；该结构位于
+`session/range.ts`，不代表或启动语言服务。保留的 VS Code protocol package 只允许作为其他产品依赖的传递依赖，
+不得重新投影为 OpenCorvus LSP 能力。
+
 ## MCP —— Model Context Protocol
 
 **代码**：`src/mcp/`
@@ -485,6 +558,131 @@ fallback。项目与 user-global Mission Skill 继续通过同一严格 catalog 
 OpenCorvus 作为 client / host 接入外部或 package-scoped MCP server，并把 active projection
 授予的工具暴露给 Agent。`mcp browser` 是内置浏览器 MCP 的独立 stdio 入口，Task 调度只使用
 内部 projected-agent runtime。Browser MCP 的 Playwright Page 是浏览、截图、诊断和用户观看的唯一页面事实源。
+`browser` 是该内置 provider 的保留 server identity：配置缺省时注入内置 local declaration，严格
+`{ enabled: false }` override 可将其关闭；显式 typed declaration 只有 command 与当前内置 provider 精确一致时
+才可调整 environment、timeout 或 enabled 等 local options。remote 或其他 local command 必须在配置解析时以
+稳定的 `mcp.browser.type` / `mcp.browser.command` custom issue 拒绝，不能继承 Browser 的 connection ownership、
+permission ledger 和 result materialization 语义，也不能被 host 静默替换。内部唯一
+`configuredDeclaration` 以 `BrowserMCPConfigurationError` 表达原因；`Config.Info` 把它映射为上述 Zod issue，
+配置文件 loader 再通过 `Config.InvalidError` 投影同一 issue，而不把内部 NamedError 作为公共配置错误冒充出去。
+
+MCP OAuth callback broker 是本地 redirect 的唯一 finish 与 HTTP answer adapter。每个 data root 在
+`mcp-oauth-callback-broker.json` 保存 mode-`0600` 的稳定 positive loopback port（1–65535）、随机 generation 与 proof secret；文件只描述
+broker identity，不描述 OAuth flow。第一个 backend 绑定该 port，peer 通过随机 challenge 的 HMAC
+（Hash-based Message Authentication Code，基于哈希的消息认证码）响应验证它确属同一 data root，并在 owner 退出后
+重绑同一 port。peer probe/takeover 在每个 runtime 内 single-flight；identity handoff 会先停止旧 local server，再替换
+runtime handle。listener 已 `unref`，因此复用它的 backend 正常存活时 callback 可达，而一次性 CLI 不会因 listener
+悬挂。proof timeout、连接失败或 response body 读取失败是 `unreachable`，不是身份否定：若旧 port 仍被占用，peer 明确拒绝破坏性轮换；
+收到完整 HTTP response 后，非 2xx、JSON/shape 解析失败或 generation/proof/HMAC 认证失败都把 owner 判为 `foreign`、选择新 port/generation 并结算旧 generation 的
+pending flow。broker identity 或 generation settlement 的 atomic rename 若返回不确定结果，owner 重读 exact identity/flow facts；
+一次 `unreachable` takeover refusal 不 retire 当前 peer monitor；只有 replacement 已成功 bind、publish identity 并结算 generation，
+或显式 stop，才替换/退役原 runtime。短暂 stall 恢复后 monitor 继续验证同一 owner，owner 随后退出仍自动接管同一 URI。
+proof 请求与响应都使用 `Connection: close`，runtime 退役则等待 `server.stop(true)` 完成；因此接管判断不会复用旧 owner 的
+keep-alive 连接，显式 stop 返回时旧 listener 及其存量连接都已退出。
+每条 ensure 路径在返回 binding 前重试 generation settlement。不同 data root 不共享 secret，因而不能把另一 root 的
+listener 误认成自己的 broker。
+port `0` 只允许作为进程内动态 bind 请求，不能发布为 durable identity；schema-valid broker 必须已经携带实际 listener port，
+损坏 identity 以 typed parse failure fail closed，不 probe、bind 或结算其 generation。
+每个 root 的 broker startup 也在进程内 single-flight，并登记在 stop owner 下；stop 与并发 stop 共享一个 settlement，递增 stop epoch，
+等待 startup/peer takeover 后再次 retire 全部 runtime。任何跨越 stop epoch 才完成的 startup 都只返回固定 retired error，不能复活
+listener 或 monitor；stop 完成后下一次显式 ensure 才能重新启动 broker。
+
+`mcp-auth.json` 是 flow、PKCE（Proof Key for Code Exchange，授权码交换证明密钥）、dynamic client 与 credential 的唯一
+事实源。pending state 同时绑定 authorize-time server URL、OAuth client credential identity、callback generation 与完整 redirect URI；dynamic client registration
+使用独立的 client callback binding，不能被后来 state 写入伪装成已为新 URI 注册。callback broker 按 exact state 扫描
+store，解析 canonical `projectID:mcpName`，从 SQLite Project owner 映射 worktree，再通过
+`runWithInitializedIndependentProject` 进入该 Project；不扫描 active Instance，也没有 process-local Project authority
+registration。升级前没有 generation 的 pending state/verifier/client facts 在首个 broker generation 下原子结算，token
+与 static credential 保留。token commit 同时快照它实际使用的 dynamic client；broker rotation 可删除仅供未来 authorize
+使用的旧 client registration，但 refresh token 仍使用该 token snapshot，直至 token set 本身被 invalidate。
+每个 OAuth provider connection admission 都通过 store lock 为 absent 或 upgrade-era material entry 初始化一个 non-empty revision；
+初始化不 supersede/clear flow，但此后所有 refresh/client/token writes 都携带该 exact revision。显式 remove 之后，已捕获的 legacy
+refresh writer 不能以 `expectedRevision=undefined` 复活 credential。
+OAuth provider 的 authority 显式分成 `connection` 与 `authorization`。普通 startup/admission 的 connection provider 只读取或
+刷新已存在的 credential；没有有效 token 时在第一个 interactive SDK boundary 返回 `UnauthorizedError` 并投影 `needs_auth`，
+不能 dynamic-register client、读写 state/PKCE verifier 或 redirect，也不能借用另一个 pending occurrence。只有显式 authorize、
+finish 和用户主动运行的 OAuth debug probe 取得 authorization authority。connection refresh 记录本次 SDK attempt 实际读取的
+token 与 selected client snapshot；save 以及 SDK 对 `tokens`/`client`/`all` 的 invalidation 都在 store lock 内比较 snapshot。
+`clientInformation()` 与 `tokens()` 两次 SDK await 之间会在返回 refresh token 前重读 exact token、selected client 和 durable revision，
+并再次验证 canonical Project MCP definition；same-value revision replacement 或配置提交都在任何远端 refresh side effect 前中止旧
+attempt。callback 或另一 refresh 已提交新输入时，旧 attempt 不能向旧端点发送 token/client、覆盖或删除 winner。普通 `MCP.add`
+不等待 callback broker，也不给 connection provider callback binding；broker maintenance 是 stop-tracked background work，因此有效 token 的
+连接和 refresh 不依赖 callback listener 可达。authorization provider 不读取旧 token/token client；首个 broker generation 会在删除旧
+client registration 前把 legacy `tokens + clientInfo` 快照为 `tokenClientInfo`，保留 refresh 所需的真实 client owner。
+
+`finishAuthCallback` 在 spend 前先要求当前 canonical MCP definition 与 authorize-time server/client identity 精确一致；不一致时
+通过 exact revision + state（finishing 时再含 owner）compare-and-swap 发布 terminal；若新 flow 已先取得 auth key，只读取旧 state
+的 `superseded`，绝不撤销新 lease。不匹配的当前 occurrence 发布 `revoked` terminal，不构造 token transport。已进入 exchange 后，唯一 transport 仍从 durable authorize-time server/client
+identity 与 redirect binding 构造；configuration 在途变化不能把旧 code、verifier 或 redirect URI 送往 replacement endpoint。
+若 provider write/renew/reconnect identity fence 观察到 mismatch，已 spend occurrence 收敛为 `exchange_uncertain`；若 old endpoint
+在 fence 再次运行前先返回网络或 exchange error，则收敛为固定 `failed`。每次 provider write 与 post-exchange connection
+publication 都重新验证当前 identity。
+`finishAuthCallback` 通过 credential store 内 compare-and-clear 的单次 spend 完成唯一 admission，并把 pending state
+原子移动到随机 owner、credential revision 与 expiry 共同 fencing 的 `oauthFinishing` occurrence。live owner 在 exchange 和
+post-auth connection 期间续租，每个 token write 也在 store lock 内验证 exact owner 与未过期 lease；broker 轮换不能改写
+或清除 finishing occurrence 的 authorize-time generation、redirect、client 与 verifier。live finishing 阻止新 credential
+lease；owner 消失或停顿越过 expiry 后只发布 `exchange_uncertain` 并清理 flow material，永不重放 authorization code。
+成功、provider rejection、missing code、exchange failure、pending-generation rotation 与新 flow supersession 分别发布
+exact-state durable callback terminal。terminals 是按 state 保存的 occurrence history，至少保留 24 小时；新 lease 不删除旧
+terminal，pending 被替代时先发布 `superseded`。terminal publication 清理 finishing state/verifier/binding，但不复制
+authorization code、token、provider error text 或其他 secret；tombstone 只额外保留当次非敏感 callback generation，使完成后、
+Project 删除后到达的 HTTP duplicate 可由 `state + generation` 精确投影同一 terminal，而无需保留 spendable state。atomic write 的
+不确定结果通过重读 exact state/outcome 收敛。
+authorization-code token commit 也保存本次写入的 exact token/client/server/credential target；rename 后报错仅在 revision、live
+finishing owner 与完整 target footprint 重读一致时视为成功。terminal publish 与 pending abandon 在 rename 前瞬时失败时，仅在
+同一 revision 和 exact pending/finishing owner 仍 live 的边界内受限重试同一幂等 mutation；owner 或 outcome 改变时立即停止，
+不会把本地成功/失败与 peer waiter 的 durable outcome 分裂。若 authorization server 已成功返回 token，但所有 token-store
+pre-rename 写入均失败，唯一 occurrence 发布固定 `exchange_uncertain`，listener/local/peer 都拒绝重放 authorization code。
+若 successful 或 failed exchange 的 terminal publication 在 exact owner 上耗尽全部有界重试，owner 停止续租并等待该 lease
+到期，再由同一 `settleExpiredOAuthFinishing` owner 发布/读取 canonical `exchange_uncertain`；listener、local waiter、peer waiter
+和 duplicate 不得先投影 process-local publication error。
+
+同一进程的 OAuth owner、finish、terminal claim、interactive waiter 与 auth-key-to-state 索引都把 exact `Global.Path.root` 纳入 key；
+相同 Project ID、MCP 名和 state 在两个 data root 中仍是两个独立 occurrence。一个 root 的 start/cancel/remove/finish 只能命中该 root
+的内存 owner，并由该 root 的 durable credential store 与 callback generation 决定结果。
+
+interactive `authenticate` 不再次 exchange authorization code。发起进程保留 process-local waiter fast path，同时按
+`authKey + state` 观察同一个 durable callback terminal；callback 落到 peer broker 时，peer 完成 exchange/terminal write，
+发起进程据此立即得到 connected 或固定 typed failure，而不是等待本地 Map timeout。`finishAuthCallback` 在同一 runtime
+仍为精确 `authKey + state` 保持一个 in-flight operation：listener duplicate 与公开 SDK callback route 加入同一 Promise，
+已进入 resolution 的 callback 通过 callback-owned receipt 穿过 live-map cleanup。命中 durable `finishing` 但没有本进程
+operation 的 callback 不得重放 authorization code；它等待 live lease 的 durable terminal，lease 到期则原子发布并返回
+固定 `exchange_uncertain` failure。只有 exact `connected` status 可发布成功；`disabled`、`disconnected`、`connecting`、
+`failed`、`needs_auth` 与 `needs_client_registration` 都发布同一个固定 failed terminal，因此 listener 与 peer waiter 不会
+对同一 exchange 得出不同结论。provider-controlled error description 与 process-local exchange exception 只作内部 cause；只要
+durable terminal 已发布，listener response、local finisher、local waiter 与 peer waiter 都投影同一个固定 terminal message。
+terminal poll 的 I/O rejection 被计数并在 waiter 边界转换为固定 durable-read failure，
+不会形成 unhandled rejection。
+`mcp debug` 复用 canonical streaming SDK authorization probe，不另建一套 provider 流程；它以 reject-pending admission 保留已有交互授权，
+并在只读探测结束时按捕获 revision terminalize 自己未完成的 state/PKCE occurrence、撤销该 lease，保留允许复用的 dynamic client facts。
+公开 SDK callback 入口遵循相同 join 规则：若 peer 已把 exact state 移入 `oauthFinishing`，本进程忽略 duplicate code 并等待
+canonical terminal。若 durable state 的 scoped Project row 已删除，broker 以 exact occurrence CAS 结算：pending 发布 `revoked`，
+finishing 发布 `exchange_uncertain`，并直接投影该 terminal；listener、本地 waiter 与 peer waiter 不等待 timeout。credential retirement 保留 terminal-only tombstone 时为每个 key
+预生成新的 revision；atomic rename 的 ambiguous catch 只有重读到 exact absent/tombstone footprint 才能视为提交，旧 revision 不能
+在 pre-rename failure 后复活 credential。Project 删除在 SQLite commit 前耐久发布唯一 v4 active cleanup manifest；commit 后同一个
+cleanup owner 才在一个 auth-store lock/read/write 中选择并退役该 `projectID` 下全部 MCP auth keys，再清理 quarantine；key enumeration
+不在 lock 外形成 TOCTOU window。同 Project 的 token/client/static/staged material 一并清除，
+其他 Project 的同名 key 保持完整。退役 publication 对 exact pre-rename failure 有界重试；连续失败返回
+`committed_with_residue` 并保留 active manifest，startup recovery 重试同一清理。active residue 关闭相同确定性 Project ID 的再准入，
+避免新 generation 与旧 credential 共用 key；completed ledger 只重试旧 quarantine，不再退役 MCP credential，因而不能删除重建
+Project 的新 token/client。已发布 v3 manifest 通过 fsync 完整新字节和 atomic write-through replace 一次性迁移为 v4；ambiguous
+replace 重读 exact current fact，迁移后只有 v4 是当前事实。退役为仍活跃的 callback 保留上述 terminal tombstone。
+Instance 初始化在公共 `Project.Info` 之外捕获不可复用的 SQLite Project-row generation。所有 project-scoped OAuth lease admission、
+static credential stage/promote/rollback、reconcile invalidate/remove 与 stale-credential cleanup 都在 auth-store mutation 内复核 exact
+Project ID、worktree 和该 generation；删除前先获 auth lock 的 writer 会被后续 prefix cleanup 包含，删除后或 same-ID 重建后的旧 Instance
+writer 则在写入前被拒。Project deletion cleanup 是唯一不走该 ordinary admission fence 的 project-wide credential retirement owner。
+`Instance.refresh` 原地切换 Project context 时同步替换这个 generation；刷新后的 context 可写入新 occurrence，而刷新前捕获的旧 writer
+仍由 store 内 fence 拒绝。
+OAuth callback 和 dynamic-client 日志只投影 correlation/presence 等固定字段；connection failure 只投影 endpoint presence，不记录 URL、
+userinfo/query、provider query error、client id、token SDK error 或 broker proof material。已向远端披露 stored refresh token 后的
+`UnauthorizedError` 属于固定 failed connection，不重新解释为首次 interactive `needs_auth`。
+只有仍为 `pending` 的 provider rejection 和 missing-code callback 才能在一个 store write 中同时 abandon state/verifier 并
+发布 terminal；若 code finish 在其后抢先 spend，先加入 callback receipt 捕获的同 runtime operation；若 peer process 已将 exact
+state 移入 finishing，则等待 durable terminal，若 peer 已发布 terminal 则直接投影其真实 outcome。connected 与任一固定 failure
+都不能被当前 provider-error/missing-code query 重新解释。interactive caller 观察 callback
+rejection 后会 best-effort clear 仍由自己 revision 拥有的 pending state；若该 cleanup 本身失败，返回保留 callback error 为 cause
+且同时携带 callback/cleanup errors 的 `AggregateError`。
+
 本地运行默认连接用户已打开的稳定版 Google Chrome。BrowserRuntime 读取其默认 profile 发布的
 `DevToolsActivePort`，经 Chrome DevTools Protocol (CDP) 连接 default context，并仅创建和关闭 MCP 自己的 Page。
 若 Chrome 尚未授权，runtime 返回包含 `chrome://inspect/#remote-debugging` 的稳定操作指引，由用户在正在使用的
@@ -498,6 +696,16 @@ Page，不关闭 Chrome、BrowserContext 或无关 tab。
 设置 `OPENCORVUS_BROWSER_MODE=isolated` 时，Browser MCP 通过同一个 BrowserRuntime 启动独立、未登录的系统
 Chrome；桌面默认 headed 可见，无图形显示的 Linux 自动 headless，也可用 `BROWSER_HEADLESS=true` 显式选择。
 该模式为明确配置而非 CDP 授权失败后的 fallback，profile 随进程结束，不承诺跨运行保存登录态。
+Playwright launch 不注册自己的 `SIGHUP`、`SIGINT` 或 `SIGTERM` handler；当前 HTTP 或 stdio composition root 是
+Browser Node 进程的唯一信号 owner。两种 root 都把外部信号、正常 transport/stdio 关闭和显式 close 收敛到同一个
+幂等终态回执：停止接纳操作，尝试关闭当前 Page，等待已接纳操作，尝试关闭迟到 Page 和 profile，最后断开 browser
+connection。每个安全阶段都要执行，Page/profile 关闭失败在 connection 断开后聚合上抛；仅全部成功时使用对应信号
+退出码，任一清理失败统一退出 1。Browser resource 层不直接终止进程，也不安装异步 `exit` handler。
+
+附着与独立是两个**浏览器身份**（不同 Cookie、不同登录态），不是同一能力的两个档次，所以跨越这条边界只能由调用方
+显式声明，不能由 runtime 在 CDP 失败时代为决定：默认的 `OPENCORVUS_BROWSER_MODE=chrome` 在 Chrome 不可附着时以
+具名错误失败并给出精确原因；只有 `OPENCORVUS_BROWSER_MODE=chrome_or_isolated` 表示操作者接受在另一个浏览器身份下
+工作，此时才会退到独立浏览器，并在日志中记录所依据的策略与原因。
 
 设置 `OPENCORVUS_BROWSER_CDP_ENDPOINT` 时，runtime 不再解析 Chrome channel 或 launch，而是经 Chrome DevTools Protocol
 (CDP) 显式附着已有 Chromium 系浏览器的 default context，并只新建、关闭 MCP 自己的 Page；shutdown 只断开
@@ -506,21 +714,30 @@ Playwright transport，不关闭外部 Chrome 或其 BrowserContext。`session_c
 Page 的只读 Live View；Live View 不创建第二个 Browser、BrowserContext、Page 或可变状态，也不复用 Task
 Browser Preview WebView。
 
+直接 Chat/Work 为每个 Conversation Session 的 Browser 投影创建独立 scoped MCP connection owner，并在该 owner
+下枚举 server 当前暴露的完整 model-visible tool 集合；切到 scoped owner 不得缩窄工具面。只有配置和 assignment
+都接纳 Browser 后才创建 owner。Browser 的 Page、Cookie 和 storage 状态位于该 owner 持有的 Browser MCP 进程中，
+Conversation disposal 会 await 该 owner 的 close 回执再完成，因此不需要在 Browser 内另建 Session tag、host 侧
+销毁路由或 Project 共享的影子 owner。Computer takeover 只替换同 Conversation 的 Computer adapter owner；它不会
+关闭 Browser owner，Browser 状态持续到 Conversation disposal。
+
 ### Computer Use
 
 `default/mcp/computer` 是平台内置的 host-native Computer Use MCP，
-不是 Expert Squad、Mission workflow 或 Browser 的别名。直接 Chat/Work 默认同时 assignment Browser 与 Computer；
-Project 可通过显式 `primary_assistant_capabilities.<agent>.mcp_server_refs` 覆盖该默认值并关闭任一能力。active Expert Squad 只能通过
+不是 Expert Squad、Mission workflow 或 Browser 的别名。Browser 与 Computer 的已配置声明都只是 capability inventory；
+直接 Chat/Work 的默认 MCP assignment 为空，Project 只有通过显式
+`primary_assistant_capabilities.<agent>.mcp_server_refs` 才激活精确 provider。active Expert Squad 只能通过
 Harness 中精确的 `default/mcp/computer/tool/*` refs 投影同一组平台工具。两种入口都保留相同的八个
 `mcp_tool` identity 和四类 Session permission；Harness visibility 不授予 permission。
 
 Conversation capability catalog 由唯一 `mcp-config` owner 一次发布 configured server 与当前精确投影的
 MCP tool 完整集合，重复 owner 继续失败关闭。`tool` 与 `mcp_tool` 是不同 canonical kind；跨类型搜索使用
-`next_owner_kinds:["call_tool"]`，禁止 generic source merge、kind alias 或隐藏扩展。默认或显式 assignment
+`next_owner_kinds:["call_tool"]`，禁止 generic source merge、kind alias 或隐藏扩展。显式 assignment
 只决定能力投影，不替代 permission；server 与其 tool 必须在同一 snapshot 中一致为 `visible`。
 
 每个 Conversation Session 拥有独立的 Computer scoped MCP connection owner；不同 Session 不共享
-controller、CUA Driver logical session 或 observation authority，删除 Session 会关闭精确 owner。每次 `observe`
+controller、CUA Driver logical session 或 observation authority，删除 Session 会关闭精确 owner，而 takeover 只关闭
+Computer owner 并保留上文独立的 Browser owner。每次 `observe`
 形成一个绑定 computer、display、observation、digest 与像素边界的单次 capability；动作在第一次异步
 backend 调用前原子消费它。create、input 与 destroy 都是 effect operation，派发后响应丢失统一返回
 `COMPUTER_OUTCOME_UNKNOWN`，不得 retry、reconnect replay 或切换 transport。

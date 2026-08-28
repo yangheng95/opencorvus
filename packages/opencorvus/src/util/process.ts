@@ -1,9 +1,16 @@
-import { spawn as launch, type ChildProcess } from "child_process"
+import {
+  ProcessDeadlineExceededError,
+  ProcessInactivityTimeoutError,
+  ProcessOutputLimitError,
+  ProcessRunFailedError as SharedProcessRunFailedError,
+  type ProcessHandle,
+  type ProcessByteSink,
+  type ProcessByteSource,
+  type ProcessRunRequest,
+} from "@opencorvus-ai/util/process"
+import { NodeProcess } from "@opencorvus-ai/util/process-node"
 import { normalizeExecutableArgv } from "./command"
-import { ProcessSupervisor } from "@/shell/process-supervisor"
-
-const PROCESS_CLOSE_TIMEOUT_MS = 5_000
-const PROCESS_TERMINATE_GRACE_MS = 1_000
+import { supervisedHostProcessFacade, supervisedTaskProcessFacade } from "./process-facade"
 
 export namespace Process {
   export type Stdio = "inherit" | "pipe" | "ignore"
@@ -20,7 +27,9 @@ export namespace Process {
     exactEnv?: NodeJS.ProcessEnv
   }
 
-  export interface RunOptions extends Omit<Options, "stdout" | "stderr"> {
+  export interface RunOptions extends Omit<Options, "stdout" | "stderr" | "ownership"> {
+    /** Stable process-supervisor owner used for diagnostic attribution and ownership observability. */
+    owner?: string
     nothrow?: boolean
     inactivityTimeoutMs?: number
     inactivityTimeoutMessage?: string
@@ -61,359 +70,133 @@ export namespace Process {
     }
   }
 
-  export type Child = ChildProcess & {
-    exited: Promise<number>
-    terminate(): Promise<void>
-  }
-
-  function collectOutput(
-    stream: NodeJS.ReadableStream,
-    onActivity: () => void,
-    acceptBytes: (bytes: number) => number,
-  ): Promise<Buffer> {
+  export async function readBytes(source: ProcessByteSource | null): Promise<Buffer> {
+    if (!source) return Buffer.alloc(0)
     const chunks: Buffer[] = []
-    return new Promise((resolve, reject) => {
-      stream.on("data", (chunk) => {
-        const bytes = Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk)
-        const retained = acceptBytes(bytes.byteLength)
-        if (retained > 0) chunks.push(retained === bytes.byteLength ? bytes : bytes.subarray(0, retained))
-        onActivity()
-      })
-      stream.once("end", () => resolve(Buffer.concat(chunks)))
-      stream.once("error", reject)
-      const existingError = (stream as NodeJS.ReadableStream & { errored?: Error | null }).errored
-      if (existingError) reject(existingError)
-    })
+    for await (const chunk of source) chunks.push(Buffer.from(chunk))
+    return Buffer.concat(chunks)
   }
 
-  async function writeInput(
-    stream: NodeJS.WritableStream,
-    input: AsyncIterable<Uint8Array>,
-    onActivity: () => void,
-  ): Promise<void> {
-    let observedError: unknown
-    const recordError = (error: unknown) => {
-      observedError ??= error
-    }
-    stream.on("error", recordError)
-    try {
-      for await (const value of input) {
-        if (observedError) throw observedError
-        const chunk = Buffer.isBuffer(value) ? value : Buffer.from(value)
-        if (chunk.length === 0) continue
-        const accepted = stream.write(chunk)
-        onActivity()
-        if (!accepted) {
-          await new Promise<void>((resolve, reject) => {
-            const cleanup = () => {
-              stream.removeListener("drain", drained)
-              stream.removeListener("error", failed)
-            }
-            const drained = () => {
-              cleanup()
-              resolve()
-            }
-            const failed = (error: unknown) => {
-              cleanup()
-              reject(error)
-            }
-            stream.once("drain", drained)
-            stream.once("error", failed)
-          })
-        }
-      }
-      if (observedError) throw observedError
-      await new Promise<void>((resolve, reject) => {
-        const cleanup = () => stream.removeListener("error", failed)
-        const failed = (error: unknown) => {
-          cleanup()
-          reject(error)
-        }
-        stream.once("error", failed)
-        stream.end(() => {
-          cleanup()
-          resolve()
-        })
-      })
-      if (observedError) throw observedError
-    } finally {
-      stream.removeListener("error", recordError)
+  export async function readText(source: ProcessByteSource | null): Promise<string> {
+    return (await readBytes(source)).toString("utf8")
+  }
+
+  export interface Child {
+    readonly occurrenceID: string
+    readonly pid: number
+    readonly stdin: ProcessByteSink | null
+    readonly stdout: ProcessByteSource | null
+    readonly stderr: ProcessByteSource | null
+    readonly exited: Promise<number>
+    terminate(): Promise<void>
+    unref(): void
+  }
+
+  function environment(opts: Pick<Options, "env" | "exactEnv">, label: string): NodeJS.ProcessEnv | undefined {
+    if (opts.exactEnv && opts.env !== undefined) throw new Error(`${label} accepts exactly one of env or exactEnv`)
+    return opts.exactEnv ?? (opts.env === null ? {} : opts.env ? { ...process.env, ...opts.env } : undefined)
+  }
+
+  function child(handle: ProcessHandle): Child {
+    return {
+      occurrenceID: handle.occurrenceID,
+      pid: handle.pid,
+      stdin: handle.stdin,
+      stdout: handle.stdout,
+      stderr: handle.stderr,
+      exited: handle.terminal.then((receipt) => receipt.exitCode ?? (receipt.signal ? 1 : 0)),
+      async terminate() {
+        await handle.terminate()
+      },
+      unref: () => handle.unref(),
     }
   }
 
-  async function terminateOwnedProcess(proc: ChildProcess, exited: Promise<number>, command: string[]) {
-    if (proc.exitCode === null && proc.signalCode === null) proc.kill("SIGTERM")
-    try {
-      await ProcessSupervisor.awaitWithTimeout(
-        exited,
-        PROCESS_TERMINATE_GRACE_MS,
-        `Process did not exit after SIGTERM: ${command.join(" ")}`,
-      )
-    } catch (error) {
-      if (proc.exitCode !== null || proc.signalCode !== null) throw error
-      proc.kill("SIGKILL")
-      await ProcessSupervisor.awaitWithTimeout(
-        exited,
-        PROCESS_CLOSE_TIMEOUT_MS,
-        `Process did not close after SIGKILL: ${command.join(" ")}`,
-      )
-    }
-  }
-
-  export function spawnHost(cmd: string[], opts: Options = {}): Child {
+  export async function spawnHost(cmd: string[], opts: Options = {}): Promise<Child> {
     if (cmd.length === 0) throw new Error("Command is required")
-    if (opts.exactEnv && opts.env !== undefined) {
-      throw new Error("Process.spawnHost accepts exactly one of env or exactEnv")
-    }
-    opts.abort?.throwIfAborted()
     const command = normalizeExecutableArgv(cmd)
-
-    const proc = launch(command[0], command.slice(1), {
+    const exactEnvironment = environment(opts, "Process.spawnHost")
+    const facade = opts.ownership === "process" ? NodeProcess : supervisedHostProcessFacade("process:spawn-host")
+    const handle = await facade.spawn({
+      command: { executable: command[0]!, args: command.slice(1) },
       cwd: opts.cwd,
-      env: opts.exactEnv ?? (opts.env === null ? {} : opts.env ? { ...process.env, ...opts.env } : undefined),
-      stdio: [opts.stdin ?? "ignore", opts.stdout ?? "ignore", opts.stderr ?? "ignore"],
-      detached: process.platform !== "win32" && opts.ownership !== "process",
+      env: exactEnvironment,
+      stdin: opts.stdin === "pipe" ? "pipe" : "ignore",
+      stdout: opts.stdout,
+      stderr: opts.stderr,
+      signal: opts.abort,
+      ownership: opts.ownership === "process" ? "owned_process" : "owned_tree",
     })
-
-    let termination: Promise<void> | undefined
-    let rejectExited: ((error: Error) => void) | undefined
-    let closed = false
-    let exited: Promise<number>
-
-    const terminate = () => {
-      if (termination) return termination
-      if (closed) return Promise.resolve()
-      if (!proc.pid) throw new Error(`Process tree termination requires a process id: ${command.join(" ")}`)
-      const cleanup =
-        opts.ownership === "process"
-          ? terminateOwnedProcess(proc, exited, command)
-          : process.platform === "win32"
-            ? ProcessSupervisor.terminateProcessTree(proc.pid, `process tree ${command.join(" ")}`)
-            : ProcessSupervisor.terminateProcessGroup(proc.pid, `process group ${command.join(" ")}`)
-      termination = cleanup
-        .then(() =>
-          ProcessSupervisor.awaitWithTimeout(
-            exited,
-            PROCESS_CLOSE_TIMEOUT_MS,
-            `Process did not close after tree cleanup: ${command.join(" ")}`,
-          ),
-        )
-        .then(() => undefined)
-        .catch((error) => {
-          const failure = error instanceof Error ? error : new Error(String(error))
-          if (!closed) rejectExited?.(failure)
-          throw failure
-        })
-      return termination
-    }
-
-    const abort = () => {
-      try {
-        void terminate().catch(() => undefined)
-      } catch {
-        // The owning caller observes termination failures through explicit terminate() calls.
-      }
-    }
-
-    exited = new Promise<number>((resolve, reject) => {
-      rejectExited = (error) => {
-        done()
-        reject(error)
-      }
-      const done = () => {
-        opts.abort?.removeEventListener("abort", abort)
-      }
-
-      proc.once("close", (code, signal) => {
-        closed = true
-        done()
-        resolve(code ?? (signal ? 1 : 0))
-      })
-
-      proc.once("error", (error) => {
-        done()
-        reject(error)
-      })
-    })
-
-    if (opts.abort) {
-      opts.abort.addEventListener("abort", abort, { once: true })
-      if (opts.abort.aborted) abort()
-    }
-
-    const child = proc as Child
-    child.exited = exited
-    child.terminate = terminate
-    return child
+    return child(handle)
   }
 
-  type CommandSpawner = (opts: ProcessSupervisor.CommandSpawnOptions) => Promise<ProcessSupervisor.Handle>
-
-  async function runWithSpawner(cmd: string[], opts: RunOptions, spawnCommand: CommandSpawner): Promise<Result> {
-    if (opts.exactEnv && opts.env !== undefined) {
-      throw new Error("Process.run accepts exactly one of env or exactEnv")
-    }
-    if (opts.input && opts.stdin && opts.stdin !== "pipe") {
-      throw new Error("Process.run binary input requires piped stdin")
-    }
+  function runRequest(cmd: string[], opts: RunOptions): ProcessRunRequest {
     const command = normalizeExecutableArgv(cmd)
-    const handle = await spawnCommand({
-      executable: command[0]!,
-      args: command.slice(1),
+    return {
+      command: { executable: command[0]!, args: command.slice(1) },
       cwd: opts.cwd,
-      env: opts.exactEnv ?? (opts.env === null ? {} : opts.env ? { ...process.env, ...opts.env } : undefined),
-      stdin: opts.input || opts.stdin === "pipe" ? "pipe" : "ignore",
-    })
+      env: environment(opts, "Process.run"),
+      stdin: opts.stdin === "pipe" ? "pipe" : "ignore",
+      signal: opts.abort,
+      input: opts.input,
+      nothrow: opts.nothrow,
+      inactivityTimeoutMs: opts.inactivityTimeoutMs,
+      inactivityTimeoutMessage: opts.inactivityTimeoutMessage,
+      timeoutMs: opts.timeoutMs,
+      maxOutputBytes: opts.maxOutputBytes,
+      onSpawned: opts.onSpawned,
+      ownership: "owned_tree",
+    }
+  }
+
+  async function runWithFacade(
+    cmd: string[],
+    opts: RunOptions,
+    facade: ReturnType<typeof supervisedHostProcessFacade>,
+  ): Promise<Result> {
     try {
-      opts.onSpawned?.()
-    } catch (observerError) {
-      try {
-        await ProcessSupervisor.disposeAndWaitForExit(handle, "Process.run spawn observer failure")
-      } catch (cleanupError) {
-        throw ProcessSupervisor.combineFailures("Process.run spawn observation and disposal failed", [
-          observerError,
-          cleanupError,
-        ])
+      const result = await facade.run(runRequest(cmd, opts))
+      return {
+        code: result.receipt.exitCode ?? (result.receipt.signal ? 1 : 0),
+        stdout: Buffer.from(result.stdout),
+        stderr: Buffer.from(result.stderr),
       }
-      throw observerError
-    }
-
-    if (!handle.stdout || !handle.stderr) throw new Error("Process output not available")
-
-    let terminationPromise: Promise<number> | undefined
-    let resolveTerminationRequested: ((promise: Promise<number>) => void) | undefined
-    const terminationRequested = new Promise<Promise<number>>((resolve) => {
-      resolveTerminationRequested = resolve
-    })
-    const requestTermination = () => {
-      if (!terminationPromise) {
-        terminationPromise = ProcessSupervisor.terminateAndWaitForExit(handle, `Process.run ${command.join(" ")}`)
-        terminationPromise.catch(() => undefined)
-        resolveTerminationRequested?.(terminationPromise)
-      }
-      return terminationPromise
-    }
-    const abort = () => {
-      requestTermination()
-    }
-
-    if (opts.abort) {
-      opts.abort.addEventListener("abort", abort, { once: true })
-      if (opts.abort.aborted) abort()
-    }
-
-    let code: number
-    let stdout: Buffer
-    let stderr: Buffer
-    let inactivityTimedOut = false
-    let wallClockTimedOut = false
-    let outputLimitExceeded = false
-    let inactivityTimer: ReturnType<typeof setTimeout> | undefined
-    const inactivityTimeoutMessage =
-      opts.inactivityTimeoutMessage ??
-      `Process.run ${command.join(" ")} timed out after ${opts.inactivityTimeoutMs}ms without stdout/stderr activity`
-    const clearInactivityTimer = () => {
-      if (inactivityTimer) clearTimeout(inactivityTimer)
-      inactivityTimer = undefined
-    }
-    const refreshInactivityTimer = () => {
-      if (opts.inactivityTimeoutMs === undefined || inactivityTimedOut) return
-      clearInactivityTimer()
-      inactivityTimer = setTimeout(() => {
-        inactivityTimedOut = true
-        clearInactivityTimer()
-        requestTermination()
-      }, opts.inactivityTimeoutMs)
-      inactivityTimer.unref?.()
-    }
-    const onProcessActivity = () => refreshInactivityTimer()
-    let outputBytes = 0
-    const acceptBytes = (bytes: number) => {
-      const retained = opts.maxOutputBytes === undefined ? bytes : Math.max(0, Math.min(bytes, opts.maxOutputBytes - outputBytes))
-      outputBytes += bytes
-      if (opts.maxOutputBytes !== undefined && outputBytes > opts.maxOutputBytes && !outputLimitExceeded) {
-        outputLimitExceeded = true
-        requestTermination()
-      }
-      return retained
-    }
-    const stdoutBuffered = collectOutput(handle.stdout, onProcessActivity, acceptBytes)
-    const stderrBuffered = collectOutput(handle.stderr, onProcessActivity, acceptBytes)
-    let inputFailure: unknown
-    const inputWritten = opts.input
-      ? (handle.stdin
-          ? writeInput(handle.stdin, opts.input, onProcessActivity)
-          : Promise.reject(new Error("Process input was requested but the supervisor did not expose stdin"))
-        ).catch((error) => {
-          inputFailure = error
-          requestTermination()
-        })
-      : Promise.resolve()
-    if (opts.inactivityTimeoutMs !== undefined) {
-      refreshInactivityTimer()
-    }
-    const wallClockTimer =
-      opts.timeoutMs === undefined
-        ? undefined
-        : setTimeout(() => {
-            wallClockTimedOut = true
-            requestTermination()
-          }, opts.timeoutMs)
-    const processCompleted = Promise.all([handle.exited, stdoutBuffered, stderrBuffered, inputWritten])
-    const terminationCompleted = terminationRequested.then(async (cleanup) => {
-      const terminatedCode = await cleanup
-      const [terminatedStdout, terminatedStderr] = await Promise.all([stdoutBuffered, stderrBuffered])
-      return [terminatedCode, terminatedStdout, terminatedStderr] as const
-    })
-    let primaryError: unknown
-    try {
-      ;[code, stdout, stderr] = await Promise.race([processCompleted, terminationCompleted])
-      if (terminationPromise) code = await terminationPromise
-      if (inputFailure) throw inputFailure
     } catch (error) {
-      primaryError = error
-      throw error
-    } finally {
-      if (wallClockTimer) clearTimeout(wallClockTimer)
-      clearInactivityTimer()
-      opts.abort?.removeEventListener("abort", abort)
-      try {
-        await ProcessSupervisor.disposeAndWaitForExit(handle, "Process.run")
-      } catch (error) {
-        if (primaryError) {
-          throw ProcessSupervisor.combineFailures("Process.run execution and disposal failed", [primaryError, error])
-        }
-        throw error
+      if (error instanceof SharedProcessRunFailedError) {
+        throw new RunFailedError(cmd, error.receipt.exitCode ?? 1, Buffer.from(error.stdout), Buffer.from(error.stderr))
       }
+      if (error instanceof ProcessInactivityTimeoutError) {
+        const resultStderr = Buffer.from(error.result.stderr)
+        const separator = resultStderr.length > 0 && !resultStderr.toString().endsWith("\n") ? "\n" : ""
+        const stderr = Buffer.concat([resultStderr, Buffer.from(`${separator}${error.message}`)])
+        const code =
+          error.result.receipt.exitCode && error.result.receipt.exitCode !== 0 ? error.result.receipt.exitCode : 1
+        if (opts.nothrow) return { code, stdout: Buffer.from(error.result.stdout), stderr }
+        throw new RunFailedError(cmd, code, Buffer.from(error.result.stdout), stderr)
+      }
+      if (error instanceof ProcessDeadlineExceededError) {
+        throw new Error(`Process timed out after ${opts.timeoutMs}ms: ${cmd.join(" ")}`, { cause: error })
+      }
+      if (error instanceof ProcessOutputLimitError) {
+        throw new Error(`Process output exceeded ${opts.maxOutputBytes} bytes: ${cmd.join(" ")}`, { cause: error })
+      }
+      throw error
     }
-    if (inactivityTimedOut) {
-      code = code === 0 ? 1 : code
-      const separator = stderr.length > 0 && !stderr.toString().endsWith("\n") ? "\n" : ""
-      stderr = Buffer.concat([stderr, Buffer.from(`${separator}${inactivityTimeoutMessage}`)])
-    }
-    if (wallClockTimedOut) throw new Error(`Process timed out after ${opts.timeoutMs}ms: ${command.join(" ")}`)
-    if (outputLimitExceeded) throw new Error(`Process output exceeded ${opts.maxOutputBytes} bytes: ${command.join(" ")}`)
-    const out = {
-      code,
-      stdout,
-      stderr,
-    }
-    if (out.code === 0 || opts.nothrow) return out
-    throw new RunFailedError(command, out.code, out.stdout, out.stderr)
   }
 
   export function runHost(cmd: string[], opts: RunOptions = {}): Promise<Result> {
-    return runWithSpawner(cmd, opts, ProcessSupervisor.spawnHostCommand)
+    return runWithFacade(cmd, opts, supervisedHostProcessFacade(opts.owner?.trim() || "process:run-host"))
   }
 
   export function runTask(
-    identity: ProcessSupervisor.TaskProcessIdentity,
+    identity: Readonly<{ taskID: string; cwd: string }>,
     cmd: string[],
     opts: Omit<RunOptions, "cwd"> = {},
   ): Promise<Result> {
-    return runWithSpawner(cmd, { ...opts, cwd: identity.cwd }, (spawnOptions) => {
-      const { cwd: _cwd, ...taskOptions } = spawnOptions
-      return ProcessSupervisor.spawnTaskCommand(identity, taskOptions)
-    })
+    return runWithFacade(
+      cmd,
+      { ...opts, cwd: identity.cwd },
+      supervisedTaskProcessFacade(identity, opts.owner?.trim() || "process:run-task"),
+    )
   }
 }

@@ -13,42 +13,73 @@ import { WORK_DEFAULT_CAPABILITY_ASSIGNMENT } from "@/work/harness"
 import { NamedError } from "@opencorvus-ai/util/error"
 import { createHarnessProjection } from "@/capability/harness-projection"
 import { capabilityRef } from "@/capability/ref"
+import { BrowserMCPBuiltin } from "@/mcp/browser/builtin"
 import { ComputerMCPBuiltin } from "@/mcp/computer/builtin"
 import { computerRuntimeScopeIdentity } from "@/mcp/computer/runtime-scope"
 import { createInstanceState } from "@/project/instance-state"
 import { ComputerHostRuntime } from "@/mcp/computer/host-runtime"
-import { DEFAULT_INTERACTIVE_MCP_SERVER_REFS } from "@/conversation/default-capability"
 
 const CHAT_AGENT_ID = "chat" as const
 export const CONVERSATION_AGENT_IDS = ["chat", "work"] as const
 export type ConversationAgentID = (typeof CONVERSATION_AGENT_IDS)[number]
 const DEFAULT_ASSIGNMENTS: Readonly<Record<ConversationAgentID, Readonly<AssignmentSeed>>> = Object.freeze({
-  chat: Object.freeze({ skill_refs: [], mcp_server_refs: DEFAULT_INTERACTIVE_MCP_SERVER_REFS }),
+  chat: Object.freeze({ skill_refs: [], mcp_server_refs: [] }),
   work: WORK_DEFAULT_CAPABILITY_ASSIGNMENT,
 })
 
-const computerConnectionOwners = createInstanceState(
+const conversationConnectionOwners = createInstanceState(
   () => new Map<string, MCP.ScopedConnectionOwner>(),
   async (owners) => {
     const results = await Promise.allSettled([...owners.values()].map((owner) => owner.close()))
     const failures = results.flatMap((result) => (result.status === "rejected" ? [result.reason] : []))
     if (failures.length === 1) throw failures[0]
-    if (failures.length > 1) throw new AggregateError(failures, "Conversation Computer MCP cleanup failed")
+    if (failures.length > 1) throw new AggregateError(failures, "Conversation builtin MCP cleanup failed")
   },
-  "conversation-computer-mcp",
+  "conversation-runtime-mcp",
 )
 
 function computerConnectionOwnerID(sessionID: string): string {
   return computerRuntimeScopeIdentity({ ownerKind: "conversation", sessionID })
 }
 
-function computerConnectionOwner(sessionID: string): MCP.ScopedConnectionOwner {
-  const owners = computerConnectionOwners()
-  const current = owners.get(sessionID)
+/** A Conversation's Browser runtime. Unlike Computer's, this identity names
+ *  only the connection owner: Browser keeps its sessions inside the process
+ *  the owner holds, so closing the owner is the whole cleanup. */
+function browserConnectionOwnerID(sessionID: string): string {
+  const trimmed = sessionID.trim()
+  if (!trimmed) throw new Error("Browser runtime scope requires a non-empty Session identity")
+  return `conversation:${trimmed}:browser`
+}
+
+/** The builtin runtimes a Conversation can own. */
+type ConversationRuntimeKind = "computer" | "browser"
+
+/** The one spelling of a Conversation runtime owner's key. */
+function conversationConnectionOwnerKey(kind: ConversationRuntimeKind, sessionID: string): string {
+  return `${kind}:${sessionID}`
+}
+
+function conversationConnectionOwner(key: string, ownerID: string): MCP.ScopedConnectionOwner {
+  const owners = conversationConnectionOwners()
+  const current = owners.get(key)
   if (current) return current
-  const owner = MCP.createScopedConnectionOwner(computerConnectionOwnerID(sessionID))
-  owners.set(sessionID, owner)
+  const owner = MCP.createScopedConnectionOwner(ownerID)
+  owners.set(key, owner)
   return owner
+}
+
+function computerConnectionOwner(sessionID: string): MCP.ScopedConnectionOwner {
+  return conversationConnectionOwner(
+    conversationConnectionOwnerKey("computer", sessionID),
+    computerConnectionOwnerID(sessionID),
+  )
+}
+
+function browserConnectionOwner(sessionID: string): MCP.ScopedConnectionOwner {
+  return conversationConnectionOwner(
+    conversationConnectionOwnerKey("browser", sessionID),
+    browserConnectionOwnerID(sessionID),
+  )
 }
 
 type AssignmentSeed = {
@@ -320,55 +351,134 @@ export namespace ConversationCapability {
     return computerConnectionOwnerID(sessionID)
   }
 
+  /** The Conversation that owns this Browser runtime. Naming it is what gives
+   *  Conversation deletion an exact cleanup target. */
+  export function browserRuntimeMcpOwnerIdentity(sessionID: string) {
+    return browserConnectionOwnerID(sessionID)
+  }
+
+  async function settleRuntimeMcpOwners(sessionID: string, kinds: readonly ConversationRuntimeKind[]): Promise<void> {
+    const owners = conversationConnectionOwners()
+    const results = await Promise.allSettled(
+      kinds.flatMap((kind) => {
+        const key = conversationConnectionOwnerKey(kind, sessionID)
+        const owner = owners.get(key)
+        if (!owner) return []
+        owners.delete(key)
+        return [owner.close()]
+      }),
+    )
+    const failures = results.flatMap((result) => (result.status === "rejected" ? [result.reason] : []))
+    if (failures.length === 1) throw failures[0]
+    if (failures.length > 1) throw new AggregateError(failures, "Conversation builtin MCP disconnect failed")
+  }
+
+  /** Human takeover replaces only the Computer adapter generation. The
+   *  Conversation's Browser process is an independent owner and keeps its
+   *  pages, cookies and storage until the Conversation itself is disposed. */
   export async function disconnectRuntimeMcp(sessionID: string): Promise<void> {
-    const owner = computerConnectionOwners().get(sessionID)
-    if (!owner) return
-    computerConnectionOwners().delete(sessionID)
-    await owner.close()
+    await settleRuntimeMcpOwners(sessionID, ["computer"])
   }
 
   export async function disposeRuntimeMcp(sessionID: string): Promise<void> {
     const runtimeScope = computerConnectionOwnerID(sessionID)
     const results = await Promise.allSettled([
-      disconnectRuntimeMcp(sessionID),
+      settleRuntimeMcpOwners(sessionID, ["computer", "browser"]),
       ComputerHostRuntime.destroy(runtimeScope),
     ])
     const failures = results.flatMap((result) => (result.status === "rejected" ? [result.reason] : []))
     if (failures.length === 1) throw failures[0]
-    if (failures.length > 1) throw new AggregateError(failures, "Conversation Computer cleanup failed")
+    if (failures.length > 1) throw new AggregateError(failures, "Conversation builtin runtime cleanup failed")
   }
 
   export async function runtimeMcpTools(config: Config.Info, agentID: ConversationAgentID, sessionID: string) {
     const selected = assignment(config, agentID)
-    const ordinaryServerRefs = selected.mcp_server_refs.filter((ref) => ref !== ComputerMCPBuiltin.ServerName)
+    const ownedServerRefs = new Set<string>([ComputerMCPBuiltin.ServerName, BrowserMCPBuiltin.ServerName])
+    const ordinaryServerRefs = selected.mcp_server_refs.filter((ref) => !ownedServerRefs.has(ref))
     const ordinaryTools = await MCP.toolsForServers(config, ordinaryServerRefs)
-    if (!selected.mcp_server_refs.includes(ComputerMCPBuiltin.ServerName)) return ordinaryTools
 
-    const owner = computerConnectionOwner(sessionID)
-    const hostAdapter = ComputerHostRuntime.adapter({
-      runtimeScope: owner.id,
+    const configuredBrowser = config.mcp?.[BrowserMCPBuiltin.ServerName]
+    const browserDeclaration = configuredBrowser
+      ? BrowserMCPBuiltin.configuredDeclaration(configuredBrowser)
+      : undefined
+    const browserTools =
+      selected.mcp_server_refs.includes(BrowserMCPBuiltin.ServerName) && browserDeclaration?.status === "enabled"
+        ? await ownedBuiltinTools({
+            config,
+            sessionID,
+            serverName: BrowserMCPBuiltin.ServerName,
+            connectionOwner: () => browserConnectionOwner(sessionID),
+            bindRuntime: (declaration) => declaration,
+          })
+        : {}
+    const owned = { ...ordinaryTools, ...browserTools }
+
+    if (!selected.mcp_server_refs.includes(ComputerMCPBuiltin.ServerName)) return owned
+
+    // The configured declaration is the provider; this only binds the runtime
+    // this session executes it under. Synthesizing the entry here made the
+    // projection a second authority that could disagree with what
+    // configuration, assignment and status all reported.
+    const configured = config.mcp?.[ComputerMCPBuiltin.ServerName]
+    if (!configured) return owned
+    const declaration = ComputerMCPBuiltin.configuredDeclaration(configured)
+    if (declaration.status === "disabled") return owned
+
+    const computerTools = await ownedBuiltinTools({
+      config,
+      sessionID,
+      serverName: ComputerMCPBuiltin.ServerName,
+      toolNames: ComputerMCPBuiltin.ImportableToolNames,
+      connectionOwner: () => computerConnectionOwner(sessionID),
+      bindRuntime: (entry, owner) =>
+        ComputerMCPBuiltin.withRuntimeScope(
+          entry as typeof declaration.config,
+          owner.id,
+          ComputerHostRuntime.adapter({ runtimeScope: owner.id }),
+        ),
     })
-    const mcp = ComputerMCPBuiltin.localConfig({
-      hostAdapter,
-    })
+    return { ...owned, ...computerTools }
+  }
+
+  /**
+   * Project one builtin's tools under the Conversation's own connection owner.
+   *
+   * The owner is the exact cleanup target the audit found Browser lacking:
+   * whatever runtime these tools reach lives inside the connection this owner
+   * holds, so closing the owner when the Conversation goes away takes the
+   * runtime with it instead of leaving it behind for the Project.
+   */
+  async function ownedBuiltinTools(input: {
+    config: Config.Info
+    sessionID: string
+    serverName: string
+    /** A builtin whose projected subset is part of its own contract names it
+     *  here. Omitting it projects whatever the server exposes, which is what
+     *  the shared-connection path does — an owned projection must not narrow
+     *  the model's tool surface just by moving onto an owner. */
+    toolNames?: readonly string[]
+    connectionOwner: () => MCP.ScopedConnectionOwner
+    bindRuntime: (declaration: Config.Mcp, owner: MCP.ScopedConnectionOwner) => Config.Mcp
+  }) {
+    const configured = input.config.mcp?.[input.serverName]
+    if (!configured || !("type" in configured) || configured.enabled === false) return {}
+    const owner = input.connectionOwner()
+    const mcp = input.bindRuntime(configured, owner)
+    const scope = {
+      key: input.serverName,
+      mcp,
+      cwd: Instance.directory,
+      processAuthority: { kind: "host", cwd: Instance.directory } as const,
+      globalTimeout: input.config.experimental?.mcp_timeout,
+      connectionOwner: owner,
+      connectionIdentity: owner.id,
+    }
+    if (!input.toolNames) return MCP.scopedToolsForServer(scope)
     const entries = await Promise.all(
-      ComputerMCPBuiltin.ImportableToolNames.map(
-        async (toolName) =>
-          [
-            `${ComputerMCPBuiltin.ServerName}_${toolName}`,
-            await MCP.scopedTool({
-              key: ComputerMCPBuiltin.ServerName,
-              mcp,
-              toolName,
-              cwd: Instance.directory,
-              processAuthority: { kind: "host", cwd: Instance.directory },
-              globalTimeout: config.experimental?.mcp_timeout,
-              connectionOwner: owner,
-              connectionIdentity: computerConnectionOwnerID(sessionID),
-            }),
-          ] as const,
+      input.toolNames.map(
+        async (toolName) => [`${input.serverName}_${toolName}`, await MCP.scopedTool({ ...scope, toolName })] as const,
       ),
     )
-    return { ...ordinaryTools, ...Object.fromEntries(entries) }
+    return Object.fromEntries(entries)
   }
 }

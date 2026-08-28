@@ -67,7 +67,6 @@ import { compileBoard, boardTag } from "@/workbench/board"
 import { compileBrief } from "@/workbench/brief"
 import {
   EngineArtifactTable,
-  EngineControlActivationLeaseTable,
   EngineChannelBindingTable,
   EngineGoalTable,
   EngineTaskTable,
@@ -120,7 +119,6 @@ import { orchestratorState } from "@/engine/orchestrator-state"
 import { writeTaskChecks } from "@/engine/checks"
 import {
   deliverTaskRootIngress,
-  discardTaskRootIngress,
   dispatchPersistedTaskLoop,
   dispatchTaskLoop,
   persistTaskRootMessageIngressInTransaction,
@@ -138,14 +136,16 @@ import {
   type ApplyGoalGraphMutationInput,
 } from "@/engine/persist"
 import { EngineInteraction } from "@/engine/interaction"
-import { terminalTask, updateTask } from "@/engine/state"
-import { findTaskCompletionDecisionForTerminalTime } from "@/engine/completion-decision"
+import { terminalTask } from "@/engine/state"
+import { prepareTaskAttachmentAppends, type TaskInputFileRef } from "@/engine/task-file-reference"
+import { requireTaskInCurrentProject } from "@/engine/task-project-read"
+import { findTaskCompletionDecisionForTerminalTime } from "@/engine/completion-decision-read"
 import {
   requireCurrentTerminalLifecycleReference,
-  sameTerminalLifecycleReference,
   TerminalLifecycleReferenceSchema,
   type TerminalLifecycleReference,
 } from "@/engine/terminal-lifecycle-reference"
+import { sameTerminalLifecycleReference } from "@/engine/terminal-lifecycle-reference-schema"
 import {
   deriveTaskStatus,
   isTaskActive,
@@ -166,7 +166,8 @@ import {
   TaskRootMessageKind,
   TaskRootMessageProvenance,
   type SchedulerDeliveryReference as SchedulerDeliveryReferenceValue,
-} from "./task-root-message"
+} from "@/protocol/task-root-message-schema"
+import { deliverTaskRootMessageToOrchestratorSession, getTaskRootMessage } from "./task-root-message"
 import {
   assertNoCallerSuppliedTaskCreatorMetadata,
   assertTaskCreatorExpertSquadAuthority,
@@ -207,7 +208,6 @@ import {
   listProjectTasks,
   listTaskRows,
   searchProjectTasks,
-  listOwnedPromptSessionsForTask,
   listCurrentGoals,
   listInteractions,
   listSnapshots,
@@ -225,7 +225,21 @@ import {
   projectTaskRowsInTransaction,
   taskDeletedInTransaction,
 } from "@/engine/store"
+import { listOwnedPromptSessionsForTask } from "@/engine/runtime"
+import {
+  acquireControlLeaseInTransaction,
+  assertControlLeaseInTransaction,
+  releaseControlLeaseOnErrorPath,
+  renewControlLeaseInTransaction,
+} from "@/engine/control-lease"
 import { Identifier } from "@/id/id"
+import {
+  acceptanceGapEvidenceLocators,
+  MissionAcceptanceGapSchema,
+  renderMissionAcceptanceRepairMessage,
+  type MissionAcceptanceGap,
+} from "@/mission/acceptance-gap"
+import { appendTaskAcceptanceLedgerRevisionInTransaction } from "@/mission/acceptance-ledger"
 import { AttachmentStore } from "@/storage/attachment-store"
 import { SessionWake } from "@/session/wake"
 import { withTaskCreationOwnerLock } from "@/engine/task-creation-owner"
@@ -324,8 +338,9 @@ const MissionTaskResumeReceiptSchema = z
     message_id: z.string().min(1),
     wake_id: z.string().min(1),
     ingress_artifact_id: z.string().min(1),
+    acceptance_ledger_revision_artifact_id: z.string().min(1),
     prior_terminal_lifecycle_reference: TerminalLifecycleReferenceSchema,
-    evidence_locators: z.array(ArtifactReadLocatorSchema).min(1).max(64),
+    acceptance_gap: MissionAcceptanceGapSchema,
     time_accepted: z.number().int().positive(),
   })
   .strict()
@@ -400,29 +415,6 @@ function assertNoCallerSuppliedChildTaskLineage(input: z.infer<typeof CreateTask
       "metadata.parent_task_id is retired server metadata. Task creation callers must keep repair and continuation work inside the existing Task.",
     source: input.source,
   })
-}
-
-function assertTaskProjectIsConcrete(task: TaskRow) {
-  if (task.project_id !== "global") return
-  throw new TaskGlobalProjectBindingError({
-    message: `Task ${task.id} is bound to project global. Task execution requires a concrete Git project; recreate the task after initializing the directory as a Git repository.`,
-    taskID: task.id,
-    projectID: task.project_id,
-  })
-}
-
-function assertTaskBelongsToCurrentProject(task: TaskRow) {
-  assertTaskProjectIsConcrete(task)
-  const current = Instance.current()
-  if (!current) return
-  if (task.project_id === current.project.id) return
-  throw new NotFoundError({ message: `Task not found: ${task.id}` })
-}
-
-function requireTaskInCurrentProject(taskID: string): TaskRow {
-  const task = requireTask(taskID)
-  assertTaskBelongsToCurrentProject(task)
-  return task
 }
 
 async function assertTaskRootSessionLineageInCurrentProject(task: TaskRow): Promise<Session.Info> {
@@ -775,34 +767,18 @@ async function acquireCancellationConvergence(taskID: string) {
       if (lifecycle.status !== "cancelling" || !lifecycle.requestEventID) {
         throw new Error(`Task ${taskID} has no durable cancellation request to converge`)
       }
-      const current = db
-        .select()
-        .from(EngineControlActivationLeaseTable)
-        .where(
-          and(
-            eq(EngineControlActivationLeaseTable.target, "lifecycle"),
-            eq(EngineControlActivationLeaseTable.target_id, lifecycle.requestEventID),
-          ),
-        )
-        .orderBy(
-          sql`${EngineControlActivationLeaseTable.time_activated} DESC`,
-          sql`${EngineControlActivationLeaseTable.id} DESC`,
-        )
-        .get()
-      if (current && current.expires_at > now) return false
       const activationID = Identifier.ascending("activity")
       const ownerOccurrenceID = `task-cancellation:${process.pid}:${randomUUID()}`
-      db.insert(EngineControlActivationLeaseTable)
-        .values({
-          id: activationID,
-          target: "lifecycle",
-          target_id: lifecycle.requestEventID,
-          owner_occurrence_id: ownerOccurrenceID,
-          time_activated: now,
-          expires_at: now + CANCELLATION_CONVERGENCE_LEASE_MS,
-        })
-        .run()
-      return { activationID, ownerOccurrenceID, requestEventID: lifecycle.requestEventID }
+      const acquired = acquireControlLeaseInTransaction(db, {
+        target: "lifecycle",
+        targetID: lifecycle.requestEventID,
+        ownerOccurrenceID,
+        now,
+        leaseMilliseconds: CANCELLATION_CONVERGENCE_LEASE_MS,
+        leaseID: activationID,
+      })
+      if (!acquired.acquired) return false
+      return { activationID: acquired.lease.id, ownerOccurrenceID, requestEventID: lifecycle.requestEventID }
     })
     if (claimed === undefined) return undefined
     if (claimed) {
@@ -814,26 +790,18 @@ async function acquireCancellationConvergence(taskID: string) {
         try {
           if (injectedFailure === "exception")
             throw new Error("injected Task cancellation convergence heartbeat failure")
-          const renewed = Database.immediateTransaction((db) =>
-            Boolean(
-              db
-                .update(EngineControlActivationLeaseTable)
-                .set({ expires_at: Date.now() + CANCELLATION_CONVERGENCE_LEASE_MS })
-                .where(
-                  and(
-                    eq(EngineControlActivationLeaseTable.id, claimed.activationID),
-                    eq(
-                      EngineControlActivationLeaseTable.owner_occurrence_id,
-                      injectedFailure === "zero-row" ? `${claimed.ownerOccurrenceID}:stale` : claimed.ownerOccurrenceID,
-                    ),
-                    eq(EngineControlActivationLeaseTable.target_id, claimed.requestEventID),
-                  ),
-                )
-                .returning({ id: EngineControlActivationLeaseTable.id })
-                .get(),
-            ),
+          const renewedAt = Date.now()
+          Database.immediateTransaction((db) =>
+            renewControlLeaseInTransaction(db, {
+              target: "lifecycle",
+              targetID: claimed.requestEventID,
+              leaseID: claimed.activationID,
+              ownerOccurrenceID:
+                injectedFailure === "zero-row" ? `${claimed.ownerOccurrenceID}:stale` : claimed.ownerOccurrenceID,
+              now: renewedAt,
+              expiresAt: renewedAt + CANCELLATION_CONVERGENCE_LEASE_MS,
+            }),
           )
-          if (!renewed) throw new Error(`Task ${taskID} cancellation activation ${claimed.activationID} is fenced`)
         } catch (error) {
           leaseFence.abort(error)
         }
@@ -852,38 +820,55 @@ async function acquireCancellationConvergence(taskID: string) {
         },
         assertActive() {
           leaseFence.signal.throwIfAborted()
-          const lease = Database.use((db) =>
-            db
-              .select({
-                ownerID: EngineControlActivationLeaseTable.owner_occurrence_id,
-                leaseExpiresAt: EngineControlActivationLeaseTable.expires_at,
-              })
-              .from(EngineControlActivationLeaseTable)
-              .where(eq(EngineControlActivationLeaseTable.id, claimed.activationID))
-              .get(),
-          )
-          if (lease?.ownerID !== claimed.ownerOccurrenceID || (lease.leaseExpiresAt ?? 0) <= Date.now()) {
-            const error = new Error(`Task ${taskID} cancellation convergence owner lease is no longer authoritative`)
+          try {
+            Database.use((db) =>
+              assertControlLeaseInTransaction(db, {
+                target: "lifecycle",
+                targetID: claimed.requestEventID,
+                leaseID: claimed.activationID,
+                ownerOccurrenceID: claimed.ownerOccurrenceID,
+                now: Date.now(),
+              }),
+            )
+          } catch (cause) {
+            const error = new Error(`Task ${taskID} cancellation convergence owner lease is no longer authoritative`, {
+              cause,
+            })
             leaseFence.abort(error)
             throw error
           }
         },
         assertInTransaction(db: Database.TxOrDb) {
           leaseFence.signal.throwIfAborted()
-          const lease = db
-            .select({
-              ownerID: EngineControlActivationLeaseTable.owner_occurrence_id,
-              leaseExpiresAt: EngineControlActivationLeaseTable.expires_at,
-            })
-            .from(EngineControlActivationLeaseTable)
-            .where(eq(EngineControlActivationLeaseTable.id, claimed.activationID))
-            .get()
-          if (lease?.ownerID !== claimed.ownerOccurrenceID || (lease.leaseExpiresAt ?? 0) <= Date.now()) {
-            throw new Error(`Task ${taskID} cancellation convergence owner lease is no longer authoritative`)
-          }
+          assertControlLeaseInTransaction(db, {
+            target: "lifecycle",
+            targetID: claimed.requestEventID,
+            leaseID: claimed.activationID,
+            ownerOccurrenceID: claimed.ownerOccurrenceID,
+            now: Date.now(),
+          })
         },
         close() {
           clearInterval(heartbeat)
+          // This convergence is settled, so its owner is done. Holding the
+          // activation until expiry is what makes the next cancellation wait
+          // out the lease in a hundred-millisecond poll instead of taking it.
+          // close() runs in a finally, so a handback failure must not replace
+          // the path's own error — but one that silently did not take returns
+          // the next cancellation to exactly that poll, so say so.
+          const handback = releaseControlLeaseOnErrorPath({
+            target: "lifecycle",
+            targetID: claimed.requestEventID,
+            leaseID: claimed.activationID,
+            ownerOccurrenceID: claimed.ownerOccurrenceID,
+            now: Date.now(),
+          })
+          if (!handback.released && !handback.error) {
+            log.warn("task cancellation convergence lease was already gone at close", {
+              taskID,
+              requestEventID: claimed.requestEventID,
+            })
+          }
         },
       }
     }
@@ -1041,8 +1026,16 @@ async function continueTaskMessage(
   source: string,
   attachments: AttachmentStore.Reference[] = [],
   metadata?: Record<string, unknown>,
+  acceptanceEffects?: (db: Database.TxOrDb) => void,
 ) {
-  const wake = await appendAndWakeTaskOperatorMessage({ taskID, text, attachments, source, metadata })
+  const wake = await appendAndWakeTaskOperatorMessage({
+    taskID,
+    text,
+    attachments,
+    source,
+    metadata,
+    acceptanceEffects,
+  })
 
   return {
     mode: "scheduler" as const,
@@ -1059,6 +1052,10 @@ async function appendAndWakeTaskOperatorMessage(input: {
   attachments?: AttachmentStore.Reference[]
   source: string
   metadata?: Record<string, unknown>
+  /** Caller-prepared durable facts that belong to this message's acceptance —
+   *  model overlay, attachment references, reopen epoch — committed in the
+   *  same transaction as the Message and its ingress. */
+  acceptanceEffects?: (db: Database.TxOrDb) => void
 }): Promise<{
   task: TaskRow
   userMessage: ProjectedTaskMessage<Message.User>
@@ -1081,6 +1078,7 @@ async function appendAndWakeTaskOperatorMessage(input: {
   const persisted = await Session.persistMessageWithCommit(bundle, () => {
     Database.use((db) => {
       const now = bundle.info.time.created
+      input.acceptanceEffects?.(db)
       appendTaskRewindClearedInTransaction(task.id, now, "service.message")
       EngineProtocol.emitInTransaction(
         Event.TaskMessageRecorded,
@@ -1357,18 +1355,6 @@ export class PlannerFailureError extends Error {
     this.name = "PlannerFailureError"
   }
 }
-
-type FileRef = {
-  sha: string
-  url: string
-  mime: string
-  size: number
-  filename?: string
-  intent?: string
-  source?: string
-}
-type TaskInputFileRef = FileRef & { intent: "task_input"; source: "user-upload" }
-type FileRefColumn = "attachments" | "system_artifacts"
 
 type ApiAttachmentInput = NonNullable<z.infer<typeof CreateTaskInput>["attachments"]>[number]
 async function materializeApiAttachments(input: {
@@ -1750,7 +1736,7 @@ export namespace EngineService {
     // "see the intent bundle §3" point at nothing — the
     // executor either misses the reference or hallucinates a body. See
     // `src/intent/bundle.ts` header for the full rationale.
-    let session!: Awaited<ReturnType<typeof Session.create>>
+    let session!: Session.Info
     let initialIngressID: string | undefined
     try {
       const preparedArtifactSources =
@@ -1790,8 +1776,11 @@ export namespace EngineService {
           active: input.promptProfile ?? taskConfigSnapshot.prompt_profile.active,
         },
       })
-      session = await Session.create({
+      // Prepared only: the root Session inserts inside persistTask's
+      // transaction, together with the Task aggregate it belongs to.
+      session = Session.prepareRootNext({
         kind: "root",
+        directory: Instance.directory,
         title,
         permission: overrides.length > 0 ? overrides : undefined,
         metadata: {
@@ -1804,7 +1793,7 @@ export namespace EngineService {
       // only after every imported resource snapshot is durable.
       initialIngressID = persistTask({
         taskID,
-        sessionID: session.id,
+        rootSession: session,
         now,
         title,
         request: input.request,
@@ -1869,123 +1858,6 @@ export namespace EngineService {
     return viewTask(task, { directory: item?.directory })
   }
 
-  /**
-   * Validate that a FileRef points at a real on-disk attachment, then merge
-   * it into one of the task's two file-reference columns. The merge strategy
-   * (`append-dedup-by-sha` vs `replace-by-intent`) is supplied by the caller
-   * — keeping both behind one validator guarantees the on-disk-existence
-   * rule stays a single source of truth even as new merge modes are added.
-   *
-   * Throws on a dangling URL: registered-but-missing files would cause
-   * downstream multimodal loading to ENOENT-crash on every retry. Failing
-   * at the registration boundary keeps the bad state out of the database.
-   */
-  async function mergeTaskFileRef(
-    taskID: string,
-    column: FileRefColumn,
-    file: FileRef,
-    merge: (prev: FileRef[], canonical: FileRef) => { next: FileRef[]; reason: string } | null,
-  ): Promise<FileRef[]> {
-    const task = requireTaskInCurrentProject(taskID)
-    const located = AttachmentStore.nameFromUrl(file.url)
-    if (!located) {
-      throw new Error(`${column}: file.url is not a valid /attachment/<projectID>/<name> reference: ${file.url}`)
-    }
-    if (located.projectID !== task.project_id) {
-      throw new Error(
-        `${column}: file.url belongs to project ${located.projectID}, expected task project ${task.project_id}: ${file.url}`,
-      )
-    }
-    let reference: AttachmentStore.Reference
-    try {
-      reference = await AttachmentStore.readReference(located.projectID, located.name)
-    } catch (error) {
-      const message = error instanceof Error ? error.message : String(error)
-      throw new Error(
-        `${column}: cannot read canonical attachment metadata for project ${located.projectID}/${located.name}: ${message}`,
-      )
-    }
-    const metadataMismatches = [
-      file.sha !== reference.sha ? "sha" : "",
-      file.mime !== reference.mime ? "mime" : "",
-      file.size !== reference.size ? "size" : "",
-    ].filter(Boolean)
-    if (metadataMismatches.length > 0) {
-      throw new Error(
-        `${column}: file metadata does not match canonical AttachmentStore metadata (${metadataMismatches.join(", ")}): ${file.url}`,
-      )
-    }
-    const canonical: FileRef = {
-      sha: reference.sha,
-      url: reference.url,
-      mime: reference.mime,
-      size: reference.size,
-      ...(reference.filename ? { filename: reference.filename } : {}),
-      ...(file.intent ? { intent: file.intent } : {}),
-      ...(file.source ? { source: file.source } : {}),
-    }
-    const prev = Array.isArray((task as any)[column]) ? ((task as any)[column] as FileRef[]) : []
-    const result = merge(prev, canonical)
-    if (!result) return prev
-    await updateTask(task, { [column]: result.next } as any, result.reason)
-    return result.next
-  }
-
-  /** Register a neutral user upload. Domain adapters assign semantics through explicit contracts. */
-  export async function appendTaskAttachment(taskID: string, attachment: TaskInputFileRef) {
-    if (attachment.intent !== "task_input" || attachment.source !== "user-upload") {
-      throw new Error("appendTaskAttachment accepts only neutral task_input/user-upload references")
-    }
-    return mergeTaskFileRef(taskID, "attachments", attachment, (prev, canonical) => {
-      if (prev.some((a) => a?.sha === canonical.sha)) return null
-      return {
-        next: [...prev, canonical],
-        reason: `attachments appended: ${canonical.filename ?? canonical.sha}`,
-      }
-    })
-  }
-
-  /**
-   * Register a SYSTEM-GENERATED artifact on a task. Use for evidence the
-   * orchestrator/agents produced on the user's behalf, including materialized
-   * design resources and rendered evidence. Consumers read these only through
-   * their explicit artifact contracts. Idempotent on sha collision.
-   */
-  export async function appendTaskSystemArtifact(taskID: string, artifact: FileRef) {
-    return mergeTaskFileRef(taskID, "system_artifacts", artifact, (prev, canonical) => {
-      if (prev.some((a) => a?.sha === canonical.sha)) return null
-      return {
-        next: [...prev, canonical],
-        reason: `system_artifacts appended: ${canonical.filename ?? canonical.sha}`,
-      }
-    })
-  }
-
-  /**
-   * Replace all system artifacts carrying a given `intent` with a single new
-   * artifact. Use when each rerun should supersede the previous output for
-   * that semantic slot (e.g. acceptance rendered_output: keeping every prior
-   * rendered.png would balloon the task and confuse the visual diff).
-   */
-  export async function replaceTaskSystemArtifactByIntent(
-    taskID: string,
-    intent: string,
-    artifact: FileRef,
-  ): Promise<FileRef[]> {
-    if (artifact.intent !== intent) {
-      throw new Error(
-        `replaceTaskSystemArtifactByIntent: intent mismatch — slot=${intent} artifact.intent=${artifact.intent}`,
-      )
-    }
-    return mergeTaskFileRef(taskID, "system_artifacts", artifact, (prev, canonical) => {
-      const purged = prev.filter((a) => a?.intent !== intent)
-      return {
-        next: [...purged, canonical],
-        reason: `system_artifacts replaced [intent=${intent}]: ${canonical.filename ?? canonical.sha}`,
-      }
-    })
-  }
-
   export async function getProgress(taskID: string) {
     // Do NOT call syncTask here — it triggers synchronous evaluation inside the GET request,
     // which blocks for minutes and causes request timeouts. The poll loop drives state advancement.
@@ -2020,8 +1892,15 @@ export namespace EngineService {
     })
   }
 
-  export async function getBoard(taskID: string, _input?: { sync?: boolean }) {
-    // Read-only — poll loop handles state advancement asynchronously.
+  /**
+   * The Board projection of a Task.
+   *
+   * Read-only by contract: the poll loop advances state, and reading never
+   * does. This used to accept a `sync` option that every caller could pass
+   * and no implementation ever read — a public promise of freshness-on-demand
+   * that did nothing. The parameter is gone rather than silently ignored.
+   */
+  export async function getBoard(taskID: string) {
     requireTaskInCurrentProject(taskID)
     return compileBoard({ taskID })
   }
@@ -2073,8 +1952,8 @@ export namespace EngineService {
     })
   }
 
-  export async function getBoardTag(taskID: string, _input?: { sync?: boolean }) {
-    // Read-only — poll loop handles state advancement asynchronously.
+  /** The Board projection's ETag. Read-only for the same reason getBoard is. */
+  export async function getBoardTag(taskID: string) {
     requireTaskInCurrentProject(taskID)
     return boardTag({ taskID })
   }
@@ -2305,7 +2184,8 @@ export namespace EngineService {
       executionCancellationOrigin,
     )
     try {
-      discardTaskRootIngress(taskID)
+      // Ingress facts are immutable: explicit Task deletion cascades them, and
+      // ordinary cancellation never rewrites or deletes accepted history.
       if (!isTaskTerminal(task)) {
         if (!options?.origin) {
           throw new Error(`deleteTask requires cancellation origin while task ${taskID} is non-terminal.`)
@@ -2377,7 +2257,8 @@ export namespace EngineService {
         executionCancellationOrigin,
       )
       try {
-        discardTaskRootIngress(taskID)
+        // Ingress facts are immutable: explicit Task deletion cascades them, and
+        // ordinary cancellation never rewrites or deletes accepted history.
         if (!isTaskTerminal(task)) {
           if (!options?.origin) {
             throw new Error(`setTaskArchived requires cancellation origin while task ${taskID} is non-terminal.`)
@@ -3288,6 +3169,8 @@ export namespace EngineService {
     input: {
       importer: CrossTaskArtifactImporter
       toolPartID: string
+      expectedAcceptanceLedgerArtifactID: string | null
+      acceptanceGap: MissionAcceptanceGap
     },
   ) {
     const receipt = existing.receipt
@@ -3295,7 +3178,8 @@ export namespace EngineService {
       receipt.mission_id !== input.importer.missionID ||
       receipt.mission_session_id !== input.importer.sessionID ||
       receipt.panel_message_id !== input.importer.messageID ||
-      receipt.tool_part_id !== input.toolPartID
+      receipt.tool_part_id !== input.toolPartID ||
+      JSON.stringify(receipt.acceptance_gap) !== JSON.stringify(MissionAcceptanceGapSchema.parse(input.acceptanceGap))
     ) {
       throw new Error(`Mission acceptance-resume tool identity conflicts with receipt ${existing.artifactID}.`)
     }
@@ -3335,13 +3219,21 @@ export namespace EngineService {
     taskID: string
     importer: CrossTaskArtifactImporter
     reviewedTerminalLifecycleReference: TerminalLifecycleReference
-    text: string
-    evidenceLocators: ArtifactReadLocator[]
+    expectedAcceptanceLedgerArtifactID: string | null
+    acceptanceGap: MissionAcceptanceGap
     completeEvidenceLocators: ArtifactReadLocator[]
     toolPartID: string
   }) {
     const reviewed = TerminalLifecycleReferenceSchema.parse(input.reviewedTerminalLifecycleReference)
-    const evidenceLocators = z.array(ArtifactReadLocatorSchema).min(1).max(64).parse(input.evidenceLocators)
+    const acceptanceGap = MissionAcceptanceGapSchema.parse(input.acceptanceGap)
+    if (!sameTerminalLifecycleReference(acceptanceGap.reviewed_terminal_lifecycle_reference, reviewed)) {
+      throw new Error(`Mission acceptance gap ${acceptanceGap.gap_id} does not bind the reviewed terminal occurrence.`)
+    }
+    const evidenceLocators = z
+      .array(ArtifactReadLocatorSchema)
+      .min(1)
+      .max(64)
+      .parse(acceptanceGapEvidenceLocators(acceptanceGap))
     const task = requireTaskInCurrentProject(input.taskID)
     await assertTaskRootSessionLineageInCurrentProject(task)
     requireMissionTaskLineageAuthority({
@@ -3351,7 +3243,7 @@ export namespace EngineService {
     })
     const existing = missionTaskResumeReceipt(input.taskID, input.importer.toolCallID)
     if (existing) {
-      assertMissionTaskResumeReceiptIdentity(existing, input)
+      assertMissionTaskResumeReceiptIdentity(existing, { ...input, acceptanceGap })
       return {
         kind: "resumed" as const,
         receipt_artifact_id: existing.artifactID,
@@ -3382,7 +3274,16 @@ export namespace EngineService {
     }
 
     const now = Date.now()
-    const bundle = await buildTaskSessionMessageBundle(task, input.text, "mission.acceptance_resume", "mission")
+    const acceptanceLedgerArtifactID = Identifier.deterministic(
+      "artifact",
+      `mission-acceptance-ledger-v1\0${input.taskID}\0${input.importer.toolCallID}`,
+    )
+    const bundle = await buildTaskSessionMessageBundle(
+      task,
+      renderMissionAcceptanceRepairMessage(acceptanceGap),
+      "mission.acceptance_resume",
+      "mission",
+    )
     const event = OrchestratorEventSchema.parse({
       missionAcceptanceResume: {
         missionID: input.importer.missionID,
@@ -3392,11 +3293,11 @@ export namespace EngineService {
         toolCallID: input.importer.toolCallID,
         toolPartID: input.toolPartID,
         reviewedTerminalLifecycleReference: reviewed,
-        evidenceLocators,
+        acceptanceLedgerRevisionArtifactID: acceptanceLedgerArtifactID,
+        acceptanceGap,
       },
     })
     let durableReceipt: { artifactID: string; receipt: z.infer<typeof MissionTaskResumeReceiptSchema> } | undefined
-    let wakeStatus: DispatchTaskLoopResult | "accepted" | undefined
     try {
       await SessionPromptState.runTaskRootIngress({
         rootSessionID: task.session_id!,
@@ -3404,9 +3305,8 @@ export namespace EngineService {
         run: async () => {
           const committed = missionTaskResumeReceipt(input.taskID, input.importer.toolCallID)
           if (committed) {
-            assertMissionTaskResumeReceiptIdentity(committed, input)
+            assertMissionTaskResumeReceiptIdentity(committed, { ...input, acceptanceGap })
             durableReceipt = committed
-            wakeStatus = "accepted"
             return
           }
           const persisted = await Session.persistMessageWithCommit(bundle, () => {
@@ -3422,6 +3322,16 @@ export namespace EngineService {
               if (isTaskCancelled(current)) throw missionTaskResumeLifecycleConflict({ task: current, reviewed })
               const openedTask = openTaskForContinuationInTransaction({ db, taskID: input.taskID, now })
               appendTaskRewindClearedInTransaction(input.taskID, now, "mission.acceptance_resume")
+              const executionEpoch = taskLifecycleProjectionInTransaction(db, input.taskID).epoch
+              appendTaskAcceptanceLedgerRevisionInTransaction({
+                db,
+                taskID: input.taskID,
+                artifactID: acceptanceLedgerArtifactID,
+                executionEpoch,
+                expectedPreviousArtifactID: input.expectedAcceptanceLedgerArtifactID,
+                gap: acceptanceGap,
+                now,
+              })
               const ingressArtifactID = persistMissionAcceptanceResumeIngressInTransaction(db, {
                 task: openedTask,
                 event,
@@ -3448,8 +3358,9 @@ export namespace EngineService {
                 message_id: bundle.info.id,
                 wake_id: bundle.info.id,
                 ingress_artifact_id: ingressArtifactID,
+                acceptance_ledger_revision_artifact_id: acceptanceLedgerArtifactID,
                 prior_terminal_lifecycle_reference: reviewed,
-                evidence_locators: evidenceLocators,
+                acceptance_gap: acceptanceGap,
                 time_accepted: now,
               })
               const artifactID = insertEngineArtifact(db, {
@@ -3465,7 +3376,6 @@ export namespace EngineService {
           if (persisted.info.role !== "user" || persisted.info.author !== "mission") {
             throw new Error(`Mission acceptance-resume message ${persisted.info.id} has invalid persisted participant.`)
           }
-          wakeStatus = await dispatchPersistedTaskLoop(input.taskID, durableReceipt?.receipt.ingress_artifact_id)
         },
       })
     } catch (error) {
@@ -3474,7 +3384,14 @@ export namespace EngineService {
       throw error
     }
     if (!durableReceipt) throw new Error(`Mission acceptance-resume transaction committed without a receipt.`)
-    if (!wakeStatus) throw new Error(`Mission acceptance-resume committed without dispatch acceptance.`)
+    // The acceptance owner serializes the Message, epoch, ledger, ingress and
+    // receipt transaction. Reconciliation must begin only after that physical
+    // owner is released: activating the persisted ingress while still holding
+    // the same root owner would queue behind itself and deadlock.
+    const wakeStatus: DispatchTaskLoopResult = await dispatchPersistedTaskLoop(
+      input.taskID,
+      durableReceipt.receipt.ingress_artifact_id,
+    )
     return {
       kind: "resumed" as const,
       receipt_artifact_id: durableReceipt.artifactID,
@@ -3518,14 +3435,16 @@ export namespace EngineService {
    * epoch bump for a message that is then refused.
    */
   function reopenTerminalTaskForOperatorMessage(taskID: string): void {
-    Database.transaction((db) => {
-      const persisted = db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, taskID)).get()
-      if (!persisted) throw new NotFoundError({ message: `Task not found: ${taskID}` })
-      if (taskDeletedInTransaction(db, taskID)) return
-      const current = projectTaskRowInTransaction(db, persisted)
-      if (!isTaskTerminal(current)) return
-      openTaskForContinuationInTransaction({ db, taskID, now: Date.now() })
-    })
+    Database.transaction((db) => reopenTerminalTaskForOperatorMessageInTransaction(db, taskID))
+  }
+
+  function reopenTerminalTaskForOperatorMessageInTransaction(db: Database.TxOrDb, taskID: string): void {
+    const persisted = db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, taskID)).get()
+    if (!persisted) throw new NotFoundError({ message: `Task not found: ${taskID}` })
+    if (taskDeletedInTransaction(db, taskID)) return
+    const current = projectTaskRowInTransaction(db, persisted)
+    if (!isTaskTerminal(current)) return
+    openTaskForContinuationInTransaction({ db, taskID, now: Date.now() })
   }
 
   /** The reopen rule is the whole contract of this change and is asserted
@@ -3565,6 +3484,7 @@ export namespace EngineService {
         return typeof model === "string" ? [[agentID, model] as const] : []
       }),
     )
+    let preparedOverlay: Awaited<ReturnType<typeof Session.prepareConfigOverlayMergeInProject>> | undefined
     if (input.model) {
       const agentModelClearPatch = Object.fromEntries(
         Object.keys(previousAgentModelOverlay).map((agentID) => [agentID, { model: null }]),
@@ -3576,24 +3496,25 @@ export namespace EngineService {
       const previousConfig = await EffectiveConfig.effective({ sessionID: rootSession.id })
       const modelPreviewConfig = Config.mergeOverlay(previousConfig, modelPatch)
       await validateConfigModelReferences(modelPreviewConfig, "taskMessage.configOverlay")
-      await Session.mergeConfigOverlay({
+      preparedOverlay = await Session.prepareConfigOverlayMergeInProject({
         sessionID: rootSession.id,
-        patch: modelPatch,
+        projectID: Instance.project.id,
+        patch: Config.Overlay.parse(modelPatch),
       })
     }
-    try {
-      // Validate once and attach the neutral task_input reference to both the
-      // visible message and task record. Domain adapters assign semantics only
-      // through their explicit contracts.
-      for (const attachment of attachmentRefs) {
-        await appendTaskAttachment(taskID, attachment)
-      }
-
-      reopenTerminalTaskForOperatorMessage(taskID)
-
-      // Natural-language user messages are recorded once as visible task-root
-      // user messages, which are the authoritative follow-up conversation.
-      const note = await continueTaskMessage(taskID, input.text, input.source, attachmentRefs, input.metadata)
+    const preparedAttachments =
+      attachmentRefs.length > 0 ? await prepareTaskAttachmentAppends(taskID, attachmentRefs) : undefined
+    {
+      // Every durable fact of this operator message — model overlay,
+      // attachment references, reopen epoch, the Message itself and its
+      // ingress — commits in ONE transaction. A process death leaves either
+      // the whole accepted occurrence or nothing; the next Turn can never
+      // observe overlay/attachment/reopen state for which no Message exists.
+      const note = await continueTaskMessage(taskID, input.text, input.source, attachmentRefs, input.metadata, (db) => {
+        preparedOverlay?.commitInTransaction(db)
+        preparedAttachments?.commitInTransaction(db)
+        reopenTerminalTaskForOperatorMessageInTransaction(db, taskID)
+      })
       const ingressID = Database.use(
         (db) =>
           db
@@ -3618,20 +3539,6 @@ export namespace EngineService {
         ...(ingressID ? { ingress_id: ingressID } : {}),
         user_message: note.user_message,
       }
-    } catch (error) {
-      if (input.model) {
-        const agentModelRestorePatch = Object.fromEntries(
-          Object.entries(previousAgentModelOverlay).map(([agentID, model]) => [agentID, { model }]),
-        )
-        await Session.mergeConfigOverlay({
-          sessionID: rootSession.id,
-          patch: {
-            model: previousModelOverlay,
-            ...(Object.keys(agentModelRestorePatch).length > 0 ? { agent: agentModelRestorePatch } : {}),
-          },
-        })
-      }
-      throw error
     }
   }
 

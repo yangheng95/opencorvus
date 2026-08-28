@@ -153,8 +153,9 @@ describe("Mission durable activity", () => {
           productPillar: "code",
           heldExpertSquadIDs: ["base"],
         })
-        const taskSession = await Session.create({
+        const taskSession = Session.prepareRootNext({
           kind: "root",
+          directory: Instance.directory,
           parentID: mission.id,
           title: "Benchmark trial",
         })
@@ -162,7 +163,7 @@ describe("Mission durable activity", () => {
         const timeCreated = Date.now()
         persistTask({
           taskID,
-          sessionID: taskSession.id,
+          rootSession: taskSession,
           now: timeCreated,
           title: "Benchmark trial",
           request: "Run one exact benchmark trial",

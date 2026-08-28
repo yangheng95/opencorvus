@@ -162,3 +162,7 @@ packages/opencorvus/script/cache-probe/out/
 # Auto-added by OpenCorvus
 # the whole baseline / acceptance commit aborts. Same trap for the other
 .opencorvus/
+
+# A generation journal only exists while an SDK generation is in flight or
+# needs recovery; a settled one removes itself.
+.generation-journal/

@@ -1,12 +1,12 @@
 ---
-title: LSP 状态
-description: OpenCorvus 0.0.38 已完全禁用语言服务器协议运行时。
+title: LSP 已删除
+description: OpenCorvus 0.0.55 beta 已删除语言服务器协议子系统。
 ---
 
-OpenCorvus 0.0.38 已完全禁用语言服务器协议（LSP）运行时，不会发现、下载、启动或保留任何语言服务器进程。
+OpenCorvus 0.0.55 beta 已删除语言服务器协议（LSP）子系统，不会发现、下载、启动或保留任何语言服务器进程。
 
-Agent 不再拥有 `lsp` 工具。读取、写入、编辑、应用补丁、打开项目和附加文件行范围都不会初始化 LSP 运行时或请求诊断。实验环境变量和 `opencorvus.jsonc` 中的 LSP 配置也不能重新启用它。
+Agent 不再拥有 `lsp` 工具。读取、写入、编辑、应用补丁、打开项目和附加文件行范围都不会初始化 LSP 运行时或请求诊断。严格的 `opencorvus.jsonc` schema 会拒绝已删除的 `lsp` 键，也不再存在 LSP 环境开关。
 
-旧的 `/lsp` 与 `/find/symbol` HTTP 接口仅为兼容入口，固定返回空数组，不会启动服务器。
+公开的 `/lsp` 与 `/find/symbol` HTTP 接口及内部 client/server 子系统都已删除：此前没有生产运行时负责它们。这是破坏性删除，不是禁用的兼容面。
 
 [Formatter](../formatters/) 仍可用，并在文件写入后独立运行。

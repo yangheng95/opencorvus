@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "components":[
+    {"id":"mission","layer":"coordination","role":"partitions independently acceptable fixed-Squad Tasks","source_claims":["CLM-002"]},
+    {"id":"task","layer":"business-lifecycle","role":"sole lifecycle and acceptance owner","source_claims":["CLM-001","CLM-003"]},
+    {"id":"delivery-slice","layer":"contract","role":"versioned objective, acceptance and owned paths; no runtime state","source_claims":["CLM-001"]},
+    {"id":"orchestrator","layer":"control","role":"selects dependency-ready projected Agents through visible tool calls","source_claims":["CLM-002","CLM-005"]},
+    {"id":"capability-projection","layer":"capability","role":"freezes package revision, Agent, Tool, Skill and MCP grants","source_claims":["CLM-004","CLM-010"]},
+    {"id":"session-dispatch","layer":"physical-execution","role":"streaming execution occurrence and lineage","source_claims":["CLM-004","CLM-007"]},
+    {"id":"artifact-catalog","layer":"evidence","role":"immutable discovery, read, selection and resource provenance","source_claims":["CLM-006"]},
+    {"id":"completion-decision","layer":"acceptance","role":"exact terminal acceptance fact","source_claims":["CLM-003"]},
+    {"id":"reconciler","layer":"recovery","role":"reduces immutable facts, policies, leases and time","source_claims":["CLM-007"]},
+    {"id":"expert-squad","layer":"organization","role":"bounded package of Agent identities and harness grants","source_claims":["CLM-008","CLM-009"]},
+    {"id":"evolution-lab","layer":"feedback","role":"authorized candidate/evaluation/review/promotion chain","source_claims":["CLM-013","CLM-014"]}
+  ],
+  "flows":[
+    {"from":"mission","to":"task","kind":"control","label":"create fixed-profile delivery closure"},
+    {"from":"delivery-slice","to":"task","kind":"contract","label":"acceptance subjects"},
+    {"from":"task","to":"orchestrator","kind":"control","label":"accepted ingress"},
+    {"from":"capability-projection","to":"orchestrator","kind":"control","label":"legal dispatch inventory"},
+    {"from":"orchestrator","to":"session-dispatch","kind":"control","label":"streamed Agent dispatch"},
+    {"from":"session-dispatch","to":"artifact-catalog","kind":"data","label":"typed outputs and resources"},
+    {"from":"artifact-catalog","to":"completion-decision","kind":"evidence","label":"exact accepted deliverables"},
+    {"from":"completion-decision","to":"mission","kind":"feedback","label":"terminal child evidence"},
+    {"from":"reconciler","to":"task","kind":"feedback","label":"restart and lost-wake recovery"},
+    {"from":"artifact-catalog","to":"evolution-lab","kind":"feedback","label":"opportunity and evaluation evidence"},
+    {"from":"evolution-lab","to":"capability-projection","kind":"feedback","label":"explicit accepted new package revision","unknown":"effectiveness not established"}
+  ],
+  "squad_relationships":{"embedded_default":["base","advanced","research-studio","squad-sdk"],"composition_rule":"Mission composes fixed-profile Tasks; active package projections do not inherit or merge.","thirty_plus":"future taxonomy, unknown identities"}
+}

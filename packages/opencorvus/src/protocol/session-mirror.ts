@@ -2,13 +2,9 @@ import { Bus } from "@/bus"
 import { PermissionAuthority } from "@/permission/authority"
 import { ProtocolStore } from "@/protocol/store"
 import { Question } from "@/question"
-import { Message, Session, SessionStatus } from "@/session"
+import { Message, Session } from "@/session"
 import { sessionRole, taskIDForSession } from "@/engine/task-session-lineage"
-import {
-  enrichMessageEventProperties,
-  originSourceFromMessageExtra,
-  overlayMeta,
-} from "@/orchestrator/protocol/message-bridge"
+import { originSourceFromMessageExtra, overlayMeta } from "@/orchestrator/protocol/message-bridge"
 import { Database, eq } from "@/storage/db"
 import { SessionTable } from "@/session/session.sql"
 import { timelineInteractionResponseOrderKey, timelineMessageOrderKey, timelineOrderKey } from "@/timeline/order"
@@ -181,23 +177,6 @@ export function mapSessionBusEvent(
   if (!sessionID) return
   if (sessionID !== input.sessionID) return
 
-  if (event.type === SessionStatus.Event.Status.type) {
-    const payload = stampSessionEventPayload(sessionID, props)
-    const status = props.status
-    const statusType =
-      status && typeof status === "object" && typeof (status as Record<string, unknown>).type === "string"
-        ? String((status as Record<string, unknown>).type)
-        : "unknown"
-    const reason =
-      status && typeof status === "object" && typeof (status as Record<string, unknown>).reason === "string"
-        ? String((status as Record<string, unknown>).reason)
-        : ""
-    return {
-      type: "agent.execution.lifecycle",
-      summary: reason ? `execution lifecycle: ${statusType} (${reason})` : `execution lifecycle: ${statusType}`,
-      payload,
-    }
-  }
   if (event.type === Session.Event.Diff.type) {
     const payload = stampSessionEventPayload(sessionID, props)
     return {
@@ -211,64 +190,6 @@ export function mapSessionBusEvent(
     return {
       type: "config.changed",
       summary: "Session config changed",
-      payload,
-    }
-  }
-  if (event.type === Message.Event.Updated.type) {
-    const payload = enrichMessageEventProperties(event.type, props, sessionID)
-    const info = payload.info as Record<string, unknown>
-    return {
-      type: "message.updated",
-      summary: typeof info.role === "string" ? `Message updated: ${info.role}` : "Message updated",
-      payload,
-    }
-  }
-  if (event.type === Message.Event.Moved.type) {
-    const payload = enrichMessageEventProperties(event.type, props, sessionID)
-    return {
-      type: "message.moved",
-      summary: "Message moved",
-      payload,
-    }
-  }
-  if (event.type === Message.Event.PartUpdated.type) {
-    const payload = enrichMessageEventProperties(event.type, props, sessionID)
-    const part = payload.part as Record<string, unknown>
-    return {
-      type: "message.part.updated",
-      summary: typeof part.type === "string" ? `Part updated: ${part.type}` : "Part updated",
-      payload,
-    }
-  }
-  if (event.type === Message.Event.PartDelta.type) {
-    const payload = enrichMessageEventProperties(event.type, props, sessionID)
-    return {
-      type: "message.part.delta",
-      summary: typeof props.field === "string" ? `Delta: ${props.field}` : "Message delta",
-      payload,
-    }
-  }
-  if (event.type === Message.Event.Removed.type) {
-    const payload = stampSessionEventPayload(sessionID, props)
-    return {
-      type: "message.removed",
-      summary: "Message removed",
-      payload,
-    }
-  }
-  if (event.type === Message.Event.PartRemoved.type) {
-    const payload = stampSessionEventPayload(sessionID, props)
-    return {
-      type: "message.part.removed",
-      summary: "Part removed",
-      payload,
-    }
-  }
-  if (event.type === Session.Event.Error.type) {
-    const payload = stampSessionEventPayload(sessionID, props)
-    return {
-      type: "session.error",
-      summary: "Session error",
       payload,
     }
   }

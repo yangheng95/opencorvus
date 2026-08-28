@@ -218,7 +218,6 @@ export function clearProjectScopeData(): void {
     specPreview: "",
     taskSequence: 0,
     boardEtag: "",
-    boardSyncPending: false,
     boardQueued: false,
     snapshotVersion: "",
     tasksError: "",
@@ -552,7 +551,6 @@ function clearSelectedWorkItem(): void {
     taskSwitching: false,
     taskSequence: 0,
     boardEtag: "",
-    boardSyncPending: false,
     boardQueued: false,
     snapshotVersion: "",
   })
@@ -784,10 +782,9 @@ export async function applyDirectory(next: string, options: ApplyDirectoryOption
   clearProjectScopeData()
 
   if (options.persist !== false) {
-    // Persist through the active host settings source.
-    const persistFn =
-      typeof globalThis.window === "object" ? (globalThis.window as any).persistOverlaySettings : undefined
-    if (typeof persistFn === "function") await persistFn()
+    // Persist the cleared workspace memory through the settings owner before
+    // the switch continues, so a reload cannot restore the previous directory.
+    await saveSettings()
   }
 
   if (!ownsWorkspaceSelection(selectionEpoch)) return false
@@ -862,20 +859,77 @@ export async function browseDirectory(): Promise<void> {
   }
 }
 
+// ── revealPath ──
+
+/** What actually happened when a path was surfaced to the user. */
+export type PathRevealOutcome = "opened" | "copied"
+
+/**
+ * Hand a filesystem path to the user through whatever this host can really do.
+ *
+ * The desktop host opens the OS file manager. A browser cannot — no page may
+ * drive Explorer or Finder — so there the same intent becomes "put the path on
+ * the clipboard", which the browser host does support.
+ *
+ * This is a capability-selected *action*, not a fallback inside an action:
+ * `nativeOpen` keeps throwing on hosts without `open-path` (see the note in
+ * utils/native.ts), and `open-path` stays false for the browser. The choice
+ * lives here, at the point where the UI decides what to offer, the same way
+ * `manualWorkspacePathEntry` and `projectEditors: []` already work.
+ */
+export async function revealPath(target: string): Promise<PathRevealOutcome> {
+  const path = typeof target === "string" ? target.trim() : ""
+  if (!path) throw new Error("revealPath requires a non-empty path")
+  if (getHostTransport().capabilities.nativeCommands["open-path"]) {
+    const opened = await nativeOpen(path)
+    if (!opened) throw new Error("native open returned false")
+    return "opened"
+  }
+  await getHostTransport().native({ kind: "clipboard.writeText", text: path })
+  return "copied"
+}
+
+/** The i18n key naming the path action this host offers. */
+export function pathRevealLabelKey(): "cwd.open" | "cwd.copy_path" {
+  return getHostTransport().capabilities.nativeCommands["open-path"] ? "cwd.open" : "cwd.copy_path"
+}
+
+/** The i18n key confirming a completed reveal, or "" when none is needed. */
+export function pathRevealNoticeKey(outcome: PathRevealOutcome): "" | "cwd.path_copied" {
+  return outcome === "copied" ? "cwd.path_copied" : ""
+}
+
+/** The i18n key describing a failed reveal on this host. */
+export function pathRevealFailureKey(): "cwd.open_failed" | "cwd.copy_failed" {
+  return getHostTransport().capabilities.nativeCommands["open-path"] ? "cwd.open_failed" : "cwd.copy_failed"
+}
+
+/**
+ * Ready-to-show wording for a failed reveal, cause included. These keys carry
+ * no `{{error}}` placeholder — they are appended to, the way every other
+ * `cwd.*_failed` message in this module is — so callers must not try to
+ * interpolate one.
+ */
+export function pathRevealFailureText(error: unknown): string {
+  return errorText(pathRevealFailureKey(), error)
+}
+
 // ── openDirectory ──
 
 /**
- * Open the given directory (or the current active directory) with the
- * native OS file explorer.
+ * Surface the given directory (or the current active directory): the OS file
+ * manager on desktop, the clipboard in the browser.
  */
 export async function openDirectory(target?: string): Promise<void> {
   const dir = target ?? activeDirectory()
   if (!dir) return
   try {
-    await nativeOpen(dir)
+    const outcome = await revealPath(dir)
+    const notice = pathRevealNoticeKey(outcome)
+    if (notice) await nativeMessage(t(notice, { path: dir }), { title: t("cwd.title") })
   } catch (e) {
-    AppLog.error("ui", "Failed to open working directory", { error: String(e) })
-    await nativeMessage(errorText("cwd.open_failed", e), {
+    AppLog.error("ui", "Failed to reveal working directory", { error: String(e) })
+    await nativeMessage(pathRevealFailureText(e), {
       title: t("cwd.title"),
       kind: "error",
     })

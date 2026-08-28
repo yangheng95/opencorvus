@@ -9,6 +9,7 @@ import { t } from "../../utils/i18n"
 import { Button } from "../ui/Button"
 import { SearchField } from "../ui/SearchField"
 import { ArtifactFrame } from "./ArtifactFrame"
+import { copyTextReporting } from "../../services/clipboard"
 
 type TerminalPayload = Extract<InteractiveArtifactPayload, { renderer: "terminal@1" }>
 
@@ -65,7 +66,7 @@ export function TerminalArtifact(props: { payload: TerminalPayload }) {
   }
 
   const copy = async () => {
-    await navigator.clipboard.writeText(terminal?.getSelection() || plain)
+    await copyTextReporting(terminal?.getSelection() || plain, "artifact-terminal")
   }
 
   const applyTheme = () => {

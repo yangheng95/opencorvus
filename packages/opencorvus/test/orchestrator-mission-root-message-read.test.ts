@@ -40,11 +40,11 @@ test("Mission acceptance wake reads its exact Mission-authored Task-root message
     directory: project.path,
     fn: async () => {
       const taskID = Identifier.ascending("task")
-      const root = await Session.create({ kind: "root", title: "Mission acceptance root message" })
+      const root = Session.prepareRootNext({ kind: "root", directory: Instance.directory, title: "Mission acceptance root message" })
       const now = Date.now()
       persistTask({
         taskID,
-        sessionID: root.id,
+        rootSession: root,
         now,
         title: "Mission acceptance root message",
         request: "Repair the exact reviewed acceptance gap",
@@ -372,12 +372,12 @@ test("successor runtime replays one atomic Task-root Message move after register
     directory: project.path,
     fn: async () => {
       taskID = Identifier.ascending("task")
-      const root = await Session.create({ kind: "root", title: "Recover atomic Task-root Message move" })
+      const root = Session.prepareRootNext({ kind: "root", directory: Instance.directory, title: "Recover atomic Task-root Message move" })
       rootSessionID = root.id
       const now = Date.now()
       persistTask({
         taskID,
-        sessionID: root.id,
+        rootSession: root,
         now,
         title: "Recover atomic Task-root Message move",
         request: "Resume the one durable moved-message occurrence",

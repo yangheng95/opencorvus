@@ -205,6 +205,7 @@ describe("Task-root fact persistence", () => {
           ownerOccurrenceID: "owner-1",
           now: now + 3,
           leaseMilliseconds: 100,
+          assertControlOwnerInTransaction: () => undefined,
         })
         expect(lease).toMatchObject({ acquired: true })
         if (!lease.acquired) throw new Error("Expected Task-root lease")
@@ -230,6 +231,7 @@ describe("Task-root fact persistence", () => {
             ownerOccurrenceID: "owner-2",
             now: now + 5,
             leaseMilliseconds: 100,
+            assertControlOwnerInTransaction: () => undefined,
           }),
         ).toEqual({
           acquired: false,

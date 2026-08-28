@@ -5,7 +5,11 @@ import { Question } from "@/question"
 import { requireTask } from "@/engine/store"
 import { Instance } from "@/project/instance"
 import { Session } from "@/session"
-import { TaskRootMessageProvenance, getTaskRootMessage, type TaskRootMessageKind } from "@/task-api/task-root-message"
+import { getTaskRootMessage } from "@/task-api/task-root-message"
+import {
+  TaskRootMessageProvenance,
+  type TaskRootMessageKind,
+} from "@/protocol/task-root-message-schema"
 import { requireTaskOrchestratorToolExecutionContext } from "./tool-execution-context"
 
 const log = Log.create({ service: "task-tools" })
@@ -18,7 +22,7 @@ export const ORCHESTRATOR_QUESTION_DESCRIPTION =
 export function authorizedTaskRootMessagesForWake(input: {
   rootMessage?: {
     messageID: string
-    kind: "operator" | "orchestrator" | "mission"
+    kind: TaskRootMessageKind
   }
   missionAcceptanceResume?: {
     messageID: string

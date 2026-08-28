@@ -14,8 +14,8 @@
 /* diff-preview-head replaced by oc-panel__header override below */
 .diff-preview-panel > .oc-panel__header {
   align-items: flex-start;
-  gap: calc(10px * var(--ui-scale));
-  padding: calc(8px * var(--ui-scale)) calc(12px * var(--ui-scale));
+  gap: var(--ui-gap-lg);
+  padding: var(--ui-gap-md) var(--ui-gap-lg);
   border-bottom: var(--oc-border-width) solid var(--border);
   background: var(--surface-strong);
 }
@@ -30,12 +30,12 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: calc(2px * var(--ui-scale));
+  gap: var(--ui-gap-3xs);
 }
 
 /* File-scope context label inside the diff preview header. */
 .diff-preview-scope {
-  font-size: var(--ui-font-control);
+  font-size: var(--ui-font-body);
   color: var(--text-soft);
 }
 
@@ -45,20 +45,20 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   font-family: var(--mono);
-  font-size: var(--ui-font-code);
+  font-size: var(--ui-font-body);
   color: var(--text-strong);
 }
 
 .diff-preview-meta {
   display: inline-flex;
   align-items: center;
-  gap: calc(6px * var(--ui-scale));
+  gap: var(--ui-gap-sm);
   flex-shrink: 0;
 }
 
 .diff-preview-body {
   /* flex:1 and overflow:auto removed — oc-panel__body handles those */
-  padding: calc(6px * var(--ui-scale));
+  padding: var(--ui-gap-sm);
 }
 
 .diff-preview-empty {
@@ -66,10 +66,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: calc(24px * var(--ui-scale));
-  background:
-    linear-gradient(180deg, var(--ui-highlight-tone), transparent 72%),
-    color-mix(in srgb, var(--surface-inset) 92%, transparent);
+  padding: var(--ui-gap-3xl);
+  background: color-mix(in srgb, var(--surface-inset) 92%, transparent);
 }
 
 /* ── File Link (inline code → selected IDE opener) ── */
@@ -254,8 +252,8 @@ code .file-link:focus-visible {
   min-height: calc(36px * var(--ui-scale));
   display: flex;
   align-items: center;
-  gap: calc(6px * var(--ui-scale));
-  padding: 0 calc(6px * var(--ui-scale));
+  gap: var(--ui-gap-sm);
+  padding: 0 var(--ui-gap-sm);
   background: var(--surface-strong);
 }
 
@@ -264,9 +262,9 @@ code .file-link:focus-visible {
   min-width: 0;
   display: inline-flex;
   align-items: center;
-  gap: calc(4px * var(--ui-scale));
+  gap: var(--ui-gap-xs);
   font-family: var(--mono);
-  font-size: calc(12px * var(--ui-scale));
+  font-size: var(--ui-font-body);
   color: var(--text-strong);
 }
 
@@ -286,7 +284,7 @@ code .file-link:focus-visible {
   --oc-button-height: calc(24px * var(--ui-scale));
   --oc-button-padding-x: calc(8px * var(--ui-scale));
 
-  font-size: var(--ui-font-control);
+  font-size: var(--ui-font-body);
 }
 
 .file-editor-header .oc-button[data-ui="file-editor-save"]:not([data-dirty="true"]) {
@@ -318,7 +316,7 @@ code .file-link:focus-visible {
   color: var(--text);
   font-family: var(--mono);
   font-size: var(--ui-font-code);
-  line-height: 1.55;
+  line-height: var(--ui-line-height-normal);
   user-select: text;
   -webkit-user-select: text;
 }
@@ -334,11 +332,11 @@ code .file-link:focus-visible {
 
 .file-editor-code .cm-scroller {
   font-family: var(--mono);
-  line-height: 1.55;
+  line-height: var(--ui-line-height-normal);
 }
 
 .file-editor-code .cm-content {
-  padding: calc(10px * var(--ui-scale)) calc(12px * var(--ui-scale));
+  padding: var(--ui-gap-lg) var(--ui-gap-lg);
   min-height: 100%;
   caret-color: var(--accent);
 }
@@ -365,8 +363,8 @@ code .file-link:focus-visible {
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  gap: calc(8px * var(--ui-scale));
-  padding: calc(20px * var(--ui-scale));
+  gap: var(--ui-gap-md);
+  padding: var(--ui-gap-2xl);
   color: var(--text-muted);
   text-align: center;
   background: var(--surface-inset);
@@ -380,10 +378,10 @@ code .file-link:focus-visible {
 
 .file-editor-error {
   flex: 0 0 auto;
-  padding: calc(6px * var(--ui-scale)) calc(10px * var(--ui-scale));
+  padding: var(--ui-gap-sm) var(--ui-gap-lg);
   background: var(--bad-dim);
   color: var(--bad);
-  font-size: var(--ui-font-control);
+  font-size: var(--ui-font-body);
 }
 
 .pane-resizer {
@@ -592,8 +590,8 @@ body[data-resizing="true"] .pane-resizer::after {
   max-height: var(--ui-panel-header-height);
   display: flex;
   align-items: center;
-  gap: calc(2px * var(--ui-scale));
-  padding: calc(6px * var(--ui-scale)) calc(8px * var(--ui-scale));
+  gap: var(--ui-gap-3xs);
+  padding: var(--ui-gap-sm) var(--ui-gap-md);
   border-bottom: var(--oc-border-width) solid var(--divider-soft);
   background: var(--chat-canvas);
 }
@@ -644,10 +642,10 @@ body[data-resizing="true"] .pane-resizer::after {
   width: max-content;
   min-width: 100%;
   max-width: 100%;
-  padding: 0 calc(var(--right-dock-control-height) + var(--ui-gap-sm)) 0 calc(12px * var(--ui-scale));
+  padding: 0 calc(var(--right-dock-control-height) + var(--ui-gap-sm)) 0 var(--ui-gap-lg);
   border-radius: var(--right-dock-tab-radius);
   background: transparent;
-  font: var(--ui-font-weight-body) var(--ui-font-small) var(--font);
+  font: var(--ui-font-weight-body) var(--ui-font-body) / var(--ui-line-height-tight) var(--font);
 }
 
 .right-dock-tab.oc-tab[data-selected] {
@@ -712,6 +710,19 @@ body[data-resizing="true"] .pane-resizer::after {
   flex: none;
 }
 
+.right-dock-menu.oc-menu {
+  width: max-content;
+  min-width: calc(184px * var(--ui-scale));
+  max-width: min(calc(320px * var(--ui-scale)), calc(100vw - 24px * var(--ui-scale)));
+}
+
+.right-dock-menu-item.oc-menu-item > span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 /* Body: holds the mounted tool views and the canonical empty tool launcher. */
 .right-dock-body {
   flex: 1 1 auto;
@@ -728,7 +739,7 @@ body[data-resizing="true"] .pane-resizer::after {
   min-height: 0;
   align-items: center;
   justify-content: center;
-  padding: calc(24px * var(--ui-scale)) calc(16px * var(--ui-scale));
+  padding: var(--ui-gap-3xl) var(--ui-gap-xl);
   overflow: auto;
 }
 
@@ -738,7 +749,7 @@ body[data-resizing="true"] .pane-resizer::after {
 
 .right-dock-empty__list {
   display: grid;
-  gap: calc(2px * var(--ui-scale));
+  gap: var(--ui-gap-3xs);
   width: max-content;
   max-width: 100%;
 }

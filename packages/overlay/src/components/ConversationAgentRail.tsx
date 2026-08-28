@@ -163,23 +163,6 @@ async function materializeRecordTarget(
 
 async function locateRecord(record: AgentActivityRecord, owner: AgentRailLocateOwner): Promise<void> {
   if (!owner.isCurrent()) return
-  if (isSubagentActivityRecord(record)) {
-    const cardID = subagentProgressCardID(record.sessionID)
-    const found = await requestConversationCardScroll({
-      cardID,
-      block: "center",
-      highlight: true,
-    })
-    if (!owner.isCurrent()) return
-    if (found) return
-    const selector = `[data-card-id="${CSS.escape(cardID)}"]`
-    reportWarning({
-      title: t("agent_rail.card_unavailable_title"),
-      message: t("agent_rail.rendered_card_missing", { id: cardID }),
-      details: describeRecord(record, selector),
-    })
-    return
-  }
   const targetRecord = await materializeRecordTarget(record, owner)
   if (!owner.isCurrent()) return
   if (!targetRecord.renderedCardID) {
@@ -313,7 +296,7 @@ function AgentRailRow(props: {
   )
 }
 
-export function ConversationAgentRail() {
+export function ConversationAgentRail(props: { onOpenSubagentConversation: (sessionID: string) => void }) {
   const records = createMemo(() => conversationAgentRecordsForSource(boardStore.selectedSource))
   const stacks = createMemo(() => buildAdjacentAgentRailStacks(records()))
   const hasVisibleRecords = createMemo(() => records().length >= AGENT_RAIL_MINIMUM_VISIBLE_RECORDS)
@@ -355,6 +338,10 @@ export function ConversationAgentRail() {
         ),
     }
     try {
+      if (isSubagentActivityRecord(record)) {
+        props.onOpenSubagentConversation(record.sessionID)
+        return
+      }
       await locateRecord(record, owner)
     } catch (error) {
       if (!agentRailLocateErrorShouldReport(error, owner.isCurrent())) return

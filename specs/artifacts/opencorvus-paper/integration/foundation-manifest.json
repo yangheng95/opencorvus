@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "record":"specs/records/2026-08/2026-08-26-opencorvus-paper-foundation-evidence.md",
+  "bundles":[
+    {"id":"boundaries","path":"specs/artifacts/opencorvus-paper/integration/material-boundaries.json"},
+    {"id":"claims","path":"specs/artifacts/opencorvus-paper/evidence/claim-evidence-matrix.json","human":"specs/artifacts/opencorvus-paper/evidence/claim-evidence-matrix.md"},
+    {"id":"statuses","path":"specs/artifacts/opencorvus-paper/evidence/implementation-status-matrix.json"},
+    {"id":"squads","path":"specs/artifacts/opencorvus-paper/evidence/expert-squad-inventory.json"},
+    {"id":"evolution","path":"specs/artifacts/opencorvus-paper/evidence/self-evolution-evidence.json"},
+    {"id":"automationbench","path":"specs/artifacts/opencorvus-paper/experiments/automationbench/audit.json","run_ledger":"specs/artifacts/opencorvus-paper/experiments/automationbench/run-ledger.json"},
+    {"id":"seven-role","path":"specs/artifacts/opencorvus-paper/cases/seven-role-data-analysis/event-ledger.json","graph":"specs/artifacts/opencorvus-paper/cases/seven-role-data-analysis/dependency-graph.json"},
+    {"id":"figures","architecture":"specs/artifacts/opencorvus-paper/figures/architecture-inputs.json","experiments":"specs/artifacts/opencorvus-paper/figures/experiment-inputs.json"},
+    {"id":"acceptance","path":"specs/artifacts/opencorvus-paper/integration/acceptance-ledger.json"}
+  ],
+  "citation_classes":{"direct":"current code/current architecture/executed command or detailed immutable record","lead":"marketing/display input without scientific protocol","authority_required":"external dataset, user-approved taxonomy or unavailable runtime"},
+  "out_of_scope":["external literature","final paper","formal 30+ catalog","final editable figures","release/tag/submission"]
+}

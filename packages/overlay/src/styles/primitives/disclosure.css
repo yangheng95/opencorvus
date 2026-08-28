@@ -66,7 +66,7 @@
 .oc-disclosure[data-size="sm"] > .oc-disclosure__trigger {
   min-height: var(--oc-density-chip-height);
   padding: 0 var(--ui-gap-sm);
-  font-size: var(--ui-font-control);
+  font-size: var(--ui-font-body);
 }
 
 .oc-disclosure[data-size="md"] > .oc-disclosure__trigger {
@@ -75,9 +75,15 @@
   font-size: var(--ui-font-body);
 }
 
+/* --hover-wash, not solid --surface-hover: the wash always moves the fill
+ * toward the text colour, so it darkens on light themes wherever it lands.
+ * Solid --surface-hover is rgb(244,246,246) on light while the rail is
+ * rgb(240,242,242), so a trigger on the rail painted *brighter* than its own
+ * background — and since groups render with defaultOpen, the [open] branch
+ * made that permanent rather than momentary. */
 .oc-disclosure__trigger:hover,
 .oc-disclosure[open] > .oc-disclosure__trigger {
-  background: var(--surface-hover);
+  background: var(--hover-wash);
   color: var(--text-strong);
 }
 

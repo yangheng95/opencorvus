@@ -3,6 +3,10 @@ import z from "zod"
 import { Identifier } from "@/id/id"
 import { SelectedWorkflowBindingSchema } from "@/engine/workflow-binding"
 import { EvidenceLocatorListSchema, type EvidenceLocator } from "@opencorvus-ai/plugin/artifact-catalog"
+import {
+  acceptanceCriterionEvidenceLocators,
+  MissionAcceptanceOpenCriterionSchema,
+} from "@/mission/acceptance-gap"
 
 export const ControlTextPartAuthoritySchema = z
   .object({
@@ -68,12 +72,43 @@ const DispatchTurnBaseSchema = z.object({
   task_authority: TaskAuthorityAnchorSchema,
 })
 
+export const AcceptanceRepairDispatchSchema = z
+  .object({
+    gap_id: z.string().min(1),
+    ledger_revision_artifact_id: Identifier.schema("artifact"),
+    execution_epoch: z.number().int().positive(),
+    criteria: z.array(MissionAcceptanceOpenCriterionSchema).min(1).max(64),
+    checkpoint_required: z.literal(true),
+  })
+  .strict()
+  .superRefine((repair, context) => {
+    const ids = new Set<string>()
+    for (const [index, criterion] of repair.criteria.entries()) {
+      if (ids.has(criterion.criterion_id)) {
+        context.addIssue({
+          code: "custom",
+          path: ["criteria", index, "criterion_id"],
+          message: `Duplicate acceptance repair criterion ${criterion.criterion_id}.`,
+        })
+      }
+      ids.add(criterion.criterion_id)
+    }
+  })
+export type AcceptanceRepairDispatch = z.infer<typeof AcceptanceRepairDispatchSchema>
+
+export function acceptanceRepairEvidenceLocators(repair: AcceptanceRepairDispatch): EvidenceLocator[] {
+  const parsed = AcceptanceRepairDispatchSchema.parse(repair)
+  const locators = parsed.criteria.flatMap(acceptanceCriterionEvidenceLocators)
+  return [...new Map(locators.map((locator) => [JSON.stringify(locator), locator])).values()]
+}
+
 export const DispatchTurnSchema = z.discriminatedUnion("kind", [
   DispatchTurnBaseSchema.extend({ kind: z.literal("initial") }).strict(),
   DispatchTurnBaseSchema.extend({
     kind: z.literal("continuation"),
     source_dispatch_id: z.string().min(1),
     child_session_id: Identifier.schema("session"),
+    acceptance_repair: AcceptanceRepairDispatchSchema.optional(),
   }).strict(),
 ])
 export type DispatchTurn = z.infer<typeof DispatchTurnSchema>
@@ -110,6 +145,32 @@ export function renderDispatchContinuationTurn(input: {
     `- workflow_occurrence_id: ${turn.workflow_occurrence_id}`,
     `- delivery_slice_revision_ids: ${turn.delivery_slice_revision_ids.join(", ") || "(none)"}`,
     `- workflow_binding: ${JSON.stringify(turn.workflow_binding)}`,
+    ...(turn.acceptance_repair
+      ? [
+          "",
+          "## Acceptance repair obligation",
+          "",
+          `- gap_id: ${turn.acceptance_repair.gap_id}`,
+          `- ledger_revision_artifact_id: ${turn.acceptance_repair.ledger_revision_artifact_id}`,
+          `- execution_epoch: ${turn.acceptance_repair.execution_epoch}`,
+          `- criterion_ids: ${turn.acceptance_repair.criteria.map((criterion) => criterion.criterion_id).join(", ")}`,
+          ...turn.acceptance_repair.criteria.flatMap((criterion) => [
+            `### ${criterion.criterion_id}`,
+            `- state: ${criterion.state}`,
+            `- disposition: ${criterion.disposition}`,
+            `- finding: ${criterion.finding}`,
+            `- responsibility: ${JSON.stringify(criterion.responsibility)}`,
+            `- expected_evidence_kind: ${criterion.repair_action.expected_evidence_kind}`,
+            `- observation_evidence_locators: ${JSON.stringify(criterion.observation_evidence_locators)}`,
+            `- repair_evidence_locators: ${JSON.stringify(criterion.repair_evidence_locators)}`,
+            `- invalidating_evidence_locators: ${JSON.stringify(criterion.invalidating_evidence_locators)}`,
+            `- resolution_evidence_locators: ${JSON.stringify(criterion.resolution_evidence_locators)}`,
+            `- irreducible_blocker_evidence_locators: ${JSON.stringify(criterion.irreducible_blocker_evidence_locators)}`,
+            `- repair_action: ${JSON.stringify(criterion.repair_action)}`,
+          ]),
+          "- Recheck only these criteria. Preserve every acceptance not named here and publish delta evidence in the canonical Artifact lineage.",
+        ]
+      : []),
     "",
     "## Task authority anchor",
     "",

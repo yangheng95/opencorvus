@@ -10,6 +10,7 @@ import { ProcessSupervisor } from "@/shell/process-supervisor"
 import { recoverOrphanedIsolatedCheckWorkspaces } from "@/project/isolated-check-workspace"
 import { recoverProjectDeletionCleanup } from "@/project/deletion-cleanup"
 import { recoverProjectMaintenanceFences } from "@/project/deletion-registry"
+import { ImplicitProject } from "@/project/implicit-project"
 import { Log } from "@/util/log"
 
 const log = Log.create({ service: "startup-recovery" })
@@ -51,6 +52,31 @@ export async function prepareServerRuntimeForListener(input: {
 }): Promise<{ occurrence: RuntimeProcessOccurrenceInfo }> {
   const occurrence = currentRuntimeProcessOccurrence()
   try {
+    // Project promotion changes both filesystem and database authority. It is
+    // the first recovery owner and must settle before a listener can expose a
+    // Project list or route any request into Instance.provide.
+    const promotions = await ImplicitProject.recoverPromotions()
+    if (promotions.forward + promotions.backward > 0) {
+      log.info("project promotion recovery completed", promotions)
+    }
+    if (promotions.failures.length > 0) {
+      throw new AggregateError(
+        promotions.failures.map((failure) => new Error(failure)),
+        "Project promotion recovery did not converge every open occurrence",
+      )
+    }
+    // Anonymous creation residue is reclamation, not authority: a backend that
+    // died mid-creation whose user never creates another anonymous Project
+    // would otherwise keep that directory forever, because `create` is the
+    // only other trigger. It reports rather than throws — a directory this
+    // sweep cannot remove must not stop the listener from binding.
+    const creations = await ImplicitProject.convergeCreations()
+    if (creations.reclaimed.length > 0) {
+      log.info("anonymous project creation recovery completed", { reclaimed: creations.reclaimed.length })
+    }
+    for (const failure of creations.failures) {
+      log.error("anonymous project creation occurrence could not be settled", { detail: failure })
+    }
     const observeProcessOccurrence = cachedRuntimeProcessOccurrenceObserver()
     const requestRecovery = await ProcessSupervisor.recoverOrphanedWindowsRequests({
       currentOccurrenceID: occurrence.occurrenceID,

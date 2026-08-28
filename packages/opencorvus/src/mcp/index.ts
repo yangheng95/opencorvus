@@ -28,17 +28,22 @@ import { NamedError } from "@opencorvus-ai/util/error"
 import z from "zod/v4"
 import { Database, NotFoundError } from "../storage/db"
 import { Instance } from "../project/instance"
-import { runWithIndependentProjectIdentity } from "../project/independent-project-owner"
+import {
+  runWithIndependentProjectIdentity,
+  runWithInitializedIndependentProject,
+} from "../project/independent-project-owner"
+import { Project } from "../project/project"
 import { createInstanceState } from "../project/instance-state"
 import { Installation } from "../installation"
-import { McpOAuthProvider } from "./oauth-provider"
-import { McpOAuthCallback } from "./oauth-callback"
-import { oauthAuthorizationLogFields } from "./oauth-log"
+import { McpOAuthProvider, McpOAuthTokenCommitUncertainError } from "./oauth-provider"
+import { McpOAuthCallback, type CallbackResolution } from "./oauth-callback"
+import { oauthAuthorizationLogFields, oauthConnectionFailureLogFields } from "./oauth-log"
 import { McpAuth } from "./auth"
 import { BrowserMCPBuiltin } from "./browser/builtin"
 import { BusEvent } from "../bus/bus-event"
 import { Bus } from "@/bus"
 import { GlobalBus } from "@/bus/global"
+import { Global } from "@/global"
 import open from "open"
 import { entries, values as objectValues } from "@/util/object"
 import { ServeRuntimeMemoryMetrics } from "@/runtime/memory-metrics"
@@ -75,9 +80,10 @@ export namespace MCP {
       kind: "task",
       taskID,
       cwd,
-      runtimeIdentity: binding.protocol === TASK_EXECUTION_CAPSULE_BINDING_PROTOCOL
-        ? binding.runtime_identity_sha256
-        : `native:${binding.project_id}:${binding.workspace_root}`,
+      runtimeIdentity:
+        binding.protocol === TASK_EXECUTION_CAPSULE_BINDING_PROTOCOL
+          ? binding.runtime_identity_sha256
+          : `native:${binding.project_id}:${binding.workspace_root}`,
     })
   }
 
@@ -357,7 +363,9 @@ export namespace MCP {
   }
 
   export function toolDefinitionDigest(tool: MCPToolDef): string {
-    return createHash("sha256").update(JSON.stringify(canonicalConfigValue(tool))).digest("hex")
+    return createHash("sha256")
+      .update(JSON.stringify(canonicalConfigValue(tool)))
+      .digest("hex")
   }
 
   export function copyAppToolBinding(source: object, target: object): void {
@@ -437,13 +445,19 @@ export namespace MCP {
   }
 
   function scopedConnectionOwnerKey(input: ScopedConnectionInput, identity: string): string {
-    return createHash("sha256").update(JSON.stringify(canonicalConfigValue({
-      identity,
-      cwd: input.cwd,
-      processAuthority: input.processAuthority,
-      mcp: input.mcp,
-      globalTimeout: input.globalTimeout ?? null,
-    }))).digest("hex")
+    return createHash("sha256")
+      .update(
+        JSON.stringify(
+          canonicalConfigValue({
+            identity,
+            cwd: input.cwd,
+            processAuthority: input.processAuthority,
+            mcp: input.mcp,
+            globalTimeout: input.globalTimeout ?? null,
+          }),
+        ),
+      )
+      .digest("hex")
   }
 
   type InternalScopedConnectionOwner = ScopedConnectionOwner & {
@@ -452,6 +466,32 @@ export namespace MCP {
       options: Pick<CreateOptions, "skipToolListVerification">,
       run: (client: MCPClient, timeout: number, connection: McpConnection) => Promise<T>,
     ): Promise<T>
+  }
+
+  /**
+   * Tear down the Computer logical session this owner's scope names.
+   *
+   * A scoped owner's id IS its Computer runtime scope — both are derived from
+   * the same Session (and Task) identity — but closing the owner only closed
+   * MCP connections, and the host backend's own `close` is a no-op. The
+   * desktop session, its driver authorization and its preserved state
+   * therefore outlived the Session that created them, until the whole Project
+   * Instance was disposed. The owner's settlement now invokes the sole destroy
+   * primitive for its scope, so Project disposal is the outer safety net it
+   * was meant to be rather than the only owner.
+   */
+  async function destroyOwnedComputerRuntimeScope(runtimeScope: string): Promise<void> {
+    const { ComputerHostRuntime } = await import("./computer/host-runtime")
+    try {
+      await ComputerHostRuntime.destroy(runtimeScope)
+    } catch (error) {
+      // A scope that never took a Computer session has nothing to destroy, and
+      // a failed teardown must not mask the MCP close that already succeeded.
+      log.info("scoped Computer runtime teardown did not settle", {
+        runtimeScope,
+        error: error instanceof Error ? error.message : String(error),
+      })
+    }
   }
 
   export function createScopedConnectionOwner(id: string): ScopedConnectionOwner {
@@ -496,17 +536,19 @@ export namespace MCP {
             globalTimeout: input.globalTimeout,
             onCleanupPending: (connection) => cleanupPending.add(connection),
             ...options,
-          }).then((result) => {
-            if (!result.mcpConnection) {
-              const status = result.status
-              const detail = "error" in status ? `: ${status.error}` : `: ${status.status}`
-              throw new Error(`Scoped MCP server ${input.key} did not connect${detail}`)
-            }
-            return result.mcpConnection
-          }).catch((error) => {
-            if (entries.get(ownerKey) === candidate) entries.delete(ownerKey)
-            throw error
           })
+            .then((result) => {
+              if (!result.mcpConnection) {
+                const status = result.status
+                const detail = "error" in status ? `: ${status.error}` : `: ${status.status}`
+                throw new Error(`Scoped MCP server ${input.key} did not connect${detail}`)
+              }
+              return result.mcpConnection
+            })
+            .catch((error) => {
+              if (entries.get(ownerKey) === candidate) entries.delete(ownerKey)
+              throw error
+            })
           candidate = {
             identity,
             key: identity,
@@ -562,6 +604,7 @@ export namespace MCP {
           entries.clear()
           ownerState.projectState?.scopedOwners.delete(ownerState)
           ownerState.projectState = undefined
+          await destroyOwnedComputerRuntimeScope(normalizedID)
         })()
         try {
           await closePromise
@@ -681,6 +724,45 @@ export namespace MCP {
       })
     }
     return tool
+  }
+
+  /**
+   * Every tool a server exposes, projected under a scoped connection owner.
+   *
+   * The shared-connection projection enumerates whatever the server actually
+   * exposes; an owned projection must enumerate the same thing, or moving a
+   * server onto an owner would silently narrow the model's tool surface to
+   * whatever list the caller happened to hold. Names are sanitized the same
+   * way too, so the same server yields the same tool identifiers either way.
+   *
+   * A server that will not connect contributes nothing and does not fail the
+   * caller's whole projection, which is how the shared path already behaves —
+   * one unavailable builtin must not cost a Session every other tool it has.
+   */
+  export async function scopedToolsForServer(input: Omit<ScopedToolInput, "toolName">): Promise<Record<string, Tool>> {
+    const sanitize = (value: string) => value.replace(/[^a-zA-Z0-9_-]/g, "_")
+    let names: string[]
+    try {
+      names = await withScopedClient(
+        input,
+        async (_client, _timeout, connection): Promise<string[]> =>
+          connection.tools.filter((item) => !isToolVisibilityAppOnly(item)).map((item) => item.name),
+      )
+    } catch (error) {
+      log.error("scoped MCP server did not list its tools", {
+        key: input.key,
+        connectionIdentity: input.connectionIdentity,
+        error: error instanceof Error ? error.message : String(error),
+      })
+      return {}
+    }
+    const entries = await Promise.all(
+      names.map(
+        async (toolName) =>
+          [`${sanitize(input.key)}_${sanitize(toolName)}`, await scopedTool({ ...input, toolName })] as const,
+      ),
+    )
+    return Object.fromEntries(entries)
   }
 
   export async function scopedToolInfo(input: ScopedToolInput): Promise<MCPToolDef> {
@@ -1055,11 +1137,94 @@ export namespace MCP {
   }
 
   type PendingOAuthFlow = {
+    root: string
+    authKey: string
     state: string
     revision: McpAuth.Revision
     correlationID: string
+    serverUrl: string
+    credentialIdentity: string
+    callbackBinding: Readonly<{ redirectUrl: string; generation: string }>
   }
+  type FinishingOAuthFlow = PendingOAuthFlow & { finishingOwnerID: string }
+  let oauthFinishingLeaseDurationMs = 60_000
+  let oauthFinishingRenewIntervalMs = 10_000
+  let afterOAuthCallbackScopeResolutionForTest: (() => Promise<void>) | undefined
+  let afterStaticConfigureRuntimeAdmissionForTest: (() => Promise<void>) | undefined
   const pendingOAuthFlows = new Map<string, PendingOAuthFlow>()
+  type PendingOAuthFinish = {
+    root: string
+    authKey: string
+    oauthState: string
+    operation: Promise<Status>
+    joiners: number
+  }
+  const pendingOAuthFinishes = new Map<string, PendingOAuthFinish>()
+  type OAuthTerminalClaim = {
+    key: string
+    finish?: { mcpName: string; operation: Promise<Status> }
+  }
+  const oauthTerminalClaims = new Map<string, Set<OAuthTerminalClaim>>()
+
+  function oauthFlowKey(authKey: string, root = Global.Path.root): string {
+    return JSON.stringify([root, authKey])
+  }
+
+  function oauthFinishKey(authKey: string, oauthState: string, root = Global.Path.root): string {
+    return JSON.stringify([root, authKey, oauthState])
+  }
+
+  function pendingOAuthFinishForProject(
+    projectID: string,
+    oauthState: string,
+  ): { mcpName: string; finish: PendingOAuthFinish } | undefined {
+    const prefix = `${projectID}:`
+    for (const finish of pendingOAuthFinishes.values()) {
+      if (finish.root === Global.Path.root && finish.oauthState === oauthState && finish.authKey.startsWith(prefix)) {
+        return { mcpName: finish.authKey.slice(prefix.length), finish }
+      }
+    }
+    return undefined
+  }
+
+  function oauthTerminalClaimKey(projectID: string, oauthState: string): string {
+    return JSON.stringify([Global.Path.root, projectID, oauthState])
+  }
+
+  function registerOAuthTerminalClaim(projectID: string, oauthState: string): OAuthTerminalClaim {
+    const key = oauthTerminalClaimKey(projectID, oauthState)
+    const inFlight = pendingOAuthFinishForProject(projectID, oauthState)
+    const claim: OAuthTerminalClaim = {
+      key,
+      ...(inFlight ? { finish: { mcpName: inFlight.mcpName, operation: inFlight.finish.operation } } : {}),
+    }
+    const claims = oauthTerminalClaims.get(key) ?? new Set<OAuthTerminalClaim>()
+    claims.add(claim)
+    oauthTerminalClaims.set(key, claims)
+    return claim
+  }
+
+  function publishOAuthFinish(
+    projectID: string,
+    oauthState: string,
+    mcpName: string,
+    operation: Promise<Status>,
+  ): void {
+    for (const claim of oauthTerminalClaims.get(oauthTerminalClaimKey(projectID, oauthState)) ?? []) {
+      claim.finish ??= { mcpName, operation }
+    }
+  }
+
+  function releaseOAuthTerminalClaim(claim: OAuthTerminalClaim): void {
+    const claims = oauthTerminalClaims.get(claim.key)
+    if (!claims) return
+    claims.delete(claim)
+    if (claims.size === 0) oauthTerminalClaims.delete(claim.key)
+  }
+
+  function capturedOAuthFinish(claim: OAuthTerminalClaim): OAuthTerminalClaim["finish"] {
+    return claim.finish
+  }
 
   // Prompt cache types
   export type PromptInfo = Awaited<ReturnType<MCPClient["listPrompts"]>>["prompts"][number]
@@ -1092,9 +1257,7 @@ export namespace MCP {
   function credentialSafeErrorMessage(error: unknown, credentialSecret?: string) {
     const message = errorMessage(error)
     if (!credentialSecret) return message
-    const formEncoded = new URLSearchParams({ credential: credentialSecret })
-      .toString()
-      .slice("credential=".length)
+    const formEncoded = new URLSearchParams({ credential: credentialSecret }).toString().slice("credential=".length)
     return [...new Set([credentialSecret, encodeURIComponent(credentialSecret), formEncoded])]
       .filter(Boolean)
       .reduce((safe, sensitive) => safe.replaceAll(sensitive, "[redacted]"), message)
@@ -1171,7 +1334,9 @@ export namespace MCP {
         }),
       )
     }
-    throw new Error(`MCP task ${current.taskId} ended as ${current.status}: ${current.statusMessage ?? "no status message"}`)
+    throw new Error(
+      `MCP task ${current.taskId} ended as ${current.status}: ${current.statusMessage ?? "no status message"}`,
+    )
   }
 
   /** Execute one MCP Tool only from inside PermissionAuthority, resuming its protocol Task when present. */
@@ -1340,12 +1505,13 @@ export namespace MCP {
         stdin: "pipe" as const,
         owner: "mcp-stdio",
       }
-      const handle = this.processAuthority.kind === "task"
-        ? await ProcessSupervisor.spawnTaskCommand(
-            { taskID: this.processAuthority.taskID, cwd: this.processAuthority.cwd },
-            command,
-          )
-        : await ProcessSupervisor.spawnHostCommand({ ...command, cwd: this.processAuthority.cwd })
+      const handle =
+        this.processAuthority.kind === "task"
+          ? await ProcessSupervisor.spawnTaskCommand(
+              { taskID: this.processAuthority.taskID, cwd: this.processAuthority.cwd },
+              command,
+            )
+          : await ProcessSupervisor.spawnHostCommand({ ...command, cwd: this.processAuthority.cwd })
       this.handle = handle
       this.lastHandle = handle
       handle.stdout?.on("data", (chunk: Buffer) => {
@@ -1842,6 +2008,14 @@ export namespace MCP {
 
   const state = createInstanceState(
     async () => {
+      // A configure that died between its definition commit and its promotion
+      // left a staged secret; settling it here is what makes startup — not an
+      // arbitrary later config commit — the crash owner, and it runs before
+      // any status or connection is projected from the configuration below.
+      await settleStagedCredentials({
+        projectAuthPrefix: `${Instance.project.id}:`,
+        definitions: ((await Config.getProject()).mcp ?? {}) as NonNullable<Config.Info["mcp"]>,
+      })
       const cfg = await Config.get()
       const config = (cfg.mcp ?? {}) as NonNullable<Config.Info["mcp"]>
       const clients: Record<string, MCPClient> = {}
@@ -1876,7 +2050,7 @@ export namespace MCP {
         status[key] = mcp.enabled === false ? { status: "disabled" } : { status: "disconnected" }
         statusIdentity[key] = mcpConfigIdentity(mcp)
       }
-      const snapshot = {
+      const snapshot: McpState = {
         projectID: Instance.project.id,
         status,
         statusIdentity,
@@ -1910,8 +2084,8 @@ export namespace MCP {
       for (const key of Object.keys(state.connections)) delete state.connections[key]
       for (const key of Object.keys(state.clients)) delete state.clients[key]
       const projectAuthPrefix = `${state.projectID}:`
-      for (const authKey of pendingOAuthFlows.keys()) {
-        if (authKey.startsWith(projectAuthPrefix)) pendingOAuthFlows.delete(authKey)
+      for (const [key, flow] of pendingOAuthFlows) {
+        if (flow.root === Global.Path.root && flow.authKey.startsWith(projectAuthPrefix)) pendingOAuthFlows.delete(key)
       }
       const connectionError = settledConnections.find(
         (result): result is PromiseRejectedResult => result.status === "rejected",
@@ -2314,18 +2488,17 @@ export namespace MCP {
     })
     .strict()
 
-  export const ConfigureInput = ConfigureRequest
-    .superRefine((input, context) => {
-      const hasStaticCredential = input.config.type === "remote" && !!input.config.credential
-      if (hasStaticCredential === !!input.credentialSecret) return
-      context.addIssue({
-        code: "custom",
-        path: ["credentialSecret"],
-        message: hasStaticCredential
-          ? "Static MCP credential secret is required"
-          : "MCP credential secret requires a static credential descriptor",
-      })
+  export const ConfigureInput = ConfigureRequest.superRefine((input, context) => {
+    const hasStaticCredential = input.config.type === "remote" && !!input.config.credential
+    if (hasStaticCredential === !!input.credentialSecret) return
+    context.addIssue({
+      code: "custom",
+      path: ["credentialSecret"],
+      message: hasStaticCredential
+        ? "Static MCP credential secret is required"
+        : "MCP credential secret requires a static credential descriptor",
     })
+  })
 
   export async function configure(name: string, mcp: Config.Mcp, credentialSecret?: string) {
     const parsed = ConfigureInput.parse({ name, config: mcp, credentialSecret })
@@ -2335,48 +2508,59 @@ export namespace MCP {
         ? McpAuth.StaticCredential.parse({ secret: parsed.credentialSecret })
         : undefined
       const authKey = mcpAuthKey(parsed.name)
-      const previousProject = await Config.getProject()
-      const previousMcp = previousProject.mcp?.[parsed.name]
-      const previousAuth = await McpAuth.get(authKey)
 
+      // The secret is STAGED before the definition commits and promoted to the
+      // active credential after it — the active credential the previous
+      // definition serves is never destroyed ahead of the commit that retires
+      // it. Every interruption converges: a crash before the definition
+      // commit leaves a staged secret matching no committed definition, which
+      // reconciliation drops; a crash between commit and promotion leaves a
+      // staged secret matching the committed definition, which reconciliation
+      // promotes. No window leaves an enabled definition whose secret is
+      // durably absent.
+      const stagedIdentity =
+        parsed.config.type === "remote" && parsed.config.credential && staticCredential
+          ? { serverUrl: parsed.config.url, credentialIdentity: configuredCredentialIdentity(parsed.config)! }
+          : undefined
+      await afterStaticConfigureRuntimeAdmissionForTest?.()
+      if (stagedIdentity && staticCredential) {
+        await McpAuth.stageStaticCredential(
+          authKey,
+          staticCredential.secret,
+          stagedIdentity.serverUrl,
+          stagedIdentity.credentialIdentity,
+          async () => {
+            await assertProjectOccurrenceCurrent(`staging ${parsed.name} credentials`)
+          },
+        )
+      }
       try {
         await Config.updateProjectPatchAtomic(() => ({
           mcp: {
             [parsed.name]: parsed.config,
           },
         }))
-        if (parsed.config.type === "remote" && parsed.config.credential && staticCredential) {
-          await McpAuth.setStaticCredential(
-            authKey,
-            staticCredential.secret,
-            parsed.config.url,
-            configuredCredentialIdentity(parsed.config)!,
-          )
-        }
       } catch (error) {
-        const rollbackFailures: unknown[] = []
+        // The definition never committed; the staged secret is dropped and
+        // the previously active credential was never touched.
         try {
-          await Config.updateProjectPatchAtomic(() => ({
-            mcp: {
-              [parsed.name]: previousMcp ?? null,
-            },
-          }))
+          if (stagedIdentity) {
+            await McpAuth.clearStagedStaticCredential(authKey, async () => {
+              await assertProjectOccurrenceCurrent(`rolling back ${parsed.name} credentials`)
+            })
+          }
         } catch (rollbackError) {
-          rollbackFailures.push(rollbackError)
-        }
-        try {
-          if (previousAuth) await McpAuth.set(authKey, previousAuth)
-          else await McpAuth.remove(authKey)
-        } catch (rollbackError) {
-          rollbackFailures.push(rollbackError)
-        }
-        if (rollbackFailures.length > 0) {
           throw new AggregateError(
-            [error, ...rollbackFailures],
-            `MCP server ${parsed.name} credential storage and rollback failed`,
+            [error, rollbackError],
+            `MCP server ${parsed.name} definition commit and staged credential drop failed`,
           )
         }
         throw error
+      }
+      if (stagedIdentity) {
+        await McpAuth.promoteStagedStaticCredential(authKey, stagedIdentity, async () => {
+          await assertProjectOccurrenceCurrent(`promoting ${parsed.name} credentials`)
+        })
       }
 
       if (staticCredential) {
@@ -2398,11 +2582,13 @@ export namespace MCP {
   async function removeStoredAuth(mcpName: string): Promise<void> {
     const authKey = mcpAuthKey(mcpName)
     try {
-      await McpAuth.remove(authKey)
+      await McpAuth.remove(authKey, async () => {
+        await assertProjectOccurrenceCurrent(`removing ${mcpName} credentials`)
+      })
       log.info("removed oauth credentials", { mcpName })
     } finally {
       McpOAuthCallback.cancelPending(authKey)
-      pendingOAuthFlows.delete(authKey)
+      pendingOAuthFlows.delete(oauthFlowKey(authKey))
     }
   }
 
@@ -2463,7 +2649,20 @@ export namespace MCP {
     })
   }
 
-  async function assertCredentialIdentity(name: string, expected: McpEntry) {
+  async function assertProjectOccurrenceCurrent(operation: string): Promise<void> {
+    const instanceProject = Instance.project
+    const durableOccurrence = Database.runOutsideContext(() => Project.occurrence(instanceProject.id))
+    if (
+      !durableOccurrence ||
+      durableOccurrence.project.worktree !== instanceProject.worktree ||
+      durableOccurrence.generation !== Instance.projectGeneration
+    ) {
+      throw new Error(`MCP Project owner changed while ${operation}`)
+    }
+  }
+
+  export async function assertCredentialIdentity(name: string, expected: McpEntry) {
+    await assertProjectOccurrenceCurrent(`${name} was connecting`)
     const current = (await Config.get()).mcp?.[name]
     if (!current || authIdentity(current) !== authIdentity(expected)) {
       throw new Error(`MCP credential identity changed while ${name} was connecting`)
@@ -2515,14 +2714,21 @@ export namespace MCP {
       delete s.runtimeConnectionOverrides[name]
       queueConnectionCleanup(s, name, s.connections[name])
       McpOAuthCallback.cancelPending(mcpAuthKey(name))
-      pendingOAuthFlows.delete(mcpAuthKey(name))
+      pendingOAuthFlows.delete(oauthFlowKey(mcpAuthKey(name)))
     }
     const tasks = names.flatMap((name) =>
       [...(s.connectionCleanupPending.get(name) ?? [])].map((connection) =>
         settleConnectionCleanup(s, name, connection),
       ),
     )
-    tasks.push(McpAuth.removeMany(names.map((name) => mcpAuthKey(name))))
+    tasks.push(
+      McpAuth.removeMany(
+        names.map((name) => mcpAuthKey(name)),
+        async () => {
+          await assertProjectOccurrenceCurrent("removed MCP definitions were settling")
+        },
+      ),
+    )
     const results = await Promise.allSettled(tasks)
     const failures = results.filter((result): result is PromiseRejectedResult => result.status === "rejected")
     if (failures.length > 0) {
@@ -2532,6 +2738,50 @@ export namespace MCP {
       )
     }
     for (const name of names) s.cleanupPending.delete(name)
+  }
+
+  /**
+   * Settle staged configure secrets against the committed project
+   * configuration. This is the crash owner: a configure that died between its
+   * definition commit and its promotion leaves a staged secret whose identity
+   * matches the committed definition, and nothing else would promote it until
+   * an unrelated config commit happened to arrive.
+   */
+  async function settleStagedCredentials(input: {
+    projectAuthPrefix: string
+    definitions: NonNullable<Config.Info["mcp"]>
+    names?: ReadonlySet<string>
+  }) {
+    const entries = await McpAuth.all()
+    for (const [authKey, entry] of Object.entries(entries)) {
+      if (!authKey.startsWith(input.projectAuthPrefix) || !entry.stagedStaticCredential) continue
+      const stagedName = authKey.slice(input.projectAuthPrefix.length)
+      if (input.names && !input.names.has(stagedName)) continue
+      const definition = input.definitions[stagedName]
+      const nextIdentity = configuredCredentialIdentity(definition)
+      const nextUrl = definition && "type" in definition && definition.type === "remote" ? definition.url : undefined
+      if (
+        nextIdentity &&
+        nextUrl &&
+        entry.stagedStaticCredential.serverUrl === nextUrl &&
+        entry.stagedStaticCredential.credentialIdentity === nextIdentity
+      ) {
+        await McpAuth.promoteStagedStaticCredential(
+          authKey,
+          {
+            serverUrl: nextUrl,
+            credentialIdentity: nextIdentity,
+          },
+          async () => {
+            await assertProjectOccurrenceCurrent(`reconciling ${stagedName} staged credentials`)
+          },
+        )
+      } else {
+        await McpAuth.clearStagedStaticCredential(authKey, async () => {
+          await assertProjectOccurrenceCurrent(`dropping ${stagedName} staged credentials`)
+        })
+      }
+    }
   }
 
   export async function reconcileProjectConfig(input: { before: Config.Info; after: Config.Info }) {
@@ -2553,7 +2803,6 @@ export namespace MCP {
       if (!previous || !next) return previous !== next
       return mcpConfigIdentity(previous) !== mcpConfigIdentity(next)
     })
-    const authRemovalNames: string[] = []
     const removedNames: string[] = []
     for (const name of changed) {
       s.reconcilePending.add(name)
@@ -2571,11 +2820,18 @@ export namespace MCP {
       delete s.clients[name]
       queueConnectionCleanup(s, name, connection)
       if (authIdentity(previous) !== authIdentity(next) && authIdentity(previous)) {
-        authRemovalNames.push(name)
+        // Live flow state dies with the identity it was opened under. The
+        // stored credential's retirement is NOT decided here: the durable
+        // store's own identity, compared against the committed definition
+        // after staged settlement below, is the single authority — deciding
+        // it from the config diff instead deleted the very secret a
+        // completed identity-changing configure had just promoted.
         McpOAuthCallback.cancelPending(mcpAuthKey(name))
-        pendingOAuthFlows.delete(mcpAuthKey(name))
+        pendingOAuthFlows.delete(oauthFlowKey(mcpAuthKey(name)))
       } else if (authIdentity(previous)) {
-        McpAuth.invalidate(mcpAuthKey(name))
+        await McpAuth.invalidate(mcpAuthKey(name), async () => {
+          await assertProjectOccurrenceCurrent(`reconciling ${name} credentials`)
+        })
       }
       if (!next) {
         s.cleanupPending.add(name)
@@ -2593,10 +2849,22 @@ export namespace MCP {
       s.statusIdentity[name] = mcpConfigIdentity(next)
     }
     const projectAuthPrefix = `${s.projectID}:`
+    // Settle staged configure secrets BEFORE computing orphans and stale
+    // credentials: a staged secret whose identity matches the committed
+    // definition is a crash-interrupted configure's missing promotion; any
+    // other staged secret belongs to no committed definition and is dropped.
+    // Running this first keeps the stale-credential sweep from removing an
+    // entry whose promotion would have made it current.
+    // A staged secret is settled only by the commit that changed its own
+    // definition — otherwise an unrelated project-config commit landing
+    // between a configure's stage and its definition commit would drop a
+    // secret that is still in flight. Whatever a crash leaves behind is
+    // settled by the startup owner.
+    await settleStagedCredentials({ projectAuthPrefix, definitions: after, names: new Set(changed) })
     const authEntries = await McpAuth.all()
-    const projectAuthNames = Object.keys(authEntries)
-      .filter((authKey) => authKey.startsWith(projectAuthPrefix))
-      .map((authKey) => authKey.slice(projectAuthPrefix.length))
+    const projectAuthNames = Object.entries(authEntries)
+      .filter(([authKey, entry]) => authKey.startsWith(projectAuthPrefix) && McpAuth.hasCredentialOrFlowMaterial(entry))
+      .map(([authKey]) => authKey.slice(projectAuthPrefix.length))
       .filter(Boolean)
     const authOrphanNames = projectAuthNames.filter((name) => !!name && !after[name])
     const staleCredentialNames = projectAuthNames.filter((name) => {
@@ -2604,6 +2872,7 @@ export namespace MCP {
       if (!nextIdentity) return !!after[name]
       const stored = authEntries[mcpAuthKey(name)]
       if (!stored) return false
+      if (!McpAuth.hasCredentialOrFlowMaterial(stored)) return false
       if (!stored.serverUrl) return true
       if (stored.serverUrl !== (after[name] as Extract<McpEntry, { type: "remote" }>).url) return true
       return stored.credentialIdentity !== nextIdentity
@@ -2615,7 +2884,10 @@ export namespace MCP {
     const retryNames = names.filter(
       (name) => !changedNames.has(name) && (s.cleanupPending.has(name) || authOrphans.has(name)) && !after[name],
     )
-    const credentialRetryNames = names.filter((name) => !changedNames.has(name) && staleCredentials.has(name))
+    // Every credential the durable store proves stale against the committed
+    // definition is retired here, whether or not this commit changed that
+    // definition — one authority, no config-diff second opinion.
+    const credentialRetryNames = names.filter((name) => staleCredentials.has(name))
     if (
       changed.length === 0 &&
       retryNames.length === 0 &&
@@ -2625,11 +2897,15 @@ export namespace MCP {
     )
       return
     const cleanupTasks: Promise<void>[] = []
-    if (authRemovalNames.length > 0) {
-      cleanupTasks.push(McpAuth.removeMany(authRemovalNames.map((name) => mcpAuthKey(name))))
-    }
     if (credentialRetryNames.length > 0) {
-      cleanupTasks.push(McpAuth.removeMany(credentialRetryNames.map((name) => mcpAuthKey(name))))
+      cleanupTasks.push(
+        McpAuth.removeMany(
+          credentialRetryNames.map((name) => mcpAuthKey(name)),
+          async () => {
+            await assertProjectOccurrenceCurrent("stale MCP credentials were retiring")
+          },
+        ),
+      )
     }
     for (const [name, pending] of s.connectionCleanupPending) {
       for (const connection of pending) cleanupTasks.push(settleConnectionCleanup(s, name, connection))
@@ -2712,6 +2988,9 @@ export namespace MCP {
 
       if (authKey) {
         const correlationID = crypto.randomUUID()
+        void McpOAuthCallback.ensureRunning().catch(() => {
+          log.warn("mcp oauth callback broker maintenance is temporarily unavailable", { key })
+        })
         authProvider = new McpOAuthProvider(
           key,
           authKey,
@@ -2721,18 +3000,30 @@ export namespace MCP {
             clientSecret: oauthConfig?.clientSecret,
             scope: oauthConfig?.scope,
           },
+          "connection",
+          undefined,
           {
             onRedirect: async (url) => {
-              log.info("oauth redirect requested", oauthAuthorizationLogFields({
-                mcpName: key,
-                authorizationUrl: url,
-                correlationID,
-              }))
+              log.info(
+                "oauth redirect requested",
+                oauthAuthorizationLogFields({
+                  mcpName: key,
+                  authorizationUrl: url,
+                  correlationID,
+                }),
+              )
               // Store the URL - actual browser opening is handled by startAuth
             },
           },
-          McpAuth.revision(authKey),
-          () => assertCredentialIdentity(key, mcp),
+          // Admission does not revoke a flow; it initializes only a missing
+          // generation so every refresh/client write is fenced against a
+          // later explicit removal, including upgrade-era token entries.
+          await McpAuth.ensureRevision(authKey, async () => {
+            await assertCredentialIdentity(key, mcp)
+          }),
+          async () => {
+            await assertCredentialIdentity(key, mcp)
+          },
           undefined,
           correlationID,
         )
@@ -2766,10 +3057,14 @@ export namespace MCP {
         log.info("connected", { key, transport: transportName })
         status = { status: "connected" }
       } catch (error) {
-        const lastError = new Error(credentialSafeErrorMessage(error, staticCredentialSecret))
+        const oauthFailure =
+          authProvider !== undefined && (!(error instanceof UnauthorizedError) || authProvider.usedStoredTokens())
+        const lastError = new Error(
+          oauthFailure ? "MCP OAuth connection failed" : credentialSafeErrorMessage(error, staticCredentialSecret),
+        )
 
         // Handle OAuth-specific errors
-        if (error instanceof UnauthorizedError && authKey) {
+        if (!oauthFailure && error instanceof UnauthorizedError && authKey) {
           log.info("mcp server requires authentication", { key, transport: transportName })
 
           // Check if this is a "needs registration" error
@@ -2797,16 +3092,25 @@ export namespace MCP {
             throw new McpCreateCleanupError(
               cleanupConnection(key, mcp, client, transport, connectionCwd),
               status,
-              new Error(credentialSafeErrorMessage(cleanupError, staticCredentialSecret)),
+              new Error(
+                oauthFailure
+                  ? "MCP OAuth connection cleanup failed"
+                  : credentialSafeErrorMessage(cleanupError, staticCredentialSecret),
+              ),
             )
           }
         } else {
-          log.debug("transport connection failed", {
-            key,
-            transport: transportName,
-            url: mcp.url,
-            error: lastError.message,
-          })
+          log.debug(
+            "transport connection failed",
+            oauthFailure
+              ? oauthConnectionFailureLogFields({ mcpName: key, transport: transportName, serverUrl: mcp.url })
+              : {
+                  key,
+                  transport: transportName,
+                  url: mcp.url,
+                  error: lastError.message,
+                },
+          )
           status = {
             status: "failed" as const,
             error: lastError.message,
@@ -2817,7 +3121,11 @@ export namespace MCP {
             throw new McpCreateCleanupError(
               cleanupConnection(key, mcp, client, transport, connectionCwd),
               status,
-              new Error(credentialSafeErrorMessage(cleanupError, staticCredentialSecret)),
+              new Error(
+                oauthFailure
+                  ? "MCP OAuth connection cleanup failed"
+                  : credentialSafeErrorMessage(cleanupError, staticCredentialSecret),
+              ),
             )
           }
         }
@@ -3080,8 +3388,7 @@ export namespace MCP {
         scopedConnecting,
       ),
       failedAwaitingReconnect: states.reduce(
-        (total, project) =>
-          total + objectValues(project.status).filter((status) => status.status === "failed").length,
+        (total, project) => total + objectValues(project.status).filter((status) => status.status === "failed").length,
         0,
       ),
     }
@@ -3276,10 +3583,7 @@ export namespace MCP {
   }
 
   export async function toolsForServers(configSnapshot: Config.Info, serverIDs: readonly string[]) {
-    const config = exactConfiguredServers(
-      (configSnapshot.mcp ?? {}) as NonNullable<Config.Info["mcp"]>,
-      serverIDs,
-    )
+    const config = exactConfiguredServers((configSnapshot.mcp ?? {}) as NonNullable<Config.Info["mcp"]>, serverIDs)
     return toolsForConfig(config, configSnapshot.experimental?.mcp_timeout, {
       kind: "host",
       cwd: Instance.directory,
@@ -3448,7 +3752,52 @@ export namespace MCP {
    * Start OAuth authentication flow for an MCP server.
    * Returns the authorization URL that should be opened in a browser.
    */
-  async function startAuthFlow(mcpName: string): Promise<{ authorizationUrl: string; flow?: PendingOAuthFlow }> {
+  export namespace TestHooks {
+    export async function rethrowRejectedOAuthCallback(input: {
+      authKey: string
+      revision: McpAuth.Revision
+      callbackError: Error
+    }): Promise<never> {
+      return throwRejectedOAuthCallback(input.authKey, input.revision, input.callbackError)
+    }
+
+    export function oauthFinishJoinCount(mcpName: string, oauthState: string): number {
+      return pendingOAuthFinishes.get(oauthFinishKey(mcpAuthKey(mcpName), oauthState))?.joiners ?? 0
+    }
+
+    export function oauthFinishInFlight(mcpName: string, oauthState: string): boolean {
+      return pendingOAuthFinishes.has(oauthFinishKey(mcpAuthKey(mcpName), oauthState))
+    }
+
+    export function setOAuthFinishingLeaseTiming(input: { durationMs: number; renewIntervalMs: number }): () => void {
+      if (input.durationMs <= 0 || input.renewIntervalMs <= 0 || input.renewIntervalMs >= input.durationMs) {
+        throw new Error("OAuth finishing lease timing requires 0 < renewIntervalMs < durationMs")
+      }
+      const previous = {
+        durationMs: oauthFinishingLeaseDurationMs,
+        renewIntervalMs: oauthFinishingRenewIntervalMs,
+      }
+      oauthFinishingLeaseDurationMs = input.durationMs
+      oauthFinishingRenewIntervalMs = input.renewIntervalMs
+      return () => {
+        oauthFinishingLeaseDurationMs = previous.durationMs
+        oauthFinishingRenewIntervalMs = previous.renewIntervalMs
+      }
+    }
+
+    export function setAfterOAuthCallbackScopeResolution(hook: (() => Promise<void>) | undefined): void {
+      afterOAuthCallbackScopeResolutionForTest = hook
+    }
+
+    export function setAfterStaticConfigureRuntimeAdmission(hook: (() => Promise<void>) | undefined): void {
+      afterStaticConfigureRuntimeAdmissionForTest = hook
+    }
+  }
+
+  async function startAuthFlow(
+    mcpName: string,
+    pendingPolicy: "supersede" | "reject" = "supersede",
+  ): Promise<{ authorizationUrl: string; flow?: PendingOAuthFlow }> {
     const cfg = await Config.get()
     const config = (cfg.mcp ?? {}) as NonNullable<Config.Info["mcp"]>
     const mcpConfig = requireMcpEntry(config, mcpName)
@@ -3488,8 +3837,17 @@ export namespace MCP {
     await assertCurrentOAuthOwner("while OAuth cleanup was settling")
     const authTimeout = effectiveTimeout(mcpConfig, cfg.experimental?.mcp_timeout)
 
-    // Start the callback server
-    await McpOAuthCallback.ensureRunning()
+    // Connection preflight is read/refresh-only. A currently usable token may
+    // satisfy the explicit auth request without opening a browser; once it
+    // reports auth is needed, the separately constructed authorization
+    // provider below cannot expose that old token/client pair to the new flow.
+    const preflight = await add(mcpName, mcpConfig)
+    if (preflight.status[mcpName]?.status === "connected") return { authorizationUrl: "" }
+    await assertCurrentOAuthOwner("after OAuth connection preflight")
+
+    // Join or own the one authenticated callback broker for this data root.
+    // Flow ownership remains exclusively in the durable credential store.
+    const callbackBinding = await McpOAuthCallback.ensureRunning()
     await assertCurrentOAuthOwner("while the OAuth callback server was starting")
 
     // Generate and store a cryptographically secure state parameter BEFORE creating the provider
@@ -3499,11 +3857,12 @@ export namespace MCP {
       .join("")
     const correlationID = crypto.randomUUID()
     const authKey = mcpAuthKey(mcpName)
-    const previousFlow = pendingOAuthFlows.get(authKey)
-    if (previousFlow) McpOAuthCallback.cancelPending(authKey)
-    pendingOAuthFlows.delete(authKey)
-    McpAuth.invalidate(authKey)
-    const authRevision = McpAuth.revision(authKey)
+    const flowKey = oauthFlowKey(authKey)
+    const previousFlow = pendingOAuthFlows.get(flowKey)
+    if (pendingPolicy === "supersede") {
+      if (previousFlow) McpOAuthCallback.cancelPending(authKey)
+      pendingOAuthFlows.delete(flowKey)
+    }
     await assertCredentialIdentity(mcpName, mcpConfig)
     const oauthConfig = typeof mcpConfig.oauth === "object" ? mcpConfig.oauth : undefined
     const oauthProviderConfig = {
@@ -3511,15 +3870,34 @@ export namespace MCP {
       clientSecret: oauthConfig?.clientSecret,
       scope: oauthConfig?.scope,
     }
+    const credentialIdentity = McpOAuthProvider.credentialIdentity(mcpConfig.url, oauthProviderConfig)
+    // Revoking the previous flow and establishing this one's lease is one
+    // store write, so no competitor can read the superseded generation as
+    // current in between. The lease carries the server identity from the
+    // start: a bare entry with no serverUrl sits in credential
+    // reconciliation's stale class, and any concurrent project-config commit
+    // would collect it out from under the flow.
+    const authRevision = await McpAuth.beginCredentialLease(
+      authKey,
+      mcpConfig.url,
+      credentialIdentity,
+      async () => {
+        await assertCredentialIdentity(mcpName, mcpConfig)
+      },
+      pendingPolicy,
+    )
     await McpAuth.updateOAuthState(
       authKey,
       oauthState,
       authRevision,
       mcpConfig.url,
-      McpOAuthProvider.credentialIdentity(mcpConfig.url, oauthProviderConfig),
+      credentialIdentity,
+      callbackBinding.generation,
+      callbackBinding.redirectUrl,
     )
     try {
       await assertCurrentOAuthOwner("while OAuth state was being prepared")
+      await McpOAuthCallback.assertCurrent(callbackBinding)
     } catch (ownerError) {
       try {
         await McpAuth.clearOAuthStateIfOwned(authKey, authRevision)
@@ -3540,13 +3918,18 @@ export namespace MCP {
       authKey,
       mcpConfig.url,
       oauthProviderConfig,
+      "authorization",
+      callbackBinding,
       {
         onRedirect: async (url) => {
           capturedUrl = url
         },
       },
       authRevision,
-      () => assertCredentialIdentity(mcpName, mcpConfig),
+      async () => {
+        await assertCredentialIdentity(mcpName, mcpConfig)
+        await McpOAuthCallback.assertCurrent(callbackBinding)
+      },
       oauthState,
       correlationID,
     )
@@ -3571,14 +3954,32 @@ export namespace MCP {
       if (error instanceof UnauthorizedError && capturedUrl) {
         try {
           await assertCurrentOAuthOwner("before the OAuth authorization flow was published")
-          if (McpAuth.revision(authKey) !== authRevision) {
+          if ((await McpAuth.revision(authKey)) !== authRevision) {
             throw new Error(`MCP auth lease was revoked: ${authKey}`)
           }
-          pendingOAuthFlows.set(authKey, { state: oauthState, revision: authRevision, correlationID })
+          pendingOAuthFlows.set(flowKey, {
+            root: Global.Path.root,
+            authKey,
+            state: oauthState,
+            revision: authRevision,
+            correlationID,
+            serverUrl: mcpConfig.url,
+            credentialIdentity,
+            callbackBinding,
+          })
           retainOAuthState = true
           businessResult = {
             authorizationUrl: capturedUrl.toString(),
-            flow: { state: oauthState, revision: authRevision, correlationID },
+            flow: {
+              root: Global.Path.root,
+              authKey,
+              state: oauthState,
+              revision: authRevision,
+              correlationID,
+              serverUrl: mcpConfig.url,
+              credentialIdentity,
+              callbackBinding,
+            },
           }
         } catch (ownerError) {
           businessError = ownerError
@@ -3591,7 +3992,7 @@ export namespace MCP {
     let authStateCleanupError: unknown
     if (!retainOAuthState) {
       try {
-        if (pendingOAuthFlows.get(authKey)?.revision === authRevision) pendingOAuthFlows.delete(authKey)
+        if (pendingOAuthFlows.get(flowKey)?.revision === authRevision) pendingOAuthFlows.delete(flowKey)
         await McpAuth.clearOAuthStateIfOwned(authKey, authRevision)
       } catch (error) {
         authStateCleanupError = error
@@ -3612,9 +4013,9 @@ export namespace MCP {
       try {
         await assertCurrentOAuthOwner("before the OAuth result returned")
         if (retainOAuthState) {
-          const pending = pendingOAuthFlows.get(authKey)
+          const pending = pendingOAuthFlows.get(flowKey)
           if (
-            McpAuth.revision(authKey) !== authRevision ||
+            (await McpAuth.revision(authKey)) !== authRevision ||
             pending?.revision !== authRevision ||
             pending.state !== oauthState
           ) {
@@ -3624,9 +4025,9 @@ export namespace MCP {
       } catch (ownerError) {
         businessError = ownerError
         if (retainOAuthState) {
-          const pending = pendingOAuthFlows.get(authKey)
+          const pending = pendingOAuthFlows.get(flowKey)
           if (pending?.revision === authRevision && pending.state === oauthState) {
-            pendingOAuthFlows.delete(authKey)
+            pendingOAuthFlows.delete(flowKey)
             McpOAuthCallback.cancelPending(authKey)
           }
           try {
@@ -3654,6 +4055,30 @@ export namespace MCP {
     return { authorizationUrl: result.authorizationUrl }
   }
 
+  export async function debugAuthProbe(mcpName: string): Promise<{
+    status: "already_authenticated" | "authorization_required"
+    clientInformation?: { client_id: string }
+  }> {
+    const result = await startAuthFlow(mcpName, "reject")
+    if (!result.flow) return { status: "already_authenticated" }
+    const flow = result.flow
+    try {
+      const entry = await McpAuth.get(flow.authKey)
+      const configuredClientID = McpOAuthProvider.parseCredentialIdentity(flow.credentialIdentity).config.clientId
+      const clientID = configuredClientID ?? entry?.clientInfo?.clientId
+      return {
+        status: "authorization_required",
+        ...(clientID ? { clientInformation: { client_id: clientID } } : {}),
+      }
+    } finally {
+      const local = pendingOAuthFlows.get(oauthFlowKey(flow.authKey, flow.root))
+      if (local?.state === flow.state && local.revision === flow.revision) {
+        pendingOAuthFlows.delete(oauthFlowKey(flow.authKey, flow.root))
+      }
+      await McpAuth.retireCredentialLeaseIfOwned(flow.authKey, flow.revision)
+    }
+  }
+
   /**
    * Complete OAuth authentication after user authorizes in browser.
    * Opens the browser and waits for callback.
@@ -3676,11 +4101,14 @@ export namespace MCP {
 
     // The SDK has already added the state parameter to the authorization URL
     // We just need to open the browser
-    log.info("opening browser for oauth", oauthAuthorizationLogFields({
-      mcpName,
-      authorizationUrl,
-      correlationID: flow.correlationID,
-    }))
+    log.info(
+      "opening browser for oauth",
+      oauthAuthorizationLogFields({
+        mcpName,
+        authorizationUrl,
+        correlationID: flow.correlationID,
+      }),
+    )
 
     // Register the callback BEFORE opening the browser to avoid race condition
     // when the IdP has an active SSO session and redirects immediately
@@ -3717,123 +4145,689 @@ export namespace MCP {
 
     // Wait for callback using the already-registered promise
     const callback = await callbackSettlement
-    if (callback.status === "rejected") throw callback.error
+    if (callback.status === "rejected") {
+      // A flow this caller abandoned must not leave a spendable state behind.
+      // Every other exit from this function clears it; the settlement failure
+      // path did not, which left a live acceptance window with no waiter.
+      return throwRejectedOAuthCallback(authKey, flow.revision, callback.error)
+    }
 
-    return finishAuthCallback(mcpName, callback.code, oauthState)
+    return callback.result
   }
 
-  async function assertOAuthState(mcpName: string, authKey: string, oauthState: string): Promise<PendingOAuthFlow> {
-    const owner = pendingOAuthFlows.get(authKey)
+  async function throwRejectedOAuthCallback(
+    authKey: string,
+    revision: McpAuth.Revision,
+    callbackError: Error,
+  ): Promise<never> {
+    try {
+      await McpAuth.clearOAuthStateIfOwned(authKey, revision)
+    } catch (cleanupError) {
+      throw new AggregateError(
+        [callbackError, cleanupError],
+        `MCP OAuth callback failed and state cleanup also failed for ${authKey}`,
+        { cause: callbackError },
+      )
+    }
+    throw callbackError
+  }
+
+  function statusFromOAuthTerminal(terminal: McpAuth.OAuthCallbackTerminal): Status {
+    if (terminal.outcome === "connected") return { status: "connected" }
+    throw new Error(McpAuth.oauthCallbackTerminalMessage(terminal.outcome))
+  }
+
+  async function waitForDurableOAuthTerminal(
+    authKey: string,
+    oauthState: string,
+    expectedRevision: McpAuth.Revision,
+  ): Promise<Status> {
+    for (;;) {
+      const terminal = await McpAuth.getOAuthCallbackTerminal(authKey, oauthState)
+      if (terminal) return statusFromOAuthTerminal(terminal)
+      const entry = await McpAuth.get(authKey)
+      const finishing = entry?.oauthFinishing
+      if (!entry || entry.revision !== expectedRevision || finishing?.oauthState !== oauthState) {
+        const settled = await McpAuth.getOAuthCallbackTerminal(authKey, oauthState)
+        if (settled) return statusFromOAuthTerminal(settled)
+        throw new OAuthStateError({
+          mcpName: McpAuth.parseScopedKey(authKey)?.mcpName ?? authKey,
+          message: "OAuth finish is no longer durably owned",
+        })
+      }
+      if (finishing.leaseExpiresAt <= Date.now()) {
+        const settled = await McpAuth.settleExpiredOAuthFinishing(authKey, oauthState, expectedRevision)
+        if (settled) return statusFromOAuthTerminal(settled)
+      }
+      await new Promise((resolve) =>
+        setTimeout(resolve, Math.min(100, Math.max(1, finishing.leaseExpiresAt - Date.now()))),
+      )
+    }
+  }
+
+  /**
+   * One project's durable owner of OAuth flows.
+   *
+   * A callback can arrive with no caller waiting for it in this process: the
+   * waiter timed out, its flow was cancelled and re-minted, or the listener
+   * outlived the `authenticate` call that started it. None of that makes the
+   * callback forged, and every fact the completion needs is durable. Admission
+   * is single-use inside the credential store, so a duplicate callback cannot
+   * redeem the same authorization code twice.
+   */
+  function durableFlowAuthority(directory: string, projectID: string): McpOAuthCallback.CallbackAuthority {
+    const resolutions = new WeakMap<CallbackResolution, OAuthTerminalClaim>()
+
+    async function inProject<R>(label: string, fn: () => Promise<R>): Promise<R> {
+      try {
+        return await runWithInitializedIndependentProject({ directory, fn })
+      } catch (error) {
+        throw new Error(`Cannot ${label} for project ${directory}`, { cause: error })
+      }
+    }
+
+    return {
+      async resolveState(oauthState) {
+        // Register before the first durable read. A finish that starts and
+        // completes while resolution is suspended publishes its exact Promise
+        // into this callback-owned receipt, so later map cleanup cannot erase
+        // the answer from a contender that was already in flight.
+        const claim = registerOAuthTerminalClaim(projectID, oauthState)
+        try {
+          const resolution = await inProject("resolve the OAuth callback's flow", async () => {
+            const existingFinish = capturedOAuthFinish(claim)
+            if (existingFinish) {
+              const entry = await McpAuth.get(McpAuth.scopedKey({ projectID, mcpName: existingFinish.mcpName }))
+              if (!entry?.revision) return undefined
+              return { mcpName: existingFinish.mcpName, phase: "finishing" as const, revision: entry.revision }
+            }
+            const prefix = `${projectID}:`
+            const entries = Object.entries(await McpAuth.all())
+            const concurrentFinish = capturedOAuthFinish(claim)
+            if (concurrentFinish) {
+              const entry = await McpAuth.get(McpAuth.scopedKey({ projectID, mcpName: concurrentFinish.mcpName }))
+              if (!entry?.revision) return undefined
+              return { mcpName: concurrentFinish.mcpName, phase: "finishing" as const, revision: entry.revision }
+            }
+            for (const [authKey, entry] of entries) {
+              if (!authKey.startsWith(prefix)) continue
+              if (entry.oauthState === oauthState) {
+                if (!entry.revision) continue
+                return { mcpName: authKey.slice(prefix.length), phase: "pending" as const, revision: entry.revision }
+              }
+              if (entry.oauthFinishing?.oauthState === oauthState) {
+                if (!entry.revision) continue
+                return { mcpName: authKey.slice(prefix.length), phase: "finishing" as const, revision: entry.revision }
+              }
+            }
+            const finishAfterRead = capturedOAuthFinish(claim)
+            if (!finishAfterRead) return undefined
+            const entry = await McpAuth.get(McpAuth.scopedKey({ projectID, mcpName: finishAfterRead.mcpName }))
+            return entry?.revision
+              ? { mcpName: finishAfterRead.mcpName, phase: "finishing" as const, revision: entry.revision }
+              : undefined
+          })
+          if (!resolution) {
+            releaseOAuthTerminalClaim(claim)
+            return undefined
+          }
+          resolutions.set(resolution, claim)
+          return resolution
+        } catch (error) {
+          releaseOAuthTerminalClaim(claim)
+          throw error
+        }
+      },
+      async finish(input) {
+        const claim = resolutions.get(input.resolution)
+        if (!claim) throw new Error("OAuth callback resolution is no longer owned")
+        try {
+          if (claim.finish) {
+            const current = pendingOAuthFinishes.get(
+              oauthFinishKey(McpAuth.scopedKey({ projectID, mcpName: claim.finish.mcpName }), input.oauthState),
+            )
+            if (current?.operation === claim.finish.operation) current.joiners++
+            return await claim.finish.operation
+          }
+          try {
+            return await inProject("finish the OAuth flow", () =>
+              finishAuthCallbackWithClaim(input.resolution.mcpName, input.authorizationCode, input.oauthState, claim),
+            )
+          } catch (error) {
+            const terminal = await McpAuth.getOAuthCallbackTerminal(
+              McpAuth.scopedKey({ projectID, mcpName: input.resolution.mcpName }),
+              input.oauthState,
+            )
+            if (terminal) return statusFromOAuthTerminal(terminal)
+            throw error
+          }
+        } finally {
+          releaseOAuthTerminalClaim(claim)
+        }
+      },
+      async joinFinish(input) {
+        const claim = resolutions.get(input.resolution)
+        if (!claim) throw new Error("OAuth callback resolution is no longer owned")
+        try {
+          if (claim.finish) {
+            const current = pendingOAuthFinishes.get(
+              oauthFinishKey(McpAuth.scopedKey({ projectID, mcpName: claim.finish.mcpName }), input.oauthState),
+            )
+            if (current?.operation === claim.finish.operation) current.joiners++
+            return await claim.finish.operation
+          }
+          try {
+            return await inProject("join the durable OAuth finish", () =>
+              waitForDurableOAuthTerminal(
+                McpAuth.scopedKey({ projectID, mcpName: input.resolution.mcpName }),
+                input.oauthState,
+                input.resolution.revision,
+              ),
+            )
+          } catch (error) {
+            const terminal = await McpAuth.getOAuthCallbackTerminal(
+              McpAuth.scopedKey({ projectID, mcpName: input.resolution.mcpName }),
+              input.oauthState,
+            )
+            if (terminal) return statusFromOAuthTerminal(terminal)
+            throw error
+          }
+        } finally {
+          releaseOAuthTerminalClaim(claim)
+        }
+      },
+      async abandon(input) {
+        const claim = resolutions.get(input.resolution)
+        if (!claim) throw new Error("OAuth callback resolution is no longer owned")
+        try {
+          if (claim.finish) {
+            const current = pendingOAuthFinishes.get(
+              oauthFinishKey(McpAuth.scopedKey({ projectID, mcpName: claim.finish.mcpName }), input.oauthState),
+            )
+            if (current?.operation === claim.finish.operation) current.joiners++
+            return { outcome: "joined", status: await claim.finish.operation }
+          }
+          return await inProject("terminalize the rejected OAuth flow", () =>
+            abandonAuthCallback(input.resolution.mcpName, input.oauthState, input.outcome, claim),
+          )
+        } finally {
+          releaseOAuthTerminalClaim(claim)
+        }
+      },
+    }
+  }
+
+  export async function resolveOAuthCallbackOwner(oauthState: string, callbackGeneration: string) {
+    let scope = await McpAuth.findOAuthState(oauthState, callbackGeneration)
+    if (!scope) {
+      for (const finish of pendingOAuthFinishes.values()) {
+        if (finish.root !== Global.Path.root || finish.oauthState !== oauthState) continue
+        const parsed = McpAuth.parseScopedKey(finish.authKey)
+        const entry = await McpAuth.get(finish.authKey)
+        if (!parsed || entry?.callbackGeneration !== callbackGeneration) continue
+        scope = { authKey: finish.authKey, ...parsed, phase: "finishing", entry }
+        break
+      }
+    }
+    if (!scope) {
+      const settled = await McpAuth.findOAuthCallbackTerminal(oauthState, callbackGeneration)
+      return settled ? { terminal: settled.terminal } : undefined
+    }
+    const capturedRevision = scope.entry.revision
+    if (!capturedRevision) return undefined
+    const capturedFinishingOwnerID =
+      scope.entry.oauthFinishing?.oauthState === oauthState ? scope.entry.oauthFinishing.ownerID : undefined
+    await afterOAuthCallbackScopeResolutionForTest?.()
+    const project = Database.runOutsideContext(() => Project.get(scope.projectID))
+    if (!project) {
+      const terminal = await McpAuth.revokeOAuthOccurrenceIfOwned(
+        scope.authKey,
+        oauthState,
+        capturedRevision,
+        capturedFinishingOwnerID,
+      )
+      return terminal ? { terminal } : undefined
+    }
+    const authority = durableFlowAuthority(project.worktree, project.id)
+    const resolution = await authority.resolveState(oauthState)
+    if (!resolution) return undefined
+    return {
+      authority,
+      resolution,
+      mcpName: resolution.mcpName,
+      phase: resolution.phase,
+    }
+  }
+
+  async function abandonAuthCallback(
+    mcpName: string,
+    oauthState: string,
+    outcome: "provider_rejected" | "missing_code",
+    claim: OAuthTerminalClaim,
+  ): Promise<
+    | { outcome: "abandoned" }
+    | { outcome: "joined"; status: Status }
+    | { outcome: "terminal"; terminal: McpAuth.OAuthCallbackTerminal }
+  > {
+    const authKey = mcpAuthKey(mcpName)
+    const joinWinner = () => {
+      const finish = claim.finish
+      if (!finish) return undefined
+      const current = pendingOAuthFinishes.get(oauthFinishKey(authKey, oauthState))
+      if (current?.operation === finish.operation) current.joiners++
+      return finish.operation.then((status) => ({ outcome: "joined" as const, status }))
+    }
+    const existingWinner = joinWinner()
+    if (existingWinner) return existingWinner
+
+    const localOwner = pendingOAuthFlows.get(oauthFlowKey(authKey))
+    const durable = await McpAuth.get(authKey)
+    const settled = durable?.oauthCallbackTerminals?.[oauthState]
+    if (settled) return { outcome: "terminal", terminal: settled }
+    if (!durable?.revision || durable.oauthState !== oauthState) {
+      const concurrentWinner = joinWinner()
+      if (concurrentWinner) return concurrentWinner
+      const finishingRevision = durable?.revision
+      if (finishingRevision && durable.oauthFinishing?.oauthState === oauthState) {
+        try {
+          return {
+            outcome: "joined",
+            status: await waitForDurableOAuthTerminal(authKey, oauthState, finishingRevision),
+          }
+        } catch (error) {
+          const terminal = await McpAuth.getOAuthCallbackTerminal(authKey, oauthState)
+          if (terminal) return { outcome: "terminal", terminal }
+          throw error
+        }
+      }
+      throw new OAuthStateError({
+        mcpName,
+        message: "OAuth state is not current - it was already used, superseded, or never issued",
+      })
+    }
+    const abandoned = await McpAuth.abandonOAuthState(authKey, oauthState, durable.revision, outcome)
+    if (!abandoned) {
+      // resolveState and durable abandon are necessarily separated by awaits.
+      // A code callback can create and spend the canonical finish between
+      // them. Losing that terminal admission is not a rejection: join the
+      // exact in-process winner and publish its one outcome.
+      const concurrentWinner = joinWinner()
+      if (concurrentWinner) return concurrentWinner
+      const current = await McpAuth.get(authKey)
+      const terminal = current?.oauthCallbackTerminals?.[oauthState]
+      if (terminal) return { outcome: "terminal", terminal }
+      if (current?.revision && current.oauthFinishing?.oauthState === oauthState) {
+        try {
+          return {
+            outcome: "joined",
+            status: await waitForDurableOAuthTerminal(authKey, oauthState, current.revision),
+          }
+        } catch (error) {
+          const settledTerminal = await McpAuth.getOAuthCallbackTerminal(authKey, oauthState)
+          if (settledTerminal) return { outcome: "terminal", terminal: settledTerminal }
+          throw error
+        }
+      }
+      if (pendingOAuthFlows.get(oauthFlowKey(authKey)) === localOwner) pendingOAuthFlows.delete(oauthFlowKey(authKey))
+      throw new OAuthStateError({
+        mcpName,
+        message: "OAuth state is not current - it was already used, superseded, or never issued",
+      })
+    }
+    if (pendingOAuthFlows.get(oauthFlowKey(authKey)) === localOwner) pendingOAuthFlows.delete(oauthFlowKey(authKey))
+    return { outcome: "abandoned" }
+  }
+
+  /**
+   * Rebuild a flow owner from the durable credential entry.
+   *
+   * The flow's facts — its OAuth state, its PKCE verifier and its lease
+   * generation — are all durable; only the in-process owner record is not. A
+   * process restart between authorize and callback therefore used to reject a
+   * completion whose every durable fact matched. The rebuilt owner carries the
+   * durable lease generation, so all of its writes stay exactly as fenced as
+   * the original flow's.
+   */
+  async function rebuildPendingOAuthFlowFromDurableFacts(authKey: string): Promise<PendingOAuthFlow | undefined> {
+    const entry = await McpAuth.get(authKey)
+    if (
+      !entry?.oauthState ||
+      !entry.codeVerifier ||
+      !entry.revision ||
+      !entry.serverUrl ||
+      !entry.credentialIdentity ||
+      !entry.callbackGeneration ||
+      !entry.callbackRedirectUrl
+    )
+      return undefined
+    return {
+      root: Global.Path.root,
+      authKey,
+      state: entry.oauthState,
+      revision: entry.revision,
+      correlationID: crypto.randomUUID(),
+      serverUrl: entry.serverUrl,
+      credentialIdentity: entry.credentialIdentity,
+      callbackBinding: {
+        generation: entry.callbackGeneration,
+        redirectUrl: entry.callbackRedirectUrl,
+      },
+    }
+  }
+
+  async function resolveOAuthStateOwner(
+    mcpName: string,
+    authKey: string,
+    oauthState: string,
+  ): Promise<PendingOAuthFlow> {
+    let owner = pendingOAuthFlows.get(oauthFlowKey(authKey))
+    if (owner && owner.state !== oauthState) {
+      // A stale in-memory owner must not veto the durable fact another
+      // process minted since: if the durable state matches the callback, the
+      // durable flow is the current one and the local record is dropped.
+      const rebuilt = await rebuildPendingOAuthFlowFromDurableFacts(authKey)
+      if (rebuilt?.state === oauthState) {
+        if (pendingOAuthFlows.get(oauthFlowKey(authKey)) === owner) pendingOAuthFlows.delete(oauthFlowKey(authKey))
+        owner = rebuilt
+      }
+    }
+    owner ??= await rebuildPendingOAuthFlowFromDurableFacts(authKey)
     if (!owner) {
       throw new OAuthStateError({ mcpName, message: "OAuth flow is no longer current" })
     }
     if (owner.state !== oauthState) {
       throw new OAuthStateError({ mcpName, message: "OAuth state mismatch - potential CSRF attack" })
     }
-    const storedState = await McpAuth.getOAuthState(authKey)
-    if (!storedState) {
-      if (pendingOAuthFlows.get(authKey) === owner) pendingOAuthFlows.delete(authKey)
-      throw new OAuthStateError({ mcpName, message: "OAuth state not found" })
-    }
-    if (storedState !== oauthState) {
-      await McpAuth.clearOAuthStateIfOwned(authKey, owner.revision)
-      if (pendingOAuthFlows.get(authKey) === owner) pendingOAuthFlows.delete(authKey)
-      throw new OAuthStateError({ mcpName, message: "OAuth state mismatch - potential CSRF attack" })
-    }
     return owner
   }
 
-  export async function finishAuthCallback(
+  async function assertCurrentOAuthFlowIdentity(
+    mcpName: string,
+    authKey: string,
+    owner: PendingOAuthFlow,
+  ): Promise<RemoteMcpConfig> {
+    const current = (await Config.get()).mcp?.[mcpName]
+    if (
+      isMcpConfigured(current) &&
+      current.type === "remote" &&
+      current.url === owner.serverUrl &&
+      configuredCredentialIdentity(current) === owner.credentialIdentity
+    ) {
+      return current
+    }
+
+    const terminal = await McpAuth.revokeOAuthOccurrenceIfOwned(
+      authKey,
+      owner.state,
+      owner.revision,
+      "finishingOwnerID" in owner && typeof owner.finishingOwnerID === "string" ? owner.finishingOwnerID : undefined,
+    )
+    const local = pendingOAuthFlows.get(oauthFlowKey(authKey))
+    if (local?.state === owner.state && local.revision === owner.revision) {
+      pendingOAuthFlows.delete(oauthFlowKey(authKey))
+    }
+    const outcome = terminal?.outcome === "connected" || !terminal ? "superseded" : terminal.outcome
+    throw new Error(McpAuth.oauthCallbackTerminalMessage(outcome))
+  }
+
+  async function assertOAuthState(mcpName: string, authKey: string, oauthState: string): Promise<FinishingOAuthFlow> {
+    const owner = await resolveOAuthStateOwner(mcpName, authKey, oauthState)
+    await assertCurrentOAuthFlowIdentity(mcpName, authKey, owner)
+    // Spending the state IS the admission: the comparison and the clear happen
+    // together inside the credential store's lock, so exactly one caller can
+    // proceed to redeem this authorization code. Reading the state and
+    // clearing it afterwards let two concurrent finishes both pass.
+    const finishingOwnerID = crypto.randomUUID()
+    const spent = await McpAuth.spendOAuthState(
+      authKey,
+      oauthState,
+      owner.revision,
+      finishingOwnerID,
+      Date.now() + oauthFinishingLeaseDurationMs,
+    )
+    if (!spent) {
+      if (pendingOAuthFlows.get(oauthFlowKey(authKey)) === owner) pendingOAuthFlows.delete(oauthFlowKey(authKey))
+      throw new OAuthStateError({
+        mcpName,
+        message: "OAuth state is not current - it was already used, superseded, or never issued",
+      })
+    }
+    return { ...owner, finishingOwnerID }
+  }
+
+  export function finishAuthCallback(mcpName: string, authorizationCode: string, oauthState: string): Promise<Status> {
+    return finishAuthCallbackWithClaim(mcpName, authorizationCode, oauthState)
+  }
+
+  function finishAuthCallbackWithClaim(
     mcpName: string,
     authorizationCode: string,
     oauthState: string,
+    claim?: OAuthTerminalClaim,
   ): Promise<Status> {
-    const cfg = await Config.get()
-    const config = (cfg.mcp ?? {}) as NonNullable<Config.Info["mcp"]>
-    const mcpConfig = requireMcpEntry(config, mcpName)
-    if (!isMcpConfigured(mcpConfig)) {
-      throw new Error(`MCP server ${mcpName} is disabled or missing configuration`)
-    }
-    if (mcpConfig.type !== "remote") {
-      throw new Error(`MCP server ${mcpName} is not a remote server`)
-    }
     const authKey = mcpAuthKey(mcpName)
-    const owner = await assertOAuthState(mcpName, authKey, oauthState)
+    const key = oauthFinishKey(authKey, oauthState)
+    if (claim?.finish) {
+      const captured = claim.finish.operation
+      const current = pendingOAuthFinishes.get(key)
+      if (current?.operation === captured) current.joiners++
+      return captured
+    }
+    const current = pendingOAuthFinishes.get(key)
+    if (current) {
+      current.joiners++
+      return current.operation
+    }
+
+    const owned = finishAuthCallbackOccurrence(mcpName, authorizationCode, oauthState, authKey)
+    const operation = owned
+      .then(
+        (status) => {
+          McpOAuthCallback.resolvePendingFinish(oauthState, status)
+          return status
+        },
+        (cause) => {
+          const error = cause instanceof Error ? cause : new Error(String(cause))
+          McpOAuthCallback.rejectPendingFinish(oauthState, error)
+          throw error
+        },
+      )
+      .finally(() => {
+        if (pendingOAuthFinishes.get(key)?.operation === operation) pendingOAuthFinishes.delete(key)
+      })
+    pendingOAuthFinishes.set(key, { root: Global.Path.root, authKey, oauthState, operation, joiners: 0 })
+    publishOAuthFinish(Instance.project.id, oauthState, mcpName, operation)
+    return operation
+  }
+
+  async function finishAuthCallbackOccurrence(
+    mcpName: string,
+    authorizationCode: string,
+    oauthState: string,
+    authKey: string,
+  ): Promise<Status> {
+    const completed = await McpAuth.getOAuthCallbackTerminal(authKey, oauthState)
+    if (completed) return statusFromOAuthTerminal(completed)
+    const finishingRevision = await McpAuth.get(authKey).then((entry) =>
+      entry?.oauthFinishing?.oauthState === oauthState ? entry.revision : undefined,
+    )
+    if (finishingRevision) return waitForDurableOAuthTerminal(authKey, oauthState, finishingRevision)
     try {
-      return await finishAuth(mcpName, authorizationCode, owner)
+      return await finishAuthCallbackOwned(mcpName, authorizationCode, oauthState, authKey)
+    } catch (error) {
+      // A concurrent config reconciliation, broker rotation or peer finisher
+      // may settle the exact occurrence between the first terminal read and
+      // durable-owner admission. Its terminal is the answer; the process-local
+      // state error is only evidence that this caller lost that race.
+      const settled = await McpAuth.getOAuthCallbackTerminal(authKey, oauthState)
+      if (settled) return statusFromOAuthTerminal(settled)
+      const racedFinishingRevision = await McpAuth.get(authKey).then((entry) =>
+        entry?.oauthFinishing?.oauthState === oauthState ? entry.revision : undefined,
+      )
+      if (racedFinishingRevision) {
+        return waitForDurableOAuthTerminal(authKey, oauthState, racedFinishingRevision)
+      }
+      throw error
+    }
+  }
+
+  async function finishAuthCallbackOwned(
+    mcpName: string,
+    authorizationCode: string,
+    oauthState: string,
+    authKey: string,
+  ): Promise<Status> {
+    const owner = await assertOAuthState(mcpName, authKey, oauthState)
+    let renewal: Promise<boolean> | undefined
+    const renew = async () => {
+      renewal ??= McpAuth.renewOAuthFinishing(
+        authKey,
+        oauthState,
+        owner.revision,
+        owner.finishingOwnerID,
+        Date.now() + oauthFinishingLeaseDurationMs,
+      ).finally(() => {
+        renewal = undefined
+      })
+      if (!(await renewal)) throw new Error(`MCP OAuth finishing lease was lost: ${authKey}`)
+    }
+    const renewalTimer = setInterval(() => {
+      void renew().catch((error) => {
+        log.warn("MCP OAuth finishing lease renewal did not settle", {
+          authKey,
+          error: error instanceof Error ? error.message : String(error),
+        })
+      })
+    }, oauthFinishingRenewIntervalMs)
+    ;(renewalTimer as ReturnType<typeof setInterval> & { unref?: () => void }).unref?.()
+    const convergeTerminalPublicationFailure = async (terminalError: unknown): Promise<Status> => {
+      clearInterval(renewalTimer)
+      await renewal?.catch(() => undefined)
+      try {
+        return await waitForDurableOAuthTerminal(authKey, oauthState, owner.revision)
+      } catch (settlementError) {
+        const terminal = await McpAuth.getOAuthCallbackTerminal(authKey, oauthState).catch(() => undefined)
+        if (terminal) return statusFromOAuthTerminal(terminal)
+        throw new AggregateError(
+          [terminalError, settlementError],
+          `MCP OAuth callback terminal publication could not converge for ${authKey}`,
+          { cause: terminalError },
+        )
+      }
+    }
+    try {
+      let status: Status
+      try {
+        status = await finishAuth(mcpName, authorizationCode, owner, renew)
+      } catch (error) {
+        const terminalOutcome = error instanceof McpOAuthTokenCommitUncertainError ? "exchange_uncertain" : "failed"
+        try {
+          await McpAuth.publishOAuthCallbackTerminal(
+            authKey,
+            oauthState,
+            terminalOutcome,
+            owner.revision,
+            owner.finishingOwnerID,
+          )
+        } catch (terminalError) {
+          return await convergeTerminalPublicationFailure(terminalError)
+        }
+        throw new Error(McpAuth.oauthCallbackTerminalMessage(terminalOutcome), { cause: error })
+      }
+      await renew()
+      try {
+        await McpAuth.publishOAuthCallbackTerminal(
+          authKey,
+          oauthState,
+          "connected",
+          owner.revision,
+          owner.finishingOwnerID,
+        )
+      } catch (terminalError) {
+        return await convergeTerminalPublicationFailure(terminalError)
+      }
+      return status
     } finally {
-      await McpAuth.clearOAuthStateIfOwned(authKey, owner.revision)
-      if (pendingOAuthFlows.get(authKey) === owner) pendingOAuthFlows.delete(authKey)
+      clearInterval(renewalTimer)
+      // The state was already spent by the admission above; clearing it again
+      // here would be a second owner of the same fact.
+      if (pendingOAuthFlows.get(oauthFlowKey(authKey)) === owner) pendingOAuthFlows.delete(oauthFlowKey(authKey))
     }
   }
 
   /**
-   * Complete OAuth authentication with the authorization code.
+   * Complete OAuth authentication with the authorization code. Private and
+   * flow-required: the ONLY finish path is finishAuthCallback, whose
+   * assertOAuthState resolves the owner — live or rebuilt from the durable
+   * facts — under the state fence. There is no second, weaker finish.
    */
-  export async function finishAuth(
+  async function finishAuth(
     mcpName: string,
     authorizationCode: string,
-    flow?: PendingOAuthFlow,
+    flow: FinishingOAuthFlow,
+    renewFinishing: () => Promise<void>,
   ): Promise<Status> {
     const cfg = await Config.get()
-    const config = (cfg.mcp ?? {}) as NonNullable<Config.Info["mcp"]>
-    const mcpConfig = requireMcpEntry(config, mcpName)
     const authKey = mcpAuthKey(mcpName)
 
-    const owner = flow ?? pendingOAuthFlows.get(authKey)
-    if (!owner || pendingOAuthFlows.get(authKey) !== owner) {
-      throw new Error(`No pending OAuth flow for MCP server: ${mcpName}`)
+    const owner = flow
+    const mcpConfig = await assertCurrentOAuthFlowIdentity(mcpName, authKey, owner)
+    const authorizeIdentity = McpOAuthProvider.parseCredentialIdentity(owner.credentialIdentity)
+    if (
+      authorizeIdentity.serverUrl !== owner.serverUrl ||
+      McpOAuthProvider.credentialIdentity(authorizeIdentity.serverUrl, authorizeIdentity.config) !==
+        owner.credentialIdentity
+    ) {
+      throw new Error(`MCP OAuth authorize-time credential identity is invalid: ${authKey}`)
     }
-    if (!isMcpConfigured(mcpConfig)) {
-      throw new Error(`MCP server ${mcpName} is disabled or missing configuration`)
-    }
-    if (mcpConfig.type !== "remote") {
-      throw new Error(`MCP server ${mcpName} is not a remote server`)
-    }
-    const oauthConfig = typeof mcpConfig.oauth === "object" ? mcpConfig.oauth : undefined
+    const exchangeConfig: RemoteMcpConfig = { ...mcpConfig, url: owner.serverUrl }
     const authRevision = owner.revision
+    const callbackBinding = owner.callbackBinding
     const authProvider = new McpOAuthProvider(
       mcpName,
       authKey,
-      mcpConfig.url,
-      {
-        clientId: oauthConfig?.clientId,
-        clientSecret: oauthConfig?.clientSecret,
-        scope: oauthConfig?.scope,
-      },
+      owner.serverUrl,
+      authorizeIdentity.config,
+      "authorization",
+      callbackBinding,
       {
         onRedirect: async () => {},
       },
       authRevision,
-      () => assertCredentialIdentity(mcpName, mcpConfig),
-      undefined,
+      async () => {
+        await assertCurrentOAuthFlowIdentity(mcpName, authKey, owner)
+        await renewFinishing()
+      },
+      owner.state,
       owner.correlationID,
+      owner.finishingOwnerID,
     )
     const authTimeout = effectiveTimeout(mcpConfig, cfg.experimental?.mcp_timeout)
-    const { transport } = createRemoteTransport(mcpConfig, authProvider, mcpFetchRequestInit(authTimeout))
+    const { transport } = createRemoteTransport(exchangeConfig, authProvider, mcpFetchRequestInit(authTimeout))
 
     try {
       // Call finishAuth on the transport
+      await renewFinishing()
       await transport.finishAuth(authorizationCode)
-
-      // Clear the code verifier after successful auth
-      await McpAuth.clearCodeVerifier(authKey, authRevision)
-      await McpAuth.clearOAuthState(authKey, authRevision)
+      await renewFinishing()
 
       // Re-add the MCP server to establish connection
-      if (pendingOAuthFlows.get(authKey) === owner) pendingOAuthFlows.delete(authKey)
-      const result = await add(mcpName, mcpConfig)
+      if (pendingOAuthFlows.get(oauthFlowKey(authKey)) === owner) pendingOAuthFlows.delete(oauthFlowKey(authKey))
+      const currentConfig = await assertCurrentOAuthFlowIdentity(mcpName, authKey, owner)
+      const result = await add(mcpName, currentConfig)
 
       const statusRecord = result.status as Record<string, Status>
       const status = statusRecord[mcpName]
       if (!status) throw new Error("Unknown error after auth")
-      if (status.status === "failed") throw new Error(status.error)
+      if (status.status !== "connected") {
+        throw new Error(McpAuth.oauthCallbackTerminalMessage("failed"))
+      }
       return status
     } catch (error) {
-      log.error("failed to finish oauth", { mcpName, correlationID: owner.correlationID, error })
+      log.error("failed to finish oauth", { mcpName, correlationID: owner.correlationID })
       throw error
     } finally {
-      if (pendingOAuthFlows.get(authKey) === owner) pendingOAuthFlows.delete(authKey)
+      if (pendingOAuthFlows.get(oauthFlowKey(authKey)) === owner) pendingOAuthFlows.delete(oauthFlowKey(authKey))
       await closeTransport(mcpName, transport)
     }
   }
@@ -3907,5 +4901,4 @@ export namespace MCP {
       client: (resource as { client?: string }).client ?? key.split("_")[0] ?? key,
     }))
   }
-
 }

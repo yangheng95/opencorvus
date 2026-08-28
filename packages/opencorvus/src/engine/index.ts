@@ -1,12 +1,11 @@
 /**
- * Public API barrel for the engine module.
+ * Current public API barrel for the engine module.
  *
- * External callers import from "@/engine" — never from sub-modules directly.
- * Internal engine files may still use relative imports between siblings.
+ * The Task lifecycle State writer keeps direct module ownership so importing
+ * unrelated Engine APIs cannot initialize its delivery machinery.
  */
 export * from "./store"
 export * from "./persist"
-export * from "./state"
 export * from "./helpers"
 export * from "./model"
 export * from "./config"

@@ -4,7 +4,7 @@ import { OAUTH_DUMMY_KEY } from "../auth"
 import { createServer } from "http"
 import { Installation } from "../installation"
 import { escapeHtml } from "@/util/html"
-import { ManagedOAuthCallbackOwner, ManagedOAuthListenerOwner } from "./oauth-lifecycle"
+import { ManagedOAuthCallbackOwner, ManagedOAuthListenerOwner, type OAuthCallbackLease } from "./oauth-lifecycle"
 
 // Public Grok-CLI OAuth client. xAI's auth server rejects loopback OAuth from
 // non-allowlisted clients, so we reuse the Grok-CLI client_id that xAI ships
@@ -479,14 +479,14 @@ async function stopOAuthServer(lease?: object) {
   await oauthServer.stop(lease)
 }
 
-function waitForOAuthCallback(pkce: PkceCodes, state: string, lease: object): Promise<TokenResponse> {
-  return pendingOAuth.wait(
+function waitForOAuthCallback(pkce: PkceCodes, state: string, lease: object): OAuthCallbackLease<TokenResponse> {
+  return pendingOAuth.begin(
     { pkce, state },
     {
       timeoutMs: 5 * 60 * 1000,
       supersededError: () => new Error("Superseded by a newer xAI authorize request"),
       timeoutError: () => new Error("OAuth callback timeout - authorization took too long"),
-      onTimeout: () => void stopOAuthServer(lease),
+      onTimeout: () => stopOAuthServer(lease),
     },
   )
 }
@@ -536,20 +536,22 @@ export async function XaiAuthPlugin(input: PluginInput, options: XaiAuthPluginOp
             if (expiresSoon) {
               if (!refreshPromise) {
                 const refreshToken = currentAuth.refresh
-                refreshPromise = refreshAccessToken(refreshToken, options)
-                  .then(async (tokens) => {
-                    const refreshedExpires = Date.now() + (tokens.expires_in ?? 3600) * 1000
-                    const refreshedRefresh = tokens.refresh_token || refreshToken
-                    await input.client.auth.set({
-                      providerID: "xai",
-                      auth: {
+                refreshPromise = input.credentials
+                  .refresh({
+                    providerID: "xai",
+                    current: currentAuth,
+                    exchange: async () => {
+                      const tokens = await refreshAccessToken(refreshToken, options)
+                      return {
                         type: "oauth",
                         access: tokens.access_token,
-                        refresh: refreshedRefresh,
-                        expires: refreshedExpires,
-                      },
-                    })
-                    return { access: tokens.access_token, refresh: refreshedRefresh, expires: refreshedExpires }
+                        refresh: tokens.refresh_token || refreshToken,
+                        expires: Date.now() + (tokens.expires_in ?? 3600) * 1000,
+                      }
+                    },
+                  })
+                  .then((credential) => {
+                    return { access: credential.access, refresh: credential.refresh, expires: credential.expires }
                   })
                   .finally(() => {
                     refreshPromise = undefined
@@ -599,9 +601,14 @@ export async function XaiAuthPlugin(input: PluginInput, options: XaiAuthPluginOp
               url: authUrl,
               instructions: "Complete authorization in your browser. This window will close automatically.",
               method: "auto" as const,
+              async dispose() {
+                callbackPromise.reject(new Error("xAI OAuth authorization occurrence ended"))
+                await callbackPromise.promise.catch(() => undefined)
+                await stopOAuthServer(lease)
+              },
               callback: async () => {
                 try {
-                  const tokens = await callbackPromise
+                  const tokens = await callbackPromise.promise
                   return {
                     type: "success" as const,
                     refresh: tokens.refresh_token,

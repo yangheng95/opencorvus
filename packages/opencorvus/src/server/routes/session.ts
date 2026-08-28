@@ -22,6 +22,9 @@ import { NativeAgentRegistryLifecycle } from "@/agent/native-agent-registry-life
 import { PromptProfile } from "@/agent/prompt-profile"
 import { Provider } from "@/provider/provider"
 import { SessionPrompt } from "../../session/prompt"
+import { SessionLoop } from "../../session/loop"
+import { SessionShell } from "../../session/shell-exec"
+import { SessionPromptState } from "../../session/prompt/state"
 import { Instance } from "@/project/instance"
 import { provideInitializedProjectExecution } from "@/project/independent-project-owner"
 import { clearRewindCursorForSession } from "@/engine/rewind"
@@ -54,7 +57,11 @@ import {
   ConversationTurnArtifactSummary,
   SessionConversationHistoryPage,
   SessionConversationHydration,
+  SessionConnectedEvent,
   SessionEvent,
+  SessionProtocolEvent,
+  SessionProtocolEventType,
+  SessionStreamEvent,
 } from "@/engine/model"
 import {
   applyRightSidebarConversationPromptOverlay,
@@ -64,6 +71,8 @@ import {
 } from "@/chat/session"
 import { awaitSessionPromptFinishedInScope, cancelSessionPromptInScope } from "@/engine/cancellation-scope"
 import { requireTimelineOrderKeyDomain, timelineOrderKey } from "@/timeline/order"
+import { currentRuntimeProcessOccurrence, observeRuntimeProcessOccurrence } from "@/runtime/process-occurrence"
+import { currentControlLease } from "@/engine/control-lease"
 import { resolveSessionMessageIdentity } from "@/session/message-identity"
 import { resolveSessionActivityStatus, resolveSessionLifecycleSnapshot } from "@/session/lifecycle"
 import { assertActiveProjectSession, getActiveProjectSession } from "../active-project-session"
@@ -89,12 +98,91 @@ import {
   ConversationHydrationQuery,
   conversationHistoryWindow,
 } from "@/conversation/history-window"
+import { sessionLineageIdentity } from "@/engine/task-session-lineage"
+import {
+  conversationTransportEventDisposition,
+  projectConversationTransportEventPayload,
+  projectConversationTransportTranscript,
+} from "@/conversation/transport"
 
 const log = Log.create({ service: "server" })
 const MissionSessionAuthorityConflict = namedErrorResponse(
   "Mission execution and lifecycle are owned by the canonical Mission API",
   "MissionSessionAuthorityError",
 )
+
+type ActiveProjectSession = Awaited<ReturnType<typeof getActiveProjectSession>>
+
+export function includeSessionTreeEvent(
+  input: {
+    sessionTreeIDs: Set<string>
+    selectedSessionID: string
+    projectID: string
+  },
+  event: { sessionID?: string },
+): boolean {
+  const eventSessionID = event.sessionID
+  if (!eventSessionID) return false
+  const lineage = sessionLineageIdentity(eventSessionID)
+  if (!lineage || lineage.projectID !== input.projectID) return false
+  const selectedIndex = lineage.sessionIDs.indexOf(input.selectedSessionID)
+  if (selectedIndex < 0) return false
+  for (const sessionID of lineage.sessionIDs.slice(0, selectedIndex + 1)) input.sessionTreeIDs.add(sessionID)
+  return true
+}
+
+export const SessionEventStreamTestHooks: {
+  afterConversationSnapshotRead?: (input: { sessionID: string }) => void | Promise<void>
+} = {}
+
+async function sessionConversationTailProjection(session: ActiveProjectSession, tailLimit: number) {
+  const sessionID = session.id
+  const sessionIDs = await Session.treeInProject({ sessionID, projectID: session.projectID })
+  const latestMessages = await MessageStore.latestAcrossSessions({ sessionIDs, limit: tailLimit + 1 })
+  const truncated = latestMessages.length > tailLimit
+  const visibleMessages = truncated ? latestMessages.slice(latestMessages.length - tailLimit) : latestMessages
+  const transcript = enrichStandaloneSessionTranscript(visibleMessages)
+    .filter(conversationMessageHasDisplay)
+    .sort(conversationTranscriptMessageOrder)
+  const historyWindow = conversationHistoryWindow(transcript, { tailLimit })
+  const history = { ...historyWindow.history, hasMore: truncated || historyWindow.history.hasMore }
+  const agentSessions = listConversationAgentSessionsForSessionTree({
+    sessionID,
+    projectID: session.projectID,
+  })
+  // Physical ownership is process-local for every Session in the tree, not
+  // only the selected root. Historical streaming/retry cannot prove an owner
+  // survived restart; a durable terminal can still restore the last exact
+  // input occurrence after the process-local latch is gone.
+  const hydratedAgentSessions = agentSessions.map((entry) => {
+    const physical = resolveSessionLifecycleSnapshot(entry.sessionID)
+    const durableTerminal =
+      entry.latestStatus?.type === "terminal" ? SessionStatus.Info.parse(entry.latestStatus) : undefined
+    const lifecycle =
+      physical.status.type === "idle" && durableTerminal
+        ? {
+            status: durableTerminal,
+            observedAt: entry.latestStatusEmittedAt!,
+          }
+        : physical
+    return {
+      ...entry,
+      latestStatus: lifecycle.status,
+      latestStatusEmittedAt: lifecycle.observedAt,
+    }
+  })
+  const view = projectConversationView({
+    transcript: historyWindow.transcript,
+    ledgerSessions: hydratedAgentSessions,
+  })
+  return {
+    sessionIDs,
+    transcript: historyWindow.transcript,
+    history,
+    view,
+    hydratedAgentSessions,
+  }
+}
 
 export function latestSummarizableUser(messages: Message.WithParts[]): Message.User | undefined {
   return messages.findLast(
@@ -121,6 +209,10 @@ function errorMessage(error: unknown): string {
   return String(error)
 }
 
+// Every public Session execution mutation requires the caller-visible stable
+// request occurrence — the input Message identity. A retry that lost its
+// response replays the same identity and converges on the first attempt's
+// occurrence instead of starting a second Turn with repeated Tool effects.
 const PublicSessionPromptInput = SessionPrompt.PromptInput.omit({
   sessionID: true,
   author: true,
@@ -129,8 +221,24 @@ const PublicSessionPromptInput = SessionPrompt.PromptInput.omit({
   includeMcpTools: true,
   extra: true,
   byteMaterializationProjectID: true,
+}).extend({
+  messageID: Identifier.schema("message").meta({
+    description: "Caller-minted stable identity of the input Message; retries with the same identity converge on the first attempt",
+  }),
 })
 type SessionPromptRouteBody = z.infer<typeof PublicSessionPromptInput>
+
+const PublicSessionCommandInput = SessionPrompt.CommandInput.omit({ sessionID: true, extra: true }).extend({
+  messageID: Identifier.schema("message").meta({
+    description: "Caller-minted stable identity of the input Message; retries with the same identity converge on the first attempt",
+  }),
+})
+
+const PublicSessionShellInput = SessionPrompt.ShellInput.omit({ sessionID: true, extra: true }).extend({
+  messageID: Identifier.schema("message").meta({
+    description: "Caller-minted stable identity of the input Message; a retry with the same identity returns the durable occurrence instead of running the command again",
+  }),
+})
 
 const PublicSessionPromptIdentity = z
   .object({
@@ -148,10 +256,174 @@ const PublicSessionPromptIdentityConflictError = NamedError.create(
   }),
 )
 
-const publicSessionPromptOperations = new Map<string, { fingerprint: string; operation: Promise<Message.WithParts> }>()
+const publicSessionExecutionOperations = new Map<
+  string,
+  { fingerprint: string; operation: Promise<Message.WithParts> }
+>()
 
-function publicSessionPromptFingerprint(prompt: SessionPromptRouteBody): string {
-  return createHash("sha256").update(JSON.stringify(prompt)).digest("hex")
+function publicSessionExecutionFingerprint(body: unknown): string {
+  return createHash("sha256").update(JSON.stringify(body)).digest("hex")
+}
+
+/**
+ * The one replay-identity implementation for every public Session execution
+ * mutation (prompt, command, shell). The caller-minted input Message identity
+ * is the request occurrence: a request whose Message is already durable and
+ * carries the same body fingerprint converges through the operation's own
+ * `converge` policy; a different body presenting the same identity is refused;
+ * only an unseen identity executes.
+ */
+async function executePublicSessionExecution(input: {
+  sessionID: string
+  messageID: string
+  fingerprint: string
+  execute: () => Promise<Message.WithParts>
+  converge: (existing: Message.WithParts) => Promise<Message.WithParts>
+}): Promise<Message.WithParts> {
+  const { sessionID, messageID, fingerprint } = input
+  const convergeExisting = async (existing: Message.WithParts) => {
+    if (existing.info.role !== "user") {
+      throw new PublicSessionPromptIdentityConflictError({
+        sessionID,
+        messageID,
+        message: `Message ${messageID} is already bound to a non-user Session message`,
+      })
+    }
+    const persistedIdentity = PublicSessionPromptIdentity.safeParse(existing.info.extra?.publicSessionPromptIdentity)
+    if (!persistedIdentity.success || persistedIdentity.data.fingerprint !== fingerprint) {
+      throw new PublicSessionPromptIdentityConflictError({
+        sessionID,
+        messageID,
+        message: `Message ${messageID} is already bound to a different public Session execution`,
+      })
+    }
+    return input.converge(existing)
+  }
+  const operationKey = `${sessionID}\0${messageID}`
+  const active = publicSessionExecutionOperations.get(operationKey)
+  if (active) {
+    if (active.fingerprint !== fingerprint) {
+      throw new PublicSessionPromptIdentityConflictError({
+        sessionID,
+        messageID,
+        message: `Message ${messageID} is already bound to a different public Session execution`,
+      })
+    }
+    return active.operation
+  }
+  const operation = (async () => {
+    const existing = await MessageStore.get({ sessionID, messageID }).catch((error) => {
+      if (NotFoundError.isInstance(error as Error)) return undefined
+      throw error
+    })
+    if (existing) return convergeExisting(existing)
+    try {
+      return await input.execute()
+    } catch (error) {
+      if (!(error instanceof Session.MessageOccurrenceClaimConflictError)) throw error
+      if (error.existingSessionID !== sessionID) {
+        throw new PublicSessionPromptIdentityConflictError({
+          sessionID,
+          messageID,
+          message: `Message ${messageID} is already bound to another Session`,
+        })
+      }
+      const claimed = await MessageStore.get({ sessionID, messageID })
+      return convergeExisting(claimed)
+    }
+  })()
+  publicSessionExecutionOperations.set(operationKey, { fingerprint, operation })
+  try {
+    return await operation
+  } finally {
+    if (publicSessionExecutionOperations.get(operationKey)?.operation === operation) {
+      publicSessionExecutionOperations.delete(operationKey)
+    }
+  }
+}
+
+/**
+ * Replay convergence for occurrences that end in a model Turn (prompt and
+ * command): return the completed assistant reply if one is durable, otherwise
+ * re-drive the Session loop against the durable input Message — the same
+ * recovery any process can perform.
+ */
+async function convergePromptTurn(sessionID: string, messageID: string): Promise<Message.WithParts> {
+  const completed = await completedAssistantReplyForUserMessage(sessionID, messageID)
+  if (completed) return completed
+  const session = await Session.get(sessionID)
+  try {
+    return await SessionContext.provide(session, () =>
+      provideInitializedProjectExecution({
+        directory: session.directory,
+        fn: () =>
+          SessionPrompt.loop({
+            sessionID,
+            reply_to_message_id: messageID,
+            retry_failed_reply: true,
+          }),
+      }),
+    )
+  } catch (error) {
+    if (!SessionLoop.FailedReplyReplayAdvancedError.isInstance(error as Error)) throw error
+    const advanced = error as { data: { failedAssistantMessageID: string } }
+    throw new PublicSessionPromptIdentityConflictError({
+      sessionID,
+      messageID,
+      message:
+        `Message ${messageID} belongs to failed assistant ${advanced.data.failedAssistantMessageID}, but Session ` +
+        `${sessionID} has accepted a newer user Turn; mint a new message identity to retry`,
+    })
+  }
+}
+
+/**
+ * Replay convergence for shell occurrences: a shell command must never run
+ * twice for one identity. A live exact child or exact shell lease keeps the
+ * same in-flight assistant; an abandoned occurrence terminalizes that exact
+ * Tool Part and assistant without re-execution.
+ */
+async function convergeShellExecution(sessionID: string, messageID: string): Promise<Message.WithParts> {
+  const session = await Session.get(sessionID)
+  for await (const candidate of MessageStore.stream(sessionID)) {
+    if (candidate.info.role !== "assistant" || !Message.acceptsInputMessage(candidate.info, messageID)) continue
+    const openShellParts = candidate.parts.filter(
+      (part): part is Message.ToolPart =>
+        part.type === "tool" &&
+        part.tool === "bash" &&
+        (part.state.status === "pending" || part.state.status === "running"),
+    )
+    if (candidate.info.time.completed !== undefined && openShellParts.length === 0) return candidate
+
+    const currentOwner = currentRuntimeProcessOccurrence()
+    const now = Date.now()
+    const remainsLive = openShellParts.some((part) => {
+      const ownership = SessionShell.processOwnership(part)
+      if (!ownership) return false
+      const isCurrentOwner =
+        ownership.owner.occurrenceID === currentOwner.occurrenceID &&
+        ownership.owner.pid === currentOwner.pid &&
+        ownership.owner.processInstanceID === currentOwner.processInstanceID
+      if (ownership.child && observeRuntimeProcessOccurrence(ownership.child) !== "dead_or_reused") return true
+      const lease = currentControlLease("session_shell", part.id)
+      const exactLeaseLive =
+        lease?.id === ownership.leaseID &&
+        lease.owner_occurrence_id === ownership.leaseOwnerOccurrenceID &&
+        lease.expires_at > now
+      if (!exactLeaseLive) return false
+      return isCurrentOwner ? SessionPromptState.hasOwnedPrompt(sessionID, session.directory) : true
+    })
+    if (remainsLive) return candidate
+    return SessionShell.terminalizeInterruptedOccurrence({
+      sessionID,
+      assistantMessageID: candidate.info.id,
+    })
+  }
+  throw new PublicSessionPromptIdentityConflictError({
+    sessionID,
+    messageID,
+    message: `Message ${messageID} is bound to a shell execution that never started; mint a new message identity to run it`,
+  })
 }
 
 async function completedAssistantReplyForUserMessage(
@@ -161,7 +433,7 @@ async function completedAssistantReplyForUserMessage(
   for await (const candidate of MessageStore.stream(sessionID)) {
     if (
       candidate.info.role === "assistant" &&
-      candidate.info.parentID === messageID &&
+      Message.acceptsInputMessage(candidate.info, messageID) &&
       candidate.info.time.completed !== undefined &&
       Boolean(candidate.info.finish) &&
       candidate.info.finish !== "error" &&
@@ -179,78 +451,17 @@ async function executePublicSessionPrompt(
   prompt: SessionPrompt.PromptInput,
 ): Promise<Message.WithParts> {
   if (!prompt.messageID) {
-    throw new Error(`Public Session prompt for ${sessionID} is missing its Host-minted input Message identity`)
+    throw new Error(`Public Session prompt for ${sessionID} is missing its caller-minted input Message identity`)
   }
+  const messageID = prompt.messageID
   const expectedIdentity = PublicSessionPromptIdentity.parse(prompt.extra?.publicSessionPromptIdentity)
-  const operationKey = `${sessionID}\0${prompt.messageID}`
-  const active = publicSessionPromptOperations.get(operationKey)
-  if (active) {
-    if (active.fingerprint !== expectedIdentity.fingerprint) {
-      throw new PublicSessionPromptIdentityConflictError({
-        sessionID,
-        messageID: prompt.messageID,
-        message: `Message ${prompt.messageID} is already bound to a different public Session prompt`,
-      })
-    }
-    return active.operation
-  }
-  const operation = executePublicSessionPromptOperation(
+  return executePublicSessionExecution({
     sessionID,
-    { ...prompt, messageID: prompt.messageID },
-    expectedIdentity,
-  )
-  publicSessionPromptOperations.set(operationKey, {
+    messageID,
     fingerprint: expectedIdentity.fingerprint,
-    operation,
+    execute: () => SessionPrompt.prompt({ ...prompt, messageID }),
+    converge: () => convergePromptTurn(sessionID, messageID),
   })
-  try {
-    return await operation
-  } finally {
-    if (publicSessionPromptOperations.get(operationKey)?.operation === operation) {
-      publicSessionPromptOperations.delete(operationKey)
-    }
-  }
-}
-
-async function executePublicSessionPromptOperation(
-  sessionID: string,
-  prompt: SessionPrompt.PromptInput & { messageID: string },
-  expectedIdentity: z.infer<typeof PublicSessionPromptIdentity>,
-): Promise<Message.WithParts> {
-  const existing = await MessageStore.get({ sessionID, messageID: prompt.messageID }).catch((error) => {
-    if (NotFoundError.isInstance(error as Error)) return undefined
-    throw error
-  })
-  if (!existing) return SessionPrompt.prompt(prompt)
-  if (existing.info.role !== "user") {
-    throw new PublicSessionPromptIdentityConflictError({
-      sessionID,
-      messageID: prompt.messageID,
-      message: `Message ${prompt.messageID} is already bound to a non-user Session message`,
-    })
-  }
-  const persistedIdentity = PublicSessionPromptIdentity.safeParse(existing.info.extra?.publicSessionPromptIdentity)
-  if (!persistedIdentity.success || persistedIdentity.data.fingerprint !== expectedIdentity.fingerprint) {
-    throw new PublicSessionPromptIdentityConflictError({
-      sessionID,
-      messageID: prompt.messageID,
-      message: `Message ${prompt.messageID} is already bound to a different public Session prompt`,
-    })
-  }
-  const completed = await completedAssistantReplyForUserMessage(sessionID, prompt.messageID)
-  if (completed) return completed
-  const session = await Session.get(sessionID)
-  return SessionContext.provide(session, () =>
-    provideInitializedProjectExecution({
-      directory: session.directory,
-      fn: () =>
-        SessionPrompt.loop({
-          sessionID,
-          reply_to_message_id: prompt.messageID,
-          retry_failed_reply: true,
-        }),
-    }),
-  )
 }
 
 function projectedWorkerPublicPromptRejection(sessionID: string): string | undefined {
@@ -293,13 +504,10 @@ async function preparePublicSessionPrompt(
     }
   }
   const runtimeContract = SessionPrompt.getSessionRuntimeContract(sessionID)
-  const identifiedPrompt = {
-    ...prompt,
-    messageID: prompt.messageID ?? Identifier.ascending("message"),
-  }
+  const identifiedPrompt = prompt
   const publicSessionPromptIdentity = {
     version: 1 as const,
-    fingerprint: publicSessionPromptFingerprint(identifiedPrompt),
+    fingerprint: publicSessionExecutionFingerprint(identifiedPrompt),
   }
   const authoredPrompt: Omit<SessionPrompt.PromptInput, "sessionID"> = {
     ...identifiedPrompt,
@@ -339,7 +547,7 @@ export function protocolSessionEvent(event: ReturnType<typeof ProtocolStore.list
     throw new Error(`protocolSessionEvent: event ${event.id} missing time.emitted (schema-invariant violated)`)
   }
   const notify = BusEvent.resolveNotify(event.type, event.payload ?? {})
-  const payload = event.payload || {}
+  const payload = projectConversationTransportEventPayload(event.type, event.payload || {})
   const orderKey = typeof event.orderKey === "string" && event.orderKey.length > 0 ? event.orderKey : undefined
   if (!orderKey) {
     throw new Error(`protocolSessionEvent: event ${event.id} (${event.type}) missing orderKey`)
@@ -351,7 +559,7 @@ export function protocolSessionEvent(event: ReturnType<typeof ProtocolStore.list
       "session",
     )
   }
-  return {
+  return SessionProtocolEvent.parse({
     event_id: event.id,
     session_id: event.sessionID,
     orderKey,
@@ -362,10 +570,10 @@ export function protocolSessionEvent(event: ReturnType<typeof ProtocolStore.list
     summary: event.summary,
     payload,
     ...(notify ? { notify } : {}),
-  }
+  })
 }
 
-function pendingQuestionSessionEvent(request: Question.Request): z.output<typeof SessionEvent> {
+function pendingQuestionSessionEvent(request: Question.Request): z.output<typeof SessionProtocolEvent> {
   const orderKey = timelineOrderKey({
     domain: "interaction",
     time: request.timeCreated,
@@ -381,7 +589,7 @@ function pendingQuestionSessionEvent(request: Question.Request): z.output<typeof
   if (!mapped?.summary || !mapped.payload) {
     throw new Error(`pendingQuestionSessionEvent: failed to map pending question ${request.id}`)
   }
-  return {
+  return SessionProtocolEvent.parse({
     event_id: `pending-question-${request.id}`,
     session_id: request.sessionID,
     orderKey,
@@ -391,17 +599,19 @@ function pendingQuestionSessionEvent(request: Question.Request): z.output<typeof
     sequence: 0,
     summary: mapped.summary,
     payload: mapped.payload,
-  }
+  })
 }
 
-function pendingPermissionProtocolSessionEvent(request: PermissionAuthority.Request): z.output<typeof SessionEvent> {
+function pendingPermissionProtocolSessionEvent(
+  request: PermissionAuthority.Request,
+): z.output<typeof SessionProtocolEvent> {
   const orderKey = timelineOrderKey({
     domain: "interaction",
     time: request.timeCreated,
     id: request.id,
   })
   const mapped = pendingPermissionSessionEvent(request)
-  return {
+  return SessionProtocolEvent.parse({
     event_id: `pending-permission-${request.id}`,
     session_id: request.sessionID,
     orderKey,
@@ -411,7 +621,7 @@ function pendingPermissionProtocolSessionEvent(request: PermissionAuthority.Requ
     sequence: 0,
     summary: mapped.summary!,
     payload: { ...mapped.payload!, orderKey },
-  }
+  })
 }
 
 const SessionConfigResponse = z
@@ -784,16 +994,9 @@ export const SessionRoutes = lazy(() =>
         const sessionID = c.req.valid("param").sessionID
         const query = c.req.valid("query")
         const session = await getActiveProjectSession(sessionID)
-        const sessionIDs = await Session.treeInProject({ sessionID, projectID: Instance.project.id })
         const tailLimit = query.tail_limit ?? CONVERSATION_TAIL_MESSAGE_LIMIT
-        const latestMessages = await MessageStore.latestAcrossSessions({ sessionIDs, limit: tailLimit + 1 })
-        const truncated = latestMessages.length > tailLimit
-        const visibleMessages = truncated ? latestMessages.slice(latestMessages.length - tailLimit) : latestMessages
-        const transcript = enrichStandaloneSessionTranscript(visibleMessages)
-          .filter(conversationMessageHasDisplay)
-          .sort(conversationTranscriptMessageOrder)
-        const historyWindow = conversationHistoryWindow(transcript, { tailLimit })
-        const history = { ...historyWindow.history, hasMore: truncated || historyWindow.history.hasMore }
+        const conversation = await sessionConversationTailProjection(session, tailLimit)
+        const { sessionIDs, transcript, history, view, hydratedAgentSessions } = conversation
         const rootMessages = await MessageStore.earliestInSession({ sessionID, limit: 20 })
         const sessionIDSet = new Set(sessionIDs)
         const pendingQuestions = (await Question.list())
@@ -821,28 +1024,10 @@ export const SessionRoutes = lazy(() =>
               }
             : {}),
         }
-        const agentSessions = listConversationAgentSessionsForSessionTree({
-          sessionID: session.id,
-          projectID: Instance.project.id,
-        })
-        const rootLifecycle = resolveSessionLifecycleSnapshot(sessionID)
-        const hydratedAgentSessions = agentSessions.map((entry) =>
-          entry.sessionID === sessionID
-            ? {
-                ...entry,
-                latestStatus: rootLifecycle.status,
-                latestStatusEmittedAt: rootLifecycle.observedAt,
-              }
-            : entry,
-        )
-        const view = projectConversationView({
-          transcript: historyWindow.transcript,
-          ledgerSessions: hydratedAgentSessions,
-        })
         const turnArtifacts =
           session.kind === "mission"
             ? await projectMissionTurnArtifacts({
-                transcript: historyWindow.transcript,
+                transcript,
                 view,
               })
             : []
@@ -851,7 +1036,7 @@ export const SessionRoutes = lazy(() =>
             ? taskExecutionProjectionForTask(board.selectedTaskID)
             : undefined
         const agentView = projectConversationAgentView(
-          historyWindow.transcript,
+          transcript,
           executionProjection ? executionProjectionLifecycleEvents(executionProjection) : [],
           hydratedAgentSessions,
           new Map(),
@@ -861,7 +1046,7 @@ export const SessionRoutes = lazy(() =>
         return c.json({
           board,
           pendingQuestions,
-          transcript: historyWindow.transcript,
+          transcript: projectConversationTransportTranscript(transcript),
           events: [],
           view,
           turnArtifacts,
@@ -909,7 +1094,7 @@ export const SessionRoutes = lazy(() =>
           projectID: Instance.project.id,
         })
         return c.json({
-          transcript: historyWindow.transcript,
+          transcript: projectConversationTransportTranscript(historyWindow.transcript),
           events: [],
           view: projectConversationView({ transcript: historyWindow.transcript, ledgerSessions: agentSessions }),
           history,
@@ -926,7 +1111,7 @@ export const SessionRoutes = lazy(() =>
             description: "Session event stream",
             content: {
               "text/event-stream": {
-                schema: resolver(SessionEvent),
+                schema: resolver(SessionStreamEvent),
               },
             },
           },
@@ -968,6 +1153,9 @@ export const SessionRoutes = lazy(() =>
             finishStream = resolve
           })
           let writes = Promise.resolve()
+          let bufferingProtocolEvents = true
+          const bufferedProtocolEvents: string[] = []
+          const seenProtocolEventIDs = new Set<string>()
           const writeData = (data: string) => {
             writes = writes
               .then(() => {
@@ -979,41 +1167,108 @@ export const SessionRoutes = lazy(() =>
               })
             return writes
           }
-          stopProtocol = ProtocolStore.subscribeEvents(
-            bind((event) => {
-              if (event.sessionID !== sessionID) return
-              void writeData(JSON.stringify(protocolSessionEvent(event)))
-            }),
-            { sessionID },
+          const sessionTreeIDs = new Set([sessionID])
+          const receiveProtocolEvent = bind((event: Parameters<typeof protocolSessionEvent>[0]) => {
+            if (
+              !includeSessionTreeEvent(
+                {
+                  sessionTreeIDs,
+                  selectedSessionID: sessionID,
+                  projectID: session.projectID,
+                },
+                event,
+              )
+            )
+              return
+            if (conversationTransportEventDisposition(event.type, event.payload) === "omit") return
+            const data = JSON.stringify(protocolSessionEvent(event))
+            if (bufferingProtocolEvents) {
+              if (seenProtocolEventIDs.has(event.id)) return
+              seenProtocolEventIDs.add(event.id)
+              bufferedProtocolEvents.push(data)
+              return
+            }
+            void writeData(data)
+          })
+          const stopSessionProtocol = ProtocolStore.subscribeEvents(receiveProtocolEvent, {
+            aggregate: "session",
+            types: SessionProtocolEventType.options,
+          })
+          const stopTaskLifecycleProtocol = ProtocolStore.subscribeEvents(receiveProtocolEvent, {
+            aggregate: "task",
+            types: ["agent.execution.lifecycle", "session.error"],
+          })
+          stopProtocol = () => {
+            stopSessionProtocol()
+            stopTaskLifecycleProtocol()
+          }
+          // The message and part tables are the canonical Session transcript.
+          // Subscribe first, then read their bounded tail: a message committed
+          // before this subscription is in the snapshot, while one committed
+          // afterwards is delivered by ProtocolStore. Stable message/part IDs
+          // are buffered until the older snapshot is sent, then replayed in
+          // arrival order so newer content always wins for a stable identity.
+          const connectionConversation = await sessionConversationTailProjection(
+            session,
+            CONVERSATION_TAIL_MESSAGE_LIMIT,
           )
+          await SessionEventStreamTestHooks.afterConversationSnapshotRead?.({ sessionID })
+          for (const treeSessionID of connectionConversation.sessionIDs) sessionTreeIDs.add(treeSessionID)
+          const conversationSnapshot = {
+            transcript: projectConversationTransportTranscript(connectionConversation.transcript),
+            view: connectionConversation.view,
+            history: connectionConversation.history,
+          }
           // Subscribe before reading the canonical pending-question state. A
           // question created before the subscription is present in this
           // snapshot; one created afterwards arrives through ProtocolStore.
           // The overlap can repeat the same request ID, which the overlay
           // interaction projection intentionally upserts idempotently.
-          for (const request of readPendingQuestions().filter((item) => item.sessionID === sessionID)) {
-            await writeData(JSON.stringify(pendingQuestionSessionEvent(request)))
-          }
-          for (const request of (await PermissionAuthority.list()).filter((item) => item.sessionID === sessionID)) {
-            await writeData(JSON.stringify(pendingPermissionProtocolSessionEvent(request)))
-          }
+          const pendingQuestionEvents = readPendingQuestions()
+            .filter((item) => sessionTreeIDs.has(item.sessionID))
+            .map(pendingQuestionSessionEvent)
+          const pendingPermissionEvents = (await PermissionAuthority.list())
+            .filter((item) => sessionTreeIDs.has(item.sessionID))
+            .map(pendingPermissionProtocolSessionEvent)
+          const connectedAt = Date.now()
           await writeData(
-            JSON.stringify({
-              event_id: `session-connected-${Date.now()}`,
-              session_id: sessionID,
-              orderKey: timelineOrderKey({
-                domain: "session",
-                time: session.time.created,
-                id: sessionID,
+            JSON.stringify(
+              SessionConnectedEvent.parse({
+                event_id: `session-connected-${connectedAt}`,
+                session_id: sessionID,
+                orderKey: timelineOrderKey({
+                  domain: "session",
+                  time: session.time.created,
+                  id: sessionID,
+                }),
+                type: "session.connected",
+                emittedAt: connectedAt,
+                timestamp: connectedAt,
+                sequence: 0,
+                summary: "Session event stream connected",
+                payload: { sessionID, conversationSnapshot },
               }),
-              type: "session.connected",
-              emittedAt: Date.now(),
-              timestamp: Date.now(),
-              sequence: 0,
-              summary: "Session event stream connected",
-              payload: { sessionID },
-            }),
+            ),
           )
+          const reconnectEvents = [...sessionTreeIDs]
+            .flatMap((treeSessionID) => {
+              const lifecycle = ProtocolStore.latestSessionEvent(treeSessionID, "agent.execution.lifecycle")
+              const status = lifecycle?.payload?.status
+              const terminalLifecycle =
+                status && typeof status === "object" && (status as { type?: unknown }).type === "terminal"
+                  ? lifecycle
+                  : undefined
+              const error = ProtocolStore.latestSessionEvent(treeSessionID, "session.error")
+              return [terminalLifecycle, error].filter((event) => event !== undefined)
+            })
+            .sort((left, right) => left.time.emitted - right.time.emitted || left.id.localeCompare(right.id))
+          for (const event of reconnectEvents) receiveProtocolEvent(event)
+          for (const event of pendingQuestionEvents) await writeData(JSON.stringify(event))
+          for (const event of pendingPermissionEvents) await writeData(JSON.stringify(event))
+          bufferingProtocolEvents = false
+          const releaseWrites = bufferedProtocolEvents.splice(0).map(writeData)
+          seenProtocolEventIDs.clear()
+          if (releaseWrites.length > 0) await releaseWrites[releaseWrites.length - 1]
           if (closed) {
             await writes
             return
@@ -1023,21 +1278,23 @@ export const SessionRoutes = lazy(() =>
               const now = Date.now()
               const eventID = `session-heartbeat-${now}`
               void writeData(
-                JSON.stringify({
-                  event_id: eventID,
-                  session_id: sessionID,
-                  orderKey: timelineOrderKey({
-                    domain: "session",
-                    time: session.time.created,
-                    id: sessionID,
+                JSON.stringify(
+                  SessionProtocolEvent.parse({
+                    event_id: eventID,
+                    session_id: sessionID,
+                    orderKey: timelineOrderKey({
+                      domain: "session",
+                      time: session.time.created,
+                      id: sessionID,
+                    }),
+                    type: "session.heartbeat",
+                    emittedAt: now,
+                    timestamp: now,
+                    sequence: 0,
+                    summary: "Session event stream heartbeat",
+                    payload: { sessionID },
                   }),
-                  type: "session.heartbeat",
-                  emittedAt: now,
-                  timestamp: now,
-                  sequence: 0,
-                  summary: "Session event stream heartbeat",
-                  payload: { sessionID },
-                }),
+                ),
               )
             }),
             10_000,
@@ -1273,7 +1530,11 @@ export const SessionRoutes = lazy(() =>
         responses: {
           200: { description: "200", content: { "application/json": { schema: resolver(z.boolean()) } } },
           ...errors(400, 404),
-          409: MissionSessionAuthorityConflict,
+          409: namedErrorResponse(
+            "Mission authority conflict, or the message identity is already bound to another public Session execution",
+            "MissionSessionAuthorityError",
+            "PublicSessionPromptIdentityConflictError",
+          ),
         },
       }),
       validator(
@@ -1282,13 +1543,25 @@ export const SessionRoutes = lazy(() =>
           sessionID: z.string().meta({ description: "Session ID" }),
         }),
       ),
-      validator("json", SessionInitializer.initialize.schema.omit({ sessionID: true })),
+      validator("json", SessionInitializer.initialize.schema.omit({ sessionID: true, extra: true })),
       async (c) => {
         const sessionID = c.req.valid("param").sessionID
         const body = c.req.valid("json")
         const session = await assertActiveProjectSession(sessionID)
         assertPublicSessionOperationAuthority(session, "session.init")
-        await SessionInitializer.initialize({ ...body, sessionID })
+        const fingerprint = publicSessionExecutionFingerprint(body)
+        await executePublicSessionExecution({
+          sessionID,
+          messageID: body.messageID,
+          fingerprint,
+          execute: () =>
+            SessionInitializer.initialize({
+              ...body,
+              sessionID,
+              extra: { publicSessionPromptIdentity: { version: 1, fingerprint } },
+            }),
+          converge: () => convergePromptTurn(sessionID, body.messageID),
+        })
         return c.json(true)
       },
     )
@@ -1451,7 +1724,7 @@ export const SessionRoutes = lazy(() =>
               if (!source) {
                 throw new Error(`Cannot compact session ${sessionID}: no real user message found`)
               }
-              await SessionCompaction.create({
+              const control = await SessionCompaction.create({
                 sessionID,
                 source,
                 model: { providerID: body.providerID, modelID: body.modelID },
@@ -1459,7 +1732,12 @@ export const SessionRoutes = lazy(() =>
                 overflow: false,
                 focus: body.focus,
               })
-              return SessionPrompt.loop(body.auto ? { sessionID } : { sessionID, result_mode: "summary" })
+              return SessionPrompt.loop({
+                sessionID,
+                result_mode: "summary",
+                summary_source_message_id: source.id,
+                summary_control_id: control.id,
+              })
             },
           }),
         )
@@ -1533,6 +1811,38 @@ export const SessionRoutes = lazy(() =>
         const params = c.req.valid("param")
         await assertActiveProjectSession(params.sessionID)
         return c.json(await MessageStore.get({ sessionID: params.sessionID, messageID: params.messageID }))
+      },
+    )
+    .get(
+      "/:sessionID/message/:messageID/part/:partID",
+      describeRoute({
+        summary: "Get message part",
+        description: "Retrieve one exact persisted part from a specific session message.",
+        operationId: "session.messagePart",
+        responses: {
+          200: {
+            description: "Message part",
+            content: {
+              "application/json": {
+                schema: resolver(Message.VisiblePart),
+              },
+            },
+          },
+          ...errors(400, 404),
+        },
+      }),
+      validator(
+        "param",
+        z.object({
+          sessionID: z.string().meta({ description: "Session ID" }),
+          messageID: z.string().meta({ description: "Message ID" }),
+          partID: z.string().meta({ description: "Part ID" }),
+        }),
+      ),
+      async (c) => {
+        const params = c.req.valid("param")
+        await assertActiveProjectSession(params.sessionID)
+        return c.json(await MessageStore.part(params))
       },
     )
     .delete(
@@ -1714,7 +2024,11 @@ export const SessionRoutes = lazy(() =>
             },
           },
           ...errors(400, 404),
-          409: MissionSessionAuthorityConflict,
+          409: namedErrorResponse(
+            "Mission authority conflict, or the message identity is already bound to another public Session execution",
+            "MissionSessionAuthorityError",
+            "PublicSessionPromptIdentityConflictError",
+          ),
         },
       }),
       validator(
@@ -1723,7 +2037,7 @@ export const SessionRoutes = lazy(() =>
           sessionID: z.string().meta({ description: "Session ID" }),
         }),
       ),
-      validator("json", SessionPrompt.CommandInput.omit({ sessionID: true })),
+      validator("json", PublicSessionCommandInput),
       async (c) => {
         const sessionID = c.req.valid("param").sessionID
         const body = c.req.valid("json")
@@ -1731,7 +2045,19 @@ export const SessionRoutes = lazy(() =>
         assertPublicSessionOperationAuthority(session, "session.command")
         const rejection = projectedWorkerPublicPromptRejection(sessionID)
         if (rejection) return c.json(badRequestBody(rejection), 400)
-        const msg = await SessionPrompt.command({ ...body, sessionID })
+        const fingerprint = publicSessionExecutionFingerprint(body)
+        const msg = await executePublicSessionExecution({
+          sessionID,
+          messageID: body.messageID,
+          fingerprint,
+          execute: () =>
+            SessionPrompt.command({
+              ...body,
+              sessionID,
+              extra: { publicSessionPromptIdentity: { version: 1, fingerprint } },
+            }),
+          converge: () => convergePromptTurn(sessionID, body.messageID),
+        })
         return c.json(msg)
       },
     )
@@ -1747,12 +2073,21 @@ export const SessionRoutes = lazy(() =>
             description: "Created message",
             content: {
               "application/json": {
-                schema: resolver(Message.Assistant.safeExtend({ orderKey: z.string().min(1) })),
+                schema: resolver(
+                  z.object({
+                    info: Message.Assistant,
+                    parts: Message.VisiblePart.array(),
+                  }),
+                ),
               },
             },
           },
           ...errors(400, 404),
-          409: MissionSessionAuthorityConflict,
+          409: namedErrorResponse(
+            "Mission authority conflict, or the message identity is already bound to another public Session execution",
+            "MissionSessionAuthorityError",
+            "PublicSessionPromptIdentityConflictError",
+          ),
         },
       }),
       validator(
@@ -1761,7 +2096,7 @@ export const SessionRoutes = lazy(() =>
           sessionID: z.string().meta({ description: "Session ID" }),
         }),
       ),
-      validator("json", SessionPrompt.ShellInput.omit({ sessionID: true })),
+      validator("json", PublicSessionShellInput),
       async (c) => {
         const sessionID = c.req.valid("param").sessionID
         const body = c.req.valid("json")
@@ -1769,7 +2104,19 @@ export const SessionRoutes = lazy(() =>
         assertPublicSessionOperationAuthority(session, "session.shell")
         const rejection = projectedWorkerPublicPromptRejection(sessionID)
         if (rejection) return c.json(badRequestBody(rejection), 400)
-        const msg = await SessionPrompt.shell({ ...body, sessionID })
+        const fingerprint = publicSessionExecutionFingerprint(body)
+        const msg = await executePublicSessionExecution({
+          sessionID,
+          messageID: body.messageID,
+          fingerprint,
+          execute: () =>
+            SessionPrompt.shell({
+              ...body,
+              sessionID,
+              extra: { publicSessionPromptIdentity: { version: 1, fingerprint } },
+            }),
+          converge: () => convergeShellExecution(sessionID, body.messageID),
+        })
         return c.json(msg)
       },
     ),

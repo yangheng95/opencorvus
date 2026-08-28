@@ -15,6 +15,7 @@ try {
       client.session.prompt({
         path: { id: session.data.id },
         body: {
+          messageID: `msg_${Date.now().toString(36)}${Math.random().toString(36).slice(2, 12)}`,
           parts: [
             {
               type: "file",
@@ -39,6 +40,7 @@ try {
       await client.session.prompt({
         path: { id: session.data.id },
         body: {
+          messageID: `msg_${Date.now().toString(36)}${Math.random().toString(36).slice(2, 12)}`,
           parts: [
             {
               type: "file",

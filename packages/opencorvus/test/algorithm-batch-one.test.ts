@@ -2,6 +2,7 @@ import { describe, expect, spyOn, test } from "bun:test"
 import { Identifier } from "../src/id/id"
 import { WorktreeOwnershipCriticalSection } from "../src/worktree/ownership-critical-section"
 import { SessionPromptState } from "../src/session/prompt/state"
+import { SessionPromptOwner } from "../src/session/prompt/owner"
 import { SessionStatus } from "../src/session/status"
 import { ProjectGitLock } from "../src/worktree/git-lock"
 import { Ownership } from "../src/engine/ownership"
@@ -574,6 +575,69 @@ describe("worktree ownership critical section", () => {
 })
 
 describe("prompt ownership termination", () => {
+  test("retains the live local owner until its exact durable generation release succeeds", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const session = await Session.create({ kind: "assistant", title: "Durable owner release retry" })
+        const owner = SessionPromptState.start(session.id, session.directory)
+        if (!owner) throw new Error("Expected a fresh prompt owner")
+        const durableOwner = SessionPromptOwner.current(session.id)
+        if (!durableOwner) throw new Error("Expected a durable prompt owner")
+
+        const releaseOwner = SessionPromptOwner.release
+        let attempts = 0
+        const firstFailure = Promise.withResolvers<void>()
+        const release = spyOn(SessionPromptOwner, "release").mockImplementation((authority) => {
+          attempts += 1
+          if (attempts === 1) {
+            firstFailure.resolve()
+            throw new Error("injected transient durable owner release failure")
+          }
+          return releaseOwner(authority)
+        })
+        try {
+          const settlement = SessionPromptState.release(session.id, session.directory)
+          await firstFailure.promise
+          expect({
+            terminating: SessionPromptState.TestHooks.isPromptTerminating(session.id, session.directory),
+            resources: SessionPromptState.TestHooks.promptResourceSnapshot(session.id),
+            durableGeneration: SessionPromptOwner.current(session.id)?.generation,
+          }).toEqual({
+            terminating: true,
+            resources: {
+              promptOwners: 1,
+              messageOwnerRegistries: 1,
+              startReservations: 0,
+              cancellationReceipts: 0,
+            },
+            durableGeneration: durableOwner.generation,
+          })
+
+          await settlement
+          expect({ attempts, resources: SessionPromptState.TestHooks.promptResourceSnapshot(session.id) }).toEqual({
+            attempts: 2,
+            resources: {
+              promptOwners: 0,
+              messageOwnerRegistries: 0,
+              startReservations: 0,
+              cancellationReceipts: 0,
+            },
+          })
+          expect(SessionPromptOwner.current(session.id)).toBeUndefined()
+
+          const replacement = SessionPromptState.start(session.id, session.directory)
+          expect(replacement).toBeInstanceOf(AbortSignal)
+          expect(SessionPromptOwner.current(session.id)?.generation).not.toBe(durableOwner.generation)
+          await SessionPromptState.release(session.id, session.directory)
+        } finally {
+          release.mockRestore()
+        }
+      },
+    })
+  })
+
   test("releases a managed-worktree Session owner after its Instance lease closes", async () => {
     await using project = await memoryProject()
     const taskID = Identifier.ascending("task")
@@ -586,6 +650,12 @@ describe("prompt ownership termination", () => {
         primaryWorktreeDir = Instance.project.worktree
         const worktree = await Worktree.create({ name: `closed-lease-${taskID.slice(-8)}`, taskID, sessionID })
         managedWorktreeDir = worktree.directory
+        await Session.createNext({
+          id: sessionID,
+          kind: "assistant",
+          directory: managedWorktreeDir,
+          title: "Closed managed-worktree prompt owner",
+        })
         SessionPromptState.start(sessionID, managedWorktreeDir)
       },
     })
@@ -607,6 +677,12 @@ describe("prompt ownership termination", () => {
         const taskID = Identifier.ascending("task")
         const sessionID = Identifier.ascending("session")
         const worktree = await Worktree.create({ name: `retry-owner-${taskID.slice(-8)}`, taskID, sessionID })
+        await Session.createNext({
+          id: sessionID,
+          kind: "assistant",
+          directory: worktree.directory,
+          title: "Retry managed-worktree prompt owner",
+        })
         SessionPromptState.start(sessionID, worktree.directory)
         const owner = SessionPromptState.promptOwner(sessionID)!
         const receipt = SessionPromptState.cancelOwned(sessionID, worktree.directory, owner, {
@@ -658,6 +734,12 @@ describe("prompt ownership termination", () => {
         const taskID = Identifier.ascending("task")
         const sessionID = Identifier.ascending("session")
         const worktree = await Worktree.create({ name: `sticky-owner-${taskID.slice(-8)}`, taskID, sessionID })
+        await Session.createNext({
+          id: sessionID,
+          kind: "assistant",
+          directory: worktree.directory,
+          title: "Retained managed-worktree prompt owner",
+        })
         SessionPromptState.start(sessionID, worktree.directory)
         const owner = SessionPromptState.promptOwner(sessionID)!
         const receipt = SessionPromptState.cancelOwned(sessionID, worktree.directory, owner, {
@@ -719,7 +801,14 @@ describe("prompt ownership termination", () => {
       directory: project.path,
       fn: async () => {
         const sessionID = Identifier.ascending("session")
-        SessionPromptState.start(sessionID, `${import.meta.dir}/prompt-owner-contract`)
+        const directory = `${import.meta.dir}/prompt-owner-contract`
+        await Session.createNext({
+          id: sessionID,
+          kind: "assistant",
+          directory,
+          title: "Complete prompt resource cleanup",
+        })
+        SessionPromptState.start(sessionID, directory)
         expect(SessionPromptState.TestHooks.promptResourceSnapshot(sessionID)).toEqual({
           promptOwners: 1,
           messageOwnerRegistries: 1,
@@ -744,7 +833,14 @@ describe("prompt ownership termination", () => {
       directory: project.path,
       fn: async () => {
         const sessionID = Identifier.ascending("session")
-        SessionPromptState.start(sessionID, `${import.meta.dir}/prompt-owner-status-failure`)
+        const directory = `${import.meta.dir}/prompt-owner-status-failure`
+        await Session.createNext({
+          id: sessionID,
+          kind: "assistant",
+          directory,
+          title: "Prompt status cleanup failure",
+        })
+        SessionPromptState.start(sessionID, directory)
         const status = spyOn(SessionStatus, "finishPromptGeneration").mockImplementation(() => {
           throw new Error("status termination failed")
         })
@@ -842,7 +938,6 @@ describe("prompt ownership termination", () => {
           session.id,
           { type: "streaming" },
           {
-            publish: false,
             inputMessageID: input.id,
             promptGenerationOwner: owner,
           },
@@ -949,6 +1044,12 @@ describe("prompt ownership termination", () => {
       fn: async () => {
         const sessionID = Identifier.ascending("session")
         const directory = `${import.meta.dir}/prompt-owner-terminal-handoff`
+        await Session.createNext({
+          id: sessionID,
+          kind: "assistant",
+          directory,
+          title: "Prompt owner terminal handoff",
+        })
         const owner = SessionPromptState.start(sessionID, directory)!
         const reservation = SessionPromptState.claimPromptSettlementReservation(sessionID, directory, owner)
         const settlement = SessionPromptState.cancelOwned(sessionID, directory, owner, {

@@ -1,0 +1,178 @@
+# Session Stream Message Cutover Convergence
+
+Date: 2026-08-26
+Status: repair verified; delivery in progress
+Owner: Codex
+
+## Recall
+
+### User request
+
+- Repair the class of defects where the first operator message in a newly created Work conversation is absent while Work Agent messages render.
+- Cover equivalent first-connection and reconnect gaps instead of applying a Work-only presentation patch.
+
+### Acceptance criteria
+
+1. A newly created Work or Chat Session exposes the exact persisted first user Message even when it commits before the Session Server-Sent Events (SSE) subscription is attached.
+2. A selected Session converges newly committed Messages and Parts missed while its transport is disconnected when the stream reconnects.
+3. The same connection cutover works for ordinary conversation and Mission Session trees without synthesizing Messages, duplicating persistence, or clearing already rendered cards.
+4. The canonical `message` / `part` tables remain the only message history source; `protocol_event` does not acquire message snapshots.
+5. Task conversation hydrate, persisted Protocol replay, live replay, and live-replay-expiry recovery remain unchanged.
+6. Focused positive non-User Interface (UI) checks prove the backend subscribe-before-snapshot cutover and the Overlay's idempotent snapshot merge, including exact `user` and `work` identities.
+7. A real isolated development page is inspected manually to prove the persisted first Work user card and following Work Agent card render with their exact identities; the subscribe-before-snapshot timing contract is exercised through the production SSE route because Provider credential use is not authorized.
+
+### Hard constraints
+
+- Keep `tree-writer.ts` as the single rendered conversation writer and canonical `orderKey` as the only timeline axis.
+- Do not create an optimistic or synthetic user bubble, persist message payloads into `protocol_event`, add a Work-only fallback, or introduce a second transcript store.
+- Preserve all streaming Large Language Model (LLM) execution. This repair concerns the message transport cutover, not model-call shape.
+- Preserve source identity: direct right-sidebar user Messages remain `role=user`, `author=user`, `agentID=work|chat`, `originSource=right-sidebar-conversation`, display stage `user`; assistant Messages retain their exact primary Agent identity.
+- Do not add, modify, or run UI automation. Visual acceptance uses a real page, real interaction, screenshots, and manual review.
+- Do not operate, restart, refresh, or close the user's running application. Use an isolated runtime for real-page acceptance.
+- Preserve unrelated concurrent Browser, Computer, MCP, Expert Squad, Session-loop, test, and architecture-debt-record changes currently present in the shared worktree.
+
+### Sources read
+
+- `AGENTS.md`
+- `specs/current/architecture/02-data.md`
+- `specs/current/architecture/07-panel-reactivity.md`
+- `specs/current/architecture/16-unified-teardown.md`
+- `specs/current/architecture/17-code-work-agent-platform.md`
+- `specs/records/2026-08/2026-08-10-session-card-ingress-projection-repair.md`
+- `specs/records/2026-08/2026-08-14-session-message-projection-e2e.md`
+- `specs/records/2026-08/2026-08-15-normalized-tool-part-bridge-and-diagnostic-copy-repair.md`
+- `packages/overlay/src/main.tsx`
+- `packages/overlay/src/services/conversation-session.ts`
+- `packages/overlay/src/services/chat.ts`
+- `packages/overlay/src/services/sse.ts`
+- `packages/overlay/src/services/conversation.ts`
+- `packages/overlay/src/services/tree-writer.ts`
+- `packages/opencorvus/src/chat/session.ts`
+- `packages/opencorvus/src/conversation/view.ts`
+- `packages/opencorvus/src/orchestrator/protocol/message-bridge.ts`
+- `packages/opencorvus/src/protocol/session-mirror.ts`
+- `packages/opencorvus/src/protocol/store.ts`
+- `packages/opencorvus/src/server/routes/session.ts`
+
+### Whole-repository search results
+
+- `rg -n 'startSSE|openStream|session.connected|session.heartbeat|subscribeEvents|listTaskLiveEventsAfter' packages/overlay/src packages/opencorvus/src`
+- `rg -n 'message.updated|message.part.updated|dispatchEphemeral|Session.messages|latestAcrossSessions' packages/opencorvus/src`
+- `rg -n 'session.events|performSessionSseReconnect|selected-task-stream-live-replay' packages/opencorvus/test packages/overlay/test`
+- `rg -n -i 'Session.*SSE|SSE.*Session|replay|hydrate|reconnect' specs/current specs/records/2026-08`
+
+The search found one selected-source stream owner in Overlay. Task and Session share the transport wrapper but have intentionally different recovery authorities. Task messages hydrate from the transcript and retain bounded in-memory live replay until the next persisted tail merge. Session messages also hydrate from the transcript initially, but the Session event route is live-only and the reconnect path only reopens it. Question and Permission interactions already close the same cutover by subscribing before rereading their canonical pending stores. No equivalent message/Part snapshot exists.
+
+### Independent agent feedback
+
+None before implementation. A later mandatory read-only review rejected commit `12ec09780` with five P1 findings. The production bridge does not emit Message/Part events for a non-Task worker child in a standalone Session tree; live events can be queued before an older connection snapshot and then be overwritten by that snapshot; dynamic child admission trusts a global event payload without canonical Project/root lineage; `session.connected` is not represented by the route/OpenAPI/generated Software Development Kit contract; and the added Overlay Card Tree test is prohibited UI state automation. The earlier review status and delivery claim were therefore incorrect.
+
+The repair must use one production path: every Message lifecycle event is stamped from durable Session lineage and dispatched to its Task aggregate when one exists or to its Session aggregate otherwise; the stream admits new members only from that canonical project/root identity; events received during snapshot construction are buffered until the typed `session.connected` envelope is written, then released in arrival order. The typed event must be used by the route and regenerated public closure. The prohibited Overlay test must be deleted and must not be run. Focused backend tests must exercise the real Bus -> bridge -> ProtocolStore -> SSE path after `session.connected`, including a non-Task child and two-project isolation, and a cutover fault injection must prove newer live Part content wins over the older snapshot. A fresh uninvolved read-only review is required after all checks pass.
+
+The implementation now follows that repair. The focused production-route test opens both Project streams, waits for each typed connection event, creates a non-Task `orchestrator` child in each durable tree, and persists its Message and Part through the real Bus/bridge/ProtocolStore/SSE flow; each stream receives the exact identities from its own canonical Project lineage. A snapshot-read hook updates the same persisted Part after the older snapshot is materialized, and the SSE sequence proves `session.connected` precedes the newer live Part value. Generated SDK types now name the connection event, snapshot, and stream union. The prohibited Overlay test is deleted and was not run during the repair. Repeat independent review confirmed the production filter and distinguishing durable-event test; its only P3 evidence-count correction is incorporated below, with the required final rereview pending.
+
+The second repeat review rejected that generated union: its broad `SessionEvent` branch still accepted `type: "session.connected"` with an arbitrary payload, so neither runtime parsing nor SDK type narrowing made the connection payload exclusive. It also found this record's verification plan still promised the deleted Overlay Card Tree automation and Decision item 5 still described identity overlap as freshness authority instead of the actual buffer/order guarantee. The corrective contract must give the non-connected stream branch a closed literal event vocabulary that excludes `session.connected`, use that exclusive union in production and the route, regenerate OpenAPI/SDK, and add a positive schema classification check. The stale UI automation plan is removed below; real-page manual evidence remains the rendering acceptance.
+
+## Problem depth and impact
+
+### Observable behavior
+
+A fresh Work submission can render the Work Agent's assistant/tool output without the operator's first visible request. Reopening the Session can make the persisted request appear, proving the input was not lost.
+
+### Direct trigger
+
+`selectConversationSession` hydrates the empty Session, calls `startSSE`, and immediately returns. `startSSE` starts the transport but does not await its `onOpen`/`session.connected` boundary. The global Composer immediately calls the synchronous Session prompt route. If the first user Message commits before the backend Session event handler subscribes, its ephemeral `message.updated` and `message.part.updated` events have no subscriber.
+
+The prompt route later returns only the completed assistant Message. Overlay synchronously projects that response, so the Work Agent output appears even though the corresponding user event was missed.
+
+### Data and control-flow root cause
+
+Message and Part tables are the correct single durable authority. Message events deliberately remain ephemeral to avoid a second full-message event log. The invariant therefore requires clients to reread the canonical transcript at every stream cutover. Task does so through its persisted hydrate/live-replay design. Session initial selection hydrates only *before* stream attachment, and Session reconnect reopens only the live subscription. The missing subscribe-before-snapshot handshake leaves a gap at both boundaries.
+
+### Why earlier repairs did not cure it
+
+- The public Session projection repair made the synchronous assistant response canonical; it did not return or merge the persisted input Message.
+- The composer dispatch repair clears a submitted draft at the local dispatch boundary; it does not create message visibility authority.
+- The bounded Session history repair made older pages reachable; it does not close events occurring after hydrate and before stream subscription.
+- Pending Question/Permission snapshots solve only their own durable stores.
+- Waiting for `onOpen` would narrow the first-send window but would not recover messages committed during a later disconnect, so it is not a complete repair.
+
+### Shared-mechanism audit
+
+| Surface | Current cutover | Impact and disposition |
+| --- | --- | --- |
+| New Work | empty hydrate -> unawaited Session stream -> immediate prompt | Directly affected; connection snapshot must merge the persisted `user` Message before/alongside live Work output. |
+| New Chat | Same route and primary Session kind as Work | Equally affected; repaired by the same Session snapshot. |
+| Existing Chat/Work | Reconnect reopens a live-only stream | Newly created Messages/Parts committed while disconnected are missed until full reselection; repaired by the same reconnect snapshot. |
+| Mission Session | Selected through the same Session stream; initial open commonly occurs after wake/hydrate | Initial wake is usually covered by hydrate, but reconnect and any hydrate-to-subscribe window share the defect; snapshot the current Session tree. |
+| Ordinary public Session | Same `/session/:id/events` contract | Same defect and repair. |
+| Task conversation | Persisted hydrate + Protocol replay + bounded live replay + tail merge on expiry | Not affected; preserve unchanged. |
+| Pending Question/Permission | Subscribe then reread canonical pending stores | Already convergent; preserve and use the same cutover ordering. |
+| Restart/recovery | Message rows survive; Session stream has no cursor or transcript reread | A new selection hydrate is safe, but transport-only reconnect is not; connection snapshot repairs it. |
+| Multi-project isolation | Route resolves exact Session through the request directory and active project | Preserve exact directory routing and project-scoped Session tree lookup. |
+
+## Decision
+
+Extend the existing `session.connected` handshake with one bounded connection snapshot derived directly from the canonical Session-tree Message/Part tables and projected by the existing conversation view:
+
+1. Subscribe to Session protocol events first.
+2. Read a bounded current transcript snapshot and canonical conversation view for the exact selected Session tree.
+3. Emit that snapshot in `session.connected`.
+4. Let Overlay validate and merge it through `prepareConversationView` / `commitPreparedConversationView` without clearing the Card Tree.
+5. Buffer protocol events received while the canonical snapshot is read, emit `session.connected` first, then release the buffered events in arrival order. Stable identities make overlap safe, while this transport order—not identity deduplication—guarantees newer live content wins.
+6. Abort and invalidate any older in-flight history request before replacing the selected Session history cursor with the cursor from the same connection window. If a disconnect accumulated more messages than the snapshot limit, the latest tail becomes visible immediately and older-page loading can continue from that tail to recover the middle segment. Stable message IDs make overlap with already loaded history idempotent.
+7. Keep one live membership set for the selected Session tree. Seed it from the canonical tree snapshot and resolve every event Session against the request Project's durable ancestor chain. Admit a new child only when that canonical chain contains the selected Session and carries the exact Project ID; payload parent claims are not authority.
+8. Make the message bridge the one live owner for every Message lifecycle event. It publishes against a Task aggregate when durable Task lineage exists and otherwise against the Session aggregate; the Session mirror no longer duplicates Message mapping.
+9. Validate the production handshake with `SessionConnectedEvent`, expose the route as `SessionStreamEvent`, and regenerate the named OpenAPI and JavaScript Software Development Kit types.
+10. Subscribe the Session route only to the ProtocolStore's canonical `session` aggregate AND the exact `SessionProtocolEventType.options` public vocabulary before parsing. `EngineProtocol` publishes Task-owned coordination and execution events with `aggregate: "task"`, while the Session aggregate also owns internal controls such as `scheduler.message`, Mission execution closure and `session.deleted`. Aggregate alone is therefore not the public projection boundary. The closed enum is the single vocabulary owner used by both the subscription filter and public parser. A production-route check must publish a real non-message Session event through Bus -> Session mirror -> ProtocolStore and observe its typed Server-Sent Events frame; another must persist a schema-valid `scheduler.message`, assert the exact append receipt, wait for post-commit subscriber settlement, and then prove the following public frame still arrives. The settlement boundary is essential: it makes the check fail if the internal control reaches and is rejected by the public parser instead of allowing an ephemeral dispatch rejection to be swallowed.
+
+This uses one message authority, one connection handshake, one writer, and one current implementation. It does not add a second event replay store or a client-created message.
+
+The bounded snapshot is intentionally additive. It repairs missed creation events—the class that makes a first user Message absent while later Agent output is visible—and refreshes rows included in its current tail. It is not an authoritative manifest for every Message ever loaded by the client: absence from the tail cannot prove deletion, and a changed Part older than the tail is not reread until that history region is loaded again. Full disconnected deletion/tail-external mutation reconciliation would require a canonical removal/change coordination contract and is not claimed by this repair.
+
+## Verification plan
+
+- Backend route-level positive check: persist a direct Work user Message before stream attachment, open the production Session SSE route, parse `session.connected`, and prove the bounded snapshot contains the exact user identity, Part, view stage, and Work Session owner.
+- Backend cutover checks: prove a Message persisted before stream attachment is present in `session.connected`; prove a disconnect-sized 82-message transcript returns the latest bounded 80-message tail with a history cursor that reaches the preceding segment. The code-order assertion remains subscribe first, then snapshot.
+- Public-contract positive check: classify a typed `session.connected` envelope and a representative ordinary stream event through the production `SessionStreamEvent` schema, then verify the generated SDK exposes an exclusive discriminated union whose non-connected branch has no `session.connected` literal.
+- Production non-message projection checks: publish `Session.Event.Diff` through the real Bus and Session mirror after attaching the production Session Server-Sent Events route, then assert that the route emits a typed `session.diff` frame for the exact Session. In the same real stream, first persist a schema-valid `scheduler.message` Session-aggregate control, assert its exact durable append receipt, and wait for post-commit subscriber settlement before publishing the public diff. Task aggregates and internal Session controls are excluded by aggregate plus the one public type vocabulary before delivery, rather than accepted and rejected later by the parser. Without the public type filter, the settlement wait observes the parser rejection and the check fails.
+- Existing focused Session history and public Session projection checks.
+- Overlay and OpenCorvus typechecks, Overlay production build, root documentation check, and task-owned diff check.
+- Real isolated Work page: use an isolated runtime and project with controlled persisted user/assistant rows (no Provider credentials), inspect a screenshot showing the exact first user request followed by `work`, and verify the page console has no warnings/errors. This proves the actual UI renders the repaired canonical identities, not the fresh-submit or reconnect timing sequence. The real Provider submission path is not exercised because credential use was not authorized; the production SSE route check owns the cutover timing proof.
+- Mandatory independent read-only review; repair every valid finding and rerun affected acceptance until no unresolved finding remains.
+
+## Progress
+
+- [x] Observable symptom, direct trigger, persisted authority, old repair gaps, and shared impact audited.
+- [x] Repair design recorded before implementation.
+- [x] Backend subscribe-before-snapshot handshake implemented.
+- [x] Overlay snapshot merge and history-cursor convergence implemented, including invalidation of an older in-flight history request.
+- [x] Message live ownership covers both Task and non-Task Session aggregates without a duplicate Session-mirror implementation.
+- [x] Cutover live events are buffered until the typed connection snapshot is emitted, then released in arrival order.
+- [x] Dynamic Session admission resolves the exact request Project's durable ancestor chain instead of trusting event payload lineage.
+- [x] OpenAPI and JavaScript SDK generation closure includes an exclusive, safely discriminated `SessionConnectedEvent | SessionProtocolEvent` union. The ordinary branch uses the production public Session stream's closed event vocabulary and excludes `session.connected`; a malformed connection frame maps to a typed Zod contract error instead of falling through. ProtocolStore subscription delivery now filters both `aggregate: "session"` and the same `SessionProtocolEventType.options` vocabulary before parsing. The real Session route test persists a schema-valid internal `scheduler.message`, asserts its append receipt and successful post-commit settlement, then proves the following Bus-projected `session.diff` still arrives typed.
+- [x] Prohibited Overlay Card Tree automation removed and not run during repair.
+- [x] Focused route/projection/history/origin tests, package typechecks, documentation checks, architecture index, diff check, SDK generation/typecheck, and Overlay production build passed.
+- [x] Real-page rendering acceptance completed against an isolated runtime; screenshot: [`../../artifacts/session-stream/2026-08-26-work-first-message-visible.png`](../../artifacts/session-stream/2026-08-26-work-first-message-visible.png). DOM and screenshot show `User` / `第一条 Work 用户消息应该完整显示`, followed by `work` / `这是 Work Agent 的消息；它应显示在用户消息之后。`; browser warning/error log was empty. This is rendering evidence only; the route test proves the connection race.
+- [x] Independent review complete with no unresolved finding. The repeat review found no production or test defect and one P3 stale evidence count; after correction, the final uninvolved read-only rereview passed with no unresolved P0-P3 finding.
+- [x] Corrective commit `4e2b1f456` created, the complete pending set reviewed, pre-push verification passed, and the source branch pushed through `702e030d4` to `origin/arch-debt-remediation`.
+
+## Verification evidence
+
+- Exclusive Session stream schema and production-route projection: the accepted isolated results are `bun test test/server/session-event-connection-snapshot.test.ts` — **7 pass, 0 fail, 12 assertions**, and `bun test test/task-event-projection-contract.test.ts` — **2 pass, 0 fail, 4 assertions** (**9 pass, 0 fail, 16 assertions** total). `bun test test/permission-transport-hydration.test.ts` — **1 pass, 0 fail, 4 assertions**. The earlier concurrent invocations exceeded existing time budgets under simultaneous verification processes, so only the isolated results are accepted.
+- Session aggregate ownership and real non-message projection: `bun test test/server/session-event-connection-snapshot.test.ts` — **7 pass, 0 fail, 12 assertions**. The added case persists a schema-valid internal `scheduler.message`, asserts its exact durable receipt, waits for subscriber settlement, then publishes `Session.Event.Diff` and receives the exact typed `session.diff` frame from the still-live production Session route. `bun test test/task-event-projection-contract.test.ts` passes separately with **2 pass, 0 fail, 4 assertions** after its first combined run exceeded the historical five-second budget under concurrent repository work.
+- Current package/static closure: OpenCorvus, Overlay and generated JavaScript SDK typechecks; SDK build; Overlay full production build; `docs:check`; `api:routes-check`; `check:architecture-index`; and `git diff --check` all pass. The production build retains only the pre-existing third-party `use client`, mixed static/dynamic import, and chunk-size warnings.
+
+- `bun test test/server/session-event-connection-snapshot.test.ts` in `packages/opencorvus`: 4 passed (first Work prompt, 82-message reconnect window, older-snapshot/newer-live Part ordering, and exact two-Project non-Task child Message/Part delivery).
+- `packages/overlay/test/session-connection-snapshot.test.ts` was identified as prohibited UI state automation. Its earlier execution is not accepted as evidence; the file is removed by this repair and is not run again.
+- `bun test test/server/session-event-connection-snapshot.test.ts test/server/session-conversation-history.test.ts test/mission-message-origin-projection.test.ts test/protocol-session-config-mirror.test.ts test/task-event-projection-contract.test.ts` in `packages/opencorvus`: 11 passed, 23 assertions.
+- `bun run typecheck` in `packages/opencorvus`: passed.
+- `bun run typecheck` in `packages/overlay`: passed.
+- `bun run build` and `bun run typecheck` in `packages/sdk/js`: passed; generated `SessionEventsResponses[200]` is `SessionStreamEvent` rather than an untyped payload-only object.
+- `bun run build:vite` in `packages/overlay`: passed (existing Rollup chunk-size and mixed static/dynamic-import warnings only).
+- `bun run api:routes-check`: passed across 34 route files.
+- `bun run docs:check`: passed, 336 operations and 25 groups.
+- `bun run check:architecture-index`: passed, 26 current documents indexed.
+- Prettier passed for both newly added focused test files, `packages/opencorvus/src/engine/model.ts`, and `packages/overlay/src/services/conversation.ts`. The pre-existing `packages/opencorvus/src/server/routes/session.ts` and `packages/overlay/src/services/sse.ts` are not whole-file Prettier-clean; unrelated formatting hunks were deliberately not retained.
+- `git diff --check`: passed.
+- `bun run build` in `packages/opencorvus`: blocked in native executable compilation because Bun resolved `@octokit/core@5.2.2` from its global cache but could not resolve five declared transitive dependencies. A frozen install and an offline frozen install were both attempted; the registry layer returned bulk `ConnectionClosed` errors, so the dependency graph could not be rebuilt. This is an explicit unmet build check, not a source verdict; Overlay build and both package typechecks remain passing.

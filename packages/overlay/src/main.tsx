@@ -50,9 +50,7 @@ import { closeFileEditor, fileEditorRevealRevision, fileWorkbenchOpen } from "./
 import type { DiffTarget } from "./services/diff"
 import { initApp } from "./services/init"
 import {
-  loadTasks,
   boardStore,
-  loadBoard,
   activeBrowserPreviewTaskID,
   activeTaskID,
   activeSessionID,
@@ -79,7 +77,6 @@ import { loadAllLocales, localeTag, setLocale } from "./utils/i18n"
 import { apiJson, configure as configureApi } from "./services/api"
 import type { AutomationRunSession } from "./services/automations"
 import { t } from "./utils/i18n"
-import { renderMarkdown } from "./utils/markdown"
 import {
   elementFileReference,
   FILE_REFERENCE_PATH_ATTRIBUTE,
@@ -90,7 +87,6 @@ import {
   applyZoom,
   handleZoomHotkey,
   installSystemThemeListener,
-  stepZoom,
   toggleDevtools,
 } from "./services/theme"
 import { bumpWorkspaceEpoch, settingsStore, setSettingsStore, saveSettings } from "./store/settings"
@@ -226,6 +222,7 @@ import {
   mergeComposerExpertSquadOptions,
 } from "./services/composer-expert-squad-catalog"
 import { currentUIScale, layoutTokenPx } from "./utils/layout-tokens"
+import { copyText } from "./services/clipboard"
 
 // ── Module teardown ──
 // Centralised cleanup for top-level document/window listeners and the Solid root.
@@ -432,6 +429,7 @@ const [rightDockAddMenuOpen, setRightDockAddMenuOpen] = createSignal(false)
 const [rightDockOverflowMenuOpen, setRightDockOverflowMenuOpen] = createSignal(false)
 const [browserPreviewPageTitles, setBrowserPreviewPageTitles] = createSignal<Record<string, string>>({})
 let primaryBrowserPreviewController: BrowserPreviewPanelController | undefined
+let pendingPrimaryBrowserPreviewNavigation: { url: string } | undefined
 const [selectedSubagentSessionID, setSelectedSubagentSessionID] = createSignal("")
 const [primaryCenterPanel, setPrimaryCenterPanel] = createSignal<PrimaryCenterPanel>("chat")
 const [primaryWorkspaceSurface, setPrimaryWorkspaceSurface] = createSignal<PrimaryWorkspaceSurface>("conversation")
@@ -541,6 +539,19 @@ function openRightDockAddMenu(): void {
 
 function registerPrimaryBrowserPreviewController(controller: BrowserPreviewPanelController): () => void {
   primaryBrowserPreviewController = controller
+  const pendingNavigation = pendingPrimaryBrowserPreviewNavigation
+  if (pendingNavigation) {
+    queueMicrotask(() => {
+      if (
+        primaryBrowserPreviewController !== controller ||
+        pendingPrimaryBrowserPreviewNavigation !== pendingNavigation
+      ) {
+        return
+      }
+      pendingPrimaryBrowserPreviewNavigation = undefined
+      controller.navigate(pendingNavigation.url)
+    })
+  }
   return () => {
     if (primaryBrowserPreviewController === controller) primaryBrowserPreviewController = undefined
   }
@@ -548,8 +559,13 @@ function registerPrimaryBrowserPreviewController(controller: BrowserPreviewPanel
 
 function openBrowserPreviewFromMessage(url: string): void {
   const controller = primaryBrowserPreviewController
-  if (!controller) throw new Error("Right Dock Browser controller is not mounted")
-  controller.navigate(url)
+  if (controller) {
+    pendingPrimaryBrowserPreviewNavigation = undefined
+    controller.navigate(url)
+    openRightDockPanel("browser")
+    return
+  }
+  pendingPrimaryBrowserPreviewNavigation = { url }
   openRightDockPanel("browser")
 }
 
@@ -1345,9 +1361,19 @@ function removeCenterWorkbenchTabs(matches: (tab: CenterWorkbenchTab) => boolean
 
   const selectedID = untrack(selectedCenterWorkbenchTabID)
   if (!remaining.some((tab) => tab.id === selectedID)) {
+    const remainingIDs = new Set(remaining.map((tab) => tab.id))
     const selectedIndex = current.findIndex((tab) => tab.id === selectedID)
-    const nextSelectedIndex = Math.max(0, Math.min(selectedIndex - 1, remaining.length - 1))
-    setSelectedCenterWorkbenchTabID(remaining[nextSelectedIndex].id)
+    const previousDockTab =
+      selectedIndex < 0
+        ? undefined
+        : current
+            .slice(0, selectedIndex)
+            .reverse()
+            .find((tab) => tab.panel !== "conversation" && remainingIDs.has(tab.id))
+    const nextDockTab = current
+      .slice(Math.max(0, selectedIndex + 1))
+      .find((tab) => tab.panel !== "conversation" && remainingIDs.has(tab.id))
+    setSelectedCenterWorkbenchTabID(previousDockTab?.id ?? nextDockTab?.id ?? "conversation")
   }
 
   setCenterWorkbenchPanels(remaining)
@@ -1450,30 +1476,11 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return !!value && typeof value === "object" && !Array.isArray(value)
 }
 
-/** Open the workspace panel. */
-function openWorkspace(): void {
-  setWorkspaceOpen(true)
-  setFileChangesActiveView("diff")
-  showRightDockForExplicitAction()
-  openCenterWorkbenchPanel("diff")
-}
-
 /** Close the workspace panel. */
 function closeWorkspace(): void {
   setWorkspaceOpen(false)
   closeCenterWorkbenchPanel("diff")
 }
-
-/** Open (or switch to) a diff file in the workspace. */
-async function openWorkspaceDiff(target: DiffTarget): Promise<void> {
-  if (!(await closeFileEditor())) return
-  setWorkspaceTarget(target)
-  openWorkspace()
-}
-
-// Exposed for services and window-level bridges that need to trigger the
-// workspace from outside this module (e.g. ChangesPanel clicks).
-;(window as any).openWorkspaceDiff = openWorkspaceDiff
 
 // Delegate clicks on rendered-markdown file links (see utils/markdown.ts —
 // codespans that look like file paths are emitted with data-file-path).
@@ -1529,7 +1536,6 @@ document.addEventListener(
     const canOpenExternalUrl = getHostTransport().capabilities.nativeCommands["open-url"]
     const canOpenBrowserPreview =
       Boolean(previewUrl) &&
-      Boolean(primaryBrowserPreviewController) &&
       browserPreviewNativeSurfaceAvailable() &&
       browserPreviewNativeUrlNavigationAvailable()
     if (!canOpenBrowserPreview && !canOpenExternalUrl) return
@@ -1590,7 +1596,7 @@ document.addEventListener(
       .replace(/&#39;/g, "'")
     runMainAsync("markdown.copy-code", async () => {
       try {
-        await navigator.clipboard.writeText(decoded)
+        await copyText(decoded)
         flash(t("markdown.copied"))
       } catch (err) {
         console.error("[md-copy] clipboard write failed", err)
@@ -1602,34 +1608,6 @@ document.addEventListener(
 )
 
 window.addEventListener("acceptance:focus-changes", requestReviewPanel, listenerOpts)
-
-function installGlobalBridges(): void {
-  ;(window as any).renderMarkdown = renderMarkdown
-  ;(window as any).persistOverlaySettings = async () => {
-    await saveSettings()
-  }
-  ;(window as any).stepZoom = (delta: number) => {
-    const next = stepZoom(delta)
-    setSettingsStore("zoom", next)
-    persistMainSettings("settings.persist-step-zoom")
-  }
-  // Test hook: snapshot the current card tree as a flat JSON shape. Used by
-  // Playwright / integration tests to read the live store-backed tree.
-  ;(window as any).renderConversation = () => cardTreeStore.order.map((id) => cardTreeStore.cards[id]).filter(Boolean)
-  ;(window as any).cardTree = cardTreeStore
-  // Benchmark hook: expose named stores so external probes do not depend on
-  // the legacy aggregate `state` bridge.
-  ;(window as any).appStore = appStore
-  ;(window as any).boardStore = boardStore
-  ;(window as any).settingsStore = settingsStore
-  ;(window as any).applyDirectory = applyDirectory
-  ;(window as any).loadTasks = loadTasks
-  ;(window as any).selectTask = (taskID: string, options?: { directory?: string }) =>
-    selectTaskWithUILifecycle(taskID, options?.directory?.trim() || activeDirectory())
-  ;(window as any).loadBoard = loadBoard
-}
-
-installGlobalBridges()
 
 // Components call strict `t()` at render time. Load the locale bundles before
 // mounting any Solid surface so early hosts do not render against an empty
@@ -2157,11 +2135,8 @@ function OverlayRoot() {
           onCreateChat={(directory) =>
             runMainAsync("work-ledger.project-new-chat", () => selectWorkLedgerProject(directory))
           }
-          onOpenProjectDirectory={
-            getHostTransport().capabilities.nativeCommands["open-path"]
-              ? (directory) =>
-                  runMainAsync("work-ledger.project-open-directory", () => openWorkLedgerProjectDirectory(directory))
-              : undefined
+          onOpenProjectDirectory={(directory) =>
+            runMainAsync("work-ledger.project-open-directory", () => openWorkLedgerProjectDirectory(directory))
           }
           onRenameProject={(directory, currentName) =>
             runMainAsync("work-ledger.project-rename", () => renameWorkLedgerProject(directory, currentName))
@@ -2376,6 +2351,7 @@ function OverlayRoot() {
         <RightDock
           addMenuOpen={rightDockAddMenuOpen}
           tabs={rightDockTabPanels}
+          open={rightDockOpen}
           active={() => {
             const selected = selectedCenterWorkbenchTab()
             return selected?.panel === "conversation" ? null : (selected?.id ?? null)
@@ -2395,12 +2371,11 @@ function OverlayRoot() {
         >
           <TabPanel
             value="explorer"
-            forceMount
             class="center-workbench-view"
             id="centerWorkbenchExplorer"
             data-workbench-view="explorer"
-            data-open="false"
-            data-active="false"
+            data-open={String(isCenterWorkbenchPanelOpen("explorer"))}
+            data-active={String(selectedCenterWorkbenchTab()?.id === "explorer")}
           >
             <div id="solidFileExplorerMount" class="center-workbench-activity sidebar-explorer-panel">
               <FileExplorerPanel active={() => isCenterWorkbenchPanelOpen("explorer")} directory={activeDirectory} />
@@ -2408,12 +2383,11 @@ function OverlayRoot() {
           </TabPanel>
           <TabPanel
             value="diff"
-            forceMount
             class="center-workbench-view"
             id="centerWorkbenchDiff"
             data-workbench-view="diff"
-            data-open="false"
-            data-active="false"
+            data-open={String(isCenterWorkbenchPanelOpen("diff"))}
+            data-active={String(selectedCenterWorkbenchTab()?.id === "diff")}
           >
             <div id="solidFileChangesMount" class="center-workbench-activity sidebar-file-changes-panel">
               <FileChangesPanel
@@ -2428,12 +2402,11 @@ function OverlayRoot() {
           </TabPanel>
           <TabPanel
             value="browser"
-            forceMount
             class="center-workbench-view"
             id="centerWorkbenchBrowser"
             data-workbench-view="browser"
-            data-open="false"
-            data-active="false"
+            data-open={String(isCenterWorkbenchPanelOpen("browser"))}
+            data-active={String(selectedCenterWorkbenchTab()?.id === "browser")}
           >
             <div id="solidBrowserPreviewMount" class="center-workbench-activity chat-browser-preview-activity">
               <BrowserPreviewPanel
@@ -2462,7 +2435,6 @@ function OverlayRoot() {
             {(tab) => (
               <TabPanel
                 value={tab.id}
-                forceMount
                 class="center-workbench-view"
                 id={`centerWorkbenchBrowser-${tab.id}`}
                 data-workbench-view="browser"
@@ -2494,12 +2466,11 @@ function OverlayRoot() {
           </For>
           <TabPanel
             value="screenshots"
-            forceMount
             class="center-workbench-view"
             id="centerWorkbenchScreenshots"
             data-workbench-view="screenshots"
-            data-open="false"
-            data-active="false"
+            data-open={String(isCenterWorkbenchPanelOpen("screenshots"))}
+            data-active={String(selectedCenterWorkbenchTab()?.id === "screenshots")}
           >
             <div id="solidScreenshotBrowserMount" class="center-workbench-activity screenshot-browser-activity">
               <ScreenshotBrowserPanel active={() => isCenterWorkbenchPanelOpen("screenshots")} />
@@ -2507,12 +2478,11 @@ function OverlayRoot() {
           </TabPanel>
           <TabPanel
             value="subagent"
-            forceMount
             class="center-workbench-view"
             id="centerWorkbenchSubagent"
             data-workbench-view="subagent"
-            data-open="false"
-            data-active="false"
+            data-open={String(isCenterWorkbenchPanelOpen("subagent"))}
+            data-active={String(selectedCenterWorkbenchTab()?.id === "subagent")}
           >
             <div id="solidSubagentConversationMount" class="center-workbench-activity subagent-conversation-activity">
               <SubagentConversationPanel
@@ -2529,12 +2499,11 @@ function OverlayRoot() {
           </TabPanel>
           <TabPanel
             value="requirements"
-            forceMount
             class="center-workbench-view"
             id="centerWorkbenchRequirements"
             data-workbench-view="requirements"
-            data-open="false"
-            data-active="false"
+            data-open={String(isCenterWorkbenchPanelOpen("requirements"))}
+            data-active={String(selectedCenterWorkbenchTab()?.id === "requirements")}
           >
             <div id="solidRequirementsPanelMount" class="center-workbench-activity task-scope-activity">
               <RequirementsBoardPanel />
@@ -2542,12 +2511,11 @@ function OverlayRoot() {
           </TabPanel>
           <TabPanel
             value="goals"
-            forceMount
             class="center-workbench-view"
             id="centerWorkbenchGoals"
             data-workbench-view="goals"
-            data-open="false"
-            data-active="false"
+            data-open={String(isCenterWorkbenchPanelOpen("goals"))}
+            data-active={String(selectedCenterWorkbenchTab()?.id === "goals")}
           >
             <div id="solidGoalsPanelMount" class="center-workbench-activity task-scope-activity">
               <GoalsBoardPanel />
@@ -2555,12 +2523,11 @@ function OverlayRoot() {
           </TabPanel>
           <TabPanel
             value="file"
-            forceMount
             class="center-workbench-view"
             id="centerWorkbenchFile"
             data-workbench-view="file"
-            data-open="false"
-            data-active="false"
+            data-open={String(isCenterWorkbenchPanelOpen("file"))}
+            data-active={String(selectedCenterWorkbenchTab()?.id === "file")}
           >
             <div
               id="solidFileEditorMount"
@@ -2616,7 +2583,7 @@ overlayAppHost.replaceChildren()
 disposers.push(render(() => <OverlayRoot />, overlayAppHost))
 await firstPaintedFrame()
 await showOverlayWindow()
-disposers.push(await installExpertSquadInstallHandoffBridge())
+disposers.push(installExpertSquadInstallHandoffBridge())
 const clipboardApiKeyPrompt = installClipboardApiKeyPrompt()
 disposers.push(() => clipboardApiKeyPrompt.dispose())
 
@@ -2764,7 +2731,6 @@ window.addEventListener("beforeunload", () => {
 installSystemThemeListener(() => applyTheme(settingsStore.theme))
 
 // ── Init ──
-;(window as any).__overlayInitSettled = false
 runMainAsync("initApp", async () => {
   try {
     await initApp({
@@ -2785,6 +2751,5 @@ runMainAsync("initApp", async () => {
     } catch (error) {
       console.error("[initApp] failed to drain overlay logs", error)
     }
-    ;(window as any).__overlayInitSettled = true
   }
 })

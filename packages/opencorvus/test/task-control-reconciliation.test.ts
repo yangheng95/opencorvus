@@ -79,6 +79,7 @@ async function createExpiredDecisionGapFixture(input: {
     ownerOccurrenceID: `${input.label}-dead-owner`,
     now: startedAt + 2,
     leaseMilliseconds: 60_000,
+    assertControlOwnerInTransaction: () => undefined,
   })
   if (!lease.acquired) throw new Error("Expected an expired Task-root lease fixture")
   const control = currentOrchestratorControlMessage({ taskCreation: { taskID } }, taskID, ingress.id, ingress.id)
@@ -976,6 +977,7 @@ describe("Task-control reconciliation", () => {
           ownerOccurrenceID: "terminal-settlement-owner",
           now: now + 2,
           leaseMilliseconds: 60_000,
+          assertControlOwnerInTransaction: () => undefined,
         })
         if (!lease.acquired) throw new Error("Expected terminal-settlement activation lease")
         const control = currentOrchestratorControlMessage({ taskCreation: { taskID } }, taskID, ingress.id, ingress.id)

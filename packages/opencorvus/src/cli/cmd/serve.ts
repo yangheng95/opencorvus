@@ -1,4 +1,5 @@
 import { Server } from "../../server/server"
+import * as fsp from "node:fs/promises"
 import path from "node:path"
 import { cmd } from "./cmd"
 import { withNetworkOptions, resolveNetworkOptions, type NetworkOptions } from "../network"
@@ -47,7 +48,10 @@ function hideConsoleWindow() {
 
 type ServeOptions = NetworkOptions & {
   "project-dir"?: string
+  "startup-receipt"?: string
+  "startup-occurrence"?: string
   "parent-pid"?: number
+  "parent-process-instance-id"?: string
   "watchdog-interval-ms"?: number
 }
 const SERVE_STOP_TIMEOUT_MILLISECONDS = 5000
@@ -58,9 +62,21 @@ const serveBuilder = (yargs: Parameters<typeof withNetworkOptions>[0]) =>
       type: "string",
       describe: "default project directory for all task operations (sandbox)",
     })
+    .option("startup-receipt", {
+      type: "string",
+      describe: "path a framed machine startup receipt is published to",
+    })
+    .option("startup-occurrence", {
+      type: "string",
+      describe: "identity of the launch occurrence the startup receipt settles",
+    })
     .option("parent-pid", {
       type: "number",
       describe: "managed host process identifier",
+    })
+    .option("parent-process-instance-id", {
+      type: "string",
+      describe: "managed host operating-system process-instance fingerprint",
     })
     .option("watchdog-interval-ms", {
       type: "number",
@@ -68,16 +84,72 @@ const serveBuilder = (yargs: Parameters<typeof withNetworkOptions>[0]) =>
     })
 
 function managedLifecycleInput(args: ArgumentsCamelCase<ServeOptions>) {
-  const rawParentPid = args["parent-pid"]
-  if (rawParentPid === undefined) return undefined
-  if (!Number.isInteger(rawParentPid) || rawParentPid <= 0) throw new Error("Managed serve requires a positive --parent-pid")
-  return {
-    parentPid: rawParentPid,
-    watchdogIntervalMilliseconds: args["watchdog-interval-ms"],
+  const parent = ManagedServerLifecycle.parentInput({
+    pid: args["parent-pid"],
+    processInstanceID: args["parent-process-instance-id"],
+  })
+  return (
+    parent && {
+      ...parent,
+      watchdogIntervalMilliseconds: args["watchdog-interval-ms"],
+    }
+  )
+}
+
+async function publishStartupReceipt(
+  args: ArgumentsCamelCase<ServeOptions>,
+  fact: { outcome: "listening"; url: string; pid: number } | { outcome: "failed"; error: string },
+) {
+  const target = args["startup-receipt"]
+  const occurrenceID = args["startup-occurrence"]
+  if (!target || !occurrenceID) return
+  const body = JSON.stringify({ schemaVersion: 1, occurrenceID, ...fact })
+  const temporary = `${target}.${process.pid}.tmp`
+  try {
+    await fsp.writeFile(temporary, body, "utf8")
+    await fsp.rename(temporary, target)
+  } catch (error) {
+    await fsp.rm(temporary, { force: true }).catch(() => undefined)
+    // The receipt IS the readiness protocol for a managed launch. A publish
+    // that fails silently leaves the launcher polling a file that will never
+    // appear until it times out and kills a server that is actually serving,
+    // so the failure is terminal for this launch rather than a log line.
+    throw new Error(
+      `Failed to publish the server startup receipt to ${target}: ${
+        error instanceof Error ? error.message : String(error)
+      }`,
+      { cause: error },
+    )
+  }
+}
+
+/** Settle a managed launch that is failing before it ever bound. */
+async function publishStartupFailure(args: ArgumentsCamelCase<ServeOptions>, error: unknown) {
+  try {
+    await publishStartupReceipt(args, {
+      outcome: "failed",
+      error: error instanceof Error ? error.message : String(error),
+    })
+  } catch (publishError) {
+    console.error("[serve] failed to publish the terminal startup receipt:", publishError)
   }
 }
 
 export async function handleServeCommand(args: ArgumentsCamelCase<ServeOptions>) {
+  // A launcher waiting on the receipt must learn about EVERY terminal
+  // outcome, including the ones that happen before a listener is attempted:
+  // an invalid managed argument, network option resolution, the restart
+  // handoff. Without this, those failures were indistinguishable from a
+  // server that was simply slow.
+  try {
+    return await handleServeCommandInner(args)
+  } catch (error) {
+    await publishStartupFailure(args, error)
+    throw error
+  }
+}
+
+async function handleServeCommandInner(args: ArgumentsCamelCase<ServeOptions>) {
   // When launched as default entry (double-click), hide console window
   const isDefaultMode = !process.argv.slice(2).some((a) => a === "serve")
   if (isDefaultMode) {
@@ -130,6 +202,12 @@ export async function handleServeCommand(args: ArgumentsCamelCase<ServeOptions>)
         childHandoff,
       )
     }
+    // A launcher waiting on the receipt learns the terminal failure now
+    // instead of waiting out its timeout.
+    await publishStartupReceipt(args, {
+      outcome: "failed",
+      error: recoveryError instanceof Error ? recoveryError.message : String(recoveryError),
+    })
     throw recoveryError
   }
   const observeStartedTaskRecovery = (recovery: Promise<void>) => {
@@ -145,6 +223,9 @@ export async function handleServeCommand(args: ArgumentsCamelCase<ServeOptions>)
   // Publish actual server URL so ChannelSupervisor can connect channel runtime to it
   process.env.OPENCORVUS_SERVER_URL = serverUrl
   console.log(`opencorvus server listening on ${serverUrl}`)
+  // The launcher's readiness protocol: a framed fact, published atomically,
+  // so console wording is diagnostics and never a contract.
+  await publishStartupReceipt(args, { outcome: "listening", url: serverUrl, pid: process.pid })
   console.log(`overlay UI available at ${serverUrl}/ui/`)
 
   let shutdownPromise: Promise<void> | null = null

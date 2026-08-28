@@ -21,7 +21,6 @@ export function oauthCallbackReceivedLogFields(input: {
     correlationID: input.correlationID,
     hasCode: input.code !== null,
     hasError: input.error !== null,
-    error: input.error ?? undefined,
   }
 }
 
@@ -36,5 +35,15 @@ export function oauthCallbackInvalidStateLogFields(input: { pendingCount: number
   return {
     correlationID: input.correlationID,
     pendingCount: input.pendingCount,
+  }
+}
+
+export function oauthConnectionFailureLogFields(input: { mcpName: string; transport: string; serverUrl: string }) {
+  return {
+    mcpName: input.mcpName,
+    transport: input.transport,
+    endpointPresent: input.serverUrl.length > 0,
+    oauthFailure: true,
+    error: "MCP OAuth connection failed",
   }
 }

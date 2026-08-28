@@ -2,15 +2,25 @@
 <html lang="en-US">
   <head>
     <script>
-      const acceptanceLocale = new URLSearchParams(location.search).get("acceptance-locale")
-      if (acceptanceLocale) globalThis.__OPENCORVUS_LOCALE__ = acceptanceLocale
+      // This bootstrap cannot import the module registry before first paint.
+      // Keep this validation list aligned with OVERLAY_THEME_IDS.
+      const ocThemeIDs = ["dark", "vscode-dark", "light", "system"]
       const ocStartupThemeQuery = matchMedia("(prefers-color-scheme: light)")
       const ocStartupTheme = new URLSearchParams(location.search).get("acceptance-startup-theme")
       const ocNativeStartupTheme = globalThis.__OPENCORVUS_STARTUP_THEME__ || ""
-      const ocRequestedStartupTheme = ocStartupTheme || ocNativeStartupTheme
+      const ocRequestedStartupTheme = ocThemeIDs.includes(ocStartupTheme)
+        ? ocStartupTheme
+        : ocThemeIDs.includes(ocNativeStartupTheme)
+          ? ocNativeStartupTheme
+          : "system"
+      // The requested policy and its effective palette are different facts:
+      // `system` must survive module mount while data-theme carries light/dark.
+      document.documentElement.dataset.opencorvusStartupTheme = ocRequestedStartupTheme
       document.documentElement.dataset.theme =
-        ocRequestedStartupTheme === "system" || !ocRequestedStartupTheme
-          ? (ocStartupThemeQuery.matches ? "light" : "dark")
+        ocRequestedStartupTheme === "system"
+          ? ocStartupThemeQuery.matches
+            ? "light"
+            : "dark"
           : ocRequestedStartupTheme
     </script>
     <meta charset="UTF-8" />
@@ -32,7 +42,7 @@
         display: flex;
         flex: 1 1 auto;
         flex-direction: column;
-        font: var(--ui-font-weight-body) var(--ui-font-body)/1.5 var(--font);
+        font: var(--ui-font-weight-body) var(--ui-font-body) / var(--ui-line-height-normal) var(--font);
         justify-content: center;
         min-height: 100%;
         overflow: hidden;
@@ -77,7 +87,9 @@
       }
 
       .oc-startup-surface__mark img {
-        filter: drop-shadow(0 calc(12px * var(--ui-scale)) calc(18px * var(--ui-scale)) color-mix(in srgb, black 34%, transparent));
+        filter: drop-shadow(
+          0 calc(12px * var(--ui-scale)) calc(18px * var(--ui-scale)) color-mix(in srgb, black 34%, transparent)
+        );
         height: calc(98px * var(--ui-scale));
         position: relative;
         transform: rotate(2deg);
@@ -92,16 +104,16 @@
       }
 
       .oc-startup-surface__title {
-        font-size: clamp(calc(30px * var(--ui-scale)), 3.25vw, calc(42px * var(--ui-scale)));
+        font-size: var(--ui-font-emphasis);
         font-weight: var(--ui-font-weight-strong);
         letter-spacing: var(--ui-letter-spacing-tight);
-        line-height: 1.14;
+        line-height: var(--ui-line-height-tight);
         margin: 0;
       }
 
       .oc-startup-surface__description {
         color: var(--text-soft);
-        font-size: clamp(var(--ui-font-body), 1.65vw, calc(20px * var(--ui-scale)));
+        font-size: var(--ui-font-body);
         font-weight: var(--ui-font-weight-body);
         margin: calc(14px * var(--ui-scale)) 0 0;
         max-width: calc(920px * var(--ui-scale));
@@ -135,8 +147,8 @@
 
       .oc-startup-surface__progress:not([value]) {
         background:
-          linear-gradient(90deg, var(--accent), color-mix(in srgb, var(--accent) 68%, white), var(--accent))
-            0 0 / 30% 100% no-repeat,
+          linear-gradient(90deg, var(--accent), color-mix(in srgb, var(--accent) 68%, white), var(--accent)) 0 0 / 30%
+            100% no-repeat,
           var(--subtle-2);
       }
 
@@ -149,7 +161,7 @@
 
       .oc-startup-surface__status {
         color: var(--text-muted);
-        font-size: var(--ui-font-small);
+        font-size: var(--ui-font-caption);
         grid-column: 2;
         letter-spacing: var(--ui-letter-spacing-normal);
         margin: 0;
@@ -158,7 +170,7 @@
       .oc-startup-surface__detail {
         color: var(--text-soft);
         display: none;
-        font-size: var(--ui-font-small);
+        font-size: var(--ui-font-caption);
         grid-column: 3;
         justify-self: end;
         margin: 0;
@@ -197,7 +209,7 @@
         color: var(--bad);
         display: block;
         font-size: var(--ui-font-body);
-        line-height: 1.45;
+        line-height: var(--ui-line-height-normal);
         max-height: calc(108px * var(--ui-scale));
         overflow: auto;
         overflow-wrap: anywhere;
@@ -230,10 +242,14 @@
 
       @keyframes oc-startup-progress {
         from {
-          background-position: -43% 0, 0 0;
+          background-position:
+            -43% 0,
+            0 0;
         }
         to {
-          background-position: 143% 0, 0 0;
+          background-position:
+            143% 0,
+            0 0;
         }
       }
 
@@ -330,13 +346,24 @@
           Preparing the runtime environment. OpenCorvus will open automatically when ready.
         </p>
         <div class="oc-startup-surface__feedback">
-          <progress class="oc-startup-surface__progress" id="oc-startup-progress" max="100">Preparing OpenCorvus</progress>
+          <progress class="oc-startup-surface__progress" id="oc-startup-progress" max="100">
+            Preparing OpenCorvus
+          </progress>
           <div class="oc-startup-surface__progress-meta">
             <p class="oc-startup-surface__status" id="oc-startup-status" role="status">Preparing OpenCorvus…</p>
             <p class="oc-startup-surface__detail" id="oc-startup-detail"></p>
           </div>
           <div class="oc-startup-surface__actions" id="oc-startup-actions" hidden>
-            <button class="oc-button" data-variant="solid" data-size="md" data-tone="accent" id="oc-startup-retry" type="button">Retry</button>
+            <button
+              class="oc-button"
+              data-variant="solid"
+              data-size="md"
+              data-tone="accent"
+              id="oc-startup-retry"
+              type="button"
+            >
+              Retry
+            </button>
             <button
               class="oc-button"
               data-variant="outline"

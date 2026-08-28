@@ -47,6 +47,11 @@ export function sha256Text(domain: string, value: string): string {
   return canonicalDigestSource(domain, value).sha256
 }
 
+/** Serialize one JSON value with recursively sorted object keys. */
+export function canonicalJSONValue(value: unknown, context = "canonical-json"): string {
+  return canonicalJSON(value, context, new Set<object>())
+}
+
 function canonicalJSON(value: unknown, context: string, active: Set<object>): string {
   if (value === null || typeof value === "string" || typeof value === "boolean") return JSON.stringify(value)
   if (typeof value === "number") {

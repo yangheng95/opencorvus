@@ -62,10 +62,10 @@ import { AcceptanceSpecSchema } from "@/acceptance/types"
  * The orchestrator decodes them exactly once at task-creation time, writes them
  * to AttachmentStore, and never carries base64 further into the system.
  */
-const UserUploadBytesInput = z
+export const UserUploadBytesInput = z
   .object({
     /** MIME type, e.g. "image/png", "application/pdf", "audio/mpeg" */
-    mime: z.string(),
+    mime: z.string().min(1),
     /** Base64-encoded file bytes (no data-URL prefix) */
     data: z.string(),
     /** Optional display name shown in the overlay message and LLM file part */
@@ -101,24 +101,36 @@ const UserUploadReferenceInput = z
  */
 export const UserUploadInput = z.union([UserUploadReferenceInput, UserUploadBytesInput])
 
-export const UserUploadList = UserUploadInput.array()
-  .max(COMPOSER_FILE_ATTACHMENT_LIMIT + COMPOSER_FOLDER_ATTACHMENT_LIMIT)
-  .superRefine((attachments, ctx) => {
-    const folderCount = attachments.filter((attachment) => attachment.mime === DIRECTORY_REFERENCE_MIME).length
-    const fileCount = attachments.length - folderCount
-    if (fileCount > COMPOSER_FILE_ATTACHMENT_LIMIT) {
-      ctx.addIssue({
-        code: "custom",
-        message: `No more than ${COMPOSER_FILE_ATTACHMENT_LIMIT} file attachments are allowed`,
-      })
-    }
-    if (folderCount > COMPOSER_FOLDER_ATTACHMENT_LIMIT) {
-      ctx.addIssue({
-        code: "custom",
-        message: `No more than ${COMPOSER_FOLDER_ATTACHMENT_LIMIT} folder attachments are allowed`,
-      })
-    }
-  })
+function userUploadList<T extends z.ZodType<{ mime: string }>>(item: T) {
+  return item
+    .array()
+    .max(COMPOSER_FILE_ATTACHMENT_LIMIT + COMPOSER_FOLDER_ATTACHMENT_LIMIT)
+    .superRefine((attachments, ctx) => {
+      const folderCount = attachments.filter((attachment) => attachment.mime === DIRECTORY_REFERENCE_MIME).length
+      const fileCount = attachments.length - folderCount
+      if (fileCount > COMPOSER_FILE_ATTACHMENT_LIMIT) {
+        ctx.addIssue({
+          code: "custom",
+          message: `No more than ${COMPOSER_FILE_ATTACHMENT_LIMIT} file attachments are allowed`,
+        })
+      }
+      if (folderCount > COMPOSER_FOLDER_ATTACHMENT_LIMIT) {
+        ctx.addIssue({
+          code: "custom",
+          message: `No more than ${COMPOSER_FOLDER_ATTACHMENT_LIMIT} folder attachments are allowed`,
+        })
+      }
+    })
+}
+
+export const UserUploadList = userUploadList(UserUploadInput)
+
+/**
+ * A one-call ingress that allocates its Project cannot consume a previously
+ * uploaded project-owned reference because that Project does not exist yet.
+ * It accepts inline bytes only and materializes them after allocation.
+ */
+export const UserUploadBytesList = userUploadList(UserUploadBytesInput)
 
 /**
  * Persisted attachment reference. Once the bytes live in AttachmentStore
@@ -155,7 +167,7 @@ export const CreateTaskInput = z
      * is bound to this exact registered directory.
      */
     directory: z.string().trim().min(1).optional(),
-    requestID: z.string().optional(),
+    requestID: z.string().trim().min(1).optional(),
     artifactSources: CrossTaskArtifactSourceListSchema.optional(),
     source: z.string().optional(),
     productPillar: ProductPillarSchema,
@@ -825,12 +837,14 @@ export const TaskEvent = z.object({
 export const TaskConversationAgentActivityItem = z.discriminatedUnion("type", [
   z.object({
     id: z.string().min(1),
+    messageID: z.string().min(1),
     orderKey: z.string().min(1),
     type: z.literal("text"),
     text: z.string().min(1),
   }),
   z.object({
     id: z.string().min(1),
+    messageID: z.string().min(1),
     orderKey: z.string().min(1),
     type: z.literal("tool"),
     tool: z.string().min(1),
@@ -839,18 +853,21 @@ export const TaskConversationAgentActivityItem = z.discriminatedUnion("type", [
   }),
   z.object({
     id: z.string().min(1),
+    messageID: z.string().min(1),
     orderKey: z.string().min(1),
     type: z.literal("patch"),
     files: z.array(z.unknown()),
   }),
   z.object({
     id: z.string().min(1),
+    messageID: z.string().min(1),
     orderKey: z.string().min(1),
     type: z.literal("file"),
     filename: z.string().min(1),
   }),
   z.object({
     id: z.string().min(1),
+    messageID: z.string().min(1),
     orderKey: z.string().min(1),
     type: z.literal("part-error"),
     title: z.string().min(1).optional(),
@@ -971,7 +988,6 @@ export const TaskConversationHistoryState = z.object({
 
 export const TaskConversationHydration = z.object({
   lastSequence: z.number().int().nonnegative(),
-  messageWatermark: z.number().nonnegative(),
   board: TaskBoard,
   transcript: MessageVisibleWithPartsArray,
   events: TaskEvent.array(),
@@ -1006,18 +1022,83 @@ export const SessionPendingQuestion = QuestionRequest.extend({
   orderKey: z.string().min(1),
 })
 
-export const SessionEvent = z.object({
+const SessionEventEnvelope = z.object({
   event_id: z.string(),
   session_id: z.string(),
   orderKey: z.string().min(1),
-  type: z.string(),
   emittedAt: z.number().int().positive(),
   timestamp: z.number(),
   sequence: z.number().int().nonnegative().optional(),
   summary: z.string(),
-  payload: z.record(z.string(), z.any()),
   notify: BusEvent.NotifyDescriptorSchema.optional(),
 })
+
+export const SessionEvent = SessionEventEnvelope.extend({
+  type: z.string(),
+  payload: z.record(z.string(), z.any()),
+})
+
+export const SessionConversationConnectionSnapshot = z
+  .object({
+    transcript: z.array(
+      z.object({
+        info: z.intersection(
+          Message.VisibleInfo,
+          z.object({
+            channel: z.string(),
+            resolvedRole: z.string(),
+            agentID: z.string(),
+            sessionAgentID: z.string(),
+            originSource: z.string(),
+            parentSessionID: z.string().optional(),
+            participantEvidence: z.any().optional(),
+          }),
+        ),
+        parts: z.array(Message.VisiblePart),
+      }),
+    ),
+    view: TaskConversationView,
+    history: TaskConversationHistoryState,
+  })
+  .meta({ ref: "SessionConversationConnectionSnapshot" })
+
+export const SessionConnectedEvent = SessionEventEnvelope.extend({
+  type: z.literal("session.connected"),
+  payload: z.object({
+    sessionID: z.string(),
+    conversationSnapshot: SessionConversationConnectionSnapshot,
+  }),
+}).meta({ ref: "SessionConnectedEvent" })
+
+export const SessionProtocolEventType = z.enum([
+  "agent.execution.lifecycle",
+  "config.changed",
+  "message.updated",
+  "message.moved",
+  "message.removed",
+  "message.part.updated",
+  "message.part.delta",
+  "message.part.removed",
+  "permission.asked",
+  "permission.replied",
+  "question.asked",
+  "question.replied",
+  "question.rejected",
+  "question.expired",
+  "question.abandoned",
+  "session.diff",
+  "session.error",
+  "session.heartbeat",
+])
+
+export const SessionProtocolEvent = SessionEventEnvelope.extend({
+  type: SessionProtocolEventType,
+  payload: z.record(z.string(), z.any()),
+}).meta({ ref: "SessionProtocolEvent" })
+
+export const SessionStreamEvent = z
+  .discriminatedUnion("type", [SessionConnectedEvent, SessionProtocolEvent])
+  .meta({ ref: "SessionStreamEvent" })
 
 export const SessionConversationHydration = z.object({
   board: SessionBoardEnvelope,

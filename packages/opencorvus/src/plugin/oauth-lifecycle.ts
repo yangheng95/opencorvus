@@ -2,7 +2,7 @@ interface OAuthCallbackWaitOptions {
   timeoutMs: number
   supersededError: () => Error
   timeoutError: () => Error
-  onTimeout?: () => void
+  onTimeout?: () => void | Promise<void>
 }
 
 export interface OAuthCallbackOwner<Context, Result> {
@@ -50,11 +50,17 @@ export class ManagedOAuthCallbackOwner<Context, Result> {
 
       timeout = setTimeout(() => {
         if (this.pending !== owner) return
-        options.onTimeout?.()
         owner.reject(options.timeoutError())
+        void Promise.resolve()
+          .then(() => options.onTimeout?.())
+          .catch(() => undefined)
       }, options.timeoutMs)
       this.pending = owner
     })
+    // The live executor may not await this promise until a later callback.
+    // Observe rejection immediately without changing the original promise's
+    // rejection semantics for that eventual consumer.
+    void promise.catch(() => undefined)
     return {
       promise,
       reject: (error) => owner.reject(error),
@@ -84,7 +90,7 @@ interface ManagedListener {
 export class ManagedOAuthListenerOwner<Server extends ManagedListener> {
   private server: Server | undefined
   private starting: Promise<Server> | undefined
-  private stopping: Promise<void> | undefined
+  private stopping: { server: Server; lease: object | undefined; promise: Promise<void> } | undefined
   private lease: object | undefined
 
   get current(): Server | undefined {
@@ -98,12 +104,11 @@ export class ManagedOAuthListenerOwner<Server extends ManagedListener> {
   }
 
   start(create: () => Server, listen: (server: Server, ready: () => void) => void): Promise<Server> {
+    if (this.stopping) return this.stopping.promise.then(() => this.start(create, listen))
     if (this.server) return Promise.resolve(this.server)
     if (this.starting) return this.starting
 
-    const stopping = this.stopping
     const starting = (async () => {
-      if (stopping) await stopping
       const server = create()
       await new Promise<void>((resolve, reject) => {
         const onError = (error: Error) => {
@@ -134,22 +139,31 @@ export class ManagedOAuthListenerOwner<Server extends ManagedListener> {
   }
 
   async stop(lease?: object): Promise<void> {
+    const currentStop = this.stopping
+    if (currentStop) {
+      if (lease && currentStop.lease !== lease) return
+      return currentStop.promise
+    }
     if (lease && this.lease !== lease) return
-    this.lease = undefined
     const server = this.server
-    this.server = undefined
-    if (!server) return this.stopping
+    if (!server) return
     const stopping = new Promise<void>((resolve, reject) => {
       server.close((error) => {
         if (error) reject(error)
         else resolve()
       })
     })
-    this.stopping = stopping
+    const owner = { server, lease: this.lease, promise: stopping }
+    this.stopping = owner
     const clearStopping = () => {
-      if (this.stopping === stopping) this.stopping = undefined
+      if (this.stopping === owner) this.stopping = undefined
     }
-    void stopping.then(clearStopping, clearStopping)
-    return stopping
+    try {
+      await stopping
+      if (this.server === server) this.server = undefined
+      if (this.lease === owner.lease) this.lease = undefined
+    } finally {
+      clearStopping()
+    }
   }
 }

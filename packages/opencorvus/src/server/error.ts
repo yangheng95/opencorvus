@@ -101,6 +101,14 @@ export const ERRORS = {
       },
     },
   },
+  502: {
+    description: "Upstream service failure",
+    content: {
+      "application/json": {
+        schema: namedErrorSchema("SkillMarketUpstreamError"),
+      },
+    },
+  },
   503: {
     description: "Required ownership authority could not be observed safely",
     content: {

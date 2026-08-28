@@ -59,14 +59,15 @@ afterEach(async () => {
 async function createBoundTask() {
   const taskID = Identifier.ascending("task")
   const now = Date.now()
-  const root = await Session.create({
+  const root = Session.prepareRootNext({
     kind: "root",
+    directory: Instance.directory,
     title: "Workflow occurrence authority",
     metadata: { configOverlay: { prompt_profile: { active: packageRevision.id } } },
   })
   persistTask({
     taskID,
-    sessionID: root.id,
+    rootSession: root,
     now,
     title: "Workflow occurrence authority",
     request: "Bind each workflow node exactly once",

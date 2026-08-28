@@ -1,6 +1,6 @@
 // ── Theme Service ──
 // Exported surface:
-// sanitizeTheme(value) — supported theme id or DEFAULT_THEME
+// sanitizeTheme(value) — supported theme id, or TypeError (it validates, not coerces)
 // sanitizeZoom(value) — number clamped to [0.8, 1.6]
 // resolvedTheme() — effective "light" | "dark" after system detection
 // applyTheme(theme) — writes the documentElement data-theme

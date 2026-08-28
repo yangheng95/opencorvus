@@ -1,5 +1,5 @@
 import { Process } from "./process"
-import { ProcessSupervisor } from "@/shell/process-supervisor"
+import type { ProcessSupervisor } from "@/shell/process-supervisor"
 
 export interface GitResult {
   exitCode: number

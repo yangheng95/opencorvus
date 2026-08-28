@@ -4,7 +4,7 @@ import {
   EvolutionMutationIntentRequestSchema,
   EvolutionPromotionReceiptSchema,
 } from "@opencorvus-ai/plugin"
-import { evolutionMutationConfirmationText } from "../src/expert-squad/evolution-mutation"
+import { evolutionMutationConfirmationText } from "../src/expert-squad/evolution-mutation-intent"
 
 const digest = (seed: string) => seed.repeat(64).slice(0, 64)
 const locator = {

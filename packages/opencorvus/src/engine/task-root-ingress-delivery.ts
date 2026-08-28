@@ -36,7 +36,11 @@ import { projectToolPartInTransaction } from "@/session/tool-part-facts"
 import { Database, and, asc, eq, inArray, sql } from "@/storage/db"
 import { Log } from "@/util/log"
 import { Filesystem } from "@/util/filesystem"
-import { TaskRootMessageProvenance } from "@/task-api/task-root-message"
+import {
+  TaskRootMessageProvenance,
+  type SchedulerDeliveryReference,
+  type TaskRootMessageKind,
+} from "@/protocol/task-root-message-schema"
 import {
   EngineControlActivationLeaseTable,
   EngineInteractionRequestTable,
@@ -76,13 +80,7 @@ import {
 } from "./task-root-ingress-reducer"
 import { TaskControlDriver, type TaskControlScanContext, type TaskControlScanResult } from "./task-control-driver"
 import { TaskRootIngressIntegrityError } from "./task-root-ingress-integrity"
-import {
-  assertProcessLivenessLease,
-  expireProcessLivenessLease,
-  isProcessOccurrenceLive,
-  PROCESS_LIVENESS_LEASE_MS,
-  PROCESS_LIVENESS_RENEWAL_MS,
-} from "./process-liveness"
+import { isProcessOccurrenceLive, joinProcessLivenessLease, PROCESS_LIVENESS_LEASE_MS } from "./process-liveness"
 import { TaskRootIngressError, taskRootDirectory } from "./task-directory"
 import { listDispatchLineage } from "./dispatch-lineage"
 import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
@@ -257,8 +255,8 @@ export function persistTaskRootMessageIngressInTransaction(
   input: {
     task: TaskRow
     messageID: string
-    kind: "operator" | "orchestrator" | "mission"
-    schedulerDelivery?: import("@/task-api/task-root-message").SchedulerDeliveryReference
+    kind: TaskRootMessageKind
+    schedulerDelivery?: SchedulerDeliveryReference
     now: number
   },
 ): string {
@@ -912,7 +910,11 @@ type ActivationAttempt =
   /** The exact projection that refused activation, for wake-instant pacing. */
   | { activated: false; projection: TaskRootIngressProjection }
 
-async function activate(input: { taskID: string; ingressID: string }): Promise<ActivationAttempt> {
+async function activate(input: {
+  taskID: string
+  ingressID: string
+  runWithActivationOwner?: <T>(run: () => Promise<T>) => Promise<T>
+}): Promise<ActivationAttempt> {
   let reservation: RuntimeExecutionReservation | undefined
   let bound = false
   reservation = RuntimeExecutionSettlement.reserve(
@@ -948,12 +950,14 @@ async function activate(input: { taskID: string; ingressID: string }): Promise<A
       return faulted
     }
     const ownerID = ownerOccurrenceID()
+    const liveness = driverState().liveness
     const acquired = acquireTaskRootIngressLease({
       ingressID: input.ingressID,
       ownerOccurrenceID: ownerID,
       now,
       leaseMilliseconds,
       readEvidence: readTaskRootIngressEvidence,
+      assertControlOwnerInTransaction: (db) => liveness.assertOwnedInTransaction(db, ownerID, Date.now()),
     })
     if (!acquired.acquired) {
       reservation.settle()
@@ -962,14 +966,18 @@ async function activate(input: { taskID: string; ingressID: string }): Promise<A
       // `ready` would arm no timer at all and strand the Task.
       return { activated: false, projection: acquired.projection }
     }
-    const operation = runner()({
-      taskID: input.taskID,
-      event,
-      signal: reservation.signal,
-      wakeID: ingress.id,
-      activationID: acquired.activationID,
-      predecessorID: predecessorFor(projection, ingress.id, evidence),
-    })
+    const runActivation = () =>
+      runner()({
+        taskID: input.taskID,
+        event,
+        signal: reservation.signal,
+        wakeID: ingress.id,
+        activationID: acquired.activationID,
+        predecessorID: predecessorFor(projection, ingress.id, evidence),
+      })
+    const operation = input.runWithActivationOwner
+      ? input.runWithActivationOwner(runActivation)
+      : runActivation()
     reservation.settleWith(operation)
     bound = true
     let renewalFailure: unknown
@@ -1562,7 +1570,11 @@ async function scanTaskControlPlane(
         break
       }
       if (projection.state === "ready") {
-        const attempt = await activate({ taskID, ingressID: ingress.id })
+        const attempt = await activate({
+          taskID,
+          ingressID: ingress.id,
+          runWithActivationOwner: context.runWithActivationOwner,
+        })
         if (attempt.activated) {
           activated += 1
           continue
@@ -1591,25 +1603,16 @@ async function scanTaskControlPlane(
 const driverState = createInstanceState(
   () => {
     const directory = Filesystem.resolve(Instance.directory)
-    const claimLiveness = () => {
-      try {
-        assertProcessLivenessLease(ownerOccurrenceID())
-      } catch (error) {
-        log.error("Could not renew this runtime's liveness lease", { error })
-      }
-    }
-    // Recovery in every process reads this row to decide whether our
-    // dispatches are still owned, so the claim exists before any scan can run.
-    claimLiveness()
-    const livenessTimer = setInterval(() => {
-      void reenterActiveInstance({ directory, fn: async () => claimLiveness() }).catch((error) => {
-        log.error("Runtime liveness renewal could not re-enter its project", { error })
-      })
-    }, PROCESS_LIVENESS_RENEWAL_MS)
-    ;(livenessTimer as { unref?: () => void }).unref?.()
+    // Every Project driver joins one process-wide owner. Recovery in another
+    // backend reads this row before it may settle our dispatches, so joining
+    // and asserting the exact occurrence precedes every scan.
+    const liveness = joinProcessLivenessLease(ownerOccurrenceID())
     return {
       driver: new TaskControlDriver({
-        scan: scanTaskControlPlane,
+        scan: async (taskID, context) => {
+          liveness.assertOwned(ownerOccurrenceID())
+          return scanTaskControlPlane(taskID, context)
+        },
         liveTasks: () => {
           try {
             return currentSweepProjectTaskIDs()
@@ -1622,19 +1625,14 @@ const driverState = createInstanceState(
           await reenterActiveInstance({ directory, fn })
         },
       }),
-      livenessTimer,
+      liveness,
     }
   },
   async (state) => {
-    clearInterval(state.livenessTimer)
-    try {
-      // Release the claim so peers can recover this process's work at once
-      // instead of waiting out the full lease.
-      expireProcessLivenessLease(ownerOccurrenceID())
-    } catch (error) {
-      log.warn("Could not expire this runtime's liveness lease on shutdown", { error })
-    }
     state.driver.dispose()
+    // Intermediate Project disposal leaves the process fact live. Only the
+    // final Project reference publishes graceful process exit.
+    state.liveness.release()
   },
   "task-control-driver",
 )
@@ -1645,9 +1643,19 @@ const driverState = createInstanceState(
  * A single-Task request reports its owner's first-pass fault; a project-wide
  * request isolates each Task so one faulted Task cannot starve the rest.
  */
-export async function reconcileTaskControlPlane(taskID?: string): Promise<number> {
-  const driver = driverState().driver
-  if (taskID) return driver.request(taskID, { propagateFailure: true })
+export async function reconcileTaskControlPlane(
+  taskID?: string,
+  options?: { runWithActivationOwner?: <T>(run: () => Promise<T>) => Promise<T> },
+): Promise<number> {
+  const state = driverState()
+  state.liveness.assertOwned(ownerOccurrenceID())
+  const driver = state.driver
+  if (taskID) {
+    return driver.request(taskID, {
+      propagateFailure: true,
+      runWithActivationOwner: options?.runWithActivationOwner,
+    })
+  }
   // A project-wide request only has to *start* every Task. Awaiting them in
   // sequence would make each Task's whole Orchestrator Turn a prerequisite of
   // the next Task's first scan — at startup that serializes recovery for the
@@ -1691,7 +1699,8 @@ export async function deliverPendingTaskRootIngresses(): Promise<number> {
  * the same way every time therefore has no bound at all: each cycle costs a
  * whole Orchestrator Turn and produces the next cycle. The budget must be
  * quantified over something the retry cannot create, and the epoch is that
- * thing — it changes only when an operator reopens the Task.
+ * thing — it changes only when an operator Message or exact Mission
+ * acceptance resume opens the next Task occurrence.
  */
 export const TASK_EPOCH_INFRASTRUCTURE_INGRESS_BUDGET = 5
 
@@ -1831,6 +1840,7 @@ export function dispatchTaskLoopInBackground(input: DispatchTaskLoopInput, opera
 export async function dispatchPersistedTaskLoop(
   taskID: string,
   expectedWakeID?: string,
+  options?: { runWithActivationOwner?: <T>(run: () => Promise<T>) => Promise<T> },
 ): Promise<"accepted" | "ignored"> {
   if (expectedWakeID) {
     const exists = Database.use((db) =>
@@ -1842,7 +1852,7 @@ export async function dispatchPersistedTaskLoop(
     )
     if (!exists) throw new Error(`Task ${taskID} has no persisted ingress ${expectedWakeID}`)
   }
-  await reconcileTaskControlPlane(taskID)
+  await reconcileTaskControlPlane(taskID, options)
   return "accepted"
 }
 
@@ -1916,11 +1926,6 @@ export function requireTaskCreationIngressID(taskID: string): string {
   if (!ingress) throw new Error(`Task ${taskID} has no durable creation ingress`)
   return ingress.id
 }
-
-/** Ingress facts are immutable. Explicit Task deletion cascades them; ordinary
- * cancellation/discard never rewrites or deletes accepted history. */
-export function discardTaskRootIngress(_taskID: string): void {}
-export function discardAcceptedTaskRootIngressForRequest(_input: { taskID: string; requestID: string }): void {}
 
 export function taskCwd(taskID: string): string {
   const task = findTask(taskID)

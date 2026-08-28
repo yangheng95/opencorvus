@@ -5,16 +5,17 @@ import { rm } from "node:fs/promises"
 import path from "node:path"
 import { Config } from "../src/config/config"
 import { EffectiveConfig } from "../src/config/effective"
-import { exactEngineArtifactLocator, requireEngineArtifactByLocator } from "../src/artifact-catalog"
+import { exactEngineArtifactLocator } from "../src/artifact-catalog"
+import { requireEngineArtifactByLocator } from "../src/engine/engine-artifact-version-facts"
 import { recordEngineArtifact, updateEngineArtifact } from "../src/engine/artifact"
 import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import { prepareTaskProcessBinding } from "../src/engine/task-execution-capsule-binding"
 import { requireTaskPackageRevisionBinding } from "../src/engine/task-package-revision-binding"
 import {
   authorizeEvolutionPackageMutation,
-  evolutionMutationConfirmationText,
   executeEvolutionPackageMutation,
 } from "../src/expert-squad/evolution-mutation"
+import { evolutionMutationConfirmationText } from "../src/expert-squad/evolution-mutation-intent"
 import { ExpertSquadPackageManager } from "../src/expert-squad/manager"
 import { readEvolutionCampaignDetail, readEvolutionHistory } from "../src/expert-squad/evolution-history"
 import { PromptProfileResolver } from "../src/expert-squad/prompt-profile-resolver"
@@ -96,8 +97,9 @@ async function createTask(input: {
   title: string
   revision: { namespace: string; id: string; version: string; packageDigest: string }
 }) {
-  const session = await Session.create({
+  const session = Session.prepareRootNext({
     kind: "root",
+    directory: Instance.directory,
     title: input.title,
     metadata: {
       configOverlay: {
@@ -110,7 +112,7 @@ async function createTask(input: {
   const now = Date.now()
   persistTask({
     taskID,
-    sessionID: session.id,
+    rootSession: session,
     now,
     title: input.title,
     request: input.title,

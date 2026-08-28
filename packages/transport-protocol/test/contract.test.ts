@@ -14,6 +14,7 @@ import {
   WorkLedgerArchiveList,
   WorkLedgerEvent,
   WorkLedgerList,
+  ToolFailureCause,
   base64ToUint8,
   conversationMessageDisplayStage,
   projectConversationAgentActivityPart,
@@ -24,10 +25,26 @@ import {
   isNativeCommand,
   isOverlayPersistedSettings,
   routeRequiresProjectDirectory,
+  renderToolFailureCause,
   uint8ToBase64,
   type NativeCommand,
   type OverlayPersistedSettings,
 } from "../src/index"
+
+test("Tool failure transport preserves and renders the complete canonical cause", () => {
+  const failure = ToolFailureCause.parse({
+    kind: "shell-exit",
+    name: "CommandFailed",
+    message: "command exited with code 17",
+    originSite: "session.processor.tool",
+    classification: "tool-execution",
+    data: { exit_code: 17, command: "verify" },
+  })
+
+  expect(renderToolFailureCause(failure)).toBe(
+    'shell-exit/CommandFailed at session.processor.tool: command exited with code 17; data={"exit_code":17,"command":"verify"}',
+  )
+})
 
 describe("canonical Server-Sent Events payload contracts", () => {
   test("parses each canonical Pseudo Terminal event branch", () => {
@@ -119,7 +136,7 @@ describe("canonical Server-Sent Events payload contracts", () => {
 })
 
 describe("canonical Work Ledger and Project Worktree response contracts", () => {
-  test("parses the complete Mission-owned Work Ledger hierarchy", () => {
+  test("parses Mission-owned and unowned Task Work Ledger hierarchy", () => {
     const task = {
       kind: "task",
       id: "task-1",
@@ -157,7 +174,18 @@ describe("canonical Work Ledger and Project Worktree response contracts", () => 
       pendingInteractions: 0,
       tasks: [task],
     }
-    const value = { rows: [mission], nextCursor: { pinned: false, updated: 2, rowKey: "mission:mission-1" } }
+    const unownedTask = {
+      ...task,
+      id: "task-unowned",
+      title: "Unowned Task",
+      source: "operator",
+      missionID: undefined,
+      missionSessionID: undefined,
+    }
+    const value = {
+      rows: [mission, unownedTask],
+      nextCursor: { pinned: false, updated: 2, rowKey: "task:task-unowned" },
+    }
     expect(WorkLedgerList.parse(value)).toEqual(value)
   })
 
@@ -567,18 +595,21 @@ describe("conversation message part projection", () => {
     expect(
       projectConversationAgentActivityPart({
         id: "part_text",
+        messageID: "message_activity",
         orderKey: "v1:0000000000000100:0000000000000030:0000000000000000:part:part_text",
         type: "text",
         text: "  Inspecting\n\n the current layout  ",
       }),
     ).toEqual({
       id: "part_text",
+      messageID: "message_activity",
       orderKey: "v1:0000000000000100:0000000000000030:0000000000000000:part:part_text",
       type: "text",
       text: "Inspecting the current layout",
     })
     const tool = projectConversationAgentActivityPart({
       id: "part_tool",
+      messageID: "message_activity",
       orderKey: "v1:0000000000000102:0000000000000030:0000000000000000:part:part_tool",
       type: "tool",
       tool: "read_file",
@@ -590,6 +621,7 @@ describe("conversation message part projection", () => {
     })
     expect(tool).toMatchObject({
       id: "part_tool",
+      messageID: "message_activity",
       type: "tool",
       tool: "read_file",
       state: {

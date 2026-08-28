@@ -21,7 +21,38 @@ type PublishDependencyVersions = {
   workspace: Record<string, string>
 }
 
-function sourceExportStem(target: string, label: string): string {
+function sourceExportStem(target: unknown, label: string): string {
+  if (!target || typeof target !== "object" || Array.isArray(target)) {
+    throw new Error(`${label} must be the workspace conditional export map`)
+  }
+  const conditions = target as Record<string, unknown>
+  const source = conditions.source
+  if (source === undefined) {
+    const compiled = conditions.import ?? conditions.default
+    if (typeof compiled !== "string" || !compiled.startsWith("./dist/") || !compiled.endsWith(".js")) {
+      throw new Error(`${label}.import must be a compiled module when no source entry is published`)
+    }
+    const stem = compiled.slice("./dist/".length, -".js".length)
+    if (conditions.types !== `./dist/${stem}.d.ts` || conditions.default !== compiled) {
+      throw new Error(`${label} compiled-only export targets do not share one dist stem`)
+    }
+    return stem
+  }
+  if (typeof source !== "string") throw new Error(`${label}.source must be a TypeScript source entry`)
+  if (conditions.bun !== undefined && conditions.bun !== source)
+    throw new Error(`${label}.bun must equal its source entry when present`)
+  const stem = sourceExportPathStem(source, `${label}.source`)
+  const compiled = `./dist/${stem}.js`
+  const declaration = `./dist/${stem}.d.ts`
+  if (conditions.types !== source && conditions.types !== declaration)
+    throw new Error(`${label}.types must equal ${source} or ${declaration}`)
+  for (const condition of ["import", "default"] as const) {
+    if (conditions[condition] !== compiled) throw new Error(`${label}.${condition} must equal ${compiled}`)
+  }
+  return stem
+}
+
+function sourceExportPathStem(target: string, label: string): string {
   if (!target.startsWith("./src/") || !target.endsWith(".ts") || target.includes("\\")) {
     throw new Error(`${label} must point to a TypeScript source entry under ./src, got ${target}`)
   }
@@ -57,13 +88,13 @@ export function buildPublishPackageJson<T extends PluginPackageJson>(
   const output = structuredClone(source)
   output.exports = Object.fromEntries(
     Object.entries(source.exports).map(([subpath, target]) => {
-      if (typeof target !== "string") throw new Error(`exports.${subpath} must be a source entry string`)
       const stem = sourceExportStem(target, `exports.${subpath}`)
       return [
         subpath,
         {
           types: `./dist/${stem}.d.ts`,
           import: `./dist/${stem}.js`,
+          default: `./dist/${stem}.js`,
         },
       ]
     }),
@@ -130,7 +161,8 @@ async function workspaceVersions(workspaceDirectory: string): Promise<Record<str
     const manifestPath = path.join(directory, "package.json")
     if (await directoryExists(manifestPath)) {
       const manifest = JSON.parse(await readFile(manifestPath, "utf8")) as { name?: unknown; version?: unknown }
-      if (typeof manifest.name === "string" && typeof manifest.version === "string") versions[manifest.name] = manifest.version
+      if (typeof manifest.name === "string" && typeof manifest.version === "string")
+        versions[manifest.name] = manifest.version
     }
     if (depth === 2) return
     for (const entry of await readdir(directory, { withFileTypes: true })) {
@@ -149,7 +181,8 @@ export async function stagePluginPackage(input: {
 }): Promise<StagedPluginPackage> {
   const sourceDirectory = path.resolve(input.sourceDirectory)
   const stagingDirectory = path.resolve(input.stagingDirectory)
-  if (sourceDirectory === stagingDirectory) throw new Error("Plugin publication staging must not reuse the source directory")
+  if (sourceDirectory === stagingDirectory)
+    throw new Error("Plugin publication staging must not reuse the source directory")
   if (await directoryExists(stagingDirectory)) {
     throw new Error(`Plugin publication staging directory already exists: ${stagingDirectory}`)
   }
@@ -158,7 +191,9 @@ export async function stagePluginPackage(input: {
   const rootManifest = JSON.parse(await readFile(path.join(workspaceDirectory, "package.json"), "utf8")) as {
     workspaces?: { catalog?: Record<string, string> }
   }
-  const sourceManifest = JSON.parse(await readFile(path.join(sourceDirectory, "package.json"), "utf8")) as PluginPackageJson
+  const sourceManifest = JSON.parse(
+    await readFile(path.join(sourceDirectory, "package.json"), "utf8"),
+  ) as PluginPackageJson
   const packageJson = buildPublishPackageJson(sourceManifest, {
     catalog: rootManifest.workspaces?.catalog ?? {},
     workspace: await workspaceVersions(workspaceDirectory),
@@ -184,9 +219,7 @@ export async function stagePluginPackage(input: {
     new Response(compiler.stderr).text(),
   ])
   if (compilerExitCode !== 0) {
-    throw new Error(
-      `Plugin publication compilation failed (${compilerExitCode})\n${compilerStdout}\n${compilerStderr}`,
-    )
+    throw new Error(`Plugin publication compilation failed (${compilerExitCode})\n${compilerStdout}\n${compilerStderr}`)
   }
   await writeFile(path.join(stagingDirectory, "package.json"), `${JSON.stringify(packageJson, null, 2)}\n`)
 

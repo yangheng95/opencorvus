@@ -1,3 +1,14 @@
+/* The review lane's violet. Derived from the palette instead of a fixed hex
+ * so it tracks the theme the way the board's other three lanes already do
+ * (--accent / --warn / --good). The retired --oc-stage-goal was a hardcoded
+ * #8c6edc that measured 3.4-3.9 against every theme's surfaces, and read as
+ * the one lane that ignored the palette. Declared on `body`, not `:root`, so
+ * the var() substitution resolves against the active theme — see the scope
+ * note in surfaces/card.css. */
+body {
+  --mission-board-review-accent: color-mix(in oklch, var(--accent) 55%, var(--bad) 45%);
+}
+
 .mission-board {
   display: flex;
   flex: 1 1 auto;
@@ -35,7 +46,7 @@
 .mission-board__heading > div,
 .mission-board__error > span {
   flex-direction: column;
-  gap: calc(2px * var(--ui-scale));
+  gap: var(--ui-gap-3xs);
 }
 
 .mission-board__title-icon {
@@ -50,7 +61,7 @@
 }
 
 .mission-board__heading h1 {
-  font-size: var(--ui-font-title);
+  font-size: var(--ui-font-emphasis);
   font-weight: var(--ui-font-weight-strong);
   line-height: var(--ui-line-height-tight);
 }
@@ -58,7 +69,7 @@
 .mission-board__heading p {
   margin: 0;
   color: var(--text-muted);
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-body);
   white-space: normal;
 }
 
@@ -94,6 +105,7 @@
 
 .mission-board__error small {
   color: var(--text-soft);
+  font-size: var(--ui-font-body);
 }
 
 .mission-board__state {
@@ -111,7 +123,7 @@
 
 .mission-board__state strong {
   color: var(--text-strong);
-  font-size: var(--ui-font-title);
+  font-size: var(--ui-font-body);
 }
 
 .mission-board__state .oc-icon-loading,
@@ -153,7 +165,7 @@
 }
 
 .mission-board-lane[data-lane="review"] {
-  --mission-board-lane-accent: var(--oc-stage-goal);
+  --mission-board-lane-accent: var(--mission-board-review-accent);
 }
 
 .mission-board-lane[data-lane="completed"] {
@@ -204,7 +216,7 @@
   align-items: center;
   justify-content: center;
   color: var(--text-muted);
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-body);
 }
 
 .mission-board-card {
@@ -287,25 +299,32 @@
   justify-content: space-between;
   gap: var(--ui-gap-sm);
   color: var(--text-muted);
-  font-size: var(--ui-font-meta);
+  font-size: var(--ui-font-caption);
   font-variant-numeric: tabular-nums;
 }
 
 .mission-board-card__title {
   display: -webkit-box;
   overflow: hidden;
+  /* Clamped text needs a break strategy: an English title carrying a URL or
+   * a long path has no break opportunity, overflows the line, and is clipped
+   * with no ellipsis to show for it. CJK breaks anywhere, so this only ever
+   * showed in the English locale. Every other clamped block in the tree sets
+   * one of these. */
+  overflow-wrap: anywhere;
   color: var(--text-strong);
   font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-strong);
-  line-height: 1.35;
+  line-height: var(--ui-line-height-tight);
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
 }
 
 .mission-board-card__project {
-  gap: calc(5px * var(--ui-scale));
+  gap: var(--ui-gap-sm);
   color: var(--text-soft);
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-caption);
 }
 
 .mission-board-card__project span,
@@ -319,11 +338,18 @@
 .mission-board-card__summary {
   display: -webkit-box;
   overflow: hidden;
+  /* Clamped text needs a break strategy: an English title carrying a URL or
+   * a long path has no break opportunity, overflows the line, and is clipped
+   * with no ellipsis to show for it. CJK breaks anywhere, so this only ever
+   * showed in the English locale. Every other clamped block in the tree sets
+   * one of these. */
+  overflow-wrap: anywhere;
   color: var(--text-soft);
-  font-size: var(--ui-font-small);
-  line-height: 1.35;
+  font-size: var(--ui-font-body);
+  line-height: var(--ui-line-height-tight);
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
 }
 
 .mission-board-card__progress {
@@ -348,17 +374,17 @@
 
 .mission-board-card__tasks {
   flex-wrap: wrap;
-  gap: calc(5px * var(--ui-scale));
+  gap: var(--ui-gap-sm);
 }
 
 .mission-board-card__task {
   max-width: 100%;
-  gap: calc(4px * var(--ui-scale));
+  gap: var(--ui-gap-xs);
 }
 
 .mission-board-card__attention {
   align-self: flex-start;
-  gap: calc(5px * var(--ui-scale));
+  gap: var(--ui-gap-sm);
 }
 
 .mission-board-card__actions {
@@ -440,7 +466,7 @@
 .mission-create-form__context > legend {
   padding: 0 var(--ui-gap-xs);
   color: var(--text-strong);
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-strong);
 }
 
@@ -493,8 +519,8 @@
 .mission-create-form__model-note {
   margin: 0;
   color: var(--text-muted);
-  font-size: var(--ui-font-small);
-  line-height: 1.5;
+  font-size: var(--ui-font-body);
+  line-height: var(--ui-line-height-normal);
 }
 
 .mission-create-form__context-error {
@@ -503,14 +529,14 @@
   justify-content: space-between;
   gap: var(--ui-gap-md);
   color: var(--bad);
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-body);
 }
 
 .mission-create-form__context-error > span {
   display: flex;
   min-width: 0;
   flex-direction: column;
-  gap: calc(2px * var(--ui-scale));
+  gap: var(--ui-gap-3xs);
 }
 
 .mission-create-form__context-error small {
@@ -527,7 +553,7 @@
   display: flex;
   min-width: 0;
   flex-direction: column;
-  gap: calc(2px * var(--ui-scale));
+  gap: var(--ui-gap-3xs);
 }
 
 .mission-create-form__option strong,
@@ -550,6 +576,7 @@
 
 .mission-create-form__option small {
   color: var(--text-muted);
+  font-size: var(--ui-font-body);
 }
 
 .mission-create-form__market {
@@ -583,20 +610,28 @@
 }
 
 .mission-create-form__market > header > div {
-  gap: calc(2px * var(--ui-scale));
+  gap: var(--ui-gap-3xs);
 }
 
 .mission-create-form__market > header strong {
   color: var(--text-strong);
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-body);
 }
 
-.mission-create-form__market > header small,
 .mission-create-form__market-copy small,
-.mission-create-form__market-copy p,
 .mission-create-form__market-state {
   color: var(--text-muted);
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-caption);
+}
+
+.mission-create-form__market > header small {
+  color: var(--text-muted);
+  font-size: var(--ui-font-body);
+}
+
+.mission-create-form__market-copy p {
+  color: var(--text-muted);
+  font-size: var(--ui-font-body);
 }
 
 .mission-create-form__market-item {
@@ -611,7 +646,7 @@
 }
 
 .mission-create-form__market-copy {
-  gap: calc(2px * var(--ui-scale));
+  gap: var(--ui-gap-3xs);
 }
 
 .mission-create-form__market-copy > strong,
@@ -629,10 +664,10 @@
 .mission-create-form__market-copy p {
   display: -webkit-box;
   overflow: hidden;
-  margin: calc(2px * var(--ui-scale)) 0 0;
+  margin: var(--ui-gap-3xs) 0 0;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
-  line-height: 1.4;
+  line-height: var(--ui-line-height-tight);
 }
 
 .mission-create-form__market-actions {
@@ -660,7 +695,7 @@
   border-radius: var(--oc-radius-large);
   background: var(--bad-dim);
   color: var(--bad);
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-body);
 }
 
 @media (max-width: 760px) {
@@ -701,7 +736,7 @@
 .mission-board-nav-summary {
   display: flex;
   flex-wrap: wrap;
-  gap: calc(3px * var(--ui-scale)) var(--ui-gap-sm);
+  gap: var(--ui-gap-xs) var(--ui-gap-sm);
 }
 
 .mission-board-nav-summary__lane {
@@ -709,7 +744,7 @@
 
   display: inline-flex;
   align-items: center;
-  gap: calc(5px * var(--ui-scale));
+  gap: var(--ui-gap-sm);
   color: var(--text-soft);
   font-variant-numeric: tabular-nums;
 }
@@ -723,7 +758,7 @@
 }
 
 .mission-board-nav-summary__lane[data-lane="review"] {
-  --mission-board-nav-accent: var(--oc-stage-goal);
+  --mission-board-nav-accent: var(--mission-board-review-accent);
 }
 
 .mission-board-nav-summary__lane[data-lane="completed"] {

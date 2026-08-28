@@ -11,17 +11,21 @@
    rewrite of `999px` etc. that already routes through tokens.
    ───────────────────────────────────────────────────────────── */
 
+:where(small) {
+  font-size: var(--ui-font-caption);
+}
+
 .dialog-title {
   color: var(--text-strong);
-  font-size: var(--ui-font-title);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-strong);
   letter-spacing: 0;
-  line-height: 1.2;
+  line-height: var(--ui-line-height-tight);
 }
 
 .oc-text-field__label,
 .knowledge-item-meta {
-  font-size: var(--ui-font-control);
+  font-size: var(--ui-font-body);
 }
 
 .oc-text-field__label {

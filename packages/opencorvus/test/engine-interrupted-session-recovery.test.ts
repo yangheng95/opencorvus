@@ -17,7 +17,7 @@ import {
 } from "@/engine/task-root-ingress-delivery"
 import { currentOrchestratorControlMessage } from "@/orchestrator/agent"
 import { Message } from "@/session/message"
-import type { TaskRootMessageProvenance } from "@/task-api/task-root-message"
+import type { TaskRootMessageProvenance } from "@/protocol/task-root-message-schema"
 import { recordProviderActivityEvent } from "@/session/provider-activity-facts"
 import { ProviderActivityOutcomeTable } from "@/session/session.sql"
 import { Database, eq } from "@/storage/db"
@@ -91,6 +91,7 @@ async function persistCrashedProviderActivityTask(input: { projectPath: string; 
     ownerOccurrenceID: `${input.label}-dead-owner`,
     now: startedAt + 2,
     leaseMilliseconds: 60_000,
+    assertControlOwnerInTransaction: () => undefined,
   })
   if (!lease.acquired) throw new Error("Expected a Task-root activation lease fixture")
   const control = currentOrchestratorControlMessage({ taskCreation: { taskID } }, taskID, ingress.id, ingress.id)
@@ -275,17 +276,12 @@ describe("interrupted prepared Worker Turn recovery", () => {
     await Instance.provide({
       directory: project.path,
       fn: async () => {
-        const root = await Session.create({ kind: "root", title: "Interrupted recovery root" })
-        const worker = await Session.create({
-          kind: "delegated-worker",
-          parentID: root.id,
-          title: "Interrupted prepared worker",
-        })
+        const root = Session.prepareRootNext({ kind: "root", directory: Instance.directory, title: "Interrupted recovery root" })
         const taskID = Identifier.ascending("task")
         const now = Date.now()
         persistTask({
           taskID,
-          sessionID: root.id,
+          rootSession: root,
           now,
           title: "Interrupted prepared worker",
           request: "Recover the exact prepared Worker Turn",
@@ -303,6 +299,11 @@ describe("interrupted prepared Worker Turn recovery", () => {
             packageRevisionSHA256: packageRevision.packageDigest,
             timeCreated: now,
           }),
+        })
+        const worker = await Session.create({
+          kind: "delegated-worker",
+          parentID: root.id,
+          title: "Interrupted prepared worker",
         })
         const message = await Session.updateMessage({
           id: Identifier.ascending("message"),

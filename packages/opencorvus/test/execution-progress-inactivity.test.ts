@@ -97,4 +97,85 @@ describe("execution progress inactivity configuration ownership", () => {
       get.mockRestore()
     }
   })
+
+  test("delegates Provider and Tool execution, then rearms the scheduler settlement window", async () => {
+    const getGlobal = spyOn(EngineConfig, "getGlobal").mockResolvedValue({
+      ...EngineConfig.defaults,
+      activity: {
+        ...EngineConfig.defaults.activity,
+        execution_progress_idle_ms: 25,
+      },
+    })
+    try {
+      using fence = await createSchedulerExecutionInactivityFence({
+        occurrence: "Automation fire delegated-provider-contract",
+        signals: [],
+        initialPhase: "claimed",
+        configurationOwner: "global",
+      })
+      const receipt = await fence.runDelegated("provider-owned execution", async () => {
+        await Bun.sleep(50)
+        fence.signal.throwIfAborted()
+        return { kind: "durable_provider_terminal_receipt" as const }
+      })
+      const reason = await new Promise<unknown>((resolve) => {
+        const observe = () => resolve(fence.signal.reason)
+        if (fence.signal.aborted) observe()
+        else fence.signal.addEventListener("abort", observe, { once: true })
+      })
+      expect({ receipt, reason }).toMatchObject({
+        receipt: { kind: "durable_provider_terminal_receipt" },
+        reason: {
+          name: "SchedulerExecutionInactivityError",
+          phase: "provider-owned execution",
+          inactivityTimeoutMilliseconds: 25,
+        },
+      })
+    } finally {
+      getGlobal.mockRestore()
+    }
+  })
+
+  test("keeps concurrent delegated owners active until the final owner settles", async () => {
+    const getGlobal = spyOn(EngineConfig, "getGlobal").mockResolvedValue({
+      ...EngineConfig.defaults,
+      activity: { ...EngineConfig.defaults.activity, execution_progress_idle_ms: 25 },
+    })
+    try {
+      using fence = await createSchedulerExecutionInactivityFence({
+        occurrence: "Automation fire concurrent-target-contract",
+        signals: [],
+        initialPhase: "targets reserved",
+        configurationOwner: "global",
+      })
+      let settleFirst!: () => void
+      let settleSecond!: () => void
+      const firstGate = new Promise<void>((resolve) => (settleFirst = resolve))
+      const secondGate = new Promise<void>((resolve) => (settleSecond = resolve))
+      const first = fence.runDelegated("target one Session owner", async () => {
+        await firstGate
+        return "target-one-settled" as const
+      })
+      const second = fence.runDelegated("target two Session owner", async () => {
+        await secondGate
+        return "target-two-settled" as const
+      })
+      await Bun.sleep(40)
+      settleFirst()
+      await Bun.sleep(40)
+      settleSecond()
+      const receipts = await Promise.all([first, second])
+      const reason = await new Promise<unknown>((resolve) => {
+        const observe = () => resolve(fence.signal.reason)
+        if (fence.signal.aborted) observe()
+        else fence.signal.addEventListener("abort", observe, { once: true })
+      })
+      expect({ receipts, reason }).toMatchObject({
+        receipts: ["target-one-settled", "target-two-settled"],
+        reason: { name: "SchedulerExecutionInactivityError", phase: "target two Session owner" },
+      })
+    } finally {
+      getGlobal.mockRestore()
+    }
+  })
 })

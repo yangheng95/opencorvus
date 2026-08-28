@@ -6,10 +6,11 @@ import { LLM } from "../llm"
 import { resolveAgentModel } from "@/agent/model"
 import { Log } from "../../util/log"
 import { EffectiveConfig } from "@/config/effective"
+import { collectLLMText } from "@/llm/activity"
 
 const log = Log.create({ service: "session.prompt" })
 
-export async function ensureTitle(input: { session: Session.Info; history: Message.WithParts[] }) {
+export async function ensureTitle(input: { session: Session.Info; history: Message.WithParts[]; abort: AbortSignal }) {
   if (input.session.parentID) return
   if (!Session.isDefaultTitle(input.session.title)) return
 
@@ -26,26 +27,31 @@ export async function ensureTitle(input: { session: Session.Info; history: Messa
   const config = await EffectiveConfig.effective({ sessionID: input.session.id })
   const agent = await HelperAgentRegistry.get("title", { config })
   const model = await resolveAgentModel("title", { sessionID: input.session.id })
-  const result = await LLM.stream({
-    agentID: agent.name,
-    agent: sessionRuntimeFromNativeAgent(agent),
-    user: firstRealUser.info as Message.User,
-    system: [],
-    small: true,
-    tools: {},
-    model,
-    abort: new AbortController().signal,
-    sessionID: input.session.id,
-    retries: 2,
-    messages: [
-      {
-        role: "user",
-        content: "Generate a title for this conversation:\n",
-      },
-      ...(await Message.toModelMessages(contextMessages, model)),
-    ],
-  })
-  const text = await Promise.resolve(result.text).catch((err) => log.error("failed to generate title", { error: err }))
+  const messages = [
+    {
+      role: "user" as const,
+      content: "Generate a title for this conversation:\n",
+    },
+    ...(await Message.toModelMessages(contextMessages, model)),
+  ]
+  const text = await collectLLMText({
+    context: { sessionID: input.session.id, provider: model.providerID, model: model.id },
+    external: input.abort,
+    start: (run) =>
+      LLM.stream({
+        agentID: agent.name,
+        agent: sessionRuntimeFromNativeAgent(agent),
+        user: firstRealUser.info as Message.User,
+        system: [],
+        small: true,
+        tools: {},
+        model,
+        abort: run.signal,
+        sessionID: input.session.id,
+        retries: 0,
+        messages,
+      }),
+  }).catch((err) => log.error("failed to generate title", { error: err }))
   if (text) {
     const cleaned = text
       .replace(/<think>[\s\S]*?<\/think>\s*/g, "")

@@ -83,6 +83,31 @@ for await (const event of stream) {
 
 常用 SSE 选项：`signal`、`onSseEvent`、`onSseError`、`sseDefaultRetryDelay`、`sseMaxRetryDelay`、`sseMaxRetryAttempts`。
 
+## 发起 Chat
+
+当一次 API 调用需要同时创建可见 Chat 并持久接收首条用户消息时，使用 `global.chat.start`。调用方必须提供 `requestID`；相同 ID 与相同 payload 的重试会返回同一个 Session 和消息，不会重复创建对话轮次。初始附件使用内联 base64 `data`，因为新分配的匿名 Project 尚不存在可复用的项目级附件引用。
+
+```typescript
+const started = await client.global.chat.start({
+  requestID: crypto.randomUUID(),
+  text: "检查认证流程，并提出最小且安全的修复方案。",
+})
+
+if (started.error) throw started.error
+const { session, messageID } = started.data
+
+const { stream } = client.session.events({
+  sessionID: session.id,
+  directory: session.directory,
+})
+
+for await (const event of stream) {
+  console.log(messageID, event.type, event)
+}
+```
+
+首条用户轮次持久接纳且 canonical wake 已调度后，start 请求返回 HTTP 202。助手输出仍通过 canonical Session 的 Server-Sent Events（SSE，服务器发送事件）流返回；start 响应不会等待并缓存完整模型回复。只有明确需要空 Chat 时才使用 `client.global.chat.create()`。
+
 ## 嵌入式服务
 
 调用方需要拉起一个 OpenCorvus server 进程并拿到已连接客户端时，使用 `createOpenCorvus()`。
@@ -121,16 +146,16 @@ try {
 
 SDK 跟随 OpenAPI `operationId` 命名。点号分段变成 namespace，snake_case 方法名变成 camelCase。例如 `session.prompt` 映射为 `client.session.prompt()`。
 
-| 命名空间                                 | 示例                                                       |
-| ---------------------------------------- | ---------------------------------------------------------- |
-| `client.global.*`                        | `health`、`event`、`config.get`、`db.reset`                |
-| `client.task.*`                          | `create`、`list`、`message`、`retry`、`replan`、`followup` |
-| `client.session.*`                       | `create`、`prompt`、`events`、`trace`、`summarize`         |
-| `client.goal.*`                          | Delivery Slice 创建、immutable revision 与派生进度路由    |
-| `client.channel.*`                       | Channel runtime 与附件路由                                 |
-| `client.mcp.*`                           | MCP server 生命周期与认证路由                              |
-| `client.permission.*`                    | 权限 reply / reject 路由                                   |
-| `client.provider.*`                      | Provider 模型、认证与刷新路由                              |
+| 命名空间              | 示例                                                       |
+| --------------------- | ---------------------------------------------------------- |
+| `client.global.*`     | `health`、`event`、`chat.start`、`config.get`、`db.reset`  |
+| `client.task.*`       | `create`、`list`、`message`、`retry`、`replan`、`followup` |
+| `client.session.*`    | `create`、`prompt`、`events`、`trace`、`summarize`         |
+| `client.goal.*`       | Delivery Slice 创建、immutable revision 与派生进度路由     |
+| `client.channel.*`    | Channel runtime 与附件路由                                 |
+| `client.mcp.*`        | MCP server 生命周期与认证路由                              |
+| `client.permission.*` | 权限 reply / reject 路由                                   |
+| `client.provider.*`   | Provider 模型、认证与刷新路由                              |
 
 [HTTP API 参考](../api/) 是完整 operation 清单；每个 `operationId` 都按上述规则映射到 SDK namespace / method。
 

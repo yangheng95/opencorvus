@@ -1,11 +1,12 @@
-import { spawn, execSync, type ChildProcess } from "node:child_process"
+import { randomUUID } from "node:crypto"
+import { ProcessAbortedError, ProcessDeadlineExceededError } from "@opencorvus-ai/util/process"
+import { NodeProcess } from "@opencorvus-ai/util/process-node"
+import { createStartupReceiptChannel } from "./startup-receipt.js"
 import { type ConfigGetResponse } from "./gen/types.gen.js"
 import { DEFAULT_SERVER_HOST, DEFAULT_SERVER_PORT } from "./defaults.js"
-import { StartupOutputObserver } from "./server-startup-observer.js"
+import { BoundedDiagnosticTail } from "./server-diagnostic-tail.js"
 
 type Config = ConfigGetResponse
-const SERVER_PROCESS_TERMINATE_GRACE_MS = 2_000
-const WINDOWS_POWERSHELL_CLEANUP_TIMEOUT_MS = 5_000
 
 export type ServerOptions = {
   hostname?: string
@@ -20,15 +21,16 @@ export type OpenCorvusServer = {
   close(): Promise<void>
 }
 
+export function combineServerStartupFailures(primary: unknown, cleanupFailures: readonly unknown[]): unknown {
+  const flattenedCleanup = cleanupFailures.flatMap((failure) =>
+    failure instanceof AggregateError ? Array.from(failure.errors) : [failure],
+  )
+  const failures = Array.from(new Set([primary, ...flattenedCleanup]))
+  return failures.length === 1 ? primary : new AggregateError(failures, "Server startup and cleanup failed")
+}
+
 function resolveCommand() {
-  if (process.env.OPENCORVUS_BIN_PATH) {
-    return process.env.OPENCORVUS_BIN_PATH
-  }
-  try {
-    execSync("opencorvus --version", { stdio: "ignore", timeout: 3000 })
-    return "opencorvus"
-  } catch {}
-  return "opencorvus"
+  return process.env.OPENCORVUS_BIN_PATH || "opencorvus"
 }
 
 export async function createOpenCorvusServer(options?: ServerOptions): Promise<OpenCorvusServer> {
@@ -41,266 +43,204 @@ export async function createOpenCorvusServer(options?: ServerOptions): Promise<O
     options ?? {},
   )
 
-  const args = [`serve`, `--hostname=${options.hostname}`, `--port=${options.port}`]
-  if (options.config?.logLevel) args.push(`--log-level=${options.config.logLevel}`)
-  const config = options.config === undefined ? process.env.OPENCORVUS_CONFIG_CONTENT : JSON.stringify(options.config)
+  // Readiness is a framed receipt this launcher owns, never a line of the
+  // server's human output.
+  const startupOccurrenceID = randomUUID()
+  const receipt = await createStartupReceiptChannel(startupOccurrenceID)
+  const startupTimeoutMs = options.timeout ?? 5_000
+  const startupDeadlineAt = Date.now() + startupTimeoutMs
+  let openedServer: OpenCorvusServer | undefined
+  let cleanupAdmittedProcess: (() => Promise<void>) | undefined
+  try {
+    const args = [
+      `serve`,
+      `--hostname=${options.hostname}`,
+      `--port=${options.port}`,
+      `--startup-receipt=${receipt.path}`,
+      `--startup-occurrence=${startupOccurrenceID}`,
+    ]
+    if (options.config?.logLevel) args.push(`--log-level=${options.config.logLevel}`)
+    const config = options.config === undefined ? process.env.OPENCORVUS_CONFIG_CONTENT : JSON.stringify(options.config)
 
-  const proc = spawn(resolveCommand(), args, {
-    detached: process.platform !== "win32",
-    windowsHide: true,
-    env: {
-      ...process.env,
-      ...(config === undefined ? {} : { OPENCORVUS_CONFIG_CONTENT: config }),
-    },
-  })
-  let stopTask: Promise<void> | undefined
-  const stopProcess = () => {
-    if (!stopTask) stopTask = terminateServerProcess(proc)
-    return stopTask
-  }
+    let proc: Awaited<ReturnType<typeof NodeProcess.spawn>>
+    try {
+      proc = await NodeProcess.spawn({
+        command: { executable: resolveCommand(), args },
+        ownership: "owned_tree",
+        signal: options.signal,
+        deadlineAt: startupDeadlineAt,
+        env: {
+          ...process.env,
+          ...(config === undefined ? {} : { OPENCORVUS_CONFIG_CONTENT: config }),
+        },
+      })
+    } catch (error) {
+      if (error instanceof ProcessDeadlineExceededError)
+        throw new Error(`Timeout waiting for server to start after ${startupTimeoutMs}ms`)
+      if (error instanceof ProcessAbortedError) throw new Error("Aborted")
+      throw error
+    }
+    // Give the host one turn to publish any immediate child error/exit before
+    // readiness polling and the startup deadline begin competing for I/O.
+    await new Promise<void>((resolve) => setImmediate(resolve))
+    let stopTask: Promise<void> | undefined
+    let outputObservationSettled: Promise<void> = Promise.resolve()
+    const stopProcess = () => {
+      if (!stopTask) {
+        stopTask = Promise.allSettled([proc.dispose(), outputObservationSettled])
+          .then((outcomes) => {
+            const failures = Array.from(
+              new Set(outcomes.flatMap((outcome) => (outcome.status === "rejected" ? [outcome.reason] : []))),
+            )
+            if (failures.length === 1) throw failures[0]
+            if (failures.length > 1) throw new AggregateError(failures, "Server process and output cleanup failed")
+          })
+          // `close` proves the child and pipes settled; one host turn then
+          // releases the adapter's libuv registrations before another server
+          // occurrence can be admitted in this process.
+          .then(() => new Promise<void>((resolve) => setImmediate(resolve)))
+          .then(() => undefined)
+      }
+      return stopTask
+    }
+    cleanupAdmittedProcess = stopProcess
 
-  const url = await new Promise<string>((resolve, reject) => {
-    let state: "pending" | "stopping_failure" | "ready" | "failed" = "pending"
-    const observer = new StartupOutputObserver()
-    const drainOutput = () => {
-      proc.stdout?.resume()
-      proc.stderr?.resume()
-    }
-    const cleanupStartup = () => {
-      clearTimeout(id)
-      if (abortListener) options.signal?.removeEventListener("abort", abortListener)
-      proc.stdout?.removeListener("data", onStdout)
-      proc.stderr?.removeListener("data", onStderr)
-    }
-    const failStartup = (error: unknown) => {
-      if (state === "failed" || state === "ready") return
-      state = "failed"
-      cleanupStartup()
-      drainOutput()
-      reject(error)
-    }
-    const failStartupAfterCleanup = (error: Error) => {
-      if (state !== "pending") return
-      state = "stopping_failure"
-      cleanupStartup()
-      drainOutput()
-      void stopProcess().then(
-        () => failStartup(error),
-        (cleanupError) => failStartup(cleanupError),
-      )
-    }
-    const finishStartup = (serverUrl: string) => {
-      if (state !== "pending") return
-      state = "ready"
-      cleanupStartup()
-      observer.clear()
-      drainOutput()
-      resolve(serverUrl)
-    }
-    const onStdout = (chunk: Buffer) => {
-      for (const line of observer.appendStdout(chunk)) {
-        if (!line.includes("server listening")) continue
-        const match = line.match(/on\s+(https?:\/\/[^\s]+)/)
-        if (!match) {
-          failStartupAfterCleanup(new Error(`Failed to parse server url from output: ${line}`))
+    const url = await new Promise<string>((resolve, reject) => {
+      let state: "pending" | "stopping_failure" | "ready" | "failed" = "pending"
+      const diagnostics = new BoundedDiagnosticTail()
+      const receiptObservation = new AbortController()
+      const cleanupStartup = () => {
+        receiptObservation.abort()
+      }
+      const failStartupAfterCleanup = (error: Error) => {
+        if (state !== "pending") return
+        state = "stopping_failure"
+        cleanupStartup()
+        void stopProcess().then(
+          () => {
+            state = "failed"
+            reject(error)
+          },
+          () => {
+            state = "failed"
+            // The outer startup owner joins this memoized cleanup exactly once
+            // and constructs the ordered primary+cleanup failure contract.
+            reject(error)
+          },
+        )
+      }
+      const finishStartup = (serverUrl: string) => {
+        if (state !== "pending") return
+        const release = proc.releaseControls()
+        if (release !== "released") {
+          failStartupAfterCleanup(
+            new Error(
+              release === "deadline_exceeded"
+                ? `Timeout waiting for server to start after ${startupTimeoutMs}ms`
+                : "Aborted",
+            ),
+          )
           return
         }
-        finishStartup(match[1]!)
-        return
+        state = "ready"
+        cleanupStartup()
+        diagnostics.clear()
+        // The caller signal and timeout own startup admission only. Once the
+        // framed readiness receipt is accepted, normal server lifetime is
+        // governed exclusively by `close()`.
+        resolve(serverUrl)
       }
-    }
-    const onStderr = (chunk: Buffer) => observer.appendStderr(chunk)
-    let abortListener: (() => void) | undefined
-    const id = setTimeout(() => {
-      failStartupAfterCleanup(new Error(`Timeout waiting for server to start after ${options.timeout}ms`))
-    }, options.timeout)
-    proc.stdout?.on("data", onStdout)
-    proc.stderr?.on("data", onStderr)
-    proc.on("exit", (code) => {
-      if (state !== "pending") return
-      const diagnostic = observer.diagnostics.snapshot()
-      let msg = `Server exited with code ${code}`
-      if (diagnostic.text.trim()) {
-        msg += diagnostic.truncated
-          ? `\nServer output (truncated=true, retained_bytes=${diagnostic.retainedBytes}): ${diagnostic.text}`
-          : `\nServer output: ${diagnostic.text}`
+      // Server output is retained for diagnostics only; it decides nothing.
+      const observeOutput = async (source: typeof proc.stdout, append: (chunk: Uint8Array) => void) => {
+        if (!source) return
+        for await (const chunk of source) {
+          if (state === "pending" || state === "stopping_failure") append(chunk)
+        }
       }
-      failStartupAfterCleanup(new Error(msg))
+      void receipt.wait(receiptObservation.signal).then(
+        (published) => {
+          if (published.outcome === "listening") {
+            if (published.pid !== proc.pid) {
+              failStartupAfterCleanup(
+                new Error(`Server startup receipt pid ${published.pid} does not match spawned process ${proc.pid}`),
+              )
+              return
+            }
+            finishStartup(published.url)
+          } else failStartupAfterCleanup(new Error(published.error))
+        },
+        (error) => {
+          if (!receiptObservation.signal.aborted)
+            failStartupAfterCleanup(error instanceof Error ? error : new Error(String(error)))
+        },
+      )
+      outputObservationSettled = Promise.all([
+        observeOutput(proc.stdout, (chunk) => diagnostics.append(chunk)),
+        observeOutput(proc.stderr, (chunk) => diagnostics.append(chunk)),
+      ]).then(() => undefined)
+      void outputObservationSettled.catch((error) =>
+        failStartupAfterCleanup(error instanceof Error ? error : new Error(String(error))),
+      )
+      void proc.terminal.then(
+        (terminal) => {
+          if (state !== "pending") return
+          if (terminal.reason === "deadline_exceeded") {
+            failStartupAfterCleanup(new Error(`Timeout waiting for server to start after ${startupTimeoutMs}ms`))
+            return
+          }
+          if (terminal.reason === "aborted") {
+            failStartupAfterCleanup(new Error("Aborted"))
+            return
+          }
+          const diagnostic = diagnostics.snapshot()
+          let msg = `Server exited with code ${terminal.exitCode}`
+          if (diagnostic.text.trim()) {
+            msg += diagnostic.truncated
+              ? `\nServer output (truncated=true, retained_bytes=${diagnostic.retainedBytes}): ${diagnostic.text}`
+              : `\nServer output: ${diagnostic.text}`
+          }
+          failStartupAfterCleanup(new Error(msg))
+        },
+        (error) => failStartupAfterCleanup(error instanceof Error ? error : new Error(String(error))),
+      )
     })
-    proc.on("error", (error) => {
-      failStartup(error)
-    })
-    if (options.signal) {
-      abortListener = () => {
-        failStartupAfterCleanup(new Error("Aborted"))
-      }
-      if (options.signal.aborted) abortListener()
-      else options.signal.addEventListener("abort", abortListener)
+
+    openedServer = {
+      url,
+      async close() {
+        await stopProcess()
+      },
     }
-  })
-
-  return {
-    url,
-    async close() {
-      await stopProcess()
-    },
-  }
-}
-
-async function terminateServerProcess(proc: ChildProcess): Promise<void> {
-  const pid = proc.pid
-  if (!pid) return
-  if (process.platform === "win32") {
-    await terminateWindowsProcessTree(pid, proc.exitCode === null && proc.signalCode === null)
-    return
-  }
-  if (!processGroupIsRunning(pid)) return
-  signalProcessGroup(pid, "SIGTERM")
-  if (await waitForProcessGroupExit(pid, SERVER_PROCESS_TERMINATE_GRACE_MS)) return
-  signalProcessGroup(pid, "SIGKILL")
-  if (await waitForProcessGroupExit(pid, SERVER_PROCESS_TERMINATE_GRACE_MS)) return
-  throw new Error(`OpenCorvus server process group ${pid} did not exit after SIGKILL`)
-}
-
-function processGroupIsRunning(pid: number): boolean {
-  try {
-    process.kill(-pid, 0)
-    return true
   } catch (error) {
-    const code = (error as NodeJS.ErrnoException).code
-    if (code === "ESRCH") return false
-    return code === "EPERM"
-  }
-}
-
-function signalProcessGroup(pid: number, signal: NodeJS.Signals): void {
-  try {
-    process.kill(-pid, signal)
-  } catch (error) {
-    if ((error as NodeJS.ErrnoException).code === "ESRCH") return
+    const cleanupFailures: unknown[] = []
+    try {
+      await cleanupAdmittedProcess?.()
+    } catch (cleanupError) {
+      cleanupFailures.push(cleanupError)
+    }
+    try {
+      await receipt.dispose()
+    } catch (cleanupError) {
+      cleanupFailures.push(cleanupError)
+    }
+    if (cleanupFailures.length) throw combineServerStartupFailures(error, cleanupFailures)
     throw error
   }
-}
-
-async function waitForProcessGroupExit(pid: number, timeoutMs: number): Promise<boolean> {
-  const deadline = Date.now() + timeoutMs
-  while (Date.now() < deadline) {
-    if (!processGroupIsRunning(pid)) return true
-    await new Promise((resolve) => setTimeout(resolve, 25))
-  }
-  return !processGroupIsRunning(pid)
-}
-
-async function terminateWindowsProcessTree(pid: number, includeRoot: boolean): Promise<void> {
-  const script = `
-$ErrorActionPreference = "Stop"
-$root = ${pid}
-$includeRoot = ${includeRoot ? "$true" : "$false"}
-$processes = @(Get-CimInstance Win32_Process | Select-Object ProcessId, ParentProcessId)
-$children = @{}
-foreach ($process in $processes) {
-  $parent = [int]$process.ParentProcessId
-  if (-not $children.ContainsKey($parent)) {
-    $children[$parent] = New-Object System.Collections.Generic.List[int]
-  }
-  $children[$parent].Add([int]$process.ProcessId)
-}
-$queue = New-Object System.Collections.Generic.Queue[int]
-$seen = New-Object System.Collections.Generic.HashSet[int]
-$targets = New-Object System.Collections.Generic.List[int]
-$queue.Enqueue([int]$root)
-while ($queue.Count -gt 0) {
-  $current = $queue.Dequeue()
-  if (-not $seen.Add($current)) { continue }
-  if (-not $children.ContainsKey($current)) { continue }
-  foreach ($child in $children[$current]) {
-    $targets.Add([int]$child)
-    $queue.Enqueue([int]$child)
-  }
-}
-if ($includeRoot) {
-  foreach ($process in $processes) {
-    if ([int]$process.ProcessId -eq [int]$root) {
-      $targets.Add([int]$root)
-      break
-    }
-  }
-}
-$unique = @($targets | Sort-Object -Unique)
-if ($unique.Count -gt 0) {
-  foreach ($target in $unique) {
-    Stop-Process -Id $target -Force -ErrorAction SilentlyContinue
-  }
-  $unique | ConvertTo-Json -Compress
-} else {
-  Write-Output "[]"
-}
-`
-  const stopped = await runWindowsPowerShellForProcessIDs(script, `OpenCorvus server process tree ${pid}`)
-  await waitForWindowsProcessIDsExit(stopped, SERVER_PROCESS_TERMINATE_GRACE_MS, `OpenCorvus server process tree ${pid}`)
-}
-
-async function runWindowsPowerShellForProcessIDs(script: string, label: string): Promise<number[]> {
-  const output = await new Promise<string>((resolve, reject) => {
-    const runner = spawn("powershell.exe", ["-NoProfile", "-ExecutionPolicy", "Bypass", "-Command", script], {
-      stdio: ["ignore", "pipe", "pipe"],
-      windowsHide: true,
-    })
-    let settled = false
-    let stdout = ""
-    let stderr = ""
-    const settle = (fn: () => void) => {
-      if (settled) return
-      settled = true
-      clearTimeout(timer)
-      fn()
-    }
-    const timer = setTimeout(() => {
-      runner.kill()
-      settle(() =>
-        reject(new Error(`${label} PowerShell cleanup timed out after ${WINDOWS_POWERSHELL_CLEANUP_TIMEOUT_MS}ms`)),
-      )
-    }, WINDOWS_POWERSHELL_CLEANUP_TIMEOUT_MS)
-    if (typeof timer.unref === "function") timer.unref()
-    runner.stdout.setEncoding("utf8")
-    runner.stderr.setEncoding("utf8")
-    runner.stdout.on("data", (chunk) => {
-      stdout += chunk
-    })
-    runner.stderr.on("data", (chunk) => {
-      stderr += chunk
-    })
-    runner.once("exit", (code, signal) => {
-      settle(() => {
-        if (code === 0) resolve(stdout)
-        else reject(new Error(`${label} PowerShell cleanup exited with ${signal ?? code}: ${stderr.trim()}`))
-      })
-    })
-    runner.once("error", (error) => settle(() => reject(error)))
-  })
-  const trimmed = output.trim()
-  if (!trimmed) return []
-  const parsed = JSON.parse(trimmed) as number | number[]
-  return (Array.isArray(parsed) ? parsed : [parsed]).filter((value) => Number.isInteger(value) && value > 0)
-}
-
-async function waitForWindowsProcessIDsExit(pids: number[], timeoutMs: number, label: string): Promise<void> {
-  const deadline = Date.now() + timeoutMs
-  while (Date.now() < deadline) {
-    if (pids.every((pid) => !processIDIsRunning(pid))) return
-    await new Promise((resolve) => setTimeout(resolve, 25))
-  }
-  const live = pids.filter(processIDIsRunning)
-  if (live.length > 0) throw new Error(`${label} did not exit after cleanup: ${live.join(", ")}`)
-}
-
-function processIDIsRunning(pid: number): boolean {
   try {
-    process.kill(pid, 0)
-    return true
-  } catch (error) {
-    const code = (error as NodeJS.ErrnoException).code
-    if (code === "ESRCH") return false
-    return code === "EPERM"
+    // The launcher owns the receipt channel on EVERY exit path: a timeout,
+    // a child that died, a spawn error and an abort each leave a directory
+    // holding the bound URL behind otherwise.
+    await receipt.dispose()
+  } catch (cleanupError) {
+    try {
+      await openedServer?.close()
+    } catch (processCleanupError) {
+      throw new AggregateError(
+        [cleanupError, processCleanupError],
+        "Server receipt and admitted process cleanup failed",
+      )
+    }
+    throw cleanupError
   }
+  return openedServer!
 }

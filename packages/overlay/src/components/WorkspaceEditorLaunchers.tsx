@@ -4,7 +4,13 @@ import { getHostTransport } from "../services/host-transport-runtime"
 import { formatErrorDetails, reportError } from "../services/diagnostics"
 import { createPersistedSelectionOwner } from "../services/persisted-selection-owner"
 import type { PersistedOverlaySettings } from "../services/persisted-overlay-settings"
-import { activeDirectory, openDirectory, openDirectoryInEditor, PROJECT_EDITORS } from "../services/workspace"
+import {
+  activeDirectory,
+  openDirectory,
+  openDirectoryInEditor,
+  pathRevealLabelKey,
+  PROJECT_EDITORS,
+} from "../services/workspace"
 import { saveSettings, settingsStore, setSettingsStore } from "../store/settings"
 import { t } from "../utils/i18n"
 import { Icon, type IconName } from "./ui/Icon"
@@ -27,10 +33,14 @@ const EDITOR_MENU_ICON_SIZES: Record<ProjectEditorID, IconSizeTier> = {
   cursor: "large",
 }
 
+/** Whether this host has any project editor to launch. */
+export function workspaceEditorLaunchersAvailable(): boolean {
+  return getHostTransport().capabilities.ui.projectEditors.length > 0
+}
+
 export function WorkspaceEditorLaunchers() {
   const hostCapabilities = getHostTransport().capabilities
   const supportedEditorIDs = hostCapabilities.ui.projectEditors
-  const canOpenDirectory = hostCapabilities.nativeCommands["open-path"]
   const supportedEditors = createMemo(() => PROJECT_EDITORS.filter((editor) => supportedEditorIDs.includes(editor.id)))
   const disabled = () => !activeDirectory() || supportedEditors().length === 0
   const selectedEditor = () =>
@@ -70,7 +80,6 @@ export function WorkspaceEditorLaunchers() {
   }
 
   async function openFileManager() {
-    if (!canOpenDirectory) return
     close()
     await openDirectory()
   }
@@ -119,18 +128,16 @@ export function WorkspaceEditorLaunchers() {
           </WorkspaceSplitLauncherItem>
         )}
       </For>
-      <Show when={canOpenDirectory}>
-        <WorkspaceSplitLauncherItem
-          class="workspace-editor-option"
-          dataAttributes={{ "data-open-target": "file-manager" }}
-          onSelect={openFileManager}
-        >
-          <span class="workspace-editor-option-icon" aria-hidden="true">
-            <Icon name="folder-open" size="medium" />
-          </span>
-          <span class="workspace-editor-option-label">{t("cwd.open")}</span>
-        </WorkspaceSplitLauncherItem>
-      </Show>
+      <WorkspaceSplitLauncherItem
+        class="workspace-editor-option"
+        dataAttributes={{ "data-open-target": "file-manager" }}
+        onSelect={openFileManager}
+      >
+        <span class="workspace-editor-option-icon" aria-hidden="true">
+          <Icon name="folder-open" size="medium" />
+        </span>
+        <span class="workspace-editor-option-label">{t(pathRevealLabelKey())}</span>
+      </WorkspaceSplitLauncherItem>
     </WorkspaceSplitLauncher>
   )
 }

@@ -1,4 +1,5 @@
 import z from "zod"
+import { Config } from "@/config/config"
 import { Buffer } from "node:buffer"
 import { randomBytes } from "node:crypto"
 import { Tool } from "./tool"
@@ -65,12 +66,20 @@ import { reviewedTerminalLifecycleReferenceBeforePanelAction } from "@/agent/tas
 import { listMissionTasks } from "@/engine/store"
 import { MissionCompletionReceipt, MissionCompletionTaskAcceptance } from "@/mission/completion"
 import {
+  acceptanceGapEvidenceLocators,
+  acceptanceGapReadReferences,
+  materializeMissionAcceptanceGap,
+} from "@/mission/acceptance-gap"
+import { readLatestTaskAcceptanceLedger } from "@/mission/acceptance-ledger"
+import {
   requireCurrentTerminalLifecycleReference,
   resolveTerminalLifecycleReference,
-  sameTerminalLifecycleReference,
   type TerminalLifecycleReference,
 } from "@/engine/terminal-lifecycle-reference"
-import { TerminalLifecycleReferenceSchema } from "@/engine/terminal-lifecycle-reference-schema"
+import {
+  sameTerminalLifecycleReference,
+  TerminalLifecycleReferenceSchema,
+} from "@/engine/terminal-lifecycle-reference-schema"
 import {
   PanelQueryTaskErrorRow,
   PanelQueryTaskOutput,
@@ -337,6 +346,7 @@ async function panelTaskSummaryRow(board: PanelTaskBoard): Promise<z.infer<typeo
   const terminalLifecycleReference = ["completed", "failed", "cancelled"].includes(board.task.status)
     ? requireCurrentTerminalLifecycleReference(board.task.id)
     : undefined
+  const acceptanceLedger = readLatestTaskAcceptanceLedger(board.task.id)
   return PanelQueryTaskSummaryRow.parse({
     taskID: board.task.id,
     title: board.task.title,
@@ -347,6 +357,17 @@ async function panelTaskSummaryRow(board: PanelTaskBoard): Promise<z.infer<typeo
     error: board.task.error,
     result: panelTaskResult(board),
     terminal_lifecycle_reference: terminalLifecycleReference,
+    ...(acceptanceLedger
+      ? {
+          acceptance_ledger: {
+            artifact_id: acceptanceLedger.artifactID,
+            revision: acceptanceLedger.revision.revision,
+            execution_epoch: acceptanceLedger.revision.execution_epoch,
+            previous_revision_artifact_id: acceptanceLedger.revision.previous_revision_artifact_id,
+            gap: acceptanceLedger.revision.gap,
+          },
+        }
+      : {}),
   })
 }
 
@@ -716,8 +737,8 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
               boards.length === 0
                 ? "No Mission-owned tasks found."
                 : boards
-                    .map((board, index) =>
-                      `${index + 1}. ${board.task.title} [${board.task.status}] (${board.task.id})`,
+                    .map(
+                      (board, index) => `${index + 1}. ${board.task.title} [${board.task.status}] (${board.task.id})`,
                     )
                     .join("\n"),
             metadata: { missionID: mission.missionID, count: boards.length },
@@ -997,10 +1018,7 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
             artifact_import_mappings: EngineService.getCrossTaskArtifactImportMappings(taskID),
             message: `Task accepted: \`${taskID}\``,
           }),
-          metadata:
-            actor === "mission"
-              ? withImmediateParkToolResultControl({})
-              : {},
+          metadata: actor === "mission" ? withImmediateParkToolResultControl({}) : {},
         }
       }
       case "wake_mission": {
@@ -1059,26 +1077,33 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
           projectDirectory: capabilityProjectDirectory,
           productPillar: rightSidebarConversationExperience(callerSession) === "work" ? "work" : "code",
         })
+        // The title and model overlay are resolved BEFORE the Session exists
+        // and commit in its insert, so a Mission Session is never published
+        // carrying the base model with its real one still unwritten.
+        const callerModel = await resolveConfiguredModelRef({ sessionID: callerSession.id })
+        const intendedModel = `${callerModel.providerID}/${callerModel.modelID}`
+        const intendedOverlay = Config.Overlay.parse({ model: intendedModel, prompt_profile: null })
         const missionSession = await ensureMissionSession({
           missionID,
           defaultCwd: callerSession.directory,
           productPillar: rightSidebarConversationExperience(callerSession) === "work" ? "work" : "code",
           heldExpertSquadIDs,
+          initialTitle: params.title,
+          initialConfigOverlay: intendedOverlay,
         })
-        if (params.title) {
-          await Session.setTitle({
+        // A Session that already existed keeps its own facts until this
+        // request's intent differs from them.
+        const storedMetadata = (missionSession.metadata ?? {}) as Record<string, unknown>
+        const storedOverlay = (storedMetadata.configOverlay ?? {}) as Record<string, unknown>
+        if (storedOverlay.model !== intendedModel) {
+          await Session.mergeConfigOverlay({
             sessionID: missionSession.id,
-            title: params.title,
+            patch: { model: intendedModel, prompt_profile: null },
           })
         }
-        const callerModel = await resolveConfiguredModelRef({ sessionID: callerSession.id })
-        await Session.mergeConfigOverlay({
-          sessionID: missionSession.id,
-          patch: {
-            model: `${callerModel.providerID}/${callerModel.modelID}`,
-            prompt_profile: null,
-          },
-        })
+        if (params.title && missionSession.title !== params.title) {
+          await Session.setTitle({ sessionID: missionSession.id, title: params.title })
+        }
         const attachedMissionSession = await attachMissionCaller({
           missionSessionID: missionSession.id,
           callerSession,
@@ -1257,14 +1282,27 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
           toolPartID: identity.toolPartID,
           taskID: params.taskID,
         })
-        const evidenceLocators = resolvePanelArtifactReadReferencesBeforeAction({
-          sessionID: ctx.sessionID,
-          assistantMessageID: ctx.messageID,
-          toolPartID: identity.toolPartID,
-          taskID: params.taskID,
-          terminalLifecycleReference: reviewedTerminalLifecycleReference,
-          references: params.evidence_read_refs,
+        const evidenceByReadReference = new Map(
+          acceptanceGapReadReferences(params.acceptance_gap).map((reference) => {
+            const resolved = resolvePanelArtifactReadReferencesBeforeAction({
+              sessionID: ctx.sessionID,
+              assistantMessageID: ctx.messageID,
+              toolPartID: identity.toolPartID,
+              taskID: params.taskID,
+              terminalLifecycleReference: reviewedTerminalLifecycleReference,
+              references: [reference],
+            })
+            const locator = resolved[0]
+            if (!locator) throw new Error(`Mission acceptance evidence reference ${reference} did not resolve.`)
+            return [reference, locator] as const
+          }),
+        )
+        const acceptanceGap = materializeMissionAcceptanceGap({
+          gap: params.acceptance_gap,
+          reviewedTerminalLifecycleReference,
+          evidenceByReadReference,
         })
+        const evidenceLocators = acceptanceGapEvidenceLocators(acceptanceGap)
         const result = await EngineService.resumeMissionTask({
           taskID: params.taskID,
           importer: {
@@ -1274,8 +1312,8 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
             toolCallID: identity.toolCallID,
           },
           reviewedTerminalLifecycleReference,
-          text: params.text,
-          evidenceLocators,
+          expectedAcceptanceLedgerArtifactID: params.acceptance_gap.current_ledger_revision_artifact_id,
+          acceptanceGap,
           completeEvidenceLocators: evidenceLocators,
           toolPartID: identity.toolPartID,
         })

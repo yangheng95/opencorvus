@@ -26,14 +26,41 @@ test("Mission acceptance resume projects current message authority and real-deci
       reviewedTerminalLifecycleReference: {
         terminalEventID: "pev_reviewed_terminal_occurrence",
       },
-      evidenceLocators: [
-        {
-          source: "engine_artifact",
-          artifact_id: "art_reviewed_acceptance_evidence",
-          catalog_revision: 1,
-          expected_sha256: "a".repeat(64),
+      acceptanceLedgerRevisionArtifactID: "art_acceptance_ledger_revision",
+      acceptanceGap: {
+        gap_id: "gap-current-acceptance",
+        reviewed_terminal_lifecycle_reference: {
+          terminalEventID: "pev_reviewed_terminal_occurrence",
         },
-      ],
+        criteria: [
+          {
+            criterion_id: "audit-receipt",
+            state: "open",
+            disposition: "failed",
+            finding: "The audit receipt is inconsistent with the canonical output.",
+            responsibility: { kind: "workflow_node", workflow_id: "repair", workflow_node_id: "builder" },
+            observation_evidence_locators: [
+              {
+                source: "engine_artifact",
+                artifact_id: "art_reviewed_acceptance_evidence",
+                catalog_revision: 1,
+                expected_sha256: "a".repeat(64),
+              },
+            ],
+            repair_evidence_locators: [],
+            resolution_evidence_locators: [],
+            invalidating_evidence_locators: [],
+            irreducible_blocker_evidence_locators: [],
+            repair_action: {
+              operation: "correct_artifact",
+              target: "audit-receipt",
+              expected_evidence_kind: "corrected-audit-receipt",
+              parameters: {},
+              identity_sha256: "b".repeat(64),
+            },
+          },
+        ],
+      },
     },
   })
 
@@ -43,7 +70,8 @@ test("Mission acceptance resume projects current message authority and real-deci
   expect(notice).toContain("mission_id=mission-current-acceptance")
   expect(notice).toContain("reviewed_terminal_event=pev_reviewed_terminal_occurrence")
   expect(notice).toContain(`message_id=${messageID}`)
-  expect(notice).toContain("Use the real Message identified above when deciding")
+  expect(notice).toContain("acceptance_ledger_revision_artifact_id=art_acceptance_ledger_revision")
+  expect(notice).toContain('"gap_id":"gap-current-acceptance"')
   expect(notice).toContain("record at least one current scheduling or lifecycle decision")
   expect(notice).toContain("matching real tool call")
   expect(notice).toContain("no_action alone cannot settle it")

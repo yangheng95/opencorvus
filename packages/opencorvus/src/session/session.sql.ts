@@ -391,6 +391,28 @@ export const SessionControlEventTable = sqliteTable(
   ],
 )
 
+/** One physical prompt-loop owner for a durable Session. A process occurrence,
+ * not a timeout, is the takeover boundary because Provider/Tool effects cannot
+ * be made safe by a clock-only lease without fencing every external byte. */
+export const SessionPromptOwnerTable = sqliteTable(
+  "session_prompt_owner",
+  {
+    session_id: text()
+      .primaryKey()
+      .references(() => SessionTable.id, { onDelete: "cascade" }),
+    project_id: text()
+      .notNull()
+      .references(() => ProjectTable.id, { onDelete: "cascade" }),
+    directory: text().notNull(),
+    generation: text().notNull(),
+    owner_pid: integer().notNull(),
+    owner_process_instance_id: text().notNull(),
+    owner_occurrence_id: text().notNull(),
+    time_acquired: integer().notNull(),
+  },
+  (table) => [index("session_prompt_owner_project_idx").on(table.project_id)],
+)
+
 export const WorkerTurnDescriptorTable = sqliteTable(
   "worker_turn_descriptor",
   {

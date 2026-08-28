@@ -224,6 +224,28 @@ export namespace BrowserMCP {
       })
     }
     const onStdinEnd = () => settleClose()
+    // The only signal owner in this process: a typed shutdown request whose
+    // exit status is set from the single cleanup receipt, never before it.
+    const closeForSignal = (exitCode: number) => {
+      void close().then(
+        () => {
+          process.exitCode = exitCode
+          resolveClosed()
+        },
+        (error) => {
+          // A failed shutdown is the same fact on this path as on the stdin
+          // and transport paths, which reject. Resolving here would have let
+          // the composition root return cleanly with nothing but a mutable
+          // process.exitCode as evidence.
+          process.exitCode = 1
+          rejectClosed(error)
+        },
+      )
+    }
+    const onSigint = () => closeForSignal(130)
+    const onSigterm = () => closeForSignal(143)
+    process.once("SIGINT", onSigint)
+    process.once("SIGTERM", onSigterm)
     process.stdin.once("end", onStdinEnd)
     transport.onclose = settleClose
     try {
@@ -237,6 +259,9 @@ export namespace BrowserMCP {
         closeHttpServer(monitorServer),
       ])
       throw error
+    } finally {
+      process.off("SIGINT", onSigint)
+      process.off("SIGTERM", onSigterm)
     }
   }
 }

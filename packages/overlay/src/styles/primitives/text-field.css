@@ -17,7 +17,7 @@
 
 .oc-text-field__label {
   color: var(--text-soft);
-  font-size: var(--ui-font-control);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-strong);
 }
 
@@ -38,9 +38,9 @@
   color: var(--text-strong);
   box-shadow: none;
   font: inherit;
-  font-size: var(--ui-font-control);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-body);
-  line-height: 1.4;
+  line-height: var(--ui-line-height-tight);
   transition:
     border-color var(--ui-duration-fast) var(--ui-timing-standard),
     background var(--ui-duration-fast) var(--ui-timing-standard),
@@ -62,9 +62,9 @@
 .oc-text-field__textarea[data-surface="composer"] {
   border-color: transparent;
   background: transparent;
-  padding: calc(5px * var(--ui-scale)) calc(6px * var(--ui-scale)) calc(3px * var(--ui-scale));
-  font-size: var(--chat-composer-font-size);
-  line-height: var(--chat-textarea-line-height);
+  padding: var(--ui-gap-sm) var(--ui-gap-sm) var(--ui-gap-xs);
+  font-size: var(--ui-font-body);
+  line-height: var(--ui-line-height-tight);
 }
 
 .oc-text-field__textarea[data-surface="composer"]:focus-visible {
@@ -132,7 +132,7 @@
 .oc-text-field__description,
 .oc-text-field__error {
   color: var(--text-muted);
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-body);
 }
 
 .oc-text-field__error {
@@ -193,5 +193,9 @@
   -webkit-box-shadow: 0 0 0 calc(1000px * var(--ui-scale)) var(--oc-text-field-surface) inset;
   -webkit-text-fill-color: var(--text-strong);
   caret-color: var(--text-strong);
+  /* Not a duration from the motion scale: a sentinel. Chrome paints its own
+   * background on an autofilled field and only stops once the background-color
+   * transition completes, so a transition long enough never to finish is the
+   * standard way to keep the field's own surface. */
   transition: background-color 9999s ease-in-out 0s;
 }

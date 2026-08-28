@@ -3,7 +3,7 @@ import {
   type ArtifactReadLocator,
   type EngineArtifactLocator,
 } from "@opencorvus-ai/plugin/artifact-catalog"
-import { requireEngineArtifactByLocator } from "@/artifact-catalog"
+import { requireEngineArtifactByLocator } from "@/engine/engine-artifact-version-facts"
 import {
   parseGoalGraphProjectionArtifact,
   parseRequirementSetArtifact,

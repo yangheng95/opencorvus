@@ -1091,7 +1091,7 @@ fn install_overlay_window_geometry_constraints<R: Runtime>(
 //
 // When the overlay exits (even on crash), closing the last handle to the job
 // object causes Windows to terminate every process in the job — including all
-// grandchildren spawned by the Bun server (LSP servers, PTY shells, etc.).
+// grandchildren spawned by the Bun server (PTY shells, JSON-RPC helpers, etc.).
 #[cfg(windows)]
 mod job_object {
     use std::ffi::c_void;
@@ -1306,6 +1306,25 @@ struct Server {
 #[derive(Default)]
 struct PendingExpertSquadInstallHandoff(Mutex<Option<String>>);
 
+impl PendingExpertSquadInstallHandoff {
+    fn replace(&self, raw: String) {
+        *self.0.lock().unwrap() = Some(raw);
+    }
+
+    fn current(&self) -> Option<String> {
+        self.0.lock().unwrap().clone()
+    }
+
+    fn acknowledge(&self, expected: &str) -> bool {
+        let mut pending = self.0.lock().unwrap();
+        if pending.as_deref() != Some(expected) {
+            return false;
+        }
+        *pending = None;
+        true
+    }
+}
+
 fn accept_expert_squad_install_handoff<R: Runtime>(app: &AppHandle<R>, raw: &str) {
     let parsed = match tauri::Url::parse(raw) {
         Ok(value)
@@ -1318,10 +1337,8 @@ fn accept_expert_squad_install_handoff<R: Runtime>(app: &AppHandle<R>, raw: &str
         _ => return,
     };
     let raw = parsed.to_string();
-    *app.state::<PendingExpertSquadInstallHandoff>()
-        .0
-        .lock()
-        .unwrap() = Some(raw.clone());
+    app.state::<PendingExpertSquadInstallHandoff>()
+        .replace(raw.clone());
     let _ = app.emit_to("main", EXPERT_SQUAD_INSTALL_HANDOFF_EVENT, raw);
     if let Some(window) = app.get_webview_window("main") {
         show_window(&window);
@@ -1772,10 +1789,18 @@ fn overlay_settings_save<R: Runtime>(
 }
 
 #[tauri::command]
-fn overlay_expert_squad_install_handoff_take(
+fn overlay_expert_squad_install_handoff_current(
     pending: tauri::State<'_, PendingExpertSquadInstallHandoff>,
 ) -> Option<String> {
-    pending.0.lock().unwrap().take()
+    pending.current()
+}
+
+#[tauri::command]
+fn overlay_expert_squad_install_handoff_acknowledge(
+    pending: tauri::State<'_, PendingExpertSquadInstallHandoff>,
+    raw: String,
+) -> bool {
+    pending.acknowledge(&raw)
 }
 
 #[tauri::command]
@@ -1931,7 +1956,8 @@ fn overlay_open_project_editor<R: Runtime>(
     }
 
     if let Some(line) = line.filter(|line| *line >= 1) {
-        match spawn_project_editor_at_line(editor, path, line, column.filter(|column| *column >= 1)) {
+        match spawn_project_editor_at_line(editor, path, line, column.filter(|column| *column >= 1))
+        {
             Ok(()) => return Ok(true),
             Err(err) => {
                 eprintln!(
@@ -4119,7 +4145,7 @@ fn stop_server_state(server: &Server) -> Result<(), String> {
     }
 
     // Unix: SIGKILL the entire process group — reaches direct child and all
-    // grandchildren that inherited the group (LSP servers, PTY shells, etc.).
+    // grandchildren that inherited the group (PTY shells, JSON-RPC helpers, etc.).
     #[cfg(unix)]
     if let Some(pgid) = lock.pgid.take() {
         if forced_termination && pgid > 1 {
@@ -4645,6 +4671,98 @@ fn prepare_server<R: Runtime>(
     })
 }
 
+#[cfg(windows)]
+fn current_process_instance_id() -> Result<String, String> {
+    use windows_sys::Win32::{
+        Foundation::{GetLastError, FILETIME},
+        System::Threading::{GetCurrentProcess, GetProcessTimes},
+    };
+
+    let mut creation = FILETIME::default();
+    let mut exit = FILETIME::default();
+    let mut kernel = FILETIME::default();
+    let mut user = FILETIME::default();
+    let succeeded = unsafe {
+        GetProcessTimes(
+            GetCurrentProcess(),
+            &mut creation,
+            &mut exit,
+            &mut kernel,
+            &mut user,
+        )
+    };
+    if succeeded == 0 {
+        return Err(format!(
+            "cannot establish Overlay process-instance identity (win32={})",
+            unsafe { GetLastError() }
+        ));
+    }
+    let filetime = ((creation.dwHighDateTime as u64) << 32) | creation.dwLowDateTime as u64;
+    Ok(windows_process_instance_id(filetime))
+}
+
+#[cfg(any(windows, test))]
+fn windows_process_instance_id(filetime_ticks: u64) -> String {
+    const DOTNET_EPOCH_OFFSET_TICKS: u64 = 504_911_232_000_000_000;
+    format!("win32:{}", filetime_ticks + DOTNET_EPOCH_OFFSET_TICKS)
+}
+
+#[cfg(target_os = "linux")]
+fn current_process_instance_id() -> Result<String, String> {
+    let stat = fs::read_to_string("/proc/self/stat").map_err(|err| {
+        format!("cannot read Overlay process identity from /proc/self/stat: {err}")
+    })?;
+    linux_process_instance_id(&stat)
+}
+
+#[cfg(any(target_os = "linux", test))]
+fn linux_process_instance_id(stat: &str) -> Result<String, String> {
+    let fields = stat
+        .rsplit_once(") ")
+        .map(|(_, fields)| fields.split_whitespace().collect::<Vec<_>>())
+        .ok_or_else(|| "Overlay /proc/self/stat process identity is malformed".to_string())?;
+    let start_ticks = fields
+        .get(19)
+        .filter(|value| !value.is_empty())
+        .ok_or_else(|| "Overlay /proc/self/stat is missing process start ticks".to_string())?;
+    Ok(format!("linux:{start_ticks}"))
+}
+
+#[cfg(target_os = "macos")]
+fn current_process_instance_id() -> Result<String, String> {
+    let output = Command::new("ps")
+        .args(["-o", "lstart=", "-p", &std::process::id().to_string()])
+        .output()
+        .map_err(|err| format!("cannot launch ps for Overlay process identity: {err}"))?;
+    if !output.status.success() {
+        return Err(format!(
+            "ps failed while reading Overlay process identity with status {}",
+            output.status
+        ));
+    }
+    let started = String::from_utf8(output.stdout)
+        .map_err(|err| format!("ps returned non-UTF-8 Overlay process identity: {err}"))?;
+    posix_process_instance_id("darwin", &started)
+}
+
+#[cfg(any(target_os = "macos", test))]
+fn posix_process_instance_id(platform: &str, started: &str) -> Result<String, String> {
+    let started = started.trim();
+    if started.is_empty() {
+        return Err("ps returned an empty Overlay process identity".to_string());
+    }
+    Ok(format!("{platform}:{started}"))
+}
+
+fn managed_parent_arguments(pid: u32, process_instance_id: &str) -> [String; 4] {
+    [
+        "--parent-pid".to_string(),
+        pid.to_string(),
+        "--parent-process-instance-id".to_string(),
+        process_instance_id.to_string(),
+    ]
+}
+
 fn start_prepared_server<R: Runtime>(
     app: &AppHandle<R>,
     prepared: PreparedServer,
@@ -4687,6 +4805,8 @@ fn start_prepared_server<R: Runtime>(
             sidecar_cwd.to_string_lossy(),
         )
     })?;
+    let parent_pid = std::process::id();
+    let parent_process_instance_id = current_process_instance_id()?;
     let mut process_occurrence =
         prepare_managed_process_occurrence(&sidecar_cwd, port, &path, &sidecar_log_path)?;
     let mut cmd = Command::new(&path);
@@ -4696,8 +4816,10 @@ fn start_prepared_server<R: Runtime>(
         .arg(LOCAL_SERVER_HOST)
         .arg("--port")
         .arg(port.to_string())
-        .arg("--parent-pid")
-        .arg(std::process::id().to_string())
+        .args(managed_parent_arguments(
+            parent_pid,
+            &parent_process_instance_id,
+        ))
         .env("OPENCORVUS_VERSION", env!("CARGO_PKG_VERSION"))
         .env("OPENCORVUS_CHANNEL", "latest")
         .env("OPENCORVUS_CLIENT", "app")
@@ -4733,7 +4855,7 @@ fn start_prepared_server<R: Runtime>(
     #[cfg(windows)]
     cmd.creation_flags(CREATE_NO_WINDOW);
     // Unix: move child into its own process group so kill(-pgid) reaches all
-    // grandchildren (LSP servers, PTY shells, JSON-RPC processes, etc.).
+    // grandchildren (PTY shells, JSON-RPC helpers, etc.).
     #[cfg(unix)]
     {
         use std::os::unix::process::CommandExt;
@@ -5688,7 +5810,8 @@ fn main() {
         overlay_settings_save,
         overlay_clipboard_read_text,
         overlay_clipboard_write_text,
-        overlay_expert_squad_install_handoff_take,
+        overlay_expert_squad_install_handoff_current,
+        overlay_expert_squad_install_handoff_acknowledge,
         overlay_server_info,
         overlay_server_restart,
         overlay_startup_retry,
@@ -5721,7 +5844,8 @@ fn main() {
         overlay_settings_save,
         overlay_clipboard_read_text,
         overlay_clipboard_write_text,
-        overlay_expert_squad_install_handoff_take,
+        overlay_expert_squad_install_handoff_current,
+        overlay_expert_squad_install_handoff_acknowledge,
         overlay_server_info,
         overlay_server_restart,
         overlay_startup_retry,
@@ -6005,6 +6129,105 @@ fn create_tray_icon() -> tauri::image::Image<'static> {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn expert_squad_install_handoff_acknowledges_the_exact_current_receipt() {
+        let pending = PendingExpertSquadInstallHandoff::default();
+        pending.replace("opencorvus://expert-squad/install?receipt=first".to_string());
+
+        assert_eq!(
+            pending.current().as_deref(),
+            Some("opencorvus://expert-squad/install?receipt=first")
+        );
+
+        pending.replace("opencorvus://expert-squad/install?receipt=second".to_string());
+        assert!(!pending.acknowledge("opencorvus://expert-squad/install?receipt=first"));
+        assert_eq!(
+            pending.current().as_deref(),
+            Some("opencorvus://expert-squad/install?receipt=second")
+        );
+        assert!(pending.acknowledge("opencorvus://expert-squad/install?receipt=second"));
+        assert_eq!(pending.current(), None);
+    }
+
+    #[derive(Deserialize)]
+    #[serde(rename_all = "camelCase")]
+    struct ProcessInstanceIDContract {
+        schema_version: u32,
+        windows: WindowsProcessInstanceIDVector,
+        linux: LinuxProcessInstanceIDVector,
+        macos: MacProcessInstanceIDVector,
+    }
+
+    #[derive(Deserialize)]
+    #[serde(rename_all = "camelCase")]
+    struct WindowsProcessInstanceIDVector {
+        filetime_ticks: String,
+        expected: String,
+    }
+
+    #[derive(Deserialize)]
+    struct LinuxProcessInstanceIDVector {
+        stat: String,
+        expected: String,
+    }
+
+    #[derive(Deserialize)]
+    struct MacProcessInstanceIDVector {
+        lstart: String,
+        expected: String,
+    }
+
+    #[test]
+    fn process_instance_id_formats_match_the_shared_runtime_contract() {
+        let contract: ProcessInstanceIDContract = serde_json::from_str(include_str!(
+            "../../../opencorvus/test/fixture/process-instance-id-contract.json"
+        ))
+        .expect("shared process-instance identity contract must parse");
+
+        assert_eq!(contract.schema_version, 1);
+        assert_eq!(
+            windows_process_instance_id(
+                contract
+                    .windows
+                    .filetime_ticks
+                    .parse()
+                    .expect("Windows FILETIME vector must be an integer")
+            ),
+            contract.windows.expected
+        );
+        assert_eq!(
+            linux_process_instance_id(&contract.linux.stat)
+                .expect("Linux stat vector must contain start ticks"),
+            contract.linux.expected
+        );
+        assert_eq!(
+            posix_process_instance_id("darwin", &contract.macos.lstart)
+                .expect("macOS lstart vector must be present"),
+            contract.macos.expected
+        );
+    }
+
+    #[test]
+    fn managed_backend_receives_the_exact_overlay_process_occurrence() {
+        let process_instance_id = current_process_instance_id()
+            .expect("current Overlay process must have an exact identity");
+        #[cfg(windows)]
+        assert!(process_instance_id.starts_with("win32:"));
+        #[cfg(target_os = "linux")]
+        assert!(process_instance_id.starts_with("linux:"));
+        #[cfg(target_os = "macos")]
+        assert!(process_instance_id.starts_with("darwin:"));
+        assert_eq!(
+            managed_parent_arguments(4242, &process_instance_id),
+            [
+                "--parent-pid".to_string(),
+                "4242".to_string(),
+                "--parent-process-instance-id".to_string(),
+                process_instance_id,
+            ]
+        );
+    }
 
     #[test]
     fn native_message_delivery_requests_attention_before_system_notification() {

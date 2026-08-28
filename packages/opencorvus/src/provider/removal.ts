@@ -2,13 +2,10 @@ import path from "path"
 import { acquireProcessLock } from "@/util/process-lock"
 import fs from "fs/promises"
 import z from "zod"
-import { NativeAgentRegistryLifecycle } from "@/agent/native-agent-registry-lifecycle"
 import { Auth } from "@/auth"
-import { ChannelSupervisor } from "@/channel/supervisor"
 import { Config } from "@/config/config"
 import { updateGlobalConfigPatchAtomic } from "@/config/update-global"
 import { Global } from "@/global"
-import { Provider } from "@/provider/provider"
 import { Filesystem } from "@/util/filesystem"
 import { withKeyedLock } from "@/util/lock"
 
@@ -61,8 +58,6 @@ function removalPatch(current: Config.Info, providerID: string): Config.ProjectM
 
 async function commitProjectConfig(providerID: string): Promise<void> {
   await Config.updateProjectPatchAtomic((current) => removalPatch(current, providerID))
-  const updated = await Config.get()
-  await Promise.all([Provider.reset(), NativeAgentRegistryLifecycle.reset(), ChannelSupervisor.sync(updated)])
 }
 
 async function commitGlobalConfig(providerID: string): Promise<void> {

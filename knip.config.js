@@ -20,6 +20,9 @@ export default {
     "packages/opencorvus/eval-workspace-*/**",
   ],
   ignoreBinaries: [
+    // Process occurrence and supervision read the operating system's own
+    // process table; `ps` ships with the host, not with this repository.
+    "ps",
     "osascript",
     "powershell.exe",
     "wl-paste",

@@ -539,15 +539,16 @@ describe("SessionLoop Tool execution authority integration", () => {
           packageRevision,
         })
         const taskID = Identifier.ascending("task")
-        const root = await Session.create({
+        const root = Session.prepareRootNext({
           kind: "root",
+          directory: Instance.directory,
           title: "Projected permission root",
           metadata: { configOverlay: { prompt_profile: { active: "base" } } },
         })
         const now = Date.now()
         persistTask({
           taskID,
-          sessionID: root.id,
+          rootSession: root,
           now,
           title: "Projected permission root",
           request: "Prove projected permission recovery",
@@ -785,15 +786,16 @@ describe("SessionLoop Tool execution authority integration", () => {
           packageRevision,
         })
         const taskID = Identifier.ascending("task")
-        const root = await Session.create({
+        const root = Session.prepareRootNext({
           kind: "root",
+          directory: Instance.directory,
           title: "Requirements stage permission root",
           metadata: { configOverlay: { prompt_profile: { active: "advanced" } } },
         })
         const now = Date.now()
         persistTask({
           taskID,
-          sessionID: root.id,
+          rootSession: root,
           now,
           title: "Requirements stage permission root",
           request: "Persist one requirements decision",
@@ -1228,15 +1230,16 @@ describe("SessionLoop Tool execution authority integration", () => {
           packageRevision,
         })
         const taskID = Identifier.ascending("task")
-        const root = await Session.create({
+        const root = Session.prepareRootNext({
           kind: "root",
+          directory: Instance.directory,
           title: "Process stage root",
           metadata: { configOverlay: { prompt_profile: { active: "advanced" } } },
         })
         const now = Date.now()
         persistTask({
           taskID,
-          sessionID: root.id,
+          rootSession: root,
           now,
           title: "Process stage root",
           request: "process stage",

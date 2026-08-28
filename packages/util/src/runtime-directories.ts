@@ -2,7 +2,7 @@ import fs from "node:fs"
 import fsPromises from "node:fs/promises"
 import os from "node:os"
 import path from "node:path"
-import { resolveOpenCorvusRuntimePaths, type OpenCorvusRuntimePaths } from "./runtime-paths"
+import { resolveOpenCorvusRuntimePaths, type OpenCorvusRuntimePaths } from "./runtime-paths.js"
 
 const OWNED_RUNTIME_DIRECTORIES: ReadonlyArray<keyof OpenCorvusRuntimePaths> = [
   "root",

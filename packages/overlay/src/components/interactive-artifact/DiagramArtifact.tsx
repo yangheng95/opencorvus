@@ -3,6 +3,7 @@ import { Show, createSignal, onCleanup, onMount } from "solid-js"
 import type { InteractiveArtifactPayload } from "../../services/interactive-artifact"
 import { observeAppliedTheme } from "../../services/theme"
 import { ArtifactFrame } from "./ArtifactFrame"
+import { randomUUID } from "../../utils/random-id"
 
 type DiagramPayload = Extract<InteractiveArtifactPayload, { renderer: "diagram@1" }>
 
@@ -24,7 +25,7 @@ export function DiagramArtifact(props: { payload: DiagramPayload }) {
       theme: dark ? "dark" : "neutral",
       flowchart: { htmlLabels: false, useMaxWidth: true },
     })
-    const id = `artifact-diagram-${crypto.randomUUID().replaceAll("-", "")}`
+    const id = `artifact-diagram-${randomUUID().replaceAll("-", "")}`
     void mermaid
       .render(id, props.payload.source, host)
       .then(({ svg, bindFunctions }) => {

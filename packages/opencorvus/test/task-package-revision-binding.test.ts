@@ -62,8 +62,9 @@ afterAll(async () => {
 async function createBoundTask() {
   const taskID = Identifier.ascending("task")
   const now = Date.now()
-  const session = await Session.create({
+  const session = Session.prepareRootNext({
     kind: "root",
+    directory: Instance.directory,
     title: "Pinned package revision task",
     metadata: {
       configOverlay: { prompt_profile: { active: packageRevision.id } },
@@ -71,7 +72,7 @@ async function createBoundTask() {
   })
   persistTask({
     taskID,
-    sessionID: session.id,
+    rootSession: session,
     now,
     title: "Pinned package revision task",
     request: "Verify immutable expert-squad package revision binding",

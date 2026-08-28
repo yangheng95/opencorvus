@@ -31,11 +31,23 @@ Git template、子进程和第三方临时写入均在该树内嵌套，结束�
 由用户明确授权的 maintenance 操作整体处置；普通启动和本路径重构不迁移或重建数据库。
 
 SQLite 数据库与 data root 不拥有单后端启动锁；不同监听端口的多个后端可以同时打开同一
-数据库。物理执行由各领域的 durable lease 协调。破坏性 Project 删除和 identity convergence
-仅通过 `project_maintenance_fence` 隔离其涉及的 Project occurrence：fence 与 Project generation、
-维护 operation 和拥有它的 PID/进程启动指纹绑定，Task/Session 新建及 Task-root lease 的取得/续租
-在各自写事务内读取该 fence。启动恢复只在物理观察证明 owner occurrence 已死亡或 PID 已复用后
-删除对应 Project fence；它不得升级为 database path 或 data root 的排他 owner。
+数据库。物理执行由各领域的 durable lease 协调。破坏性 Project 删除、identity convergence
+和匿名 Project promotion 仅通过 `project_maintenance_fence` 隔离其涉及的 Project occurrence：
+fence 与 Project generation、维护 operation 和拥有它的 PID/进程启动指纹绑定，Task/Session
+新建及 Task-root lease 的取得/续租在各自写事务内读取该 fence。删除和 identity convergence
+的启动恢复只在物理观察证明 owner occurrence 已死亡或 PID 已复用后删除对应 fence；promotion
+fence 只能由同一 operation/generation 的 durable publication occurrence 收敛并释放，通用死亡
+owner sweep 不得释放它。任何 fence 都不得升级为 database path 或 data root 的排他 owner。
+
+匿名 Project promotion 的唯一 Ready 决策是 durable publication terminal receipt。完整的
+Project/Session before-snapshot 和 source digest 先写入 immutable occurrence；随后一个 SQLite
+write transaction 重读并核对完整 snapshot、取得 promotion fence，首个 filesystem rename 只能
+发生在两者之后。外部 Project/Session writer 由 SQLite trigger 在 persistent `promotion` fence
+期间拒绝；精确 relocation/rollback transaction 临时使用 `promotion_commit`，并在 commit 前恢复
+`promotion`。Project projection 隐藏 fenced row，只有 terminal 已落盘且 exact fence 已释放后才
+发布 Project event 和 caller success。启动必须在 listener bind 前收敛所有 open occurrence 和
+仍持有 exact fence 的 settled occurrence；未知路径、pre-relocation digest、generation 或双 source/quarantine
+不允许猜测所有权或删除数据。
 
 ## engine 域
 
@@ -210,7 +222,7 @@ Metrics 域沿用 `engine_*` 表名承载评分流水，但写入边界归属 me
 `engine_metric_spec`、`engine_metric_result` 和 `engine_iteration` 的唯一直接表写入文件
 是 `metrics/store.ts`。任务、agent、engine 或 UI 层不得直接写这些 metrics 表。
 
-## session 域（8 表）
+## session 域（9 表）
 
 `src/session/session.sql.ts`：
 
@@ -221,6 +233,7 @@ Metrics 域沿用 `engine_*` 表名承载评分流水，但写入边界归属 me
 | `part`                   | 消息分片（tool call / text / reasoning / …）                                                                                           |
 | `interactive_artifact`   | Session 内可交互 artifact                                                                                                              |
 | `session_control_record` | durable compaction / summarize 等控制请求；记录请求事实，不证明当前 Runtime 存活                                                       |
+| `session_prompt_owner`   | Session 唯一物理 prompt loop 的 generation 与精确 OS process occurrence；仅在该 occurrence 已死或 PID 已复用后允许原子接管             |
 | `worker_turn_descriptor` | Projected worker 的不可变 Turn identity、模型、tool projection、Task、dispatch lineage、精确 package revision 与哈希；restart 恢复真源 |
 | `todo`                   | session 内 todo                                                                                                                        |
 | `permission`             | 权限请求（project 级全量规则集）                                                                                                       |
@@ -230,9 +243,34 @@ Metrics 域沿用 `engine_*` 表名承载评分流水，但写入边界归属 me
 运行身份来自持久化 worker descriptor，不来自 SessionKind。
 
 Session/Trace 是持久化历史与身份容器；Turn/Attempt 是一次模型执行；Runtime
-只包含当前进程中的 stream、取消句柄、MCP（Model Context Protocol，模型上下文
-协议）连接、tool instance、callback 与 Promise。服务重启只销毁 Runtime，
-不能使 Session、message、descriptor 或 durable coordination request 失效。
+中的 stream、取消句柄、MCP（Model Context Protocol，模型上下文协议）连接、
+tool instance、callback 与 Promise 仍只属于当前进程。`session_prompt_owner` 不复制
+这些资源，只用 generation 加 PID、process-instance identity 与 occurrence identity
+证明哪个物理进程可以产生 Provider/Tool effect。它在 standby 期间继续存在，并持续
+观察 durable user Message、runtime wake 与 `session_control_record`；进程内事件只用于
+降低唤醒延迟。reply peer 通过 accepted input Message identity 加入，summary peer 先按
+本次 exact Session control ID 加入其 consumed/failed 终态；consumed terminal 必须与
+该 control durable payload 中的 exact summary Message ID 绑定在同一个 immediate transaction。
+新 compaction 直接使用 checkpoint publisher 返回的 Message ID，禁止按 source、时间或排序
+重新查找；首次没有可压缩材料且没有已有 summary 时写入 typed failed terminal。已有 summary 且
+没有 post-summary material 的幂等 no-op 显式绑定已有 summary；local callback 与 peer 只从
+该 receipt 投影，不按 source 或 wall-clock 猜测。只有 OS 证明原 occurrence `dead_or_reused` 后才原子替换并
+终态化废弃 assistant。服务重启只销毁 Runtime，不能使 Session、message、descriptor
+或 durable coordination request 失效。
+
+空闲 Session 的一个 Turn 可以按顺序接受该 Turn 开始时完整的待投递 user Message
+批次。新 assistant Message 持久化完整的 accepted input Message identity 集合，且
+`parentID` 等于集合尾项；删除这些输入的 `pendingDelivery` 标记与插入 assistant
+Message 必须属于同一个 SQLite transaction，并发生在 streaming status 发布与
+Provider 请求之前。进程内 callback 与跨进程公开请求 replay 都按该持久化集合的成员关系
+收敛到同一 assistant Message；peer 不得创建第二个本地 prompt loop。Session 尚未接受更新 user Turn 时，失败重试选择与
+当前调用方 identity 相交的最新失败批次；一旦 Session 已接受更新 user Turn，旧失败
+identity 的公开 replay 返回 typed conflict 并要求新 identity，不能用更新 transcript
+重驱旧批次。该最终判定必须发生在真实 Session owner 准入之后：旧 replay 附着到更新
+owner 时只拒绝旧 callback；旧 replay 因竞态先成为 owner 时也只拒绝自身 callback，并由
+该 owner 继续处理已接受的更新 Turn。后续成功回复保持唯一权威；没有显式集合的历史
+assistant Message 只接受其 `parentID`。该事务只消费投递标记，不得重写其余 authored
+payload；已冻结的 Task-root causal fact 仍由数据库不可变约束拒绝修改。
 
 **去掉的字段 / 索引**（旧文档还在提，代码已清理）：
 
@@ -254,6 +292,25 @@ Session message 表按 Session writer 分层写入：`part` 的唯一直接表�
 `Session.updatePart` / `Session.updatePartData` / `Session.persistMessage` 等 Session writer API
 创建或修正 part row，不能直接写 `PartTable`。
 
+公开 Session shell 以调用方创建的 user Message ID 作为执行 occurrence（执行轮次）身份，
+同一身份永不重新执行命令。input user Message、assistant、running `bash` Tool request、当前 backend
+process occurrence 与该 Tool 的 `session_shell` execution lease 必须在一个 SQLite writer transaction
+内原子持久化。跨 backend 竞争的失败方只能读取这一完整执行图，不得观察到只有 input 的中间状态。
+spawn 创建的是等待 start admission 的 gated child；只有 child 的精确 process occurrence 已写入可变
+Tool progress fact 后才打开闸门并启动真实命令。该初始 progress writer 必须在同一 transaction 内
+assert exact shell lease 且确认确实新增 running progress；outcome 已存在时返回的 no-op 不构成 start
+admission。child occurrence 不得回写不可变 request metadata。owner 在命令存活期间续租该 Tool 的
+精确 lease；正常、abort 和 caught failure 均等待物理进程收敛，再在一个 writer transaction 内 assert
+exact lease、按 Tool terminal → assistant terminal 的顺序写入，并以同一 transaction 释放该 lease。
+fence loss 的旧 owner 不得写 success/failure terminal，而是从 durable graph 收敛同一 interruption outcome。
+
+replay 只读取该 occurrence：精确 child 仍存活，或同一 Tool 的精确未过期 lease 仍有效时，返回同一
+in-flight assistant；backend PID（Process Identifier，进程标识符）存活本身不证明该 shell 仍被拥有。
+child 已死亡/被复用且精确 lease 已释放、过期或丢失时，把同一 open Tool 写成 deterministic typed
+`process-execution-interrupted` error 并收敛同一 assistant，绝不生成替代 Message 或重跑命令。
+旧版本遗留的 completed assistant 加 open Tool 仍须 terminalize 该 Tool；completed assistant 已是不可变
+事实，不得为修饰历史状态而重写。
+
 ## 控制 / 工作区
 
 | 表                | 文件                         | 作用                                                                              |
@@ -268,6 +325,12 @@ Work Ledger 的置顶状态由各耐久领域拥有：Project 使用
 `time_pinned` 并发布既有更新事件，不改写 `time_updated`；统一 Work Ledger
 投影按 `pinned DESC, updated DESC, rowKey DESC` 排序和游标分页，Overlay 不保存
 第二份置顶状态。
+
+活动 Work Ledger 在服务端按精确 Mission 根划分 Task 层级：只有能解析到同一
+Project 中精确 Mission Session 的 Task 才进入该 Mission 的子列表；未归档且没有
+这条根关系的 Task 是 Mission、Chat/Work 的普通顶层同级项，复用同一 Task 选择和
+耐久操作契约。该划分发生在搜索、排序和游标分页之前，Overlay 不过滤或重建层级，
+同一 Task 也不跨层重复投影。
 
 Control Agent 的文本、tool call 与 tool result 只写普通 Session message/part；
 不存在独立 `control_message` timeline。轻量辅助域仍按领域 writer 分层写入：

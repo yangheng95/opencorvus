@@ -494,6 +494,7 @@ describe("Computer Use exact control contract", () => {
         const observationDigest = "a".repeat(64)
         const result = await materializeMcpToolResult({
           projectID: Instance.project.id,
+          serverName: ComputerMCPBuiltin.ServerName,
           result: {
             content: [{ type: "image", data: pngBase64(8, 6), mimeType: "image/png" }],
             structuredContent: {
@@ -530,6 +531,7 @@ describe("Computer Use exact control contract", () => {
         expect(
           await materializeMcpToolResult({
             projectID: Instance.project.id,
+            serverName: ComputerMCPBuiltin.ServerName,
             result: {
               content: [
                 {
@@ -566,7 +568,7 @@ describe("Computer Use exact control contract", () => {
   })
 
   test(
-    "projects explicitly declared Computer tools through an Expert Squad harness with canonical permissions",
+    "projects enabled Computer tools and reports the disabled Expert Squad configuration contract",
     { timeout: 30_000 },
     async () => {
       await using project = await memoryProject()
@@ -608,9 +610,36 @@ describe("Computer Use exact control contract", () => {
               virtual_workflows: {},
             }),
           })
+          const disabledConfig = Config.Info.parse({
+            prompt_profile: { active: profileID },
+            mcp: {
+              [ComputerMCPBuiltin.ServerName]: {
+                ...ComputerMCPBuiltin.localConfig(),
+                enabled: false,
+              },
+            },
+          })
+          await expect(
+            PromptProfileResolver.resolveSchedulerCapability({
+              projectDirectory: project.path,
+              config: disabledConfig,
+            }),
+          ).rejects.toMatchObject({
+            name: "ComputerMCPConfigurationError",
+            data: {
+              message: "Configured MCP server computer is disabled.",
+              reason: "disabled",
+              serverName: ComputerMCPBuiltin.ServerName,
+            },
+          })
+
           const config = Config.Info.parse({
             prompt_profile: { active: profileID },
-            mcp: { [ComputerMCPBuiltin.ServerName]: { enabled: false } },
+            // The builtin Computer provider is a configured declaration, the
+            // same one `materializeBuiltinMcp` writes for a project that has
+            // not customized it. The squad projects that declaration; it does
+            // not substitute a runtime of its own.
+            mcp: { [ComputerMCPBuiltin.ServerName]: ComputerMCPBuiltin.localConfig() },
           })
           const capability = await PromptProfileResolver.resolveSchedulerCapability({
             projectDirectory: project.path,

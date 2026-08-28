@@ -57,15 +57,34 @@ describe("Plugin publication package", () => {
     const source: PluginPackageJson = {
       name: "@opencorvus-ai/plugin-fixture",
       version: "1.0.0",
-      exports: { ".": "./src/index.ts", "./nested": "./src/public/nested.ts" },
+      exports: {
+        ".": {
+          source: "./src/index.ts",
+          bun: "./src/index.ts",
+          types: "./src/index.ts",
+          import: "./dist/index.js",
+          default: "./dist/index.js",
+        },
+        "./nested": {
+          source: "./src/public/nested.ts",
+          bun: "./src/public/nested.ts",
+          types: "./src/public/nested.ts",
+          import: "./dist/public/nested.js",
+          default: "./dist/public/nested.js",
+        },
+      },
     }
     const published = buildPublishPackageJson(source)
 
     expect({ source: source.exports, published: published.exports }).toEqual({
-      source: { ".": "./src/index.ts", "./nested": "./src/public/nested.ts" },
+      source: source.exports,
       published: {
-        ".": { types: "./dist/index.d.ts", import: "./dist/index.js" },
-        "./nested": { types: "./dist/public/nested.d.ts", import: "./dist/public/nested.js" },
+        ".": { types: "./dist/index.d.ts", import: "./dist/index.js", default: "./dist/index.js" },
+        "./nested": {
+          types: "./dist/public/nested.d.ts",
+          import: "./dist/public/nested.js",
+          default: "./dist/public/nested.js",
+        },
       },
     })
   })
@@ -108,13 +127,17 @@ describe("Plugin publication package", () => {
     const tarball = path.join(scratchRoot, `plugin-${randomUUID()}.tgz`)
     await run([process.execPath, "pm", "pack", "--ignore-scripts", "--filename", tarball], staged.directory)
 
-    const tarballSha256 = createHash("sha256").update(await readFile(tarball)).digest("hex")
+    const tarballSha256 = createHash("sha256")
+      .update(await readFile(tarball))
+      .digest("hex")
     const unpackedDirectory = path.join(scratchRoot, "unpacked")
     await mkdir(unpackedDirectory)
     await run(["tar", "-xf", tarball, "-C", unpackedDirectory], scratchRoot)
     const packageRoot = path.join(unpackedDirectory, "package")
     const unpackedFiles = await listPackageFiles(packageRoot)
-    const unpackedManifest = JSON.parse(await readFile(path.join(packageRoot, "package.json"), "utf8")) as PluginPackageJson
+    const unpackedManifest = JSON.parse(
+      await readFile(path.join(packageRoot, "package.json"), "utf8"),
+    ) as PluginPackageJson
     const unpackedSha256 = await packageContentDigest(packageRoot, unpackedFiles)
     const currentSourceStems = await sourceEntryStems(path.join(sourceFixture, "src"))
     const expectedFiles = [
@@ -159,7 +182,9 @@ describe("Plugin publication package", () => {
         subpath === "." ? unpackedManifest.name : `${unpackedManifest.name}/${subpath.slice("./".length)}`
       await run([process.execPath, "-e", `await import(${JSON.stringify(specifier)})`], consumerDirectory)
     }
-    const typeConsumer = publicSpecifiers.map((specifier, index) => `import type * as Public${index} from ${JSON.stringify(specifier)}`).join("\n")
+    const typeConsumer = publicSpecifiers
+      .map((specifier, index) => `import type * as Public${index} from ${JSON.stringify(specifier)}`)
+      .join("\n")
     await writeFile(path.join(consumerDirectory, "index.ts"), `${typeConsumer}\n`)
     await run(
       [

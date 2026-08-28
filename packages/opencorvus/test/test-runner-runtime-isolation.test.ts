@@ -5,6 +5,7 @@ import { isolatedTestChildEnvironment } from "@opencorvus-ai/util/test-runtime-e
 import { Global } from "../src/global"
 import { Database } from "../src/storage/db"
 import { Log } from "../src/util/log"
+import { currentTestChildEnvironment } from "./fixture/current-test-child-environment"
 
 function requireAbsoluteEnvironmentPath(name: string): string {
   const value = process.env[name]
@@ -29,13 +30,30 @@ test("owns the package runner supervisor request under its isolated runtime", as
   expect(requireAbsoluteEnvironmentPath("OPENCORVUS_TEST_PROCESS_ROOT")).not.toBe(runnerRoot)
   expect(requireAbsoluteEnvironmentPath("HOME")).toBe(requireAbsoluteEnvironmentPath("OPENCORVUS_TEST_HOME"))
   expect(requireAbsoluteEnvironmentPath("USERPROFILE")).toBe(requireAbsoluteEnvironmentPath("OPENCORVUS_TEST_HOME"))
-  for (const name of ["TEMP", "TMP", "TMPDIR", "XDG_DATA_HOME", "XDG_CACHE_HOME", "XDG_CONFIG_HOME", "XDG_STATE_HOME", "CARGO_HOME", "RUSTUP_HOME", "OPENCORVUS_TEST_MANAGED_CONFIG_DIR"]) {
-    const relative = path.relative(requireAbsoluteEnvironmentPath("OPENCORVUS_TEST_PROCESS_ROOT"), requireAbsoluteEnvironmentPath(name))
+  for (const name of [
+    "TEMP",
+    "TMP",
+    "TMPDIR",
+    "XDG_DATA_HOME",
+    "XDG_CACHE_HOME",
+    "XDG_CONFIG_HOME",
+    "XDG_STATE_HOME",
+    "CARGO_HOME",
+    "RUSTUP_HOME",
+    "OPENCORVUS_TEST_MANAGED_CONFIG_DIR",
+  ]) {
+    const relative = path.relative(
+      requireAbsoluteEnvironmentPath("OPENCORVUS_TEST_PROCESS_ROOT"),
+      requireAbsoluteEnvironmentPath(name),
+    )
     expect(relative.length > 0 && !relative.startsWith("..") && !path.isAbsolute(relative)).toBe(true)
   }
   if (process.platform === "win32") {
     for (const name of ["APPDATA", "LOCALAPPDATA"]) {
-      const relative = path.relative(requireAbsoluteEnvironmentPath("OPENCORVUS_TEST_PROCESS_ROOT"), requireAbsoluteEnvironmentPath(name))
+      const relative = path.relative(
+        requireAbsoluteEnvironmentPath("OPENCORVUS_TEST_PROCESS_ROOT"),
+        requireAbsoluteEnvironmentPath(name),
+      )
       expect(relative.length > 0 && !relative.startsWith("..") && !path.isAbsolute(relative)).toBe(true)
     }
   }
@@ -79,6 +97,33 @@ test("owns the package runner supervisor request under its isolated runtime", as
     const relative = path.relative(processRoot, path.resolve(actualPath))
     expect(relative.length > 0 && !relative.startsWith("..") && !path.isAbsolute(relative)).toBe(true)
   }
+  const child = Bun.spawn(
+    [
+      process.execPath,
+      "-e",
+      "console.log(JSON.stringify({ processRoot: process.env.OPENCORVUS_TEST_PROCESS_ROOT, runtimeRoot: process.env.OPENCORVUS_HOME }))",
+    ],
+    {
+      env: currentTestChildEnvironment(),
+      stdout: "pipe",
+      stderr: "pipe",
+    },
+  )
+  const [childExit, childOutput, childError] = await Promise.all([
+    child.exited,
+    new Response(child.stdout).text(),
+    new Response(child.stderr).text(),
+  ])
+  expect({
+    exit: childExit,
+    environment: childExit === 0 ? JSON.parse(childOutput.trim()) : childError.trim(),
+  }).toEqual({
+    exit: 0,
+    environment: {
+      processRoot: requireAbsoluteEnvironmentPath("OPENCORVUS_TEST_PROCESS_ROOT"),
+      runtimeRoot: requireAbsoluteEnvironmentPath("OPENCORVUS_HOME"),
+    },
+  })
   const sanitized = isolatedTestChildEnvironment(
     {
       ownerRoot,
@@ -108,27 +153,25 @@ test("owns the package runner supervisor request under its isolated runtime", as
       OPENCORVUS_RESTART_HANDOFF: "1",
     },
   )
-  expect(
-    [
-      sanitized.OPENCORVUS_CONFIG,
-      sanitized.OPENCORVUS_CONFIG_DIR,
-      sanitized.OPENCORVUS_CONFIG_CONTENT,
-      sanitized.OPENCORVUS_MODELS_PATH,
-      sanitized.OPENCORVUS_PACKAGED_PLUGIN_DIR,
-      sanitized.OPENCORVUS_AGENT_TRACE_DIR,
-      sanitized.OPENCORVUS_PROCESS_OCCURRENCE_ID,
-      sanitized.OPENCORVUS_PROCESS_OCCURRENCE_PATH,
-      sanitized.OPENCORVUS_PREDECESSOR_PROCESS_OCCURRENCE_PATH,
-      sanitized.OPENCORVUS_PROCESS_SHUTDOWN_REQUEST_PATH,
-      sanitized.OPENCORVUS_SHARED_SESSION_FILE,
-      sanitized.OPENCORVUS_PROJECT_DIR,
-      sanitized.OPENCORVUS_ORIGINAL_CWD,
-      sanitized.OPENCORVUS_EXECUTION_CAPSULE_DESCRIPTOR,
-      sanitized.OPENCORVUS_TASK_PROCESS_MODE,
-      sanitized.OPENCORVUS_SHARED_SESSION_MODE,
-      sanitized.OPENCORVUS_RESTART_HANDOFF,
-    ],
-  ).toEqual([
+  expect([
+    sanitized.OPENCORVUS_CONFIG,
+    sanitized.OPENCORVUS_CONFIG_DIR,
+    sanitized.OPENCORVUS_CONFIG_CONTENT,
+    sanitized.OPENCORVUS_MODELS_PATH,
+    sanitized.OPENCORVUS_PACKAGED_PLUGIN_DIR,
+    sanitized.OPENCORVUS_AGENT_TRACE_DIR,
+    sanitized.OPENCORVUS_PROCESS_OCCURRENCE_ID,
+    sanitized.OPENCORVUS_PROCESS_OCCURRENCE_PATH,
+    sanitized.OPENCORVUS_PREDECESSOR_PROCESS_OCCURRENCE_PATH,
+    sanitized.OPENCORVUS_PROCESS_SHUTDOWN_REQUEST_PATH,
+    sanitized.OPENCORVUS_SHARED_SESSION_FILE,
+    sanitized.OPENCORVUS_PROJECT_DIR,
+    sanitized.OPENCORVUS_ORIGINAL_CWD,
+    sanitized.OPENCORVUS_EXECUTION_CAPSULE_DESCRIPTOR,
+    sanitized.OPENCORVUS_TASK_PROCESS_MODE,
+    sanitized.OPENCORVUS_SHARED_SESSION_MODE,
+    sanitized.OPENCORVUS_RESTART_HANDOFF,
+  ]).toEqual([
     undefined,
     undefined,
     undefined,

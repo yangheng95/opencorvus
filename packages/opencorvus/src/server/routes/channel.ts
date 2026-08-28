@@ -82,9 +82,20 @@ export const ChannelRoutes = lazy(() =>
           ...errors(404),
         },
       }),
+      validator(
+        "query",
+        z.object({
+          e: z
+            .string()
+            .optional()
+            .meta({ description: "Expiry the signature covers; the URL is unauthorized once it passes." }),
+          s: z.string().optional().meta({ description: "Signature authorizing this attachment read." }),
+        }),
+      ),
       async (c) => {
         const id = c.req.param("id")
-        if (!(await ChannelAttachment.authorize(id, c.req.query("e") ?? null, c.req.query("s") ?? null))) {
+        const signature = c.req.valid("query")
+        if (!(await ChannelAttachment.authorize(id, signature.e ?? null, signature.s ?? null))) {
           throw new NotFoundError({ message: `Channel attachment not found: ${id}` })
         }
         const file = await ChannelAttachment.get(id)

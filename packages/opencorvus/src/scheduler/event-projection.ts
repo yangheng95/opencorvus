@@ -65,11 +65,7 @@ export function projectEventFireInTransaction(db: Database.TxOrDb, row: typeof E
     .orderBy(asc(EngineControlActivationLeaseTable.time_activated), asc(EngineControlActivationLeaseTable.id)).all()
   const lease = currentControlLeaseInTransaction(db, "event_fire", row.id)
   const disposition = latest?.disposition ?? null
-  const leaseConsumed = Boolean(
-    lease && latest?.outcome === "retry_wait" && latest.time_created >= lease.time_activated,
-  )
-  const effectiveLease = leaseConsumed ? undefined : lease
-  const status = disposition ? "disposition" : latest?.outcome === "succeeded" ? "succeeded" : latest?.outcome === "retry_wait" && (latest.retry_at ?? 0) > now ? "retry_wait" : effectiveLease && effectiveLease.expires_at > now ? "running" : "pending"
+  const status = disposition ? "disposition" : latest?.outcome === "succeeded" ? "succeeded" : latest?.outcome === "retry_wait" && (latest.retry_at ?? 0) > now ? "retry_wait" : lease && lease.expires_at > now ? "running" : "pending"
   return {
     ...row,
     event_job_id: definition.definitionID,
@@ -81,9 +77,9 @@ export function projectEventFireInTransaction(db: Database.TxOrDb, row: typeof E
     disposition,
     status,
     message_id: [...receipts].reverse().find((receipt) => receipt.message_id)?.message_id ?? null,
-    owner_id: effectiveLease?.owner_occurrence_id ?? null,
+    owner_id: lease?.owner_occurrence_id ?? null,
     owner_process_id: null,
-    lease_until: effectiveLease?.expires_at ?? 0,
+    lease_until: lease?.expires_at ?? 0,
     attempt: leases.length,
     error: latest?.error ?? null,
     time_started: leases[0]?.time_activated ?? null,

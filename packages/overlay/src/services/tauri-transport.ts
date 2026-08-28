@@ -36,7 +36,10 @@ import type {
 } from "./host-transport"
 import { HOST_CAPABILITIES, nativeUnsupported, transportRequestSignal } from "./host-transport"
 import type { HostKind } from "./host-transport"
+import { externalUrl } from "../utils/external-url"
+import { secureContextFailure } from "../utils/secure-context"
 import { loadBrowserOverlaySettings, saveBrowserOverlaySettings } from "./overlay-settings-storage"
+import { randomUUID } from "../utils/random-id"
 
 /**
  * Tauri window-handle accessor — the ONE place in the overlay that touches
@@ -98,6 +101,19 @@ function invokeTauri(command: string, args?: Record<string, unknown>): Promise<u
     throw new Error(`Tauri runtime unavailable for ${command}`)
   }
   return fn(command, args)
+}
+
+export async function currentExpertSquadInstallHandoff(): Promise<string | null> {
+  const value = await invokeTauri("overlay_expert_squad_install_handoff_current")
+  if (value === null) return null
+  if (typeof value === "string") return value
+  throw new Error("Native Expert Squad install handoff current command returned an invalid value")
+}
+
+export async function acknowledgeExpertSquadInstallHandoff(raw: string): Promise<boolean> {
+  const value = await invokeTauri("overlay_expert_squad_install_handoff_acknowledge", { raw })
+  if (typeof value === "boolean") return value
+  throw new Error("Native Expert Squad install handoff acknowledge command returned an invalid value")
 }
 
 function webNotificationApiAvailable(): boolean {
@@ -436,7 +452,7 @@ export function createTauriTransport(kind: Extract<HostKind, "tauri" | "browser"
       // be polyfilled on top of fetch in this transport for unauthed
       // streams. The note in services/sse.ts documents the original
       // incident.
-      const streamID = globalThis.crypto.randomUUID()
+      const streamID = randomUUID()
       const url = buildUrl(input.path, input.query)
       url.searchParams.set(STREAM_INSTANCE_QUERY_KEY, streamID)
       const source = new EventSource(url.toString())
@@ -540,9 +556,21 @@ export function createTauriTransport(kind: Extract<HostKind, "tauri" | "browser"
             return loadBrowserOverlaySettings()
           case "settings.save":
             return saveBrowserOverlaySettings(command.payload)
+          case "open-url": {
+            // Validated first: unlike the desktop's OS opener, a page has no
+            // backstop against a javascript: or data: URL.
+            //
+            // The return value is deliberately ignored. `window.open` returns
+            // null whenever `noopener` or `noreferrer` is set — by spec, on
+            // success as much as on failure — so it cannot distinguish an
+            // opened tab from a blocked one, and treating null as failure
+            // would report every successful open as an error.
+            window.open(externalUrl(command.url).href, "_blank", "noopener,noreferrer")
+            return true
+          }
           case "clipboard.writeText":
             if (!navigator.clipboard?.writeText) {
-              throw new Error("navigator.clipboard.writeText is unavailable")
+              throw new Error(secureContextFailure("secure_context.subject.clipboard"))
             }
             return navigator.clipboard.writeText(command.text)
           case "notification.permission":

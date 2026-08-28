@@ -5,7 +5,7 @@ import { createStore } from "solid-js/store"
 import { DEFAULT_SERVER } from "../services/default-server"
 import { PROJECT_EDITOR_IDS, type ProjectEditorID } from "../services/host-transport"
 import { getHostTransport } from "../services/host-transport-runtime"
-import { DEFAULT_THEME_ID, sanitizeThemeForHost, type OverlayThemeID } from "../services/theme-registry"
+import { runtimeStartupTheme, sanitizeThemeForHost, type OverlayThemeID } from "../services/theme-registry"
 import type { PersistedOverlaySettings } from "../services/persisted-overlay-settings"
 import { parsePersistedOverlaySettings } from "../services/persisted-overlay-settings"
 import type { WorkLedgerOrganization, WorkLedgerSort } from "@opencorvus-ai/transport-protocol"
@@ -103,7 +103,11 @@ const DEFAULT_LOCALE = runtimeLocale()
 
 // ── Defaults ──
 
-export const DEFAULT_THEME = DEFAULT_THEME_ID
+// Reads the host/acceptance startup theme, mirroring DEFAULT_LOCALE above.
+// index.html applies that theme to documentElement before Solid mounts; if the
+// store defaulted to a fixed id instead, the first applySettings would
+// immediately overwrite it and the requested theme would never survive boot.
+export const DEFAULT_THEME = runtimeStartupTheme()
 
 export const DEFAULT_SETTINGS: OverlaySettings = {
   serverUrl: DEFAULT_SERVER,
@@ -306,18 +310,4 @@ export function bootstrapOverlaySettings(input: Partial<OverlaySettings> = setti
 export function workspaceRestoreDirectory(value: any): string {
   const text = typeof value === "string" ? value.trim() : ""
   return text
-}
-
-// ── Test / timing helpers ──
-
-export function overlayTestConfig(): Record<string, unknown> | null {
-  if (typeof window === "undefined") return null
-  const value = (window as any).__overlayTest
-  return value && typeof value === "object" ? value : null
-}
-
-export function overlayTiming(name: string, defaultValue: number, min = 50): number {
-  const value = Number(overlayTestConfig()?.[name])
-  if (!Number.isFinite(value)) return defaultValue
-  return Math.max(min, Math.floor(value))
 }

@@ -108,6 +108,13 @@ export function normalizeBrowserPreviewNativeUrl(input: string): string {
   if (url.protocol !== "http:" && url.protocol !== "https:") {
     throw new TypeError("browser preview URL must use HTTP or HTTPS")
   }
+  // Matches utils/external-url.ts, which gates the same URL when the preview
+  // hands it to the host to open. This function stays separate from that one —
+  // it normalises loose address-bar input, where that one validates a finished
+  // URL — but the two must not disagree about what is acceptable.
+  if (url.username || url.password) {
+    throw new TypeError("browser preview URL must not carry embedded credentials")
+  }
   return url.toString()
 }
 

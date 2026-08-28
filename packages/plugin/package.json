@@ -1,25 +1,65 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
   "name": "@opencorvus-ai/plugin",
-  "version": "0.0.52-beta",
+  "version": "0.0.55-beta",
   "type": "module",
   "license": "MIT",
   "scripts": {
-    "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.type-tests.json",
-    "build": "tsc"
+    "typecheck": "tsc --noEmit",
+    "build": "tsc",
+    "prepack": "bun run build",
+    "prepublishOnly": "bun run build"
   },
   "exports": {
-    ".": "./src/index.ts",
-    "./tool": "./src/tool.ts",
-    "./files": "./src/files.ts",
-    "./artifact-catalog": "./src/artifact-catalog.ts",
-    "./project-path": "./src/project-path.ts",
-    "./task-artifact": "./src/task-artifact.ts"
+    ".": {
+      "source": "./src/index.ts",
+      "bun": "./src/index.ts",
+      "types": "./src/index.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./tool": {
+      "source": "./src/tool.ts",
+      "bun": "./src/tool.ts",
+      "types": "./src/tool.ts",
+      "import": "./dist/tool.js",
+      "default": "./dist/tool.js"
+    },
+    "./files": {
+      "source": "./src/files.ts",
+      "bun": "./src/files.ts",
+      "types": "./src/files.ts",
+      "import": "./dist/files.js",
+      "default": "./dist/files.js"
+    },
+    "./artifact-catalog": {
+      "source": "./src/artifact-catalog.ts",
+      "bun": "./src/artifact-catalog.ts",
+      "types": "./src/artifact-catalog.ts",
+      "import": "./dist/artifact-catalog.js",
+      "default": "./dist/artifact-catalog.js"
+    },
+    "./project-path": {
+      "source": "./src/project-path.ts",
+      "bun": "./src/project-path.ts",
+      "types": "./src/project-path.ts",
+      "import": "./dist/project-path.js",
+      "default": "./dist/project-path.js"
+    },
+    "./task-artifact": {
+      "source": "./src/task-artifact.ts",
+      "bun": "./src/task-artifact.ts",
+      "types": "./src/task-artifact.ts",
+      "import": "./dist/task-artifact.js",
+      "default": "./dist/task-artifact.js"
+    }
   },
   "files": [
-    "dist"
+    "dist",
+    "src"
   ],
   "dependencies": {
+    "@types/node": "catalog:",
     "@opencorvus-ai/sdk": "workspace:*",
     "hono": "catalog:",
     "property-information": "7.2.0",

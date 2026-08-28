@@ -2,10 +2,8 @@ import { afterEach, describe, expect, spyOn, test } from "bun:test"
 import { reviewedTerminalLifecycleReferenceBeforePanelAction } from "@/agent/task-review-facts"
 import { ArtifactReferenceResolutionError } from "@/agent/artifact-read-facts"
 import { recordEngineArtifact } from "@/engine/artifact"
-import {
-  requireCurrentTerminalLifecycleReference,
-  sameTerminalLifecycleReference,
-} from "@/engine/terminal-lifecycle-reference"
+import { requireCurrentTerminalLifecycleReference } from "@/engine/terminal-lifecycle-reference"
+import { sameTerminalLifecycleReference } from "@/engine/terminal-lifecycle-reference-schema"
 import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
 import { requireTask } from "@/engine/store"
@@ -165,12 +163,16 @@ describe("Mission terminal Task authority", () => {
           productPillar: "work",
           heldExpertSquadIDs: ["base"],
         })
-        const taskSession = await Session.create({ kind: "root", title: "Paged terminal child" })
+        const taskSession = Session.prepareRootNext({
+          kind: "root",
+          directory: Instance.directory,
+          title: "Paged terminal child",
+        })
         const taskID = Identifier.ascending("task")
         const now = Date.now()
         persistTask({
           taskID,
-          sessionID: taskSession.id,
+          rootSession: taskSession,
           now,
           title: "Paged terminal child",
           request: "Publish a multi-page evidence catalog",
@@ -367,10 +369,7 @@ describe("Mission terminal Task authority", () => {
           tool: "panel",
           state: { status: "running", input: readInput, time: { start: now + 37 } },
         })
-        const read = await panel.execute(
-          readInput,
-          { ...context, messageID: readMessage.id, callID: readCallID },
-        )
+        const read = await panel.execute(readInput, { ...context, messageID: readMessage.id, callID: readCallID })
         expect(JSON.parse(read.output)).toEqual(
           expect.objectContaining({
             taskID,
@@ -420,10 +419,7 @@ describe("Mission terminal Task authority", () => {
         })
         let staleReadError: unknown
         try {
-          await panel.execute(
-            readInput,
-            { ...context, messageID: staleReadMessage.id, callID: staleReadCallID },
-          )
+          await panel.execute(readInput, { ...context, messageID: staleReadMessage.id, callID: staleReadCallID })
         } catch (error) {
           staleReadError = error
         }
@@ -447,12 +443,16 @@ describe("Mission terminal Task authority", () => {
           productPillar: "work",
           heldExpertSquadIDs: ["base"],
         })
-        const taskSession = await Session.create({ kind: "root", title: "Terminal child" })
+        const taskSession = Session.prepareRootNext({
+          kind: "root",
+          directory: Instance.directory,
+          title: "Terminal child",
+        })
         const taskID = Identifier.ascending("task")
         const now = Date.now()
         persistTask({
           taskID,
-          sessionID: taskSession.id,
+          rootSession: taskSession,
           now,
           title: "Terminal child",
           request: "Publish accepted evidence",
@@ -612,14 +612,58 @@ describe("Mission terminal Task authority", () => {
           missionSchema.parse({
             action: "resume_task",
             taskID,
-            text: "Publish the corrected audit receipt.",
-            evidence_read_refs: [readRef],
+            acceptance_gap: {
+              gap_id: "gap-audit-receipt",
+              current_ledger_revision_artifact_id: null,
+              criteria: [
+                {
+                  criterion_id: "audit-receipt",
+                  state: "open",
+                  disposition: "failed",
+                  finding: "The audit receipt requires a corrected canonical revision.",
+                  responsibility: { kind: "workflow_node", workflow_id: "repair", workflow_node_id: "builder" },
+                  observation_evidence_read_refs: [readRef],
+                  repair_evidence_read_refs: [],
+                  resolution_evidence_read_refs: [],
+                  invalidating_evidence_read_refs: [],
+                  irreducible_blocker_evidence_read_refs: [],
+                  repair_action: {
+                    operation: "correct_artifact",
+                    target: "audit-receipt",
+                    expected_evidence_kind: "corrected-audit-receipt",
+                    parameters: {},
+                  },
+                },
+              ],
+            },
           }),
         ).toEqual({
           action: "resume_task",
           taskID,
-          text: "Publish the corrected audit receipt.",
-          evidence_read_refs: [readRef],
+          acceptance_gap: {
+            gap_id: "gap-audit-receipt",
+            current_ledger_revision_artifact_id: null,
+            criteria: [
+              {
+                criterion_id: "audit-receipt",
+                state: "open",
+                disposition: "failed",
+                finding: "The audit receipt requires a corrected canonical revision.",
+                responsibility: { kind: "workflow_node", workflow_id: "repair", workflow_node_id: "builder" },
+                observation_evidence_read_refs: [readRef],
+                repair_evidence_read_refs: [],
+                resolution_evidence_read_refs: [],
+                invalidating_evidence_read_refs: [],
+                irreducible_blocker_evidence_read_refs: [],
+                repair_action: {
+                  operation: "correct_artifact",
+                  target: "audit-receipt",
+                  expected_evidence_kind: "corrected-audit-receipt",
+                  parameters: {},
+                },
+              },
+            ],
+          },
         })
         expect(
           missionSchema.parse({

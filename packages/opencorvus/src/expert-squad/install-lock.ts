@@ -2,21 +2,13 @@ import { Global } from "@/global"
 import { Filesystem } from "@/util/filesystem"
 import { mkdir } from "node:fs/promises"
 import path from "node:path"
-import { withProcessLock } from "@/util/process-lock"
+import { CROSS_PROCESS_LOCK_RETRY, withProcessLock } from "@/util/process-lock"
 
 export namespace ExpertSquadInstallLock {
   const leaseBrand: unique symbol = Symbol("opencorvus.expert-squad-install-lease")
   export type Lease = Readonly<{ id: string; [leaseBrand]: true }>
   const activeLeases = new WeakSet<object>()
   const localQueues = new Map<string, Promise<void>>()
-  const crossProcessRetry = {
-    forever: true,
-    factor: 1.2,
-    minTimeout: 25,
-    maxTimeout: 250,
-    randomize: true,
-  } as const
-
   function target(id: string) {
     return path.join(Global.Path.config, "expert-squad-install-locks", id)
   }
@@ -24,7 +16,7 @@ export namespace ExpertSquadInstallLock {
   async function withInstallProcessLock<T>(id: string, run: (lease: Lease) => Promise<T>): Promise<T> {
     const lockTarget = target(id)
     await mkdir(path.dirname(lockTarget), { recursive: true })
-    return withProcessLock(lockTarget, { realpath: false, retries: crossProcessRetry }, async () => {
+    return withProcessLock(lockTarget, { realpath: false, retries: CROSS_PROCESS_LOCK_RETRY }, async () => {
       const lease = Object.freeze({ id, [leaseBrand]: true }) as Lease
       activeLeases.add(lease)
       try {

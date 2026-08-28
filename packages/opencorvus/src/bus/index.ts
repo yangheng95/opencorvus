@@ -22,7 +22,7 @@ import {
 } from "./bus.sql"
 import { Instance, runAsInstanceActivity, runOutsideInstanceContext } from "../project/instance"
 import { Identifier } from "@/id/id"
-import { acquireControlLease, currentControlLeaseInTransaction, renewControlLease } from "@/engine/control-lease"
+import { ControlLeaseFenceLostError, acquireControlLease, currentControlLeaseInTransaction, releaseControlLeaseInTransaction, renewControlLease } from "@/engine/control-lease"
 
 export namespace Bus {
   const log = Log.create({ service: "bus" })
@@ -684,17 +684,6 @@ export namespace Bus {
       if (outcomes.some((receipt) => receipt.outcome === "ignored")) return "ignored" as const
       return outcomes.at(-1)?.outcome
     })
-    const settleDelivery = (subscriberID: string, outcome: "succeeded" | "ignored" | "failed", error?: unknown) =>
-      Database.use((db) => db.insert(BusPublicationDeliveryReceiptTable).values({
-        id: Identifier.ascending("call"),
-        occurrence_id: payload.occurrenceID,
-        phase,
-        subscriber_id: subscriberID,
-        outcome,
-        error: error === undefined ? null : error instanceof Error ? error.message : String(error),
-        retry_at: null,
-        time_created: Date.now(),
-      }).run())
     Database.transaction((db) => {
       const stale = db
         .select()
@@ -753,10 +742,11 @@ export namespace Bus {
       const deliveryID = `${payload.occurrenceID}\0${phase}\0${target.id}`
       const ownerID = `bus:${runtimeSubscriptionID}`
       const now = Date.now()
-      const existingLease = Database.use((db) => currentControlLeaseInTransaction(db, "bus_delivery", deliveryID))
-      const lease = existingLease?.owner_occurrence_id === ownerID && existingLease.expires_at > now
-        ? { acquired: true as const, lease: existingLease }
-        : acquireControlLease({ target: "bus_delivery", targetID: deliveryID, ownerOccurrenceID: ownerID, now, leaseMilliseconds: 30_000 })
+      // Receipts now end their own lease, so a live lease for this exact
+      // delivery is a real concurrent owner rather than this runtime's own
+      // leftover. Reusing one would have been a way of tolerating a lease that
+      // nothing handed back.
+      const lease = acquireControlLease({ target: "bus_delivery", targetID: deliveryID, ownerOccurrenceID: ownerID, now, leaseMilliseconds: 30_000 })
       if (!lease.acquired) {
         failures.push(new Error(`Durable Bus delivery ${deliveryID} is leased by another runtime`))
         continue
@@ -764,15 +754,32 @@ export namespace Bus {
       const renewal = setInterval(() => {
         try {
           renewControlLease({ target: "bus_delivery", targetID: deliveryID, leaseID: lease.lease.id, ownerOccurrenceID: ownerID, now: Date.now(), expiresAt: Date.now() + 30_000 })
-        } catch {}
+        } catch (error) {
+          // A lost fence means another runtime took this lease; the receipt
+          // fence surfaces that when this delivery settles, and renewing again
+          // is pointless. Anything else — a busy database, shutdown-in-progress
+          // — is transient, and ending renewal on it would let a long delivery
+          // outlive its lease over a hiccup. Renewal cannot lose to this
+          // delivery's own receipt: the release and clearInterval have no
+          // await between them.
+          const fenceLost = error instanceof ControlLeaseFenceLostError
+          log.warn("durable Bus delivery lease renewal failed", {
+            deliveryID,
+            fenceLost,
+            error: error instanceof Error ? error.message : String(error),
+          })
+          if (fenceLost) clearInterval(renewal)
+        }
       }, 10_000)
       renewal.unref()
       try {
         await target.deliver()
         Database.immediateTransaction((db) => {
+          const settledAt = Date.now()
           const current = currentControlLeaseInTransaction(db, "bus_delivery", deliveryID)
-          if (!current || current.id !== lease.lease.id || current.owner_occurrence_id !== ownerID || current.expires_at <= Date.now()) throw new Error(`Durable Bus delivery ${deliveryID} lost its lease before receipt`)
-          db.insert(BusPublicationDeliveryReceiptTable).values({ id: Identifier.ascending("call"), occurrence_id: payload.occurrenceID, phase, subscriber_id: target.id, outcome: "succeeded", error: null, retry_at: null, time_created: Date.now() }).run()
+          if (!current || current.id !== lease.lease.id || current.owner_occurrence_id !== ownerID || current.expires_at <= settledAt) throw new Error(`Durable Bus delivery ${deliveryID} lost its lease before receipt`)
+          db.insert(BusPublicationDeliveryReceiptTable).values({ id: Identifier.ascending("call"), occurrence_id: payload.occurrenceID, phase, subscriber_id: target.id, outcome: "succeeded", error: null, retry_at: null, time_created: settledAt }).run()
+          releaseControlLeaseInTransaction(db, { target: "bus_delivery", targetID: deliveryID, leaseID: lease.lease.id, ownerOccurrenceID: ownerID, now: settledAt })
         })
       } catch (error) {
         const outcome = target.settleFailure ? "ignored" as const : "failed" as const
@@ -785,14 +792,21 @@ export namespace Bus {
               eq(BusPublicationDeliveryReceiptTable.subscriber_id, target.id),
               inArray(BusPublicationDeliveryReceiptTable.outcome, ["succeeded", "ignored"]),
             )).get()
-          if (terminal) return { kind: "terminal" as const, outcome: terminal.outcome }
+          const settledAt = Date.now()
           const current = currentControlLeaseInTransaction(db, "bus_delivery", deliveryID)
-          if (
-            !current ||
-            current.id !== lease.lease.id ||
-            current.owner_occurrence_id !== ownerID ||
-            current.expires_at <= Date.now()
-          ) return { kind: "stale" as const }
+          const held =
+            current &&
+            current.id === lease.lease.id &&
+            current.owner_occurrence_id === ownerID &&
+            current.expires_at > settledAt
+          if (terminal) {
+            // Somebody else — the stale-subscriber sweep, or another runtime —
+            // already settled this delivery. This owner writes nothing, so the
+            // only thing it still has to do is stop holding the lease.
+            if (held) releaseControlLeaseInTransaction(db, { target: "bus_delivery", targetID: deliveryID, leaseID: lease.lease.id, ownerOccurrenceID: ownerID, now: settledAt })
+            return { kind: "terminal" as const, outcome: terminal.outcome }
+          }
+          if (!held) return { kind: "stale" as const }
           db.insert(BusPublicationDeliveryReceiptTable).values({
             id: Identifier.ascending("call"),
             occurrence_id: payload.occurrenceID,
@@ -801,8 +815,10 @@ export namespace Bus {
             outcome,
             error: error instanceof Error ? error.message : String(error),
             retry_at: null,
-            time_created: Date.now(),
+            time_created: settledAt,
           }).run()
+          // This delivery has its terminal receipt, so its owner is done.
+          releaseControlLeaseInTransaction(db, { target: "bus_delivery", targetID: deliveryID, leaseID: lease.lease.id, ownerOccurrenceID: ownerID, now: settledAt })
           return { kind: "written" as const }
         })
         if (settled.kind === "terminal") continue

@@ -4,6 +4,7 @@ import { t } from "../../utils/i18n"
 import { Button } from "../ui/Button"
 import { CodeEditor } from "../ui/CodeEditor"
 import { ArtifactFrame } from "./ArtifactFrame"
+import { copyTextReporting } from "../../services/clipboard"
 
 type CodePayload = Extract<InteractiveArtifactPayload, { renderer: "code@1" }>
 export type ArtifactCodeLanguage = CodePayload["language"]
@@ -25,7 +26,7 @@ export function artifactCodeFilename(language: ArtifactCodeLanguage, filename?: 
 
 export function CodeArtifact(props: { payload: CodePayload }) {
   const [source, setSource] = createSignal(props.payload.source)
-  const copy = async () => navigator.clipboard.writeText(source())
+  const copy = () => void copyTextReporting(source(), "artifact-code")
 
   return (
     <ArtifactFrame title={props.payload.title} kind="Code">

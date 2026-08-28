@@ -9,7 +9,7 @@ import {
   ToolPartRequestTable,
   SessionTable,
 } from "@/session/session.sql"
-import { Database, and, asc, desc, eq, gt, lt, sql } from "@/storage/db"
+import { Database, and, asc, desc, eq, lt, sql } from "@/storage/db"
 import {
   EngineControlActivationLeaseTable,
   EngineArtifactTable,
@@ -19,6 +19,7 @@ import {
   type EngineTaskRootIngressSource,
 } from "./engine.sql"
 import {
+  latestTaskRootIngressLease,
   reduceTaskRootIngressFacts,
   taskRootIngressReleasesHeadOfLine,
   type ActivityOutcomeFact,
@@ -40,6 +41,11 @@ import {
 import { orchestratorControlOccurrenceIdentity } from "@/orchestrator/control-message-identity"
 import { TaskDeletedError, taskDeletedInTransaction } from "./store"
 import { Project } from "@/project/project"
+import {
+  acquireControlLeaseInTransaction,
+  currentControlLeaseInTransaction,
+  renewControlLeaseInTransaction,
+} from "./control-lease"
 
 export type TaskRootIngressEvidence = {
   turns: readonly AssistantTurnFact[]
@@ -368,6 +374,8 @@ export function acquireTaskRootIngressLease(input: {
   now: number
   leaseMilliseconds: number
   readEvidence?: TaskRootIngressEvidenceReader
+  /** Runtime-owner safety fences must commit atomically with activation. */
+  assertControlOwnerInTransaction: (db: Database.TxOrDb) => void
 }): AcquireTaskRootIngressLeaseResult {
   if (!Number.isSafeInteger(input.leaseMilliseconds) || input.leaseMilliseconds <= 0) {
     throw new Error("Task-root lease duration must be a positive safe integer")
@@ -405,18 +413,30 @@ export function acquireTaskRootIngressLease(input: {
       }
     }
     const activationID = Identifier.ascending("activity")
-    const expiresAt = input.now + input.leaseMilliseconds
-    db.insert(EngineControlActivationLeaseTable)
-      .values({
-        id: activationID,
-        target: "task_root_ingress",
-        target_id: input.ingressID,
-        owner_occurrence_id: input.ownerOccurrenceID,
-        time_activated: input.now,
-        expires_at: expiresAt,
-      })
-      .run()
-    return { acquired: true, activationID, expiresAt }
+    input.assertControlOwnerInTransaction(db)
+    const acquired = acquireControlLeaseInTransaction(db, {
+      target: "task_root_ingress",
+      targetID: input.ingressID,
+      ownerOccurrenceID: input.ownerOccurrenceID,
+      now: input.now,
+      leaseMilliseconds: input.leaseMilliseconds,
+      leaseID: activationID,
+      // `ready` after an activation means the reducer has proved that exact
+      // activation consumed by immutable assistant/effect receipts. Name it
+      // as the superseded physical owner; the primitive remains the one place
+      // that decides whether a live lease may be replaced.
+      supersedeLeaseID: latestTaskRootIngressLease(facts)?.id,
+    })
+    if (!acquired.acquired) {
+      return {
+        acquired: false,
+        projection: reduceTaskRootIngressFacts(
+          taskRootIngressFactsInTransaction(db, input.ingressID, input.readEvidence),
+          input.now,
+        ),
+      }
+    }
+    return { acquired: true, activationID: acquired.lease.id, expiresAt: acquired.lease.expires_at }
   })
 }
 
@@ -444,39 +464,14 @@ export function renewTaskRootIngressLease(input: {
     if (fence.ingressID !== input.ingressID || fence.ownerOccurrenceID !== input.ownerOccurrenceID) {
       throw new Error(`Task-root activation fence rejected lease renewal ${input.activationID}`)
     }
-    const latest = db
-      .select()
-      .from(EngineControlActivationLeaseTable)
-      .where(
-        and(
-          eq(EngineControlActivationLeaseTable.target, "task_root_ingress"),
-          eq(EngineControlActivationLeaseTable.target_id, input.ingressID),
-        ),
-      )
-      .orderBy(desc(EngineControlActivationLeaseTable.time_activated), desc(EngineControlActivationLeaseTable.id))
-      .get()
-    if (
-      !latest ||
-      latest.id !== input.activationID ||
-      latest.owner_occurrence_id !== input.ownerOccurrenceID ||
-      latest.expires_at <= input.now
-    ) {
-      throw new Error(`Task-root activation fence rejected lease renewal ${input.activationID}`)
-    }
-    const renewed = db.update(EngineControlActivationLeaseTable)
-      .set({ expires_at: input.expiresAt })
-      .where(
-        and(
-          eq(EngineControlActivationLeaseTable.id, input.activationID),
-          eq(EngineControlActivationLeaseTable.expires_at, latest.expires_at),
-          gt(EngineControlActivationLeaseTable.expires_at, input.now),
-        ),
-      )
-      .returning({ id: EngineControlActivationLeaseTable.id })
-      .get()
-    if (!renewed) {
-      throw new Error(`Task-root activation fence lost lease renewal ${input.activationID}`)
-    }
+    renewControlLeaseInTransaction(db, {
+      target: "task_root_ingress",
+      targetID: input.ingressID,
+      leaseID: input.activationID,
+      ownerOccurrenceID: input.ownerOccurrenceID,
+      now: input.now,
+      expiresAt: input.expiresAt,
+    })
   })
 }
 
@@ -492,17 +487,7 @@ export function assertTaskRootActivationLeaseFenceInTransaction(
   if (!lease || lease.target !== "task_root_ingress") {
     throw new Error(`Task-root activation fence rejected unknown activation ${input.activationID}`)
   }
-  const latest = db
-    .select()
-    .from(EngineControlActivationLeaseTable)
-    .where(
-      and(
-        eq(EngineControlActivationLeaseTable.target, "task_root_ingress"),
-        eq(EngineControlActivationLeaseTable.target_id, lease.target_id),
-      ),
-    )
-    .orderBy(desc(EngineControlActivationLeaseTable.time_activated), desc(EngineControlActivationLeaseTable.id))
-    .get()
+  const latest = currentControlLeaseInTransaction(db, "task_root_ingress", lease.target_id)
   const ingress = db
     .select()
     .from(EngineTaskRootIngressTable)

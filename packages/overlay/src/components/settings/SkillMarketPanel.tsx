@@ -10,7 +10,14 @@ import { createStore } from "solid-js/store"
 import type { SkillMountsResponse } from "@opencorvus-ai/sdk"
 import { t } from "../../utils/i18n"
 import { configure as configureApi } from "../../services/api"
-import { pickDirectory, syncActiveDirectoryApiContext } from "../../services/workspace"
+import {
+  pathRevealFailureText,
+  pathRevealLabelKey,
+  pathRevealNoticeKey,
+  pickDirectory,
+  revealPath,
+  syncActiveDirectoryApiContext,
+} from "../../services/workspace"
 import { appStore } from "../../store/app"
 import { getHostTransport } from "../../services/host-transport-runtime"
 import { nativeConfirm, nativeOpen } from "../../utils/native"
@@ -22,6 +29,9 @@ import {
   loadProjectMcpStatus,
   deleteSkill,
   installSkill,
+  searchSkillMarket,
+  inspectSkillMarket,
+  installSkillMarket,
   updateSkill,
   importSkillArchive,
   importSkillFile,
@@ -29,6 +39,8 @@ import {
   type SkillImportPackageFile,
   type SkillLoadIssue,
   type SkillUpdateSource,
+  type SkillMarketCandidate,
+  type SkillMarketDetail,
 } from "../../services/extensions"
 import { addMcpServer, deleteAllMcp, type RemoteMcpCredentialType, type RemoteMcpTransport } from "../../services/mcp"
 import {
@@ -81,6 +93,7 @@ interface SkillDropPayload {
 // ── Helpers ──
 
 function skillRemoveKind(item: SkillItem): string {
+  if (String(item.source_type) === "managed_market") return "market"
   if (item.source_type === "managed_git") return "git"
   if (item.source_type === "config_url") return "url"
   if (item.source_type === "config_path") return "path"
@@ -239,7 +252,6 @@ function SharedResourceManagementPanel(props: {
   onResourcesChanged?: () => void
 }) {
   const nativeCommands = getHostTransport().capabilities.nativeCommands
-  const canOpenLocalPath = createMemo(() => nativeCommands["open-path"])
   const canOpenRemoteUrl = createMemo(() => nativeCommands["open-url"])
   const canPickSkillDirectory = createMemo(() => nativeCommands["workspace.pickDir"])
   const skillSourceOptions = (): FormSelectOption[] => [
@@ -381,13 +393,29 @@ function SharedResourceManagementPanel(props: {
     }
   }
 
+  // A remote skill still opens as a link; a local one is revealed by whatever
+  // this host supports, so the button has to say which of the two it will do.
+  function skillOpenLabel(location: string): string {
+    return isRemoteUrl(location) ? t("skill.open_button_title") : t(pathRevealLabelKey())
+  }
+
   async function handleOpenSkill(location: string) {
-    if (isRemoteUrl(location) ? !canOpenRemoteUrl() : !canOpenLocalPath()) return
+    if (isRemoteUrl(location)) {
+      if (!canOpenRemoteUrl()) return
+      try {
+        const opened = await nativeOpen(location)
+        if (!opened) throw new Error("native open returned false")
+      } catch (e) {
+        setPanelNotice(t("skill.open_failed", { error: errorDetail(e) }))
+      }
+      return
+    }
     try {
-      const opened = await nativeOpen(location)
-      if (!opened) throw new Error("native open returned false")
+      const outcome = await revealPath(location)
+      const notice = pathRevealNoticeKey(outcome)
+      if (notice) setPanelNotice(t(notice, { path: location }), "active")
     } catch (e) {
-      setPanelNotice(t("skill.open_failed", { error: errorDetail(e) }))
+      setPanelNotice(pathRevealFailureText(e))
     }
   }
 
@@ -417,6 +445,70 @@ function SharedResourceManagementPanel(props: {
     value: "",
     policy: "allow" as "allow" | "deny",
   })
+  const [marketQuery, setMarketQuery] = createSignal("")
+  const [marketResults, setMarketResults] = createSignal<SkillMarketCandidate[]>([])
+  const [marketDetail, setMarketDetail] = createSignal<SkillMarketDetail>()
+  const [marketPolicy, setMarketPolicy] = createSignal<"allow" | "deny">("deny")
+  const [marketLoading, setMarketLoading] = createSignal(false)
+
+  async function handleMarketSearch() {
+    const query = marketQuery().trim()
+    if (query.length < 2) return
+    setMarketLoading(true)
+    setNotice("")
+    setMarketResults([])
+    setMarketDetail(undefined)
+    try {
+      setMarketResults(await searchSkillMarket(query))
+    } catch (error) {
+      setPanelNotice(error instanceof Error ? error.message : String(error))
+    } finally {
+      setMarketLoading(false)
+    }
+  }
+
+  async function handleMarketInspect(candidate: SkillMarketCandidate) {
+    setMarketLoading(true)
+    setNotice("")
+    setMarketDetail(undefined)
+    try {
+      const detail = await inspectSkillMarket(candidate.id)
+      setMarketDetail(detail)
+      setMarketPolicy(detail.recommended_policy)
+    } catch (error) {
+      setPanelNotice(error instanceof Error ? error.message : String(error))
+    } finally {
+      setMarketLoading(false)
+    }
+  }
+
+  async function handleMarketInstall(detail: SkillMarketDetail) {
+    const approved = await nativeConfirm(
+      t("skill.market_install_confirm", {
+        name: detail.name,
+        source: detail.repository,
+        hash: detail.hash,
+        risk: detail.risk.level,
+        policy: marketPolicy(),
+      }),
+    )
+    if (!approved) return
+    setMarketLoading(true)
+    setNotice("")
+    try {
+      const installed = await installSkillMarket(detail.id, detail.hash, marketPolicy())
+      setPanelNotice(t("skill.market_install_success", { name: installed.name }), "active")
+      const directory = currentDirectory()
+      if (directory) await reloadCurrentPanel({ directory })
+      setMarketDetail({ ...detail, installed: true })
+      setMarketResults((items) => items.map((item) => (item.id === detail.id ? { ...item, installed: true } : item)))
+      notifyResourceChange()
+    } catch (error) {
+      setPanelNotice(error instanceof Error ? error.message : String(error))
+    } finally {
+      setMarketLoading(false)
+    }
+  }
 
   async function handleAddSkill() {
     const value = skillForm.value.trim()
@@ -637,6 +729,136 @@ function SharedResourceManagementPanel(props: {
         )}
       </For>
 
+      {/* ── Skill Market ── */}
+      <Show when={skillPanelActive()}>
+        <SettingsGroup
+          class="extension-settings-group"
+          contentInset
+          title={t("skill.market_title")}
+          description={t("skill.market_intro")}
+          actions={<Badge tone="neutral">skills.sh</Badge>}
+        >
+          <div class="extension-settings-body">
+            <form
+              class="config-inline-form"
+              onSubmit={(event) => {
+                event.preventDefault()
+                void handleMarketSearch()
+              }}
+            >
+              <TextField.Root as="label">
+                <TextField.Label>{t("skill.market_query")}</TextField.Label>
+                <TextField.Input
+                  type="search"
+                  value={marketQuery()}
+                  placeholder={t("skill.market_query_placeholder")}
+                  onInput={(event) => setMarketQuery(event.currentTarget.value)}
+                />
+              </TextField.Root>
+              <div class="dialog-actions compact">
+                <Button
+                  type="submit"
+                  variant="solid"
+                  size="md"
+                  tone="accent"
+                  disabled={marketLoading() || marketQuery().trim().length < 2}
+                >
+                  {marketLoading() ? t("common.loading") : t("common.search")}
+                </Button>
+              </div>
+            </form>
+
+            <Show when={marketDetail()}>
+              {(selected) => (
+                <SettingsDetailSection
+                  title={selected().name}
+                  description={selected().description}
+                  actions={
+                    <Badge
+                      tone={
+                        selected().risk.level === "high" ? "bad" : selected().risk.level === "medium" ? "warn" : "ok"
+                      }
+                    >
+                      {t("skill.market_risk", { risk: selected().risk.level })}
+                    </Badge>
+                  }
+                >
+                  <SettingsRow title={t("skill.market_source")} desc={selected().repository} />
+                  <SettingsRow title={t("skill.market_hash")} desc={selected().hash} />
+                  <SettingsRow
+                    title={t("skill.market_files")}
+                    desc={selected()
+                      .files.map((file) => `${file.path} (${file.size} B)`)
+                      .join(" · ")}
+                  />
+                  <SettingsRow
+                    title={t("skill.policy")}
+                    actions={
+                      <SelectField<FormSelectOption>
+                        value={marketPolicy()}
+                        options={skillPolicyOptions()}
+                        ariaLabel={t("skill.policy")}
+                        onChange={(value) => setMarketPolicy(value as "allow" | "deny")}
+                        optionData={(option) => ({ "data-value": option.value })}
+                      />
+                    }
+                  />
+                  <div class="dialog-actions compact">
+                    <Button
+                      type="button"
+                      variant="solid"
+                      size="md"
+                      tone="accent"
+                      disabled={marketLoading() || selected().installed}
+                      onClick={() => void handleMarketInstall(selected())}
+                    >
+                      {selected().installed ? t("common.loaded") : t("skill.market_install")}
+                    </Button>
+                  </div>
+                </SettingsDetailSection>
+              )}
+            </Show>
+
+            <Show when={marketResults().length > 0}>
+              <SettingsDetailSection
+                class="extension-list"
+                title={t("skill.market_results")}
+                actions={<Badge tone="neutral">{marketResults().length}</Badge>}
+              >
+                <For each={marketResults()}>
+                  {(candidate) => (
+                    <SettingsRow
+                      class="extension-settings-row"
+                      title={candidate.name}
+                      desc={candidate.source}
+                      meta={<small>{t("skill.market_installs", { count: candidate.installs })}</small>}
+                      interactive
+                      actions={
+                        <div class="extension-settings-actions">
+                          <Show when={candidate.installed}>
+                            <Badge tone="ok">{t("common.loaded")}</Badge>
+                          </Show>
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            tone="neutral"
+                            disabled={marketLoading()}
+                            onClick={() => void handleMarketInspect(candidate)}
+                          >
+                            {t("skill.market_review")}
+                          </Button>
+                        </div>
+                      }
+                    />
+                  )}
+                </For>
+              </SettingsDetailSection>
+            </Show>
+          </div>
+        </SettingsGroup>
+      </Show>
+
       {/* ── Installed Skills ── */}
       <Show when={skillPanelActive()}>
         <SettingsGroup
@@ -838,7 +1060,7 @@ function SharedResourceManagementPanel(props: {
                             when={
                               item.location &&
                               item.location !== "builtin" &&
-                              (isRemoteUrl(item.location) ? canOpenRemoteUrl() : canOpenLocalPath())
+                              (isRemoteUrl(item.location) ? canOpenRemoteUrl() : true)
                             }
                           >
                             <Button
@@ -846,11 +1068,11 @@ function SharedResourceManagementPanel(props: {
                               variant="ghost"
                               size="md"
                               tone="neutral"
-                              title={t("skill.open_button_title")}
-                              aria-label={t("skill.open_button_title")}
+                              title={skillOpenLabel(item.location!)}
+                              aria-label={skillOpenLabel(item.location!)}
                               onClick={() => handleOpenSkill(item.location!)}
                             >
-                              {t("common.open")}
+                              {skillOpenLabel(item.location!)}
                             </Button>
                           </Show>
                           <Badge tone="ok">{item.builtin ? t("skill.builtin") : t("common.loaded")}</Badge>

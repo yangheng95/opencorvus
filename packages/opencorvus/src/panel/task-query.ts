@@ -1,5 +1,16 @@
 import z from "zod"
 import { TerminalLifecycleReferenceSchema } from "@/engine/terminal-lifecycle-reference"
+import { MissionAcceptanceGapSchema } from "@/mission/acceptance-gap"
+
+export const PanelTaskAcceptanceLedger = z
+  .object({
+    artifact_id: z.string().min(1),
+    revision: z.number().int().positive(),
+    execution_epoch: z.number().int().positive(),
+    previous_revision_artifact_id: z.string().min(1).nullable(),
+    gap: MissionAcceptanceGapSchema,
+  })
+  .strict()
 
 export const PanelTaskStatus = z.enum(["active", "completed", "failed", "cancelled"])
 export const PanelTaskFailureResult = z.object({
@@ -27,6 +38,7 @@ export const PanelQueryTaskSummaryRow = z.object({
   result: PanelTaskResult,
   pendingInteractions: z.number().int().nonnegative().optional(),
   terminal_lifecycle_reference: TerminalLifecycleReferenceSchema.optional(),
+  acceptance_ledger: PanelTaskAcceptanceLedger.optional(),
 })
 export const PanelQueryTaskRow = z.union([PanelQueryTaskSummaryRow, PanelQueryTaskErrorRow])
 export const PanelQueryTaskOutput = z.object({

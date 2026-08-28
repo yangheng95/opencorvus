@@ -15,6 +15,7 @@ import { Auth } from "../../auth"
 import { ConfigCandidateValidationError } from "@/config/candidate-validation"
 import { Provider } from "../../provider/provider"
 import { ProviderAuth } from "../../provider/auth"
+import { ProviderOAuthFlowStore } from "../../provider/oauth-flow-store"
 import { ProviderRemovalReceipt, removeProvider } from "../../provider/removal"
 import { discoverProviderModels, testProviderConnection } from "../../provider/operations"
 import { updateGlobalConfigPatch } from "../../config/update-global"
@@ -25,12 +26,13 @@ import {
   AuthReadUnavailableResponse,
   OwnedPromptControllersResponse,
   badRequestBody,
+  badRequestOrNamedErrorResponse,
   errors,
   namedErrorResponse,
 } from "../error"
-import { canRestartServer, startServerRestart } from "../restart"
 import { GlobalConversationService } from "@/chat/global-chat-service"
 import { RightSidebarConversationSessionResponse } from "@/chat/session"
+import { GlobalChatStartInput, GlobalChatStartResponse, startGlobalChat } from "@/chat/global-chat-start"
 import { ImplicitProject } from "@/project/implicit-project"
 import { SkillManager } from "@/skill/manager"
 import {
@@ -303,6 +305,29 @@ export const GlobalRoutes = lazy(() =>
           }),
           201,
         ),
+    )
+    .post(
+      "/chat/start",
+      describeRoute({
+        summary: "Start a global Chat",
+        description:
+          "Create one visible global Chat, durably accept and schedule its first user message, and return canonical Session streaming coordinates. Retry the same requestID to converge on the same Chat turn.",
+        operationId: "global.chat.start",
+        responses: {
+          202: {
+            description: "Global Chat start accepted",
+            content: { "application/json": { schema: resolver(GlobalChatStartResponse) } },
+          },
+          ...errors(400),
+          409: namedErrorResponse(
+            "Global Chat start request identity is already bound to another payload",
+            "GlobalChatStartIdentityConflictError",
+          ),
+          503: AuthReadUnavailableResponse,
+        },
+      }),
+      validator("json", GlobalChatStartInput),
+      async (c) => c.json(await startGlobalChat(c.req.valid("json")), 202),
     )
     .post(
       "/work",
@@ -591,8 +616,8 @@ export const GlobalRoutes = lazy(() =>
     .post(
       "/providers/:providerID/auth/execute",
       describeRoute({
-        summary: "Execute global Provider auth",
-        description: "Execute a built-in Provider authentication method without a project.",
+        summary: "Execute global Provider API auth",
+        description: "Execute a built-in Provider API credential method without a project.",
         operationId: "global.providers.auth.execute",
         responses: {
           200: {
@@ -631,9 +656,19 @@ export const GlobalRoutes = lazy(() =>
         responses: {
           200: {
             description: "Provider authorization",
-            content: { "application/json": { schema: resolver(ProviderAuth.Authorization.optional()) } },
+            content: { "application/json": { schema: resolver(ProviderAuth.Authorization) } },
           },
-          ...errors(400),
+          400: badRequestOrNamedErrorResponse(
+            "Provider OAuth authorization request rejected",
+            "ProviderAuthProviderNotFound",
+            "ProviderAuthMethodNotFound",
+            "ProviderAuthMethodAuthorizationTypeMismatch",
+          ),
+          409: badRequestOrNamedErrorResponse(
+            "Provider OAuth exchange is already active",
+            "ProviderAuthOAuthExchangeActiveError",
+          ),
+          503: AuthReadUnavailableResponse,
         },
       }),
       validator("param", z.object({ providerID: z.string() })),
@@ -662,6 +697,13 @@ export const GlobalRoutes = lazy(() =>
             content: { "application/json": { schema: resolver(GlobalProviderAuthMutationResponse) } },
           },
           ...errors(400),
+          409: badRequestOrNamedErrorResponse(
+            "Provider OAuth callback occurrence conflicts with the current credential or settlement",
+            "ProviderCredentialExchangeReplacedError",
+            "ProviderCredentialExchangeFailedError",
+            "ProviderAuthOAuthExchangeActiveError",
+            "ProviderAuthOAuthExchangeUncertainError",
+          ),
           503: AuthReadUnavailableResponse,
         },
       }),
@@ -671,12 +713,13 @@ export const GlobalRoutes = lazy(() =>
         z.object({
           method: z.number(),
           code: z.string().optional(),
+          flowID: ProviderOAuthFlowStore.FlowID,
         }),
       ),
       async (c) => {
         const { providerID } = c.req.valid("param")
-        const { method, code } = c.req.valid("json")
-        await ProviderAuth.callback({ providerID, method, code, scope: "global" })
+        const { method, code, flowID } = c.req.valid("json")
+        await ProviderAuth.callback({ providerID, method, code, flowID, scope: "global" })
         const issues = await settleProviderRefreshInvalidation([
           { phase: "cache.provider", run: Provider.resetAll },
           { phase: "cache.primary-assistants", run: PrimaryAssistantRegistry.resetAll },
@@ -870,16 +913,67 @@ export const GlobalRoutes = lazy(() =>
       "/skill/market",
       describeRoute({
         summary: "List the global Skill market",
-        description: "List global Skill market entries without requiring an active project.",
+        description: "List the single current Skill Market provider without requiring an active project.",
         operationId: "global.skill.market",
         responses: {
           200: {
             description: "Skill market entries",
-            content: { "application/json": { schema: resolver(SkillManager.MarketEntry.array()) } },
+            content: { "application/json": { schema: resolver(SkillManager.MarketProvider.array()) } },
           },
         },
       }),
       async (c) => c.json(await SkillManager.market()),
+    )
+    .get(
+      "/skill/market/search",
+      describeRoute({
+        summary: "Search the global Skill Market",
+        description: "Search exact Skill candidates and project live global installation status.",
+        operationId: "global.skill.market.search",
+        responses: {
+          200: {
+            description: "Skill Market candidates",
+            content: { "application/json": { schema: resolver(SkillManager.MarketEntry.array()) } },
+          },
+          ...errors(400, 502),
+        },
+      }),
+      validator("query", SkillManager.MarketSearchInput),
+      async (c) => c.json(await SkillManager.searchMarket(c.req.valid("query"))),
+    )
+    .get(
+      "/skill/market/detail",
+      describeRoute({
+        summary: "Inspect a global Skill Market candidate",
+        description: "Download and validate one exact candidate bundle without installing it.",
+        operationId: "global.skill.market.detail",
+        responses: {
+          200: {
+            description: "Validated Skill Market candidate detail",
+            content: { "application/json": { schema: resolver(SkillManager.MarketDetail) } },
+          },
+          ...errors(400, 502),
+        },
+      }),
+      validator("query", SkillManager.MarketInspectInput),
+      async (c) => c.json(await SkillManager.inspectMarket(c.req.valid("query"))),
+    )
+    .post(
+      "/skill/market/install",
+      describeRoute({
+        summary: "Install an inspected global Skill Market candidate",
+        description: "Install exactly one candidate only when its current content matches the inspected digest.",
+        operationId: "global.skill.market.install",
+        responses: {
+          200: {
+            description: "Installed Skill Market candidate",
+            content: { "application/json": { schema: resolver(SkillManager.MarketInstallResult) } },
+          },
+          ...errors(400, 502),
+        },
+      }),
+      validator("json", SkillManager.MarketInstallInput),
+      async (c) => c.json(await SkillManager.installMarket(c.req.valid("json"))),
     )
     .post(
       "/skill/install",

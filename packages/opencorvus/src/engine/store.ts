@@ -37,7 +37,7 @@ import {
 import { deriveTaskStatus, taskTerminalReason } from "./task-status"
 import { pendingTaskCancellationProjection, taskCancellationProjection } from "./cancellation-projection"
 import { GoalWorkloadArtifactSchema, type GoalWorkloadArtifact } from "@/goal-workload-analyst/types"
-import { validateGoalWorkloadArtifactRelationalIntegrity } from "@/goal-workload-analyst/publication"
+import { validateGoalWorkloadArtifactRelationalIntegrity } from "@/goal-workload-analyst/relational-integrity"
 import { RequirementSetArtifactPayloadSchema, type RequirementSet } from "@/requirements/types"
 import {
   ResearchBriefSchema,
@@ -49,15 +49,13 @@ import {
   BuildFileObservation as SnapshotBuildFileObservation,
   type BuildFileObservation as SnapshotBuildFileObservationData,
 } from "@/snapshot/types"
-import { SessionPromptState } from "@/session/prompt/state"
-import { taskIDForSession } from "./task-session-lineage"
-import { findTaskCompletionDecisionForTerminalTime } from "./completion-decision"
+import { findTaskCompletionDecisionForTerminalTime } from "./completion-decision-read"
 import {
   ArtifactReadLocatorSchema,
   type ArtifactReadLocator,
   type EngineArtifactLocator,
 } from "@opencorvus-ai/plugin/artifact-catalog"
-import { requireEngineArtifactByLocator } from "@/artifact-catalog"
+import { requireEngineArtifactByLocator } from "./engine-artifact-version-facts"
 import {
   ArchitectContractGraphArtifactPayloadSchema,
   type ArchitectContractGraphArtifactPayload,
@@ -310,6 +308,40 @@ export function listMissionTasks(input: { projectID: string; missionID: string; 
       .where(and(...missionTaskConditions(input), isNull(EngineTaskTable.time_archived)))
       .orderBy(desc(EngineTaskTable.time_created), desc(EngineTaskTable.id))
       .all()))
+}
+
+/**
+ * Resolve a global Task create replay to the Task its request already
+ * committed, before any new Project is allocated for it.
+ *
+ * A global create allocates its carrying anonymous Project first, so a
+ * per-project request lookup can never see the first attempt — the retry is
+ * scoped to the Project it just allocated. The request identity of a global
+ * create is therefore global: any live Task carrying the request ID whose
+ * root Session still lives in an anonymous Project directory is that
+ * request's Task. A Project promoted out of the anonymous root stops
+ * matching; a replay arriving after the user adopted the Project would
+ * allocate anew, which is the pre-existing behavior for every replay and is
+ * recorded as this lookup's boundary.
+ */
+export function findGlobalTaskByRequest(requestID: string, isAnonymousDirectory: (directory: string) => boolean) {
+  return Database.use((db) => {
+    const rows = db
+      .select({ task: EngineTaskTable, directory: SessionTable.directory })
+      .from(EngineTaskTable)
+      .leftJoin(SessionTable, eq(EngineTaskTable.session_id, SessionTable.id))
+      .where(eq(EngineTaskTable.request_id, requestID))
+      // Deterministic resolution if the request ever left more than one
+      // live candidate: every replay resolves the earliest commit.
+      .orderBy(EngineTaskTable.time_created, EngineTaskTable.id)
+      .all()
+    for (const row of rows) {
+      if (!row.directory || !isAnonymousDirectory(row.directory)) continue
+      if (taskDeletedInTransaction(db, row.task.id)) continue
+      return { task: projectTaskRowInTransaction(db, row.task), directory: row.directory }
+    }
+    return undefined
+  })
 }
 
 export function findTaskByRequest(projectID: string, requestID: string) {
@@ -1154,30 +1186,6 @@ export function assertCurrentDeliverySliceRevisionIDs(input: {
     )
   }
   return [...input.deliverySliceRevisionIDs]
-}
-
-/** Exact Sessions with a prompt controller owned by this process. */
-export function listOwnedPromptSessionsForTask(taskID: string) {
-  return SessionPromptState.ownedPromptSessionIDs().flatMap((sessionID) => {
-    if (taskIDForSession(sessionID) !== taskID) return []
-    const row = Database.use((db) =>
-      db
-        .select({
-          sessionID: SessionTable.id,
-          kind: SessionTable.kind,
-        })
-        .from(SessionTable)
-        .where(eq(SessionTable.id, sessionID))
-        .get(),
-    )
-    if (!row) return []
-    return [
-      {
-        ...row,
-        lastActivityMs: SessionPromptState.activity(sessionID)?.timeUpdated ?? 0,
-      },
-    ]
-  })
 }
 
 function taskRows(rows: TaskRow[]) {

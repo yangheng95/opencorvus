@@ -1,6 +1,6 @@
 import { z } from "zod"
-import { ArtifactReadLocatorListSchema, EngineArtifactLocatorSchema } from "./artifact-catalog"
-import { TaskArtifactRefSchema } from "./task-artifact"
+import { ArtifactReadLocatorListSchema, EngineArtifactLocatorSchema } from "./artifact-catalog.js"
+import { TaskArtifactRefSchema } from "./task-artifact.js"
 
 const SHA256Schema = z.string().regex(/^[a-f0-9]{64}$/)
 

@@ -22,7 +22,7 @@
 .md-content table {
   border-collapse: collapse;
   margin: var(--ui-gap-sm) 0;
-  font-size: var(--ui-font-control);
+  font-size: var(--ui-font-body);
   border: var(--oc-border-width) solid var(--border);
   border-radius: var(--oc-radius-soft);
   overflow: hidden;
@@ -50,7 +50,7 @@
 }
 
 .md-content ul li input[type="checkbox"] {
-  margin: 0 calc(6px * var(--ui-scale)) 0 calc(-16px * var(--ui-scale));
+  margin: 0 var(--ui-gap-sm) 0 calc(-16px * var(--ui-scale));
   vertical-align: -2px;
   /* `accent-color` declared globally on body (tokens/design-language.css). */
   cursor: default;
@@ -77,8 +77,10 @@
 .md-content hr {
   border: 0;
   height: var(--oc-border-width);
-  margin: var(--ui-gap-md) 0;
-  background: var(--border-strong);
+  /* A thematic break inside prose is a pause, not a wall: soft divider
+   * tone plus extra leading, instead of the strong chrome border. */
+  margin: var(--ui-gap-xl) 0;
+  background: var(--divider-soft);
 }
 
 .msg-text h1,
@@ -95,26 +97,28 @@
 .md-content h6 {
   color: var(--text-strong);
   font-weight: var(--ui-font-weight-strong);
-  margin: calc(10px * var(--ui-scale)) 0 calc(4px * var(--ui-scale));
-  line-height: 1.45;
+  margin: var(--ui-gap-lg) 0 var(--ui-gap-xs);
+  line-height: var(--ui-line-height-tight);
 }
 .msg-text h1,
 .md-content h1 {
-  font-size: var(--ui-font-display);
+  font-size: var(--ui-font-emphasis);
+  letter-spacing: var(--ui-letter-spacing-tighter);
 }
 .msg-text h2,
 .md-content h2 {
-  font-size: var(--ui-font-heading);
+  font-size: var(--ui-font-emphasis);
+  letter-spacing: var(--ui-letter-spacing-tight);
 }
 .msg-text h3,
 .md-content h3 {
-  font-size: var(--ui-font-title);
+  font-size: var(--ui-font-body);
 }
 
 .msg-text p,
 .md-content p {
-  margin: calc(5px * var(--ui-scale)) 0;
-  line-height: 1.55;
+  margin: var(--ui-gap-sm) 0;
+  line-height: var(--ui-line-height-reading);
 }
 
 .md-active-text {
@@ -126,13 +130,13 @@
 .msg-text ol,
 .md-content ul,
 .md-content ol {
-  margin: calc(5px * var(--ui-scale)) 0;
-  padding-left: calc(20px * var(--ui-scale));
-  line-height: 1.55;
+  margin: var(--ui-gap-sm) 0;
+  padding-left: var(--ui-gap-2xl);
+  line-height: var(--ui-line-height-reading);
 }
 .msg-text li,
 .md-content li {
-  margin: calc(3px * var(--ui-scale)) 0;
+  margin: var(--ui-gap-xs) 0;
 }
 
 .msg-text pre,
@@ -140,22 +144,26 @@
   background: var(--surface-inset);
   border: var(--oc-border-width) solid var(--border);
   border-radius: var(--oc-radius-soft);
-  padding: calc(6px * var(--ui-scale)) calc(9px * var(--ui-scale));
-  margin: calc(5px * var(--ui-scale)) 0;
+  padding: var(--ui-gap-sm) var(--ui-gap-md);
+  margin: var(--ui-gap-sm) 0;
   overflow-x: auto;
   font-family: var(--mono);
   font-size: var(--ui-font-code);
-  line-height: 1.5;
+  line-height: var(--ui-line-height-normal);
   color: var(--text);
   white-space: pre;
 }
 
 .msg-text code,
 .md-content code {
-  background: var(--subtle-4);
-  border: var(--oc-border-width) solid var(--border);
+  /* Neutral chip, no border. This used to be an inline text-derived wash,
+   * written that way because --subtle-* was accent-mixed on light and every
+   * inline code span read as a blue-tinted pill — loud at transcript
+   * frequency. The ladder is neutral on all three themes now, so the chip
+   * takes its rung directly. */
+  background: var(--subtle-3);
   border-radius: var(--oc-radius-soft);
-  padding: calc(1px * var(--ui-scale)) calc(4px * var(--ui-scale));
+  padding: var(--ui-gap-3xs) var(--ui-gap-xs);
   font-family: var(--mono);
   font-size: var(--ui-font-code);
   color: var(--text-strong);
@@ -230,8 +238,8 @@
   right: calc(4px * var(--ui-scale));
   display: inline-flex;
   align-items: center;
-  gap: calc(6px * var(--ui-scale));
-  padding: calc(2px * var(--ui-scale));
+  gap: var(--ui-gap-sm);
+  padding: var(--ui-gap-3xs);
   border: var(--oc-border-width) solid var(--border);
   border-radius: var(--oc-radius-soft);
   background: var(--surface-inset);
@@ -246,12 +254,12 @@
   pointer-events: auto;
 }
 .md-code-lang {
-  font-size: var(--ui-font-control);
+  font-size: var(--ui-font-body);
   font-variant-numeric: tabular-nums;
   letter-spacing: var(--ui-letter-spacing-loose);
   text-transform: uppercase;
   color: var(--text-strong);
-  padding: 0 calc(4px * var(--ui-scale));
+  padding: 0 var(--ui-gap-xs);
 }
 .oc-button[data-ui="markdown-code-copy"] {
   --oc-button-height: calc(22px * var(--ui-scale));
@@ -287,7 +295,7 @@
   max-height: calc(420px * var(--ui-scale));
   object-fit: contain;
   border-radius: var(--oc-radius-soft);
-  margin: calc(4px * var(--ui-scale)) 0;
+  margin: var(--ui-gap-xs) 0;
   border: var(--oc-border-width) solid var(--border);
 }
 
@@ -295,15 +303,15 @@
 .msg-text table {
   width: 100%;
   border-collapse: collapse;
-  margin: calc(8px * var(--ui-scale)) 0;
-  font-size: var(--ui-font-small);
+  margin: var(--ui-gap-md) 0;
+  font-size: var(--ui-font-caption);
 }
 .md-content th,
 .md-content td,
 .msg-text th,
 .msg-text td {
   border: var(--oc-border-width) solid var(--border);
-  padding: calc(6px * var(--ui-scale)) calc(10px * var(--ui-scale));
+  padding: var(--ui-gap-sm) var(--ui-gap-lg);
   text-align: left;
 }
 .md-content th,
@@ -318,15 +326,15 @@
 .md-content blockquote,
 .msg-text blockquote {
   border-left: calc(3px * var(--ui-scale)) solid var(--accent);
-  margin: calc(6px * var(--ui-scale)) 0;
-  padding: calc(4px * var(--ui-scale)) calc(12px * var(--ui-scale));
+  margin: var(--ui-gap-sm) 0;
+  padding: var(--ui-gap-xs) var(--ui-gap-lg);
   color: var(--text-soft);
 }
 .md-content hr,
 .msg-text hr {
   border: none;
-  border-top: var(--oc-border-width) solid var(--border);
-  margin: calc(8px * var(--ui-scale)) 0;
+  border-top: var(--oc-border-width) solid var(--divider-soft);
+  margin: var(--ui-gap-xl) 0;
 }
 .md-content del,
 .msg-text del {

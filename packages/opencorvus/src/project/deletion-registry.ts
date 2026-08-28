@@ -34,7 +34,7 @@ export function assertProjectDurableAdmissionOpen(db: Database.TxOrDb, projectID
 
 export function acquireProjectMaintenanceFencesInTransaction(
   db: Database.TxOrDb,
-  input: { projectRows: Snapshot[]; operationID: string; kind: "delete" | "identity_convergence" },
+  input: { projectRows: Snapshot[]; operationID: string; kind: "delete" | "identity_convergence" | "promotion" },
 ): void {
   const owner = currentRuntimeProcessOccurrence()
   for (const project of input.projectRows) {
@@ -59,6 +59,34 @@ export function acquireProjectMaintenanceFencesInTransaction(
   }
 }
 
+export function ensureProjectPromotionFenceInTransaction(
+  db: Database.TxOrDb,
+  input: { project: Snapshot; operationID: string },
+): void {
+  const existing = db
+    .select()
+    .from(ProjectMaintenanceFenceTable)
+    .where(eq(ProjectMaintenanceFenceTable.project_id, input.project.id))
+    .get()
+  if (existing) {
+    if (
+      existing.operation_id === input.operationID &&
+      existing.project_generation === input.project.generation &&
+      existing.kind === "promotion"
+    )
+      return
+    throw new ProjectDurableAdmissionClosedError({
+      projectID: input.project.id,
+      message: `Project ${input.project.id} is fenced by another durable maintenance occurrence`,
+    })
+  }
+  acquireProjectMaintenanceFencesInTransaction(db, {
+    projectRows: [input.project],
+    operationID: input.operationID,
+    kind: "promotion",
+  })
+}
+
 export type ProjectMaintenanceFenceRecoveryResult = {
   released: number
   /** Fences whose owner could not be observed. They stay held — a retained
@@ -76,6 +104,10 @@ export function recoverProjectMaintenanceFences(
     let count = 0
     for (const fence of fences) {
       try {
+        // Promotion fences are released only by the promotion journal owner
+        // after its terminal decision. Generic dead-process cleanup must not
+        // expose a Project whose convergence is still pending.
+        if (fence.kind === "promotion") continue
         const observation = observe({
           pid: fence.owner_pid,
           processInstanceID: fence.owner_process_instance_id,

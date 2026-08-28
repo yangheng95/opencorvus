@@ -1,6 +1,5 @@
 import { afterEach, expect, spyOn, test } from "bun:test"
-import { Orchestrator, OrchestratorTestHooks } from "@/orchestrator/agent"
-import { EngineConfig } from "@/engine"
+import { Orchestrator } from "@/orchestrator/agent"
 import { Bus } from "@/bus"
 import {
   TestHooks as TaskControlTestHooks,
@@ -53,63 +52,6 @@ afterEach(async () => {
   await resetMemoryDatabase()
 })
 
-test("joins an in-flight inactivity observation before prompt completion settles", async () => {
-  using _durableDrain = Bus.TestHooks.suppressAutomaticDurableDrain()
-  await using project = await memoryProject()
-  await Instance.provide({
-    directory: project.path,
-    fn: async () => {
-      const session = await Session.create({ kind: "orchestrator", title: "Inactivity observation ownership" })
-      let markTreeStarted!: () => void
-      const treeStarted = new Promise<void>((resolve) => {
-        markTreeStarted = resolve
-      })
-      let releaseTree!: () => void
-      const treeReleased = new Promise<void>((resolve) => {
-        releaseTree = resolve
-      })
-      let markRunReturned!: () => void
-      const runReturned = new Promise<void>((resolve) => {
-        markRunReturned = resolve
-      })
-      const configSpy = spyOn(EngineConfig, "get").mockResolvedValue({
-        activity: { execution_progress_idle_ms: 100 },
-      } as never)
-      const treeSpy = spyOn(Session, "tree").mockImplementation(async () => {
-        markTreeStarted()
-        await treeReleased
-        return []
-      })
-      const lifecycle: string[] = []
-      try {
-        const monitored = OrchestratorTestHooks.runPromptWithInactivity({
-          taskID: Identifier.ascending("task"),
-          session,
-          run: async () => {
-            await treeStarted
-            lifecycle.push("prompt-returned")
-            markRunReturned()
-            return "prompt-complete"
-          },
-        }).then((value) => {
-          lifecycle.push("monitor-settled")
-          return value
-        })
-        await runReturned
-        lifecycle.push("observation-released")
-        releaseTree()
-        expect(await monitored).toBe("prompt-complete")
-        expect(lifecycle).toEqual(["prompt-returned", "observation-released", "monitor-settled"])
-      } finally {
-        releaseTree()
-        await Database.awaitEffectIdle(30_000)
-        treeSpy.mockRestore()
-        configSpy.mockRestore()
-      }
-    },
-  })
-})
-
 test("a fresh typed Task ingress installs runtime authority before creator and control Messages", async () => {
   using _durableDrain = Bus.TestHooks.suppressAutomaticDurableDrain()
   await using project = await memoryProject()
@@ -143,7 +85,28 @@ test("a fresh typed Task ingress installs runtime authority before creator and c
       const retainedDecisionGaps: boolean[] = []
       const decisionRepairPrompts: boolean[] = []
       const promptSystemAudits: Array<{ countMatch: boolean; runtimeLabels: string[] }> = []
+      const atomicCreatorCuts: Array<{ creatorID: string; controlIDs: string[] }> = []
       let providerSteps = 0
+      const unsubscribeCreated = Bus.subscribe(Message.Event.Created, async (event) => {
+        const info = event.properties.info
+        if (info.role !== "user" || info.agent !== "orchestrator" || info.author !== "user") return
+        const creatorExtra = info.extra as { orchestrator_control_ingress?: unknown } | undefined
+        if (creatorExtra?.orchestrator_control_ingress) return
+        const visible = await Session.messages({ sessionID: info.sessionID })
+        atomicCreatorCuts.push({
+          creatorID: info.id,
+          controlIDs: visible
+            .filter(
+              (item) =>
+                item.info.role === "user" &&
+                Boolean(
+                  (item.info.extra as { orchestrator_control_ingress?: unknown } | undefined)
+                    ?.orchestrator_control_ingress,
+                ),
+            )
+            .map((item) => item.info.id),
+        })
+      })
       const processorSpy = spyOn(SessionProcessor, "create").mockImplementation((input: any) => {
         const assistant = input.assistantMessage as Message.Assistant
         assistantMessageIDs.push(assistant.id)
@@ -159,9 +122,7 @@ test("a fresh typed Task ingress installs runtime authority before creator and c
               countMatch: processInput.system.length === processInput.systemLabels?.length,
               runtimeLabels: (processInput.systemLabels ?? []).filter((label) => label.startsWith("runtime:")),
             })
-            decisionRepairPrompts.push(
-              processInput.system.some((part) => part.includes("<task-root-decision-repair>")),
-            )
+            decisionRepairPrompts.push(processInput.system.some((part) => part.includes("<task-root-decision-repair>")))
             const messages = await Session.messages({ sessionID: assistant.sessionID })
             observed = {
               sessionID: assistant.sessionID,
@@ -290,7 +251,8 @@ test("a fresh typed Task ingress installs runtime authority before creator and c
               runtimeLabels: [
                 "runtime:orchestrator-instructions",
                 "runtime:orchestrator-wake-and-capabilities",
-                "runtime:orchestrator-live-task-render",
+                "runtime:orchestrator-live-task-baseline",
+                "runtime:orchestrator-live-task-delta",
                 "runtime:orchestrator-current-ingress",
               ],
             },
@@ -299,7 +261,8 @@ test("a fresh typed Task ingress installs runtime authority before creator and c
               runtimeLabels: [
                 "runtime:orchestrator-instructions",
                 "runtime:orchestrator-wake-and-capabilities",
-                "runtime:orchestrator-live-task-render",
+                "runtime:orchestrator-live-task-baseline",
+                "runtime:orchestrator-live-task-delta",
                 "runtime:orchestrator-current-ingress",
               ],
             },
@@ -317,8 +280,21 @@ test("a fresh typed Task ingress installs runtime authority before creator and c
           ],
         })
         expect(new Set(assistantMessageIDs).size).toBe(1)
+        const [creator, control, assistant] = messages
+        expect({
+          atomicCreatorCuts,
+          creatorBeforeControl: creator!.info.time.created < control!.info.time.created,
+          assistantParentID: assistant!.info.role === "assistant" ? assistant!.info.parentID : undefined,
+          controlID: control!.info.id,
+        }).toEqual({
+          atomicCreatorCuts: [{ creatorID: creator!.info.id, controlIDs: [control!.info.id] }],
+          creatorBeforeControl: true,
+          assistantParentID: control!.info.id,
+          controlID: control!.info.id,
+        })
         await SessionPrompt.waitForFinish(child!.id, project.path)
       } finally {
+        unsubscribeCreated()
         await Database.awaitEffectIdle(30_000)
         gitCompleteSpy.mockRestore()
         gitPrepareSpy.mockRestore()

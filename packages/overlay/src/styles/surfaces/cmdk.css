@@ -26,11 +26,15 @@
 }
 
 .cmdk-panel {
-  top: calc(10px * var(--ui-scale));
+  /* Hangs below the titlebar rather than over it. At a flat 10px the panel
+   * covered the menubar it opens on top of — File / Edit / View stayed
+   * readable but Help was clipped mid-word, and the window read as broken
+   * for the moment the palette was up. */
+  top: calc(var(--ui-titlebar-height) + var(--ui-gap-md));
   transform: translateX(-50%);
   width: min(calc(900px * var(--ui-scale)), calc(100cqw - calc(20px * var(--ui-scale))));
   max-width: calc(100cqw - calc(20px * var(--ui-scale)));
-  max-height: calc(var(--ui-overlay-shell-height) - calc(20px * var(--ui-scale)));
+  max-height: calc(var(--ui-overlay-shell-height) - var(--ui-titlebar-height) - calc(2 * var(--ui-gap-md)));
   display: flex;
   flex-direction: column;
   gap: 0;
@@ -72,8 +76,8 @@
   border-bottom: 0;
   background: transparent;
   color: var(--text-strong);
-  font-size: var(--ui-font-title);
-  padding: calc(18px * var(--ui-scale)) calc(18px * var(--ui-scale)) calc(14px * var(--ui-scale));
+  font-size: var(--ui-font-body);
+  padding: var(--ui-gap-2xl) var(--ui-gap-2xl) var(--ui-gap-xl);
   outline: none;
 }
 
@@ -99,7 +103,7 @@
   overflow-y: auto;
   margin: 0;
   list-style: none;
-  padding: calc(4px * var(--ui-scale)) calc(10px * var(--ui-scale)) calc(16px * var(--ui-scale));
+  padding: var(--ui-gap-xs) var(--ui-gap-lg) var(--ui-gap-xl);
 }
 
 .cmdk-item {
@@ -108,12 +112,12 @@
   display: grid;
   grid-template-columns: calc(24px * var(--ui-scale)) minmax(0, 1fr) auto;
   align-items: center;
-  column-gap: calc(10px * var(--ui-scale));
-  row-gap: calc(3px * var(--ui-scale));
+  column-gap: var(--ui-gap-lg);
+  row-gap: var(--ui-gap-xs);
   min-height: calc(36px * var(--ui-scale));
-  padding: calc(4px * var(--ui-scale)) calc(12px * var(--ui-scale));
+  padding: var(--ui-gap-xs) var(--ui-gap-lg);
   border-radius: var(--oc-radius-large);
-  font-size: var(--ui-font-control);
+  font-size: var(--ui-font-body);
   color: var(--text);
   cursor: pointer;
   user-select: none;
@@ -121,7 +125,7 @@
 
 .cmdk-item[data-highlighted],
 .cmdk-item[data-selected] {
-  background: color-mix(in srgb, var(--text-strong) 6%, transparent);
+  background: var(--hover-wash);
   color: var(--text-strong);
 }
 
@@ -141,7 +145,7 @@
   margin: 0 calc(-12px * var(--ui-scale));
   min-height: calc(36px * var(--ui-scale));
   border-radius: var(--oc-radius-large);
-  background: color-mix(in srgb, var(--text-strong) 6%, transparent);
+  background: var(--hover-wash);
 }
 
 .cmdk-item-group {
@@ -155,15 +159,15 @@
 
 .cmdk-item[data-group-start] {
   grid-template-rows: auto minmax(calc(36px * var(--ui-scale)), auto);
-  padding-top: calc(10px * var(--ui-scale));
+  padding-top: var(--ui-gap-lg);
 }
 
 .cmdk-group-label {
   grid-column: 1 / -1;
   grid-row: 1;
   color: var(--text-muted);
-  line-height: 1.3;
-  padding: 0 0 calc(4px * var(--ui-scale));
+  line-height: var(--ui-line-height-tight);
+  padding: 0 0 var(--ui-gap-xs);
 }
 
 .cmdk-item-icon {
@@ -202,10 +206,10 @@
   display: inline-flex;
   align-items: center;
   justify-content: flex-end;
-  gap: calc(8px * var(--ui-scale));
+  gap: var(--ui-gap-md);
   min-width: 0;
   flex: none;
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-caption);
   color: var(--text-soft);
   position: relative;
   z-index: var(--ui-z-raised);
@@ -222,9 +226,9 @@
   border-radius: var(--oc-radius-pill);
   background: color-mix(in srgb, var(--text-strong) 8%, transparent);
   color: var(--text-muted);
-  font-size: var(--ui-font-tiny);
-  line-height: 1;
-  padding: calc(4px * var(--ui-scale)) calc(8px * var(--ui-scale));
+  font-size: var(--ui-font-caption);
+  line-height: var(--ui-line-height-flat);
+  padding: var(--ui-gap-xs) var(--ui-gap-md);
   white-space: nowrap;
 }
 
@@ -232,7 +236,7 @@
   padding: var(--ui-gap-lg);
   color: var(--text-muted);
   text-align: center;
-  font-size: var(--ui-font-control);
+  font-size: var(--ui-font-body);
 }
 
 @media (prefers-reduced-motion: reduce) {

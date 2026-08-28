@@ -20,7 +20,9 @@ describe("HostTransport capability contract", () => {
 
   test("capability matrix matches implemented native command surfaces", () => {
     expect(supported(HOST_CAPABILITIES.tauri)).toEqual([...NATIVE_COMMAND_KINDS])
+    // open-url is implemented on the browser branch of tauri-transport.
     expect(supported(HOST_CAPABILITIES.browser)).toEqual([
+      "open-url",
       "clipboard.writeText",
       "settings.load",
       "settings.save",
@@ -30,5 +32,9 @@ describe("HostTransport capability contract", () => {
     ])
     expect(HOST_CAPABILITIES.tauri.ui.desktopNotificationsRequirePermission).toBe(true)
     expect(HOST_CAPABILITIES.browser.ui.desktopNotificationsRequirePermission).toBe(true)
+    // Whether a click has to be in progress to open an external URL. The
+    // browser grants `window.open` only during transient activation.
+    expect(HOST_CAPABILITIES.tauri.ui.externalUrlNeedsUserGesture).toBe(false)
+    expect(HOST_CAPABILITIES.browser.ui.externalUrlNeedsUserGesture).toBe(true)
   })
 })

@@ -141,18 +141,16 @@ export function RightSidebarConversationRoutes(experience: ConversationExperienc
       validator("json", ConversationSessionCreateInput.optional()),
       async (c) => {
         const input = c.req.valid("json")
-        let overlay: z.infer<typeof Config.Overlay> | undefined
+        let initialOverlay: Record<string, unknown> | undefined
         if (input?.model) {
           const base = await Config.get()
-          overlay = Config.Overlay.parse({ model: input.model })
+          const overlay = Config.Overlay.parse({ model: input.model })
           const preview = Config.previewOverlayUpdate(base, {}, overlay)
           await validateConfigModelReferences(preview.effective, "conversation.configOverlay")
+          initialOverlay = preview.nextOverlay
         }
-        const session = await createRightSidebarConversationSession(experience)
-        if (overlay) {
-          await Session.mergeConfigOverlay({ sessionID: session.id, patch: overlay })
-        }
-        return c.json({ session: await Session.get(session.id) }, 201)
+        const session = await createRightSidebarConversationSession(experience, { configOverlay: initialOverlay })
+        return c.json({ session }, 201)
       },
     )
     .get(

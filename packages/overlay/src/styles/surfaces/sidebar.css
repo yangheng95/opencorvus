@@ -66,18 +66,18 @@ body .sidebar-header.oc-surface-header {
 
 .sidebar-codex-static-nav {
   display: grid;
-  gap: calc(2px * var(--ui-scale));
-  padding: calc(1px * var(--ui-scale)) var(--ui-left-rail-section-inline-inset);
+  gap: var(--ui-gap-3xs);
+  padding: var(--ui-gap-3xs) var(--ui-left-rail-section-inline-inset);
 }
 
 .sidebar-codex-primary-nav {
-  padding-bottom: calc(2px * var(--ui-scale));
+  padding-bottom: var(--ui-gap-3xs);
 }
 
 .sidebar-codex-primary-row {
   display: block;
   align-items: center;
-  gap: calc(4px * var(--ui-scale));
+  gap: var(--ui-gap-xs);
 }
 
 .sidebar-codex-shortcuts {
@@ -100,7 +100,7 @@ body .sidebar-header.oc-surface-header {
   justify-items: start;
   width: 100%;
   color: var(--text-soft);
-  font-size: var(--ui-font-navigation);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-body);
   text-align: left;
 }
@@ -132,9 +132,9 @@ body .sidebar-header.oc-surface-header {
   border-radius: var(--oc-radius-pill);
   background: color-mix(in srgb, var(--text-strong) 8%, transparent);
   color: var(--text-muted);
-  font-size: var(--ui-font-small);
-  line-height: 1;
-  padding: calc(4px * var(--ui-scale)) calc(8px * var(--ui-scale));
+  font-size: var(--ui-font-caption);
+  line-height: var(--ui-line-height-flat);
+  padding: var(--ui-gap-xs) var(--ui-gap-md);
 }
 
 /* Sidebar body: scrollable region beneath the header that holds the
@@ -145,7 +145,7 @@ body .sidebar-header.oc-surface-header {
   flex: 1;
   min-height: 0;
   overflow: hidden;
-  padding: calc(6px * var(--ui-scale)) var(--ui-left-rail-body-inline-inset);
+  padding: var(--ui-gap-sm) var(--ui-left-rail-body-inline-inset);
   display: flex;
   flex-direction: column;
   gap: 0;
@@ -156,11 +156,11 @@ body .sidebar-header.oc-surface-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: calc(8px * var(--ui-scale));
-  padding: calc(10px * var(--ui-scale)) calc(14px * var(--ui-scale));
-  border-top: var(--oc-border-width) solid color-mix(in srgb, var(--border) 60%, transparent);
+  gap: var(--ui-gap-md);
+  padding: var(--ui-gap-lg) var(--ui-gap-xl);
+  border-top: var(--oc-border-width) solid var(--divider-soft);
   color: var(--text-muted);
-  font-size: var(--ui-font-tiny);
+  font-size: var(--ui-font-caption);
   min-width: 0;
   overflow: hidden;
 }
@@ -170,10 +170,10 @@ body .sidebar-header.oc-surface-header {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  gap: calc(10px * var(--ui-scale));
+  gap: var(--ui-gap-lg);
   min-width: 0;
   color: var(--text-soft);
-  line-height: 1.2;
+  line-height: var(--ui-line-height-tight);
   overflow: hidden;
 }
 
@@ -189,7 +189,7 @@ body .sidebar-header.oc-surface-header {
   display: grid;
   width: 100%;
   grid-template-columns: calc(28px * var(--ui-scale)) minmax(0, 1fr);
-  column-gap: calc(8px * var(--ui-scale));
+  column-gap: var(--ui-gap-md);
   align-items: center;
   min-width: 0;
   max-width: 100%;
@@ -212,8 +212,13 @@ body .sidebar-header.oc-surface-header {
   justify-content: center;
   border-radius: var(--oc-radius-pill);
   background: color-mix(in srgb, var(--good) 62%, var(--surface-inset));
-  color: var(--text-on-strong);
-  font-size: var(--ui-font-small);
+  /* Fixed dark ink, not --text-on-strong. That token answers "what reads on
+   * --text-strong", so it flips to white on the light theme — and this fill is
+   * a mid-brightness green in every theme, which left the initials at 1.87
+   * there while dark and vscode-dark (whose --text-on-strong is black) sat at
+   * 7.23 and 6.96. Black holds 11.23 / 7.23 / 6.96 across all three. */
+  color: black;
+  font-size: var(--ui-font-caption);
   font-weight: var(--ui-font-weight-strong);
 }
 
@@ -226,12 +231,12 @@ body .sidebar-header.oc-surface-header {
 
 .chat-version-name {
   color: var(--text-strong);
-  font-size: calc(13px * var(--ui-scale));
+  font-size: var(--ui-font-body);
 }
 
 .chat-version-plan {
   color: var(--text-muted);
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-caption);
 }
 
 .sidebar-connection {
@@ -244,7 +249,7 @@ body .sidebar-header.oc-surface-header {
 
   flex: 0 0 auto;
   width: calc(28px * var(--ui-scale));
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-body);
 }
 
 .sidebar-update__icon {
@@ -261,9 +266,9 @@ body .sidebar-header.oc-surface-header {
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
-  gap: calc(5px * var(--ui-scale));
-  padding: calc(5px * var(--ui-scale)) calc(8px * var(--ui-scale));
-  font-size: var(--ui-font-small);
+  gap: var(--ui-gap-sm);
+  padding: var(--ui-gap-sm) var(--ui-gap-md);
+  font-size: var(--ui-font-caption);
   font-weight: var(--ui-font-weight-medium);
   letter-spacing: var(--ui-letter-spacing-normal);
   user-select: none;
@@ -315,14 +320,14 @@ body .sidebar-header.oc-surface-header {
   display: flex;
   flex-direction: column;
   min-height: 0;
-  gap: calc(10px * var(--ui-scale));
-  padding: calc(4px * var(--ui-scale));
+  gap: var(--ui-gap-lg);
+  padding: var(--ui-gap-xs);
 }
 
 .task-list-panel {
   display: flex;
   flex-direction: column;
-  gap: calc(6px * var(--ui-scale));
+  gap: var(--ui-gap-sm);
   min-height: 100%;
 }
 
@@ -339,13 +344,13 @@ body .sidebar-header.oc-surface-header {
 .sidebar-list-group {
   display: flex;
   flex-direction: column;
-  gap: calc(6px * var(--ui-scale));
+  gap: var(--ui-gap-sm);
 }
 
 .sidebar-list-cluster {
   display: flex;
   flex-direction: column;
-  gap: calc(2px * var(--ui-scale));
+  gap: var(--ui-gap-3xs);
 }
 
 /* Task row mini: a single task entry in the sidebar list. Flat shell —
@@ -362,8 +367,7 @@ body .sidebar-header.oc-surface-header {
   width: 100%;
   min-width: 0;
   box-sizing: border-box;
-  padding: calc(1px * var(--ui-scale)) calc(6px * var(--ui-scale)) calc(1px * var(--ui-scale))
-    var(--ui-left-rail-row-control-inline-inset);
+  padding: var(--ui-gap-3xs) var(--ui-gap-sm) var(--ui-gap-3xs) var(--ui-left-rail-row-control-inline-inset);
   border: var(--oc-border-width) solid transparent;
   position: relative;
   overflow: hidden;
@@ -374,7 +378,7 @@ body .sidebar-header.oc-surface-header {
   grid-column: 2;
   display: flex;
   align-items: center;
-  gap: calc(4px * var(--ui-scale));
+  gap: var(--ui-gap-xs);
   min-width: 0;
   max-width: 100%;
 }
@@ -412,7 +416,7 @@ body .sidebar-header.oc-surface-header {
   max-width: 100%;
   display: flex;
   align-items: center;
-  gap: calc(5px * var(--ui-scale));
+  gap: var(--ui-gap-sm);
   overflow: hidden;
 }
 
@@ -420,7 +424,7 @@ body .sidebar-header.oc-surface-header {
   display: block;
   font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-medium);
-  line-height: 1.25;
+  line-height: var(--ui-line-height-tight);
   letter-spacing: var(--ui-letter-spacing-normal);
   color: var(--text-soft);
   min-width: 0;
@@ -435,8 +439,8 @@ body .sidebar-header.oc-surface-header {
   display: block;
   margin-left: auto;
   flex-shrink: 0;
-  font-size: var(--ui-font-small);
-  line-height: 1;
+  font-size: var(--ui-font-caption);
+  line-height: var(--ui-line-height-flat);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -466,9 +470,7 @@ body .sidebar-header.oc-surface-header {
 }
 
 .task-row-mini[data-notification-unread="true"] {
-  background:
-    linear-gradient(90deg, color-mix(in srgb, var(--warn) 13%, transparent), transparent 72%),
-    color-mix(in srgb, var(--surface-hover) 62%, transparent);
+  background: color-mix(in srgb, var(--warn) 9%, var(--surface-hover));
   border-color: color-mix(in srgb, var(--warn) 34%, transparent);
 }
 
@@ -477,9 +479,7 @@ body .sidebar-header.oc-surface-header {
 }
 
 .task-row-mini[data-active="true"][data-notification-unread="true"] {
-  background:
-    linear-gradient(90deg, color-mix(in srgb, var(--warn) 11%, transparent), transparent 76%),
-    color-mix(in srgb, var(--accent) 10%, var(--surface-hover));
+  background: color-mix(in srgb, var(--warn) 8%, color-mix(in srgb, var(--accent) 10%, var(--surface-hover)));
   border-color: color-mix(in srgb, var(--warn) 36%, var(--accent));
 }
 
@@ -489,7 +489,7 @@ body .sidebar-header.oc-surface-header {
   flex-direction: row;
   align-items: center;
   justify-content: flex-end;
-  gap: calc(3px * var(--ui-scale));
+  gap: var(--ui-gap-xs);
   flex: 0 0 auto;
   min-width: 0;
   width: 100%;
@@ -581,30 +581,20 @@ body .sidebar-header.oc-surface-header {
   align-items: flex-start;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: calc(12px * var(--ui-scale));
-  padding: calc(12px * var(--ui-scale)) calc(14px * var(--ui-scale));
-  margin: calc(8px * var(--ui-scale)) 0 calc(10px * var(--ui-scale));
+  gap: var(--ui-gap-lg);
+  padding: var(--ui-gap-lg) var(--ui-gap-xl);
+  margin: var(--ui-gap-md) 0 var(--ui-gap-lg);
   border: var(--oc-border-width) solid color-mix(in srgb, var(--bad) 34%, var(--border));
   border-radius: var(--oc-radius-large);
-  background:
-    linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--bad) 10%, transparent),
-      color-mix(in srgb, var(--bad) 3.4%, transparent) 72%,
-      transparent
-    ),
-    color-mix(in srgb, var(--surface-strong) 74%, transparent);
-  box-shadow:
-    0 calc(10px * var(--ui-scale)) calc(18px * var(--ui-scale))
-      color-mix(in srgb, var(--ui-shadow-tone) 31%, transparent),
-    inset 0 calc(1px * var(--ui-scale)) 0 var(--ui-highlight-tone);
-  font-size: var(--ui-font-control);
+  background: color-mix(in srgb, var(--bad) 7%, var(--surface-strong));
+  box-shadow: none;
+  font-size: var(--ui-font-body);
   color: var(--text-soft);
 }
 .task-list-error-msg {
   flex: 1 1 calc(220px * var(--ui-scale));
   display: grid;
-  gap: calc(8px * var(--ui-scale));
+  gap: var(--ui-gap-md);
   word-break: break-word;
 }
 
@@ -673,7 +663,10 @@ body .sidebar-header.oc-surface-header {
 .ledger-skeleton-row {
   height: calc(48px * var(--ui-scale));
   border-radius: var(--oc-radius-soft);
-  background: var(--subtle-2);
+  /* Placeholder rows sit on the neutral rung. The inline wash this replaces
+   * existed only because --subtle-* was accent-mixed on light and tinted the
+   * loading rows blue; the ladder is achromatic on every theme now. */
+  background: var(--subtle-3);
 }
 
 .ledger-skeleton-row:nth-child(2) {
@@ -688,7 +681,7 @@ body .sidebar-header.oc-surface-header {
   display: flex;
   flex-direction: column;
   gap: 0;
-  padding: calc(1px * var(--ui-scale)) 0 0;
+  padding: var(--ui-gap-3xs) 0 0;
   border: none;
   border-radius: 0;
   background: transparent;
@@ -696,7 +689,7 @@ body .sidebar-header.oc-surface-header {
 }
 
 .project-group + .project-group {
-  margin-top: calc(1px * var(--ui-scale));
+  margin-top: var(--ui-gap-3xs);
 }
 
 .project-group-head {
@@ -704,7 +697,7 @@ body .sidebar-header.oc-surface-header {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
-  gap: calc(3px * var(--ui-scale));
+  gap: var(--ui-gap-xs);
   min-width: 0;
 }
 
@@ -716,7 +709,7 @@ body .sidebar-header.oc-surface-header {
   justify-content: flex-end;
   gap: 0;
   min-width: 0;
-  padding-inline-start: calc(8px * var(--ui-scale));
+  padding-inline-start: var(--ui-gap-md);
   background: transparent;
   opacity: var(--ui-opacity-hidden);
   visibility: hidden;
@@ -750,7 +743,7 @@ body .sidebar-header.oc-surface-header {
   gap: var(--ui-left-rail-row-label-gap);
   height: var(--oc-density-navigation-row);
   min-height: var(--oc-density-navigation-row);
-  font-size: var(--ui-font-navigation);
+  font-size: var(--ui-font-body);
   text-align: left;
   transition:
     background var(--ui-duration-base),
@@ -790,7 +783,7 @@ body .sidebar-header.oc-surface-header {
 
 .project-group-menu {
   min-width: calc(210px * var(--ui-scale));
-  gap: calc(2px * var(--ui-scale));
+  gap: var(--ui-gap-3xs);
 }
 
 .project-group-menu-item {
@@ -830,13 +823,13 @@ body .sidebar-header.oc-surface-header {
   min-width: 0;
   display: flex;
   align-items: baseline;
-  gap: calc(5px * var(--ui-scale));
+  gap: var(--ui-gap-sm);
   overflow: hidden;
 }
 
 .project-group-name {
   display: block;
-  font-size: var(--ui-font-navigation);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-body);
   line-height: var(--ui-line-height-tight);
   letter-spacing: var(--ui-letter-spacing-normal);
@@ -850,7 +843,7 @@ body .sidebar-header.oc-surface-header {
 
 .project-group-parent {
   display: none;
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-caption);
   color: color-mix(in srgb, var(--text-muted) 92%, var(--text-soft));
   opacity: var(--ui-opacity-subtle);
   overflow: hidden;
@@ -864,19 +857,19 @@ body .sidebar-header.oc-surface-header {
   display: none;
   min-width: calc(18px * var(--ui-scale));
   height: calc(17px * var(--ui-scale));
-  padding: 0 calc(5px * var(--ui-scale));
+  padding: 0 var(--ui-gap-sm);
   border: var(--oc-border-width) solid color-mix(in srgb, var(--border) 86%, transparent);
   border-radius: var(--oc-radius-pill);
   color: var(--text-muted);
-  font-size: var(--ui-font-meta);
-  line-height: calc(17px * var(--ui-scale));
+  font-size: var(--ui-font-caption);
+  line-height: var(--ui-line-height-tight);
   text-align: center;
   font-variant-numeric: tabular-nums;
 }
 
 .project-group-body {
   display: grid;
-  gap: calc(2px * var(--ui-scale));
+  gap: var(--ui-gap-3xs);
   padding-left: var(--ui-left-rail-tree-depth);
   animation: project-group-body-reveal var(--ui-duration-base) var(--ui-timing-standard);
 }
@@ -887,7 +880,7 @@ body .sidebar-header.oc-surface-header {
 
 .project-group-show-more {
   justify-self: center;
-  margin-top: calc(2px * var(--ui-scale));
+  margin-top: var(--ui-gap-3xs);
 }
 
 @keyframes project-group-body-reveal {

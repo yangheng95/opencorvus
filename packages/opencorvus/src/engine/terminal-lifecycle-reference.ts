@@ -9,13 +9,6 @@ import {
 
 export { TerminalLifecycleReferenceSchema, type TerminalLifecycleReference }
 
-export function sameTerminalLifecycleReference(
-  left: TerminalLifecycleReference,
-  right: TerminalLifecycleReference,
-): boolean {
-  return left.terminalEventID === right.terminalEventID
-}
-
 export function terminalLifecycleReferenceMatchesTaskRow(
   reference: TerminalLifecycleReference,
   task: TaskRow,

@@ -134,7 +134,6 @@ async function buildState(config: Config.Info): Promise<PrimaryAssistantState> {
           read: "allow",
           glob: "allow",
           search_code: "allow",
-          lsp: "allow",
           panel: "allow",
           mission_state: "allow",
           wait: "allow",

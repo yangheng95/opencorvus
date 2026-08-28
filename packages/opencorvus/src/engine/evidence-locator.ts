@@ -7,7 +7,8 @@ import {
   type EvidenceLocator,
   type EvidenceLocatorInput,
 } from "@opencorvus-ai/plugin/artifact-catalog"
-import { engineArtifactRevisionDigest, requireEngineArtifactByLocator } from "@/artifact-catalog"
+import { engineArtifactRevisionDigest } from "@/artifact-catalog"
+import { requireEngineArtifactByLocator } from "./engine-artifact-version-facts"
 import { MessageTable } from "@/session/session.sql"
 import { taskPrimaryProjectRoot } from "@/project/task-runtime-root"
 import { Database, and, eq, sql } from "@/storage/db"

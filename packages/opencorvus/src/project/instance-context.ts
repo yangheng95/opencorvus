@@ -8,6 +8,7 @@ export interface InstanceContext {
   directory: string
   worktree: string
   project: Project.Info
+  projectGeneration: string
   git: boolean
 }
 

@@ -8,7 +8,7 @@ import os from "os"
 import { setTimeout as sleep } from "node:timers/promises"
 import { createServer } from "http"
 import { escapeHtml } from "@/util/html"
-import { ManagedOAuthCallbackOwner, ManagedOAuthListenerOwner } from "../oauth-lifecycle"
+import { ManagedOAuthCallbackOwner, ManagedOAuthListenerOwner, type OAuthCallbackLease } from "../oauth-lifecycle"
 import { ProviderAuthRequiredError } from "@/provider/auth-required-error"
 
 const CLIENT_ID = "app_EMoamEEZ73f0CkXaXp7hrann"
@@ -106,7 +106,10 @@ type OpenAICodexOAuthCredential = Extract<Auth.Info, { type: "oauth" }>
 
 interface ResolveOpenAICodexOAuthCredentialInput {
   getAuth: () => Promise<Auth.Info | undefined>
-  setAuth: (auth: OpenAICodexOAuthCredential) => Promise<void>
+  refresh: (input: {
+    current: OpenAICodexOAuthCredential
+    exchange(): Promise<OpenAICodexOAuthCredential>
+  }) => Promise<OpenAICodexOAuthCredential>
   issuer?: string
 }
 
@@ -166,19 +169,21 @@ export async function resolveOpenAICodexOAuthCredential(
   const pending = refreshPromises.get(issuer)
   if (pending) return await pending
 
-  const refresh = refreshAccessToken(current.refresh, issuer)
-    .then(async (tokens) => {
-      const accountId = extractAccountId(tokens) || current.accountId
-      const credential: OpenAICodexOAuthCredential = {
-        type: "oauth",
-        refresh: tokens.refresh_token,
-        access: tokens.access_token,
-        expires: Date.now() + (tokens.expires_in ?? 3600) * 1000,
-        ...(accountId ? { accountId } : {}),
-        ...(current.enterpriseUrl ? { enterpriseUrl: current.enterpriseUrl } : {}),
-      }
-      await input.setAuth(credential)
-      return credential
+  const refresh = input
+    .refresh({
+      current,
+      exchange: async () => {
+        const tokens = await refreshAccessToken(current.refresh, issuer)
+        const accountId = extractAccountId(tokens) || current.accountId
+        return {
+          type: "oauth",
+          refresh: tokens.refresh_token,
+          access: tokens.access_token,
+          expires: Date.now() + (tokens.expires_in ?? 3600) * 1000,
+          ...(accountId ? { accountId } : {}),
+          ...(current.enterpriseUrl ? { enterpriseUrl: current.enterpriseUrl } : {}),
+        }
+      },
     })
     .finally(() => {
       if (refreshPromises.get(issuer) === refresh) refreshPromises.delete(issuer)
@@ -364,14 +369,14 @@ async function stopOAuthServer(lease?: object) {
   await oauthServer.stop(lease)
 }
 
-function waitForOAuthCallback(pkce: PkceCodes, state: string, lease: object): Promise<TokenResponse> {
-  return pendingOAuth.wait(
+function waitForOAuthCallback(pkce: PkceCodes, state: string, lease: object): OAuthCallbackLease<TokenResponse> {
+  return pendingOAuth.begin(
     { pkce, state },
     {
       timeoutMs: 5 * 60 * 1000,
       supersededError: () => new Error("Superseded by a newer Codex authorize request"),
       timeoutError: () => new Error("OAuth callback timeout - authorization took too long"),
-      onTimeout: () => void stopOAuthServer(lease),
+      onTimeout: () => stopOAuthServer(lease),
     },
   )
 }
@@ -441,9 +446,8 @@ export async function CodexAuthPlugin(
 
             const currentAuth = await resolveOpenAICodexOAuthCredential({
               getAuth,
-              setAuth: async (auth) => {
-                await input.client.auth.set({ providerID: "openai", auth })
-              },
+              refresh: async ({ current, exchange }) =>
+                input.credentials.refresh({ providerID: "openai", current, exchange }),
               issuer,
             })
 
@@ -499,9 +503,14 @@ export async function CodexAuthPlugin(
               url: authUrl,
               instructions: "Complete authorization in your browser. This window will close automatically.",
               method: "auto" as const,
+              async dispose() {
+                callbackPromise.reject(new Error("OpenAI Codex OAuth authorization occurrence ended"))
+                await callbackPromise.promise.catch(() => undefined)
+                await stopOAuthServer(lease)
+              },
               callback: async () => {
                 try {
-                  const tokens = await callbackPromise
+                  const tokens = await callbackPromise.promise
                   const accountId = extractAccountId(tokens)
                   return {
                     type: "success" as const,

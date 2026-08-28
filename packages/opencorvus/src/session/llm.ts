@@ -326,10 +326,10 @@ export namespace LLM {
       ...(isOpenaiOauth ? {} : { system: systemText }),
       maxOutputTokens: params.maxOutputTokens,
       abortSignal: input.abort,
-      // Disable the wrapper's 5 s default soft timeout — the LLM-activity
-      // gate (`withLLMActivity` in session/processor.ts) is the canonical
-      // idle/timeout authority and composes its own abort signal into
-      // `input.abort`. A second timeout here would race it.
+      // Disable the wrapper's 5 s default soft timeout — every production
+      // caller owns an LLM-activity boundary (the full Session processor or
+      // collectLLMText for text-only helpers) and composes its signal into
+      // `input.abort`. A second timeout here would race that authority.
       timeoutMs: false,
       usagePurpose: "session",
       usageAttribution: { sessionID: input.sessionID, agentID: input.agentID },

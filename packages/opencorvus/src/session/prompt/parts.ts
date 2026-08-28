@@ -31,6 +31,7 @@ import type { SessionMessageIdentity } from "../message-identity"
 import type { SessionControl } from "../control"
 import { SessionRuntimeContractStore } from "../runtime-contract"
 import { SessionPromptState } from "./state"
+import { SessionPromptOwner } from "./owner"
 import { resolveSessionExecutionAuthority } from "@/engine/task-session-lineage"
 
 const log = Log.create({ service: "session.prompt" })
@@ -793,8 +794,11 @@ function consumeMaterializedUserMessageForPersistence(materialized: Materialized
     throw new Error("Unrecognized materialized user message")
   }
   materializedUserMessages.delete(materialized)
-  markPendingDeliveryIfTurnInFlight(materialized.info)
-  return { info: materialized.info, parts: materialized.parts }
+  // The materialized snapshot is deep-frozen; the persistence copy is where
+  // write-time facts like pendingDelivery may still be stamped.
+  const info = { ...materialized.info }
+  markPendingDeliveryIfTurnInFlight(info)
+  return { info, parts: materialized.parts }
 }
 
 /**
@@ -806,7 +810,9 @@ function consumeMaterializedUserMessageForPersistence(materialized: Materialized
  */
 export function markPendingDeliveryIfTurnInFlight(info: Message.Info): void {
   if (info.role !== "user") return
-  if (!SessionPromptState.hasAttachedPromptWork(info.sessionID)) return
+  const durableOwner = SessionPromptOwner.current(info.sessionID)
+  const ownedByLiveProcess = durableOwner && SessionPromptOwner.observation(durableOwner) !== "dead_or_reused"
+  if (!ownedByLiveProcess && !SessionPromptState.hasAttachedPromptWork(info.sessionID)) return
   info.pendingDelivery = true
 }
 

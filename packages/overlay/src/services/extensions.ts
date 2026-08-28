@@ -26,6 +26,50 @@ export interface SkillDescriptor {
   [key: string]: any
 }
 
+export interface SkillMarketCandidate {
+  id: string
+  skill_id: string
+  name: string
+  source: string
+  installs: number
+  homepage: string
+  repository: string
+  installed: boolean
+}
+
+export interface SkillMarketDetail {
+  id: string
+  skill_id: string
+  name: string
+  description: string
+  source: string
+  homepage: string
+  repository: string
+  hash: string
+  upstream_hash?: string
+  files: Array<{ path: string; size: number }>
+  trust: string
+  risk: {
+    level: "low" | "medium" | "high"
+    has_scripts: boolean
+    has_agents: boolean
+    has_references: boolean
+    has_templates: boolean
+  }
+  recommended_policy: "allow" | "deny"
+  installed: boolean
+}
+
+export interface SkillMarketInstallResult {
+  id: string
+  name: string
+  source: string
+  path: string
+  hash: string
+  policy: "allow" | "deny"
+  available: "next_turn"
+}
+
 export type AgentSkillMountMatrix = SkillMountsResponse
 export type SkillMountOverrideInput = NonNullable<SkillSetMountOverrideData["body"]>
 
@@ -112,6 +156,7 @@ function commitOwnedSkillMountMatrix(
  * Mirrors skillRemoveKind.
  */
 export function skillRemoveKind(item: SkillDescriptor): string {
+  if (item?.source_type === "managed_market") return "market"
   if (item?.source_type === "managed_git") return "git"
   if (item?.source_type === "config_url") return "url"
   if (item?.source_type === "config_path") return "path"
@@ -262,6 +307,28 @@ export async function installSkill(
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ kind, value, policy: policy || undefined }),
+  })
+}
+
+export async function searchSkillMarket(query: string, limit = 10): Promise<SkillMarketCandidate[]> {
+  const params = new URLSearchParams({ query: query.trim(), limit: String(limit) })
+  return await apiJson<SkillMarketCandidate[]>(`global/skill/market/search?${params.toString()}`)
+}
+
+export async function inspectSkillMarket(id: string): Promise<SkillMarketDetail> {
+  const params = new URLSearchParams({ id })
+  return await apiJson<SkillMarketDetail>(`global/skill/market/detail?${params.toString()}`)
+}
+
+export async function installSkillMarket(
+  id: string,
+  expectedHash: string,
+  policy: "allow" | "deny",
+): Promise<SkillMarketInstallResult> {
+  return await apiJson<SkillMarketInstallResult>("global/skill/market/install", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ id, expected_hash: expectedHash, policy }),
   })
 }
 

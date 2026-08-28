@@ -76,8 +76,9 @@ async function taskFixture(
   channelBinding?: { platform: "slack"; channel: string; thread: string },
   configOverlay?: Config.Overlay,
 ) {
-  const root = await Session.create({
+  const root = Session.prepareRootNext({
     kind: "root",
+    directory: Instance.directory,
     title,
     ...(configOverlay ? { metadata: { configOverlay } } : {}),
   })
@@ -85,7 +86,7 @@ async function taskFixture(
   const now = Date.now()
   persistTask({
     taskID,
-    sessionID: root.id,
+    rootSession: root,
     now,
     title,
     request: `Create ${title}`,
@@ -114,6 +115,23 @@ async function waitFor(check: () => boolean, message: string, timeout = 5_000) {
     if (Date.now() >= deadline) throw new Error(message)
     await Bun.sleep(20)
   }
+}
+
+function textOnlyLLMStream(...deltas: string[]) {
+  const text = deltas.join("")
+  return {
+    text: Promise.resolve(text),
+    textStream: (async function* () {
+      yield* deltas
+    })(),
+    fullStream: (async function* () {
+      yield { type: "start" as const }
+      yield { type: "text-start" as const, id: "text-1" }
+      for (const delta of deltas) yield { type: "text-delta" as const, id: "text-1", text: delta }
+      yield { type: "text-end" as const, id: "text-1" }
+      yield { type: "finish" as const }
+    })(),
+  } as never
 }
 
 function permissionInvocation(sessionID: string, suffix: string) {
@@ -982,12 +1000,7 @@ describe("Project MEMORY.MD pending input and organizer document", () => {
         const streamCalls: Parameters<typeof LLM.stream>[0][] = []
         const streamSpy = spyOn(LLM, "stream").mockImplementation(async (input) => {
           streamCalls.push(input)
-          return {
-            text: Promise.resolve(candidate),
-            textStream: (async function* () {
-              yield candidate
-            })(),
-          } as never
+          return textOnlyLLMStream(candidate)
         })
         try {
           const response = await Server.App().request("/experimental/project-memory/organize", {
@@ -1056,12 +1069,7 @@ describe("Project MEMORY.MD pending input and organizer document", () => {
             disposition: "organized",
             markdown: "# Project context\n\nThe oldest pending Task owns the cross-Task Organizer model.",
           })
-          return {
-            text: Promise.resolve(candidate),
-            textStream: (async function* () {
-              yield candidate
-            })(),
-          } as never
+          return textOnlyLLMStream(candidate)
         })
         try {
           Database.transaction((db) => {
@@ -1140,12 +1148,7 @@ describe("Project MEMORY.MD pending input and organizer document", () => {
             disposition: "organized",
             markdown: "# Project context\n\nThe configured FIFO successor organized after unavailable heads settled.",
           })
-          return {
-            text: Promise.resolve(candidate),
-            textStream: (async function* () {
-              yield candidate
-            })(),
-          } as never
+          return textOnlyLLMStream(candidate)
         })
         try {
           Database.transaction((db) => {
@@ -1301,12 +1304,7 @@ describe("Project MEMORY.MD pending input and organizer document", () => {
             disposition: "organized",
             markdown: "# Project context\n\nOne coherent Organizer configuration snapshot.",
           })
-          return {
-            text: Promise.resolve(candidate),
-            textStream: (async function* () {
-              yield candidate
-            })(),
-          } as never
+          return textOnlyLLMStream(candidate)
         })
         try {
           await expect(ProjectMemoryOrganizer.run({ projectID: Instance.project.id })).rejects.toBeInstanceOf(
@@ -1365,14 +1363,8 @@ describe("Project MEMORY.MD pending input and organizer document", () => {
         const streamCalls: Parameters<typeof LLM.stream>[0][] = []
         const streamSpy = spyOn(LLM, "stream").mockImplementation(async (input) => {
           streamCalls.push(input)
-          return {
-            text: new Promise<string>(() => undefined),
-            textStream: (async function* () {
-              const split = Math.floor(candidate.length / 2)
-              yield candidate.slice(0, split)
-              yield candidate.slice(split)
-            })(),
-          } as never
+          const split = Math.floor(candidate.length / 2)
+          return textOnlyLLMStream(candidate.slice(0, split), candidate.slice(split))
         })
         const configSpy = spyOn(EffectiveConfig, "effective").mockResolvedValue({
           model: `${model.providerID}/${model.modelID}`,
@@ -1417,12 +1409,20 @@ describe("Project MEMORY.MD pending input and organizer document", () => {
     })
   })
 
-  test("settles a cancelled durable Organizer owner before project shutdown completes", async () => {
+  test("instance disposal cancels an in-flight Organizer run and releases its durable owner for the next attempt", async () => {
+    // The Organizer runs as instance background work: the request's own
+    // durable delivery settles immediately, and teardown — not a
+    // protocol-publication gate — is what ends an in-flight run. What must
+    // survive that cancellation is the durable owner state: the lease is
+    // released with a retry_wait status, so the next request or project open
+    // simply takes its own attempt.
     await using project = await memoryProject()
+    let projectID!: string
+    let cancelled = false
     await Instance.provide({
       directory: project.path,
       fn: async () => {
-        const automaticDrain = Bus.TestHooks.suppressAutomaticDurableDrain()
+        projectID = Instance.project.id
         const session = await Session.create({ kind: "assistant", title: "Organizer shutdown settlement" })
         await Session.persistMessage(
           userMessage(
@@ -1444,13 +1444,24 @@ describe("Project MEMORY.MD pending input and organizer document", () => {
         const streamSpy = spyOn(LLM, "stream").mockImplementation(async (input) => {
           streamStarted()
           const physicalStream = new Promise<string>((_, reject) => {
-            input.abort.addEventListener("abort", () => reject(input.abort.reason), { once: true })
+            input.abort.addEventListener(
+              "abort",
+              () => {
+                cancelled = true
+                reject(input.abort.reason)
+              },
+              { once: true },
+            )
           })
           void physicalStream.catch(() => undefined)
           return {
             text: physicalStream,
             textStream: (async function* () {
               yield await physicalStream
+            })(),
+            fullStream: (async function* () {
+              yield { type: "start" as const }
+              yield { type: "text-delta" as const, id: "text-1", text: await physicalStream }
             })(),
           } as never
         })
@@ -1463,29 +1474,11 @@ describe("Project MEMORY.MD pending input and organizer document", () => {
         } as never)
         try {
           ProjectMemoryOrganizer.init()
-          automaticDrain[Symbol.dispose]()
-          Bus.resumeDurablePublications()
           await started
-          using runtimeGate = RuntimeExecutionSettlement.acquireSettlementGate()
-          using busGate = Bus.acquireProcessSettlementGate()
-          runtimeGate.closeAdmission(["protocol_publication"])
-          runtimeGate.requestCancellation(["protocol_publication"], new Error("Organizer shutdown settlement"))
-          await runtimeGate.waitForIdle(["protocol_publication"], 5_000)
-
-          const snapshot = ProjectMemory.read(Instance.project.id)
-          expect(snapshot).toMatchObject({
-            revision: 0,
-            pendingCount: 1,
-          })
-          expect(Bus.TestHooks.ownedPublications()).toEqual(
-            expect.arrayContaining([expect.objectContaining({ pending: false })]),
-          )
-          busGate.commit()
-          runtimeGate.commit()
-          await Bun.sleep(25)
-          expect(ProjectMemory.read(Instance.project.id)).toEqual(snapshot)
+          // The run holds its durable attempt lease while its model turn is
+          // in flight; the triggering request settled long ago.
+          expect(ProjectMemory.read(projectID)).toMatchObject({ revision: 0, pendingCount: 1 })
         } finally {
-          automaticDrain[Symbol.dispose]()
           baseSpy.mockRestore()
           configSpy.mockRestore()
           streamSpy.mockRestore()
@@ -1493,6 +1486,21 @@ describe("Project MEMORY.MD pending input and organizer document", () => {
         }
       },
     })
+
+    await Instance.disposeAll()
+    expect(cancelled).toBe(true)
+    // The durable owner settled for the next attempt: no live Organizer lease,
+    // the pending input intact, the document unchanged.
+    const deadline = Date.now() + 10_000
+    for (;;) {
+      const snapshot = ProjectMemory.read(projectID)
+      if (snapshot.status === "retry_wait") {
+        expect(snapshot).toMatchObject({ revision: 0, pendingCount: 1, status: "retry_wait" })
+        break
+      }
+      if (Date.now() > deadline) throw new Error(`Organizer owner never settled: ${snapshot.status}`)
+      await new Promise((resolve) => setTimeout(resolve, 25))
+    }
   })
 
   test("injects a capacity notice that requires a visible user prompt without delegating organization to the main agent", async () => {

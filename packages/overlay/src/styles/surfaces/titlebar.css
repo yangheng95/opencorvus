@@ -28,9 +28,9 @@
   display: grid;
   grid-template-columns: minmax(0, auto) minmax(calc(16px * var(--ui-scale)), 1fr) auto;
   align-items: center;
-  gap: calc(2px * var(--ui-scale));
+  gap: var(--ui-gap-3xs);
   min-height: var(--ui-titlebar-height);
-  padding: 0 calc(8px * var(--ui-scale));
+  padding: 0 var(--ui-gap-md);
 }
 
 /* AppKit traffic lights keep a native logical position while application
@@ -74,14 +74,14 @@ html[data-native-titlebar="macos"] .titlebar-menubar .oc-button[data-ui="titleba
   --oc-button-height: 22px;
 
   height: 22px;
-  font-size: 13px;
+  font-size: var(--ui-font-body);
 }
 
 .workspace-contextbar {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
-  column-gap: calc(4px * var(--ui-scale));
+  column-gap: var(--ui-gap-xs);
   width: 100%;
   min-width: 0;
   min-height: var(--ui-workspace-contextbar-height);
@@ -236,8 +236,8 @@ html[data-native-titlebar="macos"] .titlebar-menubar .oc-button[data-ui="titleba
 .titlebar-theme-options {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: calc(4px * var(--ui-scale));
-  margin-left: calc(32px * var(--ui-scale));
+  gap: var(--ui-gap-xs);
+  margin-left: var(--ui-gap-4xl);
 }
 
 .titlebar-theme-option {
@@ -281,8 +281,17 @@ html[data-native-titlebar="macos"] .titlebar-menubar .oc-button[data-ui="titleba
   display: inline-flex;
   align-items: center;
   min-width: 0;
+  border-radius: var(--oc-radius-soft);
   text-align: left;
+  text-decoration: none;
   user-select: none;
+  cursor: pointer;
+  -webkit-app-region: no-drag;
+}
+
+.titlebar-brand-identity:focus-visible {
+  outline: calc(2px * var(--ui-scale)) solid color-mix(in srgb, var(--accent) 60%, transparent);
+  outline-offset: calc(2px * var(--ui-scale));
 }
 
 .titlebar-brand-identity__copy {
@@ -293,10 +302,10 @@ html[data-native-titlebar="macos"] .titlebar-menubar .oc-button[data-ui="titleba
 
 .titlebar-brand-identity__wordmark {
   color: var(--text-strong);
-  font-size: var(--ui-font-brand);
+  font-size: var(--ui-font-emphasis);
   font-weight: var(--ui-font-weight-strong);
   letter-spacing: var(--ui-letter-spacing-tight);
-  line-height: 1;
+  line-height: var(--ui-line-height-flat);
 }
 
 .titlebar-menubar .oc-button[data-ui="titlebar-menubar-trigger"] {
@@ -306,7 +315,7 @@ html[data-native-titlebar="macos"] .titlebar-menubar .oc-button[data-ui="titleba
   --oc-button-color: var(--oc-titlebar-menu-text);
 
   height: calc(22px * var(--ui-scale));
-  font-size: var(--ui-font-navigation);
+  font-size: var(--ui-font-body);
   white-space: nowrap;
 }
 
@@ -358,16 +367,16 @@ html[data-native-titlebar="macos"] .titlebar-menubar .oc-button[data-ui="titleba
 
 .titlebar-menubar-group {
   display: grid;
-  gap: calc(3px * var(--ui-scale));
+  gap: var(--ui-gap-xs);
 }
 
 .titlebar-menubar-group + .titlebar-menubar-group {
-  padding-top: calc(7px * var(--ui-scale));
+  padding-top: var(--ui-gap-md);
 }
 
 /* group title (e.g. "Theme", "Locale") — plain subheader, no pill chrome. */
 .titlebar-menubar-group-title {
-  padding: calc(4px * var(--ui-scale)) calc(8px * var(--ui-scale)) calc(2px * var(--ui-scale));
+  padding: var(--ui-gap-xs) var(--ui-gap-md) var(--ui-gap-3xs);
   color: var(--text-muted);
   font-weight: var(--ui-font-weight-medium);
   letter-spacing: var(--ui-letter-spacing-normal);
@@ -375,13 +384,13 @@ html[data-native-titlebar="macos"] .titlebar-menubar .oc-button[data-ui="titleba
 
 .titlebar-menubar-item {
   justify-content: space-between;
-  gap: calc(14px * var(--ui-scale));
+  gap: var(--ui-gap-xl);
 }
 
 .titlebar-menubar-range {
   display: grid;
   align-items: stretch;
-  gap: calc(6px * var(--ui-scale));
+  gap: var(--ui-gap-sm);
 }
 
 .titlebar-menubar-range:hover,
@@ -400,8 +409,8 @@ html[data-native-titlebar="macos"] .titlebar-menubar .oc-button[data-ui="titleba
 
 .titlebar-menubar-item-title {
   color: var(--text-strong);
-  font-size: var(--ui-font-navigation);
-  line-height: 1.25;
+  font-size: var(--ui-font-body);
+  line-height: var(--ui-line-height-tight);
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -410,8 +419,8 @@ html[data-native-titlebar="macos"] .titlebar-menubar .oc-button[data-ui="titleba
 
 .titlebar-menubar-item-meta {
   color: var(--text-soft);
-  font-size: var(--ui-font-small);
-  line-height: 1.25;
+  font-size: var(--ui-font-caption);
+  line-height: var(--ui-line-height-tight);
   flex: 0 0 auto;
   max-width: 46%;
   overflow: hidden;
@@ -424,7 +433,7 @@ html[data-native-titlebar="macos"] .titlebar-menubar .oc-button[data-ui="titleba
 .titlebar-menubar-range-copy {
   min-width: 0;
   display: grid;
-  gap: calc(2px * var(--ui-scale));
+  gap: var(--ui-gap-3xs);
 }
 
 .titlebar-menubar-range-copy {
@@ -435,14 +444,14 @@ html[data-native-titlebar="macos"] .titlebar-menubar .oc-button[data-ui="titleba
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(calc(34px * var(--ui-scale)), auto);
   align-items: center;
-  gap: calc(8px * var(--ui-scale));
+  gap: var(--ui-gap-md);
 }
 
 .titlebar-menubar-range-value {
   color: var(--text-muted);
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-caption);
   font-variant-numeric: tabular-nums;
-  line-height: 1;
+  line-height: var(--ui-line-height-flat);
   text-align: right;
   white-space: nowrap;
 }
@@ -455,7 +464,7 @@ html[data-native-titlebar="macos"] .titlebar-menubar .oc-button[data-ui="titleba
 .titlebar-theme-options-menubar {
   grid-template-columns: minmax(0, 1fr);
   margin-left: 0;
-  padding: calc(4px * var(--ui-scale));
+  padding: var(--ui-gap-xs);
 }
 
 .titlebar-menubar-range-copy .titlebar-menubar-item-meta {
@@ -464,6 +473,38 @@ html[data-native-titlebar="macos"] .titlebar-menubar .oc-button[data-ui="titleba
 }
 
 /* ─────────────────────────────────────────────────────────────
-   Titlebar responsive collapse (extracted 2026-05-04). At
-   max-width 760px, the titlebar reflows to two stacked rows.
+   Titlebar responsive collapse. Below --ui-breakpoint-md (760px) each
+   menu trigger drops to its single-letter label.
+
+   This block used to hold only the heading above: the rules were lost
+   in the 2026-05-04 extraction and never landed anywhere else, so the
+   file ended on a comment describing behaviour that did not exist.
+   Meanwhile `.titlebar-menu-trigger-compact` kept an unconditional
+   `display: none` and nothing ever flipped it back, while
+   TitlebarMenubar went on rendering that span — the markup has been
+   shipping a fallback that could not appear. The full labels are
+   `white-space: nowrap` at the default `min-width: auto`, so they never
+   shrank either; in a narrow window they pushed out of their grid track
+   and under the window controls.
+
+   The heading also promised two stacked rows. That is a larger reflow
+   than the evidence supports, and the compact labels alone resolve the
+   overflow, so it is not reinstated here.
+
+   Reachability: the desktop window sets minWidth 1120 (src-tauri/
+   tauri.conf.json), so this breakpoint never fires there — it covers the
+   browser and Docker builds, where the viewport is unconstrained. That
+   is also why it stays a media query rather than a container query: the
+   titlebar spans the full window, so its container *is* the viewport,
+   and the two would behave identically. Panels that can be squeezed by
+   their neighbours use @container instead (composer, conversation).
    ───────────────────────────────────────────────────────────── */
+@media (max-width: 760px) {
+  .titlebar-menu-trigger-label {
+    display: none;
+  }
+
+  .titlebar-menu-trigger-compact {
+    display: inline;
+  }
+}

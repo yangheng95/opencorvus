@@ -46,6 +46,7 @@ export const ENGINE_ARTIFACT_KINDS = [
   "dispatch_lineage",
   "dispatch_settlement",
   "mission_acceptance_resume_receipt",
+  "task_acceptance_ledger",
   "task_checkpoint_settlement",
   "task_auxiliary_settlement",
   "exploration",
@@ -202,6 +203,7 @@ export type EngineControlActivationTarget =
   | "protocol_delivery"
   | "bus_delivery"
   | "session_control"
+  | "session_shell"
   /** One row per live runtime process, renewed while it runs. It owns no work;
    * it is the durable coordinate that lets one process decide another is gone
    * without consulting its own memory, which says nothing about a peer sharing
@@ -214,7 +216,7 @@ export const EngineControlActivationLeaseTable = sqliteTable(
   "engine_control_activation_lease",
   {
     id: text().primaryKey(),
-    target: text({ enum: ["task_root_ingress", "lifecycle", "interaction", "effect", "automation", "event_fire", "build_cleanup", "protocol_delivery", "bus_delivery", "session_control", "runtime_process"] })
+    target: text({ enum: ["task_root_ingress", "lifecycle", "interaction", "effect", "automation", "event_fire", "build_cleanup", "protocol_delivery", "bus_delivery", "session_control", "session_shell", "runtime_process"] })
       .notNull()
       .$type<EngineControlActivationTarget>(),
     target_id: text().notNull(),

@@ -66,7 +66,7 @@
   padding: var(--dialog-form-padding-block) var(--dialog-form-padding-inline);
   display: flex;
   flex-direction: column;
-  gap: calc(12px * var(--ui-scale));
+  gap: var(--ui-gap-lg);
   pointer-events: auto;
 }
 
@@ -124,22 +124,20 @@
 }
 
 .dialog-title {
-  font-size: clamp(calc(18px * var(--ui-scale)), calc(19px * var(--ui-scale)), calc(22px * var(--ui-scale)));
+  font-size: var(--ui-font-emphasis);
   font-weight: var(--ui-font-weight-strong);
   color: var(--text-strong);
   letter-spacing: var(--ui-letter-spacing-loose);
-  line-height: 1.2;
+  line-height: var(--ui-line-height-tight);
   margin: 0;
 }
 
 .dialog-form > .dialog-header {
   margin: calc(-1 * var(--dialog-form-padding-block)) calc(-1 * var(--dialog-form-padding-inline)) 0;
-  padding: calc(16px * var(--ui-scale)) calc(18px * var(--ui-scale));
+  padding: var(--ui-gap-xl) var(--ui-gap-2xl);
   border-bottom: var(--oc-border-width) solid color-mix(in srgb, var(--border) 86%, transparent);
-  background:
-    linear-gradient(180deg, var(--ui-highlight-tone), transparent 72%),
-    color-mix(in srgb, var(--surface-strong) 74%, transparent);
-  box-shadow: inset 0 calc(-1px * var(--ui-scale)) 0 var(--ui-highlight-tone);
+  background: transparent;
+  box-shadow: none;
   flex-shrink: 0;
 }
 
@@ -147,7 +145,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: calc(12px * var(--ui-scale));
+  gap: var(--ui-gap-lg);
 }
 
 .dialog-header-actions,
@@ -156,7 +154,7 @@
   align-items: center;
   justify-content: flex-end;
   flex-wrap: wrap;
-  gap: calc(8px * var(--ui-scale));
+  gap: var(--ui-gap-md);
 }
 
 .dialog-actions {
@@ -169,11 +167,9 @@
 
 .dialog-form > .dialog-actions:not(.compact) {
   margin: auto calc(-1 * var(--dialog-form-padding-inline)) calc(-1 * var(--dialog-form-padding-block));
-  padding: calc(14px * var(--ui-scale)) calc(18px * var(--ui-scale));
+  padding: var(--ui-gap-xl) var(--ui-gap-2xl);
   border-top: var(--oc-border-width) solid color-mix(in srgb, var(--border) 86%, transparent);
-  background:
-    linear-gradient(0deg, var(--ui-highlight-tone), transparent 76%),
-    color-mix(in srgb, var(--surface-strong) 72%, transparent);
+  background: transparent;
 }
 
 .dialog-actions.compact {
@@ -197,19 +193,12 @@
   max-height: calc(var(--ui-overlay-shell-height) * 0.7 * var(--ui-scale));
   display: flex;
   flex-direction: column;
-  gap: calc(10px * var(--ui-scale));
-  padding: calc(14px * var(--ui-scale));
+  gap: var(--ui-gap-lg);
+  padding: var(--ui-gap-xl);
   border: var(--oc-border-width) solid color-mix(in srgb, var(--border) 84%, transparent);
   border-radius: var(--oc-radius-large);
-  background:
-    linear-gradient(
-      180deg,
-      var(--ui-highlight-tone),
-      color-mix(in srgb, var(--accent) 1.2%, transparent) 76%,
-      transparent
-    ),
-    color-mix(in srgb, var(--surface-inset) 94%, transparent);
-  box-shadow: inset 0 calc(1px * var(--ui-scale)) 0 var(--ui-highlight-tone);
+  background: var(--surface-inset);
+  box-shadow: none;
 }
 
 /* ─────────────────────────────────────────────────────────────
@@ -228,21 +217,21 @@
 
 .app-dialog-form > .dialog-header {
   margin: 0;
-  padding: calc(14px * var(--ui-scale)) calc(18px * var(--ui-scale)) calc(12px * var(--ui-scale));
+  padding: var(--ui-gap-xl) var(--ui-gap-2xl) var(--ui-gap-lg);
   border-bottom: var(--oc-border-width) solid color-mix(in srgb, var(--border) 82%, transparent);
   background: var(--surface);
   box-shadow: none;
 }
 
 .app-dialog-form .dialog-title {
-  font-size: var(--ui-font-heading);
-  line-height: 1.25;
-  letter-spacing: var(--ui-letter-spacing-normal);
+  font-size: var(--ui-font-emphasis);
+  line-height: var(--ui-line-height-tight);
+  letter-spacing: var(--ui-letter-spacing-tight);
 }
 
 .app-dialog-form > .app-dialog-body {
   min-height: 0;
-  padding: calc(14px * var(--ui-scale)) calc(18px * var(--ui-scale));
+  padding: var(--ui-gap-xl) var(--ui-gap-2xl);
   border: 0;
   border-radius: 0;
   background: transparent;
@@ -251,7 +240,7 @@
 
 .app-dialog-form > .oc-text-field {
   margin: 0;
-  padding: 0 calc(18px * var(--ui-scale)) calc(16px * var(--ui-scale));
+  padding: 0 var(--ui-gap-2xl) var(--ui-gap-xl);
 }
 
 .app-dialog-form > .oc-text-field.hidden {
@@ -260,30 +249,23 @@
 
 .app-dialog-form > .dialog-actions:not(.compact) {
   margin: 0;
-  padding: calc(12px * var(--ui-scale)) calc(18px * var(--ui-scale)) calc(14px * var(--ui-scale));
+  padding: var(--ui-gap-lg) var(--ui-gap-2xl) var(--ui-gap-xl);
   border-top: var(--oc-border-width) solid color-mix(in srgb, var(--border) 82%, transparent);
   background: color-mix(in srgb, var(--surface-inset) 64%, transparent);
 }
 
 .app-dialog-body {
   min-height: calc(72px * var(--ui-scale));
-  padding: calc(14px * var(--ui-scale)) calc(16px * var(--ui-scale));
+  padding: var(--ui-gap-xl) var(--ui-gap-xl);
   border: var(--oc-border-width) solid color-mix(in srgb, var(--border) 84%, transparent);
   border-radius: var(--oc-radius-large);
-  background:
-    linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--text-strong) 3%, transparent),
-      color-mix(in srgb, var(--accent) 1%, transparent) 76%,
-      transparent
-    ),
-    color-mix(in srgb, var(--surface-inset) 94%, transparent);
-  box-shadow: var(--shadow);
+  background: var(--surface-inset);
+  box-shadow: none;
   white-space: pre-wrap;
   word-break: break-word;
-  line-height: 1.5;
+  line-height: var(--ui-line-height-normal);
   color: var(--text);
-  font-size: var(--ui-font-control);
+  font-size: var(--ui-font-body);
 }
 
 .app-dialog-input {
@@ -291,3 +273,20 @@
 }
 
 /* Matches --ui-breakpoint-sm; media queries cannot consume var(). */
+
+/* Reported by the dialog's link action when the host refuses to open the URL.
+ * The action is the operator's last affordance in an authorization flow, so a
+ * silent failure there leaves them with nothing. */
+/* The link action is an aside, not one of the dialog's two decisions. Pushing
+ * it to the far edge separates "go do this elsewhere" from Cancel/Confirm
+ * instead of leaving three buttons crowded together on the right. */
+.app-dialog-form .dialog-actions > [data-ui="app-dialog-link"] {
+  margin-inline-end: auto;
+}
+
+.app-dialog-link-error {
+  margin: var(--ui-gap-3xs) 0 0;
+  color: var(--bad);
+  font-size: var(--ui-font-body);
+  line-height: var(--ui-line-height-tight);
+}

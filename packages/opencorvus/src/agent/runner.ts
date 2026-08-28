@@ -87,6 +87,7 @@ import { ProviderTransform } from "@/provider/transform"
 import { EffectiveConfig } from "@/config/effective"
 import { Instance } from "@/project/instance"
 import { Session } from "@/session"
+import { MessageStore } from "@/session/message-store"
 import type { PromptInput as SessionPromptInput } from "@/session/prompt/schema"
 import {
   materializeUserMessage,
@@ -135,6 +136,8 @@ import { resolvedPackageRevisionFromBinding } from "@/engine/workflow-binding"
 import { composeProjectedWorkerSystemPrompt } from "@/agent/projected-worker-system-prompt"
 import { bindInternalStageTool, stageToolMaterializerBindingOf } from "@/agent/stage-tool-materializer"
 import { runProjectedWorkerTurnExclusive } from "./projected-worker-turn-owner"
+import { createAcceptanceEpochCheckpoint } from "@/mission/acceptance-checkpoint"
+import { readTaskAcceptanceLedgerArtifact } from "@/mission/acceptance-ledger"
 
 const log = Log.create({ service: "agent-runner" })
 
@@ -1559,7 +1562,7 @@ async function runAgentSessionInner<C>(input: RunAgentSessionInput<C>): Promise<
           let persistedUserMessageCompletion!: ReturnType<typeof persistMaterializedUserMessageInTransaction>
           let continuationPrepared!: ReturnType<typeof rebindPreparedUserMessageInput>
           let continuationPromptArgs!: Parameters<typeof SessionPrompt.prompt>[0]
-          Database.transaction(() => {
+          Database.immediateTransaction(() => {
             if (input.signal?.aborted) {
               throw new AgentRunError(kind, "aborted before initial dispatch authority commit")
             }
@@ -1692,6 +1695,32 @@ async function runAgentSessionInner<C>(input: RunAgentSessionInput<C>): Promise<
         registerLifecycle(await input.onSessionCreated(session))
       }
       const persistedUserMessage = await persistedUserMessageCompletion.complete()
+      if (descriptorDispatchTurn?.kind === "continuation" && descriptorDispatchTurn.acceptance_repair) {
+        const repair = descriptorDispatchTurn.acceptance_repair
+        const ledger = readTaskAcceptanceLedgerArtifact(input.taskID, repair.ledger_revision_artifact_id)
+        if (
+          ledger.revision.execution_epoch !== repair.execution_epoch ||
+          ledger.revision.gap.gap_id !== repair.gap_id
+        ) {
+          throw new AgentRunError(kind, `acceptance repair checkpoint does not match its ledger revision`)
+        }
+        const checkpointSource = await MessageStore.get({
+          sessionID: session.id,
+          messageID: descriptor.payload.messageAuthority.user_message_id,
+        })
+        if (checkpointSource.info.role !== "user") {
+          throw new AgentRunError(kind, `acceptance repair checkpoint source must be a user Message`)
+        }
+        await createAcceptanceEpochCheckpoint({
+          sessionID: session.id,
+          source: checkpointSource.info,
+          taskID: input.taskID,
+          ledgerRevisionArtifactID: ledger.artifactID,
+          gap: ledger.revision.gap,
+          executionEpoch: repair.execution_epoch,
+          workflowNodeID: descriptorDispatchTurn.workflow_node_id,
+        })
+      }
       if (input.signal?.aborted) {
         throw new AgentRunError(kind, "aborted before runtime-ready notification")
       }

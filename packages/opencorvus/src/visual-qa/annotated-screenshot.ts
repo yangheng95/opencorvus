@@ -9,8 +9,8 @@ import {
   artifactCatalogAuthority,
   exactEngineArtifactLocator,
   readTaskArtifact,
-  requireEngineArtifactByLocator,
 } from "@/artifact-catalog"
+import { requireEngineArtifactByLocator } from "@/engine/engine-artifact-version-facts"
 import { BROWSER_PREVIEW_EVIDENCE_ARTIFACT_TYPE } from "@/browser-preview/persist"
 import { recordEngineArtifact } from "@/engine/artifact"
 import { requireTask } from "@/engine/store"

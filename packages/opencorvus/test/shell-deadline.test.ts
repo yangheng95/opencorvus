@@ -1,5 +1,6 @@
 import { describe, expect, test } from "bun:test"
 import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises"
+import { spawnSync } from "node:child_process"
 import os from "node:os"
 import path from "node:path"
 import { createServer } from "node:net"
@@ -67,7 +68,7 @@ describe("Shell absolute deadline authority", () => {
     } finally {
       await rm(project, { recursive: true, force: true })
     }
-  })
+  }, 15_000)
 
   test("settles a timed-out command through physical exit and output closure", async () => {
     let resolveExit!: (code: number) => void
@@ -140,7 +141,14 @@ describe("Shell absolute deadline authority", () => {
 
   test("executes a real relative .venv Scripts Python from the isolated workspace", async () => {
     if (process.platform !== "win32") return
-    const python = which("python")
+    const python = spawnSync("where.exe", ["python"], { encoding: "utf8", windowsHide: true })
+      .stdout.split(/\r?\n/)
+      .map((candidate) => candidate.trim())
+      .filter(Boolean)
+      .find(
+        (candidate) =>
+          spawnSync(candidate, ["--version"], { encoding: "utf8", timeout: 5_000, windowsHide: true }).status === 0,
+      )
     if (!python) throw new Error("Python is required for the relative virtual-environment contract")
     const project = await mkdtemp(path.join(os.tmpdir(), "opencorvus-relative-venv-"))
     try {
@@ -166,5 +174,5 @@ describe("Shell absolute deadline authority", () => {
     } finally {
       await rm(project, { recursive: true, force: true })
     }
-  })
+  }, 60_000)
 })

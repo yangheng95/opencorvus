@@ -3,7 +3,7 @@
 .oc-radio {
   display: inline-flex;
   align-items: center;
-  gap: calc(6px * var(--ui-scale));
+  gap: var(--ui-gap-sm);
   color: var(--text-soft);
   cursor: pointer;
 }
@@ -124,7 +124,12 @@
   box-shadow: 0 0 0 calc(2px * var(--ui-scale)) color-mix(in srgb, var(--accent) 20%, transparent);
 }
 
-:is(.oc-checkbox, .oc-switch, .oc-radio)[data-disabled] {
+/* [data-disabled] is only emitted when the component takes a `disabled` prop.
+ * A native <fieldset disabled> (MissionCreateDialog, ScheduledAutomationsPanel)
+ * disables the inner input without marking the wrapper, so the control kept
+ * full contrast and looked clickable while its clicks did nothing. */
+:is(.oc-checkbox, .oc-switch, .oc-radio)[data-disabled],
+:is(.oc-checkbox, .oc-switch, .oc-radio):has(.oc-selection-input:disabled) {
   cursor: default;
   opacity: var(--ui-opacity-disabled);
 }

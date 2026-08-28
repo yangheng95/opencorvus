@@ -6,6 +6,7 @@ import { deleteDecisionLogsForTasks } from "@/decision-log"
 import { assertSessionPromptSubtreeFinished, cancelSessionPromptInScope } from "@/engine/cancellation-scope"
 import { createTaskCancellationIncomplete } from "@/engine/cancellation-error"
 import { EngineTaskTable } from "@/engine/engine.sql"
+import { expireProjectPermissionGrantsInTransaction } from "@/permission/project-authority"
 import { deleteProjectNotes } from "@/quicknote/service"
 import { SessionTable } from "@/session/session.sql"
 import { CANCEL_INGRESS_SETTLE_INACTIVITY_MS, EngineService } from "@/task-api"
@@ -158,7 +159,9 @@ function projectDeletionInstanceDirectories(project: Project.Info): string[] {
   for (const session of projectPromptSessions(project.id)) {
     const directory = Filesystem.resolve(session.directory)
     if (!roots.some((root) => Filesystem.contains(root, directory))) {
-      throw new Error(`Project ${project.id} Session ${session.id} directory escapes its registered roots: ${directory}`)
+      throw new Error(
+        `Project ${project.id} Session ${session.id} directory escapes its registered roots: ${directory}`,
+      )
     }
     directories.add(directory)
   }
@@ -243,6 +246,11 @@ function deleteProjectRows(admission: ProjectDeletionRegistryAdmission, projectI
     }
     deleteDecisionLogsForTasks(taskIDs, db)
     deleteProjectNotes({ projectID }, db)
+    expireProjectPermissionGrantsInTransaction({
+      db,
+      projectID,
+      reason: `Project ${projectID} generation ${admission.snapshot.generation} was deleted`,
+    })
     // Task rows must go before the Project row. Both the Task subtree and the
     // Session subtree reach engine_workflow_node_occurrence, whose
     // child_session_id restricts Session deletion so a live workflow node can
@@ -290,16 +298,18 @@ export async function deleteProject(
     await Instance.disposeProjectEntries(projectID, CANCEL_INGRESS_SETTLE_INACTIVITY_MS)
     stage = "filesystem-quarantine"
     const rootPlans = await projectRootRemovalPlans(directory)
-    if (rootPlans.length > 0) {
-      cleanupPlan = await createProjectDeletionCleanupPlan({
-        projectID,
-        directory,
-        sources: rootPlans.map((plan) => plan.source),
-        operationID: registryAdmission.operationID,
-      })
-      for (const plan of cleanupPlan.manifest.targets) {
-        if (await stageProjectRootRemoval(plan)) stagedPlans.push(plan)
-      }
+    // The durable cleanup owner exists even when the Project has no filesystem
+    // root: it also owns post-commit retirement of every project-scoped MCP
+    // credential. A committed deletion can therefore report residue and let
+    // startup recovery retry it instead of orphaning secrets in a global file.
+    cleanupPlan = await createProjectDeletionCleanupPlan({
+      projectID,
+      directory,
+      sources: rootPlans.map((plan) => plan.source),
+      operationID: registryAdmission.operationID,
+    })
+    for (const plan of cleanupPlan.manifest.targets) {
+      if (await stageProjectRootRemoval(plan)) stagedPlans.push(plan)
     }
     const finalTaskIDs = projectTaskIDs(projectID)
     if (finalTaskIDs.length !== taskIDs.length || finalTaskIDs.some((taskID) => !taskIDs.includes(taskID))) {

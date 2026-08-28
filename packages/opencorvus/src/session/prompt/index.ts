@@ -4,7 +4,13 @@ import { SessionShell } from "../shell-exec"
 import { resolvePromptParts as resolvePromptPartsImpl } from "./parts"
 import { PromptInput as PromptInputSchema, type PromptInput as PromptInputType } from "./schema"
 import { SessionPromptState } from "./state"
-import { continuePersistedUserMessage, runSessionPrompt, type PromptRuntimeHooks } from "./run"
+import {
+  continuePersistedUserMessage,
+  persistNoReplyUserMessageSequence,
+  runSessionPrompt,
+  type NoReplyUserMessageSequenceEntry,
+  type PromptRuntimeHooks,
+} from "./run"
 import type { PersistedUserMessageReceipt } from "./parts"
 import type { ExecutionCancellationOrigin } from "./cancellation"
 import z from "zod"
@@ -50,6 +56,15 @@ export namespace SessionPrompt {
   export const PromptInput = PromptInputSchema
   export type PromptInput = PromptInputType
   export const resolvePromptParts = resolvePromptPartsImpl
+
+  export async function persistNoReplySequence(entries: readonly NoReplyUserMessageSequenceEntry[]) {
+    return persistNoReplyUserMessageSequence(
+      entries.map((entry) => ({
+        ...entry,
+        input: PromptInput.parse(entry.input),
+      })),
+    )
+  }
 
   async function runPrompt(input: PromptInputType, hooks?: PromptRuntimeHooks) {
     return runSessionPrompt(input, { ...hooks, loop })

@@ -1,8 +1,8 @@
 import z from "zod"
-import { ArtifactReadLocatorSchema } from "@opencorvus-ai/plugin/artifact-catalog"
 import { TerminalLifecycleReferenceSchema } from "@/engine/terminal-lifecycle-reference-schema"
+import { MissionAcceptanceGapSchema } from "@/mission/acceptance-gap"
 import { DispatchInfrastructureFailureOutcomeSchema } from "@/agent/dispatch-outcome"
-import { SchedulerDeliveryReference } from "@/task-api/task-root-message"
+import { SchedulerDeliveryReference, TaskRootMessageKind } from "@/protocol/task-root-message-schema"
 
 export const OrchestratorEventSchema = z
   .object({
@@ -34,7 +34,7 @@ export const OrchestratorEventSchema = z
     rootMessage: z
       .object({
         messageID: z.string().min(1),
-        kind: z.enum(["operator", "orchestrator", "mission"]),
+        kind: TaskRootMessageKind,
         schedulerDelivery: SchedulerDeliveryReference.optional(),
       })
       .strict()
@@ -48,7 +48,8 @@ export const OrchestratorEventSchema = z
         toolCallID: z.string().min(1),
         toolPartID: z.string().min(1),
         reviewedTerminalLifecycleReference: TerminalLifecycleReferenceSchema,
-        evidenceLocators: z.array(ArtifactReadLocatorSchema).min(1).max(64),
+        acceptanceLedgerRevisionArtifactID: z.string().min(1),
+        acceptanceGap: MissionAcceptanceGapSchema,
       })
       .strict()
       .optional(),

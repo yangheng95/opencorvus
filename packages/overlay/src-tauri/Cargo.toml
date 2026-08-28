@@ -1,6 +1,6 @@
 [package]
 name = "opencorvus-overlay"
-version = "0.0.52-beta"
+version = "0.0.55-beta"
 edition = "2021"
 
 [build-dependencies]
@@ -36,7 +36,7 @@ tauri-plugin-deep-link = "2"
 tauri-plugin-single-instance = { version = "2", features = ["deep-link"] }
 
 [target.'cfg(windows)'.dependencies]
-windows-sys = { version = "0.61", features = ["Win32_Foundation", "Win32_Graphics_Gdi", "Win32_Storage_FileSystem", "Win32_UI_Shell", "Win32_UI_WindowsAndMessaging"] }
+windows-sys = { version = "0.61", features = ["Win32_Foundation", "Win32_Graphics_Gdi", "Win32_Storage_FileSystem", "Win32_System_Threading", "Win32_UI_Shell", "Win32_UI_WindowsAndMessaging"] }
 winrt-toast-reborn = "0.3.8"
 
 [target.'cfg(target_os = "macos")'.dependencies]

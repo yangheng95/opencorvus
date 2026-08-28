@@ -24,7 +24,7 @@ import { TerminalLifecycleReferenceSchema } from "@/engine/terminal-lifecycle-re
 import { RuntimeExecutionSettlement } from "@/runtime/execution-settlement"
 import { createExecutionCancellationOrigin } from "./prompt/cancellation"
 import { ProjectMemory } from "@/memory/project-memory"
-import { SchedulerEndpoint, SchedulerMessageKind } from "@/protocol/schema"
+import { SchedulerMessageWakeReason } from "@/protocol/scheduler-message-wake-reason"
 
 /**
  * Session wake mechanism.
@@ -69,16 +69,12 @@ export namespace SessionWake {
     }),
     z
       .object({
-        source: z.literal("scheduler.message"),
-        eventID: Identifier.schema("protocol_event"),
-        inboxID: Identifier.schema("protocol_inbox"),
-        threadID: z.string().min(1),
-        messageKind: SchedulerMessageKind,
-        sourceEndpoint: SchedulerEndpoint,
-        targetEndpoint: SchedulerEndpoint,
-        replyTo: Identifier.schema("protocol_event").optional(),
+        source: z.literal("api.chat"),
+        requestID: z.string().trim().min(1).max(200),
+        requestFingerprint: z.string().regex(/^[0-9a-f]{64}$/),
       })
       .strict(),
+    SchedulerMessageWakeReason,
     z.object({
       source: z.literal("scheduler.automation"),
       jobID: z.string(),
@@ -386,14 +382,13 @@ export namespace SessionWake {
       activationSettled = true
       resolveActivation({ owner })
     }
-    const operation = Promise.resolve().then(() => {
+    const operation = Promise.resolve().then(async () => {
+      await beforeWakeLoopActivationForTest?.()
       if (wakeLoopExecutorForTest) {
-        return Promise.resolve(beforeWakeLoopActivationForTest?.()).then(() => {
-          activated(reservation.signal)
-          return wakeLoopExecutorForTest!({
-            ...input,
-            signal: reservation.signal,
-          })
+        activated(reservation.signal)
+        return wakeLoopExecutorForTest({
+          ...input,
+          signal: reservation.signal,
         })
       }
       return executeWakeLoop({

@@ -19,7 +19,7 @@ import { TitlebarBrand } from "./titlebar/TitlebarBrand"
 import { TitlebarMenubar } from "./titlebar/TitlebarMenubar"
 import { TitlebarNavigation } from "./titlebar/TitlebarNavigation"
 import { WindowControls } from "./WindowControls"
-import { WorkspaceEditorLaunchers } from "./WorkspaceEditorLaunchers"
+import { WorkspaceEditorLaunchers, workspaceEditorLaunchersAvailable } from "./WorkspaceEditorLaunchers"
 import { ProjectRuntimeToolbarActions } from "./TaskDirBar"
 import { Button } from "./ui/Button"
 import { DropdownMenu } from "./ui/DropdownMenu"
@@ -421,7 +421,7 @@ export function App(props: AppProps) {
                     data-active={String(props.primarySurface() === "conversation")}
                   >
                     <div id="solidConversationAgentRailMount" class="conversation-agent-rail-host">
-                      <ConversationAgentRail />
+                      <ConversationAgentRail onOpenSubagentConversation={props.onOpenSubagentConversation} />
                     </div>
                     <div class="center-workbench-activity chat-conversation-activity">
                       <section class="chat" id="chatSection" data-empty-chat-home={String(props.homeActive)}>
@@ -458,9 +458,11 @@ export function App(props: AppProps) {
                           </div>
                           <div class="chat-header-meta oc-surface-header__actions">
                             <div class="chat-header-actions" data-no-drag="true">
-                              <div id="solidChatHeaderEditorLaunchers">
-                                <WorkspaceEditorLaunchers />
-                              </div>
+                              <Show when={workspaceEditorLaunchersAvailable()}>
+                                <div id="solidChatHeaderEditorLaunchers">
+                                  <WorkspaceEditorLaunchers />
+                                </div>
+                              </Show>
                               <div id="solidChatHeaderRuntimeActions">
                                 <ProjectRuntimeToolbarActions
                                   anchorVisible={

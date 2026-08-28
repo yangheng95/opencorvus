@@ -14,7 +14,7 @@
   min-width: 0;
   min-height: var(--oc-file-row-height);
   align-items: center;
-  gap: calc(6px * var(--ui-scale));
+  gap: var(--ui-gap-sm);
   padding: 0 var(--oc-file-row-padding-end) 0
     calc(var(--oc-file-row-padding-start) + var(--oc-file-row-depth) * var(--oc-file-row-indent));
   border: 0;
@@ -68,7 +68,7 @@
   display: flex;
   min-width: 0;
   align-items: baseline;
-  gap: calc(6px * var(--ui-scale));
+  gap: var(--ui-gap-sm);
   overflow: hidden;
 }
 
@@ -81,13 +81,13 @@
 .oc-file-row__name {
   min-width: 0;
   color: currentColor;
-  font-size: var(--ui-font-control);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-body);
 }
 
 :is(.oc-file-row__detail, .oc-file-row__prefix) {
   color: var(--text-soft);
-  font-size: var(--ui-font-meta);
+  font-size: var(--ui-font-caption);
 }
 
 .oc-file-row__trailing {
@@ -95,7 +95,7 @@
   min-width: 0;
   align-items: center;
   justify-content: flex-end;
-  gap: calc(5px * var(--ui-scale));
+  gap: var(--ui-gap-sm);
   color: var(--text-muted);
-  font-size: var(--ui-font-meta);
+  font-size: var(--ui-font-caption);
 }

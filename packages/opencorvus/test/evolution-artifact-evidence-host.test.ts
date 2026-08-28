@@ -747,7 +747,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           "resource_set",
           "source_artifact_locators",
         ])
-        const session = await Session.create({ kind: "root", title: "Evolution typed ABI chain" })
+        const session = Session.prepareRootNext({ kind: "root", directory: Instance.directory, title: "Evolution typed ABI chain" })
         const taskID = Identifier.ascending("task")
         const started = Date.now()
         const missionID = "evolution-abi-chain"
@@ -767,7 +767,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
         const missionSessionID = missionSession.id
         persistTask({
           taskID,
-          sessionID: session.id,
+          rootSession: session,
           now: started,
           title: "Evolution typed ABI chain",
           request: "Publish and consume exact evolution evidence",
@@ -1298,13 +1298,13 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           const trial = await Instance.provide({
             directory: trialWorktree.directory,
             fn: async () => {
-              const trialSession = await Session.create({ kind: "root", title: "Frozen baseline Trial" })
+              const trialSession = Session.prepareRootNext({ kind: "root", directory: Instance.directory, title: "Frozen baseline Trial" })
               const trialTaskID = Identifier.ascending("task")
               const trialStarted = started + 10
               const trialCompleted = trialStarted + 1
               persistTask({
                 taskID: trialTaskID,
-                sessionID: trialSession.id,
+                rootSession: trialSession,
                 now: trialStarted - 1,
                 title: "Frozen baseline Trial",
                 request: "Execute case-1 against the exact baseline revision",
@@ -1794,7 +1794,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           completedAt: sourceCompleted,
         })
         const importedTaskID = Identifier.ascending("task")
-        const importedSession = await Session.create({ kind: "root", title: "Imported campaign evaluation" })
+        const importedSession = Session.prepareRootNext({ kind: "root", directory: Instance.directory, title: "Imported campaign evaluation" })
         const preparedImports = await prepareCrossTaskArtifactImports({
           imports: [
             { source_task_id: taskID, locator: sourceOpportunityLocator },
@@ -1814,7 +1814,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
         })
         persistTask({
           taskID: importedTaskID,
-          sessionID: importedSession.id,
+          rootSession: importedSession,
           now: sourceCompleted + 1,
           title: "Imported campaign evaluation",
           request: "Rehydrate campaign inputs and evaluate the imported baseline run",
@@ -2086,7 +2086,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
     await Instance.provide({
       directory: project.path,
       fn: async () => {
-        const session = await Session.create({ kind: "root", title: "Evolution package fixture" })
+        const session = Session.prepareRootNext({ kind: "root", directory: Instance.directory, title: "Evolution package fixture" })
         const taskID = Identifier.ascending("task")
         const missionID = "evolution-candidate-chain"
         const missionSession = await Session.create({
@@ -2106,7 +2106,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
         const timeCreated = Date.now()
         persistTask({
           taskID,
-          sessionID: session.id,
+          rootSession: session,
           now: timeCreated,
           title: "Evolution package fixture",
           request: "Materialize exact package revision",
@@ -2636,7 +2636,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           completedAt: sourceCompleted,
         })
         const importedTaskID = Identifier.ascending("task")
-        const importedSession = await Session.create({ kind: "root", title: "Imported candidate validation" })
+        const importedSession = Session.prepareRootNext({ kind: "root", directory: Instance.directory, title: "Imported candidate validation" })
         const preparedImports = await prepareCrossTaskArtifactImports({
           imports: [{ source_task_id: taskID, locator: candidateArtifactLocator }],
           projectID: Instance.project.id,
@@ -2651,7 +2651,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
         })
         persistTask({
           taskID: importedTaskID,
-          sessionID: importedSession.id,
+          rootSession: importedSession,
           now: sourceCompleted + 1,
           title: "Imported candidate validation",
           request: "Rehydrate and validate imported parent and candidate packages",
@@ -2809,12 +2809,12 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
     await Instance.provide({
       directory: project.path,
       fn: async () => {
-        const session = await Session.create({ kind: "root", title: "Evolution evidence fixture" })
+        const session = Session.prepareRootNext({ kind: "root", directory: Instance.directory, title: "Evolution evidence fixture" })
         const taskID = Identifier.ascending("task")
         const started = Date.now()
         persistTask({
           taskID,
-          sessionID: session.id,
+          rootSession: session,
           now: started - 1,
           title: "Evolution evidence fixture",
           request: "Produce exact evidence",
@@ -3045,11 +3045,11 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
         ])
         expect(evidence.canonical_sha256).toHaveLength(64)
 
-        const evidenceOwnerSession = await Session.create({ kind: "root", title: "Evolution evidence owner" })
+        const evidenceOwnerSession = Session.prepareRootNext({ kind: "root", directory: Instance.directory, title: "Evolution evidence owner" })
         const evidenceOwnerTaskID = Identifier.ascending("task")
         persistTask({
           taskID: evidenceOwnerTaskID,
-          sessionID: evidenceOwnerSession.id,
+          rootSession: evidenceOwnerSession,
           now: completed + 1,
           title: "Evolution evidence owner",
           request: "Publish immutable evidence for the terminal Trial",
@@ -3362,12 +3362,12 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
     await Instance.provide({
       directory: project.path,
       fn: async () => {
-        const session = await Session.create({ kind: "root", title: "Nonterminal Trial evidence fixture" })
+        const session = Session.prepareRootNext({ kind: "root", directory: Instance.directory, title: "Nonterminal Trial evidence fixture" })
         const taskID = Identifier.ascending("task")
         const started = Date.now()
         persistTask({
           taskID,
-          sessionID: session.id,
+          rootSession: session,
           now: started,
           title: "Nonterminal Trial evidence fixture",
           request: "Wait for exact evidence",

@@ -2,6 +2,7 @@ import { HelperAgentRegistry } from "@/agent/helper-agent-registry"
 import { resolveAgentModel } from "@/agent/model"
 import { EffectiveConfig } from "@/config/effective"
 import { streamText } from "@/llm/api"
+import { collectLLMText, NonReplayableLLMActivityPolicy } from "@/llm/activity"
 import { Provider } from "@/provider/provider"
 import { ProviderLLM } from "@/provider/llm"
 import { Vcs } from "@/project/vcs"
@@ -100,21 +101,28 @@ export async function streamCommitMessage(input: CommitMessageInput): Promise<st
     },
     { role: "user" as const, content: context },
   ]
-  const result = streamText({
-    model: language,
-    usagePurpose: "vcs-commit-message",
-    temperature: model.providerID.startsWith("moonshotai") ? 1 : 0,
-    messages,
-    abortSignal: input.signal,
-    timeoutMs: false,
-  })
-
-  let raw = ""
   try {
-    for await (const delta of result.textStream) {
-      raw += delta
-      await input.onDelta?.(delta)
-    }
+    const external = input.signal ?? new AbortController().signal
+    const raw = await collectLLMText({
+      context: {
+        sessionID: input.sessionID ?? input.taskID ?? "vcs-commit-message",
+        provider: model.providerID,
+        model: model.id,
+      },
+      external,
+      policy: NonReplayableLLMActivityPolicy,
+      onTextDelta: input.onDelta,
+      start: (run) =>
+        streamText({
+          model: language,
+          usagePurpose: "vcs-commit-message",
+          temperature: model.providerID.startsWith("moonshotai") ? 1 : 0,
+          messages,
+          abortSignal: run.signal,
+          timeoutMs: false,
+          retries: 0,
+        }),
+    })
     const message = normalizeCommitMessage(raw)
     if (!message) throw new Error("AI returned an empty Git commit message")
     const { AgentTrace } = await import("@/trace")

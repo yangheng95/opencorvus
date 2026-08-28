@@ -1,9 +1,8 @@
 import { Identifier } from "@/id/id"
-import { PermissionExecutionResultTable } from "@/permission/permission.sql"
 import { Database, desc, eq } from "@/storage/db"
 import { isDeepStrictEqual } from "node:util"
 import { Message } from "./message"
-import { normalizeToolResult } from "./tool-result-normalization"
+import { completedToolOutcomeOutput } from "./tool-outcome-facts"
 import {
   PartTable,
   MessageTable,
@@ -22,31 +21,6 @@ export function isToolRequestPartData(value: unknown): value is ToolRequestPartD
 
 export function toolOutcomePartIdentity(requestPartID: string): string {
   return Identifier.deterministic("part", `tool-outcome\0${requestPartID}`)
-}
-
-/**
- * The canonical string output of a completed tool outcome. A completed outcome
- * either carries its output inline or defers it to a durable Permission result
- * through `resultAttemptID`; every reader that reconstructs persisted tool facts
- * must resolve both, or a deferred output reads as an absent one.
- */
-export function completedToolOutcomeOutput(
-  db: Database.TxOrDb,
-  outcome: ToolOutcomePartData,
-  describe: () => string,
-): string | undefined {
-  if (outcome.outcome !== "completed") return undefined
-  if (!outcome.resultAttemptID) return outcome.output
-  const receipt = db
-    .select()
-    .from(PermissionExecutionResultTable)
-    .where(eq(PermissionExecutionResultTable.attempt_id, outcome.resultAttemptID))
-    .get()
-  if (!receipt) throw new Error(`${describe()} references missing Permission result ${outcome.resultAttemptID}`)
-  const stored = receipt.result as { kind?: string; value?: unknown }
-  if (stored?.kind === "undefined") return ""
-  if (stored?.kind !== "json") throw new Error(`Permission result ${receipt.attempt_id} has an invalid durable result envelope`)
-  return normalizeToolResult(stored.value).output
 }
 
 export function projectToolPartInTransaction(

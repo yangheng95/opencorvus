@@ -25,7 +25,7 @@
   color: var(--text-strong);
   box-shadow: none;
   font: inherit;
-  font-size: var(--ui-font-control);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-body);
   text-align: left;
   cursor: pointer;
@@ -77,8 +77,8 @@
   padding: var(--ui-gap-sm) var(--ui-gap-md);
   border-radius: var(--oc-radius-soft);
   color: var(--text-strong);
-  font-size: var(--ui-font-control);
-  line-height: 1.3;
+  font-size: var(--ui-font-body);
+  line-height: var(--ui-line-height-tight);
   cursor: default;
   transition:
     background-color var(--ui-duration-base) var(--ui-timing-standard),
@@ -93,7 +93,7 @@
 .oc-select-option-copy {
   display: flex;
   flex-direction: column;
-  gap: calc(2px * var(--ui-scale));
+  gap: var(--ui-gap-3xs);
   min-width: 0;
 }
 
@@ -133,21 +133,21 @@
  * internal trigger, popup, option, indicator, or icon part. */
 .oc-select-trigger[data-variant="composer"] {
   justify-content: center;
-  gap: calc(5px * var(--ui-scale));
+  gap: var(--ui-gap-sm);
   width: auto;
   max-width: 100%;
   min-width: 0;
   height: var(--oc-density-chip-height);
   min-height: var(--oc-density-chip-height);
-  padding: 0 calc(8px * var(--ui-scale));
+  padding: 0 var(--ui-gap-md);
   border: 0;
   border-radius: var(--oc-radius-pill);
   background: transparent;
   color: inherit;
   box-shadow: none;
-  font-size: var(--ui-font-control);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-medium);
-  line-height: 1;
+  line-height: var(--ui-line-height-flat);
 }
 
 .oc-select-trigger[data-variant="composer"]:hover:not([data-disabled]):not(:disabled),
@@ -171,15 +171,15 @@
 
 .oc-select-content[data-variant="composer"] {
   min-width: calc(188px * var(--ui-scale));
-  padding: calc(8px * var(--ui-scale));
+  padding: var(--ui-gap-md);
 }
 
 .oc-select-listbox[data-variant="composer"] {
   display: flex;
   flex-direction: column;
-  gap: calc(1px * var(--ui-scale));
+  gap: var(--ui-gap-3xs);
   max-height: min(calc(240px * var(--ui-scale)), calc(var(--ui-overlay-shell-height) - 32px));
-  padding: calc(6px * var(--ui-scale));
+  padding: var(--ui-gap-sm);
   border: var(--oc-border-width) solid var(--divider-soft);
   border-radius: var(--oc-radius-large);
   background: color-mix(in srgb, var(--surface-elevated) 86%, transparent);
@@ -187,10 +187,10 @@
 
 .oc-select-option[data-variant="composer"] {
   justify-content: flex-start;
-  gap: calc(8px * var(--ui-scale));
+  gap: var(--ui-gap-md);
   min-height: calc(34px * var(--ui-scale));
-  padding-block: calc(4px * var(--ui-scale));
-  font-size: var(--ui-font-small);
+  padding-block: var(--ui-gap-xs);
+  font-size: var(--ui-font-body);
 }
 
 .oc-select-option[data-variant="composer"] .oc-select-indicator {

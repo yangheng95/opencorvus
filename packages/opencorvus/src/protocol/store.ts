@@ -526,7 +526,7 @@ export namespace ProtocolStore {
             eq(ProtocolEventTable.type, type),
           ),
         )
-        .orderBy(desc(ProtocolEventTable.emitted_at), desc(ProtocolEventTable.seq), desc(ProtocolEventTable.id))
+        .orderBy(desc(ProtocolEventTable.emitted_at), desc(ProtocolEventTable.id))
         .get(),
     )
     return row ? eventView(row) : undefined
@@ -547,7 +547,7 @@ export namespace ProtocolStore {
             sql`json_extract(${ProtocolEventTable.payload}, '$.inputMessageID') = ${inputMessageID}`,
           ),
         )
-        .orderBy(desc(ProtocolEventTable.emitted_at), desc(ProtocolEventTable.seq), desc(ProtocolEventTable.id))
+        .orderBy(desc(ProtocolEventTable.emitted_at), desc(ProtocolEventTable.id))
         .get(),
     )
     return row ? eventView(row) : undefined

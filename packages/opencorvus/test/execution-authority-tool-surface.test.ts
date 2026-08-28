@@ -43,19 +43,19 @@ describe("execution authority Tool surfaces", () => {
       taskBuild: AgentToolPool.runtimeTemplateAssignment("build"),
     }).toEqual({
       coding: {
-        global: ["delegate_agent", ...conversationEffects],
+        global: ["delegate_agent", "skill_market", ...conversationEffects],
         private: [],
       },
       chat: {
-        global: ["delegate_agent", ...conversationEffects, "panel"],
+        global: ["delegate_agent", "skill_market", ...conversationEffects, "panel"],
         private: [],
       },
       work: {
-        global: ["delegate_agent", ...conversationEffects, "panel", ...WORK_ARTIFACT_TOOL_IDS],
+        global: ["delegate_agent", "skill_market", ...conversationEffects, "panel", ...WORK_ARTIFACT_TOOL_IDS],
         private: [],
       },
       mission: {
-        global: [...conversationEffects, "mission_skill", "panel", "scheduler_message", "wait"],
+        global: ["skill_market", ...conversationEffects, "mission_skill", "panel", "scheduler_message", "wait"],
         private: [],
       },
       taskBuild: {
@@ -107,6 +107,77 @@ describe("execution authority Tool surfaces", () => {
             operation: "work_artifact_validate",
             working_directory: project.path,
             payload_sha256: expect.any(String),
+          },
+        })
+      },
+    })
+  })
+
+  test("classifies Skill Market inspection and exact installation as distinct network-read and local-write effects", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const inspected = await permissionDescriptor({
+          providerKind: "builtin",
+          providerID: "builtin",
+          toolName: "skill_market",
+          args: { action: "inspect", id: "openai/skills/pdfs" },
+        })
+        const installed = await permissionDescriptor({
+          providerKind: "builtin",
+          providerID: "builtin",
+          toolName: "skill_market",
+          args: {
+            action: "install",
+            id: "openai/skills/pdfs",
+            expected_hash: "a".repeat(64),
+            policy: "deny",
+          },
+        })
+        expect({
+          inspect: { effectClass: inspected?.effectClass, resource: inspected?.scope.resource },
+          install: { effectClass: installed?.effectClass, resource: installed?.scope.resource },
+        }).toEqual({
+          inspect: {
+            effectClass: "network_read",
+            resource: {
+              scope_type: "skill_market",
+              operation: "inspect",
+              endpoint: {
+                scheme: "https",
+                hostname: "skills.sh",
+                port: "443",
+                pathname: "/",
+                query_sha256: undefined,
+                fragment_present: false,
+              },
+              query_sha256: undefined,
+              candidate_id: "openai/skills/pdfs",
+              expected_hash: undefined,
+              policy: undefined,
+              request_sha256: expect.any(String),
+            },
+          },
+          install: {
+            effectClass: "write_local",
+            resource: {
+              scope_type: "skill_market",
+              operation: "install",
+              endpoint: {
+                scheme: "https",
+                hostname: "skills.sh",
+                port: "443",
+                pathname: "/",
+                query_sha256: undefined,
+                fragment_present: false,
+              },
+              query_sha256: undefined,
+              candidate_id: "openai/skills/pdfs",
+              expected_hash: "a".repeat(64),
+              policy: "deny",
+              request_sha256: expect.any(String),
+            },
           },
         })
       },

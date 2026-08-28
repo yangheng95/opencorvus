@@ -26,6 +26,7 @@ import {
 } from "@/engine/workflow-binding"
 import { Identifier } from "@/id/id"
 import type { DispatchTurn } from "./dispatch-turn-projection"
+import type { ActiveTaskAcceptanceRepair } from "@/mission/acceptance-ledger"
 import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
 import path from "node:path"
 import { EvidenceLocatorInputListSchema } from "@opencorvus-ai/plugin/artifact-catalog"
@@ -50,6 +51,13 @@ export type DispatchAgentExecute = (
   context: DispatchAdapterExecutionContext,
 ) => Promise<DispatchOutcomeResult>
 export type DispatchAdapterExecutors = Readonly<Record<AgentDispatchAdapterID, DispatchAgentExecute>>
+
+export type AcceptanceRepairSelection = Readonly<{
+  gap_id: string
+  ledger_revision_artifact_id: string
+  execution_epoch: number
+  criterion_ids: string[]
+}>
 
 export interface DispatchAgentLineageHandle {
   readonly dispatchID: string
@@ -83,6 +91,7 @@ export type OpenDispatchAgentLineage = (input: {
   adapterInput: Record<string, unknown>
   continuationGuidance?: string
   evidenceLocators?: EvidenceLocator[]
+  acceptanceRepair?: AcceptanceRepairSelection
 }) => DispatchAgentLineageHandle | Promise<DispatchAgentLineageHandle>
 
 export type RunDispatchAgentInWorktree = <T>(input: {
@@ -374,6 +383,7 @@ export function createDispatchAgentTool(input: {
   runInWorktree: RunDispatchAgentInWorktree
   runDetached: RunDetachedDispatch
   runDetachedRecovery: RunDetachedDispatch
+  acceptanceRepair?: ActiveTaskAcceptanceRepair
 }) {
   if (input.projectedAgents.length === 0) {
     throw new Error("dispatch_agent requires at least one projected agent")
@@ -460,6 +470,28 @@ export function createDispatchAgentTool(input: {
           evidence_locators: EvidenceLocatorInputListSchema.default([]).describe(
             "Exact new durable evidence identities selected for this successor Turn. Name each Artifact by its exact revision or snapshot path only; the Host reads the digest, byte count, and media type itself, so never restate a content digest here. A session_message locator must be Task-owned and pair the Message with its actual producing Session; for a Mission acceptance-repair Task-root message, use the Task root Session authority and never missionSessionID.",
           ),
+          ...(input.acceptanceRepair
+            ? {
+                acceptance_gap_id: z
+                  .literal(input.acceptanceRepair.revision.gap.gap_id)
+                  .describe("Exact current Mission acceptance gap consumed by this continuation."),
+                criterion_ids: z
+                  .array(
+                    z
+                      .string()
+                      .refine(
+                        (criterionID) =>
+                          input.acceptanceRepair!.revision.gap.criteria.some(
+                            (criterion) => criterion.criterion_id === criterionID,
+                          ),
+                        "Criterion is not open in the current Mission acceptance gap.",
+                      ),
+                  )
+                  .min(1)
+                  .max(64)
+                  .describe("Only current gap criteria this worker continuation must consume."),
+              }
+            : {}),
         })
         .strict(),
     ])
@@ -512,6 +544,8 @@ export function createDispatchAgentTool(input: {
                   | { kind: "prior_dispatch"; continuation_dispatch_id: string }
                 guidance: string
                 evidence_locators: unknown
+                acceptance_gap_id?: string
+                criterion_ids?: string[]
               }
         }
       }
@@ -528,6 +562,24 @@ export function createDispatchAgentTool(input: {
           : undefined
       const continuationGuidance = continuationTurn?.guidance
       const continuationEvidenceLocators = continuationTurn?.evidence_locators
+      const acceptanceRepair = input.acceptanceRepair
+        ? continuationTurn?.acceptance_gap_id && continuationTurn.criterion_ids
+          ? {
+              gap_id: continuationTurn.acceptance_gap_id,
+              ledger_revision_artifact_id: input.acceptanceRepair.artifactID,
+              execution_epoch: input.acceptanceRepair.executionEpoch,
+              criterion_ids: continuationTurn.criterion_ids,
+            }
+          : undefined
+        : undefined
+      if (input.acceptanceRepair && !acceptanceRepair) {
+        throw new Error(`dispatch_agent acceptance-repair continuation is missing its current gap or criteria.`)
+      }
+      if (input.acceptanceRepair && initialTurn) {
+        throw new Error(
+          `dispatch_agent must continue an existing workflow occurrence while acceptance gap ${input.acceptanceRepair.revision.gap.gap_id} is active.`,
+        )
+      }
       const workflowSubject = initialTurn?.workflow_subject
       const targetInput = initialTurn?.input ?? {}
       const projectedAgent = agentsByID.get(target)
@@ -568,6 +620,7 @@ export function createDispatchAgentTool(input: {
           toolOptions: options,
           adapterInput: targetInput,
           continuationGuidance,
+          ...(acceptanceRepair ? { acceptanceRepair } : {}),
           evidenceLocators: await resolveTaskEvidenceLocators({
             taskID: input.taskID,
             evidenceLocators: continuationEvidenceLocators ?? [],
@@ -609,15 +662,18 @@ export function createDispatchAgentTool(input: {
           executorTargetInput,
           dispatch.deliverySliceRevisionIDs,
         )
-        const adapterInput =
-          DispatchAdapterContractRegistry.ownsWorktreeUsage(projectedAgent.identity.dispatchAdapterID)
-            ? {
-                ...frozenTargetInput,
-                worktreeUsage: useWorktree ? "managed_worktree" : "current_project",
-              }
-            : frozenTargetInput
+        const adapterInput = DispatchAdapterContractRegistry.ownsWorktreeUsage(
+          projectedAgent.identity.dispatchAdapterID,
+        )
+          ? {
+              ...frozenTargetInput,
+              worktreeUsage: useWorktree ? "managed_worktree" : "current_project",
+            }
+          : frozenTargetInput
         const preparedSessionID =
-          useWorktree && !DispatchAdapterContractRegistry.ownsWorktreeUsage(projectedAgent.identity.dispatchAdapterID) && !dispatch.existingSessionID
+          useWorktree &&
+          !DispatchAdapterContractRegistry.ownsWorktreeUsage(projectedAgent.identity.dispatchAdapterID) &&
+          !dispatch.existingSessionID
             ? Identifier.descending("session")
             : undefined
         let resolveCommittedLineage!: (lineage: { sessionID: string; artifactID: string }) => void
@@ -676,7 +732,10 @@ export function createDispatchAgentTool(input: {
           return parsed
         }
         const executeDetached = async () => {
-          if (useWorktree && !DispatchAdapterContractRegistry.ownsWorktreeUsage(projectedAgent.identity.dispatchAdapterID)) {
+          if (
+            useWorktree &&
+            !DispatchAdapterContractRegistry.ownsWorktreeUsage(projectedAgent.identity.dispatchAdapterID)
+          ) {
             const worktreeSessionID = dispatch.existingSessionID ?? preparedSessionID
             if (!worktreeSessionID) {
               throw new Error(`dispatch_agent ${target} did not allocate its managed-worktree Session identity`)
@@ -698,7 +757,9 @@ export function createDispatchAgentTool(input: {
           runDetachedRecovery: input.runDetachedRecovery,
           committedLineage,
           deliver: async ({ sessionID: completedSessionID, outcome, executionError }) => {
-            const { dispatchTaskLoop, reconcileTerminalAgentLifecycleDelivery } = await import("@/engine/task-root-ingress-delivery")
+            const { dispatchTaskLoop, reconcileTerminalAgentLifecycleDelivery } = await import(
+              "@/engine/task-root-ingress-delivery"
+            )
             const completedOutcome =
               outcome ??
               (executionError instanceof WorkerTurnSettlementError

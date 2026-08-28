@@ -3,17 +3,15 @@
 .chat-composer-stack {
   --chat-composer-min-height: calc(112px * var(--ui-scale));
   --chat-textarea-height: calc(56px * var(--ui-scale));
-  --chat-composer-font-size: var(--ui-font-control);
-  --chat-textarea-line-height: 1.34;
   --chat-composer-action-size: var(--oc-density-icon-button);
   --chat-compose-scale: 1;
 
   display: flex;
   flex-direction: column;
-  gap: calc(5px * var(--ui-scale));
+  gap: var(--ui-gap-sm);
   width: min(100%, var(--conversation-message-content-width));
   max-width: 100%;
-  margin: calc(16px * var(--ui-scale)) auto calc(20px * var(--ui-scale));
+  margin: var(--ui-gap-xl) auto var(--ui-gap-2xl);
   flex-shrink: 0;
   container-type: inline-size;
 }
@@ -24,11 +22,11 @@
 .chat-attachments {
   display: flex;
   flex-wrap: wrap;
-  gap: calc(6px * var(--ui-scale));
+  gap: var(--ui-gap-sm);
   width: 100%;
   min-width: 0;
   box-sizing: border-box;
-  padding: 0 calc(2px * var(--ui-scale));
+  padding: 0 var(--ui-gap-3xs);
 }
 
 /* Flat-redesign Step 2 (2026-05-04): attachment chip border retired
@@ -37,12 +35,12 @@
 .chat-attachment-item {
   display: flex;
   align-items: center;
-  gap: calc(5px * var(--ui-scale));
+  gap: var(--ui-gap-sm);
   background: color-mix(in srgb, var(--surface-inset) 78%, transparent);
   border: 0;
   border-radius: var(--oc-radius-soft);
-  padding: calc(4px * var(--ui-scale)) calc(8px * var(--ui-scale));
-  font-size: var(--ui-font-small);
+  padding: var(--ui-gap-xs) var(--ui-gap-md);
+  font-size: var(--ui-font-caption);
   color: var(--text-soft);
   max-width: calc(220px * var(--ui-scale));
   overflow: hidden;
@@ -86,7 +84,7 @@
   height: calc(28px * var(--ui-scale));
   background: color-mix(in srgb, var(--surface-strong) 84%, transparent);
   border-radius: var(--oc-radius-soft);
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-caption);
   font-weight: var(--ui-font-weight-strong);
   color: var(--text-muted);
   flex-shrink: 0;
@@ -117,12 +115,12 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: calc(6px * var(--ui-scale));
+  gap: var(--ui-gap-sm);
   width: 100%;
   max-width: 100%;
   min-height: var(--chat-composer-min-height);
   margin: 0;
-  padding: calc(12px * var(--ui-scale)) calc(16px * var(--ui-scale)) calc(10px * var(--ui-scale));
+  padding: var(--ui-gap-lg) var(--ui-gap-xl) var(--ui-gap-lg);
   box-sizing: border-box;
   border: var(--oc-border-width) solid color-mix(in srgb, var(--border) 76%, transparent);
   border-radius: var(--oc-radius-large);
@@ -133,11 +131,7 @@
 
 .chat-input:focus-within {
   border-color: color-mix(in srgb, var(--accent) 38%, var(--border));
-  background: linear-gradient(
-    180deg,
-    color-mix(in srgb, var(--surface-elevated) 98%, transparent),
-    color-mix(in srgb, var(--surface-strong) 98%, transparent)
-  );
+  background: var(--surface-elevated);
   box-shadow:
     0 0 0 calc(2px * var(--ui-scale)) color-mix(in srgb, var(--accent) 16%, transparent),
     var(--shadow-lg);
@@ -202,20 +196,20 @@
   z-index: 0;
   box-sizing: border-box;
   overflow: hidden;
-  padding: calc(5px * var(--ui-scale)) calc(6px * var(--ui-scale)) calc(3px * var(--ui-scale));
+  padding: var(--ui-gap-sm) var(--ui-gap-sm) var(--ui-gap-xs);
   border: var(--oc-border-width) solid transparent;
   color: var(--text-strong);
   font: inherit;
-  font-size: var(--chat-composer-font-size);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-body);
-  line-height: var(--chat-textarea-line-height);
+  line-height: var(--ui-line-height-tight);
   overflow-wrap: break-word;
   pointer-events: none;
   white-space: pre-wrap;
 }
 
 .chat-mention-pill {
-  padding-block: calc(1px * var(--ui-scale));
+  padding-block: var(--ui-gap-3xs);
   border-radius: var(--oc-radius-pill);
   background: color-mix(in srgb, var(--accent) 12%, var(--surface-inset));
   box-shadow: inset 0 0 0 var(--oc-border-width) color-mix(in srgb, var(--accent) 16%, transparent);
@@ -245,8 +239,8 @@
   align-items: center;
   justify-content: space-between;
   min-width: 0;
-  gap: calc(12px * var(--ui-scale));
-  padding: calc(4px * var(--ui-scale)) calc(9px * var(--ui-scale));
+  gap: var(--ui-gap-lg);
+  padding: var(--ui-gap-xs) var(--ui-gap-md);
   color: var(--text-soft);
   font-weight: var(--ui-font-weight-medium);
 }
@@ -260,7 +254,7 @@
   min-width: 0;
   overflow: hidden;
   color: var(--text-muted);
-  font-size: var(--ui-font-tiny);
+  font-size: var(--ui-font-caption);
   font-weight: var(--ui-font-weight-body);
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -275,7 +269,7 @@
     calc(var(--ui-overlay-shell-height) - 32px),
     var(--composer-mention-listbox-available-height, calc(var(--ui-overlay-shell-height) - 32px))
   );
-  gap: calc(3px * var(--ui-scale));
+  gap: var(--ui-gap-xs);
   overflow-y: auto;
   scroll-padding-block-start: var(--composer-mention-sticky-heading-height);
 }
@@ -287,11 +281,11 @@
   display: flex;
   align-items: center;
   min-height: var(--composer-mention-sticky-heading-height);
-  padding: calc(5px * var(--ui-scale)) calc(9px * var(--ui-scale)) calc(3px * var(--ui-scale));
+  padding: var(--ui-gap-sm) var(--ui-gap-md) var(--ui-gap-xs);
   border-top: var(--oc-border-width) solid var(--divider-soft);
   background: var(--menu-panel-bg);
   color: var(--text-muted);
-  font-size: var(--ui-font-tiny);
+  font-size: var(--ui-font-caption);
   font-weight: var(--ui-font-weight-medium);
   letter-spacing: var(--ui-letter-spacing-loose);
 }
@@ -304,10 +298,13 @@
   display: grid;
   grid-template-columns: calc(20px * var(--ui-scale)) minmax(0, 1fr) auto;
   align-items: center;
-  gap: calc(8px * var(--ui-scale));
-  height: calc(45px * var(--ui-scale));
+  gap: var(--ui-gap-md);
+  /* min-height only. A row with a description stacks 21 + 2 + 16.5 plus 12 of
+   * padding = 51.5px against the 45px this used to hard-set, and descriptions
+   * are the norm here — the copy bled into the 4px row gap above and below,
+   * and the last row's descenders were clipped at the scroll edge. */
   min-height: calc(45px * var(--ui-scale));
-  padding: calc(6px * var(--ui-scale)) calc(9px * var(--ui-scale));
+  padding: var(--ui-gap-sm) var(--ui-gap-md);
 }
 
 .composer-mention-option-icon {
@@ -336,7 +333,7 @@
 .composer-mention-option-copy {
   display: grid;
   min-width: 0;
-  gap: calc(2px * var(--ui-scale));
+  gap: var(--ui-gap-3xs);
 }
 
 :is(.composer-mention-option-label, .composer-mention-option-description) {
@@ -347,17 +344,22 @@
 
 .composer-mention-option-label {
   color: inherit;
-  font-size: var(--ui-font-control);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-strong);
 }
 
-:is(.composer-mention-option-description, .composer-mention-option-kind) {
+.composer-mention-option-description {
   color: var(--text-muted);
-  font-size: var(--ui-font-tiny);
+  font-size: var(--ui-font-body);
 }
 
 .composer-mention-option-kind {
-  padding: calc(2px * var(--ui-scale)) calc(6px * var(--ui-scale));
+  color: var(--text-muted);
+  font-size: var(--ui-font-caption);
+}
+
+.composer-mention-option-kind {
+  padding: var(--ui-gap-3xs) var(--ui-gap-sm);
   border-radius: var(--oc-radius-pill);
   background: color-mix(in srgb, var(--surface-inset) 74%, transparent);
   white-space: nowrap;
@@ -370,9 +372,9 @@
 }
 
 .composer-mention-empty {
-  padding: calc(18px * var(--ui-scale)) calc(10px * var(--ui-scale));
+  padding: var(--ui-gap-2xl) var(--ui-gap-lg);
   color: var(--text-muted);
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-body);
   text-align: center;
 }
 
@@ -385,8 +387,8 @@
   inset: 0;
   padding: calc(5px * var(--ui-scale) * var(--chat-compose-scale))
     calc(8px * var(--ui-scale) * var(--chat-compose-scale));
-  font-size: var(--chat-composer-font-size);
-  line-height: var(--chat-textarea-line-height);
+  font-size: var(--ui-font-body);
+  line-height: var(--ui-line-height-tight);
   color: var(--text-muted);
   pointer-events: none;
   overflow: hidden;
@@ -424,11 +426,14 @@
 
 .chat-compose-meta-right .oc-button[data-mode="send"]:disabled {
   --oc-button-border: 0 solid transparent;
-  --oc-button-bg: color-mix(in srgb, var(--text-strong) 42%, var(--surface-inset));
-  --oc-button-color: var(--text-on-strong);
+  /* Clearly inert: a low-presence wash with a muted glyph. The previous
+   * 42% solid fill read as an enabled mid-gray button, so an empty
+   * composer still advertised a clickable send. */
+  --oc-button-bg: color-mix(in srgb, var(--text-strong) 10%, transparent);
+  --oc-button-color: var(--text-muted);
 
   opacity: var(--ui-opacity-full);
-  box-shadow: inset 0 0 0 var(--oc-border-width) color-mix(in srgb, var(--text-strong) 12%, transparent);
+  box-shadow: none;
 }
 
 .chat-send-icon {
@@ -478,12 +483,12 @@
 .chat-input-warning {
   display: flex;
   align-items: center;
-  gap: calc(6px * var(--ui-scale));
+  gap: var(--ui-gap-sm);
   min-width: 0;
-  padding: calc(4px * var(--ui-scale)) calc(6px * var(--ui-scale));
+  padding: var(--ui-gap-xs) var(--ui-gap-sm);
   color: var(--warn);
-  font-size: var(--ui-font-meta);
-  line-height: 1.35;
+  font-size: var(--ui-font-caption);
+  line-height: var(--ui-line-height-tight);
 }
 
 .chat-input-warning svg {
@@ -498,7 +503,7 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  gap: calc(4px * var(--ui-scale));
+  gap: var(--ui-gap-xs);
   min-width: 0;
   flex: 0 0 auto;
 }
@@ -555,8 +560,8 @@
   min-width: 0;
   overflow: hidden;
   color: var(--text-muted);
-  font-size: var(--ui-font-meta);
-  line-height: 1.2;
+  font-size: var(--ui-font-caption);
+  line-height: var(--ui-line-height-tight);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -607,7 +612,7 @@
 .composer-runtime-menu-value {
   min-width: calc(20px * var(--ui-scale));
   color: var(--text-strong);
-  font-size: var(--chat-composer-font-size);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-strong);
   font-variant-numeric: tabular-nums;
   text-align: right;
@@ -616,21 +621,21 @@
 .composer-parallelism-menu {
   position: fixed;
   width: calc(244px * var(--ui-scale));
-  padding: calc(13px * var(--ui-scale));
+  padding: var(--ui-gap-lg);
 }
 
 .composer-parallelism-slider {
   display: grid;
-  gap: calc(11px * var(--ui-scale));
+  gap: var(--ui-gap-lg);
 }
 
 .composer-parallelism-slider-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: calc(12px * var(--ui-scale));
+  gap: var(--ui-gap-lg);
   color: var(--text-strong);
-  font-size: var(--chat-composer-font-size);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-medium);
 }
 
@@ -641,14 +646,14 @@
 .composer-parallelism-slider p {
   margin: 0;
   color: var(--text-muted);
-  font-size: var(--ui-font-meta);
-  line-height: 1.35;
+  font-size: var(--ui-font-body);
+  line-height: var(--ui-line-height-tight);
 }
 
 .composer-intent-selects {
   display: inline-flex;
   align-items: center;
-  gap: calc(6px * var(--ui-scale));
+  gap: var(--ui-gap-sm);
   min-width: 0;
 }
 
@@ -660,23 +665,23 @@
 .composer-mode-option {
   display: inline-flex;
   align-items: center;
-  gap: calc(6px * var(--ui-scale));
+  gap: var(--ui-gap-sm);
   min-width: 0;
   color: var(--text-strong);
-  font-size: var(--chat-composer-font-size);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-medium);
-  line-height: 1;
+  line-height: var(--ui-line-height-flat);
 }
 
 .composer-mode-menu-option {
   width: 100%;
-  gap: calc(8px * var(--ui-scale));
+  gap: var(--ui-gap-md);
 }
 
 .composer-context-flags {
   display: inline-flex;
   align-items: center;
-  gap: calc(6px * var(--ui-scale));
+  gap: var(--ui-gap-sm);
   min-width: 0;
   overflow: hidden;
 }
@@ -698,10 +703,10 @@
 
 .composer-context-flag.oc-badge {
   min-width: 0;
-  padding-inline: calc(8px * var(--ui-scale));
+  padding-inline: var(--ui-gap-md);
   border: var(--oc-border-width) solid color-mix(in srgb, var(--border) 48%, transparent);
   background: transparent;
-  font-size: var(--chat-composer-font-size);
+  font-size: var(--ui-font-body);
   overflow: hidden;
 }
 
@@ -760,7 +765,7 @@
 .composer-reference-trigger-label {
   min-width: 0;
   overflow: hidden;
-  font-size: var(--chat-composer-font-size);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-medium);
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -772,13 +777,13 @@
   height: calc(18px * var(--ui-scale));
   align-items: center;
   justify-content: center;
-  padding-inline: calc(5px * var(--ui-scale));
+  padding-inline: var(--ui-gap-sm);
   border-radius: var(--oc-radius-pill);
   background: color-mix(in srgb, var(--accent) 14%, var(--surface-inset));
   color: var(--accent);
-  font-size: var(--ui-font-tiny);
+  font-size: var(--ui-font-caption);
   font-variant-numeric: tabular-nums;
-  line-height: 1;
+  line-height: var(--ui-line-height-flat);
 }
 
 .composer-reference-popover {
@@ -790,20 +795,20 @@
 
 .composer-reference-popover-heading {
   display: grid;
-  gap: calc(2px * var(--ui-scale));
-  padding: calc(11px * var(--ui-scale)) calc(12px * var(--ui-scale)) calc(9px * var(--ui-scale));
+  gap: var(--ui-gap-3xs);
+  padding: var(--ui-gap-lg) var(--ui-gap-lg) var(--ui-gap-md);
   border-bottom: var(--oc-border-width) solid var(--divider-soft);
 }
 
 .composer-reference-popover-heading > :last-child {
   color: var(--text-muted);
-  font-size: var(--ui-font-tiny);
-  line-height: 1.35;
+  font-size: var(--ui-font-caption);
+  line-height: var(--ui-line-height-tight);
 }
 
 .composer-reference-search,
 .model-selector-search {
-  padding: calc(9px * var(--ui-scale));
+  padding: var(--ui-gap-md);
   border-bottom: var(--oc-border-width) solid var(--divider-soft);
   background: var(--menu-panel-bg);
 }
@@ -811,19 +816,19 @@
 .composer-reference-results {
   max-height: calc(360px * var(--ui-scale));
   overflow-y: auto;
-  padding: calc(8px * var(--ui-scale));
+  padding: var(--ui-gap-md);
   scrollbar-gutter: stable;
 }
 
 .composer-reference-section + .composer-reference-section {
-  margin-top: calc(10px * var(--ui-scale));
+  margin-top: var(--ui-gap-lg);
 }
 
 .composer-reference-section-title {
   display: block;
-  padding: calc(2px * var(--ui-scale)) calc(7px * var(--ui-scale)) calc(5px * var(--ui-scale));
+  padding: var(--ui-gap-3xs) var(--ui-gap-md) var(--ui-gap-sm);
   color: var(--text-muted);
-  font-size: var(--ui-font-tiny);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-strong);
   letter-spacing: 0.02em;
   text-transform: uppercase;
@@ -831,10 +836,10 @@
 
 .composer-reference-list {
   display: grid;
-  gap: calc(2px * var(--ui-scale));
+  gap: var(--ui-gap-3xs);
   max-height: calc(370px * var(--ui-scale));
   overflow-y: auto;
-  padding: calc(8px * var(--ui-scale));
+  padding: var(--ui-gap-md);
 }
 
 .composer-reference-results .composer-reference-list {
@@ -845,21 +850,21 @@
 
 .composer-reference-listbox {
   display: grid;
-  gap: calc(2px * var(--ui-scale));
+  gap: var(--ui-gap-3xs);
 }
 
 .composer-reference-listbox .composer-reference-section:not(:first-child) {
-  margin-top: calc(8px * var(--ui-scale));
+  margin-top: var(--ui-gap-md);
 }
 
 .composer-reference-option {
   display: grid;
   grid-template-columns: auto auto minmax(0, 1fr);
   align-items: center;
-  gap: calc(8px * var(--ui-scale));
+  gap: var(--ui-gap-md);
   width: 100%;
   min-height: calc(42px * var(--ui-scale));
-  padding: calc(6px * var(--ui-scale)) calc(7px * var(--ui-scale));
+  padding: var(--ui-gap-sm) var(--ui-gap-md);
   border-radius: var(--oc-radius-large);
 }
 
@@ -886,7 +891,7 @@
 }
 
 .composer-reference-option[data-reference-kind="action"] {
-  margin-top: calc(3px * var(--ui-scale));
+  margin-top: var(--ui-gap-xs);
   background: color-mix(in srgb, var(--accent) 6%, transparent);
 }
 
@@ -925,14 +930,14 @@
 .composer-reference-option-copy {
   display: grid;
   min-width: 0;
-  gap: calc(1px * var(--ui-scale));
+  gap: var(--ui-gap-3xs);
 }
 
 .composer-reference-option-heading {
   display: flex;
   min-width: 0;
   align-items: baseline;
-  gap: calc(6px * var(--ui-scale));
+  gap: var(--ui-gap-sm);
 }
 
 .composer-reference-option-name {
@@ -941,7 +946,7 @@
   flex: 0 0 auto;
   overflow: hidden;
   color: var(--text-strong);
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-medium);
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -950,10 +955,14 @@
 :is(.composer-reference-option-meta, .composer-reference-option-description) {
   overflow: hidden;
   color: var(--text-muted);
-  font-size: var(--ui-font-tiny);
-  line-height: 1.3;
+  font-size: var(--ui-font-caption);
+  line-height: var(--ui-line-height-tight);
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.composer-reference-option-description {
+  font-size: var(--ui-font-body);
 }
 
 .composer-reference-option-meta {
@@ -962,33 +971,33 @@
 }
 
 .composer-reference-empty {
-  padding: calc(18px * var(--ui-scale)) calc(12px * var(--ui-scale));
+  padding: var(--ui-gap-2xl) var(--ui-gap-lg);
   color: var(--text-muted);
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-body);
   text-align: center;
 }
 
 .composer-reference-market {
   display: grid;
-  gap: calc(4px * var(--ui-scale));
-  padding-top: calc(6px * var(--ui-scale));
-  border-top: 1px solid var(--border-subtle);
+  gap: var(--ui-gap-xs);
+  padding-top: var(--ui-gap-sm);
+  border-top: 1px solid var(--divider-soft);
   min-width: 0;
 }
 
 .composer-reference-market-head {
   display: flex;
   align-items: center;
-  gap: calc(6px * var(--ui-scale));
-  padding: calc(4px * var(--ui-scale)) calc(10px * var(--ui-scale));
+  gap: var(--ui-gap-sm);
+  padding: var(--ui-gap-xs) var(--ui-gap-lg);
   color: var(--text-muted);
-  font-size: var(--ui-font-meta);
+  font-size: var(--ui-font-caption);
 }
 
 .composer-reference-market-error {
-  padding: calc(4px * var(--ui-scale)) calc(10px * var(--ui-scale));
-  color: var(--text-bad, var(--text-muted));
-  font-size: var(--ui-font-meta);
+  padding: var(--ui-gap-xs) var(--ui-gap-lg);
+  color: var(--bad);
+  font-size: var(--ui-font-body);
   overflow-wrap: anywhere;
 }
 
@@ -996,8 +1005,8 @@
   display: grid;
   grid-template-columns: auto auto minmax(0, 1fr) auto;
   align-items: center;
-  gap: calc(8px * var(--ui-scale));
-  padding: calc(6px * var(--ui-scale)) calc(10px * var(--ui-scale));
+  gap: var(--ui-gap-md);
+  padding: var(--ui-gap-sm) var(--ui-gap-lg);
   min-width: 0;
 }
 
@@ -1029,12 +1038,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: calc(5px * var(--ui-scale));
+  gap: var(--ui-gap-sm);
   width: auto;
   max-width: 100%;
   min-height: var(--oc-button-height);
   min-width: 0;
-  padding: 0 calc(8px * var(--ui-scale));
+  padding: 0 var(--ui-gap-md);
   border: 0;
   border-radius: var(--oc-radius-pill);
   background: transparent;
@@ -1056,7 +1065,7 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: calc(5px * var(--ui-scale));
+  gap: var(--ui-gap-sm);
   min-width: 0;
   max-width: 100%;
   flex: 1 1 auto;
@@ -1067,9 +1076,9 @@
   min-width: 0;
   overflow: hidden;
   color: var(--text-strong);
-  font-size: var(--chat-composer-font-size);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-medium);
-  line-height: 1;
+  line-height: var(--ui-line-height-flat);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -1083,7 +1092,7 @@
 .composer-model-usage-tooltip {
   width: max-content;
   max-width: calc(100cqw - calc(32px * var(--ui-scale)));
-  padding: calc(8px * var(--ui-scale)) calc(10px * var(--ui-scale));
+  padding: var(--ui-gap-md) var(--ui-gap-lg);
 }
 
 .composer-model-usage-card {
@@ -1091,20 +1100,20 @@
   grid-template-columns: max-content max-content;
   align-items: center;
   min-width: calc(176px * var(--ui-scale));
-  gap: calc(16px * var(--ui-scale));
+  gap: var(--ui-gap-xl);
 }
 
 .composer-model-usage-label,
 .composer-model-usage-message {
   color: var(--text-muted);
-  font-size: var(--ui-font-control);
+  font-size: var(--ui-font-body);
   line-height: var(--ui-line-height-tight);
 }
 
 .composer-model-usage-value {
   justify-self: end;
   color: var(--text-strong);
-  font-size: var(--ui-font-control);
+  font-size: var(--ui-font-body);
   font-variant-numeric: tabular-nums;
   font-weight: var(--ui-font-weight-strong);
   line-height: var(--ui-line-height-tight);
@@ -1136,8 +1145,8 @@ div:has(> .composer-model-selector-popover) {
 
   justify-content: flex-start;
   width: 100%;
-  margin-top: calc(6px * var(--ui-scale));
-  padding-block: calc(7px * var(--ui-scale));
+  margin-top: var(--ui-gap-sm);
+  padding-block: var(--ui-gap-md);
   border-top: var(--oc-border-width) solid var(--divider-soft);
   border-radius: 0 0 var(--oc-radius-soft) var(--oc-radius-soft);
   text-align: left;
@@ -1146,20 +1155,20 @@ div:has(> .composer-model-selector-popover) {
 .composer-model-configure-provider-copy {
   display: grid;
   min-width: 0;
-  gap: calc(2px * var(--ui-scale));
+  gap: var(--ui-gap-3xs);
 }
 
 .composer-model-configure-provider-copy > :first-child {
   animation: composer-discovery-color-pulse var(--ui-duration-loop-pulse) var(--ui-timing-standard) infinite;
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-medium);
 }
 
 .composer-model-configure-provider-copy small {
   overflow: hidden;
   color: var(--text-muted);
-  font-size: var(--ui-font-tiny);
-  line-height: 1.25;
+  font-size: var(--ui-font-body);
+  line-height: var(--ui-line-height-tight);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -1216,7 +1225,7 @@ div:has(> .composer-model-selector-popover) {
   display: inline-block;
   width: 0.42em;
   height: 0.42em;
-  margin-left: calc(4px * var(--ui-scale));
+  margin-left: var(--ui-gap-xs);
   vertical-align: middle;
   background: var(--accent);
   border-radius: 50%;
@@ -1235,25 +1244,25 @@ div:has(> .composer-model-selector-popover) {
 .model-selector-popover-body {
   display: grid;
   flex-direction: column;
-  gap: calc(7px * var(--ui-scale));
+  gap: var(--ui-gap-md);
   max-height: calc(390px * var(--ui-scale));
   overflow-y: auto;
-  padding: calc(8px * var(--ui-scale));
+  padding: var(--ui-gap-md);
   scrollbar-gutter: stable;
 }
 
 .model-selector-popover-empty {
-  padding: calc(10px * var(--ui-scale));
+  padding: var(--ui-gap-lg);
   color: var(--text-muted);
-  font-size: var(--ui-font-small);
-  line-height: 1.4;
+  font-size: var(--ui-font-body);
+  line-height: var(--ui-line-height-tight);
 }
 
 .model-selector-popover-error {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: calc(8px * var(--ui-scale));
+  gap: var(--ui-gap-md);
 }
 
 .model-selector-popover-error > span {
@@ -1264,8 +1273,8 @@ div:has(> .composer-model-selector-popover) {
 .model-selector-popover-group {
   display: flex;
   flex-direction: column;
-  gap: calc(3px * var(--ui-scale));
-  padding: calc(6px * var(--ui-scale));
+  gap: var(--ui-gap-xs);
+  padding: var(--ui-gap-sm);
   border: var(--oc-border-width) solid var(--divider-soft);
   border-radius: var(--oc-radius-large);
   background: color-mix(in srgb, var(--surface-elevated) 86%, transparent);
@@ -1275,10 +1284,10 @@ div:has(> .composer-model-selector-popover) {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
-  gap: calc(7px * var(--ui-scale));
-  padding: calc(1px * var(--ui-scale)) calc(4px * var(--ui-scale)) calc(5px * var(--ui-scale));
+  gap: var(--ui-gap-md);
+  padding: var(--ui-gap-3xs) var(--ui-gap-xs) var(--ui-gap-sm);
   color: var(--text-muted);
-  font-size: var(--ui-font-tiny);
+  font-size: var(--ui-font-caption);
   font-weight: var(--ui-font-weight-strong);
 }
 
@@ -1291,13 +1300,13 @@ div:has(> .composer-model-selector-popover) {
   border-radius: var(--oc-radius-soft);
   background: color-mix(in srgb, var(--accent) 14%, var(--surface-inset));
   color: var(--accent);
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-caption);
 }
 
 .model-selector-popover-group-copy {
   display: grid;
   min-width: 0;
-  gap: calc(1px * var(--ui-scale));
+  gap: var(--ui-gap-3xs);
 }
 
 .model-selector-popover-group-name {
@@ -1309,7 +1318,7 @@ div:has(> .composer-model-selector-popover) {
 
 :is(.model-selector-popover-group-id, .model-selector-popover-group-count) {
   color: var(--text-muted);
-  font-size: var(--ui-font-tiny);
+  font-size: var(--ui-font-caption);
   font-weight: var(--ui-font-weight-medium);
 }
 
@@ -1320,7 +1329,7 @@ div:has(> .composer-model-selector-popover) {
 }
 
 .model-selector-popover-group-count {
-  padding: calc(3px * var(--ui-scale)) calc(7px * var(--ui-scale));
+  padding: var(--ui-gap-xs) var(--ui-gap-md);
   border-radius: var(--oc-radius-pill);
   background: var(--surface-inset);
   white-space: nowrap;
@@ -1329,18 +1338,18 @@ div:has(> .composer-model-selector-popover) {
 .model-selector-listbox {
   display: flex;
   flex-direction: column;
-  gap: calc(1px * var(--ui-scale));
+  gap: var(--ui-gap-3xs);
 }
 
 .model-selector-option {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: calc(8px * var(--ui-scale));
+  gap: var(--ui-gap-md);
   min-height: calc(34px * var(--ui-scale));
-  padding-block: calc(4px * var(--ui-scale));
+  padding-block: var(--ui-gap-xs);
   justify-content: flex-start;
-  font-size: var(--ui-font-small);
+  font-size: var(--ui-font-body);
 }
 
 .composer-picker-option-icon {
@@ -1359,7 +1368,7 @@ div:has(> .composer-model-selector-popover) {
   display: grid;
   min-width: 0;
   flex: 1 1 auto;
-  gap: calc(2px * var(--ui-scale));
+  gap: var(--ui-gap-3xs);
 }
 
 .composer-picker-option-label {
@@ -1373,7 +1382,7 @@ div:has(> .composer-model-selector-popover) {
   min-width: 0;
   overflow: hidden;
   color: var(--text-muted);
-  font-size: var(--ui-font-tiny);
+  font-size: var(--ui-font-caption);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -1393,10 +1402,10 @@ div:has(> .composer-model-selector-popover) {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
   align-items: center;
-  gap: calc(14px * var(--ui-scale));
+  gap: var(--ui-gap-xl);
   width: min(100%, calc(520px * var(--ui-scale)));
   min-height: auto;
-  padding: calc(18px * var(--ui-scale)) calc(20px * var(--ui-scale));
+  padding: var(--ui-gap-2xl) var(--ui-gap-2xl);
   border: 0 solid transparent;
   border-left: 0 solid transparent;
   border-radius: 0;

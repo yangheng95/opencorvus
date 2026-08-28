@@ -63,12 +63,16 @@ async function establishProjectedSchedulerSnapshot(input: {
   await fs.mkdir(path.dirname(path.join(input.projectPath, input.file)), { recursive: true })
   await fs.writeFile(path.join(input.projectPath, input.file), input.contents)
 
-  const rootSession = await Session.create({ kind: "root", title: "Scheduler snapshot contract" })
+  const rootSession = Session.prepareRootNext({
+    kind: "root",
+    directory: Instance.directory,
+    title: "Scheduler snapshot contract",
+  })
   const taskID = Identifier.ascending("task")
   const now = Date.now()
   persistTask({
     taskID,
-    sessionID: rootSession.id,
+    rootSession: rootSession,
     now,
     title: "Scheduler snapshot contract",
     request: "Freeze exact current-project Task inputs before dispatch",
@@ -318,18 +322,16 @@ describe("Task Artifact immutable Git commit publication", () => {
         await git(project.path, ["commit", "-m", "advance primary report version"])
         const currentPrimary = await fs.readFile(absolute, "utf8")
 
-        const rootSession = await Session.create({ kind: "root", title: "Commit publication contract" })
-        const workerSession = await Session.createNext({
-          kind: "build",
-          parentID: rootSession.id,
-          directory: project.path,
-          title: "Commit publication worker",
+        const rootSession = Session.prepareRootNext({
+          kind: "root",
+          directory: Instance.directory,
+          title: "Commit publication contract",
         })
         const taskID = Identifier.ascending("task")
         const now = Date.now()
         persistTask({
           taskID,
-          sessionID: rootSession.id,
+          rootSession: rootSession,
           now,
           title: "Commit publication contract",
           request: "Publish exact immutable merge result bytes",
@@ -345,6 +347,12 @@ describe("Task Artifact immutable Git commit publication", () => {
             packageRevisionSHA256: packageRevision.packageDigest,
             timeCreated: now,
           }),
+        })
+        const workerSession = await Session.createNext({
+          kind: "build",
+          parentID: rootSession.id,
+          directory: project.path,
+          title: "Commit publication worker",
         })
         const assistantMessageID = Identifier.ascending("message")
         const mergePartID = Identifier.ascending("part")

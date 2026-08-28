@@ -1,4 +1,5 @@
-import { Database, and, eq, lt } from "@/storage/db"
+import type { Database } from "@/storage/db"
+import { and, eq, lt } from "drizzle-orm"
 import { assertEngineArtifactPayloadIdentity } from "./artifact-catalog-metadata"
 import { EngineArtifactTable } from "./engine.sql"
 import { GoalGraphProjectionArtifactPayloadSchema, resolveGoalGraphProjectionTip } from "./goal-graph-projection"

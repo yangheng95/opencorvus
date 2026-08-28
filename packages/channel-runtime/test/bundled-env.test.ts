@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs"
 import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises"
 import os from "node:os"
 import path from "node:path"
-import { applyBundledEnv } from "../src/bundled-env"
+import { applyBundledEnv, parseBundle } from "../src/bundled-env"
 
 const repoRoot = path.resolve(import.meta.dir, "../../..")
 const originalOpenCorvusHome = process.env.OPENCORVUS_HOME
@@ -67,6 +67,58 @@ describe("bundled env", () => {
     expect(state.first_used_at).toBe(now)
   })
 
+  test("a partially invalid bundle is refused before it can spend the one-shot window", async () => {
+    const data = await fixture()
+    // One valid line and one malformed line. The malformed line used to be
+    // skipped silently, so the bundle still looked usable — and the bounded
+    // secret window was signed before the caller learned anything was wrong.
+    await writeFile(data.file, "BUNDLE_TOKEN=trial-token\nthis line has no assignment\n")
+    const now = Date.parse("2026-03-03T08:00:00.000Z")
+
+    const result = await applyBundledEnv(now)
+
+    expect({
+      enabled: result.enabled,
+      applied: result.applied,
+      skipped: result.skipped,
+      reason: result.reason,
+      applied_to_env: process.env.BUNDLE_TOKEN,
+      stateWritten: await readFile(data.state, "utf8").then(
+        () => true,
+        () => false,
+      ),
+    }).toEqual({
+      enabled: false,
+      applied: 0,
+      skipped: 1,
+      reason: "invalid_bundle",
+      applied_to_env: undefined,
+      stateWritten: false,
+    })
+  })
+
+  test("an invalid variable name is an invalid bundle, not a skipped line", async () => {
+    const data = await fixture()
+    await writeFile(data.file, "BUNDLE_TOKEN=trial-token\n1INVALID=nope\n")
+    const result = await applyBundledEnv(Date.parse("2026-03-03T08:00:00.000Z"))
+    expect({
+      enabled: result.enabled,
+      reason: result.reason,
+      skipped: result.skipped,
+      invalidLines: result.invalidLines,
+      windowClaimed: await readFile(data.state, "utf8").then(
+        () => true,
+        () => false,
+      ),
+    }).toEqual({
+      enabled: false,
+      reason: "invalid_bundle",
+      skipped: 1,
+      invalidLines: [{ line: 2, text: "1INVALID=nope" }],
+      windowClaimed: false,
+    })
+  })
+
   test("keeps user env as higher priority than bundled env", async () => {
     const data = await fixture()
     await writeFile(data.file, "BUNDLE_TOKEN=trial-token\nBUNDLE_ONLY=from-bundle\n")
@@ -88,7 +140,6 @@ describe("bundled env", () => {
     await writeFile(data.state, "{")
 
     await expect(applyBundledEnv(Date.parse("2026-03-30T08:00:00.000Z"))).rejects.toThrow("Invalid bundled env state")
-
   })
 
   test("real concurrent Bun runtimes claim one immutable first-use timestamp", async () => {
@@ -123,6 +174,32 @@ describe("bundled env", () => {
     expect(new Set(outputs.map((output) => output.firstUsedAt)).size).toBe(1)
     const persisted = JSON.parse(await readFile(data.state, "utf8")) as { first_used_at: number }
     expect(new Date(persisted.first_used_at).toISOString()).toBe(outputs[0]!.firstUsedAt)
+  })
+
+  test("a comments-only bundle is empty, not invalid", async () => {
+    const data = await fixture()
+    // This is exactly the shape of the shipped .env.bundle.example: every
+    // non-blank line is a comment. Reporting it invalid told operators their
+    // own example file was broken.
+    await writeFile(data.file, "# Optional bundled trial config.\n# Nothing is declared yet.\n")
+
+    const result = await applyBundledEnv(Date.parse("2026-03-03T08:00:00.000Z"))
+
+    expect({
+      enabled: result.enabled,
+      reason: result.reason,
+      applied: result.applied,
+      windowClaimed: await readFile(data.state, "utf8").then(
+        () => true,
+        () => false,
+      ),
+    }).toEqual({ enabled: false, reason: "empty_bundle", applied: 0, windowClaimed: false })
+  })
+
+  test("the shipped example file itself parses as an empty bundle", async () => {
+    const example = await readFile(path.join(import.meta.dir, "..", ".env.bundle.example"), "utf8")
+    const parsed = parseBundle(example)
+    expect(parsed).toEqual({ valid: true, env: {} })
   })
 
   test("bundle example names the runtime env variable", () => {

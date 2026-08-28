@@ -1,10 +1,10 @@
-import { spawn } from "node:child_process"
 import fs from "node:fs/promises"
 import os from "node:os"
 import path from "node:path"
 import { setTimeout as delay } from "node:timers/promises"
 import { pathToFileURL } from "node:url"
 import { resolveOpenCorvusRuntimePaths } from "@opencorvus-ai/util/runtime-paths"
+import { NodeProcess } from "@opencorvus-ai/util/process-node"
 
 export namespace BrowserRuntime {
   export type BrowserProxyConfig = {
@@ -16,7 +16,15 @@ export namespace BrowserRuntime {
 
   type PlaywrightModule = {
     chromium: {
-      launch(input: { executablePath: string; headless: boolean; args: string[]; timeout: number }): Promise<any>
+      launch(input: {
+        executablePath: string
+        headless: boolean
+        args: string[]
+        timeout: number
+        handleSIGHUP: false
+        handleSIGINT: false
+        handleSIGTERM: false
+      }): Promise<any>
       connectOverCDP(endpointURL: string, input: { timeout: number }): Promise<any>
     }
   }
@@ -95,8 +103,7 @@ export namespace BrowserRuntime {
           ? "BrowserRuntime could not connect to the running Google Chrome instance."
           : "BrowserRuntime could not connect to the configured CDP endpoint.",
       checkedCandidates: [],
-      recoveryCommand:
-        target === "chrome" ? CHROME_CHANNEL_RECOVERY_COMMAND : CDP_ENDPOINT_RECOVERY_COMMAND,
+      recoveryCommand: target === "chrome" ? CHROME_CHANNEL_RECOVERY_COMMAND : CDP_ENDPOINT_RECOVERY_COMMAND,
     }
   }
 
@@ -287,6 +294,12 @@ export namespace BrowserRuntime {
         headless: input.headless,
         args: input.args ?? defaultLaunchArgs({ proxyServer: input.proxyServer }),
         timeout: resolveBrowserLaunchTimeoutMs(input.timeoutMs),
+        // The HTTP/stdio composition root owns the process signal and its one
+        // terminal cleanup receipt. Playwright's default handlers would be a
+        // second owner racing Browser Session settlement and process exit.
+        handleSIGHUP: false,
+        handleSIGINT: false,
+        handleSIGTERM: false,
       })
     } catch (error) {
       const detail = error instanceof Error ? error.message : String(error)
@@ -384,20 +397,26 @@ export namespace BrowserRuntime {
     }
     const executablePath = await findBrowserExecutable(input?.executablePath)
     await fs.mkdir(userDataDir, { recursive: true })
-    const child = spawn(executablePath, managedChromeLaunchArgs(userDataDir), {
-      detached: true,
-      stdio: "ignore",
+    const child = await NodeProcess.spawn({
+      command: { executable: executablePath, args: managedChromeLaunchArgs(userDataDir) },
+      ownership: "detached",
+      stdin: "ignore",
+      stdout: "ignore",
+      stderr: "ignore",
+      windowsHide: false,
     })
     child.unref()
     let exitCode: number | null = null
     let spawnError: string | undefined
-    child.on("error", (error) => {
-      spawnError = error.message
-      exitCode = exitCode ?? -1
-    })
-    child.on("exit", (code) => {
-      exitCode = code ?? 0
-    })
+    void child.terminal.then(
+      (receipt) => {
+        exitCode = receipt.exitCode ?? (receipt.signal ? 1 : 0)
+      },
+      (error) => {
+        spawnError = error instanceof Error ? error.message : String(error)
+        exitCode = exitCode ?? -1
+      },
+    )
     const deadline = Date.now() + resolveChromeCdpStartupTimeoutMs(input?.startupTimeoutMs, env)
     while (Date.now() < deadline) {
       const endpointURL = await tryResolveChromeCdpEndpoint(userDataDir)

@@ -26,11 +26,6 @@
   --session-scrollbar-size: calc(12px * var(--ui-scale));
   --ui-left-rail-scrollbar-gutter-x: 0px;
 
-  --ui-font-label: var(--ui-font-meta);
-  --ui-gap-xs: calc(4px * var(--ui-scale));
-  --ui-gap-sm: calc(6px * var(--ui-scale));
-  --ui-gap-md: calc(8px * var(--ui-scale));
-  --ui-gap-lg: calc(12px * var(--ui-scale));
   --ui-titlebar-padding-x: calc(8px * var(--ui-scale));
   --ui-brand-logo-size: calc(14px * var(--ui-scale));
   --ui-input-padding-y: calc(5px * var(--ui-scale));
@@ -39,7 +34,12 @@
   --ui-btn-padding-y: calc(5px * var(--ui-scale));
   --ui-btn-padding-x: calc(12px * var(--ui-scale));
   --ui-btn-mini-padding-y: calc(3px * var(--ui-scale));
-  --ui-btn-mini-padding-x: min(calc(8px * var(--ui-scale)), 8px);
+  /* Was `min(calc(8px * var(--ui-scale)), 8px)` — the only entry in the whole
+   * ladder pinned to a bare px. Above 1x the min() always picked the
+   * constant, so a mini button's horizontal padding froze at 8px while its
+   * font and vertical padding kept scaling: at 1.6x the label crowded both
+   * pill edges. */
+  --ui-btn-mini-padding-x: calc(8px * var(--ui-scale));
   --ui-pill-padding-y: calc(2px * var(--ui-scale));
   --ui-pill-padding-x: calc(8px * var(--ui-scale));
   --ui-pill-min-height: calc(20px * var(--ui-scale));
@@ -65,9 +65,8 @@
   --ui-chat-message-padding-x: calc(22px * var(--ui-scale));
   --ui-chat-scrollbar-gutter-x: var(--session-scrollbar-size);
   --ui-select-padding-right: calc(28px * var(--ui-scale));
-  /* --title-size / --subhead-size aliases retired 2026-05-04 (Step 5
-   * v3, rule 8). Consumers reference --ui-font-title / --ui-font-
-   * control directly. */
+  /* Components consume the canonical application typography roles directly;
+   * local font-size aliases are not part of the cascade contract. */
 }
 
 *,
@@ -104,7 +103,7 @@ body {
 
   font-family: var(--font);
   font-size: var(--ui-font-body);
-  line-height: 1.5;
+  line-height: var(--ui-line-height-normal);
   color: var(--text);
   position: fixed;
   inset: 0 auto auto 0;
@@ -141,6 +140,10 @@ input,
 textarea,
 select {
   font: inherit;
+}
+
+:where(strong, b) {
+  font-weight: var(--ui-font-weight-strong);
 }
 
 a {

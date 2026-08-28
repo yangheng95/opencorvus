@@ -99,15 +99,16 @@ async function projectedSchedulerSurface(input: {
     config,
   })
   const taskID = Identifier.ascending("task")
-  const root = await Session.create({
+  const root = Session.prepareRootNext({
     kind: "root",
+    directory: Instance.directory,
     title: "Projected scheduler control root",
     metadata: { configOverlay: { prompt_profile: { active: schedulerCapability.expertSquadID } } },
   })
   const now = Date.now()
   persistEstablishedTask({
     taskID,
-    sessionID: root.id,
+    rootSession: root,
     now,
     title: "Projected scheduler control root",
     request: "Exercise the projected scheduler Tool-result control surface",
@@ -227,15 +228,16 @@ async function projectedWorkerDecisionSurface(input: { projectPath: string }) {
     config,
   })
   const taskID = Identifier.ascending("task")
-  const root = await Session.create({
+  const root = Session.prepareRootNext({
     kind: "root",
+    directory: Instance.directory,
     title: "Projected worker control root",
     metadata: { configOverlay: { prompt_profile: { active: packageRevision.id } } },
   })
   const now = Date.now()
   persistEstablishedTask({
     taskID,
-    sessionID: root.id,
+    rootSession: root,
     now,
     title: "Projected worker control root",
     request: "Exercise the production worker coordination control writer",

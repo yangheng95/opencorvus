@@ -5,7 +5,7 @@ import { ControlMessage, controlFinalMessageText } from "@/control/message"
 import { ControlMessageInput, ControlMessageResult } from "@/control/message-schema"
 import { Database, and, eq } from "@/storage/db"
 import { Identifier } from "@/id/id"
-import { acquireControlLease, assertControlLeaseInTransaction } from "@/engine/control-lease"
+import { acquireControlLease, assertControlLeaseInTransaction, releaseControlLeaseInTransaction, releaseControlLeaseOnErrorPath } from "@/engine/control-lease"
 import { Instance } from "@/project/instance"
 import z from "zod"
 import { ChannelId } from "./catalog"
@@ -106,21 +106,46 @@ export namespace ChannelIngress {
       leaseMilliseconds: 120_000,
     })
     if (!lease.acquired) throw new ChannelIngressOutcomeUnknownError(input.request_id)
-    const result = await executeMessage(input)
-    afterEffectBeforeOutcome?.()
-    Database.immediateTransaction((db) => {
-      assertControlLeaseInTransaction(db, {
+    let result: z.output<typeof ChannelIngressResult>
+    try {
+      result = await executeMessage(input)
+    } catch (error) {
+      // This request has no outcome and this process is no longer executing
+      // it. Holding the lease would make the whole lease duration the retry
+      // period and leave `reconcile` unable to take the request, so ownership
+      // goes back before the failure propagates.
+      releaseControlLeaseOnErrorPath({
         target: "effect",
         targetID: accepted.row.id,
         leaseID: lease.lease.id,
         ownerOccurrenceID: owner,
         now: Date.now(),
       })
+      throw error
+    }
+    afterEffectBeforeOutcome?.()
+    Database.immediateTransaction((db) => {
+      const settledAt = Date.now()
+      assertControlLeaseInTransaction(db, {
+        target: "effect",
+        targetID: accepted.row.id,
+        leaseID: lease.lease.id,
+        ownerOccurrenceID: owner,
+        now: settledAt,
+      })
       db.insert(ChannelIngressOutcomeTable).values({
         request_id: accepted.row.id,
         result,
-        time_created: Date.now(),
+        time_created: settledAt,
       }).run()
+      // The outcome is the terminal receipt. Its lease ends with it.
+      releaseControlLeaseInTransaction(db, {
+        target: "effect",
+        targetID: accepted.row.id,
+        leaseID: lease.lease.id,
+        ownerOccurrenceID: owner,
+        now: settledAt,
+      })
     })
     return result
   }

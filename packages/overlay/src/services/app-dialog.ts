@@ -26,6 +26,12 @@ export type AppDialogOptions = {
   selectLabel?: string
   selectValue?: string
   selectOptions?: Array<{ value: string; label?: string }>
+  /**
+   * An external URL offered as a button in the dialog footer. The open happens
+   * inside that click, which is the only way a browser will allow it — a flow
+   * that opens after an await has already lost its user activation.
+   */
+  link?: { url: string; label: string }
 }
 
 export type AppDialogOpenOptions = AppDialogOptions & { openingGuard?: () => boolean }
@@ -143,6 +149,11 @@ export function showAppDialog(options: AppDialogOpenOptions = {}): Promise<AppDi
           selectLabel: options.selectLabel || t("dialog.input"),
           selectValue,
           selectOptions: options.selectOptions || [],
+          // Listed explicitly like every other field: this write is the whole
+          // state, so an omitted key is simply never delivered. Passing
+          // `undefined` also clears a previous dialog's action rather than
+          // letting it linger.
+          link: options.link,
         })
         activeDialog = completion
         committed = true
@@ -155,13 +166,14 @@ export function showAppDialog(options: AppDialogOpenOptions = {}): Promise<AppDi
 
 export async function nativeMessage(
   message: string,
-  options: { title?: string; kind?: string; okLabel?: string } = {},
+  options: { title?: string; kind?: string; okLabel?: string; link?: AppDialogOptions["link"] } = {},
 ): Promise<AppDialogResult> {
   return showAppDialog({
     title: options.title,
     message,
     kind: options.kind,
     okLabel: options.okLabel,
+    link: options.link,
   })
 }
 

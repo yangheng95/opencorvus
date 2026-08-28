@@ -215,7 +215,7 @@ describe("Metric scorer exact evidence runtime", () => {
     await Instance.provide({
       directory: project.path,
       fn: async () => {
-        const session = await Session.create({ kind: "root", title: "Metric evidence runtime" })
+        const session = Session.prepareRootNext({ kind: "root", directory: Instance.directory, title: "Metric evidence runtime" })
         const taskID = Identifier.ascending("task")
         const started = Date.now()
         const metricPackageRevision = {
@@ -228,7 +228,7 @@ describe("Metric scorer exact evidence runtime", () => {
         }
         persistTask({
           taskID,
-          sessionID: session.id,
+          rootSession: session,
           now: started,
           title: "Metric evidence runtime",
           request: "Measure exact scorer evidence",

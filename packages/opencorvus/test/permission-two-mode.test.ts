@@ -6,9 +6,11 @@ import { permissionDescriptor } from "@/permission/invocation"
 import { PermissionExecutionResultTable, PermissionLedgerTable, PermissionPolicyTable } from "@/permission/permission.sql"
 import { Identifier } from "@/id/id"
 import { Instance } from "@/project/instance"
+import { Project } from "@/project/project"
+import { deleteProject } from "@/project/delete"
 import { Session } from "@/session"
 import { ToolPartOutcomeTable } from "@/session/session.sql"
-import { Database, eq } from "@/storage/db"
+import { Database, and, eq } from "@/storage/db"
 import { randomUUID } from "node:crypto"
 import { mkdtemp, realpath, rm, symlink, writeFile } from "node:fs/promises"
 import { tmpdir } from "node:os"
@@ -223,6 +225,79 @@ describe("two-mode permission authority", () => {
     })
   })
 
+  test("Project deletion terminals reusable grants before a same-path Project occurrence asks again", async () => {
+    await using project = await memoryProject()
+    const original = await Project.fromDirectory(project.path)
+    let grantID = ""
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        await Config.updateProjectPatch({ permission_mode: "ask" })
+        const session = await Session.create({ kind: "assistant", title: "Project grant before deletion" })
+        const first = await nextRequest(() =>
+          PermissionAuthority.authorizeAndExecute(invocation(session.id, "before-project-delete"), async () => "ran"),
+        )
+        await PermissionAuthority.reply({
+          requestID: first.request.id,
+          decision: "allow_project",
+          actorID: "project-owner",
+          autoReply: false,
+        })
+        await expect(first.execution).resolves.toBe("ran")
+        grantID = (await PermissionAuthority.grants())[0]!.id
+      },
+    })
+
+    await deleteProject(original.project, {
+      actor: "user",
+      source: "project.delete",
+      surface: "api",
+      requestID: "permission_project_generation_boundary",
+      reason: "Delete the Project occurrence that owns a reusable permission grant",
+    })
+    const expired = Database.use((db) => db.select().from(PermissionLedgerTable).where(and(
+      eq(PermissionLedgerTable.event_type, "expired"),
+      eq(PermissionLedgerTable.source_event_id, grantID),
+    )).get())
+    const recreated = await Project.fromDirectory(project.path)
+    expect({
+      expired: expired && { actor: expired.actor_id, source: expired.source_event_id },
+      projectID: recreated.project.id,
+    }).toEqual({
+      expired: { actor: "project-deletion", source: grantID },
+      projectID: original.project.id,
+    })
+
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        await Config.updateProjectPatch({ permission_mode: "ask" })
+        const session = await Session.create({ kind: "assistant", title: "Project grant after recreation" })
+        let resolveAsked!: (request: PermissionAuthority.Request) => void
+        const asked = new Promise<PermissionAuthority.Request>((resolve) => (resolveAsked = resolve))
+        const stop = Bus.subscribe(PermissionAuthority.Event.Asked, ({ properties }) => resolveAsked(properties))
+        const execution = PermissionAuthority.authorizeAndExecute(
+          invocation(session.id, "after-project-delete"),
+          async () => "must-wait-for-new-owner",
+        )
+        const outcome = await Promise.race([
+          asked.then((request) => ({ kind: "asked" as const, request })),
+          execution.then((value) => ({ kind: "executed" as const, value })),
+        ])
+        stop()
+        expect(outcome).toMatchObject({ kind: "asked", request: { projectID: original.project.id } })
+        if (outcome.kind !== "asked") throw new Error("Recreated Project reused a deleted occurrence's grant")
+        await PermissionAuthority.reply({
+          requestID: outcome.request.id,
+          decision: "deny",
+          actorID: "new-project-owner",
+          autoReply: false,
+        })
+        await expect(execution).rejects.toBeInstanceOf(PermissionAuthority.RejectedError)
+      },
+    })
+  })
+
   test("Full access executes built-in and MCP calls while retaining auditable outcomes", async () => {
     await using project = await memoryProject()
     await Instance.provide({
@@ -283,6 +358,56 @@ describe("two-mode permission authority", () => {
         } finally {
           stop()
         }
+      },
+    })
+  })
+
+  test("project-scoped permission authority resolves exact owned facts when unowned historical residue exists", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        await Config.updateProjectPatch({ permission_mode: "ask" })
+        const orphanRequestID = Identifier.ascending("permission")
+        Database.transaction((db) => db.insert(PermissionLedgerTable).values({
+          id: Identifier.ascending("permission"),
+          request_id: orphanRequestID,
+          event_type: "grant_created",
+          decision_scope: "project",
+          decision_slot: orphanRequestID,
+          actor_id: "historical-owner",
+          time_created: Date.now(),
+        }).run())
+        const session = await Session.create({ kind: "assistant", title: "Owned permission history" })
+        let ownedRequestID = ""
+        const stop = Bus.subscribe(PermissionAuthority.Event.Asked, ({ properties }) => {
+          ownedRequestID = properties.id
+          return PermissionAuthority.reply({
+            requestID: properties.id,
+            decision: "allow_once",
+            actorID: "current-project-operator",
+            autoReply: false,
+          }).then(() => undefined)
+        })
+        let result: string
+        try {
+          result = await PermissionAuthority.authorizeAndExecute(
+            invocation(session.id, "owned-with-orphan"),
+            async () => "owned-result",
+          )
+        } finally {
+          stop()
+        }
+        const history = await PermissionAuthority.history()
+        expect({
+          result,
+          requests: [...new Set(history.map((row) => row.request_id))],
+          events: history.map((row) => row.event_type).sort(),
+        }).toEqual({
+          result: "owned-result",
+          requests: [ownedRequestID],
+          events: ["allowed_once", "execution_started", "execution_succeeded", "requested"].sort(),
+        })
       },
     })
   })

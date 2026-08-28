@@ -1,4 +1,4 @@
-import { requireEngineArtifactByLocator } from "@/artifact-catalog"
+import { requireEngineArtifactByLocator } from "@/engine/engine-artifact-version-facts"
 import type { ArtifactReadLocator } from "@opencorvus-ai/plugin/artifact-catalog"
 import { ResearchBriefSchema } from "./schema"
 import { parseFrontendResearchBriefArtifactEnvelope } from "./frontend-research-artifact"

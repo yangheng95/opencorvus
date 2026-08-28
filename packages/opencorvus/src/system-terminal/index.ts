@@ -1,6 +1,6 @@
 import { NamedError } from "@opencorvus-ai/util/error"
+import { NodeProcess } from "@opencorvus-ai/util/process-node"
 import { existsSync } from "fs"
-import { spawn as spawnChildProcess } from "node:child_process"
 import path from "path"
 import z from "zod"
 import { Plugin } from "@/plugin"
@@ -202,18 +202,20 @@ export namespace SystemTerminal {
     }
   }
 
-  async function launchChildProcess(spec: CommandSpec, cwd: string, env: Record<string, string>): Promise<OpenResponse> {
-    let child
+  async function launch(spec: CommandSpec, cwd: string, env: Record<string, string>): Promise<OpenResponse> {
+    let child: Awaited<ReturnType<typeof NodeProcess.spawn>>
     try {
-      child = spawnChildProcess(spec.command, spec.args, {
+      child = await NodeProcess.spawn({
+        command: { executable: spec.command, args: spec.args },
         cwd,
-        detached: spec.detached ?? false,
+        ownership: "detached",
         env: {
           ...process.env,
           ...env,
         },
-        shell: false,
-        stdio: "ignore",
+        stdin: "ignore",
+        stdout: "ignore",
+        stderr: "ignore",
         windowsHide: false,
         windowsVerbatimArguments: spec.windowsVerbatimArguments ?? false,
       })
@@ -230,48 +232,21 @@ export namespace SystemTerminal {
         }, 300)
         const cleanup = () => {
           clearTimeout(timeout)
-          child.off("error", onError)
-          child.off("exit", onExit)
         }
-        const onError = (error: Error) => {
-          cleanup()
-          reject(error)
-        }
-        const onExit = (code: number | null) => {
-          cleanup()
-          resolve(code ?? 1)
-        }
-        child.once("error", onError)
-        child.once("exit", onExit)
+        void child.terminal.then(
+          (receipt) => {
+            cleanup()
+            resolve(receipt.exitCode ?? 1)
+          },
+          (error) => {
+            cleanup()
+            reject(error)
+          },
+        )
       })
     } catch (error) {
       throw new ConfigError({ message: error instanceof Error ? error.message : String(error) })
     }
-    if (typeof earlyExit === "number" && earlyExit !== 0) {
-      throw new ConfigError({ message: `System terminal launcher exited with code ${earlyExit}: ${spec.command}` })
-    }
-    if (earlyExit === undefined) child.unref()
-    return { ok: true }
-  }
-
-  async function launch(spec: CommandSpec, cwd: string, env: Record<string, string>): Promise<OpenResponse> {
-    if (spec.detached || spec.windowsVerbatimArguments) return await launchChildProcess(spec, cwd, env)
-
-    let child: Bun.Subprocess<"ignore", "ignore", "ignore">
-    try {
-      child = Bun.spawn([spec.command, ...spec.args], {
-        cwd,
-        env: {
-          ...process.env,
-          ...env,
-        },
-        stdio: ["ignore", "ignore", "ignore"],
-        windowsHide: false,
-      })
-    } catch (error) {
-      throw new ConfigError({ message: error instanceof Error ? error.message : String(error) })
-    }
-    const earlyExit = await Promise.race([child.exited, Bun.sleep(300).then(() => undefined)])
     if (typeof earlyExit === "number" && earlyExit !== 0) {
       throw new ConfigError({ message: `System terminal launcher exited with code ${earlyExit}: ${spec.command}` })
     }

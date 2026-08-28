@@ -1,13 +1,11 @@
 import { createHash } from "node:crypto"
-import { execFile } from "node:child_process"
 import fs from "node:fs/promises"
 import path from "node:path"
-import { promisify } from "node:util"
+import { NodeProcess } from "@opencorvus-ai/util/process-node"
 import z from "zod"
 import { officeCliRuntime, workArtifactRuntimeLockRevision, type WorkArtifactRuntimeLock } from "./runtime-lock"
 
 export const WORK_ARTIFACT_TARGET_PACKAGE_MANIFEST = "work-artifact-target-package-manifest.json"
-const execFileAsync = promisify(execFile)
 
 const Sha256 = z.string().regex(/^[a-f0-9]{64}$/)
 const PackageFileSchema = z
@@ -187,10 +185,12 @@ async function executableSignature(input: {
   if (input.phase === "staging") return { status: "unverified_staging" as const, identity: null }
   if (input.os === "linux") return { status: "not_applicable" as const, identity: null }
   if (input.os === "win32") return { status: "policy_not_required" as const, identity: null }
-  const { stderr } = await execFileAsync("codesign", ["--display", "--verbose=4", input.filename], {
-    timeout: 30_000,
+  const observed = await NodeProcess.run({
+    command: { executable: "codesign", args: ["--display", "--verbose=4", input.filename] },
+    timeoutMs: 30_000,
   })
-  const identity = stderr
+  const identity = new TextDecoder()
+    .decode(observed.stderr)
     .split(/\r?\n/)
     .filter((line) => /^(?:Identifier|Authority|TeamIdentifier|Signature)=/.test(line))
     .join("; ")
@@ -295,7 +295,10 @@ export async function verifyWorkArtifactTargetPackageManifest(input: {
         throw new Error(`Work Artifact package binary target mismatch: ${filename}`)
       }
       if (input.target.os === "darwin" && manifest.phase === "final") {
-        await execFileAsync("codesign", ["--verify", "--strict", "--verbose=2", filename], { timeout: 30_000 })
+        await NodeProcess.run({
+          command: { executable: "codesign", args: ["--verify", "--strict", "--verbose=2", filename] },
+          timeoutMs: 30_000,
+        })
         const current = await executableSignature({ filename, os: input.target.os, phase: "final" })
         if (current.status !== "verified" || current.identity !== file.signature?.identity) {
           throw new Error(`Work Artifact package signing identity mismatch: ${filename}`)

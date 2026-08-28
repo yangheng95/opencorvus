@@ -599,6 +599,17 @@ export function hasProjectedPart(sessionID: string, partID: string): boolean {
   return sessions.get(sessionID)?.partIndex.has(partID) === true
 }
 
+export function projectedConversationPartSnapshot(
+  sessionID: string,
+  partID: string,
+): Record<string, unknown> | undefined {
+  const target = sessions.get(sessionID)?.partIndex.get(partID)
+  if (!target) return undefined
+  const part = cardTreeStore.cards[target.cardID]?.parts?.[target.index]
+  if (!part || typeof part !== "object" || Array.isArray(part)) return undefined
+  return { ...part }
+}
+
 export type ProjectionPrerequisiteEntity = "session" | "message" | "part"
 
 export class ProjectionPrerequisiteError extends Error {

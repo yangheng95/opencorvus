@@ -23,6 +23,11 @@
     "typecheck:fresh": "bun run ./script/clean-cache.ts && bun run typecheck",
     "docs:api": "bun run ./packages/opencorvus/script/docs/render-api-md.ts",
     "docs:check": "bun run ./packages/opencorvus/script/docs/render-api-md.ts --check",
+    "check:package-topology": "bun run ./packages/opencorvus/script/check/package-topology.ts",
+    "check:module-topology": "bun run ./packages/opencorvus/script/check/module-topology.ts",
+    "check:process-package-publication": "bun run ./script/public-package-release.ts --check",
+    "publish:public-packages": "bun run ./script/public-package-release.ts --publish",
+    "check:architecture-index": "bun run ./packages/opencorvus/script/check/architecture-index.ts",
     "api:routes-check": "bun run ./packages/opencorvus/script/check/routes.ts",
     "check:task-control-real": "bun run ./packages/opencorvus/script/task-control-check.ts",
     "check:control-state-redundancy": "bun run --cwd packages/opencorvus check:control-state-redundancy",
@@ -30,7 +35,8 @@
     "version:check": "bun ./script/sync-version.ts --check",
     "prepare": "husky",
     "test": "echo 'do not run tests from root' && exit 1",
-    "check:expert-squad-types": "bunx tsc -p expert-squads/tsconfig.json"
+    "check:expert-squad-types": "bunx tsc -p expert-squads/tsconfig.json",
+    "check:control-lease-owners": "bun run --cwd packages/opencorvus check:control-lease-owners"
   },
   "workspaces": {
     "packages": [

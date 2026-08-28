@@ -17,11 +17,56 @@ function readSessionRow(sessionID: string) {
       .select({
         kind: SessionTable.kind,
         parent_id: SessionTable.parent_id,
+        project_id: SessionTable.project_id,
       })
       .from(SessionTable)
       .where(eq(SessionTable.id, sessionID))
       .get(),
   )
+}
+
+export type SessionLineageIdentity = Readonly<{
+  sessionID: string
+  projectID: string
+  rootSessionID: string
+  sessionIDs: readonly string[]
+}>
+
+/**
+ * Resolve the canonical durable Session ancestry for event admission. The
+ * returned IDs are ordered from the event Session to its root. A missing leaf
+ * means the event belongs to a different project database; a broken or
+ * cross-project chain is corruption and fails explicitly.
+ */
+export function sessionLineageIdentity(sessionID: string): SessionLineageIdentity | undefined {
+  const initial = sessionID.trim()
+  if (!initial) return undefined
+  const sessionIDs: string[] = []
+  const visited = new Set<string>()
+  let projectID: string | undefined
+  let current: string | undefined = initial
+  while (current) {
+    if (visited.has(current)) throw new Error(`Session lineage contains a cycle at ${current}`)
+    visited.add(current)
+    const row = readSessionRow(current)
+    if (!row) {
+      if (current === initial) return undefined
+      throw new Error(`Session lineage is missing durable Session ${current}`)
+    }
+    projectID ??= row.project_id
+    if (row.project_id !== projectID) {
+      throw new Error(`Session ${current} belongs to project ${row.project_id}, expected ${projectID}`)
+    }
+    sessionIDs.push(current)
+    current = row.parent_id ?? undefined
+  }
+  if (!projectID || sessionIDs.length === 0) return undefined
+  return Object.freeze({
+    sessionID: initial,
+    projectID,
+    rootSessionID: sessionIDs[sessionIDs.length - 1]!,
+    sessionIDs: Object.freeze(sessionIDs),
+  })
 }
 
 function loadAndCache(sessionID: string) {
@@ -60,7 +105,8 @@ export function taskSession(taskID: string): string | undefined {
 export function listTaskSessionIDs(taskID: string): string[] {
   return Database.use((db) =>
     db
-      .all<{ id: string }>(sql`
+      .all<{ id: string }>(
+        sql`
         WITH RECURSIVE session_tree(id) AS (
           SELECT session_id
           FROM engine_task
@@ -71,7 +117,8 @@ export function listTaskSessionIDs(taskID: string): string[] {
           JOIN session_tree ON session.parent_id = session_tree.id
         )
         SELECT id FROM session_tree ORDER BY id
-      `)
+      `,
+      )
       .map((row) => row.id),
   )
 }

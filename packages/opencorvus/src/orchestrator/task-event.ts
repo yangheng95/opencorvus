@@ -1,6 +1,7 @@
 import { EngineTaskTable } from "@/engine/engine.sql"
 import { sessionParentID, taskIDForSession } from "@/engine/task-session-lineage"
-import { PersistedWorkerTurnDescriptorIncompatibleError, WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
+import { PersistedWorkerTurnDescriptorIncompatibleError } from "@/agent/worker-turn-descriptor-facts"
+import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
 import { persistedSessionAgentID } from "@/agent/persisted-session-identity"
 import { RuntimeTemplateRegistry } from "@/agent/runtime-template-registry"
 import { MessageTable, type SessionKind } from "@/session/session.sql"
@@ -95,83 +96,6 @@ export function matchesTaskEvent(
   if (!evtSession) return false
   if (evtSession === sessionID) return true
   return taskIDForSession(evtSession) === taskID
-}
-
-/**
- * Latest `time_updated` watermark across every message and part in any
- * session belonging to `taskID`'s session tree. Used by the
- * conversation-history SSE bridge to detect new writes since a polling
- * cursor; lives here (not in `routes/orchestrator`) so route handlers
- * keep their SQL discipline (no direct `Database.use` / `sql\`...\``
- * inside `routes/`).
- *
- * Returns 0 when the task has no messages/parts yet, so callers can
- * safely use it as a monotonic comparator without a special-case for
- * empty tasks.
- */
-export function taskMessageWatermark(taskID: string): number {
-  return taskMessageWatermarkCursor(taskID).watermark
-}
-
-export function taskMessageWatermarkCursor(taskID: string): { watermark: number; signature: string } {
-  const row = Database.use((db) =>
-    db.get<{ watermark: number | null }>(sql`
-      WITH RECURSIVE session_tree(id) AS (
-        SELECT session_id FROM engine_task WHERE id = ${taskID}
-        UNION ALL
-        SELECT s.id FROM session s JOIN session_tree st ON s.parent_id = st.id
-      ),
-      message_watermark(value) AS (
-        SELECT max(m.time_updated)
-        FROM message m
-        JOIN session_tree st ON st.id = m.session_id
-      ),
-      part_watermark(value) AS (
-        SELECT max(p.time_updated)
-        FROM part p
-        JOIN message pm ON pm.id = p.message_id
-        JOIN session_tree st ON st.id = pm.session_id
-      )
-      SELECT max(value) AS watermark FROM (
-        SELECT value FROM message_watermark
-        UNION ALL
-        SELECT value FROM part_watermark
-      )
-    `),
-  )
-  const watermark = Math.max(0, Number(row?.watermark ?? 0) || 0)
-  if (watermark === 0) {
-    return {
-      watermark,
-      signature: "0:",
-    }
-  }
-  const members = Database.use((db) =>
-    db.all<{ member: string }>(sql`
-      WITH RECURSIVE session_tree(id) AS (
-        SELECT session_id FROM engine_task WHERE id = ${taskID}
-        UNION ALL
-        SELECT s.id FROM session s JOIN session_tree st ON s.parent_id = st.id
-      )
-      SELECT member FROM (
-        SELECT 'message:' || m.id || ':' || coalesce(cast(m.data AS TEXT), '') AS member
-        FROM message m
-        JOIN session_tree st ON st.id = m.session_id
-        WHERE m.time_updated = ${watermark}
-        UNION ALL
-        SELECT 'part:' || p.id || ':' || coalesce(cast(p.data AS TEXT), '') AS member
-        FROM part p
-        JOIN message pm ON pm.id = p.message_id
-        JOIN session_tree st ON st.id = pm.session_id
-        WHERE p.time_updated = ${watermark}
-      )
-      ORDER BY member
-    `),
-  )
-  return {
-    watermark,
-    signature: `${watermark}:${members.map((item) => item.member).join("|")}`,
-  }
 }
 
 function toConversationAgentSessionLedgerRows(
@@ -378,9 +302,12 @@ export function listConversationAgentSessionsForSessionTree(input: {
                AND wtd_newer.id > wtd.id
             )
           )
-       )
+      )
       LEFT JOIN protocol_event pe
-        ON pe.session_id = s.id
+        ON (
+         (pe.aggregate_type = 'session' AND pe.aggregate_id = s.id)
+         OR pe.session_id = s.id
+       )
        AND pe.type = 'agent.execution.lifecycle'
        AND (
          wtd.id IS NULL
@@ -389,7 +316,10 @@ export function listConversationAgentSessionsForSessionTree(input: {
        )
        AND NOT EXISTS (
          SELECT 1 FROM protocol_event pe_newer
-         WHERE pe_newer.session_id = pe.session_id
+         WHERE (
+           (pe_newer.aggregate_type = 'session' AND pe_newer.aggregate_id = s.id)
+           OR pe_newer.session_id = s.id
+         )
            AND pe_newer.type = 'agent.execution.lifecycle'
            AND (
              wtd.id IS NULL
@@ -400,7 +330,7 @@ export function listConversationAgentSessionsForSessionTree(input: {
              pe_newer.emitted_at > pe.emitted_at
              OR (
                pe_newer.emitted_at = pe.emitted_at
-               AND pe_newer.seq > pe.seq
+               AND pe_newer.id > pe.id
              )
            )
        )

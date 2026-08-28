@@ -4,10 +4,8 @@ import type { PublicLocale } from "./public-market"
 /**
  * Copy for the restyled landing page.
  *
- * Budget, enforced by test/landing-copy.test.ts: a per-locale ceiling on total body copy, section
- * headings under 12 characters, section leads under 40, card bodies under 60. The budget is the
- * feature — the previous site spread the same message over eight surfaces and nobody read past the
- * first. Anything that does not fit belongs in the docs.
+ * Copy stays deliberately terse: the previous site spread the same message over eight surfaces and
+ * nobody read past the first. Anything that does not fit belongs in the docs.
  *
  * Counting rule for the budget: CJK counts characters, Latin counts words. A 40-character Chinese
  * lead and a 40-word English lead are wildly different amounts of reading, so the English limits
@@ -61,6 +59,27 @@ export type LandingCopy = {
     readonly label: string
     readonly caption: string
   }
+  readonly benchmark: {
+    readonly eyebrow: string
+    readonly title: string
+    readonly lead: string
+    readonly strictMetric: string
+    readonly baselineLabel: string
+    readonly baselineDetail: string
+    readonly currentLabel: string
+    readonly currentDetail: string
+    readonly trackLabel: string
+    readonly casesLabel: string
+    readonly casesDetail: string
+    readonly deltaLabel: string
+    readonly deltaDetail: string
+    readonly multiplierLabel: string
+    readonly multiplierDetail: string
+    readonly referenceEyebrow: string
+    readonly referenceTitle: string
+    readonly notRanking: string
+    readonly note: string
+  }
   /**
    * The long-horizon section: three ways long work fails, and the mechanism that answers each.
    *
@@ -85,6 +104,14 @@ export type LandingCopy = {
     readonly title: string
     readonly lead: string
     readonly caseLabel: string
+    readonly paperCaseLabel: string
+    readonly missionPromptLabel: string
+    readonly requirementsLabel: string
+    readonly outputsLabel: string
+    readonly overviewLabel: string
+    readonly workflowLabel: string
+    readonly tasksUnit: string
+    readonly milestoneLabel: string
     readonly stageHeading: string
     readonly squadHeading: string
     readonly handoffHeading: string
@@ -93,6 +120,15 @@ export type LandingCopy = {
     readonly rolesUnit: string
     /** Column heading for the role count. Chinese needs a noun here, not the measure word. */
     readonly rolesHeading: string
+    readonly scale: {
+      readonly summary: string
+      readonly openSummary: string
+      readonly hint: string
+      readonly eyebrow: string
+      readonly title: string
+      readonly lead: string
+      readonly stagesUnit: string
+    }
     readonly moreLabel: string
     readonly cta: string
   }
@@ -224,11 +260,32 @@ export const landingCopy: Record<PublicLocale, LandingCopy> = {
       ],
     },
     demo: {
-      eyebrow: "实录",
-      title: "一次完整的运行",
-      lead: "NVDA 近一年日线进去，K 线图、技术分析和 Word 报告出来。",
-      label: "OpenCorvus 桌面端运行录屏",
-      caption: "桌面端 v0.0.47beta 的一次真实运行 · 1 分 44 秒 · 无音轨",
+      eyebrow: "产品故事",
+      title: "别再替 Agent 维持交接",
+      lead: "从上下文遗忘，到 Mission 调度、恢复、验收和专家团进化，4 分 11 秒讲清楚。",
+      label: "OpenCorvus Mission 中文产品故事",
+      caption: "简体中文版 · 4 分 11 秒 · 有声旁白与字幕 · 随页面语言切换",
+    },
+    benchmark: {
+      eyebrow: "实测结果",
+      title: "Mission 把 Luna 的正确率提升到 {current}",
+      lead: "{cases} 个 AutomationBench case，按严格通过标准计分；先看原始模型，再看 OpenCorvus 完整执行后的结果。",
+      strictMetric: "严格正确率",
+      baselineLabel: "原始 GPT-5.6 Luna",
+      baselineDetail: "没有 OpenCorvus Mission 编排",
+      currentLabel: "OpenCorvus Mission Base",
+      currentDetail: "同一 Luna 模型 · {cases} case",
+      trackLabel: "严格正确率从 {baseline} 提升到 {current}",
+      casesLabel: "已评测 case",
+      casesDetail: "本次冻结样本",
+      deltaLabel: "绝对提升",
+      deltaDetail: "个百分点",
+      multiplierLabel: "相对原始 Luna",
+      multiplierDetail: "严格通过率倍数",
+      referenceEyebrow: "不同样本参考",
+      referenceTitle: "官方 held-out 结果",
+      notRanking: "不可横向排名",
+      note: "参考值来自所附官方 held-out 对照；它们与本次 {cases}-case 冻结样本不是同一集合，因此只提供量级背景，不构成模型排名。",
     },
     horizon: {
       eyebrow: "长程",
@@ -263,12 +320,29 @@ export const landingCopy: Record<PublicLocale, LandingCopy> = {
       title: "专家团组合起来",
       lead: "最长的工作不是一支队伍干更久，而是几支各自负责一段。",
       caseLabel: "案例",
+      paperCaseLabel: "另一个长 Mission",
+      missionPromptLabel: "可直接交给 OpenCorvus 的 Mission",
+      requirementsLabel: "原始 Mission 要求",
+      outputsLabel: "最终必须交付",
+      overviewLabel: "六项高层交付",
+      workflowLabel: "完整执行工作流",
+      tasksUnit: "个阶段",
+      milestoneLabel: "本工作流交付",
       stageHeading: "阶段",
       squadHeading: "专家团",
       handoffHeading: "交出什么",
       squadsUnit: "支专家团",
       rolesUnit: "个具名角色",
       rolesHeading: "角色",
+      scale: {
+        summary: "展开完整执行图",
+        openSummary: "收起完整执行图",
+        hint: "把 6 项高层交付展开为 5 条工作流、18 个专家团阶段和逐层里程碑。",
+        eyebrow: "任务规模 ×3",
+        title: "这才是 OpenCorvus 实际要协调的完整任务图",
+        lead: "从模型与数据证据开始，穿过 CUDA 训练、实时产品、研究发表，最后收敛到独立复现和 GitHub 发布。",
+        stagesUnit: "个专家团阶段",
+      },
       moreLabel: "其它组合",
       cta: "看组合是怎么跑的",
     },
@@ -337,10 +411,14 @@ export const landingCopy: Record<PublicLocale, LandingCopy> = {
           { axis: "许可", cells: ["商业，Token 套餐计费", "MIT 开源", "MIT 开源"] },
           { axis: "运行位置", cells: ["云端服务", "本地", "本地或自己的服务器"] },
           { axis: "出发点", cells: ["一句话交付成品", "插件内核，能力自行组合", "完整 harness 开箱即用，再逐层替换"] },
-          { axis: "能力封装", cells: ["平台内的 Expert Group", "插件生态", `带版本与 digest 的专家团（${squadTotal} 支）`] },
+          {
+            axis: "能力封装",
+            cells: ["平台内的 Expert Group", "插件生态", `带版本与 digest 的专家团（${squadTotal} 支）`],
+          },
           { axis: "上手", cells: ["桌面客户端", "npx 一行拉起 Web UI", "安装包或源码构建"] },
         ],
-        fairness: "DeepSeek Harness 同样是 MIT 开源，也同样把运行过程完整留痕；它的插件内核比我们更彻底。选它还是选这里，取决于你要的是自己拼一套，还是拿到一套再改。",
+        fairness:
+          "DeepSeek Harness 同样是 MIT 开源，也同样把运行过程完整留痕；它的插件内核比我们更彻底。选它还是选这里，取决于你要的是自己拼一套，还是拿到一套再改。",
         note: "对比依据两者的公开产品说明",
       },
     },
@@ -478,11 +556,32 @@ export const landingCopy: Record<PublicLocale, LandingCopy> = {
       ],
     },
     demo: {
-      eyebrow: "Recorded run",
-      title: "One full run",
-      lead: "NVDA's last year of daily candles in; chart, technical read and Word report out.",
-      label: "Screen recording of an OpenCorvus desktop run",
-      caption: "One real run on desktop v0.0.47beta · 1 min 44 s · no audio track",
+      eyebrow: "Product story",
+      title: "Stop maintaining every agent handoff yourself",
+      lead: "From context loss to Mission scheduling, recovery, acceptance and squad evolution—in 4 minutes 11 seconds.",
+      label: "OpenCorvus Mission product story in English",
+      caption: "English version · 4 min 11 s · narrated with subtitles · follows the page language",
+    },
+    benchmark: {
+      eyebrow: "Measured result",
+      title: "Mission raises the same Luna to {current}",
+      lead: "{cases} AutomationBench cases scored by strict pass criteria: the unassisted model first, then the result after full OpenCorvus execution.",
+      strictMetric: "Strict pass rate",
+      baselineLabel: "Original GPT-5.6 Luna",
+      baselineDetail: "Without OpenCorvus Mission orchestration",
+      currentLabel: "OpenCorvus Mission Base",
+      currentDetail: "Same Luna model · {cases} cases",
+      trackLabel: "Strict pass rate rises from {baseline} to {current}",
+      casesLabel: "Evaluated cases",
+      casesDetail: "Current frozen sample",
+      deltaLabel: "Absolute lift",
+      deltaDetail: "percentage points",
+      multiplierLabel: "Versus original Luna",
+      multiplierDetail: "strict-pass multiple",
+      referenceEyebrow: "Different-sample context",
+      referenceTitle: "Official held-out results",
+      notRanking: "Not a cross-sample rank",
+      note: "Reference values come from the supplied official held-out comparison. They do not use the same sample as this {cases}-case frozen run, so they provide scale context only, not a model ranking.",
     },
     horizon: {
       eyebrow: "Long-horizon",
@@ -517,12 +616,29 @@ export const landingCopy: Record<PublicLocale, LandingCopy> = {
       title: "Squads, combined",
       lead: "The longest work is not one team working longer. It is several, each owning a stage.",
       caseLabel: "Case",
+      paperCaseLabel: "Another long Mission",
+      missionPromptLabel: "Mission to give OpenCorvus",
+      requirementsLabel: "Original Mission requirements",
+      outputsLabel: "Required final deliveries",
+      overviewLabel: "Six high-level deliveries",
+      workflowLabel: "Complete execution workflow",
+      tasksUnit: "stages",
+      milestoneLabel: "Workstream delivery",
       stageHeading: "Stage",
       squadHeading: "Squad",
       handoffHeading: "Hands on",
       squadsUnit: "squads",
       rolesUnit: "named roles",
       rolesHeading: "Roles",
+      scale: {
+        summary: "Unfold the complete execution map",
+        openSummary: "Collapse the execution map",
+        hint: "Turn six high-level deliveries into five workstreams, eighteen squad-owned stages, and visible milestones.",
+        eyebrow: "Workload ×3",
+        title: "This is the complete Mission OpenCorvus has to coordinate",
+        lead: "It starts with model and data evidence, crosses CUDA training, a live product, and research publication, then converges on independent reproduction and GitHub release.",
+        stagesUnit: "squad-owned stages",
+      },
       moreLabel: "Other combinations",
       cta: "How composition works",
     },
@@ -590,11 +706,22 @@ export const landingCopy: Record<PublicLocale, LandingCopy> = {
         rows: [
           { axis: "Licence", cells: ["Commercial, token packages", "MIT", "MIT"] },
           { axis: "Runs", cells: ["Cloud service", "Locally", "Your machine or your server"] },
-          { axis: "Starting point", cells: ["One sentence to a finished output", "Plugin kernel, compose it yourself", "A whole harness working, then replace any layer"] },
-          { axis: "Capability unit", cells: ["Experts and Expert Groups", "Plugins", `Versioned squads with a digest (${squadTotal})`] },
+          {
+            axis: "Starting point",
+            cells: [
+              "One sentence to a finished output",
+              "Plugin kernel, compose it yourself",
+              "A whole harness working, then replace any layer",
+            ],
+          },
+          {
+            axis: "Capability unit",
+            cells: ["Experts and Expert Groups", "Plugins", `Versioned squads with a digest (${squadTotal})`],
+          },
           { axis: "Getting in", cells: ["Desktop client", "One npx line to a web UI", "Installer or source build"] },
         ],
-        fairness: "DeepSeek Harness is MIT licensed too, and records a run just as completely; its plugin kernel goes further than ours. The choice is whether you want to assemble a harness or start from one.",
+        fairness:
+          "DeepSeek Harness is MIT licensed too, and records a run just as completely; its plugin kernel goes further than ours. The choice is whether you want to assemble a harness or start from one.",
         note: "Compared against both products' published documentation",
       },
     },

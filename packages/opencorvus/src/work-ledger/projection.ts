@@ -23,6 +23,8 @@ import { Database, eq, sql } from "@/storage/db"
 import { activityFromTaskLifecycle } from "@/status/task-status-snapshot"
 import { rightSidebarConversationExperience } from "@/chat/session"
 import { pendingTaskCancellationProjection } from "@/engine/cancellation-projection"
+import { TASK_OPEN_EVENT_TYPES, TASK_TERMINAL_EVENT_TYPES } from "@/engine/task-lifecycle"
+import { ProtocolEventTable } from "@/protocol/protocol.sql"
 
 export {
   WorkLedgerArchiveList,
@@ -117,11 +119,11 @@ function workLedgerTaskFromMissionTask(
   })
 }
 
-function workLedgerArchivedTaskFromTaskID(taskID: string, pendingInteractions: ReadonlyMap<string, number>) {
+function workLedgerTaskFromTaskID(taskID: string, pendingInteractions: ReadonlyMap<string, number>) {
   const task = findTask(taskID)
-  if (!task) throw new Error(`Archived Work Ledger task candidate missing task row: ${taskID}`)
+  if (!task) throw new Error(`Work Ledger task candidate missing task row: ${taskID}`)
   const item = listTaskRows([task])[0]
-  if (!item) throw new Error(`Archived Work Ledger task candidate missing task projection: ${taskID}`)
+  if (!item) throw new Error(`Work Ledger task candidate missing task projection: ${taskID}`)
   const lifecycleStatus = deriveTaskStatus(task)
   const binding = missionTaskBinding(task)
   return WorkLedgerTaskRow.parse({
@@ -219,6 +221,71 @@ function topRowCandidates(input: Required<Pick<WorkLedgerListInput, "limit">> & 
   const sessionArchiveCondition = archivedOnly
     ? sql`${SessionTable.time_archived} IS NOT NULL`
     : sql`${SessionTable.time_archived} IS NULL`
+  const taskNotDeletedCondition = sql`NOT EXISTS (
+    SELECT 1
+    FROM ${ProtocolEventTable} AS deleted_task_event
+    WHERE deleted_task_event.aggregate_type = 'task'
+      AND deleted_task_event.aggregate_id = ${EngineTaskTable.id}
+      AND deleted_task_event.type = 'task.deleted'
+  )`
+  const taskArchiveCondition = archivedOnly
+    ? sql`${EngineTaskTable.time_archived} IS NOT NULL AND ${taskNotDeletedCondition}`
+    : sql`${EngineTaskTable.time_archived} IS NULL
+        AND ${taskNotDeletedCondition}
+        AND NOT EXISTS (
+          SELECT 1
+          FROM ${SessionTable} AS mission_root
+          WHERE ${EngineTaskTable.source} = 'mission'
+            AND json_extract(${EngineTaskTable.metadata}, '$.actor') = 'mission'
+            AND mission_root.id = json_extract(${EngineTaskTable.metadata}, '$.mission.session_id')
+            AND mission_root.project_id = ${EngineTaskTable.project_id}
+            AND mission_root.kind = 'mission'
+            AND json_extract(mission_root.metadata, '$.mission.id') = json_extract(${EngineTaskTable.metadata}, '$.mission.id')
+        )`
+  const openEventTypes = sql.join(
+    TASK_OPEN_EVENT_TYPES.map((type) => sql`${type}`),
+    sql`, `,
+  )
+  const terminalEventTypes = sql.join(
+    TASK_TERMINAL_EVENT_TYPES.map((type) => sql`${type}`),
+    sql`, `,
+  )
+  const taskLifecycleUpdated = sql<number>`max(
+    ${EngineTaskTable.time_created},
+    coalesce(
+      (
+        SELECT current_terminal.emitted_at
+        FROM ${ProtocolEventTable} AS current_terminal
+        WHERE current_terminal.aggregate_type = 'task'
+          AND current_terminal.aggregate_id = ${EngineTaskTable.id}
+          AND current_terminal.type IN (${terminalEventTypes})
+          AND json_extract(current_terminal.payload, '$.execution_epoch') = (
+            SELECT max(json_extract(latest_open.payload, '$.execution_epoch'))
+            FROM ${ProtocolEventTable} AS latest_open
+            WHERE latest_open.aggregate_type = 'task'
+              AND latest_open.aggregate_id = ${EngineTaskTable.id}
+              AND latest_open.type IN (${openEventTypes})
+          )
+        LIMIT 1
+      ),
+      (
+        SELECT current_open.emitted_at
+        FROM ${ProtocolEventTable} AS current_open
+        WHERE current_open.aggregate_type = 'task'
+          AND current_open.aggregate_id = ${EngineTaskTable.id}
+          AND current_open.type IN (${openEventTypes})
+          AND json_extract(current_open.payload, '$.execution_epoch') = (
+            SELECT max(json_extract(latest_open.payload, '$.execution_epoch'))
+            FROM ${ProtocolEventTable} AS latest_open
+            WHERE latest_open.aggregate_type = 'task'
+              AND latest_open.aggregate_id = ${EngineTaskTable.id}
+              AND latest_open.type IN (${openEventTypes})
+          )
+        LIMIT 1
+      ),
+      ${EngineTaskTable.time_created}
+    )
+  )`
   return Database.use((db) =>
     db.all<WorkLedgerTopRowCandidate>(sql`
       WITH top_rows AS (
@@ -265,6 +332,13 @@ function topRowCandidates(input: Required<Pick<WorkLedgerListInput, "limit">> & 
               FROM ${EngineTaskTable} AS mission_task
               WHERE mission_task.project_id = ${SessionTable.project_id}
                 AND mission_task.time_archived IS NULL
+                AND NOT EXISTS (
+                  SELECT 1
+                  FROM ${ProtocolEventTable} AS deleted_mission_task_event
+                  WHERE deleted_mission_task_event.aggregate_type = 'task'
+                    AND deleted_mission_task_event.aggregate_id = mission_task.id
+                    AND deleted_mission_task_event.type = 'task.deleted'
+                )
                 AND mission_task.source = 'mission'
                 AND json_extract(mission_task.metadata, '$.actor') = 'mission'
                 AND json_extract(mission_task.metadata, '$.mission.id') = json_extract(${SessionTable.metadata}, '$.mission.id')
@@ -305,13 +379,12 @@ function topRowCandidates(input: Required<Pick<WorkLedgerListInput, "limit">> & 
           COALESCE(task_session.directory, ${ProjectTable.worktree}, '') AS directory,
           ${EngineTaskTable.title} AS title,
           ${EngineTaskTable.time_created} AS created,
-          ${EngineTaskTable.time_created} AS updated
+          ${taskLifecycleUpdated} AS updated
           ,CASE WHEN ${EngineTaskTable.time_pinned} IS NULL THEN 0 ELSE 1 END AS pinned
         FROM ${EngineTaskTable}
         LEFT JOIN ${SessionTable} AS task_session ON ${EngineTaskTable.session_id} = task_session.id
         LEFT JOIN ${ProjectTable} ON ${EngineTaskTable.project_id} = ${ProjectTable.id}
-        WHERE ${archivedOnly ? 1 : 0} = 1
-          AND ${EngineTaskTable.time_archived} IS NOT NULL
+        WHERE ${taskArchiveCondition}
           AND (${directory ?? null} IS NULL OR COALESCE(task_session.directory, ${ProjectTable.worktree}, '') = ${directory ?? null})
           AND (
             ${search ?? null} IS NULL
@@ -349,10 +422,10 @@ async function workLedgerRowFromCandidate(
 ) {
   // Exhaustive on purpose. The `task` arm used to be an unconditional fallback
   // after three `if`s, so a fifth candidate kind added to the UNION query would
-  // have compiled and then been read as an archived task — surfacing as
-  // "Archived Work Ledger task candidate missing task row", an error about
-  // something else entirely. `kind` here is a plain literal union rather than a
-  // zod union, so `never` is what makes the compiler ask.
+  // have compiled and then been read as a Task — surfacing as a missing Task
+  // projection error about something else entirely. `kind` here is a plain
+  // literal union rather than a zod union, so `never` is what makes the compiler
+  // ask.
   switch (candidate.kind) {
     case "project":
       return workLedgerProjectFromCandidate(candidate)
@@ -361,7 +434,7 @@ async function workLedgerRowFromCandidate(
     case "chat":
       return workLedgerChatFromCandidate(candidate)
     case "task":
-      return workLedgerArchivedTaskFromTaskID(candidate.id, pendingInteractions)
+      return workLedgerTaskFromTaskID(candidate.id, pendingInteractions)
     default: {
       const unhandled: never = candidate.kind
       throw new Error(`Unhandled Work Ledger candidate kind: ${String(unhandled)}`)

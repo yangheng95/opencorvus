@@ -151,7 +151,7 @@ export function taskRootIngressReleasesHeadOfLine(projection: TaskRootIngressPro
   )
 }
 
-function latestLease(facts: TaskRootIngressFacts): ActivationLeaseFact | undefined {
+export function latestTaskRootIngressLease(facts: TaskRootIngressFacts): ActivationLeaseFact | undefined {
   return facts.leases
     .filter((lease) => lease.targetID === facts.ingress.id)
     .toSorted((left, right) => right.timeActivated - left.timeActivated || right.id.localeCompare(left.id))[0]
@@ -366,7 +366,7 @@ export function reduceTaskRootIngressFacts(facts: TaskRootIngressFacts, now: num
   const decisions = validDecisionSet(facts)
   if (decisions) return { state: "resolved", decisionIDs: decisions.map((decision) => decision.id) }
 
-  const latest = latestLease(facts)
+  const latest = latestTaskRootIngressLease(facts)
   if (latest && latest.expiresAt > now && !activationConsumed(facts, latest.id)) {
     return {
       state: "leased",

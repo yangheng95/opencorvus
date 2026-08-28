@@ -1,12 +1,11 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
   "name": "@opencorvus-ai/sdk",
-  "version": "0.0.52-beta",
+  "version": "0.0.55-beta",
   "type": "module",
   "license": "MIT",
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "pretest": "bun ../../opencorvus/script/prepare-test-process-supervisor.ts",
     "test": "bun ../../opencorvus/script/run-with-inactivity.ts --inactivity-ms 120000 -- bun test --timeout=0 test",
     "build": "bun ./script/build.ts",
     "prepack": "bun run build",
@@ -77,6 +76,7 @@
     "@typescript/native-preview": "catalog:"
   },
   "dependencies": {
+    "@opencorvus-ai/util": "workspace:*",
     "zod": "catalog:"
   }
 }

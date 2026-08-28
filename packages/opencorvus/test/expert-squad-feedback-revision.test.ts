@@ -6,10 +6,12 @@ import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import { prepareTaskProcessBinding } from "../src/engine/task-execution-capsule-binding"
 import {
   authorizeEvolutionPackageMutation,
-  evolutionMutationConfirmationText,
   executeEvolutionPackageMutation,
-  prepareEvolutionPackageMutation,
 } from "../src/expert-squad/evolution-mutation"
+import {
+  evolutionMutationConfirmationText,
+  prepareEvolutionPackageMutation,
+} from "../src/expert-squad/evolution-mutation-intent"
 import {
   nextExpertSquadVersion,
   parseFeedbackRevisionTarget,
@@ -88,8 +90,9 @@ function packageDefinition(version: string): ExpertSquadPackageDefinition {
 }
 
 async function createTask(revision: { namespace: string; id: string; version: string; packageDigest: string }) {
-  const session = await Session.create({
+  const session = Session.prepareRootNext({
     kind: "root",
+    directory: Instance.directory,
     title: "feedback revision",
     metadata: { configOverlay: { model: "firmware/gpt-5", prompt_profile: { active: revision.id } } },
   })
@@ -97,7 +100,7 @@ async function createTask(revision: { namespace: string; id: string; version: st
   const now = Date.now()
   persistTask({
     taskID,
-    sessionID: session.id,
+    rootSession: session,
     now,
     title: "feedback revision",
     request: "feedback revision",
@@ -380,17 +383,19 @@ describe("revising an installed expert squad from operator feedback", () => {
             intent,
           })
           await executeEvolutionPackageMutation({ ...intent, authorization: authorization.authorization })
-          return revision.candidatePackageDigest
+          return { digest: revision.candidatePackageDigest, version: revision.version }
         }
 
-        const secondDigest = await reviseAndInstall(
+        const second = await reviseAndInstall(
           "# Feedback revision worker\n\nsecond\n",
           "Naming tables in the worker prompt makes reports carry them.",
         )
-        const thirdDigest = await reviseAndInstall(
+        const third = await reviseAndInstall(
           "# Feedback revision worker\n\nthird\n",
           "Naming charts as well makes the tables carry numbers.",
         )
+        const secondDigest = second.digest
+        const thirdDigest = third.digest
 
         const history = await readEvolutionHistory({
           namespace: "evolution-test",
@@ -415,7 +420,7 @@ describe("revising an installed expert squad from operator feedback", () => {
           installed: [thirdDigest],
           switchable: [baselineDigest, secondDigest].toSorted(),
           installedIntent: null,
-          versions: ["2026.08.13.1", "2026.08.18.1", "2026.08.18.2"].toSorted(),
+          versions: ["2026.08.13.1", second.version, third.version].toSorted(),
         })
 
         const jump = choices.get(baselineDigest)!

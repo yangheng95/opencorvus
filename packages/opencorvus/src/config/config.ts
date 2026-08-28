@@ -1,5 +1,6 @@
 import { Log } from "../util/log"
-import { acquireProcessLock } from "@/util/process-lock"
+import { PackageInstallReceipt } from "@/bun/install-receipt"
+import { CROSS_PROCESS_LOCK_RETRY, withProcessLock, withSharedJsonFactLock } from "@/util/process-lock"
 import path from "path"
 import { pathToFileURL } from "url"
 import os from "os"
@@ -20,9 +21,11 @@ import {
   parse as parseJsonc,
   printParseErrorCode,
 } from "jsonc-parser"
+import { createHash } from "node:crypto"
+import { AsyncLocalStorage } from "node:async_hooks"
+import { isDeepStrictEqual } from "node:util"
 import { createInstanceState } from "../project/instance-state"
 import { ProjectInstanceContext } from "../project/instance-context"
-import { LSP_BUILTIN_SERVER_IDS } from "../lsp/catalog"
 import { BunProc } from "@/bun"
 import { Installation } from "@/installation"
 import { ConfigMarkdown } from "./markdown"
@@ -31,11 +34,10 @@ import { GlobalBus } from "@/bus/global"
 import { Glob } from "../util/glob"
 import { PackageRegistry } from "@/bun/registry"
 import { proxied } from "@/util/proxied"
-import { iife } from "@/util/iife"
 import { ConfigPaths } from "./paths"
 import { Filesystem } from "@/util/filesystem"
 import { ChannelCatalog, buildChannelSchema } from "@/channel/catalog"
-import { withKeyedLock } from "@/util/lock"
+import { Lock } from "@/util/lock"
 import { AgentRoleContract } from "@/agent/role-contract"
 import { PromptProfileConfigSchema, PromptProfileOverlaySchema } from "@/agent/prompt-profile"
 import { isModelReference } from "@/provider/model-ref"
@@ -52,6 +54,13 @@ import {
 } from "@/agent/runtime-override"
 
 export namespace Config {
+  /** The one dependency a config tree is installed for. */
+  const PLUGIN_DEPENDENCY = "@opencorvus-ai/plugin"
+
+  /** The version spec this channel installs and reads back. One spelling, so
+   *  the receipt key and the manifest entry cannot drift apart. */
+  const installTargetVersion = () => (Installation.isLocal() ? "*" : Installation.VERSION)
+
   export const ModelId = z
     .string()
     .refine(isModelReference, {
@@ -60,7 +69,6 @@ export namespace Config {
     .meta({ $ref: "https://models.dev/model-schema.json#/$defs/Model" })
   export const DEFAULT_MODEL = "openai/gpt-5.5"
   const log = Log.create({ service: "config" })
-  const dependencyInstallLocks = new Map<string, Promise<unknown>>()
   type LoadStateOptions = {
     readOnly?: boolean
     directory?: string
@@ -79,6 +87,21 @@ export namespace Config {
     writeSchema?: boolean
     projectOwnedSource?: "project" | "non-project"
   }
+
+  export namespace TestHooks {
+    export let beforeGlobalPersist: (() => Promise<void>) | undefined
+    export let afterSourceSnapshotRead: ((input: { path: string }) => Promise<void>) | undefined
+    export let afterSourceSnapshotParsed: ((input: { path: string }) => Promise<void>) | undefined
+    export let afterProjectConfigAdmission: ((input: { directory: string }) => Promise<void>) | undefined
+    export let beforeProjectRuntimeSettlement:
+      | ((input: { directory: string; config: Info }) => Promise<void>)
+      | undefined
+    export let beforeGlobalRuntimeSettlement:
+      | ((input: { transitions: readonly RuntimeTransition[] }) => Promise<void>)
+      | undefined
+  }
+
+  const CONFIG_SCHEMA_URL = "https://opencorvus.ai/config.json"
 
   export type LegacyPermissionMigration = Readonly<{
     sourceFields: readonly ("permission" | "tool_permissions")[]
@@ -203,7 +226,103 @@ export namespace Config {
     return merged
   }
 
-  async function loadState(options: LoadStateOptions = {}) {
+  type SourceRevision = Readonly<{
+    path: string
+    digest: string
+  }>
+
+  type SourceSnapshot = Readonly<{
+    revision: SourceRevision
+    text?: string
+  }>
+
+  type LoadedState = Awaited<ReturnType<typeof loadStateOnce>>
+
+  const MISSING_SOURCE_DIGEST = createHash("sha256").update("opencorvus.config-source.missing.v1\0").digest("hex")
+  const GLOBAL_PROJECT_GENERATION_LOCK = "config-global-project-generation"
+  type ConfigGenerationToken = {
+    active: boolean
+    pending: Set<Promise<unknown>>
+  }
+
+  const configGenerationOwner = new AsyncLocalStorage<ConfigGenerationToken>()
+
+  export class ConfigGenerationReentrantMutationError extends Error {
+    constructor() {
+      super("A Config mutation cannot start inside another Config generation settlement")
+      this.name = "ConfigGenerationReentrantMutationError"
+    }
+  }
+
+  async function runWithinConfigGeneration<T>(token: ConfigGenerationToken, fn: () => Promise<T>): Promise<T> {
+    const operation = Promise.resolve().then(fn)
+    token.pending.add(operation)
+    try {
+      return await operation
+    } finally {
+      token.pending.delete(operation)
+    }
+  }
+
+  async function withConfigGenerationRead<T>(fn: () => Promise<T>): Promise<T> {
+    const token = configGenerationOwner.getStore()
+    if (token?.active) return runWithinConfigGeneration(token, fn)
+    await using _owner = await Lock.read(GLOBAL_PROJECT_GENERATION_LOCK)
+    const owned: ConfigGenerationToken = { active: true, pending: new Set() }
+    try {
+      return await configGenerationOwner.run(owned, fn)
+    } finally {
+      while (owned.pending.size > 0) await Promise.allSettled([...owned.pending])
+      owned.active = false
+    }
+  }
+
+  async function withConfigGenerationWrite<T>(fn: () => Promise<T>): Promise<T> {
+    const inherited = configGenerationOwner.getStore()
+    if (inherited?.active) throw new ConfigGenerationReentrantMutationError()
+    await using _owner = await Lock.write(GLOBAL_PROJECT_GENERATION_LOCK)
+    const token: ConfigGenerationToken = { active: true, pending: new Set() }
+    try {
+      return await configGenerationOwner.run(token, fn)
+    } finally {
+      while (token.pending.size > 0) await Promise.allSettled([...token.pending])
+      token.active = false
+    }
+  }
+
+  function sourceDigest(text: string | undefined): string {
+    if (text === undefined) return MISSING_SOURCE_DIGEST
+    return createHash("sha256").update("opencorvus.config-source.bytes.v1\0").update(text).digest("hex")
+  }
+
+  async function readSourceSnapshot(filepath: string): Promise<SourceSnapshot> {
+    const canonical = Filesystem.resolve(filepath)
+    const text = await readFile(canonical)
+    return {
+      revision: {
+        path: canonical,
+        digest: sourceDigest(text ?? undefined),
+      },
+      text: text ?? undefined,
+    }
+  }
+
+  async function readSourceRevision(filepath: string): Promise<SourceRevision> {
+    return (await readSourceSnapshot(filepath)).revision
+  }
+
+  async function loadSourceSnapshot(snapshot: SourceSnapshot, options?: ConfigLoadOptions): Promise<Info> {
+    const text = snapshot.text
+    if (!text || text.trim().length === 0) return {} as Info
+    return load(text, { path: snapshot.revision.path }, options)
+  }
+
+  async function sourceRevisionsAreCurrent(revisions: readonly SourceRevision[]): Promise<boolean> {
+    const current = await Promise.all(revisions.map((revision) => readSourceRevision(revision.path)))
+    return current.every((revision, index) => revision.digest === revisions[index]?.digest)
+  }
+
+  async function loadStateOnce(options: LoadStateOptions = {}) {
     const loadOptions: ConfigLoadOptions = {
       writeSchema: options.readOnly !== true,
       projectOwnedSource: "non-project",
@@ -214,20 +333,31 @@ export namespace Config {
       ? await ConfigPaths.assertCanonicalProject(directory, worktree)
       : undefined
     const auth = await Auth.all()
-    const loadStateFile = (filepath: string, fileOptions?: ConfigLoadOptions) => {
+    const sourceRevisions = new Map<string, SourceRevision>()
+    const loadStateFile = async (filepath: string, fileOptions?: ConfigLoadOptions) => {
       if (
         options.globalFileOverride &&
         Filesystem.resolve(filepath) === Filesystem.resolve(options.globalFileOverride.filepath)
       ) {
-        return Promise.resolve(structuredClone(options.globalFileOverride.config))
+        return structuredClone(options.globalFileOverride.config)
       }
       if (
         options.projectFileOverride &&
         Filesystem.resolve(filepath) === Filesystem.resolve(options.projectFileOverride.filepath)
       ) {
-        return Promise.resolve(structuredClone(options.projectFileOverride.config))
+        return structuredClone(options.projectFileOverride.config)
       }
-      return loadFile(filepath, fileOptions)
+      const snapshot = await readSourceSnapshot(filepath)
+      sourceRevisions.set(snapshot.revision.path, snapshot.revision)
+      await TestHooks.afterSourceSnapshotRead?.({ path: snapshot.revision.path })
+      const config = await loadSourceSnapshot(snapshot, fileOptions)
+      await TestHooks.afterSourceSnapshotParsed?.({ path: snapshot.revision.path })
+      return config
+    }
+
+    if (canonicalProjectFile) {
+      const projectRevision = await readSourceRevision(canonicalProjectFile)
+      sourceRevisions.set(projectRevision.path, projectRevision)
     }
 
     // Config loading order (low -> high precedence): https://opencorvus.ai/docs/config#precedence-order
@@ -250,7 +380,7 @@ export namespace Config {
         const wellknown = (await response.json()) as any
         const remoteConfig = wellknown.config ?? {}
         // Add $schema to prevent load() from trying to write back to a non-existent file
-        if (!remoteConfig.$schema) remoteConfig.$schema = "https://opencorvus.ai/config.json"
+        if (!remoteConfig.$schema) remoteConfig.$schema = CONFIG_SCHEMA_URL
         result = mergeConfigConcatArrays(
           result,
           await load(
@@ -325,10 +455,10 @@ export namespace Config {
       // gemini-task scaffold merge failure.
       const localPlugins = await loadPlugin(dir)
       if (!options.readOnly && (isProjectResourceDir || isNonProjectConfigDir) && localPlugins.length > 0) {
-        const operation = iife(async () => {
-          const shouldInstall = await needsInstall(dir)
-          if (shouldInstall) await installDependencies(dir)
-        })
+        // Readiness is meaningful only while holding the directory generation
+        // owner. Always join it; the owned reader decides whether this caller
+        // installs or observes the generation another backend just published.
+        const operation = installDependencies(dir)
         deps.push(
           operation.then<DependencyOutcome, DependencyOutcome>(
             () => ({ ok: true }),
@@ -390,10 +520,46 @@ export namespace Config {
       config: result,
       directories,
       deps,
+      sourceRevisions: [...sourceRevisions.values()].sort((left, right) => left.path.localeCompare(right.path)),
     }
   }
 
-  export const state = createInstanceState(async () => loadState(), undefined, "config")
+  async function loadState(options: LoadStateOptions = {}): Promise<LoadedState> {
+    while (true) {
+      const loaded = await loadStateOnce(options)
+      if (await sourceRevisionsAreCurrent(loaded.sourceRevisions)) return loaded
+    }
+  }
+
+  const stateSource = createInstanceState(async () => loadState(), undefined, "config")
+
+  async function resetProjectState(): Promise<void> {
+    await using _owner = await Lock.write("config-peer-state-lifecycle")
+    await stateSource.reset()
+  }
+
+  async function resetAllProjectStates(): Promise<void> {
+    await using _owner = await Lock.write("config-peer-state-lifecycle")
+    for (const entry of stateSource.inspectAll()) loadedProjectConfigs.add(Filesystem.resolve(entry.key))
+    await stateSource.resetAll()
+  }
+
+  export const state = Object.assign(
+    () =>
+      withConfigGenerationRead(async () => {
+        await using _lifecycleOwner = await Lock.read("config-peer-state-lifecycle")
+        return stateSource()
+      }),
+    {
+      async reset() {
+        await resetProjectState()
+      },
+      async resetAll() {
+        await resetAllProjectStates()
+      },
+      inspectAll: () => stateSource.inspectAll(),
+    },
+  )
 
   export async function waitForDependencies() {
     const deps = await state().then((x) => x.deps)
@@ -403,74 +569,97 @@ export namespace Config {
     if (errors.length > 1) throw new AggregateError(errors, "Multiple config dependency installations failed")
   }
 
-  export async function installDependencies(dir: string) {
-    const key = Filesystem.normalizePath(Filesystem.resolve(dir))
-    return withKeyedLock(dependencyInstallLocks, key, async () => {
-      await fs.mkdir(dir, { recursive: true })
-      const release = await acquireProcessLock(dir, { realpath: false })
-      try {
-        // A second project Instance may have completed the shared installation
-        // while this owner waited. Re-check under both the process-local and
-        // cross-process directory owner before changing canonical files.
-        if (!(await needsInstall(dir))) return
+  async function withDependencyInstallOwner<T>(dir: string, fn: (ownedDirectory: string) => Promise<T>): Promise<T> {
+    const ownedDirectory = Filesystem.resolve(dir)
+    const key = `config-dependency-install:${Filesystem.normalizePath(ownedDirectory)}`
+    await fs.mkdir(ownedDirectory, { recursive: true })
+    // Dependency installation has no fixed wall-clock bound: registry access,
+    // extraction and lifecycle scripts may all make legitimate progress for
+    // longer than the generic keyed mutex's 30-second queue. Join the current
+    // directory owner without inventing a shorter admission timeout, then use
+    // the same retrying process lock as the other shared installation owners.
+    using _directoryOwner = await Lock.write(key)
+    return await withProcessLock(ownedDirectory, { realpath: false, retries: CROSS_PROCESS_LOCK_RETRY }, () =>
+      fn(ownedDirectory),
+    )
+  }
 
-        const pkg = path.join(dir, "package.json")
-        const gitignore = path.join(dir, ".gitignore")
-        const targetVersion = Installation.isLocal() ? "*" : Installation.VERSION
-        const packageSchema = z.object({ dependencies: z.record(z.string(), z.string()).optional() }).passthrough()
-        const previousPackage = await Filesystem.readText(pkg).catch((error: NodeJS.ErrnoException) => {
-          if (error.code === "ENOENT") return undefined
-          throw error
-        })
-        const json =
-          previousPackage === undefined ? { dependencies: {} } : packageSchema.parse(JSON.parse(previousPackage))
-        json.dependencies = {
-          ...json.dependencies,
-          "@opencorvus-ai/plugin": targetVersion,
-        }
+  export async function installDependencies(dir: string) {
+    return withDependencyInstallOwner(dir, async (dir) => {
+      // A second project Instance may have completed the shared installation
+      // while this owner waited. Re-check under both the process-local and
+      // cross-process directory owner before changing canonical files.
+      if (!(await needsInstallOwned(dir))) return
+      const pkg = path.join(dir, "package.json")
+      const gitignore = path.join(dir, ".gitignore")
+      const targetVersion = installTargetVersion()
+      const packageSchema = z.object({ dependencies: z.record(z.string(), z.string()).optional() }).passthrough()
+      const previousPackage = await Filesystem.readText(pkg).catch((error: NodeJS.ErrnoException) => {
+        if (error.code === "ENOENT") return undefined
+        throw error
+      })
+      const json =
+        previousPackage === undefined ? { dependencies: {} } : packageSchema.parse(JSON.parse(previousPackage))
+      json.dependencies = {
+        ...json.dependencies,
+        "@opencorvus-ai/plugin": targetVersion,
+      }
+
+      // Open the target generation before any canonical mutation. This
+      // retires a historical target receipt first, so a crash can never pair
+      // that receipt with bytes from this attempt and report them Ready.
+      const installOccurrenceID = await PackageInstallReceipt.begin({
+        root: dir,
+        package: PLUGIN_DEPENDENCY,
+        requestedVersion: targetVersion,
+      })
+
+      try {
+        // Once the occurrence is open, advance the selector to the desired
+        // generation and never roll it back independently of the physical
+        // tree. A failed `bun install` may already have rewritten node_modules;
+        // retaining the target selector beside a rolled-back/unsettled target
+        // receipt makes the next owner reinstall. Restoring an old selector
+        // would let its historical committed receipt bless that partial tree.
         await Filesystem.writeAtomic(pkg, JSON.stringify(json, null, 2))
-        const createdGitignore = await Filesystem.writeAtomicIfAbsent(
+        await Filesystem.writeAtomicIfAbsent(
           gitignore,
           ["node_modules", "package.json", "bun.lock", ".gitignore"].join("\n"),
         )
-
-        try {
-          // Install any additional dependencies defined in package.json so
-          // local plugins can use their declared external packages.
-          await BunProc.run(
-            [
-              "install",
-              // TODO: get rid of this case (see: https://github.com/oven-sh/bun/issues/19936)
-              ...(proxied() || process.env.CI ? ["--no-cache"] : []),
-            ],
-            { cwd: dir },
-          )
-        } catch (cause) {
-          const rollbackFailures: unknown[] = []
-          try {
-            if (previousPackage === undefined) await fs.rm(pkg, { force: true })
-            else await Filesystem.writeAtomic(pkg, previousPackage)
-          } catch (rollbackFailure) {
-            rollbackFailures.push(rollbackFailure)
-          }
-          if (createdGitignore) {
-            try {
-              await fs.rm(gitignore, { force: true })
-            } catch (rollbackFailure) {
-              rollbackFailures.push(rollbackFailure)
-            }
-          }
-          if (rollbackFailures.length > 0) {
-            throw new AggregateError(
-              [cause, ...rollbackFailures],
-              `Config dependency installation failed and canonical metadata rollback was incomplete for ${dir}`,
-              { cause },
-            )
-          }
-          throw cause
-        }
-      } finally {
-        await release()
+        // Install any additional dependencies defined in package.json so
+        // local plugins can use their declared external packages.
+        await BunProc.run(
+          [
+            "install",
+            // TODO: get rid of this case (see: https://github.com/oven-sh/bun/issues/19936)
+            ...(proxied() || process.env.CI ? ["--no-cache"] : []),
+          ],
+          { cwd: dir },
+        )
+        // Readiness is published only after the resolved tree verifies, so a
+        // killed install can never be read back as an installed one.
+        const installedVersion = z
+          .object({ version: z.string().min(1) })
+          .passthrough()
+          .parse(await Filesystem.readJson(path.join(dir, "node_modules", PLUGIN_DEPENDENCY, "package.json"))).version
+        await PackageInstallReceipt.verifyAndPublish({
+          occurrenceID: installOccurrenceID,
+          root: dir,
+          package: PLUGIN_DEPENDENCY,
+          requestedVersion: targetVersion,
+          resolvedVersion: installedVersion,
+          moduleDirectory: path.join(dir, "node_modules", PLUGIN_DEPENDENCY),
+          // `bun install` installed everything this config declares, so the
+          // receipt has to certify all of it: a tree whose user-declared
+          // extra dependency never completed must not read as installed.
+          additionalDependencies: Object.keys(json.dependencies ?? {}),
+        })
+      } catch (cause) {
+        await PackageInstallReceipt.rollback(
+          installOccurrenceID,
+          cause instanceof Error ? cause.message : String(cause),
+        ).catch(() => undefined)
+        throw cause
       }
     })
   }
@@ -484,10 +673,15 @@ export namespace Config {
     }
   }
 
-  export async function needsInstall(dir: string) {
+  async function needsInstallOwned(dir: string) {
     const nodeModules = path.join(dir, "node_modules")
     const pkg = path.join(dir, "package.json")
     const pkgExists = await Filesystem.exists(pkg)
+    // Physical existence is not readiness. A killed `bun install` leaves a
+    // node_modules tree and a package.json naming the right version behind,
+    // and reading those as proof made every later load use an incomplete tree
+    // forever. The completeness receipt for this exact tree and revision is
+    // the authority, exactly as it is for the shared registry cache.
     let required = !existsSync(nodeModules) || !pkgExists
     if (!required) {
       const parsed = z
@@ -497,17 +691,23 @@ export namespace Config {
       const depVersion = parsed.dependencies?.["@opencorvus-ai/plugin"]
       if (!depVersion) required = true
       else {
-        const targetVersion = Installation.isLocal() ? "latest" : Installation.VERSION
-        if (targetVersion === "latest") {
-          required = await PackageRegistry.isOutdated("@opencorvus-ai/plugin", depVersion, dir)
-          if (required) {
-            log.info("Cached version is outdated, proceeding with install", {
-              pkg: "@opencorvus-ai/plugin",
-              cachedVersion: depVersion,
-            })
-          }
-        } else {
-          required = depVersion !== targetVersion
+        // The spec the install writes is the spec this compares against — one
+        // spelling of the channel's target, so the receipt key and the manifest
+        // entry cannot drift apart. The local channel's spec is a wildcard, and
+        // every version satisfies a wildcard, so asking the registry whether it
+        // was outdated was a network round trip whose only possible answer was
+        // the one this comparison already gives.
+        required = depVersion !== installTargetVersion()
+      }
+      if (!required) {
+        const published = await PackageInstallReceipt.isPublished({
+          root: dir,
+          package: PLUGIN_DEPENDENCY,
+          version: depVersion!,
+        })
+        if (!published) {
+          log.info("config dependency tree has no completeness receipt, reinstalling", { dir, depVersion })
+          required = true
         }
       }
     }
@@ -516,6 +716,10 @@ export namespace Config {
       throw new Error(`Config dependency installation is required but the directory is not writable: ${dir}`)
     }
     return true
+  }
+
+  export async function needsInstall(dir: string) {
+    return withDependencyInstallOwner(dir, needsInstallOwned)
   }
 
   function rel(item: string, patterns: string[]) {
@@ -541,7 +745,7 @@ export namespace Config {
       mcp: {
         ...(config.mcp ?? {}),
         ...(browser ? {} : { [BrowserMCPBuiltin.ServerName]: BrowserMCPBuiltin.localConfig() }),
-        ...(computer ? {} : { [ComputerMCPBuiltin.ServerName]: { enabled: false as const } }),
+        ...(computer ? {} : { [ComputerMCPBuiltin.ServerName]: ComputerMCPBuiltin.localConfig() }),
       },
     }
   }
@@ -699,7 +903,6 @@ export namespace Config {
           webfetch: PermissionAction.optional(),
           websearch: PermissionAction.optional(),
           external_code_search: PermissionAction.optional(),
-          lsp: PermissionRule.optional(),
           doom_loop: PermissionAction.optional(),
           skill: PermissionRule.optional(),
         })
@@ -1362,43 +1565,6 @@ export namespace Config {
           ),
         ])
         .optional(),
-      lsp: z
-        .union([
-          z.literal(false),
-          z.record(
-            z.string(),
-            z.union([
-              z.object({
-                disabled: z.literal(true),
-              }),
-              z.object({
-                command: z.array(z.string()),
-                extensions: z.array(z.string()).optional(),
-                disabled: z.boolean().optional(),
-                env: z.record(z.string(), z.string()).optional(),
-                initialization: z.record(z.string(), z.any()).optional(),
-              }),
-            ]),
-          ),
-        ])
-        .optional()
-        .refine(
-          (data) => {
-            if (!data) return true
-            if (typeof data === "boolean") return true
-            return Object.entries(data).every(([id, config]) => {
-              if (config.disabled) return true
-              if (LSP_BUILTIN_SERVER_IDS.has(id)) return true
-              return Boolean(config.extensions)
-            })
-          },
-          {
-            error: "For custom LSP servers, 'extensions' array is required.",
-          },
-        )
-        .describe(
-          "Deprecated compatibility field. Language Server Protocol runtimes are disabled and this value is ignored.",
-        ),
       prompt: z
         .record(z.string(), z.string())
         .optional()
@@ -1582,6 +1748,32 @@ export namespace Config {
     })
     .strict()
     .superRefine((config, ctx) => {
+      const browser = config.mcp?.[BrowserMCPBuiltin.ServerName]
+      if (browser) {
+        try {
+          BrowserMCPBuiltin.configuredDeclaration(browser)
+        } catch (error) {
+          if (!BrowserMCPBuiltin.ConfigurationError.isInstance(error)) throw error
+          ctx.addIssue({
+            code: "custom",
+            path: ["mcp", BrowserMCPBuiltin.ServerName, error.data.providerType === "local" ? "command" : "type"],
+            message: error.data.message,
+          })
+        }
+      }
+      const computer = config.mcp?.[ComputerMCPBuiltin.ServerName]
+      if (computer) {
+        try {
+          ComputerMCPBuiltin.configuredDeclaration(computer)
+        } catch (error) {
+          if (!ComputerMCPBuiltin.ConfigurationError.isInstance(error)) throw error
+          ctx.addIssue({
+            code: "custom",
+            path: ["mcp", ComputerMCPBuiltin.ServerName, "type"],
+            message: error.data.message,
+          })
+        }
+      }
       for (const [agentID, agentConfig] of Object.entries(config.agent ?? {})) {
         if (!agentConfig) continue
         const role = AgentRoleContract.get(agentID)
@@ -1618,8 +1810,40 @@ export namespace Config {
     return loader(canonical, options)
   }
 
-  export const global = lazy(async () => {
-    return loadGlobalConfig()
+  let globalState: Promise<{ config: Info; revision: SourceRevision }> | undefined
+  let globalConfigLoaded = false
+  let globalObservedRevision: SourceRevision | undefined
+  let pendingGlobalSettlementEvent = false
+
+  async function loadStableGlobalState(): Promise<{ config: Info; revision: SourceRevision }> {
+    const filepath = await ConfigPaths.assertCanonicalDirectory(Global.Path.config, ["config.json"])
+    while (true) {
+      const snapshot = await readSourceSnapshot(filepath)
+      const config = await loadSourceSnapshot(snapshot)
+      if (await sourceRevisionsAreCurrent([snapshot.revision])) return { config, revision: snapshot.revision }
+    }
+  }
+
+  async function currentGlobalState() {
+    const cached = await globalState
+    if (cached && (await sourceRevisionsAreCurrent([cached.revision]))) return cached
+    await using _owner = await Lock.write("config-global-source-cache")
+    const current = await globalState
+    if (current && (await sourceRevisionsAreCurrent([current.revision]))) return current
+    const next = loadStableGlobalState()
+    globalState = next
+    try {
+      return await next
+    } catch (error) {
+      if (globalState === next) globalState = undefined
+      throw error
+    }
+  }
+
+  export const global = Object.assign(() => withConfigGenerationRead(async () => (await currentGlobalState()).config), {
+    reset() {
+      globalState = undefined
+    },
   })
 
   export const { readFile } = ConfigPaths
@@ -1672,7 +1896,13 @@ export namespace Config {
             modify(original, [field], undefined, { formattingOptions: { insertSpaces: true, tabSize: 2 } }),
           )
         }
-        await Bun.write(options.path, original)
+        // Deliberately unlocked. `loadFile` runs inside `writeConfigFile`'s
+        // own commit hook, so taking the write lock here would deadlock
+        // against the write that is calling it. Atomic replacement is what
+        // this rewrite can guarantee on its own: the file is never torn, and
+        // the migration is idempotent, so a concurrent writer that loses it
+        // re-applies it on its next load.
+        await Filesystem.writeAtomic(options.path, original)
       }
     }
 
@@ -1680,10 +1910,17 @@ export namespace Config {
 
     const parsed = Info.safeParse(data)
     if (parsed.success) {
-      if (!parsed.data.$schema && isFile && loadOptions?.writeSchema !== false) {
-        parsed.data.$schema = "https://opencorvus.ai/config.json"
-        const updated = original.replace(/^\s*\{/, '{\n  "$schema": "https://opencorvus.ai/config.json",')
-        await Bun.write(options.path, updated)
+      // A file that holds nothing but the empty object is either untouched or
+      // freshly provisioned by the write lock. Injecting a `$schema` into it
+      // would turn a read into a write, and would put content into a file the
+      // user never created.
+      const isEmptyObjectFile = original.trim() === "{}"
+      if (!parsed.data.$schema && isFile && !isEmptyObjectFile && loadOptions?.writeSchema !== false) {
+        parsed.data.$schema = CONFIG_SCHEMA_URL
+        const updated = original.replace(/^\s*\{/, `{\n  "$schema": "${CONFIG_SCHEMA_URL}",`)
+        // Unlocked for the same reason as the migration rewrite above, and
+        // idempotent: the next load re-injects it if a concurrent writer wins.
+        await Filesystem.writeAtomic(options.path, updated)
       }
       return parsed.data
     }
@@ -1745,8 +1982,293 @@ export namespace Config {
     }
   }
 
+  type RuntimeTransition = Readonly<{
+    directory: string
+    before: Info
+    after: Info
+  }>
+
+  function runtimeConfigsEqual(left: Info, right: Info): boolean {
+    return isDeepStrictEqual(JSON.parse(JSON.stringify(left)), JSON.parse(JSON.stringify(right)))
+  }
+
+  const pendingPeerTransitions = new Map<string, RuntimeTransition>()
+  const queuedPeerTargets = new Map<string, Info>()
+  const pendingPeerSettlements = new Map<string, Promise<void>>()
+  const writerRetryDirectories = new Set<string>()
+  const loadedProjectConfigs = new Set<string>()
+  let peerConvergenceMonitor: ReturnType<typeof setInterval> | undefined
+  let peerConvergenceRunning = false
+
+  export async function publishGlobalConfigSettlement(): Promise<void> {
+    const { Event } = await import("@/server/event")
+    await GlobalBus.emit("event", {
+      directory: "global",
+      payload: {
+        type: Event.Disposed.type,
+        properties: {},
+      },
+    })
+  }
+
+  async function observeGlobalPeerState(): Promise<void> {
+    await withConfigGenerationRead(async () => {
+      if (!globalConfigLoaded) return
+      const cached = await globalState
+      const observed = cached?.revision ?? globalObservedRevision
+      if (!observed || (await sourceRevisionsAreCurrent([observed]))) return
+      const current = await currentGlobalState()
+      globalObservedRevision = current.revision
+      pendingGlobalSettlementEvent = true
+    })
+  }
+
+  function projectRuntimeSettlementKey(directory: string): string {
+    return `config-runtime-settlement:${Filesystem.normalizePath(directory)}`
+  }
+
+  async function applyProjectRuntimeTransition(
+    transition: RuntimeTransition,
+    options: { resetDerivedCaches?: boolean } = {},
+  ): Promise<void> {
+    const [{ MCP }, { Provider }, { NativeAgentRegistryLifecycle }, { ChannelSupervisor }] = await Promise.all([
+      import("@/mcp"),
+      import("@/provider/provider"),
+      import("@/agent/native-agent-registry-lifecycle"),
+      import("@/channel/supervisor"),
+    ])
+    const resetDerivedCaches = options.resetDerivedCaches !== false
+    const settled = await Promise.allSettled([
+      MCP.reconcileProjectConfig({ before: transition.before, after: transition.after }),
+      ...(resetDerivedCaches ? [Provider.reset(), NativeAgentRegistryLifecycle.reset()] : []),
+      ChannelSupervisor.sync(transition.after),
+    ])
+    const failures = settled.flatMap((result) => (result.status === "rejected" ? [result.reason] : []))
+    if (failures.length > 0) throw new ProjectConfigCommittedReconcileError(failures, transition.after)
+    try {
+      await GlobalBus.emitAndWait("event", {
+        directory: transition.directory,
+        payload: {
+          type: "config.changed",
+          properties: transition.after,
+        },
+      })
+    } catch (error) {
+      throw new ProjectConfigCommittedReconcileError([error], transition.after)
+    }
+  }
+
+  function advancePendingPeerTransition(directory: string, pending: RuntimeTransition): boolean {
+    if (pendingPeerTransitions.get(directory) !== pending) return false
+    const target = queuedPeerTargets.get(directory)
+    if (!target) {
+      pendingPeerTransitions.delete(directory)
+      writerRetryDirectories.delete(directory)
+      return false
+    }
+    queuedPeerTargets.delete(directory)
+    pendingPeerTransitions.set(directory, {
+      directory,
+      before: pending.after,
+      after: target,
+    })
+    return true
+  }
+
+  function queueCurrentConfigAfterPending(directory: string, config: Info): void {
+    const pending = pendingPeerTransitions.get(directory)
+    if (!pending || runtimeConfigsEqual(pending.after, config)) return
+    queuedPeerTargets.set(directory, structuredClone(config) as Info)
+  }
+
+  async function settleProjectRuntimeTransition(
+    transition: RuntimeTransition,
+    options: { resetDerivedCaches?: boolean } = {},
+  ): Promise<void> {
+    await using _owner = await Lock.write(projectRuntimeSettlementKey(transition.directory))
+    while (true) {
+      const pending = pendingPeerTransitions.get(transition.directory)
+      if (!pending) break
+      try {
+        await applyProjectRuntimeTransition(pending)
+      } catch (error) {
+        queuedPeerTargets.set(transition.directory, transition.after)
+        writerRetryDirectories.add(transition.directory)
+        ensurePeerConvergenceMonitor()
+        schedulePendingPeerTransition(transition.directory)
+        throw new ProjectConfigCommittedReconcileError([error], transition.after)
+      }
+      advancePendingPeerTransition(transition.directory, pending)
+    }
+    pendingPeerTransitions.set(transition.directory, transition)
+    try {
+      await applyProjectRuntimeTransition(transition, options)
+    } catch (error) {
+      writerRetryDirectories.add(transition.directory)
+      ensurePeerConvergenceMonitor()
+      schedulePendingPeerTransition(transition.directory)
+      throw error
+    }
+    advancePendingPeerTransition(transition.directory, transition)
+  }
+
+  function schedulePendingPeerTransition(directory: string): void {
+    const pending = pendingPeerTransitions.get(directory)
+    if (!pending) return
+    if (pendingPeerSettlements.has(directory)) return
+    let scheduleQueuedTarget = false
+    const runtimeOwner = Lock.reserveWrite(projectRuntimeSettlementKey(directory))
+    const settlement = Promise.all([import("@/project/instance"), import("@/storage/db")])
+      .then(([{ Instance, runOutsideInstanceContext }, { Database }]) => {
+        const settle = async () => {
+          await using _owner = await runtimeOwner.acquired
+          if (pendingPeerTransitions.get(directory) !== pending) return false
+          await applyProjectRuntimeTransition(pending)
+          scheduleQueuedTarget = advancePendingPeerTransition(directory, pending)
+          return true
+        }
+        return Database.runOutsideContext(() =>
+          runOutsideInstanceContext(async () =>
+            writerRetryDirectories.has(directory)
+              ? await Instance.provideProjectIdentity({ directory, fn: settle })
+              : await Instance.tryProvideActive({ directory, fn: settle }),
+          ),
+        )
+      })
+      .then((settled) => {
+        if (pendingPeerTransitions.get(directory) !== pending) return
+        if (!settled) {
+          pendingPeerTransitions.delete(directory)
+          queuedPeerTargets.delete(directory)
+          writerRetryDirectories.delete(directory)
+        }
+      })
+      .catch((error) => {
+        log.warn("peer configuration runtime projection failed", {
+          directory,
+          error: error instanceof Error ? error.message : String(error),
+        })
+      })
+      .finally(() => {
+        runtimeOwner.cancel()
+        if (pendingPeerSettlements.get(directory) === settlement) pendingPeerSettlements.delete(directory)
+        if (scheduleQueuedTarget) schedulePendingPeerTransition(directory)
+      })
+    pendingPeerSettlements.set(directory, settlement)
+  }
+
+  async function currentProjectStateUnderGenerationOwner(): Promise<LoadedState> {
+    await using _lifecycleOwner = await Lock.read("config-peer-state-lifecycle")
+    const directory = ProjectInstanceContext.use().directory
+    await TestHooks.afterProjectConfigAdmission?.({ directory })
+    const cached = await stateSource()
+    ensurePeerConvergenceMonitor()
+    if (await sourceRevisionsAreCurrent(cached.sourceRevisions)) {
+      loadedProjectConfigs.add(Filesystem.resolve(directory))
+      queueCurrentConfigAfterPending(directory, cached.config)
+      schedulePendingPeerTransition(directory)
+      return cached
+    }
+    await using _owner = await Lock.write(`config-source-cache:${Filesystem.normalizePath(directory)}`)
+    const owned = await stateSource()
+    if (await sourceRevisionsAreCurrent(owned.sourceRevisions)) {
+      loadedProjectConfigs.add(Filesystem.resolve(directory))
+      queueCurrentConfigAfterPending(directory, owned.config)
+      schedulePendingPeerTransition(directory)
+      return owned
+    }
+    const before = structuredClone(owned.config) as Info
+    await stateSource.reset()
+    const next = await stateSource()
+    ensurePeerConvergenceMonitor()
+    const transition: RuntimeTransition = {
+      directory,
+      before,
+      after: structuredClone(next.config) as Info,
+    }
+    loadedProjectConfigs.add(Filesystem.resolve(directory))
+    if (!runtimeConfigsEqual(transition.before, transition.after)) {
+      if (pendingPeerTransitions.has(directory)) queueCurrentConfigAfterPending(directory, transition.after)
+      else pendingPeerTransitions.set(directory, transition)
+      schedulePendingPeerTransition(directory)
+    }
+    return next
+  }
+
+  async function currentProjectState(): Promise<LoadedState> {
+    return withConfigGenerationRead(() => currentProjectStateUnderGenerationOwner())
+  }
+
+  async function convergeLoadedPeerStates(): Promise<void> {
+    if (peerConvergenceRunning) return
+    peerConvergenceRunning = true
+    try {
+      await observeGlobalPeerState()
+      const { Instance } = await import("@/project/instance")
+      const activeDirectories = new Set<string>()
+      await Instance.forEachActive({
+        fn: async () => {
+          const directory = Filesystem.resolve(ProjectInstanceContext.use().directory)
+          activeDirectories.add(directory)
+          if (!loadedProjectConfigs.has(directory)) return
+          try {
+            await currentProjectState()
+          } catch (error) {
+            log.warn("peer configuration convergence failed", {
+              directory,
+              error: error instanceof Error ? error.message : String(error),
+            })
+          }
+        },
+      })
+      for (const directory of [...loadedProjectConfigs]) {
+        if (!activeDirectories.has(directory)) loadedProjectConfigs.delete(directory)
+      }
+      await Promise.all([...pendingPeerSettlements.values()])
+      if (
+        pendingGlobalSettlementEvent &&
+        pendingPeerTransitions.size === 0 &&
+        queuedPeerTargets.size === 0 &&
+        pendingPeerSettlements.size === 0
+      ) {
+        await publishGlobalConfigSettlement()
+        pendingGlobalSettlementEvent = false
+      }
+    } finally {
+      peerConvergenceRunning = false
+    }
+  }
+
+  function ensurePeerConvergenceMonitor(): void {
+    if (peerConvergenceMonitor) return
+    peerConvergenceMonitor = setInterval(() => {
+      if (
+        loadedProjectConfigs.size === 0 &&
+        !globalConfigLoaded &&
+        !pendingGlobalSettlementEvent &&
+        pendingPeerTransitions.size === 0 &&
+        queuedPeerTargets.size === 0 &&
+        pendingPeerSettlements.size === 0
+      ) {
+        clearInterval(peerConvergenceMonitor)
+        peerConvergenceMonitor = undefined
+        return
+      }
+      void Promise.all([import("@/project/instance"), import("@/storage/db")])
+        .then(([{ runOutsideInstanceContext }, { Database }]) =>
+          Database.runOutsideContext(() => runOutsideInstanceContext(() => convergeLoadedPeerStates())),
+        )
+        .catch((error) => {
+          log.warn("peer configuration monitor failed", {
+            error: error instanceof Error ? error.message : String(error),
+          })
+        })
+    }, 250)
+    peerConvergenceMonitor.unref()
+  }
+
   export async function get() {
-    return state().then((x) => x.config)
+    return (await currentProjectState()).config
   }
 
   async function readOnlyWorktreeBoundary(directory: string) {
@@ -1783,7 +2305,13 @@ export namespace Config {
   }
 
   export async function getGlobal() {
-    return global()
+    return withConfigGenerationRead(async () => {
+      const current = await currentGlobalState()
+      globalConfigLoaded = true
+      globalObservedRevision = current.revision
+      ensurePeerConvergenceMonitor()
+      return current.config
+    })
   }
 
   /** Returns only the project-owned writable config, without inherited global values. */
@@ -1830,14 +2358,28 @@ export namespace Config {
   }
 
   export async function writeMcpConfigEntry(name: string, mcpConfig: Mcp, configPath: string) {
-    const text = await Filesystem.readText(configPath).catch((error: NodeJS.ErrnoException) => {
-      if (error.code === "ENOENT") return "{}"
-      throw error
-    })
-    const edits = modify(text, ["mcp", name], mcpConfig, {
-      formattingOptions: { tabSize: 2, insertSpaces: true },
-    })
-    await Filesystem.write(configPath, applyEdits(text, edits))
+    // A read-modify-write of the same file `writeConfigFile` owns, so it takes
+    // the same lock and replaces the file atomically. A global MCP write must
+    // first converge and own the Skill catalog: global config is part of a
+    // Skill replacement occurrence, so every global writer shares the exact
+    // catalog-owner -> config-file-owner order.
+    const write = () =>
+      withConfigFileLock(configPath, async () => {
+        const text = await Filesystem.readText(configPath).catch((error: NodeJS.ErrnoException) => {
+          if (error.code === "ENOENT") return "{}"
+          throw error
+        })
+        const edits = modify(text, ["mcp", name], mcpConfig, {
+          formattingOptions: { tabSize: 2, insertSpaces: true },
+        })
+        await Filesystem.writeAtomic(configPath, applyEdits(text, edits))
+      })
+    if (Filesystem.resolve(configPath) === Filesystem.resolve(globalConfigFile())) {
+      const { SkillManager } = await import("@/skill/manager")
+      await SkillManager.withCatalogMutationOwner(write)
+    } else {
+      await write()
+    }
     return configPath
   }
 
@@ -1851,58 +2393,66 @@ export namespace Config {
   async function writeProjectPatch(
     patch: ProjectMergePatch | ((currentProject: Info) => ProjectMergePatch | Promise<ProjectMergePatch>),
   ) {
-    const projectDirectory = ProjectInstanceContext.use().directory
-    const [{ withConversationCapabilityReferenceMutation }, { withSkillCatalogMutation }] = await Promise.all([
-      import("@/conversation/capability-transaction"),
-      import("@/skill/reference-lock"),
-    ])
-    const target = await assertCanonicalProjectConfig()
-    return withSkillCatalogMutation(() =>
-      withConversationCapabilityReferenceMutation(async () => {
-        let transition: { before: Info; after: Info } | undefined
-        await fs.mkdir(path.dirname(target), { recursive: true })
-        return writeConfigFile(target, patch, {
-          async commit(merged, _appliedPatch, persist) {
-            await state.reset()
-            const before = structuredClone(await get())
-            const candidate = await resolveProjectCandidate(merged)
-            const { validateConfigCandidate } = await import("@/config/candidate-validation")
-            await validateConfigCandidate({
-              config: candidate,
-              root: "config",
-              projectDirectory,
-              projectOwnedCapabilities: true,
-            })
-            await persist()
-            transition = { before, after: candidate }
-          },
-          async onWritten(merged) {
-            await state.reset()
-            global.reset()
-            const committedTransition = transition
-            if (!committedTransition) {
-              throw new Error("Project configuration post-commit reconciliation is missing its committed transition")
-            }
-            const projections = await Promise.allSettled([
-              GlobalBus.emitAndWait("event", {
+    return withConfigGenerationWrite(async () => {
+      const projectDirectory = ProjectInstanceContext.use().directory
+      const [{ withConversationCapabilityReferenceMutation }, { withSkillCatalogMutation }] = await Promise.all([
+        import("@/conversation/capability-transaction"),
+        import("@/skill/reference-lock"),
+      ])
+      const target = await assertCanonicalProjectConfig()
+      return withSkillCatalogMutation(() =>
+        withConversationCapabilityReferenceMutation(async () => {
+          let transition: { before: Info; after: Info } | undefined
+          await fs.mkdir(path.dirname(target), { recursive: true })
+          return writeConfigFile(target, patch, {
+            async commit(merged, _appliedPatch, persist) {
+              await state.reset()
+              const before = structuredClone(await get())
+              const candidate = await resolveProjectCandidate(merged)
+              const { validateConfigCandidate } = await import("@/config/candidate-validation")
+              await validateConfigCandidate({
+                config: candidate,
+                root: "config",
+                projectDirectory,
+                projectOwnedCapabilities: true,
+              })
+              await persist()
+              transition = { before, after: candidate }
+            },
+            async onWritten(merged) {
+              await resetProjectState()
+              global.reset()
+              const committedTransition = transition
+              if (!committedTransition) {
+                throw new Error("Project configuration post-commit reconciliation is missing its committed transition")
+              }
+              await TestHooks.beforeProjectRuntimeSettlement?.({
                 directory: projectDirectory,
-                payload: {
-                  type: "config.changed",
-                  properties: merged,
+                config: committedTransition.after,
+              })
+              await settleProjectRuntimeTransition({
+                directory: projectDirectory,
+                before: committedTransition.before,
+                after: committedTransition.after,
+              })
+              const { Instance } = await import("@/project/instance")
+              await Instance.tryProvideActive({
+                directory: projectDirectory,
+                fn: async () => {
+                  const current = await currentProjectState()
+                  if (runtimeConfigsEqual(current.config, committedTransition.after)) return
+                  await settleProjectRuntimeTransition({
+                    directory: projectDirectory,
+                    before: committedTransition.after,
+                    after: current.config,
+                  })
                 },
-              }),
-              import("@/mcp").then(({ MCP }) => MCP.reconcileProjectConfig(committedTransition)),
-            ])
-            const failures = projections.flatMap((result) =>
-              result.status === "rejected" ? [result.reason] : [],
-            )
-            if (failures.length > 0) {
-              throw new ProjectConfigCommittedReconcileError(failures, committedTransition.after)
-            }
-          },
-        })
-      }),
-    )
+              })
+            },
+          })
+        }),
+      )
+    })
   }
 
   export async function updateProjectPatch(patch: ProjectMergePatch) {
@@ -2067,6 +2617,17 @@ export namespace Config {
   // project file and the global file get independent locks.
   const writeConfigLocks = new Map<string, Promise<unknown>>()
 
+  /** Every writer of a config file takes the same cross-process lock. */
+  function withConfigFileLock<T>(filepath: string, run: () => Promise<T>): Promise<T> {
+    return withSharedJsonFactLock({
+      locks: writeConfigLocks,
+      filepath,
+      // Exactly what `loadFile` synthesizes for a missing file.
+      empty: "{}",
+      run,
+    })
+  }
+
   async function writeConfigFile(
     filepath: string,
     config: unknown | ((existing: Info) => unknown | Promise<unknown>),
@@ -2076,7 +2637,12 @@ export namespace Config {
       onWritten?(merged: Info): Promise<void>
     },
   ) {
-    return withKeyedLock(writeConfigLocks, filepath, async () => {
+    // The read has to happen inside the cross-process lock. Two backends over
+    // one data root would otherwise read the same "before" snapshot, patch
+    // different keys, and let the later atomic replacement discard the
+    // earlier override — the same lost update the in-process queue already
+    // prevents between two requests to this process.
+    return withConfigFileLock(filepath, async () => {
       const before = await Filesystem.readText(filepath).catch((err: NodeJS.ErrnoException) => {
         if (err.code === "ENOENT") return "{}"
         throw new JsonError({ path: filepath }, { cause: err })
@@ -2085,8 +2651,17 @@ export namespace Config {
       const existing = parseConfig(before, filepath)
       const appliedPatch = typeof config === "function" ? await config(existing) : config
       if (filepath.endsWith(".jsonc")) {
-        const updated = patchJsonc(before, appliedPatch)
-        const merged = parseConfig(updated, filepath)
+        let updated = patchJsonc(before, appliedPatch)
+        let merged = parseConfig(updated, filepath)
+        if (Object.keys(merged).length > 0 && !merged.$schema) {
+          updated = applyEdits(
+            updated,
+            modify(updated, ["$schema"], CONFIG_SCHEMA_URL, {
+              formattingOptions: { tabSize: 2, insertSpaces: true },
+            }),
+          )
+          merged = parseConfig(updated, filepath)
+        }
         const persist = () => Filesystem.writeAtomic(filepath, updated)
         if (hooks?.commit) await hooks.commit(merged, appliedPatch, persist)
         else {
@@ -2096,7 +2671,9 @@ export namespace Config {
         await hooks?.onWritten?.(merged)
         return merged
       }
-      const serialized = JSON.stringify(mergeWithNullDelete(existing, appliedPatch), null, 2)
+      const writable = mergeWithNullDelete(existing, appliedPatch)
+      if (Object.keys(writable).length > 0 && !writable.$schema) writable.$schema = CONFIG_SCHEMA_URL
+      const serialized = JSON.stringify(writable, null, 2)
       const merged = parseConfig(serialized, filepath)
       const persist = () => Filesystem.writeAtomic(filepath, serialized)
       if (hooks?.commit) await hooks.commit(merged, appliedPatch, persist)
@@ -2113,6 +2690,7 @@ export namespace Config {
     directory: string
     before: Info
     after: Info
+    rewarm: boolean
   }
 
   async function globalProjectDirectories(): Promise<string[]> {
@@ -2173,6 +2751,7 @@ export namespace Config {
     const { ConversationCapability } = await import("@/conversation/capability")
     const { Instance } = await import("@/project/instance")
     const transitions: GlobalProjectTransition[] = []
+    const loadedDirectories = new Set(stateSource.inspectAll().map((entry) => Filesystem.resolve(entry.key)))
     for (const directory of directories) {
       const before = await snapshotForProject(directory)
       const after = await snapshotForProject(directory, merged)
@@ -2199,32 +2778,81 @@ export namespace Config {
             projectOwnedCapabilities: true,
           }),
       })
-      transitions.push({ directory, before, after })
+      transitions.push({
+        directory,
+        before,
+        after,
+        rewarm: loadedDirectories.has(Filesystem.resolve(directory)),
+      })
     }
     await validateConfigCandidate({
       config: effectiveGlobal,
       root: "global config",
       providerScope: "global",
     })
+    await TestHooks.beforeGlobalPersist?.()
     await persist()
     global.reset()
-    await state.resetAll()
+    if (globalConfigLoaded) {
+      const current = await currentGlobalState()
+      globalObservedRevision = current.revision
+    }
+    await resetAllProjectStates()
     const { Skill } = await import("@/skill/skill")
     await Skill.state.resetAll()
     return transitions
   }
 
   async function reconcileGlobalProjectTransitions(transitions: readonly GlobalProjectTransition[]) {
-    const [{ Instance }, { MCP }] = await Promise.all([import("@/project/instance"), import("@/mcp")])
+    const [{ Instance }, { Provider }, { NativeAgentRegistryLifecycle }] = await Promise.all([
+      import("@/project/instance"),
+      import("@/provider/provider"),
+      import("@/agent/native-agent-registry-lifecycle"),
+    ])
+    const cacheSettlements = await Promise.allSettled([Provider.resetAll(), NativeAgentRegistryLifecycle.resetAll()])
+    await TestHooks.beforeGlobalRuntimeSettlement?.({
+      transitions: transitions.map((transition) => ({
+        directory: transition.directory,
+        before: transition.before,
+        after: transition.after,
+      })),
+    })
     const settled = await Promise.allSettled(
       transitions.map((transition) =>
-        Instance.provideProjectIdentity({
-          directory: transition.directory,
-          fn: () => MCP.reconcileProjectConfig(transition),
-        }),
+        (async () => {
+          await Instance.provideProjectIdentity({
+            directory: transition.directory,
+            fn: async () => {
+              await settleProjectRuntimeTransition(
+                {
+                  directory: transition.directory,
+                  before: transition.before,
+                  after: transition.after,
+                },
+                { resetDerivedCaches: false },
+              )
+            },
+          })
+          if (transition.rewarm) {
+            await Instance.tryProvideActive({
+              directory: transition.directory,
+              fn: async () => {
+                const current = await currentProjectState()
+                if (runtimeConfigsEqual(current.config, transition.after)) return
+                await settleProjectRuntimeTransition({
+                  directory: transition.directory,
+                  before: transition.after,
+                  after: current.config,
+                })
+              },
+            })
+          }
+        })(),
       ),
     )
-    const failures = settled.filter((result): result is PromiseRejectedResult => result.status === "rejected")
+    const failures = [...cacheSettlements, ...settled].filter(
+      (result): result is PromiseRejectedResult => result.status === "rejected",
+    )
     if (failures.length > 0) {
       throw new GlobalConfigCommittedReconcileError(
         failures.map((failure) => failure.reason),
@@ -2235,22 +2863,28 @@ export namespace Config {
 
   async function writeGlobalMutation(patch: unknown | ((existing: Info) => unknown | Promise<unknown>)) {
     await ConfigPaths.assertCanonicalDirectory(Global.Path.config, ["config.json"])
-    const [{ withConversationCapabilityReferenceMutation }, { withSkillCatalogMutation }] = await Promise.all([
-      import("@/conversation/capability-transaction"),
-      import("@/skill/reference-lock"),
-    ])
-    return withSkillCatalogMutation(() =>
-      withConversationCapabilityReferenceMutation(async () => {
-        let transitions: GlobalProjectTransition[] = []
-        return writeConfigFile(globalConfigFile(), patch, {
-          async commit(merged, _appliedPatch, persist) {
-            transitions = await commitGlobalCandidate(merged, persist)
-          },
-          async onWritten() {
-            await reconcileGlobalProjectTransitions(transitions)
-          },
-        })
-      }),
+    const [{ withConversationCapabilityReferenceMutation }, { withSkillCatalogMutation }, { SkillManager }] =
+      await Promise.all([
+        import("@/conversation/capability-transaction"),
+        import("@/skill/reference-lock"),
+        import("@/skill/manager"),
+      ])
+    return withConfigGenerationWrite(() =>
+      withSkillCatalogMutation(() =>
+        SkillManager.withCatalogMutationOwner(() =>
+          withConversationCapabilityReferenceMutation(async () => {
+            let transitions: GlobalProjectTransition[] = []
+            return writeConfigFile(globalConfigFile(), patch, {
+              async commit(merged, _appliedPatch, persist) {
+                transitions = await commitGlobalCandidate(merged, persist)
+              },
+              async onWritten() {
+                await reconcileGlobalProjectTransitions(transitions)
+              },
+            })
+          }),
+        ),
+      ),
     )
   }
 

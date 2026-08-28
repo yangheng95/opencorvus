@@ -32,6 +32,7 @@ import {
 import { settingsStore } from "../store/settings"
 import {
   conversationSourceDirectory,
+  mergeSessionConnectionSnapshot,
   mergeLatestConversationTail,
   registerConversationSourceDirectory,
 } from "./conversation"
@@ -469,17 +470,23 @@ export function startSSE(source: BoardSource, after = 0, options: SseStartOption
           logMalformedSsePayload({ stream: "selected-task", taskID, directory, data, error })
           return
         }
-        if (event.type === "task.heartbeat" || event.type === "session.heartbeat") return
-        if (event.type === "task.connected" || event.type === "session.connected") {
-          refreshComposerModelAfterSelectedStreamConnect(event.type)
-          return
-        }
-        recordSelectedTaskSseUpdate(event, taskID)
-        if (event.type === "task.live_replay_expired") {
-          liveReplayExpiredClose = true
-          resetSelectedLiveCursor()
-        }
         try {
+          if (event.type === "task.heartbeat" || event.type === "session.heartbeat") return
+          if (event.type === "task.connected" || event.type === "session.connected") {
+            if (event.type === "session.connected") {
+              if (source.kind !== "session") {
+                throw new Error(`session.connected arrived on ${source.kind} stream ${source.id}`)
+              }
+              mergeSessionConnectionSnapshot(source, event.payload)
+            }
+            refreshComposerModelAfterSelectedStreamConnect(event.type)
+            return
+          }
+          recordSelectedTaskSseUpdate(event, taskID)
+          if (event.type === "task.live_replay_expired") {
+            liveReplayExpiredClose = true
+            resetSelectedLiveCursor()
+          }
           const handled = routeSSEEvent(event, selectedTaskRecoveryScheduler)
           if (!handled) {
             handleEventStreamEvent(event, selectedTaskRecoveryScheduler)

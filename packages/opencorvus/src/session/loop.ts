@@ -23,7 +23,7 @@ import { SessionCompaction } from "./compaction"
 import { CompactionOverflow } from "./compaction-overflow"
 import { CompactionHandoff } from "./compaction-handoff"
 import { SessionControl } from "./control"
-import { acquireControlLease, renewControlLease } from "@/engine/control-lease"
+import { acquireControlLease, releaseControlLeaseOnErrorPath, renewControlLease } from "@/engine/control-lease"
 import { controlPromptProjection, controlToolContext } from "@/control/prompt"
 import { resolveSessionExecutionAuthority, taskIDForSession } from "@/engine/task-session-lineage"
 import { findDispatchLineageByToolExecution } from "@/engine/dispatch-lineage"
@@ -32,6 +32,8 @@ import { Instance } from "../project/instance"
 import { InstanceLifecycleContext } from "../project/instance-lifecycle-context"
 import { AttachmentStore } from "@/storage/attachment-store"
 import { materializeMcpToolResult, materializedMcpAttachmentsToFileParts } from "@/mcp/materialize"
+import { BrowserMCPBuiltin } from "@/mcp/browser/builtin"
+import { ComputerMCPBuiltin } from "@/mcp/computer/builtin"
 import { Bus } from "../bus"
 import { ProviderTransform } from "../provider/transform"
 import { ProviderSchema } from "../provider/schema"
@@ -76,7 +78,8 @@ import { RuntimeTemplateID } from "@/agent/runtime-template-id"
 import { RuntimeTemplateRegistry } from "@/agent/runtime-template-registry"
 import { TaskPlan } from "@/memory/task-plan"
 import { SessionSummary } from "./summary"
-import { SessionPromptState } from "./prompt/state"
+import { SessionPromptLoopFinishedError, SessionPromptReplyError, SessionPromptState } from "./prompt/state"
+import { SessionPromptOwner } from "./prompt/owner"
 import { isExecutionCancellationError } from "./prompt/cancellation"
 import { toolFailureCauseFromUnknown } from "./tool-failure-cause"
 import {
@@ -225,6 +228,15 @@ function visibleChatSkillNames(messages: readonly Message.WithParts[]): string[]
 }
 
 export namespace SessionLoop {
+  export const FailedReplyReplayAdvancedError = NamedError.create(
+    "FailedReplyReplayAdvancedError",
+    z.object({
+      sessionID: z.string(),
+      messageID: z.string(),
+      failedAssistantMessageID: z.string(),
+    }),
+  )
+
   async function resolveToolExecutionAuthority(input: {
     sessionID: string
     projectID: string
@@ -430,7 +442,7 @@ export namespace SessionLoop {
   async function executeCompactionControl(input: {
     control: SessionControl.Record
     sessionID: string
-    run: (leaseSignal: AbortSignal) => Promise<Awaited<ReturnType<typeof SessionCompaction.process>>>
+    run: (leaseSignal: AbortSignal) => Promise<SessionCompaction.ProcessResult>
   }): Promise<"continue" | "stop" | { status: "leased"; expiresAt: number }> {
     const ownerOccurrenceID = Identifier.ascending("call")
     const leaseMilliseconds = 120_000
@@ -461,26 +473,46 @@ export namespace SessionLoop {
       }
     }, 30_000)
     const settlementLease = () => ({ leaseID: acquired.lease.id, ownerOccurrenceID, now: Date.now() })
-    let result: Awaited<ReturnType<typeof SessionCompaction.process>>
+    // A renewal failure means this owner is gone while the control is still
+    // pending. Settlement cannot record that, so ownership goes back directly;
+    // otherwise the next attempt waits out the remaining lease for nothing.
+    const abandonControlLease = () => {
+      releaseControlLeaseOnErrorPath({
+        target: "session_control",
+        targetID: input.control.id,
+        leaseID: acquired.lease.id,
+        ownerOccurrenceID,
+        now: Date.now(),
+      })
+    }
+    let result: SessionCompaction.ProcessResult
     try {
       result = await input.run(leaseAbort.signal)
     } catch (error) {
       clearInterval(heartbeat)
-      if (renewalFailure) throw renewalFailure
+      if (renewalFailure) {
+        abandonControlLease()
+        throw renewalFailure
+      }
       const settled = SessionControl.fail({
         id: input.control.id,
         sessionID: input.sessionID,
         error: compactionControlErrorText(error),
         lease: settlementLease(),
       })
+      // `settle()` hands the lease back inside the transaction that observed
+      // the conflict, so there is nothing left to abandon here.
       if (!settled) {
         throw compactionControlSettlementConflict({ control: input.control, intendedStatus: "failed", cause: error })
       }
       throw error
     }
     clearInterval(heartbeat)
-    if (renewalFailure) throw renewalFailure
-    if (typeof result === "object") {
+    if (renewalFailure) {
+      abandonControlLease()
+      throw renewalFailure
+    }
+    if (result.status === "failed") {
       const throwable = compactionControlThrowable(result.error)
       const settled = SessionControl.fail({
         id: input.control.id,
@@ -497,11 +529,16 @@ export namespace SessionLoop {
       }
       throw throwable
     }
-    const settled = SessionControl.consume({ id: input.control.id, sessionID: input.sessionID, lease: settlementLease() })
+    const settled = SessionControl.consume({
+      id: input.control.id,
+      sessionID: input.sessionID,
+      payload: { ...input.control.payload, result_summary_message_id: result.summaryMessageID },
+      lease: settlementLease(),
+    })
     if (!settled) {
       throw compactionControlSettlementConflict({ control: input.control, intendedStatus: "consumed" })
     }
-    return result
+    return result.disposition
   }
 
   export const sessionKindRequiresRuntimeContract = sessionKindRequiresRuntimeContractImpl
@@ -1256,6 +1293,67 @@ export namespace SessionLoop {
     return { visible: msgs, deliver: pending }
   }
 
+  function failedAcceptedInputBatch(
+    msgs: Message.WithParts[],
+    attachedTargets: ReadonlySet<string>,
+    tailMessageID: string,
+  ): readonly string[] | undefined {
+    for (let index = msgs.length - 1; index >= 0; index--) {
+      const message = msgs[index]!
+      if (
+        message.info.role !== "assistant" ||
+        message.info.summary === true ||
+        message.info.parentID !== tailMessageID ||
+        message.info.time.completed === undefined ||
+        (message.info.finish !== "error" && message.info.error === undefined)
+      ) {
+        continue
+      }
+      const accepted = Message.acceptedInputMessageIDs(message.info)
+      if (accepted.some((messageID) => attachedTargets.has(messageID))) return accepted
+    }
+  }
+
+  /** Ordered user inputs after the newest prior assistant are one admission
+   * batch. This covers the cross-process first-owner race where two inputs can
+   * commit before either backend publishes the durable Session owner. */
+  function currentUnacceptedInputBatch(msgs: Message.WithParts[], lastUser: Message.User): readonly string[] {
+    let newestAssistantIndex = -1
+    for (let index = msgs.length - 1; index >= 0; index--) {
+      if (msgs[index]?.info.role === "assistant") {
+        newestAssistantIndex = index
+        break
+      }
+    }
+    const ids = msgs
+      .slice(newestAssistantIndex + 1)
+      .filter((message): message is Message.WithParts & { info: Message.User } => message.info.role === "user")
+      .map((message) => message.info.id)
+    return ids.length > 0 ? ids : [lastUser.id]
+  }
+
+  async function advancedFailedReplyForAttachedInput(
+    sessionID: string,
+    messageID: string,
+  ): Promise<(Message.WithParts & { info: Message.Assistant }) | undefined> {
+    const newerMessages: Message.WithParts[] = []
+    for await (const candidate of MessageStore.stream(sessionID)) {
+      if (
+        candidate.info.role === "assistant" &&
+        Message.acceptsInputMessage(candidate.info, messageID) &&
+        candidate.info.time.completed !== undefined &&
+        candidate.info.summary !== true &&
+        (candidate.info.finish === "error" || candidate.info.error !== undefined)
+      ) {
+        if (!newerMessages.some((message) => message.info.role === "user")) {
+          return
+        }
+        return candidate as Message.WithParts & { info: Message.Assistant }
+      }
+      newerMessages.push(candidate)
+    }
+  }
+
   function isCompletedReplyToUserMessage(
     message: Message.WithParts,
     userMessageID: string,
@@ -1279,7 +1377,7 @@ export namespace SessionLoop {
     )
     return (
       message.info.role === "assistant" &&
-      message.info.parentID === userMessageID &&
+      Message.acceptsInputMessage(message.info, userMessageID) &&
       message.info.time.completed !== undefined &&
       Boolean(message.info.finish) &&
       (message.info.finish !== "tool-calls" || committedTurnControl) &&
@@ -1310,6 +1408,58 @@ export namespace SessionLoop {
     return undefined
   }
 
+  async function waitForPeerPromptOwner(input: {
+    sessionID: string
+    resultMode: "reply" | "summary"
+    replyToMessageID?: string
+    summarySourceMessageID?: string
+    summaryControlID?: string
+    retryFailedReply: boolean
+    authority: SessionPromptOwner.Authority
+  }): Promise<{ type: "result"; message: Message.WithParts } | { type: "retry" }> {
+    while (true) {
+      if (input.resultMode === "summary" && input.summarySourceMessageID && input.summaryControlID) {
+        const summary = await settledSummaryForControl({
+          sessionID: input.sessionID,
+          sourceMessageID: input.summarySourceMessageID,
+          controlID: input.summaryControlID,
+        })
+        if (summary) return { type: "result", message: summary }
+      } else if (input.replyToMessageID) {
+        const settled = await completedReplyToUserMessage(input.sessionID, input.replyToMessageID, true)
+        if (settled) {
+          if (
+            settled.info.role === "assistant" &&
+            (settled.info.finish === "error" || settled.info.error !== undefined)
+          ) {
+            if (!input.retryFailedReply) {
+              throw new SessionPromptReplyError(input.sessionID, settled.info.id, settled.info.error)
+            }
+            const advanced = await advancedFailedReplyForAttachedInput(input.sessionID, input.replyToMessageID)
+            if (advanced) {
+              throw new FailedReplyReplayAdvancedError({
+                sessionID: input.sessionID,
+                messageID: input.replyToMessageID,
+                failedAssistantMessageID: advanced.info.id,
+              })
+            }
+          } else {
+            return { type: "result", message: settled }
+          }
+        }
+      }
+      const current = SessionPromptOwner.current(input.sessionID)
+      if (
+        !current ||
+        current.generation !== input.authority.generation ||
+        SessionPromptOwner.observation(current) === "dead_or_reused"
+      ) {
+        return { type: "retry" }
+      }
+      await Bun.sleep(25)
+    }
+  }
+
   export function completedCompactionForSource(
     messages: Message.WithParts[],
     sourceUserMessageID: string,
@@ -1323,6 +1473,48 @@ export namespace SessionLoop {
     )
   }
 
+  async function settledSummaryForControl(input: {
+    sessionID: string
+    sourceMessageID: string
+    controlID: string
+  }): Promise<Message.WithParts | undefined> {
+    const control = SessionControl.get(input.controlID)
+    if (!control || control.sessionID !== input.sessionID) {
+      throw new Error(`Session ${input.sessionID} summary control ${input.controlID} is missing`)
+    }
+    if (
+      (control.kind !== "manual_summarize" && control.kind !== "compaction_request") ||
+      control.payload.source_user_message_id !== input.sourceMessageID
+    ) {
+      throw new Error(
+        `Session ${input.sessionID} summary control ${input.controlID} does not belong to source ${input.sourceMessageID}`,
+      )
+    }
+    if (control.status === "pending") return undefined
+    if (control.status === "failed") {
+      const detail = typeof control.payload.error === "string" ? `: ${control.payload.error}` : ""
+      const error = new Error(`Session ${input.sessionID} summary control ${input.controlID} failed${detail}`)
+      error.name = "SessionPromptSummaryControlError"
+      throw error
+    }
+    const summaryMessageID = control.payload.result_summary_message_id
+    if (typeof summaryMessageID !== "string") {
+      throw new Error(`Session ${input.sessionID} summary control ${input.controlID} has no durable result binding`)
+    }
+    const summary = await MessageStore.get({ sessionID: input.sessionID, messageID: summaryMessageID })
+    if (
+      summary.info.role !== "assistant" ||
+      summary.info.parentID !== input.sourceMessageID ||
+      !CompactionHandoff.isValidSummaryMessage(summary.info) ||
+      !summary.parts.some((part) => part.type === "compaction")
+    ) {
+      throw new Error(
+        `Session ${input.sessionID} summary control ${input.controlID} result ${summaryMessageID} is not its valid summary`,
+      )
+    }
+    return summary
+  }
+
   export function hasCompletedCompactionForSource(messages: Message.WithParts[], sourceUserMessageID: string): boolean {
     return completedCompactionForSource(messages, sourceUserMessageID) !== undefined
   }
@@ -1333,10 +1525,16 @@ export namespace SessionLoop {
     sessionID: string
     directory: string
   }): "stop" | "continue" {
-    SessionControl.consume({ id: input.control.id, sessionID: input.sessionID })
-    if (input.control.kind !== "manual_summarize") return "continue"
-    flushCallbacks(input.sessionID, input.summary, input.directory, "summary")
-    return "stop"
+    const consumed = SessionControl.consume({
+      id: input.control.id,
+      sessionID: input.sessionID,
+      payload: { ...input.control.payload, result_summary_message_id: input.summary.info.id },
+    })
+    if (!consumed || consumed.payload.result_summary_message_id !== input.summary.info.id) {
+      throw new Error(`Session ${input.sessionID} summary control ${input.control.id} result binding failed`)
+    }
+    flushCallbacks(input.sessionID, input.summary, input.directory, "summary", input.control.id)
+    return input.control.kind === "manual_summarize" ? "stop" : "continue"
   }
 
   export function hasPostCompactionMaterialForSource(
@@ -1380,8 +1578,11 @@ export namespace SessionLoop {
     })
     await SessionStatus.set(input.sessionID, { type: "idle" }, { promptGenerationOwner: input.abort })
     SessionRuntimeContractStore.settleConsumedWake(input.sessionID)
+    await standbyObserverForTest?.(input.sessionID)
     return { waitForWake }
   }
+
+  let standbyObserverForTest: ((sessionID: string) => void | Promise<void>) | undefined
 
   async function sessionStateContext(input: {
     projectID: string
@@ -1416,6 +1617,7 @@ export namespace SessionLoop {
     msgs: Message.WithParts[]
     lastUser: Message.User
     lastFinished: Message.Assistant | undefined
+    acceptedInputMessageIDs: readonly string[]
     model: Provider.Model
     abort: AbortSignal
   }) {
@@ -1453,15 +1655,16 @@ export namespace SessionLoop {
       runtimeIdentity?.identityKind === "projected-scheduler" && runtimeIdentity.taskIngressID
         ? runtimeIdentity.taskIngressActivationID
         : undefined
-    const openTaskRootAssistant = taskRootActivation
+    const taskRootAssistant = taskRootActivation
       ? input.msgs.findLast(
           (message): message is Message.WithParts & { info: Message.Assistant } =>
             message.info.role === "assistant" &&
             message.info.parentID === input.lastUser.id &&
-            message.info.activationID === taskRootActivation &&
-            message.info.time.completed === undefined,
+            message.info.activationID === taskRootActivation,
         )
       : undefined
+    if (taskRootAssistant?.info.time.completed !== undefined) return "stop" as const
+    const openTaskRootAssistant = taskRootAssistant
     const taskRootDecisionGapCount = openTaskRootAssistant
       ? taskRootDecisionGapStepIDs(openTaskRootAssistant).length
       : 0
@@ -1481,13 +1684,17 @@ export namespace SessionLoop {
         `Task-root activation ${taskRootActivation} open assistant ${openTaskRootAssistant.info.id} identity changed before its next Provider step`,
       )
     }
-    const assistantMessage =
-      openTaskRootAssistant?.info ??
-      ((await Session.updateMessage({
+    const assistantMessage = openTaskRootAssistant
+      ? ({
+          ...openTaskRootAssistant.info,
+          acceptedInputMessageIDs: [...input.acceptedInputMessageIDs],
+        } as Message.Assistant)
+      : ((await Session.beginAssistantReply({
         id: taskRootActivation
           ? Identifier.deterministic("message", `task-root-assistant-v1\0${input.lastUser.id}`)
           : Identifier.ascending("message"),
         parentID: input.lastUser.id,
+        acceptedInputMessageIDs: [...input.acceptedInputMessageIDs],
         role: "assistant",
         author: input.lastUser.agent,
         agent: input.lastUser.agent,
@@ -1512,21 +1719,34 @@ export namespace SessionLoop {
         },
         sessionID: input.sessionID,
       })) as Message.Assistant)
+    if (
+      openTaskRootAssistant &&
+      JSON.stringify(Message.acceptedInputMessageIDs(openTaskRootAssistant.info)) !==
+        JSON.stringify(input.acceptedInputMessageIDs)
+    ) {
+      throw new Error(`Task-root assistant ${assistantMessage.id} accepted input identities changed within one activation`)
+    }
+    if (openTaskRootAssistant) await Session.beginAssistantReply(assistantMessage)
     SessionPromptState.bindMessageOwner(input.sessionID, assistantMessage.id, input.abort)
+    await SessionStatus.set(input.sessionID, { type: "streaming" }, { promptGenerationOwner: input.abort })
     const processor = SessionProcessor.create({
       assistantMessage,
       sessionID: input.sessionID,
       model: input.model,
       abort: input.abort,
       retainAssistantOnToolContinuation: Boolean(taskRootActivation),
+      stopAfterAssistantCompletion: Boolean(taskRootActivation),
       retainAssistantForNextProviderStep:
         taskRootActivation && taskRootSemanticTurnLimit !== undefined
-          ? async () => {
+          ? async (message) => {
               const persisted = await MessageStore.get({
                 sessionID: input.sessionID,
                 messageID: assistantMessage.id,
               })
-              if (taskRootAssistantHasDecisionReceipt(persisted)) return false
+              if (taskRootAssistantHasDecisionReceipt(persisted)) {
+                message.finish = "stop"
+                return false
+              }
               return taskRootDecisionGapStepIDs(persisted).length < taskRootSemanticTurnLimit
             }
           : undefined,
@@ -1992,6 +2212,8 @@ export namespace SessionLoop {
     resume_existing: z.boolean().optional(),
     result_mode: z.enum(["reply", "summary"]).optional(),
     reply_to_message_id: Identifier.schema("message").optional(),
+    summary_source_message_id: Identifier.schema("message").optional(),
+    summary_control_id: Identifier.schema("session_control").optional(),
     retry_failed_reply: z.boolean().optional(),
   })
 
@@ -2101,13 +2323,13 @@ export namespace SessionLoop {
   /**
    * Close the exact assistant/tool execution abandoned by a previous process.
    *
-   * Prompt ownership is intentionally process-local. A durable Session can
-   * therefore contain an incomplete assistant message after an ungraceful
-   * process exit even though the new process has no physical owner capable of
-   * completing its running tools. Leaving those records open makes a recovered
-   * scheduler turn appear concurrent with the dead turn and can duplicate a
-   * synchronous dispatch. Persist the real interruption before continuing so
-   * every Agent and Expert Squad family observes one truthful message stream.
+   * Prompt ownership is durable and bound to one exact operating-system
+   * process occurrence. After that occurrence is proved dead, its incomplete
+   * assistant has no physical owner capable of completing the running tools.
+   * Leaving those records open makes a recovered scheduler turn appear
+   * concurrent with the dead turn and can duplicate a synchronous dispatch.
+   * Persist the real interruption before continuing so every Agent and Expert
+   * Squad family observes one truthful message stream.
    */
   export async function terminalizeRecoveredIncompleteAssistant(
     sessionID: string,
@@ -2220,18 +2442,55 @@ export namespace SessionLoop {
   export const loop = fn(LoopInput, async (input) => {
     const { sessionID, resume_existing } = input
     const resultMode = input.result_mode ?? "reply"
+    if (resultMode === "summary" && (!input.summary_source_message_id || !input.summary_control_id)) {
+      throw new Error(`Session ${sessionID} summary result requires its exact source Message and control identities`)
+    }
     const session = await Session.get(sessionID)
     const directory = session.directory
     assertSessionLoopRuntimeContract(SessionRuntimeContractStore.get(sessionID), `SessionLoop session ${sessionID}`)
 
-    const { abort, startedOwner, firstResult } = await enterLoop({
-      sessionID,
-      directory,
-      resumeExisting: resume_existing === true,
-      resultMode,
-      replyToMessageID: input.reply_to_message_id,
-    })
+    let admitted: Exclude<Awaited<ReturnType<typeof enterLoop>>, { peerOwner: SessionPromptOwner.Authority }>
+    while (true) {
+      const candidate = await enterLoop({
+        sessionID,
+        directory,
+        resumeExisting: resume_existing === true,
+        resultMode,
+        replyToMessageID: input.reply_to_message_id,
+        summaryControlID: input.summary_control_id,
+      })
+      if (!("peerOwner" in candidate)) {
+        admitted = candidate
+        break
+      }
+      if (resume_existing) {
+        throw new SessionPromptLoopFinishedError(sessionID)
+      }
+      const joined = await waitForPeerPromptOwner({
+        sessionID,
+        resultMode,
+        replyToMessageID: input.reply_to_message_id,
+        summarySourceMessageID: input.summary_source_message_id,
+        summaryControlID: input.summary_control_id,
+        retryFailedReply: input.retry_failed_reply === true,
+        authority: candidate.peerOwner,
+      })
+      if (joined.type === "result") return joined.message
+    }
+    const { abort, startedOwner, firstResult } = admitted
     try {
+      if (resultMode === "summary" && input.summary_source_message_id && input.summary_control_id) {
+        const persistedSummary = await settledSummaryForControl({
+          sessionID,
+          sourceMessageID: input.summary_source_message_id,
+          controlID: input.summary_control_id,
+        })
+        if (persistedSummary) {
+          flushCallbacks(sessionID, persistedSummary, directory, "summary", input.summary_control_id)
+          if (startedOwner) await finish(sessionID, abort, directory)
+          return persistedSummary
+        }
+      }
       if (input.reply_to_message_id) {
         const persistedReply = await completedReplyToUserMessage(
           sessionID,
@@ -2239,12 +2498,35 @@ export namespace SessionLoop {
           startedOwner && input.retry_failed_reply !== true,
         )
         if (persistedReply) {
-          flushCallbacks(sessionID, persistedReply, directory, "reply", input.reply_to_message_id)
+          flushCallbacks(sessionID, persistedReply, directory, "reply")
           consumeRuntimeContractTurn(sessionID)
           if (startedOwner) {
             await finish(sessionID, abort, directory)
             SessionRuntimeContractStore.settleConsumedWake(sessionID)
             return firstResult
+          }
+        }
+        if (input.retry_failed_reply === true) {
+          const advancedFailure = await advancedFailedReplyForAttachedInput(sessionID, input.reply_to_message_id)
+          if (advancedFailure) {
+            const replayError = new FailedReplyReplayAdvancedError({
+              sessionID,
+              messageID: input.reply_to_message_id,
+              failedAssistantMessageID: advancedFailure.info.id,
+            })
+            SessionPromptState.rejectAttachedCallbacks(
+              sessionID,
+              replayError,
+              directory,
+              resultMode,
+              input.reply_to_message_id,
+              input.summary_control_id,
+            )
+            // An attached stale caller exits without crossing the owner's
+            // runtime-contract failure path. If the stale retry itself won
+            // ownership between N's input commit and owner admission, retain
+            // that owner to serve the already-accepted newer Turn.
+            if (!startedOwner) return firstResult
           }
         }
       }
@@ -2255,7 +2537,14 @@ export namespace SessionLoop {
       if (abort && !resume_existing) {
         await finish(sessionID, abort, directory, error)
       } else {
-        SessionPromptState.rejectAttachedCallbacks(sessionID, error, directory, resultMode, input.reply_to_message_id)
+        SessionPromptState.rejectAttachedCallbacks(
+          sessionID,
+          error,
+          directory,
+          resultMode,
+          input.reply_to_message_id,
+          input.summary_control_id,
+        )
       }
       await firstResult.catch(() => undefined)
       throw error
@@ -2282,7 +2571,7 @@ export namespace SessionLoop {
         if (!reply) {
           throw new Error(`Session ${sessionID} completed without a durable reply to ${replyToMessageID}`)
         }
-        flushCallbacks(sessionID, reply, directory, "reply", replyToMessageID)
+        flushCallbacks(sessionID, reply, directory, "reply")
         return
       }
       await flushPromptFinalMessage({ sessionID, abort, resultMode, directory })
@@ -2328,6 +2617,7 @@ export namespace SessionLoop {
         while (true) {
           const runActiveTurn = async () => {
             let finalizedTerminalTurn = false
+            let acceptedInputMessageIDs: readonly string[] | undefined
             while (true) {
               touch(sessionID, directory)
               log.info("loop", { step, sessionID })
@@ -2335,15 +2625,7 @@ export namespace SessionLoop {
               const durableMessages = await Message.filterCompacted(MessageStore.stream(sessionID))
               const attachedTargets = new Set(attachedReplyTargets(sessionID, directory))
               const { visible, deliver } = partitionPendingDelivery(durableMessages, attachedTargets)
-              for (const queued of deliver) {
-                if (queued.info.role !== "user") continue
-                delete queued.info.pendingDelivery
-                await Session.updateMessage(queued.info)
-              }
               const msgs = visible
-              const replyTarget = msgs.find(
-                (message) => message.info.role === "user" && attachedTargets.has(message.info.id),
-              )?.info.id
               const { lastUser, lastAssistant, lastFinished, lastFinishedRequestTokens } = collectLoopState(msgs)
               const pendingControls = SessionControl.pending(sessionID)
               for (const control of pendingControls) {
@@ -2381,13 +2663,13 @@ export namespace SessionLoop {
               }
 
               SessionStatus.beginExecutionOccurrence(sessionID, lastUser.id, abort)
-              await SessionStatus.set(sessionID, { type: "streaming" }, { promptGenerationOwner: abort })
 
               step++
               if (step === 1) {
                 await ensureTitle({
                   session,
                   history: msgs,
+                  abort,
                 }).catch((err) => log.error("failed to ensure session title", { error: String(err) }))
               }
 
@@ -2469,16 +2751,31 @@ export namespace SessionLoop {
                   return { type: "standby" as const, waitForWake }
                 }
                 if (result === "stop") {
-                  const completedMessages: Message.WithParts[] = []
-                  for await (const message of MessageStore.stream(sessionID)) completedMessages.push(message)
-                  const completedSummary = completedCompactionForSource(completedMessages, sourceUserMessageID)
+                  const completedSummary = await settledSummaryForControl({
+                    sessionID,
+                    sourceMessageID: sourceUserMessageID,
+                    controlID: compactionControl.id,
+                  })
                   if (!completedSummary) {
                     throw new Error(
                       `Manual summary for source ${sourceUserMessageID} completed without a durable summary message`,
                     )
                   }
-                  flushCallbacks(sessionID, completedSummary, directory, "summary")
+                  flushCallbacks(sessionID, completedSummary, directory, "summary", compactionControl.id)
                   break
+                }
+                if (resultMode === "summary" && input.summary_source_message_id && input.summary_control_id) {
+                  const completedSummary = await settledSummaryForControl({
+                    sessionID,
+                    sourceMessageID: input.summary_source_message_id,
+                    controlID: input.summary_control_id,
+                  })
+                  if (!completedSummary) {
+                    throw new Error(
+                      `Session ${sessionID} completed compaction without a durable summary for ${input.summary_source_message_id}`,
+                    )
+                  }
+                  flushCallbacks(sessionID, completedSummary, directory, "summary", compactionControl.id)
                 }
                 continue
               }
@@ -2560,6 +2857,11 @@ export namespace SessionLoop {
                   }
                 }
 
+                acceptedInputMessageIDs ??=
+                  deliver.length > 0
+                    ? deliver.map((message) => message.info.id)
+                    : (failedAcceptedInputBatch(msgs, attachedTargets, lastUser.id) ??
+                      currentUnacceptedInputBatch(msgs, lastUser))
                 turn = await processTurn({
                   step,
                   sessionID,
@@ -2567,6 +2869,7 @@ export namespace SessionLoop {
                   msgs,
                   lastUser,
                   lastFinished,
+                  acceptedInputMessageIDs,
                   model,
                   abort,
                 })
@@ -2584,6 +2887,7 @@ export namespace SessionLoop {
                   hasAttachedPromptWork(sessionID, directory) ||
                   SessionControl.pending(sessionID).some(isActionableSessionControl)
                 ) {
+                  acceptedInputMessageIDs = undefined
                   step = 0
                   continue
                 }
@@ -2683,7 +2987,7 @@ export namespace SessionLoop {
     afterOrderKey: string,
     options?: { ignoredActionableControlID?: string; wakeAt?: number },
   ): Promise<void> {
-    return new Promise<void>((resolve) => {
+    return new Promise<void>((resolve, reject) => {
       if (abort.aborted) {
         resolve()
         return
@@ -2694,16 +2998,19 @@ export namespace SessionLoop {
       let unsubscribeRuntimeWake = () => {}
       let unsubscribeControlWake = () => {}
       let wakeTimer: ReturnType<typeof setTimeout> | undefined
+      let durablePollTimer: ReturnType<typeof setTimeout> | undefined
       const onAbort = () => settle()
-      const settle = () => {
+      const settle = (error?: unknown) => {
         if (settled) return
         settled = true
         unsubscribeMessage()
         unsubscribeRuntimeWake()
         unsubscribeControlWake()
         if (wakeTimer !== undefined) clearTimeout(wakeTimer)
+        if (durablePollTimer !== undefined) clearTimeout(durablePollTimer)
         abort.removeEventListener("abort", onAbort)
-        resolve()
+        if (error === undefined) resolve()
+        else reject(error)
       }
 
       unsubscribeMessage = Bus.subscribe(Message.Event.Updated, (event) => {
@@ -2722,29 +3029,39 @@ export namespace SessionLoop {
         wakeTimer = setTimeout(settle, Math.max(0, options.wakeAt - Date.now()))
       }
 
-      // Re-read both durable wake sources after subscribing so a control
-      // committed between the loop's standby decision and this subscription
-      // cannot leave the prompt owner asleep.
-      if (
-        shouldRunRuntimeContractTurn(sessionID) ||
-        SessionControl.pending(sessionID).some(
-          (control) =>
-            isActionableSessionControl(control) && control.id !== options?.ignoredActionableControlID,
-        )
-      ) {
-        settle()
-        return
-      }
-
-      void (async () => {
-        for await (const item of MessageStore.stream(sessionID)) {
-          if (compareTimelineOrderKeys(timelineMessageOrderKey(item), afterOrderKey) <= 0) break
-          if (item.info.role === "user") {
+      const pollDurableWake = async () => {
+        if (settled) return
+        try {
+          if (
+            shouldRunRuntimeContractTurn(sessionID) ||
+            SessionControl.pending(sessionID).some(
+              (control) =>
+                isActionableSessionControl(control) && control.id !== options?.ignoredActionableControlID,
+            )
+          ) {
             settle()
             return
           }
+          for await (const item of MessageStore.stream(sessionID)) {
+            if (compareTimelineOrderKeys(timelineMessageOrderKey(item), afterOrderKey) <= 0) break
+            if (item.info.role === "user") {
+              settle()
+              return
+            }
+          }
+          if (!settled) {
+            durablePollTimer = setTimeout(() => void pollDurableWake(), 100)
+            durablePollTimer.unref()
+          }
+        } catch (error) {
+          settle(error)
         }
-      })()
+      }
+
+      // Local subscriptions provide low-latency wake-up. The repeating
+      // durable read is the cross-process authority and also closes commits
+      // that occur after the initial post-subscription observation.
+      void pollDurableWake()
     })
   }
 
@@ -3143,6 +3460,14 @@ export namespace SessionLoop {
               const materialized = await materializeMcpToolResult({
                 projectID: Instance.project.id,
                 result,
+                // The provider this result came from, taken from the same
+                // identity the invocation was recorded under — not guessed
+                // again from the payload's shape.
+                serverName: browserPermissionKey
+                  ? BrowserMCPBuiltin.ServerName
+                  : computerPermissionKey
+                    ? ComputerMCPBuiltin.ServerName
+                    : (mcpAuthorityBinding?.serverID ?? undefined),
               })
 
               const truncated = await Truncate.output(
@@ -4162,12 +4487,22 @@ export namespace SessionLoop {
   export const TestHooks = {
     collectLoopState,
     partitionPendingDelivery,
+    failedAcceptedInputBatch,
     consumeCompletedCompactionControl,
     executeCompactionControl,
     isSettledReplyToUserMessage,
     sessionStateContext,
     waitForUserMessage,
     resolveToolExecutionAuthority,
+    installStandbyObserver(observer: (sessionID: string) => void | Promise<void>): Disposable {
+      if (standbyObserverForTest) throw new Error("Session standby test observer is already installed")
+      standbyObserverForTest = observer
+      return {
+        [Symbol.dispose]() {
+          if (standbyObserverForTest === observer) standbyObserverForTest = undefined
+        },
+      }
+    },
   }
 }
 

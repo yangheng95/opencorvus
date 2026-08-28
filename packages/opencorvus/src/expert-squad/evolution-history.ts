@@ -15,7 +15,7 @@ import {
   type EvolutionCampaignHistoryRecord,
   type EvolutionHistoryListResponse,
 } from "@opencorvus-ai/plugin"
-import { requireEngineArtifactByLocator } from "@/artifact-catalog"
+import { requireEngineArtifactByLocator } from "@/engine/engine-artifact-version-facts"
 import {
   EngineArtifactCatalogRevisionTable,
   EngineArtifactTable,
@@ -28,7 +28,7 @@ import { NamedError } from "@opencorvus-ai/util/error"
 import z from "zod"
 import { ExpertSquadPackageLocations } from "./locations"
 import { ExpertSquadRegistry } from "./registry"
-import { evolutionMutationConfirmationText } from "./evolution-mutation"
+import { evolutionMutationConfirmationText } from "./evolution-mutation-intent"
 import { FEEDBACK_REVISION_COMPONENT_ID } from "./feedback-revision"
 
 type InstallationScope = "project" | "global"

@@ -93,7 +93,7 @@ export async function readBuildObservationContentRange(input: {
     }
   }
 
-  const process = Process.spawnHost(gitProcessArgs(["cat-file", "blob", object.oid]), {
+  const process = await Process.spawnHost(gitProcessArgs(["cat-file", "blob", object.oid]), {
     cwd: taskRootDirectory(task),
     stdin: "ignore",
     stdout: "pipe",
@@ -106,7 +106,7 @@ export async function readBuildObservationContentRange(input: {
     throw new BuildObservationContentError("git cat-file did not expose output pipes", "git_read_failed")
   }
 
-  const stderrPromise = new Response(process.stderr as unknown as ReadableStream<Uint8Array>).text()
+  const stderrPromise = Process.readText(process.stderr)
   const chunks: Uint8Array[] = []
   let streamed = 0
   let retained = 0

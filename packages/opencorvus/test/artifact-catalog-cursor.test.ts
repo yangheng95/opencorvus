@@ -16,8 +16,9 @@ afterEach(async () => {
 })
 
 async function createCatalogTask() {
-  const session = await Session.create({
+  const session = Session.prepareRootNext({
     kind: "root",
+    directory: Instance.directory,
     title: "Artifact cursor contract",
     metadata: {
       configOverlay: {
@@ -31,7 +32,7 @@ async function createCatalogTask() {
   const packageDigest = "a".repeat(64)
   persistTask({
     taskID,
-    sessionID: session.id,
+    rootSession: session,
     now,
     title: "Artifact cursor contract",
     request: "Prove compact frozen pagination.",

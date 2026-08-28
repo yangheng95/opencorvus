@@ -8,6 +8,76 @@
 
 - [2026-08-24-sol-base-restricted-shell-authority-repair.md](2026-08-24-sol-base-restricted-shell-authority-repair.md) repairs the impossible fresh 1–50 restricted-shell authority contract, preserves historical and extended digests, and requires prelaunch identity proof before resuming the Sol Mission/Base round.
 
+- [2026-08-29-light-expert-squad.md](2026-08-29-light-expert-squad.md) adds the two-role, read-only Light Expert Squad for consultation, investigation, and clarifying questions with variable same-role direct-dispatch fan-out.
+
+- [2026-08-29-mission-acceptance-baseline-readiness.md](2026-08-29-mission-acceptance-baseline-readiness.md) closes criterion-state, applicable Task delta, retryable checkpoint, direct-dispatch responsibility, real Session decision-settlement, and scheduler ownership gaps before the Luna continuation baseline.
+
+- [2026-08-28-mission-acceptance-delta-closure.md](2026-08-28-mission-acceptance-delta-closure.md) makes Mission acceptance repair a structured evidence delta with an append-only Task ledger, epoch-boundary compaction, affected-lineage continuation, and dispatch-step settlement without a synthetic `no_action` call.
+
+- [2026-08-28-overlay-expert-squad-handoff-startup-convergence.md](2026-08-28-overlay-expert-squad-handoff-startup-convergence.md) removes the Expert Squad install handoff from the renderer startup barrier and replaces destructive pending-value consumption with successful conditional acknowledgement.
+
+- [2026-08-28-overlay-panel-typography-convergence.md](2026-08-28-overlay-panel-typography-convergence.md) collapses application-panel typography to one bounded 16/14/12 scale plus 13px code, removes component-local font aliases and outliers, and makes the existing CSS checker enforce the role contract.
+
+- [2026-08-28-global-chat-start-api.md](2026-08-28-global-chat-start-api.md) adds one idempotent, asynchronous global Chat start that creates the visible Session, persists the first real user Message, and exposes canonical Session streaming coordinates.
+
+- [2026-08-28-remaining-architecture-debt-closure.md](2026-08-28-remaining-architecture-debt-closure.md) reconciles the final recorded-open architecture boundaries and orders their repair before one real Mission scheduling-trajectory acceptance.
+
+- [2026-08-28-arc-021-immutable-package-publication.md](2026-08-28-arc-021-immutable-package-publication.md) replaces the mutable shared Bun package cache with verified, atomically published immutable package revisions.
+
+- [2026-08-28-arc-008-conversation-mcp-context-budget.md](2026-08-28-arc-008-conversation-mcp-context-budget.md) separates configured Browser/Computer inventory from explicit Chat/Work MCP activation so an unassigned conversation carries no implicit full-provider schema payload.
+
+- [2026-08-28-inspect-browsecomp-luna-smoke.md](2026-08-28-inspect-browsecomp-luna-smoke.md) exercises the new Inspect-owned benchmark framework against one official BrowseComp row with exact GPT-5.6 Luna system identity, isolated Task execution, frozen membership, and fail-closed judge coverage.
+
+- [2026-08-27-right-dock-lifecycle-and-virtual-bottom-convergence.md](2026-08-27-right-dock-lifecycle-and-virtual-bottom-convergence.md) makes the Right Dock mount only its visible tab body and converges dynamic virtual-row measurement with the outer transcript bottom while fencing retired Virtualizer cleanup.
+
+- [2026-08-27-message-panel-agent-activity-and-type-density.md](2026-08-27-message-panel-agent-activity-and-type-density.md) converges live and hydrated child-Agent activity on exact execution occurrences and restores message prose/card title typography to their canonical density.
+
+- [2026-08-27-message-panel-stream-and-payload-convergence.md](2026-08-27-message-panel-stream-and-payload-convergence.md) removes the duplicate Task message watermark authority, converges main Task/Mission/Session messages on exact live replay or subscribe-before-snapshot, and defers large collapsed Tool state from first-paint transport with exact verified Part reads on expansion.
+
+- [2026-08-27-work-ledger-unowned-task-visibility.md](2026-08-27-work-ledger-unowned-task-visibility.md) restores unarchived Tasks without a valid Mission root to the active Work Ledger while keeping Mission-owned Tasks nested exactly once.
+
+- [2026-08-26-mission-task-causal-order-and-close-convergence.md](2026-08-26-mission-task-causal-order-and-close-convergence.md) makes fresh Task creator/control publication one atomic Session cut, gives every Session Message a persisted monotonic causal frontier, and re-reduces Mission closure after lifecycle-lease acquisition before any physical close.
+
+- [2026-08-26-session-stream-message-cutover-convergence.md](2026-08-26-session-stream-message-cutover-convergence.md) closes first-connect and reconnect gaps for newly created messages in Work, Chat, Mission, and ordinary Sessions by merging a subscribe-before-snapshot handshake through the canonical conversation writer.
+
+- [2026-08-26-extensible-inspect-benchmark-framework.md](2026-08-26-extensible-inspect-benchmark-framework.md) evolves the OpenCorvus Inspect adapter into a versioned benchmark registry with deterministic manifests, frozen scorer provenance, and attributed Apodex BrowseComp and FrontierScience integrations without importing a second runner or Agent runtime.
+
+- [2026-08-26-session-conversation-history-visibility-repair.md](2026-08-26-session-conversation-history-visibility-repair.md) connects the existing bounded Session tail to its canonical older-history route so Mission and ordinary conversation prefixes remain reachable through the shared Overlay writer.
+
+- [2026-08-26-runtime-skill-market-search-install.md](2026-08-26-runtime-skill-market-search-install.md) replaces the navigational Skill directory list with one runtime-searchable, hash-pinned, exact-install Market chain shared by Agents, HTTP, and Settings.
+
+- [2026-08-26-opencorvus-paper-foundation-evidence.md](2026-08-26-opencorvus-paper-foundation-evidence.md) establishes the paper-production material boundaries and a machine/human-consumable internal claims, AutomationBench, seven-role process, Expert Squad, self-evolution, and figure-input evidence foundation.
+
+- [2026-08-26-search-code-bounded-execution-repair.md](2026-08-26-search-code-bounded-execution-repair.md) reconstructs the live repository-wide ripgrep stall and restores ignored-tree, wall-clock, output, cancellation, and process-settlement bounds to the shared `search_code` Tool.
+
+- [2026-08-26-mission-stream-interruption-retry-budget.md](2026-08-26-mission-stream-interruption-retry-budget.md) reconstructs the real `idle -> network -> idle` Mission failure and restores mid-stream semantic idle to the shared bounded transient-retry budget while preserving first-byte, total-deadline, cancellation, and post-side-effect safety contracts.
+
+- [2026-08-26-inspect-ai-benchmark-adapter.md](2026-08-26-inspect-ai-benchmark-adapter.md) defines a model-free Inspect AI solver that maps ordinary evaluation Samples onto the public OpenCorvus Task lifecycle and projects the exact Completion Decision Message back into Inspect logs and scorers.
+
+- [2026-08-25-open-pull-request-triage.md](2026-08-25-open-pull-request-triage.md) classifies the stale release and Dependabot backlog against current package-family, runtime, UI, and GitHub Actions contracts before any remote merge or closure.
+
+- [2026-08-25-architecture-debt-remediation.md](2026-08-25-architecture-debt-remediation.md) carries the staged repair of the whole-repository architecture-debt saturation audit, starting with renderer privilege containment and advancing through the recorded dependency order.
+
+- [2026-08-25-landing-automationbench-proof.md](2026-08-25-landing-automationbench-proof.md) adapts the current 100-case AutomationBench result into a bilingual native landing proof with an explicit 8.07% Luna baseline, 34.00% OpenCorvus strict pass rate, derived lift, and cross-sample comparison boundary.
+
+- [2026-08-25-landing-deberta-mission-scale.md](2026-08-25-landing-deberta-mission-scale.md) replaces the featured long-horizon landing example with a catalog-bound DeBERTa research-engineering Mission and an accessible six-to-eighteen-stage magical expansion.
+
+- [2026-08-25-v0.0.54-beta-release.md](2026-08-25-v0.0.54-beta-release.md) freezes, validates, publishes, and integrates the `0.0.54-beta` application and website release from the reviewed post-`0.0.53-beta` runtime and download-selection repairs.
+
+- [2026-08-25-website-version-bound-download.md](2026-08-25-website-version-bound-download.md) binds the landing-page primary action to the current manifest asset on single-architecture Windows, exposes the exact version/file selection, and makes ambiguous platforms choose explicitly.
+
+- [2026-08-25-web-host-path-actions-and-settings-audit.md](2026-08-25-web-host-path-actions-and-settings-audit.md) audits every Settings section against the real Web build, gives the browser host a usable action wherever the desktop opens the OS file manager, and implements `open-url` on that host so its external links stop being dead — both chosen by declared capability rather than by a fallback inside the native call.
+
+- [2026-08-24-v0.0.53-beta-release.md](2026-08-24-v0.0.53-beta-release.md) tracks canonical `0.0.53-beta` convergence, immutable application publication, the same-source public website deployment, and integration of the reviewed release source into `main`.
+
+- [2026-08-24-repository-architecture-debt-saturation-audit.md](2026-08-24-repository-architecture-debt-saturation-audit.md) defines the evidence-complete whole-repository architecture-debt benchmark, carries the verified Browser/Computer seed findings, and iterates cross-domain audits until a repeated sweep finds no new P0/P1.
+
+- [2026-08-24-work-ledger-double-click-rename-repair.md](2026-08-24-work-ledger-double-click-rename-repair.md) restores the shared Mission/Task/Chat row double-click binding to the existing rename dialogs and durable writers.
+
+- [2026-08-24-right-dock-subagent-navigation-and-add-menu.md](2026-08-24-right-dock-subagent-navigation-and-add-menu.md) reconnects Agent activity child-session clicks to the exact Right Dock conversation and replaces the Dock's unavailable Webview-only Add/overflow menus with the shared accessible Overlay menu primitive.
+
+- [2026-08-23-tool-disclosure-single-owner-repair.md](2026-08-23-tool-disclosure-single-owner-repair.md) removes the nested second collapse owner from chronological Tool calls so one click reveals the canonical Tool body in both the main conversation and Expert Squad member dock.
+
 - [2026-08-23-tool-pause-durable-progress-convergence.md](2026-08-23-tool-pause-durable-progress-convergence.md) traces a real RTX 5090 Mission failure to the shared 15-minute absolute Tool-pause bound and records the append-only Tool progress bridge, configuration contract, focused benchmark, and fresh-Mission acceptance required before a website-success claim.
 
 - [2026-08-22-v0.0.52-beta-release.md](2026-08-22-v0.0.52-beta-release.md) tracks canonical `0.0.52-beta` convergence, the reviewed immutable binary release, public website deployment, and the truthful boundary around the concurrent real Expert Squad demonstration.

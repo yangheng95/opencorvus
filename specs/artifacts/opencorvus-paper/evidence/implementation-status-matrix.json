@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "source": "claim-evidence-matrix.json",
+  "allowed_statuses": ["已实现","部分实现","规划中","概念设计"],
+  "rows": [
+    {"claim_id":"CLM-001","status":"已实现"},{"claim_id":"CLM-002","status":"已实现"},{"claim_id":"CLM-003","status":"已实现"},{"claim_id":"CLM-004","status":"已实现"},{"claim_id":"CLM-005","status":"部分实现"},{"claim_id":"CLM-006","status":"已实现"},{"claim_id":"CLM-007","status":"已实现"},{"claim_id":"CLM-008","status":"已实现"},{"claim_id":"CLM-009","status":"概念设计"},{"claim_id":"CLM-010","status":"已实现"},{"claim_id":"CLM-011","status":"部分实现"},{"claim_id":"CLM-012","status":"部分实现"},{"claim_id":"CLM-013","status":"部分实现"},{"claim_id":"CLM-014","status":"概念设计"},{"claim_id":"CLM-015","status":"规划中"}
+  ],
+  "rule": "A mechanism is not upgraded to implemented effectiveness without a reproducible positive outcome contract."
+}

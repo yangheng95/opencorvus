@@ -20,11 +20,13 @@ The invocation descriptor binds provider kind and identity, provider/config dige
 - `allow_project`: the exact typed scope within the project, only for canonical built-in local reads and a normalized built-in `webfetch` endpoint;
 - `deny`: the exact request.
 
-Destructive, credential-release, and general external-effect operations cannot receive project-wide grants. Revocation appends a ledger fact and prevents later grant use.
+Destructive, credential-release, and general external-effect operations cannot receive project-wide grants. Revocation appends a ledger fact and prevents later grant use. Project deletion appends an `expired` fact for every still-active project-wide grant inside the same fenced database transaction that deletes the Project row. A same-path Project occurrence may reuse durable Project identity, but it cannot inherit reusable authorization across that explicit deletion boundary.
 
 ## Durable ledger and recovery
 
 `permission_policy` freezes the Session mode and revision. `permission_ledger` is the append-only single source of truth for requests, decisions, grant creation/use/revocation, Full-access admission, execution starts, terminal outcomes, and unknown outcomes. Unique decision, execution-start, and outcome slots enforce compare-and-set settlement and at-most-once execution admission.
+
+The canonical `requested` row is the only owner of the complete Project, Session, Message, Tool-call, provider, scope, and fingerprint identity; later rows are deltas keyed by `request_id`. The entire ledger chain outlives mutable Project and Session retention, so `permission_ledger.project_id` is not a cascading foreign key. Project-scoped history and grant readers select through the canonical owner in Structured Query Language (SQL) before reconstructing a request. Historical child residue whose owner was deleted by an older schema remains preserved and unassigned: it cannot authorize work or poison another Project's reads, and no fabricated owner or destructive cleanup is permitted. Startup atomically replaces only the normalized historical cascading schema, repeats the complete shape check after acquiring the write lock, and copies every declared value plus the exact SQLite `rowid` unchanged so the ledger's runtime order remains stable.
 
 The ledger stores redacted scope plus hashes; it must not store tokens, cookies, passwords, authorization headers, OAuth secrets, secret environment values, or complete sensitive content.
 

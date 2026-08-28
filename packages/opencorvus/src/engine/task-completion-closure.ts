@@ -1,6 +1,12 @@
 import { Identifier } from "@/id/id"
-import { Database, and, desc, eq } from "@/storage/db"
-import { EngineControlActivationLeaseTable } from "./engine.sql"
+import { Database } from "@/storage/db"
+import {
+  acquireControlLeaseInTransaction,
+  assertControlLeaseInTransaction,
+  ControlLeaseFenceLostError,
+  currentControlLeaseInTransaction,
+  releaseControlLeaseInTransaction,
+} from "./control-lease"
 import { taskLifecycleProjectionInTransaction } from "./task-lifecycle"
 
 const COMPLETION_LEASE_MS = 120_000
@@ -27,9 +33,7 @@ export function taskCompletionClosureInTransaction(
 ): TaskCompletionClosure | undefined {
   const lifecycle = taskLifecycleProjectionInTransaction(db, taskID)
   const target = `task-completion:${taskID}:${lifecycle.epoch}`
-  const lease = db.select().from(EngineControlActivationLeaseTable)
-    .where(and(eq(EngineControlActivationLeaseTable.target, "lifecycle"), eq(EngineControlActivationLeaseTable.target_id, target)))
-    .orderBy(desc(EngineControlActivationLeaseTable.time_activated), desc(EngineControlActivationLeaseTable.id)).get()
+  const lease = currentControlLeaseInTransaction(db, "lifecycle", target)
   if (!lease || lease.expires_at <= now || lifecycle.status !== "active") return undefined
   return { owner_id: lease.owner_occurrence_id, activation_id: lease.id, expires_at: lease.expires_at }
 }
@@ -54,16 +58,22 @@ export function acquireTaskCompletionClosureInTransaction(
     throw new TaskCompletionClosureConflictError(input.taskID, existing.owner_id)
   }
   const activationID = Identifier.ascending("activity")
-  const expiresAt = input.timeAcquired + COMPLETION_LEASE_MS
-  db.insert(EngineControlActivationLeaseTable).values({
-    id: activationID,
+  const acquired = acquireControlLeaseInTransaction(db, {
     target: "lifecycle",
-    target_id: targetID(db, input.taskID),
-    owner_occurrence_id: input.ownerID,
-    time_activated: input.timeAcquired,
-    expires_at: expiresAt,
-  }).run()
-  return { owner_id: input.ownerID, activation_id: activationID, expires_at: expiresAt }
+    targetID: targetID(db, input.taskID),
+    ownerOccurrenceID: input.ownerID,
+    now: input.timeAcquired,
+    leaseMilliseconds: COMPLETION_LEASE_MS,
+    leaseID: activationID,
+  })
+  if (!acquired.acquired) {
+    throw new TaskCompletionClosureConflictError(input.taskID, acquired.lease.owner_occurrence_id)
+  }
+  return {
+    owner_id: acquired.lease.owner_occurrence_id,
+    activation_id: acquired.lease.id,
+    expires_at: acquired.lease.expires_at,
+  }
 }
 
 /**
@@ -84,16 +94,13 @@ export function releaseTaskCompletionClosureInTransaction(
   const now = input.now ?? Date.now()
   const closure = taskCompletionClosureInTransaction(db, input.taskID, now)
   if (!closure || closure.owner_id !== input.ownerID) return false
-  db.update(EngineControlActivationLeaseTable)
-    .set({ expires_at: now })
-    .where(
-      and(
-        eq(EngineControlActivationLeaseTable.id, closure.activation_id),
-        eq(EngineControlActivationLeaseTable.owner_occurrence_id, input.ownerID),
-      ),
-    )
-    .run()
-  return true
+  return releaseControlLeaseInTransaction(db, {
+    target: "lifecycle",
+    targetID: targetID(db, input.taskID),
+    leaseID: closure.activation_id,
+    ownerOccurrenceID: input.ownerID,
+    now,
+  })
 }
 
 export function assertTaskCompletionClosureOwnerInTransaction(
@@ -102,14 +109,23 @@ export function assertTaskCompletionClosureOwnerInTransaction(
 ): TaskCompletionClosure {
   const lifecycle = taskLifecycleProjectionInTransaction(db, input.taskID)
   const target = `task-completion:${input.taskID}:${lifecycle.epoch}`
-  const lease = db.select().from(EngineControlActivationLeaseTable)
-    .where(and(eq(EngineControlActivationLeaseTable.target, "lifecycle"), eq(EngineControlActivationLeaseTable.target_id, target)))
-    .orderBy(desc(EngineControlActivationLeaseTable.time_activated), desc(EngineControlActivationLeaseTable.id)).get()
-  const closure = !lease || lease.expires_at <= Date.now()
-    ? undefined
-    : { owner_id: lease.owner_occurrence_id, activation_id: lease.id, expires_at: lease.expires_at }
-  if (!closure || closure.owner_id !== input.ownerID) {
-    throw new TaskCompletionClosureConflictError(input.taskID, closure?.owner_id ?? "none")
+  const current = currentControlLeaseInTransaction(db, "lifecycle", target)
+  if (!current) throw new TaskCompletionClosureConflictError(input.taskID, "none")
+  const now = Date.now()
+  try {
+    const lease = assertControlLeaseInTransaction(db, {
+      target: "lifecycle",
+      targetID: target,
+      leaseID: current.id,
+      ownerOccurrenceID: input.ownerID,
+      now,
+    })
+    return { owner_id: lease.owner_occurrence_id, activation_id: lease.id, expires_at: lease.expires_at }
+  } catch (error) {
+    if (!(error instanceof ControlLeaseFenceLostError)) throw error
+    throw new TaskCompletionClosureConflictError(
+      input.taskID,
+      current.expires_at <= now ? "none" : current.owner_occurrence_id,
+    )
   }
-  return closure
 }

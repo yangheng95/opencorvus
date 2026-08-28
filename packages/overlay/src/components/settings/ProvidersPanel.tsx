@@ -31,6 +31,7 @@ import { ArmedConfirmButton } from "../ui/ArmedConfirmButton"
 import { Disclosure } from "../ui/Disclosure"
 import { SearchField } from "../ui/SearchField"
 import { TextField } from "../ui/TextField"
+import { getHostTransport } from "../../services/host-transport-runtime"
 import {
   SettingsDetailSection,
   SettingsEmpty,
@@ -230,10 +231,7 @@ export default function ProvidersPanel() {
         setLastModelsRefreshedAt(null)
         setProviderRefreshError(null)
         setModelRefreshError(null)
-        void (async () => {
-          await refreshProviderCatalog(directory)
-          if (activeDirectory().trim() === directory) await reloadProviderInfo(directory)
-        })()
+        void reloadProviderInfo(directory)
       },
     ),
   )
@@ -309,8 +307,9 @@ export default function ProvidersPanel() {
       }),
     nativeConfirm: (message, opts) => nativeConfirm(message, opts),
     nativeOpen,
-    showLlmNotice: (message, tone = "info") => {
-      void nativeMessage(message, { title: t("llm.title"), kind: tone }).catch((error) => {
+    externalUrlNeedsUserGesture: getHostTransport().capabilities.ui.externalUrlNeedsUserGesture,
+    showLlmNotice: (message, tone = "info", _duration, link) => {
+      void nativeMessage(message, { title: t("llm.title"), kind: tone, link }).catch((error) => {
         setFormError(t("provider.auth.failed", { reason: describeFailure(error) }))
       })
     },
@@ -982,11 +981,7 @@ export default function ProvidersPanel() {
           {(issue) => (
             <SettingsState tone="error">
               {t("provider.load.failed", {
-                owner: [
-                  t(`provider.load.resource.${issue.resource}`),
-                  issue.providerID,
-                  issue.phase,
-                ]
+                owner: [t(`provider.load.resource.${issue.resource}`), issue.providerID, issue.phase]
                   .filter(Boolean)
                   .join(" · "),
                 reason: issue.message,

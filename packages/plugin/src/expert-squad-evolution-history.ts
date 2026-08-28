@@ -1,15 +1,15 @@
 import { createHash } from "node:crypto"
 import { z } from "zod"
-import { ArtifactProducerSchema, ArtifactSHA256Schema } from "./artifact-producer"
-import { ArtifactReadLocatorSchema, EngineArtifactLocatorSchema } from "./artifact-catalog"
+import { ArtifactProducerSchema, ArtifactSHA256Schema } from "./artifact-producer.js"
+import { ArtifactReadLocatorSchema, EngineArtifactLocatorSchema } from "./artifact-catalog.js"
 import {
   canonicalEvolutionJSON,
   EvolutionExactRevisionSchema,
   EvolutionInstallableTargetSchema,
   EvolutionPromotionReceiptSchema,
-} from "./expert-squad-evolution"
-import { EvolutionArtifactSchemas, EvolutionArtifactTypeSchema } from "./expert-squad-evolution-artifact"
-import { TaskArtifactPortableSegmentSchema } from "./task-artifact"
+} from "./expert-squad-evolution.js"
+import { EvolutionArtifactSchemas, EvolutionArtifactTypeSchema } from "./expert-squad-evolution-artifact.js"
+import { TaskArtifactPortableSegmentSchema } from "./task-artifact.js"
 
 const CampaignSchema = EvolutionArtifactSchemas["evolution-lab/campaign-spec"]
 const ComparisonSchema = EvolutionArtifactSchemas["evolution-lab/comparison-recommendation"]

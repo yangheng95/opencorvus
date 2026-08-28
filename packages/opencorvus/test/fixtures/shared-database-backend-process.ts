@@ -5,6 +5,7 @@ import { listenWithRecoveredServerRuntime, requireRecoveredServerRuntime } from 
 import { Instance } from "../../src/project/instance"
 import { Database } from "../../src/storage/db"
 import { ManagedServerLifecycle } from "../../src/server/managed-server-lifecycle"
+import { observedProcessOccurrence } from "../../src/runtime/process-occurrence"
 import { Project } from "../../src/project/project"
 import { ProjectTable } from "../../src/project/project.sql"
 import {
@@ -12,7 +13,9 @@ import {
   type ProjectDeletionRegistryAdmission,
 } from "../../src/project/deletion-registry"
 
-const managedLifecycle = ManagedServerLifecycle.start({ parentPid: process.ppid, onParentExit: () => process.exit(1) })
+const parent = observedProcessOccurrence(process.ppid)
+if (!parent) throw new Error(`Cannot establish test-runner process occurrence for PID ${process.ppid}`)
+const managedLifecycle = ManagedServerLifecycle.start({ parent, onParentExit: () => process.exit(1) })
 const runtime = await requireRecoveredServerRuntime(await listenWithRecoveredServerRuntime({
   options: { hostname: "127.0.0.1", port: 0, randomPort: true },
   recover: async () => {},

@@ -44,13 +44,20 @@ export function namedErrorStatus(err: { name: string }): ContentfulStatusCode {
   if (err.name === "WorktreeOwnershipObservationError") return 503
   if (err.name === "DatabaseUnavailableError") return 503
   if (err.name === "AuthReadError") return 503
+  if (err.name === "SkillMarketUpstreamError") return 502
   if (err.name === "LogFileNotFoundError") return 404
   if (err.name === "ProviderModelNotFoundError") return 400
+  if (err.name === "ProviderAuthOAuthExchangeActiveError") return 409
+  if (err.name === "ProviderAuthOAuthExchangeUncertainError") return 409
+  if (err.name === "ProviderCredentialExchangeReplacedError") return 409
+  if (err.name === "ProviderCredentialExchangeFailedError") return 409
+  if (err.name.startsWith("ProviderAuth")) return 400
   if (err.name === "DirectoryRequiredError") return 400
   if (err.name === "RequestOriginForbiddenError") return 403
   if (err.name === "InvalidInitGitParameterError") return 400
   if (err.name === "OwnedPromptControllersError") return 409
   if (err.name === "PublicSessionPromptIdentityConflictError") return 409
+  if (err.name === "GlobalChatStartIdentityConflictError") return 409
   if (err.name === "AnonymousProjectPromotionError") return 400
   if (err.name === "InvalidDirectoryError") return 400
   if (err.name === "ProjectDirectoryIntegrityError") return 400

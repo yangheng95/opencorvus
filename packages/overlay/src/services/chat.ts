@@ -27,6 +27,7 @@ import { directoryScopedPath, taskScopedPath } from "./task-path"
 import { requestTaskCancellation } from "./task-cancellation"
 import { abortMission, wakeMission } from "./mission"
 import { workLedgerSessionExecution, type WorkLedgerMissionRow } from "./work-ledger"
+import { randomUUID } from "../utils/random-id"
 
 // ── Types ──
 
@@ -170,21 +171,6 @@ export async function stopChatRequest(): Promise<boolean> {
   return true
 }
 
-// ── Public: takeChatMetadata ──
-
-/**
- * Consume and return any pending metadata set via window.__ocNextChatMetadata.
- */
-export function takeChatMetadata(): Record<string, unknown> | undefined {
-  const win = window as any
-  const meta =
-    win.__ocNextChatMetadata && typeof win.__ocNextChatMetadata === "object" && !Array.isArray(win.__ocNextChatMetadata)
-      ? (win.__ocNextChatMetadata as Record<string, unknown>)
-      : undefined
-  delete win.__ocNextChatMetadata
-  return meta
-}
-
 function sessionPromptParts(text: string, attachments: any[], metadata: any): any[] {
   const parts: any[] = [
     {
@@ -226,7 +212,7 @@ export async function promptSessionMessage(input: {
   model?: { providerID: string; modelID: string }
   onDispatch?: () => void
 }): Promise<any> {
-  const requestID = crypto.randomUUID()
+  const requestID = randomUUID()
   const controller = new AbortController()
   const mission = missionExecutionForPrompt(input.sessionID)
   const request: ChatRequestState = {
@@ -320,7 +306,7 @@ export async function panelMessage(
     })
   }
 
-  const requestID = crypto.randomUUID()
+  const requestID = randomUUID()
   const controller = new AbortController()
   const requestBase = {
     requestID,

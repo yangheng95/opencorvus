@@ -36,8 +36,8 @@ mod windows_helper {
                 TerminateProcess, UpdateProcThreadAttribute, WaitForSingleObject,
                 CREATE_BREAKAWAY_FROM_JOB, CREATE_NO_WINDOW, CREATE_SUSPENDED,
                 CREATE_UNICODE_ENVIRONMENT, EXTENDED_STARTUPINFO_PRESENT, PROCESS_INFORMATION,
-                PROCESS_SYNCHRONIZE, PROCESS_TERMINATE, PROC_THREAD_ATTRIBUTE_JOB_LIST,
-                STARTF_USESTDHANDLES, STARTUPINFOEXW,
+                PROCESS_QUERY_LIMITED_INFORMATION, PROCESS_SYNCHRONIZE, PROCESS_TERMINATE,
+                PROC_THREAD_ATTRIBUTE_JOB_LIST, STARTF_USESTDHANDLES, STARTUPINFOEXW,
             },
         },
     };
@@ -355,9 +355,8 @@ mod windows_helper {
         let mut exit: FILETIME = unsafe { std::mem::zeroed() };
         let mut kernel: FILETIME = unsafe { std::mem::zeroed() };
         let mut user: FILETIME = unsafe { std::mem::zeroed() };
-        let queried = unsafe {
-            GetProcessTimes(process, &mut creation, &mut exit, &mut kernel, &mut user)
-        };
+        let queried =
+            unsafe { GetProcessTimes(process, &mut creation, &mut exit, &mut kernel, &mut user) };
         if queried == 0 {
             let error = unsafe { GetLastError() };
             return Err(format!("GetProcessTimes failed (win32={error})"));
@@ -573,7 +572,13 @@ mod windows_helper {
                 request.owner_pid, helper_parent_pid
             ));
         }
-        let owner_handle = unsafe { OpenProcess(PROCESS_SYNCHRONIZE, 0, request.owner_pid) };
+        let owner_handle = unsafe {
+            OpenProcess(
+                PROCESS_SYNCHRONIZE | PROCESS_QUERY_LIMITED_INFORMATION,
+                0,
+                request.owner_pid,
+            )
+        };
         if owner_handle.is_null() || owner_handle == INVALID_HANDLE_VALUE {
             let error = unsafe { GetLastError() };
             return Err(format!(
@@ -582,6 +587,13 @@ mod windows_helper {
             ));
         }
         let owner = Handle(owner_handle);
+        let observed_owner_instance_id = process_instance_id(owner.0)?;
+        if observed_owner_instance_id != request.owner_process_instance_id {
+            return Err(format!(
+                "Windows supervisor owner process instance {} does not match requested {}",
+                observed_owner_instance_id, request.owner_process_instance_id
+            ));
+        }
         let standard_handles = inherited_standard_handles()?;
         let target = match create_suspended_target(&request, Some(&standard_handles)) {
             Ok(target) => target,
@@ -1127,6 +1139,31 @@ mod windows_helper {
                     }
                 }
             }
+            (Some("--process-instance-id"), Some(pid)) => {
+                let pid = match pid.parse::<u32>() {
+                    Ok(pid) if pid > 0 => pid,
+                    _ => {
+                        eprintln!("invalid process id for --process-instance-id");
+                        std::process::exit(2);
+                    }
+                };
+                let process = unsafe { OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, 0, pid) };
+                if process.is_null() || process == INVALID_HANDLE_VALUE {
+                    let error = unsafe { GetLastError() };
+                    eprintln!("OpenProcess(identity {pid}) failed (win32={error})");
+                    std::process::exit(125);
+                }
+                match process_instance_id(Handle(process).0) {
+                    Ok(identity) => {
+                        println!("{identity}");
+                        std::process::exit(0);
+                    }
+                    Err(err) => {
+                        eprintln!("read process identity failed: {err}");
+                        std::process::exit(125);
+                    }
+                }
+            }
             (Some("--kill-tree"), Some(pid)) => {
                 let pid = match pid.parse::<u32>() {
                     Ok(pid) if pid > 0 => pid,
@@ -1145,7 +1182,7 @@ mod windows_helper {
             }
             _ => {
                 eprintln!(
-                    "usage: opencorvus-process-supervisor --version | --request <json> | --kill-tree <pid>"
+                    "usage: opencorvus-process-supervisor --version | --request <json> | --process-instance-id <pid> | --kill-tree <pid>"
                 );
                 std::process::exit(2);
             }

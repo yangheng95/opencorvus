@@ -3,7 +3,10 @@ import {
   ExpertSquadFeedbackRevisionInputSchema,
   reviseInstalledExpertSquadFromFeedback,
 } from "@/expert-squad/feedback-revision"
-import { prepareEvolutionPackageMutation, evolutionMutationConfirmationText } from "@/expert-squad/evolution-mutation"
+import {
+  prepareEvolutionPackageMutation,
+  evolutionMutationConfirmationText,
+} from "@/expert-squad/evolution-mutation-intent"
 import { Instance } from "@/project/instance"
 
 const DESCRIPTION = [

@@ -719,8 +719,7 @@ export namespace PromptProfileResolver {
           `Expert squad ${input.active.profileID} skill_mounts references undeclared dynamic agent ${JSON.stringify(agentID)}.`,
         )
       }
-      const skillMountable =
-        baseRole === "orchestrator" ? true : RuntimeTemplateRegistry.get(baseRole).skillMountable
+      const skillMountable = baseRole === "orchestrator" ? true : RuntimeTemplateRegistry.get(baseRole).skillMountable
       if (!skillMountable) {
         throw new Error(
           `Expert squad ${input.active.profileID} agent ${agentID} uses base role ${baseRole}, which does not allow operator skill mounts.`,
@@ -1063,8 +1062,21 @@ export namespace PromptProfileResolver {
       const { serverName } = defaultMcpTypedPartsFromRef(ref)
       const server = config.mcp?.[serverName]
       if (!server) throw new Error(`Active expert squad projects missing default MCP server default/mcp/${serverName}.`)
-      result[serverName] =
-        serverName === ComputerMCPBuiltin.ServerName ? ComputerMCPBuiltin.localConfig() : Config.Mcp.parse(server)
+      if (serverName === ComputerMCPBuiltin.ServerName) {
+        result[serverName] = ComputerMCPBuiltin.requireEnabledConfiguredDeclaration(server)
+        continue
+      }
+      // Projection reports the configured provider; it does not substitute one.
+      // A squad that names a server configuration has turned off is a real
+      // disagreement, and saying so is the only answer that keeps
+      // configuration, assignment, status and execution describing the same
+      // capability.
+      if (!("type" in server)) {
+        throw new Error(
+          `Active expert squad projects default MCP server default/mcp/${serverName}, which configuration has disabled.`,
+        )
+      }
+      result[serverName] = Config.Mcp.parse(server)
     }
     return result
   }
@@ -2130,6 +2142,7 @@ export namespace PromptProfileResolver {
         const materialized = await materializeMcpToolResult({
           projectID: scope.projectID,
           result,
+          serverName: input.providerName,
         })
         const truncated = await Truncate.output(
           materialized.text,
@@ -2227,6 +2240,7 @@ export namespace PromptProfileResolver {
         const materialized = await materializeMcpToolResult({
           projectID: scope.projectID,
           result,
+          serverName: input.providerName,
         })
         const truncated = await Truncate.output(
           materialized.text,
@@ -3936,11 +3950,7 @@ export namespace PromptProfileResolver {
     namespace?: string
     workflowCursor?: string
   }): Promise<ExpertSquadCatalogInspection | undefined> {
-    if (
-      input.installationScope &&
-      input.installationScope !== "built_in" &&
-      !input.namespace
-    ) {
+    if (input.installationScope && input.installationScope !== "built_in" && !input.namespace) {
       throw new Error("Installed expert squad inspection requires namespace.")
     }
     const inventory = await catalogInventory(input.projectDirectory)
@@ -3976,7 +3986,8 @@ export namespace PromptProfileResolver {
           node_count: Object.keys(workflow.nodes).length,
         }))
       catalogWorkflowSummaries.set(workflowCacheKey, workflows)
-      if (catalogWorkflowSummaries.size > 64) catalogWorkflowSummaries.delete(catalogWorkflowSummaries.keys().next().value!)
+      if (catalogWorkflowSummaries.size > 64)
+        catalogWorkflowSummaries.delete(catalogWorkflowSummaries.keys().next().value!)
     }
     const nextOffset = Math.min(offset + 20, workflowCount)
     return catalogInspectionFromPackage({

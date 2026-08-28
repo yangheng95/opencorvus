@@ -105,6 +105,7 @@ export interface AuthDialogCallbacks {
       inputType?: "text" | "password"
       okLabel: string
       cancelLabel: string
+      link?: { url: string; label: string }
     },
   ) => Promise<string | null>
 
@@ -135,8 +136,15 @@ export interface AuthDialogCallbacks {
   /** Open a URL in an external browser. */
   nativeOpen: (url: string) => Promise<boolean | void>
 
+  /**
+   * Whether this host only permits opening an external URL while a click is in
+   * progress. Such a host is handed the authorization URL as a dialog action
+   * instead of having the flow open it after an awaited request.
+   */
+  externalUrlNeedsUserGesture: boolean
+
   /** Show long-running provider auth instructions to the operator. */
-  showLlmNotice: (message: string, tone?: string, duration?: number) => void
+  showLlmNotice: (message: string, tone?: string, duration?: number, link?: { url: string; label: string }) => void
 
   /** Mark provider auth as dismissed after the operator cancels an auth flow. */
   onAuthCancelled: (providerID: string) => void
@@ -604,11 +612,25 @@ export async function authorizeProvider(
     signal: AbortSignal.timeout(300_000),
   })
 
-  if (!record(authorization) || typeof authorization.url !== "string" || typeof authorization.method !== "string") {
+  if (
+    !record(authorization) ||
+    typeof authorization.url !== "string" ||
+    typeof authorization.method !== "string" ||
+    typeof authorization.flowID !== "string" ||
+    !authorization.flowID
+  ) {
     throw new Error("OAuth authorization unavailable")
   }
 
-  await callbacks.nativeOpen(authorization.url)
+  // Two network round trips have passed since the operator's click, so on a
+  // host that requires transient activation there is none left and the browser
+  // would refuse the window — silently, because window.open cannot report it.
+  // Such a host gets the URL as a button on the dialog that follows: opening
+  // it from that click is the one moment the browser will allow.
+  const authLink = callbacks.externalUrlNeedsUserGesture
+    ? { url: authorization.url, label: t("llm.auth_open_page") }
+    : undefined
+  if (!authLink) await callbacks.nativeOpen(authorization.url)
 
   if (authorization.method === "code") {
     const code = await callbacks.nativePrompt(
@@ -619,6 +641,7 @@ export async function authorizeProvider(
         inputPlaceholder: "Redirect URL or authorization code (leave blank if it auto-completes)",
         okLabel: t("common.submit"),
         cancelLabel: t("common.cancel"),
+        link: authLink,
       },
     )
     if (code == null) {
@@ -628,18 +651,18 @@ export async function authorizeProvider(
     await apiJson(providerAuthPath(providerID, "oauth/callback", options), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ method: match.index, code }),
+      body: JSON.stringify({ method: match.index, code, flowID: authorization.flowID }),
       signal: AbortSignal.timeout(300_000),
     })
     return true
   }
 
   // Implicit / device-code flow: show instructions and wait for server callback
-  callbacks.showLlmNotice(authorization.instructions || authorization.url, "warn", 0)
+  callbacks.showLlmNotice(authorization.instructions || authorization.url, "warn", 0, authLink)
   await apiJson(providerAuthPath(providerID, "oauth/callback", options), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ method: match.index }),
+    body: JSON.stringify({ method: match.index, flowID: authorization.flowID }),
     signal: AbortSignal.timeout(300_000),
   })
   return true

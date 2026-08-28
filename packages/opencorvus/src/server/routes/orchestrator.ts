@@ -70,8 +70,6 @@ import { lazy } from "../../util/lazy"
 import { Log } from "@/util/log"
 import {
   listTaskConversationAgentSessions,
-  taskMessageWatermark,
-  taskMessageWatermarkCursor,
 } from "@/orchestrator/task-event"
 import {
   sessionBelongsToTask,
@@ -102,9 +100,13 @@ import {
   BuildObservationContentError,
   readBuildObservationContentRange,
 } from "@/engine/build-observation-content"
+import {
+  conversationTransportEventDisposition,
+  projectConversationTransportEventPayload,
+  projectConversationTransportTranscript,
+} from "@/conversation/transport"
 const log = Log.create({ service: "server.routes.orchestrator" })
 const CONVERSATION_EVENT_PAGE_LIMIT = 500
-const TASK_MESSAGE_CHANGE_POLL_MS = 2_000
 function errorMessage(error: unknown): string {
   if (error instanceof Error) return error.message
   return String(error)
@@ -398,7 +400,7 @@ export const EngineRoutes = lazy(() =>
       }),
       validator("param", z.object({ taskID: Task.shape.id })),
       async (c) => {
-        const board = await EngineService.getBoard(c.req.valid("param").taskID, { sync: false })
+        const board = await EngineService.getBoard(c.req.valid("param").taskID)
         return c.json(taskStatusDetailFromBoard(board))
       },
     )
@@ -532,17 +534,31 @@ export const EngineRoutes = lazy(() =>
         },
       }),
       validator("param", z.object({ taskID: Task.shape.id })),
+      validator(
+        "query",
+        z.object({
+          after: z.string().optional().meta({ description: "Resume after this durable task-event sequence." }),
+          after_live: z
+            .string()
+            .optional()
+            .meta({ description: "Resume live projection after this sequence; omit to skip live replay." }),
+          after_live_epoch: z
+            .string()
+            .optional()
+            .meta({ description: "The live projection epoch the after_live cursor belongs to." }),
+        }),
+      ),
       async (c) => {
         const taskID = c.req.valid("param").taskID
         taskPrimaryProjectRoot(taskID, { activeProjectID: Instance.current()?.project.id })
-        const after = Math.max(0, parseInt(c.req.query("after") ?? "0", 10) || 0)
-        const afterLiveRaw = c.req.query("after_live")
+        const cursors = c.req.valid("query")
+        const after = Math.max(0, parseInt(cursors.after ?? "0", 10) || 0)
+        const afterLiveRaw = cursors.after_live
         const shouldReplayLive = afterLiveRaw !== undefined
         const afterLive = shouldReplayLive ? Math.max(0, parseInt(afterLiveRaw ?? "0", 10) || 0) : 0
-        const afterLiveEpochRaw = c.req.query("after_live_epoch")
+        const afterLiveEpochRaw = cursors.after_live_epoch
         const afterLiveEpoch =
           afterLiveEpochRaw === undefined ? undefined : Math.max(0, parseInt(afterLiveEpochRaw, 10) || 0)
-        const afterMessageWatermark = Math.max(0, parseInt(c.req.query("after_message_watermark") ?? "0", 10) || 0)
         c.header("X-Accel-Buffering", "no")
         c.header("X-Content-Type-Options", "nosniff")
         return streamGlobalSSE(c, async (stream, bind) => {
@@ -552,10 +568,8 @@ export const EngineRoutes = lazy(() =>
           // database, so reconnecting observes the durable execution lineage.
           let cursor = after
           let liveCursor = afterLive
-          let messageWatermark = afterMessageWatermark
           let ready = false
           let heartbeat: ReturnType<typeof setInterval> | undefined
-          let messageChangePoll: ReturnType<typeof setInterval> | undefined
           let stop = () => {}
           let finishStream = () => {}
           let closed = false
@@ -563,7 +577,6 @@ export const EngineRoutes = lazy(() =>
             if (closed) return
             closed = true
             if (heartbeat) clearInterval(heartbeat)
-            if (messageChangePoll) clearInterval(messageChangePoll)
             stop()
             if (input?.error) {
               log.warn("task event stream write failed", {
@@ -591,41 +604,6 @@ export const EngineRoutes = lazy(() =>
               })
             return writes
           }
-          let messageWatermarkSignature = ""
-          const rememberMessageCursor = (cursor: ReturnType<typeof taskMessageWatermarkCursor>) => {
-            if (cursor.watermark < messageWatermark) return
-            messageWatermark = cursor.watermark
-            messageWatermarkSignature = cursor.signature
-          }
-          const messageCursorChanged = (cursor: ReturnType<typeof taskMessageWatermarkCursor>) =>
-            cursor.watermark > messageWatermark ||
-            (cursor.watermark > 0 &&
-              cursor.watermark === messageWatermark &&
-              cursor.signature !== messageWatermarkSignature)
-          const emitMessageChange = async (cursor: ReturnType<typeof taskMessageWatermarkCursor>) => {
-            rememberMessageCursor(cursor)
-            const data = JSON.stringify(
-              taskEvent(taskID, {
-                type: "task.messages.changed",
-                properties: {
-                  taskID,
-                  watermark: cursor.watermark,
-                  summary: "Task message append/update tables changed",
-                },
-              }),
-            )
-            await writeData(data)
-          }
-          const emitCurrentMessageChange = async () => {
-            if (closed) return
-            const nextCursor = taskMessageWatermarkCursor(taskID)
-            if (!messageCursorChanged(nextCursor)) return
-            await emitMessageChange(nextCursor)
-          }
-          const markLiveMessageSeen = (event: ReturnType<typeof ProtocolStore.listTaskEventsAfter>[number]) => {
-            if (!isMessageTaskEvent(event.type)) return
-            rememberMessageCursor(taskMessageWatermarkCursor(taskID))
-          }
           const enqueueProtocolEvent = bind((event: ReturnType<typeof ProtocolStore.listTaskEventsAfter>[number]) => {
             if (!event.taskID || event.taskID !== taskID) return
             const isEphemeral = event.sequence === 0
@@ -633,8 +611,12 @@ export const EngineRoutes = lazy(() =>
             // and not replayed on reconnect. Sequenced events are deduplicated by cursor.
             if (!isEphemeral && event.sequence <= cursor) return
             if (isEphemeral && (event.liveSequence ?? 0) <= liveCursor) return
+            if (conversationTransportEventDisposition(event.type, event.payload) === "omit") {
+              if (!isEphemeral) cursor = Math.max(cursor, event.sequence)
+              else liveCursor = Math.max(liveCursor, event.liveSequence ?? 0)
+              return
+            }
             const data = JSON.stringify(protocolTaskEvent(event))
-            markLiveMessageSeen(event)
             if (!ready) {
               buffered.push({ sequence: event.sequence, liveSequence: event.liveSequence ?? 0, data })
               return
@@ -664,7 +646,7 @@ export const EngineRoutes = lazy(() =>
             }
             for (const event of liveReplay.events) {
               liveCursor = Math.max(liveCursor, event.liveSequence ?? 0)
-              markLiveMessageSeen(event)
+              if (conversationTransportEventDisposition(event.type, event.payload) === "omit") continue
               await writeData(JSON.stringify(protocolTaskEvent(event)))
             }
           }
@@ -697,16 +679,6 @@ export const EngineRoutes = lazy(() =>
             await writes
             return
           }
-          const initialMessageCursor = taskMessageWatermarkCursor(taskID)
-          if (messageCursorChanged(initialMessageCursor)) {
-            await emitMessageChange(initialMessageCursor)
-          } else {
-            rememberMessageCursor(initialMessageCursor)
-          }
-          if (closed) {
-            await writes
-            return
-          }
           heartbeat = setInterval(
             bind(() => {
               const data = JSON.stringify(
@@ -721,14 +693,6 @@ export const EngineRoutes = lazy(() =>
               void writeData(data)
             }),
             10_000,
-          )
-          messageChangePoll = setInterval(
-            bind(() => {
-              const nextCursor = taskMessageWatermarkCursor(taskID)
-              if (!messageCursorChanged(nextCursor)) return
-              void emitMessageChange(nextCursor)
-            }),
-            TASK_MESSAGE_CHANGE_POLL_MS,
           )
           stream.onAbort(() => {
             cleanup()
@@ -978,7 +942,6 @@ export const EngineRoutes = lazy(() =>
           })
         }
         const filteredTranscript = filterByCursor(transcript)
-        const messageWatermark = taskMessageWatermark(taskID)
         const globalHistoryWindow = __conversationHistoryWindowForTest(filteredTranscript, {
           tailLimit,
         })
@@ -1036,9 +999,8 @@ export const EngineRoutes = lazy(() =>
         )
         return c.json({
           lastSequence: latestSequence,
-          messageWatermark,
           board,
-          transcript: historyWindow.transcript,
+          transcript: projectConversationTransportTranscript(historyWindow.transcript),
           events: eventPage.events,
           eventReplay: eventPage.eventReplay,
           history,
@@ -1067,20 +1029,32 @@ export const EngineRoutes = lazy(() =>
           ...errors(404),
         },
       }),
+      validator(
+        "query",
+        z.object({
+          after_live_sequence: z
+            .string()
+            .optional()
+            .meta({ description: "Resume the live transcript after this sequence." }),
+          after_live_epoch: z
+            .string()
+            .optional()
+            .meta({ description: "The live projection epoch the after_live_sequence cursor belongs to." }),
+        }),
+      ),
       validator("param", z.object({ taskID: Task.shape.id, sessionID: z.string().min(1) })),
       async (c) => {
         const { taskID, sessionID } = c.req.valid("param")
         requireTask(taskID)
         const rewindCursor = taskRewindCursor(taskID)
-        const afterLiveSequenceRaw = c.req.query("after_live_sequence")
-        const afterLiveSequence = Math.max(0, Number.parseInt(afterLiveSequenceRaw ?? "0", 10) || 0)
-        const afterLiveEpochRaw = c.req.query("after_live_epoch")
-        const afterLiveEpoch = Math.max(0, Number.parseInt(afterLiveEpochRaw ?? "0", 10) || 0)
+        const cursors = c.req.valid("query")
+        const afterLiveSequence = Math.max(0, Number.parseInt(cursors.after_live_sequence ?? "0", 10) || 0)
+        const afterLiveEpoch = Math.max(0, Number.parseInt(cursors.after_live_epoch ?? "0", 10) || 0)
         const liveEpoch = ProtocolStore.currentTaskLiveEpoch()
         const lastLiveSequence = ProtocolStore.currentTaskLiveSequence(taskID)
-        if (afterLiveSequenceRaw !== undefined) {
+        if (cursors.after_live_sequence !== undefined) {
           const replay =
-            afterLiveEpochRaw === undefined || afterLiveSequence > lastLiveSequence
+            cursors.after_live_epoch === undefined || afterLiveSequence > lastLiveSequence
               ? { expired: true as const }
               : ProtocolStore.listTaskLiveEventsAfter(taskID, afterLiveSequence, { liveEpoch: afterLiveEpoch })
           if (replay.expired) {
@@ -1092,7 +1066,7 @@ export const EngineRoutes = lazy(() =>
             })
             const sessionEvents = conversationSessionEvents(taskID, sessionID, { rewindCursor })
             return c.json({
-              transcript: sessionTranscript,
+              transcript: projectConversationTransportTranscript(sessionTranscript),
               removedMessageIDs: [],
               lastLiveSequence,
               liveEpoch,
@@ -1142,7 +1116,7 @@ export const EngineRoutes = lazy(() =>
             .map((message) => projectPersistedTaskMessage(message, taskID))
             .filter(conversationMessageHasDisplay)
           return c.json({
-            transcript,
+            transcript: projectConversationTransportTranscript(transcript),
             removedMessageIDs: [...changedMessageIDs],
             lastLiveSequence,
             liveEpoch,
@@ -1171,7 +1145,7 @@ export const EngineRoutes = lazy(() =>
         const agentSessions = listTaskConversationAgentSessions(taskID)
         const oldestTimestamp = sessionTranscript.length > 0 ? conversationItemTimestamp(sessionTranscript[0]) : null
         return c.json({
-          transcript: sessionTranscript,
+          transcript: projectConversationTransportTranscript(sessionTranscript),
           removedMessageIDs: [],
           lastLiveSequence,
           liveEpoch,
@@ -1242,7 +1216,7 @@ export const EngineRoutes = lazy(() =>
         })
         const agentSessions = listTaskConversationAgentSessions(taskID)
         return c.json({
-          transcript: page.transcript,
+          transcript: projectConversationTransportTranscript(page.transcript),
           events: pageEvents,
           view: projectConversationView({ transcript: page.transcript, ledgerSessions: agentSessions }),
           history: page.history,
@@ -1327,8 +1301,7 @@ export const EngineRoutes = lazy(() =>
       validator("param", z.object({ taskID: Task.shape.id })),
       async (c) => {
         const taskID = c.req.valid("param").taskID
-        const sync = c.req.query("sync") !== "0"
-        const etag = await EngineService.getBoardTag(taskID, { sync })
+        const etag = await EngineService.getBoardTag(taskID)
         if (c.req.header("if-none-match") === etag) {
           return new Response(null, {
             status: 304,
@@ -1338,7 +1311,7 @@ export const EngineRoutes = lazy(() =>
           })
         }
         c.header("ETag", etag)
-        return c.json(await EngineService.getBoard(taskID, { sync: false }))
+        return c.json(await EngineService.getBoard(taskID))
       },
     )
     .get(
@@ -1991,17 +1964,6 @@ function taskEvent(taskID: string, event: { type: string; properties: Record<str
   }
 }
 
-function isMessageTaskEvent(type: string): boolean {
-  return (
-    type === "message.moved" ||
-    type === "message.updated" ||
-    type === "message.part.updated" ||
-    type === "message.part.delta" ||
-    type === "message.removed" ||
-    type === "message.part.removed"
-  )
-}
-
 function isPersistedMessageTaskEvent(type: string): boolean {
   return (
     type === "message.moved" ||
@@ -2021,8 +1983,6 @@ function conversationItemTimestamp(item: any): number {
         : 0
   return Number.isFinite(value) ? value : 0
 }
-
-export const __taskMessageWatermarkForTest = taskMessageWatermark
 
 function conversationItemSessionID(item: any): string {
   return String(item?.info?.sessionID || "")
@@ -2346,7 +2306,7 @@ export function protocolTaskEvent(event: ReturnType<typeof ProtocolStore.listTas
   if (!orderKey) throw new Error(`protocolTaskEvent: event ${event.id} (${event.type}) missing orderKey`)
   const source = typeof event.source === "string" && event.source.length > 0 ? event.source : undefined
   if (!source) throw new Error(`protocolTaskEvent: event ${event.id} (${event.type}) missing source`)
-  const payload = event.payload || {}
+  const payload = projectConversationTransportEventPayload(event.type, event.payload || {})
   if (event.type === "agent.execution.lifecycle" || event.type === "session.error") {
     requireTimelineOrderKeyDomain(orderKey, `protocolTaskEvent: event ${event.id} (${event.type}) envelope`, "session")
   }

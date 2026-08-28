@@ -698,6 +698,22 @@ export const publicMarketZhTranslations36To67 = {
       },
     },
   },
+  "builtin/light": {
+    label: "Light 轻量咨询",
+    description: "通过可变数量的并行规划员与调查员会话，提供只读咨询、调查、比较、规划和澄清问题支持。",
+    selectorSummary: "适用于不执行实现或外部操作的只读咨询、证据调查、方案比较、规划和澄清提问。",
+    agents: {
+      "light-investigator": {
+        label: "Light 调查员",
+        description: "完成一个边界明确的只读证据调查，并报告事实、推断、未知项和来源。",
+      },
+      "light-planner": {
+        label: "Light 规划员",
+        description: "在不实施或修改状态的前提下，产出咨询方案、选项分析、决策框架或最小澄清问题集。",
+      },
+    },
+    workflows: {},
+  },
   "builtin/localization-adaptation": {
     label: "本地化与适配",
     description: "将并行的术语、区域适配和语言质量工作整合为受源文件控制的区域版本发布资料包。",

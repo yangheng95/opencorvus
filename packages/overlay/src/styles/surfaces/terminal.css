@@ -19,7 +19,7 @@
   height: 100%;
   min-width: 0;
   min-height: 0;
-  padding: calc(18px * var(--ui-scale)) calc(20px * var(--ui-scale));
+  padding: var(--ui-gap-2xl) var(--ui-gap-2xl);
   overflow: hidden;
   background: var(--surface);
 }
@@ -46,8 +46,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: calc(6px * var(--ui-scale));
-  padding: calc(18px * var(--ui-scale));
+  gap: var(--ui-gap-sm);
+  padding: var(--ui-gap-2xl);
   color: var(--text-muted);
   background: var(--surface);
   font-size: var(--ui-font-meta);

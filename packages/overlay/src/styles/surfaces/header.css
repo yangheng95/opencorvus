@@ -35,8 +35,6 @@
   --oc-header-height: var(--ui-panel-header-height);
   --oc-header-padding-x: var(--ui-chat-header-padding-x);
   --oc-header-gap: calc(10px * var(--ui-scale));
-  --oc-header-title-font: var(--ui-font-weight-strong) var(--ui-font-title) var(--font);
-
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   background: var(--chat-canvas);
@@ -48,7 +46,7 @@
   display: flex;
   align-items: center;
   min-width: 0;
-  gap: calc(4px * var(--ui-scale));
+  gap: var(--ui-gap-xs);
 }
 
 .chat-title-group .chat-title {
@@ -71,26 +69,48 @@
   min-width: calc(190px * var(--ui-scale));
 }
 
+/* min-width: 0, not --oc-radius-none. The radius token is 0 today, so this
+ * worked, but it made a length depend on the corner scale. */
 .oc-surface-header__main,
 .oc-surface-header__actions {
   display: flex;
   align-items: center;
-  min-width: var(--oc-radius-none);
+  min-width: 0;
   gap: var(--oc-header-gap);
+}
+
+/* The header clips (overflow: hidden) and its buttons are nowrap at the
+ * default min-width: auto, so they refused to shrink and were cut at the
+ * right edge instead of ellipsized — unreachable, with no sign they were
+ * there. The title already ellipsizes; let it be what gives way. */
+.oc-surface-header__actions {
+  flex: 0 0 auto;
 }
 
 .oc-surface-header[data-title="false"] .oc-surface-header__actions {
   margin-inline-start: auto;
 }
 
+/* line-height comes from the ladder rather than a flat 1. Noto Sans SC's
+ * ascent + descent exceeds 1em, so a 1.0 line box clipped Chinese glyph ink
+ * top and bottom against this header's overflow: hidden — Latin descenders
+ * too. The header is a fixed 40px and centres its content, so the taller line
+ * box changes nothing else. */
 .oc-surface-header__title {
-  min-width: var(--oc-radius-none);
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font: var(--oc-header-title-font);
-  line-height: var(--oc-header-title-line-height);
+  font-family: var(--font);
+  font-size: var(--ui-font-emphasis);
+  font-weight: var(--ui-font-weight-medium);
+  line-height: var(--ui-line-height-tight);
   letter-spacing: var(--ui-letter-spacing-normal);
   text-transform: var(--oc-header-title-transform);
   color: var(--text-strong);
+}
+
+.chat-header .oc-surface-header__title {
+  font-size: var(--ui-font-body);
+  font-weight: var(--ui-font-weight-strong);
 }

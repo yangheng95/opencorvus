@@ -61,6 +61,7 @@ import { requestTaskCancellation, type TaskCancellationSurface } from "./task-ca
 import { clearComposerModelProjection, projectComposerModelFromSession } from "./composer-model"
 import { wakeMission } from "./mission"
 import { workLedgerSessionExecution } from "./work-ledger"
+import { randomUUID } from "../utils/random-id"
 
 // ── Types ──
 
@@ -127,21 +128,8 @@ function taskRecordPath(taskID: string): string {
   return `task/${encodeURIComponent(id)}`
 }
 
-/**
- * Default chat request timeout: 10 minutes.
- */
-function chatRequestTimeoutMs(): number {
-  const overlayTiming = (window as any).__ocOverlayTiming
-  const testTiming = (window as any).__overlayTest
-  const override =
-    typeof overlayTiming?.chatTimeoutMs === "number"
-      ? overlayTiming.chatTimeoutMs
-      : typeof testTiming?.chatTimeoutMs === "number"
-        ? testTiming.chatTimeoutMs
-        : undefined
-  const value = typeof override === "number" ? override : 10 * 60 * 1000
-  return Math.max(value, 1000)
-}
+/** Chat request timeout. */
+const CHAT_REQUEST_TIMEOUT_MS = 10 * 60 * 1000
 
 function activeDirectory(): string {
   return activeProjectDirectory()
@@ -583,8 +571,8 @@ export async function submitMessage(
   attachments: Attachment[] = [],
   options: SubmitMessageOptions = {},
 ): Promise<unknown> {
-  const requestID = options.requestID ?? crypto.randomUUID()
-  const timeoutMs = chatRequestTimeoutMs()
+  const requestID = options.requestID ?? randomUUID()
+  const timeoutMs = CHAT_REQUEST_TIMEOUT_MS
   const controller = new AbortController()
   const cleanupRelay = relayAbort(options.signal, controller)
   let inactivityTimer: ReturnType<typeof setTimeout> | null = null
@@ -618,11 +606,7 @@ export async function submitMessage(
         })
       }
       const result = await apiJson(
-        directoryScopedPath(
-          `session/${encodeURIComponent(selectedSource.id)}/message`,
-          directory,
-          "submitMessage",
-        ),
+        directoryScopedPath(`session/${encodeURIComponent(selectedSource.id)}/message`, directory, "submitMessage"),
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -804,7 +788,7 @@ async function offerInitGitAndRetry(): Promise<boolean> {
 export async function createTask(options: CreateTaskOptions): Promise<CreateTaskResult> {
   const { text, attachments = [], metadata = {}, signal, budget } = options
   if (!text) throw new Error("createTask: text is required")
-  const requestID = crypto.randomUUID()
+  const requestID = randomUUID()
   const body = JSON.stringify({
     request: text,
     requestID,

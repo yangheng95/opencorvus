@@ -1,0 +1,320 @@
+---
+import type { CompositionLaneView } from "../lib/landing-compositions"
+
+type Props = {
+  lanes: readonly CompositionLaneView[]
+  rolesUnit: string
+  tasksUnit: string
+  milestoneLabel: string
+  animated?: boolean
+}
+
+const { lanes, rolesUnit, tasksUnit, milestoneLabel, animated = false } = Astro.props
+---
+
+<div class="oc-mission-lanes" data-animated={animated ? "true" : undefined}>
+  {
+    lanes.map((lane, laneIndex) => (
+      <section
+        class="oc-mission-lane"
+        data-tone={lane.tone}
+        style={`--oc-lane-delay: ${laneIndex * 90}ms;`}
+      >
+        <header class="oc-lane-head">
+          <span class="oc-lane-number" aria-hidden="true">{String(laneIndex + 1).padStart(2, "0")}</span>
+          <div>
+            <h5>{lane.label}</h5>
+            <p>{lane.summary}</p>
+          </div>
+          <p class="oc-lane-total">
+            <strong>{lane.steps.length}</strong> {tasksUnit}
+            <span aria-hidden="true"> · </span>
+            <strong>{lane.roleCount}</strong> {rolesUnit}
+          </p>
+        </header>
+
+        <div class="oc-lane-body">
+          <ol class="oc-lane-route">
+            {lane.steps.map((step, stepIndex) => (
+              <li>
+                <span class="oc-route-node" aria-hidden="true">{laneIndex + 1}.{stepIndex + 1}</span>
+                <div class="oc-route-copy">
+                  <strong>{step.stage}</strong>
+                  <a href={step.href}>{step.squadLabel}</a>
+                  <span>{step.handoff}</span>
+                </div>
+              </li>
+            ))}
+          </ol>
+
+          <span class="oc-lane-to-milestone" aria-hidden="true">→</span>
+
+          <aside class="oc-lane-milestone">
+            <span class="oc-milestone-glyph" aria-hidden="true">◆</span>
+            <span>{milestoneLabel}</span>
+            <strong>{lane.outcome}</strong>
+          </aside>
+        </div>
+      </section>
+    ))
+  }
+</div>
+
+<style>
+  .oc-mission-lanes {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .oc-mission-lane {
+    --oc-lane-accent: #6f8dfa;
+    --oc-lane-soft: rgba(111, 141, 250, 0.12);
+    position: relative;
+    padding: var(--oc-space-5) 0 var(--oc-space-5) var(--oc-space-6);
+    border-top: 1px solid var(--oc-color-border-subtle);
+  }
+
+  .oc-mission-lane::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 9px;
+    width: 2px;
+    background: linear-gradient(var(--oc-lane-accent), var(--oc-color-border-subtle));
+  }
+
+  .oc-mission-lane::after {
+    content: "";
+    position: absolute;
+    top: var(--oc-space-6);
+    left: 4px;
+    width: 12px;
+    height: 12px;
+    border: 2px solid var(--oc-color-bg-surface-1);
+    border-radius: 50%;
+    background: var(--oc-lane-accent);
+    box-shadow: 0 0 0 4px var(--oc-lane-soft);
+  }
+
+  .oc-mission-lane[data-tone="compute"] {
+    --oc-lane-accent: #a978f7;
+    --oc-lane-soft: rgba(169, 120, 247, 0.13);
+  }
+
+  .oc-mission-lane[data-tone="product"] {
+    --oc-lane-accent: #32b7b0;
+    --oc-lane-soft: rgba(50, 183, 176, 0.13);
+  }
+
+  .oc-mission-lane[data-tone="publication"] {
+    --oc-lane-accent: #ec8c47;
+    --oc-lane-soft: rgba(236, 140, 71, 0.13);
+  }
+
+  .oc-mission-lane[data-tone="release"] {
+    --oc-lane-accent: #43a66f;
+    --oc-lane-soft: rgba(67, 166, 111, 0.13);
+  }
+
+  .oc-lane-head {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: start;
+    gap: var(--oc-space-3);
+  }
+
+  .oc-lane-number {
+    font-family: var(--oc-font-display);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--oc-lane-accent);
+  }
+
+  .oc-lane-head h5 {
+    margin: 0;
+    font-family: var(--oc-font-display);
+    font-size: 19px;
+    line-height: 1.2;
+    color: var(--oc-color-text-primary);
+  }
+
+  .oc-lane-head p {
+    margin: var(--oc-space-1) 0 0;
+    max-width: 72ch;
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--oc-color-text-description);
+  }
+
+  .oc-lane-total {
+    white-space: nowrap;
+  }
+
+  .oc-lane-total strong {
+    font-family: var(--oc-font-display);
+    font-size: 18px;
+    color: var(--oc-color-text-primary);
+  }
+
+  .oc-lane-body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(190px, 0.3fr);
+    align-items: stretch;
+    gap: var(--oc-space-5);
+    margin-top: var(--oc-space-4);
+  }
+
+  .oc-lane-route {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(178px, 1fr));
+    gap: var(--oc-space-4);
+    margin: 0;
+    padding: 0;
+  }
+
+  .oc-lane-route li {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: var(--oc-space-2);
+    min-width: 0;
+  }
+
+  .oc-route-node {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--oc-lane-soft);
+    font-family: var(--oc-font-display);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--oc-lane-accent);
+  }
+
+  .oc-route-copy {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    gap: 2px;
+  }
+
+  .oc-route-copy > strong {
+    font-size: 14px;
+    line-height: 1.35;
+    color: var(--oc-color-text-primary);
+  }
+
+  .oc-route-copy > a {
+    width: fit-content;
+    font-size: 13px;
+    color: var(--oc-color-text-link);
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-underline-offset: 3px;
+  }
+
+  .oc-route-copy > a:hover {
+    text-decoration-color: currentColor;
+  }
+
+  .oc-route-copy > span {
+    display: -webkit-box;
+    overflow: hidden;
+    margin-top: 2px;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    font-size: 12px;
+    line-height: 1.45;
+    color: var(--oc-color-text-description);
+  }
+
+  .oc-lane-to-milestone {
+    align-self: center;
+    font-size: 18px;
+    color: var(--oc-lane-accent);
+  }
+
+  .oc-lane-milestone {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: var(--oc-space-1);
+    min-height: 88px;
+    padding: var(--oc-space-3) var(--oc-space-4);
+    border-left: 3px solid var(--oc-lane-accent);
+    border-radius: 0 var(--oc-radius-card) var(--oc-radius-card) 0;
+    background: var(--oc-lane-soft);
+  }
+
+  .oc-milestone-glyph {
+    font-size: 11px;
+    color: var(--oc-lane-accent);
+  }
+
+  .oc-lane-milestone > span:not(.oc-milestone-glyph) {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--oc-color-text-description);
+  }
+
+  .oc-lane-milestone strong {
+    font-size: 14px;
+    line-height: 1.4;
+    color: var(--oc-color-text-primary);
+  }
+
+  .oc-mission-lanes[data-animated="true"] .oc-mission-lane {
+    opacity: 0;
+    transform: translateY(12px);
+    animation: oc-lane-arrive 0.48s ease forwards;
+    animation-delay: var(--oc-lane-delay);
+  }
+
+  @keyframes oc-lane-arrive {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (max-width: 800px) {
+    .oc-lane-head {
+      grid-template-columns: auto minmax(0, 1fr);
+    }
+
+    .oc-lane-total {
+      grid-column: 2;
+      margin-top: 0 !important;
+    }
+
+    .oc-lane-body {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .oc-lane-to-milestone {
+      justify-self: start;
+      margin-left: 8px;
+      transform: rotate(90deg);
+    }
+
+    .oc-lane-route {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .oc-mission-lanes[data-animated="true"] .oc-mission-lane {
+      opacity: 1;
+      transform: none;
+      animation: none;
+    }
+  }
+</style>

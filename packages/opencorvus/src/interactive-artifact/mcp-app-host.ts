@@ -312,6 +312,7 @@ async function callTool(input: {
     const materialized = await materializeMcpToolResult({
       projectID: Instance.project.id,
       result,
+      serverName: input.artifact.payload.server.id,
     })
     await Session.updatePart({
       id: partID,

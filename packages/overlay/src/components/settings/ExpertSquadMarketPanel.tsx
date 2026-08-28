@@ -21,6 +21,7 @@ import { LinkButton } from "../ui/LinkButton"
 import { Icon } from "../ui/Icon"
 import { SelectField } from "../ui/SelectField"
 import { SettingsGroup, SettingsPanel, SettingsState, SettingsSurface } from "./layout"
+import { secureContextFailure } from "../../utils/secure-context"
 
 const EXPERT_SQUAD_MARKET_URL = "https://opencorvus.com/market/"
 const EXPERT_SQUAD_PUBLISH_URL = "https://opencorvus.com/publish/"
@@ -46,6 +47,9 @@ async function blobToBase64(blob: Blob): Promise<string> {
 }
 
 async function sha256Hex(bytes: ArrayBuffer): Promise<string> {
+  // SubtleCrypto has no equivalent outside a secure context, so this check
+  // cannot be performed at all there — say so rather than throwing on undefined.
+  if (!crypto.subtle) throw new Error(secureContextFailure("secure_context.subject.package_digest"))
   const digest = await crypto.subtle.digest("SHA-256", bytes)
   return Array.from(new Uint8Array(digest), (value) => value.toString(16).padStart(2, "0")).join("")
 }

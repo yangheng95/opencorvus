@@ -2,14 +2,13 @@ import z from "zod"
 import { Auth } from "../auth"
 import { Config } from "../config/config"
 import { resolveOpenAICodexOAuthCredential } from "../plugin/openai/codex"
+import { ProviderCredentialExchange } from "./credential-exchange"
 
 export namespace ProviderAccountUsage {
   export const Capability = z.enum(["monetary_balance", "rate_limits"]).meta({ ref: "ProviderAccountUsageCapability" })
   export type Capability = z.infer<typeof Capability>
 
-  export const Capabilities = z
-    .record(z.string(), Capability)
-    .meta({ ref: "ProviderAccountUsageCapabilities" })
+  export const Capabilities = z.record(z.string(), Capability).meta({ ref: "ProviderAccountUsageCapabilities" })
   export type Capabilities = z.infer<typeof Capabilities>
 
   const MonetaryBalance = z
@@ -130,7 +129,8 @@ export namespace ProviderAccountUsage {
     try {
       const credential = await resolveOpenAICodexOAuthCredential({
         getAuth: () => Auth.get("openai"),
-        setAuth: (auth) => Auth.set("openai", auth),
+        refresh: ({ current, exchange }) =>
+          ProviderCredentialExchange.refresh({ providerID: "openai", current, exchange }),
       })
       const headers = new Headers({
         Accept: "application/json",

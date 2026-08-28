@@ -102,15 +102,16 @@ async function createProductionFixture(projectPath: string, title: string) {
   })
   if (workflow.kind !== "virtual_workflow") throw new Error("Expected Base planner-parallel-delivery workflow")
   const taskID = Identifier.ascending("task")
-  const root = await Session.create({
+  const root = Session.prepareRootNext({
     kind: "root",
+    directory: Instance.directory,
     title,
     metadata: { configOverlay: { prompt_profile: { active: packageRevision.id } } },
   })
   const now = Date.now()
   persistTask({
     taskID,
-    sessionID: root.id,
+    rootSession: root,
     now,
     title,
     request: "Produce one durable Build terminal fact",
@@ -266,8 +267,11 @@ async function executeProductionBuild(input: {
   return { outcome, workflow: (await describeTask(input.fixture.taskID)).workflow_execution }
 }
 
+async function withBootstrappedProject<R>(directory: string, fn: () => R): Promise<Awaited<R>> {
+  return await Instance.provide({ directory, init: InstanceBootstrap, fn })
+}
+
 async function installPhysicalBuildSpies(options?: { mockProvider?: boolean }) {
-  await InstanceBootstrap()
   const provider = options?.mockProvider === false
     ? undefined
     : spyOn(Provider, "getModel").mockResolvedValue(providerModel())
@@ -304,7 +308,7 @@ async function installPhysicalBuildSpies(options?: { mockProvider?: boolean }) {
 describe.serial("Build terminal-fact publication", () => {
   test("the physical Build retries its exact publication before final settlement", async () => {
     await using project = await memoryProject()
-    await Instance.provide({ directory: project.path, fn: async () => {
+    await withBootstrappedProject(project.path, async () => {
       using _spies = await installPhysicalBuildSpies()
       const fixture = await createProductionFixture(project.path, "Build publication recovery")
       const attempts: string[] = []
@@ -328,17 +332,17 @@ describe.serial("Build terminal-fact publication", () => {
         samePayload: true,
         settled: {
           outcome: { kind: "terminal_success" },
-          workflow: { frontier_node_ids: expect.arrayContaining(["base-tester"]) },
+          workflow: { frontier_node_ids: ["base-developer", "base-researcher"] },
         },
         facts: [{ kind: "build_host_observation" }],
         observationID: facts[0]?.id,
       })
-    } })
+    })
   }, 60_000)
 
   test("an exhausted physical publication settles partial and removes both private refs", async () => {
     await using project = await memoryProject()
-    await Instance.provide({ directory: project.path, fn: async () => {
+    await withBootstrappedProject(project.path, async () => {
       using _spies = await installPhysicalBuildSpies()
       const fixture = await createProductionFixture(project.path, "Build publication exhausted")
       const settled = await executeProductionBuild({
@@ -360,12 +364,12 @@ describe.serial("Build terminal-fact publication", () => {
         baseRef: undefined,
         headRef: undefined,
       })
-    } })
+    })
   }, 60_000)
 
   test("the canonical exact identity rejects payload drift after production publication", async () => {
     await using project = await memoryProject()
-    await Instance.provide({ directory: project.path, fn: async () => {
+    await withBootstrappedProject(project.path, async () => {
       using _spies = await installPhysicalBuildSpies()
       const fixture = await createProductionFixture(project.path, "Build publication drift")
       await executeProductionBuild({ fixture })
@@ -382,12 +386,12 @@ describe.serial("Build terminal-fact publication", () => {
         now: Date.now(),
       })).toThrow(`Engine Artifact ${fact.id} exact publication identity drift`)
       expect(terminalFacts(fixture.taskID)).toHaveLength(1)
-    } })
+    })
   }, 60_000)
 
   test("cleanup failure retains one durable owner and recovery deletes its exact refs before settlement retry", async () => {
     await using project = await memoryProject()
-    await Instance.provide({ directory: project.path, fn: async () => {
+    await withBootstrappedProject(project.path, async () => {
       using _spies = await installPhysicalBuildSpies()
       const fixture = await createProductionFixture(project.path, "Build cleanup recovery")
       let cleanupAttempts = 0
@@ -414,12 +418,12 @@ describe.serial("Build terminal-fact publication", () => {
         last_error: null,
       })
       expect(await gitRef(project.path, buildObservationRefName(owner.observation_id, "head"))).toBeUndefined()
-    } })
+    })
   }, 60_000)
 
   test("lease-renewal loss aborts the stale cleanup executor and lets one successor settle", async () => {
     await using project = await memoryProject()
-    await Instance.provide({ directory: project.path, fn: async () => {
+    await withBootstrappedProject(project.path, async () => {
       const provider = spyOn(Provider, "getModel").mockResolvedValue(providerModel())
       using _provider = { [Symbol.dispose]() { provider.mockRestore() } }
       const fixture = await createProductionFixture(project.path, "Build cleanup lease loss")
@@ -456,12 +460,12 @@ describe.serial("Build terminal-fact publication", () => {
         successorCalls: 1,
         projection: { status: "complete", attempts: 1, last_error: null },
       })
-    } })
+    })
   }, 60_000)
 
   test("production provenance failure publishes one typed partial only after private refs are cleaned", async () => {
     await using project = await memoryProject()
-    await Instance.provide({ directory: project.path, fn: async () => {
+    await withBootstrappedProject(project.path, async () => {
       using _spies = await installPhysicalBuildSpies()
       const fixture = await createProductionFixture(project.path, "Build provenance failure")
       const settled = await executeProductionBuild({
@@ -482,7 +486,7 @@ describe.serial("Build terminal-fact publication", () => {
         infrastructureFacts: [{ kind: "task-infrastructure-error", payload: { operation: "collect-git-workspace" } }],
       })
       expect(await gitRef(project.path, buildObservationRefName(owner.observation_id, "head"))).toBeUndefined()
-    } })
+    })
   }, 60_000)
 
   test("project bootstrap resumes the same pending cleanup owner after project close and reopen", async () => {
@@ -491,7 +495,7 @@ describe.serial("Build terminal-fact publication", () => {
     using _provider = { [Symbol.dispose]() { provider.mockRestore() } }
     let taskID = ""
     let observationID = ""
-    await Instance.provide({ directory: project.path, fn: async () => {
+    await withBootstrappedProject(project.path, async () => {
       using _spies = await installPhysicalBuildSpies({ mockProvider: false })
       const fixture = await createProductionFixture(project.path, "Build startup cleanup recovery")
       taskID = fixture.taskID
@@ -510,7 +514,7 @@ describe.serial("Build terminal-fact publication", () => {
       expect(movedGit).toBe(true)
       expect(buildObservationCleanupRowsForTask(taskID)[0]).toMatchObject({ status: "pending", attempts: 1 })
       completeTask(taskID)
-    } })
+    })
     await Instance.disposeAll()
     await Instance.provide({
       directory: project.path,
@@ -529,7 +533,7 @@ describe.serial("Build terminal-fact publication", () => {
 
   test("Task deletion settles retained observation refs before appending its audit-preserving tombstone", async () => {
     await using project = await memoryProject()
-    await Instance.provide({ directory: project.path, fn: async () => {
+    await withBootstrappedProject(project.path, async () => {
       using _spies = await installPhysicalBuildSpies()
       const fixture = await createProductionFixture(project.path, "Build retained cleanup deletion")
       await createTaskDeletionObservation({ projectPath: project.path, taskID: fixture.taskID, retained: true })
@@ -548,12 +552,12 @@ describe.serial("Build terminal-fact publication", () => {
         owners: [{ observation_id: owner.observation_id, status: "complete" }],
         headRef: undefined,
       })
-    } })
+    })
   }, 60_000)
 
   test("Task deletion preserves its Task and owner when Git metadata is missing, then retries the same owner", async () => {
     await using project = await memoryProject()
-    await Instance.provide({ directory: project.path, fn: async () => {
+    await withBootstrappedProject(project.path, async () => {
       using _spies = await installPhysicalBuildSpies()
       const fixture = await createProductionFixture(project.path, "Build deletion cleanup recovery")
       await createTaskDeletionObservation({ projectPath: project.path, taskID: fixture.taskID, retained: false })
@@ -581,6 +585,6 @@ describe.serial("Build terminal-fact publication", () => {
         retainedTask: { id: fixture.taskID },
         owners: [{ observation_id: owner.observation_id, status: "complete" }],
       })
-    } })
+    })
   }, 60_000)
 })

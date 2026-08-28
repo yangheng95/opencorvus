@@ -4,16 +4,16 @@ import { tool } from "ai"
 import type z from "zod"
 import { DispatchOutcome } from "@/agent/dispatch-outcome"
 import { isAgentCoordinationHandoffResult } from "@/agent/runner"
-import { EngineService } from "@/task-api"
+import { appendTaskSystemArtifact } from "@/engine/task-file-reference"
 import type { TaskRow } from "@/engine/store"
 import {
   createDesignResourceManifest,
   designResourceManifestFileRefs,
   type DesignResourceFileRef,
-  type DesignResourceIntent,
   frontendDesignMaterialMime,
   recordDesignResourceManifest,
 } from "@/frontend-design/design-resource-manifest"
+import type { DesignResourceIntent } from "@/protocol/design-resource-intent"
 import { FrontendDesignAgent } from "@/frontend-design/agent"
 import { recordPartialFrontendDesignFacts } from "@/frontend-design/partial-artifact"
 import { recordFrontendDesignArtifact } from "@/frontend-design/artifact"
@@ -207,7 +207,7 @@ export function createFrontendDesignTool(dependencies: FrontendDesignToolDepende
               intent: material.intent,
               source: "material" as const,
             }
-            await EngineService.appendTaskSystemArtifact(taskID, resource)
+            await appendTaskSystemArtifact(taskID, resource)
             designResources.push(resource)
             log.info("frontend_design: material materialized", {
               taskID,

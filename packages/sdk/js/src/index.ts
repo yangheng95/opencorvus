@@ -1,5 +1,6 @@
 export * from "./client.js"
 export * from "./server.js"
+export type { ProcessFacade } from "@opencorvus-ai/util/process"
 
 import {
   createOpenCorvusClient as createOpenCorvusClientImpl,

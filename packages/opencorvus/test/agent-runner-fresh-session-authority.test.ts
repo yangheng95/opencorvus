@@ -150,15 +150,16 @@ test("fresh delegated worker commits Session, input authority, lineage, and occu
       })
       const taskID = Identifier.ascending("task")
       const taskRequest = "Publish the bounded research charter"
-      const root = await Session.create({
+      const root = Session.prepareRootNext({
         kind: "root",
+        directory: Instance.directory,
         title: "Fresh worker authority",
         metadata: { configOverlay: { prompt_profile: { active: packageRevision.id } } },
       })
       const now = Date.now()
       persistTask({
         taskID,
-        sessionID: root.id,
+        rootSession: root,
         now,
         title: "Fresh worker authority",
         request: taskRequest,

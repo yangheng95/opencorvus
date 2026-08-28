@@ -15,7 +15,7 @@ import {
 } from "@opencorvus-ai/plugin/artifact-catalog"
 import type { TaskArtifactRef } from "@opencorvus-ai/plugin/task-artifact"
 import { createHash } from "node:crypto"
-import { requireEngineArtifactByLocator } from "@/artifact-catalog"
+import { requireEngineArtifactByLocator } from "./engine-artifact-version-facts"
 import { Identifier } from "@/id/id"
 import { taskPrimaryProjectRoot } from "@/project/task-runtime-root"
 import { Database, and, eq, sql } from "@/storage/db"
@@ -31,16 +31,14 @@ import { EngineArtifactTable, EngineTaskTable, type EngineArtifactKind, type Eng
 import { isTaskTerminal } from "./task-status"
 import { projectTaskRowInTransaction, requireTask } from "./store"
 import { deriveTaskStatus } from "./task-status"
-import {
-  findTaskCompletionDecisionForTerminalTime,
-  findTaskCompletionDecisionForTerminalTimeInTransaction,
-} from "./completion-decision"
+import { findTaskCompletionDecisionForTerminalTime } from "./completion-decision-read"
+import { findTaskCompletionDecisionForTerminalTimeInTransaction } from "./completion-decision-facts"
 import {
   requireCurrentTerminalLifecycleReference,
-  sameTerminalLifecycleReference,
   terminalLifecycleReferenceMatchesTaskRow,
   type TerminalLifecycleReference,
 } from "./terminal-lifecycle-reference"
+import { sameTerminalLifecycleReference } from "./terminal-lifecycle-reference-schema"
 
 export const CROSS_TASK_PLAIN_ENGINE_ARTIFACT_TYPE = "opencorvus/imported-engine-artifact"
 export const CROSS_TASK_TASK_ARTIFACT_SNAPSHOT_TYPE = "opencorvus/imported-task-artifact-snapshot"

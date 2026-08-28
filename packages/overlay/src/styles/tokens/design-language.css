@@ -13,6 +13,35 @@
   --oc-radius-xl: calc(24px * var(--ui-scale, 1));
   --oc-radius-pill: 999px;
 
+  /* Spacing ladder — 9 rungs, the single vocabulary for padding / gap /
+   * margin. Extended from the original four (xs/sm/md/lg) on 2026-08-24;
+   * those four keep their exact values so no existing consumer shifts.
+   *
+   * Before the ladder, surfaces/ carried these three properties at 37
+   * distinct pixel values — nearly every integer from 1 to 36. No vertical
+   * rhythm survives that: each surface picked its own breathing room, and
+   * the eye reads the sum as "nothing lines up" even where no single value
+   * looks wrong. Rungs sit on the values that were already most common, so
+   * collapsing onto them moved 802 of 1350 declarations by 0px.
+   *
+   * Sizes above 32px are structural dimensions (dialog widths, rail insets),
+   * not rhythm steps, and stay as literals. The <=32px consumer boundary is
+   * enforced by script/check-css-token-usage.ts.
+   *
+   * Lives here rather than in cascade/base.css because native-menu.html
+   * loads design-language.css but not base.css — the ladder is design
+   * language, so it belongs with the radius / density / type scales that
+   * every document entry already gets. */
+  --ui-gap-3xs: calc(2px * var(--ui-scale, 1));
+  --ui-gap-xs: calc(4px * var(--ui-scale, 1));
+  --ui-gap-sm: calc(6px * var(--ui-scale, 1));
+  --ui-gap-md: calc(8px * var(--ui-scale, 1));
+  --ui-gap-lg: calc(12px * var(--ui-scale, 1));
+  --ui-gap-xl: calc(16px * var(--ui-scale, 1));
+  --ui-gap-2xl: calc(20px * var(--ui-scale, 1));
+  --ui-gap-3xl: calc(24px * var(--ui-scale, 1));
+  --ui-gap-4xl: calc(32px * var(--ui-scale, 1));
+
   /* Font-weight scale — 3 tokens, single source.
    *
    * Step 5 v3 (2026-05-04): the 2-token plan (body / strong) was
@@ -50,8 +79,10 @@
    * shifts (width/translate). timing is always `ease` — no cubic-bezier
    * noise. Animation loop tokens are named by the visible motion role
    * because spinner, pulse, progress, and shimmer cycles do not share a
-   * single interaction scale. Any value outside this set is rejected by
-   * `flat-redesign-motion-coverage.test.ts`. */
+   * single interaction scale. Durations remain plain, theme-independent
+   * tokens: zoom changes how large things are, never how long they take. */
+  /* script/check-css-token-usage.ts rejects perceptible motion literals
+   * outside this scale and durations multiplied by --ui-scale. */
   --ui-duration-instant: 0s;
   --ui-duration-fast: 80ms;
   --ui-duration-base: 120ms;
@@ -65,6 +96,7 @@
   --ui-duration-loop-pulse: 1.6s;
   --ui-duration-loop-skeleton-shimmer: 1.6s;
   --ui-duration-loop-tool-wave: 6.8s;
+  --ui-duration-loop-terminal-wave: 5.6s;
   --ui-timing-standard: ease;
 
   /* Elevation scale — 9 z-index tokens. Step 8a (2026-05-04).
@@ -95,8 +127,13 @@
   --ui-opacity-subtle: 0.85;
   --ui-opacity-full: 1;
 
-  /* Letter-spacing — semantic tightness levels. */
-  --ui-letter-spacing-tight: -0.01em;
+  /* Letter-spacing — semantic tightness levels. Larger type needs
+   * tighter tracking to hold together: application emphasis can use
+   * `tighter`, while ordinary headings use `tight`.
+   * `tight` moved -0.01em -> -0.015em when `tighter` was added, so the
+   * two negative steps stay distinguishable. */
+  --ui-letter-spacing-tighter: -0.025em;
+  --ui-letter-spacing-tight: -0.015em;
   --ui-letter-spacing-normal: 0;
   --ui-letter-spacing-loose: 0.04em;
 
@@ -112,8 +149,6 @@
   --oc-header-padding-x: calc(6px * var(--ui-scale, 1));
   --oc-header-padding-y: 0;
   --oc-header-gap: calc(6px * var(--ui-scale, 1));
-  --oc-header-title-font: 550 var(--ui-font-title, 12px) var(--font, sans-serif);
-  --oc-header-title-line-height: 1;
   --oc-header-title-letter-spacing: 0;
   --oc-header-title-transform: none;
   --oc-header-border: 0 solid transparent;
@@ -140,10 +175,9 @@
    * `cascade/*.css` now hold *only* palette tokens scoped to specific
    * `body[data-theme="..."]` selectors.
    *
-   * Font families, font sizes, title/subhead weight + tracking, and
-   * the panel/rail layout dimensions are theme-independent (zh-CN
-   * vs en-US copy might want different sizes, but that's a locale
-   * concern, not a theme concern). */
+   * Font-family composition, font roles, weight, tracking, and panel/rail
+   * layout dimensions are theme- and locale-independent. Locale changes copy
+   * and glyph coverage; it cannot redefine application typography roles. */
   /* SC means Simplified Chinese. The paired families compose Latin and Chinese
    * glyph coverage from locally packaged WOFF2 (Web Open Font Format 2) assets. */
   --font: "Geist Variable", "Noto Sans SC Variable";
@@ -155,28 +189,26 @@
    * Consumers now reference `--ui-font-weight-strong` and `0`/literal
    * tracking directly. */
 
-  /* Typography scale — 4-tier hierarchy: display > heading > title >= body.
-   * Restores visual structure after iter48 capped all four to 12px
-   * (2026-05-03 feedback superseded by 2026-05-04 reference design request).
-   * Raised 2026-07-08 to a Codex app style 14px body baseline without
-   * changing layout density tokens or --ui-scale.
-   * display: major empty-state headings, onboarding copy.
-   * heading: panel / section titles, dialog headers.
-   * title:   card titles, sidebar item titles, menu items.
-   * body:    body text, message content. */
-  --ui-font-display: calc(32px * var(--ui-scale));
-  --ui-font-heading: calc(20px * var(--ui-scale));
-  --ui-font-title: calc(15px * var(--ui-scale));
-  --ui-font-brand: calc(18px * var(--ui-scale));
+  /* Application typography has three proportional roles and one code role.
+   * A component chooses a role; it cannot mint a local size alias or derive
+   * an intermediate size. Hierarchy within one role comes from weight,
+   * colour, spacing, and containment rather than another one-pixel tier.
+   * Interactive Artifact content owns its internal typography separately;
+   * the surrounding OpenCorvus chrome still consumes this scale. */
+  --ui-font-emphasis: calc(16px * var(--ui-scale));
   --ui-font-body: calc(14px * var(--ui-scale));
-  --ui-font-control: calc(14px * var(--ui-scale));
-  --ui-font-compact-row: calc(var(--ui-font-control) - calc(1px * var(--ui-scale)));
-  --ui-font-meta: calc(12px * var(--ui-scale));
-  --ui-font-small: calc(12px * var(--ui-scale));
-  --ui-font-tiny: calc(11px * var(--ui-scale));
   --ui-font-code: calc(13px * var(--ui-scale));
-  --ui-font-navigation: var(--ui-font-body);
+  --ui-font-caption: calc(12px * var(--ui-scale));
+
+  /* Line-height is independent from size but equally bounded. `flat` is
+   * functional single-line centering, `tight` is application chrome,
+   * `normal` is compact prose/code, and `reading` preserves comfortable
+   * leading for transcript and other sustained reading. Components do not
+   * define a private rung. */
+  --ui-line-height-flat: 1;
   --ui-line-height-tight: 1.35;
+  --ui-line-height-normal: 1.5;
+  --ui-line-height-reading: 1.68;
 
   --ui-titlebar-height: calc(36px * var(--ui-scale));
   --ui-panel-header-height: calc(40px * var(--ui-scale));
@@ -184,9 +216,7 @@
   /* UI (User Interface) Workbench contour uses wider low-alpha coverage so
      its diagonal stays continuous at fractional desktop display scales while
      retaining the perceived weight of the shared one-pixel border. */
-  --ui-workspace-contour:
-    calc(1.5px * var(--ui-scale)) solid
-      color-mix(in srgb, var(--border-strong) 68%, transparent);
+  --ui-workspace-contour: calc(1.5px * var(--ui-scale)) solid color-mix(in srgb, var(--border-strong) 68%, transparent);
   --ui-header-control-height: var(--oc-density-icon-button);
   --ui-panel-padding-x: calc(10px * var(--ui-scale));
   --ui-panel-padding-y: calc(8px * var(--ui-scale));
@@ -240,20 +270,18 @@
   --oc-theme-swatch-vscode-dark: linear-gradient(135deg, #1e1e1e 50%, #252526 50%);
   --oc-theme-swatch-system: linear-gradient(135deg, #1a1b1e 50%, #f2f2f2 50%);
 
-  /* Agent stage palette. Each pipeline stage carries a stable identity
-     hue so users can spot which agent emitted a card in a long log:
-     goal=violet, architect=teal, planner=cobalt, executor=amber.
-     The default fallback is the same cobalt as planner.
-     The hues are intentional metadata, not theme-
-     adaptive: stage identity must read the same in every overlay
-     theme so muscle memory stays portable. Surfaces consume these
-     through color-mix() with the alpha they need; raw alpha values
-     do not belong in design-language. */
-  --oc-stage-default: #6eb7ff;
-  --oc-stage-goal: #8c6edc;
-  --oc-stage-architect: #50aaa0;
-  --oc-stage-planner: #64a0dc;
-  --oc-stage-executor: #e68c32;
+  /* The --oc-stage-* palette (default / goal / architect / planner /
+   * executor) was retired 2026-08-24. It was the last survivor of the
+   * per-agent brand hues that surfaces/card.css retired in iter51, and its
+   * premise — fixed hex so stage identity reads the same in every theme —
+   * is the exact failure card.css calls out: "hardcoded hex landing wrong
+   * on light/vscode-dark". Measured against the light theme's surfaces the
+   * five sat between 1.87 and 3.82.
+   *
+   * Three had no consumer at all. The two that did now derive their colour
+   * from the palette at the point of use (surfaces/mission-board.css,
+   * surfaces/automations.css), which is how the live per-stage rails in
+   * card.css have always worked. */
 }
 
 /* Theme-wired tokens MUST live at body scope, not :root. CSS custom
@@ -309,12 +337,21 @@ body {
    * which froze them to the dark-default values; light + vscode-dark
    * never picked up their own palette. Body scope re-resolves the
    * var() chain per theme. */
-  --diff-add-fg: color-mix(in srgb, var(--accent) 58%, var(--text-strong) 42%);
-  --diff-add-bg: color-mix(in srgb, var(--accent) 12%, transparent);
-  --diff-add-border: color-mix(in srgb, var(--accent) 22%, transparent);
+  /* One colour source per side: added is --good, deleted is --bad. The add
+   * half used to draw fg/bg from --accent while --diff-add-row-bg alone used
+   * --good, so a single concept carried two hues — and since "modified" is
+   * also accent-toned, an added file and a modified one read as the same
+   * colour in the changes list. Green-for-added is also what every diff tool
+   * the user has open next to this one does.
+   *
+   * The `-border` roles were retired 2026-08-24: their only consumer set
+   * border-color on a chip whose base rule is `border: 0`, so nothing could
+   * ever draw them, and the badge primitive establishes that status chips
+   * carry tone through background and text alone. */
+  --diff-add-fg: color-mix(in srgb, var(--good) 58%, var(--text-strong) 42%);
+  --diff-add-bg: color-mix(in srgb, var(--good) 12%, transparent);
   --diff-del-fg: color-mix(in srgb, var(--bad) 58%, var(--text-strong) 42%);
   --diff-del-bg: color-mix(in srgb, var(--bad) 10%, transparent);
-  --diff-del-border: color-mix(in srgb, var(--bad) 22%, transparent);
   --diff-add-row-bg: color-mix(in srgb, var(--good) 9%, transparent);
   --diff-del-row-bg: color-mix(in srgb, var(--bad) 10%, transparent);
 

@@ -9,7 +9,7 @@ import {
   type SessionControlStatus,
 } from "./session.sql"
 import { isDeepStrictEqual } from "node:util"
-import { assertControlLeaseInTransaction } from "@/engine/control-lease"
+import { assertControlLeaseInTransaction, releaseControlLeaseInTransaction } from "@/engine/control-lease"
 
 export namespace SessionControl {
   const wakeWaiters = new Map<string, Set<() => void>>()
@@ -141,7 +141,12 @@ export namespace SessionControl {
 
   type SettlementLease = { leaseID: string; ownerOccurrenceID: string; now: number }
 
-  export function consume(input: { id: string; sessionID: string; lease?: SettlementLease }): Record | undefined {
+  export function consume(input: {
+    id: string
+    sessionID: string
+    payload?: z.input<typeof PersistedPayload>
+    lease?: SettlementLease
+  }): Record | undefined {
     return settle({ ...input, kind: "consumed" })
   }
 
@@ -150,9 +155,21 @@ export namespace SessionControl {
   }
 
   function settle(input: { id: string; sessionID: string; kind: "consumed" | "failed"; payload?: { [key: string]: unknown }; lease?: SettlementLease }): Record | undefined {
-    return Database.transaction((db) => {
+    return Database.immediateTransaction((db) => {
       const current = db.select().from(SessionControlRecordTable).where(and(eq(SessionControlRecordTable.id, input.id), eq(SessionControlRecordTable.session_id, input.sessionID))).get()
-      if (!current || terminalExists(db, input.id)) return undefined
+      if (!current || terminalExists(db, input.id)) {
+        // Somebody else already settled this control. This caller is no longer
+        // its executor and must not keep holding the lease while it reports the
+        // conflict.
+        if (input.lease) releaseControlLeaseInTransaction(db, {
+          target: "session_control",
+          targetID: input.id,
+          leaseID: input.lease.leaseID,
+          ownerOccurrenceID: input.lease.ownerOccurrenceID,
+          now: input.lease.now,
+        })
+        return undefined
+      }
       if (input.lease) assertControlLeaseInTransaction(db, {
         target: "session_control",
         targetID: input.id,
@@ -160,8 +177,27 @@ export namespace SessionControl {
         ownerOccurrenceID: input.lease.ownerOccurrenceID,
         now: input.lease.now,
       })
+      const now = Date.now()
+      if (input.kind === "consumed" && input.payload !== undefined) {
+        db.insert(SessionControlEventTable).values({
+          id: Identifier.ascending("session_control"),
+          control_id: input.id,
+          kind: "amended",
+          payload: PersistedPayload.parse(input.payload),
+          time_created: now,
+        }).run()
+      }
       const payload = input.kind === "failed" ? (input.payload ?? {}) : null
-      db.insert(SessionControlEventTable).values({ id: Identifier.deterministic("session_control", `terminal\0${input.id}`), control_id: input.id, kind: input.kind, payload, time_created: Date.now() }).run()
+      db.insert(SessionControlEventTable).values({ id: Identifier.deterministic("session_control", `terminal\0${input.id}`), control_id: input.id, kind: input.kind, payload, time_created: now }).run()
+      // Terminal is terminal: this control never runs again, so its execution
+      // owner ends with the event that settled it.
+      if (input.lease) releaseControlLeaseInTransaction(db, {
+        target: "session_control",
+        targetID: input.id,
+        leaseID: input.lease.leaseID,
+        ownerOccurrenceID: input.lease.ownerOccurrenceID,
+        now: input.lease.now,
+      })
       return project(db, current)
     })
   }

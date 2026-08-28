@@ -193,13 +193,13 @@ describe("Data Analysis expert squad package", () => {
       directory: project.path,
       fn: async () => {
         const loaded = await ExpertSquadRegistry.loadSourcePackage(packageRoot)
-        const session = await Session.create({ kind: "root", title: "Data Analysis typed Artifact chain" })
+        const session = Session.prepareRootNext({ kind: "root", directory: Instance.directory, title: "Data Analysis typed Artifact chain" })
         const taskID = Identifier.ascending("task")
         const started = Date.now()
         await ensureGitProjectMetadata()
         persistTask({
           taskID,
-          sessionID: session.id,
+          rootSession: session,
           now: started,
           title: "Data Analysis typed Artifact chain",
           request: "Publish and consume exact Data Analysis evidence",

@@ -45,6 +45,33 @@ const executionOptions = {
   abortSignal: new AbortController().signal,
 } as ToolExecutionOptions
 
+function acceptanceGap(readReference = "ar_1234567890abcdef") {
+  return {
+    gap_id: "gap-audit-receipt",
+    current_ledger_revision_artifact_id: null,
+    criteria: [
+      {
+        criterion_id: "audit-receipt",
+        state: "open" as const,
+        disposition: "failed" as const,
+        finding: "The published audit receipt does not match the accepted output.",
+        responsibility: { kind: "workflow_node" as const, workflow_id: "repair", workflow_node_id: "builder" },
+        observation_evidence_read_refs: [readReference],
+        repair_evidence_read_refs: [],
+        resolution_evidence_read_refs: [],
+        invalidating_evidence_read_refs: [],
+        irreducible_blocker_evidence_read_refs: [],
+        repair_action: {
+          operation: "correct_artifact",
+          target: "audit-receipt",
+          expected_evidence_kind: "corrected-audit-receipt",
+          parameters: {},
+        },
+      },
+    ],
+  }
+}
+
 describe("SessionLoop provider Tool execution input", () => {
   test("projects an OpenAI strict root union as one nested operation with branch-specific required fields", async () => {
     const prepared = preparedMissionPanelTool() as unknown as { inputSchema: unknown }
@@ -68,9 +95,7 @@ describe("SessionLoop provider Tool execution input", () => {
     expect(artifactPage.properties.page_number).toEqual(
       expect.objectContaining({ type: "integer", minimum: 1, maximum: 1_000 }),
     )
-    expect(artifactPage.properties.terminal_lifecycle_reference).toEqual(
-      expect.objectContaining({ type: "object" }),
-    )
+    expect(artifactPage.properties.terminal_lifecycle_reference).toEqual(expect.objectContaining({ type: "object" }))
 
     const validated = await schema.validate?.({
       operation: {
@@ -120,8 +145,7 @@ describe("SessionLoop provider Tool execution input", () => {
         operation: {
           action: "resume_task",
           taskID: "task-provider-union",
-          text: "Apply the reviewed correction.",
-          evidence_read_refs: ["ar_1234567890abcdef"],
+          acceptance_gap: acceptanceGap(),
           model: null,
           summary: null,
           task_acceptances: null,
@@ -133,8 +157,7 @@ describe("SessionLoop provider Tool execution input", () => {
     expect(result).toEqual({
       action: "resume_task",
       taskID: "task-provider-union",
-      text: "Apply the reviewed correction.",
-      evidence_read_refs: ["ar_1234567890abcdef"],
+      acceptance_gap: acceptanceGap(),
     })
   })
 
@@ -176,8 +199,7 @@ describe("SessionLoop provider Tool execution input", () => {
       {
         action: "resume_task",
         taskID: "task-provider-union",
-        text: "Apply the reviewed correction.",
-        evidence_read_refs: ["ar_1234567890abcdef"],
+        acceptance_gap: acceptanceGap(),
         invented_provider_field: "must remain invalid",
       },
       executionOptions,

@@ -24,9 +24,25 @@ Queue       = Hint(unresolved projection)
 
 A hint may be lost or duplicated. Reconciliation always rereads facts before execution or commit.
 
+A global Task create carrying `requestID` first trims and rejects an empty identity through the canonical Task input schema;
+the same normalized value then names its owner, replay lookup, per-project owner and persisted Task row. It acquires that
+global request occurrence before it reads replay state or allocates an anonymous Project. One indefinite process-local
+writer plus the shared retrying cross-process lock spans the complete global lookup, anonymous Project allocation,
+canonical per-project `EngineService.createTask` call and failure cleanup. The local writer identity includes the resolved
+data-root lock target, so equal request IDs in separate runtime roots do not share an in-process queue.
+Every waiter rereads `findGlobalTaskByRequest` under that owner. While the committed root Session remains in its anonymous
+Project directory, the waiter re-enters that Project, so same-process, multi-backend and lost-response replay all use the
+same per-project pillar, package-revision and Artifact-import conflict contract. Project promotion is a separate authority
+and is not fenced by this request owner: after promotion the Project no longer matches the anonymous global replay lookup,
+and a later create allocates a new anonymous Project, preserving the existing adoption boundary. The lock target is only
+admission; the Task row plus root Session and creation ingress remain the durable result. Requests without a request ID do
+not claim this owner and continue to allocate independently.
+
 ## Task lifecycle and execution epoch
 
 `protocol_event` is the sole Task lifecycle authority. Task aggregate identity is stored once as `(aggregate_type='task', aggregate_id=task_id)`; `protocol_event.task_id` is `NULL` for Task aggregate events and is reserved for correlation from non-Task aggregates.
+
+Execution lifecycle and Session error projections originate once from their real Bus participant and persist through one protocol bridge. A Task-owned Session keeps the Task aggregate above with immutable `session_id` correlation; a Session with no explicit or durable Task lineage uses `(aggregate_type='session', aggregate_id=session_id)` and leaves `session_id` null by the aggregate identity rule. The public Session event stream subscribes to all Session-aggregate public events plus only `agent.execution.lifecycle` and `session.error` from Task aggregates, then applies immutable Project/Session-lineage filtering. Connection cutover replays at most the latest terminal lifecycle and latest error for each Session in the selected tree, using the same immutable event IDs as live delivery; its overlap set is discarded after buffered events flush. Cross-aggregate latest selection orders by `emitted_at` and globally comparable event ID, never aggregate-local sequence. The process-local Session mirror does not publish either durable event type, so reconnect and live delivery observe the same fact rather than parallel projections. Process-local physical lifecycle wins for every Session in the tree: after restart, historical `streaming` or `retry` cannot project a live owner, while a durable terminal may restore the last settled occurrence.
 
 The lifecycle event family is:
 
@@ -42,7 +58,11 @@ One epoch has one open boundary, at most one cancellation request boundary, and 
 
 A late activation, decision, or effect request carries its exact epoch and is rejected after a newer epoch opens. An already-requested external effect may still append or reconcile its exact outcome after cancellation, because discarding an unknown outcome would permit duplicate side effects.
 
-An explicit operator message is the only thing that opens the next occurrence, and it does so for every terminal state — completed, failed, and cancelled alike. Terminal facts end an *occurrence*, not the Task: the reduction says so itself in calling an ingress `terminal_inapplicable` for "a cancelled, closed, or superseded epoch". The message reopens at `epoch + 1`, the prior occurrence stays intact as an immutable fact at its own epoch, and the message then lands on the new epoch as ordinary ingress. There is no separate retry or replan control, and no terminal-conversation mode: a state whose only exit is dedicated vocabulary is a state the operator cannot leave with an ordinary action. Non-operator arrivals — scheduler delivery, agent coordination, recovery, late outcomes — must match an existing occurrence and can never obtain reopen authority, so the only thing that can reopen a Task is the operator's own message. Asking a question rather than requesting work needs no mode of its own: the Orchestrator judges a status-only message as conversation ingress and answers it with a `no_action` decision receipt.
+Exactly two authorities may open the next occurrence. An explicit operator Message opens completed, failed, or cancelled Tasks. A Mission acceptance resume opens only a completed or failed Mission-owned Task, and must bind the exact current terminal lifecycle reference, current acceptance-ledger revision, completely read evidence, immutable workflow nodes, and one visible Mission-authored structured repair Message. Both append `epoch + 1`; the prior occurrence stays intact as an immutable fact at its old epoch. There is no separate retry or replan control. Scheduler delivery, agent coordination, recovery, and late Tool/Provider outcomes must match an existing occurrence and can never obtain reopen authority. Asking a question rather than requesting work needs no mode of its own: the Orchestrator judges a status-only operator Message as conversation ingress and answers it with a `no_action` decision receipt.
+
+Mission acceptance obligation is an append-only `task_acceptance_ledger` Artifact lineage, not another lifecycle. Each revision points to the prior revision, names the newly opened epoch, stores one typed state (`open`, `accepted`, or `blocked`) per criterion with canonical evidence locators, and never copies Task/Session status or Artifact bodies. Every state carries all five append-only evidence arrays: observation, attempted-repair, resolution, invalidating, and irreducible-blocker locators never move between roles. `open -> open` requires a new locator or a changed canonical structured repair-action hash; `open -> accepted` requires new resolution evidence; `open -> blocked` requires new irreducible-blocker evidence; `accepted -> open` retains resolution evidence in that role and requires `stale_evidence` plus new invalidating evidence. Accepted and blocked states otherwise retain exact immutable facts. The structured repair action is the single authority for its expected evidence kind and canonical identity hash. Responsibility is either an immutable virtual-workflow node or an exact direct-dispatch package revision, Agent, and `dispatch_lineage` Artifact; only the responsible node/downstream verifier or exact direct lineage continuation can consume it.
+
+The Task-root Orchestrator and every acceptance-repair worker continuation retain their physical Session lineage. Before the next Provider request, each consumes the current attempt of a logical compaction checkpoint keyed by Task, epoch, ledger revision, gap, and Session. Every failed attempt remains immutable and recovery creates a new deterministic attempt; the durable control reduction points to the pending attempt or latest consumed control and its exact summary Message binding. The checkpoint preserves Task authority, workflow/dispatch identity, criterion states, and canonical locators. It copies no Artifact body. A continuation must name the current gap and open criterion subset, reuse an existing dispatch occurrence, and target the responsible workflow node/downstream verifier or the exact responsible direct dispatch lineage.
 
 Deletion is the boundary that does fence a reopen, per the retention rule below; the reopen transaction checks it directly rather than relying on the ingress acceptance that refuses a moment later.
 
@@ -84,7 +104,13 @@ There is no persisted ingress disposition, delivery result, semantic attempt, ac
 
 ## Decision-gap continuation
 
+Session Message causality is allocated by the Session persistence boundary, not by caller wall-clock order. A new Message obtains SQLite's writer reservation before reading its exact Session frontier and persists `time.created = max(requested_created, latest_session_created + 1)`; existing Message creation time remains immutable. Moving a real Task-root participant Message into its Orchestrator Session obtains the same writer reservation before allocating that target Session's next frontier. Message events, timeline order keys and child Parts use the persisted frontier, and a Part cannot precede its parent Message. The frontier is scoped to one Session, so concurrent projects and Sessions do not share a global sequence.
+
+A fresh typed Task occurrence requires both the real task-creator Message and its deterministic Orchestrator control Message. The Session prompt writer prepares them under one runtime-contract write claim and commits both bundles in one immediate transaction before arming the runtime wake. Observers therefore see either the complete creator/control cut or neither participant; replay validates the existing deterministic control identity and never synthesizes or reorders a Message after visibility.
+
 A prose-only Provider step is visible content, not a business completion. While the current live activation is otherwise safe to continue, it remains inside the same assistant Message and activation:
+
+Every Provider step receives two JSON values: the canonical current `TaskDesc` baseline and a strict `task-projection-delta-v1` envelope. The first step uses that same shape with an empty, cursor-bound operation list. Later steps apply ordered JSON Pointer `replace`, `append`, and `remove` operations only when the envelope's previous cursor matches the supplied baseline; the resulting cursor must match the envelope's current cursor. Optional TypeScript fields are omitted by normal JSON value materialization before canonical key ordering, so `undefined` never becomes a second projection contract.
 
 ```text
 accepted ingress
@@ -153,6 +179,8 @@ Build cleanup acquires its activation before the first private ref is created, r
 
 ## Protocol delivery and scheduler inputs
 
+Scheduler execution inactivity owns preparation until a durable execution owner exists. Project/worktree entry, Session/database admission, Provider/model resolution, and activation persistence remain inside the scheduler inactivity interval. Session wakes await their durable activation receipt. A delayed Task wake passes an owner-completion wrapper into Task-root reconciliation; each physical activation invokes that wrapper only after its exact ingress lease commits and only around that activation runner. The wrapper settles and rearms scheduler inactivity before reduction continues, so post-owner scanning and every later lease acquisition are timed again. An already-owned or non-activating scan never delegates. Multiple simultaneously delegated owners retain suspension until the last owner settles, while a stall before owner establishment expires under the scheduler interval instead of escaping both timers.
+
 `protocol_event` is the immutable envelope. `protocol_inbox` is one immutable recipient occurrence. Delivery attempts use generic control leases. `protocol_delivery_receipt` stores one discriminated `receipt` JSON fact per settlement:
 
 ```text
@@ -192,6 +220,8 @@ mission.execution.closed
 ```
 
 The payload contains only `missionID` and `requestID`. Session identity, operation identity, source, state, and event time come from the Protocol envelope and event type; they are not repeated in payload. Close callers join one process-local operation while the durable event remains authoritative across restart.
+
+A lifecycle-lease owner rereads the closure reduction immediately after acquisition and before invoking the physical close. If a prior owner has already committed `closed`, the successor releases its redundant lease and returns that fact without repeating the external effect; only the owner that still observes the same `closing` operation may close and append the terminal fact.
 
 When closing starts, unanswered scheduler wakes receive exact closure receipts. Non-operator wake admission cannot open or reopen a Mission occurrence. A draft, closing, or closed occurrence produces its typed domain outcome without a parallel Mission status row.
 
@@ -247,7 +277,7 @@ Worker completion is delivered by the dispatching runtime's own in-process owner
 
 The same scan closes the opposite gap. A dispatch is settled before its outcome is handed to the Orchestrator, so a failure in between leaves a settled lineage — invisible to abandonment recovery, which looks for unsettled work — that woke nothing. Every ingress reduces to `resolved`, no timer is owed, and the Task rests permanently behind a database that looks healthy. A settled lineage with no ingress carrying its outcome is therefore replayed, keyed to the settlement artifact so the replay collapses through the ingress source index.
 
-**Owner liveness is durable, never process-local.** Deciding that a worker is abandoned destroys live work if it is wrong, and two backends may share one database, where each sees an empty local registry for every dispatch the other owns. Each runtime process therefore renews one `runtime_process` lease, each lineage records the process occurrence that owes its delivery, and "the owner is gone" means that occurrence's lease has expired. Local registries remain a fast path for this process's own lineages, where memory is authoritative; a lineage written before the claim existed is presumed live for one lease period after its commit. The lineage payload is strict, so a fleet sharing one database upgrades together.
+**Owner liveness is durable, never process-local or Project-owned.** Deciding that a worker is abandoned destroys live work if it is wrong, and two backends may share one database, where each sees an empty local registry for every dispatch the other owns. Each runtime process therefore owns exactly one fenced `runtime_process` lease even when it serves several Projects: the first Task-control driver acquires the process receipt, later Project drivers join the same in-process reference owner, intermediate Project disposal leaves it live, and only the final reference publishes graceful expiry. Physical acquire, renewal, assertion and release use the canonical control-lease primitive. Renewal or assertion fence loss is absorbing for that process owner; explicit requests, queued scan passes and activation admission refuse new work instead of reacquiring an occurrence that peers may already have treated as dead. Each lineage records the process occurrence that owes its delivery, and "the owner is gone" means that exact occurrence lease has expired. Local registries remain a fast path for this process's own lineages, where memory is authoritative; a lineage written before the claim existed is presumed live for one lease period after its commit. The lineage payload is strict, so a fleet sharing one database upgrades together.
 
 ### Wake totality
 
@@ -264,7 +294,7 @@ A Host fault is local to the ingress that observed it. It executes nothing — t
 
 ### Well-founded retry
 
-Retry budgets are frozen per ingress, but an infrastructure failure mints a *new* ingress, and each arrives with a full budget. A worker failing the same way every time therefore had no bound at all, and each cycle cost a whole Orchestrator Turn. Automatic retry must be quantified over something the retry cannot create, so the infrastructure-failure budget is per **epoch** — which changes only when an operator reopens the Task. Beyond it the failure is still recorded and surfaced; only the wake is suppressed. Recovery facts carry deterministic identities so a crash between settlement and acceptance replays to the same artifact and dedupes through the ingress source index, rather than minting a second wake with a second budget.
+Retry budgets are frozen per ingress, but an infrastructure failure mints a *new* ingress, and each arrives with a full budget. A worker failing the same way every time therefore had no bound at all, and each cycle cost a whole Orchestrator Turn. Automatic retry must be quantified over something the retry cannot create, so the infrastructure-failure budget is per **epoch** — which changes only at one of the two canonical reopen authorities above. Beyond it the failure is still recorded and surfaced; only the wake is suppressed. Recovery facts carry deterministic identities so a crash between settlement and acceptance replays to the same artifact and dedupes through the ingress source index, rather than minting a second wake with a second budget.
 
 The budget binds every path back in, not just the original wake. A settlement recorded before its wake was suppressed is later observed by the settled-undelivered recovery sweep, and an infrastructure settlement re-entering there is routed through the same infrastructure-failure gate — never as a generic recovery wake, which would continue the exact loop the budget terminates at one wake per crash cycle under a different event name. A suppressed re-entry closes the dispatch: the budget's own surfaced gate is its durable trace, and the sweep stops re-checking it.
 

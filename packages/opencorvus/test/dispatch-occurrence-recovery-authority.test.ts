@@ -46,15 +46,16 @@ describe("dispatch occurrence recovery authority", () => {
         })
         const taskID = Identifier.ascending("task")
         const request = "Prove the immutable authority boundary for dispatch recovery"
-        const root = await Session.create({
+        const root = Session.prepareRootNext({
           kind: "root",
+          directory: Instance.directory,
           title: "Dispatch occurrence recovery authority",
           metadata: { configOverlay: { prompt_profile: { active: scheduler.packageRevision.id } } },
         })
         const now = Date.now()
         persistTask({
           taskID,
-          sessionID: root.id,
+          rootSession: root,
           now,
           title: "Dispatch occurrence recovery authority",
           request,

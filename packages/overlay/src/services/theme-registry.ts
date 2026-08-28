@@ -39,3 +39,19 @@ export function sanitizeThemeForHost(value: unknown, host: HostKind = getHostTra
   if (isThemeAllowedForHost(value, host)) return value
   throw new TypeError("overlay theme is invalid for the active host")
 }
+
+/**
+ * The requested theme resolved by the pre-module bootstrap. `index.html` owns
+ * acceptance-over-native precedence and hands the validated identifier to the
+ * module graph through `data-opencorvus-startup-theme`; the renderer never
+ * copies it onto a writable JavaScript global. Counterpart to `runtimeLocale()`.
+ *
+ * Unknown values fall back rather than throw, unlike `sanitizeThemeForHost`:
+ * this is untrusted startup input read before anything renders, and a bad
+ * value must not take the window down with it.
+ */
+export function runtimeStartupTheme(): OverlayThemeID {
+  const injected = typeof document === "undefined" ? "" : document.documentElement.dataset.opencorvusStartupTheme
+  const value = String(injected || "").trim()
+  return isThemeAllowedForHost(value, getHostTransport().kind) ? value : DEFAULT_THEME_ID
+}

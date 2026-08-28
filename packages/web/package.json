@@ -26,8 +26,9 @@
     "preview": "astro preview",
     "astro": "astro",
     "qa:shots": "bun run ./qa/restyle/shoot.ts",
-    "test:copy": "bun test ./test/landing-copy.test.ts",
-    "test:web": "bun test ./test/tokens.parity.test.ts ./test/landing-copy.test.ts ./test/platform-facts.test.ts ./test/brand-assets.test.ts ./test/lander-assets.test.ts",
+    "test:compositions": "bun test ./test/squad-compositions.test.ts",
+    "test:benchmark": "bun test ./test/landing-benchmark.test.ts",
+    "test:web": "bun test ./test/tokens.parity.test.ts ./test/platform-facts.test.ts ./test/squad-compositions.test.ts ./test/landing-benchmark.test.ts ./test/brand-assets.test.ts ./test/lander-assets.test.ts",
     "test:style": "bun test ./test/style-discipline.test.ts",
     "test:assets": "bun test ./test/brand-assets.test.ts ./test/lander-assets.test.ts"
   },

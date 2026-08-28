@@ -7,7 +7,6 @@ import { Global } from "@/global"
 import { Vcs } from "@/project/vcs"
 import { streamCommitMessage } from "@/project/vcs-commit-message"
 import { Instance } from "@/project/instance"
-import { LSP } from "@/lsp"
 import { Command } from "@/command"
 import { Format } from "@/format"
 import { Log } from "@/util/log"
@@ -49,8 +48,12 @@ import { InteractiveArtifactRoutes } from "./interactive-artifact"
 import { PluginRoutes } from "./plugin"
 import { ComputerRoutes } from "./computer"
 import { QuickNoteRoutes } from "@/quicknote/routes"
-import { hasServerShutdownHandler, requestServerShutdown } from "../shutdown"
-import { canRestartServer, startServerRestart } from "../restart"
+import {
+  ServerLifecycleOccurrenceResponse,
+  admitServerRestart,
+  admitServerShutdown,
+  serverLifecycleOccurrence,
+} from "../lifecycle-occurrence"
 import { AppDocumentation } from "./documentation"
 import { requestID, serverErrorResponse } from "../error-handler"
 import { writeVcsCommitMessageStreamError } from "../vcs-stream-error"
@@ -188,18 +191,18 @@ export function AppRoutes(root: Hono) {
         operationId: "server.shutdown",
         responses: {
           200: {
-            description: "Shutdown initiated",
+            description: "Shutdown admitted",
             content: {
               "application/json": {
-                schema: resolver(z.object({ ok: z.boolean() })),
+                schema: resolver(z.object({ ok: z.boolean(), occurrenceID: z.string().optional() })),
               },
             },
           },
           409: {
-            description: "Supervisor process occurrence does not own this backend",
+            description: "Supervisor identity mismatch, or a live lifecycle occurrence owns the process",
             content: {
               "application/json": {
-                schema: resolver(z.object({ ok: z.boolean() })),
+                schema: resolver(z.object({ ok: z.boolean(), occurrenceID: z.string().optional() })),
               },
             },
           },
@@ -207,10 +210,6 @@ export function AppRoutes(root: Hono) {
         },
       }),
       async (c) => {
-        if (!hasServerShutdownHandler()) {
-          log.warn("shutdown requested without registered shutdown handler")
-          return c.json({ ok: false }, 503)
-        }
         const declaredSource = c.req.header("x-opencorvus-shutdown-source")
         const source = declaredSource === "tauri-supervisor" ? declaredSource : "http-client"
         const processOccurrenceID = c.req.header("x-opencorvus-process-occurrence")?.trim()
@@ -221,15 +220,21 @@ export function AppRoutes(root: Hono) {
           log.warn("shutdown supervisor occurrence identity mismatch", { processOccurrenceID })
           return c.json({ ok: false }, 409)
         }
-        log.info("shutdown requested", { source, processOccurrenceID })
-        setTimeout(() => {
-          requestServerShutdown({
-            source,
-            reason: "http.shutdown",
-            ...(processOccurrenceID ? { processOccurrenceID } : {}),
-          })
-        }, 25)
-        return c.json({ ok: true })
+        const admission = admitServerShutdown({
+          source,
+          reason: "http.shutdown",
+          ...(processOccurrenceID ? { processOccurrenceID } : {}),
+        })
+        if (!admission.admitted) {
+          if (admission.reason === "unavailable") {
+            log.warn("shutdown requested without registered shutdown handler")
+            return c.json({ ok: false }, 503)
+          }
+          log.warn("shutdown refused by a live lifecycle occurrence", { live: admission.live })
+          return c.json({ ok: false, occurrenceID: admission.live.id }, 409)
+        }
+        log.info("shutdown admitted", { source, processOccurrenceID, occurrenceID: admission.occurrence.id })
+        return c.json({ ok: true, occurrenceID: admission.occurrence.id })
       },
     )
     .post(
@@ -240,10 +245,18 @@ export function AppRoutes(root: Hono) {
         operationId: "server.restart",
         responses: {
           200: {
-            description: "Restart initiated",
+            description: "Restart admitted",
             content: {
               "application/json": {
-                schema: resolver(z.object({ ok: z.boolean() })),
+                schema: resolver(z.object({ ok: z.boolean(), occurrenceID: z.string().optional() })),
+              },
+            },
+          },
+          409: {
+            description: "A live lifecycle occurrence owns the process",
+            content: {
+              "application/json": {
+                schema: resolver(z.object({ ok: z.boolean(), occurrenceID: z.string().optional() })),
               },
             },
           },
@@ -251,18 +264,52 @@ export function AppRoutes(root: Hono) {
         },
       }),
       async (c) => {
-        if (!canRestartServer()) {
-          log.warn("restart requested without registered restart handler")
-          return c.json({ ok: false }, 503)
+        const admission = admitServerRestart("server.restart")
+        if (!admission.admitted) {
+          if (admission.reason === "unavailable") {
+            log.warn("restart requested without registered restart handler")
+            return c.json({ ok: false }, 503)
+          }
+          log.warn("restart refused by a live lifecycle occurrence", { live: admission.live })
+          return c.json({ ok: false, occurrenceID: admission.live.id }, 409)
         }
-        log.info("restart accepted; spawning replacement after the HTTP response releases the listener")
+        log.info("restart admitted; spawning replacement after the HTTP response releases the listener", {
+          occurrenceID: admission.occurrence.id,
+        })
         c.header("connection", "close")
-        setTimeout(() => {
-          void startServerRestart("server.restart").catch((error) => {
-            log.error("restart child failed before shutdown handoff", { error })
-          })
-        }, 25)
-        return c.json({ ok: true })
+        return c.json({ ok: true, occurrenceID: admission.occurrence.id })
+      },
+    )
+    .get(
+      "/lifecycle/:occurrenceID",
+      describeRoute({
+        summary: "Get a server lifecycle occurrence",
+        description:
+          "Return the state of an admitted shutdown or restart occurrence. A completed shutdown is unobservable from inside the process, so `executing` is the last state a successful one shows.",
+        operationId: "server.lifecycle",
+        responses: {
+          200: {
+            description: "Lifecycle occurrence state",
+            content: {
+              "application/json": {
+                schema: resolver(ServerLifecycleOccurrenceResponse),
+              },
+            },
+          },
+          404: {
+            description: "Unknown lifecycle occurrence",
+            content: {
+              "application/json": {
+                schema: resolver(z.object({ ok: z.boolean() })),
+              },
+            },
+          },
+        },
+      }),
+      async (c) => {
+        const occurrence = serverLifecycleOccurrence(c.req.param("occurrenceID"))
+        if (!occurrence) return c.json({ ok: false }, 404)
+        return c.json(ServerLifecycleOccurrenceResponse.parse(occurrence))
       },
     )
     .route("/", EngineRoutes())
@@ -762,27 +809,6 @@ export function AppRoutes(root: Hono) {
       }),
       async (c) => {
         return c.json(await PrimaryAssistantRegistry.list())
-      },
-    )
-    .get(
-      "/lsp",
-      describeRoute({
-        summary: "Get LSP status",
-        description: "Compatibility endpoint. Language Server Protocol runtimes are disabled, so this returns an empty array.",
-        operationId: "lsp.status",
-        responses: {
-          200: {
-            description: "LSP server status",
-            content: {
-              "application/json": {
-                schema: resolver(LSP.Status.array()),
-              },
-            },
-          },
-        },
-      }),
-      async (c) => {
-        return c.json(await LSP.status())
       },
     )
     .get(

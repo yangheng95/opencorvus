@@ -69,6 +69,71 @@ export type ApiAuth = {
   type: "api"
 }
 
+export type AssistantMessage = {
+  acceptedInputMessageIDs?: Array<string>
+  activationID?: string
+  agent: string
+  author: string
+  billing?: BillingCoverage
+  convergenceFailure?: {
+    failure_occurrence: {
+      assistant_message_id: string
+      error_name: string
+      session_id: string
+    }
+    inspection_error?: string
+    unconverged_part_ids: Array<string>
+    write_errors: Array<{
+      message: string
+      part_id: string
+    }>
+  }
+  cost: number
+  error?:
+    | ProviderAuthError
+    | UnknownError
+    | MessageOutputLengthError
+    | MessageAbortedError
+    | StructuredOutputPayloadError
+    | SnapshotIntegrityError
+    | SnapshotEmptyTreeError
+    | ContextOverflowError
+    | CompactionContinuationMissingError
+    | PromptBudgetOverflowError
+    | ToolSchemaBudgetError
+    | ModelImageInputTooLargeError
+    | ApiError
+  failureOccurrence?: {
+    assistant_message_id: string
+    error_name: string
+    session_id: string
+  }
+  finish?: string
+  id: string
+  modelID: string
+  observationFailures?: Array<{
+    message: string
+    phase: "snapshot_patch"
+  }>
+  orderKey?: string
+  parentID: string
+  path: {
+    cwd: string
+    root: string
+  }
+  providerID: string
+  role: "assistant"
+  sessionID: string
+  structured?: unknown
+  summary?: boolean
+  time: {
+    completed?: number
+    created: number
+  }
+  tokens: TokenUsage
+  variant?: string
+}
+
 export type Auth = OAuth | ApiAuth | WellKnownAuth
 
 export type AuthReadError = {
@@ -182,6 +247,8 @@ export type ChatCapabilitySettings = {
       license?: string
       location: string
       managed: boolean
+      market_hash?: string
+      market_id?: string
       metadata?: {
         [key: string]: string
       }
@@ -199,7 +266,7 @@ export type ChatCapabilitySettings = {
         level: "low" | "medium" | "high"
       }
       source?: string
-      source_type: "builtin" | "managed_git" | "config_path" | "config_url" | "external" | "unknown"
+      source_type: "builtin" | "managed_market" | "managed_git" | "config_path" | "config_url" | "external" | "unknown"
       trust: "builtin" | "official" | "curated" | "community" | "local" | "external" | "unknown"
       writable: boolean
     }>
@@ -478,28 +545,6 @@ export type Config = {
   locale?: "en-US" | "zh-CN"
   logLevel?: LogLevel
   /**
-   * Deprecated compatibility field. Language Server Protocol runtimes are disabled and this value is ignored.
-   */
-  lsp?:
-    | false
-    | {
-        [key: string]:
-          | {
-              disabled: true
-            }
-          | {
-              command: Array<string>
-              disabled?: boolean
-              env?: {
-                [key: string]: string
-              }
-              extensions?: Array<string>
-              initialization?: {
-                [key: string]: unknown
-              }
-            }
-      }
-  /**
    * MCP (Model Context Protocol) server configurations
    */
   mcp?: {
@@ -745,8 +790,6 @@ export type Event =
   | EventInteractionRequested
   | EventInteractionResolved
   | EventInteractiveArtifactMcpAppLifecycleChanged
-  | EventLspClientDiagnostics
-  | EventLspUpdated
   | EventMailboxAcknowledged
   | EventMailboxMessage
   | EventMcpAuthRequired
@@ -898,6 +941,7 @@ export type EventArtifactPersisted = {
       | "dispatch_lineage"
       | "dispatch_settlement"
       | "mission_acceptance_resume_receipt"
+      | "task_acceptance_ledger"
       | "task_checkpoint_settlement"
       | "task_auxiliary_settlement"
       | "exploration"
@@ -1028,21 +1072,6 @@ export type EventInteractiveArtifactMcpAppLifecycleChanged = {
     sessionID: string
   }
   type: "interactive-artifact.mcp-app.lifecycle.changed"
-}
-
-export type EventLspClientDiagnostics = {
-  properties: {
-    path: string
-    serverID: string
-  }
-  type: "lsp.client.diagnostics"
-}
-
-export type EventLspUpdated = {
-  properties: {
-    [key: string]: unknown
-  }
-  type: "lsp.updated"
 }
 
 export type EventMailboxAcknowledged = {
@@ -1198,6 +1227,7 @@ export type EventMessagePartDelta = {
     field: string
     messageID: string
     partID: string
+    partType: "text" | "reasoning" | "tool"
     sessionID: string
   }
   type: "message.part.delta"
@@ -1207,6 +1237,7 @@ export type EventMessagePartRemoved = {
   properties: {
     messageID: string
     partID: string
+    partType: string
     sessionID: string
   }
   type: "message.part.removed"
@@ -1222,6 +1253,7 @@ export type EventMessagePartUpdated = {
 
 export type EventMessageRemoved = {
   properties: {
+    info: VisibleMessage
     messageID: string
     sessionID: string
   }
@@ -2856,13 +2888,6 @@ export type JsonSchema = {
   [key: string]: unknown
 }
 
-export type LspStatus = {
-  id: string
-  name: string
-  root: string
-  status: "connected" | "error"
-}
-
 export type LineChannelConfig = {
   /**
    * Enable LINE integration
@@ -3842,7 +3867,6 @@ export type PermissionConfig =
       external_directory?: PermissionRuleConfig
       glob?: PermissionRuleConfig
       list?: PermissionRuleConfig
-      lsp?: PermissionRuleConfig
       question?: PermissionActionConfig
       read?: PermissionRuleConfig
       search_code?: PermissionRuleConfig
@@ -4019,6 +4043,7 @@ export type ProviderAccountUsageResponse =
     }
 
 export type ProviderAuthAuthorization = {
+  flowID: string
   instructions: string
   method: "auto" | "code"
   url: string
@@ -4480,6 +4505,14 @@ export type ServerConfig = {
   publicUrl?: string
 }
 
+export type ServerLifecycleOccurrence = {
+  error?: string
+  id: string
+  kind: "shutdown" | "restart"
+  state: "executing" | "failed"
+  timeAdmitted: number
+}
+
 export type Session = {
   directory: string
   id: string
@@ -4541,6 +4574,234 @@ export type SessionConfig = {
   }
 }
 
+export type SessionConnectedEvent = {
+  emittedAt: number
+  event_id: string
+  notify?: {
+    badge?: boolean
+    tier: 1 | 2 | 3
+  }
+  orderKey: string
+  payload: {
+    conversationSnapshot: SessionConversationConnectionSnapshot
+    sessionID: string
+  }
+  sequence?: number
+  session_id: string
+  summary: string
+  timestamp: number
+  type: "session.connected"
+}
+
+export type SessionConversationConnectionSnapshot = {
+  history: {
+    hasMore: boolean
+    limit: number
+    oldestMessageID?: string | null
+    oldestOrderKey: string | null
+    oldestTimestamp: number | null
+  }
+  transcript: Array<{
+    info: VisibleMessage & {
+      agentID: string
+      channel: string
+      originSource: string
+      parentSessionID?: string
+      participantEvidence?: unknown
+      resolvedRole: string
+      sessionAgentID: string
+    }
+    parts: Array<VisibleMessagePart>
+  }>
+  view: {
+    messages: Array<{
+      agentID: string
+      inputMessageID: string
+      messageID: string
+      orderKey: string
+      parentSessionID?: string
+      placement: "top_level"
+      sessionAgentID: string
+      sessionID: string
+      stage: string
+      time: number
+    }>
+    sessions: Array<
+      | {
+          activity: Array<
+            | {
+                id: string
+                messageID: string
+                orderKey: string
+                text: string
+                type: "text"
+              }
+            | {
+                callID?: string
+                id: string
+                messageID: string
+                orderKey: string
+                state: {
+                  [key: string]: unknown
+                }
+                tool: string
+                type: "tool"
+              }
+            | {
+                files: Array<unknown>
+                id: string
+                messageID: string
+                orderKey: string
+                type: "patch"
+              }
+            | {
+                filename: string
+                id: string
+                messageID: string
+                orderKey: string
+                type: "file"
+              }
+            | {
+                id: string
+                message: string
+                messageID: string
+                orderKey: string
+                title?: string
+                type: "part-error"
+              }
+          >
+          agentID: string
+          errorReason?: string
+          executionID: string
+          firstMessageTime: number
+          firstObservedAt?: number
+          inputMessageID: string
+          inputPreview?: {
+            messageID: string
+            observedAt: number
+            source: "user_message"
+            text: string
+          }
+          lastDisplayMessageID?: string
+          lastMessageTime: number
+          lastObservedAt?: number
+          messageIDs: Array<string>
+          orderKey: string
+          parentSessionID?: string
+          placement: "top_level"
+          sessionID: string
+          stage: string
+          status?: "pending" | "running" | "idle" | "completed" | "error" | "skipped"
+          todoUpdatedAt: number
+          todos: Array<Todo>
+        }
+      | {
+          activity: Array<
+            | {
+                id: string
+                messageID: string
+                orderKey: string
+                text: string
+                type: "text"
+              }
+            | {
+                callID?: string
+                id: string
+                messageID: string
+                orderKey: string
+                state: {
+                  [key: string]: unknown
+                }
+                tool: string
+                type: "tool"
+              }
+            | {
+                files: Array<unknown>
+                id: string
+                messageID: string
+                orderKey: string
+                type: "patch"
+              }
+            | {
+                filename: string
+                id: string
+                messageID: string
+                orderKey: string
+                type: "file"
+              }
+            | {
+                id: string
+                message: string
+                messageID: string
+                orderKey: string
+                title?: string
+                type: "part-error"
+              }
+          >
+          agentID: string
+          errorReason?: string
+          firstMessageTime: number
+          firstObservedAt?: number
+          inputPreview?: {
+            messageID: string
+            observedAt: number
+            source: "user_message"
+            text: string
+          }
+          lastDisplayMessageID?: string
+          lastMessageTime: number
+          lastObservedAt?: number
+          messageIDs: Array<string>
+          orderKey: string
+          parentSessionID?: string
+          placement: "top_level"
+          sessionID: string
+          stage: string
+          status?: "pending" | "running" | "idle" | "completed" | "error" | "skipped"
+          todoUpdatedAt: number
+          todos: Array<Todo>
+        }
+    >
+    topLevelSessionIDs: Array<string>
+  }
+}
+
+export type SessionProtocolEvent = {
+  emittedAt: number
+  event_id: string
+  notify?: {
+    badge?: boolean
+    tier: 1 | 2 | 3
+  }
+  orderKey: string
+  payload: {
+    [key: string]: unknown
+  }
+  sequence?: number
+  session_id: string
+  summary: string
+  timestamp: number
+  type:
+    | "agent.execution.lifecycle"
+    | "config.changed"
+    | "message.updated"
+    | "message.moved"
+    | "message.removed"
+    | "message.part.updated"
+    | "message.part.delta"
+    | "message.part.removed"
+    | "permission.asked"
+    | "permission.replied"
+    | "question.asked"
+    | "question.replied"
+    | "question.rejected"
+    | "question.expired"
+    | "question.abandoned"
+    | "session.diff"
+    | "session.error"
+    | "session.heartbeat"
+}
+
 export type SessionStatus =
   | {
       type: "idle"
@@ -4560,6 +4821,8 @@ export type SessionStatus =
       type: "terminal"
     }
 
+export type SessionStreamEvent = SessionConnectedEvent | SessionProtocolEvent
+
 export type SignalChannelConfig = {
   /**
    * Signal sender account or number
@@ -4573,6 +4836,13 @@ export type SignalChannelConfig = {
    * Signal service URL
    */
   service?: string
+}
+
+export type SkillMarketUpstreamError = {
+  data: {
+    [key: string]: unknown
+  }
+  name: "SkillMarketUpstreamError"
 }
 
 export type SlackChannelConfig = {
@@ -4713,15 +4983,6 @@ export type StructuredOutputPayloadError = {
     reason: string
   }
   name: "StructuredOutputPayloadError"
-}
-
-export type Symbol = {
-  kind: number
-  location: {
-    range: Range
-    uri: string
-  }
-  name: string
 }
 
 export type SymbolSource = {
@@ -5229,6 +5490,7 @@ export type VisibleMessage =
       variant?: string
     }
   | {
+      acceptedInputMessageIDs?: Array<string>
       activationID?: string
       agent: string
       author: string
@@ -5622,6 +5884,8 @@ export type WorkCapabilitySettings = {
       license?: string
       location: string
       managed: boolean
+      market_hash?: string
+      market_id?: string
       metadata?: {
         [key: string]: string
       }
@@ -5639,7 +5903,7 @@ export type WorkCapabilitySettings = {
         level: "low" | "medium" | "high"
       }
       source?: string
-      source_type: "builtin" | "managed_git" | "config_path" | "config_url" | "external" | "unknown"
+      source_type: "builtin" | "managed_market" | "managed_git" | "config_path" | "config_url" | "external" | "unknown"
       trust: "builtin" | "official" | "curated" | "community" | "local" | "external" | "unknown"
       writable: boolean
     }>
@@ -5859,7 +6123,12 @@ export type AttachmentGetData = {
     projectID: string
     name: string
   }
-  query?: never
+  query?: {
+    /**
+     * Serve a derived rendition of the attachment instead of the stored bytes.
+     */
+    variant?: string
+  }
   url: "/attachment/{projectID}/{name}"
 }
 
@@ -6035,7 +6304,16 @@ export type ChannelAttachmentGetData = {
   path: {
     id: string
   }
-  query?: never
+  query?: {
+    /**
+     * Expiry the signature covers; the URL is unauthorized once it passes.
+     */
+    e?: string
+    /**
+     * Signature authorizing this attachment read.
+     */
+    s?: string
+  }
   url: "/channel/attachment/{id}"
 }
 
@@ -15436,28 +15714,6 @@ export type FindFilesResponses = {
 
 export type FindFilesResponse = FindFilesResponses[keyof FindFilesResponses]
 
-export type FindSymbolsData = {
-  body?: never
-  path?: never
-  query: {
-    /**
-     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
-     */
-    directory?: string
-    query: string
-  }
-  url: "/find/symbol"
-}
-
-export type FindSymbolsResponses = {
-  /**
-   * Symbols
-   */
-  200: Array<Symbol>
-}
-
-export type FindSymbolsResponse = FindSymbolsResponses[keyof FindSymbolsResponses]
-
 export type FormatterStatusData = {
   body?: never
   path?: never
@@ -16154,19 +16410,116 @@ export type GatewayControlActionData = {
         user_id?: string
       }
     | {
-        action: "resume_task"
         /**
-         * Host-minted references returned by complete source Task reads earlier in this Mission Turn.
+         * Exact failed or unresolved criteria, preserved acceptances, current ledger revision, workflow ownership, and completely read evidence for the next execution epoch. The Host renders the visible Mission repair Message from this single structure.
          */
-        evidence_read_refs: Array<string>
+        acceptance_gap: {
+          criteria: Array<
+            | {
+                criterion_id: string
+                disposition: "failed" | "unresolved" | "stale_evidence"
+                finding: string
+                invalidating_evidence_read_refs: Array<string>
+                irreducible_blocker_evidence_read_refs: Array<string>
+                observation_evidence_read_refs: Array<string>
+                repair_action: {
+                  expected_evidence_kind: string
+                  operation: string
+                  parameters: {
+                    [key: string]: unknown
+                  }
+                  target: string
+                }
+                repair_evidence_read_refs: Array<string>
+                resolution_evidence_read_refs: Array<string>
+                responsibility:
+                  | {
+                      kind: "workflow_node"
+                      workflow_id: string
+                      workflow_node_id: string
+                    }
+                  | {
+                      agent_id: string
+                      dispatch_lineage_id: string
+                      kind: "direct_dispatch"
+                      package_revision: {
+                        id: string
+                        namespace: string
+                        package_digest: string
+                        project_id: string | null
+                        scope: "built_in" | "project" | "global"
+                        version: string
+                      }
+                    }
+                state: "open"
+              }
+            | {
+                criterion_id: string
+                finding: string
+                invalidating_evidence_read_refs: Array<string>
+                irreducible_blocker_evidence_read_refs: Array<string>
+                observation_evidence_read_refs: Array<string>
+                repair_evidence_read_refs: Array<string>
+                resolution_evidence_read_refs: Array<string>
+                responsibility:
+                  | {
+                      kind: "workflow_node"
+                      workflow_id: string
+                      workflow_node_id: string
+                    }
+                  | {
+                      agent_id: string
+                      dispatch_lineage_id: string
+                      kind: "direct_dispatch"
+                      package_revision: {
+                        id: string
+                        namespace: string
+                        package_digest: string
+                        project_id: string | null
+                        scope: "built_in" | "project" | "global"
+                        version: string
+                      }
+                    }
+                state: "accepted"
+              }
+            | {
+                criterion_id: string
+                finding: string
+                invalidating_evidence_read_refs: Array<string>
+                irreducible_blocker_evidence_read_refs: Array<string>
+                observation_evidence_read_refs: Array<string>
+                repair_evidence_read_refs: Array<string>
+                resolution_evidence_read_refs: Array<string>
+                responsibility:
+                  | {
+                      kind: "workflow_node"
+                      workflow_id: string
+                      workflow_node_id: string
+                    }
+                  | {
+                      agent_id: string
+                      dispatch_lineage_id: string
+                      kind: "direct_dispatch"
+                      package_revision: {
+                        id: string
+                        namespace: string
+                        package_digest: string
+                        project_id: string | null
+                        scope: "built_in" | "project" | "global"
+                        version: string
+                      }
+                    }
+                state: "blocked"
+              }
+          >
+          current_ledger_revision_artifact_id: string | null
+          gap_id: string
+        }
+        action: "resume_task"
         /**
          * Completed or failed source Task in the current Mission lineage.
          */
         taskID: string
-        /**
-         * Visible Mission-authored repair request describing the observed acceptance gap.
-         */
-        text: string
       }
     | {
         action: "reply_interaction"
@@ -17126,6 +17479,57 @@ export type GlobalChatCreateResponses = {
 
 export type GlobalChatCreateResponse = GlobalChatCreateResponses[keyof GlobalChatCreateResponses]
 
+export type GlobalChatStartData = {
+  body: {
+    attachments?: Array<{
+      data: string
+      filename?: string
+      mime: string
+    }>
+    model?: string
+    requestID: string
+    text: string
+  }
+  path?: never
+  query?: never
+  url: "/global/chat/start"
+}
+
+export type GlobalChatStartErrors = {
+  /**
+   * Bad request
+   */
+  400: BadRequestError
+  /**
+   * Global Chat start request identity is already bound to another payload
+   */
+  409: {
+    data: {
+      [key: string]: unknown
+    }
+    name: "GlobalChatStartIdentityConflictError"
+  }
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
+}
+
+export type GlobalChatStartError = GlobalChatStartErrors[keyof GlobalChatStartErrors]
+
+export type GlobalChatStartResponses = {
+  /**
+   * Global Chat start accepted
+   */
+  202: {
+    messageID: string
+    requestID: string
+    session: Session
+  }
+}
+
+export type GlobalChatStartResponse = GlobalChatStartResponses[keyof GlobalChatStartResponses]
+
 export type GlobalComposerExpertSquadsData = {
   body?: never
   path?: never
@@ -17859,9 +18263,43 @@ export type GlobalProvidersOauthAuthorizeData = {
 
 export type GlobalProvidersOauthAuthorizeErrors = {
   /**
-   * Bad request
+   * Provider OAuth authorization request rejected
    */
-  400: BadRequestError
+  400:
+    | BadRequestError
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "ProviderAuthProviderNotFound"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "ProviderAuthMethodNotFound"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "ProviderAuthMethodAuthorizationTypeMismatch"
+      }
+  /**
+   * Provider OAuth exchange is already active
+   */
+  409:
+    | BadRequestError
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "ProviderAuthOAuthExchangeActiveError"
+      }
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
 }
 
 export type GlobalProvidersOauthAuthorizeError =
@@ -17880,6 +18318,7 @@ export type GlobalProvidersOauthAuthorizeResponse =
 export type GlobalProvidersOauthCallbackData = {
   body: {
     code?: string
+    flowID: string
     method: number
   }
   path: {
@@ -17894,6 +18333,35 @@ export type GlobalProvidersOauthCallbackErrors = {
    * Bad request
    */
   400: BadRequestError
+  /**
+   * Provider OAuth callback occurrence conflicts with the current credential or settlement
+   */
+  409:
+    | BadRequestError
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "ProviderCredentialExchangeReplacedError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "ProviderCredentialExchangeFailedError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "ProviderAuthOAuthExchangeActiveError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "ProviderAuthOAuthExchangeUncertainError"
+      }
   /**
    * Saved Provider credentials could not be observed safely
    */
@@ -18005,21 +18473,158 @@ export type GlobalSkillMarketResponses = {
    * Skill market entries
    */
   200: Array<{
+    api_origin: "https://skills.sh"
     description: string
-    homepage: string
-    id: string
-    install_kind: "git" | "url" | "manual"
-    installed: boolean
-    name: string
-    notes?: string
-    provider: string
-    recommended_policy: "allow" | "deny"
-    source?: string
-    trust: "official" | "curated" | "community"
+    exact_install: true
+    homepage: "https://skills.sh"
+    id: "skills-sh"
+    name: "skills.sh"
+    provider: "skills.sh"
+    recommended_policy: "deny"
+    searchable: true
+    trust: "curated"
   }>
 }
 
 export type GlobalSkillMarketResponse = GlobalSkillMarketResponses[keyof GlobalSkillMarketResponses]
+
+export type GlobalSkillMarketDetailData = {
+  body?: never
+  path?: never
+  query: {
+    id: string
+  }
+  url: "/global/skill/market/detail"
+}
+
+export type GlobalSkillMarketDetailErrors = {
+  /**
+   * Bad request
+   */
+  400: BadRequestError
+  /**
+   * Upstream service failure
+   */
+  502: SkillMarketUpstreamError
+}
+
+export type GlobalSkillMarketDetailError = GlobalSkillMarketDetailErrors[keyof GlobalSkillMarketDetailErrors]
+
+export type GlobalSkillMarketDetailResponses = {
+  /**
+   * Validated Skill Market candidate detail
+   */
+  200: {
+    description: string
+    files: Array<{
+      path: string
+      size: number
+    }>
+    hash: string
+    homepage: string
+    id: string
+    installed: boolean
+    name: string
+    recommended_policy: "allow" | "deny"
+    repository: string
+    risk: {
+      has_agents: boolean
+      has_references: boolean
+      has_scripts: boolean
+      has_templates: boolean
+      level: "low" | "medium" | "high"
+    }
+    skill_id: string
+    source: string
+    trust: "builtin" | "official" | "curated" | "community" | "local" | "external" | "unknown"
+    upstream_hash?: string
+  }
+}
+
+export type GlobalSkillMarketDetailResponse = GlobalSkillMarketDetailResponses[keyof GlobalSkillMarketDetailResponses]
+
+export type GlobalSkillMarketInstallData = {
+  body: {
+    expected_hash: string
+    id: string
+    policy?: "allow" | "deny"
+  }
+  path?: never
+  query?: never
+  url: "/global/skill/market/install"
+}
+
+export type GlobalSkillMarketInstallErrors = {
+  /**
+   * Bad request
+   */
+  400: BadRequestError
+  /**
+   * Upstream service failure
+   */
+  502: SkillMarketUpstreamError
+}
+
+export type GlobalSkillMarketInstallError = GlobalSkillMarketInstallErrors[keyof GlobalSkillMarketInstallErrors]
+
+export type GlobalSkillMarketInstallResponses = {
+  /**
+   * Installed Skill Market candidate
+   */
+  200: {
+    available: "next_turn"
+    hash: string
+    id: string
+    name: string
+    path: string
+    policy: "allow" | "deny"
+    source: string
+  }
+}
+
+export type GlobalSkillMarketInstallResponse =
+  GlobalSkillMarketInstallResponses[keyof GlobalSkillMarketInstallResponses]
+
+export type GlobalSkillMarketSearchData = {
+  body?: never
+  path?: never
+  query: {
+    query: string
+    limit?: number
+  }
+  url: "/global/skill/market/search"
+}
+
+export type GlobalSkillMarketSearchErrors = {
+  /**
+   * Bad request
+   */
+  400: BadRequestError
+  /**
+   * Upstream service failure
+   */
+  502: SkillMarketUpstreamError
+}
+
+export type GlobalSkillMarketSearchError = GlobalSkillMarketSearchErrors[keyof GlobalSkillMarketSearchErrors]
+
+export type GlobalSkillMarketSearchResponses = {
+  /**
+   * Skill Market candidates
+   */
+  200: Array<{
+    homepage: string
+    id: string
+    installed: boolean
+    installs: number
+    name: string
+    repository: string
+    skill_id: string
+    source: string
+  }>
+}
+
+export type GlobalSkillMarketSearchResponse = GlobalSkillMarketSearchResponses[keyof GlobalSkillMarketSearchResponses]
 
 export type TaskGlobalListData = {
   body?: never
@@ -18758,6 +19363,35 @@ export type InteractionReplyResponses = {
 
 export type InteractionReplyResponse = InteractionReplyResponses[keyof InteractionReplyResponses]
 
+export type ServerLifecycleData = {
+  body?: never
+  path: {
+    occurrenceID: string
+  }
+  query?: never
+  url: "/lifecycle/{occurrenceID}"
+}
+
+export type ServerLifecycleErrors = {
+  /**
+   * Unknown lifecycle occurrence
+   */
+  404: {
+    ok: boolean
+  }
+}
+
+export type ServerLifecycleError = ServerLifecycleErrors[keyof ServerLifecycleErrors]
+
+export type ServerLifecycleResponses = {
+  /**
+   * Lifecycle occurrence state
+   */
+  200: ServerLifecycleOccurrence
+}
+
+export type ServerLifecycleResponse = ServerLifecycleResponses[keyof ServerLifecycleResponses]
+
 export type LogReadData = {
   body?: never
   path?: never
@@ -18954,27 +19588,6 @@ export type LogTailResponses = {
 }
 
 export type LogTailResponse = LogTailResponses[keyof LogTailResponses]
-
-export type LspStatusData = {
-  body?: never
-  path?: never
-  query?: {
-    /**
-     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
-     */
-    directory?: string
-  }
-  url: "/lsp"
-}
-
-export type LspStatusResponses = {
-  /**
-   * LSP server status
-   */
-  200: Array<LspStatus>
-}
-
-export type LspStatusResponse = LspStatusResponses[keyof LspStatusResponses]
 
 export type MailboxDeleteManyData = {
   body: {
@@ -22577,9 +23190,43 @@ export type ProviderOauthAuthorizeData = {
 
 export type ProviderOauthAuthorizeErrors = {
   /**
-   * Bad request
+   * Provider OAuth authorization request rejected
    */
-  400: BadRequestError
+  400:
+    | BadRequestError
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "ProviderAuthProviderNotFound"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "ProviderAuthMethodNotFound"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "ProviderAuthMethodAuthorizationTypeMismatch"
+      }
+  /**
+   * Provider OAuth exchange is already active
+   */
+  409:
+    | BadRequestError
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "ProviderAuthOAuthExchangeActiveError"
+      }
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
 }
 
 export type ProviderOauthAuthorizeError = ProviderOauthAuthorizeErrors[keyof ProviderOauthAuthorizeErrors]
@@ -22599,6 +23246,10 @@ export type ProviderOauthCallbackData = {
      * OAuth authorization code
      */
     code?: string
+    /**
+     * Exact authorization flow occurrence to finish
+     */
+    flowID: string
     /**
      * Auth method index
      */
@@ -22624,6 +23275,35 @@ export type ProviderOauthCallbackErrors = {
    * Bad request
    */
   400: BadRequestError
+  /**
+   * Provider OAuth callback occurrence conflicts with the current credential or settlement
+   */
+  409:
+    | BadRequestError
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "ProviderCredentialExchangeReplacedError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "ProviderCredentialExchangeFailedError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "ProviderAuthOAuthExchangeActiveError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "ProviderAuthOAuthExchangeUncertainError"
+      }
   /**
    * Saved Provider credentials could not be observed safely
    */
@@ -23128,6 +23808,13 @@ export type ServerRestartData = {
 
 export type ServerRestartErrors = {
   /**
+   * A live lifecycle occurrence owns the process
+   */
+  409: {
+    occurrenceID?: string
+    ok: boolean
+  }
+  /**
    * Shutdown handler unavailable
    */
   503: {
@@ -23139,9 +23826,10 @@ export type ServerRestartError = ServerRestartErrors[keyof ServerRestartErrors]
 
 export type ServerRestartResponses = {
   /**
-   * Restart initiated
+   * Restart admitted
    */
   200: {
+    occurrenceID?: string
     ok: boolean
   }
 }
@@ -23661,7 +24349,10 @@ export type SessionCommandData = {
     agent?: string
     arguments: string
     command: string
-    messageID?: string
+    /**
+     * Caller-minted stable identity of the input Message; retries with the same identity converge on the first attempt
+     */
+    messageID: string
     model?: string
     parts?: Array<{
       filename?: string
@@ -23712,14 +24403,21 @@ export type SessionCommandErrors = {
         name: "LogFileNotFoundError"
       }
   /**
-   * Mission execution and lifecycle are owned by the canonical Mission API
+   * Mission authority conflict, or the message identity is already bound to another public Session execution
    */
-  409: {
-    data: {
-      [key: string]: unknown
-    }
-    name: "MissionSessionAuthorityError"
-  }
+  409:
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "MissionSessionAuthorityError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "PublicSessionPromptIdentityConflictError"
+      }
 }
 
 export type SessionCommandError = SessionCommandErrors[keyof SessionCommandErrors]
@@ -23730,6 +24428,7 @@ export type SessionCommandResponses = {
    */
   200: {
     info: {
+      acceptedInputMessageIDs?: Array<string>
       activationID?: string
       agent: string
       author: string
@@ -24099,6 +24798,7 @@ export type SessionConversationResponses = {
             activity: Array<
               | {
                   id: string
+                  messageID: string
                   orderKey: string
                   text: string
                   type: "text"
@@ -24106,6 +24806,7 @@ export type SessionConversationResponses = {
               | {
                   callID?: string
                   id: string
+                  messageID: string
                   orderKey: string
                   state: {
                     [key: string]: unknown
@@ -24116,18 +24817,21 @@ export type SessionConversationResponses = {
               | {
                   files: Array<unknown>
                   id: string
+                  messageID: string
                   orderKey: string
                   type: "patch"
                 }
               | {
                   filename: string
                   id: string
+                  messageID: string
                   orderKey: string
                   type: "file"
                 }
               | {
                   id: string
                   message: string
+                  messageID: string
                   orderKey: string
                   title?: string
                   type: "part-error"
@@ -24162,6 +24866,7 @@ export type SessionConversationResponses = {
             activity: Array<
               | {
                   id: string
+                  messageID: string
                   orderKey: string
                   text: string
                   type: "text"
@@ -24169,6 +24874,7 @@ export type SessionConversationResponses = {
               | {
                   callID?: string
                   id: string
+                  messageID: string
                   orderKey: string
                   state: {
                     [key: string]: unknown
@@ -24179,18 +24885,21 @@ export type SessionConversationResponses = {
               | {
                   files: Array<unknown>
                   id: string
+                  messageID: string
                   orderKey: string
                   type: "patch"
                 }
               | {
                   filename: string
                   id: string
+                  messageID: string
                   orderKey: string
                   type: "file"
                 }
               | {
                   id: string
                   message: string
+                  messageID: string
                   orderKey: string
                   title?: string
                   type: "part-error"
@@ -24525,6 +25234,7 @@ export type SessionConversationResponses = {
             activity: Array<
               | {
                   id: string
+                  messageID: string
                   orderKey: string
                   text: string
                   type: "text"
@@ -24532,6 +25242,7 @@ export type SessionConversationResponses = {
               | {
                   callID?: string
                   id: string
+                  messageID: string
                   orderKey: string
                   state: {
                     [key: string]: unknown
@@ -24542,18 +25253,21 @@ export type SessionConversationResponses = {
               | {
                   files: Array<unknown>
                   id: string
+                  messageID: string
                   orderKey: string
                   type: "patch"
                 }
               | {
                   filename: string
                   id: string
+                  messageID: string
                   orderKey: string
                   type: "file"
                 }
               | {
                   id: string
                   message: string
+                  messageID: string
                   orderKey: string
                   title?: string
                   type: "part-error"
@@ -24588,6 +25302,7 @@ export type SessionConversationResponses = {
             activity: Array<
               | {
                   id: string
+                  messageID: string
                   orderKey: string
                   text: string
                   type: "text"
@@ -24595,6 +25310,7 @@ export type SessionConversationResponses = {
               | {
                   callID?: string
                   id: string
+                  messageID: string
                   orderKey: string
                   state: {
                     [key: string]: unknown
@@ -24605,18 +25321,21 @@ export type SessionConversationResponses = {
               | {
                   files: Array<unknown>
                   id: string
+                  messageID: string
                   orderKey: string
                   type: "patch"
                 }
               | {
                   filename: string
                   id: string
+                  messageID: string
                   orderKey: string
                   type: "file"
                 }
               | {
                   id: string
                   message: string
+                  messageID: string
                   orderKey: string
                   title?: string
                   type: "part-error"
@@ -24740,6 +25459,7 @@ export type SessionConversationHistoryResponses = {
             activity: Array<
               | {
                   id: string
+                  messageID: string
                   orderKey: string
                   text: string
                   type: "text"
@@ -24747,6 +25467,7 @@ export type SessionConversationHistoryResponses = {
               | {
                   callID?: string
                   id: string
+                  messageID: string
                   orderKey: string
                   state: {
                     [key: string]: unknown
@@ -24757,18 +25478,21 @@ export type SessionConversationHistoryResponses = {
               | {
                   files: Array<unknown>
                   id: string
+                  messageID: string
                   orderKey: string
                   type: "patch"
                 }
               | {
                   filename: string
                   id: string
+                  messageID: string
                   orderKey: string
                   type: "file"
                 }
               | {
                   id: string
                   message: string
+                  messageID: string
                   orderKey: string
                   title?: string
                   type: "part-error"
@@ -24803,6 +25527,7 @@ export type SessionConversationHistoryResponses = {
             activity: Array<
               | {
                   id: string
+                  messageID: string
                   orderKey: string
                   text: string
                   type: "text"
@@ -24810,6 +25535,7 @@ export type SessionConversationHistoryResponses = {
               | {
                   callID?: string
                   id: string
+                  messageID: string
                   orderKey: string
                   state: {
                     [key: string]: unknown
@@ -24820,18 +25546,21 @@ export type SessionConversationHistoryResponses = {
               | {
                   files: Array<unknown>
                   id: string
+                  messageID: string
                   orderKey: string
                   type: "patch"
                 }
               | {
                   filename: string
                   id: string
+                  messageID: string
                   orderKey: string
                   type: "file"
                 }
               | {
                   id: string
                   message: string
+                  messageID: string
                   orderKey: string
                   title?: string
                   type: "part-error"
@@ -24914,23 +25643,7 @@ export type SessionEventsResponses = {
   /**
    * Session event stream
    */
-  200: {
-    emittedAt: number
-    event_id: string
-    notify?: {
-      badge?: boolean
-      tier: 1 | 2 | 3
-    }
-    orderKey: string
-    payload: {
-      [key: string]: unknown
-    }
-    sequence?: number
-    session_id: string
-    summary: string
-    timestamp: number
-    type: string
-  }
+  200: SessionStreamEvent
 }
 
 export type SessionEventsResponse = SessionEventsResponses[keyof SessionEventsResponses]
@@ -25017,14 +25730,21 @@ export type SessionInitErrors = {
         name: "LogFileNotFoundError"
       }
   /**
-   * Mission execution and lifecycle are owned by the canonical Mission API
+   * Mission authority conflict, or the message identity is already bound to another public Session execution
    */
-  409: {
-    data: {
-      [key: string]: unknown
-    }
-    name: "MissionSessionAuthorityError"
-  }
+  409:
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "MissionSessionAuthorityError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "PublicSessionPromptIdentityConflictError"
+      }
 }
 
 export type SessionInitError = SessionInitErrors[keyof SessionInitErrors]
@@ -25266,7 +25986,10 @@ export type SessionPromptData = {
   body: {
     agent?: string
     format?: OutputFormat
-    messageID?: string
+    /**
+     * Caller-minted stable identity of the input Message; retries with the same identity converge on the first attempt
+     */
+    messageID: string
     model?: {
       modelID: string
       providerID: string
@@ -25333,6 +26056,7 @@ export type SessionPromptResponses = {
    */
   200: {
     info: {
+      acceptedInputMessageIDs?: Array<string>
       activationID?: string
       agent: string
       agentID: string
@@ -25576,6 +26300,65 @@ export type PartDeleteResponses = {
 
 export type PartDeleteResponse = PartDeleteResponses[keyof PartDeleteResponses]
 
+export type SessionMessagePartData = {
+  body?: never
+  path: {
+    /**
+     * Session ID
+     */
+    sessionID: string
+    /**
+     * Message ID
+     */
+    messageID: string
+    /**
+     * Part ID
+     */
+    partID: string
+  }
+  query?: {
+    /**
+     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
+     */
+    directory?: string
+  }
+  url: "/session/{sessionID}/message/{messageID}/part/{partID}"
+}
+
+export type SessionMessagePartErrors = {
+  /**
+   * Bad request
+   */
+  400: BadRequestError
+  /**
+   * Not found
+   */
+  404:
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "NotFoundError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "LogFileNotFoundError"
+      }
+}
+
+export type SessionMessagePartError = SessionMessagePartErrors[keyof SessionMessagePartErrors]
+
+export type SessionMessagePartResponses = {
+  /**
+   * Message part
+   */
+  200: VisibleMessagePart
+}
+
+export type SessionMessagePartResponse = SessionMessagePartResponses[keyof SessionMessagePartResponses]
+
 export type PartUpdateData = {
   body: Part
   path: {
@@ -25639,6 +26422,10 @@ export type SessionShellData = {
   body: {
     agent: string
     command: string
+    /**
+     * Caller-minted stable identity of the input Message; a retry with the same identity returns the durable occurrence instead of running the command again
+     */
+    messageID: string
     model?: {
       modelID: string
       providerID: string
@@ -25681,14 +26468,21 @@ export type SessionShellErrors = {
         name: "LogFileNotFoundError"
       }
   /**
-   * Mission execution and lifecycle are owned by the canonical Mission API
+   * Mission authority conflict, or the message identity is already bound to another public Session execution
    */
-  409: {
-    data: {
-      [key: string]: unknown
-    }
-    name: "MissionSessionAuthorityError"
-  }
+  409:
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "MissionSessionAuthorityError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "PublicSessionPromptIdentityConflictError"
+      }
 }
 
 export type SessionShellError = SessionShellErrors[keyof SessionShellErrors]
@@ -25698,67 +26492,8 @@ export type SessionShellResponses = {
    * Created message
    */
   200: {
-    activationID?: string
-    agent: string
-    author: string
-    billing?: BillingCoverage
-    convergenceFailure?: {
-      failure_occurrence: {
-        assistant_message_id: string
-        error_name: string
-        session_id: string
-      }
-      inspection_error?: string
-      unconverged_part_ids: Array<string>
-      write_errors: Array<{
-        message: string
-        part_id: string
-      }>
-    }
-    cost: number
-    error?:
-      | ProviderAuthError
-      | UnknownError
-      | MessageOutputLengthError
-      | MessageAbortedError
-      | StructuredOutputPayloadError
-      | SnapshotIntegrityError
-      | SnapshotEmptyTreeError
-      | ContextOverflowError
-      | CompactionContinuationMissingError
-      | PromptBudgetOverflowError
-      | ToolSchemaBudgetError
-      | ModelImageInputTooLargeError
-      | ApiError
-    failureOccurrence?: {
-      assistant_message_id: string
-      error_name: string
-      session_id: string
-    }
-    finish?: string
-    id: string
-    modelID: string
-    observationFailures?: Array<{
-      message: string
-      phase: "snapshot_patch"
-    }>
-    orderKey: string
-    parentID: string
-    path: {
-      cwd: string
-      root: string
-    }
-    providerID: string
-    role: "assistant"
-    sessionID: string
-    structured?: unknown
-    summary?: boolean
-    time: {
-      completed?: number
-      created: number
-    }
-    tokens: TokenUsage
-    variant?: string
+    info: AssistantMessage
+    parts: Array<VisibleMessagePart>
   }
 }
 
@@ -26181,9 +26916,10 @@ export type ServerShutdownData = {
 
 export type ServerShutdownErrors = {
   /**
-   * Supervisor process occurrence does not own this backend
+   * Supervisor identity mismatch, or a live lifecycle occurrence owns the process
    */
   409: {
+    occurrenceID?: string
     ok: boolean
   }
   /**
@@ -26198,9 +26934,10 @@ export type ServerShutdownError = ServerShutdownErrors[keyof ServerShutdownError
 
 export type ServerShutdownResponses = {
   /**
-   * Shutdown initiated
+   * Shutdown admitted
    */
   200: {
+    occurrenceID?: string
     ok: boolean
   }
 }
@@ -26431,6 +27168,8 @@ export type SkillInstalledResponses = {
     license?: string
     location: string
     managed: boolean
+    market_hash?: string
+    market_id?: string
     metadata?: {
       [key: string]: string
     }
@@ -26448,7 +27187,7 @@ export type SkillInstalledResponses = {
       level: "low" | "medium" | "high"
     }
     source?: string
-    source_type: "builtin" | "managed_git" | "config_path" | "config_url" | "external" | "unknown"
+    source_type: "builtin" | "managed_market" | "managed_git" | "config_path" | "config_url" | "external" | "unknown"
     trust: "builtin" | "official" | "curated" | "community" | "local" | "external" | "unknown"
     writable: boolean
   }>
@@ -26507,21 +27246,170 @@ export type SkillMarketResponses = {
    * Skill market entries
    */
   200: Array<{
+    api_origin: "https://skills.sh"
     description: string
-    homepage: string
-    id: string
-    install_kind: "git" | "url" | "manual"
-    installed: boolean
-    name: string
-    notes?: string
-    provider: string
-    recommended_policy: "allow" | "deny"
-    source?: string
-    trust: "official" | "curated" | "community"
+    exact_install: true
+    homepage: "https://skills.sh"
+    id: "skills-sh"
+    name: "skills.sh"
+    provider: "skills.sh"
+    recommended_policy: "deny"
+    searchable: true
+    trust: "curated"
   }>
 }
 
 export type SkillMarketResponse = SkillMarketResponses[keyof SkillMarketResponses]
+
+export type SkillMarketDetailData = {
+  body?: never
+  path?: never
+  query: {
+    /**
+     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
+     */
+    directory?: string
+    id: string
+  }
+  url: "/skill/market/detail"
+}
+
+export type SkillMarketDetailErrors = {
+  /**
+   * Bad request
+   */
+  400: BadRequestError
+  /**
+   * Upstream service failure
+   */
+  502: SkillMarketUpstreamError
+}
+
+export type SkillMarketDetailError = SkillMarketDetailErrors[keyof SkillMarketDetailErrors]
+
+export type SkillMarketDetailResponses = {
+  /**
+   * Validated Skill Market candidate detail
+   */
+  200: {
+    description: string
+    files: Array<{
+      path: string
+      size: number
+    }>
+    hash: string
+    homepage: string
+    id: string
+    installed: boolean
+    name: string
+    recommended_policy: "allow" | "deny"
+    repository: string
+    risk: {
+      has_agents: boolean
+      has_references: boolean
+      has_scripts: boolean
+      has_templates: boolean
+      level: "low" | "medium" | "high"
+    }
+    skill_id: string
+    source: string
+    trust: "builtin" | "official" | "curated" | "community" | "local" | "external" | "unknown"
+    upstream_hash?: string
+  }
+}
+
+export type SkillMarketDetailResponse = SkillMarketDetailResponses[keyof SkillMarketDetailResponses]
+
+export type SkillMarketInstallData = {
+  body: {
+    expected_hash: string
+    id: string
+    policy?: "allow" | "deny"
+  }
+  path?: never
+  query?: {
+    /**
+     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
+     */
+    directory?: string
+  }
+  url: "/skill/market/install"
+}
+
+export type SkillMarketInstallErrors = {
+  /**
+   * Bad request
+   */
+  400: BadRequestError
+  /**
+   * Upstream service failure
+   */
+  502: SkillMarketUpstreamError
+}
+
+export type SkillMarketInstallError = SkillMarketInstallErrors[keyof SkillMarketInstallErrors]
+
+export type SkillMarketInstallResponses = {
+  /**
+   * Installed Skill Market candidate
+   */
+  200: {
+    available: "next_turn"
+    hash: string
+    id: string
+    name: string
+    path: string
+    policy: "allow" | "deny"
+    source: string
+  }
+}
+
+export type SkillMarketInstallResponse = SkillMarketInstallResponses[keyof SkillMarketInstallResponses]
+
+export type SkillMarketSearchData = {
+  body?: never
+  path?: never
+  query: {
+    /**
+     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
+     */
+    directory?: string
+    query: string
+    limit?: number
+  }
+  url: "/skill/market/search"
+}
+
+export type SkillMarketSearchErrors = {
+  /**
+   * Bad request
+   */
+  400: BadRequestError
+  /**
+   * Upstream service failure
+   */
+  502: SkillMarketUpstreamError
+}
+
+export type SkillMarketSearchError = SkillMarketSearchErrors[keyof SkillMarketSearchErrors]
+
+export type SkillMarketSearchResponses = {
+  /**
+   * Skill Market candidates
+   */
+  200: Array<{
+    homepage: string
+    id: string
+    installed: boolean
+    installs: number
+    name: string
+    repository: string
+    skill_id: string
+    source: string
+  }>
+}
+
+export type SkillMarketSearchResponse = SkillMarketSearchResponses[keyof SkillMarketSearchResponses]
 
 export type SkillSetMountOverrideData = {
   body:
@@ -26636,6 +27524,8 @@ export type SkillSetMountOverrideResponses = {
       license?: string
       location: string
       managed: boolean
+      market_hash?: string
+      market_id?: string
       metadata?: {
         [key: string]: string
       }
@@ -26655,7 +27545,7 @@ export type SkillSetMountOverrideResponses = {
         level: "low" | "medium" | "high"
       }
       source?: string
-      source_type: "builtin" | "managed_git" | "config_path" | "config_url" | "external" | "unknown"
+      source_type: "builtin" | "managed_market" | "managed_git" | "config_path" | "config_url" | "external" | "unknown"
       trust: "builtin" | "official" | "curated" | "community" | "local" | "external" | "unknown"
       writable: boolean
     }>
@@ -26779,6 +27669,8 @@ export type SkillMountsResponses = {
       license?: string
       location: string
       managed: boolean
+      market_hash?: string
+      market_id?: string
       metadata?: {
         [key: string]: string
       }
@@ -26798,7 +27690,7 @@ export type SkillMountsResponses = {
         level: "low" | "medium" | "high"
       }
       source?: string
-      source_type: "builtin" | "managed_git" | "config_path" | "config_url" | "external" | "unknown"
+      source_type: "builtin" | "managed_market" | "managed_git" | "config_path" | "config_url" | "external" | "unknown"
       trust: "builtin" | "official" | "curated" | "community" | "local" | "external" | "unknown"
       writable: boolean
     }>
@@ -26847,7 +27739,7 @@ export type SkillPolicyResponse = SkillPolicyResponses[keyof SkillPolicyResponse
 
 export type SkillRemoveData = {
   body: {
-    kind?: "path" | "url" | "git"
+    kind?: "path" | "url" | "git" | "market"
     source: string
   }
   path?: never
@@ -27902,6 +28794,7 @@ export type TaskBoardResponses = {
         | "dispatch_lineage"
         | "dispatch_settlement"
         | "mission_acceptance_resume_receipt"
+        | "task_acceptance_ledger"
         | "task_checkpoint_settlement"
         | "task_auxiliary_settlement"
         | "exploration"
@@ -29758,6 +30651,7 @@ export type TaskConversationResponses = {
             activity: Array<
               | {
                   id: string
+                  messageID: string
                   orderKey: string
                   text: string
                   type: "text"
@@ -29765,6 +30659,7 @@ export type TaskConversationResponses = {
               | {
                   callID?: string
                   id: string
+                  messageID: string
                   orderKey: string
                   state: {
                     [key: string]: unknown
@@ -29775,18 +30670,21 @@ export type TaskConversationResponses = {
               | {
                   files: Array<unknown>
                   id: string
+                  messageID: string
                   orderKey: string
                   type: "patch"
                 }
               | {
                   filename: string
                   id: string
+                  messageID: string
                   orderKey: string
                   type: "file"
                 }
               | {
                   id: string
                   message: string
+                  messageID: string
                   orderKey: string
                   title?: string
                   type: "part-error"
@@ -29821,6 +30719,7 @@ export type TaskConversationResponses = {
             activity: Array<
               | {
                   id: string
+                  messageID: string
                   orderKey: string
                   text: string
                   type: "text"
@@ -29828,6 +30727,7 @@ export type TaskConversationResponses = {
               | {
                   callID?: string
                   id: string
+                  messageID: string
                   orderKey: string
                   state: {
                     [key: string]: unknown
@@ -29838,18 +30738,21 @@ export type TaskConversationResponses = {
               | {
                   files: Array<unknown>
                   id: string
+                  messageID: string
                   orderKey: string
                   type: "patch"
                 }
               | {
                   filename: string
                   id: string
+                  messageID: string
                   orderKey: string
                   type: "file"
                 }
               | {
                   id: string
                   message: string
+                  messageID: string
                   orderKey: string
                   title?: string
                   type: "part-error"
@@ -29921,6 +30824,7 @@ export type TaskConversationResponses = {
           | "dispatch_lineage"
           | "dispatch_settlement"
           | "mission_acceptance_resume_receipt"
+          | "task_acceptance_ledger"
           | "task_checkpoint_settlement"
           | "task_auxiliary_settlement"
           | "exploration"
@@ -30656,7 +31560,6 @@ export type TaskConversationResponses = {
       oldestTimestamp: number | null
     }
     lastSequence: number
-    messageWatermark: number
     transcript: Array<VisibleMessageWithParts>
     turnArtifacts: Array<{
       catalogComplete: boolean
@@ -30883,6 +31786,7 @@ export type TaskConversationResponses = {
             activity: Array<
               | {
                   id: string
+                  messageID: string
                   orderKey: string
                   text: string
                   type: "text"
@@ -30890,6 +31794,7 @@ export type TaskConversationResponses = {
               | {
                   callID?: string
                   id: string
+                  messageID: string
                   orderKey: string
                   state: {
                     [key: string]: unknown
@@ -30900,18 +31805,21 @@ export type TaskConversationResponses = {
               | {
                   files: Array<unknown>
                   id: string
+                  messageID: string
                   orderKey: string
                   type: "patch"
                 }
               | {
                   filename: string
                   id: string
+                  messageID: string
                   orderKey: string
                   type: "file"
                 }
               | {
                   id: string
                   message: string
+                  messageID: string
                   orderKey: string
                   title?: string
                   type: "part-error"
@@ -30946,6 +31854,7 @@ export type TaskConversationResponses = {
             activity: Array<
               | {
                   id: string
+                  messageID: string
                   orderKey: string
                   text: string
                   type: "text"
@@ -30953,6 +31862,7 @@ export type TaskConversationResponses = {
               | {
                   callID?: string
                   id: string
+                  messageID: string
                   orderKey: string
                   state: {
                     [key: string]: unknown
@@ -30963,18 +31873,21 @@ export type TaskConversationResponses = {
               | {
                   files: Array<unknown>
                   id: string
+                  messageID: string
                   orderKey: string
                   type: "patch"
                 }
               | {
                   filename: string
                   id: string
+                  messageID: string
                   orderKey: string
                   type: "file"
                 }
               | {
                   id: string
                   message: string
+                  messageID: string
                   orderKey: string
                   title?: string
                   type: "part-error"
@@ -31175,6 +32088,7 @@ export type TaskConversationHistoryResponses = {
             activity: Array<
               | {
                   id: string
+                  messageID: string
                   orderKey: string
                   text: string
                   type: "text"
@@ -31182,6 +32096,7 @@ export type TaskConversationHistoryResponses = {
               | {
                   callID?: string
                   id: string
+                  messageID: string
                   orderKey: string
                   state: {
                     [key: string]: unknown
@@ -31192,18 +32107,21 @@ export type TaskConversationHistoryResponses = {
               | {
                   files: Array<unknown>
                   id: string
+                  messageID: string
                   orderKey: string
                   type: "patch"
                 }
               | {
                   filename: string
                   id: string
+                  messageID: string
                   orderKey: string
                   type: "file"
                 }
               | {
                   id: string
                   message: string
+                  messageID: string
                   orderKey: string
                   title?: string
                   type: "part-error"
@@ -31238,6 +32156,7 @@ export type TaskConversationHistoryResponses = {
             activity: Array<
               | {
                   id: string
+                  messageID: string
                   orderKey: string
                   text: string
                   type: "text"
@@ -31245,6 +32164,7 @@ export type TaskConversationHistoryResponses = {
               | {
                   callID?: string
                   id: string
+                  messageID: string
                   orderKey: string
                   state: {
                     [key: string]: unknown
@@ -31255,18 +32175,21 @@ export type TaskConversationHistoryResponses = {
               | {
                   files: Array<unknown>
                   id: string
+                  messageID: string
                   orderKey: string
                   type: "patch"
                 }
               | {
                   filename: string
                   id: string
+                  messageID: string
                   orderKey: string
                   type: "file"
                 }
               | {
                   id: string
                   message: string
+                  messageID: string
                   orderKey: string
                   title?: string
                   type: "part-error"
@@ -31309,7 +32232,16 @@ export type TaskConversationSessionData = {
     taskID: string
     sessionID: string
   }
-  query?: never
+  query?: {
+    /**
+     * Resume the live transcript after this sequence.
+     */
+    after_live_sequence?: string
+    /**
+     * The live projection epoch the after_live_sequence cursor belongs to.
+     */
+    after_live_epoch?: string
+  }
   url: "/task/{taskID}/conversation/session/{sessionID}"
 }
 
@@ -31392,6 +32324,7 @@ export type TaskConversationSessionResponses = {
             activity: Array<
               | {
                   id: string
+                  messageID: string
                   orderKey: string
                   text: string
                   type: "text"
@@ -31399,6 +32332,7 @@ export type TaskConversationSessionResponses = {
               | {
                   callID?: string
                   id: string
+                  messageID: string
                   orderKey: string
                   state: {
                     [key: string]: unknown
@@ -31409,18 +32343,21 @@ export type TaskConversationSessionResponses = {
               | {
                   files: Array<unknown>
                   id: string
+                  messageID: string
                   orderKey: string
                   type: "patch"
                 }
               | {
                   filename: string
                   id: string
+                  messageID: string
                   orderKey: string
                   type: "file"
                 }
               | {
                   id: string
                   message: string
+                  messageID: string
                   orderKey: string
                   title?: string
                   type: "part-error"
@@ -31455,6 +32392,7 @@ export type TaskConversationSessionResponses = {
             activity: Array<
               | {
                   id: string
+                  messageID: string
                   orderKey: string
                   text: string
                   type: "text"
@@ -31462,6 +32400,7 @@ export type TaskConversationSessionResponses = {
               | {
                   callID?: string
                   id: string
+                  messageID: string
                   orderKey: string
                   state: {
                     [key: string]: unknown
@@ -31472,18 +32411,21 @@ export type TaskConversationSessionResponses = {
               | {
                   files: Array<unknown>
                   id: string
+                  messageID: string
                   orderKey: string
                   type: "patch"
                 }
               | {
                   filename: string
                   id: string
+                  messageID: string
                   orderKey: string
                   type: "file"
                 }
               | {
                   id: string
                   message: string
+                  messageID: string
                   orderKey: string
                   title?: string
                   type: "part-error"
@@ -31645,7 +32587,20 @@ export type TaskEventsData = {
   path: {
     taskID: string
   }
-  query?: never
+  query?: {
+    /**
+     * Resume after this durable task-event sequence.
+     */
+    after?: string
+    /**
+     * Resume live projection after this sequence; omit to skip live replay.
+     */
+    after_live?: string
+    /**
+     * The live projection epoch the after_live cursor belongs to.
+     */
+    after_live_epoch?: string
+  }
   url: "/task/{taskID}/events"
 }
 
@@ -33924,6 +34879,28 @@ export type WorkLedgerListResponses = {
             title: string
             updated: number
           }>
+          title: string
+          updated: number
+        }
+      | {
+          activityStatus: "running" | "inactive"
+          archived?: number
+          cancellationStatus: "none" | "cancelling" | "cancelled"
+          completed?: number
+          created: number
+          description: string
+          directory: string
+          id: string
+          kind: "task"
+          lifecycleStatus: "active" | "completed" | "failed" | "cancelled"
+          missionID?: string
+          missionSessionID?: string
+          pendingInteractions: number
+          pinned: boolean
+          priority: "critical" | "high" | "normal" | "low"
+          productPillar: "code" | "work"
+          source: string
+          started: number
           title: string
           updated: number
         }

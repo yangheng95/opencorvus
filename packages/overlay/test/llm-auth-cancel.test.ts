@@ -9,6 +9,7 @@ function callbacks(cancelled: string[]): AuthDialogCallbacks {
     nativeSelect: async () => null,
     nativeConfirm: async () => false,
     nativeOpen: async () => false,
+    externalUrlNeedsUserGesture: false,
     showLlmNotice: () => undefined,
     onAuthCancelled: (providerID) => {
       cancelled.push(providerID)

@@ -19,6 +19,9 @@ export type BundledEnvResult = {
   expired: boolean
   applied: number
   skipped: number
+  /** The lines a refused bundle could not parse, so the operator can fix the
+   *  file instead of guessing which line was wrong. */
+  invalidLines?: Array<{ line: number; text: string }>
   file: string
   stateFile: string
   firstUsedAt?: string
@@ -56,19 +59,41 @@ function parseValue(input: string) {
   return value
 }
 
-function parseBundle(raw: string) {
+export type ParsedBundle =
+  | { valid: true; env: Record<string, string> }
+  | { valid: false; invalidLines: Array<{ line: number; text: string }> }
+
+/**
+ * Parse the COMPLETE bundle before anything is claimed or applied.
+ *
+ * Invalid non-empty lines used to be skipped silently, so a partially
+ * malformed bundle still looked usable — and because the one-shot secret
+ * window is signed before the result is reported, that permanently consumed
+ * the bounded TTL for a bundle the operator never got in full. A bundle is
+ * either wholly parseable or refused with the exact lines that are not.
+ */
+export function parseBundle(raw: string): ParsedBundle {
   const env: Record<string, string> = {}
-  for (const line of raw.split(/\r?\n/)) {
-    const text = line.trim()
+  const invalidLines: Array<{ line: number; text: string }> = []
+  const lines = raw.split(/\r?\n/)
+  for (let index = 0; index < lines.length; index += 1) {
+    const text = lines[index]!.trim()
     if (!text || text.startsWith("#")) continue
     const body = text.startsWith("export ") ? text.slice(7).trim() : text
     const idx = body.indexOf("=")
-    if (idx <= 0) continue
+    if (idx <= 0) {
+      invalidLines.push({ line: index + 1, text })
+      continue
+    }
     const key = body.slice(0, idx).trim()
-    if (!/^[A-Za-z_][A-Za-z0-9_]*$/.test(key)) continue
+    if (!/^[A-Za-z_][A-Za-z0-9_]*$/.test(key)) {
+      invalidLines.push({ line: index + 1, text })
+      continue
+    }
     env[key] = parseValue(body.slice(idx + 1))
   }
-  return env
+  if (invalidLines.length > 0) return { valid: false, invalidLines }
+  return { valid: true, env }
 }
 
 async function readState(file: string) {
@@ -165,9 +190,28 @@ export async function applyBundledEnv(now = Date.now()): Promise<BundledEnvResul
   }
 
   const raw = await handle.text()
-  const env = parseBundle(raw)
-  const entries = Object.entries(env)
+  const parsed = parseBundle(raw)
+  if (!parsed.valid) {
+    // Refused BEFORE the one-shot window is claimed: a bundle the operator
+    // cannot receive in full must not spend their bounded secret window. The
+    // offending lines travel with the refusal so the operator can fix the
+    // file rather than guess at it.
+    return {
+      enabled: false,
+      expired: false,
+      applied: 0,
+      skipped: parsed.invalidLines.length,
+      invalidLines: parsed.invalidLines,
+      file,
+      stateFile: state,
+      reason: "invalid_bundle",
+    }
+  }
+  const entries = Object.entries(parsed.env)
   if (entries.length === 0) {
+    // Nothing unparseable reached here — that short-circuits above — so a
+    // bundle with no entries declares no variables. A comments-only file,
+    // which is exactly what the shipped example is, is empty, not invalid.
     return {
       enabled: false,
       expired: false,
@@ -175,7 +219,7 @@ export async function applyBundledEnv(now = Date.now()): Promise<BundledEnvResul
       skipped: 0,
       file,
       stateFile: state,
-      reason: raw.trim() ? "invalid_bundle" : "empty_bundle",
+      reason: "empty_bundle",
     }
   }
 

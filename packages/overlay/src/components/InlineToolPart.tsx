@@ -2,18 +2,24 @@ import { createMemo, createResource, For, Show } from "solid-js"
 import { DiffView, changeStatusLabel } from "./DiffView"
 import { describeToolCall, displayToolDetail, toolNameKey, stripAnsi } from "../utils/tool"
 import { extToLang, renderCodeBlock } from "../utils/markdown"
-import { selectedTaskDirectory } from "../store/board"
+import { boardStore, selectedTaskDirectory } from "../store/board"
 import { TodoListPart, extractTodos } from "./TodoListPart"
 import { StaticTextPart } from "./TextPart"
 import { FilePart } from "./FilePart"
 import { toolFileChangesFromState, type ToolFileChange } from "../utils/file-change-summary"
 import { STREAMING_ACTIVE_TEXT_LIMIT, visibleStreamingText } from "./text-part-model"
-import { fetchResourceAsObjectUrl, peekResourceObjectUrl, resolveResourceUrl } from "../services/api"
+import { apiJson, fetchResourceAsObjectUrl, peekResourceObjectUrl, resolveResourceUrl } from "../services/api"
+import { directoryScopedPath } from "../services/task-path"
 import { PreviewableImage } from "./ImagePreview"
 import { Icon } from "./ui/Icon"
 import { Button } from "./ui/Button"
 import { t, tc } from "../utils/i18n"
 import { ComputerControlSurface } from "./ComputerControlSurface"
+import {
+  conversationDeferredToolState,
+  ToolFailureCause,
+  renderToolFailureCause,
+} from "@opencorvus-ai/transport-protocol"
 
 // Same tool-kind sets used to drive code rendering below.
 const FILE_WRITE_TOOLS = new Set(["write", "writefile"])
@@ -24,6 +30,72 @@ const SHELL_TOOLS = new Set(["bash", "shellcommand", "runcommand"])
 // raw JSON — the output is JSON.stringify of the todos array, which is
 // unreadable and floods the card body. updateplan uses the same shape.
 const TODO_TOOLS = new Set(["todowrite", "todoread", "todoupdate", "updateplan"])
+const DEFERRED_TOOL_PART_CACHE_LIMIT = 128
+const deferredToolPartCache = new Map<string, Promise<any>>()
+
+type DeferredToolPartSource = {
+  sessionID: string
+  messageID: string
+  partID: string
+  directory: string
+  outputBytes: number
+  stateBytes: number
+  stateSha256: string
+}
+
+async function sha256Text(value: string): Promise<string> {
+  const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(value))
+  return Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, "0")).join("")
+}
+
+function deferredToolPartCacheKey(source: DeferredToolPartSource): string {
+  return [source.directory, source.sessionID, source.messageID, source.partID, source.stateSha256].join("\u0000")
+}
+
+function readDeferredToolPart(source: DeferredToolPartSource): Promise<any> {
+  const key = deferredToolPartCacheKey(source)
+  const cached = deferredToolPartCache.get(key)
+  if (cached) return cached
+  const request = apiJson(
+    directoryScopedPath(
+      `session/${encodeURIComponent(source.sessionID)}/message/${encodeURIComponent(source.messageID)}/part/${encodeURIComponent(source.partID)}`,
+      source.directory,
+      "deferred conversation Tool Part",
+    ),
+  )
+    .then(async (loaded) => {
+      if (
+        !loaded ||
+        loaded.type !== "tool" ||
+        String(loaded.id || "") !== source.partID ||
+        String(loaded.sessionID || "") !== source.sessionID ||
+        String(loaded.messageID || "") !== source.messageID
+      ) {
+        throw new Error(`Deferred Tool Part ${source.partID} returned drifted persisted identity`)
+      }
+      const serializedState = JSON.stringify(loaded.state)
+      const stateBytes = new TextEncoder().encode(serializedState).byteLength
+      if (stateBytes !== source.stateBytes || (await sha256Text(serializedState)) !== source.stateSha256) {
+        throw new Error(`Deferred Tool Part ${source.partID} state changed during read`)
+      }
+      const output = loaded.state?.status === "completed" ? String(loaded.state.output || "") : ""
+      if (new TextEncoder().encode(output).byteLength !== source.outputBytes) {
+        throw new Error(`Deferred Tool Part ${source.partID} output changed during read`)
+      }
+      return loaded
+    })
+    .catch((error) => {
+      if (deferredToolPartCache.get(key) === request) deferredToolPartCache.delete(key)
+      throw error
+    })
+  deferredToolPartCache.set(key, request)
+  while (deferredToolPartCache.size > DEFERRED_TOOL_PART_CACHE_LIMIT) {
+    const oldest = deferredToolPartCache.keys().next().value
+    if (typeof oldest !== "string") break
+    deferredToolPartCache.delete(oldest)
+  }
+  return request
+}
 
 /** Generic tool values are machine payloads, not Markdown prose. Keeping them
  * in one preformatted surface preserves JSON indentation and line boundaries
@@ -39,6 +111,30 @@ function ToolPayload(props: { label: string; value: string; live?: boolean }) {
 
 function isRecord(value: unknown): value is Record<string, any> {
   return !!value && typeof value === "object" && !Array.isArray(value)
+}
+
+function toolPayloadText(value: unknown): string {
+  if (typeof value === "string") return value
+  if (value === undefined) return ""
+  try {
+    return JSON.stringify(value, null, 2) ?? String(value)
+  } catch {
+    return String(value)
+  }
+}
+
+function toolFailureMessage(value: unknown): string {
+  const parsed = ToolFailureCause.safeParse(value)
+  if (parsed.success) return renderToolFailureCause(parsed.data)
+  return toolPayloadText(value)
+}
+
+function hasToolPayloadValue(value: unknown): boolean {
+  if (value === undefined) return false
+  if (typeof value === "string") return Boolean(value.trim())
+  if (Array.isArray(value)) return value.length > 0
+  if (isRecord(value)) return Object.keys(value).length > 0
+  return true
 }
 
 function BrowserEvidenceImage(props: { url: string; alt: string }) {
@@ -254,8 +350,30 @@ function ToolDiffList(props: { items: ToolFileChange[] }) {
  */
 export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "body" }) {
   const mode = () => props.mode ?? "inline"
-  const state = () => props.part.state || {}
-  const toolName = () => props.part.tool || "unknown"
+  const deferredSource = () => {
+    const deferred = conversationDeferredToolState(props.part?.state?.metadata)
+    if (!deferred) return null
+    const sessionID = String(props.part?.sessionID || "").trim()
+    const messageID = String(props.part?.messageID || "").trim()
+    const partID = String(props.part?.id || "").trim()
+    const directory = selectedTaskDirectory() || String(boardStore.board?.directory || "").trim()
+    if (!sessionID || !messageID || !partID || !directory) {
+      throw new Error(`Deferred Tool Part ${partID || "<missing>"} has incomplete persisted identity`)
+    }
+    return {
+      sessionID,
+      messageID,
+      partID,
+      directory,
+      outputBytes: deferred.outputBytes,
+      stateBytes: deferred.stateBytes,
+      stateSha256: deferred.stateSha256,
+    }
+  }
+  const [persistedPart] = createResource(deferredSource, readDeferredToolPart)
+  const part = () => persistedPart() || props.part
+  const state = () => part().state || {}
+  const toolName = () => part().tool || "unknown"
   const input = () => state().input || {}
   const display = createMemo(() => describeToolCall(toolName(), input(), state(), selectedTaskDirectory()))
   const status = () => display().status || "pending"
@@ -267,16 +385,12 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
   const raw = () => {
     const st = state()
     const r =
-      typeof st.raw === "string" ? (typeof props.part._targetRaw === "string" ? props.part._targetRaw : st.raw) : ""
+      typeof st.raw === "string" ? (typeof part()._targetRaw === "string" ? part()._targetRaw : st.raw) : ""
     return status() === "completed" ? r : visibleStreamingText(r)
   }
   const output = () => stripAnsi(state().output || "")
-  const error = () => stripAnsi(state().error || "") || output()
+  const error = () => stripAnsi(toolFailureMessage(state().failure) || state().error || "") || output()
   const key = () => toolNameKey(toolName())
-  const completedShellCommand = createMemo(() => {
-    if (status() !== "completed" || !SHELL_TOOLS.has(key())) return ""
-    return detail()
-  })
   const readView = createMemo(() => {
     if (status() !== "completed") return null
     if (!FILE_READ_TOOLS.has(key())) return null
@@ -318,7 +432,7 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
     status() === "completed" ? browserEvidenceScreenshotUrlFromState(state()) : "",
   )
   const attachments = createMemo(() =>
-    status() === "completed" ? toolAttachments(props.part, state(), browserEvidenceScreenshotUrl()) : [],
+    status() === "completed" ? toolAttachments(part(), state(), browserEvidenceScreenshotUrl()) : [],
   )
   const showStructuredOutput = createMemo(() => (toolDiffs()?.length ?? 0) > 0)
   const browserEvidence = createMemo(() => {
@@ -351,7 +465,7 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
     if (status() !== "completed" || key() !== "computersessioncreate") return null
     const metadata = isRecord(state().metadata) ? state().metadata : {}
     const computer = isRecord(metadata.computer) ? metadata.computer : {}
-    const sessionID = firstString(props.part?.sessionID)
+    const sessionID = firstString(part()?.sessionID)
     const computerID = firstString(computer.computerId)
     const displayID = firstString(computer.displayId)
     return sessionID && computerID && displayID ? { sessionID, computerID, displayID } : null
@@ -361,6 +475,36 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
     if (browserEvidence()) return false
     if (showStructuredOutput()) return /<diagnostics\b/i.test(output())
     return !codeResult()
+  })
+  const visibleShellCommand = createMemo(() => {
+    if (status() === "pending" || !SHELL_TOOLS.has(key())) return ""
+    return detail()
+  })
+  const fallbackToolPayload = createMemo(() => {
+    if (deferredSource() && !persistedPart()) return null
+    const hasVisibleBody = Boolean(
+      (todoItems()?.length ?? 0) > 0 ||
+        (status() !== "completed" && raw() && !todoItems()) ||
+        visibleShellCommand() ||
+        showStructuredOutput() ||
+        codeResult() ||
+        readView()?.note ||
+        readView()?.reminder ||
+        browserEvidence() ||
+        computerControl() ||
+        attachments().length > 0 ||
+        showPlainOutput() ||
+        (status() === "error" && error()),
+    )
+    if (hasVisibleBody) return null
+    const currentState = state()
+    if (hasToolPayloadValue(currentState.metadata)) {
+      return { label: t("tool.output"), value: toolPayloadText(currentState.metadata) }
+    }
+    if (Object.prototype.hasOwnProperty.call(currentState, "input")) {
+      return { label: t("tool.input"), value: toolPayloadText(currentState.input) }
+    }
+    return null
   })
 
   const showChip = () => mode() !== "body"
@@ -382,6 +526,14 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
         </div>
       </Show>
       <Show when={showBody()}>
+        <Show when={persistedPart.loading}>
+          <div class="loading-hint" role="status">
+            {t("common.loading")}
+          </div>
+        </Show>
+        <Show when={persistedPart.error}>
+          <div class="msg-tool-error">{String(persistedPart.error?.message || persistedPart.error)}</div>
+        </Show>
         <Show
           when={todoItems() && todoItems()!.length > 0}
           fallback={
@@ -389,7 +541,7 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
               <Show when={status() !== "completed" && raw() && !todoItems()}>
                 <ToolPayload label={t("tool.input")} value={raw()} live />
               </Show>
-              <Show when={completedShellCommand()}>
+              <Show when={visibleShellCommand()}>
                 {(command) => (
                   <div class="msg-tool-command">
                     <span class="msg-tool-command__prompt" aria-hidden="true">
@@ -449,6 +601,9 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
                   const text = output()
                   return <ToolPayload label={t("tool.output")} value={text} />
                 }}
+              </Show>
+              <Show when={fallbackToolPayload()}>
+                {(payload) => <ToolPayload label={payload().label} value={payload().value} />}
               </Show>
             </>
           }

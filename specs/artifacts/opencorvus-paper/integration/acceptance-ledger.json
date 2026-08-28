@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "phase":"implementation-ready-for-independent-review",
+  "requirements":[
+    {"id":"REQ-1","status":"passed","evidence":["dated record Recall","start git status empty","protected concurrent-change history"]},
+    {"id":"REQ-2","status":"passed","evidence":["material-boundaries.json","dated record placement table"]},
+    {"id":"REQ-3","status":"passed","evidence":["claim-evidence-matrix.json","claim-evidence-matrix.md","implementation-status-matrix.json"]},
+    {"id":"REQ-4","status":"passed-with-scientific-blocker","evidence":["experiments/automationbench/audit.json","experiments/automationbench/run-ledger.json"]},
+    {"id":"REQ-5","status":"passed","evidence":["cases/seven-role-data-analysis/event-ledger.json","cases/seven-role-data-analysis/dependency-graph.json"]},
+    {"id":"REQ-6","status":"passed","evidence":["evidence/expert-squad-inventory.json","embedded loader output","author source count"]},
+    {"id":"REQ-7","status":"passed-with-effectiveness-blocker","evidence":["evidence/self-evolution-evidence.json","comparison test","projection drift output"]},
+    {"id":"REQ-8","status":"passed-for-authorized-scope","evidence":["focused command ledger","JSON parse","docs checker","diff checker"]},
+    {"id":"REQ-9","status":"passed","evidence":["figures/architecture-inputs.json","figures/experiment-inputs.json"]},
+    {"id":"REQ-10","status":"pending-independent-workflow-review","evidence":["implementation checks complete; downstream test and integrity nodes have not yet produced review evidence"]},
+    {"id":"REQ-11","status":"committed-push-blocked-by-unrelated-outgoing-commit","evidence":["foundation commit c2a8c07a65f6242c4d639ea8e9d85a3dace07958","fetch and non-rebase upstream merge: already up to date","unrelated outgoing predecessor 7786b642d7ed4572ed31ed6a0710521a6a89239d prevents safe push"]},
+    {"id":"REQ-12","status":"implementation-package-complete","evidence":["foundation-manifest.json","citation classes and closure conditions"]}
+  ],
+  "commands":[
+    {"command":"bun test packages/web/test/landing-benchmark.test.ts","cwd":"D:/myhexin-local/opencorvus","environment":"Windows x64; Bun 1.3.14; no credentials","input":"landing-benchmark.ts and its focused positive test","raw_output":"1 pass; 0 fail; 1 expect; 1 file; 2.80s","result":"passed"},
+    {"command":"bun -e getLoadedBuiltInPackages IDs","cwd":"D:/myhexin-local/opencorvus","environment":"Windows x64; Bun 1.3.14; no credentials","input":"embedded package loader","raw_output":"[\"base\",\"advanced\",\"research-studio\",\"squad-sdk\"]","result":"passed"},
+    {"command":"git ls-files expert-squads/*/*/expert-squad.jsonc | wc -l","cwd":"D:/myhexin-local/opencorvus","environment":"current tracked worktree","input":"tracked author manifests","raw_output":"116","result":"passed"},
+    {"command":"bun test packages/opencorvus/test/expert-squad/data-analysis-package.test.ts","cwd":"D:/myhexin-local/opencorvus","environment":"Windows x64; Bun 1.3.14; no credentials","input":"data-analysis package projection and DAG contract","raw_output":"4 pass; 0 fail; 36 expects; 1 file; 18.59s","result":"passed"},
+    {"command":"bun test packages/opencorvus/test/evolution-comparison.test.ts","cwd":"D:/myhexin-local/opencorvus","environment":"Windows x64; Bun 1.3.14; no credentials","input":"deterministic evolution comparison","raw_output":"6 pass; 0 fail; 20 expects; 1 file; 2.85s","result":"passed"},
+    {"command":"bun test packages/opencorvus/test/evolution-lab-package-projection.test.ts","cwd":"D:/myhexin-local/opencorvus","environment":"Windows x64; Bun 1.3.14; no credentials","input":"current Evolution Lab payload projection","raw_output":"0 pass; 1 fail; expected version 2026.08.18.1; received version 2026.08.19.1; 1 file; 12.00s","result":"failed","classification":"read-only existing test drift; evidence gap, not foundation delivery defect"},
+    {"command":"parse and cross-check every specs/artifacts/opencorvus-paper/**/*.json","cwd":"D:/myhexin-local/opencorvus","environment":"Bun 1.3.14; no credentials","input":"13 JSON files","raw_output":"{\"json_files\":13,\"claims\":15,\"overlap_ms\":566808,\"embedded\":4,\"author_sources\":116}","result":"passed"},
+    {"command":"bun run docs:check","cwd":"D:/myhexin-local/opencorvus","environment":"Bun 1.3.14; repository docs generator","input":"current OpenAPI and generated Markdown","raw_output":"docs:check ok (332 ops, 25 groups)","result":"passed"},
+    {"command":"git diff --check -- task paths","cwd":"D:/myhexin-local/opencorvus","environment":"Git worktree","input":"two indexes, dated record and opencorvus-paper subtree","raw_output":"empty","result":"passed"}
+  ],
+  "review":{"independent_reviewer":"pending downstream Advanced workflow nodes","unresolved_findings":null,"rule":"No final Task acceptance is claimed until independent review evidence exists."},
+  "git_delivery":{"foundation_commit":"c2a8c07a65f6242c4d639ea8e9d85a3dace07958","upstream":"origin/arch-debt-remediation","fetch":"passed","merge":"already up to date","outgoing_commits":["c2a8c07a65f6242c4d639ea8e9d85a3dace07958","7786b642d7ed4572ed31ed6a0710521a6a89239d"],"push":"blocked","blocker":"7786b642d is an unrelated packages/opencorvus change set not authorized or independently verified by this Task; pushing HEAD would publish it too.","next_action":"The owner of 7786b642d must verify and push it, after which this Task can fetch, recheck upstream..HEAD, rerun affected checks and push the paper commits without history rewriting."},
+  "known_blockers":[
+    {"subject":"AutomationBench scientific reproduction","cause":"missing immutable version, cases, protocol, evaluator, per-case outcomes, repetitions and statistics"},
+    {"subject":"self-evolution effectiveness","cause":"no repeated accepted campaign; current package projection test drifts"},
+    {"subject":"strict seven-role workflow success","cause":"historical fact checker and writer dispatch violated declared predecessor order"}
+  ]
+}

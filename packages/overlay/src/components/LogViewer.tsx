@@ -12,13 +12,19 @@ import { appStore, setAppStore, filteredLogEntries } from "../store/app"
 import type { LogEntry, LogLevel, LogSource } from "../store/app"
 import { t } from "../utils/i18n"
 import { apiJson } from "../services/api"
-import { nativeOpen } from "../utils/native"
+import {
+  pathRevealFailureText,
+  pathRevealLabelKey,
+  pathRevealNoticeKey,
+  revealPath,
+} from "../services/workspace"
 import { useAsyncAction } from "../solid/async-action"
 import { Dialog } from "./ui/Dialog"
 import { Disclosure } from "./ui/Disclosure"
 import { Button } from "./ui/Button"
 import { SelectControl } from "./ui/SelectControl"
 import { fmtElapsed, logDetailFields, parseServerLogLine, stringifyLogValue } from "../utils/log"
+import { copyText } from "../services/clipboard"
 
 // ── Re-export types so callers can use them without importing store/app ──
 export type { LogEntry, LogLevel, LogSource }
@@ -161,11 +167,6 @@ function formatLogText(entries: LogEntry[]): string {
       return parts.join(" ")
     })
     .join("\n")
-}
-
-async function copyText(text: string): Promise<boolean> {
-  await navigator.clipboard.writeText(text)
-  return true
 }
 
 // ── LogEntryDetail subcomponent ──
@@ -319,17 +320,28 @@ export function LogViewer(props: LogViewerProps) {
     return message
   })
 
+  /** Show a short-lived notice, replacing whatever one is on screen. */
+  function flashNotice(tone: "success" | "error", message: string): void {
+    if (copyNoticeTimer !== undefined) clearTimeout(copyNoticeTimer)
+    setCopyNotice({ tone, message })
+    copyNoticeTimer = setTimeout(() => {
+      setCopyNotice(null)
+      copyNoticeTimer = undefined
+    }, 2000)
+  }
+
   const openFileAction = useAsyncAction(async () => {
     setServerLogError("")
     const path = currentServerLogPath()
     if (!path) throw new Error("Log file path is not loaded")
-    const opened = await nativeOpen(path)
-    if (!opened) throw new Error("Host did not open the current log file")
+    const outcome = await revealPath(path)
+    const notice = pathRevealNoticeKey(outcome)
+    if (notice) flashNotice("success", t(notice, { path }))
   })
 
   const handleOpenLogFile = () => {
     void openFileAction.run().catch((error) => {
-      setServerLogError(errorMessage(error))
+      setServerLogError(pathRevealFailureText(error))
     })
   }
 
@@ -446,12 +458,12 @@ export function LogViewer(props: LogViewerProps) {
             variant="ghost"
             size="sm"
             tone="neutral"
-            title={t("log.open_file_hint")}
-            aria-label={t("log.open_file_hint")}
+            title={t(pathRevealLabelKey())}
+            aria-label={t(pathRevealLabelKey())}
             onClick={handleOpenLogFile}
             disabled={refreshPending() || openFileAction.pending() || !currentServerLogPath()}
           >
-            {t("log.open_file")}
+            {t(pathRevealLabelKey())}
           </Button>
           <Button
             type="button"

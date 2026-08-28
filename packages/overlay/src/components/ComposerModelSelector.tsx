@@ -25,7 +25,6 @@ import { Button } from "./ui/Button"
 import { SearchField } from "./ui/SearchField"
 import { matchesSearchParts } from "../services/text-search"
 import { selectComposerModel } from "../services/composer-model"
-import { requestProviderModelsRefresh } from "../services/provider-refresh"
 
 interface ModelParts {
   provider: string
@@ -307,7 +306,7 @@ export function ComposerModelSelector(props: ComposerModelSelectorProps) {
   const [slotRef, setSlotRef] = createSignal<HTMLElement>()
   const [providerLoading, setProviderLoading] = createSignal(false)
   const [query, setQuery] = createSignal("")
-  let providerRefreshesInFlight = 0
+  let providerLoadsInFlight = 0
   let searchInputRef: HTMLInputElement | undefined
   const taskID = createMemo(() => activeTaskID().trim())
   const selectedModel = createMemo(() => appStore.composerModel)
@@ -329,29 +328,23 @@ export function ComposerModelSelector(props: ComposerModelSelectorProps) {
       .filter((group) => group.models.length > 0)
   })
 
-  async function refreshProviderModelsOnOpen(): Promise<void> {
+  async function loadProviderInfoOnOpen(): Promise<void> {
     const directory = activeDirectory().trim()
-    providerRefreshesInFlight += 1
+    providerLoadsInFlight += 1
     setProviderLoading(true)
     try {
-      try {
-        await requestProviderModelsRefresh(directory)
-      } catch {
-        // requestProviderModelsRefresh records the failure. Keep the selector
-        // usable with its last known model projection.
-      }
       await loadProviderInfo(undefined, {
         directory,
         isCurrentDirectory: (candidate) => activeDirectory().trim() === candidate,
       })
     } finally {
-      providerRefreshesInFlight -= 1
-      setProviderLoading(providerRefreshesInFlight > 0)
+      providerLoadsInFlight -= 1
+      setProviderLoading(providerLoadsInFlight > 0)
     }
   }
 
   function open() {
-    runModelSelectorAction("composer-provider-models-refresh", refreshProviderModelsOnOpen)
+    runModelSelectorAction("composer-provider-info", loadProviderInfoOnOpen)
     disclosure.openIt()
     queueMicrotask(() => searchInputRef?.focus())
   }

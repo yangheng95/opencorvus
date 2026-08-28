@@ -18,7 +18,7 @@ Source: `packages/opencorvus/src/plugin/index.ts`, `packages/plugin/src/index.ts
 
 ## Default plugins
 
-Provider auth plugins are compiled into the runtime (`src/plugin/index.ts`). The GitLab and Poe implementations are statically imported from the upstream `opencode-gitlab-auth` and `opencode-poe-auth` packages; OpenAI Codex, GitHub Copilot, Cloudflare, Azure, DigitalOcean, Snowflake Cortex, and xAI use the synchronized in-repository implementations. They are not entries in the user `plugin` configuration.
+Provider auth plugins are compiled into the runtime (`src/plugin/index.ts`). Poe is statically imported from the upstream `opencode-poe-auth` package; GitLab, OpenAI Codex, GitHub Copilot, Cloudflare, Azure, DigitalOcean, Snowflake Cortex, and xAI use synchronized in-repository implementations. The GitLab adapter routes initial OAuth credentials and runtime refreshes through the engine-owned durable credential exchange. They are not entries in the user `plugin` configuration.
 
 Third-party npm plugins load only when declared explicitly in the `plugin` config array.
 

@@ -30,7 +30,7 @@ import {
   VISUAL_FEEDBACK_VERIFICATION_ARTIFACT_LABEL,
   VisualFeedbackVerificationListSchema,
 } from "@/acceptance/visual-feedback-verification"
-import { requireEngineArtifactByLocator } from "@/artifact-catalog"
+import { requireEngineArtifactByLocator } from "@/engine/engine-artifact-version-facts"
 import { readBrowserPreviewEvidenceByRow } from "@/browser-preview/persist"
 import { Session } from "@/session"
 import { clip01, readResultsForIteration, readSpecsForTask, writeMetricResult } from "./store"

@@ -9,6 +9,7 @@ import { Button } from "./ui/Button"
 import { Icon } from "./ui/Icon"
 import { Popover } from "./ui/Popover"
 import { SegmentedControl, type SegmentedControlOption } from "./ui/SegmentedControl"
+import { copyText } from "../services/clipboard"
 
 const ALL_MODELS = "__all_models__"
 
@@ -79,8 +80,7 @@ export function ConversationTurnControl(props: ConversationTurnControlProps) {
     if (!text) return
     if (copyFeedbackTimer !== undefined) window.clearTimeout(copyFeedbackTimer)
     try {
-      if (!navigator.clipboard?.writeText) throw new Error(t("chat.message_copy_unavailable"))
-      await navigator.clipboard.writeText(text)
+      await copyText(text)
       setCopyState("copied")
       copyFeedbackTimer = window.setTimeout(() => {
         setCopyState("idle")

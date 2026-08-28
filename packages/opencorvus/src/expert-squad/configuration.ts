@@ -2,6 +2,7 @@ import path from "node:path"
 import z from "zod"
 import { Global } from "@/global"
 import { Filesystem } from "@/util/filesystem"
+import { withSharedJsonFactLock } from "@/util/process-lock"
 import { ExpertSquadIDSchema } from "./id"
 import { ExpertSquadNamespaceSchema } from "./id"
 import { ExpertSquadPackageLocations } from "./locations"
@@ -75,7 +76,7 @@ function isEnoent(error: unknown): boolean {
 
 export namespace ExpertSquadConfigurationStore {
   const filename = "expert-squad-configuration.json"
-  let pendingWrite: Promise<unknown> = Promise.resolve()
+  const writeLocks = new Map<string, Promise<unknown>>()
 
   function filepath(): string {
     return path.join(Global.Path.data, filename)
@@ -101,13 +102,20 @@ export namespace ExpertSquadConfigurationStore {
     )
   }
 
+  /**
+   * Read, change and replace the Expert Squad configuration under one
+   * cross-process lock. A module-level promise chain only ordered writers
+   * inside one process, so a second backend on the same data root could drop
+   * an assignment it never read.
+   */
   function serialized<T>(operation: () => Promise<T>): Promise<T> {
-    const result = pendingWrite.then(operation, operation)
-    pendingWrite = result.then(
-      () => undefined,
-      () => undefined,
-    )
-    return result
+    return withSharedJsonFactLock({
+      locks: writeLocks,
+      filepath: filepath(),
+      empty: "{}\n",
+      mode: 0o600,
+      run: operation,
+    })
   }
 
   function fieldMap(configuration: ExpertSquadConfiguration) {

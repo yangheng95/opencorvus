@@ -5,20 +5,20 @@ import {
   ArtifactProducerSchema,
   ArtifactSchemaLimits,
   ArtifactSHA256Schema,
-} from "./artifact-producer"
+} from "./artifact-producer.js"
 import {
   TaskArtifactMediaTypeSchema,
   type TaskArtifactRef,
   TaskArtifactRefSchema,
   TaskArtifactSnapshotIdentitySchema,
-} from "./task-artifact"
+} from "./task-artifact.js"
 
 export {
   ArtifactIdentifierSchema,
   ArtifactProducerSchema,
   ArtifactSchemaLimits,
   ArtifactSHA256Schema,
-} from "./artifact-producer"
+} from "./artifact-producer.js"
 
 export const EngineArtifactTypeSchema = z
   .string()
@@ -156,9 +156,7 @@ export const ArtifactSelectInputSchema = z
       .trim()
       .min(1)
       .max(ArtifactSchemaLimits.catalogValueLength)
-      .describe(
-        "Concise semantic role this exact completely read Artifact plays in the current consumer output.",
-      ),
+      .describe("Concise semantic role this exact completely read Artifact plays in the current consumer output."),
   })
   .strict()
 
@@ -169,14 +167,8 @@ export function mintArtifactSelectionReference(): string {
 }
 
 export const ArtifactConsumptionProvenanceFields = {
-  observed_artifact_locators: z
-    .array(ArtifactReadLocatorSchema)
-    .max(ArtifactSchemaLimits.publishResources)
-    .default([]),
-  source_artifact_locators: z
-    .array(ArtifactReadLocatorSchema)
-    .max(ArtifactSchemaLimits.publishResources)
-    .default([]),
+  observed_artifact_locators: z.array(ArtifactReadLocatorSchema).max(ArtifactSchemaLimits.publishResources).default([]),
+  source_artifact_locators: z.array(ArtifactReadLocatorSchema).max(ArtifactSchemaLimits.publishResources).default([]),
 } as const
 
 function refineArtifactConsumptionProvenance(
@@ -432,9 +424,7 @@ export const ArtifactCatalogEntrySchema = z
         message: "Engine entries must be current/historical and Task Artifact entries must be immutable",
       })
     }
-    if (
-      (entry.source === "engine_artifact") !== (entry.locator.source === "engine_artifact")
-    ) {
+    if ((entry.source === "engine_artifact") !== (entry.locator.source === "engine_artifact")) {
       context.addIssue({
         code: "custom",
         path: ["locator", "source"],
@@ -884,10 +874,7 @@ export const EngineArtifactPublishInputSchema = z
     label: z.string().trim().min(1).max(ArtifactSchemaLimits.labelLength),
     payload: ArtifactJSONValueSchema,
     resources: z.array(TaskArtifactRefSchema).max(ArtifactSchemaLimits.publishResources).default([]),
-    source_artifact_locators: z
-      .array(ArtifactReadLocatorSchema)
-      .max(ArtifactSchemaLimits.publishResources)
-      .default([]),
+    source_artifact_locators: z.array(ArtifactReadLocatorSchema).max(ArtifactSchemaLimits.publishResources).default([]),
     idempotent: z
       .literal(true)
       .optional()
@@ -917,7 +904,7 @@ export const EngineArtifactPublishResultSchema = z
   })
   .strict()
 
-export type { ArtifactProducer } from "./artifact-producer"
+export type { ArtifactProducer } from "./artifact-producer.js"
 export type EngineArtifactLocator = z.infer<typeof EngineArtifactLocatorSchema>
 export type CrossTaskArtifactImport = z.infer<typeof CrossTaskArtifactImportSchema>
 export type CrossTaskArtifactSource = z.infer<typeof CrossTaskArtifactSourceSchema>
@@ -1126,7 +1113,10 @@ export class ArtifactInspectionError extends AggregateError {
 
   constructor(diagnostics: readonly string[]) {
     const ordered = [...diagnostics].sort()
-    super(ordered.map((message) => new Error(message)), `Artifact inspection failed with ${ordered.length} diagnostics`)
+    super(
+      ordered.map((message) => new Error(message)),
+      `Artifact inspection failed with ${ordered.length} diagnostics`,
+    )
     this.name = "ArtifactInspectionError"
     this.diagnostics = ordered
   }
@@ -1323,10 +1313,7 @@ export function inspectEngineArtifactEnvelope(
     if (envelope.producer.owner_kind !== producer.ownerKind) {
       diagnostics.push(`producer.owner_kind must be ${producer.ownerKind}; received ${envelope.producer.owner_kind}`)
     }
-    if (
-      envelope.producer.owner_kind === "projected-scheduler" ||
-      envelope.producer.owner_kind === "projected-worker"
-    ) {
+    if (envelope.producer.owner_kind === "projected-scheduler" || envelope.producer.owner_kind === "projected-worker") {
       if (envelope.producer.expert_squad_id !== producer.expertSquadID) {
         diagnostics.push(
           `producer.expert_squad_id must be ${producer.expertSquadID}; received ${envelope.producer.expert_squad_id}`,

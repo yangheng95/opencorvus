@@ -1,5 +1,5 @@
 import { parseAcceptanceSpecs, renderSpecsAsText } from "@/acceptance/types"
-import { requireEngineArtifactByLocator } from "@/artifact-catalog"
+import { requireEngineArtifactByLocator } from "@/engine/engine-artifact-version-facts"
 import {
   parseRequirementSetArtifact,
   resolveCurrentGoalMembershipContext,

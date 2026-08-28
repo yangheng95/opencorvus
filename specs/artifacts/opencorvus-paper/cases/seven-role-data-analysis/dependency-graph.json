@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "graph_id":"operating-insight-report",
+  "authority":"expert-squads/builtin/data-analysis/expert-squad.jsonc:221-275",
+  "nodes":["planner","data-steward","performance-analyst","segment-analyst","insight-synthesizer","fact-checker","report-writer"],
+  "declared_edges":[["planner","data-steward"],["data-steward","performance-analyst"],["data-steward","segment-analyst"],["performance-analyst","insight-synthesizer"],["segment-analyst","insight-synthesizer"],["insight-synthesizer","fact-checker"],["fact-checker","report-writer"]],
+  "observed_edge_results":[
+    {"edge":["data-steward","performance-analyst"],"status":"acted-on"},{"edge":["data-steward","segment-analyst"],"status":"acted-on"},{"edge":["performance-analyst","insight-synthesizer"],"status":"acted-on"},{"edge":["segment-analyst","insight-synthesizer"],"status":"acted-on"},{"edge":["insight-synthesizer","fact-checker"],"status":"violated"},{"edge":["fact-checker","report-writer"],"status":"insufficient-chain","detail":"writer started after checker terminal but before synthesizer terminal"}
+  ],
+  "overall":"delivery-success-process-failure"
+}

@@ -5,6 +5,7 @@ import { collectCardText } from "../utils/card-tree"
 import { t } from "../utils/i18n"
 import { showAppDialog } from "../services/app-dialog"
 import { formatErrorDetails, reportError } from "../services/diagnostics"
+import { copyText } from "../services/clipboard"
 
 export interface UseCardHeadActionsInput {
   node: () => CardNode
@@ -44,11 +45,8 @@ function isStageCard(node: CardNode): boolean {
 
 async function writeClipboard(text: string): Promise<boolean> {
   if (!text) return false
-  if (navigator.clipboard?.writeText) {
-    await navigator.clipboard.writeText(text)
-    return true
-  }
-  return false
+  await copyText(text)
+  return true
 }
 
 function cardHeadActionErrorMessage(error: unknown): string {

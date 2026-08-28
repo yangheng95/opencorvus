@@ -16,10 +16,12 @@ import { ProjectMemory, type Entry } from "./project-memory"
 import { Bus } from "@/bus"
 import { withKeyedLock } from "@/util/lock"
 import { createInstanceState } from "@/project/instance-state"
+import { runInstanceBackgroundWork } from "@/project/instance"
 import { MissingModelConfigError } from "@/config/model-resolution-error"
 import { GlobalBus } from "@/bus/global"
 import { randomUUID } from "node:crypto"
 import { findTask } from "@/engine/store"
+import { collectLLMText } from "@/llm/activity"
 
 const log = Log.create({ service: "memory.organizer" })
 const PROTOCOL_RESERVE_TOKENS = 2_000
@@ -276,23 +278,27 @@ export namespace ProjectMemoryOrganizer {
       const sessionID = owner.sessionID
       const user = await sourceUser(sessionID)
       const messages: ModelMessage[] = [{ role: "user", content: prompt }]
-      const result = await LLM.stream({
-        agentID: "memory",
-        agent: sessionRuntimeFromNativeAgent(helper),
-        ...(user ? { user } : { requestID: selected.entries[0]!.occurrenceID }),
-        system: [],
-        small: true,
-        tools: {},
-        model,
-        abort: input?.abort ?? new AbortController().signal,
-        sessionID,
-        config,
-        retries: 0,
-        messages,
-        toolChoice: "none",
+      const external = input?.abort ?? new AbortController().signal
+      const candidateText = await collectLLMText({
+        context: { sessionID, provider: model.providerID, model: model.id },
+        external,
+        start: (run) =>
+          LLM.stream({
+            agentID: "memory",
+            agent: sessionRuntimeFromNativeAgent(helper),
+            ...(user ? { user } : { requestID: selected.entries[0]!.occurrenceID }),
+            system: [],
+            small: true,
+            tools: {},
+            model,
+            abort: run.signal,
+            sessionID,
+            config,
+            retries: 0,
+            messages,
+            toolChoice: "none",
+          }),
       })
-      let candidateText = ""
-      for await (const chunk of result.textStream) candidateText += chunk
       checkpoint()
       const candidate = parseCandidate(candidateText)
       checkpoint()
@@ -333,6 +339,43 @@ export namespace ProjectMemoryOrganizer {
     }
   }
 
+  /**
+   * One background runner per project. A request arriving while a run is in
+   * flight marks it to go again, because the in-flight run may have read
+   * `pending` before the new input was appended. The run itself executes as
+   * instance background work: its context stays valid for as long as it
+   * runs, and instance teardown cancels it instead of waiting for it.
+   */
+  const scheduledRuns = new Map<string, { again: boolean }>()
+
+  function scheduleOrganizerRun(projectID: string): void {
+    const scheduled = scheduledRuns.get(projectID)
+    if (scheduled) {
+      scheduled.again = true
+      return
+    }
+    const entry = { again: false }
+    scheduledRuns.set(projectID, entry)
+    try {
+      runInstanceBackgroundWork(`project-memory.organize:${projectID}`, async (signal) => {
+        try {
+          do {
+            entry.again = false
+            await run({ projectID, abort: signal })
+          } while (entry.again && !signal.aborted)
+        } finally {
+          if (scheduledRuns.get(projectID) === entry) scheduledRuns.delete(projectID)
+        }
+      })
+    } catch (error) {
+      // A synchronous scheduling failure would otherwise leave this slot
+      // populated forever, sending every later request down the `again` path
+      // toward a runner that never existed.
+      if (scheduledRuns.get(projectID) === entry) scheduledRuns.delete(projectID)
+      throw error
+    }
+  }
+
   export function init() {
     const state = lifecycle()
     if (state.unsub) return
@@ -350,13 +393,21 @@ export namespace ProjectMemoryOrganizer {
       unsubs.push(
         Bus.subscribe(
           ProjectMemory.Event.OrganizationRequested,
-          ({ properties, signal }) => run({ projectID: properties.projectID, abort: signal }),
+          // The delivery settles when the request has reached the Organizer.
+          // Organization itself is a full model turn, and the pending inputs,
+          // the Organizer lease and the retry_wait status are all durable
+          // before this event fires — so awaiting the turn here held every
+          // publisher of this event, including a user message's own
+          // settlement, hostage to a model call that has its own durable
+          // recovery. Failures end in `retry_wait`; the next request or the
+          // next project open re-drives them.
+          ({ properties }) => scheduleOrganizerRun(properties.projectID),
           { durableID: "project-memory.organizer", effect: "idempotent_by_occurrence" },
         ),
       )
       unsubs.push(
         Bus.subscribe(Session.Event.ConfigChanged, () =>
-          Database.transaction((db) => {
+          Database.immediateTransaction((db) => {
             ProjectMemory.invalidateOrganizerAvailabilityInTransaction(db, { projectID })
             ProjectMemory.requestOrganizationInTransaction(db, { projectID })
           }),
@@ -364,14 +415,14 @@ export namespace ProjectMemoryOrganizer {
       )
       const projectConfigListener = (event: { directory?: string; payload?: { type?: string } }) => {
         if (event.directory !== directory || event.payload?.type !== "config.changed") return
-        Database.transaction((db) => {
+        Database.immediateTransaction((db) => {
           ProjectMemory.invalidateOrganizerAvailabilityInTransaction(db, { projectID })
           ProjectMemory.requestOrganizationInTransaction(db, { projectID })
         })
       }
       GlobalBus.on("event", projectConfigListener)
       unsubs.push(() => GlobalBus.off("event", projectConfigListener))
-      Database.transaction((db) => ProjectMemory.requestOrganizationInTransaction(db, { projectID }))
+      Database.immediateTransaction((db) => ProjectMemory.requestOrganizationInTransaction(db, { projectID }))
     } catch (error) {
       if (state.unsub === dispose) state.unsub = undefined
       dispose()

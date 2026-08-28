@@ -50,14 +50,22 @@ export const RightSidebarConversationSessionResponse = z.object({
 
 export async function createRightSidebarConversationSession(
   experience: ConversationExperience,
-  options?: { id?: string },
+  options?: { id?: string; configOverlay?: Record<string, unknown>; creationMetadata?: Record<string, unknown> },
 ) {
+  // The validated initial overlay is part of the creation input and commits
+  // in the Session insert itself — a published conversation Session carries
+  // its requested model from its first durable instant, with no post-create
+  // patch window a process death could leave half-applied.
   return SessionApi.createNext({
     id: options?.id,
     kind: "assistant",
     directory: Instance.directory,
     title: rightSidebarConversationDefaultTitle(experience),
-    metadata: rightSidebarConversationMetadata(experience),
+    metadata: {
+      ...(options?.creationMetadata ?? {}),
+      ...rightSidebarConversationMetadata(experience),
+      ...(options?.configOverlay ? { configOverlay: options.configOverlay } : {}),
+    },
   })
 }
 

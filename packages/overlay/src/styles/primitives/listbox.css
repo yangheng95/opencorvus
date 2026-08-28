@@ -17,7 +17,7 @@
   box-sizing: border-box;
   width: 100%;
   min-height: var(--oc-listbox-item-height);
-  padding: calc(6px * var(--ui-scale)) calc(9px * var(--ui-scale));
+  padding: var(--ui-gap-sm) var(--ui-gap-md);
   border: 0;
   border-radius: var(--oc-radius-soft);
   outline: none;

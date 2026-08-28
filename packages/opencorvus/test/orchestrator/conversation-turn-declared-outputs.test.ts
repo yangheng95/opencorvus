@@ -10,6 +10,7 @@ import {
 import { projectDeclaredTurnOutputs, resolveCompletionArtifactEntries } from "../../src/conversation/turn-artifacts"
 import { recordEngineArtifact } from "../../src/engine/artifact"
 import { EngineTaskTable } from "../../src/engine/engine.sql"
+import { appendTaskOpenedInTransaction } from "../../src/engine/task-lifecycle"
 import { recordDesignResourceManifest } from "../../src/frontend-design/design-resource-manifest"
 import { Identifier } from "../../src/id/id"
 import { Instance } from "../../src/project/instance"
@@ -30,7 +31,7 @@ async function taskFixture(directory: string): Promise<{ taskID: string; scope: 
       const session = await Session.create({ kind: "root", title: "Declared output projection" })
       const taskID = Identifier.ascending("task")
       const now = Date.now()
-      Database.use((db) =>
+      Database.transaction((db) => {
         db
           .insert(EngineTaskTable)
           .values({
@@ -46,8 +47,15 @@ async function taskFixture(directory: string): Promise<{ taskID: string; scope: 
             time_created: now,
             time_updated: now,
           })
-          .run(),
-      )
+          .run()
+        appendTaskOpenedInTransaction({
+          db,
+          taskID,
+          sessionID: session.id,
+          now,
+          source: "test",
+        })
+      })
       return {
         taskID,
         scope: Object.freeze({

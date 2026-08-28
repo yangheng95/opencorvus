@@ -100,7 +100,7 @@ export async function saveGoalDialog(): Promise<void> {
     if (!ownsDialog()) return
     goalDialogGeneration += 1
     resetGoalDialog()
-    await loadBoard({ sync: true })
+    await loadBoard()
   } catch (err) {
     if (!ownsDialog()) return
     setDialogStore("goal", "saving", false)

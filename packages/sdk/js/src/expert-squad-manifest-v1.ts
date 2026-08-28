@@ -1,4 +1,5 @@
 import z from "zod"
+import { ProductPillarSchema, type ProductPillar } from "@opencorvus-ai/util/product-pillar"
 
 export const EXPERT_SQUAD_ID_PATTERN = /^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/
 export const EXPERT_SQUAD_VERSION_PATTERN = /^(\d{4})\.(\d{2})\.(\d{2})\.([1-9]\d*)$/
@@ -7,8 +8,10 @@ const RESERVED_DYNAMIC_AGENT_IDS = new Set(["orchestrator", "shared", "universal
 const NonBlankStringSchema = z.string().trim().min(1)
 const NonEmptyStringSchema = z.string().min(1)
 
-export const ProductPillarSchema = z.enum(["code", "work"])
-export type ProductPillar = z.output<typeof ProductPillarSchema>
+// The product pillar is owned by @opencorvus-ai/util, the lowest package
+// both the SDK and the Transport Protocol can depend on without a cycle.
+export { ProductPillarSchema }
+export type { ProductPillar }
 
 export const ProductPillarsSchema = z
   .array(ProductPillarSchema)
