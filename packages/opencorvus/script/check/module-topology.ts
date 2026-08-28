@@ -30,7 +30,7 @@ const retainedComponentBudgets = [
       "packages/opencorvus/src/engine/task-session-lineage.ts",
       "packages/opencorvus/src/engine/terminal-lifecycle-reference.ts",
       "packages/opencorvus/src/engine/workflow-binding-facts.ts",
-      "packages/opencorvus/src/goal-workload-analyst/publication.ts",
+      "packages/opencorvus/src/goal-workload-analyst/relational-integrity.ts",
       "packages/opencorvus/src/project/deletion-registry.ts",
       "packages/opencorvus/src/project/directory-admission.ts",
       "packages/opencorvus/src/project/instance.ts",

@@ -33,7 +33,7 @@ import {
 import { EngineArtifactTable } from "@/engine/engine.sql"
 import { assertEngineArtifactPayloadIdentity } from "@/engine/artifact-catalog-metadata"
 import { GoalWorkloadArtifactSchema } from "@/goal-workload-analyst/types"
-import { validateGoalWorkloadArtifactRelationalIntegrity } from "@/goal-workload-analyst/publication"
+import { validateGoalWorkloadArtifactRelationalIntegrity } from "@/goal-workload-analyst/relational-integrity"
 
 export const NotFoundError = NamedError.create(
   "NotFoundError",

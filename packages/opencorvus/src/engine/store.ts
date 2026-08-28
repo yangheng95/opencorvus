@@ -37,7 +37,7 @@ import {
 import { deriveTaskStatus, taskTerminalReason } from "./task-status"
 import { pendingTaskCancellationProjection, taskCancellationProjection } from "./cancellation-projection"
 import { GoalWorkloadArtifactSchema, type GoalWorkloadArtifact } from "@/goal-workload-analyst/types"
-import { validateGoalWorkloadArtifactRelationalIntegrity } from "@/goal-workload-analyst/publication"
+import { validateGoalWorkloadArtifactRelationalIntegrity } from "@/goal-workload-analyst/relational-integrity"
 import { RequirementSetArtifactPayloadSchema, type RequirementSet } from "@/requirements/types"
 import {
   ResearchBriefSchema,

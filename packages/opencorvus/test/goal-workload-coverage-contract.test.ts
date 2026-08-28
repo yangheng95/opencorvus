@@ -34,9 +34,9 @@ import {
 } from "@/goal-workload-analyst/types"
 import {
   GoalWorkloadPublicationConflictError,
-  goalWorkloadPublicationArtifactID,
   publishGoalWorkload,
 } from "@/goal-workload-analyst/publication"
+import { goalWorkloadPublicationArtifactID } from "@/goal-workload-analyst/relational-integrity"
 import { Instance } from "@/project/instance"
 import { taskRequestSHA256 } from "@/orchestrator/dispatch-turn-projection"
 import { createDispatchAgentTool, type DispatchAdapterExecutors } from "@/orchestrator/dispatch-agent-tool"
