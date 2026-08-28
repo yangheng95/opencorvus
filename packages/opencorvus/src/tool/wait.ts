@@ -1,7 +1,7 @@
 import { Tool } from "./tool"
 import { Log } from "@/util/log"
 import { createDecisionLog } from "@/decision-log"
-import { AutomationService } from "@/scheduler/automation-service"
+import { createDelayedSessionWake, createTaskWake } from "@/scheduler/delayed-wake-schedule"
 import { Instance } from "@/project/instance"
 import { withImmediateParkToolResultControl } from "@/session/tool-result-control"
 import { WaitToolDescription, WaitToolParameters } from "./wait-contract"
@@ -31,14 +31,14 @@ export async function executeWait(input: {
   }
 
   const scheduled = input.taskID
-    ? await AutomationService.createTaskWake({
+    ? await createTaskWake({
         name: "task wait",
         projectId: Instance.project.id,
         taskId: input.taskID,
         durationMs: input.duration_ms,
         reason: input.reason,
       })
-    : await AutomationService.createDelayedSessionWake({
+    : await createDelayedSessionWake({
         name: "session wait",
         projectId: Instance.project.id,
         sessionId: input.sessionID,

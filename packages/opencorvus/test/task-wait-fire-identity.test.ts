@@ -16,6 +16,7 @@ import { currentOrchestratorControlMessage } from "../src/orchestrator/agent"
 import { Instance } from "../src/project/instance"
 import { AutomationDefinitionTombstoneTable, AutomationRunTable, AutomationTable } from "../src/scheduler/automation.sql"
 import { AutomationService } from "../src/scheduler/automation-service"
+import { createDelayedSessionWake, createTaskWake } from "../src/scheduler/delayed-wake-schedule"
 import { taskWaitFireID } from "../src/scheduler/task-wait-fire-identity"
 import { createSchedulerExecutionInactivityFence } from "../src/scheduler/execution-inactivity"
 import { Session } from "../src/session"
@@ -45,14 +46,14 @@ describe("delayed Task-wait immutable occurrence", () => {
           source: "test", priority: "normal", metadata: { actor: "user" }, projectID: Instance.project.id, packageRevision,
           executionCapsuleBinding: await prepareTaskProcessBinding({ mode: "native", taskID, projectID: Instance.project.id, rootDirectory: Instance.directory, packageRevisionSHA256: packageRevision.packageDigest, timeCreated: now }),
         })
-        const taskWake = await AutomationService.createTaskWake({
+        const taskWake = await createTaskWake({
           name: "task resume",
           projectId: Instance.project.id,
           taskId: taskID,
           durationMs: 60_000,
           reason: "resume exact task",
         })
-        const sessionWake = await AutomationService.createDelayedSessionWake({
+        const sessionWake = await createDelayedSessionWake({
           name: "session resume",
           projectId: Instance.project.id,
           sessionId: mission.id,
@@ -184,6 +185,34 @@ describe("delayed Task-wait immutable occurrence", () => {
     })
   }, 30_000)
 
+  test("maps delayed wake lineage and duration validation to their exact errors", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const session = await Session.create({ kind: "root", title: "Delayed wake validation" })
+        await expect(
+          createDelayedSessionWake({
+            name: "foreign session",
+            projectId: "prj_foreign",
+            sessionId: session.id,
+            durationMs: 1_000,
+            prompt: "must retain exact project lineage",
+          }),
+        ).rejects.toThrow(`Session not found: ${session.id}`)
+        await expect(
+          createDelayedSessionWake({
+            name: "invalid duration",
+            projectId: Instance.project.id,
+            sessionId: session.id,
+            durationMs: 0,
+            prompt: "must require a positive integer delay",
+          }),
+        ).rejects.toThrow("Invalid delay duration: 0")
+      },
+    })
+  })
+
   test("binds accepted ingress to the exact Automation run and definition revision", async () => {
     await using project = await memoryProject()
     await Instance.provide({
@@ -204,7 +233,7 @@ describe("delayed Task-wait immutable occurrence", () => {
           source: "test", priority: "normal", metadata: { actor: "user" }, projectID: Instance.project.id, packageRevision,
           executionCapsuleBinding: await prepareTaskProcessBinding({ mode: "native", taskID, projectID: Instance.project.id, rootDirectory: Instance.directory, packageRevisionSHA256: packageRevision.packageDigest, timeCreated: now }),
         })
-        const scheduled = await AutomationService.createTaskWake({ name: "resume", projectId: Instance.project.id, taskId: taskID, durationMs: 1, reason: "resume exact task" })
+        const scheduled = await createTaskWake({ name: "resume", projectId: Instance.project.id, taskId: taskID, durationMs: 1, reason: "resume exact task" })
         await new Promise((resolve) => setTimeout(resolve, 5))
         await AutomationService.runDueNow()
         await waitForIngressDeliveryHooksForTest()

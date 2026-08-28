@@ -32,7 +32,6 @@ import {
   dispatchTaskLoop,
   persistTaskWaitIngressInTransaction,
 } from "@/engine/task-root-ingress-delivery"
-import { findTask } from "@/engine/store"
 import { Log } from "@/util/log"
 import { Instance } from "@/project/instance"
 import { createInstanceState } from "@/project/instance-state"
@@ -60,6 +59,7 @@ import type { ProductPillar } from "@opencorvus-ai/sdk/expert-squad-manifest-v1"
 import { createHash } from "node:crypto"
 import { RuntimeExecutionSettlement } from "@/runtime/execution-settlement"
 import { Config } from "@/config/config"
+import { assertTaskRootSessionInProject } from "./delayed-wake-schedule"
 
 export { AutomationRunOutcomes }
 
@@ -138,23 +138,6 @@ export type AutomationRunView = {
   startedAt: number
   completedAt: number | null
   error: string | null
-}
-
-export type CreateDelayedSessionWakeInput = {
-  name: string
-  prompt: string
-  projectId: string
-  sessionId: string
-  durationMs: number
-  surface?: string
-}
-
-export type CreateTaskWakeInput = {
-  name: string
-  reason: string
-  projectId: string
-  taskId: string
-  durationMs: number
 }
 
 export type ConsumedAutomationWaits = {
@@ -427,21 +410,6 @@ export namespace AutomationService {
       return { scope: "project", projectIds }
     }
     throw new Error(`Automation ${row.id} has invalid public target`)
-  }
-
-  async function assertSessionInProject(input: { sessionId?: string; projectId: string }) {
-    const sessionId = input.sessionId
-    if (!sessionId) return
-    await Session.assertLineageInProject({ sessionID: sessionId, projectID: input.projectId })
-  }
-
-  async function assertTaskRootSessionInProject(input: { taskId: string; projectId: string }) {
-    const task = findTask(input.taskId)
-    if (!task || task.project_id !== input.projectId)
-      throw new NotFoundError({ message: `Task not found: ${input.taskId}` })
-    if (!task.session_id) throw new Error(`Task ${input.taskId} has no root session; cannot schedule task wake.`)
-    const rootSession = await Session.assertLineageInProject({ sessionID: task.session_id, projectID: input.projectId })
-    return { ...task, sessionID: task.session_id, rootSession }
   }
 
   export async function create(input: CreateAutomationInput): Promise<{ id: string; name: string; nextRun: number }> {
@@ -733,65 +701,6 @@ export namespace AutomationService {
         })
       }
     }
-  }
-
-  export async function createDelayedSessionWake(input: CreateDelayedSessionWakeInput): Promise<{
-    id: string
-    name: string
-    nextRun: number
-  }> {
-    await assertSessionInProject({ sessionId: input.sessionId, projectId: input.projectId })
-    assertDuration(input.durationMs)
-    const now = Date.now()
-    const nextRun = now + input.durationMs
-    const id = Identifier.ascending("automation")
-    Database.use((db) =>
-      db
-        .insert(AutomationTable)
-        .values({
-          id,
-          definition_id: id,
-          revision: 1,
-          project_id: input.projectId,
-          session_id: input.sessionId,
-          name: input.name,
-          kind: "delay",
-          surface: input.surface ? PanelSurface.parse(input.surface) : undefined,
-          prompt: input.prompt,
-          status: "active",
-          due_at: nextRun,
-        })
-        .run(),
-    )
-    return { id, name: input.name, nextRun }
-  }
-
-  export async function createTaskWake(
-    input: CreateTaskWakeInput,
-  ): Promise<{ id: string; name: string; nextRun: number }> {
-    await assertTaskRootSessionInProject({ taskId: input.taskId, projectId: input.projectId })
-    assertDuration(input.durationMs)
-    const now = Date.now()
-    const nextRun = now + input.durationMs
-    const id = Identifier.ascending("automation")
-    Database.use((db) =>
-      db
-        .insert(AutomationTable)
-        .values({
-          id,
-          definition_id: id,
-          revision: 1,
-          project_id: input.projectId,
-          task_id: input.taskId,
-          name: input.name,
-          kind: "delay",
-          prompt: input.reason,
-          status: "active",
-          due_at: nextRun,
-        })
-        .run(),
-    )
-    return { id, name: input.name, nextRun }
   }
 
   export function remove(id: string): { id: string; name: string } {
@@ -2044,12 +1953,6 @@ export namespace AutomationService {
           time_created: now,
         })
         .run()
-    }
-  }
-
-  function assertDuration(durationMs: number) {
-    if (!Number.isInteger(durationMs) || durationMs <= 0) {
-      throw new Error(`Invalid delay duration: ${durationMs}`)
     }
   }
 
