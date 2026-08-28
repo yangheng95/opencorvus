@@ -9,10 +9,10 @@ import type { OrchestratorToolExecutionContext } from "./tool-execution-context"
 import { bindToolExecutionMode } from "@/tool/execution-mode"
 import {
   allocateTaskCompletionDecisionTime,
-  findTaskCompletionDecisionForTerminalTime,
   insertPreparedTaskCompletionDecision,
   prepareTaskCompletionDecision,
 } from "@/engine/completion-decision"
+import { findTaskCompletionDecisionForTerminalTime } from "@/engine/completion-decision-read"
 import { resolveTaskArtifactReadLocators, resolveTaskEvidenceLocators } from "@/engine/evidence-locator"
 import { selectedWorkflowBinding, type WorkflowProjection } from "@/engine/workflow-binding"
 import { TaskLifecycleRuntime } from "./task-lifecycle-runtime"

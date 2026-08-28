@@ -12,7 +12,10 @@ import { TaskArtifactRefSchema, type TaskArtifactRef } from "@opencorvus-ai/plug
 import { EngineService } from "@/task-api"
 import { conversationMessageHasDisplay, type ConversationView } from "./view"
 import { ConversationTurnArtifactSummary } from "@/engine/model"
-import { requireTaskCompletionDecisionArtifact } from "@/engine/completion-decision"
+import {
+  findTaskCompletionDecisionForTerminalTime,
+  requireTaskCompletionDecisionArtifact,
+} from "@/engine/completion-decision-read"
 import { requireTerminalLifecycleReferenceEvent, resolveTerminalLifecycleReference } from "@/engine/terminal-lifecycle-reference"
 import { artifactCatalogAuthority, requireEngineArtifactByLocator } from "@/artifact-catalog"
 import { readTaskArtifactSnapshotManifest, taskArtifactSnapshotResourceRefs } from "@/task-artifact/store"
@@ -23,7 +26,6 @@ import {
   TerminalLifecycleReferenceSchema,
   requireCurrentTerminalLifecycleReference,
 } from "@/engine/terminal-lifecycle-reference"
-import { findTaskCompletionDecisionForTerminalTime } from "@/engine/completion-decision"
 import { findTask } from "@/engine/store"
 
 function exactString(value: unknown): string | undefined {

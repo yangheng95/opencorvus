@@ -25,7 +25,10 @@ import {
   resolveCrossTaskArtifactSources,
   sameCrossTaskArtifactImportSet,
 } from "@/engine/cross-task-artifact-import"
-import { findTaskCompletionDecisionForTerminalTime } from "@/engine/completion-decision"
+import {
+  findTaskCompletionDecisionForTerminalTime,
+  requireTaskCompletionDecisionArtifact,
+} from "@/engine/completion-decision-read"
 import { EngineGit } from "@/engine/git"
 import {
   acquireTaskCompletionClosureInTransaction,
@@ -271,10 +274,19 @@ test("seals every terminal workflow worker Artifact into the completion decision
       expect(await completeFixtureTask(task, project.path, [first.locator], "derived", workflow)).toMatchObject({
         title: "Task Completed",
       })
+      const timeCompleted = requireTask(task.taskID).time_completed!
       const decision = findTaskCompletionDecisionForTerminalTime({
         taskID: task.taskID,
-        timeCompleted: requireTask(task.taskID).time_completed!,
+        timeCompleted,
       })
+      expect(decision).toBeDefined()
+      expect(
+        requireTaskCompletionDecisionArtifact({
+          taskID: task.taskID,
+          artifactID: decision!.id,
+          timeCompleted,
+        }),
+      ).toEqual(decision)
       expect(decision?.payload.deliverable_artifact_locators).toEqual([first.locator])
       // The derivation orders by artifact id under SQLite's binary collation, so the expectation
       // uses the same comparison rather than a locale-aware one.

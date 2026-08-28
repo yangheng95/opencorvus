@@ -31,10 +31,8 @@ import { EngineArtifactTable, EngineTaskTable, type EngineArtifactKind, type Eng
 import { isTaskTerminal } from "./task-status"
 import { projectTaskRowInTransaction, requireTask } from "./store"
 import { deriveTaskStatus } from "./task-status"
-import {
-  findTaskCompletionDecisionForTerminalTime,
-  findTaskCompletionDecisionForTerminalTimeInTransaction,
-} from "./completion-decision"
+import { findTaskCompletionDecisionForTerminalTime } from "./completion-decision-read"
+import { findTaskCompletionDecisionForTerminalTimeInTransaction } from "./completion-decision-facts"
 import {
   requireCurrentTerminalLifecycleReference,
   terminalLifecycleReferenceMatchesTaskRow,

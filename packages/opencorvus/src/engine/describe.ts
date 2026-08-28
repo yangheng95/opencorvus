@@ -32,7 +32,7 @@ import { findDispatchSettlementByDispatchID } from "./dispatch-settlement"
 import { type SelectedWorkflowBinding } from "./workflow-binding"
 import { readTaskWorkflowBinding } from "./workflow-binding-facts"
 import { taskExecutionProjectionForTask } from "@/orchestrator/task-event"
-import { findTaskCompletionDecisionForTerminalTime } from "./completion-decision"
+import { findTaskCompletionDecisionForTerminalTime } from "./completion-decision-read"
 import { parseProcessRecoveryFactContext, type ProcessRecoveryFactContext } from "./process-recovery-fact"
 import { validateProcessPhysicalEvidence } from "@/runtime/process-occurrence"
 

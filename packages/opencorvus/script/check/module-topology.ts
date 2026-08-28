@@ -11,15 +11,10 @@ const sourcePrefix = "packages/opencorvus/src/"
 const retainedComponentBudgets = [
   {
     name: "engine-storage",
-    maximumSize: 9,
+    maximumSize: 4,
     members: new Set<string>([
       "packages/opencorvus/src/artifact-catalog/index.ts",
-      "packages/opencorvus/src/engine/completion-decision.ts",
-      "packages/opencorvus/src/engine/evidence-locator.ts",
-      "packages/opencorvus/src/engine/producer-turn.ts",
       "packages/opencorvus/src/engine/store.ts",
-      "packages/opencorvus/src/engine/task-execution-capsule-binding.ts",
-      "packages/opencorvus/src/engine/task-session-lineage.ts",
       "packages/opencorvus/src/project/task-runtime-root.ts",
       "packages/opencorvus/src/task-artifact/store.ts",
     ]),

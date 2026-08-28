@@ -137,7 +137,7 @@ import {
 } from "@/engine/persist"
 import { EngineInteraction } from "@/engine/interaction"
 import { terminalTask, updateTask, writeTaskUpdateInTransaction } from "@/engine/state"
-import { findTaskCompletionDecisionForTerminalTime } from "@/engine/completion-decision"
+import { findTaskCompletionDecisionForTerminalTime } from "@/engine/completion-decision-read"
 import {
   requireCurrentTerminalLifecycleReference,
   TerminalLifecycleReferenceSchema,

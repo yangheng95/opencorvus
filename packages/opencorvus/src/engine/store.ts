@@ -49,7 +49,7 @@ import {
   BuildFileObservation as SnapshotBuildFileObservation,
   type BuildFileObservation as SnapshotBuildFileObservationData,
 } from "@/snapshot/types"
-import { findTaskCompletionDecisionForTerminalTime } from "./completion-decision"
+import { findTaskCompletionDecisionForTerminalTime } from "./completion-decision-read"
 import {
   ArtifactReadLocatorSchema,
   type ArtifactReadLocator,

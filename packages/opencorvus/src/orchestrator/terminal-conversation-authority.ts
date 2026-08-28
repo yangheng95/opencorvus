@@ -1,5 +1,5 @@
 import z from "zod"
-import { findTaskCompletionDecisionForTerminalTime } from "@/engine/completion-decision"
+import { findTaskCompletionDecisionForTerminalTime } from "@/engine/completion-decision-read"
 import { OrchestratorEventSchema, type OrchestratorEvent } from "./event"
 import {
   requireCurrentTerminalLifecycleReference,
