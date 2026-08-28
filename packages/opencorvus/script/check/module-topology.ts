@@ -11,7 +11,7 @@ const sourcePrefix = "packages/opencorvus/src/"
 const retainedComponentBudgets = [
   {
     name: "engine-storage",
-    maximumSize: 34,
+    maximumSize: 30,
     members: new Set<string>([
       "packages/opencorvus/src/agent/artifact-read-facts.ts",
       "packages/opencorvus/src/agent/worker-turn-descriptor.ts",
@@ -19,14 +19,11 @@ const retainedComponentBudgets = [
       "packages/opencorvus/src/engine/artifact.ts",
       "packages/opencorvus/src/engine/cancellation-projection.ts",
       "packages/opencorvus/src/engine/completion-decision.ts",
-      "packages/opencorvus/src/engine/control-lease.ts",
       "packages/opencorvus/src/engine/delivery-slice-membership-facts.ts",
-      "packages/opencorvus/src/engine/dispatch-lineage.ts",
       "packages/opencorvus/src/engine/evidence-locator.ts",
       "packages/opencorvus/src/engine/producer-turn.ts",
       "packages/opencorvus/src/engine/protocol.ts",
       "packages/opencorvus/src/engine/store.ts",
-      "packages/opencorvus/src/engine/task-completion-closure.ts",
       "packages/opencorvus/src/engine/task-directory.ts",
       "packages/opencorvus/src/engine/task-execution-capsule-binding.ts",
       "packages/opencorvus/src/engine/task-lifecycle.ts",
@@ -34,7 +31,6 @@ const retainedComponentBudgets = [
       "packages/opencorvus/src/engine/task-session-lineage.ts",
       "packages/opencorvus/src/engine/terminal-lifecycle-reference.ts",
       "packages/opencorvus/src/engine/workflow-binding-facts.ts",
-      "packages/opencorvus/src/engine/workflow-node-occurrence.ts",
       "packages/opencorvus/src/goal-workload-analyst/publication.ts",
       "packages/opencorvus/src/project/deletion-registry.ts",
       "packages/opencorvus/src/project/directory-admission.ts",

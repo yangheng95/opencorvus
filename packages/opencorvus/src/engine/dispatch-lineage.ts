@@ -1,11 +1,10 @@
 import { ProjectedAgentWorkScopeSchema, type ProjectedAgentWorkScope } from "@/agent/projected-agent-work-scope"
 import { ProjectedWorkerIdentitySchema, type ProjectedWorkerIdentity } from "@/agent/projected-worker-identity"
 import { insertEngineArtifact } from "@/engine/artifact"
-import { EngineArtifactTable, EngineTaskTable, type EngineMetadata } from "@/engine/engine.sql"
+import { EngineArtifactTable, EngineTaskTable } from "@/engine/engine.sql"
 import { Identifier } from "@/id/id"
 import { currentRuntimeOccurrenceID } from "@/runtime/process-occurrence"
 import { and, asc, desc, eq, sql, Database } from "@/storage/db"
-import z from "zod"
 import { SelectedWorkflowBindingSchema, type SelectedWorkflowBinding } from "./workflow-binding"
 import { assertCurrentDeliverySliceRevisionIDs, projectTaskRowInTransaction } from "./store"
 import { assertTaskWorkflowBindingInTransaction } from "./workflow-binding-facts"
@@ -16,40 +15,13 @@ import {
 } from "./workflow-node-occurrence"
 import { taskCancellationAuthorityExecutionErrorInTransaction } from "./cancellation-projection"
 import { taskCompletionClosureInTransaction, TaskCompletionClosureConflictError } from "./task-completion-closure"
-
-export interface DispatchLineagePayload extends EngineMetadata {
-  dispatch_id: string
-  task_id: string
-  orchestrator_session_id: string
-  orchestrator_message_id: string
-  tool_part_id: string
-  tool_call_id: string
-  tool_name: "dispatch_agent"
-  child_session_id: string
-  target_agent_id: string
-  projected_worker_identity: ProjectedWorkerIdentity
-  work_scope: ProjectedAgentWorkScope
-  delivery_slice_revision_ids: string[]
-  workflow_binding: SelectedWorkflowBinding
-  workflow_node_id: string | null
-  workflow_occurrence_id: string
-  coordination_action_id?: string
-  continuation_of_dispatch_id?: string
-  /** The runtime process that owns in-process delivery for this dispatch.
-   * Recovery reads it to decide, from durable evidence alone, whether the
-   * owner still exists. Absent on lineages written before the claim existed. */
-  owner_process_occurrence_id?: string
-  adapter_input: Record<string, unknown>
-  time_created: number
-}
-
-export interface DispatchLineageRow {
-  artifactID: string
-  taskID: string
-  dispatchID: string
-  payload: DispatchLineagePayload
-  timeCreated: number
-}
+import {
+  dispatchLineageRow,
+  findDispatchLineageByDispatchIDInTransaction,
+  freezeDispatchAdapterInput,
+  parseDispatchLineagePayload,
+  type DispatchLineageRow,
+} from "./dispatch-lineage-facts"
 
 export class TaskDispatchAdmissionClosedError extends Error {
   override readonly name = "TaskDispatchAdmissionClosedError"
@@ -81,42 +53,6 @@ export interface DispatchLineageOrigin {
   coordinationActionID?: string
   continuationOfDispatchID?: string
   adapterInput: Record<string, unknown>
-}
-
-const DispatchLineagePayloadSchema = z
-  .object({
-    dispatch_id: z.string().min(1),
-    task_id: z.string().min(1),
-    orchestrator_session_id: z.string().min(1),
-    orchestrator_message_id: z.string().min(1),
-    tool_part_id: z.string().min(1),
-    tool_call_id: z.string().min(1),
-    tool_name: z.literal("dispatch_agent"),
-    child_session_id: z.string().min(1),
-    target_agent_id: z.string().min(1),
-    projected_worker_identity: ProjectedWorkerIdentitySchema,
-    work_scope: ProjectedAgentWorkScopeSchema,
-    delivery_slice_revision_ids: z.array(Identifier.schema("goal")),
-    workflow_binding: SelectedWorkflowBindingSchema,
-    workflow_node_id: z.string().min(1).nullable(),
-    workflow_occurrence_id: z.string().min(1),
-    coordination_action_id: z.string().min(1).optional(),
-    continuation_of_dispatch_id: z.string().min(1).optional(),
-    owner_process_occurrence_id: z.string().min(1).optional(),
-    adapter_input: z.record(z.string(), z.unknown()),
-    time_created: z.number().positive(),
-  })
-  .strict()
-
-function deepFreeze<T>(value: T): T {
-  if (!value || typeof value !== "object" || Object.isFrozen(value)) return value
-  for (const nested of Object.values(value as Record<string, unknown>)) deepFreeze(nested)
-  return Object.freeze(value)
-}
-
-export function freezeDispatchAdapterInput(input: Record<string, unknown>): Readonly<Record<string, unknown>> {
-  const parsed = z.record(z.string(), z.unknown()).parse(input)
-  return deepFreeze(structuredClone(parsed))
 }
 
 export function resolveDispatchContinuationSourceID(input: {
@@ -318,30 +254,6 @@ export function findDispatchLineageByDispatchID(input: {
   return Database.use((db) => findDispatchLineageByDispatchIDInTransaction({ db, ...input }))
 }
 
-export function findDispatchLineageByDispatchIDInTransaction(input: {
-  db: Database.TxOrDb
-  taskID: string
-  dispatchID: string
-}): DispatchLineageRow | undefined {
-  const matches = input.db
-    .select()
-    .from(EngineArtifactTable)
-    .where(
-      and(
-        eq(EngineArtifactTable.task_id, input.taskID),
-        eq(EngineArtifactTable.kind, "dispatch_lineage"),
-        sql`json_extract(${EngineArtifactTable.payload}, '$.dispatch_id') = ${input.dispatchID}`,
-      ),
-    )
-    .orderBy(asc(EngineArtifactTable.time_created), asc(EngineArtifactTable.id))
-    .all()
-    .map(dispatchLineageRow)
-  if (matches.length > 1) {
-    throw new Error(`Dispatch identity ${input.dispatchID} has ${matches.length} lineages in Task ${input.taskID}`)
-  }
-  return matches[0]
-}
-
 export function resolveDispatchOccurrenceAuthority(input: {
   taskID: string
   dispatchID: string
@@ -415,26 +327,4 @@ export function listDispatchLineage(taskID: string): DispatchLineageRow[] {
       .all()
       .map(dispatchLineageRow),
   )
-}
-
-export function parseDispatchLineagePayload(payload: unknown, artifactID: string): DispatchLineagePayload {
-  const parsed = DispatchLineagePayloadSchema.safeParse(payload)
-  if (!parsed.success) {
-    throw new Error(`Invalid dispatch_lineage artifact ${artifactID}: ${parsed.error.message}`)
-  }
-  return deepFreeze({
-    ...parsed.data,
-    adapter_input: freezeDispatchAdapterInput(parsed.data.adapter_input),
-  }) as DispatchLineagePayload
-}
-
-export function dispatchLineageRow(row: typeof EngineArtifactTable.$inferSelect): DispatchLineageRow {
-  const payload = parseDispatchLineagePayload(row.payload, row.id)
-  return {
-    artifactID: row.id,
-    taskID: row.task_id,
-    dispatchID: payload.dispatch_id,
-    payload,
-    timeCreated: row.time_created,
-  }
 }
