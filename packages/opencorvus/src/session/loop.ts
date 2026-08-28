@@ -129,6 +129,7 @@ import { resolvePinnedTaskSchedulerTurnProjection } from "@/engine/task-package-
 import { taskRootIngressSemanticTurnLimit } from "@/engine/task-root-ingress-policy-read"
 import { requireTask } from "@/engine/store"
 import { createOrchestratorTools } from "@/orchestrator/tools"
+import { sendSchedulerMessage } from "@/protocol/scheduler-message"
 import {
   isOrchestratorDecisionToolName,
   orchestratorCommittedDecisionInParts,
@@ -4165,6 +4166,7 @@ export namespace SessionLoop {
       const rawTools = createOrchestratorTools({
         taskID,
         agentSessionID: input.session.id,
+        sendSchedulerMessage,
         dispatchAgents: [...skillProjection.schedulerOnlyAgents, ...skillProjection.projectedAgents],
       }).tools as Record<string, AITool>
       const projectedTools = await PromptProfileResolver.projectOrchestratorTools(rawTools, schedulerCapability, {

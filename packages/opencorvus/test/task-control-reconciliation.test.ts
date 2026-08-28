@@ -17,6 +17,7 @@ import { writeTaskUpdateInTransaction } from "@/engine/state"
 import { requireCurrentTerminalLifecycleReference } from "@/engine/terminal-lifecycle-reference"
 import { currentOrchestratorControlMessage } from "@/orchestrator/agent"
 import { createOrchestratorTools } from "@/orchestrator/tools"
+import { sendSchedulerMessage } from "@/protocol/scheduler-message"
 import { Identifier } from "@/id/id"
 import { Instance } from "@/project/instance"
 import { Session } from "@/session"
@@ -1066,6 +1067,7 @@ describe("Task-control reconciliation", () => {
         const { tools } = createOrchestratorTools({
           taskID,
           agentSessionID: orchestrator.id,
+          sendSchedulerMessage,
           dispatchAgents: [
             {
               identity: {

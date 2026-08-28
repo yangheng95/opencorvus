@@ -79,7 +79,7 @@ import { publishFailedAgentCoordinationTurnStatus } from "@/orchestrator/agent-c
 import { ensureTaskMessageProtocolBridge } from "@/orchestrator/protocol/message-bridge"
 import { Instance } from "@/project/instance"
 import { owningMissionSchedulerEndpoint, taskSchedulerEndpoint } from "@/protocol/delivery"
-import { sendSchedulerMessage } from "@/protocol/scheduler-message"
+import type { sendSchedulerMessage as sendSchedulerMessageContract } from "@/protocol/scheduler-message"
 import {
   runWithIndependentProjectIdentity,
   runWithInitializedIndependentProject,
@@ -856,6 +856,7 @@ function stageDispatchBinding(execution: DispatchAdapterExecutionContext) {
 export function createOrchestratorTools(input: {
   taskID: string
   agentSessionID: string
+  sendSchedulerMessage: typeof sendSchedulerMessageContract
   signal?: AbortSignal
   dispatchAgents: readonly PromptProfileResolver.ResolvedProjectedAgent[]
   rootMessage?: {
@@ -970,7 +971,7 @@ export function createOrchestratorTools(input: {
             : messageInput.target?.kind === "task"
               ? taskSchedulerEndpoint(messageInput.target.task_id)
               : undefined
-        return sendSchedulerMessage({
+        return input.sendSchedulerMessage({
           invocationID: `scheduler-message:${execution.orchestratorSessionID}:${execution.orchestratorMessageID}:${execution.toolCallID}`,
           kind: messageInput.kind,
           source,

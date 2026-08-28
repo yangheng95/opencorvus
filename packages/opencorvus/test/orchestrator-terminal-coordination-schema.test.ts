@@ -3,6 +3,7 @@ import { EngineTaskTable } from "../src/engine/engine.sql"
 import { appendTaskOpenedInTransaction } from "../src/engine/task-lifecycle"
 import { Identifier } from "../src/id/id"
 import { createOrchestratorTools } from "../src/orchestrator/tools"
+import { sendSchedulerMessage } from "../src/protocol/scheduler-message"
 import { TASK_ARTIFACT_SCHEDULER_TOOL_IDS } from "../src/tool/tool-id-catalog"
 import { Instance } from "../src/project/instance"
 import { Session } from "../src/session"
@@ -43,6 +44,7 @@ test("projects terminal acknowledgement into the exact host-authorized coordinat
       const { tools } = createOrchestratorTools({
         taskID,
         agentSessionID: root.id,
+        sendSchedulerMessage,
         dispatchAgents: [
           {
             identity: {
@@ -140,6 +142,7 @@ test("builds every declared scheduler Tool on a terminal conversation wake", asy
       const { tools } = createOrchestratorTools({
         taskID,
         agentSessionID: root.id,
+        sendSchedulerMessage,
         dispatchAgents: [
           {
             identity: {

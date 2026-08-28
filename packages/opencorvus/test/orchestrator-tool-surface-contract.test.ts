@@ -29,6 +29,7 @@ import { Identifier } from "../src/id/id"
 import { ORCHESTRATOR_DECISION_TOOL_NAMES } from "../src/orchestrator/decision-tool-names"
 import { createOrchestratorTools } from "../src/orchestrator/tools"
 import { Instance } from "../src/project/instance"
+import { sendSchedulerMessage } from "../src/protocol/scheduler-message"
 import { Session } from "../src/session"
 import { Database } from "../src/storage/db"
 import {
@@ -43,7 +44,7 @@ afterAll(async () => {
   await resetMemoryDatabase()
 })
 
-async function orchestratorToolSurface(title: string) {
+async function orchestratorToolSurface(title: string, schedulerMessageSender: typeof sendSchedulerMessage) {
   const taskID = Identifier.ascending("task")
   const root = await Session.create({ kind: "root", title })
   const now = Date.now()
@@ -68,6 +69,7 @@ async function orchestratorToolSurface(title: string) {
   const { tools } = createOrchestratorTools({
     taskID,
     agentSessionID: root.id,
+    sendSchedulerMessage: schedulerMessageSender,
     dispatchAgents: [
       {
         identity: {
@@ -95,7 +97,7 @@ async function orchestratorToolSurface(title: string) {
       } as never,
     ],
   })
-  return { taskID, tools: tools as Record<string, object> }
+  return { taskID, root, tools: tools as Record<string, object> }
 }
 
 test("builds every scheduler-projectable built-in Tool an expert-squad manifest may declare", async () => {
@@ -103,7 +105,7 @@ test("builds every scheduler-projectable built-in Tool an expert-squad manifest 
   await Instance.provide({
     directory: project.path,
     fn: async () => {
-      const { tools } = await orchestratorToolSurface("Scheduler projectable tool surface")
+      const { tools } = await orchestratorToolSurface("Scheduler projectable tool surface", sendSchedulerMessage)
       const built = new Set(Object.keys(tools))
       const missing = [...new Set(ORCHESTRATOR_SCHEDULER_PROJECTABLE_TOOL_IDS)].filter((id) => !built.has(id))
 
@@ -120,7 +122,7 @@ test("keeps the decision declaration on every Orchestrator decision Tool on the 
   await Instance.provide({
     directory: project.path,
     fn: async () => {
-      const { tools } = await orchestratorToolSurface("Decision declaration survival")
+      const { tools } = await orchestratorToolSurface("Decision declaration survival", sendSchedulerMessage)
       const undeclared = ORCHESTRATOR_DECISION_TOOL_NAMES.filter(
         (name) => toolDecisionDeclarationOf(tools[name]) === undefined,
       )
@@ -140,7 +142,7 @@ test("refuses a wait decision that joins a dispatch_agent turn on the assembled 
   await Instance.provide({
     directory: project.path,
     fn: async () => {
-      const { tools } = await orchestratorToolSurface("Mixed decision refusal")
+      const { tools } = await orchestratorToolSurface("Mixed decision refusal", sendSchedulerMessage)
       const coordinator = new ToolTurnExecutionCoordinator()
       const admit = (name: (typeof ORCHESTRATOR_DECISION_TOOL_NAMES)[number], args: unknown) => {
         const declaration = toolDecisionDeclarationOf(tools[name])
@@ -158,6 +160,112 @@ test("refuses a wait decision that joins a dispatch_agent turn on the assembled 
       await expect(admit("wait", { duration_ms: 1_000, reason: "poll" })).rejects.toBeInstanceOf(
         ToolTurnExecutionConflictError,
       )
+    },
+  })
+})
+
+test("routes the scheduler_message Tool through the exact injected sender port", async () => {
+  await using project = await memoryProject()
+  await Instance.provide({
+    directory: project.path,
+    fn: async () => {
+      let observed: Parameters<typeof sendSchedulerMessage>[0] | undefined
+      const expectedReceipt = { marker: "injected-scheduler-message-receipt" } as unknown as Awaited<
+        ReturnType<typeof sendSchedulerMessage>
+      >
+      const observingSender: typeof sendSchedulerMessage = async (input) => {
+        observed = input
+        return expectedReceipt
+      }
+      const { taskID, root, tools } = await orchestratorToolSurface(
+        "Injected scheduler Message sender",
+        observingSender,
+      )
+      const now = Date.now()
+      const user = await Session.updateMessage({
+        id: Identifier.ascending("message"),
+        sessionID: root.id,
+        role: "user",
+        author: "user",
+        time: { created: now },
+        agent: "orchestrator",
+        model: { providerID: "test", modelID: "test" },
+      })
+      const assistant = await Session.updateMessage({
+        id: Identifier.ascending("message"),
+        parentID: user.id,
+        sessionID: root.id,
+        role: "assistant",
+        author: "orchestrator",
+        agent: "orchestrator",
+        path: { cwd: project.path, root: project.path },
+        cost: 0,
+        tokens: { total: 0, input: 0, output: 0, reasoning: 0, cache: { read: 0, write: 0 } },
+        modelID: "test",
+        providerID: "test",
+        time: { created: now + 1 },
+      })
+      const toolCallID = "call_injected_scheduler_message"
+      const toolPart = await Session.updatePart({
+        id: Identifier.ascending("part"),
+        sessionID: root.id,
+        messageID: assistant.id,
+        type: "tool",
+        callID: toolCallID,
+        tool: "scheduler_message",
+        state: {
+          status: "running",
+          input: {
+            kind: "notification",
+            target: { kind: "task", task_id: taskID },
+            subject: "Injected sender authority",
+            message: "Use the exact production composition port.",
+          },
+          time: { start: now + 2 },
+        },
+      })
+      const result = await (tools.scheduler_message as any).execute(
+        {
+          kind: "notification",
+          target: { kind: "task", task_id: taskID },
+          subject: "Injected sender authority",
+          message: "Use the exact production composition port.",
+        },
+        {
+          toolCallId: toolCallID,
+          messages: [],
+          abortSignal: new AbortController().signal,
+          opencorvus: {
+            sessionID: root.id,
+            messageID: assistant.id,
+            toolCallID,
+            toolPartID: toolPart.id,
+            visibleToolName: "scheduler_message",
+          },
+        },
+      )
+
+      expect(result).toBe(expectedReceipt)
+      expect(observed).toEqual({
+        invocationID: `scheduler-message:${root.id}:${assistant.id}:${toolCallID}`,
+        kind: "notification",
+        source: {
+          kind: "task_scheduler",
+          project_id: Instance.project.id,
+          task_id: taskID,
+          root_session_id: root.id,
+        },
+        target: {
+          kind: "task_scheduler",
+          project_id: Instance.project.id,
+          task_id: taskID,
+          root_session_id: root.id,
+        },
+        replyTo: undefined,
+        subject: "Injected sender authority",
+        sourceMessageID: assistant.id,
+        sourcePartID: toolPart.id,
+      })
     },
   })
 })

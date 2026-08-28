@@ -89,6 +89,7 @@ import { resolvePinnedTaskSchedulerTurnProjection } from "@/engine/task-package-
 import { TaskCreatorMetadata } from "@/task-api/task-creator"
 import { deliverTaskRootMessageToOrchestratorSession, getTaskRootMessage } from "@/task-api/task-root-message"
 import { TaskRootMessageProvenance } from "@/protocol/task-root-message-schema"
+import { sendSchedulerMessage } from "@/protocol/scheduler-message"
 import { AgentTrace } from "@/trace"
 import { ProtocolStore } from "@/protocol/store"
 import { SchedulerMessagePayload } from "@/protocol/schema"
@@ -479,6 +480,7 @@ export namespace Orchestrator {
       const { tools: rawTools } = createOrchestratorTools({
         taskID,
         agentSessionID: agentSession.id,
+        sendSchedulerMessage,
         signal: executionSignal,
         dispatchAgents: schedulerDispatchAgents,
         rootMessage: event?.rootMessage,

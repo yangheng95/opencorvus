@@ -9,6 +9,7 @@ import { Identifier } from "@/id/id"
 import { MCP } from "@/mcp"
 import { computerRuntimeScopeIdentity } from "@/mcp/computer/runtime-scope"
 import { createOrchestratorTools } from "@/orchestrator/tools"
+import { sendSchedulerMessage } from "@/protocol/scheduler-message"
 import { PermissionAuthority } from "@/permission/authority"
 import { PermissionExecutionResultTable } from "@/permission/permission.sql"
 import { Provider } from "@/provider/provider"
@@ -185,6 +186,7 @@ async function initializeCut(): Promise<never> {
       const raw = createOrchestratorTools({
         taskID,
         agentSessionID: session.id,
+        sendSchedulerMessage,
         dispatchAgents: [...skillProjection.schedulerOnlyAgents, ...skillProjection.projectedAgents],
       }).tools as Record<string, any>
       const owner = MCP.createScopedConnectionOwner(

@@ -31,6 +31,7 @@ import { Identifier } from "../src/id/id"
 import { MCP } from "../src/mcp"
 import { computerRuntimeScopeIdentity } from "../src/mcp/computer/runtime-scope"
 import { createOrchestratorTools, OrchestratorToolsTestHooks } from "../src/orchestrator/tools"
+import { sendSchedulerMessage } from "../src/protocol/scheduler-message"
 import { taskRequestSHA256 } from "../src/orchestrator/dispatch-turn-projection"
 import { Provider } from "../src/provider/provider"
 import { Instance } from "../src/project/instance"
@@ -163,6 +164,7 @@ async function projectedSchedulerSurface(input: {
   const raw = createOrchestratorTools({
     taskID,
     agentSessionID: session.id,
+    sendSchedulerMessage,
     dispatchAgents: [...skillProjection.schedulerOnlyAgents, ...skillProjection.projectedAgents],
   }).tools as Record<string, any>
   input.instrument?.(raw)
@@ -1007,6 +1009,7 @@ describe("single Tool-result turn-control protocol", () => {
         const surface = createOrchestratorTools({
           taskID: worker.taskID,
           agentSessionID: orchestrator.id,
+          sendSchedulerMessage,
           dispatchAgents,
         })
         const runTool = async (toolName: "respond_agent_coordination" | "dispatch_agent", callID: string, args: any) => {
@@ -1169,6 +1172,7 @@ describe("single Tool-result turn-control protocol", () => {
         const raw = createOrchestratorTools({
           taskID: worker.taskID,
           agentSessionID: orchestrator.id,
+          sendSchedulerMessage,
           dispatchAgents: [
             ...worker.scheduler.skillProjection.schedulerOnlyAgents,
             ...worker.scheduler.skillProjection.projectedAgents,
@@ -1198,6 +1202,7 @@ describe("single Tool-result turn-control protocol", () => {
         const replaySurface = createOrchestratorTools({
           taskID: worker.taskID,
           agentSessionID: orchestrator.id,
+          sendSchedulerMessage,
           dispatchAgents: [
             ...worker.scheduler.skillProjection.schedulerOnlyAgents,
             ...worker.scheduler.skillProjection.projectedAgents,
