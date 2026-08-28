@@ -20,16 +20,6 @@ const retainedComponentBudgets = [
       "packages/opencorvus/src/task-api/index.ts",
     ]),
   },
-  {
-    name: "session-scheduler-delivery",
-    maximumSize: 4,
-    members: new Set<string>([
-      "packages/opencorvus/src/protocol/scheduler-message.ts",
-      "packages/opencorvus/src/session/loop.ts",
-      "packages/opencorvus/src/session/prompt/index.ts",
-      "packages/opencorvus/src/session/wake.ts",
-    ]),
-  },
 ] as const
 const cleanImportEntrypoints = [
   "packages/opencorvus/src/project/implicit-project.ts",

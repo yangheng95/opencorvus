@@ -5,7 +5,7 @@ import { Project } from "@/project/project"
 import { runWithInitializedIndependentProject } from "@/project/independent-project-owner"
 import { Scheduler } from "@/scheduler"
 import { Log } from "@/util/log"
-import { SessionWake } from "@/session/wake"
+import type { SessionWake } from "@/session/wake"
 import type { EngineService } from "@/task-api"
 import { ProtocolStore } from "./store"
 import {
@@ -49,13 +49,20 @@ let beforeMissionMaterializationForTest: (() => void | Promise<void>) | undefine
 let beforeGlobalPollForTest: (() => void | Promise<void>) | undefined
 let signalDrainFailureReportForTest: ((error: unknown) => void) | undefined
 type TaskDeliveryMaterializer = typeof EngineService.materializeClaimedSchedulerMessageToTask
+type SessionWakePort = Pick<typeof SessionWake, "resumePersistedWakeWithReceipt" | "wakeWithReceipt">
 let taskDeliveryMaterializer: TaskDeliveryMaterializer | undefined
+let sessionWake: SessionWakePort | undefined
 
 function requireTaskDeliveryMaterializer(): TaskDeliveryMaterializer {
   if (!taskDeliveryMaterializer) {
     throw new Error("Scheduler Message Task delivery materializer is not bound by Project bootstrap.")
   }
   return taskDeliveryMaterializer
+}
+
+function requireSessionWake(): SessionWakePort {
+  if (!sessionWake) throw new Error("Scheduler Message Session wake port is not bound by Project bootstrap.")
+  return sessionWake
 }
 
 function sameEndpoint(left: SchedulerEndpoint, right: SchedulerEndpoint) {
@@ -198,7 +205,7 @@ async function drainMissionRecipient(sessionID: string): Promise<void> {
           )
           return undefined
         }
-        const receipt = await SessionWake.wakeWithReceipt({
+        const receipt = await requireSessionWake().wakeWithReceipt({
           sessionID,
           messageID: ids.messageID,
           textPartID: ids.textPartID,
@@ -351,7 +358,7 @@ export async function drainSchedulerMessagesForCurrentProject(input?: {
         return undefined
       }
       if (!schedulerSessionWakeNeedsRecovery(wake)) return undefined
-      const receipt = SessionWake.resumePersistedWakeWithReceipt({
+      const receipt = requireSessionWake().resumePersistedWakeWithReceipt({
         sessionID: wake.sessionID,
         messageID: wake.messageID,
         directory: current.project.worktree,
@@ -442,6 +449,21 @@ function requestSchedulerMessageDrainForProject(
 installSchedulerMessageDrainSignal(requestSchedulerMessageDrain)
 
 export namespace SchedulerMessageDeliveryService {
+  export function bindSessionWake(next: SessionWakePort): void {
+    const bound = Object.freeze({
+      wakeWithReceipt: next.wakeWithReceipt,
+      resumePersistedWakeWithReceipt: next.resumePersistedWakeWithReceipt,
+    }) satisfies SessionWakePort
+    if (
+      sessionWake &&
+      (sessionWake.wakeWithReceipt !== bound.wakeWithReceipt ||
+        sessionWake.resumePersistedWakeWithReceipt !== bound.resumePersistedWakeWithReceipt)
+    ) {
+      throw new Error("Scheduler Message Session wake port is already bound to another implementation.")
+    }
+    sessionWake = bound
+  }
+
   export function bindTaskDeliveryMaterializer(materializer: TaskDeliveryMaterializer): void {
     if (taskDeliveryMaterializer && taskDeliveryMaterializer !== materializer) {
       throw new Error("Scheduler Message Task delivery materializer is already bound to another implementation.")
