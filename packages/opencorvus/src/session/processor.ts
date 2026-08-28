@@ -102,6 +102,27 @@ export namespace SessionProcessor {
     REPEATED_CALL_RUN_IDLE_MS,
   }
 
+  function continuationRetention(input: {
+    continuationIsSafe: boolean
+    retainAssistantOnToolContinuation: boolean
+    finishIncludesTool: boolean
+    ownedContinuationDecision: boolean | undefined
+  }) {
+    const toolContinuation =
+      input.retainAssistantOnToolContinuation &&
+      input.finishIncludesTool &&
+      input.continuationIsSafe &&
+      input.ownedContinuationDecision !== false
+    const ownedContinuation = !toolContinuation && input.ownedContinuationDecision === true
+    return {
+      toolContinuation,
+      ownedContinuation,
+      retainAssistant: toolContinuation || ownedContinuation,
+    }
+  }
+
+  export const ContinuationTestHooks = { continuationRetention }
+
   const log = Log.create({ service: "session.processor" })
 
   export class ProcessorLostPartsError extends Error {
@@ -378,8 +399,7 @@ export namespace SessionProcessor {
         if (!match || (match.state.status !== "running" && match.state.status !== "pending")) {
           throw new Error(`Open ToolPart not found for Tool call ${value.toolCallId}`)
         }
-        const resolvedInput =
-          value.input === undefined ? match.state.input : cloneToolInputForPersistence(value.input)
+        const resolvedInput = value.input === undefined ? match.state.input : cloneToolInputForPersistence(value.input)
         await Session.updatePart({
           ...match,
           state: {
@@ -917,11 +937,7 @@ export namespace SessionProcessor {
                         )
                       }
 
-                      const repeatedRun = observeRepeatedToolCall(
-                        input.sessionID,
-                        value.toolName,
-                        persistedToolInput,
-                      )
+                      const repeatedRun = observeRepeatedToolCall(input.sessionID, value.toolName, persistedToolInput)
                       if (repeatedRun > REPEATED_CALL_ACROSS_TURNS_THRESHOLD) {
                         log.warn("repeated identical tool call across turns", {
                           sessionID: input.sessionID,
@@ -1209,7 +1225,7 @@ export namespace SessionProcessor {
                       await streamInput.stream?.onFinish?.(value as never)
                       break
 
-                  default:
+                    default:
                       log.info("unhandled", {
                         ...value,
                       })
@@ -1398,17 +1414,16 @@ export namespace SessionProcessor {
             !parkAfterToolResult &&
             !coordinationHandoff &&
             !input.assistantMessage.error
-          const retainAssistantForToolContinuation =
-            input.retainAssistantOnToolContinuation === true &&
-            input.assistantMessage.finish.includes("tool") &&
-            continuationIsSafe
-          const retainAssistantForOwnedContinuation =
-            continuationIsSafe &&
-            !retainAssistantForToolContinuation &&
-            input.retainAssistantForNextProviderStep !== undefined &&
-            (await input.retainAssistantForNextProviderStep(input.assistantMessage))
-          const retainAssistantForNextProviderStep =
-            retainAssistantForToolContinuation || retainAssistantForOwnedContinuation
+          const ownedContinuationDecision =
+            continuationIsSafe && input.retainAssistantForNextProviderStep !== undefined
+              ? await input.retainAssistantForNextProviderStep(input.assistantMessage)
+              : undefined
+          const retainAssistantForNextProviderStep = continuationRetention({
+            continuationIsSafe,
+            retainAssistantOnToolContinuation: input.retainAssistantOnToolContinuation === true,
+            finishIncludesTool: input.assistantMessage.finish.includes("tool"),
+            ownedContinuationDecision,
+          }).retainAssistant
           if (!retainAssistantForNextProviderStep) {
             await input.beforeAssistantCompletion?.(input.assistantMessage)
             input.assistantMessage.time.completed = Date.now()

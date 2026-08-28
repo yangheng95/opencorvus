@@ -163,7 +163,11 @@ describe("Mission terminal Task authority", () => {
           productPillar: "work",
           heldExpertSquadIDs: ["base"],
         })
-        const taskSession = Session.prepareRootNext({ kind: "root", directory: Instance.directory, title: "Paged terminal child" })
+        const taskSession = Session.prepareRootNext({
+          kind: "root",
+          directory: Instance.directory,
+          title: "Paged terminal child",
+        })
         const taskID = Identifier.ascending("task")
         const now = Date.now()
         persistTask({
@@ -365,10 +369,7 @@ describe("Mission terminal Task authority", () => {
           tool: "panel",
           state: { status: "running", input: readInput, time: { start: now + 37 } },
         })
-        const read = await panel.execute(
-          readInput,
-          { ...context, messageID: readMessage.id, callID: readCallID },
-        )
+        const read = await panel.execute(readInput, { ...context, messageID: readMessage.id, callID: readCallID })
         expect(JSON.parse(read.output)).toEqual(
           expect.objectContaining({
             taskID,
@@ -418,10 +419,7 @@ describe("Mission terminal Task authority", () => {
         })
         let staleReadError: unknown
         try {
-          await panel.execute(
-            readInput,
-            { ...context, messageID: staleReadMessage.id, callID: staleReadCallID },
-          )
+          await panel.execute(readInput, { ...context, messageID: staleReadMessage.id, callID: staleReadCallID })
         } catch (error) {
           staleReadError = error
         }
@@ -445,7 +443,11 @@ describe("Mission terminal Task authority", () => {
           productPillar: "work",
           heldExpertSquadIDs: ["base"],
         })
-        const taskSession = Session.prepareRootNext({ kind: "root", directory: Instance.directory, title: "Terminal child" })
+        const taskSession = Session.prepareRootNext({
+          kind: "root",
+          directory: Instance.directory,
+          title: "Terminal child",
+        })
         const taskID = Identifier.ascending("task")
         const now = Date.now()
         persistTask({
@@ -610,14 +612,44 @@ describe("Mission terminal Task authority", () => {
           missionSchema.parse({
             action: "resume_task",
             taskID,
-            text: "Publish the corrected audit receipt.",
-            evidence_read_refs: [readRef],
+            acceptance_gap: {
+              gap_id: "gap-audit-receipt",
+              current_ledger_revision_artifact_id: null,
+              criteria: [
+                {
+                  criterion_id: "audit-receipt",
+                  disposition: "failed",
+                  finding: "The audit receipt requires a corrected canonical revision.",
+                  relied_evidence_read_refs: [readRef],
+                  contradictory_evidence_read_refs: [],
+                  responsible_workflow_node_id: "builder",
+                  required_new_evidence_kind: "corrected-audit-receipt",
+                },
+              ],
+              preserved_acceptances: [],
+              requested_next_action: "Publish only the corrected audit receipt revision.",
+            },
           }),
         ).toEqual({
           action: "resume_task",
           taskID,
-          text: "Publish the corrected audit receipt.",
-          evidence_read_refs: [readRef],
+          acceptance_gap: {
+            gap_id: "gap-audit-receipt",
+            current_ledger_revision_artifact_id: null,
+            criteria: [
+              {
+                criterion_id: "audit-receipt",
+                disposition: "failed",
+                finding: "The audit receipt requires a corrected canonical revision.",
+                relied_evidence_read_refs: [readRef],
+                contradictory_evidence_read_refs: [],
+                responsible_workflow_node_id: "builder",
+                required_new_evidence_kind: "corrected-audit-receipt",
+              },
+            ],
+            preserved_acceptances: [],
+            requested_next_action: "Publish only the corrected audit receipt revision.",
+          },
         })
         expect(
           missionSchema.parse({

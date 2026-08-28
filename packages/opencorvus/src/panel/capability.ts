@@ -8,12 +8,12 @@ import { isModelReference } from "@/provider/model-ref"
 import { TaskCallerMetadata } from "@/task-api/task-caller-metadata"
 import {
   ArtifactReadReferenceInputSchema,
-  ArtifactReadReferenceSchema,
   ArtifactSearchWithoutLimitSchema,
   CrossTaskArtifactSourceListSchema,
   refineArtifactSearchInput,
 } from "@opencorvus-ai/plugin/artifact-catalog"
 import { MissionCompletionInput } from "@/mission/completion"
+import { MissionAcceptanceGapInputSchema } from "@/mission/acceptance-gap"
 import { TaskCancellationReason } from "@opencorvus-ai/transport-protocol"
 import { TerminalLifecycleReferenceSchema } from "@/engine/terminal-lifecycle-reference-schema"
 
@@ -275,7 +275,7 @@ export const PanelCapabilityRegistry = list(
       "Structured batch task status query for LLM reconciliation. Returns stable JSON for up to 50 taskIDs " +
       "at a time. Distinct from view_board (which produces human-oriented prose, single-task at a time) — " +
       "use this when an agent needs to programmatically inspect outcomes of tasks it has dispatched. " +
-      "Artifact evidence is deliberately excluded from this bounded status surface; enumerate one Task through query_task_artifacts.",
+      "The current acceptance-ledger obligation is projected when present; other Artifact bodies remain excluded and are enumerated through query_task_artifacts.",
     kind: "query",
     surfaces: allProjectSurfaces,
     params: {
@@ -444,17 +444,9 @@ export const PanelCapabilityRegistry = list(
     surfaces: ["panel"],
     params: {
       taskID: z.string().min(1).describe("Completed or failed source Task in the current Mission lineage."),
-      text: z
-        .string()
-        .trim()
-        .min(1)
-        .max(32_000)
-        .describe("Visible Mission-authored repair request describing the observed acceptance gap."),
-      evidence_read_refs: z
-        .array(ArtifactReadReferenceSchema)
-        .min(1)
-        .max(64)
-        .describe("Host-minted references returned by complete source Task reads earlier in this Mission Turn."),
+      acceptance_gap: MissionAcceptanceGapInputSchema.describe(
+        "Exact failed or unresolved criteria, preserved acceptances, current ledger revision, workflow ownership, and completely read evidence for the next execution epoch. The Host renders the visible Mission repair Message from this single structure.",
+      ),
     },
   }),
   item({

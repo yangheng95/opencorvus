@@ -24,19 +24,20 @@ export class TaskWorkflowBindingConflictError extends Error {
   }
 }
 
-export function readTaskWorkflowBinding(taskID: string): SelectedWorkflowBinding | undefined {
-  const rows = Database.use((db) =>
-    db
-      .select({ id: EngineArtifactTable.id, payload: EngineArtifactTable.payload })
-      .from(EngineArtifactTable)
-      .where(
-        and(
-          eq(EngineArtifactTable.task_id, taskID),
-          inArray(EngineArtifactTable.kind, ["dispatch_lineage", "task_completion_decision"]),
-        ),
-      )
-      .all(),
-  )
+export function readTaskWorkflowBindingInTransaction(
+  db: Database.TxOrDb,
+  taskID: string,
+): SelectedWorkflowBinding | undefined {
+  const rows = db
+    .select({ id: EngineArtifactTable.id, payload: EngineArtifactTable.payload })
+    .from(EngineArtifactTable)
+    .where(
+      and(
+        eq(EngineArtifactTable.task_id, taskID),
+        inArray(EngineArtifactTable.kind, ["dispatch_lineage", "task_completion_decision"]),
+      ),
+    )
+    .all()
   const first = rows[0]
   if (!first) return undefined
   const binding = WorkflowBindingCarrierSchema.parse(first.payload).workflow_binding
@@ -46,11 +47,15 @@ export function readTaskWorkflowBinding(taskID: string): SelectedWorkflowBinding
       throw new Error(`Task ${taskID} workflow artifact ${row.id} conflicts with immutable binding from ${first.id}`)
     }
   }
-  const creationBinding = requireTaskPackageRevisionBinding(taskID)
+  const creationBinding = requireTaskPackageRevisionBinding(taskID, db)
   if (!sameExpertSquadPackageRevisionBinding(creationBinding, binding.package_revision)) {
     throw new Error(`Task ${taskID} workflow binding conflicts with immutable creation package revision binding`)
   }
   return binding
+}
+
+export function readTaskWorkflowBinding(taskID: string): SelectedWorkflowBinding | undefined {
+  return Database.use((db) => readTaskWorkflowBindingInTransaction(db, taskID))
 }
 
 /** Enforce one immutable Task workflow binding at the same transaction boundary

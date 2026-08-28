@@ -3,6 +3,7 @@ import z from "zod"
 import { Identifier } from "@/id/id"
 import { SelectedWorkflowBindingSchema } from "@/engine/workflow-binding"
 import { EvidenceLocatorListSchema, type EvidenceLocator } from "@opencorvus-ai/plugin/artifact-catalog"
+import { MissionAcceptanceCriterionSchema } from "@/mission/acceptance-gap"
 
 export const ControlTextPartAuthoritySchema = z
   .object({
@@ -68,12 +69,46 @@ const DispatchTurnBaseSchema = z.object({
   task_authority: TaskAuthorityAnchorSchema,
 })
 
+export const AcceptanceRepairDispatchSchema = z
+  .object({
+    gap_id: z.string().min(1),
+    ledger_revision_artifact_id: Identifier.schema("artifact"),
+    execution_epoch: z.number().int().positive(),
+    criteria: z.array(MissionAcceptanceCriterionSchema).min(1).max(64),
+    checkpoint_required: z.literal(true),
+  })
+  .strict()
+  .superRefine((repair, context) => {
+    const ids = new Set<string>()
+    for (const [index, criterion] of repair.criteria.entries()) {
+      if (ids.has(criterion.criterion_id)) {
+        context.addIssue({
+          code: "custom",
+          path: ["criteria", index, "criterion_id"],
+          message: `Duplicate acceptance repair criterion ${criterion.criterion_id}.`,
+        })
+      }
+      ids.add(criterion.criterion_id)
+    }
+  })
+export type AcceptanceRepairDispatch = z.infer<typeof AcceptanceRepairDispatchSchema>
+
+export function acceptanceRepairEvidenceLocators(repair: AcceptanceRepairDispatch): EvidenceLocator[] {
+  const parsed = AcceptanceRepairDispatchSchema.parse(repair)
+  const locators = parsed.criteria.flatMap((criterion) => [
+    ...criterion.relied_evidence_locators,
+    ...criterion.contradictory_evidence_locators,
+  ])
+  return [...new Map(locators.map((locator) => [JSON.stringify(locator), locator])).values()]
+}
+
 export const DispatchTurnSchema = z.discriminatedUnion("kind", [
   DispatchTurnBaseSchema.extend({ kind: z.literal("initial") }).strict(),
   DispatchTurnBaseSchema.extend({
     kind: z.literal("continuation"),
     source_dispatch_id: z.string().min(1),
     child_session_id: Identifier.schema("session"),
+    acceptance_repair: AcceptanceRepairDispatchSchema.optional(),
   }).strict(),
 ])
 export type DispatchTurn = z.infer<typeof DispatchTurnSchema>
@@ -110,6 +145,27 @@ export function renderDispatchContinuationTurn(input: {
     `- workflow_occurrence_id: ${turn.workflow_occurrence_id}`,
     `- delivery_slice_revision_ids: ${turn.delivery_slice_revision_ids.join(", ") || "(none)"}`,
     `- workflow_binding: ${JSON.stringify(turn.workflow_binding)}`,
+    ...(turn.acceptance_repair
+      ? [
+          "",
+          "## Acceptance repair obligation",
+          "",
+          `- gap_id: ${turn.acceptance_repair.gap_id}`,
+          `- ledger_revision_artifact_id: ${turn.acceptance_repair.ledger_revision_artifact_id}`,
+          `- execution_epoch: ${turn.acceptance_repair.execution_epoch}`,
+          `- criterion_ids: ${turn.acceptance_repair.criteria.map((criterion) => criterion.criterion_id).join(", ")}`,
+          ...turn.acceptance_repair.criteria.flatMap((criterion) => [
+            `### ${criterion.criterion_id}`,
+            `- disposition: ${criterion.disposition}`,
+            `- finding: ${criterion.finding}`,
+            `- responsible_workflow_node_id: ${criterion.responsible_workflow_node_id}`,
+            `- required_new_evidence_kind: ${criterion.required_new_evidence_kind}`,
+            `- relied_evidence_locators: ${JSON.stringify(criterion.relied_evidence_locators)}`,
+            `- contradictory_evidence_locators: ${JSON.stringify(criterion.contradictory_evidence_locators)}`,
+          ]),
+          "- Recheck only these criteria. Preserve every acceptance not named here and publish delta evidence in the canonical Artifact lineage.",
+        ]
+      : []),
     "",
     "## Task authority anchor",
     "",

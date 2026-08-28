@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-28-mission-acceptance-delta-closure.md](2026-08-28-mission-acceptance-delta-closure.md) makes Mission acceptance repair a structured evidence delta with an append-only Task ledger, epoch-boundary compaction, affected-lineage continuation, and dispatch-step settlement without a synthetic `no_action` call.
+
 - [2026-08-28-overlay-expert-squad-handoff-startup-convergence.md](2026-08-28-overlay-expert-squad-handoff-startup-convergence.md) removes the Expert Squad install handoff from the renderer startup barrier and replaces destructive pending-value consumption with successful conditional acknowledgement.
 
 - [2026-08-28-overlay-panel-typography-convergence.md](2026-08-28-overlay-panel-typography-convergence.md) collapses application-panel typography to one bounded 16/14/12 scale plus 13px code, removes component-local font aliases and outliers, and makes the existing CSS checker enforce the role contract.

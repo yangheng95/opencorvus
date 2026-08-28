@@ -1679,7 +1679,8 @@ export async function deliverPendingTaskRootIngresses(): Promise<number> {
  * the same way every time therefore has no bound at all: each cycle costs a
  * whole Orchestrator Turn and produces the next cycle. The budget must be
  * quantified over something the retry cannot create, and the epoch is that
- * thing — it changes only when an operator reopens the Task.
+ * thing — it changes only when an operator Message or exact Mission
+ * acceptance resume opens the next Task occurrence.
  */
 export const TASK_EPOCH_INFRASTRUCTURE_INGRESS_BUDGET = 5
 

@@ -13,7 +13,7 @@ export const NoActionInputSchema = z
   })
   .strict()
 
-export function createNoActionTool() {
+export function createNoActionTool(input: { activeAcceptanceGapID?: string } = {}) {
   return {
     no_action: bindToolExecutionMode(
       tool({
@@ -25,11 +25,18 @@ export function createNoActionTool() {
           "Task lifecycle fact, future wake, or durable waiting state. Never use it when current evidence requires a real " +
           "scheduler action.",
         inputSchema: NoActionInputSchema,
-        execute: async ({ reason }) => ({
-          title: "Current Ingress Reconciled",
-          output: reason,
-          metadata: withImmediateParkToolResultControl({}),
-        }),
+        execute: async ({ reason }) => {
+          if (input.activeAcceptanceGapID) {
+            throw new Error(
+              `Acceptance gap ${input.activeAcceptanceGapID} requires a scoped continuation or an evidence-backed Task terminal decision; no_action cannot settle it.`,
+            )
+          }
+          return {
+            title: "Current Ingress Reconciled",
+            output: reason,
+            metadata: withImmediateParkToolResultControl({}),
+          }
+        },
       }),
       "turn_control_exclusive",
     ),

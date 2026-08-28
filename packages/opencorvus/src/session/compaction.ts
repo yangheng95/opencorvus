@@ -493,9 +493,7 @@ export namespace SessionCompaction {
       JSON.stringify(todos, null, 2),
       input.focus ? ["", "Manual compaction focus:", input.focus].join("\n") : "",
       taskPlan ? ["", "Current task plan:", taskPlan].join("\n") : "",
-      sessionMemory
-        ? ["", `Current Session ${SessionMemory.filename}:`, sessionMemory.content].join("\n")
-        : "",
+      sessionMemory ? ["", `Current Session ${SessionMemory.filename}:`, sessionMemory.content].join("\n") : "",
       patches ? ["", patches].join("\n") : "",
       "</compaction-projection>",
     ]
@@ -565,9 +563,7 @@ export namespace SessionCompaction {
     overflow: boolean
   }): Promise<SelectedCompactionInput> {
     const limit = input.config.compaction?.tail_turns ?? ContextBudget.DEFAULT_TAIL_TURNS
-    const firstUserIdx = input.messages.findIndex(
-      (msg) => msg.info.role === "user",
-    )
+    const firstUserIdx = input.messages.findIndex((msg) => msg.info.role === "user")
     if (firstUserIdx < 0) return { head: [] }
     const anchor_id = input.messages[firstUserIdx].info.id
     if (input.overflow) {
@@ -664,7 +660,7 @@ export namespace SessionCompaction {
     }
     const anchorIndex = markerPart.anchor_id
       ? messages.findIndex((message) => message.info.id === markerPart.anchor_id)
-        : messages.findIndex((message) => message.info.role === "user")
+      : messages.findIndex((message) => message.info.role === "user")
     if (anchorIndex < 0) {
       return { status: "invalid_boundary", reason: "compaction anchor message is missing" }
     }
@@ -677,8 +673,7 @@ export namespace SessionCompaction {
         return { status: "invalid_boundary", reason: "compaction tail boundary is missing or is not a user message" }
       }
     }
-    const markerOnAnchor =
-      marker.info.role === "assistant" && markerPart.anchor_id === marker.info.parentID
+    const markerOnAnchor = marker.info.role === "assistant" && markerPart.anchor_id === marker.info.parentID
     const endIndex = tailIndex >= 0 ? tailIndex : markerOnAnchor ? latest.assistantIndex : latest.userIndex
     if (endIndex <= anchorIndex + 1) return { status: "no_covered_history" }
     return {
@@ -966,10 +961,7 @@ export namespace SessionCompaction {
       system: [],
       messages: providerMessages,
       model,
-      stopWhen: [
-        ({ steps }) => compactionStepDisposition(steps.at(-1)) === "summary_ready",
-        stepCountIs(agent.steps),
-      ],
+      stopWhen: [({ steps }) => compactionStepDisposition(steps.at(-1)) === "summary_ready", stepCountIs(agent.steps)],
     })
 
     if (result === "compact") {
@@ -1013,6 +1005,7 @@ export namespace SessionCompaction {
   }
 
   const CreateInput = z.object({
+    id: Identifier.schema("session_control").optional(),
     sessionID: Identifier.schema("session"),
     source: Message.User,
     model: z
@@ -1034,6 +1027,7 @@ export namespace SessionCompaction {
     }
     await Session.get(input.sessionID)
     return SessionControl.create({
+      ...(input.id ? { id: input.id } : {}),
       sessionID: input.sessionID,
       kind: input.auto ? "compaction_request" : "manual_summarize",
       payload: {

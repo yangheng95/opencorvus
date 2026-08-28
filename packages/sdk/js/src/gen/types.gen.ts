@@ -941,6 +941,7 @@ export type EventArtifactPersisted = {
       | "dispatch_lineage"
       | "dispatch_settlement"
       | "mission_acceptance_resume_receipt"
+      | "task_acceptance_ledger"
       | "task_checkpoint_settlement"
       | "task_auxiliary_settlement"
       | "exploration"
@@ -16409,19 +16410,36 @@ export type GatewayControlActionData = {
         user_id?: string
       }
     | {
-        action: "resume_task"
         /**
-         * Host-minted references returned by complete source Task reads earlier in this Mission Turn.
+         * Exact failed or unresolved criteria, preserved acceptances, current ledger revision, workflow ownership, and completely read evidence for the next execution epoch. The Host renders the visible Mission repair Message from this single structure.
          */
-        evidence_read_refs: Array<string>
+        acceptance_gap: {
+          criteria: Array<{
+            contradictory_evidence_read_refs: Array<string>
+            criterion_id: string
+            disposition: "failed" | "unresolved" | "stale_evidence"
+            finding: string
+            relied_evidence_read_refs: Array<string>
+            repeat_disposition?:
+              | "repairable_with_new_evidence"
+              | "accepted_from_existing_evidence"
+              | "irreducible_blocker"
+            required_new_evidence_kind: string
+            responsible_workflow_node_id: string
+          }>
+          current_ledger_revision_artifact_id: string | null
+          gap_id: string
+          preserved_acceptances: Array<{
+            criterion_id: string
+            evidence_read_refs: Array<string>
+          }>
+          requested_next_action: string
+        }
+        action: "resume_task"
         /**
          * Completed or failed source Task in the current Mission lineage.
          */
         taskID: string
-        /**
-         * Visible Mission-authored repair request describing the observed acceptance gap.
-         */
-        text: string
       }
     | {
         action: "reply_interaction"
@@ -28696,6 +28714,7 @@ export type TaskBoardResponses = {
         | "dispatch_lineage"
         | "dispatch_settlement"
         | "mission_acceptance_resume_receipt"
+        | "task_acceptance_ledger"
         | "task_checkpoint_settlement"
         | "task_auxiliary_settlement"
         | "exploration"
@@ -30725,6 +30744,7 @@ export type TaskConversationResponses = {
           | "dispatch_lineage"
           | "dispatch_settlement"
           | "mission_acceptance_resume_receipt"
+          | "task_acceptance_ledger"
           | "task_checkpoint_settlement"
           | "task_auxiliary_settlement"
           | "exploration"

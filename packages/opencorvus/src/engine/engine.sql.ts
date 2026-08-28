@@ -46,6 +46,7 @@ export const ENGINE_ARTIFACT_KINDS = [
   "dispatch_lineage",
   "dispatch_settlement",
   "mission_acceptance_resume_receipt",
+  "task_acceptance_ledger",
   "task_checkpoint_settlement",
   "task_auxiliary_settlement",
   "exploration",

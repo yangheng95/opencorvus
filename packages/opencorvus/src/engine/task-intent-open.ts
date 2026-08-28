@@ -7,9 +7,9 @@ import { appendTaskReopenedInTransaction, taskLifecycleProjectionInTransaction }
  * Open the next execution occurrence of an already-terminal Task.
  *
  * The prior occurrence stays intact as an immutable fact at its old epoch; this
- * appends the reopen at epoch + 1. There is exactly one caller shape — an
- * explicit operator message — because that is the only thing that may create a
- * new occurrence.
+ * appends the reopen at epoch + 1. Its callers must already prove one of the
+ * two canonical authorities: an explicit operator Message, or a Mission
+ * acceptance resume for the exact current completed/failed occurrence.
  */
 export function openTaskForContinuationInTransaction(input: {
   db: Database.TxOrDb

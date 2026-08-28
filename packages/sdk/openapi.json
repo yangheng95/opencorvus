@@ -2729,6 +2729,7 @@
                   "dispatch_lineage",
                   "dispatch_settlement",
                   "mission_acceptance_resume_receipt",
+                  "task_acceptance_ledger",
                   "task_checkpoint_settlement",
                   "task_auxiliary_settlement",
                   "exploration",
@@ -58914,29 +58915,150 @@
                   {
                     "additionalProperties": false,
                     "properties": {
+                      "acceptance_gap": {
+                        "additionalProperties": false,
+                        "description": "Exact failed or unresolved criteria, preserved acceptances, current ledger revision, workflow ownership, and completely read evidence for the next execution epoch. The Host renders the visible Mission repair Message from this single structure.",
+                        "properties": {
+                          "criteria": {
+                            "items": {
+                              "additionalProperties": false,
+                              "properties": {
+                                "contradictory_evidence_read_refs": {
+                                  "items": {
+                                    "description": "Host-minted reference to persisted complete-read facts for one exact locator in this Session Turn.",
+                                    "pattern": "^ar_[A-Za-z0-9_-]{16}$",
+                                    "type": "string"
+                                  },
+                                  "maxItems": 64,
+                                  "type": "array"
+                                },
+                                "criterion_id": {
+                                  "maxLength": 160,
+                                  "minLength": 1,
+                                  "type": "string"
+                                },
+                                "disposition": {
+                                  "enum": [
+                                    "failed",
+                                    "unresolved",
+                                    "stale_evidence"
+                                  ],
+                                  "type": "string"
+                                },
+                                "finding": {
+                                  "maxLength": 8000,
+                                  "minLength": 1,
+                                  "type": "string"
+                                },
+                                "relied_evidence_read_refs": {
+                                  "items": {
+                                    "description": "Host-minted reference to persisted complete-read facts for one exact locator in this Session Turn.",
+                                    "pattern": "^ar_[A-Za-z0-9_-]{16}$",
+                                    "type": "string"
+                                  },
+                                  "maxItems": 64,
+                                  "type": "array"
+                                },
+                                "repeat_disposition": {
+                                  "enum": [
+                                    "repairable_with_new_evidence",
+                                    "accepted_from_existing_evidence",
+                                    "irreducible_blocker"
+                                  ],
+                                  "type": "string"
+                                },
+                                "required_new_evidence_kind": {
+                                  "maxLength": 160,
+                                  "minLength": 1,
+                                  "type": "string"
+                                },
+                                "responsible_workflow_node_id": {
+                                  "maxLength": 160,
+                                  "minLength": 1,
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "criterion_id",
+                                "disposition",
+                                "finding",
+                                "relied_evidence_read_refs",
+                                "contradictory_evidence_read_refs",
+                                "responsible_workflow_node_id",
+                                "required_new_evidence_kind"
+                              ],
+                              "type": "object"
+                            },
+                            "maxItems": 64,
+                            "minItems": 1,
+                            "type": "array"
+                          },
+                          "current_ledger_revision_artifact_id": {
+                            "anyOf": [
+                              {
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "gap_id": {
+                            "maxLength": 160,
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "preserved_acceptances": {
+                            "items": {
+                              "additionalProperties": false,
+                              "properties": {
+                                "criterion_id": {
+                                  "maxLength": 160,
+                                  "minLength": 1,
+                                  "type": "string"
+                                },
+                                "evidence_read_refs": {
+                                  "items": {
+                                    "description": "Host-minted reference to persisted complete-read facts for one exact locator in this Session Turn.",
+                                    "pattern": "^ar_[A-Za-z0-9_-]{16}$",
+                                    "type": "string"
+                                  },
+                                  "maxItems": 64,
+                                  "minItems": 1,
+                                  "type": "array"
+                                }
+                              },
+                              "required": [
+                                "criterion_id",
+                                "evidence_read_refs"
+                              ],
+                              "type": "object"
+                            },
+                            "maxItems": 128,
+                            "type": "array"
+                          },
+                          "requested_next_action": {
+                            "maxLength": 8000,
+                            "minLength": 1,
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "gap_id",
+                          "current_ledger_revision_artifact_id",
+                          "criteria",
+                          "preserved_acceptances",
+                          "requested_next_action"
+                        ],
+                        "type": "object"
+                      },
                       "action": {
                         "const": "resume_task",
                         "type": "string"
                       },
-                      "evidence_read_refs": {
-                        "description": "Host-minted references returned by complete source Task reads earlier in this Mission Turn.",
-                        "items": {
-                          "description": "Host-minted reference to persisted complete-read facts for one exact locator in this Session Turn.",
-                          "pattern": "^ar_[A-Za-z0-9_-]{16}$",
-                          "type": "string"
-                        },
-                        "maxItems": 64,
-                        "minItems": 1,
-                        "type": "array"
-                      },
                       "taskID": {
                         "description": "Completed or failed source Task in the current Mission lineage.",
-                        "minLength": 1,
-                        "type": "string"
-                      },
-                      "text": {
-                        "description": "Visible Mission-authored repair request describing the observed acceptance gap.",
-                        "maxLength": 32000,
                         "minLength": 1,
                         "type": "string"
                       }
@@ -58944,8 +59066,7 @@
                     "required": [
                       "action",
                       "taskID",
-                      "text",
-                      "evidence_read_refs"
+                      "acceptance_gap"
                     ],
                     "type": "object"
                   },
@@ -96047,6 +96168,7 @@
                               "dispatch_lineage",
                               "dispatch_settlement",
                               "mission_acceptance_resume_receipt",
+                              "task_acceptance_ledger",
                               "task_checkpoint_settlement",
                               "task_auxiliary_settlement",
                               "exploration",
@@ -102922,6 +103044,7 @@
                                   "dispatch_lineage",
                                   "dispatch_settlement",
                                   "mission_acceptance_resume_receipt",
+                                  "task_acceptance_ledger",
                                   "task_checkpoint_settlement",
                                   "task_auxiliary_settlement",
                                   "exploration",

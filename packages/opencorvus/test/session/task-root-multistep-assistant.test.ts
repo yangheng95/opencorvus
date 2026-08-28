@@ -274,3 +274,18 @@ test("one activation retains a clean decision gap for a bounded owned Provider c
     },
   })
 })
+
+test("a durable Task-root decision settles a tool-finish Provider step", () => {
+  expect(
+    SessionProcessor.ContinuationTestHooks.continuationRetention({
+      continuationIsSafe: true,
+      retainAssistantOnToolContinuation: true,
+      finishIncludesTool: true,
+      ownedContinuationDecision: false,
+    }),
+  ).toEqual({
+    toolContinuation: false,
+    ownedContinuation: false,
+    retainAssistant: false,
+  })
+})

@@ -97,4 +97,30 @@ describe("execution progress inactivity configuration ownership", () => {
       get.mockRestore()
     }
   })
+
+  test("delegates Provider and Tool execution to its own terminal authority", async () => {
+    const getGlobal = spyOn(EngineConfig, "getGlobal").mockResolvedValue({
+      ...EngineConfig.defaults,
+      activity: {
+        ...EngineConfig.defaults.activity,
+        execution_progress_idle_ms: 25,
+      },
+    })
+    try {
+      using fence = await createSchedulerExecutionInactivityFence({
+        occurrence: "Automation fire delegated-provider-contract",
+        signals: [],
+        initialPhase: "claimed",
+        configurationOwner: "global",
+      })
+      const receipt = await fence.runDelegated("provider-owned execution", async () => {
+        await Bun.sleep(50)
+        fence.signal.throwIfAborted()
+        return { kind: "durable_provider_terminal_receipt" as const }
+      })
+      expect(receipt).toEqual({ kind: "durable_provider_terminal_receipt" })
+    } finally {
+      getGlobal.mockRestore()
+    }
+  })
 })

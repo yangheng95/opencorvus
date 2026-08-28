@@ -45,6 +45,26 @@ const executionOptions = {
   abortSignal: new AbortController().signal,
 } as ToolExecutionOptions
 
+function acceptanceGap(readReference = "ar_1234567890abcdef") {
+  return {
+    gap_id: "gap-audit-receipt",
+    current_ledger_revision_artifact_id: null,
+    criteria: [
+      {
+        criterion_id: "audit-receipt",
+        disposition: "failed" as const,
+        finding: "The published audit receipt does not match the accepted output.",
+        relied_evidence_read_refs: [readReference],
+        contradictory_evidence_read_refs: [],
+        responsible_workflow_node_id: "builder",
+        required_new_evidence_kind: "corrected-audit-receipt",
+      },
+    ],
+    preserved_acceptances: [],
+    requested_next_action: "Correct only the audit receipt and publish its new canonical revision.",
+  }
+}
+
 describe("SessionLoop provider Tool execution input", () => {
   test("projects an OpenAI strict root union as one nested operation with branch-specific required fields", async () => {
     const prepared = preparedMissionPanelTool() as unknown as { inputSchema: unknown }
@@ -68,9 +88,7 @@ describe("SessionLoop provider Tool execution input", () => {
     expect(artifactPage.properties.page_number).toEqual(
       expect.objectContaining({ type: "integer", minimum: 1, maximum: 1_000 }),
     )
-    expect(artifactPage.properties.terminal_lifecycle_reference).toEqual(
-      expect.objectContaining({ type: "object" }),
-    )
+    expect(artifactPage.properties.terminal_lifecycle_reference).toEqual(expect.objectContaining({ type: "object" }))
 
     const validated = await schema.validate?.({
       operation: {
@@ -120,8 +138,7 @@ describe("SessionLoop provider Tool execution input", () => {
         operation: {
           action: "resume_task",
           taskID: "task-provider-union",
-          text: "Apply the reviewed correction.",
-          evidence_read_refs: ["ar_1234567890abcdef"],
+          acceptance_gap: acceptanceGap(),
           model: null,
           summary: null,
           task_acceptances: null,
@@ -133,8 +150,7 @@ describe("SessionLoop provider Tool execution input", () => {
     expect(result).toEqual({
       action: "resume_task",
       taskID: "task-provider-union",
-      text: "Apply the reviewed correction.",
-      evidence_read_refs: ["ar_1234567890abcdef"],
+      acceptance_gap: acceptanceGap(),
     })
   })
 
@@ -176,8 +192,7 @@ describe("SessionLoop provider Tool execution input", () => {
       {
         action: "resume_task",
         taskID: "task-provider-union",
-        text: "Apply the reviewed correction.",
-        evidence_read_refs: ["ar_1234567890abcdef"],
+        acceptance_gap: acceptanceGap(),
         invented_provider_field: "must remain invalid",
       },
       executionOptions,

@@ -233,6 +233,13 @@ import {
   renewControlLeaseInTransaction,
 } from "@/engine/control-lease"
 import { Identifier } from "@/id/id"
+import {
+  acceptanceGapEvidenceLocators,
+  MissionAcceptanceGapSchema,
+  renderMissionAcceptanceRepairMessage,
+  type MissionAcceptanceGap,
+} from "@/mission/acceptance-gap"
+import { appendTaskAcceptanceLedgerRevisionInTransaction } from "@/mission/acceptance-ledger"
 import { AttachmentStore } from "@/storage/attachment-store"
 import { SessionWake } from "@/session/wake"
 import { withTaskCreationOwnerLock } from "@/engine/task-creation-owner"
@@ -331,8 +338,9 @@ const MissionTaskResumeReceiptSchema = z
     message_id: z.string().min(1),
     wake_id: z.string().min(1),
     ingress_artifact_id: z.string().min(1),
+    acceptance_ledger_revision_artifact_id: z.string().min(1),
     prior_terminal_lifecycle_reference: TerminalLifecycleReferenceSchema,
-    evidence_locators: z.array(ArtifactReadLocatorSchema).min(1).max(64),
+    acceptance_gap: MissionAcceptanceGapSchema,
     time_accepted: z.number().int().positive(),
   })
   .strict()
@@ -823,10 +831,9 @@ async function acquireCancellationConvergence(taskID: string) {
               }),
             )
           } catch (cause) {
-            const error = new Error(
-              `Task ${taskID} cancellation convergence owner lease is no longer authoritative`,
-              { cause },
-            )
+            const error = new Error(`Task ${taskID} cancellation convergence owner lease is no longer authoritative`, {
+              cause,
+            })
             leaseFence.abort(error)
             throw error
           }
@@ -1021,7 +1028,14 @@ async function continueTaskMessage(
   metadata?: Record<string, unknown>,
   acceptanceEffects?: (db: Database.TxOrDb) => void,
 ) {
-  const wake = await appendAndWakeTaskOperatorMessage({ taskID, text, attachments, source, metadata, acceptanceEffects })
+  const wake = await appendAndWakeTaskOperatorMessage({
+    taskID,
+    text,
+    attachments,
+    source,
+    metadata,
+    acceptanceEffects,
+  })
 
   return {
     mode: "scheduler" as const,
@@ -2244,7 +2258,7 @@ export namespace EngineService {
       )
       try {
         // Ingress facts are immutable: explicit Task deletion cascades them, and
-      // ordinary cancellation never rewrites or deletes accepted history.
+        // ordinary cancellation never rewrites or deletes accepted history.
         if (!isTaskTerminal(task)) {
           if (!options?.origin) {
             throw new Error(`setTaskArchived requires cancellation origin while task ${taskID} is non-terminal.`)
@@ -3155,6 +3169,8 @@ export namespace EngineService {
     input: {
       importer: CrossTaskArtifactImporter
       toolPartID: string
+      expectedAcceptanceLedgerArtifactID: string | null
+      acceptanceGap: MissionAcceptanceGap
     },
   ) {
     const receipt = existing.receipt
@@ -3162,7 +3178,8 @@ export namespace EngineService {
       receipt.mission_id !== input.importer.missionID ||
       receipt.mission_session_id !== input.importer.sessionID ||
       receipt.panel_message_id !== input.importer.messageID ||
-      receipt.tool_part_id !== input.toolPartID
+      receipt.tool_part_id !== input.toolPartID ||
+      JSON.stringify(receipt.acceptance_gap) !== JSON.stringify(MissionAcceptanceGapSchema.parse(input.acceptanceGap))
     ) {
       throw new Error(`Mission acceptance-resume tool identity conflicts with receipt ${existing.artifactID}.`)
     }
@@ -3202,13 +3219,21 @@ export namespace EngineService {
     taskID: string
     importer: CrossTaskArtifactImporter
     reviewedTerminalLifecycleReference: TerminalLifecycleReference
-    text: string
-    evidenceLocators: ArtifactReadLocator[]
+    expectedAcceptanceLedgerArtifactID: string | null
+    acceptanceGap: MissionAcceptanceGap
     completeEvidenceLocators: ArtifactReadLocator[]
     toolPartID: string
   }) {
     const reviewed = TerminalLifecycleReferenceSchema.parse(input.reviewedTerminalLifecycleReference)
-    const evidenceLocators = z.array(ArtifactReadLocatorSchema).min(1).max(64).parse(input.evidenceLocators)
+    const acceptanceGap = MissionAcceptanceGapSchema.parse(input.acceptanceGap)
+    if (!sameTerminalLifecycleReference(acceptanceGap.reviewed_terminal_lifecycle_reference, reviewed)) {
+      throw new Error(`Mission acceptance gap ${acceptanceGap.gap_id} does not bind the reviewed terminal occurrence.`)
+    }
+    const evidenceLocators = z
+      .array(ArtifactReadLocatorSchema)
+      .min(1)
+      .max(64)
+      .parse(acceptanceGapEvidenceLocators(acceptanceGap))
     const task = requireTaskInCurrentProject(input.taskID)
     await assertTaskRootSessionLineageInCurrentProject(task)
     requireMissionTaskLineageAuthority({
@@ -3218,7 +3243,7 @@ export namespace EngineService {
     })
     const existing = missionTaskResumeReceipt(input.taskID, input.importer.toolCallID)
     if (existing) {
-      assertMissionTaskResumeReceiptIdentity(existing, input)
+      assertMissionTaskResumeReceiptIdentity(existing, { ...input, acceptanceGap })
       return {
         kind: "resumed" as const,
         receipt_artifact_id: existing.artifactID,
@@ -3249,7 +3274,16 @@ export namespace EngineService {
     }
 
     const now = Date.now()
-    const bundle = await buildTaskSessionMessageBundle(task, input.text, "mission.acceptance_resume", "mission")
+    const acceptanceLedgerArtifactID = Identifier.deterministic(
+      "artifact",
+      `mission-acceptance-ledger-v1\0${input.taskID}\0${input.importer.toolCallID}`,
+    )
+    const bundle = await buildTaskSessionMessageBundle(
+      task,
+      renderMissionAcceptanceRepairMessage(acceptanceGap),
+      "mission.acceptance_resume",
+      "mission",
+    )
     const event = OrchestratorEventSchema.parse({
       missionAcceptanceResume: {
         missionID: input.importer.missionID,
@@ -3259,11 +3293,11 @@ export namespace EngineService {
         toolCallID: input.importer.toolCallID,
         toolPartID: input.toolPartID,
         reviewedTerminalLifecycleReference: reviewed,
-        evidenceLocators,
+        acceptanceLedgerRevisionArtifactID: acceptanceLedgerArtifactID,
+        acceptanceGap,
       },
     })
     let durableReceipt: { artifactID: string; receipt: z.infer<typeof MissionTaskResumeReceiptSchema> } | undefined
-    let wakeStatus: DispatchTaskLoopResult | "accepted" | undefined
     try {
       await SessionPromptState.runTaskRootIngress({
         rootSessionID: task.session_id!,
@@ -3271,9 +3305,8 @@ export namespace EngineService {
         run: async () => {
           const committed = missionTaskResumeReceipt(input.taskID, input.importer.toolCallID)
           if (committed) {
-            assertMissionTaskResumeReceiptIdentity(committed, input)
+            assertMissionTaskResumeReceiptIdentity(committed, { ...input, acceptanceGap })
             durableReceipt = committed
-            wakeStatus = "accepted"
             return
           }
           const persisted = await Session.persistMessageWithCommit(bundle, () => {
@@ -3289,6 +3322,16 @@ export namespace EngineService {
               if (isTaskCancelled(current)) throw missionTaskResumeLifecycleConflict({ task: current, reviewed })
               const openedTask = openTaskForContinuationInTransaction({ db, taskID: input.taskID, now })
               appendTaskRewindClearedInTransaction(input.taskID, now, "mission.acceptance_resume")
+              const executionEpoch = taskLifecycleProjectionInTransaction(db, input.taskID).epoch
+              appendTaskAcceptanceLedgerRevisionInTransaction({
+                db,
+                taskID: input.taskID,
+                artifactID: acceptanceLedgerArtifactID,
+                executionEpoch,
+                expectedPreviousArtifactID: input.expectedAcceptanceLedgerArtifactID,
+                gap: acceptanceGap,
+                now,
+              })
               const ingressArtifactID = persistMissionAcceptanceResumeIngressInTransaction(db, {
                 task: openedTask,
                 event,
@@ -3315,8 +3358,9 @@ export namespace EngineService {
                 message_id: bundle.info.id,
                 wake_id: bundle.info.id,
                 ingress_artifact_id: ingressArtifactID,
+                acceptance_ledger_revision_artifact_id: acceptanceLedgerArtifactID,
                 prior_terminal_lifecycle_reference: reviewed,
-                evidence_locators: evidenceLocators,
+                acceptance_gap: acceptanceGap,
                 time_accepted: now,
               })
               const artifactID = insertEngineArtifact(db, {
@@ -3332,7 +3376,6 @@ export namespace EngineService {
           if (persisted.info.role !== "user" || persisted.info.author !== "mission") {
             throw new Error(`Mission acceptance-resume message ${persisted.info.id} has invalid persisted participant.`)
           }
-          wakeStatus = await dispatchPersistedTaskLoop(input.taskID, durableReceipt?.receipt.ingress_artifact_id)
         },
       })
     } catch (error) {
@@ -3341,7 +3384,14 @@ export namespace EngineService {
       throw error
     }
     if (!durableReceipt) throw new Error(`Mission acceptance-resume transaction committed without a receipt.`)
-    if (!wakeStatus) throw new Error(`Mission acceptance-resume committed without dispatch acceptance.`)
+    // The acceptance owner serializes the Message, epoch, ledger, ingress and
+    // receipt transaction. Reconciliation must begin only after that physical
+    // owner is released: activating the persisted ingress while still holding
+    // the same root owner would queue behind itself and deadlock.
+    const wakeStatus: DispatchTaskLoopResult = await dispatchPersistedTaskLoop(
+      input.taskID,
+      durableReceipt.receipt.ingress_artifact_id,
+    )
     return {
       kind: "resumed" as const,
       receipt_artifact_id: durableReceipt.artifactID,
