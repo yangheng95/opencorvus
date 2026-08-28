@@ -26,7 +26,7 @@ import {
   ToolPartOutcomeTable,
   type ToolOutcomePartData,
 } from "@/session/session.sql"
-import { completedToolOutcomeOutput } from "@/session/tool-part-facts"
+import { completedToolOutcomeOutput } from "@/session/tool-outcome-facts"
 import { MissionPanelActionSchema } from "@/panel/capability"
 import { materializeToolExecutionInput } from "@/provider/tool-execution-input"
 import {
