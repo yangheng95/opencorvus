@@ -1,13 +1,13 @@
 import { Message } from "@/session/message"
 import { MessageTable } from "@/session/session.sql"
-import { SessionWake } from "@/session/wake"
 import { and, eq, sql, type Database } from "@/storage/db"
+import { SchedulerMessageWakeReason } from "./scheduler-message-wake-reason"
 
 /**
  * Whether the persisted wake Message is the one this scheduler delivery owns.
  *
- * Decoded through `SessionWake.WakeReason`, the same schema `event-service.ts`
- * and `automation-service.ts` read it with. The hand-written type assertion
+ * Decoded through the scheduler Message branch composed into the broader
+ * Session wake schema. The hand-written type assertion
  * this replaced named `source`/`eventID`/`inboxID` itself, so renaming a field
  * on the `scheduler.message` branch would have compiled here and quietly
  * matched nothing — and this predicate gates delivery settlement, so a silent
@@ -30,8 +30,8 @@ export function schedulerWakeMessageMatchesInTransaction(
   // to be put back the same way every other Message decode site does it.
   const info = Message.User.safeParse({ ...message.data, id: message.id, sessionID: message.sessionID })
   if (!info.success) return false
-  const reason = SessionWake.WakeReason.safeParse(info.data.extra?.wake_reason)
-  if (!reason.success || reason.data.source !== "scheduler.message") return false
+  const reason = SchedulerMessageWakeReason.safeParse(info.data.extra?.wake_reason)
+  if (!reason.success) return false
   return reason.data.eventID === input.eventID && reason.data.inboxID === input.inboxID
 }
 
