@@ -764,7 +764,7 @@ describe("single Tool-result turn-control protocol", () => {
     })
   })
 
-  test("executes the production projected runtime-repair wait writer", async () => {
+  test("executes the production projected orchestrator wait writer", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
@@ -774,10 +774,10 @@ describe("single Tool-result turn-control protocol", () => {
           permissionMode: "full_access",
         })
         const wait = fixture.tools.wait
-        if (!wait?.execute) throw new Error("Projected scheduler runtime-repair wait is unavailable")
+        if (!wait?.execute) throw new Error("Projected scheduler orchestrator wait is unavailable")
         const result = await wait.execute(
-          { duration_ms: 1_000, reason: "verify the runtime-repair wait producer" },
-          { toolCallId: "call_runtime_repair_wait", messages: [], abortSignal: fixture.abort },
+          { duration_ms: 1_000, reason: "verify the orchestrator wait producer" },
+          { toolCallId: "call_orchestrator_wait", messages: [], abortSignal: fixture.abort },
         )
         const automations = Database.use((db) =>
           db.select().from(AutomationTable).where(eq(AutomationTable.task_id, fixture.taskID)).all(),

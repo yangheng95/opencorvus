@@ -6,17 +6,11 @@ import { Shell } from "@/shell/shell"
 import { DEFAULT_BASH_TIMEOUT_MS } from "@/shell/timeout"
 import { ProcessSupervisor } from "@/shell/process-supervisor"
 import { BrowserPreviewTool, BrowserPreviewToolStaticDefinition } from "@/tool/browser-preview"
-import { executeWait } from "@/tool/wait"
-import { WAIT_MAX_MS, WAIT_MIN_MS, WaitToolDescription, WaitToolParameters } from "@/tool/wait-contract"
-import { withImmediateParkToolResultControl } from "@/session/tool-result-control"
 import { Tool } from "@/tool/tool"
 import { resolveSessionExecutionAuthority } from "@/engine/task-session-lineage"
-import { bindToolExecutionMode } from "@/tool/execution-mode"
 
 export const ORCHESTRATOR_BASH_DEFAULT_TIMEOUT_MS = DEFAULT_BASH_TIMEOUT_MS
 export const ORCHESTRATOR_BASH_MAX_TIMEOUT_MS = 10 * 60 * 1000
-export const ORCHESTRATOR_WAIT_MIN_MS = WAIT_MIN_MS
-export const ORCHESTRATOR_WAIT_MAX_MS = WAIT_MAX_MS
 
 const log = Log.create({ service: "task-tools" })
 
@@ -185,41 +179,5 @@ export function createRuntimeRepairTools(input: {
         return `purpose=${description}; exit=${exitCode ?? "?"}; cmd=${command}\n\n${clipped}${trailer}`
       },
     }),
-
-    wait: bindToolExecutionMode(tool({
-      description:
-        WaitToolDescription +
-        " In orchestrator context, wait is NOT a substitute for `question` (operator input required), `manage_task` action=fail_task (exact evidence proves force majeure beyond same-Task repair), or a real scheduler decision from the current task snapshot. Never use wait to poll child-agent completion, peer Delivery Slice reviews, or terminal evidence. After wait returns, decide from the refreshed task snapshot before the next dispatch.",
-      inputSchema: WaitToolParameters,
-      execute: async ({ duration_ms, reason }) => {
-        const result = await executeWait({
-          duration_ms,
-          reason,
-          signal: input.signal,
-          sessionID: input.agentSessionID,
-          taskID: input.taskID,
-          logPhase: "orchestrator",
-        })
-        return {
-          title: result.aborted ? "Wait Not Scheduled" : "Wait Scheduled",
-          output: `${result.output} This is a scheduled park decision; do not poll with another wait.`,
-          metadata: result.aborted ? {
-            requestedMs: result.requestedMs,
-            aborted: result.aborted,
-            jobID: result.jobID,
-            nextRun: result.nextRun,
-            mode: result.mode,
-            nonblocking: true,
-          } : withImmediateParkToolResultControl({
-            requestedMs: result.requestedMs,
-            aborted: result.aborted,
-            jobID: result.jobID,
-            nextRun: result.nextRun,
-            mode: result.mode,
-            nonblocking: true,
-          }),
-        }
-      },
-    }), "turn_control_exclusive"),
   }
 }

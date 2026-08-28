@@ -103,6 +103,8 @@ import { MessageTable, PartTable } from "@/session/session.sql"
 import { timelineOrderKey } from "@/timeline/order"
 import { READ_TOOL_DESCRIPTION, ReadTool, ReadToolParameters } from "@/tool/read"
 import { BrowserPreviewCaptureTool, BrowserPreviewCaptureToolStaticDefinition } from "@/tool/browser-preview-capture"
+import { executeWait } from "@/tool/wait"
+import { WaitToolDescription, WaitToolParameters } from "@/tool/wait-contract"
 import { Log } from "@/util/log"
 import { tool } from "ai"
 import fs from "node:fs/promises"
@@ -2029,6 +2031,47 @@ export function createOrchestratorTools(input: {
       signal: input.signal,
       requireExecutionContext: requireOrchestratorToolExecutionContext,
     }),
+
+    wait: bindToolExecutionMode(
+      tool({
+        description:
+          WaitToolDescription +
+          " In orchestrator context, wait is NOT a substitute for `question` (operator input required), `manage_task` action=fail_task (exact evidence proves force majeure beyond same-Task repair), or a real scheduler decision from the current task snapshot. Never use wait to poll child-agent completion, peer Delivery Slice reviews, or terminal evidence. After wait returns, decide from the refreshed task snapshot before the next dispatch.",
+        inputSchema: WaitToolParameters,
+        execute: async ({ duration_ms, reason }) => {
+          const result = await executeWait({
+            duration_ms,
+            reason,
+            signal: input.signal,
+            sessionID: input.agentSessionID,
+            taskID: input.taskID,
+            logPhase: "orchestrator",
+          })
+          return {
+            title: result.aborted ? "Wait Not Scheduled" : "Wait Scheduled",
+            output: `${result.output} This is a scheduled park decision; do not poll with another wait.`,
+            metadata: result.aborted
+              ? {
+                  requestedMs: result.requestedMs,
+                  aborted: result.aborted,
+                  jobID: result.jobID,
+                  nextRun: result.nextRun,
+                  mode: result.mode,
+                  nonblocking: true,
+                }
+              : withImmediateParkToolResultControl({
+                  requestedMs: result.requestedMs,
+                  aborted: result.aborted,
+                  jobID: result.jobID,
+                  nextRun: result.nextRun,
+                  mode: result.mode,
+                  nonblocking: true,
+                }),
+          }
+        },
+      }),
+      "turn_control_exclusive",
+    ),
   }
 
   const dispatchAdapterExecutor = (
