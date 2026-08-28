@@ -8,10 +8,6 @@ export function browserMcpToolKey(serverName: string, toolName: string): Browser
   return serverName === "browser" ? `browser_${toolName}` : undefined
 }
 
-export function browserMcpToolKeyFromRuntimeName(toolKey: string): BrowserMcpToolKey | undefined {
-  return toolKey.startsWith("browser_") ? (toolKey as BrowserMcpToolKey) : undefined
-}
-
 export function bindBrowserMcpPermissionKey<T extends object>(tool: T, key: BrowserMcpToolKey): T {
   Object.defineProperty(tool, browserMcpPermissionKey, {
     value: key,

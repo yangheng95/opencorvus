@@ -16,10 +16,6 @@ export function computerMcpToolKey(serverName: string, toolName: string): Comput
   return COMPUTER_MCP_TOOL_KEYS.has(key) ? key : undefined
 }
 
-export function computerMcpToolKeyFromRuntimeName(toolKey: string): ComputerMcpToolKey | undefined {
-  return COMPUTER_MCP_TOOL_KEYS.has(toolKey as ComputerMcpToolKey) ? (toolKey as ComputerMcpToolKey) : undefined
-}
-
 export function bindComputerMcpPermissionKey<T extends object>(tool: T, key: ComputerMcpToolKey): T {
   Object.defineProperty(tool, computerMcpPermissionKey, {
     value: key,

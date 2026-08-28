@@ -32,8 +32,6 @@ import { Instance } from "../project/instance"
 import { InstanceLifecycleContext } from "../project/instance-lifecycle-context"
 import { AttachmentStore } from "@/storage/attachment-store"
 import { materializeMcpToolResult, materializedMcpAttachmentsToFileParts } from "@/mcp/materialize"
-import { BrowserMCPBuiltin } from "@/mcp/browser/builtin"
-import { ComputerMCPBuiltin } from "@/mcp/computer/builtin"
 import { Bus } from "../bus"
 import { ProviderTransform } from "../provider/transform"
 import { ProviderSchema } from "../provider/schema"
@@ -49,8 +47,9 @@ import { defer } from "../util/defer"
 import { ToolRegistry } from "../tool/registry"
 import { Env } from "../env"
 import { MCP } from "../mcp"
-import { browserMcpPermissionKeyOf, browserMcpToolKeyFromRuntimeName } from "@/mcp/browser/permission-plan"
-import { computerMcpPermissionKeyOf, computerMcpToolKeyFromRuntimeName } from "@/mcp/computer/permission-plan"
+import { browserMcpPermissionKeyOf } from "@/mcp/browser/permission-plan"
+import { computerMcpPermissionKeyOf } from "@/mcp/computer/permission-plan"
+import { mcpToolProviderKind } from "@/mcp/provider-kind"
 import { NamedError } from "@opencorvus-ai/util/error"
 import { fn } from "@/util/fn"
 import { SessionProcessor } from "./processor"
@@ -3376,8 +3375,7 @@ export namespace SessionLoop {
       if (!execute) continue
       const mcpAppBinding = MCP.appToolBinding(item)
       const mcpAuthorityBinding = MCP.toolAuthorityBinding(item)
-      const isBuiltinMcp = Boolean(browserMcpToolKeyFromRuntimeName(key) || computerMcpToolKeyFromRuntimeName(key))
-      if (!isBuiltinMcp && !mcpAuthorityBinding) {
+      if (!mcpAuthorityBinding) {
         throw new Error(`MCP Tool ${key} is missing its immutable authorization binding`)
       }
       const mcpAppLifecycle = mcpAppBinding
@@ -3389,6 +3387,12 @@ export namespace SessionLoop {
           })
         : undefined
       if (mcpAppLifecycle) input.processor.registerMcpAppToolLifecycle(key, mcpAppLifecycle)
+      // The provider is the server this tool was projected from, never the
+      // shape of its runtime name.
+      const mcpProviderKind = mcpToolProviderKind({
+        serverID: mcpAuthorityBinding.serverID,
+        isMcpApp: Boolean(mcpAppLifecycle),
+      })
 
       const mcpTool = {
         ...(item as any),
@@ -3397,8 +3401,6 @@ export namespace SessionLoop {
           const normalizedInput = normalizeToolInput(args)
           const persistedInput = cloneToolInputForPersistence(normalizedInput.ok ? normalizedInput.value : {})
           const toolPart = await input.processor.ensureToolPart(opts.toolCallId, key, persistedInput)
-          const browserPermissionKey = browserMcpToolKeyFromRuntimeName(key)
-          const computerPermissionKey = computerMcpToolKeyFromRuntimeName(key)
           const invocationIdentity = {
             projectID: Instance.project.id,
             sessionID: input.session.id,
@@ -3406,17 +3408,9 @@ export namespace SessionLoop {
             toolCallID: opts.toolCallId,
             toolPartID: toolPart.id,
             providerName: key,
-            providerKind: browserPermissionKey
-              ? ("browser" as const)
-              : computerPermissionKey
-                ? ("computer" as const)
-                : mcpAppLifecycle
-                  ? ("mcp_app" as const)
-                  : ("mcp" as const),
-            providerID: mcpAuthorityBinding?.serverID ?? key,
-            providerDigest: mcpAuthorityBinding
-              ? `${mcpAuthorityBinding.configDigest}:${mcpAuthorityBinding.toolDigest}`
-              : undefined,
+            providerKind: mcpProviderKind,
+            providerID: mcpAuthorityBinding.serverID,
+            providerDigest: `${mcpAuthorityBinding.configDigest}:${mcpAuthorityBinding.toolDigest}`,
             args: persistedInput,
           }
           return withTaskToolInvocation(invocationIdentity, ctx.executionSurface, async () => {
@@ -3463,11 +3457,7 @@ export namespace SessionLoop {
                 // The provider this result came from, taken from the same
                 // identity the invocation was recorded under — not guessed
                 // again from the payload's shape.
-                serverName: browserPermissionKey
-                  ? BrowserMCPBuiltin.ServerName
-                  : computerPermissionKey
-                    ? ComputerMCPBuiltin.ServerName
-                    : (mcpAuthorityBinding?.serverID ?? undefined),
+                serverName: mcpAuthorityBinding.serverID,
               })
 
               const truncated = await Truncate.output(
