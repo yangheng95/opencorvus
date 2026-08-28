@@ -201,12 +201,14 @@ horizontal audit covers every production entry:
   partial row instead of crossing a production cut. It now exits from the real
   Session wake immediately before loop activation, and the full process checker
   passes again.
-- Final review remains blocked on delivery closure: the process-level
-  exactly-once assertion currently depends on a separate, still-uncommitted
-  durable Session prompt-owner change already present in the shared worktree.
-  That other task's files will not be folded into this commit without a verified
-  ownership handoff; the checker cannot be claimed as clean-HEAD evidence until
-  that shared mechanism lands first.
+- Final review found no unresolved issue after the shared prerequisite landed
+  independently as `34ecb65bf` (cross-process Session prompt ownership) and
+  `75757d958` (exact managed-parent occurrence). On that committed `HEAD`, the
+  route test passed 3/3, and the process checker passed with 27 assertions,
+  including one physical Provider request for the same-payload two-process
+  race. Both package typechecks and the route, docs, architecture, SDK import,
+  and diff checks passed. The independent reviewer confirmed that no
+  uncommitted prompt-owner behavior contributes to the result.
 
 ## Risks and exclusions
 
