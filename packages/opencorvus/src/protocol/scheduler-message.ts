@@ -6,7 +6,7 @@ import { runWithInitializedIndependentProject } from "@/project/independent-proj
 import { Scheduler } from "@/scheduler"
 import { Log } from "@/util/log"
 import { SessionWake } from "@/session/wake"
-import { EngineService } from "@/task-api"
+import type { EngineService } from "@/task-api"
 import { ProtocolStore } from "./store"
 import {
   assertSchedulerTargetOccurrenceAvailableInTransaction,
@@ -48,6 +48,15 @@ const drainTails = new Map<string, Promise<void>>()
 let beforeMissionMaterializationForTest: (() => void | Promise<void>) | undefined
 let beforeGlobalPollForTest: (() => void | Promise<void>) | undefined
 let signalDrainFailureReportForTest: ((error: unknown) => void) | undefined
+type TaskDeliveryMaterializer = typeof EngineService.materializeClaimedSchedulerMessageToTask
+let taskDeliveryMaterializer: TaskDeliveryMaterializer | undefined
+
+function requireTaskDeliveryMaterializer(): TaskDeliveryMaterializer {
+  if (!taskDeliveryMaterializer) {
+    throw new Error("Scheduler Message Task delivery materializer is not bound by Project bootstrap.")
+  }
+  return taskDeliveryMaterializer
+}
 
 function sameEndpoint(left: SchedulerEndpoint, right: SchedulerEndpoint) {
   return encodeSchedulerEndpoint(left) === encodeSchedulerEndpoint(right)
@@ -299,7 +308,7 @@ async function drainTaskRecipient(taskID: string, awaitedInboxID?: string): Prom
         throw new Error(`Scheduler inbox ${claimed.id} target does not match recipient Task.`)
       }
       const message = await sourceMessageText(delivery)
-      const result = await EngineService.materializeClaimedSchedulerMessageToTask({
+      const result = await requireTaskDeliveryMaterializer()({
         inboxID: delivery.id,
         ownerID,
         message,
@@ -433,6 +442,13 @@ function requestSchedulerMessageDrainForProject(
 installSchedulerMessageDrainSignal(requestSchedulerMessageDrain)
 
 export namespace SchedulerMessageDeliveryService {
+  export function bindTaskDeliveryMaterializer(materializer: TaskDeliveryMaterializer): void {
+    if (taskDeliveryMaterializer && taskDeliveryMaterializer !== materializer) {
+      throw new Error("Scheduler Message Task delivery materializer is already bound to another implementation.")
+    }
+    taskDeliveryMaterializer = materializer
+  }
+
   export function initGlobal(): void {
     Scheduler.register({
       id: "scheduler-message-delivery.poll",

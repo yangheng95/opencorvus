@@ -36,6 +36,7 @@ import { PermissionAuthority } from "@/permission/authority"
 import { ProjectMemoryOrganizer } from "@/memory/project-memory-organizer"
 import { reconcileBuildObservationCleanups } from "@/engine/build-observation-cleanup"
 import { SessionWake } from "@/session/wake"
+import { SchedulerMessageDeliveryService } from "@/protocol/scheduler-message"
 
 async function validateInstanceConversationCapabilities() {
   const lifecycleContext = {
@@ -57,6 +58,7 @@ async function validateInstanceConversationCapabilities() {
 export const InstanceBootstrap = markConversationCapabilityTransactionalInit(async function InstanceBootstrap() {
   Log.Default.info("bootstrapping", { directory: Instance.directory })
   installDefaultControlPlaneToolLoaders()
+  SchedulerMessageDeliveryService.bindTaskDeliveryMaterializer(EngineService.materializeClaimedSchedulerMessageToTask)
   configureTaskIngressRunner(runTaskLoop)
   const lifecycleContext = {
     directory: Instance.directory,

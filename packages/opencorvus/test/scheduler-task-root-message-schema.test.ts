@@ -6,6 +6,7 @@ import { appendTaskOpenedInTransaction } from "@/engine/task-lifecycle"
 import { Identifier } from "@/id/id"
 import { ensureMissionSession } from "@/mission/session"
 import { OrchestratorEventSchema } from "@/orchestrator/event"
+import { InstanceBootstrap } from "@/project/bootstrap"
 import { Instance } from "@/project/instance"
 import { requireSchedulerDelivery } from "@/protocol/delivery"
 import { sendSchedulerMessage } from "@/protocol/scheduler-message"
@@ -25,6 +26,7 @@ describe("scheduler Task-root Message protocol", () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
+      init: InstanceBootstrap,
       fn: async () => {
         await Config.updateProjectPatch({
           model: "scheduler-schema-test/scheduler-schema-model",
