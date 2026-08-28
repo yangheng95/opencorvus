@@ -42,10 +42,10 @@ import {
   listOrchestratorStreamErrorArtifacts,
   listTaskInfrastructureErrorArtifacts,
   listToolExecuteErrorArtifacts,
-  listOwnedPromptSessionsForTask,
   type GoalRow,
   type TaskRow,
 } from "./store"
+import { listOwnedPromptSessionsForTask } from "./runtime"
 import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
 import { AgentRoleContract } from "@/agent/role-contract"
 import { MessageTable, SessionTable } from "@/session/session.sql"

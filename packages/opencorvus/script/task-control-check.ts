@@ -372,7 +372,8 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
     { ProcessSupervisor },
     { ProtocolStore },
     { Session },
-    { listOwnedPromptSessionsForTask, listStartedIncompleteTaskIDs },
+    { listOwnedPromptSessionsForTask },
+    { listStartedIncompleteTaskIDs },
   ] = await Promise.all([
     import("@/cli/server-runtime"),
     import("@/engine/host-recovery"),
@@ -381,6 +382,7 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
     import("@/shell/process-supervisor"),
     import("@/protocol/store"),
     import("@/session"),
+    import("@/engine/runtime"),
     import("@/engine/store"),
   ])
   const preparedServer = await requireRecoveredServerRuntime(await listenWithRecoveredServerRuntime({

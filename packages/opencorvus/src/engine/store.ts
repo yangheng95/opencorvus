@@ -49,8 +49,6 @@ import {
   BuildFileObservation as SnapshotBuildFileObservation,
   type BuildFileObservation as SnapshotBuildFileObservationData,
 } from "@/snapshot/types"
-import { SessionPromptState } from "@/session/prompt/state"
-import { taskIDForSession } from "./task-session-lineage"
 import { findTaskCompletionDecisionForTerminalTime } from "./completion-decision"
 import {
   ArtifactReadLocatorSchema,
@@ -1188,30 +1186,6 @@ export function assertCurrentDeliverySliceRevisionIDs(input: {
     )
   }
   return [...input.deliverySliceRevisionIDs]
-}
-
-/** Exact Sessions with a prompt controller owned by this process. */
-export function listOwnedPromptSessionsForTask(taskID: string) {
-  return SessionPromptState.ownedPromptSessionIDs().flatMap((sessionID) => {
-    if (taskIDForSession(sessionID) !== taskID) return []
-    const row = Database.use((db) =>
-      db
-        .select({
-          sessionID: SessionTable.id,
-          kind: SessionTable.kind,
-        })
-        .from(SessionTable)
-        .where(eq(SessionTable.id, sessionID))
-        .get(),
-    )
-    if (!row) return []
-    return [
-      {
-        ...row,
-        lastActivityMs: SessionPromptState.activity(sessionID)?.timeUpdated ?? 0,
-      },
-    ]
-  })
 }
 
 function taskRows(rows: TaskRow[]) {

@@ -206,7 +206,6 @@ import {
   listProjectTasks,
   listTaskRows,
   searchProjectTasks,
-  listOwnedPromptSessionsForTask,
   listCurrentGoals,
   listInteractions,
   listSnapshots,
@@ -224,6 +223,7 @@ import {
   projectTaskRowsInTransaction,
   taskDeletedInTransaction,
 } from "@/engine/store"
+import { listOwnedPromptSessionsForTask } from "@/engine/runtime"
 import {
   acquireControlLeaseInTransaction,
   assertControlLeaseInTransaction,
