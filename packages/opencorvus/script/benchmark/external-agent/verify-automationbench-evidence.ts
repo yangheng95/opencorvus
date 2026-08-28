@@ -24,6 +24,7 @@ import {
   reusableBatchCandidateRunIDs,
   sourceAuthSecretLeaves,
   summarizeBenchmarkToolEvents,
+  auditScorerReplayEvidence,
   summarizeProviderUsageRows,
   providerUsageMatchesModel,
   type ProviderUsageRow,
@@ -663,12 +664,13 @@ for (const attempt of catalog.attempts) {
     throw new Error(`Host boundary isolation mismatch: ${attempt.run_id}`)
   }
   const independentReplay = await replayScore(directory, payload)
-  if (
-    scorerReplay.passed !== true ||
-    scorerReplay.example_id !== payload.benchmark.example_id ||
-    JSON.stringify(independentReplay) !== JSON.stringify(scorerReplay)
-  ) {
-    throw new Error(`Scorer replay mismatch: ${attempt.run_id}`)
+  const scorerReplayEvidenceAudit = auditScorerReplayEvidence({
+    sealed: scorerReplay,
+    independent: independentReplay,
+    exampleID: payload.benchmark.example_id,
+  })
+  if (!scorerReplayEvidenceAudit.passed) {
+    throw new Error(`Scorer replay mismatch for ${attempt.run_id}: ${scorerReplayEvidenceAudit.violations.join(", ")}`)
   }
   const events = eventText
     .split(/\r?\n/)

@@ -591,6 +591,96 @@ export function summarizeBenchmarkToolEvents(events: Array<Record<string, any>>)
   }
 }
 
+const SEALED_SCORER_REPLAY_REQUIRED_CHECKS = [
+  "partial_credit",
+  "task_completed_correctly",
+  "assertion_results",
+  "end_state_sha256",
+  "tool_attempts",
+  "tool_succeeded",
+  "tool_failed",
+  "world_transition_chain",
+] as const
+const CURRENT_SCORER_REPLAY_REQUIRED_CHECKS = [
+  ...SEALED_SCORER_REPLAY_REQUIRED_CHECKS,
+  "scorer_world_stable",
+] as const
+const SCORER_REPLAY_COUNTERS = [
+  "stateful_calls_verified_by_hash_chain",
+  "replayed_non_stateful_calls",
+  "skipped_non_stateful_calls",
+] as const
+const SCORER_REPLAY_TOP_LEVEL_FIELDS = new Set([
+  "schema_version",
+  "passed",
+  "example_id",
+  "checks",
+  ...SCORER_REPLAY_COUNTERS,
+])
+
+function scorerReplayRecord(value: unknown): Record<string, unknown> | undefined {
+  return value && typeof value === "object" && !Array.isArray(value)
+    ? (value as Record<string, unknown>)
+    : undefined
+}
+
+export function auditScorerReplayEvidence(input: {
+  sealed: unknown
+  independent: unknown
+  exampleID: unknown
+}) {
+  const sealed = scorerReplayRecord(input.sealed)
+  const independent = scorerReplayRecord(input.independent)
+  const sealedChecks = scorerReplayRecord(sealed?.checks)
+  const independentChecks = scorerReplayRecord(independent?.checks)
+  const violations: string[] = []
+  if (!sealed) violations.push("sealed_replay_audit_shape")
+  if (!independent) violations.push("independent_replay_audit_shape")
+  if (sealed?.schema_version !== 1) violations.push("sealed_replay_schema_version")
+  if (independent?.schema_version !== 1) violations.push("independent_replay_schema_version")
+  if (sealed?.passed !== true) violations.push("sealed_replay_not_passed")
+  if (independent?.passed !== true) violations.push("independent_replay_not_passed")
+  if (sealed?.example_id !== input.exampleID) violations.push("sealed_replay_example_identity")
+  if (independent?.example_id !== input.exampleID) violations.push("independent_replay_example_identity")
+  if (!sealedChecks) violations.push("sealed_replay_checks_shape")
+  if (!independentChecks) violations.push("independent_replay_checks_shape")
+  for (const field of Object.keys(sealed ?? {})) {
+    if (!SCORER_REPLAY_TOP_LEVEL_FIELDS.has(field)) violations.push(`sealed_replay_unknown_claim:${field}`)
+  }
+  for (const field of Object.keys(independent ?? {})) {
+    if (!SCORER_REPLAY_TOP_LEVEL_FIELDS.has(field)) violations.push(`independent_replay_unknown_claim:${field}`)
+  }
+  for (const check of SEALED_SCORER_REPLAY_REQUIRED_CHECKS) {
+    if (sealedChecks?.[check] !== true) violations.push(`sealed_replay_required_check:${check}`)
+  }
+  for (const check of CURRENT_SCORER_REPLAY_REQUIRED_CHECKS) {
+    if (independentChecks?.[check] !== true) violations.push(`independent_replay_required_check:${check}`)
+  }
+  for (const [check, value] of Object.entries(independentChecks ?? {})) {
+    if (value !== true) violations.push(`independent_replay_check_not_proven:${check}`)
+  }
+  for (const [check, value] of Object.entries(sealedChecks ?? {})) {
+    if (value !== true || independentChecks?.[check] !== value) violations.push(`sealed_replay_check_mismatch:${check}`)
+  }
+  for (const field of SCORER_REPLAY_COUNTERS) {
+    if (!Number.isSafeInteger(sealed?.[field]) || sealed?.[field] !== independent?.[field]) {
+      violations.push(`scorer_replay_counter_mismatch:${field}`)
+    }
+  }
+  for (const [field, value] of Object.entries(sealed ?? {})) {
+    if (
+      !SCORER_REPLAY_TOP_LEVEL_FIELDS.has(field) ||
+      field === "checks" ||
+      SCORER_REPLAY_COUNTERS.includes(field as (typeof SCORER_REPLAY_COUNTERS)[number])
+    )
+      continue
+    if (JSON.stringify(value) !== JSON.stringify(independent?.[field])) {
+      violations.push(`sealed_replay_claim_mismatch:${field}`)
+    }
+  }
+  return { passed: violations.length === 0, violations }
+}
+
 export function evidenceFileSetMatches(actual: string[], expected: string[]) {
   return JSON.stringify([...actual].sort()) === JSON.stringify([...expected].sort())
 }

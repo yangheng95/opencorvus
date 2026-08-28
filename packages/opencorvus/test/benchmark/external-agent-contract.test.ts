@@ -13,6 +13,7 @@ import {
   benchmarkInactivityDeadline,
   benchmarkRunKey,
   auditBenchmarkBunRuntime,
+  auditScorerReplayEvidence,
   auditBatchReceiptRedaction,
   automationBenchToolConfig,
   automationBenchHarnessRequest,
@@ -69,6 +70,135 @@ import {
 } from "../../script/benchmark/external-agent/contract"
 
 describe("external agent benchmark contract", () => {
+  test("accepts an immutable historical scorer seal after the current replay proves its additive purity check", () => {
+    const sealed = {
+      schema_version: 1,
+      passed: true,
+      example_id: 1488,
+      checks: {
+        partial_credit: true,
+        task_completed_correctly: true,
+        assertion_results: true,
+        end_state_sha256: true,
+        tool_attempts: true,
+        tool_succeeded: true,
+        tool_failed: true,
+        world_transition_chain: true,
+      },
+      stateful_calls_verified_by_hash_chain: 38,
+      replayed_non_stateful_calls: 33,
+      skipped_non_stateful_calls: 3,
+    }
+    const independent = {
+      ...sealed,
+      checks: { ...sealed.checks, scorer_world_stable: true, future_integrity_check: true },
+    }
+
+    expect(auditScorerReplayEvidence({ sealed, independent, exampleID: 1488 })).toEqual({ passed: true, violations: [] })
+  })
+
+  test("maps scorer seal and current replay drift to explicit evidence violations", () => {
+    const sealed = {
+      schema_version: 1,
+      passed: true,
+      example_id: 1488,
+      checks: {
+        partial_credit: true,
+        task_completed_correctly: true,
+        assertion_results: true,
+        end_state_sha256: true,
+        tool_attempts: true,
+        tool_succeeded: true,
+        tool_failed: true,
+        world_transition_chain: true,
+      },
+      stateful_calls_verified_by_hash_chain: 38,
+      replayed_non_stateful_calls: 33,
+      skipped_non_stateful_calls: 3,
+    }
+    const independent = {
+      ...sealed,
+      example_id: 1489,
+      checks: { ...sealed.checks, scorer_world_stable: false },
+      replayed_non_stateful_calls: 32,
+    }
+
+    expect(auditScorerReplayEvidence({ sealed, independent, exampleID: 1488 })).toEqual({
+      passed: false,
+      violations: [
+        "independent_replay_example_identity",
+        "independent_replay_required_check:scorer_world_stable",
+        "independent_replay_check_not_proven:scorer_world_stable",
+        "scorer_replay_counter_mismatch:replayed_non_stateful_calls",
+        "sealed_replay_claim_mismatch:example_id",
+      ],
+    })
+    const incompleteSealedChecks: Record<string, boolean> = { ...sealed.checks }
+    delete incompleteSealedChecks.partial_credit
+    expect(
+      auditScorerReplayEvidence({
+        sealed: { ...sealed, checks: incompleteSealedChecks },
+        independent: { ...sealed, checks: { ...sealed.checks, scorer_world_stable: true } },
+        exampleID: 1488,
+      }),
+    ).toEqual({
+      passed: false,
+      violations: ["sealed_replay_required_check:partial_credit"],
+    })
+    expect(
+      auditScorerReplayEvidence({
+        sealed,
+        independent: {
+          ...sealed,
+          checks: { ...sealed.checks, partial_credit: false, scorer_world_stable: true },
+        },
+        exampleID: 1488,
+      }),
+    ).toEqual({
+      passed: false,
+      violations: [
+        "independent_replay_required_check:partial_credit",
+        "independent_replay_check_not_proven:partial_credit",
+        "sealed_replay_check_mismatch:partial_credit",
+      ],
+    })
+    expect(
+      auditScorerReplayEvidence({
+        sealed,
+        independent: {
+          ...sealed,
+          checks: { ...sealed.checks, scorer_world_stable: true },
+          future_integrity_claim: true,
+        },
+        exampleID: 1488,
+      }),
+    ).toEqual({ passed: false, violations: ["independent_replay_unknown_claim:future_integrity_claim"] })
+    expect(
+      auditScorerReplayEvidence({
+        sealed,
+        independent: {
+          ...sealed,
+          checks: { ...sealed.checks, scorer_world_stable: true },
+          future_integrity_claim: false,
+        },
+        exampleID: 1488,
+      }),
+    ).toEqual({ passed: false, violations: ["independent_replay_unknown_claim:future_integrity_claim"] })
+    expect(
+      auditScorerReplayEvidence({
+        sealed,
+        independent: {
+          ...sealed,
+          checks: { ...sealed.checks, scorer_world_stable: true, future_integrity_check: false },
+        },
+        exampleID: 1488,
+      }),
+    ).toEqual({
+      passed: false,
+      violations: ["independent_replay_check_not_proven:future_integrity_check"],
+    })
+  })
+
   test("settles independent work with bounded concurrency and preserves input order", async () => {
     let active = 0
     let peak = 0

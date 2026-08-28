@@ -24,6 +24,7 @@ import {
   permanentRunInvalidation,
   sourceAuthSecretLeaves,
   summarizeBenchmarkToolEvents,
+  auditScorerReplayEvidence,
   summarizeProviderUsageRows,
   providerUsageMatchesModel,
   mapSettledWithBoundedConcurrency,
@@ -498,10 +499,12 @@ async function inspectRawRunEvidence(
     if (!input.independentReplay || input.independentReplay.status !== "fulfilled") {
       throw input.independentReplay?.reason ?? new Error("independent_scorer_replay_missing")
     }
-    const replayPassed =
-      scorerReplay.passed === true &&
-      scorerReplay.example_id === (result.benchmark as any).example_id &&
-      JSON.stringify(input.independentReplay.value) === JSON.stringify(scorerReplay)
+    const replayAudit = auditScorerReplayEvidence({
+      sealed: scorerReplay,
+      independent: input.independentReplay.value,
+      exampleID: (result.benchmark as any).example_id,
+    })
+    const replayPassed = replayAudit.passed
     const expectedAgentUID = 60_000 + Number((result.benchmark as any).case_index)
     const restrictedShellAuthority = automationBenchRestrictedShellAuthority({
       caseIndex: (result.benchmark as any).case_index,
@@ -572,6 +575,7 @@ async function inspectRawRunEvidence(
       tool_passed: toolPassed,
       request_hash_passed: requestPassed,
       scorer_replay_passed: replayPassed,
+      scorer_replay_evidence_audit: replayAudit,
       sandbox_isolation_passed: sandboxPassed,
       restricted_shell_authority_audit: restrictedShellAuthority,
       host_boundary_isolation_passed: hostBoundaryPassed,
