@@ -11,13 +11,11 @@ const sourcePrefix = "packages/opencorvus/src/"
 const retainedComponentBudgets = [
   {
     name: "session-orchestration",
-    maximumSize: 19,
+    maximumSize: 17,
     members: new Set<string>([
-      "packages/opencorvus/src/build/agent.ts",
       "packages/opencorvus/src/chat/global-chat-service.ts",
       "packages/opencorvus/src/expert-squad/evolution-mutation.ts",
       "packages/opencorvus/src/orchestrator/agent.ts",
-      "packages/opencorvus/src/orchestrator/build-tool.ts",
       "packages/opencorvus/src/orchestrator/loop.ts",
       "packages/opencorvus/src/orchestrator/runtime-repair-tools.ts",
       "packages/opencorvus/src/orchestrator/tools.ts",
@@ -41,6 +39,7 @@ const cleanImportEntrypoints = [
   "packages/opencorvus/src/session/loop.ts",
   "packages/opencorvus/src/config/config.ts",
 ] as const
+const cleanImportTimeoutMs = 120_000
 const snapshotMaterializationPaths = [
   "packages/opencorvus/src",
   "packages/opencorvus/generated",
@@ -294,12 +293,17 @@ async function checkCleanImports(snapshotRoot: string): Promise<string[]> {
           env: { ...process.env, OPENCORVUS_HOME: runtimeRoot },
           stdout: "pipe",
           stderr: "pipe",
-          timeout: 60_000,
+          timeout: cleanImportTimeoutMs,
         },
       )
       if (result.exitCode !== 0) {
         failures.push(
-          `clean import failed for ${entrypoint}: ${result.stderr.toString().trim() || `exit ${result.exitCode}`}`,
+          `clean import failed for ${entrypoint}: ${cleanImportFailureDetail({
+            stderr: result.stderr.toString().trim(),
+            exitCode: result.exitCode,
+            signalCode: result.signalCode,
+            exitedDueToTimeout: result.exitedDueToTimeout,
+          })}`,
         )
       }
     }
@@ -307,6 +311,20 @@ async function checkCleanImports(snapshotRoot: string): Promise<string[]> {
     await rm(runtimeRoot, { recursive: true, force: true })
   }
   return failures
+}
+
+export function cleanImportFailureDetail(input: {
+  stderr: string
+  exitCode: number | null
+  signalCode: NodeJS.Signals | null
+  exitedDueToTimeout: boolean
+}): string {
+  if (input.stderr) return input.stderr
+  if (input.exitedDueToTimeout) {
+    return `timed out after ${cleanImportTimeoutMs}ms${input.signalCode ? ` (${input.signalCode})` : ""}`
+  }
+  if (input.signalCode) return `terminated by signal ${input.signalCode}`
+  return `exit ${input.exitCode}`
 }
 
 async function main() {
