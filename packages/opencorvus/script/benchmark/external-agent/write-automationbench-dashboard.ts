@@ -381,7 +381,7 @@ const html = `<!doctype html>
   <section class="metrics" aria-label="Profile benchmark summary">
     ${summaries
       .flatMap((summary) => [
-        `<div class="metric"><span>${escapeHTML(summary.profile)} verified coverage</span><strong>${summary.rows.length} / ${targetCases}</strong>${summary.pendingRows.length > 0 ? `<span>${summary.pendingRows.length} sealed · pending catalog verification</span>` : ""}</div>`,
+        `<div class="metric"><span>${escapeHTML(summary.profile)} verified coverage</span><strong>${summary.rows.length} / ${targetCases}</strong>${summary.pendingRows.length > 0 ? `<span>${summary.pendingRows.length} sealed · pending audited receipt</span>` : ""}</div>`,
         `<div class="metric"><span>${escapeHTML(summary.profile)} strict pass rate</span><strong>${percent(summary.strictRate)}</strong></div>`,
         `<div class="metric"><span>${escapeHTML(summary.profile)} mean partial · usage</span><strong>${percent(summary.partialMean)}</strong><span>${integer(summary.tokensTotal)} total tokens · ${integer(summary.tokensMean)} mean</span><span>${integer(summary.modelCallsTotal)} model calls · ${integer(summary.modelCallsMean)} mean</span></div>`,
       ])
