@@ -1,6 +1,6 @@
 # August 2026 Records
 
-- [2026-08-29-v0.0.56-beta-release.md](2026-08-29-v0.0.56-beta-release.md) tracks the failed immutable `v0.0.56-beta` candidate and the reviewed `v0.0.56-beta.1` corrective application/same-source website publication through every remaining acceptance boundary.
+- [2026-08-29-v0.0.56-beta-release.md](2026-08-29-v0.0.56-beta-release.md) tracks the failed immutable `v0.0.56-beta` candidate and the reviewed `v0.0.57-beta` corrective application/same-source website publication through every remaining acceptance boundary.
 
 - [2026-08-29-light-expert-squad.md](2026-08-29-light-expert-squad.md) adds the two-role, read-only Light Expert Squad for consultation, investigation, and clarifying questions with variable same-role direct-dispatch fan-out.
 

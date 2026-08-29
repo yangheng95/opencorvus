@@ -4,9 +4,9 @@
 
 ## 未发布
 
-## 0.0.56beta.1 - 2026-08-29
+## 0.0.57beta - 2026-08-29
 
-本版本完成全仓架构债清理与真实 Mission 调度验收：统一 Task、Mission、Session、Provider、MCP、调度器、持久化与 Overlay 的事实和组合边界；新增全局 Chat、运行时 Skill Market、Inspect AI benchmark 适配与 Light 专家团；桌面端、命令行与公开网站由同一份 `0.0.56-beta.1` 不可变源码发布。SDK、util 与 plugin 的源码包元数据同步到同一版本并通过打包安装预检；npm registry 发布不属于本轮应用/网站发布范围。未发布的 `v0.0.56-beta` 首次候选因 frozen lockfile 漂移在 10 个矩阵任务的共享依赖安装阶段、原生打包前失败关闭，标签保留为不可变审计证据；`.1` 修正身份包含同步后的单一锁文件事实和前置发布门禁。
+本版本完成全仓架构债清理与真实 Mission 调度验收：统一 Task、Mission、Session、Provider、MCP、调度器、持久化与 Overlay 的事实和组合边界；新增全局 Chat、运行时 Skill Market、Inspect AI benchmark 适配与 Light 专家团；桌面端、命令行与公开网站由同一份 `0.0.57-beta` 不可变源码发布。SDK、util 与 plugin 的源码包元数据同步到同一版本并通过打包安装预检；npm registry 发布不属于本轮应用/网站发布范围。未发布的 `v0.0.56-beta` 首次候选因 frozen lockfile 漂移在 10 个矩阵任务的共享依赖安装阶段、原生打包前失败关闭，标签保留为不可变审计证据；`0.0.57-beta` 修正身份包含同步后的单一锁文件事实和前置发布门禁，并保持最多三段数字版本字段。
 
 ### Security
 

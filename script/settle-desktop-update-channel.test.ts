@@ -52,32 +52,32 @@ describe("desktop update channel settlement", () => {
     const authority = new MemoryChannel()
     await expect(
       settleDesktopUpdateChannel(
-        { version: "0.0.56-beta.2", channel: "beta", repository, candidate: candidate("0.0.56-beta.2") },
+        { version: "0.0.58-beta", channel: "beta", repository, candidate: candidate("0.0.58-beta") },
         authority,
       ),
-    ).resolves.toEqual({ kind: "promoted", version: "0.0.56-beta.2", channel: "beta" })
+    ).resolves.toEqual({ kind: "promoted", version: "0.0.58-beta", channel: "beta" })
     await expect(
       settleDesktopUpdateChannel(
-        { version: "0.0.56-beta.1", channel: "beta", repository, candidate: candidate("0.0.56-beta.1") },
+        { version: "0.0.57-beta", channel: "beta", repository, candidate: candidate("0.0.57-beta") },
         authority,
       ),
-    ).resolves.toEqual({ kind: "superseded", version: "0.0.56-beta.2", channel: "beta" })
-    expect(authority.current).toBe(candidate("0.0.56-beta.2"))
+    ).resolves.toEqual({ kind: "superseded", version: "0.0.58-beta", channel: "beta" })
+    expect(authority.current).toBe(candidate("0.0.58-beta"))
   })
 
   test("resumes an uncertain upload from canonical same-version channel state", async () => {
     const authority = new MemoryChannel()
     authority.failAfterUpload = true
     const input = {
-      version: "0.0.56-beta.1",
+      version: "0.0.57-beta",
       channel: "beta" as const,
       repository,
-      candidate: candidate("0.0.56-beta.1"),
+      candidate: candidate("0.0.57-beta"),
     }
     await expect(settleDesktopUpdateChannel(input, authority)).rejects.toThrow("connection closed after upload")
     await expect(settleDesktopUpdateChannel(input, authority)).resolves.toEqual({
       kind: "current",
-      version: "0.0.56-beta.1",
+      version: "0.0.57-beta",
       channel: "beta",
     })
   })
@@ -101,7 +101,7 @@ describe("desktop update channel settlement", () => {
     authority.current = current
     await expect(
       settleDesktopUpdateChannel(
-        { version: "0.0.56-beta.1", channel: "beta", repository, candidate: candidate("0.0.56-beta.1") },
+        { version: "0.0.57-beta", channel: "beta", repository, candidate: candidate("0.0.57-beta") },
         authority,
       ),
     ).rejects.toMatchObject({ code: "desktop_channel_invalid_manifest" })
@@ -113,10 +113,10 @@ describe("desktop update channel settlement", () => {
     await expect(
       settleDesktopUpdateChannel(
         {
-          version: "0.0.56-beta.1",
+          version: "0.0.57-beta",
           channel: "beta",
           repository,
-          candidate: JSON.stringify({ version: "0.0.56-beta.1" }),
+          candidate: JSON.stringify({ version: "0.0.57-beta" }),
         },
         authority,
       ),
@@ -169,7 +169,7 @@ describe("desktop update channel settlement", () => {
     authority.current = JSON.stringify(current)
     await expect(
       settleDesktopUpdateChannel(
-        { version: "0.0.56-beta.1", channel: "beta", repository, candidate: candidate("0.0.56-beta.1") },
+        { version: "0.0.57-beta", channel: "beta", repository, candidate: candidate("0.0.57-beta") },
         authority,
       ),
     ).rejects.toMatchObject({ code: "desktop_channel_invalid_manifest" })

@@ -95,7 +95,7 @@ describe("release dispatcher", () => {
     const head = run("git", ["rev-parse", "HEAD"], input.checkout).stdout.toString().trim()
     const result = run(
       gitBash,
-      [bashPath(path.join(repositoryRoot, "script", "release")), "0.0.56-beta.1"],
+      [bashPath(path.join(repositoryRoot, "script", "release")), "0.0.57-beta"],
       input.checkout,
       {
         GH_ARGUMENT_LOG: bashPath(input.log),
@@ -106,7 +106,7 @@ describe("release dispatcher", () => {
     )
     expect(result.exitCode, result.stderr.toString()).toBe(0)
     expect(result.stdout.toString()).toContain(
-      `Dispatching build.yml for v0.0.56-beta.1 from owner/repository:release-source@${head}`,
+      `Dispatching build.yml for v0.0.57-beta from owner/repository:release-source@${head}`,
     )
     const args = (await fs.readFile(input.log)).toString().split("\0").filter(Boolean)
     expect(args).toEqual([
@@ -118,7 +118,7 @@ describe("release dispatcher", () => {
       "--ref",
       "release-source",
       "-f",
-      "version=0.0.56-beta.1",
+      "version=0.0.57-beta",
       "-f",
       `expected_source_sha=${head}`,
     ])
@@ -138,7 +138,7 @@ describe("release dispatcher", () => {
 
     const result = run(
       gitBash,
-      [bashPath(path.join(repositoryRoot, "script", "release")), "0.0.56-beta.1"],
+      [bashPath(path.join(repositoryRoot, "script", "release")), "0.0.57-beta"],
       input.checkout,
       {
         GH_ARGUMENT_LOG: bashPath(input.log),
