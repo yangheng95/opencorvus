@@ -2230,6 +2230,36 @@ export function advanceBenchmarkActivityWindow(input: {
   }
 }
 
+const BENCHMARK_OBSERVATION_POLL_MIN_MS = 1_000
+const BENCHMARK_OBSERVATION_POLL_MAX_MS = 8_000
+
+/**
+ * Pace complete Mission/Task projection snapshots without changing their
+ * authority. Every observed activity change resets the caller's unchanged
+ * count to zero; stable snapshots back off to a small bound, and the current
+ * inactivity deadline always remains the final observation fence.
+ */
+export function benchmarkObservationPollDelay(input: {
+  consecutiveUnchanged: number
+  now: number
+  deadline: number
+  immediate?: boolean
+}): number {
+  const requestedUnchanged = Number.isSafeInteger(input.consecutiveUnchanged)
+    ? Math.max(0, input.consecutiveUnchanged)
+    : 0
+  const unchanged = input.immediate ? 0 : requestedUnchanged
+  const exponent = Math.min(
+    unchanged,
+    Math.log2(BENCHMARK_OBSERVATION_POLL_MAX_MS / BENCHMARK_OBSERVATION_POLL_MIN_MS),
+  )
+  const scheduled = Math.min(
+    BENCHMARK_OBSERVATION_POLL_MAX_MS,
+    BENCHMARK_OBSERVATION_POLL_MIN_MS * 2 ** exponent,
+  )
+  return Math.min(scheduled, Math.max(0, input.deadline - input.now))
+}
+
 export function benchmarkActivitySignature(input: {
   board: Record<string, any>
   transcript: TranscriptMessage[]

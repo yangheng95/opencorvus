@@ -15,6 +15,7 @@ import {
   advanceBenchmarkActivityWindow,
   benchmarkActivitySignature,
   benchmarkInactivityDeadline,
+  benchmarkObservationPollDelay,
   benchmarkRunKey,
   automationBenchToolConfig,
   automationBenchHarnessRequest,
@@ -1280,6 +1281,7 @@ function currentMissionSchedulerSettlement() {
 
 async function waitForTerminal() {
   let signature = ""
+  let consecutiveUnchanged = 0
   let inactivityDeadline = Date.now() + arguments_.inactivityMs
   let current: Awaited<ReturnType<typeof observations>>
   while (true) {
@@ -1303,6 +1305,7 @@ async function waitForTerminal() {
     })
     signature = activity.signature
     inactivityDeadline = activity.deadline
+    consecutiveUnchanged = activity.changed ? 0 : consecutiveUnchanged + 1
     if (activity.changed) {
       process.stdout.write(
         JSON.stringify({
@@ -1346,11 +1349,20 @@ async function waitForTerminal() {
         }) + "\n",
       )
     }
-    if (missionReachedNaturalTerminal(current) && currentMissionSchedulerSettlement()?.passed === false) {
+    const schedulerDrainPending =
+      missionReachedNaturalTerminal(current) && currentMissionSchedulerSettlement()?.passed === false
+    if (schedulerDrainPending) {
       requestMissionSchedulerDrain()
     }
     if (Date.now() >= inactivityDeadline) break
-    await Bun.sleep(1000)
+    await Bun.sleep(
+      benchmarkObservationPollDelay({
+        consecutiveUnchanged,
+        now: Date.now(),
+        deadline: inactivityDeadline,
+        immediate: schedulerDrainPending,
+      }),
+    )
   }
   throwIfMissionSchedulerDrainFailed()
   if (activeMissionSchedulerDrain || currentMissionSchedulerSettlement()?.passed === false) {
@@ -1383,6 +1395,7 @@ async function waitForTerminal() {
 async function waitForTerminalQuiescence(initial: Awaited<ReturnType<typeof observations>>) {
   let current = initial
   let signature = missionActivitySignature(current)
+  let consecutiveUnchanged = 0
   let inactivityDeadline = Date.now() + arguments_.inactivityMs
   while (Date.now() < inactivityDeadline) {
     throwIfTerminationRequested()
@@ -1396,10 +1409,22 @@ async function waitForTerminalQuiescence(initial: Awaited<ReturnType<typeof obse
       await within(waitForIngressDeliveryHooks?.() ?? Promise.resolve(), CLEANUP_TIMEOUT_MS, "Terminal ingress settlement")
       if (currentMissionSchedulerSettlement()?.passed === false) {
         requestMissionSchedulerDrain()
-        await Bun.sleep(1000)
+        await Bun.sleep(
+          benchmarkObservationPollDelay({
+            consecutiveUnchanged,
+            now: Date.now(),
+            deadline: inactivityDeadline,
+            immediate: true,
+          }),
+        )
         const next = await observations(inactivityDeadline)
         const nextSignature = missionActivitySignature(next)
-        if (nextSignature !== signature) inactivityDeadline = Date.now() + arguments_.inactivityMs
+        if (nextSignature !== signature) {
+          inactivityDeadline = Date.now() + arguments_.inactivityMs
+          consecutiveUnchanged = 0
+        } else {
+          consecutiveUnchanged += 1
+        }
         current = next
         signature = nextSignature
         continue
@@ -1422,15 +1447,25 @@ async function waitForTerminalQuiescence(initial: Awaited<ReturnType<typeof obse
       }
       current = confirmed
       signature = confirmedSignature
+      consecutiveUnchanged = 0
       inactivityDeadline = Date.now() + arguments_.inactivityMs
       continue
     }
-    await Bun.sleep(1000)
+    await Bun.sleep(
+      benchmarkObservationPollDelay({
+        consecutiveUnchanged,
+        now: Date.now(),
+        deadline: inactivityDeadline,
+      }),
+    )
     const next = await observations(inactivityDeadline)
     const nextSignature = missionActivitySignature(next)
     if (nextSignature !== signature) {
       signature = nextSignature
       inactivityDeadline = Date.now() + arguments_.inactivityMs
+      consecutiveUnchanged = 0
+    } else {
+      consecutiveUnchanged += 1
     }
     current = next
   }

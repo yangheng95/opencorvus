@@ -11,6 +11,7 @@ import {
   benchmarkActivitySignature,
   advanceBenchmarkActivityWindow,
   benchmarkInactivityDeadline,
+  benchmarkObservationPollDelay,
   benchmarkRunKey,
   auditBenchmarkBunRuntime,
   auditScorerReplayEvidence,
@@ -736,6 +737,48 @@ describe("external agent benchmark contract", () => {
         observedSignature: "same",
       }),
     ).toEqual({ changed: false, signature: "same", deadline: 11_000 })
+  })
+
+  test("paces unchanged complete observations while preserving activity reset and the inactivity fence", () => {
+    expect(
+      [0, 1, 2, 3, 4, 20].map((consecutiveUnchanged) =>
+        benchmarkObservationPollDelay({
+          consecutiveUnchanged,
+          now: 1_000,
+          deadline: 30_000,
+        }),
+      ),
+    ).toEqual([1_000, 2_000, 4_000, 8_000, 8_000, 8_000])
+    expect(
+      benchmarkObservationPollDelay({
+        consecutiveUnchanged: 20,
+        now: 29_250,
+        deadline: 30_000,
+      }),
+    ).toBe(750)
+    expect(
+      benchmarkObservationPollDelay({
+        consecutiveUnchanged: 20,
+        now: 30_000,
+        deadline: 30_000,
+      }),
+    ).toBe(0)
+    expect(
+      benchmarkObservationPollDelay({
+        consecutiveUnchanged: 20,
+        now: 1_000,
+        deadline: 30_000,
+        immediate: true,
+      }),
+    ).toBe(1_000)
+    expect(
+      benchmarkObservationPollDelay({
+        consecutiveUnchanged: 20,
+        now: 29_250,
+        deadline: 30_000,
+        immediate: true,
+      }),
+    ).toBe(750)
   })
 
   test("extends inactivity through the earliest durable scheduled wake promise", () => {
