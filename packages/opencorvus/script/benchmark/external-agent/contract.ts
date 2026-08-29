@@ -1936,6 +1936,9 @@ export function auditBatchEvidence(input: {
           const caseIndex = Number(record.benchmark?.case_index)
           const profile = String(record.opencorvus?.profile ?? "")
           if (explicitRunIDs.has(String(record.run_id))) return []
+          const startedAt = Number(record.started_at)
+          const finishedAt = Number(record.finished_at)
+          if (!Number.isFinite(startedAt) || !Number.isFinite(finishedAt) || finishedAt < startedAt) return []
           const expectedSlot = (input.plan.waves?.[waveIndex - 1] as BatchPlanSlot[] | undefined)?.some(
             (slot) => slot.case_index === caseIndex && slot.profile === profile,
           )
@@ -1949,9 +1952,6 @@ export function auditBatchEvidence(input: {
             reasons.push(`plan_bound_attempt:${profile}:${caseIndex}`)
             return []
           }
-          const startedAt = Number(record.started_at)
-          const finishedAt = Number(record.finished_at)
-          if (!Number.isFinite(startedAt) || !Number.isFinite(finishedAt) || finishedAt < startedAt) return []
           return [{
             case_index: caseIndex,
             profile,

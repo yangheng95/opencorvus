@@ -3028,13 +3028,15 @@ describe("external agent benchmark contract", () => {
       leaderboard_eligible: true,
       started_at: item.case_index * 100,
       ...(item.case_index === 2 ? {} : { finished_at: item.case_index * 100 + 50 }),
-      benchmark: {
-        batch_run_id: plan.batch_run_id,
-        batch_plan_sha256: "interrupted-plan-sha",
-        wave_index: 1,
-        case_index: item.case_index,
-        repetition: 1,
-      },
+      benchmark: item.case_index === 2
+        ? { batch_run_id: plan.batch_run_id, wave_index: 1, repetition: 1 }
+        : {
+            batch_run_id: plan.batch_run_id,
+            batch_plan_sha256: "interrupted-plan-sha",
+            wave_index: 1,
+            case_index: item.case_index,
+            repetition: 1,
+          },
       opencorvus: { profile: "base", model: plan.model, launch_mode: "mission" },
     }))
     const failed = auditBatchEvidence({
@@ -3071,6 +3073,16 @@ describe("external agent benchmark contract", () => {
         adopted_run_ids: [],
       },
       orphanReusable: reusable,
+    })
+    const terminalMisbinding = auditBatchEvidence({
+      plan,
+      receipt: { batch_run_id: plan.batch_run_id, batch_index: 1, status: "failed" },
+      attempts: attempts.map((attempt, index) => index === 1 ? { ...attempt, finished_at: 250 } : attempt),
+      planSHA256: "interrupted-plan-sha",
+    })
+    expect({ reasons: terminalMisbinding.reasons, reusable: reusableBatchCandidateRunIDs(terminalMisbinding) }).toEqual({
+      reasons: ["plan_bound_attempt:base:NaN"],
+      reusable: [],
     })
   })
 
