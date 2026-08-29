@@ -6,6 +6,7 @@ import { ProviderError } from "../../../src/provider/error"
 import {
   auditBenchmarkBunRuntime,
   automationBenchCoordinatorBatchIndexes,
+  createAutomationBenchDerivedEvidenceRefreshDrain,
   createBenchmarkRunnerStopController,
   createRestartableDrain,
   installBenchmarkTerminationHandlers,
@@ -16,6 +17,7 @@ import {
   reusableProfileRuns,
   rollingDashboardPlanPaths,
   settlePendingSnapshotAfterRefresh,
+  type AutomationBenchDerivedEvidenceRefresh,
 } from "./contract"
 
 type FrozenCase = {
@@ -210,10 +212,7 @@ try {
   throw error
 }
 const activeChildren = new Set<ReturnType<typeof Bun.spawn>>()
-let dashboardFailure: Error | undefined
-let dashboardQueue = Promise.resolve()
-let dashboardWriteRequested = false
-let dashboardWriterRunning = false
+const activeTrialChildren = new Set<ReturnType<typeof Bun.spawn>>()
 let terminationSignal: "SIGINT" | "SIGTERM" | undefined
 const childStops = createBenchmarkRunnerStopController<ReturnType<typeof Bun.spawn>>({
   isAlive: (child) => processIsAlive(child.pid),
@@ -222,7 +221,7 @@ const childStops = createBenchmarkRunnerStopController<ReturnType<typeof Bun.spa
 })
 const terminate = (signal: "SIGINT" | "SIGTERM") => {
   terminationSignal ??= signal
-  for (const child of activeChildren) void childStops.stop(child)
+  for (const child of activeTrialChildren) void childStops.stop(child)
 }
 const removeTerminationHandlers = installBenchmarkTerminationHandlers(terminate)
 
@@ -239,7 +238,7 @@ async function stopChild(child: ReturnType<typeof Bun.spawn>) {
   await childStops.stop(child)
 }
 
-async function refreshCatalog() {
+async function refreshCatalog(options: { allowAfterTermination?: boolean } = {}) {
   const releaseCatalog = await lockfile.lock(catalogLockPath, {
     realpath: false,
     stale: 60_000,
@@ -247,7 +246,9 @@ async function refreshCatalog() {
     retries: { retries: 900, factor: 1, minTimeout: 1_000, maxTimeout: 1_000 },
   })
   try {
-    if (terminationSignal) throw new Error(`Batch coordinator received ${terminationSignal}`)
+    if (terminationSignal && !options.allowAfterTermination) {
+      throw new Error(`Batch coordinator received ${terminationSignal}`)
+    }
     const child = Bun.spawn(
       [
         process.execPath,
@@ -328,27 +329,17 @@ async function writeDashboard() {
   if (exitCode !== 0) throw new Error(`External dashboard refresh failed: ${stderr.trim() || exitCode}`)
 }
 
-function queueDashboardWrite() {
-  if (!dashboard) return dashboardQueue
-  dashboardWriteRequested = true
-  if (dashboardWriterRunning) return dashboardQueue
-  dashboardWriterRunning = true
-  dashboardQueue = (async () => {
-    try {
-      while (dashboardWriteRequested) {
-        dashboardWriteRequested = false
-        try {
-          await writeDashboard()
-          dashboardFailure = undefined
-        } catch (error) {
-          dashboardFailure = error instanceof Error ? error : new Error(String(error))
-        }
-      }
-    } finally {
-      dashboardWriterRunning = false
-    }
-  })()
-  return dashboardQueue
+const derivedEvidenceRefresh = createAutomationBenchDerivedEvidenceRefreshDrain({
+  refreshCatalog: async () => {
+    await refreshCatalog({ allowAfterTermination: true })
+  },
+  writeDashboard,
+})
+
+async function refreshDerivedEvidence(requested: AutomationBenchDerivedEvidenceRefresh = "dashboard") {
+  if (!dashboard && requested === "dashboard") return
+  derivedEvidenceRefresh.request(requested)
+  await derivedEvidenceRefresh.waitForIdle()
 }
 
 async function queueDashboardWhenLeaseActive(context: BatchContext, item: FrozenCase, profile: Profile) {
@@ -366,7 +357,7 @@ async function queueDashboardWhenLeaseActive(context: BatchContext, item: Frozen
         (lease) => lease.case_id === caseID && lease.profile === profile && lease.batch_run_id === context.batchRunID,
       )
     ) {
-      await queueDashboardWrite()
+      await refreshDerivedEvidence()
       return
     }
     await new Promise<void>((resolve) => {
@@ -467,6 +458,7 @@ async function runTrial(context: BatchContext, item: FrozenCase, profile: Profil
   ]
   const child = Bun.spawn(args, { cwd: process.cwd(), stdout: "pipe", stderr: "pipe" })
   activeChildren.add(child)
+  activeTrialChildren.add(child)
   void queueDashboardWhenLeaseActive(context, item, profile)
   try {
     const stdoutPromise = readBenchmarkObserverLivenessStream({
@@ -501,6 +493,7 @@ async function runTrial(context: BatchContext, item: FrozenCase, profile: Profil
       stderr_tail: ProviderError.redactSensitiveProviderText(stderr).slice(-2000),
     }
   } finally {
+    activeTrialChildren.delete(child)
     activeChildren.delete(child)
   }
 }
@@ -597,7 +590,7 @@ const settlementDrain = createRestartableDrain({
         }
       },
     })
-    await queueDashboardWrite()
+    await refreshDerivedEvidence()
   },
 })
 
@@ -662,7 +655,7 @@ try {
     if (missing.length === 0) void queueBatchSettlement(context)
     return missing
   })
-  await queueDashboardWrite()
+  await refreshDerivedEvidence()
   let schedulingFailure: Error | undefined
   const scheduled = await mapSettledWithBoundedConcurrency(
     queuedTrials,
@@ -685,11 +678,22 @@ try {
       }))
       context.launchedByWave![waveIndex - 1]!.push(outcome)
       context.remainingSlots = (context.remainingSlots ?? 1) - 1
+      try {
+        await refreshDerivedEvidence("catalog_and_dashboard")
+      } catch (error) {
+        schedulingFailure = error instanceof Error ? error : new Error(String(error))
+        throw schedulingFailure
+      }
       if (context.remainingSlots === 0) void queueBatchSettlement(context)
-      void queueDashboardWrite()
       return outcome
     },
-    { shouldStart: () => !terminationSignal && !schedulingFailure && !settlementDrain.failure() },
+    {
+      shouldStart: () =>
+        !terminationSignal &&
+        !schedulingFailure &&
+        !settlementDrain.failure() &&
+        !derivedEvidenceRefresh.failure(),
+    },
   )
   await settlementDrain.waitForIdle()
   const unstarted = scheduled.filter((outcome) => outcome.status === "rejected").length
@@ -700,15 +704,6 @@ try {
   if (failedBatchIndexes.length > 0) {
     throw new Error(`Rolling batches ${failedBatchIndexes.join(",")} contain failed, invalid, or unsealed trials`)
   }
-  process.stdout.write(
-    JSON.stringify({
-      ok: true,
-      batch_indices: contexts.map((context) => context.batchIndex),
-      queue_concurrency: queueConcurrency,
-      receipts: contexts.map((context) => context.receiptPath),
-      dashboard_warning: dashboardFailure?.message,
-    }) + "\n",
-  )
 } catch (error) {
   for (const context of contexts.filter((item) => !item.receiptWritten)) {
     const outcomes = context.batchOutcomes ?? partialAutomationBenchBatchOutcomes({
@@ -746,7 +741,20 @@ try {
   await Promise.all([...activeChildren].map((child) => stopChild(child)))
   await Promise.all(contexts.map((context) => fs.rm(context.activeAuthorizationPath, { force: true })))
   for (const context of contexts) context.receiptPublished = true
-  await queueDashboardWrite()
-  await Promise.all(releaseCoordinators.toReversed().map((release) => release()))
-  removeTerminationHandlers()
+  try {
+    await refreshDerivedEvidence("catalog_and_dashboard")
+  } finally {
+    await Promise.all(releaseCoordinators.toReversed().map((release) => release()))
+    removeTerminationHandlers()
+  }
 }
+
+process.stdout.write(
+  JSON.stringify({
+    ok: true,
+    batch_indices: contexts.map((context) => context.batchIndex),
+    queue_concurrency: queueConcurrency,
+    receipts: contexts.map((context) => context.receiptPath),
+    dashboard_warning: derivedEvidenceRefresh.dashboardFailure()?.message,
+  }) + "\n",
+)

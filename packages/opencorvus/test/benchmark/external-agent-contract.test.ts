@@ -17,6 +17,7 @@ import {
   benchmarkObserverLivenessEvent,
   benchmarkObservationPollDelay,
   benchmarkRunnerShutdownGraceMs,
+  createAutomationBenchDerivedEvidenceRefreshDrain,
   createBenchmarkRunnerStopController,
   benchmarkRunKey,
   auditBenchmarkBunRuntime,
@@ -53,6 +54,7 @@ import {
   automationBenchBatchPlanIdentity,
   automationBenchBatchPlanMatches,
   automationBenchCoordinatorBatchIndexes,
+  automationBenchPendingCatalogCandidates,
   activeAutomationBenchBatchRunIDs,
   executeRollingBatchChains,
   failureObservationReceipt,
@@ -72,6 +74,7 @@ import {
   createRestartableDrain,
   EmptySuccessfulJsonResponseError,
   mapSettledWithBoundedConcurrency,
+  mergeAutomationBenchDerivedEvidenceRefresh,
   parseRequiredJsonResponse,
   retryReadOnlyProjection,
   settlePendingSnapshotAfterRefresh,
@@ -2679,6 +2682,242 @@ describe("external agent benchmark contract", () => {
     ).toEqual(["active", "settling"])
   })
 
+  test("projects every catalog-sealed unverified sibling as pending across receipt boundaries", () => {
+    const record = (runID: string, caseIndex: number, model = "openai/gpt-5.6-sol", profile = "base") => ({
+      run_id: runID,
+      benchmark: { case_index: caseIndex },
+      opencorvus: { model, profile, launch_mode: "mission" },
+    })
+    const verified = record("verified-10", 10)
+    const pending = [
+      record("failed-receipt-sibling-12", 12),
+      record("failed-receipt-sibling-13", 13),
+      record("active-plan-16", 16),
+    ]
+
+    expect(
+      automationBenchPendingCatalogCandidates({
+        candidates: [
+          verified,
+          ...pending.toReversed(),
+          record("other-model", 12, "openai/gpt-5.6-luna"),
+          record("other-profile", 12, "openai/gpt-5.6-sol", "advanced"),
+        ],
+        leaderboard: [verified],
+        model: "openai/gpt-5.6-sol",
+        profiles: ["base"],
+      }).map((item) => item.run_id),
+    ).toEqual(pending.map((item) => item.run_id))
+  })
+
+  test("preserves a catalog refresh while coalescing rolling derived-evidence requests", () => {
+    let requested = mergeAutomationBenchDerivedEvidenceRefresh(undefined, "dashboard")
+    requested = mergeAutomationBenchDerivedEvidenceRefresh(requested, "catalog_and_dashboard")
+    requested = mergeAutomationBenchDerivedEvidenceRefresh(requested, "dashboard")
+    expect(requested).toBe("catalog_and_dashboard")
+  })
+
+  test("drains a stronger catalog request that arrives during an active dashboard write", async () => {
+    const events: string[] = []
+    let startFirstWrite!: () => void
+    const firstWriteStarted = new Promise<void>((resolve) => {
+      startFirstWrite = resolve
+    })
+    let releaseFirstWrite!: () => void
+    const firstWriteRelease = new Promise<void>((resolve) => {
+      releaseFirstWrite = resolve
+    })
+    let writes = 0
+    const refresh = createAutomationBenchDerivedEvidenceRefreshDrain({
+      refreshCatalog: async () => {
+        events.push("catalog")
+      },
+      writeDashboard: async () => {
+        writes += 1
+        events.push(`dashboard-${writes}-start`)
+        if (writes === 1) {
+          startFirstWrite()
+          await firstWriteRelease
+        }
+        events.push(`dashboard-${writes}-end`)
+      },
+    })
+
+    refresh.request("dashboard")
+    const settled = refresh.waitForIdle()
+    await firstWriteStarted
+    refresh.request("catalog_and_dashboard")
+    releaseFirstWrite()
+    await settled
+
+    expect(events).toEqual([
+      "dashboard-1-start",
+      "dashboard-1-end",
+      "catalog",
+      "dashboard-2-start",
+      "dashboard-2-end",
+    ])
+  })
+
+  test("keeps a queued catalog refresh stronger than a later dashboard-only request", async () => {
+    const events: string[] = []
+    const refresh = createAutomationBenchDerivedEvidenceRefreshDrain({
+      refreshCatalog: async () => {
+        events.push("catalog")
+      },
+      writeDashboard: async () => {
+        events.push("dashboard")
+      },
+    })
+
+    refresh.request("catalog_and_dashboard")
+    refresh.request("dashboard")
+    await refresh.waitForIdle()
+
+    expect(events).toEqual(["catalog", "dashboard"])
+  })
+
+  test("fails closed after a catalog refresh error and does not clear it with a dashboard request", async () => {
+    let dashboardWrites = 0
+    const refresh = createAutomationBenchDerivedEvidenceRefreshDrain({
+      refreshCatalog: async () => {
+        throw new Error("catalog refresh failed")
+      },
+      writeDashboard: async () => {
+        dashboardWrites += 1
+      },
+    })
+
+    refresh.request("catalog_and_dashboard")
+    await expect(refresh.waitForIdle()).rejects.toThrow("catalog refresh failed")
+    refresh.request("dashboard")
+    await expect(refresh.waitForIdle()).rejects.toThrow("catalog refresh failed")
+
+    expect({ dashboardWrites, failure: refresh.failure()?.message }).toEqual({
+      dashboardWrites: 0,
+      failure: "catalog refresh failed",
+    })
+  })
+
+  test("records a dashboard warning without fencing later refresh recovery", async () => {
+    let writes = 0
+    const refresh = createAutomationBenchDerivedEvidenceRefreshDrain({
+      refreshCatalog: async () => undefined,
+      writeDashboard: async () => {
+        writes += 1
+        if (writes === 1) throw new Error("dashboard unavailable")
+      },
+    })
+
+    refresh.request("dashboard")
+    await refresh.waitForIdle()
+    expect({ failure: refresh.failure(), warning: refresh.dashboardFailure()?.message }).toEqual({
+      failure: undefined,
+      warning: "dashboard unavailable",
+    })
+
+    refresh.request("catalog_and_dashboard")
+    await refresh.waitForIdle()
+    expect({ writes, failure: refresh.failure(), warning: refresh.dashboardFailure() }).toEqual({
+      writes: 2,
+      failure: undefined,
+      warning: undefined,
+    })
+  })
+
+  test("lets an in-flight catalog refresh reach its terminal reconcile boundary after termination", async () => {
+    const events: string[] = []
+    let releaseCatalog!: () => void
+    const catalogRelease = new Promise<void>((resolve) => {
+      releaseCatalog = resolve
+    })
+    let catalogStarted!: () => void
+    const catalogStart = new Promise<void>((resolve) => {
+      catalogStarted = resolve
+    })
+    let catalogRefreshes = 0
+    const refresh = createAutomationBenchDerivedEvidenceRefreshDrain({
+      refreshCatalog: async () => {
+        catalogRefreshes += 1
+        events.push(`catalog-${catalogRefreshes}-start`)
+        if (catalogRefreshes === 1) {
+          catalogStarted()
+          await catalogRelease
+        }
+        events.push(`catalog-${catalogRefreshes}-end`)
+      },
+      writeDashboard: async () => {
+        events.push("dashboard")
+      },
+    })
+    const activeTrials = new Set([{ kind: "trial", stopped: false }])
+    const activeDerivedChildren = new Set([{ kind: "catalog", stopped: false }])
+    const originalFailure = new Error("Batch coordinator received SIGTERM")
+
+    refresh.request("catalog_and_dashboard")
+    const rollingRefresh = refresh.waitForIdle()
+    await catalogStart
+    for (const child of activeTrials) child.stopped = true
+    expect({
+      trialStopped: [...activeTrials][0]?.stopped,
+      catalogStopped: [...activeDerivedChildren][0]?.stopped,
+    }).toEqual({ trialStopped: true, catalogStopped: false })
+    releaseCatalog()
+    await rollingRefresh
+
+    refresh.request("catalog_and_dashboard")
+    await refresh.waitForIdle()
+    expect({
+      catalogRefreshes,
+      derivedFailure: refresh.failure(),
+      terminalFailure: originalFailure.message,
+      events,
+    }).toEqual({
+      catalogRefreshes: 2,
+      derivedFailure: undefined,
+      terminalFailure: "Batch coordinator received SIGTERM",
+      events: ["catalog-1-start", "catalog-1-end", "dashboard", "catalog-2-start", "catalog-2-end", "dashboard"],
+    })
+  })
+
+  test("waits for the final catalog and dashboard convergence boundary", async () => {
+    const events: string[] = []
+    let releaseCatalog!: () => void
+    const catalogRelease = new Promise<void>((resolve) => {
+      releaseCatalog = resolve
+    })
+    let catalogStarted!: () => void
+    const catalogStart = new Promise<void>((resolve) => {
+      catalogStarted = resolve
+    })
+    const refresh = createAutomationBenchDerivedEvidenceRefreshDrain({
+      refreshCatalog: async () => {
+        events.push("catalog-start")
+        catalogStarted()
+        await catalogRelease
+        events.push("catalog-end")
+      },
+      writeDashboard: async () => {
+        events.push("dashboard")
+      },
+    })
+
+    refresh.request("catalog_and_dashboard")
+    let settled = false
+    const terminal = refresh.waitForIdle().then(() => {
+      settled = true
+    })
+    await catalogStart
+    expect(settled).toBe(false)
+    releaseCatalog()
+    await terminal
+
+    expect({ settled, events }).toEqual({
+      settled: true,
+      events: ["catalog-start", "catalog-end", "dashboard"],
+    })
+  })
+
   test("admits two independent five-case batches up to ten shared trial leases", () => {
     const candidate = (caseIndex: number, batchIndex: number) => ({
       run_id: `run-${caseIndex}`,
@@ -3505,11 +3744,23 @@ describe("external agent benchmark contract", () => {
       singleCoordinator: script.includes('active_coordinator="$!"') && !script.includes("active_coordinators=("),
       batchScopedAuthorization: coordinator.includes("`active-batch-${selected.batchIndex}.json`"),
       rollingPlansAnchored: coordinator.includes("rollingDashboardPlanPaths("),
-      terminalDashboardRefresh:
+      trialSettlementDerivedEvidenceRefresh: coordinator.includes(
+        'await refreshDerivedEvidence("catalog_and_dashboard")',
+      ),
+      terminalDerivedEvidenceRefresh:
         coordinator.lastIndexOf("fs.rm(context.activeAuthorizationPath") <
           coordinator.lastIndexOf("for (const context of contexts) context.receiptPublished = true") &&
         coordinator.lastIndexOf("for (const context of contexts) context.receiptPublished = true") <
-          coordinator.lastIndexOf("await queueDashboardWrite()"),
+          coordinator.lastIndexOf('await refreshDerivedEvidence("catalog_and_dashboard")'),
+      terminalRefreshBeforeSuccess:
+        coordinator.lastIndexOf('await refreshDerivedEvidence("catalog_and_dashboard")') <
+        coordinator.lastIndexOf("process.stdout.write("),
+      derivedRefreshFailureStopsAdmission: coordinator.includes("!derivedEvidenceRefresh.failure()"),
+      terminationStopsTrialsAtCatalogSafeBoundary:
+        coordinator.includes("const activeTrialChildren = new Set") &&
+        coordinator.includes("for (const child of activeTrialChildren) void childStops.stop(child)") &&
+        coordinator.includes("activeTrialChildren.add(child)") &&
+        coordinator.includes("activeTrialChildren.delete(child)"),
       serializedCatalog: coordinator.includes('path.join(controlRoot, "catalog.lock")'),
       catalogLockWaits: coordinator.includes("retries: { retries: 900, factor: 1, minTimeout: 1_000, maxTimeout: 1_000 }"),
       invocations,
@@ -3525,7 +3776,11 @@ describe("external agent benchmark contract", () => {
       singleCoordinator: true,
       batchScopedAuthorization: true,
       rollingPlansAnchored: true,
-      terminalDashboardRefresh: true,
+      trialSettlementDerivedEvidenceRefresh: true,
+      terminalDerivedEvidenceRefresh: true,
+      terminalRefreshBeforeSuccess: true,
+      derivedRefreshFailureStopsAdmission: true,
+      terminationStopsTrialsAtCatalogSafeBoundary: true,
       serializedCatalog: true,
       catalogLockWaits: true,
       invocations: [

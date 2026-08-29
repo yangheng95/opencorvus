@@ -1,7 +1,10 @@
-import crypto from "node:crypto"
 import fs from "node:fs/promises"
 import path from "node:path"
-import { activeAutomationBenchBatchRunIDs, plannedAutomationBenchSlotState } from "./contract"
+import {
+  activeAutomationBenchBatchRunIDs,
+  automationBenchPendingCatalogCandidates,
+  plannedAutomationBenchSlotState,
+} from "./contract"
 
 type Profile = "base" | "advanced"
 type DashboardResult = {
@@ -37,9 +40,6 @@ type BatchPlan = {
   cases: Array<{ case_index: number; task: string }>
   profiles: Profile[]
   waves: Array<Array<{ case_index: number; profile: Profile }>>
-  preexisting_eligible?: Partial<
-    Record<Profile, Array<{ run_id: string; case_index: number; profile: Profile }>>
-  >
 }
 
 type CatalogAttempt = {
@@ -52,13 +52,6 @@ type CatalogAttempt = {
   permanent_invalidation?: { invalid?: boolean }
   benchmark?: { case_index?: number }
   opencorvus?: { profile?: Profile }
-}
-
-type EvidenceManifest = {
-  run_id?: string
-  run_key?: string
-  redacted_from_manifest_sha256?: string
-  files?: Array<{ path?: string; bytes?: number; sha256?: string }>
 }
 
 type PublicContext = {
@@ -116,43 +109,6 @@ async function walk(directory: string): Promise<string[]> {
       }),
     )
   ).flat()
-}
-
-async function verifyEvidenceManifest(directory: string, manifest: EvidenceManifest | undefined, runID: string) {
-  if (
-    !manifest ||
-    manifest.run_id !== runID ||
-    manifest.redacted_from_manifest_sha256 ||
-    !Array.isArray(manifest.files)
-  ) {
-    return false
-  }
-  const entries = await fs.readdir(directory, { withFileTypes: true }).catch(() => [])
-  const actualFiles = entries
-    .filter((entry) => entry.isFile() && entry.name !== "evidence-manifest.json")
-    .map((entry) => entry.name)
-    .sort()
-  const declaredFiles = manifest.files.map((entry) => entry.path ?? "").sort()
-  if (
-    new Set(declaredFiles).size !== declaredFiles.length ||
-    actualFiles.length !== declaredFiles.length ||
-    actualFiles.some((name, index) => name !== declaredFiles[index])
-  ) {
-    return false
-  }
-  return (
-    await Promise.all(
-      manifest.files.map(async (entry) => {
-        if (!entry.path || path.basename(entry.path) !== entry.path) return false
-        const bytes = await fs.readFile(path.join(directory, entry.path)).catch(() => undefined)
-        return (
-          bytes !== undefined &&
-          bytes.byteLength === entry.bytes &&
-          crypto.createHash("sha256").update(bytes).digest("hex") === entry.sha256
-        )
-      }),
-    )
-  ).every(Boolean)
 }
 
 function escapeHTML(value: unknown) {
@@ -223,76 +179,12 @@ const verified = (catalog?.primary_leaderboard ?? catalog?.leaderboard ?? [])
   )
   .sort((left, right) => Number(left.benchmark.case_index) - Number(right.benchmark.case_index))
 const verifiedRunIDs = new Set(verified.map((record) => String(record.run_id)))
-const catalogAttempts = new Map((catalog?.attempts ?? []).map((attempt) => [String(attempt.run_id), attempt]))
-const dispositions = await readJSON<{ runs?: Record<string, unknown> }>(path.join(root, "run-dispositions.json"))
-const currentResults = (
-  await Promise.all(
-    allFiles
-      .filter((file) => path.basename(file) === "result.json")
-      .map(async (file) => {
-        const directory = path.dirname(file)
-        const payload = await readJSON<DashboardResult>(file)
-        if (
-          !payload ||
-          currentPlans.length === 0 ||
-          !currentBatchRunIDs.has(String(payload.benchmark.batch_run_id)) ||
-          payload.opencorvus.model !== model ||
-          payload.opencorvus.launch_mode !== "mission" ||
-          verifiedRunIDs.has(String(payload.run.id))
-        ) {
-          return { file, payload, manifest: undefined, manifestValid: false, names: [] }
-        }
-        const [manifest, names] = await Promise.all([
-          readJSON<EvidenceManifest>(path.join(directory, "evidence-manifest.json")),
-          fs.readdir(directory).catch(() => []),
-        ])
-        const manifestValid = await verifyEvidenceManifest(directory, manifest, String(payload.run.id))
-        return { file, payload, manifest, manifestValid, names }
-      }),
-  )
-)
-  .filter(
-    (item): item is {
-      file: string
-      payload: DashboardResult
-      manifest: EvidenceManifest
-      manifestValid: true
-      names: string[]
-    } =>
-      Boolean(
-        item.payload &&
-          item.manifestValid &&
-          item.manifest?.files?.some((entry) => entry.path === "result.json") &&
-          item.payload.run.status === "scored" &&
-          item.payload.benchmark.metrics &&
-          profiles.includes(item.payload.opencorvus.profile) &&
-          currentPlans.length > 0 &&
-          currentBatchRunIDs.has(String(item.payload.benchmark.batch_run_id)) &&
-          !verifiedRunIDs.has(String(item.payload.run.id)),
-      ),
-  )
-  .filter((item) => {
-    const runID = String(item.payload.run.id)
-    const attempt = catalogAttempts.get(runID)
-    return (
-      dispositions?.runs?.[runID] === undefined &&
-      (attempt === undefined || attempt.raw_leaderboard_eligible === true || attempt.batch_candidate_eligible === true) &&
-      attempt?.permanent_invalidation?.invalid !== true &&
-      !item.names.some(
-        (name) =>
-          name === "failure.json" ||
-          name === "cleanup-failure.json" ||
-          name === "evidence-seal-failure.json" ||
-          /^redaction-receipt(?:-\d+)?\.json$/.test(name),
-      )
-    )
-  })
-  .map(({ payload }) => ({
-    run_id: payload.run.id,
-    duration_ms: payload.run.duration_ms,
-    benchmark: payload.benchmark,
-    opencorvus: payload.opencorvus,
-  }))
+const pending = automationBenchPendingCatalogCandidates({
+  candidates: catalog?.candidates ?? [],
+  leaderboard: verified,
+  model,
+  profiles,
+}) as DashboardRecord[]
 
 const active = (activeLeases?.active ?? []).filter(
   (item) => profiles.includes(item.profile) && currentBatchRunIDs.has(item.batch_run_id),
@@ -303,21 +195,7 @@ const verifiedBySlot = new Map(
   verified.map((record) => [slotKey(record.benchmark.case_index, record.opencorvus.profile), record]),
 )
 const pendingBySlot = new Map(
-  currentResults.map((record) => [slotKey(record.benchmark.case_index, record.opencorvus.profile), record]),
-)
-const adoptedCandidateBySlot = new Map(
-  profiles.flatMap((profile) =>
-    currentPlans.flatMap((currentPlan) =>
-      (currentPlan.preexisting_eligible?.[profile] ?? []).map((record) => [
-        slotKey(record.case_index, record.profile),
-        record.run_id,
-      ] as const),
-    ),
-  ),
-)
-const adoptedRunIDs = new Set(adoptedCandidateBySlot.values())
-const adoptedRecords = (catalog?.candidates ?? []).filter(
-  (record) => adoptedRunIDs.has(String(record.run_id)) && profiles.includes(record.opencorvus.profile),
+  pending.map((record) => [slotKey(record.benchmark.case_index, record.opencorvus.profile), record]),
 )
 /**
  * A planned slot whose run was invalidated is not a slot that has yet to run.
@@ -340,14 +218,7 @@ for (const attempt of catalog?.attempts ?? []) {
   invalidatedBySlot.set(key, { status, reason: String(attempt.reason ?? ""), startedAt })
 }
 const planned = currentPlans.flatMap((currentPlan) => currentPlan.waves.flat())
-const displayRecords = [
-  ...verified,
-  ...adoptedRecords.filter((record) => !verifiedRunIDs.has(String(record.run_id))),
-]
-for (const slot of planned) {
-  const key = slotKey(slot.case_index, slot.profile)
-  if (!verifiedBySlot.has(key) && pendingBySlot.has(key)) displayRecords.push(pendingBySlot.get(key)!)
-}
+const displayRecords = [...verified, ...pending]
 displayRecords.sort(
   (left, right) =>
     Number(left.benchmark.case_index) - Number(right.benchmark.case_index) ||
@@ -367,7 +238,7 @@ const summaries = profiles.map((profile) => {
   return {
     profile,
     rows,
-    pendingRows: currentResults.filter((record) => record.opencorvus.profile === profile),
+    pendingRows: pending.filter((record) => record.opencorvus.profile === profile),
     strictPasses,
     strictRate: rows.length ? strictPasses / rows.length : 0,
     partialMean: mean((record) => Number(record.benchmark.metrics?.partial_credit ?? 0)),
@@ -387,11 +258,7 @@ const officialRows = catalog?.public_context?.rows ?? []
 const resultRows = displayRecords
   .map((record) => {
     const metrics = record.benchmark.metrics
-    const status = verifiedRunIDs.has(String(record.run_id))
-      ? "verified"
-      : adoptedRunIDs.has(String(record.run_id))
-        ? "sealed candidate · adopted"
-        : "sealed · pending catalog"
+    const status = verifiedRunIDs.has(String(record.run_id)) ? "verified" : "sealed · pending audited receipt"
     return `<tr>
       <td>${integer(record.benchmark.case_index)}</td>
       <td>${escapeHTML(record.benchmark.task)}</td>
@@ -410,7 +277,7 @@ const resultRows = displayRecords
 const plannedRows = planned
   .filter((slot) => {
     const key = slotKey(slot.case_index, slot.profile)
-    return !verifiedBySlot.has(key) && !pendingBySlot.has(key) && !adoptedCandidateBySlot.has(key)
+    return !verifiedBySlot.has(key) && !pendingBySlot.has(key)
   })
   .map((slot) => {
     const task = currentCases.find((item) => item.case_index === slot.case_index)?.task ?? ""
@@ -510,7 +377,7 @@ const html = `<!doctype html>
   </header>
   <h1>AutomationBench · OpenCorvus Mission ${profiles.map((profile) => escapeHTML(profile)).join(" + ")} / ${escapeHTML(model)}</h1>
   <div class="subtle">Primary profiles: ${profiles.map(escapeHTML).join(" + ")} · target ${targetCases} unique cases · updated ${new Date(generatedAt).toISOString()}</div>
-  ${currentResults.length > 0 ? `<div class="catalog-state"><strong>Catalog verification pending.</strong> ${currentResults.length} manifest-sealed result${currentResults.length === 1 ? " is" : "s are"} awaiting final catalog reconciliation. Verified coverage remains ${coverage} / ${targetSlots} until that evidence audit completes.</div>` : ""}
+  ${pending.length > 0 ? `<div class="catalog-state"><strong>Audited receipt completion pending.</strong> ${pending.length} catalog-sealed result${pending.length === 1 ? " is" : "s are"} preserved for adoption into a completed batch receipt. Verified coverage remains ${coverage} / ${targetSlots} until that batch audit completes.</div>` : ""}
   <section class="metrics" aria-label="Profile benchmark summary">
     ${summaries
       .flatMap((summary) => [
@@ -555,7 +422,7 @@ const html = `<!doctype html>
       <span>官网 · <a href="https://opencorvus.com">https://opencorvus.com</a></span>
       <span>项目 · <a href="https://github.com/yangheng95/opencorvus">https://github.com/yangheng95/opencorvus</a></span>
     </div>
-    <div class="evidence-footer">Verified ${coverage} / ${targetSlots} · sealed pending ${currentResults.length} · remaining after verified ${Math.max(0, targetSlots - coverage)} · indexed attempts ${integer(catalog?.attempts?.length ?? 0)} · source: <a href="${escapeHTML(catalog?.public_context?.source ?? "https://github.com/zapier/AutomationBench")}">AutomationBench official leaderboard</a>${catalog?.public_context?.snapshot_date ? ` · snapshot ${escapeHTML(catalog.public_context.snapshot_date)}` : ""}</div>
+    <div class="evidence-footer">Verified ${coverage} / ${targetSlots} · sealed pending ${pending.length} · remaining after verified ${Math.max(0, targetSlots - coverage)} · indexed attempts ${integer(catalog?.attempts?.length ?? 0)} · source: <a href="${escapeHTML(catalog?.public_context?.source ?? "https://github.com/zapier/AutomationBench")}">AutomationBench official leaderboard</a>${catalog?.public_context?.snapshot_date ? ` · snapshot ${escapeHTML(catalog.public_context.snapshot_date)}` : ""}</div>
   </footer>
 </main>
 </body>
@@ -566,4 +433,4 @@ await fs.mkdir(path.dirname(dashboard), { recursive: true })
 const temporary = `${dashboard}.tmp-${process.pid}-${Date.now()}`
 await fs.writeFile(temporary, html, "utf8")
 await fs.rename(temporary, dashboard)
-process.stdout.write(JSON.stringify({ dashboard, verified: coverage, pending: currentResults.length, active: active.length }) + "\n")
+process.stdout.write(JSON.stringify({ dashboard, verified: coverage, pending: pending.length, active: active.length }) + "\n")

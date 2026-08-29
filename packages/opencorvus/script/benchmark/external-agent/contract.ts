@@ -53,6 +53,49 @@ export async function settlePendingSnapshotAfterRefresh<Pending, Snapshot>(input
   return items
 }
 
+export type AutomationBenchDerivedEvidenceRefresh = "dashboard" | "catalog_and_dashboard"
+
+export function mergeAutomationBenchDerivedEvidenceRefresh(
+  current: AutomationBenchDerivedEvidenceRefresh | undefined,
+  requested: AutomationBenchDerivedEvidenceRefresh,
+): AutomationBenchDerivedEvidenceRefresh {
+  return current === "catalog_and_dashboard" || requested === "catalog_and_dashboard"
+    ? "catalog_and_dashboard"
+    : "dashboard"
+}
+
+export function createAutomationBenchDerivedEvidenceRefreshDrain(input: {
+  refreshCatalog: () => Promise<void>
+  writeDashboard: () => Promise<void>
+}) {
+  let requested: AutomationBenchDerivedEvidenceRefresh | undefined
+  let dashboardFailure: Error | undefined
+  const drain = createRestartableDrain({
+    hasWork: () => requested !== undefined,
+    drain: async () => {
+      const current = requested
+      requested = undefined
+      if (!current) return
+      if (current === "catalog_and_dashboard") await input.refreshCatalog()
+      try {
+        await input.writeDashboard()
+        dashboardFailure = undefined
+      } catch (error) {
+        dashboardFailure = error instanceof Error ? error : new Error(String(error))
+      }
+    },
+  })
+  return {
+    request(next: AutomationBenchDerivedEvidenceRefresh) {
+      requested = mergeAutomationBenchDerivedEvidenceRefresh(requested, next)
+      drain.wake()
+    },
+    waitForIdle: drain.waitForIdle,
+    failure: drain.failure,
+    dashboardFailure: () => dashboardFailure,
+  }
+}
+
 export async function mapSettledWithBoundedConcurrency<Input, Output>(
   values: readonly Input[],
   concurrency: number,
@@ -1575,6 +1618,28 @@ export function rollingDashboardPlanPaths(
   return contexts
     .filter((context) => (context.authorizationStarted || context.receiptWritten) && !context.receiptPublished)
     .map((context) => context.planPath)
+}
+
+export function automationBenchPendingCatalogCandidates(input: {
+  candidates: Array<Record<string, any>>
+  leaderboard: Array<Record<string, any>>
+  model: string
+  profiles: ReadonlyArray<"base" | "advanced">
+}) {
+  const verifiedRunIDs = new Set(input.leaderboard.map((record) => String(record.run_id)))
+  return input.candidates
+    .filter(
+      (record) =>
+        input.profiles.includes(record.opencorvus?.profile) &&
+        record.opencorvus?.model === input.model &&
+        record.opencorvus?.launch_mode === "mission" &&
+        !verifiedRunIDs.has(String(record.run_id)),
+    )
+    .sort(
+      (left, right) =>
+        Number(left.benchmark?.case_index) - Number(right.benchmark?.case_index) ||
+        String(left.opencorvus?.profile).localeCompare(String(right.opencorvus?.profile)),
+    )
 }
 
 export function reconcileAutomationBenchBatchCandidates(input: {
