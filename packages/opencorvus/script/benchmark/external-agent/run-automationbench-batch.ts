@@ -6,8 +6,11 @@ import { ProviderError } from "../../../src/provider/error"
 import {
   auditBenchmarkBunRuntime,
   automationBenchCoordinatorBatchIndexes,
+  createBenchmarkRunnerStopController,
   createRestartableDrain,
+  installBenchmarkTerminationHandlers,
   mapSettledWithBoundedConcurrency,
+  readBenchmarkObserverLivenessStream,
   reconcileAutomationBenchBatchCandidates,
   reusableProfileRuns,
   rollingDashboardPlanPaths,
@@ -211,18 +214,16 @@ let dashboardQueue = Promise.resolve()
 let dashboardWriteRequested = false
 let dashboardWriterRunning = false
 let terminationSignal: "SIGINT" | "SIGTERM" | undefined
-let forcedTerminationTimer: ReturnType<typeof setTimeout> | undefined
+const childStops = createBenchmarkRunnerStopController<ReturnType<typeof Bun.spawn>>({
+  isAlive: (child) => processIsAlive(child.pid),
+  signal: (child, signal) => child.kill(signal),
+  exited: (child) => child.exited,
+})
 const terminate = (signal: "SIGINT" | "SIGTERM") => {
-  terminationSignal = signal
-  for (const child of activeChildren) child.kill("SIGTERM")
-  forcedTerminationTimer ??= setTimeout(() => {
-    for (const child of activeChildren) child.kill("SIGKILL")
-  }, 10_000)
+  terminationSignal ??= signal
+  for (const child of activeChildren) void childStops.stop(child)
 }
-const onSIGINT = () => terminate("SIGINT")
-const onSIGTERM = () => terminate("SIGTERM")
-process.once("SIGINT", onSIGINT)
-process.once("SIGTERM", onSIGTERM)
+const removeTerminationHandlers = installBenchmarkTerminationHandlers(terminate)
 
 function processIsAlive(pid: number) {
   try {
@@ -233,49 +234,8 @@ function processIsAlive(pid: number) {
   }
 }
 
-function cancellableDelay<T>(timeoutMs: number, value: T) {
-  let timer: ReturnType<typeof setTimeout> | undefined
-  return {
-    promise: new Promise<T>((resolve) => {
-      timer = setTimeout(() => resolve(value), timeoutMs)
-    }),
-    cancel: () => {
-      if (timer) clearTimeout(timer)
-    },
-  }
-}
-
 async function stopChild(child: ReturnType<typeof Bun.spawn>) {
-  if (!processIsAlive(child.pid)) return child.exited.catch(() => undefined)
-  child.kill("SIGTERM")
-  const deadline = cancellableDelay(5_000, false)
-  const exited = await Promise.race([child.exited.then(() => true).catch(() => true), deadline.promise])
-  deadline.cancel()
-  if (!exited) {
-    child.kill("SIGKILL")
-    await child.exited.catch(() => undefined)
-  }
-}
-
-async function readWithInactivity(
-  stream: ReadableStream<Uint8Array>,
-  child: ReturnType<typeof Bun.spawn>,
-  timeoutMs: number,
-) {
-  const reader = stream.getReader()
-  const decoder = new TextDecoder()
-  let output = ""
-  while (true) {
-    const deadline = cancellableDelay(timeoutMs, { timeout: true as const })
-    const next = await Promise.race([reader.read(), deadline.promise]).finally(deadline.cancel)
-    if ("timeout" in next) {
-      child.kill("SIGTERM")
-      await stopChild(child)
-      throw new Error(`Trial emitted no runner activity for ${timeoutMs}ms`)
-    }
-    if (next.done) return output + decoder.decode()
-    output += decoder.decode(next.value, { stream: true })
-  }
+  await childStops.stop(child)
 }
 
 async function refreshCatalog() {
@@ -508,7 +468,11 @@ async function runTrial(context: BatchContext, item: FrozenCase, profile: Profil
   activeChildren.add(child)
   void queueDashboardWhenLeaseActive(context, item, profile)
   try {
-    const stdoutPromise = readWithInactivity(child.stdout, child, Number(inactivityMs) + 60_000)
+    const stdoutPromise = readBenchmarkObserverLivenessStream({
+      stream: child.stdout,
+      timeoutMs: Number(inactivityMs) + 60_000,
+      onTimeout: () => stopChild(child),
+    })
     const stderrPromise = new Response(child.stderr).text()
     const [exitCode, stdout, stderr] = await Promise.all([
       child.exited,
@@ -776,13 +740,10 @@ try {
   }
   throw error
 } finally {
-  for (const child of activeChildren) child.kill("SIGTERM")
   await Promise.all([...activeChildren].map((child) => stopChild(child)))
-  if (forcedTerminationTimer) clearTimeout(forcedTerminationTimer)
   await Promise.all(contexts.map((context) => fs.rm(context.activeAuthorizationPath, { force: true })))
   for (const context of contexts) context.receiptPublished = true
   await queueDashboardWrite()
-  process.removeListener("SIGINT", onSIGINT)
-  process.removeListener("SIGTERM", onSIGTERM)
   await Promise.all(releaseCoordinators.toReversed().map((release) => release()))
+  removeTerminationHandlers()
 }

@@ -15,8 +15,10 @@ import {
   advanceBenchmarkActivityWindow,
   benchmarkActivitySignature,
   benchmarkInactivityDeadline,
+  benchmarkObserverLivenessEvent,
   benchmarkObservationPollDelay,
   benchmarkRunKey,
+  BENCHMARK_RUNNER_CLEANUP_TIMEOUT_MS,
   automationBenchToolConfig,
   automationBenchHarnessRequest,
   automationBenchRunValidity,
@@ -43,6 +45,7 @@ import {
   automationBenchRestrictedShellAuthority,
   automationBenchRestrictedShellSourceFile,
   failureObservationReceipt,
+  installBenchmarkTerminationHandlers,
   parseRequiredJsonResponse,
   retryReadOnlyProjection,
   type ProviderUsageRow,
@@ -56,7 +59,7 @@ const AUTOMATIONBENCH_VERSION = "1.0.6"
 const AUTOMATIONBENCH_SOURCE_REVISION = "4a8e1061254004d9dac807054eed33fad7d1ff14"
 const AUTOMATIONBENCH_PACKAGE_TREE_SHA256 = "cc7a63f9444814c7029e325dacbdf1c2e870430d08aaf8d4ecf5c0e44fe829d4"
 const DEFAULT_INACTIVITY_MS = 120_000
-const CLEANUP_TIMEOUT_MS = 10_000
+const CLEANUP_TIMEOUT_MS = BENCHMARK_RUNNER_CLEANUP_TIMEOUT_MS
 
 type Profile = "base" | "advanced"
 
@@ -966,14 +969,12 @@ let leaseAcquired = false
 let terminationSignal: "SIGINT" | "SIGTERM" | undefined
 const terminationAbort = new AbortController()
 const requestTermination = (signal: "SIGINT" | "SIGTERM") => {
+  if (terminationSignal) return
   terminationSignal = signal
   terminationAbort.abort(new Error(`Benchmark runner received ${signal}`))
   bridge?.process.kill("SIGTERM")
 }
-const onSIGINT = () => requestTermination("SIGINT")
-const onSIGTERM = () => requestTermination("SIGTERM")
-process.once("SIGINT", onSIGINT)
-process.once("SIGTERM", onSIGTERM)
+const removeTerminationHandlers = installBenchmarkTerminationHandlers(requestTermination)
 
 function throwIfTerminationRequested() {
   if (terminationSignal) throw new Error(`Benchmark runner received ${terminationSignal}`)
@@ -1215,10 +1216,19 @@ async function collectObservations() {
 }
 
 async function observations(deadline = Date.now() + arguments_.inactivityMs) {
-  return retryReadOnlyProjection({
+  const current = await retryReadOnlyProjection({
     read: collectObservations,
     deadline,
   })
+  process.stdout.write(
+    JSON.stringify(
+      benchmarkObserverLivenessEvent({
+        observedAt: latestObservationAt ?? Date.now(),
+        missionID,
+      }),
+    ) + "\n",
+  )
+  return current
 }
 
 function missionActivitySignature(current: Awaited<ReturnType<typeof observations>>) {
@@ -2456,8 +2466,6 @@ try {
       failures.push(error)
     }
   }
-  process.removeListener("SIGINT", onSIGINT)
-  process.removeListener("SIGTERM", onSIGTERM)
   if (failures.length > 0) {
     await fs.writeFile(
       path.join(outputDirectory, "cleanup-failure.json"),
@@ -2502,6 +2510,7 @@ try {
       )
       .catch(() => undefined)
   }
+  removeTerminationHandlers()
   if (failures.length === 1) throw failures[0]
   if (failures.length > 1) throw new AggregateError(failures, "AutomationBench pilot cleanup failed")
 }

@@ -2,6 +2,7 @@ import { describe, expect, test } from "bun:test"
 import fs from "node:fs/promises"
 import path from "node:path"
 import crypto from "node:crypto"
+import { pathToFileURL } from "node:url"
 import {
   automationBenchCaseSetAuthority,
   automationBenchRestrictedShellAuthority,
@@ -9,9 +10,14 @@ import {
   AUTOMATIONBENCH_BASE_RESTRICTED_SHELL_SHA256,
   acquireAutomationBenchTrialLease,
   benchmarkActivitySignature,
+  advanceBenchmarkObserverLivenessFrames,
+  BenchmarkObserverLivenessTimeoutError,
   advanceBenchmarkActivityWindow,
   benchmarkInactivityDeadline,
+  benchmarkObserverLivenessEvent,
   benchmarkObservationPollDelay,
+  benchmarkRunnerShutdownGraceMs,
+  createBenchmarkRunnerStopController,
   benchmarkRunKey,
   auditBenchmarkBunRuntime,
   auditScorerReplayEvidence,
@@ -22,6 +28,7 @@ import {
   auditBenchmarkIsolation,
   summarizeProviderUsageRows,
   providerUsageMatchesModel,
+  readBenchmarkObserverLivenessStream,
   summarizeBenchmarkToolEvents,
   evidenceFileSetMatches,
   permanentRunInvalidation,
@@ -780,6 +787,196 @@ describe("external agent benchmark contract", () => {
       }),
     ).toBe(750)
   })
+
+  test("reports each completed canonical observation as hard liveness without changing semantic activity", () => {
+    expect(
+      benchmarkObserverLivenessEvent({
+        observedAt: 42_000,
+        missionID: "mission-1",
+      }),
+    ).toEqual({
+      event: "observer_liveness",
+      observed_at: 42_000,
+      mission_id: "mission-1",
+    })
+    expect(benchmarkObserverLivenessEvent({ observedAt: 43_000 })).toEqual({
+      event: "observer_liveness",
+      observed_at: 43_000,
+    })
+  })
+
+  test("frames split and multiple observer heartbeats into one absolute liveness deadline", () => {
+    const first = advanceBenchmarkObserverLivenessFrames({
+      buffer: "",
+      chunk: '{"event":"activity"}\n{"event":"observer_live',
+      currentDeadline: 5_000,
+      now: 1_000,
+      timeoutMs: 10_000,
+    })
+    expect(first).toEqual({
+      buffer: '{"event":"observer_live',
+      heartbeats: 0,
+      deadline: 5_000,
+    })
+    const second = advanceBenchmarkObserverLivenessFrames({
+      buffer: first.buffer,
+      chunk:
+        'ness","observed_at":900}\n{"event":"activity"}\n{"event":"observer_liveness","observed_at":950}\n',
+      currentDeadline: first.deadline,
+      now: 1_100,
+      timeoutMs: 10_000,
+    })
+    expect(second).toEqual({
+      buffer: "",
+      heartbeats: 2,
+      deadline: 11_100,
+    })
+  })
+
+  test("maps buffered unrelated stream output beyond the absolute deadline to typed liveness timeout", async () => {
+    let timeoutCalls = 0
+    const stream = new ReadableStream<Uint8Array>({
+      pull(controller) {
+        const until = Date.now() + 10
+        while (Date.now() < until) {
+          // Hold the event loop while an unrelated chunk becomes readable at an expired deadline.
+        }
+        controller.enqueue(new TextEncoder().encode('{"event":"activity"}\n'))
+      },
+    })
+    let captured: unknown
+    try {
+      await readBenchmarkObserverLivenessStream({
+        stream,
+        timeoutMs: 1,
+        onTimeout: async () => {
+          timeoutCalls += 1
+        },
+      })
+    } catch (error) {
+      captured = error
+    }
+    expect({
+      name: captured instanceof Error ? captured.name : null,
+      typed: captured instanceof BenchmarkObserverLivenessTimeoutError,
+      timeoutCalls,
+    }).toEqual({
+      name: "BenchmarkObserverLivenessTimeoutError",
+      typed: true,
+      timeoutCalls: 1,
+    })
+  })
+
+  test("propagates the typed stream read error after cancelling its pending liveness deadline", async () => {
+    const expected = new TypeError("observer stream read failed")
+    const stream = new ReadableStream<Uint8Array>({
+      start(controller) {
+        controller.error(expected)
+      },
+    })
+    let captured: unknown
+    try {
+      await readBenchmarkObserverLivenessStream({
+        stream,
+        timeoutMs: 60_000,
+        onTimeout: async () => {
+          throw new Error("unexpected timeout callback")
+        },
+      })
+    } catch (error) {
+      captured = error
+    }
+    expect({ sameError: captured === expected, name: captured instanceof Error ? captured.name : null }).toEqual({
+      sameError: true,
+      name: "TypeError",
+    })
+  })
+
+  test("gives the canonical runner cleanup phases one shared bounded shutdown grace", () => {
+    expect(benchmarkRunnerShutdownGraceMs()).toBe(90_000)
+  })
+
+  test("starts one memoized child stop immediately and preserves graceful lease release", async () => {
+    const child = {}
+    let alive = true
+    let leaseActive = true
+    let resolveExit: (() => void) | undefined
+    const exited = new Promise<void>((resolve) => {
+      resolveExit = resolve
+    })
+    const signals: string[] = []
+    const controller = createBenchmarkRunnerStopController({
+      isAlive: () => alive,
+      signal: (_child, signal) => {
+        signals.push(signal)
+        if (signal === "SIGTERM") {
+          setTimeout(() => {
+            leaseActive = false
+            alive = false
+            resolveExit?.()
+          }, 10)
+        }
+      },
+      exited: () => exited,
+      graceMs: 100,
+    })
+    const first = controller.stop(child)
+    const second = controller.stop(child)
+    expect(first).toBe(second)
+    expect(signals).toEqual(["SIGTERM"])
+    await first
+    expect({ signals, leaseActive, alive }).toEqual({
+      signals: ["SIGTERM"],
+      leaseActive: false,
+      alive: false,
+    })
+  })
+
+  test.skipIf(process.platform !== "linux")(
+    "keeps repeated process signals inside the shared cleanup handler until durable release",
+    async () => {
+      const temporary = await fs.mkdtemp(path.join(process.env.TEMP ?? process.cwd(), "benchmark-signal-test-"))
+      try {
+        const releasedPath = path.join(temporary, "released.txt")
+        const contractURL = pathToFileURL(
+          path.resolve(import.meta.dir, "../../script/benchmark/external-agent/contract.ts"),
+        ).href
+        const fixture = [
+          `import fs from "node:fs/promises"`,
+          `import { installBenchmarkTerminationHandlers } from ${JSON.stringify(contractURL)}`,
+          `let requested = false`,
+          `const remove = installBenchmarkTerminationHandlers(() => {`,
+          `  if (requested) return`,
+          `  requested = true`,
+          `  setTimeout(async () => {`,
+          `    await fs.writeFile(${JSON.stringify(releasedPath)}, "released\\n")`,
+          `    remove()`,
+          `    process.exit(0)`,
+          `  }, 100)`,
+          `})`,
+          `process.stdout.write("ready\\n")`,
+          `setInterval(() => {}, 1000)`,
+        ].join("\n")
+        const child = Bun.spawn([process.execPath, "-e", fixture], {
+          stdout: "pipe",
+          stderr: "pipe",
+        })
+        const reader = child.stdout.getReader()
+        const ready = await reader.read()
+        expect(new TextDecoder().decode(ready.value)).toContain("ready")
+        child.kill("SIGTERM")
+        await Bun.sleep(20)
+        child.kill("SIGTERM")
+        const exitCode = await child.exited
+        expect({ exitCode, released: await fs.readFile(releasedPath, "utf8") }).toEqual({
+          exitCode: 0,
+          released: "released\n",
+        })
+      } finally {
+        await fs.rm(temporary, { recursive: true, force: true })
+      }
+    },
+  )
 
   test("extends inactivity through the earliest durable scheduled wake promise", () => {
     const scheduledWakes = [

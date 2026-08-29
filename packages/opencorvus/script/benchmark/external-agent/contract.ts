@@ -2260,6 +2260,174 @@ export function benchmarkObservationPollDelay(input: {
   return Math.min(scheduled, Math.max(0, input.deadline - input.now))
 }
 
+/**
+ * A completed canonical projection is also the runner's hard-liveness proof.
+ * The coordinator may bound a genuinely stuck projection, but it must not use
+ * arbitrary output silence as a second semantic inactivity authority.
+ */
+export function benchmarkObserverLivenessEvent(input: {
+  observedAt: number
+  missionID?: string
+}) {
+  return {
+    event: "observer_liveness" as const,
+    observed_at: input.observedAt,
+    ...(input.missionID ? { mission_id: input.missionID } : {}),
+  }
+}
+
+export function advanceBenchmarkObserverLivenessFrames(input: {
+  buffer: string
+  chunk: string
+  currentDeadline: number
+  now: number
+  timeoutMs: number
+}) {
+  const framed = `${input.buffer}${input.chunk}`.split(/\r?\n/)
+  const buffer = framed.pop() ?? ""
+  let heartbeats = 0
+  for (const line of framed) {
+    let event: unknown
+    try {
+      event = JSON.parse(line)
+    } catch {
+      continue
+    }
+    if (
+      event &&
+      typeof event === "object" &&
+      (event as { event?: unknown }).event === "observer_liveness" &&
+      Number.isFinite((event as { observed_at?: unknown }).observed_at)
+    ) {
+      heartbeats += 1
+    }
+  }
+  return {
+    buffer,
+    heartbeats,
+    deadline: heartbeats > 0 ? input.now + input.timeoutMs : input.currentDeadline,
+  }
+}
+
+export class BenchmarkObserverLivenessTimeoutError extends Error {
+  readonly timeoutMs: number
+
+  constructor(timeoutMs: number) {
+    super(`Trial observation loop emitted no liveness heartbeat for ${timeoutMs}ms`)
+    this.name = "BenchmarkObserverLivenessTimeoutError"
+    this.timeoutMs = timeoutMs
+  }
+}
+
+export async function readBenchmarkObserverLivenessStream(input: {
+  stream: ReadableStream<Uint8Array>
+  timeoutMs: number
+  onTimeout: () => Promise<void>
+}) {
+  const reader = input.stream.getReader()
+  const decoder = new TextDecoder()
+  let output = ""
+  let frameBuffer = ""
+  let livenessDeadline = Date.now() + input.timeoutMs
+  while (true) {
+    let timer: ReturnType<typeof setTimeout> | undefined
+    const next = await Promise.race([
+      reader.read(),
+      new Promise<{ timeout: true }>((resolve) => {
+        timer = setTimeout(
+          () => resolve({ timeout: true }),
+          Math.max(0, livenessDeadline - Date.now()),
+        )
+      }),
+    ]).finally(() => {
+      if (timer) clearTimeout(timer)
+    })
+    if ("timeout" in next) {
+      await input.onTimeout()
+      throw new BenchmarkObserverLivenessTimeoutError(input.timeoutMs)
+    }
+    if (next.done) return output + decoder.decode()
+    const chunk = decoder.decode(next.value, { stream: true })
+    output += chunk
+    const liveness = advanceBenchmarkObserverLivenessFrames({
+      buffer: frameBuffer,
+      chunk,
+      currentDeadline: livenessDeadline,
+      now: Date.now(),
+      timeoutMs: input.timeoutMs,
+    })
+    frameBuffer = liveness.buffer
+    livenessDeadline = liveness.deadline
+    if (Date.now() >= livenessDeadline) {
+      await input.onTimeout()
+      throw new BenchmarkObserverLivenessTimeoutError(input.timeoutMs)
+    }
+  }
+}
+
+export const BENCHMARK_RUNNER_CLEANUP_TIMEOUT_MS = 10_000
+
+/**
+ * The runner can spend five bounded cleanup phases at the shared per-phase
+ * timeout before database snapshot and isolated-runtime removal. Keep one
+ * coordinator grace owner with explicit room for those final durable writes.
+ */
+export function benchmarkRunnerShutdownGraceMs(): number {
+  return BENCHMARK_RUNNER_CLEANUP_TIMEOUT_MS * 5 + 40_000
+}
+
+export function createBenchmarkRunnerStopController<T extends object>(input: {
+  isAlive: (child: T) => boolean
+  signal: (child: T, signal: "SIGTERM" | "SIGKILL") => void
+  exited: (child: T) => Promise<unknown>
+  graceMs?: number
+}) {
+  const signalled = new WeakSet<T>()
+  const operations = new WeakMap<T, Promise<void>>()
+  const graceMs = input.graceMs ?? benchmarkRunnerShutdownGraceMs()
+  const stop = (child: T): Promise<void> => {
+    const existing = operations.get(child)
+    if (existing) return existing
+    const operation = (async () => {
+      if (!input.isAlive(child)) {
+        await input.exited(child).catch(() => undefined)
+        return
+      }
+      if (!signalled.has(child)) {
+        signalled.add(child)
+        input.signal(child, "SIGTERM")
+      }
+      let timer: ReturnType<typeof setTimeout> | undefined
+      const graceful = await Promise.race([
+        input.exited(child).then(() => true).catch(() => true),
+        new Promise<false>((resolve) => {
+          timer = setTimeout(() => resolve(false), graceMs)
+        }),
+      ])
+      if (timer) clearTimeout(timer)
+      if (graceful) return
+      input.signal(child, "SIGKILL")
+      await input.exited(child).catch(() => undefined)
+    })()
+    operations.set(child, operation)
+    return operation
+  }
+  return { stop }
+}
+
+export function installBenchmarkTerminationHandlers(
+  request: (signal: "SIGINT" | "SIGTERM") => void,
+) {
+  const onSIGINT = () => request("SIGINT")
+  const onSIGTERM = () => request("SIGTERM")
+  process.on("SIGINT", onSIGINT)
+  process.on("SIGTERM", onSIGTERM)
+  return () => {
+    process.removeListener("SIGINT", onSIGINT)
+    process.removeListener("SIGTERM", onSIGTERM)
+  }
+}
+
 export function benchmarkActivitySignature(input: {
   board: Record<string, any>
   transcript: TranscriptMessage[]
