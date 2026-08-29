@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest Inspect FrontierScience Research GPT-5.6 Luna smoke: [`2026-08-29-inspect-frontier-science-research-luna-smoke.md`](records/2026-08/2026-08-29-inspect-frontier-science-research-luna-smoke.md).
+
 Current `v0.0.57-beta` corrective application and website release tracker, including the failed immutable `v0.0.56-beta` candidate: [`2026-08-29-v0.0.56-beta-release.md`](records/2026-08/2026-08-29-v0.0.56-beta-release.md).
 
 Latest Light consultation and investigation Expert Squad: [`2026-08-29-light-expert-squad.md`](records/2026-08/2026-08-29-light-expert-squad.md).

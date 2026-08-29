@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-29-inspect-frontier-science-research-luna-smoke.md](2026-08-29-inspect-frontier-science-research-luna-smoke.md) exercises one official FrontierScience Research sample through the Inspect-owned framework with exact GPT-5.6 Luna system identity, isolated Provider authority, bounded cost, frozen membership, and fail-closed judge coverage.
+
 - [2026-08-29-v0.0.56-beta-release.md](2026-08-29-v0.0.56-beta-release.md) tracks the failed immutable `v0.0.56-beta` candidate and the reviewed `v0.0.57-beta` corrective application/same-source website publication through every remaining acceptance boundary.
 
 - [2026-08-29-light-expert-squad.md](2026-08-29-light-expert-squad.md) adds the two-role, read-only Light Expert Squad for consultation, investigation, and clarifying questions with variable same-role direct-dispatch fan-out.
