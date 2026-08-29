@@ -4,6 +4,10 @@
 
 ## 未发布
 
+## 0.0.56beta - 2026-08-29
+
+本版本完成全仓架构债清理与真实 Mission 调度验收：统一 Task、Mission、Session、Provider、MCP、调度器、持久化与 Overlay 的事实和组合边界；新增全局 Chat、运行时 Skill Market、Inspect AI benchmark 适配与 Light 专家团；桌面端、命令行与公开网站由同一份 `0.0.56-beta` 不可变源码发布。SDK、util 与 plugin 的源码包元数据同步到同一版本并通过打包安装预检；npm registry 发布不属于本轮应用/网站发布范围。
+
 ### Security
 
 - 桌面端渲染进程不再向 `window` 暴露实时设置、应用和看板 store、明文服务器密码，以及目录切换、任务加载/选择、看板加载和设置持久化等业务写入入口；相关生产代码改为直接使用类型化模块导入。渲染进程中的任意脚本或开发者工具表达式因此无法再读取服务器密码或触发这些业务写入。
@@ -11,9 +15,16 @@
 ### Added
 
 - 新增 `GET /lifecycle/{occurrenceID}`：`server.shutdown` 与 `server.restart` 现在同步受理为一次带稳定标识的生命周期 occurrence，响应携带 `occurrenceID`；受理后处理器被清除或失败会把该 occurrence 结算为 `failed` 并附精确错误，重复请求收敛到在途 occurrence，冲突的另一种转换以 409 拒绝并返回在途 occurrence 标识。关机成功即进程退出，无法自证，故没有 `succeeded` 状态。
+- 新增幂等的全局 Chat start API：一次请求原子创建可见 Chat、持久化首条真实用户消息并返回 canonical Session 流坐标；相同请求重放收敛到同一对话和同一回合。
+- 新增运行时 Skill Market 搜索、检查与 exact-hash 托管安装链；外部内容在安装前后校验同一 SHA-256，安装仅影响下一回合，不会热挂载到当前执行。
+- 新增 Inspect AI benchmark 注册表和 OpenCorvus Task 适配器，以及面向咨询、调查和澄清问题的两角色 Light 专家团；二者都复用现有 Task/Session runtime，不引入第二套 Agent 执行器。
 
 ### Changed
 
+- Mission acceptance 现在由 revisioned ledger、criterion 状态、Task execution epoch、obligation/evidence 绑定和受影响 lineage continuation 共同决定；调度、恢复、重试和最终关闭使用同一套持久化事实。
+- Session prompt owner、运行时 package publication、Task root ingress、scheduler wake、artifact provenance 与 execution directory 等跨进程边界迁移到各自单一 owner，并由 module topology 与 architecture checker 防止重新形成反向依赖或双源。
+- 原生 OpenAI/Azure 在带 Tool 的单个 Provider step 内关闭并行 function calls；独立 Session、Task、Agent 与 Project 仍可并发。Provider schema 保留开放 JSON record 语义，canonical Zod schema 继续负责执行前校验与默认值物化。
+- Overlay 的 Mission/Task/Session 消息统一走 subscribe-before-snapshot 与同一 causal frontier，实时增量和重连 hydration 收敛到同一 Message/Part lineage；较早历史可继续分页读取，大型折叠 Tool payload 延迟到显式展开。
 - Provider plugin 的能力改为最小权限 ABI：运行期 OAuth refresh 必须通过 `PluginInput.credentials.refresh` 进入引擎持久化 exchange occurrence；plugin 不再获得完整 SDK client，只获得受管 credential 操作与只读 Session facts。非网络 API credential metadata 只通过带 observed-key 比较的窄更新接口写入。OAuth credential alias 从 callback success 的动态 `provider` 字段迁移为 method-level 静态 `credentialProvider` 声明；外部 plugin 必须在 authorize 前声明真实 credential target。
 - MCP（Model Context Protocol，模型上下文协议）OAuth 凭据引入持久化租约代：一次授权流程在开始时建立租约，流程内的多次写入共用这一代；吊销或新流程铸新代后，旧持有者的写入被精确拒绝，包括由同一数据根上另一后端执行的吊销。删除后重建的凭据不再可能被删除前的持有者写入。
 - 调度器、总线、权限、构建清理、会话控制、任务取消收敛等全部控制租约持有方现在与其结算收据同事务归还租约；新增 `check:control-lease-owners` 守卫（pre-push 运行），任何新增取租约位置必须声明其释放路径。
@@ -25,6 +36,9 @@
 
 ### Fixed
 
+- 修复 Mission 创建 Task、Task 完成投递、父级唤醒、acceptance repair 与终态关闭之间可能出现重复 occurrence、遗漏回执、错误重开或 head-of-line starvation 的共享调度缺陷；真实 `openai/gpt-5.6-terra` Mission 以一个 Task、一个 epoch 和 planner/developer/tester 各一次完成，Provider、Tool 与 Bus 逐项全成功结算。
+- 修复 OpenAI 在复杂 Panel surface 上同一并行批次内产生部分 canonical、部分嵌套 `parameters` 输入的问题；最终 artifact reads 逐次使用同一 flat schema，不再产生 `tool-input-invalid` 与下一 Turn 重试。
+- 修复 Conversation/Session 首次连接、重连、旧消息分页、飞行中 operator message、child-Agent activity 和 Work Ledger hierarchy 的多处投影分叉；真实参与者消息保持完整可见，Standalone 与 Mission-owned Task 各自只出现一次。
 - GitLab Provider auth 不再加载会自行刷新并写入 OpenCode `auth.json` 的旧 npm plugin；仓库内适配器把 OAuth 首次交换、运行期 refresh 与 Personal Access Token（PAT，个人访问令牌）提交全部交还中央 Provider auth authority，并保留原 MIT 来源声明。错误 state 的 loopback 请求只得到固定 400，不会终止合法的在途授权。
 - 修复 Provider 初次 OAuth 授权与运行期 token refresh 在远端交换成功、`auth.json` 提交前进程退出时丢失 minted credential 且无精确事实的问题：Project、global、CLI、内置 plugin 与 account-usage 共用 Provider-wide renewable owner，按 `exchanging → credential_ready → consumed` 持久化；`auth.json` 的 generation/tombstone 与输出 digest 同时证明精确提交并阻止 ABA 覆盖，owner 过期时收敛为成功或 `exchange_uncertain`。结果不确定的 rotating refresh fence 在原 credential generation 仍有效时不按时间淘汰，因此不会在 24 小时后重新交换同一 refresh token。
 - 修复全局任务创建的请求重放会重复分配项目与任务的问题：请求身份现在在项目分配之前全局解析，重放返回首次提交的同一 `{task_id, project_id, directory}`，冲突重放由既有的项目内幂等检查拒绝。

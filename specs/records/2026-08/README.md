@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-29-v0.0.56-beta-release.md](2026-08-29-v0.0.56-beta-release.md) prepares the reviewed architecture-debt closure for `0.0.56-beta` application and same-source website publication and tracks every remaining release acceptance boundary.
+
 - [2026-08-29-light-expert-squad.md](2026-08-29-light-expert-squad.md) adds the two-role, read-only Light Expert Squad for consultation, investigation, and clarifying questions with variable same-role direct-dispatch fan-out.
 
 - [2026-08-29-mission-acceptance-baseline-readiness.md](2026-08-29-mission-acceptance-baseline-readiness.md) closes criterion-state, applicable Task delta, retryable checkpoint, direct-dispatch responsibility, real Session decision-settlement, and scheduler ownership gaps before the Luna continuation baseline.

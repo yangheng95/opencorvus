@@ -208,6 +208,9 @@ describe("GitHub Actions workflow contract", () => {
     })
     expect(jobs["publish-release-assets"]?.needs).toEqual(["prepare", "package-overlay", "package-cli"])
     expect(jobs["publish-release"]?.needs).toEqual(["prepare", "publish-release-assets"])
+    expect(jobs["publish-release"]?.if).toBe(
+      "${{ !cancelled() && needs.publish-release-assets.result == 'success' && needs.publish-release-assets.outputs.complete == 'true' }}",
+    )
     expect(jobs.prepare?.outputs).toEqual({
       version: "${{ steps.meta.outputs.version }}",
       prerelease: "${{ steps.meta.outputs.prerelease }}",

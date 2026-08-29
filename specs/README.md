@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Current `v0.0.56-beta` application and website release preparation and publication tracker: [`2026-08-29-v0.0.56-beta-release.md`](records/2026-08/2026-08-29-v0.0.56-beta-release.md).
+
 Latest Light consultation and investigation Expert Squad: [`2026-08-29-light-expert-squad.md`](records/2026-08/2026-08-29-light-expert-squad.md).
 
 Latest Mission acceptance Luna-baseline readiness closure: [`2026-08-29-mission-acceptance-baseline-readiness.md`](records/2026-08/2026-08-29-mission-acceptance-baseline-readiness.md).
