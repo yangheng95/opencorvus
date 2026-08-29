@@ -70,6 +70,11 @@ export default {
         // /main.tsx via the standard <script type="module"> tag.
         "src/index.html!",
         "src/main.tsx!",
+        // The native menu surface is the second production Vite entry
+        // (vite.config.ts `native-menu`); its HTML host loads /native-menu.tsx
+        // through a Vite-root-absolute path this analysis cannot follow.
+        "src/native-menu.html!",
+        "src/native-menu.tsx!",
       ],
       project: ["script/**/*.ts", "src/**/*.{ts,tsx,js}!", "vite.config.ts"],
       ignore: ["src-tauri/**", "test/**", "node_modules/**", "dist/**", "dist-vite/**"],

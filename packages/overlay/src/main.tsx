@@ -32,7 +32,7 @@ import {
 } from "./services/work-ledger"
 import { LogViewer } from "./components/LogViewer"
 import { FileExplorerPanel } from "./components/FileExplorerPanel"
-import { FileChangesPanel, type FileChangesActiveView } from "./components/FileChangesPanel"
+import { FileChangesPanel } from "./components/FileChangesPanel"
 import { BrowserPreviewPanel, type BrowserPreviewPanelController } from "./components/BrowserPreviewPanel"
 import {
   browserPreviewNativeSurfaceAvailable,
@@ -47,7 +47,6 @@ import { MailboxPanel } from "./components/MailboxPanel"
 import { Button } from "./components/ui/Button"
 import { TabPanel } from "./components/ui/Tabs"
 import { closeFileEditor, fileEditorRevealRevision, fileWorkbenchOpen } from "./services/file-workbench"
-import type { DiffTarget } from "./services/diff"
 import { initApp } from "./services/init"
 import {
   boardStore,
@@ -384,13 +383,6 @@ const [logOpen, setLogOpen] = createSignal(false)
 
 window.addEventListener("oc:open-logs", () => setLogOpen(true), listenerOpts)
 
-// ── Workspace (secondary panel, stacked above composer) state ──
-// workspaceOpen drives layout visibility; workspaceTarget is remembered across
-// open/close cycles so reopening restores the last active diff target.
-const [workspaceOpen, setWorkspaceOpen] = createSignal(false)
-const [workspaceTarget, setWorkspaceTarget] = createSignal<DiffTarget>({ filePath: "" })
-const [fileChangesActiveView, setFileChangesActiveView] = createSignal<FileChangesActiveView>("changes")
-
 type CenterWorkbenchPanel =
   | "conversation"
   | "requirements"
@@ -456,7 +448,6 @@ function revealPendingCenterWorkbenchPanel(): void {
 
 function resetCenterWorkbenchToPrimaryPanel(panel: PrimaryCenterPanel): void {
   setPrimaryWorkspaceSurface("conversation")
-  setWorkspaceOpen(false)
   closeFileEditor()
   setRightDockVisible(false)
   setSelectedSubagentSessionID("")
@@ -496,11 +487,6 @@ async function openAutomationSession(session: AutomationRunSession): Promise<voi
   await selectConversationWithUILifecycle(session.id, session.directory, session.experience ?? "chat")
 }
 
-function openDiffActivity(): void {
-  setFileChangesActiveView("changes")
-  openCenterWorkbenchPanel("diff")
-}
-
 function showRightDockForExplicitAction(): void {
   if (primaryWorkspaceSurface() === "mission-board") setPrimaryWorkspaceSurface("conversation")
   setRightDockVisible(true)
@@ -508,19 +494,12 @@ function showRightDockForExplicitAction(): void {
 
 function openRightDockPanel(panel: RightDockPanel): void {
   showRightDockForExplicitAction()
-  if (panel === "diff") {
-    openDiffActivity()
-    return
-  }
   openCenterWorkbenchPanel(panel)
 }
 
 function presentRightDockPanel(panel: RightDockPanel): void {
   if (primaryWorkspaceSurface() !== "conversation") return
   setRightDockVisible(true)
-  if (panel === "diff") {
-    setFileChangesActiveView("changes")
-  }
   openCenterWorkbenchPanel(panel)
 }
 
@@ -1381,7 +1360,6 @@ function removeCenterWorkbenchTabs(matches: (tab: CenterWorkbenchTab) => boolean
 
 function closeCenterWorkbenchPanel(panel: CenterWorkbenchPanel): void {
   if (panel === "conversation") return
-  if (panel === "diff") setWorkspaceOpen(false)
   if (panel === "file") {
     void closeFileEditor()
     return
@@ -1392,7 +1370,6 @@ function closeCenterWorkbenchPanel(panel: CenterWorkbenchPanel): void {
 function closeRightDockTab(tabID: string): void {
   const tab = untrack(centerWorkbenchPanels).find((item) => item.id === tabID)
   if (!tab || tab.panel === "conversation") return
-  if (tab.panel === "diff") setWorkspaceOpen(false)
   if (tab.panel === "file") {
     void closeFileEditor()
     return
@@ -1447,12 +1424,6 @@ function activateCenterWorkbenchTab(tabID: string): void {
   scheduleCenterWorkbenchPanelReveal(tab.panel)
 }
 
-function selectRightDockTab(tabID: string): void {
-  const panel = untrack(centerWorkbenchPanels).find((tab) => tab.id === tabID)?.panel
-  if (panel === "diff") setFileChangesActiveView("changes")
-  activateCenterWorkbenchTab(tabID)
-}
-
 function renderRightDockWidth(): void {
   const dock = document.getElementById("rightDock")
   if (!dock) return
@@ -1474,12 +1445,6 @@ function scheduleCenterWorkbenchPanelReveal(panel: CenterWorkbenchPanel): void {
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return !!value && typeof value === "object" && !Array.isArray(value)
-}
-
-/** Close the workspace panel. */
-function closeWorkspace(): void {
-  setWorkspaceOpen(false)
-  closeCenterWorkbenchPanel("diff")
 }
 
 // Delegate clicks on rendered-markdown file links (see utils/markdown.ts —
@@ -1964,19 +1929,9 @@ function OverlayRoot() {
     const open = fileWorkbenchOpen()
     void fileEditorRevealRevision()
     if (open) {
-      setWorkspaceOpen(false)
       openRightDockPanel("file")
     } else {
       removeCenterWorkbenchTabs((tab) => tab.panel === "file")
-    }
-  })
-
-  createEffect(() => {
-    const open = workspaceOpen()
-    if (open) {
-      openCenterWorkbenchPanel("diff")
-    } else {
-      closeCenterWorkbenchPanel("diff")
     }
   })
 
@@ -2356,7 +2311,7 @@ function OverlayRoot() {
             const selected = selectedCenterWorkbenchTab()
             return selected?.panel === "conversation" ? null : (selected?.id ?? null)
           }}
-          onSelect={selectRightDockTab}
+          onSelect={activateCenterWorkbenchTab}
           onOpen={openRightDockPanel}
           onNewBrowserTab={openBlankBrowserTab}
           onClose={closeRightDockTab}
@@ -2391,12 +2346,7 @@ function OverlayRoot() {
           >
             <div id="solidFileChangesMount" class="center-workbench-activity sidebar-file-changes-panel">
               <FileChangesPanel
-                scopeKey={activeTaskID()}
-                diffOpen={workspaceOpen()}
-                diffTarget={workspaceTarget()}
                 active={() => isCenterWorkbenchPanelOpen("file") || isCenterWorkbenchPanelOpen("diff")}
-                activeView={fileChangesActiveView()}
-                onCloseDiff={closeWorkspace}
               />
             </div>
           </TabPanel>

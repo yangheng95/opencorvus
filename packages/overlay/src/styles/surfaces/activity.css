@@ -304,27 +304,3 @@
   overscroll-behavior: contain;
   padding-right: var(--ui-gap-3xs);
 }
-
-.file-changes-diff-header {
-  flex: 0 0 auto;
-  min-height: calc(36px * var(--ui-scale));
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--ui-gap-sm);
-  padding: 0 var(--ui-gap-sm);
-  background: var(--surface-strong);
-  color: var(--text-strong);
-  font-weight: var(--ui-font-weight-strong);
-}
-
-.file-changes-diff-header .oc-button[data-ui="file-changes-diff-close"] {
-  --oc-button-color: var(--text-muted);
-}
-
-.file-changes-diff-header .oc-button[data-ui="file-changes-diff-close"]:hover,
-.file-changes-diff-header .oc-button[data-ui="file-changes-diff-close"]:focus-visible {
-  --oc-button-bg: color-mix(in srgb, var(--bad) 12%, transparent);
-  --oc-button-border: var(--oc-border-width) solid transparent;
-  --oc-button-color: var(--bad);
-}

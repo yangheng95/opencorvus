@@ -221,7 +221,6 @@
         "@opencorvus-ai/plugin": "workspace:*",
         "@opencorvus-ai/sdk": "workspace:*",
         "@opencorvus-ai/transport-protocol": "workspace:*",
-        "@opencorvus-ai/util": "workspace:*",
         "@tanstack/solid-table": "8.21.3",
         "@tauri-apps/api": "^2",
         "@tauri-apps/plugin-notification": "^2",
@@ -251,6 +250,7 @@
         "vis-timeline": "^8.5.2",
       },
       "devDependencies": {
+        "@opencorvus-ai/util": "workspace:*",
         "@tauri-apps/cli": "^2",
         "jsonc-parser": "3.3.1",
         "vite": "^6",

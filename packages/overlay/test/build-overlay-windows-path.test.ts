@@ -9,7 +9,9 @@ const packageManifest = JSON.parse(readFileSync(join(import.meta.dir, "../packag
 
 describe("build-overlay", () => {
   test("keeps ordinary UI build separate from explicit packaging", () => {
-    expect(packageManifest.scripts.build).toBe("bun run build:vite")
+    // `build` composes the renderer bundle with its public-surface gate;
+    // packaging stays behind the explicit `build:overlay` entry point.
+    expect(packageManifest.scripts.build).toBe("bun run build:vite && bun run check:renderer-surface")
     expect(packageManifest.scripts["build:overlay"]).toBe("bun run script/build-overlay.ts")
   })
 

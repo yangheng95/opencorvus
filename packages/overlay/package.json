@@ -22,6 +22,7 @@
     "check:renderer-surface": "bun run script/check-renderer-public-surface.ts"
   },
   "devDependencies": {
+    "@opencorvus-ai/util": "workspace:*",
     "@tauri-apps/cli": "^2",
     "jsonc-parser": "3.3.1",
     "vite": "^6",
@@ -53,7 +54,6 @@
     "@opencorvus-ai/plugin": "workspace:*",
     "@opencorvus-ai/sdk": "workspace:*",
     "@opencorvus-ai/transport-protocol": "workspace:*",
-    "@opencorvus-ai/util": "workspace:*",
     "@tanstack/solid-table": "8.21.3",
     "@tauri-apps/api": "^2",
     "@tauri-apps/plugin-notification": "^2",
