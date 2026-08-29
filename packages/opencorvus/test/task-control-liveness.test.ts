@@ -532,6 +532,43 @@ describe("Task-control driver", () => {
     driver.dispose()
   })
 
+  test("keeps the heartbeat cadence while an earlier Task scan is still running", async () => {
+    const heartbeatTicks: Array<() => void> = []
+    const scanned: string[] = []
+    let liveTasks = ["task-a"]
+    let releaseTaskA!: () => void
+    const taskAGate = new Promise<void>((resolve) => {
+      releaseTaskA = resolve
+    })
+    const driver = new TaskControlDriver({
+      scan: async (taskID) => {
+        scanned.push(taskID)
+        if (taskID === "task-a") await taskAGate
+        return { activated: 0 }
+      },
+      liveTasks: () => liveTasks,
+      heartbeatMilliseconds: 5_000,
+      setTimer: (fn, delay) => {
+        if (delay === 5_000) heartbeatTicks.push(fn)
+        return { cancel() {} }
+      },
+    })
+
+    heartbeatTicks.shift()!()
+    await Promise.resolve()
+    expect(scanned).toEqual(["task-a"])
+
+    liveTasks = ["task-a", "task-b"]
+    heartbeatTicks.shift()!()
+    await Promise.resolve()
+    await Promise.resolve()
+    expect(scanned).toEqual(["task-a", "task-b"])
+
+    releaseTaskA()
+    await Promise.resolve()
+    driver.dispose()
+  })
+
   test("stops the heartbeat when disposed", () => {
     const cancelled: number[] = []
     const driver = new TaskControlDriver({

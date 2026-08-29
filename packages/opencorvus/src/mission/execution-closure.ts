@@ -2,16 +2,23 @@ import { randomUUID } from "node:crypto"
 import z from "zod"
 import { ProtocolStore, type ProtocolEventView } from "@/protocol/store"
 import { ProtocolDeliveryReceiptTable, ProtocolEventTable, ProtocolInboxTable } from "@/protocol/protocol.sql"
-import { projectProtocolDeliveryInTransaction } from "@/protocol/delivery-projection"
-import {
-  schedulerWakeMessageMatchesInTransaction,
-  successfulSchedulerWakeReplyExistsInTransaction,
-} from "@/protocol/session-wake-state"
-import { Database, and, eq, sql } from "@/storage/db"
+import { schedulerMissionWakeDispositionInTransaction } from "@/protocol/session-wake-state"
+import { ProtocolDeliveryReceipt } from "@/protocol/schema"
+import { Database, and, eq } from "@/storage/db"
 import { Identifier } from "@/id/id"
 import { withKeyedLock } from "@/util/lock"
 import { NamedError } from "@opencorvus-ai/util/error"
-import { acquireControlLease, assertControlLeaseInTransaction, releaseControlLeaseInTransaction, releaseControlLeaseOnErrorPath, renewControlLease } from "@/engine/control-lease"
+import {
+  acquireControlLease,
+  assertControlLeaseInTransaction,
+  releaseControlLeaseInTransaction,
+  releaseControlLeaseOnErrorPath,
+  renewControlLease,
+} from "@/engine/control-lease"
+import { TaskCancellationRequestBody } from "@opencorvus-ai/transport-protocol"
+
+export const MissionExecutionCloseSource = z.enum(["mission.abort", "mission.delete", "mission.archive"])
+export type MissionExecutionCloseSource = z.infer<typeof MissionExecutionCloseSource>
 
 export const MISSION_EXECUTION_CLOSURE_EVENT_TYPES = {
   opened: "mission.execution.opened",
@@ -19,10 +26,25 @@ export const MISSION_EXECUTION_CLOSURE_EVENT_TYPES = {
   closed: "mission.execution.closed",
 } as const
 
+const MISSION_EXECUTION_PROVENANCE_EVENT_TYPES = {
+  required: "mission.execution.cancellation_provenance.required",
+  unavailable_terminal: "mission.execution.cancellation_provenance.unavailable_terminal",
+  supplied: "mission.execution.cancellation_provenance.supplied",
+} as const
+
+const MissionExecutionOpenedOccurrence = z
+  .object({
+    eventID: Identifier.schema("protocol_event"),
+    operationID: z.string().uuid(),
+  })
+  .strict()
+
 export const MissionExecutionClosurePayload = z
   .object({
     missionID: z.string().min(1),
     requestID: z.string().min(1),
+    cancellation: TaskCancellationRequestBody.optional(),
+    openedOccurrence: MissionExecutionOpenedOccurrence.optional(),
   })
   .strict()
 
@@ -30,8 +52,9 @@ export type MissionExecutionClosure = z.infer<typeof MissionExecutionClosurePayl
   eventID: string
   sessionID: string
   operationID: string
-  state: keyof typeof MISSION_EXECUTION_CLOSURE_EVENT_TYPES
+  state: keyof typeof MISSION_EXECUTION_CLOSURE_EVENT_TYPES | "recovery_blocked"
   source: string
+  provenanceAuthorityEventID?: string
 }
 
 export const MissionExecutionClosingError = NamedError.create(
@@ -54,7 +77,7 @@ export const MissionExecutionWakeClosedError = NamedError.create(
       message: z.string(),
       missionID: z.string().min(1),
       sessionID: z.string().min(1),
-      state: z.enum(["closing", "closed"]),
+      state: z.enum(["closing", "closed", "recovery_blocked"]),
       operationID: z.string().uuid(),
       closureEventID: z.string().min(1),
     })
@@ -72,19 +95,98 @@ export const MissionExecutionWakeNotOpenedError = NamedError.create(
     .strict(),
 )
 
+export const MissionExecutionWakeOccurrenceChangedError = NamedError.create(
+  "MissionExecutionWakeOccurrenceChangedError",
+  z
+    .object({
+      message: z.string(),
+      missionID: z.string().min(1),
+      sessionID: z.string().min(1),
+      expectedOperationID: z.string().uuid(),
+      expectedClosureEventID: z.string().min(1),
+      currentOperationID: z.string().uuid(),
+      currentClosureEventID: z.string().min(1),
+    })
+    .strict(),
+)
+
+export const MissionExecutionCancellationProvenanceRequiredError = NamedError.create(
+  "MissionExecutionCancellationProvenanceRequiredError",
+  z
+    .object({
+      message: z.string(),
+      missionID: z.string().min(1),
+      sessionID: z.string().min(1),
+      operationID: z.string().uuid(),
+      closureEventID: Identifier.schema("protocol_event"),
+      authorityEventID: Identifier.schema("protocol_event"),
+      requiredSource: MissionExecutionCloseSource,
+    })
+    .strict(),
+)
+
+export type MissionExecutionWakePersistence = Readonly<{
+  openedEventID: string
+  openedOperationID: string
+  /** Exact occurrence fence executed inside the Message bundle write transaction. */
+  preflightBundle: () => void
+}>
+
 const missionExecutionAdmissionLocks = new Map<string, Promise<unknown>>()
 
 export function withMissionExecutionAdmission<T>(sessionID: string, operation: () => Promise<T>): Promise<T> {
   return withKeyedLock(missionExecutionAdmissionLocks, sessionID, operation)
 }
 
+const HistoricalMissionExecutionClosurePayload = z
+  .object({ missionID: z.string().min(1), requestID: z.string().min(1) })
+  .strict()
+
+const MissionExecutionProvenanceBoundaryPayload = z
+  .object({
+    version: z.literal(1),
+    missionID: z.string().min(1),
+    requestID: z.string().min(1),
+    requiredSource: MissionExecutionCloseSource,
+  })
+  .strict()
+
+const MissionExecutionSuppliedProvenancePayload = z
+  .object({
+    version: z.literal(1),
+    missionID: z.string().min(1),
+    originalRequestID: z.string().min(1),
+    requestID: z.string().min(1),
+    source: MissionExecutionCloseSource,
+    cancellation: TaskCancellationRequestBody,
+  })
+  .strict()
+
+function provenanceEventsForClosure(event: ProtocolEventView): ProtocolEventView[] {
+  return Database.use((db) =>
+    db
+      .select({ id: ProtocolEventTable.id })
+      .from(ProtocolEventTable)
+      .where(
+        and(
+          eq(ProtocolEventTable.aggregate_type, "session"),
+          eq(ProtocolEventTable.aggregate_id, event.aggregateID),
+          eq(ProtocolEventTable.causation_id, event.id),
+        ),
+      )
+      .all()
+      .map((row) => ProtocolStore.requireEvent(row.id))
+      .filter((candidate) => Object.values(MISSION_EXECUTION_PROVENANCE_EVENT_TYPES).includes(candidate.type as never)),
+  )
+}
+
 function closureFromEvent(event: ProtocolEventView | undefined): MissionExecutionClosure | undefined {
   if (!event) return undefined
-  const payload = MissionExecutionClosurePayload.parse(event.payload)
-  const state = (Object.entries(MISSION_EXECUTION_CLOSURE_EVENT_TYPES) as Array<[
-    keyof typeof MISSION_EXECUTION_CLOSURE_EVENT_TYPES,
-    string,
-  ]>).find(([, type]) => type === event.type)?.[0]
+  const state = (
+    Object.entries(MISSION_EXECUTION_CLOSURE_EVENT_TYPES) as Array<
+      [keyof typeof MISSION_EXECUTION_CLOSURE_EVENT_TYPES, string]
+    >
+  ).find(([, type]) => type === event.type)?.[0]
   if (
     !state ||
     event.aggregate !== "session" ||
@@ -93,6 +195,89 @@ function closureFromEvent(event: ProtocolEventView | undefined): MissionExecutio
     !event.correlationID
   ) {
     throw new Error(`Mission execution closure event ${event.id} has conflicting Session identity`)
+  }
+  const parsedCurrent = MissionExecutionClosurePayload.safeParse(event.payload)
+  const hasInlineAuthority = parsedCurrent.success && (state === "opened" || Boolean(parsedCurrent.data.cancellation))
+  const provenanceEvents = provenanceEventsForClosure(event)
+  if (hasInlineAuthority && provenanceEvents.length > 0) {
+    throw new Error(`Mission execution closure event ${event.id} has conflicting inline and addendum provenance`)
+  }
+  if (!hasInlineAuthority && state !== "opened") {
+    const historical = HistoricalMissionExecutionClosurePayload.parse(event.payload)
+    const boundaryType =
+      state === "closing"
+        ? MISSION_EXECUTION_PROVENANCE_EVENT_TYPES.required
+        : MISSION_EXECUTION_PROVENANCE_EVENT_TYPES.unavailable_terminal
+    const boundaries = provenanceEvents.filter((candidate) => candidate.type === boundaryType)
+    const supplied = provenanceEvents.filter(
+      (candidate) => candidate.type === MISSION_EXECUTION_PROVENANCE_EVENT_TYPES.supplied,
+    )
+    if (boundaries.length !== 1 || supplied.length > 1) {
+      throw new Error(`Historical Mission execution ${state} event ${event.id} has ambiguous provenance authority`)
+    }
+    const authority = boundaries[0]!
+    const boundary = MissionExecutionProvenanceBoundaryPayload.parse(authority.payload)
+    if (
+      authority.correlationID !== event.correlationID ||
+      boundary.missionID !== historical.missionID ||
+      boundary.requestID !== historical.requestID ||
+      boundary.requiredSource !== event.source
+    ) {
+      throw new Error(`Historical Mission execution ${state} event ${event.id} has conflicting provenance authority`)
+    }
+    if (state === "closed") {
+      if (supplied.length > 0) {
+        throw new Error(`Historical closed Mission execution ${event.id} cannot accept supplied provenance`)
+      }
+      return {
+        ...historical,
+        eventID: event.id,
+        sessionID: event.sessionID,
+        operationID: event.correlationID,
+        state,
+        source: event.source,
+        provenanceAuthorityEventID: authority.id,
+      }
+    }
+    if (supplied.length === 0) {
+      return {
+        ...historical,
+        eventID: event.id,
+        sessionID: event.sessionID,
+        operationID: event.correlationID,
+        state: "recovery_blocked",
+        source: event.source,
+        provenanceAuthorityEventID: authority.id,
+      }
+    }
+    const suppliedEvent = supplied[0]!
+    const suppliedPayload = MissionExecutionSuppliedProvenancePayload.parse(suppliedEvent.payload)
+    if (
+      suppliedEvent.correlationID !== event.correlationID ||
+      suppliedPayload.missionID !== historical.missionID ||
+      suppliedPayload.originalRequestID !== historical.requestID ||
+      suppliedPayload.source !== event.source
+    ) {
+      throw new Error(`Historical Mission closing event ${event.id} has conflicting supplied provenance`)
+    }
+    return {
+      missionID: historical.missionID,
+      requestID: suppliedPayload.requestID,
+      cancellation: suppliedPayload.cancellation,
+      eventID: event.id,
+      sessionID: event.sessionID,
+      operationID: event.correlationID,
+      state: "closing",
+      source: event.source,
+      provenanceAuthorityEventID: suppliedEvent.id,
+    }
+  }
+  const payload = MissionExecutionClosurePayload.parse(event.payload)
+  if (state === "opened" && (payload.cancellation || payload.openedOccurrence)) {
+    throw new Error(`Mission execution open event ${event.id} cannot carry close or recovery provenance`)
+  }
+  if (state !== "opened" && !payload.cancellation) {
+    throw new Error(`Mission execution ${state} event ${event.id} is missing cancellation provenance`)
   }
   return {
     ...payload,
@@ -121,11 +306,23 @@ function currentMissionExecutionClosureInTransaction(
 }
 
 async function appendMissionExecutionClosure(
-  input: z.input<typeof MissionExecutionClosurePayload> & { sessionID: string; operationID: string; state: keyof typeof MISSION_EXECUTION_CLOSURE_EVENT_TYPES; source: string },
+  input: z.input<typeof MissionExecutionClosurePayload> & {
+    eventID?: string
+    sessionID: string
+    operationID: string
+    state: keyof typeof MISSION_EXECUTION_CLOSURE_EVENT_TYPES
+    source: string
+  },
 ): Promise<MissionExecutionClosure> {
-  const payload = MissionExecutionClosurePayload.parse({ missionID: input.missionID, requestID: input.requestID })
+  const payload = MissionExecutionClosurePayload.parse({
+    missionID: input.missionID,
+    requestID: input.requestID,
+    ...(input.cancellation ? { cancellation: input.cancellation } : {}),
+    ...(input.openedOccurrence ? { openedOccurrence: input.openedOccurrence } : {}),
+  })
   const event = await ProtocolStore.appendEvent({
     kind: "event",
+    ...(input.eventID ? { id: input.eventID } : {}),
     type: MISSION_EXECUTION_CLOSURE_EVENT_TYPES[input.state],
     aggregate: "session",
     aggregate_id: input.sessionID,
@@ -138,12 +335,24 @@ async function appendMissionExecutionClosure(
 }
 
 function appendMissionExecutionClosureInTransaction(
-  input: z.input<typeof MissionExecutionClosurePayload> & { sessionID: string; operationID: string; state: keyof typeof MISSION_EXECUTION_CLOSURE_EVENT_TYPES; source: string },
+  input: z.input<typeof MissionExecutionClosurePayload> & {
+    eventID?: string
+    sessionID: string
+    operationID: string
+    state: keyof typeof MISSION_EXECUTION_CLOSURE_EVENT_TYPES
+    source: string
+  },
 ): MissionExecutionClosure {
   Database.requireActiveTransaction("appendMissionExecutionClosureInTransaction")
-  const payload = MissionExecutionClosurePayload.parse({ missionID: input.missionID, requestID: input.requestID })
+  const payload = MissionExecutionClosurePayload.parse({
+    missionID: input.missionID,
+    requestID: input.requestID,
+    ...(input.cancellation ? { cancellation: input.cancellation } : {}),
+    ...(input.openedOccurrence ? { openedOccurrence: input.openedOccurrence } : {}),
+  })
   const event = ProtocolStore.appendEventInTransaction({
     kind: "event",
+    ...(input.eventID ? { id: input.eventID } : {}),
     type: MISSION_EXECUTION_CLOSURE_EVENT_TYPES[input.state],
     aggregate: "session",
     aggregate_id: input.sessionID,
@@ -160,8 +369,8 @@ export function settleMissionSchedulerWakesForClosureInTransaction(
   closure: MissionExecutionClosure,
 ): number {
   Database.requireActiveTransaction("settleMissionSchedulerWakesForClosureInTransaction")
-  if (closure.state !== "closing" && closure.state !== "closed") {
-    throw new Error(`Mission wake closure settlement requires closing or closed state, got ${closure.state}`)
+  if (closure.state !== "closing" && closure.state !== "closed" && closure.state !== "recovery_blocked") {
+    throw new Error(`Mission wake closure settlement requires a terminal-fenced state, got ${closure.state}`)
   }
   const rows = db
     .select({
@@ -179,72 +388,31 @@ export function settleMissionSchedulerWakesForClosureInTransaction(
     )
     .all()
   let settled = 0
-  const now = Date.now()
   for (const row of rows) {
-    const delivery = projectProtocolDeliveryInTransaction(db, row.inbox, now)
-    const result = delivery.delivery_result
-    if (delivery.status !== "delivered" || !result || result.kind !== "session_wake") continue
-    if (
-      !schedulerWakeMessageMatchesInTransaction(db, {
-        sessionID: closure.sessionID,
-        messageID: result.message_id,
-        eventID: row.eventID,
-        inboxID: row.inbox.id,
-      })
-    ) {
-      throw new Error(`Scheduler inbox ${row.inbox.id} session wake Message occurrence is invalid during Mission closure`)
-    }
-    if (
-      successfulSchedulerWakeReplyExistsInTransaction(db, {
-        sessionID: closure.sessionID,
-        messageID: result.message_id,
-      })
-    ) {
-      continue
-    }
-    const receiptID = Identifier.deterministic(
-      "protocol_inbox",
-      `mission-wake-closure-receipt\0${row.inbox.id}\0${closure.eventID}`,
-    )
-    // The settlement boundary is the inbox, not the minted receipt identity: an
-    // inbox carries at most one non-retry receipt, which is exactly what
-    // `protocol_delivery_receipt_terminal_idx` enforces. That index is partial,
-    // so it cannot serve as an ON CONFLICT target; this restates its predicate
-    // instead. The surrounding transaction is immediate, so the read and the
-    // insert settle atomically.
-    const settledReceipt = db
+    const terminalReceipt = db
       .select()
       .from(ProtocolDeliveryReceiptTable)
-      .where(
-        and(
-          eq(ProtocolDeliveryReceiptTable.inbox_id, row.inbox.id),
-          sql`json_extract(${ProtocolDeliveryReceiptTable.receipt}, '$.kind') <> 'retry_wait'`,
-        ),
-      )
-      .get()
-    if (!settledReceipt) {
-      db.insert(ProtocolDeliveryReceiptTable)
-        .values({
-          id: receiptID,
-          inbox_id: row.inbox.id,
-          receipt: {
-            kind: "mission_wake_closed",
-            message_id: result.message_id,
-            closure_event_id: closure.eventID,
-          },
-          time_created: now,
-        })
-        .run()
+      .where(eq(ProtocolDeliveryReceiptTable.inbox_id, row.inbox.id))
+      .all()
+      .map((receipt) => ProtocolDeliveryReceipt.parse(receipt.receipt))
+      .find((receipt) => receipt.kind !== "retry_wait")
+    if (terminalReceipt?.kind !== "session_wake") continue
+    const disposition = schedulerMissionWakeDispositionInTransaction(db, {
+      sessionID: closure.sessionID,
+      messageID: terminalReceipt.message_id,
+      eventID: row.eventID,
+      inboxID: row.inbox.id,
+    })
+    if (disposition.kind === "answered" || disposition.kind === "integrity_boundary") continue
+    if (disposition.kind === "mission_closed") {
       settled += 1
       continue
     }
-    const existingResult = settledReceipt.receipt
-    // A prior closure of the same wake is a valid settled state; only a receipt
-    // that settles a different Message contradicts the immutable fact.
-    if (
-      existingResult?.kind !== "mission_wake_closed" ||
-      existingResult.message_id !== result.message_id
-    ) throw new Error(`Mission wake closure receipt ${receiptID} conflicts with the immutable settlement fact`)
+    throw new Error(
+      `Scheduler inbox ${row.inbox.id} cannot reduce against Mission closure ${closure.eventID}: ${
+        disposition.kind === "invalid_binding" ? disposition.reason : "wake remained unanswered"
+      }`,
+    )
   }
   return settled
 }
@@ -281,9 +449,9 @@ async function openMissionExecutionUnderAdmission(input: {
     // different dispatch/wake request is another activation of that occurrence,
     // not authority to mint a second lifecycle boundary.
     if (current?.state === "opened") return current
-    if (current?.state === "closing") {
+    if (current?.state === "closing" || current?.state === "recovery_blocked") {
       throw new MissionExecutionClosingError({
-        message: `Mission ${input.missionID} execution is still closing; retry or complete the durable close operation before reopening it.`,
+        message: `Mission ${input.missionID} execution is still ${current.state === "recovery_blocked" ? "blocked on operator cancellation provenance" : "closing"}; complete the durable close operation before reopening it.`,
         missionID: input.missionID,
         sessionID: input.sessionID,
         operationID: current.operationID,
@@ -314,18 +482,18 @@ export async function openMissionExecutionWithWake<Receipt extends { activation:
   sessionID: string
   source: "mission.dispatch" | "mission.wake"
   requestID: string
-  wake: () => Promise<Receipt>
+  wake: (persistence: MissionExecutionWakePersistence) => Promise<Receipt>
 }): Promise<Receipt> {
   const closing = activeCloseOperations.get(input.sessionID)
   if (closing) await closing
   return withMissionExecutionAdmission(input.sessionID, async () => {
-    await openMissionExecutionUnderAdmission({
+    const opened = await openMissionExecutionUnderAdmission({
       missionID: input.missionID,
       sessionID: input.sessionID,
       source: input.source,
       requestID: input.requestID,
     })
-    const receipt = await input.wake()
+    const receipt = await input.wake(missionExecutionWakePersistence(opened))
     await receipt.activation
     return receipt
   })
@@ -339,36 +507,76 @@ export async function openMissionExecutionWithWake<Receipt extends { activation:
 export function admitMissionExecutionWake<Receipt extends { activation: Promise<unknown> }>(input: {
   missionID: string
   sessionID: string
-  wake: () => Receipt | Promise<Receipt>
+  wake: (persistence: MissionExecutionWakePersistence) => Receipt | Promise<Receipt>
 }): Promise<Receipt> {
   return withMissionExecutionAdmission(input.sessionID, async () => {
-    const current = currentMissionExecutionClosure(input.sessionID)
-    if (!current) {
-      throw new MissionExecutionWakeNotOpenedError({
-        message: `Mission ${input.missionID} has no opened execution occurrence for non-operator wake activation.`,
-        missionID: input.missionID,
-        sessionID: input.sessionID,
-      })
-    }
-    if (current.missionID !== input.missionID) {
-      throw new Error(
-        `Mission execution closure for Session ${input.sessionID} belongs to Mission ${current.missionID}`,
-      )
-    }
-    if (current.state === "closing" || current.state === "closed") {
-      throw new MissionExecutionWakeClosedError({
-        message: `Mission ${input.missionID} ${current.state} occurrence rejects non-operator wake activation under closure event ${current.eventID}.`,
-        missionID: input.missionID,
-        sessionID: input.sessionID,
-        state: current.state,
-        operationID: current.operationID,
-        closureEventID: current.eventID,
-      })
-    }
-    const receipt = await input.wake()
+    const opened = requireOpenedMissionExecutionWake({
+      missionID: input.missionID,
+      sessionID: input.sessionID,
+    })
+    const receipt = await input.wake(missionExecutionWakePersistence(opened))
     await receipt.activation
     return receipt
   })
+}
+
+function requireOpenedMissionExecutionWake(input: {
+  missionID: string
+  sessionID: string
+  expected?: MissionExecutionClosure
+}): MissionExecutionClosure {
+  const current = currentMissionExecutionClosure(input.sessionID)
+  if (!current) {
+    throw new MissionExecutionWakeNotOpenedError({
+      message: `Mission ${input.missionID} has no opened execution occurrence for non-operator wake activation.`,
+      missionID: input.missionID,
+      sessionID: input.sessionID,
+    })
+  }
+  if (current.missionID !== input.missionID) {
+    throw new Error(`Mission execution closure for Session ${input.sessionID} belongs to Mission ${current.missionID}`)
+  }
+  if (current.state !== "opened") {
+    throw new MissionExecutionWakeClosedError({
+      message: `Mission ${input.missionID} ${current.state} occurrence rejects non-operator wake activation under closure event ${current.eventID}.`,
+      missionID: input.missionID,
+      sessionID: input.sessionID,
+      state: current.state,
+      operationID: current.operationID,
+      closureEventID: current.eventID,
+    })
+  }
+  if (
+    input.expected &&
+    (current.eventID !== input.expected.eventID || current.operationID !== input.expected.operationID)
+  ) {
+    throw new MissionExecutionWakeOccurrenceChangedError({
+      message: `Mission ${input.missionID} wake occurrence changed from ${input.expected.eventID} to ${current.eventID} before Message commit.`,
+      missionID: input.missionID,
+      sessionID: input.sessionID,
+      expectedOperationID: input.expected.operationID,
+      expectedClosureEventID: input.expected.eventID,
+      currentOperationID: current.operationID,
+      currentClosureEventID: current.eventID,
+    })
+  }
+  return current
+}
+
+function missionExecutionWakePersistence(opened: MissionExecutionClosure): MissionExecutionWakePersistence {
+  if (opened.state !== "opened") throw new Error(`Mission wake persistence requires an opened occurrence`)
+  return {
+    openedEventID: opened.eventID,
+    openedOperationID: opened.operationID,
+    preflightBundle: () => {
+      Database.requireActiveTransaction("Mission execution wake Message preflight")
+      requireOpenedMissionExecutionWake({
+        missionID: opened.missionID,
+        sessionID: opened.sessionID,
+        expected: opened,
+      })
+    },
+  }
 }
 
 const activeCloseOperations = new Map<string, Promise<MissionExecutionClosure>>()
@@ -380,42 +588,15 @@ export const MissionExecutionClosureTestHooks = {
   },
 }
 
-export function closeMissionExecutionOperation(input: {
-  missionID: string
-  sessionID: string
-  source: "mission.abort" | "mission.delete" | "mission.archive"
-  requestID: string
+function runMissionExecutionClosingOperation(input: {
+  closing: MissionExecutionClosure
   close: (signal: AbortSignal) => Promise<void>
 }): Promise<MissionExecutionClosure> {
-  const active = activeCloseOperations.get(input.sessionID)
+  const active = activeCloseOperations.get(input.closing.sessionID)
   if (active) return active
 
   const operation = (async () => {
-    const closing = await withMissionExecutionAdmission(input.sessionID, async () => {
-      const current = currentMissionExecutionClosure(input.sessionID)
-      if (current && current.missionID !== input.missionID) {
-        throw new Error(
-          `Mission execution closure for Session ${input.sessionID} belongs to Mission ${current.missionID}`,
-        )
-      }
-      if (current?.state === "closed" || current?.state === "closing") {
-        settleMissionSchedulerWakesForClosure(current)
-        return current
-      }
-      return Database.immediateTransaction((db) => {
-        const closure = appendMissionExecutionClosureInTransaction({
-          missionID: input.missionID,
-          sessionID: input.sessionID,
-          operationID: randomUUID(),
-          state: "closing",
-          source: input.source,
-          requestID: input.requestID,
-        })
-        settleMissionSchedulerWakesForClosureInTransaction(db, closure)
-        return closure
-      })
-    })
-    if (closing.state === "closed") return closing
+    const closing = input.closing
     const ownerOccurrenceID = Identifier.ascending("call")
     const targetID = `mission:${closing.sessionID}`
     const leaseMilliseconds = 120_000
@@ -512,6 +693,8 @@ export function closeMissionExecutionOperation(input: {
                 state: "closed",
                 source: closing.source,
                 requestID: closing.requestID,
+                cancellation: closing.cancellation,
+                ...(closing.openedOccurrence ? { openedOccurrence: closing.openedOccurrence } : {}),
               })
         // The closure fact is terminal, so this owner is finished. The next
         // closure waits for the lease by polling every 10-100 ms, which means
@@ -544,16 +727,143 @@ export function closeMissionExecutionOperation(input: {
       }
     }
   })()
-  activeCloseOperations.set(input.sessionID, operation)
+  activeCloseOperations.set(input.closing.sessionID, operation)
   void operation.then(
     () => {
-      if (activeCloseOperations.get(input.sessionID) === operation) activeCloseOperations.delete(input.sessionID)
+      if (activeCloseOperations.get(input.closing.sessionID) === operation) {
+        activeCloseOperations.delete(input.closing.sessionID)
+      }
     },
     () => {
-      if (activeCloseOperations.get(input.sessionID) === operation) activeCloseOperations.delete(input.sessionID)
+      if (activeCloseOperations.get(input.closing.sessionID) === operation) {
+        activeCloseOperations.delete(input.closing.sessionID)
+      }
     },
   )
   return operation
+}
+
+export async function closeMissionExecutionOperation(input: {
+  missionID: string
+  sessionID: string
+  source: MissionExecutionCloseSource
+  requestID: string
+  provenance: z.input<typeof TaskCancellationRequestBody>
+  close: (signal: AbortSignal) => Promise<void>
+}): Promise<MissionExecutionClosure> {
+  const closing = await withMissionExecutionAdmission(input.sessionID, async () => {
+    const current = currentMissionExecutionClosure(input.sessionID)
+    if (current && current.missionID !== input.missionID) {
+      throw new Error(
+        `Mission execution closure for Session ${input.sessionID} belongs to Mission ${current.missionID}`,
+      )
+    }
+    if (current?.state === "closed" || current?.state === "closing") {
+      settleMissionSchedulerWakesForClosure(current)
+      return current
+    }
+    if (current?.state === "recovery_blocked") {
+      if (!current.provenanceAuthorityEventID) {
+        throw new Error(`Mission execution recovery block ${current.eventID} has no authority event`)
+      }
+      if (current.source !== input.source) {
+        throw new MissionExecutionCancellationProvenanceRequiredError({
+          message: `Mission execution ${current.eventID} requires a real ${current.source} operator request before recovery.`,
+          missionID: current.missionID,
+          sessionID: current.sessionID,
+          operationID: current.operationID,
+          closureEventID: current.eventID,
+          authorityEventID: current.provenanceAuthorityEventID,
+          requiredSource: MissionExecutionCloseSource.parse(current.source),
+        })
+      }
+      return Database.immediateTransaction((db) => {
+        const blocked = currentMissionExecutionClosureInTransaction(db, input.sessionID)
+        if (
+          !blocked ||
+          blocked.state !== "recovery_blocked" ||
+          blocked.eventID !== current.eventID ||
+          blocked.operationID !== current.operationID
+        ) {
+          if (blocked?.state === "closing" || blocked?.state === "closed") return blocked
+          throw new Error(`Mission execution recovery boundary ${current.eventID} changed before provenance supply`)
+        }
+        ProtocolStore.appendEventInTransaction({
+          id: Identifier.deterministic(
+            "protocol_event",
+            `mission-closing-provenance-supplied\0${blocked.eventID}\0${input.requestID}`,
+          ),
+          kind: "event",
+          type: MISSION_EXECUTION_PROVENANCE_EVENT_TYPES.supplied,
+          aggregate: "session",
+          aggregate_id: blocked.sessionID,
+          session_id: null,
+          source: input.source,
+          causation_id: blocked.eventID,
+          correlation_id: blocked.operationID,
+          payload: MissionExecutionSuppliedProvenancePayload.parse({
+            version: 1,
+            missionID: blocked.missionID,
+            originalRequestID: blocked.requestID,
+            requestID: input.requestID,
+            source: input.source,
+            cancellation: input.provenance,
+          }),
+        })
+        return currentMissionExecutionClosureInTransaction(db, input.sessionID)!
+      })
+    }
+    return Database.immediateTransaction((db) => {
+      const closure = appendMissionExecutionClosureInTransaction({
+        missionID: input.missionID,
+        sessionID: input.sessionID,
+        operationID: randomUUID(),
+        state: "closing",
+        source: input.source,
+        requestID: input.requestID,
+        cancellation: TaskCancellationRequestBody.parse(input.provenance),
+        ...(current?.state === "opened"
+          ? { openedOccurrence: { eventID: current.eventID, operationID: current.operationID } }
+          : {}),
+      })
+      settleMissionSchedulerWakesForClosureInTransaction(db, closure)
+      return closure
+    })
+  })
+  if (closing.state === "closed") return closing
+  return runMissionExecutionClosingOperation({ closing, close: input.close })
+}
+
+export type ResumeMissionExecutionClosingResult =
+  | { status: "not_closing"; closure: MissionExecutionClosure | undefined }
+  | { status: "already_running"; closure: MissionExecutionClosure }
+  | { status: "closed"; closure: MissionExecutionClosure }
+
+/**
+ * Continue only an exact durable `closing` occurrence. Recovery has no
+ * authority to convert an `opened` occurrence into a close request.
+ */
+export async function resumeMissionExecutionClosingOperation(input: {
+  sessionID: string
+  close: (signal: AbortSignal) => Promise<void>
+}): Promise<ResumeMissionExecutionClosingResult> {
+  if (activeCloseOperations.has(input.sessionID)) {
+    const current = currentMissionExecutionClosure(input.sessionID)
+    if (current?.state === "closing") return { status: "already_running", closure: current }
+  }
+  const closing = await withMissionExecutionAdmission(input.sessionID, async () => {
+    const current = currentMissionExecutionClosure(input.sessionID)
+    if (current?.state !== "closing") return undefined
+    settleMissionSchedulerWakesForClosure(current)
+    return current
+  })
+  if (!closing) {
+    return { status: "not_closing", closure: currentMissionExecutionClosure(input.sessionID) }
+  }
+  return {
+    status: "closed",
+    closure: await runMissionExecutionClosingOperation({ closing, close: input.close }),
+  }
 }
 
 export function requireMissionExecutionClosureEvent(eventID: string): MissionExecutionClosure {

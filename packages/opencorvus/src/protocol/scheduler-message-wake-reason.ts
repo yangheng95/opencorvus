@@ -11,6 +11,17 @@ export const SchedulerMessageWakeReason = z
     messageKind: SchedulerMessageKind,
     sourceEndpoint: SchedulerEndpoint,
     targetEndpoint: SchedulerEndpoint,
+    /** Exact Mission execution occurrence admitted by the Message commit
+     * fence. Historical scheduler wakes may omit this and are reduced through
+     * their append-only historical authority; only an unprovable topology
+     * becomes an explicit integrity boundary. */
+    missionOccurrence: z
+      .object({
+        openedEventID: Identifier.schema("protocol_event"),
+        openedOperationID: z.string().uuid(),
+      })
+      .strict()
+      .optional(),
     replyTo: Identifier.schema("protocol_event").optional(),
   })
   .strict()

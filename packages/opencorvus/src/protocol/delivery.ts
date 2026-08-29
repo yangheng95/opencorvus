@@ -27,8 +27,8 @@ import { ProtocolStore } from "./store"
 import { currentMissionExecutionClosure, requireMissionExecutionClosureEvent } from "@/mission/execution-closure"
 import { assertTaskNotDeletedInTransaction, projectTaskRowInTransaction, type TaskRow } from "@/engine/store"
 import {
+  schedulerMissionWakeDispositionInTransaction,
   schedulerWakeMessageMatchesInTransaction,
-  successfulSchedulerWakeReplyExistsInTransaction,
 } from "./session-wake-state"
 
 const SCHEDULER_MESSAGE_EVENT_TYPE = "scheduler.message"
@@ -616,7 +616,7 @@ function requireDeliveryResultOccurrence(
     if (
       inbox.actor !== "session" ||
       closure.sessionID !== inbox.actor_id ||
-      (closure.state !== "closing" && closure.state !== "closed") ||
+      (closure.state !== "closing" && closure.state !== "closed" && closure.state !== "recovery_blocked") ||
       currentClosure?.operationID !== closure.operationID
     ) {
       throw new SchedulerMessageConflictError({
@@ -646,7 +646,7 @@ function requireDeliveryResultOccurrence(
       const currentClosure = currentMissionExecutionClosure(inbox.actor_id)
       if (
         closure.sessionID !== inbox.actor_id ||
-        (closure.state !== "closing" && closure.state !== "closed") ||
+        (closure.state !== "closing" && closure.state !== "closed" && closure.state !== "recovery_blocked") ||
         currentClosure?.operationID !== closure.operationID
       ) {
         throw new SchedulerMessageConflictError({
@@ -908,6 +908,20 @@ export function requireSchedulerDelivery(inboxID: string) {
   return delivery
 }
 
+function requireMissionWakeDisposition(
+  db: Database.TxOrDb,
+  input: { sessionID: string; messageID: string; eventID: string; inboxID: string },
+) {
+  const disposition = schedulerMissionWakeDispositionInTransaction(db, input)
+  if (disposition.kind === "invalid_binding") {
+    throw new SchedulerMessageConflictError({
+      message: `Scheduler inbox ${input.inboxID} has invalid Mission wake occurrence binding: ${disposition.reason}.`,
+      eventID: input.eventID,
+    })
+  }
+  return disposition
+}
+
 export function claimNextSchedulerDelivery(input: {
   actor: "task" | "session"
   actorID: string
@@ -930,7 +944,26 @@ export function claimNextSchedulerDelivery(input: {
       )
       .orderBy(asc(ProtocolEventTable.seq), asc(ProtocolEventTable.id))
       .all()
-    return rows.map((candidate) => projectProtocolDeliveryInTransaction(db, candidate.protocol_inbox, now)).find((candidate) => candidate.status === "pending" && candidate.visible_at <= now)
+    for (const candidate of rows) {
+      const projected = projectProtocolDeliveryInTransaction(db, candidate.protocol_inbox, now)
+      if (projected.status === "dead_letter") continue
+      if (projected.status === "delivered") {
+        const result = projected.delivery_result
+        if (input.actor === "session" && result?.kind === "session_wake") {
+          const disposition = requireMissionWakeDisposition(db, {
+            sessionID: input.actorID,
+            messageID: result.message_id,
+            eventID: candidate.protocol_event.id,
+            inboxID: candidate.protocol_inbox.id,
+          })
+          if (disposition.kind === "unanswered") return undefined
+        }
+        continue
+      }
+      if (projected.status !== "pending" || projected.visible_at > now) return undefined
+      return projected
+    }
+    return undefined
   })
   if (!row) return undefined
   const acquired = acquireControlLease({ target: "protocol_delivery", targetID: row.id, ownerOccurrenceID: input.ownerID, now, leaseMilliseconds: input.leaseMilliseconds })
@@ -1131,12 +1164,15 @@ export function listPendingSchedulerProjectIDs(): string[] {
       const projected = projectProtocolDeliveryInTransaction(db, inbox)
       if (projected.status === "pending" || projected.status === "leased") return [projectID]
       const result = projected.delivery_result
-      if (
-        inbox.actor === "session" &&
-        projected.status === "delivered" &&
-        result?.kind === "session_wake" &&
-        !successfulSchedulerWakeReplyExistsInTransaction(db, { sessionID: inbox.actor_id, messageID: result.message_id })
-      ) return [projectID]
+      if (inbox.actor === "session" && projected.status === "delivered" && result?.kind === "session_wake") {
+        const disposition = requireMissionWakeDisposition(db, {
+          sessionID: inbox.actor_id,
+          messageID: result.message_id,
+          eventID: projected.envelope_id,
+          inboxID: projected.id,
+        })
+        if (disposition.kind === "unanswered") return [projectID]
+      }
       return []
     })
     return [...new Set(projects)]
@@ -1221,11 +1257,14 @@ export function listUnansweredSchedulerSessionWakes(projectID: string): Array<{
     return rows.flatMap(({ inbox }) => {
       const delivery = projectProtocolDeliveryInTransaction(db, inbox)
       const result = delivery.delivery_result
-      if (
-        delivery.status !== "delivered" ||
-        result?.kind !== "session_wake" ||
-        successfulSchedulerWakeReplyExistsInTransaction(db, { sessionID: inbox.actor_id, messageID: result.message_id })
-      ) return []
+      if (delivery.status !== "delivered" || result?.kind !== "session_wake") return []
+      const disposition = requireMissionWakeDisposition(db, {
+        sessionID: inbox.actor_id,
+        messageID: result.message_id,
+        eventID: delivery.envelope_id,
+        inboxID: delivery.id,
+      })
+      if (disposition.kind !== "unanswered") return []
       return [{ inboxID: inbox.id, sessionID: inbox.actor_id, messageID: result.message_id }]
     })
   })
@@ -1234,9 +1273,11 @@ export function listUnansweredSchedulerSessionWakes(projectID: string): Array<{
 /** Physical settlement of every durable scheduler delivery owned by one Session. */
 export function auditSchedulerSessionDeliverySettlement(sessionID: string): {
   passed: boolean
+  evidenceComplete: boolean
   pendingInboxIDs: string[]
   leasedInboxIDs: string[]
   unansweredInboxIDs: string[]
+  integrityBoundaryInboxIDs: string[]
   deadLetterInboxIDs: string[]
   invalidTerminalInboxIDs: string[]
 } {
@@ -1247,6 +1288,22 @@ export function auditSchedulerSessionDeliverySettlement(sessionID: string): {
       .where(and(eq(ProtocolInboxTable.actor, "session"), eq(ProtocolInboxTable.actor_id, sessionID)))
       .all()
       .map((row) => projectProtocolDeliveryInTransaction(db, row))
+    const missionWakeDispositions = new Map<
+      string,
+      ReturnType<typeof requireMissionWakeDisposition>
+    >()
+    for (const delivery of deliveries) {
+      if (delivery.status !== "delivered" || delivery.delivery_result?.kind !== "session_wake") continue
+      missionWakeDispositions.set(
+        delivery.id,
+        requireMissionWakeDisposition(db, {
+          sessionID,
+          messageID: delivery.delivery_result.message_id,
+          eventID: delivery.envelope_id,
+          inboxID: delivery.id,
+        }),
+      )
+    }
     const pendingInboxIDs = deliveries
       .filter((delivery) => delivery.status === "pending")
       .map((delivery) => delivery.id)
@@ -1262,17 +1319,27 @@ export function auditSchedulerSessionDeliverySettlement(sessionID: string): {
     const unansweredInboxIDs = deliveries
       .filter((delivery) => {
         if (delivery.status !== "delivered" || delivery.delivery_result?.kind !== "session_wake") return false
-        return !successfulSchedulerWakeReplyExistsInTransaction(db, {
-          sessionID,
-          messageID: delivery.delivery_result.message_id,
-        })
+        return missionWakeDispositions.get(delivery.id)?.kind === "unanswered"
+      })
+      .map((delivery) => delivery.id)
+      .sort()
+    const integrityBoundaryInboxIDs = deliveries
+      .filter((delivery) => {
+        const disposition = missionWakeDispositions.get(delivery.id)
+        return (
+          disposition?.kind === "integrity_boundary" ||
+          (disposition?.kind === "answered" && disposition.integrityBoundaryEventID !== undefined)
+        )
       })
       .map((delivery) => delivery.id)
       .sort()
     const invalidTerminalInboxIDs = deliveries
       .filter(
         (delivery) =>
-          delivery.status === "delivered" && delivery.delivery_result?.kind !== "session_wake",
+          delivery.status === "delivered" &&
+          delivery.delivery_result?.kind !== "session_wake" &&
+          delivery.delivery_result?.kind !== "mission_closed" &&
+          delivery.delivery_result?.kind !== "mission_wake_closed",
       )
       .map((delivery) => delivery.id)
       .sort()
@@ -1283,9 +1350,11 @@ export function auditSchedulerSessionDeliverySettlement(sessionID: string): {
         unansweredInboxIDs.length === 0 &&
         deadLetterInboxIDs.length === 0 &&
         invalidTerminalInboxIDs.length === 0,
+      evidenceComplete: integrityBoundaryInboxIDs.length === 0,
       pendingInboxIDs,
       leasedInboxIDs,
       unansweredInboxIDs,
+      integrityBoundaryInboxIDs,
       deadLetterInboxIDs,
       invalidTerminalInboxIDs,
     }
@@ -1318,10 +1387,14 @@ export function schedulerSessionWakeNeedsRecovery(input: {
         eventID: row.envelope_id,
       })
     }
-    return !successfulSchedulerWakeReplyExistsInTransaction(db, {
-      sessionID: input.sessionID,
-      messageID: input.messageID,
-    })
+    return (
+      requireMissionWakeDisposition(db, {
+        sessionID: input.sessionID,
+        messageID: input.messageID,
+        eventID: row.envelope_id,
+        inboxID: row.id,
+      }).kind === "unanswered"
+    )
   })
 }
 

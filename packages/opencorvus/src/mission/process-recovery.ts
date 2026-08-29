@@ -9,6 +9,7 @@ import { Log } from "@/util/log"
 import z from "zod"
 import { requireMissionSession } from "./session"
 import { currentMissionExecutionClosure, withMissionExecutionAdmission } from "./execution-closure"
+import { recoverMissionExecutionClosing } from "./execution-closer"
 
 const log = Log.create({ service: "mission.process-recovery" })
 const RECOVERY_CONTROL_KIND = "mission_process_recovery" as const
@@ -120,6 +121,7 @@ export async function recoverMissionProcessSession(
   dependencies: { wake?: WakeRecovery } = {},
 ): Promise<MissionProcessRecoveryResult> {
   const mission = await requireMissionSession(sessionID)
+  await recoverMissionExecutionClosing(sessionID)
   return withMissionExecutionAdmission(sessionID, async () => {
     const messages = await Session.messages({ sessionID })
     const incompleteAssistantMessageIDs = trailingIncompleteAssistantMessageIDs(messages)
@@ -134,7 +136,7 @@ export async function recoverMissionProcessSession(
     }
 
     const closure = currentMissionExecutionClosure(sessionID)
-    if (closure?.state === "closing" || closure?.state === "closed") {
+    if (closure?.state === "closing" || closure?.state === "closed" || closure?.state === "recovery_blocked") {
       await SessionLoop.terminalizeRecoveredIncompleteAssistant(sessionID)
       if (previous) {
         const settled = SessionControl.fail({

@@ -7,6 +7,9 @@ import { projectProtocolDeliveryInTransaction } from "../src/protocol/delivery-p
 import { auditSchedulerSessionDeliverySettlement } from "../src/protocol/delivery"
 import { ProtocolStore } from "../src/protocol/store"
 import { Database, eq } from "../src/storage/db"
+import { ensureMissionSession } from "../src/mission/session"
+import { openMissionExecution } from "../src/mission/execution-closure"
+import { Session } from "../src/session"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
 afterAll(async () => {
@@ -53,9 +56,11 @@ describe("Protocol delivery fact storage", () => {
         ))).toMatchObject({ status: "pending", visible_at: now + 1_000, last_error: "temporary" })
         expect(auditSchedulerSessionDeliverySettlement("session:protocol-delivery")).toEqual({
           passed: false,
+          evidenceComplete: true,
           pendingInboxIDs: [inboxID],
           leasedInboxIDs: [],
           unansweredInboxIDs: [],
+          integrityBoundaryInboxIDs: [],
           deadLetterInboxIDs: [],
           invalidTerminalInboxIDs: [],
         })
@@ -87,17 +92,21 @@ describe("Protocol delivery fact storage", () => {
         })
         expect(auditSchedulerSessionDeliverySettlement("session:protocol-delivery")).toEqual({
           passed: false,
+          evidenceComplete: true,
           pendingInboxIDs: [],
           leasedInboxIDs: [],
           unansweredInboxIDs: [],
+          integrityBoundaryInboxIDs: [],
           deadLetterInboxIDs: [inboxID],
           invalidTerminalInboxIDs: [],
         })
         expect(auditSchedulerSessionDeliverySettlement("session:settled-empty")).toEqual({
           passed: true,
+          evidenceComplete: true,
           pendingInboxIDs: [],
           leasedInboxIDs: [],
           unansweredInboxIDs: [],
+          integrityBoundaryInboxIDs: [],
           deadLetterInboxIDs: [],
           invalidTerminalInboxIDs: [],
         })
@@ -123,14 +132,70 @@ describe("Protocol delivery fact storage", () => {
           leasedInboxIDs: [leasedInboxID],
         })
 
+        const unansweredMissionID = `mission-${Identifier.uuid4First8()}`
+        const unansweredSession = await ensureMissionSession({
+          missionID: unansweredMissionID,
+          defaultCwd: project.path,
+          productPillar: "code",
+          heldExpertSquadIDs: ["base"],
+        })
+        const unansweredOpened = await openMissionExecution({
+          missionID: unansweredMissionID,
+          sessionID: unansweredSession.id,
+          source: "mission.dispatch",
+          requestID: "protocol-delivery-unanswered",
+        })
+        const unansweredEvent = await ProtocolStore.appendEvent({
+          kind: "event",
+          type: "scheduler.message",
+          aggregate: "stream",
+          aggregate_id: `stream:${Identifier.uuid4First8()}`,
+          source: "test",
+          emitted_at: now + 5,
+          payload: {},
+        })
         const unansweredInboxID = Identifier.ascending("protocol_inbox")
         const unansweredMessageID = Identifier.ascending("message")
+        await Session.updateMessage({
+          id: unansweredMessageID,
+          sessionID: unansweredSession.id,
+          role: "user",
+          author: "orchestrator",
+          time: { created: now + 5 },
+          agent: "mission",
+          model: { providerID: "test", modelID: "test" },
+          extra: {
+            wake_reason: {
+              source: "scheduler.message",
+              eventID: unansweredEvent.id,
+              inboxID: unansweredInboxID,
+              threadID: `thread:${Identifier.uuid4First8()}`,
+              messageKind: "notification",
+              sourceEndpoint: {
+                kind: "task_scheduler",
+                project_id: Instance.project.id,
+                task_id: Identifier.ascending("task"),
+                root_session_id: Identifier.ascending("session"),
+              },
+              targetEndpoint: {
+                kind: "mission_scheduler",
+                project_id: Instance.project.id,
+                mission_id: unansweredMissionID,
+                session_id: unansweredSession.id,
+              },
+              missionOccurrence: {
+                openedEventID: unansweredOpened.eventID,
+                openedOperationID: unansweredOpened.operationID,
+              },
+            },
+          },
+        })
         Database.transaction((db) => {
           db.insert(ProtocolInboxTable).values({
             id: unansweredInboxID,
-            envelope_id: event.id,
+            envelope_id: unansweredEvent.id,
             actor: "session",
-            actor_id: "session:unanswered",
+            actor_id: unansweredSession.id,
             visible_at: now,
             time_created: now,
           }).run()
@@ -141,7 +206,7 @@ describe("Protocol delivery fact storage", () => {
             time_created: now + 5,
           }).run()
         })
-        expect(auditSchedulerSessionDeliverySettlement("session:unanswered")).toMatchObject({
+        expect(auditSchedulerSessionDeliverySettlement(unansweredSession.id)).toMatchObject({
           passed: false,
           unansweredInboxIDs: [unansweredInboxID],
         })
@@ -164,8 +229,8 @@ describe("Protocol delivery fact storage", () => {
           }).run()
         })
         expect(auditSchedulerSessionDeliverySettlement("session:closed")).toMatchObject({
-          passed: false,
-          invalidTerminalInboxIDs: [closedInboxID],
+          passed: true,
+          invalidTerminalInboxIDs: [],
         })
       },
     })

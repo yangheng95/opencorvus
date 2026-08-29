@@ -29,7 +29,7 @@ import { taskWaitFireID } from "./task-wait-fire-identity"
 import { EngineTaskTable } from "@/engine/engine.sql"
 import {
   dispatchPersistedTaskLoop,
-  dispatchTaskLoop,
+  persistTaskWaitActivityIngressInTransaction,
   persistTaskWaitIngressInTransaction,
 } from "@/engine/task-root-ingress-delivery"
 import { findTask } from "@/engine/store"
@@ -56,7 +56,7 @@ import { ProjectInstanceContext } from "@/project/instance-context"
 import { Filesystem } from "@/util/filesystem"
 import z from "zod"
 import { missionProductPillar, requireMissionSession } from "@/mission/session"
-import { admitMissionExecutionWake } from "@/mission/execution-closure"
+import { admitMissionExecutionWake, type MissionExecutionWakePersistence } from "@/mission/execution-closure"
 import type { ProductPillar } from "@opencorvus-ai/sdk/expert-squad-manifest-v1"
 import { createHash } from "node:crypto"
 import { RuntimeExecutionSettlement } from "@/runtime/execution-settlement"
@@ -899,76 +899,69 @@ export namespace AutomationService {
     })
     const jobIDs = claimed.map((job) => job.id)
     if (jobIDs.length === 0) return { jobIDs }
-    let dispatchResult: string
+    let wakeID: string
     try {
-      dispatchResult = await runInTargetProject({
-        directory: task.rootSession.directory,
-        fn: () =>
-          dispatchTaskLoop({
-            taskID: input.taskId,
-            event: {
-              note: renderTaskWaitEarlyActivityNote({
-                source: input.source,
-                detail: input.detail,
-                jobIDs,
-              }),
-              taskWaitActivity: {
-                source: input.source,
-                detail: input.detail,
-                jobIDs,
-              },
-            },
-          }),
-      })
-    } catch (error) {
-      for (const job of claimed) await fail(job, owner, error)
-      throw error
-    }
-    // Each claimed wait settles in its own transaction. Settling the whole
-    // batch in one meant that the last job's lost fence rolled back every
-    // earlier job's tombstone *and its lease release*, leaving those waits
-    // holding a two-minute lease with no receipt and no owner.
-    const unsettled: { id: string; reason: string }[] = []
-    const settledJobIDs: string[] = []
-    for (const job of claimed) {
-      const settledAt = Date.now()
-      const settled = Database.immediateTransaction((db) => {
-        const lease = currentControlLeaseInTransaction(db, "automation", job.id)
-        if (!lease || lease.owner_occurrence_id !== owner || lease.expires_at <= settledAt) return "lease"
-        const latest = latestAutomationDefinitionInTransaction(db, job.id)
-        if (!latest || latest.id !== job.revision_id) {
-          // The definition moved on, so this wait has no tombstone to write —
-          // but this owner still holds its lease and must hand it back.
+      const transferredAt = Date.now()
+      wakeID = Database.immediateTransaction((db) => {
+        for (const job of claimed) {
+          const lease = currentControlLeaseInTransaction(db, "automation", job.id)
+          const latest = latestAutomationDefinitionInTransaction(db, job.id)
+          if (
+            !lease ||
+            lease.owner_occurrence_id !== owner ||
+            lease.expires_at <= transferredAt ||
+            !latest ||
+            latest.id !== job.revision_id ||
+            latest.status !== "active"
+          ) {
+            throw new AutomationRunningConflictError({
+              message: `Automation ${job.id} lost ownership before Task wait activity transfer`,
+              automationID: job.id,
+            })
+          }
+        }
+        const acceptedWakeID = persistTaskWaitActivityIngressInTransaction(db, {
+          task,
+          jobIDs,
+          jobRevisionIDs: claimed.map((job) => job.revision_id),
+          source: input.source,
+          detail: input.detail,
+          now: transferredAt,
+        })
+        for (const job of claimed) {
+          const lease = currentControlLeaseInTransaction(db, "automation", job.id)!
+          const latest = latestAutomationDefinitionInTransaction(db, job.id)!
+          appendAutomationTombstoneInTransaction(db, latest, transferredAt)
           releaseControlLeaseInTransaction(db, {
             target: "automation",
             targetID: job.id,
             leaseID: lease.id,
             ownerOccurrenceID: owner,
-            now: settledAt,
+            now: transferredAt,
           })
-          return "revision"
         }
-        appendAutomationTombstoneInTransaction(db, latest, settledAt)
-        releaseControlLeaseInTransaction(db, {
-          target: "automation",
-          targetID: job.id,
-          leaseID: lease.id,
-          ownerOccurrenceID: owner,
-          now: settledAt,
-        })
-        return "settled"
+        return acceptedWakeID
       })
-      if (settled === "settled") settledJobIDs.push(job.id)
-      else unsettled.push({ id: job.id, reason: settled })
+    } catch (error) {
+      for (const job of claimed) await fail(job, owner, error)
+      throw error
     }
-    if (unsettled.length > 0) {
-      // Earlier waits in this batch are already tombstoned and released. The
-      // error names the first wait that could not settle, not the first that
-      // was claimed, and carries the settled ids so a caller can tell them
-      // apart.
-      throw new AutomationRunningConflictError({
-        message: `Automation activity delivery settled ${settledJobIDs.join(", ") || "none"} and could not settle ${unsettled.map((item) => item.id).join(", ")}`,
-        automationID: unsettled[0]!.id,
+    let dispatchResult = "accepted"
+    try {
+      dispatchResult = await runInTargetProject({
+        directory: task.rootSession.directory,
+        fn: () => dispatchPersistedTaskLoop(input.taskId, wakeID),
+      })
+    } catch (error) {
+      // Ownership already moved to the immutable Task ingress. The per-Task
+      // level-triggered reconciler owns retry/restart; reactivating the consumed
+      // Automation would create a second logical occurrence.
+      log.error("Task wait activity ingress remains accepted after delivery failure", {
+        taskID: input.taskId,
+        projectID: input.projectId,
+        wakeID,
+        jobIDs,
+        error,
       })
     }
     log.info("pending task wait triggered early from activity", {
@@ -976,6 +969,7 @@ export namespace AutomationService {
       projectID: input.projectId,
       source: input.source,
       jobIDs,
+      wakeID,
       dispatchResult,
     })
     return { jobIDs, dispatchResult }
@@ -1520,9 +1514,9 @@ export namespace AutomationService {
 
   async function admitAutomationSessionWake<Receipt extends { activation: Promise<unknown> }>(
     session: Session.Info,
-    wake: () => Receipt | Promise<Receipt>,
+    wake: (persistence?: MissionExecutionWakePersistence) => Receipt | Promise<Receipt>,
   ): Promise<Receipt> {
-    if (session.kind !== "mission") return wake()
+    if (session.kind !== "mission") return wake(undefined)
     const mission = await requireMissionSession(session.id)
     return admitMissionExecutionWake({ missionID: mission.missionID, sessionID: mission.id, wake })
   }
@@ -1688,7 +1682,7 @@ export namespace AutomationService {
     const messageID = deterministicAutomationID("msg", identityID)
     const textPartID = deterministicAutomationID("prt", identityID)
     const session = await Session.get(sessionID)
-    const receipt = await admitAutomationSessionWake(session, () =>
+    const receipt = await admitAutomationSessionWake(session, (persistence) =>
       (wakeSessionForTest ?? SessionWake.wakeWithReceipt)({
         sessionID,
         messageID,
@@ -1703,6 +1697,7 @@ export namespace AutomationService {
             : undefined,
         variant: job.reasoning_effort ?? undefined,
         surface: persistedSurface(job.surface),
+        preflightBundle: persistence?.preflightBundle,
         commitBundle: (message, parts) => {
           if (message.id !== messageID || !parts.some((part) => part.id === textPartID)) {
             throw new Error(`Automation ${job.id} wake materialized identities outside fire ${fireID}`)
@@ -2065,17 +2060,6 @@ export namespace AutomationService {
       `fire_id=${fireID}`,
       `due_at=${new Date(job.next_run).toISOString()}`,
       `Reason: ${job.prompt}`,
-      "Read the current task snapshot and decide the next workflow action from present evidence.",
-    ].join("\n")
-  }
-
-  function renderTaskWaitEarlyActivityNote(input: { source: string; detail: string; jobIDs: string[] }) {
-    return [
-      "This is an early task wait wake triggered by new task/session activity, not a user-authored message.",
-      "The pending scheduled task wait was cancelled by newer task/session activity.",
-      `activity_source=${input.source}`,
-      `activity_detail=${input.detail}`,
-      `wait_job_ids=${input.jobIDs.join(",")}`,
       "Read the current task snapshot and decide the next workflow action from present evidence.",
     ].join("\n")
   }

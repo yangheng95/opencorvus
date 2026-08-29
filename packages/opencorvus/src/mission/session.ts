@@ -19,6 +19,7 @@ import { missionExpertSquadSnapshotsMatch } from "./expert-squad-authority"
 import { NamedError } from "@opencorvus-ai/util/error"
 import { createHash } from "node:crypto"
 import z from "zod"
+import { ProtocolEventTable } from "@/protocol/protocol.sql"
 
 export type MissionSession = Session.Info & { missionID: string; productPillar: ProductPillar }
 
@@ -347,7 +348,8 @@ export type GlobalMissionProcessRecoveryCandidate = {
 /**
  * Discover standalone Mission Sessions whose process-owned Turn did not
  * settle, including the post-terminalization/pre-wake crash cut represented
- * by the durable Mission recovery marker.
+ * by the durable Mission recovery marker, or whose exact current execution
+ * occurrence is already durably closing and must converge after host restart.
  */
 export function listGlobalMissionProcessRecoveryCandidates(input?: {
   scopeProjectWorktree?: string
@@ -391,6 +393,25 @@ export function listGlobalMissionProcessRecoveryCandidates(input?: {
                         AND newer_user.id > ${MessageTable.id}
                       )
                     )
+                )
+            )
+            OR EXISTS (
+              SELECT 1
+              FROM ${ProtocolEventTable} AS current_closure
+              WHERE current_closure.aggregate_type = 'session'
+                AND current_closure.aggregate_id = ${SessionTable.id}
+                AND current_closure.type = 'mission.execution.closing'
+                AND NOT EXISTS (
+                  SELECT 1
+                  FROM ${ProtocolEventTable} AS newer_closure
+                  WHERE newer_closure.aggregate_type = 'session'
+                    AND newer_closure.aggregate_id = current_closure.aggregate_id
+                    AND newer_closure.type IN (
+                      'mission.execution.opened',
+                      'mission.execution.closing',
+                      'mission.execution.closed'
+                    )
+                    AND newer_closure.seq > current_closure.seq
                 )
             )
           )`,

@@ -25,8 +25,6 @@ import {
 } from "@/mission/schema"
 import { resolveMissionLaunchExpertSquadIDs } from "@/mission/expert-squad-authority"
 import { MissionRecord, missionRecord, missionStatusRecord } from "@/mission/projection"
-import { listMissionTasks } from "@/engine/store"
-import { deriveTaskStatus } from "@/engine/task-status"
 import { Config } from "@/config/config"
 import { Auth } from "@/auth"
 import { validateConfigModelReferences } from "@/config/model-reference-validation"
@@ -41,8 +39,6 @@ import { buildMissionProjectArchive, ProjectArchiveUnsupportedProjectError } fro
 import { EngineService } from "@/task-api"
 import { UserUploadList } from "@/engine/model"
 import { materializeUserUploadParts } from "@/engine/user-upload-parts"
-import { awaitSessionPromptFinishedInScope, cancelSessionPromptInScope } from "@/engine/cancellation-scope"
-import { createTaskCancellationIncomplete } from "@/engine/cancellation-error"
 import {
   AuthReadUnavailableResponse,
   badRequestBody,
@@ -51,18 +47,13 @@ import {
   namedErrorResponse,
 } from "../error"
 import { requestID as resolveRequestID } from "../error-handler"
-import { createExecutionCancellationOrigin } from "@/session/prompt/cancellation"
-import type { TaskCancellationOrigin } from "@/engine/cancellation-origin"
 import { PersistedProjectContext } from "@/server/persisted-project-context"
 import { NotFoundError } from "@/storage/db"
 import { MissionDurableActivityCursorSchema, readMissionDurableActivity } from "@/engine/durable-activity"
 import { HttpQueryBoolean, HttpQueryLimit } from "../query-schema"
-import {
-  TaskArchiveRequestBody,
-  TaskCancellationRequestBody,
-  type TaskCancellationRequestBody as TaskCancellationRequestBodyValue,
-} from "@opencorvus-ai/transport-protocol"
-import { closeMissionExecutionOperation, openMissionExecutionWithWake } from "@/mission/execution-closure"
+import { TaskArchiveRequestBody, TaskCancellationRequestBody } from "@opencorvus-ai/transport-protocol"
+import { openMissionExecutionWithWake } from "@/mission/execution-closure"
+import { closeMissionExecution } from "@/mission/execution-closer"
 
 function newMissionID(): string {
   return randomBytes(8).toString("hex")
@@ -147,84 +138,6 @@ function missionRouteSession(missionID: string): Promise<MissionSessionRecord> {
 
 async function missionTranscript(sessionID: string) {
   return enrichStandaloneSessionTranscript(await Session.messages({ sessionID })).filter(conversationMessageHasDisplay)
-}
-
-async function closeMissionExecution(
-  session: MissionSessionRecord,
-  handle: "mission.abort" | "mission.delete" | "mission.archive",
-  requestID: string,
-  provenance: TaskCancellationRequestBodyValue,
-) {
-  const cancellationOrigin = {
-    actor: "user",
-    source: handle,
-    surface: provenance.surface,
-    requestID,
-    reason: provenance.reason,
-    sessionID: session.id,
-    missionID: session.missionID,
-  } satisfies TaskCancellationOrigin
-  await closeMissionExecutionOperation({
-    missionID: session.missionID,
-    sessionID: session.id,
-    source: handle,
-    requestID,
-    close: async () => {
-      const failures: string[] = []
-      try {
-        const origin = createExecutionCancellationOrigin({
-          actor: cancellationOrigin.actor,
-          source: cancellationOrigin.source,
-          surface: cancellationOrigin.surface,
-          requestID: cancellationOrigin.requestID,
-          reason: cancellationOrigin.reason,
-          targetSessionID: session.id,
-          missionID: cancellationOrigin.missionID,
-        })
-        cancelSessionPromptInScope({
-          session,
-          handle,
-          origin,
-          settleBeforeReuse: true,
-        })
-      } catch (error) {
-        failures.push(`mission ${session.missionID}: ${error instanceof Error ? error.message : String(error)}`)
-      }
-      const childTasks = listMissionTasks({
-        projectID: session.projectID,
-        missionID: session.missionID,
-        sessionID: session.id,
-      }).filter((task) => {
-        const status = deriveTaskStatus(task)
-        return status === "active"
-      })
-      for (const task of childTasks) {
-        try {
-          await EngineService.cancelTask(task.id, {
-            origin: cancellationOrigin,
-          })
-        } catch (error) {
-          failures.push(`task ${task.id}: ${error instanceof Error ? error.message : String(error)}`)
-        }
-      }
-      try {
-        await awaitSessionPromptFinishedInScope({
-          session,
-          handle,
-          publishTerminalStatus: handle === "mission.abort",
-        })
-      } catch (error) {
-        failures.push(`mission ${session.missionID}: ${error instanceof Error ? error.message : String(error)}`)
-      }
-      if (failures.length > 0) {
-        throw createTaskCancellationIncomplete({
-          handle,
-          cause: new Error(failures.join("; ")),
-        })
-      }
-    },
-  })
-  return cancellationOrigin
 }
 
 export function MissionRoutes() {
@@ -584,7 +497,7 @@ export function MissionRoutes() {
           sessionID: session.id,
           source: "mission.dispatch",
           requestID: resolveRequestID(c),
-          wake: async () => {
+          wake: async (persistence) => {
             await Session.mergeConfigOverlay({
               sessionID: session.id,
               patch: configPatch,
@@ -596,6 +509,7 @@ export function MissionRoutes() {
               agent: "mission",
               surface: "panel",
               userAuthored: true,
+              preflightBundle: persistence.preflightBundle,
               reason: {
                 source: "mission.operator",
                 missionID,
@@ -716,7 +630,7 @@ export function MissionRoutes() {
           sessionID: session.id,
           source: "mission.wake",
           requestID: resolveRequestID(c),
-          wake: async () => {
+          wake: async (persistence) => {
             await Session.mergeConfigOverlay({
               sessionID: session.id,
               patch: configPatch,
@@ -728,6 +642,7 @@ export function MissionRoutes() {
               agent: "mission",
               surface: "panel",
               userAuthored: true,
+              preflightBundle: persistence.preflightBundle,
               parts: attachmentParts,
               reason: {
                 source: "mission.operator",

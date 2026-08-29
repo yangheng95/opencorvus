@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-30-control-plane-occurrence-reconciliation.md](2026-08-30-control-plane-occurrence-reconciliation.md) uses AutomationBench only as evidence and repairs shared OpenCorvus Task heartbeat, protocol-recipient fairness, Task-wait ownership transfer, and Mission wake/closure fencing without adding benchmark or parallel state.
+
 - [2026-08-27-automationbench-luna-base-600-completion.md](2026-08-27-automationbench-luna-base-600-completion.md) resumes the user-authorized Luna Mission/Base unique-case AutomationBench round from the locally verifiable 75/600 frontier, reconciles stale derived evidence without rewriting sealed attempts, and defines timed monitoring through exact 600/600 verification and reviewed delivery.
 
 - [2026-08-26-automationbench-sol-base-completion.md](2026-08-26-automationbench-sol-base-completion.md) resumes the authoritative Sol Mission/Base 50-case AutomationBench primary round from zero eligible slots, preserving prior invalid evidence and requiring exact source/environment identity, timed monitoring, final verification, visual dashboard review, and independent delivery review.

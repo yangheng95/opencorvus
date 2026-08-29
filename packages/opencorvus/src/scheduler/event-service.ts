@@ -40,6 +40,8 @@ import {
   admitMissionExecutionWake,
   MissionExecutionWakeClosedError,
   MissionExecutionWakeNotOpenedError,
+  MissionExecutionWakeOccurrenceChangedError,
+  type MissionExecutionWakePersistence,
 } from "@/mission/execution-closure"
 
 type Match = Record<string, string | number | boolean>
@@ -620,9 +622,9 @@ export namespace EventService {
 
   async function admitEventSessionWake<Receipt extends { activation: Promise<unknown> }>(
     session: Session.Info,
-    wake: () => Receipt | Promise<Receipt>,
+    wake: (persistence?: MissionExecutionWakePersistence) => Receipt | Promise<Receipt>,
   ): Promise<Receipt> {
-    if (session.kind !== "mission") return wake()
+    if (session.kind !== "mission") return wake(undefined)
     const mission = await requireMissionSession(session.id)
     return admitMissionExecutionWake({ missionID: mission.missionID, sessionID: mission.id, wake })
   }
@@ -703,7 +705,9 @@ export namespace EventService {
       try {
         const reconciledMessageID = findWakeMessageID(claimed)
         const missionAdmissionRejected =
-          MissionExecutionWakeClosedError.isInstance(error) || MissionExecutionWakeNotOpenedError.isInstance(error)
+          MissionExecutionWakeClosedError.isInstance(error) ||
+          MissionExecutionWakeNotOpenedError.isInstance(error) ||
+          MissionExecutionWakeOccurrenceChangedError.isInstance(error)
         if (missionAdmissionRejected && !leaseFence.lost) {
           scheduleRetry(claimed, job, s.ownerID, error)
         } else if (reconciledMessageID && !leaseFence.lost) {
@@ -959,7 +963,7 @@ export namespace EventService {
     await beforeSessionWakeForTest?.({ fire: input.fire, ownerID: input.ownerID, signal: input.signal })
     throwIfAborted(input.signal)
     const session = await Session.get(input.fire.target_session_id)
-    const receipt = await admitEventSessionWake(session, () =>
+    const receipt = await admitEventSessionWake(session, (persistence) =>
       SessionWake.wakeWithReceipt({
         sessionID: input.fire.target_session_id,
         messageID,
@@ -968,6 +972,7 @@ export namespace EventService {
         prompt: input.job.prompt,
         author: "orchestrator",
         agent: input.job.agent === "default" ? undefined : input.job.agent,
+        preflightBundle: persistence?.preflightBundle,
         reason: {
           source: "scheduler.event",
           jobID: input.job.id,

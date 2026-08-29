@@ -55,6 +55,7 @@ describe("Mission durable activity", () => {
             sessionID: mission.id,
             source: "mission.abort",
             requestID: "close-before-rejected-wake",
+            provenance: { surface: "api", reason: "Reject non-operator wakes after closing begins" },
             close: async () => {
               throw new Error("injected close interruption")
             },

@@ -21,7 +21,12 @@ import {
   reconcileSchemaTriggers,
   schemaObjectFingerprint,
 } from "./schema-contract"
-import { migrateFactKernelSchema, migratePermissionLedgerProjectRetentionSchema } from "./fact-kernel-migration"
+import {
+  migrateFactKernelSchema,
+  migratePermissionLedgerProjectRetentionSchema,
+} from "./fact-kernel-migration"
+import { migrateMissionClosureCancellationProvenance } from "./mission-closure-provenance-migration"
+import { migrateMissionSchedulerWakeOccurrenceAuthorities } from "./mission-scheduler-wake-migration"
 import { migrateSessionPromptOwnerSchema } from "./session-prompt-owner-migration"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
 import { Identifier } from "@/id/id"
@@ -1103,6 +1108,8 @@ export namespace Database {
         migrateSessionPromptOwnerSchema(sqlite)
         migratePermissionLedgerProjectRetentionSchema(sqlite)
         migrateFactKernelSchema(sqlite)
+        migrateMissionClosureCancellationProvenance(sqlite)
+        migrateMissionSchedulerWakeOccurrenceAuthorities(sqlite)
         const reconciledTriggers = reconcileSchemaTriggers(sqlite)
         if (reconciledTriggers.length > 0) {
           log.info("schema triggers reconciled", { path: dbPath, triggers: reconciledTriggers })

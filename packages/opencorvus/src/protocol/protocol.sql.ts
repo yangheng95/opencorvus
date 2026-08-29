@@ -74,6 +74,19 @@ export const ProtocolEventTable = sqliteTable(
       .where(
         sql`${table.aggregate_type} = 'session' AND ${table.type} IN ('mission.execution.opened','mission.execution.closing','mission.execution.closed') AND ${table.correlation_id} IS NOT NULL`,
       ),
+    uniqueIndex("protocol_event_mission_closure_provenance_boundary_idx")
+      .on(table.causation_id)
+      .where(
+        sql`${table.type} IN ('mission.execution.cancellation_provenance.required','mission.execution.cancellation_provenance.unavailable_terminal')`,
+      ),
+    uniqueIndex("protocol_event_mission_closure_provenance_supplied_idx")
+      .on(table.aggregate_id, table.correlation_id)
+      .where(sql`${table.type} = 'mission.execution.cancellation_provenance.supplied'`),
+    uniqueIndex("protocol_event_mission_scheduler_wake_authority_idx")
+      .on(table.correlation_id)
+      .where(
+        sql`${table.type} IN ('scheduler.message.mission_occurrence_binding.historical','scheduler.message.mission_occurrence_binding.unavailable')`,
+      ),
     index("protocol_event_task_idx").on(table.task_id, table.seq),
     check("protocol_event_task_identity_shape", sql`${table.aggregate_type} <> 'task' OR ${table.task_id} IS NULL`),
     check("protocol_event_session_identity_shape", sql`${table.aggregate_type} <> 'session' OR ${table.session_id} IS NULL`),

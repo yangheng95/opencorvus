@@ -14,12 +14,17 @@ import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 import {
   closeMissionExecutionOperation,
   currentMissionExecutionClosure,
+  admitMissionExecutionWake,
+  MissionExecutionWakeClosedError,
+  MissionExecutionCancellationProvenanceRequiredError,
   MissionExecutionClosureTestHooks,
   openMissionExecution,
+  resumeMissionExecutionClosingOperation,
 } from "@/mission/execution-closure"
 import { Database, eq } from "@/storage/db"
 import { SessionControlEventTable } from "@/session/session.sql"
 import { ProtocolEventTable } from "@/protocol/protocol.sql"
+import { ProtocolStore } from "@/protocol/store"
 import { createRightSidebarConversationSession } from "@/chat/session"
 import { Question } from "@/question"
 import { PanelTool, PanelToolTestHooks } from "@/tool/panel"
@@ -66,6 +71,62 @@ describe("standalone Mission process recovery", () => {
     } })
   })
 
+  test("fences a non-operator wake against the exact Mission occurrence inside Message commit", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const missionID = "mission-wake-commit-fence"
+        const mission = await ensureMissionSession({
+          missionID,
+          defaultCwd: project.path,
+          productPillar: "code",
+          heldExpertSquadIDs: ["base"],
+        })
+        const opened = await openMissionExecution({
+          missionID,
+          sessionID: mission.id,
+          source: "mission.dispatch",
+          requestID: "mission-wake-commit-fence-open",
+        })
+        let closingEventID = ""
+        await expect(
+          admitMissionExecutionWake({
+            missionID,
+            sessionID: mission.id,
+            wake: async (persistence) => {
+              const closing = await ProtocolStore.appendEvent({
+                kind: "event",
+                type: "mission.execution.closing",
+                aggregate: "session",
+                aggregate_id: mission.id,
+                session_id: null,
+                source: "mission.abort",
+                correlation_id: opened.operationID,
+                payload: {
+                  missionID,
+                  requestID: "mission-wake-commit-fence-close",
+                  cancellation: { surface: "api", reason: "Close before wake Message commit" },
+                },
+              })
+              closingEventID = closing.id
+              Database.immediateTransaction(() => persistence.preflightBundle())
+              throw new Error("Expected Mission wake commit fence rejection")
+            },
+          }),
+        ).rejects.toMatchObject({
+          name: MissionExecutionWakeClosedError.name,
+          data: { missionID, sessionID: mission.id, state: "closing" },
+        })
+        expect(currentMissionExecutionClosure(mission.id)).toMatchObject({
+          state: "closing",
+          eventID: closingEventID,
+          operationID: opened.operationID,
+        })
+      },
+    })
+  })
+
   test("fences concurrent process owners to one physical Mission close and one terminal fact", async () => {
     await using project = await memoryProject()
     await Instance.provide({
@@ -96,6 +157,7 @@ describe("standalone Mission process recovery", () => {
           sessionID: mission.id,
           source: "mission.abort",
           requestID: "mission-close-fence-request",
+          provenance: { surface: "api", reason: "Fence Mission close owners" },
           close: async () => {
             closeCalls++
             enterFirst()
@@ -109,6 +171,7 @@ describe("standalone Mission process recovery", () => {
           sessionID: mission.id,
           source: "mission.abort",
           requestID: "mission-close-fence-request",
+          provenance: { surface: "api", reason: "Fence Mission close owners" },
           close: async () => {
             closeCalls++
           },
@@ -120,6 +183,149 @@ describe("standalone Mission process recovery", () => {
           firstResult: { state: "closed" },
           secondResult: { state: "closed", operationID: firstResult.operationID },
           current: { state: "closed", operationID: firstResult.operationID },
+        })
+      },
+    })
+  })
+
+  test("keeps historical Mission closure provenance fail-closed until the matching operator supplies it", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const missionID = "mission-historical-closing-provenance"
+        const mission = await ensureMissionSession({
+          missionID,
+          defaultCwd: project.path,
+          productPillar: "code",
+          heldExpertSquadIDs: ["base"],
+        })
+        const opened = await openMissionExecution({
+          missionID,
+          sessionID: mission.id,
+          source: "mission.dispatch",
+          requestID: "historical-closing-open",
+        })
+        const historicalClosing = await ProtocolStore.appendEvent({
+          kind: "event",
+          type: "mission.execution.closing",
+          aggregate: "session",
+          aggregate_id: mission.id,
+          session_id: null,
+          source: "mission.archive",
+          correlation_id: opened.operationID,
+          payload: { missionID, requestID: "historical-archive-request" },
+        })
+        const authority = await ProtocolStore.appendEvent({
+          kind: "event",
+          type: "mission.execution.cancellation_provenance.required",
+          aggregate: "session",
+          aggregate_id: mission.id,
+          session_id: null,
+          source: "storage.mission-closure-provenance-migration",
+          causation_id: historicalClosing.id,
+          correlation_id: opened.operationID,
+          payload: {
+            version: 1,
+            missionID,
+            requestID: "historical-archive-request",
+            requiredSource: "mission.archive",
+          },
+        })
+        let physicalCloseCalls = 0
+        const blockedRecovery = await resumeMissionExecutionClosingOperation({
+          sessionID: mission.id,
+          close: async () => {
+            physicalCloseCalls += 1
+          },
+        })
+        await expect(
+          closeMissionExecutionOperation({
+            missionID,
+            sessionID: mission.id,
+            source: "mission.abort",
+            requestID: "wrong-source-repair",
+            provenance: { surface: "api", reason: "Wrong operator source" },
+            close: async () => {
+              physicalCloseCalls += 1
+            },
+          }),
+        ).rejects.toMatchObject({
+          name: MissionExecutionCancellationProvenanceRequiredError.name,
+          data: {
+            missionID,
+            operationID: opened.operationID,
+            closureEventID: historicalClosing.id,
+            authorityEventID: authority.id,
+            requiredSource: "mission.archive",
+          },
+        })
+        const repaired = await closeMissionExecutionOperation({
+          missionID,
+          sessionID: mission.id,
+          source: "mission.archive",
+          requestID: "matching-archive-repair",
+          provenance: { surface: "api", reason: "Supply real operator provenance" },
+          close: async () => {
+            physicalCloseCalls += 1
+          },
+        })
+        const supplied = Database.use((db) =>
+          db
+            .select()
+            .from(ProtocolEventTable)
+            .where(eq(ProtocolEventTable.aggregate_id, mission.id))
+            .all()
+            .filter((event) => event.type === "mission.execution.cancellation_provenance.supplied"),
+        )
+        const terminalMissionID = "mission-historical-closed-provenance"
+        const terminalMission = await ensureMissionSession({
+          missionID: terminalMissionID,
+          defaultCwd: project.path,
+          productPillar: "code",
+          heldExpertSquadIDs: ["base"],
+        })
+        const terminalOperationID = "55555555-5555-4555-8555-555555555555"
+        const historicalClosed = await ProtocolStore.appendEvent({
+          kind: "event",
+          type: "mission.execution.closed",
+          aggregate: "session",
+          aggregate_id: terminalMission.id,
+          session_id: null,
+          source: "mission.abort",
+          correlation_id: terminalOperationID,
+          payload: { missionID: terminalMissionID, requestID: "historical-abort-request" },
+        })
+        await ProtocolStore.appendEvent({
+          kind: "event",
+          type: "mission.execution.cancellation_provenance.unavailable_terminal",
+          aggregate: "session",
+          aggregate_id: terminalMission.id,
+          session_id: null,
+          source: "storage.mission-closure-provenance-migration",
+          causation_id: historicalClosed.id,
+          correlation_id: terminalOperationID,
+          payload: {
+            version: 1,
+            missionID: terminalMissionID,
+            requestID: "historical-abort-request",
+            requiredSource: "mission.abort",
+          },
+        })
+        expect({
+          blocked: currentMissionExecutionClosure(mission.id),
+          blockedRecovery,
+          repaired,
+          physicalCloseCalls,
+          supplied,
+          historicalClosed: currentMissionExecutionClosure(terminalMission.id),
+        }).toMatchObject({
+          blocked: { state: "closed", operationID: opened.operationID },
+          blockedRecovery: { status: "not_closing", closure: { state: "recovery_blocked" } },
+          repaired: { state: "closed", operationID: opened.operationID },
+          physicalCloseCalls: 1,
+          supplied: [{ causation_id: historicalClosing.id, correlation_id: opened.operationID }],
+          historicalClosed: { state: "closed", eventID: historicalClosed.id, operationID: terminalOperationID },
         })
       },
     })
@@ -212,6 +418,7 @@ describe("standalone Mission process recovery", () => {
             sessionID: mission.id,
             source: "mission.abort",
             requestID: "panel-mission-activation-close",
+            provenance: { surface: "api", reason: "Close the Mission activation fixture" },
             close: async () => {
               events.push(`close_${currentMissionExecutionClosure(mission.id)?.state}`)
             },
@@ -317,6 +524,7 @@ describe("standalone Mission process recovery", () => {
           sessionID: mission.id,
           source: "mission.abort",
           requestID: "request-process-recovery-close",
+          provenance: { surface: "api", reason: "Settle Mission process recovery" },
           close: async () => {
             const closing = currentMissionExecutionClosure(mission.id)!
             expect(closing.state).toBe("closing")
@@ -360,6 +568,86 @@ describe("standalone Mission process recovery", () => {
             error: expect.stringContaining(closingEventID!),
           },
         })
+      },
+    })
+  }, 30_000)
+
+  test("recovers one exact persisted closing occurrence without applying archive storage effects", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const missionID = "persisted-closing-host-recovery"
+        const mission = await ensureMissionSession({
+          missionID,
+          defaultCwd: project.path,
+          productPillar: "code",
+          heldExpertSquadIDs: ["base"],
+        })
+        await openMissionExecution({
+          missionID,
+          sessionID: mission.id,
+          source: "mission.dispatch",
+          requestID: "persisted-closing-host-recovery-open",
+        })
+        await expect(
+          closeMissionExecutionOperation({
+            missionID,
+            sessionID: mission.id,
+            source: "mission.archive",
+            requestID: "persisted-closing-host-recovery-close",
+            provenance: { surface: "api", reason: "Persist closing before simulated host loss" },
+            close: async () => {
+              throw new Error("simulated host loss after closing commit")
+            },
+          }),
+        ).rejects.toThrow("simulated host loss after closing commit")
+        MissionExecutionClosureTestHooks.forgetLocalCloseOwner(mission.id)
+        const durableClosing = currentMissionExecutionClosure(mission.id)
+        expect(durableClosing).toMatchObject({ state: "closing", source: "mission.archive" })
+
+        const before = listGlobalMissionProcessRecoveryCandidates().map((candidate) => candidate.sessionID)
+        expect(before).toContain(mission.id)
+        const [first, second] = await Promise.all([
+          recoverMissionProcessSession(mission.id),
+          recoverMissionProcessSession(mission.id),
+        ])
+        const closureEvents = Database.use((db) =>
+          db
+            .select()
+            .from(ProtocolEventTable)
+            .where(eq(ProtocolEventTable.aggregate_id, mission.id))
+            .all()
+            .filter((event) => event.type.startsWith("mission.execution.")),
+        )
+        const current = currentMissionExecutionClosure(mission.id)
+        const persistedSession = await Session.get(mission.id)
+        expect({ first, second, current, closureEvents, archivedAt: persistedSession.time.archived }).toMatchObject({
+          first: { status: "not_needed", sessionID: mission.id },
+          second: { status: "not_needed", sessionID: mission.id },
+          current: { state: "closed", operationID: durableClosing!.operationID, source: "mission.archive" },
+          archivedAt: undefined,
+        })
+        expect(closureEvents.filter((event) => event.type === "mission.execution.closed")).toHaveLength(1)
+        expect(listGlobalMissionProcessRecoveryCandidates().map((candidate) => candidate.sessionID)).not.toContain(
+          mission.id,
+        )
+
+        const openedOnly = await ensureMissionSession({
+          missionID: "opened-only-not-a-close-recovery",
+          defaultCwd: project.path,
+          productPillar: "code",
+          heldExpertSquadIDs: ["base"],
+        })
+        await openMissionExecution({
+          missionID: "opened-only-not-a-close-recovery",
+          sessionID: openedOnly.id,
+          source: "mission.dispatch",
+          requestID: "opened-only-not-a-close-recovery-open",
+        })
+        expect(listGlobalMissionProcessRecoveryCandidates().map((candidate) => candidate.sessionID)).not.toContain(
+          openedOnly.id,
+        )
       },
     })
   }, 30_000)

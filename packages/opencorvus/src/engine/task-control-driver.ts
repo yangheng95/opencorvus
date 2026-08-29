@@ -219,20 +219,22 @@ export class TaskControlDriver {
 
   /**
    * Level-triggered sweep. Requests run in parallel so one Task's Orchestrator
-   * Turn cannot starve its siblings, but the sweep *awaits* them inside the
-   * re-entered project context: `reenter` provides an instance lease exactly
-   * for the duration of its callback, and a scan detached past that boundary
-   * keeps the closed lease in its async context — every later database access
-   * then faults with "closed instance cache lease" on each tick, which is how
-   * the heartbeat silently broke the very liveness it exists to guarantee.
-   * The next tick therefore arms after the sweep settles; under long Turns the
-   * period stretches, which costs backstop latency, never correctness.
+   * Turn cannot starve its siblings, and the next tick is armed before this
+   * sweep starts so a long-running Task cannot stretch the project heartbeat.
+   * A later tick records fresh demand for that Task without joining its owner,
+   * while newly live siblings acquire their own scan immediately.
+   *
+   * Each sweep still awaits the requests it owns inside its own re-entered
+   * project context: `reenter` provides an instance lease exactly for the
+   * duration of its callback, and detaching an owned scan past that boundary
+   * would leave later database access with a closed instance cache lease.
    */
   private armHeartbeat(): void {
     if (this.disposed || !this.liveTasks) return
     this.heartbeat?.cancel()
     this.heartbeat = this.setTimer(() => {
       this.heartbeat = undefined
+      this.armHeartbeat()
       void this.reenter(async () => {
         await Promise.all(
           this.liveTasks!().map((taskID) =>
@@ -241,11 +243,9 @@ export class TaskControlDriver {
             }),
           ),
         )
+      }).catch((error) => {
+        log.error("Task-control heartbeat sweep faulted", { error })
       })
-        .catch((error) => {
-          log.error("Task-control heartbeat sweep faulted", { error })
-        })
-        .finally(() => this.armHeartbeat())
     }, this.heartbeatDelay)
   }
 

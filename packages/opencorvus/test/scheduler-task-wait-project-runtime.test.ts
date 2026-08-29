@@ -236,4 +236,102 @@ describe("scheduled Task wait project runtime", () => {
       },
     })
   }, 90_000)
+
+  test("transfers a Task wait to one durable ingress before its long Task Turn completes", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const capability = await PromptProfileResolver.resolveSchedulerCapability({
+          projectDirectory: project.path,
+          config: Config.Info.parse({ prompt_profile: { active: "base" } }),
+        })
+        const taskID = Identifier.ascending("task")
+        const root = Session.prepareRootNext({
+          kind: "root",
+          directory: Instance.directory,
+          title: "Task wait atomic transfer",
+          metadata: { configOverlay: { prompt_profile: { active: capability.packageRevision.id } } },
+        })
+        const now = Date.now()
+        persistEstablishedTask({
+          taskID,
+          rootSession: root,
+          now,
+          title: "Task wait atomic transfer",
+          request: "Keep one accepted wait occurrence while the Task Turn is long",
+          productPillar: "code",
+          source: "test",
+          priority: "normal",
+          metadata: { actor: "user" },
+          projectID: Instance.project.id,
+          packageRevision: capability.packageRevision,
+          executionCapsuleBinding: await prepareTaskProcessBinding({
+            mode: "native",
+            taskID,
+            projectID: Instance.project.id,
+            rootDirectory: Instance.directory,
+            packageRevisionSHA256: capability.packageRevision.packageDigest,
+            timeCreated: now,
+          }),
+        })
+        let releaseTurn!: () => void
+        const turnGate = new Promise<void>((resolve) => {
+          releaseTurn = resolve
+        })
+        configureTaskIngressRunner(async () => turnGate)
+        const scheduled = await AutomationService.createTaskWake({
+          name: "atomic participant activity",
+          projectId: Instance.project.id,
+          taskId: taskID,
+          durationMs: 600_000,
+          reason: "resume exactly once",
+        })
+
+        const first = AutomationService.triggerTaskWaitFromActivity({
+          taskId: taskID,
+          projectId: Instance.project.id,
+          source: "message.created",
+          detail: "first exact participant occurrence",
+        })
+        await waitFor(
+          () =>
+            AutomationService.pendingDelayedWakeSchedule({
+              projectID: Instance.project.id,
+              taskIDs: [taskID],
+            }).length === 0,
+        )
+
+        const duplicate = await AutomationService.triggerTaskWaitFromActivity({
+          taskId: taskID,
+          projectId: Instance.project.id,
+          source: "message.part.updated",
+          detail: "a later activity while the same Task Turn still owns execution",
+        })
+        const activityIngresses = Database.use((db) => db.select().from(EngineTaskRootIngressTable).all()).filter(
+          (row) => {
+            const event = OrchestratorEventSchema.safeParse(row.inline_payload)
+            return row.task_id === taskID && row.source === "inline" && event.success && event.data.taskWaitActivity
+          },
+        )
+
+        expect({ duplicate, activityIngresses: activityIngresses.map((row) => row.inline_payload) }).toEqual({
+          duplicate: { jobIDs: [] },
+          activityIngresses: [
+            {
+              note: expect.any(String),
+              taskWaitActivity: {
+                source: "message.created",
+                detail: "first exact participant occurrence",
+                jobIDs: [scheduled.id],
+              },
+            },
+          ],
+        })
+
+        releaseTurn()
+        await first
+      },
+    })
+  }, 90_000)
 })

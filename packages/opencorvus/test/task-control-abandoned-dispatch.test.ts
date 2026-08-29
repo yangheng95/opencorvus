@@ -20,6 +20,7 @@ import { PromptProfileResolver } from "../src/expert-squad/prompt-profile-resolv
 import { Identifier } from "../src/id/id"
 import { BrowserMCPBuiltin } from "../src/mcp/browser/builtin"
 import { Instance } from "../src/project/instance"
+import { ProtocolStore } from "../src/protocol/store"
 import { Session } from "../src/session"
 import { Database, and, eq } from "../src/storage/db"
 import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
@@ -185,6 +186,58 @@ describe("abandoned dispatch recovery", () => {
             .all(),
         )
         expect(afterReplay.length).toBe(1)
+
+        // Failure can win without the completion path's unsettled-dispatch
+        // assertion. A fresh host has no direct edge for this now-terminal
+        // Task, so only project sweep discovery can close the committed child
+        // lineage.
+        const terminalChild = await Session.create({
+          kind: "delegated-worker",
+          parentID: root.id,
+          title: "Terminal parent abandoned worker",
+        })
+        const terminalDispatchID = Identifier.ascending("artifact")
+        recordDispatchLineage({
+          origin: createDispatchLineageOrigin({
+            dispatchID: terminalDispatchID,
+            taskID,
+            orchestratorSessionID: task.session_id!,
+            orchestratorMessageID: Identifier.ascending("message"),
+            toolPartID: Identifier.ascending("part"),
+            toolCallID: Identifier.ascending("call"),
+            targetAgentID: worker.identity.agentID,
+            projectedWorkerIdentity: worker.identity,
+            workScope: { kind: "task" },
+            workflowBinding: selectedWorkflowBinding({
+              projection: {
+                packageRevision: scheduler.packageRevision,
+                virtualWorkflows: scheduler.virtualWorkflows,
+              },
+              workflowID: null,
+            }),
+            workflowNodeID: null,
+            adapterInput: {},
+          }),
+          childSessionID: terminalChild.id,
+          ownerProcessOccurrenceID: "runtime:vanished-terminal-owner",
+        })
+        await ProtocolStore.appendEvent({
+          kind: "event",
+          type: "task.failed",
+          aggregate: "task",
+          aggregate_id: taskID,
+          task_id: null,
+          session_id: task.session_id!,
+          source: "test.terminal-abandoned-dispatch",
+          emitted_at: Date.now(),
+          payload: { execution_epoch: 1, reason: "terminal parent recovery test" },
+        })
+
+        await reconcileTaskControlPlane()
+
+        expect(
+          findDispatchSettlementByDispatchID({ taskID, dispatchID: terminalDispatchID })?.payload.outcome,
+        ).toMatchObject({ kind: "infrastructure_failure", session_id: terminalChild.id })
       },
     })
   }, 30_000)

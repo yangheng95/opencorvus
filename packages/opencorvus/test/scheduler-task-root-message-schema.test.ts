@@ -8,11 +8,16 @@ import { ensureMissionSession } from "@/mission/session"
 import { OrchestratorEventSchema } from "@/orchestrator/event"
 import { Instance } from "@/project/instance"
 import { requireSchedulerDelivery } from "@/protocol/delivery"
-import { sendSchedulerMessage } from "@/protocol/scheduler-message"
+import { ProtocolDeliveryReceiptTable, ProtocolInboxTable } from "@/protocol/protocol.sql"
+import {
+  drainSchedulerMessagesForCurrentProject,
+  SchedulerMessageTestHooks,
+  sendSchedulerMessage,
+} from "@/protocol/scheduler-message"
 import { TaskRootMessageProvenance } from "@/protocol/task-root-message-schema"
 import { Session } from "@/session"
 import { MessageTable } from "@/session/session.sql"
-import { Database, eq } from "@/storage/db"
+import { and, Database, eq, sql } from "@/storage/db"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
 afterEach(async () => {
@@ -21,7 +26,7 @@ afterEach(async () => {
 })
 
 describe("scheduler Task-root Message protocol", () => {
-  test("materializes one delivery reference into the persisted Message and Orchestrator wake", async () => {
+  test("serializes concurrent direct sends through one recipient owner", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
@@ -52,7 +57,9 @@ describe("scheduler Task-root Message protocol", () => {
           heldExpertSquadIDs: ["base"],
         })
         const root = await Session.create({ kind: "root", title: "Scheduler delivery target" })
+        const siblingRoot = await Session.create({ kind: "root", title: "Sibling scheduler delivery target" })
         const taskID = Identifier.ascending("task")
+        const siblingTaskID = Identifier.ascending("task")
         const now = Date.now()
         Database.immediateTransaction((db) => {
           db.insert(EngineTaskTable)
@@ -72,6 +79,26 @@ describe("scheduler Task-root Message protocol", () => {
             db,
             taskID,
             sessionID: root.id,
+            now,
+            source: "test.scheduler-delivery",
+          })
+          db.insert(EngineTaskTable)
+            .values({
+              id: siblingTaskID,
+              project_id: Instance.project.id,
+              session_id: siblingRoot.id,
+              source: "mission",
+              product_pillar: "code",
+              title: "Sibling scheduler delivery target",
+              request: "Remain concurrent with another recipient owner",
+              metadata: { actor: "mission", mission: { id: missionID, session_id: mission.id } },
+              time_created: now,
+            })
+            .run()
+          appendTaskOpenedInTransaction({
+            db,
+            taskID: siblingTaskID,
+            sessionID: siblingRoot.id,
             now,
             source: "test.scheduler-delivery",
           })
@@ -116,15 +143,48 @@ describe("scheduler Task-root Message protocol", () => {
           },
         })
 
-        let observedWake: unknown
+        const observedWakes: unknown[] = []
+        let enteredFirst!: () => void
+        let releaseFirst!: () => void
+        const firstEntered = new Promise<void>((resolve) => (enteredFirst = resolve))
+        const firstGate = new Promise<void>((resolve) => (releaseFirst = resolve))
+        let revisionCutEnabled = false
+        let enteredRevisionCut!: () => void
+        let releaseRevisionCut!: () => void
+        const revisionCutEntered = new Promise<void>((resolve) => (enteredRevisionCut = resolve))
+        const revisionCutGate = new Promise<void>((resolve) => (releaseRevisionCut = resolve))
+        const observedRevisions: number[] = []
+        let revisionCutObserved = false
+        let revisionAtCut = 0
+        using _revisionHook = SchedulerMessageTestHooks.installBeforeRecipientRevisionCheck(async (input) => {
+          if (input.actor !== "task" || input.actorID !== taskID) return
+          observedRevisions.push(input.observedRevision)
+          if (!revisionCutEnabled || revisionCutObserved) return
+          revisionCutObserved = true
+          revisionAtCut = input.observedRevision
+          enteredRevisionCut()
+          await revisionCutGate
+        })
         using _runner = TaskControlTestHooks.replaceTaskIngressRunner({
           runner: async ({ event }) => {
-            if (event?.rootMessage) observedWake = event
+            if (event?.rootMessage) {
+              observedWakes.push(event)
+              if (observedWakes.length === 1) {
+                enteredFirst()
+                await firstGate
+              }
+            }
             return {}
           },
         })
         const invocationID = `scheduler-delivery-${Identifier.uuid4First8()}`
-        const receipt = await sendSchedulerMessage({
+        const endpoint = {
+          kind: "task_scheduler" as const,
+          project_id: Instance.project.id,
+          task_id: taskID,
+          root_session_id: root.id,
+        }
+        const firstSend = sendSchedulerMessage({
           invocationID,
           kind: "notification",
           source: {
@@ -133,16 +193,63 @@ describe("scheduler Task-root Message protocol", () => {
             mission_id: missionID,
             session_id: mission.id,
           },
-          target: {
-            kind: "task_scheduler",
-            project_id: Instance.project.id,
-            task_id: taskID,
-            root_session_id: root.id,
-          },
+          target: endpoint,
           subject: "Exact scheduler delivery",
           sourceMessageID: sourceMessage.id,
           sourcePartID: sourcePart.id,
         })
+        await firstEntered
+        const secondInvocationID = `scheduler-delivery-${Identifier.uuid4First8()}`
+        const secondSend = sendSchedulerMessage({
+          invocationID: secondInvocationID,
+          kind: "notification",
+          source: {
+            kind: "mission_scheduler",
+            project_id: Instance.project.id,
+            mission_id: missionID,
+            session_id: mission.id,
+          },
+          target: endpoint,
+          subject: "Second exact scheduler delivery",
+          sourceMessageID: sourceMessage.id,
+          sourcePartID: sourcePart.id,
+        })
+        const inboxDeadline = Date.now() + 5_000
+        while (
+          Database.use(
+            (db) =>
+              db
+                .select()
+                .from(ProtocolInboxTable)
+                .where(and(eq(ProtocolInboxTable.actor, "task"), eq(ProtocolInboxTable.actor_id, taskID)))
+                .all().length,
+          ) < 2 &&
+          Date.now() < inboxDeadline
+        )
+          await Bun.sleep(10)
+        const gatedSnapshot = Database.use((db) => ({
+          inboxes: db
+            .select()
+            .from(ProtocolInboxTable)
+            .where(and(eq(ProtocolInboxTable.actor, "task"), eq(ProtocolInboxTable.actor_id, taskID)))
+            .all().length,
+          terminalReceipts: db
+            .select()
+            .from(ProtocolDeliveryReceiptTable)
+            .innerJoin(ProtocolInboxTable, eq(ProtocolInboxTable.id, ProtocolDeliveryReceiptTable.inbox_id))
+            .where(
+              and(
+                eq(ProtocolInboxTable.actor, "task"),
+                eq(ProtocolInboxTable.actor_id, taskID),
+                sql`json_extract(${ProtocolDeliveryReceiptTable.receipt}, '$.kind') <> 'retry_wait'`,
+              ),
+            )
+            .all().length,
+          runnerOccurrences: observedWakes.length,
+        }))
+        releaseFirst()
+        const [receipt, secondReceipt] = await Promise.all([firstSend, secondSend])
+        expect(gatedSnapshot).toEqual({ inboxes: 2, terminalReceipts: 1, runnerOccurrences: 1 })
         const delivery = requireSchedulerDelivery(receipt.inboxID)
         if (delivery.status !== "delivered") {
           throw new Error(`Scheduler delivery did not settle: ${JSON.stringify(delivery)}`)
@@ -167,11 +274,11 @@ describe("scheduler Task-root Message protocol", () => {
           ingressID: expect.any(String),
         })
         expect(persisted).toBeDefined()
-        expect(observedWake).toBeDefined()
+        expect(observedWakes).toHaveLength(1)
         const provenance = TaskRootMessageProvenance.parse(
           (persisted?.data as { extra?: { task_root_message?: unknown } } | undefined)?.extra?.task_root_message,
         )
-        const wake = OrchestratorEventSchema.parse(observedWake)
+        const wake = OrchestratorEventSchema.parse(observedWakes[0])
 
         expect(provenance).toEqual({
           protocol: "task-root-message",
@@ -185,7 +292,81 @@ describe("scheduler Task-root Message protocol", () => {
           kind: "mission",
           schedulerDelivery: expectedReference,
         })
+        const deliveryOrder = [
+          requireSchedulerDelivery(receipt.inboxID).event.sequence,
+          requireSchedulerDelivery(secondReceipt.inboxID).event.sequence,
+        ]
+        expect({ secondReceipt }).toMatchObject({
+          secondReceipt: { status: "delivered", messageID: expect.any(String), ingressID: expect.any(String) },
+        })
+        expect(deliveryOrder[1]).toBe(deliveryOrder[0]! + 1)
+
+        revisionCutEnabled = true
+        const thirdSend = sendSchedulerMessage({
+          invocationID: `scheduler-delivery-${Identifier.uuid4First8()}`,
+          kind: "notification",
+          source: {
+            kind: "mission_scheduler",
+            project_id: Instance.project.id,
+            mission_id: missionID,
+            session_id: mission.id,
+          },
+          target: endpoint,
+          subject: "Revision cut head",
+          sourceMessageID: sourceMessage.id,
+          sourcePartID: sourcePart.id,
+        })
+        await revisionCutEntered
+        const fourthSend = sendSchedulerMessage({
+          invocationID: `scheduler-delivery-${Identifier.uuid4First8()}`,
+          kind: "notification",
+          source: {
+            kind: "mission_scheduler",
+            project_id: Instance.project.id,
+            mission_id: missionID,
+            session_id: mission.id,
+          },
+          target: endpoint,
+          subject: "Revision cut follower",
+          sourceMessageID: sourceMessage.id,
+          sourcePartID: sourcePart.id,
+        })
+        const signalDiscoveryDrain = drainSchedulerMessagesForCurrentProject()
+        const recoveryDiscoveryDrain = drainSchedulerMessagesForCurrentProject()
+        const siblingSend = sendSchedulerMessage({
+          invocationID: `scheduler-delivery-${Identifier.uuid4First8()}`,
+          kind: "notification",
+          source: {
+            kind: "mission_scheduler",
+            project_id: Instance.project.id,
+            mission_id: missionID,
+            session_id: mission.id,
+          },
+          target: {
+            kind: "task_scheduler",
+            project_id: Instance.project.id,
+            task_id: siblingTaskID,
+            root_session_id: siblingRoot.id,
+          },
+          subject: "Sibling recipient remains concurrent",
+          sourceMessageID: sourceMessage.id,
+          sourcePartID: sourcePart.id,
+        })
+        const siblingReceipt = await siblingSend
+        expect(siblingReceipt).toMatchObject({ status: "delivered", messageID: expect.any(String) })
+        releaseRevisionCut()
+        const [thirdReceipt, fourthReceipt] = await Promise.all([
+          thirdSend,
+          fourthSend,
+          signalDiscoveryDrain,
+          recoveryDiscoveryDrain,
+        ])
+        expect({ thirdReceipt, fourthReceipt }).toMatchObject({
+          thirdReceipt: { status: "delivered", messageID: expect.any(String) },
+          fourthReceipt: { status: "delivered", messageID: expect.any(String) },
+        })
+        expect(observedRevisions.at(-1)).toBeGreaterThanOrEqual(revisionAtCut + 3)
       },
     })
-  })
+  }, 30_000)
 })

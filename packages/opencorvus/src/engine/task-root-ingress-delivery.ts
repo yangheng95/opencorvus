@@ -301,6 +301,51 @@ export function persistTaskWaitIngressInTransaction(
   )
 }
 
+/**
+ * Transfer one or more pending Task waits to one durable activity occurrence.
+ *
+ * The Automation definitions remain the authority for which waits were
+ * claimed; their exact revision identities make the Task ingress stable across
+ * a claimant crash before this transaction. The participant detail is retained
+ * as the real event payload, but it does not mint a second logical occurrence
+ * when another activity races the same wait revisions.
+ */
+export function persistTaskWaitActivityIngressInTransaction(
+  db: Database.TxOrDb,
+  input: {
+    task: TaskRow
+    jobIDs: readonly string[]
+    jobRevisionIDs: readonly string[]
+    source: string
+    detail: string
+    now: number
+  },
+): string {
+  const jobRevisionIDs = [...new Set(input.jobRevisionIDs)].toSorted()
+  const jobIDs = [...new Set(input.jobIDs)].toSorted()
+  if (jobRevisionIDs.length === 0) throw new Error("Task wait activity requires an exact Automation revision")
+  if (jobIDs.length !== jobRevisionIDs.length) {
+    throw new Error("Task wait activity requires one exact definition for every Automation revision")
+  }
+  const sourceID = createHash("sha256")
+    .update(["task-wait-activity-v1", input.task.id, ...jobRevisionIDs].join("\0"))
+    .digest("hex")
+  return persistTaskRootIngressInTransaction(
+    db,
+    input.task,
+    {
+      note: `Task wait activity consumed ${jobRevisionIDs.length} pending wait(s)`,
+      taskWaitActivity: {
+        source: input.source,
+        detail: input.detail,
+        jobIDs,
+      },
+    },
+    { waitJobID: sourceID },
+    input.now,
+  )
+}
+
 export function persistCoordinationIngressInTransaction(
   db: Database.TxOrDb,
   input: { taskID: string; rootSessionID: string; requestID: string; now?: number },
@@ -1065,7 +1110,7 @@ function currentSweepProjectTaskIDs(): string[] {
           return true
         }
         if (lifecycle.terminalAt === undefined) return false
-        return db
+        const hasUnsettledPostTerminalIngress = db
           .select({ id: EngineTaskRootIngressTable.id })
           .from(EngineTaskRootIngressTable)
           .where(
@@ -1077,6 +1122,15 @@ function currentSweepProjectTaskIDs(): string[] {
           )
           .all()
           .some((ingress) => !settledIngressIDs.has(ingress.id))
+        if (hasUnsettledPostTerminalIngress) return true
+        // Completion refuses to terminalize with an open dispatch, but failure
+        // and cancellation can win while a committed child lineage is still
+        // physically settling. That lineage is itself an exact recovery
+        // obligation; hiding the terminal parent from the sweep strands it
+        // forever after the owner process disappears.
+        return listDispatchLineage(id).some(
+          (lineage) => findDispatchSettlementByDispatchID({ taskID: id, dispatchID: lineage.dispatchID }) === undefined,
+        )
       } catch (error) {
         log.error("Task-control sweep could not project a Task lifecycle", { taskID: id, error })
         return false
@@ -1436,6 +1490,13 @@ async function settleAbandonedDispatch(input: {
     throw new Error("Abandoned dispatch recovery constructed a non-infrastructure outcome")
   }
   settleDispatchOrReturnExisting({ taskID: input.taskID, dispatchID: input.lineage.dispatchID, outcome })
+  const lifecycle = Database.use((db) => taskLifecycleProjectionInTransaction(db, input.taskID))
+  if (lifecycle.status !== "active" && lifecycle.status !== "cancelling") {
+    // A terminal parent cannot legally accept another Orchestrator ingress.
+    // Its exact child settlement is the recovery obligation, and committing it
+    // is sufficient for project discovery to converge and drop this Task.
+    return true
+  }
   await dispatchTaskLoop({
     taskID: input.taskID,
     event: {

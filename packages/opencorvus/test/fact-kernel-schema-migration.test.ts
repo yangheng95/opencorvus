@@ -4,7 +4,13 @@ import { mkdtempSync, rmSync } from "node:fs"
 import { tmpdir } from "node:os"
 import path from "node:path"
 import { SCHEMA_DDL } from "@/storage/ddl"
-import { migrateFactKernelSchema, migratePermissionLedgerProjectRetentionSchema } from "@/storage/fact-kernel-migration"
+import {
+  migrateFactKernelSchema,
+  migratePermissionLedgerProjectRetentionSchema,
+} from "@/storage/fact-kernel-migration"
+import { migrateMissionClosureCancellationProvenance } from "@/storage/mission-closure-provenance-migration"
+import { migrateMissionSchedulerWakeOccurrenceAuthorities } from "@/storage/mission-scheduler-wake-migration"
+import { Identifier } from "@/id/id"
 import { findSchemaDrift } from "@/storage/schema-contract"
 
 function all<T>(sqlite: SQLite, sql: string, ...parameters: unknown[]): T[] {
@@ -20,6 +26,15 @@ function get<T>(sqlite: SQLite, sql: string, ...parameters: unknown[]): T | null
   const statement = sqlite.query(sql)
   try {
     return statement.get(...parameters as []) as T | null
+  } finally {
+    statement.finalize()
+  }
+}
+
+function execute(sqlite: SQLite, sql: string, ...parameters: unknown[]): void {
+  const statement = sqlite.query(sql)
+  try {
+    statement.run(...parameters as [])
   } finally {
     statement.finalize()
   }
@@ -127,6 +142,391 @@ function insertLegacyArtifact(sqlite: SQLite, input: {
 }
 
 describe("fact-kernel schema migration", () => {
+  test("adds immutable provenance boundaries to historical Mission closing and closed facts", () => {
+    const sqlite = new SQLite(":memory:")
+    try {
+      sqlite.exec(SCHEMA_DDL)
+      const operationA = "11111111-1111-4111-8111-111111111111"
+      const operationB = "22222222-2222-4222-8222-222222222222"
+      const operationC = "33333333-3333-4333-8333-333333333333"
+      sqlite.exec(`
+        INSERT INTO protocol_event
+          (id,kind,type,aggregate_type,aggregate_id,task_id,session_id,source,correlation_id,seq,emitted_at,payload)
+        VALUES
+          ('pev_legacy_closing','event','mission.execution.closing','session','session:legacy-closing',NULL,NULL,'mission.archive','${operationA}',1,10,'{"missionID":"mission:legacy-closing","requestID":"request:legacy-closing"}'),
+          ('pev_legacy_closed','event','mission.execution.closed','session','session:legacy-closed',NULL,NULL,'mission.abort','${operationB}',1,20,'{"missionID":"mission:legacy-closed","requestID":"request:legacy-closed"}'),
+          ('pev_old_closed','event','mission.execution.closed','session','session:reopened',NULL,NULL,'mission.delete','${operationC}',1,30,'{"missionID":"mission:reopened","requestID":"request:old-close"}'),
+          ('pev_new_opened','event','mission.execution.opened','session','session:reopened',NULL,NULL,'mission.wake','44444444-4444-4444-8444-444444444444',2,40,'{"missionID":"mission:reopened","requestID":"request:new-open"}');
+      `)
+      const before = all<{ id: string; payload: string }>(
+        sqlite,
+        `
+        SELECT id,payload FROM protocol_event
+        WHERE id IN ('pev_legacy_closing','pev_legacy_closed','pev_old_closed') ORDER BY id
+      `,
+      )
+      expect(migrateMissionClosureCancellationProvenance(sqlite)).toBe(3)
+      expect(migrateMissionClosureCancellationProvenance(sqlite)).toBe(0)
+      const after = all<{ id: string; payload: string }>(
+        sqlite,
+        `
+        SELECT id,payload FROM protocol_event
+        WHERE id IN ('pev_legacy_closing','pev_legacy_closed','pev_old_closed') ORDER BY id
+      `,
+      )
+      const authorities = all<{ type: string; causation_id: string; correlation_id: string; required_source: string }>(
+        sqlite,
+        `
+        SELECT type,causation_id,correlation_id,json_extract(payload,'$.requiredSource') AS required_source
+        FROM protocol_event
+        WHERE type LIKE 'mission.execution.cancellation_provenance.%'
+        ORDER BY causation_id
+      `,
+      )
+      const reopenedCurrent = get<{ id: string; type: string }>(
+        sqlite,
+        `
+        SELECT id,type FROM protocol_event
+        WHERE aggregate_type='session' AND aggregate_id='session:reopened'
+          AND type IN ('mission.execution.opened','mission.execution.closing','mission.execution.closed')
+        ORDER BY seq DESC LIMIT 1
+      `,
+      )
+      expect({ before, after, authorities, reopenedCurrent }).toEqual({
+        before,
+        after: before,
+        authorities: [
+          {
+            type: "mission.execution.cancellation_provenance.unavailable_terminal",
+            causation_id: "pev_legacy_closed",
+            correlation_id: operationB,
+            required_source: "mission.abort",
+          },
+          {
+            type: "mission.execution.cancellation_provenance.required",
+            causation_id: "pev_legacy_closing",
+            correlation_id: operationA,
+            required_source: "mission.archive",
+          },
+          {
+            type: "mission.execution.cancellation_provenance.unavailable_terminal",
+            causation_id: "pev_old_closed",
+            correlation_id: operationC,
+            required_source: "mission.delete",
+          },
+        ],
+        reopenedCurrent: { id: "pev_new_opened", type: "mission.execution.opened" },
+      })
+    } finally {
+      sqlite.close(true)
+    }
+  })
+
+  test("appends idempotent exact or recipient-local authorities for historical Mission scheduler wakes", () => {
+    const sqlite = new SQLite(":memory:")
+    try {
+      sqlite.exec(SCHEMA_DDL)
+      const projectID = "project:historical-wakes"
+      execute(
+        sqlite,
+        `
+          INSERT INTO project(
+            id,worktree,name,time_created,time_updated,sandboxes,generation
+          ) VALUES (?,?,?,?,?,'[]',?)
+        `,
+        projectID,
+        "D:/historical-wakes",
+        "historical-wakes",
+        1,
+        1,
+        crypto.randomUUID(),
+      )
+
+      const fixtures: Array<{
+        label: string
+        sessionID: string
+        inboxID: string
+        messageID: string
+        schedulerEventID: string
+        opened: Array<{ eventID: string; operationID: string }>
+        historicalClosureEventID?: string
+        inline: boolean
+      }> = []
+      for (const [label, openedCount, inline] of [
+        ["exact", 1, false],
+        ["ambiguous", 2, false],
+        ["missing", 0, false],
+        ["preceding", 1, false],
+        ["late-open", 1, false],
+        ["current", 1, true],
+      ] as const) {
+        const sessionID = Identifier.ascending("session")
+        const inboxID = Identifier.ascending("protocol_inbox")
+        const messageID = Identifier.ascending("message")
+        const schedulerEventID = Identifier.ascending("protocol_event")
+        const opened = Array.from({ length: openedCount }, () => ({
+          eventID: Identifier.ascending("protocol_event"),
+          operationID: crypto.randomUUID(),
+        }))
+        execute(
+          sqlite,
+          `
+            INSERT INTO session(
+              id,project_id,slug,directory,title,version,kind,time_created,time_updated
+            ) VALUES (?,?,?,?,?,'1','assistant',?,?)
+          `,
+          sessionID,
+          projectID,
+          label,
+          "D:/historical-wakes",
+          label,
+          2,
+          2,
+        )
+        let historicalClosureEventID: string | undefined
+        if (label === "preceding") {
+          historicalClosureEventID = Identifier.ascending("protocol_event")
+          execute(
+            sqlite,
+            `
+              INSERT INTO protocol_event(
+                id,kind,type,aggregate_type,aggregate_id,source,correlation_id,seq,emitted_at,payload
+              ) VALUES (?,'event','mission.execution.closed','session',?,'mission.abort',?,1,5,?)
+            `,
+            historicalClosureEventID,
+            sessionID,
+            crypto.randomUUID(),
+            JSON.stringify({ missionID: `mission:${label}`, requestID: `old-close:${label}` }),
+          )
+        }
+        for (const [index, occurrence] of opened.entries()) {
+          execute(
+            sqlite,
+            `
+              INSERT INTO protocol_event(
+                id,kind,type,aggregate_type,aggregate_id,source,correlation_id,seq,emitted_at,payload
+              ) VALUES (?,'event','mission.execution.opened','session',?,'mission.wake',?,?,?,?)
+            `,
+            occurrence.eventID,
+            sessionID,
+            occurrence.operationID,
+            index + 1 + (label === "preceding" ? 1 : 0),
+            label === "late-open" ? 30 + index : 10 + index,
+            JSON.stringify({ missionID: `mission:${label}`, requestID: `open:${label}:${index}` }),
+          )
+        }
+        if (label === "exact") {
+          historicalClosureEventID = Identifier.ascending("protocol_event")
+          execute(
+            sqlite,
+            `
+              INSERT INTO protocol_event(
+                id,kind,type,aggregate_type,aggregate_id,source,correlation_id,seq,emitted_at,payload
+              ) VALUES (?,'event','mission.execution.closed','session',?,'mission.abort',?,2,30,?)
+            `,
+            historicalClosureEventID,
+            sessionID,
+            crypto.randomUUID(),
+            JSON.stringify({ missionID: `mission:${label}`, requestID: `close:${label}` }),
+          )
+        }
+        const wakeReason = {
+          source: "scheduler.message",
+          eventID: schedulerEventID,
+          inboxID,
+          threadID: `thread:${label}`,
+          messageKind: "notification",
+          sourceEndpoint: {
+            kind: "task_scheduler",
+            project_id: projectID,
+            task_id: `task:${label}`,
+            root_session_id: sessionID,
+          },
+          targetEndpoint: {
+            kind: "mission_scheduler",
+            project_id: projectID,
+            mission_id: `mission:${label}`,
+            session_id: sessionID,
+          },
+          ...(inline && opened[0]
+            ? {
+                missionOccurrence: {
+                  openedEventID: opened[0].eventID,
+                  openedOperationID: opened[0].operationID,
+                },
+              }
+            : {}),
+        }
+        execute(
+          sqlite,
+          `
+            INSERT INTO message(id,session_id,time_created,time_updated,data)
+            VALUES (?,?,?,?,?)
+          `,
+          messageID,
+          sessionID,
+          20,
+          20,
+          JSON.stringify({
+            role: "user",
+            author: "orchestrator",
+            time: { created: 20 },
+            extra: { wake_reason: wakeReason },
+          }),
+        )
+        execute(
+          sqlite,
+          `
+            INSERT INTO protocol_event(
+              id,kind,type,aggregate_type,aggregate_id,source,seq,emitted_at,payload
+            ) VALUES (?,'event','scheduler.message','task',?,'test',1,15,'{}')
+          `,
+          schedulerEventID,
+          `task:${label}`,
+        )
+        execute(
+          sqlite,
+          `
+            INSERT INTO protocol_inbox(id,envelope_id,actor,actor_id,visible_at,time_created)
+            VALUES (?,?,'session',?,15,15)
+          `,
+          inboxID,
+          schedulerEventID,
+          sessionID,
+        )
+        execute(
+          sqlite,
+          `
+            INSERT INTO protocol_delivery_receipt(id,inbox_id,receipt,time_created)
+            VALUES (?,?,?,21)
+          `,
+          Identifier.ascending("protocol_inbox"),
+          inboxID,
+          JSON.stringify({ kind: "session_wake", message_id: messageID }),
+        )
+        fixtures.push({
+          label,
+          sessionID,
+          inboxID,
+          messageID,
+          schedulerEventID,
+          opened,
+          ...(historicalClosureEventID ? { historicalClosureEventID } : {}),
+          inline,
+        })
+      }
+
+      const originalRows = all<{ id: string; data: string }>(
+        sqlite,
+        "SELECT id,data FROM message ORDER BY id",
+      )
+      const originalReceipts = all<{ inbox_id: string; receipt: string }>(
+        sqlite,
+        "SELECT inbox_id,receipt FROM protocol_delivery_receipt ORDER BY inbox_id",
+      )
+      expect(migrateMissionSchedulerWakeOccurrenceAuthorities(sqlite)).toBe(5)
+      const firstAuthorities = all<{
+        correlation_id: string
+        type: string
+        reason: string | null
+        opened_event_id: string | null
+        closure_event_id: string | null
+      }>(sqlite, `
+        SELECT
+          correlation_id,
+          type,
+          json_extract(payload,'$.reason') AS reason,
+          json_extract(payload,'$.openedEventID') AS opened_event_id,
+          json_extract(payload,'$.historicalClosureEventID') AS closure_event_id
+        FROM protocol_event
+        WHERE type LIKE 'scheduler.message.mission_occurrence_binding.%'
+        ORDER BY correlation_id
+      `)
+      const exact = fixtures.find((fixture) => fixture.label === "exact")!
+      const nextOpenedID = Identifier.ascending("protocol_event")
+      execute(
+        sqlite,
+        `
+          INSERT INTO protocol_event(
+            id,kind,type,aggregate_type,aggregate_id,source,correlation_id,seq,emitted_at,payload
+          ) VALUES (?,'event','mission.execution.opened','session',?,'mission.wake',?,4,40,?)
+        `,
+        nextOpenedID,
+        exact.sessionID,
+        crypto.randomUUID(),
+        JSON.stringify({ missionID: "mission:exact", requestID: "open:exact:later" }),
+      )
+      expect(migrateMissionSchedulerWakeOccurrenceAuthorities(sqlite)).toBe(0)
+      const exactAuthorityAfterReopen = get<{ type: string; opened_event_id: string }>(sqlite, `
+        SELECT type,json_extract(payload,'$.openedEventID') AS opened_event_id
+        FROM protocol_event
+        WHERE correlation_id=?
+          AND type LIKE 'scheduler.message.mission_occurrence_binding.%'
+      `, exact.inboxID)
+      expect({
+        firstAuthorities,
+        exactAuthorityAfterReopen,
+        messages: all<{ id: string; data: string }>(sqlite, "SELECT id,data FROM message ORDER BY id"),
+        receipts: all<{ inbox_id: string; receipt: string }>(
+          sqlite,
+          "SELECT inbox_id,receipt FROM protocol_delivery_receipt ORDER BY inbox_id",
+        ),
+      }).toEqual({
+        firstAuthorities: expect.arrayContaining([
+          {
+            correlation_id: exact.inboxID,
+            type: "scheduler.message.mission_occurrence_binding.historical",
+            reason: null,
+            opened_event_id: exact.opened[0]!.eventID,
+            closure_event_id: exact.historicalClosureEventID!,
+          },
+          {
+            correlation_id: fixtures.find((fixture) => fixture.label === "ambiguous")!.inboxID,
+            type: "scheduler.message.mission_occurrence_binding.unavailable",
+            reason: "multiple_opened_occurrences",
+            opened_event_id: null,
+            closure_event_id: null,
+          },
+          {
+            correlation_id: fixtures.find((fixture) => fixture.label === "missing")!.inboxID,
+            type: "scheduler.message.mission_occurrence_binding.unavailable",
+            reason: "no_opened_occurrence",
+            opened_event_id: null,
+            closure_event_id: null,
+          },
+          {
+            correlation_id: fixtures.find((fixture) => fixture.label === "preceding")!.inboxID,
+            type: "scheduler.message.mission_occurrence_binding.unavailable",
+            reason: "preceding_closure_without_opened_occurrence",
+            opened_event_id: null,
+            closure_event_id: null,
+          },
+          {
+            correlation_id: fixtures.find((fixture) => fixture.label === "late-open")!.inboxID,
+            type: "scheduler.message.mission_occurrence_binding.unavailable",
+            reason: "opened_occurrence_not_before_message",
+            opened_event_id: null,
+            closure_event_id: null,
+          },
+        ]),
+        exactAuthorityAfterReopen: {
+          type: "scheduler.message.mission_occurrence_binding.historical",
+          opened_event_id: exact.opened[0]!.eventID,
+        },
+        messages: originalRows,
+        receipts: originalReceipts,
+      })
+      expect(
+        firstAuthorities.some(
+          (authority) => authority.correlation_id === fixtures.find((fixture) => fixture.inline)!.inboxID,
+        ),
+      ).toBe(false)
+    } finally {
+      expect(sqlite.inTransaction).toBe(false)
+      sqlite.close(true)
+    }
+  })
+
   test("removes the Permission Project cascade while preserving the complete ledger chain", () => {
     const sqlite = new SQLite(":memory:")
     try {

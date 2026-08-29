@@ -1114,13 +1114,14 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
           sessionID: missionSession.id,
           source: "mission.wake",
           requestID: ctx.callID || callerMessageID,
-          wake: () =>
+          wake: (persistence) =>
             (missionWakeForTest ?? SessionWake.wakeWithReceipt)({
               sessionID: missionSession.id,
               prompt: params.request,
               author: ctx.agent,
               agent: "mission",
               surface: "panel",
+              preflightBundle: persistence.preflightBundle,
               parts: callerFileParts,
               reason: {
                 source: "mission.operator",

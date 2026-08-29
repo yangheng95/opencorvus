@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest Mission/Task/Session control-plane occurrence reconciliation: [`2026-08-30-control-plane-occurrence-reconciliation.md`](records/2026-08/2026-08-30-control-plane-occurrence-reconciliation.md).
+
 Latest AutomationBench Luna Mission/Base 600-case completion run: [`2026-08-27-automationbench-luna-base-600-completion.md`](records/2026-08/2026-08-27-automationbench-luna-base-600-completion.md).
 
 Stopped AutomationBench Sol Mission/Base 50-case run: [`2026-08-26-automationbench-sol-base-completion.md`](records/2026-08/2026-08-26-automationbench-sol-base-completion.md).
