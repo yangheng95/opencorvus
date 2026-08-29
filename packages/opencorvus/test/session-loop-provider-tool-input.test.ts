@@ -1,11 +1,14 @@
 import { describe, expect, test } from "bun:test"
-import { asSchema, InvalidToolInputError, tool, type ToolExecutionOptions } from "ai"
+import { asSchema, generateText, InvalidToolInputError, tool, type ToolExecutionOptions } from "ai"
+import { createAzure } from "@ai-sdk/azure"
+import { createOpenAI } from "@ai-sdk/openai"
 import { MissionPanelActionSchema } from "@/panel/capability"
 import type { Provider } from "@/provider/provider"
+import { ProviderTransform } from "@/provider/transform"
 import { SessionLoop } from "@/session/loop"
 import { ScheduleTool } from "@/tool/schedule"
 
-function openAIStrictModel(): Provider.Model {
+function openAIModel(): Provider.Model {
   return {
     id: "gpt-5.6-terra",
     providerID: "openai",
@@ -29,7 +32,7 @@ function preparedMissionPanelTool() {
   return SessionLoop.prepareProviderTool({
     name: "panel",
     source: "registry",
-    model: openAIStrictModel(),
+    model: openAIModel(),
     tool: tool({
       inputSchema: MissionPanelActionSchema,
       execute: async (input) => input,
@@ -39,13 +42,60 @@ function preparedMissionPanelTool() {
   }
 }
 
+function azureModel(): Provider.Model {
+  return {
+    ...openAIModel(),
+    providerID: "azure",
+    api: { id: "azure-openai", npm: "@ai-sdk/azure" },
+  } as Provider.Model
+}
+
+function successfulResponsesFetch(capture: { body?: Record<string, any> }) {
+  return (async (_input: RequestInfo | URL, init?: RequestInit) => {
+    capture.body = JSON.parse(String(init?.body)) as Record<string, any>
+    return Response.json({
+      id: "resp_serialized_tool_contract",
+      created_at: 1,
+      model: "gpt-5.6-terra",
+      output: [
+        {
+          type: "message",
+          role: "assistant",
+          id: "msg_serialized_tool_contract",
+          content: [{ type: "output_text", text: "done", annotations: [] }],
+        },
+      ],
+      usage: {
+        input_tokens: 1,
+        input_tokens_details: { cached_tokens: 0 },
+        output_tokens: 1,
+        output_tokens_details: { reasoning_tokens: 0 },
+      },
+    })
+  }) as typeof fetch
+}
+
+function serializedToolRequestOptions(model: Provider.Model) {
+  return ProviderTransform.providerOptions(
+    model,
+    ProviderTransform.optionsForToolRequest(
+      model,
+      { store: false, parallelToolCalls: true },
+      { toolChoice: "auto", activeToolCount: 1 },
+    ),
+  )
+}
+
 const executionOptions = {
   toolCallId: "call_panel_provider_union",
   messages: [],
   abortSignal: new AbortController().signal,
 } as ToolExecutionOptions
 
-function acceptanceGap(readReference = "ar_1234567890abcdef") {
+function acceptanceGap(
+  readReference = "ar_1234567890abcdef",
+  parameters: Record<string, unknown> = {},
+) {
   return {
     gap_id: "gap-audit-receipt",
     current_ledger_revision_artifact_id: null,
@@ -65,7 +115,7 @@ function acceptanceGap(readReference = "ar_1234567890abcdef") {
           operation: "correct_artifact",
           target: "audit-receipt",
           expected_evidence_kind: "corrected-audit-receipt",
-          parameters: {},
+          parameters,
         },
       },
     ],
@@ -73,7 +123,7 @@ function acceptanceGap(readReference = "ar_1234567890abcdef") {
 }
 
 describe("SessionLoop provider Tool execution input", () => {
-  test("projects an OpenAI strict root union as one nested operation with branch-specific required fields", async () => {
+  test("projects an OpenAI root union as one nested operation with branch-specific required fields", async () => {
     const prepared = preparedMissionPanelTool() as unknown as { inputSchema: unknown }
     const schema = asSchema(prepared.inputSchema as never) as {
       jsonSchema: Record<string, any>
@@ -122,12 +172,79 @@ describe("SessionLoop provider Tool execution input", () => {
     })
   })
 
+  test("sends the prepared Tool in a serialized OpenAI Responses request", async () => {
+    const capture: { body?: Record<string, any> } = {}
+    const model = openAIModel()
+    const openAI = createOpenAI({ apiKey: "fixture", fetch: successfulResponsesFetch(capture) })
+
+    await generateText({
+      model: openAI.responses("gpt-5.6-terra"),
+      prompt: "Finish without calling a Tool.",
+      tools: { panel: preparedMissionPanelTool() as any },
+      providerOptions: serializedToolRequestOptions(model),
+    })
+
+    expect(capture.body).toEqual(
+      expect.objectContaining({
+        parallel_tool_calls: false,
+        tools: [expect.objectContaining({ type: "function", name: "panel", parameters: expect.any(Object) })],
+      }),
+    )
+    const operation = capture.body?.tools?.[0]?.parameters?.properties?.operation
+    const resume = (operation?.anyOf ?? operation?.oneOf).find(
+      (variant: Record<string, any>) => variant.properties?.action?.const === "resume_task",
+    )
+    const openCriterion = (resume.properties.acceptance_gap.properties.criteria.items.anyOf ??
+      resume.properties.acceptance_gap.properties.criteria.items.oneOf).find(
+      (variant: Record<string, any>) => variant.properties?.state?.const === "open",
+    )
+    expect(openCriterion.properties.repair_action.properties.parameters).toEqual(
+      expect.objectContaining({ type: "object", propertyNames: { type: "string" }, additionalProperties: true }),
+    )
+  })
+
+  test("sends the prepared Tool through Azure's serialized production Responses namespace", async () => {
+    const capture: { body?: Record<string, any> } = {}
+    const model = azureModel()
+    const options = serializedToolRequestOptions(model)
+    const azure = createAzure({
+      apiKey: "fixture",
+      baseURL: "https://azure.example.invalid/openai",
+      fetch: successfulResponsesFetch(capture),
+    })
+
+    expect(options).toEqual({
+      openai: { store: false, parallelToolCalls: false },
+      azure: { store: false, parallelToolCalls: false },
+    })
+    await generateText({
+      model: azure.responses("gpt-5.6-terra"),
+      prompt: "Finish without calling a Tool.",
+      tools: {
+        panel: SessionLoop.prepareProviderTool({
+          name: "panel",
+          source: "registry",
+          model,
+          tool: tool({ inputSchema: MissionPanelActionSchema, execute: async (input) => input }),
+        }) as any,
+      },
+      providerOptions: options,
+    })
+
+    expect(capture.body).toEqual(
+      expect.objectContaining({
+        parallel_tool_calls: false,
+        tools: [expect.objectContaining({ type: "function", name: "panel", parameters: expect.any(Object) })],
+      }),
+    )
+  })
+
   test("preserves action-specific fields for a second production root-union Tool", async () => {
     const schedule = await ScheduleTool.init()
     const prepared = SessionLoop.prepareProviderTool({
       name: "schedule",
       source: "registry",
-      model: openAIStrictModel(),
+      model: openAIModel(),
       tool: tool({ inputSchema: schedule.parameters, execute: async (input) => input }),
     }) as unknown as { inputSchema: unknown }
     const provider = asSchema(prepared.inputSchema as never).jsonSchema as Record<string, any>
@@ -139,13 +256,17 @@ describe("SessionLoop provider Tool execution input", () => {
     expect(history.properties.automationId).toEqual(expect.objectContaining({ type: "string" }))
   })
 
-  test("materializes the exact resume_task branch from an OpenAI strict union superset", async () => {
+  test("materializes the exact resume_task branch from an OpenAI provider union superset", async () => {
+    const gap = acceptanceGap("ar_1234567890abcdef", {
+      artifact_kind: "corrected-audit-receipt",
+      retry_limit: 1,
+    })
     const result = await preparedMissionPanelTool().execute(
       {
         operation: {
           action: "resume_task",
           taskID: "task-provider-union",
-          acceptance_gap: acceptanceGap(),
+          acceptance_gap: gap,
           model: null,
           summary: null,
           task_acceptances: null,
@@ -157,7 +278,7 @@ describe("SessionLoop provider Tool execution input", () => {
     expect(result).toEqual({
       action: "resume_task",
       taskID: "task-provider-union",
-      acceptance_gap: acceptanceGap(),
+      acceptance_gap: gap,
     })
   })
 

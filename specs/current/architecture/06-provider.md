@@ -140,6 +140,17 @@ Agent.run()                                     agent 发起 LLM 调用
 **session/llm.ts** 复用 `ProviderLLM.wrapModel()` + `baseHeaders()`，叠加 session 特有逻辑
 （plugin / trace / permission / inactivity）。
 
+原生 OpenAI / Azure OpenAI 在复杂 Tool surface 上采用单步串行 function-call 策略。凡
+`requiresSerializedOpenAIToolCalls(model)` 为真且当前请求携带 Tool，参数转换层必须在进入
+`providerOptions()` 命名空间封装前设置 `parallelToolCalls: false`。这是 `tool-call-policy.ts` 拥有的
+Provider 执行策略，不是 Structured Outputs 或 `tools[].strict` 声明；Provider-bound schema 继续作为
+best-effort function definition，并由 canonical Zod schema 在执行前完成最终校验与默认值 materialization。
+Zod 开放 record 的 provider projection 必须保留可接受非空 JSON map 的语义，不得因生成器用
+`propertyNames + additionalProperties:false` 表示不可投影值而把它静默收窄为空对象。该策略只串行化
+单个 Provider step 内的 Tool calls，不得串行化不同 Session、Task、Agent、Project 或 scheduler
+delivery，也不得通过兼容输入、Host 重试或 prompt 顺序指令另建协议。`@ai-sdk/openai-compatible`
+不暴露 parallel-call request option，不能伪装为已约束；其他 Provider 保留其显式配置的并行策略。
+
 ## Token 与计费统计单一链路
 
 所有 bundled 与动态安装的语言模型 Provider 都必须通过 `llm/api.ts` 的共享流式

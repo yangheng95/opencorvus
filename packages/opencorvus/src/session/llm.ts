@@ -244,7 +244,10 @@ export namespace LLM {
     const toolChoice = input.toolChoice
     const providerOptions = ProviderTransform.providerOptions(
       input.model,
-      ProviderTransform.optionsForToolChoice(input.model, params.options, toolChoice),
+      ProviderTransform.optionsForToolRequest(input.model, params.options, {
+        toolChoice,
+        activeToolCount: Object.keys(tools).length,
+      }),
     )
     const requestHeaders = {
       ...(input.model.providerID.startsWith("opencorvus")

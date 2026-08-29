@@ -12,6 +12,7 @@ import { decodeDataUrlBase64Bytes, decodeRawBase64Payload } from "@/session/text
 import { normalizeVendorMessages } from "./vendor-messages"
 import { GLM_EVALUATION_TEMPERATURE, THINKING_MODEL_TOP_P } from "./sampling"
 import { requiresOpenAIStrictToolSchema } from "./strict-tool-schema"
+import { requiresSerializedOpenAIToolCalls } from "./tool-call-policy"
 
 type Modality = NonNullable<ModelsDev.Model["modalities"]>["input"][number]
 
@@ -1140,15 +1141,22 @@ export namespace ProviderTransform {
     return { [key]: options }
   }
 
-  export function optionsForToolChoice(
+  export function optionsForToolRequest(
     model: ProviderModel,
     options: { [x: string]: any },
-    toolChoice: ToolChoice | undefined,
+    input: {
+      toolChoice: ToolChoice | undefined
+      activeToolCount: number
+    },
   ) {
-    if (!toolChoiceForcesToolCall(toolChoice)) return options
-    if (!hasKimiDashScopeThinkingToolChoiceConflict(model)) return options
-    if (options.enable_thinking !== true) return options
-    return { ...options, enable_thinking: false }
+    let resolved = options
+    if (input.activeToolCount > 0 && requiresSerializedOpenAIToolCalls(model)) {
+      resolved = { ...resolved, parallelToolCalls: false }
+    }
+    if (!toolChoiceForcesToolCall(input.toolChoice)) return resolved
+    if (!hasKimiDashScopeThinkingToolChoiceConflict(model)) return resolved
+    if (resolved.enable_thinking !== true) return resolved
+    return { ...resolved, enable_thinking: false }
   }
 
   function toolChoiceForcesToolCall(toolChoice: ToolChoice | undefined) {
@@ -1406,6 +1414,20 @@ export namespace ProviderTransform {
         continue
       }
       output[key] = strictifyOpenAISchemaNode(value, false)
+    }
+
+    if (
+      input.type === "object" &&
+      input.properties === undefined &&
+      input.propertyNames !== undefined &&
+      input.additionalProperties === false
+    ) {
+      // Zod emits `propertyNames + additionalProperties:false` for
+      // `z.record(..., z.unknown())`, even though the canonical validator
+      // accepts arbitrary JSON values. This provider surface is not declared
+      // strict; preserve the open-record meaning and let the canonical Zod
+      // schema validate/materialize the executed value.
+      output.additionalProperties = true
     }
 
     const properties = input.properties
