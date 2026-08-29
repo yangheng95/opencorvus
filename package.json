@@ -25,6 +25,7 @@
     "docs:check": "bun run ./packages/opencorvus/script/docs/render-api-md.ts --check",
     "check:package-topology": "bun run ./packages/opencorvus/script/check/package-topology.ts",
     "check:module-topology": "bun run ./packages/opencorvus/script/check/module-topology.ts",
+    "check:release-mutation-topology": "bun run ./script/check-release-mutation-topology.ts",
     "check:process-package-publication": "bun run ./script/public-package-release.ts --check",
     "publish:public-packages": "bun run ./script/public-package-release.ts --publish",
     "check:architecture-index": "bun run ./packages/opencorvus/script/check/architecture-index.ts",

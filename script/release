@@ -2,40 +2,49 @@
 
 set -euo pipefail
 
-ARG=${1:-patch}
+RAW_VERSION=${1:?'Usage: ./script/release <x.y.z|vx.y.z>'}
+VERSION=$(bun -e 'import { normalizeReleaseVersion } from "./script/sync-version.ts"; console.log(normalizeReleaseVersion(Bun.argv.at(-1)))' "$RAW_VERSION")
 
-if [[ "$ARG" =~ ^v?[0-9]+\.[0-9]+\.[0-9]+([-.][0-9A-Za-z.-]+)?$ ]]; then
-  VERSION="${ARG#v}"
-else
-  case "$ARG" in
-    patch|minor|major) ;;
-    *)
-      echo "Usage: ./script/release [patch|minor|major|x.y.z|vx.y.z]"
-      exit 1
-      ;;
-  esac
-
-  VERSION=$(bun -e 'const bump = process.argv[2] ?? "patch"
-const pkg = await Bun.file("packages/opencorvus/package.json").json()
-const latest = typeof pkg.version === "string" ? pkg.version.trim().replace(/^v(?=\d)/, "") : ""
-if (!latest) {
-  throw new Error("missing version in packages/opencorvus/package.json")
-}
-const base = latest.split(/[-+]/, 1)[0]
-const [major, minor, patch] = base.split(".").map((item) => Number(item) || 0)
-if (bump === "major") {
-  console.log(`${major + 1}.0.0`)
-  process.exit(0)
-}
-if (bump === "minor") {
-  console.log(`${major}.${minor + 1}.0`)
-  process.exit(0)
-}
-console.log(`${major}.${minor}.${patch + 1}`)' "$ARG")
+if ! git diff --quiet || ! git diff --cached --quiet; then
+  echo "Release dispatch requires a clean tracked worktree and index."
+  exit 1
 fi
 
-echo "Synchronizing versions to $VERSION"
-bun ./script/sync-version.ts "$VERSION"
+BRANCH=$(git symbolic-ref --quiet --short HEAD) || {
+  echo "Release dispatch requires a named branch."
+  exit 1
+}
+UPSTREAM=$(git rev-parse --abbrev-ref --symbolic-full-name '@{upstream}') || {
+  echo "Release dispatch requires an upstream branch."
+  exit 1
+}
+REMOTE=$(git config --get "branch.$BRANCH.remote")
+MERGE_REF=$(git config --get "branch.$BRANCH.merge")
+if [[ -z "$REMOTE" || "$REMOTE" == "." ]]; then
+  echo "Release dispatch requires a remote upstream branch."
+  exit 1
+fi
+if [[ "$MERGE_REF" != refs/heads/* ]]; then
+  echo "Release dispatch requires an upstream branch ref, received $MERGE_REF."
+  exit 1
+fi
+REMOTE_BRANCH=${MERGE_REF#refs/heads/}
+REMOTE_URL=$(git remote get-url "$REMOTE")
+REPOSITORY=$(bun -e 'const value = Bun.argv.at(-1); const match = value?.match(/github\.com[/:]([^/]+\/[^/]+?)(?:\.git)?$/); if (!match) throw new Error(`Remote is not a GitHub repository: ${value}`); console.log(match[1])' "$REMOTE_URL")
+git fetch --quiet "$REMOTE"
 
-echo "Dispatching build.yml for v$VERSION"
-gh workflow run build.yml -f "version=$VERSION"
+HEAD_SHA=$(git rev-parse 'HEAD^{commit}')
+UPSTREAM_SHA=$(git rev-parse '@{upstream}^{commit}')
+if [[ "$HEAD_SHA" != "$UPSTREAM_SHA" ]]; then
+  echo "Release dispatch requires HEAD to equal $UPSTREAM (HEAD=$HEAD_SHA upstream=$UPSTREAM_SHA)."
+  exit 1
+fi
+
+bun ./script/sync-version.ts "$VERSION" --check
+
+echo "Dispatching build.yml for v$VERSION from $REPOSITORY:$REMOTE_BRANCH@$HEAD_SHA"
+gh workflow run build.yml \
+  --repo "$REPOSITORY" \
+  --ref "$REMOTE_BRANCH" \
+  -f "version=$VERSION" \
+  -f "expected_source_sha=$HEAD_SHA"

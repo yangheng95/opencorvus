@@ -96,18 +96,17 @@ Extensions 2 (AVX2).
 Use:
 
 ```bash
-./script/release patch
-./script/release minor
-./script/release major
 ./script/release 0.0.1
 ./script/release v0.0.1
 ```
 
 What it does:
 
-1. Computes the target version
-2. Runs `bun ./script/sync-version.ts <version>`
-3. Dispatches `.github/workflows/build.yml`
+1. Normalizes the explicit version and requires a clean tracked worktree/index on a named branch with a remote upstream
+2. Fetches that upstream, requires the local `HEAD` to be its exact commit, and runs the read-only `bun ./script/sync-version.ts <version> --check`
+3. Resolves the upstream's exact GitHub repository and remote merge branch, then dispatches `.github/workflows/build.yml` with both `--repo <owner/repository>` and `--ref <remote-branch>` plus the verified `expected_source_sha=<HEAD>` fence
+
+Version generation remains an explicit preparation step through `bun run version:bump <version>` followed by review, commit and push. The workflow rejects a manual dispatch if its checkout no longer equals `expected_source_sha`; the dispatcher never writes version projections or chooses a newer semantic version on the operator's behalf.
 
 ## Local Overlay Build
 

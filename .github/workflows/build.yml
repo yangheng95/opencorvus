@@ -9,6 +9,9 @@ on:
       version:
         description: "Release version (for example 0.0.1 or v0.0.1)."
         required: true
+      expected_source_sha:
+        description: "Exact commit SHA already reviewed and pushed for this release."
+        required: true
 
 jobs:
   prepare:
@@ -53,13 +56,26 @@ jobs:
           echo "update-channel=$UPDATE_CHANNEL" >> "$GITHUB_OUTPUT"
           echo "source-sha=$SOURCE_SHA" >> "$GITHUB_OUTPUT"
 
-      - name: Sync repo versions
-        shell: bash
-        run: bun ./script/sync-version.ts "${{ steps.meta.outputs.version }}"
-
       - name: Verify version alignment
         shell: bash
         run: bun ./script/sync-version.ts "${{ steps.meta.outputs.version }}" --check
+
+      - name: Verify immutable release identity
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ steps.meta.outputs.version }}
+          SOURCE_SHA: ${{ steps.meta.outputs.source-sha }}
+          EVENT_NAME: ${{ github.event_name }}
+          EXPECTED_SOURCE_SHA: ${{ inputs.expected_source_sha || '' }}
+          IDENTITY_MODE: probe
+        run: bun ./script/verify-release-identity.ts
+
+      - name: Verify frozen dependency graph
+        shell: bash
+        env:
+          HUSKY: "0"
+        run: bun install --frozen-lockfile --no-progress --ignore-scripts
 
   package-overlay:
     name: overlay (${{ matrix.platform }})
@@ -89,8 +105,8 @@ jobs:
 
       - uses: ./.github/actions/setup-bun
 
-      - name: Sync repo versions
-        run: bun ./script/sync-version.ts "${{ needs.prepare.outputs.version }}"
+      - name: Verify version alignment
+        run: bun ./script/sync-version.ts "${{ needs.prepare.outputs.version }}" --check
 
       - name: Install Linux system dependencies
         if: runner.os == 'Linux'
@@ -188,8 +204,8 @@ jobs:
         with:
           prepare_compile_runtimes: "true"
 
-      - name: Sync repo versions
-        run: bun ./script/sync-version.ts "${{ needs.prepare.outputs.version }}"
+      - name: Verify version alignment
+        run: bun ./script/sync-version.ts "${{ needs.prepare.outputs.version }}" --check
 
       - name: Install Linux CLI runtime dependencies
         if: runner.os == 'Linux'
@@ -294,10 +310,53 @@ jobs:
         with:
           path: /tmp/release-assets
 
+      - name: Claim immutable release identity
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ needs.prepare.outputs.version }}
+          SOURCE_SHA: ${{ needs.prepare.outputs.source-sha }}
+          EVENT_NAME: ${{ github.event_name }}
+          EXPECTED_SOURCE_SHA: ${{ inputs.expected_source_sha || '' }}
+          IDENTITY_MODE: claim
+        run: bun ./script/verify-release-identity.ts
+
+      - name: Claim draft publication owner
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ needs.prepare.outputs.version }}
+          SOURCE_SHA: ${{ needs.prepare.outputs.source-sha }}
+          EVENT_NAME: ${{ github.event_name }}
+          EXPECTED_SOURCE_SHA: ${{ inputs.expected_source_sha || '' }}
+          RELEASE_RUN_ID: ${{ github.run_id }}
+          PRERELEASE: ${{ needs.prepare.outputs.prerelease }}
+          IDENTITY_MODE: claim-publication
+        run: bun ./script/verify-release-identity.ts
+
+      - name: Verify upload release identity
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ needs.prepare.outputs.version }}
+          SOURCE_SHA: ${{ needs.prepare.outputs.source-sha }}
+          EVENT_NAME: ${{ github.event_name }}
+          EXPECTED_SOURCE_SHA: ${{ inputs.expected_source_sha || '' }}
+          IDENTITY_MODE: verify-owned
+        run: bun ./script/verify-release-identity.ts
+
+      - name: Verify draft publication owner
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ needs.prepare.outputs.version }}
+          SOURCE_SHA: ${{ needs.prepare.outputs.source-sha }}
+          EVENT_NAME: ${{ github.event_name }}
+          EXPECTED_SOURCE_SHA: ${{ inputs.expected_source_sha || '' }}
+          RELEASE_RUN_ID: ${{ github.run_id }}
+          PRERELEASE: ${{ needs.prepare.outputs.prerelease }}
+          IDENTITY_MODE: verify-publication
+        run: bun ./script/verify-release-identity.ts
+
       - name: Upload release assets to GitHub Release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SOURCE_SHA: ${{ needs.prepare.outputs.source-sha }}
         run: |
           VERSION="${{ needs.prepare.outputs.version }}"
           UPLOAD_DIR="$(mktemp -d)"
@@ -316,21 +375,6 @@ jobs:
           )
           mapfile -t FILES < <(find "$UPLOAD_DIR" -type f | sort)
           printf '%s\n' "${FILES[@]}"
-          if ! gh release view "v${VERSION}" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
-            # --target pins the tag to the commit prepare resolved, which is the tree these
-            # binaries were actually built from. Without it `gh release create` tags whatever the
-            # default branch points at when this step runs — an hour of packaging later — so any
-            # merge during a release silently produced a tag that disagreed with the payload
-            # `source_sha` the deploy carries, and the website's immutable-source guard refused a
-            # Release whose binaries were fine. Observed on v0.0.48-beta.
-            gh release create "v${VERSION}" \
-              --draft \
-              --target "$SOURCE_SHA" \
-              --prerelease="${{ needs.prepare.outputs.prerelease }}" \
-              --title "v${VERSION}" \
-              --generate-notes \
-              --repo "$GITHUB_REPOSITORY"
-          fi
           gh release upload "v${VERSION}" "${FILES[@]}" --clobber --repo "$GITHUB_REPOSITORY"
 
       - name: Report matrix completeness
@@ -367,30 +411,65 @@ jobs:
       - publish-release-assets
     if: ${{ !cancelled() && needs.publish-release-assets.result == 'success' && needs.publish-release-assets.outputs.complete == 'true' }}
     runs-on: ubuntu-latest
+    concurrency:
+      group: opencorvus-desktop-update-${{ needs.prepare.outputs.update-channel }}
+      queue: max
+      cancel-in-progress: false
     permissions:
       contents: write
     steps:
-      - name: Publish verified draft
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - uses: ./.github/actions/setup-bun
+        with:
+          install_dependencies: "false"
+
+      - name: Verify public release identity
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VERSION: ${{ needs.prepare.outputs.version }}
+          SOURCE_SHA: ${{ needs.prepare.outputs.source-sha }}
+          EVENT_NAME: ${{ github.event_name }}
+          EXPECTED_SOURCE_SHA: ${{ inputs.expected_source_sha || '' }}
+          IDENTITY_MODE: verify-owned
+        run: bun ./script/verify-release-identity.ts
+
+      - name: Settle public release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ needs.prepare.outputs.version }}
+          SOURCE_SHA: ${{ needs.prepare.outputs.source-sha }}
+          EVENT_NAME: ${{ github.event_name }}
+          EXPECTED_SOURCE_SHA: ${{ inputs.expected_source_sha || '' }}
+          RELEASE_RUN_ID: ${{ github.run_id }}
           PRERELEASE: ${{ needs.prepare.outputs.prerelease }}
-          UPDATE_CHANNEL: ${{ needs.prepare.outputs.update-channel }}
+          IDENTITY_MODE: settle-publication
+        run: bun ./script/verify-release-identity.ts
+
+      - name: Download immutable update manifest
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ needs.prepare.outputs.version }}
         run: |
-          gh release edit "v${VERSION}" --draft=false --prerelease="${PRERELEASE}" --repo "$GITHUB_REPOSITORY"
-          CHANNEL_TAG="desktop-update-${UPDATE_CHANNEL}"
-          if ! gh release view "$CHANNEL_TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
-            gh release create "$CHANNEL_TAG" \
-              --prerelease \
-              --title "OpenCorvus ${UPDATE_CHANNEL} desktop update channel" \
-              --notes "Mutable signed desktop update metadata. Installers remain in immutable versioned releases." \
-              --repo "$GITHUB_REPOSITORY"
-          fi
-          CHANNEL_DIR="$(mktemp -d)"
-          gh release download "v${VERSION}" --pattern latest.json --dir "$CHANNEL_DIR" --repo "$GITHUB_REPOSITORY"
-          gh release upload "$CHANNEL_TAG" "$CHANNEL_DIR/latest.json" --clobber --repo "$GITHUB_REPOSITORY"
+          mkdir -p /tmp/version-update-channel
+          gh release download "v${VERSION}" \
+            --pattern latest.json \
+            --dir /tmp/version-update-channel \
+            --repo "$GITHUB_REPOSITORY"
+
+      - name: Settle monotonic desktop update channel
+        id: update-channel
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ needs.prepare.outputs.version }}
+          UPDATE_CHANNEL: ${{ needs.prepare.outputs.update-channel }}
+          CANDIDATE_MANIFEST: /tmp/version-update-channel/latest.json
+        run: bun ./script/settle-desktop-update-channel.ts
 
       - name: Dispatch public download page deployment
+        if: ${{ steps.update-channel.outputs.promoted == 'true' }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VERSION: ${{ needs.prepare.outputs.version }}

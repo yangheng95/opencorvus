@@ -45,11 +45,12 @@ routing, context management, memory, permission enforcement, and recovery. Long-
 capability is a property of that whole system rather than of the model — a capable model
 inside a harness that loses task state still stops short.
 
-OpenCorvus is that harness, already assembled, and aimed at work that runs long. Install
-it and you get a streaming agent loop across five primary roles, 43 built-in tools, 87
-model providers, orchestration that survives a restart, a durable permission authority,
-project and session memory, automatic context compaction, and a catalog of 119 inspectable
-Expert Squads — working on first launch.
+OpenCorvus is that harness, already assembled, and aimed at work that runs long. It ships
+a streaming agent loop across five primary roles, 43 built-in tools, a catalog of 87 model
+providers, orchestration that survives a restart, a durable permission authority, project
+and session memory, automatic context compaction, and 119 inspectable Expert Squads.
+Before an Agent can run, you explicitly select a model and configure a reachable provider;
+the catalog is capability metadata, not a hidden default credential or model fallback.
 
 Three things break long work, and each has an answer here: **runs that stop short**,
 **results you cannot check**, and **workflows that never improve**. Combining several
@@ -90,11 +91,11 @@ deal of open source, Bun, the AI SDK, SolidJS and Tauri among them.
 
 ## Where long-horizon work breaks
 
-| It breaks here | What answers it |
-| -------------- | --------------- |
-| **The run stops short.** A step is skipped, a process dies, or a Task ends terminal with the goal half met. | Requirements emit `REQ-N` entries carrying their own acceptance conditions and explicit non-goals, and a squad's workflow declares what depends on what. Physical ownership is an append-only lease: when a process disappears, the reconciler terminalizes the abandoned Turn at the lease's expiry — a deterministic timestamp — and only then acquires a successor. Every accepted input passes one total-order reduction in which each state has a name. |
-| **The result is not dependably usable.** Success is reported, but what arrives is a summary you cannot check. | Handoffs are typed Artifacts with provenance and exact locators, read across a causal boundary that only exposes completed prior-step output. The host records file changes and command results independently of any agent's account of them. Fact-checking, integrity review, and visual QA run as named stages with their own agents, and a qualified Work Artifact — today the editable presentation profile — is delivered when it has been rendered, inspected, and given a validation receipt. |
-| **The workflow never improves.** The tenth run repeats the mistake of the first, because the correction died with the conversation. | Tell a squad what you actually wanted and it drafts a revision from what you said; you accept it, and the receipt is how you undo it. Or run a measured Evolution Lab campaign. Nothing installs without your confirmation. |
+| It breaks here                                                                                                                      | What answers it                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| ----------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **The run stops short.** A step is skipped, a process dies, or a Task ends terminal with the goal half met.                         | Requirements emit `REQ-N` entries carrying their own acceptance conditions and explicit non-goals, and a squad's workflow declares what depends on what. Physical ownership is an append-only lease: when a process disappears, the reconciler terminalizes the abandoned Turn at the lease's expiry — a deterministic timestamp — and only then acquires a successor. Every accepted input passes one total-order reduction in which each state has a name.                                         |
+| **The result is not dependably usable.** Success is reported, but what arrives is a summary you cannot check.                       | Handoffs are typed Artifacts with provenance and exact locators, read across a causal boundary that only exposes completed prior-step output. The host records file changes and command results independently of any agent's account of them. Fact-checking, integrity review, and visual QA run as named stages with their own agents, and a qualified Work Artifact — today the editable presentation profile — is delivered when it has been rendered, inspected, and given a validation receipt. |
+| **The workflow never improves.** The tenth run repeats the mistake of the first, because the correction died with the conversation. | Tell a squad what you actually wanted and it drafts a revision from what you said; you accept it, and the receipt is how you undo it. Or run a measured Evolution Lab campaign. Nothing installs without your confirmation.                                                                                                                                                                                                                                                                          |
 
 Terminal is not final either. A Task that reached `completed`, `failed`, or `cancelled`
 reopens when you send it a message, at a fresh execution occurrence, with the prior
@@ -120,14 +121,14 @@ lifetime. Composition happens at the Mission level and ownership stays at the Ta
 
 **6 Expert Squads · 33 named roles**, all shipping in the catalog today.
 
-|    | Stage   | Expert Squad                                                                                          | Roles | Hands on                                                                                                                 |
-| -- | ------- | ----------------------------------------------------------------------------------------------------- | ----- | ------------------------------------------------------------------------------------------------------------------------ |
-| 01 | Frame   | [Scientific Research Design](https://opencorvus.com/market/builtin/scientific-research-design/)        | 4     | Evidence landscape, competing hypotheses, and a rigor-and-ethics read, joined into one decision register.                 |
-| 02 | Source  | [Deep Research](https://opencorvus.com/market/builtin/deep-research/)                                  | 6     | Multi-perspective discovery and curated evidence, with an independent citation review between the draft and the report.   |
-| 03 | Analyze | [Data Analysis & Business Insights](https://opencorvus.com/market/builtin/data-analysis/)              | 7     | Metric reconciliation and parallel performance and segment work, checked by a role that did not run the analysis.         |
-| 04 | Draft   | [Research Studio](https://opencorvus.com/market/builtin/research-studio/)                              | 5     | Durable evidence collection, reproducible analysis, post-computation fact-checking, and template-driven delivery.         |
-| 05 | Review  | [Academic Paper Review](https://opencorvus.com/market/builtin/academic-paper-review/)                  | 8     | Literature, novelty, logic, methods and figures — plus a citation-and-hallucination auditor separate from all of them.    |
-| 06 | Package | [Office Delivery](https://opencorvus.com/market/builtin/office-delivery/)                              | 3     | The submission deck built from the same sources, with a real chart and a validation receipt.                              |
+|     | Stage   | Expert Squad                                                                                    | Roles | Hands on                                                                                                                |
+| --- | ------- | ----------------------------------------------------------------------------------------------- | ----- | ----------------------------------------------------------------------------------------------------------------------- |
+| 01  | Frame   | [Scientific Research Design](https://opencorvus.com/market/builtin/scientific-research-design/) | 4     | Evidence landscape, competing hypotheses, and a rigor-and-ethics read, joined into one decision register.               |
+| 02  | Source  | [Deep Research](https://opencorvus.com/market/builtin/deep-research/)                           | 6     | Multi-perspective discovery and curated evidence, with an independent citation review between the draft and the report. |
+| 03  | Analyze | [Data Analysis & Business Insights](https://opencorvus.com/market/builtin/data-analysis/)       | 7     | Metric reconciliation and parallel performance and segment work, checked by a role that did not run the analysis.       |
+| 04  | Draft   | [Research Studio](https://opencorvus.com/market/builtin/research-studio/)                       | 5     | Durable evidence collection, reproducible analysis, post-computation fact-checking, and template-driven delivery.       |
+| 05  | Review  | [Academic Paper Review](https://opencorvus.com/market/builtin/academic-paper-review/)           | 8     | Literature, novelty, logic, methods and figures — plus a citation-and-hallucination auditor separate from all of them.  |
+| 06  | Package | [Office Delivery](https://opencorvus.com/market/builtin/office-delivery/)                       | 3     | The submission deck built from the same sources, with a real chart and a validation receipt.                            |
 
 Prior-art evidence, live-page observation, or a second language extend the same chain.
 Adding [Patent Landscape and Prior Art](https://opencorvus.com/market/builtin/patent-landscape-prior-art/) (4),
@@ -143,11 +144,11 @@ long-running team cannot have, however carefully it is prompted.
 
 ### Other combinations that already ship
 
-| Combination                   | Chain                                                                                                                            | Roles |
-| ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| Deal due diligence            | Mergers and Acquisitions Due Diligence → Forensic Accounting Investigations → Commercial Legal → Tax Compliance → Internal Audit Control Assurance | 29 |
-| Incident to written knowledge | Service Reliability Incident Operations → Digital Forensics Incident Investigation → Review & Debug → Knowledge Base Operations   | 18    |
-| Launching something           | Product Management → Marketing & Growth Strategy → SEO & Generative Engine Optimization → Product Video Production → Localization & Adaptation | 26 |
+| Combination                   | Chain                                                                                                                                              | Roles |
+| ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| Deal due diligence            | Mergers and Acquisitions Due Diligence → Forensic Accounting Investigations → Commercial Legal → Tax Compliance → Internal Audit Control Assurance | 29    |
+| Incident to written knowledge | Service Reliability Incident Operations → Digital Forensics Incident Investigation → Review & Debug → Knowledge Base Operations                    | 18    |
+| Launching something           | Product Management → Marketing & Growth Strategy → SEO & Generative Engine Optimization → Product Video Production → Localization & Adaptation     | 26    |
 
 Split where a delivery can be independently owned, accepted, or depended on. Splitting for
 its own sake produces coordination overhead with no owner. See
@@ -168,7 +169,7 @@ candidate is refused — appending leaves the older, more specific instruction i
 is the usual reason a revision appears to change nothing.
 
 **From measurement.** The Evolution Lab squad freezes the target revision, cases, scorers,
-environment, arm order, budget, and mutation surface *before* any candidate is authored,
+environment, arm order, budget, and mutation surface _before_ any candidate is authored,
 then runs the arms and produces an integrity review and a comparison recommendation as
 typed, persisted Artifacts.
 
@@ -181,34 +182,34 @@ listed, and restoration is the undo against that list: it cites one earlier muta
 and returns the target to a revision that receipt itself witnessed. See
 [How squads evolve](https://opencorvus.com/expert-squads/evolution/).
 
-## What runs on first launch
+## What ships
 
-| Capability          | What ships                                                                                  |
-| ------------------- | ------------------------------------------------------------------------------------------- |
-| **Model providers** | 87 providers and 2,579 models resolved from one bundled catalog, including local runtimes.  |
-| **Tools**           | 43 built-in tools, with Browser and Computer control available as default capability blocks. |
-| **Expert Squads**   | 119 in the public catalog — 4 embedded and ready immediately, 115 importable.                |
-| **Agent roles**     | Five primary roles: `coding`, `chat`, `work`, `control`, and `mission`.                     |
-| **Chat channels**   | Slack, Discord, Telegram, Feishu, DingTalk, WeCom, WhatsApp, Line, Signal, Matrix, Mattermost, Microsoft Teams, and Google Chat. |
-| **Surfaces**        | Desktop application, HTTP API with Server-Sent Events (SSE), and scheduled automation.      |
+| Capability          | What ships                                                                                                                                                                    |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Model providers** | A bundled catalog resolves 87 providers and 2,579 models, including local runtimes; running an Agent requires an explicitly selected model and configured reachable provider. |
+| **Tools**           | 43 built-in tools, with Browser and Computer control available as default capability blocks.                                                                                  |
+| **Expert Squads**   | 119 in the public catalog — 4 embedded and ready immediately, 115 importable.                                                                                                 |
+| **Agent roles**     | Five primary roles: `coding`, `chat`, `work`, `control`, and `mission`.                                                                                                       |
+| **Chat channels**   | Slack, Discord, Telegram, Feishu, DingTalk, WeCom, WhatsApp, Line, Signal, Matrix, Mattermost, Microsoft Teams, and Google Chat.                                              |
+| **Surfaces**        | Desktop application, HTTP API with Server-Sent Events (SSE), and scheduled automation.                                                                                        |
 
 ## The harness, layer by layer
 
-Every layer runs the moment you install, and every layer is a configuration surface.
+Every layer ships as part of the harness and is a configuration surface. Actual Agent work starts only after a model and reachable provider are explicitly configured.
 
-| Layer                 | Ships working                                                                                   | Replace via                              |
-| --------------------- | ----------------------------------------------------------------------------------------------- | ---------------------------------------- |
-| **Agent loop**        | Five primary roles on a streaming loop with typed tool results.                                 | `agent`, prompt overrides                |
-| **Tools**             | 43 built-in tools plus Model Context Protocol (MCP) servers and plugins.                        | `tools`, `mcp`, `plugin`                 |
-| **Models**            | 87 providers, 2,579 models, one bundled catalog.                                                | `model`, `small_model`, `provider`       |
-| **Context**           | Automatic compaction and per-turn context budgeting keep long runs inside the window.           | model and budget configuration           |
-| **Memory**            | Project and session memory with search, organization, and explicit injection.                   | `instructions`, memory configuration     |
-| **Permission**        | Every side effect passes one durable allow / ask / deny authority before it runs.                | `permission` rules, shell scope          |
-| **Expert Squads**     | 119 inspectable squads; a Task pins one exact revision and cannot silently switch it.            | `expert_squads`, author your own         |
-| **Durable execution** | Process leases, an event log, and a reconciler resume owned work after a restart.               | Platform guarantee                       |
-| **Verification**      | Integrity review, fact-checking, and visual QA run as named stages.                             | acceptance configuration                 |
-| **Evidence**          | Host observations record file changes and command results apart from any agent summary.         | Platform guarantee                       |
-| **Surfaces**          | Desktop, HTTP API with SSE, 13 chat channels, scheduled automation.                             | SDK, plugin API, Agent Client Protocol   |
+| Layer                 | Included with the harness                                                                            | Replace via                            |
+| --------------------- | ---------------------------------------------------------------------------------------------------- | -------------------------------------- |
+| **Agent loop**        | Five primary roles on a streaming loop with typed tool results.                                      | `agent`, prompt overrides              |
+| **Tools**             | 43 built-in tools plus Model Context Protocol (MCP) servers and plugins.                             | `tools`, `mcp`, `plugin`               |
+| **Models**            | 87 providers and 2,579 models in one bundled catalog; no model or credential is selected implicitly. | `model`, `small_model`, `provider`     |
+| **Context**           | Automatic compaction and per-turn context budgeting keep long runs inside the window.                | model and budget configuration         |
+| **Memory**            | Project and session memory with search, organization, and explicit injection.                        | `instructions`, memory configuration   |
+| **Permission**        | Every side effect passes one durable allow / ask / deny authority before it runs.                    | `permission` rules, shell scope        |
+| **Expert Squads**     | 119 inspectable squads; a Task pins one exact revision and cannot silently switch it.                | `expert_squads`, author your own       |
+| **Durable execution** | Process leases, an event log, and a reconciler resume owned work after a restart.                    | Platform guarantee                     |
+| **Verification**      | Integrity review, fact-checking, and visual QA run as named stages.                                  | acceptance configuration               |
+| **Evidence**          | Host observations record file changes and command results apart from any agent summary.              | Platform guarantee                     |
+| **Surfaces**          | Desktop, HTTP API with SSE, 13 chat channels, scheduled automation.                                  | SDK, plugin API, Agent Client Protocol |
 
 ## Quick Start
 
@@ -287,15 +288,15 @@ curl -N http://127.0.0.1:7878/task/<task_id>/events
 The shipped defaults are a starting point, not a boundary. Configuration lives in one
 project file; everything below is opt-in.
 
-| You want to…                          | Configure                                                            |
-| ------------------------------------- | -------------------------------------------------------------------- |
-| Use a different model or provider     | `model`, `small_model`, `provider`                                   |
-| Add or restrict capabilities          | `tools`, `mcp`, `plugin`                                             |
-| Change who may do what                | `permission` rules (allow / ask / deny) and shell scope              |
-| Redefine an agent's behavior          | `agent` with `prompt` or `prompt_append`                             |
-| Swap or override an Expert Squad      | `expert_squads`                                                      |
-| Add project context or house rules    | `instructions`                                                       |
-| Add repeatable operations             | `command`, `formatter`, `keybinds`                                   |
+| You want to…                       | Configure                                               |
+| ---------------------------------- | ------------------------------------------------------- |
+| Use a different model or provider  | `model`, `small_model`, `provider`                      |
+| Add or restrict capabilities       | `tools`, `mcp`, `plugin`                                |
+| Change who may do what             | `permission` rules (allow / ask / deny) and shell scope |
+| Redefine an agent's behavior       | `agent` with `prompt` or `prompt_append`                |
+| Swap or override an Expert Squad   | `expert_squads`                                         |
+| Add project context or house rules | `instructions`                                          |
+| Add repeatable operations          | `command`, `formatter`, `keybinds`                      |
 
 Beyond configuration, three extension paths keep the harness itself open:
 
@@ -363,14 +364,14 @@ and [`operations`](./skills/opencorvus/references/operations.md) references.
 
 ## Core model
 
-| Object           | Role                                                                                                                       |
-| ---------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| Mission          | Coordinates an outcome that spans multiple Tasks and records their dependencies.                                           |
+| Object           | Role                                                                                                                        |
+| ---------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| Mission          | Coordinates an outcome that spans multiple Tasks and records their dependencies.                                            |
 | Task             | Owns one project-scoped unit of work, one fixed Expert Squad, any selected workflow, its Sessions, and lifecycle decisions. |
-| Expert Squad     | Packages an agent roster, instructions, Skills, tools, MCP access, and any declared workflows.                             |
-| Workflow         | Declares the agents that run for a Task and their dependency order.                                                        |
-| Artifact         | Stores a typed output or file snapshot with provenance so another agent or Task can read the exact result.                 |
-| Host observation | Records facts such as file changes and command results independently of an agent's summary.                                |
+| Expert Squad     | Packages an agent roster, instructions, Skills, tools, MCP access, and any declared workflows.                              |
+| Workflow         | Declares the agents that run for a Task and their dependency order.                                                         |
+| Artifact         | Stores a typed output or file snapshot with provenance so another agent or Task can read the exact result.                  |
+| Host observation | Records facts such as file changes and command results independently of an agent's summary.                                 |
 
 For a Task, the selected Expert Squad remains fixed; a selected workflow is also fixed.
 Workers stream messages and tool calls, publish Artifacts when their contract requires

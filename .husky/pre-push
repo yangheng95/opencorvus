@@ -26,6 +26,7 @@ bun run check:architecture-index
 bun run check:package-topology
 printf '%s\n' "$pre_push_refs" | while read -r local_ref local_sha remote_ref remote_sha; do
   if [ -n "$local_sha" ] && [ "$local_sha" != "0000000000000000000000000000000000000000" ]; then
+    bun run check:release-mutation-topology --treeish "$local_sha"
     bun run check:module-topology --treeish "$local_sha"
   fi
 done

@@ -2,16 +2,13 @@
 
 import fs from "node:fs/promises"
 import path from "node:path"
+import {
+  canonicalDesktopUpdateManifestVersion,
+  canonicalDesktopUpdatePublicationDate,
+  DESKTOP_UPDATE_PLATFORMS,
+  type DesktopUpdateManifest,
+} from "./desktop-update-manifest"
 import { overlayUpdaterContract, updaterSignatureName } from "./release-asset-contract"
-import { releaseVersionMetadata } from "./sync-version"
-
-export const DESKTOP_UPDATE_PLATFORMS = [
-  "linux-x64",
-  "linux-arm64",
-  "darwin-x64",
-  "darwin-arm64",
-  "windows-x64",
-] as const
 
 type DesktopUpdatePlatform = (typeof DESKTOP_UPDATE_PLATFORMS)[number]
 
@@ -21,25 +18,6 @@ export interface DesktopUpdateManifestInput {
   repository: string
   publicationDate: string
   notes?: string
-}
-
-export interface DesktopUpdateManifest {
-  version: string
-  notes: string
-  pub_date: string
-  platforms: Record<string, { url: string; signature: string }>
-}
-
-function normalizedVersion(version: string): string {
-  return releaseVersionMetadata(version).version
-}
-
-function publicationDate(value: string): string {
-  const parsed = new Date(value)
-  if (!Number.isFinite(parsed.valueOf()) || parsed.toISOString() !== value) {
-    throw new Error(`Desktop update publication date must be canonical RFC 3339 UTC: ${value}`)
-  }
-  return value
 }
 
 /**
@@ -59,8 +37,8 @@ function singleAssetOrAbsent(files: readonly string[], pattern: RegExp, label: s
 }
 
 export async function generateDesktopUpdateManifest(input: DesktopUpdateManifestInput): Promise<DesktopUpdateManifest> {
-  const version = normalizedVersion(input.version)
-  const pubDate = publicationDate(input.publicationDate)
+  const version = canonicalDesktopUpdateManifestVersion(input.version)
+  const pubDate = canonicalDesktopUpdatePublicationDate(input.publicationDate)
   const files = await fs.readdir(input.directory)
   const platforms: DesktopUpdateManifest["platforms"] = {}
 

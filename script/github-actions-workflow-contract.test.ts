@@ -3,6 +3,8 @@ import fs from "node:fs/promises"
 import path from "node:path"
 
 type WorkflowStep = {
+  id?: string
+  if?: string
   name?: string
   shell?: string
   uses?: string
@@ -12,6 +14,7 @@ type WorkflowStep = {
 }
 
 type WorkflowJob = {
+  concurrency?: Record<string, unknown>
   if?: string
   needs?: string | string[]
   outputs?: Record<string, string>
@@ -57,6 +60,7 @@ describe("GitHub Actions workflow contract", () => {
       { file: "build.yml", job: "package-overlay", uses: "actions/checkout@v6" },
       { file: "build.yml", job: "package-cli", uses: "actions/checkout@v6" },
       { file: "build.yml", job: "publish-release-assets", uses: "actions/checkout@v6" },
+      { file: "build.yml", job: "publish-release", uses: "actions/checkout@v6" },
       { file: "codeql.yml", job: "analyze", uses: "actions/checkout@v6" },
       {
         file: "deploy-opencorvus-com.yml",
@@ -108,28 +112,121 @@ describe("GitHub Actions workflow contract", () => {
     }
   })
 
-  test("tags the Release at the commit its binaries were built from", async () => {
+  test("dispatches the canonical release workflow from the exact checked upstream source", async () => {
+    const dispatcher = await Bun.file(path.join(import.meta.dir, "release")).text()
+    const commands = dispatcher
+      .split(/\r?\n/)
+      .map((line) => line.trim())
+      .filter((line) =>
+        [
+          'git fetch --quiet "$REMOTE"',
+          "HEAD_SHA=$(git rev-parse 'HEAD^{commit}')",
+          "UPSTREAM_SHA=$(git rev-parse '@{upstream}^{commit}')",
+          'bun ./script/sync-version.ts "$VERSION" --check',
+          "gh workflow run build.yml \\",
+          '--repo "$REPOSITORY" \\',
+          '--ref "$REMOTE_BRANCH" \\',
+          '-f "expected_source_sha=$HEAD_SHA"',
+        ].includes(line),
+      )
+    expect(commands).toEqual([
+      'git fetch --quiet "$REMOTE"',
+      "HEAD_SHA=$(git rev-parse 'HEAD^{commit}')",
+      "UPSTREAM_SHA=$(git rev-parse '@{upstream}^{commit}')",
+      'bun ./script/sync-version.ts "$VERSION" --check',
+      "gh workflow run build.yml \\",
+      '--repo "$REPOSITORY" \\',
+      '--ref "$REMOTE_BRANCH" \\',
+      '-f "expected_source_sha=$HEAD_SHA"',
+    ])
+  })
+
+  test("atomically owns the Release tag and draft writer at the commit its binaries were built from", async () => {
     /*
-     * prepare freezes source-sha at the start of the run and the release dispatch carries it, but
-     * `gh release create` without --target tags whatever the default branch points at when that
-     * step runs — an hour of packaging later. On v0.0.48-beta two website commits merged during
-     * the build, so the tag landed on one commit while the dispatch payload named another, and
-     * deploy-opencorvus-com's immutable-source job refused a Release whose binaries were correct.
+     * prepare freezes source-sha at the start of the run. Two workflow dispatches can race after
+     * prepare has observed the same version as available, including when both use the same source.
+     * The publication boundary therefore atomically creates the Git ref and rereads its canonical
+     * target, then atomically assigns the draft to exactly one workflow-run receipt.
      *
-     * Both halves have to name the same commit, so both are pinned here.
+     * Upload and public publication each verify both authorities again before mutation.
      */
     const workflow = await readWorkflow("build.yml")
-    const stage = (workflow.jobs?.["publish-release-assets"]?.steps ?? []).find(
-      (step: { name?: string }) => step.name === "Upload release assets to GitHub Release",
+    const assetSteps = workflow.jobs?.["publish-release-assets"]?.steps ?? []
+    const claim = assetSteps.find((step: { name?: string }) => step.name === "Claim immutable release identity")
+    const claimPublication = assetSteps.find((step: { name?: string }) => step.name === "Claim draft publication owner")
+    const verifyUpload = assetSteps.find((step: { name?: string }) => step.name === "Verify upload release identity")
+    const verifyUploadPublication = assetSteps.find(
+      (step: { name?: string }) => step.name === "Verify draft publication owner",
     )
+    const stage = assetSteps.find((step: { name?: string }) => step.name === "Upload release assets to GitHub Release")
 
+    expect(claim?.env).toEqual({
+      GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}",
+      VERSION: "${{ needs.prepare.outputs.version }}",
+      SOURCE_SHA: "${{ needs.prepare.outputs.source-sha }}",
+      EVENT_NAME: "${{ github.event_name }}",
+      EXPECTED_SOURCE_SHA: "${{ inputs.expected_source_sha || '' }}",
+      IDENTITY_MODE: "claim",
+    })
+    expect(claimPublication?.env).toEqual({
+      GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}",
+      VERSION: "${{ needs.prepare.outputs.version }}",
+      SOURCE_SHA: "${{ needs.prepare.outputs.source-sha }}",
+      EVENT_NAME: "${{ github.event_name }}",
+      EXPECTED_SOURCE_SHA: "${{ inputs.expected_source_sha || '' }}",
+      RELEASE_RUN_ID: "${{ github.run_id }}",
+      PRERELEASE: "${{ needs.prepare.outputs.prerelease }}",
+      IDENTITY_MODE: "claim-publication",
+    })
+    expect(verifyUpload?.env).toEqual({ ...claim?.env, IDENTITY_MODE: "verify-owned" })
+    expect(verifyUploadPublication?.env).toEqual({
+      ...claimPublication?.env,
+      IDENTITY_MODE: "verify-publication",
+    })
+    expect(assetSteps.indexOf(claim!)).toBeLessThan(assetSteps.indexOf(claimPublication!))
+    expect(assetSteps.indexOf(claimPublication!)).toBeLessThan(assetSteps.indexOf(verifyUpload!))
+    expect(assetSteps.indexOf(verifyUpload!)).toBeLessThan(assetSteps.indexOf(verifyUploadPublication!))
+    expect(assetSteps.indexOf(verifyUploadPublication!)).toBeLessThan(assetSteps.indexOf(stage!))
     expect(stage, "build.yml lost its Release upload step").toBeDefined()
-    expect(stage.env?.SOURCE_SHA).toBe("${{ needs.prepare.outputs.source-sha }}")
-    expect(stage.run).toContain('--target "$SOURCE_SHA"')
+    expect(stage.run).toContain('gh release upload "v${VERSION}" "${FILES[@]}" --clobber')
 
-    const dispatch = (workflow.jobs?.["publish-release"]?.steps ?? []).find(
+    const publicationSteps = workflow.jobs?.["publish-release"]?.steps ?? []
+    const verifyPublic = publicationSteps.find(
+      (step: { name?: string }) => step.name === "Verify public release identity",
+    )
+    const settlePublic = publicationSteps.find((step: { name?: string }) => step.name === "Settle public release")
+    expect(verifyPublic?.env).toEqual({
+      GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}",
+      VERSION: "${{ needs.prepare.outputs.version }}",
+      SOURCE_SHA: "${{ needs.prepare.outputs.source-sha }}",
+      EVENT_NAME: "${{ github.event_name }}",
+      EXPECTED_SOURCE_SHA: "${{ inputs.expected_source_sha || '' }}",
+      IDENTITY_MODE: "verify-owned",
+    })
+    expect(settlePublic?.env).toEqual({
+      GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}",
+      VERSION: "${{ needs.prepare.outputs.version }}",
+      SOURCE_SHA: "${{ needs.prepare.outputs.source-sha }}",
+      EVENT_NAME: "${{ github.event_name }}",
+      EXPECTED_SOURCE_SHA: "${{ inputs.expected_source_sha || '' }}",
+      RELEASE_RUN_ID: "${{ github.run_id }}",
+      PRERELEASE: "${{ needs.prepare.outputs.prerelease }}",
+      IDENTITY_MODE: "settle-publication",
+    })
+    const immutableManifest = publicationSteps.find(
+      (step: { name?: string }) => step.name === "Download immutable update manifest",
+    )
+    const settleChannel = publicationSteps.find(
+      (step: { name?: string }) => step.name === "Settle monotonic desktop update channel",
+    )
+    expect(publicationSteps.indexOf(verifyPublic!)).toBeLessThan(publicationSteps.indexOf(settlePublic!))
+    expect(publicationSteps.indexOf(settlePublic!)).toBeLessThan(publicationSteps.indexOf(immutableManifest!))
+    expect(publicationSteps.indexOf(immutableManifest!)).toBeLessThan(publicationSteps.indexOf(settleChannel!))
+
+    const dispatch = publicationSteps.find(
       (step: { name?: string }) => step.name === "Dispatch public download page deployment",
     )
+    expect(dispatch.if).toBe("${{ steps.update-channel.outputs.promoted == 'true' }}")
     expect(dispatch.env?.SOURCE_SHA).toBe("${{ needs.prepare.outputs.source-sha }}")
     expect(dispatch.run).toContain("client_payload[source_sha]=$SOURCE_SHA")
   })
@@ -144,6 +241,10 @@ describe("GitHub Actions workflow contract", () => {
         inputs: {
           version: {
             description: "Release version (for example 0.0.1 or v0.0.1).",
+            required: true,
+          },
+          expected_source_sha: {
+            description: "Exact commit SHA already reviewed and pushed for this release.",
             required: true,
           },
         },
@@ -223,10 +324,60 @@ describe("GitHub Actions workflow contract", () => {
     expect(jobs.prepare?.steps?.find(({ name }) => name === "Resolve release version")?.run).toContain(
       "git rev-parse 'HEAD^{commit}'",
     )
+    const releaseIdentity = jobs.prepare?.steps?.find(({ name }) => name === "Verify immutable release identity")
+    expect(releaseIdentity).toEqual({
+      name: "Verify immutable release identity",
+      shell: "bash",
+      env: {
+        GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}",
+        VERSION: "${{ steps.meta.outputs.version }}",
+        SOURCE_SHA: "${{ steps.meta.outputs.source-sha }}",
+        EVENT_NAME: "${{ github.event_name }}",
+        EXPECTED_SOURCE_SHA: "${{ inputs.expected_source_sha || '' }}",
+        IDENTITY_MODE: "probe",
+      },
+      run: "bun ./script/verify-release-identity.ts",
+    })
+    const frozenDependencyGraph = jobs.prepare?.steps?.find(({ name }) => name === "Verify frozen dependency graph")
+    expect(frozenDependencyGraph).toEqual({
+      name: "Verify frozen dependency graph",
+      shell: "bash",
+      env: { HUSKY: "0" },
+      run: "bun install --frozen-lockfile --no-progress --ignore-scripts",
+    })
+    const prepareStepNames = jobs.prepare?.steps?.map(({ name }) => name) ?? []
+    expect(prepareStepNames.slice(-3)).toEqual([
+      "Verify version alignment",
+      "Verify immutable release identity",
+      "Verify frozen dependency graph",
+    ])
     expect(
-      jobs["publish-release-assets"]?.steps?.find(({ name }) => name === "Upload release assets to GitHub Release")
-        ?.run,
-    ).toContain('--prerelease="${{ needs.prepare.outputs.prerelease }}"')
+      ["prepare", "package-overlay", "package-cli"].flatMap((job) =>
+        (jobs[job]?.steps ?? [])
+          .filter(({ name }) => name === "Verify version alignment")
+          .map(({ name, run }) => ({ job, name, run })),
+      ),
+    ).toEqual([
+      {
+        job: "prepare",
+        name: "Verify version alignment",
+        run: 'bun ./script/sync-version.ts "${{ steps.meta.outputs.version }}" --check',
+      },
+      {
+        job: "package-overlay",
+        name: "Verify version alignment",
+        run: 'bun ./script/sync-version.ts "${{ needs.prepare.outputs.version }}" --check',
+      },
+      {
+        job: "package-cli",
+        name: "Verify version alignment",
+        run: 'bun ./script/sync-version.ts "${{ needs.prepare.outputs.version }}" --check',
+      },
+    ])
+    expect(
+      jobs["publish-release-assets"]?.steps?.find(({ name }) => name === "Claim draft publication owner")?.env
+        ?.PRERELEASE,
+    ).toBe("${{ needs.prepare.outputs.prerelease }}")
     expect(jobs["package-overlay"]?.steps?.find(({ name }) => name === "Package GUI installers")?.env).toEqual({
       OPENCORVUS_VERSION: "${{ needs.prepare.outputs.version }}",
       OPENCORVUS_CHANNEL: "latest",
@@ -237,20 +388,29 @@ describe("GitHub Actions workflow contract", () => {
       jobs["publish-release-assets"]?.steps?.find(({ name }) => name === "Upload release assets to GitHub Release")
         ?.run,
     ).toContain("generate-desktop-update-manifest.ts")
-    expect(jobs["publish-release"]?.steps?.find(({ name }) => name === "Publish verified draft")).toEqual({
-      name: "Publish verified draft",
+    expect(jobs["publish-release"]?.concurrency).toEqual({
+      group: "opencorvus-desktop-update-${{ needs.prepare.outputs.update-channel }}",
+      queue: "max",
+      "cancel-in-progress": false,
+    })
+    expect(
+      jobs["publish-release"]?.steps?.find(({ name }) => name === "Settle monotonic desktop update channel"),
+    ).toEqual({
+      name: "Settle monotonic desktop update channel",
+      id: "update-channel",
       env: {
         GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}",
         VERSION: "${{ needs.prepare.outputs.version }}",
-        PRERELEASE: "${{ needs.prepare.outputs.prerelease }}",
         UPDATE_CHANNEL: "${{ needs.prepare.outputs.update-channel }}",
+        CANDIDATE_MANIFEST: "/tmp/version-update-channel/latest.json",
       },
-      run: 'gh release edit "v${VERSION}" --draft=false --prerelease="${PRERELEASE}" --repo "$GITHUB_REPOSITORY"\nCHANNEL_TAG="desktop-update-${UPDATE_CHANNEL}"\nif ! gh release view "$CHANNEL_TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then\n  gh release create "$CHANNEL_TAG" \\\n    --prerelease \\\n    --title "OpenCorvus ${UPDATE_CHANNEL} desktop update channel" \\\n    --notes "Mutable signed desktop update metadata. Installers remain in immutable versioned releases." \\\n    --repo "$GITHUB_REPOSITORY"\nfi\nCHANNEL_DIR="$(mktemp -d)"\ngh release download "v${VERSION}" --pattern latest.json --dir "$CHANNEL_DIR" --repo "$GITHUB_REPOSITORY"\ngh release upload "$CHANNEL_TAG" "$CHANNEL_DIR/latest.json" --clobber --repo "$GITHUB_REPOSITORY"\n',
+      run: "bun ./script/settle-desktop-update-channel.ts",
     })
     expect(
       jobs["publish-release"]?.steps?.find(({ name }) => name === "Dispatch public download page deployment"),
     ).toEqual({
       name: "Dispatch public download page deployment",
+      if: "${{ steps.update-channel.outputs.promoted == 'true' }}",
       env: {
         GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}",
         VERSION: "${{ needs.prepare.outputs.version }}",
@@ -337,6 +497,10 @@ describe("GitHub Actions workflow contract", () => {
         inputs: {
           version: {
             description: "Release version (for example 0.0.1 or v0.0.1).",
+            required: true,
+          },
+          expected_source_sha: {
+            description: "Exact commit SHA already reviewed and pushed for this release.",
             required: true,
           },
         },
