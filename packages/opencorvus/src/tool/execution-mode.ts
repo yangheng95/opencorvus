@@ -1,16 +1,19 @@
 import { InvalidToolResultControlError, toolResultControl } from "@/session/tool-result-control"
 
 export type ToolExecutionMode = "ordinary" | "turn_control_exclusive"
+export type ToolExecutionModeResolver = (args: unknown) => ToolExecutionMode
+export type ToolExecutionModeDeclaration = ToolExecutionMode | ToolExecutionModeResolver
 
-const modeByTool = new WeakMap<object, ToolExecutionMode>()
+const modeByTool = new WeakMap<object, ToolExecutionModeDeclaration>()
 
-export function bindToolExecutionMode<T extends object>(tool: T, mode: ToolExecutionMode): T {
-  modeByTool.set(tool, mode)
+export function bindToolExecutionMode<T extends object>(tool: T, declaration: ToolExecutionModeDeclaration): T {
+  modeByTool.set(tool, declaration)
   return tool
 }
 
-export function toolExecutionModeOf(tool: object): ToolExecutionMode {
-  return modeByTool.get(tool) ?? "ordinary"
+export function toolExecutionModeOf(tool: object, args?: unknown): ToolExecutionMode {
+  const declaration = modeByTool.get(tool)
+  return typeof declaration === "function" ? declaration(args) : (declaration ?? "ordinary")
 }
 
 /**
@@ -38,7 +41,8 @@ export function toolDecisionDeclarationOf(tool: object): ToolDecisionDeclaration
 /** Carry both coordination bindings onto a wrapped Tool. Rebinding only the
  * execution mode silently drops the decision rule. */
 export function copyToolCoordinationBindings<T extends object>(from: object, to: T): T {
-  bindToolExecutionMode(to, toolExecutionModeOf(from))
+  const executionMode = modeByTool.get(from)
+  if (executionMode) bindToolExecutionMode(to, executionMode)
   const declaration = toolDecisionDeclarationOf(from)
   if (declaration) bindToolDecisionDeclaration(to, declaration)
   return to

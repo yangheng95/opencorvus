@@ -143,7 +143,7 @@ import {
   ToolTurnExecutionCoordinator,
   toolDecisionDeclarationOf,
   toolExecutionModeOf,
-  type ToolExecutionMode,
+  type ToolExecutionModeDeclaration,
 } from "@/tool/execution-mode"
 import {
   materializeBoundStageTool,
@@ -311,11 +311,11 @@ export namespace SessionLoop {
       if (surface.coordinatedTools.has(current as object)) continue
       const execute = current.execute
       if (!execute) continue
-      const mode = toolExecutionModeOf(current as object)
       const declaration = toolDecisionDeclarationOf(current as object)
       const coordinated = {
         ...current,
         execute(args: unknown, options: ToolExecutionOptions) {
+          const mode = toolExecutionModeOf(current as object, args)
           const decision = declaration
             ? {
                 command: declaration.command,
@@ -3176,7 +3176,7 @@ export namespace SessionLoop {
           ? Execute
           : never
         : never
-      executionMode?: ToolExecutionMode
+      executionMode?: ToolExecutionModeDeclaration
     }) => {
       const registryTool = tool({
         id: item.id as any,

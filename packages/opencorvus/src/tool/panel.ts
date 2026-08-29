@@ -11,6 +11,7 @@ import { Question } from "@/question"
 import { captureWindowScreenshot } from "@/gui/screenshot"
 import {
   derivePanelActor,
+  panelActionKind,
   panelActionSetForActor,
   panelActionSchemaForAgent,
   PanelSurface,
@@ -619,7 +620,14 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
   description:
     "Operate the OpenCorvus control plane: inspect plans/boards, manage task state, reply to interactions, and manage sessions.",
   parameters: panelActionSchemaForAgent(initCtx?.agentID),
-  executionMode: initCtx?.agentID === "mission" ? "turn_control_exclusive" : "ordinary",
+  executionMode:
+    initCtx?.agentID === "mission"
+      ? (input) => {
+          const action = (input as { action?: unknown } | undefined)?.action
+          if (typeof action !== "string") throw new Error("Mission panel execution requires one parsed action.")
+          return panelActionKind(action) === "query" ? "ordinary" : "turn_control_exclusive"
+        }
+      : "ordinary",
   async execute(params, ctx) {
     const actor = await resolvePanelActor(ctx)
     const surface = resolvePanelSurface(ctx)

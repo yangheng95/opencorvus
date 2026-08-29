@@ -210,9 +210,8 @@ const MissionPanelCapabilityActions = [
 const ExplorePanelCapabilityActions = ["query_task", "view_board", "view_plan", "view_tasks"] as const
 
 function selectCapabilities(actions: readonly string[], context: string): CapabilityTuple {
-  const byAction: Map<string, Capability> = new Map(PanelCapabilityRegistry.map((item) => [item.action, item] as const))
   const items = actions.map((action) => {
-    const capability = byAction.get(action)
+    const capability = panelCapabilityByAction.get(action)
     if (!capability) throw new Error(`${context} references unknown panel action ${action}.`)
     return capability
   })
@@ -576,6 +575,16 @@ export const PanelCapabilityRegistry = list(
     },
   }),
 )
+
+const panelCapabilityByAction: ReadonlyMap<string, Capability> = new Map(
+  PanelCapabilityRegistry.map((capability) => [capability.action, capability] as const),
+)
+
+export function panelActionKind(action: string): Kind {
+  const capability = panelCapabilityByAction.get(action)
+  if (!capability) throw new Error(`Unknown panel action ${JSON.stringify(action)}.`)
+  return capability.kind
+}
 
 const RegistryPanelActionSchema = z.discriminatedUnion("action", schemas(PanelCapabilityRegistry))
 export type PanelActionInput = z.infer<typeof RegistryPanelActionSchema>

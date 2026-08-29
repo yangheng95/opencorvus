@@ -1,6 +1,9 @@
 import { afterEach, describe, expect, spyOn, test } from "bun:test"
+import { PrimaryAssistantRegistry } from "@/agent/primary-assistant-registry"
+import { sessionRuntimeFromNativeAgent } from "@/agent/session-agent-runtime"
 import { reviewedTerminalLifecycleReferenceBeforePanelAction } from "@/agent/task-review-facts"
 import { ArtifactReferenceResolutionError } from "@/agent/artifact-read-facts"
+import { Config } from "@/config/config"
 import { recordEngineArtifact } from "@/engine/artifact"
 import { requireCurrentTerminalLifecycleReference } from "@/engine/terminal-lifecycle-reference"
 import { sameTerminalLifecycleReference } from "@/engine/terminal-lifecycle-reference-schema"
@@ -15,9 +18,13 @@ import { ensureMissionSession } from "@/mission/session"
 import { panelActionSchemaForAgent } from "@/panel/capability"
 import { PanelQueryTaskOutput } from "@/panel/task-query"
 import { Instance } from "@/project/instance"
+import { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
 import { Session } from "@/session"
+import { SessionLoop } from "@/session/loop"
+import { SessionProcessor } from "@/session/processor"
 import { Tool } from "@/tool/tool"
 import { PanelTool } from "@/tool/panel"
+import { ToolTurnExecutionConflictError } from "@/tool/execution-mode"
 import { toolResultControl } from "@/session/tool-result-control"
 import { EngineService } from "@/task-api"
 import { ArtifactSchemaLimits } from "@opencorvus-ai/plugin/artifact-catalog"
@@ -39,18 +46,198 @@ const locator = {
   expected_sha256: "b".repeat(64),
 }
 
+const providerModel = {
+  id: "mission-panel-execution-mode-model",
+  providerID: "mission-panel-execution-mode-provider",
+  name: "Mission panel execution mode",
+  limit: { context: 1_000_000, input: 900_000, output: 4_096 },
+  cost: { available: true, input: 0, output: 0, cache: { read: 0, write: 0 } },
+  capabilities: {
+    toolcall: true,
+    attachment: false,
+    reasoning: false,
+    temperature: true,
+    input: { text: true, image: false, audio: false, video: false },
+    output: { text: true, image: false, audio: false, video: false },
+  },
+  api: { id: "mission-panel-execution-mode", npm: "@ai-sdk/anthropic" },
+  options: {},
+} as any
+
 afterEach(async () => {
   await resetMemoryDatabase()
 })
 
 describe("Mission terminal Task authority", () => {
-  test("projects Mission panel calls as exclusive turn control", async () => {
+  test("projects Mission panel queries as ordinary work and mutations as exclusive turn control", async () => {
     const missionPanel = await PanelTool.init({ agentID: "mission" })
     const ordinaryPanel = await PanelTool.init({ agentID: "base" })
+    const missionMode = missionPanel.executionMode
+    if (typeof missionMode !== "function") throw new Error("Mission panel did not project an action-aware execution mode.")
 
-    expect({ mission: missionPanel.executionMode, ordinary: ordinaryPanel.executionMode }).toEqual({
-      mission: "turn_control_exclusive",
-      ordinary: "ordinary",
+    expect({
+      viewTasks: missionMode({ action: "view_tasks" }),
+      inspectSquad: missionMode({ action: "expert_squad_inspect", id: "base" }),
+      createTask: missionMode({ action: "create_task" }),
+      completeMission: missionMode({ action: "complete_mission" }),
+      ordinaryPanel: ordinaryPanel.executionMode,
+    }).toEqual({
+      viewTasks: "ordinary",
+      inspectSquad: "ordinary",
+      createTask: "turn_control_exclusive",
+      completeMission: "turn_control_exclusive",
+      ordinaryPanel: "ordinary",
+    })
+  })
+
+  test("coordinates overlapping queries and a control mutation on the final Mission SessionLoop panel surface", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const mission = await ensureMissionSession({
+          missionID: "mission-overlapping-panel-queries",
+          defaultCwd: project.path,
+          productPillar: "work",
+          heldExpertSquadIDs: ["base"],
+        })
+        const now = Date.now()
+        const user = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: mission.id,
+          role: "user",
+          author: "user",
+          time: { created: now },
+          agent: "mission",
+          model: { providerID: "test", modelID: "mission-query-overlap" },
+        })
+        const assistant = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: mission.id,
+          role: "assistant",
+          author: "mission",
+          parentID: user.id,
+          time: { created: now + 1 },
+          agent: "mission",
+          providerID: "test",
+          modelID: "mission-query-overlap",
+          path: { cwd: project.path, root: project.path },
+          cost: 0,
+          tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+        })
+        const config = await Config.get()
+        const processor = SessionProcessor.create({
+          assistantMessage: assistant,
+          sessionID: mission.id,
+          model: providerModel,
+          abort: new AbortController().signal,
+        })
+        const tools = await SessionLoop.resolveTools({
+          agent: sessionRuntimeFromNativeAgent(await PrimaryAssistantRegistry.get("mission", { config })),
+          agentID: "mission",
+          model: providerModel,
+          session: mission,
+          processor,
+          messages: await Session.messages({ sessionID: mission.id }),
+          config,
+          includeMcpTools: false,
+          extra: { surface: "panel" },
+        })
+        const panel = tools.panel
+        if (!panel?.execute) throw new Error("Final Mission SessionLoop surface did not project panel execution.")
+        const options = (toolCallId: string) => ({
+          toolCallId,
+          messages: [],
+          abortSignal: new AbortController().signal,
+        })
+        const originalRecommendationCatalog = PromptProfileResolver.recommendationCatalog
+        const order: string[] = []
+        let markInspectionEntered!: () => void
+        let releaseInspection!: () => void
+        const inspectionEntered = new Promise<void>((resolve) => (markInspectionEntered = resolve))
+        const inspectionGate = new Promise<void>((resolve) => (releaseInspection = resolve))
+        const recommendationSpy = spyOn(PromptProfileResolver, "recommendationCatalog").mockImplementation(
+          async (input) => {
+            order.push("inspection:start")
+            markInspectionEntered()
+            await inspectionGate
+            order.push("inspection:end")
+            return originalRecommendationCatalog(input)
+          },
+        )
+        const taskID = Identifier.ascending("task")
+        const createSpy = spyOn(EngineService, "createTask").mockImplementation(async () => {
+          order.push("mutation:effect")
+          return taskID
+        })
+        const mappingSpy = spyOn(EngineService, "getCrossTaskArtifactImportMappings").mockReturnValue([])
+        try {
+          const inspectionPromise = panel.execute(
+            { action: "expert_squad_inspect", id: "base" },
+            options("call_final_surface_inspection"),
+          )
+          await inspectionEntered
+          const tasks = await panel.execute({ action: "view_tasks" }, options("call_final_surface_tasks"))
+          order.push("tasks:done")
+          const mutationPromise = panel.execute(
+            {
+              action: "create_task",
+              title: "Verify action-aware Mission control",
+              request: "Verify action-aware Mission control",
+              model: "firmware/gpt-5",
+              promptProfile: "base",
+            },
+            options("call_final_surface_mutation"),
+          )
+          const fencedQuery = await panel
+            .execute({ action: "view_tasks" }, options("call_query_behind_pending_mutation"))
+            .then(() => ({ kind: "completed" as const }))
+            .catch((error) => ({
+              kind: "rejected" as const,
+              name: error instanceof Error ? error.name : typeof error,
+              message: error instanceof Error ? error.message : String(error),
+              typed: error instanceof ToolTurnExecutionConflictError,
+            }))
+          releaseInspection()
+          const [inspection, mutation] = await Promise.all([inspectionPromise, mutationPromise])
+          const inspected = JSON.parse((inspection as { output: string }).output) as { squad: { id: string } }
+          const taskResult = JSON.parse((mutation as { output: string }).output) as { task_id: string }
+
+          expect({
+            order,
+            tasks: {
+              title: (tasks as { title: string }).title,
+              output: (tasks as { output: string }).output,
+              metadata: (tasks as { metadata: unknown }).metadata,
+            },
+            inspection: { title: (inspection as { title: string }).title, squadID: inspected.squad.id },
+            mutation: {
+              taskID: taskResult.task_id,
+              control: toolResultControl((mutation as { metadata: Record<string, unknown> }).metadata),
+            },
+            fencedQuery,
+          }).toEqual({
+            order: ["inspection:start", "tasks:done", "inspection:end", "mutation:effect"],
+            tasks: {
+              title: "Mission Tasks",
+              output: "No Mission-owned tasks found.",
+              metadata: { missionID: mission.missionID, count: 0, truncated: false },
+            },
+            inspection: { title: "Expert Squad", squadID: "base" },
+            mutation: { taskID, control: { kind: "immediate_park" } },
+            fencedQuery: {
+              kind: "rejected",
+              name: "ToolTurnExecutionConflictError",
+              message: "An exclusive Tool occurrence is already pending in this assistant turn",
+              typed: true,
+            },
+          })
+        } finally {
+          mappingSpy.mockRestore()
+          createSpy.mockRestore()
+          recommendationSpy.mockRestore()
+        }
+      },
     })
   })
 

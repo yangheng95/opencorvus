@@ -1,9 +1,34 @@
 import { describe, expect, test } from "bun:test"
+import z from "zod"
 import {
   orchestratorCommittedDecisionInParts,
   orchestratorDecisionToolCompletionEffect,
 } from "@/orchestrator/decision-tool-names"
-import { ToolTurnExecutionConflictError, ToolTurnExecutionCoordinator } from "@/tool/execution-mode"
+import { SessionLoop } from "@/session/loop"
+import {
+  bindToolExecutionMode,
+  ToolTurnExecutionConflictError,
+  ToolTurnExecutionCoordinator,
+  toolExecutionModeOf,
+} from "@/tool/execution-mode"
+
+const providerModel = {
+  id: "tool-execution-mode-model",
+  providerID: "tool-execution-mode-provider",
+  name: "Tool execution mode",
+  limit: { context: 1_000_000, input: 900_000, output: 4_096 },
+  cost: { available: true, input: 0, output: 0, cache: { read: 0, write: 0 } },
+  capabilities: {
+    toolcall: true,
+    attachment: false,
+    reasoning: false,
+    temperature: true,
+    input: { text: true, image: false, audio: false, video: false },
+    output: { text: true, image: false, audio: false, video: false },
+  },
+  api: { id: "tool-execution-mode", npm: "@ai-sdk/anthropic" },
+  options: {},
+} as any
 
 /**
  * The durable reduction accepts one assistant turn's decision set only when it
@@ -184,6 +209,70 @@ describe("assistant-turn decision coordination", () => {
     expect({ failed, fallback: await attempt(coordinator, "no_action") }).toEqual({
       failed: "dispatch adapter unavailable",
       fallback: "committed",
+    })
+  })
+
+  test("preserves input-resolved execution modes through provider preparation and coordination", async () => {
+    const actionAware = bindToolExecutionMode(
+      {
+        inputSchema: z.object({ action: z.enum(["query", "mutation"]) }),
+        async execute(args: { action: "query" | "mutation" }) {
+          return { title: args.action, output: args.action, metadata: {} }
+        },
+      } as any,
+      (args) => ((args as { action: string }).action === "query" ? "ordinary" : "turn_control_exclusive"),
+    )
+    const prepared = SessionLoop.prepareProviderTool({
+      name: "action_aware",
+      source: "extra",
+      model: providerModel,
+      tool: actionAware,
+    })
+    const queryInput = { action: "query" }
+    const mutationInput = { action: "mutation" }
+    const coordinator = new ToolTurnExecutionCoordinator()
+    const order: string[] = []
+    let releaseQuery!: () => void
+    let markQueryStarted!: () => void
+    const queryGate = new Promise<void>((resolve) => (releaseQuery = resolve))
+    const queryStarted = new Promise<void>((resolve) => (markQueryStarted = resolve))
+    const query = coordinator.run(toolExecutionModeOf(prepared as object, queryInput), async () => {
+      order.push("query:start")
+      markQueryStarted()
+      await queryGate
+      order.push("query:end")
+      return prepared.execute!(queryInput, {
+        toolCallId: "call_action_query",
+        messages: [],
+        abortSignal: new AbortController().signal,
+      })
+    })
+    await queryStarted
+    const mutation = coordinator.run(toolExecutionModeOf(prepared as object, mutationInput), async () => {
+      order.push("mutation:start")
+      const result = await prepared.execute!(mutationInput, {
+        toolCallId: "call_action_mutation",
+        messages: [],
+        abortSignal: new AbortController().signal,
+      })
+      order.push("mutation:end")
+      return result
+    })
+    await Promise.resolve()
+    releaseQuery()
+    const [queryResult, mutationResult] = await Promise.all([query, mutation])
+
+    expect({
+      modes: {
+        query: toolExecutionModeOf(prepared as object, queryInput),
+        mutation: toolExecutionModeOf(prepared as object, mutationInput),
+      },
+      order,
+      outputs: [queryResult.output, mutationResult.output],
+    }).toEqual({
+      modes: { query: "ordinary", mutation: "turn_control_exclusive" },
+      order: ["query:start", "query:end", "mutation:start", "mutation:end"],
+      outputs: ["query", "mutation"],
     })
   })
 })
