@@ -1,4 +1,4 @@
-import { defineConfig, type Plugin } from "vite"
+import { defaultClientConditions, defineConfig, type Plugin } from "vite"
 import solidPlugin from "vite-plugin-solid"
 import path from "path"
 import fs from "fs"
@@ -109,6 +109,7 @@ export default defineConfig({
     },
   },
   resolve: {
+    conditions: ["source", ...defaultClientConditions],
     alias: [{ find: "@", replacement: path.resolve(__dirname, "src") }],
     dedupe: codeMirrorDedupePackages,
   },
