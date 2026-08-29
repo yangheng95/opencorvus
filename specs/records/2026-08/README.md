@@ -1,6 +1,7 @@
 # August 2026 Records
 
 - [2026-08-30-scheduling-algorithm-razor-audit.md](2026-08-30-scheduling-algorithm-razor-audit.md) iteratively audits the current Task/Mission/Session scheduling and recovery design for duplicated authority, over-engineering, convergence hazards, and violations of razor-style minimality.
+- [2026-08-30-scheduling-architecture-remediation.md](2026-08-30-scheduling-architecture-remediation.md) reconciles and closes the scheduling razor audit against current source, one reviewed implementation cut at a time, before a fresh exact-remote Mission and the canonical `0.0.58-beta` corrective release.
 - [2026-08-30-dynamic-frontier-reliability-and-token-budget.md](2026-08-30-dynamic-frontier-reliability-and-token-budget.md) replaces Dynamic's prompt-only multi-call assumption with one structured frontier Tool over the canonical dispatch primitive, narrows the scheduler Tool surface, and requires a no-correction real-Provider E2E with explicit token budgets.
 - [2026-08-29-dynamic-expert-squad.md](2026-08-29-dynamic-expert-squad.md) adds the lightweight Dynamic Expert Squad: the Orchestrator describes a minimal ephemeral team and dependency sketch inline, then immediately fans out real direct-dispatch Sessions through two reusable capability envelopes without authoring a permanent package.
 

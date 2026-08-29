@@ -135,7 +135,6 @@ import {
 } from "@/orchestrator/dispatch-agents-recovery"
 import { sendSchedulerMessage } from "@/protocol/scheduler-message"
 import {
-  isOrchestratorDecisionToolName,
   orchestratorCommittedDecisionInParts,
   type OrchestratorDecisionToolName,
 } from "@/orchestrator/decision-tool-names"
@@ -181,50 +180,15 @@ function taskRootAssistantHasDecisionReceipt(message: Message.WithParts): boolea
   return taskRootAssistantCommittedDecision(message) !== undefined
 }
 
-/**
- * Mechanism escalation for a Task-root Turn that streamed a Provider step
- * without committing a decision.
- *
- * Prose alone is not a lever: re-sending the same request with an extra
- * paragraph draws from the same distribution, so attempts 2 and 3 of a
- * `semanticTurnLimit: 3` budget were near-identical repeats of attempt 1 and
- * the Turn reached `exhausted` having never been constrained once. Each rung
- * below removes one degree of freedom the previous rung left open:
- *
- *  - rung 0 (no gap yet): unconstrained.
- *  - rung 1: `toolChoice: "required"` — the step cannot end as prose.
- *  - rung 2 and beyond: also narrow the visible surface to the decision Tools,
- *    so "call some tool" cannot be satisfied by another read-only inspection.
- *
- * Narrowing is conditional on the decision Tools actually being present in the
- * resolved surface, so a runtime that never installed them keeps the weaker
- * rung instead of being handed an empty tool set.
- */
-export type TaskRootDecisionRepairRung = { toolChoice: "required"; restrictToDecisionTools: boolean }
-
-export function taskRootDecisionRepairRung(gapCount: number): TaskRootDecisionRepairRung | undefined {
-  if (gapCount <= 0) return undefined
-  return { toolChoice: "required", restrictToDecisionTools: gapCount >= 2 }
-}
-
-export function taskRootDecisionRepairToolSurface<T>(tools: Record<string, T>): Record<string, T> {
-  return Object.fromEntries(
-    Object.entries(tools).filter(([, candidate]) => toolDecisionDeclarationOf(candidate as object) !== undefined),
-  )
-}
-
 function taskRootDecisionRepairPrompt(input: {
   attempt: number
   limit: number
-  rung: TaskRootDecisionRepairRung
 }): string {
   return [
     "<task-root-decision-repair>",
     `The previous streamed Provider step ended without a valid Task-root decision receipt (attempt ${input.attempt} of ${input.limit}).`,
     "Continue the same visible assistant Turn and now call exactly one valid current decision Tool, using the active frontier dispatch Tool when the decision contains parallel workers.",
-    input.rung.restrictToDecisionTools
-      ? "This step is restricted to the decision Tools; inspection Tools are not offered on it. Decide from the facts already in this Turn."
-      : "Do not repeat the diagnosis as prose alone. Inspect current facts as needed, but the Host will not infer or choose the decision for you.",
+    "Do not repeat the diagnosis as prose alone. Inspect current facts as needed, but the Host will not infer or choose the decision for you.",
     "</task-root-decision-repair>",
   ].join("\n")
 }
@@ -1723,7 +1687,7 @@ export namespace SessionLoop {
     const format = input.lastUser.format ?? { type: "text" }
     const messagePromptProjection = controlPromptProjection(agentID, input.sessionID)
     const controlRuntimeContext = controlToolContext(input.sessionID)
-    let tools = await resolveTools({
+    const tools = await resolveTools({
       agent,
       agentID,
       session: input.session,
@@ -1821,38 +1785,19 @@ export namespace SessionLoop {
       system.push(MAX_STEPS)
       systemLabels.push("max-steps")
     }
-    const decisionRepairRung =
+    const needsTaskRootDecisionRepair =
       openTaskRootAssistant &&
       taskRootSemanticTurnLimit !== undefined &&
+      taskRootDecisionGapCount > 0 &&
       !taskRootAssistantHasDecisionReceipt(openTaskRootAssistant)
-        ? taskRootDecisionRepairRung(taskRootDecisionGapCount)
-        : undefined
-    if (decisionRepairRung && taskRootSemanticTurnLimit !== undefined) {
+    if (needsTaskRootDecisionRepair && taskRootSemanticTurnLimit !== undefined) {
       system.push(
         taskRootDecisionRepairPrompt({
           attempt: Math.min(taskRootDecisionGapCount + 1, taskRootSemanticTurnLimit),
           limit: taskRootSemanticTurnLimit,
-          rung: decisionRepairRung,
         }),
       )
       systemLabels.push("task-root-decision-repair")
-      if (decisionRepairRung.restrictToDecisionTools) {
-        const decisionTools = taskRootDecisionRepairToolSurface(tools)
-        if (Object.keys(decisionTools).length > 0) {
-          log.info("task-root-decision-repair-restricting-tool-surface", {
-            sessionID: input.sessionID,
-            gapCount: taskRootDecisionGapCount,
-            from: Object.keys(tools).length,
-            to: Object.keys(decisionTools).length,
-          })
-          tools = decisionTools
-        } else {
-          log.warn("task-root-decision-repair-has-no-decision-tools", {
-            sessionID: input.sessionID,
-            gapCount: taskRootDecisionGapCount,
-          })
-        }
-      }
     }
 
     // Live session-state blocks. These change between turns (the project MEMORY.MD
@@ -2122,7 +2067,6 @@ export namespace SessionLoop {
       messages: modelMessages,
       tools,
       model: input.model,
-      toolChoice: decisionRepairRung?.toolChoice,
       stream: runtimeContract?.stream,
       runtimeSystemMode: messagePromptProjection?.systemMode ?? runtimeContract?.systemMode,
     })

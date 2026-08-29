@@ -2,6 +2,8 @@
 
 Latest scheduling algorithm razor audit: [`2026-08-30-scheduling-algorithm-razor-audit.md`](records/2026-08/2026-08-30-scheduling-algorithm-razor-audit.md).
 
+Latest scheduling architecture remediation: [`2026-08-30-scheduling-architecture-remediation.md`](records/2026-08/2026-08-30-scheduling-architecture-remediation.md).
+
 Latest Dynamic reliability and token-budget repair: [`2026-08-30-dynamic-frontier-reliability-and-token-budget.md`](records/2026-08/2026-08-30-dynamic-frontier-reliability-and-token-budget.md).
 
 Latest Inspect FrontierScience Research GPT-5.6 Luna smoke: [`2026-08-29-inspect-frontier-science-research-luna-smoke.md`](records/2026-08/2026-08-29-inspect-frontier-science-research-luna-smoke.md).
