@@ -4,6 +4,32 @@ import { resolveOpenCorvusRuntimePaths } from "../packages/util/src/runtime-path
 
 export const PACKAGE_RUNTIME_RELATIVE_PATH = path.join(".scratch", "package-runtime")
 
+export interface PublicRuntimePackageBuildCommand {
+  label: string
+  cwd: string
+  argv: string[]
+}
+
+export function publicRuntimePackageBuildCommands(repoRoot: string): PublicRuntimePackageBuildCommand[] {
+  return [
+    {
+      label: "Util build",
+      cwd: path.join(repoRoot, "packages", "util"),
+      argv: ["bun", "run", "build"],
+    },
+    {
+      label: "SDK build",
+      cwd: repoRoot,
+      argv: ["bun", "packages/sdk/js/script/build.ts"],
+    },
+    {
+      label: "Plugin build",
+      cwd: path.join(repoRoot, "packages", "plugin"),
+      argv: ["bun", "run", "build"],
+    },
+  ]
+}
+
 export async function preparePackageBuildEnvironment(
   repoRoot: string,
   baseEnv: NodeJS.ProcessEnv,

@@ -6,7 +6,11 @@ import path from "node:path"
 import { fileURLToPath } from "node:url"
 import { overlayExecutableFileName, overlayPlatformFromNode } from "../packages/overlay/script/artifact-names"
 import { copyReleaseFile } from "./copy-release-file"
-import { preparePackageBuildEnvironment } from "./package-build-environment"
+import {
+  preparePackageBuildEnvironment,
+  publicRuntimePackageBuildCommands,
+  type PublicRuntimePackageBuildCommand,
+} from "./package-build-environment"
 import { overlayBundlePatterns, overlayUpdaterContract, updaterSignatureName } from "./release-asset-contract"
 import { runTimedStage } from "./timed-stage"
 
@@ -36,6 +40,17 @@ export const GUI_INSTALLER_AUTOMATION_ENV = { CI: "true" } as const
 
 export function guiInstallerBuildEnvironment(env: NodeJS.ProcessEnv, version: string): NodeJS.ProcessEnv {
   return { ...env, ...GUI_INSTALLER_AUTOMATION_ENV, OPENCORVUS_VERSION: version }
+}
+
+export function guiInstallerBuildCommands(repoRoot: string): PublicRuntimePackageBuildCommand[] {
+  return [
+    ...publicRuntimePackageBuildCommands(repoRoot),
+    {
+      label: "Overlay release build",
+      cwd: path.join(repoRoot, "packages", "overlay"),
+      argv: ["bun", "run", "script/build.ts"],
+    },
+  ]
 }
 
 export const GUI_INSTALLER_MATRIX: readonly GuiInstallerMatrixRow[] = [
@@ -205,12 +220,11 @@ export async function packageGuiInstallerMatrix(
       continue
     }
     if (!options.skipBuild) {
-      await runTimedStage("SDK build", async () => {
-        await $`bun packages/sdk/js/script/build.ts`.cwd(repoRoot).env(buildEnv)
-      })
-      await runTimedStage("Overlay release build", async () => {
-        await $`bun run script/build.ts`.cwd(path.join(repoRoot, "packages", "overlay")).env(buildEnv)
-      })
+      for (const command of guiInstallerBuildCommands(repoRoot)) {
+        await runTimedStage(command.label, async () => {
+          await $`${command.argv}`.cwd(command.cwd).env(buildEnv)
+        })
+      }
     }
     const artifacts = await runTimedStage("Installer staging", () => stageGuiInstallerArtifacts(repoRoot, row, version))
     await runTimedStage("Installer validation", () => validateGuiInstallerArtifacts(repoRoot, row, version))

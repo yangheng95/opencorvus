@@ -20,13 +20,24 @@ test("native binary build environment retains the selected release identity", ()
   })
 })
 
-test("native binary build prepares the SDK before its overlay and CLI consumers", () => {
+test("native binary build prepares the complete public package dependency chain before its runtime consumers", () => {
   const repoRoot = path.resolve("clean-native-binary-source")
 
   expect(nativeBinaryBuildCommands(repoRoot)).toEqual([
     {
+      label: "Util build",
+      cwd: path.join(repoRoot, "packages", "util"),
+      argv: ["bun", "run", "build"],
+    },
+    {
+      label: "SDK build",
       cwd: repoRoot,
       argv: ["bun", "packages/sdk/js/script/build.ts"],
+    },
+    {
+      label: "Plugin build",
+      cwd: path.join(repoRoot, "packages", "plugin"),
+      argv: ["bun", "run", "build"],
     },
     {
       cwd: path.join(repoRoot, "packages", "overlay"),

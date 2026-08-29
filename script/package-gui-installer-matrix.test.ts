@@ -4,11 +4,39 @@ import os from "node:os"
 import path from "node:path"
 import {
   GUI_INSTALLER_MATRIX,
+  guiInstallerBuildCommands,
   guiInstallerStagePaths,
   stageGuiInstallerArtifacts,
 } from "./package-gui-installer-matrix"
 
 describe("GUI installer staging", () => {
+  test("builds the public runtime package dependency chain before the embedded Overlay backend", () => {
+    const repoRoot = path.resolve("clean-gui-installer-source")
+
+    expect(guiInstallerBuildCommands(repoRoot)).toEqual([
+      {
+        label: "Util build",
+        cwd: path.join(repoRoot, "packages", "util"),
+        argv: ["bun", "run", "build"],
+      },
+      {
+        label: "SDK build",
+        cwd: repoRoot,
+        argv: ["bun", "packages/sdk/js/script/build.ts"],
+      },
+      {
+        label: "Plugin build",
+        cwd: path.join(repoRoot, "packages", "plugin"),
+        argv: ["bun", "run", "build"],
+      },
+      {
+        label: "Overlay release build",
+        cwd: path.join(repoRoot, "packages", "overlay"),
+        argv: ["bun", "run", "script/build.ts"],
+      },
+    ])
+  })
+
   test("stages Tauri's signed macOS archive under its canonical public name", async () => {
     const repoRoot = await fs.mkdtemp(path.join(os.tmpdir(), "opencorvus-gui-staging-"))
     const row = GUI_INSTALLER_MATRIX.find((candidate) => candidate.id === "darwin-arm64")!

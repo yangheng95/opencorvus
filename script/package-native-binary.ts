@@ -17,7 +17,7 @@ import {
   inspectArtifactExecutableClosure,
   normalizeArtifactExecutablePermissions,
 } from "../packages/opencorvus/script/runtime-executable-contract"
-import { preparePackageBuildEnvironment } from "./package-build-environment"
+import { preparePackageBuildEnvironment, publicRuntimePackageBuildCommands } from "./package-build-environment"
 import { writeOverlayPayloadStamp } from "../packages/opencorvus/script/build-overlay-payload-stamp"
 import { WORK_ARTIFACT_RUNTIME_LOCK } from "../packages/opencorvus/script/work-artifact-runtime-lock"
 import { officeCliRuntime } from "../packages/opencorvus/src/work-artifact/runtime/runtime-lock"
@@ -46,6 +46,7 @@ export interface PackageNativeBinaryOptions {
 }
 
 export interface NativeBinaryBuildCommand {
+  label?: string
   cwd: string
   argv: string[]
 }
@@ -125,10 +126,7 @@ export function nativeBinaryBuildEnv(baseEnv: NodeJS.ProcessEnv, packageVersion:
 
 export function nativeBinaryBuildCommands(repoRoot: string, skipUi = false): NativeBinaryBuildCommand[] {
   return [
-    {
-      cwd: repoRoot,
-      argv: ["bun", "packages/sdk/js/script/build.ts"],
-    },
+    ...publicRuntimePackageBuildCommands(repoRoot),
     ...(skipUi
       ? []
       : [
