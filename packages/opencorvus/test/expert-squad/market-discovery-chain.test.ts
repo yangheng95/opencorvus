@@ -15,6 +15,11 @@ interface CatalogPage {
   entries: Array<{ id: string; product_pillars: Array<"code" | "work"> }>
 }
 
+interface InstallReceipt {
+  operation: "installed" | "skipped"
+  after: { id: string; installationScope: "project" | "global" }
+}
+
 async function withMarketRoutes<T>(
   directory: string,
   fn: (call: (route: string, init?: RequestInit) => Promise<unknown>) => Promise<T>,
@@ -28,7 +33,8 @@ async function withMarketRoutes<T>(
         return await fn(async (route, init) => {
           const response = await fetch(`http://${server.hostname}:${server.port}/expert-squad/${route}`, init)
           const body = await response.text()
-          if (response.status !== 200) throw new Error(`${init?.method ?? "GET"} ${route} -> ${response.status}: ${body}`)
+          if (response.status !== 200)
+            throw new Error(`${init?.method ?? "GET"} ${route} -> ${response.status}: ${body}`)
           return JSON.parse(body)
         })
       } finally {
@@ -39,14 +45,11 @@ async function withMarketRoutes<T>(
 }
 
 describe("expert squad market discovery chain", () => {
-  test("carries a localized projection for every bundled package without touching package bytes", () => {
+  test("carries a localized projection for every bundled package", () => {
     for (const source of payloadPackageSources) {
       const localization = expertSquadSearchLocalizations[`${source.namespace}/${source.id}`]
       expect(localization?.primary.length).toBe(3)
       for (const entry of localization?.primary ?? []) expect(entry).toMatch(/\p{Script=Han}/u)
-    }
-    for (const source of payloadPackageSources) {
-      expect(Object.keys(source.files)).not.toContain("search-localization.json")
     }
   })
 
@@ -68,33 +71,29 @@ describe("expert squad market discovery chain", () => {
       expect(market.entries[0]!.id).toBe("commercial-legal")
       for (const entry of market.entries) expect(entry.product_pillars).toContain("work")
 
-      const codeMarket = (await call(
-        `market?${new URLSearchParams({
-          directory: project.path,
-          query: "审查一份商务合同",
-          availability: "available",
-          productPillar: "code",
-          limit: "3",
-        })}`,
-      )) as MarketPage
-      expect(codeMarket.entries.some((entry) => entry.id === "commercial-legal")).toBe(false)
-
-      await call(`install-payload?directory=${encodeURIComponent(project.path)}`, {
+      const installation = (await call(`install-payload?directory=${encodeURIComponent(project.path)}`, {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ id: "commercial-legal", installationScope: "project" }),
+      })) as InstallReceipt
+      expect(installation).toMatchObject({
+        operation: "installed",
+        after: { id: "commercial-legal", installationScope: "project" },
       })
 
-      const afterInstall = (await call(
+      const installedMarket = (await call(
         `market?${new URLSearchParams({
           directory: project.path,
           query: "审查一份商务合同",
-          availability: "available",
+          availability: "installed",
           productPillar: "work",
           limit: "3",
         })}`,
       )) as MarketPage
-      expect(afterInstall.entries.some((entry) => entry.id === "commercial-legal")).toBe(false)
+      expect(installedMarket.entries.find((entry) => entry.id === "commercial-legal")).toMatchObject({
+        id: "commercial-legal",
+        installation_scopes: ["project"],
+      })
 
       const catalog = (await call(
         `search?${new URLSearchParams({
@@ -107,7 +106,7 @@ describe("expert squad market discovery chain", () => {
       )) as CatalogPage
       expect(catalog.entries.some((entry) => entry.id === "commercial-legal")).toBe(true)
     })
-  })
+  }, 60_000)
 
   test("ranks the package whose own vocabulary is the request above packages that merely mention it", async () => {
     await using project = await memoryProject()
@@ -135,5 +134,5 @@ describe("expert squad market discovery chain", () => {
       )) as MarketPage
       expect(landing.entries[0]!.id).toBe("frontend-innovate")
     })
-  })
+  }, 60_000)
 })

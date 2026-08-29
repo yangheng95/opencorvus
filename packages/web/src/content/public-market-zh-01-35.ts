@@ -1517,6 +1517,23 @@ export const publicMarketZhTranslations01To35 = {
       },
     },
   },
+  "builtin/dynamic": {
+    label: "Dynamic 动态团队",
+    description:
+      "根据当前任务即时描述最小临时 Agent 团队和依赖关系，并立即通过现有 Session 调度执行，不生成永久专家团包。",
+    selectorSummary: "用于需要按本轮请求快速生成成员分工和工作流描述的调查、规划、实现、审查与综合任务。",
+    agents: {
+      "dynamic-generalist": {
+        label: "Dynamic 通用成员",
+        description: "以独立 Session 承担一个即时生成的规划、调查、分析、审查、验证或综合职责。",
+      },
+      "dynamic-builder": {
+        label: "Dynamic 交付成员",
+        description: "以 Build 运行时承担一个即时生成的实现或具体交付职责及其验证。",
+      },
+    },
+    workflows: {},
+  },
   "builtin/ecommerce-merchandising": {
     label: "电商商品运营",
     description: "将商品目录、需求与定价以及体验与运营证据整合为可回退的商品运营测试计划。",
