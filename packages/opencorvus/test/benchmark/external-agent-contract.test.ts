@@ -2027,7 +2027,9 @@ describe("external agent benchmark contract", () => {
     // This fixture isolates projection accounting: user Messages prove dispatch identity, while the
     // preceding sealed-receipt fixture owns assistant runtime-load and command-order evidence.
     const transcript = (agents: string[]) =>
-      agents.map((agent, index) => ({ info: { agent, role: "user", sessionID: `ses_projection_${index}` } }))
+      agents.map((agent, index) => ({
+        info: { agent, sessionAgentID: agent, role: "user", sessionID: `ses_projection_${index}` },
+      }))
 
     expect(
       auditDispatchedSkillCoverage({
@@ -2036,13 +2038,63 @@ describe("external agent benchmark contract", () => {
       }),
     ).toMatchObject({ passed: true, uncovered_agents: [] })
 
+    expect(
+      auditDispatchedSkillCoverage({
+        projection,
+        transcript: [{ info: { agent: "orchestrator", role: "user", sessionID: "ses_legacy" } }],
+      }),
+    ).toMatchObject({
+      passed: true,
+      dispatched_agents: ["orchestrator"],
+      uncovered_agents: [],
+    })
+
+    expect(
+      auditDispatchedSkillCoverage({
+        projection,
+        transcript: [
+          {
+            info: {
+              agent: "compaction",
+              sessionAgentID: "test-engineer",
+              resolvedRole: "compaction",
+              role: "assistant",
+              summary: true,
+              sessionID: "ses_tester",
+            },
+          },
+        ],
+      }),
+    ).toMatchObject({
+      passed: true,
+      dispatched_agents: ["test-engineer"],
+      uncovered_agents: [],
+    })
+
     // The real failure: `SkillMount.matrix()` omitted scheduler-only `universal-build`, so the
     // pre-Task projection audit passed while the worker that performed every mutation searched an
     // empty Skill surface. Two sealed Advanced runs carried that false positive.
     expect(
       auditDispatchedSkillCoverage({
         projection,
-        transcript: transcript(["orchestrator", "universal-build"]),
+        transcript: [
+          {
+            info: {
+              agent: "orchestrator",
+              sessionAgentID: "orchestrator",
+              role: "assistant",
+              sessionID: "ses_orchestrator",
+            },
+          },
+          {
+            info: {
+              agent: "universal-build",
+              sessionAgentID: "universal-build",
+              role: "assistant",
+              sessionID: "ses_universal_build",
+            },
+          },
+        ],
       }),
     ).toMatchObject({
       passed: false,

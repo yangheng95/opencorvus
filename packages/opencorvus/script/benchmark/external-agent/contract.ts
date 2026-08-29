@@ -2576,11 +2576,13 @@ export const SCHEDULER_AGENT_ID = "orchestrator"
  * Skill surface — a false positive that survived two sealed runs.
  *
  * This closes that class of gap from the other side, against evidence rather than against the same
- * matrix: every Agent the sealed transcript shows actually running must be accounted for by the
- * projection audit, either as mounted or as explicitly unmountable. Every mounted Agent Session
- * that actually produces an assistant Message also gets an explicit runtime-adherence outcome for
- * the exact Skill load, and every real benchmark-client Bash invocation gets an ordering outcome
- * in the same Session. Projection, runtime load, and operational ordering remain three independently
+ * matrix: every Agent Session owner the sealed transcript shows dispatched must be accounted for by
+ * the projection audit, either as mounted or as explicitly unmountable. Internal same-Session helper
+ * Turns retain their physical Agent identity for usage, Skill-load, and client-order evidence, but
+ * their evidenced `sessionAgentID` remains the dispatch owner. Every mounted Agent Session that
+ * actually produces an assistant Message also gets an explicit runtime-adherence outcome for the
+ * exact Skill load, and every real benchmark-client Bash invocation gets an ordering outcome in the
+ * same Session. Projection, runtime load, and operational ordering remain three independently
  * measured facts; natural model non-adherence is reported without discarding its official score.
  */
 /**
@@ -2630,10 +2632,15 @@ export function auditDispatchedSkillCoverage(input: {
     ...input.projection.mounted_agents,
     ...input.projection.unmountable_agents.map((agent) => agent.agent_id),
   ])
+  const dispatchAgentID = (message: TranscriptMessage) => {
+    const sessionAgentID = message.info?.sessionAgentID
+    if (typeof sessionAgentID === "string" && sessionAgentID.length > 0) return sessionAgentID
+    return message.info?.agent
+  }
   const dispatched = [
     ...new Set(
       input.transcript
-        .map((message) => message.info?.agent)
+        .map(dispatchAgentID)
         .filter((agent): agent is string => typeof agent === "string" && agent.length > 0),
     ),
   ].sort()
