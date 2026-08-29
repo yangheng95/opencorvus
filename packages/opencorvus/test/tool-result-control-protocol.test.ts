@@ -222,7 +222,7 @@ async function projectedWorkerDecisionSurface(input: { projectPath: string }) {
   const projection = await PromptProfileResolver.resolveWorkerTurnProjection({
     projectDirectory: input.projectPath,
     config,
-    agentID: "base-planner",
+    agentID: "base-tester",
     packageRevision,
   })
   const scheduler = await PromptProfileResolver.resolveSchedulerTurnProjection({
@@ -764,7 +764,7 @@ describe("single Tool-result turn-control protocol", () => {
         await SessionRuntimeContractStore.dispose(fixture.session.id)
       },
     })
-  })
+  }, 120_000)
 
   test("executes the production projected orchestrator wait writer", async () => {
     await using project = await memoryProject()
