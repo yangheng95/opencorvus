@@ -1604,40 +1604,57 @@ export function reconcileAutomationBenchBatchCandidates(input: {
   return candidates
 }
 
+export function partialAutomationBenchBatchOutcomes<T extends { case_index: number }>(input: {
+  waveCount: number
+  launchedByWave?: T[][]
+}) {
+  return Array.from({ length: input.waveCount }, (_, offset) => ({
+    launched: [...(input.launchedByWave?.[offset] ?? [])].sort((left, right) => left.case_index - right.case_index),
+    eligible: [] as Array<{ case_index: number; profile: "base" | "advanced"; run_id: string }>,
+  }))
+}
+
+export class AutomationBenchReusableRunConflictError extends Error {
+  readonly caseIndex: number
+  readonly profile: "base" | "advanced"
+  readonly runIDs: string[]
+
+  constructor(input: { caseIndex: number; profile: "base" | "advanced"; runIDs: string[] }) {
+    const runIDs = [...new Set(input.runIDs)].sort()
+    super(`Multiple reusable ${input.profile} runs exist for case ${input.caseIndex}: ${runIDs.join(", ")}`)
+    this.name = "AutomationBenchReusableRunConflictError"
+    this.caseIndex = input.caseIndex
+    this.profile = input.profile
+    this.runIDs = runIDs
+  }
+}
+
 export function reusableProfileRuns(
   catalog: { leaderboard: Array<Record<string, any>>; candidates: Array<Record<string, any>> },
   profile: "base" | "advanced",
   model: string,
   launchMode: string,
 ): Map<number, Record<string, any>> {
-  const verified = new Map(
-    catalog.leaderboard
-      .filter(
-        (record) =>
-          record.opencorvus?.profile === profile &&
-          record.opencorvus?.model === model &&
-          record.opencorvus?.launch_mode === launchMode &&
-          record.benchmark?.repetition === 1,
-      )
-      .map((record) => [Number(record.benchmark.case_index), record]),
-  )
   const reusable = new Map<number, Record<string, any>>()
-  for (const record of catalog.candidates.filter(
-    (item) =>
-      item.opencorvus?.profile === profile &&
-      item.opencorvus?.model === model &&
-      item.opencorvus?.launch_mode === launchMode &&
-      item.benchmark?.repetition === 1,
-  )) {
-    const caseIndex = Number(record.benchmark.case_index)
-    if (verified.has(caseIndex)) continue
+  const matching = (record: Record<string, any>) =>
+    record.opencorvus?.profile === profile &&
+    record.opencorvus?.model === model &&
+    record.opencorvus?.launch_mode === launchMode &&
+    record.benchmark?.repetition === 1
+  for (const record of [...catalog.candidates.filter(matching), ...catalog.leaderboard.filter(matching)]) {
+    const caseIndex = Number(record.benchmark?.case_index)
+    if (!Number.isInteger(caseIndex) || !record.run_id) continue
     const existing = reusable.get(caseIndex)
     if (existing && existing.run_id !== record.run_id) {
-      throw new Error(`Multiple reusable ${profile} candidates exist for case ${caseIndex}`)
+      throw new AutomationBenchReusableRunConflictError({
+        caseIndex,
+        profile,
+        runIDs: [String(existing.run_id), String(record.run_id)],
+      })
     }
     reusable.set(caseIndex, record)
   }
-  return new Map([...reusable, ...verified])
+  return reusable
 }
 
 export function missingCompletedBatchProfileReceipts(input: {
@@ -1861,22 +1878,17 @@ export function auditBatchEvidence(input: {
   attempts: Array<Record<string, any>>
   planSHA256: string
 }) {
-  if (!input.receipt) {
-    return {
-      passed: false,
-      status: "orphan_plan",
-      reasons: ["batch_receipt_missing"],
-      eligible_run_ids: [] as string[],
-      sealing_run_ids: [] as string[],
-      adopted_run_ids: [] as string[],
-    }
-  }
   const reasons: string[] = []
+  const receipt = input.receipt ?? {
+    status: "failed",
+    batch_run_id: input.plan.batch_run_id,
+  }
+  if (!input.receipt) reasons.push("batch_receipt_missing")
   const planSchemaAudit = auditAutomationBenchBatchPlanSchema(input.plan)
   if (!planSchemaAudit.passed) reasons.push(planSchemaAudit.reason!)
   if (
-    !["completed", "failed"].includes(input.receipt.status) ||
-    input.receipt.batch_run_id !== input.plan.batch_run_id
+    !["completed", "failed"].includes(receipt.status) ||
+    receipt.batch_run_id !== input.plan.batch_run_id
   ) {
     reasons.push("batch_receipt_identity")
   }
@@ -1909,14 +1921,52 @@ export function auditBatchEvidence(input: {
     JSON.stringify(
       (input.waveCompletion?.eligible_slots ?? []).map((item: any) => `${item.case_index}:${item.profile}`).sort(),
     ) === JSON.stringify(expectedWave1)
-  if (!rolling && (input.receipt.status === "completed" || input.waveCompletion) && !waveCompletionValid) {
+  if (!rolling && (receipt.status === "completed" || input.waveCompletion) && !waveCompletionValid) {
     reasons.push("wave_1_completion")
   }
-  const launched = waveIndexes.flatMap((waveIndex: number) =>
-    (input.receipt[`wave_${waveIndex}`]?.launched ?? []).map((item: any) => ({ ...item, waveIndex })),
+  const explicitLaunched = waveIndexes.flatMap((waveIndex: number) =>
+    (receipt[`wave_${waveIndex}`]?.launched ?? []).map((item: any) => ({ ...item, waveIndex })),
   )
+  const explicitRunIDs = new Set(explicitLaunched.map((item: any) => String(item.run_id ?? "")).filter(Boolean))
+  const recoveredLaunched = rolling && receipt.status === "failed"
+    ? input.attempts
+        .filter((record) => record.benchmark?.batch_run_id === input.plan.batch_run_id)
+        .flatMap((record) => {
+          const waveIndex = Number(record.benchmark?.wave_index)
+          const caseIndex = Number(record.benchmark?.case_index)
+          const profile = String(record.opencorvus?.profile ?? "")
+          if (explicitRunIDs.has(String(record.run_id))) return []
+          const expectedSlot = (input.plan.waves?.[waveIndex - 1] as BatchPlanSlot[] | undefined)?.some(
+            (slot) => slot.case_index === caseIndex && slot.profile === profile,
+          )
+          const exactBinding =
+            record.benchmark?.batch_plan_sha256 === input.planSHA256 &&
+            record.benchmark?.repetition === (planSchemaAudit.repetition ?? 1) &&
+            record.opencorvus?.model === input.plan.model &&
+            record.opencorvus?.launch_mode === input.plan.launch_mode &&
+            expectedSlot
+          if (!exactBinding) {
+            reasons.push(`plan_bound_attempt:${profile}:${caseIndex}`)
+            return []
+          }
+          const startedAt = Number(record.started_at)
+          const finishedAt = Number(record.finished_at)
+          if (!Number.isFinite(startedAt) || !Number.isFinite(finishedAt) || finishedAt < startedAt) return []
+          return [{
+            case_index: caseIndex,
+            profile,
+            run_id: record.run_id,
+            exit_code: record.raw_leaderboard_eligible === true ? 0 : 1,
+            run_status: record.raw_leaderboard_eligible === true ? "scored" : "failed",
+            stderr_tail: "",
+            recovered_from_immutable_attempt: true,
+            waveIndex,
+          }]
+        })
+    : []
+  const launched = [...explicitLaunched, ...recoveredLaunched]
   const eligibleClaims = waveIndexes.flatMap((waveIndex: number) =>
-    (input.receipt[`wave_${waveIndex}`]?.eligible ?? []).map((item: any) => ({ ...item, waveIndex })),
+    (receipt[`wave_${waveIndex}`]?.eligible ?? []).map((item: any) => ({ ...item, waveIndex })),
   )
   const preexisting = new Map<string, BatchPlanSlot & { run_id: string }>(
     ["base", "advanced"].flatMap((profile) =>
@@ -1933,6 +1983,7 @@ export function auditBatchEvidence(input: {
     end: number
   }> = []
   const launchedRunIDs = new Set<string>()
+  const recoveredSealingRunIDs = new Set<string>()
   for (const item of launched) {
     const attempt = input.attempts.find((record) => record.run_id === item.run_id)
     const expectedSlot = (input.plan.waves?.[item.waveIndex - 1] as BatchPlanSlot[] | undefined)?.some(
@@ -1971,6 +2022,12 @@ export function auditBatchEvidence(input: {
       continue
     }
     launchedRunIDs.add(String(item.run_id))
+    const slotHasEligibleClaim = eligibleClaims.some(
+      (claim: any) => claim.case_index === item.case_index && claim.profile === item.profile,
+    )
+    if (receipt.status === "failed" && attempt.raw_leaderboard_eligible === true && !slotHasEligibleClaim) {
+      recoveredSealingRunIDs.add(String(item.run_id))
+    }
     intervals.push({
       profile: item.profile,
       waveIndex: item.waveIndex,
@@ -1986,7 +2043,7 @@ export function auditBatchEvidence(input: {
     }
   }
   const eligibleRunIDs = new Set<string>()
-  const sealingRunIDs = new Set<string>()
+  const sealingRunIDs = new Set<string>(recoveredSealingRunIDs)
   const adoptedRunIDs = new Set<string>()
   for (const item of eligibleClaims) {
     const attempt = input.attempts.find((record) => record.run_id === item.run_id)
@@ -2055,18 +2112,18 @@ export function auditBatchEvidence(input: {
   }
   const selectedSlots = waveIndexes
     .flatMap((waveIndex) =>
-      (input.receipt[`wave_${waveIndex}`]?.eligible ?? []).map((item: any) => `${item.case_index}:${item.profile}`),
+      (receipt[`wave_${waveIndex}`]?.eligible ?? []).map((item: any) => `${item.case_index}:${item.profile}`),
     )
     .sort()
   const expectedSelectedSlots = expectedCases
     .flatMap((caseIndex) => (input.plan.profiles ?? []).map((profile: string) => `${caseIndex}:${profile}`))
     .sort()
-  if (input.receipt.status === "completed" && JSON.stringify(selectedSlots) !== JSON.stringify(expectedSelectedSlots)) {
+  if (receipt.status === "completed" && JSON.stringify(selectedSlots) !== JSON.stringify(expectedSelectedSlots)) {
     reasons.push("selected_case_coverage")
   }
   return {
     passed: reasons.length === 0,
-    status: reasons.length === 0 ? input.receipt.status : "invalid",
+    status: reasons.length === 0 ? receipt.status : input.receipt ? "invalid" : "orphan_plan",
     reasons,
     eligible_run_ids: [...eligibleRunIDs].sort(),
     sealing_run_ids: [...sealingRunIDs].sort(),
@@ -2103,7 +2160,9 @@ export function reusableBatchCandidateRunIDs(audit: {
     reasons.length === 0 ||
     !reasons.every(
       (reason) =>
-        reason.startsWith("eligible_trial_raw_invalid:") || reason.startsWith("launched_trial_unstarted:"),
+        reason === "batch_receipt_missing" ||
+        reason.startsWith("eligible_trial_raw_invalid:") ||
+        reason.startsWith("launched_trial_unstarted:"),
     )
   ) {
     return []

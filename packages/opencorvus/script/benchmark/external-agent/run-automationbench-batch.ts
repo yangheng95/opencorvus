@@ -10,6 +10,7 @@ import {
   createRestartableDrain,
   installBenchmarkTerminationHandlers,
   mapSettledWithBoundedConcurrency,
+  partialAutomationBenchBatchOutcomes,
   readBenchmarkObserverLivenessStream,
   reconcileAutomationBenchBatchCandidates,
   reusableProfileRuns,
@@ -710,6 +711,10 @@ try {
   )
 } catch (error) {
   for (const context of contexts.filter((item) => !item.receiptWritten)) {
+    const outcomes = context.batchOutcomes ?? partialAutomationBenchBatchOutcomes({
+      waveCount: context.waves.length,
+      launchedByWave: context.launchedByWave,
+    })
     await fs.mkdir(planDirectory, { recursive: true }).catch(() => undefined)
     await fs
       .writeFile(
@@ -722,9 +727,7 @@ try {
             status: "failed",
             finished_at: Date.now(),
             signal: terminationSignal ?? null,
-            ...(context.batchOutcomes
-              ? Object.fromEntries(context.batchOutcomes.map((outcome, index) => [`wave_${index + 1}`, outcome]))
-              : {}),
+            ...Object.fromEntries(outcomes.map((outcome, index) => [`wave_${index + 1}`, outcome])),
             error: error instanceof Error ? { name: error.name, message: error.message } : { name: "UnknownError" },
           },
           null,

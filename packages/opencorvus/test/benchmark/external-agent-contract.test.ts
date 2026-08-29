@@ -57,6 +57,8 @@ import {
   executeRollingBatchChains,
   failureObservationReceipt,
   missingCompletedBatchProfileReceipts,
+  AutomationBenchReusableRunConflictError,
+  partialAutomationBenchBatchOutcomes,
   reusableProfileRuns,
   reconcileAutomationBenchBatchCandidates,
   reusableBatchCandidateRunIDs,
@@ -3003,6 +3005,310 @@ describe("external agent benchmark contract", () => {
     ).toEqual([])
   })
 
+  test("recovers raw-valid rolling slots when interrupted settlement omitted receipt rows", () => {
+    const cases = [1, 2, 3, 4, 5].map((case_index) => ({ case_index }))
+    const wave = cases.map((item) => ({ ...item, profile: "base" }))
+    const plan = {
+      schema_version: 2,
+      repetition: 1,
+      batch_run_id: "batch-interrupted-settlement",
+      batch_index: 1,
+      model: "openai/gpt-5.6-luna",
+      launch_mode: "mission",
+      trial_concurrency: 5,
+      schedule_mode: "rolling_case_slots_v1",
+      profiles: ["base"],
+      cases,
+      waves: [wave],
+      preexisting_eligible: { base: [], advanced: [] },
+    }
+    const attempts = cases.map((item) => ({
+      run_id: `sealed-${item.case_index}`,
+      raw_leaderboard_eligible: true,
+      leaderboard_eligible: true,
+      started_at: item.case_index * 100,
+      ...(item.case_index === 2 ? {} : { finished_at: item.case_index * 100 + 50 }),
+      benchmark: {
+        batch_run_id: plan.batch_run_id,
+        batch_plan_sha256: "interrupted-plan-sha",
+        wave_index: 1,
+        case_index: item.case_index,
+        repetition: 1,
+      },
+      opencorvus: { profile: "base", model: plan.model, launch_mode: "mission" },
+    }))
+    const failed = auditBatchEvidence({
+      plan,
+      receipt: { batch_run_id: plan.batch_run_id, batch_index: 1, status: "failed" },
+      attempts,
+      planSHA256: "interrupted-plan-sha",
+    })
+    const orphan = auditBatchEvidence({
+      plan,
+      attempts,
+      planSHA256: "interrupted-plan-sha",
+    })
+    const reusable = ["sealed-1", "sealed-3", "sealed-4", "sealed-5"]
+
+    expect({ failed, failedReusable: reusableBatchCandidateRunIDs(failed) }).toEqual({
+      failed: {
+        passed: true,
+        status: "failed",
+        reasons: [],
+        eligible_run_ids: [],
+        sealing_run_ids: reusable,
+        adopted_run_ids: [],
+      },
+      failedReusable: reusable,
+    })
+    expect({ orphan, orphanReusable: reusableBatchCandidateRunIDs(orphan) }).toEqual({
+      orphan: {
+        passed: false,
+        status: "orphan_plan",
+        reasons: ["batch_receipt_missing"],
+        eligible_run_ids: [],
+        sealing_run_ids: reusable,
+        adopted_run_ids: [],
+      },
+      orphanReusable: reusable,
+    })
+  })
+
+  test("projects launched outcomes into a failed receipt without waiting for batch eligibility", () => {
+    const launchedByWave = [[
+      { case_index: 5, profile: "base" as const, run_id: "sealed-5" },
+      { case_index: 1, profile: "base" as const, run_id: "sealed-1" },
+    ]]
+
+    expect(partialAutomationBenchBatchOutcomes({ waveCount: 2, launchedByWave })).toEqual([
+      {
+        launched: [
+          { case_index: 1, profile: "base", run_id: "sealed-1" },
+          { case_index: 5, profile: "base", run_id: "sealed-5" },
+        ],
+        eligible: [],
+      },
+      { launched: [], eligible: [] },
+    ])
+    expect(launchedByWave[0]!.map((item) => item.case_index)).toEqual([5, 1])
+  })
+
+  test("adopts five failed-receipt sealed candidates into a later completed receipt", () => {
+    const cases = [1, 2, 3, 4, 5].map((case_index) => ({ case_index }))
+    const wave = cases.map((item) => ({ ...item, profile: "base" }))
+    const planSHA256 = "sealed-source-plan-sha"
+    const sourcePlan = {
+      schema_version: 2,
+      repetition: 1,
+      batch_run_id: "sealed-source-batch",
+      batch_index: 1,
+      model: "openai/gpt-5.6-luna",
+      launch_mode: "mission",
+      trial_concurrency: 5,
+      schedule_mode: "rolling_case_slots_v1",
+      profiles: ["base"],
+      cases,
+      waves: [wave],
+      preexisting_eligible: { base: [], advanced: [] },
+    }
+    const attempts = cases.map((item) => ({
+      run_id: `sealed-${item.case_index}`,
+      raw_leaderboard_eligible: true,
+      leaderboard_eligible: true,
+      started_at: item.case_index * 100,
+      finished_at: item.case_index * 100 + 50,
+      benchmark: {
+        batch_run_id: sourcePlan.batch_run_id,
+        batch_plan_sha256: planSHA256,
+        wave_index: 1,
+        case_index: item.case_index,
+        repetition: 1,
+      },
+      opencorvus: { profile: "base", model: sourcePlan.model, launch_mode: "mission" },
+    }))
+    const launched = attempts.map((attempt, index) => ({
+      ...wave[index],
+      run_id: attempt.run_id,
+      exit_code: 0,
+      run_status: "scored",
+    }))
+    const sourceAudit = auditBatchEvidence({
+      plan: sourcePlan,
+      receipt: {
+        batch_run_id: sourcePlan.batch_run_id,
+        batch_index: 1,
+        status: "failed",
+        wave_1: { launched, eligible: [] },
+      },
+      attempts,
+      planSHA256,
+    })
+    const completedPlan = {
+      ...sourcePlan,
+      batch_run_id: "completed-adoption-batch",
+      batch_index: 2,
+      preexisting_eligible: { base: launched.map(({ case_index, profile, run_id }) => ({ case_index, profile, run_id })), advanced: [] },
+    }
+    const completedAudit = auditBatchEvidence({
+      plan: completedPlan,
+      receipt: {
+        batch_run_id: completedPlan.batch_run_id,
+        batch_index: 2,
+        status: "completed",
+        wave_1: { launched: [], eligible: launched.map(({ case_index, profile, run_id }) => ({ case_index, profile, run_id })) },
+      },
+      attempts,
+      planSHA256: "completed-adoption-plan-sha",
+    })
+    const runIDs = attempts.map((attempt) => attempt.run_id).sort()
+
+    expect({ sourceAudit, reusable: reusableBatchCandidateRunIDs(sourceAudit), completedAudit }).toEqual({
+      sourceAudit: {
+        passed: true,
+        status: "failed",
+        reasons: [],
+        eligible_run_ids: [],
+        sealing_run_ids: runIDs,
+        adopted_run_ids: [],
+      },
+      reusable: runIDs,
+      completedAudit: {
+        passed: true,
+        status: "completed",
+        reasons: [],
+        eligible_run_ids: runIDs,
+        sealing_run_ids: [],
+        adopted_run_ids: runIDs,
+      },
+    })
+  })
+
+  test("keeps an explicit eligible selection ahead of a later launched duplicate in a failed receipt", () => {
+    const cases = [1, 2, 3, 4, 5].map((case_index) => ({ case_index }))
+    const wave = cases.map((item) => ({ ...item, profile: "base" }))
+    const plan = {
+      schema_version: 2,
+      repetition: 1,
+      batch_run_id: "batch-explicit-selection",
+      batch_index: 1,
+      model: "openai/gpt-5.6-luna",
+      launch_mode: "mission",
+      trial_concurrency: 5,
+      schedule_mode: "rolling_case_slots_v1",
+      profiles: ["base"],
+      cases,
+      waves: [wave],
+      preexisting_eligible: {
+        base: [{ case_index: 1, profile: "base", run_id: "earliest-1" }],
+        advanced: [],
+      },
+    }
+    const current = cases.map((item) => ({
+      run_id: item.case_index === 1 ? "later-duplicate-1" : `current-${item.case_index}`,
+      raw_leaderboard_eligible: true,
+      leaderboard_eligible: true,
+      started_at: item.case_index * 100,
+      finished_at: item.case_index * 100 + 50,
+      benchmark: {
+        batch_run_id: plan.batch_run_id,
+        batch_plan_sha256: "explicit-selection-plan-sha",
+        wave_index: 1,
+        case_index: item.case_index,
+        repetition: 1,
+      },
+      opencorvus: { profile: "base", model: plan.model, launch_mode: "mission" },
+    }))
+    const earliest = {
+      run_id: "earliest-1",
+      raw_leaderboard_eligible: true,
+      leaderboard_eligible: true,
+      started_at: 1,
+      finished_at: 50,
+      benchmark: { batch_run_id: "earlier-batch", case_index: 1, repetition: 1 },
+      opencorvus: { profile: "base", model: plan.model, launch_mode: "mission" },
+    }
+    const launched = current.map((item, index) => ({
+      ...wave[index],
+      run_id: item.run_id,
+      exit_code: 0,
+      run_status: "scored",
+    }))
+    const eligible = [
+      { ...wave[0], run_id: earliest.run_id },
+      ...launched.slice(1),
+    ]
+    const audit = auditBatchEvidence({
+      plan,
+      receipt: {
+        batch_run_id: plan.batch_run_id,
+        batch_index: 1,
+        status: "failed",
+        wave_1: { launched, eligible },
+      },
+      attempts: [earliest, ...current],
+      planSHA256: "explicit-selection-plan-sha",
+    })
+
+    expect({ audit, reusable: reusableBatchCandidateRunIDs(audit) }).toEqual({
+      audit: {
+        passed: true,
+        status: "failed",
+        reasons: [],
+        eligible_run_ids: ["current-2", "current-3", "current-4", "current-5", "earliest-1"],
+        sealing_run_ids: ["current-2", "current-3", "current-4", "current-5"],
+        adopted_run_ids: ["earliest-1"],
+      },
+      reusable: ["current-2", "current-3", "current-4", "current-5"],
+    })
+  })
+
+  test("fails closed when interrupted settlement binds multiple attempts to one rolling slot", () => {
+    const cases = [1, 2, 3, 4, 5].map((case_index) => ({ case_index }))
+    const plan = {
+      schema_version: 2,
+      repetition: 1,
+      batch_run_id: "batch-duplicate-slot",
+      batch_index: 1,
+      model: "openai/gpt-5.6-luna",
+      launch_mode: "mission",
+      trial_concurrency: 5,
+      schedule_mode: "rolling_case_slots_v1",
+      profiles: ["base"],
+      cases,
+      waves: [cases.map((item) => ({ ...item, profile: "base" }))],
+      preexisting_eligible: { base: [], advanced: [] },
+    }
+    const attempt = (run_id: string, case_index: number, started_at: number) => ({
+      run_id,
+      raw_leaderboard_eligible: true,
+      leaderboard_eligible: true,
+      started_at,
+      finished_at: started_at + 50,
+      benchmark: {
+        batch_run_id: plan.batch_run_id,
+        batch_plan_sha256: "duplicate-slot-plan-sha",
+        wave_index: 1,
+        case_index,
+        repetition: 1,
+      },
+      opencorvus: { profile: "base", model: plan.model, launch_mode: "mission" },
+    })
+    const audit = auditBatchEvidence({
+      plan,
+      receipt: { batch_run_id: plan.batch_run_id, batch_index: 1, status: "failed" },
+      attempts: [
+        ...cases.map((item) => attempt(`sealed-${item.case_index}`, item.case_index, item.case_index * 100)),
+        attempt("duplicate-1", 1, 700),
+      ],
+      planSHA256: "duplicate-slot-plan-sha",
+    })
+
+    expect({ reasons: audit.reasons, reusable: reusableBatchCandidateRunIDs(audit) }).toEqual({
+      reasons: ["wave_launch_shape:1"],
+      reusable: [],
+    })
+  })
+
   test("projects active and terminal attempts ahead of an unstarted planned slot", () => {
     const invalidation = { status: "invalid_bug", reason: "host_decision_ambiguous" }
     expect([
@@ -3389,36 +3695,53 @@ describe("external agent benchmark contract", () => {
     ).toThrow("Multiple eligible candidates exist for base case 61")
   })
 
-  test("reuses verified profile rows before failed-batch candidates", () => {
+  test("fails closed when candidate and leaderboard claim distinct reusable runs for one case", () => {
     const record = (run_id: string, case_index: number) => ({
       run_id,
       benchmark: { case_index, repetition: 1 },
       opencorvus: { profile: "base", model: "openai/gpt-5.6-luna", launch_mode: "mission" },
     })
+    const catalog = {
+      leaderboard: [record("verified-1", 1)],
+      candidates: [
+        record("earliest-candidate-1", 1),
+        record("candidate-2", 2),
+        {
+          ...record("direct-task-candidate-3", 3),
+          opencorvus: { profile: "base", model: "openai/gpt-5.6-luna", launch_mode: "task" },
+        },
+        {
+          ...record("terra-mission-candidate-4", 4),
+          opencorvus: { profile: "base", model: "openai/gpt-5.6-terra", launch_mode: "mission" },
+        },
+      ],
+    }
+
+    let conflict: unknown
+    try {
+      reusableProfileRuns(catalog, "base", "openai/gpt-5.6-luna", "mission")
+    } catch (error) {
+      conflict = error
+    }
+    expect(conflict).toEqual(
+      new AutomationBenchReusableRunConflictError({
+        caseIndex: 1,
+        profile: "base",
+        runIDs: ["earliest-candidate-1", "verified-1"],
+      }),
+    )
+
     const reusable = reusableProfileRuns(
-      {
-        leaderboard: [record("verified-1", 1)],
-        candidates: [
-          record("superseded-candidate-1", 1),
-          record("candidate-2", 2),
-          {
-            ...record("direct-task-candidate-3", 3),
-            opencorvus: { profile: "base", model: "openai/gpt-5.6-luna", launch_mode: "task" },
-          },
-          {
-            ...record("terra-mission-candidate-4", 4),
-            opencorvus: { profile: "base", model: "openai/gpt-5.6-terra", launch_mode: "mission" },
-          },
-        ],
-      },
+      { ...catalog, leaderboard: [record("verified-5", 5), record("earliest-candidate-1", 1)] },
       "base",
       "openai/gpt-5.6-luna",
       "mission",
     )
 
     expect([...reusable].map(([caseIndex, item]) => [caseIndex, item.run_id])).toEqual([
+      [1, "earliest-candidate-1"],
       [2, "candidate-2"],
-      [1, "verified-1"],
+      [5, "verified-5"],
     ])
   })
 

@@ -1031,7 +1031,7 @@ for (let pass = 0; pass < batchAudits.length; pass++) {
 }
 for (const record of records.filter((item) => item.leaderboard_eligible)) {
   const candidateBatch = batchAudits.find(
-    (item) => item.receipt_present && item.referenced_run_ids.includes(String(record.run_id)),
+    (item) => item.referenced_run_ids.includes(String(record.run_id)),
   )
   record.batch_candidate_eligible = candidateBatch !== undefined
   const completedBatch = batchAudits.find(
