@@ -9,6 +9,7 @@ import {
   resolveBrowserNodeSidecarRuntime,
 } from "@/browser/runtime/node-sidecar"
 import { ProcessSupervisor } from "@/shell/process-supervisor"
+import { BrowserMCPNodeBundleContract } from "./node-bundle-contract"
 
 export namespace BrowserMCPNodeLauncher {
   const CHILD_CLEANUP_TIMEOUT_MS = 2_000
@@ -197,6 +198,7 @@ export namespace BrowserMCPNodeLauncher {
         path.join(import.meta.dir, `${transport}.ts`),
         "--target=node",
         "--external=electron",
+        ...BrowserMCPNodeBundleContract.bunCliConditionArgs(),
         `--outfile=${staging}`,
       ],
       cwd: process.cwd(),

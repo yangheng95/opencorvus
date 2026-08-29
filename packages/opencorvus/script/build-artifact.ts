@@ -1,5 +1,6 @@
 import { createRequire } from "node:module"
 import path from "node:path"
+import { BrowserMCPNodeBundleContract } from "../src/mcp/browser/node-bundle-contract"
 import { nodeBinaryPackageName, nodeExecutableName } from "@opencorvus-ai/util/node-runtime"
 
 export type BuildFlavor = "cli" | "overlay-server"
@@ -71,14 +72,12 @@ export function artifactBrowserMcpNodeRuntimeModules(): ArtifactRuntimeNodeModul
   return [{ name: "playwright" }]
 }
 
-export async function buildArtifactBrowserMcpNodeBundle(input: {
-  entrypoint: string
-  outdir?: string
-}) {
+export async function buildArtifactBrowserMcpNodeBundle(input: { entrypoint: string; outdir?: string }) {
   return Bun.build({
     entrypoints: [input.entrypoint],
     ...(input.outdir ? { outdir: input.outdir } : {}),
     target: "node",
+    conditions: [...BrowserMCPNodeBundleContract.sourceExportConditions],
     external: artifactBrowserMcpNodeExternalModules(),
   })
 }

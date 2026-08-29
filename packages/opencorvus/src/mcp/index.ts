@@ -40,6 +40,7 @@ import { McpOAuthCallback, type CallbackResolution } from "./oauth-callback"
 import { oauthAuthorizationLogFields, oauthConnectionFailureLogFields } from "./oauth-log"
 import { McpAuth } from "./auth"
 import { BrowserMCPBuiltin } from "./browser/builtin"
+import { partitionMcpByRuntimeOwnership } from "./scoped-builtin-ownership"
 import { BusEvent } from "../bus/bus-event"
 import { Bus } from "@/bus"
 import { GlobalBus } from "@/bus/global"
@@ -3489,8 +3490,9 @@ export namespace MCP {
 
   export async function tools(processAuthority: ProcessAuthority) {
     const cfg = await Config.get()
+    const configured = (cfg.mcp ?? {}) as NonNullable<Config.Info["mcp"]>
     return toolsForConfig(
-      (cfg.mcp ?? {}) as NonNullable<Config.Info["mcp"]>,
+      partitionMcpByRuntimeOwnership(configured).ordinary,
       cfg.experimental?.mcp_timeout,
       processAuthority,
     )
@@ -3615,7 +3617,8 @@ export namespace MCP {
 
   export async function prompts() {
     const cfg = await Config.get()
-    return promptsForConfig((cfg.mcp ?? {}) as NonNullable<Config.Info["mcp"]>, cfg.experimental?.mcp_timeout)
+    const configured = (cfg.mcp ?? {}) as NonNullable<Config.Info["mcp"]>
+    return promptsForConfig(partitionMcpByRuntimeOwnership(configured).ordinary, cfg.experimental?.mcp_timeout)
   }
 
   export async function promptsForServers(configSnapshot: Config.Info, serverIDs: readonly string[]) {
@@ -3650,7 +3653,8 @@ export namespace MCP {
 
   export async function resources() {
     const cfg = await Config.get()
-    return resourcesForConfig((cfg.mcp ?? {}) as NonNullable<Config.Info["mcp"]>, cfg.experimental?.mcp_timeout)
+    const configured = (cfg.mcp ?? {}) as NonNullable<Config.Info["mcp"]>
+    return resourcesForConfig(partitionMcpByRuntimeOwnership(configured).ordinary, cfg.experimental?.mcp_timeout)
   }
 
   export async function resourcesForServers(configSnapshot: Config.Info, serverIDs: readonly string[]) {
