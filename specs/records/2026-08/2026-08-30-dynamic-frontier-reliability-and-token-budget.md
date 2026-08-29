@@ -97,6 +97,10 @@
 
 再次复审确认 P1 已闭合，同时发现一个有效 P2：失败/取消 lifecycle 若携带 exact `final_message_id`，恢复 outcome 曾无声丢弃该 authority。现已把成功与失败分支共用同一个 exact Message 校验 primitive：ID 必须属于 exact child Session、接受 descriptor 的 exact input Message、且为已完成并带 finish 的 assistant reply；失败 recovery 在 ID 缺省时保持无 Message outcome，在 ID 存在时把同一 ID 写入 `infrastructure_failure.final_message_id`。新增 process-cut 正向测试旁置一个 later adjacent completed assistant Message，验证 settlement 仍保留 lifecycle 指定的 exact ID、唯一 ingress 和重复 sweep 幂等。该文件现为 6/6，OpenCorvus typecheck 再次通过。修复后的完整输入已经独立只读终审，结论为 FINAL PASS，P0/P1/P2/P3 均为 0。
 
+首次完整 pre-push 继续发现一个架构边界错误：`dispatch-agents-recovery.ts` 为重建 frontier executor 直接导入完整 `orchestrator/tools.ts`，与 `session/loop.ts -> orchestrator/tools.ts -> agent/runner.ts -> session/loop.ts` 共同形成 31 模块循环。第一步移除 recovery 的反向 composition 依赖后，`--index` checker 如实把循环缩到 30 模块，并暴露第二条 Dynamic 新边：runner 为读取 canonical completed reply 反向导入整个 Session loop。两条依赖都不是恢复语义所需；根因分别是 durable recovery 与 Tool registry composition、completed Message 查询与 Session loop orchestration 的职责没有分离。修复保持单一实现：recovery 继续唯一负责 Task/Session authority、pinned projection、exact outer Part replay 与 terminal settlement，但由本来就拥有 Tool registry composition 的 Session loop 注入精确 frontier Tool factory；canonical reply 查询下沉为独立 session primitive，由 loop 与 runner 共同使用，删除 loop 内旧定义。不得给 checker 增加 retained member、上调 ceiling 或保留旧构造路径；验收必须重跑真实 `check:module-topology --index` 与提交后的 `--treeish`、frontier process-cut 正向测试和 typecheck。
+
+断环修复的独立只读审查发现一个有效 P2：真实 Dynamic E2E script 不在 package typecheck 范围内，仍从 `SessionLoop` 读取已经下沉并删除的 namespace member；昂贵 Provider 流程会直到 canonical final Message 验收阶段才失败。修复不增加 compatibility re-export，script 与 runner、loop 一样直接使用唯一 `session/completed-reply` owner；无需 Provider 的 Bun bundle/import-resolution 检查成功解析 3851 modules，deterministic E2E contract 3/3 通过，候选 index topology 为 1057 modules / 5176 runtime edges / 无 retained SCC / 4 clean imports。修复后的完整 staged diff 已再次独立只读复审，结论为 FINAL PASS，P0/P1/P2/P3 均为 0。
+
 ## 根因结论
 
 ### 可观察现象

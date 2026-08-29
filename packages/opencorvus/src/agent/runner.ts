@@ -117,7 +117,7 @@ import { SessionContext } from "@/session/context"
 import { recordTaskInfrastructureError, recordToolExecuteError } from "@/engine/persist"
 import { cancelSessionPromptInScope } from "@/engine/cancellation-scope"
 import { SessionPromptState } from "@/session/prompt/state"
-import { SessionLoop } from "@/session/loop"
+import { completedReplyToUserMessage } from "@/session/completed-reply"
 import { SessionRuntimeContractStore } from "@/session/runtime-contract"
 import { MCP } from "@/mcp"
 import { createComputerRuntimeConnectionOwner } from "@/mcp/computer/runtime-owner"
@@ -1804,7 +1804,7 @@ async function runAgentSessionInner<C>(input: RunAgentSessionInput<C>): Promise<
       promptGenerationOwner,
     })
     promptPhysicallySettled = true
-    const canonicalFinalMessage = await SessionLoop.completedReplyToUserMessage(
+    const canonicalFinalMessage = await completedReplyToUserMessage(
       session.id,
       committedInputMessageID!,
       true,

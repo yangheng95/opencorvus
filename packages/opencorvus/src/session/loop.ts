@@ -129,7 +129,10 @@ import { resolvePinnedTaskSchedulerTurnProjection } from "@/engine/task-package-
 import { taskRootIngressSemanticTurnLimit } from "@/engine/task-root-ingress-policy-read"
 import { requireTask } from "@/engine/store"
 import { createOrchestratorTools } from "@/orchestrator/tools"
-import { recoverInterruptedDispatchAgentsPart } from "@/orchestrator/dispatch-agents-recovery"
+import {
+  recoverInterruptedDispatchAgentsPart,
+  type DispatchAgentsRecoveryTool,
+} from "@/orchestrator/dispatch-agents-recovery"
 import { sendSchedulerMessage } from "@/protocol/scheduler-message"
 import {
   isOrchestratorDecisionToolName,
@@ -137,6 +140,11 @@ import {
   type OrchestratorDecisionToolName,
 } from "@/orchestrator/decision-tool-names"
 import { assertToolResultControlPreserved, toolResultControl, toolResultDisposition } from "./tool-result-control"
+import {
+  completedReplyToUserMessage,
+  isCompletedReplyToUserMessage,
+  isSettledReplyToUserMessage,
+} from "./completed-reply"
 import {
   bindToolExecutionMode,
   copyToolCoordinationBindings,
@@ -1361,58 +1369,10 @@ export namespace SessionLoop {
     }
   }
 
-  function isCompletedReplyToUserMessage(
-    message: Message.WithParts,
-    userMessageID: string,
-  ): message is Message.WithParts & { info: Message.Assistant } {
-    return (
-      isSettledReplyToUserMessage(message, userMessageID) &&
-      message.info.finish !== "error" &&
-      message.info.error === undefined
-    )
-  }
-
-  function isSettledReplyToUserMessage(
-    message: Message.WithParts,
-    userMessageID: string,
-  ): message is Message.WithParts & { info: Message.Assistant } {
-    const committedTurnControl = message.parts.some(
-      (part) =>
-        part.type === "tool" &&
-        part.state.status === "completed" &&
-        toolResultControl(part.state.metadata) !== undefined,
-    )
-    return (
-      message.info.role === "assistant" &&
-      Message.acceptsInputMessage(message.info, userMessageID) &&
-      message.info.time.completed !== undefined &&
-      Boolean(message.info.finish) &&
-      (message.info.finish !== "tool-calls" || committedTurnControl) &&
-      message.info.summary !== true
-    )
-  }
-
   function shouldEnterStandby(input: { lastUser: Message.User; lastAssistant: Message.Assistant | undefined }) {
     return !!(
       input.lastAssistant && isCompletedReplyToUserMessage({ info: input.lastAssistant, parts: [] }, input.lastUser.id)
     )
-  }
-
-  export async function completedReplyToUserMessage(
-    sessionID: string,
-    userMessageID: string,
-    includeFailedReply: boolean,
-  ): Promise<Message.WithParts | undefined> {
-    for await (const message of MessageStore.stream(sessionID)) {
-      if (
-        isCompletedReplyToUserMessage(message, userMessageID) ||
-        (includeFailedReply && isSettledReplyToUserMessage(message, userMessageID))
-      ) {
-        return message
-      }
-      if (message.info.id === userMessageID) return undefined
-    }
-    return undefined
   }
 
   async function waitForPeerPromptOwner(input: {
@@ -2383,6 +2343,11 @@ export namespace SessionLoop {
           sessionID,
           messageID: candidate.info.id,
           part: frontier,
+          createFrontierTool: (frontierInput) =>
+            createOrchestratorTools({
+              ...frontierInput,
+              sendSchedulerMessage,
+            }).tools.dispatch_agents as DispatchAgentsRecoveryTool | undefined,
           signal,
         })
       }

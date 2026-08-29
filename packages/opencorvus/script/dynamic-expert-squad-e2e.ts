@@ -163,7 +163,7 @@ try {
     { WorkerTurnDescriptor },
     { findDispatchLineageBySession },
     { ProtocolStore },
-    { SessionLoop },
+    { completedReplyToUserMessage },
   ] = await Promise.all([
     import("@/cli/server-runtime"),
     import("@/engine/host-recovery"),
@@ -174,7 +174,7 @@ try {
     import("@/agent/worker-turn-descriptor"),
     import("@/engine/dispatch-lineage"),
     import("@/protocol/store"),
-    import("@/session/loop"),
+    import("@/session/completed-reply"),
   ])
   runtime.Database = Database
   runtime.Instance = Instance
@@ -467,7 +467,7 @@ function usageFromTaskTranscript(transcript: TranscriptMessage[]) {
         "agent.execution.lifecycle",
         inputMessageID,
       )
-      const canonicalReply = await SessionLoop.completedReplyToUserMessage(sessionID, inputMessageID, false)
+      const canonicalReply = await completedReplyToUserMessage(sessionID, inputMessageID, false)
       return requireAuthoritativeCompletedWorkerFinalMessage({
         sessionID,
         inputMessageID,

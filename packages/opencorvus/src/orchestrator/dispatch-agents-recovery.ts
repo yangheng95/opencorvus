@@ -2,12 +2,11 @@ import { resolvePinnedTaskSchedulerTurnProjection } from "@/engine/task-package-
 import { requireTask } from "@/engine/store"
 import { taskIDForSession } from "@/engine/task-session-lineage"
 import { EffectiveConfig } from "@/config/effective"
+import type { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
 import { Instance } from "@/project/instance"
-import { sendSchedulerMessage } from "@/protocol/scheduler-message"
 import { Session } from "@/session"
 import type { Message } from "@/session/message"
 import { toolFailureCauseFromUnknown } from "@/session/tool-failure-cause"
-import { createOrchestratorTools } from "./tools"
 
 type FrontierToolResult = {
   title: string
@@ -15,9 +14,16 @@ type FrontierToolResult = {
   metadata: Record<string, unknown>
 }
 
-type FrontierTool = {
+export type DispatchAgentsRecoveryTool = {
   execute?: (input: unknown, options: unknown) => Promise<unknown> | unknown
 }
+
+export type DispatchAgentsRecoveryToolFactory = (input: {
+  taskID: string
+  agentSessionID: string
+  signal?: AbortSignal
+  dispatchAgents: readonly PromptProfileResolver.ResolvedProjectedAgent[]
+}) => DispatchAgentsRecoveryTool | undefined
 
 /**
  * Resume one persisted frontier decision whose owning process ended.
@@ -31,6 +37,7 @@ export async function recoverInterruptedDispatchAgentsPart(input: {
   sessionID: string
   messageID: string
   part: Message.ToolPart
+  createFrontierTool: DispatchAgentsRecoveryToolFactory
   signal?: AbortSignal
 }): Promise<"completed" | "failed"> {
   if (input.part.tool !== "dispatch_agents" || input.part.state.status !== "running") {
@@ -87,13 +94,12 @@ export async function recoverInterruptedDispatchAgentsPart(input: {
       if (!schedulerCapability.builtInToolIDs.includes("dispatch_agents")) {
         throw new Error(`Task ${taskID} pinned scheduler no longer projects dispatch_agents`)
       }
-      const frontier = createOrchestratorTools({
+      const frontier = input.createFrontierTool({
         taskID,
         agentSessionID: input.sessionID,
-        sendSchedulerMessage,
         signal: input.signal,
         dispatchAgents: [...skillProjection.schedulerOnlyAgents, ...skillProjection.projectedAgents],
-      }).tools.dispatch_agents as FrontierTool | undefined
+      })
       if (!frontier?.execute) throw new Error(`Task ${taskID} dispatch_agents recovery executor is unavailable`)
 
         const result = (await frontier.execute(input.part.state.input as never, {
