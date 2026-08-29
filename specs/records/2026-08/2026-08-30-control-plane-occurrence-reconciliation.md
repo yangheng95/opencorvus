@@ -201,6 +201,8 @@ The fifth uninvolved read-only review confirmed that correction and found no pro
 
 The sixth and final uninvolved read-only review inspected the complete staged set after the exact force-add and reported no unresolved findings. It confirmed that all 33 paths were staged without unstaged or untracked residue, the authoritative record and both indexes were consistent, no benchmark-specific product state was present, and the implementation, tests, architecture, review history, and limitations expressed one shared contract. The main agent then reran the ten-file suite at 60 pass, 0 fail, 218 assertions, package TypeScript, documentation, architecture, state, lease, route, topology, and staged-diff checks successfully.
 
+The scoped implementation and record were committed as `79e126492227e2fafd5eabe5169e3532c872da5f`. A fresh fetch showed the branch one commit ahead and zero behind its configured upstream, so no merge commit was required. The push hook passed the repository-wide SDK/runtime checks, all eight package typechecks, routes, docs, lease-owner, architecture-index, package-topology, module-topology, and secret scan, then pushed that exact commit to `origin/codex/automation-workbuddy-benchmark`. This final record-only closure commit is fetched, outgoing-inspected, and pushed under the same delivery rules.
+
 ## Progress
 
 - [x] Benchmark-specific implementation direction removed; clean product baseline restored.
@@ -210,4 +212,4 @@ The sixth and final uninvolved read-only review inspected the complete staged se
 - [x] Product shared primitives implemented.
 - [x] Focused positive/runtime checks pass.
 - [x] Uninvolved read-only review reports no unresolved findings.
-- [ ] Scoped commit merged with latest upstream, outgoing set inspected and pushed.
+- [x] Scoped commit merged with latest upstream, outgoing set inspected and pushed.
