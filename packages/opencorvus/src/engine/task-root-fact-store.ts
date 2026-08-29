@@ -39,6 +39,7 @@ import {
   TaskRootIngressIntegrityError,
 } from "./task-root-ingress-integrity"
 import { orchestratorControlOccurrenceIdentity } from "@/orchestrator/control-message-identity"
+import { OrchestratorControlMessageExtra } from "@/protocol/orchestrator-control-message-schema"
 import { TaskDeletedError, taskDeletedInTransaction } from "./store"
 import { Project } from "@/project/project"
 import {
@@ -627,8 +628,10 @@ export function assertTaskRootAssistantActivationFenceInTransaction(
   }
   const parent = db.select({ data: MessageTable.data, sessionID: MessageTable.session_id }).from(MessageTable)
     .where(eq(MessageTable.id, assistant.parentID)).get()
-  const control = (parent?.data as { extra?: { orchestrator_control_ingress?: { ingress_id?: unknown; predecessor_id?: unknown } } } | undefined)
-    ?.extra?.orchestrator_control_ingress
+  const controlExtra = OrchestratorControlMessageExtra.safeParse(
+    (parent?.data as { extra?: unknown } | undefined)?.extra,
+  )
+  const control = controlExtra.success ? controlExtra.data.orchestrator_control_ingress : undefined
   if (
     parent?.sessionID !== sessionID ||
     control?.ingress_id !== fence.ingressID ||

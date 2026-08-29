@@ -89,6 +89,10 @@ import { resolvePinnedTaskSchedulerTurnProjection } from "@/engine/task-package-
 import { TaskCreatorMetadata } from "@/task-api/task-creator"
 import { deliverTaskRootMessageToOrchestratorSession, getTaskRootMessage } from "@/task-api/task-root-message"
 import { TaskRootMessageProvenance } from "@/protocol/task-root-message-schema"
+import {
+  OrchestratorControlMessageExtra,
+  type OrchestratorControlMessageExtra as OrchestratorControlMessageExtraValue,
+} from "@/protocol/orchestrator-control-message-schema"
 import { AgentTrace } from "@/trace"
 import { ProtocolStore } from "@/protocol/store"
 import { SchedulerMessagePayload } from "@/protocol/schema"
@@ -1154,9 +1158,13 @@ function hasSessionCreatorMessage(db: Database.TxOrDb, sessionID: string): boole
   return rows.some((row) => {
     const info = row.data as {
       role?: string
-      extra?: { task_root_message?: unknown; orchestrator_control_ingress?: unknown }
+      extra?: { task_root_message?: unknown }
     }
-    return info.role === "user" && !info.extra?.task_root_message && !info.extra?.orchestrator_control_ingress
+    return (
+      info.role === "user" &&
+      !info.extra?.task_root_message &&
+      !OrchestratorControlMessageExtra.safeParse(info.extra).success
+    )
   })
 }
 
@@ -1294,12 +1302,7 @@ export type CurrentOrchestratorControlMessage = {
   messageID: string
   partID: string
   text: string
-  extra: {
-    orchestrator_control_ingress: {
-      ingress_id: string
-      predecessor_id: string
-    }
-  }
+  extra: OrchestratorControlMessageExtraValue
 }
 
 /**
@@ -1320,10 +1323,12 @@ export function currentOrchestratorControlMessage(
   if (!exactWakeID) throw new Error("Orchestrator control occurrence requires exact durable ingress identity")
   const predecessor = predecessorID?.trim() || exactWakeID
   if (event.rootMessage?.messageID === predecessor) return undefined
-  const identity = {
-    ingress_id: exactWakeID,
-    predecessor_id: predecessor,
-  }
+  const extra = OrchestratorControlMessageExtra.parse({
+    orchestrator_control_ingress: {
+      ingress_id: exactWakeID,
+      predecessor_id: predecessor,
+    },
+  })
   const occurrence = orchestratorControlOccurrenceIdentity(exactWakeID, predecessor)
   return {
     ...occurrence,
@@ -1332,7 +1337,7 @@ export function currentOrchestratorControlMessage(
       "Continue the same unresolved durable ingress from the exact preceding assistant Turn.",
       renderWakeProvenanceNotice(event, taskID, exactWakeID),
     ].join("\n\n"),
-    extra: { orchestrator_control_ingress: identity },
+    extra,
   }
 }
 

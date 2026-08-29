@@ -40,6 +40,7 @@ import { Identifier } from "@/id/id"
 import { Bus } from "@/bus"
 import { Message } from "@/session/message"
 import { TaskRootMessageProvenance } from "@/protocol/task-root-message-schema"
+import { OrchestratorControlMessageExtra } from "@/protocol/orchestrator-control-message-schema"
 import { taskIDForSession } from "@/engine/task-session-lineage"
 import { SessionStatus } from "@/session/status"
 import { Worktree } from "@/worktree"
@@ -1042,7 +1043,7 @@ export namespace AutomationService {
 
   async function handleMessageCreated(info: Message.VisibleInfo): Promise<void> {
     if (info.role !== "user") return
-    if (isSchedulerWakeMessage(info)) return
+    if (isSchedulerWakeMessage(info) || isOrchestratorControlMessage(info)) return
     await consumePendingSessionWaits({
       sessionId: info.sessionID,
       projectId: Instance.project.id,
@@ -1090,6 +1091,10 @@ export namespace AutomationService {
     // shape check this replaced accepted reasons the schema rejects.
     const parsed = SessionWake.WakeReason.safeParse(info.extra?.wake_reason)
     return parsed.success && parsed.data.source.startsWith("scheduler.")
+  }
+
+  function isOrchestratorControlMessage(info: Message.User): boolean {
+    return OrchestratorControlMessageExtra.safeParse(info.extra).success
   }
 
   function isTaskOperatorMessage(info: Message.User): boolean {

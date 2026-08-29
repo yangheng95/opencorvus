@@ -20,6 +20,7 @@ import { reenterActiveInstance } from "@/project/instance"
 import { createInstanceState } from "@/project/instance-state"
 import { ProtocolEventTable } from "@/protocol/protocol.sql"
 import { ProtocolStore } from "@/protocol/store"
+import { OrchestratorControlMessageExtra } from "@/protocol/orchestrator-control-message-schema"
 import { currentRuntimeOccurrenceID, replaceRuntimeOccurrenceIDForTest } from "@/runtime/process-occurrence"
 import { RuntimeExecutionSettlement, type RuntimeExecutionReservation } from "@/runtime/execution-settlement"
 import { Message } from "@/session/message"
@@ -617,11 +618,10 @@ export const readTaskRootIngressEvidence: TaskRootIngressEvidenceReader = (db, i
       .from(MessageTable)
       .where(eq(MessageTable.id, assistant.parentID))
       .get()
-    const control = (
-      parent?.data as
-        | { extra?: { orchestrator_control_ingress?: { ingress_id?: unknown; predecessor_id?: unknown } } }
-        | undefined
-    )?.extra?.orchestrator_control_ingress
+    const controlExtra = OrchestratorControlMessageExtra.safeParse(
+      (parent?.data as { extra?: unknown } | undefined)?.extra,
+    )
+    const control = controlExtra.success ? controlExtra.data.orchestrator_control_ingress : undefined
     if (
       parent?.sessionID !== row.session_id ||
       control?.ingress_id !== ingress.id ||
