@@ -1,11 +1,7 @@
 import { afterEach, describe, expect, test } from "bun:test"
 import { EngineWorkflowNodeOccurrenceTable } from "@/engine/engine.sql"
-import {
-  createDispatchLineageOrigin,
-  listDispatchLineage,
-  recordDispatchLineage,
-  resolveDispatchContinuationSourceID,
-} from "@/engine/dispatch-lineage"
+import { createDispatchLineageOrigin, listDispatchLineage, resolveDispatchContinuationSourceID } from "@/engine/dispatch-lineage"
+import { recordTestDispatchLineage } from "./fixture/dispatch-lineage"
 import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
 import { WorkflowNodeOccurrenceConflictError } from "@/engine/workflow-node-occurrence"
@@ -129,7 +125,7 @@ async function commitInitialSession(input: {
   })
   const lineage = Database.transaction(() => {
     Session.persistPreparedNext(session)
-    return recordDispatchLineage({
+    return recordTestDispatchLineage({
       origin: origin({ taskID: input.taskID, dispatchID: input.dispatchID, nodeID: input.nodeID }),
       childSessionID: session.id,
     })
@@ -161,7 +157,7 @@ describe("workflow node occurrence authority", () => {
         })
 
         const continuationDispatchID = Identifier.ascending("artifact")
-        const continuation = recordDispatchLineage({
+        const continuation = recordTestDispatchLineage({
           origin: origin({
             taskID,
             dispatchID: continuationDispatchID,
@@ -230,7 +226,7 @@ describe("workflow node occurrence authority", () => {
         try {
           Database.transaction(() => {
             Session.persistPreparedNext(secondChild)
-            recordDispatchLineage({
+            recordTestDispatchLineage({
               origin: origin({ taskID, dispatchID: secondDispatchID, nodeID: "fundamentals" }),
               childSessionID: secondChild.id,
             })

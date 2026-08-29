@@ -371,16 +371,47 @@ CREATE VIRTUAL TABLE IF NOT EXISTS memory_fts USING fts5(
 );
 
 -- Dispatch lineage is immutable physical-execution authority. Adapter input
--- must be present as an exact JSON (JavaScript Object Notation) object because
--- continuation reuses it unchanged; changing this trigger is also the physical
--- schema breakpoint for any future breaking lineage-payload contract.
+-- and the exact delivery-owner disposition are required JSON (JavaScript
+-- Object Notation) objects; changing this trigger is also the physical schema
+-- breakpoint for any future breaking lineage-payload contract.
 CREATE TRIGGER IF NOT EXISTS engine_dispatch_lineage_payload_insert
 BEFORE INSERT ON engine_artifact
 FOR EACH ROW
 WHEN NEW.kind = 'dispatch_lineage'
-  AND json_type(NEW.payload, '$.adapter_input') IS NOT 'object'
+  AND (
+    json_type(NEW.payload, '$.adapter_input') IS NOT 'object'
+    OR json_type(NEW.payload, '$.delivery_owner') IS NOT 'object'
+    OR NOT (
+      (
+        json_extract(NEW.payload, '$.delivery_owner.kind') = 'runtime_process'
+        AND json_type(NEW.payload, '$.delivery_owner.process_occurrence_id') = 'text'
+        AND length(trim(json_extract(NEW.payload, '$.delivery_owner.process_occurrence_id'))) > 0
+        AND (SELECT count(*) FROM json_each(NEW.payload, '$.delivery_owner')) = 2
+      )
+      OR (
+        json_extract(NEW.payload, '$.delivery_owner.kind') = 'historical_reconciliation'
+        AND json_type(NEW.payload, '$.delivery_owner.source') = 'object'
+        AND (SELECT count(*) FROM json_each(NEW.payload, '$.delivery_owner')) = 2
+        AND (SELECT count(*) FROM json_each(NEW.payload, '$.delivery_owner.source')) = 2
+        AND (
+          (
+            json_extract(NEW.payload, '$.delivery_owner.source.kind') = 'dispatch_settlement'
+            AND json_type(NEW.payload, '$.delivery_owner.source.artifact_id') = 'text'
+            AND length(trim(json_extract(NEW.payload, '$.delivery_owner.source.artifact_id'))) > 0
+            AND json_type(NEW.payload, '$.delivery_owner.source.event_id') IS NULL
+          )
+          OR (
+            json_extract(NEW.payload, '$.delivery_owner.source.kind') = 'agent_execution_lifecycle'
+            AND json_type(NEW.payload, '$.delivery_owner.source.event_id') = 'text'
+            AND length(trim(json_extract(NEW.payload, '$.delivery_owner.source.event_id'))) > 0
+            AND json_type(NEW.payload, '$.delivery_owner.source.artifact_id') IS NULL
+          )
+        )
+      )
+    )
+  )
 BEGIN
-  SELECT RAISE(ABORT, 'engine_artifact: dispatch_lineage adapter_input must be an exact object');
+  SELECT RAISE(ABORT, 'engine_artifact: dispatch_lineage requires exact adapter_input and delivery_owner objects');
 END;
 
 CREATE TRIGGER IF NOT EXISTS engine_dispatch_lineage_immutable

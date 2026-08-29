@@ -1,6 +1,7 @@
 import { afterAll, describe, expect, test } from "bun:test"
 import { Database as BunDatabase } from "bun:sqlite"
-import { createDispatchLineageOrigin, recordDispatchLineage } from "@/engine/dispatch-lineage"
+import { createDispatchLineageOrigin } from "@/engine/dispatch-lineage"
+import { recordTestDispatchLineage } from "./fixture/dispatch-lineage"
 import { recordDispatchSettlement } from "@/engine/dispatch-settlement"
 import { describeTask } from "@/engine/describe"
 import { EngineArtifactTable } from "@/engine/engine.sql"
@@ -162,7 +163,7 @@ async function fixture(title: string) {
       dispatchTurn: turn,
     },
   })
-  recordDispatchLineage({
+  recordTestDispatchLineage({
     origin: createDispatchLineageOrigin({
       dispatchID,
       taskID,

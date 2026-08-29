@@ -1,7 +1,8 @@
 import { afterEach, describe, expect, test } from "bun:test"
 import z from "zod"
 import type { IntentAnalysisAgent } from "@/intent-analysis/agent"
-import { createDispatchLineageOrigin, recordDispatchLineage } from "@/engine/dispatch-lineage"
+import { createDispatchLineageOrigin } from "@/engine/dispatch-lineage"
+import { recordTestDispatchLineage } from "./fixture/dispatch-lineage"
 import { recordDispatchSettlement } from "@/engine/dispatch-settlement"
 import { describeTask } from "@/engine/describe"
 import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
@@ -229,7 +230,7 @@ async function createFixture(title: string) {
       },
     },
   }
-  recordDispatchLineage({
+  recordTestDispatchLineage({
     origin: createDispatchLineageOrigin({
       dispatchID,
       taskID,

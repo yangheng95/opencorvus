@@ -10,11 +10,10 @@ import { assertCurrentDeliverySliceRevisionIDs, projectTaskRowInTransaction } fr
 import { assertTaskWorkflowBindingInTransaction } from "./workflow-binding-facts"
 import { assertCurrentDeliverySliceRevisionIDsInTransaction } from "./delivery-slice-membership-facts"
 import type { DispatchOccurrenceAuthority } from "./dispatch-occurrence-authority"
-import {
-  assertWorkflowNodeOccurrenceLineageInTransaction,
-} from "./workflow-node-occurrence"
+import { assertWorkflowNodeOccurrenceLineageInTransaction } from "./workflow-node-occurrence"
 import { taskCancellationAuthorityExecutionErrorInTransaction } from "./cancellation-projection"
 import { taskCompletionClosureInTransaction, TaskCompletionClosureConflictError } from "./task-completion-closure"
+import { assertProcessLivenessOwnerInTransaction, ProcessLivenessOwnerUnavailableError } from "./process-liveness"
 import {
   dispatchLineageRow,
   findDispatchLineageByDispatchIDInTransaction,
@@ -114,24 +113,18 @@ export function createDispatchLineageOrigin(
 export function recordDispatchLineage(input: {
   origin: DispatchLineageOrigin
   childSessionID: string
-  /** Overrides the owning process claim; tests use it to stand in for a peer
-   * backend sharing this database, or `null` for a lineage written before the
-   * claim existed. */
-  ownerProcessOccurrenceID?: string | null
   now?: number
 }): DispatchLineageRow {
   const now = input.now ?? Date.now()
-  const ownerProcessOccurrenceID = (() => {
-    if (input.ownerProcessOccurrenceID === null) return undefined
-    if (input.ownerProcessOccurrenceID) return input.ownerProcessOccurrenceID
-    try {
-      return currentRuntimeOccurrenceID()
-    } catch {
-      // A dispatch must not fail because process identity is unavailable;
-      // recovery falls back to a commit-time grace window for such lineages.
-      return undefined
-    }
-  })()
+  let ownerProcessOccurrenceID: string
+  try {
+    ownerProcessOccurrenceID = currentRuntimeOccurrenceID()
+  } catch (error) {
+    throw new ProcessLivenessOwnerUnavailableError(
+      `Dispatch ${input.origin.dispatchID} cannot establish its runtime process occurrence`,
+      error,
+    )
+  }
   const artifactID = Identifier.ascending("artifact")
   const deliverySliceRevisionIDs = assertCurrentDeliverySliceRevisionIDs({
     taskID: input.origin.taskID,
@@ -159,24 +152,24 @@ export function recordDispatchLineage(input: {
       ...(input.origin.continuationOfDispatchID
         ? { continuation_of_dispatch_id: input.origin.continuationOfDispatchID }
         : {}),
-      ...(ownerProcessOccurrenceID ? { owner_process_occurrence_id: ownerProcessOccurrenceID } : {}),
+      delivery_owner: {
+        kind: "runtime_process",
+        process_occurrence_id: ownerProcessOccurrenceID,
+      },
       adapter_input: input.origin.adapterInput,
       time_created: now,
     },
     artifactID,
   )
   Database.transaction((db) => {
+    assertProcessLivenessOwnerInTransaction(db, ownerProcessOccurrenceID, now)
     const cancellation = taskCancellationAuthorityExecutionErrorInTransaction(
       db,
       input.origin.taskID,
       `dispatch_agent ${input.origin.targetAgentID} lineage commit`,
     )
     if (cancellation) throw cancellation
-    const persistedTask = db
-      .select()
-      .from(EngineTaskTable)
-      .where(eq(EngineTaskTable.id, input.origin.taskID))
-      .get()
+    const persistedTask = db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, input.origin.taskID)).get()
     if (!persistedTask) throw new Error(`Dispatch Task ${input.origin.taskID} does not exist`)
     const task = projectTaskRowInTransaction(db, persistedTask)
     if (task.time_completed !== null) {

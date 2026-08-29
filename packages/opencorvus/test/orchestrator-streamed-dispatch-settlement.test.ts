@@ -65,7 +65,6 @@ test("a streamed dispatch decision settles from one Task-root Provider request",
     directory: project.path,
     fn: async () => {
       await Config.updateProjectPatch({ prompt_profile: { active: "base" } })
-      using _runtime = TaskControlTestHooks.replaceTerminalIngressDeliveryRuntime("runtime:streamed-dispatch")
       using _runner = TaskControlTestHooks.replaceTaskIngressRunner({
         runner: async (input) =>
           await Orchestrator.processTask(
@@ -114,7 +113,11 @@ test("a streamed dispatch decision settles from one Task-root Provider request",
                 chunks: [
                   { type: "stream-start", warnings: [] },
                   { type: "text-start", id: "dispatch-preamble" },
-                  { type: "text-delta", id: "dispatch-preamble", delta: "Dispatch the exact first workflow occurrence." },
+                  {
+                    type: "text-delta",
+                    id: "dispatch-preamble",
+                    delta: "Dispatch the exact first workflow occurrence.",
+                  },
                   { type: "text-end", id: "dispatch-preamble" },
                   {
                     type: "tool-call",
@@ -152,11 +155,11 @@ test("a streamed dispatch decision settles from one Task-root Provider request",
               async start(controller) {
                 await workerGate
                 for (const chunk of [
-                { type: "stream-start", warnings: [] },
-                { type: "text-start", id: "worker-result" },
-                { type: "text-delta", id: "worker-result", delta: "The streamed dispatch receipt is durable." },
-                { type: "text-end", id: "worker-result" },
-                { type: "finish", finishReason: { unified: "stop", raw: "stop" }, usage },
+                  { type: "stream-start", warnings: [] },
+                  { type: "text-start", id: "worker-result" },
+                  { type: "text-delta", id: "worker-result", delta: "The streamed dispatch receipt is durable." },
+                  { type: "text-end", id: "worker-result" },
+                  { type: "finish", finishReason: { unified: "stop", raw: "stop" }, usage },
                 ] as const) {
                   controller.enqueue(chunk)
                 }
@@ -195,7 +198,9 @@ test("a streamed dispatch decision settles from one Task-root Provider request",
         )
         await waitForIngressDeliveryHooksForTest()
         const task = requireTask(taskID)
-        const orchestrator = (await Session.children(task.session_id!)).find((session) => session.kind === "orchestrator")
+        const orchestrator = (await Session.children(task.session_id!)).find(
+          (session) => session.kind === "orchestrator",
+        )
         if (!orchestrator) throw new Error("Task-root Orchestrator Session was not created")
         await Database.awaitEffectIdle(30_000)
         const messages = await Session.messages({ sessionID: orchestrator.id })

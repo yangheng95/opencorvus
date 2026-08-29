@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, test } from "bun:test"
 import { Config } from "../src/config/config"
-import { createDispatchLineageOrigin, recordDispatchLineage } from "../src/engine/dispatch-lineage"
+import { createDispatchLineageOrigin } from "../src/engine/dispatch-lineage"
+import { recordTestDispatchLineage } from "./fixture/dispatch-lineage"
 import { findDispatchSettlementByDispatchID } from "../src/engine/dispatch-settlement"
 import { EngineTaskRootIngressTable } from "../src/engine/engine.sql"
 import { requireTask } from "../src/engine/store"
@@ -93,7 +94,7 @@ describe("abandoned dispatch recovery", () => {
         const task = requireTask(taskID)
         const child = await Session.create({ kind: "delegated-worker", parentID: root.id, title: "Abandoned worker" })
         const dispatchID = Identifier.ascending("artifact")
-        const lineage = recordDispatchLineage({
+        const lineage = recordTestDispatchLineage({
           origin: createDispatchLineageOrigin({
             dispatchID,
             taskID,
@@ -278,7 +279,7 @@ describe("abandoned dispatch recovery", () => {
         const task = requireTask(taskID)
         const child = await Session.create({ kind: "delegated-worker", parentID: root.id, title: "Silenced worker" })
         const dispatchID = Identifier.ascending("artifact")
-        recordDispatchLineage({
+        recordTestDispatchLineage({
           origin: createDispatchLineageOrigin({
             dispatchID,
             taskID,

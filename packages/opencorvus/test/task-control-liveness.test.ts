@@ -145,7 +145,6 @@ describe("Task-control liveness", () => {
         const activatedIngresses: string[] = []
         const blockedRequests: number[] = []
         let second: { id: string } | undefined
-        using _owner = TaskControlTestHooks.replaceTerminalIngressDeliveryRuntime("runtime:test-liveness")
         using _runner = TaskControlTestHooks.replaceTaskIngressRunner({
           runner: async ({ wakeID, activationID, predecessorID }) => {
             if (!wakeID || !activationID || !predecessorID) throw new Error("Missing exact activation identity")
@@ -247,12 +246,7 @@ describe("Task-control compaction coexistence", () => {
             // same control Message, and only then does the real activation
             // assistant append. The fence must refuse a second *turn*, not a
             // system-authored summary.
-            const control = currentOrchestratorControlMessage(
-              { note: wakeID },
-              taskID,
-              wakeID,
-              predecessorID,
-            )
+            const control = currentOrchestratorControlMessage({ note: wakeID }, taskID, wakeID, predecessorID)
             if (!control) throw new Error("Expected an Orchestrator control occurrence")
             await Session.persistMessage({
               info: {

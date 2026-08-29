@@ -1,9 +1,6 @@
 import { afterEach, expect, spyOn, test } from "bun:test"
 import { Orchestrator } from "@/orchestrator/agent"
-import {
-  ORCHESTRATOR_SCHEDULER_ROLE_BASE_TOOL_IDS,
-  uniqueToolIDs,
-} from "@/agent/tool-pool-data"
+import { ORCHESTRATOR_SCHEDULER_ROLE_BASE_TOOL_IDS, uniqueToolIDs } from "@/agent/tool-pool-data"
 import { Bus } from "@/bus"
 import {
   TestHooks as TaskControlTestHooks,
@@ -62,7 +59,6 @@ test("a fresh typed Task ingress installs runtime authority before creator and c
   await Instance.provide({
     directory: project.path,
     fn: async () => {
-      using _runtime = TaskControlTestHooks.replaceTerminalIngressDeliveryRuntime("runtime:initial-render")
       using _runner = TaskControlTestHooks.replaceTaskIngressRunner({
         runner: async (input) =>
           await Orchestrator.processTask(

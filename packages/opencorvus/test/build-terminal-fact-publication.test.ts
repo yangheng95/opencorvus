@@ -20,7 +20,8 @@ import { createBuildTool, type BuildToolDependencies } from "@/orchestrator/buil
 import type { DispatchAdapterExecutionContext } from "@/orchestrator/dispatch-adapter-execution-context"
 import { selectedWorkflowBinding } from "@/engine/workflow-binding"
 import { recordDispatchSettlement } from "@/engine/dispatch-settlement"
-import { createDispatchLineageOrigin, recordDispatchLineage } from "@/engine/dispatch-lineage"
+import { createDispatchLineageOrigin } from "@/engine/dispatch-lineage"
+import { recordTestDispatchLineage } from "./fixture/dispatch-lineage"
 import { describeTask } from "@/engine/describe"
 import { EngineArtifactTable, EngineBuildObservationCleanupTable, EngineTaskTable } from "@/engine/engine.sql"
 import { Database, and, eq } from "@/storage/db"
@@ -157,7 +158,7 @@ async function createProductionFixture(projectPath: string, title: string) {
       adapterInput: { goal_ids: [], reason: "Publish terminal fact" },
       observeSession() {},
       commitSession(sessionID) {
-        return recordDispatchLineage({
+        return recordTestDispatchLineage({
           origin: createDispatchLineageOrigin({
             dispatchID,
             taskID,

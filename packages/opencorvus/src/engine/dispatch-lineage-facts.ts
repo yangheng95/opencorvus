@@ -25,10 +25,30 @@ export interface DispatchLineagePayload extends EngineMetadata {
   workflow_occurrence_id: string
   coordination_action_id?: string
   continuation_of_dispatch_id?: string
-  owner_process_occurrence_id?: string
+  delivery_owner: DispatchDeliveryOwner
   adapter_input: Record<string, unknown>
   time_created: number
 }
+
+export const DispatchDeliveryOwnerSchema = z.discriminatedUnion("kind", [
+  z
+    .object({
+      kind: z.literal("runtime_process"),
+      process_occurrence_id: z.string().min(1),
+    })
+    .strict(),
+  z
+    .object({
+      kind: z.literal("historical_reconciliation"),
+      source: z.discriminatedUnion("kind", [
+        z.object({ kind: z.literal("dispatch_settlement"), artifact_id: z.string().min(1) }).strict(),
+        z.object({ kind: z.literal("agent_execution_lifecycle"), event_id: z.string().min(1) }).strict(),
+      ]),
+    })
+    .strict(),
+])
+
+export type DispatchDeliveryOwner = z.infer<typeof DispatchDeliveryOwnerSchema>
 
 export interface DispatchLineageRow {
   artifactID: string
@@ -57,7 +77,7 @@ const DispatchLineagePayloadSchema = z
     workflow_occurrence_id: z.string().min(1),
     coordination_action_id: z.string().min(1).optional(),
     continuation_of_dispatch_id: z.string().min(1).optional(),
-    owner_process_occurrence_id: z.string().min(1).optional(),
+    delivery_owner: DispatchDeliveryOwnerSchema,
     adapter_input: z.record(z.string(), z.unknown()),
     time_created: z.number().positive(),
   })

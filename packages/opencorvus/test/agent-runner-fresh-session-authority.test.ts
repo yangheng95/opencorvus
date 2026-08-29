@@ -1,7 +1,8 @@
 import { afterEach, expect, spyOn, test } from "bun:test"
 import { DelegatedWorkerAgent } from "@/delegated-worker/agent"
 import { DispatchAdapterContractRegistry, type AgentDispatchAdapterID } from "@/agent/dispatch-adapter-contract"
-import { createDispatchLineageOrigin, listDispatchLineage, recordDispatchLineage } from "@/engine/dispatch-lineage"
+import { createDispatchLineageOrigin, listDispatchLineage } from "@/engine/dispatch-lineage"
+import { recordTestDispatchLineage } from "./fixture/dispatch-lineage"
 import { EngineWorkflowNodeOccurrenceTable } from "@/engine/engine.sql"
 import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import {
@@ -260,7 +261,7 @@ test("fresh delegated worker commits Session, input authority, lineage, and occu
           model,
           onDispatchAuthorityCommit(sessionID, descriptor) {
             expect(WorkerTurnDescriptor.get({ id: descriptor.id, sessionID })).toEqual(descriptor)
-            lineageArtifactID = recordDispatchLineage({ origin, childSessionID: sessionID }).artifactID
+            lineageArtifactID = recordTestDispatchLineage({ origin, childSessionID: sessionID }).artifactID
           },
           async onSessionCreated(sessionID) {
             committedSessionID = sessionID

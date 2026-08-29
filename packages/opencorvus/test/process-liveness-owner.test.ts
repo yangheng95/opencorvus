@@ -70,10 +70,10 @@ describe("runtime process liveness owner", () => {
   })
 
   test("turns exact process fence loss into an absorbing Task-control refusal", async () => {
-    await using project = await memoryProject()
     using _runtime = TaskControlTestHooks.replaceTerminalIngressDeliveryRuntime(
       "runtime:test-process-liveness-fence-loss",
     )
+    await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
       fn: async () => {

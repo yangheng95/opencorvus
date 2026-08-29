@@ -4,12 +4,17 @@ import { DispatchOutcome } from "../src/agent/dispatch-outcome"
 import { WorkerTurnDescriptor } from "../src/agent/worker-turn-descriptor"
 import { createDispatchLineageOrigin, recordDispatchLineage } from "../src/engine/dispatch-lineage"
 import { findDispatchSettlementByDispatchID, settleDispatchOrReturnExisting } from "../src/engine/dispatch-settlement"
+import { insertEngineArtifact } from "../src/engine/artifact"
 import {
   EngineArtifactTable,
   EngineControlActivationLeaseTable,
   EngineTaskRootIngressTable,
 } from "../src/engine/engine.sql"
-import { PROCESS_LIVENESS_LEASE_MS } from "../src/engine/process-liveness"
+import {
+  PROCESS_LIVENESS_LEASE_MS,
+  ProcessLivenessOwnerUnavailableError,
+  joinProcessLivenessLease,
+} from "../src/engine/process-liveness"
 import { requireTask } from "../src/engine/store"
 import { selectedWorkflowBinding } from "../src/engine/workflow-binding"
 import { taskRequestSHA256 } from "../src/orchestrator/dispatch-turn-projection"
@@ -20,9 +25,10 @@ import { Identifier } from "../src/id/id"
 import { BrowserMCPBuiltin } from "../src/mcp/browser/builtin"
 import { Instance } from "../src/project/instance"
 import { ProtocolStore } from "../src/protocol/store"
+import { currentRuntimeOccurrenceID } from "../src/runtime/process-occurrence"
 import { Session } from "../src/session"
 import { executionLifecycleOrderKey } from "../src/session/status"
-import { Database, eq } from "../src/storage/db"
+import { Database, eq, sql } from "../src/storage/db"
 import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
@@ -31,10 +37,11 @@ afterEach(async () => {
   await resetMemoryDatabase()
 })
 
-const PEER = "runtime:peer-backend"
+const PEER = currentRuntimeOccurrenceID()
 
-/** One Task with one committed dispatch lineage owned by `owner`. */
-async function seedPeerOwnedDispatch(projectPath: string, owner: string | null) {
+/** One Task with one committed dispatch lineage owned by this fixture's exact
+ * process-liveness occurrence. */
+async function seedPeerOwnedDispatch(projectPath: string, claimOwner = true) {
   const config = Config.Info.parse({
     prompt_profile: { active: "base" },
     mcp: { [BrowserMCPBuiltin.ServerName]: BrowserMCPBuiltin.localConfig() },
@@ -76,30 +83,39 @@ async function seedPeerOwnedDispatch(projectPath: string, owner: string | null) 
     }),
   })
   const task = requireTask(taskID)
-  const child = await Session.create({ kind: worker.identity.sessionKind, parentID: root.id, title: "Peer-owned worker" })
+  const child = await Session.create({
+    kind: worker.identity.sessionKind,
+    parentID: root.id,
+    title: "Peer-owned worker",
+  })
   const dispatchID = Identifier.ascending("artifact")
   const workflowBinding = selectedWorkflowBinding({
     projection: { packageRevision: scheduler.packageRevision, virtualWorkflows: scheduler.virtualWorkflows },
     workflowID: null,
   })
-  const lineage = recordDispatchLineage({
-    origin: createDispatchLineageOrigin({
-      dispatchID,
-      taskID,
-      orchestratorSessionID: task.session_id!,
-      orchestratorMessageID: Identifier.ascending("message"),
-      toolPartID: Identifier.ascending("part"),
-      toolCallID: Identifier.ascending("call"),
-      targetAgentID: worker.identity.agentID,
-      projectedWorkerIdentity: worker.identity,
-      workScope: { kind: "task" },
-      workflowBinding,
-      workflowNodeID: null,
-      adapterInput: {},
-    }),
-    childSessionID: child.id,
-    ownerProcessOccurrenceID: owner,
-  })
+  const liveness = claimOwner ? joinProcessLivenessLease(currentRuntimeOccurrenceID()) : undefined
+  let lineage: ReturnType<typeof recordDispatchLineage>
+  try {
+    lineage = recordDispatchLineage({
+      origin: createDispatchLineageOrigin({
+        dispatchID,
+        taskID,
+        orchestratorSessionID: task.session_id!,
+        orchestratorMessageID: Identifier.ascending("message"),
+        toolPartID: Identifier.ascending("part"),
+        toolCallID: Identifier.ascending("call"),
+        targetAgentID: worker.identity.agentID,
+        projectedWorkerIdentity: worker.identity,
+        workScope: { kind: "task" },
+        workflowBinding,
+        workflowNodeID: null,
+        adapterInput: {},
+      }),
+      childSessionID: child.id,
+    })
+  } finally {
+    liveness?.release()
+  }
   const inputMessage = await Session.updateMessage({
     id: Identifier.ascending("message"),
     sessionID: child.id,
@@ -153,6 +169,7 @@ async function seedPeerOwnedDispatch(projectPath: string, owner: string | null) 
 }
 
 function claimPeerLiveness(occurrenceID: string, expiresAt: number) {
+  const timeActivated = Math.min(Date.now(), expiresAt - 1)
   Database.immediateTransaction((db) => {
     db.insert(EngineControlActivationLeaseTable)
       .values({
@@ -160,7 +177,7 @@ function claimPeerLiveness(occurrenceID: string, expiresAt: number) {
         target: "runtime_process",
         target_id: occurrenceID,
         owner_occurrence_id: occurrenceID,
-        time_activated: Date.now() - 1_000,
+        time_activated: timeActivated,
         expires_at: expiresAt,
       })
       .run()
@@ -179,13 +196,46 @@ function recoveryIngressCount(taskID: string) {
   )
 }
 
+function replaceLineageDeliveryOwnerForTest(
+  lineageArtifactID: string,
+  deliveryOwner:
+    | { kind: "historical_reconciliation"; source: { kind: "dispatch_settlement"; artifact_id: string } }
+    | { kind: "historical_reconciliation"; source: { kind: "agent_execution_lifecycle"; event_id: string } },
+) {
+  Database.immediateTransaction((db) => {
+    const triggers = db.all<{ name: string; sql: string }>(
+      sql`SELECT name,sql FROM sqlite_schema WHERE type='trigger' AND tbl_name='engine_artifact' ORDER BY name`,
+    )
+    if (triggers.length === 0 || triggers.some((trigger) => !trigger.sql)) {
+      throw new Error("engine Artifact triggers are unavailable")
+    }
+    for (const trigger of triggers) {
+      db.run(sql.raw(`DROP TRIGGER "${trigger.name.replaceAll('"', '""')}"`))
+    }
+    try {
+      const lineage = db
+        .select()
+        .from(EngineArtifactTable)
+        .where(eq(EngineArtifactTable.id, lineageArtifactID))
+        .get()
+      if (!lineage) throw new Error(`Dispatch lineage ${lineageArtifactID} does not exist`)
+      db.update(EngineArtifactTable)
+        .set({ payload: { ...lineage.payload, delivery_owner: deliveryOwner } })
+        .where(eq(EngineArtifactTable.id, lineageArtifactID))
+        .run()
+    } finally {
+      for (const trigger of triggers) db.run(sql.raw(trigger.sql))
+    }
+  })
+}
+
 describe("cross-process dispatch abandonment", () => {
   test("leaves a peer backend's dispatch alone while that peer's liveness lease is current", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
       fn: async () => {
-        const { taskID, dispatchID } = await seedPeerOwnedDispatch(project.path, PEER)
+        const { taskID, dispatchID, lineage } = await seedPeerOwnedDispatch(project.path)
         claimPeerLiveness(PEER, Date.now() + PROCESS_LIVENESS_LEASE_MS)
 
         using _owner = TaskControlTestHooks.replaceTerminalIngressDeliveryRuntime("runtime:this-backend")
@@ -196,9 +246,14 @@ describe("cross-process dispatch abandonment", () => {
         // will. Reading its own memory would declare a live worker abandoned
         // on every heartbeat — the cross-process kill loop this fences.
         expect({
+          deliveryOwner: lineage.payload.delivery_owner,
           settlement: findDispatchSettlementByDispatchID({ taskID, dispatchID }),
           recoveryIngresses: recoveryIngressCount(taskID),
-        }).toEqual({ settlement: undefined, recoveryIngresses: 0 })
+        }).toEqual({
+          deliveryOwner: { kind: "runtime_process", process_occurrence_id: PEER },
+          settlement: undefined,
+          recoveryIngresses: 0,
+        })
       },
     })
   })
@@ -208,7 +263,7 @@ describe("cross-process dispatch abandonment", () => {
     await Instance.provide({
       directory: project.path,
       fn: async () => {
-        const { taskID, dispatchID } = await seedPeerOwnedDispatch(project.path, PEER)
+        const { taskID, dispatchID } = await seedPeerOwnedDispatch(project.path)
         claimPeerLiveness(PEER, Date.now() - 1)
 
         using _owner = TaskControlTestHooks.replaceTerminalIngressDeliveryRuntime("runtime:this-backend")
@@ -232,12 +287,16 @@ describe("cross-process dispatch abandonment", () => {
     await Instance.provide({
       directory: project.path,
       fn: async () => {
+        const fixtures = []
+        for (const reason of ["error", "aborted"] as const) {
+          const fixture = await seedPeerOwnedDispatch(project.path)
+          fixtures.push({ reason, fixture })
+        }
         claimPeerLiveness(PEER, Date.now() - 1)
         using _owner = TaskControlTestHooks.replaceTerminalIngressDeliveryRuntime("runtime:this-backend")
         using _runner = TaskControlTestHooks.replaceTaskIngressRunner({ runner: async () => ({}) })
 
-        for (const reason of ["error", "aborted"] as const) {
-          const fixture = await seedPeerOwnedDispatch(project.path, PEER)
+        for (const { reason, fixture } of fixtures) {
           const error = reason === "error" ? "provider stream failed" : "caller cancelled worker"
           await ProtocolStore.appendEvent({
             kind: "event",
@@ -269,9 +328,7 @@ describe("cross-process dispatch abandonment", () => {
             db
               .select({ sourceID: EngineTaskRootIngressTable.source_id })
               .from(EngineTaskRootIngressTable)
-              .where(
-                eq(EngineTaskRootIngressTable.task_id, fixture.taskID),
-              )
+              .where(eq(EngineTaskRootIngressTable.task_id, fixture.taskID))
               .all()
               .filter((row) => row.sourceID === settlement?.payload.outcome.infrastructure_error?.artifact_id),
           )
@@ -310,12 +367,67 @@ describe("cross-process dispatch abandonment", () => {
     })
   }, 30_000)
 
+  test("replays the exact historical lifecycle source even after a later terminal event", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const fixture = await seedPeerOwnedDispatch(project.path)
+        const inputMessageID = fixture.descriptor.payload.messageAuthority.user_message_id
+        const bound = await ProtocolStore.appendEvent({
+          id: "pev_historical_bound",
+          kind: "event",
+          type: "agent.execution.lifecycle",
+          aggregate: "task",
+          aggregate_id: fixture.taskID,
+          task_id: null,
+          session_id: fixture.child.id,
+          source: "task-control-cross-process-dispatch-test",
+          order_key: executionLifecycleOrderKey(fixture.child.id, inputMessageID),
+          payload: {
+            inputMessageID,
+            status: { type: "terminal", reason: "error", error: "bound historical failure" },
+          },
+        })
+        await ProtocolStore.appendEvent({
+          id: "pev_historical_later",
+          kind: "event",
+          type: "agent.execution.lifecycle",
+          aggregate: "task",
+          aggregate_id: fixture.taskID,
+          task_id: null,
+          session_id: fixture.child.id,
+          source: "task-control-cross-process-dispatch-test",
+          order_key: executionLifecycleOrderKey(fixture.child.id, inputMessageID),
+          emitted_at: bound.time.emitted + 1,
+          payload: {
+            inputMessageID,
+            status: { type: "terminal", reason: "error", error: "later sibling failure" },
+          },
+        })
+        replaceLineageDeliveryOwnerForTest(fixture.lineage.artifactID, {
+          kind: "historical_reconciliation",
+          source: { kind: "agent_execution_lifecycle", event_id: bound.id },
+        })
+
+        using _owner = TaskControlTestHooks.replaceTerminalIngressDeliveryRuntime("runtime:this-backend")
+        using _runner = TaskControlTestHooks.replaceTaskIngressRunner({ runner: async () => ({}) })
+        await reconcileTaskControlPlane(fixture.taskID)
+
+        expect(
+          findDispatchSettlementByDispatchID({ taskID: fixture.taskID, dispatchID: fixture.dispatchID })?.payload
+            .outcome,
+        ).toMatchObject({ kind: "infrastructure_failure", message: "bound historical failure" })
+      },
+    })
+  })
+
   test("preserves an exact failed lifecycle final Message instead of a later adjacent reply", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
       fn: async () => {
-        const fixture = await seedPeerOwnedDispatch(project.path, PEER)
+        const fixture = await seedPeerOwnedDispatch(project.path)
         claimPeerLiveness(PEER, Date.now() - 1)
         using _owner = TaskControlTestHooks.replaceTerminalIngressDeliveryRuntime("runtime:this-backend")
         using _runner = TaskControlTestHooks.replaceTaskIngressRunner({ runner: async () => ({}) })
@@ -412,23 +524,43 @@ describe("cross-process dispatch abandonment", () => {
     await Instance.provide({
       directory: project.path,
       fn: async () => {
-        const { taskID, dispatchID } = await seedPeerOwnedDispatch(project.path, PEER)
-        claimPeerLiveness(PEER, Date.now() - 1)
+        const { taskID, dispatchID, descriptor, child, lineage } = await seedPeerOwnedDispatch(project.path)
         // The outcome is recorded before it is handed over, so a failure in
         // between leaves a settled dispatch that woke nothing. Abandonment
         // recovery cannot see it: by definition it looks for unsettled work.
-        settleDispatchOrReturnExisting({
+        const settlement = settleDispatchOrReturnExisting({
           taskID,
           dispatchID,
           outcome: DispatchOutcome.partial({
             sessionID: Database.use(
               (db) =>
-                db.select().from(EngineArtifactTable).all().find((row) => row.kind === "dispatch_lineage")!
-                  .payload as { child_session_id: string },
+                db
+                  .select()
+                  .from(EngineArtifactTable)
+                  .all()
+                  .find((row) => row.kind === "dispatch_lineage")!.payload as { child_session_id: string },
             ).child_session_id,
             finalMessageID: Identifier.ascending("message"),
             failedOperation: "deliver-terminal-lifecycle",
           }),
+        })
+        await ProtocolStore.appendEvent({
+          kind: "event",
+          type: "agent.execution.lifecycle",
+          aggregate: "task",
+          aggregate_id: taskID,
+          task_id: null,
+          session_id: child.id,
+          source: "task-control-cross-process-dispatch-test",
+          order_key: executionLifecycleOrderKey(child.id, descriptor.payload.messageAuthority.user_message_id),
+          payload: {
+            inputMessageID: descriptor.payload.messageAuthority.user_message_id,
+            status: { type: "terminal", reason: "completed" },
+          },
+        })
+        replaceLineageDeliveryOwnerForTest(lineage.artifactID, {
+          kind: "historical_reconciliation",
+          source: { kind: "dispatch_settlement", artifact_id: settlement.artifactID },
         })
 
         using _owner = TaskControlTestHooks.replaceTerminalIngressDeliveryRuntime("runtime:this-backend")
@@ -443,21 +575,47 @@ describe("cross-process dispatch abandonment", () => {
     })
   })
 
-  test("gives a lineage with no owner claim one lease period of grace", async () => {
+  test("returns a typed admission error when no current process liveness owner exists", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
       fn: async () => {
-        // No owner claim at all is how lineages written before the claim
-        // existed appear. They cannot be attributed, so a freshly committed
-        // one is presumed live for exactly as long as a lease would last.
-        const { taskID, dispatchID } = await seedPeerOwnedDispatch(project.path, null)
+        await expect(seedPeerOwnedDispatch(project.path, false)).rejects.toMatchObject({
+          name: ProcessLivenessOwnerUnavailableError.name,
+          code: "PROCESS_LIVENESS_OWNER_UNAVAILABLE",
+        })
+      },
+    })
+  })
 
-        using _owner = TaskControlTestHooks.replaceTerminalIngressDeliveryRuntime("runtime:this-backend")
-        using _runner = TaskControlTestHooks.replaceTaskIngressRunner({ runner: async () => ({}) })
-        await reconcileTaskControlPlane(taskID)
-
-        expect(findDispatchSettlementByDispatchID({ taskID, dispatchID })).toBeUndefined()
+  test("rejects noncanonical delivery-owner objects at the SQLite lineage boundary", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const fixture = await seedPeerOwnedDispatch(project.path)
+        const invalidOwners = [
+          { kind: "runtime_process", process_occurrence_id: "" },
+          { kind: "runtime_process", process_occurrence_id: "runtime", source: {} },
+          {
+            kind: "historical_reconciliation",
+            source: { kind: "dispatch_settlement", artifact_id: "settlement", extra: true },
+          },
+        ]
+        for (const [index, deliveryOwner] of invalidOwners.entries()) {
+          expect(() =>
+            Database.immediateTransaction((db) => {
+              insertEngineArtifact(db, {
+                id: `art_invalid_delivery_owner_${index}`,
+                taskID: fixture.taskID,
+                kind: "dispatch_lineage",
+                label: "dispatch-agent",
+                payload: { adapter_input: {}, delivery_owner: deliveryOwner },
+                timeCreated: Date.now(),
+              })
+            }),
+          ).toThrow("engine_artifact: dispatch_lineage requires exact adapter_input and delivery_owner objects")
+        }
       },
     })
   })

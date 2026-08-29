@@ -81,12 +81,13 @@ import {
 } from "./task-root-ingress-reducer"
 import { TaskControlDriver, type TaskControlScanContext, type TaskControlScanResult } from "./task-control-driver"
 import { TaskRootIngressIntegrityError } from "./task-root-ingress-integrity"
-import { isProcessOccurrenceLive, joinProcessLivenessLease, PROCESS_LIVENESS_LEASE_MS } from "./process-liveness"
+import { isProcessOccurrenceLive, joinProcessLivenessLease } from "./process-liveness"
 import { TaskRootIngressError, taskRootDirectory } from "./task-directory"
 import { listDispatchLineage } from "./dispatch-lineage"
 import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
 import {
   findDispatchSettlementByDispatchID,
+  requireDispatchSettlementByArtifactID,
   settleDispatchOrReturnExisting,
   type DispatchSettlementRow,
 } from "./dispatch-settlement"
@@ -1229,6 +1230,27 @@ async function reconcileAbandonedDispatches(taskID: string): Promise<number> {
     if (closedDispatchIDs.has(lineage.dispatchID)) continue
     if (await dispatchDeliveryOwnerIsLive(lineage, Date.now())) continue
     try {
+      const historicalSource =
+        lineage.payload.delivery_owner.kind === "historical_reconciliation"
+          ? lineage.payload.delivery_owner.source
+          : undefined
+      if (historicalSource?.kind === "dispatch_settlement") {
+        recovered += await recoverSettledUndeliveredDispatch({ taskID, lineage })
+        closedDispatchIDs.add(lineage.dispatchID)
+        continue
+      }
+      if (historicalSource?.kind === "agent_execution_lifecycle") {
+        const delivery = await reconcileTerminalAgentLifecycleDelivery({
+          taskID,
+          sessionID: childSessionID,
+          dispatchID: lineage.dispatchID,
+        })
+        if (delivery === "delivered") recovered += 1
+        if (delivery === "delivered" || delivery === "already_delivered" || delivery === "suppressed_budget_exhausted") {
+          closedDispatchIDs.add(lineage.dispatchID)
+        }
+        continue
+      }
       if (settled.has(lineage.dispatchID)) {
         recovered += await recoverSettledUndeliveredDispatch({ taskID, lineage })
         // Reaching here without a throw means the settlement is delivered,
@@ -1277,24 +1299,53 @@ async function reconcileAbandonedDispatches(taskID: string): Promise<number> {
  */
 async function recoverSettledUndeliveredDispatch(input: {
   taskID: string
-  lineage: { artifactID: string; dispatchID: string; payload: { child_session_id: string } }
+  lineage: {
+    artifactID: string
+    dispatchID: string
+    payload: {
+      child_session_id: string
+      delivery_owner:
+        | { kind: "runtime_process"; process_occurrence_id: string }
+        | {
+            kind: "historical_reconciliation"
+            source:
+              | { kind: "dispatch_settlement"; artifact_id: string }
+              | { kind: "agent_execution_lifecycle"; event_id: string }
+          }
+    }
+  }
 }): Promise<number> {
-  const settlement = findDispatchSettlementByDispatchID({
-    taskID: input.taskID,
-    dispatchID: input.lineage.dispatchID,
-  })
+  const historicalSource =
+    input.lineage.payload.delivery_owner.kind === "historical_reconciliation"
+      ? input.lineage.payload.delivery_owner.source
+      : undefined
+  const settlement =
+    historicalSource?.kind === "dispatch_settlement"
+      ? requireDispatchSettlementByArtifactID({
+          artifactID: historicalSource.artifact_id,
+          taskID: input.taskID,
+          dispatchID: input.lineage.dispatchID,
+          lineageArtifactID: input.lineage.artifactID,
+          sessionID: input.lineage.payload.child_session_id,
+        })
+      : findDispatchSettlementByDispatchID({
+          taskID: input.taskID,
+          dispatchID: input.lineage.dispatchID,
+        })
   if (!settlement) return 0
   if (dispatchSettlementDelivered({ taskID: input.taskID, settlement })) return 0
   // The canonical replay is idempotent and produces the ordinary lifecycle
   // ingress, so it is always preferred over a synthetic recovery wake.
-  const replay = await reconcileTerminalAgentLifecycleDelivery({
-    taskID: input.taskID,
-    sessionID: input.lineage.payload.child_session_id,
-    dispatchID: input.lineage.dispatchID,
-  })
-  if (replay === "delivered") return 1
-  if (replay === "suppressed_budget_exhausted") return 0
-  if (replay === "already_delivered") return 0
+  if (historicalSource?.kind !== "dispatch_settlement") {
+    const replay = await reconcileTerminalAgentLifecycleDelivery({
+      taskID: input.taskID,
+      sessionID: input.lineage.payload.child_session_id,
+      dispatchID: input.lineage.dispatchID,
+    })
+    if (replay === "delivered") return 1
+    if (replay === "suppressed_budget_exhausted") return 0
+    if (replay === "already_delivered") return 0
+  }
   // No terminal lifecycle to replay: wake the Orchestrator on the settlement
   // itself, keyed so the ingress source index makes the replay idempotent.
   //
@@ -1362,39 +1413,31 @@ function dispatchSettlementDelivered(input: { taskID: string; settlement: Dispat
  * The order matters. This process's own registries are authoritative for its
  * own lineages and answer without a query. For a lineage another process
  * claimed, only that process's liveness lease can answer — its absence from
- * local memory means nothing. A lineage written before the claim existed gets
- * one lease period of grace from its commit, which is the longest a live owner
- * could plausibly have gone unrecorded.
+ * local memory means nothing. Historical ownerless rows were classified by
+ * the one startup migration and are immediately replayable facts, never live
+ * work inferred from elapsed time.
  */
 async function dispatchDeliveryOwnerIsLive(
-  lineage: { artifactID: string; payload: { child_session_id: string; owner_process_occurrence_id?: string } },
+  lineage: {
+    artifactID: string
+    payload: {
+      child_session_id: string
+      delivery_owner: { kind: "runtime_process"; process_occurrence_id: string } | { kind: "historical_reconciliation" }
+    }
+  },
   now: number,
-  timeCreated?: number,
 ): Promise<boolean> {
   const { hasLiveDetachedDispatchPipeline } = await import("@/orchestrator/dispatch-agent-tool")
   const { SessionPrompt } = await import("@/session/prompt")
   if (hasLiveDetachedDispatchPipeline(lineage.artifactID)) return true
   if (SessionPrompt.hasGeneration(lineage.payload.child_session_id)) return true
-  const owner = lineage.payload.owner_process_occurrence_id
-  if (owner === undefined) {
-    const created = timeCreated ?? lineageTimeCreated(lineage.artifactID)
-    return created !== undefined && created + PROCESS_LIVENESS_LEASE_MS > now
-  }
+  const deliveryOwner = lineage.payload.delivery_owner
+  if (deliveryOwner.kind === "historical_reconciliation") return false
+  const owner = deliveryOwner.process_occurrence_id
   // This process claimed it and neither registry holds it: the work is gone,
   // and our own memory is the authority on that.
   if (owner === ownerOccurrenceID()) return false
   return Database.use((db) => isProcessOccurrenceLive(db, owner, now))
-}
-
-function lineageTimeCreated(artifactID: string): number | undefined {
-  return Database.use(
-    (db) =>
-      db
-        .select({ timeCreated: EngineArtifactTable.time_created })
-        .from(EngineArtifactTable)
-        .where(eq(EngineArtifactTable.id, artifactID))
-        .get()?.timeCreated,
-  )
 }
 
 /** Record the interruption of one abandoned worker as its durable outcome and
@@ -2160,12 +2203,34 @@ export async function reconcileTerminalAgentLifecycleDelivery(input: {
   if (!lineage) return "missing_lineage"
   const descriptor = WorkerTurnDescriptor.findForDispatch({ sessionID: input.sessionID, dispatchID: input.dispatchID })
   if (!descriptor) return "missing_descriptor"
-  const lifecycle = ProtocolStore.latestSessionOccurrenceEvent(
-    input.sessionID,
-    "agent.execution.lifecycle",
-    descriptor.payload.messageAuthority.user_message_id,
-  )
+  const historicalSource =
+    lineage.payload.delivery_owner.kind === "historical_reconciliation"
+      ? lineage.payload.delivery_owner.source
+      : undefined
+  if (historicalSource?.kind === "dispatch_settlement") {
+    throw new Error(
+      `Dispatch ${input.dispatchID} historical settlement ${historicalSource.artifact_id} cannot be replayed as a lifecycle`,
+    )
+  }
+  const lifecycle =
+    historicalSource?.kind === "agent_execution_lifecycle"
+      ? ProtocolStore.requireEvent(historicalSource.event_id)
+      : ProtocolStore.latestSessionOccurrenceEvent(
+          input.sessionID,
+          "agent.execution.lifecycle",
+          descriptor.payload.messageAuthority.user_message_id,
+        )
   if (!lifecycle) return "nonterminal"
+  if (
+    lifecycle.type !== "agent.execution.lifecycle" ||
+    lifecycle.taskID !== input.taskID ||
+    lifecycle.sessionID !== input.sessionID ||
+    lifecycle.payload?.inputMessageID !== descriptor.payload.messageAuthority.user_message_id
+  ) {
+    throw new Error(
+      `Historical lifecycle ${lifecycle.id} identity drift for dispatch ${input.dispatchID}`,
+    )
+  }
   const lifecycleStatus = SessionStatus.Info.parse(lifecycle.payload?.status)
   if (lifecycleStatus.type !== "terminal") return "nonterminal"
   if (lifecycleStatus.reason === "error" || lifecycleStatus.reason === "aborted") {

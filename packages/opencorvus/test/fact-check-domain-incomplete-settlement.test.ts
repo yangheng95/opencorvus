@@ -1,6 +1,7 @@
 import { afterAll, describe, expect, test } from "bun:test"
 import z from "zod"
-import { createDispatchLineageOrigin, recordDispatchLineage } from "@/engine/dispatch-lineage"
+import { createDispatchLineageOrigin } from "@/engine/dispatch-lineage"
+import { recordTestDispatchLineage } from "./fixture/dispatch-lineage"
 import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
 import { recordDispatchSettlement } from "@/engine/dispatch-settlement"
 import { describeTask } from "@/engine/describe"
@@ -256,7 +257,7 @@ function executionContext(taskID: string, dispatchID: string): DispatchAdapterEx
 
 function recordLineage(fixture: Awaited<ReturnType<typeof createFixture>>) {
   const dispatchID = Identifier.ascending("artifact")
-  const lineage = recordDispatchLineage({
+  const lineage = recordTestDispatchLineage({
     origin: createDispatchLineageOrigin({
       dispatchID,
       taskID: fixture.taskID,

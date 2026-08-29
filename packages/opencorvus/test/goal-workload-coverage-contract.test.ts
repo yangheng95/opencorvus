@@ -7,7 +7,8 @@ import { DispatchAdapterContractRegistry, type AgentDispatchAdapterID } from "@/
 import { Identifier } from "@/id/id"
 import { DispatchOutcome } from "@/agent/dispatch-outcome"
 import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
-import { createDispatchLineageOrigin, recordDispatchLineage } from "@/engine/dispatch-lineage"
+import { createDispatchLineageOrigin } from "@/engine/dispatch-lineage"
+import { recordTestDispatchLineage } from "./fixture/dispatch-lineage"
 import {
   findDispatchSettlementByDispatchID,
   recordDispatchSettlement,
@@ -240,7 +241,7 @@ async function createWorkloadTurn(input: {
   }
   const workflowNodeID = input.workflowNodeID ?? "workload-0"
   const occurrenceID = input.workflowOccurrenceID ?? dispatchID
-  const lineage = recordDispatchLineage({
+  const lineage = recordTestDispatchLineage({
     origin: createDispatchLineageOrigin({
       dispatchID,
       taskID: input.task.taskID,
@@ -532,7 +533,7 @@ async function executeProductionWorkloadDispatch(input: {
           adapterInput,
           observeSession() {},
           commitSession(sessionID: string) {
-            const lineage = recordDispatchLineage({ origin, childSessionID: sessionID, now: input.task.now + 11 })
+            const lineage = recordTestDispatchLineage({ origin, childSessionID: sessionID, now: input.task.now + 11 })
             return { artifactID: lineage.artifactID }
           },
         }
@@ -1038,7 +1039,7 @@ describe("Goal Workload coverage contract", () => {
           kind: "direct" as const,
           package_revision: expertSquadPackageRevisionBinding(packageRevision),
         }
-        const lineage = recordDispatchLineage({
+        const lineage = recordTestDispatchLineage({
           origin: createDispatchLineageOrigin({
             dispatchID,
             taskID,
@@ -1739,7 +1740,7 @@ describe("Goal Workload coverage contract", () => {
         })
         const child = await Session.create({ kind: "goal-workload-analyst", parentID: root.id, title: "Workload" })
         const dispatchID = Identifier.ascending("artifact")
-        recordDispatchLineage({
+        recordTestDispatchLineage({
           origin: createDispatchLineageOrigin({
             dispatchID,
             taskID,

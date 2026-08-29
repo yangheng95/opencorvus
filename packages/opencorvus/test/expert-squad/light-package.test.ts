@@ -4,11 +4,8 @@ import { DispatchAdapterContractRegistry, type AgentDispatchAdapterID } from "..
 import { WorkerTurnDescriptor } from "../../src/agent/worker-turn-descriptor"
 import { Config } from "../../src/config/config"
 import { EffectiveConfig } from "../../src/config/effective"
-import {
-  createDispatchLineageOrigin,
-  listDispatchLineage,
-  recordDispatchLineage,
-} from "../../src/engine/dispatch-lineage"
+import { createDispatchLineageOrigin, listDispatchLineage } from "../../src/engine/dispatch-lineage"
+import { recordTestDispatchLineage } from "../fixture/dispatch-lineage"
 import { persistEstablishedTask } from "../fixture/engine-task"
 import { requireTask } from "../../src/engine/store"
 import {
@@ -471,7 +468,7 @@ describe("Light Expert Squad package", () => {
                 observeSession() {},
                 commitSession(sessionID: string, descriptor: WorkerTurnDescriptor.Info) {
                   expect(WorkerTurnDescriptor.get({ id: descriptor.id, sessionID })).toEqual(descriptor)
-                  return { artifactID: recordDispatchLineage({ origin, childSessionID: sessionID }).artifactID }
+                  return { artifactID: recordTestDispatchLineage({ origin, childSessionID: sessionID }).artifactID }
                 },
               }
             },
@@ -535,6 +532,8 @@ describe("Light Expert Squad package", () => {
 
           releaseWorkers()
           await requireWithin(allFinished, "four completed Light worker processors")
+          await requireWithin(waitForDetachedDispatchPipelinesForTest(), "detached Light dispatch pipelines")
+          await requireWithin(waitForIngressDeliveryHooksForTest(), "Light lifecycle ingress deliveries")
         },
       })
 

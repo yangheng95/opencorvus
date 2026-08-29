@@ -1,6 +1,7 @@
 import { afterAll, describe, expect, test } from "bun:test"
 import z from "zod"
-import { createDispatchLineageOrigin, recordDispatchLineage } from "@/engine/dispatch-lineage"
+import { createDispatchLineageOrigin } from "@/engine/dispatch-lineage"
+import { recordTestDispatchLineage } from "./fixture/dispatch-lineage"
 import { recordDispatchSettlement } from "@/engine/dispatch-settlement"
 import { describeTask } from "@/engine/describe"
 import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
@@ -302,7 +303,7 @@ describe("Frontend Design domain-incomplete settlement", () => {
         const task = await createTask({ title: "Partial Frontend Design" })
         const analysis = await workerTurn({ rootSessionID: task.root.id, taskID: task.taskID, outcome: "partial" })
         const context = executionContext(task.taskID)
-        recordDispatchLineage({
+        recordTestDispatchLineage({
           origin: createDispatchLineageOrigin({
             dispatchID: context.dispatch.dispatchID,
             taskID: task.taskID,
@@ -412,7 +413,7 @@ describe("Frontend Design domain-incomplete settlement", () => {
         const task = await createTask({ title: "Complete Frontend Design" })
         const analysis = await workerTurn({ rootSessionID: task.root.id, taskID: task.taskID, outcome: "complete" })
         const context = executionContext(task.taskID)
-        recordDispatchLineage({
+        recordTestDispatchLineage({
           origin: createDispatchLineageOrigin({
             dispatchID: context.dispatch.dispatchID,
             taskID: task.taskID,

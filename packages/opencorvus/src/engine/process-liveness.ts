@@ -37,6 +37,15 @@ type ProcessLivenessOwner = {
   fenceError?: ControlLeaseFenceLostError
 }
 
+export class ProcessLivenessOwnerUnavailableError extends Error {
+  override readonly name = "ProcessLivenessOwnerUnavailableError"
+  readonly code = "PROCESS_LIVENESS_OWNER_UNAVAILABLE"
+
+  constructor(message: string, cause?: unknown) {
+    super(message, cause === undefined ? undefined : { cause })
+  }
+}
+
 let currentOwner: ProcessLivenessOwner | undefined
 const lostFences = new Map<string, ControlLeaseFenceLostError>()
 
@@ -123,6 +132,19 @@ export interface ProcessLivenessReference {
   assertOwned(expectedOccurrenceID?: string): void
   assertOwnedInTransaction(db: Database.TxOrDb, expectedOccurrenceID: string, now: number): void
   release(): void
+}
+
+/** Assert the one current process-wide owner inside a caller's writer
+ * transaction. Durable effects whose recovery depends on process liveness use
+ * this instead of merely copying the runtime occurrence string. */
+export function assertProcessLivenessOwnerInTransaction(db: Database.TxOrDb, occurrenceID: string, now: number): void {
+  const owner = currentOwner
+  if (!owner || owner.references <= 0) {
+    throw new ProcessLivenessOwnerUnavailableError(
+      `Runtime process occurrence ${occurrenceID} has no active liveness owner`,
+    )
+  }
+  assertOwnerInTransaction(owner, occurrenceID, db, now)
 }
 
 /** Join the one liveness owner for this runtime process. */

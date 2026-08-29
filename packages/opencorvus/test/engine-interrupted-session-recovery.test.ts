@@ -175,7 +175,6 @@ describe("interrupted Provider activity recovery", () => {
           label: "crashed-provider-activity",
         })
         const activatedWakeIDs: string[] = []
-        using _owner = TaskControlTestHooks.replaceTerminalIngressDeliveryRuntime("runtime:test-crashed-provider")
         using _runner = TaskControlTestHooks.replaceTaskIngressRunner({
           runner: async ({ wakeID }) => {
             if (!wakeID) throw new Error("Missing exact activation identity")
@@ -255,6 +254,7 @@ describe("interrupted Provider activity recovery", () => {
             {
               outcome: "aborted",
               error_class: "external_abort",
+              attempt_count: 1,
               error: {
                 name: "ProcessExecutionInterruptedError",
                 message: expect.stringContaining(fixture.assistantID),
@@ -276,7 +276,11 @@ describe("interrupted prepared Worker Turn recovery", () => {
     await Instance.provide({
       directory: project.path,
       fn: async () => {
-        const root = Session.prepareRootNext({ kind: "root", directory: Instance.directory, title: "Interrupted recovery root" })
+        const root = Session.prepareRootNext({
+          kind: "root",
+          directory: Instance.directory,
+          title: "Interrupted recovery root",
+        })
         const taskID = Identifier.ascending("task")
         const now = Date.now()
         persistTask({

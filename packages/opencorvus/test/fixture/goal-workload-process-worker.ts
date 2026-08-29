@@ -18,6 +18,8 @@ import { executionLifecycleOrderKey } from "@/session/status"
 import { Database, count, eq } from "@/storage/db"
 import { EngineArtifactTable } from "@/engine/engine.sql"
 import { declareNativeTaskProcessDeployment } from "@/runtime/task-process-deployment"
+import { currentRuntimeOccurrenceID } from "@/runtime/process-occurrence"
+import { joinProcessLivenessLease } from "@/engine/process-liveness"
 import { persistEstablishedTask } from "./engine-task"
 
 type Fixture = Awaited<ReturnType<typeof createFixture>>
@@ -343,20 +345,25 @@ async function result() {
       init: async () => {},
       fn: async () => {
         Database.Client()
-        if (mode === "init-publication") {
-          const fixture = await createFixture("Cross-process publication")
-          await fs.writeFile(fixturePath, JSON.stringify(fixture))
-          return fixture
-        }
-        if (mode === "init-settlement") {
-          const fixtures = []
-          for (const label of ["race", "mapped-first", "partial-first"]) {
-            fixtures.push(await createFixture(`Cross-process settlement ${label}`, true))
+        const processLiveness = joinProcessLivenessLease(currentRuntimeOccurrenceID())
+        try {
+          if (mode === "init-publication") {
+            const fixture = await createFixture("Cross-process publication")
+            await fs.writeFile(fixturePath, JSON.stringify(fixture))
+            return fixture
           }
-          await fs.writeFile(fixturePath, JSON.stringify(fixtures))
-          return { dispatchIDs: fixtures.map((fixture) => fixture.dispatchID) }
+          if (mode === "init-settlement") {
+            const fixtures = []
+            for (const label of ["race", "mapped-first", "partial-first"]) {
+              fixtures.push(await createFixture(`Cross-process settlement ${label}`, true))
+            }
+            await fs.writeFile(fixturePath, JSON.stringify(fixtures))
+            return { dispatchIDs: fixtures.map((fixture) => fixture.dispatchID) }
+          }
+          throw new Error(`Unknown Goal Workload process worker mode: ${mode}`)
+        } finally {
+          processLiveness.release()
         }
-        throw new Error(`Unknown Goal Workload process worker mode: ${mode}`)
       },
     })
   } finally {

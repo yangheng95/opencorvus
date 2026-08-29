@@ -15,7 +15,8 @@ import { Config } from "../src/config/config"
 import { requireTask } from "../src/engine/store"
 import { deriveTaskStatus } from "../src/engine/task-status"
 import { terminalTask } from "../src/engine/state"
-import { createDispatchLineageOrigin, listDispatchLineage, recordDispatchLineage } from "../src/engine/dispatch-lineage"
+import { createDispatchLineageOrigin, listDispatchLineage } from "../src/engine/dispatch-lineage"
+import { recordTestDispatchLineage } from "./fixture/dispatch-lineage"
 import { selectedWorkflowBinding } from "../src/engine/workflow-binding"
 import {
   findAgentCoordinationRequest,
@@ -41,6 +42,8 @@ import { LLM } from "../src/session/llm"
 import { SessionProcessor } from "../src/session/processor"
 import { SessionLoop } from "../src/session/loop"
 import { SessionRuntimeContractStore } from "../src/session/runtime-contract"
+import { joinProcessLivenessLease } from "../src/engine/process-liveness"
+import { currentRuntimeOccurrenceID } from "../src/runtime/process-occurrence"
 import {
   InvalidToolResultControlError,
   TOOL_RESULT_CONTROL_METADATA_KEY,
@@ -323,7 +326,7 @@ async function projectedWorkerDecisionSurface(input: { projectPath: string }) {
     virtualWorkflows: projection.workerCapability.virtualWorkflows,
   }
   const dispatchID = Identifier.ascending("artifact")
-  const dispatchLineage = recordDispatchLineage({
+  const dispatchLineage = recordTestDispatchLineage({
     origin: createDispatchLineageOrigin({
       dispatchID,
       taskID,
@@ -1074,7 +1077,12 @@ describe("single Tool-result turn-control protocol", () => {
           sessionID: worker.session.id,
           payload: { ...previous.payload, dispatchTurn: lineageHandle.turn },
         })
-        lineageHandle.commitSession(worker.session.id, descriptor)
+        const deliveryOwner = joinProcessLivenessLease(currentRuntimeOccurrenceID())
+        try {
+          lineageHandle.commitSession(worker.session.id, descriptor)
+        } finally {
+          deliveryOwner.release()
+        }
         const continuation = listDispatchLineage(worker.taskID).find(
           (lineage) => lineage.payload.coordination_action_id === action.payload.action_id,
         )

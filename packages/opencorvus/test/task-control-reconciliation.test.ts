@@ -200,17 +200,26 @@ describe("Task-control reconciliation", () => {
           })
           return request.id
         }
-        await persistCompletedTool("manage_task", { goal: { title: "New delivery scope" }, reason: "accepted evidence" }, {
-          status: "applied",
-        })
+        await persistCompletedTool(
+          "manage_task",
+          { goal: { title: "New delivery scope" }, reason: "accepted evidence" },
+          {
+            status: "applied",
+          },
+        )
         const dispatchIDs = await Promise.all([
-          persistCompletedTool("dispatch_agent", { dispatch: { target: "implementation-engineer" } }, { kind: "accepted" }),
+          persistCompletedTool(
+            "dispatch_agent",
+            { dispatch: { target: "implementation-engineer" } },
+            { kind: "accepted" },
+          ),
           persistCompletedTool("dispatch_agent", { dispatch: { target: "workload-reviewer" } }, { kind: "accepted" }),
         ])
         const assistant = (await Session.messages({ sessionID: fixture.orchestrator.id })).find(
           (message) => message.info.id === fixture.assistantID,
         )
-        if (!assistant || assistant.info.role !== "assistant") throw new Error("Expected persisted Orchestrator assistant")
+        if (!assistant || assistant.info.role !== "assistant")
+          throw new Error("Expected persisted Orchestrator assistant")
         await Session.updateMessage({
           ...assistant.info,
           finish: "tool-calls",
@@ -282,7 +291,6 @@ describe("Task-control reconciliation", () => {
         })
 
         const activatedIngresses: string[] = []
-        using _owner = TaskControlTestHooks.replaceTerminalIngressDeliveryRuntime("runtime:test-no-action")
         using _runner = TaskControlTestHooks.replaceTaskIngressRunner({
           runner: async ({ event, wakeID, activationID, predecessorID }) => {
             if (!event || !wakeID || !activationID || !predecessorID)
@@ -457,7 +465,6 @@ describe("Task-control reconciliation", () => {
         })
 
         const calls: Array<{ activationID: string; predecessorID: string; assistantID: string }> = []
-        using _owner = TaskControlTestHooks.replaceTerminalIngressDeliveryRuntime("runtime:test-task-control")
         using _runner = TaskControlTestHooks.replaceTaskIngressRunner({
           runner: async ({ event, wakeID, activationID, predecessorID }) => {
             if (!event || !wakeID || !activationID || !predecessorID)
@@ -603,7 +610,6 @@ describe("Task-control reconciliation", () => {
         })
 
         const activatedIngresses: string[] = []
-        using _owner = TaskControlTestHooks.replaceTerminalIngressDeliveryRuntime("runtime:test-parallel-decision")
         using _runner = TaskControlTestHooks.replaceTaskIngressRunner({
           runner: async ({ event, wakeID, activationID, predecessorID }) => {
             if (!event || !wakeID || !activationID || !predecessorID)
@@ -708,18 +714,12 @@ describe("Task-control reconciliation", () => {
         let successor:
           | { activationID: string; predecessorID: string; controlID: string; assistantID: string }
           | undefined
-        using _owner = TaskControlTestHooks.replaceTerminalIngressDeliveryRuntime("runtime:test-crash-successor")
         using _runner = TaskControlTestHooks.replaceTaskIngressRunner({
           runner: async ({ event, wakeID, activationID, predecessorID }) => {
             if (!event || !wakeID || !activationID || !predecessorID) {
               throw new Error("Missing recovered activation identity")
             }
-            const control = currentOrchestratorControlMessage(
-              event,
-              fixture.taskID,
-              wakeID,
-              predecessorID,
-            )
+            const control = currentOrchestratorControlMessage(event, fixture.taskID, wakeID, predecessorID)
             if (!control) throw new Error("Expected a successor Task-root control occurrence")
             await Session.persistMessage({
               info: {
@@ -795,9 +795,7 @@ describe("Task-control reconciliation", () => {
           reconcileTaskControlPlane(fixture.taskID),
         ])
         const sessionMessages = await Session.messages({ sessionID: fixture.orchestrator.id })
-        const oldAssistant = sessionMessages.find(
-          (message) => message.info.id === fixture.assistantID,
-        )
+        const oldAssistant = sessionMessages.find((message) => message.info.id === fixture.assistantID)
         const assistantIDs = sessionMessages.flatMap((message) =>
           message.info.role === "assistant" ? [message.info.id] : [],
         )
@@ -885,7 +883,6 @@ describe("Task-control reconciliation", () => {
           semanticTurnLimit: 1,
           label: "recover-at-limit",
         })
-        using _owner = TaskControlTestHooks.replaceTerminalIngressDeliveryRuntime("runtime:test-crash-exhausted")
         using _runner = TaskControlTestHooks.replaceTaskIngressRunner({
           runner: async () => {
             throw new Error("An exhausted crash recovery must not start another Provider activation")

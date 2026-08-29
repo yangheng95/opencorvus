@@ -1,11 +1,8 @@
 import { afterAll, describe, expect, test } from "bun:test"
 import { DispatchOutcome } from "../src/agent/dispatch-outcome"
 import { Config } from "../src/config/config"
-import {
-  createDispatchLineageOrigin,
-  recordDispatchLineage,
-  resolveDispatchOccurrenceAuthority,
-} from "../src/engine/dispatch-lineage"
+import { createDispatchLineageOrigin, resolveDispatchOccurrenceAuthority } from "../src/engine/dispatch-lineage"
+import { recordTestDispatchLineage } from "./fixture/dispatch-lineage"
 import { describeTask } from "../src/engine/describe"
 import { recordDispatchSettlement } from "../src/engine/dispatch-settlement"
 import { requireTask } from "../src/engine/store"
@@ -89,7 +86,7 @@ describe("dispatch occurrence recovery authority", () => {
         })
 
         const task = requireTask(taskID)
-        const lineage = recordDispatchLineage({
+        const lineage = recordTestDispatchLineage({
           origin: createDispatchLineageOrigin({
             dispatchID,
             taskID,

@@ -13,7 +13,8 @@ import {
 } from "@/artifact-catalog"
 import { DispatchOutcome } from "@/agent/dispatch-outcome"
 import { recordEngineArtifact, updateEngineArtifact } from "@/engine/artifact"
-import { createDispatchLineageOrigin, listDispatchLineage, recordDispatchLineage } from "@/engine/dispatch-lineage"
+import { createDispatchLineageOrigin, listDispatchLineage } from "@/engine/dispatch-lineage"
+import { recordTestDispatchLineage } from "./fixture/dispatch-lineage"
 import { assertTaskDispatchesSettledInTransaction, recordDispatchSettlement } from "@/engine/dispatch-settlement"
 import { EngineArtifactTable, EngineTaskTable } from "@/engine/engine.sql"
 import {
@@ -591,7 +592,7 @@ test("closes continuation admission before the real completion checkpoint and im
         workflowNodeID: null,
         adapterInput: { request: "Publish one terminal result" },
       })
-      const lineage = recordDispatchLineage({ origin, childSessionID })
+      const lineage = recordTestDispatchLineage({ origin, childSessionID })
       recordDispatchSettlement({
         taskID: task.taskID,
         dispatchID: lineage.dispatchID,
@@ -680,7 +681,7 @@ test("closes continuation admission before the real completion checkpoint and im
       const originalPrepare = EngineGit.prepare.bind(EngineGit)
       using _checkpointRace = spyOn(EngineGit, "prepare").mockImplementation(async (row) => {
         try {
-          recordDispatchLineage({ origin: lateOrigin, childSessionID: Identifier.ascending("session") })
+          recordTestDispatchLineage({ origin: lateOrigin, childSessionID: Identifier.ascending("session") })
         } catch (error) {
           lateDispatch = error
         }
@@ -818,7 +819,7 @@ test("closes continuation admission before the real completion checkpoint and im
         baselineMode: continuationGit?.baseline?.mode,
         priorResultMode: continuationGit?.result_history?.at(-1)?.mode,
       }).toEqual({ error: undefined, baselineMode: "recorded_head", priorResultMode: "recorded_head" })
-      const reopenedLineage = recordDispatchLineage({
+      const reopenedLineage = recordTestDispatchLineage({
         origin: lateOrigin,
         childSessionID: Identifier.ascending("session"),
       })

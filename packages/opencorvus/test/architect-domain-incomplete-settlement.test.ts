@@ -1,5 +1,6 @@
 import { afterAll, describe, expect, test } from "bun:test"
-import { createDispatchLineageOrigin, recordDispatchLineage } from "@/engine/dispatch-lineage"
+import { createDispatchLineageOrigin } from "@/engine/dispatch-lineage"
+import { recordTestDispatchLineage } from "./fixture/dispatch-lineage"
 import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
 import { recordDispatchSettlement } from "@/engine/dispatch-settlement"
 import { describeTask } from "@/engine/describe"
@@ -232,7 +233,7 @@ function seedProjection(input: {
 
 function recordArchitectLineage(input: { taskID: string; rootSessionID: string; childSessionID: string }) {
   const dispatchID = Identifier.ascending("artifact")
-  recordDispatchLineage({
+  recordTestDispatchLineage({
     origin: createDispatchLineageOrigin({
       dispatchID,
       taskID: input.taskID,
