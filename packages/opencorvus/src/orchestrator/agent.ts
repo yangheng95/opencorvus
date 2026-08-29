@@ -1268,12 +1268,13 @@ export function renderWakeProvenanceNotice(event?: OrchestratorEvent, taskID?: s
       `CURRENT LIFECYCLE CONTROL FACT: event_id=${delivery.eventID}; session_id=${delivery.sessionID}; ` +
         `dispatch_id=${delivery.dispatchID}; input_message_id=${lifecycle.inputMessageID}; ` +
         `authoritative_status=${lifecycle.status.type}/${lifecycle.status.reason}; ` +
+        `final_message_id=${JSON.stringify(lifecycle.status.final_message_id ?? null)}; ` +
         "physical_turn_state=settled; " +
         `emitted_at=${new Date(lifecycle.emittedAt).toISOString()}; ` +
         `summary=${JSON.stringify(lifecycle.summary)}; error=${JSON.stringify(lifecycle.status.error ?? null)}. ` +
         "This exact terminal lifecycle fact triggered the current wake. The referenced worker is not streaming, running, or awaiting completion. " +
         "Any earlier assistant text or wait reason that described this dispatch as nonterminal is expired historical context; this terminal fact satisfies that wait, so never repeat, extend, or reschedule it for this dispatch. " +
-        "The current visible control Turn is authored by the orchestrator and does not quote or impersonate the worker. Use this canonical fact with the current workflow, dispatch lineage, and Artifact snapshot without replacing those authorities, then record the next scheduling or lifecycle decision with its matching real tool call before this decision pass ends.",
+        "The current visible control Turn is authored by the orchestrator and does not quote or impersonate the worker. When final_message_id is non-null, read that exact participant Message rather than selecting another Message from Session history. Use this canonical fact with the current workflow, dispatch lineage, and Artifact snapshot without replacing those authorities, then record the next scheduling or lifecycle decision with its matching real tool call before this decision pass ends.",
     )
   }
 
@@ -1447,8 +1448,11 @@ export function isCurrentWakeIngress(event?: OrchestratorEvent): boolean {
   )
 }
 
-export function renderInitialDispatchContractInstruction(): string {
-  return "- Call `dispatch_agent` with one target-discriminated `dispatch` object. For a first node occurrence, set `turn.kind=initial`, put the exact workflow subject in `turn.workflow_subject`, and put only the selected row's `target_fields` in `turn.input`; `target`, `work_scope`, and `use_worktree` remain dispatch-level fields. Supply every field required by that target schema. When `instruction` is listed, it carries the complete bounded work the worker must perform. When `reason` is listed, it separately explains why that work is needed now and never substitutes for `instruction`. Never copy fields from another target. For a successor Turn, set `turn.kind=continuation`, choose exactly one typed `turn.authority` (`coordination_action` or `prior_dispatch`), and provide only incremental `turn.guidance` plus exact `turn.evidence_locators`; never invent placeholder guidance or a lineage identity."
+export function renderInitialDispatchContractInstruction(input?: { frontier?: boolean }): string {
+  const callShape = input?.frontier
+    ? "Call `dispatch_agents` once with `team` and `dispatches` describing the same complete current dependency-ready frontier in aligned order. Every team row is the visible Task-local name, target, responsibility, boundary, expected result, and settled predecessors for its exact target-discriminated dispatch; include all mutually independent ready members and no dependent or ownership-conflicting member."
+    : "Call `dispatch_agent` with one target-discriminated `dispatch` object."
+  return `- ${callShape} For a first node occurrence, set \`turn.kind=initial\`, put the exact workflow subject in \`turn.workflow_subject\`, and put only the selected row's \`target_fields\` in \`turn.input\`; \`target\`, \`work_scope\`, and \`use_worktree\` remain dispatch-level fields. Supply every field required by that target schema. When \`instruction\` is listed, it carries the complete bounded work the worker must perform. When \`reason\` is listed, it separately explains why that work is needed now and never substitutes for \`instruction\`. Never copy fields from another target. For a successor Turn, set \`turn.kind=continuation\`, choose exactly one typed \`turn.authority\` (\`coordination_action\` or \`prior_dispatch\`), and provide only incremental \`turn.guidance\` plus exact \`turn.evidence_locators\`; never invent placeholder guidance or a lineage identity.`
 }
 
 function requireCurrentAgentLifecycleFact(
@@ -1757,8 +1761,9 @@ async function buildSystemParts(
     ctx.push("")
   }
   ctx.push("## Active Projected Worker Identities")
+  const usesDispatchFrontier = schedulerCapability.builtInToolIDs.includes("dispatch_agents")
   ctx.push(
-    "`dispatch_agent.dispatch.target` accepts only the exact agent IDs below. Choose responsibility from each projection's label, description, target schema, and the active package collaboration contract. `base_role` and `dispatch_adapter_id` are template metadata, never aliases or scheduler order. `tools` is the exact set each projection can call — read it to know what a worker is able to produce and to tell a capability this Squad lacks from one it holds and was never told to use; it is a capability fact, not a routing key, and never overrides the responsibility the contract assigns.",
+    `${usesDispatchFrontier ? "`dispatch_agents.team[].target` and its aligned `dispatches[].dispatch.target`" : "`dispatch_agent.dispatch.target`"} accept only the exact agent IDs below. Choose responsibility from each projection's label, description, target schema, and the active package collaboration contract. \`base_role\` and \`dispatch_adapter_id\` are template metadata, never aliases or scheduler order. \`tools\` is the exact set each projection can call — read it to know what a worker is able to produce and to tell a capability this Squad lacks from one it holds and was never told to use; it is a capability fact, not a routing key, and never overrides the responsibility the contract assigns.`,
   )
   for (const projectedAgent of projectedAgents.toSorted((left, right) =>
     left.identity.agentID.localeCompare(right.identity.agentID),
@@ -1768,7 +1773,7 @@ async function buildSystemParts(
       `- target=${projectedAgent.identity.agentID}; label=${JSON.stringify(projectedAgent.label)}; description=${JSON.stringify(projectedAgent.description ?? "")}; base_role=${projectedAgent.identity.baseRole}; dispatch_adapter_id=${projectedAgent.identity.dispatchAdapterID}; target_fields=${adapterFields.join(",")}; tools=${projectedAgent.projectedToolIDs.toSorted().join(",")}`,
     )
   }
-  ctx.push(renderInitialDispatchContractInstruction())
+  ctx.push(renderInitialDispatchContractInstruction({ frontier: usesDispatchFrontier }))
   ctx.push("")
   // ── Recovery discipline ──
   // Rendered as one invariant instead of a configuration mode: the orchestrator

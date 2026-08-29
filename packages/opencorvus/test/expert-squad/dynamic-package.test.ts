@@ -2,7 +2,6 @@ import { afterEach, describe, expect, spyOn, test } from "bun:test"
 import path from "node:path"
 import { DispatchAdapterContractRegistry, type AgentDispatchAdapterID } from "../../src/agent/dispatch-adapter-contract"
 import { WorkerTurnDescriptor } from "../../src/agent/worker-turn-descriptor"
-import { BuildAgent } from "../../src/build/agent"
 import { Config } from "../../src/config/config"
 import { EffectiveConfig } from "../../src/config/effective"
 import {
@@ -21,15 +20,19 @@ import { ExpertSquadPackageManager } from "../../src/expert-squad/manager"
 import { PromptProfileResolver } from "../../src/expert-squad/prompt-profile-resolver"
 import { ExpertSquadRegistry } from "../../src/expert-squad/registry"
 import { Identifier } from "../../src/id/id"
-import { createBuildTool } from "../../src/orchestrator/build-tool"
 import { orchestratorControlOccurrenceIdentity } from "../../src/orchestrator/control-message-identity"
 import {
   createDispatchAgentTool,
   type DispatchAdapterExecutors,
   waitForDetachedDispatchPipelinesForTest,
 } from "../../src/orchestrator/dispatch-agent-tool"
+import {
+  createDispatchAgentsTool,
+  DispatchAgentsToolTestHooks,
+} from "../../src/orchestrator/dispatch-agents-tool"
 import { taskRequestSHA256 } from "../../src/orchestrator/dispatch-turn-projection"
 import { createDelegatedWorkerTool } from "../../src/orchestrator/delegated-worker-tool"
+import { createReadAgentMessageTool } from "../../src/orchestrator/read-agent-message-tool"
 import { Instance } from "../../src/project/instance"
 import { Provider } from "../../src/provider/provider"
 import type { Provider as ProviderType } from "../../src/provider/provider"
@@ -38,6 +41,7 @@ import { Session } from "../../src/session"
 import { Message } from "../../src/session/message"
 import { MessageStore } from "../../src/session/message-store"
 import { SessionProcessor } from "../../src/session/processor"
+import { SessionLoop } from "../../src/session/loop"
 import { SessionStatus } from "../../src/session/status"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
 
@@ -89,7 +93,7 @@ describe("Dynamic Expert Squad package", () => {
     expect(source.manifest).toMatchObject({
       namespace: "builtin",
       id: "dynamic",
-      version: "2026.08.29.1",
+      version: "2026.08.30.2",
       product_pillars: ["code", "work"],
       capability_projection: {
         agents: {
@@ -118,7 +122,7 @@ describe("Dynamic Expert Squad package", () => {
         })
         expect(receipt).toMatchObject({
           operation: "installed",
-          after: { installationScope: "project", namespace: "builtin", id: "dynamic", version: "2026.08.29.1" },
+          after: { installationScope: "project", namespace: "builtin", id: "dynamic", version: "2026.08.30.2" },
         })
 
         const config = Config.mergeOverlay(await EffectiveConfig.snapshotCurrent(), {
@@ -148,8 +152,26 @@ describe("Dynamic Expert Squad package", () => {
 
         expect(scheduler.virtualWorkflows).toEqual({})
         expect(scheduler.productionSkills.map((entry) => entry.ref)).toEqual([skillRef])
-        expect(scheduler.promptOverlay).toContain("one compact `Dynamic team` block")
-        expect(scheduler.promptOverlay).toContain("immediately dispatch every dependency-ready member")
+        expect(scheduler.promptOverlay).toContain("required `dispatch_agents.team` rows")
+        expect(scheduler.promptOverlay).toContain("same visible streamed assistant Tool call")
+        expect(scheduler.promptOverlay).toContain("`team` and `dispatches` are aligned arrays")
+        expect(scheduler.promptOverlay).toContain("Immediately call `dispatch_agents` once")
+        expect(scheduler.builtInToolIDs).toEqual([
+          "artifact_search",
+          "artifact_read",
+          "artifact_select",
+          "artifact_snapshot",
+          "publish_interactive_artifact",
+          "dispatch_agents",
+          "manage_task",
+          "no_action",
+          "read_task_message",
+          "read_agent_message",
+          "skill",
+        ])
+        expect(scheduler.promptOverlay).toContain(
+          "call `read_agent_message` once with that worker's exact Task-projected `final_message_id`",
+        )
         expect({
           generalist: {
             identity: generalist.identity,
@@ -245,8 +267,6 @@ describe("Dynamic Expert Squad package", () => {
     let ingressRunnerLease: Disposable | undefined
     let providerSpy: ReturnType<typeof spyOn> | undefined
     let processorSpy: ReturnType<typeof spyOn> | undefined
-    let buildAgentSpy: ReturnType<typeof spyOn> | undefined
-    let builderFinalMessageID: string | undefined
     try {
       await Instance.provide({
         directory: project.path,
@@ -342,26 +362,6 @@ describe("Dynamic Expert Squad package", () => {
             parts: [],
           })
 
-          const initialTeamText = [
-            "Dynamic team",
-            "- source-a (dynamic-generalist): inspect evidence partition A; read-only; return cited findings.",
-            "- source-b (dynamic-generalist): inspect evidence partition B; read-only; return cited findings.",
-            "- implementation-owner (dynamic-builder): implement one disjoint bounded scaffold independent of both evidence partitions.",
-          ].join("\n")
-          const teamPart = await Session.updatePart({
-            id: Identifier.ascending("part"),
-            sessionID: orchestrator.id,
-            messageID: orchestratorMessageID,
-            type: "text",
-            text: initialTeamText,
-          })
-          const visibleDescription = `${initialTeamText}\n\nWorkflow\nsource-a || source-b || implementation-owner`
-          const streamedTeamPart = await Session.updatePart({ ...teamPart, text: visibleDescription })
-          expect({ initial: teamPart.text, streamed: streamedTeamPart }).toMatchObject({
-            initial: expect.stringContaining("Dynamic team"),
-            streamed: { id: teamPart.id, messageID: orchestratorMessageID, text: visibleDescription },
-          })
-
           const requests = [
             {
               dispatch: {
@@ -395,51 +395,42 @@ describe("Dynamic Expert Squad package", () => {
                 },
               },
             },
-            {
-              dispatch: {
-                target: "dynamic-builder",
-                work_scope: { kind: "task" },
-                turn: {
-                  kind: "initial",
-                  workflow_subject: { kind: "direct" },
-                  use_worktree: false,
-                  input: {
-                    goal_ids: [],
-                    request:
-                      "implementation-owner: own one disjoint bounded scaffold and its checks without consuming source-a or source-b",
-                    reason: "The generated workflow makes the independent Builder partition immediately ready",
-                  },
-                },
-              },
-            },
           ]
-          const toolAuthorities = requests.map((request) => ({
-            target: request.dispatch.target,
-            partID: Identifier.ascending("part"),
-            callID: Identifier.ascending("call"),
-            request,
-          }))
-          for (const authority of toolAuthorities) {
-            await Session.updatePart({
-              id: authority.partID,
-              sessionID: orchestrator.id,
-              messageID: orchestratorMessageID,
-              type: "tool",
-              callID: authority.callID,
-              tool: "dispatch_agent",
-              state: {
-                status: "running",
-                input: authority.request,
-                time: { start: Date.now() },
+          const frontierInput = {
+            team: [
+              {
+                name: "source-a",
+                target: "dynamic-generalist",
+                responsibility: "Inspect evidence partition A",
+                boundary: "Read only partition A and do not overlap partition B",
+                expected_result: "Return cited findings from partition A",
+                depends_on: [],
               },
-            })
+              {
+                name: "source-b",
+                target: "dynamic-generalist",
+                responsibility: "Inspect evidence partition B",
+                boundary: "Read only partition B and do not overlap partition A",
+                expected_result: "Return cited findings from partition B",
+                depends_on: [],
+              },
+            ],
+            dispatches: requests,
           }
-          const authorityQueues = new Map<string, typeof toolAuthorities>()
-          for (const authority of toolAuthorities) {
-            const queue = authorityQueues.get(authority.target) ?? []
-            queue.push(authority)
-            authorityQueues.set(authority.target, queue)
-          }
+          const frontierPartID = Identifier.ascending("part")
+          await Session.updatePart({
+            id: frontierPartID,
+            sessionID: orchestrator.id,
+            messageID: orchestratorMessageID,
+            type: "tool",
+            callID: frontierPartID,
+            tool: "dispatch_agents",
+            state: {
+              status: "running",
+              input: frontierInput,
+              time: { start: Date.now() },
+            },
+          })
 
           let starts = 0
           let finishes = 0
@@ -449,83 +440,6 @@ describe("Dynamic Expert Squad package", () => {
           const allFinished = new Promise<void>((resolve) => (resolveFinished = resolve))
           const release = new Promise<void>((resolve) => (releaseWorkers = resolve))
           providerSpy = spyOn(Provider, "getModel").mockResolvedValue(providerModel())
-          buildAgentSpy = spyOn(BuildAgent, "run").mockImplementation(async (input: any) => {
-            const child = await Session.create({
-              kind: "build",
-              parentID: input.parentSessionID,
-              title: "Dynamic Builder production adapter",
-            })
-            await input.onSessionCreated?.(child.id, {})
-            const inputMessage = await Session.updateMessage({
-              id: Identifier.ascending("message"),
-              sessionID: child.id,
-              role: "user",
-              author: "orchestrator",
-              time: { created: Date.now() },
-              agent: "dynamic-builder",
-              model,
-            })
-            const control = await Session.updatePart({
-              id: Identifier.ascending("part"),
-              sessionID: child.id,
-              messageID: inputMessage.id,
-              type: "text",
-              text: input.message.text,
-            })
-            const descriptor = WorkerTurnDescriptor.create({
-              sessionID: child.id,
-              payload: {
-                identity: skillProjection.projectedAgents.find((agent) => agent.identity.agentID === "dynamic-builder")!
-                  .identity,
-                expertSquadID: packageRevision.id,
-                packageRevision,
-                model: { selection: "explicit", providerID: model.providerID, modelID: model.modelID },
-                prompt: { systemMode: "complete", systemSha256: "d".repeat(64) },
-                tools: { enabled: [], stageOwned: [], stageMaterializers: {} },
-                output: { format: "text", resultMode: "reply" },
-                lifecycle: { taskID, workScope: input.workScope },
-                messageAuthority: {
-                  user_message_id: inputMessage.id,
-                  control_text_parts: [{ part_id: control.id, text_sha256: taskRequestSHA256(control.text) }],
-                },
-                dispatchTurn: input.dispatchTurn,
-              },
-            })
-            await input.onDispatchAuthorityCommit?.(child.id, descriptor)
-            await input.onRuntimeReady?.(child.id)
-            starts++
-            if (starts === 3) resolveStarted()
-            await release
-            const finalMessage = await Session.updateMessage({
-              id: Identifier.ascending("message"),
-              sessionID: child.id,
-              parentID: inputMessage.id,
-              role: "assistant",
-              author: "dynamic-builder",
-              time: { created: Date.now(), completed: Date.now() + 1 },
-              agent: "dynamic-builder",
-              providerID: model.providerID,
-              modelID: model.modelID,
-              path: { cwd: project.path, root: project.path },
-              cost: 0,
-              tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
-              finish: "stop",
-            })
-            builderFinalMessageID = finalMessage.id
-            SessionStatus.beginExecutionOccurrence(child.id, inputMessage.id)
-            await SessionStatus.set(
-              child.id,
-              { type: "terminal", reason: "completed" },
-              { taskID, inputMessageID: inputMessage.id },
-            )
-            finishes++
-            if (finishes === 3) resolveFinished()
-            return {
-              sessionID: child.id,
-              finalMessageID: finalMessage.id,
-              terminalFactPublication: { kind: "terminal_success" },
-            } as never
-          })
           processorSpy = spyOn(SessionProcessor, "create").mockImplementation((input: any) => {
             const assistant = input.assistantMessage
             return {
@@ -535,7 +449,7 @@ describe("Dynamic Expert Squad package", () => {
               },
               async process() {
                 starts++
-                if (starts === 3) resolveStarted()
+                if (starts === 2) resolveStarted()
                 await release
                 await Session.updatePart({
                   id: Identifier.ascending("part"),
@@ -548,7 +462,7 @@ describe("Dynamic Expert Squad package", () => {
                 assistant.time.completed = Date.now()
                 await Session.updateMessage(assistant)
                 finishes++
-                if (finishes === 3) resolveFinished()
+                if (finishes === 2) resolveFinished()
                 return "stop"
               },
             } as any
@@ -559,20 +473,12 @@ describe("Dynamic Expert Squad package", () => {
             agentSessionID: orchestrator.id,
             requireCurrentTaskAndAgentSessionLineage: async () => requireTask(taskID),
           }).delegated_worker
-          const buildTool = createBuildTool({
-            inputSchema: DispatchAdapterContractRegistry.inputSchema("build"),
-            taskID,
-            parentSessionID: orchestrator.id,
-            buildAgentContextSections: () => [],
-          }).build
           const executors = Object.fromEntries(
             DispatchAdapterContractRegistry.ids.map((id) => [
               id,
               id === "delegated_worker"
                 ? async (args: unknown, context: unknown) => workerTool.execute!(args as never, context as never)
-                : id === "build"
-                  ? async (args: unknown, context: unknown) => buildTool.execute!(args as never, context as never)
-                  : async () => {
+                : async () => {
                       throw new Error(`unexpected ${id} adapter execution`)
                     },
             ]),
@@ -592,20 +498,27 @@ describe("Dynamic Expert Squad package", () => {
               workflowBinding,
               workflowNodeID,
               adapterInput,
+              toolOptions,
             }) {
               if (!workflowBinding || workflowBinding.kind !== "direct" || workflowNodeID !== null) {
                 throw new Error("Dynamic dispatch must retain direct workflow authority")
               }
-              const authority = authorityQueues.get(targetAgentID)?.shift()
-              if (!authority) throw new Error(`Dynamic dispatch ${targetAgentID} lost its visible Tool Part authority`)
+              const execution = (toolOptions as {
+                opencorvus?: { toolPartID?: unknown; toolCallID?: unknown }
+              } | undefined)?.opencorvus
+              const toolPartID = typeof execution?.toolPartID === "string" ? execution.toolPartID : ""
+              const toolCallID = typeof execution?.toolCallID === "string" ? execution.toolCallID : ""
+              if (!toolPartID || !toolCallID) {
+                throw new Error(`Dynamic dispatch ${targetAgentID} lost its visible Tool Part authority`)
+              }
               const dispatchID = Identifier.ascending("artifact")
               const origin = createDispatchLineageOrigin({
                 dispatchID,
                 taskID,
                 orchestratorSessionID: orchestrator.id,
                 orchestratorMessageID,
-                toolPartID: authority.partID,
-                toolCallID: authority.callID,
+                toolPartID,
+                toolCallID,
                 targetAgentID,
                 projectedWorkerIdentity: projectedAgent.identity,
                 workScope,
@@ -641,60 +554,90 @@ describe("Dynamic Expert Squad package", () => {
             },
           })
           if (!dispatchTool.execute) throw new Error("dispatch_agent has no production executor")
+          const interruptedFrontier = DispatchAgentsToolTestHooks.create(dispatchTool, {
+            afterPrepared() {
+              throw new Error("simulated process loss after durable frontier preparation")
+            },
+          })
+          if (!interruptedFrontier.execute) throw new Error("dispatch_agents has no interrupted executor")
+          await expect(
+            interruptedFrontier.execute(frontierInput as never, {
+              toolCallId: frontierPartID,
+              opencorvus: {
+                sessionID: orchestrator.id,
+                messageID: orchestratorMessageID,
+                toolCallID: frontierPartID,
+                toolPartID: frontierPartID,
+                visibleToolName: "dispatch_agents",
+              },
+            } as never),
+          ).rejects.toThrow("simulated process loss after durable frontier preparation")
+          expect(
+            (await MessageStore.parts(orchestratorMessageID))
+              .filter((part) => part.type === "tool" && part.tool === "dispatch_agent")
+              .map((part) => part.state.status),
+          ).toEqual(["running", "running"])
+          expect(await SessionLoop.terminalizeRecoveredIncompleteAssistant(orchestrator.id)).toBe(true)
 
-          const receipts = await Promise.all(
-            requests.map((request) => dispatchTool.execute!(request as never, {} as never)),
+          const frontierTool = createDispatchAgentsTool(dispatchTool)
+          if (!frontierTool.execute) throw new Error("dispatch_agents has no production executor")
+          const recoveredFrontierPart = (await MessageStore.parts(orchestratorMessageID)).find(
+            (part): part is Message.ToolPart => part.type === "tool" && part.id === frontierPartID,
           )
+          if (!recoveredFrontierPart || recoveredFrontierPart.state.status !== "completed") {
+            throw new Error("dispatch_agents recovery did not complete its durable outer Part")
+          }
+          const frontierResult = {
+            output: recoveredFrontierPart.state.output,
+            title: recoveredFrontierPart.state.title,
+            metadata: recoveredFrontierPart.state.metadata,
+          }
+          const receipts = (frontierResult as { metadata: { dispatches: any[] } }).metadata.dispatches
           for (const receipt of receipts) {
             if (receipt.kind !== "accepted") {
               throw new Error(`Expected accepted Dynamic dispatch, got ${JSON.stringify(receipt)}`)
             }
           }
-          expect(receipts.map((receipt) => receipt.kind)).toEqual(["accepted", "accepted", "accepted"])
-          for (const [index, authority] of toolAuthorities.entries()) {
-            await Session.updatePart({
-              id: authority.partID,
+          expect(receipts.map((receipt) => receipt.kind)).toEqual(["accepted", "accepted"])
+          const replay = await frontierTool.execute(frontierInput as never, {
+            toolCallId: frontierPartID,
+            opencorvus: {
               sessionID: orchestrator.id,
               messageID: orchestratorMessageID,
-              type: "tool",
-              callID: authority.callID,
-              tool: "dispatch_agent",
-              state: {
-                status: "completed",
-                input: authority.request,
-                output: JSON.stringify(receipts[index]),
-                title: `Dispatched ${authority.target}`,
-                metadata: { target: authority.target },
-                time: { start: now + 3 + index, end: Date.now() },
-              },
-            })
-          }
-          const persistedOrchestratorMessage = await MessageStore.get({
-            sessionID: orchestrator.id,
-            messageID: orchestratorMessageID,
-          })
-          await Session.updateMessage({
-            ...persistedOrchestratorMessage.info,
-            time: { created: now + 2, completed: Date.now() },
-            finish: "tool-calls",
-          } as Message.Assistant)
+              toolCallID: frontierPartID,
+              toolPartID: frontierPartID,
+              visibleToolName: "dispatch_agents",
+            },
+          } as never)
+          expect((replay as { metadata: { dispatches: unknown[] } }).metadata.dispatches).toEqual(receipts)
+          const childToolParts = (await MessageStore.parts(orchestratorMessageID)).filter(
+            (part): part is Message.ToolPart => part.type === "tool" && part.tool === "dispatch_agent",
+          )
+          expect(childToolParts).toHaveLength(2)
           expect(await MessageStore.parts(orchestratorMessageID)).toMatchObject([
-            { id: teamPart.id, messageID: orchestratorMessageID, type: "text", text: visibleDescription },
-            ...toolAuthorities.map((authority) => ({
-              id: authority.partID,
+            {
+              id: frontierPartID,
               messageID: orchestratorMessageID,
               type: "tool",
-              callID: authority.callID,
+              callID: frontierPartID,
+              tool: "dispatch_agents",
+              state: { status: "completed", input: frontierInput },
+            },
+            ...childToolParts.map((part) => ({
+              id: part.id,
+              messageID: orchestratorMessageID,
+              type: "tool",
+              callID: part.callID,
               tool: "dispatch_agent",
-              state: { status: "completed", input: authority.request },
+              state: { status: "completed" },
             })),
           ])
-          await requireWithin(allStarted, "three overlapping Dynamic members")
+          await requireWithin(allStarted, "two overlapping Dynamic members")
           const childSessionIDs = receipts.map((receipt) => {
             if (receipt.kind !== "accepted") throw new Error(`Expected accepted dispatch, got ${receipt.kind}`)
             return receipt.session_id
           })
-          expect(new Set(childSessionIDs).size).toBe(3)
+          expect(new Set(childSessionIDs).size).toBe(2)
           expect(
             (await Promise.all(childSessionIDs.map((sessionID) => Session.get(sessionID)))).map((session) => ({
               kind: session.kind,
@@ -704,53 +647,59 @@ describe("Dynamic Expert Squad package", () => {
           ).toEqual([
             { kind: "delegated-worker", parentID: orchestrator.id, directory: project.path },
             { kind: "delegated-worker", parentID: orchestrator.id, directory: project.path },
-            { kind: "build", parentID: orchestrator.id, directory: project.path },
           ])
           releaseWorkers()
-          await requireWithin(allFinished, "three completed Dynamic members")
+          await requireWithin(allFinished, "two completed Dynamic members")
           const lineages = listDispatchLineage(taskID)
-          expect(new Set(lineages.map((lineage) => lineage.dispatchID)).size).toBe(3)
+          expect(new Set(lineages.map((lineage) => lineage.dispatchID)).size).toBe(2)
           expect(lineages.map((lineage) => lineage.payload.target_agent_id).sort()).toEqual([
-            "dynamic-builder",
             "dynamic-generalist",
             "dynamic-generalist",
           ])
           expect(lineages.map((lineage) => lineage.payload.workflow_binding.kind)).toEqual([
             "direct",
             "direct",
-            "direct",
           ])
-          expect(lineages.map((lineage) => lineage.payload.workflow_node_id)).toEqual([null, null, null])
+          expect(lineages.map((lineage) => lineage.payload.workflow_node_id)).toEqual([null, null])
           expect(lineages.map((lineage) => lineage.payload.orchestrator_message_id)).toEqual([
-            orchestratorMessageID,
             orchestratorMessageID,
             orchestratorMessageID,
           ])
           expect(lineages.map((lineage) => lineage.payload.tool_part_id).sort()).toEqual(
-            toolAuthorities.map((authority) => authority.partID).sort(),
+            childToolParts.map((part) => part.id).sort(),
           )
           expect(
             childSessionIDs.map(
               (sessionID) => WorkerTurnDescriptor.latestForSession(sessionID)?.payload.identity.agentID,
             ),
-          ).toEqual(["dynamic-generalist", "dynamic-generalist", "dynamic-builder"])
+          ).toEqual(["dynamic-generalist", "dynamic-generalist"])
 
           await requireWithin(waitForDetachedDispatchPipelinesForTest(), "detached Dynamic dispatch pipelines")
           await requireWithin(waitForIngressDeliveryHooksForTest(), "Dynamic lifecycle ingress deliveries")
+          const readAgentMessage = createReadAgentMessageTool({ taskID }).read_agent_message
+          if (!readAgentMessage.execute) throw new Error("read_agent_message has no production executor")
           for (const sessionID of childSessionIDs) {
             const descriptor = WorkerTurnDescriptor.latestForSession(sessionID)
             expect(descriptor).toBeDefined()
-            if (descriptor!.payload.identity.agentID === "dynamic-builder") {
-              expect(await MessageStore.get({ sessionID, messageID: builderFinalMessageID! })).toMatchObject({
-                info: {
-                  id: builderFinalMessageID,
-                  role: "assistant",
-                  finish: "stop",
-                  time: { completed: expect.any(Number) },
-                },
-              })
-              continue
-            }
+            const finalMessage = (await Session.messages({ sessionID }))
+              .filter((message) => message.info.role === "assistant")
+              .at(-1)
+            if (!finalMessage) throw new Error(`Dynamic worker ${sessionID} has no final assistant Message`)
+            const exactMessage = await readAgentMessage.execute(
+              { message_id: finalMessage.info.id },
+              {
+                toolCallId: Identifier.ascending("call"),
+                messages: [],
+                abortSignal: new AbortController().signal,
+              },
+            )
+            expect(JSON.parse(String(exactMessage))).toMatchObject({
+              session_id: sessionID,
+              message_id: finalMessage.info.id,
+              role: "assistant",
+              author: "dynamic-generalist",
+              text: [`completed ${sessionID}`],
+            })
             expect(
               ProtocolStore.latestSessionOccurrenceEvent(
                 sessionID,
@@ -759,9 +708,91 @@ describe("Dynamic Expert Squad package", () => {
               ),
             ).toMatchObject({
               sessionID,
-              payload: { status: { type: "terminal", reason: "completed" } },
+              payload: {
+                status: {
+                  type: "terminal",
+                  reason: "completed",
+                  final_message_id: finalMessage.info.id,
+                },
+              },
             })
           }
+
+          const foreignTaskID = Identifier.ascending("task")
+          const foreignRoot = Session.prepareRootNext({
+            kind: "root",
+            directory: Instance.directory,
+            title: "Foreign Dynamic Task",
+          })
+          const foreignNow = Date.now()
+          persistEstablishedTask({
+            taskID: foreignTaskID,
+            rootSession: foreignRoot,
+            now: foreignNow,
+            title: "Foreign Dynamic Task",
+            request: "Produce one foreign Task message",
+            productPillar: "work",
+            source: "test",
+            priority: "normal",
+            metadata: {},
+            projectID: Instance.project.id,
+            packageRevision,
+            executionCapsuleBinding: await prepareTaskProcessBinding({
+              mode: "native",
+              taskID: foreignTaskID,
+              projectID: Instance.project.id,
+              rootDirectory: Instance.directory,
+              packageRevisionSHA256: packageRevision.packageDigest,
+              timeCreated: foreignNow,
+            }),
+          })
+          const foreignWorker = await Session.create({
+            kind: "delegated-worker",
+            parentID: foreignRoot.id,
+            title: "Foreign worker",
+          })
+          const foreignInputID = Identifier.ascending("message")
+          const foreignFinalID = Identifier.ascending("message")
+          await Session.persistMessage({
+            info: {
+              id: foreignInputID,
+              sessionID: foreignWorker.id,
+              role: "user",
+              author: "orchestrator",
+              time: { created: foreignNow + 1 },
+              agent: "dynamic-generalist",
+              model,
+            },
+            parts: [],
+          })
+          await Session.persistMessage({
+            info: {
+              id: foreignFinalID,
+              sessionID: foreignWorker.id,
+              parentID: foreignInputID,
+              role: "assistant",
+              author: "dynamic-generalist",
+              time: { created: foreignNow + 2, completed: foreignNow + 3 },
+              agent: "dynamic-generalist",
+              providerID: model.providerID,
+              modelID: model.modelID,
+              path: { cwd: project.path, root: project.path },
+              cost: 0,
+              tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+              finish: "stop",
+            },
+            parts: [],
+          })
+          await expect(
+            readAgentMessage.execute(
+              { message_id: foreignFinalID },
+              {
+                toolCallId: Identifier.ascending("call"),
+                messages: [],
+                abortSignal: new AbortController().signal,
+              },
+            ),
+          ).rejects.toThrow(`Message ${foreignFinalID} does not belong to Task ${taskID}`)
         },
       })
     } finally {
@@ -772,7 +803,6 @@ describe("Dynamic Expert Squad package", () => {
       await requireWithin(waitForIngressDeliveryHooksForTest(), "Dynamic cleanup ingress deliveries").catch(
         () => undefined,
       )
-      buildAgentSpy?.mockRestore()
       processorSpy?.mockRestore()
       providerSpy?.mockRestore()
       ingressRunnerLease?.[Symbol.dispose]()

@@ -167,6 +167,7 @@ export type LLMActivityEvent =
       id: string
       ts: number
       outcome: "done" | "failed" | "aborted"
+      attempts?: number
       cls?: ErrorClass
       error?: { name: string; message: string }
     }
@@ -503,6 +504,7 @@ export async function withLLMActivity<T>(
   const remainingTotalMs = () => Math.max(0, policy.totalMs - activeElapsedMs())
 
   let terminalEmitted = false
+  let attempt = 0
 
   const emitStarted = () => {
     sink({
@@ -523,6 +525,7 @@ export async function withLLMActivity<T>(
       id,
       ts: Date.now(),
       outcome,
+      attempts: attempt + 1,
       cls,
       error: err instanceof Error ? { name: err.name, message: err.message } : undefined,
     })
@@ -588,8 +591,6 @@ export async function withLLMActivity<T>(
     armTotalTimer()
   }
   armTotalTimer()
-
-  let attempt = 0
 
   try {
     while (true) {

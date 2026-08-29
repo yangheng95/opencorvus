@@ -1,4 +1,5 @@
 import { afterEach, expect, spyOn, test } from "bun:test"
+import type { EvidenceLocatorInput } from "@opencorvus-ai/plugin/artifact-catalog"
 import fs from "node:fs/promises"
 import path from "node:path"
 import { randomUUID } from "node:crypto"
@@ -159,6 +160,7 @@ async function completeFixtureTask(
     id: string
     nodes: Record<string, { agent_id: string; description: string; depends_on: string[] }>
   } | null = null,
+  evidenceLocators?: readonly EvidenceLocatorInput[],
 ) {
   const user = await Session.updateMessage({
     id: Identifier.ascending("message"),
@@ -220,7 +222,7 @@ async function completeFixtureTask(
   return (tools.complete_task.execute as any)(
     {
       summary: `Complete fixture ${suffix}`,
-      evidence_locators: namedDeliverables,
+      evidence_locators: evidenceLocators ?? namedDeliverables,
       deliverable_artifact_locators: namedDeliverables,
       accepted_delivery_slice_revision_ids: [],
       workflow_id: workflow?.id ?? null,
@@ -228,6 +230,59 @@ async function completeFixtureTask(
     { toolCallId: callID, messages: [] },
   )
 }
+
+test("binds an exact Task-owned worker Message into the completion decision", async () => {
+  await using project = await memoryProject()
+  await Instance.provide({
+    directory: project.path,
+    fn: async () => {
+      const task = await taskFixture(project.path)
+      const worker = await Session.create({
+        kind: "delegated-worker",
+        parentID: task.sessionID,
+        title: "Completion evidence worker",
+      })
+      const workerInput = await Session.updateMessage({
+        id: Identifier.ascending("message"),
+        sessionID: worker.id,
+        role: "user",
+        author: "orchestrator",
+        time: { created: Date.now() },
+        agent: "base-developer",
+        model: { providerID: "test", modelID: "completion-evidence" },
+      })
+      const message = await Session.updateMessage({
+        id: Identifier.ascending("message"),
+        sessionID: worker.id,
+        parentID: workerInput.id,
+        role: "assistant",
+        author: "agent",
+        time: { created: Date.now(), completed: Date.now() + 1 },
+        agent: "base-developer",
+        providerID: "test",
+        modelID: "completion-evidence",
+        path: { cwd: project.path, root: project.path },
+        cost: 0,
+        tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+        finish: "stop",
+      })
+      const locator = {
+        source: "session_message" as const,
+        session_id: worker.id,
+        message_id: message.id,
+      }
+
+      expect(await completeFixtureTask(task, project.path, [], "session-message", null, [locator])).toMatchObject({
+        title: "Task Completed",
+      })
+      const decision = findTaskCompletionDecisionForTerminalTime({
+        taskID: task.taskID,
+        timeCompleted: requireTask(task.taskID).time_completed!,
+      })
+      expect(decision?.payload.evidence_locators).toEqual([locator])
+    },
+  })
+}, 60_000)
 
 test("seals every terminal workflow worker Artifact into the completion decision without asking the model", async () => {
   await using project = await memoryProject()

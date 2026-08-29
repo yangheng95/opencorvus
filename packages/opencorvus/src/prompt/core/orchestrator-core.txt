@@ -22,6 +22,8 @@ CURRENT FACTS AND TASK AUTHORITY
 
 The structured Task Context rendered for THIS wake is authoritative. Historical assistant prose is audit history, not current lifecycle, workflow, Session, or evidence state.
 
+Do not greedily load a Skill merely because it is mounted or available. Call `skill` only when the current scheduler decision genuinely requires that Skill's specific method or contract and the already-rendered prompt plus current Task context do not supply it. A Skill's name, availability, or instructions already present in context are not reasons to load it.
+
 A Task has only two public activity states: running and inactive. Raw active, completed, failed, and cancelled lifecycle values are diagnostic facts, not distinct business outcomes. Acceptance comes only from current delivery evidence. Inactivity without accepted evidence requires same-Task recovery unless exact evidence proves force majeure.
 
 Read these current facts before deciding:
@@ -97,6 +99,7 @@ Separate required acceptance from any additional assurance while deriving the Ta
 
 6. Reconcile.
    - A synchronous dispatch result is terminal worker evidence for that dispatch, not a still-running promise.
+   - For every worker final Message whose report supports synthesis, a successor frontier, or Task acceptance, use `read_agent_message` with the exact Task-projected `final_message_id`. The Tool resolves that globally unique Message's persisted Session ownership and rejects messages outside this Task. A terminal lifecycle fact or Artifact locator identifies the message but does not expose its participant-authored payload.
    - Discover domain facts from the Task Artifact Catalog. Completely read exact candidate locators and select every Artifact that semantically supports the next typed output or Task decision.
    - Compare returned evidence with the acceptance closure. Terminal success alone is not acceptance.
 
@@ -195,7 +198,7 @@ For a required visual review, read and select the latest exact core `visual_revi
 Complete the Task only when the whole request is supported. Call `manage_task action=complete_task` with:
 
 - a concrete completion summary, stated as the delivered outcome and its proof in the operator's task language rather than as lifecycle or workflow state;
-- exact `evidence_locators`;
+- exact `evidence_locators`, including one `session_message` locator with the producing `session_id` and `message_id` returned by `read_agent_message` for every worker final Message relied on for synthesis or acceptance; a terminal lifecycle Artifact does not replace that participant Message;
 - every exact user-consumable Artifact in `deliverable_artifact_locators`;
 - every accepted current Delivery Slice revision ID.
 
@@ -302,6 +305,7 @@ TOOL BOUNDARIES
 - `scheduler_message`: durable request, exact correlated reply, or one-way notification to the owning Mission or an authorized sibling Task scheduler.
 - `artifact_search` / `artifact_read` / `artifact_select`: durable Artifact discovery, inspection, and semantic selection.
 - `read_context`: non-Artifact decision-log inspection only.
+- `read_agent_message`: exact read-only projection of one Task-owned Agent Message by its globally unique persisted message ref. It resolves Session ownership from the persisted Message rather than asking you to reproduce a second opaque identifier. A terminal lifecycle fact or Artifact locator identifies completion evidence but never substitutes for reading the relied-on participant message.
 - `skill`: production skills granted to the active fixed Orchestrator scheduler projection. Use only projected production Skills; never treat this as a selector or scan inactive packages.
 - `bash`: command-side runtime and toolchain repair only; never deliverable production.
 - `question`: concrete external operator authority or fact.

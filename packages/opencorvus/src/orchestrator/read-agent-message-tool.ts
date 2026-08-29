@@ -1,4 +1,5 @@
 import { taskIDForSession } from "@/engine/task-session-lineage"
+import { Session } from "@/session"
 import { MessageStore } from "@/session/message-store"
 import { tool } from "ai"
 import z from "zod"
@@ -7,20 +8,21 @@ export function createReadAgentMessageTool(input: { taskID: string }) {
   return {
     read_agent_message: tool({
       description:
-        "Read one exact persisted Agent message and its tool parts by stable Session/message refs from the Task description. " +
+        "Read one exact persisted Agent message and its tool parts by its globally unique message ref from the Task description. " +
         "This is a read-only fact projection: it does not select a latest message, infer success, or materialize an artifact.",
       inputSchema: z
         .object({
-          session_id: z.string().min(1).describe("Exact persisted Agent Session identity from Task evidence."),
           message_id: z
             .string()
             .min(1)
-            .describe("Exact persisted message identity owned by the selected Agent Session."),
+            .describe("Exact globally unique persisted Agent message identity from Task evidence."),
         })
         .strict(),
-      execute: async ({ session_id, message_id }) => {
+      execute: async ({ message_id }) => {
+        const session_id = Session.messageOccurrenceSessionID(message_id)
+        if (!session_id) throw new Error(`Message ${message_id} is not persisted`)
         if (taskIDForSession(session_id) !== input.taskID) {
-          throw new Error(`Session ${session_id} does not belong to Task ${input.taskID}`)
+          throw new Error(`Message ${message_id} does not belong to Task ${input.taskID}`)
         }
         const message = await MessageStore.get({
           sessionID: session_id,

@@ -22,8 +22,10 @@ import { ProtocolStore } from "@/protocol/store"
 import { Provider } from "@/provider/provider"
 import type { Provider as ProviderType } from "@/provider/provider"
 import { Session } from "@/session"
+import { MessageStore } from "@/session/message-store"
 import { Message } from "@/session/message"
 import { SessionProcessor } from "@/session/processor"
+import { SessionPromptState } from "@/session/prompt/state"
 import { SessionRuntimeContractStore } from "@/session/runtime-contract"
 import { resolveSessionMessageIdentity } from "@/session/message-identity"
 import { materializeUserMessage, preparedUserMessageFromPreflight } from "@/session/prompt/parts"
@@ -212,9 +214,12 @@ test("fresh delegated worker commits Session, input authority, lineage, and occu
       })
 
       let processorStarts = 0
+      let firstAssistantMessageID: string | undefined
+      let canonicalFinalMessageID: string | undefined
       let committedSessionID: string | undefined
       let lineageArtifactID: string | undefined
       const providerSpy = spyOn(Provider, "getModel").mockResolvedValue(providerModel())
+      const runtimeDisposeSpy = spyOn(SessionRuntimeContractStore, "dispose")
       const processorSpy = spyOn(SessionProcessor, "create").mockImplementation((input: any) => {
         processorStarts++
         const assistant = input.assistantMessage
@@ -224,17 +229,20 @@ test("fresh delegated worker commits Session, input authority, lineage, and occu
             return undefined
           },
           async process() {
+            const firstStep = processorStarts === 1
+            if (firstStep) firstAssistantMessageID = assistant.id
+            else canonicalFinalMessageID = assistant.id
             await Session.updatePart({
               id: Identifier.ascending("part"),
               sessionID: assistant.sessionID,
               messageID: assistant.id,
               type: "text",
-              text: "charter complete",
+              text: firstStep ? "intermediate tool evidence" : "canonical charter complete",
             })
-            assistant.finish = "stop"
+            assistant.finish = firstStep ? "tool-calls" : "stop"
             assistant.time.completed = Date.now()
             await Session.updateMessage(assistant)
-            return "stop"
+            return firstStep ? "continue" : "stop"
           },
         } as any
       })
@@ -340,8 +348,20 @@ test("fresh delegated worker commits Session, input authority, lineage, and occu
           },
         })
 
-        expect(result).toMatchObject({ sessionID: committedSessionID })
-        expect(processorStarts).toBe(1)
+        expect(result).toEqual({ sessionID: committedSessionID, finalMessageID: canonicalFinalMessageID })
+        expect(processorStarts).toBe(2)
+        expect(result.finalMessageID).not.toBe(firstAssistantMessageID)
+        expect(await MessageStore.get({ sessionID: committedSessionID!, messageID: result.finalMessageID })).toMatchObject({
+          info: { id: canonicalFinalMessageID, parentID: expect.any(String), finish: "stop" },
+          parts: [{ type: "text", text: "canonical charter complete" }],
+        })
+        expect(runtimeDisposeSpy).toHaveBeenCalledTimes(1)
+        expect(SessionPromptState.TestHooks.promptResourceSnapshot(committedSessionID!)).toEqual({
+          promptOwners: 0,
+          messageOwnerRegistries: 0,
+          startReservations: 0,
+          cancellationReceipts: 0,
+        })
         const descriptor = WorkerTurnDescriptor.findForDispatch({
           sessionID: committedSessionID!,
           dispatchID,
@@ -353,7 +373,13 @@ test("fresh delegated worker commits Session, input authority, lineage, and occu
         )
         expect(lifecycle).toMatchObject({
           sessionID: committedSessionID,
-          payload: { status: { type: "terminal", reason: "completed" } },
+          payload: {
+            status: {
+              type: "terminal",
+              reason: "completed",
+              final_message_id: canonicalFinalMessageID,
+            },
+          },
         })
         expect(
           await reconcileTerminalAgentLifecycleDelivery({ taskID, sessionID: committedSessionID!, dispatchID }),
@@ -432,6 +458,7 @@ test("fresh delegated worker commits Session, input authority, lineage, and occu
           ],
         })
       } finally {
+        runtimeDisposeSpy.mockRestore()
         processorSpy.mockRestore()
         providerSpy.mockRestore()
       }

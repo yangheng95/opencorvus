@@ -1599,6 +1599,21 @@ describe("Goal Workload coverage contract", () => {
           now: task.now + 20,
         })
         const inputMessageID = initial.descriptor.payload.messageAuthority.user_message_id
+        await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: initial.child.id,
+          role: "assistant",
+          author: workloadIdentity.agentID,
+          parentID: inputMessageID,
+          time: { created: task.now + 14, completed: task.now + 15 },
+          agent: workloadIdentity.agentID,
+          providerID: "test",
+          modelID: "test-model",
+          path: { cwd: Instance.directory, root: Instance.directory },
+          cost: 0,
+          tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+          finish: "tool-calls",
+        })
         const orderKey = executionLifecycleOrderKey(initial.child.id, inputMessageID)
         await ProtocolStore.appendEvent({
           kind: "event",
@@ -1617,7 +1632,11 @@ describe("Goal Workload coverage contract", () => {
           order_key: orderKey,
           payload: {
             inputMessageID,
-            status: { type: "terminal", reason: "completed" },
+            status: {
+              type: "terminal",
+              reason: "completed",
+              final_message_id: initial.final.id,
+            },
           },
         })
         await Database.awaitEffectIdle(30_000)

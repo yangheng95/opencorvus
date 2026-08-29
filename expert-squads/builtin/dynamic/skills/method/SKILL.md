@@ -36,7 +36,7 @@ Omit stages that do no real work. `||` means the members are ready in the same f
 
 ## 4. Dispatch immediately
 
-Write the team and workflow description in the same streamed Orchestrator message as the first dispatch calls. Do not spend another Agent call producing the description. Dispatch all ready members in that Turn up to real Task capacity. Repeated use of one target creates independent sibling Sessions with separate context and lineage.
+Write the current frontier's team and dependency description in the required `dispatch_agents.team` rows of the same streamed Orchestrator Tool call as the aligned `dispatches`. Do not spend another Agent or Tool call producing the description. Put the complete ready frontier in that call up to real Task capacity. Repeated use of one target creates independent sibling Sessions with separate context and lineage.
 
 Use `dynamic-generalist` for bounded investigation, planning, analysis, review, verification, and synthesis. Use `dynamic-builder` for repository mutation or concrete deliverables. Parallel writers require non-overlapping ownership and managed worktrees when isolation is needed. Shared-file or otherwise shared mutable work is serial.
 

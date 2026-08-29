@@ -116,7 +116,7 @@ test("agent lifecycle delivery projects its exact current occurrence", () => {
     payload: {
       sessionID: "ses_worker_terminal_delivery",
       inputMessageID: "msg_worker_terminal_delivery",
-      status: { type: "terminal", reason: "completed" },
+      status: { type: "terminal", reason: "completed", final_message_id: "msg_worker_final_delivery" },
     },
     time: { emitted: 1, created: 1, updated: 1 },
   } as ReturnType<typeof ProtocolStore.requireEvent>)
@@ -139,6 +139,7 @@ test("agent lifecycle delivery projects its exact current occurrence", () => {
   expect(notice).toContain("dispatch_id=dispatch_worker_terminal_delivery")
   expect(notice).toContain("input_message_id=msg_worker_terminal_delivery")
   expect(notice).toContain("authoritative_status=terminal/completed")
+  expect(notice).toContain('final_message_id="msg_worker_final_delivery"')
   expect(notice).toContain("physical_turn_state=settled")
   expect(notice).toContain("Any earlier assistant text or wait reason")
   expect(notice).toContain("this terminal fact satisfies that wait")
@@ -165,5 +166,6 @@ test("agent lifecycle delivery projects its exact current occurrence", () => {
   })
   expect(control.text).toContain("CURRENT LIFECYCLE CONTROL FACT")
   expect(control.text).toContain("authoritative_status=terminal/completed")
+  expect(control.text).toContain('final_message_id="msg_worker_final_delivery"')
   expect(requireEvent).toHaveBeenCalledWith("pev_worker_terminal_delivery")
 })

@@ -81,6 +81,7 @@ export namespace SessionStatus {
         type: z.literal("terminal"),
         reason: z.enum(["completed", "coordinated", "error", "aborted"]),
         error: z.string().optional(),
+        final_message_id: Identifier.schema("message").optional(),
       }),
     ])
     .meta({

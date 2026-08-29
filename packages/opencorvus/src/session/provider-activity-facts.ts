@@ -49,6 +49,7 @@ export function recordProviderActivityEvent(assistantMessageID: string, event: L
     const id = Identifier.deterministic("part", `provider-activity-outcome\0${event.id}`)
     const data = {
       outcome: event.outcome,
+      attempt_count: event.attempts ?? 1,
       ...(event.cls ? { error_class: event.cls } : {}),
       ...(event.error ? { error: event.error } : {}),
     }

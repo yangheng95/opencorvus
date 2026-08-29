@@ -102,8 +102,18 @@ describe("Provider activity fact storage", () => {
           { id: secondActivityID, assistant_message_id: assistant.id, time_created: now + 3 },
         ])
         expect(facts.outcomes).toEqual([
-          { id: expect.any(String), request_id: activityID, data: { outcome: "done" }, time_created: now + 4 },
-          { id: expect.any(String), request_id: secondActivityID, data: { outcome: "done" }, time_created: now + 5 },
+          {
+            id: expect.any(String),
+            request_id: activityID,
+            data: { outcome: "done", attempt_count: 1 },
+            time_created: now + 4,
+          },
+          {
+            id: expect.any(String),
+            request_id: secondActivityID,
+            data: { outcome: "done", attempt_count: 1 },
+            time_created: now + 5,
+          },
         ])
       },
     })
@@ -185,11 +195,12 @@ describe("Provider activity fact storage", () => {
           db.select().from(ProviderActivityOutcomeTable).orderBy(ProviderActivityOutcomeTable.time_created).all(),
         )
         expect(outcomes.map((outcome) => [outcome.request_id, outcome.data])).toEqual([
-          [owned, { outcome: "done" }],
+          [owned, { outcome: "done", attempt_count: 1 }],
           [
             abandoned,
             {
               outcome: "aborted",
+              attempt_count: 1,
               error_class: "external_abort",
               error: { name: "ProcessExecutionInterruptedError", message: "Previous process ended mid-call" },
             },

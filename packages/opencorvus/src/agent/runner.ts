@@ -117,6 +117,7 @@ import { SessionContext } from "@/session/context"
 import { recordTaskInfrastructureError, recordToolExecuteError } from "@/engine/persist"
 import { cancelSessionPromptInScope } from "@/engine/cancellation-scope"
 import { SessionPromptState } from "@/session/prompt/state"
+import { SessionLoop } from "@/session/loop"
 import { SessionRuntimeContractStore } from "@/session/runtime-contract"
 import { MCP } from "@/mcp"
 import { createComputerRuntimeConnectionOwner } from "@/mcp/computer/runtime-owner"
@@ -412,7 +413,7 @@ async function completeProjectedWorkerTurn<C>(input: {
   }
   const promptGenerationOwner = input.promptGenerationOwner
   if (coordinationHandoff) {
-    await publishPhysicallySettledWorkerTerminal({
+    await publishSettledWorkerTerminal({
       session: input.session,
       agentID: input.agentID,
       taskID: input.run.taskID,
@@ -443,7 +444,7 @@ async function completeProjectedWorkerTurn<C>(input: {
     }
   }
 
-  await publishPhysicallySettledWorkerTerminal({
+  await publishSettledWorkerTerminal({
     session: input.session,
     agentID: input.agentID,
     taskID: input.run.taskID,
@@ -502,7 +503,11 @@ async function failProjectedWorkerTurn<C>(input: {
   error: unknown
   inputMessageID?: string
   promptGenerationOwner?: AbortSignal
+  physicallySettled?: boolean
 }): Promise<never> {
+  const publishTerminal = input.physicallySettled
+    ? publishSettledWorkerTerminal
+    : publishPhysicallySettledWorkerTerminal
   const cancellationCause = isExecutionCancellationError(input.error)
     ? input.error
     : isExecutionCancellationError(input.signal?.reason)
@@ -525,7 +530,7 @@ async function failProjectedWorkerTurn<C>(input: {
       throw new Error(`Session ${input.session.id} failed message belongs to a different prompt generation owner`)
     }
     const promptGenerationOwner = input.promptGenerationOwner ?? messageOwner
-    await publishPhysicallySettledWorkerTerminal({
+    await publishTerminal({
       session: input.session,
       agentID: input.agentID,
       taskID: input.run.taskID,
@@ -543,7 +548,7 @@ async function failProjectedWorkerTurn<C>(input: {
     throw new Error(`Session ${input.session.id} failed message belongs to a different prompt generation owner`)
   }
   const promptGenerationOwner = input.promptGenerationOwner ?? messageOwner
-  await publishPhysicallySettledWorkerTerminal({
+  await publishTerminal({
     session: input.session,
     agentID: input.agentID,
     taskID: input.run.taskID,
@@ -790,8 +795,21 @@ async function publishPhysicallySettledWorkerTerminal(
   },
 ): Promise<void> {
   using _generationReservation = await settlePhysicalWorkerTurn(input)
+  await publishSettledWorkerTerminal(input)
+}
+
+async function publishSettledWorkerTerminal(
+  input: PhysicalWorkerTurnSettlementInput & {
+    session: Pick<Awaited<ReturnType<typeof Session.get>>, "id" | "directory">
+    status: Extract<SessionStatus.Info, { type: "terminal" }>
+    inputMessageID?: string
+  },
+): Promise<void> {
   try {
-    await publishSessionStatus(input.session, input.status, {
+    const status = input.finalMessageID
+      ? { ...input.status, final_message_id: input.finalMessageID }
+      : input.status
+    await publishSessionStatus(input.session, status, {
       promptGenerationOwner: input.promptGenerationOwner,
       inputMessageID: input.inputMessageID,
       taskID: input.taskID,
@@ -1246,6 +1264,8 @@ async function runAgentSessionInner<C>(input: RunAgentSessionInput<C>): Promise<
   const streamErrors: Array<{ reason: string; name?: string }> = []
   let finalMessage: Message.WithParts | undefined
   let promptGenerationOwner: AbortSignal | undefined
+  let promptPhysicallySettled = false
+  let physicalSettlementReservation: Disposable | undefined
   let committedInputMessageID: string | undefined
   let untransferredMcpOwner: MCP.ScopedConnectionOwner | undefined
   try {
@@ -1769,6 +1789,30 @@ async function runAgentSessionInner<C>(input: RunAgentSessionInput<C>): Promise<
     if (!promptGenerationOwner) {
       throw new AgentRunError(kind, `Session ${session.id} worker Turn has no prompt generation owner`)
     }
+    const initialCoordinationHandoff = coordinationHandoffFromMessage({
+      taskID: input.taskID,
+      sessionID: session.id,
+      finalMessage,
+      declaredToolID: coordinationHandoffToolID,
+    })
+    physicalSettlementReservation = await settlePhysicalWorkerTurn({
+      session,
+      agentID,
+      taskID: input.taskID,
+      outcome: initialCoordinationHandoff ? "coordinated" : "completed",
+      finalMessageID: finalMessage.info.id,
+      promptGenerationOwner,
+    })
+    promptPhysicallySettled = true
+    const canonicalFinalMessage = await SessionLoop.completedReplyToUserMessage(
+      session.id,
+      committedInputMessageID!,
+      true,
+    )
+    if (!canonicalFinalMessage) {
+      throw new AgentRunError(kind, `Session ${session.id} physically settled without a canonical completed reply`)
+    }
+    finalMessage = canonicalFinalMessage
     return await completeProjectedWorkerTurn({
       run: input,
       session,
@@ -1808,7 +1852,10 @@ async function runAgentSessionInner<C>(input: RunAgentSessionInput<C>): Promise<
       error: err,
       inputMessageID: committedInputMessageID,
       promptGenerationOwner,
+      physicallySettled: promptPhysicallySettled,
     })
+  } finally {
+    physicalSettlementReservation?.[Symbol.dispose]()
   }
 }
 

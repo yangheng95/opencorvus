@@ -130,6 +130,7 @@ import {
   type DispatchAgentExecute,
   type OpenDispatchAgentLineage,
 } from "./dispatch-agent-tool"
+import { createDispatchAgentsTool } from "./dispatch-agents-tool"
 
 import { DispatchOutcome, DispatchOutcomeSchema } from "@/agent/dispatch-outcome"
 import { createExploreTool } from "./explore-tool"
@@ -2656,6 +2657,7 @@ export function createOrchestratorTools(input: {
     artifact_snapshot: createArtifactSnapshotAiTool(input.taskID),
     publish_interactive_artifact: createPublishInteractiveArtifactAiTool(),
     dispatch_agent: dispatchAgentTool,
+    dispatch_agents: createDispatchAgentsTool(dispatchAgentTool),
     manage_task: manageTaskTool,
   }
   for (const decisionToolName of ORCHESTRATOR_DECISION_TOOL_NAMES) {

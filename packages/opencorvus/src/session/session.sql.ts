@@ -132,6 +132,7 @@ export type ToolProgressPartData = {
 
 export type ProviderActivityOutcomeData = {
   outcome: "done" | "failed" | "aborted"
+  attempt_count?: number
   error_class?: string
   error?: { name: string; message: string }
 }
@@ -325,6 +326,13 @@ export const ProviderActivityOutcomeTable = sqliteTable(
       json_extract(${table.data}, '$.outcome') IN ('done', 'failed', 'aborted')
       AND json_type(${table.data}, '$.status') IS NULL
       AND json_type(${table.data}, '$.attempt') IS NULL
+      AND (
+        json_type(${table.data}, '$.attempt_count') IS NULL
+        OR (
+          json_type(${table.data}, '$.attempt_count')='integer'
+          AND json_extract(${table.data}, '$.attempt_count') >= 1
+        )
+      )
     `),
   ],
 )

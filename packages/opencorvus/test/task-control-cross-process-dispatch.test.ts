@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, test } from "bun:test"
 import { Config } from "../src/config/config"
 import { DispatchOutcome } from "../src/agent/dispatch-outcome"
+import { WorkerTurnDescriptor } from "../src/agent/worker-turn-descriptor"
 import { createDispatchLineageOrigin, recordDispatchLineage } from "../src/engine/dispatch-lineage"
 import { findDispatchSettlementByDispatchID, settleDispatchOrReturnExisting } from "../src/engine/dispatch-settlement"
 import {
@@ -11,13 +12,16 @@ import {
 import { PROCESS_LIVENESS_LEASE_MS } from "../src/engine/process-liveness"
 import { requireTask } from "../src/engine/store"
 import { selectedWorkflowBinding } from "../src/engine/workflow-binding"
+import { taskRequestSHA256 } from "../src/orchestrator/dispatch-turn-projection"
 import { prepareTaskProcessBinding } from "../src/engine/task-execution-capsule-binding"
 import { reconcileTaskControlPlane, TestHooks as TaskControlTestHooks } from "../src/engine/task-root-ingress-delivery"
 import { PromptProfileResolver } from "../src/expert-squad/prompt-profile-resolver"
 import { Identifier } from "../src/id/id"
 import { BrowserMCPBuiltin } from "../src/mcp/browser/builtin"
 import { Instance } from "../src/project/instance"
+import { ProtocolStore } from "../src/protocol/store"
 import { Session } from "../src/session"
+import { executionLifecycleOrderKey } from "../src/session/status"
 import { Database, eq } from "../src/storage/db"
 import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
@@ -72,9 +76,13 @@ async function seedPeerOwnedDispatch(projectPath: string, owner: string | null) 
     }),
   })
   const task = requireTask(taskID)
-  const child = await Session.create({ kind: "delegated-worker", parentID: root.id, title: "Peer-owned worker" })
+  const child = await Session.create({ kind: worker.identity.sessionKind, parentID: root.id, title: "Peer-owned worker" })
   const dispatchID = Identifier.ascending("artifact")
-  recordDispatchLineage({
+  const workflowBinding = selectedWorkflowBinding({
+    projection: { packageRevision: scheduler.packageRevision, virtualWorkflows: scheduler.virtualWorkflows },
+    workflowID: null,
+  })
+  const lineage = recordDispatchLineage({
     origin: createDispatchLineageOrigin({
       dispatchID,
       taskID,
@@ -85,17 +93,63 @@ async function seedPeerOwnedDispatch(projectPath: string, owner: string | null) 
       targetAgentID: worker.identity.agentID,
       projectedWorkerIdentity: worker.identity,
       workScope: { kind: "task" },
-      workflowBinding: selectedWorkflowBinding({
-        projection: { packageRevision: scheduler.packageRevision, virtualWorkflows: scheduler.virtualWorkflows },
-        workflowID: null,
-      }),
+      workflowBinding,
       workflowNodeID: null,
       adapterInput: {},
     }),
     childSessionID: child.id,
     ownerProcessOccurrenceID: owner,
   })
-  return { taskID, dispatchID }
+  const inputMessage = await Session.updateMessage({
+    id: Identifier.ascending("message"),
+    sessionID: child.id,
+    role: "user",
+    author: "orchestrator",
+    agent: worker.identity.agentID,
+    model: { providerID: "test", modelID: "test-model" },
+    time: { created: now + 1 },
+  })
+  const controlText = `Execute dispatch ${dispatchID}`
+  const controlPart = await Session.updatePart({
+    id: Identifier.ascending("part"),
+    sessionID: child.id,
+    messageID: inputMessage.id,
+    type: "text",
+    text: controlText,
+  })
+  const descriptor = WorkerTurnDescriptor.create({
+    sessionID: child.id,
+    payload: {
+      identity: worker.identity,
+      expertSquadID: scheduler.packageRevision.id,
+      packageRevision: scheduler.packageRevision,
+      model: { selection: "explicit", providerID: "test", modelID: "test-model" },
+      prompt: { systemMode: "complete", systemSha256: "c".repeat(64) },
+      tools: { enabled: [], stageOwned: [], stageMaterializers: {} },
+      output: { format: "text", resultMode: "reply" },
+      lifecycle: { taskID, workScope: { kind: "task" } },
+      messageAuthority: {
+        user_message_id: inputMessage.id,
+        control_text_parts: [{ part_id: controlPart.id, text_sha256: taskRequestSHA256(controlText) }],
+      },
+      dispatchTurn: {
+        kind: "initial",
+        current_dispatch_id: dispatchID,
+        workflow_binding: workflowBinding,
+        workflow_node_id: null,
+        workflow_occurrence_id: dispatchID,
+        delivery_slice_revision_ids: [],
+        evidence_locators: [],
+        task_authority: {
+          task_id: taskID,
+          root_session_id: root.id,
+          request_sha256: taskRequestSHA256(task.request),
+          initial_control_text_parts: [],
+        },
+      },
+    },
+  })
+  return { taskID, dispatchID, child, descriptor, lineage }
 }
 
 function claimPeerLiveness(occurrenceID: string, expiresAt: number) {
@@ -172,6 +226,186 @@ describe("cross-process dispatch abandonment", () => {
       },
     })
   })
+
+  test("recovers exact error and aborted terminal occurrences that ended before a final Message", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        claimPeerLiveness(PEER, Date.now() - 1)
+        using _owner = TaskControlTestHooks.replaceTerminalIngressDeliveryRuntime("runtime:this-backend")
+        using _runner = TaskControlTestHooks.replaceTaskIngressRunner({ runner: async () => ({}) })
+
+        for (const reason of ["error", "aborted"] as const) {
+          const fixture = await seedPeerOwnedDispatch(project.path, PEER)
+          const error = reason === "error" ? "provider stream failed" : "caller cancelled worker"
+          await ProtocolStore.appendEvent({
+            kind: "event",
+            type: "agent.execution.lifecycle",
+            aggregate: "task",
+            aggregate_id: fixture.taskID,
+            task_id: null,
+            session_id: fixture.child.id,
+            source: "task-control-cross-process-dispatch-test",
+            order_key: executionLifecycleOrderKey(
+              fixture.child.id,
+              fixture.descriptor.payload.messageAuthority.user_message_id,
+            ),
+            payload: {
+              inputMessageID: fixture.descriptor.payload.messageAuthority.user_message_id,
+              status: { type: "terminal", reason, error },
+            },
+          })
+          await Database.awaitEffectIdle(30_000)
+
+          await reconcileTaskControlPlane(fixture.taskID)
+          await reconcileTaskControlPlane(fixture.taskID)
+
+          const settlement = findDispatchSettlementByDispatchID({
+            taskID: fixture.taskID,
+            dispatchID: fixture.dispatchID,
+          })
+          const recoveryIngresses = Database.use((db) =>
+            db
+              .select({ sourceID: EngineTaskRootIngressTable.source_id })
+              .from(EngineTaskRootIngressTable)
+              .where(
+                eq(EngineTaskRootIngressTable.task_id, fixture.taskID),
+              )
+              .all()
+              .filter((row) => row.sourceID === settlement?.payload.outcome.infrastructure_error?.artifact_id),
+          )
+          expect({
+            reason,
+            outcome: settlement?.payload.outcome,
+            settlementSessionID: settlement?.payload.session_id,
+            settlementLineageID: settlement?.payload.dispatch_lineage_id,
+            recoveryIngresses,
+          }).toMatchObject({
+            reason,
+            outcome: {
+              kind: "infrastructure_failure",
+              operation: "recover-terminal-agent-lifecycle",
+              message: error,
+              session_id: fixture.child.id,
+              recovery_authority: {
+                occurrence_status: "occurrence_committed",
+                dispatch_lineage_id: fixture.lineage.artifactID,
+                dispatch_id: fixture.dispatchID,
+              },
+              worker_turn: {
+                descriptor_id: fixture.descriptor.id,
+                descriptor_hash: fixture.descriptor.hash,
+                input_message_id: fixture.descriptor.payload.messageAuthority.user_message_id,
+                current_dispatch_id: fixture.dispatchID,
+              },
+              failure_issues: [{ code: reason, path: ["agent_execution_lifecycle", "status"], message: error }],
+            },
+            settlementSessionID: fixture.child.id,
+            settlementLineageID: fixture.lineage.artifactID,
+            recoveryIngresses: [{ sourceID: expect.any(String) }],
+          })
+        }
+      },
+    })
+  }, 30_000)
+
+  test("preserves an exact failed lifecycle final Message instead of a later adjacent reply", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const fixture = await seedPeerOwnedDispatch(project.path, PEER)
+        claimPeerLiveness(PEER, Date.now() - 1)
+        using _owner = TaskControlTestHooks.replaceTerminalIngressDeliveryRuntime("runtime:this-backend")
+        using _runner = TaskControlTestHooks.replaceTaskIngressRunner({ runner: async () => ({}) })
+        const inputMessageID = fixture.descriptor.payload.messageAuthority.user_message_id
+        const now = Date.now()
+        const exactFinal = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: fixture.child.id,
+          parentID: inputMessageID,
+          role: "assistant",
+          author: fixture.descriptor.payload.identity.agentID,
+          agent: fixture.descriptor.payload.identity.agentID,
+          providerID: "test",
+          modelID: "test-model",
+          path: { cwd: project.path, root: project.path },
+          cost: 0,
+          tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+          time: { created: now, completed: now + 1 },
+          finish: "stop",
+        })
+        await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: fixture.child.id,
+          parentID: inputMessageID,
+          role: "assistant",
+          author: fixture.descriptor.payload.identity.agentID,
+          agent: fixture.descriptor.payload.identity.agentID,
+          providerID: "test",
+          modelID: "test-model",
+          path: { cwd: project.path, root: project.path },
+          cost: 0,
+          tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+          time: { created: now + 2, completed: now + 3 },
+          finish: "stop",
+        })
+        await ProtocolStore.appendEvent({
+          kind: "event",
+          type: "agent.execution.lifecycle",
+          aggregate: "task",
+          aggregate_id: fixture.taskID,
+          task_id: null,
+          session_id: fixture.child.id,
+          source: "task-control-cross-process-dispatch-test",
+          order_key: executionLifecycleOrderKey(fixture.child.id, inputMessageID),
+          payload: {
+            inputMessageID,
+            status: {
+              type: "terminal",
+              reason: "error",
+              error: "post-turn settlement failed",
+              final_message_id: exactFinal.id,
+            },
+          },
+        })
+        await Database.awaitEffectIdle(30_000)
+
+        await reconcileTaskControlPlane(fixture.taskID)
+        await reconcileTaskControlPlane(fixture.taskID)
+
+        const settlement = findDispatchSettlementByDispatchID({
+          taskID: fixture.taskID,
+          dispatchID: fixture.dispatchID,
+        })
+        const infrastructureArtifactID =
+          settlement?.payload.outcome.kind === "infrastructure_failure"
+            ? settlement.payload.outcome.infrastructure_error?.artifact_id
+            : undefined
+        const ingressSourceIDs = Database.use((db) =>
+          db
+            .select({ sourceID: EngineTaskRootIngressTable.source_id })
+            .from(EngineTaskRootIngressTable)
+            .where(eq(EngineTaskRootIngressTable.task_id, fixture.taskID))
+            .all()
+            .filter((row) => row.sourceID === infrastructureArtifactID),
+        )
+        expect({ outcome: settlement?.payload.outcome, ingressSourceIDs }).toMatchObject({
+          outcome: {
+            kind: "infrastructure_failure",
+            final_message_id: exactFinal.id,
+            worker_turn: {
+              descriptor_id: fixture.descriptor.id,
+              input_message_id: inputMessageID,
+              current_dispatch_id: fixture.dispatchID,
+            },
+          },
+          ingressSourceIDs: [{ sourceID: infrastructureArtifactID }],
+        })
+      },
+    })
+  }, 30_000)
 
   test("wakes the Orchestrator for a dispatch that settled but never reached it", async () => {
     await using project = await memoryProject()

@@ -129,6 +129,7 @@ import { resolvePinnedTaskSchedulerTurnProjection } from "@/engine/task-package-
 import { taskRootIngressSemanticTurnLimit } from "@/engine/task-root-ingress-policy-read"
 import { requireTask } from "@/engine/store"
 import { createOrchestratorTools } from "@/orchestrator/tools"
+import { recoverInterruptedDispatchAgentsPart } from "@/orchestrator/dispatch-agents-recovery"
 import { sendSchedulerMessage } from "@/protocol/scheduler-message"
 import {
   isOrchestratorDecisionToolName,
@@ -198,6 +199,12 @@ export function taskRootDecisionRepairRung(gapCount: number): TaskRootDecisionRe
   return { toolChoice: "required", restrictToDecisionTools: gapCount >= 2 }
 }
 
+export function taskRootDecisionRepairToolSurface<T>(tools: Record<string, T>): Record<string, T> {
+  return Object.fromEntries(
+    Object.entries(tools).filter(([, candidate]) => toolDecisionDeclarationOf(candidate as object) !== undefined),
+  )
+}
+
 function taskRootDecisionRepairPrompt(input: {
   attempt: number
   limit: number
@@ -206,7 +213,7 @@ function taskRootDecisionRepairPrompt(input: {
   return [
     "<task-root-decision-repair>",
     `The previous streamed Provider step ended without a valid Task-root decision receipt (attempt ${input.attempt} of ${input.limit}).`,
-    "Continue the same visible assistant Turn and now call exactly one valid current decision Tool, or one valid parallel dispatch_agent set.",
+    "Continue the same visible assistant Turn and now call exactly one valid current decision Tool, using the active frontier dispatch Tool when the decision contains parallel workers.",
     input.rung.restrictToDecisionTools
       ? "This step is restricted to the decision Tools; inspection Tools are not offered on it. Decide from the facts already in this Turn."
       : "Do not repeat the diagnosis as prose alone. Inspect current facts as needed, but the Host will not infer or choose the decision for you.",
@@ -1391,7 +1398,7 @@ export namespace SessionLoop {
     )
   }
 
-  async function completedReplyToUserMessage(
+  export async function completedReplyToUserMessage(
     sessionID: string,
     userMessageID: string,
     includeFailedReply: boolean,
@@ -1870,9 +1877,7 @@ export namespace SessionLoop {
       )
       systemLabels.push("task-root-decision-repair")
       if (decisionRepairRung.restrictToDecisionTools) {
-        const decisionTools = Object.fromEntries(
-          Object.entries(tools).filter(([name]) => isOrchestratorDecisionToolName(name)),
-        )
+        const decisionTools = taskRootDecisionRepairToolSurface(tools)
         if (Object.keys(decisionTools).length > 0) {
           log.info("task-root-decision-repair-restricting-tool-surface", {
             sessionID: input.sessionID,
@@ -2359,14 +2364,34 @@ export namespace SessionLoop {
     if (candidates.length === 0) return false
 
     const defaultCompletedAt = Date.now()
-    for (const { message: candidate, completedAt } of candidates) {
+    for (const { message: recoveredCandidate, completedAt } of candidates) {
       signal?.throwIfAborted()
+      let candidate = recoveredCandidate
       if (candidate.info.role !== "assistant") continue
       const now = completedAt ?? defaultCompletedAt
       const interruption = new Error(
         `Previous process ended before Session ${sessionID} completed assistant message ${candidate.info.id}`,
       )
       interruption.name = "ProcessExecutionInterruptedError"
+      const interruptedFrontiers = candidate.parts.filter(
+        (part): part is Message.ToolPart =>
+          part.type === "tool" && part.tool === "dispatch_agents" && part.state.status === "running",
+      )
+      for (const frontier of interruptedFrontiers) {
+        signal?.throwIfAborted()
+        await recoverInterruptedDispatchAgentsPart({
+          sessionID,
+          messageID: candidate.info.id,
+          part: frontier,
+          signal,
+        })
+      }
+      if (interruptedFrontiers.length > 0) {
+        candidate = await MessageStore.get({ sessionID, messageID: candidate.info.id })
+        if (candidate.info.role !== "assistant") {
+          throw new Error(`Recovered frontier Message ${candidate.info.id} changed participant role`)
+        }
+      }
       for (const part of candidate.parts) {
         signal?.throwIfAborted()
         if (part.type !== "tool" || (part.state.status !== "pending" && part.state.status !== "running")) continue

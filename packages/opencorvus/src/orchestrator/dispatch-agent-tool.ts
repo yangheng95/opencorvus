@@ -791,7 +791,11 @@ export function createDispatchAgentTool(input: {
               sessionID: completedSessionID,
               dispatchID: dispatch.dispatchID,
             })
-            if (result !== "delivered" && result !== "already_delivered") {
+            if (
+              result !== "delivered" &&
+              result !== "already_delivered" &&
+              result !== "suppressed_budget_exhausted"
+            ) {
               throw new Error(
                 `dispatch_agent ${target} completion delivery is ${result} for Session ${completedSessionID}`,
               )
@@ -876,7 +880,11 @@ export function createDispatchAgentTool(input: {
               sessionID: completedSessionID,
               dispatchID: dispatch.dispatchID,
             })
-            if (result === "delivered" || result === "already_delivered") return
+            if (
+              result === "delivered" ||
+              result === "already_delivered" ||
+              result === "suppressed_budget_exhausted"
+            ) return
             throw new Error(`Detached worker lifecycle recovery is ${result} for Session ${completedSessionID}`)
           },
           onPipelineOwnerCleanupFailure: async ({ sessionID: completedSessionID, error }) => {

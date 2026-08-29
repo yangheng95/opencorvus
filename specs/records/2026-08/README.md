@@ -1,6 +1,7 @@
 # August 2026 Records
 
 - [2026-08-30-scheduling-algorithm-razor-audit.md](2026-08-30-scheduling-algorithm-razor-audit.md) iteratively audits the current Task/Mission/Session scheduling and recovery design for duplicated authority, over-engineering, convergence hazards, and violations of razor-style minimality.
+- [2026-08-30-dynamic-frontier-reliability-and-token-budget.md](2026-08-30-dynamic-frontier-reliability-and-token-budget.md) replaces Dynamic's prompt-only multi-call assumption with one structured frontier Tool over the canonical dispatch primitive, narrows the scheduler Tool surface, and requires a no-correction real-Provider E2E with explicit token budgets.
 - [2026-08-29-dynamic-expert-squad.md](2026-08-29-dynamic-expert-squad.md) adds the lightweight Dynamic Expert Squad: the Orchestrator describes a minimal ephemeral team and dependency sketch inline, then immediately fans out real direct-dispatch Sessions through two reusable capability envelopes without authoring a permanent package.
 
 - [2026-08-29-inspect-frontier-science-research-luna-smoke.md](2026-08-29-inspect-frontier-science-research-luna-smoke.md) exercises one official FrontierScience Research sample through the Inspect-owned framework with exact GPT-5.6 Luna system identity, isolated Provider authority, bounded cost, frozen membership, and fail-closed judge coverage.

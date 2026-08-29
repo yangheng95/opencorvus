@@ -14,6 +14,8 @@ import { LLM } from "../../src/session/llm"
 import { MessageStore } from "../../src/session/message-store"
 import { Message } from "../../src/session/message"
 import { SessionProcessor } from "../../src/session/processor"
+import { ProviderActivityOutcomeTable, ProviderActivityRequestTable } from "../../src/session/session.sql"
+import { Database, eq } from "../../src/storage/db"
 import { abortableIterable } from "../../src/util/stream-activity"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
 
@@ -161,8 +163,20 @@ describe("SessionProcessor semantic LLM activity retry", () => {
         }
 
         const persisted = await MessageStore.get({ sessionID: session.id, messageID: assistant.id })
+        const providerActivity = Database.use((db) =>
+          db
+            .select({ data: ProviderActivityOutcomeTable.data })
+            .from(ProviderActivityRequestTable)
+            .innerJoin(
+              ProviderActivityOutcomeTable,
+              eq(ProviderActivityOutcomeTable.request_id, ProviderActivityRequestTable.id),
+            )
+            .where(eq(ProviderActivityRequestTable.assistant_message_id, assistant.id))
+            .get(),
+        )
         expect({
           attempts,
+          providerActivity,
           info: persisted.info,
           parts: persisted.parts.map((part) =>
             part.type === "text"
@@ -173,6 +187,7 @@ describe("SessionProcessor semantic LLM activity retry", () => {
           ),
         }).toMatchObject({
           attempts: 4,
+          providerActivity: { data: { outcome: "done", attempt_count: 4 } },
           info: { finish: "stop", tokens: { total: 7, input: 1, output: 6 } },
           parts: [
             { type: "text", text: "Recovered after repeated transient stalls." },
@@ -421,6 +436,7 @@ describe("SessionProcessor semantic LLM activity retry", () => {
               messageID: assistant.id,
               partID: reasoning?.id,
               field: "text",
+              partType: "reasoning",
               delta: "Bounded reasoning before abort.",
             },
           ])

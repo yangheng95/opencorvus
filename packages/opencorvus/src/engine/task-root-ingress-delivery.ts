@@ -23,6 +23,7 @@ import { ProtocolStore } from "@/protocol/store"
 import { currentRuntimeOccurrenceID, replaceRuntimeOccurrenceIDForTest } from "@/runtime/process-occurrence"
 import { RuntimeExecutionSettlement, type RuntimeExecutionReservation } from "@/runtime/execution-settlement"
 import { Message } from "@/session/message"
+import { SessionStatus } from "@/session/status"
 import {
   MessageTable,
   PartTable,
@@ -1244,6 +1245,10 @@ async function reconcileAbandonedDispatches(taskID: string): Promise<number> {
         recovered += 1
         continue
       }
+      if (delivery === "suppressed_budget_exhausted") {
+        closedDispatchIDs.add(lineage.dispatchID)
+        continue
+      }
       if (delivery === "already_delivered") continue
       if (await settleAbandonedDispatch({ taskID, lineage })) recovered += 1
     } catch (error) {
@@ -1288,6 +1293,7 @@ async function recoverSettledUndeliveredDispatch(input: {
     dispatchID: input.lineage.dispatchID,
   })
   if (replay === "delivered") return 1
+  if (replay === "suppressed_budget_exhausted") return 0
   if (replay === "already_delivered") return 0
   // No terminal lifecycle to replay: wake the Orchestrator on the settlement
   // itself, keyed so the ingress source index makes the replay idempotent.
@@ -2012,7 +2018,137 @@ export type TerminalAgentLifecycleDeliveryReconciliation =
   | "missing_descriptor"
   | "nonterminal"
   | "already_delivered"
+  | "suppressed_budget_exhausted"
   | "delivered"
+
+function requireTerminalLifecycleFinalMessageAuthority(input: {
+  lifecycleID: string
+  dispatchID: string
+  sessionID: string
+  inputMessageID: string
+  finalMessageID: string
+}): string {
+  const final = Database.use((db) =>
+    db
+      .select({ id: MessageTable.id, data: MessageTable.data })
+      .from(MessageTable)
+      .where(
+        and(
+          eq(MessageTable.id, input.finalMessageID),
+          eq(MessageTable.session_id, input.sessionID),
+        ),
+      )
+      .get(),
+  )
+  if (!final) {
+    throw new Error(
+      `Terminal lifecycle ${input.lifecycleID} final Message ${input.finalMessageID} ` +
+      `is not the completed reply for dispatch ${input.dispatchID}`,
+    )
+  }
+  const parsedFinal = Message.Assistant.safeParse({ ...final.data, id: final.id, sessionID: input.sessionID })
+  if (
+    !parsedFinal.success ||
+    parsedFinal.data.time.completed === undefined ||
+    !parsedFinal.data.finish ||
+    !Message.acceptsInputMessage(parsedFinal.data, input.inputMessageID)
+  ) {
+    throw new Error(
+      `Terminal lifecycle ${input.lifecycleID} final Message ${input.finalMessageID} ` +
+      `is not the completed reply for dispatch ${input.dispatchID}`,
+    )
+  }
+  return input.finalMessageID
+}
+
+function settleTerminalAgentLifecycleFailure(input: {
+  taskID: string
+  dispatchID: string
+  sessionID: string
+  lineageArtifactID: string
+  descriptor: WorkerTurnDescriptor.Info
+  lifecycle: NonNullable<ReturnType<typeof ProtocolStore.latestSessionOccurrenceEvent>>
+  lifecycleStatus: {
+    type: "terminal"
+    reason: "error" | "aborted"
+    error?: string
+    final_message_id?: string
+  }
+}): DispatchSettlementRow {
+  return Database.immediateTransaction((db) => {
+    const existing = findDispatchSettlementByDispatchID({ taskID: input.taskID, dispatchID: input.dispatchID })
+    if (existing) return existing
+    const operation = "recover-terminal-agent-lifecycle"
+    const errorName = input.lifecycleStatus.reason === "aborted" ? "AgentExecutionAbortedError" : "AgentExecutionError"
+    const message =
+      input.lifecycleStatus.error ??
+      `Worker Session ${input.sessionID} ended with lifecycle reason ${input.lifecycleStatus.reason}`
+    const finalMessageID = input.lifecycleStatus.final_message_id
+      ? requireTerminalLifecycleFinalMessageAuthority({
+          lifecycleID: input.lifecycle.id,
+          dispatchID: input.dispatchID,
+          sessionID: input.sessionID,
+          inputMessageID: input.descriptor.payload.messageAuthority.user_message_id,
+          finalMessageID: input.lifecycleStatus.final_message_id,
+        })
+      : undefined
+    const infrastructureFactID = recordTaskInfrastructureErrorInTransaction(db, {
+      id: Identifier.deterministic(
+        "artifact",
+        `terminal-agent-lifecycle-failure-v1\0${input.taskID}\0${input.dispatchID}\0${input.lifecycle.id}`,
+      ),
+      taskID: input.taskID,
+      component: "dispatch-agent",
+      operation,
+      reason: message,
+      errorName,
+      sessionID: input.sessionID,
+      context: {
+        dispatchID: input.dispatchID,
+        dispatchLineageID: input.lineageArtifactID,
+        lifecycleEventID: input.lifecycle.id,
+        lifecycleReason: input.lifecycleStatus.reason,
+        inputMessageID: input.descriptor.payload.messageAuthority.user_message_id,
+      },
+      now: input.lifecycle.time.emitted,
+    })
+    const outcome = DispatchOutcome.infrastructureFailure({
+      operation,
+      message,
+      errorName,
+      sessionID: input.sessionID,
+      ...(finalMessageID ? { finalMessageID } : {}),
+      recoveryAuthority: resolveDispatchOccurrenceAuthority({
+        taskID: input.taskID,
+        dispatchID: input.dispatchID,
+      }),
+      infrastructureError: exactEngineArtifactLocator({
+        taskID: input.taskID,
+        artifactID: infrastructureFactID,
+      }),
+      workerTurn: {
+        descriptorID: input.descriptor.id,
+        descriptorHash: input.descriptor.hash,
+        inputMessageID: input.descriptor.payload.messageAuthority.user_message_id,
+        currentDispatchID: input.dispatchID,
+      },
+      failureIssues: [
+        {
+          code: input.lifecycleStatus.reason,
+          path: ["agent_execution_lifecycle", "status"],
+          message,
+        },
+      ],
+    })
+    return settleDispatchOrReturnExisting({
+      taskID: input.taskID,
+      dispatchID: input.dispatchID,
+      outcome,
+      now: input.lifecycle.time.emitted,
+    })
+  })
+}
+
 export async function reconcileTerminalAgentLifecycleDelivery(input: {
   taskID: string
   sessionID: string
@@ -2029,30 +2165,79 @@ export async function reconcileTerminalAgentLifecycleDelivery(input: {
     "agent.execution.lifecycle",
     descriptor.payload.messageAuthority.user_message_id,
   )
-  if (!lifecycle || (lifecycle.payload?.status as { type?: string } | undefined)?.type !== "terminal")
-    return "nonterminal"
-  if (!findDispatchSettlementByDispatchID({ taskID: input.taskID, dispatchID: input.dispatchID })) {
-    const final = Database.use((db) =>
+  if (!lifecycle) return "nonterminal"
+  const lifecycleStatus = SessionStatus.Info.parse(lifecycle.payload?.status)
+  if (lifecycleStatus.type !== "terminal") return "nonterminal"
+  if (lifecycleStatus.reason === "error" || lifecycleStatus.reason === "aborted") {
+    const settlement = settleTerminalAgentLifecycleFailure({
+      taskID: input.taskID,
+      dispatchID: input.dispatchID,
+      sessionID: input.sessionID,
+      lineageArtifactID: lineage.artifactID,
+      descriptor,
+      lifecycle,
+      lifecycleStatus: {
+        type: "terminal",
+        reason: lifecycleStatus.reason,
+        ...(lifecycleStatus.error ? { error: lifecycleStatus.error } : {}),
+        ...(lifecycleStatus.final_message_id ? { final_message_id: lifecycleStatus.final_message_id } : {}),
+      },
+    })
+    const outcome = settlement.payload.outcome
+    if (outcome.kind !== "infrastructure_failure" || !outcome.infrastructure_error) {
+      throw new Error(
+        `Terminal lifecycle ${lifecycle.id} failure conflicts with dispatch ${input.dispatchID} settlement ${outcome.kind}`,
+      )
+    }
+    const infrastructureError = outcome.infrastructure_error
+    const existed = Database.use((db) =>
       db
-        .select({ id: MessageTable.id })
-        .from(MessageTable)
+        .select({ id: EngineTaskRootIngressTable.id })
+        .from(EngineTaskRootIngressTable)
         .where(
           and(
-            eq(MessageTable.session_id, input.sessionID),
-            sql`json_extract(${MessageTable.data}, '$.role') = 'assistant'`,
-            sql`json_extract(${MessageTable.data}, '$.time.completed') IS NOT NULL`,
+            eq(EngineTaskRootIngressTable.task_id, input.taskID),
+            eq(EngineTaskRootIngressTable.source, "engine_artifact"),
+            eq(EngineTaskRootIngressTable.source_id, infrastructureError.artifact_id),
           ),
         )
-        .orderBy(sql`${MessageTable.time_created} DESC`, sql`${MessageTable.id} DESC`)
         .get(),
     )
-    if (!final) return "nonterminal"
+    if (existed) return "already_delivered"
+    const result = await dispatchTaskLoop({
+      taskID: input.taskID,
+      event: {
+        note:
+          `Worker Session ${input.sessionID} ended dispatch ${input.dispatchID} ` +
+          `with lifecycle reason ${lifecycleStatus.reason}.`,
+        dispatchInfrastructureFailure: {
+          infrastructureFactID: infrastructureError.artifact_id,
+          outcome,
+        },
+      },
+    })
+    return result === "suppressed_budget_exhausted" ? "suppressed_budget_exhausted" : "delivered"
+  }
+  if (!findDispatchSettlementByDispatchID({ taskID: input.taskID, dispatchID: input.dispatchID })) {
+    const finalMessageID = lifecycleStatus.final_message_id
+    if (!finalMessageID) {
+      throw new Error(
+        `Terminal lifecycle ${lifecycle.id} for dispatch ${input.dispatchID} has no final_message_id authority`,
+      )
+    }
+    requireTerminalLifecycleFinalMessageAuthority({
+      lifecycleID: lifecycle.id,
+      dispatchID: input.dispatchID,
+      sessionID: input.sessionID,
+      inputMessageID: descriptor.payload.messageAuthority.user_message_id,
+      finalMessageID,
+    })
     settleDispatchOrReturnExisting({
       taskID: input.taskID,
       dispatchID: input.dispatchID,
       outcome: DispatchOutcome.partial({
         sessionID: input.sessionID,
-        finalMessageID: final.id,
+        finalMessageID,
         failedOperation: "recover_dispatch_domain_settlement",
       }),
     })

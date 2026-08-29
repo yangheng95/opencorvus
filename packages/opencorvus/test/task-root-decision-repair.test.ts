@@ -12,8 +12,9 @@
  * of freedom the previous rung left open.
  */
 import { describe, expect, test } from "bun:test"
-import { taskRootDecisionRepairRung } from "../src/session/loop"
+import { taskRootDecisionRepairRung, taskRootDecisionRepairToolSurface } from "../src/session/loop"
 import { ORCHESTRATOR_DECISION_TOOL_NAMES } from "../src/orchestrator/decision-tool-names"
+import { bindToolDecisionDeclaration } from "../src/tool/execution-mode"
 
 describe("task-root decision repair ladder", () => {
   test("leaves the first attempt unconstrained", () => {
@@ -37,9 +38,7 @@ describe("task-root decision repair ladder", () => {
     expect(restrictions).toEqual([...restrictions].sort((left, right) => Number(left) - Number(right)))
   })
 
-  test("the narrowed surface is the decision tool set the ingress reducer settles on", () => {
-    // The restriction filters the resolved surface by this exact list, so a
-    // decision the reducer would accept must remain callable on the last rung.
+  test("the ingress reducer keeps its canonical persisted decision names", () => {
     expect([...ORCHESTRATOR_DECISION_TOOL_NAMES]).toEqual([
       "dispatch_agent",
       "respond_agent_coordination",
@@ -48,5 +47,18 @@ describe("task-root decision repair ladder", () => {
       "wait",
       "no_action",
     ])
+  })
+
+  test("keeps a projected frontier Tool through its canonical decision declaration", () => {
+    const dispatchAgents = bindToolDecisionDeclaration({}, { command: "dispatch_agent", commits: () => true })
+    const inspect = {}
+    expect(
+      Object.keys(
+        taskRootDecisionRepairToolSurface({
+          dispatch_agents: dispatchAgents,
+          inspect,
+        }),
+      ),
+    ).toEqual(["dispatch_agents"])
   })
 })
