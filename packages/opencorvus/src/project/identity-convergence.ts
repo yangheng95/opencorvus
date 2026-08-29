@@ -15,7 +15,7 @@ import { EventJobFireTable, EventJobTable, EventOccurrenceTable } from "@/schedu
 import { MemoryChunkTable, MemoryFileTable } from "@/memory/memory.sql"
 import { PermissionLedgerTable, PermissionPolicyTable } from "@/permission/permission.sql"
 import { QuickNoteTable } from "@/quicknote/quicknote.sql"
-import { SessionTable } from "@/session/session.sql"
+import { SessionPromptOwnerTable, SessionTable } from "@/session/session.sql"
 import { WorkspaceTable } from "@/workspace/workspace.sql"
 import { ProjectRuntimePaths } from "./runtime-paths"
 import { ProjectTable } from "./project.sql"
@@ -92,6 +92,7 @@ export namespace ProjectIdentityConvergence {
     { table: "automation_project_target", settlement: "preserve" as const },
     { table: "event_job", settlement: "preserve" as const },
     { table: "event_occurrence", settlement: "preserve" as const },
+    { table: "session_prompt_owner", settlement: "preserve" as const },
     { table: "project_maintenance_fence", settlement: "maintenance_fence" as const },
   ]
 
@@ -113,11 +114,7 @@ export namespace ProjectIdentityConvergence {
     )
   }
 
-  function referencedRows(
-    db: Database.TxOrDb,
-    table: ProjectReferenceTable,
-    projectIDs: string[],
-  ): number {
+  function referencedRows(db: Database.TxOrDb, table: ProjectReferenceTable, projectIDs: string[]): number {
     return db.select({ projectID: table.project_id }).from(table).where(inArray(table.project_id, projectIDs)).all()
       .length
   }
@@ -144,7 +141,9 @@ export namespace ProjectIdentityConvergence {
       },
       {
         domain: "immutable Automation definitions",
-        count: referencedRows(input.db, AutomationTable, input.duplicateProjectIDs) + referencedRows(input.db, AutomationProjectTargetTable, input.duplicateProjectIDs),
+        count:
+          referencedRows(input.db, AutomationTable, input.duplicateProjectIDs) +
+          referencedRows(input.db, AutomationProjectTargetTable, input.duplicateProjectIDs),
       },
       {
         domain: "immutable Event definitions",
@@ -153,6 +152,10 @@ export namespace ProjectIdentityConvergence {
       {
         domain: "immutable Event occurrences",
         count: referencedRows(input.db, EventOccurrenceTable, input.duplicateProjectIDs),
+      },
+      {
+        domain: "durable Session prompt ownership",
+        count: referencedRows(input.db, SessionPromptOwnerTable, input.duplicateProjectIDs),
       },
     ]
     for (const blocker of blockers) {
@@ -173,10 +176,7 @@ export namespace ProjectIdentityConvergence {
         .select({ id: EngineArtifactTable.id })
         .from(EngineArtifactTable)
         .where(
-          and(
-            eq(EngineArtifactTable.task_id, task.id),
-            eq(EngineArtifactTable.kind, "task_execution_capsule_binding"),
-          ),
+          and(eq(EngineArtifactTable.task_id, task.id), eq(EngineArtifactTable.kind, "task_execution_capsule_binding")),
         )
         .all()
       if (bindings.length > 0) {
@@ -256,7 +256,12 @@ export namespace ProjectIdentityConvergence {
     const worktree = path.resolve(input.worktree)
     const canonicalProjectID = input.canonicalProjectID.trim()
     if (!canonicalProjectID) {
-      conflict({ worktree, canonicalProjectID, projectIDs: ["<missing>", "<missing>"], message: "Canonical Project ID is required" })
+      conflict({
+        worktree,
+        canonicalProjectID,
+        projectIDs: ["<missing>", "<missing>"],
+        message: "Canonical Project ID is required",
+      })
     }
 
     const observedRows = Database.use((db) => db.select().from(ProjectTable).all())
@@ -272,7 +277,8 @@ export namespace ProjectIdentityConvergence {
       conflict({
         worktree,
         canonicalProjectID,
-        projectIDs: observedProjectIDs.length >= 2 ? observedProjectIDs : [canonicalProjectID, attachmentAuthority.project_id],
+        projectIDs:
+          observedProjectIDs.length >= 2 ? observedProjectIDs : [canonicalProjectID, attachmentAuthority.project_id],
         message: `Attachment store authority does not belong to canonical Project ${canonicalProjectID}`,
       })
     }
@@ -283,13 +289,16 @@ export namespace ProjectIdentityConvergence {
         const matches = all.filter((row) => observedProjectIDs.includes(row.id))
         const unchanged =
           matches.length === observedMatches.length &&
-          matches.every((row) => observedMatches.some((observed) => observed.id === row.id && observed.generation === row.generation))
+          matches.every((row) =>
+            observedMatches.some((observed) => observed.id === row.id && observed.generation === row.generation),
+          )
         const canonical = matches.find((row) => row.id === canonicalProjectID)
         if (!unchanged || matches.length < 2 || !canonical) {
           conflict({
             worktree,
             canonicalProjectID,
-            projectIDs: observedProjectIDs.length >= 2 ? observedProjectIDs : [canonicalProjectID, "<duplicate-required>"],
+            projectIDs:
+              observedProjectIDs.length >= 2 ? observedProjectIDs : [canonicalProjectID, "<duplicate-required>"],
             message: `Expected one unchanged duplicate Project occurrence set for ${worktree}`,
           })
         }
@@ -308,8 +317,20 @@ export namespace ProjectIdentityConvergence {
           worktree,
           projectIDs: observedProjectIDs,
         })
-        assertImmutableDomainFactsAbsent({ worktree, canonicalProjectID, projectIDs: observedProjectIDs, duplicateProjectIDs, db })
-        assertNoEmbeddedProjectIDReferences({ worktree, canonicalProjectID, projectIDs: observedProjectIDs, duplicateProjectIDs, db })
+        assertImmutableDomainFactsAbsent({
+          worktree,
+          canonicalProjectID,
+          projectIDs: observedProjectIDs,
+          duplicateProjectIDs,
+          db,
+        })
+        assertNoEmbeddedProjectIDReferences({
+          worktree,
+          canonicalProjectID,
+          projectIDs: observedProjectIDs,
+          duplicateProjectIDs,
+          db,
+        })
 
         const migratedRows: Record<string, number> = {
           bus_publication_outbox: 0,
@@ -336,14 +357,20 @@ export namespace ProjectIdentityConvergence {
           db.delete(ProjectTable).where(eq(ProjectTable.id, duplicateProjectID)).run()
         }
         releaseProjectMaintenanceFencesInTransaction(db, { operationID: maintenanceOperationID })
-        return Receipt.parse({ worktree, canonicalProjectID, removedProjectIDs: duplicateProjectIDs.sort(), migratedRows })
+        return Receipt.parse({
+          worktree,
+          canonicalProjectID,
+          removedProjectIDs: duplicateProjectIDs.sort(),
+          migratedRows,
+        })
       })
     } catch (cause) {
       if (ConflictError.isInstance(cause)) throw cause
       conflict({
         worktree,
         canonicalProjectID,
-        projectIDs: observedProjectIDs.length >= 2 ? observedProjectIDs : [canonicalProjectID, "<transaction-conflict>"],
+        projectIDs:
+          observedProjectIDs.length >= 2 ? observedProjectIDs : [canonicalProjectID, "<transaction-conflict>"],
         message: `Project identity convergence failed atomically: ${cause instanceof Error ? cause.message : String(cause)}`,
         cause,
       })

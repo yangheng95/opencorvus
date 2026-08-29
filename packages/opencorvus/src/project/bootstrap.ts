@@ -144,18 +144,18 @@ export const InstanceBootstrap = markConversationCapabilityTransactionalInit(asy
   // config, but neither is required to open a Project. Letting either failure
   // propagate would mean an uninstalled shell or a broken channel adapter
   // makes the whole Project permanently unopenable.
-  // The terminal profile and the managed channel runtime are optional
-  // subsystems: each protects a real invariant by refusing to start on bad
-  // config, but neither is required to open a Project. Letting either failure
-  // propagate would mean an uninstalled shell or a broken channel adapter
-  // makes the whole Project permanently unopenable.
   await ProjectOpenLifecycle.stage("terminal-profile.ensure-default", lifecycleContext, async () => {
     try {
       await TerminalProfile.ensureProjectDefaultProfile()
     } catch (error) {
-      Log.Default.error("default terminal profile unavailable; Project opens without one", {
+      // A host without a resolvable shell is an explicit degraded terminal
+      // outcome. Config commit or runtime-settlement failures are not: they
+      // must fail this stage so Instance rollback remains the one cleanup
+      // authority instead of reporting a partially committed stage complete.
+      if (!(error instanceof TerminalProfile.ConfigError)) throw error
+      Log.Default.warn("default terminal profile unavailable; Project opens without one", {
         ...lifecycleContext,
-        error: error instanceof Error ? error.message : String(error),
+        error: error.message,
       })
     }
   })

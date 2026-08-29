@@ -2435,19 +2435,20 @@ export namespace Config {
                 before: committedTransition.before,
                 after: committedTransition.after,
               })
-              const { Instance } = await import("@/project/instance")
-              await Instance.tryProvideActive({
-                directory: projectDirectory,
-                fn: async () => {
-                  const current = await currentProjectState()
-                  if (runtimeConfigsEqual(current.config, committedTransition.after)) return
-                  await settleProjectRuntimeTransition({
-                    directory: projectDirectory,
-                    before: committedTransition.after,
-                    after: current.config,
-                  })
-                },
-              })
+              // Project Config writers already own the exact project identity
+              // required by assertCanonicalProjectConfig(). Re-entering the
+              // Instance here is both redundant and invalid while Project open
+              // is preparing that same Instance. Reread the source generation
+              // under the current identity so a peer write that won after our
+              // commit still receives one ordered runtime transition.
+              const current = await currentProjectState()
+              if (!runtimeConfigsEqual(current.config, committedTransition.after)) {
+                await settleProjectRuntimeTransition({
+                  directory: projectDirectory,
+                  before: committedTransition.after,
+                  after: current.config,
+                })
+              }
             },
           })
         }),

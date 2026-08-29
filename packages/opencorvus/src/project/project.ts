@@ -116,67 +116,67 @@ export namespace Project {
 
   async function capturePhysicalRegistrationAuthority(projectID: string, directories: readonly string[]) {
     const rows = Database.runOutsideContext(() => Database.use((db) => db.select().from(ProjectTable).all()))
-    const expected = ownershipProjection(rows)
     const candidates = await Promise.all(
       directories.map(async (directory) => ({ directory, key: await ProjectDirectoryAdmission.key(directory) })),
     )
-    const registered = await Promise.all(
-      rows.flatMap((row) =>
-        [row.worktree, ...row.sandboxes].map(async (directory) => ({
-          projectID: row.id,
-          directory,
-          key: await ProjectDirectoryAdmission.key(directory),
-        })),
-      ),
-    )
-    const conflictingProjectIDs = [
-      ...new Set(
-        registered
-          .filter(
-            (entry) => entry.projectID !== projectID && candidates.some((candidate) => candidate.key === entry.key),
-          )
-          .map((entry) => entry.projectID),
-      ),
-    ].sort()
-    if (conflictingProjectIDs.length > 0) {
+    const resolveRegistered = (currentRows: readonly Row[]) =>
+      Promise.all(
+        currentRows.flatMap((row) =>
+          [row.worktree, ...row.sandboxes].map(async (directory) => ({
+            projectID: row.id,
+            directory,
+            key: await ProjectDirectoryAdmission.key(directory),
+          })),
+        ),
+      )
+    const registered = await resolveRegistered(rows)
+    const conflictsWith = (
+      currentCandidates: readonly { directory: string; key: string }[],
+      currentRegistered: readonly { projectID: string; directory: string; key: string }[],
+    ) =>
+      [
+        ...new Set(
+          currentRegistered
+            .filter(
+              (entry) =>
+                entry.projectID !== projectID && currentCandidates.some((candidate) => candidate.key === entry.key),
+            )
+            .map((entry) => entry.projectID),
+        ),
+      ].sort()
+    const assertNoPhysicalOwner = (
+      currentCandidates: readonly { directory: string; key: string }[],
+      currentRegistered: readonly { projectID: string; directory: string; key: string }[],
+    ) => {
+      const conflictingProjectIDs = conflictsWith(currentCandidates, currentRegistered)
+      if (conflictingProjectIDs.length === 0) return
       throw new RegisteredDirectoryConflictError({
-        directory: path.resolve(candidates[0]?.directory ?? ""),
+        directory: path.resolve(currentCandidates[0]?.directory ?? ""),
         projectIDs: [projectID, ...conflictingProjectIDs].sort(),
         message: `Cannot register a physical directory already owned by Project${conflictingProjectIDs.length === 1 ? "" : "s"} ${conflictingProjectIDs.join(", ")}`,
       })
     }
+    assertNoPhysicalOwner(candidates, registered)
     return {
       async revalidate() {
-        const [currentCandidates, currentRegistered] = await Promise.all([
-          Promise.all(
-            candidates.map(async ({ directory }) => ({
-              directory,
-              key: await ProjectDirectoryAdmission.key(directory),
-            })),
-          ),
-          Promise.all(
-            registered.map(async ({ projectID: ownerProjectID, directory }) => ({
-              projectID: ownerProjectID,
-              directory,
-              key: await ProjectDirectoryAdmission.key(directory),
-            })),
-          ),
-        ])
-        if (
-          JSON.stringify(currentCandidates) !== JSON.stringify(candidates) ||
-          JSON.stringify(currentRegistered) !== JSON.stringify(registered)
-        ) {
+        const currentCandidates = await Promise.all(
+          candidates.map(async ({ directory }) => ({
+            directory,
+            key: await ProjectDirectoryAdmission.key(directory),
+          })),
+        )
+        if (JSON.stringify(currentCandidates) !== JSON.stringify(candidates)) {
           throw new DirectoryOccurrenceChangedError({
             directory: path.resolve(directories[0] ?? ""),
             message: "Project physical directory ownership changed while registration waited for admission",
           })
         }
-      },
-      validate(db: Database.TxOrDb) {
-        const current = ownershipProjection(db.select().from(ProjectTable).all())
-        if (JSON.stringify(current) !== JSON.stringify(expected)) {
-          throw new Error("Project physical directory ownership changed while registration was being admitted")
-        }
+        // The candidate's durable admission is now held. Re-read the current
+        // registry and resolve only the ownership relation that can affect this
+        // candidate. Disjoint Project commits are irrelevant, while a peer
+        // that won the queue through another alias is rejected before commit.
+        const currentRows = Database.runOutsideContext(() => Database.use((db) => db.select().from(ProjectTable).all()))
+        assertNoPhysicalOwner(currentCandidates, await resolveRegistered(currentRows))
       },
     }
   }
@@ -651,7 +651,6 @@ export namespace Project {
 
         let committed!: { result: Info; changed: boolean; generation: string }
         ProjectDirectoryAdmission.settleMany(registrations, (db) => {
-          physicalRegistration.validate(db)
           assertRegistryAdmissionOpen(db, data.id)
           const currentRow = db.select().from(ProjectTable).where(eq(ProjectTable.id, data.id)).get()
           const resolvedAt = Date.now()
@@ -1262,7 +1261,6 @@ export namespace Project {
         await validate?.()
         let result!: Info
         ProjectDirectoryAdmission.settleMany(registrations, (db) => {
-          physicalRegistration.validate(db)
           result = addSandboxRow(db, id, target)
         })
         settled = true

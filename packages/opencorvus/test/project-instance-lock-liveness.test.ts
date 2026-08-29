@@ -24,8 +24,11 @@
  */
 import { afterEach, expect, test } from "bun:test"
 import path from "node:path"
+import { symlink } from "node:fs/promises"
 import { createManagedTemporaryDirectory } from "@opencorvus-ai/util/runtime-directories"
 import { Instance, InstanceTestHooks } from "@/project/instance"
+import { Project } from "@/project/project"
+import { ProjectDirectoryAdmission } from "@/project/directory-admission"
 import { declareNativeTaskProcessDeployment } from "@/runtime/task-process-deployment"
 import { resetMemoryDatabase } from "./fixture/memory"
 
@@ -57,7 +60,10 @@ function withDeadline<T>(operation: Promise<T>, milliseconds: number, label: str
   return Promise.race([
     operation,
     new Promise<never>((_, reject) => {
-      const timer = setTimeout(() => reject(new Error(`${label} did not settle within ${milliseconds}ms`)), milliseconds)
+      const timer = setTimeout(
+        () => reject(new Error(`${label} did not settle within ${milliseconds}ms`)),
+        milliseconds,
+      )
       timer.unref?.()
     }),
   ])
@@ -188,6 +194,65 @@ test("runs one shared initializer exactly once across concurrent first admission
 
   expect(initializerRuns).toBe(1)
   expect(new Set(results).size).toBe(1)
+})
+
+test("commits two disjoint Project registrations captured before either enters the shared queue", async () => {
+  const firstDirectory = await fixtureDirectory("project-registration-first-")
+  const secondDirectory = await fixtureDirectory("project-registration-second-")
+  const bothCaptured = deferred()
+  const release = deferred()
+  let captured = 0
+  using _capture = ProjectDirectoryAdmission.TestHooks.installBeforeAcquire(async () => {
+    captured += 1
+    if (captured === 2) bothCaptured.resolve()
+    await release.promise
+  })
+
+  const first = Instance.provide({ directory: firstDirectory, fn: () => Instance.project.id })
+  const second = Instance.provide({ directory: secondDirectory, fn: () => Instance.project.id })
+  try {
+    await withDeadline(bothCaptured.promise, 20_000, "disjoint Project physical captures")
+  } finally {
+    release.resolve()
+  }
+
+  const projectIDs = await withDeadline(Promise.all([first, second]), 30_000, "disjoint Project registrations")
+  const listedProjectIDs = Project.list().map((project) => project.id)
+  expect(new Set(projectIDs).size).toBe(2)
+  expect(projectIDs.every((projectID) => listedProjectIDs.includes(projectID))).toBe(true)
+})
+
+test("admits one physical Project owner when two aliases capture before the shared queue", async () => {
+  const directory = await fixtureDirectory("project-registration-physical-")
+  const alias = `${directory}-alias`
+  await symlink(directory, alias, process.platform === "win32" ? "junction" : "dir")
+  const bothCaptured = deferred()
+  const release = deferred()
+  let captured = 0
+  using _capture = ProjectDirectoryAdmission.TestHooks.installBeforeAcquire(async () => {
+    captured += 1
+    if (captured === 2) bothCaptured.resolve()
+    await release.promise
+  })
+
+  const original = Instance.provide({ directory, fn: () => Instance.project.id })
+  const aliased = Instance.provide({ directory: alias, fn: () => Instance.project.id })
+  try {
+    await withDeadline(bothCaptured.promise, 20_000, "aliased Project physical captures")
+  } finally {
+    release.resolve()
+  }
+
+  const outcomes = await withDeadline(
+    Promise.allSettled([original, aliased]),
+    30_000,
+    "aliased Project registration settlement",
+  )
+  const accepted = outcomes.filter((outcome) => outcome.status === "fulfilled")
+  const rejected = outcomes.filter((outcome) => outcome.status === "rejected")
+  expect({ accepted: accepted.length, rejected: rejected.length }).toEqual({ accepted: 1, rejected: 1 })
+  expect(rejected[0]?.reason).toBeInstanceOf(Project.RegisteredDirectoryConflictError)
+  expect(Project.list().map((project) => project.id)).toContain(accepted[0]?.value)
 })
 
 test("prepares a nested same-key provide with a new initializer while another lease serves", async () => {

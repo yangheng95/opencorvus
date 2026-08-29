@@ -17,6 +17,7 @@ import { EngineArtifactTable } from "../src/engine/engine.sql"
 import { ProjectRuntimePaths } from "../src/project/runtime-paths"
 import { insertTaskProcessBinding } from "../src/engine/task-execution-capsule-binding"
 import { Identifier } from "../src/id/id"
+import { SessionPromptOwnerTable, SessionTable } from "../src/session/session.sql"
 
 function insertProject(input: {
   id: string
@@ -134,10 +135,16 @@ describe("explicit Project identity convergence", () => {
         commands: repaired.commands,
       },
       duplicate: Project.get(duplicateProjectID),
-      notes: Database.use((db) => db.select({
-        project_id: QuickNoteTable.project_id,
-        content: QuickNoteTable.content,
-      }).from(QuickNoteTable).where(eq(QuickNoteTable.project_id, canonicalProjectID)).all()),
+      notes: Database.use((db) =>
+        db
+          .select({
+            project_id: QuickNoteTable.project_id,
+            content: QuickNoteTable.content,
+          })
+          .from(QuickNoteTable)
+          .where(eq(QuickNoteTable.project_id, canonicalProjectID))
+          .all(),
+      ),
       resolvedProjectID: resolved.project.id,
     }).toEqual({
       receipt: {
@@ -201,7 +208,7 @@ describe("explicit Project identity convergence", () => {
             time_created: now,
           })
           .run()
-        }
+      }
     })
     const before = identityRows([canonicalProjectID, duplicateProjectID])
     let conflict: unknown
@@ -302,14 +309,14 @@ describe("explicit Project identity convergence", () => {
       insertTaskProcessBinding({
         db,
         payload: {
-            protocol: "task-native-process-binding-v1",
-            task_id: taskID,
-            project_id: duplicateProjectID,
-            package_revision_sha256: "b".repeat(64),
-            mode: "native",
-            workspace_root: fixture.path,
-            initial_tree_sha256: "c".repeat(64),
-            time_created: now,
+          protocol: "task-native-process-binding-v1",
+          task_id: taskID,
+          project_id: duplicateProjectID,
+          package_revision_sha256: "b".repeat(64),
+          mode: "native",
+          workspace_root: fixture.path,
+          initial_tree_sha256: "c".repeat(64),
+          time_created: now,
         },
       })
     })
@@ -401,7 +408,9 @@ describe("explicit Project identity convergence", () => {
     expect({
       name: conflict instanceof Error ? conflict.name : undefined,
       message: ProjectIdentityConvergence.ConflictError.isInstance(conflict) ? conflict.data.message : undefined,
-      task: Database.use((db) => db.select().from(EngineTaskTable).where(eq(EngineTaskTable.project_id, duplicateProjectID)).get()),
+      task: Database.use((db) =>
+        db.select().from(EngineTaskTable).where(eq(EngineTaskTable.project_id, duplicateProjectID)).get(),
+      ),
     }).toEqual({
       name: "ProjectIdentityConvergenceConflictError",
       message: `Embedded attachment identity remains for duplicate Project ${duplicateProjectID}`,
@@ -450,8 +459,13 @@ describe("explicit Project identity convergence", () => {
     }
     expect({
       message: ProjectIdentityConvergence.ConflictError.isInstance(conflict) ? conflict.data.message : undefined,
-      ledger: Database.use((db) => db.select().from(PermissionLedgerTable).where(eq(PermissionLedgerTable.id, ledgerID)).get()),
-      projects: Project.list().filter((project) => [canonicalProjectID, duplicateProjectID].includes(project.id)).map((project) => project.id).sort(),
+      ledger: Database.use((db) =>
+        db.select().from(PermissionLedgerTable).where(eq(PermissionLedgerTable.id, ledgerID)).get(),
+      ),
+      projects: Project.list()
+        .filter((project) => [canonicalProjectID, duplicateProjectID].includes(project.id))
+        .map((project) => project.id)
+        .sort(),
     }).toEqual({
       message: "append-only permission ledger contains 1 immutable fact(s) for duplicate Project identity",
       ledger: expect.objectContaining({ id: ledgerID, project_id: duplicateProjectID }),
@@ -488,10 +502,138 @@ describe("explicit Project identity convergence", () => {
     }
     expect({
       message: ProjectIdentityConvergence.ConflictError.isInstance(conflict) ? conflict.data.message : undefined,
-      event: Database.use((db) => db.select().from(BusPublicationOutboxTable).where(eq(BusPublicationOutboxTable.occurrence_id, occurrenceID)).get()),
+      event: Database.use((db) =>
+        db
+          .select()
+          .from(BusPublicationOutboxTable)
+          .where(eq(BusPublicationOutboxTable.occurrence_id, occurrenceID))
+          .get(),
+      ),
     }).toEqual({
       message: "durable publication outbox contains 1 immutable fact(s) for duplicate Project identity",
       event: expect.objectContaining({ project_id: duplicateProjectID, properties: { projectID: duplicateProjectID } }),
+    })
+  })
+
+  test("a durable Session prompt owner preserves its exact Project occurrence", async () => {
+    await using fixture = await memoryProject()
+    const canonicalProjectID = `project_${crypto.randomUUID()}`
+    const duplicateProjectID = `project_${crypto.randomUUID()}`
+    const sessionID = `session_${crypto.randomUUID()}`
+    const generation = `call_${crypto.randomUUID()}`
+    insertProject({ id: canonicalProjectID, worktree: fixture.path })
+    insertProject({ id: duplicateProjectID, worktree: fixture.path })
+    const now = Date.now()
+    Database.use((db) => {
+      db.insert(SessionTable)
+        .values({
+          id: sessionID,
+          project_id: duplicateProjectID,
+          slug: "durable-prompt-owner",
+          directory: fixture.path,
+          title: "Durable prompt owner",
+          version: "1",
+          kind: "root",
+          time_created: now,
+          time_updated: now,
+        })
+        .run()
+      db.insert(SessionPromptOwnerTable)
+        .values({
+          session_id: sessionID,
+          project_id: duplicateProjectID,
+          directory: fixture.path,
+          generation,
+          owner_pid: process.pid,
+          owner_process_instance_id: `process_${crypto.randomUUID()}`,
+          owner_occurrence_id: `occurrence_${crypto.randomUUID()}`,
+          time_acquired: now,
+        })
+        .run()
+    })
+
+    const conflict = await convergeProjectIdentity({ worktree: fixture.path, canonicalProjectID }).catch(
+      (cause) => cause,
+    )
+    expect({
+      name: conflict instanceof Error ? conflict.name : undefined,
+      message: ProjectIdentityConvergence.ConflictError.isInstance(conflict) ? conflict.data.message : undefined,
+      projects: Project.list()
+        .filter((project) => [canonicalProjectID, duplicateProjectID].includes(project.id))
+        .map((project) => project.id)
+        .sort(),
+      session: Database.use((db) => db.select().from(SessionTable).where(eq(SessionTable.id, sessionID)).get()),
+      owner: Database.use((db) =>
+        db.select().from(SessionPromptOwnerTable).where(eq(SessionPromptOwnerTable.session_id, sessionID)).get(),
+      ),
+    }).toEqual({
+      name: "ProjectIdentityConvergenceConflictError",
+      message: "durable Session prompt ownership contains 1 immutable fact(s) for duplicate Project identity",
+      projects: [canonicalProjectID, duplicateProjectID].sort(),
+      session: expect.objectContaining({ id: sessionID, project_id: duplicateProjectID }),
+      owner: expect.objectContaining({ session_id: sessionID, project_id: duplicateProjectID, generation }),
+    })
+  })
+
+  test("a canonical Session prompt owner remains authoritative while its duplicate Project converges", async () => {
+    await using fixture = await memoryProject()
+    const canonicalProjectID = `project_${crypto.randomUUID()}`
+    const duplicateProjectID = `project_${crypto.randomUUID()}`
+    const sessionID = `session_${crypto.randomUUID()}`
+    insertProject({ id: canonicalProjectID, worktree: fixture.path })
+    insertProject({ id: duplicateProjectID, worktree: fixture.path })
+    const now = Date.now()
+    const session = {
+      id: sessionID,
+      project_id: canonicalProjectID,
+      parent_id: null,
+      slug: "canonical-durable-prompt-owner",
+      directory: fixture.path,
+      title: "Canonical durable prompt owner",
+      version: "1",
+      kind: "root" as const,
+      share_url: null,
+      summary_additions: null,
+      summary_deletions: null,
+      summary_files: null,
+      permission: null,
+      metadata: null,
+      time_created: now,
+      time_updated: now,
+      time_archived: null,
+      time_pinned: null,
+    }
+    const owner = {
+      session_id: sessionID,
+      project_id: canonicalProjectID,
+      directory: fixture.path,
+      generation: `call_${crypto.randomUUID()}`,
+      owner_pid: process.pid,
+      owner_process_instance_id: `process_${crypto.randomUUID()}`,
+      owner_occurrence_id: `occurrence_${crypto.randomUUID()}`,
+      time_acquired: now,
+    }
+    Database.use((db) => {
+      db.insert(SessionTable).values(session).run()
+      db.insert(SessionPromptOwnerTable).values(owner).run()
+    })
+
+    const receipt = await convergeProjectIdentity({ worktree: fixture.path, canonicalProjectID })
+    expect({
+      receipt: {
+        canonicalProjectID: receipt.canonicalProjectID,
+        removedProjectIDs: receipt.removedProjectIDs,
+      },
+      duplicate: Project.get(duplicateProjectID),
+      session: Database.use((db) => db.select().from(SessionTable).where(eq(SessionTable.id, sessionID)).get()),
+      owner: Database.use((db) =>
+        db.select().from(SessionPromptOwnerTable).where(eq(SessionPromptOwnerTable.session_id, sessionID)).get(),
+      ),
+    }).toEqual({
+      receipt: { canonicalProjectID, removedProjectIDs: [duplicateProjectID] },
+      duplicate: undefined,
+      session,
+      owner,
     })
   })
 
