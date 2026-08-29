@@ -5,7 +5,7 @@ import { sessionRole, taskIDForSession } from "@/engine/task-session-lineage"
 import { ComputerError } from "@/mcp/computer/errors"
 import { computerRuntimeScopeIdentity } from "@/mcp/computer/runtime-scope"
 import { ComputerHostRuntime } from "@/mcp/computer/host-runtime"
-import { ConversationCapability } from "@/conversation/capability"
+import { HostSessionMcpRuntime } from "@/mcp/host-session-runtime"
 import { badRequestBody, errors } from "../error"
 
 const ComputerOwnershipInput = z
@@ -29,7 +29,7 @@ const ComputerOwnershipResponse = z
 
 export function computerRuntimeScopeForSession(sessionID: string): string {
   const taskID = taskIDForSession(sessionID)
-  if (!taskID) return computerRuntimeScopeIdentity({ ownerKind: "conversation", sessionID })
+  if (!taskID) return computerRuntimeScopeIdentity({ ownerKind: "session", sessionID })
   return computerRuntimeScopeIdentity({
     ownerKind: sessionRole(sessionID) === "orchestrator" ? "orchestrator" : "worker",
     taskID,
@@ -95,7 +95,7 @@ export function ComputerRoutes() {
             computerId: input.computerID,
             displayId: input.displayID,
           })
-          await ConversationCapability.disconnectRuntimeMcp(input.sessionID)
+          await HostSessionMcpRuntime.disconnectComputer(input.sessionID)
           return c.json(result)
         } catch (error) {
           if (error instanceof ComputerError) return c.json(badRequestBody(error.message), 400)

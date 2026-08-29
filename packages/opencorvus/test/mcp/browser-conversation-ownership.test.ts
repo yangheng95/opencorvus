@@ -4,6 +4,7 @@ import { ConversationCapability } from "@/conversation/capability"
 import { MCP } from "@/mcp"
 import { BrowserMCPBuiltin } from "@/mcp/browser/builtin"
 import { ComputerMCPBuiltin } from "@/mcp/computer/builtin"
+import { HostSessionMcpRuntime } from "@/mcp/host-session-runtime"
 import { Instance } from "@/project/instance"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
 
@@ -51,11 +52,11 @@ describe("a Conversation owns the Browser runtime it creates", () => {
         expect(owned.filter((entry) => entry.key === BrowserMCPBuiltin.ServerName)).toEqual([
           {
             key: BrowserMCPBuiltin.ServerName,
-            connectionIdentity: "conversation:session-browser-owner-first:browser",
+            connectionIdentity: "session:session-browser-owner-first:browser",
           },
           {
             key: BrowserMCPBuiltin.ServerName,
-            connectionIdentity: "conversation:session-browser-owner-second:browser",
+            connectionIdentity: "session:session-browser-owner-second:browser",
           },
         ])
       },
@@ -68,8 +69,8 @@ describe("a Conversation owns the Browser runtime it creates", () => {
       directory: project.path,
       fn: async () => {
         const sessionID = "session-builtin-owner-lifecycle"
-        const browserIdentity = ConversationCapability.browserRuntimeMcpOwnerIdentity(sessionID)
-        const computerIdentity = ConversationCapability.runtimeMcpOwnerIdentity(sessionID)
+        const browserIdentity = HostSessionMcpRuntime.browserOwnerIdentity(sessionID)
+        const computerIdentity = HostSessionMcpRuntime.computerOwnerIdentity(sessionID)
         const generations = new Map<string, number>()
         const created: { id: string; generation: number }[] = []
         const settled: { id: string; generation: number }[] = []
@@ -118,9 +119,9 @@ describe("a Conversation owns the Browser runtime it creates", () => {
             },
           }
           await ConversationCapability.runtimeMcpTools(config, "chat", sessionID)
-          await ConversationCapability.disconnectRuntimeMcp(sessionID)
+          await HostSessionMcpRuntime.disconnectComputer(sessionID)
           await ConversationCapability.runtimeMcpTools(config, "chat", sessionID)
-          const disposal = ConversationCapability.disposeRuntimeMcp(sessionID).then(() => {
+          const disposal = HostSessionMcpRuntime.dispose(sessionID).then(() => {
             timeline.push("disposed")
           })
           await new Promise<void>((resolve) => setTimeout(resolve, 0))

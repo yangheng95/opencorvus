@@ -427,6 +427,10 @@ export namespace MCP {
     close(): Promise<void>
   }
 
+  export interface ScopedConnectionOwnerLifecycle {
+    onClose(): Promise<void>
+  }
+
   type OwnedScopedConnectionEntry = {
     identity: string
     key: string
@@ -468,33 +472,10 @@ export namespace MCP {
     ): Promise<T>
   }
 
-  /**
-   * Tear down the Computer logical session this owner's scope names.
-   *
-   * A scoped owner's id IS its Computer runtime scope — both are derived from
-   * the same Session (and Task) identity — but closing the owner only closed
-   * MCP connections, and the host backend's own `close` is a no-op. The
-   * desktop session, its driver authorization and its preserved state
-   * therefore outlived the Session that created them, until the whole Project
-   * Instance was disposed. The owner's settlement now invokes the sole destroy
-   * primitive for its scope, so Project disposal is the outer safety net it
-   * was meant to be rather than the only owner.
-   */
-  async function destroyOwnedComputerRuntimeScope(runtimeScope: string): Promise<void> {
-    const { ComputerHostRuntime } = await import("./computer/host-runtime")
-    try {
-      await ComputerHostRuntime.destroy(runtimeScope)
-    } catch (error) {
-      // A scope that never took a Computer session has nothing to destroy, and
-      // a failed teardown must not mask the MCP close that already succeeded.
-      log.info("scoped Computer runtime teardown did not settle", {
-        runtimeScope,
-        error: error instanceof Error ? error.message : String(error),
-      })
-    }
-  }
-
-  export function createScopedConnectionOwner(id: string): ScopedConnectionOwner {
+  export function createScopedConnectionOwner(
+    id: string,
+    lifecycle?: ScopedConnectionOwnerLifecycle,
+  ): ScopedConnectionOwner {
     const normalizedID = id.trim()
     if (!normalizedID) throw new Error("Scoped MCP connection owner requires a non-empty id")
     const entries = new Map<string, OwnedScopedConnectionEntry>()
@@ -502,6 +483,8 @@ export namespace MCP {
     const ownerState: ScopedConnectionOwnerState = { id: normalizedID, entries, cleanupPending }
     let closed = false
     let closePromise: Promise<void> | undefined
+    let connectionSettlementComplete = false
+    let lifecycleSettlementComplete = lifecycle === undefined
 
     const registerOwnerState = async () => {
       if (ownerState.projectState) return ownerState.projectState
@@ -577,34 +560,58 @@ export namespace MCP {
       async close() {
         closePromise ??= (async () => {
           closed = true
-          const owned = [...entries.values()]
-          await Promise.all(owned.map(waitForIdle))
-          const connections = await Promise.allSettled(
-            owned.map(async (entry) => entry.connection ?? (await entry.connecting)),
-          )
-          for (const result of connections) {
-            if (result.status === "fulfilled") cleanupPending.add(result.value)
+          const connectionErrors: unknown[] = []
+          if (!connectionSettlementComplete) {
+            const owned = [...entries.values()]
+            await Promise.all(owned.map(waitForIdle))
+            const connections = await Promise.allSettled(
+              owned.map(async (entry) => entry.connection ?? (await entry.connecting)),
+            )
+            for (const result of connections) {
+              if (result.status === "fulfilled") cleanupPending.add(result.value)
+            }
+            const closeResults = await Promise.allSettled(
+              [...cleanupPending].map(async (connection) => {
+                await closeConnection(connection.key, connection)
+                cleanupPending.delete(connection)
+              }),
+            )
+            connectionErrors.push(
+              ...[...connections, ...closeResults].flatMap((result) =>
+                result.status === "rejected" ? [result.reason] : [],
+              ),
+            )
+            let cleanupTransferred = true
+            if (connectionErrors.length > 0) {
+              try {
+                await transferScopedCleanupToInstance(cleanupPending, ownerState.projectState)
+              } catch (error) {
+                cleanupTransferred = false
+                connectionErrors.push(error)
+              }
+            }
+            if (cleanupTransferred) {
+              connectionSettlementComplete = true
+              entries.clear()
+              ownerState.projectState?.scopedOwners.delete(ownerState)
+              ownerState.projectState = undefined
+            }
           }
-          const closeResults = await Promise.allSettled(
-            [...cleanupPending].map(async (connection) => {
-              await closeConnection(connection.key, connection)
-              cleanupPending.delete(connection)
-            }),
-          )
-          const errors = [...connections, ...closeResults].flatMap((result) =>
-            result.status === "rejected" ? [result.reason] : [],
-          )
-          if (errors.length > 0) {
-            await transferScopedCleanupToInstance(cleanupPending)
-            entries.clear()
-            ownerState.projectState?.scopedOwners.delete(ownerState)
-            ownerState.projectState = undefined
+
+          const lifecycleErrors: unknown[] = []
+          if (!lifecycleSettlementComplete) {
+            try {
+              await lifecycle?.onClose()
+              lifecycleSettlementComplete = true
+            } catch (error) {
+              lifecycleErrors.push(error)
+            }
+          }
+          const errors = [...connectionErrors, ...lifecycleErrors]
+          if (connectionErrors.length > 0) {
             throw new AggregateError(errors, `Failed to close scoped MCP connection owner ${normalizedID}`)
           }
-          entries.clear()
-          ownerState.projectState?.scopedOwners.delete(ownerState)
-          ownerState.projectState = undefined
-          await destroyOwnedComputerRuntimeScope(normalizedID)
+          if (lifecycleErrors.length > 0) throw lifecycleErrors[0]
         })()
         try {
           await closePromise
@@ -919,8 +926,8 @@ export namespace MCP {
     if (errors.length > 0) throw new AggregateError(errors, label)
   }
 
-  async function transferScopedCleanupToInstance(pending: Set<McpConnection>) {
-    const s = await state()
+  async function transferScopedCleanupToInstance(pending: Set<McpConnection>, target?: McpState) {
+    const s = target ?? (await state())
     for (const connection of pending) queueConnectionCleanup(s, connection.key, connection)
     pending.clear()
   }

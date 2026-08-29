@@ -13,7 +13,7 @@ import { ExpertSquadPackageManager } from "@/expert-squad/manager"
 import { resolveAgentModelRef, resolveConfiguredModelRef } from "@/agent/model"
 import { Bus } from "@/bus"
 import { Config } from "@/config/config"
-import { ConversationCapability } from "@/conversation/capability"
+import { HostSessionMcpRuntime } from "@/mcp/host-session-runtime"
 import { validateConfigModelReferences } from "@/config/model-reference-validation"
 import { EffectiveConfig } from "@/config/effective"
 import { discoverChecks, resolveConfig, resolvedChecks } from "@/acceptance/checks/discovery"
@@ -3054,18 +3054,29 @@ export namespace EngineService {
       origin: executionCancellationOrigin,
     })
     const ids = requested.sessionIDs
+    const sessionsByDirectory = new Map<string, string[]>()
+    for (const id of ids) {
+      const session = await Session.getInProject({ sessionID: id, projectID: root.projectID })
+      const directorySessions = sessionsByDirectory.get(session.directory)
+      if (directorySessions) directorySessions.push(id)
+      else sessionsByDirectory.set(session.directory, [id])
+    }
     await assertSessionPromptSubtreeFinished({
       sessions: requested.cancelledSessions,
       failures: requested.failures,
       handle: "EngineService.deleteSession",
       publishTerminalStatus: false,
     })
-    await Instance.tryProvideActive({
-      directory: root.directory,
-      fn: async () => {
-        await Promise.all(ids.map((id) => ConversationCapability.disposeRuntimeMcp(id)))
-      },
-    })
+    await Promise.all(
+      [...sessionsByDirectory].map(([directory, sessionIDs]) =>
+        Instance.tryProvideActive({
+          directory,
+          fn: async () => {
+            await Promise.all(sessionIDs.map((id) => HostSessionMcpRuntime.dispose(id)))
+          },
+        }),
+      ),
+    )
     const tasksForDelete: TaskRow[] = []
     if (input?.deleteTasks) {
       for (const item of boundTasks) {

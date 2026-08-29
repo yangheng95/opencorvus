@@ -51,6 +51,7 @@ import { ProviderTransform } from "@/provider/transform"
 import { EffectiveConfig } from "@/config/effective"
 import { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
 import { MCP } from "@/mcp"
+import { createComputerRuntimeConnectionOwner } from "@/mcp/computer/runtime-owner"
 import { computerRuntimeScopeIdentity } from "@/mcp/computer/runtime-scope"
 import { resolveAgentModel } from "@/agent/model"
 import { HostAgentRegistry } from "@/agent/host-agent-registry"
@@ -487,7 +488,7 @@ export namespace Orchestrator {
         missionAcceptanceResume: event?.missionAcceptanceResume,
         terminalConversationAuthority,
       })
-      schedulerMcpOwner = MCP.createScopedConnectionOwner(
+      schedulerMcpOwner = createComputerRuntimeConnectionOwner(
         computerRuntimeScopeIdentity({ ownerKind: "orchestrator", taskID, sessionID: agentSession.id }),
       )
       const tools = await PromptProfileResolver.projectOrchestratorTools(rawTools, schedulerCapability, {

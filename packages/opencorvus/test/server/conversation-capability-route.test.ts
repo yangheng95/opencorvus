@@ -4,6 +4,7 @@ import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
 import { Instance } from "../../src/project/instance"
 import { Config } from "../../src/config/config"
 import { ConversationCapability } from "../../src/conversation/capability"
+import { HostSessionMcpRuntime } from "../../src/mcp/host-session-runtime"
 import { BrowserMCPBuiltin } from "../../src/mcp/browser/builtin"
 import { ComputerMCPBuiltin } from "../../src/mcp/computer/builtin"
 import { SessionLoop } from "../../src/session/loop"
@@ -135,7 +136,7 @@ describe("native conversation capability routes", () => {
           const schemaChars = SessionLoop.estimateToolPayloadChars(tools)
           expect(schemaChars).toBeGreaterThan(0)
         } finally {
-          await ConversationCapability.disposeRuntimeMcp(sessionID)
+          await HostSessionMcpRuntime.dispose(sessionID)
         }
       },
     })

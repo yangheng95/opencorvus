@@ -1,4 +1,4 @@
-import { describe, expect, test } from "bun:test"
+import { describe, expect, spyOn, test } from "bun:test"
 import type { CuaDriverLike, ToolResult } from "@trycua/cua-driver"
 import { PNG } from "pngjs"
 import { ComputerMCPBuiltin } from "../../src/mcp/computer/builtin"
@@ -11,6 +11,7 @@ import {
 } from "../../src/mcp/computer/backend"
 import { ComputerController } from "../../src/mcp/computer/controller"
 import { ConversationCapability } from "../../src/conversation/capability"
+import { HostSessionMcpRuntime } from "../../src/mcp/host-session-runtime"
 import { Config } from "../../src/config/config"
 import { Instance } from "../../src/project/instance"
 import { memoryProject } from "../fixture/memory"
@@ -22,8 +23,9 @@ import { MCP } from "../../src/mcp"
 import { computerMcpPermissionKeyOf } from "../../src/mcp/computer/permission-plan"
 import { computerRuntimeScopeIdentity } from "../../src/mcp/computer/runtime-scope"
 import { CapabilityCatalog, searchCapabilityCatalog } from "../../src/tool/capability-catalog"
-import { ComputerHostRuntimeAuthority } from "../../src/mcp/computer/host-runtime"
+import { ComputerHostRuntime, ComputerHostRuntimeAuthority } from "../../src/mcp/computer/host-runtime"
 import { HostComputerBackend } from "../../src/mcp/computer/host-client"
+import { ComputerRoutes } from "../../src/server/routes/computer"
 import { EngineService } from "../../src/task-api"
 import { configureTaskIngressRunner } from "../../src/engine/task-root-ingress-delivery"
 import { artifactRuntimeNodeModuleNames } from "../../script/build-artifact"
@@ -116,8 +118,8 @@ describe("Computer Use exact control contract", () => {
   })
 
   test("derives the exact host runtime owner identities for every supported execution surface", () => {
-    expect(computerRuntimeScopeIdentity({ ownerKind: "conversation", sessionID: "session-1" })).toBe(
-      "conversation:session-1:computer",
+    expect(computerRuntimeScopeIdentity({ ownerKind: "session", sessionID: "session-1" })).toBe(
+      "session:session-1:computer",
     )
     expect(computerRuntimeScopeIdentity({ ownerKind: "orchestrator", taskID: "task-1", sessionID: "session-2" })).toBe(
       "orchestrator:task-1:session-2",
@@ -131,7 +133,7 @@ describe("Computer Use exact control contract", () => {
     const runtime = new LifecycleBackend()
     const authority = new ComputerHostRuntimeAuthority({ entries: new Map(), authorizations: new Map() }, () => runtime)
     const firstAdapter = authority.adapter({
-      runtimeScope: "conversation:session-lifecycle:computer",
+      runtimeScope: "session:session-lifecycle:computer",
     })
     const firstController = new ComputerController(
       new HostComputerBackend(
@@ -206,6 +208,93 @@ describe("Computer Use exact control contract", () => {
     ])
   })
 
+  test("routes human takeover through connection-only settlement and destroys the desktop once at Session disposal", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const sessionID = "ses_route_takeover_lifecycle"
+        const scope = HostSessionMcpRuntime.computerOwnerIdentity(sessionID)
+        const runtime = new LifecycleBackend("computer-route", "display-route")
+        const authority = new ComputerHostRuntimeAuthority(
+          { entries: new Map(), authorizations: new Map() },
+          () => runtime,
+        )
+        const destroyCalls: string[] = []
+        const adapter = spyOn(ComputerHostRuntime, "adapter").mockImplementation((input) => authority.adapter(input))
+        const takeover = spyOn(ComputerHostRuntime, "takeover").mockImplementation((input) => authority.takeover(input))
+        const status = spyOn(ComputerHostRuntime, "status").mockImplementation((input) => authority.status(input))
+        const returnControl = spyOn(ComputerHostRuntime, "returnControl").mockImplementation((input) =>
+          authority.returnControl(input),
+        )
+        const destroy = spyOn(ComputerHostRuntime, "destroy").mockImplementation(async (runtimeScope) => {
+          destroyCalls.push(runtimeScope)
+          await authority.destroy(runtimeScope)
+        })
+        const scopedTool = spyOn(MCP, "scopedTool").mockResolvedValue({ description: "Computer route fixture" } as never)
+        try {
+          await HostSessionMcpRuntime.tools(await Config.get(), sessionID, [ComputerMCPBuiltin.ServerName])
+          const hostAdapter = authority.adapter({ runtimeScope: scope })
+          const controller = new ComputerController(
+            new HostComputerBackend(hostAdapter.endpoint, hostAdapter.authorization, hostAdapter.runtimeScope, (input, init) =>
+              authority.fetch(new Request(input, init)),
+            ),
+          )
+          const identity = await controller.create()
+          const body = JSON.stringify({
+            sessionID,
+            computerID: identity.computerId,
+            displayID: identity.displayId,
+          })
+          const app = ComputerRoutes()
+          const human = await app.request("/takeover", {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body,
+          })
+          const humanStatus = await app.request("/status", {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body,
+          })
+          const returned = await app.request("/return", {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body,
+          })
+          expect({
+            takeover: await human.json(),
+            status: await humanStatus.json(),
+            returned: await returned.json(),
+            identity: authority.identity(scope),
+            destroyCalls,
+          }).toEqual({
+            takeover: { ownership: "human", ...identity, desktopPreserved: true },
+            status: { ownership: "human", ...identity },
+            returned: { ownership: "agent", ...identity, freshObservationRequired: true },
+            identity,
+            destroyCalls: [],
+          })
+
+          await HostSessionMcpRuntime.dispose(sessionID)
+          expect({ destroyCalls, events: runtime.events }).toEqual({
+            destroyCalls: [scope],
+            events: ["desktop:create", "desktop:destroy:computer-route", "desktop:close"],
+          })
+          await controller.close()
+          await authority.close()
+        } finally {
+          scopedTool.mockRestore()
+          destroy.mockRestore()
+          returnControl.mockRestore()
+          status.mockRestore()
+          takeover.mockRestore()
+          adapter.mockRestore()
+        }
+      },
+    })
+  }, 60_000)
+
   test("keeps one adapter authority usable for a new desktop session after exact session destruction", async () => {
     const backends = [
       new LifecycleBackend("computer-generation-1", "display-generation-1"),
@@ -215,7 +304,7 @@ describe("Computer Use exact control contract", () => {
       { entries: new Map(), authorizations: new Map() },
       () => backends.shift()!,
     )
-    const adapter = authority.adapter({ runtimeScope: "conversation:reusable-adapter:computer" })
+    const adapter = authority.adapter({ runtimeScope: "session:reusable-adapter:computer" })
     const controller = new ComputerController(
       new HostComputerBackend(adapter.endpoint, adapter.authorization, adapter.runtimeScope, (input, init) =>
         authority.fetch(new Request(input, init)),
@@ -243,7 +332,7 @@ describe("Computer Use exact control contract", () => {
   test("classifies a lost post-dispatch native session response as an unknown effect outcome", async () => {
     const runtime = new LifecycleBackend()
     const authority = new ComputerHostRuntimeAuthority({ entries: new Map(), authorizations: new Map() }, () => runtime)
-    const adapter = authority.adapter({ runtimeScope: "conversation:lost-create-response:computer" })
+    const adapter = authority.adapter({ runtimeScope: "session:lost-create-response:computer" })
     const backend = new HostComputerBackend(
       adapter.endpoint,
       adapter.authorization,
@@ -295,7 +384,7 @@ describe("Computer Use exact control contract", () => {
       async close() {},
     }
     const authority = new ComputerHostRuntimeAuthority({ entries: new Map(), authorizations: new Map() }, () => runtime)
-    const adapter = authority.adapter({ runtimeScope: "conversation:takeover-quiescence:computer" })
+    const adapter = authority.adapter({ runtimeScope: "session:takeover-quiescence:computer" })
     const controller = new HostComputerBackend(
       adapter.endpoint,
       adapter.authorization,
@@ -474,13 +563,13 @@ describe("Computer Use exact control contract", () => {
               (entry) => entry.ref.local_ref,
             ),
           ).toEqual(executionMcpToolIDs)
-          expect(ConversationCapability.runtimeMcpOwnerIdentity("session-computer-catalog-contract")).toBe(
-            "conversation:session-computer-catalog-contract:computer",
+          expect(HostSessionMcpRuntime.computerOwnerIdentity("session-computer-catalog-contract")).toBe(
+            "session:session-computer-catalog-contract:computer",
           )
-          expect(ConversationCapability.runtimeMcpOwnerIdentity("session-computer-independent-contract")).toBe(
-            "conversation:session-computer-independent-contract:computer",
+          expect(HostSessionMcpRuntime.computerOwnerIdentity("session-computer-independent-contract")).toBe(
+            "session:session-computer-independent-contract:computer",
           )
-          await ConversationCapability.disposeRuntimeMcp("session-computer-catalog-contract")
+          await HostSessionMcpRuntime.dispose("session-computer-catalog-contract")
         },
       })
     },

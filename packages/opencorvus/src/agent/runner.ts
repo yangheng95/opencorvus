@@ -119,6 +119,7 @@ import { cancelSessionPromptInScope } from "@/engine/cancellation-scope"
 import { SessionPromptState } from "@/session/prompt/state"
 import { SessionRuntimeContractStore } from "@/session/runtime-contract"
 import { MCP } from "@/mcp"
+import { createComputerRuntimeConnectionOwner } from "@/mcp/computer/runtime-owner"
 import { computerRuntimeScopeIdentity } from "@/mcp/computer/runtime-scope"
 import { toolResultControl } from "@/session/tool-result-control"
 import { ProtocolStore } from "@/protocol/store"
@@ -1382,7 +1383,7 @@ async function runAgentSessionInner<C>(input: RunAgentSessionInput<C>): Promise<
     const installedMcpOwner = SessionRuntimeContractStore.get(session.id)?.resources?.mcp
     const mcpOwner =
       installedMcpOwner ??
-      MCP.createScopedConnectionOwner(
+      createComputerRuntimeConnectionOwner(
         computerRuntimeScopeIdentity({ ownerKind: "worker", taskID: input.taskID, sessionID: session.id }),
       )
     if (!installedMcpOwner) untransferredMcpOwner = mcpOwner

@@ -47,6 +47,8 @@ import { defer } from "../util/defer"
 import { ToolRegistry } from "../tool/registry"
 import { Env } from "../env"
 import { MCP } from "../mcp"
+import { HostSessionMcpRuntime } from "@/mcp/host-session-runtime"
+import { createComputerRuntimeConnectionOwner } from "@/mcp/computer/runtime-owner"
 import { browserMcpPermissionKeyOf } from "@/mcp/browser/permission-plan"
 import { computerMcpPermissionKeyOf } from "@/mcp/computer/permission-plan"
 import { mcpToolProviderKind } from "@/mcp/provider-kind"
@@ -120,7 +122,6 @@ import { sameExpertSquadPackageRevision } from "@/expert-squad/package-revision"
 import { createAgentCoordinationRuntimeTools } from "@/agent/coordination-runtime-tools"
 import { createAgentContextTools } from "@/agent/context-tools"
 import { filterAgentTools } from "@/agent/filter-tools"
-import { MCP as McpRuntime } from "@/mcp"
 import { computerRuntimeScopeIdentity } from "@/mcp/computer/runtime-scope"
 import { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
 import { DispatchAdapterContractRegistry } from "@/agent/dispatch-adapter-contract"
@@ -3356,21 +3357,23 @@ export namespace SessionLoop {
 
     const includeMcpTools = runtimeContract?.includeMcpTools !== false && input.includeMcpTools !== false
     const { ConversationCapability } = await import("@/conversation/capability")
-    const nativeConversationMcpTools =
-      includeMcpTools &&
-      !exactRuntimeContractTools &&
-      !runtimeContract?.identity &&
-      ConversationCapability.isAgentID(input.agentID)
-        ? await ConversationCapability.runtimeMcpTools(input.config, input.agentID, input.session.id)
-        : undefined
     const defaultMcpProcessAuthority =
       executionAuthority.kind === "task"
         ? MCP.taskProcessAuthority(executionAuthority.taskID, executionAuthority.directory)
         : MCP.hostProcessAuthority(executionAuthority.directory)
+    const nativeHostSessionMcpTools =
+      includeMcpTools &&
+      !exactRuntimeContractTools &&
+      !runtimeContract?.identity &&
+      defaultMcpProcessAuthority.kind === "host"
+        ? ConversationCapability.isAgentID(input.agentID)
+          ? await ConversationCapability.runtimeMcpTools(input.config, input.agentID, input.session.id)
+          : await HostSessionMcpRuntime.tools(input.config, input.session.id, Object.keys(input.config.mcp ?? {}))
+        : undefined
     const resolvedMcpTools =
       exactRuntimeContractTools || !includeMcpTools
         ? {}
-        : (nativeConversationMcpTools ?? (await MCP.tools(defaultMcpProcessAuthority)))
+        : (nativeHostSessionMcpTools ?? (await MCP.tools(defaultMcpProcessAuthority)))
     for (const [key, item] of Object.entries(resolvedMcpTools)) {
       const execute = item.execute
       if (!execute) continue
@@ -4015,7 +4018,7 @@ export namespace SessionLoop {
       RuntimeTemplateID.get(payload.identity.baseRole),
       { taskID: payload.lifecycle.taskID, sessionID: input.session.parentID },
     )
-    const owner = McpRuntime.createScopedConnectionOwner(
+    const owner = createComputerRuntimeConnectionOwner(
       computerRuntimeScopeIdentity({
         ownerKind: "worker",
         taskID: payload.lifecycle.taskID,
@@ -4159,7 +4162,7 @@ export namespace SessionLoop {
         "The projected scheduler model changed after restart",
       )
     }
-    const owner = McpRuntime.createScopedConnectionOwner(
+    const owner = createComputerRuntimeConnectionOwner(
       computerRuntimeScopeIdentity({ ownerKind: "orchestrator", taskID, sessionID: input.session.id }),
     )
     try {
