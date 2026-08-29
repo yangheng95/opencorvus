@@ -16601,6 +16601,10 @@
               "error": {
                 "type": "string"
               },
+              "final_message_id": {
+                "pattern": "^msg.*",
+                "type": "string"
+              },
               "reason": {
                 "enum": [
                   "completed",

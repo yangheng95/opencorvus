@@ -4817,6 +4817,7 @@ export type SessionStatus =
     }
   | {
       error?: string
+      final_message_id?: string
       reason: "completed" | "coordinated" | "error" | "aborted"
       type: "terminal"
     }
