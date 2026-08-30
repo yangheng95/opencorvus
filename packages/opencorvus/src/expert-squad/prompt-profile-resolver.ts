@@ -81,7 +81,7 @@ import {
   compareCanonicalStrings,
   textSHA256,
 } from "./projection-hash"
-import { TASK_ARTIFACT_SCHEDULER_TOOL_IDS, TASK_ARTIFACT_TOOL_IDS } from "@/tool/tool-id-catalog"
+import { TASK_ARTIFACT_TOOL_IDS } from "@/tool/tool-id-catalog"
 import { ExpertSquadRegistry } from "./registry"
 import { runtimeOverrideLayers } from "@/agent/runtime-override"
 import { sessionRuntimeFromProjectedTemplate, type SessionAgentRuntime } from "@/agent/session-agent-runtime"
@@ -1193,11 +1193,9 @@ export namespace PromptProfileResolver {
 
   function expandedSchedulerBuiltInToolIDs(projection: ExpertSquadRegistry.Projection, config: ConfigLike): string[] {
     return expandedProjectedBuiltInToolIDs({
-      inheritedToolIDs: [
-        ...(projection.inherit_base_tools ? AgentToolPool.orchestratorSchedulerRoleBaseToolIDs() : []),
-        ...TASK_ARTIFACT_SCHEDULER_TOOL_IDS,
-        "publish_interactive_artifact",
-      ],
+      inheritedToolIDs: projection.inherit_base_tools
+        ? AgentToolPool.orchestratorSchedulerRoleBaseToolIDs()
+        : [],
       explicitToolIDs: projection.built_in_tool_ids,
       projectableToolIDs: AgentToolPool.orchestratorSchedulerProjectableToolIDs(),
       config,

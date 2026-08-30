@@ -5,7 +5,7 @@
   "name": "Light",
   "label": "Light",
   "description": "Read-only consultation, investigation, and clarifying-question support with variable parallel Planner and Investigator sessions.",
-  "version": "2026.08.29.1",
+  "version": "2026.08.30.1",
   "product_pillars": ["code", "work"],
   "readme": "README.md",
   "selector": {
@@ -17,10 +17,18 @@
     "scheduler": {
       "base_role": "orchestrator",
       "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": ["dispatch_agent", "manage_task", "read"],
+      "inherit_base_tools": false,
+      "built_in_tool_ids": [
+        "dispatch_agents",
+        "manage_task",
+        "no_action",
+        "question",
+        "scheduler_message",
+        "read_task_message",
+        "read_agent_message"
+      ],
       "default_skill_refs": [],
-      "package_skill_refs": ["light/shared/method"],
+      "package_skill_refs": [],
       "default_tool_refs": [],
       "package_tool_refs": [],
       "default_mcp_server_refs": [],

@@ -3496,7 +3496,9 @@ export namespace SessionLoop {
       switches: input.tools,
       requiredToolIDs:
         runtimeContract?.identity.identityKind === "projected-scheduler"
-          ? TASK_ARTIFACT_SCHEDULER_TOOL_IDS
+          ? TASK_ARTIFACT_SCHEDULER_TOOL_IDS.filter((toolID) =>
+              runtimeContract.projectedRegistryToolIDs?.includes(toolID),
+            )
           : runtimeContract?.identity.identityKind === "projected-worker"
             ? TASK_ARTIFACT_TOOL_IDS
             : undefined,

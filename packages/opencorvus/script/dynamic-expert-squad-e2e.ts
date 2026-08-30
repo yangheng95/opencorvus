@@ -60,10 +60,22 @@ function requiredGeneratedDynamicPackage() {
   if (typeof manifestText !== "string") throw new Error("Generated builtin/dynamic payload has no manifest bytes.")
   const manifest = Bun.JSONC.parse(manifestText) as JsonObject
   if (
-    manifest.version !== "2026.08.30.2" ||
+    manifest.version !== "2026.08.30.3" ||
     manifest.capability_projection?.scheduler?.inherit_base_tools !== false ||
     JSON.stringify(manifest.capability_projection?.scheduler?.built_in_tool_ids) !==
-      JSON.stringify(["dispatch_agents", "manage_task", "no_action", "read_task_message", "read_agent_message", "skill"])
+      JSON.stringify([
+        "artifact_search",
+        "artifact_read",
+        "artifact_select",
+        "artifact_snapshot",
+        "publish_interactive_artifact",
+        "dispatch_agents",
+        "manage_task",
+        "no_action",
+        "read_task_message",
+        "read_agent_message",
+        "skill",
+      ])
   ) {
     throw new Error(`Generated builtin/dynamic payload is stale: ${JSON.stringify(manifest)}`)
   }

@@ -782,7 +782,9 @@ Multica 生成 package 时复用 `@opencorvus-ai/sdk/expert-squad-authoring` 的
 manifest/目录 materializer。导入 source `updated_at` 的日期表示该 source revision 日期，首次生成的
 OpenCorvus package version 为 `YYYY.MM.DD.1`；source digest 仍是 preview/import freshness authority。
 mapping 不创建、映射或引用 `universal-build`，该能力由 runtime scheduler projection 独立提供。Task
-Artifact 的 `artifact_search` / `artifact_read` / `artifact_select` 由 runtime 投影给 scheduler 和 worker；
+Artifact 的 `artifact_search` / `artifact_read` / `artifact_select` 由 runtime 投影给继承 base tools 的 scheduler 和所有 worker；
+明确设置 `inherit_base_tools: false` 的 scheduler 只获得 manifest 在 `built_in_tool_ids` 中显式声明的 Tool，
+需要 Artifact catalog 时必须显式列出相应平台 Tool，runtime 不在 resolved projection 后追加隐藏 Tool；
 consumer 必须先完整精确读取，再对 typed output 的每个语义来源调用 `artifact_select`。完整但未选择的读取只进入
 `observed_artifact_locators`，成功选择的来源进入 `source_artifact_locators`，且 source 必须是 observed 的子集；
 零选择与缺省可选字段均合法。即时 `artifact_publish` 显式提交本次发布专属的
@@ -791,8 +793,9 @@ consumer 必须先完整精确读取，再对 typed output 的每个语义来源
 `artifact_search` 的 opaque pagination cursor 由当前 runtime 使用进程随机 HMAC-SHA-256 authority 签发；cursor
 携带的 frozen revision、membership、provider state、total 与 position 在验证前均不可信。runtime restart 会使旧 cursor
 明确失效，caller 必须从第一页重新开始；不保留 unkeyed checksum decoder 或跨 runtime fallback。
-`artifact_snapshot` 投影给 scheduler 与 worker，`artifact_publish` 只投影给 worker；Multica mapping、manifest、prompt 和 Skill
-不声明、遮蔽或复制这些平台工具及 Artifact body。`artifact_snapshot` 返回内容寻址的 `resource_set`，并为 snapshot 与每个 resource
+`artifact_snapshot` 投影给继承 base tools 或显式声明它的 scheduler，并继续投影给所有 worker；`artifact_publish` 只投影给 worker；
+Multica mapping、prompt 和 Skill 不遮蔽或复制这些平台工具及 Artifact body，非继承 scheduler 的 manifest 显式声明本身就是唯一 capability source。
+`artifact_snapshot` 返回内容寻址的 `resource_set`，并为 snapshot 与每个 resource
 返回 Host-minted `artifact_locator_ref`。其模型输入由冻结 runtime contract 投影：scheduler 与没有精确 Build `merge_back` 私有 stage surface 的普通
 worker 只获得当前主项目 `files`；只有该 managed Build surface 获得必填 `source_commit`，且 Host 再次校验它等于最近完成 merge 的
 `primary_head`。schema 收窄不替代执行权限校验。

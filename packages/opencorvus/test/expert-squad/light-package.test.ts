@@ -23,13 +23,18 @@ import {
   type DispatchAdapterExecutors,
   waitForDetachedDispatchPipelinesForTest,
 } from "../../src/orchestrator/dispatch-agent-tool"
+import { createDispatchAgentsTool } from "../../src/orchestrator/dispatch-agents-tool"
+import { requireOrchestratorToolExecutionContext } from "../../src/orchestrator/tool-execution-context"
+import { createOrchestratorTools } from "../../src/orchestrator/tools"
 import { taskRequestSHA256 } from "../../src/orchestrator/dispatch-turn-projection"
 import { createDelegatedWorkerTool } from "../../src/orchestrator/delegated-worker-tool"
 import { Instance } from "../../src/project/instance"
 import { ProtocolStore } from "../../src/protocol/store"
+import { sendSchedulerMessage } from "../../src/protocol/scheduler-message"
 import { Provider } from "../../src/provider/provider"
 import type { Provider as ProviderType } from "../../src/provider/provider"
 import { Session } from "../../src/session"
+import { SessionLoop } from "../../src/session/loop"
 import { Message } from "../../src/session/message"
 import { SessionProcessor } from "../../src/session/processor"
 import { SkillMount } from "../../src/skill/mounts"
@@ -37,6 +42,15 @@ import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
 
 const packageRoot = path.resolve(import.meta.dir, "../../../../expert-squads/builtin/light")
 const skillRef = "light/shared/method"
+const schedulerTools = [
+  "dispatch_agents",
+  "manage_task",
+  "no_action",
+  "question",
+  "scheduler_message",
+  "read_task_message",
+  "read_agent_message",
+]
 const agentRoles = {
   "light-investigator": "delegated-worker",
   "light-planner": "delegated-worker",
@@ -108,13 +122,13 @@ describe("Light Expert Squad package", () => {
     expect(source.manifest).toMatchObject({
       namespace: "builtin",
       id: "light",
-      version: "2026.08.29.1",
+      version: "2026.08.30.1",
       product_pillars: ["code", "work"],
     })
     expect(Object.keys(source.manifest.capability_projection.agents).sort()).toEqual(Object.keys(agentRoles).sort())
     expect(source.manifest.capability_projection.virtual_workflows).toEqual({})
     expect([...source.packageSkills.keys()]).toEqual([skillRef])
-    expect(projections.map((projection) => projection.package_skill_refs)).toEqual([[skillRef], [skillRef], [skillRef]])
+    expect(projections.map((projection) => projection.package_skill_refs)).toEqual([[], [skillRef], [skillRef]])
   })
 
   test("installs the released payload and projects the exact read-only advisory and Skill surfaces", async () => {
@@ -129,7 +143,7 @@ describe("Light Expert Squad package", () => {
         })
         expect(receipt).toMatchObject({
           operation: "installed",
-          after: { installationScope: "project", namespace: "builtin", id: "light", version: "2026.08.29.1" },
+          after: { installationScope: "project", namespace: "builtin", id: "light", version: "2026.08.30.1" },
         })
 
         const config = Config.mergeOverlay(await EffectiveConfig.snapshotCurrent(), {
@@ -150,9 +164,10 @@ describe("Light Expert Squad package", () => {
           packageRevision: revision,
         })
 
-        expect(revision).toMatchObject({ namespace: "builtin", id: "light", version: "2026.08.29.1" })
+        expect(revision).toMatchObject({ namespace: "builtin", id: "light", version: "2026.08.30.1" })
         expect(scheduler.virtualWorkflows).toEqual({})
-        expect(scheduler.productionSkills.map((entry) => entry.ref)).toEqual([skillRef])
+        expect(scheduler.builtInToolIDs).toEqual(schedulerTools)
+        expect(scheduler.productionSkills.map((entry) => entry.ref)).toEqual([])
         expect(skillProjection.projectedAgentIDs).toEqual(Object.keys(agentRoles).sort())
 
         const workers = await Promise.all(
@@ -278,6 +293,11 @@ describe("Light Expert Squad package", () => {
             projectDirectory: project.path,
             config,
           })
+          const schedulerCapability = await PromptProfileResolver.resolveSchedulerCapability({
+            projectDirectory: project.path,
+            config,
+            packageRevision,
+          })
           const skillProjection = await PromptProfileResolver.resolveSkillProjection({
             projectDirectory: project.path,
             config,
@@ -355,8 +375,27 @@ describe("Light Expert Squad package", () => {
             parts: [],
           })
 
+          const rawSchedulerTools = createOrchestratorTools({
+            taskID,
+            agentSessionID: orchestrator.id,
+            sendSchedulerMessage,
+            dispatchAgents: [...skillProjection.schedulerOnlyAgents, ...skillProjection.projectedAgents],
+          }).tools
+          const projectedSchedulerTools = Object.fromEntries(
+            schedulerCapability.builtInToolIDs.map((toolID) => [toolID, rawSchedulerTools[toolID]!]),
+          )
+          const schedulerToolBudget = SessionLoop.estimateToolPayload(projectedSchedulerTools)
+          expect({
+            toolIDs: Object.keys(projectedSchedulerTools),
+            withinTokenBudget: schedulerToolBudget.tokensEst <= 40_000,
+          }).toEqual({
+            toolIDs: schedulerTools,
+            withinTokenBudget: true,
+          })
+
           let processorStarts = 0
           let processorFinishes = 0
+          const workerToolBudgets = new Map<string, ReturnType<typeof SessionLoop.estimateToolPayload>>()
           let resolveAllStarted!: () => void
           let resolveAllFinished!: () => void
           const allStarted = new Promise<void>((resolve) => {
@@ -376,7 +415,13 @@ describe("Light Expert Squad package", () => {
               partFromToolCall() {
                 return undefined
               },
-              async process() {
+              async process(streamInput: {
+                agentID: string
+                tools: Parameters<typeof SessionLoop.estimateToolPayload>[0]
+              }) {
+                if (Object.hasOwn(agentRoles, streamInput.agentID)) {
+                  workerToolBudgets.set(streamInput.agentID, SessionLoop.estimateToolPayload(streamInput.tools))
+                }
                 processorStarts++
                 if (processorStarts === 4) resolveAllStarted()
                 await release
@@ -427,17 +472,23 @@ describe("Light Expert Squad package", () => {
               workflowBinding,
               workflowNodeID,
               adapterInput,
+              toolOptions,
             }) {
               if (!workflowBinding || workflowBinding.kind !== "direct" || workflowNodeID !== null)
                 throw new Error("Light dispatch must retain direct workflow authority")
-              const dispatchID = Identifier.ascending("artifact")
+              const toolExecution = requireOrchestratorToolExecutionContext(toolOptions, "dispatch_agent")
+              if (toolExecution.visibleToolName !== "dispatch_agents" || !toolExecution.collectionMember) {
+                throw new Error("Light dispatch must be owned by one canonical collection member")
+              }
               const origin = createDispatchLineageOrigin({
-                dispatchID,
                 taskID,
-                orchestratorSessionID: orchestrator.id,
-                orchestratorMessageID,
-                toolPartID: Identifier.ascending("part"),
-                toolCallID: Identifier.ascending("call"),
+                orchestratorSessionID: toolExecution.orchestratorSessionID,
+                orchestratorMessageID: toolExecution.orchestratorMessageID,
+                toolPartID: toolExecution.toolPartID,
+                toolCallID: toolExecution.toolCallID,
+                toolName: "dispatch_agents",
+                collectionMemberIndex: toolExecution.collectionMember.index,
+                collectionMemberCount: toolExecution.collectionMember.count,
                 targetAgentID,
                 projectedWorkerIdentity: projectedAgent.identity,
                 workScope,
@@ -446,6 +497,7 @@ describe("Light Expert Squad package", () => {
                 workflowNodeID,
                 adapterInput,
               })
+              const dispatchID = origin.dispatchID
               const childSessionID = Identifier.deterministic("session", `light-dispatch\0${origin.dispatchID}`)
               const lineage = recordTestDispatchLineage({ origin, childSessionID })
               return {
@@ -498,17 +550,62 @@ describe("Light Expert Squad package", () => {
               },
             },
           }))
-          const receipts = await Promise.all(
-            requests.map((request) => dispatchTool.execute!(request as never, {} as never)),
-          )
+          const collection = {
+            team: targets.map((target, index) => ({
+              name: `light-member-${index + 1}`,
+              target,
+              responsibility: `Own advisory partition ${index + 1}`,
+              boundary: `Use only evidence partition ${index + 1}`,
+              expected_result: `Return the complete advisory result for partition ${index + 1}`,
+              depends_on: [],
+            })),
+            dispatches: requests,
+          }
+          const outerToolPartID = Identifier.ascending("part")
+          const outerToolCallID = Identifier.ascending("call")
+          await Session.updatePart({
+            id: outerToolPartID,
+            sessionID: orchestrator.id,
+            messageID: orchestratorMessageID,
+            type: "tool",
+            callID: outerToolCallID,
+            tool: "dispatch_agents",
+            state: { status: "running", input: collection, time: { start: Date.now() } },
+          })
+          const collectionTool = createDispatchAgentsTool(dispatchTool)
+          if (!collectionTool.execute) throw new Error("dispatch_agents has no production executor")
+          const collectionResult = (await collectionTool.execute(
+            collection as never,
+            {
+              toolCallId: outerToolCallID,
+              opencorvus: {
+                sessionID: orchestrator.id,
+                messageID: orchestratorMessageID,
+                toolCallID: outerToolCallID,
+                toolPartID: outerToolPartID,
+                visibleToolName: "dispatch_agents",
+              },
+            } as never,
+          )) as { output: string }
+          const receipts = JSON.parse(collectionResult.output).members.map(
+            (member: { status: string; outcome?: { kind: string; session_id?: string } }) => member.outcome,
+          ) as Array<{ kind: string; session_id?: string }>
           expect(receipts.map((receipt) => receipt.kind)).toEqual(["accepted", "accepted", "accepted", "accepted"])
           await requireWithin(allStarted, "four overlapping Light worker processors")
           childSessionIDs = receipts.map((receipt) => {
             if (receipt.kind !== "accepted") throw new Error(`Expected accepted dispatch, got ${receipt.kind}`)
+            if (!receipt.session_id) throw new Error("Accepted Light dispatch lost its child Session")
             return receipt.session_id
           })
           expect(new Set(childSessionIDs).size).toBe(4)
           expect(processorStarts).toBe(4)
+          for (const agentID of Object.keys(agentRoles)) {
+            const budget = workerToolBudgets.get(agentID)
+            if (!budget) throw new Error(`Light ${agentID} final Provider Tool surface was not resolved`)
+            expect(budget.chars).toBeGreaterThan(0)
+            expect(budget.tokensEst).toBeGreaterThan(0)
+            expect(budget.tokensEst).toBeLessThanOrEqual(50_000)
+          }
           const sessions = await Promise.all(childSessionIDs.map((sessionID) => Session.get(sessionID)))
           expect(
             sessions.map((session) => ({
@@ -526,6 +623,25 @@ describe("Light Expert Squad package", () => {
           expect(lineages.map((lineage) => lineage.payload.target_agent_id).sort()).toEqual([...targets].sort())
           expect(lineages.map((lineage) => lineage.payload.orchestrator_message_id)).toEqual(
             targets.map(() => orchestratorMessageID),
+          )
+          expect(
+            lineages
+              .map((lineage) => ({
+                tool: lineage.payload.tool_name,
+                part: lineage.payload.tool_part_id,
+                call: lineage.payload.tool_call_id,
+                member: lineage.payload.collection_member_index,
+                count: lineage.payload.collection_member_count,
+              }))
+              .sort((left, right) => (left.member ?? -1) - (right.member ?? -1)),
+          ).toEqual(
+            targets.map((_, index) => ({
+              tool: "dispatch_agents",
+              part: outerToolPartID,
+              call: outerToolCallID,
+              member: index,
+              count: targets.length,
+            })),
           )
           expect(lineages.map((lineage) => lineage.payload.workflow_binding.kind)).toEqual(targets.map(() => "direct"))
           expect(lineages.map((lineage) => lineage.payload.workflow_node_id)).toEqual(targets.map(() => null))
