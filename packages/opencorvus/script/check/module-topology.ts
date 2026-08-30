@@ -1,6 +1,6 @@
 #!/usr/bin/env bun
 import { spawnSync } from "node:child_process"
-import { mkdtemp, readFile, rm, symlink } from "node:fs/promises"
+import { mkdir, mkdtemp, readdir, readFile, rm, stat, symlink } from "node:fs/promises"
 import os from "node:os"
 import path from "node:path"
 import { pathToFileURL } from "node:url"
@@ -17,10 +17,12 @@ const cleanImportEntrypoints = [
 ] as const
 const cleanImportTimeoutMs = 120_000
 const snapshotMaterializationPaths = [
-  "packages/opencorvus/src",
-  "packages/opencorvus/generated",
-  "packages/opencorvus/tsconfig.json",
-  "packages/opencorvus/package.json",
+  // Workspace links under packages/opencorvus/node_modules are relative to
+  // packages/*. A clean snapshot therefore needs the exact treeish versions
+  // of those packages too; otherwise Bun resolves (for example)
+  // @opencorvus-ai/util into an absent snapshot/packages/util directory and
+  // reports a false clean-import failure against a valid commit.
+  "packages",
   "expert-squads",
 ] as const
 
@@ -52,18 +54,47 @@ function productionModulesFromListing(listed: string): string[] {
     .split(/\r?\n/)
     .filter(
       (file) =>
-        (file.endsWith(".ts") || file.endsWith(".tsx")) &&
-        !file.endsWith(".d.ts") &&
-        !file.includes("/skill/builtin/"),
+        (file.endsWith(".ts") || file.endsWith(".tsx")) && !file.endsWith(".d.ts") && !file.includes("/skill/builtin/"),
     )
     .sort()
 }
 
 async function linkSnapshotDependencies(snapshotRoot: string): Promise<void> {
-  for (const relative of ["node_modules", "packages/opencorvus/node_modules"]) {
+  const workspaceRoots = (await readdir(path.join(repositoryRoot, "packages"), { withFileTypes: true }))
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => `packages/${entry.name}`)
+  workspaceRoots.push("packages/sdk/js")
+
+  const dependencyRoots = new Set(["node_modules", ...workspaceRoots.map((root) => `${root}/node_modules`)])
+  for (const relative of dependencyRoots) {
     const source = path.join(repositoryRoot, relative)
     const target = path.join(snapshotRoot, relative)
+    const sourceIsDirectory = await stat(source).then(
+      (value) => value.isDirectory(),
+      () => false,
+    )
+    if (!sourceIsDirectory) continue
+    await mkdir(path.dirname(target), { recursive: true })
     await symlink(source, target, process.platform === "win32" ? "junction" : "dir")
+  }
+}
+
+function buildSnapshotRuntimeDependencies(snapshotRoot: string): void {
+  const result = Bun.spawnSync(
+    [
+      process.execPath,
+      path.join(repositoryRoot, "node_modules", "typescript", "bin", "tsc"),
+      "-p",
+      "packages/sdk/js/tsconfig.json",
+    ],
+    {
+      cwd: snapshotRoot,
+      stdout: "pipe",
+      stderr: "pipe",
+    },
+  )
+  if (result.exitCode !== 0) {
+    throw new Error(`snapshot SDK build failed: ${result.stderr.toString().trim() || result.stdout.toString().trim()}`)
   }
 }
 
@@ -108,6 +139,7 @@ async function materializeSnapshot(request: SnapshotRequest): Promise<Materializ
     extractSnapshotArchive(snapshotRoot, path.basename(archivePath))
     await rm(archivePath, { force: true })
     await linkSnapshotDependencies(snapshotRoot)
+    buildSnapshotRuntimeDependencies(snapshotRoot)
     return { root: snapshotRoot, label: request.label, productionModules }
   } catch (error) {
     await rm(snapshotRoot, { recursive: true, force: true })
@@ -251,9 +283,12 @@ function componentDiagnostic(component: readonly string[], graph: Graph): string
       .sort()
       .map((target) => `    ${source} -> ${target}`),
   )
-  return [`  component (${component.length})`, ...component.map((member) => `    ${member}`), "  internal edges", ...edges].join(
-    "\n",
-  )
+  return [
+    `  component (${component.length})`,
+    ...component.map((member) => `    ${member}`),
+    "  internal edges",
+    ...edges,
+  ].join("\n")
 }
 
 async function checkCleanImports(snapshotRoot: string): Promise<string[]> {
@@ -325,7 +360,9 @@ async function main() {
         component.every((member) => candidate.members.has(member)),
       )
       if (!budget) {
-        failures.push(`multi-module component contains an unknown or cross-boundary cycle (${component.length} modules)`)
+        failures.push(
+          `multi-module component contains an unknown or cross-boundary cycle (${component.length} modules)`,
+        )
         continue
       }
       if (component.length > budget.maximumSize) {
