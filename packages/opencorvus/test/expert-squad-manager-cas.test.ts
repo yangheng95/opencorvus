@@ -9,28 +9,13 @@ import { Instance } from "../src/project/instance"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
 function emptyProjectionResources() {
-  return {
-    inherit_base_tools: false,
-    built_in_tool_ids: [] as string[],
-    default_skill_refs: [] as string[],
-    package_skill_refs: [] as string[],
-    default_tool_refs: [] as string[],
-    package_tool_refs: [] as string[],
-    default_mcp_server_refs: [] as string[],
-    package_mcp_server_refs: [] as string[],
-    default_mcp_tool_refs: [] as string[],
-    package_mcp_tool_refs: [] as string[],
-    default_mcp_prompt_refs: [] as string[],
-    package_mcp_prompt_refs: [] as string[],
-    default_mcp_resource_refs: [] as string[],
-    package_mcp_resource_refs: [] as string[],
-  }
+  return { capability_refs: [] as string[] }
 }
 
 function packageDefinition(version: string, marker: string): ExpertSquadPackageDefinition {
   return {
     manifest: {
-      schema_version: 1,
+      schema_version: 2,
       namespace: "evolution-test",
       id: "manager-cas-squad",
       label: "Manager CAS squad",
@@ -43,6 +28,7 @@ function packageDefinition(version: string, marker: string): ExpertSquadPackageD
         selection_guidance: "Select only for the Manager CAS contract.",
         instructions: "selector.md",
       },
+      capability_sets: {},
       capability_projection: {
         scheduler: { ...emptyProjectionResources(), base_role: "orchestrator" },
         agents: {

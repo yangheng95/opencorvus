@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "product-management",
   "name": "Product Management",
   "label": "Product Management",
   "description": "Frames product decisions, investigates customer evidence and solution options in parallel, and joins both into an owned, verifiable decision brief.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.30.2",
   "product_pillars": [
     "work"
   ],
@@ -15,119 +15,67 @@
     "selection_guidance": "Select Product Management when the primary outcome is a bounded product decision with a target user, alternatives, scope, metrics, ownership, and a next verification step.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 4 projections.",
+      "member_refs": [
+        "capability:skill:package:product-management:product-management%2Fshared%2Fevidence-backed-product-planning"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:capability_set:platform:tool-registry:scheduler-transport",
+        "capability:skill:package:product-management:product-management%2Fshared%2Fevidence-backed-product-planning",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "product-management/shared/evidence-backed-product-planning"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "product-problem-framer": {
+        "capability_refs": [
+          "capability:capability_set:package:product-management:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Product Problem Framer",
         "description": "Defines the decision owner, target user, problem, outcome, constraints, metrics, non-goals, and open questions.",
         "base_role": "delegated-worker",
-        "prompt": "agents/product-problem-framer/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "product-management/shared/evidence-backed-product-planning"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/product-problem-framer/system.md"
       },
       "product-customer-evidence-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:product-management:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:deep-research-base"
+        ],
         "label": "Product Customer Evidence Analyst",
         "description": "Builds a dated, source-linked account of user needs, frequency, severity, reach, and evidence gaps.",
         "base_role": "deep-research",
-        "prompt": "agents/product-customer-evidence-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "product-management/shared/evidence-backed-product-planning"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/product-customer-evidence-analyst/system.md"
       },
       "product-solution-strategist": {
+        "capability_refs": [
+          "capability:capability_set:package:product-management:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Product Solution Strategist",
         "description": "Develops distinct options and compares value, feasibility, dependencies, reversibility, time to learn, and opportunity cost.",
         "base_role": "delegated-worker",
-        "prompt": "agents/product-solution-strategist/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "product-management/shared/evidence-backed-product-planning"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/product-solution-strategist/system.md"
       },
       "product-decision-owner": {
+        "capability_refs": [
+          "capability:capability_set:package:product-management:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Product Decision Owner",
         "description": "Joins customer evidence and solution analysis into a chosen, rejected, or deferred decision with execution and verification contracts.",
         "base_role": "delegated-worker",
-        "prompt": "agents/product-decision-owner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "product-management/shared/evidence-backed-product-planning"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/product-decision-owner/system.md"
       }
     },
     "virtual_workflows": {

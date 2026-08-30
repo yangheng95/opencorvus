@@ -8,6 +8,7 @@ import { Instance } from "../../src/project/instance"
 import { payloadPackageSources } from "../../generated/expert-squad-payload"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
 import { analyzeExpertSquadWorkflowTopology } from "@opencorvus-ai/sdk/expert-squad-authoring"
+import { agentCapabilityGrants, allCapabilityGrants, schedulerCapabilityGrants } from "./capability-grant-fixture"
 
 const newSquadIDs = [
   "browser-research-acceptance",
@@ -30,11 +31,8 @@ const sourceRoot = (id: string) => path.resolve(import.meta.dir, "../../../..", 
 
 function projectedSkillCount(manifest: ExpertSquadRegistry.Manifest) {
   const refs = new Set<string>()
-  for (const projection of [
-    manifest.capability_projection.scheduler,
-    ...Object.values(manifest.capability_projection.agents),
-  ]) {
-    for (const ref of [...projection.default_skill_refs, ...projection.package_skill_refs]) refs.add(ref)
+  for (const grants of allCapabilityGrants(manifest)) {
+    for (const ref of [...grants.defaultSkillRefs, ...grants.packageSkillRefs]) refs.add(ref)
   }
   return refs.size
 }
@@ -105,7 +103,7 @@ describe("Ten-swimlane generated payload integration", () => {
             config,
             packageRevision: revision,
           })
-          const schedulerProjection = source.manifest.capability_projection.scheduler
+          const schedulerProjection = schedulerCapabilityGrants(source.manifest)
           const workflowIDs = Object.keys(source.manifest.capability_projection.virtual_workflows)
 
           expect(revision).toMatchObject({
@@ -115,8 +113,8 @@ describe("Ten-swimlane generated payload integration", () => {
             packageDigest: source.packageDigest,
           })
           expect(scheduler.productionSkills.map((skill) => skill.ref)).toEqual([
-            ...schedulerProjection.default_skill_refs,
-            ...schedulerProjection.package_skill_refs,
+            ...schedulerProjection.defaultSkillRefs,
+            ...schedulerProjection.packageSkillRefs,
           ])
           expect(Object.keys(scheduler.virtualWorkflows)).toEqual(workflowIDs)
 
@@ -128,7 +126,7 @@ describe("Ten-swimlane generated payload integration", () => {
             ),
           ).toBe(true)
 
-          for (const [agentID, projection] of Object.entries(source.manifest.capability_projection.agents)) {
+          for (const agentID of Object.keys(source.manifest.capability_projection.agents)) {
             const worker = await PromptProfileResolver.resolveWorkerCapability({
               projectDirectory: project.path,
               config,
@@ -136,8 +134,8 @@ describe("Ten-swimlane generated payload integration", () => {
               agentID,
             })
             expect(worker.productionSkills.map((skill) => skill.ref)).toEqual([
-              ...projection.default_skill_refs,
-              ...projection.package_skill_refs,
+              ...agentCapabilityGrants(source.manifest, agentID).defaultSkillRefs,
+              ...agentCapabilityGrants(source.manifest, agentID).packageSkillRefs,
             ])
           }
         }

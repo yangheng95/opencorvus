@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "biopharmaceutical-manufacturing-quality",
   "name": "Biopharmaceutical Manufacturing Quality",
   "label": "Biopharmaceutical Manufacturing Quality",
   "description": "GMP batch, material/equipment genealogy, deviation, CAPA, process-validation, continued-verification, and data-integrity evidence joined into a bounded quality review pack.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.30.2",
   "product_pillars": [
     "work"
   ],
@@ -15,119 +15,67 @@
     "selection_guidance": "Select for master/executed batch records, material/lot/equipment genealogy, yields and audit trails, deviations/OOS/OOT, investigation and CAPA evidence, process validation, control-strategy traceability, continued process verification, cleaning/contamination-control applicability, and manufacturing data integrity. Do not select for record mutation, process-parameter change, deviation/root-cause/CAPA closure, result validation, equipment/area/batch release, product quality or sterility assurance, regulatory submission, or GMP certification.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 4 projections.",
+      "member_refs": [
+        "capability:skill:package:biopharmaceutical-manufacturing-quality:biopharmaceutical-manufacturing-quality%2Fshared%2Fmethod"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:capability_set:platform:tool-registry:scheduler-transport",
+        "capability:skill:package:biopharmaceutical-manufacturing-quality:biopharmaceutical-manufacturing-quality%2Fshared%2Fmethod",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "biopharmaceutical-manufacturing-quality/shared/method"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "biopharma-batch-record-genealogy-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:biopharmaceutical-manufacturing-quality:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:explore-base"
+        ],
         "label": "Biopharma Batch Record and Genealogy Analyst",
         "description": "Reconciles master/executed batch records, materials, lots, equipment, personnel entries, yields, status, and audit trails.",
         "base_role": "explore",
-        "prompt": "agents/biopharma-batch-record-genealogy-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "biopharmaceutical-manufacturing-quality/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/biopharma-batch-record-genealogy-analyst/system.md"
       },
       "biopharma-deviation-capa-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:biopharmaceutical-manufacturing-quality:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Biopharma Deviation and CAPA Analyst",
         "description": "Builds deviation chronology, impact scope, evidence-backed cause hypotheses, CAPA actions, and effectiveness evidence.",
         "base_role": "delegated-worker",
-        "prompt": "agents/biopharma-deviation-capa-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "biopharmaceutical-manufacturing-quality/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/biopharma-deviation-capa-analyst/system.md"
       },
       "biopharma-process-validation-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:biopharmaceutical-manufacturing-quality:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Biopharma Process Validation Analyst",
         "description": "Traces lifecycle validation, CQA/CPP/control strategy, qualification, sampling, statistics, and continued verification evidence.",
         "base_role": "delegated-worker",
-        "prompt": "agents/biopharma-process-validation-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "biopharmaceutical-manufacturing-quality/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/biopharma-process-validation-analyst/system.md"
       },
       "biopharma-manufacturing-quality-review-owner": {
+        "capability_refs": [
+          "capability:capability_set:package:biopharmaceutical-manufacturing-quality:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Biopharma Manufacturing Quality Review Owner",
         "description": "Joins batch, deviation/CAPA, and validation evidence while preserving Quality Unit and batch-release authority.",
         "base_role": "delegated-worker",
-        "prompt": "agents/biopharma-manufacturing-quality-review-owner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "biopharmaceutical-manufacturing-quality/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/biopharma-manufacturing-quality-review-owner/system.md"
       }
     },
     "virtual_workflows": {

@@ -1,13 +1,19 @@
-import { canonicalDigestSource, compareCanonicalStrings } from "@/util/canonical-digest"
-import { GLOBAL_TOOL_IDS } from "./tool-id-catalog"
+import { compareCanonicalStrings } from "@/util/canonical-digest"
+import { coreBuiltInToolIDs } from "@/agent/tool-pool-data"
+import { PlatformCapabilitySetRegistry } from "@/agent/platform-capability-sets"
 
-const toolIDs = Object.freeze([...new Set<string>(GLOBAL_TOOL_IDS)].sort(compareCanonicalStrings))
+const toolIDs = Object.freeze([...coreBuiltInToolIDs()].sort(compareCanonicalStrings))
 
 export namespace ToolCapabilityInventory {
-  export function snapshot(): { revision: string; toolIDs: readonly string[] } {
+  export function snapshot(): {
+    revision: string
+    toolIDs: readonly string[]
+    sets: ReturnType<typeof PlatformCapabilitySetRegistry.all>
+  } {
     return Object.freeze({
-      revision: canonicalDigestSource("tool-registry-capability-inventory-v1", toolIDs).sha256,
+      revision: PlatformCapabilitySetRegistry.sourceRevision(toolIDs),
       toolIDs,
+      sets: PlatformCapabilitySetRegistry.all(),
     })
   }
 }

@@ -254,11 +254,11 @@ describe("Tax Compliance Expert Squad", () => {
   test("loads the exact self-contained package and complete active projection", async () => {
     const source = await ExpertSquadRegistry.loadSourcePackage(packageRoot)
     expect(source.manifest).toMatchObject({
-      schema_version: 1,
+      schema_version: 2,
       namespace: "builtin",
       id: "tax-compliance",
       name: "Tax Compliance",
-      version: "2026.08.13.1",
+      version: "2026.08.30.2",
       product_pillars: ["work"],
     })
     expect([...source.packageSkills.keys()].sort()).toEqual([...skillRefs].sort())
@@ -383,12 +383,12 @@ describe("Tax Compliance Expert Squad", () => {
           ["tax-compliance-engagement-planner", "charter"],
           ["tax-compliance-authority-researcher", "dossier"],
         ] as const) {
-          await Session.updateMessage({
+          const assistantMessage = await Session.updateMessage({
             id: `message-tax-compliance-${suffix}`,
             sessionID: session.id,
             role: "assistant",
             author: agentID,
-            time: { created: started, completed: started + 1 },
+            time: { created: started },
             parentID: userMessage.id,
             modelID: "test",
             providerID: "test",
@@ -396,7 +396,21 @@ describe("Tax Compliance Expert Squad", () => {
             path: { cwd: project.path, root: project.path },
             cost: 0,
             tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
-            finish: "stop",
+          })
+          await Session.updatePart({
+            id: `step-tax-compliance-${suffix}`,
+            sessionID: session.id,
+            messageID: assistantMessage.id,
+            type: "step-start",
+          })
+          await Session.updatePart({
+            id: `part-tax-compliance-${suffix}`,
+            sessionID: session.id,
+            messageID: assistantMessage.id,
+            type: "tool",
+            callID: `call-tax-compliance-${suffix}`,
+            tool: publisherRef,
+            state: { status: "running", input: {}, time: { start: started + 1 } },
           })
         }
 

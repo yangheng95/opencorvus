@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "student-financial-aid-administration",
   "name": "Student Financial Aid Administration",
   "label": "Student Financial Aid Administration",
   "description": "Source-versioned student financial-aid application, verification, academic, cost, packaging, award, disbursement, reconciliation and exception evidence without eligibility or fund-movement authority.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.30.2",
   "product_pillars": [
     "work"
   ],
@@ -15,141 +15,77 @@
     "selection_guidance": "Select for FAFSA/ISIR data provenance, verification documents, academic/program/calendar inputs, cost of attendance, packaging, award, disbursement, reconciliation, satisfactory academic progress, return/withdrawal or overaward evidence. Do not select to determine eligibility, change records, originate/disburse/return funds, contact students or make compliance conclusions.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 5 projections.",
+      "member_refs": [
+        "capability:skill:package:student-financial-aid-administration:student-financial-aid-administration%2Fshared%2Fmethod"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:capability_set:platform:tool-registry:scheduler-transport",
+        "capability:skill:package:student-financial-aid-administration:student-financial-aid-administration%2Fshared%2Fmethod",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "student-financial-aid-administration/shared/method"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "aid-applicant-isir-verification-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:student-financial-aid-administration:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:explore-base"
+        ],
         "label": "Aid Applicant ISIR Verification Analyst",
         "description": "Freezes applicant token, aid year, FAFSA/ISIR transaction and supplied verification/conflicting-information evidence.",
         "base_role": "explore",
-        "prompt": "agents/aid-applicant-isir-verification-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "student-financial-aid-administration/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/aid-applicant-isir-verification-analyst/system.md"
       },
       "aid-academic-cost-packaging-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:student-financial-aid-administration:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Aid Academic Cost Packaging Analyst",
         "description": "Traces program/calendar/enrollment, cost-of-attendance, need inputs, policy and package calculations as supplied.",
         "base_role": "delegated-worker",
-        "prompt": "agents/aid-academic-cost-packaging-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "student-financial-aid-administration/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/aid-academic-cost-packaging-analyst/system.md"
       },
       "aid-award-disbursement-reconciliation-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:student-financial-aid-administration:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Aid Award Disbursement Reconciliation Analyst",
         "description": "Reconciles supplied award, origination, disbursement, student-account and program cash records without fund movement.",
         "base_role": "delegated-worker",
-        "prompt": "agents/aid-award-disbursement-reconciliation-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "student-financial-aid-administration/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/aid-award-disbursement-reconciliation-analyst/system.md"
       },
       "aid-sap-return-overaward-exception-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:student-financial-aid-administration:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Aid SAP Return Overaward Exception Analyst",
         "description": "Builds source-bound chronology for academic-progress, withdrawal/return, overaward and conflicting-information questions.",
         "base_role": "delegated-worker",
-        "prompt": "agents/aid-sap-return-overaward-exception-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "student-financial-aid-administration/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/aid-sap-return-overaward-exception-analyst/system.md"
       },
       "student-financial-aid-administration-review-owner": {
+        "capability_refs": [
+          "capability:capability_set:package:student-financial-aid-administration:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Student Financial Aid Administration Review Owner",
         "description": "Joins application, academic/package, disbursement and exception evidence into an authorized aid-administration review pack.",
         "base_role": "delegated-worker",
-        "prompt": "agents/student-financial-aid-administration-review-owner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "student-financial-aid-administration/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/student-financial-aid-administration-review-owner/system.md"
       }
     },
     "virtual_workflows": {

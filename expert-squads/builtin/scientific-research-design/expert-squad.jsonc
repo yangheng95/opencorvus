@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "scientific-research-design",
   "name": "Scientific Research Design",
   "label": "Scientific Research Design",
   "description": "Evidence landscape, competing hypothesis, and rigor or ethics analysis joined into a reproducible research decision register.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.30.2",
   "product_pillars": [
     "work"
   ],
@@ -15,122 +15,69 @@
     "selection_guidance": "Select when evidence, competing hypotheses, disconfirming tests, uncertainty, and institutional review gates must remain explicit.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 4 projections.",
+      "member_refs": [
+        "capability:skill:package:scientific-research-design:scientific-research-design%2Fshared%2Fmethod"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:capability_set:platform:tool-registry:scheduler-transport",
+        "capability:skill:package:scientific-research-design:scientific-research-design%2Fshared%2Fmethod",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "scientific-research-design/shared/method"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "research-evidence-landscape-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:scientific-research-design:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:explore-base",
+          "capability:tool:platform:tool-registry:webfetch",
+          "capability:tool:platform:tool-registry:websearch"
+        ],
         "label": "Research Evidence Landscape Analyst",
         "description": "Maps bounded literature and evidence for and against candidate directions.",
         "base_role": "explore",
-        "prompt": "agents/research-evidence-landscape-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [
-          "websearch",
-          "webfetch"
-        ],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "scientific-research-design/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/research-evidence-landscape-analyst/system.md"
       },
       "research-hypothesis-alternatives-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:scientific-research-design:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Hypothesis Alternatives Analyst",
         "description": "Generates testable alternatives, predictions, and disconfirming observations.",
         "base_role": "delegated-worker",
-        "prompt": "agents/research-hypothesis-alternatives-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "scientific-research-design/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/research-hypothesis-alternatives-analyst/system.md"
       },
       "research-rigor-ethics-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:scientific-research-design:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Research Rigor and Ethics Analyst",
         "description": "Maps bias, feasibility, safety, privacy, ethics, and regulatory gates.",
         "base_role": "delegated-worker",
-        "prompt": "agents/research-rigor-ethics-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "scientific-research-design/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/research-rigor-ethics-analyst/system.md"
       },
       "research-decision-integrator": {
+        "capability_refs": [
+          "capability:capability_set:package:scientific-research-design:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:architect-base"
+        ],
         "label": "Research Decision Integrator",
         "description": "Joins evidence, alternatives, and gates into a reproducible research register.",
         "base_role": "architect",
-        "prompt": "agents/research-decision-integrator/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "scientific-research-design/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/research-decision-integrator/system.md"
       }
     },
     "virtual_workflows": {

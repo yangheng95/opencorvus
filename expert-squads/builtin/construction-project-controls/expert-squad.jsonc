@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "construction-project-controls",
   "name": "Construction Project Controls",
   "label": "Construction Project Controls",
   "description": "Scope, schedule, cost, procurement, site-risk, and quality evidence joined into an accountable project controls register.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.30.2",
   "product_pillars": [
     "work"
   ],
@@ -15,119 +15,67 @@
     "selection_guidance": "Select for construction scope, schedule, cost, change, procurement, site-risk, quality, and milestone evidence without engineering certification, site direction, contract interpretation, or payment approval.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 4 projections.",
+      "member_refs": [
+        "capability:skill:package:construction-project-controls:construction-project-controls%2Fshared%2Fmethod"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:capability_set:platform:tool-registry:scheduler-transport",
+        "capability:skill:package:construction-project-controls:construction-project-controls%2Fshared%2Fmethod",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "construction-project-controls/shared/method"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "construction-scope-schedule-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:construction-project-controls:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:explore-base"
+        ],
         "label": "Scope and Schedule Analyst",
         "description": "Maps scope baseline, dependencies, milestones, critical-path assumptions, and schedule variance.",
         "base_role": "explore",
-        "prompt": "agents/construction-scope-schedule-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "construction-project-controls/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/construction-scope-schedule-analyst/system.md"
       },
       "construction-cost-procurement-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:construction-project-controls:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Cost and Procurement Analyst",
         "description": "Maps estimate basis, commitments, changes, procurement lead times, and cost variance.",
         "base_role": "delegated-worker",
-        "prompt": "agents/construction-cost-procurement-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "construction-project-controls/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/construction-cost-procurement-analyst/system.md"
       },
       "construction-site-risk-quality-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:construction-project-controls:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Site Risk and Quality Analyst",
         "description": "Maps site constraints, quality evidence, safety interfaces, permits, and unresolved risks.",
         "base_role": "delegated-worker",
-        "prompt": "agents/construction-site-risk-quality-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "construction-project-controls/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/construction-site-risk-quality-analyst/system.md"
       },
       "construction-controls-owner": {
+        "capability_refs": [
+          "capability:capability_set:package:construction-project-controls:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Construction Controls Owner",
         "description": "Joins the branches into a decision-ready controls register.",
         "base_role": "delegated-worker",
-        "prompt": "agents/construction-controls-owner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "construction-project-controls/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/construction-controls-owner/system.md"
       }
     },
     "virtual_workflows": {

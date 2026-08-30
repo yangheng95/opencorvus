@@ -15,36 +15,21 @@ import {
   validateExpertSquadPackageDefinition,
   writeExpertSquadPackage,
   type ExpertSquadCollaborationDefinition,
-  type ExpertSquadManifestV1,
+  type ExpertSquadManifestV2,
   type ExpertSquadPackageDefinition,
   type ExpertSquadPackageFile,
 } from "../src/expert-squad-authoring"
 import { createOpenCorvusClient } from "../src/client"
-import { ExpertSquadManifestV1Schema } from "../src/expert-squad-manifest-v1"
+import { ExpertSquadManifestV2Schema } from "../src/expert-squad-manifest-v2"
 
 function emptyResources() {
-  return {
-    inherit_base_tools: false,
-    built_in_tool_ids: [],
-    default_skill_refs: [],
-    package_skill_refs: [],
-    default_tool_refs: [],
-    package_tool_refs: [],
-    default_mcp_server_refs: [],
-    package_mcp_server_refs: [],
-    default_mcp_tool_refs: [],
-    package_mcp_tool_refs: [],
-    default_mcp_prompt_refs: [],
-    package_mcp_prompt_refs: [],
-    default_mcp_resource_refs: [],
-    package_mcp_resource_refs: [],
-  }
+  return { capability_refs: [] }
 }
 
-function manifest(): ExpertSquadManifestV1 {
+function manifest(): ExpertSquadManifestV2 {
   return {
     product_pillars: ["code", "work"],
-    schema_version: 1,
+    schema_version: 2,
     namespace: "example",
     id: "example-squad",
     name: "Example squad",
@@ -56,6 +41,7 @@ function manifest(): ExpertSquadManifestV1 {
       selection_guidance: "Select for the concrete example only.",
       instructions: "selector.md",
     },
+    capability_sets: {},
     capability_projection: {
       scheduler: { ...emptyResources(), base_role: "orchestrator" },
       agents: {
@@ -111,8 +97,8 @@ describe("expert squad authoring SDK", () => {
       "artifact_publish",
     ])
     const packageDefinition = definition()
-    expect(packageDefinition.manifest.capability_projection.scheduler.built_in_tool_ids).toEqual([])
-    expect(packageDefinition.manifest.capability_projection.agents["example-builder"]!.built_in_tool_ids).toEqual([])
+    expect(packageDefinition.manifest.capability_projection.scheduler.capability_refs).toEqual([])
+    expect(packageDefinition.manifest.capability_projection.agents["example-builder"]!.capability_refs).toEqual([])
     expect(validateExpertSquadPackageDefinition(packageDefinition)).toBe(packageDefinition)
   })
 
@@ -143,11 +129,13 @@ describe("expert squad authoring SDK", () => {
     expect(() => validateExpertSquadCollaboration({ definition, manifests: [source] })).toThrow(/at least one stage/)
   })
 
-  test("validates connected fixed-profile Mission stage Tasks without creating runtime state", () => {
+  test("validates connected fixed-profile Mission stage Tasks while preserving canonical manifest input", () => {
     const source = manifest()
     source.id = "source-squad"
     const delivery = manifest()
     delivery.id = "delivery-squad"
+    const sourceBefore = structuredClone(source)
+    const deliveryBefore = structuredClone(delivery)
     const definition: ExpertSquadCollaborationDefinition = {
       schema_version: 1,
       stage_execution: "mission_task",
@@ -176,7 +164,8 @@ describe("expert squad authoring SDK", () => {
     }
 
     expect(validateExpertSquadCollaboration({ definition, manifests: [source, delivery] })).toBe(definition)
-    expect(Object.keys(source)).not.toContain("active_stage")
+    expect(source).toEqual(sourceBefore)
+    expect(delivery).toEqual(deliveryBefore)
   })
 
   test("accepts structurally valid Task collaboration without prescribing planning roles", () => {
@@ -259,14 +248,14 @@ describe("expert squad authoring SDK", () => {
   test("reports the exact execution-contract mapping required by the Integrity runtime", () => {
     const ambiguousIntegrity = manifest()
     ambiguousIntegrity.capability_projection.agents["example-builder"]!.base_role = "integrity"
-    expect(() => ExpertSquadManifestV1Schema.parse(ambiguousIntegrity)).toThrow(
+    expect(() => ExpertSquadManifestV2Schema.parse(ambiguousIntegrity)).toThrow(
       /integrity base_role requires the explicit platform_integrity_review execution contract/,
     )
 
     const misplacedContract = manifest()
     misplacedContract.capability_projection.agents["example-builder"]!.execution_contract =
       "platform_integrity_review"
-    expect(() => ExpertSquadManifestV1Schema.parse(misplacedContract)).toThrow(
+    expect(() => ExpertSquadManifestV2Schema.parse(misplacedContract)).toThrow(
       /platform_integrity_review execution contract requires integrity base_role/,
     )
   })
@@ -336,7 +325,7 @@ describe("expert squad authoring SDK", () => {
     try {
       validateExpertSquadPackageDefinition({
         manifest: {
-          schema_version: 2,
+          schema_version: 1,
           id: "Invalid ID",
           selector: null,
           capability_projection: null,

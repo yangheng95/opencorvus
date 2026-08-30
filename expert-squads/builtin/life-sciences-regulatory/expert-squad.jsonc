@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "life-sciences-regulatory",
   "name": "Life Sciences Regulatory Readiness",
   "label": "Life Sciences Regulatory Readiness",
   "description": "Product, evidence, pathway, market, quality, and risk inputs joined into a draft regulatory readiness register for qualified review.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.30.2",
   "product_pillars": [
     "work"
   ],
@@ -15,119 +15,67 @@
     "selection_guidance": "Select for medical-device or life-sciences product evidence, intended-use traceability, pathway questions, market requirements, quality documentation, risk files, or submission-readiness gaps without clinical, classification, conformity, filing, or approval authority.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 4 projections.",
+      "member_refs": [
+        "capability:skill:package:life-sciences-regulatory:life-sciences-regulatory%2Fshared%2Fmethod"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:capability_set:platform:tool-registry:scheduler-transport",
+        "capability:skill:package:life-sciences-regulatory:life-sciences-regulatory%2Fshared%2Fmethod",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "life-sciences-regulatory/shared/method"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "regulatory-product-evidence-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:life-sciences-regulatory:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:explore-base"
+        ],
         "label": "Product and Evidence Analyst",
         "description": "Maps intended use, product claims, evidence, versions, and unresolved clinical or technical gaps.",
         "base_role": "explore",
-        "prompt": "agents/regulatory-product-evidence-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "life-sciences-regulatory/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/regulatory-product-evidence-analyst/system.md"
       },
       "regulatory-pathway-market-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:life-sciences-regulatory:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Pathway and Market Analyst",
         "description": "Maps candidate jurisdictions, pathways, classifications, requirements, and authority questions.",
         "base_role": "delegated-worker",
-        "prompt": "agents/regulatory-pathway-market-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "life-sciences-regulatory/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/regulatory-pathway-market-analyst/system.md"
       },
       "regulatory-quality-risk-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:life-sciences-regulatory:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Quality and Risk Analyst",
         "description": "Maps quality-system, risk-file, traceability, post-market, and control evidence.",
         "base_role": "delegated-worker",
-        "prompt": "agents/regulatory-quality-risk-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "life-sciences-regulatory/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/regulatory-quality-risk-analyst/system.md"
       },
       "regulatory-readiness-owner": {
+        "capability_refs": [
+          "capability:capability_set:package:life-sciences-regulatory:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Regulatory Readiness Owner",
         "description": "Joins the branches into a draft readiness register with qualified decision gates.",
         "base_role": "delegated-worker",
-        "prompt": "agents/regulatory-readiness-owner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "life-sciences-regulatory/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/regulatory-readiness-owner/system.md"
       }
     },
     "virtual_workflows": {

@@ -40,26 +40,7 @@ function displayLabel(label: string, namespace: string): string {
 
 function declarationResources(projection: ExpertSquadRegistry.Projection) {
   return {
-    inherit_base_tools: projection.inherit_base_tools,
-    built_in_tool_ids: canonicalStringSet(projection.built_in_tool_ids, "catalog built_in_tool_ids"),
-    default_skill_refs: canonicalStringSet(projection.default_skill_refs, "catalog default_skill_refs"),
-    package_skill_refs: canonicalStringSet(projection.package_skill_refs, "catalog package_skill_refs"),
-    default_tool_refs: canonicalStringSet(projection.default_tool_refs, "catalog default_tool_refs"),
-    package_tool_refs: canonicalStringSet(projection.package_tool_refs, "catalog package_tool_refs"),
-    default_mcp_server_refs: canonicalStringSet(projection.default_mcp_server_refs, "catalog default_mcp_server_refs"),
-    package_mcp_server_refs: canonicalStringSet(projection.package_mcp_server_refs, "catalog package_mcp_server_refs"),
-    default_mcp_tool_refs: canonicalStringSet(projection.default_mcp_tool_refs, "catalog default_mcp_tool_refs"),
-    package_mcp_tool_refs: canonicalStringSet(projection.package_mcp_tool_refs, "catalog package_mcp_tool_refs"),
-    default_mcp_prompt_refs: canonicalStringSet(projection.default_mcp_prompt_refs, "catalog default_mcp_prompt_refs"),
-    package_mcp_prompt_refs: canonicalStringSet(projection.package_mcp_prompt_refs, "catalog package_mcp_prompt_refs"),
-    default_mcp_resource_refs: canonicalStringSet(
-      projection.default_mcp_resource_refs,
-      "catalog default_mcp_resource_refs",
-    ),
-    package_mcp_resource_refs: canonicalStringSet(
-      projection.package_mcp_resource_refs,
-      "catalog package_mcp_resource_refs",
-    ),
+    capability_refs: canonicalStringSet(projection.capability_refs, "catalog capability_refs"),
   }
 }
 
@@ -112,6 +93,17 @@ export function catalogProfileFromPackage(input: {
   builtIn: boolean
 }): ExpertSquadCatalogProfile {
   const capabilityProjection = declarationCapabilityProjection(input.pkg.manifest)
+  const capabilitySets = Object.fromEntries(
+    Object.entries(input.pkg.manifest.capability_sets)
+      .sort(([left], [right]) => compareCanonicalStrings(left, right))
+      .map(([setID, definition]) => [
+        setID,
+        {
+          description: definition.description,
+          member_refs: canonicalStringSet(definition.member_refs, `catalog capability_sets.${setID}.member_refs`),
+        },
+      ]),
+  )
   return {
     id: input.pkg.id,
     name: ExpertSquadRegistry.displayName(input.pkg.manifest),
@@ -122,6 +114,7 @@ export function catalogProfileFromPackage(input: {
     product_pillars: input.pkg.manifest.product_pillars,
     ...(input.pkg.manifest.system_role ? { system_role: input.pkg.manifest.system_role } : {}),
     ...(input.pkg.manifest.configuration ? { configuration: input.pkg.manifest.configuration } : {}),
+    capability_sets: capabilitySets,
     declaration_hash: canonicalProjectionHash(ProjectionHashDomain.catalogDeclaration, {
       namespace: input.pkg.namespace,
       expert_squad_id: input.pkg.id,
@@ -132,6 +125,7 @@ export function catalogProfileFromPackage(input: {
       label: input.pkg.manifest.label,
       description: input.pkg.manifest.description ?? null,
       configuration: input.pkg.manifest.configuration ?? null,
+      capability_sets: capabilitySets,
       capability_projection: capabilityProjection,
       readme_sha256: textSHA256(input.pkg.readmeContent ?? ""),
       selector: {

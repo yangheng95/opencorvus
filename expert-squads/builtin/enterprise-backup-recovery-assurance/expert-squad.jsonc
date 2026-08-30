@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "enterprise-backup-recovery-assurance",
   "name": "Enterprise Backup Recovery Assurance",
   "label": "Enterprise Backup Recovery Assurance",
   "description": "Workload scope, backup-copy, integrity and isolated-restore evidence joined for qualified recovery assurance.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.30.2",
   "product_pillars": [
     "code",
     "work"
@@ -16,141 +16,77 @@
     "selection_guidance": "Select for workload/recovery scope, copy/retention/immutability, catalog/hash integrity and isolated restore validation.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 5 projections.",
+      "member_refs": [
+        "capability:skill:package:enterprise-backup-recovery-assurance:enterprise-backup-recovery-assurance%2Fshared%2Fmethod"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:capability_set:platform:tool-registry:scheduler-transport",
+        "capability:skill:package:enterprise-backup-recovery-assurance:enterprise-backup-recovery-assurance%2Fshared%2Fmethod",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "enterprise-backup-recovery-assurance/shared/method"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "workload-recovery-scope-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:enterprise-backup-recovery-assurance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:explore-base"
+        ],
         "label": "Workload and Recovery Scope Analyst",
         "description": "Freezes workload, data, dependency and human-owned recovery-objective evidence.",
         "base_role": "explore",
-        "prompt": "agents/workload-recovery-scope-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "enterprise-backup-recovery-assurance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/workload-recovery-scope-analyst/system.md"
       },
       "backup-copy-retention-immutability-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:enterprise-backup-recovery-assurance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Backup Copy, Retention and Immutability Analyst",
         "description": "Reconciles backup jobs, copies, retention and supplied immutability evidence.",
         "base_role": "delegated-worker",
-        "prompt": "agents/backup-copy-retention-immutability-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "enterprise-backup-recovery-assurance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/backup-copy-retention-immutability-analyst/system.md"
       },
       "backup-catalog-hash-integrity-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:enterprise-backup-recovery-assurance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Backup Catalog and Hash Integrity Analyst",
         "description": "Tests supplied catalog, manifest, checksum and completeness evidence.",
         "base_role": "delegated-worker",
-        "prompt": "agents/backup-catalog-hash-integrity-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "enterprise-backup-recovery-assurance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/backup-catalog-hash-integrity-analyst/system.md"
       },
       "isolated-restore-recovery-validation-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:enterprise-backup-recovery-assurance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Isolated Restore and Recovery Validation Analyst",
         "description": "Reviews authorized isolated restore tests and recovery validation evidence.",
         "base_role": "delegated-worker",
-        "prompt": "agents/isolated-restore-recovery-validation-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "enterprise-backup-recovery-assurance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/isolated-restore-recovery-validation-analyst/system.md"
       },
       "enterprise-backup-recovery-assurance-owner": {
+        "capability_refs": [
+          "capability:capability_set:package:enterprise-backup-recovery-assurance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Enterprise Backup Recovery Assurance Owner",
         "description": "Joins scope, copy, integrity and isolated restore evidence without executing recovery.",
         "base_role": "delegated-worker",
-        "prompt": "agents/enterprise-backup-recovery-assurance-owner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "enterprise-backup-recovery-assurance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/enterprise-backup-recovery-assurance-owner/system.md"
       }
     },
     "virtual_workflows": {

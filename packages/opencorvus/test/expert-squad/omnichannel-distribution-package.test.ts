@@ -179,11 +179,11 @@ describe("Omnichannel Distribution Expert Squad package", () => {
   test("loads the complete package and parses every current Artifact value", async () => {
     const loaded = await ExpertSquadRegistry.loadSourcePackage(packageRoot)
     expect(loaded.manifest).toMatchObject({
-      schema_version: 1,
+      schema_version: 2,
       namespace: "builtin",
       id: "omnichannel-distribution",
       name: "Omnichannel Distribution",
-      version: "2026.08.13.1",
+      version: "2026.08.30.2",
       product_pillars: ["work"],
     })
     expect(Object.keys(loaded.manifest.capability_projection.agents)).toEqual(Object.keys(dependencies))
@@ -273,12 +273,12 @@ describe("Omnichannel Distribution Expert Squad package", () => {
           agent: "user",
           model: { providerID: "test", modelID: "test" },
         })
-        await Session.updateMessage({
+        const assistantMessage = await Session.updateMessage({
           id: "message-omnichannel-publisher",
           sessionID: session.id,
           role: "assistant",
           author: "channel-spec-researcher",
-          time: { created: started, completed: started + 1 },
+          time: { created: started },
           parentID: "message-omnichannel-user",
           modelID: "test",
           providerID: "test",
@@ -286,7 +286,21 @@ describe("Omnichannel Distribution Expert Squad package", () => {
           path: { cwd: project.path, root: project.path },
           cost: 0,
           tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
-          finish: "stop",
+        })
+        await Session.updatePart({
+          id: "step-omnichannel-publisher",
+          sessionID: session.id,
+          messageID: assistantMessage.id,
+          type: "step-start",
+        })
+        await Session.updatePart({
+          id: "part-omnichannel-publisher",
+          sessionID: session.id,
+          messageID: assistantMessage.id,
+          type: "tool",
+          callID: "call-omnichannel-publisher",
+          tool: publisherRef,
+          state: { status: "running", input: {}, time: { start: started + 1 } },
         })
         const scope: TaskToolExecutionScope = {
           kind: "task",

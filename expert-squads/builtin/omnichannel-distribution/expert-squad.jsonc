@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "omnichannel-distribution",
   "name": "Omnichannel Distribution",
   "label": "Omnichannel Distribution",
   "description": "Current channel research, rights-aware adaptation, measurement planning, readiness review, and canonical prepared-not-posted delivery bundles.",
-  "version": "2026.08.19.1",
+  "version": "2026.08.30.2",
   "product_pillars": [
     "work"
   ],
@@ -15,241 +15,112 @@
     "selection_guidance": "Select when an accepted campaign must become at least two channel-ready packages with specifications, rights, measurement, schedule, and review.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 8 projections.",
+      "member_refs": [
+        "capability:skill:package:omnichannel-distribution:omnichannel-distribution%2Fshared%2Facceptance",
+        "capability:skill:package:omnichannel-distribution:omnichannel-distribution%2Fshared%2Fmethod",
+        "capability:skill:package:omnichannel-distribution:omnichannel-distribution%2Fshared%2Fworkflow",
+        "capability:tool:package:omnichannel-distribution:omnichannel-distribution%2Fshared%2Fpublish-omnichannel-artifact"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:capability_set:platform:tool-registry:scheduler-transport",
+        "capability:skill:package:omnichannel-distribution:omnichannel-distribution%2Fshared%2Facceptance",
+        "capability:skill:package:omnichannel-distribution:omnichannel-distribution%2Fshared%2Fmethod",
+        "capability:skill:package:omnichannel-distribution:omnichannel-distribution%2Fshared%2Fworkflow",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "default_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": [],
-      "package_skill_refs": [
-        "omnichannel-distribution/shared/workflow",
-        "omnichannel-distribution/shared/method",
-        "omnichannel-distribution/shared/acceptance"
-      ],
-      "package_tool_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "distribution-brief-planner": {
+        "capability_refs": [
+          "capability:capability_set:package:omnichannel-distribution:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Distribution Brief Planner",
         "description": "Defines the accepted campaign source, targets, and constraints.",
         "base_role": "delegated-worker",
-        "prompt": "agents/distribution-brief-planner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "default_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-        "package_skill_refs": [
-          "omnichannel-distribution/shared/workflow",
-          "omnichannel-distribution/shared/method",
-          "omnichannel-distribution/shared/acceptance"
-        ],
-        "package_tool_refs": [
-          "omnichannel-distribution/shared/publish-omnichannel-artifact"
-        ]
+        "prompt": "agents/distribution-brief-planner/system.md"
       },
       "channel-spec-researcher": {
+        "capability_refs": [
+          "capability:capability_set:package:omnichannel-distribution:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:deep-research-base"
+        ],
         "label": "Channel Specification Researcher",
         "description": "Builds the dated first-party channel specification dossier.",
         "base_role": "deep-research",
-        "prompt": "agents/channel-spec-researcher/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "default_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-        "package_skill_refs": [
-          "omnichannel-distribution/shared/workflow",
-          "omnichannel-distribution/shared/method",
-          "omnichannel-distribution/shared/acceptance"
-        ],
-        "package_tool_refs": [
-          "omnichannel-distribution/shared/publish-omnichannel-artifact"
-        ]
+        "prompt": "agents/channel-spec-researcher/system.md"
       },
       "rights-compliance-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:omnichannel-distribution:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:deep-research-base"
+        ],
         "label": "Rights and Compliance Analyst",
         "description": "Classifies claim, disclosure, rights, and approval obligations.",
         "base_role": "deep-research",
-        "prompt": "agents/rights-compliance-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "default_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-        "package_skill_refs": [
-          "omnichannel-distribution/shared/workflow",
-          "omnichannel-distribution/shared/method",
-          "omnichannel-distribution/shared/acceptance"
-        ],
-        "package_tool_refs": [
-          "omnichannel-distribution/shared/publish-omnichannel-artifact"
-        ]
+        "prompt": "agents/rights-compliance-analyst/system.md"
       },
       "channel-adaptation-producer": {
+        "capability_refs": [
+          "capability:capability_set:package:omnichannel-distribution:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Channel Adaptation Producer",
         "description": "Produces complete channel-specific content packages.",
         "base_role": "delegated-worker",
-        "prompt": "agents/channel-adaptation-producer/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "default_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-        "package_skill_refs": [
-          "omnichannel-distribution/shared/workflow",
-          "omnichannel-distribution/shared/method",
-          "omnichannel-distribution/shared/acceptance"
-        ],
-        "package_tool_refs": [
-          "omnichannel-distribution/shared/publish-omnichannel-artifact"
-        ]
+        "prompt": "agents/channel-adaptation-producer/system.md"
       },
       "distribution-measurement-planner": {
+        "capability_refs": [
+          "capability:capability_set:package:omnichannel-distribution:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Distribution Measurement Planner",
         "description": "Defines channel measurement and attribution contracts.",
         "base_role": "delegated-worker",
-        "prompt": "agents/distribution-measurement-planner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "default_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-        "package_skill_refs": [
-          "omnichannel-distribution/shared/workflow",
-          "omnichannel-distribution/shared/method",
-          "omnichannel-distribution/shared/acceptance"
-        ],
-        "package_tool_refs": [
-          "omnichannel-distribution/shared/publish-omnichannel-artifact"
-        ]
+        "prompt": "agents/distribution-measurement-planner/system.md"
       },
       "distribution-plan-synthesizer": {
+        "capability_refs": [
+          "capability:capability_set:package:omnichannel-distribution:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Distribution Plan Synthesizer",
         "description": "Joins adaptation and measurement into one prepared distribution plan.",
         "base_role": "delegated-worker",
-        "prompt": "agents/distribution-plan-synthesizer/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "default_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-        "package_skill_refs": [
-          "omnichannel-distribution/shared/workflow",
-          "omnichannel-distribution/shared/method",
-          "omnichannel-distribution/shared/acceptance"
-        ],
-        "package_tool_refs": [
-          "omnichannel-distribution/shared/publish-omnichannel-artifact"
-        ]
+        "prompt": "agents/distribution-plan-synthesizer/system.md"
       },
       "distribution-readiness-reviewer": {
+        "capability_refs": [
+          "capability:capability_set:package:omnichannel-distribution:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:fact-check-base"
+        ],
         "label": "Distribution Readiness Reviewer",
         "description": "Independently reviews the single joined-plan predecessor.",
         "base_role": "fact-check",
-        "prompt": "agents/distribution-readiness-reviewer/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "default_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-        "package_skill_refs": [
-          "omnichannel-distribution/shared/workflow",
-          "omnichannel-distribution/shared/method",
-          "omnichannel-distribution/shared/acceptance"
-        ],
-        "package_tool_refs": [
-          "omnichannel-distribution/shared/publish-omnichannel-artifact"
-        ]
+        "prompt": "agents/distribution-readiness-reviewer/system.md"
       },
       "omnichannel-delivery-owner": {
+        "capability_refs": [
+          "capability:capability_set:package:omnichannel-distribution:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:build-base"
+        ],
         "label": "Omnichannel Delivery Owner",
         "description": "Publishes the canonical prepared-not-posted bundle.",
         "base_role": "build",
-        "prompt": "agents/omnichannel-delivery-owner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "default_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-        "package_skill_refs": [
-          "omnichannel-distribution/shared/workflow",
-          "omnichannel-distribution/shared/method",
-          "omnichannel-distribution/shared/acceptance"
-        ],
-        "package_tool_refs": [
-          "omnichannel-distribution/shared/publish-omnichannel-artifact"
-        ]
+        "prompt": "agents/omnichannel-delivery-owner/system.md"
       }
     },
     "virtual_workflows": {

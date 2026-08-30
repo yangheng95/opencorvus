@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "radiation-therapy-physics-quality-assurance",
   "name": "Radiation Therapy Physics Quality Assurance",
   "label": "Radiation Therapy Physics Quality Assurance",
   "description": "Source-bound radiotherapy equipment, dosimetry, treatment-planning-system, patient-specific quality, change, incident and independent-audit evidence without clinical or release authority.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.30.2",
   "product_pillars": [
     "work"
   ],
@@ -15,141 +15,77 @@
     "selection_guidance": "Select for equipment and software configuration, acceptance or commissioning evidence, reference dosimetry, periodic machine QA, TPS verification, patient-specific QA records, controlled changes, incident evidence or independent audit readiness. Do not select to prescribe, plan treatment, operate equipment, authorize beam-on or return a system to service.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 5 projections.",
+      "member_refs": [
+        "capability:skill:package:radiation-therapy-physics-quality-assurance:radiation-therapy-physics-quality-assurance%2Fshared%2Fmethod"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:capability_set:platform:tool-registry:scheduler-transport",
+        "capability:skill:package:radiation-therapy-physics-quality-assurance:radiation-therapy-physics-quality-assurance%2Fshared%2Fmethod",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "radiation-therapy-physics-quality-assurance/shared/method"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "radiotherapy-equipment-configuration-commissioning-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:radiation-therapy-physics-quality-assurance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:explore-base"
+        ],
         "label": "Equipment Configuration and Commissioning Analyst",
         "description": "Freezes treatment-unit, source, imaging, TPS, OIS and record-and-verify configurations and traces acceptance and commissioning evidence.",
         "base_role": "explore",
-        "prompt": "agents/radiotherapy-equipment-configuration-commissioning-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "radiation-therapy-physics-quality-assurance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/radiotherapy-equipment-configuration-commissioning-analyst/system.md"
       },
       "radiotherapy-reference-dosimetry-machine-qa-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:radiation-therapy-physics-quality-assurance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Reference Dosimetry and Machine Quality Analyst",
         "description": "Reconciles calibration traceability, beam or source identity, instrument conditions and periodic machine-quality evidence.",
         "base_role": "delegated-worker",
-        "prompt": "agents/radiotherapy-reference-dosimetry-machine-qa-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "radiation-therapy-physics-quality-assurance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/radiotherapy-reference-dosimetry-machine-qa-analyst/system.md"
       },
       "radiotherapy-treatment-planning-patient-specific-qa-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:radiation-therapy-physics-quality-assurance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Treatment Planning and Patient-Specific Quality Analyst",
         "description": "Traces TPS model and calculation evidence, transfer checks and de-identified patient-specific QA without approving a plan.",
         "base_role": "delegated-worker",
-        "prompt": "agents/radiotherapy-treatment-planning-patient-specific-qa-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "radiation-therapy-physics-quality-assurance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/radiotherapy-treatment-planning-patient-specific-qa-analyst/system.md"
       },
       "radiotherapy-incident-change-independent-audit-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:radiation-therapy-physics-quality-assurance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Incident Change and Independent Audit Analyst",
         "description": "Builds event chronology, configuration-change trace and independent-audit evidence without classifying an event or releasing equipment.",
         "base_role": "delegated-worker",
-        "prompt": "agents/radiotherapy-incident-change-independent-audit-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "radiation-therapy-physics-quality-assurance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/radiotherapy-incident-change-independent-audit-analyst/system.md"
       },
       "radiation-therapy-physics-quality-review-owner": {
+        "capability_refs": [
+          "capability:capability_set:package:radiation-therapy-physics-quality-assurance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Radiation Therapy Physics Quality Review Owner",
         "description": "Joins configuration, dosimetry, planning-system and incident/audit evidence into a controlled qualified-review pack.",
         "base_role": "delegated-worker",
-        "prompt": "agents/radiation-therapy-physics-quality-review-owner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "radiation-therapy-physics-quality-assurance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/radiation-therapy-physics-quality-review-owner/system.md"
       }
     },
     "virtual_workflows": {

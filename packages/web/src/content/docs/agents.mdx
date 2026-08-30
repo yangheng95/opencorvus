@@ -29,16 +29,20 @@ The manifest's `capability_projection.agents.<agent-id>` key is a package worker
 
 Each projected worker declares a required `base_role`. The base role selects a core-owned Application Binary Interface (ABI) template seed for prompt, model, tools, permissions, session, and adapter behavior. It is not the running identity or an alias and cannot be used as a dispatch target unless the package explicitly declares the same string as an agent ID.
 
-All 13 resource arrays on the scheduler and every worker are required; use explicit empty arrays when the package grants no resource of that kind.
+Manifest v2 gives every scheduler and worker one canonically sorted `capability_refs` array. Each entry is a typed `capability:<kind>:<source>:<owner>:<local-ref>` identity or a one-level CapabilitySet reference; package-owned sets are declared once under top-level `capability_sets`.
 
-The same manifest v1 declares an explicit `virtual_workflows` record. Use `{}` for direct dispatch without a binding graph. Every declared node executes once per Task:
+The same manifest declares an explicit `virtual_workflows` record. Use `{}` for direct dispatch without a binding graph. Every declared node executes once per Task:
 
 ```jsonc
 "capability_projection": {
   "agents": {
     "security-reviewer": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:integrity-base"
+      ],
       "label": "Security reviewer",
-      "base_role": "integrity"
+      "base_role": "integrity",
+      "execution_contract": "platform_integrity_review"
     }
   },
   "virtual_workflows": {
@@ -63,7 +67,7 @@ This excerpt shows identity and planning fields; start from the generated portab
 
 Use direct projected-Agent dispatch with `virtual_workflows: {}` when no binding graph is needed. Requirements, Architect, Integrity, review, and Delivery Slice inputs are package-owned design choices justified by the domain responsibility graph. Registry and Software Development Kit (SDK) validate manifest shape, exact projected-agent/dependency references, canonical dependency order, and acyclicity; they do not impose one universal role topology.
 
-Use the Node-only authoring surface from the existing SDK to materialize a new source directory. The SDK's runtime manifest v1 schema is the portable source consumed by both authoring and Registry. The writer validates completely, writes a same-parent staging directory, atomically renames it into place, and refuses an existing destination.
+Use the Node-only authoring surface from the existing SDK to materialize a new source directory. The SDK's runtime manifest v2 schema is the portable source consumed by both authoring and Registry. The writer validates completely, writes a same-parent staging directory, atomically renames it into place, and refuses an existing destination.
 
 ```ts
 import { createOpenCorvusClient } from "@opencorvus-ai/sdk"
@@ -87,7 +91,7 @@ await client.expertSquad.importFolder(
 
 Start from `templates/portable-expert-squad-template` in the repository for a complete concrete definition. Validation is read-only and uses the real Registry; import is a separate explicit Manager operation and does not activate the package. Folder and ZIP imports require `installationScope: "project" | "global"`; both scopes use the same Registry and manifest identity rules. Select the installed manifest ID through `prompt_profile.active` only when the project should use it.
 
-Package resource refs follow one grammar. Shared Skills, tools, and Model Context Protocol (MCP) servers use `<squad-id>/shared/<name>`; agent-local resources use `<squad-id>/<agent-id>/<name>` and can be projected only by that agent. A Skill is a directory containing `SKILL.md`; a tool is `tools/<name>.ts` or the matching agent-local path; an MCP server is `mcp/<name>.jsonc` or the matching agent-local path. Select one MCP capability with `<server-ref>/tool/<name>`, `<server-ref>/prompt/<name>`, or `<server-ref>/resource/<name>`. `package_mcp_server_refs` mounts all capabilities declared by that server, so do not repeat those capabilities in typed MCP ref arrays. Default host resources use the separate `default/...` namespace.
+Package-local resource names follow one grammar. Shared Skills, tools, and Model Context Protocol (MCP) servers use `<squad-id>/shared/<name>`; agent-local resources use `<squad-id>/<agent-id>/<name>` and can be projected only by that agent. A Skill is a directory containing `SKILL.md`; a tool is `tools/<name>.ts` or the matching agent-local path; an MCP server is `mcp/<name>.jsonc` or the matching agent-local path. Encode those names in typed `capability_refs` with the package manifest ID as owner. An MCP server ref mounts every capability declared by that server; alternatively grant exact `mcp_tool`, `mcp_prompt`, or `mcp_resource` leaves, never both for the same capability. Default MCP leaves use source `project` and owner `default-mcp-registry`.
 
 Virtual workflows declare exact executable collaboration variants. A graph does not have to include every projected agent, but every node it does declare is mandatory after that workflow is selected. Before dispatch, the scheduler visibly identifies the exact workflow matching the request and evidence. It must obtain terminal-success evidence for every node, respect every `depends_on` edge, and refuse continuation rather than omit, skip, substitute, or reorder a node.
 

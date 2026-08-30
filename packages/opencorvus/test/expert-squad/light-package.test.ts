@@ -39,6 +39,7 @@ import { Message } from "../../src/session/message"
 import { SessionProcessor } from "../../src/session/processor"
 import { SkillMount } from "../../src/skill/mounts"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
+import { allCapabilityGrants } from "./capability-grant-fixture"
 
 const packageRoot = path.resolve(import.meta.dir, "../../../../expert-squads/builtin/light")
 const skillRef = "light/shared/method"
@@ -50,26 +51,26 @@ const schedulerTools = [
   "scheduler_message",
   "read_task_message",
   "read_agent_message",
-]
+].sort()
 const agentRoles = {
   "light-investigator": "delegated-worker",
   "light-planner": "delegated-worker",
 } as const
 const projectedReadOnlyTools = [
-  "artifact_search",
+  "artifact_publish",
   "artifact_read",
+  "artifact_search",
   "artifact_select",
   "artifact_snapshot",
-  "artifact_publish",
   "publish_interactive_artifact",
   "capability_search",
-  "read",
+  "external_code_search",
   "glob",
+  "read",
   "search_code",
+  "skill",
   "webfetch",
   "websearch",
-  "external_code_search",
-  "skill",
 ]
 const model = { providerID: "test", modelID: "light-parallel-dispatch" }
 
@@ -114,11 +115,6 @@ afterEach(async () => {
 describe("Light Expert Squad package", () => {
   test("loads exactly the Planner and Investigator advisory roles with one shared package Skill", async () => {
     const source = await ExpertSquadRegistry.loadSourcePackage(packageRoot)
-    const projections = [
-      source.manifest.capability_projection.scheduler,
-      ...Object.values(source.manifest.capability_projection.agents),
-    ]
-
     expect(source.manifest).toMatchObject({
       namespace: "builtin",
       id: "light",
@@ -128,7 +124,11 @@ describe("Light Expert Squad package", () => {
     expect(Object.keys(source.manifest.capability_projection.agents).sort()).toEqual(Object.keys(agentRoles).sort())
     expect(source.manifest.capability_projection.virtual_workflows).toEqual({})
     expect([...source.packageSkills.keys()]).toEqual([skillRef])
-    expect(projections.map((projection) => projection.package_skill_refs)).toEqual([[], [skillRef], [skillRef]])
+    expect(allCapabilityGrants(source.manifest).map((grant) => grant.packageSkillRefs)).toEqual([
+      [],
+      [skillRef],
+      [skillRef],
+    ])
   })
 
   test("installs the released payload and projects the exact read-only advisory and Skill surfaces", async () => {

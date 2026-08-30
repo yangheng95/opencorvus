@@ -4,6 +4,8 @@ import { Hono } from "hono"
 import { ExpertSquadRegistry } from "../../src/expert-squad/registry"
 import { Instance } from "../../src/project/instance"
 import { ExpertSquadRoutes } from "../../src/server/routes/expert-squad"
+import { allCapabilityGrants } from "./capability-grant-fixture"
+import { catalogPackageSkillRefs } from "./catalog-capability-fixture"
 
 const EXPERT_SQUAD_IDS = [
   "browser-research-acceptance",
@@ -44,11 +46,8 @@ const sourceRoot = (id: string) => path.resolve(import.meta.dir, "../../../..", 
 
 function projectedSkillCount(manifest: ExpertSquadRegistry.Manifest) {
   const refs = new Set<string>()
-  for (const projection of [
-    manifest.capability_projection.scheduler,
-    ...Object.values(manifest.capability_projection.agents),
-  ]) {
-    for (const ref of [...projection.default_skill_refs, ...projection.package_skill_refs]) refs.add(ref)
+  for (const capabilities of allCapabilityGrants(manifest)) {
+    for (const ref of [...capabilities.defaultSkillRefs, ...capabilities.packageSkillRefs]) refs.add(ref)
   }
   return refs.size
 }
@@ -87,7 +86,7 @@ const result = await Instance.provide({
         const selected = settings.selected as Record<string, unknown>
         const capability = selected.capability_projection as Record<string, unknown>
         const scheduler = capability.scheduler as Record<string, unknown>
-        const schedulerSkillRefs = scheduler.package_skill_refs as string[]
+        const schedulerSkillRefs = catalogPackageSkillRefs(selected, scheduler)
         const agents = capability.agents as Record<string, Record<string, unknown>>
 
         if (
@@ -98,7 +97,7 @@ const result = await Instance.provide({
         }
         if (
           !Object.values(agents).every(
-            (agent) => JSON.stringify(agent.package_skill_refs) === JSON.stringify(schedulerSkillRefs),
+            (agent) => JSON.stringify(catalogPackageSkillRefs(selected, agent)) === JSON.stringify(schedulerSkillRefs),
           )
         ) {
           throw new Error(`Worker Skill projection drifted from the scheduler for ${input.id}`)

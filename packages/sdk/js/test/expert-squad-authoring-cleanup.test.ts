@@ -3,12 +3,11 @@ import * as filesystemModule from "node:fs/promises"
 import os from "node:os"
 import path from "node:path"
 import type { ExpertSquadPackageDefinition } from "../src/expert-squad-authoring"
-import { runIsolatedBunTest } from "../../../opencorvus/test/harness/isolated-bun-runner"
 
 const runCleanupFailureCase = process.env.OPENCORVUS_SDK_AUTHORING_CLEANUP_FAILURE === "1"
 const originalWriteFile = filesystemModule.writeFile.bind(filesystemModule)
 const originalRm = filesystemModule.rm.bind(filesystemModule)
-let cleanupFailureRoot: string | undefined
+let cleanupFailureParent: string | undefined
 
 if (runCleanupFailureCase) {
   mock.module("node:fs/promises", () => ({
@@ -26,7 +25,12 @@ if (runCleanupFailureCase) {
       target: Parameters<typeof filesystemModule.rm>[0],
       options?: Parameters<typeof filesystemModule.rm>[1],
     ) => {
-      if (cleanupFailureRoot && path.resolve(String(target)) === cleanupFailureRoot) {
+      const resolved = path.resolve(String(target))
+      if (
+        cleanupFailureParent &&
+        path.dirname(resolved) === cleanupFailureParent &&
+        path.basename(resolved).startsWith(".source.staging-")
+      ) {
         throw new Error("forced expert squad package cleanup failure")
       }
       return originalRm(target, options)
@@ -40,17 +44,22 @@ afterAll(() => {
 
 if (!runCleanupFailureCase) {
   test("runs SDK package write cleanup-evidence coverage in an isolated Bun process", { timeout: 0 }, async () => {
-    await runIsolatedBunTest({
-      suiteName: "Expert Squad SDK package write cleanup evidence",
-      isolatedFile: path.join(import.meta.dir, "expert-squad-authoring-cleanup.test.ts"),
-      temporaryPrefix: "opencorvus-sdk-authoring-cleanup-",
-      expectedPassCount: 1,
-      inactivityTimeoutMilliseconds: 30_000,
+    const child = Bun.spawn([process.execPath, "test", "--timeout=0", path.join(import.meta.dir, "expert-squad-authoring-cleanup.test.ts")], {
+      cwd: import.meta.dir,
       env: {
+        ...process.env,
         OPENCORVUS_SDK_AUTHORING_CLEANUP_FAILURE: "1",
       },
-      forbiddenOutput: ["killed "],
+      stdout: "pipe",
+      stderr: "pipe",
     })
+    const [exitCode, stdout, stderr] = await Promise.all([
+      child.exited,
+      new Response(child.stdout).text(),
+      new Response(child.stderr).text(),
+    ])
+    expect(exitCode, `${stdout}\n${stderr}`).toBe(0)
+    expect(`${stdout}\n${stderr}`).toContain("1 pass")
   })
 } else {
   const { writeExpertSquadPackage } = await import("../src/expert-squad-authoring")
@@ -58,11 +67,11 @@ if (!runCleanupFailureCase) {
   test("preserves both package write and destination cleanup failures", async () => {
     const parent = await filesystemModule.mkdtemp(path.join(os.tmpdir(), "opencorvus-sdk-cleanup-failure-"))
     const directory = path.join(parent, "source")
-    cleanupFailureRoot = path.resolve(directory)
+    cleanupFailureParent = path.resolve(parent)
     const definition = {
       manifest: {
         product_pillars: ["code", "work"],
-        schema_version: 1,
+        schema_version: 2,
         namespace: "example",
         id: "cleanup-evidence",
         name: "Cleanup evidence",
@@ -74,22 +83,10 @@ if (!runCleanupFailureCase) {
           selection_guidance: "Select only for the cleanup evidence test.",
           instructions: "selector.md",
         },
+        capability_sets: {},
         capability_projection: {
           scheduler: {
-            inherit_base_tools: false,
-            built_in_tool_ids: [],
-            default_skill_refs: [],
-            package_skill_refs: [],
-            default_tool_refs: [],
-            package_tool_refs: [],
-            default_mcp_server_refs: [],
-            package_mcp_server_refs: [],
-            default_mcp_tool_refs: [],
-            package_mcp_tool_refs: [],
-            default_mcp_prompt_refs: [],
-            package_mcp_prompt_refs: [],
-            default_mcp_resource_refs: [],
-            package_mcp_resource_refs: [],
+            capability_refs: [],
             base_role: "orchestrator",
           },
           agents: {},
@@ -108,15 +105,16 @@ if (!runCleanupFailureCase) {
       const error = await writeExpertSquadPackage({ directory, definition }).catch((cause) => cause)
       expect(error).toBeInstanceOf(AggregateError)
       expect(error).toMatchObject({
-        message: "Expert squad package writing failed and destination cleanup also failed",
+        message: "Expert squad package publication failed and staging cleanup also failed",
         cause: expect.objectContaining({ message: "forced expert squad package write failure" }),
       })
       expect(
         (error as AggregateError).errors.map((entry) => (entry instanceof Error ? entry.message : String(entry))),
       ).toEqual(["forced expert squad package write failure", "forced expert squad package cleanup failure"])
-      expect(await filesystemModule.stat(directory)).toBeDefined()
+      const stagingEntries = await filesystemModule.readdir(parent)
+      expect(stagingEntries.filter((entry) => entry.startsWith(".source.staging-"))).toHaveLength(1)
     } finally {
-      cleanupFailureRoot = undefined
+      cleanupFailureParent = undefined
       await originalRm(parent, { recursive: true, force: true })
     }
   })

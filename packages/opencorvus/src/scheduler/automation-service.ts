@@ -60,7 +60,7 @@ import {
   MissionExecutionWakeNotOpenedError,
   type MissionExecutionWakeAdmission,
 } from "@/mission/execution-closure"
-import type { ProductPillar } from "@opencorvus-ai/sdk/expert-squad-manifest-v1"
+import type { ProductPillar } from "@opencorvus-ai/sdk/expert-squad-manifest-v2"
 import { createHash } from "node:crypto"
 import { RuntimeExecutionSettlement } from "@/runtime/execution-settlement"
 import { Config } from "@/config/config"

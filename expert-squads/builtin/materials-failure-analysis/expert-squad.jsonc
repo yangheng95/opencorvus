@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "materials-failure-analysis",
   "name": "Materials Failure Analysis",
   "label": "Materials Failure Analysis",
   "description": "Physical-component custody, service history, fracture-surface, material-characterization, load, environment, mechanics and competing-hypothesis evidence joined for qualified review.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.30.2",
   "product_pillars": [
     "work"
   ],
@@ -15,119 +15,67 @@
     "selection_guidance": "Select for failed physical-component identity and custody, as-received condition, service/design/manufacturing history, fracture origin/morphology, metallography/composition/hardness/mechanical-test evidence, loads, environment, fracture-mechanics applicability, and competing failure hypotheses. Do not select for generic manufacturing disposition, laboratory accreditation, vehicle functional-safety HARA, aircraft maintenance release, well-integrity declaration, semiconductor-device failure analysis, evidence handling/cleaning/cutting/etching/testing, root-cause/liability conclusions, fitness-for-service, rework/recall/scrap, or return to service.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 4 projections.",
+      "member_refs": [
+        "capability:skill:package:materials-failure-analysis:materials-failure-analysis%2Fshared%2Fmethod"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:capability_set:platform:tool-registry:scheduler-transport",
+        "capability:skill:package:materials-failure-analysis:materials-failure-analysis%2Fshared%2Fmethod",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "materials-failure-analysis/shared/method"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "materials-failure-evidence-custody-history-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:materials-failure-analysis:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:explore-base"
+        ],
         "label": "Materials Failure Evidence, Custody and History Analyst",
         "description": "Freezes failed-component identity, as-received condition, evidence custody, design/manufacturing and service chronology.",
         "base_role": "explore",
-        "prompt": "agents/materials-failure-evidence-custody-history-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "materials-failure-analysis/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/materials-failure-evidence-custody-history-analyst/system.md"
       },
       "materials-fractography-characterization-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:materials-failure-analysis:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Materials Fractography and Characterization Analyst",
         "description": "Maps supplied fracture-origin/morphology, metallography, composition, hardness and mechanical-test evidence with uncertainty.",
         "base_role": "delegated-worker",
-        "prompt": "agents/materials-fractography-characterization-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "materials-failure-analysis/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/materials-fractography-characterization-analyst/system.md"
       },
       "materials-load-environment-mechanics-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:materials-failure-analysis:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Materials Load, Environment and Mechanics Analyst",
         "description": "Reconciles service loads, geometry, environment and bounded mechanics calculations into competing failure hypotheses.",
         "base_role": "delegated-worker",
-        "prompt": "agents/materials-load-environment-mechanics-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "materials-failure-analysis/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/materials-load-environment-mechanics-analyst/system.md"
       },
       "materials-failure-analysis-review-owner": {
+        "capability_refs": [
+          "capability:capability_set:package:materials-failure-analysis:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Materials Failure Analysis Review Owner",
         "description": "Joins custody/history, characterization and mechanics evidence while preserving competing hypotheses and professional authority.",
         "base_role": "delegated-worker",
-        "prompt": "agents/materials-failure-analysis-review-owner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "materials-failure-analysis/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/materials-failure-analysis-review-owner/system.md"
       }
     },
     "virtual_workflows": {

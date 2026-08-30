@@ -6375,51 +6375,8 @@
                       "minLength": 1,
                       "type": "string"
                     },
-                    "built_in_tool_ids": {
+                    "capability_refs": {
                       "items": {
-                        "minLength": 1,
-                        "type": "string"
-                      },
-                      "type": "array"
-                    },
-                    "default_mcp_prompt_refs": {
-                      "items": {
-                        "minLength": 1,
-                        "type": "string"
-                      },
-                      "type": "array"
-                    },
-                    "default_mcp_resource_refs": {
-                      "items": {
-                        "minLength": 1,
-                        "type": "string"
-                      },
-                      "type": "array"
-                    },
-                    "default_mcp_server_refs": {
-                      "items": {
-                        "minLength": 1,
-                        "type": "string"
-                      },
-                      "type": "array"
-                    },
-                    "default_mcp_tool_refs": {
-                      "items": {
-                        "minLength": 1,
-                        "type": "string"
-                      },
-                      "type": "array"
-                    },
-                    "default_skill_refs": {
-                      "items": {
-                        "minLength": 1,
-                        "type": "string"
-                      },
-                      "type": "array"
-                    },
-                    "default_tool_refs": {
-                      "items": {
-                        "minLength": 1,
                         "type": "string"
                       },
                       "type": "array"
@@ -6432,54 +6389,9 @@
                       "const": "platform_integrity_review",
                       "type": "string"
                     },
-                    "inherit_base_tools": {
-                      "type": "boolean"
-                    },
                     "label": {
                       "minLength": 1,
                       "type": "string"
-                    },
-                    "package_mcp_prompt_refs": {
-                      "items": {
-                        "minLength": 1,
-                        "type": "string"
-                      },
-                      "type": "array"
-                    },
-                    "package_mcp_resource_refs": {
-                      "items": {
-                        "minLength": 1,
-                        "type": "string"
-                      },
-                      "type": "array"
-                    },
-                    "package_mcp_server_refs": {
-                      "items": {
-                        "minLength": 1,
-                        "type": "string"
-                      },
-                      "type": "array"
-                    },
-                    "package_mcp_tool_refs": {
-                      "items": {
-                        "minLength": 1,
-                        "type": "string"
-                      },
-                      "type": "array"
-                    },
-                    "package_skill_refs": {
-                      "items": {
-                        "minLength": 1,
-                        "type": "string"
-                      },
-                      "type": "array"
-                    },
-                    "package_tool_refs": {
-                      "items": {
-                        "minLength": 1,
-                        "type": "string"
-                      },
-                      "type": "array"
                     },
                     "prompt": {
                       "minLength": 1,
@@ -6487,20 +6399,7 @@
                     }
                   },
                   "required": [
-                    "inherit_base_tools",
-                    "built_in_tool_ids",
-                    "default_skill_refs",
-                    "package_skill_refs",
-                    "default_tool_refs",
-                    "package_tool_refs",
-                    "default_mcp_server_refs",
-                    "package_mcp_server_refs",
-                    "default_mcp_tool_refs",
-                    "package_mcp_tool_refs",
-                    "default_mcp_prompt_refs",
-                    "package_mcp_prompt_refs",
-                    "default_mcp_resource_refs",
-                    "package_mcp_resource_refs",
+                    "capability_refs",
                     "label",
                     "base_role"
                   ],
@@ -6521,96 +6420,8 @@
                     "const": "orchestrator",
                     "type": "string"
                   },
-                  "built_in_tool_ids": {
+                  "capability_refs": {
                     "items": {
-                      "minLength": 1,
-                      "type": "string"
-                    },
-                    "type": "array"
-                  },
-                  "default_mcp_prompt_refs": {
-                    "items": {
-                      "minLength": 1,
-                      "type": "string"
-                    },
-                    "type": "array"
-                  },
-                  "default_mcp_resource_refs": {
-                    "items": {
-                      "minLength": 1,
-                      "type": "string"
-                    },
-                    "type": "array"
-                  },
-                  "default_mcp_server_refs": {
-                    "items": {
-                      "minLength": 1,
-                      "type": "string"
-                    },
-                    "type": "array"
-                  },
-                  "default_mcp_tool_refs": {
-                    "items": {
-                      "minLength": 1,
-                      "type": "string"
-                    },
-                    "type": "array"
-                  },
-                  "default_skill_refs": {
-                    "items": {
-                      "minLength": 1,
-                      "type": "string"
-                    },
-                    "type": "array"
-                  },
-                  "default_tool_refs": {
-                    "items": {
-                      "minLength": 1,
-                      "type": "string"
-                    },
-                    "type": "array"
-                  },
-                  "inherit_base_tools": {
-                    "type": "boolean"
-                  },
-                  "package_mcp_prompt_refs": {
-                    "items": {
-                      "minLength": 1,
-                      "type": "string"
-                    },
-                    "type": "array"
-                  },
-                  "package_mcp_resource_refs": {
-                    "items": {
-                      "minLength": 1,
-                      "type": "string"
-                    },
-                    "type": "array"
-                  },
-                  "package_mcp_server_refs": {
-                    "items": {
-                      "minLength": 1,
-                      "type": "string"
-                    },
-                    "type": "array"
-                  },
-                  "package_mcp_tool_refs": {
-                    "items": {
-                      "minLength": 1,
-                      "type": "string"
-                    },
-                    "type": "array"
-                  },
-                  "package_skill_refs": {
-                    "items": {
-                      "minLength": 1,
-                      "type": "string"
-                    },
-                    "type": "array"
-                  },
-                  "package_tool_refs": {
-                    "items": {
-                      "minLength": 1,
                       "type": "string"
                     },
                     "type": "array"
@@ -6621,20 +6432,7 @@
                   }
                 },
                 "required": [
-                  "inherit_base_tools",
-                  "built_in_tool_ids",
-                  "default_skill_refs",
-                  "package_skill_refs",
-                  "default_tool_refs",
-                  "package_tool_refs",
-                  "default_mcp_server_refs",
-                  "package_mcp_server_refs",
-                  "default_mcp_tool_refs",
-                  "package_mcp_tool_refs",
-                  "default_mcp_prompt_refs",
-                  "package_mcp_prompt_refs",
-                  "default_mcp_resource_refs",
-                  "package_mcp_resource_refs",
+                  "capability_refs",
                   "base_role"
                 ],
                 "type": "object"
@@ -6712,6 +6510,36 @@
               "agents",
               "virtual_workflows"
             ],
+            "type": "object"
+          },
+          "capability_sets": {
+            "additionalProperties": {
+              "additionalProperties": false,
+              "properties": {
+                "description": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "member_refs": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "minItems": 1,
+                  "type": "array"
+                }
+              },
+              "required": [
+                "description",
+                "member_refs"
+              ],
+              "type": "object"
+            },
+            "propertyNames": {
+              "maxLength": 64,
+              "minLength": 1,
+              "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+              "type": "string"
+            },
             "type": "object"
           },
           "configuration": {
@@ -7022,6 +6850,7 @@
           "editable",
           "declaration_hash",
           "product_pillars",
+          "capability_sets",
           "capability_projection",
           "version",
           "package_digest",
@@ -26229,43 +26058,7 @@
                               "base_role": {
                                 "type": "string"
                               },
-                              "built_in_tool_ids": {
-                                "items": {
-                                  "type": "string"
-                                },
-                                "type": "array"
-                              },
-                              "default_mcp_prompt_refs": {
-                                "items": {
-                                  "type": "string"
-                                },
-                                "type": "array"
-                              },
-                              "default_mcp_resource_refs": {
-                                "items": {
-                                  "type": "string"
-                                },
-                                "type": "array"
-                              },
-                              "default_mcp_server_refs": {
-                                "items": {
-                                  "type": "string"
-                                },
-                                "type": "array"
-                              },
-                              "default_mcp_tool_refs": {
-                                "items": {
-                                  "type": "string"
-                                },
-                                "type": "array"
-                              },
-                              "default_skill_refs": {
-                                "items": {
-                                  "type": "string"
-                                },
-                                "type": "array"
-                              },
-                              "default_tool_refs": {
+                              "capability_refs": {
                                 "items": {
                                   "type": "string"
                                 },
@@ -26279,42 +26072,6 @@
                               },
                               "label": {
                                 "type": "string"
-                              },
-                              "package_mcp_prompt_refs": {
-                                "items": {
-                                  "type": "string"
-                                },
-                                "type": "array"
-                              },
-                              "package_mcp_resource_refs": {
-                                "items": {
-                                  "type": "string"
-                                },
-                                "type": "array"
-                              },
-                              "package_mcp_server_refs": {
-                                "items": {
-                                  "type": "string"
-                                },
-                                "type": "array"
-                              },
-                              "package_mcp_tool_refs": {
-                                "items": {
-                                  "type": "string"
-                                },
-                                "type": "array"
-                              },
-                              "package_skill_refs": {
-                                "items": {
-                                  "type": "string"
-                                },
-                                "type": "array"
-                              },
-                              "package_tool_refs": {
-                                "items": {
-                                  "type": "string"
-                                },
-                                "type": "array"
                               },
                               "projection_hash": {
                                 "type": "string"
@@ -26330,19 +26087,7 @@
                               "dispatch_adapter_id",
                               "label",
                               "projection_hash",
-                              "built_in_tool_ids",
-                              "default_skill_refs",
-                              "package_skill_refs",
-                              "default_tool_refs",
-                              "package_tool_refs",
-                              "default_mcp_server_refs",
-                              "package_mcp_server_refs",
-                              "default_mcp_tool_refs",
-                              "package_mcp_tool_refs",
-                              "default_mcp_prompt_refs",
-                              "package_mcp_prompt_refs",
-                              "default_mcp_resource_refs",
-                              "package_mcp_resource_refs"
+                              "capability_refs"
                             ],
                             "type": "object"
                           },
@@ -55264,51 +55009,8 @@
                                 "minLength": 1,
                                 "type": "string"
                               },
-                              "built_in_tool_ids": {
+                              "capability_refs": {
                                 "items": {
-                                  "minLength": 1,
-                                  "type": "string"
-                                },
-                                "type": "array"
-                              },
-                              "default_mcp_prompt_refs": {
-                                "items": {
-                                  "minLength": 1,
-                                  "type": "string"
-                                },
-                                "type": "array"
-                              },
-                              "default_mcp_resource_refs": {
-                                "items": {
-                                  "minLength": 1,
-                                  "type": "string"
-                                },
-                                "type": "array"
-                              },
-                              "default_mcp_server_refs": {
-                                "items": {
-                                  "minLength": 1,
-                                  "type": "string"
-                                },
-                                "type": "array"
-                              },
-                              "default_mcp_tool_refs": {
-                                "items": {
-                                  "minLength": 1,
-                                  "type": "string"
-                                },
-                                "type": "array"
-                              },
-                              "default_skill_refs": {
-                                "items": {
-                                  "minLength": 1,
-                                  "type": "string"
-                                },
-                                "type": "array"
-                              },
-                              "default_tool_refs": {
-                                "items": {
-                                  "minLength": 1,
                                   "type": "string"
                                 },
                                 "type": "array"
@@ -55321,54 +55023,9 @@
                                 "const": "platform_integrity_review",
                                 "type": "string"
                               },
-                              "inherit_base_tools": {
-                                "type": "boolean"
-                              },
                               "label": {
                                 "minLength": 1,
                                 "type": "string"
-                              },
-                              "package_mcp_prompt_refs": {
-                                "items": {
-                                  "minLength": 1,
-                                  "type": "string"
-                                },
-                                "type": "array"
-                              },
-                              "package_mcp_resource_refs": {
-                                "items": {
-                                  "minLength": 1,
-                                  "type": "string"
-                                },
-                                "type": "array"
-                              },
-                              "package_mcp_server_refs": {
-                                "items": {
-                                  "minLength": 1,
-                                  "type": "string"
-                                },
-                                "type": "array"
-                              },
-                              "package_mcp_tool_refs": {
-                                "items": {
-                                  "minLength": 1,
-                                  "type": "string"
-                                },
-                                "type": "array"
-                              },
-                              "package_skill_refs": {
-                                "items": {
-                                  "minLength": 1,
-                                  "type": "string"
-                                },
-                                "type": "array"
-                              },
-                              "package_tool_refs": {
-                                "items": {
-                                  "minLength": 1,
-                                  "type": "string"
-                                },
-                                "type": "array"
                               },
                               "prompt": {
                                 "minLength": 1,
@@ -55376,20 +55033,7 @@
                               }
                             },
                             "required": [
-                              "inherit_base_tools",
-                              "built_in_tool_ids",
-                              "default_skill_refs",
-                              "package_skill_refs",
-                              "default_tool_refs",
-                              "package_tool_refs",
-                              "default_mcp_server_refs",
-                              "package_mcp_server_refs",
-                              "default_mcp_tool_refs",
-                              "package_mcp_tool_refs",
-                              "default_mcp_prompt_refs",
-                              "package_mcp_prompt_refs",
-                              "default_mcp_resource_refs",
-                              "package_mcp_resource_refs",
+                              "capability_refs",
                               "label",
                               "base_role"
                             ],
@@ -55410,96 +55054,8 @@
                               "const": "orchestrator",
                               "type": "string"
                             },
-                            "built_in_tool_ids": {
+                            "capability_refs": {
                               "items": {
-                                "minLength": 1,
-                                "type": "string"
-                              },
-                              "type": "array"
-                            },
-                            "default_mcp_prompt_refs": {
-                              "items": {
-                                "minLength": 1,
-                                "type": "string"
-                              },
-                              "type": "array"
-                            },
-                            "default_mcp_resource_refs": {
-                              "items": {
-                                "minLength": 1,
-                                "type": "string"
-                              },
-                              "type": "array"
-                            },
-                            "default_mcp_server_refs": {
-                              "items": {
-                                "minLength": 1,
-                                "type": "string"
-                              },
-                              "type": "array"
-                            },
-                            "default_mcp_tool_refs": {
-                              "items": {
-                                "minLength": 1,
-                                "type": "string"
-                              },
-                              "type": "array"
-                            },
-                            "default_skill_refs": {
-                              "items": {
-                                "minLength": 1,
-                                "type": "string"
-                              },
-                              "type": "array"
-                            },
-                            "default_tool_refs": {
-                              "items": {
-                                "minLength": 1,
-                                "type": "string"
-                              },
-                              "type": "array"
-                            },
-                            "inherit_base_tools": {
-                              "type": "boolean"
-                            },
-                            "package_mcp_prompt_refs": {
-                              "items": {
-                                "minLength": 1,
-                                "type": "string"
-                              },
-                              "type": "array"
-                            },
-                            "package_mcp_resource_refs": {
-                              "items": {
-                                "minLength": 1,
-                                "type": "string"
-                              },
-                              "type": "array"
-                            },
-                            "package_mcp_server_refs": {
-                              "items": {
-                                "minLength": 1,
-                                "type": "string"
-                              },
-                              "type": "array"
-                            },
-                            "package_mcp_tool_refs": {
-                              "items": {
-                                "minLength": 1,
-                                "type": "string"
-                              },
-                              "type": "array"
-                            },
-                            "package_skill_refs": {
-                              "items": {
-                                "minLength": 1,
-                                "type": "string"
-                              },
-                              "type": "array"
-                            },
-                            "package_tool_refs": {
-                              "items": {
-                                "minLength": 1,
                                 "type": "string"
                               },
                               "type": "array"
@@ -55510,20 +55066,7 @@
                             }
                           },
                           "required": [
-                            "inherit_base_tools",
-                            "built_in_tool_ids",
-                            "default_skill_refs",
-                            "package_skill_refs",
-                            "default_tool_refs",
-                            "package_tool_refs",
-                            "default_mcp_server_refs",
-                            "package_mcp_server_refs",
-                            "default_mcp_tool_refs",
-                            "package_mcp_tool_refs",
-                            "default_mcp_prompt_refs",
-                            "package_mcp_prompt_refs",
-                            "default_mcp_resource_refs",
-                            "package_mcp_resource_refs",
+                            "capability_refs",
                             "base_role"
                           ],
                           "type": "object"
@@ -55601,6 +55144,36 @@
                         "agents",
                         "virtual_workflows"
                       ],
+                      "type": "object"
+                    },
+                    "capability_sets": {
+                      "additionalProperties": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "description": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "member_refs": {
+                            "items": {
+                              "type": "string"
+                            },
+                            "minItems": 1,
+                            "type": "array"
+                          }
+                        },
+                        "required": [
+                          "description",
+                          "member_refs"
+                        ],
+                        "type": "object"
+                      },
+                      "propertyNames": {
+                        "maxLength": 64,
+                        "minLength": 1,
+                        "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+                        "type": "string"
+                      },
                       "type": "object"
                     },
                     "configuration": {
@@ -55693,7 +55266,7 @@
                       "type": "string"
                     },
                     "schema_version": {
-                      "const": 1,
+                      "const": 2,
                       "type": "number"
                     },
                     "selector": {
@@ -55739,6 +55312,7 @@
                     "product_pillars",
                     "readme",
                     "selector",
+                    "capability_sets",
                     "capability_projection"
                   ],
                   "type": "object"

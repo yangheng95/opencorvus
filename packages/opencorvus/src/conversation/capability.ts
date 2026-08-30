@@ -12,7 +12,7 @@ import type { ResolvedSkillSurface } from "@/skill/surface"
 import { WORK_DEFAULT_CAPABILITY_ASSIGNMENT } from "@/work/harness"
 import { NamedError } from "@opencorvus-ai/util/error"
 import { createHarnessProjection } from "@/capability/harness-projection"
-import { capabilityRef, CapabilityRefCodec, type CapabilityRef } from "@/capability/ref"
+import { capabilityRef, CapabilityRefCodec, type CapabilityRef } from "@opencorvus-ai/util/capability-ref"
 import { canonicalDigestSource, compareCanonicalStrings } from "@/util/canonical-digest"
 
 const CHAT_AGENT_ID = "chat" as const

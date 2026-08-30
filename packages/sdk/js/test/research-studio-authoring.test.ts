@@ -7,15 +7,23 @@ import path from "node:path"
 import {
   EXPERT_SQUAD_MANIFEST_PATH,
   writeExpertSquadPackage,
-  type ExpertSquadManifestV1,
+  type ExpertSquadManifestV2,
   type ExpertSquadPackageDefinition,
 } from "../src/expert-squad-authoring"
 
 const repositoryRoot = path.resolve(import.meta.dir, "../../../..")
-const packageRoot = path.join(repositoryRoot, "expert-squads", "builtin", "research-studio")
+const packageRoot = path.join(
+  repositoryRoot,
+  "packages",
+  "opencorvus",
+  "src",
+  "expert-squad",
+  "builtin",
+  "research-studio",
+)
 
-function parseManifest(source: string): ExpertSquadManifestV1 {
-  return JSON.parse(source.replace(/,(\s*[}\]])/g, "$1")) as ExpertSquadManifestV1
+function parseManifest(source: string): ExpertSquadManifestV2 {
+  return JSON.parse(source.replace(/,(\s*[}\]])/g, "$1")) as ExpertSquadManifestV2
 }
 
 async function packageFiles(root: string): Promise<string[]> {
@@ -52,7 +60,7 @@ describe("Research Studio expert-squad authoring SDK", () => {
       expect(await packageFiles(output)).toEqual(sourceFiles)
       expect(parseManifest(await readFile(path.join(output, EXPERT_SQUAD_MANIFEST_PATH), "utf8"))).toEqual(manifest)
       expect(manifest).toMatchObject({
-        schema_version: 1,
+        schema_version: 2,
         namespace: "builtin",
         id: "research-studio",
       })

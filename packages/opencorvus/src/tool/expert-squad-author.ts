@@ -2,11 +2,12 @@ import { ExpertSquadConversationAuthoring } from "@/expert-squad/conversation-au
 import { RuntimeTemplateID } from "@/agent/runtime-template-id"
 import { Instance } from "@/project/instance"
 import {
+  ExpertSquadCapabilitySetsSchema,
   ExpertSquadConfigurationSchema,
   ExpertSquadDynamicAgentIDSchema,
   ExpertSquadIDSchema,
   ExpertSquadNamespaceSchema,
-  ExpertSquadProjectionResourcesSchema,
+  ExpertSquadProjectionCapabilitiesSchema,
   ProductPillarsSchema,
   ExpertSquadTextPackageDefinitionSchema,
   ExpertSquadVersionSchema,
@@ -21,38 +22,9 @@ import {
   type ExpertSquadGenerationTrace,
 } from "@/expert-squad/installation-metadata"
 
-const AuthoringProjectionResourceDefaults = {
-  built_in_tool_ids: ExpertSquadProjectionResourcesSchema.shape.built_in_tool_ids.default([]),
-  default_skill_refs: ExpertSquadProjectionResourcesSchema.shape.default_skill_refs.default([]),
-  package_skill_refs: ExpertSquadProjectionResourcesSchema.shape.package_skill_refs.default([]),
-  default_tool_refs: ExpertSquadProjectionResourcesSchema.shape.default_tool_refs.default([]),
-  package_tool_refs: ExpertSquadProjectionResourcesSchema.shape.package_tool_refs.default([]).describe(
-    "Exact package tool refs projected to this owner. A shared ref <squad-id>/shared/<tool-id> requires extra_files[\"tools/<tool-id>.ts\"]; an Agent-owned ref <squad-id>/<agent-id>/<tool-id> requires extra_files[\"agents/<agent-id>/tools/<tool-id>.ts\"]. There is no top-level tools input field.",
-  ),
-  default_mcp_server_refs: ExpertSquadProjectionResourcesSchema.shape.default_mcp_server_refs.default([]),
-  package_mcp_server_refs: ExpertSquadProjectionResourcesSchema.shape.package_mcp_server_refs.default([]),
-  default_mcp_tool_refs: ExpertSquadProjectionResourcesSchema.shape.default_mcp_tool_refs.default([]),
-  package_mcp_tool_refs: ExpertSquadProjectionResourcesSchema.shape.package_mcp_tool_refs.default([]),
-  default_mcp_prompt_refs: ExpertSquadProjectionResourcesSchema.shape.default_mcp_prompt_refs.default([]),
-  package_mcp_prompt_refs: ExpertSquadProjectionResourcesSchema.shape.package_mcp_prompt_refs.default([]),
-  default_mcp_resource_refs: ExpertSquadProjectionResourcesSchema.shape.default_mcp_resource_refs.default([]),
-  package_mcp_resource_refs: ExpertSquadProjectionResourcesSchema.shape.package_mcp_resource_refs.default([]),
-}
-
-const AuthoringReferencedResourceDefaults = {
-  default_skill_refs: AuthoringProjectionResourceDefaults.default_skill_refs,
-  package_skill_refs: AuthoringProjectionResourceDefaults.package_skill_refs,
-  default_tool_refs: AuthoringProjectionResourceDefaults.default_tool_refs,
-  package_tool_refs: AuthoringProjectionResourceDefaults.package_tool_refs,
-  default_mcp_server_refs: AuthoringProjectionResourceDefaults.default_mcp_server_refs,
-  package_mcp_server_refs: AuthoringProjectionResourceDefaults.package_mcp_server_refs,
-  default_mcp_tool_refs: AuthoringProjectionResourceDefaults.default_mcp_tool_refs,
-  package_mcp_tool_refs: AuthoringProjectionResourceDefaults.package_mcp_tool_refs,
-  default_mcp_prompt_refs: AuthoringProjectionResourceDefaults.default_mcp_prompt_refs,
-  package_mcp_prompt_refs: AuthoringProjectionResourceDefaults.package_mcp_prompt_refs,
-  default_mcp_resource_refs: AuthoringProjectionResourceDefaults.default_mcp_resource_refs,
-  package_mcp_resource_refs: AuthoringProjectionResourceDefaults.package_mcp_resource_refs,
-}
+const AuthoringCapabilityRefs = ExpertSquadProjectionCapabilitiesSchema.shape.capability_refs.default([]).describe(
+  "Canonical encoded leaf or one-level capability-set refs granted to this projection. base_role is only a runtime upper bound and grants nothing; include the exact matching platform base CapabilitySet ref when its members are required. Package files referenced by a package capability must be supplied in extra_files.",
+)
 
 const AuthoringVirtualWorkflowNodeSchema = z
   .object({
@@ -80,7 +52,7 @@ export const ExpertSquadAuthorDefinitionSchema = ExpertSquadTextPackageDefinitio
 const AuthoringSchedulerInputSchema = z
   .object({
     prompt: z.string().trim().min(1),
-    ...AuthoringReferencedResourceDefaults,
+    capability_refs: AuthoringCapabilityRefs,
   })
   .strict()
 
@@ -94,13 +66,13 @@ const AuthoringAgentInputSchema = z
         "fact-check reviews exactly one existing assistant message per workflow node. Give it exactly one upstream producer dependency; use separate fact-check nodes for separate messages, or synthesize them into one message first. Use deep-research for independent public-source investigation.",
       ),
     prompt: z.string().trim().min(1),
-    ...AuthoringReferencedResourceDefaults,
+    capability_refs: AuthoringCapabilityRefs,
   })
   .strict()
 
 export const ExpertSquadAuthorParameters = z
   .object({
-    schema_version: z.literal(1),
+    schema_version: z.literal(2),
     namespace: ExpertSquadNamespaceSchema,
     id: ExpertSquadIDSchema,
     name: z.string().trim().min(1).optional(),
@@ -109,6 +81,7 @@ export const ExpertSquadAuthorParameters = z
     version: ExpertSquadVersionSchema,
     product_pillars: ProductPillarsSchema.describe("Product pillars where this Expert Squad is valid."),
     configuration: ExpertSquadConfigurationSchema.optional(),
+    capability_sets: ExpertSquadCapabilitySetsSchema.default({}),
     expected_current_package_digest: z
       .string()
       .regex(/^[a-f0-9]{64}$/)
@@ -166,7 +139,13 @@ export function buildExpertSquadAuthorDefinition(args: z.infer<typeof ExpertSqua
       const prompt = `agents/${agentID}/system.md`
       const { prompt: agentPrompt, ...projection } = agent
       files[prompt] = agentPrompt
-      return [agentID, { ...projection, prompt }]
+      return [
+        agentID,
+        {
+          ...projection,
+          prompt,
+        },
+      ]
     }),
   )
   return ExpertSquadAuthorDefinitionSchema.parse({
@@ -180,6 +159,7 @@ export function buildExpertSquadAuthorDefinition(args: z.infer<typeof ExpertSqua
       version: input.version,
       product_pillars: input.product_pillars,
       configuration: input.configuration,
+      capability_sets: input.capability_sets,
       readme: "README.md",
       selector: {
         summary: input.selector.summary,
@@ -191,19 +171,8 @@ export function buildExpertSquadAuthorDefinition(args: z.infer<typeof ExpertSqua
           ...schedulerProjection,
           base_role: "orchestrator",
           prompt: "agents/orchestrator/system.md",
-          inherit_base_tools: true,
-          built_in_tool_ids: ["dispatch_agent"],
         },
-        agents: Object.fromEntries(
-          Object.entries(agents).map(([agentID, projection]) => [
-            agentID,
-            {
-              ...projection,
-              inherit_base_tools: true,
-              built_in_tool_ids: [],
-            },
-          ]),
-        ),
+        agents,
         virtual_workflows: input.virtual_workflows,
       },
     },
@@ -234,8 +203,8 @@ export async function authorProjectExpertSquad(
 const DESCRIPTION = [
   "Author, validate, and explicitly import one OpenCorvus Expert Squad through the canonical SDK writer.",
   "Prefer one package-owned Planner node followed by at least two independent worker nodes that all depend only on that Planner. Use a richer acyclic evidence graph only when an exact producer/consumer Artifact dependency makes the edge unavoidable; never manufacture roles or edges for topology metrics.",
-  "Submit the compact authoring blueprint directly. Prompts and README/selector content are inline; the Host deterministically owns canonical manifest paths and package file projection. Empty resource arrays, empty depends_on arrays, and extra_files may be omitted.",
-  'Package tools use no top-level tools field. Put each shared entrypoint in extra_files["tools/<tool-id>.ts"] and project <squad-id>/shared/<tool-id> through package_tool_refs; Agent-owned entries use extra_files["agents/<agent-id>/tools/<tool-id>.ts"] and <squad-id>/<agent-id>/<tool-id>. Supporting code lives under lib/ or the matching Agent lib/.',
+  "Submit the compact authoring blueprint directly. Prompts and README/selector content are inline; the Host deterministically owns canonical manifest paths and package file projection. base_role only selects a runtime upper bound and grants nothing: every projection that needs the matching platform base capabilities must declare that exact CapabilitySet in capability_refs. Empty capability_refs may be omitted only when runtime-owned transport is sufficient; empty capability_sets, depends_on, and extra_files may also be omitted.",
+  'Package tools use no top-level tools field. Put each shared entrypoint in extra_files["tools/<tool-id>.ts"] and grant its canonical capability:tool:package:<squad-id>:<ref> identity through capability_refs or one package capability set; Agent-owned entries use extra_files["agents/<agent-id>/tools/<tool-id>.ts"]. Supporting code lives under lib/ or the matching Agent lib/.',
   "The Host writes a temporary source package with @opencorvus-ai/sdk/expert-squad-authoring, validates it through the Registry, records exact Task and Session generation provenance, imports it into the current project's canonical .opencorvus/expert-squads root through the Manager, removes the temporary source, and returns exact installed identity, scope, agents, deterministic workflow structure/frontier analysis, file count, canonical package digest, mutation operation, generation trace, and target.",
   "A new project-owned ID installs directly. Replacing an existing exact ID requires expected_current_package_digest; a stale digest returns an explicit compare-and-swap conflict.",
   "Every successful generation becomes discoverable through the current project catalog. The tool never activates the generated Squad and exposes no model-selected installation scope or target path.",

@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "emergency-management-continuity",
   "name": "Emergency Management and Continuity",
   "label": "Emergency Management and Continuity",
   "description": "All-hazards, essential-function, resource, communications, and exercise evidence joined into a non-operational continuity-readiness pack.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.30.2",
   "product_pillars": [
     "work"
   ],
@@ -15,141 +15,77 @@
     "selection_guidance": "Select for all-hazards assumptions, essential-function continuity, recovery objectives, succession, resource and communications coordination, exercises, and improvement actions without live command, dispatch, warning, plan-mutation, or readiness-certification authority.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 5 projections.",
+      "member_refs": [
+        "capability:skill:package:emergency-management-continuity:emergency-management-continuity%2Fshared%2Fmethod"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:capability_set:platform:tool-registry:scheduler-transport",
+        "capability:skill:package:emergency-management-continuity:emergency-management-continuity%2Fshared%2Fmethod",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "emergency-management-continuity/shared/method"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "hazard-scenario-assumption-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:emergency-management-continuity:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:explore-base"
+        ],
         "label": "Hazard Scenario and Assumption Analyst",
         "description": "Builds dated all-hazards planning scenarios and cascading-impact assumptions without forecasting.",
         "base_role": "explore",
-        "prompt": "agents/hazard-scenario-assumption-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "emergency-management-continuity/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/hazard-scenario-assumption-analyst/system.md"
       },
       "essential-functions-continuity-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:emergency-management-continuity:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Essential Functions Continuity Analyst",
         "description": "Maps essential functions, recovery objectives, dependencies, succession, delegations and continuity strategies.",
         "base_role": "delegated-worker",
-        "prompt": "agents/essential-functions-continuity-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "emergency-management-continuity/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/essential-functions-continuity-analyst/system.md"
       },
       "incident-resource-communications-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:emergency-management-continuity:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Incident Resource and Communications Analyst",
         "description": "Maps approved incident interfaces, typed resources, mutual aid, logistics and accessible communications.",
         "base_role": "delegated-worker",
-        "prompt": "agents/incident-resource-communications-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "emergency-management-continuity/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/incident-resource-communications-analyst/system.md"
       },
       "exercise-improvement-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:emergency-management-continuity:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Exercise and Improvement Analyst",
         "description": "Traces exercise objectives, observations, evaluation evidence and corrective actions.",
         "base_role": "delegated-worker",
-        "prompt": "agents/exercise-improvement-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "emergency-management-continuity/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/exercise-improvement-analyst/system.md"
       },
       "emergency-continuity-readiness-owner": {
+        "capability_refs": [
+          "capability:capability_set:package:emergency-management-continuity:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Emergency Continuity Readiness Owner",
         "description": "Joins four branches into a versioned readiness and improvement decision pack.",
         "base_role": "delegated-worker",
-        "prompt": "agents/emergency-continuity-readiness-owner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "emergency-management-continuity/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/emergency-continuity-readiness-owner/system.md"
       }
     },
     "virtual_workflows": {

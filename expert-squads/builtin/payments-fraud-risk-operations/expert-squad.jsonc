@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "payments-fraud-risk-operations",
   "name": "Payments Fraud Risk Operations",
   "label": "Payments Fraud Risk Operations",
   "description": "Transaction, authentication, merchant-cohort, fraud-signal, dispute, chargeback, and control evidence joined into a bounded payments-risk review pack.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.30.2",
   "product_pillars": [
     "work"
   ],
@@ -15,119 +15,67 @@
     "selection_guidance": "Select for payment event lifecycles, authorization/authentication evidence, transaction/device/account signals, merchant cohorts, fraud labels, model outcomes, disputes, chargebacks, reason codes, and evidence timelines. Do not select for approving/declining/blocking transactions, changing rules/models, freezing/closing accounts, accusing fraud, KYC/KYB/AML/SAR decisions, dispute representment/adjudication, refunds, merchant offboarding, moving money, or contacting external parties.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 4 projections.",
+      "member_refs": [
+        "capability:skill:package:payments-fraud-risk-operations:payments-fraud-risk-operations%2Fshared%2Fmethod"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:capability_set:platform:tool-registry:scheduler-transport",
+        "capability:skill:package:payments-fraud-risk-operations:payments-fraud-risk-operations%2Fshared%2Fmethod",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "payments-fraud-risk-operations/shared/method"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "payment-transaction-authentication-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:payments-fraud-risk-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:explore-base"
+        ],
         "label": "Payment Transaction and Authentication Analyst",
         "description": "Reconstructs payment event lifecycles and transaction, authentication, device, account, and model evidence.",
         "base_role": "explore",
-        "prompt": "agents/payment-transaction-authentication-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "payments-fraud-risk-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/payment-transaction-authentication-analyst/system.md"
       },
       "payment-merchant-monitoring-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:payments-fraud-risk-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Merchant Fraud Monitoring Analyst",
         "description": "Builds comparable merchant cohorts and denominator-aware fraud, dispute, refund, decline, and linkage evidence.",
         "base_role": "delegated-worker",
-        "prompt": "agents/payment-merchant-monitoring-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "payments-fraud-risk-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/payment-merchant-monitoring-analyst/system.md"
       },
       "payment-dispute-evidence-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:payments-fraud-risk-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Payment Dispute Evidence Analyst",
         "description": "Reconciles dispute/chargeback reason, rule-version, deadline, transaction, authentication, delivery, refund, and communication evidence.",
         "base_role": "delegated-worker",
-        "prompt": "agents/payment-dispute-evidence-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "payments-fraud-risk-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/payment-dispute-evidence-analyst/system.md"
       },
       "payments-fraud-risk-review-owner": {
+        "capability_refs": [
+          "capability:capability_set:package:payments-fraud-risk-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Payments Fraud Risk Review Owner",
         "description": "Joins independent transaction, merchant, and dispute evidence while retaining human decision gates.",
         "base_role": "delegated-worker",
-        "prompt": "agents/payments-fraud-risk-review-owner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "payments-fraud-risk-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/payments-fraud-risk-review-owner/system.md"
       }
     },
     "virtual_workflows": {

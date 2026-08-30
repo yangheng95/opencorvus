@@ -1446,7 +1446,7 @@ async function runAgentSessionInner<C>(input: RunAgentSessionInput<C>): Promise<
     const enableMap = {
       ...promptToolSwitchesForAgentRun({
         extraToolNames: Object.keys(runtimeTools),
-        explicitProjectedToolNames: workerCapability.projection.built_in_tool_ids,
+        explicitProjectedToolNames: workerCapability.grants.explicitBuiltInToolIDs,
         role,
       }),
       ...(input.toolSwitches ?? {}),

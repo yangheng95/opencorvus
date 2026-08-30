@@ -1,4 +1,5 @@
 import type { ExpertSquadRegistry } from "../../../opencorvus/src/expert-squad/registry"
+import { CapabilityRefCodec, type CapabilityRef } from "@opencorvus-ai/util/capability-ref"
 
 type FactSource = Pick<
   ExpertSquadRegistry.CatalogPackage,
@@ -25,36 +26,33 @@ export function projectExpertSquadFacts(loaded: FactSource) {
   const packageTools = new Set<string>()
   const packageMcp = new Set<string>()
 
-  for (const projection of projections) {
-    for (const ref of [...projection.default_skill_refs, ...projection.package_skill_refs]) skills.add(ref)
-    for (const ref of projection.package_skill_refs) packageSkills.add(ref)
-    for (const ref of [
-      ...projection.built_in_tool_ids,
-      ...projection.default_tool_refs,
-      ...projection.package_tool_refs,
-    ]) {
-      tools.add(ref)
+  const count = (ref: CapabilityRef) => {
+    if (ref.kind === "skill") {
+      skills.add(CapabilityRefCodec.encode(ref))
+      if (ref.source === "package") packageSkills.add(ref.local_ref)
+      return
     }
-    for (const ref of projection.package_tool_refs) packageTools.add(ref)
+    if (ref.kind === "tool") {
+      tools.add(CapabilityRefCodec.encode(ref))
+      if (ref.source === "package") packageTools.add(ref.local_ref)
+      return
+    }
+    if (!ref.kind.startsWith("mcp_")) return
+    mcp.add(CapabilityRefCodec.encode(ref))
+    if (ref.source === "package") packageMcp.add(ref.local_ref)
+  }
 
-    const mcpRefs = [
-      ...projection.default_mcp_server_refs,
-      ...projection.package_mcp_server_refs,
-      ...projection.default_mcp_tool_refs,
-      ...projection.package_mcp_tool_refs,
-      ...projection.default_mcp_prompt_refs,
-      ...projection.package_mcp_prompt_refs,
-      ...projection.default_mcp_resource_refs,
-      ...projection.package_mcp_resource_refs,
-    ]
-    for (const ref of mcpRefs) mcp.add(ref)
-    for (const ref of [
-      ...projection.package_mcp_server_refs,
-      ...projection.package_mcp_tool_refs,
-      ...projection.package_mcp_prompt_refs,
-      ...projection.package_mcp_resource_refs,
-    ]) {
-      packageMcp.add(ref)
+  for (const projection of projections) {
+    for (const encoded of projection.capability_refs) {
+      const ref = CapabilityRefCodec.decode(encoded)
+      if (ref.kind !== "capability_set") {
+        count(ref)
+        continue
+      }
+      if (ref.source !== "package") continue
+      const set = loaded.manifest.capability_sets[ref.local_ref]
+      if (!set) throw new Error(`Expert squad ${loaded.id} references missing capability set ${ref.local_ref}`)
+      for (const member of set.member_refs) count(CapabilityRefCodec.decode(member))
     }
   }
 

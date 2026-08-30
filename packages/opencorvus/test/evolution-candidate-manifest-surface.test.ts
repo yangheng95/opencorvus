@@ -1,5 +1,6 @@
 import { describe, expect, test } from "bun:test"
 import { compareCandidateIntegrity } from "@squads/evolution-lab/lib/evolution-lab/candidate-integrity"
+import { capabilityRef, CapabilityRefCodec } from "@opencorvus-ai/util/capability-ref"
 
 const digest = (seed: string) => seed.repeat(64).slice(0, 64)
 
@@ -21,22 +22,31 @@ function manifest(overrides: {
   nodeDescription: string
   schedulerTools: string[]
 }) {
+  const builtInToolRef = (localRef: string) =>
+    CapabilityRefCodec.encode(
+      capabilityRef({ kind: "tool", source: "platform", owner_ref: "tool-registry", local_ref: localRef }),
+    )
+  const packageToolRef = (localRef: string) =>
+    CapabilityRefCodec.encode(
+      capabilityRef({ kind: "tool", source: "package", owner_ref: "surface-target", local_ref: localRef }),
+    )
   return {
-    schema_version: 1,
+    schema_version: 2,
     namespace: "builtin",
     id: "surface-target",
     name: "Surface Target",
     label: "Surface Target",
     description: overrides.description,
     version: overrides.version,
+    product_pillars: ["code"],
     readme: "README.md",
     selector: { summary: "pick me", selection_guidance: "when relevant", instructions: "selector.md" },
+    capability_sets: {},
     capability_projection: {
       scheduler: {
         base_role: "orchestrator",
         prompt: "agents/orchestrator/system.md",
-        inherit_base_tools: true,
-        built_in_tool_ids: overrides.schedulerTools,
+        capability_refs: overrides.schedulerTools.map(builtInToolRef).sort(),
       },
       agents: {
         worker: {
@@ -44,7 +54,7 @@ function manifest(overrides: {
           description: overrides.agentDescription,
           base_role: "delegated-worker",
           prompt: "agents/worker/system.md",
-          package_tool_refs: ["surface-target/shared/run"],
+          capability_refs: [packageToolRef("surface-target/shared/run")],
         },
       },
       virtual_workflows: {
@@ -146,6 +156,7 @@ describe("Evolution candidate manifest surface", () => {
       description: "added by evolution",
       base_role: "delegated-worker",
       prompt: "agents/reviewer/system.md",
+      capability_refs: [],
     }
     candidate.files.push({ path: "agents/reviewer/system.md", sha256: digest("7"), bytes: 10, utf8_text: true })
     const comparison = compareCandidateIntegrity(parent, candidate)
@@ -156,7 +167,13 @@ describe("Evolution candidate manifest surface", () => {
     const parent = packageValue(baseline)
     const candidate = packageValue({ ...baseline, version: "2026.08.17.2" })
     const agents = candidate.manifest.capability_projection.agents as Record<string, unknown>
-    agents.ghost = { label: "Ghost", description: "no prompt", base_role: "delegated-worker", prompt: "agents/ghost.md" }
+    agents.ghost = {
+      label: "Ghost",
+      description: "no prompt",
+      base_role: "delegated-worker",
+      prompt: "agents/ghost.md",
+      capability_refs: [],
+    }
     expect(() => compareCandidateIntegrity(parent, candidate)).toThrow(
       /agent ghost prompt names missing package file agents\/ghost\.md/,
     )
@@ -183,7 +200,7 @@ describe("Evolution candidate manifest surface", () => {
     const parent = packageValue(baseline)
     const candidate = packageValue({ ...baseline, version: "2026.08.17.2", schedulerTools: ["read", "bash"] })
     expect(() => compareCandidateIntegrity(parent, candidate)).toThrow(
-      /Candidate grants built_in_tool_ids .*received: \["bash"\], expected: a subset of \["read"\]/,
+      /Candidate grants capability_refs .*bash.*expected: a subset of .*read/,
     )
   })
 
@@ -196,10 +213,19 @@ describe("Evolution candidate manifest surface", () => {
       description: "added by evolution",
       base_role: "delegated-worker",
       prompt: "agents/reviewer/system.md",
-      package_tool_refs: ["surface-target/shared/escalate"],
+      capability_refs: [
+        CapabilityRefCodec.encode(
+          capabilityRef({
+            kind: "tool",
+            source: "package",
+            owner_ref: "surface-target",
+            local_ref: "surface-target/shared/escalate",
+          }),
+        ),
+      ],
     }
     candidate.files.push({ path: "agents/reviewer/system.md", sha256: digest("7"), bytes: 10, utf8_text: true })
-    expect(() => compareCandidateIntegrity(parent, candidate)).toThrow(/Candidate grants package_tool_refs/)
+    expect(() => compareCandidateIntegrity(parent, candidate)).toThrow(/Candidate grants capability_refs/)
   })
 
   test("accepts a newly added agent that reuses a reference the parent already declared elsewhere", () => {
@@ -211,7 +237,16 @@ describe("Evolution candidate manifest surface", () => {
       description: "added by evolution",
       base_role: "delegated-worker",
       prompt: "agents/reviewer/system.md",
-      package_tool_refs: ["surface-target/shared/run"],
+      capability_refs: [
+        CapabilityRefCodec.encode(
+          capabilityRef({
+            kind: "tool",
+            source: "package",
+            owner_ref: "surface-target",
+            local_ref: "surface-target/shared/run",
+          }),
+        ),
+      ],
     }
     candidate.files.push({ path: "agents/reviewer/system.md", sha256: digest("7"), bytes: 10, utf8_text: true })
     expect(compareCandidateIntegrity(parent, candidate).changed_paths).toEqual([

@@ -89,12 +89,12 @@ describe("Growth and discovery Expert Squad packages", () => {
       const workflow = loaded.manifest.capability_projection.virtual_workflows[definition.workflowID]!
 
       expect(loaded.manifest).toMatchObject({
-        schema_version: 1,
+        schema_version: 2,
         namespace: "builtin",
         id: definition.id,
         name: definition.name,
         label: definition.name,
-        version: "2026.08.13.1",
+        version: "2026.08.30.2",
         product_pillars: ["work"],
       })
       expect(Object.keys(loaded.manifest.capability_projection.agents)).toEqual(definition.agentIDs)
@@ -163,7 +163,7 @@ describe("Growth and discovery Expert Squad packages", () => {
           })
           expect(scheduler).toMatchObject({
             expertSquadID: definition.id,
-            packageRevision: { id: definition.id, version: "2026.08.13.1" },
+            packageRevision: { id: definition.id, version: "2026.08.30.2" },
           })
           expect(scheduler.productionSkills.map((skill) => skill.ref)).toEqual([
             `${definition.id}/shared/method`,

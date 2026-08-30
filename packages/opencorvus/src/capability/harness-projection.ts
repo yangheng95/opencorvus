@@ -1,5 +1,5 @@
 import z from "zod"
-import { CapabilityRef, CapabilityRefCodec } from "./ref"
+import { CapabilityRef, CapabilityRefCodec } from "@opencorvus-ai/util/capability-ref"
 import { canonicalDigestSource, compareCanonicalStrings } from "@/util/canonical-digest"
 
 export const HarnessContext = z.discriminatedUnion("kind", [

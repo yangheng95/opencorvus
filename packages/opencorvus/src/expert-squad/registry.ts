@@ -16,14 +16,18 @@ import {
 } from "@/expert-squad/installation-metadata"
 import { ExpertSquadVersionSchema } from "@/expert-squad/version"
 import {
+  materializeExpertSquadCapabilities,
+  type MaterializedExpertSquadCapabilities,
+} from "@/expert-squad/capability-grants"
+import {
   type ExpertSquadAgentProjection,
   type ExpertSquadSchedulerProjection,
   type ExpertSquadVirtualWorkflow,
   type ExpertSquadVirtualWorkflows,
 } from "@/expert-squad/protocol-schema"
 import {
-  ExpertSquadManifestV1Schema,
-  type ExpertSquadManifestV1,
+  ExpertSquadManifestV2Schema,
+  type ExpertSquadManifestV2,
   validateExpertSquadManifestDispatchTopology,
 } from "@opencorvus-ai/sdk/expert-squad-authoring"
 import { defaultToolNameFromRef } from "@/expert-squad/provider-names"
@@ -73,9 +77,9 @@ export namespace ExpertSquadRegistry {
     })
   }
 
-  export const ManifestSchema = ExpertSquadManifestV1Schema
+  export const ManifestSchema = ExpertSquadManifestV2Schema
 
-  export type Manifest = ExpertSquadManifestV1
+  export type Manifest = ExpertSquadManifestV2
 
   export function displayName(manifest: Pick<Manifest, "name" | "label">): string {
     return manifest.name ?? manifest.label
@@ -675,17 +679,22 @@ export namespace ExpertSquadRegistry {
     return (await capturePackageTree(root, false)).digest
   }
 
+  async function publishedSnapshotMatches(target: string, digest: string): Promise<boolean> {
+    const existing = await lstatIfExists(target)
+    if (!existing) return false
+    if (!existing.isDirectory() || (await packageDigest(target)) !== digest) {
+      throw new Error(`expert squad immutable package snapshot is corrupt: ${target}`)
+    }
+    return true
+  }
+
   async function materializeCapturedPackageSnapshot(
     snapshot: PackageTreeSnapshot,
   ): Promise<Readonly<{ root: string; digest: string }>> {
     const snapshotsRoot = path.join(Global.Path.data, "expert-squad-package-revisions", PACKAGE_SNAPSHOT_ABI)
     const target = path.join(snapshotsRoot, snapshot.digest)
     await mkdir(snapshotsRoot, { recursive: true })
-    const existing = await lstatIfExists(target)
-    if (existing) {
-      if (!existing.isDirectory() || (await packageDigest(target)) !== snapshot.digest) {
-        throw new Error(`expert squad immutable package snapshot is corrupt: ${target}`)
-      }
+    if (await publishedSnapshotMatches(target, snapshot.digest)) {
       return Object.freeze({ root: target, digest: snapshot.digest })
     }
 
@@ -700,7 +709,13 @@ export namespace ExpertSquadRegistry {
         await Filesystem.renameAfterTransientContention(staging, target)
       } catch (error) {
         const code = (error as NodeJS.ErrnoException).code
-        if (code !== "EEXIST" && code !== "ENOTEMPTY") throw error
+        const competingPublication =
+          code === "EEXIST" ||
+          code === "ENOTEMPTY" ||
+          code === "EPERM" ||
+          code === "EACCES" ||
+          code === "EBUSY"
+        if (!competingPublication || !(await publishedSnapshotMatches(target, snapshot.digest))) throw error
         await rm(staging, { recursive: true, force: true })
       }
       if ((await packageDigest(target)) !== snapshot.digest) {
@@ -1217,7 +1232,7 @@ export namespace ExpertSquadRegistry {
   function validateProjection(input: {
     id: string
     context: string
-    projection: Projection
+    capabilities: MaterializedExpertSquadCapabilities
     ownerID: string
     resources: Awaited<ReturnType<typeof collectPackageResources>>
     knownBuiltInToolIDs: Set<string>
@@ -1228,7 +1243,7 @@ export namespace ExpertSquadRegistry {
     const {
       id,
       context,
-      projection,
+      capabilities,
       ownerID,
       resources,
       knownBuiltInToolIDs,
@@ -1236,19 +1251,19 @@ export namespace ExpertSquadRegistry {
       knownDefaultHostToolIDs,
       projectableDefaultHostToolIDs,
     } = input
-    for (const toolID of projection.built_in_tool_ids) {
+    for (const toolID of capabilities.builtInToolIDs) {
       if (!knownBuiltInToolIDs.has(toolID)) throw new Error(`${context}: unknown built-in tool "${toolID}"`)
       if (!projectableBuiltInToolIDs.has(toolID)) {
         throw new Error(`${context}: built-in tool "${toolID}" is not supplied by this base-role runtime template`)
       }
     }
-    for (const ref of projection.default_skill_refs) {
+    for (const ref of capabilities.defaultSkillRefs) {
       const parsed = DefaultSkillRefSchema.safeParse(ref)
       if (!parsed.success) {
         throw new Error(`${context}: default skill ref ${JSON.stringify(ref)} must match default/skill/<name>`)
       }
     }
-    for (const ref of projection.default_tool_refs) {
+    for (const ref of capabilities.defaultToolRefs) {
       assertDefaultRef(ref, "tool", context)
       const toolID = defaultToolNameFromRef(ref)
       if (!knownDefaultHostToolIDs.has(toolID)) throw new Error(`${context}: unknown default host tool "${toolID}"`)
@@ -1256,28 +1271,28 @@ export namespace ExpertSquadRegistry {
         throw new Error(`${context}: default host tool "${toolID}" is not supplied by this base-role runtime template`)
       }
     }
-    for (const ref of projection.default_mcp_server_refs) assertDefaultRef(ref, "mcp", context)
-    if (projection.default_mcp_server_refs.length > 0) {
+    for (const ref of capabilities.defaultMcpServerRefs) assertDefaultRef(ref, "mcp", context)
+    if (capabilities.defaultMcpServerRefs.length > 0) {
       throw new Error(
-        `${context}: default_mcp_server_refs is not supported; project default_mcp_tool_refs, default_mcp_prompt_refs, or default_mcp_resource_refs instead`,
+        `${context}: default MCP server capabilities are not supported; project exact MCP tool, prompt, or resource refs instead`,
       )
     }
-    for (const ref of projection.default_mcp_tool_refs) {
+    for (const ref of capabilities.defaultMcpToolRefs) {
       if (!/^default\/mcp\/[^/\\]+\/tool\/[^/\\]+$/.test(ref)) {
         throw new Error(`${context}: invalid default MCP tool ref "${ref}"`)
       }
     }
-    for (const ref of projection.default_mcp_prompt_refs) {
+    for (const ref of capabilities.defaultMcpPromptRefs) {
       if (!/^default\/mcp\/[^/\\]+\/prompt\/[^/\\]+$/.test(ref)) {
         throw new Error(`${context}: invalid default MCP prompt ref "${ref}"`)
       }
     }
-    for (const ref of projection.default_mcp_resource_refs) {
+    for (const ref of capabilities.defaultMcpResourceRefs) {
       if (!/^default\/mcp\/[^/\\]+\/resource\/[^/\\]+$/.test(ref)) {
         throw new Error(`${context}: invalid default MCP resource ref "${ref}"`)
       }
     }
-    for (const ref of projection.package_skill_refs) {
+    for (const ref of capabilities.packageSkillRefs) {
       assertProjectedPackageRef({
         ref,
         id,
@@ -1286,7 +1301,7 @@ export namespace ExpertSquadRegistry {
         context,
       })
     }
-    for (const ref of projection.package_tool_refs) {
+    for (const ref of capabilities.packageToolRefs) {
       assertProjectedPackageRef({
         ref,
         id,
@@ -1295,7 +1310,7 @@ export namespace ExpertSquadRegistry {
         context,
       })
     }
-    for (const ref of projection.package_mcp_server_refs) {
+    for (const ref of capabilities.packageMcpServerRefs) {
       assertProjectedPackageRef({
         ref,
         id,
@@ -1305,26 +1320,26 @@ export namespace ExpertSquadRegistry {
       })
     }
     const serverMountedMcpToolRefs = packageMcpRefsExpandedByServers({
-      serverRefs: projection.package_mcp_server_refs,
+      serverRefs: capabilities.packageMcpServerRefs,
       available: resources.mcpTools,
       kind: "tool",
       context,
     })
     const serverMountedMcpPromptRefs = packageMcpRefsExpandedByServers({
-      serverRefs: projection.package_mcp_server_refs,
+      serverRefs: capabilities.packageMcpServerRefs,
       available: resources.mcpPrompts,
       kind: "prompt",
       context,
     })
     const serverMountedMcpResourceRefs = packageMcpRefsExpandedByServers({
-      serverRefs: projection.package_mcp_server_refs,
+      serverRefs: capabilities.packageMcpServerRefs,
       available: resources.mcpResources,
       kind: "resource",
       context,
     })
-    for (const ref of projection.package_mcp_tool_refs) {
+    for (const ref of capabilities.packageMcpToolRefs) {
       if (serverMountedMcpToolRefs.has(ref)) {
-        throw new Error(`${context}: package MCP tool ref "${ref}" is already mounted by package_mcp_server_refs`)
+        throw new Error(`${context}: package MCP tool ref "${ref}" is already mounted by a server capability ref`)
       }
       assertProjectedPackageMcpTypedRef({
         ref,
@@ -1335,9 +1350,9 @@ export namespace ExpertSquadRegistry {
         context,
       })
     }
-    for (const ref of projection.package_mcp_prompt_refs) {
+    for (const ref of capabilities.packageMcpPromptRefs) {
       if (serverMountedMcpPromptRefs.has(ref)) {
-        throw new Error(`${context}: package MCP prompt ref "${ref}" is already mounted by package_mcp_server_refs`)
+        throw new Error(`${context}: package MCP prompt ref "${ref}" is already mounted by a server capability ref`)
       }
       assertProjectedPackageMcpTypedRef({
         ref,
@@ -1348,9 +1363,9 @@ export namespace ExpertSquadRegistry {
         context,
       })
     }
-    for (const ref of projection.package_mcp_resource_refs) {
+    for (const ref of capabilities.packageMcpResourceRefs) {
       if (serverMountedMcpResourceRefs.has(ref)) {
-        throw new Error(`${context}: package MCP resource ref "${ref}" is already mounted by package_mcp_server_refs`)
+        throw new Error(`${context}: package MCP resource ref "${ref}" is already mounted by a server capability ref`)
       }
       assertProjectedPackageMcpTypedRef({
         ref,
@@ -1367,7 +1382,7 @@ export namespace ExpertSquadRegistry {
     id: string
     agentID: string
     context: string
-    projection: Projection
+    capabilities: MaterializedExpertSquadCapabilities
     resources: Awaited<ReturnType<typeof collectPackageResources>>
   }) {
     const prefix = `${input.id}/${input.agentID}/`
@@ -1378,14 +1393,14 @@ export namespace ExpertSquadRegistry {
       }
     }
 
-    assertSelected(input.resources.skills, new Set(input.projection.package_skill_refs), "skill")
-    assertSelected(input.resources.tools, new Set(input.projection.package_tool_refs), "tool")
+    assertSelected(input.resources.skills, new Set(input.capabilities.packageSkillRefs), "skill")
+    assertSelected(input.resources.tools, new Set(input.capabilities.packageToolRefs), "tool")
 
-    const selectedServers = new Set(input.projection.package_mcp_server_refs)
+    const selectedServers = new Set(input.capabilities.packageMcpServerRefs)
     const selectedTypedRefs = new Set([
-      ...input.projection.package_mcp_tool_refs,
-      ...input.projection.package_mcp_prompt_refs,
-      ...input.projection.package_mcp_resource_refs,
+      ...input.capabilities.packageMcpToolRefs,
+      ...input.capabilities.packageMcpPromptRefs,
+      ...input.capabilities.packageMcpResourceRefs,
     ])
     for (const serverRef of input.resources.mcpDeclarations.keys()) {
       if (!serverRef.startsWith(prefix) || selectedServers.has(serverRef)) continue
@@ -1406,18 +1421,14 @@ export namespace ExpertSquadRegistry {
       }
       assertSelected(available, selected, `MCP ${kind}`)
     }
-    selectedForKind(input.projection.package_mcp_tool_refs, input.resources.mcpTools, "tool")
-    selectedForKind(input.projection.package_mcp_prompt_refs, input.resources.mcpPrompts, "prompt")
-    selectedForKind(input.projection.package_mcp_resource_refs, input.resources.mcpResources, "resource")
-  }
-
-  function allProjections(manifest: Manifest): Projection[] {
-    return [manifest.capability_projection.scheduler, ...Object.values(manifest.capability_projection.agents)]
+    selectedForKind(input.capabilities.packageMcpToolRefs, input.resources.mcpTools, "tool")
+    selectedForKind(input.capabilities.packageMcpPromptRefs, input.resources.mcpPrompts, "prompt")
+    selectedForKind(input.capabilities.packageMcpResourceRefs, input.resources.mcpResources, "resource")
   }
 
   function assertSharedResourcesProjected(input: {
     id: string
-    manifest: Manifest
+    capabilities: readonly MaterializedExpertSquadCapabilities[]
     resources: Awaited<ReturnType<typeof collectPackageResources>>
   }) {
     const selectedSkills = new Set<string>()
@@ -1426,24 +1437,24 @@ export namespace ExpertSquadRegistry {
     const selectedMcpTools = new Set<string>()
     const selectedMcpPrompts = new Set<string>()
     const selectedMcpResources = new Set<string>()
-    for (const projection of allProjections(input.manifest)) {
-      for (const ref of projection.package_skill_refs) selectedSkills.add(ref)
-      for (const ref of projection.package_tool_refs) selectedTools.add(ref)
-      for (const ref of projection.package_mcp_server_refs) selectedServers.add(ref)
-      for (const ref of projection.package_mcp_tool_refs) {
+    for (const capabilities of input.capabilities) {
+      for (const ref of capabilities.packageSkillRefs) selectedSkills.add(ref)
+      for (const ref of capabilities.packageToolRefs) selectedTools.add(ref)
+      for (const ref of capabilities.packageMcpServerRefs) selectedServers.add(ref)
+      for (const ref of capabilities.packageMcpToolRefs) {
         selectedMcpTools.add(ref)
         selectedServers.add(packageMcpServerRefFromTypedRef(ref, "tool", "shared package MCP tool"))
       }
-      for (const ref of projection.package_mcp_prompt_refs) {
+      for (const ref of capabilities.packageMcpPromptRefs) {
         selectedMcpPrompts.add(ref)
         selectedServers.add(packageMcpServerRefFromTypedRef(ref, "prompt", "shared package MCP prompt"))
       }
-      for (const ref of projection.package_mcp_resource_refs) {
+      for (const ref of capabilities.packageMcpResourceRefs) {
         selectedMcpResources.add(ref)
         selectedServers.add(packageMcpServerRefFromTypedRef(ref, "resource", "shared package MCP resource"))
       }
       for (const ref of packageMcpRefsExpandedByServers({
-        serverRefs: projection.package_mcp_server_refs,
+        serverRefs: capabilities.packageMcpServerRefs,
         available: input.resources.mcpTools,
         kind: "tool",
         context: "shared package MCP tools",
@@ -1451,7 +1462,7 @@ export namespace ExpertSquadRegistry {
         selectedMcpTools.add(ref)
       }
       for (const ref of packageMcpRefsExpandedByServers({
-        serverRefs: projection.package_mcp_server_refs,
+        serverRefs: capabilities.packageMcpServerRefs,
         available: input.resources.mcpPrompts,
         kind: "prompt",
         context: "shared package MCP prompts",
@@ -1459,7 +1470,7 @@ export namespace ExpertSquadRegistry {
         selectedMcpPrompts.add(ref)
       }
       for (const ref of packageMcpRefsExpandedByServers({
-        serverRefs: projection.package_mcp_server_refs,
+        serverRefs: capabilities.packageMcpServerRefs,
         available: input.resources.mcpResources,
         kind: "resource",
         context: "shared package MCP resources",
@@ -1851,10 +1862,18 @@ export namespace ExpertSquadRegistry {
     const { AgentToolPool } = await import("@/agent/tool-pool-contract")
     const knownBuiltInToolIDs = AgentToolPool.coreBuiltInToolIDs()
     const knownDefaultHostToolIDs = AgentToolPool.allPackageProjectableDefaultHostToolIDs()
+    const materializedCapabilities: MaterializedExpertSquadCapabilities[] = []
+    const schedulerCapabilities = materializeExpertSquadCapabilities({
+      manifest,
+      projection: manifest.capability_projection.scheduler,
+      runtime: { kind: "scheduler" },
+      context: "capability_projection.scheduler",
+    })
+    materializedCapabilities.push(schedulerCapabilities)
     validateProjection({
       id: manifest.id,
       context: "capability_projection.scheduler",
-      projection: manifest.capability_projection.scheduler,
+      capabilities: schedulerCapabilities,
       ownerID: "orchestrator",
       resources,
       knownBuiltInToolIDs,
@@ -1866,29 +1885,33 @@ export namespace ExpertSquadRegistry {
       id: manifest.id,
       agentID: "orchestrator",
       context: "capability_projection.scheduler",
-      projection: manifest.capability_projection.scheduler,
+      capabilities: schedulerCapabilities,
       resources,
     })
     for (const { agentID, projection } of agentProjectionEntries(manifest)) {
       const context = `capability_projection.agents.${agentID}`
+      const baseRole = projectionBaseRole(projection, context)
+      const capabilities = materializeExpertSquadCapabilities({
+        manifest,
+        projection,
+        runtime: { kind: "worker", baseRole },
+        context,
+      })
+      materializedCapabilities.push(capabilities)
       validateProjection({
         id: manifest.id,
         context,
-        projection,
+        capabilities,
         ownerID: agentID,
         resources,
         knownBuiltInToolIDs,
-        projectableBuiltInToolIDs: AgentToolPool.projectableRuntimeTemplateBuiltInToolIDs(
-          projectionBaseRole(projection, context),
-        ),
+        projectableBuiltInToolIDs: AgentToolPool.projectableRuntimeTemplateBuiltInToolIDs(baseRole),
         knownDefaultHostToolIDs,
-        projectableDefaultHostToolIDs: AgentToolPool.packageProjectableDefaultHostToolIDsForRuntimeTemplate(
-          projectionBaseRole(projection, context),
-        ),
+        projectableDefaultHostToolIDs: AgentToolPool.packageProjectableDefaultHostToolIDsForRuntimeTemplate(baseRole),
       })
-      assertAgentLocalResourcesProjected({ id: manifest.id, agentID, context, projection, resources })
+      assertAgentLocalResourcesProjected({ id: manifest.id, agentID, context, capabilities, resources })
     }
-    assertSharedResourcesProjected({ id: manifest.id, manifest, resources })
+    assertSharedResourcesProjected({ id: manifest.id, capabilities: materializedCapabilities, resources })
     const packageToolBundles = await preparePackageToolBundles({ metadata, resources })
     await assertLibraryFilesReachable(metadata.root, packageToolBundles)
     await assertAssetFilesReachable(metadata.root, packageToolBundles)

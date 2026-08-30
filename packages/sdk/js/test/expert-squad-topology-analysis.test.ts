@@ -2,30 +2,15 @@ import { expect, test } from "bun:test"
 import {
   analyzeExpertSquadWorkflowTopology,
   validateBuiltInExpertSquadTopologyPolicy,
-  type ExpertSquadManifestV1,
+  type ExpertSquadManifestV2,
 } from "../src/expert-squad-authoring"
 
-const resources = {
-  inherit_base_tools: false,
-  built_in_tool_ids: [],
-  default_skill_refs: [],
-  package_skill_refs: [],
-  default_tool_refs: [],
-  package_tool_refs: [],
-  default_mcp_server_refs: [],
-  package_mcp_server_refs: [],
-  default_mcp_tool_refs: [],
-  package_mcp_tool_refs: [],
-  default_mcp_prompt_refs: [],
-  package_mcp_prompt_refs: [],
-  default_mcp_resource_refs: [],
-  package_mcp_resource_refs: [],
-} as const
+const resources = { capability_refs: [] } as const
 
 test("workflow topology analysis reports parallel roots, a join, and deterministic waves", () => {
-  const manifest: ExpertSquadManifestV1 = {
+  const manifest: ExpertSquadManifestV2 = {
     product_pillars: ["code", "work"],
-    schema_version: 1,
+    schema_version: 2,
     namespace: "example",
     id: "parallel-example",
     name: "Parallel example",
@@ -37,6 +22,7 @@ test("workflow topology analysis reports parallel roots, a join, and determinist
       selection_guidance: "Use for the topology analysis contract.",
       instructions: "selector.md",
     },
+    capability_sets: {},
     capability_projection: {
       scheduler: { ...resources, base_role: "orchestrator" },
       agents: {
@@ -88,9 +74,9 @@ test("workflow topology analysis reports parallel roots, a join, and determinist
 })
 
 test("workflow topology analysis identifies a Planner-first parallel-worker frontier", () => {
-  const manifest: ExpertSquadManifestV1 = {
+  const manifest: ExpertSquadManifestV2 = {
     product_pillars: ["code", "work"],
-    schema_version: 1,
+    schema_version: 2,
     namespace: "builtin",
     id: "flat-example",
     name: "Flat example",
@@ -102,6 +88,7 @@ test("workflow topology analysis identifies a Planner-first parallel-worker fron
       selection_guidance: "Use for the Planner-first topology contract.",
       instructions: "selector.md",
     },
+    capability_sets: {},
     capability_projection: {
       scheduler: { ...resources, base_role: "orchestrator" },
       agents: {

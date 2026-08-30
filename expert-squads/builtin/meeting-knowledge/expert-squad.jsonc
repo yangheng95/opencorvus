@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "meeting-knowledge",
   "name": "Meeting Knowledge Operations",
   "label": "Meeting Knowledge Operations",
   "description": "Source-grounded meeting capture, decision and action extraction, knowledge publication, and independent traceability review.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.30.2",
   "product_pillars": [
     "work"
   ],
@@ -15,119 +15,67 @@
     "selection_guidance": "Use when the user provides or identifies meeting transcripts, recordings, notes, chat, documents, or decisions and needs a decision log, action register, minutes, or knowledge update. Do not infer attendance, consent, agreement, ownership, or confidential publication from incomplete evidence.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 4 projections.",
+      "member_refs": [
+        "capability:skill:package:meeting-knowledge:meeting-knowledge%2Fshared%2Fmethod"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:capability_set:platform:tool-registry:scheduler-transport",
+        "capability:skill:package:meeting-knowledge:meeting-knowledge%2Fshared%2Fmethod",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "meeting-knowledge/shared/method"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "meeting-evidence-curator": {
+        "capability_refs": [
+          "capability:capability_set:package:meeting-knowledge:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Meeting Evidence Curator",
         "description": "Builds the canonical, timestamped source ledger from transcripts, recordings, notes, chat, and referenced documents.",
         "base_role": "delegated-worker",
-        "prompt": "agents/meeting-evidence-curator/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "meeting-knowledge/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/meeting-evidence-curator/system.md"
       },
       "meeting-decision-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:meeting-knowledge:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Meeting Decision and Action Analyst",
         "description": "Classifies candidate decisions, actions, owners, dates, questions, risks, and disagreements without manufacturing consensus.",
         "base_role": "delegated-worker",
-        "prompt": "agents/meeting-decision-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "meeting-knowledge/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/meeting-decision-analyst/system.md"
       },
       "meeting-knowledge-editor": {
+        "capability_refs": [
+          "capability:capability_set:package:meeting-knowledge:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:build-base"
+        ],
         "label": "Meeting Knowledge Editor",
         "description": "Joins source evidence and classified outcomes into canonical minutes, decision and action registers, and scoped knowledge updates.",
         "base_role": "build",
-        "prompt": "agents/meeting-knowledge-editor/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "meeting-knowledge/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/meeting-knowledge-editor/system.md"
       },
       "meeting-knowledge-reviewer": {
+        "capability_refs": [
+          "capability:capability_set:package:meeting-knowledge:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:fact-check-base"
+        ],
         "label": "Meeting Knowledge Reviewer",
         "description": "Independently checks attribution, timestamps, decision state, action ownership, confidentiality, contradictions, and source coverage.",
         "base_role": "fact-check",
-        "prompt": "agents/meeting-knowledge-reviewer/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "meeting-knowledge/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/meeting-knowledge-reviewer/system.md"
       }
     },
     "virtual_workflows": {

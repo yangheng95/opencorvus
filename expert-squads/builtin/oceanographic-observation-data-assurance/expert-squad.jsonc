@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "oceanographic-observation-data-assurance",
   "name": "Oceanographic Observation Data Assurance",
   "label": "Oceanographic Observation Data Assurance",
   "description": "Source-bound ocean platform, instrument, calibration, profile, time-series, QC, coordinate, format, provenance, and cross-platform validation evidence without publication or marine-safety authority.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.30.2",
   "product_pillars": [
     "work"
   ],
@@ -15,141 +15,77 @@
     "selection_guidance": "Select for oceanographic observation data assurance involving cruise/platform/station/deployment identity, sensor calibration, casts or profiles, pressure/depth/time semantics, QARTOD test provenance, raw-adjusted-derived separation, NetCDF/HDF5/Zarr coordinates and metadata, or cross-platform collocation. Do not select for meteorological forecasting, hydrographic legal boundaries, cartographic publication, vessel survey, port operations, live platform control, QC flag overwrite, data release, navigation, warning, or marine-safety decisions.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 5 projections.",
+      "member_refs": [
+        "capability:skill:package:oceanographic-observation-data-assurance:oceanographic-observation-data-assurance%2Fshared%2Fmethod"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:capability_set:platform:tool-registry:scheduler-transport",
+        "capability:skill:package:oceanographic-observation-data-assurance:oceanographic-observation-data-assurance%2Fshared%2Fmethod",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "oceanographic-observation-data-assurance/shared/method"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "ocean-observing-platform-instrument-metadata-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:oceanographic-observation-data-assurance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:explore-base"
+        ],
         "label": "Ocean Observing Platform Instrument Metadata Analyst",
         "description": "Freezes mission, platform, station, cruise, deployment, cast/profile, instrument, calibration, sampling, and measurand metadata.",
         "base_role": "explore",
-        "prompt": "agents/ocean-observing-platform-instrument-metadata-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "oceanographic-observation-data-assurance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/ocean-observing-platform-instrument-metadata-analyst/system.md"
       },
       "oceanographic-profile-timeseries-quality-control-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:oceanographic-observation-data-assurance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Oceanographic Profile Timeseries Quality Control Analyst",
         "description": "Applies only source-defined QARTOD/project QC tests and preserves original, aggregate, and reviewed flag provenance.",
         "base_role": "delegated-worker",
-        "prompt": "agents/oceanographic-profile-timeseries-quality-control-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "oceanographic-observation-data-assurance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/oceanographic-profile-timeseries-quality-control-analyst/system.md"
       },
       "ocean-data-coordinate-format-provenance-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:oceanographic-observation-data-assurance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Ocean Data Coordinate Format Provenance Analyst",
         "description": "Assures labeled dimensions, coordinates, attributes, encodings, formats, chunking, missing values, and transformation provenance.",
         "base_role": "delegated-worker",
-        "prompt": "agents/ocean-data-coordinate-format-provenance-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "oceanographic-observation-data-assurance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/ocean-data-coordinate-format-provenance-analyst/system.md"
       },
       "oceanographic-cross-platform-validation-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:oceanographic-observation-data-assurance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Oceanographic Cross Platform Validation Analyst",
         "description": "Builds source-defined spatial, vertical, temporal, variable, and method collocations with uncertainty and representativeness evidence.",
         "base_role": "delegated-worker",
-        "prompt": "agents/oceanographic-cross-platform-validation-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "oceanographic-observation-data-assurance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/oceanographic-cross-platform-validation-analyst/system.md"
       },
       "oceanographic-observation-data-assurance-review-owner": {
+        "capability_refs": [
+          "capability:capability_set:package:oceanographic-observation-data-assurance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Oceanographic Observation Data Assurance Review Owner",
         "description": "Joins platform, QC, multidimensional-format, provenance, and validation evidence while preserving scientific and publication authority.",
         "base_role": "delegated-worker",
-        "prompt": "agents/oceanographic-observation-data-assurance-review-owner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "oceanographic-observation-data-assurance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/oceanographic-observation-data-assurance-review-owner/system.md"
       }
     },
     "virtual_workflows": {

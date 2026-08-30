@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "maritime-port-operations",
   "name": "Maritime Port Operations",
   "label": "Maritime Port Operations",
   "description": "Vessel-call, berth, nautical-service, terminal-flow, cargo-document, and custody evidence joined into a bounded port-operations review pack.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.30.2",
   "product_pillars": [
     "work"
   ],
@@ -15,119 +15,67 @@
     "selection_guidance": "Select for vessel calls, berth windows, nautical-service dependencies, terminal yard/gate flow, cargo manifests, verified gross mass status, dangerous-goods declaration status, port-community-system records, and custody handoffs. Do not select for vessel navigation, VTS direction, pilot/tug orders, berth clearance, cargo handling, customs/security release, dangerous-goods classification or stowage, or emergency response.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 4 projections.",
+      "member_refs": [
+        "capability:skill:package:maritime-port-operations:maritime-port-operations%2Fshared%2Fmethod"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:capability_set:platform:tool-registry:scheduler-transport",
+        "capability:skill:package:maritime-port-operations:maritime-port-operations%2Fshared%2Fmethod",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "maritime-port-operations/shared/method"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "vessel-call-berth-nautical-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:maritime-port-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:explore-base"
+        ],
         "label": "Vessel Call, Berth and Nautical Analyst",
         "description": "Reconciles vessel-call milestones, berth windows, dimensional compatibility, and nautical-service dependencies.",
         "base_role": "explore",
-        "prompt": "agents/vessel-call-berth-nautical-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "maritime-port-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/vessel-call-berth-nautical-analyst/system.md"
       },
       "terminal-yard-gate-flow-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:maritime-port-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Terminal Yard and Gate Flow Analyst",
         "description": "Reconciles cargo moves, equipment and labor capacity, yard occupancy, dwell, rehandles, and modal interfaces.",
         "base_role": "delegated-worker",
-        "prompt": "agents/terminal-yard-gate-flow-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "maritime-port-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/terminal-yard-gate-flow-analyst/system.md"
       },
       "cargo-document-safety-custody-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:maritime-port-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Cargo Document, Safety and Custody Analyst",
         "description": "Reconciles cargo identity, manifest, VGM, declaration, clearance-status, and custody evidence without release authority.",
         "base_role": "delegated-worker",
-        "prompt": "agents/cargo-document-safety-custody-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "maritime-port-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/cargo-document-safety-custody-analyst/system.md"
       },
       "maritime-port-operations-review-owner": {
+        "capability_refs": [
+          "capability:capability_set:package:maritime-port-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Maritime Port Operations Review Owner",
         "description": "Joins vessel-call, terminal-flow, and cargo-custody evidence and routes qualified decisions.",
         "base_role": "delegated-worker",
-        "prompt": "agents/maritime-port-operations-review-owner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "maritime-port-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/maritime-port-operations-review-owner/system.md"
       }
     },
     "virtual_workflows": {

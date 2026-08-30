@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "satellite-mission-operations",
   "name": "Satellite Mission Operations",
   "label": "Satellite Mission Operations",
   "description": "Evidence-bounded spacecraft telemetry, mission-plan, ground-contact, and telecommand-readiness review joined without live flight or ground-system authority.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.30.2",
   "product_pillars": [
     "work"
   ],
@@ -15,119 +15,67 @@
     "selection_guidance": "Select for spacecraft telemetry state reconstruction, ground-contact and mission-resource planning evidence, or telecommand procedure and anomaly-readiness review. Do not select for live spacecraft control, orbital decisions, pass booking, or emergency response.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 4 projections.",
+      "member_refs": [
+        "capability:skill:package:satellite-mission-operations:satellite-mission-operations%2Fshared%2Fmethod"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:capability_set:platform:tool-registry:scheduler-transport",
+        "capability:skill:package:satellite-mission-operations:satellite-mission-operations%2Fshared%2Fmethod",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "satellite-mission-operations/shared/method"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "spacecraft-telemetry-health-state-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:satellite-mission-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:explore-base"
+        ],
         "label": "Spacecraft Telemetry Health State Analyst",
         "description": "Reconstructs source-bound telemetry, mode, limit-set, and event evidence without issuing alerts or operational diagnoses.",
         "base_role": "explore",
-        "prompt": "agents/spacecraft-telemetry-health-state-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "satellite-mission-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/spacecraft-telemetry-health-state-analyst/system.md"
       },
       "mission-planning-ground-contact-resource-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:satellite-mission-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Mission Planning Ground Contact Resource Analyst",
         "description": "Checks source-bound contact windows, data generation, downlink capacity, and resource conflicts without booking passes.",
         "base_role": "delegated-worker",
-        "prompt": "agents/mission-planning-ground-contact-resource-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "satellite-mission-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/mission-planning-ground-contact-resource-analyst/system.md"
       },
       "telecommand-procedure-anomaly-readiness-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:satellite-mission-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Telecommand Procedure Anomaly Readiness Analyst",
         "description": "Traces telecommand procedure, authorization, rehearsal, inhibit, verification, and anomaly evidence without creating or sending commands.",
         "base_role": "delegated-worker",
-        "prompt": "agents/telecommand-procedure-anomaly-readiness-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "satellite-mission-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/telecommand-procedure-anomaly-readiness-analyst/system.md"
       },
       "satellite-mission-operations-review-owner": {
+        "capability_refs": [
+          "capability:capability_set:package:satellite-mission-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Satellite Mission Operations Review Owner",
         "description": "Joins telemetry, plan/contact, and procedure/anomaly branches into a qualified-review pack while preserving unresolved operational decisions.",
         "base_role": "delegated-worker",
-        "prompt": "agents/satellite-mission-operations-review-owner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "satellite-mission-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/satellite-mission-operations-review-owner/system.md"
       }
     },
     "virtual_workflows": {

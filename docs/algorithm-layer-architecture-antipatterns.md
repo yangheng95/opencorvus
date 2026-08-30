@@ -443,16 +443,16 @@ grep -rn 'from "@/' packages/opencorvus/src/$d --include="*.ts" | grep -v ".test
   }
   ```
   只读白名单（`tools.ts:875-886`）10 个名字，**不含** `artifact_select`、`artifact_snapshot`、`publish_interactive_artifact`。
-  外层建 `builtInToolIDs`（`prompt-profile-resolver.ts:1174-1180`）：
+  Phase B 之前外层建 `builtInToolIDs` 的旧路径已删除；当前路径由 manifest v2 typed refs 与 platform sets 一次物化：
   ```ts
-  function expandedSchedulerBuiltInToolIDs(projection, config) {
+  function expandedSchedulerBuiltInToolIDs(grants, config) {
     return expandedProjectedBuiltInToolIDs({
-      inheritedToolIDs: [
-        ...(projection.inherit_base_tools ? AgentToolPool.orchestratorSchedulerRoleBaseToolIDs() : []),
-        ...TASK_ARTIFACT_SCHEDULER_TOOL_IDS,     // ← 无条件，与 inherit_base_tools 无关
-        "publish_interactive_artifact",           // ← 无条件
-      ],
-      ...
+      inheritedToolIDs: grants.builtInToolIDs.filter(
+        (toolID) => !grants.explicitBuiltInToolIDs.includes(toolID),
+      ),
+      explicitToolIDs: grants.explicitBuiltInToolIDs,
+    })
+  }
   ```
   `TASK_ARTIFACT_SCHEDULER_TOOL_IDS`（`tool-id-catalog.ts:20-23`）= `[...PLATFORM_ARTIFACT_DISCOVERY_TOOL_IDS, "artifact_snapshot"]` = `["artifact_search", "artifact_read", "artifact_select", "artifact_snapshot"]`（见 `platform-artifact-tool-ids.ts:6-8`）。
   外层校验（`prompt-profile-resolver.ts:2922-2931`）：

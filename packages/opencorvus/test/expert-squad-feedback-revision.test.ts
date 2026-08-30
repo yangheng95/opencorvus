@@ -26,6 +26,7 @@ import { Instance } from "../src/project/instance"
 import { Session } from "../src/session"
 import { configureTaskIngressRunner } from "../src/engine/task-root-ingress-delivery"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
+import { capabilityRef, CapabilityRefCodec } from "@opencorvus-ai/util/capability-ref"
 
 const SQUAD_ID = "feedback-revision-squad"
 const FEEDBACK = "我希望调研报告尽可能多的图和表，不要干干的全是文字"
@@ -33,28 +34,13 @@ const REVISED_PROMPT =
   "# Feedback revision worker\n\nOpen with a summary table, and give every quantitative claim a chart or a table.\n"
 
 function emptyProjectionResources() {
-  return {
-    inherit_base_tools: false,
-    built_in_tool_ids: [] as string[],
-    default_skill_refs: [] as string[],
-    package_skill_refs: [] as string[],
-    default_tool_refs: [] as string[],
-    package_tool_refs: [] as string[],
-    default_mcp_server_refs: [] as string[],
-    package_mcp_server_refs: [] as string[],
-    default_mcp_tool_refs: [] as string[],
-    package_mcp_tool_refs: [] as string[],
-    default_mcp_prompt_refs: [] as string[],
-    package_mcp_prompt_refs: [] as string[],
-    default_mcp_resource_refs: [] as string[],
-    package_mcp_resource_refs: [] as string[],
-  }
+  return { capability_refs: [] as string[] }
 }
 
 function packageDefinition(version: string): ExpertSquadPackageDefinition {
   return {
     manifest: {
-      schema_version: 1,
+      schema_version: 2,
       namespace: "evolution-test",
       id: SQUAD_ID,
       label: "Feedback revision squad",
@@ -67,6 +53,7 @@ function packageDefinition(version: string): ExpertSquadPackageDefinition {
         selection_guidance: "Select only for the feedback revision contract.",
         instructions: "selector.md",
       },
+      capability_sets: {},
       capability_projection: {
         scheduler: { ...emptyProjectionResources(), base_role: "orchestrator" },
         agents: {
@@ -574,8 +561,14 @@ describe("revising an installed expert squad from operator feedback", () => {
 
         // Reaching for a Tool no revision before it declared is the one move
         // that stays refused, whatever the operator asked for.
-        const selfWidened = baselineManifest.replace('"built_in_tool_ids": []', '"built_in_tool_ids": ["bash"]')
-        expect(selfWidened).not.toBe(baselineManifest)
+        const selfWidenedManifest = JSON.parse(baselineManifest)
+        selfWidenedManifest.capability_projection.scheduler.capability_refs.push(
+          CapabilityRefCodec.encode(
+            capabilityRef({ kind: "tool", source: "platform", owner_ref: "tool-registry", local_ref: "bash" }),
+          ),
+        )
+        selfWidenedManifest.capability_projection.scheduler.capability_refs.sort()
+        const selfWidened = `${JSON.stringify(selfWidenedManifest, null, 2)}\n`
         await expect(
           reviseInstalledExpertSquadFromFeedback({
             taskID: task.taskID,
@@ -588,7 +581,7 @@ describe("revising an installed expert squad from operator feedback", () => {
               files: [{ path: "expert-squad.jsonc", content: selfWidened }],
             },
           }),
-        ).rejects.toThrow(/built_in_tool_ids/)
+        ).rejects.toThrow(/capability_refs/)
       },
     })
   })

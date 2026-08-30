@@ -15,6 +15,7 @@ import { HostSessionMcpRuntime } from "../../src/mcp/host-session-runtime"
 import { Config } from "../../src/config/config"
 import { Instance } from "../../src/project/instance"
 import { memoryProject } from "../fixture/memory"
+import { capabilityRef, CapabilityRefCodec } from "@opencorvus-ai/util/capability-ref"
 import { materializeMcpToolResult } from "../../src/mcp/materialize"
 import { ExpertSquadConversationAuthoring } from "../../src/expert-squad/conversation-authoring"
 import { PromptProfileResolver } from "../../src/expert-squad/prompt-profile-resolver"
@@ -32,7 +33,7 @@ import { configureTaskIngressRunner } from "../../src/engine/task-root-ingress-d
 import { artifactRuntimeNodeModuleNames } from "../../script/build-artifact"
 import { SessionRuntimeContractStore } from "../../src/session/runtime-contract"
 import { Session } from "../../src/session"
-import { CapabilityRefCodec } from "../../src/capability/ref"
+import { CapabilityRefCodec } from "@opencorvus-ai/util/capability-ref"
 
 function pngBase64(width: number, height: number) {
   const image = new PNG({ width, height })
@@ -695,7 +696,7 @@ describe("Computer Use exact control contract", () => {
             installationScope: "project",
             replace: false,
             definition: buildExpertSquadAuthorDefinition({
-              schema_version: 1,
+              schema_version: 2,
               namespace: "test",
               id: profileID,
               name: "Computer Harness Contract",
@@ -711,7 +712,16 @@ describe("Computer Use exact control contract", () => {
               },
               scheduler: {
                 prompt: "Coordinate the exact Computer harness contract.",
-                default_mcp_tool_refs: [...ComputerMCPBuiltin.ImportableToolRefs],
+                capability_refs: ComputerMCPBuiltin.ImportableToolRefs.map((localRef) =>
+                  CapabilityRefCodec.encode(
+                    capabilityRef({
+                      kind: "mcp_tool",
+                      source: "project",
+                      owner_ref: "default-mcp-registry",
+                      local_ref: localRef,
+                    }),
+                  ),
+                ).sort(),
               },
               agents: {
                 "computer-contract-worker": {
@@ -760,9 +770,9 @@ describe("Computer Use exact control contract", () => {
               projectDirectory: project.path,
               config,
             })
-          expect(capability.defaultMcpTools.map((entry) => entry.ref)).toEqual([
-            ...ComputerMCPBuiltin.ImportableToolRefs,
-          ])
+          expect(capability.defaultMcpTools.map((entry) => entry.ref)).toEqual(
+            [...ComputerMCPBuiltin.ImportableToolRefs].sort(),
+          )
 
           configureTaskIngressRunner(async () => {})
           const taskID = await EngineService.createTask(

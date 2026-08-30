@@ -1,6 +1,6 @@
 import z from "zod"
 import { ExpertSquadIDSchema } from "@/expert-squad/id"
-export { ProductPillarSchema, type ProductPillar } from "@opencorvus-ai/sdk/expert-squad-manifest-v1"
+export { ProductPillarSchema, type ProductPillar } from "@opencorvus-ai/sdk/expert-squad-manifest-v2"
 
 // Mission identifier shape. It matches mission_state's path guard before the
 // ID is used as the readable `.opencorvus/.r/missions/<mission-id>/`

@@ -2,10 +2,11 @@ import { lstat, mkdir, mkdtemp, rename, rm, writeFile } from "node:fs/promises"
 import path from "node:path"
 import { setTimeout as delay } from "node:timers/promises"
 import z from "zod"
+import { CapabilityRefCodec, type CapabilityRef } from "@opencorvus-ai/util/capability-ref"
 import {
-  ExpertSquadManifestV1Schema,
-  type ExpertSquadManifestV1,
-} from "./expert-squad-manifest-v1.js"
+  ExpertSquadManifestV2Schema,
+  type ExpertSquadManifestV2,
+} from "./expert-squad-manifest-v2.js"
 import { isCanonicalProjectRelativePath } from "./project-path.js"
 import {
   PLATFORM_ARTIFACT_DISCOVERY_TOOL_IDS,
@@ -77,7 +78,7 @@ export const EXPERT_SQUAD_PLATFORM_ARTIFACT_DISCOVERY_TOOL_IDS = PLATFORM_ARTIFA
 export const EXPERT_SQUAD_PLATFORM_ARTIFACT_PUBLISH_TOOL_IDS = PLATFORM_ARTIFACT_PUBLISH_TOOL_IDS
 export const EXPERT_SQUAD_PLATFORM_ARTIFACT_TOOL_IDS = PLATFORM_ARTIFACT_TOOL_IDS
 
-export * from "./expert-squad-manifest-v1.js"
+export * from "./expert-squad-manifest-v2.js"
 export type ExpertSquadPackageFile = string | Uint8Array
 
 /**
@@ -87,13 +88,13 @@ export type ExpertSquadPackageFile = string | Uint8Array
  * Task acceptance state.
  */
 export interface ExpertSquadPackageDefinition {
-  manifest: ExpertSquadManifestV1
+  manifest: ExpertSquadManifestV2
   files: Readonly<Record<string, ExpertSquadPackageFile>>
 }
 
 export const ExpertSquadTextPackageDefinitionSchema = z
   .object({
-    manifest: ExpertSquadManifestV1Schema,
+    manifest: ExpertSquadManifestV2Schema,
     files: z.record(z.string(), z.string()),
   })
   .strict()
@@ -139,7 +140,7 @@ export interface ExpertSquadCollaborationDefinition {
 
 export interface ValidateExpertSquadCollaborationInput {
   definition: ExpertSquadCollaborationDefinition
-  manifests: readonly ExpertSquadManifestV1[]
+  manifests: readonly ExpertSquadManifestV2[]
 }
 
 export interface ExpertSquadSourceImportedClosure {
@@ -215,7 +216,7 @@ export interface ExpertSquadSourceCapabilityContract {
 export interface ValidateExpertSquadSourceCapabilitiesInput {
   definition: ExpertSquadSourceCapabilityContract
   collaborations: readonly ExpertSquadCollaborationDefinition[]
-  manifests: readonly ExpertSquadManifestV1[]
+  manifests: readonly ExpertSquadManifestV2[]
 }
 
 const CANONICAL_EXPERT_SQUAD_ID = /^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/
@@ -246,11 +247,23 @@ function throwValidationDiagnostics(diagnostics: readonly ExpertSquadValidationD
   if (diagnostics.length > 0) throw new ExpertSquadValidationError(diagnostics)
 }
 
+function projectionCapabilityLeaves(
+  manifest: ExpertSquadManifestV2,
+  projection: ExpertSquadManifestV2["capability_projection"]["scheduler"] | ExpertSquadManifestV2["capability_projection"]["agents"][string],
+): CapabilityRef[] {
+  return projection.capability_refs.flatMap((encoded) => {
+    const ref = CapabilityRefCodec.decode(encoded)
+    if (ref.kind !== "capability_set") return [ref]
+    if (ref.source !== "package" || ref.owner_ref !== manifest.id) return []
+    return manifest.capability_sets[ref.local_ref]!.member_refs.map(CapabilityRefCodec.decode)
+  })
+}
+
 function manifestShapeDiagnostics(input: unknown): {
-  manifest?: ExpertSquadManifestV1
+  manifest?: ExpertSquadManifestV2
   diagnostics: ExpertSquadValidationDiagnostic[]
 } {
-  const parsed = ExpertSquadManifestV1Schema.safeParse(input)
+  const parsed = ExpertSquadManifestV2Schema.safeParse(input)
   if (parsed.success) return { manifest: parsed.data, diagnostics: [] }
   return {
     diagnostics: parsed.error.issues.map((issue) => ({
@@ -277,7 +290,7 @@ function assertDistinctCanonicalIDs(values: readonly string[], field: string): S
   return result
 }
 
-export function validateExpertSquadManifestDispatchTopology(input: unknown): ExpertSquadManifestV1 {
+export function validateExpertSquadManifestDispatchTopology(input: unknown): ExpertSquadManifestV2 {
   const shape = manifestShapeDiagnostics(input)
   throwValidationDiagnostics(shape.diagnostics)
   const manifest = shape.manifest!
@@ -327,7 +340,7 @@ export function validateExpertSquadManifestDispatchTopology(input: unknown): Exp
     }
   }
   throwValidationDiagnostics(diagnostics)
-  return input as ExpertSquadManifestV1
+  return input as ExpertSquadManifestV2
 }
 
 /** A deterministic read-only view of one dependency depth in a virtual workflow. */
@@ -337,7 +350,7 @@ export interface ExpertSquadWorkflowTopologyWave {
 }
 
 /**
- * Author-facing graph facts derived from manifest v1. These facts are not
+ * Author-facing graph facts derived from manifest v2. These facts are not
  * scheduler state and do not impose a minimum width or a preferred topology.
  */
 export interface ExpertSquadWorkflowTopologyAnalysis {
@@ -432,7 +445,7 @@ export function analyzeExpertSquadWorkflowTopology(
  * Requirements -> Architect -> Implementer delivery chain. Advanced is the
  * explicit product exception because that package owns those specialist ABIs.
  */
-export function validateBuiltInExpertSquadTopologyPolicy(input: unknown): ExpertSquadManifestV1 {
+export function validateBuiltInExpertSquadTopologyPolicy(input: unknown): ExpertSquadManifestV2 {
   const manifest = validateExpertSquadManifestDispatchTopology(input)
   if (manifest.id === "advanced") return manifest
 
@@ -512,7 +525,7 @@ export function validateExpertSquadSourceCapabilities(
     throw new Error("Expert squad source capability source pipeline version must not be empty")
   }
 
-  const manifests = new Map<string, ExpertSquadManifestV1>()
+  const manifests = new Map<string, ExpertSquadManifestV2>()
   for (const manifest of input.manifests) {
     validateExpertSquadManifestDispatchTopology(manifest)
     if (manifests.has(manifest.id)) throw new Error(`Duplicate expert squad manifest id: ${manifest.id}`)
@@ -587,12 +600,12 @@ export function validateExpertSquadSourceCapabilities(
       if (ownerIDs.has(ownerID)) throw new Error(`Native replacement ${replacement.id} repeats owner: ${ownerID}`)
       ownerIDs.add(ownerID)
       const projection = agentProjection(owner, `Native replacement ${replacement.id}`)
-      for (const surface of [
-        ...(projection.built_in_tool_ids ?? []),
-        ...(projection.default_tool_refs ?? []),
-        ...(projection.default_mcp_tool_refs ?? []),
-      ]) {
-        visibleSurfaces.add(surface)
+      const manifest = manifests.get(owner.squad_id)!
+      for (const ref of projectionCapabilityLeaves(manifest, projection)) {
+        if (ref.kind === "tool" || ref.kind === "mcp_tool") {
+          visibleSurfaces.add(ref.local_ref)
+          visibleSurfaces.add(CapabilityRefCodec.encode(ref))
+        }
       }
     }
     for (const surface of replacement.surfaces) {
@@ -610,7 +623,11 @@ export function validateExpertSquadSourceCapabilities(
     if (!role.target_skill.startsWith(expectedPrefix)) {
       throw new Error(`Role capability ${role.id} target_skill must be agent-local under ${expectedPrefix}`)
     }
-    if (!projection.package_skill_refs.includes(role.target_skill)) {
+    const manifest = manifests.get(role.owner.squad_id)!
+    const projectedPackageSkills = projectionCapabilityLeaves(manifest, projection).filter(
+      (ref) => ref.kind === "skill" && ref.source === "package",
+    )
+    if (!projectedPackageSkills.some((ref) => ref.local_ref === role.target_skill)) {
       throw new Error(`Role capability ${role.id} target_skill is not projected to its owner: ${role.target_skill}`)
     }
   }
@@ -755,7 +772,7 @@ export function validateExpertSquadCollaboration(
 
   const externalInputs = assertDistinctCanonicalIDs(definition.inputs, "Collaboration inputs")
   const requestedOutputs = assertDistinctCanonicalIDs(definition.outputs, "Collaboration outputs")
-  const manifests = new Map<string, ExpertSquadManifestV1>()
+  const manifests = new Map<string, ExpertSquadManifestV2>()
   for (const manifest of input.manifests) {
     if (manifests.has(manifest.id)) throw new Error(`Duplicate expert squad manifest id: ${manifest.id}`)
     validateExpertSquadManifestDispatchTopology(manifest)

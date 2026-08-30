@@ -15,6 +15,8 @@ import { ExpertSquadVersionSchema, expertSquadVersionForTimestamp } from "./vers
 import { MCP } from "../mcp"
 import { BrowserMCPBuiltin } from "../mcp/browser/builtin"
 import { Global } from "../global"
+import { PlatformCapabilitySetRegistry } from "../agent/platform-capability-sets"
+import { capabilityRef, CapabilityRefCodec, type CapabilityRef } from "@opencorvus-ai/util/capability-ref"
 
 // UUID means Universally Unique Identifier; Multica uses UUIDs as stable source identities.
 const UUID = z.string().uuid()
@@ -1174,22 +1176,8 @@ function markdownSection(title: string, content: string): string {
   return `## ${title}\n\n${content.trim()}\n`
 }
 
-function emptyProjectionResources() {
-  return {
-    built_in_tool_ids: [],
-    default_skill_refs: [],
-    package_skill_refs: [],
-    default_tool_refs: [],
-    package_tool_refs: [],
-    default_mcp_server_refs: [],
-    package_mcp_server_refs: [],
-    default_mcp_tool_refs: [],
-    package_mcp_tool_refs: [],
-    default_mcp_prompt_refs: [],
-    package_mcp_prompt_refs: [],
-    default_mcp_resource_refs: [],
-    package_mcp_resource_refs: [],
-  }
+function encodedCapabilityRefs(refs: readonly CapabilityRef[]) {
+  return [...new Set(refs.map(CapabilityRefCodec.encode))].sort()
 }
 
 function packageFiles(
@@ -1273,15 +1261,30 @@ function packageFiles(
       ),
     ]
     projections[agentID] = {
-      ...emptyProjectionResources(),
       label: agent.name,
       ...(agent.description.trim() ? { description: agent.description } : {}),
       base_role: mapping.agents[agent.id]!.base_role,
       prompt: `agents/${agentID}/system.md`,
-      inherit_base_tools: true,
-      package_skill_refs: skillRefs,
-      package_mcp_server_refs: mcpServerRefs,
-      default_mcp_tool_refs: defaultMcpToolRefs,
+      capability_refs: encodedCapabilityRefs([
+        PlatformCapabilitySetRegistry.baseRef({
+          kind: "worker",
+          baseRole: mapping.agents[agent.id]!.base_role,
+        }),
+        ...skillRefs.map((localRef) =>
+          capabilityRef({ kind: "skill", source: "package", owner_ref: preview.targetID, local_ref: localRef }),
+        ),
+        ...mcpServerRefs.map((localRef) =>
+          capabilityRef({ kind: "mcp_server", source: "package", owner_ref: preview.targetID, local_ref: localRef }),
+        ),
+        ...defaultMcpToolRefs.map((localRef) =>
+          capabilityRef({
+            kind: "mcp_tool",
+            source: "project",
+            owner_ref: "default-mcp-registry",
+            local_ref: localRef,
+          }),
+        ),
+      ]),
     }
     files.set(
       `agents/${agentID}/system.md`,
@@ -1310,7 +1313,7 @@ function packageFiles(
     for (const file of skill.files) files.set(`${skillRoot}/${file.path}`, file.content)
   }
   const manifest: ExpertSquadRegistry.Manifest = {
-    schema_version: 1,
+    schema_version: 2,
     namespace: TARGET_NAMESPACE,
     id: preview.targetID,
     name: snapshot.squad.name,
@@ -1324,12 +1327,12 @@ function packageFiles(
       selection_guidance: `Select ${preview.targetID} only when the request matches the imported Multica squad ${snapshot.squad.name}.`,
       instructions: "selector.md",
     },
+    capability_sets: {},
     capability_projection: {
       scheduler: {
-        ...emptyProjectionResources(),
+        capability_refs: [CapabilityRefCodec.encode(PlatformCapabilitySetRegistry.baseRef({ kind: "scheduler" }))],
         base_role: "orchestrator",
         prompt: "agents/orchestrator/system.md",
-        inherit_base_tools: true,
       },
       agents: projections,
       virtual_workflows: Object.fromEntries(

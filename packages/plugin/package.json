@@ -61,6 +61,7 @@
   "dependencies": {
     "@types/node": "catalog:",
     "@opencorvus-ai/sdk": "workspace:*",
+    "@opencorvus-ai/util": "workspace:*",
     "hono": "catalog:",
     "property-information": "7.2.0",
     "zod": "catalog:"

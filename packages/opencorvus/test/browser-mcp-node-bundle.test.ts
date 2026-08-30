@@ -1,4 +1,7 @@
 import { afterAll, describe, expect, test } from "bun:test"
+import { createHash } from "node:crypto"
+import fs from "node:fs/promises"
+import os from "node:os"
 import path from "node:path"
 import { artifactBrowserMcpNodeRuntimeModules } from "../script/build-artifact"
 import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
@@ -84,6 +87,69 @@ describe("Browser Model Context Protocol Node sidecar bundle", () => {
       packagedRuntime: "1",
     })
   })
+
+  test("converges two process publishers on one verified Browser source bundle", async () => {
+    const isolatedRoot = await fs.mkdtemp(path.join(os.tmpdir(), "opencorvus-browser-bundle-race-"))
+    const cacheRoot = path.join(isolatedRoot, "cache")
+    const barrierRoot = path.join(isolatedRoot, "barrier")
+    const worker = path.join(import.meta.dir, "fixture", "browser-mcp-node-bundle-process-worker.ts")
+    await fs.mkdir(barrierRoot, { recursive: true })
+    const children = ["one", "two"].map((workerID) =>
+      Bun.spawn([process.execPath, worker, cacheRoot, barrierRoot, workerID], {
+        cwd: path.resolve(import.meta.dir, ".."),
+        env: { ...Bun.env, OPENCORVUS_HOME: path.join(isolatedRoot, "runtime") },
+        stdout: "pipe",
+        stderr: "pipe",
+      }),
+    )
+
+    try {
+      for (const workerID of ["one", "two"]) {
+        const ready = path.join(barrierRoot, `ready-${workerID}`)
+        const deadline = Date.now() + 10_000
+        while (true) {
+          try {
+            await fs.access(ready)
+            break
+          } catch (error) {
+            if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error
+            if (Date.now() >= deadline) throw new Error(`Timed out waiting for Browser bundle worker ${workerID}`)
+            await Bun.sleep(10)
+          }
+        }
+      }
+      await fs.writeFile(path.join(barrierRoot, "release"), "release", { flag: "wx" })
+
+      const results = await Promise.all(
+        children.map(async (child) => {
+          const [exitCode, stdout, stderr] = await Promise.all([
+            child.exited,
+            new Response(child.stdout).text(),
+            new Response(child.stderr).text(),
+          ])
+          if (exitCode !== 0) throw new Error(`Browser bundle worker failed (${exitCode}): ${stderr}`)
+          return JSON.parse(stdout.trim().split(/\r?\n/).filter(Boolean).at(-1) ?? "null") as {
+            bundle: string
+            digest: string
+          }
+        }),
+      )
+
+      expect(results[0]).toEqual(results[1])
+      expect(path.basename(results[0]!.bundle)).toBe(`stdio-${results[0]!.digest}.mjs`)
+      expect(createHash("sha256").update(await fs.readFile(results[0]!.bundle)).digest("hex")).toBe(
+        results[0]!.digest,
+      )
+    } finally {
+      for (const child of children) {
+        try {
+          child.kill()
+        } catch {}
+      }
+      await Promise.all(children.map((child) => child.exited.catch(() => -1)))
+      await fs.rm(isolatedRoot, { recursive: true, force: true })
+    }
+  }, 30_000)
 
   test("reuses one canonical Browser connection across hashed Task provider aliases and reports its owner", async () => {
     await using project = await memoryProject()

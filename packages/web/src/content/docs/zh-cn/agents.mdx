@@ -29,16 +29,20 @@ Manifest 中 `capability_projection.agents.<agent-id>` 的 key 是 package worke
 
 每个投影 worker 必须声明 `base_role`。它只选择 core-owned ABI（Application Binary Interface，应用二进制接口）模板种子，为 prompt、model、tool、permission、session 和 adapter 提供默认契约。它不是运行身份或 alias；除非 package 显式声明了同名 agent ID，否则不能把 base role 当 dispatch target。
 
-Scheduler 和每个 worker 的 13 个 resource array 都是必填字段；没有授权时也必须明确写空数组。
+Manifest v2 为 scheduler 和每个 worker 提供唯一、canonical 排序的 `capability_refs` 数组。每个条目都是 typed `capability:<kind>:<source>:<owner>:<local-ref>` identity 或一层 CapabilitySet 引用；package-owned set 统一声明在顶层 `capability_sets`。
 
-同一个 manifest v1 必须显式声明 `virtual_workflows` record；无需 binding graph 的直接调度使用 `{}`。每个已声明 node 在一个 Task 中只执行一次：
+同一个 manifest 必须显式声明 `virtual_workflows` record；无需 binding graph 的直接调度使用 `{}`。每个已声明 node 在一个 Task 中只执行一次：
 
 ```jsonc
 "capability_projection": {
   "agents": {
     "security-reviewer": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:integrity-base"
+      ],
       "label": "Security reviewer",
-      "base_role": "integrity"
+      "base_role": "integrity",
+      "execution_contract": "platform_integrity_review"
     }
   },
   "virtual_workflows": {
@@ -63,7 +67,7 @@ Scheduler 和每个 worker 的 13 个 resource array 都是必填字段；没有
 
 无需 binding graph 时使用 `virtual_workflows: {}` 直接调度。Requirements、Architect、Integrity、review 与 Delivery Slice 输入都是 package 根据领域责任图作出的设计选择。Registry 与 SDK 只校验 manifest 形态、精确 Agent/依赖引用、canonical 依赖顺序和无环性，不强制一种通用角色拓扑。
 
-使用现有 SDK 的 Node-only authoring surface 将定义物化为新的 source directory。SDK 的 runtime manifest v1 schema 是 authoring 与 Registry 共用的 portable 单一来源。Writer 完成全部校验后写入同父目录 staging，通过一次 rename 原子发布，并拒绝已存在的目标目录。
+使用现有 SDK 的 Node-only authoring surface 将定义物化为新的 source directory。SDK 的 runtime manifest v2 schema 是 authoring 与 Registry 共用的 portable 单一来源。Writer 完成全部校验后写入同父目录 staging，通过一次 rename 原子发布，并拒绝已存在的目标目录。
 
 ```ts
 import { createOpenCorvusClient } from "@opencorvus-ai/sdk"
@@ -87,7 +91,7 @@ await client.expertSquad.importFolder(
 
 完整的具体定义见仓库中的 `templates/portable-expert-squad-template`。Validation 是只读操作并调用真实 Registry；import 是独立、显式的 Manager 操作，不会激活 package。Folder 和 ZIP import 必须声明 `installationScope: "project" | "global"`，两个 scope 共用同一个 Registry 和 manifest identity 规则。只有当项目需要使用它时，才通过唯一的 `prompt_profile.active` 选择已安装 manifest ID。
 
-Package resource ref 使用同一套语法。共享 Skill、tool 和 MCP（Model Context Protocol）server 使用 `<squad-id>/shared/<name>`；agent-local resource 使用 `<squad-id>/<agent-id>/<name>`，并且只能由该 agent 投影。Skill 是包含 `SKILL.md` 的目录；tool 位于 `tools/<name>.ts` 或对应 agent-local 路径；MCP server 位于 `mcp/<name>.jsonc` 或对应 agent-local 路径。选择单个 MCP capability 时使用 `<server-ref>/tool/<name>`、`<server-ref>/prompt/<name>` 或 `<server-ref>/resource/<name>`。`package_mcp_server_refs` 会挂载该 server 声明的全部 capability，因此不能再在 typed MCP ref array 中重复声明。默认 host resource 使用独立的 `default/...` namespace。
+Package-local resource name 使用同一套语法。共享 Skill、tool 和 MCP（Model Context Protocol）server 使用 `<squad-id>/shared/<name>`；agent-local resource 使用 `<squad-id>/<agent-id>/<name>`，并且只能由该 agent 投影。Skill 是包含 `SKILL.md` 的目录；tool 位于 `tools/<name>.ts` 或对应 agent-local 路径；MCP server 位于 `mcp/<name>.jsonc` 或对应 agent-local 路径。声明时把这些名称编码为 typed `capability_refs`，owner 是 package manifest ID。MCP server ref 会挂载该 server 的全部 capability；也可以只授权精确的 `mcp_tool`、`mcp_prompt` 或 `mcp_resource` leaf，但同一 capability 不能同时通过两种方式声明。默认 MCP leaf 使用 `project` source 和 `default-mcp-registry` owner。
 
 Virtual workflow 声明精确的可执行协作变体，不要求覆盖每个投影 agent；但一个 workflow 被选中后，其中声明的每个 node 都是必需步骤。Scheduler 必须在首次 dispatch 前可见地指出与请求和证据匹配的精确 workflow，为每个 node 获得 terminal-success evidence，遵守全部 `depends_on`，并在无法满足时拒绝继续，而不是省略、跳步、替换或调整顺序。
 

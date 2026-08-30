@@ -262,6 +262,7 @@
       "version": "0.0.58-beta",
       "dependencies": {
         "@opencorvus-ai/sdk": "workspace:*",
+        "@opencorvus-ai/util": "workspace:*",
         "@types/node": "catalog:",
         "hono": "catalog:",
         "property-information": "7.2.0",
@@ -333,6 +334,7 @@
         "@fontsource/fragment-mono": "5.3.0",
         "@fontsource/ibm-plex-mono": "5.3.0",
         "@fontsource/montserrat": "5.3.0",
+        "@opencorvus-ai/util": "workspace:*",
         "@zip.js/zip.js": "2.7.62",
         "astro": "7.2.0",
         "rehype-autolink-headings": "7.1.0",

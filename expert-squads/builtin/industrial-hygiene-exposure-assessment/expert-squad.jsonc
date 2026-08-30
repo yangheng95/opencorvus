@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "industrial-hygiene-exposure-assessment",
   "name": "Industrial Hygiene Exposure Assessment",
   "label": "Industrial Hygiene Exposure Assessment",
   "description": "Worker, agent, similar-exposure-group, sampling, analytical-quality, exposure-limit, and control evidence joined for qualified industrial-hygiene review.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.30.2",
   "product_pillars": [
     "work"
   ],
@@ -15,119 +15,67 @@
     "selection_guidance": "Select for workplace agent/task/route scoping, similar exposure groups, occupational exposure-limit authority, sampling and analytical QA, time-weighted exposure calculations, control and respiratory-program evidence, and uncertainty review. Do not select for major-process-hazard analysis, clinical diagnosis, laboratory accreditation, product-quality disposition, site entry, live sampling, worker assignment, PPE or respirator selection, overexposure/compliance determinations, or employee-health reporting.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 4 projections.",
+      "member_refs": [
+        "capability:skill:package:industrial-hygiene-exposure-assessment:industrial-hygiene-exposure-assessment%2Fshared%2Fmethod"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:capability_set:platform:tool-registry:scheduler-transport",
+        "capability:skill:package:industrial-hygiene-exposure-assessment:industrial-hygiene-exposure-assessment%2Fshared%2Fmethod",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "industrial-hygiene-exposure-assessment/shared/method"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "industrial-hygiene-scope-exposure-group-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:industrial-hygiene-exposure-assessment:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:explore-base"
+        ],
         "label": "Industrial Hygiene Scope and Exposure-group Analyst",
         "description": "Builds the worker, task, agent, route, shift, and similar-exposure-group evidence spine.",
         "base_role": "explore",
-        "prompt": "agents/industrial-hygiene-scope-exposure-group-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "industrial-hygiene-exposure-assessment/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/industrial-hygiene-scope-exposure-group-analyst/system.md"
       },
       "industrial-hygiene-sampling-analytical-qa-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:industrial-hygiene-exposure-assessment:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Industrial Hygiene Sampling and Analytical QA Analyst",
         "description": "Reconciles sample identity, method, calibration, blanks, laboratory results, units, censoring, and uncertainty.",
         "base_role": "delegated-worker",
-        "prompt": "agents/industrial-hygiene-sampling-analytical-qa-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "industrial-hygiene-exposure-assessment/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/industrial-hygiene-sampling-analytical-qa-analyst/system.md"
       },
       "industrial-hygiene-exposure-control-evidence-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:industrial-hygiene-exposure-assessment:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Industrial Hygiene Exposure and Control Evidence Analyst",
         "description": "Calculates compatible exposure measures and maps engineering, work-practice, administrative, and respiratory-program evidence.",
         "base_role": "delegated-worker",
-        "prompt": "agents/industrial-hygiene-exposure-control-evidence-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "industrial-hygiene-exposure-assessment/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/industrial-hygiene-exposure-control-evidence-analyst/system.md"
       },
       "industrial-hygiene-exposure-assessment-review-owner": {
+        "capability_refs": [
+          "capability:capability_set:package:industrial-hygiene-exposure-assessment:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Industrial Hygiene Exposure Assessment Review Owner",
         "description": "Joins three independent evidence branches and routes all exposure, control, medical, and compliance decisions to qualified humans.",
         "base_role": "delegated-worker",
-        "prompt": "agents/industrial-hygiene-exposure-assessment-review-owner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "industrial-hygiene-exposure-assessment/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/industrial-hygiene-exposure-assessment-review-owner/system.md"
       }
     },
     "virtual_workflows": {

@@ -8,6 +8,7 @@ import {
   requireCrossSessionProviderExecutionOverlap,
   requireSingleAttemptProviderActivities,
 } from "./dynamic-e2e-contract"
+import { capabilityRef, CapabilityRefCodec } from "@opencorvus-ai/util/capability-ref"
 
 const ALLOW_REAL_PROVIDER = "DYNAMIC_EXPERT_SQUAD_E2E_ALLOW_REAL_PROVIDER"
 const AUTH_SOURCE = "DYNAMIC_EXPERT_SQUAD_E2E_AUTH_SOURCE"
@@ -59,23 +60,27 @@ function requiredGeneratedDynamicPackage() {
   const manifestText = source.files["expert-squad.jsonc"]
   if (typeof manifestText !== "string") throw new Error("Generated builtin/dynamic payload has no manifest bytes.")
   const manifest = Bun.JSONC.parse(manifestText) as JsonObject
+  const schedulerCapabilityRefs = [
+    CapabilityRefCodec.encode(
+      capabilityRef({
+        kind: "capability_set",
+        source: "platform",
+        owner_ref: "tool-registry",
+        local_ref: "scheduler-transport",
+      }),
+    ),
+    ...["dispatch_agents", "manage_task", "no_action", "read_task_message", "read_agent_message", "skill"].map(
+      (localRef) =>
+      CapabilityRefCodec.encode(
+        capabilityRef({ kind: "tool", source: "platform", owner_ref: "tool-registry", local_ref: localRef }),
+      ),
+    ),
+  ]
+    .sort()
   if (
     manifest.version !== "2026.08.30.3" ||
-    manifest.capability_projection?.scheduler?.inherit_base_tools !== false ||
-    JSON.stringify(manifest.capability_projection?.scheduler?.built_in_tool_ids) !==
-      JSON.stringify([
-        "artifact_search",
-        "artifact_read",
-        "artifact_select",
-        "artifact_snapshot",
-        "publish_interactive_artifact",
-        "dispatch_agents",
-        "manage_task",
-        "no_action",
-        "read_task_message",
-        "read_agent_message",
-        "skill",
-      ])
+    manifest.schema_version !== 2 ||
+    JSON.stringify(manifest.capability_projection?.scheduler?.capability_refs) !== JSON.stringify(schedulerCapabilityRefs)
   ) {
     throw new Error(`Generated builtin/dynamic payload is stale: ${JSON.stringify(manifest)}`)
   }

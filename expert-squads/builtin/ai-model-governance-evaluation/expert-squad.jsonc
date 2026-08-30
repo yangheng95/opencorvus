@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "ai-model-governance-evaluation",
   "name": "AI Model Governance and Evaluation",
   "label": "AI Model Governance and Evaluation",
   "description": "Use-case risk, provenance, evaluation and independent trustworthiness evidence joined into an accountable AI governance pack.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.30.2",
   "product_pillars": [
     "code",
     "work"
@@ -16,141 +16,77 @@
     "selection_guidance": "Select for AI inventory, risk, provenance, evaluation, trustworthiness, drift and decision evidence without deployment, risk-acceptance, eligibility or compliance authority.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 5 projections.",
+      "member_refs": [
+        "capability:skill:package:ai-model-governance-evaluation:ai-model-governance-evaluation%2Fshared%2Fmethod"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:capability_set:platform:tool-registry:scheduler-transport",
+        "capability:skill:package:ai-model-governance-evaluation:ai-model-governance-evaluation%2Fshared%2Fmethod",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "ai-model-governance-evaluation/shared/method"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "ai-use-case-risk-governance-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:ai-model-governance-evaluation:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:explore-base"
+        ],
         "label": "AI Use-Case Risk and Governance Analyst",
         "description": "Maps intended use, affected groups, risk taxonomy, controls, owners and decision authority.",
         "base_role": "explore",
-        "prompt": "agents/ai-use-case-risk-governance-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "ai-model-governance-evaluation/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/ai-use-case-risk-governance-analyst/system.md"
       },
       "model-data-provenance-documentation-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:ai-model-governance-evaluation:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Model and Data Provenance Analyst",
         "description": "Versions model, dataset, prompt, tool, configuration, limitation and documentation evidence.",
         "base_role": "delegated-worker",
-        "prompt": "agents/model-data-provenance-documentation-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "ai-model-governance-evaluation/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/model-data-provenance-documentation-analyst/system.md"
       },
       "ai-evaluation-design-results-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:ai-model-governance-evaluation:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "AI Evaluation Design and Results Analyst",
         "description": "Designs claim-bound protocols and checks row-level, slice, aggregate and reproducibility evidence.",
         "base_role": "delegated-worker",
-        "prompt": "agents/ai-evaluation-design-results-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "ai-model-governance-evaluation/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/ai-evaluation-design-results-analyst/system.md"
       },
       "ai-independent-trustworthiness-reviewer": {
+        "capability_refs": [
+          "capability:capability_set:package:ai-model-governance-evaluation:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Independent AI Trustworthiness Reviewer",
         "description": "Challenges robustness, bias, privacy, security, human-oversight and evaluation validity claims.",
         "base_role": "delegated-worker",
-        "prompt": "agents/ai-independent-trustworthiness-reviewer/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "ai-model-governance-evaluation/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/ai-independent-trustworthiness-reviewer/system.md"
       },
       "ai-model-governance-evaluation-owner": {
+        "capability_refs": [
+          "capability:capability_set:package:ai-model-governance-evaluation:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "AI Model Governance and Evaluation Owner",
         "description": "Joins four branches into one claim-risk-evidence-decision register.",
         "base_role": "delegated-worker",
-        "prompt": "agents/ai-model-governance-evaluation-owner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "ai-model-governance-evaluation/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/ai-model-governance-evaluation-owner/system.md"
       }
     },
     "virtual_workflows": {

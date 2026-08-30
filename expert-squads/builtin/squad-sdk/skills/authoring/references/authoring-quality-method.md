@@ -45,7 +45,7 @@ A complete package includes:
 - at least one substantive `skills/<skill-id>/SKILL.md` that owns the domain method, workflow practice, or quality contract;
 - model-readable references, examples, ledgers, rubrics, and templates beneath that Skill directory;
 - immutable tool-only templates or data under package `assets/` only when a package tool consumes them;
-- exact scheduler and worker `package_skill_refs` for every role that must apply the method;
+- exact typed package Skill entries in scheduler and worker `capability_refs` for every role that must apply the method;
 - package tool, Model Context Protocol, configuration, and dependency projections only when they are required, owned, portable, and validated.
 
 A filename-only Skill, a generic checklist that fits any domain, role prompts with no reusable method, or saved Skill bytes that no runtime owner receives is a rejection.

@@ -1,6 +1,6 @@
 import z from "zod"
 import { InteractionUserInput } from "@/memory/interaction-user-input"
-import { ProductPillarSchema } from "@opencorvus-ai/sdk/expert-squad-manifest-v1"
+import { ProductPillarSchema } from "@opencorvus-ai/sdk/expert-squad-manifest-v2"
 import {
   ArtifactCatalogEntrySchema,
   ArtifactCatalogProviderErrorSchema,

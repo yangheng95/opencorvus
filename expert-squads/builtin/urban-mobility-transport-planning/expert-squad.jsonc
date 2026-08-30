@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "urban-mobility-transport-planning",
   "name": "Urban Mobility Transport Planning",
   "label": "Urban Mobility Transport Planning",
   "description": "Multimodal baseline, demand, accessibility, options, equity, safety and engagement evidence joined for public planning review.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.30.2",
   "product_pillars": [
     "code",
     "work"
@@ -16,141 +16,77 @@
     "selection_guidance": "Select for city network/service baselines, demand and accessibility models, option comparison, equity, safety and engagement without adopting plans or committing funds.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 5 projections.",
+      "member_refs": [
+        "capability:skill:package:urban-mobility-transport-planning:urban-mobility-transport-planning%2Fshared%2Fmethod"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:capability_set:platform:tool-registry:scheduler-transport",
+        "capability:skill:package:urban-mobility-transport-planning:urban-mobility-transport-planning%2Fshared%2Fmethod",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "urban-mobility-transport-planning/shared/method"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "urban-mobility-baseline-network-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:urban-mobility-transport-planning:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:explore-base"
+        ],
         "label": "Mobility Baseline, Network and Data Analyst",
         "description": "Freeze the planning geography, horizon, multimodal network/service baseline and source-data provenance.",
         "base_role": "explore",
-        "prompt": "agents/urban-mobility-baseline-network-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "urban-mobility-transport-planning/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/urban-mobility-baseline-network-analyst/system.md"
       },
       "travel-demand-accessibility-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:urban-mobility-transport-planning:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Travel Demand and Accessibility Model Analyst",
         "description": "Evaluate supplied demand-model, calibration, scenario and accessibility evidence without inventing parameters or forecasting outcomes.",
         "base_role": "delegated-worker",
-        "prompt": "agents/travel-demand-accessibility-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "urban-mobility-transport-planning/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/travel-demand-accessibility-analyst/system.md"
       },
       "multimodal-options-performance-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:urban-mobility-transport-planning:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Multimodal Options and Performance Analyst",
         "description": "Compare multimodal option packages on consistently defined supplied measures and implementation dependencies.",
         "base_role": "delegated-worker",
-        "prompt": "agents/multimodal-options-performance-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "urban-mobility-transport-planning/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/multimodal-options-performance-analyst/system.md"
       },
       "mobility-equity-safety-engagement-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:urban-mobility-transport-planning:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Equity, Safety and Engagement Evidence Analyst",
         "description": "Trace distributional burdens and benefits, safety evidence, accessibility needs and public involvement without making legal or equity determinations.",
         "base_role": "delegated-worker",
-        "prompt": "agents/mobility-equity-safety-engagement-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "urban-mobility-transport-planning/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/mobility-equity-safety-engagement-analyst/system.md"
       },
       "urban-mobility-transport-plan-owner": {
+        "capability_refs": [
+          "capability:capability_set:package:urban-mobility-transport-planning:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Urban Mobility Transport Planning Owner",
         "description": "Join baseline, demand/accessibility, option-performance and equity/safety/engagement evidence into a decision-ready planning pack.",
         "base_role": "delegated-worker",
-        "prompt": "agents/urban-mobility-transport-plan-owner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "urban-mobility-transport-planning/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/urban-mobility-transport-plan-owner/system.md"
       }
     },
     "virtual_workflows": {

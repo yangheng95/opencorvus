@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "securities-post-trade-operations",
   "name": "Securities Post-Trade Operations",
   "label": "Securities Post-Trade Operations",
   "description": "Trade capture, clearing, custody, settlement and break evidence joined for qualified post-trade review.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.30.2",
   "product_pillars": [
     "code",
     "work"
@@ -16,141 +16,77 @@
     "selection_guidance": "Select for trade capture/allocation/confirmation, clearing/netting, custody/DVP/RVP, settlement and fail/break reconciliation.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 5 projections.",
+      "member_refs": [
+        "capability:skill:package:securities-post-trade-operations:securities-post-trade-operations%2Fshared%2Fmethod"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:capability_set:platform:tool-registry:scheduler-transport",
+        "capability:skill:package:securities-post-trade-operations:securities-post-trade-operations%2Fshared%2Fmethod",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "securities-post-trade-operations/shared/method"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "trade-capture-allocation-confirmation-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:securities-post-trade-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:explore-base"
+        ],
         "label": "Trade Capture, Allocation and Confirmation Analyst",
         "description": "Reconciles trade capture, allocation, confirmation and affirmation evidence.",
         "base_role": "explore",
-        "prompt": "agents/trade-capture-allocation-confirmation-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "securities-post-trade-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/trade-capture-allocation-confirmation-analyst/system.md"
       },
       "clearing-netting-obligation-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:securities-post-trade-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Clearing, Netting and Obligation Analyst",
         "description": "Traces clearing eligibility, matching, netting and resulting obligations.",
         "base_role": "delegated-worker",
-        "prompt": "agents/clearing-netting-obligation-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "securities-post-trade-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/clearing-netting-obligation-analyst/system.md"
       },
       "custody-dvp-settlement-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:securities-post-trade-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Custody, DVP and Settlement Analyst",
         "description": "Traces custody instructions, securities/cash legs and settlement evidence.",
         "base_role": "delegated-worker",
-        "prompt": "agents/custody-dvp-settlement-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "securities-post-trade-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/custody-dvp-settlement-analyst/system.md"
       },
       "settlement-fail-break-control-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:securities-post-trade-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Settlement Fail and Break Control Analyst",
         "description": "Reviews fails, stock/cash breaks, ageing, exceptions and control evidence.",
         "base_role": "delegated-worker",
-        "prompt": "agents/settlement-fail-break-control-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "securities-post-trade-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/settlement-fail-break-control-analyst/system.md"
       },
       "securities-post-trade-operations-review-owner": {
+        "capability_refs": [
+          "capability:capability_set:package:securities-post-trade-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Securities Post-Trade Operations Review Owner",
         "description": "Joins lifecycle evidence without instructing, settling or moving securities or cash.",
         "base_role": "delegated-worker",
-        "prompt": "agents/securities-post-trade-operations-review-owner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "securities-post-trade-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/securities-post-trade-operations-review-owner/system.md"
       }
     },
     "virtual_workflows": {

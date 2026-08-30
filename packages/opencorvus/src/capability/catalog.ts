@@ -23,7 +23,7 @@ import {
   type CapabilitySearchResult as CapabilitySearchResultValue,
   type CapabilitySetDescriptor as CapabilitySetDescriptorValue,
 } from "./descriptor"
-import { CapabilityRefCodec } from "./ref"
+import { CapabilityRefCodec } from "@opencorvus-ai/util/capability-ref"
 
 const MAX_SOURCE_CACHE_ENTRIES = 256
 const MAX_SNAPSHOT_CACHE_ENTRIES = 128

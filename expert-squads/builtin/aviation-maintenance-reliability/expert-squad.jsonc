@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "aviation-maintenance-reliability",
   "name": "Aviation Maintenance Reliability",
   "label": "Aviation Maintenance Reliability",
   "description": "Aircraft configuration, maintenance reliability, and planning evidence joined into an authorized airworthiness review pack without maintenance or release authority.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.30.2",
   "product_pillars": [
     "work"
   ],
@@ -15,119 +15,67 @@
     "selection_guidance": "Select for aircraft configuration reconciliation, life-limited-part status, maintenance-event reliability, repeat defects, due-work planning, or continuing-airworthiness review preparation without issuing maintenance instructions or return-to-service approval.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 4 projections.",
+      "member_refs": [
+        "capability:skill:package:aviation-maintenance-reliability:aviation-maintenance-reliability%2Fshared%2Fmethod"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:capability_set:platform:tool-registry:scheduler-transport",
+        "capability:skill:package:aviation-maintenance-reliability:aviation-maintenance-reliability%2Fshared%2Fmethod",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "aviation-maintenance-reliability/shared/method"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "aircraft-configuration-records-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:aviation-maintenance-reliability:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:explore-base"
+        ],
         "label": "Aircraft Configuration and Records Analyst",
         "description": "Reconciles serialized aircraft configuration, life limits, maintenance records, and supplied applicability evidence.",
         "base_role": "explore",
-        "prompt": "agents/aircraft-configuration-records-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "aviation-maintenance-reliability/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/aircraft-configuration-records-analyst/system.md"
       },
       "maintenance-reliability-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:aviation-maintenance-reliability:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Maintenance Reliability Analyst",
         "description": "Analyzes exposure-normalized maintenance events, repeats, removals, and stratified reliability evidence.",
         "base_role": "delegated-worker",
-        "prompt": "agents/maintenance-reliability-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "aviation-maintenance-reliability/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/maintenance-reliability-analyst/system.md"
       },
       "maintenance-planning-airworthiness-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:aviation-maintenance-reliability:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Maintenance Planning and Airworthiness Analyst",
         "description": "Traces due work, approved-program revisions, deferrals, dependencies, and authorized review needs.",
         "base_role": "delegated-worker",
-        "prompt": "agents/maintenance-planning-airworthiness-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "aviation-maintenance-reliability/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/maintenance-planning-airworthiness-analyst/system.md"
       },
       "aviation-maintenance-reliability-owner": {
+        "capability_refs": [
+          "capability:capability_set:package:aviation-maintenance-reliability:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Aviation Maintenance Reliability Owner",
         "description": "Joins configuration, reliability, and planning evidence into a qualified-review decision pack.",
         "base_role": "delegated-worker",
-        "prompt": "agents/aviation-maintenance-reliability-owner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "aviation-maintenance-reliability/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/aviation-maintenance-reliability-owner/system.md"
       }
     },
     "virtual_workflows": {

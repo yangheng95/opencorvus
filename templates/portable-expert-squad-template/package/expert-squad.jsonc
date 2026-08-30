@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "template",
   "id": "portable-template",
   "name": "Portable Expert Squad Template",
@@ -16,38 +16,26 @@
     "selection_guidance": "After specializing this sample, select its manifest id only for ledger-to-settlement reconciliation that requires source-row evidence.",
     "instructions": "selector.md"
   },
+  "capability_sets": {},
   "capability_projection": {
     "scheduler": {
       "base_role": "orchestrator",
       "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": false,
-      "built_in_tool_ids": [
-        "capability_search",
-        "skill",
-        "question",
-        "read_context",
-        "dispatch_agent",
-        "manage_task",
-        "wait",
-        "browser_preview",
-        "bash",
-        "respond_agent_coordination",
-        "cancel_subagent"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [],
-      "default_tool_refs": [],
-      "package_tool_refs": [
-        "portable-template/shared/reconciliation-policy"
-      ],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:scheduler-transport",
+        "capability:tool:package:portable-template:portable-template%2Fshared%2Freconciliation-policy",
+        "capability:tool:platform:tool-registry:bash",
+        "capability:tool:platform:tool-registry:browser_preview",
+        "capability:tool:platform:tool-registry:cancel_subagent",
+        "capability:tool:platform:tool-registry:capability_search",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:question",
+        "capability:tool:platform:tool-registry:read_context",
+        "capability:tool:platform:tool-registry:respond_agent_coordination",
+        "capability:tool:platform:tool-registry:skill",
+        "capability:tool:platform:tool-registry:wait"
+      ]
     },
     "agents": {
       "ledger-requirements": {
@@ -55,120 +43,54 @@
         "description": "Defines source-record, period, currency, tolerance, and close-report requirements.",
         "base_role": "requirements",
         "prompt": "agents/ledger-requirements/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "capability_refs": [
+          "capability:capability_set:platform:tool-registry:requirements-base"
+        ]
       },
       "reconciliation-architect": {
         "label": "Reconciliation Architect",
         "description": "Designs deterministic matching rules and evidence-preserving reconciliation architecture.",
         "base_role": "architect",
         "prompt": "agents/reconciliation-architect/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "capability_refs": [
+          "capability:capability_set:platform:tool-registry:architect-base"
+        ]
       },
       "primary-reconciliation-builder": {
         "label": "Primary Reconciliation Builder",
         "description": "Implements the read-only source comparison and reconciliation result pipeline.",
         "base_role": "build",
         "prompt": "agents/primary-reconciliation-builder/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "capability_refs": [
+          "capability:capability_set:platform:tool-registry:build-base"
+        ]
       },
       "exception-remediation-builder": {
         "label": "Exception Remediation Builder",
         "description": "Implements approved exception classification and auditable remediation outputs.",
         "base_role": "build",
         "prompt": "agents/exception-remediation-builder/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "capability_refs": [
+          "capability:capability_set:platform:tool-registry:build-base"
+        ]
       },
       "source-evidence-explorer": {
         "label": "Source Evidence Explorer",
         "description": "Locates authoritative ledgers, settlement exports, refund records, and existing close evidence.",
         "base_role": "explore",
         "prompt": "agents/source-evidence-explorer/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "capability_refs": [
+          "capability:capability_set:platform:tool-registry:explore-base"
+        ]
       },
       "settlement-researcher": {
         "label": "Settlement Semantics Researcher",
         "description": "Researches source-system schemas, settlement semantics, refund flows, and audit constraints.",
         "base_role": "deep-research",
         "prompt": "agents/settlement-researcher/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "capability_refs": [
+          "capability:capability_set:platform:tool-registry:deep-research-base"
+        ]
       },
       "close-integrity-reviewer": {
         "label": "Close Integrity Reviewer",
@@ -176,60 +98,27 @@
         "base_role": "integrity",
         "execution_contract": "platform_integrity_review",
         "prompt": "agents/close-integrity-reviewer/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "capability_refs": [
+          "capability:capability_set:platform:tool-registry:integrity-base"
+        ]
       },
       "discrepancy-fact-checker": {
         "label": "Discrepancy Fact Checker",
         "description": "Verifies sampled matched and unmatched records against the raw source rows.",
         "base_role": "fact-check",
         "prompt": "agents/discrepancy-fact-checker/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "capability_refs": [
+          "capability:capability_set:platform:tool-registry:fact-check-base"
+        ]
       },
       "close-workload-planner": {
         "label": "Close Workload Planner",
         "description": "Sizes evidence collection, rule definition, implementation, verification, and delivery work.",
         "base_role": "goal-workload-analyst",
         "prompt": "agents/close-workload-planner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "capability_refs": [
+          "capability:capability_set:platform:tool-registry:goal-workload-analyst-base"
+        ]
       }
     },
     "virtual_workflows": {

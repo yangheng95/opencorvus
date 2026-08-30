@@ -1,6 +1,8 @@
 #!/usr/bin/env bun
 
 import type { RuntimeTemplateID as RuntimeTemplateIDValue } from "../src/agent/runtime-template-id"
+import { PlatformCapabilitySetRegistry } from "../src/agent/platform-capability-sets"
+import { capabilityRef, CapabilityRefCodec, type CapabilityRef } from "@opencorvus-ai/util/capability-ref"
 import { readFileSync } from "node:fs"
 import fs from "node:fs/promises"
 import path from "node:path"
@@ -9,7 +11,7 @@ import {
   expertSquadAssetPath,
   renderExpertSquadPackageFiles,
   writeExpertSquadPackage,
-  type ExpertSquadManifestV1,
+  type ExpertSquadManifestV2,
   type ExpertSquadPackageDefinition,
 } from "../../sdk/js/src/expert-squad-authoring"
 
@@ -155,7 +157,7 @@ function renderHumanTutorial(): string {
     "",
     "TypeScript package tools do not invoke the model-facing `artifact_publish` tool. They publish Engine Artifacts explicitly through `context.host.engineArtifacts.publish` with stable `artifact_type`, `schema_version`, `label`, structured `payload`, `resources`, and `source_artifact_locators`, then return a compact locator/digest receipt. They publish immutable Task Artifact files through `context.host.taskArtifacts.stage(...)` followed by `context.host.taskArtifacts.publish(...)`, then return the typed snapshot locator. Returning a string from a package tool never publishes an Artifact. Consumers always discover the durable Artifact through the catalog and read/select its exact locator rather than treating the tool receipt as evidence transport.",
     "",
-    "OpenCorvus projects the Core-owned `artifact_search`, `artifact_read`, and `artifact_select` discovery/provenance transport into every projected worker and every scheduler that inherits its base Tools. A scheduler with `inherit_base_tools: false` receives only its explicit `built_in_tool_ids`, so it must list the platform Artifact Tools it actually uses. Projected workers additionally receive `artifact_snapshot` and `artifact_publish`. Do not shadow or wrap those tools in the package. A worker without a typed domain-output producer calls `artifact_publish` with a canonical JSON `expert_output` type under `<active-squad-id>/...`; it passes publication-specific `source_artifact_locators` drawn from complete reads earlier in that Turn, and the Host derives Task, Session, Agent, active-Squad, projection, observed, and selected provenance. Typed domain-output and package tools remain their domain's sole publishers and must not duplicate the same fact through `artifact_publish`. Ordinary dispatch outcomes and Agent messages never transport domain Artifact inventories, locators, or bodies. A consumer enumerates the complete same-Task catalog with a queryless search, chooses by immutable producer/type/workflow/node provenance, reads exact locators to completion, and calls `artifact_select` for each semantic source of its typed output. Reads remain observed even when unselected; zero selections are valid. A user-pinned locator is the sole same-Task exception and must be read exactly rather than replaced by search. For Cross-Task evidence, Mission references a completed source with `{authority: \"completion_decision\", source_task_id}` in `artifact_sources`; the Host imports that decision's complete deliverable set without copied locator IDs. Failed/cancelled recovery uses `{authority: \"terminal_lifecycle\", source_task_id, locator}`. The receiving catalog exposes target-owned imported Engine Artifacts preserving source type, schema, payload, and copied resources, with immutable `import_lineage`; request prose and foreign reads are not evidence. Missing optional fields and zero search results are valid; a missing selected locator, foreign-Task reference, corrupt manifest or bytes, wrong path, digest mismatch, or unreadable text is an explicit evidence error.",
+    "Projected workers receive the platform-owned Task Artifact discovery and publication transport. A scheduler receives the read-only Task Artifact discovery/provenance transport only by declaring the exact platform `scheduler-transport` CapabilitySet in `capability_refs`; schedulers do not receive generic `artifact_publish`. Do not shadow or wrap platform transport in the package. A worker without a typed domain-output producer calls `artifact_publish` with a canonical JSON `expert_output` type under `<active-squad-id>/...`; it passes publication-specific `source_artifact_locators` drawn from complete reads earlier in that Turn, and the Host derives Task, Session, Agent, active-Squad, projection, observed, and selected provenance. Typed domain-output and package tools remain their domain's sole publishers and must not duplicate the same fact through `artifact_publish`. Ordinary dispatch outcomes and Agent messages never transport domain Artifact inventories, locators, or bodies. A consumer enumerates the complete same-Task catalog with a queryless search, chooses by immutable producer/type/workflow/node provenance, reads exact locators to completion, and calls `artifact_select` for each semantic source of its typed output. Reads remain observed even when unselected; zero selections are valid. A user-pinned locator is the sole same-Task exception and must be read exactly rather than replaced by search. For Cross-Task evidence, Mission references a completed source with `{authority: \"completion_decision\", source_task_id}` in `artifact_sources`; the Host imports that decision's complete deliverable set without copied locator IDs. Failed/cancelled recovery uses `{authority: \"terminal_lifecycle\", source_task_id, locator}`. The receiving catalog exposes target-owned imported Engine Artifacts preserving source type, schema, payload, and copied resources, with immutable `import_lineage`; request prose and foreign reads are not evidence. Missing optional fields and zero search results are valid; a missing selected locator, foreign-Task reference, corrupt manifest or bytes, wrong path, digest mismatch, or unreadable text is an explicit evidence error.",
     "",
     "Do not install this sample package as-is. Use its definition as a concrete reference, build one `ExpertSquadPackageDefinition`, and materialize a new source directory outside `.opencorvus/expert-squads/**` through `writeExpertSquadPackage` from `@opencorvus-ai/sdk/expert-squad-authoring`. Validate the source package before explicitly importing it into `.opencorvus/expert-squads/<namespace>/<id>/`.",
     "",
@@ -198,7 +200,7 @@ function renderHumanTutorial(): string {
     "| MCP declaration `mcp/<server>.jsonc` | `<squad-id>/shared/<server>` | `<squad-id>/<agent-id>/<server>` |",
     "| One MCP capability | `<server-ref>/tool/<name>`, `/prompt/<name>`, or `/resource/<name>` | same grammar |",
     "",
-    "Project a shared ref from any scheduler or worker projection. Project an agent-local ref only from that owning agent. `package_mcp_server_refs` mounts every capability declared by that server; use the typed MCP arrays to mount selected capabilities instead, never both for the same capability. Default host resources use the separate `default/...` ref namespace and are not package files.",
+    "Project a shared ref from any scheduler or worker projection. Project an agent-local ref only from that owning agent. A package MCP server capability ref mounts every capability declared by that server; use exact typed MCP capability refs to mount selected capabilities instead, never both for the same capability. Default host resources use the separate `default/...` ref namespace and are not package files.",
     "",
     "## Create A Real Squad",
     "",
@@ -245,25 +247,11 @@ function schedulerToolIDs(): string[] {
   ]
 }
 
-function emptyProjectionResources() {
-  return {
-    built_in_tool_ids: [] as string[],
-    default_skill_refs: [] as string[],
-    package_skill_refs: [] as string[],
-    default_tool_refs: [] as string[],
-    package_tool_refs: [] as string[],
-    default_mcp_server_refs: [] as string[],
-    package_mcp_server_refs: [] as string[],
-    default_mcp_tool_refs: [] as string[],
-    package_mcp_tool_refs: [] as string[],
-    default_mcp_prompt_refs: [] as string[],
-    package_mcp_prompt_refs: [] as string[],
-    default_mcp_resource_refs: [] as string[],
-    package_mcp_resource_refs: [] as string[],
-  }
+function encodedCapabilityRefs(refs: readonly CapabilityRef[]) {
+  return [...new Set(refs.map(CapabilityRefCodec.encode))].sort()
 }
 
-function renderManifest(): ExpertSquadManifestV1 {
+function renderManifest(): ExpertSquadManifestV2 {
   const agents = Object.fromEntries(
     PORTABLE_TEMPLATE_AGENTS.map((agent) => [
       agent.agentID,
@@ -273,13 +261,16 @@ function renderManifest(): ExpertSquadManifestV1 {
         base_role: agent.baseRole,
         ...(agent.executionContract ? { execution_contract: agent.executionContract } : {}),
         prompt: `agents/${agent.agentID}/system.md`,
-        inherit_base_tools: true,
-        ...emptyProjectionResources(),
+        capability_refs: [
+          CapabilityRefCodec.encode(
+            PlatformCapabilitySetRegistry.baseRef({ kind: "worker", baseRole: agent.baseRole }),
+          ),
+        ],
       },
     ]),
   )
   return {
-    schema_version: 1,
+    schema_version: 2,
     namespace: PORTABLE_TEMPLATE_NAMESPACE,
     id: PORTABLE_TEMPLATE_ID,
     name: "Portable Expert Squad Template",
@@ -295,14 +286,23 @@ function renderManifest(): ExpertSquadManifestV1 {
         "After specializing this sample, select its manifest id only for ledger-to-settlement reconciliation that requires source-row evidence.",
       instructions: "selector.md",
     },
+    capability_sets: {},
     capability_projection: {
       scheduler: {
         base_role: "orchestrator",
         prompt: "agents/orchestrator/system.md",
-        inherit_base_tools: false,
-        ...emptyProjectionResources(),
-        built_in_tool_ids: schedulerToolIDs(),
-        package_tool_refs: ["portable-template/shared/reconciliation-policy"],
+        capability_refs: encodedCapabilityRefs([
+          PlatformCapabilitySetRegistry.transportRef("scheduler"),
+          ...schedulerToolIDs().map((localRef) =>
+            capabilityRef({ kind: "tool", source: "platform", owner_ref: "tool-registry", local_ref: localRef }),
+          ),
+          capabilityRef({
+            kind: "tool",
+            source: "package",
+            owner_ref: PORTABLE_TEMPLATE_ID,
+            local_ref: "portable-template/shared/reconciliation-policy",
+          }),
+        ]),
       },
       agents,
       virtual_workflows: {
@@ -338,7 +338,7 @@ function renderPackageReadme(): string {
     "",
     "A TypeScript package tool publishes an Engine Artifact through `context.host.engineArtifacts.publish`, not the model-facing `artifact_publish` tool. Its call declares stable type/schema/label values, structured payload, explicit resources and source locators, and its returned string is only a compact receipt. A package tool publishes immutable Task Artifact files through `context.host.taskArtifacts.stage(...)` followed by `context.host.taskArtifacts.publish(...)` and returns the typed snapshot locator. A plain package-tool return never creates an Artifact.",
     "",
-    "Every projected worker and every scheduler that inherits its base Tools uses the Core Task Artifact catalog through `artifact_search`, `artifact_read`, and `artifact_select`; a non-inheriting scheduler lists the exact platform Artifact Tools it needs in `built_in_tool_ids`. Projected workers additionally receive `artifact_snapshot` and `artifact_publish`. Use queryless search to enumerate durable same-Task evidence by immutable producer/type/workflow/node provenance, read exact locators to completion, and call `artifact_select` for each semantic source of a typed output. Reads remain observed even when unselected; zero selections are valid. A worker without a typed domain-output producer calls `artifact_publish` with a canonical JSON `expert_output` type under `<active-squad-id>/...` and publication-specific `source_artifact_locators` drawn from earlier complete reads; the Host supplies Task, Session, Agent, active-Squad, projection, observed, and selected provenance. Typed domain-output and package tools remain their domain's sole publishers. Never ask an upstream Agent, message, or dispatch result to transport an Artifact inventory, locator, or body. A user-pinned locator must not be silently replaced by another search result. For Cross-Task evidence, Mission references a completed source with `{authority: \"completion_decision\", source_task_id}` in `artifact_sources`; the Host imports that decision's complete deliverable set without copied locator IDs. Failed/cancelled recovery uses `{authority: \"terminal_lifecycle\", source_task_id, locator}`. The receiving catalog exposes target-owned imported Engine Artifacts preserving source type, schema, payload, and copied resources, with immutable `import_lineage`. Missing optional fields and zero matches are valid; missing selected evidence, wrong Task/path/digest, corrupt bytes, and unreadable text are explicit blockers.",
+    "Projected workers receive the Core Task Artifact catalog and publication transport. This scheduler declares the platform `scheduler-transport` CapabilitySet, so it receives `artifact_search`, `artifact_read`, `artifact_select`, and `artifact_snapshot`, but not generic `artifact_publish`. Use queryless search to enumerate durable same-Task evidence by immutable producer/type/workflow/node provenance, read exact locators to completion, and call `artifact_select` for each semantic source of a typed output. Reads remain observed even when unselected; zero selections are valid. A worker without a typed domain-output producer calls `artifact_publish` with a canonical JSON `expert_output` type under `<active-squad-id>/...` and publication-specific `source_artifact_locators` drawn from earlier complete reads; the Host supplies Task, Session, Agent, active-Squad, projection, observed, and selected provenance. Typed domain-output and package tools remain their domain's sole publishers. Never ask an upstream Agent, message, or dispatch result to transport an Artifact inventory, locator, or body. A user-pinned locator must not be silently replaced by another search result. For Cross-Task evidence, Mission references a completed source with `{authority: \"completion_decision\", source_task_id}` in `artifact_sources`; the Host imports that decision's complete deliverable set without copied locator IDs. Failed/cancelled recovery uses `{authority: \"terminal_lifecycle\", source_task_id, locator}`. The receiving catalog exposes target-owned imported Engine Artifacts preserving source type, schema, payload, and copied resources, with immutable `import_lineage`. Missing optional fields and zero matches are valid; missing selected evidence, wrong Task/path/digest, corrupt bytes, and unreadable text are explicit blockers.",
     "",
     "Coordinate only work that reconciles application invoices, payment-provider settlements, refunds, approved adjustments, and monthly-close evidence. Reject general bookkeeping advice or any task that lacks source records.",
     "",

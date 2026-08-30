@@ -3,6 +3,7 @@ import { payloadPackageSources } from "../../generated/expert-squad-payload"
 import { Instance } from "../../src/project/instance"
 import { declareNativeTaskProcessDeployment } from "../../src/runtime/task-process-deployment"
 import { Server } from "../../src/server/server"
+import { catalogPackageSkillRefs } from "./catalog-capability-fixture"
 
 const projectDirectory = process.argv[2]
 if (!projectDirectory) throw new Error("On-demand payload probe requires an isolated project directory")
@@ -100,10 +101,12 @@ try {
   const capability = selected.capability_projection as Record<string, unknown>
   const scheduler = capability.scheduler as Record<string, unknown>
   const agents = capability.agents as Record<string, Record<string, unknown>>
-  const schedulerRefs = scheduler.package_skill_refs as string[]
+  const schedulerRefs = catalogPackageSkillRefs(selected, scheduler)
   if (
     JSON.stringify(schedulerRefs) !== JSON.stringify([`${installID}/shared/method`]) ||
-    !Object.values(agents).every((agent) => JSON.stringify(agent.package_skill_refs) === JSON.stringify(schedulerRefs))
+    !Object.values(agents).every(
+      (agent) => JSON.stringify(catalogPackageSkillRefs(selected, agent)) === JSON.stringify(schedulerRefs),
+    )
   ) {
     throw new Error("Installed package did not project its exact package-local Skill to scheduler and workers")
   }

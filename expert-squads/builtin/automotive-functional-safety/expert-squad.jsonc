@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "automotive-functional-safety",
   "name": "Automotive Functional Safety",
   "label": "Automotive Functional Safety",
   "description": "Item, HARA, safety-requirement, failure-analysis, verification and lifecycle evidence joined into a qualified functional-safety-case review pack.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.30.2",
   "product_pillars": [
     "work"
   ],
@@ -15,141 +15,77 @@
     "selection_guidance": "Select for item/HARA/safety-goal, requirements, HW/SW analysis, verification, configuration, change and confirmation evidence without ASIL, design, qualification, release or compliance authority.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 5 projections.",
+      "member_refs": [
+        "capability:skill:package:automotive-functional-safety:automotive-functional-safety%2Fshared%2Fmethod"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:capability_set:platform:tool-registry:scheduler-transport",
+        "capability:skill:package:automotive-functional-safety:automotive-functional-safety%2Fshared%2Fmethod",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "automotive-functional-safety/shared/method"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "item-definition-hara-evidence-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:automotive-functional-safety:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:explore-base"
+        ],
         "label": "Item Definition and HARA Evidence Analyst",
         "description": "Traces item boundaries, situations, hazardous events, classifications and supplied safety goals.",
         "base_role": "explore",
-        "prompt": "agents/item-definition-hara-evidence-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "automotive-functional-safety/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/item-definition-hara-evidence-analyst/system.md"
       },
       "safety-concept-requirement-trace-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:automotive-functional-safety:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Safety Concept and Requirement Trace Analyst",
         "description": "Traces safety goals through functional, technical, system, hardware and software requirements and tests.",
         "base_role": "delegated-worker",
-        "prompt": "agents/safety-concept-requirement-trace-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "automotive-functional-safety/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/safety-concept-requirement-trace-analyst/system.md"
       },
       "hardware-software-safety-analysis-verification-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:automotive-functional-safety:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Hardware, Software and Verification Analyst",
         "description": "Reviews supplied failure analyses, metrics, dependent failures, verification and validation evidence.",
         "base_role": "delegated-worker",
-        "prompt": "agents/hardware-software-safety-analysis-verification-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "automotive-functional-safety/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/hardware-software-safety-analysis-verification-analyst/system.md"
       },
       "functional-safety-lifecycle-assurance-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:automotive-functional-safety:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Functional Safety Lifecycle Assurance Analyst",
         "description": "Traces plans, responsibility interfaces, configuration, changes, anomalies, qualification and confirmation evidence.",
         "base_role": "delegated-worker",
-        "prompt": "agents/functional-safety-lifecycle-assurance-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "automotive-functional-safety/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/functional-safety-lifecycle-assurance-analyst/system.md"
       },
       "automotive-functional-safety-case-owner": {
+        "capability_refs": [
+          "capability:capability_set:package:automotive-functional-safety:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Automotive Functional Safety Case Owner",
         "description": "Joins four branches into a claim-evidence-gap register for qualified assessment.",
         "base_role": "delegated-worker",
-        "prompt": "agents/automotive-functional-safety-case-owner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "automotive-functional-safety/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/automotive-functional-safety-case-owner/system.md"
       }
     },
     "virtual_workflows": {

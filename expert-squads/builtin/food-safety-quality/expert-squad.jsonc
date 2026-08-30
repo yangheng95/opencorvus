@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "food-safety-quality",
   "name": "Food Safety Quality",
   "label": "Food Safety Quality",
   "description": "Evidence-bounded food hazard, control-monitoring, traceability, and recall-readiness review joined without safety, release, recall, or regulatory authority.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.30.2",
   "product_pillars": [
     "work"
   ],
@@ -15,119 +15,67 @@
     "selection_guidance": "Select for process-flow hazard evidence, HACCP control records, monitoring and verification, lot genealogy, mass balance, or mock-recall readiness. Do not select for food-safety declarations, critical-limit decisions, product disposition, or actual recalls.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 4 projections.",
+      "member_refs": [
+        "capability:skill:package:food-safety-quality:food-safety-quality%2Fshared%2Fmethod"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:capability_set:platform:tool-registry:scheduler-transport",
+        "capability:skill:package:food-safety-quality:food-safety-quality%2Fshared%2Fmethod",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "food-safety-quality/shared/method"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "food-process-hazard-haccp-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:food-safety-quality:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:explore-base"
+        ],
         "label": "Food Process Hazard HACCP Analyst",
         "description": "Builds product/process and hazard-control evidence without choosing significant hazards, CCPs, or critical limits.",
         "base_role": "explore",
-        "prompt": "agents/food-process-hazard-haccp-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "food-safety-quality/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/food-process-hazard-haccp-analyst/system.md"
       },
       "food-control-monitoring-verification-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:food-safety-quality:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Food Control Monitoring Verification Analyst",
         "description": "Traces monitoring, calibration, deviation, corrective-action, verification, and validation evidence without product disposition.",
         "base_role": "delegated-worker",
-        "prompt": "agents/food-control-monitoring-verification-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "food-safety-quality/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/food-control-monitoring-verification-analyst/system.md"
       },
       "food-traceability-recall-readiness-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:food-safety-quality:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Food Traceability Recall Readiness Analyst",
         "description": "Reconstructs lot genealogy, quantity reconciliation, distribution scope, and mock-recall readiness without initiating a recall.",
         "base_role": "delegated-worker",
-        "prompt": "agents/food-traceability-recall-readiness-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "food-safety-quality/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/food-traceability-recall-readiness-analyst/system.md"
       },
       "food-safety-quality-review-owner": {
+        "capability_refs": [
+          "capability:capability_set:package:food-safety-quality:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Food Safety Quality Review Owner",
         "description": "Joins hazard, control, and traceability branches into a qualified-review pack without food-safety or disposition decisions.",
         "base_role": "delegated-worker",
-        "prompt": "agents/food-safety-quality-review-owner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "food-safety-quality/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/food-safety-quality-review-owner/system.md"
       }
     },
     "virtual_workflows": {

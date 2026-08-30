@@ -28,7 +28,7 @@ import {
   CapabilityDescriptor,
   CapabilitySetDescriptor,
 } from "./descriptor"
-import { CapabilityRef, CapabilityRefCodec } from "./ref"
+import { CapabilityRef, CapabilityRefCodec } from "@opencorvus-ai/util/capability-ref"
 import { canonicalDigestSource, canonicalJSONValue, compareCanonicalStrings } from "@/util/canonical-digest"
 import { Bus } from "@/bus"
 import { timelineMessageOrderKey, timelinePartOrderKey } from "@/timeline/order"

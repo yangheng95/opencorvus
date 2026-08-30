@@ -8,7 +8,7 @@
 
 | 入口             | 位置            | 扩展的是                                           | 典型对象                                 |
 | ---------------- | --------------- | -------------------------------------------------- | ---------------------------------------- |
-| **Expert Squad** | `expert-squad/` | 动态 Agent、Skill、tool、MCP 与 scheduler guidance | manifest v1 package                      |
+| **Expert Squad** | `expert-squad/` | 动态 Agent、Skill、tool、MCP 与 scheduler guidance | manifest v2 package                      |
 | **Plugin**       | `plugin/`       | 进程内 hook / provider auth                        | `@opencorvus-ai/plugin` API 下的任意实现 |
 | **MCP**          | `mcp/`          | Model Context Protocol client 与 package tool host | 任意实现 MCP 的工具服务                  |
 | **ACP**          | `acp/`          | Agent Client Protocol（编辑器集成）                | Zed 等外部编辑器                         |
@@ -198,18 +198,19 @@ location 校验，项目配置、Task 和 Session 候选则从 global + exact pr
 可以各自拥有同名 project-local package，扫描不会把它们合成一个 catalog，也不会因无关 ID 重复
 阻止安装。平台从不扫描用户文件系统；从未注册的目录在首次打开时也使用相同的项目覆盖解析。
 
-- `expert-squad.jsonc` 声明 profile identity、scheduler projection、dynamic agent projections、不可变的 binding `virtual_workflows` contract、skills、package tools、package MCP servers/tools 和可选严格 `configuration.fields`，且 `namespace` 必须匹配父目录；scheduler 和每个 worker 的 13 个 resource array 都必须显式存在，空投影写 `[]`，registry 不补默认值。Workflow node 天然为 Task 级且每个 Task 只实例化一次；可选 Slice revision refs 只是 typed subject，不改变 node cardinality。Orchestrator 从真实 predecessor evidence、active Session、Task 并发容量与 ownership 自然决策，Host 不计算、持久化、自动准入或自动调度 frontier；
-- 专家团必须 self-contained：每个 shipped package 至少保存一个 package-local `SKILL.md`，并由 manifest 的 `package_skill_refs` 精确投影给 scheduler 及所有实际使用该方法的 worker；平台 default Skill、README、selector、Agent prompt 或未被投影的同名文件都不能替代这一契约。模型可见资料只存在于一个显式投影 Skill 的目录闭包，工具专用的不可变模板和数据只存在于顶层 `assets/**`，并由 package tool 静态 import 进入内容寻址 bundle。运行时禁止解析 project/global 安装路径、回读源仓库、复制平行 authority、环境变量或路径 fallback。普通 Task 输入与显式外部服务仍由调用契约声明，不伪装为 package asset；
+- `expert-squad.jsonc` v2 声明 profile identity、package-root `capability_sets`、scheduler/dynamic-Agent `capability_refs`、不可变 binding `virtual_workflows` contract 和可选严格 `configuration.fields`，且 `namespace` 必须匹配父目录。每个 projection 只接受 canonical typed leaf ref 或一层 set ref；set 只包含 leaf。Workflow node 天然为 Task 级且每个 Task 只实例化一次；可选 Slice revision refs 只是 typed subject，不改变 node cardinality。Orchestrator 从真实 predecessor evidence、active Session、Task 并发容量与 ownership 自然决策，Host 不计算、持久化、自动准入或自动调度 frontier；
+- `base_role` 只限定 runtime template 上界，不隐式授权 Tool。每个 worker 由平台追加唯一的 `worker-transport`；scheduler 不存在隐藏 transport，只有在其 `capability_refs` 精确声明 `capability:capability_set:platform:tool-registry:scheduler-transport` 时才获得只读 Task Artifact transport。平台 base set、scheduler transport set、package set 与 direct leaf 都在同一个 materializer 中展开，不存在 legacy projection、fallback、后置补授权或第二事实来源；
+- 专家团必须 self-contained：每个 shipped package 至少保存一个 package-local `SKILL.md`，并由 manifest 的 typed package Skill `capability_refs` 精确授予 scheduler 及所有实际使用该方法的 worker；平台 default Skill、README、selector、Agent prompt 或未被投影的同名文件都不能替代这一契约。模型可见资料只存在于一个显式投影 Skill 的目录闭包，工具专用的不可变模板和数据只存在于顶层 `assets/**`，并由 package tool 静态 import 进入内容寻址 bundle。运行时禁止解析 project/global 安装路径、回读源仓库、复制平行 authority、环境变量或路径 fallback。普通 Task 输入与显式外部服务仍由调用契约声明，不伪装为 package asset；
 - manifest 的 `configuration.fields` 只声明 `text | boolean | secret` 字段形态，不包含值。值的唯一来源是 `Global.Path.data/expert-squad-configuration.json`，以 installation scope、project ID、namespace 与 manifest ID 组成的精确安装身份索引，并以原子 mode `0600` 写入；HTTP（Hypertext Transfer Protocol，超文本传输协议）和 Overlay 只返回字段声明、非 secret 值与 secret 的 `configured` 布尔状态。Resolver 只把精确 active package 的声明和安装身份带到其 package tool，工具调用时通过 `ToolContext.configuration` 读取；配置不得进入 prompt、隐藏消息、catalog secret、Bash、terminal 或进程环境。未投影 package tool 不存在调用面，因此 inactive package 不获得配置值；
 - `selector.md` 是 Orchestrator-visible selector skill 的完整说明来源；
 - `getLoadedBuiltInPackages()` 是内置 package 的唯一加载面，只返回默认 `base`、完整 `advanced`、`research-studio` 与 `squad-sdk`；不存在
   flattened built-in profile facade。非通用 squad 即使随应用分发，也只有经操作者显式选择 `project | global`
   scope 安装为明文 package 后，才通过 package discovery / registry / resolver 进入 catalog；
 - 默认内置 `base` 是 `advanced` 的紧凑替代，投影相互独立的 `base-planner`、`base-researcher`、`base-developer` 与 `base-tester`。Planner 使用不含 shell/edit/write 的 plan-only Tool 投影；`planner-execution-verification` 以 Planner → command-capable Developer → independently executable Tester 处理需要 project Skill、命令、本地 client、package Tool、MCP 或 browser mutation 的交付；`planner-parallel-delivery` 只在 Researcher 能用其真实 repository/web 读工具完成一个独立完整分区时，才让它与 Developer 共享 Planner 后的 dependency-ready frontier。两张图都让 Tester 依赖 Developer，在实现节点结算后验证已停止变化的结果。动态业务状态交付先关闭 request 指向的 candidate authority sources，再由 Developer 建立 entity/rule/effect action matrix；Tester 在读取实现声明前从原始请求与 current authoritative sources 独立重建矩阵，并逐行核对缺失、额外、替代、身份与规则优先级。验收范围不来自实现方报告。Base 不投影 Integrity 或 Visual Quality Assurance 身份；真实页面证据仍由计划指定的实现或测试分区负责。它不创建或消费 RequirementSet、ContractGraph、Goal 或 Delivery Slice 计划事实；
-- 内置 `advanced` 的 manifest v1 投影完整的十四 Agent 软件开发团队，包括 package-owned 的 Build `implementation-engineer` 与 Delegated Worker `test-engineer`。每张交付图保留 Requirements → Architect 依赖并按真实 Tool projection 分配 repository read、web research、executable discovery/mutation、independent readback 与 Artifact review；`researched-planned-delivery` 在外部 web 事实会改变需求时让 `research-investigator` 先于 Requirements，普通 `planned-delivery` 则把动态 client source 交给 implementation/testing owner。RequirementSet 与 Slice acceptance specs 保留 candidate-source closure 和 action-matrix contract；外部状态的直接验收由具备执行/读回能力的 Tester 从 raw authorities 独立重建矩阵后完成。无 shell/client 的 `system-integrity-reviewer` 依赖已结算的 Test evidence，再独立审计 requirement coverage、authority closure、action-matrix mapping、freshness 与 contradiction。Agent 身份、职责、依赖图和协作提示全部由 package 拥有，不进入 host Core prompt、Delivery Slice 控制工具或 runtime template；
+- 内置 `advanced` 的 manifest v2 投影完整的十四 Agent 软件开发团队，包括 package-owned 的 Build `implementation-engineer` 与 Delegated Worker `test-engineer`。每张交付图保留 Requirements → Architect 依赖并按真实 typed capability grant 分配 repository read、web research、executable discovery/mutation、independent readback 与 Artifact review；`researched-planned-delivery` 在外部 web 事实会改变需求时让 `research-investigator` 先于 Requirements，普通 `planned-delivery` 则把动态 client source 交给 implementation/testing owner。RequirementSet 与 Slice acceptance specs 保留 candidate-source closure 和 action-matrix contract；外部状态的直接验收由具备执行/读回能力的 Tester 从 raw authorities 独立重建矩阵后完成。无 shell/client 的 `system-integrity-reviewer` 依赖已结算的 Test evidence，再独立审计 requirement coverage、authority closure、action-matrix mapping、freshness 与 contradiction。Agent 身份、职责、依赖图和协作提示全部由 package 拥有，不进入 host Core prompt、Delivery Slice 控制工具或 runtime template；
 - 内置 `research-studio` 投影 Planner、Deep Researcher、Evidence Analyst、Fact Checker 与 Report Writer 五个精确身份，分别以 direct-writing、evidence-synthesis 与 full-research 三张 binding workflow 交付可引用研究报告。其共享 `analysis-report-quality` package Skill 连同固定报告模板和 Draft 2020-12 JavaScript Object Notation (JSON) Schema 完整内化在 package 闭包内，并只投影给 Analyst、Fact Checker 与 Writer；Analyst 先生成可复现计算证据，Fact Checker 独立复算，再由 Writer 从同一结构化模型派生 Markdown 与集成 Hypertext Markup Language (HTML)。浏览器可见报告必须由 Writer 和 Orchestrator 分别读取真实 `browser_preview_capture` 图像完成两次人工视觉复核；它不进入 payload、Market 或项目 provisioning；
 - `universal-build` 是平台唯一通用实现/修复身份：明确的有限改动与已规划交付均按 Task workflow node 调度，并可携带精确 Slice revision refs；它由 Resolver 只投影到 scheduler dispatch inventory，不属于 Advanced 或任何外置 package；同一个 `build` runtime template 只提供 typed adapter Application Binary Interface (ABI) 种子，不构成运行身份；
-- Advanced 的 `planned-delivery`、`researched-planned-delivery`、`evidence-investigation`、`greenfield-interface-delivery`、`greenfield-interface-visual-delivery` 和 `reference-interface-delivery` 是六张不可变 manifest v1 scheduler contract 图；researched 图只用于一个 load-bearing external web evidence gap 必须先于 Requirements 的非界面交付，禁止把 `research-investigator` 当作选中图之外的 optional node；greenfield 图自带完整需求、架构、原创界面设计、工作量复核、真实渲染复核与界面完整性谱系，不需要参考 URL，也不得与非界面 planned 图重叠选择；只有 reference 图要求 `interface-investigator` 与一个 operator 已提供的 source URL。Orchestrator 可见地选择精确图后必须完成全部声明 node/依赖，但这些图不是 host 执行引擎、状态机、active/default workflow 字段或持久化进度；
+- Advanced 的 `planned-delivery`、`researched-planned-delivery`、`evidence-investigation`、`greenfield-interface-delivery`、`greenfield-interface-visual-delivery` 和 `reference-interface-delivery` 是六张不可变 manifest v2 scheduler contract 图；researched 图只用于一个 load-bearing external web evidence gap 必须先于 Requirements 的非界面交付，禁止把 `research-investigator` 当作选中图之外的 optional node；greenfield 图自带完整需求、架构、原创界面设计、工作量复核、真实渲染复核与界面完整性谱系，不需要参考 URL，也不得与非界面 planned 图重叠选择；只有 reference 图要求 `interface-investigator` 与一个 operator 已提供的 source URL。Orchestrator 可见地选择精确图后必须完成全部声明 node/依赖，但这些图不是 host 执行引擎、状态机、active/default workflow 字段或持久化进度；
 - 激活任意其他 squad 会完整替换当前 Base、Advanced 或 Research Studio 投影，不继承或组合它们的 Agent、prompt、skill、tool、mount、MCP resource 或 virtual-workflow contract；
 - 每个 active squad 都由 `PromptProfileResolver` 获得平台 `universal-build`，且只进入 scheduler 的 `dispatch_agent` schema；manifest、virtual workflow、catalog member、public `projected_agent_ids` 和普通 worker surface 都不得声明或显示它。review / acceptance evidence 已证明需要修改 repository 时，Orchestrator 通过 prompt 自然选择负责的精确领域 producer，或在没有更窄责任时选择 `universal-build`；host 不加 route gate。领域 package 可以声明真实实现 Agent，但不得把它包装成平台兜底 Build；
 - manifest `version` 严格使用 `YYYY.MM.DD.N`，其中 `N` 是该 Squad 在该日的正整数修订序号；Registry 拒绝任意 SemVer、裸日期、时间戳、伪日期和零/前导零序号；
@@ -241,10 +242,10 @@ location 校验，项目配置、Task 和 Session 候选则从 global + exact pr
   Session 漂移到新 package bytes；
 - `capability_projection.scheduler` 是固定 host Orchestrator 的唯一 package 配置面；它不是 worker identity；
 - `capability_projection.agents.<agentID>` 的 key 是唯一动态 worker identity，也是 `dispatch_agent.dispatch.target` 的精确 literal。`base_role` 只选择 core prompt、model、tool、session、adapter 和 runtime template seed，不能反向推导或替代 `agentID`；
-- 每个 worker 的 canonical resource root 是 `agents/<agentID>/`。Prompt、skills、tools 和 MCP refs 必须由同一个 projection 显式声明；未知 owner、orphan directory 和未投影资源直接失败；
+- 每个 worker 的 canonical resource root 是 `agents/<agentID>/`。Prompt 与 typed Skill/Tool/MCP `capability_refs` 必须由同一个 projection 显式声明；未知 kind/source/owner、orphan directory 和未投影资源直接失败；
 - manifest 不存在 top-level `agents`、`virtual_agents`、`team` 或 dispatch identity 面，也不存在 `virtual-agents/**` resource root；动态身份只来自 `capability_projection.agents.<agentID>`；
 - `capability_projection.virtual_workflows` 是 package 声明的不可变 scheduler contract；显式 `{}` 表示普通 direct-dispatch Squad 没有 binding workflow，禁止为它虚构阶段。非空记录只包含 workflow label/description 以及 node 的动态 `agent_id`、description 和 `depends_on`。Orchestrator 在首次 domain dispatch 前记录一次不可变、可见的 workflow-selection decision，绑定 Task、workflow、精确 package revision/digest 和真实 scheduler message/tool identity。每个 node 在该 Task 中只实例化一次；dispatch lineage 可引用精确 Delivery Slice revisions 作为输入与证据 subject。图没有 dispatch scope、active/default workflow、current node、step status、auto-advance、session binding 或 persisted workflow state；
-- 对话驱动创建 Squad 时，简单 direct-dispatch Squad 写 `virtual_workflows: {}`。需要协作图时，authoring 默认优先一个 Planner 根节点加至少两个只依赖 Planner 的并行 worker；只有消费者确实需要生产者 Artifact 时才声明更丰富的 binding DAG。Requirements、Architect、Integrity 与 Slice 组合属于具体 package 的 authoring/prompt contract，不是平台通用合法性；SDK 和 Registry 的通用 validator 只校验 manifest v1 数据形态、workflow identity、引用、依赖排序与无环图，内置包另走 `validateBuiltInExpertSquadTopologyPolicy()` 防止非 Advanced 回归到平台 Visual/Integrity 角色或 Requirements → Architect → Build 串行链。所有新建 source package 都必须先经过 `validateExpertSquadPackageDefinition()`，再由唯一 `@opencorvus-ai/sdk/expert-squad-authoring` writer 通过同父目录 staging 和 rename 原子物化，并继续走 Registry validation 与显式 Manager import；禁止手写第二套 package writer；
+- 对话驱动创建 Squad 时，简单 direct-dispatch Squad 写 `virtual_workflows: {}`。需要协作图时，authoring 默认优先一个 Planner 根节点加至少两个只依赖 Planner 的并行 worker；只有消费者确实需要生产者 Artifact 时才声明更丰富的 binding DAG。Requirements、Architect、Integrity 与 Slice 组合属于具体 package 的 authoring/prompt contract，不是平台通用合法性；SDK 和 Registry 的通用 validator 只校验 manifest v2 数据形态、typed ref/set closure、workflow identity、引用、依赖排序与无环图，内置包另走 `validateBuiltInExpertSquadTopologyPolicy()` 防止非 Advanced 回归到平台 Visual/Integrity 角色或 Requirements → Architect → Build 串行链。所有新建 source package 都必须先经过 `validateExpertSquadPackageDefinition()`，再由唯一 `@opencorvus-ai/sdk/expert-squad-authoring` writer 通过同父目录 staging 和 rename 原子物化，并继续走 Registry validation 与显式 Manager import；禁止手写第二套 package writer；
 - 任务推进由 scheduler scope 的 Orchestrator 通过自然判断和真实工具调用决定。Virtual workflow 的 dependency 不自动 dispatch、不形成 host hard gate，也不创建第二套 workflow engine、dispatch、context packet 或 broad task-manipulation tool；它通过模型必须遵守的 prompt contract 防止无效越序工作。
 - 用户界面的 Goal 是 versioned Delivery Slice contract，只提供目标、验收、owned paths、priority、kind 和精确需求/契约引用；它没有 execution、status、retry、workspace、`depends_on` 或 readiness ancestry。Task 是唯一 business lifecycle；Session/dispatch 是 physical execution；panel 分别读取 current revision、独立 activity/evidence/review association 与 Task Completion Decision acceptance，禁止合成为 Goal progress 或 lifecycle。ContractGraph 只保存 producer/consumer interface contracts，不能推导调度顺序；未发布项目只有这一种严格结构，不声明协议代际。
 
@@ -441,13 +442,13 @@ projection；matrix row 不是第二份执行授权。每个 owner 仍必须拥�
 Advanced `source-investigator` 只有在 manifest 显式使用 Skill-mountable runtime 且 operator 精确挂载后，
 才可通过其真实只读命令/Skill surface 调用项目客户端。
 
-- `advanced` manifest 的 scheduler 与精确 `requirement-engineer` worker 各自通过 `default_skill_refs`
+- `advanced` manifest 的 scheduler 与精确 `requirement-engineer` worker 各自通过 typed Skill `capability_refs`
   显式获得 `grill-me`；Requirements worker 被鼓励用它逐个澄清当前决策 frontier，但问题仍经可见的
   worker coordination → Orchestrator `ask_user` interaction → 同 lineage continuation 链路返回，最终
   RequirementSet 仍只由 typed Requirements adapter 注册，不存在按 `base_role`、provider 或模型继承；`squad-sdk` scheduler
   独占 package-local authoring/import method Skills 与 `expert_squad_author | multica_catalog |
   multica_preview | multica_import`，每个 worker 的授权只来自该 worker 的精确动态投影；
-- Prism manifest 只给 `mirror-design-page-designer` 的 `default_skill_refs` 显式授予
+- Prism manifest 只给 `mirror-design-page-designer` 的 typed Skill `capability_refs` 显式授予
   `design-taste-frontend`；其他 Prism Agent 与其他 Expert Squad 不继承该试点授权，也不存在按
   `base_role` 或 runtime template 自动推断的前端 Skill；
 - native Chat 与 Work 都不继承 `advanced` 的生产投影。各自的
@@ -763,7 +764,7 @@ leader 身份推断 typed adapter。adapter 接受不含
 credential、header、OAuth（Open Authorization，开放授权）、command 或 environment 的公开 remote
 HTTP/SSE（Server-Sent Events，服务器发送事件）配置，并在 preview 阶段真实连接、遍历分页、精确读取
 tools/prompts/resources。能力清单进入 source digest，import 会重新发现并拒绝漂移；生成声明归属于精确
-Agent 的 `agents/<agent>/mcp/*.jsonc`，由 `package_mcp_server_refs` 和 `PromptProfileResolver` 单源投影。
+Agent 的 `agents/<agent>/mcp/*.jsonc`，由 package MCP server/leaf `capability_refs` 和 `PromptProfileResolver` 单源投影。
 
 结构完整、无 secret / remote 字段的 local process 声明只能先成为 typed repair candidate，仍然保持 blocker。
 当 Agent 根据完整 source evidence 确认它是 browser automation capability 时，必须在同一 Task 内直接修复
@@ -782,9 +783,10 @@ Multica 生成 package 时复用 `@opencorvus-ai/sdk/expert-squad-authoring` 的
 manifest/目录 materializer。导入 source `updated_at` 的日期表示该 source revision 日期，首次生成的
 OpenCorvus package version 为 `YYYY.MM.DD.1`；source digest 仍是 preview/import freshness authority。
 mapping 不创建、映射或引用 `universal-build`，该能力由 runtime scheduler projection 独立提供。Task
-Artifact 的 `artifact_search` / `artifact_read` / `artifact_select` 由 runtime 投影给继承 base tools 的 scheduler 和所有 worker；
-明确设置 `inherit_base_tools: false` 的 scheduler 只获得 manifest 在 `built_in_tool_ids` 中显式声明的 Tool，
-需要 Artifact catalog 时必须显式列出相应平台 Tool，runtime 不在 resolved projection 后追加隐藏 Tool；
+Artifact 的 `artifact_search` / `artifact_read` / `artifact_select` 只在 scheduler manifest 声明精确
+`capability:capability_set:platform:tool-registry:scheduler-transport` typed ref 或相应 direct Tool refs 时投影给
+scheduler；scheduler base set 不包含 transport，runtime 不在 resolved projection 后追加隐藏 scheduler Tool。
+所有 worker 的 Artifact transport 仍由 platform worker transport 唯一追加，manifest 不复制或覆盖该 set；
 consumer 必须先完整精确读取，再对 typed output 的每个语义来源调用 `artifact_select`。完整但未选择的读取只进入
 `observed_artifact_locators`，成功选择的来源进入 `source_artifact_locators`，且 source 必须是 observed 的子集；
 零选择与缺省可选字段均合法。即时 `artifact_publish` 显式提交本次发布专属的
@@ -793,8 +795,9 @@ consumer 必须先完整精确读取，再对 typed output 的每个语义来源
 `artifact_search` 的 opaque pagination cursor 由当前 runtime 使用进程随机 HMAC-SHA-256 authority 签发；cursor
 携带的 frozen revision、membership、provider state、total 与 position 在验证前均不可信。runtime restart 会使旧 cursor
 明确失效，caller 必须从第一页重新开始；不保留 unkeyed checksum decoder 或跨 runtime fallback。
-`artifact_snapshot` 投影给继承 base tools 或显式声明它的 scheduler，并继续投影给所有 worker；`artifact_publish` 只投影给 worker；
-Multica mapping、prompt 和 Skill 不遮蔽或复制这些平台工具及 Artifact body，非继承 scheduler 的 manifest 显式声明本身就是唯一 capability source。
+`artifact_snapshot` 仅投影给声明 scheduler transport set 或该 direct Tool ref 的 scheduler，并继续通过 platform worker
+transport 投影给所有 worker；`artifact_publish` 只投影给 worker。Multica mapping、prompt 和 Skill 不遮蔽或复制这些
+平台工具及 Artifact body；scheduler manifest 的 typed refs 是 scheduler capability 的唯一来源。
 `artifact_snapshot` 返回内容寻址的 `resource_set`，并为 snapshot 与每个 resource
 返回 Host-minted `artifact_locator_ref`。其模型输入由冻结 runtime contract 投影：scheduler 与没有精确 Build `merge_back` 私有 stage surface 的普通
 worker 只获得当前主项目 `files`；只有该 managed Build surface 获得必填 `source_commit`，且 Host 再次校验它等于最近完成 merge 的

@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "medical-device-postmarket-surveillance",
   "name": "Medical Device Postmarket Surveillance",
   "label": "Medical Device Postmarket Surveillance",
   "description": "Complaint, installed-base, device-event, vigilance, trend, PMCF, RWE, field-action, CAPA and risk-file evidence without reportability, recall or compliance authority.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.30.2",
   "product_pillars": [
     "work"
   ],
@@ -15,141 +15,77 @@
     "selection_guidance": "Select for device installed-base and complaint intake reconciliation, adverse-event or vigilance evidence, trend denominators, PMCF or real-world performance evidence, field-action trace, CAPA effectiveness or risk-file linkage. Do not select to decide causality, seriousness, reportability, recall, compliance, submission or clinical action.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 5 projections.",
+      "member_refs": [
+        "capability:skill:package:medical-device-postmarket-surveillance:medical-device-postmarket-surveillance%2Fshared%2Fmethod"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:capability_set:platform:tool-registry:scheduler-transport",
+        "capability:skill:package:medical-device-postmarket-surveillance:medical-device-postmarket-surveillance%2Fshared%2Fmethod",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "medical-device-postmarket-surveillance/shared/method"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "device-installed-base-complaint-intake-quality-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:medical-device-postmarket-surveillance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:explore-base"
+        ],
         "label": "Installed Base and Complaint Intake Analyst",
         "description": "Freezes device identity, distribution exposure and complaint-source evidence without closing or recoding complaints.",
         "base_role": "explore",
-        "prompt": "agents/device-installed-base-complaint-intake-quality-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "medical-device-postmarket-surveillance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/device-installed-base-complaint-intake-quality-analyst/system.md"
       },
       "device-adverse-event-vigilance-reportability-evidence-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:medical-device-postmarket-surveillance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Adverse Event and Vigilance Evidence Analyst",
         "description": "Traces event facts, device problems, health effects, investigation and jurisdictional rule sources without reportability decisions.",
         "base_role": "delegated-worker",
-        "prompt": "agents/device-adverse-event-vigilance-reportability-evidence-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "medical-device-postmarket-surveillance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/device-adverse-event-vigilance-reportability-evidence-analyst/system.md"
       },
       "device-trend-benefit-risk-pmcf-rwe-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:medical-device-postmarket-surveillance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Trend Benefit-Risk PMCF and RWE Analyst",
         "description": "Reconciles counts, exposure denominators, PMCF and real-world evidence without declaring a signal or benefit-risk conclusion.",
         "base_role": "delegated-worker",
-        "prompt": "agents/device-trend-benefit-risk-pmcf-rwe-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "medical-device-postmarket-surveillance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/device-trend-benefit-risk-pmcf-rwe-analyst/system.md"
       },
       "device-field-action-capa-effectiveness-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:medical-device-postmarket-surveillance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Field Action CAPA and Effectiveness Analyst",
         "description": "Traces proposed or recorded field actions, CAPA, verification, effectiveness and risk-file links without initiating action.",
         "base_role": "delegated-worker",
-        "prompt": "agents/device-field-action-capa-effectiveness-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "medical-device-postmarket-surveillance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/device-field-action-capa-effectiveness-analyst/system.md"
       },
       "medical-device-postmarket-surveillance-review-owner": {
+        "capability_refs": [
+          "capability:capability_set:package:medical-device-postmarket-surveillance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Medical Device Postmarket Review Owner",
         "description": "Joins installed-base, event, trend and CAPA/field-action evidence into a controlled qualified-review pack.",
         "base_role": "delegated-worker",
-        "prompt": "agents/medical-device-postmarket-surveillance-review-owner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "medical-device-postmarket-surveillance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/medical-device-postmarket-surveillance-review-owner/system.md"
       }
     },
     "virtual_workflows": {

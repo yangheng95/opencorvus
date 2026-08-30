@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "semiconductor-yield-engineering",
   "name": "Semiconductor Yield Engineering",
   "label": "Semiconductor Yield Engineering",
   "description": "Lot-wafer-die genealogy, spatial yield, and SPC evidence joined into a controlled excursion review pack without process or disposition authority.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.30.2",
   "product_pillars": [
     "work"
   ],
@@ -15,119 +15,67 @@
     "selection_guidance": "Select for lot-wafer-die genealogy, first-pass and final yield reconciliation, bin Pareto, wafer spatial signatures, parametric distributions, tool/chamber/tester comparison, or excursion hypothesis preparation without changing process recipes, test limits, holds, release, scrap, or rework.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 4 projections.",
+      "member_refs": [
+        "capability:skill:package:semiconductor-yield-engineering:semiconductor-yield-engineering%2Fshared%2Fmethod"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:capability_set:platform:tool-registry:scheduler-transport",
+        "capability:skill:package:semiconductor-yield-engineering:semiconductor-yield-engineering%2Fshared%2Fmethod",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "semiconductor-yield-engineering/shared/method"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "yield-genealogy-data-quality-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:semiconductor-yield-engineering:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:explore-base"
+        ],
         "label": "Yield Genealogy and Data Quality Analyst",
         "description": "Reconciles product, lot, wafer, die, process, and test genealogy plus eligible denominators.",
         "base_role": "explore",
-        "prompt": "agents/yield-genealogy-data-quality-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "semiconductor-yield-engineering/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/yield-genealogy-data-quality-analyst/system.md"
       },
       "wafer-spatial-bin-parametric-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:semiconductor-yield-engineering:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Wafer Spatial, Bin, and Parametric Analyst",
         "description": "Analyzes yield denominators, bin reconciliation, wafer signatures, and parametric evidence.",
         "base_role": "delegated-worker",
-        "prompt": "agents/wafer-spatial-bin-parametric-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "semiconductor-yield-engineering/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/wafer-spatial-bin-parametric-analyst/system.md"
       },
       "process-spc-excursion-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:semiconductor-yield-engineering:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Process SPC and Excursion Analyst",
         "description": "Evaluates qualified control baselines, capability evidence, equipment correlations, and excursion hypotheses.",
         "base_role": "delegated-worker",
-        "prompt": "agents/process-spc-excursion-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "semiconductor-yield-engineering/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/process-spc-excursion-analyst/system.md"
       },
       "semiconductor-yield-excursion-owner": {
+        "capability_refs": [
+          "capability:capability_set:package:semiconductor-yield-engineering:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Semiconductor Yield Excursion Owner",
         "description": "Joins genealogy, spatial yield, and SPC evidence into a qualified disposition-review pack.",
         "base_role": "delegated-worker",
-        "prompt": "agents/semiconductor-yield-excursion-owner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "semiconductor-yield-engineering/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/semiconductor-yield-excursion-owner/system.md"
       }
     },
     "virtual_workflows": {

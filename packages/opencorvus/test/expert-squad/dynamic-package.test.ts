@@ -37,6 +37,7 @@ import { MessageStore } from "../../src/session/message-store"
 import { SessionProcessor } from "../../src/session/processor"
 import { SessionStatus } from "../../src/session/status"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
+import { allCapabilityGrants } from "./capability-grant-fixture"
 
 const packageRoot = path.resolve(import.meta.dir, "../../../../expert-squads/builtin/dynamic")
 const skillRef = "dynamic/shared/method"
@@ -90,18 +91,15 @@ describe("Dynamic Expert Squad package", () => {
       product_pillars: ["code", "work"],
       capability_projection: {
         agents: {
-          "dynamic-generalist": { base_role: "delegated-worker", inherit_base_tools: false },
-          "dynamic-builder": { base_role: "build", inherit_base_tools: true },
+          "dynamic-generalist": { base_role: "delegated-worker" },
+          "dynamic-builder": { base_role: "build" },
         },
         virtual_workflows: {},
       },
     })
     expect([...source.packageSkills.keys()]).toEqual([skillRef])
     expect(
-      [
-        source.manifest.capability_projection.scheduler,
-        ...Object.values(source.manifest.capability_projection.agents),
-      ].map((projection) => projection.package_skill_refs),
+      allCapabilityGrants(source.manifest).map((grant) => grant.packageSkillRefs),
     ).toEqual([[skillRef], [skillRef], [skillRef]])
 
     await using project = await memoryProject()
@@ -150,16 +148,16 @@ describe("Dynamic Expert Squad package", () => {
         expect(scheduler.promptOverlay).toContain("`team` and `dispatches` are aligned arrays")
         expect(scheduler.promptOverlay).toContain("Immediately call `dispatch_agents` once")
         expect(scheduler.builtInToolIDs).toEqual([
-          "artifact_search",
           "artifact_read",
+          "artifact_search",
           "artifact_select",
           "artifact_snapshot",
           "publish_interactive_artifact",
           "dispatch_agents",
           "manage_task",
           "no_action",
-          "read_task_message",
           "read_agent_message",
+          "read_task_message",
           "skill",
         ])
         expect(scheduler.promptOverlay).toContain(
@@ -184,7 +182,7 @@ describe("Dynamic Expert Squad package", () => {
             skillRefs: [skillRef],
           },
         })
-        expect(generalist.builtInToolIDs).toEqual([
+        expect([...generalist.builtInToolIDs].sort()).toEqual([
           "artifact_search",
           "artifact_read",
           "artifact_select",
@@ -201,7 +199,7 @@ describe("Dynamic Expert Squad package", () => {
           "skill",
           "request_orchestrator_decision",
           "send_mailbox_message",
-        ])
+        ].sort())
         expect(builder.builtInToolIDs).toEqual(
           expect.arrayContaining(["artifact_search", "artifact_publish", "bash", "edit", "write", "apply_patch"]),
         )

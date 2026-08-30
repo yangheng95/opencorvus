@@ -13,6 +13,7 @@ import { Skill } from "../../src/skill/skill"
 import { SkillMount } from "../../src/skill/mounts"
 import { authorProjectExpertSquad, ExpertSquadAuthorParameters } from "../../src/tool/expert-squad-author"
 import { memoryProject } from "../fixture/memory"
+import { agentCapabilityGrants, schedulerCapabilityGrants } from "./capability-grant-fixture"
 
 const packageRoot = path.resolve(import.meta.dir, "../../../..", "expert-squads", "builtin", "squad-sdk")
 const schedulerTools = [
@@ -39,13 +40,13 @@ describe("Generate Expert Squads expert squad", () => {
     const workflows = loaded.manifest.capability_projection.virtual_workflows
 
     expect(loaded.manifest).toMatchObject({
-      schema_version: 1,
+      schema_version: 2,
       namespace: "builtin",
       id: "squad-sdk",
-      version: "2026.08.30.1",
+      version: "2026.08.30.4",
       system_role: "expert_squad_generator",
     })
-    expect(loaded.manifest.capability_projection.scheduler.built_in_tool_ids).toEqual([...schedulerTools])
+    expect(schedulerCapabilityGrants(loaded.manifest).explicitBuiltInToolIDs).toEqual([...schedulerTools].sort())
     expect(Object.keys(loaded.manifest.capability_projection.agents).sort()).toEqual([...agentIDs])
     expect([...loaded.packageSkills.keys()]).toEqual([...packageSkills])
     expect(Object.keys(workflows)).toEqual(["sdk-authoring", "heterogeneous-import"])
@@ -209,7 +210,7 @@ describe("Generate Expert Squads expert squad", () => {
           expect(authoringContract).toMatchObject({
             contract_owner: "squad-sdk",
             tool_input: {
-              schema_version: 1,
+              schema_version: 2,
               agents: {
                 "briefing-planner": { base_role: "delegated-worker" },
                 "evidence-researcher": { base_role: "deep-research" },
@@ -239,17 +240,14 @@ describe("Generate Expert Squads expert squad", () => {
               },
             },
           })
-          expect(authoringContract.tool_input.agents["evidence-researcher"].package_tool_refs).toEqual([
-            "source-backed-briefing/shared/publish-source-evidence",
+          expect(authoringContract.tool_input.agents["evidence-researcher"].capability_refs).toEqual([
+            "capability:capability_set:platform:tool-registry:deep-research-base",
+            "capability:skill:package:source-backed-briefing:source-backed-briefing%2Fshared%2Fmethod",
+            "capability:tool:package:source-backed-briefing:source-backed-briefing%2Fshared%2Fpublish-source-evidence",
           ])
-          expect(authoringContract.tool_input.scheduler.package_skill_refs).toEqual([
-            "source-backed-briefing/shared/method",
-          ])
-          expect(authoringContract.tool_input.agents["evidence-researcher"].package_skill_refs).toEqual([
-            "source-backed-briefing/shared/method",
-          ])
-          expect(authoringContract.tool_input.agents["briefing-writer"].package_skill_refs).toEqual([
-            "source-backed-briefing/shared/method",
+          expect(authoringContract.tool_input.scheduler.capability_refs).toEqual([
+            "capability:capability_set:platform:tool-registry:orchestrator-base",
+            "capability:skill:package:source-backed-briefing:source-backed-briefing%2Fshared%2Fmethod",
           ])
           expect(authoringQualityMethod).toContain("Decide whether to create a Squad")
           expect(authoringQualityMethod).toContain("Verify positive production behavior")
@@ -285,7 +283,7 @@ describe("Generate Expert Squads expert squad", () => {
         session_id: trace.sessionID,
       },
     })
-    expect(loaded.manifest.capability_projection.agents["evidence-researcher"]!.package_tool_refs).toEqual([
+    expect(agentCapabilityGrants(loaded.manifest, "evidence-researcher").packageToolRefs).toEqual([
       "source-backed-briefing/shared/publish-source-evidence",
     ])
     expect([...loaded.packageToolBundles.keys()]).toEqual(["source-backed-briefing/shared/publish-source-evidence"])
@@ -339,7 +337,7 @@ describe("Generate Expert Squads expert squad", () => {
         fn: () =>
           authorProjectExpertSquad(
             {
-              schema_version: 1,
+              schema_version: 2,
               namespace: "test",
               id: generatedID,
               name: "Generated Project Contract",
@@ -355,6 +353,7 @@ describe("Generate Expert Squads expert squad", () => {
               },
               scheduler: {
                 prompt: "Coordinate the generated project contract fixture through direct dispatch.",
+                capability_refs: ["capability:tool:platform:tool-registry:read"],
               },
               agents: {
                 "contract-worker": {
@@ -362,6 +361,7 @@ describe("Generate Expert Squads expert squad", () => {
                   description: "Produces the generated project contract fixture outcome.",
                   base_role: "build",
                   prompt: "Produce the requested generated project contract fixture outcome.",
+                  capability_refs: ["capability:tool:platform:tool-registry:websearch"],
                 },
               },
               virtual_workflows: {},
@@ -395,6 +395,14 @@ describe("Generate Expert Squads expert squad", () => {
       expect(generated).toMatchObject({
         id: generatedID,
         name: "Generated Project Contract",
+        capability_projection: {
+          scheduler: { capability_refs: ["capability:tool:platform:tool-registry:read"] },
+          agents: {
+            "contract-worker": {
+              capability_refs: ["capability:tool:platform:tool-registry:websearch"],
+            },
+          },
+        },
         source: {
           kind: "installed_package",
           installation_scope: "project",

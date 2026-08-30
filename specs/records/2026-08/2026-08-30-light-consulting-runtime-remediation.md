@@ -221,3 +221,90 @@ This closes the deterministic post-merge gate only. Push hook evidence and a new
 uninvolved post-merge read-only review are still required before the branch can be
 pushed. The four real Luna consultation cases remain a post-push acceptance gate
 and cannot be inferred from deterministic tests.
+
+## Typed capability-reference integration plan
+
+After the first post-merge review passed, fetched upstream advanced to
+`ee6b5f5b0b0917da2f40455775f7da129cfb9ce9` with the Expert Squad manifest v2
+typed capability-reference migration. The migration conflicts with this cut in
+the package manifests, generated closure and resolver tests, and its current
+materializer appends the platform `scheduler-transport` set to every scheduler.
+That unconditional transport grant recreates the hidden Artifact Tool tail that
+the real Light consultation evidence required this cut to remove. Selecting one
+side of the textual conflicts would therefore either discard the typed authority
+model or regress the accepted Light runtime contract.
+
+The integration uses one typed grant source:
+
+1. Worker Artifact and interactive-publication transport remains the existing
+   platform-owned universal worker transport.
+2. Scheduler transport is no longer appended by the materializer. A scheduler
+   that needs it declares the typed platform `scheduler-transport` capability-set
+   ref in its manifest projection. The materializer accepts only the exact
+   scheduler base and scheduler transport platform sets for a scheduler; there is
+   no fallback, exclusion list or hidden post-projection append.
+3. Every migrated package whose prior effective scheduler contract included the
+   transport receives the explicit typed set. Light declares neither base,
+   scheduler transport nor scheduler Skill and retains exactly its seven current
+   control/coordination Tools. Dynamic explicitly declares scheduler transport
+   alongside its bounded control and package Skill refs.
+4. Because manifest bytes and typed grant ownership change, the current revision
+   stamping transaction must advance every affected immutable package identity
+   and then regenerate the tracked payload, revision ledger, portable template,
+   SDK/OpenAPI closure and all exact package expectations. Historical versions are
+   not rewritten and no v1 compatibility projection is retained.
+5. Positive tests must resolve the production typed grants and final Provider
+   surfaces: Light stays at seven scheduler Tools with bounded Planner and
+   Investigator payloads; representative transported schedulers resolve the
+   explicit scheduler transport; every worker retains universal transport;
+   generated payload/revisions match a fresh render. The full typed-capability
+   suite, Light/Dynamic/Squad SDK closure, typecheck and architecture/topology
+   checkers must pass before a new frozen-tree independent review.
+
+## Typed capability-reference candidate evidence
+
+The second-upstream integration was materialized as one prospective merge result
+over local parent `114ad71d7be17f3afce33f9ef9669b8294f40c75` and upstream
+parent `ee6b5f5b0b0917da2f40455775f7da129cfb9ce9`; it has not been represented as
+a single-parent squash. The implementation-only index tree before this
+evidence-record update was
+`505c41d3f97b097fc2525d4fb043007b3934dc36`. All validation ran from an
+isolated checkout of that exact index rather than from the shared worktree, so
+the three excluded working paths were neither loaded nor staged.
+
+The first 55-file OpenCorvus candidate run found 122 stale positive package
+revision expectations after the required immutable revision transaction; the
+runtime install, projection and parallel-flow cases around them continued to
+pass. The expectations were synchronized to the generated revision ledger, not
+to guessed global increments: Advanced is `2026.08.30.3`, Base and the migrated
+transported packages are at their generated `2026.08.30.2` revisions, while
+Light remains `2026.08.30.1`, Dynamic `2026.08.30.3` and Squad SDK
+`2026.08.30.4`. The affected 24-file rerun then passed 154/154 tests with 2,599
+assertions, and the complete 55-file matrix passed 303/303 with 4,656
+assertions. The SDK suite passed 190/190 with 1,002 assertions.
+
+Root typecheck passed all eight package tasks from the exact candidate. Routes,
+documentation, architecture index and package topology passed at 6 rules/34
+files, 338 operations/25 groups, 15 current documents and 10 packages. Control
+lease and state checks passed at 17 owners/19 acquire sites and 45 tables/7
+allowed fact classes. Release mutation topology retained five authorities;
+public package publication order and the three-component public version
+`0.0.58-beta` passed. Built-in topology covered 121 manifests and 133 workflows.
+Exact candidate module topology passed at 1,078 modules, 5,335 runtime edges,
+zero retained strongly connected components and four clean imports.
+
+A fresh revision render reported 121 packages and zero new stamps. Fresh
+portable-template, generated payload and SDK/OpenAPI transactions left the
+isolated checkout byte-clean. The public-package checker initially could not
+resolve the SDK package's already-installed private `@hey-api/openapi-ts`
+dependency because the isolated checkout had mounted only top-level package
+dependency directories; mounting the SDK's existing package-local dependency
+directory repaired the validation environment, and the unchanged checker then
+passed. No product source or dependency version changed for that toolchain
+repair.
+
+This is not delivery evidence yet. A fresh uninvolved agent must review the new
+frozen index, complete diff, tests, generated closure and this record with no
+unresolved P0-P3 findings. The reviewed result must then be committed with both
+parents above, revalidated against any newer upstream, passed through the full
+push hook, and pushed before the real four-case Luna acceptance can begin.

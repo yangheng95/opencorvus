@@ -46,11 +46,11 @@
       "import": "./dist/expert-squad-authoring.js",
       "default": "./dist/expert-squad-authoring.js"
     },
-    "./expert-squad-manifest-v1": {
-      "source": "./src/expert-squad-manifest-v1.ts",
-      "types": "./dist/expert-squad-manifest-v1.d.ts",
-      "import": "./dist/expert-squad-manifest-v1.js",
-      "default": "./dist/expert-squad-manifest-v1.js"
+    "./expert-squad-manifest-v2": {
+      "source": "./src/expert-squad-manifest-v2.ts",
+      "types": "./dist/expert-squad-manifest-v2.d.ts",
+      "import": "./dist/expert-squad-manifest-v2.js",
+      "default": "./dist/expert-squad-manifest-v2.js"
     },
     "./expert-squad-package-contract": {
       "source": "./src/expert-squad-package-contract.ts",

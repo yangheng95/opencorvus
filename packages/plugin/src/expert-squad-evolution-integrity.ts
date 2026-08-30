@@ -1,7 +1,7 @@
 // SHA-256 means Secure Hash Algorithm 256-bit.
 import { createHash } from "node:crypto"
 import { z } from "zod"
-import type { ExpertSquadProjectionResourcesSchema } from "@opencorvus-ai/sdk/expert-squad-manifest-v1"
+import { CapabilityRefCodec } from "@opencorvus-ai/util/capability-ref"
 import { InspectedExpertSquadPackageSchema } from "./expert-squad-package.js"
 
 /**
@@ -53,7 +53,7 @@ export function candidateMutableTextPaths(pkg: InspectedPackage): string[] {
     const root = closure.source.slice(0, -"SKILL.md".length).replace(/\/$/, "")
     for (const file of closure.files) {
       // Agent Skills reserve scripts and assets for executable or opaque resources.
-      // V1 mutates only the instruction and model-readable reference/example closure.
+      // Evolution mutates only the instruction and model-readable reference/example closure.
       if (file !== "SKILL.md" && !file.startsWith("references/") && !file.startsWith("examples/")) {
         continue
       }
@@ -140,60 +140,6 @@ function assertCandidateStructure(candidate: InspectedPackage) {
   }
 }
 
-/**
- * Every manifest field that hands a node a capability. `inherit_base_tools`
- * and `base_role` are handled separately below because both select a Tool pool
- * without being a ref list: a candidate that flips the flag or moves an agent
- * to a more privileged role has granted itself capability just as surely as
- * one that appends a ref.
- *
- * The list is written out rather than derived from
- * `ExpertSquadProjectionResourcesSchema.shape` because not every field added
- * to that schema is necessarily a grant, and deriving would silently classify
- * a future non-grant field as one. What must not happen is the opposite — a
- * new grant field appearing in the schema and never reaching this loop, which
- * would let a candidate widen its own capability through the one field nobody
- * checks. `MISSING_CAPABILITY_GRANT_FIELDS` below makes that a compile error
- * that names the field, so adding one forces a deliberate classification.
- *
- * The import is type-only on purpose: this module runs inside a package tool
- * Capsule, and a value import would pull the SDK into that bundle.
- */
-// Keyed off `.shape` rather than `z.infer`: the SDK ships its own zod type
-// instance, and inferring across that boundary widens the key union to
-// `string`, which would make the exhaustiveness check below always pass.
-type ProjectionResourceField = keyof (typeof ExpertSquadProjectionResourcesSchema)["shape"]
-
-type CapabilityGrantListField = Exclude<ProjectionResourceField, "inherit_base_tools">
-
-const CAPABILITY_GRANT_LIST_FIELDS = [
-  "built_in_tool_ids",
-  "default_skill_refs",
-  "package_skill_refs",
-  "default_tool_refs",
-  "package_tool_refs",
-  "default_mcp_server_refs",
-  "package_mcp_server_refs",
-  "default_mcp_tool_refs",
-  "package_mcp_tool_refs",
-  "default_mcp_prompt_refs",
-  "package_mcp_prompt_refs",
-  "default_mcp_resource_refs",
-  "package_mcp_resource_refs",
-] as const satisfies readonly CapabilityGrantListField[]
-
-type MissingCapabilityGrantField = Exclude<CapabilityGrantListField, (typeof CAPABILITY_GRANT_LIST_FIELDS)[number]>
-
-/**
- * Resolves while the list above covers every projection resource field. When
- * it does not, the constraint fails and the compiler names the field that was
- * left out of the inheritance check. An `X[] = []` style assertion would not
- * work here: the empty array is assignable to every array type, so a missing
- * field would pass silently.
- */
-type AssertNoUncheckedGrantField<Missing extends never> = Missing
-type CapabilityGrantFieldsAreExhaustive = AssertNoUncheckedGrantField<MissingCapabilityGrantField>
-
 function capabilityNodes(pkg: InspectedPackage): Manifest[] {
   const capability = manifestRecord(manifestRecord(pkg.manifest).capability_projection)
   const agents = manifestRecord(capability.agents)
@@ -207,20 +153,32 @@ function capabilityNodes(pkg: InspectedPackage): Manifest[] {
  * uses — while still never introducing one it did not already hold.
  */
 function declaredGrants(pkg: InspectedPackage) {
-  const lists = new Map<string, Set<string>>(CAPABILITY_GRANT_LIST_FIELDS.map((field) => [field, new Set<string>()]))
+  const manifest = manifestRecord(pkg.manifest)
+  const manifestID = String(manifest.id)
+  const sets = manifestRecord(manifest.capability_sets)
+  const refs = new Set<string>()
   const baseRoles = new Set<string>()
-  let inheritsBaseTools = false
   for (const node of capabilityNodes(pkg)) {
-    for (const field of CAPABILITY_GRANT_LIST_FIELDS) {
-      const value = node[field]
-      if (value === undefined || value === null) continue
-      if (!Array.isArray(value)) throw new Error(`Validated package manifest field ${field} must be an array`)
-      for (const entry of value) lists.get(field)!.add(String(entry))
+    const capabilityRefs = node.capability_refs
+    if (!Array.isArray(capabilityRefs)) {
+      throw new Error("Validated package manifest capability_refs must be an array")
+    }
+    for (const value of capabilityRefs) {
+      const encoded = String(value)
+      const ref = CapabilityRefCodec.decode(encoded)
+      if (ref.kind !== "capability_set" || ref.source !== "package" || ref.owner_ref !== manifestID) {
+        refs.add(encoded)
+        continue
+      }
+      const set = manifestRecord(sets[ref.local_ref])
+      if (!Array.isArray(set.member_refs)) {
+        throw new Error(`Validated package capability set ${ref.local_ref} member_refs must be an array`)
+      }
+      for (const member of set.member_refs) refs.add(String(member))
     }
     if (typeof node.base_role === "string") baseRoles.add(node.base_role)
-    if (node.inherit_base_tools === true) inheritsBaseTools = true
   }
-  return { lists, baseRoles, inheritsBaseTools }
+  return { refs, baseRoles }
 }
 
 /**
@@ -242,16 +200,10 @@ function assertCandidateGrantsAreInherited(parent: InspectedPackage, candidate: 
         `A candidate revision may only grant capability references the parent already held.`,
     )
   }
-  for (const field of CAPABILITY_GRANT_LIST_FIELDS) {
-    const allowed = before.lists.get(field)!
-    const added = [...after.lists.get(field)!].filter((entry) => !allowed.has(entry))
-    if (added.length > 0) refuse(field, added, [...allowed])
-  }
+  const addedRefs = [...after.refs].filter((entry) => !before.refs.has(entry))
+  if (addedRefs.length > 0) refuse("capability_refs", addedRefs, [...before.refs])
   const addedRoles = [...after.baseRoles].filter((role) => !before.baseRoles.has(role))
   if (addedRoles.length > 0) refuse("base_role", addedRoles, [...before.baseRoles])
-  if (after.inheritsBaseTools && !before.inheritsBaseTools) {
-    refuse("inherit_base_tools", ["true"], ["false"])
-  }
 }
 
 export const CandidateIntegrityComparisonSchema = z

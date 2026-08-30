@@ -215,13 +215,18 @@ export namespace BrowserMCPNodeLauncher {
       const bytes = await fs.readFile(staging)
       const digest = createHash("sha256").update(bytes).digest("hex")
       const published = path.join(outdir, `${transport}-${digest}.mjs`)
-      if (await exists(published)) return published
+      if (await publishedBundleMatches(published, digest)) return published
       try {
         await fs.rename(staging, published)
       } catch (error) {
         const code = (error as NodeJS.ErrnoException).code
-        if (code !== "EEXIST" && code !== "ENOTEMPTY") throw error
-        if (!(await exists(published))) throw error
+        const competingPublication =
+          code === "EEXIST" ||
+          code === "ENOTEMPTY" ||
+          code === "EPERM" ||
+          code === "EACCES" ||
+          code === "EBUSY"
+        if (!competingPublication || !(await publishedBundleMatches(published, digest))) throw error
       }
       return published
     } catch (error) {
@@ -239,6 +244,20 @@ export namespace BrowserMCPNodeLauncher {
       .access(file)
       .then(() => true)
       .catch(() => false)
+  }
+
+  async function publishedBundleMatches(file: string, digest: string): Promise<boolean> {
+    let bytes: Buffer
+    try {
+      bytes = await fs.readFile(file)
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code === "ENOENT") return false
+      throw error
+    }
+    if (createHash("sha256").update(bytes).digest("hex") !== digest) {
+      throw new Error(`Browser MCP source bundle cache entry is corrupt: ${file}`)
+    }
+    return true
   }
 
   function logLauncherError(message: string, error: unknown) {

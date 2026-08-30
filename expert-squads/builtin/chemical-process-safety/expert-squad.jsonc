@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "chemical-process-safety",
   "name": "Chemical Process Safety",
   "label": "Chemical Process Safety",
   "description": "Process-information, hazard-scenario, integrity-change-readiness, and incident-barrier evidence joined into a qualified process-safety review pack.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.30.2",
   "product_pillars": [
     "work"
   ],
@@ -15,141 +15,77 @@
     "selection_guidance": "Select for PSI, PHA/HAZOP, supplied LOPA, safeguards, MI, MOC, PSSR, incidents and barrier learning without engineering, risk-acceptance, startup, emergency-command or compliance authority.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 5 projections.",
+      "member_refs": [
+        "capability:skill:package:chemical-process-safety:chemical-process-safety%2Fshared%2Fmethod"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:capability_set:platform:tool-registry:scheduler-transport",
+        "capability:skill:package:chemical-process-safety:chemical-process-safety%2Fshared%2Fmethod",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "chemical-process-safety/shared/method"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "process-safety-information-boundary-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:chemical-process-safety:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:explore-base"
+        ],
         "label": "Process Safety Information and Boundary Analyst",
         "description": "Versions chemical, technology, equipment and design-basis evidence for the bounded process.",
         "base_role": "explore",
-        "prompt": "agents/process-safety-information-boundary-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "chemical-process-safety/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/process-safety-information-boundary-analyst/system.md"
       },
       "pha-hazop-lopa-scenario-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:chemical-process-safety:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "PHA, HAZOP and LOPA Scenario Analyst",
         "description": "Traces deviations, causes, consequences, safeguards and supplied protection-layer assumptions.",
         "base_role": "delegated-worker",
-        "prompt": "agents/pha-hazop-lopa-scenario-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "chemical-process-safety/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/pha-hazop-lopa-scenario-analyst/system.md"
       },
       "mechanical-integrity-moc-readiness-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:chemical-process-safety:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Mechanical Integrity and Change Readiness Analyst",
         "description": "Traces inspection, testing, deferrals, MOC impacts, training and PSSR prerequisites.",
         "base_role": "delegated-worker",
-        "prompt": "agents/mechanical-integrity-moc-readiness-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "chemical-process-safety/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/mechanical-integrity-moc-readiness-analyst/system.md"
       },
       "incident-barrier-learning-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:chemical-process-safety:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Incident and Barrier Learning Analyst",
         "description": "Maps incidents and near misses to barrier evidence, causes, recommendations and revalidation.",
         "base_role": "delegated-worker",
-        "prompt": "agents/incident-barrier-learning-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "chemical-process-safety/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/incident-barrier-learning-analyst/system.md"
       },
       "process-safety-evidence-owner": {
+        "capability_refs": [
+          "capability:capability_set:package:chemical-process-safety:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Process Safety Evidence Owner",
         "description": "Joins four branches into one qualified-review decision register without accepting risk.",
         "base_role": "delegated-worker",
-        "prompt": "agents/process-safety-evidence-owner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "chemical-process-safety/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/process-safety-evidence-owner/system.md"
       }
     },
     "virtual_workflows": {

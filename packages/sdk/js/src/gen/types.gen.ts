@@ -1896,42 +1896,16 @@ export type ExpertSquadCatalogSummary = {
     agents: {
       [key: string]: {
         base_role: string
-        built_in_tool_ids: Array<string>
-        default_mcp_prompt_refs: Array<string>
-        default_mcp_resource_refs: Array<string>
-        default_mcp_server_refs: Array<string>
-        default_mcp_tool_refs: Array<string>
-        default_skill_refs: Array<string>
-        default_tool_refs: Array<string>
+        capability_refs: Array<string>
         description?: string
         execution_contract?: "platform_integrity_review"
-        inherit_base_tools: boolean
         label: string
-        package_mcp_prompt_refs: Array<string>
-        package_mcp_resource_refs: Array<string>
-        package_mcp_server_refs: Array<string>
-        package_mcp_tool_refs: Array<string>
-        package_skill_refs: Array<string>
-        package_tool_refs: Array<string>
         prompt?: string
       }
     }
     scheduler: {
       base_role: "orchestrator"
-      built_in_tool_ids: Array<string>
-      default_mcp_prompt_refs: Array<string>
-      default_mcp_resource_refs: Array<string>
-      default_mcp_server_refs: Array<string>
-      default_mcp_tool_refs: Array<string>
-      default_skill_refs: Array<string>
-      default_tool_refs: Array<string>
-      inherit_base_tools: boolean
-      package_mcp_prompt_refs: Array<string>
-      package_mcp_resource_refs: Array<string>
-      package_mcp_server_refs: Array<string>
-      package_mcp_tool_refs: Array<string>
-      package_skill_refs: Array<string>
-      package_tool_refs: Array<string>
+      capability_refs: Array<string>
       prompt?: string
     }
     virtual_workflows: {
@@ -1946,6 +1920,12 @@ export type ExpertSquadCatalogSummary = {
           }
         }
       }
+    }
+  }
+  capability_sets: {
+    [key: string]: {
+      description: string
+      member_refs: Array<string>
     }
   }
   configuration?: {
@@ -8533,22 +8513,10 @@ export type ExpertSquadCatalogResponses = {
       agents: Array<{
         agent_id: string
         base_role: string
-        built_in_tool_ids: Array<string>
-        default_mcp_prompt_refs: Array<string>
-        default_mcp_resource_refs: Array<string>
-        default_mcp_server_refs: Array<string>
-        default_mcp_tool_refs: Array<string>
-        default_skill_refs: Array<string>
-        default_tool_refs: Array<string>
+        capability_refs: Array<string>
         description?: string
         dispatch_adapter_id: string
         label: string
-        package_mcp_prompt_refs: Array<string>
-        package_mcp_resource_refs: Array<string>
-        package_mcp_server_refs: Array<string>
-        package_mcp_tool_refs: Array<string>
-        package_skill_refs: Array<string>
-        package_tool_refs: Array<string>
         projection_hash: string
         session_kind: string
       }>
@@ -15041,42 +15009,16 @@ export type ExpertSquadValidateFolderResponses = {
       agents: {
         [key: string]: {
           base_role: string
-          built_in_tool_ids: Array<string>
-          default_mcp_prompt_refs: Array<string>
-          default_mcp_resource_refs: Array<string>
-          default_mcp_server_refs: Array<string>
-          default_mcp_tool_refs: Array<string>
-          default_skill_refs: Array<string>
-          default_tool_refs: Array<string>
+          capability_refs: Array<string>
           description?: string
           execution_contract?: "platform_integrity_review"
-          inherit_base_tools: boolean
           label: string
-          package_mcp_prompt_refs: Array<string>
-          package_mcp_resource_refs: Array<string>
-          package_mcp_server_refs: Array<string>
-          package_mcp_tool_refs: Array<string>
-          package_skill_refs: Array<string>
-          package_tool_refs: Array<string>
           prompt?: string
         }
       }
       scheduler: {
         base_role: "orchestrator"
-        built_in_tool_ids: Array<string>
-        default_mcp_prompt_refs: Array<string>
-        default_mcp_resource_refs: Array<string>
-        default_mcp_server_refs: Array<string>
-        default_mcp_tool_refs: Array<string>
-        default_skill_refs: Array<string>
-        default_tool_refs: Array<string>
-        inherit_base_tools: boolean
-        package_mcp_prompt_refs: Array<string>
-        package_mcp_resource_refs: Array<string>
-        package_mcp_server_refs: Array<string>
-        package_mcp_tool_refs: Array<string>
-        package_skill_refs: Array<string>
-        package_tool_refs: Array<string>
+        capability_refs: Array<string>
         prompt?: string
       }
       virtual_workflows: {
@@ -15091,6 +15033,12 @@ export type ExpertSquadValidateFolderResponses = {
             }
           }
         }
+      }
+    }
+    capability_sets: {
+      [key: string]: {
+        description: string
+        member_refs: Array<string>
       }
     }
     configuration?: {
@@ -15110,7 +15058,7 @@ export type ExpertSquadValidateFolderResponses = {
     namespace: string
     product_pillars: Array<"code" | "work">
     readme: "README.md"
-    schema_version: 1
+    schema_version: 2
     selector: {
       instructions: "selector.md"
       selection_guidance: string

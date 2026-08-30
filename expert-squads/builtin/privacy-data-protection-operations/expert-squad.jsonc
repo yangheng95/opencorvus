@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "privacy-data-protection-operations",
   "name": "Privacy Data Protection Operations",
   "label": "Privacy Data Protection Operations",
   "description": "Evidence-bounded data inventory, privacy-impact, data-subject request, retention/deletion, and incident review without legal or production-system authority.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.30.2",
   "product_pillars": [
     "work"
   ],
@@ -15,141 +15,77 @@
     "selection_guidance": "Select for processing inventory and flows, privacy impact evidence, data-subject request search/retention conflicts, or personal-data incident facts. Do not select for legal conclusions, production searches/disclosures/deletions, hold release, incident containment, or notification.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 5 projections.",
+      "member_refs": [
+        "capability:skill:package:privacy-data-protection-operations:privacy-data-protection-operations%2Fshared%2Fmethod"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:capability_set:platform:tool-registry:scheduler-transport",
+        "capability:skill:package:privacy-data-protection-operations:privacy-data-protection-operations%2Fshared%2Fmethod",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "privacy-data-protection-operations/shared/method"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "personal-data-inventory-flow-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:privacy-data-protection-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:explore-base"
+        ],
         "label": "Personal Data Inventory Flow Analyst",
         "description": "Maps source-bound processing activities, systems, data categories, recipients, transfers, roles, and retention sources without deciding lawful basis.",
         "base_role": "explore",
-        "prompt": "agents/personal-data-inventory-flow-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "privacy-data-protection-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/personal-data-inventory-flow-analyst/system.md"
       },
       "privacy-impact-assessment-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:privacy-data-protection-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Privacy Impact Assessment Analyst",
         "description": "Structures processing, necessity, proportionality, rights-and-freedoms risk, measure, and residual-uncertainty evidence without accepting risk.",
         "base_role": "delegated-worker",
-        "prompt": "agents/privacy-impact-assessment-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "privacy-data-protection-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/privacy-impact-assessment-analyst/system.md"
       },
       "data-subject-request-retention-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:privacy-data-protection-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Data Subject Request Retention Analyst",
         "description": "Traces authorized request intake, evidence search, retention/deletion rules, hold conflicts, and review questions without production action or response.",
         "base_role": "delegated-worker",
-        "prompt": "agents/data-subject-request-retention-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "privacy-data-protection-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/data-subject-request-retention-analyst/system.md"
       },
       "personal-data-incident-evidence-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:privacy-data-protection-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Personal Data Incident Evidence Analyst",
         "description": "Reconstructs personal-data incident facts, chronology, affected-data scope, effects, and remedial evidence without breach or notification decisions.",
         "base_role": "delegated-worker",
-        "prompt": "agents/personal-data-incident-evidence-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "privacy-data-protection-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/personal-data-incident-evidence-analyst/system.md"
       },
       "privacy-data-protection-review-owner": {
+        "capability_refs": [
+          "capability:capability_set:package:privacy-data-protection-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Privacy Data Protection Review Owner",
         "description": "Joins inventory, assessment, request/retention, and incident branches into a qualified-review pack without legal or operational decisions.",
         "base_role": "delegated-worker",
-        "prompt": "agents/privacy-data-protection-review-owner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "privacy-data-protection-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/privacy-data-protection-review-owner/system.md"
       }
     },
     "virtual_workflows": {

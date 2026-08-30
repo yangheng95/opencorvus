@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "digital-accessibility-assurance",
   "name": "Digital Accessibility Assurance",
   "label": "Digital Accessibility Assurance",
   "description": "Digital accessibility inventory, WCAG criterion mapping, semantic, keyboard, assistive-technology, visual, media, cognitive, manual and remediation evidence assurance without conformance or legal authority.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.30.2",
   "product_pillars": [
     "work"
   ],
@@ -15,141 +15,77 @@
     "selection_guidance": "Select for web/app/document accessibility scope, WCAG mapping, semantics, keyboard/focus, forms, assistive technology, contrast/reflow, media alternatives, motion, cognitive usability, manual testing or remediation trace. Do not select for automatic production mutation, disability inference, legal advice or conformance certification.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 5 projections.",
+      "member_refs": [
+        "capability:skill:package:digital-accessibility-assurance:digital-accessibility-assurance%2Fshared%2Fmethod"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:capability_set:platform:tool-registry:scheduler-transport",
+        "capability:skill:package:digital-accessibility-assurance:digital-accessibility-assurance%2Fshared%2Fmethod",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "digital-accessibility-assurance/shared/method"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "accessibility-scope-inventory-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:digital-accessibility-assurance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:explore-base"
+        ],
         "label": "Accessibility Scope Inventory Analyst",
         "description": "Freezes journeys, states, builds, locales, technology, standards/policy sources and test matrix.",
         "base_role": "explore",
-        "prompt": "agents/accessibility-scope-inventory-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "digital-accessibility-assurance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/accessibility-scope-inventory-analyst/system.md"
       },
       "accessibility-semantics-keyboard-assistive-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:digital-accessibility-assurance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Accessibility Semantics Keyboard Assistive Analyst",
         "description": "Produces semantic, keyboard, focus, form, status and assistive-technology evidence.",
         "base_role": "delegated-worker",
-        "prompt": "agents/accessibility-semantics-keyboard-assistive-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "digital-accessibility-assurance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/accessibility-semantics-keyboard-assistive-analyst/system.md"
       },
       "accessibility-visual-media-cognitive-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:digital-accessibility-assurance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Accessibility Visual Media Cognitive Analyst",
         "description": "Measures contrast, reflow, visual presentation, motion, timing, media alternatives and cognitive consistency evidence.",
         "base_role": "delegated-worker",
-        "prompt": "agents/accessibility-visual-media-cognitive-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "digital-accessibility-assurance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/accessibility-visual-media-cognitive-analyst/system.md"
       },
       "accessibility-manual-user-remediation-verification-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:digital-accessibility-assurance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Accessibility Manual User Remediation Verification Analyst",
         "description": "Traces manual protocols, disabled-user evidence as authorized, remediation versions, retests, regressions and exceptions.",
         "base_role": "delegated-worker",
-        "prompt": "agents/accessibility-manual-user-remediation-verification-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "digital-accessibility-assurance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/accessibility-manual-user-remediation-verification-analyst/system.md"
       },
       "digital-accessibility-assurance-review-owner": {
+        "capability_refs": [
+          "capability:capability_set:package:digital-accessibility-assurance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Digital Accessibility Assurance Review Owner",
         "description": "Joins scope, semantic/keyboard, visual/media and manual/remediation evidence into a qualified accessibility review pack.",
         "base_role": "delegated-worker",
-        "prompt": "agents/digital-accessibility-assurance-review-owner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "digital-accessibility-assurance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/digital-accessibility-assurance-review-owner/system.md"
       }
     },
     "virtual_workflows": {

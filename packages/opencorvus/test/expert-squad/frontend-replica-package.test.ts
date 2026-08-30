@@ -26,10 +26,10 @@ describe("Frontend Replica acceptance package", () => {
     const acceptance = loaded.packageSkills.get(acceptanceSkillRef)
 
     expect(loaded.manifest).toMatchObject({
-      schema_version: 1,
+      schema_version: 2,
       namespace: "builtin",
       id: "frontend-replica",
-      version: "2026.08.13.1",
+      version: "2026.08.30.2",
     })
     expect([...loaded.packageSkills.keys()]).toEqual([acceptanceSkillRef])
     expect(acceptance?.content).toContain(

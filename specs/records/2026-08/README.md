@@ -1,5 +1,6 @@
 # August 2026 Records
 
+- [2026-08-30-search-native-capability-phase-b.md](2026-08-30-search-native-capability-phase-b.md) hard-cuts Expert Squad authoring and runtime projection from the sparse manifest V1 field matrix to canonical typed capability refs, platform/package sets, and one-level grant expansion while keeping eager execution unchanged until the atomic reveal cutover.
 - [2026-08-30-search-native-capability-phase-a2.md](2026-08-30-search-native-capability-phase-a2.md) binds one complete context-specific Catalog view to the canonical occurrence input through a content-addressed AttachmentStore ref/hash and atomic assistant admission, then makes search, restart, and permission continuation consume that exact immutable view.
 - [2026-08-30-search-native-capability-phase-a1.md](2026-08-30-search-native-capability-phase-a1.md) hard-replaces the temporary Tool-owned capability catalog with stable owner descriptors/sources separated from caller projections/views, explicit owner and projection revisions, context-bound immutable snapshots, and one runtime composition path while leaving eager Tool execution unchanged for the later atomic reveal cutover.
 

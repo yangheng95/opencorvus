@@ -1,105 +1,71 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "light",
   "name": "Light",
   "label": "Light",
   "description": "Read-only consultation, investigation, and clarifying-question support with variable parallel Planner and Investigator sessions.",
   "version": "2026.08.30.1",
-  "product_pillars": ["code", "work"],
+  "product_pillars": [
+    "code",
+    "work"
+  ],
   "readme": "README.md",
   "selector": {
     "summary": "Use Light for read-only consultation, investigation, comparison, planning, and clarifying questions.",
     "selection_guidance": "Select Light when the requested outcome is advice, an evidence-backed investigation, a plan, a comparison, or the smallest useful set of clarifying questions. Do not select it for implementation, file changes, external actions, transactions, or operational execution.",
-    "instructions": "selector.md",
+    "instructions": "selector.md"
+  },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 2 projections.",
+      "member_refs": [
+        "capability:skill:package:light:light%2Fshared%2Fmethod",
+        "capability:tool:platform:tool-registry:capability_search",
+        "capability:tool:platform:tool-registry:external_code_search",
+        "capability:tool:platform:tool-registry:glob",
+        "capability:tool:platform:tool-registry:read",
+        "capability:tool:platform:tool-registry:search_code",
+        "capability:tool:platform:tool-registry:skill",
+        "capability:tool:platform:tool-registry:webfetch",
+        "capability:tool:platform:tool-registry:websearch"
+      ]
+    }
   },
   "capability_projection": {
     "scheduler": {
-      "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": false,
-      "built_in_tool_ids": [
-        "dispatch_agents",
-        "manage_task",
-        "no_action",
-        "question",
-        "scheduler_message",
-        "read_task_message",
-        "read_agent_message"
+      "capability_refs": [
+        "capability:tool:platform:tool-registry:dispatch_agents",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:no_action",
+        "capability:tool:platform:tool-registry:question",
+        "capability:tool:platform:tool-registry:read_agent_message",
+        "capability:tool:platform:tool-registry:read_task_message",
+        "capability:tool:platform:tool-registry:scheduler_message"
       ],
-      "default_skill_refs": [],
-      "package_skill_refs": [],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": [],
+      "base_role": "orchestrator",
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "light-investigator": {
+        "capability_refs": [
+          "capability:capability_set:package:light:shared-capabilities-1"
+        ],
         "label": "Light Investigator",
         "description": "Performs one bounded read-only evidence investigation and reports facts, inferences, unknowns, and source references.",
         "base_role": "delegated-worker",
-        "prompt": "agents/light-investigator/system.md",
-        "inherit_base_tools": false,
-        "built_in_tool_ids": [
-          "capability_search",
-          "read",
-          "glob",
-          "search_code",
-          "webfetch",
-          "websearch",
-          "external_code_search",
-          "skill",
-        ],
-        "default_skill_refs": [],
-        "package_skill_refs": ["light/shared/method"],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "prompt": "agents/light-investigator/system.md"
       },
       "light-planner": {
+        "capability_refs": [
+          "capability:capability_set:package:light:shared-capabilities-1"
+        ],
         "label": "Light Planner",
         "description": "Produces one bounded advisory plan, option analysis, decision frame, or minimal clarifying-question set without implementation or mutation.",
         "base_role": "delegated-worker",
-        "prompt": "agents/light-planner/system.md",
-        "inherit_base_tools": false,
-        "built_in_tool_ids": [
-          "capability_search",
-          "read",
-          "glob",
-          "search_code",
-          "webfetch",
-          "websearch",
-          "external_code_search",
-          "skill",
-        ],
-        "default_skill_refs": [],
-        "package_skill_refs": ["light/shared/method"],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-      },
+        "prompt": "agents/light-planner/system.md"
+      }
     },
-    "virtual_workflows": {},
-  },
+    "virtual_workflows": {}
+  }
 }

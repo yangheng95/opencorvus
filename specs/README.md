@@ -1,6 +1,8 @@
 # Specs Storage Index
 
-Latest search-native Capability Phase A2 implementation: [`2026-08-30-search-native-capability-phase-a2.md`](records/2026-08/2026-08-30-search-native-capability-phase-a2.md).
+Latest search-native Capability Phase B implementation plan: [`2026-08-30-search-native-capability-phase-b.md`](records/2026-08/2026-08-30-search-native-capability-phase-b.md).
+
+Previous search-native Capability Phase A2 implementation: [`2026-08-30-search-native-capability-phase-a2.md`](records/2026-08/2026-08-30-search-native-capability-phase-a2.md).
 
 Previous search-native Capability Phase A1 implementation: [`2026-08-30-search-native-capability-phase-a1.md`](records/2026-08/2026-08-30-search-native-capability-phase-a1.md).
 

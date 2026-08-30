@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "mining-resource-operations",
   "name": "Mining Resource Operations",
   "label": "Mining Resource Operations",
   "description": "Geological, mine-reconciliation, metallurgical, water-tailings, fleet-maintenance and critical-control evidence joined into a qualified-review pack.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.30.2",
   "product_pillars": [
     "work"
   ],
@@ -15,141 +15,77 @@
     "selection_guidance": "Select for geological QA/QC, resource assumptions, plan and grade-control reconciliation, metallurgical accounting, water-tailings dependencies, fleet-maintenance exposure, and critical-control verification without Resource/Reserve signing, disclosure, operational approval, dispatch, safety clearance, compliance, or investment authority.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 5 projections.",
+      "member_refs": [
+        "capability:skill:package:mining-resource-operations:mining-resource-operations%2Fshared%2Fmethod"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:capability_set:platform:tool-registry:scheduler-transport",
+        "capability:skill:package:mining-resource-operations:mining-resource-operations%2Fshared%2Fmethod",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "mining-resource-operations/shared/method"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "mineral-data-resource-evidence-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:mining-resource-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:explore-base"
+        ],
         "label": "Mineral Data and Resource Evidence Analyst",
         "description": "Tests sampling, assay QA/QC, survey, density, domaining, model and resource-assumption evidence.",
         "base_role": "explore",
-        "prompt": "agents/mineral-data-resource-evidence-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "mining-resource-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/mineral-data-resource-evidence-analyst/system.md"
       },
       "mine-planning-grade-control-reconciliation-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:mining-resource-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Mine Planning, Grade Control and Reconciliation Analyst",
         "description": "Reconciles plan, grade-control, survey, mining, stockpile and plant-feed records on compatible bases.",
         "base_role": "delegated-worker",
-        "prompt": "agents/mine-planning-grade-control-reconciliation-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "mining-resource-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/mine-planning-grade-control-reconciliation-analyst/system.md"
       },
       "processing-metallurgy-water-tailings-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:mining-resource-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Processing, Metallurgy, Water and Tailings Analyst",
         "description": "Checks metallurgical accounting boundaries, recovery, inventories, water balance and tailings dependencies.",
         "base_role": "delegated-worker",
-        "prompt": "agents/processing-metallurgy-water-tailings-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "mining-resource-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/processing-metallurgy-water-tailings-analyst/system.md"
       },
       "fleet-maintenance-critical-control-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:mining-resource-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Fleet, Maintenance and Critical Control Analyst",
         "description": "Separates fleet availability and utilization while tracing maintenance exposure and critical-control verification.",
         "base_role": "delegated-worker",
-        "prompt": "agents/fleet-maintenance-critical-control-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "mining-resource-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/fleet-maintenance-critical-control-analyst/system.md"
       },
       "mining-integrated-operations-owner": {
+        "capability_refs": [
+          "capability:capability_set:package:mining-resource-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Mining Integrated Operations Owner",
         "description": "Joins four evidence branches into a versioned pack for qualified multidisciplinary review.",
         "base_role": "delegated-worker",
-        "prompt": "agents/mining-integrated-operations-owner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "mining-resource-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/mining-integrated-operations-owner/system.md"
       }
     },
     "virtual_workflows": {

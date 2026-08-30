@@ -1,5 +1,5 @@
 import z from "zod"
-import { ProductPillarSchema } from "@opencorvus-ai/sdk/expert-squad-manifest-v1"
+import { ProductPillarSchema } from "@opencorvus-ai/sdk/expert-squad-manifest-v2"
 import { AcceptanceSpecSchema } from "@/acceptance/types"
 import { CheckConfig } from "@/engine/check-config"
 import { ChannelId, ChannelSurface as SharedChannelSurface } from "@/channel/catalog"

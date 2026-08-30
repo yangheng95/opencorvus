@@ -1,5 +1,6 @@
 import z from "zod"
 import {
+  ExpertSquadCapabilitySetsSchema,
   ExpertSquadCapabilityProjectionSchema,
   ExpertSquadConfigurationSchema,
   ExpertSquadVirtualWorkflowsSchema,
@@ -77,6 +78,7 @@ export const ExpertSquadCatalogProfileSchema = z
     product_pillars: ProductPillarsSchema,
     system_role: z.enum(["expert_squad_generator"]).optional(),
     configuration: ExpertSquadConfigurationSchema.optional(),
+    capability_sets: ExpertSquadCapabilitySetsSchema,
     capability_projection: ExpertSquadCapabilityProjectionSchema,
   })
   .strict()
@@ -305,19 +307,7 @@ export const ExpertSquadActiveAgentProjectionAgentSchema = z
     label: z.string(),
     description: z.string().optional(),
     projection_hash: z.string(),
-    built_in_tool_ids: z.array(z.string()),
-    default_skill_refs: z.array(z.string()),
-    package_skill_refs: z.array(z.string()),
-    default_tool_refs: z.array(z.string()),
-    package_tool_refs: z.array(z.string()),
-    default_mcp_server_refs: z.array(z.string()),
-    package_mcp_server_refs: z.array(z.string()),
-    default_mcp_tool_refs: z.array(z.string()),
-    package_mcp_tool_refs: z.array(z.string()),
-    default_mcp_prompt_refs: z.array(z.string()),
-    package_mcp_prompt_refs: z.array(z.string()),
-    default_mcp_resource_refs: z.array(z.string()),
-    package_mcp_resource_refs: z.array(z.string()),
+    capability_refs: z.array(z.string()),
   })
   .strict()
 

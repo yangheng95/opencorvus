@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "power-grid-protection-reliability-assurance",
   "name": "Power Grid Protection Reliability Assurance",
   "label": "Power Grid Protection Reliability Assurance",
   "description": "Source-bound topology, protection-zone, relay-setting, fault-study, disturbance, misoperation, outage, and reliability-definition evidence for qualified review without grid-control authority.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.30.2",
   "product_pillars": [
     "work"
   ],
@@ -15,141 +15,77 @@
     "selection_guidance": "Select for a named power-system protection and reliability evidence review involving topology/model baselines, protection zones, relays, current or voltage transformers, breakers, trip logic, teleprotection, fault studies, setting coordination, oscillography, misoperations, outages, or reliability metrics. Do not select for energy-market planning, battery product safety, live dispatch, switching, relay access, setting changes, trip/reclose/energization, cybersecurity response, or compliance certification.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 5 projections.",
+      "member_refs": [
+        "capability:skill:package:power-grid-protection-reliability-assurance:power-grid-protection-reliability-assurance%2Fshared%2Fmethod"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:capability_set:platform:tool-registry:scheduler-transport",
+        "capability:skill:package:power-grid-protection-reliability-assurance:power-grid-protection-reliability-assurance%2Fshared%2Fmethod",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "power-grid-protection-reliability-assurance/shared/method"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "power-grid-protection-zone-device-configuration-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:power-grid-protection-reliability-assurance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:explore-base"
+        ],
         "label": "Power Grid Protection Zone Device Configuration Analyst",
         "description": "Freezes network topology, model case, protection zones, relay/device identities, CT/VT, breaker, DC, trip, and teleprotection configuration.",
         "base_role": "explore",
-        "prompt": "agents/power-grid-protection-zone-device-configuration-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "power-grid-protection-reliability-assurance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/power-grid-protection-zone-device-configuration-analyst/system.md"
       },
       "power-grid-fault-study-relay-coordination-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:power-grid-protection-reliability-assurance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Power Grid Fault Study Relay Coordination Analyst",
         "description": "Reconciles supplied fault-study cases, instrument-transformer behavior, relay settings, timing, selectivity, sensitivity, and coordination evidence.",
         "base_role": "delegated-worker",
-        "prompt": "agents/power-grid-fault-study-relay-coordination-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "power-grid-protection-reliability-assurance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/power-grid-fault-study-relay-coordination-analyst/system.md"
       },
       "power-grid-disturbance-misoperation-event-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:power-grid-protection-reliability-assurance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Power Grid Disturbance Misoperation Event Analyst",
         "description": "Aligns oscillography, COMTRADE, sequence-of-events, relay targets, breaker, SCADA, communications, and time-quality evidence.",
         "base_role": "delegated-worker",
-        "prompt": "agents/power-grid-disturbance-misoperation-event-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "power-grid-protection-reliability-assurance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/power-grid-disturbance-misoperation-event-analyst/system.md"
       },
       "power-grid-reliability-outage-data-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:power-grid-protection-reliability-assurance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Power Grid Reliability Outage Data Analyst",
         "description": "Traces outage events, affected elements and customers/load, restorations, exclusions, denominators, and source-defined reliability metrics.",
         "base_role": "delegated-worker",
-        "prompt": "agents/power-grid-reliability-outage-data-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "power-grid-protection-reliability-assurance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/power-grid-reliability-outage-data-analyst/system.md"
       },
       "power-grid-protection-reliability-assurance-review-owner": {
+        "capability_refs": [
+          "capability:capability_set:package:power-grid-protection-reliability-assurance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Power Grid Protection Reliability Assurance Review Owner",
         "description": "Joins topology, settings, study, event, misoperation, outage, and reliability evidence without operating or approval authority.",
         "base_role": "delegated-worker",
-        "prompt": "agents/power-grid-protection-reliability-assurance-review-owner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "power-grid-protection-reliability-assurance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/power-grid-protection-reliability-assurance-review-owner/system.md"
       }
     },
     "virtual_workflows": {

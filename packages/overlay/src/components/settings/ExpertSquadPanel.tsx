@@ -51,6 +51,7 @@ import { showAppDialog } from "../../services/app-dialog"
 import { TextField } from "../ui/TextField"
 import { Switch } from "../ui/Switch"
 import ExpertSquadEvolutionPanel from "./ExpertSquadEvolutionPanel"
+import { CapabilityRefCodec, type CapabilityKind } from "@opencorvus-ai/util/capability-ref"
 
 function markdownHtml(value: string): string {
   if (!value.trim()) {
@@ -93,41 +94,26 @@ function catalogDirectoryLabel(): string {
   return directory ? directory : t("expert_squad.directory_unavailable")
 }
 
-function projectionCount(values: string[] | undefined): number {
-  return values?.length ?? 0
+type ProjectionEntry = Pick<ExpertSquadDetail["capability_projection"]["scheduler"], "capability_refs">
+type CapabilitySets = ExpertSquadDetail["capability_sets"]
+
+function projectionLeafRefs(entry: ProjectionEntry, capabilitySets: CapabilitySets) {
+  return entry.capability_refs.flatMap((encoded) => {
+    const capability = CapabilityRefCodec.decode(encoded)
+    if (capability.kind !== "capability_set") return [capability]
+    if (capability.source !== "package") return []
+    const definition = capabilitySets[capability.local_ref]
+    if (!definition) throw new Error(`Missing package capability set ${capability.local_ref}`)
+    return definition.member_refs.map(CapabilityRefCodec.decode)
+  })
 }
 
-type ProjectionEntry = Omit<
-  ExpertSquadDetail["capability_projection"]["scheduler"],
-  "base_role" | "inherit_base_tools" | "prompt"
->
-
-function projectionToolRefCount(entry: ProjectionEntry): number {
-  return (
-    projectionCount(entry.built_in_tool_ids) +
-    projectionCount(entry.default_tool_refs) +
-    projectionCount(entry.package_tool_refs) +
-    projectionCount(entry.default_mcp_tool_refs) +
-    projectionCount(entry.package_mcp_tool_refs)
-  )
+function projectionToolRefCount(entry: ProjectionEntry, capabilitySets: CapabilitySets): number {
+  return projectionLeafRefs(entry, capabilitySets).filter((capability) => {
+    const kind = capability.kind
+    return kind === "tool" || kind === "mcp_tool"
+  }).length
 }
-
-type ResourceProjectionEntry = Pick<
-  ProjectionEntry,
-  | "built_in_tool_ids"
-  | "default_skill_refs"
-  | "package_skill_refs"
-  | "default_tool_refs"
-  | "package_tool_refs"
-  | "default_mcp_server_refs"
-  | "package_mcp_server_refs"
-  | "default_mcp_tool_refs"
-  | "package_mcp_tool_refs"
-  | "default_mcp_prompt_refs"
-  | "package_mcp_prompt_refs"
-  | "default_mcp_resource_refs"
-  | "package_mcp_resource_refs"
->
 
 type CapabilityOrigin = "built_in" | "default" | "package"
 type McpCapabilityKind = "server" | "tool" | "prompt" | "resource"
@@ -138,36 +124,36 @@ interface CapabilityItem {
   mcpKind?: McpCapabilityKind
 }
 
-function capabilityItems(values: string[], origin: CapabilityOrigin, mcpKind?: McpCapabilityKind): CapabilityItem[] {
-  return values.map((ref) => ({ ref, origin, mcpKind }))
+function capabilityItems(
+  entry: ProjectionEntry,
+  capabilitySets: CapabilitySets,
+  kinds: readonly CapabilityKind[],
+): CapabilityItem[] {
+  return projectionLeafRefs(entry, capabilitySets).flatMap((capability) => {
+    if (!kinds.includes(capability.kind)) return []
+    const origin: CapabilityOrigin =
+      capability.source === "package"
+        ? "package"
+        : capability.source === "platform" && capability.owner_ref === "tool-registry"
+          ? "built_in"
+          : "default"
+    const mcpKind = capability.kind.startsWith("mcp_")
+      ? (capability.kind.slice("mcp_".length) as McpCapabilityKind)
+      : undefined
+    return [{ ref: capability.local_ref, origin, ...(mcpKind ? { mcpKind } : {}) }]
+  })
 }
 
-function skillCapabilityItems(entry: ResourceProjectionEntry): CapabilityItem[] {
-  return [
-    ...capabilityItems(entry.default_skill_refs, "default"),
-    ...capabilityItems(entry.package_skill_refs, "package"),
-  ]
+function skillCapabilityItems(entry: ProjectionEntry, capabilitySets: CapabilitySets): CapabilityItem[] {
+  return capabilityItems(entry, capabilitySets, ["skill"])
 }
 
-function toolCapabilityItems(entry: ResourceProjectionEntry): CapabilityItem[] {
-  return [
-    ...capabilityItems(entry.built_in_tool_ids, "built_in"),
-    ...capabilityItems(entry.default_tool_refs, "default"),
-    ...capabilityItems(entry.package_tool_refs, "package"),
-  ]
+function toolCapabilityItems(entry: ProjectionEntry, capabilitySets: CapabilitySets): CapabilityItem[] {
+  return capabilityItems(entry, capabilitySets, ["tool"])
 }
 
-function mcpCapabilityItems(entry: ResourceProjectionEntry): CapabilityItem[] {
-  return [
-    ...capabilityItems(entry.default_mcp_server_refs, "default", "server"),
-    ...capabilityItems(entry.package_mcp_server_refs, "package", "server"),
-    ...capabilityItems(entry.default_mcp_tool_refs, "default", "tool"),
-    ...capabilityItems(entry.package_mcp_tool_refs, "package", "tool"),
-    ...capabilityItems(entry.default_mcp_prompt_refs, "default", "prompt"),
-    ...capabilityItems(entry.package_mcp_prompt_refs, "package", "prompt"),
-    ...capabilityItems(entry.default_mcp_resource_refs, "default", "resource"),
-    ...capabilityItems(entry.package_mcp_resource_refs, "package", "resource"),
-  ]
+function mcpCapabilityItems(entry: ProjectionEntry, capabilitySets: CapabilitySets): CapabilityItem[] {
+  return capabilityItems(entry, capabilitySets, ["mcp_server", "mcp_tool", "mcp_prompt", "mcp_resource"])
 }
 
 function capabilityOriginLabel(origin: CapabilityOrigin): string {
@@ -222,21 +208,7 @@ function AgentCapabilityGroup(props: {
 }
 
 function projectionRows(entry: ProjectionEntry) {
-  return [
-    ["built_in_tool_ids", entry.built_in_tool_ids],
-    ["default_skill_refs", entry.default_skill_refs],
-    ["package_skill_refs", entry.package_skill_refs],
-    ["default_tool_refs", entry.default_tool_refs],
-    ["package_tool_refs", entry.package_tool_refs],
-    ["default_mcp_server_refs", entry.default_mcp_server_refs],
-    ["package_mcp_server_refs", entry.package_mcp_server_refs],
-    ["default_mcp_tool_refs", entry.default_mcp_tool_refs],
-    ["package_mcp_tool_refs", entry.package_mcp_tool_refs],
-    ["default_mcp_prompt_refs", entry.default_mcp_prompt_refs],
-    ["package_mcp_prompt_refs", entry.package_mcp_prompt_refs],
-    ["default_mcp_resource_refs", entry.default_mcp_resource_refs],
-    ["package_mcp_resource_refs", entry.package_mcp_resource_refs],
-  ] as const
+  return [["capability_refs", entry.capability_refs]] as const
 }
 
 function catalogScopeIdentity(scope = expertSquadCatalogScope()): string {
@@ -1783,19 +1755,19 @@ export default function ExpertSquadPanel() {
                                                   kind="tools"
                                                   title={t("expert_squad.tools")}
                                                   icon="config-tool"
-                                                  items={toolCapabilityItems(access().entry)}
+                                                  items={toolCapabilityItems(access().entry, squad.capability_sets)}
                                                 />
                                                 <AgentCapabilityGroup
                                                   kind="skills"
                                                   title={t("expert_squad.skills")}
                                                   icon="config-skill"
-                                                  items={skillCapabilityItems(access().entry)}
+                                                  items={skillCapabilityItems(access().entry, squad.capability_sets)}
                                                 />
                                                 <AgentCapabilityGroup
                                                   kind="mcp"
                                                   title={t("expert_squad.mcp")}
                                                   icon="config-mcp"
-                                                  items={mcpCapabilityItems(access().entry)}
+                                                  items={mcpCapabilityItems(access().entry, squad.capability_sets)}
                                                 />
                                               </div>
                                             )}
@@ -1918,7 +1890,10 @@ export default function ExpertSquadPanel() {
                                 <h3>{t("expert_squad.capability_projection")}</h3>
                                 <span class="expert-squad-section-meta">
                                   {t("expert_squad.tool_count", {
-                                    count: projectionToolRefCount(squad.capability_projection.scheduler),
+                                    count: projectionToolRefCount(
+                                      squad.capability_projection.scheduler,
+                                      squad.capability_sets,
+                                    ),
                                   })}
                                 </span>
                               </div>

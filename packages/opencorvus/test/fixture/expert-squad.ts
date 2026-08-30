@@ -22,12 +22,13 @@ export async function materializeMirrorPrismPackage(destination: string): Promis
     let updated = original
       .replaceAll("deep-research", "prism")
       .replaceAll('"base_role": "prism"', '"base_role": "deep-research"')
+      .replaceAll("tool-registry:prism-base", "tool-registry:deep-research-base")
       .replaceAll("Deep Research", "Prism")
     if (path.basename(file) === "expert-squad.jsonc") {
       updated = updated
         .replace('"namespace": "builtin"', '"namespace": "mirror"')
-        .replace('"version": "2026.08.05.1"', '"version": "2026.08.07.1"')
-        .replace('"product_pillars": ["work"]', '"product_pillars": ["code"]')
+        .replace('"version": "2026.08.30.1"', '"version": "2026.08.07.1"')
+        .replace('"product_pillars": [\n    "work"\n  ]', '"product_pillars": [\n    "code"\n  ]')
     }
     if (updated !== original) await fs.writeFile(file, updated, "utf8")
   }

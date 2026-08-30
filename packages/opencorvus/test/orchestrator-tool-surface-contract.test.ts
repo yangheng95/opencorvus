@@ -3,7 +3,7 @@
  * but two separate declarations describe it from the outside:
  *
  *  1. `ORCHESTRATOR_SCHEDULER_PROJECTABLE_TOOL_IDS` tells expert-squad manifest
- *     validation which scheduler `built_in_tool_ids` are legal. When it names a
+ *     validation which scheduler Tool capability refs are legal. When it names a
  *     tool the factory never builds, `projectOrchestratorTools` throws at task
  *     start and every Task on that squad dies within seconds (observed:
  *     research-studio projecting `browser_preview_capture`).

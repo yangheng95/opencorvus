@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "customs-trade-compliance",
   "name": "Customs Trade Compliance",
   "label": "Customs Trade Compliance",
   "description": "Cross-border transaction, classification, origin, valuation, screening and broker-entry evidence joined for qualified trade review.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.30.2",
   "product_pillars": [
     "code",
     "work"
@@ -16,141 +16,77 @@
     "selection_guidance": "Select for goods and transaction evidence, classification candidates, origin/valuation, screening and entry reconciliation without declarations or shipment decisions.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 5 projections.",
+      "member_refs": [
+        "capability:skill:package:customs-trade-compliance:customs-trade-compliance%2Fshared%2Fmethod"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:capability_set:platform:tool-registry:scheduler-transport",
+        "capability:skill:package:customs-trade-compliance:customs-trade-compliance%2Fshared%2Fmethod",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "customs-trade-compliance/shared/method"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "trade-transaction-jurisdiction-document-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:customs-trade-compliance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:explore-base"
+        ],
         "label": "Trade Transaction, Jurisdiction and Document Analyst",
         "description": "Freezes cross-border transaction, parties, goods, route, dates, roles and document baseline.",
         "base_role": "explore",
-        "prompt": "agents/trade-transaction-jurisdiction-document-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "customs-trade-compliance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/trade-transaction-jurisdiction-document-analyst/system.md"
       },
       "tariff-classification-product-evidence-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:customs-trade-compliance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Tariff Classification and Product Evidence Analyst",
         "description": "Builds product-fact, candidate nomenclature and ruling trace without assigning a final classification.",
         "base_role": "delegated-worker",
-        "prompt": "agents/tariff-classification-product-evidence-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "customs-trade-compliance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/tariff-classification-product-evidence-analyst/system.md"
       },
       "origin-valuation-preference-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:customs-trade-compliance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Origin, Valuation and Preference Analyst",
         "description": "Traces BOM/process/origin evidence and customs-valuation inputs to supplied preference claims.",
         "base_role": "delegated-worker",
-        "prompt": "agents/origin-valuation-preference-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "customs-trade-compliance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/origin-valuation-preference-analyst/system.md"
       },
       "restricted-party-license-entry-control-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:customs-trade-compliance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Restricted Party, License and Entry Control Analyst",
         "description": "Examines potential-match, licence/control and broker-entry reconciliation evidence.",
         "base_role": "delegated-worker",
-        "prompt": "agents/restricted-party-license-entry-control-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "customs-trade-compliance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/restricted-party-license-entry-control-analyst/system.md"
       },
       "customs-trade-compliance-review-owner": {
+        "capability_refs": [
+          "capability:capability_set:package:customs-trade-compliance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Customs Trade Compliance Review Owner",
         "description": "Joins transaction, classification, origin/valuation and screening/entry evidence for qualified review.",
         "base_role": "delegated-worker",
-        "prompt": "agents/customs-trade-compliance-review-owner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "customs-trade-compliance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/customs-trade-compliance-review-owner/system.md"
       }
     },
     "virtual_workflows": {

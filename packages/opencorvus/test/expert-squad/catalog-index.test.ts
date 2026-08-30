@@ -23,25 +23,10 @@ import { Session } from "../../src/session"
 import { Identifier } from "../../src/id/id"
 
 function scalePackageDefinition(id: string): ExpertSquadPackageDefinition {
-  const emptyResources = {
-    inherit_base_tools: false,
-    built_in_tool_ids: [] as string[],
-    default_skill_refs: [] as string[],
-    package_skill_refs: [] as string[],
-    default_tool_refs: [] as string[],
-    package_tool_refs: [] as string[],
-    default_mcp_server_refs: [] as string[],
-    package_mcp_server_refs: [] as string[],
-    default_mcp_tool_refs: [] as string[],
-    package_mcp_tool_refs: [] as string[],
-    default_mcp_prompt_refs: [] as string[],
-    package_mcp_prompt_refs: [] as string[],
-    default_mcp_resource_refs: [] as string[],
-    package_mcp_resource_refs: [] as string[],
-  }
+  const emptyResources = { capability_refs: [] as string[] }
   return {
     manifest: {
-      schema_version: 1,
+      schema_version: 2,
       namespace: "scale",
       id,
       label: `Scale ${id}`,
@@ -54,6 +39,7 @@ function scalePackageDefinition(id: string): ExpertSquadPackageDefinition {
         selection_guidance: `Use ${id} only for bounded catalog verification.`,
         instructions: "selector.md",
       },
+      capability_sets: {},
       capability_projection: {
         scheduler: { ...emptyResources, base_role: "orchestrator" },
         agents: {},
@@ -114,7 +100,7 @@ describe("Expert Squad catalog index", () => {
     const inspection = await PromptProfileResolver.catalogInspection({ projectDirectory: project.path, id: "base" })
     expect(inspection).toMatchObject({
       id: "base",
-      version: "2026.08.22.4",
+      version: "2026.08.30.2",
       selector: {
         summary: expect.any(String),
         selection_guidance: expect.any(String),
@@ -610,7 +596,7 @@ describe("Expert Squad catalog index", () => {
     })
     expect(detail).toMatchObject({
       id: "evolution-lab",
-      installations: [{ installationScope: "project", installedVersion: "2026.08.30.1" }],
+      installations: [{ installationScope: "project", installedVersion: "2026.08.30.3" }],
     })
   }, 0)
 

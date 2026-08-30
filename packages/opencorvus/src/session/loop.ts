@@ -62,7 +62,7 @@ import { bindProjectedTaskToolRuntime, projectedTaskToolRuntimeBindingOf } from 
 import type { ResolvedSkillSurface } from "@/skill/surface"
 import { AgentToolPool } from "@/agent/tool-pool-contract"
 import { CapabilityRules } from "@/capability/rules"
-import { capabilityRef } from "@/capability/ref"
+import { capabilityRef } from "@opencorvus-ai/util/capability-ref"
 import { SessionStatus, sessionLifecycleOrderKey } from "./status"
 import { ensureTitle } from "./prompt/title"
 import { Truncate } from "@/tool/truncation"
