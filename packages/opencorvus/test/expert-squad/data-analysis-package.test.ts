@@ -130,11 +130,11 @@ describe("Data Analysis expert squad package", () => {
   test("loads its complete typed package and seven-node parallel workflow", async () => {
     const loaded = await ExpertSquadRegistry.loadSourcePackage(packageRoot)
     expect(loaded.manifest).toMatchObject({
-      schema_version: 1,
+      schema_version: 2,
       namespace: "builtin",
       id: "data-analysis",
       name: "Data Analysis & Business Insights",
-      version: "2026.08.19.1",
+      version: "2026.08.30.1",
       product_pillars: ["work"],
     })
     expect(Object.keys(loaded.manifest.capability_projection.agents)).toEqual(Object.keys(dependencies))

@@ -277,9 +277,9 @@ export namespace Filesystem {
       } catch (error) {
         const code =
           error && typeof error === "object" && "code" in error ? String((error as NodeJS.ErrnoException).code) : ""
-        // EBUSY means "resource busy"; EPERM means "operation not permitted".
-        // Windows can report either while another process releases a directory handle.
-        const retryable = code === "EBUSY" || code === "EPERM"
+        // Windows can report EBUSY, EPERM, or EACCES while another process
+        // releases a directory handle around the same atomic rename.
+        const retryable = code === "EBUSY" || code === "EPERM" || code === "EACCES"
         if (!retryable || attempt === Flag.OPENCORVUS_FILESYSTEM_RENAME_ATTEMPTS) throw error
         await new Promise<void>((resolve) => setTimeout(resolve, Flag.OPENCORVUS_FILESYSTEM_RENAME_DELAY_MS * attempt))
       }

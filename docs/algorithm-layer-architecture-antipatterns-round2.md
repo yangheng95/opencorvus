@@ -104,19 +104,11 @@ const visualReview = campaign.ui_rubric_digest === null
 
 ---
 
-### R2-02　候选自我授权的安全不变式，覆盖的是一份与 SDK schema 零编译期链接的手抄清单
+### R2-02　候选自我授权的安全不变式已收敛到 typed capability refs
 
 **分类** REGRESSION（ARCH-C-4 的修复自己留的后门）｜**当前不可利用，SDK 加一个字段即刻可利用**
 
-真值源 `packages/sdk/js/src/expert-squad-manifest-v1.ts:119-134`，`ExpertSquadProjectionResourcesSchema` 有 13 个 ref-list 字段 + `inherit_base_tools`。
-
-手抄副本 `packages/plugin/src/expert-squad-evolution-integrity.ts:148-162`：`CAPABILITY_GRANT_LIST_FIELDS` 逐字复制那 13 个字段名，`as const`。同文件 `:14` 是 `type Manifest = Record<string, unknown>`——**完全 untyped**，与真值源之间没有 `keyof` / `satisfies` / `Object.keys(schema.shape)` 之类的任何编译期联系。
-
-`assertCandidateGrantsAreInherited`（`:202-222`）只遍历这份手抄清单。
-
-**后果**：SDK schema 未来新增第 14 个授权字段（这套 schema 已横跨 skill / tool / mcp_server / mcp_tool / mcp_prompt / mcp_resource 六类，加第七类是合理演进），`CAPABILITY_GRANT_LIST_FIELDS` 不会自动感知——`declaredGrants` 不会为它建 Set，for 循环压根不访问它。不是编译错误，不是运行时报错：**一个自修改的候选包可以通过这个新字段静默授予自己父包没有的能力**，完全绕过 ARCH-C-4 刚刚建立的不变式。这正是 ARCH-C-4 原文声称要封死的奖励攻击路径，只是攻击面从「当前 13 个已知字段」变成「未来任何新字段」。
-
-**方向**：`packages/plugin` 已经 workspace 依赖 `@opencorvus-ai/sdk`（`package.json:23`）。删掉手抄数组，改为 `Object.keys(ExpertSquadProjectionResourcesSchema.shape).filter((f) => f !== "inherit_base_tools")`。不新增抽象，只是把已存在的 schema 当唯一真值源。
+Manifest v2 已删除按 kind/source 拆分的授权字段。SDK、Core 与 plugin 共享 `CapabilityRefCodec`；候选完整遍历唯一的 `capability_refs`，把 package CapabilitySet 展开为 leaf 后比较父修订的 canonical ref union，并单独比较 `base_role`。新增 capability kind 不再要求维护一份字段名清单。
 
 ---
 
@@ -289,7 +281,7 @@ ARCH-C-1（终态会话工具闸门两层不同步、每次唤醒必抛错）已
 
 | 判别字段 | 定义处 | 成员 | 独立消费点 | 编译期穷尽 | 漏改后果 |
 | --- | --- | --- | --- | --- | --- |
-| `ExpertSquadProjectionResources` 授权字段 | `sdk/expert-squad-manifest-v1.ts:119` | 13+1 | 1（手抄） | **否** | **静默放行越权授予**（R2-02） |
+| Expert Squad typed capability grant | `sdk/expert-squad-manifest-v2.ts` | 1 个 `capability_refs` 面 | 共享 codec + generic traversal | **是** | 未继承 ref 被明确拒绝（R2-02） |
 | `WakeReason` scheduler.message 分支 | `session/wake.ts:70` | 8 字段 | 3（2 safeParse / 1 手写） | 2/3 | 结算全卡死（R2-05） |
 | `operationKind` | `browser-preview/persist.ts:53` | 4 | 4 | 部分 | 静默 404 / 漏取角色（R2-10） |
 | `scorer.type`（acceptance） | `acceptance/types.ts:127` | 4 | 6 | 仅 schema | 展示静默错标；扩展成本未降（R2-09） |
@@ -348,7 +340,7 @@ ARCH-C-1（终态会话工具闸门两层不同步、每次唤醒必抛错）已
 | 编号 | 处置 | 验证 | 状态 |
 | --- | --- | --- | --- |
 | R2-01 | 视觉门改由 `visualScorerIDs.size` 决定，与 `ui_rubric_digest` 解耦。顺带修掉反向的失败开放：有视觉 scorer 但无 judge scorer 时，`unavailable` 结果此前完全跳过这道门 | 新增回归用例；**故意还原旧判据确认它变红**（`status: "unavailable"`），再还原。evolution-comparison 6/6。包字节已重生成 | ✅ |
-| R2-02 | 手抄的 13 字段清单改为 `satisfies readonly CapabilityGrantListField[]` + `AssertNoUncheckedGrantField` 穷尽断言，字段union 由 SDK `ExpertSquadProjectionResourcesSchema["shape"]` 派生。**type-only import**，Capsule 运行时依赖不变 | 删掉一个字段后编译器**点名** `"package_mcp_resource_refs"`；plugin typecheck 0 错。（`z.infer` 跨包会退化成 `string` 让断言恒真，故走 `.shape`） | ✅ |
+| R2-02 | Manifest v2 删除手抄授权字段清单；plugin 使用共享 `CapabilityRefCodec` 遍历 `capability_refs` 并展开 package set | 新 capability kind 自动进入同一遍历；plugin typecheck 与 candidate integrity 聚焦测试通过 | ✅ |
 | R2-03 | CI workflow 改为直接调用根 `bun run typecheck`，删掉手写的重复步骤清单 | `check:ai-runtime` 与 `check:expert-squad-types` 首次进入 CI | ✅ |
 | R2-04 | `EDIT_TOOLS` 归一化下沉进 `evaluate()`，`disabled()` 不再自带一份 | 新增 `test/capability/rules.test.ts` 4 例，直接断言两个入口对同一配置结论一致；security-p0-contracts 9/9 | ✅ |
 | R2-05 | `schedulerWakeMessageMatchesInTransaction` 改走 `Message.User.safeParse` + `SessionWake.WakeReason.safeParse`，手写类型断言归零 | protocol/scheduler 四个套件全绿 | ✅ |

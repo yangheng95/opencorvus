@@ -81,14 +81,24 @@ import {
   compareCanonicalStrings,
   textSHA256,
 } from "./projection-hash"
-import { TASK_ARTIFACT_SCHEDULER_TOOL_IDS, TASK_ARTIFACT_TOOL_IDS } from "@/tool/tool-id-catalog"
+import { TASK_ARTIFACT_TOOL_IDS } from "@/tool/tool-id-catalog"
 import { ExpertSquadRegistry } from "./registry"
+import {
+  materializeExpertSquadCapabilities,
+  type MaterializedExpertSquadCapabilities,
+} from "./capability-grants"
+import { PlatformCapabilitySetRegistry } from "@/agent/platform-capability-sets"
 import { runtimeOverrideLayers } from "@/agent/runtime-override"
 import { sessionRuntimeFromProjectedTemplate, type SessionAgentRuntime } from "@/agent/session-agent-runtime"
 import { configuredProjectedWorkerModelRef } from "@/agent/model"
 import { ExpertSquadConfigurationStore } from "./configuration"
 import { createHarnessProjection } from "@/capability/harness-projection"
-import { capabilityRef, type CapabilityKind, type CapabilityRef } from "@/capability/ref"
+import {
+  capabilityRef,
+  CapabilityRefCodec,
+  type CapabilityKind,
+  type CapabilityRef,
+} from "@opencorvus-ai/util/capability-ref"
 import { NamedError } from "@opencorvus-ai/util/error"
 
 type ConfigLike = {
@@ -185,6 +195,7 @@ export namespace PromptProfileResolver {
     builtIn: boolean
     projectionHash: string
     scheduler: ExpertSquadRegistry.SchedulerProjection
+    grants: MaterializedExpertSquadCapabilities
     virtualWorkflows: ExpertSquadRegistry.VirtualWorkflows
     builtInToolIDs: string[]
     defaultTools: ResolvedProviderRef[]
@@ -217,6 +228,7 @@ export namespace PromptProfileResolver {
     builtIn: boolean
     capabilityOwner: "package" | "platform"
     projection: ExpertSquadRegistry.AgentProjection
+    grants: MaterializedExpertSquadCapabilities
     builtInToolIDs: string[]
     defaultTools: ResolvedProviderRef[]
     packageTools: ResolvedPackageTool[]
@@ -265,7 +277,6 @@ export namespace PromptProfileResolver {
   }
 
   function capabilityHarnessRefs(capability: ResolvedSchedulerCapability | ResolvedWorkerCapability) {
-    const projection = "scheduler" in capability ? capability.scheduler : capability.projection
     return {
       tool_refs: [
         ...harnessRefs("tool", "platform", "tool-registry", capability.builtInToolIDs),
@@ -286,13 +297,13 @@ export namespace PromptProfileResolver {
         capabilityRef({
           kind: "skill",
           source: grant.source === "package" ? "package" : "platform",
-          owner_ref: capability.expertSquadID,
+          owner_ref: grant.source === "package" ? capability.expertSquadID : "skill-manager",
           local_ref: grant.ref,
         }),
       ),
       mcp_server_refs: [
-        ...harnessRefs("mcp_server", "project", "mcp-config", projection.default_mcp_server_refs),
-        ...harnessRefs("mcp_server", "package", capability.expertSquadID, projection.package_mcp_server_refs),
+        ...harnessRefs("mcp_server", "project", "mcp-config", capability.grants.defaultMcpServerRefs),
+        ...harnessRefs("mcp_server", "package", capability.expertSquadID, capability.grants.packageMcpServerRefs),
       ],
       mcp_tool_refs: [
         ...harnessRefs(
@@ -471,20 +482,11 @@ export namespace PromptProfileResolver {
     label: UNIVERSAL_BUILD_LABEL,
     description: UNIVERSAL_BUILD_DESCRIPTION,
     base_role: "build",
-    inherit_base_tools: true,
-    built_in_tool_ids: [],
-    default_skill_refs: [],
-    package_skill_refs: [],
-    default_tool_refs: [],
-    package_tool_refs: [],
-    default_mcp_server_refs: [],
-    package_mcp_server_refs: [],
-    default_mcp_tool_refs: [],
-    package_mcp_tool_refs: [],
-    default_mcp_prompt_refs: [],
-    package_mcp_prompt_refs: [],
-    default_mcp_resource_refs: [],
-    package_mcp_resource_refs: [],
+    capability_refs: [
+      CapabilityRefCodec.encode(
+        PlatformCapabilitySetRegistry.baseRef({ kind: "worker", baseRole: "build" }),
+      ),
+    ],
   })
 
   function freezeResolvedProjection<T>(value: T, seen = new WeakSet<object>()): T {
@@ -970,7 +972,7 @@ export namespace PromptProfileResolver {
       description: input.description,
       prompt_sha256: contentDigest(input.promptOverlay),
       readme_sha256: contentDigest(input.readmeContent),
-      built_in_tool_ids: canonicalStringSet(input.builtInToolIDs, `${input.agentID}.builtInToolIDs`),
+      projected_tool_ids: canonicalStringSet(input.builtInToolIDs, `${input.agentID}.builtInToolIDs`),
       default_tools: canonicalProviderRefs(input.defaultTools, `${input.agentID}.defaultTools`),
       package_tools: canonicalPackageTools(input.packageTools),
       default_mcp_tools: canonicalProviderRefs(input.defaultMcpTools, `${input.agentID}.defaultMcpTools`),
@@ -1091,12 +1093,12 @@ export namespace PromptProfileResolver {
   }
 
   function projectionPackageMcpKindRefs(
-    projection: ExpertSquadRegistry.Projection,
+    grants: MaterializedExpertSquadCapabilities,
     kind: McpCapabilityKind,
   ): readonly string[] {
-    if (kind === "tool") return projection.package_mcp_tool_refs
-    if (kind === "prompt") return projection.package_mcp_prompt_refs
-    return projection.package_mcp_resource_refs
+    if (kind === "tool") return grants.packageMcpToolRefs
+    if (kind === "prompt") return grants.packageMcpPromptRefs
+    return grants.packageMcpResourceRefs
   }
 
   function effectivePackageMcpRefs(input: {
@@ -1106,7 +1108,7 @@ export namespace PromptProfileResolver {
           builtIn: false
           pkg: PackageMcpRefInventory
         }
-    projection: ExpertSquadRegistry.Projection
+    grants: MaterializedExpertSquadCapabilities
     kind: McpCapabilityKind
     context: string
   }): string[] {
@@ -1128,15 +1130,15 @@ export namespace PromptProfileResolver {
       result.push(ref)
     }
 
-    for (const serverRef of input.projection.package_mcp_server_refs) {
+    for (const serverRef of input.grants.packageMcpServerRefs) {
       if (!input.active.pkg.packageMcpDeclarations.has(serverRef)) {
         throw new Error(`${input.context}: package MCP server ref ${serverRef} is not declared in the active package`)
       }
       const prefix = `${serverRef}/${input.kind}/`
       const expanded = [...available.keys()].filter((item) => item.startsWith(prefix)).sort(compareCanonicalStrings)
-      for (const ref of expanded) add(ref, `package_mcp_server_refs.${serverRef}`)
+      for (const ref of expanded) add(ref, `package MCP server capability ${serverRef}`)
     }
-    for (const ref of projectionPackageMcpKindRefs(input.projection, input.kind)) {
+    for (const ref of projectionPackageMcpKindRefs(input.grants, input.kind)) {
       add(ref, `package_mcp_${input.kind}_refs`)
     }
     return result
@@ -1191,14 +1193,13 @@ export namespace PromptProfileResolver {
     return [...toolIDs]
   }
 
-  function expandedSchedulerBuiltInToolIDs(projection: ExpertSquadRegistry.Projection, config: ConfigLike): string[] {
+  function expandedSchedulerBuiltInToolIDs(
+    grants: MaterializedExpertSquadCapabilities,
+    config: ConfigLike,
+  ): string[] {
     return expandedProjectedBuiltInToolIDs({
-      inheritedToolIDs: [
-        ...(projection.inherit_base_tools ? AgentToolPool.orchestratorSchedulerRoleBaseToolIDs() : []),
-        ...TASK_ARTIFACT_SCHEDULER_TOOL_IDS,
-        "publish_interactive_artifact",
-      ],
-      explicitToolIDs: projection.built_in_tool_ids,
+      inheritedToolIDs: grants.builtInToolIDs.filter((toolID) => !grants.explicitBuiltInToolIDs.includes(toolID)),
+      explicitToolIDs: grants.explicitBuiltInToolIDs,
       projectableToolIDs: AgentToolPool.orchestratorSchedulerProjectableToolIDs(),
       config,
       context: "Orchestrator scheduler template",
@@ -1207,18 +1208,12 @@ export namespace PromptProfileResolver {
 
   function expandedWorkerBuiltInToolIDs(
     baseRole: RuntimeTemplateID,
-    projection: ExpertSquadRegistry.Projection,
+    grants: MaterializedExpertSquadCapabilities,
     config: ConfigLike,
   ): string[] {
     return expandedProjectedBuiltInToolIDs({
-      inheritedToolIDs: [
-        ...(projection.inherit_base_tools
-          ? AgentToolPool.visibleToolIDs(AgentToolPool.runtimeTemplateAssignment(baseRole))
-          : []),
-        ...TASK_ARTIFACT_TOOL_IDS,
-        "publish_interactive_artifact",
-      ],
-      explicitToolIDs: projection.built_in_tool_ids,
+      inheritedToolIDs: grants.builtInToolIDs.filter((toolID) => !grants.explicitBuiltInToolIDs.includes(toolID)),
+      explicitToolIDs: grants.explicitBuiltInToolIDs,
       projectableToolIDs: AgentToolPool.projectableRuntimeTemplateBuiltInToolIDs(baseRole),
       config,
       context: `Worker base-role template ${baseRole}`,
@@ -1345,29 +1340,35 @@ export namespace PromptProfileResolver {
     if (schedulerContract.sessionKind === null) {
       throw new Error("orchestrator role contract requires a session kind")
     }
-    const builtInToolIDs = expandedSchedulerBuiltInToolIDs(scheduler, config)
+    const grants = materializeExpertSquadCapabilities({
+      manifest: active.pkg.manifest,
+      projection: scheduler,
+      runtime: { kind: "scheduler" },
+      context: "capability_projection.scheduler",
+    })
+    const builtInToolIDs = expandedSchedulerBuiltInToolIDs(grants, config)
     const defaultTools = resolvedProviderRefs(
-      scheduler.default_tool_refs,
+      grants.defaultToolRefs,
       defaultToolProviderName,
-      "capability_projection.scheduler.default_tool_refs",
+      "capability_projection.scheduler.capability_refs",
     )
     assertProjectableSchedulerDefaultHostTools(defaultTools, "capability_projection.scheduler")
     assertDefaultToolsDoNotRepeatBuiltIns(builtInToolIDs, defaultTools, "capability_projection.scheduler")
-    const packageTools = resolvedPackageTools(active, active.builtIn ? [] : scheduler.package_tool_refs)
+    const packageTools = resolvedPackageTools(active, active.builtIn ? [] : grants.packageToolRefs)
     const defaultMcpTools = resolvedProviderRefs(
-      scheduler.default_mcp_tool_refs,
+      grants.defaultMcpToolRefs,
       defaultMcpToolProviderName,
-      "capability_projection.scheduler.default_mcp_tool_refs",
+      "capability_projection.scheduler.capability_refs",
     )
     const defaultMcpPrompts = resolvedProviderRefs(
-      scheduler.default_mcp_prompt_refs,
+      grants.defaultMcpPromptRefs,
       defaultMcpPromptProviderName,
-      "capability_projection.scheduler.default_mcp_prompt_refs",
+      "capability_projection.scheduler.capability_refs",
     )
     const defaultMcpResources = resolvedProviderRefs(
-      scheduler.default_mcp_resource_refs,
+      grants.defaultMcpResourceRefs,
       defaultMcpResourceProviderName,
-      "capability_projection.scheduler.default_mcp_resource_refs",
+      "capability_projection.scheduler.capability_refs",
     )
     const defaultMcpServers = defaultMcpServersForRefs(config, [
       ...defaultMcpTools.map((entry) => entry.ref),
@@ -1379,39 +1380,39 @@ export namespace PromptProfileResolver {
       active,
       effectivePackageMcpRefs({
         active,
-        projection: scheduler,
+        grants,
         kind: "tool",
         context: "capability_projection.scheduler",
       }),
       "tool",
       packageMcpToolProviderName,
-      "capability_projection.scheduler.package_mcp_tool_refs",
+      "capability_projection.scheduler.capability_refs",
     )
     const packageMcpPrompts = resolvedPackageMcpRefs(
       active,
       effectivePackageMcpRefs({
         active,
-        projection: scheduler,
+        grants,
         kind: "prompt",
         context: "capability_projection.scheduler",
       }),
       "prompt",
       packageMcpPromptProviderName,
-      "capability_projection.scheduler.package_mcp_prompt_refs",
+      "capability_projection.scheduler.capability_refs",
     )
     const packageMcpResources = resolvedPackageMcpRefs(
       active,
       effectivePackageMcpRefs({
         active,
-        projection: scheduler,
+        grants,
         kind: "resource",
         context: "capability_projection.scheduler",
       }),
       "resource",
       packageMcpResourceProviderName,
-      "capability_projection.scheduler.package_mcp_resource_refs",
+      "capability_projection.scheduler.capability_refs",
     )
-    const productionSkills = effectiveProductionSkillGrants(context, scheduler, "orchestrator", config)
+    const productionSkills = effectiveProductionSkillGrants(context, grants, "orchestrator", config)
     const promptOverlay = active.pkg.promptProfile.agents.orchestrator
     const readmeContent = active.pkg.readmeContent
     const projectionHash = canonicalProjectionHash(
@@ -1457,6 +1458,7 @@ export namespace PromptProfileResolver {
       builtIn: active.builtIn,
       projectionHash,
       scheduler,
+      grants,
       virtualWorkflows: active.pkg.manifest.capability_projection.virtual_workflows,
       builtInToolIDs,
       defaultTools,
@@ -1553,33 +1555,39 @@ export namespace PromptProfileResolver {
         capabilityOwner,
       }),
     })
-    const builtInToolIDs = expandedWorkerBuiltInToolIDs(baseRole, projection, input.config)
     const context =
       capabilityOwner === "platform"
         ? `platform.scheduler_capabilities.${agentID}`
         : `capability_projection.agents.${agentID}`
+    const grants = materializeExpertSquadCapabilities({
+      manifest: active.pkg.manifest,
+      projection,
+      runtime: { kind: "worker", baseRole },
+      context,
+    })
+    const builtInToolIDs = expandedWorkerBuiltInToolIDs(baseRole, grants, input.config)
     const defaultTools = resolvedProviderRefs(
-      projection.default_tool_refs,
+      grants.defaultToolRefs,
       defaultToolProviderName,
-      `${context}.default_tool_refs`,
+      `${context}.capability_refs`,
     )
     assertProjectableDefaultHostTools(defaultTools, baseRole, context)
     assertDefaultToolsDoNotRepeatBuiltIns(builtInToolIDs, defaultTools, context)
-    const packageTools = resolvedPackageTools(active, active.builtIn ? [] : projection.package_tool_refs)
+    const packageTools = resolvedPackageTools(active, active.builtIn ? [] : grants.packageToolRefs)
     const defaultMcpTools = resolvedProviderRefs(
-      projection.default_mcp_tool_refs,
+      grants.defaultMcpToolRefs,
       defaultMcpToolProviderName,
-      `${context}.default_mcp_tool_refs`,
+      `${context}.capability_refs`,
     )
     const defaultMcpPrompts = resolvedProviderRefs(
-      projection.default_mcp_prompt_refs,
+      grants.defaultMcpPromptRefs,
       defaultMcpPromptProviderName,
-      `${context}.default_mcp_prompt_refs`,
+      `${context}.capability_refs`,
     )
     const defaultMcpResources = resolvedProviderRefs(
-      projection.default_mcp_resource_refs,
+      grants.defaultMcpResourceRefs,
       defaultMcpResourceProviderName,
-      `${context}.default_mcp_resource_refs`,
+      `${context}.capability_refs`,
     )
     const defaultMcpServers = defaultMcpServersForRefs(input.config, [
       ...defaultMcpTools.map((entry) => entry.ref),
@@ -1589,26 +1597,26 @@ export namespace PromptProfileResolver {
     const globalMcpTimeout = input.config.experimental?.mcp_timeout
     const packageMcpTools = resolvedPackageMcpRefs(
       active,
-      effectivePackageMcpRefs({ active, projection, kind: "tool", context }),
+      effectivePackageMcpRefs({ active, grants, kind: "tool", context }),
       "tool",
       packageMcpToolProviderName,
-      `${context}.package_mcp_tool_refs`,
+      `${context}.capability_refs`,
     )
     const packageMcpPrompts = resolvedPackageMcpRefs(
       active,
-      effectivePackageMcpRefs({ active, projection, kind: "prompt", context }),
+      effectivePackageMcpRefs({ active, grants, kind: "prompt", context }),
       "prompt",
       packageMcpPromptProviderName,
-      `${context}.package_mcp_prompt_refs`,
+      `${context}.capability_refs`,
     )
     const packageMcpResources = resolvedPackageMcpRefs(
       active,
-      effectivePackageMcpRefs({ active, projection, kind: "resource", context }),
+      effectivePackageMcpRefs({ active, grants, kind: "resource", context }),
       "resource",
       packageMcpResourceProviderName,
-      `${context}.package_mcp_resource_refs`,
+      `${context}.capability_refs`,
     )
-    const productionSkills = effectiveProductionSkillGrants(input.context, projection, agentID, input.config)
+    const productionSkills = effectiveProductionSkillGrants(input.context, grants, agentID, input.config)
     const promptOverlay = capabilityOwner === "platform" ? undefined : active.pkg.promptProfile.agents[agentID]
     const workerProjectionHash = canonicalProjectionHash(
       ProjectionHashDomain.worker,
@@ -1658,6 +1666,7 @@ export namespace PromptProfileResolver {
       builtIn: active.builtIn,
       capabilityOwner,
       projection,
+      grants,
       builtInToolIDs,
       defaultTools,
       packageTools,
@@ -3269,7 +3278,7 @@ export namespace PromptProfileResolver {
 
   function manifestProductionSkillGrants(
     context: CapabilityResolutionContext,
-    projection: ExpertSquadRegistry.Projection,
+    capabilities: MaterializedExpertSquadCapabilities,
     agentID: string,
   ): ProductionSkillGrant[] {
     const grants: ProductionSkillGrant[] = []
@@ -3284,7 +3293,7 @@ export namespace PromptProfileResolver {
       names.set(grant.skill.name, grant.ref)
       grants.push(grant)
     }
-    for (const ref of [...projection.default_skill_refs].sort(compareCanonicalStrings)) {
+    for (const ref of capabilities.defaultSkillRefs) {
       const name = defaultSkillNameFromRef(ref)
       const skill = context.defaultSkillsByName.get(name)
       if (!skill) {
@@ -3299,7 +3308,7 @@ export namespace PromptProfileResolver {
         skill: cloneProductionSkill(skill),
       })
     }
-    for (const ref of [...projection.package_skill_refs].sort(compareCanonicalStrings)) {
+    for (const ref of capabilities.packageSkillRefs) {
       const prepared = context.active.pkg.packageSkills.get(ref)
       if (!prepared) {
         throw new Error(`Active expert squad ${context.active.profileID} has no prepared package skill ${ref}.`)
@@ -3319,11 +3328,11 @@ export namespace PromptProfileResolver {
 
   function effectiveProductionSkillGrants(
     context: CapabilityResolutionContext,
-    projection: ExpertSquadRegistry.Projection,
+    capabilities: MaterializedExpertSquadCapabilities,
     agentID: string,
     config: ConfigLike,
   ): ProductionSkillGrant[] {
-    const manifest = manifestProductionSkillGrants(context, projection, agentID)
+    const manifest = manifestProductionSkillGrants(context, capabilities, agentID)
     const byDefaultRef = new Map(
       manifest.filter((grant) => grant.source === "default").map((grant) => [grant.ref, grant]),
     )
@@ -3658,6 +3667,71 @@ export namespace PromptProfileResolver {
     capabilitySet: ResolvedPackageCapabilitySet
     promptProfileActive: string
   }): Promise<ExpertSquadCatalog["active_agent_projection"]> {
+    const activeCapabilityRefs = (capability: ResolvedWorkerCapability) =>
+      canonicalStringSet(
+        [
+          ...harnessRefs("tool", "platform", "tool-registry", capability.builtInToolIDs),
+          ...harnessRefs(
+            "tool",
+            "platform",
+            "default-tool-registry",
+            capability.defaultTools.map((entry) => entry.ref),
+          ),
+          ...harnessRefs(
+            "tool",
+            "package",
+            capability.expertSquadID,
+            capability.packageTools.map((entry) => entry.ref),
+          ),
+          ...capability.productionSkills.map((grant) =>
+            capabilityRef({
+              kind: "skill",
+              source: grant.source === "package" ? "package" : "platform",
+              owner_ref: grant.source === "package" ? capability.expertSquadID : "skill-manager",
+              local_ref: grant.ref,
+            }),
+          ),
+          ...harnessRefs("mcp_server", "project", "default-mcp-registry", capability.grants.defaultMcpServerRefs),
+          ...harnessRefs("mcp_server", "package", capability.expertSquadID, capability.grants.packageMcpServerRefs),
+          ...harnessRefs(
+            "mcp_tool",
+            "project",
+            "default-mcp-registry",
+            capability.defaultMcpTools.map((entry) => entry.ref),
+          ),
+          ...harnessRefs(
+            "mcp_tool",
+            "package",
+            capability.expertSquadID,
+            capability.packageMcpTools.map((entry) => entry.ref),
+          ),
+          ...harnessRefs(
+            "mcp_prompt",
+            "project",
+            "default-mcp-registry",
+            capability.defaultMcpPrompts.map((entry) => entry.ref),
+          ),
+          ...harnessRefs(
+            "mcp_prompt",
+            "package",
+            capability.expertSquadID,
+            capability.packageMcpPrompts.map((entry) => entry.ref),
+          ),
+          ...harnessRefs(
+            "mcp_resource",
+            "project",
+            "default-mcp-registry",
+            capability.defaultMcpResources.map((entry) => entry.ref),
+          ),
+          ...harnessRefs(
+            "mcp_resource",
+            "package",
+            capability.expertSquadID,
+            capability.packageMcpResources.map((entry) => entry.ref),
+          ),
+        ].map(CapabilityRefCodec.encode),
+        `${capability.identity.agentID}.capabilityRefs`,
+      )
     const agents = input.capabilitySet.workers.map((capability) => {
       return {
         agent_id: capability.identity.agentID,
@@ -3667,23 +3741,7 @@ export namespace PromptProfileResolver {
         label: capability.projection.label,
         ...(capability.projection.description ? { description: capability.projection.description } : {}),
         projection_hash: capability.identity.projectionHash,
-        built_in_tool_ids: capability.builtInToolIDs,
-        default_skill_refs: capability.productionSkills
-          .filter((grant) => grant.source === "default")
-          .map((grant) => grant.ref),
-        package_skill_refs: capability.productionSkills
-          .filter((grant) => grant.source === "package")
-          .map((grant) => grant.ref),
-        default_tool_refs: capability.defaultTools.map((entry) => entry.ref),
-        package_tool_refs: capability.packageTools.map((entry) => entry.ref),
-        default_mcp_server_refs: capability.projection.default_mcp_server_refs,
-        package_mcp_server_refs: capability.projection.package_mcp_server_refs,
-        default_mcp_tool_refs: capability.defaultMcpTools.map((entry) => entry.ref),
-        package_mcp_tool_refs: capability.packageMcpTools.map((entry) => entry.ref),
-        default_mcp_prompt_refs: capability.defaultMcpPrompts.map((entry) => entry.ref),
-        package_mcp_prompt_refs: capability.packageMcpPrompts.map((entry) => entry.ref),
-        default_mcp_resource_refs: capability.defaultMcpResources.map((entry) => entry.ref),
-        package_mcp_resource_refs: capability.packageMcpResources.map((entry) => entry.ref),
+        capability_refs: activeCapabilityRefs(capability),
       }
     })
     return {

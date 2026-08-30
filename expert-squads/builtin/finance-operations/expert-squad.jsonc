@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "finance-operations",
   "name": "Finance Operations",
   "label": "Finance Operations",
   "description": "Source-grounded finance operations reconciliation, control review, close planning, and independent review with explicit non-advisory and human-approval boundaries.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.30.1",
   "product_pillars": [
     "work"
   ],
@@ -15,119 +15,66 @@
     "selection_guidance": "Use for operational reconciliation, management reporting support, close checklists, variance investigation, receivables or payables process review, and finance-control design. This package does not provide financial, investment, accounting, audit, or tax advice and does not approve, file, pay, post, or transact.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 4 projections.",
+      "member_refs": [
+        "capability:skill:package:finance-operations:finance-operations%2Fshared%2Fmethod"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:skill:package:finance-operations:finance-operations%2Fshared%2Fmethod",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "finance-operations/shared/method"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "finance-operations-record-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:finance-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Finance Record Analyst",
         "description": "Reconciles supplied ledgers, statements, schedules, definitions, periods, and variances into a traceable evidence table.",
         "base_role": "delegated-worker",
-        "prompt": "agents/finance-operations-record-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "finance-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/finance-operations-record-analyst/system.md"
       },
       "finance-operations-controls-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:finance-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Finance Controls Analyst",
         "description": "Maps process ownership, approvals, segregation, evidence retention, exception handling, and control gaps.",
         "base_role": "delegated-worker",
-        "prompt": "agents/finance-operations-controls-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "finance-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/finance-operations-controls-analyst/system.md"
       },
       "finance-operations-close-planner": {
+        "capability_refs": [
+          "capability:capability_set:package:finance-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Finance Close and Operations Planner",
         "description": "Joins reconciled records and control analysis into one sequenced close or remediation plan for accountable human approval.",
         "base_role": "delegated-worker",
-        "prompt": "agents/finance-operations-close-planner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "finance-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/finance-operations-close-planner/system.md"
       },
       "finance-operations-reviewer": {
+        "capability_refs": [
+          "capability:capability_set:package:finance-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:fact-check-base"
+        ],
         "label": "Finance Operations Reviewer",
         "description": "Independently checks reconciliation, controls, source lineage, unresolved exceptions, and human approval requirements.",
         "base_role": "fact-check",
-        "prompt": "agents/finance-operations-reviewer/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "finance-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/finance-operations-reviewer/system.md"
       }
     },
     "virtual_workflows": {

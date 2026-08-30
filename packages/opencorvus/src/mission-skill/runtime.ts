@@ -4,7 +4,7 @@ import { skillDisabledReason, skillLoaderAvailable } from "@/skill/eligibility"
 import type { ResolvedSkillSurface } from "@/skill/surface"
 import { MissionSkillCatalog } from "./catalog"
 import { createHarnessProjection } from "@/capability/harness-projection"
-import { capabilityRef } from "@/capability/ref"
+import { capabilityRef } from "@opencorvus-ai/util/capability-ref"
 
 export namespace MissionSkillRuntime {
   export async function resolve(input: {

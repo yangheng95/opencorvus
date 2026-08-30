@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "cybersecurity-assurance",
   "name": "Cybersecurity Assurance",
   "label": "Cybersecurity Assurance",
   "description": "Read-only threat, control, and incident-readiness analysis joined into an evidence-backed security assurance register.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.30.1",
   "product_pillars": [
     "code",
     "work"
@@ -16,119 +16,66 @@
     "selection_guidance": "Select when a decision owner needs a source-grounded security assurance pack without exploitation, credential access, production mutation, or compliance certification.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 4 projections.",
+      "member_refs": [
+        "capability:skill:package:cybersecurity-assurance:cybersecurity-assurance%2Fshared%2Fmethod"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:skill:package:cybersecurity-assurance:cybersecurity-assurance%2Fshared%2Fmethod",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "cybersecurity-assurance/shared/method"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "security-threat-evidence-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:cybersecurity-assurance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:explore-base"
+        ],
         "label": "Threat Evidence Analyst",
         "description": "Maps assets, trust boundaries, threat claims, and observed evidence.",
         "base_role": "explore",
-        "prompt": "agents/security-threat-evidence-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "cybersecurity-assurance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/security-threat-evidence-analyst/system.md"
       },
       "security-control-coverage-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:cybersecurity-assurance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Control Coverage Analyst",
         "description": "Maps claimed controls to evidence, owners, gaps, and verification status.",
         "base_role": "delegated-worker",
-        "prompt": "agents/security-control-coverage-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "cybersecurity-assurance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/security-control-coverage-analyst/system.md"
       },
       "security-incident-readiness-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:cybersecurity-assurance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Incident Readiness Analyst",
         "description": "Assesses detection, escalation, containment, recovery, and exercise evidence.",
         "base_role": "delegated-worker",
-        "prompt": "agents/security-incident-readiness-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "cybersecurity-assurance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/security-incident-readiness-analyst/system.md"
       },
       "security-assurance-integrator": {
+        "capability_refs": [
+          "capability:capability_set:package:cybersecurity-assurance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Security Assurance Integrator",
         "description": "Joins all security evidence into one reviewable assurance register.",
         "base_role": "delegated-worker",
-        "prompt": "agents/security-assurance-integrator/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "cybersecurity-assurance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/security-assurance-integrator/system.md"
       }
     },
     "virtual_workflows": {

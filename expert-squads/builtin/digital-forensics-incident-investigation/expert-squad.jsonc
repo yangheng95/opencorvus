@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "digital-forensics-incident-investigation",
   "name": "Digital Forensics Incident Investigation",
   "label": "Digital Forensics Incident Investigation",
   "description": "Authorized digital-evidence preservation, endpoint and cloud artifacts, timeline and hypothesis evidence joined for qualified DFIR review.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.30.1",
   "product_pillars": [
     "code",
     "work"
@@ -16,141 +16,76 @@
     "selection_guidance": "Select for authorized preservation, custody, endpoint/memory/disk, network/cloud/identity artifact and timeline evidence.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 5 projections.",
+      "member_refs": [
+        "capability:skill:package:digital-forensics-incident-investigation:digital-forensics-incident-investigation%2Fshared%2Fmethod"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:skill:package:digital-forensics-incident-investigation:digital-forensics-incident-investigation%2Fshared%2Fmethod",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "digital-forensics-incident-investigation/shared/method"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "digital-evidence-authority-preservation-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:digital-forensics-incident-investigation:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:explore-base"
+        ],
         "label": "Digital Evidence Authority and Preservation Analyst",
         "description": "Freezes investigation authority, matter scope, legal hold, systems, custodians, permitted methods and evidence custody.",
         "base_role": "explore",
-        "prompt": "agents/digital-evidence-authority-preservation-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "digital-forensics-incident-investigation/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/digital-evidence-authority-preservation-analyst/system.md"
       },
       "endpoint-memory-disk-artifact-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:digital-forensics-incident-investigation:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Endpoint, Memory and Disk Artifact Analyst",
         "description": "Examines supplied endpoint, memory-image and disk-image artifact observations with tool and parser provenance.",
         "base_role": "delegated-worker",
-        "prompt": "agents/endpoint-memory-disk-artifact-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "digital-forensics-incident-investigation/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/endpoint-memory-disk-artifact-analyst/system.md"
       },
       "network-cloud-identity-artifact-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:digital-forensics-incident-investigation:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Network, Cloud and Identity Artifact Analyst",
         "description": "Correlates supplied network, cloud-audit and identity artifacts across accounts, devices, sessions and services.",
         "base_role": "delegated-worker",
-        "prompt": "agents/network-cloud-identity-artifact-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "digital-forensics-incident-investigation/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/network-cloud-identity-artifact-analyst/system.md"
       },
       "incident-timeline-hypothesis-corroboration-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:digital-forensics-incident-investigation:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Incident Timeline, Hypothesis and Corroboration Analyst",
         "description": "Builds a normalized, source-preserving event timeline and tests competing incident hypotheses.",
         "base_role": "delegated-worker",
-        "prompt": "agents/incident-timeline-hypothesis-corroboration-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "digital-forensics-incident-investigation/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/incident-timeline-hypothesis-corroboration-analyst/system.md"
       },
       "digital-forensics-incident-evidence-owner": {
+        "capability_refs": [
+          "capability:capability_set:package:digital-forensics-incident-investigation:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Digital Forensics Incident Evidence Owner",
         "description": "Joins authority, endpoint, distributed artifacts and timeline hypotheses into a contradiction-preserving review pack.",
         "base_role": "delegated-worker",
-        "prompt": "agents/digital-forensics-incident-evidence-owner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "digital-forensics-incident-investigation/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/digital-forensics-incident-evidence-owner/system.md"
       }
     },
     "virtual_workflows": {

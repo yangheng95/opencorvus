@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "cloud-platform-architecture",
   "name": "Cloud Platform Architecture",
   "label": "Cloud Platform Architecture",
   "description": "Provider-neutral cloud workload, reliability, and cost/operations analysis joined into an architecture decision pack.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.30.1",
   "product_pillars": [
     "code",
     "work"
@@ -16,119 +16,66 @@
     "selection_guidance": "Select when workload requirements, resilience, cost, operations, alternatives, and approval gates must converge before implementation.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 4 projections.",
+      "member_refs": [
+        "capability:skill:package:cloud-platform-architecture:cloud-platform-architecture%2Fshared%2Fmethod"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:skill:package:cloud-platform-architecture:cloud-platform-architecture%2Fshared%2Fmethod",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "cloud-platform-architecture/shared/method"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "cloud-workload-requirements-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:cloud-platform-architecture:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:requirements-base"
+        ],
         "label": "Workload Requirements Analyst",
         "description": "Defines workload boundaries, objectives, constraints, and assumptions.",
         "base_role": "requirements",
-        "prompt": "agents/cloud-workload-requirements-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "cloud-platform-architecture/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/cloud-workload-requirements-analyst/system.md"
       },
       "cloud-reliability-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:cloud-platform-architecture:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Cloud Reliability Analyst",
         "description": "Evaluates failure domains, recovery, state, and resilience evidence.",
         "base_role": "delegated-worker",
-        "prompt": "agents/cloud-reliability-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "cloud-platform-architecture/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/cloud-reliability-analyst/system.md"
       },
       "cloud-cost-operations-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:cloud-platform-architecture:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Cloud Cost and Operations Analyst",
         "description": "Maps cost drivers, operational ownership, and support constraints.",
         "base_role": "delegated-worker",
-        "prompt": "agents/cloud-cost-operations-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "cloud-platform-architecture/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/cloud-cost-operations-analyst/system.md"
       },
       "cloud-architecture-decision-owner": {
+        "capability_refs": [
+          "capability:capability_set:package:cloud-platform-architecture:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:architect-base"
+        ],
         "label": "Cloud Architecture Decision Owner",
         "description": "Joins requirements, reliability, and operations evidence into one decision record.",
         "base_role": "architect",
-        "prompt": "agents/cloud-architecture-decision-owner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "cloud-platform-architecture/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/cloud-architecture-decision-owner/system.md"
       }
     },
     "virtual_workflows": {

@@ -22,7 +22,7 @@ describe("Research Studio report-quality package", () => {
     expect(loaded.manifest).toMatchObject({
       id: "research-studio",
       name: "Research Studio",
-      version: "2026.08.13.1",
+      version: "2026.08.30.1",
       product_pillars: ["code", "work"],
     })
     expect(reportSkill?.snapshot.files.map((file) => file.path)).toEqual([
@@ -69,11 +69,9 @@ describe("Research Studio report-quality package", () => {
           ),
         )
 
-        expect(scheduler.builtInToolIDs).toEqual([
-          ...ORCHESTRATOR_SCHEDULER_ROLE_BASE_TOOL_IDS,
-          "read",
-          "browser_preview_capture",
-        ])
+        expect([...scheduler.builtInToolIDs].sort()).toEqual(
+          [...ORCHESTRATOR_SCHEDULER_ROLE_BASE_TOOL_IDS, "read", "browser_preview_capture"].sort(),
+        )
         expect(scheduler.packageRevision.packageDigest).toBe(sourcePackage.packageDigest)
         expect(agents.map((agent) => agent.productionSkills.map((skill) => skill.ref))).toEqual([
           [reportQualitySkillRef],

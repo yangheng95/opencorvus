@@ -178,7 +178,7 @@ Overlay 是用户可见桌面端，前端为 Solid.js，原生容器为 Tauri 2�
 | `src/server.ts` | 从 SDK 启动 OpenCorvus server 的 helper。 |
 | `src/index.ts` | 统一导出，并提供 `createOpenCorvus()` 同时创建 server 和 client。 |
 | `src/gen/` | OpenAPI 生成客户端代码。 |
-| `src/expert-squad-authoring.ts` / `expert-squad-manifest-v1.ts` | 专家团 authoring 和 manifest 类型。 |
+| `src/expert-squad-authoring.ts` / `expert-squad-manifest-v2.ts` | 专家团 authoring、CapabilitySet 与 typed manifest 类型。 |
 | `script/build.ts` | SDK 生成/构建脚本。 |
 
 ### Plugin Package `packages/plugin`

@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "medical-imaging-quality-assurance",
   "name": "Medical Imaging Quality Assurance",
   "label": "Medical Imaging Quality Assurance",
   "description": "Evidence-bounded imaging equipment, protocol, phantom QC, DICOM workflow, display, dose-index, and nonconformance review without clinical or system-operation authority.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.30.1",
   "product_pillars": [
     "work"
   ],
@@ -15,141 +15,76 @@
     "selection_guidance": "Select for equipment/configuration baselines, phantom technical QC, DICOM transfer/display integrity, dose-index context, or imaging CAPA trends. Do not select for diagnosis, clinical image acceptance, patient-dose decisions, system operation, or accreditation decisions.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 5 projections.",
+      "member_refs": [
+        "capability:skill:package:medical-imaging-quality-assurance:medical-imaging-quality-assurance%2Fshared%2Fmethod"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:skill:package:medical-imaging-quality-assurance:medical-imaging-quality-assurance%2Fshared%2Fmethod",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "medical-imaging-quality-assurance/shared/method"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "imaging-equipment-protocol-configuration-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:medical-imaging-quality-assurance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:explore-base"
+        ],
         "label": "Imaging Equipment Protocol Configuration Analyst",
         "description": "Reconciles device, detector, software, protocol, and approved baseline evidence.",
         "base_role": "explore",
-        "prompt": "agents/imaging-equipment-protocol-configuration-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "medical-imaging-quality-assurance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/imaging-equipment-protocol-configuration-analyst/system.md"
       },
       "imaging-phantom-technical-qc-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:medical-imaging-quality-assurance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Imaging Phantom Technical QC Analyst",
         "description": "Traces phantom procedures, technical measurements, calculations, tolerances, and uncertainty.",
         "base_role": "delegated-worker",
-        "prompt": "agents/imaging-phantom-technical-qc-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "medical-imaging-quality-assurance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/imaging-phantom-technical-qc-analyst/system.md"
       },
       "dicom-data-display-workflow-integrity-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:medical-imaging-quality-assurance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "DICOM Data Display Workflow Integrity Analyst",
         "description": "Reconciles minimized DICOM identity, transfer, storage, derived-output, and display-chain evidence.",
         "base_role": "delegated-worker",
-        "prompt": "agents/dicom-data-display-workflow-integrity-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "medical-imaging-quality-assurance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/dicom-data-display-workflow-integrity-analyst/system.md"
       },
       "imaging-dose-nonconformance-trend-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:medical-imaging-quality-assurance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Imaging Dose Nonconformance Trend Analyst",
         "description": "Traces modality dose-index context, nonconformance, service, retest, CAPA, and trend evidence.",
         "base_role": "delegated-worker",
-        "prompt": "agents/imaging-dose-nonconformance-trend-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "medical-imaging-quality-assurance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/imaging-dose-nonconformance-trend-analyst/system.md"
       },
       "medical-imaging-quality-assurance-review-owner": {
+        "capability_refs": [
+          "capability:capability_set:package:medical-imaging-quality-assurance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Medical Imaging Quality Assurance Review Owner",
         "description": "Joins all four branches into a qualified-review pack while preserving clinical and operational decisions.",
         "base_role": "delegated-worker",
-        "prompt": "agents/medical-imaging-quality-assurance-review-owner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "medical-imaging-quality-assurance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/medical-imaging-quality-assurance-review-owner/system.md"
       }
     },
     "virtual_workflows": {

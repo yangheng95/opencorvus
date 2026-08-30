@@ -11,6 +11,7 @@ import { EngineService } from "../../src/task-api"
 import { Database } from "../../src/storage/db"
 import { buildExpertSquadAuthorDefinition } from "../../src/tool/expert-squad-author"
 import { memoryProject } from "../fixture/memory"
+import { capabilityRef, CapabilityRefCodec } from "@opencorvus-ai/util/capability-ref"
 
 describe("Browser MCP projection contract", () => {
   test(
@@ -29,7 +30,7 @@ describe("Browser MCP projection contract", () => {
             installationScope: "project",
             replace: false,
             definition: buildExpertSquadAuthorDefinition({
-              schema_version: 1,
+              schema_version: 2,
               namespace: "test",
               id: profileID,
               name: "Browser Projection Contract",
@@ -45,7 +46,18 @@ describe("Browser MCP projection contract", () => {
               },
               scheduler: {
                 prompt: "Coordinate the exact Browser projection contract.",
-                default_mcp_tool_refs: [...browserToolRefs],
+                capability_refs: browserToolRefs
+                  .map((localRef) =>
+                    CapabilityRefCodec.encode(
+                      capabilityRef({
+                        kind: "mcp_tool",
+                        source: "project",
+                        owner_ref: "default-mcp-registry",
+                        local_ref: localRef,
+                      }),
+                    ),
+                  )
+                  .sort(),
               },
               agents: {
                 "browser-contract-worker": {

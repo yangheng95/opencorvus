@@ -43,7 +43,7 @@ Independent responsibilities publish non-transferable evidence through their exa
 
 Advanced is used only while `prompt_profile.active` is `advanced`. Selecting another expert squad replaces this package's complete projection; other packages do not inherit or combine with Advanced agents, prompts, skills, tools, mounts, or workflow contracts. The platform-owned `universal-build` capability remains scheduler-only and is not Advanced inheritance.
 
-The scheduler and `requirement-engineer` each receive the platform `grill-me` Skill through their own exact `default_skill_refs` grants. The Requirement Engineer is encouraged to use its one-question decision-frontier method, routes unresolved operator decisions through the visible coordination and user-interaction path, and still persists the final requirements and foundational decisions only through the Requirements typed adapter. The grant does not follow the `requirements` runtime template into any other Agent or Expert Squad.
+The scheduler and `requirement-engineer` each receive the platform `grill-me` Skill through their own exact typed `capability_refs` grant. The Requirement Engineer is encouraged to use its one-question decision-frontier method, routes unresolved operator decisions through the visible coordination and user-interaction path, and still persists the final requirements and foundational decisions only through the Requirements typed adapter. The grant does not follow the `requirements` runtime template into any other Agent or Expert Squad.
 
 ## Artifact protocol
 

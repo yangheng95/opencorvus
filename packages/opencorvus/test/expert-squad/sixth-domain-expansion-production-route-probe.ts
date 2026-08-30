@@ -2,6 +2,7 @@ import fs from "node:fs/promises"
 import { Hono } from "hono"
 import { Instance } from "../../src/project/instance"
 import { ExpertSquadRoutes } from "../../src/server/routes/expert-squad"
+import { catalogPackageSkillRefs } from "./catalog-capability-fixture"
 
 const squadIDs = [
   "satellite-mission-operations",
@@ -74,7 +75,7 @@ const result = await Instance.provide({
         const agents = capability.agents as Record<string, Record<string, unknown>>
         const workflow = Object.values(capability.virtual_workflows as Record<string, Record<string, unknown>>)[0]
         const nodes = (workflow?.nodes ?? {}) as Record<string, Record<string, unknown>>
-        const schedulerRefs = scheduler.package_skill_refs as string[]
+        const schedulerRefs = catalogPackageSkillRefs(selected, scheduler)
         const skillRef = id + "/shared/method"
         const expectedAgentCount = fiveAgentSquads.has(id) ? 5 : 4
         const expectedRootCount = expectedAgentCount - 1
@@ -86,7 +87,7 @@ const result = await Instance.provide({
           throw new Error("Scheduler did not project the exact Skill for " + id)
         if (
           !Object.values(agents).every(
-            (agent) => JSON.stringify(agent.package_skill_refs) === JSON.stringify(schedulerRefs),
+            (agent) => JSON.stringify(catalogPackageSkillRefs(selected, agent)) === JSON.stringify(schedulerRefs),
           )
         )
           throw new Error("Worker Skill projection drifted for " + id)

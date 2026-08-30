@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "sports-performance-analysis",
   "name": "Sports Performance Analysis",
   "label": "Sports Performance Analysis",
   "description": "Training exposure and load, performance testing and reliability, and availability and wellbeing evidence joined into an individual-context performance review.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.30.1",
   "product_pillars": [
     "work"
   ],
@@ -15,119 +15,66 @@
     "selection_guidance": "Select for training and competition exposure, internal/external load, performance-test protocols, measurement reliability, individual longitudinal change, availability, wellbeing, travel, and recovery context. Do not select for diagnosis, individual injury prediction, return-to-play, training prescription, live coaching, supplements, anti-doping decisions, selection, contracts, or discipline.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 4 projections.",
+      "member_refs": [
+        "capability:skill:package:sports-performance-analysis:sports-performance-analysis%2Fshared%2Fmethod"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:skill:package:sports-performance-analysis:sports-performance-analysis%2Fshared%2Fmethod",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "sports-performance-analysis/shared/method"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "training-exposure-load-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:sports-performance-analysis:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:explore-base"
+        ],
         "label": "Training Exposure and Load Analyst",
         "description": "Reconciles training and competition exposure with versioned internal and external load measures.",
         "base_role": "explore",
-        "prompt": "agents/training-exposure-load-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "sports-performance-analysis/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/training-exposure-load-analyst/system.md"
       },
       "performance-testing-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:sports-performance-analysis:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Performance Testing and Reliability Analyst",
         "description": "Checks protocol comparability, measurement error, reliability, and defensible individual change.",
         "base_role": "delegated-worker",
-        "prompt": "agents/performance-testing-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "sports-performance-analysis/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/performance-testing-analyst/system.md"
       },
       "availability-wellbeing-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:sports-performance-analysis:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Availability and Wellbeing Analyst",
         "description": "Maps availability, self-reported wellbeing, symptoms, travel, and recovery context without diagnosis.",
         "base_role": "delegated-worker",
-        "prompt": "agents/availability-wellbeing-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "sports-performance-analysis/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/availability-wellbeing-analyst/system.md"
       },
       "sports-performance-review-owner": {
+        "capability_refs": [
+          "capability:capability_set:package:sports-performance-analysis:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Sports Performance Review Owner",
         "description": "Joins exposure, testing, and wellbeing evidence into bounded hypotheses and qualified decision gates.",
         "base_role": "delegated-worker",
-        "prompt": "agents/sports-performance-review-owner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "sports-performance-analysis/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/sports-performance-review-owner/system.md"
       }
     },
     "virtual_workflows": {

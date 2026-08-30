@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "water-wastewater-operations",
   "name": "Water and Wastewater Operations",
   "label": "Water and Wastewater Operations",
   "description": "Treatment-process, flow-quality balance, collection/distribution, asset-reliability, sampling, and permit evidence joined into a bounded operations review pack.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.30.1",
   "product_pillars": [
     "work"
   ],
@@ -15,119 +15,66 @@
     "selection_guidance": "Select for drinking-water and wastewater process trains, flow/concentration/mass balances, collection or distribution evidence, sampling and laboratory methods, alarms/work orders, asset reliability, permit-condition traceability, and excursion review. Do not select for chemical dosing, pump/valve/SCADA control, potable-water declaration, discharge/bypass approval, laboratory validation, compliance determination, public notice, maintenance isolation, design approval, or emergency command.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 4 projections.",
+      "member_refs": [
+        "capability:skill:package:water-wastewater-operations:water-wastewater-operations%2Fshared%2Fmethod"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:skill:package:water-wastewater-operations:water-wastewater-operations%2Fshared%2Fmethod",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "water-wastewater-operations/shared/method"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "drinking-water-treatment-quality-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:water-wastewater-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:explore-base"
+        ],
         "label": "Drinking Water Treatment and Quality Analyst",
         "description": "Reconciles source-water, treatment-stage, distribution, monitoring, and laboratory-quality evidence.",
         "base_role": "explore",
-        "prompt": "agents/drinking-water-treatment-quality-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "water-wastewater-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/drinking-water-treatment-quality-analyst/system.md"
       },
       "wastewater-collection-treatment-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:water-wastewater-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Wastewater Collection and Treatment Analyst",
         "description": "Reconciles collection, influent, unit-process, effluent, residuals, overflow, and permit-monitoring evidence.",
         "base_role": "delegated-worker",
-        "prompt": "agents/wastewater-collection-treatment-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "water-wastewater-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/wastewater-collection-treatment-analyst/system.md"
       },
       "water-asset-compliance-reliability-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:water-wastewater-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Water Asset, Monitoring and Reliability Analyst",
         "description": "Reconciles assets, alarms, work orders, redundancy, monitoring obligations, and response ownership.",
         "base_role": "delegated-worker",
-        "prompt": "agents/water-asset-compliance-reliability-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "water-wastewater-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/water-asset-compliance-reliability-analyst/system.md"
       },
       "water-wastewater-operations-review-owner": {
+        "capability_refs": [
+          "capability:capability_set:package:water-wastewater-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Water and Wastewater Operations Review Owner",
         "description": "Joins process, collection/distribution, asset, monitoring, and permit evidence and routes qualified decisions.",
         "base_role": "delegated-worker",
-        "prompt": "agents/water-wastewater-operations-review-owner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "water-wastewater-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/water-wastewater-operations-review-owner/system.md"
       }
     },
     "virtual_workflows": {

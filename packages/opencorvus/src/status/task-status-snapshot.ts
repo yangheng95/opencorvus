@@ -1,6 +1,6 @@
 import z from "zod"
 import { TaskBoard } from "@/engine/model"
-import { ProductPillarSchema } from "@opencorvus-ai/sdk/expert-squad-manifest-v1"
+import { ProductPillarSchema } from "@opencorvus-ai/sdk/expert-squad-manifest-v2"
 
 export const TaskActivityState = z.enum(["running", "inactive"])
 

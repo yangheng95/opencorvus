@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "frontend-innovate",
   "name": "Frontend Innovate",
   "label": "Frontend Innovate",
   "description": "Evidence-backed product redesign, visual direction, implementation, and rendered proof through durable catalog facts and visible narrative Turn summaries.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.30.1",
   "product_pillars": [
     "code"
   ],
@@ -26,254 +26,138 @@
       }
     ]
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 7 projections.",
+      "member_refs": [
+        "capability:skill:package:frontend-innovate:frontend-innovate%2Fshared%2Fmethod"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:skill:package:frontend-innovate:frontend-innovate%2Fshared%2Fmethod",
+        "capability:tool:package:frontend-innovate:frontend-innovate%2Fshared%2Fmaterialize-figma-resources",
+        "capability:tool:platform:tool-registry:bash",
+        "capability:tool:platform:tool-registry:browser_preview",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "browser_preview",
-        "bash"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "frontend-innovate/shared/method"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [
-        "frontend-innovate/shared/materialize-figma-resources"
-      ],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "frontend-innovate-explorer": {
+        "capability_refs": [
+          "capability:capability_set:package:frontend-innovate:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:explore-base"
+        ],
         "label": "Frontend Innovation Explorer",
         "description": "Locates the current product surface, reusable assets, and implementation constraints.",
         "base_role": "explore",
-        "prompt": "agents/frontend-innovate-explorer/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "frontend-innovate/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/frontend-innovate-explorer/system.md"
       },
       "frontend-innovate-intent-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:frontend-innovate:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:intent-analysis-base"
+        ],
         "label": "Frontend Innovation Intent Analyst",
         "description": "Classifies product intent, design ambition, evidence needs, and constraints.",
         "base_role": "intent-analysis",
-        "prompt": "agents/frontend-innovate-intent-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "frontend-innovate/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/frontend-innovate-intent-analyst/system.md"
       },
       "frontend-innovate-experience-designer": {
+        "capability_refs": [
+          "capability:capability_set:platform:tool-registry:frontend-design-base",
+          "capability:skill:package:frontend-innovate:frontend-innovate%2Fshared%2Fmethod",
+          "capability:tool:platform:default-tool-registry:default%2Ftool%2Fcreate_visual_region_binding_package",
+          "capability:tool:platform:default-tool-registry:default%2Ftool%2Fcreate_visual_region_coordinate_atlas",
+          "capability:tool:platform:default-tool-registry:default%2Ftool%2Fupdate_frontend_competitor_reference"
+        ],
         "label": "Frontend Innovation Experience Designer",
         "description": "Produces evidence-backed design directions and a rendered source-editable design draft.",
         "base_role": "frontend-design",
-        "prompt": "agents/frontend-innovate-experience-designer/system.md",
-        "inherit_base_tools": true,
-        "default_tool_refs": [
-          "default/tool/create_visual_region_coordinate_atlas",
-          "default/tool/create_visual_region_binding_package",
-          "default/tool/update_frontend_competitor_reference"
-        ],
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "frontend-innovate/shared/method"
-        ],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/frontend-innovate-experience-designer/system.md"
       },
       "frontend-innovate-source-researcher": {
+        "capability_refs": [
+          "capability:capability_set:package:frontend-innovate:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:frontend-research-base"
+        ],
         "label": "Frontend Innovation Source Researcher",
         "description": "Investigates source pages, interaction states, information architecture, and visual evidence.",
         "base_role": "frontend-research",
-        "prompt": "agents/frontend-innovate-source-researcher/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "frontend-innovate/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/frontend-innovate-source-researcher/system.md"
       },
       "frontend-innovate-implementer": {
+        "capability_refs": [
+          "capability:capability_set:platform:tool-registry:build-base",
+          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fcheck",
+          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fclick",
+          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fdiagnostics_get",
+          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fhover",
+          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fnavigate",
+          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fobserve",
+          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fpress_key",
+          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fscreenshot",
+          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fscroll",
+          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fselect_option",
+          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fsession_create",
+          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fsession_destroy",
+          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Ftype",
+          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Funcheck",
+          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fviewport_set",
+          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fwait_for_load",
+          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fwait_for_selector",
+          "capability:skill:package:frontend-innovate:frontend-innovate%2Fshared%2Fmethod"
+        ],
         "label": "Frontend Innovation Implementer",
         "description": "Implements the selected rendered design direction without inventing a parallel structure.",
         "base_role": "build",
-        "prompt": "agents/frontend-innovate-implementer/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "frontend-innovate/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [
-          "default/mcp/browser/tool/session_create",
-          "default/mcp/browser/tool/session_destroy",
-          "default/mcp/browser/tool/viewport_set",
-          "default/mcp/browser/tool/navigate",
-          "default/mcp/browser/tool/diagnostics_get",
-          "default/mcp/browser/tool/screenshot",
-          "default/mcp/browser/tool/observe",
-          "default/mcp/browser/tool/click",
-          "default/mcp/browser/tool/hover",
-          "default/mcp/browser/tool/type",
-          "default/mcp/browser/tool/press_key",
-          "default/mcp/browser/tool/select_option",
-          "default/mcp/browser/tool/check",
-          "default/mcp/browser/tool/uncheck",
-          "default/mcp/browser/tool/scroll",
-          "default/mcp/browser/tool/wait_for_selector",
-          "default/mcp/browser/tool/wait_for_load"
-        ],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/frontend-innovate-implementer/system.md"
       },
       "frontend-innovate-deep-researcher": {
+        "capability_refs": [
+          "capability:capability_set:package:frontend-innovate:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:deep-research-base"
+        ],
         "label": "Frontend Innovation Researcher",
         "description": "Collects competitor, industry, and design-reference evidence.",
         "base_role": "deep-research",
-        "prompt": "agents/frontend-innovate-deep-researcher/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "frontend-innovate/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/frontend-innovate-deep-researcher/system.md"
       },
       "frontend-innovate-fact-checker": {
+        "capability_refs": [
+          "capability:capability_set:package:frontend-innovate:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:fact-check-base"
+        ],
         "label": "Frontend Innovation Fact Checker",
         "description": "Verifies reference and product claims against evidence.",
         "base_role": "fact-check",
-        "prompt": "agents/frontend-innovate-fact-checker/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "frontend-innovate/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/frontend-innovate-fact-checker/system.md"
       },
       "frontend-innovate-workload-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:frontend-innovate:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:goal-workload-analyst-base"
+        ],
         "label": "Frontend Innovation Workload Analyst",
         "description": "Sizes design, implementation, evidence, and verification work.",
         "base_role": "goal-workload-analyst",
-        "prompt": "agents/frontend-innovate-workload-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "frontend-innovate/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/frontend-innovate-workload-analyst/system.md"
       },
       "frontend-innovate-planner": {
+        "capability_refs": [
+          "capability:capability_set:package:frontend-innovate:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Frontend Innovation Planner",
         "description": "Publishes one implementation-ready direction, evidence boundary, work partition, and acceptance allocation for parallel specialist execution.",
         "base_role": "delegated-worker",
-        "prompt": "agents/frontend-innovate-planner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "frontend-innovate/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/frontend-innovate-planner/system.md"
       }
     },
     "virtual_workflows": {

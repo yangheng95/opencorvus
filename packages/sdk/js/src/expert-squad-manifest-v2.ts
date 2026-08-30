@@ -1,5 +1,14 @@
 import z from "zod"
 import { ProductPillarSchema, type ProductPillar } from "@opencorvus-ai/util/product-pillar"
+import { CapabilityRefCodec, EncodedCapabilityRef } from "@opencorvus-ai/util/capability-ref"
+
+function decodedCapabilityRef(value: string) {
+  try {
+    return CapabilityRefCodec.decode(value)
+  } catch {
+    return undefined
+  }
+}
 
 export const EXPERT_SQUAD_ID_PATTERN = /^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/
 export const EXPERT_SQUAD_VERSION_PATTERN = /^(\d{4})\.(\d{2})\.(\d{2})\.([1-9]\d*)$/
@@ -96,12 +105,18 @@ export const ExpertSquadConfigurationSchema = z
     }
   })
 
-function uniqueRefList(field: string) {
-  return z.array(NonEmptyStringSchema).superRefine((refs, context) => {
+function canonicalCapabilityRefList(field: string, options: { leafOnly?: boolean } = {}) {
+  return z.array(EncodedCapabilityRef).superRefine((refs, context) => {
     const seen = new Set<string>()
     for (const [index, ref] of refs.entries()) {
       if (seen.has(ref)) context.addIssue({ code: "custom", path: [index], message: `${field} repeats ${ref}` })
       seen.add(ref)
+      if (index > 0 && refs[index - 1]! >= ref) {
+        context.addIssue({ code: "custom", path: [index], message: `${field} must be canonically sorted` })
+      }
+      if (options.leafOnly && decodedCapabilityRef(ref)?.kind === "capability_set") {
+        context.addIssue({ code: "custom", path: [index], message: `${field} cannot contain a capability set` })
+      }
     }
   })
 }
@@ -119,29 +134,25 @@ function canonicalIDList(field: string) {
   })
 }
 
-export const ExpertSquadProjectionResourcesSchema = z.object({
-  inherit_base_tools: z.boolean(),
-  built_in_tool_ids: uniqueRefList("built_in_tool_ids"),
-  default_skill_refs: uniqueRefList("default_skill_refs"),
-  package_skill_refs: uniqueRefList("package_skill_refs"),
-  default_tool_refs: uniqueRefList("default_tool_refs"),
-  package_tool_refs: uniqueRefList("package_tool_refs"),
-  default_mcp_server_refs: uniqueRefList("default_mcp_server_refs"),
-  package_mcp_server_refs: uniqueRefList("package_mcp_server_refs"),
-  default_mcp_tool_refs: uniqueRefList("default_mcp_tool_refs"),
-  package_mcp_tool_refs: uniqueRefList("package_mcp_tool_refs"),
-  default_mcp_prompt_refs: uniqueRefList("default_mcp_prompt_refs"),
-  package_mcp_prompt_refs: uniqueRefList("package_mcp_prompt_refs"),
-  default_mcp_resource_refs: uniqueRefList("default_mcp_resource_refs"),
-  package_mcp_resource_refs: uniqueRefList("package_mcp_resource_refs"),
+export const ExpertSquadCapabilitySetSchema = z
+  .object({
+    description: NonBlankStringSchema,
+    member_refs: canonicalCapabilityRefList("member_refs", { leafOnly: true }).min(1),
+  })
+  .strict()
+
+export const ExpertSquadCapabilitySetsSchema = z.record(ExpertSquadIDSchema, ExpertSquadCapabilitySetSchema)
+
+export const ExpertSquadProjectionCapabilitiesSchema = z.object({
+  capability_refs: canonicalCapabilityRefList("capability_refs"),
 })
 
-export const ExpertSquadSchedulerProjectionSchema = ExpertSquadProjectionResourcesSchema.extend({
+export const ExpertSquadSchedulerProjectionSchema = ExpertSquadProjectionCapabilitiesSchema.extend({
   base_role: z.literal("orchestrator"),
   prompt: NonEmptyStringSchema.optional(),
 }).strict()
 
-export const ExpertSquadAgentProjectionSchema = ExpertSquadProjectionResourcesSchema.extend({
+export const ExpertSquadAgentProjectionSchema = ExpertSquadProjectionCapabilitiesSchema.extend({
   label: NonBlankStringSchema,
   description: NonBlankStringSchema.optional(),
   base_role: NonEmptyStringSchema,
@@ -197,9 +208,9 @@ export const ExpertSquadCapabilityProjectionSchema: z.ZodType<ExpertSquadCapabil
   })
   .strict()
 
-export const ExpertSquadManifestV1Schema: z.ZodType<ExpertSquadManifestV1> = z
+export const ExpertSquadManifestV2Schema: z.ZodType<ExpertSquadManifestV2> = z
   .object({
-    schema_version: z.literal(1),
+    schema_version: z.literal(2),
     namespace: ExpertSquadNamespaceSchema,
     id: ExpertSquadIDSchema,
     name: z.string().trim().min(1).optional(),
@@ -219,12 +230,77 @@ export const ExpertSquadManifestV1Schema: z.ZodType<ExpertSquadManifestV1> = z
       })
       .strict(),
     configuration: ExpertSquadConfigurationSchema.optional(),
+    capability_sets: ExpertSquadCapabilitySetsSchema,
     capability_projection: ExpertSquadCapabilityProjectionSchema,
   })
   .strict()
+  .superRefine((manifest, context) => {
+    const referencedPackageSets = new Set<string>()
+    const projections = [
+      ["scheduler", manifest.capability_projection.scheduler],
+      ...Object.entries(manifest.capability_projection.agents).map(([agentID, projection]) => [
+        `agents.${agentID}`,
+        projection,
+      ] as const),
+    ] as const
+    for (const [projectionPath, projection] of projections) {
+      for (const [index, encoded] of projection.capability_refs.entries()) {
+        const ref = decodedCapabilityRef(encoded)
+        if (!ref) continue
+        if (ref.source === "package" && ref.owner_ref !== manifest.id) {
+          context.addIssue({
+            code: "custom",
+            path: ["capability_projection", ...projectionPath.split("."), "capability_refs", index],
+            message: `package capability owner ${ref.owner_ref} must equal manifest id ${manifest.id}`,
+          })
+        }
+        if (ref.kind !== "capability_set") continue
+        if (ref.source === "package") {
+          referencedPackageSets.add(ref.local_ref)
+          if (!Object.hasOwn(manifest.capability_sets, ref.local_ref)) {
+            context.addIssue({
+              code: "custom",
+              path: ["capability_projection", ...projectionPath.split("."), "capability_refs", index],
+              message: `references missing package capability set ${ref.local_ref}`,
+            })
+          }
+          continue
+        }
+        if (ref.source !== "platform" || ref.owner_ref !== "tool-registry") {
+          context.addIssue({
+            code: "custom",
+            path: ["capability_projection", ...projectionPath.split("."), "capability_refs", index],
+            message: "non-package capability sets must be owned by platform tool-registry",
+          })
+        }
+      }
+    }
+    for (const [setID, set] of Object.entries(manifest.capability_sets)) {
+      if (!referencedPackageSets.has(setID)) {
+        context.addIssue({
+          code: "custom",
+          path: ["capability_sets", setID],
+          message: `package capability set ${setID} is not referenced by a projection`,
+        })
+      }
+      for (const [index, encoded] of set.member_refs.entries()) {
+        const ref = decodedCapabilityRef(encoded)
+        if (!ref) continue
+        if (ref.source === "package" && ref.owner_ref !== manifest.id) {
+          context.addIssue({
+            code: "custom",
+            path: ["capability_sets", setID, "member_refs", index],
+            message: `package capability owner ${ref.owner_ref} must equal manifest id ${manifest.id}`,
+          })
+        }
+      }
+    }
+  })
 
 export type ExpertSquadConfiguration = z.output<typeof ExpertSquadConfigurationSchema>
 export type ExpertSquadConfigurationField = z.output<typeof ExpertSquadConfigurationFieldSchema>
+export type ExpertSquadCapabilitySet = z.output<typeof ExpertSquadCapabilitySetSchema>
+export type ExpertSquadCapabilitySets = z.output<typeof ExpertSquadCapabilitySetsSchema>
 export type ExpertSquadSchedulerProjection = z.output<typeof ExpertSquadSchedulerProjectionSchema>
 export type ExpertSquadAgentProjection = z.output<typeof ExpertSquadAgentProjectionSchema>
 export type ExpertSquadVirtualWorkflowNode = z.output<typeof ExpertSquadVirtualWorkflowNodeSchema>
@@ -239,8 +315,8 @@ export interface ExpertSquadCapabilityProjection {
   agents: Record<string, ExpertSquadAgentProjection>
   virtual_workflows: ExpertSquadVirtualWorkflows
 }
-export interface ExpertSquadManifestV1 {
-  schema_version: 1
+export interface ExpertSquadManifestV2 {
+  schema_version: 2
   namespace: string
   id: string
   name?: string
@@ -256,5 +332,6 @@ export interface ExpertSquadManifestV1 {
     instructions: "selector.md"
   }
   configuration?: ExpertSquadConfiguration
+  capability_sets: ExpertSquadCapabilitySets
   capability_projection: ExpertSquadCapabilityProjection
 }

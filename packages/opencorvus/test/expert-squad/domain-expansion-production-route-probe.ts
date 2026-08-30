@@ -2,6 +2,7 @@ import fs from "node:fs/promises"
 import { Hono } from "hono"
 import { Instance } from "../../src/project/instance"
 import { ExpertSquadRoutes } from "../../src/server/routes/expert-squad"
+import { catalogPackageSkillRefs } from "./catalog-capability-fixture"
 
 const squadIDs = [
   "cybersecurity-assurance",
@@ -69,7 +70,7 @@ const result = await Instance.provide({
         const workflow = Object.values(workflows)[0]
         const nodes = (workflow?.nodes ?? {}) as Record<string, Record<string, unknown>>
         const expectedRef = `${id}/shared/method`
-        const schedulerRefs = scheduler.package_skill_refs as string[]
+        const schedulerRefs = catalogPackageSkillRefs(selected, scheduler)
         const rootCount = Object.values(nodes).filter((node) => (node.depends_on as string[]).length === 0).length
         const joinCount = Object.values(nodes).filter((node) => (node.depends_on as string[]).length === 3).length
 
@@ -78,7 +79,7 @@ const result = await Instance.provide({
         }
         if (
           !Object.values(agents).every(
-            (agent) => JSON.stringify(agent.package_skill_refs) === JSON.stringify(schedulerRefs),
+            (agent) => JSON.stringify(catalogPackageSkillRefs(selected, agent)) === JSON.stringify(schedulerRefs),
           )
         ) {
           throw new Error(`Worker Skill projection drifted for ${id}`)

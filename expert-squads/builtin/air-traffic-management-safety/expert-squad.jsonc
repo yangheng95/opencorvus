@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "air-traffic-management-safety",
   "name": "Air Traffic Management Safety",
   "label": "Air Traffic Management Safety",
   "description": "Airspace configuration, demand/capacity, hazard/control and assurance evidence joined for qualified ATM safety review.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.30.1",
   "product_pillars": [
     "code",
     "work"
@@ -16,141 +16,76 @@
     "selection_guidance": "Select for dated airspace/facility/procedure baselines, demand/capacity evidence, hazards/controls, occurrences and change assurance.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 5 projections.",
+      "member_refs": [
+        "capability:skill:package:air-traffic-management-safety:air-traffic-management-safety%2Fshared%2Fmethod"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:skill:package:air-traffic-management-safety:air-traffic-management-safety%2Fshared%2Fmethod",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "air-traffic-management-safety/shared/method"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "airspace-facility-procedure-configuration-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:air-traffic-management-safety:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:explore-base"
+        ],
         "label": "Airspace, Facility and Procedure Configuration Analyst",
         "description": "Reconciles dated airspace, facility, procedure and system configuration evidence.",
         "base_role": "explore",
-        "prompt": "agents/airspace-facility-procedure-configuration-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "air-traffic-management-safety/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/airspace-facility-procedure-configuration-analyst/system.md"
       },
       "traffic-demand-capacity-performance-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:air-traffic-management-safety:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Traffic Demand, Capacity and Performance Analyst",
         "description": "Tests supplied traffic, capacity and performance definitions and measures.",
         "base_role": "delegated-worker",
-        "prompt": "agents/traffic-demand-capacity-performance-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "air-traffic-management-safety/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/traffic-demand-capacity-performance-analyst/system.md"
       },
       "air-traffic-hazard-risk-control-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:air-traffic-management-safety:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Air Traffic Hazard, Risk and Control Analyst",
         "description": "Builds hazard-consequence-control traceability from supplied safety evidence.",
         "base_role": "delegated-worker",
-        "prompt": "agents/air-traffic-hazard-risk-control-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "air-traffic-management-safety/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/air-traffic-hazard-risk-control-analyst/system.md"
       },
       "occurrence-change-safety-assurance-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:air-traffic-management-safety:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Occurrence, Change and Safety Assurance Analyst",
         "description": "Reviews occurrence, indicator, change and control-effectiveness evidence.",
         "base_role": "delegated-worker",
-        "prompt": "agents/occurrence-change-safety-assurance-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "air-traffic-management-safety/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/occurrence-change-safety-assurance-analyst/system.md"
       },
       "air-traffic-management-safety-review-owner": {
+        "capability_refs": [
+          "capability:capability_set:package:air-traffic-management-safety:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Air Traffic Management Safety Review Owner",
         "description": "Joins ATM configuration, performance, hazard and assurance evidence without operational authority.",
         "base_role": "delegated-worker",
-        "prompt": "agents/air-traffic-management-safety-review-owner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "air-traffic-management-safety/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/air-traffic-management-safety-review-owner/system.md"
       }
     },
     "virtual_workflows": {

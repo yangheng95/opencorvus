@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "corporate-treasury-liquidity-operations",
   "name": "Corporate Treasury Liquidity Operations",
   "label": "Corporate Treasury Liquidity Operations",
   "description": "Corporate cash-position, forecast, funding, payment, settlement, bank-account and reconciliation evidence operations without payment, trade, borrowing, hedge, accounting or investment authority.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.30.1",
   "product_pillars": [
     "work"
   ],
@@ -15,141 +15,76 @@
     "selection_guidance": "Select for bank/account/authority inventory, daily cash position, forecast variance, liquidity scenarios, funding maturity, payment queue, settlement evidence, bank fee/signatory/control or reconciliation review. Do not select to move money, approve payments, trade, borrow, hedge, open accounts, set limits or book entries.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 5 projections.",
+      "member_refs": [
+        "capability:skill:package:corporate-treasury-liquidity-operations:corporate-treasury-liquidity-operations%2Fshared%2Fmethod"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:skill:package:corporate-treasury-liquidity-operations:corporate-treasury-liquidity-operations%2Fshared%2Fmethod",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "corporate-treasury-liquidity-operations/shared/method"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "treasury-cash-account-authority-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:corporate-treasury-liquidity-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:explore-base"
+        ],
         "label": "Treasury Cash Account Authority Analyst",
         "description": "Freezes entity, bank, account, currency, balance-definition, ownership, signatory and control evidence.",
         "base_role": "explore",
-        "prompt": "agents/treasury-cash-account-authority-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "corporate-treasury-liquidity-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/treasury-cash-account-authority-analyst/system.md"
       },
       "treasury-cash-position-forecast-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:corporate-treasury-liquidity-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Treasury Cash Position Forecast Analyst",
         "description": "Reconciles value-dated positions, forecasts, actuals, scenarios and variance evidence.",
         "base_role": "delegated-worker",
-        "prompt": "agents/treasury-cash-position-forecast-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "corporate-treasury-liquidity-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/treasury-cash-position-forecast-analyst/system.md"
       },
       "treasury-payment-funding-liquidity-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:corporate-treasury-liquidity-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Treasury Payment Funding Liquidity Analyst",
         "description": "Maps payment obligations, funding instruments, maturities, settlement dependencies and supplied limits without execution.",
         "base_role": "delegated-worker",
-        "prompt": "agents/treasury-payment-funding-liquidity-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "corporate-treasury-liquidity-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/treasury-payment-funding-liquidity-analyst/system.md"
       },
       "treasury-bank-reconciliation-control-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:corporate-treasury-liquidity-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Treasury Bank Reconciliation Control Analyst",
         "description": "Reconciles bank statement, treasury, ERP and instruction evidence with exceptions and control ownership.",
         "base_role": "delegated-worker",
-        "prompt": "agents/treasury-bank-reconciliation-control-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "corporate-treasury-liquidity-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/treasury-bank-reconciliation-control-analyst/system.md"
       },
       "corporate-treasury-liquidity-review-owner": {
+        "capability_refs": [
+          "capability:capability_set:package:corporate-treasury-liquidity-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Corporate Treasury Liquidity Review Owner",
         "description": "Joins authority, position/forecast, payment/funding and reconciliation branches into a controlled treasury review pack.",
         "base_role": "delegated-worker",
-        "prompt": "agents/corporate-treasury-liquidity-review-owner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "corporate-treasury-liquidity-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/corporate-treasury-liquidity-review-owner/system.md"
       }
     },
     "virtual_workflows": {

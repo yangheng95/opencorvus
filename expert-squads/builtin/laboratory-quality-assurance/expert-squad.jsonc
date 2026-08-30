@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "laboratory-quality-assurance",
   "name": "Laboratory Quality Assurance",
   "label": "Laboratory Quality Assurance",
   "description": "Method-performance, metrology, and sample-quality evidence review joined for qualified laboratory assurance without result release, clinical interpretation, or accreditation authority.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.30.1",
   "product_pillars": [
     "work"
   ],
@@ -15,119 +15,66 @@
     "selection_guidance": "Select when work requires method validation or verification evidence, calibration and traceability chains, measurement uncertainty records, sample custody, QC, proficiency testing, nonconformance, or CAPA traceability. Do not select for clinical interpretation, result release, accreditation, or equipment/sample actions.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 4 projections.",
+      "member_refs": [
+        "capability:skill:package:laboratory-quality-assurance:laboratory-quality-assurance%2Fshared%2Fmethod"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:skill:package:laboratory-quality-assurance:laboratory-quality-assurance%2Fshared%2Fmethod",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "laboratory-quality-assurance/shared/method"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "laboratory-method-validation-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:laboratory-quality-assurance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:explore-base"
+        ],
         "label": "Laboratory Method Validation Analyst",
         "description": "Structures intended-use, measurand, matrix, range, performance, and verification evidence without approving a method.",
         "base_role": "explore",
-        "prompt": "agents/laboratory-method-validation-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "laboratory-quality-assurance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/laboratory-method-validation-analyst/system.md"
       },
       "laboratory-metrology-equipment-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:laboratory-quality-assurance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Laboratory Metrology and Equipment Analyst",
         "description": "Traces equipment state, calibration, reference standards, metrological traceability, and uncertainty evidence.",
         "base_role": "delegated-worker",
-        "prompt": "agents/laboratory-metrology-equipment-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "laboratory-quality-assurance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/laboratory-metrology-equipment-analyst/system.md"
       },
       "laboratory-sample-qc-proficiency-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:laboratory-quality-assurance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Laboratory Sample QC and Proficiency Analyst",
         "description": "Audits custody, quality controls, proficiency testing, nonconformance, and CAPA evidence.",
         "base_role": "delegated-worker",
-        "prompt": "agents/laboratory-sample-qc-proficiency-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "laboratory-quality-assurance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/laboratory-sample-qc-proficiency-analyst/system.md"
       },
       "laboratory-quality-review-owner": {
+        "capability_refs": [
+          "capability:capability_set:package:laboratory-quality-assurance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Laboratory Quality Review Owner",
         "description": "Joins the three laboratory evidence branches into a controlled qualified-review pack.",
         "base_role": "delegated-worker",
-        "prompt": "agents/laboratory-quality-review-owner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "laboratory-quality-assurance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/laboratory-quality-review-owner/system.md"
       }
     },
     "virtual_workflows": {

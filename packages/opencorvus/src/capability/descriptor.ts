@@ -1,6 +1,6 @@
 import z from "zod"
 import { canonicalDigestSource, compareCanonicalStrings } from "@/util/canonical-digest"
-import { CapabilityKind, CapabilityRef, CapabilityRefCodec } from "./ref"
+import { CapabilityKind, CapabilityRef, CapabilityRefCodec } from "@opencorvus-ai/util/capability-ref"
 
 export const CapabilityCaller = z.enum(["conversation", "mission", "task_scheduler", "task_agent"])
 export type CapabilityCaller = z.infer<typeof CapabilityCaller>

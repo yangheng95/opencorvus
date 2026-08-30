@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "petroleum-well-integrity-operations",
   "name": "Petroleum Well Integrity Operations",
   "label": "Petroleum Well Integrity Operations",
   "description": "Well design basis, barriers, drilling/completion verification, production surveillance and intervention evidence joined for qualified review.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.30.1",
   "product_pillars": [
     "code",
     "work"
@@ -16,141 +16,76 @@
     "selection_guidance": "Select for well identity, barrier envelopes, test evidence, surveillance and lifecycle-change traceability without live well control or integrity declarations.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 5 projections.",
+      "member_refs": [
+        "capability:skill:package:petroleum-well-integrity-operations:petroleum-well-integrity-operations%2Fshared%2Fmethod"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:skill:package:petroleum-well-integrity-operations:petroleum-well-integrity-operations%2Fshared%2Fmethod",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "petroleum-well-integrity-operations/shared/method"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "well-basis-design-envelope-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:petroleum-well-integrity-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:explore-base"
+        ],
         "label": "Well Basis and Design Envelope Analyst",
         "description": "Freeze well identity, lifecycle state, schematic, formations, pressure/temperature basis, loads, fluids, materials and authorized operating envelope.",
         "base_role": "explore",
-        "prompt": "agents/well-basis-design-envelope-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "petroleum-well-integrity-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/well-basis-design-envelope-analyst/system.md"
       },
       "drilling-completion-barrier-verification-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:petroleum-well-integrity-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Drilling and Completion Barrier Verification Analyst",
         "description": "Trace drilling/completion operations evidence to primary and secondary barrier envelopes and well-barrier elements.",
         "base_role": "delegated-worker",
-        "prompt": "agents/drilling-completion-barrier-verification-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "petroleum-well-integrity-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/drilling-completion-barrier-verification-analyst/system.md"
       },
       "production-well-integrity-surveillance-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:petroleum-well-integrity-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Production Well Integrity Surveillance Analyst",
         "description": "Organize operating-envelope, annulus-pressure, corrosion, leak, valve and integrity surveillance evidence.",
         "base_role": "delegated-worker",
-        "prompt": "agents/production-well-integrity-surveillance-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "petroleum-well-integrity-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/production-well-integrity-surveillance-analyst/system.md"
       },
       "well-intervention-change-anomaly-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:petroleum-well-integrity-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Well Intervention, Change and Anomaly Analyst",
         "description": "Trace interventions, repairs, configuration changes, anomalies and remediation evidence across the well lifecycle.",
         "base_role": "delegated-worker",
-        "prompt": "agents/well-intervention-change-anomaly-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "petroleum-well-integrity-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/well-intervention-change-anomaly-analyst/system.md"
       },
       "petroleum-well-integrity-evidence-owner": {
+        "capability_refs": [
+          "capability:capability_set:package:petroleum-well-integrity-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Petroleum Well Integrity Evidence Owner",
         "description": "Join design-basis, barrier, surveillance and intervention evidence for qualified well-integrity review.",
         "base_role": "delegated-worker",
-        "prompt": "agents/petroleum-well-integrity-evidence-owner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "petroleum-well-integrity-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/petroleum-well-integrity-evidence-owner/system.md"
       }
     },
     "virtual_workflows": {

@@ -11,6 +11,7 @@ import { Instance } from "../../src/project/instance"
 import { SkillManager } from "../../src/skill/manager"
 import { SkillMount } from "../../src/skill/mounts"
 import { memoryProject } from "../fixture/memory"
+import { agentCapabilityGrants, schedulerCapabilityGrants } from "./capability-grant-fixture"
 
 const advancedPackageRoot = path.resolve(import.meta.dir, "../../src/expert-squad/builtin/advanced")
 const basePackageRoot = path.resolve(import.meta.dir, "../../src/expert-squad/builtin/base")
@@ -28,9 +29,9 @@ describe("built-in interface review workflow authority", () => {
   test("projects autonomous greenfield and explicit independent-visual Advanced workflows", async () => {
     const loaded = await ExpertSquadRegistry.loadSourcePackage(advancedPackageRoot)
 
-    expect(loaded.manifest.version).toBe("2026.08.22.6")
-    expect(loaded.manifest.capability_projection.scheduler.default_skill_refs).toEqual(["default/skill/grill-me"])
-    expect(loaded.manifest.capability_projection.agents["requirement-engineer"]!.default_skill_refs).toEqual([
+    expect(loaded.manifest.version).toBe("2026.08.30.2")
+    expect(schedulerCapabilityGrants(loaded.manifest).defaultSkillRefs).toEqual(["default/skill/grill-me"])
+    expect(agentCapabilityGrants(loaded.manifest, "requirement-engineer").defaultSkillRefs).toEqual([
       "default/skill/grill-me",
     ])
     expect(loaded.promptProfile.agents["requirement-engineer"]).toContain(
@@ -104,10 +105,15 @@ describe("built-in interface review workflow authority", () => {
     )
     expect(loaded.manifest.capability_projection.agents["source-investigator"]).toMatchObject({
       base_role: "delegated-worker",
-      inherit_base_tools: false,
-      built_in_tool_ids: ["read", "glob", "search_code", "bash", "skill"],
       description: "Performs read-only repository and projected-client authority investigation and records source-grounded evidence.",
     })
+    expect(agentCapabilityGrants(loaded.manifest, "source-investigator").explicitBuiltInToolIDs).toEqual([
+      "bash",
+      "glob",
+      "read",
+      "search_code",
+      "skill",
+    ])
     expect(loaded.promptProfile.agents["source-investigator"]).toContain(
       "use its executable surface only for read/list/get/search operations",
     )
@@ -191,7 +197,7 @@ describe("built-in interface review workflow authority", () => {
   test("projects capability-matched Base workflows and the read-only authority Planner surface", async () => {
     const loaded = await ExpertSquadRegistry.loadSourcePackage(basePackageRoot)
 
-    expect(loaded.manifest.version).toBe("2026.08.22.4")
+    expect(loaded.manifest.version).toBe("2026.08.30.1")
     expect(workflowNodes(loaded, "planner-execution-verification")).toEqual({
       "base-planner": [],
       "base-developer": ["base-planner"],
@@ -278,19 +284,18 @@ describe("built-in interface review workflow authority", () => {
     )
     expect(loaded.manifest.capability_projection.agents["base-planner"]).toMatchObject({
       base_role: "delegated-worker",
-      inherit_base_tools: false,
-      built_in_tool_ids: [
-        "capability_search",
-        "read",
-        "glob",
-        "search_code",
-        "webfetch",
-        "websearch",
-        "external_code_search",
-        "skill",
-        "bash",
-      ],
     })
+    expect(agentCapabilityGrants(loaded.manifest, "base-planner").explicitBuiltInToolIDs).toEqual([
+      "bash",
+      "capability_search",
+      "external_code_search",
+      "glob",
+      "read",
+      "search_code",
+      "skill",
+      "webfetch",
+      "websearch",
+    ])
   })
 
   test("resolves the exact Base Planner publication and read surface", async () => {
@@ -587,16 +592,16 @@ describe("built-in interface review workflow authority", () => {
           agentID: "source-investigator",
         })
         expect(sourceTurn.workerCapability.builtInToolIDs).toEqual([
-          "artifact_search",
+          "artifact_publish",
           "artifact_read",
+          "artifact_search",
           "artifact_select",
           "artifact_snapshot",
-          "artifact_publish",
           "publish_interactive_artifact",
-          "read",
-          "glob",
-          "search_code",
           "bash",
+          "glob",
+          "read",
+          "search_code",
           "skill",
         ])
         const sourceSurface = await SkillMount.resolve({

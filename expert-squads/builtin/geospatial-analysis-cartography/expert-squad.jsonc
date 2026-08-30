@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "geospatial-analysis-cartography",
   "name": "Geospatial Analysis and Cartography",
   "label": "Geospatial Analysis and Cartography",
   "description": "Spatial data integrity, raster-vector analysis, and accessible cartographic evidence joined into a publication-review pack without survey, legal-boundary, navigation, or publishing authority.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.30.1",
   "product_pillars": [
     "work"
   ],
@@ -15,119 +15,66 @@
     "selection_guidance": "Select for CRS and datum reconciliation, geometry/topology quality, raster-vector operations, spatial joins, uncertainty, classification, map hierarchy, labeling, multilingual and accessibility review without guessing coordinates, disclosing sensitive locations, making cadastral or survey claims, or publishing.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 4 projections.",
+      "member_refs": [
+        "capability:skill:package:geospatial-analysis-cartography:geospatial-analysis-cartography%2Fshared%2Fmethod"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:skill:package:geospatial-analysis-cartography:geospatial-analysis-cartography%2Fshared%2Fmethod",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "geospatial-analysis-cartography/shared/method"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "spatial-data-crs-integrity-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:geospatial-analysis-cartography:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:explore-base"
+        ],
         "label": "Spatial Data and CRS Integrity Analyst",
         "description": "Audits source identity, license, CRS, datum, epoch, axis, units, geometry validity, precision, and topology.",
         "base_role": "explore",
-        "prompt": "agents/spatial-data-crs-integrity-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "geospatial-analysis-cartography/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/spatial-data-crs-integrity-analyst/system.md"
       },
       "spatial-analysis-raster-vector-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:geospatial-analysis-cartography:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Spatial Analysis Raster and Vector Analyst",
         "description": "Plans and reconciles projection, joins, overlays, measurements, raster alignment, resampling, nodata, and spatial uncertainty.",
         "base_role": "delegated-worker",
-        "prompt": "agents/spatial-analysis-raster-vector-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "geospatial-analysis-cartography/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/spatial-analysis-raster-vector-analyst/system.md"
       },
       "cartographic-design-accessibility-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:geospatial-analysis-cartography:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Cartographic Design and Accessibility Analyst",
         "description": "Specifies purpose-led hierarchy, classification, symbology, labels, legends, multilingual behavior, uncertainty, and accessibility.",
         "base_role": "delegated-worker",
-        "prompt": "agents/cartographic-design-accessibility-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "geospatial-analysis-cartography/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/cartographic-design-accessibility-analyst/system.md"
       },
       "geospatial-cartography-owner": {
+        "capability_refs": [
+          "capability:capability_set:package:geospatial-analysis-cartography:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Geospatial and Cartography Owner",
         "description": "Joins spatial integrity, analysis provenance, and cartographic specifications into a controlled publication-review pack.",
         "base_role": "delegated-worker",
-        "prompt": "agents/geospatial-cartography-owner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "geospatial-analysis-cartography/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/geospatial-cartography-owner/system.md"
       }
     },
     "virtual_workflows": {

@@ -26,12 +26,12 @@ describe("Product Video Production Expert Squad package", () => {
     const workflow = loaded.manifest.capability_projection.virtual_workflows["product-video-production-handoff"]!
 
     expect(loaded.manifest).toMatchObject({
-      schema_version: 1,
+      schema_version: 2,
       namespace: "builtin",
       id: "product-video",
       name: "Product Video Production",
       label: "Product Video Production",
-      version: "2026.08.13.1",
+      version: "2026.08.30.1",
       product_pillars: ["work"],
     })
     expect(Object.keys(loaded.manifest.capability_projection.agents)).toEqual(agentIDs)
@@ -68,7 +68,7 @@ describe("Product Video Production Expert Squad package", () => {
 
         expect(scheduler).toMatchObject({
           expertSquadID: "product-video",
-          packageRevision: { id: "product-video", version: "2026.08.13.1" },
+          packageRevision: { id: "product-video", version: "2026.08.30.1" },
         })
         expect(scheduler.productionSkills.map((skill) => skill.ref)).toEqual(["product-video/shared/method"])
         expect(Object.keys(scheduler.virtualWorkflows)).toEqual(["product-video-production-handoff"])

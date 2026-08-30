@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "evolution-lab",
   "name": "Evolution Lab",
   "label": "Evolution Lab",
   "description": "Target-agnostic evidence, candidate, evaluation, integrity review, and recommendation package for explicit Expert Squad evolution campaigns.",
-  "version": "2026.08.19.1",
+  "version": "2026.08.30.2",
   "product_pillars": [
     "code",
     "work"
@@ -16,209 +16,112 @@
     "selection_guidance": "Select Evolution Lab only when the user explicitly asks to investigate, construct, evaluate, compare, promote, or restore an Expert Squad revision. Promotion and restoration remain separate user-authorized operations.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 3 projections.",
+      "member_refs": [
+        "capability:skill:package:evolution-lab:evolution-lab%2Fshared%2Fcampaign",
+        "capability:tool:package:evolution-lab:evolution-lab%2Fshared%2Fexpert-squad-package",
+        "capability:tool:package:evolution-lab:evolution-lab%2Fshared%2Fpublish-evolution-artifact",
+        "capability:tool:package:evolution-lab:evolution-lab%2Fshared%2Frehydrate-evolution-resources"
+      ]
+    },
+    "shared-capabilities-2": {
+      "description": "Shared capabilities used by 2 projections.",
+      "member_refs": [
+        "capability:skill:package:evolution-lab:evolution-lab%2Fshared%2Fcampaign",
+        "capability:tool:package:evolution-lab:evolution-lab%2Fshared%2Fpublish-evolution-artifact"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:skill:package:evolution-lab:evolution-lab%2Fshared%2Fcampaign",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "evolution-lab/shared/campaign"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "evolution-observer": {
+        "capability_refs": [
+          "capability:capability_set:platform:tool-registry:explore-base",
+          "capability:skill:package:evolution-lab:evolution-lab%2Fshared%2Fcampaign",
+          "capability:tool:package:evolution-lab:evolution-lab%2Fshared%2Fcollect-run-evidence",
+          "capability:tool:package:evolution-lab:evolution-lab%2Fshared%2Fpublish-evolution-artifact"
+        ],
         "label": "Evolution Opportunity Observer",
         "description": "Turns explicitly selected production evidence into a bounded opportunity without dispatching repairs.",
         "base_role": "explore",
-        "prompt": "agents/evolution-observer/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "evolution-lab/shared/campaign"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [
-          "evolution-lab/shared/publish-evolution-artifact",
-          "evolution-lab/shared/collect-run-evidence"
-        ],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/evolution-observer/system.md"
       },
       "evolution-failure-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:evolution-lab:shared-capabilities-2",
+          "capability:capability_set:platform:tool-registry:deep-research-base"
+        ],
         "label": "Evolution Failure Analyst",
         "description": "Reconstructs the evidence-backed causal chain and assigns proven ownership while preserving unknowns.",
         "base_role": "deep-research",
-        "prompt": "agents/evolution-failure-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "evolution-lab/shared/campaign"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [
-          "evolution-lab/shared/publish-evolution-artifact"
-        ],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/evolution-failure-analyst/system.md"
       },
       "evolution-experiment-planner": {
+        "capability_refs": [
+          "capability:capability_set:package:evolution-lab:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Evolution Experiment Planner",
         "description": "Freezes target revision, cases, scorers, environment, arm order, budget, and mutation surface before candidate work.",
         "base_role": "delegated-worker",
-        "prompt": "agents/evolution-experiment-planner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "evolution-lab/shared/campaign"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [
-          "evolution-lab/shared/publish-evolution-artifact",
-          "evolution-lab/shared/expert-squad-package",
-          "evolution-lab/shared/rehydrate-evolution-resources"
-        ],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/evolution-experiment-planner/system.md"
       },
       "evolution-candidate-author": {
+        "capability_refs": [
+          "capability:capability_set:package:evolution-lab:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:build-base"
+        ],
         "label": "Evolution Candidate Author",
         "description": "Authors one complete self-contained target package candidate within the frozen mutable text surface.",
         "base_role": "build",
-        "prompt": "agents/evolution-candidate-author/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "evolution-lab/shared/campaign"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [
-          "evolution-lab/shared/publish-evolution-artifact",
-          "evolution-lab/shared/expert-squad-package",
-          "evolution-lab/shared/rehydrate-evolution-resources"
-        ],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/evolution-candidate-author/system.md"
       },
       "evolution-evaluator": {
+        "capability_refs": [
+          "capability:capability_set:platform:tool-registry:fact-check-base",
+          "capability:skill:package:evolution-lab:evolution-lab%2Fshared%2Fcampaign",
+          "capability:tool:package:evolution-lab:evolution-lab%2Fshared%2Fcollect-run-evidence",
+          "capability:tool:package:evolution-lab:evolution-lab%2Fshared%2Fexecute-evolution-metrics",
+          "capability:tool:package:evolution-lab:evolution-lab%2Fshared%2Fpublish-evolution-artifact",
+          "capability:tool:package:evolution-lab:evolution-lab%2Fshared%2Frehydrate-evolution-resources"
+        ],
         "label": "Evolution Evaluator",
         "description": "Collects exact two-arm run evidence and executes only the frozen scorer contract, preserving unavailable results.",
         "base_role": "fact-check",
-        "prompt": "agents/evolution-evaluator/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "evolution-lab/shared/campaign"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [
-          "evolution-lab/shared/publish-evolution-artifact",
-          "evolution-lab/shared/collect-run-evidence",
-          "evolution-lab/shared/execute-evolution-metrics",
-          "evolution-lab/shared/rehydrate-evolution-resources"
-        ],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/evolution-evaluator/system.md"
       },
       "evolution-recommendation-owner": {
+        "capability_refs": [
+          "capability:capability_set:package:evolution-lab:shared-capabilities-2",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Evolution Recommendation Owner",
         "description": "Publishes the experiment-scoped comparison and recommendation with unknowns, without installing any revision.",
         "base_role": "delegated-worker",
-        "prompt": "agents/evolution-recommendation-owner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "evolution-lab/shared/campaign"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [
-          "evolution-lab/shared/publish-evolution-artifact"
-        ],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/evolution-recommendation-owner/system.md"
       },
       "evolution-safety-auditor": {
+        "capability_refs": [
+          "capability:capability_set:package:evolution-lab:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Evolution Safety Auditor",
         "description": "Publishes the independent integrity review of each exact evaluation result, covering permissions, leakage, reward hacking, evidence lineage, frozen inputs, and experiment drift.",
         "base_role": "delegated-worker",
-        "prompt": "agents/evolution-safety-auditor/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "evolution-lab/shared/campaign"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [
-          "evolution-lab/shared/publish-evolution-artifact",
-          "evolution-lab/shared/expert-squad-package",
-          "evolution-lab/shared/rehydrate-evolution-resources"
-        ],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/evolution-safety-auditor/system.md"
       }
     },
     "virtual_workflows": {

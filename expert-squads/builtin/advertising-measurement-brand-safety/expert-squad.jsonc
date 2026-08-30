@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "advertising-measurement-brand-safety",
   "name": "Advertising Measurement and Brand Safety",
   "label": "Advertising Measurement and Brand Safety",
   "description": "Source-bound campaign measurement, delivery quality, attribution and brand suitability evidence without live platform mutation, spend authority or compliance conclusions.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.30.1",
   "product_pillars": [
     "work"
   ],
@@ -15,141 +15,76 @@
     "selection_guidance": "Select for campaign taxonomy, metric contracts, event lineage, delivery, viewability, invalid traffic, suitability, attribution, incrementality and experiment evidence. Do not select for live buying, budget, bid, creative, targeting, blocklist, publication or legal/compliance decisions.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 5 projections.",
+      "member_refs": [
+        "capability:skill:package:advertising-measurement-brand-safety:advertising-measurement-brand-safety%2Fshared%2Fmethod"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:skill:package:advertising-measurement-brand-safety:advertising-measurement-brand-safety%2Fshared%2Fmethod",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "advertising-measurement-brand-safety/shared/method"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "brand-safety-suitability-verification-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:advertising-measurement-brand-safety:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Brand Safety Suitability Verification Analyst",
         "description": "Verifies source-bound placement, content, suitability, exclusion and incident evidence.",
         "base_role": "delegated-worker",
-        "prompt": "agents/brand-safety-suitability-verification-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "advertising-measurement-brand-safety/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/brand-safety-suitability-verification-analyst/system.md"
       },
       "campaign-taxonomy-metric-contract-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:advertising-measurement-brand-safety:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:explore-base"
+        ],
         "label": "Campaign Taxonomy Metric Contract Analyst",
         "description": "Freezes campaign identity, taxonomy, metric definitions, denominators and event lineage.",
         "base_role": "explore",
-        "prompt": "agents/campaign-taxonomy-metric-contract-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "advertising-measurement-brand-safety/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/campaign-taxonomy-metric-contract-analyst/system.md"
       },
       "delivery-reconciliation-data-quality-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:advertising-measurement-brand-safety:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Delivery Reconciliation Data Quality Analyst",
         "description": "Reconciles delivery, viewability, invalid-traffic and source-system data quality evidence.",
         "base_role": "delegated-worker",
-        "prompt": "agents/delivery-reconciliation-data-quality-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "advertising-measurement-brand-safety/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/delivery-reconciliation-data-quality-analyst/system.md"
       },
       "outcome-attribution-experiment-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:advertising-measurement-brand-safety:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Outcome Attribution Experiment Analyst",
         "description": "Tests outcome, attribution, incrementality and experiment evidence against prespecified contracts.",
         "base_role": "delegated-worker",
-        "prompt": "agents/outcome-attribution-experiment-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "advertising-measurement-brand-safety/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/outcome-attribution-experiment-analyst/system.md"
       },
       "advertising-measurement-brand-safety-review-owner": {
+        "capability_refs": [
+          "capability:capability_set:package:advertising-measurement-brand-safety:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Advertising Measurement Brand Safety Review Owner",
         "description": "Joins all advertising assurance branches into a conflict-preserving qualified review pack.",
         "base_role": "delegated-worker",
-        "prompt": "agents/advertising-measurement-brand-safety-review-owner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "advertising-measurement-brand-safety/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/advertising-measurement-brand-safety-review-owner/system.md"
       }
     },
     "virtual_workflows": {

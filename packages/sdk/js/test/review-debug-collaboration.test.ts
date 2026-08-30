@@ -7,7 +7,7 @@ import path from "node:path"
 import {
   EXPERT_SQUAD_MANIFEST_PATH,
   writeExpertSquadPackage,
-  type ExpertSquadManifestV1,
+  type ExpertSquadManifestV2,
   type ExpertSquadPackageDefinition,
 } from "../src/expert-squad-authoring"
 
@@ -35,7 +35,7 @@ describe("Review & Debug to independent audit collaboration", () => {
   test("round-trips the complete Review & Debug package through the SDK writer", async () => {
     const sourceRoot = path.join(repositoryRoot, "expert-squads", "builtin", "review-debug")
     const sourceFiles = await packageFiles(sourceRoot)
-    const sourceManifest = parseJsonc<ExpertSquadManifestV1>(
+    const sourceManifest = parseJsonc<ExpertSquadManifestV2>(
       await readFile(path.join(sourceRoot, EXPERT_SQUAD_MANIFEST_PATH), "utf8"),
     )
     const files = Object.fromEntries(
@@ -56,7 +56,7 @@ describe("Review & Debug to independent audit collaboration", () => {
       expect(result.files.sort()).toEqual(sourceFiles)
       expect(await packageFiles(output)).toEqual(sourceFiles)
       expect(
-        parseJsonc<ExpertSquadManifestV1>(await readFile(path.join(output, EXPERT_SQUAD_MANIFEST_PATH), "utf8")),
+        parseJsonc<ExpertSquadManifestV2>(await readFile(path.join(output, EXPERT_SQUAD_MANIFEST_PATH), "utf8")),
       ).toEqual(sourceManifest)
       for (const relativePath of sourceFiles.filter((entry) => entry !== EXPERT_SQUAD_MANIFEST_PATH)) {
         expect(

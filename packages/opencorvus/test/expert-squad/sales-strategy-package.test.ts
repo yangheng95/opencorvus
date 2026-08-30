@@ -129,11 +129,11 @@ describe("Sales Strategy expert squad package", () => {
   test("loads its complete typed package and seven-node parallel workflow", async () => {
     const loaded = await ExpertSquadRegistry.loadSourcePackage(packageRoot)
     expect(loaded.manifest).toMatchObject({
-      schema_version: 1,
+      schema_version: 2,
       namespace: "builtin",
       id: "sales-strategy",
       name: "Sales Strategy & Customer Research",
-      version: "2026.08.13.1",
+      version: "2026.08.30.1",
       product_pillars: ["work"],
     })
     expect(Object.keys(loaded.manifest.capability_projection.agents)).toEqual(Object.keys(dependencies))
@@ -238,7 +238,7 @@ describe("Sales Strategy expert squad package", () => {
           sessionID: session.id,
           role: "assistant",
           author: "sales-strategy-planner",
-          time: { created: started, completed: started + 1 },
+          time: { created: started },
           parentID: userMessage.id,
           modelID: "test",
           providerID: "test",
@@ -246,7 +246,21 @@ describe("Sales Strategy expert squad package", () => {
           path: { cwd: project.path, root: project.path },
           cost: 0,
           tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
-          finish: "stop",
+        })
+        await Session.updatePart({
+          id: "step-sales-strategy-chain",
+          sessionID: session.id,
+          messageID: assistantMessage.id,
+          type: "step-start",
+        })
+        await Session.updatePart({
+          id: "part-sales-strategy-chain",
+          sessionID: session.id,
+          messageID: assistantMessage.id,
+          type: "tool",
+          callID: "call-sales-strategy-chain",
+          tool: publisherRef,
+          state: { status: "running", input: {}, time: { start: started + 1 } },
         })
         const scope: TaskToolExecutionScope = {
           kind: "task",

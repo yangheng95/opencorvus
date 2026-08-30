@@ -6,11 +6,12 @@ import { PromptProfileResolver } from "../../src/expert-squad/prompt-profile-res
 import { ExpertSquadRegistry } from "../../src/expert-squad/registry"
 import { Instance } from "../../src/project/instance"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
+import { allCapabilityGrants } from "./capability-grant-fixture"
 
 const packages = [
   {
     id: "browser-research-acceptance",
-    version: "2026.08.13.1",
+    version: "2026.08.30.1",
     name: "Browser Research & Acceptance",
     productPillars: ["code", "work"],
     skillName: "browser-evidence-acceptance",
@@ -35,7 +36,7 @@ const packages = [
   },
   {
     id: "office-delivery",
-    version: "2026.08.13.4",
+    version: "2026.08.30.1",
     name: "Office Delivery",
     productPillars: ["work"],
     skillName: "office-delivery-method",
@@ -52,7 +53,7 @@ const packages = [
   },
   {
     id: "product-management",
-    version: "2026.08.13.1",
+    version: "2026.08.30.1",
     name: "Product Management",
     productPillars: ["work"],
     skillName: "evidence-backed-product-planning",
@@ -111,7 +112,7 @@ describe("Expert Squad swimlanes 01-03 packages", () => {
       const skill = loaded.packageSkills.get(definition.skillRef)!
 
       expect(loaded.manifest).toMatchObject({
-        schema_version: 1,
+        schema_version: 2,
         namespace: "builtin",
         id: definition.id,
         name: definition.name,
@@ -132,9 +133,8 @@ describe("Expert Squad swimlanes 01-03 packages", () => {
       }
 
       expect(Object.keys(projection.agents)).toEqual([...definition.agentIDs])
-      expect(projection.scheduler.package_skill_refs).toEqual([definition.skillRef])
-      expect(definition.agentIDs.map((agentID) => projection.agents[agentID]!.package_skill_refs)).toEqual(
-        definition.agentIDs.map(() => [definition.skillRef]),
+      expect(allCapabilityGrants(loaded.manifest).map((grant) => grant.packageSkillRefs)).toEqual(
+        allCapabilityGrants(loaded.manifest).map(() => [definition.skillRef]),
       )
       expect(
         Object.fromEntries(Object.entries(workflow.nodes).map(([nodeID, node]) => [nodeID, node.depends_on])),

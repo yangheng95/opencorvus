@@ -110,7 +110,7 @@ The exact A1 cut and exclusions are recorded in
 - `packages/opencorvus/src/work/harness.ts`
 - `packages/opencorvus/src/conversation/capability.ts`
 - `packages/opencorvus/src/agent/{primary-assistant-registry,tool-pool-data,role-contract}.ts`
-- `packages/sdk/js/src/expert-squad-manifest-v1.ts`
+- `packages/sdk/js/src/expert-squad-manifest-v2.ts`
 - `packages/opencorvus/src/expert-squad/{registry,catalog,prompt-profile-resolver,configuration}.ts`
 - `packages/opencorvus/src/{agent/prompt-profile,tool/skill,tool/registry,tool/execution-surface}.ts`
 - `packages/opencorvus/src/agent/{tool-pool-contract,runtime-override,session-agent-runtime}.ts`
@@ -136,7 +136,7 @@ The design followed repository-wide searches for:
 primary_assistant_capabilities
 WORK_AGENT_ID / WORK_RUNTIME_PROMPT / wake_work / wake_mission
 promptProfile / prompt_profile / Task package revision binding
-ExpertSquadManifestV1Schema / ExpertSquadCatalog* / capability_projection
+ExpertSquadManifestV2Schema / ExpertSquadCatalog* / capability_projection / capability_sets
 PermissionNext.ask / PermissionNext.evaluate / ctx.ask
 McpAuth / OAuth / mcpPermissionPlan
 AutomationService / EventService / TaskQueueService / SessionWake.wake
@@ -277,7 +277,7 @@ dedicated `work` conversation experience. Either may hand off to Mission.
 | Work harness | Fixed `work` identity, prompt, default capability assignment, Work-only Office tools, parent-only delivery. | Keep and extend through packages, not another base harness. |
 | Shared conversation runtime | Work already reuses Session, Message, streaming loop, provider, permission, Skill, MCP, attachment, artifact, delegation, lifecycle, and ledger. | Keep. |
 | Durable work | Work already recommends the real Mission path; Mission owns Tasks, Goals, scheduler, cancellation, archive, and receipts. | Keep. Make Work Mission packages a first-class catalog segment. |
-| Expert Squad projection | Manifest v1, Registry, catalog, `prompt_profile.active`, Resolver, and virtual workflow contract exist. Mission supplies `promptProfile`, but current Task/message paths do not enforce lifetime immutability. | Extend with pillar applicability and close Mission Task mutation without adding another active field. |
+| Expert Squad projection | Manifest v2 typed CapabilityRefs/CapabilitySets, Registry, catalog, `prompt_profile.active`, Resolver, and virtual workflow contract exist. Mission supplies `promptProfile`, but current Task/message paths do not enforce lifetime immutability. | Keep the single v2 grant contract, extend with pillar applicability, and close Mission Task mutation without adding another active field. |
 | Office capability | First Work production slice already creates, validates, renders, reviews, and delivers PPTX through typed tools. | Use as the first proof that Work can ship vertical capability. |
 | Time scheduling | Lease-based recurring automation and run history already exist. | Reuse. |
 | Internal event scheduling | Persistent Bus event jobs already match, cool down, and wake Sessions. | Reuse for normalized events. |
@@ -296,7 +296,7 @@ Add one required manifest field:
 ```ts
 type ProductPillar = "code" | "work"
 
-interface ExpertSquadManifestV1 {
+interface ExpertSquadManifestV2 {
   // Existing fields omitted.
   product_pillars: ProductPillar[]
 }
@@ -1188,7 +1188,7 @@ Exit criteria:
 
 | Owner/callers | Planned disposition |
 | --- | --- |
-| `sdk/js/expert-squad-manifest-v1.ts`, authoring | Add required pillar schema and canonical validation. |
+| `sdk/js/expert-squad-manifest-v2.ts`, authoring | Own the required pillar schema and canonical validation. |
 | all package `expert-squad.jsonc` and portable template | Declare exact pillar lists in one replacement. |
 | `expert-squad/registry.ts` | Parse and retain pillar metadata; no inference. |
 | `expert-squad/catalog.ts` | Project pillar metadata and exact filtered recommendations. |

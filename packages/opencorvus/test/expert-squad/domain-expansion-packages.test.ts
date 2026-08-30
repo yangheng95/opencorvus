@@ -6,6 +6,7 @@ import { PromptProfileResolver } from "../../src/expert-squad/prompt-profile-res
 import { ExpertSquadRegistry } from "../../src/expert-squad/registry"
 import { Instance } from "../../src/project/instance"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
+import { allCapabilityGrants } from "./capability-grant-fixture"
 
 const packages = [
   {
@@ -139,20 +140,19 @@ describe("Ten-domain Expert Squad package expansion", () => {
       const workflow = loaded.manifest.capability_projection.virtual_workflows[definition.workflowID]!
 
       expect(loaded.manifest).toMatchObject({
-        schema_version: 1,
+        schema_version: 2,
         namespace: "builtin",
         id: definition.id,
-        version: "2026.08.13.1",
+        version: "2026.08.30.1",
       })
       expect([...loaded.packageSkills.keys()]).toEqual([ref])
       expect(method.definition.name).toBe(definition.skillName)
       expect(method.snapshot.files.map((file) => file.path)).toContain(definition.asset)
       expect(method.snapshot.files.find((file) => file.path === definition.asset)?.bytes).toBeGreaterThan(0)
-      expect(loaded.manifest.capability_projection.scheduler.package_skill_refs).toEqual([ref])
-      expect(Object.keys(agents)).toEqual([...definition.roots, definition.join])
-      expect(Object.values(agents).map((agent) => agent.package_skill_refs)).toEqual(
-        Object.values(agents).map(() => [ref]),
+      expect(allCapabilityGrants(loaded.manifest).map((grant) => grant.packageSkillRefs)).toEqual(
+        allCapabilityGrants(loaded.manifest).map(() => [ref]),
       )
+      expect(Object.keys(agents)).toEqual([...definition.roots, definition.join])
       expect(Object.fromEntries(Object.entries(workflow.nodes).map(([id, node]) => [id, node.depends_on]))).toEqual({
         ...Object.fromEntries(definition.roots.map((id) => [id, []])),
         [definition.join]: [...definition.roots].sort(),
@@ -190,7 +190,7 @@ describe("Ten-domain Expert Squad package expansion", () => {
 
           expect(scheduler).toMatchObject({
             expertSquadID: definition.id,
-            packageRevision: { version: "2026.08.13.1" },
+            packageRevision: { version: "2026.08.30.1" },
           })
           expect(scheduler.productionSkills.map((skill) => ({ ref: skill.ref, source: skill.source }))).toEqual([
             { ref, source: "package" },

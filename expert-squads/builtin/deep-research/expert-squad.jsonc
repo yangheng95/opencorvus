@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "deep-research",
   "name": "Deep Research",
   "label": "Deep Research",
   "description": "Multi-perspective source discovery, evidence curation, grounded outlining, cited drafting, independent citation review, and polished long-form reporting.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.30.1",
   "product_pillars": [
     "work"
   ],
@@ -15,170 +15,88 @@
     "selection_guidance": "Select Deep Research when answering the question requires discovering viewpoints and subquestions before writing. Use direct writing for simple transformations and Equity Research for public-company valuation work.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 6 projections.",
+      "member_refs": [
+        "capability:skill:package:deep-research:deep-research%2Fshared%2Fmethod",
+        "capability:skill:package:deep-research:deep-research%2Fshared%2Fworkflow"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:skill:package:deep-research:deep-research%2Fshared%2Fmethod",
+        "capability:skill:package:deep-research:deep-research%2Fshared%2Fworkflow",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "deep-research/shared/workflow",
-        "deep-research/shared/method"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "deep-research-planner": {
+        "capability_refs": [
+          "capability:capability_set:package:deep-research:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Deep Research Planner",
         "description": "Defines the research question, audience, perspective map, source policy, deliverable, and stopping conditions.",
         "base_role": "delegated-worker",
-        "prompt": "agents/deep-research-planner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "deep-research/shared/workflow",
-          "deep-research/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/deep-research-planner/system.md"
       },
       "deep-research-knowledge-curator": {
+        "capability_refs": [
+          "capability:capability_set:package:deep-research:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:deep-research-base"
+        ],
         "label": "Deep Research Knowledge Curator",
         "description": "Discovers distinct perspectives, asks perspective-specific questions, and builds a cited evidence dossier.",
         "base_role": "deep-research",
-        "prompt": "agents/deep-research-knowledge-curator/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "deep-research/shared/workflow",
-          "deep-research/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/deep-research-knowledge-curator/system.md"
       },
       "deep-research-outline-editor": {
+        "capability_refs": [
+          "capability:capability_set:package:deep-research:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Deep Research Outline Editor",
         "description": "Transforms selected evidence into a coherent, non-redundant hierarchy with section-level evidence assignments.",
         "base_role": "delegated-worker",
-        "prompt": "agents/deep-research-outline-editor/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "deep-research/shared/workflow",
-          "deep-research/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/deep-research-outline-editor/system.md"
       },
       "deep-research-draft-writer": {
+        "capability_refs": [
+          "capability:capability_set:package:deep-research:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Deep Research Draft Writer",
         "description": "Writes a complete, source-grounded draft whose inline citations map to the curated source index.",
         "base_role": "delegated-worker",
-        "prompt": "agents/deep-research-draft-writer/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "deep-research/shared/workflow",
-          "deep-research/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/deep-research-draft-writer/system.md"
       },
       "deep-research-citation-reviewer": {
+        "capability_refs": [
+          "capability:capability_set:package:deep-research:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:fact-check-base"
+        ],
         "label": "Deep Research Citation Reviewer",
         "description": "Independently audits citation entailment, source quality, coverage, placement, synthesis, and uncertainty.",
         "base_role": "fact-check",
-        "prompt": "agents/deep-research-citation-reviewer/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "deep-research/shared/workflow",
-          "deep-research/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/deep-research-citation-reviewer/system.md"
       },
       "deep-research-report-writer": {
+        "capability_refs": [
+          "capability:capability_set:package:deep-research:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:build-base"
+        ],
         "label": "Deep Research Report Writer",
         "description": "Resolves the independent review and publishes canonical Markdown plus the visible final research report.",
         "base_role": "build",
-        "prompt": "agents/deep-research-report-writer/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "deep-research/shared/workflow",
-          "deep-research/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/deep-research-report-writer/system.md"
       }
     },
     "virtual_workflows": {

@@ -16,7 +16,7 @@
     "fact-check"
   ],
   "tool_input": {
-    "schema_version": 1,
+    "schema_version": 2,
     "namespace": "example",
     "id": "source-backed-briefing",
     "name": "Source-backed Briefing",
@@ -34,8 +34,9 @@
     },
     "scheduler": {
       "prompt": "# Briefing Orchestrator\n\nLoad the package method Skill, select the verified-briefing workflow, and preserve source attribution and explicit unknowns.\n",
-      "package_skill_refs": [
-        "source-backed-briefing/shared/method"
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:skill:package:source-backed-briefing:source-backed-briefing%2Fshared%2Fmethod"
       ]
     },
     "agents": {
@@ -44,8 +45,9 @@
         "description": "Freezes the evidence boundary, briefing structure, worker partition, and acceptance allocation.",
         "base_role": "delegated-worker",
         "prompt": "# Briefing Planner\n\nPublish one bounded source and delivery plan. Partition public evidence collection, briefing construction, and independent claim checking into non-overlapping worker ownership. Do not write the final briefing.\n",
-        "package_skill_refs": [
-          "source-backed-briefing/shared/method"
+        "capability_refs": [
+          "capability:capability_set:platform:tool-registry:delegated-worker-base",
+          "capability:skill:package:source-backed-briefing:source-backed-briefing%2Fshared%2Fmethod"
         ]
       },
       "evidence-researcher": {
@@ -53,11 +55,10 @@
         "description": "Collects attributable public evidence and records unknowns.",
         "base_role": "deep-research",
         "prompt": "# Evidence Researcher\n\nCollect real public sources, cite exact URLs and dates, mark unavailable facts unknown, and publish the complete structured evidence once through the package-owned publish-source-evidence tool.\n",
-        "package_skill_refs": [
-          "source-backed-briefing/shared/method"
-        ],
-        "package_tool_refs": [
-          "source-backed-briefing/shared/publish-source-evidence"
+        "capability_refs": [
+          "capability:capability_set:platform:tool-registry:deep-research-base",
+          "capability:skill:package:source-backed-briefing:source-backed-briefing%2Fshared%2Fmethod",
+          "capability:tool:package:source-backed-briefing:source-backed-briefing%2Fshared%2Fpublish-source-evidence"
         ]
       },
       "briefing-writer": {
@@ -65,8 +66,9 @@
         "description": "Verifies the collected claims and delivers the final briefing.",
         "base_role": "build",
         "prompt": "# Briefing Writer\n\nLoad the package method Skill, read the accepted evidence, verify every load-bearing claim, and deliver one cited briefing.\n",
-        "package_skill_refs": [
-          "source-backed-briefing/shared/method"
+        "capability_refs": [
+          "capability:capability_set:platform:tool-registry:build-base",
+          "capability:skill:package:source-backed-briefing:source-backed-briefing%2Fshared%2Fmethod"
         ]
       },
       "claim-checker": {
@@ -74,8 +76,9 @@
         "description": "Independently checks load-bearing claims and records uncertainty against the planned source boundary.",
         "base_role": "fact-check",
         "prompt": "# Briefing Claim Checker\n\nCheck the Planner's exact target message and evidence boundary, report unsupported claims and explicit unknowns, and do not rewrite the briefing.\n",
-        "package_skill_refs": [
-          "source-backed-briefing/shared/method"
+        "capability_refs": [
+          "capability:capability_set:platform:tool-registry:fact-check-base",
+          "capability:skill:package:source-backed-briefing:source-backed-briefing%2Fshared%2Fmethod"
         ]
       }
     },

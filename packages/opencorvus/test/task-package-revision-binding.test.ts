@@ -16,6 +16,8 @@ import { requireTask, viewTask, viewTaskListTask } from "../src/engine/store"
 import { selectedWorkflowBinding } from "../src/engine/workflow-binding"
 import { assertTaskWorkflowBindingInTransaction } from "../src/engine/workflow-binding-facts"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
+import { capabilityRef, CapabilityRefCodec } from "@opencorvus-ai/util/capability-ref"
+import { PlatformCapabilitySetRegistry } from "../src/agent/platform-capability-sets"
 import { EffectiveConfig } from "../src/config/effective"
 import { Config } from "../src/config/config"
 import { PromptProfileResolver } from "../src/expert-squad/prompt-profile-resolver"
@@ -539,8 +541,23 @@ describe("Task package revision binding", () => {
           label: "Candidate Skill Owner",
           prompt: "agents/candidate-skill-owner/system.md",
           base_role: "frontend-design",
-          default_skill_refs: ["default/skill/design-taste-frontend"],
-          package_skill_refs: [],
+          capability_refs: [
+            ...((sourceAgent.capability_refs as string[] | undefined) ?? []).filter((encoded) => {
+              const ref = CapabilityRefCodec.decode(encoded)
+              return ref.kind !== "capability_set" || ref.source !== "platform"
+            }),
+            CapabilityRefCodec.encode(
+              PlatformCapabilitySetRegistry.baseRef({ kind: "worker", baseRole: "frontend-design" }),
+            ),
+            CapabilityRefCodec.encode(
+              capabilityRef({
+                kind: "skill",
+                source: "platform",
+                owner_ref: "skill-manager",
+                local_ref: "default/skill/design-taste-frontend",
+              }),
+            ),
+          ].sort(),
         }
         await writeFile(manifestPath, `${JSON.stringify(candidateManifest, null, 2)}\n`)
         const candidateAgentDirectory = path.join(candidateDirectory, "agents", "candidate-skill-owner")

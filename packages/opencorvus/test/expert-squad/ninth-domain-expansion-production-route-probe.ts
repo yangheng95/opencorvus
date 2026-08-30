@@ -2,6 +2,7 @@ import fs from "node:fs/promises"
 import { Instance } from "../../src/project/instance"
 import { declareNativeTaskProcessDeployment } from "../../src/runtime/task-process-deployment"
 import { Server } from "../../src/server/server"
+import { catalogPackageSkillRefs } from "./catalog-capability-fixture"
 
 const squadIDs = [
   "clinical-genomics-variant-evidence-review",
@@ -66,7 +67,7 @@ try {
     const agents = capability.agents as Record<string, Record<string, unknown>>
     const workflow = Object.values(capability.virtual_workflows as Record<string, Record<string, unknown>>)[0]
     const nodes = (workflow?.nodes ?? {}) as Record<string, Record<string, unknown>>
-    const schedulerRefs = scheduler.package_skill_refs as string[]
+    const schedulerRefs = catalogPackageSkillRefs(selected, scheduler)
     const skillRef = `${id}/shared/method`
     const rootCount = Object.values(nodes).filter((node) => (node.depends_on as string[]).length === 0).length
     const joinCount = Object.values(nodes).filter((node) => (node.depends_on as string[]).length === 4).length
@@ -75,7 +76,7 @@ try {
     }
     if (
       !Object.values(agents).every(
-        (agent) => JSON.stringify(agent.package_skill_refs) === JSON.stringify(schedulerRefs),
+        (agent) => JSON.stringify(catalogPackageSkillRefs(selected, agent)) === JSON.stringify(schedulerRefs),
       )
     ) {
       throw new Error(`Worker Skill projection drifted for ${id}`)

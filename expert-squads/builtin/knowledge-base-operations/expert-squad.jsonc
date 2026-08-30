@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "knowledge-base-operations",
   "name": "Knowledge Base Operations",
   "label": "Knowledge Base Operations",
   "description": "Parallel source mapping, change editing, and lifecycle governance joined into a traceable knowledge publication record.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.30.1",
   "product_pillars": [
     "work"
   ],
@@ -15,119 +15,66 @@
     "selection_guidance": "Select when content enters a maintained knowledge base. Use direct document editing for one-off prose without ownership, review, and deprecation requirements.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 4 projections.",
+      "member_refs": [
+        "capability:skill:package:knowledge-base-operations:knowledge-base-operations%2Fshared%2Fmethod"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:skill:package:knowledge-base-operations:knowledge-base-operations%2Fshared%2Fmethod",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "knowledge-base-operations/shared/method"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "knowledge-source-curator": {
+        "capability_refs": [
+          "capability:capability_set:package:knowledge-base-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:deep-research-base"
+        ],
         "label": "Knowledge Source Curator",
         "description": "Maps authoritative source claims to exact knowledge destinations with conflicts and freshness evidence.",
         "base_role": "deep-research",
-        "prompt": "agents/knowledge-source-curator/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "knowledge-base-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/knowledge-source-curator/system.md"
       },
       "knowledge-change-editor": {
+        "capability_refs": [
+          "capability:capability_set:package:knowledge-base-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Knowledge Change Editor",
         "description": "Prepares canonical additions or revisions with stable keys, material diffs, and dependency impacts.",
         "base_role": "delegated-worker",
-        "prompt": "agents/knowledge-change-editor/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "knowledge-base-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/knowledge-change-editor/system.md"
       },
       "knowledge-lifecycle-governor": {
+        "capability_refs": [
+          "capability:capability_set:package:knowledge-base-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:fact-check-base"
+        ],
         "label": "Knowledge Lifecycle Governor",
         "description": "Defines ownership, review, approval, deprecation, replacement, retention, and correction controls.",
         "base_role": "fact-check",
-        "prompt": "agents/knowledge-lifecycle-governor/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "knowledge-base-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/knowledge-lifecycle-governor/system.md"
       },
       "knowledge-publication-integrator": {
+        "capability_refs": [
+          "capability:capability_set:package:knowledge-base-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:build-base"
+        ],
         "label": "Knowledge Publication Integrator",
         "description": "Joins source, change, and lifecycle evidence into the canonical prepared publication record.",
         "base_role": "build",
-        "prompt": "agents/knowledge-publication-integrator/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "knowledge-base-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/knowledge-publication-integrator/system.md"
       }
     },
     "virtual_workflows": {

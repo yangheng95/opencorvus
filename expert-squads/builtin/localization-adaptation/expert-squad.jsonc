@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "localization-adaptation",
   "name": "Localization & Adaptation",
   "label": "Localization & Adaptation",
   "description": "Parallel terminology, locale adaptation, and linguistic quality work joined into a source-controlled locale release pack.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.30.1",
   "product_pillars": [
     "work"
   ],
@@ -15,119 +15,66 @@
     "selection_guidance": "Select when a fixed source must be adapted for a locale and channel. Keep external publication and certified native approval outside the package unless evidenced.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 4 projections.",
+      "member_refs": [
+        "capability:skill:package:localization-adaptation:localization-adaptation%2Fshared%2Fmethod"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:skill:package:localization-adaptation:localization-adaptation%2Fshared%2Fmethod",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "localization-adaptation/shared/method"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "localization-terminology-steward": {
+        "capability_refs": [
+          "capability:capability_set:package:localization-adaptation:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Localization Terminology Steward",
         "description": "Builds the contextual term register, protected-token inventory, and source ambiguity record.",
         "base_role": "delegated-worker",
-        "prompt": "agents/localization-terminology-steward/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "localization-adaptation/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/localization-terminology-steward/system.md"
       },
       "localization-locale-adapter": {
+        "capability_refs": [
+          "capability:capability_set:package:localization-adaptation:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Locale Adaptation Specialist",
         "description": "Adapts stable source content for the named locale, audience, channel, and format constraints.",
         "base_role": "delegated-worker",
-        "prompt": "agents/localization-locale-adapter/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "localization-adaptation/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/localization-locale-adapter/system.md"
       },
       "localization-linguistic-qa": {
+        "capability_refs": [
+          "capability:capability_set:package:localization-adaptation:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:fact-check-base"
+        ],
         "label": "Linguistic Quality Reviewer",
         "description": "Independently checks accuracy, fluency, terminology, locale conventions, tokens, and review coverage.",
         "base_role": "fact-check",
-        "prompt": "agents/localization-linguistic-qa/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "localization-adaptation/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/localization-linguistic-qa/system.md"
       },
       "localization-release-integrator": {
+        "capability_refs": [
+          "capability:capability_set:package:localization-adaptation:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:build-base"
+        ],
         "label": "Localization Release Integrator",
         "description": "Joins terminology, adaptation, and linguistic quality evidence into the locale release pack.",
         "base_role": "build",
-        "prompt": "agents/localization-release-integrator/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "localization-adaptation/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/localization-release-integrator/system.md"
       }
     },
     "virtual_workflows": {

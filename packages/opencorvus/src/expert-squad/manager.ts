@@ -15,6 +15,7 @@ import { ExpertSquadPackageLocations } from "./locations"
 import { payloadPackageSources } from "../../generated/expert-squad-payload"
 import { expertSquadSearchLocalizations } from "../../generated/expert-squad-search-localization"
 import { ExpertSquadRegistry } from "./registry"
+import { materializeExpertSquadCapabilities } from "./capability-grants"
 import { ExpertSquadArchive } from "./archive"
 import { writeExpertSquadInstallationMetadata, type ExpertSquadGenerationMetadata } from "./installation-metadata"
 import { NamedError } from "@opencorvus-ai/util/error"
@@ -22,7 +23,7 @@ import z from "zod"
 import { Log } from "@/util/log"
 import { EngineArtifactEnvelopeSchema, EvolutionPromotionReceiptSchema } from "@opencorvus-ai/plugin"
 import { EXPERT_SQUAD_ARCHIVE_IMPORT_LIMITS } from "@opencorvus-ai/sdk/expert-squad-package-contract"
-import type { ProductPillar } from "@opencorvus-ai/sdk/expert-squad-manifest-v1"
+import type { ProductPillar } from "@opencorvus-ai/sdk/expert-squad-manifest-v2"
 import { EngineArtifactTable } from "@/engine/engine.sql"
 import { Database, eq } from "@/storage/db"
 import { scoreDiscoveryFields, scoreDocumentField } from "@/capability/fuzzy"
@@ -1416,31 +1417,39 @@ export namespace ExpertSquadPackageManager {
     const skills = new Set<string>()
     const tools = new Set<string>()
     const mcp = new Set<string>()
-    const projections: ExpertSquadRegistry.Projection[] = [
-      loaded.manifest.capability_projection.scheduler,
-      ...Object.values(loaded.manifest.capability_projection.agents),
+    const projections = [
+      materializeExpertSquadCapabilities({
+        manifest: loaded.manifest,
+        projection: loaded.manifest.capability_projection.scheduler,
+        runtime: { kind: "scheduler" },
+        context: "payload capability_projection.scheduler",
+      }),
+      ...ExpertSquadRegistry.agentProjectionEntries(loaded.manifest).map(({ agentID, baseRole, projection }) =>
+        materializeExpertSquadCapabilities({
+          manifest: loaded.manifest,
+          projection,
+          runtime: { kind: "worker", baseRole },
+          context: `payload capability_projection.agents.${agentID}`,
+        }),
+      ),
     ]
-    for (const projection of projections) {
-      for (const ref of [...projection.default_skill_refs, ...projection.package_skill_refs]) skills.add(ref)
+    for (const capabilities of projections) {
+      for (const ref of [...capabilities.defaultSkillRefs, ...capabilities.packageSkillRefs]) skills.add(ref)
       for (const ref of [
-        ...projection.built_in_tool_ids,
-        ...projection.default_tool_refs,
-        ...projection.package_tool_refs,
-      ]) {
-        tools.add(ref)
-      }
+        ...capabilities.builtInToolIDs,
+        ...capabilities.defaultToolRefs,
+        ...capabilities.packageToolRefs,
+      ]) tools.add(ref)
       for (const ref of [
-        ...projection.default_mcp_server_refs,
-        ...projection.package_mcp_server_refs,
-        ...projection.default_mcp_tool_refs,
-        ...projection.package_mcp_tool_refs,
-        ...projection.default_mcp_prompt_refs,
-        ...projection.package_mcp_prompt_refs,
-        ...projection.default_mcp_resource_refs,
-        ...projection.package_mcp_resource_refs,
-      ]) {
-        mcp.add(ref)
-      }
+        ...capabilities.defaultMcpServerRefs,
+        ...capabilities.packageMcpServerRefs,
+        ...capabilities.defaultMcpToolRefs,
+        ...capabilities.packageMcpToolRefs,
+        ...capabilities.defaultMcpPromptRefs,
+        ...capabilities.packageMcpPromptRefs,
+        ...capabilities.defaultMcpResourceRefs,
+        ...capabilities.packageMcpResourceRefs,
+      ]) mcp.add(ref)
     }
     return { skillCount: skills.size, toolCount: tools.size, mcpCount: mcp.size }
   }

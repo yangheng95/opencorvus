@@ -21,7 +21,7 @@ import {
   createCapabilityCatalogViewEntry,
   createCapabilityDescriptor,
 } from "../../src/capability/descriptor"
-import { capabilityRef } from "../../src/capability/ref"
+import { capabilityRef } from "@opencorvus-ai/util/capability-ref"
 import { memoryProject } from "../fixture/memory"
 import { Config } from "../../src/config/config"
 import { persistEstablishedTask } from "../fixture/engine-task"

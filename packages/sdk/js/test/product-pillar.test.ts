@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test"
-import { ProductPillarSchema, ProductPillarsSchema } from "../src/expert-squad-manifest-v1"
+import { ProductPillarSchema, ProductPillarsSchema } from "../src/expert-squad-manifest-v2"
 
 describe("product pillar contract", () => {
   test("projects both canonical product pillars", () => {

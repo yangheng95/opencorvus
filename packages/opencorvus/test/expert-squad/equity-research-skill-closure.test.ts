@@ -6,6 +6,7 @@ import { Config } from "../../src/config/config"
 import { ExpertSquadPackageManager } from "../../src/expert-squad/manager"
 import { PromptProfileResolver } from "../../src/expert-squad/prompt-profile-resolver"
 import { ExpertSquadRegistry } from "../../src/expert-squad/registry"
+import { agentCapabilityGrants, schedulerCapabilityGrants } from "./capability-grant-fixture"
 import { Instance } from "../../src/project/instance"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
 
@@ -75,10 +76,10 @@ describe("Equity Research professional Skill closure", () => {
     expect(method.content).toContain("thesis-tracker")
     expect(method.content).toContain("audit-xls")
     expect(Object.keys(loaded.manifest.capability_projection.agents)).toEqual(expectedAgents)
-    expect([...loaded.manifest.capability_projection.scheduler.package_skill_refs].sort()).toEqual(skillRefs)
+    expect(schedulerCapabilityGrants(loaded.manifest).packageSkillRefs).toEqual(skillRefs)
     expect(
       expectedAgents.map((agentID) =>
-        [...loaded.manifest.capability_projection.agents[agentID]!.package_skill_refs].sort(),
+        agentCapabilityGrants(loaded.manifest, agentID).packageSkillRefs,
       ),
     ).toEqual(expectedAgents.map(() => skillRefs))
   })

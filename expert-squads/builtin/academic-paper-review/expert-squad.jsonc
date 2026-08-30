@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "academic-paper-review",
   "name": "Academic Paper Review",
   "label": "Academic Paper Review",
   "description": "Evidence-traceable manuscript review across literature, novelty, logic, methods, facts, citations, hallucination risk, presentation, and integrated revision guidance.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.30.1",
   "product_pillars": [
     "work"
   ],
@@ -15,207 +15,106 @@
     "selection_guidance": "Select when an academic manuscript, preprint, protocol, or proposal needs literature investigation, novelty analysis, logical and methodological critique, factual and citation verification, hallucination checks, presentation review, and one integrated evidence register.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 8 projections.",
+      "member_refs": [
+        "capability:skill:package:academic-paper-review:academic-paper-review%2Fshared%2Facademic-paper-review-method"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:skill:package:academic-paper-review:academic-paper-review%2Fshared%2Facademic-paper-review-method",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "academic-paper-review/shared/academic-paper-review-method"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "paper-review-charter-planner": {
+        "capability_refs": [
+          "capability:capability_set:package:academic-paper-review:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Review Charter Planner",
         "description": "Freezes manuscript version, authorization, venue context, evidence boundary, claim inventory, and specialist-review needs.",
         "base_role": "delegated-worker",
-        "prompt": "agents/paper-review-charter-planner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "academic-paper-review/shared/academic-paper-review-method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/paper-review-charter-planner/system.md"
       },
       "paper-literature-landscape-reviewer": {
+        "capability_refs": [
+          "capability:capability_set:package:academic-paper-review:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:deep-research-base"
+        ],
         "label": "Literature Landscape Reviewer",
         "description": "Builds a reproducible prior-work landscape and checks citation coverage and representation.",
         "base_role": "deep-research",
-        "prompt": "agents/paper-literature-landscape-reviewer/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "academic-paper-review/shared/academic-paper-review-method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/paper-literature-landscape-reviewer/system.md"
       },
       "paper-novelty-contribution-reviewer": {
+        "capability_refs": [
+          "capability:capability_set:package:academic-paper-review:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Novelty and Contribution Reviewer",
         "description": "Compares claimed contributions with inspected prior work and records defensible distinctions and overlap.",
         "base_role": "delegated-worker",
-        "prompt": "agents/paper-novelty-contribution-reviewer/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "academic-paper-review/shared/academic-paper-review-method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/paper-novelty-contribution-reviewer/system.md"
       },
       "paper-logic-argument-reviewer": {
+        "capability_refs": [
+          "capability:capability_set:package:academic-paper-review:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Logic and Argument Reviewer",
         "description": "Audits premises, inference, contradictions, alternatives, scope, causality, and conclusion strength.",
         "base_role": "delegated-worker",
-        "prompt": "agents/paper-logic-argument-reviewer/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "academic-paper-review/shared/academic-paper-review-method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/paper-logic-argument-reviewer/system.md"
       },
       "paper-methods-facts-reviewer": {
+        "capability_refs": [
+          "capability:capability_set:package:academic-paper-review:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Methods, Statistics, and Facts Reviewer",
         "description": "Checks design, statistics, reproducibility, ethics, numerical identities, and factual consistency.",
         "base_role": "delegated-worker",
-        "prompt": "agents/paper-methods-facts-reviewer/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "academic-paper-review/shared/academic-paper-review-method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/paper-methods-facts-reviewer/system.md"
       },
       "paper-presentation-reviewer": {
+        "capability_refs": [
+          "capability:capability_set:package:academic-paper-review:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Presentation and Figure Reviewer",
         "description": "Reviews narrative fidelity, structure, readability, tables, figures, captions, uncertainty, and accessibility.",
         "base_role": "delegated-worker",
-        "prompt": "agents/paper-presentation-reviewer/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "academic-paper-review/shared/academic-paper-review-method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/paper-presentation-reviewer/system.md"
       },
       "paper-citation-hallucination-auditor": {
+        "capability_refs": [
+          "capability:capability_set:package:academic-paper-review:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:fact-check-base"
+        ],
         "label": "Citation and Hallucination Auditor",
         "description": "Independently verifies material claims and references while preserving bounded-search uncertainty.",
         "base_role": "fact-check",
-        "prompt": "agents/paper-citation-hallucination-auditor/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "academic-paper-review/shared/academic-paper-review-method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/paper-citation-hallucination-auditor/system.md"
       },
       "paper-review-integration-editor": {
+        "capability_refs": [
+          "capability:capability_set:package:academic-paper-review:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Review Integration Editor",
         "description": "Joins every branch into an evidence register, preserves disagreements, and orders actionable revisions.",
         "base_role": "delegated-worker",
-        "prompt": "agents/paper-review-integration-editor/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "academic-paper-review/shared/academic-paper-review-method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/paper-review-integration-editor/system.md"
       }
     },
     "virtual_workflows": {

@@ -1,14 +1,16 @@
 /**
- * The public SDK owns the portable Expert Squad manifest v1 runtime shape.
+ * The public SDK owns the portable Expert Squad manifest v2 runtime shape.
  * Core re-exports the exact schemas so Registry, OpenAPI, SDK authoring, and
  * runtime projections cannot drift into parallel protocol definitions.
  */
 export {
   ExpertSquadAgentProjectionSchema,
+  ExpertSquadCapabilitySetSchema,
+  ExpertSquadCapabilitySetsSchema,
   ExpertSquadCapabilityProjectionSchema,
   ExpertSquadConfigurationFieldSchema,
   ExpertSquadConfigurationSchema,
-  ExpertSquadProjectionResourcesSchema,
+  ExpertSquadProjectionCapabilitiesSchema,
   ProductPillarSchema,
   ProductPillarsSchema,
   ExpertSquadSchedulerProjectionSchema,
@@ -17,6 +19,8 @@ export {
   ExpertSquadVirtualWorkflowSchema,
   ExpertSquadVirtualWorkflowsSchema,
   type ExpertSquadAgentProjection,
+  type ExpertSquadCapabilitySet,
+  type ExpertSquadCapabilitySets,
   type ExpertSquadCapabilityProjection,
   type ExpertSquadConfiguration,
   type ExpertSquadConfigurationField,

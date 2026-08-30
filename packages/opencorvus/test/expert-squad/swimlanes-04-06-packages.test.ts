@@ -6,6 +6,7 @@ import { PromptProfileResolver } from "../../src/expert-squad/prompt-profile-res
 import { ExpertSquadRegistry } from "../../src/expert-squad/registry"
 import { Instance } from "../../src/project/instance"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
+import { allCapabilityGrants } from "./capability-grant-fixture"
 
 const packages = [
   {
@@ -104,21 +105,20 @@ describe("Expert Squad swimlanes 04-06 packages", () => {
       const method = loaded.packageSkills.get(definition.skillRef)!
 
       expect(loaded.manifest).toMatchObject({
-        schema_version: 1,
+        schema_version: 2,
         namespace: "builtin",
         id: definition.id,
         name: definition.name,
         label: definition.name,
-        version: "2026.08.13.1",
+        version: "2026.08.30.1",
         product_pillars: ["work"],
       })
       expect([...loaded.packageSkills.keys()]).toEqual([definition.skillRef])
       expect(method.snapshot.files.map((file) => file.path)).toEqual(definition.skillFiles)
       expect(Object.keys(loaded.manifest.capability_projection.agents)).toEqual(definition.agentIDs)
-      expect(loaded.manifest.capability_projection.scheduler.package_skill_refs).toEqual([definition.skillRef])
-      expect(
-        definition.agentIDs.map((agentID) => loaded.manifest.capability_projection.agents[agentID]!.package_skill_refs),
-      ).toEqual(definition.agentIDs.map(() => [definition.skillRef]))
+      expect(allCapabilityGrants(loaded.manifest).map((grant) => grant.packageSkillRefs)).toEqual(
+        allCapabilityGrants(loaded.manifest).map(() => [definition.skillRef]),
+      )
       expect(
         Object.fromEntries(Object.entries(workflow.nodes).map(([nodeID, node]) => [nodeID, node.depends_on])),
       ).toEqual(definition.dependencies)
@@ -154,7 +154,7 @@ describe("Expert Squad swimlanes 04-06 packages", () => {
           })
           expect(scheduler).toMatchObject({
             expertSquadID: definition.id,
-            packageRevision: { id: definition.id, version: "2026.08.13.1" },
+            packageRevision: { id: definition.id, version: "2026.08.30.1" },
           })
           expect(scheduler.productionSkills.map((skill) => ({ ref: skill.ref, source: skill.source }))).toEqual([
             { ref: definition.skillRef, source: "package" },

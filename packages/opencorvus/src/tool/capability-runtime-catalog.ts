@@ -24,8 +24,9 @@ import {
   type CapabilityCatalogViewEntry,
   type CapabilityDescriptor,
   type CapabilityNextOwner,
+  type CapabilitySetDescriptor,
 } from "@/capability/descriptor"
-import { capabilityRef, CapabilityRefCodec, type CapabilityRef } from "@/capability/ref"
+import { capabilityRef, CapabilityRefCodec, type CapabilityRef } from "@opencorvus-ai/util/capability-ref"
 import type { HarnessProjection } from "@/capability/harness-projection"
 import { resolveCapabilityCaller } from "@/capability/caller-authority"
 import { Session } from "@/session"
@@ -109,6 +110,7 @@ type PublicationDraft = {
   ownerRevision: string
   descriptors: CapabilityDescriptor[]
   views: CapabilityCatalogViewEntry[]
+  sets: CapabilitySetDescriptor[]
 }
 
 function addPublication(
@@ -118,6 +120,7 @@ function addPublication(
     ownerRevision: string
     descriptors: readonly CapabilityDescriptor[]
     views: readonly CapabilityCatalogViewEntry[]
+    sets?: readonly CapabilitySetDescriptor[]
   },
 ): void {
   const current = publications.get(input.ownerRef)
@@ -130,12 +133,14 @@ function addPublication(
     }
     current.descriptors.push(...input.descriptors)
     current.views.push(...input.views)
+    current.sets.push(...(input.sets ?? []))
     return
   }
   publications.set(input.ownerRef, {
     ownerRevision: input.ownerRevision,
     descriptors: [...input.descriptors],
     views: [...input.views],
+    sets: [...(input.sets ?? [])],
   })
 }
 
@@ -195,7 +200,7 @@ function materializePublications(publications: ReadonlyMap<string, PublicationDr
         owner_ref: ownerRef,
         owner_revision: publication.ownerRevision,
         descriptors: publication.descriptors,
-        sets: [],
+        sets: publication.sets,
       }),
     )
     projections.push(
@@ -333,6 +338,7 @@ async function buildRuntimeSnapshot(input: RuntimeInput): Promise<{
     ownerRevision: toolInventory.revision,
     descriptors: platformDescriptors,
     views: visiblePlatformDescriptors.map((entry) => view({ descriptor: entry, caller, availability: "visible" })),
+    sets: toolInventory.sets,
   })
 
   const directlyProjectedMcpToolDescriptors =

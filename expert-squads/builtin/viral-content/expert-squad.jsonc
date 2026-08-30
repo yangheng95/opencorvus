@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "viral-content",
   "name": "Viral Content",
   "label": "Viral Content",
   "description": "Evidence-backed audience and trend research, testable concepts, complete text-led campaign copy, independent review, and canonical delivery without promised engagement.",
-  "version": "2026.08.19.1",
+  "version": "2026.08.30.1",
   "product_pillars": [
     "work"
   ],
@@ -15,215 +15,101 @@
     "selection_guidance": "Select for complete text-led campaign development; do not select for actual media generation, external posting, or guaranteed engagement.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 7 projections.",
+      "member_refs": [
+        "capability:skill:package:viral-content:viral-content%2Fshared%2Facceptance",
+        "capability:skill:package:viral-content:viral-content%2Fshared%2Fmethod",
+        "capability:skill:package:viral-content:viral-content%2Fshared%2Fworkflow",
+        "capability:tool:package:viral-content:viral-content%2Fshared%2Fpublish-viral-content-artifact"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:skill:package:viral-content:viral-content%2Fshared%2Facceptance",
+        "capability:skill:package:viral-content:viral-content%2Fshared%2Fmethod",
+        "capability:skill:package:viral-content:viral-content%2Fshared%2Fworkflow",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "default_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": [],
-      "package_skill_refs": [
-        "viral-content/shared/workflow",
-        "viral-content/shared/method",
-        "viral-content/shared/acceptance"
-      ],
-      "package_tool_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "viral-brief-strategist": {
+        "capability_refs": [
+          "capability:capability_set:package:viral-content:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Viral Campaign Brief Strategist",
         "description": "Defines the bounded campaign, evidence questions, and falsifiable success hypotheses.",
         "base_role": "delegated-worker",
-        "prompt": "agents/viral-brief-strategist/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "default_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-        "package_skill_refs": [
-          "viral-content/shared/workflow",
-          "viral-content/shared/method",
-          "viral-content/shared/acceptance"
-        ],
-        "package_tool_refs": [
-          "viral-content/shared/publish-viral-content-artifact"
-        ]
+        "prompt": "agents/viral-brief-strategist/system.md"
       },
       "viral-audience-researcher": {
+        "capability_refs": [
+          "capability:capability_set:package:viral-content:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:deep-research-base"
+        ],
         "label": "Viral Audience Researcher",
         "description": "Builds the attributable audience-needs and language dossier.",
         "base_role": "deep-research",
-        "prompt": "agents/viral-audience-researcher/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "default_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-        "package_skill_refs": [
-          "viral-content/shared/workflow",
-          "viral-content/shared/method",
-          "viral-content/shared/acceptance"
-        ],
-        "package_tool_refs": [
-          "viral-content/shared/publish-viral-content-artifact"
-        ]
+        "prompt": "agents/viral-audience-researcher/system.md"
       },
       "viral-trend-researcher": {
+        "capability_refs": [
+          "capability:capability_set:package:viral-content:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:deep-research-base"
+        ],
         "label": "Viral Trend Researcher",
         "description": "Builds the dated content-pattern and lifecycle dossier.",
         "base_role": "deep-research",
-        "prompt": "agents/viral-trend-researcher/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "default_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-        "package_skill_refs": [
-          "viral-content/shared/workflow",
-          "viral-content/shared/method",
-          "viral-content/shared/acceptance"
-        ],
-        "package_tool_refs": [
-          "viral-content/shared/publish-viral-content-artifact"
-        ]
+        "prompt": "agents/viral-trend-researcher/system.md"
       },
       "viral-concept-strategist": {
+        "capability_refs": [
+          "capability:capability_set:package:viral-content:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Viral Concept Strategist",
         "description": "Joins audience and trend evidence into distinct, testable concepts.",
         "base_role": "delegated-worker",
-        "prompt": "agents/viral-concept-strategist/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "default_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-        "package_skill_refs": [
-          "viral-content/shared/workflow",
-          "viral-content/shared/method",
-          "viral-content/shared/acceptance"
-        ],
-        "package_tool_refs": [
-          "viral-content/shared/publish-viral-content-artifact"
-        ]
+        "prompt": "agents/viral-concept-strategist/system.md"
       },
       "viral-copy-producer": {
+        "capability_refs": [
+          "capability:capability_set:package:viral-content:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Viral Copy Producer",
         "description": "Creates complete long-form and short-form text with claim traceability.",
         "base_role": "delegated-worker",
-        "prompt": "agents/viral-copy-producer/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "default_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-        "package_skill_refs": [
-          "viral-content/shared/workflow",
-          "viral-content/shared/method",
-          "viral-content/shared/acceptance"
-        ],
-        "package_tool_refs": [
-          "viral-content/shared/publish-viral-content-artifact"
-        ]
+        "prompt": "agents/viral-copy-producer/system.md"
       },
       "viral-content-reviewer": {
+        "capability_refs": [
+          "capability:capability_set:package:viral-content:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:fact-check-base"
+        ],
         "label": "Viral Content Reviewer",
         "description": "Independently reviews the one copy-pack predecessor and publishes corrections.",
         "base_role": "fact-check",
-        "prompt": "agents/viral-content-reviewer/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "default_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-        "package_skill_refs": [
-          "viral-content/shared/workflow",
-          "viral-content/shared/method",
-          "viral-content/shared/acceptance"
-        ],
-        "package_tool_refs": [
-          "viral-content/shared/publish-viral-content-artifact"
-        ]
+        "prompt": "agents/viral-content-reviewer/system.md"
       },
       "viral-delivery-owner": {
+        "capability_refs": [
+          "capability:capability_set:package:viral-content:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:build-base"
+        ],
         "label": "Viral Campaign Delivery Owner",
         "description": "Resolves review findings and publishes the canonical campaign resources.",
         "base_role": "build",
-        "prompt": "agents/viral-delivery-owner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "default_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-        "package_skill_refs": [
-          "viral-content/shared/workflow",
-          "viral-content/shared/method",
-          "viral-content/shared/acceptance"
-        ],
-        "package_tool_refs": [
-          "viral-content/shared/publish-viral-content-artifact"
-        ]
+        "prompt": "agents/viral-delivery-owner/system.md"
       }
     },
     "virtual_workflows": {

@@ -7,7 +7,7 @@ import { ComputerMCPBuiltin } from "./computer/builtin"
 import { ComputerHostRuntime } from "./computer/host-runtime"
 import { computerRuntimeScopeIdentity } from "./computer/runtime-scope"
 import { canonicalDigestSource, compareCanonicalStrings } from "@/util/canonical-digest"
-import { capabilityRef, type CapabilityRef } from "@/capability/ref"
+import { capabilityRef, type CapabilityRef } from "@opencorvus-ai/util/capability-ref"
 import { mergeProviderToolMaps } from "@/tool/provider-name-authority"
 
 type HostSessionRuntimeKind = "browser" | "computer"

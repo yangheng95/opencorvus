@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "base",
   "name": "Base",
   "label": "Base",
   "description": "Built-in Planner-first Expert Squad for compact capability-matched delivery and independent verification of the settled result.",
-  "version": "2026.08.22.4",
+  "version": "2026.08.30.1",
   "product_pillars": [
     "code",
     "work"
@@ -16,169 +16,94 @@
     "selection_guidance": "Select Base when one Planner can partition the complete Task into capability-matched implementation and acceptance ownership. Use the research workflow only for a complete independent read/web partition; use the execution workflow when source discovery requires a project Skill, command, client, or mutating browser. Select Advanced or a domain Squad when evidence dependencies require a richer graph.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 2 projections.",
+      "member_refs": [
+        "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fcheck",
+        "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fclick",
+        "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fdiagnostics_get",
+        "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fhover",
+        "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fnavigate",
+        "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fobserve",
+        "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fpress_key",
+        "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fscreenshot",
+        "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fscroll",
+        "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fselect_option",
+        "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fsession_create",
+        "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fsession_destroy",
+        "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Ftype",
+        "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Funcheck",
+        "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fviewport_set",
+        "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fwait_for_load",
+        "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fwait_for_selector",
+        "capability:skill:package:base:base%2Fshared%2Fmethod"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:skill:package:base:base%2Fshared%2Fmethod",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "base/shared/method"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "base-researcher": {
+        "capability_refs": [
+          "capability:capability_set:platform:tool-registry:explore-base",
+          "capability:skill:package:base:base%2Fshared%2Fmethod",
+          "capability:tool:platform:tool-registry:external_code_search",
+          "capability:tool:platform:tool-registry:webfetch",
+          "capability:tool:platform:tool-registry:websearch"
+        ],
         "label": "Base Researcher",
         "description": "Performs read-oriented repository and relevant external research and publishes the canonical Base research report.",
         "base_role": "explore",
-        "prompt": "agents/base-researcher/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [
-          "webfetch",
-          "websearch",
-          "external_code_search"
-        ],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "base/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/base-researcher/system.md"
       },
       "base-planner": {
+        "capability_refs": [
+          "capability:skill:package:base:base%2Fshared%2Fmethod",
+          "capability:tool:platform:tool-registry:bash",
+          "capability:tool:platform:tool-registry:capability_search",
+          "capability:tool:platform:tool-registry:external_code_search",
+          "capability:tool:platform:tool-registry:glob",
+          "capability:tool:platform:tool-registry:read",
+          "capability:tool:platform:tool-registry:search_code",
+          "capability:tool:platform:tool-registry:skill",
+          "capability:tool:platform:tool-registry:webfetch",
+          "capability:tool:platform:tool-registry:websearch"
+        ],
         "label": "Base Planner",
         "description": "Publishes one capability-matched Task implementation plan after read-only current-authority discovery, without mutating external state, editing product files, or creating Goal-derived planning facts.",
         "base_role": "delegated-worker",
-        "prompt": "agents/base-planner/system.md",
-        "inherit_base_tools": false,
-        "built_in_tool_ids": [
-          "capability_search",
-          "read",
-          "glob",
-          "search_code",
-          "webfetch",
-          "websearch",
-          "external_code_search",
-          "skill",
-          "bash"
-        ],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "base/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/base-planner/system.md"
       },
       "base-developer": {
+        "capability_refs": [
+          "capability:capability_set:package:base:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:build-base"
+        ],
         "label": "Base Developer",
         "description": "Consumes the selected Base implementation plan, changes the repository, performs implementation-owned checks, and publishes the development report.",
         "base_role": "build",
-        "prompt": "agents/base-developer/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "base/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [
-          "default/mcp/browser/tool/session_create",
-          "default/mcp/browser/tool/session_destroy",
-          "default/mcp/browser/tool/viewport_set",
-          "default/mcp/browser/tool/navigate",
-          "default/mcp/browser/tool/diagnostics_get",
-          "default/mcp/browser/tool/screenshot",
-          "default/mcp/browser/tool/observe",
-          "default/mcp/browser/tool/click",
-          "default/mcp/browser/tool/hover",
-          "default/mcp/browser/tool/type",
-          "default/mcp/browser/tool/press_key",
-          "default/mcp/browser/tool/select_option",
-          "default/mcp/browser/tool/check",
-          "default/mcp/browser/tool/uncheck",
-          "default/mcp/browser/tool/scroll",
-          "default/mcp/browser/tool/wait_for_selector",
-          "default/mcp/browser/tool/wait_for_load"
-        ],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/base-developer/system.md"
       },
       "base-tester": {
+        "capability_refs": [
+          "capability:capability_set:package:base:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Base Tester",
         "description": "Independently verifies the settled implementation against the original request and the plan's acceptance criteria through the final diff, executable checks, and rendered evidence, and publishes the canonical test report.",
         "base_role": "delegated-worker",
-        "prompt": "agents/base-tester/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "base/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [
-          "default/mcp/browser/tool/session_create",
-          "default/mcp/browser/tool/session_destroy",
-          "default/mcp/browser/tool/viewport_set",
-          "default/mcp/browser/tool/navigate",
-          "default/mcp/browser/tool/diagnostics_get",
-          "default/mcp/browser/tool/screenshot",
-          "default/mcp/browser/tool/observe",
-          "default/mcp/browser/tool/click",
-          "default/mcp/browser/tool/hover",
-          "default/mcp/browser/tool/type",
-          "default/mcp/browser/tool/press_key",
-          "default/mcp/browser/tool/select_option",
-          "default/mcp/browser/tool/check",
-          "default/mcp/browser/tool/uncheck",
-          "default/mcp/browser/tool/scroll",
-          "default/mcp/browser/tool/wait_for_selector",
-          "default/mcp/browser/tool/wait_for_load"
-        ],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/base-tester/system.md"
       }
     },
     "virtual_workflows": {

@@ -20,7 +20,7 @@ import {
   type CapabilityDescriptor as CapabilityDescriptorValue,
 } from "../../src/capability/descriptor"
 import { RuntimeCapabilityCatalog } from "../../src/tool/capability-runtime-catalog"
-import { capabilityRef, CapabilityRefCodec } from "../../src/capability/ref"
+import { capabilityRef, CapabilityRefCodec } from "@opencorvus-ai/util/capability-ref"
 import { createHarnessProjection } from "../../src/capability/harness-projection"
 import { memoryProject } from "../fixture/memory"
 import { Instance } from "../../src/project/instance"

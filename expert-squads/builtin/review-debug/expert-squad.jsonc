@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "review-debug",
   "name": "Review & Debug",
   "label": "Review & Debug",
   "description": "Evidence-backed product review, root-cause debugging, product-source repair, and independent repair verification through durable catalog facts and visible narrative Turn summaries.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.30.1",
   "product_pillars": [
     "code"
   ],
@@ -15,137 +15,83 @@
     "selection_guidance": "Select Review & Debug only when the Task already identifies the concrete repository/revision and review target or reproducible defect evidence; bootstrap repository and issue selection under Advanced first. Keep independent audit responsible for post-delivery test artifacts and independent audit reports.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 3 projections.",
+      "member_refs": [
+        "capability:skill:package:review-debug:review-debug%2Fshared%2Fworkflow"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:skill:package:review-debug:review-debug%2Fshared%2Fworkflow",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "review-debug/shared/workflow"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "review-debug-code-reviewer": {
+        "capability_refs": [
+          "capability:capability_set:package:review-debug:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Review & Debug Code Reviewer",
         "description": "Reviews the change and complete call graph for correctness, regressions, architectural violations, and causal clues.",
         "base_role": "delegated-worker",
-        "prompt": "agents/review-debug-code-reviewer/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "review-debug/shared/workflow"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/review-debug-code-reviewer/system.md"
       },
       "review-debug-root-cause-investigator": {
+        "capability_refs": [
+          "capability:capability_set:package:review-debug:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:deep-research-base"
+        ],
         "label": "Review & Debug Root Cause Investigator",
         "description": "Proves the causal chain from observable symptom through trigger and data flow to the underlying design or implementation fault.",
         "base_role": "deep-research",
-        "prompt": "agents/review-debug-root-cause-investigator/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "review-debug/shared/workflow"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/review-debug-root-cause-investigator/system.md"
       },
       "review-debug-repair-implementer": {
+        "capability_refs": [
+          "capability:capability_set:platform:tool-registry:build-base",
+          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fcheck",
+          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fclick",
+          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fdiagnostics_get",
+          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fhover",
+          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fnavigate",
+          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fobserve",
+          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fpress_key",
+          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fscreenshot",
+          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fscroll",
+          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fselect_option",
+          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fsession_create",
+          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fsession_destroy",
+          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Ftype",
+          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Funcheck",
+          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fviewport_set",
+          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fwait_for_load",
+          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fwait_for_selector",
+          "capability:skill:package:review-debug:review-debug%2Fshared%2Fworkflow"
+        ],
         "label": "Review & Debug Repair Implementer",
         "description": "Repairs the proven product root cause, removes the superseded path, adds regression tests, and verifies the changed surface.",
         "base_role": "build",
-        "prompt": "agents/review-debug-repair-implementer/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "review-debug/shared/workflow"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [
-          "default/mcp/browser/tool/session_create",
-          "default/mcp/browser/tool/session_destroy",
-          "default/mcp/browser/tool/viewport_set",
-          "default/mcp/browser/tool/navigate",
-          "default/mcp/browser/tool/diagnostics_get",
-          "default/mcp/browser/tool/screenshot",
-          "default/mcp/browser/tool/observe",
-          "default/mcp/browser/tool/click",
-          "default/mcp/browser/tool/hover",
-          "default/mcp/browser/tool/type",
-          "default/mcp/browser/tool/press_key",
-          "default/mcp/browser/tool/select_option",
-          "default/mcp/browser/tool/check",
-          "default/mcp/browser/tool/uncheck",
-          "default/mcp/browser/tool/scroll",
-          "default/mcp/browser/tool/wait_for_selector",
-          "default/mcp/browser/tool/wait_for_load"
-        ],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/review-debug-repair-implementer/system.md"
       },
       "review-debug-planner": {
+        "capability_refs": [
+          "capability:capability_set:package:review-debug:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Review and Debug Planner",
         "description": "Publishes the exact reproduction, affected call graph, worker partition, and repair acceptance contract.",
         "base_role": "delegated-worker",
-        "prompt": "agents/review-debug-planner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "review-debug/shared/workflow"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/review-debug-planner/system.md"
       }
     },
     "virtual_workflows": {

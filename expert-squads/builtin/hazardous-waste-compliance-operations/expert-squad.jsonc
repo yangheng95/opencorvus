@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "hazardous-waste-compliance-operations",
   "name": "Hazardous Waste Compliance Operations",
   "label": "Hazardous Waste Compliance Operations",
   "description": "Source-bound waste-stream determinations, generator/accumulation evidence, and manifest-to-disposition reconciliation without legal, handling, shipping, or disposal authority.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.30.1",
   "product_pillars": [
     "work"
   ],
@@ -15,119 +15,66 @@
     "selection_guidance": "Select for waste-stream/process identity, determination evidence, generator category by site/month, accumulation-unit controls, and manifest/disposition chain reconciliation. Do not select for handling waste, emergency response, legal conclusions, signing/submitting manifests, or treatment/disposal decisions.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 4 projections.",
+      "member_refs": [
+        "capability:skill:package:hazardous-waste-compliance-operations:hazardous-waste-compliance-operations%2Fshared%2Fmethod"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:skill:package:hazardous-waste-compliance-operations:hazardous-waste-compliance-operations%2Fshared%2Fmethod",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "hazardous-waste-compliance-operations/shared/method"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "hazardous-waste-stream-determination-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:hazardous-waste-compliance-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:explore-base"
+        ],
         "label": "Hazardous Waste Stream Determination Analyst",
         "description": "Traces generation process, material identity, sampling, analytical, process-knowledge, and source-bound determination evidence.",
         "base_role": "explore",
-        "prompt": "agents/hazardous-waste-stream-determination-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "hazardous-waste-compliance-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/hazardous-waste-stream-determination-analyst/system.md"
       },
       "generator-accumulation-compliance-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:hazardous-waste-compliance-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Generator Accumulation Compliance Analyst",
         "description": "Reconciles site-and-month generation quantities, category evidence, accumulation-unit identity, inspections, training, and contingency records.",
         "base_role": "delegated-worker",
-        "prompt": "agents/generator-accumulation-compliance-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "hazardous-waste-compliance-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/generator-accumulation-compliance-analyst/system.md"
       },
       "hazardous-waste-manifest-disposition-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:hazardous-waste-compliance-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Hazardous Waste Manifest Disposition Analyst",
         "description": "Reconciles manifest lines, parties, signatures, amendments, discrepancies, exception evidence, receipt, and final disposition records.",
         "base_role": "delegated-worker",
-        "prompt": "agents/hazardous-waste-manifest-disposition-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "hazardous-waste-compliance-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/hazardous-waste-manifest-disposition-analyst/system.md"
       },
       "hazardous-waste-compliance-operations-review-owner": {
+        "capability_refs": [
+          "capability:capability_set:package:hazardous-waste-compliance-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Hazardous Waste Compliance Operations Review Owner",
         "description": "Joins determination, generator/accumulation, and manifest/disposition evidence while preserving qualified and regulatory authority.",
         "base_role": "delegated-worker",
-        "prompt": "agents/hazardous-waste-compliance-operations-review-owner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "hazardous-waste-compliance-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/hazardous-waste-compliance-operations-review-owner/system.md"
       }
     },
     "virtual_workflows": {

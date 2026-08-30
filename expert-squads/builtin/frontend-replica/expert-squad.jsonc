@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "frontend-replica",
   "name": "Frontend Replica",
   "label": "Frontend Replica",
   "description": "Source URL and reference-screenshot replica with a desktop surface ledger, rendered proof, durable catalog facts, and visible narrative Turn summaries.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.30.1",
   "product_pillars": [
     "code"
   ],
@@ -15,215 +15,121 @@
     "selection_guidance": "Select frontend-replica only when the requested outcome is source-bound interface parity.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 4 projections.",
+      "member_refs": [
+        "capability:skill:package:frontend-replica:frontend-replica%2Fshared%2Facceptance"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:skill:package:frontend-replica:frontend-replica%2Fshared%2Facceptance",
+        "capability:tool:platform:tool-registry:bash",
+        "capability:tool:platform:tool-registry:browser_preview",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "browser_preview",
-        "bash"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "frontend-replica/shared/acceptance"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "frontend-replica-explorer": {
+        "capability_refs": [
+          "capability:capability_set:package:frontend-replica:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:explore-base"
+        ],
         "label": "Frontend Replica Explorer",
         "description": "Locates target implementation surfaces, assets, primitives, and integration constraints.",
         "base_role": "explore",
-        "prompt": "agents/frontend-replica-explorer/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "frontend-replica/shared/acceptance"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/frontend-replica-explorer/system.md"
       },
       "frontend-replica-intent-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:frontend-replica:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:intent-analysis-base"
+        ],
         "label": "Frontend Replica Intent Analyst",
         "description": "Classifies source, target, desktop scope, evidence gaps, and parity obligations.",
         "base_role": "intent-analysis",
-        "prompt": "agents/frontend-replica-intent-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "frontend-replica/shared/acceptance"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/frontend-replica-intent-analyst/system.md"
       },
       "frontend-replica-interface-modeler": {
+        "capability_refs": [
+          "capability:capability_set:platform:tool-registry:frontend-design-base",
+          "capability:skill:package:frontend-replica:frontend-replica%2Fshared%2Facceptance",
+          "capability:tool:package:frontend-replica:frontend-replica%2Ffrontend-replica-interface-modeler%2Fgenerate-source-project",
+          "capability:tool:platform:default-tool-registry:default%2Ftool%2Fcreate_visual_region_binding_package",
+          "capability:tool:platform:default-tool-registry:default%2Ftool%2Fcreate_visual_region_coordinate_atlas"
+        ],
         "label": "Frontend Replica Interface Modeler",
         "description": "Generates the sole task-scoped source-bound interface model and implementation contract.",
         "base_role": "frontend-design",
-        "prompt": "agents/frontend-replica-interface-modeler/system.md",
-        "inherit_base_tools": true,
-        "default_tool_refs": [
-          "default/tool/create_visual_region_coordinate_atlas",
-          "default/tool/create_visual_region_binding_package"
-        ],
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "frontend-replica/shared/acceptance"
-        ],
-        "package_tool_refs": [
-          "frontend-replica/frontend-replica-interface-modeler/generate-source-project"
-        ],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/frontend-replica-interface-modeler/system.md"
       },
       "frontend-replica-source-researcher": {
+        "capability_refs": [
+          "capability:capability_set:platform:tool-registry:frontend-research-base",
+          "capability:skill:package:frontend-replica:frontend-replica%2Fshared%2Facceptance",
+          "capability:tool:package:frontend-replica:frontend-replica%2Ffrontend-replica-source-researcher%2Fprepare-source-context",
+          "capability:tool:platform:default-tool-registry:default%2Ftool%2Fwebpage_compile",
+          "capability:tool:platform:default-tool-registry:default%2Ftool%2Fwebpage_extract",
+          "capability:tool:platform:default-tool-registry:default%2Ftool%2Fwebpage_runtime_state"
+        ],
         "label": "Frontend Replica Source Researcher",
         "description": "Captures source-page structure, state, content, interaction, and screenshot evidence.",
         "base_role": "frontend-research",
-        "prompt": "agents/frontend-replica-source-researcher/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "frontend-replica/shared/acceptance"
-        ],
-        "default_tool_refs": [
-          "default/tool/webpage_extract",
-          "default/tool/webpage_compile",
-          "default/tool/webpage_runtime_state"
-        ],
-        "package_tool_refs": [
-          "frontend-replica/frontend-replica-source-researcher/prepare-source-context"
-        ],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/frontend-replica-source-researcher/system.md"
       },
       "frontend-replica-workload-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:frontend-replica:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:goal-workload-analyst-base"
+        ],
         "label": "Frontend Replica Workload Analyst",
         "description": "Sizes source evidence, surface implementation, interaction, and visual verification work.",
         "base_role": "goal-workload-analyst",
-        "prompt": "agents/frontend-replica-workload-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "frontend-replica/shared/acceptance"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/frontend-replica-workload-analyst/system.md"
       },
       "frontend-replica-implementer": {
+        "capability_refs": [
+          "capability:capability_set:platform:tool-registry:build-base",
+          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fcheck",
+          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fclick",
+          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fdiagnostics_get",
+          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fhover",
+          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fnavigate",
+          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fobserve",
+          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fpress_key",
+          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fscreenshot",
+          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fscroll",
+          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fselect_option",
+          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fsession_create",
+          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fsession_destroy",
+          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Ftype",
+          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Funcheck",
+          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fviewport_set",
+          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fwait_for_load",
+          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fwait_for_selector",
+          "capability:skill:package:frontend-replica:frontend-replica%2Fshared%2Facceptance"
+        ],
         "label": "Frontend Replica Implementer",
         "description": "Implements the same source-bound surface in the target project.",
         "base_role": "build",
-        "prompt": "agents/frontend-replica-implementer/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "frontend-replica/shared/acceptance"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [
-          "default/mcp/browser/tool/session_create",
-          "default/mcp/browser/tool/session_destroy",
-          "default/mcp/browser/tool/viewport_set",
-          "default/mcp/browser/tool/navigate",
-          "default/mcp/browser/tool/diagnostics_get",
-          "default/mcp/browser/tool/screenshot",
-          "default/mcp/browser/tool/observe",
-          "default/mcp/browser/tool/click",
-          "default/mcp/browser/tool/hover",
-          "default/mcp/browser/tool/type",
-          "default/mcp/browser/tool/press_key",
-          "default/mcp/browser/tool/select_option",
-          "default/mcp/browser/tool/check",
-          "default/mcp/browser/tool/uncheck",
-          "default/mcp/browser/tool/scroll",
-          "default/mcp/browser/tool/wait_for_selector",
-          "default/mcp/browser/tool/wait_for_load"
-        ],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/frontend-replica-implementer/system.md"
       },
       "frontend-replica-planner": {
+        "capability_refs": [
+          "capability:capability_set:package:frontend-replica:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Frontend Replica Planner",
         "description": "Publishes one source-bound replica plan, region ownership map, and acceptance allocation for parallel specialist execution.",
         "base_role": "delegated-worker",
-        "prompt": "agents/frontend-replica-planner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "frontend-replica/shared/acceptance"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/frontend-replica-planner/system.md"
       }
     },
     "virtual_workflows": {

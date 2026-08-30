@@ -7,6 +7,7 @@ import { PromptProfileResolver } from "../../src/expert-squad/prompt-profile-res
 import { ExpertSquadRegistry } from "../../src/expert-squad/registry"
 import { Instance } from "../../src/project/instance"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
+import { allCapabilityGrants } from "./capability-grant-fixture"
 
 const packages = [
   {
@@ -218,10 +219,10 @@ describe("Tenth ten-domain Expert Squad package expansion", () => {
       const agents = loaded.manifest.capability_projection.agents
 
       expect(loaded.manifest).toMatchObject({
-        schema_version: 1,
+        schema_version: 2,
         namespace: "builtin",
         id: definition.id,
-        version: "2026.08.13.1",
+        version: "2026.08.30.1",
       })
       expect([...loaded.packageSkills.keys()]).toEqual([skillRef])
       expect(method.definition.name).toBe(`${definition.id}-method`)
@@ -262,9 +263,8 @@ describe("Tenth ten-domain Expert Squad package expansion", () => {
       ).toEqual(assetContents.map(() => true))
       expect(references.length).toBeGreaterThanOrEqual(2)
       expect(references.map((file) => file.bytes > 400)).toEqual(references.map(() => true))
-      expect(loaded.manifest.capability_projection.scheduler.package_skill_refs).toEqual([skillRef])
-      expect(Object.values(agents).map((agent) => agent.package_skill_refs)).toEqual(
-        Object.values(agents).map(() => [skillRef]),
+      expect(allCapabilityGrants(loaded.manifest).map((grant) => grant.packageSkillRefs)).toEqual(
+        allCapabilityGrants(loaded.manifest).map(() => [skillRef]),
       )
       expect(roots).toEqual([...definition.roots])
       expect([...workflow.nodes[definition.join]!.depends_on].sort()).toEqual([...definition.roots].sort())

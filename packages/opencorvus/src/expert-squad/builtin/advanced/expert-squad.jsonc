@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "advanced",
   "name": "Advanced",
   "label": "Advanced",
   "description": "Built-in advanced software delivery team with capability-matched Requirements-to-Architect traceability, execution, testing, interface, and independent-review frontiers.",
-  "version": "2026.08.22.6",
+  "version": "2026.08.30.2",
   "product_pillars": [
     "code",
     "work"
@@ -16,385 +16,200 @@
     "selection_guidance": "Select advanced when the delivery materially requires the full Requirements, architecture, implementation, testing, interface, investigation, and independent-review contract; choose the researched workflow only when external web evidence must precede Requirements.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 2 projections.",
+      "member_refs": [
+        "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fcheck",
+        "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fclick",
+        "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fdiagnostics_get",
+        "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fhover",
+        "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fnavigate",
+        "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fobserve",
+        "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fpress_key",
+        "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fscreenshot",
+        "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fscroll",
+        "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fselect_option",
+        "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fsession_create",
+        "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fsession_destroy",
+        "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Ftype",
+        "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Funcheck",
+        "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fviewport_set",
+        "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fwait_for_load",
+        "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fwait_for_selector",
+        "capability:skill:package:advanced:advanced%2Fshared%2Fmethod"
+      ]
+    },
+    "shared-capabilities-2": {
+      "description": "Shared capabilities used by 2 projections.",
+      "member_refs": [
+        "capability:skill:package:advanced:advanced%2Fshared%2Fmethod",
+        "capability:skill:platform:skill-manager:default%2Fskill%2Fgrill-me"
+      ]
+    },
+    "shared-capabilities-3": {
+      "description": "Shared capabilities used by 10 projections.",
+      "member_refs": [
+        "capability:skill:package:advanced:advanced%2Fshared%2Fmethod"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:package:advanced:shared-capabilities-2",
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task"
-      ],
-      "default_skill_refs": [
-        "default/skill/grill-me"
-      ],
-      "package_skill_refs": [
-        "advanced/shared/method"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "request-interpreter": {
+        "capability_refs": [
+          "capability:capability_set:package:advanced:shared-capabilities-3",
+          "capability:capability_set:platform:tool-registry:intent-analysis-base"
+        ],
         "label": "Request Interpreter",
         "description": "Clarifies intent, missing inputs, scope boundaries, and operator decisions.",
         "base_role": "intent-analysis",
-        "prompt": "agents/request-interpreter/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "advanced/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/request-interpreter/system.md"
       },
       "requirement-engineer": {
+        "capability_refs": [
+          "capability:capability_set:package:advanced:shared-capabilities-2",
+          "capability:capability_set:platform:tool-registry:requirements-base"
+        ],
         "label": "Requirement Engineer",
         "description": "Registers falsifiable requirements and foundational decisions from current evidence.",
         "base_role": "requirements",
-        "prompt": "agents/requirement-engineer/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [
-          "default/skill/grill-me"
-        ],
-        "package_skill_refs": [
-          "advanced/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/requirement-engineer/system.md"
       },
       "solution-architect": {
+        "capability_refs": [
+          "capability:capability_set:package:advanced:shared-capabilities-3",
+          "capability:capability_set:platform:tool-registry:architect-base"
+        ],
         "label": "Solution Architect",
         "description": "Creates traceable interface contracts, independently revisioned Delivery Slices, and assembly ownership.",
         "base_role": "architect",
-        "prompt": "agents/solution-architect/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "advanced/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/solution-architect/system.md"
       },
       "workload-reviewer": {
+        "capability_refs": [
+          "capability:capability_set:package:advanced:shared-capabilities-3",
+          "capability:capability_set:platform:tool-registry:goal-workload-analyst-base"
+        ],
         "label": "Workload Reviewer",
         "description": "Assesses Delivery Slice size, coupling, omitted work, acceptance coverage, and verification cost without acting as an architecture authority.",
         "base_role": "goal-workload-analyst",
-        "prompt": "agents/workload-reviewer/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "advanced/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/workload-reviewer/system.md"
       },
       "source-investigator": {
+        "capability_refs": [
+          "capability:skill:package:advanced:advanced%2Fshared%2Fmethod",
+          "capability:tool:platform:tool-registry:bash",
+          "capability:tool:platform:tool-registry:glob",
+          "capability:tool:platform:tool-registry:read",
+          "capability:tool:platform:tool-registry:search_code",
+          "capability:tool:platform:tool-registry:skill"
+        ],
         "label": "Source Investigator",
         "description": "Performs read-only repository and projected-client authority investigation and records source-grounded evidence.",
         "base_role": "delegated-worker",
-        "prompt": "agents/source-investigator/system.md",
-        "inherit_base_tools": false,
-        "built_in_tool_ids": [
-          "read",
-          "glob",
-          "search_code",
-          "bash",
-          "skill"
-        ],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "advanced/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/source-investigator/system.md"
       },
       "research-investigator": {
+        "capability_refs": [
+          "capability:capability_set:package:advanced:shared-capabilities-3",
+          "capability:capability_set:platform:tool-registry:deep-research-base"
+        ],
         "label": "Research Investigator",
         "description": "Collects durable multi-source external evidence and separates fact from inference.",
         "base_role": "deep-research",
-        "prompt": "agents/research-investigator/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "advanced/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/research-investigator/system.md"
       },
       "interface-investigator": {
+        "capability_refs": [
+          "capability:capability_set:package:advanced:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:frontend-research-base"
+        ],
         "label": "Interface Investigator",
         "description": "Captures interface structure, behavior, states, assets, and reference evidence.",
         "base_role": "frontend-research",
-        "prompt": "agents/interface-investigator/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "advanced/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [
-          "default/mcp/browser/tool/session_create",
-          "default/mcp/browser/tool/session_destroy",
-          "default/mcp/browser/tool/viewport_set",
-          "default/mcp/browser/tool/navigate",
-          "default/mcp/browser/tool/diagnostics_get",
-          "default/mcp/browser/tool/screenshot",
-          "default/mcp/browser/tool/observe",
-          "default/mcp/browser/tool/click",
-          "default/mcp/browser/tool/hover",
-          "default/mcp/browser/tool/type",
-          "default/mcp/browser/tool/press_key",
-          "default/mcp/browser/tool/select_option",
-          "default/mcp/browser/tool/check",
-          "default/mcp/browser/tool/uncheck",
-          "default/mcp/browser/tool/scroll",
-          "default/mcp/browser/tool/wait_for_selector",
-          "default/mcp/browser/tool/wait_for_load"
-        ],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/interface-investigator/system.md"
       },
       "interface-designer": {
+        "capability_refs": [
+          "capability:capability_set:package:advanced:shared-capabilities-3",
+          "capability:capability_set:platform:tool-registry:frontend-design-base"
+        ],
         "label": "Interface Designer",
         "description": "Produces a traceable interface design and implementation contract from approved evidence.",
         "base_role": "frontend-design",
-        "prompt": "agents/interface-designer/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "advanced/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/interface-designer/system.md"
       },
       "implementation-engineer": {
+        "capability_refs": [
+          "capability:capability_set:package:advanced:shared-capabilities-3",
+          "capability:capability_set:platform:tool-registry:build-base"
+        ],
         "label": "Implementation Engineer",
         "description": "Implements the Architect contract and produces repository, command, and runtime evidence without taking review ownership.",
         "base_role": "build",
-        "prompt": "agents/implementation-engineer/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "advanced/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/implementation-engineer/system.md"
       },
       "test-engineer": {
+        "capability_refs": [
+          "capability:capability_set:package:advanced:shared-capabilities-3",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Test Engineer",
         "description": "Independently executes applicable non-UI tests and runtime checks against implementation evidence and reports exact results.",
         "base_role": "delegated-worker",
-        "prompt": "agents/test-engineer/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "advanced/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/test-engineer/system.md"
       },
       "visual-reviewer": {
+        "capability_refs": [
+          "capability:capability_set:package:advanced:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:visual-qa-base"
+        ],
         "label": "Visual Reviewer",
         "description": "Reviews real rendered evidence, interaction states, and visual acceptance coverage.",
         "base_role": "visual-qa",
-        "prompt": "agents/visual-reviewer/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "advanced/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [
-          "default/mcp/browser/tool/session_create",
-          "default/mcp/browser/tool/session_destroy",
-          "default/mcp/browser/tool/viewport_set",
-          "default/mcp/browser/tool/navigate",
-          "default/mcp/browser/tool/diagnostics_get",
-          "default/mcp/browser/tool/screenshot",
-          "default/mcp/browser/tool/observe",
-          "default/mcp/browser/tool/click",
-          "default/mcp/browser/tool/hover",
-          "default/mcp/browser/tool/type",
-          "default/mcp/browser/tool/press_key",
-          "default/mcp/browser/tool/select_option",
-          "default/mcp/browser/tool/check",
-          "default/mcp/browser/tool/uncheck",
-          "default/mcp/browser/tool/scroll",
-          "default/mcp/browser/tool/wait_for_selector",
-          "default/mcp/browser/tool/wait_for_load"
-        ],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/visual-reviewer/system.md"
       },
       "system-integrity-reviewer": {
+        "capability_refs": [
+          "capability:capability_set:package:advanced:shared-capabilities-3",
+          "capability:capability_set:platform:tool-registry:integrity-base"
+        ],
         "label": "System Integrity Reviewer",
         "description": "Produces non-transferable independent system review across requirements, contracts, implementation, and evidence once implementation proof is ready.",
         "base_role": "integrity",
         "execution_contract": "platform_integrity_review",
-        "prompt": "agents/system-integrity-reviewer/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "advanced/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/system-integrity-reviewer/system.md"
       },
       "interface-integrity-reviewer": {
+        "capability_refs": [
+          "capability:capability_set:package:advanced:shared-capabilities-3",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Interface Integrity Reviewer",
         "description": "Performs an independent Task-scoped review of implemented interface behavior and rendered evidence without requiring a Delivery Slice planning graph.",
         "base_role": "delegated-worker",
-        "prompt": "agents/interface-integrity-reviewer/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "advanced/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/interface-integrity-reviewer/system.md"
       },
       "claim-verifier": {
+        "capability_refs": [
+          "capability:capability_set:package:advanced:shared-capabilities-3",
+          "capability:capability_set:platform:tool-registry:fact-check-base"
+        ],
         "label": "Claim Verifier",
         "description": "Verifies material factual claims against traceable evidence and reports uncertainty.",
         "base_role": "fact-check",
-        "prompt": "agents/claim-verifier/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "advanced/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/claim-verifier/system.md"
       }
     },
     "virtual_workflows": {

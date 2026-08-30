@@ -34,6 +34,7 @@ import { Message } from "../../src/session/message"
 import { SessionProcessor } from "../../src/session/processor"
 import { SkillMount } from "../../src/skill/mounts"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
+import { allCapabilityGrants } from "./capability-grant-fixture"
 
 const packageRoot = path.resolve(import.meta.dir, "../../../../expert-squads/builtin/light")
 const skillRef = "light/shared/method"
@@ -42,20 +43,20 @@ const agentRoles = {
   "light-planner": "delegated-worker",
 } as const
 const projectedReadOnlyTools = [
-  "artifact_search",
+  "artifact_publish",
   "artifact_read",
+  "artifact_search",
   "artifact_select",
   "artifact_snapshot",
-  "artifact_publish",
-  "publish_interactive_artifact",
   "capability_search",
-  "read",
+  "external_code_search",
   "glob",
+  "publish_interactive_artifact",
+  "read",
   "search_code",
+  "skill",
   "webfetch",
   "websearch",
-  "external_code_search",
-  "skill",
 ]
 const model = { providerID: "test", modelID: "light-parallel-dispatch" }
 
@@ -100,10 +101,6 @@ afterEach(async () => {
 describe("Light Expert Squad package", () => {
   test("loads exactly the Planner and Investigator advisory roles with one shared package Skill", async () => {
     const source = await ExpertSquadRegistry.loadSourcePackage(packageRoot)
-    const projections = [
-      source.manifest.capability_projection.scheduler,
-      ...Object.values(source.manifest.capability_projection.agents),
-    ]
 
     expect(source.manifest).toMatchObject({
       namespace: "builtin",
@@ -114,7 +111,11 @@ describe("Light Expert Squad package", () => {
     expect(Object.keys(source.manifest.capability_projection.agents).sort()).toEqual(Object.keys(agentRoles).sort())
     expect(source.manifest.capability_projection.virtual_workflows).toEqual({})
     expect([...source.packageSkills.keys()]).toEqual([skillRef])
-    expect(projections.map((projection) => projection.package_skill_refs)).toEqual([[skillRef], [skillRef], [skillRef]])
+    expect(allCapabilityGrants(source.manifest).map((grant) => grant.packageSkillRefs)).toEqual([
+      [skillRef],
+      [skillRef],
+      [skillRef],
+    ])
   })
 
   test("installs the released payload and projects the exact read-only advisory and Skill surfaces", async () => {
@@ -167,7 +168,7 @@ describe("Light Expert Squad package", () => {
               agentID: worker.identity.agentID,
               baseRole: worker.identity.baseRole,
               skillRefs: worker.productionSkills.map((entry) => entry.ref),
-              builtInToolIDs: worker.builtInToolIDs,
+              builtInToolIDs: [...worker.builtInToolIDs].sort(),
               expectedBaseRole,
             }
           }),
@@ -177,14 +178,14 @@ describe("Light Expert Squad package", () => {
             agentID: "light-investigator",
             baseRole: "delegated-worker",
             skillRefs: [skillRef],
-            builtInToolIDs: projectedReadOnlyTools,
+            builtInToolIDs: [...projectedReadOnlyTools].sort(),
             expectedBaseRole: "delegated-worker",
           },
           {
             agentID: "light-planner",
             baseRole: "delegated-worker",
             skillRefs: [skillRef],
-            builtInToolIDs: projectedReadOnlyTools,
+            builtInToolIDs: [...projectedReadOnlyTools].sort(),
             expectedBaseRole: "delegated-worker",
           },
         ])

@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "identity-access-governance",
   "name": "Identity Access Governance",
   "label": "Identity Access Governance",
   "description": "Identity lifecycle, account-entitlement, access-control and certification evidence joined for qualified governance review.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.30.1",
   "product_pillars": [
     "code",
     "work"
@@ -16,141 +16,76 @@
     "selection_guidance": "Select for authoritative identity lifecycle, account and entitlement correlation, access request/role/SoD controls, certifications and orphan-account review.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 5 projections.",
+      "member_refs": [
+        "capability:skill:package:identity-access-governance:identity-access-governance%2Fshared%2Fmethod"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:skill:package:identity-access-governance:identity-access-governance%2Fshared%2Fmethod",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "identity-access-governance/shared/method"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "authoritative-identity-lifecycle-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:identity-access-governance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:explore-base"
+        ],
         "label": "Authoritative Identity Lifecycle Analyst",
         "description": "Reconciles authoritative identity populations and Joiner-Mover-Leaver events.",
         "base_role": "explore",
-        "prompt": "agents/authoritative-identity-lifecycle-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "identity-access-governance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/authoritative-identity-lifecycle-analyst/system.md"
       },
       "account-entitlement-correlation-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:identity-access-governance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Account and Entitlement Correlation Analyst",
         "description": "Correlates identities, accounts, groups, roles and effective entitlements.",
         "base_role": "delegated-worker",
-        "prompt": "agents/account-entitlement-correlation-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "identity-access-governance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/account-entitlement-correlation-analyst/system.md"
       },
       "access-request-role-sod-control-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:identity-access-governance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Access Request, Role and SoD Control Analyst",
         "description": "Tests access-request, role and segregation-of-duties evidence.",
         "base_role": "delegated-worker",
-        "prompt": "agents/access-request-role-sod-control-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "identity-access-governance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/access-request-role-sod-control-analyst/system.md"
       },
       "access-certification-orphan-review-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:identity-access-governance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Access Certification and Orphan Review Analyst",
         "description": "Reviews certification populations, dormant and orphaned account evidence.",
         "base_role": "delegated-worker",
-        "prompt": "agents/access-certification-orphan-review-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "identity-access-governance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/access-certification-orphan-review-analyst/system.md"
       },
       "identity-access-governance-review-owner": {
+        "capability_refs": [
+          "capability:capability_set:package:identity-access-governance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Identity Access Governance Review Owner",
         "description": "Joins lifecycle, entitlement, control and certification evidence without deciding access.",
         "base_role": "delegated-worker",
-        "prompt": "agents/identity-access-governance-review-owner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "identity-access-governance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/identity-access-governance-review-owner/system.md"
       }
     },
     "virtual_workflows": {

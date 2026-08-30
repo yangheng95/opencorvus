@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "office-delivery",
   "name": "Office Delivery",
   "label": "Office Delivery",
   "description": "Develops new source-backed PPTX presentations through parallel content and format planning plus the qualified Work Artifact lifecycle.",
-  "version": "2026.08.13.4",
+  "version": "2026.08.30.1",
   "product_pillars": [
     "work"
   ],
@@ -15,104 +15,61 @@
     "selection_guidance": "Select Office Delivery only for a new PPTX presentation supported by the current office.presentation@1 profile. Do not select it for DOCX, XLSX, PDF, existing-presentation editing, or coordinated multi-format packs until those profiles are qualified.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 2 projections.",
+      "member_refs": [
+        "capability:skill:package:office-delivery:office-delivery%2Fshared%2Foffice-delivery-method"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:skill:package:office-delivery:office-delivery%2Fshared%2Foffice-delivery-method",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "office-delivery/shared/office-delivery-method"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "office-source-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:office-delivery:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:deep-research-base"
+        ],
         "label": "Office Source Analyst",
         "description": "Builds the dated source, claim, calculation, citation, terminology, and missing-input model.",
         "base_role": "deep-research",
-        "prompt": "agents/office-source-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "office-delivery/shared/office-delivery-method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/office-source-analyst/system.md"
       },
       "office-delivery-builder": {
+        "capability_refs": [
+          "capability:capability_set:platform:tool-registry:build-base",
+          "capability:skill:package:office-delivery:office-delivery%2Fshared%2Foffice-delivery-method",
+          "capability:skill:platform:skill-manager:default%2Fskill%2Fwork-artifacts",
+          "capability:tool:platform:tool-registry:work_artifact_author",
+          "capability:tool:platform:tool-registry:work_artifact_deliver",
+          "capability:tool:platform:tool-registry:work_artifact_inspect",
+          "capability:tool:platform:tool-registry:work_artifact_validate"
+        ],
         "label": "Office Delivery Builder",
         "description": "Builds editable deliverables and canonical exports directly from the Planner contract and original sources, then renders and inspects them.",
         "base_role": "build",
-        "prompt": "agents/office-delivery-builder/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [
-          "work_artifact_inspect",
-          "work_artifact_author",
-          "work_artifact_validate",
-          "work_artifact_deliver"
-        ],
-        "default_skill_refs": [
-          "default/skill/work-artifacts"
-        ],
-        "package_skill_refs": [
-          "office-delivery/shared/office-delivery-method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/office-delivery-builder/system.md"
       },
       "office-delivery-planner": {
+        "capability_refs": [
+          "capability:capability_set:package:office-delivery:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Office Delivery Planner",
         "description": "Publishes the source boundary, document structure, formatting system, worker partition, and acceptance allocation.",
         "base_role": "delegated-worker",
-        "prompt": "agents/office-delivery-planner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "office-delivery/shared/office-delivery-method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/office-delivery-planner/system.md"
       }
     },
     "virtual_workflows": {

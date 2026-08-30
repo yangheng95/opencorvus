@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "cloud-finops-cost-governance",
   "name": "Cloud FinOps Cost Governance",
   "label": "Cloud FinOps Cost Governance",
   "description": "Cloud cost, usage, billing quality, allocation, unit economics, forecast, commitment, optimization, anomaly, governance, and value evidence joined into a bounded FinOps review pack.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.30.1",
   "product_pillars": [
     "work"
   ],
@@ -15,141 +15,76 @@
     "selection_guidance": "Select for cloud, software-as-a-service, artificial-intelligence, platform, data, and other technology cost/usage ingestion; billing quality; allocation and unit economics; budget/forecast evidence; commitment and optimization candidates; anomalies; governance; and value linkage. Do not select to buy or exchange commitments, change production resources, create budgets, post accounting entries, determine tax treatment, enforce tags, contact vendors, or approve savings claims.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 5 projections.",
+      "member_refs": [
+        "capability:skill:package:cloud-finops-cost-governance:cloud-finops-cost-governance%2Fshared%2Fmethod"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:skill:package:cloud-finops-cost-governance:cloud-finops-cost-governance%2Fshared%2Fmethod",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "cloud-finops-cost-governance/shared/method"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "finops-cost-usage-billing-quality-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:cloud-finops-cost-governance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:explore-base"
+        ],
         "label": "FinOps Cost Usage and Billing Quality Analyst",
         "description": "Reconciles technology cost, usage, billing, currency, schema, invoice, and source-quality evidence.",
         "base_role": "explore",
-        "prompt": "agents/finops-cost-usage-billing-quality-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "cloud-finops-cost-governance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/finops-cost-usage-billing-quality-analyst/system.md"
       },
       "finops-allocation-unit-economics-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:cloud-finops-cost-governance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "FinOps Allocation and Unit Economics Analyst",
         "description": "Builds traceable direct, shared, and unallocated cost evidence plus versioned unit-economics calculations.",
         "base_role": "delegated-worker",
-        "prompt": "agents/finops-allocation-unit-economics-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "cloud-finops-cost-governance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/finops-allocation-unit-economics-analyst/system.md"
       },
       "finops-forecast-commitment-optimization-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:cloud-finops-cost-governance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "FinOps Forecast Commitment and Optimization Analyst",
         "description": "Compares source-grounded budget, forecast, commitment, utilization, and optimization evidence without transactions or changes.",
         "base_role": "delegated-worker",
-        "prompt": "agents/finops-forecast-commitment-optimization-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "cloud-finops-cost-governance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/finops-forecast-commitment-optimization-analyst/system.md"
       },
       "finops-anomaly-governance-value-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:cloud-finops-cost-governance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:explore-base"
+        ],
         "label": "FinOps Anomaly Governance and Value Analyst",
         "description": "Reconstructs cost anomalies, control ownership, exceptions, value links, and outcome uncertainty.",
         "base_role": "explore",
-        "prompt": "agents/finops-anomaly-governance-value-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "cloud-finops-cost-governance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/finops-anomaly-governance-value-analyst/system.md"
       },
       "cloud-finops-cost-governance-review-owner": {
+        "capability_refs": [
+          "capability:capability_set:package:cloud-finops-cost-governance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Cloud FinOps Cost Governance Review Owner",
         "description": "Joins billing, allocation, forecast, commitment, anomaly, governance, and value evidence while retaining human decision gates.",
         "base_role": "delegated-worker",
-        "prompt": "agents/cloud-finops-cost-governance-review-owner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "cloud-finops-cost-governance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/cloud-finops-cost-governance-review-owner/system.md"
       }
     },
     "virtual_workflows": {

@@ -10,6 +10,7 @@ import { Instance } from "../../src/project/instance"
 import { WORK_ARTIFACT_TOOL_IDS } from "../../src/work/harness"
 import { toolSwitchAllows } from "../../src/tool/execution-surface"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
+import { agentCapabilityGrants } from "./capability-grant-fixture"
 
 const packageRoot = path.resolve(import.meta.dir, "../../../..", "expert-squads", "builtin", "office-delivery")
 const workArtifactSkillRef = "default/skill/work-artifacts"
@@ -21,10 +22,10 @@ afterAll(async () => {
 describe("Office Delivery Work Artifact production capability", () => {
   test("projects the qualified Work Artifact tools and Skill only when the builder declares them", async () => {
     const loaded = await ExpertSquadRegistry.loadSourcePackage(packageRoot)
-    const builder = loaded.manifest.capability_projection.agents["office-delivery-builder"]!
+    const builder = agentCapabilityGrants(loaded.manifest, "office-delivery-builder")
 
-    expect(builder.built_in_tool_ids).toEqual([...WORK_ARTIFACT_TOOL_IDS])
-    expect(builder.default_skill_refs).toEqual([workArtifactSkillRef])
+    expect(builder.explicitBuiltInToolIDs).toEqual([...WORK_ARTIFACT_TOOL_IDS].sort())
+    expect(builder.defaultSkillRefs).toEqual([workArtifactSkillRef])
     expect(
       WORK_ARTIFACT_TOOL_IDS.map((toolID) =>
         AgentToolPool.projectableRuntimeTemplateBuiltInToolIDs("build").has(toolID),
@@ -33,7 +34,7 @@ describe("Office Delivery Work Artifact production capability", () => {
     const switches = promptToolSwitchesForAgentRun({
       role: "build",
       extraToolNames: [],
-      explicitProjectedToolNames: builder.built_in_tool_ids,
+      explicitProjectedToolNames: builder.explicitBuiltInToolIDs,
     })
     expect(WORK_ARTIFACT_TOOL_IDS.map((toolID) => toolSwitchAllows(toolID, switches))).toEqual(
       WORK_ARTIFACT_TOOL_IDS.map(() => true),

@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "squad-sdk",
   "name": "Generate Expert Squads",
   "label": "Generate Expert Squads",
   "description": "Evidence-led heterogeneous algorithm import and canonical generation of project-owned, traceable OpenCorvus Expert Squads with independent contract review.",
-  "version": "2026.08.21.1",
+  "version": "2026.08.30.3",
   "product_pillars": [
     "code",
     "work"
@@ -17,125 +17,72 @@
     "selection_guidance": "Select Generate Expert Squads only when the requested deliverable is a project-owned Expert Squad package or a lossless import of an external agent team. Use the resulting domain Squad, not Generate Expert Squads, for subsequent domain work.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 2 projections.",
+      "member_refs": [
+        "capability:skill:package:squad-sdk:squad-sdk%2Fshared%2Fauthoring"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:skill:package:squad-sdk:squad-sdk%2Fshared%2Fauthoring",
+        "capability:skill:package:squad-sdk:squad-sdk%2Fshared%2Fimport",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:expert_squad_author",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:multica_catalog",
+        "capability:tool:platform:tool-registry:multica_import",
+        "capability:tool:platform:tool-registry:multica_preview",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read",
-        "expert_squad_author",
-        "multica_catalog",
-        "multica_preview",
-        "multica_import"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "squad-sdk/shared/authoring",
-        "squad-sdk/shared/import"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "squad-sdk-source-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:squad-sdk:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:deep-research-base"
+        ],
         "label": "Generate Expert Squads Source Analyst",
         "description": "Extracts the source algorithm, domain boundary, actors, evidence flow, resources, portability constraints, and acceptance contract.",
         "base_role": "deep-research",
-        "prompt": "agents/squad-sdk-source-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "squad-sdk/shared/authoring"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/squad-sdk-source-analyst/system.md"
       },
       "squad-sdk-import-analyst": {
+        "capability_refs": [
+          "capability:capability_set:platform:tool-registry:deep-research-base",
+          "capability:skill:package:squad-sdk:squad-sdk%2Fshared%2Fimport"
+        ],
         "label": "Generate Expert Squads Import Analyst",
         "description": "Examines an external Squad's roster, instructions, Skill closures, MCP capabilities, mapping evidence, and portability blockers.",
         "base_role": "deep-research",
-        "prompt": "agents/squad-sdk-import-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "squad-sdk/shared/import"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/squad-sdk-import-analyst/system.md"
       },
       "squad-sdk-contract-reviewer": {
+        "capability_refs": [
+          "capability:capability_set:platform:tool-registry:fact-check-base",
+          "capability:skill:package:squad-sdk:squad-sdk%2Fshared%2Fauthoring",
+          "capability:skill:package:squad-sdk:squad-sdk%2Fshared%2Fimport"
+        ],
         "label": "Generate Expert Squads Contract Reviewer",
         "description": "Independently validates the complete authoring blueprint or import mapping against source evidence and package invariants.",
         "base_role": "fact-check",
-        "prompt": "agents/squad-sdk-contract-reviewer/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "squad-sdk/shared/authoring",
-          "squad-sdk/shared/import"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/squad-sdk-contract-reviewer/system.md"
       },
       "squad-sdk-planner": {
+        "capability_refs": [
+          "capability:capability_set:package:squad-sdk:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Generate Expert Squads Planner",
         "description": "Publishes the package boundary, flat Planner/parallel-worker topology, resource closure, and acceptance allocation.",
         "base_role": "delegated-worker",
-        "prompt": "agents/squad-sdk-planner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "squad-sdk/shared/authoring"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/squad-sdk-planner/system.md"
       }
     },
     "virtual_workflows": {

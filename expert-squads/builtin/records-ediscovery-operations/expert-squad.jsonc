@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "records-ediscovery-operations",
   "name": "Records and E-Discovery Operations",
   "label": "Records and E-Discovery Operations",
   "description": "Matter-authorized records, preservation, collection provenance, processing, review and production evidence without live collection, deletion, legal rulings or production authority.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.30.1",
   "product_pillars": [
     "work"
   ],
@@ -15,141 +15,76 @@
     "selection_guidance": "Select for matter authority, retention and hold sources, custodians and systems, collection provenance, processing, deduplication, families, search/review, privilege flags, request mapping and production evidence. Do not select for live collection, deletion, hold release, production, privilege/responsiveness/admissibility/spoliation decisions or legal advice.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 5 projections.",
+      "member_refs": [
+        "capability:skill:package:records-ediscovery-operations:records-ediscovery-operations%2Fshared%2Fmethod"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:skill:package:records-ediscovery-operations:records-ediscovery-operations%2Fshared%2Fmethod",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "records-ediscovery-operations/shared/method"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "custodian-source-collection-provenance-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:records-ediscovery-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Custodian Source Collection Provenance Analyst",
         "description": "Maps authorized custodians, systems, preservation and collection provenance without live collection.",
         "base_role": "delegated-worker",
-        "prompt": "agents/custodian-source-collection-provenance-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "records-ediscovery-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/custodian-source-collection-provenance-analyst/system.md"
       },
       "processing-dedup-search-review-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:records-ediscovery-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Processing Dedup Search Review Analyst",
         "description": "Reconciles processing, normalization, deduplication, family, search and review evidence.",
         "base_role": "delegated-worker",
-        "prompt": "agents/processing-dedup-search-review-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "records-ediscovery-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/processing-dedup-search-review-analyst/system.md"
       },
       "production-privilege-disposition-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:records-ediscovery-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Production Privilege Disposition Analyst",
         "description": "Builds request, privilege-flag, redaction, production and disposition evidence for counsel review.",
         "base_role": "delegated-worker",
-        "prompt": "agents/production-privilege-disposition-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "records-ediscovery-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/production-privilege-disposition-analyst/system.md"
       },
       "records-authority-retention-hold-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:records-ediscovery-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:explore-base"
+        ],
         "label": "Records Authority Retention Hold Analyst",
         "description": "Freezes matter authority, records schedules, retention, hold scope, notices and acknowledgement evidence.",
         "base_role": "explore",
-        "prompt": "agents/records-authority-retention-hold-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "records-ediscovery-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/records-authority-retention-hold-analyst/system.md"
       },
       "records-ediscovery-operations-review-owner": {
+        "capability_refs": [
+          "capability:capability_set:package:records-ediscovery-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Records Ediscovery Operations Review Owner",
         "description": "Joins all records and e-discovery branches into a conflict-preserving qualified review pack.",
         "base_role": "delegated-worker",
-        "prompt": "agents/records-ediscovery-operations-review-owner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "records-ediscovery-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/records-ediscovery-operations-review-owner/system.md"
       }
     },
     "virtual_workflows": {

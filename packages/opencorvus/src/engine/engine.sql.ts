@@ -3,7 +3,7 @@ import { sql } from "drizzle-orm"
 import { ProjectTable } from "@/project/project.sql"
 import { SessionTable } from "@/session/session.sql"
 import { Timestamps } from "@/storage/schema.sql"
-import type { ProductPillar } from "@opencorvus-ai/sdk/expert-squad-manifest-v1"
+import type { ProductPillar } from "@opencorvus-ai/sdk/expert-squad-manifest-v2"
 import type { SelectedWorkflowBinding } from "./workflow-binding"
 
 export type EngineBudget = {

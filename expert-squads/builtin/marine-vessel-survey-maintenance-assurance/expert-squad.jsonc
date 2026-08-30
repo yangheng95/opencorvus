@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "marine-vessel-survey-maintenance-assurance",
   "name": "Marine Vessel Survey Maintenance Assurance",
   "label": "Marine Vessel Survey Maintenance Assurance",
   "description": "Marine vessel identity, statutory/class source, hull survey, machinery/electrical maintenance, defect, repair, nonconformity and verification evidence assurance without seaworthiness or sailing authority.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.30.1",
   "product_pillars": [
     "work"
   ],
@@ -15,141 +15,76 @@
     "selection_guidance": "Select for vessel identity, flag/class/statutory record trace, hull/structure condition, machinery/electrical maintenance, critical equipment, defects, repairs, nonconformities or survey verification. Do not select to declare seaworthiness, class/certificate validity, authorize sailing, issue a survey or accept a defect.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 5 projections.",
+      "member_refs": [
+        "capability:skill:package:marine-vessel-survey-maintenance-assurance:marine-vessel-survey-maintenance-assurance%2Fshared%2Fmethod"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:skill:package:marine-vessel-survey-maintenance-assurance:marine-vessel-survey-maintenance-assurance%2Fshared%2Fmethod",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "marine-vessel-survey-maintenance-assurance/shared/method"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "vessel-identity-statutory-class-authority-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:marine-vessel-survey-maintenance-assurance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:explore-base"
+        ],
         "label": "Vessel Identity Statutory Class Authority Analyst",
         "description": "Freezes vessel/configuration identity and separates flag, statutory, class, port-state and company records.",
         "base_role": "explore",
-        "prompt": "agents/vessel-identity-statutory-class-authority-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "marine-vessel-survey-maintenance-assurance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/vessel-identity-statutory-class-authority-analyst/system.md"
       },
       "vessel-hull-structure-condition-survey-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:marine-vessel-survey-maintenance-assurance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Vessel Hull Structure Condition Survey Analyst",
         "description": "Maps hull, tank, deck, member, coating, corrosion, cracking, deformation and thickness evidence.",
         "base_role": "delegated-worker",
-        "prompt": "agents/vessel-hull-structure-condition-survey-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "marine-vessel-survey-maintenance-assurance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/vessel-hull-structure-condition-survey-analyst/system.md"
       },
       "vessel-machinery-electrical-maintenance-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:marine-vessel-survey-maintenance-assurance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Vessel Machinery Electrical Maintenance Analyst",
         "description": "Traces critical equipment, redundancy, maintenance, tests, failures, deferments, spares and verification.",
         "base_role": "delegated-worker",
-        "prompt": "agents/vessel-machinery-electrical-maintenance-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "marine-vessel-survey-maintenance-assurance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/vessel-machinery-electrical-maintenance-analyst/system.md"
       },
       "vessel-defect-repair-nonconformity-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:marine-vessel-survey-maintenance-assurance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Vessel Defect Repair Nonconformity Analyst",
         "description": "Traces defect, temporary measure, repair, nonconformity, survey/inspection, verification and closure evidence.",
         "base_role": "delegated-worker",
-        "prompt": "agents/vessel-defect-repair-nonconformity-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "marine-vessel-survey-maintenance-assurance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/vessel-defect-repair-nonconformity-analyst/system.md"
       },
       "marine-vessel-survey-maintenance-review-owner": {
+        "capability_refs": [
+          "capability:capability_set:package:marine-vessel-survey-maintenance-assurance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Marine Vessel Survey Maintenance Review Owner",
         "description": "Joins vessel authority, hull, machinery and defect/repair evidence into a qualified marine review pack.",
         "base_role": "delegated-worker",
-        "prompt": "agents/marine-vessel-survey-maintenance-review-owner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "marine-vessel-survey-maintenance-assurance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/marine-vessel-survey-maintenance-review-owner/system.md"
       }
     },
     "virtual_workflows": {

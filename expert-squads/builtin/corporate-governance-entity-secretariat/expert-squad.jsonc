@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "corporate-governance-entity-secretariat",
   "name": "Corporate Governance Entity Secretariat",
   "label": "Corporate Governance Entity Secretariat",
   "description": "Source-bound corporate entity, governing-body, meeting, consent, resolution, minutes, action, filing-calendar and register evidence preparation without legal, signature or filing authority.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.30.1",
   "product_pillars": [
     "work"
   ],
@@ -15,141 +15,76 @@
     "selection_guidance": "Select for entity/authority records, board or committee meeting preparation, agenda/material trace, minutes evidence, written-consent support, resolution/action registers, entity calendar or filing evidence. Do not select for legal advice, quorum/authority/validity decisions, signatures, filings or director/regulator communications.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 5 projections.",
+      "member_refs": [
+        "capability:skill:package:corporate-governance-entity-secretariat:corporate-governance-entity-secretariat%2Fshared%2Fmethod"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:skill:package:corporate-governance-entity-secretariat:corporate-governance-entity-secretariat%2Fshared%2Fmethod",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "corporate-governance-entity-secretariat/shared/method"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "entity-authority-governing-record-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:corporate-governance-entity-secretariat:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:explore-base"
+        ],
         "label": "Entity Authority Governing Record Analyst",
         "description": "Freezes entity identity, jurisdiction, governing documents, body composition and delegated-authority evidence.",
         "base_role": "explore",
-        "prompt": "agents/entity-authority-governing-record-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "corporate-governance-entity-secretariat/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/entity-authority-governing-record-analyst/system.md"
       },
       "governing-body-meeting-materials-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:corporate-governance-entity-secretariat:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Governing Body Meeting Materials Analyst",
         "description": "Reconciles meeting purpose, notice, agenda, materials, attendance, conflicts and source chronology.",
         "base_role": "delegated-worker",
-        "prompt": "agents/governing-body-meeting-materials-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "corporate-governance-entity-secretariat/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/governing-body-meeting-materials-analyst/system.md"
       },
       "resolution-minutes-consent-action-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:corporate-governance-entity-secretariat:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Resolution Minutes Consent Action Analyst",
         "description": "Drafts evidence-bound minutes/consent/resolution records and traces actions without signature or effectiveness claims.",
         "base_role": "delegated-worker",
-        "prompt": "agents/resolution-minutes-consent-action-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "corporate-governance-entity-secretariat/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/resolution-minutes-consent-action-analyst/system.md"
       },
       "entity-calendar-filing-register-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:corporate-governance-entity-secretariat:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Entity Calendar Filing Register Analyst",
         "description": "Maps counsel-supplied obligations, dates, filings, registers and evidence of completion.",
         "base_role": "delegated-worker",
-        "prompt": "agents/entity-calendar-filing-register-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "corporate-governance-entity-secretariat/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/entity-calendar-filing-register-analyst/system.md"
       },
       "corporate-governance-entity-secretariat-review-owner": {
+        "capability_refs": [
+          "capability:capability_set:package:corporate-governance-entity-secretariat:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Corporate Governance Entity Secretariat Review Owner",
         "description": "Joins authority, meeting, decision/action and entity-calendar evidence into a counsel-ready secretariat pack.",
         "base_role": "delegated-worker",
-        "prompt": "agents/corporate-governance-entity-secretariat-review-owner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "corporate-governance-entity-secretariat/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/corporate-governance-entity-secretariat-review-owner/system.md"
       }
     },
     "virtual_workflows": {

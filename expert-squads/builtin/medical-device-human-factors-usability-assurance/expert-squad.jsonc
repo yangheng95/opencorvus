@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "medical-device-human-factors-usability-assurance",
   "name": "Medical Device Human Factors Usability Assurance",
   "label": "Medical Device Human Factors Usability Assurance",
   "description": "Medical-device use specification, task and use-related-risk analysis, formative and summative evidence, and usability-engineering traceability without compliance or residual-risk authority.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.30.1",
   "product_pillars": [
     "work"
   ],
@@ -15,141 +15,76 @@
     "selection_guidance": "Select for intended users, uses and environments, user-interface inventory, task analysis, use-error evidence, critical-task trace, formative studies, summative protocol/results, labeling/training dependencies, or usability-file gaps. Do not select for UI automation, device modification, participant activity, regulatory submission or conformance decisions.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 5 projections.",
+      "member_refs": [
+        "capability:skill:package:medical-device-human-factors-usability-assurance:medical-device-human-factors-usability-assurance%2Fshared%2Fmethod"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:skill:package:medical-device-human-factors-usability-assurance:medical-device-human-factors-usability-assurance%2Fshared%2Fmethod",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "medical-device-human-factors-usability-assurance/shared/method"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "device-use-specification-interface-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:medical-device-human-factors-usability-assurance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:explore-base"
+        ],
         "label": "Device Use Specification and Interface Analyst",
         "description": "Freezes intended users, uses, environments, device/UI versions, labeling, training and interface boundaries.",
         "base_role": "explore",
-        "prompt": "agents/device-use-specification-interface-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "medical-device-human-factors-usability-assurance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/device-use-specification-interface-analyst/system.md"
       },
       "critical-task-use-risk-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:medical-device-human-factors-usability-assurance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Critical Task and Use-Risk Analyst",
         "description": "Maps task sequences, use difficulties, errors and supplied hazardous situations without risk acceptance.",
         "base_role": "delegated-worker",
-        "prompt": "agents/critical-task-use-risk-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "medical-device-human-factors-usability-assurance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/critical-task-use-risk-analyst/system.md"
       },
       "formative-usability-evidence-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:medical-device-human-factors-usability-assurance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Formative Usability Evidence Analyst",
         "description": "Traces formative study scope, observations, design hypotheses and controlled design responses.",
         "base_role": "delegated-worker",
-        "prompt": "agents/formative-usability-evidence-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "medical-device-human-factors-usability-assurance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/formative-usability-evidence-analyst/system.md"
       },
       "summative-usability-traceability-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:medical-device-human-factors-usability-assurance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Summative Usability Traceability Analyst",
         "description": "Reviews supplied summative protocol/execution/results and critical-task coverage without declaring validation success.",
         "base_role": "delegated-worker",
-        "prompt": "agents/summative-usability-traceability-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "medical-device-human-factors-usability-assurance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/summative-usability-traceability-analyst/system.md"
       },
       "medical-device-human-factors-usability-review-owner": {
+        "capability_refs": [
+          "capability:capability_set:package:medical-device-human-factors-usability-assurance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Medical Device Human Factors Usability Review Owner",
         "description": "Joins use specification, use-risk, formative and summative branches into a controlled usability-engineering review pack.",
         "base_role": "delegated-worker",
-        "prompt": "agents/medical-device-human-factors-usability-review-owner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "medical-device-human-factors-usability-assurance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/medical-device-human-factors-usability-review-owner/system.md"
       }
     },
     "virtual_workflows": {

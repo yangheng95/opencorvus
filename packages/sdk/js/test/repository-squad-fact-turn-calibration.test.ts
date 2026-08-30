@@ -6,7 +6,7 @@ import path from "node:path"
 import {
   EXPERT_SQUAD_MANIFEST_PATH,
   validateExpertSquadPackageDefinition,
-  type ExpertSquadManifestV1,
+  type ExpertSquadManifestV2,
   type ExpertSquadPackageDefinition,
   type ExpertSquadPackageFile,
 } from "../src/expert-squad-authoring"
@@ -82,7 +82,7 @@ async function readPackageFiles(root: string): Promise<Record<string, ExpertSqua
 
 async function readPackage(relativeRoot: string): Promise<ExpertSquadPackageDefinition> {
   const root = path.join(repositoryRoot, ...relativeRoot.split("/"))
-  const manifest = parseJsonc<ExpertSquadManifestV1>(
+  const manifest = parseJsonc<ExpertSquadManifestV2>(
     await readFile(path.join(root, EXPERT_SQUAD_MANIFEST_PATH), "utf8"),
   )
   return {
@@ -120,7 +120,7 @@ describe("repository Expert Squad fact and Turn calibration", () => {
     const definition = await readPackage("templates/portable-expert-squad-template/package")
 
     expect(validateExpertSquadPackageDefinition(definition)).toBe(definition)
-    expect(definition.manifest.version).toBe("2026.08.01.2")
+    expect(definition.manifest.version).toBe("2026.08.21.3")
     const reconciliationPolicyTool = definition.files["tools/reconciliation-policy.ts"]
     if (reconciliationPolicyTool === undefined) throw new Error("portable reconciliation policy tool is missing")
     expect(

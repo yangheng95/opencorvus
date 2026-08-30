@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "dam-safety-surveillance-assurance",
   "name": "Dam Safety Surveillance Assurance",
   "label": "Dam Safety Surveillance Assurance",
   "description": "Dam facility configuration, inspection, instrumentation, performance, potential-failure-mode and control evidence assurance without operational, engineering-release or emergency authority.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.30.1",
   "product_pillars": [
     "work"
   ],
@@ -15,141 +15,76 @@
     "selection_guidance": "Select for dam configuration/design-authority trace, consequence context, inspection findings, instrumentation data, behavior trends, potential failure modes, controls or action verification. Do not select to operate gates, set alarm levels, declare safety, warn the public, order evacuation or approve engineering work.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 5 projections.",
+      "member_refs": [
+        "capability:skill:package:dam-safety-surveillance-assurance:dam-safety-surveillance-assurance%2Fshared%2Fmethod"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:skill:package:dam-safety-surveillance-assurance:dam-safety-surveillance-assurance%2Fshared%2Fmethod",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "dam-safety-surveillance-assurance/shared/method"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "dam-configuration-authority-consequence-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:dam-safety-surveillance-assurance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:explore-base"
+        ],
         "label": "Dam Configuration Authority and Consequence Analyst",
         "description": "Freezes dam identity, structures, design/modification authority, loading context and supplied consequence classification.",
         "base_role": "explore",
-        "prompt": "agents/dam-configuration-authority-consequence-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "dam-safety-surveillance-assurance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/dam-configuration-authority-consequence-analyst/system.md"
       },
       "dam-inspection-condition-defect-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:dam-safety-surveillance-assurance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Dam Inspection Condition and Defect Analyst",
         "description": "Maps visual, survey and nondestructive observations to exact locations, dimensions, comparisons and limitations.",
         "base_role": "delegated-worker",
-        "prompt": "agents/dam-inspection-condition-defect-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "dam-safety-surveillance-assurance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/dam-inspection-condition-defect-analyst/system.md"
       },
       "dam-instrumentation-performance-surveillance-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:dam-safety-surveillance-assurance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Dam Instrumentation Performance Surveillance Analyst",
         "description": "Reconciles instrument health, readings, conversions, environmental/loading covariates and authorized behavior baselines.",
         "base_role": "delegated-worker",
-        "prompt": "agents/dam-instrumentation-performance-surveillance-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "dam-safety-surveillance-assurance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/dam-instrumentation-performance-surveillance-analyst/system.md"
       },
       "dam-potential-failure-mode-control-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:dam-safety-surveillance-assurance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Dam Potential Failure Mode and Control Analyst",
         "description": "Traces supplied potential failure modes, evidence, detection controls, actions and verification without risk acceptance.",
         "base_role": "delegated-worker",
-        "prompt": "agents/dam-potential-failure-mode-control-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "dam-safety-surveillance-assurance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/dam-potential-failure-mode-control-analyst/system.md"
       },
       "dam-safety-surveillance-review-owner": {
+        "capability_refs": [
+          "capability:capability_set:package:dam-safety-surveillance-assurance:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Dam Safety Surveillance Review Owner",
         "description": "Joins configuration, inspection, instrumentation and failure-mode/control evidence into a qualified dam-safety review pack.",
         "base_role": "delegated-worker",
-        "prompt": "agents/dam-safety-surveillance-review-owner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "dam-safety-surveillance-assurance/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/dam-safety-surveillance-review-owner/system.md"
       }
     },
     "virtual_workflows": {

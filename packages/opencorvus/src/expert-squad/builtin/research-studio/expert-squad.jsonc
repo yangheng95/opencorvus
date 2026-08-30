@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "research-studio",
   "name": "Research Studio",
   "label": "Research Studio",
   "description": "A research planning, durable evidence collection, reproducible analysis, post-computation fact-checking, and template-driven report-delivery squad.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.30.1",
   "product_pillars": [
     "code",
     "work"
@@ -16,137 +16,74 @@
     "selection_guidance": "Select Research Studio only when its declared workflow owns the complete evidence, computation, fact-check, report-rendering, and acceptance surface required by the outcome; a deliverable being called a report is not sufficient by itself.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 2 projections.",
+      "member_refs": [
+        "capability:skill:package:research-studio:research-studio%2Fshared%2Fanalysis-report-quality"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
-      "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "read",
-        "browser_preview_capture"
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:tool:platform:tool-registry:browser_preview_capture",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:read"
       ],
-      "default_skill_refs": [],
-      "package_skill_refs": [],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "base_role": "orchestrator",
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "research-studio-planner": {
+        "capability_refs": [
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Research Studio Planner",
         "description": "Frames the bounded question, research method, source hierarchy, comparison dimensions, freshness rules, and stopping conditions.",
         "base_role": "delegated-worker",
-        "prompt": "agents/research-studio-planner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/research-studio-planner/system.md"
       },
       "research-studio-researcher": {
+        "capability_refs": [
+          "capability:capability_set:platform:tool-registry:deep-research-base"
+        ],
         "label": "Research Studio Deep Researcher",
         "description": "Collects durable multi-source evidence, citation mappings, contradictions, and open questions from the approved research plan.",
         "base_role": "deep-research",
-        "prompt": "agents/research-studio-researcher/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/research-studio-researcher/system.md"
       },
       "research-studio-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:research-studio:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Research Studio Evidence Analyst",
         "description": "Builds the claim-and-evidence matrix and owns reproducible computation, canonical result resources, algorithm validation, and analytical synthesis before fact-checking.",
         "base_role": "delegated-worker",
-        "prompt": "agents/research-studio-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "research-studio/shared/analysis-report-quality"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/research-studio-analyst/system.md"
       },
       "research-studio-fact-checker": {
+        "capability_refs": [
+          "capability:capability_set:package:research-studio:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:fact-check-base"
+        ],
         "label": "Research Studio Fact Checker",
         "description": "Verifies the analyst's post-computation load-bearing claims and method evidence against durable sources and records corrections, uncertainty, and claim-level verdicts.",
         "base_role": "fact-check",
-        "prompt": "agents/research-studio-fact-checker/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "research-studio/shared/analysis-report-quality"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/research-studio-fact-checker/system.md"
       },
       "research-studio-writer": {
+        "capability_refs": [
+          "capability:capability_set:platform:tool-registry:build-base",
+          "capability:skill:package:research-studio:research-studio%2Fshared%2Fanalysis-report-quality",
+          "capability:skill:platform:skill-manager:default%2Fskill%2Fdesign-taste-frontend"
+        ],
         "label": "Research Studio Report Writer",
         "description": "Turns accepted evidence, analysis, and fact-check verdicts into one template-driven integrated report, its archive, and real rendered-page review evidence.",
         "base_role": "build",
-        "prompt": "agents/research-studio-writer/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [
-          "default/skill/design-taste-frontend"
-        ],
-        "package_skill_refs": [
-          "research-studio/shared/analysis-report-quality"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/research-studio-writer/system.md"
       }
     },
     "virtual_workflows": {

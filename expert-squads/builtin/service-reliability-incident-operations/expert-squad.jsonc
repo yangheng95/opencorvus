@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "service-reliability-incident-operations",
   "name": "Service Reliability Incident Operations",
   "label": "Service Reliability Incident Operations",
   "description": "Service-level, observability, alert-quality, incident coordination, handoff, post-incident learning, and action evidence joined into a bounded reliability review pack.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.30.1",
   "product_pillars": [
     "work"
   ],
@@ -15,141 +15,76 @@
     "selection_guidance": "Select for service and dependency identity, service-level indicator/objective and error-budget evidence, telemetry and alert quality, incident timeline and impact evidence, role and handoff context, post-incident contributing factors, learning, and owned follow-up actions. Do not select to declare severity, page responders, run production commands, change infrastructure or code, issue status updates, attribute a security incident, declare root cause, or approve closure.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 5 projections.",
+      "member_refs": [
+        "capability:skill:package:service-reliability-incident-operations:service-reliability-incident-operations%2Fshared%2Fmethod"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:skill:package:service-reliability-incident-operations:service-reliability-incident-operations%2Fshared%2Fmethod",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "service-reliability-incident-operations/shared/method"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "reliability-sli-slo-error-budget-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:service-reliability-incident-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Reliability SLI SLO and Error Budget Analyst",
         "description": "Reconciles service boundaries, service-level indicator/objective definitions, measurements, windows, exclusions, and error-budget evidence.",
         "base_role": "delegated-worker",
-        "prompt": "agents/reliability-sli-slo-error-budget-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "service-reliability-incident-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/reliability-sli-slo-error-budget-analyst/system.md"
       },
       "reliability-observability-alert-quality-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:service-reliability-incident-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:explore-base"
+        ],
         "label": "Reliability Observability and Alert Quality Analyst",
         "description": "Maps telemetry, instrumentation, queries, alert states, routing evidence, blind spots, and signal quality.",
         "base_role": "explore",
-        "prompt": "agents/reliability-observability-alert-quality-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "service-reliability-incident-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/reliability-observability-alert-quality-analyst/system.md"
       },
       "reliability-incident-coordination-handoff-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:service-reliability-incident-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Reliability Incident Coordination and Handoff Analyst",
         "description": "Builds an evidence-sourced incident timeline, impact record, role ledger, decision log, and handoff context without command authority.",
         "base_role": "delegated-worker",
-        "prompt": "agents/reliability-incident-coordination-handoff-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "service-reliability-incident-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/reliability-incident-coordination-handoff-analyst/system.md"
       },
       "reliability-postincident-learning-action-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:service-reliability-incident-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:explore-base"
+        ],
         "label": "Reliability Post-incident Learning and Action Analyst",
         "description": "Separates observations, contributing factors, hypotheses, counterevidence, learning, and owned action evidence.",
         "base_role": "explore",
-        "prompt": "agents/reliability-postincident-learning-action-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "service-reliability-incident-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/reliability-postincident-learning-action-analyst/system.md"
       },
       "service-reliability-incident-review-owner": {
+        "capability_refs": [
+          "capability:capability_set:package:service-reliability-incident-operations:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Service Reliability Incident Review Owner",
         "description": "Joins SLO, observability, incident, handoff, learning, and action evidence while retaining human operational authority.",
         "base_role": "delegated-worker",
-        "prompt": "agents/service-reliability-incident-review-owner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "service-reliability-incident-operations/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/service-reliability-incident-review-owner/system.md"
       }
     },
     "virtual_workflows": {

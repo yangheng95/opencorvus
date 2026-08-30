@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": "builtin",
   "id": "clinical-biostatistics-data-monitoring",
   "name": "Clinical Biostatistics and Data Monitoring",
   "label": "Clinical Biostatistics and Data Monitoring",
   "description": "Estimand, SAP, analysis-population, SDTM/ADaM traceability, model, missing-data, multiplicity, sensitivity, interim and monitoring evidence without unblinding or stop/continue authority.",
-  "version": "2026.08.13.1",
+  "version": "2026.08.30.1",
   "product_pillars": [
     "work"
   ],
@@ -15,141 +15,76 @@
     "selection_guidance": "Select for estimand and SAP trace, analysis populations, source-to-SDTM-to-ADaM derivations, statistical model specifications, missing-data or multiplicity controls, sensitivity analyses, interim evidence, blinding boundaries or DMC packet readiness. Do not select to choose unapproved methods or thresholds, unblind data, lock a database, sign results or recommend stop/continue.",
     "instructions": "selector.md"
   },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 5 projections.",
+      "member_refs": [
+        "capability:skill:package:clinical-biostatistics-data-monitoring:clinical-biostatistics-data-monitoring%2Fshared%2Fmethod"
+      ]
+    }
+  },
   "capability_projection": {
     "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:skill:package:clinical-biostatistics-data-monitoring:clinical-biostatistics-data-monitoring%2Fshared%2Fmethod",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read"
+      ],
       "base_role": "orchestrator",
-      "prompt": "agents/orchestrator/system.md",
-      "inherit_base_tools": true,
-      "built_in_tool_ids": [
-        "dispatch_agent",
-        "manage_task",
-        "read"
-      ],
-      "default_skill_refs": [],
-      "package_skill_refs": [
-        "clinical-biostatistics-data-monitoring/shared/method"
-      ],
-      "default_tool_refs": [],
-      "package_tool_refs": [],
-      "default_mcp_server_refs": [],
-      "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [],
-      "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [],
-      "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": []
+      "prompt": "agents/orchestrator/system.md"
     },
     "agents": {
       "clinical-estimand-sap-population-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:clinical-biostatistics-data-monitoring:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:explore-base"
+        ],
         "label": "Estimand SAP and Population Analyst",
         "description": "Freezes protocol, estimand, endpoint, intercurrent-event strategy, SAP and analysis-population evidence.",
         "base_role": "explore",
-        "prompt": "agents/clinical-estimand-sap-population-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "clinical-biostatistics-data-monitoring/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/clinical-estimand-sap-population-analyst/system.md"
       },
       "clinical-analysis-dataset-traceability-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:clinical-biostatistics-data-monitoring:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Source SDTM ADaM Traceability Analyst",
         "description": "Traces authorized source data through SDTM, ADaM, metadata, derivations and results without changing or locking data.",
         "base_role": "delegated-worker",
-        "prompt": "agents/clinical-analysis-dataset-traceability-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "clinical-biostatistics-data-monitoring/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/clinical-analysis-dataset-traceability-analyst/system.md"
       },
       "clinical-model-missing-data-multiplicity-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:clinical-biostatistics-data-monitoring:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Model Missing Data and Multiplicity Analyst",
         "description": "Reconciles prespecified models, effect measures, missing-data handling, multiplicity and sensitivity evidence without choosing thresholds.",
         "base_role": "delegated-worker",
-        "prompt": "agents/clinical-model-missing-data-multiplicity-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "clinical-biostatistics-data-monitoring/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/clinical-model-missing-data-multiplicity-analyst/system.md"
       },
       "clinical-interim-data-monitoring-evidence-analyst": {
+        "capability_refs": [
+          "capability:capability_set:package:clinical-biostatistics-data-monitoring:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Interim Blinding and Monitoring Evidence Analyst",
         "description": "Traces authorized interim snapshots, access separation, DMC charter outputs and communication evidence without unblinding or recommendations.",
         "base_role": "delegated-worker",
-        "prompt": "agents/clinical-interim-data-monitoring-evidence-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "clinical-biostatistics-data-monitoring/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/clinical-interim-data-monitoring-evidence-analyst/system.md"
       },
       "clinical-biostatistics-data-monitoring-review-owner": {
+        "capability_refs": [
+          "capability:capability_set:package:clinical-biostatistics-data-monitoring:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
         "label": "Clinical Biostatistics Data Monitoring Review Owner",
         "description": "Joins estimand, derivation, model and interim-monitoring evidence into a controlled qualified-review pack.",
         "base_role": "delegated-worker",
-        "prompt": "agents/clinical-biostatistics-data-monitoring-review-owner/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": [
-          "clinical-biostatistics-data-monitoring/shared/method"
-        ],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": []
+        "prompt": "agents/clinical-biostatistics-data-monitoring-review-owner/system.md"
       }
     },
     "virtual_workflows": {
