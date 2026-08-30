@@ -129,12 +129,12 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | PATCH | `/mailbox/{messageID}` | Update a mailbox item 请求体: `action`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `mailbox.acknowledge` |
 | GET | `/mission` | List Missions | `mission.list` |
 | POST | `/mission/draft` | Create a Mission draft 请求体: `expertSquadIDs`, `productPillar`, `request`, `title`; 错误: `BadRequestError`. | `mission.createDraft` |
-| POST | `/mission/wake` | Wake the Mission agent 请求体: `attachments`, `expertSquadIDs`, `missionID`, `model`, `productPillar`, `text`; 错误: `AuthReadError`, `BadRequestError`, `MissionExecutionClosingError`, `MissionExpertSquadSnapshotMismatchError`. | `mission.wake` |
+| POST | `/mission/wake` | Wake the Mission agent 请求体: `attachments`, `expertSquadIDs`, `missionID`, `model`, `productPillar`, `requestID`, `text`; 错误: `AuthReadError`, `BadRequestError`, `MissionExecutionClosingError`, `MissionExecutionWakeClosedError`, `MissionExecutionWakeInputConflictError`, `MissionExpertSquadSnapshotMismatchError`. | `mission.wake` |
 | DELETE | `/mission/{missionID}` | Delete a Mission 请求体: `reason`, `surface`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `mission.delete` |
 | POST | `/mission/{missionID}/abort` | Abort a Mission 请求体: `reason`, `surface`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `mission.abort` |
 | GET | `/mission/{missionID}/activity-cursor` | Get Mission durable activity cursor 错误: `LogFileNotFoundError`, `NotFoundError`. | `mission.activityCursor` |
 | PATCH | `/mission/{missionID}/archive` | Archive or restore a Mission 请求体: `archived`, `reason`, `surface`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `mission.setArchived` |
-| POST | `/mission/{missionID}/dispatch` | Dispatch a Mission draft 请求体: `model`; 错误: `AuthReadError`, `BadRequestError`, `LogFileNotFoundError`, `MissionExecutionClosingError`, `NotFoundError`. | `mission.dispatch` |
+| POST | `/mission/{missionID}/dispatch` | Dispatch a Mission draft 请求体: `model`, `requestID`; 错误: `AuthReadError`, `BadRequestError`, `LogFileNotFoundError`, `MissionExecutionClosingError`, `MissionExecutionWakeClosedError`, `MissionExecutionWakeInputConflictError`, `NotFoundError`. | `mission.dispatch` |
 | GET | `/mission/{missionID}/project-archive` | Download Mission project archive 错误: `LogFileNotFoundError`, `NotFoundError`. | `mission.projectArchive` |
 | GET | `/mission/{missionID}/status` | Get Mission status 错误: `LogFileNotFoundError`, `NotFoundError`. | `mission.status` |
 | PATCH | `/mission/{missionID}/title` | Rename a Mission 请求体: `title`; 错误: `LogFileNotFoundError`, `NotFoundError`. | `mission.rename` |

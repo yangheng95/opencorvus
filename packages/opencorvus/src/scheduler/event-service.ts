@@ -40,8 +40,16 @@ import {
   admitMissionExecutionWake,
   MissionExecutionWakeClosedError,
   MissionExecutionWakeNotOpenedError,
+  type MissionExecutionWakeAdmission,
 } from "@/mission/execution-closure"
 import { SchedulerEventWakeReason, schedulerEventWakeReasonJSONPath } from "@/protocol/scheduler-event-wake-reason"
+import {
+  assertMissionSchedulerOccurrenceAdmission,
+  MissionSchedulerOccurrenceClosedError,
+  missionSchedulerOccurrenceDisposition,
+  type MissionSchedulerOccurrenceDisposition,
+} from "@/protocol/delivery"
+import { schedulerMissionReservationInTransaction } from "./mission-reservation"
 
 type Match = Record<string, string | number | boolean>
 type EventEnvelope = Bus.Envelope
@@ -465,6 +473,7 @@ export namespace EventService {
       return input.jobs.map((job) => {
         const fireID = Identifier.ascending("call")
         const cycle = input.causation.ancestry.some((entry) => entry.jobID === job.id)
+        const missionReservation = schedulerMissionReservationInTransaction(db, job.session_id)
         const inserted = db
           .insert(EventJobFireTable)
           .values({
@@ -473,6 +482,9 @@ export namespace EventService {
             event_occurrence_id: input.occurrenceID,
             causation_fire_id: input.causation.parentFireID,
             created_session_id: job.session_id === null ? Identifier.ascending("session") : null,
+            mission_opened_event_id: missionReservation.openedEventID,
+            mission_disposition: missionReservation.disposition,
+            mission_closure_event_id: missionReservation.closureEventID,
             time_created: input.now,
           })
           .onConflictDoNothing({
@@ -481,7 +493,21 @@ export namespace EventService {
           .returning()
           .get()
         if (inserted) {
-          if (cycle) {
+          if (missionReservation.kind === "mission_closed") {
+            db.insert(EventJobFireReceiptTable)
+              .values({
+                id: Identifier.ascending("call"),
+                fire_id: inserted.id,
+                outcome: "disposition",
+                disposition: "mission_closed",
+                closure_event_id: missionReservation.closureEventID,
+                message_id: null,
+                retry_at: null,
+                error: null,
+                time_created: input.now,
+              })
+              .run()
+          } else if (cycle) {
             db.insert(EventJobFireReceiptTable)
               .values({
                 id: Identifier.ascending("call"),
@@ -630,21 +656,54 @@ export namespace EventService {
 
   async function admitEventSessionWake<Receipt extends { activation: Promise<unknown> }>(
     session: Session.Info,
-    wake: () => Receipt | Promise<Receipt>,
+    wake: (admission?: MissionExecutionWakeAdmission) => Receipt | Promise<Receipt>,
   ): Promise<Receipt> {
     if (session.kind !== "mission") return wake()
     const mission = await requireMissionSession(session.id)
-    return admitMissionExecutionWake({ missionID: mission.missionID, sessionID: mission.id, wake })
+    return admitMissionExecutionWake({
+      missionID: mission.missionID,
+      sessionID: mission.id,
+      wake: (admission) => wake(admission),
+    })
   }
 
   async function resumeEventWake(input: { session: Session.Info; messageID: string }): Promise<void> {
-    await admitEventSessionWake(input.session, () =>
+    await admitEventSessionWake(input.session, (missionAdmission) =>
       requireSessionWake().resumePersistedWakeWithReceipt({
         sessionID: input.session.id,
         messageID: input.messageID,
         directory: input.session.directory,
+        ownerPreflight: missionAdmission?.ownerPreflight,
+        ownerLifecycle: missionAdmission?.ownerLifecycle,
       }),
     )
+  }
+
+  function missionDispositionForEventFire(
+    fire: Pick<
+      EventJobFire,
+      "target_session_id" | "mission_opened_event_id" | "mission_disposition" | "mission_closure_event_id"
+    >,
+  ): MissionSchedulerOccurrenceDisposition | undefined {
+    const session = Database.use((db) =>
+      db
+        .select({ id: SessionTable.id })
+        .from(SessionTable)
+        .where(and(eq(SessionTable.id, fire.target_session_id), eq(SessionTable.kind, "mission")))
+        .get(),
+    )
+    if (!session) return undefined
+    if (fire.mission_disposition === "mission_closed" && fire.mission_closure_event_id) {
+      return {
+        kind: "mission_closed",
+        openedEventID: null,
+        closureEventID: fire.mission_closure_event_id,
+      }
+    }
+    return missionSchedulerOccurrenceDisposition({
+      sessionID: session.id,
+      openedEventID: fire.mission_opened_event_id,
+    })
   }
 
   async function processFire(fireID: string, runtimeSignal: AbortSignal): Promise<void> {
@@ -681,6 +740,17 @@ export namespace EventService {
         return persisted ? projectEventJobInTransaction(db, persisted, Date.now()) : undefined
       })
       inactivityFence.touch("job resolved")
+      const missionDisposition = missionDispositionForEventFire(claimed)
+      if (missionDisposition?.kind === "mission_closed") {
+        settleDisposition(
+          claimed,
+          s.ownerID,
+          "mission_closed",
+          null,
+          missionDisposition.closureEventID,
+        )
+        return
+      }
       if (existingMessageID) {
         const session = await Session.get(claimed.target_session_id)
         throwIfAborted(signal)
@@ -713,9 +783,19 @@ export namespace EventService {
       try {
         const reconciledMessageID = findWakeMessageID(claimed)
         const missionAdmissionRejected =
-          MissionExecutionWakeClosedError.isInstance(error) || MissionExecutionWakeNotOpenedError.isInstance(error)
+          MissionExecutionWakeClosedError.isInstance(error) ||
+          MissionExecutionWakeNotOpenedError.isInstance(error) ||
+          MissionSchedulerOccurrenceClosedError.isInstance(error)
         if (missionAdmissionRejected && !leaseFence.lost) {
-          scheduleRetry(claimed, job, s.ownerID, error)
+          const disposition = missionDispositionForEventFire(claimed)
+          if (disposition?.kind !== "mission_closed") throw error
+          settleDisposition(
+            claimed,
+            s.ownerID,
+            "mission_closed",
+            null,
+            disposition.closureEventID,
+          )
         } else if (reconciledMessageID && !leaseFence.lost) {
           const session = await Session.get(claimed.target_session_id)
           throwIfAborted(leaseFence.signal)
@@ -969,8 +1049,18 @@ export namespace EventService {
     await beforeSessionWakeForTest?.({ fire: input.fire, ownerID: input.ownerID, signal: input.signal })
     throwIfAborted(input.signal)
     const session = await Session.get(input.fire.target_session_id)
-    const receipt = await admitEventSessionWake(session, () =>
-      requireSessionWake().wakeWithReceipt({
+    const receipt = await admitEventSessionWake(session, (missionAdmission) => {
+      if (missionAdmission) {
+        if (!input.fire.mission_opened_event_id) {
+          throw new Error(`Event fire ${input.fire.id} has no exact Mission opened occurrence binding`)
+        }
+        assertMissionSchedulerOccurrenceAdmission({
+          sessionID: input.fire.target_session_id,
+          openedEventID: input.fire.mission_opened_event_id,
+          admissionOpenedEventID: missionAdmission.closureEventID,
+        })
+      }
+      return requireSessionWake().wakeWithReceipt({
         sessionID: input.fire.target_session_id,
         messageID,
         textPartID,
@@ -996,8 +1086,11 @@ export namespace EventService {
             sessionID: message.sessionID,
           })
         },
-      }),
-    )
+        preflightBundle: missionAdmission?.preflightBundle,
+        ownerPreflight: missionAdmission?.ownerPreflight,
+        ownerLifecycle: missionAdmission?.ownerLifecycle,
+      })
+    })
     const sessionID = receipt.sessionID
     const persistedMessageID = findWakeMessageID(input.fire)
     if (persistedMessageID !== messageID) {
@@ -1110,8 +1203,9 @@ export namespace EventService {
   function settleDisposition(
     fire: EventJobFire,
     ownerID: string,
-    disposition: "cooldown" | "job_disabled",
-    error: string,
+    disposition: "cooldown" | "job_disabled" | "mission_closed",
+    error: string | null,
+    closureEventID: string | null = null,
   ): void {
     const now = Date.now()
     const settled = Database.immediateTransaction((db) => {
@@ -1123,7 +1217,12 @@ export namespace EventService {
         )
         .get()
       if (terminal) {
-        if (terminal.outcome !== "disposition" || terminal.disposition !== disposition || terminal.error !== error)
+        if (
+          terminal.outcome !== "disposition" ||
+          terminal.disposition !== disposition ||
+          terminal.closure_event_id !== closureEventID ||
+          terminal.error !== error
+        )
           throw new Error(`Event fire ${fire.id} conflicts with its immutable terminal receipt`)
         return true
       }
@@ -1135,6 +1234,7 @@ export namespace EventService {
           fire_id: fire.id,
           outcome: "disposition",
           disposition,
+          closure_event_id: closureEventID,
           message_id: null,
           retry_at: null,
           error,

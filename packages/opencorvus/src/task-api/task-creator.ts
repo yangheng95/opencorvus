@@ -7,6 +7,16 @@ import { isRightSidebarConversationSession } from "@/chat/session"
 import { suppliedTaskCreatorMetadataKeys } from "./task-caller-metadata"
 import { MissionVisibleExpertSquadIDs } from "@/mission/schema"
 import { createHash } from "node:crypto"
+import { currentMissionExecutionClosure, type MissionExecutionClosure } from "@/mission/execution-closure"
+import { Database } from "@/storage/db"
+
+export const MissionTaskCreationOpenedOccurrence = z
+  .object({
+    eventID: Identifier.schema("protocol_event"),
+    operationID: z.string().uuid(),
+  })
+  .strict()
+export type MissionTaskCreationOpenedOccurrence = z.infer<typeof MissionTaskCreationOpenedOccurrence>
 
 export const TaskCreatorActor = z.enum([
   "user",
@@ -25,6 +35,7 @@ export const TaskCreator = z.discriminatedUnion("actor", [
     .object({
       actor: z.literal("mission"),
       sessionID: Identifier.schema("session"),
+      openedOccurrence: MissionTaskCreationOpenedOccurrence,
       messageID: Identifier.schema("message").optional(),
       toolCallID: z.string().min(1).optional(),
     })
@@ -41,6 +52,7 @@ const ResolvedTaskCreator = z.discriminatedUnion("actor", [
       missionID: z.string().min(1),
       heldExpertSquadIDs: MissionVisibleExpertSquadIDs,
       sessionID: Identifier.schema("session"),
+      openedOccurrence: MissionTaskCreationOpenedOccurrence,
       messageID: Identifier.schema("message").optional(),
       toolCallID: z.string().min(1).optional(),
     })
@@ -88,6 +100,21 @@ export const TaskCreatorAuthorityError = NamedError.create(
 
 export const TaskCreatorSessionError = NamedError.create("TaskCreatorSessionError", z.object({ message: z.string() }))
 
+export const MissionTaskCreationClosureError = NamedError.create(
+  "MissionTaskCreationClosureError",
+  z
+    .object({
+      message: z.string(),
+      sessionID: Identifier.schema("session"),
+      expectedOpenedEventID: Identifier.schema("protocol_event").nullable(),
+      expectedOperationID: z.string().uuid().nullable(),
+      currentState: z.enum(["not_opened", "opened", "closing", "closed"]),
+      currentClosureEventID: Identifier.schema("protocol_event").nullable(),
+      currentOperationID: z.string().uuid().nullable(),
+    })
+    .strict(),
+)
+
 export const MissionExpertSquadAuthorityError = NamedError.create(
   "MissionExpertSquadAuthorityError",
   z.object({
@@ -98,6 +125,67 @@ export const MissionExpertSquadAuthorityError = NamedError.create(
     heldExpertSquadSnapshotHash: z.string().regex(/^[a-f0-9]{64}$/),
   }),
 )
+
+function missionTaskCreationClosureError(input: {
+  sessionID: string
+  expected?: MissionTaskCreationOpenedOccurrence
+  current?: MissionExecutionClosure
+}) {
+  const currentState = input.current?.state ?? "not_opened"
+  return new MissionTaskCreationClosureError({
+    message:
+      currentState === "opened"
+        ? `Mission Session ${input.sessionID} Task creation belongs to stale opened event ${input.expected?.eventID}; current opened event is ${input.current!.eventID}.`
+        : `Mission Session ${input.sessionID} Task creation requires its exact opened occurrence; current execution state is ${currentState}.`,
+    sessionID: input.sessionID,
+    expectedOpenedEventID: input.expected?.eventID ?? null,
+    expectedOperationID: input.expected?.operationID ?? null,
+    currentState,
+    currentClosureEventID: input.current?.eventID ?? null,
+    currentOperationID: input.current?.operationID ?? null,
+  })
+}
+
+/** Capture the immutable Mission occurrence that authorizes one real panel.create_task call. */
+export function requireMissionTaskCreationOpenedOccurrence(sessionID: string): MissionTaskCreationOpenedOccurrence {
+  const current = currentMissionExecutionClosure(sessionID)
+  if (!current || current.state !== "opened") {
+    throw missionTaskCreationClosureError({ sessionID, current })
+  }
+  return MissionTaskCreationOpenedOccurrence.parse({
+    eventID: current.eventID,
+    operationID: current.operationID,
+  })
+}
+
+export function assertMissionTaskCreationOpenedOccurrence(input: {
+  sessionID: string
+  openedOccurrence: MissionTaskCreationOpenedOccurrence
+}): void {
+  const expected = MissionTaskCreationOpenedOccurrence.parse(input.openedOccurrence)
+  const current = currentMissionExecutionClosure(input.sessionID)
+  if (
+    current?.state === "opened" &&
+    current.eventID === expected.eventID &&
+    current.operationID === expected.operationID
+  ) {
+    return
+  }
+  throw missionTaskCreationClosureError({ sessionID: input.sessionID, expected, current })
+}
+
+/**
+ * Compare-and-set the exact Mission opened occurrence from inside the Task
+ * aggregate writer transaction. The caller must run this immediately before
+ * the Task/root Session/initial ingress insert in that same transaction.
+ */
+export function assertMissionTaskCreationOpenedOccurrenceInTransaction(input: {
+  sessionID: string
+  openedOccurrence: MissionTaskCreationOpenedOccurrence
+}): void {
+  Database.requireActiveTransaction("assertMissionTaskCreationOpenedOccurrenceInTransaction")
+  assertMissionTaskCreationOpenedOccurrence(input)
+}
 
 export function assertNoCallerSuppliedTaskCreatorMetadata(metadata: Record<string, unknown> | undefined): void {
   const supplied = suppliedTaskCreatorMetadataKeys(metadata)

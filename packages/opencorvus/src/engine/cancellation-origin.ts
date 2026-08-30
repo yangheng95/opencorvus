@@ -40,6 +40,7 @@ export const TaskCancellationSurface = z.enum([
   ...ChannelSurface.options,
   "right-sidebar",
   "orchestrator",
+  "runtime",
 ])
 
 const NonEmptyCancellationIdentity = z.string().trim().min(1)
@@ -99,6 +100,17 @@ export const TaskCancellationOrigin = z.union([
       ...CancellationOriginBase,
       actor: z.literal("user"),
       source: MissionCancellationSource,
+      sessionID: CancellationSessionID,
+      ...NoCancellationToolIdentity,
+      missionID: MissionID,
+    })
+    .strict(),
+  z
+    .object({
+      ...CancellationOriginBase,
+      actor: z.literal("mission"),
+      source: MissionCancellationSource,
+      surface: z.literal("runtime"),
       sessionID: CancellationSessionID,
       ...NoCancellationToolIdentity,
       missionID: MissionID,

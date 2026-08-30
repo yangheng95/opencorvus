@@ -95,6 +95,7 @@ import { Token } from "@/util/token"
 import { decodeDataUrlBase64Bytes } from "./text-mime"
 import { normalizeToolInput } from "./tool-input-norm"
 import { configureSessionShellResume } from "./shell-exec"
+import { bindMissionClosingAssistantTerminalizer } from "@/mission/execution-close-effects"
 import {
   assertSessionLoopRuntimeContract,
   isProjectedSchedulerRuntimeContract,
@@ -2563,7 +2564,7 @@ export namespace SessionLoop {
               const { lastUser, lastAssistant, lastFinished, lastFinishedRequestTokens } = collectLoopState(msgs)
               const pendingControls = SessionControl.pending(sessionID)
               for (const control of pendingControls) {
-                if (isActionableSessionControl(control) || control.kind === "mission_process_recovery") continue
+                if (isActionableSessionControl(control)) continue
                 SessionControl.fail({
                   id: control.id,
                   sessionID,
@@ -4435,3 +4436,6 @@ export namespace SessionLoop {
 }
 
 configureSessionShellResume((input) => SessionLoop.loop(input))
+bindMissionClosingAssistantTerminalizer((sessionID, signal, exactMessages) =>
+  SessionLoop.terminalizeRecoveredIncompleteAssistant(sessionID, signal, exactMessages),
+)

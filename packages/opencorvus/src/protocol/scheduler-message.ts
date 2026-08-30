@@ -1,5 +1,5 @@
 import { createHash, randomUUID } from "node:crypto"
-import { Database, DatabaseEffectAdmissionClosedError } from "@/storage/db"
+import { Database, DatabaseEffectAdmissionClosedError, eq } from "@/storage/db"
 import { Instance, InstanceProcessAdmissionClosedError } from "@/project/instance"
 import { Project } from "@/project/project"
 import { runWithInitializedIndependentProject } from "@/project/independent-project-owner"
@@ -24,9 +24,12 @@ import {
   requireSchedulerDelivery,
   rescheduleSchedulerDelivery,
   schedulerSessionWakeNeedsRecovery,
+  assertMissionSchedulerOccurrenceAdmission,
+  missionSchedulerOccurrenceDispositionForEnvelope,
   schedulerTargetOccurrenceIdentity,
   schedulerSourceBodyInTransaction,
   SchedulerMessageConflictError,
+  MissionSchedulerOccurrenceClosedError,
   SchedulerTargetOccurrenceStaleError,
   settleSchedulerDeliveryInTransaction,
   type SchedulerDeliveryReceipt,
@@ -35,17 +38,22 @@ import { SchedulerEndpoint, SchedulerMessagePayload, type SchedulerMessageKind }
 import { installSchedulerMessageDrainSignal, signalSchedulerMessageDrain } from "./scheduler-drain-signal"
 import { RuntimeExecutionAdmissionClosedError } from "@/runtime/execution-settlement"
 import {
+  admitMissionExecutionWake,
   currentMissionExecutionClosure,
-  settleMissionSchedulerWakesForClosure,
-  withMissionExecutionAdmission,
 } from "@/mission/execution-closure"
+import { requireMissionSession } from "@/mission/session"
 
 const DELIVERY_LEASE_MS = 120_000
 const MAX_DELIVERY_ATTEMPTS = 5
 const DELIVERY_POLL_INTERVAL_MS = 1_000
+const DELIVERY_RECIPIENT_PAGE_SIZE = 32
+const DELIVERY_RECIPIENT_CONCURRENCY = 4
+const DELIVERY_PROJECT_PAGE_SIZE = 32
+const DELIVERY_PROJECT_CONCURRENCY = 4
 const log = Log.create({ service: "scheduler-message-delivery" })
 const drainTails = new Map<string, Promise<void>>()
 let beforeMissionMaterializationForTest: (() => void | Promise<void>) | undefined
+let beforeTaskMaterializationForTest: (() => void | Promise<void>) | undefined
 let beforeGlobalPollForTest: (() => void | Promise<void>) | undefined
 let signalDrainFailureReportForTest: ((error: unknown) => void) | undefined
 type TaskDeliveryMaterializer = typeof EngineService.materializeClaimedSchedulerMessageToTask
@@ -192,96 +200,118 @@ async function drainMissionRecipient(sessionID: string): Promise<void> {
       }
       const message = await sourceMessageText(delivery)
       const ids = schedulerTargetOccurrenceIdentity(delivery.id)
-      await beforeMissionMaterializationForTest?.()
-      const receipt = await withMissionExecutionAdmission(sessionID, async () => {
-        const closure = currentMissionExecutionClosure(sessionID)
-        if (closure?.state === "closing" || closure?.state === "closed") {
-          Database.immediateTransaction((db) =>
-            settleSchedulerDeliveryInTransaction(db, {
-              inboxID: delivery.id,
-              ownerID,
-              result: { kind: "mission_closed", closure_event_id: closure.eventID },
-            }),
-          )
-          return undefined
-        }
-        const receipt = await requireSessionWake().wakeWithReceipt({
-          sessionID,
-          messageID: ids.messageID,
-          textPartID: ids.textPartID,
-          controlID: ids.controlID,
-          author: "orchestrator",
-          agent: "mission",
-          surface: "panel",
-          reason: {
-            source: "scheduler.message",
-            eventID: delivery.event.id,
+      const disposition = missionSchedulerOccurrenceDispositionForEnvelope(sessionID, delivery.event.id)
+      if (disposition.kind === "mission_closed") {
+        Database.immediateTransaction((db) =>
+          settleSchedulerDeliveryInTransaction(db, {
             inboxID: delivery.id,
-            threadID: delivery.message.thread_id,
-            messageKind: delivery.message.message_kind,
-            sourceEndpoint: delivery.source,
-            targetEndpoint: delivery.target,
-            ...(delivery.event.replyTo ? { replyTo: delivery.event.replyTo } : {}),
-          },
-          prompt: renderSchedulerParticipantMessage({
-            eventID: delivery.event.id,
-            kind: delivery.message.message_kind,
-            source: delivery.source,
-            threadID: delivery.message.thread_id,
-            replyTo: delivery.event.replyTo,
-            subject: delivery.message.subject,
-            message,
+            ownerID,
+            result: { kind: "mission_closed", closure_event_id: disposition.closureEventID },
           }),
-          commitBundle: (userMessage) => {
-            if (userMessage.id !== ids.messageID) {
-              throw new Error(`Scheduler inbox ${delivery.id} materialized an unexpected Mission Message.`)
-            }
-            Database.use((db) => {
-              const currentBody = schedulerSourceBodyInTransaction(db, {
-                source: delivery.source,
-                sourceMessageID: delivery.message.source_message_id,
-                sourcePartID: delivery.message.source_part_id,
-                sourceTerminalEventID: delivery.message.source_terminal_event_id,
-              })
-              const currentDigest = createHash("sha256").update(currentBody).digest("hex")
-              if (currentDigest !== delivery.message.source_body_sha256 || currentBody !== message) {
-                throw new Error(
-                  `Scheduler event ${delivery.event.id} source body changed before Mission materialization.`,
-                )
+        )
+        continue
+      }
+      await beforeMissionMaterializationForTest?.()
+      const mission = await requireMissionSession(sessionID)
+      const receipt = await admitMissionExecutionWake({
+        missionID: mission.missionID,
+        sessionID,
+        wake: async (missionAdmission) => {
+          assertMissionSchedulerOccurrenceAdmission({
+            sessionID,
+            openedEventID: disposition.openedEventID,
+            admissionOpenedEventID: missionAdmission.closureEventID,
+          })
+          const wakeReceipt = await requireSessionWake().wakeWithReceipt({
+            sessionID,
+            messageID: ids.messageID,
+            textPartID: ids.textPartID,
+            controlID: ids.controlID,
+            author: "orchestrator",
+            agent: "mission",
+            surface: "panel",
+            reason: {
+              source: "scheduler.message",
+              eventID: delivery.event.id,
+              inboxID: delivery.id,
+              threadID: delivery.message.thread_id,
+              messageKind: delivery.message.message_kind,
+              sourceEndpoint: delivery.source,
+              targetEndpoint: delivery.target,
+              ...(delivery.event.replyTo ? { replyTo: delivery.event.replyTo } : {}),
+            },
+            prompt: renderSchedulerParticipantMessage({
+              eventID: delivery.event.id,
+              kind: delivery.message.message_kind,
+              source: delivery.source,
+              threadID: delivery.message.thread_id,
+              replyTo: delivery.event.replyTo,
+              subject: delivery.message.subject,
+              message,
+            }),
+            commitBundle: (userMessage) => {
+              if (userMessage.id !== ids.messageID) {
+                throw new Error(`Scheduler inbox ${delivery.id} materialized an unexpected Mission Message.`)
               }
-              settleSchedulerDeliveryInTransaction(db, {
-                inboxID: delivery.id,
-                ownerID,
-                result: { kind: "session_wake", message_id: userMessage.id },
+              Database.use((db) => {
+                const currentBody = schedulerSourceBodyInTransaction(db, {
+                  source: delivery.source,
+                  sourceMessageID: delivery.message.source_message_id,
+                  sourcePartID: delivery.message.source_part_id,
+                  sourceTerminalEventID: delivery.message.source_terminal_event_id,
+                })
+                const currentDigest = createHash("sha256").update(currentBody).digest("hex")
+                if (currentDigest !== delivery.message.source_body_sha256 || currentBody !== message) {
+                  throw new Error(
+                    `Scheduler event ${delivery.event.id} source body changed before Mission materialization.`,
+                  )
+                }
+                settleSchedulerDeliveryInTransaction(db, {
+                  inboxID: delivery.id,
+                  ownerID,
+                  result: { kind: "session_wake", message_id: userMessage.id },
+                })
               })
-            })
-          },
-          preflightBundle: (userMessage, parts) => {
-            const textPart = parts.find((part) => part.id === ids.textPartID)
-            if (!textPart) {
-              throw new SchedulerMessageConflictError({
-                message: `Scheduler inbox ${delivery.id} did not materialize its exact text Part.`,
-                eventID: delivery.event.id,
-              })
-            }
-            Database.use((db) =>
-              assertSchedulerTargetOccurrenceAvailableInTransaction(db, {
-                inboxID: delivery.id,
-                messageID: userMessage.id,
-                textPartID: textPart.id,
-                controlID: ids.controlID,
-              }),
-            )
-          },
-        })
-        await receipt.activation
-        return receipt
+            },
+            preflightBundle: (userMessage, parts) => {
+              missionAdmission.preflightBundle(userMessage, parts)
+              const textPart = parts.find((part) => part.id === ids.textPartID)
+              if (!textPart) {
+                throw new SchedulerMessageConflictError({
+                  message: `Scheduler inbox ${delivery.id} did not materialize its exact text Part.`,
+                  eventID: delivery.event.id,
+                })
+              }
+              Database.use((db) =>
+                assertSchedulerTargetOccurrenceAvailableInTransaction(db, {
+                  inboxID: delivery.id,
+                  messageID: userMessage.id,
+                  textPartID: textPart.id,
+                  controlID: ids.controlID,
+                }),
+              )
+            },
+            ownerPreflight: missionAdmission.ownerPreflight,
+            ownerLifecycle: missionAdmission.ownerLifecycle,
+          })
+          await wakeReceipt.activation
+          return wakeReceipt
+        },
       })
-      if (!receipt) continue
       await receipt.completion
     } catch (error) {
       const current = requireSchedulerDelivery(claimed.id)
       if (current.status !== "leased" || current.leaseOwner !== ownerID) continue
+      if (MissionSchedulerOccurrenceClosedError.isInstance(error)) {
+        Database.immediateTransaction((db) =>
+          settleSchedulerDeliveryInTransaction(db, {
+            inboxID: current.id,
+            ownerID,
+            result: { kind: "mission_closed", closure_event_id: error.data.closureEventID },
+          }),
+        )
+        continue
+      }
       if (current.attempt >= MAX_DELIVERY_ATTEMPTS) {
         deadLetterSchedulerDelivery({ inboxID: current.id, ownerID, error })
         continue
@@ -315,6 +345,7 @@ async function drainTaskRecipient(taskID: string, awaitedInboxID?: string): Prom
         throw new Error(`Scheduler inbox ${claimed.id} target does not match recipient Task.`)
       }
       const message = await sourceMessageText(delivery)
+      await beforeTaskMaterializationForTest?.()
       const result = await requireTaskDeliveryMaterializer()({
         inboxID: delivery.id,
         ownerID,
@@ -349,53 +380,112 @@ export async function drainSchedulerMessagesForCurrentProject(input?: {
 }): Promise<void> {
   const current = Instance.current()
   if (!current) return
-  for (const wake of listUnansweredSchedulerSessionWakes(current.project.id)) {
-    if (input?.excludeSessionIDs?.has(wake.sessionID)) continue
-    const reconciliation = await withMissionExecutionAdmission(wake.sessionID, async () => {
-      const closure = currentMissionExecutionClosure(wake.sessionID)
-      if (closure?.state === "closing" || closure?.state === "closed") {
-        settleMissionSchedulerWakesForClosure(closure)
-        return undefined
-      }
-      if (!schedulerSessionWakeNeedsRecovery(wake)) return undefined
-      const receipt = requireSessionWake().resumePersistedWakeWithReceipt({
-        sessionID: wake.sessionID,
-        messageID: wake.messageID,
-        directory: current.project.worktree,
-        retryFailedReply: true,
-      })
-      await receipt.activation
-      return { completion: receipt.completion }
+  let afterWakeInboxID: string | undefined
+  while (true) {
+    const wakes = listUnansweredSchedulerSessionWakes({
+      projectID: current.project.id,
+      afterInboxID: afterWakeInboxID,
+      limit: 64,
     })
-    if (reconciliation) await reconciliation.completion
+    if (wakes.length === 0) break
+    for (const wake of wakes) {
+      if (input?.excludeSessionIDs?.has(wake.sessionID)) continue
+      const closure = currentMissionExecutionClosure(wake.sessionID)
+      if (closure?.state === "closing" || closure?.state === "closed") continue
+      if (!schedulerSessionWakeNeedsRecovery(wake)) continue
+      const mission = await requireMissionSession(wake.sessionID)
+      const reconciliation = await admitMissionExecutionWake({
+        missionID: mission.missionID,
+        sessionID: wake.sessionID,
+        wake: async (missionAdmission) => {
+          assertMissionSchedulerOccurrenceAdmission({
+            sessionID: wake.sessionID,
+            openedEventID: wake.openedEventID,
+            admissionOpenedEventID: missionAdmission.closureEventID,
+          })
+          const receipt = requireSessionWake().resumePersistedWakeWithReceipt({
+            sessionID: wake.sessionID,
+            messageID: wake.messageID,
+            directory: current.project.worktree,
+            retryFailedReply: true,
+            ownerPreflight: missionAdmission.ownerPreflight,
+            ownerLifecycle: missionAdmission.ownerLifecycle,
+          })
+          await receipt.activation
+          return { activation: Promise.resolve(undefined), completion: receipt.completion }
+        },
+      })
+      if (reconciliation) await reconciliation.completion
+    }
+    afterWakeInboxID = wakes.at(-1)!.inboxID
   }
-  const sessionIDs = listPendingSchedulerRecipientIDs({ actor: "session", projectID: current.project.id })
-  for (const sessionID of sessionIDs) {
-    if (input?.excludeSessionIDs?.has(sessionID)) continue
-    await drainMissionRecipient(sessionID)
+
+  await drainRecipientPages({
+    actor: "session",
+    projectID: current.project.id,
+    excludeActorIDs: input?.excludeSessionIDs,
+    drain: drainMissionRecipient,
+  })
+  await drainRecipientPages({ actor: "task", projectID: current.project.id, drain: drainTaskRecipient })
+}
+
+async function drainRecipientPages(input: {
+  actor: "task" | "session"
+  projectID: string
+  excludeActorIDs?: ReadonlySet<string>
+  drain: (actorID: string) => Promise<unknown>
+}): Promise<void> {
+  let afterActorID: string | undefined
+  while (true) {
+    const actorIDs = listPendingSchedulerRecipientIDs({
+      actor: input.actor,
+      projectID: input.projectID,
+      afterActorID,
+      limit: DELIVERY_RECIPIENT_PAGE_SIZE,
+    })
+    if (actorIDs.length === 0) return
+    for (let offset = 0; offset < actorIDs.length; offset += DELIVERY_RECIPIENT_CONCURRENCY) {
+      const batch = actorIDs
+        .slice(offset, offset + DELIVERY_RECIPIENT_CONCURRENCY)
+        .filter((actorID) => !input.excludeActorIDs?.has(actorID))
+      const settled = await Promise.allSettled(batch.map((actorID) => input.drain(actorID)))
+      const failures = settled.flatMap((result) => (result.status === "rejected" ? [result.reason] : []))
+      if (failures.length === 1) throw failures[0]
+      if (failures.length > 1) {
+        throw new AggregateError(failures, `Scheduler ${input.actor} recipient drain batch failed`)
+      }
+    }
+    afterActorID = actorIDs.at(-1)
   }
-  const taskIDs = listPendingSchedulerRecipientIDs({ actor: "task", projectID: current.project.id })
-  for (const taskID of taskIDs) await drainTaskRecipient(taskID)
 }
 
 async function pollSchedulerMessageDeliveries(signal: AbortSignal): Promise<void> {
   await beforeGlobalPollForTest?.()
   const now = Date.now()
-  const drains: Promise<void>[] = []
-  for (const projectID of listPendingSchedulerProjectIDs()) {
-    if (signal.aborted) throw signal.reason
-    const dueAt = nextSchedulerDeliveryDueAt(projectID)
-    const hasUnansweredWake = listUnansweredSchedulerSessionWakes(projectID).length > 0
-    if (!hasUnansweredWake && (dueAt === undefined || dueAt > now)) continue
-    const project = Project.get(projectID)
-    if (!project) continue
-    drains.push(requestSchedulerMessageDrainForProject(projectID, project.worktree, signal))
+  let afterProjectID: string | undefined
+  while (true) {
+    const projectIDs = listPendingSchedulerProjectIDs({
+      afterProjectID,
+      limit: DELIVERY_PROJECT_PAGE_SIZE,
+    })
+    if (projectIDs.length === 0) return
+    for (let offset = 0; offset < projectIDs.length; offset += DELIVERY_PROJECT_CONCURRENCY) {
+      if (signal.aborted) throw signal.reason
+      const drains = projectIDs.slice(offset, offset + DELIVERY_PROJECT_CONCURRENCY).flatMap((projectID) => {
+        const dueAt = nextSchedulerDeliveryDueAt(projectID, now)
+        const hasUnansweredWake = listUnansweredSchedulerSessionWakes({ projectID, limit: 1 }).length > 0
+        if (!hasUnansweredWake && (dueAt === undefined || dueAt > now)) return []
+        const project = Project.get(projectID)
+        return project ? [requestSchedulerMessageDrainForProject(projectID, project.worktree, signal)] : []
+      })
+      const results = await Promise.allSettled(drains)
+      if (signal.aborted) throw signal.reason
+      const failures = results.flatMap((result) => (result.status === "rejected" ? [result.reason] : []))
+      if (failures.length === 1) throw failures[0]
+      if (failures.length > 1) throw new AggregateError(failures, "Scheduler Message Project drain batch failed")
+    }
+    afterProjectID = projectIDs.at(-1)
   }
-  const results = await Promise.allSettled(drains)
-  if (signal.aborted) throw signal.reason
-  const failures = results.flatMap((result) => (result.status === "rejected" ? [result.reason] : []))
-  if (failures.length === 1) throw failures[0]
-  if (failures.length > 1) throw new AggregateError(failures, "Scheduler Message Project drains failed")
 }
 
 export function requestSchedulerMessageDrain(): void {
@@ -519,6 +609,15 @@ export const SchedulerMessageTestHooks = {
     return {
       [Symbol.dispose]() {
         if (beforeMissionMaterializationForTest === hook) beforeMissionMaterializationForTest = undefined
+      },
+    }
+  },
+  installBeforeTaskMaterialization(hook: () => void | Promise<void>): Disposable {
+    if (beforeTaskMaterializationForTest) throw new Error("Task materialization test hook is already installed")
+    beforeTaskMaterializationForTest = hook
+    return {
+      [Symbol.dispose]() {
+        if (beforeTaskMaterializationForTest === hook) beforeTaskMaterializationForTest = undefined
       },
     }
   },

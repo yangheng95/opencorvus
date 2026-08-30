@@ -69,6 +69,11 @@ export const ProtocolEventTable = sqliteTable(
     uniqueIndex("protocol_event_session_deleted_idx")
       .on(table.aggregate_id)
       .where(sql`${table.aggregate_type} = 'session' AND ${table.type} = 'session.deleted'`),
+    uniqueIndex("protocol_event_mission_delete_retention_idx")
+      .on(table.aggregate_id)
+      .where(
+        sql`${table.aggregate_type} = 'session' AND ${table.type} = 'mission.retention.delete_requested'`,
+      ),
     uniqueIndex("protocol_event_mission_operation_boundary_idx")
       .on(table.aggregate_id, table.correlation_id, table.type)
       .where(

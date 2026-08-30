@@ -880,6 +880,34 @@ BEGIN
   SELECT RAISE(ABORT, 'automation_run: execution history is immutable');
 END;
 
+CREATE TRIGGER IF NOT EXISTS automation_run_mission_reservation_insert
+BEFORE INSERT ON automation_run
+FOR EACH ROW
+WHEN (
+  EXISTS (
+    SELECT 1 FROM automation AS definition
+    JOIN session AS target ON target.id=definition.session_id
+    WHERE definition.id=NEW.automation_revision_id AND target.kind='mission'
+  )
+  AND NEW.mission_opened_event_id IS NULL
+  AND NEW.mission_disposition IS NULL
+  AND NEW.mission_closure_event_id IS NULL
+) OR (
+  NOT EXISTS (
+    SELECT 1 FROM automation AS definition
+    JOIN session AS target ON target.id=definition.session_id
+    WHERE definition.id=NEW.automation_revision_id AND target.kind='mission'
+  )
+  AND (
+    NEW.mission_opened_event_id IS NOT NULL
+    OR NEW.mission_disposition IS NOT NULL
+    OR NEW.mission_closure_event_id IS NOT NULL
+  )
+)
+BEGIN
+  SELECT RAISE(ABORT, 'automation_run: Mission target requires one exact active or terminal reservation');
+END;
+
 -- An accepted Task-root Message is frozen in content, not in place. Delivery
 -- moves it from the Task-root Session into the Orchestrator Session, which
 -- rewrites only its Session, its timeline position, and the matching \`time\`
@@ -1324,6 +1352,32 @@ BEGIN SELECT RAISE(ABORT, 'event_job_fire: occurrence input is immutable; append
 CREATE TRIGGER IF NOT EXISTS event_job_fire_no_delete
 BEFORE DELETE ON event_job_fire FOR EACH ROW
 BEGIN SELECT RAISE(ABORT, 'event_job_fire: occurrence history is immutable'); END;
+CREATE TRIGGER IF NOT EXISTS event_job_fire_mission_reservation_insert
+BEFORE INSERT ON event_job_fire FOR EACH ROW
+WHEN (
+  EXISTS (
+    SELECT 1 FROM event_job AS definition
+    JOIN session AS target ON target.id=definition.session_id
+    WHERE definition.id=NEW.event_job_revision_id AND target.kind='mission'
+  )
+  AND NEW.mission_opened_event_id IS NULL
+  AND NEW.mission_disposition IS NULL
+  AND NEW.mission_closure_event_id IS NULL
+) OR (
+  NOT EXISTS (
+    SELECT 1 FROM event_job AS definition
+    JOIN session AS target ON target.id=definition.session_id
+    WHERE definition.id=NEW.event_job_revision_id AND target.kind='mission'
+  )
+  AND (
+    NEW.mission_opened_event_id IS NOT NULL
+    OR NEW.mission_disposition IS NOT NULL
+    OR NEW.mission_closure_event_id IS NOT NULL
+  )
+)
+BEGIN
+  SELECT RAISE(ABORT, 'event_job_fire: Mission target requires one exact active or terminal reservation');
+END;
 CREATE TRIGGER IF NOT EXISTS event_occurrence_no_update
 BEFORE UPDATE ON event_occurrence FOR EACH ROW
 BEGIN SELECT RAISE(ABORT, 'event_occurrence: input fact is immutable'); END;

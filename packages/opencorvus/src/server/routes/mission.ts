@@ -25,8 +25,6 @@ import {
 } from "@/mission/schema"
 import { resolveMissionLaunchExpertSquadIDs } from "@/mission/expert-squad-authority"
 import { MissionRecord, missionRecord, missionStatusRecord } from "@/mission/projection"
-import { listMissionTasks } from "@/engine/store"
-import { deriveTaskStatus } from "@/engine/task-status"
 import { Config } from "@/config/config"
 import { Auth } from "@/auth"
 import { validateConfigModelReferences } from "@/config/model-reference-validation"
@@ -38,11 +36,8 @@ import { isModelReference } from "@/provider/model-ref"
 import { Provider } from "@/provider/provider"
 import { resolveAgentModel } from "@/agent/model"
 import { buildMissionProjectArchive, ProjectArchiveUnsupportedProjectError } from "@/engine/task-project-archive"
-import { EngineService } from "@/task-api"
 import { UserUploadList } from "@/engine/model"
 import { materializeUserUploadParts } from "@/engine/user-upload-parts"
-import { awaitSessionPromptFinishedInScope, cancelSessionPromptInScope } from "@/engine/cancellation-scope"
-import { createTaskCancellationIncomplete } from "@/engine/cancellation-error"
 import {
   AuthReadUnavailableResponse,
   badRequestBody,
@@ -51,8 +46,6 @@ import {
   namedErrorResponse,
 } from "../error"
 import { requestID as resolveRequestID } from "../error-handler"
-import { createExecutionCancellationOrigin } from "@/session/prompt/cancellation"
-import type { TaskCancellationOrigin } from "@/engine/cancellation-origin"
 import { PersistedProjectContext } from "@/server/persisted-project-context"
 import { NotFoundError } from "@/storage/db"
 import { MissionDurableActivityCursorSchema, readMissionDurableActivity } from "@/engine/durable-activity"
@@ -62,7 +55,20 @@ import {
   TaskCancellationRequestBody,
   type TaskCancellationRequestBody as TaskCancellationRequestBodyValue,
 } from "@opencorvus-ai/transport-protocol"
-import { closeMissionExecutionOperation, openMissionExecutionWithWake } from "@/mission/execution-closure"
+import {
+  closeMissionExecutionOperation,
+  currentMissionExecutionClosure,
+  missionOperatorAttachmentInputs,
+  missionOperatorWakeReason,
+  openMissionExecutionWithWake,
+} from "@/mission/execution-closure"
+import {
+  commitMissionArchiveRetention,
+  findMissionDeleteRetention,
+  requestMissionDeleteRetention,
+  requireCompletedMissionDeleteRetention,
+  resumeMissionDeleteRetention,
+} from "@/mission/retention"
 
 function newMissionID(): string {
   return randomBytes(8).toString("hex")
@@ -70,6 +76,7 @@ function newMissionID(): string {
 
 const MissionWakeInput = z
   .object({
+    requestID: z.string().trim().min(1).max(200).optional(),
     missionID: MissionID.optional(),
     productPillar: ProductPillarSchema,
     text: z.string().min(1).max(32_000),
@@ -102,6 +109,7 @@ const MissionDraftInput = z
 
 const MissionDispatchInput = z
   .object({
+    requestID: z.string().trim().min(1).max(200).optional(),
     model: z
       .string()
       .refine(isModelReference, {
@@ -154,77 +162,16 @@ async function closeMissionExecution(
   handle: "mission.abort" | "mission.delete" | "mission.archive",
   requestID: string,
   provenance: TaskCancellationRequestBodyValue,
+  signal?: AbortSignal,
 ) {
-  const cancellationOrigin = {
-    actor: "user",
-    source: handle,
-    surface: provenance.surface,
-    requestID,
-    reason: provenance.reason,
-    sessionID: session.id,
-    missionID: session.missionID,
-  } satisfies TaskCancellationOrigin
-  await closeMissionExecutionOperation({
+  return closeMissionExecutionOperation({
     missionID: session.missionID,
     sessionID: session.id,
     source: handle,
     requestID,
-    close: async () => {
-      const failures: string[] = []
-      try {
-        const origin = createExecutionCancellationOrigin({
-          actor: cancellationOrigin.actor,
-          source: cancellationOrigin.source,
-          surface: cancellationOrigin.surface,
-          requestID: cancellationOrigin.requestID,
-          reason: cancellationOrigin.reason,
-          targetSessionID: session.id,
-          missionID: cancellationOrigin.missionID,
-        })
-        cancelSessionPromptInScope({
-          session,
-          handle,
-          origin,
-          settleBeforeReuse: true,
-        })
-      } catch (error) {
-        failures.push(`mission ${session.missionID}: ${error instanceof Error ? error.message : String(error)}`)
-      }
-      const childTasks = listMissionTasks({
-        projectID: session.projectID,
-        missionID: session.missionID,
-        sessionID: session.id,
-      }).filter((task) => {
-        const status = deriveTaskStatus(task)
-        return status === "active"
-      })
-      for (const task of childTasks) {
-        try {
-          await EngineService.cancelTask(task.id, {
-            origin: cancellationOrigin,
-          })
-        } catch (error) {
-          failures.push(`task ${task.id}: ${error instanceof Error ? error.message : String(error)}`)
-        }
-      }
-      try {
-        await awaitSessionPromptFinishedInScope({
-          session,
-          handle,
-          publishTerminalStatus: handle === "mission.abort",
-        })
-      } catch (error) {
-        failures.push(`mission ${session.missionID}: ${error instanceof Error ? error.message : String(error)}`)
-      }
-      if (failures.length > 0) {
-        throw createTaskCancellationIncomplete({
-          handle,
-          cause: new Error(failures.join("; ")),
-        })
-      }
-    },
+    provenance: { kind: "request", surface: provenance.surface, reason: provenance.reason },
+    signal,
   })
-  return cancellationOrigin
 }
 
 export function MissionRoutes() {
@@ -462,13 +409,31 @@ export function MissionRoutes() {
         const session = await missionRouteSession(missionID)
         const body = c.req.valid("json")
         const { archived } = body
-        if (archived && session.time.archived === undefined) {
-          await closeMissionExecution(session, "mission.archive", resolveRequestID(c), body)
+        const requestID = resolveRequestID(c)
+        let updated: Awaited<ReturnType<typeof Session.get>> | undefined
+        while (!updated) {
+          const closure = archived
+            ? await closeMissionExecution(session, "mission.archive", requestID, body, c.req.raw.signal)
+            : currentMissionExecutionClosure(session.id)
+          if (!closure || closure.state !== "closed") {
+            throw new Error(`Mission ${missionID} must be closed before its archive projection can be restored`)
+          }
+          // The exact initial archive request commits Session.time_archived in
+          // the close terminal transaction. Its route is a reader of that
+          // projection, while a later request over an already-closed Mission
+          // enters the monotonic retention writer below.
+          if (archived && closure.source === "mission.archive" && closure.requestID === requestID) {
+            updated = await Session.get(session.id)
+            continue
+          }
+          const committed = commitMissionArchiveRetention({
+            missionID,
+            sessionID: session.id,
+            expectedClosureEventID: closure.eventID,
+            archived,
+          })
+          if (committed.status === "committed") updated = committed.value
         }
-        const updated = await Session.setArchived({
-          sessionID: session.id,
-          time: archived ? Date.now() : null,
-        })
         return c.json(missionRecord({ ...updated, missionID, productPillar: session.productPillar }))
       },
     )
@@ -490,7 +455,13 @@ export function MissionRoutes() {
       validator("json", TaskCancellationRequestBody),
       async (c) => {
         const session = await missionRouteSession(c.req.valid("param").missionID)
-        await closeMissionExecution(session, "mission.abort", resolveRequestID(c), c.req.valid("json"))
+        await closeMissionExecution(
+          session,
+          "mission.abort",
+          resolveRequestID(c),
+          c.req.valid("json"),
+          c.req.raw.signal,
+        )
         return c.json(true)
       },
     )
@@ -512,24 +483,49 @@ export function MissionRoutes() {
       validator("json", TaskCancellationRequestBody),
       async (c) => {
         const missionID = c.req.valid("param").missionID
-        const session = await getMissionSessionByDirectory({
-          missionID,
-          directory: PersistedProjectContext.currentDirectory(),
-        })
-        if (session.projectID !== PersistedProjectContext.currentProject().id) {
-          throw new NotFoundError({ message: `Mission not found: ${missionID}` })
+        const project = PersistedProjectContext.currentProject()
+        const directory = PersistedProjectContext.currentDirectory()
+        const existing = findMissionDeleteRetention({ missionID, projectID: project.id, directory })
+        if (existing) {
+          requireCompletedMissionDeleteRetention(
+            await resumeMissionDeleteRetention({
+              sessionID: existing.sessionID,
+              projectID: project.id,
+              signal: c.req.raw.signal,
+            }),
+          )
+          return c.json(true)
         }
-        const cancellationOrigin = await closeMissionExecution(
-          session,
-          "mission.delete",
-          resolveRequestID(c),
-          c.req.valid("json"),
-        )
-        await EngineService.deleteSession(session.id, {
-          projectID: session.projectID,
-          cancellationOrigin,
-        })
-        return c.json(true)
+        const session = await getMissionSessionByDirectory({ missionID, directory })
+        if (session.projectID !== project.id) throw new NotFoundError({ message: `Mission not found: ${missionID}` })
+        const body = c.req.valid("json")
+        const requestID = resolveRequestID(c)
+        while (true) {
+          const closure = await closeMissionExecution(
+            session,
+            "mission.delete",
+            requestID,
+            body,
+            c.req.raw.signal,
+          )
+          if (closure.state !== "closed") throw new Error(`Mission ${missionID} delete close did not settle`)
+          const requested = await requestMissionDeleteRetention({
+            missionID,
+            sessionID: session.id,
+            expectedClosureEventID: closure.eventID,
+            requestID,
+            provenance: { kind: "request", surface: body.surface, reason: body.reason },
+          })
+          if (requested.status === "occurrence_changed") continue
+          requireCompletedMissionDeleteRetention(
+            await resumeMissionDeleteRetention({
+              sessionID: session.id,
+              projectID: session.projectID,
+              signal: c.req.raw.signal,
+            }),
+          )
+          return c.json(true)
+        }
       },
     )
     .post(
@@ -537,7 +533,8 @@ export function MissionRoutes() {
       describeRoute({
         summary: "Dispatch a Mission draft",
         description:
-          "Consume the Mission's pending operator prompt through the canonical visible user-message and streaming Mission wake path.",
+          "Consume the Mission's pending operator prompt through the canonical visible user-message and streaming Mission wake path. " +
+          "Supply requestID to replay one exact accepted input; reusing it with changed model or prompt facts returns a conflict.",
         operationId: "mission.dispatch",
         responses: {
           200: {
@@ -548,6 +545,8 @@ export function MissionRoutes() {
           409: namedErrorResponse(
             "Mission execution is still completing its durable close operation",
             "MissionExecutionClosingError",
+            "MissionExecutionWakeClosedError",
+            "MissionExecutionWakeInputConflictError",
           ),
           503: AuthReadUnavailableResponse,
         },
@@ -583,23 +582,31 @@ export function MissionRoutes() {
           missionID,
           sessionID: session.id,
           source: "mission.dispatch",
-          requestID: resolveRequestID(c),
-          wake: async () => {
-            await Session.mergeConfigOverlay({
-              sessionID: session.id,
-              patch: configPatch,
-            })
+          requestID: input.requestID ?? resolveRequestID(c),
+          acceptedInput: {
+            text: pendingPrompt.text,
+            model: input.model ?? null,
+            attachments: [],
+            configPatch,
+            context: { surface: "mission.dispatch" },
+          },
+          wake: async (admission) => {
             return SessionWake.wakeWithReceipt({
               sessionID: session.id,
+              messageID: admission.messageID,
+              textPartID: admission.textPartID,
+              controlID: admission.controlID,
               prompt: pendingPrompt.text,
               author: "user",
               agent: "mission",
+              model: input.model ? Provider.parseModel(input.model) : undefined,
               surface: "panel",
               userAuthored: true,
-              reason: {
-                source: "mission.operator",
-                missionID,
-              },
+              reason: missionOperatorWakeReason(admission, missionID),
+              commitBundle: admission.commitBundle,
+              preflightBundle: admission.preflightBundle,
+              ownerPreflight: admission.ownerPreflight,
+              ownerLifecycle: admission.ownerLifecycle,
             })
           },
         })
@@ -624,7 +631,8 @@ export function MissionRoutes() {
           "Start (or resume) a Mission agent session and inject a user prompt. " +
           "Omit `missionID` to start a new mission; supply it to resume an existing one. " +
           "The route is idempotent for (project, directory, missionID) — exactly one mission " +
-          "session is keyed per mission.",
+          "session is keyed per mission. Supply requestID to join one exact accepted prompt, model, attachment and config input; " +
+          "reusing it with drift returns a conflict.",
         operationId: "mission.wake",
         responses: {
           200: {
@@ -638,6 +646,8 @@ export function MissionRoutes() {
           409: namedErrorResponse(
             "Mission execution is still completing its durable close operation",
             "MissionExecutionClosingError",
+            "MissionExecutionWakeClosedError",
+            "MissionExecutionWakeInputConflictError",
           ),
           503: AuthReadUnavailableResponse,
         },
@@ -715,24 +725,36 @@ export function MissionRoutes() {
           missionID,
           sessionID: session.id,
           source: "mission.wake",
-          requestID: resolveRequestID(c),
-          wake: async () => {
-            await Session.mergeConfigOverlay({
-              sessionID: session.id,
-              patch: configPatch,
-            })
+          requestID: input.requestID ?? resolveRequestID(c),
+          acceptedInput: {
+            text: input.text,
+            model: input.model ?? null,
+            attachments: missionOperatorAttachmentInputs(attachmentParts),
+            configPatch,
+            context: {
+              surface: "mission.wake",
+              productPillar: input.productPillar,
+              heldExpertSquadIDs: launchHeldExpertSquadIDs ?? [],
+            },
+          },
+          wake: async (admission) => {
             return SessionWake.wakeWithReceipt({
               sessionID: session.id,
+              messageID: admission.messageID,
+              textPartID: admission.textPartID,
+              controlID: admission.controlID,
               prompt: input.text,
               author: "user",
               agent: "mission",
+              model: input.model ? Provider.parseModel(input.model) : undefined,
               surface: "panel",
               userAuthored: true,
               parts: attachmentParts,
-              reason: {
-                source: "mission.operator",
-                missionID,
-              },
+              reason: missionOperatorWakeReason(admission, missionID),
+              commitBundle: admission.commitBundle,
+              preflightBundle: admission.preflightBundle,
+              ownerPreflight: admission.ownerPreflight,
+              ownerLifecycle: admission.ownerLifecycle,
             })
           },
         })

@@ -77,6 +77,20 @@ export type TaskControlScan = (taskID: string, context: TaskControlScanContext) 
 
 export type TaskControlDriverOptions = {
   scan: TaskControlScan
+  /**
+   * Maximum distinct Tasks this driver may scan concurrently. The bound is
+   * owned by the long-lived per-Project driver, so direct edges, heartbeat
+   * sweeps and deadline timers all share it. Omit to preserve an unbounded
+   * generic driver for callers whose scan already has its own admission.
+   */
+  maximumConcurrentScans?: number
+  /** Maximum admitted scans waiting behind the active set. Excess hints are
+   * coalesced into the level-triggered heartbeat instead of retaining an
+   * unbounded Promise queue. */
+  maximumPendingScans?: number
+  /** Retire an entry once it has no timer or active scan. Mission recovery uses
+   * level-triggered discovery and does not retain per-candidate history. */
+  retireSettledEntries?: boolean
   /** Fixpoint passes before a non-settling Task degrades to timer pacing. */
   maxPasses?: number
   minimumWakeDelayMilliseconds?: number
@@ -144,6 +158,11 @@ export class TaskControlDriver {
   private readonly reenter: (fn: () => Promise<void>) => Promise<void>
   private readonly heartbeatDelay: number
   private readonly liveTasks: (() => readonly string[]) | undefined
+  private readonly maximumConcurrentScans: number
+  private readonly maximumPendingScans: number
+  private readonly retireSettledEntries: boolean
+  private activeScans = 0
+  private readonly scanWaiters: Array<(admitted: boolean) => void> = []
   private heartbeat: { cancel(): void } | undefined
   private disposed = false
 
@@ -159,6 +178,9 @@ export class TaskControlDriver {
     this.reenter = options.reenter ?? ((fn) => fn())
     this.heartbeatDelay = options.heartbeatMilliseconds ?? 30_000
     this.liveTasks = options.liveTasks
+    this.maximumConcurrentScans = options.maximumConcurrentScans ?? Number.MAX_SAFE_INTEGER
+    this.maximumPendingScans = options.maximumPendingScans ?? Number.MAX_SAFE_INTEGER
+    this.retireSettledEntries = options.retireSettledEntries ?? false
     if (
       !Number.isSafeInteger(this.maxPasses) ||
       this.maxPasses <= 0 ||
@@ -166,7 +188,11 @@ export class TaskControlDriver {
       this.maximumWakeDelay < this.minimumWakeDelay ||
       this.initialBackoff <= 0 ||
       this.maximumBackoff < this.initialBackoff ||
-      this.heartbeatDelay <= 0
+      this.heartbeatDelay <= 0 ||
+      !Number.isSafeInteger(this.maximumConcurrentScans) ||
+      this.maximumConcurrentScans <= 0 ||
+      !Number.isSafeInteger(this.maximumPendingScans) ||
+      this.maximumPendingScans <= 0
     ) {
       throw new Error("Task-control driver requires positive, ordered pacing bounds")
     }
@@ -191,7 +217,35 @@ export class TaskControlDriver {
     entry.revision += 1
     if (entry.running) return 0
     entry.running = true
-    return this.own(taskID, entry, options?.propagateFailure === true, options?.runWithActivationOwner)
+    const admission = this.acquireScanSlot()
+    if (typeof admission === "boolean") {
+      if (!admission) {
+        entry.running = false
+        if (this.retireSettledEntries && !entry.timer) this.entries.delete(taskID)
+        return 0
+      }
+      return this.runOwnedScan(taskID, entry, options?.propagateFailure === true, options?.runWithActivationOwner)
+    }
+    const admitted = await admission
+    if (!admitted) {
+      entry.running = false
+      if (this.retireSettledEntries && !entry.timer) this.entries.delete(taskID)
+      return 0
+    }
+    return this.runOwnedScan(taskID, entry, options?.propagateFailure === true, options?.runWithActivationOwner)
+  }
+
+  private async runOwnedScan(
+    taskID: string,
+    entry: Entry,
+    propagateFailure: boolean,
+    runWithActivationOwner: (<T>(run: () => Promise<T>) => Promise<T>) | undefined,
+  ): Promise<number> {
+    try {
+      return await this.own(taskID, entry, propagateFailure, runWithActivationOwner)
+    } finally {
+      this.releaseScanSlot()
+    }
   }
 
   /** Pending re-arm and fault state, for diagnostics only. */
@@ -209,6 +263,7 @@ export class TaskControlDriver {
     this.disposed = true
     this.heartbeat?.cancel()
     this.heartbeat = undefined
+    for (const release of this.scanWaiters.splice(0)) release(false)
     for (const entry of this.entries.values()) {
       entry.timer?.cancel()
       entry.timer = undefined
@@ -218,8 +273,9 @@ export class TaskControlDriver {
   }
 
   /**
-   * Level-triggered sweep. Requests run in parallel so one Task's Orchestrator
-   * Turn cannot starve its siblings, but the sweep *awaits* them inside the
+   * Level-triggered sweep. Requests run through the driver's shared concurrency
+   * bound so one Project cannot create an unbounded recovery fan-out, while
+   * independent Project drivers remain isolated. The sweep *awaits* them inside the
    * re-entered project context: `reenter` provides an instance lease exactly
    * for the duration of its callback, and a scan detached past that boundary
    * keeps the closed lease in its async context — every later database access
@@ -262,6 +318,30 @@ export class TaskControlDriver {
     }
     this.entries.set(taskID, created)
     return created
+  }
+
+  private acquireScanSlot(): boolean | Promise<boolean> {
+    if (this.disposed) return false
+    if (this.activeScans < this.maximumConcurrentScans) {
+      this.activeScans += 1
+      return true
+    }
+    if (this.scanWaiters.length >= this.maximumPendingScans) return false
+    return new Promise<boolean>((resolve) => this.scanWaiters.push(resolve))
+  }
+
+  private releaseScanSlot(): void {
+    this.activeScans -= 1
+    while (this.scanWaiters.length > 0) {
+      const admit = this.scanWaiters.shift()!
+      if (this.disposed) {
+        admit(false)
+        continue
+      }
+      this.activeScans += 1
+      admit(true)
+      break
+    }
   }
 
   private async own(
@@ -323,6 +403,7 @@ export class TaskControlDriver {
     } finally {
       entry.running = false
       this.arm(taskID, entry, wakeAt)
+      if (this.retireSettledEntries && !entry.timer) this.entries.delete(taskID)
     }
     if (failed) throw failure
     return activated

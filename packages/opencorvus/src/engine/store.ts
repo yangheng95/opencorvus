@@ -292,6 +292,62 @@ function missionTaskConditions(input: { projectID: string; missionID: string; se
   ] as const
 }
 
+function activeTaskLifecycleCondition() {
+  return sql`(
+    SELECT mission_child_lifecycle.type
+    FROM protocol_event AS mission_child_lifecycle
+    WHERE mission_child_lifecycle.aggregate_type = 'task'
+      AND mission_child_lifecycle.aggregate_id = ${EngineTaskTable.id}
+      AND mission_child_lifecycle.type IN (
+        'task.execution.opened',
+        'task.execution.reopened',
+        'task.cancellation.requested',
+        'task.completed',
+        'task.failed',
+        'task.cancelled'
+      )
+    ORDER BY mission_child_lifecycle.seq DESC, mission_child_lifecycle.id DESC
+    LIMIT 1
+  ) IN ('task.execution.opened', 'task.execution.reopened', 'task.cancellation.requested')`
+}
+
+export function listActiveMissionTaskIDsPageInTransaction(
+  db: Database.TxOrDb,
+  input: {
+    projectID: string
+    missionID: string
+    sessionID: string
+    afterTaskID?: string
+    limit: number
+  },
+): string[] {
+  if (!Number.isSafeInteger(input.limit) || input.limit <= 0 || input.limit > 64) {
+    throw new Error("Active Mission Task page limit must be between 1 and 64")
+  }
+  return db
+    .select({ id: EngineTaskTable.id })
+    .from(EngineTaskTable)
+    .where(
+      and(
+        ...missionTaskConditions(input),
+        isNull(EngineTaskTable.time_archived),
+        activeTaskLifecycleCondition(),
+        ...(input.afterTaskID ? [gt(EngineTaskTable.id, input.afterTaskID)] : []),
+      ),
+    )
+    .orderBy(EngineTaskTable.id)
+    .limit(input.limit)
+    .all()
+    .map((row) => row.id)
+}
+
+export function findActiveMissionTaskIDInTransaction(
+  db: Database.TxOrDb,
+  input: { projectID: string; missionID: string; sessionID: string },
+): string | undefined {
+  return listActiveMissionTaskIDsPageInTransaction(db, { ...input, limit: 1 })[0]
+}
+
 export function listAllMissionTasks(input: { projectID: string; missionID: string; sessionID: string }): TaskRow[] {
   return Database.use((db) => projectTaskRowsInTransaction(db, db
       .select()

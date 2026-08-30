@@ -23,6 +23,7 @@ import { EngineService } from "../src/task-api"
 import {
   configureTaskIngressRunner,
   requireTaskCreationIngressID,
+  TestHooks as TaskControlTestHooks,
   waitForIngressDeliveryHooksForTest,
 } from "../src/engine/task-root-ingress-delivery"
 import { EngineTaskRootIngressTable } from "../src/engine/engine.sql"
@@ -40,7 +41,11 @@ import { ExpertSquadRegistry } from "../src/expert-squad/registry"
 import { prepareTaskProcessBinding } from "../src/engine/task-execution-capsule-binding"
 import { materializeMirrorPrismPackage } from "./fixture/expert-squad"
 import { ensureMissionSession } from "../src/mission/session"
-import { MissionExpertSquadAuthorityError } from "../src/task-api/task-creator"
+import {
+  MissionExpertSquadAuthorityError,
+  requireMissionTaskCreationOpenedOccurrence,
+} from "../src/task-api/task-creator"
+import { openMissionThroughRealWake } from "./fixture/mission-opened"
 import { SkillMount } from "../src/skill/mounts"
 import { PromptProfile } from "../src/agent/prompt-profile"
 import { Message } from "../src/session/message"
@@ -141,13 +146,24 @@ describe("Task package revision binding", () => {
     await Instance.provide({
       directory: project.path,
       fn: async () => {
-        configureTaskIngressRunner(settleTaskCreationIngress)
         const mission = await ensureMissionSession({
           missionID: "mission-authority-held",
           defaultCwd: project.path,
           productPillar: "code",
           heldExpertSquadIDs: ["base"],
         })
+        await openMissionThroughRealWake({
+          missionID: mission.missionID,
+          sessionID: mission.id,
+          source: "mission.dispatch",
+          requestID: "mission-authority-held:dispatch",
+        })
+        using _taskIngress = TaskControlTestHooks.replaceTaskIngressRunner({ runner: settleTaskCreationIngress })
+        const missionCreator = {
+          actor: "mission" as const,
+          sessionID: mission.id,
+          openedOccurrence: requireMissionTaskCreationOpenedOccurrence(mission.id),
+        }
         const taskID = await EngineService.createTask(
           {
             requestID: `mission-held-${Identifier.ascending("artifact")}`,
@@ -157,7 +173,7 @@ describe("Task package revision binding", () => {
             model: "firmware/gpt-5",
             promptProfile: "base",
           },
-          { actor: "mission", sessionID: mission.id },
+          missionCreator,
         )
         expect(requireTaskPackageRevisionBinding(taskID)).toMatchObject({ id: "base", scope: "built_in" })
 
@@ -171,7 +187,7 @@ describe("Task package revision binding", () => {
               model: "firmware/gpt-5",
               promptProfile: "advanced",
             },
-            { actor: "mission", sessionID: mission.id },
+            missionCreator,
           )
           throw new Error("Expected Mission Expert Squad authority contract")
         } catch (error) {
@@ -193,7 +209,7 @@ describe("Task package revision binding", () => {
               productPillar: "code",
               model: "firmware/gpt-5",
             },
-            { actor: "mission", sessionID: mission.id },
+            missionCreator,
           )
           throw new Error("Expected explicit Mission Expert Squad authority contract")
         } catch (error) {

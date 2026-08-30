@@ -1,225 +1,411 @@
 import { Identifier } from "@/id/id"
-import { runWithInitializedIndependentProject } from "@/project/independent-project-owner"
-import { Session } from "@/session"
-import { SessionControl } from "@/session/control"
+import {
+  acquireControlLease,
+  assertControlLeaseInTransaction,
+  releaseControlLeaseOnErrorPath,
+  renewControlLease,
+} from "@/engine/control-lease"
 import { SessionLoop } from "@/session/loop"
-import type { Message } from "@/session/message"
+import { MessageStore } from "@/session/message-store"
+import { SessionPrompt } from "@/session/prompt"
+import { SessionPromptOwner } from "@/session/prompt/owner"
 import { SessionWake } from "@/session/wake"
-import { Log } from "@/util/log"
-import z from "zod"
-import { requireMissionSession } from "./session"
-import { currentMissionExecutionClosure, withMissionExecutionAdmission } from "./execution-closure"
+import { Database, and, desc, eq, inArray, sql } from "@/storage/db"
+import { MessageTable } from "@/session/session.sql"
+import { abortAfterAny } from "@/util/abort"
+import { admitMissionExecutionWake, currentMissionExecutionClosure } from "./execution-closure"
+import { applyMissionControlPromptOverlay, requireMissionSession } from "./session"
+import {
+  readActionableMissionProcessRecoveryWake,
+  readIncompleteMissionAssistantMessageIDs,
+  type MissionProcessRecoveryReason as RecoveryReason,
+} from "./process-recovery-facts"
 
-const log = Log.create({ service: "mission.process-recovery" })
-const RECOVERY_CONTROL_KIND = "mission_process_recovery" as const
+const RECOVERY_LEASE_MS = 30_000
+const RECOVERY_DEADLINE_MS = 120_000
+const MAX_RECOVERY_FRONTIER_MESSAGES = 64
 
-export const MissionProcessRecoveryMarker = z
-  .object({
-    version: z.literal(1),
-    occurrenceID: Identifier.schema("session_control"),
-    attempt: z.number().int().positive(),
-    interruptedAssistantMessageIDs: z.array(Identifier.schema("message")).min(1),
-    wakeMessageID: Identifier.schema("message"),
-    wakeTextPartID: Identifier.schema("part"),
-    wakeControlID: Identifier.schema("session_control"),
-    interruptedAt: z.number().int().positive(),
-  })
-  .strict()
-export type MissionProcessRecoveryMarker = z.infer<typeof MissionProcessRecoveryMarker>
-
-type WakeRecovery = (input: SessionWake.WakeInput) => Promise<{
-  sessionID: string
-  messageID: string
-  activation: Promise<SessionWake.WakeActivation>
-  completion?: Promise<SessionWake.WakeCompletion>
-}>
-
-function pendingMarker(sessionID: string): MissionProcessRecoveryMarker | undefined {
-  const records = SessionControl.pending(sessionID).filter((record) => record.kind === RECOVERY_CONTROL_KIND)
-  if (records.length > 1) {
-    throw new Error(`Mission Session ${sessionID} has ${records.length} pending process-recovery occurrences`)
-  }
-  const record = records[0]
-  if (!record) return undefined
-  const marker = MissionProcessRecoveryMarker.parse(record.payload)
-  if (marker.occurrenceID !== record.id) {
-    throw new Error(`Mission process-recovery occurrence ${record.id} payload identity does not match`)
-  }
-  return marker
-}
-
-function persistMarker(sessionID: string, marker: MissionProcessRecoveryMarker, exists: boolean): void {
-  if (!exists) {
-    SessionControl.create({
-      id: marker.occurrenceID,
-      sessionID,
-      kind: RECOVERY_CONTROL_KIND,
-      status: "pending",
-      owner: "mission.process-recovery",
-      payload: marker,
-    })
-    return
-  }
-  const updated = SessionControl.updatePendingPayload({
-    id: marker.occurrenceID,
-    sessionID,
-    payload: marker,
-  })
-  if (!updated) throw new Error(`Mission process-recovery occurrence ${marker.occurrenceID} is no longer pending`)
-}
-
-function trailingIncompleteAssistantMessageIDs(messages: Message.WithParts[]): string[] {
-  const result: string[] = []
-  for (let index = messages.length - 1; index >= 0; index -= 1) {
-    const message = messages[index]!
-    if (message.info.role === "user") break
-    if (message.info.role === "assistant" && message.info.time.completed === undefined) result.push(message.info.id)
-  }
-  return result
-}
-
-function repliesTo(messages: Message.WithParts[], wakeMessageID: string): Array<Message.WithParts> {
-  return messages.filter((message) => message.info.role === "assistant" && message.info.parentID === wakeMessageID)
-}
-
-function successfulReplyExists(messages: Message.WithParts[], wakeMessageID: string): boolean {
-  return repliesTo(messages, wakeMessageID).some(
-    (message) =>
-      message.info.role === "assistant" &&
-      message.info.time.completed !== undefined &&
-      Boolean(message.info.finish) &&
-      message.info.finish !== "error" &&
-      message.info.finish !== "tool-calls" &&
-      message.info.error === undefined &&
-      message.info.summary !== true,
+function readTrailingIncompleteAssistantMessageIDs(sessionID: string): string[] {
+  const rows = Database.use((db) =>
+    db
+      .select({ id: MessageTable.id })
+      .from(MessageTable)
+      .where(
+        and(
+          eq(MessageTable.session_id, sessionID),
+          sql`json_extract(${MessageTable.data}, '$.role') = 'assistant'`,
+          sql`json_extract(${MessageTable.data}, '$.time.completed') IS NULL`,
+          sql`NOT EXISTS (
+            SELECT 1 FROM message AS newer_user
+            WHERE newer_user.session_id = ${sessionID}
+              AND json_extract(newer_user.data, '$.role') = 'user'
+              AND (
+                newer_user.time_created > ${MessageTable.time_created}
+                OR (newer_user.time_created = ${MessageTable.time_created} AND newer_user.id > ${MessageTable.id})
+              )
+          )`,
+        ),
+      )
+      .orderBy(desc(MessageTable.time_created), desc(MessageTable.id))
+      .limit(MAX_RECOVERY_FRONTIER_MESSAGES + 1)
+      .all(),
   )
+  if (rows.length > MAX_RECOVERY_FRONTIER_MESSAGES) {
+    throw new Error(`Mission Session ${sessionID} recovery frontier exceeds ${MAX_RECOVERY_FRONTIER_MESSAGES} Messages`)
+  }
+  return rows.map((row) => row.id).toSorted()
 }
 
-function clearMarkerIfCurrent(sessionID: string, occurrenceID: string): boolean {
-  const marker = pendingMarker(sessionID)
-  if (marker?.occurrenceID !== occurrenceID) return false
-  return SessionControl.consume({ id: occurrenceID, sessionID }) !== undefined
+function recoveryIdentity(input: {
+  closureEventID: string
+  deadOwnerGeneration: string
+  interruptedFrontierDigest: string
+}) {
+  const key = [
+    "mission-process-recovery-v3",
+    input.closureEventID,
+    input.deadOwnerGeneration,
+    input.interruptedFrontierDigest,
+  ].join("\0")
+  return {
+    occurrenceID: Identifier.deterministic("session_control", `${key}\0occurrence`),
+    wakeMessageID: Identifier.deterministic("message", `${key}\0message`),
+    wakeTextPartID: Identifier.deterministic("part", `${key}\0text`),
+    wakeControlID: Identifier.deterministic("session_control", `${key}\0control`),
+  }
 }
 
-function recoveryPrompt(interruptedCount: number, attempt: number): string {
+function recoveryPrompt(interruptedCount: number): string {
   return (
-    `The backend process restarted while ${interruptedCount} assistant turn${interruptedCount === 1 ? " was" : "s were"} ` +
-    `still executing. This is recovery attempt ${attempt} for the same process-recovery occurrence. ` +
-    "Inspect the persisted process-interruption failures, reconcile durable Mission state, and continue the Mission from the last safe boundary without duplicating completed work."
+    `The backend process ended while ${interruptedCount} assistant turn${interruptedCount === 1 ? " was" : "s were"} ` +
+    "still executing. Inspect the persisted process-interruption facts, reconcile durable Mission state, and continue from the last safe boundary without duplicating completed work."
   )
+}
+
+function assertExactIncompleteFrontierInTransaction(
+  db: Database.TxOrDb,
+  input: { sessionID: string; messageIDs: readonly string[] },
+): void {
+  Database.requireActiveTransaction("assertExactIncompleteFrontierInTransaction")
+  if (input.messageIDs.length === 0) return
+  const rows = db
+    .select({ id: MessageTable.id })
+    .from(MessageTable)
+    .where(
+      and(
+        eq(MessageTable.session_id, input.sessionID),
+        inArray(MessageTable.id, [...input.messageIDs]),
+        sql`json_extract(${MessageTable.data}, '$.role') = 'assistant'`,
+        sql`json_extract(${MessageTable.data}, '$.time.completed') IS NULL`,
+      ),
+    )
+    .all()
+  const exact = new Set(rows.map((row) => row.id))
+  if (exact.size !== input.messageIDs.length || input.messageIDs.some((id) => !exact.has(id))) {
+    throw new Error(`Mission Session ${input.sessionID} interrupted assistant frontier changed before recovery claim`)
+  }
+}
+
+let afterRecoveryWriteAheadForTest:
+  | ((input: { sessionID: string; wakeMessageID: string }) => void | Promise<void>)
+  | undefined
+
+export const MissionProcessRecoveryTestHooks = {
+  installAfterWriteAhead(
+    hook: (input: { sessionID: string; wakeMessageID: string }) => void | Promise<void>,
+  ): Disposable {
+    if (afterRecoveryWriteAheadForTest) throw new Error("Mission recovery write-ahead hook is already installed")
+    afterRecoveryWriteAheadForTest = hook
+    return {
+      [Symbol.dispose]() {
+        if (afterRecoveryWriteAheadForTest === hook) afterRecoveryWriteAheadForTest = undefined
+      },
+    }
+  },
 }
 
 export type MissionProcessRecoveryResult =
   | { status: "not_needed"; sessionID: string }
-  | { status: "already_completed"; sessionID: string; occurrenceID: string }
-  | { status: "closure_settled"; sessionID: string; closureEventID: string; occurrenceID?: string }
-  | { status: "woken"; sessionID: string; occurrenceID: string; attempt: number; wakeMessageID: string }
+  | { status: "live"; sessionID: string; ownerGeneration: string }
+  | { status: "owned"; sessionID: string; ownerExpiresAt: number }
+  | { status: "closure_settled"; sessionID: string; closureEventID: string }
+  | { status: "woken"; sessionID: string; occurrenceID: string; attempt: 1; wakeMessageID: string }
 
+/** Reconcile one Mission process interruption from immutable facts only. */
 export async function recoverMissionProcessSession(
   sessionID: string,
-  dependencies: { wake?: WakeRecovery } = {},
+  input: { signal?: AbortSignal; deadlineAt?: number } = {},
 ): Promise<MissionProcessRecoveryResult> {
+  input.signal?.throwIfAborted()
+  const deadlineAt = input.deadlineAt ?? Date.now() + RECOVERY_DEADLINE_MS
+  if (!Number.isSafeInteger(deadlineAt) || deadlineAt <= Date.now()) {
+    throw new Error(`Mission Session ${sessionID} recovery requires a future absolute deadline`)
+  }
   const mission = await requireMissionSession(sessionID)
-  return withMissionExecutionAdmission(sessionID, async () => {
-    const messages = await Session.messages({ sessionID })
-    const incompleteAssistantMessageIDs = trailingIncompleteAssistantMessageIDs(messages)
-    let previous = pendingMarker(sessionID)
-    if (!previous && incompleteAssistantMessageIDs.length === 0) return { status: "not_needed", sessionID }
-    if (previous && successfulReplyExists(messages, previous.wakeMessageID)) {
-      clearMarkerIfCurrent(sessionID, previous.occurrenceID)
-      if (incompleteAssistantMessageIDs.length === 0) {
-        return { status: "already_completed", sessionID, occurrenceID: previous.occurrenceID }
-      }
-      previous = undefined
-    }
+  const ownerOccurrenceID = Identifier.ascending("call")
+  const targetID = `mission:${sessionID}`
+  const acquired = acquireControlLease({
+    target: "lifecycle",
+    targetID,
+    ownerOccurrenceID,
+    now: Date.now(),
+    leaseMilliseconds: RECOVERY_LEASE_MS,
+  })
+  if (!acquired.acquired) return { status: "owned", sessionID, ownerExpiresAt: acquired.lease.expires_at }
 
+  const ownerAbort = new AbortController()
+  const deadline = abortAfterAny(
+    Math.max(1, deadlineAt - Date.now()),
+    ownerAbort.signal,
+    ...(input.signal ? [input.signal] : []),
+  )
+  const releaseLease = () =>
+    releaseControlLeaseOnErrorPath({
+      target: "lifecycle",
+      targetID,
+      leaseID: acquired.lease.id,
+      ownerOccurrenceID,
+      now: Date.now(),
+    })
+  const releaseLeaseOnAbort = () => releaseLease()
+  deadline.signal.addEventListener("abort", releaseLeaseOnAbort, { once: true })
+  const renewal = setInterval(() => {
+    if (deadline.signal.aborted) return
+    try {
+      const now = Date.now()
+      renewControlLease({
+        target: "lifecycle",
+        targetID,
+        leaseID: acquired.lease.id,
+        ownerOccurrenceID,
+        now,
+        expiresAt: now + RECOVERY_LEASE_MS,
+      })
+    } catch (error) {
+      ownerAbort.abort(error)
+    }
+  }, RECOVERY_LEASE_MS / 3)
+  renewal.unref()
+
+  try {
     const closure = currentMissionExecutionClosure(sessionID)
     if (closure?.state === "closing" || closure?.state === "closed") {
-      await SessionLoop.terminalizeRecoveredIncompleteAssistant(sessionID)
-      if (previous) {
-        const settled = SessionControl.fail({
-          id: previous.occurrenceID,
+      return { status: "closure_settled", sessionID, closureEventID: closure.eventID }
+    }
+    if (!closure || closure.state !== "opened") {
+      throw new Error(`Mission Session ${sessionID} has interrupted work without an opened execution occurrence`)
+    }
+
+    const owner = SessionPromptOwner.current(sessionID)
+    if (owner) {
+      const observation = SessionPromptOwner.observation(owner)
+      if (observation === "exact_live" || observation === "unknown_live") {
+        return { status: "live", sessionID, ownerGeneration: owner.generation }
+      }
+    }
+
+    const persistedWake = readActionableMissionProcessRecoveryWake({
+      sessionID,
+      missionID: mission.missionID,
+      openedEventID: closure.eventID,
+    })
+    const trailingIncomplete = readTrailingIncompleteAssistantMessageIDs(sessionID)
+    const interruptedAssistantMessageIDs = persistedWake
+      ? persistedWake.reason.interruptedAssistantMessageIDs
+      : trailingIncomplete
+    if (!persistedWake && interruptedAssistantMessageIDs.length === 0) return { status: "not_needed", sessionID }
+    if (!persistedWake && !owner) {
+      throw new Error(`Mission Session ${sessionID} has an interrupted frontier without its exact dead Prompt owner`)
+    }
+    const interruptedFrontierDigest = SessionWake.recoveryFrontierDigest(interruptedAssistantMessageIDs)
+    const identity = persistedWake
+      ? {
+          occurrenceID: persistedWake.reason.occurrenceID,
+          wakeMessageID: persistedWake.messageID,
+          wakeTextPartID: "",
+          wakeControlID: "",
+        }
+      : recoveryIdentity({
+          closureEventID: closure.eventID,
+          deadOwnerGeneration: owner!.generation,
+          interruptedFrontierDigest,
+        })
+
+    const exactIncompleteFrontier = [
+      ...new Set([
+        ...(persistedWake
+          ? readIncompleteMissionAssistantMessageIDs(
+              sessionID,
+              persistedWake.reason.interruptedAssistantMessageIDs,
+            )
+          : []),
+        ...trailingIncomplete,
+      ]),
+    ].toSorted()
+    const completedAt = Date.now()
+    const receipt = await admitMissionExecutionWake({
+      missionID: mission.missionID,
+      sessionID,
+      wake: async (missionAdmission) => {
+        if (!persistedWake) {
+          const reason: RecoveryReason = {
+            source: "mission.process_recovery",
+            version: 3,
+            missionID: mission.missionID,
+            occurrenceID: identity.occurrenceID,
+            openedEventID: closure.eventID,
+            deadOwnerGeneration: owner!.generation,
+            interruptedFrontierDigest,
+            interruptedAssistantMessageIDs,
+          }
+          const prompt = applyMissionControlPromptOverlay({
+            sessionID,
+            messageID: identity.wakeMessageID,
+            author: "OpenCorvus runtime recovery",
+            agent: "mission",
+            noReply: true as const,
+            extra: {
+              ...SessionWake.reasonExtra(reason),
+              surface: "panel" as const,
+            },
+            byteMaterializationProjectID: mission.projectID,
+            parts: [
+              {
+                id: identity.wakeTextPartID,
+                type: "text" as const,
+                text: recoveryPrompt(interruptedAssistantMessageIDs.length),
+              },
+            ],
+          })
+          await SessionPrompt.persistNoReplySequence([
+            {
+              input: prompt,
+              hooks: {
+                controls: (message) => [
+                  {
+                    id: identity.wakeControlID,
+                    sessionID,
+                    kind: "wake_reason",
+                    status: "consumed",
+                    owner: reason.source,
+                    payload: { messageID: message.id, wake_reason: reason },
+                  },
+                ],
+                preflightBundle: missionAdmission.preflightBundle,
+                commitBundle: () =>
+                  Database.use((db) => {
+                    Database.requireActiveTransaction("recoverMissionProcessSession.writeAhead")
+                    assertControlLeaseInTransaction(db, {
+                      target: "lifecycle",
+                      targetID,
+                      leaseID: acquired.lease.id,
+                      ownerOccurrenceID,
+                      now: Date.now(),
+                    })
+                    assertExactIncompleteFrontierInTransaction(db, {
+                      sessionID,
+                      messageIDs: exactIncompleteFrontier,
+                    })
+                    SessionPromptOwner.releaseDeadInTransaction(db, {
+                      sessionID,
+                      ...(owner ? { expectedGeneration: owner.generation } : {}),
+                    })
+                  }),
+              },
+            },
+          ])
+          await afterRecoveryWriteAheadForTest?.({ sessionID, wakeMessageID: identity.wakeMessageID })
+          deadline.signal.throwIfAborted()
+        } else {
+          const persistedMessage = await MessageStore.get({ sessionID, messageID: persistedWake.messageID })
+          if (persistedMessage.info.role !== "user") {
+            throw new Error(`Mission recovery Message ${persistedWake.messageID} changed participant role`)
+          }
+          const persistedUserInfo = persistedMessage.info
+          const persistedUserParts = persistedMessage.parts
+          Database.immediateTransaction((db) => {
+            missionAdmission.preflightBundle(persistedUserInfo, persistedUserParts)
+            assertControlLeaseInTransaction(db, {
+              target: "lifecycle",
+              targetID,
+              leaseID: acquired.lease.id,
+              ownerOccurrenceID,
+              now: Date.now(),
+            })
+            assertExactIncompleteFrontierInTransaction(db, {
+              sessionID,
+              messageIDs: exactIncompleteFrontier,
+            })
+            if (owner) {
+              SessionPromptOwner.releaseDeadInTransaction(db, {
+                sessionID,
+                expectedGeneration: owner.generation,
+              })
+            }
+          })
+        }
+
+        if (exactIncompleteFrontier.length > 0) {
+          await SessionLoop.terminalizeRecoveredIncompleteAssistant(
+            sessionID,
+            deadline.signal,
+            exactIncompleteFrontier.map((messageID) => ({ messageID, completedAt })),
+          )
+        }
+        if (readIncompleteMissionAssistantMessageIDs(sessionID, exactIncompleteFrontier).length > 0) {
+          throw new Error(`Mission Session ${sessionID} interrupted assistant frontier did not terminalize`)
+        }
+        deadline.signal.throwIfAborted()
+
+        const ownerPreflight = SessionPromptOwner.recoveryFencePreflight({
           sessionID,
-          error: `Mission execution closed by ${closure.eventID}`,
-          payload: {
-            ...previous,
-            terminal: { kind: "mission_closed", closureEventID: closure.eventID },
+          messageID: identity.wakeMessageID,
+          preflight: (db) => {
+            missionAdmission.ownerPreflight(db)
+            assertControlLeaseInTransaction(db, {
+              target: "lifecycle",
+              targetID,
+              leaseID: acquired.lease.id,
+              ownerOccurrenceID,
+              now: Date.now(),
+            })
           },
         })
-        if (!settled) {
-          throw new Error(`Mission process-recovery occurrence ${previous.occurrenceID} is no longer pending`)
+        return {
+          sessionID,
+          messageID: identity.wakeMessageID,
+          ...SessionWake.resumePersistedWakeWithReceipt({
+            sessionID,
+            messageID: identity.wakeMessageID,
+            directory: mission.directory,
+            signal: deadline.signal,
+            retryFailedReply: Boolean(persistedWake),
+            ownerPreflight,
+            ownerLifecycle: missionAdmission.ownerLifecycle,
+          }),
         }
-      }
-      return {
-        status: "closure_settled",
-        sessionID,
-        closureEventID: closure.eventID,
-        ...(previous ? { occurrenceID: previous.occurrenceID } : {}),
-      }
-    }
-
-    const interruptedAssistantMessageIDs = [
-      ...new Set([...(previous?.interruptedAssistantMessageIDs ?? []), ...incompleteAssistantMessageIDs]),
-    ]
-    if (interruptedAssistantMessageIDs.length === 0) {
-      throw new Error(`Mission process recovery ${previous?.occurrenceID ?? "<missing>"} has no interrupted assistant`)
-    }
-    const rotateAttempt = previous ? repliesTo(messages, previous.wakeMessageID).length > 0 : false
-    const occurrenceID = previous?.occurrenceID ?? Identifier.ascending("session_control")
-    const marker = MissionProcessRecoveryMarker.parse({
-      version: 1,
-      occurrenceID,
-      attempt: previous ? previous.attempt + (rotateAttempt ? 1 : 0) : 1,
-      interruptedAssistantMessageIDs,
-      wakeMessageID: previous && !rotateAttempt ? previous.wakeMessageID : Identifier.ascending("message"),
-      wakeTextPartID: previous && !rotateAttempt ? previous.wakeTextPartID : Identifier.ascending("part"),
-      wakeControlID: previous && !rotateAttempt ? previous.wakeControlID : Identifier.ascending("session_control"),
-      interruptedAt: previous?.interruptedAt ?? Date.now(),
-    })
-    persistMarker(sessionID, marker, previous !== undefined)
-    await SessionLoop.terminalizeRecoveredIncompleteAssistant(sessionID)
-
-    const wake = dependencies.wake ?? SessionWake.wakeWithReceipt
-    const receipt = await wake({
-      sessionID,
-      messageID: marker.wakeMessageID,
-      textPartID: marker.wakeTextPartID,
-      controlID: marker.wakeControlID,
-      prompt: recoveryPrompt(marker.interruptedAssistantMessageIDs.length, marker.attempt),
-      author: "OpenCorvus runtime recovery",
-      reason: {
-        source: "mission.process_recovery",
-        missionID: mission.missionID,
-        occurrenceID: marker.occurrenceID,
-        interruptedAssistantMessageIDs: marker.interruptedAssistantMessageIDs,
       },
-      agent: "mission",
-      surface: "panel",
     })
-    if (receipt.messageID !== marker.wakeMessageID) {
+    if (receipt.messageID !== identity.wakeMessageID) {
       throw new Error(`Mission process recovery wake identity changed for ${sessionID}`)
     }
     await receipt.activation
-    if (receipt.completion) {
-      void receipt.completion.then((outcome) => {
-        if (!outcome.ok) return
-        return runWithInitializedIndependentProject({
-          directory: mission.directory,
-          fn: async () => {
-            const currentMessages = await Session.messages({ sessionID })
-            if (successfulReplyExists(currentMessages, marker.wakeMessageID)) {
-              clearMarkerIfCurrent(sessionID, marker.occurrenceID)
-            }
-          },
-        }).catch((error) => log.error("failed to clear completed Mission recovery marker", { sessionID, error }))
-      })
+    const completion = await receipt.completion
+    deadline.signal.throwIfAborted()
+    if (!completion.ok) {
+      throw new Error(`Mission process recovery wake ${identity.wakeMessageID} failed: ${completion.error}`)
     }
     return {
       status: "woken",
       sessionID,
-      occurrenceID: marker.occurrenceID,
-      attempt: marker.attempt,
-      wakeMessageID: marker.wakeMessageID,
+      occurrenceID: identity.occurrenceID,
+      attempt: 1,
+      wakeMessageID: identity.wakeMessageID,
     }
-  })
+  } finally {
+    clearInterval(renewal)
+    deadline.signal.removeEventListener("abort", releaseLeaseOnAbort)
+    deadline.clearTimeout()
+    releaseLease()
+  }
 }

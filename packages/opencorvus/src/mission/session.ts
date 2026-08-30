@@ -4,7 +4,7 @@ import { Instance } from "@/project/instance"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
 import { Project } from "@/project/project"
 import { Session } from "@/session"
-import { MessageTable, SessionControlRecordTable, SessionTable } from "@/session/session.sql"
+import { MessageTable, SessionTable } from "@/session/session.sql"
 import { Filesystem } from "@/util/filesystem"
 import { MISSION_CONTROL_DEFAULT_TITLE } from "@/session/first-message-title"
 import {
@@ -345,13 +345,19 @@ export type GlobalMissionProcessRecoveryCandidate = {
 }
 
 /**
- * Discover standalone Mission Sessions whose process-owned Turn did not
- * settle, including the post-terminalization/pre-wake crash cut represented
- * by the durable Mission recovery marker.
+ * Discover standalone Mission Sessions whose canonical reducer has work:
+ * either a delete-retention intent lacks its Session tombstone, the latest
+ * execution fact is `closing`, or a process-owned Turn did not settle.
+ * Discovery is only a hint; the reconciler re-reads exact facts.
  */
-export function listGlobalMissionProcessRecoveryCandidates(input?: {
-  scopeProjectWorktree?: string
+export function listGlobalMissionProcessRecoveryCandidates(input: {
+  scopeProjectID?: string
+  afterSessionID?: string
+  limit: number
 }): GlobalMissionProcessRecoveryCandidate[] {
+  if (!Number.isSafeInteger(input.limit) || input.limit <= 0) {
+    throw new Error("Mission process recovery discovery requires a positive bounded page size")
+  }
   const rows = Database.use((db) =>
     db
       .select({ sessionID: SessionTable.id, directory: SessionTable.directory })
@@ -359,18 +365,49 @@ export function listGlobalMissionProcessRecoveryCandidates(input?: {
       .where(
         and(
           eq(SessionTable.kind, "mission"),
-          isNull(SessionTable.time_archived),
+          input.scopeProjectID ? eq(SessionTable.project_id, input.scopeProjectID) : undefined,
+          input.afterSessionID ? sql`${SessionTable.id} > ${input.afterSessionID}` : undefined,
           sql`json_extract(${SessionTable.metadata}, '$.mission.id') IS NOT NULL`,
           sql`(
+            (
+              EXISTS (
+                SELECT 1
+                FROM protocol_event AS delete_request
+                WHERE delete_request.aggregate_type = 'session'
+                  AND delete_request.aggregate_id = ${SessionTable.id}
+                  AND delete_request.type = 'mission.retention.delete_requested'
+              )
+              AND NOT EXISTS (
+                SELECT 1
+                FROM protocol_event AS deleted_session
+                WHERE deleted_session.aggregate_type = 'session'
+                  AND deleted_session.aggregate_id = ${SessionTable.id}
+                  AND deleted_session.type = 'session.deleted'
+              )
+            )
+            OR (
+              ${SessionTable.time_archived} IS NULL
+              AND (
             EXISTS (
               SELECT 1
-              FROM ${SessionControlRecordTable}
-              WHERE ${SessionControlRecordTable.session_id} = ${SessionTable.id}
-                AND ${SessionControlRecordTable.kind} = 'mission_process_recovery'
+              FROM protocol_event AS closing_event
+              WHERE closing_event.aggregate_type = 'session'
+                AND closing_event.aggregate_id = ${SessionTable.id}
+                AND closing_event.type = 'mission.execution.closing'
                 AND NOT EXISTS (
-                  SELECT 1 FROM session_control_event
-                  WHERE session_control_event.control_id = ${SessionControlRecordTable.id}
-                    AND session_control_event.kind IN ('consumed', 'failed')
+                  SELECT 1
+                  FROM protocol_event AS later_closure
+                  WHERE later_closure.aggregate_type = 'session'
+                    AND later_closure.aggregate_id = closing_event.aggregate_id
+                    AND later_closure.type IN (
+                      'mission.execution.opened',
+                      'mission.execution.closing',
+                      'mission.execution.closed'
+                    )
+                    AND (
+                      later_closure.seq > closing_event.seq
+                      OR (later_closure.seq = closing_event.seq AND later_closure.id > closing_event.id)
+                    )
                 )
             )
             OR EXISTS (
@@ -393,15 +430,55 @@ export function listGlobalMissionProcessRecoveryCandidates(input?: {
                     )
                 )
             )
+            OR EXISTS (
+              SELECT 1
+              FROM ${MessageTable} AS recovery_wake
+              WHERE recovery_wake.session_id = ${SessionTable.id}
+                AND json_extract(recovery_wake.data, '$.role') = 'user'
+                AND json_extract(recovery_wake.data, '$.extra.wake_reason.source') = 'mission.process_recovery'
+                AND json_extract(recovery_wake.data, '$.extra.wake_reason.version') = 3
+                AND json_extract(recovery_wake.data, '$.extra.wake_reason.openedEventID') = (
+                  SELECT current_opened.id
+                  FROM protocol_event AS current_opened
+                  WHERE current_opened.aggregate_type = 'session'
+                    AND current_opened.aggregate_id = ${SessionTable.id}
+                    AND current_opened.type IN (
+                      'mission.execution.opened',
+                      'mission.execution.closing',
+                      'mission.execution.closed'
+                    )
+                  ORDER BY current_opened.seq DESC,current_opened.id DESC
+                  LIMIT 1
+                )
+                AND NOT EXISTS (
+                  SELECT 1
+                  FROM ${MessageTable} AS terminal_recovery_reply
+                  WHERE terminal_recovery_reply.session_id = ${SessionTable.id}
+                    AND json_extract(terminal_recovery_reply.data, '$.role') = 'assistant'
+                    AND json_extract(terminal_recovery_reply.data, '$.parentID') = recovery_wake.id
+                    AND json_extract(terminal_recovery_reply.data, '$.time.completed') IS NOT NULL
+                    AND NOT (
+                      json_extract(terminal_recovery_reply.data, '$.finish') = 'error'
+                      AND json_extract(terminal_recovery_reply.data, '$.error.name') = 'ProcessExecutionInterruptedError'
+                      AND json_type(terminal_recovery_reply.data, '$.error') = 'object'
+                      AND (SELECT COUNT(*) FROM json_each(json_extract(terminal_recovery_reply.data, '$.error'))) = 2
+                      AND json_type(terminal_recovery_reply.data, '$.error.data') = 'object'
+                      AND (SELECT COUNT(*) FROM json_each(json_extract(terminal_recovery_reply.data, '$.error.data'))) = 1
+                      AND json_type(terminal_recovery_reply.data, '$.error.data.message') = 'text'
+                      AND length(json_extract(terminal_recovery_reply.data, '$.error.data.message')) > 0
+                    )
+                )
+            )
+              )
+            )
           )`,
         ),
       )
-      .orderBy(SessionTable.directory, SessionTable.id)
+      .orderBy(SessionTable.id)
+      .limit(input.limit)
       .all(),
   )
-  return rows.filter(
-    (row) => !input?.scopeProjectWorktree || Project.samePath(row.directory, input.scopeProjectWorktree),
-  )
+  return rows
 }
 
 async function ensureMissionSessionInner(input: {
@@ -438,15 +515,18 @@ async function ensureMissionSessionInner(input: {
       }
       return existing
     }
-    return Session.persistPreparedNextInTransaction(db, Session.prepareRootNext({
-      directory: input.directory,
-      title: input.initialTitle ?? MISSION_CONTROL_DEFAULT_TITLE,
-      kind: "mission",
-      metadata: {
-        ...canonicalMissionMetadata(input),
-        ...(input.initialConfigOverlay ? { configOverlay: input.initialConfigOverlay } : {}),
-      },
-    }))
+    return Session.persistPreparedNextInTransaction(
+      db,
+      Session.prepareRootNext({
+        directory: input.directory,
+        title: input.initialTitle ?? MISSION_CONTROL_DEFAULT_TITLE,
+        kind: "mission",
+        metadata: {
+          ...canonicalMissionMetadata(input),
+          ...(input.initialConfigOverlay ? { configOverlay: input.initialConfigOverlay } : {}),
+        },
+      }),
+    )
   })
   if (missionProductPillar(session) !== input.productPillar) {
     throw new Error(`Mission ${missionID} already holds a different immutable product pillar.`)

@@ -3,6 +3,7 @@ import { Database, asc, eq, inArray } from "@/storage/db"
 import { AutomationRunReceiptTable, AutomationRunTable, AutomationTable } from "./automation.sql"
 import { Recurrence } from "./recurrence"
 import { createHash } from "node:crypto"
+import { assertSchedulerMissionReservationInTransaction } from "./mission-reservation"
 
 export type AutomationRunRow = typeof AutomationRunTable.$inferSelect & {
   automation_id: string
@@ -10,7 +11,9 @@ export type AutomationRunRow = typeof AutomationRunTable.$inferSelect & {
   project_id: string | null
   session_id: string | null
   owner: string | null
-  outcome: "running" | "retry_wait" | "succeeded" | "failed"
+  outcome: "running" | "retry_wait" | "succeeded" | "failed" | "disposition"
+  disposition: "mission_closed" | null
+  closure_event_id: string | null
   completed_at: number | null
   error: string | null
   retry_at: number | null
@@ -37,7 +40,18 @@ export function projectAutomationRunInTransaction(db: Database.TxOrDb, row: type
   const targetScope = definition.scope ?? (definition.sessionID ? "session" : "project")
   const projectID = row.target_project_id ?? definition.projectID
   const sessionID = definition.sessionID ?? (definition.kind === "recurring" && targetScope !== "session" ? deterministicRunSessionID(row.id) : null)
-  return { ...row, automation_id: definition.definitionID, target_scope: targetScope, project_id: projectID, session_id: sessionID, owner: lease?.owner_occurrence_id ?? null, outcome: receipt?.outcome ?? "running", completed_at: receipt?.time_created ?? null, error: receipt?.error ?? null, retry_at: receipt?.retry_at ?? null }
+  if (definition.sessionID) {
+    const reservation = assertSchedulerMissionReservationInTransaction(db, definition.sessionID, row)
+    if (
+      reservation.kind === "mission_closed" &&
+      (receipt?.outcome !== "disposition" ||
+        receipt.disposition !== "mission_closed" ||
+        receipt.closure_event_id !== reservation.closureEventID)
+    ) {
+      throw new Error(`Automation run ${row.id} terminal Mission reservation has no exact atomic receipt`)
+    }
+  }
+  return { ...row, automation_id: definition.definitionID, target_scope: targetScope, project_id: projectID, session_id: sessionID, owner: lease?.owner_occurrence_id ?? null, outcome: receipt?.outcome ?? "running", disposition: receipt?.disposition ?? null, closure_event_id: receipt?.closure_event_id ?? null, completed_at: receipt?.time_created ?? null, error: receipt?.error ?? null, retry_at: receipt?.retry_at ?? null }
 }
 
 export type AutomationRow = typeof AutomationTable.$inferSelect & {
@@ -59,7 +73,7 @@ export function projectAutomationInTransaction(db: Database.TxOrDb, row: typeof 
   const latest = runs.at(-1)
   let failureCount = 0
   for (const run of runs.toReversed()) {
-    if (run.outcome === "succeeded") break
+    if (run.outcome === "succeeded" || run.outcome === "disposition") break
     if (run.outcome === "failed" || run.outcome === "retry_wait") failureCount += 1
   }
   const lease = currentControlLeaseInTransaction(db, "automation", row.definition_id)

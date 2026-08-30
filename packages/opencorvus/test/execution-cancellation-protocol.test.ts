@@ -4,6 +4,7 @@ import {
   ExecutionCancellationError,
   isExecutionCancellationError,
 } from "@/session/prompt/cancellation"
+import { TaskCancellationOrigin } from "@/engine/cancellation-origin"
 
 test("recognizes an exact cancellation protocol value after a module-realm clone", () => {
   const error = new ExecutionCancellationError({
@@ -39,5 +40,27 @@ test("recognizes an exact cancellation protocol value after a module-realm clone
       source: "orchestrator.abort_cascade",
       wakeID: "art_structural_cancellation",
     },
+  })
+})
+
+test("records historical Mission child cancellation as runtime reconciliation provenance", () => {
+  expect(
+    TaskCancellationOrigin.parse({
+      actor: "mission",
+      source: "mission.abort",
+      surface: "runtime",
+      requestID: "req_historical_mission_close",
+      reason: "Resume historical Mission close event evt_historical_mission_close",
+      sessionID: "ses_historical_mission_close",
+      missionID: "mission-historical-close",
+    }),
+  ).toEqual({
+    actor: "mission",
+    source: "mission.abort",
+    surface: "runtime",
+    requestID: "req_historical_mission_close",
+    reason: "Resume historical Mission close event evt_historical_mission_close",
+    sessionID: "ses_historical_mission_close",
+    missionID: "mission-historical-close",
   })
 })

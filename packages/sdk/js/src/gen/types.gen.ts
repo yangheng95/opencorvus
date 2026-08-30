@@ -94,6 +94,7 @@ export type AssistantMessage = {
     | UnknownError
     | MessageOutputLengthError
     | MessageAbortedError
+    | ProcessExecutionInterruptedError
     | StructuredOutputPayloadError
     | SnapshotIntegrityError
     | SnapshotEmptyTreeError
@@ -1536,6 +1537,7 @@ export type EventSessionError = {
       | UnknownError
       | MessageOutputLengthError
       | MessageAbortedError
+      | ProcessExecutionInterruptedError
       | StructuredOutputPayloadError
       | SnapshotIntegrityError
       | SnapshotEmptyTreeError
@@ -1617,6 +1619,7 @@ export type EventTaskCancellationRequested = {
       | "zalouser"
       | "right-sidebar"
       | "orchestrator"
+      | "runtime"
     toolCallID?: string
     toolPartID?: string
   }
@@ -3927,6 +3930,13 @@ export type PermissionRequest = {
 
 export type PermissionRuleConfig = PermissionActionConfig | PermissionObjectConfig
 
+export type ProcessExecutionInterruptedError = {
+  data: {
+    message: string
+  }
+  name: "ProcessExecutionInterruptedError"
+}
+
 export type Project = {
   commands?: {
     /**
@@ -5515,6 +5525,7 @@ export type VisibleMessage =
         | UnknownError
         | MessageOutputLengthError
         | MessageAbortedError
+        | ProcessExecutionInterruptedError
         | StructuredOutputPayloadError
         | SnapshotIntegrityError
         | SnapshotEmptyTreeError
@@ -17373,7 +17384,7 @@ export type GlobalAutomationsRunResponses = {
     error: string | null
     fireId: string
     id: string
-    outcome: "running" | "retry_wait" | "succeeded" | "failed"
+    outcome: "running" | "retry_wait" | "succeeded" | "failed" | "disposition"
     session: {
       directory: string
       experience: "chat" | "work" | null
@@ -17434,7 +17445,7 @@ export type GlobalAutomationsRunsResponses = {
     error: string | null
     fireId: string
     id: string
-    outcome: "running" | "retry_wait" | "succeeded" | "failed"
+    outcome: "running" | "retry_wait" | "succeeded" | "failed" | "disposition"
     session: {
       directory: string
       experience: "chat" | "work" | null
@@ -20700,6 +20711,7 @@ export type MissionWakeData = {
     missionID?: string
     model?: string
     productPillar: "code" | "work"
+    requestID?: string
     text: string
   }
   path?: never
@@ -20727,12 +20739,25 @@ export type MissionWakeErrors = {
   /**
    * Mission execution is still completing its durable close operation
    */
-  409: {
-    data: {
-      [key: string]: unknown
-    }
-    name: "MissionExecutionClosingError"
-  }
+  409:
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "MissionExecutionClosingError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "MissionExecutionWakeClosedError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "MissionExecutionWakeInputConflictError"
+      }
   /**
    * Saved Provider credentials could not be observed safely
    */
@@ -21065,6 +21090,7 @@ export type MissionSetArchivedResponse = MissionSetArchivedResponses[keyof Missi
 export type MissionDispatchData = {
   body?: {
     model?: string
+    requestID?: string
   }
   path: {
     missionID: string
@@ -21102,12 +21128,25 @@ export type MissionDispatchErrors = {
   /**
    * Mission execution is still completing its durable close operation
    */
-  409: {
-    data: {
-      [key: string]: unknown
-    }
-    name: "MissionExecutionClosingError"
-  }
+  409:
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "MissionExecutionClosingError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "MissionExecutionWakeClosedError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "MissionExecutionWakeInputConflictError"
+      }
   /**
    * Saved Provider credentials could not be observed safely
    */
@@ -24453,6 +24492,7 @@ export type SessionCommandResponses = {
         | UnknownError
         | MessageOutputLengthError
         | MessageAbortedError
+        | ProcessExecutionInterruptedError
         | StructuredOutputPayloadError
         | SnapshotIntegrityError
         | SnapshotEmptyTreeError
@@ -26083,6 +26123,7 @@ export type SessionPromptResponses = {
         | UnknownError
         | MessageOutputLengthError
         | MessageAbortedError
+        | ProcessExecutionInterruptedError
         | StructuredOutputPayloadError
         | SnapshotIntegrityError
         | SnapshotEmptyTreeError
@@ -28281,6 +28322,7 @@ export type TaskGetResponses = {
             | "zalouser"
             | "right-sidebar"
             | "orchestrator"
+            | "runtime"
           toolCallID?: string
           toolPartID?: string
         }
@@ -28344,6 +28386,7 @@ export type TaskGetResponses = {
             | "zalouser"
             | "right-sidebar"
             | "orchestrator"
+            | "runtime"
           terminalAt: number
           terminalEventID: string
           toolCallID?: string
@@ -29255,6 +29298,7 @@ export type TaskBoardResponses = {
               | "zalouser"
               | "right-sidebar"
               | "orchestrator"
+              | "runtime"
             toolCallID?: string
             toolPartID?: string
           }
@@ -29318,6 +29362,7 @@ export type TaskBoardResponses = {
               | "zalouser"
               | "right-sidebar"
               | "orchestrator"
+              | "runtime"
             terminalAt: number
             terminalEventID: string
             toolCallID?: string
@@ -30525,6 +30570,7 @@ export type TaskCancelResponses = {
           | "zalouser"
           | "right-sidebar"
           | "orchestrator"
+          | "runtime"
         toolCallID?: string
         toolPartID?: string
       }
@@ -30588,6 +30634,7 @@ export type TaskCancelResponses = {
           | "zalouser"
           | "right-sidebar"
           | "orchestrator"
+          | "runtime"
         terminalAt: number
         terminalEventID: string
         toolCallID?: string
@@ -31285,6 +31332,7 @@ export type TaskConversationResponses = {
                 | "zalouser"
                 | "right-sidebar"
                 | "orchestrator"
+                | "runtime"
               toolCallID?: string
               toolPartID?: string
             }
@@ -31348,6 +31396,7 @@ export type TaskConversationResponses = {
                 | "zalouser"
                 | "right-sidebar"
                 | "orchestrator"
+                | "runtime"
               terminalAt: number
               terminalEventID: string
               toolCallID?: string
@@ -33238,6 +33287,7 @@ export type TaskProgressResponses = {
               | "zalouser"
               | "right-sidebar"
               | "orchestrator"
+              | "runtime"
             toolCallID?: string
             toolPartID?: string
           }
@@ -33301,6 +33351,7 @@ export type TaskProgressResponses = {
               | "zalouser"
               | "right-sidebar"
               | "orchestrator"
+              | "runtime"
             terminalAt: number
             terminalEventID: string
             toolCallID?: string

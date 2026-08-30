@@ -55,3 +55,23 @@ export function successfulSchedulerWakeReplyExistsInTransaction(
       .get(),
   )
 }
+
+export function completedSchedulerWakeReplyExistsInTransaction(
+  db: Database.TxOrDb,
+  input: { sessionID: string; messageID: string },
+): boolean {
+  return Boolean(
+    db
+      .select({ id: MessageTable.id })
+      .from(MessageTable)
+      .where(
+        and(
+          eq(MessageTable.session_id, input.sessionID),
+          sql`json_extract(${MessageTable.data}, '$.role') = 'assistant'`,
+          sql`json_extract(${MessageTable.data}, '$.parentID') = ${input.messageID}`,
+          sql`json_extract(${MessageTable.data}, '$.time.completed') IS NOT NULL`,
+        ),
+      )
+      .get(),
+  )
+}
