@@ -1889,6 +1889,14 @@ export namespace SessionLoop {
         assistant: assistantMessage,
         parent: parentInput,
         binding: catalogBinding,
+        admitInTransaction(db) {
+          settleSessionDelaysAtAssistantAcceptanceInTransaction(db, {
+            sessionID: assistantMessage.sessionID,
+            assistantMessageID: assistantMessage.id,
+            acceptedInputMessageIDs: assistantMessage.acceptedInputMessageIDs ?? [],
+            now: Date.now(),
+          })
+        },
       })
     }
     const occurrenceHarness = bindHarnessProjection(occurrenceGrants, catalogBinding)

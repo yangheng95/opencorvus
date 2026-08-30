@@ -1,7 +1,7 @@
 import type { Tool as AITool } from "ai"
 import z from "zod"
 import { canonicalDigestSource, compareCanonicalStrings } from "@/util/canonical-digest"
-import { projectedTaskToolRuntimeBindingOf } from "@/tool/task-tool-execution-scope"
+import { projectedTaskToolRuntimeBindingOf } from "@/tool/projected-task-tool-runtime-binding"
 import { internalStageToolBindingOf, stageToolMaterializerBindingOf } from "@/agent/stage-tool-materializer"
 import { MCP } from "@/mcp"
 

@@ -14,33 +14,30 @@ import { sameProjectedWorkerIdentity } from "@/agent/projected-worker-identity"
 import { Filesystem } from "@/util/filesystem"
 import { currentTaskToolInvocationSurface } from "@/tool/task-tool-invocation"
 import type { ToolExecutionSurface } from "@/tool/execution-surface"
-import type { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
-import { sameExpertSquadPackageRevision } from "@/expert-squad/package-revision"
+import {
+  sameExpertSquadPackageRevision,
+  type ExpertSquadPackageRevision,
+} from "@/expert-squad/package-revision"
 import type { SessionExecutionAuthority } from "@/engine/task-session-lineage"
 import { harnessGrantedRefs } from "@/capability/harness-projection"
 import { capabilityRef, CapabilityRefCodec, type CapabilityRef } from "@opencorvus-ai/util/capability-ref"
+import {
+  bindPackageToolRuntime,
+  bindProjectedTaskToolRuntime,
+  projectedTaskToolRuntimeBindingOf,
+  type PackageToolRuntimeBinding,
+  type ProjectedTaskToolRuntimeBinding,
+} from "@/tool/projected-task-tool-runtime-binding"
+
+export {
+  bindPackageToolRuntime,
+  bindProjectedTaskToolRuntime,
+  projectedTaskToolRuntimeBindingOf,
+  type PackageToolRuntimeBinding,
+  type ProjectedTaskToolRuntimeBinding,
+}
 
 // SDK means Software Development Kit; SHA-256 means Secure Hash Algorithm 256-bit.
-export type ProjectedTaskToolRuntimeBinding = Readonly<{
-  taskID: string
-  projectDirectory: string
-  ownerKind: "projected-scheduler" | "projected-worker"
-  expertSquadID: string
-  packageRevision: PromptProfileResolver.ResolvedPackageRevision
-  agentID: string
-  projectionHash: string
-  providerKind: "package-tool" | "package-mcp-tool" | "default-mcp-tool"
-  toolRef: string
-  providerName: string
-  runtimeToolID: string
-  mcpServerConfigSHA256?: string
-}>
-
-export type PackageToolRuntimeBinding = ProjectedTaskToolRuntimeBinding &
-  Readonly<{
-    providerKind: "package-tool"
-    compiledBundleSHA256: string
-  }>
 
 function projectedBindingCapabilityRef(binding: ProjectedTaskToolRuntimeBinding): CapabilityRef {
   switch (binding.providerKind) {
@@ -114,14 +111,14 @@ export type TaskToolExecutionScope = Readonly<{
     | {
         kind: "projected-scheduler"
         expertSquadID: string
-        packageRevision: PromptProfileResolver.ResolvedPackageRevision
+        packageRevision: ExpertSquadPackageRevision
         agentID: "orchestrator"
         projectionHash: string
       }
     | {
         kind: "projected-worker"
         expertSquadID: string
-        packageRevision: PromptProfileResolver.ResolvedPackageRevision
+        packageRevision: ExpertSquadPackageRevision
         agentID: string
         projectionHash: string
         workerTurnDescriptorID: string
@@ -140,8 +137,6 @@ export function executionAuthorityFromTaskToolScope(scope: TaskToolExecutionScop
   })
 }
 
-const projectedTaskToolRuntimeBinding = Symbol("opencorvus.projected-task-tool-runtime-binding")
-
 type AiSdkExecutionOptions = {
   toolCallId?: unknown
   opencorvus?: {
@@ -152,33 +147,6 @@ type AiSdkExecutionOptions = {
     toolPartID?: unknown
     invocationAuthority?: unknown
   }
-}
-
-export function bindProjectedTaskToolRuntime<T extends object>(tool: T, binding: ProjectedTaskToolRuntimeBinding): T {
-  Object.defineProperty(tool, projectedTaskToolRuntimeBinding, {
-    value: Object.freeze({ ...binding, packageRevision: Object.freeze({ ...binding.packageRevision }) }),
-    enumerable: false,
-    configurable: false,
-    writable: false,
-  })
-  return tool
-}
-
-export function bindPackageToolRuntime<T extends object>(tool: T, binding: PackageToolRuntimeBinding): T {
-  return bindProjectedTaskToolRuntime(tool, binding)
-}
-
-function runtimeBinding(tool: object | undefined): ProjectedTaskToolRuntimeBinding | undefined {
-  return (
-    tool &&
-    (tool as { [projectedTaskToolRuntimeBinding]?: ProjectedTaskToolRuntimeBinding })[projectedTaskToolRuntimeBinding]
-  )
-}
-
-export function projectedTaskToolRuntimeBindingOf(
-  tool: object | undefined,
-): ProjectedTaskToolRuntimeBinding | undefined {
-  return runtimeBinding(tool)
 }
 
 function requireExecutionIdentity(options: unknown, toolName: string) {

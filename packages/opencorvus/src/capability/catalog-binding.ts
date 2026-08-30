@@ -34,7 +34,6 @@ import { canonicalDigestSource, canonicalJSONValue, compareCanonicalStrings } fr
 import { Bus } from "@/bus"
 import { timelineMessageOrderKey, timelinePartOrderKey } from "@/timeline/order"
 import { resolveCapabilityCaller } from "./caller-authority"
-import { settleSessionDelaysAtAssistantAcceptanceInTransaction } from "@/scheduler/session-delay-admission"
 
 export const CATALOG_SNAPSHOT_REF_METADATA_KEY = "catalog_snapshot_ref"
 export const CATALOG_SNAPSHOT_HASH_METADATA_KEY = "catalog_snapshot_hash"
@@ -712,6 +711,7 @@ export namespace CatalogOccurrenceBinding {
     assistant: Message.Assistant
     parent: Message.WithParts
     binding: CatalogSnapshotBindingV2
+    admitInTransaction?: (db: Database.TxOrDb) => void
   }): Promise<Message.Assistant> {
     if (input.parent.info.role !== "user" || input.parent.info.id !== input.assistant.parentID) {
       throw new Error(`Catalog assistant ${input.assistant.id} parent authority is invalid`)
@@ -732,12 +732,7 @@ export namespace CatalogOccurrenceBinding {
     const binding = CatalogSnapshotBindingV2.parse(input.binding)
     await read({ projectID: input.projectID, binding })
     const admitted = await Session.beginAssistantReplyWithCommit(input.assistant, (db) => {
-      settleSessionDelaysAtAssistantAcceptanceInTransaction(db, {
-        sessionID: input.assistant.sessionID,
-        assistantMessageID: input.assistant.id,
-        acceptedInputMessageIDs: input.assistant.acceptedInputMessageIDs ?? [],
-        now: Date.now(),
-      })
+      input.admitInTransaction?.(db)
       const parent = db
         .select({ data: MessageTable.data, timeCreated: MessageTable.time_created })
         .from(MessageTable)
