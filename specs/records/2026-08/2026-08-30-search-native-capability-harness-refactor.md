@@ -801,4 +801,4 @@ UI 若因 Settings/permission copy 改动，只用真实 `/ui` 页面、截图�
 - 第四轮独立只读审查：FAIL。0个P0、2个P1、1个P2已通过MCP child access单调继承、exact inspection Tool owner source和complete-payload snapshot hash解决。
 - 第五轮最终独立只读审查：PASS。未发现未解决P0/P1/P2、合同矛盾或unknown；权限、snapshot、stage恢复、MCP successor、迁移/回滚、CAS与benchmark合同全部闭合。
 - 已通过：`bun run docs:check`、本记录/索引/architecture chapter的 Prettier check、`git diff --check`、Capability Catalog/authorization/Conversation focused tests、Browser MCP Node bundle checker。
-- `check:architecture-index` 仍报告本分支既有 815 个 broken links/missing old records；本记录与本轮修改的 architecture/index不新增问题。该既有仓库基线不由本方案任务扩张清理。
+- Pre-push暴露`check:architecture-index`把`specs/README.md`全部dated-record链接误当作current-architecture authority的checker scope缺陷；按脚本原注释收窄为只校验该index指向`current/architecture/**`的链接，并删除19个真实失效current-authority入口/交叉引用。3个scope正向测试通过，原checker现为`15 current documents indexed, every link live`；增量独立只读审查PASS。

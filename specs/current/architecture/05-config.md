@@ -47,7 +47,7 @@ experimental: auto_question · batch_tool · disable_paste_summary · continue_l
 > **已删除 schema 字段**：以下旧 schema 字段已删除，不再存在：
 >
 > - `assistant.spec{}` / `assistant.goal{}` / `assistant.planner{}` / `assistant.evaluator{}` /
->   the deleted acceptance-review assistant config field / `assistant.adaptive{}` — planner / acceptance review 整体下线（见 [01-agents.md](01-agents.md)），
+>   the deleted acceptance-review assistant config field / `assistant.adaptive{}` — planner / acceptance review 整体下线，
 >   spec/goal/adaptive 字段已删除。
 > - `assistant.debug{}` — host-side prompt injection and stream-marker abort toggles are not config surfaces.
 > - `assistant.requirements{}` / `assistant.architect{}` / `assistant.frontend_design{}` /
