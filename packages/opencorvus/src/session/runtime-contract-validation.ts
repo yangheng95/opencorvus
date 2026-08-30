@@ -4,12 +4,13 @@ import { SessionRuntimeContractMissingError } from "./runtime-contract-error"
 import { AgentRuntimeMetadata } from "./agent-runtime-metadata"
 import {
   isProjectedWorkerRuntimeContract,
-  sessionRuntimeToolRecords,
+  sessionRuntimeToolOwner,
   SessionRuntimeContractStore,
   type SessionRuntimeContract,
   type SessionRuntimeContractKind,
 } from "./runtime-contract"
 import type { SessionKind } from "./session.sql"
+import { harnessGrantedRefs } from "@/capability/harness-projection"
 
 export function sessionKindRequiresRuntimeContract(sessionKind: string | undefined): boolean {
   return !!sessionKind && AgentRuntimeMetadata.RUNTIME_CONTRACT_REQUIRED_AGENT_KIND_SET.has(sessionKind as SessionKind)
@@ -198,11 +199,17 @@ export function validateSessionRuntimeContractForContinuation(
       )
     }
     const descriptorTools = [...descriptor.payload.tools.enabled].sort()
-    const records = sessionRuntimeToolRecords(contract)
-    const contractToolSet = new Set(Object.keys({ ...records.projectedTools, ...records.stageTools }))
+    const contractToolSet = new Set(
+      harnessGrantedRefs(contract.harnessGrants, "execute")
+        .filter((ref) => ref.kind === "tool" || ref.kind === "mcp_tool")
+        .map((ref) => ref.local_ref),
+    )
     if (isProjectedWorkerRuntimeContract(contract) && contract.permissionContinuation) {
       const requestedStageTool = descriptor.payload.tools.stageOwned.includes(contract.permissionContinuation.toolName)
-      if (requestedStageTool && !Object.hasOwn(records.stageTools, contract.permissionContinuation.toolName)) {
+      if (
+        requestedStageTool &&
+        sessionRuntimeToolOwner(contract)?.kind(contract.permissionContinuation.toolName) !== "stage"
+      ) {
         throw new Error(
           `SessionRuntimeContract permission continuation Tool ${contract.permissionContinuation.toolName} is not materialized`,
         )

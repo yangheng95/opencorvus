@@ -72,10 +72,10 @@ describe("Artifact read facts from provider Tool input", () => {
           messageID: readMessage.id,
           type: "tool",
           callID: "call_unrelated_panel_fact",
-          tool: "panel",
+          tool: "panel_query_task",
           state: {
             status: "completed",
-            input: { action: "unrelated_panel_action", sessionID: "unrelated" },
+            input: { taskID: "unrelated" },
             output: JSON.stringify({ ok: true }),
             title: "Unrelated panel fact",
             metadata: { truncated: false },
@@ -88,19 +88,16 @@ describe("Artifact read facts from provider Tool input", () => {
           messageID: readMessage.id,
           type: "tool",
           callID: "call_provider_read_fact",
-          tool: "panel",
+          tool: "panel_read_task_artifact",
           state: {
             status: "completed",
             input: {
-              operation: {
-                action: "read_task_artifact",
-                taskID,
-                artifact_transport_version: 2,
-                artifact_locator_ref: locatorRef,
-                byte_offset: 0,
-                max_bytes: 65_536,
-                delivery: "inline",
-              },
+              taskID,
+              artifact_transport_version: 2,
+              artifact_locator_ref: locatorRef,
+              byte_offset: 0,
+              max_bytes: 65_536,
+              delivery: "inline",
             },
             output: JSON.stringify({
               taskID,
@@ -155,7 +152,7 @@ describe("Artifact read facts from provider Tool input", () => {
           messageID: mutationMessage.id,
           type: "tool",
           callID: "complete-panel-action",
-          tool: "panel",
+          tool: "panel_complete_mission",
           state: { status: "running", input: {}, time: { start: now + 4 } },
         })
 

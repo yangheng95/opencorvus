@@ -1,42 +1,23 @@
 import type { Tool } from "./tool"
 import { Flag } from "@/flag/flag"
-import { BATCH_TOOL_ID } from "./tool-id-catalog"
 import { requireControlPlaneToolLoaders } from "./control-plane-tool-provider"
 import { isSkillFamilyToolID } from "./skill"
 
 export type BuiltInToolProviderState = "available" | "deferred" | "unavailable"
 
-export interface BuiltInToolProviderEnvironment {
-  batchToolEnabled: boolean
-}
+export interface BuiltInToolProviderEnvironment {}
 
 export function builtInToolProviderState(
   toolID: string,
-  environment: BuiltInToolProviderEnvironment,
+  _environment: BuiltInToolProviderEnvironment,
 ): BuiltInToolProviderState {
   if (isSkillFamilyToolID(toolID)) return "deferred"
-  if (toolID === BATCH_TOOL_ID) return environment.batchToolEnabled ? "available" : "unavailable"
   if (toolID === "question") {
     return ["app", "cli", "desktop"].includes(Flag.OPENCORVUS_CLIENT) || Flag.OPENCORVUS_ENABLE_QUESTION_TOOL
       ? "available"
       : "unavailable"
   }
   return "available"
-}
-
-export function assertBuiltInToolProviderClosure(
-  toolIDs: Iterable<string>,
-  environment: BuiltInToolProviderEnvironment,
-  context: string,
-): void {
-  const ids = new Set(toolIDs)
-  if (!ids.has(BATCH_TOOL_ID)) return
-  const targetCount = [...ids].filter(
-    (toolID) => toolID !== BATCH_TOOL_ID && builtInToolProviderState(toolID, environment) === "available",
-  ).length
-  if (targetCount === 0) {
-    throw new Error(`${context} cannot project batch without at least one materialized registry target tool`)
-  }
 }
 
 let builtInGlobalToolLoad: Promise<readonly Tool.Info[]> | undefined
@@ -73,6 +54,7 @@ async function loadBuiltInGlobalTools(): Promise<readonly Tool.Info[]> {
     { ExpertSquadAuthorTool },
     { CapabilitySearchTool },
     { SkillMarketTool },
+    { PanelLeafTools },
   ] = await Promise.all([
     import("./delegate-agent"),
     import("./question"),
@@ -103,11 +85,11 @@ async function loadBuiltInGlobalTools(): Promise<readonly Tool.Info[]> {
     import("./expert-squad-author"),
     import("./capability-search"),
     import("./skill-market"),
+    import("./panel"),
   ])
-  const [ScheduleTool, PanelTool, WaitTool, RequestOrchestratorDecisionTool, SendMailboxMessageTool] =
+  const [ScheduleTool, WaitTool, RequestOrchestratorDecisionTool, SendMailboxMessageTool] =
     await Promise.all([
       controlPlaneToolLoaders.schedule(),
-      controlPlaneToolLoaders.panel(),
       controlPlaneToolLoaders.wait(),
       controlPlaneToolLoaders.requestOrchestratorDecision(),
       controlPlaneToolLoaders.sendMailboxMessage(),
@@ -137,7 +119,7 @@ async function loadBuiltInGlobalTools(): Promise<readonly Tool.Info[]> {
     MemoryTool,
     ScheduleTool,
     PlannerTool,
-    PanelTool,
+    ...PanelLeafTools,
     MissionStateTool,
     SchedulerMessageTool,
     WaitTool,

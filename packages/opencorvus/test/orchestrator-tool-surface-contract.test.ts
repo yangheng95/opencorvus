@@ -4,8 +4,8 @@
  *
  *  1. `ORCHESTRATOR_SCHEDULER_PROJECTABLE_TOOL_IDS` tells expert-squad manifest
  *     validation which scheduler Tool capability refs are legal. When it names a
- *     tool the factory never builds, `projectOrchestratorTools` throws at task
- *     start and every Task on that squad dies within seconds (observed:
+ *     tool the exact factory never builds, scheduler materialization fails at
+ *     task start and every Task on that squad dies within seconds (observed:
  *     research-studio projecting `browser_preview_capture`).
  *  2. The decision declarations bound to each `ORCHESTRATOR_DECISION_TOOL_NAMES`
  *     entry let `ToolTurnExecutionCoordinator` refuse a mixed decision set while
@@ -27,7 +27,7 @@ import { EngineTaskTable } from "../src/engine/engine.sql"
 import { appendTaskOpenedInTransaction } from "../src/engine/task-lifecycle"
 import { Identifier } from "../src/id/id"
 import { ORCHESTRATOR_DECISION_TOOL_NAMES } from "../src/orchestrator/decision-tool-names"
-import { createOrchestratorTools } from "../src/orchestrator/tools"
+import { createOrchestratorTools, OrchestratorToolsTestHooks } from "../src/orchestrator/tools"
 import { Instance } from "../src/project/instance"
 import { sendSchedulerMessage } from "../src/protocol/scheduler-message"
 import { Session } from "../src/session"
@@ -39,12 +39,17 @@ import {
   toolExecutionModeOf,
 } from "../src/tool/execution-mode"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
+import { ToolRegistry } from "../src/tool/registry"
 
 afterAll(async () => {
   await resetMemoryDatabase()
 })
 
-async function orchestratorToolSurface(title: string, schedulerMessageSender: typeof sendSchedulerMessage) {
+async function orchestratorToolSurface(
+  title: string,
+  schedulerMessageSender: typeof sendSchedulerMessage,
+  exactToolID?: string,
+) {
   const taskID = Identifier.ascending("task")
   const root = await Session.create({ kind: "root", title })
   const now = Date.now()
@@ -70,6 +75,7 @@ async function orchestratorToolSurface(title: string, schedulerMessageSender: ty
     taskID,
     agentSessionID: root.id,
     sendSchedulerMessage: schedulerMessageSender,
+    exactToolID,
     dispatchAgents: [
       {
         identity: {
@@ -100,6 +106,26 @@ async function orchestratorToolSurface(title: string, schedulerMessageSender: ty
   return { taskID, root, tools: tools as Record<string, object> }
 }
 
+test("materializes only the exact scheduler Tool leaf selected by its runtime factory", async () => {
+  await using project = await memoryProject()
+  await Instance.provide({
+    directory: project.path,
+    fn: async () => {
+      const materialized: string[] = []
+      using observer = OrchestratorToolsTestHooks.replaceToolFactoryObserver((toolID) => {
+        materialized.push(toolID)
+      })
+      const first = await orchestratorToolSurface("Exact read-context scheduler leaf", sendSchedulerMessage, "read_context")
+      expect(Object.keys(first.tools)).toEqual(["read_context"])
+      expect(materialized).toEqual(["read_context"])
+
+      const second = await orchestratorToolSurface("Exact wait scheduler leaf", sendSchedulerMessage, "wait")
+      expect(Object.keys(second.tools)).toEqual(["wait"])
+      expect(materialized).toEqual(["read_context", "wait"])
+    },
+  })
+})
+
 test("builds every scheduler-projectable built-in Tool an expert-squad manifest may declare", async () => {
   await using project = await memoryProject()
   await Instance.provide({
@@ -107,12 +133,11 @@ test("builds every scheduler-projectable built-in Tool an expert-squad manifest 
     fn: async () => {
       const { tools } = await orchestratorToolSurface("Scheduler projectable tool surface", sendSchedulerMessage)
       const built = new Set(Object.keys(tools))
-      const missing = [...new Set(ORCHESTRATOR_SCHEDULER_PROJECTABLE_TOOL_IDS)].filter((id) => !built.has(id))
-
-      // A projectable ID the factory never builds is not a lint nit: manifest
-      // validation accepts it and `projectOrchestratorTools` then throws on the
-      // first wake, failing the Task before any work starts.
-      expect(missing).toEqual([])
+      const factoryOwned = [...new Set(ORCHESTRATOR_SCHEDULER_PROJECTABLE_TOOL_IDS)].filter(
+        (id) => id !== "capability_search",
+      )
+      expect(factoryOwned.map((id) => built.has(id))).toEqual(factoryOwned.map(() => true))
+      expect(await ToolRegistry.ids()).toContain("capability_search")
     },
   })
 })
@@ -123,11 +148,6 @@ test("keeps the decision declaration on every Orchestrator decision Tool on the 
     directory: project.path,
     fn: async () => {
       const { tools } = await orchestratorToolSurface("Decision declaration survival", sendSchedulerMessage)
-      const undeclared = ORCHESTRATOR_DECISION_TOOL_NAMES.filter(
-        (name) => toolDecisionDeclarationOf(tools[name]) === undefined,
-      )
-
-      expect(undeclared).toEqual([])
       expect(ORCHESTRATOR_DECISION_TOOL_NAMES.map((name) => toolDecisionDeclarationOf(tools[name])?.command)).toEqual([
         ...ORCHESTRATOR_DECISION_TOOL_NAMES,
       ])

@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, spyOn, test } from "bun:test"
 import { Config } from "@/config/config"
-import { ConversationCapability } from "@/conversation/capability"
+import { exactConversationMcpTools } from "../fixture/conversation-mcp"
 import { MCP } from "@/mcp"
 import { BrowserMCPBuiltin } from "@/mcp/browser/builtin"
 import { ComputerMCPBuiltin } from "@/mcp/computer/builtin"
@@ -24,10 +24,35 @@ describe("a Conversation owns the Browser runtime it creates", () => {
           browser_navigate: { description: "Navigate through the owned Browser connection" } as never,
           browser_tabs: { description: "List tabs through the owned Browser connection" } as never,
         }
-        const projected = spyOn(MCP, "scopedToolsForServer")
+        const projected = spyOn(MCP, "inspectScopedCapabilitySnapshot")
         projected.mockImplementation(async (input) => {
           owned.push({ key: input.key, connectionIdentity: input.connectionIdentity })
-          return browserTools
+          return {
+            tool_definitions: ["navigate", "tabs"].map((name) => ({
+              name,
+              description: browserTools[`browser_${name}` as keyof typeof browserTools].description,
+              inputSchema: { type: "object", properties: {} },
+            })),
+            prompt_definitions: [],
+            resource_definitions: [],
+            inventory_revision: "5".repeat(64),
+          }
+        })
+        const exact = spyOn(MCP, "scopedTool").mockImplementation(async (input) => {
+          const runtimeName = MCP.runtimeToolName(input.key, input.toolName) as keyof typeof browserTools
+          return Object.assign(browserTools[runtimeName], { __runtimeName: runtimeName })
+        })
+        const originalAuthority = MCP.toolAuthorityBinding
+        const authority = spyOn(MCP, "toolAuthorityBinding").mockImplementation((tool) => {
+          const runtimeName = (tool as { __runtimeName?: string }).__runtimeName
+          if (!runtimeName) return originalAuthority(tool)
+          const binding = ["session-browser-owner-first", "session-browser-owner-second"]
+            .flatMap((sessionID) => HostSessionMcpRuntime.catalogSnapshots(sessionID))
+            .map((snapshot) => snapshot.tool_bindings[runtimeName])
+            .find(Boolean)
+          return binding
+            ? { serverID: binding.server_id, configDigest: binding.config_digest, toolDigest: binding.tool_digest }
+            : undefined
         })
         try {
           const base = await Config.get()
@@ -38,11 +63,13 @@ describe("a Conversation owns the Browser runtime it creates", () => {
               chat: { skill_refs: [], mcp_server_refs: [BrowserMCPBuiltin.ServerName] },
             },
           }
-          const first = await ConversationCapability.runtimeMcpTools(config, "chat", "session-browser-owner-first")
-          const second = await ConversationCapability.runtimeMcpTools(config, "chat", "session-browser-owner-second")
+          const first = await exactConversationMcpTools(config, "chat", "session-browser-owner-first")
+          const second = await exactConversationMcpTools(config, "chat", "session-browser-owner-second")
           expect(first).toEqual(browserTools)
           expect(second).toEqual(browserTools)
         } finally {
+          authority.mockRestore()
+          exact.mockRestore()
           projected.mockRestore()
         }
 
@@ -95,6 +122,11 @@ describe("a Conversation owns the Browser runtime it creates", () => {
           return {
             id,
             use: async () => ({}),
+            catalogSnapshot: () => ({
+              owner_id: id,
+              owner_revision: String(generation).padStart(64, "0"),
+              entries: [],
+            }),
             close: async () => {
               await closeGates.get(gateKey)?.promise
               settled.push(receipt)
@@ -102,10 +134,13 @@ describe("a Conversation owns the Browser runtime it creates", () => {
             },
           } as never
         })
-        const projected = spyOn(MCP, "scopedToolsForServer")
-        projected.mockImplementation(async () => ({ browser_tabs: {} as never }))
-        const single = spyOn(MCP, "scopedTool")
-        single.mockImplementation(async () => ({}) as never)
+        const projected = spyOn(MCP, "inspectScopedCapabilitySnapshot")
+        projected.mockResolvedValue({
+          tool_definitions: [],
+          prompt_definitions: [],
+          resource_definitions: [],
+          inventory_revision: "6".repeat(64),
+        })
         try {
           const base = await Config.get()
           const config: Config.Info = {
@@ -118,9 +153,9 @@ describe("a Conversation owns the Browser runtime it creates", () => {
               },
             },
           }
-          await ConversationCapability.runtimeMcpTools(config, "chat", sessionID)
+          await exactConversationMcpTools(config, "chat", sessionID)
           await HostSessionMcpRuntime.disconnectComputer(sessionID)
-          await ConversationCapability.runtimeMcpTools(config, "chat", sessionID)
+          await exactConversationMcpTools(config, "chat", sessionID)
           const disposal = HostSessionMcpRuntime.dispose(sessionID).then(() => {
             timeline.push("disposed")
           })
@@ -128,9 +163,8 @@ describe("a Conversation owns the Browser runtime it creates", () => {
           closeGates.get(`${computerIdentity}#2`)?.release()
           closeGates.get(`${browserIdentity}#1`)?.release()
           await disposal
-          await ConversationCapability.runtimeMcpTools(config, "chat", sessionID)
+          await exactConversationMcpTools(config, "chat", sessionID)
         } finally {
-          single.mockRestore()
           projected.mockRestore()
           create.mockRestore()
         }

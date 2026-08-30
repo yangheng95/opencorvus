@@ -4,6 +4,7 @@ import { WORK_ARTIFACT_TOOL_IDS } from "../src/tool/tool-id-catalog"
 import { permissionDescriptor } from "../src/permission/invocation"
 import { Instance } from "../src/project/instance"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
+import { MISSION_PANEL_LEAF_TOOL_IDS, RIGHT_SIDEBAR_PANEL_LEAF_TOOL_IDS } from "../src/panel/action-ids"
 
 afterAll(async () => {
   await resetMemoryDatabase()
@@ -30,7 +31,6 @@ const conversationEffects = [
   "schedule",
   "planner",
   "mission_state",
-  "batch",
 ] as const
 
 describe("execution authority Tool surfaces", () => {
@@ -47,15 +47,28 @@ describe("execution authority Tool surfaces", () => {
         private: [],
       },
       chat: {
-        global: ["delegate_agent", "skill_market", ...conversationEffects, "panel"],
+        global: ["delegate_agent", "skill_market", ...conversationEffects, ...RIGHT_SIDEBAR_PANEL_LEAF_TOOL_IDS],
         private: [],
       },
       work: {
-        global: ["delegate_agent", "skill_market", ...conversationEffects, "panel", ...WORK_ARTIFACT_TOOL_IDS],
+        global: [
+          "delegate_agent",
+          "skill_market",
+          ...conversationEffects,
+          ...RIGHT_SIDEBAR_PANEL_LEAF_TOOL_IDS,
+          ...WORK_ARTIFACT_TOOL_IDS,
+        ],
         private: [],
       },
       mission: {
-        global: ["skill_market", ...conversationEffects, "mission_skill", "panel", "scheduler_message", "wait"],
+        global: [
+          "skill_market",
+          ...conversationEffects,
+          "mission_skill",
+          ...MISSION_PANEL_LEAF_TOOL_IDS,
+          "scheduler_message",
+          "wait",
+        ],
         private: [],
       },
       taskBuild: {

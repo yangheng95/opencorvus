@@ -1,4 +1,5 @@
 import { tool } from "ai"
+import { materializeExactTool } from "@/agent/exact-tool-factory"
 import { z } from "zod"
 import { markdownList } from "@/util/markdown"
 import type { FactCheckItem } from "@/fact-check/schema"
@@ -420,10 +421,12 @@ function upsertBundleSection(
   return `OK: bundle section "${section.title}" registered (${collector.bundle.full_markdown_sections.length} total)`
 }
 
-export function createResearchOutputTools(options: { expectedWebpageSourceUrl?: string } = {}) {
+export function createResearchOutputTools(
+  options: { expectedWebpageSourceUrl?: string; onToolMaterialized?: (toolID: string) => void } = {},
+) {
   let collector = emptyCollector()
-  const tools = {
-    update_research_scope: tool({
+  const toolFactories = {
+    update_research_scope: () => tool({
       description: "Set the brief scope once before registering research items.",
       inputSchema: ResearchScopeSchema,
       execute: async (input) => {
@@ -434,7 +437,7 @@ export function createResearchOutputTools(options: { expectedWebpageSourceUrl?: 
       },
     }),
 
-    update_research_summary: tool({
+    update_research_summary: () => tool({
       description: "Set or replace the compact research summary.",
       inputSchema: z.object({ summary: z.string().min(1) }),
       execute: async ({ summary }) => {
@@ -444,7 +447,7 @@ export function createResearchOutputTools(options: { expectedWebpageSourceUrl?: 
       },
     }),
 
-    update_research_evidence: tool({
+    update_research_evidence: () => tool({
       description: "Register one evidence source. Call once per source or prepared artifact.",
       inputSchema: ResearchEvidenceRefSchema,
       execute: async (input) => {
@@ -455,7 +458,7 @@ export function createResearchOutputTools(options: { expectedWebpageSourceUrl?: 
       },
     }),
 
-    update_research_fact: tool({
+    update_research_fact: () => tool({
       description: "Register one source-backed fact.",
       inputSchema: ResearchFactSchema,
       execute: async (input) => {
@@ -468,7 +471,7 @@ export function createResearchOutputTools(options: { expectedWebpageSourceUrl?: 
       },
     }),
 
-    update_research_inference: tool({
+    update_research_inference: () => tool({
       description: "Register one inference based on registered fact IDs.",
       inputSchema: ResearchInferenceSchema,
       execute: async (input) => {
@@ -485,7 +488,7 @@ export function createResearchOutputTools(options: { expectedWebpageSourceUrl?: 
       },
     }),
 
-    update_research_problem: tool({
+    update_research_problem: () => tool({
       description: "Register one problem statement derived from the evidence.",
       inputSchema: ResearchProblemStatementSchema,
       execute: async (input) => {
@@ -498,7 +501,7 @@ export function createResearchOutputTools(options: { expectedWebpageSourceUrl?: 
       },
     }),
 
-    update_research_need: tool({
+    update_research_need: () => tool({
       description: "Register one user need derived from task and evidence.",
       inputSchema: ResearchUserNeedSchema,
       execute: async (input) => {
@@ -511,7 +514,7 @@ export function createResearchOutputTools(options: { expectedWebpageSourceUrl?: 
       },
     }),
 
-    update_research_constraint: tool({
+    update_research_constraint: () => tool({
       description: "Register one constraint derived from task and evidence.",
       inputSchema: ResearchConstraintSchema,
       execute: async (input) => {
@@ -524,7 +527,7 @@ export function createResearchOutputTools(options: { expectedWebpageSourceUrl?: 
       },
     }),
 
-    update_research_document_section: tool({
+    update_research_document_section: () => tool({
       description: "Register one downstream document-outline section.",
       inputSchema: ResearchDocumentSectionSchema,
       execute: async (input) => {
@@ -541,7 +544,7 @@ export function createResearchOutputTools(options: { expectedWebpageSourceUrl?: 
       },
     }),
 
-    update_webpage_contract_source: tool({
+    update_webpage_contract_source: () => tool({
       description: "Set webpage contract source URL and visual reference evidence IDs.",
       inputSchema: WebpageContractSourceInputSchema,
       execute: async (input) => {
@@ -564,7 +567,7 @@ export function createResearchOutputTools(options: { expectedWebpageSourceUrl?: 
       },
     }),
 
-    update_webpage_functional_surface: tool({
+    update_webpage_functional_surface: () => tool({
       description: "Register one webpage functional surface work packet.",
       inputSchema: ResearchWebpageFunctionalSurfaceSchema,
       execute: async (input) => {
@@ -581,7 +584,7 @@ export function createResearchOutputTools(options: { expectedWebpageSourceUrl?: 
       },
     }),
 
-    update_webpage_visual_layout: tool({
+    update_webpage_visual_layout: () => tool({
       description: "Register one webpage visual layout work packet.",
       inputSchema: ResearchWebpageVisualLayoutSchema,
       execute: async (input) => {
@@ -598,7 +601,7 @@ export function createResearchOutputTools(options: { expectedWebpageSourceUrl?: 
       },
     }),
 
-    update_webpage_style_requirement: tool({
+    update_webpage_style_requirement: () => tool({
       description: "Register one webpage style requirement work packet.",
       inputSchema: ResearchWebpageStyleRequirementSchema,
       execute: async (input) => {
@@ -615,7 +618,7 @@ export function createResearchOutputTools(options: { expectedWebpageSourceUrl?: 
       },
     }),
 
-    update_webpage_interaction_state: tool({
+    update_webpage_interaction_state: () => tool({
       description: "Register one webpage interaction-state work packet.",
       inputSchema: ResearchWebpageInteractionStateSchema,
       execute: async (input) => {
@@ -632,7 +635,7 @@ export function createResearchOutputTools(options: { expectedWebpageSourceUrl?: 
       },
     }),
 
-    update_webpage_data_inventory: tool({
+    update_webpage_data_inventory: () => tool({
       description: "Register one webpage data/content inventory work packet.",
       inputSchema: ResearchWebpageDataInventorySchema,
       execute: async (input) => {
@@ -649,7 +652,7 @@ export function createResearchOutputTools(options: { expectedWebpageSourceUrl?: 
       },
     }),
 
-    update_webpage_fidelity_acceptance: tool({
+    update_webpage_fidelity_acceptance: () => tool({
       description: "Register one webpage fidelity acceptance work packet.",
       inputSchema: ResearchWebpageAcceptanceCriterionSchema,
       execute: async (input) => {
@@ -666,7 +669,7 @@ export function createResearchOutputTools(options: { expectedWebpageSourceUrl?: 
       },
     }),
 
-    update_webpage_fidelity_risk: tool({
+    update_webpage_fidelity_risk: () => tool({
       description: "Register one webpage fidelity risk.",
       inputSchema: ResearchWebpageFidelityRiskSchema,
       execute: async (input) => {
@@ -683,7 +686,7 @@ export function createResearchOutputTools(options: { expectedWebpageSourceUrl?: 
       },
     }),
 
-    update_subpage_research_task: tool({
+    update_subpage_research_task: () => tool({
       description: "Register one independent subpage or same-page deep-state research task.",
       inputSchema: ResearchSubpageTaskSchema,
       execute: async (input) => {
@@ -700,7 +703,7 @@ export function createResearchOutputTools(options: { expectedWebpageSourceUrl?: 
       },
     }),
 
-    update_research_open_question: tool({
+    update_research_open_question: () => tool({
       description: "Register one open question.",
       inputSchema: ResearchOpenQuestionSchema,
       execute: async (input) => {
@@ -717,7 +720,7 @@ export function createResearchOutputTools(options: { expectedWebpageSourceUrl?: 
       },
     }),
 
-    update_research_bundle_section: tool({
+    update_research_bundle_section: () => tool({
       description: "Register one rendered research-bundle markdown section.",
       inputSchema: ResearchBundleMarkdownSectionSchema,
       execute: async (input) => {
@@ -733,7 +736,7 @@ export function createResearchOutputTools(options: { expectedWebpageSourceUrl?: 
       },
     }),
 
-    update_research_evidence_note: tool({
+    update_research_evidence_note: () => tool({
       description: "Register one structured evidence note for evidence.json.",
       inputSchema: ResearchBundleEvidenceNoteSchema,
       execute: async (input) => {
@@ -751,7 +754,7 @@ export function createResearchOutputTools(options: { expectedWebpageSourceUrl?: 
       },
     }),
 
-    update_research_citation: tool({
+    update_research_citation: () => tool({
       description: "Register one claim-to-evidence citation for citation-map.json.",
       inputSchema: ResearchBundleCitationEntrySchema,
       execute: async (input) => {
@@ -773,18 +776,19 @@ export function createResearchOutputTools(options: { expectedWebpageSourceUrl?: 
       },
     }),
 
-    inspect_research_result_status: tool({
+    inspect_research_result_status: () => tool({
       description: "Inspect which research fragments have been recorded and which remain missing.",
       inputSchema: z.object({}).strict(),
       execute: async () => researchResultStatus(collector, options),
     }),
   }
   const nonReplayableToolNames = new Set(["inspect_research_result_status"])
-  function isResearchOutputMutationToolName(toolName: string): toolName is keyof typeof tools {
-    return Object.prototype.hasOwnProperty.call(tools, toolName) && !nonReplayableToolNames.has(toolName)
+  function isResearchOutputMutationToolName(toolName: string): toolName is keyof typeof toolFactories {
+    return Object.prototype.hasOwnProperty.call(toolFactories, toolName) && !nonReplayableToolNames.has(toolName)
   }
   return {
-    tools,
+    materializeExact: (toolID: string) =>
+      materializeExactTool(toolFactories, toolID, options.onToolMaterialized),
     getCollector: () => collector,
     snapshotDraft() {
       const missing = researchMissingActions(collector, options)
@@ -809,7 +813,7 @@ export function createResearchOutputTools(options: { expectedWebpageSourceUrl?: 
       let replayed = 0
       for (const call of calls) {
         if (!isResearchOutputMutationToolName(call.toolName)) continue
-        const outputTool = tools[call.toolName]
+        const outputTool = materializeExactTool(toolFactories, call.toolName, options.onToolMaterialized)!
         const execute = outputTool.execute
         if (!execute) throw new Error(`research output tool ${call.toolName} has no execute handler`)
         await execute(call.input as never, {} as never)

@@ -57,18 +57,25 @@ export function bindStageToolMaterializer<T extends object>(
   tool: T,
   binding: Omit<StageToolMaterializerBinding, "revision" | "inputSha256">,
 ): T {
-  const parsed = StageToolMaterializerBindingSchema.parse({
-    ...binding,
-    revision: 1,
-    inputSha256: stageToolMaterializerInputSha256(binding.input),
-  })
+  const parsed = createStageToolMaterializerBinding(binding)
   Object.defineProperty(tool, bindingSymbol, {
-    value: Object.freeze({ ...parsed, input: Object.freeze({ ...parsed.input }) }),
+    value: parsed,
     enumerable: false,
     configurable: false,
     writable: false,
   })
   return tool
+}
+
+export function createStageToolMaterializerBinding(
+  binding: Omit<StageToolMaterializerBinding, "revision" | "inputSha256">,
+): StageToolMaterializerBinding {
+  const parsed = StageToolMaterializerBindingSchema.parse({
+    ...binding,
+    revision: 1,
+    inputSha256: stageToolMaterializerInputSha256(binding.input),
+  })
+  return Object.freeze({ ...parsed, input: Object.freeze({ ...parsed.input }) })
 }
 
 export function stageToolMaterializerBindingOf(tool: object | undefined): StageToolMaterializerBinding | undefined {

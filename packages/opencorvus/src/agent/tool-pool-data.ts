@@ -15,6 +15,12 @@ import {
 } from "@/tool/tool-id-catalog"
 import { VISUAL_QA_STATIC_TOOL_IDS } from "@/visual-qa/static-tools"
 import { WORK_ARTIFACT_TOOL_IDS } from "@/work/harness"
+import {
+  EXPLORE_PANEL_LEAF_TOOL_IDS,
+  MISSION_PANEL_LEAF_TOOL_IDS,
+  PANEL_LEAF_TOOL_IDS,
+  RIGHT_SIDEBAR_PANEL_LEAF_TOOL_IDS,
+} from "@/panel/action-ids"
 import type { AgentRoleID } from "./role-contract"
 import type { RuntimeTemplateID } from "./runtime-template-id"
 
@@ -162,7 +168,6 @@ const primaryExecutionGlobal = [
   "schedule",
   "planner",
   "mission_state",
-  "batch",
 ] as const
 
 const codingGlobal = ["delegate_agent", SKILL_MARKET_TOOL_ID, ...primaryExecutionGlobal] as const
@@ -193,7 +198,6 @@ const delegatedWorkerGlobal = [
   "skill",
   "apply_patch",
   "memory",
-  "batch",
   ...WORKER_COMMUNICATION_TOOL_IDS,
 ] as const
 
@@ -220,7 +224,7 @@ export const runtimeTemplateAssignments = Object.freeze({
       "external_code_search",
       "webfetch",
       "websearch",
-      "panel",
+      ...EXPLORE_PANEL_LEAF_TOOL_IDS,
       "publish_interactive_artifact",
       "memory",
       ...WORKER_COMMUNICATION_TOOL_IDS,
@@ -281,13 +285,15 @@ export const runtimeTemplateAssignments = Object.freeze({
 
 export const roleAssignments = Object.freeze({
   coding: createToolPool({ global: codingGlobal }),
-  chat: createToolPool({ global: [...codingGlobal, "panel"] }),
-  work: createToolPool({ global: [...codingGlobal, "panel", ...WORK_ARTIFACT_TOOL_IDS] }),
+  chat: createToolPool({ global: [...codingGlobal, ...RIGHT_SIDEBAR_PANEL_LEAF_TOOL_IDS] }),
+  work: createToolPool({
+    global: [...codingGlobal, ...RIGHT_SIDEBAR_PANEL_LEAF_TOOL_IDS, ...WORK_ARTIFACT_TOOL_IDS],
+  }),
   compaction: createToolPool({}),
   title: createToolPool({}),
   summary: createToolPool({}),
   memory: createToolPool({}),
-  control: createToolPool({ global: ["panel"] }),
+  control: createToolPool({ global: [...PANEL_LEAF_TOOL_IDS] }),
   orchestrator: createToolPool({
     global: [
       ...PLATFORM_CAPABILITY_DISCOVERY_TOOL_IDS,
@@ -304,7 +310,14 @@ export const roleAssignments = Object.freeze({
     private: ORCHESTRATOR_PRIVATE_TOOL_IDS,
   }),
   mission: createToolPool({
-    global: [SKILL_MARKET_TOOL_ID, ...primaryExecutionGlobal, "mission_skill", "panel", "scheduler_message", "wait"],
+    global: [
+      SKILL_MARKET_TOOL_ID,
+      ...primaryExecutionGlobal,
+      "mission_skill",
+      ...MISSION_PANEL_LEAF_TOOL_IDS,
+      "scheduler_message",
+      "wait",
+    ],
   }),
 } satisfies Record<AgentRoleID, ToolPoolAssignment>)
 

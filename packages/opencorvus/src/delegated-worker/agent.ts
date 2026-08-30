@@ -58,8 +58,8 @@ export namespace DelegatedWorkerAgent {
       onRuntimeReady: input.onRuntimeReady ? (session) => input.onRuntimeReady!(session.id) : undefined,
       toolSwitches: input.toolSwitches,
       toolKit: {
-        tools: {},
         stageOwnedToolIDs: [],
+        materializeExact: () => undefined,
         getCollector: () => ({}),
       },
       buildUserPrompt: () => buildDelegatedWorkerUserPrompt(instruction, input.contextSections),

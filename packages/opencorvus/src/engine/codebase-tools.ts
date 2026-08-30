@@ -17,6 +17,7 @@ import { ProcessSupervisor } from "@/shell/process-supervisor"
 import { activeTaskExecutionCapsule } from "@/engine/task-execution-capsule-binding"
 import { activeExecutionCapsuleRuntimeFact } from "@/execution-capsule/runtime"
 import { text } from "node:stream/consumers"
+import { materializeExactTool } from "@/agent/exact-tool-factory"
 
 const READ_FILE_MAX_LINE_CHARS = 1200
 
@@ -47,7 +48,7 @@ function detectBinaryKind(buf: Buffer, filePath: string): string | null {
   return null
 }
 
-export function createCodebaseTools(projectDir?: string) {
+export function createCodebaseToolFactory(projectDir?: string, onMaterialize?: (toolID: string) => void) {
   const dir = projectDir ?? Instance.directory
 
   function sessionIDFromOptions(options: unknown): string | undefined {
@@ -77,8 +78,8 @@ export function createCodebaseTools(projectDir?: string) {
     }
   }
 
-  return {
-    read: tool({
+  const toolFactories = {
+    read: () => tool({
       description:
         "Read the contents of a file. Returns the file contents with line numbers. " +
         "Use this to understand code structure, conventions, and existing patterns. " +
@@ -141,7 +142,7 @@ export function createCodebaseTools(projectDir?: string) {
       },
     }),
 
-    glob: tool({
+    glob: () => tool({
       description:
         "Find files matching a glob pattern. Returns file paths relative to project root. " +
         "Use this to discover project structure and find relevant source files.",
@@ -171,7 +172,7 @@ export function createCodebaseTools(projectDir?: string) {
       },
     }),
 
-    search_code: tool({
+    search_code: () => tool({
       description:
         "Search file contents using a regex pattern (powered by ripgrep). " +
         'Required input shape: {"pattern":"<regex>"}. The search string field is named "pattern"; do not use "query". ' +
@@ -221,7 +222,7 @@ export function createCodebaseTools(projectDir?: string) {
       },
     }),
 
-    list: tool({
+    list: () => tool({
       description:
         "List files and directories at a given path. " +
         "Use this to understand project layout and find relevant directories.",
@@ -248,5 +249,8 @@ export function createCodebaseTools(projectDir?: string) {
         }
       },
     }),
+  }
+  return {
+    materializeExact: (toolID: string) => materializeExactTool(toolFactories, toolID, onMaterialize),
   }
 }

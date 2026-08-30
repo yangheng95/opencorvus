@@ -3,7 +3,6 @@ import type { ProjectedSchedulerIdentity } from "@/agent/projected-scheduler-ide
 import type { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
 import { sameExpertSquadPackageRevision } from "@/expert-squad/package-revision"
 import type { TextHooks } from "@/llm/api"
-import type { Tool as AITool } from "ai"
 import { DispatchAdapterContractRegistry, type AgentDispatchAdapterID } from "@/agent/dispatch-adapter-contract"
 import {
   assertFrozenSessionAgentRuntime,
@@ -17,8 +16,8 @@ import {
   type ProjectedAgentWorkScope as ProjectedAgentWorkScopeValue,
 } from "@/agent/projected-agent-work-scope"
 import type { MCP } from "@/mcp"
-import type { HarnessProjection } from "@/capability/harness-projection"
-import { copyToolCoordinationBindings } from "@/tool/execution-mode"
+import { harnessGrantedRefs, type HarnessGrantSet } from "@/capability/harness-projection"
+import { runtimeToolOwnerIDs, type RuntimeToolOwner } from "./runtime-tool-owner"
 
 export type SessionRuntimeContractKind = "stage-attempt" | "orchestrator-wake"
 
@@ -75,21 +74,20 @@ interface SessionRuntimeContractBase {
   systemMode?: "complete"
   runOnce?: boolean
   stream?: TextHooks
-  resources?: Readonly<{
+  resources: Readonly<{
     mcp: MCP.ScopedConnectionOwner
+    tools: RuntimeToolOwner
   }>
-  harnessProjection: HarnessProjection
+  harnessGrants: HarnessGrantSet
 }
 
 interface SessionLoopRuntimeOptions {
   includeMcpTools?: boolean
-  exactTools?: boolean
 }
 
 type ProjectedWorkerRuntimeContractBase = SessionRuntimeContractBase & {
   system?: readonly string[]
   identity: Extract<SessionRuntimeContractIdentity, { identityKind: "projected-worker" }>
-  projectedRegistryToolIDs: readonly string[]
   skillProjection: PromptProfileResolver.ResolvedSkillProjection
   projectDirectory: string
   runtime: SessionAgentRuntimeValue
@@ -97,10 +95,7 @@ type ProjectedWorkerRuntimeContractBase = SessionRuntimeContractBase & {
 }
 
 export type ProjectedWorkerSessionLoopRuntimeContract = ProjectedWorkerRuntimeContractBase &
-  SessionLoopRuntimeOptions & {
-    projectedTools: Readonly<Record<string, AITool>>
-    stageTools: Readonly<Record<string, AITool>>
-  }
+  SessionLoopRuntimeOptions
 
 export type ProjectedWorkerRuntimeContract = ProjectedWorkerSessionLoopRuntimeContract
 
@@ -110,9 +105,6 @@ export type ProjectedSchedulerRuntimeContract = SessionRuntimeContractBase &
       | readonly string[]
       | (() => SessionRuntimeSystemProjection | Promise<SessionRuntimeSystemProjection>)
     identity: Extract<SessionRuntimeContractIdentity, { identityKind: "projected-scheduler" }>
-    projectedTools: Readonly<Record<string, AITool>>
-    stageTools?: never
-    projectedRegistryToolIDs: readonly string[]
     skillProjection: PromptProfileResolver.ResolvedSkillProjection
     projectDirectory: string
   }
@@ -189,6 +181,35 @@ function sameRuntimeContractOccurrence(
   return Boolean(left && JSON.stringify(left.identity) === JSON.stringify(right.identity))
 }
 
+function sameRuntimeToolOwnerOccurrence(
+  left: SessionRuntimeContract | undefined,
+  right: SessionRuntimeContract,
+): boolean {
+  if (!left || left.identity.identityKind !== right.identity.identityKind) return false
+  if (left.identity.sessionID !== right.identity.sessionID) return false
+  if (left.identity.identityKind === "projected-worker" && right.identity.identityKind === "projected-worker") {
+    return (
+      left.identity.workerTurnDescriptorID === right.identity.workerTurnDescriptorID &&
+      left.identity.workerTurnDescriptorHash === right.identity.workerTurnDescriptorHash
+    )
+  }
+  if (left.identity.identityKind !== "projected-scheduler" || right.identity.identityKind !== "projected-scheduler") {
+    return false
+  }
+  if (left.identity.taskIngressID || right.identity.taskIngressID) {
+    return (
+      left.identity.taskIngressID === right.identity.taskIngressID &&
+      left.identity.taskIngressActivationID === right.identity.taskIngressActivationID &&
+      left.identity.taskIngressPredecessorID === right.identity.taskIngressPredecessorID
+    )
+  }
+  return Boolean(
+    left.identity.inputMessageID &&
+      right.identity.inputMessageID &&
+      left.identity.inputMessageID === right.identity.inputMessageID,
+  )
+}
+
 function notifyWake(sessionID: string): void {
   const waiters = wakeWaiters.get(sessionID)
   if (!waiters) return
@@ -205,8 +226,12 @@ export namespace SessionRuntimeContractStore {
     if (ownerOperations.length > 0) {
       throw new Error(`SessionRuntimeContract cannot change during ${ownerOperations.join(", ")} for ${sessionID}`)
     }
-    if (Object.hasOwn(contract as object, "tools")) {
-      throw new Error("SessionRuntimeContract.tools is retired; use classified projectedTools and stageTools")
+    if (
+      Object.hasOwn(contract as object, "tools") ||
+      Object.hasOwn(contract as object, "projectedTools") ||
+      Object.hasOwn(contract as object, "stageTools")
+    ) {
+      throw new Error("SessionRuntimeContract Tool records are retired; use the exact resources.tools owner.")
     }
     if (contract.identity.sessionID !== sessionID) {
       throw new Error(
@@ -256,7 +281,7 @@ export namespace SessionRuntimeContractStore {
       if (!identity.workerTurnDescriptorID || !identity.workerTurnDescriptorHash) {
         throw new Error(`Projected worker ${identity.agentID} runtime contract requires worker descriptor id/hash`)
       }
-      assertHarnessProjection(identity, contract)
+      assertHarnessGrants(identity, contract)
       const owner = assertProjectedSkillSurface(
         contract.identity as Extract<SessionRuntimeContractIdentity, { identityKind: "projected-worker" }>,
         contract,
@@ -325,7 +350,7 @@ export namespace SessionRuntimeContractStore {
       ) {
         throw new Error("Projected scheduler Task ingress identity requires activation and predecessor identities")
       }
-      assertHarnessProjection(identity, contract)
+      assertHarnessGrants(identity, contract)
       const owner = assertProjectedSkillSurface(
         schedulerIdentity,
         contract,
@@ -346,6 +371,15 @@ export namespace SessionRuntimeContractStore {
         `SessionRuntimeContract cannot replace owned MCP resources for ${sessionID}; dispose the installed contract first`,
       )
     }
+    if (
+      current &&
+      sameRuntimeToolOwnerOccurrence(current, snapshot) &&
+      currentResources?.tools.owner_revision !== snapshot.resources.tools.owner_revision
+    ) {
+      throw new Error(
+        `SessionRuntimeContract cannot change the exact Tool materializer owner within occurrence ${sessionID}`,
+      )
+    }
     contracts.set(sessionID, snapshot)
     if (
       snapshot.identity.contractKind === "orchestrator-wake" &&
@@ -358,7 +392,7 @@ export namespace SessionRuntimeContractStore {
     return snapshot
   }
 
-  function assertHarnessProjection(
+  function assertHarnessGrants(
     identity: SessionRuntimeContractIdentityBase & {
       identityKind: string
       expertSquadID?: string
@@ -367,11 +401,11 @@ export namespace SessionRuntimeContractStore {
     },
     contract: SessionRuntimeContract,
   ): void {
-    const harnessContext = contract.harnessProjection?.context
+    const harnessContext = contract.harnessGrants?.context
     if (!harnessContext) {
-      throw new Error(`SessionRuntimeContract ${identity.agentID} requires an exact Harness projection.`)
+      throw new Error(`SessionRuntimeContract ${identity.agentID} requires exact Harness grants.`)
     }
-    if (contract.harnessProjection.owner_revision !== identity.projectionHash) {
+    if (contract.harnessGrants.owner_revision !== identity.projectionHash) {
       throw new Error(
         `SessionRuntimeContract ${identity.agentID} Harness owner revision does not match runtime projection hash.`,
       )
@@ -404,9 +438,6 @@ export namespace SessionRuntimeContractStore {
     identity: Extract<SessionRuntimeContractIdentity, { identityKind: "projected-worker" | "projected-scheduler" }>,
     contract: SessionRuntimeContract,
   ): PromptProfileResolver.ResolvedProjectedAgent | PromptProfileResolver.ResolvedProjectedScheduler {
-    if (!Array.isArray(contract.projectedRegistryToolIDs)) {
-      throw new Error(`Projected skill owner ${identity.agentID} runtime contract requires projectedRegistryToolIDs`)
-    }
     if (!contract.projectDirectory?.trim()) {
       throw new Error(`Projected skill owner ${identity.agentID} runtime contract requires a project directory`)
     }
@@ -436,10 +467,20 @@ export namespace SessionRuntimeContractStore {
     ) {
       throw new Error(`Projected skill owner ${identity.agentID} runtime identity does not match turn-owned projection`)
     }
+    const projectedRuntimeToolIDs = new Set(runtimeToolOwnerIDs(runtimeToolOwner(contract), "projected"))
     assertExactStringSet(
-      contract.projectedRegistryToolIDs,
-      owner.builtInToolIDs,
+      harnessGrantedRefs(contract.harnessGrants, "execute")
+        .filter((ref) => ref.kind === "tool" && ref.owner_ref === "tool-registry")
+        .map((ref) => ref.local_ref),
+      owner.builtInToolIDs.filter((toolID) => !projectedRuntimeToolIDs.has(toolID)),
       `Projected skill owner ${identity.agentID} registry tool IDs`,
+    )
+    assertExactStringSet(
+      harnessGrantedRefs(contract.harnessGrants, "execute")
+        .filter((ref) => ref.kind === "tool" && ref.owner_ref === `runtime-projection:${identity.agentID}`)
+        .map((ref) => ref.local_ref),
+      owner.projectedToolIDs.filter((toolID) => projectedRuntimeToolIDs.has(toolID)),
+      `Projected skill owner ${identity.agentID} runtime-projection tool IDs`,
     )
     return owner
   }
@@ -458,19 +499,17 @@ export namespace SessionRuntimeContractStore {
     }
   }
 
-  function assertToolRecord(value: unknown, context: string): asserts value is Record<string, AITool> {
-    if (!value || typeof value !== "object" || Array.isArray(value)) {
-      throw new Error(`${context} requires an explicit tool record`)
-    }
+  function runtimeToolOwner(contract: SessionRuntimeContract): RuntimeToolOwner {
+    return contract.resources.tools
   }
 
   function assertProjectedToolKeys(
     owner: PromptProfileResolver.ResolvedProjectedAgent | PromptProfileResolver.ResolvedProjectedScheduler,
-    projectedTools: Readonly<Record<string, AITool>>,
+    projectedToolIDs: readonly string[],
     context: string,
   ): void {
     const projected = new Set(owner.projectedToolIDs)
-    for (const toolID of Object.keys(projectedTools)) {
+    for (const toolID of projectedToolIDs) {
       if (!projected.has(toolID)) throw new Error(`${context} tool ${JSON.stringify(toolID)} is not projected`)
     }
   }
@@ -480,13 +519,26 @@ export namespace SessionRuntimeContractStore {
     owner: PromptProfileResolver.ResolvedProjectedAgent,
     contract: ProjectedWorkerRuntimeContract,
   ): void {
-    const records = assertProjectedWorkerToolRecords(owner, contract)
-    assertToolRecord(records.projectedTools, `Projected worker ${owner.identity.agentID} projected tools`)
-    assertToolRecord(records.stageTools, `Projected worker ${owner.identity.agentID} stage tools`)
-    assertProjectedToolKeys(owner, records.projectedTools, `Projected worker ${owner.identity.agentID}`)
+    const toolOwner = runtimeToolOwner(contract)
+    const projectedToolIDs = runtimeToolOwnerIDs(toolOwner, "projected")
+    const stageToolIDs = runtimeToolOwnerIDs(toolOwner, "stage")
+    assertProjectedToolKeys(owner, projectedToolIDs, `Projected worker ${owner.identity.agentID}`)
+    const eagerlyOwnedToolIDs = harnessGrantedRefs(contract.harnessGrants, "execute")
+      .filter(
+        (ref) =>
+          ref.kind === "tool" &&
+          (ref.owner_ref === `runtime-projection:${owner.identity.agentID}` ||
+            ref.owner_ref === "default-tool-registry"),
+      )
+      .map((ref) => ref.local_ref)
+    assertExactStringSet(
+      projectedToolIDs,
+      eagerlyOwnedToolIDs,
+      `Projected worker ${owner.identity.agentID} runtime owner tool IDs`,
+    )
     const projected = new Set(owner.projectedToolIDs)
     const allowedStage = DispatchAdapterContractRegistry.privateStageToolIDSet(dispatchAdapterID)
-    for (const toolID of Object.keys(records.stageTools)) {
+    for (const toolID of stageToolIDs) {
       if (projected.has(toolID)) {
         throw new Error(
           `Projected worker ${owner.identity.agentID} stage tool ${JSON.stringify(toolID)} overlaps projected capability`,
@@ -500,35 +552,26 @@ export namespace SessionRuntimeContractStore {
     }
   }
 
-  function assertProjectedWorkerToolRecords(
-    owner: PromptProfileResolver.ResolvedProjectedAgent,
-    contract: ProjectedWorkerRuntimeContract,
-  ): { projectedTools: Readonly<Record<string, AITool>>; stageTools: Readonly<Record<string, AITool>> } {
-    const loopContract = contract as ProjectedWorkerRuntimeContractBase & {
-      projectedTools: Readonly<Record<string, AITool>>
-      stageTools: Readonly<Record<string, AITool>>
-    }
-    const builtIns = new Set(owner.builtInToolIDs)
-    const missingProjectedProviders = owner.projectedToolIDs.filter(
-      (toolID) => !builtIns.has(toolID) && !Object.hasOwn(loopContract.projectedTools, toolID),
-    )
-    if (missingProjectedProviders.length > 0) {
-      throw new Error(
-        `Projected worker ${owner.identity.agentID} is missing projected runtime provider implementations: ${missingProjectedProviders.join(",")}`,
-      )
-    }
-    return { projectedTools: loopContract.projectedTools, stageTools: loopContract.stageTools }
-  }
-
   function assertProjectedSchedulerToolSurface(
     owner: PromptProfileResolver.ResolvedProjectedScheduler,
     contract: SessionRuntimeContract,
   ): void {
-    assertToolRecord(contract.projectedTools, "Projected scheduler tools")
-    if (contract.stageTools !== undefined)
-      throw new Error("Projected scheduler runtime contract cannot carry stage tools")
-    assertProjectedToolKeys(owner, contract.projectedTools, "Projected scheduler")
-    assertExactStringSet(Object.keys(contract.projectedTools), owner.projectedToolIDs, "Projected scheduler tool IDs")
+    const toolOwner = runtimeToolOwner(contract)
+    const projectedToolIDs = runtimeToolOwnerIDs(toolOwner, "projected")
+    assertProjectedToolKeys(owner, projectedToolIDs, "Projected scheduler")
+    assertExactStringSet(runtimeToolOwnerIDs(toolOwner, "stage"), [], "Projected scheduler stage Tool IDs")
+    assertExactStringSet(
+      projectedToolIDs,
+      harnessGrantedRefs(contract.harnessGrants, "execute")
+        .filter(
+          (ref) =>
+            ref.kind === "tool" &&
+            (ref.owner_ref === `runtime-projection:${owner.identity.agentID}` ||
+              ref.owner_ref === "default-tool-registry"),
+        )
+        .map((ref) => ref.local_ref),
+      "Projected scheduler runtime owner tool IDs",
+    )
   }
 
   export function get(sessionID: string): SessionRuntimeContract | undefined {
@@ -733,16 +776,6 @@ function assertRecursivelyFrozen(value: unknown, context: string, seen = new Wea
   }
 }
 
-function snapshotToolRecord(tools: Readonly<Record<string, AITool>>): Readonly<Record<string, AITool>> {
-  const entries = Object.entries(tools).map(([toolID, tool]) => {
-    if (!tool || typeof tool !== "object") throw new Error(`Runtime tool ${JSON.stringify(toolID)} must be an object`)
-    const snapshot = Object.create(Object.getPrototypeOf(tool), Object.getOwnPropertyDescriptors(tool)) as AITool
-    copyToolCoordinationBindings(tool as object, snapshot as object)
-    return [toolID, Object.freeze(snapshot)] as const
-  })
-  return Object.freeze(Object.fromEntries(entries))
-}
-
 function snapshotRuntimeContract(
   contract: SessionRuntimeContract,
   packageRevision: PromptProfileResolver.ResolvedPackageRevision,
@@ -759,53 +792,13 @@ function snapshotRuntimeContract(
         }
       : {}),
     ...(contract.stream ? { stream: Object.freeze({ ...contract.stream }) } : {}),
-    ...(contract.resources ? { resources: Object.freeze({ ...contract.resources }) } : {}),
-  }
-  if (contract.identity.identityKind === "projected-worker") {
-    const workerContract = contract as ProjectedWorkerRuntimeContract
-    if (!workerContract.projectedRegistryToolIDs) {
-      throw new Error("Projected worker runtime contract is missing its classified tool snapshot")
-    }
-    if (!workerContract.projectedTools || !workerContract.stageTools) {
-      throw new Error("Projected worker SessionLoop runtime contract is missing its classified tool snapshot")
-    }
-    return Object.freeze({
-      ...common,
-      projectedTools: snapshotToolRecord(workerContract.projectedTools),
-      stageTools: snapshotToolRecord(workerContract.stageTools),
-      projectedRegistryToolIDs: Object.freeze([...workerContract.projectedRegistryToolIDs]),
-    }) as SessionRuntimeContract
-  }
-  if (contract.identity.identityKind === "projected-scheduler") {
-    if (!contract.projectedTools || !contract.projectedRegistryToolIDs) {
-      throw new Error("Projected scheduler runtime contract is missing its projected tool snapshot")
-    }
-    return Object.freeze({
-      ...common,
-      projectedTools: snapshotToolRecord(contract.projectedTools),
-      projectedRegistryToolIDs: Object.freeze([...contract.projectedRegistryToolIDs]),
-    }) as SessionRuntimeContract
+    resources: Object.freeze({ ...contract.resources }),
   }
   return Object.freeze(common) as SessionRuntimeContract
 }
 
-export function sessionRuntimeToolRecords(contract: SessionRuntimeContract | undefined): {
-  projectedTools: Readonly<Record<string, AITool>>
-  stageTools: Readonly<Record<string, AITool>>
-} {
-  if (!contract) return { projectedTools: {}, stageTools: {} }
-  if (contract.identity.identityKind === "projected-worker") {
-    const worker = contract as ProjectedWorkerRuntimeContractBase & {
-      projectedTools?: Readonly<Record<string, AITool>>
-      stageTools?: Readonly<Record<string, AITool>>
-    }
-    return { projectedTools: worker.projectedTools!, stageTools: worker.stageTools! }
-  }
-  if (contract.identity.identityKind === "projected-scheduler") {
-    const scheduler = contract as Extract<SessionRuntimeContract, { projectedTools: Readonly<Record<string, AITool>> }>
-    return { projectedTools: scheduler.projectedTools, stageTools: {} }
-  }
-  return { projectedTools: {}, stageTools: {} }
+export function sessionRuntimeToolOwner(contract: SessionRuntimeContract | undefined): RuntimeToolOwner | undefined {
+  return contract?.resources.tools
 }
 
 export function assertSessionLoopRuntimeContract(contract: SessionRuntimeContract | undefined, context: string): void {

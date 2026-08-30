@@ -3,8 +3,11 @@ import { createVisualQaOutputTools } from "@/visual-qa/output-tools"
 
 test("visual QA commits parallel check and dependent coverage as one turn-local graph", async () => {
   const output = createVisualQaOutputTools()
-  const execute = (name: keyof typeof output.tools, input: unknown) =>
-    (output.tools[name] as { execute: (input: unknown, options: unknown) => Promise<unknown> }).execute(input, {})
+  const execute = (name: string, input: unknown) =>
+    (output.materializeExact(name) as { execute: (input: unknown, options: unknown) => Promise<unknown> }).execute(
+      input,
+      {},
+    )
 
   const [checkResult, coverageResult] = await Promise.all([
     execute("register_visual_qa_check_item", {

@@ -1,7 +1,12 @@
 import { PlatformCapabilitySetRegistry } from "@/agent/platform-capability-sets"
 import type { RuntimeTemplateID } from "@/agent/runtime-template-id"
 import type { ExpertSquadManifestV2 } from "@opencorvus-ai/sdk/expert-squad-authoring"
-import { CapabilityRefCodec, type CapabilityKind, type CapabilityRef } from "@opencorvus-ai/util/capability-ref"
+import {
+  capabilityRef,
+  CapabilityRefCodec,
+  type CapabilityKind,
+  type CapabilityRef,
+} from "@opencorvus-ai/util/capability-ref"
 import { compareCanonicalStrings } from "@/util/canonical-digest"
 
 type Projection = ExpertSquadManifestV2["capability_projection"]["scheduler"] | ExpertSquadManifestV2["capability_projection"]["agents"][string]
@@ -48,7 +53,7 @@ type ProjectionRuntime =
   | { readonly kind: "scheduler" }
   | { readonly kind: "worker"; readonly baseRole: RuntimeTemplateID }
 
-type GrantOrigin = "platform-base" | "projection" | "transport"
+type GrantOrigin = "platform-core" | "platform-base" | "projection" | "transport"
 
 function canonicalRefs(refs: Iterable<CapabilityRef>): CapabilityRef[] {
   return [...refs]
@@ -150,16 +155,34 @@ export function materializeExpertSquadCapabilities(input: {
     const previous = effectiveByRef.get(encoded)
     if (previous) {
       const projectionOverridesBase =
-        (previous.origin === "platform-base" && origin === "projection") ||
-        (previous.origin === "projection" && origin === "platform-base")
+        ((previous.origin === "platform-base" || previous.origin === "platform-core") && origin === "projection") ||
+        (previous.origin === "projection" && (origin === "platform-base" || origin === "platform-core"))
       if (projectionOverridesBase) {
         if (origin === "projection") effectiveByRef.set(encoded, { ref, declaredBy, origin })
+        return
+      }
+      if (
+        (previous.origin === "platform-core" && origin === "platform-base") ||
+        (previous.origin === "platform-base" && origin === "platform-core")
+      ) {
+        if (origin === "platform-base") effectiveByRef.set(encoded, { ref, declaredBy, origin })
         return
       }
       throw new Error(`${input.context}: capability ${encoded} is granted by both ${previous.declaredBy} and ${declaredBy}`)
     }
     effectiveByRef.set(encoded, { ref, declaredBy, origin })
   }
+
+  addLeaf(
+    capabilityRef({
+      kind: "tool",
+      source: "platform",
+      owner_ref: "tool-registry",
+      local_ref: "capability_search",
+    }),
+    "platform-core:capability_search",
+    "platform-core",
+  )
 
   for (const ref of declaredRefs) {
     const encoded = CapabilityRefCodec.encode(ref)

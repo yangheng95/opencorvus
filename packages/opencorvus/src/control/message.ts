@@ -303,7 +303,7 @@ function buildResult(input: {
   let observation: z.infer<typeof PanelToolObservation> | undefined
   for (const message of input.turnMessages) {
     for (const part of message.parts) {
-      if (part.type !== "tool" || part.tool !== "panel" || part.state.status !== "completed") continue
+      if (part.type !== "tool" || !part.tool.startsWith("panel_") || part.state.status !== "completed") continue
       toolResultRefs.push({
         session_id: part.sessionID,
         message_id: part.messageID,

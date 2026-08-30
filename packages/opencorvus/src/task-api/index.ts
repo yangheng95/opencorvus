@@ -1575,7 +1575,7 @@ export namespace EngineService {
       input.artifactSources && input.artifactSources.length > 0
         ? (() => {
             if (creator.actor !== "mission" || !creator.messageID || !creator.toolCallID) {
-              throw new Error("Cross-Task Artifact imports require a real Mission panel.create_task tool execution")
+              throw new Error("Cross-Task Artifact imports require a real Mission panel_create_task Tool execution")
             }
             return {
               missionID: creator.missionID,

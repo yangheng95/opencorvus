@@ -22,7 +22,7 @@ import { SessionControlEventTable } from "@/session/session.sql"
 import { ProtocolEventTable } from "@/protocol/protocol.sql"
 import { createRightSidebarConversationSession } from "@/chat/session"
 import { Question } from "@/question"
-import { PanelTool, PanelToolTestHooks } from "@/tool/panel"
+import { PanelLeafTools, PanelToolTestHooks } from "@/tool/panel"
 import { Tool } from "@/tool/tool"
 
 afterEach(async () => {
@@ -183,10 +183,11 @@ describe("standalone Mission process recovery", () => {
           }
         })
         try {
-          const panel = await PanelTool.init({ agentID: "work" })
+          const panelDefinition = PanelLeafTools.find((tool) => tool.id === "panel_wake_mission")
+          if (!panelDefinition) throw new Error("panel_wake_mission leaf is unavailable")
+          const panel = await panelDefinition.init({ agentID: "work" })
           const execution = panel.execute(
             {
-              action: "wake_mission",
               request: "Run a durable activation-fenced Mission",
               reason: "This request needs a durable Mission. Continue?",
             },
@@ -197,7 +198,7 @@ describe("standalone Mission process recovery", () => {
               agent: "work",
               abort: new AbortController().signal,
               messages: [],
-              executionSurface: Tool.executionSurface(["panel"], []),
+              executionSurface: Tool.executionSurface([panelDefinition.id], []),
               extra: { surface: "right-sidebar" },
               metadata() {},
             },

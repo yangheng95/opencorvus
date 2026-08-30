@@ -16,6 +16,7 @@ import { SessionProcessor } from "@/session/processor"
 import { EngineService } from "@/task-api"
 import { Worktree } from "@/worktree"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
+import { resolveTestCapabilityTools } from "../fixture/capability-occurrence"
 
 function providerModel(): Provider.Model {
   return {
@@ -43,61 +44,75 @@ afterEach(async () => {
 })
 
 describe("host-owned native Session MCP composition", () => {
-  test("binds Browser and Computer to independent owners for one native Session", async () => {
+  test("publishes Browser and Computer inventory through independent owners for one native Session", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
       fn: async () => {
         const sessionID = "ses_host_native_mcp"
-        const scopedServers: Array<{
+        const discoveredServers: Array<{
           key: string
           connectionIdentity: string | undefined
           runtimeScope?: string
           hasEndpoint?: boolean
           hasAuthorization?: boolean
         }> = []
-        const browser = spyOn(MCP, "scopedToolsForServer").mockImplementation(async (input) => {
-          scopedServers.push({ key: input.key, connectionIdentity: input.connectionIdentity })
-          return { browser_tabs: { description: "Owned Browser tabs" } as never }
-        })
-        const computer = spyOn(MCP, "scopedTool").mockImplementation(async (input) => {
+        const inspect = spyOn(MCP, "inspectScopedCapabilitySnapshot").mockImplementation(async (input) => {
           const environment = input.mcp.type === "local" ? input.mcp.environment : undefined
-          scopedServers.push({
+          discoveredServers.push({
             key: input.key,
             connectionIdentity: input.connectionIdentity,
             runtimeScope: environment?.OPENCORVUS_COMPUTER_RUNTIME_SCOPE,
             hasEndpoint: Boolean(environment?.OPENCORVUS_COMPUTER_HOST_ENDPOINT),
             hasAuthorization: Boolean(environment?.OPENCORVUS_COMPUTER_HOST_AUTHORIZATION),
           })
-          return { description: `Owned Computer ${input.toolName}` } as never
+          const names =
+            input.key === BrowserMCPBuiltin.ServerName
+              ? ["tabs"]
+              : input.key === ComputerMCPBuiltin.ServerName
+                ? [...ComputerMCPBuiltin.ImportableToolNames]
+                : []
+          return {
+            tool_definitions: names.map((name) => ({
+              name,
+              description: `Owned ${input.key} ${name}`,
+              inputSchema: { type: "object", properties: {} },
+            })),
+            prompt_definitions: [],
+            resource_definitions: [],
+            inventory_revision: "1".repeat(64),
+          }
         })
         try {
           const config = await Config.get()
-          const tools = await HostSessionMcpRuntime.tools(config, sessionID, [
+          await HostSessionMcpRuntime.prepareCatalog(config, sessionID, [
             BrowserMCPBuiltin.ServerName,
             ComputerMCPBuiltin.ServerName,
           ])
-          expect(Object.keys(tools).sort()).toEqual([
+          const names = HostSessionMcpRuntime.catalogSnapshots(sessionID)
+            .flatMap((snapshot) => Object.keys(snapshot.tool_bindings))
+            .sort()
+          expect(names).toEqual([
             "browser_tabs",
             ...ComputerMCPBuiltin.ImportableToolNames.map((name) => `computer_${name}`),
           ].sort())
-          expect(scopedServers[0]).toEqual({
+          expect(discoveredServers[0]).toEqual({
             key: BrowserMCPBuiltin.ServerName,
             connectionIdentity: "session:ses_host_native_mcp:browser",
+            runtimeScope: undefined,
+            hasEndpoint: false,
+            hasAuthorization: false,
           })
-          expect(scopedServers.slice(1)).toEqual(
-            ComputerMCPBuiltin.ImportableToolNames.map(() => ({
-              key: ComputerMCPBuiltin.ServerName,
-              connectionIdentity: "session:ses_host_native_mcp:computer",
-              runtimeScope: "session:ses_host_native_mcp:computer",
-              hasEndpoint: true,
-              hasAuthorization: true,
-            })),
-          )
+          expect(discoveredServers[1]).toEqual({
+            key: ComputerMCPBuiltin.ServerName,
+            connectionIdentity: "session:ses_host_native_mcp:computer",
+            runtimeScope: "session:ses_host_native_mcp:computer",
+            hasEndpoint: true,
+            hasAuthorization: true,
+          })
           await HostSessionMcpRuntime.dispose(sessionID)
         } finally {
-          computer.mockRestore()
-          browser.mockRestore()
+          inspect.mockRestore()
         }
       },
     })
@@ -152,32 +167,34 @@ describe("host-owned native Session MCP composition", () => {
           model,
           abort: new AbortController().signal,
         })
-        const resolved: Array<{ sessionID: string; selectedServerRefs: string[] }> = []
-        const native = spyOn(HostSessionMcpRuntime, "tools").mockImplementation(
-          async (_config, sessionID, selectedServerRefs) => {
-            resolved.push({ sessionID, selectedServerRefs: [...selectedServerRefs].sort() })
-            return {}
-          },
-        )
+        const resolved: Array<{ key: string; connectionIdentity: string | undefined }> = []
+        const native = spyOn(MCP, "inspectScopedCapabilitySnapshot").mockImplementation(async (input) => {
+          resolved.push({ key: input.key, connectionIdentity: input.connectionIdentity })
+          return {
+            tool_definitions: [],
+            prompt_definitions: [],
+            resource_definitions: [],
+            inventory_revision: "2".repeat(64),
+          }
+        })
         try {
-          const tools = await SessionLoop.resolveTools({
-            agent: sessionRuntimeFromNativeAgent(await PrimaryAssistantRegistry.get("mission", { config })),
+          const runtime = sessionRuntimeFromNativeAgent(await PrimaryAssistantRegistry.get("mission", { config }))
+          const { tools } = await resolveTestCapabilityTools({
+            agent: runtime,
             agentID: "mission",
             model,
             session: mission,
+            assistant,
             processor,
             messages: await Session.messages({ sessionID: mission.id }),
             config,
+            activeLocalRefs: ["wait"],
           })
-          expect(resolved).toEqual([
-            { sessionID: mission.id, selectedServerRefs: Object.keys(config.mcp ?? {}).sort() },
-          ])
-          expect(["mission_skill", "panel", "scheduler_message", "wait"].map((name) => Object.hasOwn(tools, name))).toEqual([
-            true,
-            true,
-            true,
-            true,
-          ])
+          expect(resolved.map((entry) => entry.key).sort()).toEqual(Object.keys(config.mcp ?? {}).sort())
+          expect(HostSessionMcpRuntime.catalogSnapshots(mission.id).map((snapshot) => snapshot.owner.owner_id).sort()).toEqual(
+            resolved.map((entry) => entry.connectionIdentity).filter((entry): entry is string => Boolean(entry)).sort(),
+          )
+          expect(Object.keys(tools).sort()).toEqual(["capability_search", "wait"])
         } finally {
           native.mockRestore()
         }
@@ -206,13 +223,18 @@ describe("host-owned native Session MCP composition", () => {
       owners.set(id, owner)
       return owner
     })
-    const browser = spyOn(MCP, "scopedToolsForServer").mockResolvedValue({})
+    const browser = spyOn(MCP, "inspectScopedCapabilitySnapshot").mockResolvedValue({
+      tool_definitions: [],
+      prompt_definitions: [],
+      resource_definitions: [],
+      inventory_revision: "3".repeat(64),
+    })
     try {
       const root = await Instance.provide({
         directory: project.path,
         fn: async () => {
           const session = await Session.create({ kind: "root", title: "Cross-directory runtime root" })
-          await HostSessionMcpRuntime.tools(await Config.get(), session.id, [BrowserMCPBuiltin.ServerName])
+          await HostSessionMcpRuntime.prepareCatalog(await Config.get(), session.id, [BrowserMCPBuiltin.ServerName])
           return session
         },
       })
@@ -226,8 +248,8 @@ describe("host-owned native Session MCP composition", () => {
           })
           const unrelated = await Session.create({ kind: "root", title: "Unrelated retained runtime" })
           const config = await Config.get()
-          await HostSessionMcpRuntime.tools(config, child.id, [BrowserMCPBuiltin.ServerName])
-          await HostSessionMcpRuntime.tools(config, unrelated.id, [BrowserMCPBuiltin.ServerName])
+          await HostSessionMcpRuntime.prepareCatalog(config, child.id, [BrowserMCPBuiltin.ServerName])
+          await HostSessionMcpRuntime.prepareCatalog(config, unrelated.id, [BrowserMCPBuiltin.ServerName])
           return { child, unrelated }
         },
       })
@@ -252,7 +274,7 @@ describe("host-owned native Session MCP composition", () => {
         directory: nestedDirectory,
         fn: async () => {
           const before = owners.size
-          await HostSessionMcpRuntime.tools(await Config.get(), unrelated.id, [BrowserMCPBuiltin.ServerName])
+          await HostSessionMcpRuntime.prepareCatalog(await Config.get(), unrelated.id, [BrowserMCPBuiltin.ServerName])
           expect(owners.size).toBe(before)
           await HostSessionMcpRuntime.dispose(unrelated.id)
         },

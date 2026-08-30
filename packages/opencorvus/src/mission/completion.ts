@@ -21,7 +21,7 @@ export const MissionCompletionTaskAcceptance = z
     task_id: z.string().min(1),
     evidence_locators: z.array(ArtifactReadLocatorSchema).min(1).max(64),
     terminal_lifecycle_reference: TerminalLifecycleReferenceSchema.describe(
-      "Exact current completed occurrence reviewed through panel.query_task earlier in the same Mission Turn.",
+      "Exact current completed occurrence reviewed through panel_query_task earlier in the same Mission Turn.",
     ),
   })
   .strict()

@@ -4,10 +4,7 @@ import { Database, and, desc, eq } from "@/storage/db"
 import { MessageTable, ToolPartRequestTable as PartTable } from "@/session/session.sql"
 import { projectToolPartInTransaction } from "@/session/tool-part-facts"
 import { Message } from "@/session/message"
-import { MissionPanelActionSchema } from "@/panel/capability"
-import { materializeToolExecutionInput } from "@/provider/tool-execution-input"
 import { resolvePanelArtifactReadReferencesBeforeAction } from "@/agent/artifact-read-facts"
-import { ArtifactReadLocatorSchema } from "@opencorvus-ai/plugin/artifact-catalog"
 import type { MissionSession } from "./session"
 import {
   MissionCompletionActionInput,
@@ -15,29 +12,6 @@ import {
   MissionCompletionReceipt,
   type MissionCompletionFactValue,
 } from "./completion"
-
-const LegacyMissionCompletionActionInput = z
-  .object({
-    action: z.literal("complete_mission"),
-    summary: z.string().trim().min(1).max(4_000),
-    task_acceptances: z
-      .array(
-        z
-          .object({
-            task_id: z.string().min(1),
-            evidence_locators: z.array(ArtifactReadLocatorSchema).min(1).max(64),
-          })
-          .strict(),
-      )
-      .max(128),
-  })
-  .strict()
-
-function unwrapPersistedProviderOperation(input: unknown): unknown {
-  if (!input || typeof input !== "object" || Array.isArray(input)) return input
-  const entries = Object.entries(input as Record<string, unknown>)
-  return entries.length === 1 && entries[0]?.[0] === "operation" ? entries[0][1] : input
-}
 
 export const MissionBoardLane = z.enum(["backlog", "running", "attention", "review", "completed"])
 
@@ -122,20 +96,15 @@ function currentMissionCompletion(session: MissionSession): MissionCompletionFac
     if (row.messageData.role !== "assistant") continue
     if (latestUser && !orderedAfter({ id: row.messageID, timeCreated: row.messageTimeCreated }, latestUser)) continue
     const part = Message.ToolPart.safeParse(row.projected)
-    if (!part.success || part.data.tool !== "panel" || part.data.state.status !== "completed") continue
-    const currentInput = MissionCompletionActionInput.safeParse(
-      materializeToolExecutionInput(MissionPanelActionSchema, part.data.state.input),
-    )
-    const legacyInput = currentInput.success
-      ? undefined
-      : LegacyMissionCompletionActionInput.safeParse(unwrapPersistedProviderOperation(part.data.state.input))
-    let input: z.infer<typeof MissionCompletionActionInput> | z.infer<typeof LegacyMissionCompletionActionInput>
-    let currentCompletionInput: z.infer<typeof MissionCompletionActionInput> | undefined
-    if (currentInput.success) {
-      input = currentInput.data
-      currentCompletionInput = currentInput.data
-    } else if (legacyInput?.success) input = legacyInput.data
-    else continue
+    if (!part.success || part.data.tool !== "panel_complete_mission" || part.data.state.status !== "completed") continue
+    if (!part.data.state.input || typeof part.data.state.input !== "object" || Array.isArray(part.data.state.input)) continue
+    const currentInput = MissionCompletionActionInput.safeParse({
+      action: "complete_mission",
+      ...(part.data.state.input as Record<string, unknown>),
+    })
+    if (!currentInput.success) continue
+    const input = currentInput.data
+    const currentCompletionInput = currentInput.data
     let decoded: unknown
     try {
       decoded = JSON.parse(part.data.state.output)

@@ -7,7 +7,6 @@ import { Session } from "@/session"
 import { MessageStore } from "@/session/message-store"
 import {
   SessionRuntimeContractStore,
-  sessionRuntimeToolRecords,
   type SessionRuntimeContractIdentity,
 } from "@/session/runtime-contract"
 import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
@@ -18,6 +17,8 @@ import type { ToolExecutionSurface } from "@/tool/execution-surface"
 import type { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
 import { sameExpertSquadPackageRevision } from "@/expert-squad/package-revision"
 import type { SessionExecutionAuthority } from "@/engine/task-session-lineage"
+import { harnessGrantedRefs } from "@/capability/harness-projection"
+import { capabilityRef, CapabilityRefCodec, type CapabilityRef } from "@opencorvus-ai/util/capability-ref"
 
 // SDK means Software Development Kit; SHA-256 means Secure Hash Algorithm 256-bit.
 export type ProjectedTaskToolRuntimeBinding = Readonly<{
@@ -40,6 +41,59 @@ export type PackageToolRuntimeBinding = ProjectedTaskToolRuntimeBinding &
     providerKind: "package-tool"
     compiledBundleSHA256: string
   }>
+
+function projectedBindingCapabilityRef(binding: ProjectedTaskToolRuntimeBinding): CapabilityRef {
+  switch (binding.providerKind) {
+    case "package-tool":
+      return capabilityRef({
+        kind: "tool",
+        source: "package",
+        owner_ref: binding.expertSquadID,
+        local_ref: binding.providerName,
+      })
+    case "package-mcp-tool":
+      return capabilityRef({
+        kind: "mcp_tool",
+        source: "package",
+        owner_ref: binding.expertSquadID,
+        local_ref: binding.providerName,
+      })
+    case "default-mcp-tool":
+      return capabilityRef({
+        kind: "mcp_tool",
+        source: "project",
+        owner_ref: "default-mcp-registry",
+        local_ref: binding.providerName,
+      })
+  }
+}
+
+function exactRefIn(refs: readonly CapabilityRef[], expected: CapabilityRef): boolean {
+  const encoded = CapabilityRefCodec.encode(expected)
+  return refs.some((ref) => CapabilityRefCodec.encode(ref) === encoded)
+}
+
+export class TaskToolCapabilityAuthorityError extends Error {
+  override readonly name = "TaskToolCapabilityAuthorityError"
+}
+
+export function assertExactTaskToolCapabilityAuthority(input: {
+  toolName: string
+  expected: CapabilityRef
+  executableRefs: readonly CapabilityRef[]
+  activeRefs: readonly CapabilityRef[]
+}): void {
+  if (!exactRefIn(input.executableRefs, input.expected)) {
+    throw new TaskToolCapabilityAuthorityError(
+      `${input.toolName}: projected runtime Harness does not grant exact ref ${CapabilityRefCodec.encode(input.expected)}.`,
+    )
+  }
+  if (!exactRefIn(input.activeRefs, input.expected)) {
+    throw new TaskToolCapabilityAuthorityError(
+      `${input.toolName}: current occurrence did not reveal exact ref ${CapabilityRefCodec.encode(input.expected)}.`,
+    )
+  }
+}
 
 export type TaskToolExecutionScope = Readonly<{
   kind: "task"
@@ -180,26 +234,6 @@ function canonicalDirectory(value: string): string {
   return Filesystem.normalizePath(path.resolve(value))
 }
 
-function assertRuntimeBinding(
-  actual: ProjectedTaskToolRuntimeBinding | undefined,
-  expected: ProjectedTaskToolRuntimeBinding,
-): void {
-  if (!actual) throw new Error(`${expected.providerName}: active runtime tool has no projected execution binding.`)
-  for (const key of Object.keys(expected) as (keyof ProjectedTaskToolRuntimeBinding)[]) {
-    if (key === "packageRevision") {
-      if (!sameExpertSquadPackageRevision(actual.packageRevision, expected.packageRevision)) {
-        throw new Error(`${expected.providerName}: active runtime package revision does not match this tool closure.`)
-      }
-      continue
-    }
-    if (actual[key] !== expected[key]) {
-      throw new Error(
-        `${expected.providerName}: active runtime projected binding ${key} does not match this tool closure.`,
-      )
-    }
-  }
-}
-
 function assertWorkerDescriptor(
   identity: Extract<SessionRuntimeContractIdentity, { identityKind: "projected-worker" }>,
 ): void {
@@ -264,8 +298,13 @@ export async function resolveProjectedTaskToolExecutionScope(input: {
   }
   if (identity.identityKind === "projected-worker") assertWorkerDescriptor(identity)
 
-  const activeTool = sessionRuntimeToolRecords(contract).projectedTools[input.expected.providerName]
-  assertRuntimeBinding(runtimeBinding(activeTool), input.expected)
+  const expectedCapabilityRef = projectedBindingCapabilityRef(input.expected)
+  assertExactTaskToolCapabilityAuthority({
+    toolName: input.expected.providerName,
+    expected: expectedCapabilityRef,
+    executableRefs: harnessGrantedRefs(contract.harnessGrants, "execute"),
+    activeRefs: execution.executionSurface.capability_projection?.active_refs ?? [],
+  })
 
   const owner =
     identity.identityKind === "projected-scheduler"
@@ -333,9 +372,18 @@ export async function resolveCoreProjectedTaskToolExecutionScope(input: {
     throw new Error(`${input.toolName}: persisted tool call is no longer the current running invocation.`)
   }
   if (identity.identityKind === "projected-worker") assertWorkerDescriptor(identity)
-  if (!contract.projectedRegistryToolIDs?.includes(input.toolName)) {
-    throw new Error(`${input.toolName}: tool is not present in the projected Task registry contract.`)
-  }
+  const expectedCapabilityRef = capabilityRef({
+    kind: "tool",
+    source: "platform",
+    owner_ref: "tool-registry",
+    local_ref: input.toolName,
+  })
+  assertExactTaskToolCapabilityAuthority({
+    toolName: input.toolName,
+    expected: expectedCapabilityRef,
+    executableRefs: harnessGrantedRefs(contract.harnessGrants, "execute"),
+    activeRefs: execution.executionSurface.capability_projection?.active_refs ?? [],
+  })
   const projectDirectory = taskPrimaryProjectRoot(execution.taskID, { activeProjectID: execution.projectID })
   if (canonicalDirectory(contract.projectDirectory) !== canonicalDirectory(projectDirectory)) {
     throw new Error(`${input.toolName}: projected project directory does not match the Task project root.`)

@@ -15,14 +15,12 @@ import { SessionLoop } from "../src/session/loop"
 import { MessageStore } from "../src/session/message-store"
 import { SessionProcessor } from "../src/session/processor"
 import { SessionStatus } from "../src/session/status"
+import { normalizeToolResult } from "../src/session/tool-result-normalization"
 import { ToolPartProgressTable } from "../src/session/session.sql"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 import { PromptProfileResolver } from "../src/expert-squad/prompt-profile-resolver"
 import { WorkerTurnDescriptor } from "../src/agent/worker-turn-descriptor"
 import { SessionRuntimeContractStore } from "../src/session/runtime-contract"
-import { createAgentContextTools } from "../src/agent/context-tools"
-import { createAgentCoordinationRuntimeTools } from "../src/agent/coordination-runtime-tools"
-import { filterAgentTools } from "../src/agent/filter-tools"
 import { sessionRuntimeWithResolvedModel } from "../src/agent/session-agent-runtime"
 import { composeProjectedWorkerSystemPrompt } from "../src/agent/projected-worker-system-prompt"
 import { RuntimeTemplateRegistry } from "../src/agent/runtime-template-registry"
@@ -34,7 +32,7 @@ import { MCP } from "../src/mcp"
 import { computerRuntimeScopeIdentity } from "../src/mcp/computer/runtime-scope"
 import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import { prepareTaskProcessBinding } from "../src/engine/task-execution-capsule-binding"
-import { createRequirementsOutputTools } from "../src/requirements/output-tools"
+import { createRequirementsOutputToolFactory } from "../src/requirements/output-tools"
 import { createArchitectOutputTools } from "../src/architect/output-tools"
 import { assertArchitectOutputToolTurnIdentity } from "../src/architect/output-tool-turn-identity"
 import { bindInternalStageTool, stageToolMaterializerBindingOf } from "../src/agent/stage-tool-materializer"
@@ -44,7 +42,21 @@ import { ToolTurnExecutionConflictError } from "../src/tool/execution-mode"
 import { RuntimeCapabilityCatalog } from "../src/tool/capability-runtime-catalog"
 import { CatalogOccurrenceBinding } from "../src/capability/catalog-binding"
 import { ProviderToolNameCollisionError } from "../src/tool/provider-name-authority"
-import type { Tool as AITool } from "ai"
+import { resolveTestCapabilityTools } from "./fixture/capability-occurrence"
+import { harnessGrantedRefs } from "../src/capability/harness-projection"
+import { createRuntimeToolOwner } from "../src/session/runtime-tool-owner"
+import { testRuntimeToolFactories } from "./fixture/runtime-tool-owner"
+
+function workerHarness(input: Parameters<typeof PromptProfileResolver.workerHarnessGrants>[0]) {
+  const grants = PromptProfileResolver.workerHarnessGrants(input)
+  return {
+    grants,
+    toolIDs: harnessGrantedRefs(grants, "execute")
+      .filter((ref) => ref.kind === "tool" || ref.kind === "mcp_tool")
+      .map((ref) => ref.local_ref)
+      .sort(),
+  }
+}
 
 function providerModel(): Provider.Model {
   return {
@@ -64,40 +76,6 @@ function providerModel(): Provider.Model {
     api: { id: "authority-integration", npm: "@ai-sdk/anthropic" },
     options: {},
   } as Provider.Model
-}
-
-async function bindResolvedCatalogOccurrence(input: {
-  config: Config.Info
-  model: Provider.Model
-  session: Session.Info
-  assistant: Message.Assistant
-  agentID: string
-  tools: Record<string, AITool>
-}) {
-  const catalog = await RuntimeCapabilityCatalog.snapshot({
-    config: input.config,
-    sessionID: input.session.id,
-    agentID: input.agentID,
-    executionToolIDs: Object.keys(input.tools),
-    harnessProjection: SessionLoop.harnessProjectionForResolvedTools(input.tools),
-  })
-  const payload = CatalogOccurrenceBinding.payload({
-    snapshot: catalog.snapshot,
-    materializationScope: await CatalogOccurrenceBinding.materializationScope({
-      model: input.model,
-      config: input.config,
-    }),
-    runtimeContract: SessionRuntimeContractStore.get(input.session.id),
-  })
-  const binding = await CatalogOccurrenceBinding.publish({ projectID: Instance.project.id, payload })
-  const parent = await MessageStore.get({ sessionID: input.session.id, messageID: input.assistant.parentID })
-  const admitted = await CatalogOccurrenceBinding.bindAndBeginAssistant({
-    projectID: Instance.project.id,
-    assistant: { ...input.assistant, acceptedInputMessageIDs: [input.assistant.parentID] },
-    parent,
-    binding,
-  })
-  return { admitted, payload, binding }
 }
 
 afterEach(async () => {
@@ -145,14 +123,16 @@ describe("SessionLoop Tool execution authority integration", () => {
           abort: new AbortController().signal,
         })
         await expect(
-          SessionLoop.resolveTools({
+          resolveTestCapabilityTools({
             agent,
             agentID: "coding",
             model,
             session,
+            assistant,
             processor,
             messages: await Session.messages({ sessionID: session.id }),
             config,
+            activeLocalRefs: ["read"],
             reservedProviderToolNames: [
               {
                 name: "read",
@@ -229,15 +209,18 @@ describe("SessionLoop Tool execution authority integration", () => {
           model,
           abort: new AbortController().signal,
         })
-        const withReceipt = await SessionLoop.resolveTools({
+        const withReceipt = (
+          await resolveTestCapabilityTools({
           agent,
           agentID: "coding",
           model,
           session,
+          assistant: reopened.info,
           processor,
           messages: await Session.messages({ sessionID: session.id }),
           config,
-        })
+          })
+        ).tools
         const coordinator = SessionLoop.executionCoordinatorForResolvedTools(withReceipt)
         if (!coordinator) throw new Error("Expected the resolved Tool execution coordinator")
         expect(coordinator.committedDecision).toBe("dispatch_agent")
@@ -291,15 +274,19 @@ describe("SessionLoop Tool execution authority integration", () => {
         })
         const abort = new AbortController().signal
         const processor = SessionProcessor.create({ assistantMessage: assistant, sessionID: session.id, model, abort })
-        const tools = await SessionLoop.resolveTools({
+        const tools = (
+          await resolveTestCapabilityTools({
           agent,
           agentID: "coding",
           model,
           session,
+          assistant,
           processor,
           messages: await Session.messages({ sessionID: session.id }),
           config,
-        })
+          activeLocalRefs: ["write"],
+          })
+        ).tools
         const evidencePath = path.join(project.path, "session-loop-authority-evidence.txt")
         const toolCallID = "call_session_loop_authority"
         const toolInput = { filePath: evidencePath, content: "session-loop-conversation-authority\n" }
@@ -408,15 +395,19 @@ describe("SessionLoop Tool execution authority integration", () => {
         })
         const abort = new AbortController().signal
         const processor = SessionProcessor.create({ assistantMessage: assistant, sessionID: session.id, model, abort })
-        const tools = await SessionLoop.resolveTools({
+        const tools = (
+          await resolveTestCapabilityTools({
           agent,
           agentID: "coding",
           model,
           session,
+          assistant,
           processor,
           messages: await Session.messages({ sessionID: session.id }),
           config,
-        })
+          activeLocalRefs: ["edit"],
+          })
+        ).tools
         const edit = tools.edit
         if (!edit?.execute) throw new Error("SessionLoop did not project the edit Tool")
         const toolCallID = "call_durable_tool_activity"
@@ -514,16 +505,19 @@ describe("SessionLoop Tool execution authority integration", () => {
         }
         const abort = new AbortController().signal
         const processor = SessionProcessor.create({ assistantMessage: assistant, sessionID: session.id, model, abort })
-        const tools = await SessionLoop.resolveTools({
+        const tools = (
+          await resolveTestCapabilityTools({
           agent,
           agentID: "coding",
           model,
           session,
+          assistant,
           processor,
           messages: await Session.messages({ sessionID: session.id }),
           config,
-        })
-        await bindResolvedCatalogOccurrence({ config, model, session, assistant, agentID: "coding", tools })
+          activeLocalRefs: ["write"],
+          })
+        ).tools
         let resolveAsked!: (request: PermissionAuthority.Request) => void
         const asked = new Promise<PermissionAuthority.Request>((resolve) => (resolveAsked = resolve))
         const stopAsked = Bus.subscribe(PermissionAuthority.Event.Asked, ({ properties }) => resolveAsked(properties))
@@ -532,7 +526,12 @@ describe("SessionLoop Tool execution authority integration", () => {
           messages: [],
           abortSignal: abort,
         }).catch((error) => error)
-        const request = await asked
+        const request = await Promise.race([
+          asked,
+          pending.then((result) => {
+            throw result instanceof Error ? result : new Error(`Permission execution settled before Ask: ${String(result)}`)
+          }),
+        ])
         stopAsked()
         return { sessionID: session.id, assistantID: assistant.id, request, pending }
       },
@@ -695,31 +694,17 @@ describe("SessionLoop Tool execution authority integration", () => {
           type: "text",
           text: "Write the projected restart evidence file.",
         })
-        const contextTools = await filterAgentTools(
-          {
-            ...createAgentContextTools(),
-            ...(await createAgentCoordinationRuntimeTools({
-              agentID: projection.workerCapability.identity.agentID,
-              taskID,
-            })),
-          },
-          projection.workerCapability.identity.baseRole,
-          { taskID, sessionID: root.id },
-        )
+        const contextTools = {}
         const owner = MCP.createScopedConnectionOwner(
           computerRuntimeScopeIdentity({ ownerKind: "worker", taskID, sessionID: session.id }),
         )
-        const projectedTools = await PromptProfileResolver.projectWorkerTools(
-          contextTools,
-          projection.workerCapability,
-          {
-            taskID,
-            projectDirectory: project.path,
-            toolDirectory: project.path,
-            stageOwnedToolIDs: [],
-            connectionOwner: owner,
-          },
-        )
+        const projectedTools = { projectedTools: {}, stageTools: {} }
+        const runtimeHarness = workerHarness({
+          taskID,
+          capability: projection.workerCapability,
+          projectedToolIDs: Object.keys(projectedTools.projectedTools),
+          stageToolIDs: Object.keys(projectedTools.stageTools),
+        })
         const descriptor = WorkerTurnDescriptor.create({
           sessionID: session.id,
           payload: {
@@ -729,7 +714,7 @@ describe("SessionLoop Tool execution authority integration", () => {
             model: { selection: "explicit", providerID: model.providerID, modelID: model.id },
             prompt: { systemMode: "complete", systemSha256: textSHA256(system.prompt) },
             tools: {
-              enabled: Object.keys(projectedTools.projectedTools).sort(),
+              enabled: runtimeHarness.toolIDs,
               stageOwned: [],
               stageMaterializers: {},
             },
@@ -777,43 +762,38 @@ describe("SessionLoop Tool execution authority integration", () => {
             providerID: model.providerID,
             modelID: model.id,
           }),
-          projectedTools: projectedTools.projectedTools,
-          stageTools: {},
           system: [system.prompt],
           systemMode: "complete",
           includeMcpTools: projection.workerCapability.includeMcpTools,
-          exactTools: runtimeTemplate.exactRuntimeContract,
-          projectedRegistryToolIDs: projection.workerCapability.builtInToolIDs,
           skillProjection: projection.skillProjection,
-          harnessProjection: PromptProfileResolver.workerHarnessProjection({
-            taskID,
-            capability: projection.workerCapability,
-          }),
+          harnessGrants: runtimeHarness.grants,
           projectDirectory: project.path,
-          resources: { mcp: owner },
+          resources: {
+            mcp: owner,
+            tools: createRuntimeToolOwner({
+              leaves: testRuntimeToolFactories(projectedTools.projectedTools, "projected"),
+            }),
+          },
         })
         const abort = new AbortController().signal
         const processor = SessionProcessor.create({ assistantMessage: assistant, sessionID: session.id, model, abort })
-        const tools = await SessionLoop.resolveTools({
-          agent: sessionRuntimeWithResolvedModel(projection.workerCapability.runtime, {
+        const projectedRuntime = sessionRuntimeWithResolvedModel(projection.workerCapability.runtime, {
             providerID: model.providerID,
             modelID: model.id,
-          }),
+          })
+        const tools = (
+          await resolveTestCapabilityTools({
+          agent: projectedRuntime,
           agentID: projection.workerCapability.identity.agentID,
-          model,
-          session,
-          processor,
-          messages: await Session.messages({ sessionID: session.id }),
-          config,
-        })
-        await bindResolvedCatalogOccurrence({
-          config,
           model,
           session,
           assistant,
-          agentID: projection.workerCapability.identity.agentID,
-          tools,
-        })
+          processor,
+          messages: await Session.messages({ sessionID: session.id }),
+          config,
+          activeLocalRefs: ["write"],
+          })
+        ).tools
         let resolveAsked!: (request: PermissionAuthority.Request) => void
         const asked = new Promise<PermissionAuthority.Request>((resolve) => (resolveAsked = resolve))
         const stopAsked = Bus.subscribe(PermissionAuthority.Event.Asked, ({ properties }) => resolveAsked(properties))
@@ -954,40 +934,28 @@ describe("SessionLoop Tool execution authority integration", () => {
             return undefined
           },
         })
-        for (const [toolName, runtimeTool] of Object.entries(architectOutputTools.tools)) {
+        const architectRuntimeTools = Object.fromEntries(
+          DispatchAdapterContractRegistry.privateStageToolIDs("architect").map((toolID) => [
+            toolID,
+            architectOutputTools.materializeExact(toolID)!,
+          ]),
+        )
+        for (const [toolName, runtimeTool] of Object.entries(architectRuntimeTools)) {
           bindInternalStageTool(runtimeTool as object, { adapterID: "architect", toolName })
         }
-        const architectContextTools = await filterAgentTools(
-          {
-            ...createAgentContextTools(),
-            ...(await createAgentCoordinationRuntimeTools({
-              agentID: architectProjection.workerCapability.identity.agentID,
-              taskID,
-            })),
-          },
-          "architect",
-          { taskID, sessionID: root.id },
-        )
-        Object.assign(architectContextTools, architectOutputTools.tools)
+        const architectContextTools = { ...architectRuntimeTools }
         const architectOwner = MCP.createScopedConnectionOwner(
           computerRuntimeScopeIdentity({ ownerKind: "worker", taskID, sessionID: architectSession.id }),
         )
-        const architectStageOwned = Object.keys(architectOutputTools.tools)
-        const architectProjectedTools = await PromptProfileResolver.projectWorkerTools(
-          architectContextTools,
-          architectProjection.workerCapability,
-          {
-            taskID,
-            projectDirectory: project.path,
-            toolDirectory: project.path,
-            stageOwnedToolIDs: architectStageOwned,
-            connectionOwner: architectOwner,
-          },
-        )
-        const architectEnabled = [
-          ...Object.keys(architectProjectedTools.projectedTools),
-          ...Object.keys(architectProjectedTools.stageTools),
-        ].sort()
+        const architectStageOwned = Object.keys(architectRuntimeTools)
+        const architectProjectedTools = { projectedTools: {}, stageTools: architectContextTools }
+        const architectHarness = workerHarness({
+          taskID,
+          capability: architectProjection.workerCapability,
+          projectedToolIDs: Object.keys(architectProjectedTools.projectedTools),
+          stageToolIDs: Object.keys(architectProjectedTools.stageTools),
+        })
+        const architectEnabled = architectHarness.toolIDs
         const architectDescriptor = WorkerTurnDescriptor.create({
           sessionID: architectSession.id,
           payload: {
@@ -1042,26 +1010,34 @@ describe("SessionLoop Tool execution authority integration", () => {
             providerID: model.providerID,
             modelID: model.id,
           }),
-          projectedTools: architectProjectedTools.projectedTools,
-          stageTools: architectProjectedTools.stageTools,
           system: [architectSystem.prompt],
           systemMode: "complete",
           includeMcpTools: architectProjection.workerCapability.includeMcpTools,
-          exactTools: architectRuntimeTemplate.exactRuntimeContract,
-          projectedRegistryToolIDs: architectProjection.workerCapability.builtInToolIDs,
           skillProjection: architectProjection.skillProjection,
-          harnessProjection: PromptProfileResolver.workerHarnessProjection({
-            taskID,
-            capability: architectProjection.workerCapability,
-          }),
+          harnessGrants: architectHarness.grants,
           projectDirectory: project.path,
-          resources: { mcp: architectOwner },
+          resources: {
+            mcp: architectOwner,
+            tools: createRuntimeToolOwner({
+              leaves: [
+                ...testRuntimeToolFactories(architectProjectedTools.projectedTools, "projected", {
+                  workerTurnDescriptorHash: architectDescriptor.hash,
+                  projectionHash: architectProjection.workerCapability.identity.projectionHash,
+                }),
+                ...testRuntimeToolFactories(architectProjectedTools.stageTools, "stage", {
+                  workerTurnDescriptorHash: architectDescriptor.hash,
+                  projectionHash: architectProjection.workerCapability.identity.projectionHash,
+                }),
+              ],
+            }),
+          },
         })
         const architectCatalog = await RuntimeCapabilityCatalog.snapshot({
           config,
           sessionID: architectSession.id,
           agentID: architectProjection.workerCapability.identity.agentID,
           executionToolIDs: architectEnabled,
+          permission: [],
         })
         expect(
           architectCatalog.snapshot.descriptors
@@ -1079,18 +1055,23 @@ describe("SessionLoop Tool execution authority integration", () => {
           model,
           abort: architectAbort,
         })
-        const architectTools = await SessionLoop.resolveTools({
-          agent: sessionRuntimeWithResolvedModel(architectProjection.workerCapability.runtime, {
+        const architectRuntime = sessionRuntimeWithResolvedModel(architectProjection.workerCapability.runtime, {
             providerID: model.providerID,
             modelID: model.id,
-          }),
+          })
+        const architectTools = (
+          await resolveTestCapabilityTools({
+          agent: architectRuntime,
           agentID: architectProjection.workerCapability.identity.agentID,
           model,
           session: architectSession,
+          assistant: architectAssistant,
           processor: architectProcessor,
           messages: await Session.messages({ sessionID: architectSession.id }),
           config,
-        })
+          activeLocalRefs: ["view_architect_draft"],
+          })
+        ).tools
         const architectToolCallID = "call_architect_draft_identity"
         const architectResult = await architectTools.view_architect_draft!.execute!(
           {},
@@ -1133,44 +1114,29 @@ describe("SessionLoop Tool execution authority integration", () => {
           type: "text",
           text: "Register the persisted runtime decision.",
         })
-        const outputTools = createRequirementsOutputTools({ taskID })
-        bindInternalStageTool(outputTools.tools.register_requirement as object, {
+        const outputTools = createRequirementsOutputToolFactory({ taskID })
+        const stageOwned = ["register_requirement", "register_decision"]
+        const requirementsRuntimeTools = Object.fromEntries(
+          stageOwned.map((toolID) => [toolID, outputTools.materializeExact(toolID)!]),
+        )
+        bindInternalStageTool(requirementsRuntimeTools.register_requirement as object, {
           adapterID: "requirements",
           toolName: "register_requirement",
         })
-        const contextTools = await filterAgentTools(
-          {
-            ...createAgentContextTools(),
-            ...(await createAgentCoordinationRuntimeTools({
-              agentID: projection.workerCapability.identity.agentID,
-              taskID,
-            })),
-          },
-          "requirements",
-          { taskID, sessionID: root.id },
-        )
-        Object.assign(contextTools, outputTools.tools)
+        const contextTools = { ...requirementsRuntimeTools }
         const owner = MCP.createScopedConnectionOwner(
           computerRuntimeScopeIdentity({ ownerKind: "worker", taskID, sessionID: session.id }),
         )
-        const stageOwned = ["register_requirement", "register_decision"]
-        const projectedTools = await PromptProfileResolver.projectWorkerTools(
-          contextTools,
-          projection.workerCapability,
-          {
-            taskID,
-            projectDirectory: project.path,
-            toolDirectory: project.path,
-            stageOwnedToolIDs: stageOwned,
-            connectionOwner: owner,
-          },
-        )
+        const projectedTools = { projectedTools: {}, stageTools: contextTools }
         const materializer = stageToolMaterializerBindingOf(projectedTools.stageTools.register_decision as object)
         if (!materializer) throw new Error("requirements decision Tool has no materializer")
-        const enabled = [
-          ...Object.keys(projectedTools.projectedTools),
-          ...Object.keys(projectedTools.stageTools),
-        ].sort()
+        const requirementsHarness = workerHarness({
+          taskID,
+          capability: projection.workerCapability,
+          projectedToolIDs: Object.keys(projectedTools.projectedTools),
+          stageToolIDs: Object.keys(projectedTools.stageTools),
+        })
+        const enabled = requirementsHarness.toolIDs
         const descriptor = WorkerTurnDescriptor.create({
           sessionID: session.id,
           payload: {
@@ -1229,43 +1195,47 @@ describe("SessionLoop Tool execution authority integration", () => {
             providerID: model.providerID,
             modelID: model.id,
           }),
-          projectedTools: projectedTools.projectedTools,
-          stageTools: projectedTools.stageTools,
           system: [system.prompt],
           systemMode: "complete",
           includeMcpTools: projection.workerCapability.includeMcpTools,
-          exactTools: runtimeTemplate.exactRuntimeContract,
-          projectedRegistryToolIDs: projection.workerCapability.builtInToolIDs,
           skillProjection: projection.skillProjection,
-          harnessProjection: PromptProfileResolver.workerHarnessProjection({
-            taskID,
-            capability: projection.workerCapability,
-          }),
+          harnessGrants: requirementsHarness.grants,
           projectDirectory: project.path,
-          resources: { mcp: owner },
+          resources: {
+            mcp: owner,
+            tools: createRuntimeToolOwner({
+              leaves: [
+                ...testRuntimeToolFactories(projectedTools.projectedTools, "projected", {
+                  workerTurnDescriptorHash: descriptor.hash,
+                  projectionHash: projection.workerCapability.identity.projectionHash,
+                }),
+                ...testRuntimeToolFactories(projectedTools.stageTools, "stage", {
+                  workerTurnDescriptorHash: descriptor.hash,
+                  projectionHash: projection.workerCapability.identity.projectionHash,
+                }),
+              ],
+            }),
+          },
         })
         const abort = new AbortController().signal
         const processor = SessionProcessor.create({ assistantMessage: assistant, sessionID: session.id, model, abort })
-        const tools = await SessionLoop.resolveTools({
-          agent: sessionRuntimeWithResolvedModel(projection.workerCapability.runtime, {
+        const requirementsRuntime = sessionRuntimeWithResolvedModel(projection.workerCapability.runtime, {
             providerID: model.providerID,
             modelID: model.id,
-          }),
+          })
+        const tools = (
+          await resolveTestCapabilityTools({
+          agent: requirementsRuntime,
           agentID: projection.workerCapability.identity.agentID,
-          model,
-          session,
-          processor,
-          messages: await Session.messages({ sessionID: session.id }),
-          config,
-        })
-        await bindResolvedCatalogOccurrence({
-          config,
           model,
           session,
           assistant,
-          agentID: projection.workerCapability.identity.agentID,
-          tools,
-        })
+          processor,
+          messages: await Session.messages({ sessionID: session.id }),
+          config,
+          activeLocalRefs: ["register_requirement", "register_decision"],
+          })
+        ).tools
         let resolveAsked!: (request: PermissionAuthority.Request) => void
         const asked = new Promise<PermissionAuthority.Request>((resolve) => (resolveAsked = resolve))
         const stopAsked = Bus.subscribe(PermissionAuthority.Event.Asked, ({ properties }) => resolveAsked(properties))
@@ -1274,7 +1244,12 @@ describe("SessionLoop Tool execution authority integration", () => {
           messages: [],
           abortSignal: abort,
         }).catch((error) => error)
-        const request = await asked
+        const request = await Promise.race([
+          asked,
+          pending.then((result) => {
+            throw result instanceof Error ? result : new Error(`Permission execution settled before Ask: ${String(result)}`)
+          }),
+        ])
         stopAsked()
         return {
           request,
@@ -1415,36 +1390,28 @@ describe("SessionLoop Tool execution authority integration", () => {
           type: "text",
           text: "process restart decision",
         })
-        const outputTools = createRequirementsOutputTools({ taskID })
-        bindInternalStageTool(outputTools.tools.register_requirement as object, {
+        const outputTools = createRequirementsOutputToolFactory({ taskID })
+        const stageOwned = ["register_requirement", "register_decision"]
+        const requirementsRuntimeTools = Object.fromEntries(
+          stageOwned.map((toolID) => [toolID, outputTools.materializeExact(toolID)!]),
+        )
+        bindInternalStageTool(requirementsRuntimeTools.register_requirement as object, {
           adapterID: "requirements",
           toolName: "register_requirement",
         })
-        const contextTools = await filterAgentTools(
-          {
-            ...createAgentContextTools(),
-            ...(await createAgentCoordinationRuntimeTools({
-              agentID: projection.workerCapability.identity.agentID,
-              taskID,
-            })),
-          },
-          "requirements",
-          { taskID, sessionID: root.id },
-        )
-        Object.assign(contextTools, outputTools.tools)
+        const contextTools = { ...requirementsRuntimeTools }
         const owner = MCP.createScopedConnectionOwner(
           computerRuntimeScopeIdentity({ ownerKind: "worker", taskID, sessionID: session.id }),
         )
-        const stageOwned = ["register_requirement", "register_decision"]
-        const projected = await PromptProfileResolver.projectWorkerTools(contextTools, projection.workerCapability, {
-          taskID,
-          projectDirectory: project.path,
-          toolDirectory: project.path,
-          stageOwnedToolIDs: stageOwned,
-          connectionOwner: owner,
-        })
+        const projected = { projectedTools: {}, stageTools: contextTools }
         const materializer = stageToolMaterializerBindingOf(projected.stageTools.register_decision as object)
         if (!materializer) throw new Error("missing process materializer")
+        const processHarness = workerHarness({
+          taskID,
+          capability: projection.workerCapability,
+          projectedToolIDs: Object.keys(projected.projectedTools),
+          stageToolIDs: Object.keys(projected.stageTools),
+        })
         const descriptor = WorkerTurnDescriptor.create({
           sessionID: session.id,
           payload: {
@@ -1454,7 +1421,7 @@ describe("SessionLoop Tool execution authority integration", () => {
             model: { selection: "explicit", providerID: model.providerID, modelID: model.id },
             prompt: { systemMode: "complete", systemSha256: textSHA256(system.prompt) },
             tools: {
-              enabled: [...Object.keys(projected.projectedTools), ...Object.keys(projected.stageTools)].sort(),
+              enabled: processHarness.toolIDs,
               stageOwned,
               stageMaterializers: { register_decision: materializer },
             },
@@ -1503,43 +1470,47 @@ describe("SessionLoop Tool execution authority integration", () => {
             providerID: model.providerID,
             modelID: model.id,
           }),
-          projectedTools: projected.projectedTools,
-          stageTools: projected.stageTools,
           system: [system.prompt],
           systemMode: "complete",
           includeMcpTools: projection.workerCapability.includeMcpTools,
-          exactTools: runtimeTemplate.exactRuntimeContract,
-          projectedRegistryToolIDs: projection.workerCapability.builtInToolIDs,
           skillProjection: projection.skillProjection,
-          harnessProjection: PromptProfileResolver.workerHarnessProjection({
-            taskID,
-            capability: projection.workerCapability,
-          }),
+          harnessGrants: processHarness.grants,
           projectDirectory: project.path,
-          resources: { mcp: owner },
+          resources: {
+            mcp: owner,
+            tools: createRuntimeToolOwner({
+              leaves: [
+                ...testRuntimeToolFactories(projected.projectedTools, "projected", {
+                  workerTurnDescriptorHash: descriptor.hash,
+                  projectionHash: projection.workerCapability.identity.projectionHash,
+                }),
+                ...testRuntimeToolFactories(projected.stageTools, "stage", {
+                  workerTurnDescriptorHash: descriptor.hash,
+                  projectionHash: projection.workerCapability.identity.projectionHash,
+                }),
+              ],
+            }),
+          },
         })
         const abort = new AbortController().signal
         const processor = SessionProcessor.create({ assistantMessage: assistant, sessionID: session.id, model, abort })
-        const tools = await SessionLoop.resolveTools({
-          agent: sessionRuntimeWithResolvedModel(projection.workerCapability.runtime, {
+        const processRuntime = sessionRuntimeWithResolvedModel(projection.workerCapability.runtime, {
             providerID: model.providerID,
             modelID: model.id,
-          }),
+          })
+        const tools = (
+          await resolveTestCapabilityTools({
+          agent: processRuntime,
           agentID: projection.workerCapability.identity.agentID,
-          model,
-          session,
-          processor,
-          messages: await Session.messages({ sessionID: session.id }),
-          config,
-        })
-        await bindResolvedCatalogOccurrence({
-          config,
           model,
           session,
           assistant,
-          agentID: projection.workerCapability.identity.agentID,
-          tools,
-        })
+          processor,
+          messages: await Session.messages({ sessionID: session.id }),
+          config,
+          activeLocalRefs: ["register_requirement", "register_decision"],
+          })
+        ).tools
         let resolveAsked!: (request: PermissionAuthority.Request) => void
         const asked = new Promise<PermissionAuthority.Request>((resolve) => (resolveAsked = resolve))
         const stop = Bus.subscribe(PermissionAuthority.Event.Asked, ({ properties }) => resolveAsked(properties))
@@ -1556,6 +1527,30 @@ describe("SessionLoop Tool execution authority integration", () => {
         expect(catalogOccurrence.payload.fixed_package_digests).toEqual({
           [`${packageRevision.scope}:${packageRevision.projectID ?? "global"}:${packageRevision.namespace}:${packageRevision.id}:${packageRevision.version}`]:
             packageRevision.packageDigest,
+        })
+        const collectorCallID = "call_requirements_collector_before_restart"
+        const collectorInput = {
+          id: "REQ-1",
+          type: "explicit",
+          description: "Preserve collector state across permission recovery",
+          acceptance: "Recovered continuation retains the completed collector fact",
+          non_goals: "No unrelated collector state",
+          evidence_refs: [],
+        }
+        const collectorRaw = await tools.register_requirement!.execute!(collectorInput, {
+          toolCallId: collectorCallID,
+          messages: [],
+          abortSignal: abort,
+        })
+        const collectorOutput = normalizeToolResult(collectorRaw)
+        await processor.completeRecoveredToolPart({
+          toolCallID: collectorCallID,
+          toolInput: collectorInput,
+          output: {
+            output: collectorOutput.output,
+            title: collectorOutput.title,
+            metadata: collectorOutput.metadata,
+          },
         })
         const pending = tools.register_decision!.execute!(toolInput, {
           toolCallId: toolCallID,

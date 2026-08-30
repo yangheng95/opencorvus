@@ -23,7 +23,6 @@ import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
 import { Bus } from "@/bus"
 import { Config } from "@/config/config"
 import { Tool } from "@/tool/tool"
-import { createCapabilitySearchAiTool } from "@/tool/capability-search"
 import { createPublishInteractiveArtifactAiTool } from "@/tool/publish-interactive-artifact"
 import {
   createArtifactReadAiTool,
@@ -112,7 +111,7 @@ import { BrowserPreviewCaptureTool, BrowserPreviewCaptureToolStaticDefinition } 
 import { executeWait } from "@/tool/wait"
 import { WaitToolDescription, WaitToolParameters } from "@/tool/wait-contract"
 import { Log } from "@/util/log"
-import { tool } from "ai"
+import { tool, type Tool as AITool } from "ai"
 import fs from "node:fs/promises"
 import z from "zod"
 import { ArtifactReadLocatorSchema, type EvidenceLocator } from "@opencorvus-ai/plugin/artifact-catalog"
@@ -202,6 +201,7 @@ let afterDispatchLineageClaimForTest:
       workScope: Parameters<OpenDispatchAgentLineage>[0]["workScope"]
     }) => void | Promise<void>)
   | undefined
+let toolFactoryObserverForTest: ((toolID: string) => void) | undefined
 
 export const OrchestratorToolsTestHooks = Object.freeze({
   openDispatchLineage(surface: object): OpenDispatchAgentLineage {
@@ -217,6 +217,15 @@ export const OrchestratorToolsTestHooks = Object.freeze({
     return {
       [Symbol.dispose]() {
         afterDispatchLineageClaimForTest = prior
+      },
+    }
+  },
+  replaceToolFactoryObserver(callback: typeof toolFactoryObserverForTest): Disposable {
+    const prior = toolFactoryObserverForTest
+    toolFactoryObserverForTest = callback
+    return {
+      [Symbol.dispose]() {
+        toolFactoryObserverForTest = prior
       },
     }
   },
@@ -950,6 +959,8 @@ export function createOrchestratorTools(input: {
     messageID: string
   }
   terminalConversationAuthority?: TerminalConversationAuthority
+  /** Materialize one exact public scheduler leaf without constructing the rest of the surface. */
+  exactToolID?: string
 }) {
   if (!Array.isArray(input.dispatchAgents)) {
     throw new Error("createOrchestratorTools requires the exact turn-owned dynamic-agent projection.")
@@ -1015,8 +1026,8 @@ export function createOrchestratorTools(input: {
     signal: input.signal,
   })
 
-  const tools = {
-    scheduler_message: tool({
+  const toolFactories = {
+    scheduler_message: () => tool({
       description:
         "Send one durable scheduler message. Use request for a question/directive, reply with the exact request event_id, and notification for a one-way update. The target may be this Task's owning Mission or a sibling Task owned by the same Mission. Replies preserve the original route and thread automatically.",
       inputSchema: z
@@ -1066,7 +1077,7 @@ export function createOrchestratorTools(input: {
         })
       },
     }),
-    skill: tool({
+    skill: () => tool({
       description:
         "Search/load surface for production skills granted to the Task's immutable Orchestrator scheduler projection. The session loop replaces this placeholder with the exact turn-scoped scheduler SkillTool before the model can call it.",
       inputSchema: z
@@ -1085,7 +1096,7 @@ export function createOrchestratorTools(input: {
         throw new Error("Orchestrator production SkillTool was not rebound for this projected scheduler turn.")
       },
     }),
-    read: tool({
+    read: () => tool({
       description: READ_TOOL_DESCRIPTION,
       inputSchema: ReadToolParameters,
       execute: async (args, options) => {
@@ -1120,7 +1131,7 @@ export function createOrchestratorTools(input: {
     // preview target a worker already persisted, before accepting the Task.
     // The full Tool result is returned so its image attachments survive into
     // the model output; returning only `output` would strip the evidence.
-    browser_preview_capture: tool({
+    browser_preview_capture: () => tool({
       description: BrowserPreviewCaptureToolStaticDefinition.description,
       inputSchema: BrowserPreviewCaptureToolStaticDefinition.parameters,
       execute: async (args, options) => {
@@ -1150,7 +1161,7 @@ export function createOrchestratorTools(input: {
         })
       },
     }),
-    requirements: tool({
+    requirements: () => tool({
       description:
         "Requirements typed-adapter executor for one exact projected agent. It parses the user's task into REQ-N requirements plus " +
         "foundational technical decisions (runtime, framework, test strategy, " +
@@ -1177,19 +1188,19 @@ export function createOrchestratorTools(input: {
     // Frontend Design typed-adapter executor.
     // -----------------------------------------------------------------------
 
-    ...createFrontendDesignTool({
+    frontend_design: () => createFrontendDesignTool({
       inputSchema: FrontendDesignInputSchema,
       taskID,
       parentSessionID: input.agentSessionID,
       signal: input.signal,
       requireCurrentTaskAndAgentSessionLineage,
-    }),
+    }).frontend_design,
 
     // -----------------------------------------------------------------------
     // Architect typed-adapter executor.
     // -----------------------------------------------------------------------
 
-    architect: tool({
+    architect: () => tool({
       description:
         "Architect typed-adapter executor for one exact projected agent. The consumer searches the same-Task Artifact catalog, completely reads the exact RequirementSet and evidence versions it uses, " +
         "then registers a ContractGraph and Goals with verified RequirementSet references, source/reference coverage, and cross-goal contracts. " +
@@ -1226,18 +1237,18 @@ export function createOrchestratorTools(input: {
     // which projected consumers use concern findings and the resulting brief.
     // -----------------------------------------------------------------------
 
-    ...createWorkloadAnalysisTool({
+    workload_analysis: () => createWorkloadAnalysisTool({
       inputSchema: WorkloadAnalysisInputSchema,
       taskID,
       agentSessionID: input.agentSessionID,
       signal: input.signal,
-    }),
+    }).workload_analysis,
 
     // -----------------------------------------------------------------------
     // Visual QA — frontend GUI product review evidence
     // -----------------------------------------------------------------------
 
-    visual_qa: tool({
+    visual_qa: () => tool({
       description:
         "Dedicated frontend visual GUI and functional product review agent. GUI means Graphical User Interface. " +
         "It can perform screenshot comparison, screen-by-screen desktop screenshots, explicitly requested non-desktop screenshots, " +
@@ -1270,7 +1281,7 @@ export function createOrchestratorTools(input: {
     // incremental IntegrityReview facts, and never rewrites requirements or goals.
     // -----------------------------------------------------------------------
 
-    integrity: createIntegrityTool({
+    integrity: () => createIntegrityTool({
       inputSchema: IntegrityInputSchema,
       requireExecutionContext: (executionInput) => {
         const execution = requireDispatchAdapterExecutionContext(executionInput)
@@ -1304,7 +1315,7 @@ export function createOrchestratorTools(input: {
     //   retry after it finishes.
     // -----------------------------------------------------------------------
 
-    fact_check: createFactCheckTool({
+    fact_check: () => createFactCheckTool({
       inputSchema: FactCheckInputSchema,
       stageInputSchema: FactCheckStageInputSchema,
       taskID,
@@ -1320,15 +1331,15 @@ export function createOrchestratorTools(input: {
     // the active package and the Orchestrator's current evidence.
     // -----------------------------------------------------------------------
 
-    ...createAnalyzeIntentTool({
+    analyze_intent: () => createAnalyzeIntentTool({
       inputSchema: AnalyzeIntentInputSchema,
       taskID,
       agentSessionID: input.agentSessionID,
       signal: input.signal,
       requireTask: () => requireTask(taskID),
-    }),
+    }).analyze_intent,
 
-    frontend_research: tool({
+    frontend_research: () => tool({
       description:
         "OPTIONAL interface investigation publisher. Pass the complete authorized HTTP(S) source set for the single Task workflow occurrence; the active expert-squad projection decides how its dynamic worker acquires and partitions evidence through visible tools. Persist one structured brief Artifact built from small update_* result tools, not a giant terminal payload. Additional independent URLs, focus, viewport, interaction state, component, region, fidelity risk, or missing-detail questions do not authorize another occurrence of an already-dispatched frontend_research node. Consume existing frontend_research and frontend_design Artifacts through exact catalog locators. It does not own the frontend implementation template, route selection, implementation, or final acceptance; projected consumers use its Artifact only when their declared contracts require it.",
       inputSchema: FrontendResearchInputSchema,
@@ -1347,7 +1358,7 @@ export function createOrchestratorTools(input: {
       },
     }),
 
-    deep_research: tool({
+    deep_research: () => tool({
       description:
         "OPTIONAL deep evidence agent. Use when the task depends on multi-source external facts, current documentation, competitor/industry/API research, source maps, or PRD/SPEC/report source material that should become a durable citation bundle. For supplied URLs that need functional/visual frontend analysis, `frontend_research` is a separate capability; for implementation-template/source evidence, `frontend_design` is a separate capability. The result is a compact research_brief Artifact plus bundle paths and may include subpage_research_tasks for independent follow-up deep research. It does not select routes or replace requirements, architecture, implementation, or acceptance evidence.",
       inputSchema: DeepResearchInputSchema,
@@ -1366,25 +1377,25 @@ export function createOrchestratorTools(input: {
       },
     }),
 
-    ...createExploreTool({
+    explore: () => createExploreTool({
       taskID,
       agentSessionID: input.agentSessionID,
       signal: input.signal,
       requireCurrentTaskAndAgentSessionLineage,
-    }),
+    }).explore,
 
-    ...createDelegatedWorkerTool({
+    delegated_worker: () => createDelegatedWorkerTool({
       taskID,
       agentSessionID: input.agentSessionID,
       signal: input.signal,
       requireCurrentTaskAndAgentSessionLineage,
-    }),
+    }).delegated_worker,
 
     // -----------------------------------------------------------------------
     // Delivery Slice contract tools — Orchestrator decides when to call each
     // -----------------------------------------------------------------------
 
-    ...createTaskLifecycleTools({
+    complete_task: () => createTaskLifecycleTools({
       taskID,
       workflowProjection: workflowProjectionFromProjectedAgents(input.dispatchAgents),
       requireExecutionContext: (options, toolName) =>
@@ -1392,29 +1403,61 @@ export function createOrchestratorTools(input: {
           taskID,
           agentSessionID: input.agentSessionID,
         }),
-    }),
+    }).complete_task,
+    fail_task: () => createTaskLifecycleTools({
+      taskID,
+      workflowProjection: workflowProjectionFromProjectedAgents(input.dispatchAgents),
+      requireExecutionContext: (options, toolName) =>
+        requireTaskOrchestratorToolExecutionContext(options, toolName, {
+          taskID,
+          agentSessionID: input.agentSessionID,
+        }),
+    }).fail_task,
+    cancel_task: () => createTaskLifecycleTools({
+      taskID,
+      workflowProjection: workflowProjectionFromProjectedAgents(input.dispatchAgents),
+      requireExecutionContext: (options, toolName) =>
+        requireTaskOrchestratorToolExecutionContext(options, toolName, {
+          taskID,
+          agentSessionID: input.agentSessionID,
+        }),
+    }).cancel_task,
 
-    ...createOrchestratorInteractionTools({
+    read_task_message: () => createOrchestratorInteractionTools({
       taskID,
       agentSessionID: input.agentSessionID,
       allowedRootMessages: authorizedTaskRootMessagesForWake(input),
-    }),
-
-    ...createDeliverySliceContractTools({
+    }).read_task_message,
+    question: () => createOrchestratorInteractionTools({
       taskID,
       agentSessionID: input.agentSessionID,
-    }),
+      allowedRootMessages: authorizedTaskRootMessagesForWake(input),
+    }).question,
 
-    ...createSubagentCancellationTool({
+    add_goal: () => createDeliverySliceContractTools({
+      taskID,
+      agentSessionID: input.agentSessionID,
+    }).add_goal,
+    modify_goal: () => createDeliverySliceContractTools({
+      taskID,
+      agentSessionID: input.agentSessionID,
+    }).modify_goal,
+    delete_goal: () => createDeliverySliceContractTools({
+      taskID,
+      agentSessionID: input.agentSessionID,
+    }).delete_goal,
+
+    cancel_subagent: () => createSubagentCancellationTool({
       taskID,
       assertDirectReplySessionLineage,
-    }),
+    }).cancel_subagent,
 
-    ...createReadContextTool({ taskID }),
-    ...createReadAgentMessageTool({ taskID }),
-    ...createNoActionTool({ activeAcceptanceGapID: activeAcceptanceRepair?.revision.gap.gap_id }),
+    read_context: () => createReadContextTool({ taskID }).read_context,
+    read_agent_message: () => createReadAgentMessageTool({ taskID }).read_agent_message,
+    no_action: () =>
+      createNoActionTool({ activeAcceptanceGapID: activeAcceptanceRepair?.revision.gap.gap_id }).no_action,
 
-    respond_agent_coordination: bindToolExecutionMode(
+    respond_agent_coordination: () => bindToolExecutionMode(
       tool({
         description:
           "Answer one pending worker/operator-to-orchestrator coordination request. This is the only orchestrator path for scheduler guidance that continues/cancels a worker, asks the user through a real interaction, fails the task through a terminal lifecycle event, or acknowledges an exact terminal occurrence during a host-authorized terminal conversation; it requires request_id and writes visible request/response/action artifacts before executing the bound side effect.",
@@ -2102,22 +2145,28 @@ export function createOrchestratorTools(input: {
       "turn_control_exclusive",
     ),
 
-    ...createBuildTool({
+    build: () => createBuildTool({
       inputSchema: BuildInputSchema,
       taskID,
       parentSessionID: input.agentSessionID,
       signal: input.signal,
       buildAgentContextSections,
-    }),
+    }).build,
 
-    ...createRuntimeRepairTools({
+    browser_preview: () => createRuntimeRepairTools({
       taskID,
       agentSessionID: input.agentSessionID,
       signal: input.signal,
       requireExecutionContext: requireOrchestratorToolExecutionContext,
-    }),
+    }).browser_preview,
+    bash: () => createRuntimeRepairTools({
+      taskID,
+      agentSessionID: input.agentSessionID,
+      signal: input.signal,
+      requireExecutionContext: requireOrchestratorToolExecutionContext,
+    }).bash,
 
-    wait: bindToolExecutionMode(
+    wait: () => bindToolExecutionMode(
       tool({
         description:
           WaitToolDescription +
@@ -2159,6 +2208,32 @@ export function createOrchestratorTools(input: {
     ),
   }
 
+  type InternalOrchestratorTools = {
+    [ToolID in keyof typeof toolFactories]: ReturnType<(typeof toolFactories)[ToolID]>
+  }
+  const materializedInternalTools = new Map<keyof typeof toolFactories, unknown>()
+  const tools = new Proxy({} as InternalOrchestratorTools, {
+    get(_target, property) {
+      if (typeof property !== "string" || !Object.hasOwn(toolFactories, property)) return undefined
+      const toolID = property as keyof typeof toolFactories
+      if (!materializedInternalTools.has(toolID)) {
+        toolFactoryObserverForTest?.(toolID)
+        materializedInternalTools.set(toolID, toolFactories[toolID]())
+      }
+      return materializedInternalTools.get(toolID)
+    },
+    has(_target, property) {
+      return typeof property === "string" && Object.hasOwn(toolFactories, property)
+    },
+    ownKeys() {
+      return Object.keys(toolFactories)
+    },
+    getOwnPropertyDescriptor(_target, property) {
+      if (typeof property !== "string" || !Object.hasOwn(toolFactories, property)) return undefined
+      return { configurable: true, enumerable: true }
+    },
+  })
+
   const dispatchAdapterExecutor = (
     adapterID: AgentDispatchAdapterID,
     definition: { execute?: (...args: any[]) => unknown },
@@ -2169,22 +2244,25 @@ export function createOrchestratorTools(input: {
     }
     return async (args, context) => DispatchOutcomeSchema.parse(await execute(args, context))
   }
-  const dispatchAdapterExecutors = bindDispatchAdapterExecutors({
-    delegated_worker: dispatchAdapterExecutor("delegated_worker", tools.delegated_worker),
-    requirements: dispatchAdapterExecutor("requirements", tools.requirements),
-    architect: dispatchAdapterExecutor("architect", tools.architect),
-    frontend_design: dispatchAdapterExecutor("frontend_design", tools.frontend_design),
-    frontend_research: dispatchAdapterExecutor("frontend_research", tools.frontend_research),
-    deep_research: dispatchAdapterExecutor("deep_research", tools.deep_research),
-    visual_qa: dispatchAdapterExecutor("visual_qa", tools.visual_qa),
-    workload_analysis: dispatchAdapterExecutor("workload_analysis", tools.workload_analysis),
-    analyze_intent: dispatchAdapterExecutor("analyze_intent", tools.analyze_intent),
-    fact_check: dispatchAdapterExecutor("fact_check", tools.fact_check),
-    build: dispatchAdapterExecutor("build", tools.build),
-    explore: dispatchAdapterExecutor("explore", tools.explore),
-    integrity: dispatchAdapterExecutor("integrity", tools.integrity),
-  })
-  const dispatchAgentTool = createDispatchAgentTool({
+  let dispatchAgentToolCache: ReturnType<typeof createDispatchAgentTool> | undefined
+  const materializeDispatchAgentTool = () => {
+    if (dispatchAgentToolCache) return dispatchAgentToolCache
+    const dispatchAdapterExecutors = bindDispatchAdapterExecutors({
+      delegated_worker: dispatchAdapterExecutor("delegated_worker", tools.delegated_worker),
+      requirements: dispatchAdapterExecutor("requirements", tools.requirements),
+      architect: dispatchAdapterExecutor("architect", tools.architect),
+      frontend_design: dispatchAdapterExecutor("frontend_design", tools.frontend_design),
+      frontend_research: dispatchAdapterExecutor("frontend_research", tools.frontend_research),
+      deep_research: dispatchAdapterExecutor("deep_research", tools.deep_research),
+      visual_qa: dispatchAdapterExecutor("visual_qa", tools.visual_qa),
+      workload_analysis: dispatchAdapterExecutor("workload_analysis", tools.workload_analysis),
+      analyze_intent: dispatchAdapterExecutor("analyze_intent", tools.analyze_intent),
+      fact_check: dispatchAdapterExecutor("fact_check", tools.fact_check),
+      build: dispatchAdapterExecutor("build", tools.build),
+      explore: dispatchAdapterExecutor("explore", tools.explore),
+      integrity: dispatchAdapterExecutor("integrity", tools.integrity),
+    })
+    dispatchAgentToolCache = createDispatchAgentTool({
     taskID,
     projectedAgents: input.dispatchAgents,
     executors: dispatchAdapterExecutors,
@@ -2793,10 +2871,15 @@ export function createOrchestratorTools(input: {
         releaseAdmission,
       }
     }) satisfies OpenDispatchAgentLineage,
-  })
+    })
+    return dispatchAgentToolCache
+  }
 
-  const manageTaskTool = bindToolExecutionMode(
-    tool({
+  let manageTaskToolCache: ReturnType<typeof bindToolExecutionMode> | undefined
+  const materializeManageTaskTool = () => {
+    if (manageTaskToolCache) return manageTaskToolCache
+    manageTaskToolCache = bindToolExecutionMode(
+      tool({
       description:
         "Single scheduler task-management tool. Use action to select Task lifecycle or Delivery Slice contract behavior, then provide action-specific fields. Slice mutations never create, retry, cancel, or complete workers, worktrees, workflow nodes, or lifecycle. " +
         `Exact action fields: ${MANAGE_TASK_ACTION_NAMES.map(
@@ -2819,37 +2902,60 @@ export function createOrchestratorTools(input: {
         )
         return result
       },
-    }),
-    "turn_control_exclusive",
-  )
+      }),
+      "turn_control_exclusive",
+    )
+    return manageTaskToolCache
+  }
 
-  const publicTools: Record<string, unknown> = {
-    ...tools,
-    ...createMulticaImportTools({ taskID: input.taskID, sessionID: input.agentSessionID }),
-    capability_search: createCapabilitySearchAiTool({
-      taskID: input.taskID,
-      signal: input.signal,
-    }),
-    expert_squad_author: createExpertSquadAuthorAiTool({
-      taskID: input.taskID,
-      sessionID: input.agentSessionID,
-    }),
-    evolve_expert_squad_from_feedback: createExpertSquadFeedbackRevisionAiTool({
-      taskID: input.taskID,
-      sessionID: input.agentSessionID,
-    }),
-    artifact_search: createArtifactSearchAiTool(input.taskID),
-    artifact_read: createArtifactReadAiTool(input.taskID),
-    artifact_select: createArtifactSelectAiTool(input.taskID),
-    artifact_snapshot: createArtifactSnapshotAiTool(input.taskID),
-    publish_interactive_artifact: createPublishInteractiveArtifactAiTool(),
-    dispatch_agent: dispatchAgentTool,
-    dispatch_agents: createDispatchAgentsTool(dispatchAgentTool),
-    manage_task: manageTaskTool,
+  const hiddenToolIDs = new Set<string>([...DispatchAdapterContractRegistry.ids, ...MANAGE_TASK_ACTION_NAMES])
+  const materializePublicTool = (toolID: string): unknown => {
+    if (Object.hasOwn(toolFactories, toolID) && !hiddenToolIDs.has(toolID)) {
+      return tools[toolID as keyof typeof tools]
+    }
+    if (toolID === "dispatch_agent") return materializeDispatchAgentTool()
+    if (toolID === "dispatch_agents") return createDispatchAgentsTool(materializeDispatchAgentTool())
+    if (toolID === "manage_task") return materializeManageTaskTool()
+    if (toolID === "expert_squad_author") {
+      return createExpertSquadAuthorAiTool({ taskID: input.taskID, sessionID: input.agentSessionID })
+    }
+    if (toolID === "evolve_expert_squad_from_feedback") {
+      return createExpertSquadFeedbackRevisionAiTool({ taskID: input.taskID, sessionID: input.agentSessionID })
+    }
+    if (toolID === "artifact_search") return createArtifactSearchAiTool(input.taskID)
+    if (toolID === "artifact_read") return createArtifactReadAiTool(input.taskID)
+    if (toolID === "artifact_select") return createArtifactSelectAiTool(input.taskID)
+    if (toolID === "artifact_snapshot") return createArtifactSnapshotAiTool(input.taskID)
+    if (toolID === "publish_interactive_artifact") return createPublishInteractiveArtifactAiTool()
+    if (toolID === "multica_catalog" || toolID === "multica_preview" || toolID === "multica_import") {
+      return createMulticaImportTools({ taskID: input.taskID, sessionID: input.agentSessionID })[toolID]
+    }
+    return undefined
+  }
+
+  const publicTools: Record<string, unknown> = input.exactToolID
+    ? { [input.exactToolID]: materializePublicTool(input.exactToolID) }
+    : {
+        ...tools,
+        ...createMulticaImportTools({ taskID: input.taskID, sessionID: input.agentSessionID }),
+        expert_squad_author: materializePublicTool("expert_squad_author"),
+        evolve_expert_squad_from_feedback: materializePublicTool("evolve_expert_squad_from_feedback"),
+        artifact_search: materializePublicTool("artifact_search"),
+        artifact_read: materializePublicTool("artifact_read"),
+        artifact_select: materializePublicTool("artifact_select"),
+        artifact_snapshot: materializePublicTool("artifact_snapshot"),
+        publish_interactive_artifact: materializePublicTool("publish_interactive_artifact"),
+        dispatch_agent: materializePublicTool("dispatch_agent"),
+        dispatch_agents: materializePublicTool("dispatch_agents"),
+        manage_task: materializePublicTool("manage_task"),
+      }
+  if (input.exactToolID && publicTools[input.exactToolID] === undefined) {
+    throw new Error(`Orchestrator public Tool ${JSON.stringify(input.exactToolID)} is unavailable.`)
   }
   for (const decisionToolName of ORCHESTRATOR_DECISION_TOOL_NAMES) {
     const decisionTool = publicTools[decisionToolName]
     if (!decisionTool) {
+      if (input.exactToolID) continue
       throw new Error(`Orchestrator decision Tool ${decisionToolName} is absent from the public Tool surface`)
     }
     // The reduction accepts a `dispatch_agent` fan-out or exactly one other
@@ -2870,7 +2976,7 @@ export function createOrchestratorTools(input: {
       },
     })
   }
-  for (const hidden of [...DispatchAdapterContractRegistry.ids, ...MANAGE_TASK_ACTION_NAMES]) {
+  for (const hidden of hiddenToolIDs) {
     delete publicTools[hidden]
   }
 
@@ -2884,6 +2990,15 @@ export function createOrchestratorTools(input: {
   // the engine's own existing_terminal invariant and returns a model-visible
   // rejection with the actual status.
   const surface = { tools: publicTools }
-  orchestratorToolLineageHooks.set(surface, DispatchAgentToolTestHooks.openLineage(dispatchAgentTool))
+  if (dispatchAgentToolCache) {
+    orchestratorToolLineageHooks.set(surface, DispatchAgentToolTestHooks.openLineage(dispatchAgentToolCache))
+  }
   return surface
+}
+
+export function createExactOrchestratorTool(
+  input: Omit<Parameters<typeof createOrchestratorTools>[0], "exactToolID"> & { toolID: string },
+): AITool {
+  const { toolID, ...surfaceInput } = input
+  return createOrchestratorTools({ ...surfaceInput, exactToolID: toolID }).tools[toolID] as AITool
 }

@@ -18,25 +18,15 @@
  * Implementation: thin shell over `runAgentSession`. The runner owns
  * model / session / prompt-composition / abort / stream-error handling.
  */
-import type { ToolSet } from "ai"
 import { agentCoordinationHandoffResult, runAgentSession, type AgentCoordinationHandoffResult } from "@/agent/runner"
 import { renderPromptSections, withAttachmentPromptSections } from "@/agent/prompt-projection"
-import { createAgentContextTools } from "@/agent/context-tools"
 import { Log } from "@/util/log"
 import { renderUserRequestSection } from "@/intent/request-prompt"
 import { Instance } from "@/project/instance"
 import type { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
 import { taskPrimaryProjectRoot } from "@/project/task-runtime-root"
-import { createAiSdkToolFromInfo } from "@/tool/ai-sdk-adapter"
-import type { Tool } from "@/tool/tool"
-import { BashTool } from "@/tool/bash"
-import { EditTool } from "@/tool/edit"
-import { WriteTool } from "@/tool/write"
-import { ApplyPatchTool } from "@/tool/apply_patch"
-import { RequestOrchestratorDecisionTool } from "@/tool/request-orchestrator-decision"
-import { SendMailboxMessageTool } from "@/tool/send-mailbox-message"
-import { FRONTEND_DESIGN_REFERENCE_TOOL_IDS } from "@/tool/non-base-tool-ids"
+import { createStageToolMaterializerBinding } from "@/agent/stage-tool-materializer"
 import type { VisualSpec } from "./types"
 import {
   createFrontendDesignOutputTools,
@@ -44,15 +34,8 @@ import {
   type FrontendDesignCollector,
 } from "./output-tools"
 import { createReadAttachmentTool } from "./read-attachment-tool"
-import { createVisualRegionBindingPackageTool } from "./visual-region-binding-tool"
-import {
-  FRONTEND_DESIGN_CONTEXT_TOOL_IDS,
-  FRONTEND_DESIGN_IMPLEMENTATION_TOOL_IDS,
-  FRONTEND_DESIGN_OUTPUT_TOOL_IDS,
-  FRONTEND_DESIGN_RAW_RUNTIME_TOOL_IDS,
-  FRONTEND_DESIGN_STAGE_OWNED_TOOL_IDS,
-  FRONTEND_DESIGN_UTILITY_TOOL_IDS,
-} from "./static-tools"
+import { createVisualRegionBindingPackageToolFactory } from "./visual-region-binding-tool"
+import { FRONTEND_DESIGN_STAGE_OWNED_TOOL_IDS } from "./static-tools"
 import {
   projectFrontendDesignInput,
   type FrontendDesignInputRefs,
@@ -134,39 +117,20 @@ export namespace FrontendDesignAgent {
     input: AnalyzeInput,
   ): Promise<(Result & { sessionID: string }) | PartialResult | AgentCoordinationHandoffResult> {
     const projection = projectFrontendDesignInput(input)
-    const contextTools = createFrontendDesignContextTools()
-    const implementationTools = await createFrontendImplementationTools({
-      agentID: input.agentID,
-      taskID: input.taskID,
-      signal: input.signal,
-    })
-    const utilityTools = await createFrontendUtilityTools({
-      agentID: input.agentID,
-      taskID: input.taskID,
-      signal: input.signal,
-    })
-    const visualRegionBindingToolKit = createVisualRegionBindingPackageTool({
-      taskID: input.taskID,
-    })
     const frontendRuntimePaths = frontendDesignPathsForTask(input.taskID)
-    const outputToolKit = createFrontendDesignOutputTools({
+    const captureFactoryInput = {
       mode: input.mode,
       artifactRoot: frontendRuntimePaths.absoluteDir,
       artifactRootRelative: frontendRuntimePaths.relativeDir,
       workspaceRoot: Instance.worktree,
       taskID: input.taskID,
-    })
-    const runtimeOutputTools = createFrontendRuntimeOutputTools(outputToolKit)
-    const readAttachmentTools = createReadAttachmentTool(Instance.project.id)
-    const agentTools = {
-      ...implementationTools,
-      ...contextTools,
-      ...utilityTools,
-      ...visualRegionBindingToolKit,
-      ...readAttachmentTools,
-      ...runtimeOutputTools,
     }
-    assertFrontendStaticToolSurface(agentTools)
+    const outputToolKit = createFrontendDesignOutputTools(captureFactoryInput)
+    const visualRegionFactory = createVisualRegionBindingPackageToolFactory({ taskID: input.taskID })
+    const materializeExact = async (toolID: string) =>
+      outputToolKit.materializeExact(toolID) ??
+      visualRegionFactory.materializeExact(toolID) ??
+      createReadAttachmentTool(Instance.project.id)[toolID as "read_attachment"]
     log.info("frontend design starting", {
       taskID: input.taskID,
       selectedAttachmentCount: input.attachments.length,
@@ -192,8 +156,14 @@ export namespace FrontendDesignAgent {
         : undefined,
       onRuntimeReady: input.onRuntimeReady ? (session) => input.onRuntimeReady!(session.id) : undefined,
       toolKit: {
-        tools: agentTools,
         stageOwnedToolIDs: FRONTEND_DESIGN_STAGE_OWNED_TOOL_IDS,
+        stageMaterializers: {
+          capture_frontend_visual_evidence: createStageToolMaterializerBinding({
+            id: "frontend-design.capture-visual-evidence",
+            input: captureFactoryInput,
+          }),
+        },
+        materializeExact,
         getCollector: () => outputToolKit.getCollector(),
       },
       buildUserPrompt: () => buildUserPrompt(projection, input.agentID),
@@ -320,92 +290,6 @@ function buildUserPrompt(input: FrontendDesignPromptProjection, agentID: string)
   return sections.join("\n\n")
 }
 
-async function createFrontendTool(
-  info: Tool.Info,
-  input: { agentID: string; taskID: string; signal?: AbortSignal },
-  initCtx?: Tool.InitContext,
-) {
-  return createAiSdkToolFromInfo({
-    info,
-    agent: input.agentID,
-    taskID: input.taskID,
-    signal: input.signal,
-    initCtx,
-  })
-}
-
-function createFrontendRuntimeOutputTools(
-  outputToolKit: ReturnType<typeof createFrontendDesignOutputTools>,
-): ToolSet {
-  const ids = [...FRONTEND_DESIGN_OUTPUT_TOOL_IDS, ...FRONTEND_DESIGN_REFERENCE_TOOL_IDS] as const
-  const selected: ToolSet = {}
-  for (const id of ids) {
-    const item = outputToolKit.tools[id]
-    if (!item) throw new Error(`frontend-design output tool is missing: ${id}`)
-    selected[id] = item
-  }
-  return selected
-}
-
-function createFrontendDesignContextTools(): ToolSet {
-  return selectFrontendStaticTools(
-    createAgentContextTools(),
-    FRONTEND_DESIGN_CONTEXT_TOOL_IDS,
-    "frontend-design context",
-  )
-}
-
-function selectFrontendStaticTools(tools: ToolSet, ids: readonly string[], label: string): ToolSet {
-  const selected: ToolSet = {}
-  for (const id of ids) {
-    const item = tools[id]
-    if (!item) throw new Error(`${label} static tool is missing: ${id}`)
-    selected[id] = item
-  }
-  return selected
-}
-
-function assertFrontendStaticToolSurface(tools: ToolSet): void {
-  const expected = [...FRONTEND_DESIGN_RAW_RUNTIME_TOOL_IDS].sort()
-  const actual = Object.keys(tools).sort()
-  const expectedSet = new Set<string>(expected)
-  const actualSet = new Set<string>(actual)
-  const missing = expected.filter((id) => !actualSet.has(id))
-  const extra = actual.filter((id) => !expectedSet.has(id))
-  if (missing.length > 0 || extra.length > 0) {
-    throw new Error(
-      "frontend-design runtime tool surface diverged from static definition: " +
-        `missing=[${missing.join(", ")}] extra=[${extra.join(", ")}]`,
-    )
-  }
-}
-
-async function createFrontendImplementationTools(input: {
-  agentID: string
-  taskID: string
-  signal?: AbortSignal
-}): Promise<ToolSet> {
-  const tools = {
-    bash: await createFrontendTool(BashTool, input),
-    edit: await createFrontendTool(EditTool, input),
-    write: await createFrontendTool(WriteTool, input),
-    apply_patch: await createFrontendTool(ApplyPatchTool, input),
-  }
-  return selectFrontendStaticTools(tools, FRONTEND_DESIGN_IMPLEMENTATION_TOOL_IDS, "frontend-design implementation")
-}
-
-async function createFrontendUtilityTools(input: {
-  agentID: string
-  taskID: string
-  signal?: AbortSignal
-}): Promise<ToolSet> {
-  const tools = {
-    request_orchestrator_decision: await createFrontendTool(RequestOrchestratorDecisionTool, input),
-    send_mailbox_message: await createFrontendTool(SendMailboxMessageTool, input),
-  }
-  return selectFrontendStaticTools(tools, FRONTEND_DESIGN_UTILITY_TOOL_IDS, "frontend-design utility")
-}
-
 function frontendDesignPathsForTask(taskID: string): ReturnType<typeof ProjectRuntimePaths.frontendDesignPaths> {
   return ProjectRuntimePaths.frontendDesignPaths(
     taskPrimaryProjectRoot(taskID, { activeProjectID: Instance.project.id }),
@@ -437,9 +321,4 @@ export const FrontendDesignTestHooks = {
   buildPromptParts,
   buildUserPrompt: buildUserPromptForTest,
   projectFrontendDesignInput,
-  createFrontendRuntimeOutputTools,
-  createFrontendDesignContextTools,
-  createFrontendImplementationTools,
-  createFrontendUtilityTools,
-  assertFrontendStaticToolSurface,
 }

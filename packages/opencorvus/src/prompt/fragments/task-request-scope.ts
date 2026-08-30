@@ -1,5 +1,5 @@
 export const TASK_REQUEST_SCOPE_GUIDANCE =
-  "Preserve the operator's delivery surfaces exactly when authoring `panel.create_task.request`. " +
+  "Preserve the operator's delivery surfaces exactly when authoring `panel_create_task.request`. " +
   "Do not add mobile, tablet, responsive, multi-platform, native, browser, API, deployment, or other " +
   "delivery/acceptance surfaces that the original input did not request. A more detailed Task brief may " +
   "make implicit implementation necessities explicit, but it must not turn an absent surface into required work. " +

@@ -14,9 +14,12 @@ import {
   panelActionKind,
   panelActionSetForActor,
   panelActionSchemaForAgent,
+  panelLeafActionSchemaForAgent,
+  panelLeafCapability,
   PanelSurface,
   type PanelActor,
 } from "@/panel/capability"
+import { PANEL_ACTIONS, panelLeafToolID } from "@/panel/action-ids"
 import {
   RIGHT_SIDEBAR_CONVERSATION_SOURCE,
   createRightSidebarConversationSession,
@@ -535,7 +538,8 @@ async function requirePanelToolIdentity(
     throw new Error(`panel.${operation} message ${ctx.messageID} is not an assistant message.`)
   }
   const parts = message.parts.filter(
-    (part): part is Message.ToolPart => part.type === "tool" && part.callID === callID && part.tool === "panel",
+    (part): part is Message.ToolPart =>
+      part.type === "tool" && part.callID === callID && part.tool === `panel_${operation}`,
   )
   if (parts.length !== 1) {
     throw new Error(
@@ -1537,3 +1541,24 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
     }
   },
 }))
+
+/** Model-facing Panel leaves. The umbrella remains only for the non-model UI route. */
+export const PanelLeafTools = Object.freeze(
+  PANEL_ACTIONS.map(({ action }) =>
+    Tool.define(panelLeafToolID(action), async (initCtx) => {
+      const capability = panelLeafCapability(action)
+      const umbrella = await PanelTool.init(initCtx)
+      return {
+        description: capability.description,
+        parameters: panelLeafActionSchemaForAgent(action, initCtx?.agentID),
+        executionMode:
+          initCtx?.agentID === "mission" && capability.kind === "mutation"
+            ? ("turn_control_exclusive" as const)
+            : ("ordinary" as const),
+        async execute(params: Record<string, unknown>, ctx: Tool.Context) {
+          return umbrella.execute({ action, ...params } as never, ctx)
+        },
+      }
+    }),
+  ),
+)

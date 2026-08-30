@@ -12,13 +12,13 @@ import {
   WORK_PARENT_ONLY_TOOL_IDS,
 } from "@/work/harness"
 import { createExecutionCancellationOrigin, isExecutionCancellationError } from "@/session/prompt/cancellation"
+import { PANEL_LEAF_TOOL_IDS } from "@/panel/action-ids"
 
 export const DELEGATE_AGENT_TOOL_ID = "delegate_agent" as const
 
 const LOCAL_DELEGATE_DISABLED_TOOLS = [
   DELEGATE_AGENT_TOOL_ID,
-  "batch",
-  "panel",
+  ...PANEL_LEAF_TOOL_IDS,
   "schedule",
   "mission_state",
   "question",

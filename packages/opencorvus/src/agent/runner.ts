@@ -111,7 +111,7 @@ import { Identifier } from "@/id/id"
 import { Log } from "@/util/log"
 import { Message } from "@/session/message"
 import type { SessionKind } from "@/session/session.sql"
-import type { ToolSet } from "ai"
+import type { Tool as AITool } from "ai"
 import { AgentTrace } from "@/trace"
 import { SessionContext } from "@/session/context"
 import { recordTaskInfrastructureError, recordToolExecuteError } from "@/engine/persist"
@@ -140,6 +140,8 @@ import { bindInternalStageTool, stageToolMaterializerBindingOf } from "@/agent/s
 import { runProjectedWorkerTurnExclusive } from "./projected-worker-turn-owner"
 import { createAcceptanceEpochCheckpoint } from "@/mission/acceptance-checkpoint"
 import { readTaskAcceptanceLedgerArtifact } from "@/mission/acceptance-ledger"
+import { harnessGrantedRefs } from "@/capability/harness-projection"
+import { bindRuntimeToolFactories, createRuntimeToolOwner } from "@/session/runtime-tool-owner"
 
 const log = Log.create({ service: "agent-runner" })
 
@@ -153,9 +155,10 @@ const log = Log.create({ service: "agent-runner" })
  * agent collected during the run; the runner does not interpret it.
  */
 export interface AgentToolKit<C> {
-  tools: ToolSet
   stageOwnedToolIDs: readonly string[]
-  getCollector: () => C
+  stageMaterializers?: Readonly<Record<string, import("./stage-tool-materializer").StageToolMaterializerBinding>>
+  materializeExact: (toolID: string) => Promise<AITool | undefined> | AITool | undefined
+  getCollector: () => Promise<C> | C
 }
 
 export interface AgentSessionObserverDisposable {
@@ -232,7 +235,6 @@ export interface RunAgentSessionInput<C> {
     /** Controls Model Context Protocol tool loading for this worker session. */
     includeMcpTools?: boolean
     /** Uses only runtime contract tools, skipping registry and Model Context Protocol tools. */
-    exactTools?: boolean
   }
   /** Attachment byte writes performed while creating the user message must
    *  target this storage namespace. Build passes task.project_id explicitly;
@@ -402,7 +404,7 @@ async function completeProjectedWorkerTurn<C>(input: {
     finalMessage: input.finalMessage,
     declaredToolID: input.coordinationHandoffToolID,
   })
-  const collector = input.run.toolKit.getCollector()
+  const collector = await input.run.toolKit.getCollector()
 
   const messageOwner = promptGenerationOwnerForMessage({
     sessionID: input.session.id,
@@ -1407,45 +1409,65 @@ async function runAgentSessionInner<C>(input: RunAgentSessionInput<C>): Promise<
         computerRuntimeScopeIdentity({ ownerKind: "worker", taskID: input.taskID, sessionID: session.id }),
       )
     if (!installedMcpOwner) untransferredMcpOwner = mcpOwner
-    // ── 6. Invoke SessionPrompt with the agent's extra tools ─────────────
+    // ── 6. Admit exact Tool factories without constructing Tool objects ──
     const permissionBearingStageToolIDs = DispatchAdapterContractRegistry.permissionBearingStageToolIDSet(
       workerCapability.identity.dispatchAdapterID,
     )
-    for (const toolID of input.toolKit.stageOwnedToolIDs) {
-      const runtimeTool = input.toolKit.tools[toolID]
-      if (!runtimeTool || permissionBearingStageToolIDs.has(toolID)) continue
-      bindInternalStageTool(runtimeTool as object, {
-        adapterID: workerCapability.identity.dispatchAdapterID,
-        toolName: toolID,
-      })
-    }
     for (const toolID of permissionBearingStageToolIDs) {
       if (!input.toolKit.stageOwnedToolIDs.includes(toolID)) continue
-      const runtimeTool = input.toolKit.tools[toolID]
-      if (!runtimeTool || !stageToolMaterializerBindingOf(runtimeTool as object)) {
+      if (!input.toolKit.stageMaterializers?.[toolID]) {
         throw new Error(
           `Permission-bearing stage Tool ${workerCapability.identity.dispatchAdapterID}:${toolID} has no persistent materializer binding`,
         )
       }
     }
-    const runtimeToolProjection = await PromptProfileResolver.projectWorkerTools(
-      input.toolKit.tools,
-      workerCapability,
-      {
-        taskID: input.taskID,
-        projectDirectory,
-        toolDirectory: session.directory,
-        stageOwnedToolIDs: input.toolKit.stageOwnedToolIDs,
-        connectionOwner: mcpOwner,
-      },
-    )
-    const runtimeTools = {
-      ...runtimeToolProjection.projectedTools,
-      ...runtimeToolProjection.stageTools,
+    const projectedToolIDs = workerCapability.defaultTools.map((entry) => entry.providerName)
+    const materializeStageExact = async (toolID: string): Promise<AITool> => {
+      const runtimeTool = await input.toolKit.materializeExact(toolID)
+      if (!runtimeTool) {
+        throw new Error(
+          `Stage Tool factory ${workerCapability.identity.dispatchAdapterID}:${toolID} did not publish its exact leaf.`,
+        )
+      }
+      if (permissionBearingStageToolIDs.has(toolID)) {
+        const actual = stageToolMaterializerBindingOf(runtimeTool as object)
+        const expected = input.toolKit.stageMaterializers?.[toolID]
+        if (JSON.stringify(actual) !== JSON.stringify(expected)) {
+          throw new Error(
+            `Permission-bearing stage Tool ${workerCapability.identity.dispatchAdapterID}:${toolID} changed its persistent materializer binding.`,
+          )
+        }
+        return runtimeTool
+      }
+      return bindInternalStageTool(runtimeTool as object as AITool, {
+        adapterID: workerCapability.identity.dispatchAdapterID,
+        toolName: toolID,
+      })
     }
+    const materializeProjectedExact = async (providerName: string): Promise<AITool> => {
+      const entry = workerCapability.defaultTools.find((candidate) => candidate.providerName === providerName)
+      if (!entry) throw new Error(`Projected Tool factory ${providerName} has no immutable default Tool binding.`)
+      const runtimeName = PromptProfileResolver.defaultToolRuntimeName(entry.ref)
+      const runtimeTool = await input.toolKit.materializeExact(runtimeName)
+      if (!runtimeTool) {
+        throw new Error(
+          `Projected Tool factory ${providerName} requires unavailable runtime leaf ${runtimeName}.`,
+        )
+      }
+      return runtimeTool
+    }
+    const occurrenceHarnessGrants = PromptProfileResolver.workerHarnessGrants({
+      taskID: input.taskID,
+      capability: workerCapability,
+      projectedToolIDs,
+      stageToolIDs: input.toolKit.stageOwnedToolIDs,
+    })
+    const occurrenceToolIDs = harnessGrantedRefs(occurrenceHarnessGrants, "execute")
+      .filter((ref) => ref.kind === "tool" || ref.kind === "mcp_tool")
+      .map((ref) => ref.local_ref)
     const enableMap = {
       ...promptToolSwitchesForAgentRun({
-        extraToolNames: Object.keys(runtimeTools),
+        extraToolNames: occurrenceToolIDs,
         explicitProjectedToolNames: workerCapability.grants.explicitBuiltInToolIDs,
         role,
       }),
@@ -1477,8 +1499,8 @@ async function runAgentSessionInner<C>(input: RunAgentSessionInput<C>): Promise<
         parentSessionID: input.parentSessionID,
         taskID: input.taskID,
         modelID: model.id,
-        toolNames: Object.keys(runtimeTools),
-        projectedRegistryToolIDs: workerCapability.builtInToolIDs,
+        toolNames: occurrenceToolIDs,
+        harnessRegistryToolIDs: workerCapability.builtInToolIDs,
         expertSquadID: workerCapability.expertSquadID,
         projectionHash: capabilityIdentity.projectionHash,
       })
@@ -1604,15 +1626,10 @@ async function runAgentSessionInner<C>(input: RunAgentSessionInput<C>): Promise<
                   systemSha256: systemPromptHash,
                 },
                 tools: {
-                  enabled: Object.keys(runtimeTools).sort(),
+                  enabled: [...occurrenceToolIDs].sort(),
                   switches: enableMap,
-                  stageOwned: Object.keys(runtimeToolProjection.stageTools).sort(),
-                  stageMaterializers: Object.fromEntries(
-                    Object.entries(runtimeToolProjection.stageTools).flatMap(([toolID, runtimeTool]) => {
-                      const binding = stageToolMaterializerBindingOf(runtimeTool as object)
-                      return binding ? [[toolID, binding] as const] : []
-                    }),
-                  ),
+                  stageOwned: [...input.toolKit.stageOwnedToolIDs].sort(),
+                  stageMaterializers: { ...(input.toolKit.stageMaterializers ?? {}) },
                   ...(coordinationHandoffToolID ? { coordinationHandoff: coordinationHandoffToolID } : {}),
                 },
                 output: {
@@ -1682,21 +1699,42 @@ async function runAgentSessionInner<C>(input: RunAgentSessionInput<C>): Promise<
           installedAt: Date.now(),
         },
         runtime: executionRuntime,
-        projectedTools: runtimeToolProjection.projectedTools,
-        stageTools: runtimeToolProjection.stageTools,
         system: [systemPrompt],
         systemMode: "complete",
         stream: input.stream,
         includeMcpTools: workerCapability.includeMcpTools,
-        exactTools: input.runtimeContract?.exactTools,
-        projectedRegistryToolIDs: workerCapability.builtInToolIDs,
         skillProjection,
-        harnessProjection: PromptProfileResolver.workerHarnessProjection({
-          taskID: input.taskID,
-          capability: workerCapability,
-        }),
+        harnessGrants: occurrenceHarnessGrants,
         projectDirectory,
-        resources: { mcp: mcpOwner },
+        resources: {
+          mcp: mcpOwner,
+          tools: createRuntimeToolOwner({
+            leaves: [
+              ...bindRuntimeToolFactories({
+                toolIDs: projectedToolIDs,
+                kind: "projected",
+                factoryInput: (toolID) => ({
+                  source: "worker-projection",
+                  tool_id: toolID,
+                  worker_turn_descriptor_hash: descriptor.hash,
+                  projection_hash: workerCapability.identity.projectionHash,
+                }),
+                materialize: materializeProjectedExact,
+              }),
+              ...bindRuntimeToolFactories({
+                toolIDs: input.toolKit.stageOwnedToolIDs,
+                kind: "stage",
+                factoryInput: (toolID) => ({
+                  source: "worker-stage",
+                  tool_id: toolID,
+                  worker_turn_descriptor_hash: descriptor.hash,
+                  materializer: input.toolKit.stageMaterializers?.[toolID] ?? null,
+                }),
+                materialize: materializeStageExact,
+              }),
+            ],
+          }),
+        },
       })
       untransferredMcpOwner = undefined
       if (input.signal) {

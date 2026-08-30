@@ -13,9 +13,6 @@
  * whole point (spec §0).
  */
 import { agentCoordinationHandoffResult, runAgentSession, type AgentCoordinationHandoffResult } from "@/agent/runner"
-import { createAgentContextTools } from "@/agent/context-tools"
-import { createAgentCoordinationRuntimeTools } from "@/agent/coordination-runtime-tools"
-import { filterAgentTools } from "@/agent/filter-tools"
 import { Log } from "@/util/log"
 import type { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
 import { createGoalWorkloadOutputTools } from "./output-tools"
@@ -56,19 +53,6 @@ export namespace GoalWorkloadAnalystAgent {
     const projection = projectWorkloadInput(input)
     const knownGoalIDs = projection.goals.map((goal) => goal.id)
     const outputToolKit = createGoalWorkloadOutputTools({ knownGoalIDs })
-    const coordinationTools = await createAgentCoordinationRuntimeTools({
-      agentID: input.agentID,
-      taskID: input.taskID,
-      signal: input.signal,
-    })
-    const contextTools = await filterAgentTools(
-      { ...createAgentContextTools(), ...coordinationTools },
-      "goal-workload-analyst",
-      {
-        taskID: input.taskID,
-        sessionID: input.parentSessionID,
-      },
-    )
 
     log.info("goal-workload-analyst starting", {
       goals: projection.goals.length,
@@ -94,8 +78,8 @@ export namespace GoalWorkloadAnalystAgent {
         : undefined,
       onRuntimeReady: input.onRuntimeReady ? (session) => input.onRuntimeReady!(session.id) : undefined,
       toolKit: {
-        tools: { ...contextTools, ...outputToolKit.tools },
-        stageOwnedToolIDs: Object.keys(outputToolKit.tools),
+        stageOwnedToolIDs: ["register_workload_brief"],
+        materializeExact: (toolID) => outputToolKit.materializeExact(toolID),
         getCollector: () => outputToolKit.getCollector(),
       },
       buildUserPrompt: () =>
@@ -107,7 +91,7 @@ export namespace GoalWorkloadAnalystAgent {
     const coordinationHandoff = agentCoordinationHandoffResult(out)
     if (coordinationHandoff) return coordinationHandoff
 
-    const collector = outputToolKit.getCollector()
+    const collector = out.collector
     log.info("goal-workload-analyst finished", {
       sessionID: out.session.id,
       briefs: collector.briefs.length,

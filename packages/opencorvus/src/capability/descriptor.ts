@@ -265,7 +265,7 @@ export type CapabilityCatalogContext = z.infer<typeof CapabilityCatalogContext>
 
 export const CapabilitySearchInput = z
   .object({
-    query: z.string().max(500).default(""),
+    queries: z.array(z.string().max(500)).min(1).max(4).default([""]),
     kinds: z
       .array(CapabilityKind)
       .max(20)
@@ -279,14 +279,38 @@ export const CapabilitySearchInput = z
       .optional()
       .describe('Exact next-step kinds. Use ["call_tool"] to search every executable platform or MCP tool.'),
     owner_refs: z.array(z.string().trim().min(1).max(320)).max(20).optional(),
+    exact_refs: z
+      .array(
+        CapabilityRef.refine((ref) => ref.kind !== "capability_set", {
+          message: "Capability reveal requires exact leaf references.",
+        }),
+      )
+      .max(5)
+      .default([]),
+    deactivate_refs: z
+      .array(
+        CapabilityRef.refine((ref) => ref.kind !== "capability_set", {
+          message: "Capability deactivation requires exact leaf references.",
+        }),
+      )
+      .max(10)
+      .default([]),
     product_pillar: z.enum(["code", "work"]).optional(),
-    limit: z.number().int().min(1).max(20).default(20),
-    expected_catalog_revision: z
+    limit: z.number().int().min(1).max(5).default(5),
+    expected_catalog_snapshot_hash: z
       .string()
       .regex(/^[a-f0-9]{64}$/)
       .optional(),
   })
   .strict()
+  .superRefine((input, context) => {
+    for (const field of ["exact_refs", "deactivate_refs"] as const) {
+      const refs = input[field].map(CapabilityRefCodec.encode)
+      if (new Set(refs).size !== refs.length) {
+        context.addIssue({ code: "custom", path: [field], message: `${field} must contain unique references.` })
+      }
+    }
+  })
 export type CapabilitySearchInput = z.infer<typeof CapabilitySearchInput>
 
 export const CapabilitySearchResult = z

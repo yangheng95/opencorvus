@@ -20,6 +20,7 @@ file.
 
 - [04 — Extension ownership, package projection, and lifecycle](04-extensions.md)
 - [17 — Code and Work agent platform](17-code-work-agent-platform.md)
+- [Search-native capability runtime](capability-search-runtime.md)
 
 ## Configuration, providers, and memory
 

@@ -1,7 +1,7 @@
 import { tool } from "ai"
 import z from "zod"
 import { requirementIDsFromAcceptanceSpecs } from "@/requirements/traceability"
-import { createCodebaseTools } from "@/engine/codebase-tools"
+import { createCodebaseToolFactory } from "@/engine/codebase-tools"
 import { Instance } from "@/project/instance"
 import { runGuardedHostCommand, runGuardedTaskCommand } from "@/shell/guarded-command"
 import { DEFAULT_BASH_TIMEOUT_MS } from "@/shell/timeout"
@@ -12,6 +12,7 @@ import {
   type IntegrityFactSelection,
 } from "./fact-projection"
 import { bindStageToolMaterializer } from "@/agent/stage-tool-materializer"
+import { materializeExactTool } from "@/agent/exact-tool-factory"
 
 const IntegrityRunCommandMaterializerInput = z
   .object({ taskID: z.string().min(1), projectDirectory: z.string().min(1) })
@@ -52,19 +53,19 @@ export function materializeIntegrityRunCommandTool(raw: Record<string, unknown>,
  * read-only project exploration, guarded command verification, and bounded
  * evidence drilldown; mutation and nested review are intentionally excluded.
  */
-export function createIntegrityAcceptanceTools(
+export function createIntegrityAcceptanceToolFactory(
   selection?:
     | (IntegrityFactSelection & { instruction: string })
     | (() => IntegrityFactSelection & { instruction: string }),
-  options?: { signal?: AbortSignal },
+  options?: { signal?: AbortSignal; onToolMaterialized?: (toolID: string) => void },
 ) {
   const projectDir = Filesystem.resolve(Instance.directory)
   const resolveSelection = () =>
     typeof selection === "function" ? selection() : selection
   const initialSelection = resolveSelection()
-  return {
-    ...createCodebaseTools(projectDir),
-    run_command: initialSelection?.taskID
+  const codebase = createCodebaseToolFactory(projectDir, options?.onToolMaterialized)
+  const toolFactories = {
+    run_command: () => initialSelection?.taskID
       ? materializeIntegrityRunCommandTool(
           { taskID: initialSelection.taskID, projectDirectory: projectDir },
           options?.signal,
@@ -92,7 +93,7 @@ export function createIntegrityAcceptanceTools(
             }
           },
         }),
-    inspect_integrity_evidence: tool({
+    inspect_integrity_evidence: () => tool({
       description:
         "Inspect scoped integrity evidence on demand. Start from changed_directories, then request exact files or diffs only for directories and files relevant to this review scope.",
       inputSchema: z.object({
@@ -123,7 +124,16 @@ export function createIntegrityAcceptanceTools(
         ),
     }),
   }
+  return {
+    materializeExact(toolID: string) {
+      return (
+        materializeExactTool(toolFactories, toolID, options?.onToolMaterialized) ??
+        codebase.materializeExact(toolID)
+      )
+    },
+  }
 }
+
 
 function renderIntegrityEvidenceSection(
   selection: (IntegrityFactSelection & { instruction: string }) | undefined,

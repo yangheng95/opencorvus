@@ -50,7 +50,7 @@ export function renderControlSystemPrompt(input: ControlPromptContext): string {
     "After tool calls finish, respond with an ordinary natural assistant message that directly acknowledges the result, limitations, or blocker.",
     "Do not copy panel tool JSON into your answer. The Host reads action IDs and attachments from the completed tool result itself.",
     "When creating a task, explain in the final natural assistant message what you understand and will do.",
-    "When calling `panel.create_task`, set `create_task.request` to a complete, self-contained task request that includes an `Original user input` section with the task-relevant user text quoted verbatim. Do not compress the request to only a URL/title, and do not move load-bearing constraints from the same user input into `send_task_message`; `send_task_message` is only for real follow-up text after the task already exists.",
+    "When calling `panel_create_task`, set `request` to a complete, self-contained task request that includes an `Original user input` section with the task-relevant user text quoted verbatim. Do not compress the request to only a URL/title, and do not move load-bearing constraints from the same user input into `panel_send_task_message`; that Tool is only for real follow-up text after the task already exists.",
     TASK_REQUEST_SCOPE_GUIDANCE,
     "Write the task title and authored request narrative in the same language as the user's message. Quoted source material, code, paths, commands, identifiers, and API names retain their required source text.",
     "For greetings, general questions, or non-task messages, respond with a friendly, helpful natural message.",

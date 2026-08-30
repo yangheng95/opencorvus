@@ -14,6 +14,7 @@ import {
   rightSidebarConversationMetadata,
   type ConversationExperience,
 } from "./identity"
+import { RIGHT_SIDEBAR_PANEL_LEAF_TOOL_IDS } from "@/panel/action-ids"
 export {
   ConversationExperience,
   RIGHT_SIDEBAR_CHAT_DEFAULT_TITLE,
@@ -31,7 +32,7 @@ export const RIGHT_SIDEBAR_WORK_METADATA = rightSidebarConversationMetadata("wor
 export const RIGHT_SIDEBAR_CONVERSATION_SOURCE = "right-sidebar-conversation"
 export const RIGHT_SIDEBAR_CONVERSATION_REQUIRED_TOOLS = [
   "delegate_agent",
-  "panel",
+  ...RIGHT_SIDEBAR_PANEL_LEAF_TOOL_IDS,
   "question",
   "bash",
   "read",

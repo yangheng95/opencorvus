@@ -15,9 +15,6 @@
 import { Log } from "@/util/log"
 import { agentCoordinationHandoffResult, runAgentSession, type AgentCoordinationHandoffResult } from "@/agent/runner"
 import { renderPromptSections } from "@/agent/prompt-projection"
-import { filterAgentTools } from "@/agent/filter-tools"
-import { createAgentCoordinationRuntimeTools } from "@/agent/coordination-runtime-tools"
-import { createReadonlyRetrievalTools } from "@/agent/retrieval-tools"
 import type { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
 import { createFactCheckOutputTools, type FactCheckCollector } from "./tools"
 import type { FactCheckReview } from "./schema"
@@ -188,22 +185,6 @@ export namespace FactCheckAgent {
       targetAgent: input.targetAgent,
     })
 
-    const retrievalTools = await filterAgentTools(createReadonlyRetrievalTools(), "fact-check", {
-      taskID: input.taskID,
-      sessionID: input.orchestratorSessionID,
-    })
-    const coordinationTools = await filterAgentTools(
-      await createAgentCoordinationRuntimeTools({
-        agentID: input.agentID,
-        taskID: input.taskID,
-        signal: input.signal,
-      }),
-      "fact-check",
-      {
-        taskID: input.taskID,
-        sessionID: input.orchestratorSessionID,
-      },
-    )
     const outputToolKit = createFactCheckOutputTools()
     const factProjection = projectFactCheckFacts({ taskID: input.taskID })
     const targetMessageText = await loadTargetMessageText(
@@ -233,9 +214,9 @@ export namespace FactCheckAgent {
           : undefined,
         onRuntimeReady: input.onRuntimeReady ? (session) => input.onRuntimeReady!(session.id) : undefined,
         toolKit: {
-          tools: { ...retrievalTools, ...coordinationTools, ...outputToolKit.tools },
-          stageOwnedToolIDs: Object.keys(outputToolKit.tools),
-          getCollector: outputToolKit.getCollector,
+          stageOwnedToolIDs: ["record_fact_check_review"],
+          materializeExact: (toolID) => outputToolKit.materializeExact(toolID),
+          getCollector: () => outputToolKit.getCollector(),
         },
         buildUserPrompt: () => buildFactCheckUserPrompt(input, targetMessageText, factProjection),
       })
@@ -276,7 +257,7 @@ export namespace FactCheckAgent {
         // Reset the collector so a retry from the orchestrator side
         // doesn't accidentally see stale state. (The runtime is one-shot
         // per call; collector is local to this invocation.)
-        outputToolKit.reset()
+        outputToolKit?.reset()
       }
     }
   }

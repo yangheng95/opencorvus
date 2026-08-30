@@ -1,4 +1,4 @@
-import { tool, type ToolSet } from "ai"
+import { tool } from "ai"
 import z from "zod"
 import { agentCoordinationHandoffResult, runAgentSession, type AgentCoordinationHandoffResult } from "@/agent/runner"
 import { createAiSdkToolFromInfo } from "@/tool/ai-sdk-adapter"
@@ -13,7 +13,8 @@ import type { ParsedRequirement } from "@/requirements/types"
 import { completeArtifactReadLocatorsForSession } from "@/agent/artifact-read-facts"
 import { renderPromptSections, withAttachmentPromptSections } from "@/agent/prompt-projection"
 import { Log } from "@/util/log"
-import { createIntegrityAcceptanceTools } from "./acceptance-tools"
+import { createIntegrityAcceptanceToolFactory } from "./acceptance-tools"
+import { materializeExactTool } from "@/agent/exact-tool-factory"
 import {
   projectIntegrityPromptFacts,
   type IntegrityFactSelection,
@@ -31,6 +32,10 @@ import {
   unsupportedIntegrityEvidenceIssues,
 } from "./review-validation"
 import { sanitizeIntegrityPromptText } from "./shared-prompt"
+import { DispatchAdapterContractRegistry } from "@/agent/dispatch-adapter-contract"
+import { createStageToolMaterializerBinding } from "@/agent/stage-tool-materializer"
+import { Instance } from "@/project/instance"
+import { Filesystem } from "@/util/filesystem"
 import {
   buildIntegrityEvidencePrompt,
   buildSingleSessionIntegrityPrompt,
@@ -63,7 +68,7 @@ export type { IntegrityFinding, IntegrityReviewerReview, IntegrityReview, Integr
 export { buildIntegrityEvidencePrompt, buildSingleSessionIntegrityPrompt, type IntegrityPromptRefs }
 
 
-type ConsensusCollector = {
+export type ConsensusCollector = {
   checkItems: IntegrityReview["checkItems"]
   reviewers: IntegrityReview["reviewers"]
   coverageAudit: IntegrityReview["coverageAudit"]
@@ -107,7 +112,7 @@ function collectorUnknownCheckIDIssues(
   return rows.flatMap((row) => unknownIntegrityCheckIDIssues(known, row.label, row.id, row.checkIDs))
 }
 
-function emptyConsensusCollector(): ConsensusCollector {
+export function emptyConsensusCollector(): ConsensusCollector {
   return {
     checkItems: [],
     reviewers: [],
@@ -198,6 +203,15 @@ export async function reviewIntegrity(input: {
   const currentRequirements = () => projectIntegrityPromptFacts(currentFactRefs()).requirements
 
   const collector = emptyConsensusCollector()
+  let integrityToolKitPromise: ReturnType<typeof createSingleSessionIntegrityToolKit> | undefined
+  const loadIntegrityToolKit = () =>
+    (integrityToolKitPromise ??= createSingleSessionIntegrityToolKit({
+      agentID: input.agentID,
+      collector,
+      factRefs: currentFactRefs,
+      requirements: currentRequirements,
+      signal: input.signal,
+    }))
   const out = await runAgentSession<ConsensusCollector>({
     agentID: input.agentID,
     packageRevision: input.packageRevision,
@@ -210,13 +224,17 @@ export async function reviewIntegrity(input: {
     parentSessionID: input.parentSessionID,
     taskID: input.taskID,
     signal: input.signal,
-    toolKit: await createSingleSessionIntegrityToolKit({
-      agentID: input.agentID,
-      collector,
-      factRefs: currentFactRefs,
-      requirements: currentRequirements,
-      signal: input.signal,
-    }),
+    toolKit: {
+      stageOwnedToolIDs: DispatchAdapterContractRegistry.privateStageToolIDs("integrity"),
+      stageMaterializers: {
+        run_command: createStageToolMaterializerBinding({
+          id: "integrity.run-command",
+          input: { taskID: input.taskID, projectDirectory: Filesystem.resolve(Instance.directory) },
+        }),
+      },
+      materializeExact: async (toolID) => (await loadIntegrityToolKit()).materializeExact(toolID),
+      getCollector: async () => (await loadIntegrityToolKit()).getCollector(),
+    },
     buildUserPrompt: () => renderSingleSessionIntegrityPrompt(promptProjection),
     stream: createReviewReasoningForwarder({
       taskID: input.taskID,
@@ -265,23 +283,22 @@ export async function reviewIntegrity(input: {
   }
 }
 
-async function createSingleSessionIntegrityToolKit(input: {
+export async function createSingleSessionIntegrityToolKit(input: {
   agentID: string
   collector: ConsensusCollector
   factRefs?: IntegrityPromptRefs | (() => IntegrityPromptRefs)
   requirements?: readonly ParsedRequirement[] | (() => readonly ParsedRequirement[])
   signal?: AbortSignal
+  onToolMaterialized?: (toolID: string) => void
 }) {
-  const evidenceTools = input.factRefs ? createIntegrityAcceptanceTools(input.factRefs, { signal: input.signal }) : {}
-  const previewTools = input.factRefs
-    ? await createIntegrityPreviewTools({
-        agentID: input.agentID,
-        taskID: typeof input.factRefs === "function" ? input.factRefs().taskID : input.factRefs.taskID,
+  const evidenceFactory = input.factRefs
+    ? createIntegrityAcceptanceToolFactory(input.factRefs, {
         signal: input.signal,
+        onToolMaterialized: input.onToolMaterialized,
       })
-    : {}
-  const outputTools = {
-    register_integrity_check_item: tool({
+    : undefined
+  const outputToolFactories = {
+    register_integrity_check_item: () => tool({
       description:
         "Register one concrete Integrity check item before recording reviewer coverage, findings, repairs, or a current judgment. Every active requirement should be covered by at least one check item; uncovered requirements remain visible as coverage gaps. Re-register the same id with the complete corrected row to overwrite it.",
       inputSchema: IntegrityCheckItemSchema,
@@ -291,7 +308,7 @@ async function createSingleSessionIntegrityToolKit(input: {
         return `OK: integrity checkItem "${item.id}" ${status} (${input.collector.checkItems.length} total)`
       },
     }),
-    register_integrity_reviewer_review: tool({
+    register_integrity_reviewer_review: () => tool({
       description:
         "Register one reviewer review tied to registered checkIDs. Do not put findings here; register findings separately with register_integrity_finding. Re-register the same reviewerID with the complete corrected review to overwrite it.",
       inputSchema: IntegrityReviewerReviewSchema,
@@ -310,7 +327,7 @@ async function createSingleSessionIntegrityToolKit(input: {
         return `OK: integrity reviewer "${report.reviewerID}" registered (${input.collector.reviewers.length} total)`
       },
     }),
-    register_integrity_coverage_audit: tool({
+    register_integrity_coverage_audit: () => tool({
       description: "Register one coverage-audit row tied to registered checkIDs.",
       inputSchema: IntegrityCoverageAuditRowSchema,
       execute: async (raw) => {
@@ -325,7 +342,7 @@ async function createSingleSessionIntegrityToolKit(input: {
         return `OK: integrity coverageAudit row registered (${input.collector.coverageAudit.length} total)`
       },
     }),
-    register_integrity_uninspected_risk: tool({
+    register_integrity_uninspected_risk: () => tool({
       description: "Register one uninspected risk tied to registered checkIDs.",
       inputSchema: IntegrityUninspectedRiskSchema,
       execute: async (raw) => {
@@ -340,7 +357,7 @@ async function createSingleSessionIntegrityToolKit(input: {
         return `OK: integrity uninspectedRisk registered (${input.collector.uninspectedRisks.length} total)`
       },
     }),
-    register_integrity_finding: tool({
+    register_integrity_finding: () => tool({
       description:
         "Register one Integrity finding tied to registered checkIDs. Re-register the same id with the complete corrected finding to overwrite it.",
       inputSchema: IntegrityFindingSchema,
@@ -356,7 +373,7 @@ async function createSingleSessionIntegrityToolKit(input: {
         return `OK: integrity finding "${finding.id}" ${status} (${input.collector.findings.length} total)`
       },
     }),
-    register_integrity_round: tool({
+    register_integrity_round: () => tool({
       description:
         "Register one Integrity review round summary. Re-register the same roundID with the complete corrected round to overwrite it.",
       inputSchema: IntegrityReviewRoundSchema,
@@ -366,7 +383,7 @@ async function createSingleSessionIntegrityToolKit(input: {
         return `OK: integrity round "${round.roundID}" ${status} (${input.collector.rounds.length} total)`
       },
     }),
-    register_integrity_required_repair: tool({
+    register_integrity_required_repair: () => tool({
       description:
         "Register one required repair tied to registered checkIDs and finding IDs. Re-register the same id with the complete corrected repair to overwrite it.",
       inputSchema: IntegrityRequiredRepairSchema,
@@ -382,7 +399,7 @@ async function createSingleSessionIntegrityToolKit(input: {
         return `OK: integrity requiredRepair "${repair.id}" ${status} (${input.collector.requiredRepairs.length} total)`
       },
     }),
-    register_integrity_unresolved_disagreement: tool({
+    register_integrity_unresolved_disagreement: () => tool({
       description:
         "Register one unresolved disagreement tied to registered checkIDs. Re-register the same id with the complete corrected disagreement to overwrite it.",
       inputSchema: IntegrityUnresolvedDisagreementSchema,
@@ -398,7 +415,7 @@ async function createSingleSessionIntegrityToolKit(input: {
         return `OK: integrity unresolvedDisagreement "${disagreement.id}" ${status} (${input.collector.unresolvedDisagreements.length} total)`
       },
     }),
-    register_integrity_fact_check_item: tool({
+    register_integrity_fact_check_item: () => tool({
       description: "Register one factual claim that the projected review could not verify in-session.",
       inputSchema: FactCheckItemSchema,
       execute: async (raw) => {
@@ -407,7 +424,7 @@ async function createSingleSessionIntegrityToolKit(input: {
         return `OK: integrity fact_check_item registered (${input.collector.fact_check_items.length} total)`
       },
     }),
-    update_integrity_judgment: tool({
+    update_integrity_judgment: () => tool({
       description: `Record or revise the reviewer's current verdict and concise summary. Registered checks, findings, coverage, repairs, disagreements, and risks remain valid whether or not this judgment exists. coverageAudit[].status must be exactly one of ${IntegrityCoverageStatusValues.join(", ")}.`,
       inputSchema: IntegrityJudgmentSchema,
       execute: async (raw) => {
@@ -426,31 +443,41 @@ async function createSingleSessionIntegrityToolKit(input: {
       },
     }),
   }
-  const stageOwnedTools = {
-    ...evidenceTools,
-    ...outputTools,
-  }
   return {
-    tools: {
-      ...evidenceTools,
-      ...previewTools,
-      ...outputTools,
+    async materializeExact(toolID: string) {
+      const output = materializeExactTool(outputToolFactories, toolID, input.onToolMaterialized)
+      if (output) return output
+      const evidence = evidenceFactory?.materializeExact(toolID)
+      if (evidence) return evidence
+      if (input.factRefs) {
+        const taskID = typeof input.factRefs === "function" ? input.factRefs().taskID : input.factRefs.taskID
+        return materializeIntegrityPreviewToolExact({
+          toolID,
+          agentID: input.agentID,
+          taskID,
+          signal: input.signal,
+          onToolMaterialized: input.onToolMaterialized,
+        })
+      }
+      return undefined
     },
-    stageOwnedToolIDs: Object.keys(stageOwnedTools),
+    stageOwnedToolIDs: DispatchAdapterContractRegistry.privateStageToolIDs("integrity"),
     getCollector: () => input.collector,
   }
 }
 
-async function createIntegrityPreviewTools(input: {
+async function materializeIntegrityPreviewToolExact(input: {
+  toolID: string
   agentID: string
   taskID: string
   signal?: AbortSignal
-}): Promise<ToolSet> {
+  onToolMaterialized?: (toolID: string) => void
+}) {
   const toolInfos = await loadIntegrityPreviewToolInfos()
-  const entries = await Promise.all(
-    toolInfos.map(async (info) => [info.id, await createIntegrityTool(info, input)] as const),
-  )
-  return Object.fromEntries(entries) as ToolSet
+  const info = toolInfos.find((candidate) => candidate.id === input.toolID)
+  if (!info) return undefined
+  input.onToolMaterialized?.(input.toolID)
+  return createIntegrityTool(info, input)
 }
 
 async function createIntegrityTool(info: Tool.Info, input: { agentID: string; taskID: string; signal?: AbortSignal }) {

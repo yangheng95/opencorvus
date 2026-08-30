@@ -60,8 +60,8 @@ export namespace ExploreAgent {
       onRuntimeReady: input.onRuntimeReady ? (session) => input.onRuntimeReady!(session.id) : undefined,
       toolSwitches: input.toolSwitches,
       toolKit: {
-        tools: {},
         stageOwnedToolIDs: [],
+        materializeExact: () => undefined,
         getCollector: () => ({}),
       },
       buildUserPrompt: promptWithContext,

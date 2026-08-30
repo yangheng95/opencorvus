@@ -338,7 +338,7 @@ route resolver 直接启动 Mission，前者把精确 Squad identity 写入 Miss
 后者在 launch 时冻结当时授权的精确 identity set，但不把完整 catalog 投影进 Composer 或 Mission
 context。没有结构化 reference 的普通 Code / Work 请求仍进入各自 conversation；
 当用户在自然语言中明确要求启动或转交 Mission 时，primary assistant 使用可见的
-`panel.wake_mission` handoff，禁止用 host 关键字匹配制造第二套路由来源。
+`panel_wake_mission` handoff，禁止用 host 关键字匹配制造第二套路由来源。
 Chat 与 Work 共用一个
 right-sidebar conversation session、message、attachment、tool、Skill、Model Context Protocol
 (MCP) server 和 lifecycle 实现；持久化的 `metadata.conversation.experience` 是唯一身份来源，
@@ -407,7 +407,7 @@ from the ambient Workbench canvas; header and content share that frame instead
 of creating separate cards or local geometry state.
 
 When the selected right-sidebar Chat or Work starts a durable Mission through
-the typed `panel.wake_mission` action, the backend keeps two real Sessions: the caller conversation
+the typed `panel_wake_mission` action, the backend keeps two real Sessions: the caller conversation
 —either Chat or Work—
 and the independently configured Mission. After the Mission wake message is
 persisted, one `mission.handoff` fact is projected through the existing global
@@ -427,8 +427,8 @@ Mission receipt written back to the caller conversation.
 Mission is a coordinator and never owns an active expert-squad profile. Composer
 selection writes only the non-empty immutable
 `metadata.mission.visibleExpertSquadIDs` authority snapshot. Mission
-`capability_search` searches only that snapshot and returns no more than twenty
-bounded identity/display references per call; `panel.expert_squad_inspect` accepts
+`capability_search` searches only that snapshot and returns no more than five
+bounded identity/display references per call; `panel_expert_squad_inspect` accepts
 one held ID and returns bounded selector guidance plus no more than twenty workflow
 summaries. Settings-only capability graphs, Agent inventories, package paths,
 hashes, README bodies, selector instruction bodies and the complete held ID set
@@ -437,7 +437,7 @@ tool-call count, but one response no longer grows with total installed Squads.
 Mission assigns each outcome-complete Task to one fixed
 Squad, and creates another Task only at a genuine Squad, accepted-evidence,
 operator-authority, or explicitly requested lifecycle boundary. Every
-`panel.create_task` call supplies one explicit fixed `promptProfile`. The created
+`panel_create_task` call supplies one explicit fixed `promptProfile`. The created
 Task, not Mission, is the execution and capability-projection boundary.
 
 The Mission Panel exposes `query_task_artifacts` for complete catalog paging.

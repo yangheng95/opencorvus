@@ -29,6 +29,7 @@ import {
   type VisualReview,
 } from "./schema"
 import { bindStageToolMaterializer } from "@/agent/stage-tool-materializer"
+import { materializeExactTool } from "@/agent/exact-tool-factory"
 
 function limitSummary(text: string): string {
   const normalized = text.replace(/\s+/g, " ").trim()
@@ -652,10 +653,13 @@ export function materializeVisualQaProblemDomRegionTool(
   )
 }
 
-export function createVisualQaOutputTools(context: VisualQaOutputToolContext = {}) {
+export function createVisualQaOutputTools(
+  context: VisualQaOutputToolContext = {},
+  onMaterialize?: (toolID: string) => void,
+) {
   let collector = emptyCollector()
-  const tools = {
-    register_visual_qa_check_item: tool({
+  const toolFactories = {
+    register_visual_qa_check_item: () => tool({
       description:
         "Register one concrete Visual QA check item before reporting coverage, evidence, findings, blockers, DOM regions, unresolved code-module problems, or a current acceptance judgment. Initial check registration may leave evidence_refs empty; evidence support comes from registered evidence rows tied to the check ID or from registered evidence_refs on the item. Every review row must reference registered check item IDs.",
       inputSchema: VisualQaCheckItemSchema,
@@ -676,7 +680,7 @@ export function createVisualQaOutputTools(context: VisualQaOutputToolContext = {
         return `OK: visual QA check_item "${item.id}" ${status} (${collector.check_items.length} total)`
       },
     }),
-    register_visual_qa_coverage: tool({
+    register_visual_qa_coverage: () => tool({
       description: "Register one Visual QA coverage row tied to registered check_ids.",
       inputSchema: VisualQaCoverageSchema,
       execute: async (raw) => {
@@ -696,7 +700,7 @@ export function createVisualQaOutputTools(context: VisualQaOutputToolContext = {
         return `OK: visual QA coverage "${row.region}" registered (${collector.coverage.length} total)`
       },
     }),
-    register_visual_qa_evidence: tool({
+    register_visual_qa_evidence: () => tool({
       description:
         "Register one fresh Visual QA evidence item tied to registered check_ids. ref must be an exact artifact_read locator from the current Task catalog. Screenshot-bearing evidence must resolve to a matching Browser Preview envelope whose operation, status, resource roles, and resource digests are readable now.",
       inputSchema: VisualQaEvidenceSchema,
@@ -717,7 +721,7 @@ export function createVisualQaOutputTools(context: VisualQaOutputToolContext = {
         return `OK: visual QA evidence ${formatVisualQaArtifactLocator(row.ref)} registered (${collector.evidence.length} total)`
       },
     }),
-    register_visual_qa_finding: tool({
+    register_visual_qa_finding: () => tool({
       description: "Register one Visual QA finding tied to registered check_ids.",
       inputSchema: VisualQaFindingSchema,
       execute: async (raw) => {
@@ -737,7 +741,7 @@ export function createVisualQaOutputTools(context: VisualQaOutputToolContext = {
         return `OK: visual QA finding "${row.id}" ${status} (${collector.findings.length} total)`
       },
     }),
-    register_visual_qa_production_blocker: tool({
+    register_visual_qa_production_blocker: () => tool({
       description:
         "Register one production blocker tied to registered failed or inconclusive check_ids. Do not register blockers without a concrete check item.",
       inputSchema: VisualQaProductionBlockerSchema,
@@ -758,7 +762,7 @@ export function createVisualQaOutputTools(context: VisualQaOutputToolContext = {
         return `OK: visual QA production_blocker "${row.id}" ${status} (${collector.production_blockers.length} total)`
       },
     }),
-    register_visual_qa_problem_dom_region:
+    register_visual_qa_problem_dom_region: () =>
       context.taskID && context.projectRoot
         ? materializeVisualQaProblemDomRegionTool(
             { taskID: context.taskID, projectRoot: context.projectRoot, projectID: context.projectID },
@@ -769,7 +773,7 @@ export function createVisualQaOutputTools(context: VisualQaOutputToolContext = {
             inputSchema: VisualQaProblemDomRegionSchema,
             execute: async () => "Error: visual QA problem DOM annotation requires taskID and projectRoot.",
           }),
-    register_visual_qa_unresolved_code_module_problem: tool({
+    register_visual_qa_unresolved_code_module_problem: () => tool({
       description:
         "Register one unresolved code module problem tied to registered check_ids and production blocker IDs.",
       inputSchema: VisualQaUnresolvedCodeModuleProblemSchema,
@@ -789,7 +793,7 @@ export function createVisualQaOutputTools(context: VisualQaOutputToolContext = {
         return `OK: visual QA unresolved_code_module_problem "${row.id}" ${status} (${collector.unresolved_code_module_problems.length} total)`
       },
     }),
-    register_visual_qa_open_question: tool({
+    register_visual_qa_open_question: () => tool({
       description: "Register one open question that prevents stronger Visual QA certainty.",
       inputSchema: z.object({ question: z.string().min(1) }).strict(),
       execute: async ({ question }) => {
@@ -797,7 +801,7 @@ export function createVisualQaOutputTools(context: VisualQaOutputToolContext = {
         return `OK: visual QA open question registered (${collector.open_questions.length} total)`
       },
     }),
-    register_visual_qa_fact_check_item: tool({
+    register_visual_qa_fact_check_item: () => tool({
       description: "Register one factual claim that Visual QA could not verify in-session.",
       inputSchema: FactCheckItemSchema,
       execute: async (raw) => {
@@ -806,7 +810,7 @@ export function createVisualQaOutputTools(context: VisualQaOutputToolContext = {
         return `OK: visual QA fact_check_item registered (${collector.fact_check_items.length} total)`
       },
     }),
-    set_visual_qa_reference_parity: tool({
+    set_visual_qa_reference_parity: () => tool({
       description:
         "Set the Visual QA reference parity summary after registering per-region check items. Required regions must also have check_items with matching reference_region_key.",
       inputSchema: VisualQaReferenceParitySchema,
@@ -841,7 +845,7 @@ export function createVisualQaOutputTools(context: VisualQaOutputToolContext = {
         return `OK: visual QA reference_parity set (required=${collector.reference_parity.required}, regions=${collector.reference_parity.required_regions.length})`
       },
     }),
-    update_visual_qa_judgment: tool({
+    update_visual_qa_judgment: () => tool({
       description:
         "Record or revise the reviewer's current accepted judgment and concise summary. This is an optional reviewer fact, not a finalizer: registered checks, evidence, findings, blockers, and questions remain valid whether or not a judgment is recorded, and later registrations may refine the review.",
       inputSchema: z.object({ accepted: z.boolean(), summary: z.string().min(1) }).strict(),
@@ -859,7 +863,7 @@ export function createVisualQaOutputTools(context: VisualQaOutputToolContext = {
   }
 
   return {
-    tools,
+    materializeExact: (toolID: string) => materializeExactTool(toolFactories, toolID, onMaterialize),
     getCollector: () => collector,
     async snapshotReview() {
       const review = snapshotVisualQaReview(collector)

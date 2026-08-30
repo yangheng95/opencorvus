@@ -8,7 +8,7 @@ import { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
 import { Identifier } from "@/id/id"
 import { MCP } from "@/mcp"
 import { computerRuntimeScopeIdentity } from "@/mcp/computer/runtime-scope"
-import { createOrchestratorTools } from "@/orchestrator/tools"
+import { createExactOrchestratorTool } from "@/orchestrator/tools"
 import { sendSchedulerMessage } from "@/protocol/scheduler-message"
 import { PermissionAuthority } from "@/permission/authority"
 import { PermissionExecutionResultTable } from "@/permission/permission.sql"
@@ -22,12 +22,13 @@ import { SessionLoop } from "@/session/loop"
 import { MessageStore } from "@/session/message-store"
 import { SessionProcessor } from "@/session/processor"
 import { SessionRuntimeContractStore } from "@/session/runtime-contract"
+import { createRuntimeToolOwner } from "@/session/runtime-tool-owner"
+import { testRuntimeToolFactories } from "./runtime-tool-owner"
 import { toolResultControl } from "@/session/tool-result-control"
 import { Database, eq } from "@/storage/db"
 import { installDefaultControlPlaneToolLoaders } from "@/tool/control-plane-tool-composition"
 import { persistEstablishedTask } from "./engine-task"
-import { CatalogOccurrenceBinding } from "@/capability/catalog-binding"
-import { RuntimeCapabilityCatalog } from "@/tool/capability-runtime-catalog"
+import { resolveTestCapabilityTools } from "./capability-occurrence"
 
 type State = {
   request: PermissionAuthority.Request
@@ -186,20 +187,37 @@ async function initializeCut(): Promise<never> {
         providerID: model.providerID,
         time: { created: now },
       } as const
-      const raw = createOrchestratorTools({
-        taskID,
-        agentSessionID: session.id,
-        sendSchedulerMessage,
-        dispatchAgents: [...skillProjection.schedulerOnlyAgents, ...skillProjection.projectedAgents],
-      }).tools as Record<string, any>
       const owner = MCP.createScopedConnectionOwner(
         computerRuntimeScopeIdentity({ ownerKind: "orchestrator", taskID, sessionID: session.id }),
       )
-      const projectedTools = await PromptProfileResolver.projectOrchestratorTools(raw, schedulerCapability, {
-        taskID,
-        projectDirectory,
-        connectionOwner: owner,
-      })
+      const dispatchAgents = [...skillProjection.schedulerOnlyAgents, ...skillProjection.projectedAgents]
+      const materializeBuiltIn = (toolID: string) =>
+        createExactOrchestratorTool({
+          toolID,
+          taskID,
+          agentSessionID: session.id,
+          sendSchedulerMessage,
+          dispatchAgents,
+        })
+      const projectedTools = Object.fromEntries(
+        await Promise.all(
+          PromptProfileResolver.schedulerRuntimeToolIDs(schedulerCapability).map(async (toolID) => {
+            const exact = schedulerCapability.builtInToolIDs.includes(toolID)
+              ? materializeBuiltIn(toolID)
+              : await PromptProfileResolver.exactProjectedExtensionTool({
+                  capability: schedulerCapability,
+                  providerName: toolID,
+                  runtimeTool: materializeBuiltIn,
+                  taskID,
+                  projectDirectory,
+                  toolDirectory: projectDirectory,
+                  connectionOwner: owner,
+                })
+            if (!exact) throw new Error(`Projected process fixture cannot materialize ${toolID}`)
+            return [toolID, exact] as const
+          }),
+        ),
+      )
       SessionRuntimeContractStore.set(session.id, {
         identity: {
           identityKind: "projected-scheduler",
@@ -211,50 +229,34 @@ async function initializeCut(): Promise<never> {
           contractKind: "orchestrator-wake",
           installedAt: now,
         },
-        projectedTools,
-        projectedRegistryToolIDs: schedulerCapability.builtInToolIDs,
         skillProjection,
-        harnessProjection: PromptProfileResolver.schedulerHarnessProjection({ taskID, capability: schedulerCapability }),
+        harnessGrants: PromptProfileResolver.schedulerHarnessGrants({
+          taskID,
+          capability: schedulerCapability,
+          projectedToolIDs: Object.keys(projectedTools),
+        }),
         projectDirectory,
         includeMcpTools: false,
         system: [],
         systemMode: "complete",
-        resources: { mcp: owner },
+        resources: {
+          mcp: owner,
+          tools: createRuntimeToolOwner({ leaves: testRuntimeToolFactories(projectedTools, "projected") }),
+        },
       })
       const abort = new AbortController().signal
       const processor = SessionProcessor.create({ assistantMessage: assistant, sessionID: session.id, model, abort })
       const runtime = sessionRuntimeFromNativeAgent(await HostAgentRegistry.get("orchestrator", { config }))
-      const tools = await SessionLoop.resolveTools({
+      const { tools } = await resolveTestCapabilityTools({
         agent: runtime,
         agentID: "orchestrator",
         model,
         session,
+        assistant,
         processor,
         messages: await Session.messages({ sessionID: session.id }),
         config,
-      })
-      const runtimeContract = SessionRuntimeContractStore.get(session.id)
-      if (!runtimeContract) throw new Error("Projected scheduler runtime contract was not installed")
-      const catalog = await RuntimeCapabilityCatalog.snapshot({
-        config,
-        sessionID: session.id,
-        agentID: "orchestrator",
-        executionToolIDs: Object.keys(tools),
-        harnessProjection: SessionLoop.harnessProjectionForResolvedTools(tools),
-      })
-      const binding = await CatalogOccurrenceBinding.publish({
-        projectID: Instance.project.id,
-        payload: CatalogOccurrenceBinding.payload({
-          snapshot: catalog.snapshot,
-          materializationScope: await CatalogOccurrenceBinding.materializationScope({ model, config }),
-          runtimeContract,
-        }),
-      })
-      await CatalogOccurrenceBinding.bindAndBeginAssistant({
-        projectID: Instance.project.id,
-        assistant,
-        parent: await MessageStore.get({ sessionID: session.id, messageID: user.id }),
-        binding,
+        activeLocalRefs: ["wait"],
       })
       const wait = tools.wait
       if (!wait?.execute) throw new Error("Projected scheduler wait is unavailable")

@@ -85,6 +85,7 @@ import { Plugin } from "@/plugin"
 import { InstructionPrompt } from "@/session/instruction"
 import { renderBuildPromptOverlays } from "./prompt-context"
 import { createMergeBackSingleFlight, materializeBuildMergeBackTool } from "./merge-back-tool"
+import { createStageToolMaterializerBinding } from "@/agent/stage-tool-materializer"
 import {
   buildTerminalFactObservationID,
   publishBuildTerminalFact,
@@ -513,7 +514,6 @@ export namespace BuildAgent {
     /** False disables Model Context Protocol tools for bounded research-only callers. */
     includeMcpTools?: boolean
     /** True exposes only BuildAgent runtime tools for bounded special-purpose callers. */
-    exactRuntimeTools?: boolean
     /** Additional per-run tool switches merged after the build defaults. */
     toolSwitches?: Record<string, boolean>
     signal?: AbortSignal
@@ -748,29 +748,34 @@ export namespace BuildAgent {
       type BuildCollector = Record<string, never>
       const buildCollector: BuildCollector = {}
       const buildToolKit: {
-        tools: ToolSet
         stageOwnedToolIDs: readonly string[]
+        stageMaterializers?: Readonly<Record<string, import("@/agent/stage-tool-materializer").StageToolMaterializerBinding>>
+        materializeExact: (toolID: string) => AITool | undefined
         getCollector: () => BuildCollector
       } =
         ownsWorktree && worktreeBranch && worktreeDir
-          ? (() => {
-              const stageTools = {
-                merge_back: materializeBuildMergeBackTool(
-                  { taskID: task.id, branch: worktreeBranch, worktreeDir },
-                  (primaryHead) => {
-                    mergedHead = primaryHead
-                  },
-                ),
-              }
-              return {
-                tools: stageTools,
-                stageOwnedToolIDs: Object.keys(stageTools),
-                getCollector: () => buildCollector,
-              }
-            })()
+          ? {
+              stageOwnedToolIDs: ["merge_back"],
+              stageMaterializers: {
+                merge_back: createStageToolMaterializerBinding({
+                  id: "build.merge-back",
+                  input: { taskID: task.id, branch: worktreeBranch, worktreeDir },
+                }),
+              },
+              materializeExact: (toolID) =>
+                toolID === "merge_back"
+                  ? materializeBuildMergeBackTool(
+                    { taskID: task.id, branch: worktreeBranch, worktreeDir },
+                    (primaryHead) => {
+                      mergedHead = primaryHead
+                    },
+                  )
+                  : undefined,
+              getCollector: () => buildCollector,
+            }
           : {
-              tools: {},
               stageOwnedToolIDs: [],
+              materializeExact: () => undefined,
               getCollector: () => buildCollector,
             }
 
@@ -865,7 +870,6 @@ export namespace BuildAgent {
           buildUserParts: buildUserPartsFn,
           runtimeContract: {
             includeMcpTools: input.includeMcpTools,
-            exactTools: input.exactRuntimeTools,
           },
           toolSwitches: input.toolSwitches,
           onSessionCreated: input.existingSessionID

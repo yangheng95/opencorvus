@@ -152,6 +152,7 @@ describe("Dynamic Expert Squad package", () => {
           "artifact_search",
           "artifact_select",
           "artifact_snapshot",
+          "capability_search",
           "publish_interactive_artifact",
           "dispatch_agents",
           "manage_task",

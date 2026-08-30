@@ -268,7 +268,7 @@ describe("random Expert Squad evolution controller contracts", () => {
           time_updated: 601_000,
           part_data: {
             type: "tool",
-            tool: "panel",
+            tool: "panel_create_task",
             state: {
               status: "error",
               input: { confidential: "must-not-enter-result" },
@@ -285,7 +285,7 @@ describe("random Expert Squad evolution controller contracts", () => {
         part_id: "prt_stalled",
         message_id: "msg_stalled",
         session_id: "ses_mission",
-        tool: "panel",
+        tool: "panel_create_task",
         status: "error",
         time_created: 1_000,
         time_updated: 601_000,
@@ -300,7 +300,7 @@ describe("random Expert Squad evolution controller contracts", () => {
           part_id: "prt_stalled",
           message_id: "msg_stalled",
           session_id: "ses_mission",
-          tool: "panel",
+          tool: "panel_create_task",
           status: "error",
           time_created: 1_000,
           time_updated: 601_000,

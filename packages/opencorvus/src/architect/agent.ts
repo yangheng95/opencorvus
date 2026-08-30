@@ -28,9 +28,7 @@ import {
   type AgentCoordinationHandoffResult,
   type RunAgentSessionOutput,
 } from "@/agent/runner"
-import { createAgentContextTools } from "@/agent/context-tools"
-import { createAgentCoordinationRuntimeTools } from "@/agent/coordination-runtime-tools"
-import { filterAgentTools } from "@/agent/filter-tools"
+import { DispatchAdapterContractRegistry } from "@/agent/dispatch-adapter-contract"
 import { Log } from "@/util/log"
 import type { GoalContractFields } from "@/pipeline/types"
 import type { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
@@ -122,11 +120,7 @@ export namespace ArchitectAgent {
     let outputToolKit: ReturnType<typeof createArchitectOutputTools>
     outputToolKit = createArchitectOutputTools({
       selectedExistingGoals: (options, toolName) => {
-        const turn = assertArchitectOutputToolTurnIdentity({
-          taskID: input.taskID,
-          toolName,
-          options,
-        })
+        const turn = assertArchitectOutputToolTurnIdentity({ taskID: input.taskID, toolName, options })
         const frozenSourceKey = outputToolKit.selectedExistingGoalSourceKey()
         if (frozenSourceKey) return priorBySourceKey.get(frozenSourceKey)?.seed
         const sourceArtifactLocators = selectedArtifactLocatorsBeforePublication({
@@ -144,15 +138,6 @@ export namespace ArchitectAgent {
         if (role && seed) priorBySourceKey.set(seed.sourceKey, { role, seed })
         return seed
       },
-    })
-    const coordinationTools = await createAgentCoordinationRuntimeTools({
-      agentID: input.agentID,
-      taskID: input.taskID,
-      signal: input.signal,
-    })
-    const contextTools = await filterAgentTools({ ...createAgentContextTools(), ...coordinationTools }, "architect", {
-      taskID: input.taskID,
-      sessionID: input.parentSessionID,
     })
 
     const completeOutput = async (out: RunAgentSessionOutput<ArchitectCollector>): Promise<CoordinateResult> => {
@@ -253,8 +238,8 @@ export namespace ArchitectAgent {
         : undefined,
       onRuntimeReady: input.onRuntimeReady ? (session) => input.onRuntimeReady!(session.id) : undefined,
       toolKit: {
-        tools: { ...contextTools, ...outputToolKit.tools },
-        stageOwnedToolIDs: Object.keys(outputToolKit.tools),
+        stageOwnedToolIDs: DispatchAdapterContractRegistry.privateStageToolIDs("architect"),
+        materializeExact: (toolID) => outputToolKit.materializeExact(toolID),
         getCollector: () => outputToolKit.getCollector(),
       },
       buildUserPrompt: () => buildArchitectUserPrompt(projection, input.agentID),

@@ -110,7 +110,7 @@ test("projects terminal acknowledgement into the exact host-authorized coordinat
 })
 
 // Regression: the scheduler capability declares TASK_ARTIFACT_SCHEDULER_TOOL_IDS
-// and publish_interactive_artifact unconditionally, and projectOrchestratorTools
+// and publish_interactive_artifact unconditionally, and exact materialization
 // throws when a declared Tool was not built. A terminal-only crop of the built
 // table therefore failed every terminal wake before the model saw anything.
 test("builds every declared scheduler Tool on a terminal conversation wake", async () => {

@@ -267,7 +267,7 @@ transport，不实现第二套 runtime schema、writer、loader 或安装路径�
 结构化 tool schema、SDK validator 与 Registry 正向校验的完整 definition contract，
 用于呈现 canonical field、runtime template 与 package path，而不复制合法性实现。
 Mission launch 把当时授权的精确 ID 集合固定为整个 Mission 的 held-Squad authority。Mission 通过
-每次最多二十项的 `capability_search` 检索该 frozen set，再用 `panel.expert_squad_inspect` 读取一个
+每次最多五项的 `capability_search` 检索该 frozen set，再用 `panel_expert_squad_inspect` 读取一个
 精确 held Squad 的一页 planning guidance；完整 held catalog 从不写入 tool result 或 Session frontier。
 Mission Session 的首次数据库提交就是唯一身份提交：`kind="mission"` 的 Session row 与同事务
 `session.created` occurrence 已携带 canonical `metadata.mission.id`、channel key、cwd、product pillar

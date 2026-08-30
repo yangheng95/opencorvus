@@ -12,6 +12,7 @@
  */
 import { tool } from "ai"
 import { WorkloadBriefSchema, type WorkloadBrief } from "./types"
+import { materializeExactTool } from "@/agent/exact-tool-factory"
 
 export interface GoalWorkloadCollector {
   briefs: WorkloadBrief[]
@@ -29,7 +30,7 @@ export interface GoalWorkloadCollector {
  * where contract_audit scorers are authored, in
  * `architect/reference-integrity.ts`; this one is gone rather than dormant.
  */
-export function createGoalWorkloadOutputTools(input: { knownGoalIDs: string[] }) {
+export function createGoalWorkloadOutputTools(input: { knownGoalIDs: string[]; onToolMaterialized?: (toolID: string) => void }) {
   const knownGoals = new Set(input.knownGoalIDs)
 
   function emptyCollector(): GoalWorkloadCollector {
@@ -37,8 +38,8 @@ export function createGoalWorkloadOutputTools(input: { knownGoalIDs: string[] })
   }
   let collector = emptyCollector()
 
-  const tools = {
-    register_workload_brief: tool({
+  const toolFactories = {
+    register_workload_brief: () => tool({
       description:
         "Register one goal's workload brief. index/lens discipline: ORIGINATE why_not_smaller / traps / " +
         "execution_inventory / verification_inventory / decomposition_concern; REFERENCE surfaces and contracts " +
@@ -65,7 +66,8 @@ export function createGoalWorkloadOutputTools(input: { knownGoalIDs: string[] })
   }
 
   return {
-    tools,
+    materializeExact: (toolID: string) =>
+      materializeExactTool(toolFactories, toolID, input.onToolMaterialized),
     getCollector: () => collector,
     reset() {
       collector = emptyCollector()

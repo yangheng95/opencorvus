@@ -2,7 +2,8 @@ import { describe, expect, test } from "bun:test"
 import { asSchema, generateText, InvalidToolInputError, tool, type ToolExecutionOptions } from "ai"
 import { createAzure } from "@ai-sdk/azure"
 import { createOpenAI } from "@ai-sdk/openai"
-import { MissionPanelActionSchema } from "@/panel/capability"
+import { panelLeafActionSchemaForAgent } from "@/panel/capability"
+import { panelLeafToolID, type PanelActionID } from "@/panel/action-ids"
 import type { Provider } from "@/provider/provider"
 import { ProviderTransform } from "@/provider/transform"
 import { SessionLoop } from "@/session/loop"
@@ -28,14 +29,14 @@ function openAIModel(): Provider.Model {
   } as Provider.Model
 }
 
-function preparedMissionPanelTool() {
+function preparedMissionPanelTool(action: PanelActionID = "resume_task") {
   return SessionLoop.prepareProviderTool({
-    name: "panel",
+    name: panelLeafToolID(action),
     source: "registry",
     model: openAIModel(),
     tool: tool({
-      inputSchema: MissionPanelActionSchema,
-      execute: async (input) => input,
+      inputSchema: panelLeafActionSchemaForAgent(action, "mission"),
+      execute: async (input) => ({ action, ...(input as Record<string, unknown>) }),
     }),
   }) as {
     execute: (input: unknown, options: ToolExecutionOptions) => Promise<unknown>
@@ -123,53 +124,42 @@ function acceptanceGap(
 }
 
 describe("SessionLoop provider Tool execution input", () => {
-  test("projects an OpenAI root union as one nested operation with branch-specific required fields", async () => {
-    const prepared = preparedMissionPanelTool() as unknown as { inputSchema: unknown }
+  test("projects one exact OpenAI panel leaf with action-specific required fields", async () => {
+    const prepared = preparedMissionPanelTool("query_task_artifacts") as unknown as { inputSchema: unknown }
     const schema = asSchema(prepared.inputSchema as never) as {
       jsonSchema: Record<string, any>
       validate?: (input: unknown) => Promise<{ success: boolean; value?: unknown; error?: unknown }>
     }
     const provider = schema.jsonSchema
-    const variants = provider.properties.operation.anyOf as Array<Record<string, any>>
-    const read = variants.find((variant) => variant.properties.action.const === "read_task_artifact")
-    const artifactPage = variants.find((variant) => variant.properties.action.const === "query_task_artifacts")
-
-    expect(provider.required).toEqual(["operation"])
-    expect(Object.keys(provider.properties)).toEqual(["operation"])
-    expect(read.required).toContain("taskID")
-    expect(read.required).toContain("artifact_locator_ref")
-    expect(read.properties.taskID).toEqual(expect.objectContaining({ type: "string", minLength: 1 }))
-    expect(artifactPage.required).toEqual(
+    expect(provider.required).toEqual(
       expect.arrayContaining(["taskID", "terminal_lifecycle_reference", "page_number"]),
     )
-    expect(artifactPage.properties.page_number).toEqual(
+    expect(Object.keys(provider.properties).sort()).toEqual(
+      [
+        "artifact_types",
+        "created_at_or_after_ms",
+        "created_before_ms",
+        "goal_ids",
+        "import_source_task_ids",
+        "kinds",
+        "labels",
+        "media_types",
+        "page_number",
+        "producer_agent_ids",
+        "producer_session_ids",
+        "producer_squad_ids",
+        "query",
+        "sort",
+        "sources",
+        "taskID",
+        "terminal_lifecycle_reference",
+        "version_scope",
+      ].sort(),
+    )
+    expect(provider.properties.page_number).toEqual(
       expect.objectContaining({ type: "integer", minimum: 1, maximum: 1_000 }),
     )
-    expect(artifactPage.properties.terminal_lifecycle_reference).toEqual(expect.objectContaining({ type: "object" }))
-
-    const validated = await schema.validate?.({
-      operation: {
-        action: "read_task_artifact",
-        taskID: "task-provider-union",
-        artifact_transport_version: 2,
-        artifact_locator_ref: "al_1234567890abcdef",
-        byte_offset: null,
-        max_bytes: null,
-        delivery: null,
-      },
-    })
-    expect(validated).toEqual({
-      success: true,
-      value: {
-        action: "read_task_artifact",
-        taskID: "task-provider-union",
-        artifact_transport_version: 2,
-        artifact_locator_ref: "al_1234567890abcdef",
-        byte_offset: 0,
-        max_bytes: 24_576,
-        delivery: "inline",
-      },
-    })
+    expect(provider.properties.terminal_lifecycle_reference).toEqual(expect.objectContaining({ type: "object" }))
   })
 
   test("sends the prepared Tool in a serialized OpenAI Responses request", async () => {
@@ -180,22 +170,19 @@ describe("SessionLoop provider Tool execution input", () => {
     await generateText({
       model: openAI.responses("gpt-5.6-terra"),
       prompt: "Finish without calling a Tool.",
-      tools: { panel: preparedMissionPanelTool() as any },
+      tools: { panel_resume_task: preparedMissionPanelTool() as any },
       providerOptions: serializedToolRequestOptions(model),
     })
 
     expect(capture.body).toEqual(
       expect.objectContaining({
         parallel_tool_calls: false,
-        tools: [expect.objectContaining({ type: "function", name: "panel", parameters: expect.any(Object) })],
+        tools: [expect.objectContaining({ type: "function", name: "panel_resume_task", parameters: expect.any(Object) })],
       }),
     )
-    const operation = capture.body?.tools?.[0]?.parameters?.properties?.operation
-    const resume = (operation?.anyOf ?? operation?.oneOf).find(
-      (variant: Record<string, any>) => variant.properties?.action?.const === "resume_task",
-    )
-    const openCriterion = (resume.properties.acceptance_gap.properties.criteria.items.anyOf ??
-      resume.properties.acceptance_gap.properties.criteria.items.oneOf).find(
+    const parameters = capture.body?.tools?.[0]?.parameters
+    const openCriterion = (parameters.properties.acceptance_gap.properties.criteria.items.anyOf ??
+      parameters.properties.acceptance_gap.properties.criteria.items.oneOf).find(
       (variant: Record<string, any>) => variant.properties?.state?.const === "open",
     )
     expect(openCriterion.properties.repair_action.properties.parameters).toEqual(
@@ -221,11 +208,14 @@ describe("SessionLoop provider Tool execution input", () => {
       model: azure.responses("gpt-5.6-terra"),
       prompt: "Finish without calling a Tool.",
       tools: {
-        panel: SessionLoop.prepareProviderTool({
-          name: "panel",
+        panel_resume_task: SessionLoop.prepareProviderTool({
+          name: "panel_resume_task",
           source: "registry",
           model,
-          tool: tool({ inputSchema: MissionPanelActionSchema, execute: async (input) => input }),
+          tool: tool({
+            inputSchema: panelLeafActionSchemaForAgent("resume_task", "mission"),
+            execute: async (input) => input,
+          }),
         }) as any,
       },
       providerOptions: options,
@@ -234,7 +224,7 @@ describe("SessionLoop provider Tool execution input", () => {
     expect(capture.body).toEqual(
       expect.objectContaining({
         parallel_tool_calls: false,
-        tools: [expect.objectContaining({ type: "function", name: "panel", parameters: expect.any(Object) })],
+        tools: [expect.objectContaining({ type: "function", name: "panel_resume_task", parameters: expect.any(Object) })],
       }),
     )
   })
@@ -256,21 +246,15 @@ describe("SessionLoop provider Tool execution input", () => {
     expect(history.properties.automationId).toEqual(expect.objectContaining({ type: "string" }))
   })
 
-  test("materializes the exact resume_task branch from an OpenAI provider union superset", async () => {
+  test("materializes the exact resume_task leaf from Provider input", async () => {
     const gap = acceptanceGap("ar_1234567890abcdef", {
       artifact_kind: "corrected-audit-receipt",
       retry_limit: 1,
     })
     const result = await preparedMissionPanelTool().execute(
       {
-        operation: {
-          action: "resume_task",
-          taskID: "task-provider-union",
-          acceptance_gap: gap,
-          model: null,
-          summary: null,
-          task_acceptances: null,
-        },
+        taskID: "task-provider-union",
+        acceptance_gap: gap,
       },
       executionOptions,
     )
@@ -283,20 +267,17 @@ describe("SessionLoop provider Tool execution input", () => {
   })
 
   test("materializes a completed cross-Task source without any copied Artifact locator", async () => {
-    const result = await preparedMissionPanelTool().execute(
+    const result = await preparedMissionPanelTool("create_task").execute(
       {
-        operation: {
-          action: "create_task",
-          title: "Analyze completed evidence",
-          request: "Analyze the predecessor's declared delivery closure.",
-          promptProfile: "evolution-lab",
-          artifact_sources: [
-            {
-              authority: "completion_decision",
-              source_task_id: "task-completed-source",
-            },
-          ],
-        },
+        title: "Analyze completed evidence",
+        request: "Analyze the predecessor's declared delivery closure.",
+        promptProfile: "evolution-lab",
+        artifact_sources: [
+          {
+            authority: "completion_decision",
+            source_task_id: "task-completed-source",
+          },
+        ],
       },
       executionOptions,
     )
@@ -316,9 +297,8 @@ describe("SessionLoop provider Tool execution input", () => {
   })
 
   test("maps a property absent from every panel branch to the canonical typed input error", async () => {
-    const execution = preparedMissionPanelTool().execute(
+    const execution = preparedMissionPanelTool("resume_task").execute(
       {
-        action: "resume_task",
         taskID: "task-provider-union",
         acceptance_gap: acceptanceGap(),
         invented_provider_field: "must remain invalid",
@@ -336,17 +316,14 @@ describe("SessionLoop provider Tool execution input", () => {
   })
 
   test("keeps a null required read Task ID as an explicit typed input error", async () => {
-    const execution = preparedMissionPanelTool().execute(
+    const execution = preparedMissionPanelTool("read_task_artifact").execute(
       {
-        operation: {
-          action: "read_task_artifact",
-          taskID: null,
-          artifact_transport_version: 2,
-          artifact_locator_ref: "al_1234567890abcdef",
-          byte_offset: null,
-          max_bytes: null,
-          delivery: null,
-        },
+        taskID: null,
+        artifact_transport_version: 2,
+        artifact_locator_ref: "al_1234567890abcdef",
+        byte_offset: null,
+        max_bytes: null,
+        delivery: null,
       },
       executionOptions,
     )

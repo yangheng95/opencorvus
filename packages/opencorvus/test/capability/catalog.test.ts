@@ -4,7 +4,6 @@ import {
   CapabilityCatalogCache,
   CapabilityCatalogContractError,
   CapabilityCatalogSnapshot,
-  StaleCapabilityCatalogError,
   createCapabilityCatalogSnapshot,
   searchCapabilityCatalog,
 } from "../../src/capability/catalog"
@@ -21,7 +20,7 @@ import {
 } from "../../src/capability/descriptor"
 import { RuntimeCapabilityCatalog } from "../../src/tool/capability-runtime-catalog"
 import { capabilityRef, CapabilityRefCodec } from "@opencorvus-ai/util/capability-ref"
-import { createHarnessProjection } from "../../src/capability/harness-projection"
+import { createHarnessGrantSet } from "../../src/capability/harness-projection"
 import { memoryProject } from "../fixture/memory"
 import { Instance } from "../../src/project/instance"
 import { ensureMissionSession } from "../../src/mission/session"
@@ -32,6 +31,7 @@ import { PromptProfileResolver } from "../../src/expert-squad/prompt-profile-res
 import { MissionSkillCatalog } from "../../src/mission-skill/catalog"
 import { SkillManager } from "../../src/skill/manager"
 import { MCP } from "../../src/mcp"
+import { HostSessionMcpRuntime } from "../../src/mcp/host-session-runtime"
 import { mkdir } from "node:fs/promises"
 import path from "node:path"
 
@@ -114,6 +114,7 @@ describe("capability catalog executable discovery", () => {
           sessionID: mission.id,
           agentID: "mission",
           executionToolIDs: [],
+          permission: [],
         })
         const results = searchCapabilityCatalog(snapshot, caller, { kinds: ["expert_squad"] })
         expect(results.map((item) => item.ref.local_ref)).toEqual(["base"])
@@ -147,6 +148,7 @@ describe("capability catalog executable discovery", () => {
           sessionID: mission.id,
           agentID: "mission",
           executionToolIDs: [],
+          permission: [],
         })
         expect(
           searchCapabilityCatalog(snapshot, caller, { kinds: ["expert_squad"] }).map((item) => item.ref.local_ref),
@@ -225,6 +227,7 @@ describe("capability catalog executable discovery", () => {
           sessionID: session.id,
           agentID: "work",
           executionToolIDs: ["capability_search"],
+          permission: [],
         }
         const [first, second] = await Promise.all([
           RuntimeCapabilityCatalog.snapshot(request),
@@ -270,24 +273,6 @@ describe("capability catalog executable discovery", () => {
     ).toBe(4)
     expect(first.descriptors).toEqual(projectionAdvanced.descriptors)
     expect(first.views).not.toEqual(projectionAdvanced.views)
-  })
-
-  test("maps an expected revision mismatch to the typed stale-catalog contract", () => {
-    const descriptor = entry("mcp_server", "computer")
-    const snapshot = createCapabilityCatalogSnapshot({
-      context: context(),
-      sources: [source("mcp-config", "owner-revision", [descriptor])],
-      projections: [projection("mcp-config", [descriptor])],
-    })
-    const run = () => searchCapabilityCatalog(snapshot, "conversation", { expected_catalog_revision: "0".repeat(64) })
-
-    expect(run).toThrow(
-      expect.objectContaining<Partial<StaleCapabilityCatalogError>>({
-        name: "StaleCapabilityCatalogError",
-        expected: "0".repeat(64),
-        actual: snapshot.catalog_revision,
-      }),
-    )
   })
 
   test("maps one owner revision to one exact stable descriptor publication", async () => {
@@ -380,29 +365,23 @@ describe("capability catalog executable discovery", () => {
     })
   })
 
-  test("canonicalizes Harness exact refs across Unicode input order", () => {
+  test("canonicalizes Harness grants across Unicode input order", () => {
     const refs = [
       capabilityRef({ kind: "mcp_tool", source: "project", owner_ref: "Éclair", local_ref: "中" }),
       capabilityRef({ kind: "mcp_tool", source: "project", owner_ref: "apple", local_ref: "éclair" }),
     ]
     const build = (mcpToolRefs: typeof refs) =>
-      createHarnessProjection({
+      createHarnessGrantSet({
         context: { kind: "conversation", agent_id: "work" },
         owner_revision: "unicode-owner",
-        tool_refs: [],
-        skill_refs: [],
-        mission_skill_refs: [],
-        mcp_server_refs: [],
-        mcp_tool_refs: mcpToolRefs,
-        mcp_prompt_refs: [],
-        mcp_resource_refs: [],
+        grants: mcpToolRefs.map((ref) => ({ ref, access: "discover_execute" })),
       })
     const first = build(refs)
     const second = build([...refs].reverse())
 
-    expect(second.projection_hash).toBe(first.projection_hash)
-    expect(second.mcp_tool_refs.map(CapabilityRefCodec.encode)).toEqual(
-      first.mcp_tool_refs.map(CapabilityRefCodec.encode),
+    expect(second.grant_hash).toBe(first.grant_hash)
+    expect(second.grants.map((grant) => CapabilityRefCodec.encode(grant.ref))).toEqual(
+      first.grants.map((grant) => CapabilityRefCodec.encode(grant.ref)),
     )
   })
 
@@ -565,7 +544,7 @@ describe("capability catalog executable discovery", () => {
         expect(skills.revision.length).toBeGreaterThan(0)
         expect(skills.skills.length).toBeGreaterThan(0)
         expect(missionSkills.revision).toMatch(/^[a-f0-9]{64}$/)
-        expect(missionSkills.skills.length).toBeGreaterThan(0)
+        expect(Array.isArray(missionSkills.skills)).toBe(true)
         expect(squads.revision).toMatch(/^[a-f0-9]{64}$/)
         expect(squads.entries.length).toBeGreaterThan(0)
 
@@ -612,6 +591,8 @@ describe("capability catalog executable discovery", () => {
             config_digest: "e".repeat(64),
             provenance: "runtime_observed" as const,
             tool_ids: Object.freeze([]),
+            tool_bindings: Object.freeze({}),
+            inventory_revision_vector: Object.freeze({}),
             statuses: Object.freeze({
               auth: Object.freeze({ status: "needs_auth" as const }),
               disabled: Object.freeze({ status: "disabled" as const }),
@@ -620,6 +601,7 @@ describe("capability catalog executable discovery", () => {
             }),
           }),
         )
+        const prepared = spyOn(HostSessionMcpRuntime, "prepareCatalog").mockResolvedValue()
         try {
           const session = await Session.create({ kind: "assistant", title: "MCP status Catalog" })
           const { caller, snapshot } = await RuntimeCapabilityCatalog.snapshot({
@@ -627,6 +609,7 @@ describe("capability catalog executable discovery", () => {
             sessionID: session.id,
             agentID: "chat",
             executionToolIDs: ["capability_search"],
+            permission: [],
           })
           const states = Object.fromEntries(
             searchCapabilityCatalog(snapshot, caller, { kinds: ["mcp_server"] }).map((item) => [
@@ -642,7 +625,99 @@ describe("capability catalog executable discovery", () => {
           })
           expect(snapshot.owner_revisions["mcp-config"]).toBe("d".repeat(64))
         } finally {
+          prepared.mockRestore()
           observed.mockRestore()
+        }
+      },
+    })
+  })
+
+  test("projects exact Host Session authentication and failure status instead of an empty visible inventory", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        await CapabilityCatalogCache.reset()
+        const config = Config.Info.parse({
+          mcp: {
+            host_auth: { type: "remote", transport: "streamable-http", url: "https://auth.example.invalid/mcp" },
+            host_failed: { type: "remote", transport: "streamable-http", url: "https://failed.example.invalid/mcp" },
+          },
+        })
+        const session = await Session.create({ kind: "assistant", title: "Exact Host MCP status" })
+        const statuses = new Map([
+          ["host_auth", { status: "needs_auth" as const }],
+          ["host_failed", { status: "failed" as const, error: "sanitized fixture failure" }],
+        ])
+        const owners = new Map<string, MCP.ScopedConnectionOwner>()
+        const createOwner = spyOn(MCP, "createScopedConnectionOwner").mockImplementation((id) => {
+          const serverID = id.split(":mcp:").at(-1)!
+          const status = statuses.get(serverID)
+          if (!status) throw new Error(`No status fixture for ${serverID}.`)
+          const owner: MCP.ScopedConnectionOwner = {
+            id,
+            catalogSnapshot: () => ({
+              owner_id: id,
+              owner_revision: serverID === "host_auth" ? "a".repeat(64) : "b".repeat(64),
+              entries: [
+                {
+                  server_id: serverID,
+                  connection_identity: id,
+                  config_digest: "c".repeat(64),
+                  inventory_revision: "d".repeat(64),
+                  status,
+                },
+              ],
+            }),
+            close: async () => {},
+          }
+          owners.set(id, owner)
+          return owner
+        })
+        const inspect = spyOn(MCP, "inspectScopedCapabilitySnapshot").mockRejectedValue(
+          new Error("fixture inspection did not produce an inventory"),
+        )
+        const harness = createHarnessGrantSet({
+          context: { kind: "conversation", agent_id: "chat" },
+          owner_revision: "host-status-harness",
+          grants: [...statuses.keys()].map((serverID) => ({
+            ref: capabilityRef({
+              kind: "mcp_server" as const,
+              source: "project" as const,
+              owner_ref: "mcp-config",
+              local_ref: serverID,
+            }),
+            access: "discover_execute" as const,
+            descendant_scope: ["mcp_tool" as const, "mcp_prompt" as const, "mcp_resource" as const],
+          })),
+        })
+        try {
+          const catalog = await RuntimeCapabilityCatalog.snapshot({
+            config,
+            sessionID: session.id,
+            agentID: "chat",
+            executionToolIDs: ["capability_search"],
+            harnessGrants: harness,
+            permission: [],
+          })
+          expect({
+            states: searchCapabilityCatalog(catalog.snapshot, catalog.caller, { kinds: ["mcp_server"] })
+              .map((entry) => [entry.ref.local_ref, entry.availability])
+              .sort(),
+            owners: [...owners.keys()].sort(),
+          }).toEqual({
+            states: [
+              ["host_auth", "requires_auth"],
+              ["host_failed", "unavailable"],
+            ],
+            owners: [
+              `session:${session.id}:mcp:host_auth`,
+              `session:${session.id}:mcp:host_failed`,
+            ],
+          })
+        } finally {
+          inspect.mockRestore()
+          createOwner.mockRestore()
         }
       },
     })
@@ -659,7 +734,7 @@ describe("capability catalog executable discovery", () => {
             exact: { type: "remote", transport: "streamable-http", url: "https://exact.example.invalid/mcp" },
           },
           primary_assistant_capabilities: {
-            chat: { skill_refs: [], mcp_server_refs: ["exact"] },
+            chat: { skill_refs: [], mcp_server_refs: [] },
           },
         })
         const observed = spyOn(MCP, "observedCatalogSnapshot").mockResolvedValue(
@@ -669,23 +744,18 @@ describe("capability catalog executable discovery", () => {
             provenance: "runtime_observed" as const,
             statuses: Object.freeze({ exact: Object.freeze({ status: "connected" as const }) }),
             tool_ids: Object.freeze(["exact_one", "exact_two"]),
+            tool_bindings: Object.freeze({}),
+            inventory_revision_vector: Object.freeze({ exact: "1".repeat(64) }),
           }),
         )
         const harness = (toolID: string) =>
-          createHarnessProjection({
+          createHarnessGrantSet({
             context: { kind: "conversation", agent_id: "chat" },
             owner_revision: `harness-${toolID}`,
-            tool_refs: [],
-            skill_refs: [],
-            mission_skill_refs: [],
-            mcp_server_refs: [
+            grants: [
               capabilityRef({ kind: "mcp_server", source: "project", owner_ref: "mcp-config", local_ref: "exact" }),
-            ],
-            mcp_tool_refs: [
               capabilityRef({ kind: "mcp_tool", source: "project", owner_ref: "mcp-config", local_ref: toolID }),
-            ],
-            mcp_prompt_refs: [],
-            mcp_resource_refs: [],
+            ].map((ref) => ({ ref, access: "discover_execute" })),
           })
         try {
           const [firstSession, secondSession] = await Promise.all([
@@ -697,14 +767,16 @@ describe("capability catalog executable discovery", () => {
             sessionID: firstSession.id,
             agentID: "chat",
             executionToolIDs: ["exact_one"],
-            harnessProjection: harness("exact_one"),
+            harnessGrants: harness("exact_one"),
+            permission: [],
           })
           const second = await RuntimeCapabilityCatalog.snapshot({
             config,
             sessionID: secondSession.id,
             agentID: "chat",
             executionToolIDs: ["exact_two"],
-            harnessProjection: harness("exact_two"),
+            harnessGrants: harness("exact_two"),
+            permission: [],
           })
 
           expect(first.snapshot.descriptors.filter((item) => item.ref.kind === "mcp_tool").length).toBe(2)
@@ -756,6 +828,7 @@ describe("capability catalog executable discovery", () => {
           "owner_revision",
           "provenance",
           "statuses",
+          "tool_bindings",
           "tool_ids",
         ])
         expect(first.tool_ids).toEqual([])

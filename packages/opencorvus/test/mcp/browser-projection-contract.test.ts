@@ -94,22 +94,31 @@ describe("Browser MCP projection contract", () => {
 
           const owner = MCP.createScopedConnectionOwner("test:browser-projection-contract")
           try {
-            const projected = await PromptProfileResolver.projectOrchestratorTools(
-              Object.fromEntries(capability.builtInToolIDs.map((toolID) => [toolID, {}])),
-              capability,
-              {
-                taskID,
-                projectDirectory: project.path,
-                connectionOwner: owner,
-              },
+            const projectedToolIDs = PromptProfileResolver.schedulerRuntimeToolIDs(capability)
+            expect(projectedToolIDs.filter((toolID) => capability.builtInToolIDs.includes(toolID)).sort()).toEqual(
+              capability.builtInToolIDs.filter((toolID) => toolID !== "capability_search").sort(),
             )
-            expect(Object.keys(projected).sort()).toEqual(
-              [...capability.builtInToolIDs, ...capability.defaultMcpTools.map((entry) => entry.providerName)].sort(),
+            const exact = Object.fromEntries(
+              await Promise.all(
+                capability.defaultMcpTools.map(async (entry) => {
+                  const materialized = await PromptProfileResolver.exactProjectedExtensionTool({
+                    capability,
+                    providerName: entry.providerName,
+                    runtimeTools: {},
+                    taskID,
+                    projectDirectory: project.path,
+                    toolDirectory: project.path,
+                    connectionOwner: owner,
+                  })
+                  if (!materialized) throw new Error(`Exact Browser Tool ${entry.providerName} is unavailable.`)
+                  return [entry.providerName, materialized] as const
+                }),
+              ),
             )
             expect(
               capability.defaultMcpTools.map((entry) => ({
                 ref: entry.ref,
-                permission: browserMcpPermissionKeyOf(projected[entry.providerName] as object),
+                permission: browserMcpPermissionKeyOf(exact[entry.providerName] as object),
               })),
             ).toEqual(
               browserToolRefs.map((ref) => ({

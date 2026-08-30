@@ -11,7 +11,7 @@
  */
 import { tool } from "ai"
 import z from "zod"
-import { createCodebaseTools } from "@/engine/codebase-tools"
+import { createCodebaseToolFactory } from "@/engine/codebase-tools"
 import { Memory } from "@/memory"
 import { Instance } from "@/project/instance"
 
@@ -30,15 +30,10 @@ import { Instance } from "@/project/instance"
  * wrappers. SessionLoop injects SkillTool directly from the projected runtime
  * identity after this context set and the remaining turn tools are known.
  */
-export function createAgentContextTools(taskWorkDir?: string) {
-  const codebase = createCodebaseTools(taskWorkDir)
+export function createAgentContextToolFactory(taskWorkDir?: string, onMaterialize?: (toolID: string) => void) {
+  const codebase = createCodebaseToolFactory(taskWorkDir, onMaterialize)
   const projectId = Instance.project.id
-  return {
-    // --- Codebase exploration (inherited) ---
-    ...codebase,
-
-    // --- Project memory ---
-    memory: tool({
+  const materializeMemory = () => tool({
       description:
         "Read-only scoped memory for prior work, known patterns, gotchas, and architectural decisions. " +
         "ALWAYS search memory before planning to leverage past experience. " +
@@ -78,7 +73,15 @@ export function createAgentContextTools(taskWorkDir?: string) {
         const text = chunks.map((c) => c.content).join("\n\n")
         return `# ${file.title}\nKind: ${file.kind} | Scope: ${file.scope} | Source: ${file.source}\n\n${text}`
       },
-    }),
+    })
+  return {
+    materializeExact(toolID: string) {
+      if (toolID === "memory") {
+        onMaterialize?.(toolID)
+        return materializeMemory()
+      }
+      return codebase.materializeExact(toolID)
+    },
   }
 }
 

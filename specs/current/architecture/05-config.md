@@ -30,7 +30,7 @@ assistant: activity{} · max_executor_groups
            max_executor_groups 是 task 未显式覆盖时的并行 agent 上限；
            未配置时唯一 EngineConfig 默认值为 5。
 
-experimental: auto_question · batch_tool · disable_paste_summary · continue_loop_on_deny
+experimental: auto_question · disable_paste_summary · continue_loop_on_deny
              memory{} · mcp_timeout · primary_tools · openTelemetry
 ```
 

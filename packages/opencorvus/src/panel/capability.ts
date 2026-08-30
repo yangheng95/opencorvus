@@ -16,6 +16,12 @@ import { MissionCompletionInput } from "@/mission/completion"
 import { MissionAcceptanceGapInputSchema } from "@/mission/acceptance-gap"
 import { TaskCancellationReason } from "@opencorvus-ai/transport-protocol"
 import { TerminalLifecycleReferenceSchema } from "@/engine/terminal-lifecycle-reference-schema"
+import {
+  EXPLORE_PANEL_ACTION_IDS,
+  MISSION_PANEL_ACTION_IDS,
+  PANEL_ACTIONS,
+  type PanelActionID,
+} from "./action-ids"
 
 const { cursor: _genericArtifactCursor, ...PanelArtifactSearchShape } = ArtifactSearchWithoutLimitSchema.shape
 
@@ -191,24 +197,6 @@ function panelUISchemas<const T extends readonly Capability[]>(items: T) {
   return items.map(panelUISchema) as SchemaTuple
 }
 
-const MissionPanelCapabilityActions = [
-  "expert_squad_inspect",
-  "multica_catalog",
-  "create_task",
-  "query_task",
-  "query_task_artifacts",
-  "read_task_artifact",
-  "complete_mission",
-  "view_board",
-  "view_plan",
-  "view_tasks",
-  "resume_task",
-  "cancel_task",
-  "reply_interaction",
-  "reject_interaction",
-] as const
-const ExplorePanelCapabilityActions = ["query_task", "view_board", "view_plan", "view_tasks"] as const
-
 function selectCapabilities(actions: readonly string[], context: string): CapabilityTuple {
   const items = actions.map((action) => {
     const capability = panelCapabilityByAction.get(action)
@@ -294,7 +282,7 @@ export const PanelCapabilityRegistry = list(
     params: {
       taskID: z.string().min(1).describe("Source Task whose Artifact catalog should be enumerated."),
       terminal_lifecycle_reference: TerminalLifecycleReferenceSchema.describe(
-        "Exact current terminal occurrence returned by panel.query_task for this source Task.",
+        "Exact current terminal occurrence returned by panel_query_task for this source Task.",
       ),
       page_number: z
         .number()
@@ -580,6 +568,14 @@ const panelCapabilityByAction: ReadonlyMap<string, Capability> = new Map(
   PanelCapabilityRegistry.map((capability) => [capability.action, capability] as const),
 )
 
+const registeredActionKinds = PanelCapabilityRegistry.map((capability) => ({
+  action: capability.action,
+  kind: capability.kind,
+}))
+if (JSON.stringify(registeredActionKinds) !== JSON.stringify(PANEL_ACTIONS)) {
+  throw new Error("Panel Capability Registry action identity drifted from the canonical leaf Tool catalog.")
+}
+
 export function panelActionKind(action: string): Kind {
   const capability = panelCapabilityByAction.get(action)
   if (!capability) throw new Error(`Unknown panel action ${JSON.stringify(action)}.`)
@@ -594,11 +590,11 @@ export const PanelActionSchema = z.discriminatedUnion(
   panelUISchemas(PanelCapabilityRegistry),
 ) as unknown as PanelActionParameterSchema
 export const MissionPanelCapabilityRegistry = selectCapabilities(
-  MissionPanelCapabilityActions,
+  MISSION_PANEL_ACTION_IDS,
   "mission panel capability registry",
 )
 export const ExplorePanelCapabilityRegistry = selectCapabilities(
-  ExplorePanelCapabilityActions,
+  EXPLORE_PANEL_ACTION_IDS,
   "explore panel capability registry",
 )
 export const MissionPanelActionSchema = z.discriminatedUnion(
@@ -614,6 +610,45 @@ export function panelActionSchemaForAgent(agent: string | undefined): PanelActio
   if (actor === "mission") return MissionPanelActionSchema as unknown as PanelActionParameterSchema
   if (actor === "explore") return ExplorePanelActionSchema as unknown as PanelActionParameterSchema
   return AgentPanelActionSchema as unknown as PanelActionParameterSchema
+}
+
+export function panelLeafCapability(action: PanelActionID) {
+  const capability = panelCapabilityByAction.get(action)
+  if (!capability) throw new Error(`Unknown Panel leaf action ${JSON.stringify(action)}.`)
+  return capability
+}
+
+export function panelLeafActionSchemaForAgent(action: PanelActionID, agent: string | undefined): z.ZodType {
+  const capability = panelLeafCapability(action)
+  const actor = agent === "panel_ui" ? "panel_ui" : derivePanelActor(agent)
+  if (
+    actor === "mission" &&
+    !MISSION_PANEL_ACTION_IDS.includes(action as (typeof MISSION_PANEL_ACTION_IDS)[number])
+  ) {
+    throw new Error(`Mission does not own Panel leaf ${action}.`)
+  }
+  if (
+    actor === "explore" &&
+    !EXPLORE_PANEL_ACTION_IDS.includes(action as (typeof EXPLORE_PANEL_ACTION_IDS)[number])
+  ) {
+    throw new Error(`Explore does not own Panel leaf ${action}.`)
+  }
+  let schema = z.object(capability.params).strict() as z.ZodObject<any>
+  if (actor === "panel_ui" && action === "create_task") {
+    schema = schema.omit({ artifact_sources: true })
+  } else if (actor !== "panel_ui") {
+    if (action === "create_task") {
+      schema = schema.omit({ metadata: true, source: true }).extend({ checks: AgentTaskCheckConfig.optional() })
+      if (actor === "mission") schema = schema.required({ title: true, promptProfile: true })
+    } else if (action === "send_task_message") {
+      schema = schema.omit({ source: true })
+    } else if (action === "update_checks") {
+      schema = schema.extend({ checks: AgentTaskCheckConfig })
+    }
+  }
+  if (action === "create_task") return schema.superRefine(refineCreateTaskChannelBinding)
+  if (action === "query_task_artifacts") return schema.superRefine(refineArtifactSearchInput)
+  return schema
 }
 
 export const PanelCapability = z.object({

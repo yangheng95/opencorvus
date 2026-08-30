@@ -957,9 +957,10 @@ describe("Goal Workload coverage contract", () => {
 
   test("retains unselected and repeated collector submissions as exact evidence", async () => {
     const output = createGoalWorkloadOutputTools({ knownGoalIDs: [goalA] })
-    const first = await output.tools.register_workload_brief.execute?.(brief(goalA), {} as never)
-    const duplicate = await output.tools.register_workload_brief.execute?.(brief(goalA), {} as never)
-    const extra = await output.tools.register_workload_brief.execute?.(brief(goalB), {} as never)
+    const register = output.materializeExact("register_workload_brief")!
+    const first = await register.execute?.(brief(goalA), {} as never)
+    const duplicate = await register.execute?.(brief(goalA), {} as never)
+    const extra = await register.execute?.(brief(goalB), {} as never)
     expect({ first, duplicate, extra, collector: output.getCollector() }).toEqual({
       first: `OK: workload brief for "${goalA}" registered (1 total).`,
       duplicate: `Error: goal_id "${goalA}" was submitted more than once. Submission retained as duplicate coverage evidence.`,

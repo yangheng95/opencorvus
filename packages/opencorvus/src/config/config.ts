@@ -1669,7 +1669,6 @@ export namespace Config {
       experimental: z
         .object({
           disable_paste_summary: z.boolean().optional(),
-          batch_tool: z.boolean().optional().describe("Enable the batch tool"),
           openTelemetry: z
             .boolean()
             .optional()

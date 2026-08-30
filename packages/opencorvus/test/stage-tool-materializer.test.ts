@@ -8,7 +8,7 @@ import {
   stageToolMaterializerBindingOf,
 } from "../src/agent/stage-tool-materializer"
 import { DispatchAdapterContractRegistry } from "../src/agent/dispatch-adapter-contract"
-import { createRequirementsOutputTools } from "../src/requirements/output-tools"
+import { createRequirementsOutputToolFactory } from "../src/requirements/output-tools"
 import { materializeBuildMergeBackTool } from "../src/build/merge-back-tool"
 import { materializeIntegrityRunCommandTool } from "../src/integrity/acceptance-tools"
 import { materializeVisualQaProblemDomRegionTool } from "../src/visual-qa/output-tools"
@@ -50,7 +50,7 @@ describe("effectful private stage Tool materializers", () => {
   })
 
   test("all five initial factories persist a revisioned stable input and rematerialize the same Tool identity", async () => {
-    const requirements = createRequirementsOutputTools({ taskID: "task-requirements" }).tools.register_decision
+    const requirements = createRequirementsOutputToolFactory({ taskID: "task-requirements" }).materializeExact("register_decision")!
     const originals = [
       {
         adapterID: "requirements" as const,
@@ -110,10 +110,10 @@ describe("effectful private stage Tool materializers", () => {
 
   test("requirements rematerialization executes the real persisted Decision Log effect once per invocation", async () => {
     const appended: Array<{ phase: string; key: string; value: string; reason: string }> = []
-    const original = createRequirementsOutputTools({
+    const original = createRequirementsOutputToolFactory({
       taskID: "task-decision-effect",
       decisionLog: { append: (entry) => appended.push(entry), read: () => [], readByPhase: () => [], renderForPrompt: () => "", renderScopedForPrompt: () => "", toDocument: () => "", toFullDocument: () => "" },
-    }).tools.register_decision
+    }).materializeExact("register_decision")!
     const persisted = binding(original as object)
     const recovered = await materializeBoundStageTool({
       adapterID: "requirements",

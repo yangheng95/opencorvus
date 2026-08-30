@@ -21,13 +21,17 @@ import { Instance } from "@/project/instance"
 import { Session } from "@/session"
 import { MessageStore } from "@/session/message-store"
 import { toolFailureCauseFromUnknown } from "@/session/tool-failure-cause"
-import { SessionRuntimeContractStore, sessionRuntimeToolRecords } from "@/session/runtime-contract"
+import { SessionRuntimeContractStore } from "@/session/runtime-contract"
 import { NotFoundError } from "@/storage/db"
 import { projectedTaskToolRuntimeBindingOf } from "@/tool/task-tool-execution-scope"
 import { NamedError } from "@opencorvus-ai/util/error"
 import z from "zod"
 import { findInteractiveArtifact } from "./persist"
 import type { InteractiveArtifactRecord } from "./schema"
+import { EffectiveConfig } from "@/config/effective"
+import { resolvePinnedTaskSchedulerTurnProjection } from "@/engine/task-package-projection"
+import { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
+import { sameExpertSquadPackageRevision } from "@/expert-squad/package-revision"
 
 const MAX_TOOL_PAGES = 100
 
@@ -127,7 +131,44 @@ async function withArtifactMcpClient<T>(
   ) {
     forbidden("MCP App expert-squad authority does not match the active session runtime contract")
   }
-  const runtimeTool = sessionRuntimeToolRecords(contract).projectedTools[authority.providerName]
+  const config = await EffectiveConfig.effective({ sessionID: artifact.sessionID })
+  const capabilityProjectDirectory = await EffectiveConfig.capabilityProjectDirectory({
+    sessionID: artifact.sessionID,
+  })
+  const capability =
+    contract.identity.identityKind === "projected-scheduler"
+      ? (
+          await resolvePinnedTaskSchedulerTurnProjection({
+            taskID: contract.identity.taskID,
+            projectDirectory: capabilityProjectDirectory,
+            config,
+          })
+        ).schedulerCapability
+      : (
+          await PromptProfileResolver.resolveWorkerTurnProjection({
+            config,
+            projectDirectory: capabilityProjectDirectory,
+            agentID: contract.identity.agentID,
+            packageRevision: contract.identity.packageRevision,
+          })
+        ).workerCapability
+  if (
+    capability.identity.projectionHash !== contract.identity.projectionHash ||
+    !sameExpertSquadPackageRevision(capability.packageRevision, contract.identity.packageRevision)
+  ) {
+    forbidden("MCP App expert-squad capability changed after artifact publication")
+  }
+  const owner = contract.resources?.mcp
+  if (!owner) forbidden("MCP App expert-squad runtime has no scoped connection owner")
+  const runtimeTool = await PromptProfileResolver.exactProjectedExtensionTool({
+    capability,
+    providerName: authority.providerName,
+    runtimeTools: {},
+    taskID: contract.identity.taskID,
+    projectDirectory: contract.projectDirectory,
+    toolDirectory: (await Session.get(artifact.sessionID)).directory,
+    connectionOwner: owner,
+  })
   const projected = projectedTaskToolRuntimeBindingOf(runtimeTool)
   if (
     !runtimeTool ||

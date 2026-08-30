@@ -6,7 +6,12 @@ import { missionVisibleExpertSquadIDs, requireMissionSession } from "@/mission/s
 import { MissionSkillCatalog } from "@/mission-skill/catalog"
 import { MCP } from "@/mcp"
 import { HostSessionMcpRuntime } from "@/mcp/host-session-runtime"
-import { isProjectedWorkerRuntimeContract, SessionRuntimeContractStore } from "@/session/runtime-contract"
+import {
+  isProjectedWorkerRuntimeContract,
+  sessionRuntimeToolOwner,
+  SessionRuntimeContractStore,
+} from "@/session/runtime-contract"
+import { runtimeToolOwnerIDs } from "@/session/runtime-tool-owner"
 import { SkillManager } from "@/skill/manager"
 import { ToolCapabilityInventory } from "@/tool/capability-inventory"
 import { canonicalDigestSource, compareCanonicalStrings } from "@/util/canonical-digest"
@@ -27,9 +32,12 @@ import {
   type CapabilitySetDescriptor,
 } from "@/capability/descriptor"
 import { capabilityRef, CapabilityRefCodec, type CapabilityRef } from "@opencorvus-ai/util/capability-ref"
-import type { HarnessProjection } from "@/capability/harness-projection"
+import { harnessGrantedRefs, type HarnessGrantSet } from "@/capability/harness-projection"
 import { resolveCapabilityCaller } from "@/capability/caller-authority"
 import { Session } from "@/session"
+import type { McpToolParentBindingV2 } from "@/capability/catalog-binding"
+import { CapabilityRules } from "@/capability/rules"
+import { visibleExecutionToolIDs } from "@/tool/execution-surface"
 
 export class CapabilityOwnerUnavailableError extends Error {
   override readonly name = "CapabilityOwnerUnavailableError"
@@ -286,6 +294,34 @@ function descriptorForProjectedRef(
   })
 }
 
+function descriptorForMcpMetadata(
+  kind: "mcp_prompt" | "mcp_resource",
+  ownerRef: string,
+  binding: MCP.CatalogMetadataBinding,
+): CapabilityDescriptor {
+  const ref = capabilityRef({
+    kind,
+    source: "project",
+    owner_ref: ownerRef,
+    local_ref: binding.runtime_name,
+  })
+  const label = binding.capability_name.trim().slice(0, 240) || binding.runtime_name.slice(0, 240)
+  const description =
+    binding.description?.slice(0, 2_000) ??
+    `Model Context Protocol ${kind === "mcp_prompt" ? "prompt" : "resource"} ${label}.`
+  return descriptor({
+    ref,
+    name: label,
+    description,
+    aliases: [],
+    search_terms: [kind === "mcp_prompt" ? "MCP prompt" : "MCP resource"],
+    behavior: {
+      kind: "unavailable",
+      reason_code: kind === "mcp_prompt" ? "mcp_prompt_metadata_only" : "mcp_resource_metadata_only",
+    },
+  })
+}
+
 function mcpAvailability(status: MCP.Status | undefined, assigned: boolean): CapabilityAvailability {
   if (status?.status === "needs_auth" || status?.status === "needs_client_registration") return "requires_auth"
   if (status?.status === "disabled" || status?.status === "failed") return "unavailable"
@@ -303,12 +339,15 @@ type RuntimeInput = {
   sessionID: string
   agentID: string
   executionToolIDs: readonly string[]
-  harnessProjection?: HarnessProjection
+  harnessGrants?: HarnessGrantSet
+  permission: CapabilityRules.Ruleset
+  toolSwitches?: Readonly<Record<string, boolean>>
 }
 
 async function buildRuntimeSnapshot(input: RuntimeInput): Promise<{
   caller: CapabilityCaller
   snapshot: CapabilityCatalogSnapshot
+  mcpToolParentBindings: McpToolParentBindingV2[]
 }> {
   const contract = SessionRuntimeContractStore.get(input.sessionID)
   const session = await Session.get(input.sessionID)
@@ -317,16 +356,21 @@ async function buildRuntimeSnapshot(input: RuntimeInput): Promise<{
     agentID: input.agentID,
     runtimeIdentityKind: contract?.identity.identityKind,
   })
-  const harnessProjection = input.harnessProjection ?? contract?.harnessProjection
+  const harnessGrants = input.harnessGrants ?? contract?.harnessGrants
+  const executableGrantRefs = harnessGrants ? harnessGrantedRefs(harnessGrants, "execute") : []
+  const discoverableGrantRefs = harnessGrants ? harnessGrantedRefs(harnessGrants, "discover") : []
   const publications = new Map<string, PublicationDraft>()
+  const mcpToolParentBindings: McpToolParentBindingV2[] = []
   const toolInventory = await readOwner("tool-registry", () => ToolCapabilityInventory.snapshot())
   const platformDescriptors = toolInventory.toolIDs.map((toolID) =>
     toolDescriptor({ toolID, ownerRef: "tool-registry" }),
   )
   const platformByID = new Map(platformDescriptors.map((entry) => [entry.ref.local_ref, entry]))
-  const platformToolIDs = harnessProjection
+  const platformToolIDs = harnessGrants
     ? new Set(
-        harnessProjection.tool_refs.filter((ref) => ref.owner_ref === "tool-registry").map((ref) => ref.local_ref),
+        discoverableGrantRefs
+          .filter((ref) => ref.kind === "tool" && ref.owner_ref === "tool-registry")
+          .map((ref) => ref.local_ref),
       )
     : new Set(input.executionToolIDs)
   const visiblePlatformDescriptors = [...new Set(input.executionToolIDs)]
@@ -341,8 +385,10 @@ async function buildRuntimeSnapshot(input: RuntimeInput): Promise<{
     sets: toolInventory.sets,
   })
 
-  const directlyProjectedMcpToolDescriptors =
-    !contract && harnessProjection ? harnessProjection.mcp_tool_refs.map((ref) => descriptorForProjectedRef(ref)) : []
+  let directlyProjectedMcpToolDescriptors =
+    !contract && harnessGrants
+      ? discoverableGrantRefs.filter((ref) => ref.kind === "mcp_tool").map((ref) => descriptorForProjectedRef(ref))
+      : []
 
   if (contract) {
     const identity = contract.identity
@@ -363,13 +409,13 @@ async function buildRuntimeSnapshot(input: RuntimeInput): Promise<{
         .filter((grant) => grant.agentIDs.includes(identity.agentID))
         .map((grant) => [grant.ref, grant.skill]),
     )
-    const projected = contract.harnessProjection
+    const projected = contract.harnessGrants
+    const projectedRefs = harnessGrantedRefs(projected, "execute")
+    const projectedDiscoverableRefs = harnessGrantedRefs(projected, "discover")
+    const projectedDiscoverableRefKeys = new Set(projectedDiscoverableRefs.map(CapabilityRefCodec.encode))
     const visibleToolIDs = new Set(input.executionToolIDs)
     const scopedRefs = [
-      ...projected.mcp_server_refs,
-      ...projected.mcp_tool_refs,
-      ...projected.mcp_prompt_refs,
-      ...projected.mcp_resource_refs,
+      ...projectedRefs.filter((ref) => ref.kind.startsWith("mcp_")),
     ]
     const scopedCatalog =
       scopedRefs.length > 0
@@ -391,14 +437,15 @@ async function buildRuntimeSnapshot(input: RuntimeInput): Promise<{
     const scopedStatusByServer = new Map(scopedCatalog?.entries.map((entry) => [entry.server_id, entry.status]) ?? [])
 
     const taskDescriptors: CapabilityDescriptor[] = [
-      ...projected.tool_refs
-        .filter((ref) => ref.owner_ref !== "tool-registry")
+      ...projectedRefs
+        .filter((ref) => ref.kind === "tool")
+        .filter((ref) => ref.owner_ref !== "tool-registry" && !ref.owner_ref.startsWith("dispatch-stage:"))
         .map((ref) =>
           descriptorForProjectedRef(ref, {
             description: `${titleFromID(ref.local_ref)} is published by ${identity.expertSquadID}.`,
           }),
         ),
-      ...projected.skill_refs.map((ref) => {
+      ...projectedRefs.filter((ref) => ref.kind === "skill").map((ref) => {
         const skill = skillByRef.get(ref.local_ref)
         return descriptor({
           ref,
@@ -413,12 +460,10 @@ async function buildRuntimeSnapshot(input: RuntimeInput): Promise<{
           },
         })
       }),
-      ...projected.mcp_server_refs.map((ref) => descriptorForProjectedRef(ref)),
-      ...projected.mcp_tool_refs.map((ref) => descriptorForProjectedRef(ref)),
-      ...projected.mcp_prompt_refs.map((ref) => descriptorForProjectedRef(ref)),
-      ...projected.mcp_resource_refs.map((ref) => descriptorForProjectedRef(ref)),
+      ...projectedRefs.filter((ref) => ref.kind.startsWith("mcp_")).map((ref) => descriptorForProjectedRef(ref)),
     ]
     const taskViews = taskDescriptors
+      .filter((entry) => projectedDiscoverableRefKeys.has(CapabilityRefCodec.encode(entry.ref)))
       .map((entry) => {
         if ((entry.ref.kind === "tool" || entry.ref.kind === "mcp_tool") && !visibleToolIDs.has(entry.ref.local_ref)) {
           return undefined
@@ -426,7 +471,10 @@ async function buildRuntimeSnapshot(input: RuntimeInput): Promise<{
         if (!entry.ref.kind.startsWith("mcp_")) {
           return view({ descriptor: entry, caller, availability: "visible" })
         }
-        const availability = scopedMcpAvailability(scopedStatusByServer.get(entry.ref.local_ref))
+        const availability =
+          entry.ref.kind === "mcp_tool"
+            ? "visible"
+            : scopedMcpAvailability(scopedStatusByServer.get(entry.ref.local_ref))
         return view({
           descriptor: entry,
           caller,
@@ -451,7 +499,8 @@ async function buildRuntimeSnapshot(input: RuntimeInput): Promise<{
     })
 
     if (isProjectedWorkerRuntimeContract(contract)) {
-      const stageToolIDs = Object.keys(contract.stageTools).sort(compareCanonicalStrings)
+      const runtimeOwner = sessionRuntimeToolOwner(contract)
+      const stageToolIDs = (runtimeOwner ? runtimeToolOwnerIDs(runtimeOwner, "stage") : []).sort(compareCanonicalStrings)
       if (stageToolIDs.length > 0) {
         const ownerRef = `dispatch-stage:${contract.identity.dispatchAdapterID}`
         const stageDescriptors = stageToolIDs.map((toolID) =>
@@ -472,7 +521,11 @@ async function buildRuntimeSnapshot(input: RuntimeInput): Promise<{
           }).sha256,
           descriptors: stageDescriptors,
           views: stageDescriptors
-            .filter((entry) => input.executionToolIDs.includes(entry.ref.local_ref))
+            .filter(
+              (entry) =>
+                input.executionToolIDs.includes(entry.ref.local_ref) &&
+                projectedDiscoverableRefKeys.has(CapabilityRefCodec.encode(entry.ref)),
+            )
             .map((entry) => view({ descriptor: entry, caller, availability: "visible" })),
         })
       }
@@ -531,7 +584,7 @@ async function buildRuntimeSnapshot(input: RuntimeInput): Promise<{
         aliases: [squad.name, squad.id],
         search_terms: squad.product_pillars,
         product_pillars: squad.product_pillars,
-        behavior: { kind: "create_task", action_tool_ref: platformToolRef("panel"), profile_id: squad.id },
+        behavior: { kind: "create_task", action_tool_ref: platformToolRef("panel_create_task"), profile_id: squad.id },
       }),
     )
     const visibleSquadIDs = new Set(visibleSquads.entries.map((entry) => entry.id))
@@ -543,9 +596,10 @@ async function buildRuntimeSnapshot(input: RuntimeInput): Promise<{
         .filter((entry) => visibleSquadIDs.has(entry.ref.local_ref))
         .map((entry) => view({ descriptor: entry, caller, availability: "installed_unbound" })),
     })
-  } else if (caller === "conversation" && ConversationCapability.isAgentID(input.agentID)) {
-    const assignment = ConversationCapability.assignment(input.config, input.agentID)
-    const projectedSkillNames = new Set((harnessProjection?.skill_refs ?? []).map((ref) => ref.local_ref))
+  } else if (caller === "conversation") {
+    const projectedSkillNames = new Set(
+      discoverableGrantRefs.filter((ref) => ref.kind === "skill").map((ref) => ref.local_ref),
+    )
     const installed = await readOwner("skill-manager", () => SkillManager.installedCatalogSnapshot())
     const skillDescriptors = installed.skills.map((skill) =>
       descriptor({
@@ -583,12 +637,60 @@ async function buildRuntimeSnapshot(input: RuntimeInput): Promise<{
         })
       }),
     })
+  }
 
+  if (!contract && (caller === "conversation" || caller === "mission")) {
+    const assignedMcpServerRefs = discoverableGrantRefs
+      .filter((ref) => ref.kind === "mcp_server" && ref.owner_ref === "mcp-config")
+      .map((ref) => ref.local_ref)
     const mcpCatalog = await readOwner("mcp-config", () => MCP.observedCatalogSnapshot(input.config))
+    await HostSessionMcpRuntime.prepareCatalog(input.config, input.sessionID, assignedMcpServerRefs)
     const hostSessionCatalogs = await readOwner("host-session-mcp", () =>
       HostSessionMcpRuntime.catalogSnapshots(input.sessionID),
     )
-    const assignedServers = new Set(assignment.mcp_server_refs)
+    const assignedServers = new Set(assignedMcpServerRefs)
+    const candidateChildToolIDs = [
+      ...hostSessionCatalogs.flatMap((catalog) =>
+        Object.values(catalog.tool_bindings)
+          .filter((binding) => assignedServers.has(binding.server_id))
+          .map((binding) => binding.runtime_name),
+      ),
+      ...directlyProjectedMcpToolDescriptors.map((entry) => entry.ref.local_ref),
+    ]
+    const eligibleChildToolIDs = new Set(
+      visibleExecutionToolIDs({
+        toolIDs: [...new Set(candidateChildToolIDs)],
+        permission: input.permission,
+        switches: input.toolSwitches,
+      }),
+    )
+    directlyProjectedMcpToolDescriptors = directlyProjectedMcpToolDescriptors.filter((entry) =>
+      eligibleChildToolIDs.has(entry.ref.local_ref),
+    )
+    const descendantToolRefs = [
+      ...hostSessionCatalogs.flatMap((catalog) => {
+        const ownerRef = HostSessionMcpRuntime.catalogOwnerRef(catalog.owner.owner_id)
+        return Object.values(catalog.tool_bindings)
+          .filter(
+            (binding) => assignedServers.has(binding.server_id) && eligibleChildToolIDs.has(binding.runtime_name),
+          )
+          .map((binding) =>
+            capabilityRef({
+              kind: "mcp_tool" as const,
+              source: "project" as const,
+              owner_ref: ownerRef,
+              local_ref: binding.runtime_name,
+            }),
+          )
+      }),
+    ]
+    const projectedMcpChildren = new Map(
+      [...directlyProjectedMcpToolDescriptors.map((entry) => entry.ref), ...descendantToolRefs].map((ref) => [
+        CapabilityRefCodec.encode(ref),
+        descriptorForProjectedRef(ref),
+      ]),
+    )
+    directlyProjectedMcpToolDescriptors = [...projectedMcpChildren.values()]
     const mcpServerDescriptors = Object.keys(input.config.mcp ?? {})
       .sort(compareCanonicalStrings)
       .map((serverID) =>
@@ -616,17 +718,40 @@ async function buildRuntimeSnapshot(input: RuntimeInput): Promise<{
         }),
       ),
     )
+    for (const binding of Object.values(mcpCatalog.tool_bindings).filter((candidate) =>
+      directlyProjectedMcpToolDescriptors.some(
+        (entry) => entry.ref.owner_ref === "mcp-config" && entry.ref.local_ref === candidate.runtime_name,
+      ),
+    )) {
+      mcpToolParentBindings.push({
+        tool_ref: capabilityRef({
+          kind: "mcp_tool",
+          source: "project",
+          owner_ref: "mcp-config",
+          local_ref: binding.runtime_name,
+        }),
+        server_ref: capabilityRef({
+          kind: "mcp_server",
+          source: "project",
+          owner_ref: "mcp-config",
+          local_ref: binding.server_id,
+        }),
+      })
+    }
     const mcpConfigDescriptors = [...mcpServerDescriptors, ...mcpConfigToolDescriptors]
     const projectedMcpRefIDs = new Set(
       directlyProjectedMcpToolDescriptors
-        .filter((entry) => input.executionToolIDs.includes(entry.ref.local_ref))
         .map((entry) => CapabilityRefCodec.encode(entry.ref)),
     )
     const hostCatalogByOwner = new Map(
       hostSessionCatalogs.map((entry) => [HostSessionMcpRuntime.catalogOwnerRef(entry.owner.owner_id), entry]),
     )
+    const hostStatusByServer = new Map(
+      hostSessionCatalogs.flatMap((catalog) =>
+        catalog.owner.entries.map((entry) => [entry.server_id, entry.status] as const),
+      ),
+    )
     for (const projected of directlyProjectedMcpToolDescriptors) {
-      if (!input.executionToolIDs.includes(projected.ref.local_ref)) continue
       const inventory =
         projected.ref.owner_ref === "mcp-config"
           ? mcpCatalog.tool_ids
@@ -655,7 +780,12 @@ async function buildRuntimeSnapshot(input: RuntimeInput): Promise<{
             : []
         }
         const assigned = assignedServers.has(entry.ref.local_ref)
-        const availability = mcpAvailability(mcpCatalog.statuses[entry.ref.local_ref], assigned)
+        const availability = mcpAvailability(
+          assigned
+            ? (hostStatusByServer.get(entry.ref.local_ref) ?? mcpCatalog.statuses[entry.ref.local_ref])
+            : mcpCatalog.statuses[entry.ref.local_ref],
+          assigned,
+        )
         return [
           view({
             descriptor: entry,
@@ -673,54 +803,83 @@ async function buildRuntimeSnapshot(input: RuntimeInput): Promise<{
     })
     for (const hostCatalog of hostSessionCatalogs) {
       const ownerRef = HostSessionMcpRuntime.catalogOwnerRef(hostCatalog.owner.owner_id)
-      const descriptors = hostCatalog.tool_ids.map((toolID) =>
+      const toolDescriptors = hostCatalog.tool_ids.map((toolID) =>
         descriptorForProjectedRef(
           capabilityRef({ kind: "mcp_tool", source: "project", owner_ref: ownerRef, local_ref: toolID }),
         ),
       )
+      const metadataDescriptors = [
+        ...Object.values(hostCatalog.prompt_bindings).map((binding) =>
+          descriptorForMcpMetadata("mcp_prompt", ownerRef, binding),
+        ),
+        ...Object.values(hostCatalog.resource_bindings).map((binding) =>
+          descriptorForMcpMetadata("mcp_resource", ownerRef, binding),
+        ),
+      ]
+      const descriptors = [...toolDescriptors, ...metadataDescriptors]
+      for (const binding of Object.values(hostCatalog.tool_bindings).filter(
+        (candidate) =>
+          assignedServers.has(candidate.server_id) && eligibleChildToolIDs.has(candidate.runtime_name),
+      )) {
+        mcpToolParentBindings.push({
+          tool_ref: capabilityRef({
+            kind: "mcp_tool",
+            source: "project",
+            owner_ref: ownerRef,
+            local_ref: binding.runtime_name,
+          }),
+          server_ref: capabilityRef({
+            kind: "mcp_server",
+            source: "project",
+            owner_ref: "mcp-config",
+            local_ref: binding.server_id,
+          }),
+        })
+      }
       addPublication(publications, {
         ownerRef,
         ownerRevision: hostCatalog.owner_revision,
         descriptors,
-        views: descriptors
+        views: [
+          ...toolDescriptors
           .filter((entry) => projectedMcpRefIDs.has(CapabilityRefCodec.encode(entry.ref)))
           .map((entry) => view({ descriptor: entry, caller, availability: "visible" })),
+          ...metadataDescriptors.map((entry) => view({ descriptor: entry, caller, availability: "visible" })),
+        ],
       })
     }
     const foreignMcpToolDescriptors = directlyProjectedMcpToolDescriptors.filter(
       (entry) => entry.ref.owner_ref !== "mcp-config" && !hostCatalogByOwner.has(entry.ref.owner_ref),
     )
     addPublicationsByOwner(publications, {
-      ownerRevision: harnessProjection?.owner_revision ?? "direct-mcp-projection",
+      ownerRevision: harnessGrants?.owner_revision ?? "direct-mcp-projection",
       descriptors: foreignMcpToolDescriptors,
       views: foreignMcpToolDescriptors
-        .filter((entry) => input.executionToolIDs.includes(entry.ref.local_ref))
         .map((entry) => view({ descriptor: entry, caller, availability: "visible" })),
     })
-  } else if (directlyProjectedMcpToolDescriptors.length > 0) {
+  } else if (!contract && directlyProjectedMcpToolDescriptors.length > 0) {
     addPublicationsByOwner(publications, {
-      ownerRevision: harnessProjection?.owner_revision ?? "direct-mcp-projection",
+      ownerRevision: harnessGrants?.owner_revision ?? "direct-mcp-projection",
       descriptors: directlyProjectedMcpToolDescriptors,
       views: directlyProjectedMcpToolDescriptors
-        .filter((entry) => input.executionToolIDs.includes(entry.ref.local_ref))
         .map((entry) => view({ descriptor: entry, caller, availability: "visible" })),
     })
   }
 
-  const contextRef = harnessProjection
+  const contextRef = harnessGrants
     ? CapabilityRefCodec.encode(
         capabilityRef({
           kind: "capability_set",
           source: contract ? "package" : "project",
           owner_ref: "runtime-harness",
-          local_ref: harnessProjection.projection_hash,
+          local_ref: harnessGrants.grant_hash,
         }),
       )
     : `${caller}:${input.agentID}`
   const contextRevision = canonicalDigestSource("runtime-capability-catalog-context-v2", {
     caller,
     agent_id: input.agentID,
-    harness_projection_hash: harnessProjection?.projection_hash ?? null,
+    harness_grant_hash: harnessGrants?.grant_hash ?? null,
     execution_tool_ids: [...new Set(input.executionToolIDs)].sort(compareCanonicalStrings),
     runtime_identity: contract
       ? {
@@ -739,13 +898,20 @@ async function buildRuntimeSnapshot(input: RuntimeInput): Promise<{
     sources: publishedSources,
     projections,
   })
-  return { caller, snapshot }
+  return {
+    caller,
+    snapshot,
+    mcpToolParentBindings: mcpToolParentBindings.sort((left, right) =>
+      compareCanonicalStrings(CapabilityRefCodec.encode(left.tool_ref), CapabilityRefCodec.encode(right.tool_ref)),
+    ),
+  }
 }
 
 export namespace RuntimeCapabilityCatalog {
   export async function snapshot(input: RuntimeInput): Promise<{
     caller: CapabilityCaller
     snapshot: CapabilityCatalogSnapshot
+    mcpToolParentBindings: McpToolParentBindingV2[]
   }> {
     return buildRuntimeSnapshot(input)
   }

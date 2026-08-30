@@ -27,6 +27,7 @@ import { requireTask } from "../src/engine/store"
 import { isTaskTerminal } from "../src/engine/task-status"
 import { Database } from "../src/storage/db"
 import { asSchema } from "ai"
+import { bindRuntimeToolFactory, createRuntimeToolOwner } from "../src/session/runtime-tool-owner"
 
 const packageRevision = {
   scope: "built_in" as const,
@@ -160,8 +161,7 @@ async function establishProjectedSchedulerSnapshot(input: {
       taskID,
       agentID: "orchestrator",
     },
-    stageTools: {},
-    projectedTools: {},
+    resources: { tools: createRuntimeToolOwner({ leaves: [] }) },
   } as unknown as SessionRuntimeContract
   const source = resolveArtifactSnapshotReadAuthorityFromFacts({
     scope,
@@ -438,8 +438,18 @@ describe("Task Artifact immutable Git commit publication", () => {
             agentID: "base-developer",
             dispatchAdapterID: "build",
           },
-          stageTools: { merge_back: {} },
-          projectedTools: {},
+          resources: {
+            tools: createRuntimeToolOwner({
+              leaves: [
+                bindRuntimeToolFactory({
+                  toolID: "merge_back",
+                  kind: "stage",
+                  factoryInput: { source: "test-merge-back" },
+                  materialize: () => ({} as never),
+                }),
+              ],
+            }),
+          },
         } as unknown as SessionRuntimeContract
         const messages = await Session.messages({ sessionID: workerSession.id })
         const source = resolveArtifactSnapshotReadAuthorityFromFacts({
@@ -472,7 +482,10 @@ describe("Task Artifact immutable Git commit publication", () => {
 
         const currentProjectSource = resolveArtifactSnapshotReadAuthorityFromFacts({
           scope,
-          contract: { ...runtimeContract, stageTools: {} } as SessionRuntimeContract,
+          contract: {
+            ...runtimeContract,
+            resources: { tools: createRuntimeToolOwner({ leaves: [] }) },
+          } as SessionRuntimeContract,
           messages,
         })
         const currentPublication = await publishTaskArtifactProjectFiles({

@@ -3,7 +3,6 @@ import { AgentToolPool } from "@/agent/tool-pool-contract"
 import { PrimaryAssistantRegistry } from "@/agent/primary-assistant-registry"
 import type { SessionAgentRuntime } from "@/agent/session-agent-runtime"
 import { Config } from "@/config/config"
-import { HostSessionMcpRuntime } from "@/mcp/host-session-runtime"
 import { Instance } from "@/project/instance"
 import { skillDisabledReason, skillLoaderAvailable } from "@/skill/eligibility"
 import { SkillManager } from "@/skill/manager"
@@ -11,7 +10,7 @@ import { withSkillCatalogReferenceRead } from "@/skill/reference-lock"
 import type { ResolvedSkillSurface } from "@/skill/surface"
 import { WORK_DEFAULT_CAPABILITY_ASSIGNMENT } from "@/work/harness"
 import { NamedError } from "@opencorvus-ai/util/error"
-import { createHarnessProjection } from "@/capability/harness-projection"
+import { createHarnessGrantSet, harnessLeafAccess } from "@/capability/harness-projection"
 import { capabilityRef, CapabilityRefCodec, type CapabilityRef } from "@opencorvus-ai/util/capability-ref"
 import { canonicalDigestSource, compareCanonicalStrings } from "@/util/canonical-digest"
 
@@ -136,6 +135,7 @@ export namespace ConversationCapability {
     runtime: SessionAgentRuntime
     availableToolNames?: Iterable<string>
     explicitSkillNames?: Iterable<string>
+    activeSkillNames?: Iterable<string>
     scope: "project" | "session"
   }): Promise<Extract<ResolvedSkillSurface, { family: "production" }>> {
     return withSkillCatalogReferenceRead(async () => {
@@ -154,7 +154,10 @@ export namespace ConversationCapability {
       const installedByName = new Map(installed.map((skill) => [skill.name, skill]))
       const selected = assignment(input.config, input.agentID)
       const explicitSkillNames = unique([...(input.explicitSkillNames ?? [])], `${input.agentID} explicit Skill names`)
-      const effectiveSkillNames = [...new Set([...selected.skill_refs, ...explicitSkillNames])]
+      const activeSkillNames = input.activeSkillNames
+        ? unique([...input.activeSkillNames], `${input.agentID} active Skill names`)
+        : undefined
+      const effectiveSkillNames = activeSkillNames ?? [...new Set([...selected.skill_refs, ...explicitSkillNames])]
       const skills = effectiveSkillNames.map((ref) => {
         const skill = installedByName.get(ref)
         if (!skill) {
@@ -215,18 +218,20 @@ export namespace ConversationCapability {
     })
   }
 
-  export async function harnessProjection(
+  export async function harnessGrants(
     agentID: ConversationAgentID,
     input?: {
       config?: Config.Info
       executionToolIDs?: Iterable<string>
       executionMcpToolRefs?: Iterable<CapabilityRef>
       skillRefs?: Iterable<string>
+      includeMcpTools?: boolean
     },
   ) {
     const config = input?.config ?? (await Config.get())
     const agent = await PrimaryAssistantRegistry.get(agentID, { config })
     const selected = assignment(config, agentID)
+    const selectedMcpServerRefs = input?.includeMcpTools === false ? [] : selected.mcp_server_refs
     const mcpToolRefs = [...(input?.executionMcpToolRefs ?? [])]
     for (const ref of mcpToolRefs) {
       if (ref.kind !== "mcp_tool") throw new Error(`Conversation MCP Tool Harness received ${ref.kind} reference.`)
@@ -236,28 +241,40 @@ export namespace ConversationCapability {
       (toolID) => !mcpToolIDs.has(toolID),
     )
     const skillRefs = [...new Set(input?.skillRefs ?? selected.skill_refs)]
-    return createHarnessProjection({
+    const installedSkills = await SkillManager.installedCatalogSnapshot()
+    const installedSkillByName = new Map(installedSkills.skills.map((skill) => [skill.name, skill]))
+    const skillCapabilityRefs = skillRefs.map((name) => {
+      const skill = installedSkillByName.get(name)
+      if (!skill) throw new Error(`Conversation ${agentID} projects unknown Skill ${name}.`)
+      return capabilityRef({
+        kind: "skill",
+        source: skill.builtin ? "platform" : "project",
+        owner_ref: "skill-manager",
+        local_ref: name,
+      })
+    })
+    return createHarnessGrantSet({
       context: { kind: "conversation", agent_id: agentID },
-      owner_revision: canonicalDigestSource("conversation-harness-owner-v1", {
+      owner_revision: canonicalDigestSource("conversation-harness-grants-v2", {
         agent_id: agentID,
         tool_ids: [...toolIDs].sort(compareCanonicalStrings),
-        skill_refs: [...skillRefs].sort(compareCanonicalStrings),
-        mcp_server_refs: [...selected.mcp_server_refs].sort(compareCanonicalStrings),
+        skill_refs: skillCapabilityRefs.map(CapabilityRefCodec.encode).sort(compareCanonicalStrings),
+        mcp_server_refs: [...selectedMcpServerRefs].sort(compareCanonicalStrings),
         mcp_tool_refs: mcpToolRefs.map(CapabilityRefCodec.encode).sort(compareCanonicalStrings),
       }).sha256,
-      tool_refs: toolIDs.map((toolID) =>
-        capabilityRef({ kind: "tool", source: "platform", owner_ref: "tool-registry", local_ref: toolID }),
-      ),
-      skill_refs: skillRefs.map((ref) =>
-        capabilityRef({ kind: "skill", source: "project", owner_ref: `${agentID}-capability`, local_ref: ref }),
-      ),
-      mission_skill_refs: [],
-      mcp_server_refs: selected.mcp_server_refs.map((ref) =>
-        capabilityRef({ kind: "mcp_server", source: "project", owner_ref: "mcp-config", local_ref: ref }),
-      ),
-      mcp_tool_refs: mcpToolRefs,
-      mcp_prompt_refs: [],
-      mcp_resource_refs: [],
+      grants: [
+        ...toolIDs.map((toolID) => {
+          const ref = capabilityRef({ kind: "tool", source: "platform", owner_ref: "tool-registry", local_ref: toolID })
+          return { ref, access: harnessLeafAccess(ref) }
+        }),
+        ...skillCapabilityRefs.map((ref) => ({ ref, access: "discover_execute" as const })),
+        ...selectedMcpServerRefs.map((ref) => ({
+          ref: capabilityRef({ kind: "mcp_server", source: "project", owner_ref: "mcp-config", local_ref: ref }),
+          access: "discover_execute" as const,
+          descendant_scope: ["mcp_tool" as const, "mcp_prompt" as const, "mcp_resource" as const],
+        })),
+        ...mcpToolRefs.map((ref) => ({ ref, access: "discover_execute" as const })),
+      ],
     })
   }
 
@@ -286,8 +303,4 @@ export namespace ConversationCapability {
     return settings(agentID)
   }
 
-  export async function runtimeMcpTools(config: Config.Info, agentID: ConversationAgentID, sessionID: string) {
-    const selected = assignment(config, agentID)
-    return HostSessionMcpRuntime.tools(config, sessionID, selected.mcp_server_refs)
-  }
 }

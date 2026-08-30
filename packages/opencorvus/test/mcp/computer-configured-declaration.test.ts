@@ -5,6 +5,7 @@ import { BrowserMCPBuiltin } from "@/mcp/browser/builtin"
 import { ComputerMCPBuiltin } from "@/mcp/computer/builtin"
 import { Instance } from "@/project/instance"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
+import { prepareConversationMcpCatalog } from "../fixture/conversation-mcp"
 
 afterEach(async () => {
   await Instance.disposeAll()
@@ -49,13 +50,13 @@ describe("the configured declaration is the Computer provider", () => {
         }))
 
         const config = await Config.get()
-        const tools = await ConversationCapability.runtimeMcpTools(
+        const catalog = await prepareConversationMcpCatalog(
           config,
           "work",
           "session-computer-configured-declaration",
         )
 
-        expect(Object.keys(tools).sort()).toEqual([
+        expect(catalog.names).toEqual([
           "browser_check",
           "browser_click",
           "browser_count",

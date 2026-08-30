@@ -38,6 +38,7 @@ import { ProviderSchema } from "../provider/schema"
 import { artifactSnapshotSourceForRuntimeContract } from "@/build/merge-back-publication-authority"
 import { SystemPrompt } from "./system"
 import { EffectiveConfig } from "@/config/effective"
+import { ConversationCapability } from "@/conversation/capability"
 import { resolveAgentModel, resolveProjectedWorkerModel } from "@/agent/model"
 import { InstructionPrompt } from "./instruction"
 import { Plugin } from "../plugin"
@@ -62,17 +63,17 @@ import { bindProjectedTaskToolRuntime, projectedTaskToolRuntimeBindingOf } from 
 import type { ResolvedSkillSurface } from "@/skill/surface"
 import { AgentToolPool } from "@/agent/tool-pool-contract"
 import { CapabilityRules } from "@/capability/rules"
-import { capabilityRef } from "@opencorvus-ai/util/capability-ref"
+import { capabilityRef, CapabilityRefCodec, type CapabilityRef } from "@opencorvus-ai/util/capability-ref"
 import { SessionStatus, sessionLifecycleOrderKey } from "./status"
 import { ensureTitle } from "./prompt/title"
 import { Truncate } from "@/tool/truncation"
 import {
   createToolExecutionSurface,
   applyToolExecutionPolicy,
+  visibleExecutionToolIDs,
   toolSwitchAllows as executionToolSwitchAllows,
   type ToolExecutionSurface,
 } from "@/tool/execution-surface"
-import { TASK_ARTIFACT_SCHEDULER_TOOL_IDS, TASK_ARTIFACT_TOOL_IDS } from "@/tool/tool-id-catalog"
 import { MemoryInjection } from "@/memory/injection"
 import { resolveSessionMessageIdentity } from "./message-identity"
 import type { SessionAgentRuntime } from "@/agent/session-agent-runtime"
@@ -101,7 +102,7 @@ import {
   assertSessionLoopRuntimeContract,
   isProjectedSchedulerRuntimeContract,
   isSessionRuntimeSystemProjection,
-  sessionRuntimeToolRecords,
+  sessionRuntimeToolOwner,
   SessionRuntimeContractStore,
   type SessionRuntimeContract as RuntimeContract,
   type SessionRuntimeContractIdentity as RuntimeContractIdentity,
@@ -111,20 +112,57 @@ import {
   sessionKindRequiresRuntimeContract as sessionKindRequiresRuntimeContractImpl,
   validateSessionRuntimeContractForContinuation as validateSessionRuntimeContractForContinuationImpl,
 } from "./runtime-contract-validation"
-import { createMcpAppToolLifecycle, mcpAppAuthorityForRuntimeTool } from "@/interactive-artifact/mcp-app-lifecycle"
+import {
+  McpAppToolLifecycleOwnerConflictError,
+  createMcpAppToolLifecycle,
+  mcpAppAuthorityForRuntimeTool,
+  type McpAppToolLifecycleController,
+} from "@/interactive-artifact/mcp-app-lifecycle"
 import { visibleMentionDirectiveRanges } from "@opencorvus-ai/transport-protocol"
-import type { HarnessProjection } from "@/capability/harness-projection"
-import { CatalogOccurrenceBinding, CorruptCatalogOccurrenceError } from "@/capability/catalog-binding"
+import {
+  bindHarnessProjection,
+  createHarnessGrantSet,
+  harnessGrantedRefs,
+  harnessLeafAccess,
+  type HarnessGrantSet,
+  type HarnessProjection,
+} from "@/capability/harness-projection"
+import {
+  CatalogOccurrenceBinding,
+  CorruptCatalogOccurrenceError,
+  StaleCatalogOccurrenceError,
+  type CatalogSnapshotBindingV2,
+  type CatalogViewSnapshotPayloadV2,
+} from "@/capability/catalog-binding"
 import { RuntimeCapabilityCatalog } from "@/tool/capability-runtime-catalog"
+import {
+  CAPABILITY_REVEAL_OWNER_EXTRA_KEY,
+  capabilityRevealOccurrenceParts,
+  createCapabilityRevealOwner,
+  normalizedProviderToolDefinition,
+  type CapabilityRevealOwner,
+} from "@/capability/reveal-owner"
+import {
+  CAPABILITY_SEARCH_INITIAL_MAX_CHARS,
+  CAPABILITY_SEARCH_INITIAL_MAX_TOKENS,
+  capabilityRevealBaseDefinitions,
+  foldCapabilityRevealReceipts,
+  createTurnCapabilityProjection,
+  providerToolDefinitionChars,
+  providerToolDefinitionDigest,
+  providerToolDefinitionTokens,
+  type TurnCapabilityProjectionV2,
+} from "@/capability/reveal-receipt"
+import { CAPABILITY_SEARCH_TOOL_ID } from "@/tool/capability-search"
+import { canonicalDigestSource } from "@/util/canonical-digest"
 import { compareTimelineOrderKeys, timelineMessageOrderKey } from "@/timeline/order"
 import { PermissionAuthority } from "@/permission/authority"
 import { composeProjectedWorkerSystemPrompt } from "@/agent/projected-worker-system-prompt"
+import { createRecoveredDispatchStageToolFactory } from "@/agent/dispatch-stage-tool-factory"
 import { sessionRuntimeWithResolvedModel } from "@/agent/session-agent-runtime"
 import { textSHA256 } from "@/expert-squad/projection-hash"
 import { sameExpertSquadPackageRevision } from "@/expert-squad/package-revision"
-import { createAgentCoordinationRuntimeTools } from "@/agent/coordination-runtime-tools"
-import { createAgentContextTools } from "@/agent/context-tools"
-import { filterAgentTools } from "@/agent/filter-tools"
+import { createAgentContextToolFactory } from "@/agent/context-tools"
 import { computerRuntimeScopeIdentity } from "@/mcp/computer/runtime-scope"
 import { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
 import { DispatchAdapterContractRegistry } from "@/agent/dispatch-adapter-contract"
@@ -132,7 +170,8 @@ import { coordinationHandoffPrompt } from "@/prompt/fragments/coordination-hando
 import { resolvePinnedTaskSchedulerTurnProjection } from "@/engine/task-package-projection"
 import { taskRootIngressSemanticTurnLimit } from "@/engine/task-root-ingress-policy-read"
 import { requireTask } from "@/engine/store"
-import { createOrchestratorTools } from "@/orchestrator/tools"
+import { bindRuntimeToolFactories, createRuntimeToolOwner } from "./runtime-tool-owner"
+import { createExactOrchestratorTool } from "@/orchestrator/tools"
 import {
   recoverInterruptedDispatchAgentsPart,
   type DispatchAgentsRecoveryTool,
@@ -157,6 +196,7 @@ import {
   type ToolExecutionModeDeclaration,
 } from "@/tool/execution-mode"
 import {
+  bindInternalStageTool,
   materializeBoundStageTool,
   internalStageToolBindingOf,
   stageToolMaterializerBindingOf,
@@ -1509,6 +1549,63 @@ export namespace SessionLoop {
     })
   }
 
+  export async function resolveOccurrenceHarnessGrants(input: {
+    runtimeContract?: RuntimeContract
+    agentID: string
+    session: Session.Info
+    agent: SessionAgentRuntime
+    config: Config.Info
+    includeMcpTools?: boolean
+  }): Promise<HarnessGrantSet> {
+    if (input.runtimeContract) return input.runtimeContract.harnessGrants
+    if (ConversationCapability.isAgentID(input.agentID)) {
+      return ConversationCapability.harnessGrants(input.agentID, {
+        config: input.config,
+        includeMcpTools: input.includeMcpTools,
+      })
+    }
+    if (input.agentID === "mission" && input.session.kind === "mission") {
+      return (await import("@/mission-skill/runtime")).MissionSkillRuntime.harnessGrants({
+        agentID: input.agentID,
+        sessionKind: input.session.kind,
+        runtime: input.agent,
+        config: input.config,
+        includeMcpTools: input.includeMcpTools,
+      })
+    }
+    const mcpServerRefs = input.includeMcpTools === false ? [] : Object.keys(input.config.mcp ?? {}).sort()
+    const toolIDs = [...AgentToolPool.visibleToolIDs(input.agent.tools)].sort()
+    return createHarnessGrantSet({
+      context: { kind: "conversation", agent_id: input.agentID },
+      owner_revision: canonicalDigestSource("native-conversation-harness-grants-v2", {
+        agent_id: input.agentID,
+        tool_ids: toolIDs,
+        mcp_server_refs: mcpServerRefs,
+      }).sha256,
+      grants: [
+        ...toolIDs.map((toolID) => {
+          const ref = capabilityRef({
+            kind: "tool" as const,
+            source: "platform" as const,
+            owner_ref: "tool-registry",
+            local_ref: toolID,
+          })
+          return { ref, access: harnessLeafAccess(ref) }
+        }),
+        ...mcpServerRefs.map((serverID) => ({
+          ref: capabilityRef({
+            kind: "mcp_server" as const,
+            source: "project" as const,
+            owner_ref: "mcp-config",
+            local_ref: serverID,
+          }),
+          access: "discover_execute" as const,
+          descendant_scope: ["mcp_tool" as const, "mcp_prompt" as const, "mcp_resource" as const],
+        })),
+      ],
+    })
+  }
+
   async function beginStandby(input: {
     sessionID: string
     abort: AbortSignal
@@ -1678,6 +1775,9 @@ export namespace SessionLoop {
       abort: input.abort,
       retainAssistantOnToolContinuation: Boolean(taskRootActivation),
       stopAfterAssistantCompletion: Boolean(taskRootActivation),
+      beforeAssistantCompletion(message) {
+        if (structured !== undefined) message.structured = structured
+      },
       retainAssistantForNextProviderStep:
         taskRootActivation && taskRootSemanticTurnLimit !== undefined
           ? async (message) => {
@@ -1702,24 +1802,91 @@ export namespace SessionLoop {
         : undefined
     const messagePromptProjection = controlPromptProjection(agentID, input.sessionID)
     const controlRuntimeContext = controlToolContext(input.sessionID)
-    const tools = await resolveTools({
-      agent,
+    const occurrenceIncludeMcpTools = messagePromptProjection?.includeMcpTools ?? input.lastUser.includeMcpTools
+    const toolSwitches =
+      runtimeIdentity?.identityKind === "projected-worker"
+        ? toolSwitchesFromWorkerTurnDescriptor(workerTurnDescriptor)
+        : (messagePromptProjection?.tools ?? input.lastUser.tools)
+    const occurrenceGrants = await resolveOccurrenceHarnessGrants({
+      runtimeContract,
       agentID,
       session: input.session,
-      model: input.model,
-      tools:
-        runtimeIdentity?.identityKind === "projected-worker"
-          ? toolSwitchesFromWorkerTurnDescriptor(workerTurnDescriptor)
-          : (messagePromptProjection?.tools ?? input.lastUser.tools),
-      includeMcpTools: messagePromptProjection?.includeMcpTools ?? input.lastUser.includeMcpTools,
-      processor,
-      extra: controlRuntimeContext ? { controlPromptContext: controlRuntimeContext } : input.lastUser.extra,
-      messages: input.msgs,
+      agent,
       config,
-      reservedProviderToolNames: structuredOutputOwner
-        ? [{ name: "StructuredOutput", owner: structuredOutputOwner }]
-        : undefined,
+      includeMcpTools: occurrenceIncludeMcpTools,
     })
+    const executableGrantRefs = harnessGrantedRefs(occurrenceGrants, "execute")
+    const registryGrantIDs = executableGrantRefs
+      .filter((ref) => ref.kind === "tool" && ref.owner_ref === "tool-registry")
+      .map((ref) => ref.local_ref)
+    const projectableRegistryIDs = await ToolRegistry.projectableRuntimeToolIDs(
+      { modelID: input.model.api.id, providerID: input.model.providerID },
+      agent,
+      config,
+      registryGrantIDs,
+    )
+    const grantedProviderToolIDs = [
+      ...projectableRegistryIDs,
+      ...executableGrantRefs
+        .filter((ref) => ref.kind === "mcp_tool" || (ref.kind === "tool" && ref.owner_ref !== "tool-registry"))
+        .map((ref) => ref.local_ref),
+    ]
+    const policyProviderToolIDs = visibleExecutionToolIDs({
+      toolIDs: [...new Set(grantedProviderToolIDs)],
+      permission: CapabilityRules.merge(agent.permission, input.session.permission),
+      switches: toolSwitches,
+    })
+    if (!policyProviderToolIDs.includes("capability_search")) {
+      throw new Error(`Session ${input.sessionID} Harness does not expose the required capability_search Tool.`)
+    }
+    const materializationScope = await CatalogOccurrenceBinding.materializationScope({ model: input.model, config })
+    const parentInput =
+      input.msgs.find((message) => message.info.id === input.lastUser.id) ??
+      (await MessageStore.get({ sessionID: input.sessionID, messageID: input.lastUser.id }))
+    const existingCatalogBinding = CatalogOccurrenceBinding.bindingFromInput(parentInput)
+    let catalogBinding: CatalogSnapshotBindingV2
+    let catalogPayload: CatalogViewSnapshotPayloadV2
+    if (existingCatalogBinding) {
+      const payload = await CatalogOccurrenceBinding.read({
+        projectID: Instance.project.id,
+        binding: existingCatalogBinding,
+      })
+      CatalogOccurrenceBinding.assertCurrent({ payload, materializationScope, runtimeContract })
+      catalogPayload = payload
+      await Session.beginAssistantReply(assistantMessage)
+      catalogBinding = existingCatalogBinding
+    } else {
+      if (openTaskRootAssistant) {
+        throw new CorruptCatalogOccurrenceError(
+          "unbound",
+          `Open assistant ${assistantMessage.id} has no Catalog binding on input ${input.lastUser.id}.`,
+        )
+      }
+      const catalog = await RuntimeCapabilityCatalog.snapshot({
+        config,
+        sessionID: input.sessionID,
+        agentID,
+        executionToolIDs: policyProviderToolIDs,
+        harnessGrants: occurrenceGrants,
+        permission: CapabilityRules.merge(agent.permission, input.session.permission),
+        toolSwitches,
+      })
+      const payload = CatalogOccurrenceBinding.payload({
+        snapshot: catalog.snapshot,
+        mcpToolParentBindings: catalog.mcpToolParentBindings,
+        materializationScope,
+        runtimeContract,
+      })
+      catalogPayload = payload
+      catalogBinding = await CatalogOccurrenceBinding.publish({ projectID: Instance.project.id, payload })
+      await CatalogOccurrenceBinding.bindAndBeginAssistant({
+        projectID: Instance.project.id,
+        assistant: assistantMessage,
+        parent: parentInput,
+        binding: catalogBinding,
+      })
+    }
+    const occurrenceHarness = bindHarnessProjection(occurrenceGrants, catalogBinding)
     const structuredOutputTool =
       input.lastUser.format?.type === "json_schema"
         ? prepareProviderTool({
@@ -1734,57 +1901,34 @@ export namespace SessionLoop {
             }),
           })
         : undefined
+    const tools = await resolveTools({
+      agent,
+      agentID,
+      session: input.session,
+      model: input.model,
+      tools: toolSwitches,
+      includeMcpTools: occurrenceIncludeMcpTools,
+      processor,
+      extra: controlRuntimeContext ? { controlPromptContext: controlRuntimeContext } : input.lastUser.extra,
+      messages: input.msgs,
+      config,
+      harnessProjection: occurrenceHarness,
+      occurrenceID: input.lastUser.id,
+      reservedProviderTools:
+        structuredOutputOwner && structuredOutputTool
+          ? [{ name: "StructuredOutput", owner: structuredOutputOwner, tool: structuredOutputTool }]
+        : undefined,
+    })
     const skillSurface = await finalizeResolvedToolSkillSurface(
       tools,
       structuredOutputTool ? [...Object.keys(tools), "StructuredOutput"] : Object.keys(tools),
     )
     coordinateResolvedToolExecutionSurface(tools)
-    const occurrenceToolIDs = Object.keys(tools)
-    const occurrenceHarness = harnessProjectionForResolvedTools(tools)
-    const materializationScope = await CatalogOccurrenceBinding.materializationScope({ model: input.model, config })
-    const parentInput =
-      input.msgs.find((message) => message.info.id === input.lastUser.id) ??
-      (await MessageStore.get({ sessionID: input.sessionID, messageID: input.lastUser.id }))
-    const existingCatalogBinding = CatalogOccurrenceBinding.bindingFromInput(parentInput)
-    if (existingCatalogBinding) {
-      const payload = await CatalogOccurrenceBinding.read({
-        projectID: Instance.project.id,
-        binding: existingCatalogBinding,
-      })
-      CatalogOccurrenceBinding.assertCurrent({ payload, materializationScope, runtimeContract })
-      await Session.beginAssistantReply(assistantMessage)
-    } else {
-      if (openTaskRootAssistant) {
-        throw new CorruptCatalogOccurrenceError(
-          "unbound",
-          `Open assistant ${assistantMessage.id} has no Catalog binding on input ${input.lastUser.id}.`,
-        )
-      }
-      const catalog = await RuntimeCapabilityCatalog.snapshot({
-        config,
-        sessionID: input.sessionID,
-        agentID,
-        executionToolIDs: occurrenceToolIDs,
-        harnessProjection: occurrenceHarness,
-      })
-      const payload = CatalogOccurrenceBinding.payload({
-        snapshot: catalog.snapshot,
-        materializationScope,
-        runtimeContract,
-      })
-      const binding = await CatalogOccurrenceBinding.publish({ projectID: Instance.project.id, payload })
-      await CatalogOccurrenceBinding.bindAndBeginAssistant({
-        projectID: Instance.project.id,
-        assistant: assistantMessage,
-        parent: parentInput,
-        binding,
-      })
-    }
     SessionPromptState.bindMessageOwner(input.sessionID, assistantMessage.id, input.abort)
     await SessionStatus.set(input.sessionID, { type: "streaming" }, { promptGenerationOwner: input.abort })
-    // StructuredOutput encodes the assistant response. It is not an executable
-    // effect, permission occurrence, or turn-control producer, so it is added
-    // only after the final executable Tool surface has been coordinated.
+    // StructuredOutput encodes the assistant response. It is not Harness-
+    // discoverable, but its Provider definition is admitted into the immutable
+    // revision-0 budget before the executable surface is finalized.
     if (structuredOutputTool && structuredOutputOwner) {
       bindReservedProviderTool(tools, "StructuredOutput", structuredOutputOwner, structuredOutputTool)
     }
@@ -2135,9 +2279,6 @@ export namespace SessionLoop {
     })
 
     if (structured !== undefined) {
-      processor.message.structured = structured
-      processor.message.finish = processor.message.finish ?? "stop"
-      await Session.updateMessage(processor.message)
       return "stop" as const
     }
 
@@ -2351,10 +2492,11 @@ export namespace SessionLoop {
           messageID: candidate.info.id,
           part: frontier,
           createFrontierTool: (frontierInput) =>
-            createOrchestratorTools({
+            createExactOrchestratorTool({
               ...frontierInput,
+              toolID: "dispatch_agents",
               sendSchedulerMessage,
-            }).tools.dispatch_agents as DispatchAgentsRecoveryTool | undefined,
+            }) as DispatchAgentsRecoveryTool | undefined,
           signal,
         })
       }
@@ -3072,9 +3214,12 @@ export namespace SessionLoop {
     extra?: Record<string, unknown>
     messages: Message.WithParts[]
     config: Config.Info
-    reservedProviderToolNames?: readonly {
+    harnessProjection: HarnessProjection
+    occurrenceID: string
+    reservedProviderTools?: readonly {
       name: string
       owner: ProviderToolNameOwner
+      tool: AITool
     }[]
   }) {
     using _ = log.time("resolveTools")
@@ -3093,8 +3238,20 @@ export namespace SessionLoop {
     const toolSources = new Map<string, ProviderToolSource>()
     const providerToolNameOwners = new Map<string, ProviderToolNameOwner>()
     resolvedProviderToolNameOwners.set(tools, providerToolNameOwners)
-    for (const reservation of input.reservedProviderToolNames ?? []) {
+    for (const reservation of input.reservedProviderTools ?? []) {
       admitProviderToolName(providerToolNameOwners, reservation.name, reservation.owner)
+    }
+    const registerMcpAppLifecycle = (toolName: string, candidate: McpAppToolLifecycleController) => {
+      try {
+        return input.processor.registerMcpAppToolLifecycle(toolName, candidate)
+      } catch (error) {
+        if (!(error instanceof McpAppToolLifecycleOwnerConflictError)) throw error
+        const mismatch =
+          error.existing_identity.tool_definition_digest !== error.candidate_identity.tool_definition_digest
+            ? `receipt.${toolName}.definition_digest`
+            : `receipt.${toolName}.mcp_app_lifecycle_identity`
+        throw new StaleCatalogOccurrenceError([mismatch])
+      }
     }
     const executionPermission = CapabilityRules.merge(input.agent.permission, input.session.permission)
     const runtimeContract = getSessionRuntimeContract(input.session.id)
@@ -3104,7 +3261,20 @@ export namespace SessionLoop {
       projectID: Instance.project.id,
       runtimeIdentity: runtimeContract?.identity,
     })
-    let executionHarnessProjection: HarnessProjection | undefined
+    const executionHarnessProjection = input.harnessProjection
+    const occurrenceCatalogPayload = await CatalogOccurrenceBinding.readAssistant({
+      projectID: Instance.project.id,
+      sessionID: input.session.id,
+      assistantMessageID: input.processor.message.id,
+    })
+    if (CatalogOccurrenceBinding.hash(occurrenceCatalogPayload) !== executionHarnessProjection.catalog_snapshot_hash) {
+      throw new CorruptCatalogOccurrenceError(
+        "digest_mismatch",
+        `SessionLoop occurrence Catalog does not match Harness ${executionHarnessProjection.catalog_snapshot_hash}.`,
+      )
+    }
+    let capabilityRevealOwner: CapabilityRevealOwner | undefined
+    let turnCapabilityProjection: TurnCapabilityProjectionV2 | undefined
     const context = (
       args: any,
       options: ToolExecutionOptions,
@@ -3149,6 +3319,9 @@ export namespace SessionLoop {
                 invocationAuthority: invocation.invocationAuthority,
               }
             : {}),
+          ...(capabilityRevealOwner
+            ? { [CAPABILITY_REVEAL_OWNER_EXTRA_KEY]: capabilityRevealOwner }
+            : {}),
         },
         agent: input.agentID,
         messages: input.messages,
@@ -3159,6 +3332,7 @@ export namespace SessionLoop {
             toolIDs: Object.keys(tools),
             permission: executionPermission,
             harnessProjection: executionHarnessProjection,
+            capabilityProjection: turnCapabilityProjection,
             permissionLayers: {
               agent: input.agent.permission,
               session: input.session.permission,
@@ -3183,7 +3357,7 @@ export namespace SessionLoop {
           : never
         executionMode?: ToolExecutionModeDeclaration
       },
-      options: { declaredRuntimeFinalization?: boolean } = {},
+      options: { declaredRuntimeFinalization?: boolean; bind?: boolean } = {},
     ) => {
       const registryTool = tool({
         id: item.id as any,
@@ -3200,6 +3374,7 @@ export namespace SessionLoop {
             toolIDs: Object.keys(tools),
             permission: executionPermission,
             harnessProjection: executionHarnessProjection,
+            capabilityProjection: turnCapabilityProjection,
             permissionLayers: {
               agent: input.agent.permission,
               session: input.session.permission,
@@ -3224,17 +3399,20 @@ export namespace SessionLoop {
               executionSurface,
               persistedInput,
             })
-            await Plugin.trigger(
-              "tool.execute.before",
-              {
-                tool: item.id,
-                sessionID: ctx.sessionID,
-                callID: ctx.callID,
-              },
-              {
-                args,
-              },
-            )
+            const integrityOwnedReveal = item.id === CAPABILITY_SEARCH_TOOL_ID
+            if (!integrityOwnedReveal) {
+              await Plugin.trigger(
+                "tool.execute.before",
+                {
+                  tool: item.id,
+                  sessionID: ctx.sessionID,
+                  callID: ctx.callID,
+                },
+                {
+                  args,
+                },
+              )
+            }
             const liveMetadataSink = ctx.extra?.liveMetadataSink as
               | ToolLiveMetadataSink<{ title?: string; metadata?: Record<string, any> }>
               | undefined
@@ -3278,16 +3456,18 @@ export namespace SessionLoop {
                   }))
                 : undefined,
             }
-            await Plugin.trigger(
-              "tool.execute.after",
-              {
-                tool: item.id,
-                sessionID: ctx.sessionID,
-                callID: ctx.callID,
-                args,
-              },
-              output,
-            )
+            if (!integrityOwnedReveal) {
+              await Plugin.trigger(
+                "tool.execute.after",
+                {
+                  tool: item.id,
+                  sessionID: ctx.sessionID,
+                  callID: ctx.callID,
+                  args,
+                },
+                output,
+              )
+            }
             assertToolResultControlPreserved(hostControl, output.metadata)
             return materializeToolResultInlineAttachments({
               projectID: invocationIdentity.projectID,
@@ -3303,111 +3483,274 @@ export namespace SessionLoop {
         tool: registryTool,
       })
       bindToolExecutionMode(preparedRegistryTool as object, item.executionMode ?? "ordinary")
-      admitProviderToolName(
-        providerToolNameOwners,
-        item.id,
-        { source: "registry", ref: item.id },
-        { declaredRuntimeFinalization: options.declaredRuntimeFinalization },
-      )
-      tools[item.id] = preparedRegistryTool
-      toolSources.set(item.id, "registry")
+      if (options.bind !== false) {
+        admitProviderToolName(
+          providerToolNameOwners,
+          item.id,
+          { source: "registry", ref: item.id },
+          { declaredRuntimeFinalization: options.declaredRuntimeFinalization },
+        )
+        tools[item.id] = preparedRegistryTool
+        toolSources.set(item.id, "registry")
+      }
+      return preparedRegistryTool
     }
 
-    executionHarnessProjection = runtimeContract?.harnessProjection
-    const runtimeToolRecords = sessionRuntimeToolRecords(runtimeContract)
-    const extras = {
-      ...runtimeToolRecords.projectedTools,
-      ...runtimeToolRecords.stageTools,
+    const runtimeToolOwner = sessionRuntimeToolOwner(runtimeContract)
+    const extras: Record<string, AITool> = {}
+    let resolvedTaskCapability:
+      | Promise<
+          PromptProfileResolver.ResolvedSchedulerCapability | PromptProfileResolver.ResolvedWorkerCapability
+        >
+      | undefined
+    const taskCapability = async () => {
+      if (!runtimeContract) return undefined
+      resolvedTaskCapability ??= (async () => {
+        const capabilityProjectDirectory = await EffectiveConfig.capabilityProjectDirectory({
+          sessionID: input.session.id,
+        })
+        if (runtimeContract.identity.identityKind === "projected-scheduler") {
+          const projection = await resolvePinnedTaskSchedulerTurnProjection({
+            taskID: runtimeContract.identity.taskID,
+            projectDirectory: capabilityProjectDirectory,
+            config: input.config,
+          })
+          const capability = projection.schedulerCapability
+          if (
+            capability.identity.projectionHash !== runtimeContract.identity.projectionHash ||
+            !sameExpertSquadPackageRevision(capability.packageRevision, runtimeContract.identity.packageRevision)
+          ) {
+            throw new Error(`Projected scheduler capability changed inside occurrence ${input.occurrenceID}.`)
+          }
+          return capability
+        }
+        const projection = await PromptProfileResolver.resolveWorkerTurnProjection({
+          config: input.config,
+          projectDirectory: capabilityProjectDirectory,
+          agentID: runtimeContract.identity.agentID,
+          packageRevision: runtimeContract.identity.packageRevision,
+        })
+        const capability = projection.workerCapability
+        if (
+          capability.identity.projectionHash !== runtimeContract.identity.projectionHash ||
+          !sameExpertSquadPackageRevision(capability.packageRevision, runtimeContract.identity.packageRevision)
+        ) {
+          throw new Error(`Projected worker capability changed inside occurrence ${input.occurrenceID}.`)
+        }
+        return capability
+      })()
+      return resolvedTaskCapability
     }
-    const exactRuntimeContractTools = usesExactRuntimeContractTools(runtimeContract)
-    if (requiresProjectedRuntimeSurface(runtimeContract) && !runtimeContract?.projectedRegistryToolIDs) {
-      throw new Error(`Projected skill owner session ${input.session.id} is missing projectedRegistryToolIDs.`)
+    const materializeExactProjectedExtension = async (providerName: string): Promise<AITool | undefined> => {
+      if (!runtimeContract) return undefined
+      const capability = await taskCapability()
+      if (!capability) return undefined
+      const owner = runtimeContract.resources?.mcp
+      if (!owner) throw new Error(`Projected capability ${providerName} has no scoped MCP/resource owner.`)
+      try {
+        return await PromptProfileResolver.exactProjectedExtensionTool({
+          capability,
+          providerName,
+          runtimeTools: extras,
+          taskID: runtimeContract.identity.taskID,
+          projectDirectory: runtimeContract.projectDirectory,
+          toolDirectory: input.session.directory,
+          connectionOwner: owner,
+        })
+      } catch (error) {
+        if (error instanceof MCP.CatalogBindingStaleError) {
+          throw new StaleCatalogOccurrenceError(error.mismatches)
+        }
+        throw error
+      }
     }
-    const projectedRegistryToolIDs = runtimeContract?.projectedRegistryToolIDs
-      ? new Set(runtimeContract.projectedRegistryToolIDs)
+    const projectedRegistryToolIDs = runtimeContract
+      ? new Set(
+          harnessGrantedRefs(runtimeContract.harnessGrants, "execute")
+            .filter((ref) => ref.kind === "tool" && ref.owner_ref === "tool-registry")
+            .map((ref) => ref.local_ref),
+        )
       : undefined
 
     const projectedWorkerRuntime = runtimeContract?.identity.identityKind === "projected-worker"
-    let projectedWorkerVisibleRegistryToolIDs: ReadonlySet<string> | undefined
-    if (!exactRuntimeContractTools || projectedWorkerRuntime) {
-      const projectedRegistry = projectedWorkerRuntime
-        ? await ToolRegistry.projectedWorkerTools(
-            { modelID: input.model.api.id, providerID: input.model.providerID },
-            input.agent,
-            input.agentID,
-            RuntimeTemplateID.get(runtimeContract.identity.baseRole),
-            input.config,
-            runtimeContract.projectedRegistryToolIDs!,
-            {
-              sessionPermission: input.session.permission,
-              toolSwitches: input.tools,
-              batchTargetExclusions: Object.keys(extras),
-              artifactSnapshotSource: artifactSnapshotSourceForRuntimeContract(runtimeContract),
-            },
-          )
-        : undefined
-      const registryTools = projectedRegistry
-        ? projectedRegistry.tools
-        : await ToolRegistry.runtimeTools(
-            { modelID: input.model.api.id, providerID: input.model.providerID },
-            input.agent,
-            input.agentID,
-            input.config,
-          )
-      if (projectedRegistry) {
-        projectedWorkerVisibleRegistryToolIDs = new Set(projectedRegistry.visibleToolIDs)
+    const artifactSnapshotSource = runtimeContract
+      ? artifactSnapshotSourceForRuntimeContract(runtimeContract)
+      : "current_task_project"
+    const [searchRegistryTool] = await ToolRegistry.exactRuntimeTools(
+      { modelID: input.model.api.id, providerID: input.model.providerID },
+      input.agent,
+      input.agentID,
+      input.config,
+      [CAPABILITY_SEARCH_TOOL_ID],
+      { artifactSnapshotSource },
+    )
+    if (!searchRegistryTool || searchRegistryTool.id !== CAPABILITY_SEARCH_TOOL_ID) {
+      throw new Error("Tool Registry did not materialize the exact capability_search leaf.")
+    }
+    if (projectedRegistryToolIDs && !projectedRegistryToolIDs.has(searchRegistryTool.id)) {
+      throw new Error("Projected runtime does not grant the mandatory capability_search leaf.")
+    }
+    const preparedSearchTool = bindRegistryTool(searchRegistryTool)
+    const searchDefinition = normalizedProviderToolDefinition(CAPABILITY_SEARCH_TOOL_ID, preparedSearchTool)
+    const searchPayloadChars = providerToolDefinitionChars(searchDefinition)
+    const searchPayloadTokens = providerToolDefinitionTokens(searchDefinition)
+    if (
+      searchPayloadChars > CAPABILITY_SEARCH_INITIAL_MAX_CHARS ||
+      searchPayloadTokens > CAPABILITY_SEARCH_INITIAL_MAX_TOKENS
+    ) {
+      throw new Error(
+        `Initial capability_search payload is ${searchPayloadChars} chars/${searchPayloadTokens} estimated tokens; maximum is ${CAPABILITY_SEARCH_INITIAL_MAX_CHARS}/${CAPABILITY_SEARCH_INITIAL_MAX_TOKENS}.`,
+      )
+    }
+    const searchBaseDefinition = capabilityRevealBaseDefinitions([
+      searchDefinition,
+      ...(input.reservedProviderTools ?? []).map((reservation) =>
+        normalizedProviderToolDefinition(reservation.name, reservation.tool),
+      ),
+    ])
+    const revealState = foldCapabilityRevealReceipts({
+      occurrenceID: input.occurrenceID,
+      parts: await capabilityRevealOccurrenceParts({
+        sessionID: input.session.id,
+        occurrenceID: input.occurrenceID,
+      }),
+      harnessProjectionHash: executionHarnessProjection.projection_hash,
+      catalogSnapshotRef: executionHarnessProjection.catalog_snapshot_ref,
+      catalogSnapshotHash: executionHarnessProjection.catalog_snapshot_hash,
+      baseDefinition: searchBaseDefinition,
+    })
+    turnCapabilityProjection = createTurnCapabilityProjection({
+      occurrenceID: input.occurrenceID,
+      harnessProjectionHash: executionHarnessProjection.projection_hash,
+      catalogSnapshotRef: executionHarnessProjection.catalog_snapshot_ref,
+      catalogSnapshotHash: executionHarnessProjection.catalog_snapshot_hash,
+      state: revealState,
+    })
+    const activeProviderNames = new Set(revealState.definitions.map((activation) => activation.provider_name))
+    activeProviderNames.add(CAPABILITY_SEARCH_TOOL_ID)
+    const activeProductionSkillNames = [...revealState.active.values()]
+      .filter((activation) => activation.requested_ref.kind === "skill")
+      .map((activation) => activation.requested_ref.local_ref)
+    const activeMissionSkillNames = [...revealState.active.values()]
+      .filter((activation) => activation.requested_ref.kind === "mission_skill")
+      .map((activation) => activation.requested_ref.local_ref)
+    const activeRegistryToolIDs = [
+      ...revealState.definitions.flatMap((activation) =>
+        activation.executable_ref.kind === "tool" && activation.executable_ref.owner_ref === "tool-registry"
+          ? [activation.executable_ref.local_ref]
+          : [],
+      ),
+    ].filter((toolID, index, values) => values.indexOf(toolID) === index)
+    const registryTools = await ToolRegistry.exactRuntimeTools(
+      { modelID: input.model.api.id, providerID: input.model.providerID },
+      input.agent,
+      input.agentID,
+      input.config,
+      activeRegistryToolIDs,
+      { artifactSnapshotSource },
+    )
+    for (const item of registryTools) {
+      if (projectedRegistryToolIDs && !projectedRegistryToolIDs.has(item.id)) {
+        throw new Error(`Active reveal projects registry Tool ${item.id} outside the runtime contract.`)
       }
-      for (const item of registryTools) {
-        if (projectedRegistryToolIDs && !projectedRegistryToolIDs.has(item.id)) continue
-        // Session-level deny rules take precedence over the runtime template.
-        if (!projectedWorkerRuntime && input.session.permission?.length) {
-          const rule = CapabilityRules.evaluate(item.id, "*", input.session.permission)
-          if (rule.action === "deny") continue
-        }
-        bindRegistryTool(item)
-      }
+      bindRegistryTool(item)
     }
 
     const includeMcpTools = runtimeContract?.includeMcpTools !== false && input.includeMcpTools !== false
-    const { ConversationCapability } = await import("@/conversation/capability")
     const defaultMcpProcessAuthority =
       executionAuthority.kind === "task"
         ? MCP.taskProcessAuthority(executionAuthority.taskID, executionAuthority.directory)
         : MCP.hostProcessAuthority(executionAuthority.directory)
-    const nativeHostSessionMcpTools =
-      includeMcpTools &&
-      !exactRuntimeContractTools &&
-      !runtimeContract?.identity &&
-      defaultMcpProcessAuthority.kind === "host"
-        ? ConversationCapability.isAgentID(input.agentID)
-          ? await ConversationCapability.runtimeMcpTools(input.config, input.agentID, input.session.id)
-          : await HostSessionMcpRuntime.tools(input.config, input.session.id, Object.keys(input.config.mcp ?? {}))
-        : undefined
-    const resolvedMcpTools =
-      exactRuntimeContractTools || !includeMcpTools
-        ? {}
-        : (nativeHostSessionMcpTools ?? (await MCP.tools(defaultMcpProcessAuthority)))
+    const materializeExactMcp = async (ref: CapabilityRef): Promise<AITool> => {
+      if (ref.kind !== "mcp_tool") throw new Error(`Exact MCP materializer received ${ref.kind}.`)
+      if (!includeMcpTools) throw new Error(`MCP Tool ${CapabilityRefCodec.encode(ref)} is disabled for this occurrence.`)
+      if (ref.owner_ref.startsWith("host-session-mcp:")) {
+        const expectedRevision = occurrenceCatalogPayload.owner_revision_vector[ref.owner_ref]
+        if (!expectedRevision) {
+          throw new StaleCatalogOccurrenceError([`owner_revision_vector.${ref.owner_ref}`])
+        }
+        try {
+          return (await HostSessionMcpRuntime.exactTool(
+            input.config,
+            input.session.id,
+            ref.local_ref,
+            expectedRevision,
+          )) as AITool
+        } catch (error) {
+          if (error instanceof MCP.CatalogBindingStaleError) {
+            throw new StaleCatalogOccurrenceError(error.mismatches)
+          }
+          throw error
+        }
+      }
+      if (ref.owner_ref === "mcp-config") {
+        const expectedRevision = occurrenceCatalogPayload.owner_revision_vector[ref.owner_ref]
+        if (!expectedRevision) {
+          throw new StaleCatalogOccurrenceError([`owner_revision_vector.${ref.owner_ref}`])
+        }
+        const catalog = await MCP.observedCatalogSnapshot(input.config)
+        const binding = catalog.tool_bindings[ref.local_ref]
+        if (!binding) throw new Error(`MCP Catalog has no exact binding for ${CapabilityRefCodec.encode(ref)}.`)
+        try {
+          return (await MCP.exactCatalogTool({
+            config: input.config,
+            binding,
+            processAuthority: defaultMcpProcessAuthority,
+            expectedOwnerRevision: expectedRevision,
+          })) as AITool
+        } catch (error) {
+          if (error instanceof MCP.CatalogBindingStaleError) {
+            throw new StaleCatalogOccurrenceError(error.mismatches)
+          }
+          throw error
+        }
+      }
+      throw new Error(`MCP Tool ${CapabilityRefCodec.encode(ref)} has no exact occurrence materializer.`)
+    }
+    const activeMcpRefs = new Map<string, CapabilityRef>()
+    for (const activation of revealState.definitions) {
+      const owned = await runtimeToolOwner?.exact(activation.provider_name)
+      if (owned) extras[activation.provider_name] = owned
+      if (activation.executable_ref.kind !== "mcp_tool") continue
+      activeMcpRefs.set(CapabilityRefCodec.encode(activation.executable_ref), activation.executable_ref)
+    }
+    const resolvedMcpTools: Record<string, AITool> = {}
+    for (const ref of activeMcpRefs.values()) {
+      if (Object.hasOwn(extras, ref.local_ref)) continue
+      const projected = await materializeExactProjectedExtension(ref.local_ref)
+      if (projected) {
+        extras[ref.local_ref] = projected
+        continue
+      }
+      resolvedMcpTools[ref.local_ref] = await materializeExactMcp(ref)
+    }
     for (const [key, item] of Object.entries(resolvedMcpTools)) {
       const execute = (item as AITool).execute
       if (!execute) continue
       const mcpAppBinding = MCP.appToolBinding(item)
       const mcpAuthorityBinding = MCP.toolAuthorityBinding(item)
+      const assertExactMcpCurrent = MCP.exactToolAssertion(item)
       if (!mcpAuthorityBinding) {
         throw new Error(`MCP Tool ${key} is missing its immutable authorization binding`)
+      }
+      if (!assertExactMcpCurrent) {
+        throw new Error(`MCP Tool ${key} is missing its exact Catalog invocation assertion`)
       }
       admitProviderToolName(providerToolNameOwners, key, {
         source: "mcp",
         ref: `${mcpAuthorityBinding.serverID}:${mcpAuthorityBinding.configDigest}:${mcpAuthorityBinding.toolDigest}`,
       })
       const mcpAppLifecycle = mcpAppBinding
-        ? createMcpAppToolLifecycle({
-            sessionID: input.session.id,
-            messageID: input.processor.message.id,
-            binding: mcpAppBinding,
-            authority: mcpAppAuthorityForRuntimeTool(item),
-          })
+        ? registerMcpAppLifecycle(
+            key,
+            createMcpAppToolLifecycle({
+              sessionID: input.session.id,
+              messageID: input.processor.message.id,
+              binding: mcpAppBinding,
+              authority: mcpAppAuthorityForRuntimeTool(item),
+            }),
+          )
         : undefined
-      if (mcpAppLifecycle) input.processor.registerMcpAppToolLifecycle(key, mcpAppLifecycle)
       // The provider is the server this tool was projected from, never the
       // shape of its runtime name.
       const mcpProviderKind = mcpToolProviderKind({
@@ -3435,6 +3778,17 @@ export namespace SessionLoop {
             args: persistedInput,
           }
           return withTaskToolInvocation(invocationIdentity, ctx.executionSurface, async () => {
+            try {
+              await assertExactMcpCurrent()
+            } catch (error) {
+              if (mcpAppLifecycle?.started(opts.toolCallId)) {
+                await mcpAppLifecycle.fail(opts.toolCallId, args, error)
+              }
+              if (error instanceof MCP.CatalogBindingStaleError) {
+                throw new StaleCatalogOccurrenceError(error.mismatches)
+              }
+              throw error
+            }
             try {
               await mcpAppLifecycle?.input(opts.toolCallId, args)
               await Plugin.trigger(
@@ -3536,17 +3890,38 @@ export namespace SessionLoop {
     // without silently landing a ZodError at tool-completion time.
     const sessionIDForExtras = input.session.id
     const messageIDForExtras = input.processor.message.id
+    for (const activation of revealState.definitions) {
+      const ref = activation.executable_ref
+      if (
+        ref.kind !== "tool" ||
+        ref.owner_ref === "tool-registry" ||
+        ref.owner_ref.startsWith("dispatch-stage:") ||
+        Object.hasOwn(extras, activation.provider_name)
+      ) {
+        continue
+      }
+      const projected = await materializeExactProjectedExtension(activation.provider_name)
+      if (!projected) {
+        throw new Error(
+          `Active projected capability ${CapabilityRefCodec.encode(ref)} has no exact occurrence materializer.`,
+        )
+      }
+      extras[activation.provider_name] = projected
+    }
     for (const [name, extraTool] of Object.entries(extras)) {
+      if (!activeProviderNames.has(name)) continue
       const mcpAppBinding = MCP.appToolBinding(extraTool as object)
       const mcpAppLifecycle = mcpAppBinding
-        ? createMcpAppToolLifecycle({
-            sessionID: sessionIDForExtras,
-            messageID: messageIDForExtras,
-            binding: mcpAppBinding,
-            authority: mcpAppAuthorityForRuntimeTool(extraTool as object),
-          })
+        ? registerMcpAppLifecycle(
+            name,
+            createMcpAppToolLifecycle({
+              sessionID: sessionIDForExtras,
+              messageID: messageIDForExtras,
+              binding: mcpAppBinding,
+              authority: mcpAppAuthorityForRuntimeTool(extraTool as object),
+            }),
+          )
         : undefined
-      if (mcpAppLifecycle) input.processor.registerMcpAppToolLifecycle(name, mcpAppLifecycle)
       const wrapped = wrapExtraTool(name, extraTool, {
         sessionID: sessionIDForExtras,
         messageID: messageIDForExtras,
@@ -3555,6 +3930,7 @@ export namespace SessionLoop {
             toolIDs: Object.keys(tools),
             permission: executionPermission,
             harnessProjection: executionHarnessProjection,
+            capabilityProjection: turnCapabilityProjection,
             permissionLayers: {
               agent: input.agent.permission,
               session: input.session.permission,
@@ -3564,7 +3940,7 @@ export namespace SessionLoop {
           input.processor.ensureToolPart(toolCallID, toolName, toolInput),
         mcpAppLifecycle,
       })
-      const declaredStageShadow = Object.hasOwn(runtimeToolRecords.stageTools, name)
+      const declaredStageShadow = runtimeToolOwner?.kind(name) === "stage"
       admitProviderToolName(
         providerToolNameOwners,
         name,
@@ -3587,30 +3963,34 @@ export namespace SessionLoop {
       tools,
       permission: executionPermission,
       switches: input.tools,
-      requiredToolIDs:
-        runtimeContract?.identity.identityKind === "projected-scheduler"
-          ? TASK_ARTIFACT_SCHEDULER_TOOL_IDS
-          : runtimeContract?.identity.identityKind === "projected-worker"
-            ? TASK_ARTIFACT_TOOL_IDS
-            : undefined,
     })
-    const finalizeSkillSurface = async (availableToolNames: Iterable<string>) => {
+    const finalizeSkillSurface = async (
+      availableToolNames: Iterable<string>,
+      activation?: { productionSkillNames?: readonly string[]; missionSkillNames?: readonly string[] },
+    ) => {
       const { SkillMount } = await import("@/skill/mounts")
+      const providerToolNameSet = new Set(availableToolNames)
+      const eligibilityToolNameSet = new Set(
+        harnessGrantedRefs(executionHarnessProjection, "execute")
+          .filter((ref) => ref.kind === "tool" || ref.kind === "mcp_tool")
+          .map((ref) => ref.local_ref),
+      )
+      for (const name of providerToolNameSet) eligibilityToolNameSet.add(name)
       const runtimeIdentity = runtimeContract?.identity
       if (!runtimeIdentity) {
         const nativeMissionSurface = input.agentID === "mission" && input.session.kind === "mission"
         if (nativeMissionSurface) {
           const { MissionSkillRuntime } = await import("@/mission-skill/runtime")
-          const availableToolNameSet = new Set(availableToolNames)
           const surface = await MissionSkillRuntime.resolve({
             agentID: input.agentID,
             sessionKind: input.session.kind,
             runtime: input.agent,
             scope: "session",
-            availableToolNames: availableToolNameSet,
+            availableToolNames: eligibilityToolNameSet,
+            activeSkillNames: activation?.missionSkillNames ?? activeMissionSkillNames,
           })
           resolvedToolSkillSurfaces.set(tools, surface)
-          const exposeMissionSkillTool = surface.tool_available && availableToolNameSet.has(MissionSkillTool.id)
+          const exposeMissionSkillTool = surface.tool_available && providerToolNameSet.has(MissionSkillTool.id)
           if (!exposeMissionSkillTool) {
             delete tools[MissionSkillTool.id]
             return surface
@@ -3634,17 +4014,17 @@ export namespace SessionLoop {
         }
         delete tools[MissionSkillTool.id]
         if (ConversationCapability.isAgentID(input.agentID)) {
-          const availableToolNameSet = new Set(availableToolNames)
           const surface = await ConversationCapability.resolveSkillSurface({
             agentID: input.agentID,
             config: input.config,
             runtime: input.agent,
             scope: "session",
-            availableToolNames: availableToolNameSet,
+            availableToolNames: eligibilityToolNameSet,
             explicitSkillNames: visibleChatSkillNames(input.messages),
+            activeSkillNames: activation?.productionSkillNames ?? activeProductionSkillNames,
           })
           resolvedToolSkillSurfaces.set(tools, surface)
-          const exposeSkillTool = surface.tool_available && availableToolNameSet.has(SkillTool.id)
+          const exposeSkillTool = surface.tool_available && providerToolNameSet.has(SkillTool.id)
           if (!exposeSkillTool) {
             delete tools[SkillTool.id]
             return surface
@@ -3673,9 +4053,7 @@ export namespace SessionLoop {
           `Projected skill owner ${runtimeIdentity.agentID} session ${input.session.id} is missing projectedRegistryToolIDs.`,
         )
       }
-      const availableToolNameSet = new Set(availableToolNames)
-      const effectiveRegistryToolIDs = projectedWorkerVisibleRegistryToolIDs ?? projectedRegistryToolIDs
-      const exposeSkillTool = effectiveRegistryToolIDs.has(SkillTool.id) && availableToolNameSet.has(SkillTool.id)
+      const exposeSkillTool = projectedRegistryToolIDs.has(SkillTool.id) && providerToolNameSet.has(SkillTool.id)
       if (!exposeSkillTool) delete tools[SkillTool.id]
       const skillProjection = runtimeContract.skillProjection
       if (!skillProjection) {
@@ -3695,7 +4073,8 @@ export namespace SessionLoop {
         scope: "session",
         projectDirectory,
         skillProjection,
-        availableToolNames: availableToolNameSet,
+        availableToolNames: eligibilityToolNameSet,
+        activeSkillNames: activation?.productionSkillNames ?? activeProductionSkillNames,
       })
       resolvedToolSkillSurfaces.set(tools, surface)
       if (exposeSkillTool) {
@@ -3716,69 +4095,157 @@ export namespace SessionLoop {
     }
     resolvedToolSkillFinalizers.set(tools, finalizeSkillSurface)
     const initialToolNames = new Set(Object.keys(tools))
-    const projectedWorkerAllowsSkill = projectedWorkerVisibleRegistryToolIDs?.has(SkillTool.id)
-    const nonWorkerAllowsSkill =
-      projectedWorkerVisibleRegistryToolIDs === undefined &&
-      projectedRegistryToolIDs?.has(SkillTool.id) &&
-      (!input.session.permission?.length ||
-        CapabilityRules.evaluate(SkillTool.id, "*", input.session.permission).action !== "deny") &&
-      toolSwitchAllows(SkillTool.id, input.tools)
-    if (projectedWorkerAllowsSkill || nonWorkerAllowsSkill) {
-      initialToolNames.add(SkillTool.id)
-    }
-    const missionRoleAllowsSkill =
-      runtimeContract === undefined &&
-      input.agentID === "mission" &&
-      input.session.kind === "mission" &&
-      AgentToolPool.visibleToolIDs(input.agent.tools).has(MissionSkillTool.id) &&
-      (!input.session.permission?.length ||
-        CapabilityRules.evaluate(MissionSkillTool.id, "*", input.session.permission).action !== "deny") &&
-      toolSwitchAllows(MissionSkillTool.id, input.tools)
-    if (missionRoleAllowsSkill) initialToolNames.add(MissionSkillTool.id)
-    const nativeConversationAllowsSkill =
-      runtimeContract === undefined &&
-      (input.agentID === "chat" || input.agentID === "work") &&
-      AgentToolPool.visibleToolIDs(input.agent.tools).has(SkillTool.id) &&
-      (!input.session.permission?.length ||
-        CapabilityRules.evaluate(SkillTool.id, "*", input.session.permission).action !== "deny") &&
-      toolSwitchAllows(SkillTool.id, input.tools)
-    if (nativeConversationAllowsSkill) initialToolNames.add(SkillTool.id)
+    if (activeProductionSkillNames.length > 0) initialToolNames.add(SkillTool.id)
+    if (activeMissionSkillNames.length > 0) initialToolNames.add(MissionSkillTool.id)
     await finalizeSkillSurface(initialToolNames)
-    if (!runtimeContract && ConversationCapability.isAgentID(input.agentID)) {
-      const mcpToolIDs = [...toolSources.entries()].filter(([, source]) => source === "mcp").map(([toolID]) => toolID)
-      const hostMcpRefsByID = new Map(
-        HostSessionMcpRuntime.catalogToolRefs(input.session.id).map((ref) => [ref.local_ref, ref]),
-      )
-      executionHarnessProjection = await ConversationCapability.harnessProjection(input.agentID, {
-        config: input.config,
-        executionToolIDs: Object.keys(tools),
-        executionMcpToolRefs: mcpToolIDs.map(
-          (toolID) =>
-            hostMcpRefsByID.get(toolID) ??
-            capabilityRef({
-              kind: "mcp_tool",
-              source: "project",
-              owner_ref: "mcp-config",
-              local_ref: toolID,
-            }),
-        ),
-        skillRefs:
-          resolvedToolSkillSurfaces.get(tools)?.family === "production"
-            ? resolvedToolSkillSurfaces.get(tools)?.skills.map((skill) => skill.name)
-            : undefined,
-      })
-    } else if (!runtimeContract && input.agentID === "mission" && input.session.kind === "mission") {
-      const { MissionSkillRuntime } = await import("@/mission-skill/runtime")
-      executionHarnessProjection = await MissionSkillRuntime.harnessProjection({
-        agentID: input.agentID,
-        sessionKind: input.session.kind,
-        runtime: input.agent,
-        availableToolNames: Object.keys(tools),
-        executionToolIDs: Object.keys(tools),
-      })
-    }
-
     resolvedToolExecutionSurfaces.get(tools)!.harnessProjection = executionHarnessProjection
+    const materializedCandidates = { ...tools }
+    const materializeRevealCandidate = async (requestedRef: CapabilityRef, executableRef: CapabilityRef) => {
+      const providerName = executableRef.local_ref
+      let executable = materializedCandidates[providerName]
+      let source = toolSources.get(providerName)
+      if (!executable) {
+        const owned = await runtimeToolOwner?.exact(providerName)
+        if (owned) {
+          executable = prepareProviderTool({
+            name: providerName,
+            source: "extra",
+            model: input.model,
+            tool: owned,
+          })
+          source = "extra"
+          materializedCandidates[providerName] = executable
+        }
+      }
+      if (!executable && (requestedRef.kind === "skill" || requestedRef.kind === "mission_skill")) {
+        const candidateNames = new Set(Object.keys(tools))
+        candidateNames.add(providerName)
+        await finalizeSkillSurface(candidateNames, {
+          ...(requestedRef.kind === "skill"
+            ? { productionSkillNames: [...new Set([...activeProductionSkillNames, requestedRef.local_ref])] }
+            : { missionSkillNames: [...new Set([...activeMissionSkillNames, requestedRef.local_ref])] }),
+        })
+        executable = tools[providerName]
+        source = toolSources.get(providerName)
+        if (executable) materializedCandidates[providerName] = executable
+      }
+      if (!executable && executableRef.kind === "tool" && executableRef.owner_ref === "tool-registry") {
+        const [registryCandidate] = await ToolRegistry.exactRuntimeTools(
+          { modelID: input.model.api.id, providerID: input.model.providerID },
+          input.agent,
+          input.agentID,
+          input.config,
+          [providerName],
+          {
+            artifactSnapshotSource: runtimeContract
+              ? artifactSnapshotSourceForRuntimeContract(runtimeContract)
+              : "current_task_project",
+          },
+        )
+        if (registryCandidate) {
+          executable = bindRegistryTool(registryCandidate, { bind: false })
+          source = "registry"
+          materializedCandidates[providerName] = executable
+        }
+      }
+      if (
+        !executable &&
+        executableRef.kind === "tool" &&
+        executableRef.owner_ref !== "tool-registry" &&
+        !executableRef.owner_ref.startsWith("dispatch-stage:")
+      ) {
+        const projected = await materializeExactProjectedExtension(providerName)
+        if (projected) {
+          executable = prepareProviderTool({
+            name: providerName,
+            source: "extra",
+            model: input.model,
+            tool: projected,
+          })
+          source = "extra"
+          materializedCandidates[providerName] = executable
+        }
+      }
+      if (!executable && Object.hasOwn(extras, providerName)) {
+        executable = prepareProviderTool({
+          name: providerName,
+          source: "extra",
+          model: input.model,
+          tool: extras[providerName]!,
+        })
+        source = "extra"
+        materializedCandidates[providerName] = executable
+      }
+      if (!executable && executableRef.kind === "mcp_tool") {
+        const projected = await materializeExactProjectedExtension(providerName)
+        if (projected) {
+          executable = prepareProviderTool({
+            name: providerName,
+            source: "extra",
+            model: input.model,
+            tool: projected,
+          })
+          source = "extra"
+        } else {
+          const rawMcpTool = await materializeExactMcp(executableRef)
+          executable = prepareProviderTool({
+            name: providerName,
+            source: "mcp",
+            model: input.model,
+            tool: rawMcpTool,
+          })
+          source = "mcp"
+        }
+        materializedCandidates[providerName] = executable
+      }
+      if (!executable) {
+        throw new Error(
+          `Capability ${requestedRef.local_ref} resolves to ${providerName}, which is absent from the materialized owner surface.`,
+        )
+      }
+      if (!source) throw new Error(`Capability executable ${providerName} has no exact Tool source binding.`)
+      const mcpAuthority = MCP.toolAuthorityBinding(executable as object)
+      const projectedAuthority = projectedTaskToolRuntimeBindingOf(executable as object)
+      const stageAuthority = stageToolMaterializerBindingOf(executable as object)
+      return {
+        providerName,
+        executableRef,
+        tool: executable,
+        materializerBindingDigest: canonicalDigestSource("capability-materializer-binding-v2", {
+          executable_ref: executableRef,
+          source,
+          mcp_authority: mcpAuthority ?? null,
+          projected_authority: projectedAuthority ?? null,
+          stage_authority: stageAuthority ?? null,
+          owner_revision: executionHarnessProjection.owner_revision,
+          catalog_snapshot_hash: executionHarnessProjection.catalog_snapshot_hash,
+        }).sha256,
+      }
+    }
+    capabilityRevealOwner = createCapabilityRevealOwner({
+      projectID: Instance.project.id,
+      model: input.model,
+      occurrenceID: input.occurrenceID,
+      harness: executionHarnessProjection,
+      baseDefinition: searchBaseDefinition,
+      materialize: materializeRevealCandidate,
+    })
+    for (const activation of revealState.definitions) {
+      const materialized = await materializeRevealCandidate(activation.requested_ref, activation.executable_ref)
+      const definition = normalizedProviderToolDefinition(materialized.providerName, materialized.tool)
+      const mismatches = [
+        ...(providerToolDefinitionDigest(definition) !== activation.definition_digest
+          ? [`receipt.${activation.provider_name}.definition_digest`]
+          : []),
+        ...(materialized.materializerBindingDigest !== activation.materializer_binding_digest
+          ? [`receipt.${activation.provider_name}.materializer_binding_digest`]
+          : []),
+      ]
+      if (mismatches.length > 0) throw new StaleCatalogOccurrenceError(mismatches)
+    }
+    for (const toolName of Object.keys(tools)) {
+      if (!activeProviderNames.has(toolName)) delete tools[toolName]
+    }
 
     coordinateResolvedToolExecutionSurface(tools)
     const finalizeWithCoordination = resolvedToolSkillFinalizers.get(tools)
@@ -3906,6 +4373,22 @@ export namespace SessionLoop {
       materializationScope: await CatalogOccurrenceBinding.materializationScope({ model, config }),
       runtimeContract: getSessionRuntimeContract(request.sessionID),
     })
+    const continuationRuntimeContract = getSessionRuntimeContract(request.sessionID)
+    const continuationGrants = await resolveOccurrenceHarnessGrants({
+      runtimeContract: continuationRuntimeContract,
+      agentID: messageIdentity.agentID,
+      session,
+      agent: messageIdentity.runtime,
+      config,
+      includeMcpTools: persistedUser.info.includeMcpTools,
+    })
+    const continuationBinding = CatalogOccurrenceBinding.bindingFromInput(persistedUser)
+    if (!continuationBinding) {
+      throw new CorruptCatalogOccurrenceError(
+        "unbound",
+        `Permission continuation ${request.id} input ${persistedUser.info.id} has no Catalog binding.`,
+      )
+    }
     const abortController = new AbortController()
     const processor = SessionProcessor.create({
       assistantMessage: assistant,
@@ -3925,6 +4408,8 @@ export namespace SessionLoop {
       extra: persistedUser.info.extra,
       messages,
       config,
+      harnessProjection: bindHarnessProjection(continuationGrants, continuationBinding),
+      occurrenceID: persistedUser.info.id,
     })
     const recoveredTool = tools[request.toolName]
     if (!recoveredTool?.execute) {
@@ -4058,17 +4543,7 @@ export namespace SessionLoop {
         "The projected worker system contract changed after restart",
       )
     }
-    const contextTools = await filterAgentTools(
-      {
-        ...createAgentContextTools(),
-        ...(await createAgentCoordinationRuntimeTools({
-          agentID: payload.identity.agentID,
-          taskID: payload.lifecycle.taskID,
-        })),
-      },
-      RuntimeTemplateID.get(payload.identity.baseRole),
-      { taskID: payload.lifecycle.taskID, sessionID: input.session.parentID },
-    )
+    const contextToolFactory = createAgentContextToolFactory(input.session.directory)
     const owner = createComputerRuntimeConnectionOwner(
       computerRuntimeScopeIdentity({
         ownerKind: "worker",
@@ -4077,30 +4552,47 @@ export namespace SessionLoop {
       }),
     )
     try {
-      const stageBinding = payload.tools.stageMaterializers[input.request.toolName]
-      const requestedStageTool = stageBinding
-        ? await materializeBoundStageTool({
-            adapterID: payload.identity.dispatchAdapterID,
-            toolName: input.request.toolName,
-            binding: stageBinding,
-            authority: {
-              taskID: payload.lifecycle.taskID,
-              projectDirectory,
-              toolDirectory: input.session.directory,
-            },
-          })
-        : undefined
-      const runtimeTools = await PromptProfileResolver.projectWorkerTools(
-        requestedStageTool ? { ...contextTools, [input.request.toolName]: requestedStageTool } : contextTools,
-        capability,
-        {
-          taskID: payload.lifecycle.taskID,
-          projectDirectory,
-          toolDirectory: input.session.directory,
-          stageOwnedToolIDs: requestedStageTool ? [input.request.toolName] : [],
-          connectionOwner: owner,
-        },
+      const occurrenceInput = await MessageStore.get({
+        sessionID: input.session.id,
+        messageID: input.assistant.parentID,
+      })
+      const occurrenceCatalogBinding = CatalogOccurrenceBinding.bindingFromInput(occurrenceInput)
+      if (!occurrenceCatalogBinding) {
+        throw new PermissionAuthority.StaleContinuationError(
+          input.request.id,
+          "Permission continuation input has no exact Catalog binding",
+        )
+      }
+      const catalogPayload = await CatalogOccurrenceBinding.read({
+        projectID: Instance.project.id,
+        binding: occurrenceCatalogBinding,
+      })
+      if (catalogPayload.context.caller !== "task_agent") {
+        throw new PermissionAuthority.StaleContinuationError(
+          input.request.id,
+          `Permission continuation Catalog caller is ${catalogPayload.context.caller}, not task_agent`,
+        )
+      }
+      const stageBindings = catalogPayload.occurrence_owner_bindings.filter(
+        (binding) => binding.adapter_id === payload.identity.dispatchAdapterID,
       )
+      if (stageBindings.length !== 1) {
+        throw new PermissionAuthority.StaleContinuationError(
+          input.request.id,
+          `Permission continuation has ${stageBindings.length} exact dispatch-stage occurrence bindings`,
+        )
+      }
+      const recoveredStageFactory = createRecoveredDispatchStageToolFactory({
+        continuationRequestID: input.request.id,
+        payload,
+        occurrenceBinding: stageBindings[0]!,
+        projectDirectory,
+        toolDirectory: input.session.directory,
+        historyParts: await capabilityRevealOccurrenceParts({
+          sessionID: input.session.id,
+          occurrenceID: input.assistant.parentID,
+        }),
+      })
       const persistedStageIDs = [...payload.tools.stageOwned].sort()
       const materializedStageIDs = Object.keys(payload.tools.stageMaterializers).sort()
       const enabled = new Set(payload.tools.enabled)
@@ -4110,18 +4602,71 @@ export namespace SessionLoop {
       ) {
         throw new PermissionAuthority.StaleContinuationError(
           input.request.id,
-          "A persisted stage Tool materializer is outside the enabled Tool surface",
+          "A persisted stage Tool factory is outside the enabled Tool surface",
         )
       }
-      if (persistedStageIDs.includes(input.request.toolName) && !requestedStageTool) {
+      if (
+        persistedStageIDs.includes(input.request.toolName) &&
+        !payload.tools.stageMaterializers[input.request.toolName]
+      ) {
         throw new PermissionAuthority.StaleContinuationError(
           input.request.id,
-          "The requested private stage Tool has no exact persisted materializer",
+          "The requested permission-bearing stage Tool has no exact persisted materializer",
         )
       }
-      const recoveredProjectedIDs = Object.keys(runtimeTools.projectedTools).sort()
-      const persistedProjectedIDs = payload.tools.enabled.filter((toolID) => !persistedStageIDs.includes(toolID)).sort()
-      if (JSON.stringify(recoveredProjectedIDs) !== JSON.stringify(persistedProjectedIDs)) {
+      const projectedToolIDs = capability.defaultTools.map((entry) => entry.providerName)
+      const materializeProjectedTool = async (toolID: string) => {
+        const exact = await PromptProfileResolver.exactProjectedExtensionTool({
+          capability,
+          providerName: toolID,
+          runtimeTool: async (runtimeToolID) =>
+            contextToolFactory.materializeExact(runtimeToolID) ??
+            (await recoveredStageFactory.materializeProjectedRuntimeExact(runtimeToolID)),
+          taskID: payload.lifecycle.taskID,
+          projectDirectory,
+          toolDirectory: input.session.directory,
+          connectionOwner: owner,
+        })
+        if (!exact) throw new Error(`Recovered projected Tool factory ${toolID} is unavailable.`)
+        return exact
+      }
+      const materializeRecoveredStageTool = async (toolID: string): Promise<AITool> => {
+        const binding = payload.tools.stageMaterializers[toolID]
+        if (binding) {
+          return materializeBoundStageTool({
+            adapterID: payload.identity.dispatchAdapterID,
+            toolName: toolID,
+            binding,
+            authority: {
+              taskID: payload.lifecycle.taskID,
+              projectDirectory,
+              toolDirectory: input.session.directory,
+            },
+          })
+        }
+        const exact = await recoveredStageFactory.materializeCollectorExact(toolID)
+        return bindInternalStageTool(exact as object as AITool, {
+          adapterID: payload.identity.dispatchAdapterID,
+          toolName: toolID,
+        })
+      }
+      const recoveredHarnessGrants = PromptProfileResolver.workerHarnessGrants({
+        taskID: payload.lifecycle.taskID,
+        capability,
+        projectedToolIDs,
+        // The Harness grant set is occurrence authority, not the subset of
+        // stage Tools needed to resume this one permission-bearing call.
+        // Rebuild it from the immutable Worker Turn descriptor so its hash
+        // is byte-for-byte identical to the original occurrence while the
+        // runtime still materializes only the requested exact leaf.
+        stageToolIDs: persistedStageIDs,
+      })
+      const recoveredProviderIDs = harnessGrantedRefs(recoveredHarnessGrants, "execute")
+        .filter((ref) => ref.kind === "tool" || ref.kind === "mcp_tool")
+        .map((ref) => ref.local_ref)
+        .sort()
+      const persistedProviderIDs = [...payload.tools.enabled].sort()
+      if (JSON.stringify(recoveredProviderIDs) !== JSON.stringify(persistedProviderIDs)) {
         throw new PermissionAuthority.StaleContinuationError(
           input.request.id,
           "The projected worker Tool surface changed after restart",
@@ -4144,20 +4689,41 @@ export namespace SessionLoop {
         },
         runtime,
         permissionContinuation: { requestID: input.request.id, toolName: input.request.toolName },
-        projectedTools: runtimeTools.projectedTools,
-        stageTools: runtimeTools.stageTools,
         system: [system.prompt],
         systemMode: "complete",
         includeMcpTools: capability.includeMcpTools,
-        exactTools: RuntimeTemplateRegistry.get(payload.identity.baseRole).exactRuntimeContract,
-        projectedRegistryToolIDs: capability.builtInToolIDs,
         skillProjection: projection.skillProjection,
-        harnessProjection: PromptProfileResolver.workerHarnessProjection({
-          taskID: payload.lifecycle.taskID,
-          capability,
-        }),
+        harnessGrants: recoveredHarnessGrants,
         projectDirectory,
-        resources: { mcp: owner },
+        resources: {
+          mcp: owner,
+          tools: createRuntimeToolOwner({
+            leaves: [
+              ...bindRuntimeToolFactories({
+                toolIDs: projectedToolIDs,
+                kind: "projected",
+                factoryInput: (toolID) => ({
+                  source: "worker-projection",
+                  tool_id: toolID,
+                  worker_turn_descriptor_hash: descriptor.hash,
+                  projection_hash: capability.identity.projectionHash,
+                }),
+                materialize: materializeProjectedTool,
+              }),
+              ...bindRuntimeToolFactories({
+                toolIDs: persistedStageIDs,
+                kind: "stage",
+                factoryInput: (toolID) => ({
+                  source: "worker-stage",
+                  tool_id: toolID,
+                  worker_turn_descriptor_hash: descriptor.hash,
+                  materializer: payload.tools.stageMaterializers[toolID] ?? null,
+                }),
+                materialize: materializeRecoveredStageTool,
+              }),
+            ],
+          }),
+        },
       })
       return {
         async [Symbol.asyncDispose]() {
@@ -4217,22 +4783,47 @@ export namespace SessionLoop {
       computerRuntimeScopeIdentity({ ownerKind: "orchestrator", taskID, sessionID: input.session.id }),
     )
     try {
-      const rawTools = createOrchestratorTools({
-        taskID,
-        agentSessionID: input.session.id,
-        sendSchedulerMessage,
-        dispatchAgents: [...skillProjection.schedulerOnlyAgents, ...skillProjection.projectedAgents],
-      }).tools as Record<string, AITool>
-      const projectedTools = await PromptProfileResolver.projectOrchestratorTools(rawTools, schedulerCapability, {
-        taskID,
-        projectDirectory,
-        connectionOwner: owner,
-      })
-      if (!Object.hasOwn(projectedTools, input.request.toolName)) {
+      const projectedToolIDs = [
+        ...schedulerCapability.builtInToolIDs.filter((toolID) => toolID !== CAPABILITY_SEARCH_TOOL_ID),
+        ...schedulerCapability.defaultTools.map((entry) => entry.providerName),
+        ...schedulerCapability.packageTools.map((entry) => entry.providerName),
+        ...schedulerCapability.defaultMcpTools.map((entry) => entry.providerName),
+        ...schedulerCapability.packageMcpTools.map((entry) => entry.providerName),
+      ]
+      if (!projectedToolIDs.includes(input.request.toolName)) {
         throw new PermissionAuthority.StaleContinuationError(
           input.request.id,
           `The projected scheduler Tool ${input.request.toolName} changed after restart`,
         )
+      }
+      const dispatchAgents = [...skillProjection.schedulerOnlyAgents, ...skillProjection.projectedAgents]
+      const builtInToolIDs = new Set(schedulerCapability.builtInToolIDs)
+      const materializeBuiltInTool = (toolID: string) =>
+        createExactOrchestratorTool({
+          toolID,
+          taskID,
+          agentSessionID: input.session.id,
+          sendSchedulerMessage,
+          dispatchAgents,
+        })
+      const materializeProjectedTool = async (toolID: string) => {
+        if (builtInToolIDs.has(toolID)) return materializeBuiltInTool(toolID)
+        const exact = await PromptProfileResolver.exactProjectedExtensionTool({
+          capability: schedulerCapability,
+          providerName: toolID,
+          runtimeTool: materializeBuiltInTool,
+          taskID,
+          projectDirectory,
+          toolDirectory: projectDirectory,
+          connectionOwner: owner,
+        })
+        if (!exact) {
+          throw new PermissionAuthority.StaleContinuationError(
+            input.request.id,
+            `The projected scheduler Tool ${toolID} changed after restart`,
+          )
+        }
+        return exact
       }
       SessionRuntimeContractStore.set(input.session.id, {
         identity: {
@@ -4245,18 +4836,27 @@ export namespace SessionLoop {
           contractKind: "orchestrator-wake",
           installedAt: Date.now(),
         },
-        projectedTools,
-        projectedRegistryToolIDs: schedulerCapability.builtInToolIDs,
         skillProjection,
-        harnessProjection: PromptProfileResolver.schedulerHarnessProjection({
+        harnessGrants: PromptProfileResolver.schedulerHarnessGrants({
           taskID,
           capability: schedulerCapability,
+          projectedToolIDs,
         }),
         projectDirectory,
         includeMcpTools: false,
         system: [],
         systemMode: "complete",
-        resources: { mcp: owner },
+        resources: {
+          mcp: owner,
+          tools: createRuntimeToolOwner({
+            leaves: bindRuntimeToolFactories({
+              toolIDs: projectedToolIDs,
+              kind: "projected",
+              factoryInput: (toolID) => ({ source: "scheduler-projection", tool_id: toolID }),
+              materialize: materializeProjectedTool,
+            }),
+          }),
+        },
       })
       return {
         async [Symbol.asyncDispose]() {
@@ -4267,19 +4867,6 @@ export namespace SessionLoop {
       await owner.close()
       throw error
     }
-  }
-
-  export function usesExactRuntimeContractTools(contract: SessionRuntimeContract | undefined): boolean {
-    if (!contract) return false
-    if (contract.identity.agentID === "orchestrator" && contract.identity.contractKind === "orchestrator-wake") {
-      return true
-    }
-    const runtimeTemplate = RuntimeTemplateRegistry.get(contract.identity.baseRole)
-    return contract.exactTools === true || runtimeTemplate.exactRuntimeContract
-  }
-
-  export function requiresProjectedRuntimeSurface(contract: SessionRuntimeContract | undefined): boolean {
-    return contract !== undefined
   }
 
   export function applyToolSwitches(
@@ -4324,6 +4911,7 @@ export namespace SessionLoop {
     const browserPermissionKey = browserMcpPermissionKeyOf(raw)
     const computerPermissionKey = computerMcpPermissionKeyOf(raw)
     const mcpAuthorityBinding = MCP.toolAuthorityBinding(raw as object)
+    const assertExactMcpCurrent = MCP.exactToolAssertion(raw as object)
     const stageMaterializerBinding = stageToolMaterializerBindingOf(raw as object)
     const internalStageBinding = internalStageToolBindingOf(raw as object)
     if (internalStageBinding) {
@@ -4347,9 +4935,8 @@ export namespace SessionLoop {
       !projectedBinding &&
       runtimeContract
     ) {
-      const records = sessionRuntimeToolRecords(runtimeContract)
-      const record = records.projectedTools[name] ?? records.stageTools[name]
-      if (record) {
+      const ownerKind = sessionRuntimeToolOwner(runtimeContract)?.kind(name)
+      if (ownerKind) {
         const bound = bindProjectedTaskToolRuntime(
           { ...(raw as object) },
           {
@@ -4378,6 +4965,9 @@ export namespace SessionLoop {
       !internalStageBinding
     ) {
       throw new Error(`Projected Tool ${name} is missing its immutable authorization binding`)
+    }
+    if (mcpAuthorityBinding && !assertExactMcpCurrent) {
+      throw new Error(`Projected MCP Tool ${name} is missing its exact Catalog invocation assertion`)
     }
     // Mirror the attachment stamping the registry-tools wrapper applies
     // (loop.ts:967-987). Extras (e.g. build/runtime visual
@@ -4456,6 +5046,19 @@ export namespace SessionLoop {
               },
             }),
           )
+        if (assertExactMcpCurrent) {
+          try {
+            await assertExactMcpCurrent()
+          } catch (error) {
+            if (ctx.mcpAppLifecycle?.started(toolCallID)) {
+              await ctx.mcpAppLifecycle.fail(toolCallID, toolInput, error)
+            }
+            if (error instanceof MCP.CatalogBindingStaleError) {
+              throw new StaleCatalogOccurrenceError(error.mismatches)
+            }
+            throw error
+          }
+        }
         try {
           await ctx.mcpAppLifecycle?.input(toolCallID, toolInput)
           const result = await executeProjectedTool()

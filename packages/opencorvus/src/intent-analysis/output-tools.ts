@@ -24,6 +24,7 @@ import type {
   IntentSlot,
 } from "./types"
 import { FactCheckItemListSchema } from "@/fact-check/schema"
+import { materializeExactTool } from "@/agent/exact-tool-factory"
 
 export const INTENT_CLASSES = [
   "question",
@@ -130,11 +131,11 @@ function emptyCollector(): IntentCollector {
 // Tool factory
 // ---------------------------------------------------------------------------
 
-export function createIntentOutputTools() {
+export function createIntentOutputTools(onMaterialize?: (toolID: string) => void) {
   let collector = emptyCollector()
 
-  const tools = {
-    extract_slot: tool({
+  const toolFactories = {
+    extract_slot: () => tool({
       description:
         "Record one extracted requirement element (a 'slot') from the user's " +
         "request. Call once per distinct element — e.g. target file, module, " +
@@ -158,7 +159,7 @@ export function createIntentOutputTools() {
       },
     }),
 
-    flag_missing_info: tool({
+    flag_missing_info: () => tool({
       description:
         "Flag one piece of information judged missing but important for the " +
         "downstream planning agents. Use short snake_case keys; the matching " +
@@ -178,7 +179,7 @@ export function createIntentOutputTools() {
       },
     }),
 
-    ask_clarification: tool({
+    ask_clarification: () => tool({
       description:
         "Record one clarification question the user would need to answer " +
         "before downstream agents can proceed safely. Use priority='blocker' " +
@@ -198,7 +199,7 @@ export function createIntentOutputTools() {
       },
     }),
 
-    record_intent_analysis: tool({
+    record_intent_analysis: () => tool({
       description:
         "Record or revise the current intent classification judgment. This is an optional domain fact, not a finalizer: extracted slots, missing information, and clarification facts remain readable when no judgment is recorded.",
       inputSchema: IntentJudgmentSchema,
@@ -214,7 +215,7 @@ export function createIntentOutputTools() {
   }
 
   return {
-    tools,
+    materializeExact: (toolID: string) => materializeExactTool(toolFactories, toolID, onMaterialize),
     reset() {
       collector = emptyCollector()
       return collector

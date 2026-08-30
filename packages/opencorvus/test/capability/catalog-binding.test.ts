@@ -30,8 +30,6 @@ import { Database, eq } from "../../src/storage/db"
 import { PartTable } from "../../src/session/session.sql"
 import { acceptTaskRootIngressInTransaction } from "../../src/engine/task-root-fact-store"
 import { MCP } from "../../src/mcp"
-import { CapabilitySearchTool } from "../../src/tool/capability-search"
-import { Tool } from "../../src/tool/tool"
 import { writeFile } from "node:fs/promises"
 import path from "node:path"
 import { resolveCapabilityCaller } from "../../src/capability/caller-authority"
@@ -257,25 +255,18 @@ describe("occurrence-bound capability catalog", () => {
         })
         expect(CatalogOccurrenceBinding.hash(restored)).toBe(binding.snapshot_hash)
 
-        const search = await CapabilitySearchTool.init({ agentID: "work" })
-        const searchContext = {
-          sessionID: session.id,
-          messageID: first.id,
-          callID: "call-bound-search",
-          agent: "work",
-          abort: new AbortController().signal,
-          messages: [],
-          executionSurface: Tool.executionSurface(["capability_search"], []),
-          metadata() {},
-          async ask() {},
-        }
-        const beforeMutation = await search.execute({ query: "discover" }, searchContext)
-        await CapabilityCatalogCache.invalidate("tool-registry")
-        const afterMutation = await search.execute(
-          { query: "discover" },
-          { ...searchContext, callID: "call-bound-search-after-mutation" },
+        const beforeMutation = searchCapabilityCatalog(
+          CatalogOccurrenceBinding.searchSnapshot(restored),
+          "conversation",
+          { queries: ["discover"] },
         )
-        expect(afterMutation.output).toBe(beforeMutation.output)
+        await CapabilityCatalogCache.invalidate("tool-registry")
+        const afterMutation = searchCapabilityCatalog(
+          CatalogOccurrenceBinding.searchSnapshot(restored),
+          "conversation",
+          { queries: ["discover"] },
+        )
+        expect(afterMutation).toEqual(beforeMutation)
 
         const second = assistant({ sessionID: session.id, parentID: userMessageID })
         await Session.beginAssistantReply(second)
@@ -645,10 +636,10 @@ describe("occurrence-bound capability catalog", () => {
         await CapabilityCatalogCache.reset()
         const payload = CatalogOccurrenceBinding.payload({ snapshot: snapshot(), materializationScope: scope() })
         const bound = CatalogOccurrenceBinding.searchSnapshot(payload)
-        const before = searchCapabilityCatalog(bound, "conversation", { query: "discover" })
+        const before = searchCapabilityCatalog(bound, "conversation", { queries: ["discover"] })
         const firstGeneration = await CapabilityCatalogCache.invalidate("tool-registry")
         const secondGeneration = await CapabilityCatalogCache.invalidate("tool-registry")
-        const after = searchCapabilityCatalog(bound, "conversation", { query: "discover" })
+        const after = searchCapabilityCatalog(bound, "conversation", { queries: ["discover"] })
 
         expect(firstGeneration).toEqual({ "tool-registry": 1 })
         expect(secondGeneration).toEqual({ "tool-registry": 2 })
@@ -727,11 +718,13 @@ describe("occurrence-bound capability catalog", () => {
           processAuthority: MCP.hostProcessAuthority(project.path),
         }
         try {
-          const initial = await MCP.inspectScopedCapabilities(connection)
-          expect(initial.tools).toEqual(["activate", "retiring"])
-          const materializedBefore = await MCP.scopedToolsForServer(connection)
-          const activateBefore = MCP.toolAuthorityBinding(materializedBefore["catalog-list-changed_activate"]!)
-          expect(materializedBefore).toHaveProperty("catalog-list-changed_retiring")
+          const initialSnapshot = await MCP.inspectScopedCapabilitySnapshot(connection)
+          expect(initialSnapshot.tool_definitions.map((tool) => tool.name)).toEqual(["activate", "retiring"])
+          const bindingsBefore = MCP.catalogToolBindings("catalog-list-changed", mcp, initialSnapshot)
+          const activateBefore = MCP.toolAuthorityBinding(
+            await MCP.scopedTool({ ...connection, toolName: "activate" }),
+          )
+          expect(bindingsBefore.map((binding) => binding.runtime_name)).toContain("catalog-list-changed_retiring")
           const before = owner.catalogSnapshot().owner_revision
           let after = owner.catalogSnapshot().owner_revision
           for (let attempt = 0; attempt < 100 && after === before; attempt++) {
@@ -739,13 +732,73 @@ describe("occurrence-bound capability catalog", () => {
             after = owner.catalogSnapshot().owner_revision
           }
           expect(after).not.toBe(before)
-          const materializedAfter = await MCP.scopedToolsForServer(connection)
-          const activateAfter = MCP.toolAuthorityBinding(materializedAfter["catalog-list-changed_activate"]!)
-          expect(Object.keys(materializedAfter).sort()).toEqual([
+          const afterSnapshot = await MCP.inspectScopedCapabilitySnapshot(connection)
+          const bindingsAfter = MCP.catalogToolBindings("catalog-list-changed", mcp, afterSnapshot)
+          const activateAfter = MCP.toolAuthorityBinding(
+            await MCP.scopedTool({ ...connection, toolName: "activate" }),
+          )
+          expect(bindingsAfter.map((binding) => binding.runtime_name)).toEqual([
             "catalog-list-changed_activate",
             "catalog-list-changed_successor",
           ])
           expect(activateAfter?.toolDigest).not.toBe(activateBefore?.toolDigest)
+        } finally {
+          await owner.close()
+        }
+      },
+    })
+  }, 0)
+
+  test("converges five concurrent exact leaves on one identical immutable owner snapshot", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const fixture = path.join(project.path, "catalog-concurrent-exact.mjs")
+        await writeFile(
+          fixture,
+          [
+            "import readline from 'node:readline';",
+            "const rl=readline.createInterface({input:process.stdin});",
+            "const send=(value)=>process.stdout.write(JSON.stringify(value)+'\\n');",
+            "const schema={type:'object',properties:{},additionalProperties:false};",
+            "const names=['alpha','beta','delta','epsilon','gamma'];",
+            "rl.on('line',(line)=>{const request=JSON.parse(line);",
+            "if(request.method==='initialize') return send({jsonrpc:'2.0',id:request.id,result:{protocolVersion:'2025-06-18',capabilities:{tools:{}},serverInfo:{name:'catalog-concurrent-exact',version:'1'}}});",
+            "if(request.method==='tools/list') return send({jsonrpc:'2.0',id:request.id,result:{tools:names.map(name=>({name,description:'exact '+name,inputSchema:schema}))}});",
+            "});",
+          ].join("\n"),
+        )
+        const mcp = Config.Mcp.parse({ type: "local", command: [process.execPath, fixture], timeout: 10_000 })
+        const owner = MCP.createScopedConnectionOwner("catalog-concurrent-exact-owner")
+        const connection = {
+          key: "catalog-concurrent-exact",
+          mcp,
+          cwd: project.path,
+          connectionOwner: owner,
+          connectionIdentity: "catalog-concurrent-exact-identity",
+          processAuthority: MCP.hostProcessAuthority(project.path),
+        }
+        const names = ["alpha", "beta", "delta", "epsilon", "gamma"]
+        try {
+          const inventory = await MCP.inspectScopedCapabilitySnapshot(connection)
+          const ownerRevision = owner.catalogSnapshot().owner_revision
+          const exact = await Promise.all(
+            names.map((toolName) => MCP.exactScopedTool({ ...connection, toolName })),
+          )
+          expect({
+            inventory: inventory.tool_definitions.map((definition) => definition.name),
+            definitions: exact.map((tool) => tool.description),
+            authorities: exact.map((tool) => MCP.toolAuthorityBinding(tool)!.toolDigest),
+            assertions: exact.map((tool) => typeof MCP.exactToolAssertion(tool)),
+            ownerRevision: owner.catalogSnapshot().owner_revision,
+          }).toEqual({
+            inventory: names,
+            definitions: names.map((name) => `exact ${name}`),
+            authorities: names.map(() => expect.stringMatching(/^[a-f0-9]{64}$/)),
+            assertions: names.map(() => "function"),
+            ownerRevision,
+          })
         } finally {
           await owner.close()
         }
@@ -786,10 +839,16 @@ describe("occurrence-bound capability catalog", () => {
           processAuthority: MCP.hostProcessAuthority(project.path),
         }
         try {
-          const tool = await MCP.scopedToolInfo({ ...connection, toolName: "long_call" })
+          const exact = await MCP.exactScopedTool({ ...connection, toolName: "long_call" })
+          const authority = MCP.toolAuthorityBinding(exact)
+          const assertCurrent = MCP.exactToolAssertion(exact)
+          if (!authority || !assertCurrent || !exact.execute) {
+            throw new Error("Exact long-call fixture did not publish its invocation authority.")
+          }
+          await assertCurrent()
           const before = owner.catalogSnapshot().owner_revision
           const session = await Session.create({ kind: "assistant", title: "MCP listChanged during long call" })
-          let callSettled = false
+          const timeline = ["invocation_started"]
           const call = PermissionAuthority.authorizeAndExecute(
             {
               projectID: Instance.project.id,
@@ -798,22 +857,29 @@ describe("occurrence-bound capability catalog", () => {
               toolCallID: "call_catalog_long_call",
               providerKind: "mcp",
               providerID: connection.key,
-              providerDigest: MCP.toolDefinitionDigest(tool),
-              toolName: tool.name,
+              providerDigest: `${authority.configDigest}:${authority.toolDigest}`,
+              toolName: "long_call",
               args: {},
             },
-            () => MCP.callScopedTool({ ...connection, toolName: tool.name, args: {} }),
-          ).finally(() => {
-            callSettled = true
+            () =>
+              exact.execute!({}, {
+                toolCallId: "call_catalog_long_call",
+                messages: [],
+                abortSignal: new AbortController().signal,
+              }) as Promise<{ content: unknown }>,
+          ).then((result) => {
+            timeline.push("invocation_completed")
+            return result
           })
           let after = owner.catalogSnapshot().owner_revision
           for (let attempt = 0; attempt < 100 && after === before; attempt++) {
             await new Promise((resolve) => setTimeout(resolve, 10))
             after = owner.catalogSnapshot().owner_revision
           }
+          timeline.push("inventory_advanced")
           expect(after).not.toBe(before)
-          expect(callSettled).toBe(false)
           expect((await call).content).toEqual([{ type: "text", text: "done" }])
+          expect(timeline).toEqual(["invocation_started", "inventory_advanced", "invocation_completed"])
         } finally {
           await owner.close()
         }
@@ -888,20 +954,22 @@ describe("occurrence-bound capability catalog", () => {
         })
         const owner = MCP.createScopedConnectionOwner("catalog-collision-owner")
         try {
-          await expect(
-            MCP.scopedToolsForServer({
+          const collisionInput = {
               key: "collision",
               mcp: sameServer,
               cwd: project.path,
               connectionOwner: owner,
               connectionIdentity: "catalog-collision-identity",
               processAuthority: MCP.hostProcessAuthority(project.path),
-            }),
-          ).rejects.toMatchObject<Partial<MCP.McpRuntimeNameCollisionError>>({
+            }
+          const collisionSnapshot = await MCP.inspectScopedCapabilitySnapshot(collisionInput)
+          expect(() =>
+            MCP.catalogToolBindings("collision", sameServer, collisionSnapshot),
+          ).toThrow(expect.objectContaining<Partial<MCP.McpRuntimeNameCollisionError>>({
             name: "McpRuntimeNameCollisionError",
-            owner_ref: "scoped-mcp:catalog-collision-owner",
+            owner_ref: "mcp-server:collision",
             runtime_name: "collision_a_b",
-          })
+          }))
         } finally {
           await owner.close()
         }
@@ -909,7 +977,8 @@ describe("occurrence-bound capability catalog", () => {
         const one = Config.Mcp.parse({ type: "local", command: [process.execPath, fixture], timeout: 2_000 })
         await Config.updateProjectPatch({ mcp: { "a.b": one, "a/b": one } })
         const config = await Config.get()
-        await expect(MCP.toolsForServers(config, ["a.b", "a/b"])).rejects.toMatchObject<
+        await Promise.all([MCP.connect("a.b"), MCP.connect("a/b")])
+        await expect(MCP.observedCatalogSnapshot(config)).rejects.toMatchObject<
           Partial<MCP.McpRuntimeNameCollisionError>
         >({
           name: "McpRuntimeNameCollisionError",
