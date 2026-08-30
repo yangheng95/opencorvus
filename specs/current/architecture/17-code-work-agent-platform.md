@@ -1,6 +1,15 @@
 # Code and Work Agent Platform
 
-Status: proposed current architecture, implementation pending
+Status: partially implemented current contract; search-native convergence pending
+
+Implementation calibration (2026-08-30): typed `CapabilityRef`, `HarnessProjection`,
+`capability_search`, product pillars and immutable Task package binding are present in current source. The
+context-bound Catalog view lifecycle over project-scoped owner caches, pre-materialization native Harness authority, unified Expert Squad
+capability declaration and deferred Tool reveal described as future work in this chapter are not complete. The
+evidence, industry comparison and hard-replacement plan are recorded in
+[`2026-08-30-search-native-capability-harness-refactor.md`](../../records/2026-08/2026-08-30-search-native-capability-harness-refactor.md).
+Until that replacement lands, this chapter's Catalog/Harness sections describe the current V1 contract and its
+intended boundaries, not proof that every milestone below is implemented.
 
 ## Recall
 
@@ -271,7 +280,7 @@ dedicated `work` conversation experience. Either may hand off to Mission.
 | Prompt queue/recovery | Durable Task queue and Session wake paths already exist. | Reuse. |
 | External always-on host | Runtime services currently depend on an opened project instance. Full `InstanceBootstrap` also starts interactive services and registered directories include sandboxes. | Missing. Add one headless composition plus explicit daemon/desktop ownership. |
 | External provider ingress | No generic package-owned poll/webhook adapter emits normalized external events. | Partial future need; do not block the first paid slice. |
-| Capability fuzzy search | Skill and Artifact each have local fuzzy search; there is no cross-kind capability index. | Add one read-only catalog search. |
+| Capability fuzzy search | A typed cross-kind `capability_search` exists, while Skill/Mission Skill and Expert Squad retain additional search contracts. The current Tool surface remains eager, and Catalog snapshots are rebuilt per call instead of following the documented owner-revision lifecycle. | Converge local capability discovery and replace eager model schemas through the dated search-native refactor; keep external Market and business-data search under their own owners. |
 | Authorization | One permission evaluator and MCP OAuth path exist, but generic non-Browser MCP execution has no provider-semantic argument mapper and unmatched permissions default to allow. | Add a package-owned typed action boundary that calls the existing evaluator; do not create a grant service. |
 
 ## Product-Pillar Contract

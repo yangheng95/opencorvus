@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest search-native capability Harness investigation and refactor design: [`2026-08-30-search-native-capability-harness-refactor.md`](records/2026-08/2026-08-30-search-native-capability-harness-refactor.md).
+
 Latest scheduling algorithm razor audit: [`2026-08-30-scheduling-algorithm-razor-audit.md`](records/2026-08/2026-08-30-scheduling-algorithm-razor-audit.md).
 
 Latest scheduling architecture remediation: [`2026-08-30-scheduling-architecture-remediation.md`](records/2026-08/2026-08-30-scheduling-architecture-remediation.md).
