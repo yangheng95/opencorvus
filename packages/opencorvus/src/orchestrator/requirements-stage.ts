@@ -31,6 +31,7 @@ type RequirementsStageDispatch = {
   existingSessionID?: string
   continuationPrompt?: string
   dispatchTurn?: import("./dispatch-turn-projection").DispatchTurn
+  signal: AbortSignal
   onSessionCreated?: (sessionID: string) => void | Promise<void>
   onDispatchAuthorityCommit?: import("@/agent/runner").AgentDispatchAuthorityCommit
   onRuntimeReady?: (sessionID: string) => void | Promise<void>
@@ -66,7 +67,7 @@ export function createRequirementsStageDispatcher(dependencies: RequirementsStag
         attachmentRefs: dispatch.attachmentRefs,
         taskID: dependencies.taskID,
         parentSessionID: dependencies.parentSessionID,
-        signal: dependencies.signal,
+        signal: dispatch.signal,
         onStatus: () => {},
         onSessionCreated: async (sessionID) => {
           await dispatch.onSessionCreated?.(sessionID)

@@ -107,7 +107,14 @@ export function createBuildTool(dependencies: BuildToolDependencies) {
                   projectDir: taskProjectDir,
                 }
               : undefined
-          let boundSessionID = execution.existingSessionID
+          const buildSessionIdentity = execution.existingSessionID
+            ? ({ existingSessionID: execution.existingSessionID } as const)
+            : execution.newSessionID
+              ? ({ newSessionID: execution.newSessionID } as const)
+              : (() => {
+                  throw new Error("Build dispatch has no exact existing or preallocated Session identity")
+                })()
+          let boundSessionID = execution.existingSessionID ?? execution.newSessionID
 
           log.info("build tool invoked", {
             taskID,
@@ -120,7 +127,7 @@ export function createBuildTool(dependencies: BuildToolDependencies) {
           const result = await BuildAgent.run({
             agentID,
             packageRevision: execution.projectedAgent.packageRevision,
-            existingSessionID: execution.existingSessionID,
+            ...buildSessionIdentity,
             continuationPrompt: dispatchAdapterContinuationPrompt(execution),
             dispatchTurn: execution.dispatch.turn,
             taskID: task.id,
@@ -130,7 +137,7 @@ export function createBuildTool(dependencies: BuildToolDependencies) {
               attachmentRefs: [],
             },
             parentSessionID: input.agentSessionID,
-            signal: input.signal,
+            signal: execution.signal,
             workDir: worktreeUsage === "current_project" ? taskProjectDir : undefined,
             onSessionCreated: async (sessionID) => {
               if (boundSessionID && boundSessionID !== sessionID) {

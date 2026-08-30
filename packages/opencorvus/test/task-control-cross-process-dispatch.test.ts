@@ -588,7 +588,7 @@ describe("cross-process dispatch abandonment", () => {
     })
   })
 
-  test("rejects noncanonical delivery-owner objects at the SQLite lineage boundary", async () => {
+  test("returns the exact SQLite contract error for malformed lineage Tool and owner shapes", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
@@ -610,11 +610,44 @@ describe("cross-process dispatch abandonment", () => {
                 taskID: fixture.taskID,
                 kind: "dispatch_lineage",
                 label: "dispatch-agent",
-                payload: { adapter_input: {}, delivery_owner: deliveryOwner },
+                payload: {
+                  tool_name: "dispatch_agent",
+                  tool_part_id: `part-invalid-owner-${index}`,
+                  tool_call_id: `call-invalid-owner-${index}`,
+                  adapter_input: {},
+                  delivery_owner: deliveryOwner,
+                },
                 timeCreated: Date.now(),
               })
             }),
-          ).toThrow("engine_artifact: dispatch_lineage requires exact adapter_input and delivery_owner objects")
+          ).toThrow("engine_artifact: dispatch_lineage requires exact Tool occurrence, adapter_input and delivery_owner objects")
+        }
+        const validOwner = { kind: "runtime_process", process_occurrence_id: "runtime" }
+        const invalidToolOccurrences = [
+          {},
+          { tool_name: "dispatch_agent", collection_member_index: 0, collection_member_count: 1 },
+          { tool_name: "dispatch_agents", collection_member_index: 0 },
+          { tool_name: "dispatch_agents", collection_member_index: 2, collection_member_count: 2 },
+        ]
+        for (const [index, toolOccurrence] of invalidToolOccurrences.entries()) {
+          expect(() =>
+            Database.immediateTransaction((db) => {
+              insertEngineArtifact(db, {
+                id: `art_invalid_dispatch_tool_${index}`,
+                taskID: fixture.taskID,
+                kind: "dispatch_lineage",
+                label: "dispatch-agent",
+                payload: {
+                  tool_part_id: `part-invalid-tool-${index}`,
+                  tool_call_id: `call-invalid-tool-${index}`,
+                  ...toolOccurrence,
+                  adapter_input: {},
+                  delivery_owner: validOwner,
+                },
+                timeCreated: Date.now(),
+              })
+            }),
+          ).toThrow("engine_artifact: dispatch_lineage requires exact Tool occurrence, adapter_input and delivery_owner objects")
         }
       },
     })

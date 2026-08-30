@@ -485,7 +485,7 @@ export namespace BuildAgent {
     projectDir?: string
   }
 
-  export interface RunInput {
+  interface RunInputBase {
     /** Exact durable Task identity. The Agent resolves the Task from the
      * producer store instead of receiving a copied row. */
     taskID: string
@@ -504,7 +504,6 @@ export namespace BuildAgent {
     /** Existing build session to continue for retry attempts. When set,
      *  BuildAgent appends the new user message to this session and replaces
      *  its runtime contract instead of creating a new build session. */
-    existingSessionID?: string
     continuationPrompt?: string
     dispatchTurn?: import("@/orchestrator/dispatch-turn-projection").DispatchTurn
     agentID: string
@@ -551,6 +550,12 @@ export namespace BuildAgent {
     terminalFactProvenance?: typeof artifactProvenanceForSession
   }
 
+  export type RunInput = RunInputBase &
+    (
+      | { existingSessionID: string; newSessionID?: never }
+      | { existingSessionID?: never; newSessionID: string }
+    )
+
   export interface RunOutput {
     /** The child build session and its visible final assistant message. */
     sessionID: string
@@ -585,7 +590,7 @@ export namespace BuildAgent {
       const ownsWorktree = !input.workDir
       let worktreeDir = input.managedWorktree?.directory ?? input.workDir
       let worktreeBranch: string | undefined
-      const buildSessionID = input.existingSessionID ?? Identifier.descending("session")
+      const buildSessionID = input.existingSessionID ?? input.newSessionID
       // Worktree HEAD commit at creation time. Equals primary HEAD because
       // Worktree.create branches off it; we capture the SHA so post-build
       // diff extraction can compute baseRef..HEAD inside the worktree

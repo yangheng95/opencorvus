@@ -1,6 +1,6 @@
 import type { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
 import { ProjectedAgentWorkScopeSchema, type ProjectedAgentWorkScope } from "@/agent/projected-agent-work-scope"
-import type { DispatchAgentLineageHandle } from "./dispatch-agent-tool"
+import type { LiveDispatchAgentLineageHandle } from "./dispatch-agent-tool"
 import { DispatchTurnSchema, renderDispatchContinuationTurn } from "./dispatch-turn-projection"
 
 export interface DispatchAdapterExecutionContext {
@@ -11,7 +11,8 @@ export interface DispatchAdapterExecutionContext {
   readonly newSessionID?: string
   /** Exact prior child Session identity for continuation or coordination redispatch. */
   readonly existingSessionID?: string
-  readonly dispatch: DispatchAgentLineageHandle
+  readonly dispatch: LiveDispatchAgentLineageHandle
+  readonly signal: AbortSignal
   readonly toolOptions: unknown
 }
 
@@ -20,20 +21,29 @@ export function createDispatchAdapterExecutionContext(input: {
   workScope: ProjectedAgentWorkScope
   newSessionID?: string
   existingSessionID?: string
-  dispatch: DispatchAgentLineageHandle
+  dispatch: LiveDispatchAgentLineageHandle
   toolOptions: unknown
 }): DispatchAdapterExecutionContext {
   const agentID = input.projectedAgent.identity.agentID
   if (!agentID) throw new Error("dispatch adapter execution requires an exact projected agent identity")
   const workScope = ProjectedAgentWorkScopeSchema.parse(input.workScope)
+  if (!(input.dispatch.signal instanceof AbortSignal)) {
+    throw new Error("dispatch adapter execution requires the admission cancellation signal")
+  }
   if (input.newSessionID !== undefined && input.newSessionID.length === 0) {
     throw new Error("dispatch adapter execution requires a non-empty newSessionID")
   }
   if (input.existingSessionID !== undefined && input.existingSessionID.length === 0) {
     throw new Error("dispatch adapter execution requires a non-empty existingSessionID")
   }
-  if (input.newSessionID && input.existingSessionID) {
-    throw new Error("dispatch adapter execution cannot create and reuse a Session simultaneously")
+  if (!!input.newSessionID === !!input.existingSessionID) {
+    throw new Error("dispatch adapter execution requires exactly one existing or preallocated Session identity")
+  }
+  if (
+    input.newSessionID !== input.dispatch.newSessionID ||
+    input.existingSessionID !== input.dispatch.existingSessionID
+  ) {
+    throw new Error("dispatch adapter execution Session identity does not match its admission handle")
   }
   return Object.freeze({
     agentID,
@@ -42,6 +52,7 @@ export function createDispatchAdapterExecutionContext(input: {
     newSessionID: input.newSessionID,
     existingSessionID: input.existingSessionID,
     dispatch: input.dispatch,
+    signal: input.dispatch.signal,
     toolOptions: input.toolOptions,
   })
 }
@@ -62,6 +73,18 @@ export function requireDispatchAdapterExecutionContext(input: unknown): Dispatch
   }
   if (!context.dispatch || typeof context.dispatch.dispatchID !== "string") {
     throw new Error("dispatch adapter execution context requires dispatch_agent lineage")
+  }
+  if (!(context.signal instanceof AbortSignal) || context.signal !== context.dispatch.signal) {
+    throw new Error("dispatch adapter execution signal does not match its admission handle")
+  }
+  if (!!context.newSessionID === !!context.existingSessionID) {
+    throw new Error("dispatch adapter execution context requires exactly one Session identity")
+  }
+  if (
+    context.newSessionID !== context.dispatch.newSessionID ||
+    context.existingSessionID !== context.dispatch.existingSessionID
+  ) {
+    throw new Error("dispatch adapter execution context Session identity does not match its admission handle")
   }
   DispatchTurnSchema.parse(context.dispatch.turn)
   if (!("toolOptions" in context)) {

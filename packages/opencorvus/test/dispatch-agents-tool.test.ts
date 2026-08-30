@@ -1,11 +1,11 @@
 import { afterEach, describe, expect, test } from "bun:test"
 import { DispatchOutcome } from "@/agent/dispatch-outcome"
 import { Identifier } from "@/id/id"
+import { DispatchAgentsToolTestHooks } from "@/orchestrator/dispatch-agents-tool"
 import { Instance } from "@/project/instance"
 import { Session } from "@/session"
 import { SessionLoop } from "@/session/loop"
 import { MessageStore } from "@/session/message-store"
-import { DispatchAgentsToolTestHooks } from "@/orchestrator/dispatch-agents-tool"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 import z from "zod"
 
@@ -13,11 +13,6 @@ afterEach(async () => {
   await Instance.disposeAll()
   await resetMemoryDatabase()
 })
-
-function allErrorMessages(error: unknown): string[] {
-  if (error instanceof AggregateError) return [error.message, ...error.errors.flatMap(allErrorMessages)]
-  return [error instanceof Error ? error.message : String(error)]
-}
 
 function frontierInput(targets: readonly string[]) {
   return {
@@ -29,428 +24,282 @@ function frontierInput(targets: readonly string[]) {
       expected_result: `Return the evidenced ${target} result`,
       depends_on: [],
     })),
-    dispatches: targets.map((target) => ({ dispatch: { target } })),
+    dispatches: targets.map((target) => ({
+      dispatch: {
+        target,
+        work_scope: { kind: "task" as const },
+        turn: {
+          kind: "initial" as const,
+          workflow_subject: { kind: "direct" as const },
+          use_worktree: false,
+          input: {},
+        },
+      },
+    })),
   }
 }
 
-describe("dispatch_agents durable child settlement", () => {
-  test("reuses a completed child and resumes the remaining persisted frontier occurrence", async () => {
+async function persistedOuter(input: ReturnType<typeof frontierInput>) {
+  const session = await Session.create({ kind: "orchestrator", title: "Canonical dispatch collection" })
+  const user = await Session.updateMessage({
+    id: Identifier.ascending("message"),
+    sessionID: session.id,
+    role: "user",
+    author: "user",
+    agent: "orchestrator",
+    model: { providerID: "test", modelID: "test" },
+    time: { created: Date.now() },
+  })
+  const messageID = Identifier.ascending("message")
+  await Session.updateMessage({
+    id: messageID,
+    parentID: user.id,
+    sessionID: session.id,
+    role: "assistant",
+    author: "orchestrator",
+    agent: "orchestrator",
+    providerID: "test",
+    modelID: "test",
+    path: { cwd: Instance.directory, root: Instance.directory },
+    cost: 0,
+    tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+    time: { created: Date.now() },
+  })
+  const partID = Identifier.ascending("part")
+  const callID = Identifier.ascending("call")
+  await Session.updatePart({
+    id: partID,
+    sessionID: session.id,
+    messageID,
+    type: "tool",
+    callID,
+    tool: "dispatch_agents",
+    state: { status: "running", input, time: { start: Date.now() } },
+  })
+  return { sessionID: session.id, messageID, partID, callID }
+}
+
+function executionOptions(identity: Awaited<ReturnType<typeof persistedOuter>>, signal?: AbortSignal) {
+  return {
+    toolCallId: identity.callID,
+    ...(signal ? { abortSignal: signal } : {}),
+    opencorvus: {
+      sessionID: identity.sessionID,
+      messageID: identity.messageID,
+      toolCallID: identity.callID,
+      toolPartID: identity.partID,
+      visibleToolName: "dispatch_agents",
+    },
+  }
+}
+
+const childSchema = z
+  .object({
+    dispatch: z
+      .object({
+        target: z.string(),
+        work_scope: z.object({ kind: z.literal("task") }).strict(),
+        turn: z
+          .object({
+            kind: z.literal("initial"),
+            workflow_subject: z.object({ kind: z.literal("direct") }).strict(),
+            use_worktree: z.boolean(),
+            input: z.record(z.string(), z.unknown()),
+          })
+          .strict(),
+      })
+      .strict(),
+  })
+  .strict()
+
+describe("dispatch_agents canonical collection occurrence", () => {
+  test("binds every member to the one persisted model-authored Tool occurrence", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
       fn: async () => {
-        const session = await Session.create({ kind: "orchestrator", title: "Partial frontier replay" })
-        const user = await Session.updateMessage({
-          id: Identifier.ascending("message"),
-          sessionID: session.id,
-          role: "user",
-          author: "user",
-          agent: "orchestrator",
-          model: { providerID: "test", modelID: "test" },
-          time: { created: Date.now() },
-        })
-        const messageID = Identifier.ascending("message")
-        await Session.updateMessage({
-          id: messageID,
-          parentID: user.id,
-          sessionID: session.id,
-          role: "assistant",
-          author: "orchestrator",
-          agent: "orchestrator",
-          providerID: "test",
-          modelID: "test",
-          path: { cwd: project.path, root: project.path },
-          cost: 0,
-          tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
-          time: { created: Date.now() },
-        })
-        const outerPartID = Identifier.ascending("part")
         const input = frontierInput(["a", "b"])
-        const completed = DispatchOutcome.accepted({
-          sessionID: Identifier.descending("session"),
-          dispatchLineageID: Identifier.ascending("artifact"),
-        })
-        const startedAt = Date.now()
-        const originalRunningStart = startedAt - 60_000
-        await Session.updatePart({
-          id: Identifier.deterministic("part", `dispatch-agents\0${outerPartID}\0${0}`),
-          sessionID: session.id,
-          messageID,
-          type: "tool",
-          callID: Identifier.deterministic("call", `dispatch-agents\0${outerPartID}\0${0}`),
-          tool: "dispatch_agent",
-          state: {
-            status: "completed",
-            input: input.dispatches[0],
-            output: JSON.stringify(completed),
-            title: "Dispatched a",
-            metadata: {},
-            time: { start: startedAt, end: startedAt + 1 },
-          },
-        })
-        await Session.updatePart({
-          id: Identifier.deterministic("part", `dispatch-agents\0${outerPartID}\0${1}`),
-          sessionID: session.id,
-          messageID,
-          type: "tool",
-          callID: Identifier.deterministic("call", `dispatch-agents\0${outerPartID}\0${1}`),
-          tool: "dispatch_agent",
-          state: { status: "running", input: input.dispatches[1], time: { start: originalRunningStart } },
-        })
-        const executedTargets: string[] = []
-        const resumed = DispatchOutcome.accepted({
-          sessionID: Identifier.descending("session"),
-          dispatchLineageID: Identifier.ascending("artifact"),
-        })
+        const identity = await persistedOuter(input)
+        const invocations: unknown[] = []
         const frontier = DispatchAgentsToolTestHooks.create({
-          inputSchema: z.object({ dispatch: z.object({ target: z.string() }).strict() }).strict(),
-          execute: async (request: { dispatch: { target: string } }) => {
-            executedTargets.push(request.dispatch.target)
-            return resumed
-          },
-        }, {})
-        if (!frontier.execute) throw new Error("dispatch_agents has no executor")
-        const result = await frontier.execute(input as never, {
-          toolCallId: outerPartID,
-          opencorvus: {
-            sessionID: session.id,
-            messageID,
-            toolCallID: outerPartID,
-            toolPartID: outerPartID,
-            visibleToolName: "dispatch_agents",
-          },
-        } as never)
-        expect(executedTargets).toEqual(["b"])
-        expect((result as { metadata: { dispatches: unknown[]; member_names: string[] } }).metadata).toMatchObject({
-          dispatches: [completed, resumed],
-          member_names: ["member-1", "member-2"],
-        })
-        const settledChildren = (await MessageStore.parts(messageID)).filter(
-          (part): part is import("@/session/message").Message.ToolPart =>
-            part.type === "tool" && part.tool === "dispatch_agent",
-        )
-        expect(settledChildren.map((part) => part.state.status)).toEqual(["completed", "completed"])
-        expect(settledChildren[1]?.state.time.start).toBe(originalRunningStart)
-      },
-    })
-  })
-
-  test("settles the exact outer and child Parts when deterministic recovery preflight fails", async () => {
-    await using project = await memoryProject()
-    await Instance.provide({
-      directory: project.path,
-      fn: async () => {
-        const session = await Session.create({ kind: "orchestrator", title: "Frontier recovery preflight" })
-        const user = await Session.updateMessage({
-          id: Identifier.ascending("message"),
-          sessionID: session.id,
-          role: "user",
-          author: "user",
-          agent: "orchestrator",
-          model: { providerID: "test", modelID: "test" },
-          time: { created: Date.now() },
-        })
-        const messageID = Identifier.ascending("message")
-        await Session.updateMessage({
-          id: messageID,
-          parentID: user.id,
-          sessionID: session.id,
-          role: "assistant",
-          author: "orchestrator",
-          agent: "orchestrator",
-          providerID: "test",
-          modelID: "test",
-          path: { cwd: project.path, root: project.path },
-          cost: 0,
-          tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
-          time: { created: Date.now() },
-        })
-        const outerPartID = Identifier.ascending("part")
-        const input = frontierInput(["a"])
-        await Session.updatePart({
-          id: outerPartID,
-          sessionID: session.id,
-          messageID,
-          type: "tool",
-          callID: outerPartID,
-          tool: "dispatch_agents",
-          state: { status: "running", input, time: { start: Date.now() - 2_000 } },
-        })
-        const childPartID = Identifier.deterministic("part", `dispatch-agents\0${outerPartID}\0${0}`)
-        await Session.updatePart({
-          id: childPartID,
-          sessionID: session.id,
-          messageID,
-          type: "tool",
-          callID: Identifier.deterministic("call", `dispatch-agents\0${outerPartID}\0${0}`),
-          tool: "dispatch_agent",
-          state: { status: "running", input: input.dispatches[0], time: { start: Date.now() - 1_000 } },
-        })
-        expect(await SessionLoop.terminalizeRecoveredIncompleteAssistant(session.id)).toBe(true)
-        const settled = await MessageStore.parts(messageID)
-        expect(
-          settled
-            .filter((part) => part.type === "tool" && (part.id === outerPartID || part.id === childPartID))
-            .map((part) => ({ id: part.id, status: part.state.status })),
-        ).toEqual([
-          { id: outerPartID, status: "error" },
-          { id: childPartID, status: "error" },
-        ])
-      },
-    })
-  })
-
-  test("preserves the exact caller abort and leaves frontier occurrences recoverable", async () => {
-    await using project = await memoryProject()
-    await Instance.provide({
-      directory: project.path,
-      fn: async () => {
-        const session = await Session.create({ kind: "orchestrator", title: "Frontier caller abort" })
-        const user = await Session.updateMessage({
-          id: Identifier.ascending("message"),
-          sessionID: session.id,
-          role: "user",
-          author: "user",
-          agent: "orchestrator",
-          model: { providerID: "test", modelID: "test" },
-          time: { created: Date.now() },
-        })
-        const messageID = Identifier.ascending("message")
-        await Session.updateMessage({
-          id: messageID,
-          parentID: user.id,
-          sessionID: session.id,
-          role: "assistant",
-          author: "orchestrator",
-          agent: "orchestrator",
-          providerID: "test",
-          modelID: "test",
-          path: { cwd: project.path, root: project.path },
-          cost: 0,
-          tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
-          time: { created: Date.now() },
-        })
-        const outerPartID = Identifier.ascending("part")
-        const input = frontierInput(["a"])
-        await Session.updatePart({
-          id: outerPartID,
-          sessionID: session.id,
-          messageID,
-          type: "tool",
-          callID: outerPartID,
-          tool: "dispatch_agents",
-          state: { status: "running", input, time: { start: Date.now() } },
-        })
-        const controller = new AbortController()
-        const abortReason = new DOMException("caller stopped frontier recovery", "AbortError")
-        const frontier = DispatchAgentsToolTestHooks.create({
-          inputSchema: z.object({ dispatch: z.object({ target: z.string() }).strict() }).strict(),
-          execute: async () => {
-            controller.abort(abortReason)
-            controller.signal.throwIfAborted()
-          },
-        }, {})
-        if (!frontier.execute) throw new Error("dispatch_agents has no executor")
-        let failure: unknown
-        try {
-          await frontier.execute(input as never, {
-            toolCallId: outerPartID,
-            abortSignal: controller.signal,
-            opencorvus: {
-              sessionID: session.id,
-              messageID,
-              toolCallID: outerPartID,
-              toolPartID: outerPartID,
-              visibleToolName: "dispatch_agents",
-            },
-          } as never)
-        } catch (error) {
-          failure = error
-        }
-        expect(failure).toBe(abortReason)
-        expect(
-          (await MessageStore.parts(messageID))
-            .filter((part) => part.type === "tool")
-            .map((part) => ({ tool: part.tool, status: part.state.status })),
-        ).toEqual([
-          { tool: "dispatch_agents", status: "running" },
-          { tool: "dispatch_agent", status: "running" },
-        ])
-      },
-    })
-  })
-
-  test("settles every prepared child when a later preparation write fails", async () => {
-    await using project = await memoryProject()
-    await Instance.provide({
-      directory: project.path,
-      fn: async () => {
-        const session = await Session.create({ kind: "orchestrator", title: "Frontier preparation failure" })
-        const user = await Session.updateMessage({
-          id: Identifier.ascending("message"),
-          sessionID: session.id,
-          role: "user",
-          author: "user",
-          agent: "orchestrator",
-          model: { providerID: "test", modelID: "test" },
-          time: { created: Date.now() },
-        })
-        const messageID = Identifier.ascending("message")
-        await Session.updateMessage({
-          id: messageID,
-          parentID: user.id,
-          sessionID: session.id,
-          role: "assistant",
-          author: "orchestrator",
-          agent: "orchestrator",
-          providerID: "test",
-          modelID: "test",
-          path: { cwd: project.path, root: project.path },
-          cost: 0,
-          tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
-          time: { created: Date.now() },
-        })
-        const outerPartID = Identifier.ascending("part")
-        const input = frontierInput(["a", "b", "c"])
-        await Session.updatePart({
-          id: outerPartID,
-          sessionID: session.id,
-          messageID,
-          type: "tool",
-          callID: outerPartID,
-          tool: "dispatch_agents",
-          state: { status: "running", input, time: { start: Date.now() } },
-        })
-        let runningWrites = 0
-        const frontier = DispatchAgentsToolTestHooks.create(
-          {
-            inputSchema: z.object({ dispatch: z.object({ target: z.string() }).strict() }).strict(),
-            execute: async () => DispatchOutcome.accepted({
+          inputSchema: childSchema,
+          execute: async (_request: unknown, options: unknown) => {
+            invocations.push(options)
+            return DispatchOutcome.accepted({
               sessionID: Identifier.descending("session"),
               dispatchLineageID: Identifier.ascending("artifact"),
-            }),
+            })
+          },
+        })
+        if (!frontier.execute) throw new Error("dispatch_agents has no executor")
+        const result = (await frontier.execute(input as never, executionOptions(identity) as never)) as {
+          output: string
+          metadata: { completed_count: number; member_names: string[] }
+        }
+        expect(invocations.map((options) => (options as any).opencorvus)).toEqual([
+          {
+            sessionID: identity.sessionID,
+            messageID: identity.messageID,
+            toolCallID: identity.callID,
+            toolPartID: identity.partID,
+            visibleToolName: "dispatch_agents",
+            collectionMember: { index: 0, count: 2 },
           },
           {
-            updatePart: async (part) => {
-              if (part.type === "tool" && part.tool === "dispatch_agent" && part.state.status === "running") {
-                runningWrites += 1
-                if (runningWrites === 3) throw new Error("injected preparation write failure")
-              }
-              return await Session.updatePart(part)
-            },
+            sessionID: identity.sessionID,
+            messageID: identity.messageID,
+            toolCallID: identity.callID,
+            toolPartID: identity.partID,
+            visibleToolName: "dispatch_agents",
+            collectionMember: { index: 1, count: 2 },
           },
-        )
-        if (!frontier.execute) throw new Error("dispatch_agents has no executor")
-        let failure: unknown
-        try {
-          await frontier.execute(input as never, {
-            toolCallId: outerPartID,
-            opencorvus: {
-              sessionID: session.id,
-              messageID,
-              toolCallID: outerPartID,
-              toolPartID: outerPartID,
-              visibleToolName: "dispatch_agents",
-            },
-          } as never)
-        } catch (error) {
-          failure = error
-        }
-        expect(allErrorMessages(failure)).toContain("injected preparation write failure")
+        ])
+        expect(result.metadata).toMatchObject({ completed_count: 2, member_names: ["member-1", "member-2"] })
+        expect(JSON.parse(result.output).members.map((member: any) => member.member_index)).toEqual([0, 1])
         expect(
-          (await MessageStore.parts(messageID))
-            .filter((part) => part.type === "tool" && part.tool === "dispatch_agent")
-            .map((part) => part.state.status),
-        ).toEqual(["error", "error"])
+          (await MessageStore.parts(identity.messageID)).map((part) => ({
+            id: part.id,
+            tool: part.type === "tool" ? part.tool : part.type,
+            status: part.type === "tool" ? part.state.status : undefined,
+          })),
+        ).toEqual([{ id: identity.partID, tool: "dispatch_agents", status: "running" }])
       },
     })
   })
 
-  test("preserves dispatch failures while attempting every child terminal write", async () => {
+  test("replays settled member checkpoints from the exact outer input", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
       fn: async () => {
-        const session = await Session.create({ kind: "orchestrator", title: "Frontier settlement failure" })
-        const user = await Session.updateMessage({
-          id: Identifier.ascending("message"),
-          sessionID: session.id,
-          role: "user",
-          author: "user",
-          agent: "orchestrator",
-          model: { providerID: "test", modelID: "test" },
-          time: { created: Date.now() },
-        })
-        const messageID = Identifier.ascending("message")
-        await Session.updateMessage({
-          id: messageID,
-          parentID: user.id,
-          sessionID: session.id,
-          role: "assistant",
-          author: "orchestrator",
-          agent: "orchestrator",
-          providerID: "test",
-          modelID: "test",
-          path: { cwd: project.path, root: project.path },
-          cost: 0,
-          tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
-          time: { created: Date.now() },
-        })
-        const outerPartID = Identifier.ascending("part")
         const input = frontierInput(["a", "b", "c"])
-        await Session.updatePart({
-          id: outerPartID,
-          sessionID: session.id,
-          messageID,
-          type: "tool",
-          callID: outerPartID,
-          tool: "dispatch_agents",
-          state: { status: "running", input, time: { start: Date.now() } },
+        const identity = await persistedOuter(input)
+        const observed: string[] = []
+        const frontier = DispatchAgentsToolTestHooks.create({
+          inputSchema: childSchema,
+          execute: async (request: { dispatch: { target: string } }, options: any) => {
+            observed.push(`${request.dispatch.target}:${options.opencorvus.collectionMember.index}`)
+            return DispatchOutcome.accepted({
+              sessionID: Identifier.descending("session"),
+              dispatchLineageID: Identifier.ascending("artifact"),
+            })
+          },
         })
-        const terminalAttempts: string[] = []
-        const frontier = DispatchAgentsToolTestHooks.create(
-          {
-            inputSchema: z.object({ dispatch: z.object({ target: z.string() }).strict() }).strict(),
-            execute: async (request: { dispatch: { target: string } }) => {
-              throw new Error(`dispatch primary ${request.dispatch.target}`)
-            },
-          },
-          {
-            updatePart: async (part) => {
-              if (part.type === "tool" && part.tool === "dispatch_agent" && part.state.status === "error") {
-                const target = String((part.state.input as { dispatch?: { target?: unknown } }).dispatch?.target)
-                terminalAttempts.push(target)
-                if (target === "b") throw new Error("injected terminal write failure b")
-              }
-              return await Session.updatePart(part)
-            },
-          },
+        if (!frontier.execute) throw new Error("dispatch_agents has no executor")
+        const first = await frontier.execute(input as never, executionOptions(identity) as never)
+        const replay = await frontier.execute(input as never, executionOptions(identity) as never)
+        expect({ observed, first, replay }).toEqual({
+          observed: ["a:0", "b:1", "c:2"],
+          first,
+          replay: first,
+        })
+      },
+    })
+  })
+
+  test("returns the exact collection-identity error for replay input drift", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const persisted = frontierInput(["a"])
+        const identity = await persistedOuter(persisted)
+        const frontier = DispatchAgentsToolTestHooks.create({
+          inputSchema: childSchema,
+          execute: async () => DispatchOutcome.accepted({
+            sessionID: Identifier.descending("session"),
+            dispatchLineageID: Identifier.ascending("artifact"),
+          }),
+        })
+        if (!frontier.execute) throw new Error("dispatch_agents has no executor")
+        await expect(
+          frontier.execute(frontierInput(["b"]) as never, executionOptions(identity) as never),
+        ).rejects.toThrow(
+          `dispatch_agents persisted occurrence ${identity.partID}/${identity.callID} does not match its exact collection input`,
         )
+      },
+    })
+  })
+
+  test("completes one collection result with exact typed member failures", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const input = frontierInput(["a", "b"])
+        const identity = await persistedOuter(input)
+        const frontier = DispatchAgentsToolTestHooks.create({
+          inputSchema: childSchema,
+          execute: async (request: { dispatch: { target: string } }) => {
+            if (request.dispatch.target === "b") throw new Error("member b admission failed")
+            return DispatchOutcome.accepted({
+              sessionID: Identifier.descending("session"),
+              dispatchLineageID: Identifier.ascending("artifact"),
+            })
+          },
+        })
+        if (!frontier.execute) throw new Error("dispatch_agents has no executor")
+        const result = (await frontier.execute(input as never, executionOptions(identity) as never)) as {
+          output: string
+          metadata: { completed_count: number }
+        }
+        const members = JSON.parse(result.output).members
+        expect(result.metadata.completed_count).toBe(1)
+        expect(members.map((member: any) => ({ index: member.member_index, status: member.status }))).toEqual([
+          { index: 0, status: "completed" },
+          { index: 1, status: "failed" },
+        ])
+        expect(members[1].failure.message).toContain("member b admission failed")
+      },
+    })
+  })
+
+  test("preserves caller cancellation for recovery of the same outer occurrence", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const input = frontierInput(["a"])
+        const identity = await persistedOuter(input)
+        const controller = new AbortController()
+        const reason = new DOMException("caller stopped collection", "AbortError")
+        const frontier = DispatchAgentsToolTestHooks.create({
+          inputSchema: childSchema,
+          execute: async () => {
+            controller.abort(reason)
+            controller.signal.throwIfAborted()
+          },
+        })
         if (!frontier.execute) throw new Error("dispatch_agents has no executor")
         let failure: unknown
         try {
-          await frontier.execute(input as never, {
-            toolCallId: outerPartID,
-            opencorvus: {
-              sessionID: session.id,
-              messageID,
-              toolCallID: outerPartID,
-              toolPartID: outerPartID,
-              visibleToolName: "dispatch_agents",
-            },
-          } as never)
+          await frontier.execute(input as never, executionOptions(identity, controller.signal) as never)
         } catch (error) {
           failure = error
         }
-        expect(terminalAttempts.toSorted()).toEqual(["a", "b", "c"])
-        expect(allErrorMessages(failure)).toEqual(
-          expect.arrayContaining([
-            expect.stringContaining("dispatch primary a"),
-            expect.stringContaining("dispatch primary b"),
-            expect.stringContaining("dispatch primary c"),
-            "injected terminal write failure b",
-          ]),
-        )
+        expect(failure).toBe(reason)
+        expect((await MessageStore.parts(identity.messageID))[0]).toMatchObject({
+          id: identity.partID,
+          tool: "dispatch_agents",
+          state: { status: "running" },
+        })
+      },
+    })
+  })
+
+  test("settles the real outer occurrence when recovery has no Task authority", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const input = frontierInput(["a"])
+        const identity = await persistedOuter(input)
+        expect(await SessionLoop.terminalizeRecoveredIncompleteAssistant(identity.sessionID)).toBe(true)
+        expect((await MessageStore.parts(identity.messageID))[0]).toMatchObject({
+          id: identity.partID,
+          tool: "dispatch_agents",
+          state: { status: "error" },
+        })
       },
     })
   })

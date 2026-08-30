@@ -223,14 +223,19 @@ function reviewFor(fixture: Awaited<ReturnType<typeof createFixture>>): FactChec
 }
 
 function executionContext(taskID: string, dispatchID: string): DispatchAdapterExecutionContext {
+  const childSessionID = Identifier.deterministic("session", `fact-check-dispatch\0${dispatchID}`)
+  const signal = new AbortController().signal
   return {
     agentID: projectedFactChecker.identity.agentID,
     projectedAgent: projectedFactChecker as never,
     workScope: { kind: "task" },
+    newSessionID: childSessionID,
     dispatch: {
       dispatchID,
       deliverySliceRevisionIDs: [],
+      newSessionID: childSessionID,
       adapterInput: {},
+      signal,
       turn: {
         kind: "initial",
         current_dispatch_id: dispatchID,
@@ -250,7 +255,9 @@ function executionContext(taskID: string, dispatchID: string): DispatchAdapterEx
       commitSession() {
         return { artifactID: Identifier.ascending("artifact") }
       },
+      releaseAdmission() {},
     },
+    signal,
     toolOptions: {},
   }
 }

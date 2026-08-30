@@ -3,7 +3,6 @@ import type { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolv
 import { tool } from "ai"
 import z from "zod"
 import { ProjectedAgentWorkScopeSchema } from "@/agent/projected-agent-work-scope"
-import { optionsWithVisibleOrchestratorToolName } from "./tool-execution-context"
 import {
   createDispatchAdapterExecutionContext,
   type DispatchAdapterExecutionContext,
@@ -24,7 +23,6 @@ import {
   workflowProjectionFromProjectedAgents,
   type SelectedWorkflowBinding,
 } from "@/engine/workflow-binding"
-import { Identifier } from "@/id/id"
 import type { DispatchTurn } from "./dispatch-turn-projection"
 import type { ActiveTaskAcceptanceRepair } from "@/mission/acceptance-ledger"
 import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
@@ -59,22 +57,38 @@ export type AcceptanceRepairSelection = Readonly<{
   criterion_ids: string[]
 }>
 
-export interface DispatchAgentLineageHandle {
+type DispatchAgentLineageHandleBase = {
   readonly dispatchID: string
   readonly deliverySliceRevisionIDs: readonly string[]
   /** Exact existing worker Session reused by continuation or coordination redispatch. */
   readonly existingSessionID?: string
-  /** Exact visible user-Turn authority and immutable workflow occurrence for this dispatch. */
-  readonly turn: DispatchTurn
+  /** Preallocated identity for a new worker Session, claimed before any physical effect. */
+  readonly newSessionID?: string
   readonly adapterInput: Readonly<Record<string, unknown>>
+  /** Combined caller and fenced admission cancellation for the physical effect. */
+  readonly signal: AbortSignal
   readonly continuationGuidance?: string
-  /** Durable result for an exact replay of an already committed parent tool occurrence. */
-  readonly replayOutcome?: DispatchOutcomeResult
   /** Observe the physical Session identity without publishing logical dispatch lineage. */
   observeSession(sessionID: string): void
   /** Commit logical dispatch authority only after the exact Turn descriptor is durable. */
   commitSession(sessionID: string, descriptor: WorkerTurnDescriptor.Info): { artifactID: string }
+  /** Release pre-effect physical ownership after preparation fails. */
+  releaseAdmission(): void
 }
+
+export type LiveDispatchAgentLineageHandle = DispatchAgentLineageHandleBase & {
+  readonly replayOutcome?: never
+  /** Exact visible user-Turn authority and immutable workflow occurrence for this dispatch. */
+  readonly turn: DispatchTurn
+}
+
+export type DispatchAgentLineageHandle =
+  | LiveDispatchAgentLineageHandle
+  | (DispatchAgentLineageHandleBase & {
+      /** Durable result for an exact replay of an already committed parent tool occurrence. */
+      readonly replayOutcome: DispatchOutcomeResult
+      readonly turn?: DispatchTurn
+    })
 
 export type OpenDispatchAgentLineage = (input: {
   taskID: string
@@ -604,6 +618,7 @@ export function createDispatchAgentTool(input: {
       )
       let childSessionID: string | undefined
       let dispatchID: string | undefined
+      let openedDispatch: DispatchAgentLineageHandle | undefined
       try {
         const dispatch = await input.openLineage({
           taskID: input.taskID,
@@ -626,7 +641,12 @@ export function createDispatchAgentTool(input: {
             evidenceLocators: continuationEvidenceLocators ?? [],
           }),
         })
+        openedDispatch = dispatch
         if (dispatch.replayOutcome) return dispatch.replayOutcome
+        if (!dispatch.turn) throw new Error(`dispatch_agent ${target} live dispatch has no exact Turn authority`)
+        const dispatchTurn = dispatch.turn
+        const executionSignal = input.signal ? AbortSignal.any([input.signal, dispatch.signal]) : dispatch.signal
+        executionSignal.throwIfAborted()
         dispatchID = dispatch.dispatchID
         if (input.signal?.aborted) {
           const origin = isExecutionCancellationError(input.signal.reason)
@@ -670,22 +690,22 @@ export function createDispatchAgentTool(input: {
               worktreeUsage: useWorktree ? "managed_worktree" : "current_project",
             }
           : frozenTargetInput
-        const preparedSessionID =
-          useWorktree &&
-          !DispatchAdapterContractRegistry.ownsWorktreeUsage(projectedAgent.identity.dispatchAdapterID) &&
-          !dispatch.existingSessionID
-            ? Identifier.descending("session")
-            : undefined
+        const preparedSessionID = dispatch.newSessionID
+        if (!dispatch.existingSessionID && !preparedSessionID) {
+          throw new Error(`dispatch_agent ${target} has no preclaimed worker Session identity`)
+        }
         let resolveCommittedLineage!: (lineage: { sessionID: string; artifactID: string }) => void
         const committedLineage = new Promise<{ sessionID: string; artifactID: string }>((resolve) => {
           resolveCommittedLineage = resolve
         })
-        const trackedDispatch: DispatchAgentLineageHandle = {
+        const trackedDispatch: LiveDispatchAgentLineageHandle = {
           dispatchID: dispatch.dispatchID,
           deliverySliceRevisionIDs: dispatch.deliverySliceRevisionIDs,
           existingSessionID: dispatch.existingSessionID,
-          turn: dispatch.turn,
+          newSessionID: dispatch.newSessionID,
+          turn: dispatchTurn,
           adapterInput: dispatch.adapterInput,
+          signal: executionSignal,
           continuationGuidance: dispatch.continuationGuidance,
           observeSession: (sessionID) => {
             if (preparedSessionID && !dispatch.existingSessionID && sessionID !== preparedSessionID) {
@@ -702,6 +722,7 @@ export function createDispatchAgentTool(input: {
             resolveCommittedLineage({ sessionID, artifactID: committed.artifactID })
             return committed
           },
+          releaseAdmission: () => dispatch.releaseAdmission(),
         }
         if (dispatch.existingSessionID) {
           childSessionID = dispatch.existingSessionID
@@ -716,7 +737,7 @@ export function createDispatchAgentTool(input: {
               newSessionID: dispatch.existingSessionID ? undefined : preparedSessionID,
               existingSessionID: dispatch.existingSessionID,
               dispatch: trackedDispatch,
-              toolOptions: optionsWithVisibleOrchestratorToolName(options, "dispatch_agent"),
+              toolOptions: options,
             }),
           )
           const parsed = DispatchAdapterContractRegistry.outputSchema(projectedAgent.identity.dispatchAdapterID).parse(
@@ -936,6 +957,7 @@ export function createDispatchAgentTool(input: {
           },
         })
       } catch (error) {
+        openedDispatch?.releaseAdmission()
         if (error instanceof TaskWorkflowBindingConflictError) {
           return DispatchOutcome.infrastructureFailure({
             operation: "workflow_binding_initial_claim",

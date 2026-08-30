@@ -5,6 +5,7 @@
  */
 export const ORCHESTRATOR_DECISION_TOOL_NAMES = [
   "dispatch_agent",
+  "dispatch_agents",
   "respond_agent_coordination",
   "manage_task",
   "question",
@@ -35,7 +36,7 @@ export function orchestratorDecisionToolCompletionEffect(input: {
   tool: OrchestratorDecisionToolName
   stateInput: unknown
 }): OrchestratorDecisionToolCompletionEffect {
-  if (input.tool === "dispatch_agent") return "inspect_dispatch_outcome"
+  if (input.tool === "dispatch_agent" || input.tool === "dispatch_agents") return "inspect_dispatch_outcome"
   if (input.tool === "question") return "requires_followup_decision"
   if (input.tool === "manage_task") {
     const taskInput = input.stateInput && typeof input.stateInput === "object" && !Array.isArray(input.stateInput)

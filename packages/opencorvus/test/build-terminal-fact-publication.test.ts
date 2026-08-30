@@ -78,7 +78,7 @@ async function gitRef(directory: string, ref: string) {
   return result.exitCode === 0 ? result.text().trim() : undefined
 }
 
-async function createProductionFixture(projectPath: string, title: string) {
+async function createProductionFixture(projectPath: string, title: string, agentID = "base-planner") {
   await Config.updateProjectPatch({ prompt_profile: { active: "base" }, model: `${modelRef.providerID}/${modelRef.modelID}` })
   const config = Config.mergeOverlay(await EffectiveConfig.snapshotCurrent(), {
     prompt_profile: { active: "base" },
@@ -94,9 +94,9 @@ async function createProductionFixture(projectPath: string, title: string) {
     packageRevision,
   })
   const projectedAgent = skillProjection.projectedAgents.find(
-    (candidate) => candidate.identity.agentID === "base-planner",
+    (candidate) => candidate.identity.agentID === agentID,
   )
-  if (!projectedAgent) throw new Error("Base package did not project base-planner")
+  if (!projectedAgent) throw new Error(`Base package did not project ${agentID}`)
   const workflow = selectedWorkflowBinding({
     projection: { packageRevision, virtualWorkflows: projectedAgent.virtualWorkflows },
     workflowID: "planner-parallel-delivery",
@@ -132,11 +132,12 @@ async function createProductionFixture(projectPath: string, title: string) {
     }),
   })
   const dispatchID = Identifier.ascending("artifact")
+  const childSessionID = Identifier.deterministic("session", `build-terminal-fact\0${dispatchID}`)
   const turn = {
     kind: "initial" as const,
     current_dispatch_id: dispatchID,
     workflow_binding: workflow,
-    workflow_node_id: "base-planner",
+    workflow_node_id: agentID,
     workflow_occurrence_id: dispatchID,
     delivery_slice_revision_ids: [],
     evidence_locators: [],
@@ -147,15 +148,19 @@ async function createProductionFixture(projectPath: string, title: string) {
       initial_control_text_parts: [],
     },
   }
+  const dispatchSignal = new AbortController().signal
   const context: DispatchAdapterExecutionContext = {
     agentID: projectedAgent.identity.agentID,
     projectedAgent,
     workScope: { kind: "task" },
+    newSessionID: childSessionID,
     dispatch: {
       dispatchID,
       deliverySliceRevisionIDs: [],
+      newSessionID: childSessionID,
       turn,
       adapterInput: { goal_ids: [], reason: "Publish terminal fact" },
+      signal: dispatchSignal,
       observeSession() {},
       commitSession(sessionID) {
         return recordTestDispatchLineage({
@@ -170,13 +175,15 @@ async function createProductionFixture(projectPath: string, title: string) {
             projectedWorkerIdentity: projectedAgent.identity,
             workScope: { kind: "task" },
             workflowBinding: workflow,
-            workflowNodeID: "base-planner",
+            workflowNodeID: agentID,
             adapterInput: { goal_ids: [], reason: "Publish terminal fact" },
           }),
           childSessionID: sessionID,
         })
       },
+      releaseAdmission() {},
     },
+    signal: dispatchSignal,
     toolOptions: {},
   }
   return { taskID, root, dispatchID, context }
@@ -241,6 +248,8 @@ async function createTaskDeletionObservation(input: {
 
 async function executeProductionBuild(input: {
   fixture: Awaited<ReturnType<typeof createProductionFixture>>
+  worktreeUsage?: "managed_worktree" | "current_project"
+  recordSettlement?: boolean
   writer?: BuildToolDependencies["terminalFactWriter"]
   cleanup?: BuildToolDependencies["terminalFactCleanup"]
   provenance?: BuildToolDependencies["terminalFactProvenance"]
@@ -261,10 +270,12 @@ async function executeProductionBuild(input: {
   }).build
   if (!adapter.execute) throw new Error("Build adapter has no executor")
   const outcome = await adapter.execute(
-    { goal_ids: [], reason: "Publish terminal fact", worktreeUsage: "current_project" },
+    { goal_ids: [], reason: "Publish terminal fact", worktreeUsage: input.worktreeUsage ?? "current_project" },
     input.fixture.context as never,
   )
-  recordDispatchSettlement({ taskID: input.fixture.taskID, dispatchID: input.fixture.dispatchID, outcome: outcome as never })
+  if (input.recordSettlement !== false) {
+    recordDispatchSettlement({ taskID: input.fixture.taskID, dispatchID: input.fixture.dispatchID, outcome: outcome as never })
+  }
   return { outcome, workflow: (await describeTask(input.fixture.taskID)).workflow_execution }
 }
 
@@ -307,6 +318,31 @@ async function installPhysicalBuildSpies(options?: { mockProvider?: boolean }) {
 }
 
 describe.serial("Build terminal-fact publication", () => {
+  test("fresh managed-worktree Build preserves the preallocated Session identity", async () => {
+    await using project = await memoryProject()
+    await withBootstrappedProject(project.path, async () => {
+      using _spies = await installPhysicalBuildSpies()
+      const fixture = await createProductionFixture(
+        project.path,
+        "Build deterministic identity managed worktree",
+        "base-developer",
+      )
+      const settled = await executeProductionBuild({
+        fixture,
+        worktreeUsage: "managed_worktree",
+        recordSettlement: false,
+      })
+      const expectedSessionID = fixture.context.newSessionID!
+      const session = await Session.get(expectedSessionID)
+      expect({
+        expectedSessionID,
+        outcomeSessionID: "session_id" in settled.outcome ? settled.outcome.session_id : undefined,
+        sessionID: session.id,
+      }).toEqual({ expectedSessionID, outcomeSessionID: expectedSessionID, sessionID: expectedSessionID })
+      expect(path.resolve(session.directory)).not.toBe(path.resolve(project.path))
+    })
+  }, 60_000)
+
   test("the physical Build retries its exact publication before final settlement", async () => {
     await using project = await memoryProject()
     await withBootstrappedProject(project.path, async () => {
@@ -325,12 +361,14 @@ describe.serial("Build terminal-fact publication", () => {
       expect({
         attempts: attempts.length,
         samePayload: attempts[0] === attempts[1],
+        expectedSessionID: fixture.context.newSessionID,
         settled,
         facts,
         observationID: buildTerminalFactObservationID({ taskID: fixture.taskID, dispatchID: fixture.dispatchID }),
       }).toMatchObject({
         attempts: 2,
         samePayload: true,
+        expectedSessionID: (settled.outcome as { session_id?: string }).session_id,
         settled: {
           outcome: { kind: "terminal_success" },
           workflow: { frontier_node_ids: ["base-developer", "base-researcher"] },

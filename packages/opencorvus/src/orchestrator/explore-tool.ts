@@ -59,7 +59,7 @@ export function createExploreTool(input: {
           parentSessionID: input.agentSessionID,
           taskID: input.taskID,
           sessionTitle: `${agentID} (explore): ${question.slice(0, 80)}`,
-          signal: input.signal,
+          signal: execution.signal,
           prompt: promptLines.join("\n"),
           onSessionCreated: async (sessionID) => {
             execution.dispatch.observeSession(sessionID)

@@ -61,6 +61,12 @@ const DECLARED_OWNERS: Record<string, Declaration> = {
     release:
       "settleBuildObservationCleanup releases with both the complete and the failed receipt. The terminal `retained` receipt releases in engine/persist.ts, fenced on the caller's own activation.",
   },
+  "engine/dispatch-lineage.ts": {
+    targets: ["dispatch_admission"],
+    sites: 1,
+    release:
+      "The descriptor-backed Session authority transaction consumes the exact admission fence; every pre-commit error or cancellation hands it back, while a crash leaves only the bounded lease for same-occurrence takeover.",
+  },
   "engine/process-liveness.ts": {
     targets: ["runtime_process"],
     sites: 1,

@@ -11,6 +11,7 @@ export type OrchestratorToolExecutionContext = {
   toolCallID: string
   toolPartID: string
   visibleToolName: string
+  collectionMember?: { index: number; count: number }
 }
 
 type TaskOrchestratorToolExecutionExpectation = {
@@ -60,6 +61,13 @@ export const OrchestratorToolInvocationSchema = z
     toolCallID: z.string().min(1),
     toolPartID: z.string().min(1),
     visibleToolName: z.string().min(1).optional(),
+    collectionMember: z
+      .object({
+        index: z.number().int().min(0),
+        count: z.number().int().min(1),
+      })
+      .strict()
+      .optional(),
   })
   .loose()
 
@@ -77,12 +85,16 @@ export function requireOrchestratorToolExecutionContext(
         `received: ${JSON.stringify(meta)}, expected: ${z.prettifyError(parsed.error)}`,
     )
   }
+  if (parsed.data.collectionMember && parsed.data.collectionMember.index >= parsed.data.collectionMember.count) {
+    throw new Error(`${toolName}: collection member index must be smaller than its count.`)
+  }
   return {
     orchestratorSessionID: parsed.data.sessionID,
     orchestratorMessageID: parsed.data.messageID,
     toolCallID: parsed.data.toolCallID,
     toolPartID: parsed.data.toolPartID,
     visibleToolName: parsed.data.visibleToolName ?? toolName,
+    ...(parsed.data.collectionMember ? { collectionMember: parsed.data.collectionMember } : {}),
   }
 }
 

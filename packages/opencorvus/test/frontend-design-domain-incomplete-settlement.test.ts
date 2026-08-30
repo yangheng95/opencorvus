@@ -225,14 +225,19 @@ function executionContext(
   taskID: string,
   dispatchID = Identifier.ascending("artifact"),
 ): DispatchAdapterExecutionContext {
+  const childSessionID = Identifier.deterministic("session", `frontend-design-dispatch\0${dispatchID}`)
+  const signal = new AbortController().signal
   return {
     agentID: projectedFrontendDesigner.identity.agentID,
     projectedAgent: projectedFrontendDesigner as never,
     workScope: { kind: "task" },
+    newSessionID: childSessionID,
     dispatch: {
       dispatchID,
       deliverySliceRevisionIDs: [],
+      newSessionID: childSessionID,
       adapterInput: {},
+      signal,
       turn: {
         kind: "initial",
         current_dispatch_id: dispatchID,
@@ -252,7 +257,9 @@ function executionContext(
       commitSession() {
         return { artifactID: Identifier.ascending("artifact") }
       },
+      releaseAdmission() {},
     },
+    signal,
     toolOptions: {},
   }
 }

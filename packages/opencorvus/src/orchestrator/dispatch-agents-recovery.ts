@@ -26,12 +26,12 @@ export type DispatchAgentsRecoveryToolFactory = (input: {
 }) => DispatchAgentsRecoveryTool | undefined
 
 /**
- * Resume one persisted frontier decision whose owning process ended.
+ * Resume one persisted dispatch collection whose owning process ended.
  *
- * The outer Part already owns the complete validated model input. The frontier
- * executor derives deterministic child Tool identities from that Part, so a
- * replay resumes missing admissions and reuses every child that already owns a
- * canonical dispatch lineage instead of creating a second occurrence.
+ * The real outer Part owns the complete ordered model input. Each member uses
+ * that Tool identity plus its stable array index, so replay resumes missing
+ * admissions and reuses every canonical member lineage without inventing
+ * child Tool calls or a second collection occurrence.
  */
 export async function recoverInterruptedDispatchAgentsPart(input: {
   sessionID: string

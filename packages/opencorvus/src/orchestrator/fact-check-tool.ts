@@ -156,7 +156,7 @@ export function createFactCheckTool(dependencies: FactCheckToolDependencies) {
         reason: resolvedArgs.reason,
         orchestratorSessionID: dependencies.orchestratorSessionID,
         taskID: task.id,
-        signal: dependencies.signal,
+        signal: execution.signal,
         onSessionCreated: (sessionID) => execution.dispatch.observeSession(sessionID),
         onDispatchAuthorityCommit: (sessionID, descriptor) => execution.dispatch.commitSession(sessionID, descriptor),
       })
