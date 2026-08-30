@@ -97,6 +97,20 @@ zero, so the permanent Tool cannot sit outside the compare-and-swap budget.
   merged capability rules and per-message Tool switches to its child names,
   then publishes only eligible Tool views and exact `{ server_ref, tool_ref }`
   parent bindings. It never expands Harness grants after the Catalog is bound.
+- Host Session MCP recovery uses the frozen `{ server_ref, tool_ref }` parent
+  binding only when an exact leaf is materialized. A present owner must match
+  the occurrence revision and binding and therefore skips another full
+  inventory scan. A missing owner is ensured for that one parent without
+  closing searchable or active sibling owners; the exact Tool definition is
+  then re-read and checked against the frozen binding. The ensured owner,
+  revision, and exact binding are revalidated first, so a removed, failed, or
+  auth-blocked leaf is typed stale rather than a generic missing-binding error.
+  Computer Host endpoint
+  and authorization values are fresh per-process transport coordinates, not
+  capability identity; its command, logical configuration, and exact runtime
+  scope remain in the stable Catalog digest. The live connection identity still
+  includes the full endpoint and authorization so adapter rotation always
+  reconnects instead of reusing an old transport.
 - Native and Task-projected exact MCP materializers verify frozen owner,
   configuration, and definition digests. They also re-read the exact inventory
   before final lifecycle input, the plugin hook, and business `tools/call`.

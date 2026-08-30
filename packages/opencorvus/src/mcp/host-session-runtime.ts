@@ -209,11 +209,11 @@ export namespace HostSessionMcpRuntime {
     }
   }
 
-  /** Build immutable discovery bindings without constructing Provider Tools. */
-  export async function prepareCatalog(
+  async function prepareCatalogSelection(
     config: Config.Info,
     sessionID: string,
     selectedServerRefs: readonly string[],
+    settleUnselected: boolean,
   ): Promise<void> {
     const selected = [...new Set(selectedServerRefs)].sort(compareCanonicalStrings)
     const desiredKinds = new Set<HostSessionRuntimeKind>(
@@ -230,7 +230,7 @@ export namespace HostSessionMcpRuntime {
       .filter((key) => key.endsWith(sessionSuffix))
       .map((key) => key.slice(0, -sessionSuffix.length) as HostSessionRuntimeKind)
       .filter((kind) => !desiredKinds.has(kind))
-    if (staleKinds.length > 0) await settleOwners(sessionID, staleKinds)
+    if (settleUnselected && staleKinds.length > 0) await settleOwners(sessionID, staleKinds)
     const runtimeNames = new Map<string, string>()
     for (const serverName of selected) {
       const runtime = runtimeScope({ config, sessionID, serverName })
@@ -284,6 +284,24 @@ export namespace HostSessionMcpRuntime {
       catalogPromptBindings.set(runtime.owner, promptRecord)
       catalogResourceBindings.set(runtime.owner, resourceRecord)
     }
+  }
+
+  /** Reconcile the complete selected Host Session inventory without constructing Provider Tools. */
+  export async function prepareCatalog(
+    config: Config.Info,
+    sessionID: string,
+    selectedServerRefs: readonly string[],
+  ): Promise<void> {
+    await prepareCatalogSelection(config, sessionID, selectedServerRefs, true)
+  }
+
+  /** Rebuild only exact occurrence parents while retaining other searchable or active owners. */
+  export async function ensureCatalog(
+    config: Config.Info,
+    sessionID: string,
+    selectedServerRefs: readonly string[],
+  ): Promise<void> {
+    await prepareCatalogSelection(config, sessionID, selectedServerRefs, false)
   }
 
   export async function exactTool(

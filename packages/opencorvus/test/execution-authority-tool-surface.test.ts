@@ -5,6 +5,9 @@ import { permissionDescriptor } from "../src/permission/invocation"
 import { Instance } from "../src/project/instance"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 import { MISSION_PANEL_LEAF_TOOL_IDS, RIGHT_SIDEBAR_PANEL_LEAF_TOOL_IDS } from "../src/panel/action-ids"
+import { builtinMissionSkillSources } from "../src/mission-skill/builtin-payload"
+import { ConfigMarkdown } from "../src/config/markdown"
+import { Skill } from "../src/skill/skill"
 
 afterAll(async () => {
   await resetMemoryDatabase()
@@ -34,6 +37,30 @@ const conversationEffects = [
 ] as const
 
 describe("execution authority Tool surfaces", () => {
+  test("binds the source and generated general Mission Skill to the ordered Mission Panel leaf contract", async () => {
+    const generated = builtinMissionSkillSources.find((item) => item.name === "general")
+    if (!generated) throw new Error("Built-in general Mission Skill source is missing.")
+    const sourceText = await Bun.file(
+      new URL("../src/mission-skill/builtin/general/SKILL.md", import.meta.url),
+    ).text()
+    const parseRequiredTools = (value: string, label: string) => {
+      const markdown = ConfigMarkdown.parseText(value, label)
+      return Skill.parseDefinition(markdown.data, label).required_tools
+    }
+    const missionTools = AgentToolPool.assignment("mission").global
+    const firstMissionPanelLeaf = missionTools.indexOf(MISSION_PANEL_LEAF_TOOL_IDS[0])
+
+    expect({
+      source: parseRequiredTools(sourceText, "source mission skill general"),
+      generated: parseRequiredTools(generated.skill, "generated mission skill general"),
+      role: missionTools.slice(firstMissionPanelLeaf, firstMissionPanelLeaf + MISSION_PANEL_LEAF_TOOL_IDS.length),
+    }).toEqual({
+      source: MISSION_PANEL_LEAF_TOOL_IDS,
+      generated: MISSION_PANEL_LEAF_TOOL_IDS,
+      role: MISSION_PANEL_LEAF_TOOL_IDS,
+    })
+  })
+
   test("projects the complete standalone and Task-owned Tool contracts", () => {
     expect({
       coding: AgentToolPool.assignment("coding"),

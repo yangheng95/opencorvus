@@ -36,6 +36,7 @@ import { McpOAuthCallback, type CallbackResolution } from "./oauth-callback"
 import { oauthAuthorizationLogFields, oauthConnectionFailureLogFields } from "./oauth-log"
 import { McpAuth } from "./auth"
 import { BrowserMCPBuiltin } from "./browser/builtin"
+import { ComputerMCPBuiltin } from "./computer/builtin"
 import { BusEvent } from "../bus/bus-event"
 import { Bus } from "@/bus"
 import { GlobalBus } from "@/bus/global"
@@ -678,7 +679,7 @@ export namespace MCP {
             connection_key: ownerKey,
             server_id: input.key,
             connection_identity: identity,
-            config_digest: mcpConfigDigest(input.mcp),
+            config_digest: mcpConfigDigest(input.key, input.mcp),
             inventory_revision:
               entry?.connection?.capabilitySnapshot.inventory_revision ?? emptyCapabilityInventoryRevision(),
             status: Object.freeze({ ...currentStatus }),
@@ -1048,14 +1049,14 @@ export namespace MCP {
     })
     toolAuthorityBindings.set(tool, {
       serverID: input.key,
-      configDigest: mcpConfigDigest(input.mcp),
+      configDigest: mcpConfigDigest(input.key, input.mcp),
       toolDigest: toolDefinitionDigest(mcpTool),
     })
     const resourceURI = stableToolUiResourceUri(mcpTool)
     if (resourceURI) {
       appToolBindings.set(tool, {
         serverID: input.key,
-        configDigest: mcpConfigDigest(input.mcp),
+        configDigest: mcpConfigDigest(input.key, input.mcp),
         tool: mcpTool,
         resourceURI,
         withClient: (run) => withScopedClient(input, run),
@@ -1077,7 +1078,7 @@ export namespace MCP {
     if (runtimeToolName(binding.server_id, binding.tool_name) !== binding.runtime_name) {
       throw new Error(`MCP Catalog Tool binding ${binding.runtime_name} has a noncanonical runtime name.`)
     }
-    if (input.key !== binding.server_id || mcpConfigDigest(input.mcp) !== binding.config_digest) {
+    if (input.key !== binding.server_id || mcpConfigDigest(input.key, input.mcp) !== binding.config_digest) {
       throw new CatalogBindingStaleError([`tool_binding.${binding.runtime_name}.config_digest`])
     }
     const exactDefinition = async () => {
@@ -2013,8 +2014,13 @@ export namespace MCP {
     return JSON.stringify(canonicalConfigValue({ ...mcp, enabled: mcp.enabled !== false }))
   }
 
-  function mcpConfigDigest(mcp: McpEntry) {
-    return createHash("sha256").update(mcpConfigIdentity(mcp)).digest("hex")
+  function mcpConfigDigest(serverID: string, mcp: McpEntry) {
+    const identity =
+      serverID === ComputerMCPBuiltin.ServerName && isMcpConfigured(mcp) && mcp.type === "local"
+        ? ComputerMCPBuiltin.catalogIdentityConfig(mcp)
+        : mcp
+    const value = isMcpConfigured(identity) ? { ...identity, enabled: identity.enabled !== false } : identity
+    return createHash("sha256").update(JSON.stringify(canonicalConfigValue(value))).digest("hex")
   }
 
   interface CreateOptions {
@@ -3670,7 +3676,7 @@ export namespace MCP {
             runtime_name: runtimeName,
             server_id: serverID,
             tool_name: tool.name,
-            config_digest: mcpConfigDigest(mcp),
+            config_digest: mcpConfigDigest(serverID, mcp),
             tool_digest: toolDefinitionDigest(tool),
           })
         })
@@ -3728,7 +3734,7 @@ export namespace MCP {
           toolCapabilities.push({
             serverID,
             capabilityName: tool.name,
-            value: { tool, configDigest: mcpConfigDigest(mcp) },
+            value: { tool, configDigest: mcpConfigDigest(serverID, mcp) },
           })
         }
       }
@@ -3807,7 +3813,7 @@ export namespace MCP {
     if (!isMcpConfigured(configured) || configured.enabled === false) {
       throw new CatalogBindingStaleError([`tool_binding.${binding.runtime_name}.server_enabled`])
     }
-    if (mcpConfigDigest(configured) !== binding.config_digest) {
+    if (mcpConfigDigest(binding.server_id, configured) !== binding.config_digest) {
       throw new CatalogBindingStaleError([`tool_binding.${binding.runtime_name}.config_digest`])
     }
     const assertOwnerRevision = async () => {
@@ -3867,7 +3873,7 @@ export namespace MCP {
       if (
         !isMcpConfigured(currentConfigured) ||
         currentConfigured.enabled === false ||
-        mcpConfigDigest(currentConfigured) !== binding.config_digest
+        mcpConfigDigest(binding.server_id, currentConfigured) !== binding.config_digest
       ) {
         throw new CatalogBindingStaleError([`tool_binding.${binding.runtime_name}.config_digest`])
       }
@@ -4193,7 +4199,7 @@ export namespace MCP {
     if (!isMcpConfigured(runtimeEntry) || runtimeEntry.enabled === false) {
       throw new Error(`MCP App server ${input.serverID} is not enabled`)
     }
-    const currentDigest = mcpConfigDigest(runtimeEntry)
+    const currentDigest = mcpConfigDigest(input.serverID, runtimeEntry)
     if (currentDigest !== input.configDigest) {
       throw new Error(`MCP App server ${input.serverID} configuration changed after the artifact was created`)
     }
@@ -4204,7 +4210,7 @@ export namespace MCP {
     if (!runtime) {
       throw new Error(`MCP App server ${input.serverID} is not connected`)
     }
-    if (mcpConfigDigest(runtime.mcp) !== input.configDigest) {
+    if (mcpConfigDigest(input.serverID, runtime.mcp) !== input.configDigest) {
       throw new Error(`MCP App server ${input.serverID} configuration changed after the artifact was created`)
     }
     return run(runtime.client, effectiveTimeout(runtime.mcp, currentConfig.experimental?.mcp_timeout))
@@ -4215,6 +4221,14 @@ export namespace MCP {
    * Returns the authorization URL that should be opened in a browser.
    */
   export namespace TestHooks {
+    export function runtimeConfigIdentity(mcp: Config.Mcp): string {
+      return mcpConfigIdentity(mcp)
+    }
+
+    export function catalogConfigDigest(serverID: string, mcp: Config.Mcp): string {
+      return mcpConfigDigest(serverID, mcp)
+    }
+
     export async function collectToolDefinitionPages(
       list: (cursor: string | undefined) => Promise<{ tools: MCPToolDef[]; nextCursor?: string }>,
     ): Promise<MCPToolDef[]> {

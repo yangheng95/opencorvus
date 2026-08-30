@@ -2,7 +2,20 @@
 name: general
 description: Coordinate an operator-defined Mission through native Mission state and fixed-profile Tasks without imposing a domain-specific workflow.
 required_tools:
-  - panel
+  - panel_expert_squad_inspect
+  - panel_multica_catalog
+  - panel_create_task
+  - panel_query_task
+  - panel_query_task_artifacts
+  - panel_read_task_artifact
+  - panel_complete_mission
+  - panel_view_board
+  - panel_view_plan
+  - panel_view_tasks
+  - panel_resume_task
+  - panel_cancel_task
+  - panel_reply_interaction
+  - panel_reject_interaction
 ---
 
 # General Mission

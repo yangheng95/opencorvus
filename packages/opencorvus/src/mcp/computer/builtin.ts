@@ -138,6 +138,15 @@ export namespace ComputerMCPBuiltin {
       },
     }
   }
+
+  /** Stable capability identity excludes per-process transport coordinates while retaining the logical runtime owner. */
+  export function catalogIdentityConfig<T extends { type: "local"; environment?: Record<string, string> }>(mcp: T): T {
+    if (!mcp.environment?.OPENCORVUS_COMPUTER_RUNTIME_SCOPE) return mcp
+    const environment = { ...mcp.environment }
+    delete environment.OPENCORVUS_COMPUTER_HOST_ENDPOINT
+    delete environment.OPENCORVUS_COMPUTER_HOST_AUTHORIZATION
+    return { ...mcp, environment }
+  }
 }
 
 function isBunRuntime(execPath: string) {

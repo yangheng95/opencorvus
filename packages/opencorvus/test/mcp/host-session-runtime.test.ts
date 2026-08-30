@@ -118,6 +118,225 @@ describe("host-owned native Session MCP composition", () => {
     })
   }, 60_000)
 
+  test("ensures exact Host Session MCP parents without closing an already recovered sibling", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const sessionID = "ses_host_exact_recovery"
+        try {
+          const config = await Config.get()
+          await HostSessionMcpRuntime.prepareCatalog(config, sessionID, [
+            BrowserMCPBuiltin.ServerName,
+            ComputerMCPBuiltin.ServerName,
+          ])
+          const originals = new Map(
+            HostSessionMcpRuntime.catalogSnapshots(sessionID).map((snapshot) => [snapshot.owner.owner_id, snapshot]),
+          )
+          const originalBrowser = originals.get(HostSessionMcpRuntime.browserOwnerIdentity(sessionID))
+          const originalComputer = originals.get(HostSessionMcpRuntime.computerOwnerIdentity(sessionID))
+          if (!originalBrowser || !originalComputer) throw new Error("Host Session MCP owners were not prepared.")
+
+          await HostSessionMcpRuntime.dispose(sessionID)
+          await HostSessionMcpRuntime.ensureCatalog(config, sessionID, [BrowserMCPBuiltin.ServerName])
+          const afterBrowser = HostSessionMcpRuntime.catalogSnapshots(sessionID).map((item) => item.owner.owner_id)
+          await HostSessionMcpRuntime.ensureCatalog(config, sessionID, [ComputerMCPBuiltin.ServerName])
+          const recoveredBrowser = await HostSessionMcpRuntime.exactTool(
+            config,
+            sessionID,
+            "browser_session_status",
+            originalBrowser.owner_revision,
+          )
+          const recoveredComputer = await HostSessionMcpRuntime.exactTool(
+            config,
+            sessionID,
+            "computer_session_destroy",
+            originalComputer.owner_revision,
+          )
+
+          expect({
+            afterBrowser,
+            afterDisposeAndPrepare: HostSessionMcpRuntime.catalogSnapshots(sessionID).map((item) => ({
+              ownerID: item.owner.owner_id,
+              revision: item.owner_revision,
+              toolIDs: item.tool_ids,
+            })),
+            authorities: [MCP.toolAuthorityBinding(recoveredBrowser), MCP.toolAuthorityBinding(recoveredComputer)],
+          }).toEqual({
+            afterBrowser: [HostSessionMcpRuntime.browserOwnerIdentity(sessionID)],
+            afterDisposeAndPrepare: expect.arrayContaining([
+              {
+                ownerID: HostSessionMcpRuntime.browserOwnerIdentity(sessionID),
+                revision: originalBrowser.owner_revision,
+                toolIDs: originalBrowser.tool_ids,
+              },
+              {
+                ownerID: HostSessionMcpRuntime.computerOwnerIdentity(sessionID),
+                revision: originalComputer.owner_revision,
+                toolIDs: originalComputer.tool_ids,
+              },
+            ]),
+            authorities: [
+              expect.objectContaining({ serverID: BrowserMCPBuiltin.ServerName }),
+              expect.objectContaining({ serverID: ComputerMCPBuiltin.ServerName }),
+            ],
+          })
+        } finally {
+          await HostSessionMcpRuntime.dispose(sessionID)
+        }
+      },
+    })
+  }, 60_000)
+
+  test("reveals a dormant Host MCP leaf after restart and retains it while revealing a sibling", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const model = providerModel()
+        const config = await Config.get()
+        const runtime = sessionRuntimeFromNativeAgent(await PrimaryAssistantRegistry.get("coding", { config }))
+        const session = await Session.create({ kind: "assistant", title: "Host MCP exact reveal recovery" })
+        const user = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: session.id,
+          role: "user",
+          author: "coding",
+          agent: "coding",
+          time: { created: Date.now() },
+          model: { providerID: model.providerID, modelID: model.id },
+        })
+        await Session.updatePart({
+          id: Identifier.ascending("part"),
+          sessionID: session.id,
+          messageID: user.id,
+          type: "text",
+          text: "Reveal exact Host MCP leaves across owner recovery.",
+        })
+        const assistant = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          parentID: user.id,
+          sessionID: session.id,
+          role: "assistant",
+          author: "coding",
+          agent: "coding",
+          path: { cwd: project.path, root: project.path },
+          cost: 0,
+          tokens: { total: 0, input: 0, output: 0, reasoning: 0, cache: { read: 0, write: 0 } },
+          modelID: model.id,
+          providerID: model.providerID,
+          time: { created: Date.now() },
+        })
+        const abort = new AbortController().signal
+        const processor = SessionProcessor.create({ assistantMessage: assistant, sessionID: session.id, model, abort })
+        const resolve = () =>
+          resolveTestCapabilityTools({
+            agent: runtime,
+            agentID: "coding",
+            model,
+            session,
+            assistant,
+            processor,
+            messages: [],
+            config,
+          })
+        const reveal = async (
+          resolved: Awaited<ReturnType<typeof resolveTestCapabilityTools>>,
+          localRef: string,
+          callID: string,
+        ) => {
+          const matches = resolved.occurrence.payload.views.filter(
+            (view) =>
+              view.descriptor_ref.local_ref === localRef &&
+              view.discoverable_by.includes("conversation") &&
+              view.availability === "visible" &&
+              view.next_owner.kind === "call_tool",
+          )
+          if (matches.length !== 1) throw new Error(`Catalog publishes ${matches.length} exact refs for ${localRef}.`)
+          const search = resolved.tools.capability_search
+          if (!search?.execute) throw new Error("Recovered occurrence has no capability_search Tool.")
+          await search.execute(
+            { queries: [""], exact_refs: [matches[0]!.descriptor_ref], deactivate_refs: [], limit: 5 },
+            { toolCallId: callID, messages: [], abortSignal: abort },
+          )
+        }
+
+        const ensure = spyOn(HostSessionMcpRuntime, "ensureCatalog")
+        const revisionZero = await resolve()
+        await HostSessionMcpRuntime.dispose(session.id)
+        const restartedRevisionZero = await resolve()
+        await reveal(restartedRevisionZero, "browser_session_status", "call_reveal_browser_after_restart")
+        const browserActive = await resolve()
+        await HostSessionMcpRuntime.dispose(session.id)
+        const restoredBrowser = await resolve()
+        await reveal(restoredBrowser, "browser_tabs", "call_reveal_browser_sibling_after_recovery")
+        const twoBrowserLeaves = await resolve()
+        await reveal(twoBrowserLeaves, "computer_session_destroy", "call_reveal_computer_after_browser_recovery")
+        const bothActive = await resolve()
+        const computer = bothActive.tools.computer_session_destroy
+        if (!computer?.execute) throw new Error("Recovered occurrence did not materialize Computer destroy.")
+        const result = await computer.execute(
+          { computer_id: "host-mcp-recovery-missing" },
+          { toolCallId: "call_execute_recovered_computer", messages: [], abortSignal: abort },
+        )
+        const recoveredOwners = HostSessionMcpRuntime.catalogSnapshots(session.id).map((item) => item.owner.owner_id).sort()
+        await HostSessionMcpRuntime.dispose(session.id)
+        const unavailable = spyOn(MCP, "inspectScopedCapabilitySnapshot").mockResolvedValue({
+          tool_definitions: [],
+          prompt_definitions: [],
+          resource_definitions: [],
+          inventory_revision: "9".repeat(64),
+        })
+        const stale = await resolve().then(
+          () => ({ name: "resolved", mismatches: [] as string[] }),
+          (error) => ({
+            name: error instanceof Error ? error.name : typeof error,
+            mismatches: Array.isArray((error as { mismatches?: unknown })?.mismatches)
+              ? ((error as { mismatches: string[] }).mismatches)
+              : [],
+          }),
+        )
+        unavailable.mockRestore()
+
+        expect({
+          revisionZero: Object.keys(revisionZero.tools),
+          restartedRevisionZero: Object.keys(restartedRevisionZero.tools),
+          browserActive: Object.keys(browserActive.tools).sort(),
+          restoredBrowser: Object.keys(restoredBrowser.tools).sort(),
+          twoBrowserLeaves: Object.keys(twoBrowserLeaves.tools).sort(),
+          bothActive: Object.keys(bothActive.tools).sort(),
+          ensureCalls: ensure.mock.calls.map((call) => call[2]),
+          owners: recoveredOwners,
+          computer: JSON.stringify(result),
+          stale,
+        }).toEqual({
+          revisionZero: ["capability_search"],
+          restartedRevisionZero: ["capability_search"],
+          browserActive: ["browser_session_status", "capability_search"],
+          restoredBrowser: ["browser_session_status", "capability_search"],
+          twoBrowserLeaves: ["browser_session_status", "browser_tabs", "capability_search"],
+          bothActive: ["browser_session_status", "browser_tabs", "capability_search", "computer_session_destroy"],
+          ensureCalls: [
+            [BrowserMCPBuiltin.ServerName],
+            [BrowserMCPBuiltin.ServerName],
+            [ComputerMCPBuiltin.ServerName],
+            [BrowserMCPBuiltin.ServerName],
+          ],
+          owners: [
+            HostSessionMcpRuntime.browserOwnerIdentity(session.id),
+            HostSessionMcpRuntime.computerOwnerIdentity(session.id),
+          ].sort(),
+          computer: expect.stringContaining("COMPUTER_SESSION_NOT_FOUND"),
+          stale: {
+            name: "StaleCatalogOccurrenceError",
+            mismatches: expect.arrayContaining([expect.stringContaining("owner_revision_vector.host-session-mcp:")]),
+          },
+        })
+        ensure.mockRestore()
+      },
+    })
+  }, 60_000)
+
   test("resolves a real native Mission through the host Session MCP owner", async () => {
     await using project = await memoryProject()
     await Instance.provide({

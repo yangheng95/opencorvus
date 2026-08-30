@@ -3,6 +3,7 @@ import { Config } from "@/config/config"
 import { ConversationCapability } from "@/conversation/capability"
 import { BrowserMCPBuiltin } from "@/mcp/browser/builtin"
 import { ComputerMCPBuiltin } from "@/mcp/computer/builtin"
+import { MCP } from "@/mcp"
 import { Instance } from "@/project/instance"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
 import { prepareConversationMcpCatalog } from "../fixture/conversation-mcp"
@@ -13,6 +14,37 @@ afterEach(async () => {
 })
 
 describe("the configured declaration is the Computer provider", () => {
+  test("keeps live adapter rotation distinct while preserving the logical Computer Catalog identity", () => {
+    const first = ComputerMCPBuiltin.localConfig({
+      hostAdapter: {
+        endpoint: "http://127.0.0.1:31001/computer/runtime",
+        authorization: "first-authorization",
+        runtimeScope: "session:stable-computer:computer",
+      },
+    })
+    const second = ComputerMCPBuiltin.localConfig({
+      hostAdapter: {
+        endpoint: "http://127.0.0.1:31002/computer/runtime",
+        authorization: "second-authorization",
+        runtimeScope: "session:stable-computer:computer",
+      },
+    })
+
+    expect({
+      liveIdentityChanged: MCP.TestHooks.runtimeConfigIdentity(first) !== MCP.TestHooks.runtimeConfigIdentity(second),
+      computerCatalogIdentityStable:
+        MCP.TestHooks.catalogConfigDigest(ComputerMCPBuiltin.ServerName, first) ===
+        MCP.TestHooks.catalogConfigDigest(ComputerMCPBuiltin.ServerName, second),
+      ordinaryServerStillBindsTransport:
+        MCP.TestHooks.catalogConfigDigest("ordinary-local-mcp", first) !==
+        MCP.TestHooks.catalogConfigDigest("ordinary-local-mcp", second),
+    }).toEqual({
+      liveIdentityChanged: true,
+      computerCatalogIdentityStable: true,
+      ordinaryServerStillBindsTransport: true,
+    })
+  })
+
   test("configuration declares the builtin provider itself, not a disabled stub", async () => {
     await using project = await memoryProject()
     await Instance.provide({

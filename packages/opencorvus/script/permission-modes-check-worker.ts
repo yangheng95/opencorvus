@@ -1,6 +1,8 @@
 import { PrimaryAssistantRegistry } from "@/agent/primary-assistant-registry"
-import { sessionRuntimeFromNativeAgent } from "@/agent/session-agent-runtime"
+import { sessionRuntimeFromNativeAgent, type SessionAgentRuntime } from "@/agent/session-agent-runtime"
 import { ACP } from "@/acp/agent"
+import { CatalogOccurrenceBinding } from "@/capability/catalog-binding"
+import { bindHarnessProjection, harnessGrantedRefs } from "@/capability/harness-projection"
 import { Config } from "@/config/config"
 import { Identifier } from "@/id/id"
 import { Instance } from "@/project/instance"
@@ -8,7 +10,7 @@ import { InstanceBootstrap } from "@/project/bootstrap"
 import type { Provider } from "@/provider/provider"
 import { declareNativeTaskProcessDeployment } from "@/runtime/task-process-deployment"
 import { RuntimeExecutionSettlement } from "@/runtime/execution-settlement"
-import { Session } from "@/session"
+import { Message, Session } from "@/session"
 import { SessionLoop } from "@/session/loop"
 import { SessionProcessor } from "@/session/processor"
 import { SessionRuntimeContractStore } from "@/session/runtime-contract"
@@ -22,6 +24,8 @@ import { createExecutionCancellationOrigin } from "@/session/prompt/cancellation
 import { ComputerMCPBuiltin } from "@/mcp/computer/builtin"
 import { ComputerHostRuntime } from "@/mcp/computer/host-runtime"
 import { MCP } from "@/mcp"
+import { RuntimeCapabilityCatalog } from "@/tool/capability-runtime-catalog"
+import { ToolRegistry } from "@/tool/registry"
 import { createOpenCorvusClient } from "@opencorvus-ai/sdk/client"
 import { createManagedTemporaryDirectory, removeManagedDirectoryTree } from "@opencorvus-ai/util/runtime-directories"
 import {
@@ -371,7 +375,7 @@ function providerModel(): Provider.Model {
       input: { text: true, image: false, audio: false, video: false },
       output: { text: true, image: false, audio: false, video: false },
     },
-    api: { id: "permission-check", npm: "@ai-sdk/anthropic" },
+    api: { id: "permission-check-model", npm: "@ai-sdk/openai-compatible" },
     options: {},
   } as Provider.Model
 }
@@ -419,7 +423,82 @@ async function writeMcpTaskFixture(file: string, stateFile: string) {
   )
 }
 
-async function resolveSessionTools(title: string) {
+async function resolvePermissionCheckOccurrence(input: {
+  model: Provider.Model
+  config: Config.Info
+  agent: SessionAgentRuntime
+  agentID: string
+  session: Session.Info
+  assistant: Message.Assistant
+  publish: boolean
+}) {
+  const parent = await MessageStore.get({ sessionID: input.session.id, messageID: input.assistant.parentID })
+  const runtimeContract = SessionRuntimeContractStore.get(input.session.id)
+  const grants = await SessionLoop.resolveOccurrenceHarnessGrants({
+    runtimeContract,
+    agentID: input.agentID,
+    session: input.session,
+    agent: input.agent,
+    config: input.config,
+    includeMcpTools: true,
+  })
+  let binding = CatalogOccurrenceBinding.bindingFromInput(parent)
+  let payload: Awaited<ReturnType<typeof CatalogOccurrenceBinding.read>>
+  if (!binding) {
+    if (!input.publish) {
+      throw new Error(`Permission checker occurrence ${input.assistant.parentID} has no Catalog binding.`)
+    }
+    const executableRefs = harnessGrantedRefs(grants, "execute")
+    const registryIDs = executableRefs
+      .filter((ref) => ref.kind === "tool" && ref.owner_ref === "tool-registry")
+      .map((ref) => ref.local_ref)
+    const projectableRegistryIDs = await ToolRegistry.projectableRuntimeToolIDs(
+      { providerID: input.model.providerID, modelID: input.model.api.id },
+      input.agent,
+      input.config,
+      registryIDs,
+    )
+    const executionToolIDs = [
+      ...projectableRegistryIDs,
+      ...executableRefs
+        .filter((ref) => ref.kind === "mcp_tool" || (ref.kind === "tool" && ref.owner_ref !== "tool-registry"))
+        .map((ref) => ref.local_ref),
+    ]
+    const catalog = await RuntimeCapabilityCatalog.snapshot({
+      config: input.config,
+      sessionID: input.session.id,
+      agentID: input.agentID,
+      executionToolIDs,
+      harnessGrants: grants,
+      permission: [],
+    })
+    payload = CatalogOccurrenceBinding.payload({
+      snapshot: catalog.snapshot,
+      mcpToolParentBindings: catalog.mcpToolParentBindings,
+      materializationScope: await CatalogOccurrenceBinding.materializationScope({
+        model: input.model,
+        config: input.config,
+      }),
+      runtimeContract,
+    })
+    binding = await CatalogOccurrenceBinding.publish({ projectID: Instance.project.id, payload })
+    await CatalogOccurrenceBinding.bindAndBeginAssistant({
+      projectID: Instance.project.id,
+      assistant: { ...input.assistant, acceptedInputMessageIDs: [input.assistant.parentID] },
+      parent,
+      binding,
+    })
+  } else {
+    payload = await CatalogOccurrenceBinding.read({ projectID: Instance.project.id, binding })
+  }
+  return {
+    grants,
+    payload,
+    harnessProjection: bindHarnessProjection(grants, binding),
+  }
+}
+
+async function resolveSessionTools(title: string, activeLocalRefs: readonly string[]) {
   markActivity(`resolve:${title}:start`)
   const model = providerModel()
   const config = await Config.get()
@@ -458,42 +537,56 @@ async function resolveSessionTools(title: string) {
   })
   const abort = new AbortController().signal
   const processor = SessionProcessor.create({ assistantMessage: assistant, sessionID: session.id, model, abort })
-  const tools = await SessionLoop.resolveTools({
+  const occurrence = await resolvePermissionCheckOccurrence({
+    model,
+    config,
     agent,
     agentID: "coding",
-    model,
     session,
-    processor,
-    messages: await Session.messages({ sessionID: session.id }),
-    config,
+    assistant,
+    publish: true,
   })
+  const resolve = async () =>
+    SessionLoop.resolveTools({
+      agent,
+      agentID: "coding",
+      model,
+      session,
+      processor,
+      messages: await Session.messages({ sessionID: session.id }),
+      config,
+      harnessProjection: occurrence.harnessProjection,
+      occurrenceID: assistant.parentID,
+    })
+  let tools = await resolve()
+  const exactRefs = [...new Set(activeLocalRefs)].map((localRef) => {
+    const matches = occurrence.payload.views.filter(
+      (view) =>
+        view.descriptor_ref.local_ref === localRef &&
+        view.discoverable_by.includes(occurrence.payload.context.caller) &&
+        view.availability === "visible" &&
+        view.next_owner.kind === "call_tool",
+    )
+    if (matches.length !== 1) {
+      throw new Error(`Permission checker Catalog publishes ${matches.length} executable refs for ${JSON.stringify(localRef)}.`)
+    }
+    return matches[0]!.descriptor_ref
+  })
+  for (let offset = 0; offset < exactRefs.length; offset += 5) {
+    const search = tools.capability_search
+    if (!search?.execute) throw new Error("Permission checker occurrence has no capability_search Tool.")
+    await search.execute(
+      { queries: [""], exact_refs: exactRefs.slice(offset, offset + 5), deactivate_refs: [], limit: 5 },
+      {
+        toolCallId: `call_permission_check_reveal_${offset}_${Identifier.ascending("part")}`,
+        messages: [],
+        abortSignal: abort,
+      },
+    )
+    tools = await resolve()
+  }
   markActivity(`resolve:${title}:done`)
-  return { session, assistant, tools, abort }
-}
-
-async function resolvePersistedSessionTools(sessionID: string, assistantID: string) {
-  markActivity(`resolve-persisted:${sessionID}:start`)
-  const model = providerModel()
-  const config = await Config.get()
-  const nativeAgent = await PrimaryAssistantRegistry.get("coding", { config })
-  const agent = sessionRuntimeFromNativeAgent(nativeAgent)
-  const session = await Session.get(sessionID)
-  const messages = await Session.messages({ sessionID })
-  const assistant = messages.map((message) => message.info).find((message) => message.id === assistantID)
-  if (!assistant || assistant.role !== "assistant") throw new Error(`Missing persisted assistant ${assistantID}`)
-  const abort = new AbortController().signal
-  const processor = SessionProcessor.create({ assistantMessage: assistant, sessionID, model, abort })
-  const tools = await SessionLoop.resolveTools({
-    agent,
-    agentID: "coding",
-    model,
-    session,
-    processor,
-    messages,
-    config,
-  })
-  markActivity(`resolve-persisted:${sessionID}:done`)
-  return { tools, abort }
+  return { session, assistant, processor, tools, abort }
 }
 
 async function executeTool(
@@ -501,12 +594,48 @@ async function executeTool(
   input: unknown,
   callID: string,
   abortSignal: AbortSignal,
+  processor?: SessionProcessor.Info,
 ) {
   if (!tool.execute) throw new Error(`SessionLoop Tool ${callID} has no execute adapter`)
   markActivity(`execute:${callID}:start`)
   const result = await tool.execute(input, { toolCallId: callID, messages: [], abortSignal })
+  if (processor) {
+    await processor.completeRecoveredToolPart({
+      toolCallID: callID,
+      toolInput: input,
+      output: result as {
+        output: string
+        title: string
+        metadata: Record<string, unknown>
+        attachments?: Message.FilePart[]
+      },
+    })
+  }
   markActivity(`execute:${callID}:done`)
   return result
+}
+
+async function allowPendingExecution<T>(sessionID: string, execution: Promise<T>, label: string): Promise<T> {
+  execution.catch(() => undefined)
+  const request = await waitForValue(
+    async () => (await PermissionAuthority.list()).find((item) => item.sessionID === sessionID),
+    `${label} permission request`,
+  )
+  await PermissionAuthority.reply({
+    requestID: request.id,
+    decision: "allow_once",
+    actorID: "permission-check",
+    autoReply: false,
+  })
+  return execution
+}
+
+async function completeSyntheticAssistant(assistant: Message.Assistant): Promise<void> {
+  await Session.updateMessage({
+    ...assistant,
+    finish: "tool-calls",
+    time: { ...assistant.time, completed: Date.now() },
+  })
 }
 
 async function main() {
@@ -541,7 +670,6 @@ async function main() {
         await Config.updateProjectPatch({
           permission_mode: "full_access",
           model: "permission-check-provider/permission-check-model",
-          experimental: { batch_tool: true },
           provider: {
             "permission-check-provider": {
               name: "Permission checker provider",
@@ -574,23 +702,26 @@ async function main() {
           },
         })
 
-        const defaultRun = await resolveSessionTools("Permission checker default Full access")
+        const defaultRun = await resolveSessionTools("Permission checker default Full access", ["write"])
         const defaultTarget = path.join(projectDirectory, "default-full-access.txt")
         await executeTool(
           defaultRun.tools.write,
           { filePath: defaultTarget, content: "default-full-access" },
           "call_permission_check_default",
           defaultRun.abort,
+          defaultRun.processor,
         )
+        await completeSyntheticAssistant(defaultRun.assistant)
 
         await Config.updateProjectPatch({ permission_mode: "ask" })
-        const askRun = await resolveSessionTools("Permission checker Ask me")
+        const askRun = await resolveSessionTools("Permission checker Ask me", ["write"])
         const askTarget = path.join(projectDirectory, "ask-approved.txt")
         const pending = executeTool(
           askRun.tools.write,
           { filePath: askTarget, content: "approved" },
           "call_permission_check_ask",
           askRun.abort,
+          askRun.processor,
         )
         let request: PermissionAuthority.Request | undefined
         const deadline = Date.now() + INACTIVITY_MS
@@ -606,8 +737,9 @@ async function main() {
           autoReply: false,
         })
         await pending
+        await completeSyntheticAssistant(askRun.assistant)
 
-        const transportRun = await resolveSessionTools("Permission checker transport hydration")
+        const transportRun = await resolveSessionTools("Permission checker transport hydration", ["write"])
         const transportTarget = path.join(projectDirectory, "transport-approved.txt")
         const transportExecution = executeTool(
           transportRun.tools.write,
@@ -620,15 +752,24 @@ async function main() {
           return (await PermissionAuthority.list()).find((request) => request.sessionID === transportRun.session.id)
         }, "transport permission request")
 
-        await Config.updateProjectPatch({ permission_mode: "full_access" })
-        const mcpRun = await resolveSessionTools("Permission checker real MCP")
+        const mcpRun = await resolveSessionTools("Permission checker real MCP", [
+          "permission_check_mcp_controlled_echo",
+          "computer_session_destroy",
+          "browser_session_status",
+          "schedule",
+        ])
         const mcpTool = mcpRun.tools.permission_check_mcp_controlled_echo
         if (!mcpTool) throw new Error("SessionLoop did not project the controlled MCP Tool")
-        const mcpResult = await executeTool(
-          mcpTool,
-          { value: "controlled" },
-          "call_permission_check_mcp",
-          mcpRun.abort,
+        const mcpResult = await allowPendingExecution(
+          mcpRun.session.id,
+          executeTool(
+            mcpTool,
+            { value: "controlled" },
+            "call_permission_check_mcp",
+            mcpRun.abort,
+            mcpRun.processor,
+          ),
+          "controlled MCP",
         )
         const mcpArtifactPart = (await MessageStore.parts(mcpRun.assistant.id)).find(
           (part) => part.type === "interactive-artifact",
@@ -636,80 +777,109 @@ async function main() {
         if (!mcpArtifactPart || mcpArtifactPart.type !== "interactive-artifact") {
           throw new Error("Real MCP Tool execution did not materialize its MCP App artifact")
         }
-        const mcpAppResult = await handleMcpAppHostRequest({
-          sessionID: mcpRun.session.id,
-          artifactID: mcpArtifactPart.artifactID,
-          request: {
-            method: "tools/call",
-            params: { name: "controlled_echo", arguments: { value: "controlled-mcp-app" } },
-          },
-        })
-        const batchTool = mcpRun.tools.batch
-        if (!batchTool) throw new Error("SessionLoop did not project the real batch Tool")
-        const batchTarget = path.join(projectDirectory, "batch-child.txt")
-        const batchResult = await executeTool(
-          batchTool,
-          { tool_calls: [{ tool: "write", parameters: { filePath: batchTarget, content: "batch-child" } }] },
-          "call_permission_check_batch",
-          mcpRun.abort,
+        const mcpAppResult = await allowPendingExecution(
+          mcpRun.session.id,
+          handleMcpAppHostRequest({
+            sessionID: mcpRun.session.id,
+            artifactID: mcpArtifactPart.artifactID,
+            request: {
+              method: "tools/call",
+              params: { name: "controlled_echo", arguments: { value: "controlled-mcp-app" } },
+            },
+          }),
+          "controlled MCP App",
         )
         const computerDestroyTool = mcpRun.tools.computer_session_destroy
         if (!computerDestroyTool) throw new Error("SessionLoop did not project the built-in Computer MCP Tool")
-        const computerResult = await executeTool(
-          computerDestroyTool,
-          { computer_id: "permission-check-missing-computer" },
-          "call_permission_check_computer",
-          mcpRun.abort,
+        const computerResult = await allowPendingExecution(
+          mcpRun.session.id,
+          executeTool(
+            computerDestroyTool,
+            { computer_id: "permission-check-missing-computer" },
+            "call_permission_check_computer",
+            mcpRun.abort,
+            mcpRun.processor,
+          ),
+          "Computer MCP",
         )
         const browserStatusTool = mcpRun.tools.browser_session_status
         if (!browserStatusTool) throw new Error("SessionLoop did not project the Browser MCP status Tool")
-        const browserStatus = await executeTool(
-          browserStatusTool,
-          { sessionId: "permission-check-missing-session" },
-          "call_permission_check_browser_status",
-          mcpRun.abort,
+        const browserStatus = await allowPendingExecution(
+          mcpRun.session.id,
+          executeTool(
+            browserStatusTool,
+            { sessionId: "permission-check-missing-session" },
+            "call_permission_check_browser_status",
+            mcpRun.abort,
+            mcpRun.processor,
+          ),
+          "Browser MCP",
         )
         const scheduleTool = mcpRun.tools.schedule
         if (!scheduleTool) throw new Error("SessionLoop did not project the schedule Tool")
-        const scheduled = await executeTool(
-          scheduleTool,
-          {
-            action: "create",
-            name: "Permission checker future schedule",
-            recurrence: "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY",
-            prompt: "Permission checker future schedule",
-            scope: "session",
-            executionMode: "local",
-          },
-          "call_permission_check_schedule_create",
-          mcpRun.abort,
+        const scheduled = await allowPendingExecution(
+          mcpRun.session.id,
+          executeTool(
+            scheduleTool,
+            {
+              action: "create",
+              name: "Permission checker future schedule",
+              recurrence: "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY",
+              prompt: "Permission checker future schedule",
+              scope: "session",
+              executionMode: "local",
+            },
+            "call_permission_check_schedule_create",
+            mcpRun.abort,
+            mcpRun.processor,
+          ),
+          "schedule create",
         )
         const automationId = JSON.parse(String((scheduled as any)?.output ?? "{}"))?.automationId
         if (typeof automationId !== "string") {
           throw new Error(`Schedule Tool did not return its automation identity: ${JSON.stringify(scheduled)}`)
         }
-    const scheduleRun = await executeTool(
-      scheduleTool,
-      { action: "run", automationId },
-      "call_permission_check_schedule_run",
-      mcpRun.abort,
-    )
-        markActivity("matrix:scheduler-run-complete")
-        const unscheduled = await executeTool(
-          scheduleTool,
-          { action: "delete", automationId },
-          "call_permission_check_schedule_delete",
-          mcpRun.abort,
+        const scheduleRun = await allowPendingExecution(
+          mcpRun.session.id,
+          executeTool(
+            scheduleTool,
+            { action: "run", automationId },
+            "call_permission_check_schedule_run",
+            mcpRun.abort,
+            mcpRun.processor,
+          ),
+          "schedule run",
         )
-        const mcpTask = mcpRun.tools.permission_task_check_mcp_controlled_task
+        markActivity("matrix:scheduler-run-complete")
+        const unscheduled = await allowPendingExecution(
+          mcpRun.session.id,
+          executeTool(
+            scheduleTool,
+            { action: "delete", automationId },
+            "call_permission_check_schedule_delete",
+            mcpRun.abort,
+            mcpRun.processor,
+          ),
+          "schedule delete",
+        )
+        await completeSyntheticAssistant(mcpRun.assistant)
+        const mcpTaskRun = await resolveSessionTools("Permission checker durable MCP task", [
+          "permission_task_check_mcp_controlled_task",
+        ])
+        const mcpTask = mcpTaskRun.tools.permission_task_check_mcp_controlled_task
         if (!mcpTask) throw new Error("SessionLoop did not project the controlled MCP task Tool")
         let interruptedTaskError = ""
         try {
-          await executeTool(
-            mcpTask,
-            { value: "durable-task" },
-            "call_permission_check_mcp_task",
-            mcpRun.abort,
+          await allowPendingExecution(
+            mcpTaskRun.session.id,
+            executeTool(
+              mcpTask,
+              { value: "durable-task" },
+              "call_permission_check_mcp_task",
+              mcpTaskRun.abort,
+              mcpTaskRun.processor,
+            ),
+            "durable MCP task",
           )
         } catch (error) {
           interruptedTaskError = error instanceof Error ? error.message : String(error)
@@ -731,8 +901,6 @@ async function main() {
         markActivity("matrix:read-default")
         const askFile = await fs.readFile(askTarget, "utf8")
         markActivity("matrix:read-ask")
-        const batchFile = await fs.readFile(batchTarget, "utf8")
-        markActivity("matrix:read-batch")
         const pluginEvidence = (await fs.readFile(pluginState, "utf8")).trim().split("\n").map((line) => JSON.parse(line))
         markActivity("matrix:read-plugin")
         const pendingCount = (await PermissionAuthority.list()).length
@@ -744,14 +912,13 @@ async function main() {
           askFile,
           mcpResult,
           mcpAppResult,
-          batch: { result: batchResult, file: batchFile },
           computer: computerResult,
           browserStatus,
           schedule: { scheduled, run: scheduleRun, unscheduled },
           plugin: pluginEvidence,
           mcpTaskRecovery: {
-            sessionID: mcpRun.session.id,
-            assistantID: mcpRun.assistant.id,
+            sessionID: mcpTaskRun.session.id,
+            assistantID: mcpTaskRun.assistant.id,
             callID: "call_permission_check_mcp_task",
             interruptedTaskError,
           },
@@ -825,7 +992,6 @@ async function main() {
       evidence.askFile !== "approved" ||
       !JSON.stringify(evidence.mcpResult).includes("controlled") ||
       !JSON.stringify(evidence.mcpAppResult).includes("controlled-mcp-app") ||
-      evidence.batch.file !== "batch-child" ||
       !JSON.stringify(evidence.computer).includes("COMPUTER_SESSION_NOT_FOUND") ||
       !JSON.stringify(evidence.browserStatus).includes("permission-check-missing-session") ||
       !JSON.stringify(evidence.schedule).includes("Permission checker future schedule") ||
@@ -839,14 +1005,6 @@ async function main() {
     ) {
       throw new Error(`Permission checker result mismatch: ${JSON.stringify(evidence)}`)
     }
-    await Instance.provide({
-      directory: projectDirectory,
-      fn: async () => {
-        await MCP.disconnect(ComputerMCPBuiltin.ServerName)
-        await Config.updateProjectPatch({ mcp: { [ComputerMCPBuiltin.ServerName]: { enabled: false } } })
-      },
-    })
-    markActivity("matrix:cleanup-complete")
     // `full_access` is a Permission mode column, not a ledger event type — the
     // event union is declared by `PermissionEventType` in permission.sql.ts.
     // Assert both halves of the full-access path: the request carried the mode,
@@ -867,29 +1025,27 @@ async function main() {
       init: InstanceBootstrap,
       fn: async () => {
         markActivity("matrix:mcp-task-recovery-start")
-        const recovered = await resolvePersistedSessionTools(
-          evidence.mcpTaskRecovery.sessionID,
-          evidence.mcpTaskRecovery.assistantID,
-        )
-        const taskTool = recovered.tools.permission_task_check_mcp_controlled_task
-        if (!taskTool) throw new Error("Restarted SessionLoop did not project the controlled MCP task Tool")
-        const result = await executeTool(
-          taskTool,
-          { value: "durable-task" },
-          evidence.mcpTaskRecovery.callID,
-          recovered.abort,
+        const recoveredPart = await waitForValue(
+          async () => {
+            const part = (await MessageStore.parts(evidence.mcpTaskRecovery.assistantID)).find(
+              (candidate) =>
+                candidate.type === "tool" && candidate.callID === evidence.mcpTaskRecovery.callID,
+            )
+            return part?.type === "tool" && part.state.status === "completed" ? part : undefined
+          },
+          "automatic MCP task recovery completion",
         )
         const state = JSON.parse(await fs.readFile(mcpTaskState, "utf8")) as { calls: number; polls?: number }
         const events = (await PermissionAuthority.history()).map((row) => row.event_type)
         if (
-          !JSON.stringify(result).includes("durable-task") ||
+          !JSON.stringify(recoveredPart.state).includes("durable-task") ||
           state.calls !== 1 ||
           state.polls !== 2 ||
           !events.includes("mcp_task_status")
         ) {
-          throw new Error(`MCP task recovery mismatch: ${JSON.stringify({ result, state, events })}`)
+          throw new Error(`MCP task recovery mismatch: ${JSON.stringify({ recoveredPart, state, events })}`)
         }
-        Object.assign(evidence, { mcpTaskResult: result, mcpTaskState: state, events })
+        Object.assign(evidence, { mcpTaskResult: recoveredPart.state, mcpTaskState: state, events })
       },
     })
     SessionPrompt.cancel(
@@ -924,6 +1080,7 @@ async function main() {
       throw new Error(`Permission transport checker mismatch: ${JSON.stringify(transports)}`)
     }
     Object.assign(evidence, { transports })
+    markActivity("matrix:cleanup-complete")
     markActivity("transport:prompt-finished")
     markActivity()
     process.stdout.write(`${JSON.stringify({ status: "passed", ...evidence })}\n`)

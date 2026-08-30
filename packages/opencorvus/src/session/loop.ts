@@ -3666,9 +3666,34 @@ export namespace SessionLoop {
       if (ref.kind !== "mcp_tool") throw new Error(`Exact MCP materializer received ${ref.kind}.`)
       if (!includeMcpTools) throw new Error(`MCP Tool ${CapabilityRefCodec.encode(ref)} is disabled for this occurrence.`)
       if (ref.owner_ref.startsWith("host-session-mcp:")) {
+        const encoded = CapabilityRefCodec.encode(ref)
+        const parents = occurrenceCatalogPayload.mcp_tool_parent_bindings.filter(
+          (binding) => CapabilityRefCodec.encode(binding.tool_ref) === encoded,
+        )
+        if (parents.length !== 1) {
+          throw new StaleCatalogOccurrenceError([`mcp_tool_parent_bindings.${encoded}`])
+        }
         const expectedRevision = occurrenceCatalogPayload.owner_revision_vector[ref.owner_ref]
         if (!expectedRevision) {
           throw new StaleCatalogOccurrenceError([`owner_revision_vector.${ref.owner_ref}`])
+        }
+        const currentOwner = HostSessionMcpRuntime.catalogSnapshots(input.session.id).find(
+          (snapshot) => HostSessionMcpRuntime.catalogOwnerRef(snapshot.owner.owner_id) === ref.owner_ref,
+        )
+        if (currentOwner && currentOwner.owner_revision !== expectedRevision) {
+          throw new StaleCatalogOccurrenceError([`owner_revision_vector.${ref.owner_ref}`])
+        }
+        if (!currentOwner?.tool_bindings[ref.local_ref]) {
+          await HostSessionMcpRuntime.ensureCatalog(input.config, input.session.id, [parents[0]!.server_ref.local_ref])
+        }
+        const ensuredOwner = HostSessionMcpRuntime.catalogSnapshots(input.session.id).find(
+          (snapshot) => HostSessionMcpRuntime.catalogOwnerRef(snapshot.owner.owner_id) === ref.owner_ref,
+        )
+        if (!ensuredOwner || ensuredOwner.owner_revision !== expectedRevision) {
+          throw new StaleCatalogOccurrenceError([`owner_revision_vector.${ref.owner_ref}`])
+        }
+        if (!ensuredOwner.tool_bindings[ref.local_ref]) {
+          throw new StaleCatalogOccurrenceError([`tool_binding.${ref.local_ref}`])
         }
         try {
           return (await HostSessionMcpRuntime.exactTool(
