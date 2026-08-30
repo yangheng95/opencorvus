@@ -4,6 +4,8 @@ import { HostAgentRegistry } from "@/agent/host-agent-registry"
 import { Bus } from "@/bus"
 import { Config } from "@/config/config"
 import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
+import { EngineTaskRootIngressTable, EngineTaskWaitRegistrationTable } from "@/engine/engine.sql"
+import { acquireTaskRootIngressLease } from "@/engine/task-root-fact-store"
 import { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
 import { Identifier } from "@/id/id"
 import { MCP } from "@/mcp"
@@ -15,7 +17,7 @@ import { PermissionExecutionResultTable } from "@/permission/permission.sql"
 import { Provider } from "@/provider/provider"
 import { Instance } from "@/project/instance"
 import { declareNativeTaskProcessDeployment } from "@/runtime/task-process-deployment"
-import { AutomationTable } from "@/scheduler/automation.sql"
+import { currentOrchestratorControlMessage } from "@/orchestrator/agent"
 import { Session } from "@/session"
 import { LLM } from "@/session/llm"
 import { SessionLoop } from "@/session/loop"
@@ -92,7 +94,8 @@ async function snapshot(state: State) {
         : undefined,
     resultCount: results.length,
     automationCount: Database.use((db) =>
-      db.select().from(AutomationTable).where(eq(AutomationTable.task_id, state.taskID)).all(),
+      db.select().from(EngineTaskWaitRegistrationTable)
+        .where(eq(EngineTaskWaitRegistrationTable.task_id, state.taskID)).all(),
     ).length,
     executionStarts: history.filter(
       (event) => event.request_id === state.request.id && event.event_type === "execution_started",
@@ -150,26 +153,51 @@ async function initializeCut(): Promise<never> {
           timeCreated: now,
         }),
       })
+      const ingress = Database.use((db) =>
+        db.select().from(EngineTaskRootIngressTable)
+          .where(eq(EngineTaskRootIngressTable.task_id, taskID))
+          .orderBy(EngineTaskRootIngressTable.sequence, EngineTaskRootIngressTable.id)
+          .get(),
+      )
+      if (!ingress) throw new Error(`Cross-process Tool-result Task ${taskID} has no creation ingress`)
+      const activation = acquireTaskRootIngressLease({
+        ingressID: ingress.id,
+        ownerOccurrenceID: `tool-result-process:${taskID}`,
+        now: now + 1,
+        leaseMilliseconds: 120_000,
+        assertControlOwnerInTransaction: () => undefined,
+      })
+      if (!activation.acquired) throw new Error(`Cross-process Tool-result Task ${taskID} could not acquire its ingress`)
       const session = await Session.create({
         kind: "orchestrator",
         parentID: root.id,
         title: "Cross-process Tool-result permission occurrence",
       })
+      const control = currentOrchestratorControlMessage(
+        { taskCreation: { taskID } },
+        taskID,
+        ingress.id,
+        ingress.id,
+      )
+      if (!control) throw new Error(`Cross-process Tool-result Task ${taskID} has no control Message`)
       const user = await Session.updateMessage({
-        id: Identifier.ascending("message"),
+        id: control.messageID,
         sessionID: session.id,
         role: "user",
-        author: "user",
+        author: "orchestrator",
         time: { created: now },
         agent: "orchestrator",
         model: { providerID: model.providerID, modelID: model.id },
+        extra: control.extra,
       })
       await Session.updatePart({
-        id: Identifier.ascending("part"),
+        id: control.partID,
         sessionID: session.id,
         messageID: user.id,
         type: "text",
-        text: "Schedule one exact projected wait.",
+        text: control.text,
+        kind: "control",
+        source: "system",
       })
       const assistant = {
         id: Identifier.ascending("message"),
@@ -185,6 +213,7 @@ async function initializeCut(): Promise<never> {
         modelID: model.id,
         providerID: model.providerID,
         time: { created: now },
+        activationID: activation.activationID,
       } as const
       const raw = createOrchestratorTools({
         taskID,

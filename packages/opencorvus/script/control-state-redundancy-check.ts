@@ -148,7 +148,7 @@ const CONTROL_STATE_INVENTORY = {
     lease: ["time_acquired"],
   }),
   AutomationTable: inventory({
-    identity: ["id", "definition_id", "revision", "project_id", "session_id", "task_id"],
+    identity: ["id", "definition_id", "revision", "project_id", "session_id"],
     input: [
       "name",
       "kind",
@@ -163,16 +163,41 @@ const CONTROL_STATE_INVENTORY = {
       "agent",
       "status",
       "due_at",
+      "tool_input_digest",
       "time_created",
     ],
+    causal: ["tool_part_id"],
   }),
   AutomationDefinitionTombstoneTable: inventory({
     identity: ["id", "definition_id", "revision"],
+    causal: ["tool_part_id"],
+    input: ["tool_input_digest"],
     fact: ["time_created"],
   }),
   AutomationProjectTargetTable: inventory({
     identity: ["automation_revision_id", "project_id"],
     input: ["position"],
+  }),
+  AutomationFireTable: inventory({
+    identity: ["id", "automation_revision_id"],
+    causal: ["tool_part_id"],
+    input: ["scheduled_due_at", "origin", "input_digest"],
+    fact: ["time_created"],
+  }),
+  AutomationFireAttemptTable: inventory({
+    identity: ["id", "fire_id", "ordinal"],
+    causal: ["owner_occurrence_id"],
+    fact: ["time_created"],
+  }),
+  AutomationFireAttemptReceiptTable: inventory({
+    identity: ["attempt_id"],
+    policy: ["retry_at"],
+    receipt: ["outcome", "error", "time_created"],
+  }),
+  AutomationDelaySettlementTable: inventory({
+    identity: ["definition_id"],
+    causal: ["assistant_message_id", "accepted_input_message_ids", "fire_id"],
+    receipt: ["disposition", "time_created"],
   }),
   AutomationRunTable: inventory({
     identity: ["id", "automation_revision_id", "fire_id"],
@@ -189,6 +214,22 @@ const CONTROL_STATE_INVENTORY = {
     policy: ["retry_at"],
     receipt: ["outcome", "disposition", "closure_event_id", "error", "time_created"],
   }),
+  EngineTaskWaitRegistrationTable: inventory({
+    identity: ["id", "task_id", "execution_epoch"],
+    causal: [
+      "tool_part_id",
+      "creator_ingress_id",
+      "creator_activation_id",
+      "legacy_automation_definition_id",
+    ],
+    input: ["due_at", "reason", "input_digest"],
+    fact: ["time_created"],
+  }),
+  EngineTaskWaitSettlementTable: inventory({
+    identity: ["wait_id"],
+    causal: ["ingress_id"],
+    receipt: ["disposition", "time_created"],
+  }),
   EventJobTable: inventory({
     identity: ["id", "definition_id", "revision", "project_id", "session_id"],
     input: [
@@ -200,11 +241,15 @@ const CONTROL_STATE_INVENTORY = {
       "enabled",
       "one_shot",
       "cooldown_ms",
+      "tool_input_digest",
       "time_created",
     ],
+    causal: ["tool_part_id"],
   }),
   EventJobDefinitionTombstoneTable: inventory({
     identity: ["id", "definition_id", "revision"],
+    causal: ["tool_part_id"],
+    input: ["tool_input_digest"],
     fact: ["time_created"],
   }),
   EventJobFireTable: inventory({

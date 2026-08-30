@@ -117,7 +117,7 @@ const DECLARED_OWNERS: Record<string, Declaration> = {
   },
   "scheduler/automation-service.ts": {
     targets: ["automation"],
-    sites: 2,
+    sites: 3,
     release:
       "The recurring, one-shot, activity and failure settlements each release with their receipts, inside the same transaction.",
   },

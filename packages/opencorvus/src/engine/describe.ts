@@ -20,8 +20,6 @@ import { renderUserRequestSection } from "@/intent/request-prompt"
 import { deriveTaskStatus } from "./task-status"
 import { ToolFailureCause, renderToolFailureCause } from "@/session/tool-failure-cause"
 import { SessionStatus } from "@/session/status"
-import { AutomationTable } from "@/scheduler/automation.sql"
-import { projectAutomationInTransaction } from "@/scheduler/automation-projection"
 import { Database, and, asc, desc, eq, isNotNull, or, sql } from "@/storage/db"
 import { listAgentCoordinationResponses, listPendingAgentCoordinationRequests } from "./agent-coordination"
 import { listRecentTaskMailboxMessages, type MailboxSchedulerMessage } from "./mailbox"
@@ -52,6 +50,7 @@ import { AgentRoleContract } from "@/agent/role-contract"
 import { MessageTable, SessionTable } from "@/session/session.sql"
 import { ProtocolEventTable, protocolEventBelongsToTask } from "@/protocol/protocol.sql"
 import { taskRewindCursor } from "./rewind"
+import { listCurrentTaskWaits } from "./task-wait"
 
 /** Cap recent stream-failure entries surfaced into the orchestrator prompt.
  *  A chronically failing provider can write an artifact every wake; older
@@ -433,30 +432,17 @@ export interface TaskDesc {
   recent_mailbox_messages?: MailboxSchedulerMessage[]
 }
 
-function describeTaskScheduledWaits(taskID: string, floor: number): TaskScheduledWaitDesc[] {
-  const persisted = Database.use((db) => db
-      .select()
-      .from(AutomationTable)
-      .where(and(eq(AutomationTable.task_id, taskID), eq(AutomationTable.kind, "delay")))
-      .orderBy(AutomationTable.definition_id, desc(AutomationTable.revision), desc(AutomationTable.id)).all())
-  const latest = new Map<string, (typeof persisted)[number]>()
-  for (const row of persisted) if (!latest.has(row.definition_id)) latest.set(row.definition_id, row)
-  const rows = [...latest.values()]
-    .map((row) => Database.use((db) => projectAutomationInTransaction(db, row)))
-    .filter((row) => row.status === "active" || row.last_error !== null)
-    .sort((left, right) => Number(right.status === "active") - Number(left.status === "active") || left.next_run - right.next_run || (right.last_run ?? 0) - (left.last_run ?? 0) || right.id.localeCompare(left.id))
-    .slice(0, TASK_SCHEDULED_WAIT_PROMPT_CAP)
+function describeTaskScheduledWaits(taskID: string): TaskScheduledWaitDesc[] {
+  const rows = listCurrentTaskWaits({ taskID, limit: TASK_SCHEDULED_WAIT_PROMPT_CAP })
   return rows.map((row) => ({
     job_id: row.id,
-    name: row.name,
-    reason: row.prompt,
-    expression: `until ${new Date(row.next_run).toISOString()}`,
-    enabled: row.status === "active",
+    name: "task wait",
+    reason: row.reason,
+    expression: `until ${new Date(row.dueAt).toISOString()}`,
+    enabled: true,
     one_shot: true,
-    next_run: row.next_run,
-    last_run: row.last_run ?? undefined,
-    failure_count: row.failure_count,
-    last_error: row.last_error ?? undefined,
+    next_run: row.dueAt,
+    failure_count: 0,
   }))
 }
 
@@ -958,7 +944,7 @@ async function describeTaskFromRow(task: TaskRow): Promise<TaskDesc> {
   const openToolCallsWithoutCurrentOwner = listOpenToolCallsWithoutCurrentOwner(task)
   const completedToolCallRefs = listCompletedToolCallRefs(task)
   const agentMessageRefs = listAgentMessageRefs(task)
-  const taskScheduledWaits = describeTaskScheduledWaits(task.id, task.time_started)
+  const taskScheduledWaits = describeTaskScheduledWaits(task.id)
 
   return {
     id: task.id,

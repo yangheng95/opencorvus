@@ -1,6 +1,5 @@
 import { Identifier } from "@/id/id"
 import { ProtocolEventTable } from "@/protocol/protocol.sql"
-import { AutomationRunTable, AutomationTable } from "@/scheduler/automation.sql"
 import {
   MessageTable,
   ProviderActivityOutcomeTable,
@@ -46,6 +45,10 @@ import {
   currentControlLeaseInTransaction,
   renewControlLeaseInTransaction,
 } from "./control-lease"
+import {
+  exactDueTaskWaitForIngressInTransaction,
+  supersedeCurrentTaskWaitsForIngressInTransaction,
+} from "./task-wait"
 
 export type TaskRootIngressEvidence = {
   turns: readonly AssistantTurnFact[]
@@ -221,12 +224,7 @@ export function acceptTaskRootIngressInTransaction(
     const source = db.select({ taskID: EngineArtifactTable.task_id }).from(EngineArtifactTable).where(eq(EngineArtifactTable.id, input.sourceID)).get()
     if (!source || source.taskID !== input.taskID) throw new Error(`Task-root ingress Engine Artifact ${input.sourceID} is outside Task ${input.taskID}`)
   }
-  if (input.source === "automation_run") {
-    const source = db.select({ taskID: AutomationTable.task_id }).from(AutomationRunTable)
-      .innerJoin(AutomationTable, eq(AutomationTable.id, AutomationRunTable.automation_revision_id))
-      .where(eq(AutomationRunTable.id, input.sourceID)).get()
-    if (!source || source.taskID !== input.taskID) throw new Error(`Task-root ingress Automation run ${input.sourceID} is outside Task ${input.taskID}`)
-  }
+  const dueWaitID = exactDueTaskWaitForIngressInTransaction(db, input)
   const policyID = ensureTaskRootIngressPolicyInTransaction(db, input)
   const previous = db
     .select({ sequence: EngineTaskRootIngressTable.sequence })
@@ -256,7 +254,15 @@ export function acceptTaskRootIngressInTransaction(
       time_accepted: input.now,
     })
     .run()
-  return db.select().from(EngineTaskRootIngressTable).where(eq(EngineTaskRootIngressTable.id, id)).get()!
+  const accepted = db.select().from(EngineTaskRootIngressTable).where(eq(EngineTaskRootIngressTable.id, id)).get()!
+  supersedeCurrentTaskWaitsForIngressInTransaction(db, {
+    taskID: input.taskID,
+    executionEpoch: input.executionEpoch,
+    ingressID: accepted.id,
+    ...(dueWaitID ? { exceptWaitID: dueWaitID } : {}),
+    now: input.now,
+  })
+  return accepted
 }
 
 function lifecycleKind(type: string): TaskLifecycleFact["kind"] | undefined {

@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, test } from "bun:test"
-import { EngineControlActivationLeaseTable, EngineTaskTable } from "@/engine/engine.sql"
+import { EngineArtifactTable, EngineControlActivationLeaseTable, EngineTaskTable } from "@/engine/engine.sql"
 import {
   reconcileTaskControlPlane,
   readTaskRootIngressEvidence,
@@ -840,8 +840,8 @@ describe("Task-control reconciliation", () => {
         }).toEqual({
           recoveryResults: [0, 1],
           oldBoundary: "error",
-          oldError: "UnknownError",
-          oldErrorMessage: expect.stringContaining("ProcessExecutionInterruptedError"),
+          oldError: "ProcessExecutionInterruptedError",
+          oldErrorMessage: undefined,
           oldCompleted: expect.any(Number),
           successor: {
             activationID: leases[1]!.id,
@@ -889,6 +889,26 @@ describe("Task-control reconciliation", () => {
           },
         })
 
+        {
+          using _failedSurface = TaskControlTestHooks.replaceOperatorGateWriter(() => {
+            throw new Error("injected operator-gate persistence failure")
+          })
+          expect(await reconcileTaskControlPlane(fixture.taskID)).toBe(0)
+        }
+        expect(
+          Database.use((db) =>
+            db
+              .select()
+              .from(EngineArtifactTable)
+              .where(eq(EngineArtifactTable.task_id, fixture.taskID))
+              .all()
+              .filter(
+                (artifact) =>
+                  artifact.kind === "task-infrastructure-error" &&
+                  (artifact.payload as { operation?: string }).operation === "surface-operator-gated-ingress",
+              ),
+          ),
+        ).toHaveLength(0)
         expect(await reconcileTaskControlPlane(fixture.taskID)).toBe(0)
         const oldAssistant = (await Session.messages({ sessionID: fixture.orchestrator.id })).find(
           (message) => message.info.id === fixture.assistantID,
@@ -917,15 +937,28 @@ describe("Task-control reconciliation", () => {
           },
           semanticAttemptIDs: debug?.semanticAttemptIDs,
           projection: projectTaskRootIngress(fixture.ingress.id, Date.now(), readTaskRootIngressEvidence),
+          surfacedGates: Database.use((db) =>
+            db
+              .select()
+              .from(EngineArtifactTable)
+              .where(eq(EngineArtifactTable.task_id, fixture.taskID))
+              .all()
+              .filter(
+                (artifact) =>
+                  artifact.kind === "task-infrastructure-error" &&
+                  (artifact.payload as { operation?: string }).operation === "surface-operator-gated-ingress",
+              ).length,
+          ),
         }).toEqual({
           oldBoundary: "error",
-          oldError: "UnknownError",
-          oldErrorMessage: expect.stringContaining("ProcessExecutionInterruptedError"),
+          oldError: "ProcessExecutionInterruptedError",
+          oldErrorMessage: undefined,
           oldCompleted: expect.any(Number),
           leaseIDs: [fixture.lease.activationID],
           providerActivity: { requests: [fixture.providerRequestID], outcomes: ["completed"] },
           semanticAttemptIDs: [fixture.decisionGapStepID],
           projection: { state: "exhausted", reason: "semantic_limit" },
+          surfacedGates: 1,
         })
       },
     })

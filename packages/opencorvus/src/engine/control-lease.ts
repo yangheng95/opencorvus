@@ -1,6 +1,6 @@
 import { Identifier } from "@/id/id"
 import { Log } from "@/util/log"
-import { Database, and, desc, eq, gt } from "@/storage/db"
+import { Database, and, desc, eq, gt, inArray } from "@/storage/db"
 import { EngineControlActivationLeaseTable, type EngineControlActivationTarget } from "./engine.sql"
 
 const log = Log.create({ service: "control-lease" })
@@ -17,14 +17,35 @@ export class ControlLeaseFenceLostError extends Error {
 
 export type ControlLease = typeof EngineControlActivationLeaseTable.$inferSelect
 
+export function currentControlLeasesInTransaction(
+  db: Database.TxOrDb,
+  target: EngineControlActivationTarget,
+  targetIDs: readonly string[],
+): Map<string, ControlLease> {
+  const ids = [...new Set(targetIDs)]
+  if (ids.length === 0) return new Map()
+  const current = new Map<string, ControlLease>()
+  for (const row of db
+    .select()
+    .from(EngineControlActivationLeaseTable)
+    .where(and(eq(EngineControlActivationLeaseTable.target, target), inArray(EngineControlActivationLeaseTable.target_id, ids)))
+    .orderBy(
+      EngineControlActivationLeaseTable.target_id,
+      desc(EngineControlActivationLeaseTable.time_activated),
+      desc(EngineControlActivationLeaseTable.id),
+    )
+    .all()) {
+    if (!current.has(row.target_id)) current.set(row.target_id, row)
+  }
+  return current
+}
+
 export function currentControlLeaseInTransaction(
   db: Database.TxOrDb,
   target: EngineControlActivationTarget,
   targetID: string,
 ): ControlLease | undefined {
-  return db.select().from(EngineControlActivationLeaseTable)
-    .where(and(eq(EngineControlActivationLeaseTable.target, target), eq(EngineControlActivationLeaseTable.target_id, targetID)))
-    .orderBy(desc(EngineControlActivationLeaseTable.time_activated), desc(EngineControlActivationLeaseTable.id)).get()
+  return currentControlLeasesInTransaction(db, target, [targetID]).get(targetID)
 }
 
 export type ControlLeaseAcquisition =

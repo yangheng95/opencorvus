@@ -17279,6 +17279,73 @@ export type GlobalAutomationsUpdateResponses = {
 
 export type GlobalAutomationsUpdateResponse = GlobalAutomationsUpdateResponses[keyof GlobalAutomationsUpdateResponses]
 
+export type GlobalAutomationsFiresData = {
+  body?: never
+  path: {
+    id: string
+  }
+  query?: never
+  url: "/global/automations/{id}/fires"
+}
+
+export type GlobalAutomationsFiresErrors = {
+  /**
+   * Bad request
+   */
+  400: BadRequestError
+  /**
+   * Not found
+   */
+  404:
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "NotFoundError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "LogFileNotFoundError"
+      }
+}
+
+export type GlobalAutomationsFiresError = GlobalAutomationsFiresErrors[keyof GlobalAutomationsFiresErrors]
+
+export type GlobalAutomationsFiresResponses = {
+  /**
+   * Scheduled automation Fire history
+   */
+  200: Array<{
+    attemptCount: number
+    automationId: string
+    automationRevisionId: string
+    completedAt: number | null
+    error: string | null
+    fireId: string
+    origin: "scheduled" | "manual_api" | "manual_tool" | "legacy"
+    retryAt: number | null
+    runs: Array<{
+      closureEventID: string | null
+      completedAt: number | null
+      disposition: "mission_closed" | "target_deleted" | "superseded" | null
+      error: string | null
+      id: string
+      outcome: "running" | "retry_wait" | "succeeded" | "failed" | "disposition"
+      sessionId: string | null
+      startedAt: number
+      targetProjectId: string | null
+      targetScope: "session" | "project" | "global"
+    }>
+    scheduledDueAt: number
+    startedAt: number
+    state: "running" | "retry_wait" | "succeeded" | "failed" | "partial" | "disposition"
+  }>
+}
+
+export type GlobalAutomationsFiresResponse = GlobalAutomationsFiresResponses[keyof GlobalAutomationsFiresResponses]
+
 export type GlobalAutomationsRunData = {
   body?: never
   path: {
@@ -17385,7 +17452,7 @@ export type GlobalAutomationsRunsError = GlobalAutomationsRunsErrors[keyof Globa
 
 export type GlobalAutomationsRunsResponses = {
   /**
-   * Scheduled automation run history
+   * Scheduled automation target-execution history; use /fires for logical occurrence history
    */
   200: Array<{
     automationId: string
@@ -32566,7 +32633,7 @@ export type TaskDebugTaskRootIngressesResponses = {
           semanticAttemptIDs: Array<string>
           semanticTurnIDs: Array<string>
           sequence: number
-          source: "message" | "protocol_event" | "automation_run" | "engine_artifact" | "task" | "inline"
+          source: "message" | "protocol_event" | "engine_artifact" | "task" | "inline"
           sourceID: string
         }>
         status: "available"

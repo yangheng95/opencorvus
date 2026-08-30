@@ -76,8 +76,9 @@ error and durable `session.error` event. Downstream layers never reconstruct a
 caller from the reason string.
 
 `retryTask` / `replanTask` 只接受 terminal Task，已有 workflow occurrence 仍作为不可变执行证据保留。
-Lifecycle 校验、被动 `task_wait_activity | orchestrator_event` wake 清理和本次 intent wake 写入位于
-同一数据库事务；active/queued Task 返回 typed lifecycle conflict。用户消息、coordination request、
+Lifecycle 校验、本次 intent wake 写入，以及同 epoch native Task wait 的 `superseded` settlement 位于
+同一数据库事务；active/queued Task 返回 typed lifecycle conflict。历史 `task_wait_activity` 只作为已落盘
+旧 ingress 的可读来源存在，不再有当前 writer。用户消息、coordination request、
 infrastructure recovery 和既有 operator intent 是已接受的 durable input，retry/replan 不得删除它们。
 事务提交后 queue 只消费已经持久化的 intent，不再写第二个 wake。
 普通 operator/orchestrator message 与 coordination request 只产生可见 ingress 和 delivery fact，

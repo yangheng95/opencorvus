@@ -3,6 +3,7 @@ import { acquireControlLease } from "../src/engine/control-lease"
 import { Identifier } from "../src/id/id"
 import { Instance } from "../src/project/instance"
 import {
+  AutomationFireTable,
   AutomationRunReceiptTable,
   AutomationRunTable,
   AutomationTable,
@@ -26,6 +27,7 @@ describe("scheduler immutable fact control", () => {
       fn: async () => {
         const now = Date.now()
         const automationID = Identifier.ascending("automation")
+        const fireID = Identifier.ascending("automation")
         const runID = Identifier.ascending("automation_run")
         Database.transaction((db) => {
           db.insert(AutomationTable).values({
@@ -43,10 +45,17 @@ describe("scheduler immutable fact control", () => {
             status: "active",
             time_created: now,
           }).run()
+          db.insert(AutomationFireTable).values({
+            id: fireID,
+            automation_revision_id: automationID,
+            scheduled_due_at: now,
+            origin: "legacy",
+            time_created: now,
+          }).run()
           db.insert(AutomationRunTable).values({
             id: runID,
             automation_revision_id: automationID,
-            fire_id: "fire:fact-projection",
+            fire_id: fireID,
             target_project_id: Instance.project.id,
             started_at: now + 1,
           }).run()

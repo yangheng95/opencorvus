@@ -79,7 +79,7 @@ Deleting a Task-root or Mission Session tree uses `session.deleted` on each Sess
 ```text
 IngressAccepted {
   id, task_id, execution_epoch, sequence,
-  source: task | message | protocol_event | automation_run | engine_artifact | inline,
+  source: task | message | protocol_event | engine_artifact | inline,
   source_id, inline_payload?, policy_id, time_accepted
 }
 ```
@@ -137,7 +137,7 @@ Lifecycle cancellation or a terminal Task decision fences every new Provider/Too
 
 A completed exclusive Tool outcome whose metadata carries the typed `immediate_park` control is itself the durable reply boundary for that assistant Turn, even though the Provider finish reason remains `tool-calls`. Session completion and recovery reduce that persisted outcome control; they do not infer reply completion from prose or require a synthetic follow-up assistant message.
 
-`no_action({reason})` is the sole non-mutating Orchestrator decision. Its completed assistant-owned Tool request/outcome resolves only the current ingress and uses `immediate_park` to close the physical Turn. It creates no timer, Automation, Interaction, worker action, Task lifecycle fact, future wake, or durable waiting state. A lifecycle ingress with no newly ready frontier and a status/diagnosis reply both use this receipt after the visible reasoning or answer. Scheduled `wait` remains a distinct decision that names an external event, carries a defensible duration, and creates the future Automation ingress; it is never child polling or an alias for `no_action`.
+`no_action({reason})` is the sole non-mutating Orchestrator decision. Its completed assistant-owned Tool request/outcome resolves only the current ingress and uses `immediate_park` to close the physical Turn. It creates no timer, Automation, Interaction, worker action, Task lifecycle fact, future wake, or durable waiting state. A lifecycle ingress with no newly ready frontier and a status/diagnosis reply both use this receipt after the visible reasoning or answer. Scheduled `wait` remains a distinct decision that names an external event and carries a defensible duration. Under Task authority it registers one epoch-bound native Task wait whose due materialization is an exact Task ingress; under conversation authority it creates one Session-delay Automation. It is never child polling or an alias for `no_action`.
 
 ## Physical leases
 
@@ -205,12 +205,14 @@ Mailbox Protocol events follow the same envelope/body boundary. `mailbox.message
 
 Automation and Event configuration changes append immutable definition revisions or tombstones. Execution is immutable and references the exact definition revision:
 
-- Automation: `automation_run` input plus ordered `automation_run_receipt` facts and leases;
+- Automation: immutable definition revision/tombstone, logical `automation_fire`, ordered physical `automation_fire_attempt` plus attempt receipt, real `automation_run` plus ordered run receipts, and the generic Automation lease. A zero-run terminal Fire is a real public occurrence, not a synthetic run. Current writers emit `scheduled`, `manual_api`, or Tool-bound `manual_tool` provenance; the one-time upgrade uses explicit `legacy` provenance when the old database did not persist whether a run was scheduled or manual. The old runtime encoded a retry deadline as a deterministic successor Fire ID. Migration folds only that exact successor into the first logical Fire and appends a `superseded` disposition to the replaced physical run; a non-deterministic/manual-looking successor is ambiguous and rolls back. A terminal legacy Fire may advance the recurrence boundary but can never be created by a current writer;
 - Event: `event_job_fire` input plus ordered `event_job_fire_receipt` facts and leases;
 
 When either target is a Mission, the immutable run/fire reservation is a strict union committed under the same immediate writer boundary: an active target carries its exact `mission.execution.opened` event, while a target already closing or closed carries `mission_closed` plus its exact closure event and receives the matching terminal receipt in that transaction. A non-Mission target carries none of those fields. Projection validates the stored event aggregate/type and the atomic terminal receipt; it never resolves a nullable Mission row against a later reopen. Historical rows without an exact causal pointer fail migration rather than deriving occurrence ownership from timestamps.
 - Bus: publication/delivery inputs plus phase, attempt, and delivery receipts;
 - Session control: `session_control_record` input plus amendment/consumed/failed events.
+
+Task waits are native Task-control facts: one immutable `engine_task_wait_registration` names its creator Tool Part, Task execution epoch, creator ingress and activation; one optional `engine_task_wait_settlement` names the exact accepted ingress. The registration ID is also the due ingress `source_id`, `taskWaitWake.jobID`, and logical `fireID`; `dueAt` must equal the registered boundary and the ingress cannot be accepted early. The canonical ingress writer validates that complete identity against the still-unsettled registration before inserting anything; an arbitrary inline payload cannot exempt a wait from supersede or create a semantic Turn. A superseding ingress must follow the creator ingress in the same Task epoch. Registration, settlement and ingress are immutable while the owning Task exists, then cascade together through the canonical Task/Project retention delete. Existing pre-cutover wait tables are rebuilt atomically so old `RESTRICT` foreign keys cannot lock retention. The upgrade rewrites a former due identity only when source, deterministic former Fire, job, deadline, Task and epoch prove the exact old production footprint; ambiguous rows and any foreign-key violation roll back the whole transaction. Session one-shot waits remain Automation delays. Their due-wake-versus-ordinary-input winner is appended as `automation_delay_settlement` inside the same assistant Message transaction that accepts the input batch; that transaction may also append the exact superseded run receipt and tombstone. No post-commit Bus subscriber owns either decision.
 
 Their legacy running, lease, attempt, failure-count, next-run, last-error, completion, and recovery columns do not exist. Public views reduce inputs, receipts, current time, and generic leases.
 

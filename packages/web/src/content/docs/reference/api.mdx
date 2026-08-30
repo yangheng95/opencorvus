@@ -25,8 +25,9 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 | POST | `/global/automations` | Create a scheduled automation Body: `executionMode`, `model`, `name`, `prompt`, `reasoningEffort`, `recurrence`, `target`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `global.automations.create` |
 | DELETE | `/global/automations/{id}` | Delete a scheduled automation Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `global.automations.delete` |
 | PATCH | `/global/automations/{id}` | Update a scheduled automation Body: `executionMode`, `model`, `name`, `prompt`, `reasoningEffort`, `recurrence`, `status`, `target`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `global.automations.update` |
+| GET | `/global/automations/{id}/fires` | List scheduled automation Fire history Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `global.automations.fires` |
 | POST | `/global/automations/{id}/run` | Run a scheduled automation now Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `global.automations.run` |
-| GET | `/global/automations/{id}/runs` | List scheduled automation runs Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `global.automations.runs` |
+| GET | `/global/automations/{id}/runs` | List scheduled automation target executions Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `global.automations.runs` |
 | POST | `/global/chat` | Create Chat in a temporary project Body: `model`; Errors: `BadRequestError`. | `global.chat.create` |
 | POST | `/global/chat/start` | Start a global Chat Body: `attachments`, `model`, `requestID`, `text`; Errors: `AuthReadError`, `BadRequestError`, `GlobalChatStartIdentityConflictError`. | `global.chat.start` |
 | GET | `/global/composer-expert-squads` | Search global Composer expert squads Errors: `BadRequestError`, `UnknownError`. | `global.composerExpertSquads` |

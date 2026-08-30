@@ -26,6 +26,7 @@ import { migrateSessionPromptOwnerSchema } from "./session-prompt-owner-migratio
 import { migrateDispatchLineageDeliveryOwners } from "./dispatch-lineage-owner-migration"
 import { migrateDispatchCollectionOccurrences } from "./dispatch-collection-occurrence-migration"
 import { migrateMissionExecutionReconciliationFacts } from "./mission-execution-reconciliation-migration"
+import { migrateSchedulingOccurrences } from "./scheduling-occurrence-migration"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
 import { Identifier } from "@/id/id"
 import {
@@ -1105,6 +1106,7 @@ export namespace Database {
         migrateDispatchLineageDeliveryOwners(sqlite)
         migrateDispatchCollectionOccurrences(sqlite)
         migrateMissionExecutionReconciliationFacts(sqlite)
+        migrateSchedulingOccurrences(sqlite)
         const reconciledTriggers = reconcileSchemaTriggers(sqlite)
         if (reconciledTriggers.length > 0) {
           log.info("schema triggers reconciled", { path: dbPath, triggers: reconciledTriggers })

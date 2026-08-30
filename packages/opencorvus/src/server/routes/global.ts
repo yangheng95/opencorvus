@@ -118,6 +118,38 @@ export const AutomationRunViewSchema = z
   })
   .strict()
 
+export const AutomationFireHistoryViewSchema = z
+  .object({
+    fireId: z.string(),
+    automationId: z.string(),
+    automationRevisionId: z.string(),
+    origin: z.enum(["scheduled", "manual_api", "manual_tool", "legacy"]),
+    scheduledDueAt: z.number(),
+    startedAt: z.number(),
+    completedAt: z.number().nullable(),
+    state: z.enum(["running", "retry_wait", "succeeded", "failed", "partial", "disposition"]),
+    attemptCount: z.number(),
+    retryAt: z.number().nullable(),
+    error: z.string().nullable(),
+    runs: z.array(
+      z
+        .object({
+          id: z.string(),
+          targetScope: z.enum(["session", "project", "global"]),
+          targetProjectId: z.string().nullable(),
+          sessionId: z.string().nullable(),
+          outcome: z.enum(AutomationRunOutcomes),
+          disposition: z.enum(["mission_closed", "target_deleted", "superseded"]).nullable(),
+          closureEventID: z.string().nullable(),
+          startedAt: z.number(),
+          completedAt: z.number().nullable(),
+          error: z.string().nullable(),
+        })
+        .strict(),
+    ),
+  })
+  .strict()
+
 const CreateAutomationBody = z
   .object({
     name: z.string().min(1),
@@ -250,13 +282,29 @@ export const GlobalRoutes = lazy(() =>
       async (c) => c.json(await AutomationService.runNow(c.req.param("id"))),
     )
     .get(
+      "/automations/:id/fires",
+      describeRoute({
+        summary: "List scheduled automation Fire history",
+        description: "Lists logical Fire occurrences with immutable target-run receipts, including terminal Fires that reserved no target runs.",
+        operationId: "global.automations.fires",
+        responses: {
+          200: {
+            description: "Scheduled automation Fire history",
+            content: { "application/json": { schema: resolver(z.array(AutomationFireHistoryViewSchema)) } },
+          },
+          ...errors(400, 404),
+        },
+      }),
+      (c) => c.json(AutomationService.listFireHistory(c.req.param("id"))),
+    )
+    .get(
       "/automations/:id/runs",
       describeRoute({
-        summary: "List scheduled automation runs",
+        summary: "List scheduled automation target executions",
         operationId: "global.automations.runs",
         responses: {
           200: {
-            description: "Scheduled automation run history",
+            description: "Scheduled automation target-execution history; use /fires for logical occurrence history",
             content: { "application/json": { schema: resolver(z.array(AutomationRunViewSchema)) } },
           },
           ...errors(400, 404),

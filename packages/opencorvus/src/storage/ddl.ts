@@ -866,6 +866,115 @@ CREATE TRIGGER IF NOT EXISTS automation_definition_tombstone_no_delete
 BEFORE DELETE ON automation_definition_tombstone FOR EACH ROW
 BEGIN SELECT RAISE(ABORT, 'automation_definition_tombstone: immutable deletion fact'); END;
 
+CREATE TRIGGER IF NOT EXISTS automation_fire_no_update
+BEFORE UPDATE ON automation_fire FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'automation_fire: immutable logical occurrence'); END;
+CREATE TRIGGER IF NOT EXISTS automation_fire_no_delete
+BEFORE DELETE ON automation_fire FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'automation_fire: immutable logical occurrence'); END;
+
+CREATE TRIGGER IF NOT EXISTS automation_delay_settlement_no_update
+BEFORE UPDATE ON automation_delay_settlement FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'automation_delay_settlement: immutable admission settlement'); END;
+CREATE TRIGGER IF NOT EXISTS automation_delay_settlement_no_delete
+BEFORE DELETE ON automation_delay_settlement FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'automation_delay_settlement: immutable admission settlement'); END;
+CREATE TRIGGER IF NOT EXISTS automation_delay_settlement_lineage_insert
+BEFORE INSERT ON automation_delay_settlement FOR EACH ROW
+WHEN
+  json_type(NEW.accepted_input_message_ids)<>'array'
+  OR json_array_length(NEW.accepted_input_message_ids)=0
+  OR NOT EXISTS (
+    SELECT 1
+    FROM automation AS definition
+    JOIN message AS assistant
+      ON assistant.id=NEW.assistant_message_id
+      AND assistant.session_id=definition.session_id
+      AND json_extract(assistant.data,'$.role')='assistant'
+    WHERE definition.definition_id=NEW.definition_id
+      AND definition.kind='delay'
+      AND definition.session_id IS NOT NULL
+      AND json_type(assistant.data,'$.acceptedInputMessageIDs')='array'
+      AND json(json_extract(assistant.data,'$.acceptedInputMessageIDs'))=json(NEW.accepted_input_message_ids)
+  )
+  OR EXISTS (
+    SELECT 1
+    FROM json_each(NEW.accepted_input_message_ids) AS accepted
+    LEFT JOIN message AS input ON input.id=accepted.value
+    JOIN automation AS definition ON definition.definition_id=NEW.definition_id
+    WHERE input.id IS NULL
+      OR input.session_id<>definition.session_id
+      OR json_extract(input.data,'$.role')<>'user'
+  )
+  OR (
+    NEW.disposition='due_accepted'
+    AND NOT EXISTS (
+      SELECT 1
+      FROM json_each(NEW.accepted_input_message_ids) AS accepted
+      JOIN message AS wake
+        ON wake.id=accepted.value
+        AND json_extract(wake.data,'$.role')='user'
+      JOIN automation_fire AS fire
+        ON fire.id=NEW.fire_id
+      JOIN automation AS definition
+        ON definition.id=fire.automation_revision_id
+      JOIN automation_run AS run
+        ON run.fire_id=fire.id
+        AND run.automation_revision_id=fire.automation_revision_id
+      WHERE definition.definition_id=NEW.definition_id
+        AND definition.kind='delay'
+        AND wake.session_id=definition.session_id
+        AND json_extract(wake.data,'$.extra.wake_reason.source')='scheduler.automation'
+        AND json_extract(wake.data,'$.extra.wake_reason.jobID')=definition.definition_id
+        AND json_extract(wake.data,'$.extra.wake_reason.fireID')=fire.id
+        AND (
+          SELECT count(*) FROM automation_run AS exact_run
+          WHERE exact_run.fire_id=fire.id
+            AND exact_run.automation_revision_id=fire.automation_revision_id
+        )=1
+    )
+  )
+BEGIN SELECT RAISE(ABORT, 'automation_delay_settlement: invalid Session delay admission lineage'); END;
+
+CREATE TRIGGER IF NOT EXISTS automation_fire_attempt_no_update
+BEFORE UPDATE ON automation_fire_attempt FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'automation_fire_attempt: immutable physical attempt'); END;
+CREATE TRIGGER IF NOT EXISTS automation_fire_attempt_no_delete
+BEFORE DELETE ON automation_fire_attempt FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'automation_fire_attempt: immutable physical attempt'); END;
+CREATE TRIGGER IF NOT EXISTS automation_fire_attempt_admission_insert
+BEFORE INSERT ON automation_fire_attempt FOR EACH ROW
+WHEN
+  NEW.ordinal<>(
+    SELECT COALESCE(max(existing.ordinal),0)+1
+    FROM automation_fire_attempt AS existing
+    WHERE existing.fire_id=NEW.fire_id
+  )
+  OR NOT EXISTS (
+    SELECT 1
+    FROM automation_fire AS fire
+    JOIN automation AS definition ON definition.id=fire.automation_revision_id
+    JOIN engine_control_activation_lease AS lease
+      ON lease.target='automation'
+      AND lease.target_id=definition.definition_id
+      AND lease.owner_occurrence_id=NEW.owner_occurrence_id
+      AND lease.expires_at>NEW.time_created
+    WHERE fire.id=NEW.fire_id
+      AND lease.time_activated=(
+        SELECT max(current.time_activated)
+        FROM engine_control_activation_lease AS current
+        WHERE current.target='automation'
+          AND current.target_id=definition.definition_id
+      )
+  )
+BEGIN SELECT RAISE(ABORT, 'automation_fire_attempt: invalid ordinal or owner admission'); END;
+CREATE TRIGGER IF NOT EXISTS automation_fire_attempt_receipt_no_update
+BEFORE UPDATE ON automation_fire_attempt_receipt FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'automation_fire_attempt_receipt: immutable attempt receipt'); END;
+CREATE TRIGGER IF NOT EXISTS automation_fire_attempt_receipt_no_delete
+BEFORE DELETE ON automation_fire_attempt_receipt FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'automation_fire_attempt_receipt: immutable attempt receipt'); END;
+
 CREATE TRIGGER IF NOT EXISTS automation_run_no_update
 BEFORE UPDATE ON automation_run
 FOR EACH ROW
@@ -878,6 +987,17 @@ BEFORE DELETE ON automation_run
 FOR EACH ROW
 BEGIN
   SELECT RAISE(ABORT, 'automation_run: execution history is immutable');
+END;
+
+CREATE TRIGGER IF NOT EXISTS automation_run_fire_revision_insert
+BEFORE INSERT ON automation_run
+FOR EACH ROW
+WHEN NOT EXISTS (
+  SELECT 1 FROM automation_fire
+  WHERE id=NEW.fire_id AND automation_revision_id=NEW.automation_revision_id
+)
+BEGIN
+  SELECT RAISE(ABORT, 'automation_run: logical fire belongs to another definition revision');
 END;
 
 CREATE TRIGGER IF NOT EXISTS automation_run_mission_reservation_insert
@@ -1441,6 +1561,108 @@ BEGIN SELECT RAISE(ABORT, 'engine_task_root_ingress_policy: immutable policy fac
 CREATE TRIGGER IF NOT EXISTS engine_task_root_ingress_policy_no_delete
 BEFORE DELETE ON engine_task_root_ingress_policy FOR EACH ROW
 BEGIN SELECT RAISE(ABORT, 'engine_task_root_ingress_policy: immutable policy fact'); END;
+
+CREATE TRIGGER IF NOT EXISTS engine_task_wait_registration_no_update
+BEFORE UPDATE ON engine_task_wait_registration FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'engine_task_wait_registration: immutable wait intent'); END;
+CREATE TRIGGER IF NOT EXISTS engine_task_wait_registration_no_delete
+BEFORE DELETE ON engine_task_wait_registration FOR EACH ROW
+WHEN EXISTS (SELECT 1 FROM engine_task WHERE id=OLD.task_id)
+BEGIN SELECT RAISE(ABORT, 'engine_task_wait_registration: immutable wait intent'); END;
+CREATE TRIGGER IF NOT EXISTS engine_task_wait_registration_lineage_insert
+BEFORE INSERT ON engine_task_wait_registration FOR EACH ROW
+WHEN NEW.tool_part_id IS NOT NULL
+  AND NOT EXISTS (
+    SELECT 1
+    FROM tool_part_request AS request
+    JOIN message AS creator
+      ON creator.id=request.message_id
+      AND json_extract(creator.data,'$.role')='assistant'
+      AND json_extract(creator.data,'$.activationID')=NEW.creator_activation_id
+    JOIN engine_control_activation_lease AS lease
+      ON lease.id=NEW.creator_activation_id
+      AND lease.target='task_root_ingress'
+      AND lease.target_id=NEW.creator_ingress_id
+      AND lease.expires_at>NEW.time_created
+    JOIN engine_task_root_ingress AS ingress
+      ON ingress.id=NEW.creator_ingress_id
+      AND ingress.task_id=NEW.task_id
+      AND ingress.execution_epoch=NEW.execution_epoch
+    WHERE request.id=NEW.tool_part_id
+      AND json_extract(request.data,'$.tool')='wait'
+  )
+BEGIN SELECT RAISE(ABORT, 'engine_task_wait_registration: invalid Tool creator lineage'); END;
+CREATE TRIGGER IF NOT EXISTS engine_task_wait_settlement_no_update
+BEFORE UPDATE ON engine_task_wait_settlement FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'engine_task_wait_settlement: immutable settlement'); END;
+CREATE TRIGGER IF NOT EXISTS engine_task_wait_settlement_lineage_insert
+BEFORE INSERT ON engine_task_wait_settlement FOR EACH ROW
+WHEN NOT EXISTS (
+  SELECT 1
+  FROM engine_task_wait_registration AS wait
+  JOIN engine_task_root_ingress AS ingress ON ingress.id=NEW.ingress_id
+  WHERE wait.id=NEW.wait_id
+    AND wait.task_id=ingress.task_id
+    AND wait.execution_epoch=ingress.execution_epoch
+    AND (
+      (
+        NEW.disposition='superseded'
+        AND ingress.time_accepted>=wait.time_created
+        AND NOT (
+          ingress.source='inline'
+          AND ingress.source_id=wait.id
+          AND json_extract(ingress.inline_payload,'$.taskWaitWake.jobID')=wait.id
+        )
+        AND (
+          wait.creator_ingress_id IS NULL
+          OR ingress.sequence>(
+            SELECT creator.sequence
+            FROM engine_task_root_ingress AS creator
+            WHERE creator.id=wait.creator_ingress_id
+          )
+        )
+      )
+      OR (
+        NEW.disposition='due_ingress_accepted'
+        AND (
+          (
+            ingress.source='inline'
+            AND ingress.source_id=wait.id
+            AND json_type(ingress.inline_payload,'$.taskWaitWake')='object'
+            AND json_extract(ingress.inline_payload,'$.taskWaitWake.jobID')=wait.id
+            AND json_extract(ingress.inline_payload,'$.taskWaitWake.fireID')=wait.id
+            AND json_extract(ingress.inline_payload,'$.taskWaitWake.dueAt')=wait.due_at
+            AND ingress.time_accepted>=wait.due_at
+            AND NEW.time_created>=ingress.time_accepted
+          )
+          OR (
+            wait.tool_part_id IS NULL
+            AND wait.legacy_automation_definition_id IS NOT NULL
+            AND wait.id=wait.legacy_automation_definition_id
+            AND ingress.source='automation_run'
+            AND EXISTS (
+              SELECT 1
+              FROM automation AS legacy_definition
+              JOIN automation_run AS legacy_run
+                ON legacy_run.automation_revision_id=legacy_definition.id
+                AND legacy_run.id=ingress.source_id
+              WHERE legacy_definition.definition_id=wait.legacy_automation_definition_id
+            )
+          )
+        )
+      )
+    )
+)
+BEGIN SELECT RAISE(ABORT, 'engine_task_wait_settlement: wait and ingress lineage must match'); END;
+CREATE TRIGGER IF NOT EXISTS engine_task_wait_settlement_no_delete
+BEFORE DELETE ON engine_task_wait_settlement FOR EACH ROW
+WHEN EXISTS (
+  SELECT 1
+  FROM engine_task_wait_registration AS wait
+  JOIN engine_task AS task ON task.id=wait.task_id
+  WHERE wait.id=OLD.wait_id
+)
+BEGIN SELECT RAISE(ABORT, 'engine_task_wait_settlement: immutable settlement'); END;
 
 CREATE TRIGGER IF NOT EXISTS automation_project_target_no_update
 BEFORE UPDATE ON automation_project_target FOR EACH ROW
