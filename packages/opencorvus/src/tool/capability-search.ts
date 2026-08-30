@@ -1,6 +1,8 @@
 import { Config } from "@/config/config"
 import { EffectiveConfig } from "@/config/effective"
-import { CapabilityCatalog, CapabilitySearchInput, searchCapabilityCatalog } from "./capability-catalog"
+import { CapabilitySearchInput } from "@/capability/descriptor"
+import { searchCapabilityCatalog } from "@/capability/catalog"
+import { RuntimeCapabilityCatalog } from "./capability-runtime-catalog"
 import { tool as aiTool } from "ai"
 import { createAiSdkToolFromInfo } from "./ai-sdk-adapter"
 import { Tool } from "./tool"
@@ -17,7 +19,7 @@ export const CapabilitySearchTool = Tool.define(CAPABILITY_SEARCH_TOOL_ID, async
     parameters: CapabilitySearchInput,
     async execute(params, ctx) {
       const input = CapabilitySearchInput.parse(params)
-      const { caller, snapshot } = await CapabilityCatalog.runtimeSnapshot({
+      const { caller, snapshot } = await RuntimeCapabilityCatalog.snapshot({
         config,
         sessionID: ctx.sessionID,
         agentID: ctx.agent,
@@ -27,8 +29,8 @@ export const CapabilitySearchTool = Tool.define(CAPABILITY_SEARCH_TOOL_ID, async
       const mission = caller === "mission" ? await requireMissionSession(ctx.sessionID) : undefined
       const effectiveInput = mission ? { ...input, product_pillar: mission.productPillar } : input
       const results = searchCapabilityCatalog(snapshot, caller, effectiveInput)
-      const visibleExpertSquadCount = snapshot.entries.filter(
-        (entry) => entry.ref.kind === "expert_squad" && entry.discoverable_by.includes(caller),
+      const visibleExpertSquadCount = snapshot.views.filter(
+        (entry) => entry.descriptor_ref.kind === "expert_squad" && entry.discoverable_by.includes(caller),
       ).length
       const heldExpertSquadCount = mission ? missionVisibleExpertSquadIDs(mission).length : undefined
       const productPillar = mission?.productPillar ?? input.product_pillar

@@ -60,6 +60,7 @@ import {
   resolveTaskProcessExecution,
   TASK_EXECUTION_CAPSULE_BINDING_PROTOCOL,
 } from "@/engine/task-execution-capsule-binding"
+import { compareCanonicalStrings } from "@/util/canonical-digest"
 
 export namespace MCP {
   const log = Log.create({ service: "mcp" })
@@ -422,8 +423,30 @@ export namespace MCP {
     .strict()
   export type ScopedCapabilityInventory = z.infer<typeof ScopedCapabilityInventory>
 
+  export interface ScopedCatalogEntry {
+    readonly server_id: string
+    readonly connection_identity: string
+    readonly config_digest: string
+    readonly status: Status
+  }
+
+  export interface ScopedCatalogSnapshot {
+    readonly owner_id: string
+    readonly owner_revision: string
+    readonly entries: readonly ScopedCatalogEntry[]
+  }
+
+  export class ScopedConnectionOwnerClosedError extends Error {
+    override readonly name = "ScopedConnectionOwnerClosedError"
+
+    constructor(public readonly owner_id: string) {
+      super(`Scoped MCP connection owner ${owner_id} is closed`)
+    }
+  }
+
   export interface ScopedConnectionOwner {
     readonly id: string
+    catalogSnapshot(): ScopedCatalogSnapshot
     close(): Promise<void>
   }
 
@@ -440,9 +463,14 @@ export namespace MCP {
     idleWaiters: Set<() => void>
   }
 
+  type OwnedScopedCatalogEntry = ScopedCatalogEntry & {
+    connection_key: string
+  }
+
   type ScopedConnectionOwnerState = {
     id: string
     entries: Map<string, OwnedScopedConnectionEntry>
+    catalogEntries: Map<string, OwnedScopedCatalogEntry>
     cleanupPending: Set<McpConnection>
     projectState?: McpState
     close?: () => Promise<void>
@@ -479,8 +507,9 @@ export namespace MCP {
     const normalizedID = id.trim()
     if (!normalizedID) throw new Error("Scoped MCP connection owner requires a non-empty id")
     const entries = new Map<string, OwnedScopedConnectionEntry>()
+    const catalogEntries = new Map<string, OwnedScopedCatalogEntry>()
     const cleanupPending = new Set<McpConnection>()
-    const ownerState: ScopedConnectionOwnerState = { id: normalizedID, entries, cleanupPending }
+    const ownerState: ScopedConnectionOwnerState = { id: normalizedID, entries, catalogEntries, cleanupPending }
     let closed = false
     let closePromise: Promise<void> | undefined
     let connectionSettlementComplete = false
@@ -499,8 +528,43 @@ export namespace MCP {
       await new Promise<void>((resolve) => entry.idleWaiters.add(resolve))
     }
 
+    const publishCatalogStatus = (connectionKey: string, status: Status) => {
+      for (const [catalogKey, entry] of catalogEntries) {
+        if (entry.connection_key !== connectionKey) continue
+        catalogEntries.set(
+          catalogKey,
+          Object.freeze({
+            ...entry,
+            status: Object.freeze({ ...status }),
+          }),
+        )
+      }
+    }
+
     const owner: InternalScopedConnectionOwner = {
       id: normalizedID,
+      catalogSnapshot() {
+        if (closed) throw new ScopedConnectionOwnerClosedError(normalizedID)
+        const catalog = [...catalogEntries.values()]
+          .sort((left, right) =>
+            compareCanonicalStrings(
+              JSON.stringify([left.server_id, left.connection_identity, left.config_digest]),
+              JSON.stringify([right.server_id, right.connection_identity, right.config_digest]),
+            ),
+          )
+          .map(({ connection_key: _connectionKey, ...entry }) =>
+            Object.freeze({ ...entry, status: Object.freeze({ ...entry.status }) }),
+          )
+        const ownerRevision = createHash("sha256")
+          .update("scoped-mcp-catalog-v1\0")
+          .update(JSON.stringify(canonicalConfigValue({ owner_id: normalizedID, entries: catalog })))
+          .digest("hex")
+        return Object.freeze({
+          owner_id: normalizedID,
+          owner_revision: ownerRevision,
+          entries: Object.freeze(catalog),
+        })
+      },
       async use(input, options, run) {
         if (closed) throw new Error(`Scoped MCP connection owner ${normalizedID} is closed`)
         const identity = input.connectionIdentity?.trim()
@@ -510,6 +574,25 @@ export namespace MCP {
         await registerOwnerState()
         const ownerKey = scopedConnectionOwnerKey(input, identity)
         let entry = entries.get(ownerKey)
+        const catalogKey = createHash("sha256")
+          .update("scoped-mcp-catalog-entry-v1\0")
+          .update(JSON.stringify([ownerKey, input.key]))
+          .digest("hex")
+        const currentStatus: Status = entry?.connection
+          ? { status: "connected" }
+          : ([...catalogEntries.values()].find((candidate) => candidate.connection_key === ownerKey)?.status ?? {
+              status: "connecting",
+            })
+        catalogEntries.set(
+          catalogKey,
+          Object.freeze({
+            connection_key: ownerKey,
+            server_id: input.key,
+            connection_identity: identity,
+            config_digest: mcpConfigDigest(input.mcp),
+            status: Object.freeze({ ...currentStatus }),
+          }),
+        )
         if (!entry) {
           let candidate!: OwnedScopedConnectionEntry
           const connecting = createSafely(identity, input.mcp, {
@@ -521,6 +604,7 @@ export namespace MCP {
             ...options,
           })
             .then((result) => {
+              publishCatalogStatus(ownerKey, result.status)
               if (!result.mcpConnection) {
                 const status = result.status
                 const detail = "error" in status ? `: ${status.error}` : `: ${status.status}`
@@ -530,6 +614,16 @@ export namespace MCP {
             })
             .catch((error) => {
               if (entries.get(ownerKey) === candidate) entries.delete(ownerKey)
+              if (
+                [...catalogEntries.values()].some(
+                  (candidate) => candidate.connection_key === ownerKey && candidate.status.status === "connecting",
+                )
+              ) {
+                publishCatalogStatus(ownerKey, {
+                  status: "failed",
+                  error: error instanceof Error ? error.message : String(error),
+                })
+              }
               throw error
             })
           candidate = {
@@ -593,6 +687,7 @@ export namespace MCP {
             if (cleanupTransferred) {
               connectionSettlementComplete = true
               entries.clear()
+              catalogEntries.clear()
               ownerState.projectState?.scopedOwners.delete(ownerState)
               ownerState.projectState = undefined
             }
@@ -649,7 +744,7 @@ export namespace MCP {
   }
 
   function exactScopedCapabilityNames(kind: "tool" | "prompt" | "resource", values: Array<{ name: string }>) {
-    const names = values.map((value) => value.name).sort((left, right) => left.localeCompare(right))
+    const names = values.map((value) => value.name).sort(compareCanonicalStrings)
     for (let index = 1; index < names.length; index++) {
       if (names[index - 1] === names[index]) {
         throw new Error(`Scoped MCP server repeats ${kind} capability ${JSON.stringify(names[index])}`)
@@ -1759,7 +1854,7 @@ export namespace MCP {
     if (!value || typeof value !== "object") return value
     return Object.fromEntries(
       Object.entries(value as Record<string, unknown>)
-        .sort(([left], [right]) => left.localeCompare(right))
+        .sort(([left], [right]) => compareCanonicalStrings(left, right))
         .map(([key, item]) => [key, canonicalConfigValue(item)]),
     )
   }
@@ -3322,9 +3417,7 @@ export namespace MCP {
     }
   }
 
-  export async function status() {
-    const s = await state()
-    const cfg = await Config.get()
+  async function catalogStatusProjection(s: McpState, cfg: Config.Info) {
     const config = (cfg.mcp ?? {}) as NonNullable<Config.Info["mcp"]>
     const result: Record<string, Status> = {}
 
@@ -3347,6 +3440,76 @@ export namespace MCP {
     }
 
     return result
+  }
+
+  export async function status() {
+    return catalogStatusProjection(await state(), await Config.get())
+  }
+
+  export interface CatalogSnapshot {
+    readonly owner_revision: string
+    readonly config_digest: string
+    readonly provenance: "config_only" | "runtime_observed"
+    readonly statuses: Readonly<Record<string, Status>>
+    readonly tool_ids: readonly string[]
+  }
+
+  /** Publish a complete config/status identity without initializing MCP state.
+   * The full config participates only through an irreversible digest; discovery
+   * never exposes credentials or owns staged credential settlement. */
+  export async function observedCatalogSnapshot(configInput?: Config.Info): Promise<CatalogSnapshot> {
+    const existing = state.inspectAll().find((entry) => entry.key === Instance.directory)
+    const cfg = configInput ?? (await Config.get())
+    const config = (cfg.mcp ?? {}) as NonNullable<Config.Info["mcp"]>
+    const observedState = existing ? await existing.state : undefined
+    const statuses = observedState
+      ? await catalogStatusProjection(observedState, cfg)
+      : Object.fromEntries(
+          entries(config).flatMap(([key, mcp]) => {
+            if (isMcpDisabledOverride(mcp)) return [[key, { status: "disabled" as const }]]
+            if (!isMcpConfigured(mcp)) return []
+            return [
+              [key, mcp.enabled === false ? { status: "disabled" as const } : { status: "disconnected" as const }],
+            ]
+          }),
+        )
+    const orderedStatuses = Object.fromEntries(
+      Object.entries(statuses)
+        .sort(([left], [right]) => compareCanonicalStrings(left, right))
+        .map(([key, value]) => [key, Object.freeze({ ...value })]),
+    )
+    const sanitize = (value: string) => value.replace(/[^a-zA-Z0-9_-]/g, "_")
+    const toolIDs = new Set<string>()
+    if (observedState) {
+      for (const [serverID, configuredMcp] of entries(config)) {
+        const mcp = effectiveRuntimeMcp(observedState, serverID, configuredMcp)
+        if (!isMcpConfigured(mcp)) continue
+        const connection = observedState.connections[serverID]
+        if (!connection || connection.configIdentity !== mcpConfigIdentity(mcp)) continue
+        for (const tool of connection.tools) toolIDs.add(`${sanitize(serverID)}_${sanitize(tool.name)}`)
+      }
+    }
+    const orderedToolIDs = Object.freeze([...toolIDs].sort(compareCanonicalStrings))
+    const configDigest = createHash("sha256")
+      .update("mcp-catalog-config-v1\0")
+      .update(JSON.stringify(canonicalConfigValue(config)))
+      .digest("hex")
+    const provenance = existing ? "runtime_observed" : "config_only"
+    const ownerRevision = createHash("sha256")
+      .update("mcp-catalog-owner-v1\0")
+      .update(
+        JSON.stringify(
+          canonicalConfigValue({ config_digest: configDigest, statuses: orderedStatuses, tool_ids: orderedToolIDs }),
+        ),
+      )
+      .digest("hex")
+    return Object.freeze({
+      owner_revision: ownerRevision,
+      config_digest: configDigest,
+      provenance,
+      statuses: Object.freeze(orderedStatuses),
+      tool_ids: orderedToolIDs,
+    })
   }
 
   function exactConfiguredServers(

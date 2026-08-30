@@ -83,6 +83,7 @@ export namespace SkillManager {
     managed: z.boolean(),
     writable: z.boolean(),
   })
+  export type Installed = z.infer<typeof Installed>
 
   export const MarketProvider = SkillMarket.Provider
   export const MarketSearchInput = SkillMarket.SearchInput
@@ -362,22 +363,35 @@ export namespace SkillManager {
     await installedInventoryState.resetAll()
   }
 
-  export async function installed() {
-    return withCatalogProjection(async (publicationRevision) => {
-      if (installedPublicationRevision !== publicationRevision) {
-        await installedInventoryState.resetAll()
-        installedPublicationRevision = publicationRevision
-      }
-      const global = await Config.getGlobal()
-      const rules = CapabilityRules.fromConfig({ skill: global.skill_policy ?? {} })
+  async function installedAtPublication(publicationRevision: string) {
+    if (installedPublicationRevision !== publicationRevision) {
+      await installedInventoryState.resetAll()
+      installedPublicationRevision = publicationRevision
+    }
+    const global = await Config.getGlobal()
+    const rules = CapabilityRules.fromConfig({ skill: global.skill_policy ?? {} })
+    return Installed.array().parse(
+      (await installedInventoryState()).map((skill) => ({
+        ...skill,
+        policy: CapabilityRules.evaluate("skill", skill.name, rules).action,
+      })),
+    )
+  }
 
-      return Installed.array().parse(
-        (await installedInventoryState()).map((skill) => ({
-          ...skill,
-          policy: CapabilityRules.evaluate("skill", skill.name, rules).action,
-        })),
-      )
-    })
+  export async function installedCatalogSnapshot(): Promise<{
+    revision: string
+    skills: readonly Installed[]
+  }> {
+    return withCatalogProjection(async (revision) =>
+      Object.freeze({
+        revision,
+        skills: Object.freeze(await installedAtPublication(revision)),
+      }),
+    )
+  }
+
+  export async function installed() {
+    return [...(await installedCatalogSnapshot()).skills]
   }
 
   export async function refreshDiscoveryState() {

@@ -41,6 +41,7 @@ import { bindInternalStageTool, stageToolMaterializerBindingOf } from "../src/ag
 import { createDecisionLog } from "../src/decision-log"
 import { Database } from "../src/storage/db"
 import { ToolTurnExecutionConflictError } from "../src/tool/execution-mode"
+import { RuntimeCapabilityCatalog } from "../src/tool/capability-runtime-catalog"
 
 function providerModel(): Provider.Model {
   return {
@@ -895,9 +896,7 @@ describe("SessionLoop Tool execution authority integration", () => {
             lifecycle: { taskID, workScope: { kind: "task" }, attemptID: "architect-attempt-1" },
             messageAuthority: {
               user_message_id: architectUser.id,
-              control_text_parts: [
-                { part_id: architectUserPart.id, text_sha256: textSHA256(architectUserPart.text) },
-              ],
+              control_text_parts: [{ part_id: architectUserPart.id, text_sha256: textSHA256(architectUserPart.text) }],
             },
           },
         })
@@ -953,6 +952,21 @@ describe("SessionLoop Tool execution authority integration", () => {
           projectDirectory: project.path,
           resources: { mcp: architectOwner },
         })
+        const architectCatalog = await RuntimeCapabilityCatalog.snapshot({
+          config,
+          sessionID: architectSession.id,
+          agentID: architectProjection.workerCapability.identity.agentID,
+          executionToolIDs: architectEnabled,
+        })
+        expect(
+          architectCatalog.snapshot.descriptors
+            .filter(
+              (item) =>
+                item.ref.owner_ref ===
+                `dispatch-stage:${architectProjection.workerCapability.identity.dispatchAdapterID}`,
+            )
+            .map((item) => item.ref.local_ref),
+        ).toEqual([...architectStageOwned].sort())
         const architectAbort = new AbortController().signal
         const architectProcessor = SessionProcessor.create({
           assistantMessage: architectAssistant,
@@ -973,11 +987,14 @@ describe("SessionLoop Tool execution authority integration", () => {
           config,
         })
         const architectToolCallID = "call_architect_draft_identity"
-        const architectResult = await architectTools.view_architect_draft!.execute!({}, {
-          toolCallId: architectToolCallID,
-          messages: [],
-          abortSignal: architectAbort,
-        })
+        const architectResult = await architectTools.view_architect_draft!.execute!(
+          {},
+          {
+            toolCallId: architectToolCallID,
+            messages: [],
+            abortSignal: architectAbort,
+          },
+        )
         const architectMessage = await MessageStore.get({
           sessionID: architectSession.id,
           messageID: architectAssistant.id,

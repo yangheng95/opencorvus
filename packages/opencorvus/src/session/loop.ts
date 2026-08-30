@@ -61,6 +61,7 @@ import { bindProjectedTaskToolRuntime, projectedTaskToolRuntimeBindingOf } from 
 import type { ResolvedSkillSurface } from "@/skill/surface"
 import { AgentToolPool } from "@/agent/tool-pool-contract"
 import { CapabilityRules } from "@/capability/rules"
+import { capabilityRef } from "@/capability/ref"
 import { SessionStatus, sessionLifecycleOrderKey } from "./status"
 import { ensureTitle } from "./prompt/title"
 import { Truncate } from "@/tool/truncation"
@@ -165,10 +166,7 @@ const STRUCTURED_OUTPUT_DESCRIPTION =
 
 function taskRootDecisionGapStepIDs(message: Message.WithParts): string[] {
   return message.parts
-    .filter(
-      (part): part is Message.StepFinishPart =>
-        part.type === "step-finish" && part.reason !== "tool-calls",
-    )
+    .filter((part): part is Message.StepFinishPart => part.type === "step-finish" && part.reason !== "tool-calls")
     .map((part) => part.id)
 }
 
@@ -180,10 +178,7 @@ function taskRootAssistantHasDecisionReceipt(message: Message.WithParts): boolea
   return taskRootAssistantCommittedDecision(message) !== undefined
 }
 
-function taskRootDecisionRepairPrompt(input: {
-  attempt: number
-  limit: number
-}): string {
+function taskRootDecisionRepairPrompt(input: { attempt: number; limit: number }): string {
   return [
     "<task-root-decision-repair>",
     `The previous streamed Provider step ended without a valid Task-root decision receipt (attempt ${input.attempt} of ${input.limit}).`,
@@ -1515,11 +1510,7 @@ export namespace SessionLoop {
 
   let standbyObserverForTest: ((sessionID: string) => void | Promise<void>) | undefined
 
-  async function sessionStateContext(input: {
-    projectID: string
-    sessionID: string
-    memoryToolAvailable: boolean
-  }) {
+  async function sessionStateContext(input: { projectID: string; sessionID: string; memoryToolAvailable: boolean }) {
     const projectMemory = await MemoryInjection.systemPromptSection({
       projectID: input.projectID,
       sessionID: input.sessionID,
@@ -1621,41 +1612,43 @@ export namespace SessionLoop {
           acceptedInputMessageIDs: [...input.acceptedInputMessageIDs],
         } as Message.Assistant)
       : ((await Session.beginAssistantReply({
-        id: taskRootActivation
-          ? Identifier.deterministic("message", `task-root-assistant-v1\0${input.lastUser.id}`)
-          : Identifier.ascending("message"),
-        parentID: input.lastUser.id,
-        acceptedInputMessageIDs: [...input.acceptedInputMessageIDs],
-        role: "assistant",
-        author: input.lastUser.agent,
-        agent: input.lastUser.agent,
-        variant: input.lastUser.variant,
-        path: {
-          cwd: Instance.directory,
-          root: Instance.worktree,
-        },
-        cost: 0,
-        tokens: {
-          total: 0,
-          input: 0,
-          output: 0,
-          reasoning: 0,
-          cache: { read: 0, write: 0 },
-        },
-        modelID: input.model.id,
-        providerID: input.model.providerID,
-        ...(taskRootActivation ? { activationID: taskRootActivation } : {}),
-        time: {
-          created: Date.now(),
-        },
-        sessionID: input.sessionID,
-      })) as Message.Assistant)
+          id: taskRootActivation
+            ? Identifier.deterministic("message", `task-root-assistant-v1\0${input.lastUser.id}`)
+            : Identifier.ascending("message"),
+          parentID: input.lastUser.id,
+          acceptedInputMessageIDs: [...input.acceptedInputMessageIDs],
+          role: "assistant",
+          author: input.lastUser.agent,
+          agent: input.lastUser.agent,
+          variant: input.lastUser.variant,
+          path: {
+            cwd: Instance.directory,
+            root: Instance.worktree,
+          },
+          cost: 0,
+          tokens: {
+            total: 0,
+            input: 0,
+            output: 0,
+            reasoning: 0,
+            cache: { read: 0, write: 0 },
+          },
+          modelID: input.model.id,
+          providerID: input.model.providerID,
+          ...(taskRootActivation ? { activationID: taskRootActivation } : {}),
+          time: {
+            created: Date.now(),
+          },
+          sessionID: input.sessionID,
+        })) as Message.Assistant)
     if (
       openTaskRootAssistant &&
       JSON.stringify(Message.acceptedInputMessageIDs(openTaskRootAssistant.info)) !==
         JSON.stringify(input.acceptedInputMessageIDs)
     ) {
-      throw new Error(`Task-root assistant ${assistantMessage.id} accepted input identities changed within one activation`)
+      throw new Error(
+        `Task-root assistant ${assistantMessage.id} accepted input identities changed within one activation`,
+      )
     }
     if (openTaskRootAssistant) await Session.beginAssistantReply(assistantMessage)
     SessionPromptState.bindMessageOwner(input.sessionID, assistantMessage.id, input.abort)
@@ -2969,8 +2962,7 @@ export namespace SessionLoop {
           if (
             shouldRunRuntimeContractTurn(sessionID) ||
             SessionControl.pending(sessionID).some(
-              (control) =>
-                isActionableSessionControl(control) && control.id !== options?.ignoredActionableControlID,
+              (control) => isActionableSessionControl(control) && control.id !== options?.ignoredActionableControlID,
             )
           ) {
             settle()
@@ -3652,10 +3644,22 @@ export namespace SessionLoop {
     await finalizeSkillSurface(initialToolNames)
     if (!runtimeContract && ConversationCapability.isAgentID(input.agentID)) {
       const mcpToolIDs = [...toolSources.entries()].filter(([, source]) => source === "mcp").map(([toolID]) => toolID)
+      const hostMcpRefsByID = new Map(
+        HostSessionMcpRuntime.catalogToolRefs(input.session.id).map((ref) => [ref.local_ref, ref]),
+      )
       executionHarnessProjection = await ConversationCapability.harnessProjection(input.agentID, {
         config: input.config,
         executionToolIDs: Object.keys(tools),
-        executionMcpToolIDs: mcpToolIDs,
+        executionMcpToolRefs: mcpToolIDs.map(
+          (toolID) =>
+            hostMcpRefsByID.get(toolID) ??
+            capabilityRef({
+              kind: "mcp_tool",
+              source: "project",
+              owner_ref: "mcp-config",
+              local_ref: toolID,
+            }),
+        ),
         skillRefs:
           resolvedToolSkillSurfaces.get(tools)?.family === "production"
             ? resolvedToolSkillSurfaces.get(tools)?.skills.map((skill) => skill.name)
@@ -4312,7 +4316,7 @@ export namespace SessionLoop {
                 ? ("mcp_app" as const)
                 : internalStageBinding
                   ? ("internal" as const)
-                : ("projected" as const),
+                  : ("projected" as const),
           providerID:
             mcpAuthorityBinding?.serverID ??
             stageMaterializerBinding?.id ??

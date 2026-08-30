@@ -1,0 +1,478 @@
+import z from "zod"
+import { createInstanceState } from "@/project/instance-state"
+import { canonicalDigestSource, canonicalJSONValue, compareCanonicalStrings } from "@/util/canonical-digest"
+import { scoreDiscoveryFields, type DiscoverySearchField } from "./fuzzy"
+import {
+  CapabilityCaller,
+  CapabilityCatalogContext,
+  CapabilityCatalogProjection,
+  CapabilityCatalogSource,
+  CapabilityCatalogViewEntry,
+  CapabilityDescriptor,
+  CapabilitySearchInput,
+  CapabilitySearchResult,
+  CapabilitySetDescriptor,
+  createCapabilityCatalogProjection,
+  createCapabilityCatalogSource,
+  type CapabilityCatalogProjection as CapabilityCatalogProjectionValue,
+  type CapabilityCatalogSource as CapabilityCatalogSourceValue,
+  type CapabilityCatalogViewEntry as CapabilityCatalogViewEntryValue,
+  type CapabilityBehavior as CapabilityBehaviorValue,
+  type CapabilityDescriptor as CapabilityDescriptorValue,
+  type CapabilitySearchResult as CapabilitySearchResultValue,
+  type CapabilitySetDescriptor as CapabilitySetDescriptorValue,
+} from "./descriptor"
+import { CapabilityRefCodec } from "./ref"
+
+const MAX_SOURCE_CACHE_ENTRIES = 256
+const MAX_SNAPSHOT_CACHE_ENTRIES = 128
+
+export class CapabilityCatalogContractError extends Error {
+  override readonly name = "CapabilityCatalogContractError"
+
+  constructor(
+    public readonly code:
+      | "duplicate_owner"
+      | "duplicate_projection_owner"
+      | "duplicate_ref"
+      | "duplicate_view_ref"
+      | "foreign_owner_ref"
+      | "unknown_projection_owner"
+      | "unknown_view_ref"
+      | "unknown_behavior_target"
+      | "view_digest_mismatch"
+      | "unknown_set_member"
+      | "source_revision_conflict",
+    message: string,
+  ) {
+    super(message)
+  }
+}
+
+export class StaleCapabilityCatalogError extends Error {
+  override readonly name = "StaleCapabilityCatalogError"
+
+  constructor(
+    public readonly expected: string,
+    public readonly actual: string,
+  ) {
+    super(`Capability catalog revision is stale: expected ${expected}, current revision is ${actual}.`)
+  }
+}
+
+function exactStringRecord(value: unknown): value is Record<string, string> {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return false
+  return Reflect.ownKeys(value).every(
+    (key) => typeof key === "string" && typeof (value as Record<string, unknown>)[key] === "string",
+  )
+}
+
+const OwnerRevisionRecord = z.custom<Record<string, string>>(exactStringRecord, {
+  message: "Owner revisions must be an own-key string record.",
+})
+const ProjectionRevisionRecord = OwnerRevisionRecord.refine(
+  (value) => Object.values(value).every((revision) => /^[a-f0-9]{64}$/.test(revision)),
+  { message: "Projection revisions must be SHA-256 strings." },
+)
+
+export const CapabilityCatalogSnapshot = z
+  .object({
+    catalog_revision: z.string().regex(/^[a-f0-9]{64}$/),
+    context: CapabilityCatalogContext,
+    owner_revisions: OwnerRevisionRecord,
+    projection_revisions: ProjectionRevisionRecord,
+    descriptors: z.array(CapabilityDescriptor),
+    views: z.array(CapabilityCatalogViewEntry),
+    sets: z.array(CapabilitySetDescriptor),
+  })
+  .strict()
+export type CapabilityCatalogSnapshot = z.infer<typeof CapabilityCatalogSnapshot>
+
+function freezeDescriptor(descriptor: CapabilityDescriptorValue): CapabilityDescriptorValue {
+  return Object.freeze({
+    ...descriptor,
+    ref: Object.freeze({ ...descriptor.ref }),
+    aliases: Object.freeze([...descriptor.aliases]) as string[],
+    search_terms: Object.freeze([...descriptor.search_terms]) as string[],
+    ...(descriptor.product_pillars
+      ? { product_pillars: Object.freeze([...descriptor.product_pillars]) as Array<"code" | "work"> }
+      : {}),
+    behavior: freezeBehavior(descriptor.behavior),
+  })
+}
+
+function freezeBehavior(behavior: CapabilityBehaviorValue): CapabilityBehaviorValue {
+  const frozen = { ...behavior } as Record<string, unknown>
+  for (const key of ["tool_ref", "loader_tool_ref", "action_tool_ref", "server_ref", "prompt_ref", "resource_ref"]) {
+    const ref = frozen[key]
+    if (ref && typeof ref === "object") frozen[key] = Object.freeze({ ...(ref as object) })
+  }
+  return Object.freeze(frozen) as CapabilityBehaviorValue
+}
+
+function behaviorTargetRefs(behavior: CapabilityBehaviorValue) {
+  switch (behavior.kind) {
+    case "call_tool":
+      return [behavior.tool_ref]
+    case "open_skill":
+    case "open_mission_skill":
+      return [behavior.loader_tool_ref]
+    case "create_task":
+    case "manage":
+      return [behavior.action_tool_ref]
+    case "inspect_mcp":
+      return [behavior.action_tool_ref, behavior.server_ref]
+    case "open_mcp_prompt":
+      return [behavior.action_tool_ref, behavior.prompt_ref]
+    case "open_mcp_resource":
+      return [behavior.action_tool_ref, behavior.resource_ref]
+    case "unavailable":
+      return []
+  }
+}
+
+function freezeView(entry: CapabilityCatalogViewEntryValue): CapabilityCatalogViewEntryValue {
+  return Object.freeze({
+    ...entry,
+    descriptor_ref: Object.freeze({ ...entry.descriptor_ref }),
+    discoverable_by: Object.freeze([...entry.discoverable_by]) as Array<z.infer<typeof CapabilityCaller>>,
+    next_owner: Object.freeze({ ...entry.next_owner }),
+  })
+}
+
+function freezeSet(set: CapabilitySetDescriptorValue): CapabilitySetDescriptorValue {
+  return Object.freeze({
+    ...set,
+    ref: Object.freeze({ ...set.ref }),
+    member_refs: Object.freeze(set.member_refs.map((ref) => Object.freeze({ ...ref }))) as typeof set.member_refs,
+  })
+}
+
+function freezeSource(source: CapabilityCatalogSourceValue): CapabilityCatalogSourceValue {
+  return Object.freeze({
+    ...source,
+    descriptors: Object.freeze(source.descriptors.map(freezeDescriptor)) as CapabilityDescriptorValue[],
+    sets: Object.freeze(source.sets.map(freezeSet)) as CapabilitySetDescriptorValue[],
+  })
+}
+
+function ownRecord(entries: ReadonlyMap<string, string>): Record<string, string> {
+  return Object.fromEntries([...entries.entries()].sort(([left], [right]) => compareCanonicalStrings(left, right)))
+}
+
+function canonicalSnapshot(input: {
+  context: z.input<typeof CapabilityCatalogContext>
+  sources: readonly CapabilityCatalogSourceValue[]
+  projections: readonly CapabilityCatalogProjectionValue[]
+}): CapabilityCatalogSnapshot {
+  const context = CapabilityCatalogContext.parse(input.context)
+  const sources = input.sources
+    .map((source) => createCapabilityCatalogSource(source))
+    .sort((left, right) => compareCanonicalStrings(left.owner_ref, right.owner_ref))
+  const projections = input.projections
+    .map((projection) => createCapabilityCatalogProjection(projection))
+    .sort((left, right) => compareCanonicalStrings(left.owner_ref, right.owner_ref))
+  const ownerRevisions = new Map<string, string>()
+  const projectionRevisions = new Map<string, string>()
+  const descriptorByRef = new Map<string, CapabilityDescriptorValue>()
+  const viewByRef = new Map<string, CapabilityCatalogViewEntryValue>()
+  const setByRef = new Map<string, CapabilitySetDescriptorValue>()
+
+  for (const source of sources) {
+    if (ownerRevisions.has(source.owner_ref)) {
+      throw new CapabilityCatalogContractError(
+        "duplicate_owner",
+        `Capability catalog contains duplicate owner ${JSON.stringify(source.owner_ref)}.`,
+      )
+    }
+    ownerRevisions.set(source.owner_ref, source.owner_revision)
+    for (const descriptor of source.descriptors) {
+      const encoded = CapabilityRefCodec.encode(descriptor.ref)
+      if (descriptor.ref.owner_ref !== source.owner_ref) {
+        throw new CapabilityCatalogContractError(
+          "foreign_owner_ref",
+          `Capability ${encoded} belongs to ${descriptor.ref.owner_ref}, not source ${source.owner_ref}.`,
+        )
+      }
+      if (descriptorByRef.has(encoded) || setByRef.has(encoded)) {
+        throw new CapabilityCatalogContractError(
+          "duplicate_ref",
+          `Capability catalog contains duplicate reference ${encoded}.`,
+        )
+      }
+      descriptorByRef.set(encoded, freezeDescriptor(descriptor))
+    }
+    for (const set of source.sets) {
+      const encoded = CapabilityRefCodec.encode(set.ref)
+      if (set.ref.owner_ref !== source.owner_ref) {
+        throw new CapabilityCatalogContractError(
+          "foreign_owner_ref",
+          `Capability set ${encoded} belongs to ${set.ref.owner_ref}, not source ${source.owner_ref}.`,
+        )
+      }
+      if (descriptorByRef.has(encoded) || setByRef.has(encoded)) {
+        throw new CapabilityCatalogContractError(
+          "duplicate_ref",
+          `Capability catalog contains duplicate reference ${encoded}.`,
+        )
+      }
+      setByRef.set(encoded, freezeSet(set))
+    }
+  }
+
+  for (const projection of projections) {
+    if (projectionRevisions.has(projection.owner_ref)) {
+      throw new CapabilityCatalogContractError(
+        "duplicate_projection_owner",
+        `Capability catalog contains duplicate projection owner ${JSON.stringify(projection.owner_ref)}.`,
+      )
+    }
+    if (!ownerRevisions.has(projection.owner_ref)) {
+      throw new CapabilityCatalogContractError(
+        "unknown_projection_owner",
+        `Capability projection ${JSON.stringify(projection.owner_ref)} has no owner source.`,
+      )
+    }
+    projectionRevisions.set(projection.owner_ref, projection.projection_revision)
+    for (const view of projection.entries) {
+      const encoded = CapabilityRefCodec.encode(view.descriptor_ref)
+      if (view.descriptor_ref.owner_ref !== projection.owner_ref) {
+        throw new CapabilityCatalogContractError(
+          "foreign_owner_ref",
+          `Capability view ${encoded} belongs to ${view.descriptor_ref.owner_ref}, not projection ${projection.owner_ref}.`,
+        )
+      }
+      const descriptor = descriptorByRef.get(encoded)
+      if (!descriptor) {
+        throw new CapabilityCatalogContractError(
+          "unknown_view_ref",
+          `Capability projection ${projection.owner_ref} contains unknown descriptor ${encoded}.`,
+        )
+      }
+      if (view.descriptor_digest !== descriptor.metadata_digest) {
+        throw new CapabilityCatalogContractError(
+          "view_digest_mismatch",
+          `Capability view ${encoded} does not bind descriptor digest ${descriptor.metadata_digest}.`,
+        )
+      }
+      if (viewByRef.has(encoded)) {
+        throw new CapabilityCatalogContractError(
+          "duplicate_view_ref",
+          `Capability catalog contains duplicate view reference ${encoded}.`,
+        )
+      }
+      viewByRef.set(encoded, freezeView(view))
+    }
+  }
+
+  for (const [descriptorRef, descriptor] of descriptorByRef) {
+    for (const target of behaviorTargetRefs(descriptor.behavior)) {
+      const encoded = CapabilityRefCodec.encode(target)
+      if (!descriptorByRef.has(encoded)) {
+        throw new CapabilityCatalogContractError(
+          "unknown_behavior_target",
+          `Capability ${descriptorRef} behavior contains unknown target ${encoded}.`,
+        )
+      }
+    }
+  }
+
+  for (const ownerRef of ownerRevisions.keys()) {
+    if (!projectionRevisions.has(ownerRef)) {
+      throw new CapabilityCatalogContractError(
+        "unknown_projection_owner",
+        `Capability owner ${JSON.stringify(ownerRef)} has no caller projection.`,
+      )
+    }
+  }
+  for (const [setRef, set] of setByRef) {
+    for (const member of set.member_refs) {
+      const encoded = CapabilityRefCodec.encode(member)
+      if (!descriptorByRef.has(encoded)) {
+        throw new CapabilityCatalogContractError(
+          "unknown_set_member",
+          `Capability set ${setRef} contains unknown leaf ${encoded}.`,
+        )
+      }
+    }
+  }
+
+  const descriptors = [...descriptorByRef.entries()]
+    .sort(([left], [right]) => compareCanonicalStrings(left, right))
+    .map(([, descriptor]) => descriptor)
+  const views = [...viewByRef.entries()]
+    .sort(([left], [right]) => compareCanonicalStrings(left, right))
+    .map(([, view]) => view)
+  const sets = [...setByRef.entries()]
+    .sort(([left], [right]) => compareCanonicalStrings(left, right))
+    .map(([, set]) => set)
+  const ownerRevisionRecord = ownRecord(ownerRevisions)
+  const projectionRevisionRecord = ownRecord(projectionRevisions)
+  const payload = {
+    context,
+    owner_revisions: ownerRevisionRecord,
+    projection_revisions: projectionRevisionRecord,
+    descriptors,
+    views,
+    sets,
+  }
+  const catalogRevision = canonicalDigestSource("capability-catalog-snapshot-v3", payload).sha256
+  return Object.freeze({
+    catalog_revision: catalogRevision,
+    context: Object.freeze({ ...context }),
+    owner_revisions: Object.freeze(ownerRevisionRecord),
+    projection_revisions: Object.freeze(projectionRevisionRecord),
+    descriptors: Object.freeze(descriptors) as CapabilityDescriptorValue[],
+    views: Object.freeze(views) as CapabilityCatalogViewEntryValue[],
+    sets: Object.freeze(sets) as CapabilitySetDescriptorValue[],
+  }) as CapabilityCatalogSnapshot
+}
+
+type CatalogCacheState = {
+  sources: Map<string, CapabilityCatalogSourceValue>
+  snapshots: Map<string, CapabilityCatalogSnapshot>
+}
+
+const cacheState = createInstanceState<CatalogCacheState>(
+  () => ({ sources: new Map(), snapshots: new Map() }),
+  undefined,
+  "capability-catalog-v3",
+)
+
+function retainBounded<K, V>(map: Map<K, V>, key: K, value: V, maximum: number): V {
+  map.set(key, value)
+  while (map.size > maximum) map.delete(map.keys().next().value!)
+  return value
+}
+
+export namespace CapabilityCatalogCache {
+  export async function publishSource(
+    raw: z.input<typeof CapabilityCatalogSource>,
+  ): Promise<CapabilityCatalogSourceValue> {
+    const source = createCapabilityCatalogSource(raw)
+    const cache = await cacheState()
+    const key = canonicalDigestSource("capability-catalog-source-cache-key-v1", [
+      source.owner_ref,
+      source.owner_revision,
+    ]).sha256
+    const existing = cache.sources.get(key)
+    if (existing) {
+      if (canonicalJSONValue(existing) !== canonicalJSONValue(source)) {
+        throw new CapabilityCatalogContractError(
+          "source_revision_conflict",
+          `Capability owner ${source.owner_ref} published different descriptors for owner revision ${source.owner_revision}.`,
+        )
+      }
+      return existing
+    }
+    return retainBounded(cache.sources, key, freezeSource(source), MAX_SOURCE_CACHE_ENTRIES)
+  }
+
+  export async function publishSnapshot(input: {
+    context: z.input<typeof CapabilityCatalogContext>
+    sources: readonly CapabilityCatalogSourceValue[]
+    projections: readonly CapabilityCatalogProjectionValue[]
+  }): Promise<CapabilityCatalogSnapshot> {
+    const snapshot = canonicalSnapshot(input)
+    const cache = await cacheState()
+    const existing = cache.snapshots.get(snapshot.catalog_revision)
+    if (existing) return existing
+    return retainBounded(cache.snapshots, snapshot.catalog_revision, snapshot, MAX_SNAPSHOT_CACHE_ENTRIES)
+  }
+
+  export async function reset(): Promise<void> {
+    await cacheState.reset()
+  }
+}
+
+export function createCapabilityCatalogSnapshot(input: {
+  context: z.input<typeof CapabilityCatalogContext>
+  sources: readonly CapabilityCatalogSourceValue[]
+  projections: readonly CapabilityCatalogProjectionValue[]
+}): CapabilityCatalogSnapshot {
+  return canonicalSnapshot(input)
+}
+
+function searchFields(descriptor: CapabilityDescriptorValue): DiscoverySearchField[] {
+  return [
+    { text: descriptor.name, weight: 1 },
+    { text: descriptor.ref.local_ref, weight: 1 },
+    ...descriptor.aliases.map((alias) => ({ text: alias, weight: 0.94 })),
+    ...(descriptor.aliases.length > 1 ? [{ text: descriptor.aliases.join(" "), weight: 0.92 }] : []),
+    ...descriptor.search_terms.map((term) => ({ text: term, weight: 0.9 })),
+    { text: descriptor.description, weight: 0.78 },
+    { text: descriptor.ref.kind, weight: 0.45 },
+    { text: descriptor.ref.owner_ref, weight: 0.35 },
+  ]
+}
+
+export function searchCapabilityCatalog(
+  snapshot: CapabilityCatalogSnapshot,
+  caller: z.infer<typeof CapabilityCaller>,
+  rawInput: z.input<typeof CapabilitySearchInput>,
+): CapabilitySearchResultValue[] {
+  const input = CapabilitySearchInput.parse(rawInput)
+  if (input.expected_catalog_revision && input.expected_catalog_revision !== snapshot.catalog_revision) {
+    throw new StaleCapabilityCatalogError(input.expected_catalog_revision, snapshot.catalog_revision)
+  }
+  const kinds = input.kinds ? new Set(input.kinds) : undefined
+  const nextOwnerKinds = input.next_owner_kinds ? new Set(input.next_owner_kinds) : undefined
+  const owners = input.owner_refs ? new Set(input.owner_refs) : undefined
+  const descriptorByRef = new Map(
+    snapshot.descriptors.map((descriptor) => [CapabilityRefCodec.encode(descriptor.ref), descriptor]),
+  )
+  const candidates = snapshot.views.flatMap((view) => {
+    const descriptor = descriptorByRef.get(CapabilityRefCodec.encode(view.descriptor_ref))!
+    if (!view.discoverable_by.includes(caller)) return []
+    if (kinds && !kinds.has(descriptor.ref.kind)) return []
+    if (nextOwnerKinds && !nextOwnerKinds.has(view.next_owner.kind)) return []
+    if (owners && !owners.has(descriptor.ref.owner_ref)) return []
+    if (
+      input.product_pillar &&
+      descriptor.ref.kind === "expert_squad" &&
+      !descriptor.product_pillars?.includes(input.product_pillar)
+    ) {
+      return []
+    }
+    return [{ descriptor, view }]
+  })
+  const needle = input.query.trim()
+  const ranked: Array<{
+    descriptor: CapabilityDescriptorValue
+    view: CapabilityCatalogViewEntryValue
+    score: number | null
+  }> = []
+  for (const candidate of candidates) {
+    if (!needle) {
+      ranked.push({ ...candidate, score: null })
+      continue
+    }
+    const score = scoreDiscoveryFields(needle, searchFields(candidate.descriptor))
+    if (score !== undefined) ranked.push({ ...candidate, score })
+  }
+  ranked.sort((left, right) => {
+    if (left.score !== right.score) {
+      if (left.score === null) return -1
+      if (right.score === null) return 1
+      return right.score - left.score
+    }
+    return compareCanonicalStrings(
+      CapabilityRefCodec.encode(left.descriptor.ref),
+      CapabilityRefCodec.encode(right.descriptor.ref),
+    )
+  })
+  return ranked.slice(0, input.limit).map(({ descriptor, view, score }) =>
+    CapabilitySearchResult.parse({
+      ref: descriptor.ref,
+      name: descriptor.name,
+      description: descriptor.description,
+      aliases: descriptor.aliases,
+      discoverable_by: view.discoverable_by,
+      ...(descriptor.product_pillars ? { product_pillars: descriptor.product_pillars } : {}),
+      availability: view.availability,
+      next_owner: view.next_owner,
+      catalog_revision: snapshot.catalog_revision,
+      score,
+    }),
+  )
+}

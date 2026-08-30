@@ -12,7 +12,8 @@ import type { ResolvedSkillSurface } from "@/skill/surface"
 import { WORK_DEFAULT_CAPABILITY_ASSIGNMENT } from "@/work/harness"
 import { NamedError } from "@opencorvus-ai/util/error"
 import { createHarnessProjection } from "@/capability/harness-projection"
-import { capabilityRef } from "@/capability/ref"
+import { capabilityRef, CapabilityRefCodec, type CapabilityRef } from "@/capability/ref"
+import { canonicalDigestSource, compareCanonicalStrings } from "@/util/canonical-digest"
 
 const CHAT_AGENT_ID = "chat" as const
 export const CONVERSATION_AGENT_IDS = ["chat", "work"] as const
@@ -219,31 +220,31 @@ export namespace ConversationCapability {
     input?: {
       config?: Config.Info
       executionToolIDs?: Iterable<string>
-      executionMcpToolIDs?: Iterable<string>
+      executionMcpToolRefs?: Iterable<CapabilityRef>
       skillRefs?: Iterable<string>
     },
   ) {
     const config = input?.config ?? (await Config.get())
     const agent = await PrimaryAssistantRegistry.get(agentID, { config })
     const selected = assignment(config, agentID)
-    const mcpToolIDs = new Set(input?.executionMcpToolIDs ?? [])
+    const mcpToolRefs = [...(input?.executionMcpToolRefs ?? [])]
+    for (const ref of mcpToolRefs) {
+      if (ref.kind !== "mcp_tool") throw new Error(`Conversation MCP Tool Harness received ${ref.kind} reference.`)
+    }
+    const mcpToolIDs = new Set(mcpToolRefs.map((ref) => ref.local_ref))
     const toolIDs = [...(input?.executionToolIDs ?? AgentToolPool.visibleToolIDs(agent.tools))].filter(
       (toolID) => !mcpToolIDs.has(toolID),
     )
     const skillRefs = [...new Set(input?.skillRefs ?? selected.skill_refs)]
     return createHarnessProjection({
       context: { kind: "conversation", agent_id: agentID },
-      owner_revision: String(
-        Bun.hash.xxHash64(
-          JSON.stringify({
-            agent_id: agentID,
-            tool_ids: [...toolIDs].sort(),
-            skill_refs: [...skillRefs].sort(),
-            mcp_server_refs: [...selected.mcp_server_refs].sort(),
-            mcp_tool_refs: [...mcpToolIDs].sort(),
-          }),
-        ),
-      ),
+      owner_revision: canonicalDigestSource("conversation-harness-owner-v1", {
+        agent_id: agentID,
+        tool_ids: [...toolIDs].sort(compareCanonicalStrings),
+        skill_refs: [...skillRefs].sort(compareCanonicalStrings),
+        mcp_server_refs: [...selected.mcp_server_refs].sort(compareCanonicalStrings),
+        mcp_tool_refs: mcpToolRefs.map(CapabilityRefCodec.encode).sort(compareCanonicalStrings),
+      }).sha256,
       tool_refs: toolIDs.map((toolID) =>
         capabilityRef({ kind: "tool", source: "platform", owner_ref: "tool-registry", local_ref: toolID }),
       ),
@@ -254,9 +255,7 @@ export namespace ConversationCapability {
       mcp_server_refs: selected.mcp_server_refs.map((ref) =>
         capabilityRef({ kind: "mcp_server", source: "project", owner_ref: "mcp-config", local_ref: ref }),
       ),
-      mcp_tool_refs: [...mcpToolIDs].map((ref) =>
-        capabilityRef({ kind: "mcp_tool", source: "project", owner_ref: "mcp-config", local_ref: ref }),
-      ),
+      mcp_tool_refs: mcpToolRefs,
       mcp_prompt_refs: [],
       mcp_resource_refs: [],
     })

@@ -247,8 +247,9 @@ describe("Expert Squad catalog index", () => {
       directory: project.path,
       fn: async () => {
         const root = ExpertSquadPackageLocations.project(project.path).packagesRoot
-        const heldExpertSquadIDs = Array.from({ length: 100 }, (_, index) =>
-          `mission-scale-${String(index).padStart(3, "0")}`,
+        const heldExpertSquadIDs = Array.from(
+          { length: 100 },
+          (_, index) => `mission-scale-${String(index).padStart(3, "0")}`,
         )
         await Promise.all(
           heldExpertSquadIDs.map((id) =>
@@ -309,8 +310,10 @@ describe("Expert Squad catalog index", () => {
           requested_product_pillar: string
           results: Array<Record<string, unknown>>
         }
+        expect(result.metadata.catalog_revision).toMatch(/^[a-f0-9]{64}$/)
+        const { catalog_revision: _catalogRevision, ...metadata } = result.metadata
         expect({
-          metadata: result.metadata,
+          metadata,
           caller: output.caller,
           visibleCount: output.visible_expert_squad_count,
           heldCount: output.held_expert_squad_count,
@@ -325,7 +328,6 @@ describe("Expert Squad catalog index", () => {
           },
         }).toEqual({
           metadata: {
-            catalog_revision: expect.stringMatching(/^[a-f0-9]{64}$/),
             caller: "mission",
             result_count: 20,
             visible_expert_squad_count: 100,

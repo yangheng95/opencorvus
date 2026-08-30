@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-30-search-native-capability-phase-a1.md](2026-08-30-search-native-capability-phase-a1.md) hard-replaces the temporary Tool-owned capability catalog with stable owner descriptors/sources separated from caller projections/views, explicit owner and projection revisions, context-bound immutable snapshots, and one runtime composition path while leaving eager Tool execution unchanged for the later atomic reveal cutover.
+
 - [2026-08-30-search-native-capability-harness-refactor.md](2026-08-30-search-native-capability-harness-refactor.md) audits the fragmented Tool, Skill, MCP, Expert Squad, Mission Skill, and Harness discovery/projection stack against current code and industry deferred-tool practice, then defines one search-native capability architecture and migration without replacing specialized execution owners.
 
 - [2026-08-30-scheduling-algorithm-razor-audit.md](2026-08-30-scheduling-algorithm-razor-audit.md) iteratively audits the current Task/Mission/Session scheduling and recovery design for duplicated authority, over-engineering, convergence hazards, and violations of razor-style minimality.

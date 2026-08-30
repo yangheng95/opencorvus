@@ -1,15 +1,19 @@
 # Code and Work Agent Platform
 
-Status: partially implemented current contract; search-native convergence pending
+Status: Capability Catalog A1 implemented; search-native execution convergence pending
 
 Implementation calibration (2026-08-30): typed `CapabilityRef`, `HarnessProjection`,
-`capability_search`, product pillars and immutable Task package binding are present in current source. The
-context-bound Catalog view lifecycle over project-scoped owner caches, pre-materialization native Harness authority, unified Expert Squad
-capability declaration and deferred Tool reveal described as future work in this chapter are not complete. The
-evidence, industry comparison and hard-replacement plan are recorded in
+`capability_search`, product pillars and immutable Task package binding are present in current source. Phase A1 has
+deleted the temporary Tool-owned catalog builder: `capability/descriptor.ts` and `capability/catalog.ts` now own
+the pure contracts, canonical context snapshots, bounded project-local source/snapshot caches, search, and typed
+stale/contract errors. `tool/capability-runtime-catalog.ts` is the only owner composition root and keeps the pure
+Capability layer from depending back on Tool/Skill/MCP/Expert Squad runtime. Tool Registry,
+Skill, Mission Skill, Expert Squad, Harness/Worker stage facts, and MCP config/status contribute exact revisions.
+Durable input-Part catalog binding, pre-materialization native Harness authority, unified Expert Squad capability
+declaration, and deferred Tool reveal are not complete. The evidence, industry comparison and hard-replacement plan are recorded in
 [`2026-08-30-search-native-capability-harness-refactor.md`](../../records/2026-08/2026-08-30-search-native-capability-harness-refactor.md).
-Until that replacement lands, this chapter's Catalog/Harness sections describe the current V1 contract and its
-intended boundaries, not proof that every milestone below is implemented.
+The exact A1 cut and exclusions are recorded in
+[`2026-08-30-search-native-capability-phase-a1.md`](../../records/2026-08/2026-08-30-search-native-capability-phase-a1.md).
 
 ## Recall
 
@@ -499,6 +503,7 @@ Before fuzzy search, every searchable item receives one typed reference:
 
 ```ts
 type CapabilityKind =
+  | "capability_set"
   | "skill"
   | "tool"
   | "mcp_server"
@@ -522,11 +527,21 @@ authoritative Registry or package projection owner. `local_ref` is that
 owner's exact existing reference. The catalog does not replace current Skill,
 Tool, MCP, Mission Skill, or Expert Squad identifiers.
 
-Each owner publishes immutable, non-secret metadata plus its source revision.
-One catalog builder normalizes, rejects duplicate serialized references, sorts
-deterministically, and computes `catalog_revision` from the canonical entries
-and source revisions. Queries read a prepared snapshot; they never scan files,
-connect MCP servers, load Skill bodies, execute package code, or refresh OAuth.
+Each owner publishes immutable, non-secret metadata plus its explicit source
+revision. Stable `CapabilityDescriptor` records contain identity, searchable
+metadata and exact-ref typed behavior only. Behavior targets use canonical
+Tool/loader/action/MCP references and every target must resolve inside the
+same snapshot. Caller assignment, policy, availability and
+resolved `next_owner` live separately in `CapabilityCatalogViewEntry` records,
+bound back to the owner descriptor by its metadata digest. The Catalog never
+re-hashes caller rows and labels that value as an owner revision. One builder
+validates descriptor/view digests and one-level Capability Sets, rejects
+duplicate owners/references and unknown members, sorts deterministically, and
+computes `catalog_revision` from the complete canonical context, owner and
+projection revision vectors, descriptors, views, and sets. The pure ranking
+function reads only a prepared snapshot. Runtime composition reads existing
+owner inventory APIs but never initiates an MCP connection, executes package
+code, refreshes OAuth, or owns an irreversible action.
 
 Fuzzy scoring is deliberately replaceable and non-authoritative. The first
 implementation reuses the repository's existing fuzzy-search library, with
@@ -537,19 +552,40 @@ query produce the same result order.
 
 ### Snapshot lifecycle
 
-The snapshot is project-scoped, derived, and initially in memory. It is not a
-database or a second installation catalog. Its revision input is a canonical
-vector of the current Tool Registry revision, Skill catalog revision, MCP
-configuration/package revision, Expert Squad catalog revision, and Mission
-Skill revision.
+The snapshot is context-bound, project-cached, derived, and currently in
+memory. It is not a database or a second installation catalog. Its revision
+input is a canonical vector of the current Tool Registry revision, Skill
+publication revision, irreversible full MCP configuration digest plus global
+observed status/inventory revision, exact Conversation Host Session MCP owner
+revision, scoped Task MCP owner revision, Expert Squad catalog revision,
+Mission Skill revision, Harness projection hash, Worker descriptor/stage
+identity, and caller context. Global and scoped MCP inventories are never
+unioned into one owner. Raw MCP configuration and credentials are never
+published in the Catalog.
 
-Existing owner mutation paths publish invalidation. The next query builds one
-complete replacement under a project-local single-flight lock and atomically
-publishes it. Queries never receive a partially rebuilt snapshot, and an
-invalidated snapshot is not served as a silent stale fallback. An owner that
-cannot produce metadata makes the new revision visibly unavailable with an
-owner-specific diagnostic; the builder does not drop that owner and pretend
-the snapshot is complete.
+Every owner revision preimage uses canonical code-point ordering and encoded
+tuples, including MCP configuration/status/tool identities, Harness refs, and
+Mission Skill issue facts. Locale-dependent comparison and delimiter-joined
+tuple keys are not revision authorities.
+
+Conversation Host Session MCP Tools keep one exact reference end to end: the
+materializing Host Session owner publishes the ref, Session Loop passes that
+ref into `ConversationCapability`, Harness freezes it, and Catalog consumes it
+without replacing the owner by matching a local Tool ID. Ordinary shared
+project MCP Tools retain their `mcp-config` owner.
+
+Existing owner publication revisions and runtime context hashes make mutation
+produce a new source/snapshot key. Runtime composition is not joined across
+requests: each call captures current owner facts, while existing owner caches
+and the content-addressed, bounded source/snapshot cache reuse identical frozen
+publications. This avoids returning a pre-mutation in-flight composition to a
+post-mutation caller.
+Queries never receive a partially rebuilt snapshot, and an invalidated snapshot
+is not served as a silent stale fallback. An owner that cannot produce metadata
+raises `CapabilityOwnerUnavailableError`; the builder does not drop that owner
+and pretend the snapshot is complete. Durable binding of one exact snapshot to
+an authoritative input Part remains a later cut and is not implied by this
+in-memory cache.
 
 The query contract includes normalized query text, optional exact filters,
 configured result limit, caller context, and expected catalog revision. Empty
@@ -688,7 +724,7 @@ interface CapabilitySearchResult {
   name: string
   description: string
   product_pillars?: ProductPillar[] // Expert Squad applicability only
-  availability: "visible" | "installed_unbound" | "requires_auth" | "denied"
+  availability: "visible" | "installed_unbound" | "requires_auth" | "denied" | "unavailable"
   next_owner:
     | { kind: "load_skill"; name: string }
     | { kind: "call_tool"; tool_id: string }
@@ -716,6 +752,8 @@ stale-reference error and a new search, never a compatibility fallback.
   project it;
 - `requires_auth` means it is projected but transport authentication is absent;
 - `denied` means safe metadata may be named but loading or execution is denied.
+- `unavailable` means the exact owner/configuration exists but its current
+  typed status cannot support the advertised next operation.
 
 Search never calls OAuth, changes an assignment, persists an approval, or
 returns provider arguments. `next_owner` is navigation to the authoritative
@@ -971,6 +1009,10 @@ Primary metrics:
 
 ### Milestone A: typed Capability Catalog and fuzzy search
 
+Status: A1 Catalog single-source hard replacement implemented. Durable
+input-Part snapshot binding and the later search/reveal execution cut remain
+pending; eager execution is intentionally unchanged.
+
 Goal: complete discovery identity and indexing without touching execution
 authority.
 
@@ -981,8 +1023,8 @@ Changes:
    Mission Skill owners.
 3. Build one immutable, deterministic, revisioned snapshot with no secrets,
    resource bodies, provider connections, or package execution.
-4. Wire owner revisions, invalidation, single-flight rebuild, and atomic
-   snapshot publication.
+4. Wire owner revisions and content-addressed atomic snapshot publication;
+   owner-specific readers retain their existing cache/single-flight contracts.
 5. Add caller-specific discovery views for Chat, Work, Mission, Task
    scheduler, and Task Agent contexts.
 6. Add fuzzy ranking after exact visibility, kind, owner, and pillar filters.
