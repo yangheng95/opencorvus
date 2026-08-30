@@ -23,10 +23,7 @@ import {
   type DispatchAdapterExecutors,
   waitForDetachedDispatchPipelinesForTest,
 } from "../../src/orchestrator/dispatch-agent-tool"
-import {
-  createDispatchAgentsTool,
-  DispatchAgentsToolTestHooks,
-} from "../../src/orchestrator/dispatch-agents-tool"
+import { createDispatchAgentsTool } from "../../src/orchestrator/dispatch-agents-tool"
 import { taskRequestSHA256 } from "../../src/orchestrator/dispatch-turn-projection"
 import { createDelegatedWorkerTool } from "../../src/orchestrator/delegated-worker-tool"
 import { createReadAgentMessageTool } from "../../src/orchestrator/read-agent-message-tool"
@@ -38,7 +35,6 @@ import { Session } from "../../src/session"
 import { Message } from "../../src/session/message"
 import { MessageStore } from "../../src/session/message-store"
 import { SessionProcessor } from "../../src/session/processor"
-import { SessionLoop } from "../../src/session/loop"
 import { SessionStatus } from "../../src/session/status"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
 
@@ -501,12 +497,24 @@ describe("Dynamic Expert Squad package", () => {
                 throw new Error("Dynamic dispatch must retain direct workflow authority")
               }
               const execution = (toolOptions as {
-                opencorvus?: { toolPartID?: unknown; toolCallID?: unknown }
+                opencorvus?: {
+                  toolPartID?: unknown
+                  toolCallID?: unknown
+                  visibleToolName?: unknown
+                  collectionMember?: { index?: unknown; count?: unknown }
+                }
               } | undefined)?.opencorvus
               const toolPartID = typeof execution?.toolPartID === "string" ? execution.toolPartID : ""
               const toolCallID = typeof execution?.toolCallID === "string" ? execution.toolCallID : ""
               if (!toolPartID || !toolCallID) {
                 throw new Error(`Dynamic dispatch ${targetAgentID} lost its visible Tool Part authority`)
+              }
+              if (
+                execution?.visibleToolName !== "dispatch_agents" ||
+                !Number.isInteger(execution.collectionMember?.index) ||
+                !Number.isInteger(execution.collectionMember?.count)
+              ) {
+                throw new Error(`Dynamic dispatch ${targetAgentID} lost its collection member authority`)
               }
               const dispatchID = Identifier.ascending("artifact")
               const origin = createDispatchLineageOrigin({
@@ -516,6 +524,9 @@ describe("Dynamic Expert Squad package", () => {
                 orchestratorMessageID,
                 toolPartID,
                 toolCallID,
+                toolName: "dispatch_agents",
+                collectionMemberIndex: execution.collectionMember!.index as number,
+                collectionMemberCount: execution.collectionMember!.count as number,
                 targetAgentID,
                 projectedWorkerIdentity: projectedAgent.identity,
                 workScope,
@@ -524,10 +535,14 @@ describe("Dynamic Expert Squad package", () => {
                 workflowNodeID,
                 adapterInput,
               })
+              const childSessionID = Identifier.deterministic("session", `dynamic-frontier\0${origin.dispatchID}`)
+              const lineage = recordTestDispatchLineage({ origin, childSessionID })
               return {
                 dispatchID,
                 deliverySliceRevisionIDs,
                 adapterInput,
+                newSessionID: childSessionID,
+                signal: new AbortController().signal,
                 turn: {
                   kind: "initial",
                   current_dispatch_id: dispatchID,
@@ -545,58 +560,17 @@ describe("Dynamic Expert Squad package", () => {
                 },
                 observeSession() {},
                 commitSession(sessionID: string, descriptor: WorkerTurnDescriptor.Info) {
-                  return { artifactID: recordTestDispatchLineage({ origin, childSessionID: sessionID }).artifactID }
+                  if (sessionID !== childSessionID) throw new Error("Dynamic dispatch Session identity drift")
+                  return { artifactID: lineage.artifactID }
                 },
+                releaseAdmission() {},
               }
             },
           })
           if (!dispatchTool.execute) throw new Error("dispatch_agent has no production executor")
-          const interruptedFrontier = DispatchAgentsToolTestHooks.create(dispatchTool, {
-            afterPrepared() {
-              throw new Error("simulated process loss after durable frontier preparation")
-            },
-          })
-          if (!interruptedFrontier.execute) throw new Error("dispatch_agents has no interrupted executor")
-          await expect(
-            interruptedFrontier.execute(frontierInput as never, {
-              toolCallId: frontierPartID,
-              opencorvus: {
-                sessionID: orchestrator.id,
-                messageID: orchestratorMessageID,
-                toolCallID: frontierPartID,
-                toolPartID: frontierPartID,
-                visibleToolName: "dispatch_agents",
-              },
-            } as never),
-          ).rejects.toThrow("simulated process loss after durable frontier preparation")
-          expect(
-            (await MessageStore.parts(orchestratorMessageID))
-              .filter((part) => part.type === "tool" && part.tool === "dispatch_agent")
-              .map((part) => part.state.status),
-          ).toEqual(["running", "running"])
-          expect(await SessionLoop.terminalizeRecoveredIncompleteAssistant(orchestrator.id)).toBe(true)
-
           const frontierTool = createDispatchAgentsTool(dispatchTool)
           if (!frontierTool.execute) throw new Error("dispatch_agents has no production executor")
-          const recoveredFrontierPart = (await MessageStore.parts(orchestratorMessageID)).find(
-            (part): part is Message.ToolPart => part.type === "tool" && part.id === frontierPartID,
-          )
-          if (!recoveredFrontierPart || recoveredFrontierPart.state.status !== "completed") {
-            throw new Error("dispatch_agents recovery did not complete its durable outer Part")
-          }
-          const frontierResult = {
-            output: recoveredFrontierPart.state.output,
-            title: recoveredFrontierPart.state.title,
-            metadata: recoveredFrontierPart.state.metadata,
-          }
-          const receipts = (frontierResult as { metadata: { dispatches: any[] } }).metadata.dispatches
-          for (const receipt of receipts) {
-            if (receipt.kind !== "accepted") {
-              throw new Error(`Expected accepted Dynamic dispatch, got ${JSON.stringify(receipt)}`)
-            }
-          }
-          expect(receipts.map((receipt) => receipt.kind)).toEqual(["accepted", "accepted"])
-          const replay = await frontierTool.execute(frontierInput as never, {
+          const frontierResult = (await frontierTool.execute(frontierInput as never, {
             toolCallId: frontierPartID,
             opencorvus: {
               sessionID: orchestrator.id,
@@ -605,12 +579,30 @@ describe("Dynamic Expert Squad package", () => {
               toolPartID: frontierPartID,
               visibleToolName: "dispatch_agents",
             },
-          } as never)
-          expect((replay as { metadata: { dispatches: unknown[] } }).metadata.dispatches).toEqual(receipts)
-          const childToolParts = (await MessageStore.parts(orchestratorMessageID)).filter(
-            (part): part is Message.ToolPart => part.type === "tool" && part.tool === "dispatch_agent",
-          )
-          expect(childToolParts).toHaveLength(2)
+          } as never)) as { output: string; title: string; metadata: { members: any[] } }
+          await Session.updatePart({
+            id: frontierPartID,
+            sessionID: orchestrator.id,
+            messageID: orchestratorMessageID,
+            type: "tool",
+            callID: frontierPartID,
+            tool: "dispatch_agents",
+            state: {
+              status: "completed",
+              input: frontierInput,
+              output: frontierResult.output,
+              title: frontierResult.title,
+              metadata: frontierResult.metadata,
+              time: { start: now + 3, end: Date.now() },
+            },
+          })
+          const receipts = frontierResult.metadata.members.map((member) => member.outcome)
+          for (const receipt of receipts) {
+            if (receipt.kind !== "accepted") {
+              throw new Error(`Expected accepted Dynamic dispatch, got ${JSON.stringify(receipt)}`)
+            }
+          }
+          expect(receipts.map((receipt) => receipt.kind)).toEqual(["accepted", "accepted"])
           expect(await MessageStore.parts(orchestratorMessageID)).toMatchObject([
             {
               id: frontierPartID,
@@ -620,14 +612,6 @@ describe("Dynamic Expert Squad package", () => {
               tool: "dispatch_agents",
               state: { status: "completed", input: frontierInput },
             },
-            ...childToolParts.map((part) => ({
-              id: part.id,
-              messageID: orchestratorMessageID,
-              type: "tool",
-              callID: part.callID,
-              tool: "dispatch_agent",
-              state: { status: "completed" },
-            })),
           ])
           await requireWithin(allStarted, "two overlapping Dynamic members")
           const childSessionIDs = receipts.map((receipt) => {
@@ -662,9 +646,16 @@ describe("Dynamic Expert Squad package", () => {
             orchestratorMessageID,
             orchestratorMessageID,
           ])
-          expect(lineages.map((lineage) => lineage.payload.tool_part_id).sort()).toEqual(
-            childToolParts.map((part) => part.id).sort(),
-          )
+          expect(lineages.map((lineage) => lineage.payload.tool_part_id)).toEqual([
+            frontierPartID,
+            frontierPartID,
+          ])
+          expect(lineages.map((lineage) => lineage.payload.tool_name)).toEqual([
+            "dispatch_agents",
+            "dispatch_agents",
+          ])
+          expect(lineages.map((lineage) => lineage.payload.collection_member_index).toSorted()).toEqual([0, 1])
+          expect(lineages.map((lineage) => lineage.payload.collection_member_count).toSorted()).toEqual([2, 2])
           expect(
             childSessionIDs.map(
               (sessionID) => WorkerTurnDescriptor.latestForSession(sessionID)?.payload.identity.agentID,

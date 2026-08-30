@@ -82,6 +82,7 @@ import {
 import { TaskControlDriver, type TaskControlScanContext, type TaskControlScanResult } from "./task-control-driver"
 import { TaskRootIngressIntegrityError } from "./task-root-ingress-integrity"
 import { isProcessOccurrenceLive, joinProcessLivenessLease } from "./process-liveness"
+import { currentControlLease } from "./control-lease"
 import { TaskRootIngressError, taskRootDirectory } from "./task-directory"
 import { listDispatchLineage } from "./dispatch-lineage"
 import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
@@ -1192,14 +1193,18 @@ function surfaceUnconvergedTaskBoundary(input: {
  * Task holds an empty ready set, no lease, and no timer: a stall no ingress
  * projection can express, because the missing fact is the worker's outcome.
  *
- * Two cases are settled here, and only these two, because only these two are
- * provable from durable evidence:
+ * Only descriptor-backed accepted workers enter this reconciler. Within that
+ * durable boundary two cases are provable:
  *
  *   1. the worker reached a terminal lifecycle but its delivery was lost — the
  *      outcome exists, so replaying delivery is idempotent gap-closing;
- *   2. the worker has no terminal lifecycle and no owner in this process — the
- *      run is abandoned, so its interruption is recorded as an infrastructure
- *      outcome and handed back to the Orchestrator as a real fact.
+ *   2. the accepted worker has no terminal lifecycle and its exact process
+ *      owner is dead — the run is abandoned, so its interruption is recorded
+ *      as an infrastructure outcome and handed back to the Orchestrator.
+ *
+ * A lineage without its exact Worker Turn descriptor is only a write-ahead
+ * admission request. Its dispatch_admission lease/takeover loop is the sole
+ * recovery authority and this reconciler never terminalizes it.
  *
  * Liveness of the owner is decided from durable evidence, never from this
  * process's memory: a peer backend sharing this database owns dispatches whose
@@ -1228,6 +1233,11 @@ async function reconcileAbandonedDispatches(taskID: string): Promise<number> {
     // deliberately suppressed) is finished history; without the memo every
     // sweep replays its delivery check against the protocol store.
     if (closedDispatchIDs.has(lineage.dispatchID)) continue
+    // A write-ahead lineage without its exact durable Turn is an admission
+    // request, not an abandoned worker. Its fenced admission owner or a later
+    // takeover must finish the same occurrence; this delivery reconciler only
+    // owns work that crossed the descriptor-backed accepted boundary.
+    if (!WorkerTurnDescriptor.findForDispatch({ sessionID: childSessionID, dispatchID: lineage.dispatchID })) continue
     if (await dispatchDeliveryOwnerIsLive(lineage, Date.now())) continue
     try {
       const historicalSource =
@@ -1432,6 +1442,12 @@ async function dispatchDeliveryOwnerIsLive(
   if (hasLiveDetachedDispatchPipeline(lineage.artifactID)) return true
   if (SessionPrompt.hasGeneration(lineage.payload.child_session_id)) return true
   const deliveryOwner = lineage.payload.delivery_owner
+  const acceptedAdmission = currentControlLease("dispatch_admission", lineage.artifactID)
+  if (acceptedAdmission) {
+    const owner = acceptedAdmission.owner_occurrence_id
+    if (owner === ownerOccurrenceID()) return false
+    return Database.use((db) => isProcessOccurrenceLive(db, owner, now))
+  }
   if (deliveryOwner.kind === "historical_reconciliation") return false
   const owner = deliveryOwner.process_occurrence_id
   // This process claimed it and neither registry holds it: the work is gone,
@@ -1440,12 +1456,10 @@ async function dispatchDeliveryOwnerIsLive(
   return Database.use((db) => isProcessOccurrenceLive(db, owner, now))
 }
 
-/** Record the interruption of one abandoned worker as its durable outcome and
- * hand it back to the Orchestrator as an ordinary accepted ingress. */
-async function settleAbandonedDispatch(input: {
+async function recordAbandonedDispatchSettlement(input: {
   taskID: string
   lineage: { artifactID: string; dispatchID: string; payload: { child_session_id: string; target_agent_id: string } }
-}): Promise<boolean> {
+}): Promise<DispatchSettlementRow> {
   const childSessionID = input.lineage.payload.child_session_id
   const { SessionLoop } = await import("@/session/loop")
   await SessionLoop.terminalizeRecoveredIncompleteAssistant(childSessionID)
@@ -1484,11 +1498,41 @@ async function settleAbandonedDispatch(input: {
   if (outcome.kind !== "infrastructure_failure") {
     throw new Error("Abandoned dispatch recovery constructed a non-infrastructure outcome")
   }
-  settleDispatchOrReturnExisting({ taskID: input.taskID, dispatchID: input.lineage.dispatchID, outcome })
+  return settleDispatchOrReturnExisting({ taskID: input.taskID, dispatchID: input.lineage.dispatchID, outcome })
+}
+
+/** Record the interruption of one abandoned worker as its durable outcome and
+ * hand it back to the Orchestrator as an ordinary accepted ingress. */
+async function settleAbandonedDispatch(input: {
+  taskID: string
+  lineage: {
+    artifactID: string
+    dispatchID: string
+    payload: {
+      child_session_id: string
+      target_agent_id: string
+      delivery_owner:
+        | { kind: "runtime_process"; process_occurrence_id: string }
+        | {
+            kind: "historical_reconciliation"
+            source:
+              | { kind: "dispatch_settlement"; artifact_id: string }
+              | { kind: "agent_execution_lifecycle"; event_id: string }
+          }
+    }
+  }
+}): Promise<boolean> {
+  const settlement = await recordAbandonedDispatchSettlement(input)
+  const outcome = settlement.payload.outcome
+  const infrastructureFactID =
+    outcome.kind === "infrastructure_failure" ? outcome.infrastructure_error?.artifact_id : undefined
+  if (outcome.kind !== "infrastructure_failure" || !infrastructureFactID) {
+    return (await recoverSettledUndeliveredDispatch(input)) > 0
+  }
   await dispatchTaskLoop({
     taskID: input.taskID,
     event: {
-      note: `Worker Session ${childSessionID} was abandoned before completing dispatch ${input.lineage.dispatchID}`,
+      note: `Worker Session ${input.lineage.payload.child_session_id} was abandoned before completing dispatch ${input.lineage.dispatchID}`,
       dispatchInfrastructureFailure: { infrastructureFactID, outcome },
     },
   })

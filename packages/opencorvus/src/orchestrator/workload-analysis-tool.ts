@@ -50,7 +50,7 @@ export function createWorkloadAnalysisTool<TSchema extends z.ZodType<WorkloadAna
             goalIDs: goal_ids,
             taskID: input.taskID,
             parentSessionID: input.agentSessionID,
-            signal: input.signal,
+            signal: execution.signal,
             onSessionCreated: async (sessionID) => {
               execution.dispatch.observeSession(sessionID)
             },

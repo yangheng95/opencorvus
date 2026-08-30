@@ -1059,7 +1059,20 @@ describe("single Tool-result turn-control protocol", () => {
         )
         if (!target) throw new Error("Coordination redispatch target was not projected")
         const dispatchExecution = await runTool("dispatch_agent", "call_coordination_dispatch", {})
+        const deliveryOwner = joinProcessLivenessLease(currentRuntimeOccurrenceID())
         const lineageHandle = await OrchestratorToolsTestHooks.openDispatchLineage(surface)({
+          taskID: worker.taskID,
+          targetAgentID: target.identity.agentID,
+          projectedAgent: target,
+          workScope: { kind: "task" },
+          deliverySliceRevisionIDs: [],
+          coordinationActionID: action.payload.action_id,
+          toolOptions: dispatchExecution.options,
+          adapterInput: {},
+          continuationGuidance: "Continue with the scheduler's exact incremental guidance.",
+          evidenceLocators: [],
+        })
+        const peerLineageHandle = OrchestratorToolsTestHooks.openDispatchLineage(surface)({
           taskID: worker.taskID,
           targetAgentID: target.identity.agentID,
           projectedAgent: target,
@@ -1077,12 +1090,12 @@ describe("single Tool-result turn-control protocol", () => {
           sessionID: worker.session.id,
           payload: { ...previous.payload, dispatchTurn: lineageHandle.turn },
         })
-        const deliveryOwner = joinProcessLivenessLease(currentRuntimeOccurrenceID())
         try {
           lineageHandle.commitSession(worker.session.id, descriptor)
         } finally {
           deliveryOwner.release()
         }
+        const peer = await peerLineageHandle
         const continuation = listDispatchLineage(worker.taskID).find(
           (lineage) => lineage.payload.coordination_action_id === action.payload.action_id,
         )
@@ -1098,9 +1111,15 @@ describe("single Tool-result turn-control protocol", () => {
             persistedDescriptor?.payload.dispatchTurn?.kind === "continuation"
               ? persistedDescriptor.payload.dispatchTurn.source_dispatch_id
               : undefined,
+          peerReplay: peer.replayOutcome,
         }).toEqual({
           lineageSource: worker.dispatchLineage.dispatchID,
           descriptorSource: worker.dispatchLineage.dispatchID,
+          peerReplay: {
+            kind: "accepted",
+            session_id: worker.session.id,
+            dispatch_lineage_id: continuation?.artifactID,
+          },
         })
         await SessionRuntimeContractStore.dispose(worker.session.id)
       },

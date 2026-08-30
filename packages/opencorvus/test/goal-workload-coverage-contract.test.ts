@@ -7,7 +7,13 @@ import { DispatchAdapterContractRegistry, type AgentDispatchAdapterID } from "@/
 import { Identifier } from "@/id/id"
 import { DispatchOutcome } from "@/agent/dispatch-outcome"
 import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
-import { createDispatchLineageOrigin } from "@/engine/dispatch-lineage"
+import {
+  claimDispatchLineage,
+  commitDispatchLineageSession,
+  createDispatchLineageOrigin,
+  releaseDispatchAdmissionOnError,
+} from "@/engine/dispatch-lineage"
+import { joinProcessLivenessLease } from "@/engine/process-liveness"
 import { recordTestDispatchLineage } from "./fixture/dispatch-lineage"
 import {
   findDispatchSettlementByDispatchID,
@@ -26,6 +32,7 @@ import {
 } from "@/engine/task-root-ingress-delivery"
 import type { SelectedWorkflowBinding } from "@/engine/workflow-binding"
 import { GoalWorkloadAnalystAgent } from "@/goal-workload-analyst/agent"
+import { currentRuntimeOccurrenceID } from "@/runtime/process-occurrence"
 import { createGoalWorkloadOutputTools } from "@/goal-workload-analyst/output-tools"
 import {
   GoalWorkloadArtifactSchema,
@@ -384,12 +391,15 @@ async function createCompletedWorkloadAgentTurn(input: {
   task: Awaited<ReturnType<typeof createTaskFixture>>
   dispatchTurn: NonNullable<Parameters<typeof GoalWorkloadAnalystAgent.analyze>[0]["dispatchTurn"]>
   briefs: WorkloadBrief[]
+  newSessionID?: string
   onSessionCreated?: (sessionID: string) => void | Promise<void>
   onDispatchAuthorityCommit?: Parameters<typeof GoalWorkloadAnalystAgent.analyze>[0]["onDispatchAuthorityCommit"]
 }) {
-  const child = await Session.create({
+  const child = await Session.createNext({
+    id: input.newSessionID,
     kind: "goal-workload-analyst",
     parentID: input.task.root.id,
+    directory: Instance.directory,
     title: "Production-chain Workload Analyst",
   })
   await input.onSessionCreated?.(child.id)
@@ -456,6 +466,7 @@ async function executeProductionWorkloadDispatch(input: {
       task: input.task,
       dispatchTurn: analysisInput.dispatchTurn!,
       briefs: input.briefs,
+      newSessionID: analysisInput.newSessionID,
       onSessionCreated: analysisInput.onSessionCreated,
       onDispatchAuthorityCommit: analysisInput.onDispatchAuthorityCommit,
     }),
@@ -526,53 +537,71 @@ async function executeProductionWorkloadDispatch(input: {
             initial_control_text_parts: [],
           },
         }
+        const childSessionID = Identifier.deterministic("session", `goal-workload-dispatch\0${origin.dispatchID}`)
+        const claim = claimDispatchLineage({ origin, childSessionID, now: input.task.now + 11 })
+        expect(claim.createdNow).toBe(true)
+        const admission = claim.admission
+        if (!admission) throw new Error("Goal workload dispatch did not acquire its pre-effect admission")
         return {
           dispatchID,
           deliverySliceRevisionIDs,
           turn,
           adapterInput,
+          newSessionID: childSessionID,
+          signal: new AbortController().signal,
           observeSession() {},
           commitSession(sessionID: string) {
-            const lineage = recordTestDispatchLineage({ origin, childSessionID: sessionID, now: input.task.now + 11 })
-            return { artifactID: lineage.artifactID }
+            if (sessionID !== childSessionID) throw new Error("Goal workload dispatch Session identity drift")
+            commitDispatchLineageSession(claim.lineage, admission)
+            return { artifactID: claim.lineage.artifactID }
+          },
+          releaseAdmission() {
+            releaseDispatchAdmissionOnError(admission)
           },
         }
       },
     })
     if (!dispatchTool.execute) throw new Error("dispatch_agent has no production executor")
-    const firstOutcome = await dispatchTool.execute(
-      {
-        dispatch: {
-          target: workloadIdentity.agentID,
-          work_scope: { kind: "task" },
-          turn: {
-            kind: "initial",
-            workflow_subject: {
-              kind: "virtual_workflow",
-              workflow_id: workloadWorkflowID,
-              node_id: workloadNodeID,
+    const processLiveness = joinProcessLivenessLease(currentRuntimeOccurrenceID())
+    try {
+      const firstOutcome = await dispatchTool.execute(
+        {
+          dispatch: {
+            target: workloadIdentity.agentID,
+            work_scope: { kind: "task" },
+            turn: {
+              kind: "initial",
+              workflow_subject: {
+                kind: "virtual_workflow",
+                workflow_id: workloadWorkflowID,
+                node_id: workloadNodeID,
+              },
+              use_worktree: false,
+              input: { reason: "Verify exact workload coverage", goal_ids: input.selectedGoalIDs },
             },
-            use_worktree: false,
-            input: { reason: "Verify exact workload coverage", goal_ids: input.selectedGoalIDs },
           },
         },
-      },
-      {} as never,
-    )
-    const dispatchID = listGoalWorkloadArtifacts(input.task.taskID)[0]?.payload.dispatch.dispatch_id
-    if (!dispatchID) throw new Error("production-chain dispatch did not publish Workload evidence")
-    const outcome =
-      firstOutcome.kind === "accepted"
-        ? await (async () => {
-            for (let attempt = 0; attempt < 200; attempt += 1) {
-              const settlement = findDispatchSettlementByDispatchID({ taskID: input.task.taskID, dispatchID })
-              if (settlement) return settlement.payload.outcome
-              await Bun.sleep(10)
-            }
-            throw new Error(`production-chain dispatch ${dispatchID} did not settle`)
-          })()
-        : firstOutcome
-    return { outcome, projection: await describeTask(input.task.taskID) }
+        {} as never,
+      )
+      const dispatchID = listGoalWorkloadArtifacts(input.task.taskID)[0]?.payload.dispatch.dispatch_id
+      if (!dispatchID) {
+        throw new Error(`production-chain dispatch did not publish Workload evidence: ${JSON.stringify(firstOutcome)}`)
+      }
+      const outcome =
+        firstOutcome.kind === "accepted"
+          ? await (async () => {
+              for (let attempt = 0; attempt < 200; attempt += 1) {
+                const settlement = findDispatchSettlementByDispatchID({ taskID: input.task.taskID, dispatchID })
+                if (settlement) return settlement.payload.outcome
+                await Bun.sleep(10)
+              }
+              throw new Error(`production-chain dispatch ${dispatchID} did not settle`)
+            })()
+          : firstOutcome
+      return { outcome, projection: await describeTask(input.task.taskID) }
+    } finally {
+      processLiveness.release()
+    }
   } finally {
     analyzeSpy.mockRestore()
   }

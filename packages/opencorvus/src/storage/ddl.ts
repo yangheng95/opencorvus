@@ -381,6 +381,26 @@ WHEN NEW.kind = 'dispatch_lineage'
   AND (
     json_type(NEW.payload, '$.adapter_input') IS NOT 'object'
     OR json_type(NEW.payload, '$.delivery_owner') IS NOT 'object'
+    OR json_type(NEW.payload, '$.tool_part_id') IS NOT 'text'
+    OR length(trim(json_extract(NEW.payload, '$.tool_part_id'))) = 0
+    OR json_type(NEW.payload, '$.tool_call_id') IS NOT 'text'
+    OR length(trim(json_extract(NEW.payload, '$.tool_call_id'))) = 0
+    OR json_type(NEW.payload, '$.tool_name') IS NOT 'text'
+    OR NOT (
+      COALESCE((
+        json_extract(NEW.payload, '$.tool_name') = 'dispatch_agent'
+        AND json_type(NEW.payload, '$.collection_member_index') IS NULL
+        AND json_type(NEW.payload, '$.collection_member_count') IS NULL
+      ), 0)
+      OR COALESCE((
+        json_extract(NEW.payload, '$.tool_name') = 'dispatch_agents'
+        AND json_type(NEW.payload, '$.collection_member_index') = 'integer'
+        AND json_extract(NEW.payload, '$.collection_member_index') >= 0
+        AND json_type(NEW.payload, '$.collection_member_count') = 'integer'
+        AND json_extract(NEW.payload, '$.collection_member_count') > 0
+        AND json_extract(NEW.payload, '$.collection_member_index') < json_extract(NEW.payload, '$.collection_member_count')
+      ), 0)
+    )
     OR NOT (
       (
         json_extract(NEW.payload, '$.delivery_owner.kind') = 'runtime_process'
@@ -411,7 +431,7 @@ WHEN NEW.kind = 'dispatch_lineage'
     )
   )
 BEGIN
-  SELECT RAISE(ABORT, 'engine_artifact: dispatch_lineage requires exact adapter_input and delivery_owner objects');
+  SELECT RAISE(ABORT, 'engine_artifact: dispatch_lineage requires exact Tool occurrence, adapter_input and delivery_owner objects');
 END;
 
 CREATE TRIGGER IF NOT EXISTS engine_dispatch_lineage_immutable

@@ -14,7 +14,9 @@ export interface DispatchLineagePayload extends EngineMetadata {
   orchestrator_message_id: string
   tool_part_id: string
   tool_call_id: string
-  tool_name: "dispatch_agent"
+  tool_name: "dispatch_agent" | "dispatch_agents"
+  collection_member_index?: number
+  collection_member_count?: number
   child_session_id: string
   target_agent_id: string
   projected_worker_identity: ProjectedWorkerIdentity
@@ -66,7 +68,9 @@ const DispatchLineagePayloadSchema = z
     orchestrator_message_id: z.string().min(1),
     tool_part_id: z.string().min(1),
     tool_call_id: z.string().min(1),
-    tool_name: z.literal("dispatch_agent"),
+    tool_name: z.enum(["dispatch_agent", "dispatch_agents"]),
+    collection_member_index: z.number().int().min(0).optional(),
+    collection_member_count: z.number().int().min(1).optional(),
     child_session_id: z.string().min(1),
     target_agent_id: z.string().min(1),
     projected_worker_identity: ProjectedWorkerIdentitySchema,
@@ -82,6 +86,33 @@ const DispatchLineagePayloadSchema = z
     time_created: z.number().positive(),
   })
   .strict()
+  .superRefine((payload, context) => {
+    if (payload.tool_name === "dispatch_agent") {
+      if (payload.collection_member_index !== undefined || payload.collection_member_count !== undefined) {
+        context.addIssue({
+          code: "custom",
+          path: ["tool_name"],
+          message: "direct dispatch_agent lineage cannot carry collection member identity",
+        })
+      }
+      return
+    }
+    if (payload.collection_member_index === undefined || payload.collection_member_count === undefined) {
+      context.addIssue({
+        code: "custom",
+        path: ["collection_member_index"],
+        message: "dispatch_agents lineage requires exact collection member index and count",
+      })
+      return
+    }
+    if (payload.collection_member_index >= payload.collection_member_count) {
+      context.addIssue({
+        code: "custom",
+        path: ["collection_member_index"],
+        message: "collection member index must be smaller than collection member count",
+      })
+    }
+  })
 
 function deepFreeze<T>(value: T): T {
   if (!value || typeof value !== "object" || Object.isFrozen(value)) return value

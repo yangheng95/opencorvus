@@ -288,7 +288,7 @@ export function createFrontendDesignTool(dependencies: FrontendDesignToolDepende
               }),
             ),
             parentSessionID: input.agentSessionID,
-            signal: input.signal,
+            signal: execution.signal,
             onStatus: () => {},
             onSessionCreated: async (id) => {
               execution.dispatch.observeSession(id)

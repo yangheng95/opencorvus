@@ -37,6 +37,7 @@ export function createIntegrityReviewStage(dependencies: IntegrityReviewStageDep
       continuationPrompt?: string
       dispatchTurn?: import("./dispatch-turn-projection").DispatchTurn
       dispatch: DispatchAgentLineageHandle
+      signal: AbortSignal
     }
     toolInput: IntegrityToolInput
   }): Promise<DispatchOutcomeResult> {
@@ -61,7 +62,7 @@ export function createIntegrityReviewStage(dependencies: IntegrityReviewStageDep
       instruction: toolInput.reason ?? "Review the selected Integrity facts.",
       goalIDs: requestedGoalIDs,
       attachmentRefs: toolInput.attachment_refs,
-      signal: input.signal,
+      signal: toolExecution.signal,
       taskID,
       parentSessionID: input.agentSessionID,
       onSessionCreated: async (sessionID) => {

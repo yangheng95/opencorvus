@@ -33,6 +33,7 @@ export function createDeepResearchStageDispatcher(dependencies: DeepResearchStag
     existingSessionID?: string
     continuationPrompt?: string
     dispatchTurn?: import("./dispatch-turn-projection").DispatchTurn
+    signal: AbortSignal
     onSessionCreated?: (sessionID: string) => void | Promise<void>
     onDispatchAuthorityCommit?: import("@/agent/runner").AgentDispatchAuthorityCommit
     onRuntimeReady?: (sessionID: string) => void | Promise<void>
@@ -56,7 +57,7 @@ export function createDeepResearchStageDispatcher(dependencies: DeepResearchStag
         reason: dispatch.reason,
         taskID: dependencies.taskID,
         parentSessionID: dependencies.parentSessionID,
-        signal: dependencies.signal,
+        signal: dispatch.signal,
         onSessionCreated: dispatch.onSessionCreated,
         onDispatchAuthorityCommit: dispatch.onDispatchAuthorityCommit,
         onRuntimeReady: dispatch.onRuntimeReady,

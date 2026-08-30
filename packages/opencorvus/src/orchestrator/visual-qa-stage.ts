@@ -34,6 +34,7 @@ export function createVisualQaStageDispatcher(dependencies: VisualQaStageDepende
     existingSessionID?: string
     continuationPrompt?: string
     dispatchTurn?: import("./dispatch-turn-projection").DispatchTurn
+    signal: AbortSignal
     goalIDs: string[]
     onSessionCreated?: (sessionID: string) => void | Promise<void>
     onDispatchAuthorityCommit?: import("@/agent/runner").AgentDispatchAuthorityCommit
@@ -76,7 +77,7 @@ export function createVisualQaStageDispatcher(dependencies: VisualQaStageDepende
         projectRoot,
         taskID: dependencies.taskID,
         parentSessionID: dependencies.parentSessionID,
-        signal: dependencies.signal,
+        signal: dispatch.signal,
         onSessionCreated: async (sessionID) => {
           await dispatch.onSessionCreated?.(sessionID)
         },

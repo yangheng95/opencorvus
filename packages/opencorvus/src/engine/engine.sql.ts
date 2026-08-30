@@ -204,6 +204,10 @@ export type EngineControlActivationTarget =
   | "bus_delivery"
   | "session_control"
   | "session_shell"
+  /** Fenced physical owner preparing the deterministic Session and first Turn
+   * for one immutable dispatch lineage. The lineage is the logical request;
+   * this lease is only its transferable pre-effect executor. */
+  | "dispatch_admission"
   /** One row per live runtime process, renewed while it runs. It owns no work;
    * it is the durable coordinate that lets one process decide another is gone
    * without consulting its own memory, which says nothing about a peer sharing
@@ -216,7 +220,7 @@ export const EngineControlActivationLeaseTable = sqliteTable(
   "engine_control_activation_lease",
   {
     id: text().primaryKey(),
-    target: text({ enum: ["task_root_ingress", "lifecycle", "interaction", "effect", "automation", "event_fire", "build_cleanup", "protocol_delivery", "bus_delivery", "session_control", "session_shell", "runtime_process"] })
+    target: text({ enum: ["task_root_ingress", "lifecycle", "interaction", "effect", "automation", "event_fire", "build_cleanup", "protocol_delivery", "bus_delivery", "session_control", "session_shell", "dispatch_admission", "runtime_process"] })
       .notNull()
       .$type<EngineControlActivationTarget>(),
     target_id: text().notNull(),
@@ -434,6 +438,39 @@ export const EngineArtifactTable = sqliteTable(
     uniqueIndex("engine_artifact_partition_authority_idx").on(table.id, table.task_id, table.kind),
     uniqueIndex("engine_artifact_catalog_revision_idx").on(table.catalog_revision),
     index("engine_artifact_task_kind_latest_idx").on(table.task_id, table.kind, table.time_created, table.id),
+    uniqueIndex("engine_dispatch_lineage_direct_tool_occurrence_idx")
+      .on(
+        table.task_id,
+        sql<string>`json_extract(${table.payload}, '$.tool_part_id')`,
+        sql<string>`json_extract(${table.payload}, '$.tool_call_id')`,
+      )
+      .where(
+        sql`${table.kind} = 'dispatch_lineage' AND json_extract(${table.payload}, '$.tool_name') = 'dispatch_agent'`,
+      ),
+    uniqueIndex("engine_dispatch_lineage_collection_member_idx")
+      .on(
+        table.task_id,
+        sql<string>`json_extract(${table.payload}, '$.tool_part_id')`,
+        sql<string>`json_extract(${table.payload}, '$.tool_call_id')`,
+        sql<number>`json_extract(${table.payload}, '$.collection_member_index')`,
+      )
+      .where(
+        sql`${table.kind} = 'dispatch_lineage' AND json_extract(${table.payload}, '$.tool_name') = 'dispatch_agents'`,
+      ),
+    uniqueIndex("engine_dispatch_lineage_initial_workflow_node_idx")
+      .on(
+        table.task_id,
+        sql<string>`json_extract(${table.payload}, '$.workflow_occurrence_id')`,
+        sql<string>`json_extract(${table.payload}, '$.workflow_node_id')`,
+      )
+      .where(
+        sql`${table.kind} = 'dispatch_lineage' AND json_extract(${table.payload}, '$.workflow_binding.kind') = 'virtual_workflow' AND json_type(${table.payload}, '$.continuation_of_dispatch_id') IS NULL AND json_type(${table.payload}, '$.coordination_action_id') IS NULL`,
+      ),
+    uniqueIndex("engine_dispatch_lineage_coordination_action_idx")
+      .on(table.task_id, sql<string>`json_extract(${table.payload}, '$.coordination_action_id')`)
+      .where(
+        sql`${table.kind} = 'dispatch_lineage' AND json_type(${table.payload}, '$.coordination_action_id') = 'text'`,
+      ),
     uniqueIndex("engine_artifact_task_completion_decision_time_idx")
       .on(table.task_id, table.time_created)
       .where(sql`${table.kind} = 'task_completion_decision'`),

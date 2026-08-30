@@ -24,6 +24,7 @@ import {
 import { migrateFactKernelSchema, migratePermissionLedgerProjectRetentionSchema } from "./fact-kernel-migration"
 import { migrateSessionPromptOwnerSchema } from "./session-prompt-owner-migration"
 import { migrateDispatchLineageDeliveryOwners } from "./dispatch-lineage-owner-migration"
+import { migrateDispatchCollectionOccurrences } from "./dispatch-collection-occurrence-migration"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
 import { Identifier } from "@/id/id"
 import {
@@ -1101,6 +1102,7 @@ export namespace Database {
         migratePermissionLedgerProjectRetentionSchema(sqlite)
         migrateFactKernelSchema(sqlite)
         migrateDispatchLineageDeliveryOwners(sqlite)
+        migrateDispatchCollectionOccurrences(sqlite)
         const reconciledTriggers = reconcileSchemaTriggers(sqlite)
         if (reconciledTriggers.length > 0) {
           log.info("schema triggers reconciled", { path: dbPath, triggers: reconciledTriggers })

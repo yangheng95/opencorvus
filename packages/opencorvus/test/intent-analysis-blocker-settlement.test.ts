@@ -191,14 +191,19 @@ async function createFixture(title: string) {
   })
 
   const dispatchID = Identifier.ascending("artifact")
+  const childSessionID = Identifier.deterministic("session", `intent-analysis-dispatch\0${dispatchID}`)
+  const signal = new AbortController().signal
   const context: DispatchAdapterExecutionContext = {
     agentID: projectedIntentAnalyst.identity.agentID,
     projectedAgent: projectedIntentAnalyst as never,
     workScope: { kind: "task" },
+    newSessionID: childSessionID,
     dispatch: {
       dispatchID,
       deliverySliceRevisionIDs: [],
+      newSessionID: childSessionID,
       adapterInput: {},
+      signal,
       turn: {
         kind: "initial",
         current_dispatch_id: dispatchID,
@@ -218,7 +223,9 @@ async function createFixture(title: string) {
       commitSession() {
         return { artifactID: Identifier.ascending("artifact") }
       },
+      releaseAdmission() {},
     },
+    signal,
     toolOptions: {
       toolCallId: callID,
       opencorvus: {

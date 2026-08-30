@@ -8,7 +8,7 @@ import {
 import { engineArtifactCatalogLabelIndex } from "@/engine/artifact-catalog-constants"
 import type { EngineArtifactKind, EngineMetadata } from "@/engine/engine.sql"
 
-type ArtifactRow = {
+export type DispatchLineageMigrationArtifactRow = {
   id: string
   task_id: string
   kind: EngineArtifactKind
@@ -149,7 +149,13 @@ function insertArtifact(
   }
 }
 
-function updateLineagePayload(db: BunDatabase, row: ArtifactRow, payload: Record<string, unknown>): void {
+export function rewriteDispatchLineagePayloadForMigration(
+  db: BunDatabase,
+  row: DispatchLineageMigrationArtifactRow,
+  payload: Record<string, unknown>,
+): void {
+  const catalogRevision = allocateCatalogRevision(db)
+  const timeUpdated = Math.max(Date.now(), row.time_updated)
   const derived = derivedArtifactValues({
     id: row.id,
     taskID: row.task_id,
@@ -157,7 +163,7 @@ function updateLineagePayload(db: BunDatabase, row: ArtifactRow, payload: Record
     label: row.label,
     payload,
     timeCreated: row.time_created,
-    timeUpdated: row.time_updated,
+    timeUpdated,
   })
   const metadata = derived.metadata
   run(
@@ -166,7 +172,7 @@ function updateLineagePayload(db: BunDatabase, row: ArtifactRow, payload: Record
       payload=?,payload_sha256=?,payload_bytes=?,payload_block_sha256s=?,payload_block_index_sha256=?,
       catalog_artifact_type=?,catalog_schema_diagnostic=?,catalog_producer=?,catalog_import_source_task_id=?,
       catalog_resource_count=?,catalog_resource_media_types=?,catalog_search_text=?,
-      catalog_search_text_truncated=?,catalog_metadata_sha256=? WHERE id=?`,
+      catalog_search_text_truncated=?,catalog_metadata_sha256=?,catalog_revision=?,time_updated=? WHERE id=?`,
     derived.payloadText,
     metadata.payload_sha256,
     metadata.payload_bytes,
@@ -181,6 +187,8 @@ function updateLineagePayload(db: BunDatabase, row: ArtifactRow, payload: Record
     metadata.catalog_search_text,
     metadata.catalog_search_text_truncated ? 1 : 0,
     derived.catalogMetadataSHA256,
+    catalogRevision,
+    timeUpdated,
     row.id,
   )
 }
@@ -370,7 +378,7 @@ export function migrateDispatchLineageDeliveryOwners(sqlite: BunDatabase): boole
       "SELECT sql FROM sqlite_schema WHERE type='trigger' AND name='engine_dispatch_lineage_immutable'",
     )[0]?.sql
     if (!immutableTrigger) throw new Error("Dispatch lineage owner migration requires the immutable lineage trigger")
-    const lineages = rows<ArtifactRow>(
+    const lineages = rows<DispatchLineageMigrationArtifactRow>(
       sqlite,
       `SELECT id,task_id,kind,label,payload,time_created,time_updated,catalog_revision
        FROM engine_artifact WHERE kind='dispatch_lineage' ORDER BY time_created,id`,
@@ -416,7 +424,7 @@ export function migrateDispatchLineageDeliveryOwners(sqlite: BunDatabase): boole
       }
       delete payload.owner_process_occurrence_id
       payload.delivery_owner = deliveryOwner
-      updateLineagePayload(sqlite, row, payload)
+      rewriteDispatchLineagePayloadForMigration(sqlite, row, payload)
     }
     sqlite.exec(immutableTrigger)
     sqlite.exec("COMMIT")

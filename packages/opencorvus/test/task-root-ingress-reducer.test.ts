@@ -58,6 +58,19 @@ describe("Task-root fact reducer", () => {
     })
   })
 
+  test("resolves one canonical dispatch collection receipt", () => {
+    const input = facts({
+      leases: [{ id: "act_1", targetID: "ing_1", ownerOccurrenceID: "occ_1", timeActivated: 20, expiresAt: 100 }],
+      turns: [{ id: "msg_collection", activationID: "act_1", predecessorID: "ing_1", timeCompleted: 30, boundary: "final" }],
+      decisions: [{ id: "dec_collection", assistantMessageID: "msg_collection", command: "dispatch_agents" }],
+    })
+
+    expect(reduceTaskRootIngressFacts(input, 31)).toEqual({
+      state: "resolved",
+      decisionIDs: ["dec_collection"],
+    })
+  })
+
   test("conflict wins over an apparent decision receipt", () => {
     const input = facts({
       leases: [{ id: "act_1", targetID: "ing_1", ownerOccurrenceID: "occ_1", timeActivated: 20, expiresAt: 100 }],

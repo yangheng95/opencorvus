@@ -63,7 +63,7 @@ export function createAnalyzeIntentTool<TSchema extends z.ZodType<AnalyzeIntentI
             taskID: input.taskID,
             attachmentRefs: attachment_refs,
             parentSessionID: input.agentSessionID,
-            signal: input.signal,
+            signal: execution.signal,
             onStatus: () => {},
             onSessionCreated: async (sessionID) => {
               execution.dispatch.observeSession(sessionID)

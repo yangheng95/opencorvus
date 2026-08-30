@@ -165,6 +165,14 @@ describe("assistant-turn decision coordination", () => {
         completedToolPart("dispatch_agent", { agent: "base-tester" }),
       ]),
     ).toBe("dispatch_agent")
+    expect(
+      orchestratorCommittedDecisionInParts([
+        completedToolPart("dispatch_agents", {
+          team: [{ name: "a" }, { name: "b" }],
+          dispatches: [{ dispatch: { target: "a" } }, { dispatch: { target: "b" } }],
+        }),
+      ]),
+    ).toBe("dispatch_agents")
   })
 
   test("classifies every manage_task action by its durable scheduling effect", () => {

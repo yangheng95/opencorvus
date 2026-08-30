@@ -54,12 +54,18 @@ import {
   type AgentCoordinationSessionLineageSource,
 } from "@/engine/agent-coordination"
 import {
+  claimDispatchLineage,
+  commitDispatchLineageSession,
   createDispatchLineageOrigin,
+  holdDispatchAdmission,
+  releaseDispatchAdmission,
+  releaseDispatchAdmissionOnError,
   resolveDispatchContinuationSourceID,
   findDispatchLineageByArtifactID,
   findDispatchLineageByDispatchID,
   findDispatchLineageBySession,
   findDispatchLineageByToolExecution,
+  findDispatchLineageByCollectionMember,
   listDispatchLineage,
   recordDispatchLineage,
 } from "@/engine/dispatch-lineage"
@@ -187,6 +193,15 @@ import {
 } from "./dispatch-turn-projection"
 
 const orchestratorToolLineageHooks = new WeakMap<object, OpenDispatchAgentLineage>()
+const replayDispatchSignal = new AbortController().signal
+let afterDispatchLineageClaimForTest:
+  | ((input: {
+      lineage: ReturnType<typeof claimDispatchLineage>["lineage"]
+      turn: z.infer<typeof DispatchTurnSchema>
+      projectedAgent: PromptProfileResolver.ResolvedProjectedAgent
+      workScope: Parameters<OpenDispatchAgentLineage>[0]["workScope"]
+    }) => void | Promise<void>)
+  | undefined
 
 export const OrchestratorToolsTestHooks = Object.freeze({
   openDispatchLineage(surface: object): OpenDispatchAgentLineage {
@@ -194,7 +209,73 @@ export const OrchestratorToolsTestHooks = Object.freeze({
     if (!openLineage) throw new Error("Orchestrator Tools lineage hook is unavailable")
     return openLineage
   },
+  replaceAfterDispatchLineageClaim(
+    callback: typeof afterDispatchLineageClaimForTest,
+  ): Disposable {
+    const prior = afterDispatchLineageClaimForTest
+    afterDispatchLineageClaimForTest = callback
+    return {
+      [Symbol.dispose]() {
+        afterDispatchLineageClaimForTest = prior
+      },
+    }
+  },
 })
+
+type ExistingDispatchLineage = NonNullable<ReturnType<typeof findDispatchLineageByArtifactID>>
+
+function waitForDispatchClaimChange(signal: AbortSignal | undefined, milliseconds: number): Promise<void> {
+  signal?.throwIfAborted()
+  return new Promise((resolve, reject) => {
+    let timer: ReturnType<typeof setTimeout> | undefined
+    const aborted = () => {
+      if (timer) clearTimeout(timer)
+      reject(signal?.reason ?? new DOMException("Dispatch claim wait aborted", "AbortError"))
+    }
+    timer = setTimeout(() => {
+      signal?.removeEventListener("abort", aborted)
+      resolve()
+    }, milliseconds)
+    signal?.addEventListener("abort", aborted, { once: true })
+  })
+}
+
+/**
+ * Resolve one immutable write-ahead dispatch claim into a truthful replay.
+ * A lineage alone is not acceptance: only its exact durable worker Turn or a
+ * final settlement may complete the parent Tool occurrence.
+ */
+function readDispatchLineageReplay(input: {
+  taskID: string
+  lineage: ExistingDispatchLineage
+}): {
+  descriptor?: WorkerTurnDescriptor.Info
+  turn?: NonNullable<WorkerTurnDescriptor.Info["payload"]["dispatchTurn"]>
+  outcome: z.infer<typeof DispatchOutcomeSchema>
+} | undefined {
+  const settlement = findDispatchSettlementByDispatchID({
+    taskID: input.taskID,
+    dispatchID: input.lineage.dispatchID,
+  })
+  if (settlement) return { outcome: settlement.payload.outcome }
+  const descriptor = WorkerTurnDescriptor.findForDispatch({
+    sessionID: input.lineage.payload.child_session_id,
+    dispatchID: input.lineage.dispatchID,
+  })
+  if (!descriptor) return undefined
+  const turn = descriptor.payload.dispatchTurn
+  if (!turn) {
+    throw new Error(`Dispatch ${input.lineage.dispatchID} durable Turn descriptor has no dispatch authority`)
+  }
+  return {
+    descriptor,
+    turn,
+    outcome: DispatchOutcome.accepted({
+      sessionID: input.lineage.payload.child_session_id,
+      dispatchLineageID: input.lineage.artifactID,
+    }),
+  }
+}
 
 const log = Log.create({ service: "task-tools" })
 
@@ -846,6 +927,7 @@ function stageDispatchBinding(execution: DispatchAdapterExecutionContext) {
     existingSessionID: execution.existingSessionID,
     continuationPrompt: dispatchAdapterContinuationPrompt(execution),
     dispatchTurn: execution.dispatch.turn,
+    signal: execution.signal,
     onSessionCreated: async (sessionID: string) => {
       execution.dispatch.observeSession(sessionID)
     },
@@ -1202,6 +1284,7 @@ export function createOrchestratorTools(input: {
           existingSessionID: execution.existingSessionID,
           continuationPrompt: dispatchAdapterContinuationPrompt(execution),
           dispatchTurn: execution.dispatch.turn,
+          signal: execution.signal,
         }
       },
       runReview: runIntegrityReview,
@@ -2166,45 +2249,54 @@ export function createOrchestratorTools(input: {
         taskID: ownershipTaskID,
         agentSessionID: input.agentSessionID,
       })
-      const replayLineage = findDispatchLineageByToolExecution({
-        taskID: ownershipTaskID,
-        toolPartID: toolExecution.toolPartID,
-        toolCallID: toolExecution.toolCallID,
-      })
+      const collectionMember = toolExecution.collectionMember
+      if (toolExecution.visibleToolName === "dispatch_agents" && !collectionMember) {
+        throw new Error("dispatch_agent collection execution is missing its exact member index and count")
+      }
+      if (toolExecution.visibleToolName === "dispatch_agent" && collectionMember) {
+        throw new Error("direct dispatch_agent execution cannot carry collection member identity")
+      }
+      if (toolExecution.visibleToolName !== "dispatch_agent" && toolExecution.visibleToolName !== "dispatch_agents") {
+        throw new Error(`dispatch_agent cannot execute under visible Tool ${toolExecution.visibleToolName}`)
+      }
+      const replayLineage = collectionMember
+        ? findDispatchLineageByCollectionMember({
+            taskID: ownershipTaskID,
+            toolPartID: toolExecution.toolPartID,
+            toolCallID: toolExecution.toolCallID,
+            memberIndex: collectionMember.index,
+            memberCount: collectionMember.count,
+          })
+        : findDispatchLineageByToolExecution({
+            taskID: ownershipTaskID,
+            toolPartID: toolExecution.toolPartID,
+            toolCallID: toolExecution.toolCallID,
+          })
       if (replayLineage) {
         if (
           replayLineage.payload.target_agent_id !== targetAgentID ||
-          !isDeepStrictEqual(replayLineage.payload.work_scope, workScope)
+          !isDeepStrictEqual(replayLineage.payload.work_scope, workScope) ||
+          (!coordinationActionID && !continuationDispatchID &&
+            !isDeepStrictEqual(replayLineage.payload.adapter_input, adapterInput))
         ) {
           throw new Error(
             `dispatch_agent exact tool occurrence ${toolExecution.toolPartID}/${toolExecution.toolCallID} input drift`,
           )
         }
-        const descriptor = WorkerTurnDescriptor.findForDispatch({
-          sessionID: replayLineage.payload.child_session_id,
-          dispatchID: replayLineage.dispatchID,
-        })
-        const turn = descriptor?.payload.dispatchTurn
-        if (!descriptor || !turn) {
-          throw new Error(`dispatch_agent exact tool occurrence ${replayLineage.dispatchID} has no durable Turn`)
-        }
-        const settlement = findDispatchSettlementByDispatchID({
+        const replay = readDispatchLineageReplay({
           taskID: ownershipTaskID,
-          dispatchID: replayLineage.dispatchID,
+          lineage: replayLineage,
         })
-        const replayOutcome =
-          settlement?.payload.outcome ??
-          DispatchOutcome.accepted({
-            sessionID: replayLineage.payload.child_session_id,
-            dispatchLineageID: replayLineage.artifactID,
-          })
-        return {
+        if (replay) {
+          if (replay.descriptor) commitDispatchLineageSession(replayLineage)
+          return {
           dispatchID: replayLineage.dispatchID,
           deliverySliceRevisionIDs: [...replayLineage.payload.delivery_slice_revision_ids],
-          existingSessionID: replayLineage.payload.child_session_id,
-          turn,
+          ...(replay.descriptor ? { existingSessionID: replayLineage.payload.child_session_id } : {}),
+          ...(replay.turn ? { turn: replay.turn } : {}),
           adapterInput: Object.freeze({ ...replayLineage.payload.adapter_input }),
-          replayOutcome,
+          signal: replayDispatchSignal,
+          replayOutcome: replay.outcome,
           observeSession(sessionID: string) {
             if (sessionID !== replayLineage.payload.child_session_id) {
               throw new Error(`dispatch_agent replay Session identity drift for ${replayLineage.dispatchID}`)
@@ -2216,6 +2308,8 @@ export function createOrchestratorTools(input: {
             }
             return { artifactID: replayLineage.artifactID }
           },
+            releaseAdmission() {},
+          }
         }
       }
       if (signal?.aborted) {
@@ -2379,6 +2473,13 @@ export function createOrchestratorTools(input: {
         orchestratorMessageID: toolExecution.orchestratorMessageID,
         toolCallID: toolExecution.toolCallID,
         toolPartID: toolExecution.toolPartID,
+        toolName: toolExecution.visibleToolName as "dispatch_agent" | "dispatch_agents",
+        ...(collectionMember
+          ? {
+              collectionMemberIndex: collectionMember.index,
+              collectionMemberCount: collectionMember.count,
+            }
+          : {}),
         targetAgentID,
         projectedWorkerIdentity: projectedAgent.identity,
         workScope,
@@ -2431,7 +2532,108 @@ export function createOrchestratorTools(input: {
             },
       )
       if (signal?.aborted) throw new Error(`dispatch_agent ${targetAgentID} aborted before lineage preparation`)
+      const claimedSessionID =
+        existingSessionID ?? Identifier.deterministic("session", `dispatch-worker-session\0${origin.dispatchID}`)
       let recordedLineage: ReturnType<typeof recordDispatchLineage> | undefined
+      let admission: ReturnType<typeof claimDispatchLineage>["admission"]
+      let admissionHold: ReturnType<typeof holdDispatchAdmission> | undefined
+      let waitMilliseconds = 10
+      for (;;) {
+        signal?.throwIfAborted()
+        const claim = claimDispatchLineage({ origin, childSessionID: claimedSessionID })
+        recordedLineage = claim.lineage
+        if (claim.admission) {
+          admission = claim.admission
+          admissionHold = holdDispatchAdmission(admission)
+          try {
+            await afterDispatchLineageClaimForTest?.({
+              lineage: claim.lineage,
+              turn,
+              projectedAgent,
+              workScope,
+            })
+          } catch (error) {
+            admissionHold[Symbol.dispose]()
+            releaseDispatchAdmissionOnError(admission)
+            throw error
+          }
+          const committedDuringPreparation = readDispatchLineageReplay({
+            taskID: ownershipTaskID,
+            lineage: claim.lineage,
+          })
+          if (committedDuringPreparation) {
+            if (committedDuringPreparation.descriptor) {
+              commitDispatchLineageSession(claim.lineage, admission)
+            } else if (!releaseDispatchAdmission(admission)) {
+              throw new Error(`Dispatch terminal replay could not consume admission ${admission.leaseID}`)
+            }
+            admissionHold[Symbol.dispose]()
+            return {
+              dispatchID: claim.lineage.dispatchID,
+              deliverySliceRevisionIDs: [...claim.lineage.payload.delivery_slice_revision_ids],
+              ...(committedDuringPreparation.descriptor
+                ? { existingSessionID: claim.lineage.payload.child_session_id }
+                : {}),
+              ...(committedDuringPreparation.turn ? { turn: committedDuringPreparation.turn } : {}),
+              adapterInput: Object.freeze({ ...claim.lineage.payload.adapter_input }),
+              signal: replayDispatchSignal,
+              replayOutcome: committedDuringPreparation.outcome,
+              observeSession(sessionID: string) {
+                if (sessionID !== claim.lineage.payload.child_session_id) {
+                  throw new Error(`dispatch_agent replay Session identity drift for ${claim.lineage.dispatchID}`)
+                }
+              },
+              commitSession() {
+                return { artifactID: claim.lineage.artifactID }
+              },
+              releaseAdmission() {},
+            }
+          }
+          break
+        }
+        const replay = readDispatchLineageReplay({ taskID: ownershipTaskID, lineage: claim.lineage })
+        if (replay) {
+          const winner = claim.lineage
+          if (replay.descriptor) commitDispatchLineageSession(winner)
+          return {
+            dispatchID: winner.dispatchID,
+            deliverySliceRevisionIDs: [...winner.payload.delivery_slice_revision_ids],
+            ...(replay.descriptor ? { existingSessionID: winner.payload.child_session_id } : {}),
+            ...(replay.turn ? { turn: replay.turn } : {}),
+            adapterInput: Object.freeze({ ...winner.payload.adapter_input }),
+            signal: replayDispatchSignal,
+            replayOutcome: replay.outcome,
+            observeSession(sessionID: string) {
+              if (sessionID !== winner.payload.child_session_id) {
+                throw new Error(`dispatch_agent replay Session identity drift for ${winner.dispatchID}`)
+              }
+            },
+            commitSession(sessionID: string) {
+              if (sessionID !== winner.payload.child_session_id) {
+                throw new Error(`dispatch_agent replay Session identity drift for ${winner.dispatchID}`)
+              }
+              return { artifactID: winner.artifactID }
+            },
+            releaseAdmission() {},
+          }
+        }
+        await waitForDispatchClaimChange(signal, waitMilliseconds)
+        waitMilliseconds = Math.min(waitMilliseconds * 2, 250)
+      }
+      if (!admission || !admissionHold || !recordedLineage) {
+        throw new Error(`dispatch_agent ${targetAgentID} failed to acquire its exact admission owner`)
+      }
+      let admissionClosed = false
+      const closeAdmissionHold = () => {
+        if (admissionClosed) return
+        admissionClosed = true
+        admissionHold?.[Symbol.dispose]()
+      }
+      const releaseAdmission = () => {
+        if (admissionClosed) return
+        closeAdmissionHold()
+        releaseDispatchAdmissionOnError(admission!)
+      }
       const observeSession = (sessionID: string) => {
         if (recordedLineage && recordedLineage.payload.child_session_id !== sessionID) {
           throw new Error(
@@ -2443,8 +2645,10 @@ export function createOrchestratorTools(input: {
         dispatchID: origin.dispatchID,
         deliverySliceRevisionIDs: [...(origin.deliverySliceRevisionIDs ?? [])],
         existingSessionID,
+        ...(existingSessionID ? {} : { newSessionID: claimedSessionID }),
         turn,
         adapterInput: Object.freeze({ ...exactAdapterInput }),
+        signal: admissionHold.signal,
         ...(existingSessionID ? { continuationGuidance } : {}),
         observeSession,
         commitSession(sessionID: string, descriptor: WorkerTurnDescriptor.Info) {
@@ -2549,20 +2753,17 @@ export function createOrchestratorTools(input: {
               )
             }
           }
+          const lineage = recordedLineage
+          if (!lineage) throw new Error(`dispatch_agent ${targetAgentID} has no preclaimed lineage`)
           if (!coordinationActionID) {
-            const lineage =
-              recordedLineage ??
-              (recordedLineage = recordDispatchLineage({
-                origin,
-                childSessionID: sessionID,
-              }))
+            commitDispatchLineageSession(lineage, admission)
+            closeAdmissionHold()
             return { artifactID: lineage.artifactID }
           }
           if (!coordinationSourceSessionID) {
             throw new Error(`dispatch_agent coordination action ${coordinationActionID} has no source session`)
           }
 
-          let createdLineage: ReturnType<typeof recordDispatchLineage> | undefined
           const bound = bindAgentCoordinationRedispatchSuccessor({
             taskID: ownershipTaskID,
             actionID: coordinationActionID,
@@ -2570,13 +2771,9 @@ export function createOrchestratorTools(input: {
             childSessionID: sessionID,
             targetAgentID,
             bindSuccessor: () => {
-              createdLineage = recordDispatchLineage({
-                origin,
-                childSessionID: sessionID,
-              })
               return {
-                dispatch_lineage_id: createdLineage.artifactID,
-                dispatch_id: createdLineage.dispatchID,
+                dispatch_lineage_id: lineage.artifactID,
+                dispatch_id: lineage.dispatchID,
                 dispatch_agent_id: targetAgentID,
                 dispatch_session_id: sessionID,
                 work_scope: workScope,
@@ -2586,24 +2783,14 @@ export function createOrchestratorTools(input: {
             },
             summary: `Completed explicit redispatch with immutable lineage for session ${sessionID}`,
           })
-          if (createdLineage) recordedLineage = createdLineage
-          if (!recordedLineage) {
-            const lineageArtifactID = bound.action.payload.result?.dispatch_lineage_id
-            if (typeof lineageArtifactID !== "string") {
-              throw new Error(`dispatch_agent coordination action ${coordinationActionID} has no bound lineage`)
-            }
-            recordedLineage = findDispatchLineageByArtifactID({
-              taskID: ownershipTaskID,
-              artifactID: lineageArtifactID,
-            })
-            if (!recordedLineage) {
-              throw new Error(
-                `dispatch_agent coordination action ${coordinationActionID} bound lineage ${lineageArtifactID} is missing`,
-              )
-            }
+          if (bound.action.payload.result?.dispatch_lineage_id !== lineage.artifactID) {
+            throw new Error(`dispatch_agent coordination action ${coordinationActionID} bound another lineage`)
           }
-          return { artifactID: recordedLineage.artifactID }
+          commitDispatchLineageSession(lineage, admission)
+          closeAdmissionHold()
+          return { artifactID: lineage.artifactID }
         },
+        releaseAdmission,
       }
     }) satisfies OpenDispatchAgentLineage,
   })

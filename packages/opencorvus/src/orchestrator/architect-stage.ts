@@ -75,6 +75,7 @@ export function createArchitectStageDispatcher(dependencies: ArchitectStageDepen
     existingSessionID?: string
     continuationPrompt?: string
     dispatchTurn?: import("./dispatch-turn-projection").DispatchTurn
+    signal: AbortSignal
     onSessionCreated?: (sessionID: string) => void | Promise<void>
     onDispatchAuthorityCommit?: import("@/agent/runner").AgentDispatchAuthorityCommit
     onRuntimeReady?: (sessionID: string) => void | Promise<void>
@@ -410,7 +411,7 @@ export function createArchitectStageDispatcher(dependencies: ArchitectStageDepen
         instruction: dispatch.reason ?? "Produce or reassess the exact selected architecture facts.",
         taskID,
         attachmentRefs: dispatch.attachmentRefs,
-        signal: input.signal,
+        signal: dispatch.signal,
         parentSessionID: input.agentSessionID,
         onStatus: () => {},
         onSessionCreated: async (id) => {

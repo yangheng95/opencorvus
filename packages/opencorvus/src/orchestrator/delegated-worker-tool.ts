@@ -51,7 +51,7 @@ export function createDelegatedWorkerTool(input: {
             sessionTitle: delegatedWorkerSessionTitle(agentID, instruction),
             taskID: input.taskID,
             parentSessionID: input.agentSessionID,
-            signal: input.signal,
+            signal: execution.signal,
             onSessionCreated: async (sessionID) => {
               execution.dispatch.observeSession(sessionID)
             },

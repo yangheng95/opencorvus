@@ -446,10 +446,14 @@ describe("Light Expert Squad package", () => {
                 workflowNodeID,
                 adapterInput,
               })
+              const childSessionID = Identifier.deterministic("session", `light-dispatch\0${origin.dispatchID}`)
+              const lineage = recordTestDispatchLineage({ origin, childSessionID })
               return {
                 dispatchID,
                 deliverySliceRevisionIDs,
                 adapterInput,
+                newSessionID: childSessionID,
+                signal: new AbortController().signal,
                 turn: {
                   kind: "initial",
                   current_dispatch_id: dispatchID,
@@ -468,8 +472,10 @@ describe("Light Expert Squad package", () => {
                 observeSession() {},
                 commitSession(sessionID: string, descriptor: WorkerTurnDescriptor.Info) {
                   expect(WorkerTurnDescriptor.get({ id: descriptor.id, sessionID })).toEqual(descriptor)
-                  return { artifactID: recordTestDispatchLineage({ origin, childSessionID: sessionID }).artifactID }
+                  if (sessionID !== childSessionID) throw new Error("Light dispatch Session identity drift")
+                  return { artifactID: lineage.artifactID }
                 },
+                releaseAdmission() {},
               }
             },
           })
