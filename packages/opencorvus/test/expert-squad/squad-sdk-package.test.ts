@@ -43,7 +43,7 @@ describe("Generate Expert Squads expert squad", () => {
       schema_version: 2,
       namespace: "builtin",
       id: "squad-sdk",
-      version: "2026.08.30.3",
+      version: "2026.08.30.4",
       system_role: "expert_squad_generator",
     })
     expect(schedulerCapabilityGrants(loaded.manifest).explicitBuiltInToolIDs).toEqual([...schedulerTools].sort())

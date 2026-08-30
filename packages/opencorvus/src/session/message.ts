@@ -27,6 +27,7 @@ import { normalizeToolInput } from "./tool-input-norm"
 import { ModelImageInputTooLargeError, prepareModelImageInput } from "./model-image-input"
 import { VISIBLE_PART_TYPE } from "./part-types"
 import { ExecutionCancellationError, ExecutionCancellationOrigin } from "./prompt/cancellation"
+import { ProcessExecutionInterruptedError as TypedProcessExecutionInterruptedError } from "./process-execution-interrupted-error"
 
 function replayToolInput(raw: unknown): Record<string, unknown> {
   const normalized = normalizeToolInput(raw)
@@ -52,6 +53,7 @@ export namespace Message {
       cancellation: ExecutionCancellationOrigin.optional(),
     }),
   )
+  export const ProcessExecutionInterruptedError = TypedProcessExecutionInterruptedError
   export const StructuredOutputPayloadError = NamedError.create(
     "StructuredOutputPayloadError",
     z.object({
@@ -664,6 +666,7 @@ export namespace Message {
         NamedError.Unknown.Schema,
         OutputLengthError.Schema,
         AbortedError.Schema,
+        ProcessExecutionInterruptedError.Schema,
         StructuredOutputPayloadError.Schema,
         SnapshotIntegrityError.Schema,
         SnapshotEmptyTreeError.Schema,
@@ -1664,6 +1667,10 @@ export namespace Message {
             cause: e,
           },
         ).toObject()
+      case e instanceof Error && e.name === "ProcessExecutionInterruptedError":
+        return new Message.ProcessExecutionInterruptedError({ message: e.message }, { cause: e }).toObject()
+      case Message.ProcessExecutionInterruptedError.isInstance(e):
+        return e
       case Message.OutputLengthError.isInstance(e):
         return e
       case Message.StructuredOutputPayloadError.isInstance(e):

@@ -5,7 +5,7 @@
   "name": "Advanced",
   "label": "Advanced",
   "description": "Built-in advanced software delivery team with capability-matched Requirements-to-Architect traceability, execution, testing, interface, and independent-review frontiers.",
-  "version": "2026.08.30.2",
+  "version": "2026.08.30.3",
   "product_pillars": [
     "code",
     "work"
@@ -59,6 +59,7 @@
       "capability_refs": [
         "capability:capability_set:package:advanced:shared-capabilities-2",
         "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:capability_set:platform:tool-registry:scheduler-transport",
         "capability:tool:platform:tool-registry:dispatch_agent",
         "capability:tool:platform:tool-registry:manage_task"
       ],

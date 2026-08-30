@@ -22,6 +22,14 @@ afterEach(async () => {
   await resetMemoryDatabase()
 })
 
+async function waitUntil(predicate: () => boolean, label: string): Promise<void> {
+  const deadline = Date.now() + 5_000
+  while (!predicate()) {
+    if (Date.now() >= deadline) throw new Error(`Timed out waiting for ${label}`)
+    await Bun.sleep(1)
+  }
+}
+
 /** Commit one exact decision receipt for the activated ingress. */
 async function commitDecision(input: {
   projectPath: string
@@ -348,6 +356,183 @@ describe("Task-control driver", () => {
     driver.dispose()
   })
 
+  test("bounds concurrent scans while completing every distinct Mission request", async () => {
+    let active = 0
+    let maximumActive = 0
+    const entered: string[] = []
+    const releases: Array<() => void> = []
+    const driver = new TaskControlDriver({
+      maximumConcurrentScans: 2,
+      scan: async (missionID) => {
+        active += 1
+        maximumActive = Math.max(maximumActive, active)
+        entered.push(missionID)
+        await new Promise<void>((resolve) => {
+          releases.push(() => {
+            active -= 1
+            resolve()
+          })
+        })
+        return { activated: 1 }
+      },
+      setTimer: () => ({ cancel() {} }),
+    })
+    const missionIDs = Array.from({ length: 9 }, (_, index) => `mission-${index}`)
+    const requests = missionIDs.map((missionID) => driver.request(missionID))
+
+    await waitUntil(() => entered.length === 2, "the first bounded Mission scan set")
+    expect({ entered: [...entered], maximumActive }).toEqual({
+      entered: ["mission-0", "mission-1"],
+      maximumActive: 2,
+    })
+    while (entered.length < missionIDs.length) {
+      releases.shift()!()
+      const expected = entered.length + 1
+      await waitUntil(() => entered.length === expected, `Mission scan ${expected}`)
+    }
+    while (releases.length > 0) releases.shift()!()
+
+    expect({ outcomes: await Promise.all(requests), entered, maximumActive }).toEqual({
+      outcomes: missionIDs.map(() => 1),
+      entered: missionIDs,
+      maximumActive: 2,
+    })
+    driver.dispose()
+  })
+
+  test("bounds admitted Mission scans and retires level-triggered candidate entries", async () => {
+    const entered: string[] = []
+    const releases: Array<() => void> = []
+    const driver = new TaskControlDriver({
+      maximumConcurrentScans: 2,
+      maximumPendingScans: 2,
+      retireSettledEntries: true,
+      scan: async (missionID) => {
+        entered.push(missionID)
+        await new Promise<void>((resolve) => releases.push(resolve))
+        return { activated: 1 }
+      },
+      setTimer: () => ({ cancel() {} }),
+    })
+    const requests = Array.from({ length: 7 }, (_, index) => driver.request(`mission-bounded-${index}`))
+
+    await waitUntil(() => entered.length === 2, "the active bounded Mission page")
+    const admittedSnapshot = driver.snapshot()
+    while (entered.length < 4) {
+      releases.shift()!()
+      const expected = entered.length + 1
+      await waitUntil(() => entered.length === expected, `admitted Mission scan ${expected}`)
+    }
+    while (releases.length > 0) releases.shift()!()
+
+    expect({
+      admittedTaskIDs: admittedSnapshot.map((entry) => entry.taskID),
+      outcomes: await Promise.all(requests),
+      entered,
+      settledSnapshot: driver.snapshot(),
+    }).toEqual({
+      admittedTaskIDs: [
+        "mission-bounded-0",
+        "mission-bounded-1",
+        "mission-bounded-2",
+        "mission-bounded-3",
+      ],
+      outcomes: [1, 1, 1, 1, 0, 0, 0],
+      entered: ["mission-bounded-0", "mission-bounded-1", "mission-bounded-2", "mission-bounded-3"],
+      settledSnapshot: [],
+    })
+    driver.dispose()
+  })
+
+  test("shares one concurrency bound across heartbeat and deadline requests", async () => {
+    type Timer = { delay: number; fire: () => void; cancelled: boolean }
+    const timers: Timer[] = []
+    const entered: string[] = []
+    const releases: Array<() => void> = []
+    let active = 0
+    let maximumActive = 0
+    let block = false
+    const driver = new TaskControlDriver({
+      maximumConcurrentScans: 1,
+      scan: async (missionID) => {
+        if (!block) return { activated: 0, wakeAt: 100 }
+        active += 1
+        maximumActive = Math.max(maximumActive, active)
+        entered.push(missionID)
+        await new Promise<void>((resolve) => {
+          releases.push(() => {
+            active -= 1
+            resolve()
+          })
+        })
+        return { activated: 0 }
+      },
+      liveTasks: () => ["mission-heartbeat-a", "mission-heartbeat-b"],
+      heartbeatMilliseconds: 5_000,
+      minimumWakeDelayMilliseconds: 25,
+      maximumWakeDelayMilliseconds: 5_000,
+      now: () => 0,
+      setTimer: (fn, delay) => {
+        const timer: Timer = { delay, fire: fn, cancelled: false }
+        timers.push(timer)
+        return {
+          cancel() {
+            timer.cancelled = true
+          },
+        }
+      },
+    })
+    await driver.request("mission-deadline")
+    const heartbeat = timers.find((timer) => timer.delay === 5_000 && !timer.cancelled)
+    const deadline = timers.find((timer) => timer.delay === 100 && !timer.cancelled)
+    if (!heartbeat || !deadline) throw new Error("Expected heartbeat and Mission deadline timers")
+
+    block = true
+    heartbeat.fire()
+    deadline.fire()
+    await waitUntil(() => entered.length === 1, "the first timer-driven Mission scan")
+    while (entered.length < 3) {
+      releases.shift()!()
+      const expected = entered.length + 1
+      await waitUntil(() => entered.length === expected, `timer-driven Mission scan ${expected}`)
+    }
+    while (releases.length > 0) releases.shift()!()
+    await waitUntil(() => active === 0, "timer-driven Mission scans to settle")
+
+    expect({ entered: entered.toSorted(), maximumActive }).toEqual({
+      entered: ["mission-deadline", "mission-heartbeat-a", "mission-heartbeat-b"],
+      maximumActive: 1,
+    })
+    driver.dispose()
+  })
+
+  test("settles queued requests with the disposed driver result", async () => {
+    let releaseOwner!: () => void
+    const ownerHeld = new Promise<void>((resolve) => (releaseOwner = resolve))
+    const entered: string[] = []
+    const driver = new TaskControlDriver({
+      maximumConcurrentScans: 1,
+      scan: async (missionID) => {
+        entered.push(missionID)
+        await ownerHeld
+        return { activated: 1, wakeAt: 1_000 }
+      },
+      now: () => 0,
+      setTimer: () => ({ cancel() {} }),
+    })
+    const owner = driver.request("mission-owner")
+    await waitUntil(() => entered.length === 1, "the Mission scan owner")
+    const queued = driver.request("mission-queued")
+    driver.dispose()
+
+    releaseOwner()
+    expect({ owner: await owner, queued: await queued, snapshot: driver.snapshot() }).toEqual({
+      owner: 1,
+      queued: 0,
+      snapshot: [],
+    })
+  })
+
   test("re-arms one timer at the earliest instant a projection can change", async () => {
     const timers: number[] = []
     let clock = 1_000
@@ -526,7 +711,7 @@ describe("Task-control driver", () => {
     driver.dispose()
   })
 
-  test("stops the heartbeat when disposed", () => {
+  test("cancels the heartbeat timer during disposal", () => {
     const cancelled: number[] = []
     const driver = new TaskControlDriver({
       scan: async () => ({ activated: 0 }),

@@ -50,7 +50,13 @@ test("projects Mission operator and scheduler wake origins through one persisted
         time: { created },
         agent: "mission",
         model: { providerID: "test", modelID: "test" },
-        extra: SessionWake.reasonExtra({ source: "mission.operator", missionID: mission.missionID }),
+        extra: SessionWake.reasonExtra({
+          source: "mission.operator",
+          missionID: mission.missionID,
+          requestID: "message-origin-projection",
+          requestFingerprint: "a".repeat(64),
+          openedEventID: Identifier.deterministic("protocol_event", "message-origin-projection"),
+        }),
       })
       await Session.updatePart({
         id: Identifier.ascending("part"),
@@ -223,7 +229,11 @@ test("hydrates nested wake provenance through the Task conversation route", asyn
   await Instance.provide({
     directory: project.path,
     fn: async () => {
-      const root = Session.prepareRootNext({ kind: "root", directory: Instance.directory, title: "Task wake provenance" })
+      const root = Session.prepareRootNext({
+        kind: "root",
+        directory: Instance.directory,
+        title: "Task wake provenance",
+      })
       const taskID = Identifier.ascending("task")
       const created = Date.now()
       persistEstablishedTask({

@@ -57,8 +57,9 @@ export const ExpertSquadFeedbackRevisionInputSchema = z
       .describe(
         "By what mechanism these edits make the squad satisfy that preference: which agent's behavior changes, and " +
           "through what it produces. Name the Tool when the preference asks for an output the squad renders rather " +
-          "than describes — `publish_interactive_artifact` carries `table@1` and `chart@1`, and every projection " +
-          "already holds it. An answer that only restates the preference is the shape that has repeatedly shipped " +
+          "than describes — `publish_interactive_artifact` carries `table@1` and `chart@1`, and every projected " +
+          "worker already holds it; scheduler availability follows its exact inherited and explicit Tool surface. " +
+          "An answer that only restates the preference is the shape that has repeatedly shipped " +
           "revisions changing wording and nothing else.",
       ),
     conflicting_instruction: z

@@ -5,7 +5,7 @@
   "name": "Review & Debug",
   "label": "Review & Debug",
   "description": "Evidence-backed product review, root-cause debugging, product-source repair, and independent repair verification through durable catalog facts and visible narrative Turn summaries.",
-  "version": "2026.08.30.1",
+  "version": "2026.08.30.2",
   "product_pillars": [
     "code"
   ],
@@ -27,6 +27,7 @@
     "scheduler": {
       "capability_refs": [
         "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:capability_set:platform:tool-registry:scheduler-transport",
         "capability:skill:package:review-debug:review-debug%2Fshared%2Fworkflow",
         "capability:tool:platform:tool-registry:dispatch_agent",
         "capability:tool:platform:tool-registry:manage_task",

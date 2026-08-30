@@ -5,7 +5,7 @@
   "name": "Deep Research",
   "label": "Deep Research",
   "description": "Multi-perspective source discovery, evidence curation, grounded outlining, cited drafting, independent citation review, and polished long-form reporting.",
-  "version": "2026.08.30.1",
+  "version": "2026.08.30.2",
   "product_pillars": [
     "work"
   ],
@@ -28,6 +28,7 @@
     "scheduler": {
       "capability_refs": [
         "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:capability_set:platform:tool-registry:scheduler-transport",
         "capability:skill:package:deep-research:deep-research%2Fshared%2Fmethod",
         "capability:skill:package:deep-research:deep-research%2Fshared%2Fworkflow",
         "capability:tool:platform:tool-registry:dispatch_agent",

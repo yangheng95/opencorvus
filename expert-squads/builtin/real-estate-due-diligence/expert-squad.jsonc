@@ -5,7 +5,7 @@
   "name": "Real Estate Due Diligence",
   "label": "Real Estate Due Diligence",
   "description": "Property documents, market and financial evidence, and physical and regulatory risks joined into a professional-review diligence pack.",
-  "version": "2026.08.30.1",
+  "version": "2026.08.30.2",
   "product_pillars": [
     "work"
   ],
@@ -27,6 +27,7 @@
     "scheduler": {
       "capability_refs": [
         "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:capability_set:platform:tool-registry:scheduler-transport",
         "capability:skill:package:real-estate-due-diligence:real-estate-due-diligence%2Fshared%2Fmethod",
         "capability:tool:platform:tool-registry:dispatch_agent",
         "capability:tool:platform:tool-registry:manage_task",

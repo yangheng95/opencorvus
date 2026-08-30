@@ -4,6 +4,7 @@ import { Buffer } from "node:buffer"
 import { randomBytes } from "node:crypto"
 import { Tool } from "./tool"
 import { EngineService } from "@/task-api"
+import { requireMissionTaskCreationOpenedOccurrence } from "@/task-api/task-creator"
 import { Session } from "@/session"
 import { Message } from "@/session/message"
 import { MessageStore } from "@/session/message-store"
@@ -39,7 +40,11 @@ import { SessionWake } from "@/session/wake"
 import { EffectiveConfig } from "@/config/effective"
 import { resolveConfiguredModelRef } from "@/agent/model"
 import { attachMissionCaller, publishMissionHandoff } from "@/mission/caller-receipt"
-import { openMissionExecutionWithWake } from "@/mission/execution-closure"
+import {
+  missionOperatorAttachmentInputs,
+  missionOperatorWakeReason,
+  openMissionExecutionWithWake,
+} from "@/mission/execution-closure"
 import { MulticaExpertSquadImport } from "@/expert-squad/multica-import"
 import { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
 import { Instance } from "@/project/instance"
@@ -440,7 +445,7 @@ async function resolvePanelActor(ctx: Tool.Context) {
 
 const PanelTaskCreatorActor = z.enum(["control_agent", "mission", "right_sidebar_conversation"])
 
-function resolvePanelTaskCreator(actor: string, ctx: Tool.Context) {
+async function resolvePanelTaskCreator(actor: string, ctx: Tool.Context) {
   if (actor === "panel_ui" && panelUIRequestContext(ctx)) {
     return { actor: "user" as const }
   }
@@ -452,6 +457,7 @@ function resolvePanelTaskCreator(actor: string, ctx: Tool.Context) {
     ? {
         actor: parsed.data,
         sessionID: ctx.sessionID,
+        openedOccurrence: requireMissionTaskCreationOpenedOccurrence(ctx.sessionID),
         messageID: ctx.messageID,
         ...(ctx.callID ? { toolCallID: ctx.callID } : {}),
       }
@@ -959,7 +965,7 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
         if (params.artifact_sources && params.artifact_sources.length > 0 && actor !== "mission") {
           throw new Error("panel.create_task artifact_sources is only available to a real Mission")
         }
-        const taskCreator = resolvePanelTaskCreator(actor, ctx)
+        const taskCreator = await resolvePanelTaskCreator(actor, ctx)
         const taskChannelBinding = resolveCreateTaskChannelBinding(params, ctx)
         const inheritedPromptProfile = panelUIRequest
           ? params.promptProfile
@@ -1103,16 +1109,6 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
           initialTitle: params.title,
           initialConfigOverlay: intendedOverlay,
         })
-        // A Session that already existed keeps its own facts until this
-        // request's intent differs from them.
-        const storedMetadata = (missionSession.metadata ?? {}) as Record<string, unknown>
-        const storedOverlay = (storedMetadata.configOverlay ?? {}) as Record<string, unknown>
-        if (storedOverlay.model !== intendedModel) {
-          await Session.mergeConfigOverlay({
-            sessionID: missionSession.id,
-            patch: { model: intendedModel, prompt_profile: null },
-          })
-        }
         if (params.title && missionSession.title !== params.title) {
           await Session.setTitle({ sessionID: missionSession.id, title: params.title })
         }
@@ -1126,18 +1122,37 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
           sessionID: missionSession.id,
           source: "mission.wake",
           requestID: ctx.callID || callerMessageID,
-          wake: () =>
+          acceptedInput: {
+            text: params.request,
+            model: intendedModel,
+            attachments: missionOperatorAttachmentInputs(callerFileParts),
+            configPatch: intendedOverlay,
+            context: {
+              surface: "panel.wake_mission",
+              callerSessionID: callerSession.id,
+              callerMessageID,
+              title: params.title ?? null,
+              productPillar: rightSidebarConversationExperience(callerSession) === "work" ? "work" : "code",
+              heldExpertSquadIDs,
+            },
+          },
+          wake: (admission) =>
             (missionWakeForTest ?? SessionWake.wakeWithReceipt)({
               sessionID: missionSession.id,
+              messageID: admission.messageID,
+              textPartID: admission.textPartID,
+              controlID: admission.controlID,
               prompt: params.request,
               author: ctx.agent,
               agent: "mission",
+              model: callerModel,
               surface: "panel",
               parts: callerFileParts,
-              reason: {
-                source: "mission.operator",
-                missionID,
-              },
+              reason: missionOperatorWakeReason(admission, missionID),
+              commitBundle: admission.commitBundle,
+              preflightBundle: admission.preflightBundle,
+              ownerPreflight: admission.ownerPreflight,
+              ownerLifecycle: admission.ownerLifecycle,
             }),
         })
         await publishMissionHandoff(attachedMissionSession)

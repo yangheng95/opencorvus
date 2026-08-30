@@ -1,6 +1,7 @@
 import { check, sqliteTable, text, integer, index, primaryKey, uniqueIndex } from "drizzle-orm/sqlite-core"
 import { sql } from "drizzle-orm"
 import { EngineTaskTable } from "@/engine/engine.sql"
+import { ProtocolEventTable } from "@/protocol/protocol.sql"
 import { ProjectTable } from "../project/project.sql"
 import { SessionTable } from "../session/session.sql"
 
@@ -76,7 +77,7 @@ export const AutomationProjectTargetTable = sqliteTable(
   ],
 )
 
-export const AutomationRunOutcomes = ["running", "retry_wait", "succeeded", "failed"] as const
+export const AutomationRunOutcomes = ["running", "retry_wait", "succeeded", "failed", "disposition"] as const
 
 export const AutomationRunTable = sqliteTable(
   "automation_run",
@@ -89,6 +90,14 @@ export const AutomationRunTable = sqliteTable(
     /** Only the branch-specific choice that is not owned by the exact
      * definition revision. Null for Session/global/delay definitions. */
     target_project_id: text(),
+    /** Exact Mission occurrence captured when this target run is reserved.
+     * Null for non-Mission targets. Retries must never resolve this again. */
+    mission_opened_event_id: text().references(() => ProtocolEventTable.id, { onDelete: "restrict" }),
+    /** Terminal-at-reservation Mission targets carry no opened binding. The
+     * exact closure disposition is frozen here and receives its terminal
+     * receipt in the same writer transaction. */
+    mission_disposition: text({ enum: ["mission_closed"] }),
+    mission_closure_event_id: text().references(() => ProtocolEventTable.id, { onDelete: "restrict" }),
     started_at: integer().notNull(),
   },
   (table) => [
@@ -96,6 +105,11 @@ export const AutomationRunTable = sqliteTable(
     index("automation_run_fire_idx").on(table.fire_id),
     index("automation_run_project_idx").on(table.target_project_id),
     index("automation_run_started_at_idx").on(table.started_at),
+    check("automation_run_mission_reservation_shape", sql`
+      (${table.mission_opened_event_id} IS NULL AND ${table.mission_disposition} IS NULL AND ${table.mission_closure_event_id} IS NULL)
+      OR (${table.mission_opened_event_id} IS NOT NULL AND ${table.mission_disposition} IS NULL AND ${table.mission_closure_event_id} IS NULL)
+      OR (${table.mission_opened_event_id} IS NULL AND ${table.mission_disposition}='mission_closed' AND ${table.mission_closure_event_id} IS NOT NULL)
+    `),
   ],
 )
 
@@ -104,7 +118,9 @@ export const AutomationRunReceiptTable = sqliteTable(
   {
     id: text().primaryKey(),
     run_id: text().notNull().references(() => AutomationRunTable.id, { onDelete: "cascade" }),
-    outcome: text({ enum: ["retry_wait", "succeeded", "failed"] }).notNull(),
+    outcome: text({ enum: ["retry_wait", "succeeded", "failed", "disposition"] }).notNull(),
+    disposition: text({ enum: ["mission_closed"] }),
+    closure_event_id: text().references(() => ProtocolEventTable.id, { onDelete: "restrict" }),
     retry_at: integer(),
     error: text(),
     time_created: integer().notNull(),
@@ -114,9 +130,10 @@ export const AutomationRunReceiptTable = sqliteTable(
     uniqueIndex("automation_run_terminal_receipt_idx").on(table.run_id)
       .where(sql`${table.outcome} <> 'retry_wait'`),
     check("automation_run_receipt_shape", sql`
-      (${table.outcome}='retry_wait' AND ${table.retry_at} IS NOT NULL AND ${table.error} IS NOT NULL)
-      OR (${table.outcome}='succeeded' AND ${table.retry_at} IS NULL AND ${table.error} IS NULL)
-      OR (${table.outcome}='failed' AND ${table.retry_at} IS NULL AND ${table.error} IS NOT NULL)
+      (${table.outcome}='retry_wait' AND ${table.disposition} IS NULL AND ${table.closure_event_id} IS NULL AND ${table.retry_at} IS NOT NULL AND ${table.error} IS NOT NULL)
+      OR (${table.outcome}='succeeded' AND ${table.disposition} IS NULL AND ${table.closure_event_id} IS NULL AND ${table.retry_at} IS NULL AND ${table.error} IS NULL)
+      OR (${table.outcome}='failed' AND ${table.disposition} IS NULL AND ${table.closure_event_id} IS NULL AND ${table.retry_at} IS NULL AND ${table.error} IS NOT NULL)
+      OR (${table.outcome}='disposition' AND ${table.disposition}='mission_closed' AND ${table.closure_event_id} IS NOT NULL AND ${table.retry_at} IS NULL AND ${table.error} IS NULL)
     `),
   ],
 )

@@ -100,7 +100,7 @@ describe("Expert Squad catalog index", () => {
     const inspection = await PromptProfileResolver.catalogInspection({ projectDirectory: project.path, id: "base" })
     expect(inspection).toMatchObject({
       id: "base",
-      version: "2026.08.30.1",
+      version: "2026.08.30.2",
       selector: {
         summary: expect.any(String),
         selection_guidance: expect.any(String),
@@ -608,7 +608,7 @@ describe("Expert Squad catalog index", () => {
     })
     expect(detail).toMatchObject({
       id: "evolution-lab",
-      installations: [{ installationScope: "project", installedVersion: "2026.08.30.2" }],
+      installations: [{ installationScope: "project", installedVersion: "2026.08.30.3" }],
     })
   }, 0)
 

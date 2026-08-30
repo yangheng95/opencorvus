@@ -14,7 +14,7 @@ Status: implementation, final validation, and repeated independent review comple
 1. 删除 Expert Squad manifest V1 schema、类型、SDK export、reader、writer 输入与全部 13 个 per-kind projection 字段；新 runtime 只接受 `schema_version: 2`。
 2. `CapabilityRef`/codec/kind/source 只有一个跨 package 实现，SDK manifest authoring 与 Core Catalog 不再各自解析 capability identity。
 3. V2 manifest 只用 package-root `capability_sets` 与每个 scheduler/Agent 的 `capability_refs`；set 只能包含 leaf，projection 只允许 leaf 或一层 set，不允许 nested set、foreign package set或悬空 ref。
-4. platform base Tool pool 以显式 CapabilitySet 发布；`base_role` 只选 runtime template upper bound，不自动授予 Tool。Task artifact/coordination transport 由 runtime owner显式追加并进入 projection revision。
+4. platform base Tool pool 以显式 CapabilitySet 发布；`base_role` 只选 runtime template upper bound，不自动授予 Tool。Worker Task artifact/coordination transport 由 runtime owner 追加，scheduler transport 由 manifest 的 exact platform CapabilitySet ref 授权，两者都进入 projection revision。
 5. `PromptProfileResolver` 只从 typed refs与一层 set expansion建立声明 grant，再按 ref kind/source/owner分派给现有唯一 Skill/Tool/MCP materializer；不得重新引入按 manifest 字段名分裂的 Resolver。
 6. 122 个 tracked manifest、四个 embedded package、portable template、SDK authoring、generator/generated payload、OpenAPI/SDK类型、当前架构、测试与文档在同一批升级；V1 source 不留兼容入口。
 7. Task package revision、workflow、prompt、permission、OAuth、streaming、Tool/result可见性与当前 eager execution保持；leaf reveal和 `HarnessProjection` grant/receipt hard cut属于 Phase C/D，不在本批形成半套运行时。
@@ -117,7 +117,7 @@ package set ref固定为`capability:capability_set:package:<manifest.id>:<set-id
 | default MCP server/leaf | `mcp_*/project/default-mcp-registry/<default/mcp/...>` | config-scoped default MCP owner |
 | package MCP server/leaf | `mcp_*/package/<squad-id>/<package/mcp/...>` | package-root MCP inventory owner |
 
-Transport Tool不由manifest声明：scheduler/worker runtime分别追加固定platform transport set并把展开后的leaf写入同一resolved projection revision。Manifest不能删除、覆盖或冒充transport。
+Worker transport 不由 manifest 重复声明：worker runtime 追加固定 platform `worker-transport` set 并把展开后的 leaf 写入同一 resolved projection revision。Scheduler transport 则必须由 projection 精确声明 platform `scheduler-transport` set；未声明就不获得该 Tool surface。Manifest 不能覆盖、冒充或平行实现 transport。
 
 Resolver先canonical expand refs，再按上表dispatch。每个effective ref必须被恰好一个owner消费；unknown owner/kind/source、错误base set、foreign package owner、缺失inventory、provider-name collision、重复explicit来源与transport冲突都返回typed/明确contract error。materializer函数继续单源，不复制Skill/MCP/Tool实现。
 
@@ -180,7 +180,7 @@ set member都是`tool/platform/tool-registry/<id>` leaf，canonical、无嵌套�
 
 - `CapabilityRef`、codec、kind/source schema 已移动到 `@opencorvus-ai/util/capability-ref`；Core wrapper 与 SDK manifest V1 文件/export 已删除。
 - SDK、OpenAPI、Registry、authoring writer、`expert_squad_author`、Multica import、Catalog detail/active projection、Overlay 与 Web facts 已统一到 manifest v2 的 `capability_sets` + `capability_refs`。
-- `PlatformCapabilitySetRegistry` 发布 Orchestrator、全部 Runtime Template base sets 及 scheduler/worker transport sets；transport 包含 Task Artifact transport 与 `publish_interactive_artifact`，manifest 无法声明、删除或替换 transport。
+- `PlatformCapabilitySetRegistry` 发布 Orchestrator、全部 Runtime Template base sets 及 scheduler/worker transport sets；worker transport 由 runtime 单一追加，scheduler transport 由 manifest 精确 typed set ref 授权。两者都包含各自的 Task Artifact transport 与 `publish_interactive_artifact`，manifest 不能删除 worker transport、覆盖 set membership 或用 package Tool 冒充 platform transport。
 - `materializeExpertSquadCapabilities()` 是 Registry 与 Resolver 共用的唯一一层展开和 kind/source/owner dispatch；package set与direct leaf同为显式来源，显式leaf覆盖同一platform base member时保持单一effective grant及显式provenance；错误base set、foreign owner、unknown source/kind、重复explicit来源、transport冲突与悬空set都fail fast。
 - tool-registry inventory 从 45 个 global Tool 扩为全部 61 个 core Tool，并在同一 owner revision 发布 platform sets。
 - 122/122 tracked manifest 已硬切到 schema v2，legacy projection 字段为0；121个shipped revision record按同一未发布Phase B的最终bytes保持一次发布版本，不保留审查迭代产生的虚假中间版本。最终generator重跑为`{"packages":121,"stamped":0}`。
@@ -195,7 +195,7 @@ set member都是`tool/platform/tool-registry/<id>` leaf，canonical、无嵌套�
 - `bun run check:architecture-index`、`bun run api:routes-check`、`bun run docs:check` 全通过。
 - `bunx astro check`：0 errors；仅保留既有 warning/hint。
 - SDK full suite：190 pass、0 fail、1002 assertions；包含122个source manifest/portable template authoring validation与Windows owned-process tests。
-- V2 focused contract：9 pass，明确验证61 Tool inventory、platform/package set展开、direct/package-set显式语义等价、显式Tool覆盖base默认switch、双explicit冲突、`base_role`无隐式授权、transport追加、错误base/missing set合同，以及malformed encoded ref通过`safeParse()`返回结构化issue而不抛异常。
+- V2 focused contract：9 pass，明确验证61 Tool inventory、platform/package set展开、direct/package-set显式语义等价、显式Tool覆盖base默认switch、双explicit冲突、`base_role`无隐式授权、worker transport追加与scheduler transport精确声明、错误base/missing set合同，以及malformed encoded ref通过`safeParse()`返回结构化issue而不抛异常。
 - Domain package matrix：13个文件116 pass，覆盖首批10 + 第三至第十批80 + swimlane 10的真实Registry load、安装与scheduler/worker grant解析；16个专项包文件最终55项全部通过，Light顺序断言修正后单文件3/3。
 - Generated payload matrix：10个文件20 pass、1207 assertions；Market唯一payload总量117。生产HTTP route matrix：11个文件11 pass，覆盖首批10、第三至第十批80、swimlane10与on-demand payload的Market、install、Settings exact detail、workflow与Skill materialization。
 - Catalog/A2 binding：catalog 20 pass；occurrence binding通过包内隔离runner为16 pass、48 assertions；Task package revision pin 6 pass；Orchestrator Tool surface 4 pass；Browser MCP projection 1 pass；Computer MCP 15 pass。
@@ -207,13 +207,14 @@ set member都是`tool/platform/tool-registry/<id>` leaf，canonical、无嵌套�
 
 ## 12. 首轮验证中发现并根治的问题
 
-- 初始 transport set遗漏旧运行时无条件提供的 `publish_interactive_artifact`，导致关闭base set的显式projection丢能力；已把它纳入scheduler/worker transport并从base set去重，恢复现有execution语义且使transport owner显式。
+- 初始 transport set 遗漏旧运行时无条件提供的 `publish_interactive_artifact`，随后又把完整 scheduler transport 无条件追加到所有 scheduler；真实 Light 咨询验收证明这会重建隐藏 Artifact Tool tail。最终合同把 `publish_interactive_artifact` 保留在两个 platform transport set 中，仅 worker transport 由 runtime 追加，scheduler transport 改为 manifest 精确声明；Light 不声明该 set，其余保留旧有效 transport 的 shipped scheduler 显式声明。
 - 多处测试把 Tool/Skill list误当顺序协议；V2 canonical ref展开后顺序稳定但不同。集合语义断言改为canonical/sorted comparison，运行输出仍确定。
 - Mirror Prism fixture按字符串把 `deep-research-base`误改成不存在的`prism-base`；fixture改为保留真实Runtime Template base set，并在变更base role时同步替换typed base ref。
 - 六个package Tool ABI测试只伪造scope中的Tool Part ID，未持久化真实Provider step/Tool Part，已按当前provenance合同补全真实事实并重跑通过。
 - SDK full suite首次直接运行缺少Windows process supervisor；先运行仓库提供的helper构建器并显式绑定精确二进制后，原suite 190/190通过。
 - SDK manifest父级`superRefine`首次直接decode malformed percent encoding会使`safeParse()`抛异常；manifest V2本地`decodedCapabilityRef()`改为try/decode guard，并仅在成功时执行owner/set闭包校验，新增回归后返回结构化issue。
 - 独立审查复现package-set Tool leaf丢失显式provenance，导致build默认关闭Tool无法被package set启用，且base+direct leaf被误判双grant；统一GrantOrigin后，direct/package-set都为显式来源、base重合为单一override、transport仍独立。基于`git show HEAD`逐项补回V1显式Tool refs，122个manifest/713个projection审计为`effectiveMismatch=0, explicitMismatch=0`。
+- 第二次上游集成终审发现 current architecture 仍有一段用已删除的 `inherit_base_tools` / `built_in_tool_ids` 描述 scheduler Artifact 投影。该段已改为 V2 typed capability-ref 契约：scheduler transport 只来自 manifest 的精确 platform set 或 direct leaf，worker transport 仍由 platform 唯一追加；修正后 current source/docs 的 legacy 字段搜索重新为零。
 - 独立审查发现`expert_squad_author`仍依据`base_role`自动注入base set，与manifest/Resolver合同矛盾；builder注入已删除，Tool schema、两份authoring Skill和正向definition contract统一要求caller显式声明匹配base set。
 - 独立审查发现current architecture仍引用已删除manifest V1文件、类型与入口表；`04-extensions.md`和`17-code-work-agent-platform.md`已统一到V2 current authority。
 - 首轮generator后继续修复同一未提交Phase B bytes，若直接把工作区generated revision当新baseline会把普通包`.1`虚增到`.2`并制造未发布中间版本；已恢复单次发布目标版本，以最终bytes重建revision/payload/localization并再次确认`stamped: 0`。

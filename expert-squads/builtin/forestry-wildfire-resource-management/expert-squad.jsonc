@@ -5,7 +5,7 @@
   "name": "Forestry Wildfire Resource Management",
   "label": "Forestry Wildfire Resource Management",
   "description": "Forest inventory, fuels and wildfire risk, treatment scenarios and post-fire resource evidence joined for qualified review.",
-  "version": "2026.08.30.1",
+  "version": "2026.08.30.2",
   "product_pillars": [
     "code",
     "work"
@@ -28,6 +28,7 @@
     "scheduler": {
       "capability_refs": [
         "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:capability_set:platform:tool-registry:scheduler-transport",
         "capability:skill:package:forestry-wildfire-resource-management:forestry-wildfire-resource-management%2Fshared%2Fmethod",
         "capability:tool:platform:tool-registry:dispatch_agent",
         "capability:tool:platform:tool-registry:manage_task",

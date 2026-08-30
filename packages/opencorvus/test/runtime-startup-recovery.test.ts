@@ -14,6 +14,7 @@ import * as IsolatedCheckWorkspace from "@/project/isolated-check-workspace"
 import { ImplicitProject } from "@/project/implicit-project"
 import * as SchedulerMessage from "@/protocol/scheduler-message"
 import { recoverStartedTaskProjects } from "@/engine/host-recovery"
+import { TaskControlDriver } from "@/engine/task-control-driver"
 import { restartReplacementEnvironment } from "@/server/restart-handoff"
 
 describe("runtime startup recovery", () => {
@@ -183,6 +184,65 @@ describe("runtime startup recovery", () => {
       missionCompleted: 0,
       failures: [],
     })
+  }, 60_000)
+
+  test("keeps each Project recovery queue independent when one Project exhausts its slots", async () => {
+    const events: string[] = []
+    let releaseHeldProject!: () => void
+    const heldProject = new Promise<void>((resolve) => (releaseHeldProject = resolve))
+    let reportReadyProject!: () => void
+    const readyProject = new Promise<void>((resolve) => (reportReadyProject = resolve))
+
+    const recovery = recoverStartedTaskProjects({
+      directories: ["held-project", "ready-project"],
+      initializeProject: async (directory) => {
+        const driver = new TaskControlDriver({
+          maximumConcurrentScans: 1,
+          scan: async (missionID) => {
+            events.push(`${directory}:${missionID}:started`)
+            if (directory === "held-project") await heldProject
+            events.push(`${directory}:${missionID}:completed`)
+            return { activated: 1 }
+          },
+          setTimer: () => ({ cancel() {} }),
+        })
+        try {
+          if (directory === "held-project") {
+            await Promise.all([driver.request("mission-a"), driver.request("mission-b")])
+          } else {
+            await driver.request("mission-ready")
+            reportReadyProject()
+          }
+        } finally {
+          driver.dispose()
+        }
+      },
+    })
+
+    await within(readyProject, "ready Project Mission reconciliation")
+    expect(events).toEqual([
+      "held-project:mission-a:started",
+      "ready-project:mission-ready:started",
+      "ready-project:mission-ready:completed",
+    ])
+
+    releaseHeldProject()
+    await expect(within(recovery, "independent Project recovery queues")).resolves.toEqual({
+      attempted: 2,
+      initialized: 2,
+      missionAttempted: 0,
+      missionWoken: 0,
+      missionCompleted: 0,
+      failures: [],
+    })
+    expect(events).toEqual([
+      "held-project:mission-a:started",
+      "ready-project:mission-ready:started",
+      "ready-project:mission-ready:completed",
+      "held-project:mission-a:completed",
+      "held-project:mission-b:started",
+      "held-project:mission-b:completed",
+    ])
   }, 60_000)
 
   test("settles failed foundational preparation and prepares the next attempt", async () => {

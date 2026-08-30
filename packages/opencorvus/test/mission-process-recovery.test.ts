@@ -1,636 +1,331 @@
-import { afterEach, describe, expect, spyOn, test } from "bun:test"
+import { afterEach, describe, expect, test } from "bun:test"
+import { Config } from "@/config/config"
 import { Identifier } from "@/id/id"
+import { acquireControlLease, releaseControlLeaseOnErrorPath } from "@/engine/control-lease"
 import { recoverMissionProcessSession } from "@/mission/process-recovery"
-import {
-  ensureMissionSession,
-  listGlobalMissionProcessRecoveryCandidates,
-  listMissionSessions,
-} from "@/mission/session"
-import { Instance } from "@/project/instance"
-import { Session } from "@/session"
-import { SessionControl } from "@/session/control"
-import { SessionWake } from "@/session/wake"
-import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
+import { ensureMissionSession, listGlobalMissionProcessRecoveryCandidates } from "@/mission/session"
 import {
   closeMissionExecutionOperation,
   currentMissionExecutionClosure,
-  MissionExecutionClosureTestHooks,
-  openMissionExecution,
+  MissionExecutionClosingError,
+  openMissionExecutionWithWake,
+  resumeMissionExecutionClosure,
 } from "@/mission/execution-closure"
-import { Database, eq } from "@/storage/db"
-import { SessionControlEventTable } from "@/session/session.sql"
-import { ProtocolEventTable } from "@/protocol/protocol.sql"
-import { createRightSidebarConversationSession } from "@/chat/session"
-import { Question } from "@/question"
-import { PanelLeafTools, PanelToolTestHooks } from "@/tool/panel"
-import { Tool } from "@/tool/tool"
+import { Instance } from "@/project/instance"
+import { InstanceBootstrap } from "@/project/bootstrap"
+import { Session } from "@/session"
+import { SessionPromptOwner } from "@/session/prompt/owner"
+import { SessionWake } from "@/session/wake"
+import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
+import { resumeMissionDeleteRetention } from "@/mission/retention"
+import "@/task-api"
 
 afterEach(async () => {
   await Instance.disposeAll()
   await resetMemoryDatabase()
 })
 
-describe("standalone Mission process recovery", () => {
-  const activation = () => Promise.resolve({ owner: new AbortController().signal })
-
-  test("Session control failure stores only its outcome delta and reduces the complete public payload", async () => {
-    await using project = await memoryProject()
-    await Instance.provide({ directory: project.path, fn: async () => {
-      const session = await Session.create({ kind: "root", title: "control failure reduction" })
-      const created = SessionControl.create({ sessionID: session.id, kind: "wake_reason", payload: { reason: "operator", attempt: 1 } })
-      const failed = SessionControl.fail({ id: created.id, sessionID: session.id, error: "provider unavailable" })
-      const event = Database.use((db) => db.select().from(SessionControlEventTable).where(eq(SessionControlEventTable.control_id, created.id)).get())
-      expect(event).toMatchObject({ kind: "failed", payload: { error: "provider unavailable" } })
-      expect(failed).toMatchObject({ status: "failed", payload: { reason: "operator", attempt: 1, error: "provider unavailable" } })
-    } })
+async function missionFixture(label: string) {
+  const model = { providerID: "mission-recovery-test", modelID: "recovery-model" }
+  await Config.updateProjectPatch({
+    model: `${model.providerID}/${model.modelID}`,
+    provider: {
+      [model.providerID]: {
+        name: "Mission process recovery test provider",
+        npm: "@ai-sdk/openai-compatible",
+        api: "http://127.0.0.1:1/v1",
+        models: {
+          [model.modelID]: {
+            name: "Mission process recovery model",
+            tool_call: true,
+            modalities: { input: ["text"], output: ["text"] },
+            limit: { context: 32_000, output: 4_096 },
+          },
+        },
+      },
+    },
   })
-
-  test("distinct wake requests continue the one opened Mission occurrence", async () => {
-    await using project = await memoryProject()
-    await Instance.provide({ directory: project.path, fn: async () => {
-      const mission = await ensureMissionSession({
-        missionID: "mission-open-fence",
-        defaultCwd: project.path,
-        productPillar: "code",
-        heldExpertSquadIDs: ["base"],
-      })
-      const first = await openMissionExecution({ missionID: "mission-open-fence", sessionID: mission.id, source: "mission.dispatch", requestID: "dispatch:1" })
-      const second = await openMissionExecution({ missionID: "mission-open-fence", sessionID: mission.id, source: "mission.wake", requestID: "wake:2" })
-      const opened = Database.use((db) => db.select().from(ProtocolEventTable).where(eq(ProtocolEventTable.aggregate_id, mission.id)).all()
-        .filter((event) => event.type === "mission.execution.opened"))
-      expect({ first, second, count: opened.length }).toMatchObject({
-        first: { state: "opened" },
-        second: { state: "opened", operationID: first.operationID, eventID: first.eventID },
-        count: 1,
-      })
-    } })
+  const mission = await ensureMissionSession({
+    missionID: `mission-${label}`,
+    defaultCwd: Instance.directory,
+    productPillar: "code",
+    heldExpertSquadIDs: ["base"],
   })
+  using _loop = SessionWake.TestHooks.installWakeLoopExecutor(async () => undefined)
+  await openMissionExecutionWithWake({
+    missionID: mission.missionID,
+    sessionID: mission.id,
+    source: "mission.dispatch",
+    requestID: `${label}:open`,
+    acceptedInput: {
+      text: `Open Mission recovery fixture ${label}`,
+      model: null,
+      attachments: [],
+      configPatch: {},
+      context: {},
+    },
+    wake: (admission) => {
+      if (!admission.operatorRequest) throw new Error("Mission operator admission is missing request authority")
+      return SessionWake.wakeWithReceipt({
+        sessionID: mission.id,
+        messageID: admission.messageID,
+        textPartID: admission.textPartID,
+        controlID: admission.controlID,
+        prompt: `Open Mission recovery fixture ${label}`,
+        author: "user",
+        agent: "mission",
+        surface: "panel",
+        userAuthored: true,
+        reason: {
+          source: "mission.operator",
+          missionID: mission.missionID,
+          requestID: admission.operatorRequest.requestID,
+          requestFingerprint: admission.operatorRequest.requestFingerprint,
+          openedEventID: admission.closureEventID,
+        },
+        commitBundle: admission.commitBundle,
+        preflightBundle: admission.preflightBundle,
+        ownerPreflight: admission.ownerPreflight,
+        ownerLifecycle: admission.ownerLifecycle,
+      })
+    },
+  })
+  const opened = currentMissionExecutionClosure(mission.id)
+  if (!opened || opened.state !== "opened") throw new Error(`Mission ${mission.missionID} did not open`)
+  return { mission, opened }
+}
 
-  test("fences concurrent process owners to one physical Mission close and one terminal fact", async () => {
+async function incompleteAssistant(sessionID: string, label: string) {
+  const now = Date.now()
+  const user = await Session.updateMessage({
+    id: Identifier.ascending("message"),
+    sessionID,
+    role: "user",
+    author: "operator",
+    time: { created: now },
+    agent: "mission",
+    model: { providerID: "test", modelID: "mission-recovery" },
+  })
+  const assistant = await Session.updateMessage({
+    id: Identifier.ascending("message"),
+    sessionID,
+    role: "assistant",
+    author: "mission",
+    parentID: user.id,
+    time: { created: now + 1 },
+    agent: "mission",
+    providerID: "test",
+    modelID: "mission-recovery",
+    path: { cwd: Instance.directory, root: Instance.directory },
+    cost: 0,
+    tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+  })
+  await Session.updatePart({
+    id: Identifier.ascending("part"),
+    sessionID,
+    messageID: assistant.id,
+    type: "tool",
+    callID: `call_${label}`,
+    tool: "glob",
+    state: { status: "running", input: { pattern: "*" }, time: { start: now + 2 } },
+  })
+  return assistant
+}
+
+describe("canonical Mission close and process reconciliation", () => {
+  test("scopes pending Mission delete recovery by Project while sibling cleanup remains actionable", async () => {
+    await using firstProject = await memoryProject()
+    await using secondProject = await memoryProject()
+    const pending: Array<{ sessionID: string; missionID: string; projectID: string; directory: string }> = []
+    for (const [index, directory] of [firstProject.path, secondProject.path].entries()) {
+      await Instance.provide({
+        directory,
+        init: InstanceBootstrap,
+        fn: async () => {
+          const missionID = `delete-project-scope-${index}`
+          const mission = await ensureMissionSession({
+            missionID,
+            defaultCwd: directory,
+            productPillar: "code",
+            heldExpertSquadIDs: ["base"],
+          })
+          await closeMissionExecutionOperation({
+            missionID,
+            sessionID: mission.id,
+            source: "mission.delete",
+            requestID: `delete-project-scope-${index}:request`,
+            provenance: { kind: "request", surface: "api", reason: `Delete Project-scoped Mission ${index}` },
+          })
+          pending.push({ sessionID: mission.id, missionID, projectID: Instance.project.id, directory })
+        },
+      })
+    }
+    const [first, second] = pending
+    expect({
+      first: listGlobalMissionProcessRecoveryCandidates({ scopeProjectID: first!.projectID, limit: 4 }),
+      second: listGlobalMissionProcessRecoveryCandidates({ scopeProjectID: second!.projectID, limit: 4 }),
+    }).toEqual({
+      first: [{ sessionID: first!.sessionID, directory: first!.directory }],
+      second: [{ sessionID: second!.sessionID, directory: second!.directory }],
+    })
+
+    await Instance.provide({
+      directory: first!.directory,
+      init: InstanceBootstrap,
+      fn: () => resumeMissionDeleteRetention({ sessionID: first!.sessionID, projectID: first!.projectID }),
+    })
+    expect({
+      first: listGlobalMissionProcessRecoveryCandidates({ scopeProjectID: first!.projectID, limit: 4 }),
+      second: listGlobalMissionProcessRecoveryCandidates({ scopeProjectID: second!.projectID, limit: 4 }),
+    }).toEqual({
+      first: [],
+      second: [{ sessionID: second!.sessionID, directory: second!.directory }],
+    })
+    await Instance.provide({
+      directory: second!.directory,
+      init: InstanceBootstrap,
+      fn: () => resumeMissionDeleteRetention({ sessionID: second!.sessionID, projectID: second!.projectID }),
+    })
+  }, 60_000)
+
+  test("discovers one Project's Mission recovery candidates through fixed cursor pages", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
+      init: InstanceBootstrap,
       fn: async () => {
-        const missionID = "mission-close-fence"
-        const mission = await ensureMissionSession({
-          missionID,
-          defaultCwd: project.path,
-          productPillar: "code",
-          heldExpertSquadIDs: ["base"],
+        const sessionIDs: string[] = []
+        for (let index = 0; index < 9; index += 1) {
+          const { mission } = await missionFixture(`paged-${index}`)
+          await incompleteAssistant(mission.id, `paged_${index}`)
+          sessionIDs.push(mission.id)
+        }
+        const first = listGlobalMissionProcessRecoveryCandidates({
+          scopeProjectID: Instance.project.id,
+          limit: 4,
         })
-        const opened = await openMissionExecution({
-          missionID,
-          sessionID: mission.id,
-          source: "mission.dispatch",
-          requestID: "mission-close-fence-open",
+        const second = listGlobalMissionProcessRecoveryCandidates({
+          scopeProjectID: Instance.project.id,
+          afterSessionID: first.at(-1)!.sessionID,
+          limit: 4,
         })
-        expect(opened.state).toBe("opened")
-
-        let closeCalls = 0
-        let enterFirst!: () => void
-        let releaseFirst!: () => void
-        const entered = new Promise<void>((resolve) => (enterFirst = resolve))
-        const release = new Promise<void>((resolve) => (releaseFirst = resolve))
-        const first = closeMissionExecutionOperation({
-          missionID,
-          sessionID: mission.id,
-          source: "mission.abort",
-          requestID: "mission-close-fence-request",
-          close: async () => {
-            closeCalls++
-            enterFirst()
-            await release
-          },
+        const third = listGlobalMissionProcessRecoveryCandidates({
+          scopeProjectID: Instance.project.id,
+          afterSessionID: second.at(-1)!.sessionID,
+          limit: 4,
         })
-        await entered
-        MissionExecutionClosureTestHooks.forgetLocalCloseOwner(mission.id)
-        const second = closeMissionExecutionOperation({
-          missionID,
-          sessionID: mission.id,
-          source: "mission.abort",
-          requestID: "mission-close-fence-request",
-          close: async () => {
-            closeCalls++
-          },
-        })
-        releaseFirst()
-        const [firstResult, secondResult] = await Promise.all([first, second])
-        expect({ closeCalls, firstResult, secondResult, current: currentMissionExecutionClosure(mission.id) }).toMatchObject({
-          closeCalls: 1,
-          firstResult: { state: "closed" },
-          secondResult: { state: "closed", operationID: firstResult.operationID },
-          current: { state: "closed", operationID: firstResult.operationID },
+        expect({
+          pageSizes: [first.length, second.length, third.length],
+          sessionIDs: [...first, ...second, ...third].map((candidate) => candidate.sessionID),
+        }).toEqual({
+          pageSizes: [4, 4, 1],
+          sessionIDs: sessionIDs.toSorted(),
         })
       },
     })
-  })
+  }, 120_000)
 
-  test("holds panel Mission handoff admission until its exact wake activation is published", async () => {
+  test("startup discovers one pure closing occurrence and resumes its original provenance", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
+      init: InstanceBootstrap,
       fn: async () => {
-        const createdCaller = await createRightSidebarConversationSession("work")
-        const caller = await Session.mergeMetadata({
-          sessionID: createdCaller.id,
-          patch: { configOverlay: { model: "test/panel-mission-activation" } },
+        const { mission } = await missionFixture("closing-takeover")
+        const peerOwnerOccurrenceID = Identifier.ascending("call")
+        const held = acquireControlLease({
+          target: "lifecycle",
+          targetID: `mission:${mission.id}`,
+          ownerOccurrenceID: peerOwnerOccurrenceID,
+          now: Date.now(),
+          leaseMilliseconds: 30_000,
         })
-        const now = Date.now()
-        const user = await Session.updateMessage({
-          id: Identifier.ascending("message"),
-          sessionID: caller.id,
-          role: "user",
-          author: "user",
-          time: { created: now },
-          agent: "work",
-          model: { providerID: "test", modelID: "panel-mission-activation" },
-        })
-        const assistant = await Session.updateMessage({
-          id: Identifier.ascending("message"),
-          sessionID: caller.id,
-          role: "assistant",
-          author: "work",
-          parentID: user.id,
-          time: { created: now + 1 },
-          agent: "work",
-          providerID: "test",
-          modelID: "panel-mission-activation",
-          path: { cwd: project.path, root: project.path },
-          cost: 0,
-          tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
-        })
-        const question = spyOn(Question, "askAndFormat").mockResolvedValue({
-          status: "answered",
-          output: "User answered yes",
-          answers: [["yes"]],
-        })
-        const events: string[] = []
-        let markActivationWaiting!: () => void
-        let releaseActivation!: () => void
-        const activationWaiting = new Promise<void>((resolve) => (markActivationWaiting = resolve))
-        const activationGate = new Promise<void>((resolve) => (releaseActivation = resolve))
-        using _wake = PanelToolTestHooks.installMissionWakeExecutor(async (input) => {
-          events.push("panel_wake_waiting")
-          markActivationWaiting()
-          return {
-            sessionID: input.sessionID!,
-            messageID: Identifier.ascending("message"),
-            activation: activationGate.then(() => {
-              events.push("panel_wake_activated")
-              return { owner: new AbortController().signal }
-            }),
-            completion: Promise.resolve({ ok: true as const }),
-          }
-        })
+        if (!held.acquired) throw new Error("closing takeover fixture did not acquire its peer lease")
         try {
-          const panelDefinition = PanelLeafTools.find((tool) => tool.id === "panel_wake_mission")
-          if (!panelDefinition) throw new Error("panel_wake_mission leaf is unavailable")
-          const panel = await panelDefinition.init({ agentID: "work" })
-          const execution = panel.execute(
-            {
-              request: "Run a durable activation-fenced Mission",
-              reason: "This request needs a durable Mission. Continue?",
+          await expect(
+            closeMissionExecutionOperation({
+              missionID: mission.missionID,
+              sessionID: mission.id,
+              source: "mission.archive",
+              requestID: "closing-takeover:archive",
+              provenance: {
+                kind: "request",
+                surface: "overlay.archive_panel",
+                reason: "Archive the Mission from the exact operator request",
+              },
+            }),
+          ).rejects.toBeInstanceOf(MissionExecutionClosingError)
+          const closing = currentMissionExecutionClosure(mission.id)
+          expect({
+            closing,
+            candidates: listGlobalMissionProcessRecoveryCandidates({
+              scopeProjectID: Instance.project.id,
+              limit: 4,
+            }),
+          }).toMatchObject({
+            closing: {
+              state: "closing",
+              source: "mission.archive",
+              provenance: {
+                kind: "request",
+                surface: "overlay.archive_panel",
+                reason: "Archive the Mission from the exact operator request",
+              },
             },
-            {
-              sessionID: caller.id,
-              messageID: assistant.id,
-              callID: "call_panel_mission_activation",
-              agent: "work",
-              abort: new AbortController().signal,
-              messages: [],
-              executionSurface: Tool.executionSurface([panelDefinition.id], []),
-              extra: { surface: "right-sidebar" },
-              metadata() {},
-            },
-          )
-          await activationWaiting
-          const missions = []
-          for await (const mission of listMissionSessions()) missions.push(mission)
-          const mission = missions[0]
-          if (!mission) throw new Error("Panel Mission activation fixture did not create its Mission")
-          const closing = closeMissionExecutionOperation({
-            missionID: mission.missionID,
-            sessionID: mission.id,
-            source: "mission.abort",
-            requestID: "panel-mission-activation-close",
-            close: async () => {
-              events.push(`close_${currentMissionExecutionClosure(mission.id)?.state}`)
-            },
-          })
-          releaseActivation()
-          const [result, closure] = await Promise.all([execution, closing])
-          expect({ result: JSON.parse(result.output), events, closure }).toMatchObject({
-            result: { kind: "mission_wake", mission_id: mission.missionID, session_id: mission.id },
-            events: ["panel_wake_waiting", "panel_wake_activated", "close_closing"],
-            closure: { missionID: mission.missionID, sessionID: mission.id, state: "closed" },
+            candidates: [{ sessionID: mission.id, directory: project.path }],
           })
         } finally {
-          question.mockRestore()
+          releaseControlLeaseOnErrorPath({
+            target: "lifecycle",
+            targetID: `mission:${mission.id}`,
+            leaseID: held.lease.id,
+            ownerOccurrenceID: peerOwnerOccurrenceID,
+            now: Date.now(),
+          })
         }
-      },
-    })
-  }, 30_000)
 
-  test("settles a pending recovery occurrence against the active Mission closing event", async () => {
-    await using project = await memoryProject()
-    await Instance.provide({
-      directory: project.path,
-      fn: async () => {
-        const missionID = "process-recovery-closure"
-        const mission = await ensureMissionSession({
-          missionID,
-          defaultCwd: project.path,
-          productPillar: "code",
-          heldExpertSquadIDs: ["base"],
-        })
-        const now = Date.now()
-        const user = await Session.updateMessage({
-          id: Identifier.ascending("message"),
-          sessionID: mission.id,
-          role: "user",
-          author: "operator",
-          time: { created: now },
-          agent: "mission",
-          model: { providerID: "test", modelID: "test-model" },
-        })
-        await Session.updateMessage({
-          id: Identifier.ascending("message"),
-          sessionID: mission.id,
-          role: "assistant",
-          author: "mission",
-          parentID: user.id,
-          time: { created: now + 1 },
-          agent: "mission",
-          providerID: "test",
-          modelID: "test-model",
-          path: { cwd: project.path, root: project.path },
-          cost: 0,
-          tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
-        })
-        const activationEvents: string[] = []
-        let markWakePrepared!: () => void
-        let releaseActivation!: () => void
-        const wakePrepared = new Promise<void>((resolve) => {
-          markWakePrepared = resolve
-        })
-        const activationGate = new Promise<void>((resolve) => {
-          releaseActivation = resolve
-        })
-        const firstRecovery = recoverMissionProcessSession(mission.id, {
-          wake: async (input) => {
-            activationEvents.push("wake_prepared")
-            markWakePrepared()
-            return {
-              sessionID: mission.id,
-              messageID: input.messageID!,
-              activation: activationGate.then(() => {
-                activationEvents.push("prompt_owner_published")
-                return { owner: new AbortController().signal }
-              }),
-            }
-          },
-        })
-        await wakePrepared
-        releaseActivation()
-        const first = await firstRecovery
-        activationEvents.push(`result_${first.status}`)
-        expect(activationEvents).toEqual(["wake_prepared", "prompt_owner_published", "result_woken"])
-        expect(first).toMatchObject({ status: "woken", sessionID: mission.id })
-        if (first.status !== "woken") throw new Error("expected Mission recovery wake")
-        const interruptedRecovery = await Session.updateMessage({
-          id: Identifier.ascending("message"),
-          sessionID: mission.id,
-          role: "assistant",
-          author: "mission",
-          parentID: first.wakeMessageID,
-          time: { created: now + 2 },
-          agent: "mission",
-          providerID: "test",
-          modelID: "test-model",
-          path: { cwd: project.path, root: project.path },
-          cost: 0,
-          tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
-        })
-        let settled: Awaited<ReturnType<typeof recoverMissionProcessSession>> | undefined
-        let closingEventID: string | undefined
-        await closeMissionExecutionOperation({
-          missionID,
-          sessionID: mission.id,
-          source: "mission.abort",
-          requestID: "request-process-recovery-close",
-          close: async () => {
-            const closing = currentMissionExecutionClosure(mission.id)!
-            expect(closing.state).toBe("closing")
-            closingEventID = closing.eventID
-            settled = await recoverMissionProcessSession(mission.id, {
-              wake: async (input) => ({
-                sessionID: mission.id,
-                messageID: input.messageID!,
-                activation: activation(),
-              }),
-            })
-          },
-        })
-        const closure = currentMissionExecutionClosure(mission.id)!
-        expect({ settled, closingEventID, closedState: closure.state }).toEqual({
-          settled: {
-            status: "closure_settled",
-            sessionID: mission.id,
-            closureEventID: closingEventID,
-            occurrenceID: first.occurrenceID,
-          },
-          closingEventID: expect.any(String),
-          closedState: "closed",
-        })
-        expect(
-          (await Session.messages({ sessionID: mission.id })).find(
-            (message) => message.info.id === interruptedRecovery.id,
-          )?.info,
-        ).toMatchObject({ finish: "error" })
-        const marker = Database.use((db) =>
-          db
-            .select({ status: SessionControlEventTable.kind, payload: SessionControlEventTable.payload })
-            .from(SessionControlEventTable)
-            .where(eq(SessionControlEventTable.control_id, first.occurrenceID))
-            .get(),
-        )
-        expect(marker).toMatchObject({
-          status: "failed",
-          payload: {
-            terminal: { kind: "mission_closed", closureEventID: closingEventID },
-            error: expect.stringContaining(closingEventID!),
+        const closed = await resumeMissionExecutionClosure({ sessionID: mission.id })
+        expect(closed).toMatchObject({
+          state: "closed",
+          source: "mission.archive",
+          requestID: "closing-takeover:archive",
+          provenance: {
+            kind: "request",
+            surface: "overlay.archive_panel",
+            reason: "Archive the Mission from the exact operator request",
           },
         })
       },
     })
   }, 30_000)
 
-  test("terminalizes interrupted tools, reuses a reply-free attempt, and rotates interrupted or failed replies", async () => {
+  test("preserves an exact live Prompt owner and its persisted assistant frontier", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
+      init: InstanceBootstrap,
       fn: async () => {
-        const mission = await ensureMissionSession({
-          missionID: "process-recovery-test",
-          defaultCwd: project.path,
-          productPillar: "code",
-          heldExpertSquadIDs: ["base"],
-        })
-        const stableControlID = Identifier.ascending("session_control")
-        const stableControl = {
-          id: stableControlID,
+        const { mission } = await missionFixture("live-owner")
+        const assistant = await incompleteAssistant(mission.id, "live_owner")
+        const admission = SessionPromptOwner.acquire({
           sessionID: mission.id,
-          kind: "wake_reason" as const,
-          status: "consumed" as const,
-          owner: "recovery-test",
-          payload: { messageID: "stable-wake", attempt: 1 },
-        }
-        expect(SessionControl.create(stableControl).id).toBe(stableControlID)
-        expect(SessionControl.create(stableControl).id).toBe(stableControlID)
-        expect(() => SessionControl.create({ ...stableControl, payload: { messageID: "changed" } })).toThrow(
-          "different persisted semantics",
-        )
-        const now = Date.now()
-        const user = await Session.updateMessage({
-          id: Identifier.ascending("message"),
-          sessionID: mission.id,
-          role: "user",
-          author: "operator",
-          time: { created: now },
-          agent: "mission",
-          model: { providerID: "test", modelID: "test-model" },
+          projectID: mission.projectID,
+          directory: mission.directory,
         })
-        const assistant = await Session.updateMessage({
-          id: Identifier.ascending("message"),
-          sessionID: mission.id,
-          role: "assistant",
-          author: "mission",
-          parentID: user.id,
-          time: { created: now + 1 },
-          agent: "mission",
-          providerID: "test",
-          modelID: "test-model",
-          path: { cwd: project.path, root: project.path },
-          cost: 0,
-          tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
-        })
-        const tool = await Session.updatePart({
-          id: Identifier.ascending("part"),
-          sessionID: mission.id,
-          messageID: assistant.id,
-          type: "tool",
-          callID: "call_interrupted_glob",
-          tool: "glob",
-          state: { status: "running", input: { pattern: "*" }, time: { start: now + 2 } },
-        })
+        if (!admission.acquired) throw new Error("live owner fixture did not acquire Prompt ownership")
 
-        expect(listGlobalMissionProcessRecoveryCandidates()).toEqual([
-          { sessionID: mission.id, directory: project.path },
-        ])
-        expect(listGlobalMissionProcessRecoveryCandidates({ scopeProjectWorktree: `${project.path}-other` })).toEqual(
-          [],
-        )
-        const wakes: SessionWake.WakeInput[] = []
-        const wake = async (input: SessionWake.WakeInput) => {
-          wakes.push(input)
-          return { sessionID: mission.id, messageID: input.messageID!, activation: activation() }
-        }
-        let recoveryControlWakeCount = 0
-        const unsubscribeControlWake = SessionControl.subscribeWake(mission.id, () => {
-          recoveryControlWakeCount += 1
+        const live = await recoverMissionProcessSession(mission.id)
+        const liveAssistant = (await Session.messages({ sessionID: mission.id })).find(
+          (item) => item.info.id === assistant.id,
+        )?.info
+        expect({
+          live,
+          assistantState: liveAssistant?.time.completed === undefined ? "persisted_running" : "terminal",
+        }).toEqual({
+          live: { status: "live", sessionID: mission.id, ownerGeneration: admission.authority.generation },
+          assistantState: "persisted_running",
         })
-        const first = await recoverMissionProcessSession(mission.id, { wake })
-        unsubscribeControlWake()
-        expect(recoveryControlWakeCount).toBe(0)
-        const second = await recoverMissionProcessSession(mission.id, { wake })
-        expect(first).toMatchObject({ status: "woken", sessionID: mission.id })
-        expect(second).toEqual(first)
-        expect(
-          SessionControl.pending(mission.id).filter((control) => control.kind === "mission_process_recovery"),
-        ).toHaveLength(1)
-        expect(wakes).toHaveLength(2)
-        expect(wakes[1]).toMatchObject({
-          messageID: wakes[0]!.messageID,
-          textPartID: wakes[0]!.textPartID,
-          controlID: wakes[0]!.controlID,
-          reason: {
-            source: "mission.process_recovery",
-            interruptedAssistantMessageIDs: [assistant.id],
-          },
-        })
-
-        const persisted = await Session.messages({ sessionID: mission.id })
-        const failedTool = persisted.flatMap((message) => message.parts).find((part) => part.id === tool.id)
-        expect(failedTool).toMatchObject({
-          type: "tool",
-          state: { status: "error", failure: { kind: "process-execution-interrupted" } },
-        })
-        const failedAssistant = persisted.find((message) => message.info.id === assistant.id)?.info
-        expect(failedAssistant).toMatchObject({
-          role: "assistant",
-          finish: "error",
-          error: {
-            name: "UnknownError",
-            data: { message: expect.stringContaining("ProcessExecutionInterruptedError") },
-          },
-        })
-
-        const interruptedRecovery = await Session.updateMessage({
-          id: Identifier.ascending("message"),
-          sessionID: mission.id,
-          role: "assistant",
-          author: "mission",
-          parentID: first.status === "woken" ? first.wakeMessageID : "unreachable",
-          time: { created: now + 3 },
-          agent: "mission",
-          providerID: "test",
-          modelID: "test-model",
-          path: { cwd: project.path, root: project.path },
-          cost: 0,
-          tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
-        })
-        const third = await recoverMissionProcessSession(mission.id, { wake })
-        expect(third).toMatchObject({
-          status: "woken",
-          sessionID: mission.id,
-          occurrenceID: first.status === "woken" ? first.occurrenceID : "unreachable",
-          attempt: 2,
-        })
-        expect(third.status === "woken" && first.status === "woken" && third.wakeMessageID).not.toBe(
-          first.status === "woken" ? first.wakeMessageID : "unreachable",
-        )
-        expect(
-          (await Session.messages({ sessionID: mission.id })).find(
-            (message) => message.info.id === interruptedRecovery.id,
-          )?.info,
-        ).toMatchObject({ finish: "error" })
-
-        const failedRecoveryReply = await Session.updateMessage({
-          id: Identifier.ascending("message"),
-          sessionID: mission.id,
-          role: "assistant",
-          author: "mission",
-          parentID: third.status === "woken" ? third.wakeMessageID : "unreachable",
-          time: { created: now + 4, completed: now + 5 },
-          agent: "mission",
-          providerID: "test",
-          modelID: "test-model",
-          path: { cwd: project.path, root: project.path },
-          cost: 0,
-          tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
-          finish: "error",
-          error: { name: "UnknownError", data: { message: "provider failed during recovery" } },
-        })
-        const fourth = await recoverMissionProcessSession(mission.id, { wake })
-        expect(fourth).toMatchObject({ status: "woken", attempt: 3 })
-        expect(fourth.status === "woken" && third.status === "woken" && fourth.wakeMessageID).not.toBe(
-          third.status === "woken" ? third.wakeMessageID : "unreachable",
-        )
-        expect(failedRecoveryReply.finish).toBe("error")
-
-        await Session.updateMessage({
-          id: Identifier.ascending("message"),
-          sessionID: mission.id,
-          role: "assistant",
-          author: "mission",
-          parentID: fourth.status === "woken" ? fourth.wakeMessageID : "unreachable",
-          time: { created: now + 6, completed: now + 7 },
-          agent: "mission",
-          providerID: "test",
-          modelID: "test-model",
-          path: { cwd: project.path, root: project.path },
-          cost: 0,
-          tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
-          finish: "stop",
-        })
-        const nextUser = await Session.updateMessage({
-          id: Identifier.ascending("message"),
-          sessionID: mission.id,
-          role: "user",
-          author: "operator",
-          time: { created: now + 8 },
-          agent: "mission",
-          model: { providerID: "test", modelID: "test-model" },
-        })
-        const nextInterrupted = await Session.updateMessage({
-          id: Identifier.ascending("message"),
-          sessionID: mission.id,
-          role: "assistant",
-          author: "mission",
-          parentID: nextUser.id,
-          time: { created: now + 9 },
-          agent: "mission",
-          providerID: "test",
-          modelID: "test-model",
-          path: { cwd: project.path, root: project.path },
-          cost: 0,
-          tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
-        })
-        const nextOccurrence = await recoverMissionProcessSession(mission.id, { wake })
-        expect(nextOccurrence).toMatchObject({ status: "woken", attempt: 1 })
-        expect(
-          nextOccurrence.status === "woken" && first.status === "woken" && nextOccurrence.occurrenceID,
-        ).not.toBe(first.status === "woken" ? first.occurrenceID : "unreachable")
-        expect(
-          (await Session.messages({ sessionID: mission.id })).find(
-            (message) => message.info.id === nextInterrupted.id,
-          )?.info,
-        ).toMatchObject({ finish: "error" })
-
-        await Session.updateMessage({
-          id: Identifier.ascending("message"),
-          sessionID: mission.id,
-          role: "assistant",
-          author: "mission",
-          parentID: nextOccurrence.status === "woken" ? nextOccurrence.wakeMessageID : "unreachable",
-          time: { created: now + 10, completed: now + 11 },
-          agent: "mission",
-          providerID: "test",
-          modelID: "test-model",
-          path: { cwd: project.path, root: project.path },
-          cost: 0,
-          tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
-          finish: "stop",
-        })
-        const completed = await recoverMissionProcessSession(mission.id, {
-          wake: async () => {
-            throw new Error("completed recovery must not wake again")
-          },
-        })
-        expect(completed).toMatchObject({ status: "already_completed", sessionID: mission.id })
-        expect(
-          SessionControl.pending(mission.id).filter((control) => control.kind === "mission_process_recovery"),
-        ).toEqual([])
-        expect(listGlobalMissionProcessRecoveryCandidates()).toEqual([])
-
-        await Session.updateMessage({
-          id: Identifier.ascending("message"),
-          sessionID: mission.id,
-          role: "assistant",
-          author: "mission",
-          parentID: user.id,
-          time: { created: now + 12 },
-          agent: "mission",
-          providerID: "test",
-          modelID: "test-model",
-          path: { cwd: project.path, root: project.path },
-          cost: 0,
-          tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
-        })
-        await Session.updateMessage({
-          id: Identifier.ascending("message"),
-          sessionID: mission.id,
-          role: "user",
-          author: "operator",
-          time: { created: now + 13 },
-          agent: "mission",
-          model: { providerID: "test", modelID: "test-model" },
-        })
-        expect(listGlobalMissionProcessRecoveryCandidates()).toEqual([])
-        expect(await recoverMissionProcessSession(mission.id, { wake })).toEqual({
-          status: "not_needed",
-          sessionID: mission.id,
-        })
+        expect(SessionPromptOwner.release(admission.authority)).toBe(true)
       },
     })
   }, 30_000)

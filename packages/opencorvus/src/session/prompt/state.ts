@@ -17,6 +17,7 @@ import {
 } from "@/worktree/managed-session-owner"
 import { awaitWithAbort } from "@/util/abort"
 import { SessionPromptOwner } from "./owner"
+import type { Database } from "@/storage/db"
 
 export class SessionPromptLoopFinishedError extends Error {
   constructor(public readonly sessionID: string) {
@@ -74,6 +75,7 @@ export namespace SessionPromptState {
       cancellation?: ExecutionCancellationError
       durableOwner: SessionPromptOwner.Authority
       directoryOwnership: Disposable
+      ownerLifecycle?: Disposable
       worktreeOwnerAuthority: ManagedWorktreeSessionOwnerAuthority
     }
   >
@@ -126,6 +128,8 @@ export namespace SessionPromptState {
   const promptOwnerCapture = new AsyncLocalStorage<{
     sessionID: string
     capture(owner: AbortSignal): void
+    preflight?: (db: Database.TxOrDb) => void
+    lifecycle?: (owner: AbortSignal) => Disposable
   }>()
 
   function rootSessionDestructiveOrigin(rootSessionID: string): RootSessionDestructiveOrigin | undefined {
@@ -136,8 +140,10 @@ export namespace SessionPromptState {
     sessionID: string,
     capture: (owner: AbortSignal) => void,
     run: () => Result,
+    preflight?: (db: Database.TxOrDb) => void,
+    lifecycle?: (owner: AbortSignal) => Disposable,
   ): Result {
-    return promptOwnerCapture.run({ sessionID, capture }, run)
+    return promptOwnerCapture.run({ sessionID, capture, preflight, lifecycle }, run)
   }
 
   function publishPromptOwnerCapture(sessionID: string, owner: AbortSignal): void {
@@ -226,6 +232,7 @@ export namespace SessionPromptState {
       sessionID,
       projectID: Instance.project.id,
       directory: key,
+      preflight: promptOwnerCapture.getStore()?.preflight,
     })
     if (!durableAdmission.acquired) {
       deleteDirectoryIfEmpty(key, s)
@@ -277,18 +284,28 @@ export namespace SessionPromptState {
     messageOwnersBySession.set(sessionID, { owners: new Map() })
     try {
       SessionStatus.beginPromptGeneration(sessionID, controller.signal)
+      s[sessionID]!.ownerLifecycle = promptOwnerCapture.getStore()?.lifecycle?.(controller.signal)
     } catch (error) {
+      const cleanupErrors: unknown[] = [error]
+      try {
+        s[sessionID]?.ownerLifecycle?.[Symbol.dispose]()
+      } catch (lifecycleError) {
+        cleanupErrors.push(lifecycleError)
+      }
+      SessionStatus.finishPromptGeneration(sessionID, controller.signal)
       delete s[sessionID]
       messageOwnersBySession.delete(sessionID)
       deleteDirectoryIfEmpty(key, s)
       try {
         directoryOwnership[Symbol.dispose]()
       } catch (releaseError) {
-        releaseDurableAdmission(
-          new AggregateError([error, releaseError], `Session ${sessionID} failed prompt status and worktree cleanup`),
-        )
+        cleanupErrors.push(releaseError)
       }
-      releaseDurableAdmission(error)
+      releaseDurableAdmission(
+        cleanupErrors.length === 1
+          ? error
+          : new AggregateError(cleanupErrors, `Session ${sessionID} failed prompt admission cleanup`),
+      )
     }
     publishPromptOwnerCapture(sessionID, controller.signal)
     return { type: "owner", abort: controller.signal }
@@ -945,7 +962,7 @@ export namespace SessionPromptState {
 
   export function cancelOwned(
     sessionID: string,
-    directory: string,
+    directory: string | undefined,
     owner: AbortSignal,
     options: { origin: ExecutionCancellationOrigin; settlementRequired?: boolean },
   ): CancellationReceipt | undefined {
@@ -1040,6 +1057,11 @@ export namespace SessionPromptState {
       }
     } finally {
       if (match && key !== undefined) {
+        try {
+          match.ownerLifecycle?.[Symbol.dispose]()
+        } catch (lifecycleError) {
+          errors.push(lifecycleError)
+        }
         try {
           match.directoryOwnership[Symbol.dispose]()
         } catch (ownershipError) {

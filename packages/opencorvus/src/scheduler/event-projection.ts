@@ -3,6 +3,7 @@ import { EngineControlActivationLeaseTable } from "@/engine/engine.sql"
 import { Database, and, asc, eq, inArray } from "@/storage/db"
 import { EventJobFireReceiptTable, EventJobFireTable, EventJobTable, EventOccurrenceTable } from "./event.sql"
 import { BusPublicationOutboxTable } from "@/bus/bus.sql"
+import { assertSchedulerMissionReservationInTransaction } from "./mission-reservation"
 
 export type EventJobFireRow = typeof EventJobFireTable.$inferSelect & {
   event_job_id: string
@@ -12,7 +13,8 @@ export type EventJobFireRow = typeof EventJobFireTable.$inferSelect & {
   target_session_id: string
   creates_session: boolean
   status: "pending" | "running" | "retry_wait" | "succeeded" | "disposition"
-  disposition: "causal_cycle" | "cooldown" | "job_disabled" | null
+  disposition: "causal_cycle" | "cooldown" | "job_disabled" | "mission_closed" | null
+  closure_event_id: string | null
   message_id: string | null
   owner_id: string | null
   owner_process_id: number | null
@@ -60,6 +62,15 @@ export function projectEventFireInTransaction(db: Database.TxOrDb, row: typeof E
   const receipts = db.select().from(EventJobFireReceiptTable).where(eq(EventJobFireReceiptTable.fire_id, row.id))
     .orderBy(asc(EventJobFireReceiptTable.time_created), asc(EventJobFireReceiptTable.id)).all()
   const latest = receipts.at(-1)
+  const reservation = assertSchedulerMissionReservationInTransaction(db, targetSessionID, row)
+  if (
+    reservation.kind === "mission_closed" &&
+    (latest?.outcome !== "disposition" ||
+      latest.disposition !== "mission_closed" ||
+      latest.closure_event_id !== reservation.closureEventID)
+  ) {
+    throw new Error(`Event fire ${row.id} terminal Mission reservation has no exact atomic receipt`)
+  }
   const leases = db.select().from(EngineControlActivationLeaseTable)
     .where(and(eq(EngineControlActivationLeaseTable.target, "event_fire"), eq(EngineControlActivationLeaseTable.target_id, row.id)))
     .orderBy(asc(EngineControlActivationLeaseTable.time_activated), asc(EngineControlActivationLeaseTable.id)).all()
@@ -75,6 +86,7 @@ export function projectEventFireInTransaction(db: Database.TxOrDb, row: typeof E
     target_session_id: targetSessionID,
     creates_session: definition.sessionID === null,
     disposition,
+    closure_event_id: latest?.closure_event_id ?? null,
     status,
     message_id: [...receipts].reverse().find((receipt) => receipt.message_id)?.message_id ?? null,
     owner_id: lease?.owner_occurrence_id ?? null,
@@ -83,7 +95,8 @@ export function projectEventFireInTransaction(db: Database.TxOrDb, row: typeof E
     attempt: leases.length,
     error: latest?.error ?? null,
     time_started: leases[0]?.time_activated ?? null,
-    time_completed: latest?.outcome === "succeeded" ? latest.time_created : null,
+    time_completed:
+      latest?.outcome === "succeeded" || latest?.outcome === "disposition" ? latest.time_created : null,
     time_updated: latest?.time_created ?? lease?.time_activated ?? row.time_created,
     retry_at: latest?.retry_at ?? null,
   }
@@ -105,7 +118,7 @@ export function projectEventJobInTransaction(db: Database.TxOrDb, row: typeof Ev
   const latest = fires.at(-1)
   let failures = 0
   for (const fire of fires.toReversed()) {
-    if (fire.status === "succeeded") break
+    if (fire.status === "succeeded" || fire.status === "disposition") break
     if (fire.status === "retry_wait") failures += 1
   }
   const oneShotCompleted = row.one_shot && fires.some((fire) => fire.status === "succeeded")

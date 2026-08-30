@@ -258,7 +258,7 @@ describe("Tax Compliance Expert Squad", () => {
       namespace: "builtin",
       id: "tax-compliance",
       name: "Tax Compliance",
-      version: "2026.08.30.1",
+      version: "2026.08.30.2",
       product_pillars: ["work"],
     })
     expect([...source.packageSkills.keys()].sort()).toEqual([...skillRefs].sort())

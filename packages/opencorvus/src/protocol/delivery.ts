@@ -11,7 +11,7 @@ import { deriveTaskStatus, isTaskActive } from "@/engine/task-status"
 import { Identifier } from "@/id/id"
 import { MessageTable, PartTable, ToolPartRequestTable, SessionControlRecordTable, SessionTable } from "@/session/session.sql"
 import { Message } from "@/session/message"
-import { and, asc, Database, eq, inArray, sql } from "@/storage/db"
+import { and, asc, Database, eq, inArray, or, sql } from "@/storage/db"
 import { TaskCreatorMetadata } from "@/task-api/task-creator"
 import { ProtocolDeliveryReceiptTable, ProtocolEventTable, ProtocolInboxTable } from "./protocol.sql"
 import { projectProtocolDeliveryInTransaction, type ProtocolDeliveryRow } from "./delivery-projection"
@@ -24,15 +24,151 @@ import {
   type ProtocolAggregate,
 } from "./schema"
 import { ProtocolStore } from "./store"
-import { currentMissionExecutionClosure, requireMissionExecutionClosureEvent } from "@/mission/execution-closure"
+import { requireMissionExecutionClosureEvent } from "@/mission/execution-closure"
 import { assertTaskNotDeletedInTransaction, projectTaskRowInTransaction, type TaskRow } from "@/engine/store"
 import {
+  completedSchedulerWakeReplyExistsInTransaction,
   schedulerWakeMessageMatchesInTransaction,
   successfulSchedulerWakeReplyExistsInTransaction,
 } from "./session-wake-state"
 
 const SCHEDULER_MESSAGE_EVENT_TYPE = "scheduler.message"
 const ENDPOINT_PREFIX = "scheduler-endpoint:"
+const SCHEDULER_WAKE_RECOVERY_PAGE_LIMIT = 64
+const SCHEDULER_RECIPIENT_PAGE_LIMIT = 64
+const SCHEDULER_PROJECT_PAGE_LIMIT = 64
+
+function schedulerDeliveryHasNoTerminalReceipt() {
+  return sql`NOT EXISTS (
+    SELECT 1
+    FROM protocol_delivery_receipt AS scheduler_terminal_receipt
+    WHERE scheduler_terminal_receipt.inbox_id = ${ProtocolInboxTable.id}
+      AND json_extract(scheduler_terminal_receipt.receipt, '$.kind') <> 'retry_wait'
+  )`
+}
+
+function schedulerDeliveryIsCurrentUnresolvedHead() {
+  return sql`${schedulerDeliveryHasNoTerminalReceipt()} AND NOT EXISTS (
+    SELECT 1
+    FROM protocol_inbox AS scheduler_earlier_inbox
+    JOIN protocol_event AS scheduler_earlier_event
+      ON scheduler_earlier_event.id = scheduler_earlier_inbox.envelope_id
+    WHERE scheduler_earlier_inbox.actor = ${ProtocolInboxTable.actor}
+      AND scheduler_earlier_inbox.actor_id = ${ProtocolInboxTable.actor_id}
+      AND scheduler_earlier_event.type = ${SCHEDULER_MESSAGE_EVENT_TYPE}
+      AND (
+        scheduler_earlier_event.seq < ${ProtocolEventTable.seq}
+        OR (
+          scheduler_earlier_event.seq = ${ProtocolEventTable.seq}
+          AND scheduler_earlier_event.id < ${ProtocolEventTable.id}
+        )
+      )
+      AND NOT EXISTS (
+        SELECT 1
+        FROM protocol_delivery_receipt AS scheduler_earlier_terminal_receipt
+        WHERE scheduler_earlier_terminal_receipt.inbox_id = scheduler_earlier_inbox.id
+          AND json_extract(scheduler_earlier_terminal_receipt.receipt, '$.kind') <> 'retry_wait'
+      )
+  )`
+}
+
+function schedulerDeliveryHeadIsDueAndUnleased(now: number) {
+  return sql`${schedulerDeliveryHeadAvailableAt(now)} <= ${now}`
+}
+
+function schedulerDeliveryHeadAvailableAt(now: number) {
+  const visibleAt = sql<number>`COALESCE((
+      SELECT json_extract(scheduler_latest_retry.receipt, '$.visible_at')
+      FROM protocol_delivery_receipt AS scheduler_latest_retry
+      WHERE scheduler_latest_retry.inbox_id = ${ProtocolInboxTable.id}
+        AND json_extract(scheduler_latest_retry.receipt, '$.kind') = 'retry_wait'
+      ORDER BY scheduler_latest_retry.time_created DESC, scheduler_latest_retry.id DESC
+      LIMIT 1
+    ), ${ProtocolInboxTable.visible_at})`
+  const leaseExpiresAt = sql<number>`COALESCE((
+      SELECT scheduler_latest_lease.expires_at
+      FROM engine_control_activation_lease AS scheduler_latest_lease
+      WHERE scheduler_latest_lease.target = 'protocol_delivery'
+        AND scheduler_latest_lease.target_id = ${ProtocolInboxTable.id}
+      ORDER BY scheduler_latest_lease.time_activated DESC, scheduler_latest_lease.id DESC
+      LIMIT 1
+    ), 0)`
+  return sql<number>`MAX(
+    ${visibleAt},
+    CASE WHEN ${leaseExpiresAt} > ${now} THEN ${leaseExpiresAt} ELSE 0 END
+  )`
+}
+
+function schedulerSessionWakeHasRecoverableTerminalReceipt() {
+  return sql`EXISTS (
+      SELECT 1
+      FROM protocol_delivery_receipt AS scheduler_session_wake_receipt
+      WHERE scheduler_session_wake_receipt.inbox_id = ${ProtocolInboxTable.id}
+        AND json_extract(scheduler_session_wake_receipt.receipt, '$.kind') = 'session_wake'
+    )
+    AND ${schedulerSessionWakeHasActiveOccurrence()}
+    AND NOT EXISTS (
+      SELECT 1
+      FROM protocol_delivery_receipt AS scheduler_session_wake_receipt
+      JOIN message AS scheduler_successful_reply
+        ON scheduler_successful_reply.session_id = ${ProtocolInboxTable.actor_id}
+       AND json_extract(scheduler_successful_reply.data, '$.role') = 'assistant'
+       AND json_extract(scheduler_successful_reply.data, '$.parentID') = json_extract(scheduler_session_wake_receipt.receipt, '$.message_id')
+       AND json_extract(scheduler_successful_reply.data, '$.time.completed') IS NOT NULL
+       AND json_extract(scheduler_successful_reply.data, '$.error') IS NULL
+      WHERE scheduler_session_wake_receipt.inbox_id = ${ProtocolInboxTable.id}
+        AND json_extract(scheduler_session_wake_receipt.receipt, '$.kind') = 'session_wake'
+    )`
+}
+
+function activeSchedulerMissionOpenedEventID() {
+  return sql<string>`(
+    SELECT CASE
+      WHEN scheduler_prior_lifecycle.type = 'mission.execution.opened' THEN scheduler_prior_lifecycle.id
+      ELSE NULL
+    END
+    FROM protocol_event AS scheduler_prior_lifecycle
+    WHERE scheduler_prior_lifecycle.aggregate_type = 'session'
+      AND scheduler_prior_lifecycle.aggregate_id = ${ProtocolInboxTable.actor_id}
+      AND scheduler_prior_lifecycle.type IN (
+        'mission.execution.opened',
+        'mission.execution.closing',
+        'mission.execution.closed'
+      )
+      AND scheduler_prior_lifecycle.seq < ${ProtocolEventTable.seq}
+    ORDER BY scheduler_prior_lifecycle.seq DESC, scheduler_prior_lifecycle.id DESC
+    LIMIT 1
+  )`
+}
+
+function schedulerSessionWakeHasActiveOccurrence() {
+  const openedEventID = activeSchedulerMissionOpenedEventID()
+  return sql`${openedEventID} IS NOT NULL AND ${openedEventID} = (
+    SELECT scheduler_current_lifecycle.id
+    FROM protocol_event AS scheduler_current_lifecycle
+    WHERE scheduler_current_lifecycle.aggregate_type = 'session'
+      AND scheduler_current_lifecycle.aggregate_id = ${ProtocolInboxTable.actor_id}
+      AND scheduler_current_lifecycle.type IN (
+        'mission.execution.opened',
+        'mission.execution.closing',
+        'mission.execution.closed'
+      )
+    ORDER BY scheduler_current_lifecycle.seq DESC, scheduler_current_lifecycle.id DESC
+    LIMIT 1
+  )`
+}
+
+function schedulerSessionWakeHasNoSuccessfulReply() {
+  return sql`NOT EXISTS (
+    SELECT 1
+    FROM message AS scheduler_successful_reply
+    WHERE scheduler_successful_reply.session_id = ${ProtocolInboxTable.actor_id}
+      AND json_extract(scheduler_successful_reply.data, '$.role') = 'assistant'
+      AND json_extract(scheduler_successful_reply.data, '$.parentID') = json_extract(${ProtocolDeliveryReceiptTable.receipt}, '$.message_id')
+      AND json_extract(scheduler_successful_reply.data, '$.time.completed') IS NOT NULL
+      AND json_extract(scheduler_successful_reply.data, '$.error') IS NULL
+  )`
+}
 
 function sourceBodyFromPartData(data: unknown): string | undefined {
   if (!data || typeof data !== "object" || Array.isArray(data)) return undefined
@@ -66,6 +202,256 @@ export const SchedulerTargetOccurrenceStaleError = NamedError.create(
     currentEpoch: z.number().int().positive(),
   }),
 )
+
+export const MissionSchedulerOccurrenceClosedError = NamedError.create(
+  "MissionSchedulerOccurrenceClosedError",
+  z.object({
+    message: z.string().min(1),
+    sessionID: Identifier.schema("session"),
+    openedEventID: Identifier.schema("protocol_event"),
+    closureEventID: Identifier.schema("protocol_event"),
+  }),
+)
+
+export type MissionSchedulerOccurrenceDisposition =
+  | { kind: "active"; openedEventID: string }
+  | { kind: "mission_closed"; openedEventID: string | null; closureEventID: string }
+
+/** Capture the one Mission occurrence a durable scheduler fact is allowed to
+ * target. The scheduler writer calls this in the same transaction that stores
+ * the fact, so retries never resolve a later reopen. */
+export function missionSchedulerOccurrenceBindingInTransaction(
+  db: Database.TxOrDb,
+  sessionID: string,
+): string | null {
+  const latest = db
+    .select({ id: ProtocolEventTable.id, type: ProtocolEventTable.type })
+    .from(ProtocolEventTable)
+    .where(
+      and(
+        eq(ProtocolEventTable.aggregate_type, "session"),
+        eq(ProtocolEventTable.aggregate_id, sessionID),
+        sql`${ProtocolEventTable.type} IN ('mission.execution.opened','mission.execution.closing','mission.execution.closed')`,
+      ),
+    )
+    .orderBy(sql`${ProtocolEventTable.seq} DESC`, sql`${ProtocolEventTable.id} DESC`)
+    .get()
+  return latest?.type === "mission.execution.opened" ? latest.id : null
+}
+
+function missionSchedulerOccurrenceBindingForEnvelopeInTransaction(
+  db: Database.TxOrDb,
+  sessionID: string,
+  envelopeID: string,
+): string | null {
+  const envelope = db
+    .select({
+      id: ProtocolEventTable.id,
+      type: ProtocolEventTable.type,
+      aggregateType: ProtocolEventTable.aggregate_type,
+      aggregateID: ProtocolEventTable.aggregate_id,
+      seq: ProtocolEventTable.seq,
+    })
+    .from(ProtocolEventTable)
+    .where(eq(ProtocolEventTable.id, envelopeID))
+    .get()
+  if (
+    !envelope ||
+    envelope.type !== SCHEDULER_MESSAGE_EVENT_TYPE ||
+    envelope.aggregateType !== "session" ||
+    envelope.aggregateID !== sessionID
+  ) {
+    throw new SchedulerMessageConflictError({
+      message: `Scheduler inbox envelope ${envelopeID} is not an exact scheduler Message event.`,
+      eventID: envelopeID,
+    })
+  }
+  const latest = db
+    .select({ id: ProtocolEventTable.id, type: ProtocolEventTable.type })
+    .from(ProtocolEventTable)
+    .where(
+      and(
+        eq(ProtocolEventTable.aggregate_type, "session"),
+        eq(ProtocolEventTable.aggregate_id, sessionID),
+        sql`${ProtocolEventTable.type} IN ('mission.execution.opened','mission.execution.closing','mission.execution.closed')`,
+        sql`${ProtocolEventTable.seq} < ${envelope.seq}`,
+      ),
+    )
+    .orderBy(sql`${ProtocolEventTable.seq} DESC`, sql`${ProtocolEventTable.id} DESC`)
+    .get()
+  return latest?.type === "mission.execution.opened" ? latest.id : null
+}
+
+function missionSchedulerOccurrenceDispositionForEnvelopeInTransaction(
+  db: Database.TxOrDb,
+  sessionID: string,
+  envelopeID: string,
+): MissionSchedulerOccurrenceDisposition {
+  const envelope = db
+    .select({
+      id: ProtocolEventTable.id,
+      type: ProtocolEventTable.type,
+      aggregateType: ProtocolEventTable.aggregate_type,
+      aggregateID: ProtocolEventTable.aggregate_id,
+      seq: ProtocolEventTable.seq,
+    })
+    .from(ProtocolEventTable)
+    .where(eq(ProtocolEventTable.id, envelopeID))
+    .get()
+  if (
+    !envelope ||
+    envelope.type !== SCHEDULER_MESSAGE_EVENT_TYPE ||
+    envelope.aggregateType !== "session" ||
+    envelope.aggregateID !== sessionID
+  ) {
+    throw new SchedulerMessageConflictError({
+      message: `Scheduler inbox envelope ${envelopeID} is not an exact scheduler Message event.`,
+      eventID: envelopeID,
+    })
+  }
+  const prior = db
+    .select({ id: ProtocolEventTable.id, type: ProtocolEventTable.type })
+    .from(ProtocolEventTable)
+    .where(
+      and(
+        eq(ProtocolEventTable.aggregate_type, "session"),
+        eq(ProtocolEventTable.aggregate_id, sessionID),
+        sql`${ProtocolEventTable.type} IN ('mission.execution.opened','mission.execution.closing','mission.execution.closed')`,
+        sql`${ProtocolEventTable.seq} < ${envelope.seq}`,
+      ),
+    )
+    .orderBy(sql`${ProtocolEventTable.seq} DESC`, sql`${ProtocolEventTable.id} DESC`)
+    .get()
+  if (prior?.type === "mission.execution.opened") {
+    return missionSchedulerOccurrenceDispositionInTransaction(db, {
+      sessionID,
+      openedEventID: prior.id,
+    })
+  }
+  if (prior?.type === "mission.execution.closing" || prior?.type === "mission.execution.closed") {
+    return { kind: "mission_closed", openedEventID: null, closureEventID: prior.id }
+  }
+  throw new Error(`Scheduler Message ${envelopeID} for Mission Session ${sessionID} has no causal lifecycle boundary`)
+}
+
+export function missionSchedulerOccurrenceBindingForEnvelope(
+  sessionID: string,
+  envelopeID: string,
+): string | null {
+  return Database.use((db) =>
+    missionSchedulerOccurrenceBindingForEnvelopeInTransaction(db, sessionID, envelopeID),
+  )
+}
+
+export function missionSchedulerOccurrenceDispositionForEnvelope(
+  sessionID: string,
+  envelopeID: string,
+): MissionSchedulerOccurrenceDisposition {
+  const disposition = Database.use((db) =>
+    missionSchedulerOccurrenceDispositionForEnvelopeInTransaction(db, sessionID, envelopeID),
+  )
+  if (disposition.kind === "active") requireMissionExecutionClosureEvent(disposition.openedEventID)
+  else requireMissionExecutionClosureEvent(disposition.closureEventID)
+  return disposition
+}
+
+function missionSchedulerOccurrenceDispositionInTransaction(
+  db: Database.TxOrDb,
+  input: { sessionID: string; openedEventID: string | null },
+): MissionSchedulerOccurrenceDisposition {
+  const current = db
+    .select({ id: ProtocolEventTable.id, type: ProtocolEventTable.type, seq: ProtocolEventTable.seq })
+    .from(ProtocolEventTable)
+    .where(
+      and(
+        eq(ProtocolEventTable.aggregate_type, "session"),
+        eq(ProtocolEventTable.aggregate_id, input.sessionID),
+        sql`${ProtocolEventTable.type} IN ('mission.execution.opened','mission.execution.closing','mission.execution.closed')`,
+      ),
+    )
+    .orderBy(sql`${ProtocolEventTable.seq} DESC`, sql`${ProtocolEventTable.id} DESC`)
+    .get()
+  if (!input.openedEventID) {
+    if (current?.type === "mission.execution.closing" || current?.type === "mission.execution.closed") {
+      return { kind: "mission_closed", openedEventID: null, closureEventID: current.id }
+    }
+    throw new Error(`Scheduler fact for Mission Session ${input.sessionID} has no exact opened occurrence binding`)
+  }
+  const opened = db
+    .select({ id: ProtocolEventTable.id, type: ProtocolEventTable.type, seq: ProtocolEventTable.seq })
+    .from(ProtocolEventTable)
+    .where(
+      and(
+        eq(ProtocolEventTable.id, input.openedEventID),
+        eq(ProtocolEventTable.aggregate_type, "session"),
+        eq(ProtocolEventTable.aggregate_id, input.sessionID),
+      ),
+    )
+    .get()
+  if (opened?.type !== "mission.execution.opened") {
+    throw new Error(
+      `Scheduler fact for Mission Session ${input.sessionID} references invalid opened event ${input.openedEventID}`,
+    )
+  }
+  if (current?.id === opened.id) return { kind: "active", openedEventID: opened.id }
+  const next = db
+    .select({ id: ProtocolEventTable.id, type: ProtocolEventTable.type })
+    .from(ProtocolEventTable)
+    .where(
+      and(
+        eq(ProtocolEventTable.aggregate_type, "session"),
+        eq(ProtocolEventTable.aggregate_id, input.sessionID),
+        sql`${ProtocolEventTable.type} IN ('mission.execution.opened','mission.execution.closing','mission.execution.closed')`,
+        sql`${ProtocolEventTable.seq} > ${opened.seq}`,
+      ),
+    )
+    .orderBy(asc(ProtocolEventTable.seq), asc(ProtocolEventTable.id))
+    .get()
+  if (next?.type !== "mission.execution.closing" && next?.type !== "mission.execution.closed") {
+    throw new Error(
+      `Scheduler fact for Mission Session ${input.sessionID} cannot prove closure of opened event ${opened.id}`,
+    )
+  }
+  return { kind: "mission_closed", openedEventID: opened.id, closureEventID: next.id }
+}
+
+export function missionSchedulerOccurrenceDisposition(input: {
+  sessionID: string
+  openedEventID: string | null
+}): MissionSchedulerOccurrenceDisposition {
+  const disposition = Database.use((db) => missionSchedulerOccurrenceDispositionInTransaction(db, input))
+  if (input.openedEventID) requireMissionExecutionClosureEvent(input.openedEventID)
+  if (disposition.kind === "mission_closed") requireMissionExecutionClosureEvent(disposition.closureEventID)
+  return disposition
+}
+
+/** Reassert the scheduler fact's immutable Mission occurrence at the actual
+ * wake admission boundary. A close/reopen between the earlier scheduler read
+ * and this callback reduces to the old occurrence's closure instead of
+ * admitting the wake into the new occurrence. */
+export function assertMissionSchedulerOccurrenceAdmission(input: {
+  sessionID: string
+  openedEventID: string
+  admissionOpenedEventID: string
+}): void {
+  const disposition = missionSchedulerOccurrenceDisposition({
+    sessionID: input.sessionID,
+    openedEventID: input.openedEventID,
+  })
+  if (disposition.kind === "mission_closed") {
+    throw new MissionSchedulerOccurrenceClosedError({
+      message: `Scheduler fact for Mission Session ${input.sessionID} is terminal under closure ${disposition.closureEventID}.`,
+      sessionID: input.sessionID,
+      openedEventID: input.openedEventID,
+      closureEventID: disposition.closureEventID,
+    })
+  }
+  if (disposition.openedEventID !== input.admissionOpenedEventID) {
+    throw new Error(
+      `Scheduler fact for Mission Session ${input.sessionID} was admitted against occurrence ${input.admissionOpenedEventID}, expected ${disposition.openedEventID}`,
+    )
+  }
+}
 
 export type SchedulerDeliveryReceipt = {
   eventID: string
@@ -612,21 +998,29 @@ function requireDeliveryResultOccurrence(
   if (result.kind === "dead_letter") return
   if (result.kind === "mission_closed") {
     const closure = requireMissionExecutionClosureEvent(result.closure_event_id)
-    const currentClosure = currentMissionExecutionClosure(inbox.actor_id)
+    const disposition =
+      inbox.actor === "session"
+        ? missionSchedulerOccurrenceDispositionForEnvelopeInTransaction(
+            db,
+            inbox.actor_id,
+            inbox.envelope_id,
+          )
+        : undefined
     if (
       inbox.actor !== "session" ||
       closure.sessionID !== inbox.actor_id ||
       (closure.state !== "closing" && closure.state !== "closed") ||
-      currentClosure?.operationID !== closure.operationID
+      disposition?.kind !== "mission_closed" ||
+      disposition.closureEventID !== closure.eventID
     ) {
       throw new SchedulerMessageConflictError({
-        message: `Scheduler inbox ${inbox.id} mission_closed result does not name an active closure for its recipient Mission Session.`,
+        message: `Scheduler inbox ${inbox.id} mission_closed result does not name the first closure of its enqueue-time Mission occurrence.`,
         eventID: inbox.envelope_id,
       })
     }
     return
   }
-  if (result.kind === "session_wake" || result.kind === "mission_wake_closed") {
+  if (result.kind === "session_wake") {
     if (
       inbox.actor !== "session" ||
       !schedulerWakeMessageMatchesInTransaction(db, {
@@ -640,20 +1034,6 @@ function requireDeliveryResultOccurrence(
         message: `Scheduler inbox ${inbox.id} ${result.kind} result does not name its exact Message occurrence in the recipient Session.`,
         eventID: inbox.envelope_id,
       })
-    }
-    if (result.kind === "mission_wake_closed") {
-      const closure = requireMissionExecutionClosureEvent(result.closure_event_id)
-      const currentClosure = currentMissionExecutionClosure(inbox.actor_id)
-      if (
-        closure.sessionID !== inbox.actor_id ||
-        (closure.state !== "closing" && closure.state !== "closed") ||
-        currentClosure?.operationID !== closure.operationID
-      ) {
-        throw new SchedulerMessageConflictError({
-          message: `Scheduler inbox ${inbox.id} mission_wake_closed result does not name an active closure for its recipient Mission Session.`,
-          eventID: inbox.envelope_id,
-        })
-      }
     }
     return
   }
@@ -917,8 +1297,8 @@ export function claimNextSchedulerDelivery(input: {
 }) {
   const now = input.now ?? Date.now()
   const row = Database.use((db) => {
-    const rows = db
-      .select()
+    return db
+      .select({ inbox: ProtocolInboxTable })
       .from(ProtocolInboxTable)
       .innerJoin(ProtocolEventTable, eq(ProtocolEventTable.id, ProtocolInboxTable.envelope_id))
       .where(
@@ -926,11 +1306,13 @@ export function claimNextSchedulerDelivery(input: {
           eq(ProtocolInboxTable.actor, input.actor),
           eq(ProtocolInboxTable.actor_id, input.actorID),
           eq(ProtocolEventTable.type, SCHEDULER_MESSAGE_EVENT_TYPE),
+          schedulerDeliveryIsCurrentUnresolvedHead(),
+          schedulerDeliveryHeadIsDueAndUnleased(now),
         ),
       )
       .orderBy(asc(ProtocolEventTable.seq), asc(ProtocolEventTable.id))
-      .all()
-    return rows.map((candidate) => projectProtocolDeliveryInTransaction(db, candidate.protocol_inbox, now)).find((candidate) => candidate.status === "pending" && candidate.visible_at <= now)
+      .limit(1)
+      .get()?.inbox
   })
   if (!row) return undefined
   const acquired = acquireControlLease({ target: "protocol_delivery", targetID: row.id, ownerOccurrenceID: input.ownerID, now, leaseMilliseconds: input.leaseMilliseconds })
@@ -1084,73 +1466,99 @@ export function detachProtocolEventsFromDeletedTasksInTransaction(
 export function listPendingSchedulerRecipientIDs(input: {
   actor: "task" | "session"
   projectID?: string
+  afterActorID?: string
+  limit: number
   now?: number
 }): string[] {
+  if (!Number.isSafeInteger(input.limit) || input.limit <= 0 || input.limit > SCHEDULER_RECIPIENT_PAGE_LIMIT) {
+    throw new Error(`Scheduler recipient page limit must be between 1 and ${SCHEDULER_RECIPIENT_PAGE_LIMIT}`)
+  }
   const now = input.now ?? Date.now()
   return Database.use((db) => {
     const rows = input.actor === "session"
       ? db
-        .select({ inbox: ProtocolInboxTable, projectID: SessionTable.project_id })
+        .select({ actorID: ProtocolInboxTable.actor_id })
         .from(ProtocolInboxTable)
         .innerJoin(ProtocolEventTable, eq(ProtocolEventTable.id, ProtocolInboxTable.envelope_id))
         .innerJoin(SessionTable, eq(SessionTable.id, ProtocolInboxTable.actor_id))
-        .where(and(eq(ProtocolInboxTable.actor, "session"), eq(ProtocolEventTable.type, SCHEDULER_MESSAGE_EVENT_TYPE)))
+        .where(and(
+          eq(ProtocolInboxTable.actor, "session"),
+          eq(ProtocolEventTable.type, SCHEDULER_MESSAGE_EVENT_TYPE),
+          ...(input.projectID ? [eq(SessionTable.project_id, input.projectID)] : []),
+          ...(input.afterActorID ? [sql`${ProtocolInboxTable.actor_id} > ${input.afterActorID}`] : []),
+          schedulerDeliveryIsCurrentUnresolvedHead(),
+          schedulerDeliveryHeadIsDueAndUnleased(now),
+        ))
+        .orderBy(asc(ProtocolInboxTable.actor_id))
+        .limit(input.limit)
         .all()
       : db
-        .select({ inbox: ProtocolInboxTable, projectID: EngineTaskTable.project_id })
+        .select({ actorID: ProtocolInboxTable.actor_id })
         .from(ProtocolInboxTable)
         .innerJoin(ProtocolEventTable, eq(ProtocolEventTable.id, ProtocolInboxTable.envelope_id))
         .innerJoin(EngineTaskTable, eq(EngineTaskTable.id, ProtocolInboxTable.actor_id))
-        .where(and(eq(ProtocolInboxTable.actor, "task"), eq(ProtocolEventTable.type, SCHEDULER_MESSAGE_EVENT_TYPE)))
+        .where(and(
+          eq(ProtocolInboxTable.actor, "task"),
+          eq(ProtocolEventTable.type, SCHEDULER_MESSAGE_EVENT_TYPE),
+          ...(input.projectID ? [eq(EngineTaskTable.project_id, input.projectID)] : []),
+          ...(input.afterActorID ? [sql`${ProtocolInboxTable.actor_id} > ${input.afterActorID}`] : []),
+          schedulerDeliveryIsCurrentUnresolvedHead(),
+          schedulerDeliveryHeadIsDueAndUnleased(now),
+        ))
+        .orderBy(asc(ProtocolInboxTable.actor_id))
+        .limit(input.limit)
         .all()
-    return [...new Set(rows.flatMap(({ inbox, projectID }) => {
-      if (input.projectID && projectID !== input.projectID) return []
-      const projected = projectProtocolDeliveryInTransaction(db, inbox, now)
-      return projected.status === "pending" && projected.visible_at <= now ? [projected.actor_id] : []
-    }))]
+    return rows.map((row) => row.actorID)
   })
 }
 
-export function listPendingSchedulerProjectIDs(): string[] {
+export function listPendingSchedulerProjectIDs(input: {
+  afterProjectID?: string
+  limit: number
+}): string[] {
+  if (!Number.isSafeInteger(input.limit) || input.limit <= 0 || input.limit > SCHEDULER_PROJECT_PAGE_LIMIT) {
+    throw new Error(`Scheduler Project page limit must be between 1 and ${SCHEDULER_PROJECT_PAGE_LIMIT}`)
+  }
   return Database.use((db) => {
-    const sessions = db
-      .select({ inbox: ProtocolInboxTable, projectID: SessionTable.project_id })
+    const projectID = sql<string>`COALESCE(${SessionTable.project_id}, ${EngineTaskTable.project_id})`
+    return db
+      .select({ projectID })
       .from(ProtocolInboxTable)
       .innerJoin(ProtocolEventTable, eq(ProtocolEventTable.id, ProtocolInboxTable.envelope_id))
-      .innerJoin(SessionTable, eq(SessionTable.id, ProtocolInboxTable.actor_id))
-      .where(and(eq(ProtocolInboxTable.actor, "session"), eq(ProtocolEventTable.type, SCHEDULER_MESSAGE_EVENT_TYPE)))
+      .leftJoin(
+        SessionTable,
+        and(eq(ProtocolInboxTable.actor, "session"), eq(SessionTable.id, ProtocolInboxTable.actor_id)),
+      )
+      .leftJoin(
+        EngineTaskTable,
+        and(eq(ProtocolInboxTable.actor, "task"), eq(EngineTaskTable.id, ProtocolInboxTable.actor_id)),
+      )
+      .where(
+        and(
+          eq(ProtocolEventTable.type, SCHEDULER_MESSAGE_EVENT_TYPE),
+          sql`${projectID} IS NOT NULL`,
+          ...(input.afterProjectID ? [sql`${projectID} > ${input.afterProjectID}`] : []),
+          or(
+            and(
+              eq(ProtocolInboxTable.actor, "session"),
+              or(schedulerDeliveryIsCurrentUnresolvedHead(), schedulerSessionWakeHasRecoverableTerminalReceipt()),
+            ),
+            and(eq(ProtocolInboxTable.actor, "task"), schedulerDeliveryIsCurrentUnresolvedHead()),
+          ),
+        ),
+      )
+      .groupBy(projectID)
+      .orderBy(projectID)
+      .limit(input.limit)
       .all()
-    const tasks = db
-      .select({ inbox: ProtocolInboxTable, projectID: EngineTaskTable.project_id })
-      .from(ProtocolInboxTable)
-      .innerJoin(ProtocolEventTable, eq(ProtocolEventTable.id, ProtocolInboxTable.envelope_id))
-      .innerJoin(EngineTaskTable, eq(EngineTaskTable.id, ProtocolInboxTable.actor_id))
-      .where(and(eq(ProtocolInboxTable.actor, "task"), eq(ProtocolEventTable.type, SCHEDULER_MESSAGE_EVENT_TYPE)))
-      .all()
-    const projects = [...sessions, ...tasks].flatMap(({ inbox, projectID }) => {
-      const projected = projectProtocolDeliveryInTransaction(db, inbox)
-      if (projected.status === "pending" || projected.status === "leased") return [projectID]
-      const result = projected.delivery_result
-      if (
-        inbox.actor === "session" &&
-        projected.status === "delivered" &&
-        result?.kind === "session_wake" &&
-        !successfulSchedulerWakeReplyExistsInTransaction(db, { sessionID: inbox.actor_id, messageID: result.message_id })
-      ) return [projectID]
-      return []
-    })
-    return [...new Set(projects)]
+      .map((row) => row.projectID)
   })
 }
 
-export function nextSchedulerDeliveryDueAt(projectID: string): number | undefined {
+export function nextSchedulerDeliveryDueAt(projectID: string, now = Date.now()): number | undefined {
   return Database.use((db) => {
-    const sessionRows = db
-      .select({
-        inbox: ProtocolInboxTable,
-        sequence: ProtocolEventTable.seq,
-        eventID: ProtocolEventTable.id,
-      })
+    const sessionDueAt = db
+      .select({ dueAt: sql<number | null>`MIN(${schedulerDeliveryHeadAvailableAt(now)})` })
       .from(ProtocolInboxTable)
       .innerJoin(ProtocolEventTable, eq(ProtocolEventTable.id, ProtocolInboxTable.envelope_id))
       .innerJoin(SessionTable, eq(SessionTable.id, ProtocolInboxTable.actor_id))
@@ -1159,16 +1567,12 @@ export function nextSchedulerDeliveryDueAt(projectID: string): number | undefine
           eq(SessionTable.project_id, projectID),
           eq(ProtocolInboxTable.actor, "session"),
           eq(ProtocolEventTable.type, SCHEDULER_MESSAGE_EVENT_TYPE),
+          schedulerDeliveryIsCurrentUnresolvedHead(),
         ),
       )
-      .orderBy(ProtocolInboxTable.actor_id, ProtocolEventTable.seq, ProtocolEventTable.id)
-      .all()
-    const taskRows = db
-      .select({
-        inbox: ProtocolInboxTable,
-        sequence: ProtocolEventTable.seq,
-        eventID: ProtocolEventTable.id,
-      })
+      .get()?.dueAt
+    const taskDueAt = db
+      .select({ dueAt: sql<number | null>`MIN(${schedulerDeliveryHeadAvailableAt(now)})` })
       .from(ProtocolInboxTable)
       .innerJoin(ProtocolEventTable, eq(ProtocolEventTable.id, ProtocolInboxTable.envelope_id))
       .innerJoin(EngineTaskTable, eq(EngineTaskTable.id, ProtocolInboxTable.actor_id))
@@ -1177,56 +1581,77 @@ export function nextSchedulerDeliveryDueAt(projectID: string): number | undefine
           eq(EngineTaskTable.project_id, projectID),
           eq(ProtocolInboxTable.actor, "task"),
           eq(ProtocolEventTable.type, SCHEDULER_MESSAGE_EVENT_TYPE),
+          schedulerDeliveryIsCurrentUnresolvedHead(),
         ),
       )
-      .orderBy(ProtocolInboxTable.actor_id, ProtocolEventTable.seq, ProtocolEventTable.id)
-      .all()
-    const projectedRows = [...sessionRows, ...taskRows]
-      .map((row) => ({ ...row, delivery: projectProtocolDeliveryInTransaction(db, row.inbox) }))
-      .filter((row) => row.delivery.status === "pending" || row.delivery.status === "leased")
-    const heads = projectedRows.filter((row, index, rows) =>
-      rows.findIndex((candidate) => candidate.delivery.actor_id === row.delivery.actor_id) === index,
-    )
-    const due = heads.map(({ delivery }) => delivery.status === "leased"
-      ? Math.max(delivery.visible_at, delivery.lease_until ?? delivery.visible_at)
-      : delivery.visible_at)
+      .get()?.dueAt
+    const due = [sessionDueAt, taskDueAt].filter((value): value is number => typeof value === "number")
     return due.length > 0 ? Math.min(...due) : undefined
   })
 }
 
-export function listUnansweredSchedulerSessionWakes(projectID: string): Array<{
+export function listUnansweredSchedulerSessionWakes(input: {
+  projectID: string
+  afterInboxID?: string
+  limit: number
+}): Array<{
   inboxID: string
   sessionID: string
   messageID: string
+  openedEventID: string
 }> {
+  if (!Number.isSafeInteger(input.limit) || input.limit <= 0 || input.limit > SCHEDULER_WAKE_RECOVERY_PAGE_LIMIT) {
+    throw new Error(
+      `Scheduler wake recovery page limit must be between 1 and ${SCHEDULER_WAKE_RECOVERY_PAGE_LIMIT}`,
+    )
+  }
   return Database.use((db) => {
     const rows = db
       .select({
-        inbox: ProtocolInboxTable,
-        sequence: ProtocolEventTable.seq,
+        inboxID: ProtocolInboxTable.id,
+        sessionID: ProtocolInboxTable.actor_id,
         eventID: ProtocolEventTable.id,
+        messageID: sql<string>`json_extract(${ProtocolDeliveryReceiptTable.receipt}, '$.message_id')`,
+        openedEventID: activeSchedulerMissionOpenedEventID(),
       })
-      .from(ProtocolInboxTable)
+      .from(ProtocolDeliveryReceiptTable)
+      .innerJoin(ProtocolInboxTable, eq(ProtocolInboxTable.id, ProtocolDeliveryReceiptTable.inbox_id))
       .innerJoin(ProtocolEventTable, eq(ProtocolEventTable.id, ProtocolInboxTable.envelope_id))
       .innerJoin(SessionTable, eq(SessionTable.id, ProtocolInboxTable.actor_id))
       .where(
         and(
-          eq(SessionTable.project_id, projectID),
+          eq(SessionTable.project_id, input.projectID),
           eq(ProtocolInboxTable.actor, "session"),
           eq(ProtocolEventTable.type, SCHEDULER_MESSAGE_EVENT_TYPE),
+          sql`json_extract(${ProtocolDeliveryReceiptTable.receipt}, '$.kind') = 'session_wake'`,
+          schedulerSessionWakeHasNoSuccessfulReply(),
+          schedulerSessionWakeHasActiveOccurrence(),
+          ...(input.afterInboxID ? [sql`${ProtocolInboxTable.id} > ${input.afterInboxID}`] : []),
         ),
       )
-      .orderBy(ProtocolInboxTable.actor_id, ProtocolEventTable.seq, ProtocolEventTable.id)
+      .orderBy(asc(ProtocolInboxTable.id))
+      .limit(input.limit)
       .all()
-    return rows.flatMap(({ inbox }) => {
-      const delivery = projectProtocolDeliveryInTransaction(db, inbox)
-      const result = delivery.delivery_result
+    return rows.map((row) => {
       if (
-        delivery.status !== "delivered" ||
-        result?.kind !== "session_wake" ||
-        successfulSchedulerWakeReplyExistsInTransaction(db, { sessionID: inbox.actor_id, messageID: result.message_id })
-      ) return []
-      return [{ inboxID: inbox.id, sessionID: inbox.actor_id, messageID: result.message_id }]
+        !schedulerWakeMessageMatchesInTransaction(db, {
+          sessionID: row.sessionID,
+          messageID: row.messageID,
+          eventID: row.eventID,
+          inboxID: row.inboxID,
+        })
+      ) {
+        throw new SchedulerMessageConflictError({
+          message: `Scheduler inbox ${row.inboxID} recovery does not name its exact Message occurrence.`,
+          eventID: row.eventID,
+        })
+      }
+      return {
+        inboxID: row.inboxID,
+        sessionID: row.sessionID,
+        messageID: row.messageID,
+        openedEventID: row.openedEventID,
+      }
     })
   })
 }
@@ -1262,18 +1687,43 @@ export function auditSchedulerSessionDeliverySettlement(sessionID: string): {
     const unansweredInboxIDs = deliveries
       .filter((delivery) => {
         if (delivery.status !== "delivered" || delivery.delivery_result?.kind !== "session_wake") return false
-        return !successfulSchedulerWakeReplyExistsInTransaction(db, {
+        const reply = {
           sessionID,
           messageID: delivery.delivery_result.message_id,
-        })
+        }
+        if (successfulSchedulerWakeReplyExistsInTransaction(db, reply)) return false
+        const envelope = db
+          .select({ type: ProtocolEventTable.type })
+          .from(ProtocolEventTable)
+          .where(eq(ProtocolEventTable.id, delivery.envelope_id))
+          .get()
+        if (envelope?.type !== SCHEDULER_MESSAGE_EVENT_TYPE) return true
+        const openedEventID = missionSchedulerOccurrenceBindingForEnvelopeInTransaction(
+          db,
+          sessionID,
+          delivery.envelope_id,
+        )
+        if (!openedEventID) return true
+        const disposition = missionSchedulerOccurrenceDispositionInTransaction(db, { sessionID, openedEventID })
+        return !(
+          disposition.kind === "mission_closed" &&
+          completedSchedulerWakeReplyExistsInTransaction(db, reply)
+        )
       })
       .map((delivery) => delivery.id)
       .sort()
     const invalidTerminalInboxIDs = deliveries
-      .filter(
-        (delivery) =>
-          delivery.status === "delivered" && delivery.delivery_result?.kind !== "session_wake",
-      )
+      .filter((delivery) => {
+        if (delivery.status !== "delivered" || !delivery.delivery_result) return false
+        if (delivery.delivery_result.kind === "session_wake") return false
+        if (delivery.delivery_result.kind !== "mission_closed") return true
+        try {
+          requireDeliveryResultOccurrence(db, delivery, delivery.delivery_result)
+          return false
+        } catch {
+          return true
+        }
+      })
       .map((delivery) => delivery.id)
       .sort()
     return {
@@ -1296,6 +1746,7 @@ export function schedulerSessionWakeNeedsRecovery(input: {
   inboxID: string
   sessionID: string
   messageID: string
+  openedEventID: string
 }): boolean {
   return Database.use((db) => {
     const inbox = db.select().from(ProtocolInboxTable).where(eq(ProtocolInboxTable.id, input.inboxID)).get()
@@ -1318,6 +1769,22 @@ export function schedulerSessionWakeNeedsRecovery(input: {
         eventID: row.envelope_id,
       })
     }
+    const envelopeOpenedEventID = missionSchedulerOccurrenceBindingForEnvelopeInTransaction(
+      db,
+      input.sessionID,
+      row.envelope_id,
+    )
+    if (envelopeOpenedEventID !== input.openedEventID) {
+      throw new SchedulerMessageConflictError({
+        message: `Scheduler inbox ${input.inboxID} recovery changed its opened occurrence binding.`,
+        eventID: row.envelope_id,
+      })
+    }
+    const disposition = missionSchedulerOccurrenceDispositionInTransaction(db, {
+      sessionID: input.sessionID,
+      openedEventID: input.openedEventID,
+    })
+    if (disposition.kind === "mission_closed") return false
     return !successfulSchedulerWakeReplyExistsInTransaction(db, {
       sessionID: input.sessionID,
       messageID: input.messageID,

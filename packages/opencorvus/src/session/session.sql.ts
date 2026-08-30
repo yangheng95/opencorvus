@@ -108,7 +108,6 @@ export type ToolOutcomePartData =
       time: { end: number }
       attachments?: Message.FilePart[]
     }
-
   | {
       outcome: "completed"
       resultAttemptID: string
@@ -207,12 +206,11 @@ export const PartTable = sqliteTable(
   (table) => [
     index("part_message_idx").on(table.message_id),
     index("part_message_time_idx").on(table.message_id, table.time_created),
-    index("part_type_time_idx").on(
-      sql`json_extract(${table.data}, '$.type')`,
-      table.time_created,
-      table.id,
+    index("part_type_time_idx").on(sql`json_extract(${table.data}, '$.type')`, table.time_created, table.id),
+    check(
+      "part_excludes_tool_effect_state",
+      sql`json_extract(${table.data}, '$.type') NOT IN ('tool', 'tool-request', 'tool-outcome')`,
     ),
-    check("part_excludes_tool_effect_state", sql`json_extract(${table.data}, '$.type') NOT IN ('tool', 'tool-request', 'tool-outcome')`),
   ],
 )
 
@@ -220,7 +218,9 @@ export const ToolPartRequestTable = sqliteTable(
   "tool_part_request",
   {
     id: text().primaryKey(),
-    message_id: text().notNull().references(() => MessageTable.id, { onDelete: "cascade" }),
+    message_id: text()
+      .notNull()
+      .references(() => MessageTable.id, { onDelete: "cascade" }),
     data: text({ mode: "json" }).notNull().$type<ToolRequestPartData>(),
     time_created: integer().notNull(),
   },
@@ -230,13 +230,16 @@ export const ToolPartRequestTable = sqliteTable(
       table.message_id,
       sql<string>`json_extract(${table.data}, '$.callID')`,
     ),
-    check("tool_part_request_fact_shape", sql`
+    check(
+      "tool_part_request_fact_shape",
+      sql`
       json_extract(${table.data}, '$.type') = 'tool-request'
       AND json_type(${table.data}, '$.callID') = 'text'
       AND json_type(${table.data}, '$.tool') = 'text'
       AND json_type(${table.data}, '$.time.start') IN ('integer', 'real')
       AND json_type(${table.data}, '$.state') IS NULL
-    `),
+    `,
+    ),
   ],
 )
 
@@ -256,10 +259,13 @@ export const ToolPartProgressTable = sqliteTable(
   },
   (table) => [
     index("tool_part_progress_request_idx").on(table.request_part_id, table.time_created, table.id),
-    check("tool_part_progress_fact_shape", sql`
+    check(
+      "tool_part_progress_fact_shape",
+      sql`
       (${table.title} IS NOT NULL OR ${table.metadata} IS NOT NULL)
       AND (${table.metadata} IS NULL OR json_type(${table.metadata}) = 'object')
-    `),
+    `,
+    ),
   ],
 )
 
@@ -276,7 +282,9 @@ export const ToolPartOutcomeTable = sqliteTable(
   },
   (table) => [
     uniqueIndex("tool_part_outcome_request_idx").on(table.request_part_id),
-    check("tool_part_outcome_fact_shape", sql`
+    check(
+      "tool_part_outcome_fact_shape",
+      sql`
       json_type(${table.data}, '$.time.end') IN ('integer', 'real')
       AND json_type(${table.data}, '$.input') IS NULL AND json_type(${table.data}, '$.status') IS NULL
       AND (
@@ -293,7 +301,8 @@ export const ToolPartOutcomeTable = sqliteTable(
           AND json_type(${table.data}, '$.resultAttemptID') IS NULL
           AND json_type(${table.data}, '$.title') IS NULL),0)
       )
-    `),
+    `,
+    ),
   ],
 )
 
@@ -303,7 +312,9 @@ export const ProviderActivityRequestTable = sqliteTable(
   "provider_activity_request",
   {
     id: text().primaryKey(),
-    assistant_message_id: text().notNull().references(() => MessageTable.id, { onDelete: "cascade" }),
+    assistant_message_id: text()
+      .notNull()
+      .references(() => MessageTable.id, { onDelete: "cascade" }),
     time_created: integer().notNull(),
   },
   (table) => [
@@ -316,13 +327,17 @@ export const ProviderActivityOutcomeTable = sqliteTable(
   "provider_activity_outcome",
   {
     id: text().primaryKey(),
-    request_id: text().notNull().references(() => ProviderActivityRequestTable.id, { onDelete: "cascade" }),
+    request_id: text()
+      .notNull()
+      .references(() => ProviderActivityRequestTable.id, { onDelete: "cascade" }),
     data: text({ mode: "json" }).notNull().$type<ProviderActivityOutcomeData>(),
     time_created: integer().notNull(),
   },
   (table) => [
     uniqueIndex("provider_activity_outcome_request_idx").on(table.request_id),
-    check("provider_activity_outcome_fact_shape", sql`
+    check(
+      "provider_activity_outcome_fact_shape",
+      sql`
       json_extract(${table.data}, '$.outcome') IN ('done', 'failed', 'aborted')
       AND json_type(${table.data}, '$.status') IS NULL
       AND json_type(${table.data}, '$.attempt') IS NULL
@@ -333,7 +348,8 @@ export const ProviderActivityOutcomeTable = sqliteTable(
           AND json_extract(${table.data}, '$.attempt_count') >= 1
         )
       )
-    `),
+    `,
+    ),
   ],
 )
 
@@ -350,11 +366,7 @@ export const InteractiveArtifactTable = sqliteTable(
   (table) => [index("interactive_artifact_message_idx").on(table.message_id)],
 )
 
-export type SessionControlKind =
-  | "manual_summarize"
-  | "compaction_request"
-  | "wake_reason"
-  | "mission_process_recovery"
+export type SessionControlKind = "manual_summarize" | "compaction_request" | "wake_reason"
 
 export type SessionControlStatus = "pending" | "consumed" | "failed"
 
@@ -381,7 +393,9 @@ export const SessionControlEventTable = sqliteTable(
   "session_control_event",
   {
     id: text().primaryKey(),
-    control_id: text().notNull().references(() => SessionControlRecordTable.id, { onDelete: "cascade" }),
+    control_id: text()
+      .notNull()
+      .references(() => SessionControlRecordTable.id, { onDelete: "cascade" }),
     kind: text({ enum: ["amended", "consumed", "failed"] }).notNull(),
     payload: text({ mode: "json" }).$type<Record<string, unknown>>(),
     time_created: integer().notNull(),
@@ -391,11 +405,14 @@ export const SessionControlEventTable = sqliteTable(
     uniqueIndex("session_control_event_terminal_idx")
       .on(table.control_id)
       .where(sql`${table.kind} IN ('consumed', 'failed')`),
-    check("session_control_event_shape", sql`
+    check(
+      "session_control_event_shape",
+      sql`
       (${table.kind}='amended' AND ${table.payload} IS NOT NULL)
       OR (${table.kind}='consumed' AND ${table.payload} IS NULL)
       OR (${table.kind}='failed' AND json_type(${table.payload}, '$.error')='text')
-    `),
+    `,
+    ),
   ],
 )
 

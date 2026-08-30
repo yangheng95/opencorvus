@@ -144,6 +144,9 @@ export function materializeExpertSquadCapabilities(input: {
 }): MaterializedExpertSquadCapabilities {
   const expectedBase = PlatformCapabilitySetRegistry.baseRef(input.runtime)
   const expectedBaseEncoded = CapabilityRefCodec.encode(expectedBase)
+  const schedulerTransport =
+    input.runtime.kind === "scheduler" ? PlatformCapabilitySetRegistry.transportRef("scheduler") : undefined
+  const schedulerTransportEncoded = schedulerTransport ? CapabilityRefCodec.encode(schedulerTransport) : undefined
   const declaredRefs = input.projection.capability_refs.map(CapabilityRefCodec.decode)
   const effectiveByRef = new Map<string, { ref: CapabilityRef; declaredBy: string; origin: GrantOrigin }>()
 
@@ -199,19 +202,25 @@ export function materializeExpertSquadCapabilities(input: {
       if (!definition) throw new Error(`${input.context}: unknown package capability set ${encoded}`)
       members = definition.member_refs
     } else {
-      if (encoded !== expectedBaseEncoded) {
-        throw new Error(`${input.context}: platform capability set ${encoded} must equal ${expectedBaseEncoded}`)
+      if (encoded !== expectedBaseEncoded && encoded !== schedulerTransportEncoded) {
+        const allowed = schedulerTransportEncoded
+          ? `${expectedBaseEncoded} or ${schedulerTransportEncoded}`
+          : expectedBaseEncoded
+        throw new Error(`${input.context}: platform capability set ${encoded} must equal ${allowed}`)
       }
       members = PlatformCapabilitySetRegistry.get(ref).member_refs.map(CapabilityRefCodec.encode)
     }
-    const origin: GrantOrigin = ref.source === "package" ? "projection" : "platform-base"
+    const origin: GrantOrigin =
+      ref.source === "package" ? "projection" : encoded === schedulerTransportEncoded ? "transport" : "platform-base"
     for (const member of members) addLeaf(CapabilityRefCodec.decode(member), encoded, origin)
   }
 
-  const transportRef = PlatformCapabilitySetRegistry.transportRef(input.runtime.kind)
-  const transportEncoded = CapabilityRefCodec.encode(transportRef)
-  for (const member of PlatformCapabilitySetRegistry.get(transportRef).member_refs) {
-    addLeaf(member, transportEncoded, "transport")
+  if (input.runtime.kind === "worker") {
+    const transportRef = PlatformCapabilitySetRegistry.transportRef("worker")
+    const transportEncoded = CapabilityRefCodec.encode(transportRef)
+    for (const member of PlatformCapabilitySetRegistry.get(transportRef).member_refs) {
+      addLeaf(member, transportEncoded, "transport")
+    }
   }
 
   const result: MutableMaterializedCapabilities = {

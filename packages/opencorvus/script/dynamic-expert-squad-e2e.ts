@@ -61,21 +61,24 @@ function requiredGeneratedDynamicPackage() {
   if (typeof manifestText !== "string") throw new Error("Generated builtin/dynamic payload has no manifest bytes.")
   const manifest = Bun.JSONC.parse(manifestText) as JsonObject
   const schedulerCapabilityRefs = [
-    "dispatch_agents",
-    "manage_task",
-    "no_action",
-    "read_task_message",
-    "read_agent_message",
-    "skill",
-  ]
-    .map((localRef) =>
+    CapabilityRefCodec.encode(
+      capabilityRef({
+        kind: "capability_set",
+        source: "platform",
+        owner_ref: "tool-registry",
+        local_ref: "scheduler-transport",
+      }),
+    ),
+    ...["dispatch_agents", "manage_task", "no_action", "read_task_message", "read_agent_message", "skill"].map(
+      (localRef) =>
       CapabilityRefCodec.encode(
         capabilityRef({ kind: "tool", source: "platform", owner_ref: "tool-registry", local_ref: localRef }),
       ),
-    )
+    ),
+  ]
     .sort()
   if (
-    manifest.version !== "2026.08.30.2" ||
+    manifest.version !== "2026.08.30.3" ||
     manifest.schema_version !== 2 ||
     JSON.stringify(manifest.capability_projection?.scheduler?.capability_refs) !== JSON.stringify(schedulerCapabilityRefs)
   ) {

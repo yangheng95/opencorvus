@@ -5,7 +5,7 @@
   "name": "Frontend Replica",
   "label": "Frontend Replica",
   "description": "Source URL and reference-screenshot replica with a desktop surface ledger, rendered proof, durable catalog facts, and visible narrative Turn summaries.",
-  "version": "2026.08.30.1",
+  "version": "2026.08.30.2",
   "product_pillars": [
     "code"
   ],
@@ -27,6 +27,7 @@
     "scheduler": {
       "capability_refs": [
         "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:capability_set:platform:tool-registry:scheduler-transport",
         "capability:skill:package:frontend-replica:frontend-replica%2Fshared%2Facceptance",
         "capability:tool:platform:tool-registry:bash",
         "capability:tool:platform:tool-registry:browser_preview",

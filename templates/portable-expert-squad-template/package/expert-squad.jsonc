@@ -22,6 +22,7 @@
       "base_role": "orchestrator",
       "prompt": "agents/orchestrator/system.md",
       "capability_refs": [
+        "capability:capability_set:platform:tool-registry:scheduler-transport",
         "capability:tool:package:portable-template:portable-template%2Fshared%2Freconciliation-policy",
         "capability:tool:platform:tool-registry:bash",
         "capability:tool:platform:tool-registry:browser_preview",

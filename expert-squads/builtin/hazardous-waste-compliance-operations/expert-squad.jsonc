@@ -5,7 +5,7 @@
   "name": "Hazardous Waste Compliance Operations",
   "label": "Hazardous Waste Compliance Operations",
   "description": "Source-bound waste-stream determinations, generator/accumulation evidence, and manifest-to-disposition reconciliation without legal, handling, shipping, or disposal authority.",
-  "version": "2026.08.30.1",
+  "version": "2026.08.30.2",
   "product_pillars": [
     "work"
   ],
@@ -27,6 +27,7 @@
     "scheduler": {
       "capability_refs": [
         "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:capability_set:platform:tool-registry:scheduler-transport",
         "capability:skill:package:hazardous-waste-compliance-operations:hazardous-waste-compliance-operations%2Fshared%2Fmethod",
         "capability:tool:platform:tool-registry:dispatch_agent",
         "capability:tool:platform:tool-registry:manage_task",

@@ -129,12 +129,12 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 | PATCH | `/mailbox/{messageID}` | Update a mailbox item Body: `action`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `mailbox.acknowledge` |
 | GET | `/mission` | List Missions | `mission.list` |
 | POST | `/mission/draft` | Create a Mission draft Body: `expertSquadIDs`, `productPillar`, `request`, `title`; Errors: `BadRequestError`. | `mission.createDraft` |
-| POST | `/mission/wake` | Wake the Mission agent Body: `attachments`, `expertSquadIDs`, `missionID`, `model`, `productPillar`, `text`; Errors: `AuthReadError`, `BadRequestError`, `MissionExecutionClosingError`, `MissionExpertSquadSnapshotMismatchError`. | `mission.wake` |
+| POST | `/mission/wake` | Wake the Mission agent Body: `attachments`, `expertSquadIDs`, `missionID`, `model`, `productPillar`, `requestID`, `text`; Errors: `AuthReadError`, `BadRequestError`, `MissionExecutionClosingError`, `MissionExecutionWakeClosedError`, `MissionExecutionWakeInputConflictError`, `MissionExpertSquadSnapshotMismatchError`. | `mission.wake` |
 | DELETE | `/mission/{missionID}` | Delete a Mission Body: `reason`, `surface`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `mission.delete` |
 | POST | `/mission/{missionID}/abort` | Abort a Mission Body: `reason`, `surface`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `mission.abort` |
 | GET | `/mission/{missionID}/activity-cursor` | Get Mission durable activity cursor Errors: `LogFileNotFoundError`, `NotFoundError`. | `mission.activityCursor` |
 | PATCH | `/mission/{missionID}/archive` | Archive or restore a Mission Body: `archived`, `reason`, `surface`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `mission.setArchived` |
-| POST | `/mission/{missionID}/dispatch` | Dispatch a Mission draft Body: `model`; Errors: `AuthReadError`, `BadRequestError`, `LogFileNotFoundError`, `MissionExecutionClosingError`, `NotFoundError`. | `mission.dispatch` |
+| POST | `/mission/{missionID}/dispatch` | Dispatch a Mission draft Body: `model`, `requestID`; Errors: `AuthReadError`, `BadRequestError`, `LogFileNotFoundError`, `MissionExecutionClosingError`, `MissionExecutionWakeClosedError`, `MissionExecutionWakeInputConflictError`, `NotFoundError`. | `mission.dispatch` |
 | GET | `/mission/{missionID}/project-archive` | Download Mission project archive Errors: `LogFileNotFoundError`, `NotFoundError`. | `mission.projectArchive` |
 | GET | `/mission/{missionID}/status` | Get Mission status Errors: `LogFileNotFoundError`, `NotFoundError`. | `mission.status` |
 | PATCH | `/mission/{missionID}/title` | Rename a Mission Body: `title`; Errors: `LogFileNotFoundError`, `NotFoundError`. | `mission.rename` |

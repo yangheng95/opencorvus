@@ -143,7 +143,7 @@ describe("Viral Content Expert Squad package", () => {
       namespace: "builtin",
       id: "viral-content",
       name: "Viral Content",
-      version: "2026.08.30.1",
+      version: "2026.08.30.2",
       product_pillars: ["work"],
     })
     expect(Object.keys(loaded.manifest.capability_projection.agents)).toEqual(Object.keys(dependencies))

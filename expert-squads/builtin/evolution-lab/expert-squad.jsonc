@@ -5,7 +5,7 @@
   "name": "Evolution Lab",
   "label": "Evolution Lab",
   "description": "Target-agnostic evidence, candidate, evaluation, integrity review, and recommendation package for explicit Expert Squad evolution campaigns.",
-  "version": "2026.08.30.2",
+  "version": "2026.08.30.3",
   "product_pillars": [
     "code",
     "work"
@@ -38,6 +38,7 @@
     "scheduler": {
       "capability_refs": [
         "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:capability_set:platform:tool-registry:scheduler-transport",
         "capability:skill:package:evolution-lab:evolution-lab%2Fshared%2Fcampaign",
         "capability:tool:platform:tool-registry:dispatch_agent",
         "capability:tool:platform:tool-registry:manage_task",

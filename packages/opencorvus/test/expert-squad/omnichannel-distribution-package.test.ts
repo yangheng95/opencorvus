@@ -183,7 +183,7 @@ describe("Omnichannel Distribution Expert Squad package", () => {
       namespace: "builtin",
       id: "omnichannel-distribution",
       name: "Omnichannel Distribution",
-      version: "2026.08.30.1",
+      version: "2026.08.30.2",
       product_pillars: ["work"],
     })
     expect(Object.keys(loaded.manifest.capability_projection.agents)).toEqual(Object.keys(dependencies))

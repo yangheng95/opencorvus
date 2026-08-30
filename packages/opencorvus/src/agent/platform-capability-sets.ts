@@ -60,7 +60,7 @@ const definitions = Object.freeze([
   definition(
     SCHEDULER_TRANSPORT,
     "Scheduler transport",
-    "Platform-owned Task artifact transport appended to every projected scheduler.",
+    "Platform-owned Task artifact transport explicitly granted to a projected scheduler.",
     schedulerTransportIDs,
   ),
   definition(

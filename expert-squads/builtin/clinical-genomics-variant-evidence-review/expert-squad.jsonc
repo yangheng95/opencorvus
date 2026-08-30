@@ -5,7 +5,7 @@
   "name": "Clinical Genomics Variant Evidence Review",
   "label": "Clinical Genomics Variant Evidence Review",
   "description": "Source-versioned clinical genomics variant evidence review across case identity, population and computational evidence, functional and segregation evidence, and classification provenance without diagnosis or classification authority.",
-  "version": "2026.08.30.1",
+  "version": "2026.08.30.2",
   "product_pillars": [
     "work"
   ],
@@ -27,6 +27,7 @@
     "scheduler": {
       "capability_refs": [
         "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:capability_set:platform:tool-registry:scheduler-transport",
         "capability:skill:package:clinical-genomics-variant-evidence-review:clinical-genomics-variant-evidence-review%2Fshared%2Fmethod",
         "capability:tool:platform:tool-registry:dispatch_agent",
         "capability:tool:platform:tool-registry:manage_task",

@@ -87,9 +87,21 @@ const DECLARED_OWNERS: Record<string, Declaration> = {
   },
   "mission/execution-closure.ts": {
     targets: ["lifecycle"],
-    sites: 2,
+    sites: 1,
     release:
       "The closure fact releases in its own transaction; a close that ends without one hands ownership back in finally.",
+  },
+  "mission/process-recovery.ts": {
+    targets: ["lifecycle"],
+    sites: 1,
+    release:
+      "The reducer releases after it has preserved a live Prompt owner, returned the exact real Message/reply disposition, or admitted that Message for physical resume; every error path releases in finally.",
+  },
+  "mission/retention.ts": {
+    targets: ["lifecycle"],
+    sites: 1,
+    release:
+      "The unique session.deleted boundary and exact delete intent release together after canonical Session/Task cleanup; every pre-boundary error hands the lease back, while owner death leaves the immutable intent for bounded-lease takeover.",
   },
   "permission/authority.ts": {
     targets: ["effect"],

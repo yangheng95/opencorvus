@@ -5,7 +5,7 @@
   "name": "Privacy Data Protection Operations",
   "label": "Privacy Data Protection Operations",
   "description": "Evidence-bounded data inventory, privacy-impact, data-subject request, retention/deletion, and incident review without legal or production-system authority.",
-  "version": "2026.08.30.1",
+  "version": "2026.08.30.2",
   "product_pillars": [
     "work"
   ],
@@ -27,6 +27,7 @@
     "scheduler": {
       "capability_refs": [
         "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:capability_set:platform:tool-registry:scheduler-transport",
         "capability:skill:package:privacy-data-protection-operations:privacy-data-protection-operations%2Fshared%2Fmethod",
         "capability:tool:platform:tool-registry:dispatch_agent",
         "capability:tool:platform:tool-registry:manage_task",

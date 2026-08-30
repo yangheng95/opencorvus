@@ -110,7 +110,7 @@ describe("Expert Squad swimlanes 04-06 packages", () => {
         id: definition.id,
         name: definition.name,
         label: definition.name,
-        version: "2026.08.30.1",
+        version: "2026.08.30.2",
         product_pillars: ["work"],
       })
       expect([...loaded.packageSkills.keys()]).toEqual([definition.skillRef])
@@ -154,7 +154,7 @@ describe("Expert Squad swimlanes 04-06 packages", () => {
           })
           expect(scheduler).toMatchObject({
             expertSquadID: definition.id,
-            packageRevision: { id: definition.id, version: "2026.08.30.1" },
+            packageRevision: { id: definition.id, version: "2026.08.30.2" },
           })
           expect(scheduler.productionSkills.map((skill) => ({ ref: skill.ref, source: skill.source }))).toEqual([
             { ref: definition.skillRef, source: "package" },

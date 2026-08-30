@@ -225,7 +225,7 @@ describe("Commercial Legal Expert Squad", () => {
       namespace: "builtin",
       id: "commercial-legal",
       name: "Commercial Legal",
-      version: "2026.08.30.1",
+      version: "2026.08.30.2",
       product_pillars: ["work"],
     })
     expect([...source.packageSkills.keys()].sort()).toEqual([...skillRefs].sort())

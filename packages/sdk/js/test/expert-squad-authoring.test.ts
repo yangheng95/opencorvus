@@ -129,11 +129,13 @@ describe("expert squad authoring SDK", () => {
     expect(() => validateExpertSquadCollaboration({ definition, manifests: [source] })).toThrow(/at least one stage/)
   })
 
-  test("validates connected fixed-profile Mission stage Tasks without creating runtime state", () => {
+  test("validates connected fixed-profile Mission stage Tasks while preserving canonical manifest input", () => {
     const source = manifest()
     source.id = "source-squad"
     const delivery = manifest()
     delivery.id = "delivery-squad"
+    const sourceBefore = structuredClone(source)
+    const deliveryBefore = structuredClone(delivery)
     const definition: ExpertSquadCollaborationDefinition = {
       schema_version: 1,
       stage_execution: "mission_task",
@@ -162,7 +164,8 @@ describe("expert squad authoring SDK", () => {
     }
 
     expect(validateExpertSquadCollaboration({ definition, manifests: [source, delivery] })).toBe(definition)
-    expect(Object.keys(source)).not.toContain("active_stage")
+    expect(source).toEqual(sourceBefore)
+    expect(delivery).toEqual(deliveryBefore)
   })
 
   test("accepts structurally valid Task collaboration without prescribing planning roles", () => {

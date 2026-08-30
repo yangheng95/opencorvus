@@ -1,5 +1,7 @@
 import z from "zod"
 import { randomUUID } from "node:crypto"
+import fs from "node:fs/promises"
+import path from "node:path"
 import { NamedError } from "@opencorvus-ai/util/error"
 import { HostAgentRegistry } from "@/agent/host-agent-registry"
 import { PromptProfile } from "@/agent/prompt-profile"
@@ -63,6 +65,8 @@ import { Database, NotFoundError, and, eq, inArray, isNull, sql } from "@/storag
 import { Log } from "@/util/log"
 import { Filesystem } from "@/util/filesystem"
 import { awaitWithAbort } from "@/util/abort"
+import { bindMissionClosingChildTaskCanceller } from "@/mission/execution-close-effects"
+import { bindMissionRetentionSessionDeleter } from "@/mission/retention"
 import { compileBoard, boardTag } from "@/workbench/board"
 import { compileBrief } from "@/workbench/brief"
 import {
@@ -170,6 +174,8 @@ import {
 import { deliverTaskRootMessageToOrchestratorSession, getTaskRootMessage } from "./task-root-message"
 import {
   assertNoCallerSuppliedTaskCreatorMetadata,
+  assertMissionTaskCreationOpenedOccurrence,
+  assertMissionTaskCreationOpenedOccurrenceInTransaction,
   assertTaskCreatorExpertSquadAuthority,
   TaskCreator,
   TaskCreatorMetadata,
@@ -266,6 +272,8 @@ import {
   sameCrossTaskArtifactImportSet,
   type CrossTaskArtifactImporter,
 } from "@/engine/cross-task-artifact-import"
+
+type ResolvedTaskCreationAuthority = Awaited<ReturnType<typeof resolveTaskCreator>>
 
 const log = Log.create({ service: "assistant" })
 
@@ -399,6 +407,28 @@ async function assertTaskCreationReplayMatches(input: {
     pinnedPackageRevision,
     requestedProfileID: input.selectedProfileID,
     expectedPackageDigest: input.expectedPackageDigest,
+  })
+}
+
+function assertCurrentMissionTaskCreationAuthority(creator: ResolvedTaskCreationAuthority): void {
+  if (creator.actor !== "mission") return
+  assertMissionTaskCreationOpenedOccurrence({
+    sessionID: creator.sessionID,
+    openedOccurrence: creator.openedOccurrence,
+  })
+}
+
+function persistTaskWithCreatorAuthority(
+  creator: ResolvedTaskCreationAuthority,
+  input: Parameters<typeof persistTask>[0],
+): ReturnType<typeof persistTask> {
+  if (creator.actor !== "mission") return persistTask(input)
+  return Database.immediateTransaction(() => {
+    assertMissionTaskCreationOpenedOccurrenceInTransaction({
+      sessionID: creator.sessionID,
+      openedOccurrence: creator.openedOccurrence,
+    })
+    return persistTask(input)
   })
 }
 
@@ -1413,6 +1443,63 @@ export const TaskExecutionDirectoryInitializerTestHooks = {
   },
 }
 
+let beforeTaskPersistForTest:
+  | ((input: { taskID: string; creator: ResolvedTaskCreationAuthority }) => void | Promise<void>)
+  | undefined
+type RejectedTaskPreparationCleanupReceipt = {
+  taskID: string
+  root: string
+  status: "removed"
+}
+let afterRejectedTaskPreparationCleanupForTest:
+  | ((receipt: RejectedTaskPreparationCleanupReceipt) => void | Promise<void>)
+  | undefined
+
+async function removeRejectedTaskPreparation(input: {
+  projectDirectory: string
+  taskID: string
+}): Promise<RejectedTaskPreparationCleanupReceipt> {
+  if (findTask(input.taskID)) {
+    throw new Error(`Cannot clean prepared Task root ${input.taskID} after its durable Task committed`)
+  }
+  const collection = path.resolve(ProjectRuntimePaths.taskCollectionRoot(input.projectDirectory))
+  const root = path.resolve(ProjectRuntimePaths.taskRoot(input.projectDirectory, input.taskID))
+  if (path.dirname(root) !== collection) {
+    throw new Error(`Prepared Task root ${root} is outside its managed Task collection ${collection}`)
+  }
+  await fs.rm(root, { recursive: true, force: true })
+  return { taskID: input.taskID, root, status: "removed" }
+}
+
+export const TaskCreationCommitTestHooks = {
+  installBeforePersist(
+    hook: (input: { taskID: string; creator: ResolvedTaskCreationAuthority }) => void | Promise<void>,
+  ): Disposable {
+    if (beforeTaskPersistForTest) throw new Error("Task creation pre-persist hook is already installed")
+    beforeTaskPersistForTest = hook
+    return {
+      [Symbol.dispose]() {
+        if (beforeTaskPersistForTest === hook) beforeTaskPersistForTest = undefined
+      },
+    }
+  },
+  installAfterRejectedPreparationCleanup(
+    hook: (receipt: RejectedTaskPreparationCleanupReceipt) => void | Promise<void>,
+  ): Disposable {
+    if (afterRejectedTaskPreparationCleanupForTest) {
+      throw new Error("Task creation rejected-preparation cleanup hook is already installed")
+    }
+    afterRejectedTaskPreparationCleanupForTest = hook
+    return {
+      [Symbol.dispose]() {
+        if (afterRejectedTaskPreparationCleanupForTest === hook) {
+          afterRejectedTaskPreparationCleanupForTest = undefined
+        }
+      },
+    }
+  },
+}
+
 export namespace EngineService {
   export function bindTaskExecutionDirectoryInitializer(initializer: InstanceInit): void {
     if (taskExecutionDirectoryInitializer && taskExecutionDirectoryInitializer !== initializer) {
@@ -1585,11 +1672,12 @@ export namespace EngineService {
             }
           })()
         : undefined
-    return withTaskCreationOwnerLock(input, () => createTaskInExecutionDirectory(input, artifactImporter))
+    return withTaskCreationOwnerLock(input, () => createTaskInExecutionDirectory(input, creator, artifactImporter))
   }
 
   async function createTaskInExecutionDirectory(
     input: z.infer<typeof CreateTaskInput>,
+    creator: ResolvedTaskCreationAuthority,
     artifactImporter?: CrossTaskArtifactImporter,
   ) {
     const creationContext = {
@@ -1601,7 +1689,7 @@ export namespace EngineService {
     }
     const directory = Filesystem.resolve(input.directory ?? Instance.directory)
     if (Project.samePath(directory, Instance.directory)) {
-      return createTaskInner(input, { ...creationContext, artifactImporter })
+      return createTaskInner(input, creator, { ...creationContext, artifactImporter })
     }
 
     const projectID = Instance.project.id
@@ -1617,7 +1705,7 @@ export namespace EngineService {
               `Task execution directory ${directory} resolved project ${Instance.project.id}, expected ${projectID}`,
             )
           }
-          return createTaskInner(input, { ...creationContext, artifactImporter })
+          return createTaskInner(input, creator, { ...creationContext, artifactImporter })
         },
       })
     })
@@ -1625,12 +1713,14 @@ export namespace EngineService {
 
   async function createTaskInner(
     input: z.infer<typeof CreateTaskInput>,
+    creator: ResolvedTaskCreationAuthority,
     creationContext: {
       capabilityProjectDirectory: string
       taskConfigSnapshot: Config.Info
       artifactImporter?: CrossTaskArtifactImporter
     },
   ) {
+    assertCurrentMissionTaskCreationAuthority(creator)
     await prepareProject(input.project)
     const resolvedArtifactSources =
       input.artifactSources && input.artifactSources.length > 0
@@ -1662,6 +1752,7 @@ export namespace EngineService {
         selectedProfileID,
         expectedPackageDigest: input.expectedPackageDigest,
       })
+      assertCurrentMissionTaskCreationAuthority(creator)
       await dispatchPersistedTaskLoop(existingBindingTask, requireTaskCreationIngressID(existingBindingTask))
       return existingBindingTask
     }
@@ -1689,6 +1780,7 @@ export namespace EngineService {
           selectedProfileID,
           expectedPackageDigest: input.expectedPackageDigest,
         })
+        assertCurrentMissionTaskCreationAuthority(creator)
         await dispatchPersistedTaskLoop(existing.id, requireTaskCreationIngressID(existing.id))
         return existing.id
       }
@@ -1820,7 +1912,8 @@ export namespace EngineService {
 
       // Task row, target-owned imports, and initial Engine facts commit together
       // only after every imported resource snapshot is durable.
-      initialIngressID = persistTask({
+      await beforeTaskPersistForTest?.({ taskID, creator })
+      initialIngressID = persistTaskWithCreatorAuthority(creator, {
         taskID,
         rootSession: session,
         now,
@@ -1842,12 +1935,20 @@ export namespace EngineService {
         executionCapsuleBinding,
       })
     } catch (error) {
-      if (artifactImports.length > 0) {
-        await removeTaskArtifactRoot({
+      let cleanupReceipt: RejectedTaskPreparationCleanupReceipt
+      try {
+        cleanupReceipt = await removeRejectedTaskPreparation({
           projectDirectory: Instance.directory,
           taskID,
         })
+      } catch (cleanupError) {
+        throw new AggregateError(
+          [error, cleanupError],
+          `Task ${taskID} creation failed before commit and its prepared managed root cleanup also failed`,
+          { cause: error },
+        )
       }
+      await afterRejectedTaskPreparationCleanupForTest?.(cleanupReceipt)
       const existing = requestID ? recoverTaskByRequest(requestID, error) : undefined
       if (existing) {
         const committedImports = importsFromMappings(listCrossTaskArtifactImportMappings(existing))
@@ -1865,6 +1966,7 @@ export namespace EngineService {
           selectedProfileID,
           expectedPackageDigest: input.expectedPackageDigest,
         })
+        assertCurrentMissionTaskCreationAuthority(creator)
         await dispatchPersistedTaskLoop(existing, requireTaskCreationIngressID(existing))
         return existing
       }
@@ -3619,6 +3721,9 @@ export namespace EngineService {
     }
   }
 }
+
+bindMissionClosingChildTaskCanceller((taskID, origin) => EngineService.cancelTask(taskID, { origin }))
+bindMissionRetentionSessionDeleter((sessionID, input) => EngineService.deleteSession(sessionID, input))
 
 function answersFromMessage(message?: string) {
   const text = message?.trim()

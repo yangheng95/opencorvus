@@ -7,99 +7,7 @@ import { Identifier } from "../../src/id/id"
 import { Instance } from "../../src/project/instance"
 import { observeRuntimeProcessOccurrence } from "../../src/runtime/process-occurrence"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
-
-type ProviderRequest = {
-  index: number
-  kind: "memory" | "prompt"
-  body: unknown
-  responded: Promise<void>
-  release(): void
-}
-
-function startStreamingProvider(options?: { failPromptFrom?: number }) {
-  const requests: ProviderRequest[] = []
-  const server = Bun.serve({
-    hostname: "127.0.0.1",
-    port: 0,
-    idleTimeout: 255,
-    async fetch(request) {
-      const body = await request.json().catch(() => undefined)
-      const released = Promise.withResolvers<void>()
-      const responded = Promise.withResolvers<void>()
-      const index = requests.length
-      const messages = Array.isArray((body as any)?.messages) ? (body as any).messages : []
-      const kind = messages.some(
-        (message: any) =>
-          message?.role === "system" &&
-          typeof message.content === "string" &&
-          message.content.includes("dedicated Memory Organizer"),
-      )
-        ? ("memory" as const)
-        : ("prompt" as const)
-      const promptOrdinal = kind === "prompt" ? requests.filter((candidate) => candidate.kind === "prompt").length + 1 : 0
-      requests.push({ index, kind, body, responded: responded.promise, release: released.resolve })
-      const injectedFailure = kind === "prompt" && options?.failPromptFrom !== undefined && promptOrdinal >= options.failPromptFrom
-      if (kind === "memory" || injectedFailure) released.resolve()
-      await released.promise
-      if (injectedFailure) {
-        responded.resolve()
-        return new Response(JSON.stringify({ error: { message: "injected compaction provider failure" } }), {
-          status: 400,
-          headers: { "content-type": "application/json" },
-        })
-      }
-      const id = `chatcmpl-session-owner-${index}`
-      const created = Math.floor(Date.now() / 1000)
-      const memoryInstruction = messages.find((message: any) => message?.role === "user")?.content
-      const coveredOccurrenceIDs =
-        typeof memoryInstruction === "string"
-          ? JSON.parse(memoryInstruction.match(/coveredOccurrenceIDs must be exactly (\[[^\n]+\])/u)?.[1] ?? "[]")
-          : []
-      const content =
-        kind === "memory"
-          ? JSON.stringify({ baseRevision: 0, coveredOccurrenceIDs, disposition: "organized", markdown: "" })
-          : `provider reply ${requests.filter((candidate) => candidate.kind === "prompt").length}`
-      const chunks = [
-        {
-          id,
-          object: "chat.completion.chunk",
-          created,
-          model: "session-prompt-owner-model",
-          choices: [{ index: 0, delta: { role: "assistant" }, finish_reason: null }],
-        },
-        {
-          id,
-          object: "chat.completion.chunk",
-          created,
-          model: "session-prompt-owner-model",
-          choices: [{ index: 0, delta: { content }, finish_reason: null }],
-        },
-        {
-          id,
-          object: "chat.completion.chunk",
-          created,
-          model: "session-prompt-owner-model",
-          choices: [{ index: 0, delta: {}, finish_reason: "stop" }],
-        },
-      ]
-      const payload = `${chunks.map((chunk) => `data: ${JSON.stringify(chunk)}\n\n`).join("")}data: [DONE]\n\n`
-      responded.resolve()
-      return new Response(payload, {
-        headers: {
-          "content-type": "text/event-stream",
-          "cache-control": "no-cache",
-          connection: "close",
-        },
-      })
-    },
-  })
-  return {
-    server,
-    requests,
-    promptRequests: () => requests.filter((request) => request.kind === "prompt"),
-    apiURL: `http://127.0.0.1:${server.port}/v1`,
-  }
-}
+import { startControlledStreamingProvider as startStreamingProvider } from "../fixture/controlled-streaming-provider"
 
 function readPromptOwner(runtime: string, sessionID: string) {
   const sqlite = new BunDatabase(path.join(runtime, "data", "opencorvus.db"), { readonly: true })
@@ -254,14 +162,20 @@ describe("durable cross-process Session prompt ownership", () => {
       // to A; the durable SQLite wake is the production cross-process path.
       await fs.writeFile(path.join(barrier, "queued.start"), "start")
       await waitFor(
-        () => provider.promptRequests().length === 2,
+        async () => {
+          if (provider.promptRequests().length === 2) return true
+          const response = await fs.readFile(path.join(barrier, "queued.response.json"), "utf8").catch(() => undefined)
+          if (!response) return false
+          const routeError = await fs
+            .readFile(path.join(barrier, "queued.route-error.txt"), "utf8")
+            .catch(() => "no route error")
+          throw new Error(`Queued peer returned before Provider execution: ${response}\n${routeError}`)
+        },
         "The standby durable owner did not observe the peer's next input",
       )
       const queuedAfterStandby = await read(spawn("inspect", sessionID, secondMessageID, "queued-after-standby"))
       expect(
-        queuedAfterStandby.messages
-          .filter((message: any) => message.role === "user")
-          .map((message: any) => message.id),
+        queuedAfterStandby.messages.filter((message: any) => message.role === "user").map((message: any) => message.id),
       ).toEqual([firstMessageID, secondMessageID])
       provider.promptRequests()[1]!.release()
       await provider.promptRequests()[1]!.responded
@@ -499,7 +413,8 @@ describe("durable cross-process Session prompt ownership", () => {
 
       await fs.writeFile(path.join(barrier, "summary-manual-repeat.start"), "start")
       await waitFor(
-        async () => Boolean(await fs.stat(path.join(barrier, "summary-manual-repeat.response.json")).catch(() => undefined)),
+        async () =>
+          Boolean(await fs.stat(path.join(barrier, "summary-manual-repeat.response.json")).catch(() => undefined)),
         "Repeated manual summary did not settle from its exact durable control receipt",
       )
       const repeatedManual = await read(manualRepeat)
@@ -510,7 +425,8 @@ describe("durable cross-process Session prompt ownership", () => {
 
       await fs.writeFile(path.join(barrier, "summary-auto-repeat.start"), "start")
       await waitFor(
-        async () => Boolean(await fs.stat(path.join(barrier, "summary-auto-repeat.response.json")).catch(() => undefined)),
+        async () =>
+          Boolean(await fs.stat(path.join(barrier, "summary-auto-repeat.response.json")).catch(() => undefined)),
         "Repeated auto summary did not settle from its exact durable control receipt",
       )
       while (autoRepeat.exitCode === null) {
@@ -520,11 +436,13 @@ describe("durable cross-process Session prompt ownership", () => {
       const repeatedAuto = await read(autoRepeat)
 
       const compactionProviderRequests = () =>
-        provider.promptRequests().filter((request) =>
-          JSON.stringify(request.body).includes(
-            "Write a concise natural-language continuation summary as an ordinary assistant message.",
-          ),
-        )
+        provider
+          .promptRequests()
+          .filter((request) =>
+            JSON.stringify(request.body).includes(
+              "Write a concise natural-language continuation summary as an ordinary assistant message.",
+            ),
+          )
       await fs.writeFile(path.join(barrier, "summary-second-manual.start"), "start")
       await waitFor(
         () => compactionProviderRequests().length === 2,
@@ -532,7 +450,8 @@ describe("durable cross-process Session prompt ownership", () => {
       )
       compactionProviderRequests()[1]!.release()
       await waitFor(
-        async () => Boolean(await fs.stat(path.join(barrier, "summary-second-manual.response.json")).catch(() => undefined)),
+        async () =>
+          Boolean(await fs.stat(path.join(barrier, "summary-second-manual.response.json")).catch(() => undefined)),
         "Second real compaction did not settle its exact new summary",
       )
       const secondManualResult = await read(secondManual)
@@ -608,12 +527,7 @@ describe("durable cross-process Session prompt ownership", () => {
     const worker = path.join(import.meta.dir, "..", "fixture", "session-prompt-owner-process-worker.ts")
     const environment = { ...process.env, OPENCORVUS_HOME: runtime }
     const children: ReturnType<typeof Bun.spawn>[] = []
-    const spawn = (
-      mode: "init-source-only" | "summarize",
-      sessionID = "-",
-      messageID = "-",
-      label = "-",
-    ) => {
+    const spawn = (mode: "init-source-only" | "summarize", sessionID = "-", messageID = "-", label = "-") => {
       const child = Bun.spawn(
         [
           process.execPath,
@@ -815,7 +729,11 @@ describe("durable cross-process Session prompt ownership", () => {
         )
         .get(sessionID) as { kind: string; payload: string }
       sqlite.close()
-      expect({ failure, failedControl: { ...failedControl, payload: JSON.parse(failedControl.payload) }, routeError }).toEqual({
+      expect({
+        failure,
+        failedControl: { ...failedControl, payload: JSON.parse(failedControl.payload) },
+        routeError,
+      }).toEqual({
         failure: expect.objectContaining({ status: 500, error: "UnknownError" }),
         failedControl: expect.objectContaining({
           kind: "failed",

@@ -176,13 +176,18 @@ const CONTROL_STATE_INVENTORY = {
   }),
   AutomationRunTable: inventory({
     identity: ["id", "automation_revision_id", "fire_id"],
-    causal: ["target_project_id"],
+    causal: [
+      "target_project_id",
+      "mission_opened_event_id",
+      "mission_disposition",
+      "mission_closure_event_id",
+    ],
     fact: ["started_at"],
   }),
   AutomationRunReceiptTable: inventory({
     identity: ["id", "run_id"],
     policy: ["retry_at"],
-    receipt: ["outcome", "error", "time_created"],
+    receipt: ["outcome", "disposition", "closure_event_id", "error", "time_created"],
   }),
   EventJobTable: inventory({
     identity: ["id", "definition_id", "revision", "project_id", "session_id"],
@@ -204,7 +209,13 @@ const CONTROL_STATE_INVENTORY = {
   }),
   EventJobFireTable: inventory({
     identity: ["id", "event_job_revision_id", "event_occurrence_id"],
-    causal: ["causation_fire_id", "created_session_id"],
+    causal: [
+      "causation_fire_id",
+      "created_session_id",
+      "mission_opened_event_id",
+      "mission_disposition",
+      "mission_closure_event_id",
+    ],
     fact: ["time_created"],
   }),
   EventOccurrenceTable: inventory({
@@ -216,7 +227,7 @@ const CONTROL_STATE_INVENTORY = {
   EventJobFireReceiptTable: inventory({
     identity: ["id", "fire_id"],
     policy: ["retry_at"],
-    receipt: ["outcome", "disposition", "message_id", "error", "time_created"],
+    receipt: ["outcome", "disposition", "closure_event_id", "message_id", "error", "time_created"],
   }),
   ProtocolEventTable: inventory({
     identity: ["id", "aggregate_type", "aggregate_id", "task_id", "session_id", "interaction_id", "stream_id"],

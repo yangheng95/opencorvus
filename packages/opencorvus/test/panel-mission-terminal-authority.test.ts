@@ -15,6 +15,7 @@ import { Identifier } from "@/id/id"
 import { missionBoardProjection } from "@/mission/board"
 import { MissionCompletionActionInput, MissionCompletionReceipt } from "@/mission/completion"
 import { ensureMissionSession } from "@/mission/session"
+import { openMissionThroughRealWake } from "./fixture/mission-opened"
 import { panelActionSchemaForAgent } from "@/panel/capability"
 import { PanelQueryTaskOutput } from "@/panel/task-query"
 import { Instance } from "@/project/instance"
@@ -109,6 +110,12 @@ describe("Mission terminal Task authority", () => {
           defaultCwd: project.path,
           productPillar: "work",
           heldExpertSquadIDs: ["base"],
+        })
+        await openMissionThroughRealWake({
+          missionID: mission.missionID,
+          sessionID: mission.id,
+          source: "mission.dispatch",
+          requestID: "mission-overlapping-panel-queries:dispatch",
         })
         const now = Date.now()
         const user = await Session.updateMessage({
@@ -267,6 +274,12 @@ describe("Mission terminal Task authority", () => {
           productPillar: "work",
           heldExpertSquadIDs: ["base"],
         })
+        const opened = await openMissionThroughRealWake({
+          missionID: mission.missionID,
+          sessionID: mission.id,
+          source: "mission.dispatch",
+          requestID: "mission-create-task-boundary:dispatch",
+        })
         const now = Date.now()
         const user = await Session.updateMessage({
           id: Identifier.ascending("message"),
@@ -344,6 +357,14 @@ describe("Mission terminal Task authority", () => {
             control: { kind: "immediate_park" },
           })
           expect(createSpy).toHaveBeenCalledTimes(1)
+          expect(createSpy.mock.calls[0]?.[1]).toMatchObject({
+            actor: "mission",
+            sessionID: mission.id,
+            openedOccurrence: {
+              eventID: opened.eventID,
+              operationID: opened.operationID,
+            },
+          })
         } finally {
           mappingSpy.mockRestore()
           createSpy.mockRestore()

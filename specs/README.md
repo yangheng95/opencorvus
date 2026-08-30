@@ -16,6 +16,8 @@ Latest scheduling architecture remediation: [`2026-08-30-scheduling-architecture
 
 Latest Dynamic reliability and token-budget repair: [`2026-08-30-dynamic-frontier-reliability-and-token-budget.md`](records/2026-08/2026-08-30-dynamic-frontier-reliability-and-token-budget.md).
 
+Latest Light real-consultation runtime remediation: [`2026-08-30-light-consulting-runtime-remediation.md`](records/2026-08/2026-08-30-light-consulting-runtime-remediation.md).
+
 Latest Inspect FrontierScience Research GPT-5.6 Luna smoke: [`2026-08-29-inspect-frontier-science-research-luna-smoke.md`](records/2026-08/2026-08-29-inspect-frontier-science-research-luna-smoke.md).
 
 Current `v0.0.57-beta` corrective application and website release tracker, including the failed immutable `v0.0.56-beta` candidate: [`2026-08-29-v0.0.56-beta-release.md`](records/2026-08/2026-08-29-v0.0.56-beta-release.md).

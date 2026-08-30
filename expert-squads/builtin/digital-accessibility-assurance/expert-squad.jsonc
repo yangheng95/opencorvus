@@ -5,7 +5,7 @@
   "name": "Digital Accessibility Assurance",
   "label": "Digital Accessibility Assurance",
   "description": "Digital accessibility inventory, WCAG criterion mapping, semantic, keyboard, assistive-technology, visual, media, cognitive, manual and remediation evidence assurance without conformance or legal authority.",
-  "version": "2026.08.30.1",
+  "version": "2026.08.30.2",
   "product_pillars": [
     "work"
   ],
@@ -27,6 +27,7 @@
     "scheduler": {
       "capability_refs": [
         "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:capability_set:platform:tool-registry:scheduler-transport",
         "capability:skill:package:digital-accessibility-assurance:digital-accessibility-assurance%2Fshared%2Fmethod",
         "capability:tool:platform:tool-registry:dispatch_agent",
         "capability:tool:platform:tool-registry:manage_task",

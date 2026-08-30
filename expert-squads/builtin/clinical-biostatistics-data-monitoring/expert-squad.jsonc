@@ -5,7 +5,7 @@
   "name": "Clinical Biostatistics and Data Monitoring",
   "label": "Clinical Biostatistics and Data Monitoring",
   "description": "Estimand, SAP, analysis-population, SDTM/ADaM traceability, model, missing-data, multiplicity, sensitivity, interim and monitoring evidence without unblinding or stop/continue authority.",
-  "version": "2026.08.30.1",
+  "version": "2026.08.30.2",
   "product_pillars": [
     "work"
   ],
@@ -27,6 +27,7 @@
     "scheduler": {
       "capability_refs": [
         "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:capability_set:platform:tool-registry:scheduler-transport",
         "capability:skill:package:clinical-biostatistics-data-monitoring:clinical-biostatistics-data-monitoring%2Fshared%2Fmethod",
         "capability:tool:platform:tool-registry:dispatch_agent",
         "capability:tool:platform:tool-registry:manage_task",

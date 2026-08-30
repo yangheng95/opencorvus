@@ -9255,7 +9255,7 @@ export class Mission extends HeyApiClient {
   /**
    * Wake the Mission agent
    *
-   * Start (or resume) a Mission agent session and inject a user prompt. Omit `missionID` to start a new mission; supply it to resume an existing one. The route is idempotent for (project, directory, missionID) — exactly one mission session is keyed per mission.
+   * Start (or resume) a Mission agent session and inject a user prompt. Omit `missionID` to start a new mission; supply it to resume an existing one. The route is idempotent for (project, directory, missionID) — exactly one mission session is keyed per mission. Supply requestID to join one exact accepted prompt, model, attachment and config input; reusing it with drift returns a conflict.
    */
   public wake<ThrowOnError extends boolean = false>(
     parameters: {
@@ -9276,6 +9276,7 @@ export class Mission extends HeyApiClient {
       missionID?: string
       model?: string
       productPillar: "code" | "work"
+      requestID?: string
       text: string
     },
     options?: Options<never, ThrowOnError>,
@@ -9291,6 +9292,7 @@ export class Mission extends HeyApiClient {
             { in: "body", key: "missionID" },
             { in: "body", key: "model" },
             { in: "body", key: "productPillar" },
+            { in: "body", key: "requestID" },
             { in: "body", key: "text" },
           ],
         },
@@ -9489,13 +9491,14 @@ export class Mission extends HeyApiClient {
   /**
    * Dispatch a Mission draft
    *
-   * Consume the Mission's pending operator prompt through the canonical visible user-message and streaming Mission wake path.
+   * Consume the Mission's pending operator prompt through the canonical visible user-message and streaming Mission wake path. Supply requestID to replay one exact accepted input; reusing it with changed model or prompt facts returns a conflict.
    */
   public dispatch<ThrowOnError extends boolean = false>(
     parameters: {
       missionID: string
       directory?: string
       model?: string
+      requestID?: string
     },
     options?: Options<never, ThrowOnError>,
   ) {
@@ -9507,6 +9510,7 @@ export class Mission extends HeyApiClient {
             { in: "path", key: "missionID" },
             { in: "query", key: "directory" },
             { in: "body", key: "model" },
+            { in: "body", key: "requestID" },
           ],
         },
       ],

@@ -46,6 +46,7 @@ function manifest(): ExpertSquadManifestV2 {
         base_role: "orchestrator",
         capability_refs: sorted([
           PlatformCapabilitySetRegistry.baseRef({ kind: "scheduler" }),
+          PlatformCapabilitySetRegistry.transportRef("scheduler"),
           capabilityRef({
             kind: "capability_set",
             source: "package",
@@ -87,7 +88,7 @@ describe("Expert Squad typed capability grants", () => {
     )
   })
 
-  test("expands package and platform sets once and appends scheduler transport", () => {
+  test("expands the explicitly declared scheduler base and transport sets once", () => {
     const source = manifest()
     const grants = materializeExpertSquadCapabilities({
       manifest: source,

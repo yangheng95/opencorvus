@@ -5,7 +5,7 @@
   "name": "Dynamic",
   "label": "Dynamic",
   "description": "Lightweight runtime-generated Agent teams and workflow descriptions that immediately execute through reusable Generalist and Builder capability envelopes.",
-  "version": "2026.08.30.2",
+  "version": "2026.08.30.3",
   "product_pillars": [
     "code",
     "work"
@@ -20,6 +20,7 @@
   "capability_projection": {
     "scheduler": {
       "capability_refs": [
+        "capability:capability_set:platform:tool-registry:scheduler-transport",
         "capability:skill:package:dynamic:dynamic%2Fshared%2Fmethod",
         "capability:tool:platform:tool-registry:dispatch_agents",
         "capability:tool:platform:tool-registry:manage_task",

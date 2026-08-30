@@ -332,6 +332,9 @@
                 "$ref": "#/components/schemas/MessageAbortedError"
               },
               {
+                "$ref": "#/components/schemas/ProcessExecutionInterruptedError"
+              },
+              {
                 "$ref": "#/components/schemas/StructuredOutputPayloadError"
               },
               {
@@ -4976,6 +4979,9 @@
                     "$ref": "#/components/schemas/MessageAbortedError"
                   },
                   {
+                    "$ref": "#/components/schemas/ProcessExecutionInterruptedError"
+                  },
+                  {
                     "$ref": "#/components/schemas/StructuredOutputPayloadError"
                   },
                   {
@@ -5185,7 +5191,8 @@
                   "zalo",
                   "zalouser",
                   "right-sidebar",
-                  "orchestrator"
+                  "orchestrator",
+                  "runtime"
                 ],
                 "type": "string"
               },
@@ -13609,6 +13616,32 @@
           }
         ]
       },
+      "ProcessExecutionInterruptedError": {
+        "properties": {
+          "data": {
+            "additionalProperties": false,
+            "properties": {
+              "message": {
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "message"
+            ],
+            "type": "object"
+          },
+          "name": {
+            "const": "ProcessExecutionInterruptedError",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "data"
+        ],
+        "type": "object"
+      },
       "Project": {
         "properties": {
           "commands": {
@@ -18613,6 +18646,9 @@
                   },
                   {
                     "$ref": "#/components/schemas/MessageAbortedError"
+                  },
+                  {
+                    "$ref": "#/components/schemas/ProcessExecutionInterruptedError"
                   },
                   {
                     "$ref": "#/components/schemas/StructuredOutputPayloadError"
@@ -61673,7 +61709,8 @@
                           "running",
                           "retry_wait",
                           "succeeded",
-                          "failed"
+                          "failed",
+                          "disposition"
                         ],
                         "type": "string"
                       },
@@ -61932,7 +61969,8 @@
                           "running",
                           "retry_wait",
                           "succeeded",
-                          "failed"
+                          "failed",
+                          "disposition"
                         ],
                         "type": "string"
                       },
@@ -71193,7 +71231,7 @@
     },
     "/mission/wake": {
       "post": {
-        "description": "Start (or resume) a Mission agent session and inject a user prompt. Omit `missionID` to start a new mission; supply it to resume an existing one. The route is idempotent for (project, directory, missionID) — exactly one mission session is keyed per mission.",
+        "description": "Start (or resume) a Mission agent session and inject a user prompt. Omit `missionID` to start a new mission; supply it to resume an existing one. The route is idempotent for (project, directory, missionID) — exactly one mission session is keyed per mission. Supply requestID to join one exact accepted prompt, model, attachment and config input; reusing it with drift returns a conflict.",
         "operationId": "mission.wake",
         "parameters": [
           {
@@ -71284,6 +71322,11 @@
                       "code",
                       "work"
                     ],
+                    "type": "string"
+                  },
+                  "requestID": {
+                    "maxLength": 200,
+                    "minLength": 1,
                     "type": "string"
                   },
                   "text": {
@@ -71378,24 +71421,68 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "properties": {
-                    "data": {
-                      "additionalProperties": {},
-                      "propertyNames": {
-                        "type": "string"
+                  "anyOf": [
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "MissionExecutionClosingError",
+                          "type": "string"
+                        }
                       },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
                       "type": "object"
                     },
-                    "name": {
-                      "const": "MissionExecutionClosingError",
-                      "type": "string"
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "MissionExecutionWakeClosedError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "MissionExecutionWakeInputConflictError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
                     }
-                  },
-                  "required": [
-                    "name",
-                    "data"
-                  ],
-                  "type": "object"
+                  ]
                 }
               }
             },
@@ -72357,7 +72444,7 @@
     },
     "/mission/{missionID}/dispatch": {
       "post": {
-        "description": "Consume the Mission's pending operator prompt through the canonical visible user-message and streaming Mission wake path.",
+        "description": "Consume the Mission's pending operator prompt through the canonical visible user-message and streaming Mission wake path. Supply requestID to replay one exact accepted input; reusing it with changed model or prompt facts returns a conflict.",
         "operationId": "mission.dispatch",
         "parameters": [
           {
@@ -72388,6 +72475,11 @@
                 "additionalProperties": false,
                 "properties": {
                   "model": {
+                    "type": "string"
+                  },
+                  "requestID": {
+                    "maxLength": 200,
+                    "minLength": 1,
                     "type": "string"
                   }
                 },
@@ -72499,24 +72591,68 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "properties": {
-                    "data": {
-                      "additionalProperties": {},
-                      "propertyNames": {
-                        "type": "string"
+                  "anyOf": [
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "MissionExecutionClosingError",
+                          "type": "string"
+                        }
                       },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
                       "type": "object"
                     },
-                    "name": {
-                      "const": "MissionExecutionClosingError",
-                      "type": "string"
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "MissionExecutionWakeClosedError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "MissionExecutionWakeInputConflictError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
                     }
-                  },
-                  "required": [
-                    "name",
-                    "data"
-                  ],
-                  "type": "object"
+                  ]
                 }
               }
             },
@@ -80829,6 +80965,9 @@
                               "$ref": "#/components/schemas/MessageAbortedError"
                             },
                             {
+                              "$ref": "#/components/schemas/ProcessExecutionInterruptedError"
+                            },
+                            {
                               "$ref": "#/components/schemas/StructuredOutputPayloadError"
                             },
                             {
@@ -87331,6 +87470,9 @@
                             },
                             {
                               "$ref": "#/components/schemas/MessageAbortedError"
+                            },
+                            {
+                              "$ref": "#/components/schemas/ProcessExecutionInterruptedError"
                             },
                             {
                               "$ref": "#/components/schemas/StructuredOutputPayloadError"
@@ -94489,7 +94631,8 @@
                                 "zalo",
                                 "zalouser",
                                 "right-sidebar",
-                                "orchestrator"
+                                "orchestrator",
+                                "runtime"
                               ],
                               "type": "string"
                             },
@@ -94617,7 +94760,8 @@
                                 "zalo",
                                 "zalouser",
                                 "right-sidebar",
-                                "orchestrator"
+                                "orchestrator",
+                                "runtime"
                               ],
                               "type": "string"
                             },
@@ -97749,7 +97893,8 @@
                                     "zalo",
                                     "zalouser",
                                     "right-sidebar",
-                                    "orchestrator"
+                                    "orchestrator",
+                                    "runtime"
                                   ],
                                   "type": "string"
                                 },
@@ -97877,7 +98022,8 @@
                                     "zalo",
                                     "zalouser",
                                     "right-sidebar",
-                                    "orchestrator"
+                                    "orchestrator",
+                                    "runtime"
                                   ],
                                   "type": "string"
                                 },
@@ -102044,7 +102190,8 @@
                             "zalo",
                             "zalouser",
                             "right-sidebar",
-                            "orchestrator"
+                            "orchestrator",
+                            "runtime"
                           ],
                           "type": "string"
                         },
@@ -102172,7 +102319,8 @@
                             "zalo",
                             "zalouser",
                             "right-sidebar",
-                            "orchestrator"
+                            "orchestrator",
+                            "runtime"
                           ],
                           "type": "string"
                         },
@@ -104625,7 +104773,8 @@
                                         "zalo",
                                         "zalouser",
                                         "right-sidebar",
-                                        "orchestrator"
+                                        "orchestrator",
+                                        "runtime"
                                       ],
                                       "type": "string"
                                     },
@@ -104753,7 +104902,8 @@
                                         "zalo",
                                         "zalouser",
                                         "right-sidebar",
-                                        "orchestrator"
+                                        "orchestrator",
+                                        "runtime"
                                       ],
                                       "type": "string"
                                     },
@@ -112251,7 +112401,8 @@
                                     "zalo",
                                     "zalouser",
                                     "right-sidebar",
-                                    "orchestrator"
+                                    "orchestrator",
+                                    "runtime"
                                   ],
                                   "type": "string"
                                 },
@@ -112379,7 +112530,8 @@
                                     "zalo",
                                     "zalouser",
                                     "right-sidebar",
-                                    "orchestrator"
+                                    "orchestrator",
+                                    "runtime"
                                   ],
                                   "type": "string"
                                 },

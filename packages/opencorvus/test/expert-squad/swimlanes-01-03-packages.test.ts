@@ -11,7 +11,7 @@ import { allCapabilityGrants } from "./capability-grant-fixture"
 const packages = [
   {
     id: "browser-research-acceptance",
-    version: "2026.08.30.1",
+    version: "2026.08.30.2",
     name: "Browser Research & Acceptance",
     productPillars: ["code", "work"],
     skillName: "browser-evidence-acceptance",
@@ -36,7 +36,7 @@ const packages = [
   },
   {
     id: "office-delivery",
-    version: "2026.08.30.1",
+    version: "2026.08.30.2",
     name: "Office Delivery",
     productPillars: ["work"],
     skillName: "office-delivery-method",
@@ -53,7 +53,7 @@ const packages = [
   },
   {
     id: "product-management",
-    version: "2026.08.30.1",
+    version: "2026.08.30.2",
     name: "Product Management",
     productPillars: ["work"],
     skillName: "evidence-backed-product-planning",

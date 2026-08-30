@@ -29,7 +29,7 @@ describe("Frontend Replica acceptance package", () => {
       schema_version: 2,
       namespace: "builtin",
       id: "frontend-replica",
-      version: "2026.08.30.1",
+      version: "2026.08.30.2",
     })
     expect([...loaded.packageSkills.keys()]).toEqual([acceptanceSkillRef])
     expect(acceptance?.content).toContain(

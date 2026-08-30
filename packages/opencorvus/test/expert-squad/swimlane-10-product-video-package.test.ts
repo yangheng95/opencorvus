@@ -31,7 +31,7 @@ describe("Product Video Production Expert Squad package", () => {
       id: "product-video",
       name: "Product Video Production",
       label: "Product Video Production",
-      version: "2026.08.30.1",
+      version: "2026.08.30.2",
       product_pillars: ["work"],
     })
     expect(Object.keys(loaded.manifest.capability_projection.agents)).toEqual(agentIDs)
@@ -68,7 +68,7 @@ describe("Product Video Production Expert Squad package", () => {
 
         expect(scheduler).toMatchObject({
           expertSquadID: "product-video",
-          packageRevision: { id: "product-video", version: "2026.08.30.1" },
+          packageRevision: { id: "product-video", version: "2026.08.30.2" },
         })
         expect(scheduler.productionSkills.map((skill) => skill.ref)).toEqual(["product-video/shared/method"])
         expect(Object.keys(scheduler.virtualWorkflows)).toEqual(["product-video-production-handoff"])

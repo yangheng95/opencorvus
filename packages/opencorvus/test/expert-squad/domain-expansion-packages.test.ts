@@ -143,7 +143,7 @@ describe("Ten-domain Expert Squad package expansion", () => {
         schema_version: 2,
         namespace: "builtin",
         id: definition.id,
-        version: "2026.08.30.1",
+        version: "2026.08.30.2",
       })
       expect([...loaded.packageSkills.keys()]).toEqual([ref])
       expect(method.definition.name).toBe(definition.skillName)
@@ -190,7 +190,7 @@ describe("Ten-domain Expert Squad package expansion", () => {
 
           expect(scheduler).toMatchObject({
             expertSquadID: definition.id,
-            packageRevision: { version: "2026.08.30.1" },
+            packageRevision: { version: "2026.08.30.2" },
           })
           expect(scheduler.productionSkills.map((skill) => ({ ref: skill.ref, source: skill.source }))).toEqual([
             { ref, source: "package" },

@@ -5,7 +5,7 @@
   "name": "Generate Expert Squads",
   "label": "Generate Expert Squads",
   "description": "Evidence-led heterogeneous algorithm import and canonical generation of project-owned, traceable OpenCorvus Expert Squads with independent contract review.",
-  "version": "2026.08.30.3",
+  "version": "2026.08.30.4",
   "product_pillars": [
     "code",
     "work"
@@ -29,6 +29,7 @@
     "scheduler": {
       "capability_refs": [
         "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:capability_set:platform:tool-registry:scheduler-transport",
         "capability:skill:package:squad-sdk:squad-sdk%2Fshared%2Fauthoring",
         "capability:skill:package:squad-sdk:squad-sdk%2Fshared%2Fimport",
         "capability:tool:platform:tool-registry:dispatch_agent",

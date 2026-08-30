@@ -5,7 +5,7 @@
   "name": "Radiation Therapy Physics Quality Assurance",
   "label": "Radiation Therapy Physics Quality Assurance",
   "description": "Source-bound radiotherapy equipment, dosimetry, treatment-planning-system, patient-specific quality, change, incident and independent-audit evidence without clinical or release authority.",
-  "version": "2026.08.30.1",
+  "version": "2026.08.30.2",
   "product_pillars": [
     "work"
   ],
@@ -27,6 +27,7 @@
     "scheduler": {
       "capability_refs": [
         "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:capability_set:platform:tool-registry:scheduler-transport",
         "capability:skill:package:radiation-therapy-physics-quality-assurance:radiation-therapy-physics-quality-assurance%2Fshared%2Fmethod",
         "capability:tool:platform:tool-registry:dispatch_agent",
         "capability:tool:platform:tool-registry:manage_task",

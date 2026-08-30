@@ -26,6 +26,14 @@ import { createExecutionCancellationOrigin } from "./prompt/cancellation"
 import { ProjectMemory } from "@/memory/project-memory"
 import { SchedulerMessageWakeReason } from "@/protocol/scheduler-message-wake-reason"
 import { SchedulerEventWakeReason } from "@/protocol/scheduler-event-wake-reason"
+import type { Database } from "@/storage/db"
+import { MessageStore } from "./message-store"
+import {
+  MissionProcessRecoveryWakeReason,
+  missionProcessRecoveryFrontierDigest,
+} from "./mission-process-recovery-schema"
+import { MissionOperatorWakeReason } from "@/mission/operator-wake-reason"
+import { PersistedWakeReplay as PersistedWakeReplayError } from "./persisted-wake-replay"
 
 /**
  * Session wake mechanism.
@@ -49,19 +57,13 @@ export namespace SessionWake {
   let wakeLoopExecutorForTest: WakeLoopExecutor | undefined
   let beforeWakeLoopActivationForTest: (() => void | Promise<void>) | undefined
 
+  export const PersistedWakeReplay = PersistedWakeReplayError
+
+  export const recoveryFrontierDigest = missionProcessRecoveryFrontierDigest
+
   export const WakeReason = z.discriminatedUnion("source", [
-    z.object({
-      source: z.literal("mission.operator"),
-      missionID: z.string().optional(),
-    }),
-    z
-      .object({
-        source: z.literal("mission.process_recovery"),
-        missionID: z.string(),
-        occurrenceID: z.string().min(1),
-        interruptedAssistantMessageIDs: z.array(Identifier.schema("message")).min(1),
-      })
-      .strict(),
+    MissionOperatorWakeReason,
+    MissionProcessRecoveryWakeReason,
     z.object({
       source: z.literal("conversation.handoff"),
       callerSessionID: Identifier.schema("session"),
@@ -101,6 +103,11 @@ export namespace SessionWake {
     commitBundle?: UserMessagePersistenceHooks["commitBundle"]
     /** Scheduler-owned compact occurrence check performed before bundle rows. */
     preflightBundle?: UserMessagePersistenceHooks["preflightBundle"]
+    /** Exact business-occurrence check performed in the durable Prompt-owner
+     * acquisition transaction before a physical loop may start. */
+    ownerPreflight?: (db: Database.TxOrDb) => void
+    /** Observe the admitted physical Prompt owner until it settles. */
+    ownerLifecycle?: (owner: AbortSignal) => Disposable
     /** The prompt to append as the next session message. */
     prompt: string
     /** Real participant that authored this wake payload. */
@@ -265,25 +272,31 @@ export namespace SessionWake {
 
     return SessionContext.provide(session, async () => {
       if (input.signal?.aborted) throw input.signal.reason
-      const message = await SessionPrompt.prompt.force(resolvedPromptInput, {
-        prepared,
-        signal: input.signal,
-        commitBundle: input.commitBundle,
-        preflightBundle: input.preflightBundle,
-        controls: (info) => [
-          {
-            id: input.controlID,
-            sessionID,
-            kind: "wake_reason",
-            status: "consumed",
-            owner: reason.source,
-            payload: {
-              messageID: info.id,
-              wake_reason: reason,
+      const message = await SessionPrompt.prompt
+        .force(resolvedPromptInput, {
+          prepared,
+          signal: input.signal,
+          commitBundle: input.commitBundle,
+          preflightBundle: input.preflightBundle,
+          controls: (info) => [
+            {
+              id: input.controlID,
+              sessionID,
+              kind: "wake_reason",
+              status: "consumed",
+              owner: reason.source,
+              payload: {
+                messageID: info.id,
+                wake_reason: reason,
+              },
             },
-          },
-        ],
-      })
+          ],
+        })
+        .catch(async (error) => {
+          if (!(error instanceof PersistedWakeReplay)) throw error
+          if (error.sessionID !== sessionID || error.messageID !== input.messageID) throw error
+          return MessageStore.get({ sessionID, messageID: error.messageID })
+        })
 
       log.info("injected wake message", { sessionID, messageID: message.info.id, wakeReason: reason.source })
 
@@ -303,7 +316,13 @@ export namespace SessionWake {
         signal: input.signal,
         fn: () => undefined,
       })
-      const started = startPersistedWakeLoop({ sessionID, messageID: message.info.id, directory })
+      const started = startPersistedWakeLoop({
+        sessionID,
+        messageID: message.info.id,
+        directory,
+        ownerPreflight: input.ownerPreflight,
+        ownerLifecycle: input.ownerLifecycle,
+      })
 
       return { sessionID, messageID: message.info.id, ...started }
     })
@@ -313,7 +332,10 @@ export namespace SessionWake {
     sessionID: string
     messageID: string
     directory: string
+    signal?: AbortSignal
     retryFailedReply?: boolean
+    ownerPreflight?: (db: Database.TxOrDb) => void
+    ownerLifecycle?: (owner: AbortSignal) => Disposable
   }): Promise<WakeCompletion> {
     return startPersistedWakeLoop(input).completion
   }
@@ -322,7 +344,10 @@ export namespace SessionWake {
     sessionID: string
     messageID: string
     directory: string
+    signal?: AbortSignal
     retryFailedReply?: boolean
+    ownerPreflight?: (db: Database.TxOrDb) => void
+    ownerLifecycle?: (owner: AbortSignal) => Disposable
   }): Pick<WakeReceipt, "activation" | "completion"> {
     return startPersistedWakeLoop(input)
   }
@@ -331,8 +356,12 @@ export namespace SessionWake {
     sessionID: string
     messageID: string
     directory: string
+    signal?: AbortSignal
     retryFailedReply?: boolean
+    ownerPreflight?: (db: Database.TxOrDb) => void
+    ownerLifecycle?: (owner: AbortSignal) => Disposable
   }): Pick<WakeReceipt, "activation" | "completion"> {
+    input.signal?.throwIfAborted()
     let settleReply!: (completion: WakeCompletion) => void
     const reply = new Promise<WakeCompletion>((resolve) => {
       settleReply = resolve
@@ -341,19 +370,24 @@ export namespace SessionWake {
       "session_wake_loop",
       `session-wake-loop:${input.sessionID}:${input.messageID}`,
     )
+    let promptOwner: AbortSignal | undefined
     reservation.onCancel((reason) => {
+      if (!promptOwner) return
       try {
-        SessionPrompt.cancel(
+        SessionPrompt.cancelOwned(
           input.sessionID,
           input.directory,
-          createExecutionCancellationOrigin({
-            actor: "runtime",
-            source: "process.shutdown",
-            surface: "session-wake-loop",
-            reason: reason instanceof Error ? reason.message : String(reason),
-            targetSessionID: input.sessionID,
-            messageID: input.messageID,
-          }),
+          promptOwner,
+          {
+            origin: createExecutionCancellationOrigin({
+              actor: "runtime",
+              source: "process.shutdown",
+              surface: "session-wake-loop",
+              reason: reason instanceof Error ? reason.message : String(reason),
+              targetSessionID: input.sessionID,
+              messageID: input.messageID,
+            }),
+          },
         )
       } catch (error) {
         log.warn("wake loop cancellation callback failed", {
@@ -363,6 +397,9 @@ export namespace SessionWake {
         })
       }
     })
+    const cancelFromCaller = () => reservation.cancel(input.signal?.reason)
+    if (input.signal?.aborted) cancelFromCaller()
+    else input.signal?.addEventListener("abort", cancelFromCaller, { once: true })
     let resolveActivation!: (activation: WakeActivation) => void
     let rejectActivation!: (error: unknown) => void
     let activationSettled = false
@@ -373,6 +410,7 @@ export namespace SessionWake {
     void activation.catch(() => undefined)
     const activated = (owner: AbortSignal) => {
       if (activationSettled) return
+      promptOwner = owner
       activationSettled = true
       resolveActivation({ owner })
     }
@@ -393,6 +431,7 @@ export namespace SessionWake {
       })
     })
     reservation.settleWith(operation)
+    void operation.finally(() => input.signal?.removeEventListener("abort", cancelFromCaller)).catch(() => undefined)
     void operation.then(
       () => settleReply({ ok: true }),
       (err) => {
@@ -413,6 +452,8 @@ export namespace SessionWake {
     directory: string
     signal: AbortSignal
     retryFailedReply?: boolean
+    ownerPreflight?: (db: Database.TxOrDb) => void
+    ownerLifecycle?: (owner: AbortSignal) => Disposable
     activated: (owner: AbortSignal) => void
     replySettled?: () => void
   }): Promise<void> {
@@ -421,13 +462,18 @@ export namespace SessionWake {
       signal: input.signal,
       fn: async () => {
         input.signal.throwIfAborted()
-        await SessionPrompt.withPromptOwnerCapture(input.sessionID, input.activated, () =>
-          SessionPrompt.loop({
-            sessionID: input.sessionID,
-            resume_existing: false,
-            reply_to_message_id: input.messageID,
-            retry_failed_reply: input.retryFailedReply,
-          }),
+        await SessionPrompt.withPromptOwnerCapture(
+          input.sessionID,
+          input.activated,
+          () =>
+            SessionPrompt.loop({
+              sessionID: input.sessionID,
+              resume_existing: false,
+              reply_to_message_id: input.messageID,
+              retry_failed_reply: input.retryFailedReply,
+            }),
+          input.ownerPreflight,
+          input.ownerLifecycle,
         )
         input.replySettled?.()
         await SessionPrompt.waitForFinish(input.sessionID, input.directory)

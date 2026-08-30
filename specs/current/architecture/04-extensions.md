@@ -199,6 +199,7 @@ location 校验，项目配置、Task 和 Session 候选则从 global + exact pr
 阻止安装。平台从不扫描用户文件系统；从未注册的目录在首次打开时也使用相同的项目覆盖解析。
 
 - `expert-squad.jsonc` v2 声明 profile identity、package-root `capability_sets`、scheduler/dynamic-Agent `capability_refs`、不可变 binding `virtual_workflows` contract 和可选严格 `configuration.fields`，且 `namespace` 必须匹配父目录。每个 projection 只接受 canonical typed leaf ref 或一层 set ref；set 只包含 leaf。Workflow node 天然为 Task 级且每个 Task 只实例化一次；可选 Slice revision refs 只是 typed subject，不改变 node cardinality。Orchestrator 从真实 predecessor evidence、active Session、Task 并发容量与 ownership 自然决策，Host 不计算、持久化、自动准入或自动调度 frontier；
+- `base_role` 只限定 runtime template 上界，不隐式授权 Tool。每个 worker 由平台追加唯一的 `worker-transport`；scheduler 不存在隐藏 transport，只有在其 `capability_refs` 精确声明 `capability:capability_set:platform:tool-registry:scheduler-transport` 时才获得只读 Task Artifact transport。平台 base set、scheduler transport set、package set 与 direct leaf 都在同一个 materializer 中展开，不存在 legacy projection、fallback、后置补授权或第二事实来源；
 - 专家团必须 self-contained：每个 shipped package 至少保存一个 package-local `SKILL.md`，并由 manifest 的 typed package Skill `capability_refs` 精确授予 scheduler 及所有实际使用该方法的 worker；平台 default Skill、README、selector、Agent prompt 或未被投影的同名文件都不能替代这一契约。模型可见资料只存在于一个显式投影 Skill 的目录闭包，工具专用的不可变模板和数据只存在于顶层 `assets/**`，并由 package tool 静态 import 进入内容寻址 bundle。运行时禁止解析 project/global 安装路径、回读源仓库、复制平行 authority、环境变量或路径 fallback。普通 Task 输入与显式外部服务仍由调用契约声明，不伪装为 package asset；
 - manifest 的 `configuration.fields` 只声明 `text | boolean | secret` 字段形态，不包含值。值的唯一来源是 `Global.Path.data/expert-squad-configuration.json`，以 installation scope、project ID、namespace 与 manifest ID 组成的精确安装身份索引，并以原子 mode `0600` 写入；HTTP（Hypertext Transfer Protocol，超文本传输协议）和 Overlay 只返回字段声明、非 secret 值与 secret 的 `configured` 布尔状态。Resolver 只把精确 active package 的声明和安装身份带到其 package tool，工具调用时通过 `ToolContext.configuration` 读取；配置不得进入 prompt、隐藏消息、catalog secret、Bash、terminal 或进程环境。未投影 package tool 不存在调用面，因此 inactive package 不获得配置值；
 - `selector.md` 是 Orchestrator-visible selector skill 的完整说明来源；
@@ -782,7 +783,10 @@ Multica 生成 package 时复用 `@opencorvus-ai/sdk/expert-squad-authoring` 的
 manifest/目录 materializer。导入 source `updated_at` 的日期表示该 source revision 日期，首次生成的
 OpenCorvus package version 为 `YYYY.MM.DD.1`；source digest 仍是 preview/import freshness authority。
 mapping 不创建、映射或引用 `universal-build`，该能力由 runtime scheduler projection 独立提供。Task
-Artifact 的 `artifact_search` / `artifact_read` / `artifact_select` 由 runtime 投影给 scheduler 和 worker；
+Artifact 的 `artifact_search` / `artifact_read` / `artifact_select` 只在 scheduler manifest 声明精确
+`capability:capability_set:platform:tool-registry:scheduler-transport` typed ref 或相应 direct Tool refs 时投影给
+scheduler；scheduler base set 不包含 transport，runtime 不在 resolved projection 后追加隐藏 scheduler Tool。
+所有 worker 的 Artifact transport 仍由 platform worker transport 唯一追加，manifest 不复制或覆盖该 set；
 consumer 必须先完整精确读取，再对 typed output 的每个语义来源调用 `artifact_select`。完整但未选择的读取只进入
 `observed_artifact_locators`，成功选择的来源进入 `source_artifact_locators`，且 source 必须是 observed 的子集；
 零选择与缺省可选字段均合法。即时 `artifact_publish` 显式提交本次发布专属的
@@ -791,8 +795,10 @@ consumer 必须先完整精确读取，再对 typed output 的每个语义来源
 `artifact_search` 的 opaque pagination cursor 由当前 runtime 使用进程随机 HMAC-SHA-256 authority 签发；cursor
 携带的 frozen revision、membership、provider state、total 与 position 在验证前均不可信。runtime restart 会使旧 cursor
 明确失效，caller 必须从第一页重新开始；不保留 unkeyed checksum decoder 或跨 runtime fallback。
-`artifact_snapshot` 投影给 scheduler 与 worker，`artifact_publish` 只投影给 worker；Multica mapping、manifest、prompt 和 Skill
-不声明、遮蔽或复制这些平台工具及 Artifact body。`artifact_snapshot` 返回内容寻址的 `resource_set`，并为 snapshot 与每个 resource
+`artifact_snapshot` 仅投影给声明 scheduler transport set 或该 direct Tool ref 的 scheduler，并继续通过 platform worker
+transport 投影给所有 worker；`artifact_publish` 只投影给 worker。Multica mapping、prompt 和 Skill 不遮蔽或复制这些
+平台工具及 Artifact body；scheduler manifest 的 typed refs 是 scheduler capability 的唯一来源。
+`artifact_snapshot` 返回内容寻址的 `resource_set`，并为 snapshot 与每个 resource
 返回 Host-minted `artifact_locator_ref`。其模型输入由冻结 runtime contract 投影：scheduler 与没有精确 Build `merge_back` 私有 stage surface 的普通
 worker 只获得当前主项目 `files`；只有该 managed Build surface 获得必填 `source_commit`，且 Host 再次校验它等于最近完成 merge 的
 `primary_head`。schema 收窄不替代执行权限校验。

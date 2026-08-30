@@ -5,7 +5,7 @@
   "name": "Tax Compliance",
   "label": "Tax Compliance",
   "description": "Dated official-authority research, parallel accounting-controls and tax-obligation analysis, remediation planning, independent review, and canonical compliance reporting.",
-  "version": "2026.08.30.1",
+  "version": "2026.08.30.2",
   "product_pillars": [
     "work"
   ],
@@ -29,6 +29,7 @@
     "scheduler": {
       "capability_refs": [
         "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:capability_set:platform:tool-registry:scheduler-transport",
         "capability:skill:package:tax-compliance:tax-compliance%2Fshared%2Fmethod",
         "capability:skill:package:tax-compliance:tax-compliance%2Fshared%2Fworkflow",
         "capability:tool:platform:tool-registry:dispatch_agent",

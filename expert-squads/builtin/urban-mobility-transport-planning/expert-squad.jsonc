@@ -5,7 +5,7 @@
   "name": "Urban Mobility Transport Planning",
   "label": "Urban Mobility Transport Planning",
   "description": "Multimodal baseline, demand, accessibility, options, equity, safety and engagement evidence joined for public planning review.",
-  "version": "2026.08.30.1",
+  "version": "2026.08.30.2",
   "product_pillars": [
     "code",
     "work"
@@ -28,6 +28,7 @@
     "scheduler": {
       "capability_refs": [
         "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:capability_set:platform:tool-registry:scheduler-transport",
         "capability:skill:package:urban-mobility-transport-planning:urban-mobility-transport-planning%2Fshared%2Fmethod",
         "capability:tool:platform:tool-registry:dispatch_agent",
         "capability:tool:platform:tool-registry:manage_task",

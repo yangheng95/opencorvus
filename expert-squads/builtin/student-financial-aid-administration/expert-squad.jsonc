@@ -5,7 +5,7 @@
   "name": "Student Financial Aid Administration",
   "label": "Student Financial Aid Administration",
   "description": "Source-versioned student financial-aid application, verification, academic, cost, packaging, award, disbursement, reconciliation and exception evidence without eligibility or fund-movement authority.",
-  "version": "2026.08.30.1",
+  "version": "2026.08.30.2",
   "product_pillars": [
     "work"
   ],
@@ -27,6 +27,7 @@
     "scheduler": {
       "capability_refs": [
         "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:capability_set:platform:tool-registry:scheduler-transport",
         "capability:skill:package:student-financial-aid-administration:student-financial-aid-administration%2Fshared%2Fmethod",
         "capability:tool:platform:tool-registry:dispatch_agent",
         "capability:tool:platform:tool-registry:manage_task",

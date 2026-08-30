@@ -78,7 +78,7 @@ describe("Evolution Lab complete package projection", () => {
             installationScope: "project",
             namespace: "builtin",
             id: "evolution-lab",
-            version: "2026.08.30.2",
+            version: "2026.08.30.3",
           },
         })
         const config = Config.mergeOverlay(await EffectiveConfig.snapshotCurrent(), {
@@ -91,7 +91,7 @@ describe("Evolution Lab complete package projection", () => {
         expect(revision).toMatchObject({
           id: "evolution-lab",
           namespace: "builtin",
-          version: "2026.08.30.2",
+          version: "2026.08.30.3",
         })
 
         const scheduler = await PromptProfileResolver.resolveSchedulerCapability({

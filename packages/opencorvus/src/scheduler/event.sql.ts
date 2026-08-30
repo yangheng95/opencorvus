@@ -1,6 +1,7 @@
 import { check, sqliteTable, text, integer, index, uniqueIndex } from "drizzle-orm/sqlite-core"
 import { sql } from "drizzle-orm"
 import { BusPublicationOutboxTable } from "@/bus/bus.sql"
+import { ProtocolEventTable } from "@/protocol/protocol.sql"
 import { ProjectTable } from "../project/project.sql"
 import { SessionTable } from "../session/session.sql"
 
@@ -80,12 +81,22 @@ export const EventJobFireTable = sqliteTable(
     /** Present only when this fire pre-allocates a new Session. Existing
      * Session targets are owned by the exact definition revision. */
     created_session_id: text(),
+    /** Exact Mission occurrence captured when this fire is created. Null for
+     * non-Mission targets. Recovery must never bind the fire to a reopen. */
+    mission_opened_event_id: text().references(() => ProtocolEventTable.id, { onDelete: "restrict" }),
+    mission_disposition: text({ enum: ["mission_closed"] }),
+    mission_closure_event_id: text().references(() => ProtocolEventTable.id, { onDelete: "restrict" }),
     time_created: integer().notNull(),
   },
   (table) => [
     uniqueIndex("event_job_fire_occurrence_idx").on(table.event_job_revision_id, table.event_occurrence_id),
     index("event_job_fire_causation_idx").on(table.causation_fire_id),
     index("event_job_fire_target_session_idx").on(table.created_session_id),
+    check("event_job_fire_mission_reservation_shape", sql`
+      (${table.mission_opened_event_id} IS NULL AND ${table.mission_disposition} IS NULL AND ${table.mission_closure_event_id} IS NULL)
+      OR (${table.mission_opened_event_id} IS NOT NULL AND ${table.mission_disposition} IS NULL AND ${table.mission_closure_event_id} IS NULL)
+      OR (${table.mission_opened_event_id} IS NULL AND ${table.mission_disposition}='mission_closed' AND ${table.mission_closure_event_id} IS NOT NULL)
+    `),
   ],
 )
 
@@ -95,7 +106,8 @@ export const EventJobFireReceiptTable = sqliteTable(
     id: text().primaryKey(),
     fire_id: text().notNull().references(() => EventJobFireTable.id, { onDelete: "cascade" }),
     outcome: text({ enum: ["retry_wait", "succeeded", "disposition"] }).notNull(),
-    disposition: text({ enum: ["causal_cycle", "cooldown", "job_disabled"] }),
+    disposition: text({ enum: ["causal_cycle", "cooldown", "job_disabled", "mission_closed"] }),
+    closure_event_id: text().references(() => ProtocolEventTable.id, { onDelete: "restrict" }),
     message_id: text(),
     retry_at: integer(),
     error: text(),
@@ -106,9 +118,10 @@ export const EventJobFireReceiptTable = sqliteTable(
     uniqueIndex("event_job_fire_terminal_receipt_idx").on(table.fire_id)
       .where(sql`${table.outcome} <> 'retry_wait'`),
     check("event_job_fire_receipt_shape", sql`
-      (${table.outcome}='retry_wait' AND ${table.disposition} IS NULL AND ${table.message_id} IS NULL AND ${table.retry_at} IS NOT NULL AND ${table.error} IS NOT NULL)
-      OR (${table.outcome}='succeeded' AND ${table.disposition} IS NULL AND ${table.message_id} IS NOT NULL AND ${table.retry_at} IS NULL AND ${table.error} IS NULL)
-      OR (${table.outcome}='disposition' AND ${table.disposition} IS NOT NULL AND ${table.message_id} IS NULL AND ${table.retry_at} IS NULL)
+      (${table.outcome}='retry_wait' AND ${table.disposition} IS NULL AND ${table.closure_event_id} IS NULL AND ${table.message_id} IS NULL AND ${table.retry_at} IS NOT NULL AND ${table.error} IS NOT NULL)
+      OR (${table.outcome}='succeeded' AND ${table.disposition} IS NULL AND ${table.closure_event_id} IS NULL AND ${table.message_id} IS NOT NULL AND ${table.retry_at} IS NULL AND ${table.error} IS NULL)
+      OR (${table.outcome}='disposition' AND ${table.disposition} IN ('causal_cycle','cooldown','job_disabled') AND ${table.closure_event_id} IS NULL AND ${table.message_id} IS NULL AND ${table.retry_at} IS NULL)
+      OR (${table.outcome}='disposition' AND ${table.disposition}='mission_closed' AND ${table.closure_event_id} IS NOT NULL AND ${table.message_id} IS NULL AND ${table.retry_at} IS NULL AND ${table.error} IS NULL)
     `),
   ],
 )

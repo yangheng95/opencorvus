@@ -5,7 +5,7 @@
   "name": "Knowledge Base Operations",
   "label": "Knowledge Base Operations",
   "description": "Parallel source mapping, change editing, and lifecycle governance joined into a traceable knowledge publication record.",
-  "version": "2026.08.30.1",
+  "version": "2026.08.30.2",
   "product_pillars": [
     "work"
   ],
@@ -27,6 +27,7 @@
     "scheduler": {
       "capability_refs": [
         "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:capability_set:platform:tool-registry:scheduler-transport",
         "capability:skill:package:knowledge-base-operations:knowledge-base-operations%2Fshared%2Fmethod",
         "capability:tool:platform:tool-registry:dispatch_agent",
         "capability:tool:platform:tool-registry:manage_task",
