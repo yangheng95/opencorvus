@@ -61749,6 +61749,300 @@
         ]
       }
     },
+    "/global/automations/{id}/fires": {
+      "get": {
+        "description": "Lists logical Fire occurrences with immutable target-run receipts, including terminal Fires that reserved no target runs.",
+        "operationId": "global.automations.fires",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "attemptCount": {
+                        "type": "number"
+                      },
+                      "automationId": {
+                        "type": "string"
+                      },
+                      "automationRevisionId": {
+                        "type": "string"
+                      },
+                      "completedAt": {
+                        "anyOf": [
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "error": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "fireId": {
+                        "type": "string"
+                      },
+                      "origin": {
+                        "enum": [
+                          "scheduled",
+                          "manual_api",
+                          "manual_tool",
+                          "legacy"
+                        ],
+                        "type": "string"
+                      },
+                      "retryAt": {
+                        "anyOf": [
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "runs": {
+                        "items": {
+                          "additionalProperties": false,
+                          "properties": {
+                            "closureEventID": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            },
+                            "completedAt": {
+                              "anyOf": [
+                                {
+                                  "type": "number"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            },
+                            "disposition": {
+                              "anyOf": [
+                                {
+                                  "enum": [
+                                    "mission_closed",
+                                    "target_deleted",
+                                    "superseded"
+                                  ],
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            },
+                            "error": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            },
+                            "id": {
+                              "type": "string"
+                            },
+                            "outcome": {
+                              "enum": [
+                                "running",
+                                "retry_wait",
+                                "succeeded",
+                                "failed",
+                                "disposition"
+                              ],
+                              "type": "string"
+                            },
+                            "sessionId": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            },
+                            "startedAt": {
+                              "type": "number"
+                            },
+                            "targetProjectId": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            },
+                            "targetScope": {
+                              "enum": [
+                                "session",
+                                "project",
+                                "global"
+                              ],
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "targetScope",
+                            "targetProjectId",
+                            "sessionId",
+                            "outcome",
+                            "disposition",
+                            "closureEventID",
+                            "startedAt",
+                            "completedAt",
+                            "error"
+                          ],
+                          "type": "object"
+                        },
+                        "type": "array"
+                      },
+                      "scheduledDueAt": {
+                        "type": "number"
+                      },
+                      "startedAt": {
+                        "type": "number"
+                      },
+                      "state": {
+                        "enum": [
+                          "running",
+                          "retry_wait",
+                          "succeeded",
+                          "failed",
+                          "partial",
+                          "disposition"
+                        ],
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "fireId",
+                      "automationId",
+                      "automationRevisionId",
+                      "origin",
+                      "scheduledDueAt",
+                      "startedAt",
+                      "completedAt",
+                      "state",
+                      "attemptCount",
+                      "retryAt",
+                      "error",
+                      "runs"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Scheduled automation Fire history"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestError"
+                }
+              }
+            },
+            "description": "Bad request"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "NotFoundError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "LogFileNotFoundError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "Not found"
+          }
+        },
+        "summary": "List scheduled automation Fire history",
+        "x-codeSamples": [
+          {
+            "lang": "js",
+            "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.global.automations.fires({\n  ...\n})"
+          }
+        ]
+      }
+    },
     "/global/automations/{id}/run": {
       "post": {
         "operationId": "global.automations.run",
@@ -62169,7 +62463,7 @@
                 }
               }
             },
-            "description": "Scheduled automation run history"
+            "description": "Scheduled automation target-execution history; use /fires for logical occurrence history"
           },
           "400": {
             "content": {
@@ -62233,7 +62527,7 @@
             "description": "Not found"
           }
         },
-        "summary": "List scheduled automation runs",
+        "summary": "List scheduled automation target executions",
         "x-codeSamples": [
           {
             "lang": "js",
@@ -110531,7 +110825,6 @@
                                 "enum": [
                                   "message",
                                   "protocol_event",
-                                  "automation_run",
                                   "engine_artifact",
                                   "task",
                                   "inline"

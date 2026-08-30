@@ -4,6 +4,7 @@ import { Recurrence } from "@/scheduler/recurrence"
 import { AutomationService } from "@/scheduler/automation-service"
 import { EventService } from "@/scheduler/event-service"
 import { Instance } from "@/project/instance"
+import { scheduledToolInputDigest, scheduledToolOccurrenceFromContext } from "@/scheduler/tool-occurrence"
 
 const MatchSchema = z.record(z.string(), z.union([z.string(), z.number(), z.boolean()]))
 const AutomationCreateFields = {
@@ -69,9 +70,7 @@ Interpret relative dates such as "today" in the user's local time zone, then sen
 Event actions remain separate because they react to Bus events rather than time:
 - **create_event**, **list_event**, **cancel_event** manage event-triggered jobs.`
 
-export const ScheduleTool = Tool.define("schedule", {
-  description: DESCRIPTION,
-  parameters: z.union([
+export const ScheduleToolParameters = z.union([
     z.object({
       ...AutomationCreateFields,
       executionMode: z
@@ -102,9 +101,21 @@ export const ScheduleTool = Tool.define("schedule", {
     }),
     z.object({ action: z.literal("list_event") }),
     z.object({ action: z.literal("cancel_event"), jobId: z.string().describe("The event task ID") }),
-  ]),
-  async execute(params, ctx) {
-    const projectID = Instance.project.id
+])
+
+export type ScheduleToolInput = z.infer<typeof ScheduleToolParameters>
+
+export async function executeScheduleToolInput(
+  params: ScheduleToolInput,
+  ctx: {
+    sessionID: string
+    projectID: string
+    occurrence: ReturnType<typeof scheduledToolOccurrenceFromContext>
+  },
+) {
+    const projectID = ctx.projectID
+    const occurrence = ctx.occurrence
+    const causation = { occurrence, inputDigest: scheduledToolInputDigest("schedule", params) }
 
     switch (params.action) {
       case "create": {
@@ -114,7 +125,7 @@ export const ScheduleTool = Tool.define("schedule", {
             : params.scope === "project"
               ? ({ scope: "project", projectIds: params.projectIds ?? [projectID] } as const)
               : ({ scope: "global" } as const)
-        const automation = await AutomationService.create({
+        const automation = await AutomationService.createFromTool({
           name: params.name,
           target,
           recurrence: params.recurrence,
@@ -122,17 +133,19 @@ export const ScheduleTool = Tool.define("schedule", {
           executionMode: params.scope === "session" ? "local" : params.executionMode,
           model: params.model,
           reasoningEffort: params.reasoningEffort,
-        })
-        return result(`Scheduled: ${params.name}`, {
+        }, causation)
+        return result(`Scheduled: ${automation.name}`, {
           automationId: automation.id,
-          name: params.name,
-          target,
-          executionMode: params.executionMode,
-          model: params.model,
-          reasoningEffort: params.reasoningEffort,
-          recurrence: params.recurrence,
-          description: Recurrence.describe(params.recurrence),
-          nextRun: new Date(automation.nextRun).toISOString(),
+          revisionId: automation.revisionId,
+          revision: automation.revision,
+          name: automation.name,
+          target: automation.target,
+          executionMode: automation.executionMode,
+          model: automation.model,
+          reasoningEffort: automation.reasoningEffort,
+          recurrence: automation.recurrence,
+          description: Recurrence.describe(automation.recurrence),
+          firstEligibleAt: new Date(automation.firstEligibleAt).toISOString(),
         })
       }
       case "list": {
@@ -155,7 +168,7 @@ export const ScheduleTool = Tool.define("schedule", {
               : params.scope === "project"
                 ? ({ scope: "project", projectIds: params.projectIds ?? [projectID] } as const)
                 : ({ scope: "global" } as const)
-        const automation = await AutomationService.update({
+        const automation = await AutomationService.updateFromTool({
           id: params.automationId,
           name: params.name,
           target,
@@ -164,28 +177,28 @@ export const ScheduleTool = Tool.define("schedule", {
           executionMode: params.scope === "session" ? "local" : params.executionMode,
           model: params.model,
           reasoningEffort: params.reasoningEffort,
-        })
+        }, causation)
         return result(`Updated: ${automation.name}`, automation)
       }
       case "pause":
       case "resume": {
         const status = params.action === "pause" ? "paused" : "active"
-        const automation = await AutomationService.update({
+        const automation = await AutomationService.updateFromTool({
           id: params.automationId,
           status,
-        })
+        }, causation)
         return result(`${status === "paused" ? "Paused" : "Resumed"}: ${automation.name}`, automation)
       }
       case "run": {
-        const run = await AutomationService.runNow(params.automationId)
+        const run = await AutomationService.runNowFromTool(params.automationId, causation)
         return result("Automation run completed", run)
       }
       case "history": {
-        const runs = AutomationService.listRuns(params.automationId)
-        return result(`${runs.length} automation runs`, { runs })
+        const fires = AutomationService.listFireHistory(params.automationId)
+        return result(`${fires.length} automation fires`, { fires })
       }
       case "delete": {
-        const deleted = AutomationService.remove(params.automationId)
+        const deleted = AutomationService.removeFromTool(params.automationId, causation)
         return result(`Deleted: ${deleted.name}`, {
           deleted: true,
           automationId: deleted.id,
@@ -194,7 +207,7 @@ export const ScheduleTool = Tool.define("schedule", {
       }
       case "create_event": {
         const cooldownMs = params.cooldownMs ?? 0
-        const job = await EventService.create({
+        const job = await EventService.createFromTool({
           projectId: projectID,
           name: params.name,
           eventType: params.eventType,
@@ -202,7 +215,7 @@ export const ScheduleTool = Tool.define("schedule", {
           match: params.match,
           oneShot: params.oneShot,
           cooldownMs,
-        })
+        }, causation)
         return result(`Event task created: ${params.name}`, {
           jobId: job.id,
           name: params.name,
@@ -223,16 +236,26 @@ export const ScheduleTool = Tool.define("schedule", {
         })
       }
       case "cancel_event": {
-        const job = EventService.list(projectID).find((entry) => entry.id === params.jobId)
-        if (!job) return result("Not found", { error: `Event task ${params.jobId} not found` })
-        EventService.remove(params.jobId, projectID)
-        return result(`Cancelled event task: ${job.name}`, {
+        const deleted = EventService.removeFromTool(params.jobId, projectID, causation)
+        if (!deleted) return result("Not found", { error: `Event task ${params.jobId} not found` })
+        return result(`Cancelled event task: ${deleted.name}`, {
           cancelled: true,
           jobId: params.jobId,
-          name: job.name,
+          name: deleted.name,
         })
       }
     }
+}
+
+export const ScheduleTool = Tool.define("schedule", {
+  description: DESCRIPTION,
+  parameters: ScheduleToolParameters,
+  async execute(params, ctx) {
+    return executeScheduleToolInput(params, {
+      sessionID: ctx.sessionID,
+      projectID: Instance.project.id,
+      occurrence: scheduledToolOccurrenceFromContext(ctx, "schedule"),
+    })
   },
 })
 

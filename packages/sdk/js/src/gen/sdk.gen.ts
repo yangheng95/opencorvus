@@ -209,6 +209,8 @@ import type {
   GlobalAutomationsCreateResponses,
   GlobalAutomationsDeleteErrors,
   GlobalAutomationsDeleteResponses,
+  GlobalAutomationsFiresErrors,
+  GlobalAutomationsFiresResponses,
   GlobalAutomationsListErrors,
   GlobalAutomationsListResponses,
   GlobalAutomationsRunErrors,
@@ -5815,6 +5817,29 @@ export class Automations extends HeyApiClient {
   }
 
   /**
+   * List scheduled automation Fire history
+   *
+   * Lists logical Fire occurrences with immutable target-run receipts, including terminal Fires that reserved no target runs.
+   */
+  public fires<ThrowOnError extends boolean = false>(
+    parameters: {
+      id: string
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams([parameters], [{ args: [{ in: "path", key: "id" }] }])
+    return (options?.client ?? this.client).get<
+      GlobalAutomationsFiresResponses,
+      GlobalAutomationsFiresErrors,
+      ThrowOnError
+    >({
+      url: "/global/automations/{id}/fires",
+      ...options,
+      ...params,
+    })
+  }
+
+  /**
    * Run a scheduled automation now
    */
   public run<ThrowOnError extends boolean = false>(
@@ -5836,7 +5861,7 @@ export class Automations extends HeyApiClient {
   }
 
   /**
-   * List scheduled automation runs
+   * List scheduled automation target executions
    */
   public runs<ThrowOnError extends boolean = false>(
     parameters: {

@@ -177,6 +177,8 @@ import {
   recoverInterruptedDispatchAgentsPart,
   type DispatchAgentsRecoveryTool,
 } from "@/orchestrator/dispatch-agents-recovery"
+import { recoverScheduledToolPart } from "@/scheduler/tool-recovery"
+import { settleSessionDelaysAtAssistantAcceptanceInTransaction } from "@/scheduler/session-delay-admission"
 import { sendSchedulerMessage } from "@/protocol/scheduler-message"
 import {
   orchestratorCommittedDecisionInParts,
@@ -292,7 +294,6 @@ export namespace SessionLoop {
     {
       coordinator: ToolTurnExecutionCoordinator
       coordinatedTools: WeakSet<object>
-      harnessProjection?: HarnessProjection
     }
   >()
 
@@ -315,10 +316,6 @@ export namespace SessionLoop {
 
   export function executionCoordinatorForResolvedTools(tools: Record<string, AITool>) {
     return resolvedToolExecutionSurfaces.get(tools)?.coordinator
-  }
-
-  export function harnessProjectionForResolvedTools(tools: Record<string, AITool>) {
-    return resolvedToolExecutionSurfaces.get(tools)?.harnessProjection
   }
 
   function bindReservedProviderTool(
@@ -1854,7 +1851,14 @@ export namespace SessionLoop {
       })
       CatalogOccurrenceBinding.assertCurrent({ payload, materializationScope, runtimeContract })
       catalogPayload = payload
-      await Session.beginAssistantReply(assistantMessage)
+      await Session.beginAssistantReplyWithCommit(assistantMessage, (db) => {
+        settleSessionDelaysAtAssistantAcceptanceInTransaction(db, {
+          sessionID: assistantMessage.sessionID,
+          assistantMessageID: assistantMessage.id,
+          acceptedInputMessageIDs: assistantMessage.acceptedInputMessageIDs ?? [],
+          now: Date.now(),
+        })
+      })
       catalogBinding = existingCatalogBinding
     } else {
       if (openTaskRootAssistant) {
@@ -2510,6 +2514,24 @@ export namespace SessionLoop {
       for (const part of candidate.parts) {
         signal?.throwIfAborted()
         if (part.type !== "tool" || (part.state.status !== "pending" && part.state.status !== "running")) continue
+        const recoveredScheduledEffect = await recoverScheduledToolPart(part)
+        if (recoveredScheduledEffect) {
+          await Session.updatePart({
+            ...part,
+            state: {
+              status: "completed",
+              input: part.state.input,
+              title: recoveredScheduledEffect.title,
+              output: recoveredScheduledEffect.output,
+              metadata: recoveredScheduledEffect.metadata,
+              time: {
+                start: part.state.time.start,
+                end: Math.max(now, part.state.time.start + 1),
+              },
+            },
+          })
+          continue
+        }
         const taskID = taskIDForSession(sessionID)
         const lineage =
           part.tool === "dispatch_agent" && taskID
@@ -4124,7 +4146,6 @@ export namespace SessionLoop {
     if (activeProductionSkillNames.length > 0) initialToolNames.add(SkillTool.id)
     if (activeMissionSkillNames.length > 0) initialToolNames.add(MissionSkillTool.id)
     await finalizeSkillSurface(initialToolNames)
-    resolvedToolExecutionSurfaces.get(tools)!.harnessProjection = executionHarnessProjection
     const materializedCandidates = { ...tools }
     const materializeRevealCandidate = async (requestedRef: CapabilityRef, executableRef: CapabilityRef) => {
       const providerName = executableRef.local_ref

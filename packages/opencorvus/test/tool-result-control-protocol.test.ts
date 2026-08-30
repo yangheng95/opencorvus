@@ -11,6 +11,8 @@ import { HostAgentRegistry } from "../src/agent/host-agent-registry"
 import { Bus } from "../src/bus"
 import { Config } from "../src/config/config"
 import { requireTask } from "../src/engine/store"
+import { EngineTaskRootIngressTable, EngineTaskWaitRegistrationTable } from "../src/engine/engine.sql"
+import { acquireTaskRootIngressLease } from "../src/engine/task-root-fact-store"
 import { deriveTaskStatus } from "../src/engine/task-status"
 import { terminalTask } from "../src/engine/state"
 import { createDispatchLineageOrigin, listDispatchLineage } from "../src/engine/dispatch-lineage"
@@ -34,12 +36,14 @@ import {
   createOrchestratorTools,
   OrchestratorToolsTestHooks,
 } from "../src/orchestrator/tools"
+import { currentOrchestratorControlMessage } from "../src/orchestrator/agent"
 import { sendSchedulerMessage } from "../src/protocol/scheduler-message"
 import { taskRequestSHA256 } from "../src/orchestrator/dispatch-turn-projection"
 import { Provider } from "../src/provider/provider"
 import { Instance } from "../src/project/instance"
 import { Session } from "../src/session"
 import { MessageStore } from "../src/session/message-store"
+import type { Message } from "../src/session/message"
 import { LLM } from "../src/session/llm"
 import { SessionProcessor } from "../src/session/processor"
 import { SessionLoop } from "../src/session/loop"
@@ -63,7 +67,6 @@ import {
 } from "../src/tool/execution-mode"
 import { WaitTool } from "../src/tool/wait"
 import { textSHA256 } from "../src/expert-squad/projection-hash"
-import { AutomationTable } from "../src/scheduler/automation.sql"
 import { Database, DatabaseUnavailableError, eq } from "../src/storage/db"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 import { persistEstablishedTask } from "./fixture/engine-task"
@@ -102,6 +105,7 @@ async function projectedSchedulerSurface(input: {
   injectStructuredOutput?: boolean
   reserveStructuredOutput?: boolean
   activeLocalRefs: readonly string[]
+  taskActivation?: boolean
 }) {
   await Config.updateProjectPatch({
     permission_mode: input.permissionMode,
@@ -144,22 +148,69 @@ async function projectedSchedulerSurface(input: {
     parentID: root.id,
     title: "Projected scheduler control occurrence",
   })
-  const user = await Session.updateMessage({
-    id: Identifier.ascending("message"),
-    sessionID: session.id,
-    role: "user",
-    author: "user",
-    time: { created: now },
-    agent: "orchestrator",
-    model: { providerID: model.providerID, modelID: model.id },
-  })
-  await Session.updatePart({
-    id: Identifier.ascending("part"),
-    sessionID: session.id,
-    messageID: user.id,
-    type: "text",
-    text: "Exercise the projected scheduler Tool-result control surface.",
-  })
+  let activationID: string | undefined
+  let user: Message.Info
+  if (input.taskActivation) {
+    const ingress = Database.use((db) =>
+      db.select().from(EngineTaskRootIngressTable)
+        .where(eq(EngineTaskRootIngressTable.task_id, taskID))
+        .orderBy(EngineTaskRootIngressTable.sequence, EngineTaskRootIngressTable.id)
+        .get(),
+    )
+    if (!ingress) throw new Error(`Projected scheduler Task ${taskID} has no creation ingress`)
+    const activation = acquireTaskRootIngressLease({
+      ingressID: ingress.id,
+      ownerOccurrenceID: `projected-scheduler:${taskID}`,
+      now: now + 1,
+      leaseMilliseconds: 120_000,
+      assertControlOwnerInTransaction: () => undefined,
+    })
+    if (!activation.acquired) throw new Error(`Projected scheduler Task ${taskID} could not acquire its creation ingress`)
+    activationID = activation.activationID
+    const control = currentOrchestratorControlMessage(
+      { taskCreation: { taskID } },
+      taskID,
+      ingress.id,
+      ingress.id,
+    )
+    if (!control) throw new Error(`Projected scheduler Task ${taskID} has no creation control Message`)
+    user = await Session.updateMessage({
+      id: control.messageID,
+      sessionID: session.id,
+      role: "user",
+      author: "orchestrator",
+      time: { created: now },
+      agent: "orchestrator",
+      model: { providerID: model.providerID, modelID: model.id },
+      extra: control.extra,
+    })
+    await Session.updatePart({
+      id: control.partID,
+      sessionID: session.id,
+      messageID: user.id,
+      type: "text",
+      text: control.text,
+      kind: "control",
+      source: "system",
+    })
+  } else {
+    user = await Session.updateMessage({
+      id: Identifier.ascending("message"),
+      sessionID: session.id,
+      role: "user",
+      author: "user",
+      time: { created: now },
+      agent: "orchestrator",
+      model: { providerID: model.providerID, modelID: model.id },
+    })
+    await Session.updatePart({
+      id: Identifier.ascending("part"),
+      sessionID: session.id,
+      messageID: user.id,
+      type: "text",
+      text: "Exercise the projected scheduler Tool-result control surface.",
+    })
+  }
   const assistant = {
     id: Identifier.ascending("message"),
     parentID: user.id,
@@ -174,6 +225,7 @@ async function projectedSchedulerSurface(input: {
     modelID: model.id,
     providerID: model.providerID,
     time: { created: now },
+    ...(activationID ? { activationID } : {}),
   } as const
   const owner = MCP.createScopedConnectionOwner(
     computerRuntimeScopeIdentity({ ownerKind: "orchestrator", taskID, sessionID: session.id }),
@@ -786,32 +838,65 @@ describe("single Tool-result turn-control protocol", () => {
           activeLocalRefs: [],
         })
         const initialized = await WaitTool.init()
-        const context = (abort: AbortSignal, callID: string) => ({
-          sessionID: fixture.session.id,
-          messageID: Identifier.ascending("message"),
-          callID,
-          agent: "coding",
-          abort,
-          messages: [],
-          executionAuthority: {
-            kind: "conversation" as const,
+        const context = async (
+          abort: AbortSignal,
+          callID: string,
+          toolInput: { duration_ms: number; reason: string },
+        ) => {
+          const message = await Session.updateMessage({
+            id: Identifier.ascending("message"),
+            parentID: fixture.assistant.parentID,
             sessionID: fixture.session.id,
-            projectID: Instance.project.id,
-            directory: project.path,
-          },
-          executionSurface: Tool.executionSurface(["wait"], []),
-          metadata() {},
-        })
+            role: "assistant",
+            author: "coding",
+            agent: "coding",
+            providerID: "test",
+            modelID: "wait-tool",
+            path: { cwd: project.path, root: project.path },
+            cost: 0,
+            tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+            time: { created: Date.now() },
+          })
+          const toolPartID = Identifier.ascending("part")
+          await Session.updatePart({
+            id: toolPartID,
+            sessionID: fixture.session.id,
+            messageID: message.id,
+            type: "tool",
+            callID,
+            tool: "wait",
+            state: { status: "running", input: toolInput, time: { start: Date.now() } },
+          })
+          return {
+            sessionID: fixture.session.id,
+            messageID: message.id,
+            callID,
+            agent: "coding",
+            abort,
+            extra: { toolPartID, projectID: Instance.project.id },
+            messages: [],
+            executionAuthority: {
+              kind: "conversation" as const,
+              sessionID: fixture.session.id,
+              projectID: Instance.project.id,
+              directory: project.path,
+            },
+            executionSurface: Tool.executionSurface(["wait"], []),
+            metadata() {},
+          }
+        }
 
+        const scheduledInput = { duration_ms: 1_000, reason: "verify the normal Wait Tool producer" }
         const scheduled = await initialized.execute(
-          { duration_ms: 1_000, reason: "verify the normal Wait Tool producer" },
-          context(new AbortController().signal, "call_normal_wait"),
+          scheduledInput,
+          await context(new AbortController().signal, "call_normal_wait", scheduledInput),
         )
         const abortedController = new AbortController()
         abortedController.abort()
+        const abortedInput = { duration_ms: 1_000, reason: "verify the aborted Wait Tool result" }
         const aborted = await initialized.execute(
-          { duration_ms: 1_000, reason: "verify the aborted Wait Tool result" },
-          context(abortedController.signal, "call_aborted_wait"),
+          abortedInput,
+          await context(abortedController.signal, "call_aborted_wait", abortedInput),
         )
 
         expect({
@@ -847,6 +932,7 @@ describe("single Tool-result turn-control protocol", () => {
           projectPath: project.path,
           permissionMode: "full_access",
           activeLocalRefs: ["wait"],
+          taskActivation: true,
         })
         const wait = fixture.tools.wait
         if (!wait?.execute) throw new Error("Projected scheduler orchestrator wait is unavailable")
@@ -855,11 +941,12 @@ describe("single Tool-result turn-control protocol", () => {
           { toolCallId: "call_orchestrator_wait", messages: [], abortSignal: fixture.abort },
         )
         const automations = Database.use((db) =>
-          db.select().from(AutomationTable).where(eq(AutomationTable.task_id, fixture.taskID)).all(),
+          db.select().from(EngineTaskWaitRegistrationTable)
+            .where(eq(EngineTaskWaitRegistrationTable.task_id, fixture.taskID)).all(),
         )
         expect({ control: toolResultControl((result as any).metadata), automations }).toMatchObject({
           control: { kind: "immediate_park" },
-          automations: [expect.objectContaining({ task_id: fixture.taskID, status: "active" })],
+          automations: [expect.objectContaining({ task_id: fixture.taskID })],
         })
         expect(automations).toHaveLength(1)
         await SessionRuntimeContractStore.dispose(fixture.session.id)
@@ -1468,6 +1555,7 @@ describe("single Tool-result turn-control protocol", () => {
           projectPath: project.path,
           permissionMode: "full_access",
           activeLocalRefs: ["read_context", "wait"],
+          taskActivation: true,
           instrument(raw) {
             const originalReadContext = raw.read_context
             const originalWait = raw.wait
@@ -1538,7 +1626,8 @@ describe("single Tool-result turn-control protocol", () => {
           ),
         ).rejects.toBeInstanceOf(ToolTurnExecutionConflictError)
         const automations = Database.use((db) =>
-          db.select().from(AutomationTable).where(eq(AutomationTable.task_id, fixture.taskID)).all(),
+          db.select().from(EngineTaskWaitRegistrationTable)
+            .where(eq(EngineTaskWaitRegistrationTable.task_id, fixture.taskID)).all(),
         )
         const persisted = await MessageStore.get({ sessionID: fixture.session.id, messageID: fixture.assistant.id })
         expect({
@@ -1555,7 +1644,7 @@ describe("single Tool-result turn-control protocol", () => {
           ordinaryEffects: 1,
           waitEffects: 1,
           control: { kind: "immediate_park" },
-          automations: [expect.objectContaining({ task_id: fixture.taskID, status: "active" })],
+          automations: [expect.objectContaining({ task_id: fixture.taskID })],
           parts: [
             { callID: "call_projected_read", status: "running" },
             { callID: "call_projected_wait", status: "running" },
@@ -1577,6 +1666,7 @@ describe("single Tool-result turn-control protocol", () => {
           projectPath: project.path,
           permissionMode: "ask",
           activeLocalRefs: ["wait"],
+          taskActivation: true,
           instrument(raw) {
             const originalWait = raw.wait
             if (!originalWait?.execute) throw new Error("Base scheduler projection did not build wait")
@@ -1661,7 +1751,8 @@ describe("single Tool-result turn-control protocol", () => {
           part: recovered.parts.find((part) => part.type === "tool" && part.callID === request.toolCallID),
           waitEffects,
           automations: Database.use((db) =>
-            db.select().from(AutomationTable).where(eq(AutomationTable.task_id, fixture.taskID)).all(),
+            db.select().from(EngineTaskWaitRegistrationTable)
+              .where(eq(EngineTaskWaitRegistrationTable.task_id, fixture.taskID)).all(),
           ),
           starts: history.filter(
             (event) => event.request_id === request.id && event.event_type === "execution_started",
@@ -1692,6 +1783,7 @@ describe("single Tool-result turn-control protocol", () => {
           projectPath: project.path,
           permissionMode: "ask",
           activeLocalRefs: ["wait"],
+          taskActivation: true,
           instrument(raw) {
             const originalWait = raw.wait
             if (!originalWait?.execute) throw new Error("Base scheduler projection did not build wait")
@@ -1750,7 +1842,8 @@ describe("single Tool-result turn-control protocol", () => {
             second: second.info,
             waitEffects,
             automations: Database.use((db) =>
-              db.select().from(AutomationTable).where(eq(AutomationTable.task_id, fixture.taskID)).all(),
+              db.select().from(EngineTaskWaitRegistrationTable)
+                .where(eq(EngineTaskWaitRegistrationTable.task_id, fixture.taskID)).all(),
             ),
             starts: history.filter(
               (event) => event.request_id === request.id && event.event_type === "execution_started",

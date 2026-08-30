@@ -98,8 +98,12 @@ import { exactEngineArtifactLocator } from "@/artifact-catalog"
 import { taskRootIngressSourceKind } from "./task-root-ingress-source"
 import { insertEngineInteractionRequest } from "./interaction-request"
 import { orchestratorControlOccurrenceIdentity } from "@/orchestrator/control-message-identity"
-import { AutomationRunTable, AutomationTable } from "@/scheduler/automation.sql"
 import { resolveDispatchOccurrenceAuthority } from "./dispatch-lineage"
+import {
+  dueTaskWaitsInTransaction,
+  nextTaskWaitDueAtInTransaction,
+  settleTaskWaitForIngressInTransaction,
+} from "./task-wait"
 
 export { TaskRootIngressError } from "./task-directory"
 
@@ -108,6 +112,7 @@ let leaseMilliseconds = 120_000
 let leaseRenewalMilliseconds = 40_000
 const completionHooks = new Set<Promise<void>>()
 const activeProjectDirectories = new Set<string>()
+let operatorGateWriterForTest: typeof recordTaskInfrastructureError | undefined
 
 export type TaskIngressRunResult = { finalMessageID?: string }
 type TaskIngressRunner = (input: {
@@ -201,8 +206,6 @@ function sourceForEvent(event: OrchestratorEvent, identity: Record<string, strin
   if (messageID) return { source: "message" as const, sourceID: messageID }
   const lifecycleEventID = identity.lifecycleEventID?.trim()
   if (lifecycleEventID) return { source: "protocol_event" as const, sourceID: lifecycleEventID }
-  const automationRunID = identity.automationRunID?.trim()
-  if (automationRunID) return { source: "automation_run" as const, sourceID: automationRunID }
   const artifactID =
     identity.infrastructureFactID?.trim() || identity.recoveryFactID?.trim() || identity.requestID?.trim()
   if (artifactID) return { source: "engine_artifact" as const, sourceID: artifactID }
@@ -217,7 +220,7 @@ function sourceForEvent(event: OrchestratorEvent, identity: Record<string, strin
 
 export function persistTaskRootIngressInTransaction(
   db: Database.TxOrDb,
-  task: TaskRow,
+  task: Pick<TaskRow, "id" | "session_id">,
   event: OrchestratorEvent,
   identity: {
     messageID?: string
@@ -227,7 +230,6 @@ export function persistTaskRootIngressInTransaction(
     waitJobID?: string
     lifecycleEventID?: string
     taskCreationID?: string
-    automationRunID?: string
   },
   now = Date.now(),
 ): string {
@@ -287,20 +289,37 @@ export function persistMissionAcceptanceResumeIngressInTransaction(
   return persistTaskRootIngressInTransaction(db, input.task, input.event, { messageID: resume.messageID }, input.now)
 }
 
-export function persistTaskWaitIngressInTransaction(
+function materializeDueTaskWaitInTransaction(
   db: Database.TxOrDb,
-  input: { task: TaskRow; jobID: string; fireID: string; runID: string; dueAt: number; now: number },
-): string {
-  return persistTaskRootIngressInTransaction(
+  input: { task: Pick<TaskRow, "id" | "session_id">; executionEpoch: number; now: number },
+): string | undefined {
+  const wait = dueTaskWaitsInTransaction(db, {
+    taskID: input.task.id,
+    executionEpoch: input.executionEpoch,
+    now: input.now,
+  })[0]
+  if (!wait) return undefined
+  // A Task wait is already the immutable logical occurrence. Reusing that
+  // identity for its one due Fire avoids a second derivation that SQLite could
+  // not independently validate at the settlement boundary.
+  const fireID = wait.id
+  const ingressID = persistTaskRootIngressInTransaction(
     db,
     input.task,
     {
-      note: `Task wait ${input.jobID} became due`,
-      taskWaitWake: { jobID: input.jobID, fireID: input.fireID, dueAt: input.dueAt },
+      note: `Task wait ${wait.id} became due`,
+      taskWaitWake: { jobID: wait.id, fireID, dueAt: wait.due_at },
     },
-    { automationRunID: input.runID },
+    { waitJobID: wait.id },
     input.now,
   )
+  settleTaskWaitForIngressInTransaction(db, {
+    waitID: wait.id,
+    ingressID,
+    disposition: "due_ingress_accepted",
+    now: input.now,
+  })
+  return ingressID
 }
 
 export function persistCoordinationIngressInTransaction(
@@ -341,31 +360,6 @@ function eventForIngress(ingress: typeof EngineTaskRootIngressTable.$inferSelect
         `Task-root ingress ${ingress.id} references missing Task creation ${ingress.source_id}`,
       )
     return OrchestratorEventSchema.parse({ taskCreation: { taskID: task.id } })
-  }
-  if (ingress.source === "automation_run") {
-    const row = Database.use((db) =>
-      db
-        .select({ run: AutomationRunTable, definition: AutomationTable })
-        .from(AutomationRunTable)
-        .innerJoin(AutomationTable, eq(AutomationTable.id, AutomationRunTable.automation_revision_id))
-        .where(eq(AutomationRunTable.id, ingress.source_id))
-        .get(),
-    )
-    if (
-      !row ||
-      row.definition.task_id !== ingress.task_id ||
-      row.definition.kind !== "delay" ||
-      row.definition.due_at == null
-    ) {
-      throw new TaskRootIngressIntegrityError(
-        ingress.id,
-        `Task-root ingress ${ingress.id} references invalid Automation run ${ingress.source_id}`,
-      )
-    }
-    return OrchestratorEventSchema.parse({
-      note: `Task wait ${row.definition.definition_id} became due`,
-      taskWaitWake: { jobID: row.definition.definition_id, fireID: row.run.fire_id, dueAt: row.definition.due_at },
-    })
   }
   if (ingress.source === "engine_artifact") {
     const artifact = Database.use((db) =>
@@ -1104,7 +1098,7 @@ function surfaceOperatorGatedTaskRootIngress(input: {
   ingressID: string
   projection: TaskRootIngressProjection
   now: number
-}): void {
+}): boolean {
   const reason =
     input.projection.state === "host_fault" || input.projection.state === "exhausted"
       ? input.projection.reason
@@ -1118,7 +1112,8 @@ function surfaceOperatorGatedTaskRootIngress(input: {
           `it names, then send a new operator message to redo this work.`
         : `Exit: later ingresses continue past it; send a new operator message to redo the abandoned work, ` +
           `or retry the Task for a fresh budget.`
-    recordTaskInfrastructureError({
+    const writeOperatorGate = operatorGateWriterForTest ?? recordTaskInfrastructureError
+    writeOperatorGate({
       id: Identifier.deterministic(
         "artifact",
         `task-control-operator-gate-v2\0${input.ingressID}\0${input.projection.state}\0${reason}`,
@@ -1132,6 +1127,7 @@ function surfaceOperatorGatedTaskRootIngress(input: {
       context: { ingressID: input.ingressID, state: input.projection.state, gateReason: reason },
       now: input.now,
     })
+    return true
   } catch (error) {
     // Surfacing is an observability obligation, not a scheduling one. Losing
     // it must not convert a resting Task into a faulting one.
@@ -1140,6 +1136,7 @@ function surfaceOperatorGatedTaskRootIngress(input: {
       ingressID: input.ingressID,
       error,
     })
+    return false
   }
 }
 
@@ -1581,6 +1578,21 @@ async function scanTaskControlPlane(
       return { activated: 0, wakeAt: Date.now() + CANCELLATION_RECONCILE_WAKE_MS }
     }
   }
+  if (lifecycle.status === "active") {
+    Database.immediateTransaction((db) => {
+      const current = taskLifecycleProjectionInTransaction(db, taskID)
+      if (current.status !== "active" || current.epoch !== lifecycle.epoch) return
+      const task = db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, taskID)).get()
+      if (!task) return
+      materializeDueTaskWaitInTransaction(db, { task, executionEpoch: current.epoch, now: Date.now() })
+    })
+    lifecycle = Database.use((db) => taskLifecycleProjectionInTransaction(db, taskID))
+  }
+  const taskWaitWakeAt = Database.use((db) =>
+    lifecycle.status === "active"
+      ? nextTaskWaitDueAtInTransaction(db, { taskID, executionEpoch: lifecycle.epoch })
+      : undefined,
+  )
   // Worker completion is delivered by an in-process callback owned by the
   // dispatching runtime. That owner can vanish (crash, kill, OOM) after the
   // dispatch decision resolved its ingress, leaving the Task with an empty
@@ -1613,7 +1625,13 @@ async function scanTaskControlPlane(
       const classification = classifyTaskRootIngressWake(projection, absoluteDeadline, Date.now())
       if (classification.class === "finite_wake") return classification.wakeAt
       if (classification.class === "operator_gated" && classification.surface === "infrastructure_fact") {
-        surfaceOperatorGatedTaskRootIngress({ taskID, ingressID: ingress.id, projection, now: Date.now() })
+        const surfaced = surfaceOperatorGatedTaskRootIngress({
+          taskID,
+          ingressID: ingress.id,
+          projection,
+          now: Date.now(),
+        })
+        if (!surfaced) return Date.now() + 1_000
       }
       // `interaction` gates are already surfaced by their pending Interaction
       // row, and `fifo_deferred`/`absorbing` owe nothing.
@@ -1637,9 +1655,20 @@ async function scanTaskControlPlane(
         // Absorbing for this ingress but not for the Task: later ingresses may
         // still run. The gate is surfaced so the abandoned work is visible,
         // and only a surfaced gate may be memoized.
-        settle(projection)
-        settledIngressIDs.add(ingress.id)
-        break
+        const surfaced = surfaceOperatorGatedTaskRootIngress({
+          taskID,
+          ingressID: ingress.id,
+          projection,
+          now: Date.now(),
+        })
+        if (surfaced) {
+          settledIngressIDs.add(ingress.id)
+          break
+        }
+        return {
+          activated: activated + recovered,
+          wakeAt: Date.now() + 1_000,
+        }
       }
       if (projection.state === "host_fault") {
         // A Host fault is local to this ingress. It executed no effect — the
@@ -1685,12 +1714,17 @@ async function scanTaskControlPlane(
     if (stopTask) {
       return {
         activated: activated + recovered,
-        ...(wakeAt === undefined ? {} : { wakeAt }),
+        ...(wakeAt === undefined && taskWaitWakeAt === undefined
+          ? {}
+          : { wakeAt: Math.min(wakeAt ?? Number.POSITIVE_INFINITY, taskWaitWakeAt ?? Number.POSITIVE_INFINITY) }),
         ...(noProgress ? { noProgress: true } : {}),
       }
     }
   }
-  return { activated: activated + recovered }
+  return {
+    activated: activated + recovered,
+    ...(taskWaitWakeAt === undefined ? {} : { wakeAt: taskWaitWakeAt }),
+  }
 }
 
 const driverState = createInstanceState(
@@ -2380,6 +2414,15 @@ export async function waitForIngressDeliveryHooksForTest(): Promise<void> {
 }
 
 export const TestHooks = {
+  replaceOperatorGateWriter(writer: typeof recordTaskInfrastructureError): Disposable {
+    const prior = operatorGateWriterForTest
+    operatorGateWriterForTest = writer
+    return {
+      [Symbol.dispose]() {
+        operatorGateWriterForTest = prior
+      },
+    }
+  },
   replaceTerminalIngressDeliveryRuntime(value: string): Disposable {
     const prior = replaceRuntimeOccurrenceIDForTest(value)
     return {

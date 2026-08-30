@@ -1,6 +1,9 @@
 import { Database, NotFoundError, and, desc, eq, inArray, isNull, ne, or, sql } from "@/storage/db"
 import {
   AutomationDefinitionTombstoneTable,
+  AutomationFireAttemptReceiptTable,
+  AutomationFireAttemptTable,
+  AutomationFireTable,
   AutomationProjectTargetTable,
   AutomationRunReceiptTable,
   AutomationRunOutcomes,
@@ -8,8 +11,16 @@ import {
   AutomationTable,
 } from "./automation.sql"
 import {
+  automationFrontierEntriesForDefinitionsInTransaction,
+  currentAutomationDefinitionsInTransaction,
+  currentAutomationFrontiersInTransaction,
+  currentSessionDelayDefinitionsForSessionsInTransaction,
+  latestAutomationDefinitionInTransaction,
+  projectAutomationFireInTransaction,
+  projectAutomationFrontierInTransaction,
   projectAutomationInTransaction,
   projectAutomationRunInTransaction,
+  type AutomationFireProjection,
   type AutomationRunRow,
   type AutomationRow,
 } from "./automation-projection"
@@ -26,21 +37,10 @@ import { Session } from "@/session"
 import { SessionWake } from "@/session/wake"
 import { createSchedulerExecutionInactivityFence } from "./execution-inactivity"
 import type { SchedulerExecutionInactivityFence } from "./execution-inactivity"
-import { taskWaitFireID } from "./task-wait-fire-identity"
-import { EngineTaskTable } from "@/engine/engine.sql"
-import {
-  dispatchPersistedTaskLoop,
-  dispatchTaskLoop,
-  persistTaskWaitIngressInTransaction,
-} from "@/engine/task-root-ingress-delivery"
 import { Log } from "@/util/log"
 import { Instance } from "@/project/instance"
 import { createInstanceState } from "@/project/instance-state"
 import { Identifier } from "@/id/id"
-import { Bus } from "@/bus"
-import { Message } from "@/session/message"
-import { TaskRootMessageProvenance } from "@/protocol/task-root-message-schema"
-import { taskIDForSession } from "@/engine/task-session-lineage"
 import { SessionStatus } from "@/session/status"
 import { Worktree } from "@/worktree"
 import { PanelSurface } from "@/panel/capability"
@@ -64,7 +64,6 @@ import type { ProductPillar } from "@opencorvus-ai/sdk/expert-squad-manifest-v2"
 import { createHash } from "node:crypto"
 import { RuntimeExecutionSettlement } from "@/runtime/execution-settlement"
 import { Config } from "@/config/config"
-import { assertTaskRootSessionInProject } from "./delayed-wake-schedule"
 import {
   assertMissionSchedulerOccurrenceAdmission,
   MissionSchedulerOccurrenceClosedError,
@@ -72,6 +71,11 @@ import {
   type MissionSchedulerOccurrenceDisposition,
 } from "@/protocol/delivery"
 import { schedulerMissionReservationInTransaction } from "./mission-reservation"
+import {
+  assertScheduledToolOccurrenceInTransaction,
+  scheduledToolOccurrenceConflict,
+  type ScheduledToolOccurrence,
+} from "./tool-occurrence"
 
 export { AutomationRunOutcomes }
 
@@ -96,10 +100,25 @@ export type AutomationView = {
   lastError: string | null
 }
 
+export type AutomationDefinitionReceipt = {
+  id: string
+  revisionId: string
+  revision: number
+  name: string
+  target: AutomationTarget
+  recurrence: string
+  executionMode: "local" | "worktree"
+  model: { providerID: string; modelID: string } | null
+  reasoningEffort: string | null
+  prompt: string
+  status: "active" | "paused"
+  firstEligibleAt: number
+}
+
 export type PendingDelayedWakeView = {
   id: string
   projectID: string
-  target: { scope: "session"; sessionID: string } | { scope: "task"; taskID: string }
+  target: { scope: "session"; sessionID: string }
   nextRun: number
   leaseUntil: number
   state: "scheduled" | "leased"
@@ -147,15 +166,39 @@ export type AutomationRunView = {
     productPillar: ProductPillar | null
   } | null
   outcome: (typeof AutomationRunOutcomes)[number]
-  disposition: "mission_closed" | null
+  disposition: "mission_closed" | "target_deleted" | "superseded" | null
   closureEventID: string | null
   startedAt: number
   completedAt: number | null
   error: string | null
 }
 
-export type ConsumedAutomationWaits = {
-  jobIDs: string[]
+export type AutomationFireRunReceipt = {
+  id: string
+  targetScope: AutomationTarget["scope"]
+  targetProjectId: string | null
+  sessionId: string | null
+  outcome: (typeof AutomationRunOutcomes)[number]
+  disposition: "mission_closed" | "target_deleted" | "superseded" | null
+  closureEventID: string | null
+  startedAt: number
+  completedAt: number | null
+  error: string | null
+}
+
+export type AutomationFireHistoryView = {
+  fireId: string
+  automationId: string
+  automationRevisionId: string
+  origin: "scheduled" | "manual_api" | "manual_tool" | "legacy"
+  scheduledDueAt: number
+  startedAt: number
+  completedAt: number | null
+  state: AutomationFireProjection["state"]
+  attemptCount: number
+  retryAt: number | null
+  error: string | null
+  runs: AutomationFireRunReceipt[]
 }
 
 export type GlobalConversationCreator = (input: {
@@ -184,7 +227,9 @@ export const AutomationRunningConflictError = NamedError.create(
 export namespace AutomationService {
   let wakeSessionForTest: typeof SessionWake.wakeWithReceipt | undefined
   let beforeMissionSessionAdmissionForTest: (() => void | Promise<void>) | undefined
+  let beforeRunReservationForTest: (() => void | Promise<void>) | undefined
   let afterRunReservationForTest: ((input: { runIDs: string[] }) => void | Promise<void>) | undefined
+  let claimClockForTest: (() => number) | undefined
   let globalConversationCreator: GlobalConversationCreator | undefined
   const log = Log.create({ service: "automation-service" })
 
@@ -193,69 +238,42 @@ export namespace AutomationService {
   const LEASE_RENEW_MS = 30 * 1000
   const HEARTBEAT_BUSY_RETRY_MS = 30 * 1000
   const MAX_BACKOFF_MS = 5 * 60 * 1000
+  const MAX_FIRE_ATTEMPTS = 5
   const CONCURRENCY_ENV = "OPENCORVUS_AUTOMATION_CONCURRENCY"
   const CONCURRENCY_DEFAULT = 4
   const CONCURRENCY_MAX = 32
 
+  type ScheduleToolCausation = {
+    occurrence: ScheduledToolOccurrence
+    inputDigest: string
+  }
+
   const state = createInstanceState(
     () => ({
       running: false,
-      activityUnsubscribers: [] as Array<() => void>,
     }),
-    async (entry) => {
-      for (const unsubscribe of entry.activityUnsubscribers.splice(0)) unsubscribe()
-    },
+    async () => undefined,
     "automation-service",
   )
   let globalRunning = false
-
-  function latestAutomationDefinitionInTransaction(db: Database.TxOrDb, definitionID: string) {
-    const row = db
-      .select()
-      .from(AutomationTable)
-      .where(eq(AutomationTable.definition_id, definitionID))
-      .orderBy(desc(AutomationTable.revision), desc(AutomationTable.id))
-      .get()
-    const tombstone = db
-      .select()
-      .from(AutomationDefinitionTombstoneTable)
-      .where(eq(AutomationDefinitionTombstoneTable.definition_id, definitionID))
-      .orderBy(desc(AutomationDefinitionTombstoneTable.revision), desc(AutomationDefinitionTombstoneTable.id))
-      .get()
-    return row && (!tombstone || row.revision > tombstone.revision) ? row : undefined
-  }
-
-  function currentAutomationDefinitions(db: Database.TxOrDb) {
-    const latest = new Map<string, typeof AutomationTable.$inferSelect>()
-    for (const row of db
-      .select()
-      .from(AutomationTable)
-      .orderBy(AutomationTable.definition_id, desc(AutomationTable.revision), desc(AutomationTable.id))
-      .all()) {
-      if (!latest.has(row.definition_id)) latest.set(row.definition_id, row)
-    }
-    return [...latest.values()].filter((row) => {
-      const tombstone = db
-        .select({ revision: AutomationDefinitionTombstoneTable.revision })
-        .from(AutomationDefinitionTombstoneTable)
-        .where(eq(AutomationDefinitionTombstoneTable.definition_id, row.definition_id))
-        .orderBy(desc(AutomationDefinitionTombstoneTable.revision))
-        .get()
-      return !tombstone || row.revision > tombstone.revision
-    })
-  }
 
   function appendAutomationTombstoneInTransaction(
     db: Database.TxOrDb,
     row: typeof AutomationTable.$inferSelect,
     now: number,
+    causation?: ScheduleToolCausation,
   ) {
-    const id = Identifier.ascending("automation")
+    if (causation) assertScheduledToolOccurrenceInTransaction(db, causation.occurrence)
+    const id = causation
+      ? Identifier.deterministic("automation", `automation-tombstone-v1\0${causation.occurrence.toolPartID}`)
+      : Identifier.ascending("automation")
     db.insert(AutomationDefinitionTombstoneTable)
       .values({
         id,
         definition_id: row.definition_id,
         revision: row.revision + 1,
+        tool_part_id: causation?.occurrence.toolPartID,
+        tool_input_digest: causation?.inputDigest,
         time_created: now,
       })
       .run()
@@ -263,7 +281,6 @@ export namespace AutomationService {
   }
 
   export function init() {
-    installActivitySubscriptions()
     log.info("automation project hooks initialized", { projectID: Instance.project.id })
   }
 
@@ -293,7 +310,9 @@ export namespace AutomationService {
   }
 
   export function list(): AutomationView[] {
-    const rows = Database.use((db) => currentAutomationDefinitions(db).filter((row) => row.kind !== "delay"))
+    const rows = Database.use((db) =>
+      currentAutomationDefinitionsInTransaction(db).filter((row) => row.kind !== "delay"),
+    )
       .map((row) => Database.use((db) => projectAutomationInTransaction(db, row)))
       .sort((left, right) => left.next_run - right.next_run || left.id.localeCompare(right.id))
     return rows.map(view)
@@ -305,29 +324,20 @@ export namespace AutomationService {
   export function pendingDelayedWakeSchedule(input: {
     projectID: string
     sessionIDs: readonly string[]
-    taskIDs: readonly string[]
     now?: number
   }): PendingDelayedWakeView[] {
     const sessionIDs = new Set(input.sessionIDs)
-    const taskIDs = new Set(input.taskIDs)
-    if (sessionIDs.size === 0 && taskIDs.size === 0) return []
+    if (sessionIDs.size === 0) return []
     const now = input.now ?? Date.now()
-    return Database.use((db) =>
-      currentAutomationDefinitions(db).filter((row) => row.kind === "delay" && row.status === "active"),
-    )
-      .map((row) =>
-        Database.use((db) => ({
-          row: projectAutomationInTransaction(db, row),
-          lease: currentControlLeaseInTransaction(db, "automation", row.definition_id),
-        })),
+    return Database.use((db) => {
+      const definitions = currentSessionDelayDefinitionsForSessionsInTransaction(db, input.sessionIDs).filter(
+        (row) => row.project_id === input.projectID,
       )
-      .filter(({ row }) => row.project_id === input.projectID)
+      return automationFrontierEntriesForDefinitionsInTransaction(db, definitions)
+    })
       .flatMap(({ row, lease }): PendingDelayedWakeView[] => {
-        const target = row.task_id
-          ? taskIDs.has(row.task_id)
-            ? ({ scope: "task", taskID: row.task_id } as const)
-            : undefined
-          : row.session_id && sessionIDs.has(row.session_id)
+        const target =
+          row.session_id && sessionIDs.has(row.session_id)
             ? ({ scope: "session", sessionID: row.session_id } as const)
             : undefined
         if (!target || !row.project_id) return []
@@ -356,6 +366,64 @@ export namespace AutomationService {
   export function listRuns(id: string): AutomationRunView[] {
     assertPublicAutomation(id)
     return listRunsForAutomation(id)
+  }
+
+  export function listFireHistory(id: string): AutomationFireHistoryView[] {
+    assertPublicAutomation(id)
+    const revisionIDs = Database.use((db) =>
+      db
+        .select({ id: AutomationTable.id })
+        .from(AutomationTable)
+        .where(eq(AutomationTable.definition_id, id))
+        .all()
+        .map((row) => row.id),
+    )
+    if (revisionIDs.length === 0) return []
+    return Database.use((db) =>
+      db
+        .select()
+        .from(AutomationFireTable)
+        .where(inArray(AutomationFireTable.automation_revision_id, revisionIDs))
+        .orderBy(desc(AutomationFireTable.scheduled_due_at), desc(AutomationFireTable.time_created), desc(AutomationFireTable.id))
+        .all()
+        .map((fire) => fireHistoryView(projectAutomationFireInTransaction(db, fire))),
+    )
+  }
+
+  function fireHistoryForID(fireID: string): AutomationFireHistoryView {
+    return Database.use((db) => {
+      const fire = db.select().from(AutomationFireTable).where(eq(AutomationFireTable.id, fireID)).get()
+      if (!fire) throw new NotFoundError({ message: `Automation fire not found: ${fireID}` })
+      return fireHistoryView(projectAutomationFireInTransaction(db, fire))
+    })
+  }
+
+  function fireHistoryView(fire: AutomationFireProjection): AutomationFireHistoryView {
+    return {
+      fireId: fire.id,
+      automationId: fire.automationID,
+      automationRevisionId: fire.automationRevisionID,
+      origin: fire.origin,
+      scheduledDueAt: fire.scheduledDueAt,
+      startedAt: fire.startedAt,
+      completedAt: fire.completedAt,
+      state: fire.state,
+      attemptCount: fire.attemptCount,
+      retryAt: fire.retryAt,
+      error: fire.error,
+      runs: fire.runs.map((run) => ({
+        id: run.id,
+        targetScope: run.target_scope,
+        targetProjectId: run.project_id,
+        sessionId: run.session_id,
+        outcome: run.outcome,
+        disposition: run.disposition,
+        closureEventID: run.closure_event_id,
+        startedAt: run.started_at,
+        completedAt: run.completed_at,
+        error: run.error,
+      })),
+    }
   }
 
   function listRunsForAutomation(id: string, fireID?: string): AutomationRunView[] {
@@ -447,13 +515,113 @@ export namespace AutomationService {
     throw new Error(`Automation ${row.id} has invalid public target`)
   }
 
+  function definitionReceiptInTransaction(
+    db: Database.TxOrDb,
+    row: typeof AutomationTable.$inferSelect,
+  ): AutomationDefinitionReceipt {
+    if (row.kind !== "recurring" || !row.recurrence) {
+      throw new Error(`Automation revision ${row.id} is not a public recurring definition`)
+    }
+    const target: AutomationTarget =
+      row.scope === "session" && row.session_id
+        ? { scope: "session", sessionId: row.session_id }
+        : row.scope === "global"
+          ? { scope: "global" }
+          : row.scope === "project"
+            ? {
+                scope: "project",
+                projectIds: db
+                  .select({ projectID: AutomationProjectTargetTable.project_id })
+                  .from(AutomationProjectTargetTable)
+                  .where(eq(AutomationProjectTargetTable.automation_revision_id, row.id))
+                  .orderBy(AutomationProjectTargetTable.position, AutomationProjectTargetTable.project_id)
+                  .all()
+                  .map((entry) => entry.projectID),
+              }
+            : (() => {
+                throw new Error(`Automation revision ${row.id} has invalid public target`)
+              })()
+    return {
+      id: row.definition_id,
+      revisionId: row.id,
+      revision: row.revision,
+      name: row.name,
+      target,
+      recurrence: row.recurrence,
+      executionMode: row.execution_mode,
+      model:
+        row.model_provider_id && row.model_id ? { providerID: row.model_provider_id, modelID: row.model_id } : null,
+      reasoningEffort: row.reasoning_effort ?? null,
+      prompt: row.prompt,
+      status: row.status,
+      firstEligibleAt: Recurrence.nextRun(row.recurrence, row.time_created),
+    }
+  }
+
   export async function create(input: CreateAutomationInput): Promise<{ id: string; name: string; nextRun: number }> {
+    return createAutomation(input)
+  }
+
+  export async function createFromTool(
+    input: CreateAutomationInput,
+    causation: ScheduleToolCausation,
+  ): Promise<AutomationDefinitionReceipt> {
+    return createAutomation(input, causation)
+  }
+
+  async function createAutomation(
+    input: CreateAutomationInput,
+    causation: ScheduleToolCausation,
+  ): Promise<AutomationDefinitionReceipt>
+  async function createAutomation(
+    input: CreateAutomationInput,
+    causation?: undefined,
+  ): Promise<{ id: string; name: string; nextRun: number }>
+  async function createAutomation(
+    input: CreateAutomationInput,
+    causation?: ScheduleToolCausation,
+  ): Promise<AutomationDefinitionReceipt | { id: string; name: string; nextRun: number }> {
+    if (causation) {
+      const replay = Database.immediateTransaction((tx) => {
+        assertScheduledToolOccurrenceInTransaction(tx, causation.occurrence)
+        const existing = tx
+          .select()
+          .from(AutomationTable)
+          .where(eq(AutomationTable.tool_part_id, causation.occurrence.toolPartID))
+          .get()
+        if (!existing) return undefined
+        const expectedID = Identifier.deterministic(
+          "automation",
+          `automation-definition-v1\0${causation.occurrence.toolPartID}`,
+        )
+        if (existing.tool_input_digest !== causation.inputDigest || existing.definition_id !== expectedID) {
+          throw scheduledToolOccurrenceConflict(causation.occurrence, "changed its Automation create input")
+        }
+        return definitionReceiptInTransaction(tx, existing)
+      })
+      if (replay) return replay
+    }
     await assertPublicInput(input)
     const now = Date.now()
     const recurrence = Recurrence.normalize(input.recurrence)
-    const nextRun = Recurrence.nextRun(recurrence, now)
-    const id = Identifier.ascending("automation")
-    Database.transaction((tx) => {
+    const id = causation
+      ? Identifier.deterministic("automation", `automation-definition-v1\0${causation.occurrence.toolPartID}`)
+      : Identifier.ascending("automation")
+    const row = Database.immediateTransaction((tx) => {
+      if (causation) {
+        assertScheduledToolOccurrenceInTransaction(tx, causation.occurrence)
+        const existing = tx
+          .select()
+          .from(AutomationTable)
+          .where(eq(AutomationTable.tool_part_id, causation.occurrence.toolPartID))
+          .get()
+        if (existing) {
+          if (existing.tool_input_digest !== causation.inputDigest || existing.definition_id !== id) {
+            throw scheduledToolOccurrenceConflict(causation.occurrence, "changed its Automation create input")
+          }
+          return existing
+        }
+      }
       tx.insert(AutomationTable)
         .values({
           id,
@@ -471,6 +639,9 @@ export namespace AutomationService {
           reasoning_effort: input.reasoningEffort,
           prompt: input.prompt,
           status: "active",
+          tool_part_id: causation?.occurrence.toolPartID,
+          tool_input_digest: causation?.inputDigest,
+          time_created: now,
         })
         .run()
       if (input.target.scope === "project") {
@@ -484,14 +655,52 @@ export namespace AutomationService {
           )
           .run()
       }
+      return tx.select().from(AutomationTable).where(eq(AutomationTable.id, id)).get()!
     })
-    return { id, name: input.name, nextRun }
+    if (causation) return Database.use((db) => definitionReceiptInTransaction(db, row))
+    const projected = Database.use((db) => projectAutomationInTransaction(db, row))
+    return { id: projected.id, name: projected.name, nextRun: projected.next_run }
   }
 
   export async function update(input: UpdateAutomationInput): Promise<AutomationView> {
+    return updateAutomation(input)
+  }
+
+  export async function updateFromTool(
+    input: UpdateAutomationInput,
+    causation: ScheduleToolCausation,
+  ): Promise<AutomationDefinitionReceipt> {
+    return updateAutomation(input, causation)
+  }
+
+  async function updateAutomation(
+    input: UpdateAutomationInput,
+    causation: ScheduleToolCausation,
+  ): Promise<AutomationDefinitionReceipt>
+  async function updateAutomation(input: UpdateAutomationInput, causation?: undefined): Promise<AutomationView>
+  async function updateAutomation(
+    input: UpdateAutomationInput,
+    causation?: ScheduleToolCausation,
+  ): Promise<AutomationView | AutomationDefinitionReceipt> {
+    if (causation) {
+      const replay = Database.immediateTransaction((db) => {
+        assertScheduledToolOccurrenceInTransaction(db, causation.occurrence)
+        const existing = db
+          .select()
+          .from(AutomationTable)
+          .where(eq(AutomationTable.tool_part_id, causation.occurrence.toolPartID))
+          .get()
+        if (!existing) return undefined
+        if (existing.definition_id !== input.id || existing.tool_input_digest !== causation.inputDigest) {
+          throw scheduledToolOccurrenceConflict(causation.occurrence, "changed its Automation update input")
+        }
+        return definitionReceiptInTransaction(db, existing)
+      })
+      if (replay) return replay
+    }
     const current = assertPublicAutomation(input.id)
     const updateStartedAt = Date.now()
-    if (current.lease_owner && current.lease_until > updateStartedAt) {
+    if (current.pending_fire_id || (current.lease_owner && current.lease_until > updateStartedAt)) {
       throw new AutomationRunningConflictError({
         message: `Automation ${input.id} cannot be updated while it is running`,
         automationID: input.id,
@@ -525,14 +734,17 @@ export namespace AutomationService {
       reasoningEffort: next.reasoningEffort,
       prompt: next.prompt,
     })
-    const nextRun = next.status === "active" ? Recurrence.nextRun(next.recurrence, Date.now()) : current.next_run
     const committedAt = Date.now()
     const row = Database.immediateTransaction((tx) => {
       const latest = latestAutomationDefinitionInTransaction(tx, input.id)
       const lease = currentControlLeaseInTransaction(tx, "automation", input.id)
       if (!latest || latest.kind === "delay" || (lease && lease.expires_at > committedAt)) return undefined
+      if (projectAutomationFrontierInTransaction(tx, latest).pending_fire_id) return undefined
       if (latest.revision !== current.revision) return undefined
-      const revisionID = Identifier.ascending("automation")
+      if (causation) assertScheduledToolOccurrenceInTransaction(tx, causation.occurrence)
+      const revisionID = causation
+        ? Identifier.deterministic("automation", `automation-revision-v1\0${causation.occurrence.toolPartID}`)
+        : Identifier.ascending("automation")
       tx.insert(AutomationTable)
         .values({
           ...latest,
@@ -550,6 +762,8 @@ export namespace AutomationService {
           prompt: next.prompt,
           session_id: next.target.scope === "session" ? next.target.sessionId : null,
           status: next.status,
+          tool_part_id: causation?.occurrence.toolPartID ?? null,
+          tool_input_digest: causation?.inputDigest ?? null,
           time_created: committedAt,
         })
         .run()
@@ -564,8 +778,7 @@ export namespace AutomationService {
           )
           .run()
       }
-      const updated = tx.select().from(AutomationTable).where(eq(AutomationTable.id, revisionID)).get()!
-      return projectAutomationInTransaction(tx, updated)
+      return tx.select().from(AutomationTable).where(eq(AutomationTable.id, revisionID)).get()!
     })
     if (!row) {
       assertPublicAutomation(input.id)
@@ -574,11 +787,119 @@ export namespace AutomationService {
         automationID: input.id,
       })
     }
-    return view(row)
+    if (causation) return Database.use((db) => definitionReceiptInTransaction(db, row))
+    return view(Database.use((db) => projectAutomationInTransaction(db, row)))
   }
 
   export async function runNow(id: string): Promise<AutomationRunView[]> {
     return runNowWithExecutor(id, executeWithRuntimeSettlement)
+  }
+
+  export async function runNowFromTool(
+    id: string,
+    causation: ScheduleToolCausation,
+  ): Promise<AutomationFireHistoryView> {
+    const now = claimClockForTest?.() ?? Date.now()
+    const fireID = Identifier.deterministic(
+      "automation",
+      `automation-manual-fire-v1\0${causation.occurrence.toolPartID}`,
+    )
+    const owner = `manual-tool:${process.pid}:${causation.occurrence.toolPartID}`
+    const reserved = Database.immediateTransaction((db) => {
+      assertScheduledToolOccurrenceInTransaction(db, causation.occurrence)
+      const existing = db
+        .select()
+        .from(AutomationFireTable)
+        .where(eq(AutomationFireTable.tool_part_id, causation.occurrence.toolPartID))
+        .get()
+      if (existing) {
+        const definition = db
+          .select()
+          .from(AutomationTable)
+          .where(eq(AutomationTable.id, existing.automation_revision_id))
+          .get()
+        if (
+          !definition ||
+          definition.definition_id !== id ||
+          existing.id !== fireID ||
+          existing.input_digest !== causation.inputDigest ||
+          existing.origin !== "manual_tool"
+        ) {
+          throw scheduledToolOccurrenceConflict(causation.occurrence, "changed its manual run input")
+        }
+        const projectedFire = projectAutomationFireInTransaction(db, existing)
+        const terminal = ["succeeded", "failed", "partial", "disposition"].includes(projectedFire.state)
+        if (terminal) return { fire: existing, terminal: true as const }
+        const acquired = acquireControlLeaseInTransaction(db, {
+          target: "automation",
+          targetID: id,
+          ownerOccurrenceID: owner,
+          now,
+          leaseMilliseconds: LEASE_MS,
+        })
+        if (!acquired.acquired) return { fire: existing, terminal: false as const, acquired: false as const }
+        reserveAutomationFireAttemptInTransaction(db, { fireID: existing.id, owner, now })
+        return { fire: existing, terminal: false as const, acquired: true as const, definition }
+      }
+      const definition = latestAutomationDefinitionInTransaction(db, id)
+      if (!definition || definition.kind === "delay") throw new NotFoundError({ message: `Automation not found: ${id}` })
+      const pendingFireID = projectAutomationFrontierInTransaction(db, definition).pending_fire_id
+      if (pendingFireID) {
+        throw new AutomationRunningConflictError({
+          message: `Automation ${id} already has unsettled fire ${pendingFireID}`,
+          automationID: id,
+        })
+      }
+      db.insert(AutomationFireTable)
+        .values({
+          id: fireID,
+          automation_revision_id: definition.id,
+          scheduled_due_at: now,
+          origin: "manual_tool",
+          tool_part_id: causation.occurrence.toolPartID,
+          input_digest: causation.inputDigest,
+          time_created: now,
+        })
+        .run()
+      const acquired = acquireControlLeaseInTransaction(db, {
+        target: "automation",
+        targetID: id,
+        ownerOccurrenceID: owner,
+        now,
+        leaseMilliseconds: LEASE_MS,
+      })
+      if (!acquired.acquired) throw new Error(`Fresh manual Automation fire ${fireID} could not acquire its owner`)
+      reserveAutomationFireAttemptInTransaction(db, { fireID, owner, now })
+      return {
+        fire: db.select().from(AutomationFireTable).where(eq(AutomationFireTable.id, fireID)).get()!,
+        terminal: false as const,
+        acquired: true as const,
+        definition,
+      }
+    })
+    if (reserved.terminal) return fireHistoryForID(fireID)
+    if (!reserved.acquired || !reserved.definition) {
+      throw new AutomationRunningConflictError({
+        message: `Automation ${id} manual Tool occurrence is owned by another runtime`,
+        automationID: id,
+      })
+    }
+    const projected = Database.use((db) => projectAutomationInTransaction(db, reserved.definition!))
+    const job: AutomationRow = {
+      ...projected,
+      pending_fire_id: reserved.fire.id,
+      scheduled_due_at: reserved.fire.scheduled_due_at,
+      lease_owner: owner,
+      lease_until: now + LEASE_MS,
+    }
+    try {
+      await executeWithRuntimeSettlement(job, owner, now, false)
+    } catch (error) {
+      const fire = fireHistoryForID(fireID)
+      if (["succeeded", "failed", "partial", "disposition"].includes(fire.state)) return fire
+      throw error
+    }
+    return fireHistoryForID(fireID)
   }
 
   async function runNowWithExecutor(
@@ -586,6 +907,12 @@ export namespace AutomationService {
     executeFire: (job: AutomationRow, owner: string, now: number, reschedule: boolean) => Promise<string>,
   ): Promise<AutomationRunView[]> {
     const automation = assertPublicAutomation(id)
+    if (automation.pending_fire_id) {
+      throw new AutomationRunningConflictError({
+        message: `Automation ${id} already has unsettled fire ${automation.pending_fire_id}`,
+        automationID: id,
+      })
+    }
     if (
       automation.scope === "session" &&
       automation.session_id &&
@@ -675,6 +1002,15 @@ export namespace AutomationService {
         },
       }
     },
+    installBeforeRunReservation(hook: () => void | Promise<void>): Disposable {
+      if (beforeRunReservationForTest) throw new Error("Automation pre-reservation test hook is already installed")
+      beforeRunReservationForTest = hook
+      return {
+        [Symbol.dispose]() {
+          if (beforeRunReservationForTest === hook) beforeRunReservationForTest = undefined
+        },
+      }
+    },
     installFailurePersistenceHook(hook: (phase: "before" | "after") => void | Promise<void>): Disposable {
       if (failurePersistenceHookForTest)
         throw new Error("Automation failure persistence test hook is already installed")
@@ -682,6 +1018,15 @@ export namespace AutomationService {
       return {
         [Symbol.dispose]() {
           if (failurePersistenceHookForTest === hook) failurePersistenceHookForTest = undefined
+        },
+      }
+    },
+    installClaimClock(clock: () => number): Disposable {
+      if (claimClockForTest) throw new Error("Automation claim clock is already installed")
+      claimClockForTest = clock
+      return {
+        [Symbol.dispose]() {
+          if (claimClockForTest === clock) claimClockForTest = undefined
         },
       }
     },
@@ -767,9 +1112,40 @@ export namespace AutomationService {
   }
 
   export function remove(id: string): { id: string; name: string } {
+    return removeAutomation(id)
+  }
+
+  export function removeFromTool(id: string, causation: ScheduleToolCausation): { id: string; name: string } {
+    return removeAutomation(id, causation)
+  }
+
+  function removeAutomation(id: string, causation?: ScheduleToolCausation): { id: string; name: string } {
+    if (causation) {
+      const replay = Database.immediateTransaction((db) => {
+        assertScheduledToolOccurrenceInTransaction(db, causation.occurrence)
+        const tombstone = db
+          .select()
+          .from(AutomationDefinitionTombstoneTable)
+          .where(eq(AutomationDefinitionTombstoneTable.tool_part_id, causation.occurrence.toolPartID))
+          .get()
+        if (!tombstone) return undefined
+        if (tombstone.definition_id !== id || tombstone.tool_input_digest !== causation.inputDigest) {
+          throw scheduledToolOccurrenceConflict(causation.occurrence, "changed its Automation delete input")
+        }
+        const definition = db
+          .select({ name: AutomationTable.name })
+          .from(AutomationTable)
+          .where(eq(AutomationTable.definition_id, id))
+          .orderBy(desc(AutomationTable.revision))
+          .get()
+        if (!definition) throw new Error(`Automation tombstone ${tombstone.id} has no definition`)
+        return { id, name: definition.name }
+      })
+      if (replay) return replay
+    }
     const current = assertPublicAutomation(id)
     const now = Date.now()
-    if (current.lease_owner && current.lease_until > now) {
+    if (current.pending_fire_id || (current.lease_owner && current.lease_until > now)) {
       throw new AutomationRunningConflictError({
         message: `Automation ${id} is currently running`,
         automationID: id,
@@ -779,7 +1155,8 @@ export namespace AutomationService {
       const latest = latestAutomationDefinitionInTransaction(db, id)
       const lease = currentControlLeaseInTransaction(db, "automation", id)
       if (!latest || latest.kind === "delay" || (lease && lease.expires_at > now)) return undefined
-      appendAutomationTombstoneInTransaction(db, latest, now)
+      if (projectAutomationFrontierInTransaction(db, latest).pending_fire_id) return undefined
+      appendAutomationTombstoneInTransaction(db, latest, now, causation)
       return { id, name: latest.name }
     })
     if (!row) {
@@ -791,203 +1168,8 @@ export namespace AutomationService {
     return row
   }
 
-  export async function consumePendingTaskWaits(input: {
-    taskId: string
-    projectId: string
-    reason: string
-    now?: number
-  }): Promise<ConsumedAutomationWaits> {
-    const now = input.now ?? Date.now()
-    const pending = pendingDelays(now).filter(
-      (row) => row.project_id === input.projectId && row.task_id === input.taskId,
-    )
-    if (pending.length === 0) return { jobIDs: [] }
-    await assertTaskRootSessionInProject({ taskId: input.taskId, projectId: input.projectId })
-    const jobIDs = Database.immediateTransaction((db) =>
-      pending.flatMap((row) => {
-        const latest = latestAutomationDefinitionInTransaction(db, row.id)
-        if (!latest || latest.id !== row.revision_id) return []
-        appendAutomationTombstoneInTransaction(db, latest, now)
-        return [row.id]
-      }),
-    )
-    if (jobIDs.length > 0) {
-      log.info("pending task wait consumed", {
-        taskID: input.taskId,
-        projectID: input.projectId,
-        jobIDs,
-        reason: input.reason,
-      })
-    }
-    return { jobIDs }
-  }
-
-  export async function consumePendingSessionWaits(input: {
-    sessionId: string
-    projectId: string
-    reason: string
-    now?: number
-  }): Promise<ConsumedAutomationWaits> {
-    await Session.assertLineageInProject({ sessionID: input.sessionId, projectID: input.projectId })
-    const now = input.now ?? Date.now()
-    const pending = pendingDelays(now).filter(
-      (row) => row.project_id === input.projectId && row.session_id === input.sessionId && row.task_id === null,
-    )
-    const jobIDs =
-      pending.length === 0
-        ? []
-        : Database.immediateTransaction((db) =>
-            pending.flatMap((row) => {
-              const latest = latestAutomationDefinitionInTransaction(db, row.id)
-              if (!latest || latest.id !== row.revision_id) return []
-              appendAutomationTombstoneInTransaction(db, latest, now)
-              return [row.id]
-            }),
-          )
-    if (jobIDs.length > 0) {
-      log.info("pending session wait consumed", {
-        sessionID: input.sessionId,
-        projectID: input.projectId,
-        jobIDs,
-        reason: input.reason,
-      })
-    }
-    return { jobIDs }
-  }
-
-  export async function triggerTaskWaitFromActivity(input: {
-    taskId: string
-    projectId: string
-    source: string
-    detail: string
-  }): Promise<ConsumedAutomationWaits & { dispatchResult?: string }> {
-    const task = await assertTaskRootSessionInProject({ taskId: input.taskId, projectId: input.projectId })
-    const owner = Identifier.ascending("call")
-    const claimed = await claimPendingTaskWaitsFromActivity({
-      taskId: input.taskId,
-      projectId: input.projectId,
-      owner,
-    })
-    const jobIDs = claimed.map((job) => job.id)
-    if (jobIDs.length === 0) return { jobIDs }
-    let dispatchResult: string
-    try {
-      dispatchResult = await runInTargetProject({
-        directory: task.rootSession.directory,
-        fn: () =>
-          dispatchTaskLoop({
-            taskID: input.taskId,
-            event: {
-              note: renderTaskWaitEarlyActivityNote({
-                source: input.source,
-                detail: input.detail,
-                jobIDs,
-              }),
-              taskWaitActivity: {
-                source: input.source,
-                detail: input.detail,
-                jobIDs,
-              },
-            },
-          }),
-      })
-    } catch (error) {
-      for (const job of claimed) await fail(job, owner, error)
-      throw error
-    }
-    // Each claimed wait settles in its own transaction. Settling the whole
-    // batch in one meant that the last job's lost fence rolled back every
-    // earlier job's tombstone *and its lease release*, leaving those waits
-    // holding a two-minute lease with no receipt and no owner.
-    const unsettled: { id: string; reason: string }[] = []
-    const settledJobIDs: string[] = []
-    for (const job of claimed) {
-      const settledAt = Date.now()
-      const settled = Database.immediateTransaction((db) => {
-        const lease = currentControlLeaseInTransaction(db, "automation", job.id)
-        if (!lease || lease.owner_occurrence_id !== owner || lease.expires_at <= settledAt) return "lease"
-        const latest = latestAutomationDefinitionInTransaction(db, job.id)
-        if (!latest || latest.id !== job.revision_id) {
-          // The definition moved on, so this wait has no tombstone to write —
-          // but this owner still holds its lease and must hand it back.
-          releaseControlLeaseInTransaction(db, {
-            target: "automation",
-            targetID: job.id,
-            leaseID: lease.id,
-            ownerOccurrenceID: owner,
-            now: settledAt,
-          })
-          return "revision"
-        }
-        appendAutomationTombstoneInTransaction(db, latest, settledAt)
-        releaseControlLeaseInTransaction(db, {
-          target: "automation",
-          targetID: job.id,
-          leaseID: lease.id,
-          ownerOccurrenceID: owner,
-          now: settledAt,
-        })
-        return "settled"
-      })
-      if (settled === "settled") settledJobIDs.push(job.id)
-      else unsettled.push({ id: job.id, reason: settled })
-    }
-    if (unsettled.length > 0) {
-      // Earlier waits in this batch are already tombstoned and released. The
-      // error names the first wait that could not settle, not the first that
-      // was claimed, and carries the settled ids so a caller can tell them
-      // apart.
-      throw new AutomationRunningConflictError({
-        message: `Automation activity delivery settled ${settledJobIDs.join(", ") || "none"} and could not settle ${unsettled.map((item) => item.id).join(", ")}`,
-        automationID: unsettled[0]!.id,
-      })
-    }
-    log.info("pending task wait triggered early from activity", {
-      taskID: input.taskId,
-      projectID: input.projectId,
-      source: input.source,
-      jobIDs,
-      dispatchResult,
-    })
-    return { jobIDs, dispatchResult }
-  }
-
-  async function claimPendingTaskWaitsFromActivity(input: {
-    taskId: string
-    projectId: string
-    owner: string
-    now?: number
-  }) {
-    const now = input.now ?? Date.now()
-    const pending = pendingDelays(now).filter(
-      (row) => row.project_id === input.projectId && row.task_id === input.taskId,
-    )
-    if (pending.length === 0) return []
-    await assertTaskRootSessionInProject({ taskId: input.taskId, projectId: input.projectId })
-    // Same fence as `claim`: the revision each wait was selected from must
-    // still be current in the transaction that takes its lease, otherwise a
-    // lease is held for a definition this caller never validated.
-    return Database.immediateTransaction((db) =>
-      pending.flatMap((job) => {
-        const latest = latestAutomationDefinitionInTransaction(db, job.id)
-        if (!latest || latest.id !== job.revision_id || latest.status !== "active") return []
-        const acquired = acquireControlLeaseInTransaction(db, {
-          target: "automation",
-          targetID: job.id,
-          ownerOccurrenceID: input.owner,
-          now,
-          leaseMilliseconds: LEASE_MS,
-        })
-        return acquired.acquired ? [job] : []
-      }),
-    )
-  }
-
   function pendingDelays(now: number): AutomationRow[] {
-    return Database.use((db) =>
-      currentAutomationDefinitions(db).filter((row) => row.kind === "delay" && row.status === "active"),
-    )
-      .map((row) => Database.use((db) => projectAutomationInTransaction(db, row)))
+    return Database.use((db) => currentAutomationFrontiersInTransaction(db, { kind: "delay", status: "active" }))
       .filter((row) => row.lease_until <= now)
   }
 
@@ -1003,77 +1185,9 @@ export namespace AutomationService {
     })
   }
 
-  function installActivitySubscriptions() {
-    const s = state()
-    if (s.activityUnsubscribers.length > 0) return
-    s.activityUnsubscribers.push(
-      Bus.subscribe(Message.Event.Created, (event) => handleMessageCreated(event.properties.info)),
-      Bus.subscribe(Message.Event.PartUpdated, (event) => handlePartUpdated(event.properties.part)),
-    )
-  }
-
-  async function handleMessageCreated(info: Message.VisibleInfo): Promise<void> {
-    if (info.role !== "user") return
-    if (isSchedulerWakeMessage(info)) return
-    await consumePendingSessionWaits({
-      sessionId: info.sessionID,
-      projectId: Instance.project.id,
-      reason: "user message created before scheduled wait due time",
-    })
-    if (isTaskOperatorMessage(info)) return
-    const taskID = await taskIDForDirectSchedulerActivity(info.sessionID)
-    if (!taskID) return
-    await triggerTaskWaitFromActivity({
-      taskId: taskID,
-      projectId: Instance.project.id,
-      source: "message.created",
-      detail: `user message ${info.id} created in session ${info.sessionID}`,
-    })
-  }
-
-  async function handlePartUpdated(part: Message.Part): Promise<void> {
-    if (part.type !== "tool") return
-    if (part.tool === "wait") return
-    if (part.state.status !== "completed" && part.state.status !== "error") return
-    const taskID = await taskIDForDirectSchedulerActivity(part.sessionID)
-    if (!taskID) return
-    await triggerTaskWaitFromActivity({
-      taskId: taskID,
-      projectId: Instance.project.id,
-      source: "message.part.updated",
-      detail: `terminal ${part.tool} tool result ${part.id} arrived in session ${part.sessionID}`,
-    })
-  }
-
-  export async function taskIDForDirectSchedulerActivity(sessionID: string): Promise<string | undefined> {
-    const taskID = taskIDForSession(sessionID)
-    if (!taskID) return undefined
-    const projectID = Instance.project.id
-    const [task, session] = await Promise.all([
-      assertTaskRootSessionInProject({ taskId: taskID, projectId: projectID }),
-      Session.getInProject({ sessionID, projectID }),
-    ])
-    if (session.kind !== "orchestrator" || session.parentID !== task.sessionID) return undefined
-    return taskID
-  }
-
-  function isSchedulerWakeMessage(info: Message.User): boolean {
-    // Decoded by the same schema `event-service.ts` uses; the hand-rolled
-    // shape check this replaced accepted reasons the schema rejects.
-    const parsed = SessionWake.WakeReason.safeParse(info.extra?.wake_reason)
-    return parsed.success && parsed.data.source.startsWith("scheduler.")
-  }
-
-  function isTaskOperatorMessage(info: Message.User): boolean {
-    const provenance = TaskRootMessageProvenance.safeParse(info.extra?.task_root_message)
-    return provenance.success && provenance.data.kind === "operator"
-  }
-
   async function run(now: number, signal?: AbortSignal): Promise<void> {
     signal?.throwIfAborted()
-    const owner = `${process.pid}:${now}`
-    const due = Database.use((db) => currentAutomationDefinitions(db).filter((row) => row.status === "active"))
-      .map((row) => Database.use((db) => projectAutomationInTransaction(db, row)))
+    const due = Database.use((db) => currentAutomationFrontiersInTransaction(db, { status: "active" }))
       .filter((row) => row.next_run <= now && row.lease_until <= now)
       .sort((left, right) => left.next_run - right.next_run || left.id.localeCompare(right.id))
 
@@ -1094,11 +1208,13 @@ export namespace AutomationService {
           signal?.throwIfAborted()
           const row = pick()
           if (!row) return
-          const candidate = await validateDueAutomationBeforeClaim(row.id, now)
+          const claimNow = (claimClockForTest ?? Date.now)()
+          const owner = `${process.pid}:${claimNow}:${Identifier.ascending("call")}`
+          const candidate = await validateDueAutomationBeforeClaim(row.id, claimNow)
           if (!candidate) continue
-          const job = claim(row.id, owner, now)
+          const job = claim(row.id, owner, claimNow)
           if (!job) continue
-          await executeWithRuntimeSettlement(job, owner, now, true, execute, signal).catch((error) => {
+          await executeWithRuntimeSettlement(job, owner, claimNow, true, execute, signal).catch((error) => {
             signal?.throwIfAborted()
             return undefined
           })
@@ -1110,7 +1226,7 @@ export namespace AutomationService {
   async function validateDueAutomationBeforeClaim(id: string, now: number) {
     const persisted = Database.use((db) => latestAutomationDefinitionInTransaction(db, id))
     if (persisted?.status !== "active") return undefined
-    const job = Database.use((db) => projectAutomationInTransaction(db, persisted))
+    const job = Database.use((db) => projectAutomationFrontierInTransaction(db, persisted))
     if (job.next_run > now || job.lease_until > now) return undefined
     if (
       job.scope === "session" &&
@@ -1124,36 +1240,7 @@ export namespace AutomationService {
       })
       return undefined
     }
-    try {
-      await assertAutomationLineage(job)
-      return job
-    } catch (error) {
-      await failBeforeLease(job, error)
-      return undefined
-    }
-  }
-
-  async function assertAutomationLineage(job: AutomationRow): Promise<void> {
-    if (job.task_id) {
-      if (!job.project_id) throw new Error(`Delayed task wake ${job.id} has no project owner`)
-      await assertTaskRootSessionInProject({ taskId: job.task_id, projectId: job.project_id })
-      return
-    }
-    if (job.kind === "delay" && job.session_id) {
-      if (!job.project_id) throw new Error(`Delayed session wake ${job.id} has no project owner`)
-      await Session.assertLineageInProject({ sessionID: job.session_id, projectID: job.project_id })
-      return
-    }
-    if (job.scope === "session" && job.session_id) {
-      await Session.get(job.session_id)
-      return
-    }
-    if (job.scope === "project") {
-      const target = targetForRow(job)
-      if (target.scope !== "project" || target.projectIds.length === 0) {
-        throw new Error(`Project automation ${job.id} has no target projects`)
-      }
-    }
+    return job
   }
 
   function concurrency() {
@@ -1178,7 +1265,7 @@ export namespace AutomationService {
     return Database.immediateTransaction((db) => {
       const persisted = latestAutomationDefinitionInTransaction(db, id)
       if (!persisted || persisted.status !== "active") return undefined
-      const projected = projectAutomationInTransaction(db, persisted)
+      const projected = projectAutomationFrontierInTransaction(db, persisted)
       if (!force && projected.next_run > now) return undefined
       const acquired = acquireControlLeaseInTransaction(db, {
         target: "automation",
@@ -1188,9 +1275,32 @@ export namespace AutomationService {
         leaseMilliseconds: LEASE_MS,
       })
       if (!acquired.acquired) return undefined
-      // The projection already scanned every run of every revision; the only
-      // fact it could not know is the lease this transaction just took.
-      return { ...projected, lease_owner: acquired.lease.owner_occurrence_id, lease_until: acquired.lease.expires_at }
+      const scheduledDueAt = projected.pending_fire_id
+        ? projected.scheduled_due_at!
+        : force
+          ? now
+          : projected.next_run
+      const fireID =
+        projected.pending_fire_id ??
+        (force ? Identifier.ascending("automation") : deterministicAutomationID("cal", id, String(scheduledDueAt)))
+      ensureAutomationFireInTransaction(db, {
+        job: projected,
+        fireID,
+        scheduledDueAt,
+        now,
+        origin: force ? "manual_api" : "scheduled",
+      })
+      reserveAutomationFireAttemptInTransaction(db, {
+        fireID,
+        owner,
+        now,
+      })
+      const claimed = projectAutomationFrontierInTransaction(db, persisted)
+      return {
+        ...claimed,
+        lease_owner: acquired.lease.owner_occurrence_id,
+        lease_until: acquired.lease.expires_at,
+      }
     })
   }
 
@@ -1289,10 +1399,10 @@ export namespace AutomationService {
     reschedule: boolean,
     runtimeSignal: AbortSignal,
   ): Promise<string> {
-    const scheduledDue = reschedule ? job.next_run : now
+    const scheduledDue = reschedule ? (job.scheduled_due_at ?? job.next_run) : now
     const fireID =
-      job.kind === "delay" && job.task_id
-        ? taskWaitFireID(job.id)
+      job.pending_fire_id
+        ? job.pending_fire_id
         : deterministicAutomationID("cal", job.id, String(scheduledDue))
     log.info("executing automation", { jobId: job.id, fireID, name: job.name, prompt: job.prompt.slice(0, 100) })
 
@@ -1309,6 +1419,64 @@ export namespace AutomationService {
     try {
       if (job.kind === "delay") {
         const runID = deterministicAutomationID("atr", fireID, "delay")
+        if (!job.session_id) throw new Error(`Session delay ${job.id} has no Session target`)
+        const targetSession = await Session.get(job.session_id).catch((error) => {
+          if (error instanceof NotFoundError) return undefined
+          throw error
+        })
+        if (!targetSession) {
+          Database.immediateTransaction((db) => {
+            const lease = currentControlLeaseInTransaction(db, "automation", job.id)
+            if (!lease || lease.owner_occurrence_id !== owner || lease.expires_at <= Date.now()) {
+              throw new AutomationRunningConflictError({
+                message: `Automation ${job.id} lost its lease before deleted-target settlement`,
+                automationID: job.id,
+              })
+            }
+            ensureAutomationFireInTransaction(db, {
+              job,
+              fireID,
+              scheduledDueAt: scheduledDue,
+              now,
+              origin: reschedule ? "scheduled" : "manual_api",
+            })
+            settleAutomationFireAttemptReservedInTransaction(db, job, Date.now())
+            db.insert(AutomationRunTable)
+              .values({
+                id: runID,
+                automation_revision_id: job.revision_id,
+                fire_id: fireID,
+                started_at: now,
+              })
+              .onConflictDoNothing()
+              .run()
+            const projected = projectAutomationRunInTransaction(
+              db,
+              db.select().from(AutomationRunTable).where(eq(AutomationRunTable.id, runID)).get()!,
+            )
+            if (projected.outcome === "running" || projected.outcome === "retry_wait") {
+              db.insert(AutomationRunReceiptTable)
+                .values({
+                  id: Identifier.ascending("automation"),
+                  run_id: runID,
+                  outcome: "disposition",
+                  disposition: "target_deleted",
+                  time_created: Date.now(),
+                })
+                .run()
+            }
+            const latest = latestAutomationDefinitionInTransaction(db, job.id)
+            if (latest?.id === job.revision_id) appendAutomationTombstoneInTransaction(db, latest, Date.now())
+            releaseControlLeaseInTransaction(db, {
+              target: "automation",
+              targetID: job.id,
+              leaseID: lease.id,
+              ownerOccurrenceID: owner,
+              now: Date.now(),
+            })
+          })
+          return fireID
+        }
         Database.immediateTransaction((db) => {
           const lease = currentControlLeaseInTransaction(db, "automation", job.id)
           if (!lease || lease.owner_occurrence_id !== owner || lease.expires_at <= Date.now()) {
@@ -1317,6 +1485,14 @@ export namespace AutomationService {
               automationID: job.id,
             })
           }
+          ensureAutomationFireInTransaction(db, {
+            job,
+            fireID,
+            scheduledDueAt: scheduledDue,
+            now,
+            origin: reschedule ? "scheduled" : "manual_api",
+          })
+          settleAutomationFireAttemptReservedInTransaction(db, job, now)
           const reservation = schedulerMissionReservationInTransaction(db, job.session_id)
           const inserted = db.insert(AutomationRunTable)
             .values({
@@ -1411,16 +1587,14 @@ export namespace AutomationService {
                 time_created: completedAt,
               })
               .run()
-          if (!outcome.automationConsumed) {
-            const latest = latestAutomationDefinitionInTransaction(db, job.id)
-            if (!latest || latest.id !== job.revision_id) {
-              throw new AutomationRunningConflictError({
-                message: `Automation ${job.id} definition changed before one-shot completion`,
-                automationID: job.id,
-              })
-            }
-            appendAutomationTombstoneInTransaction(db, latest, completedAt)
+          const latest = latestAutomationDefinitionInTransaction(db, job.id)
+          if (!latest || latest.id !== job.revision_id) {
+            throw new AutomationRunningConflictError({
+              message: `Automation ${job.id} definition changed before one-shot completion`,
+              automationID: job.id,
+            })
           }
+          appendAutomationTombstoneInTransaction(db, latest, completedAt)
           releaseControlLeaseInTransaction(db, {
             target: "automation",
             targetID: job.id,
@@ -1443,6 +1617,7 @@ export namespace AutomationService {
       inactivityFence.touch("target resolution")
       const targets = await executionTargets(job)
       const runIDs = targets.map((target) => deterministicAutomationID("atr", fireID, automationTargetIdentity(target)))
+      await beforeRunReservationForTest?.()
       Database.immediateTransaction((db) => {
         const lease = currentControlLeaseInTransaction(db, "automation", job.id)
         if (!lease || lease.owner_occurrence_id !== owner || lease.expires_at <= Date.now()) {
@@ -1451,6 +1626,14 @@ export namespace AutomationService {
             automationID: job.id,
           })
         }
+        ensureAutomationFireInTransaction(db, {
+          job,
+          fireID,
+          scheduledDueAt: scheduledDue,
+          now,
+          origin: reschedule ? "scheduled" : "manual_api",
+        })
+        settleAutomationFireAttemptReservedInTransaction(db, job, now)
         targets.forEach((target, index) => {
           const reservation = schedulerMissionReservationInTransaction(db, target.sessionID)
           const inserted = db.insert(AutomationRunTable)
@@ -1479,6 +1662,17 @@ export namespace AutomationService {
               })
               .run()
           }
+          if (inserted && target.disposition === "target_deleted") {
+            db.insert(AutomationRunReceiptTable)
+              .values({
+                id: Identifier.ascending("automation"),
+                run_id: inserted.id,
+                outcome: "disposition",
+                disposition: "target_deleted",
+                time_created: now,
+              })
+              .run()
+          }
         })
       })
       await afterRunReservationForTest?.({ runIDs })
@@ -1495,6 +1689,7 @@ export namespace AutomationService {
       )
       let results: PromiseSettledResult<
         | { kind: "succeeded"; sessionID: string }
+        | { kind: "target_deleted" }
         | Extract<MissionSchedulerOccurrenceDisposition, { kind: "mission_closed" }>
       >[] = []
       results = await Promise.allSettled(
@@ -1507,6 +1702,7 @@ export namespace AutomationService {
               return { kind: "succeeded" as const, sessionID: reserved.session_id }
             }
             if (reserved?.outcome === "disposition") {
+              if (reserved.disposition === "target_deleted") return { kind: "target_deleted" as const }
               if (reserved.disposition !== "mission_closed" || !reserved.closure_event_id) {
                 throw new Error(`Automation run ${reserved.id} has an invalid terminal disposition`)
               }
@@ -1565,8 +1761,13 @@ export namespace AutomationService {
         )
         .filter((failure): failure is { index: number; message: string } => !!failure)
       const error = failures.length > 0 ? failures.map((failure) => failure.message).join("; ") : null
-      const retryAt = error ? automationRetryAt(job.failure_count + 1, committedAt) : 0
-      const nextRun = error ? retryAt : reschedule ? Recurrence.nextRun(job.recurrence, committedAt) : job.next_run
+      const exhausted = error !== null && job.failure_count + 1 >= MAX_FIRE_ATTEMPTS
+      const retryAt = error && !exhausted ? automationRetryAt(job.failure_count + 1, committedAt) : 0
+      const nextRun = retryAt
+        ? retryAt
+        : reschedule
+          ? Recurrence.nextRun(job.recurrence, committedAt)
+          : job.next_run
       inactivityFence.touch("durable fire settlement")
       Database.immediateTransaction((tx) => {
         const lease = currentControlLeaseInTransaction(tx, "automation", job.id)
@@ -1588,16 +1789,24 @@ export namespace AutomationService {
               outcome:
                 result.status === "fulfilled" && result.value.kind === "mission_closed"
                   ? "disposition"
+                  : result.status === "fulfilled" && result.value.kind === "target_deleted"
+                    ? "disposition"
                   : result.status === "fulfilled"
                     ? "succeeded"
-                    : "retry_wait",
+                    : exhausted
+                      ? "failed"
+                      : "retry_wait",
               disposition:
-                result.status === "fulfilled" && result.value.kind === "mission_closed" ? "mission_closed" : null,
+                result.status === "fulfilled" && result.value.kind === "mission_closed"
+                  ? "mission_closed"
+                  : result.status === "fulfilled" && result.value.kind === "target_deleted"
+                    ? "target_deleted"
+                    : null,
               closure_event_id:
                 result.status === "fulfilled" && result.value.kind === "mission_closed"
                   ? result.value.closureEventID
                   : null,
-              retry_at: result.status === "rejected" ? retryAt : null,
+              retry_at: result.status === "rejected" && !exhausted ? retryAt : null,
               error:
                 result.status === "rejected"
                   ? result.reason instanceof Error
@@ -1645,7 +1854,7 @@ export namespace AutomationService {
   ): Promise<string> {
     const reservation = RuntimeExecutionSettlement.reserve(
       "scheduler_automation_fire",
-      `automation-fire:${job.id}:${job.next_run}`,
+      `automation-fire:${job.id}:${job.pending_fire_id ?? job.next_run}`,
     )
     const signal = lifecycleSignal ? AbortSignal.any([reservation.signal, lifecycleSignal]) : reservation.signal
     const operation = executeFire(job, owner, now, reschedule, signal).catch(async (error) => {
@@ -1661,11 +1870,116 @@ export namespace AutomationService {
     projectID: string | null
     directory?: string
     sessionID?: string
+    disposition?: "target_deleted"
   }
 
   function deterministicAutomationID(prefix: "cal" | "atr" | "ses" | "msg" | "prt", ...parts: string[]): string {
     const digest = createHash("sha256").update(parts.join("\u0000")).digest("hex")
     return `${prefix}_automation_${digest.slice(0, 32)}`
+  }
+
+  function ensureAutomationFireInTransaction(
+    db: Database.TxOrDb,
+    input: {
+      job: AutomationRow
+      fireID: string
+      scheduledDueAt: number
+      now: number
+      origin: "scheduled" | "manual_api"
+    },
+  ): void {
+    db.insert(AutomationFireTable)
+      .values({
+        id: input.fireID,
+        automation_revision_id: input.job.revision_id,
+        scheduled_due_at: input.scheduledDueAt,
+        origin: input.origin,
+        time_created: input.now,
+      })
+      .onConflictDoNothing()
+      .run()
+    const fire = db.select().from(AutomationFireTable).where(eq(AutomationFireTable.id, input.fireID)).get()
+    if (
+      !fire ||
+      fire.automation_revision_id !== input.job.revision_id ||
+      fire.scheduled_due_at !== input.scheduledDueAt
+    ) {
+      throw new Error(`Automation logical fire ${input.fireID} changed its immutable occurrence`)
+    }
+  }
+
+  function reserveAutomationFireAttemptInTransaction(
+    db: Database.TxOrDb,
+    input: { fireID: string; owner: string; now: number },
+  ): typeof AutomationFireAttemptTable.$inferSelect {
+    const attempts = db
+      .select()
+      .from(AutomationFireAttemptTable)
+      .where(eq(AutomationFireAttemptTable.fire_id, input.fireID))
+      .orderBy(desc(AutomationFireAttemptTable.ordinal))
+      .all()
+    const latest = attempts[0]
+    if (latest) {
+      const receipt = db
+        .select()
+        .from(AutomationFireAttemptReceiptTable)
+        .where(eq(AutomationFireAttemptReceiptTable.attempt_id, latest.id))
+        .get()
+      if (!receipt) {
+        db.insert(AutomationFireAttemptReceiptTable)
+          .values({
+            attempt_id: latest.id,
+            outcome: "retry_wait",
+            retry_at: input.now,
+            error: `Automation fire owner ${latest.owner_occurrence_id} expired before target reservation`,
+            time_created: input.now,
+          })
+          .run()
+      } else if (receipt.outcome === "failed") {
+        throw new AutomationRunningConflictError({
+          message: `Automation fire ${input.fireID} is already terminal`,
+          automationID: input.fireID,
+        })
+      } else if (receipt.outcome === "retry_wait" && receipt.retry_at! > input.now) {
+        throw new AutomationRunningConflictError({
+          message: `Automation fire ${input.fireID} is not ready for its next attempt`,
+          automationID: input.fireID,
+        })
+      }
+    }
+    const ordinal = (latest?.ordinal ?? 0) + 1
+    const attemptID = Identifier.deterministic(
+      "automation",
+      `automation-fire-attempt-v1\0${input.fireID}\0${ordinal}`,
+    )
+    db.insert(AutomationFireAttemptTable)
+      .values({
+        id: attemptID,
+        fire_id: input.fireID,
+        ordinal,
+        owner_occurrence_id: input.owner,
+        time_created: input.now,
+      })
+      .run()
+    return db.select().from(AutomationFireAttemptTable).where(eq(AutomationFireAttemptTable.id, attemptID)).get()!
+  }
+
+  function settleAutomationFireAttemptReservedInTransaction(db: Database.TxOrDb, job: AutomationRow, now: number): void {
+    if (!job.attempt_id) throw new Error(`Automation fire ${job.pending_fire_id ?? job.id} has no physical attempt`)
+    const existing = db
+      .select()
+      .from(AutomationFireAttemptReceiptTable)
+      .where(eq(AutomationFireAttemptReceiptTable.attempt_id, job.attempt_id))
+      .get()
+    if (existing) {
+      if (existing.outcome !== "reserved") {
+        throw new Error(`Automation fire attempt ${job.attempt_id} was already settled as ${existing.outcome}`)
+      }
+      return
+    }
+    db.insert(AutomationFireAttemptReceiptTable)
+      .values({ attempt_id: job.attempt_id, outcome: "reserved", time_created: now })
+      .run()
   }
 
   function automationTargetIdentity(target: ExecutionTarget): string {
@@ -1778,13 +2092,18 @@ export namespace AutomationService {
   async function executionTargets(job: AutomationRow): Promise<ExecutionTarget[]> {
     const target = targetForRow(job)
     if (target.scope === "session") {
-      const session = await Session.get(target.sessionId)
-      return [{ scope: "session", projectID: session.projectID, directory: session.directory, sessionID: session.id }]
+      const session = await Session.get(target.sessionId).catch((error) => {
+        if (error instanceof NotFoundError) return undefined
+        throw error
+      })
+      return session
+        ? [{ scope: "session", projectID: session.projectID, directory: session.directory, sessionID: session.id }]
+        : [{ scope: "session", projectID: null, sessionID: target.sessionId, disposition: "target_deleted" }]
     }
     if (target.scope === "global") return [{ scope: "global", projectID: null }]
     return target.projectIds.map((projectID) => {
       const project = Database.use((db) => db.select().from(ProjectTable).where(eq(ProjectTable.id, projectID)).get())
-      if (!project) throw new NotFoundError({ message: `Automation target project not found: ${projectID}` })
+      if (!project) return { scope: "project" as const, projectID, disposition: "target_deleted" as const }
       return { scope: "project" as const, projectID, directory: project.worktree }
     })
   }
@@ -1989,72 +2308,7 @@ export namespace AutomationService {
     wakeID?: string
     dispatchResult?: string
     dispatchError?: string
-    automationConsumed?: true
   }> {
-    if (job.task_id) {
-      signal.throwIfAborted()
-      if (!job.project_id) throw new Error(`Delayed task wake ${job.id} has no project owner`)
-      const task = await assertTaskRootSessionInProject({ taskId: job.task_id, projectId: job.project_id })
-      return await runInTargetProject({
-        directory: task.rootSession.directory,
-        fn: async () => {
-          const committedAt = Date.now()
-          const wakeID = Database.transaction((tx) => {
-            const persistedWakeID = persistTaskWaitIngressInTransaction(tx, {
-              task,
-              jobID: job.id,
-              fireID,
-              runID,
-              dueAt: job.next_run,
-              now: committedAt,
-            })
-            const lease = currentControlLeaseInTransaction(tx, "automation", job.id)
-            if (!lease || lease.owner_occurrence_id !== owner || lease.expires_at <= committedAt)
-              throw new AutomationRunningConflictError({
-                message: `Automation ${job.id} lost its execution lease before Task wait ownership transfer`,
-                automationID: job.id,
-              })
-            const latest = latestAutomationDefinitionInTransaction(tx, job.id)
-            const consumed =
-              latest && latest.id === job.revision_id && latest.kind === "delay" && latest.status === "active"
-                ? (appendAutomationTombstoneInTransaction(tx, latest, committedAt), { id: job.id })
-                : undefined
-            if (!consumed) {
-              throw new AutomationRunningConflictError({
-                message: `Automation ${job.id} lost its execution lease before Task wait ownership transfer`,
-                automationID: job.id,
-              })
-            }
-            return persistedWakeID
-          })
-          try {
-            const dispatchResult = await dispatchPersistedTaskLoop(job.task_id!, wakeID, {
-              runWithActivationOwner: (completion) =>
-                inactivityFence.runDelegated("durable Task ingress execution", completion),
-            })
-            return { taskID: job.task_id!, wakeID, dispatchResult, automationConsumed: true as const }
-          } catch (error) {
-            const dispatchError = error instanceof Error ? error.message : String(error)
-            log.error("scheduled Task wait ingress remains accepted after delivery failure", {
-              jobId: job.id,
-              taskID: job.task_id!,
-              wakeID,
-              fireID,
-              error: dispatchError,
-              errorName: error instanceof Error ? error.name : undefined,
-            })
-            return {
-              taskID: job.task_id!,
-              wakeID,
-              dispatchResult: "accepted",
-              dispatchError,
-              automationConsumed: true as const,
-            }
-          }
-        },
-      })
-    }
-
     if (!job.project_id) throw new Error(`Delayed session wake ${job.id} has no project owner`)
     const session = job.session_id
       ? await Session.assertLineageInProject({ sessionID: job.session_id, projectID: job.project_id })
@@ -2167,7 +2421,7 @@ export namespace AutomationService {
     await failurePersistenceHookForTest?.("before")
     const now = Date.now()
     const step = job.failure_count + 1
-    const retryAt = automationRetryAt(step, now)
+    const retryAt = step >= MAX_FIRE_ATTEMPTS ? null : automationRetryAt(step, now)
     const msg = err instanceof Error ? err.message : String(err)
 
     const finalized = Database.immediateTransaction((tx) => {
@@ -2191,36 +2445,49 @@ export namespace AutomationService {
         jobId: job.id,
         name: job.name,
         error: msg,
-        retryAt: new Date(retryAt).toISOString(),
+        ...(retryAt === null ? { exhausted: true } : { retryAt: new Date(retryAt).toISOString() }),
       })
     }
     await failurePersistenceHookForTest?.("after")
-  }
-
-  async function failBeforeLease(job: AutomationRow, err: unknown): Promise<void> {
-    const now = Date.now()
-    const step = job.failure_count + 1
-    const retryAt = automationRetryAt(step, now)
-    const msg = err instanceof Error ? err.message : String(err)
-
-    Database.transaction((db) => appendAutomationFailureReceipts(db, job, msg, retryAt, now))
-
-    log.error("automation rejected before lease", {
-      jobId: job.id,
-      name: job.name,
-      error: msg,
-      retryAt: new Date(retryAt).toISOString(),
-    })
   }
 
   function appendAutomationFailureReceipts(
     db: Database.TxOrDb,
     job: AutomationRow,
     message: string,
-    retryAt: number,
+    retryAt: number | null,
     now: number,
     executionStartedAt?: number,
   ): void {
+    if (!job.attempt_id) throw new Error(`Automation ${job.id} failure has no physical fire attempt`)
+    const attemptReceipt = db
+      .select()
+      .from(AutomationFireAttemptReceiptTable)
+      .where(eq(AutomationFireAttemptReceiptTable.attempt_id, job.attempt_id))
+      .get()
+    if (!attemptReceipt) {
+      db.insert(AutomationFireAttemptReceiptTable)
+        .values({
+          attempt_id: job.attempt_id,
+          outcome: retryAt === null ? "failed" : "retry_wait",
+          retry_at: retryAt,
+          error: message,
+          time_created: now,
+        })
+        .run()
+      if (retryAt === null && job.kind === "delay") {
+        const latest = latestAutomationDefinitionInTransaction(db, job.id)
+        if (!latest || latest.id !== job.revision_id) {
+          throw new AutomationRunningConflictError({
+            message: `Automation ${job.id} definition changed before terminal attempt settlement`,
+            automationID: job.id,
+          })
+        }
+        appendAutomationTombstoneInTransaction(db, latest, now)
+      }
+      return
+    }
+    if (attemptReceipt.outcome !== "reserved") return
     const revisions = db
       .select({ id: AutomationTable.id })
       .from(AutomationTable)
@@ -2246,77 +2513,27 @@ export namespace AutomationService {
     ) {
       return
     }
-    let runs = projectedRuns.filter((run) => run.outcome === "running")
+    const runs = projectedRuns.filter((run) => run.outcome === "running" || run.outcome === "retry_wait")
     if (runs.length === 0) {
-      const id = deterministicAutomationID("atr", job.id, `failure:${job.next_run}`)
-      const reservation = schedulerMissionReservationInTransaction(db, job.session_id)
-      const inserted = db.insert(AutomationRunTable)
-        .values({
-          id,
-          automation_revision_id: job.revision_id,
-          fire_id: deterministicAutomationID("cal", job.id, String(job.next_run)),
-          target_project_id: null,
-          mission_opened_event_id: reservation.openedEventID,
-          mission_disposition: reservation.disposition,
-          mission_closure_event_id: reservation.closureEventID,
-          started_at: now,
-        })
-        .onConflictDoNothing()
-        .returning()
-        .get()
-      if (inserted && reservation.kind === "mission_closed") {
-        db.insert(AutomationRunReceiptTable)
-          .values({
-            id: Identifier.ascending("automation"),
-            run_id: inserted.id,
-            outcome: "disposition",
-            disposition: "mission_closed",
-            closure_event_id: reservation.closureEventID,
-            time_created: now,
-          })
-          .run()
-        return
-      }
-      const persisted = db.select().from(AutomationRunTable).where(eq(AutomationRunTable.id, id)).get()
-      if (persisted) {
-        const projected = projectAutomationRunInTransaction(db, persisted)
-        if (projected.outcome !== "running") return
-        runs = [projected]
-      }
+      throw new Error(`Reserved Automation attempt ${job.attempt_id} has no target occurrence to settle`)
     }
     for (const run of runs) {
       db.insert(AutomationRunReceiptTable)
         .values({
           id: Identifier.ascending("automation"),
           run_id: run.id,
-          outcome: "retry_wait",
+          outcome: retryAt === null ? "failed" : "retry_wait",
           retry_at: retryAt,
           error: message,
           time_created: now,
         })
         .run()
     }
+    if (retryAt === null && job.kind === "delay") {
+      const latest = latestAutomationDefinitionInTransaction(db, job.id)
+      if (latest?.id === job.revision_id) appendAutomationTombstoneInTransaction(db, latest, now)
+    }
   }
 
-  function renderTaskWaitWakeNote(job: AutomationRow, fireID: string) {
-    return [
-      "This is a scheduled task wait wake, not a user-authored message.",
-      `wait_job_id=${job.id}`,
-      `fire_id=${fireID}`,
-      `due_at=${new Date(job.next_run).toISOString()}`,
-      `Reason: ${job.prompt}`,
-      "Read the current task snapshot and decide the next workflow action from present evidence.",
-    ].join("\n")
-  }
 
-  function renderTaskWaitEarlyActivityNote(input: { source: string; detail: string; jobIDs: string[] }) {
-    return [
-      "This is an early task wait wake triggered by new task/session activity, not a user-authored message.",
-      "The pending scheduled task wait was cancelled by newer task/session activity.",
-      `activity_source=${input.source}`,
-      `activity_detail=${input.detail}`,
-      `wait_job_ids=${input.jobIDs.join(",")}`,
-      "Read the current task snapshot and decide the next workflow action from present evidence.",
-    ].join("\n")
-  }
 }

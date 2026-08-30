@@ -28,6 +28,8 @@ export const EventJobTable = sqliteTable(
     enabled: integer({ mode: "boolean" }).notNull().default(true),
     one_shot: integer({ mode: "boolean" }).notNull().default(false),
     cooldown_ms: integer().notNull().default(0),
+    tool_part_id: text(),
+    tool_input_digest: text(),
     time_created: integer().notNull().$default(() => Date.now()),
   },
   (table) => [
@@ -35,6 +37,13 @@ export const EventJobTable = sqliteTable(
     index("event_job_project_idx").on(table.project_id),
     index("event_job_type_idx").on(table.event_type),
     index("event_job_enabled_idx").on(table.enabled),
+    uniqueIndex("event_job_tool_occurrence_idx")
+      .on(table.tool_part_id)
+      .where(sql`${table.tool_part_id} IS NOT NULL`),
+    check("event_job_tool_causation_shape", sql`
+      (${table.tool_part_id} IS NULL AND ${table.tool_input_digest} IS NULL)
+      OR (${table.tool_part_id} IS NOT NULL AND ${table.tool_input_digest} IS NOT NULL)
+    `),
   ],
 )
 
@@ -45,11 +54,20 @@ export const EventJobDefinitionTombstoneTable = sqliteTable(
     id: text().primaryKey(),
     definition_id: text().notNull(),
     revision: integer().notNull(),
+    tool_part_id: text(),
+    tool_input_digest: text(),
     time_created: integer().notNull(),
   },
   (table) => [
     uniqueIndex("event_job_definition_tombstone_revision_idx").on(table.definition_id, table.revision),
     index("event_job_definition_tombstone_latest_idx").on(table.definition_id, table.revision),
+    uniqueIndex("event_job_definition_tombstone_tool_occurrence_idx")
+      .on(table.tool_part_id)
+      .where(sql`${table.tool_part_id} IS NOT NULL`),
+    check("event_job_tombstone_tool_causation_shape", sql`
+      (${table.tool_part_id} IS NULL AND ${table.tool_input_digest} IS NULL)
+      OR (${table.tool_part_id} IS NOT NULL AND ${table.tool_input_digest} IS NOT NULL)
+    `),
   ],
 )
 

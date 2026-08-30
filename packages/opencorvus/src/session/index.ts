@@ -1405,7 +1405,6 @@ export namespace Session {
       persisted = persistedMessage
       const time_created = persistedMessage.time.created
       const { id, sessionID, ...data } = persistedMessage
-      commit?.(db)
       db.insert(MessageTable)
         .values({
           id,
@@ -1415,6 +1414,7 @@ export namespace Session {
         })
         .onConflictDoUpdate({ target: MessageTable.id, set: { data } })
         .run()
+      commit?.(db)
       if (options.publishCreated && !existing) {
         Bus.publishOwnedInTransaction(Message.Event.Created, { info: persistedMessage })
       }

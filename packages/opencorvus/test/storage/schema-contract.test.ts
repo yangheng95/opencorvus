@@ -219,7 +219,7 @@ test("uses one explicit application table registry for SQLite and transfer shape
   try {
     rebuildTestDatabase()
     const snapshot = exportMysqlTransferSnapshot()
-    expect(mysqlSchemaFingerprint()).toBe("e64133cdf27574a8f59f81c8f0b3c0d1df239dcb4eb47387164eac0d9ad7bac3")
+    expect(mysqlSchemaFingerprint()).toBe("060df95f5902f8ea552df3c0046d3289631dfdef701c63acabed03852465f1ee")
     expect(snapshot.tables.map((table) => table.name)).toEqual(
       registeredNames.map((entry) => entry.name).filter((name) => name !== "database_authority"),
     )

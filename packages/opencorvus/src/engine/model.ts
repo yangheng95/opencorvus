@@ -708,7 +708,7 @@ export const TaskRootIngressReducerProjection = z.union([
 
 export const TaskRootIngressDebugEntry = z.object({
   ingressID: z.string(),
-  source: z.enum(["message", "protocol_event", "automation_run", "engine_artifact", "task", "inline"]),
+  source: z.enum(["message", "protocol_event", "engine_artifact", "task", "inline"]),
   sourceID: z.string(),
   executionEpoch: z.number().int().positive(),
   sequence: z.number().int().positive(),

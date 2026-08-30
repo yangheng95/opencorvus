@@ -24,16 +24,11 @@ import { TerminalLifecycleReferenceSchema } from "@/engine/terminal-lifecycle-re
 import { RuntimeExecutionSettlement } from "@/runtime/execution-settlement"
 import { createExecutionCancellationOrigin } from "./prompt/cancellation"
 import { ProjectMemory } from "@/memory/project-memory"
-import { SchedulerMessageWakeReason } from "@/protocol/scheduler-message-wake-reason"
-import { SchedulerEventWakeReason } from "@/protocol/scheduler-event-wake-reason"
 import type { Database } from "@/storage/db"
 import { MessageStore } from "./message-store"
-import {
-  MissionProcessRecoveryWakeReason,
-  missionProcessRecoveryFrontierDigest,
-} from "./mission-process-recovery-schema"
-import { MissionOperatorWakeReason } from "@/mission/operator-wake-reason"
+import { missionProcessRecoveryFrontierDigest } from "./mission-process-recovery-schema"
 import { PersistedWakeReplay as PersistedWakeReplayError } from "./persisted-wake-replay"
+import { SessionWakeReason } from "./wake-reason"
 
 /**
  * Session wake mechanism.
@@ -61,33 +56,7 @@ export namespace SessionWake {
 
   export const recoveryFrontierDigest = missionProcessRecoveryFrontierDigest
 
-  export const WakeReason = z.discriminatedUnion("source", [
-    MissionOperatorWakeReason,
-    MissionProcessRecoveryWakeReason,
-    z.object({
-      source: z.literal("conversation.handoff"),
-      callerSessionID: Identifier.schema("session"),
-      callerMessageID: Identifier.schema("message"),
-      targetExperience: z.literal("work"),
-    }),
-    z
-      .object({
-        source: z.literal("api.chat"),
-        requestID: z.string().trim().min(1).max(200),
-        requestFingerprint: z.string().regex(/^[0-9a-f]{64}$/),
-      })
-      .strict(),
-    SchedulerMessageWakeReason,
-    z.object({
-      source: z.literal("scheduler.automation"),
-      jobID: z.string(),
-      jobName: z.string(),
-      fireID: z.string(),
-      scope: z.enum(["session", "project", "global"]),
-      recurrence: z.string().nullable(),
-    }),
-    SchedulerEventWakeReason,
-  ])
+  export const WakeReason = SessionWakeReason
   export type WakeReason = z.infer<typeof WakeReason>
 
   export interface WakeInput {

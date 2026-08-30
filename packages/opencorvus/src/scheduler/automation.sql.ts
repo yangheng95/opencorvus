@@ -1,6 +1,5 @@
 import { check, sqliteTable, text, integer, index, primaryKey, uniqueIndex } from "drizzle-orm/sqlite-core"
 import { sql } from "drizzle-orm"
-import { EngineTaskTable } from "@/engine/engine.sql"
 import { ProtocolEventTable } from "@/protocol/protocol.sql"
 import { ProjectTable } from "../project/project.sql"
 import { SessionTable } from "../session/session.sql"
@@ -15,7 +14,6 @@ export const AutomationTable = sqliteTable(
     revision: integer().notNull(),
     project_id: text(),
     session_id: text(),
-    task_id: text(),
     name: text().notNull(),
     kind: text({ enum: ["recurring", "delay"] }).notNull(),
     scope: text({ enum: ["session", "project", "global"] }),
@@ -35,14 +33,30 @@ export const AutomationTable = sqliteTable(
     /** Immutable absolute deadline for one-shot delay definitions. Recurring
      * due time is reduced from recurrence, definition time, and run receipts. */
     due_at: integer(),
+    tool_part_id: text(),
+    tool_input_digest: text(),
     time_created: integer().notNull().$default(() => Date.now()),
   },
   (table) => [
     uniqueIndex("automation_definition_revision_idx").on(table.definition_id, table.revision),
     index("automation_definition_latest_idx").on(table.definition_id, table.revision),
+    index("automation_session_delay_frontier_idx").on(
+      table.session_id,
+      table.kind,
+      table.status,
+      table.definition_id,
+      table.revision,
+      table.id,
+    ),
     index("automation_project_idx").on(table.project_id),
-    index("automation_task_idx").on(table.task_id),
     index("automation_due_at_idx").on(table.due_at),
+    uniqueIndex("automation_definition_tool_occurrence_idx")
+      .on(table.tool_part_id)
+      .where(sql`${table.tool_part_id} IS NOT NULL`),
+    check("automation_definition_tool_causation_shape", sql`
+      (${table.tool_part_id} IS NULL AND ${table.tool_input_digest} IS NULL)
+      OR (${table.tool_part_id} IS NOT NULL AND ${table.tool_input_digest} IS NOT NULL)
+    `),
   ],
 )
 
@@ -54,11 +68,20 @@ export const AutomationDefinitionTombstoneTable = sqliteTable(
     id: text().primaryKey(),
     definition_id: text().notNull(),
     revision: integer().notNull(),
+    tool_part_id: text(),
+    tool_input_digest: text(),
     time_created: integer().notNull(),
   },
   (table) => [
     uniqueIndex("automation_definition_tombstone_revision_idx").on(table.definition_id, table.revision),
     index("automation_definition_tombstone_latest_idx").on(table.definition_id, table.revision),
+    uniqueIndex("automation_definition_tombstone_tool_occurrence_idx")
+      .on(table.tool_part_id)
+      .where(sql`${table.tool_part_id} IS NOT NULL`),
+    check("automation_tombstone_tool_causation_shape", sql`
+      (${table.tool_part_id} IS NULL AND ${table.tool_input_digest} IS NULL)
+      OR (${table.tool_part_id} IS NOT NULL AND ${table.tool_input_digest} IS NOT NULL)
+    `),
   ],
 )
 
@@ -79,6 +102,82 @@ export const AutomationProjectTargetTable = sqliteTable(
 
 export const AutomationRunOutcomes = ["running", "retry_wait", "succeeded", "failed", "disposition"] as const
 
+/** One immutable logical Automation fire. Retries and fan-out target runs
+ * remain children of this fact; only manual Tool fires carry Tool causation. */
+export const AutomationFireTable = sqliteTable(
+  "automation_fire",
+  {
+    id: text().primaryKey(),
+    automation_revision_id: text()
+      .notNull()
+      .references(() => AutomationTable.id, { onDelete: "restrict" }),
+    scheduled_due_at: integer().notNull(),
+    origin: text({ enum: ["scheduled", "manual_api", "manual_tool", "legacy"] }).notNull(),
+    tool_part_id: text(),
+    input_digest: text(),
+    time_created: integer().notNull(),
+  },
+  (table) => [
+    uniqueIndex("automation_fire_scheduled_occurrence_idx")
+      .on(table.automation_revision_id, table.scheduled_due_at)
+      .where(sql`${table.origin}='scheduled'`),
+    uniqueIndex("automation_fire_tool_occurrence_idx")
+      .on(table.tool_part_id)
+      .where(sql`${table.tool_part_id} IS NOT NULL`),
+    index("automation_fire_revision_frontier_idx").on(
+      table.automation_revision_id,
+      table.scheduled_due_at,
+      table.time_created,
+      table.id,
+    ),
+    index("automation_fire_due_idx").on(table.scheduled_due_at),
+    check("automation_fire_origin_shape", sql`
+      (${table.origin}='scheduled' AND ${table.tool_part_id} IS NULL AND ${table.input_digest} IS NULL)
+      OR (${table.origin}='manual_api' AND ${table.tool_part_id} IS NULL AND ${table.input_digest} IS NULL)
+      OR (${table.origin}='manual_tool' AND ${table.tool_part_id} IS NOT NULL AND ${table.input_digest} IS NOT NULL)
+      OR (${table.origin}='legacy' AND ${table.tool_part_id} IS NULL AND ${table.input_digest} IS NULL)
+    `),
+  ],
+)
+
+/** One physical claim of a logical fire. Capacity waiting and owner takeover
+ * create new attempts without changing fire identity. */
+export const AutomationFireAttemptTable = sqliteTable(
+  "automation_fire_attempt",
+  {
+    id: text().primaryKey(),
+    fire_id: text().notNull().references(() => AutomationFireTable.id, { onDelete: "restrict" }),
+    ordinal: integer().notNull(),
+    owner_occurrence_id: text().notNull(),
+    time_created: integer().notNull(),
+  },
+  (table) => [
+    uniqueIndex("automation_fire_attempt_ordinal_idx").on(table.fire_id, table.ordinal),
+    index("automation_fire_attempt_owner_idx").on(table.owner_occurrence_id),
+    check("automation_fire_attempt_positive_ordinal", sql`${table.ordinal}>0`),
+  ],
+)
+
+export const AutomationFireAttemptReceiptTable = sqliteTable(
+  "automation_fire_attempt_receipt",
+  {
+    attempt_id: text()
+      .primaryKey()
+      .references(() => AutomationFireAttemptTable.id, { onDelete: "restrict" }),
+    outcome: text({ enum: ["reserved", "retry_wait", "failed"] }).notNull(),
+    retry_at: integer(),
+    error: text(),
+    time_created: integer().notNull(),
+  },
+  (table) => [
+    check("automation_fire_attempt_receipt_shape", sql`
+      (${table.outcome}='reserved' AND ${table.retry_at} IS NULL AND ${table.error} IS NULL)
+      OR (${table.outcome}='retry_wait' AND ${table.retry_at} IS NOT NULL AND ${table.error} IS NOT NULL)
+      OR (${table.outcome}='failed' AND ${table.retry_at} IS NULL AND ${table.error} IS NOT NULL)
+    `),
+  ],
+)
+
 export const AutomationRunTable = sqliteTable(
   "automation_run",
   {
@@ -86,7 +185,9 @@ export const AutomationRunTable = sqliteTable(
     automation_revision_id: text()
       .notNull()
       .references(() => AutomationTable.id, { onDelete: "restrict" }),
-    fire_id: text().notNull(),
+    fire_id: text()
+      .notNull()
+      .references(() => AutomationFireTable.id, { onDelete: "restrict" }),
     /** Only the branch-specific choice that is not owned by the exact
      * definition revision. Null for Session/global/delay definitions. */
     target_project_id: text(),
@@ -119,7 +220,7 @@ export const AutomationRunReceiptTable = sqliteTable(
     id: text().primaryKey(),
     run_id: text().notNull().references(() => AutomationRunTable.id, { onDelete: "cascade" }),
     outcome: text({ enum: ["retry_wait", "succeeded", "failed", "disposition"] }).notNull(),
-    disposition: text({ enum: ["mission_closed"] }),
+    disposition: text({ enum: ["mission_closed", "target_deleted", "superseded"] }),
     closure_event_id: text().references(() => ProtocolEventTable.id, { onDelete: "restrict" }),
     retry_at: integer(),
     error: text(),
@@ -134,6 +235,29 @@ export const AutomationRunReceiptTable = sqliteTable(
       OR (${table.outcome}='succeeded' AND ${table.disposition} IS NULL AND ${table.closure_event_id} IS NULL AND ${table.retry_at} IS NULL AND ${table.error} IS NULL)
       OR (${table.outcome}='failed' AND ${table.disposition} IS NULL AND ${table.closure_event_id} IS NULL AND ${table.retry_at} IS NULL AND ${table.error} IS NOT NULL)
       OR (${table.outcome}='disposition' AND ${table.disposition}='mission_closed' AND ${table.closure_event_id} IS NOT NULL AND ${table.retry_at} IS NULL AND ${table.error} IS NULL)
+      OR (${table.outcome}='disposition' AND ${table.disposition} IN ('target_deleted','superseded') AND ${table.closure_event_id} IS NULL AND ${table.retry_at} IS NULL AND ${table.error} IS NULL)
+    `),
+  ],
+)
+
+/** Exact Session assistant admission that settled one one-shot delay. This is
+ * the durable relation between the accepted Message batch and the delay
+ * occurrence; the definition tombstone remains only its current-state fold. */
+export const AutomationDelaySettlementTable = sqliteTable(
+  "automation_delay_settlement",
+  {
+    definition_id: text().primaryKey(),
+    disposition: text({ enum: ["input_accepted", "due_accepted"] }).notNull(),
+    assistant_message_id: text().notNull(),
+    accepted_input_message_ids: text({ mode: "json" }).$type<string[]>().notNull(),
+    fire_id: text(),
+    time_created: integer().notNull(),
+  },
+  (table) => [
+    index("automation_delay_settlement_assistant_idx").on(table.assistant_message_id),
+    check("automation_delay_settlement_shape", sql`
+      (${table.disposition}='input_accepted')
+      OR (${table.disposition}='due_accepted' AND ${table.fire_id} IS NOT NULL)
     `),
   ],
 )

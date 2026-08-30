@@ -1,10 +1,11 @@
 import { Tool } from "./tool"
 import { Log } from "@/util/log"
 import { createDecisionLog } from "@/decision-log"
-import { createDelayedSessionWake, createTaskWake } from "@/scheduler/delayed-wake-schedule"
+import { createDelayedSessionWake } from "@/scheduler/delayed-wake-schedule"
 import { Instance } from "@/project/instance"
-import { withImmediateParkToolResultControl } from "@/session/tool-result-control"
 import { WaitToolDescription, WaitToolParameters } from "./wait-contract"
+import { completedWaitToolResult } from "./wait-result"
+import { createTaskWait, type TaskWaitToolOccurrence } from "@/engine/task-wait"
 export { WAIT_MAX_MS, WAIT_MIN_MS, WaitToolDescription, WaitToolParameters } from "./wait-contract"
 
 const log = Log.create({ service: "wait-tool" })
@@ -17,6 +18,7 @@ export async function executeWait(input: {
   taskID?: string
   logPhase?: string
   surface?: string
+  occurrence: TaskWaitToolOccurrence
 }): Promise<{
   requestedMs: number
   aborted: boolean
@@ -30,20 +32,24 @@ export async function executeWait(input: {
     return { requestedMs: input.duration_ms, aborted: true, output }
   }
 
-  const scheduled = input.taskID
-    ? await createTaskWake({
-        name: "task wait",
-        projectId: Instance.project.id,
-        taskId: input.taskID,
+  let scheduled: { id: string; name: string; nextRun: number }
+  if (input.taskID) {
+    const wait = createTaskWait({
+        projectID: Instance.project.id,
+        taskID: input.taskID,
         durationMs: input.duration_ms,
         reason: input.reason,
+        occurrence: input.occurrence,
       })
-    : await createDelayedSessionWake({
+    scheduled = { id: wait.id, name: "task wait", nextRun: wait.dueAt }
+  } else {
+    scheduled = await createDelayedSessionWake({
         name: "session wait",
         projectId: Instance.project.id,
         sessionId: input.sessionID,
         durationMs: input.duration_ms,
         surface: input.surface,
+        occurrence: input.occurrence,
         prompt: [
           "Scheduled wait completed.",
           `Requested delay: ${input.duration_ms}ms.`,
@@ -51,12 +57,13 @@ export async function executeWait(input: {
           "Continue from the current visible conversation state.",
         ].join("\n"),
       })
+  }
   const mode = input.taskID ? "task" : "session"
   if (input.taskID) {
     createDecisionLog(input.taskID).append({
       phase: input.logPhase ?? "wait",
       key: `wait_${Date.now()}`,
-      value: `scheduled wait ${input.duration_ms}ms automation=${scheduled.id}`,
+      value: `scheduled wait ${input.duration_ms}ms occurrence=${scheduled.id}`,
       reason: input.reason,
     })
   }
@@ -68,9 +75,13 @@ export async function executeWait(input: {
     nextRun: scheduled.nextRun,
     mode,
   })
-  const output =
-    `Scheduled nonblocking ${mode} wait ${scheduled.id} for ${new Date(scheduled.nextRun).toISOString()} ` +
-    `(requested ${input.duration_ms}ms). Reason: ${input.reason}. End this turn unless another real scheduler decision is immediately responsible; the scheduled wake will re-read current evidence.`
+  const output = completedWaitToolResult({
+    requestedMs: input.duration_ms,
+    reason: input.reason,
+    jobID: scheduled.id,
+    nextRun: scheduled.nextRun,
+    mode,
+  }).output
   return {
     requestedMs: input.duration_ms,
     aborted: false,
@@ -88,6 +99,9 @@ export const WaitTool = Tool.define("wait", {
   async execute(params, ctx) {
     const executionAuthority = Tool.requireExecutionAuthority(ctx)
     const taskID = executionAuthority.kind === "task" ? executionAuthority.taskID : undefined
+    const toolPartID = typeof ctx.extra?.toolPartID === "string" ? ctx.extra.toolPartID : ""
+    const toolCallID = ctx.callID ?? ""
+    if (!toolPartID || !toolCallID) throw new Error("wait requires an exact persisted Tool request occurrence")
     const result = await executeWait({
       duration_ms: params.duration_ms,
       reason: params.reason,
@@ -96,25 +110,33 @@ export const WaitTool = Tool.define("wait", {
       taskID,
       logPhase: taskID ? "agent" : undefined,
       surface: typeof ctx.extra?.surface === "string" ? ctx.extra.surface : undefined,
+      occurrence: {
+        sessionID: ctx.sessionID,
+        messageID: ctx.messageID,
+        toolPartID,
+        toolCallID,
+      },
     })
+    if (!result.aborted && result.jobID && result.nextRun && result.mode) {
+      return completedWaitToolResult({
+        requestedMs: params.duration_ms,
+        reason: params.reason,
+        jobID: result.jobID,
+        nextRun: result.nextRun,
+        mode: result.mode,
+      })
+    }
     return {
-      title: result.aborted ? "Wait Not Scheduled" : "Wait Scheduled",
+      title: "Wait Not Scheduled",
       output: result.output,
-      metadata: result.aborted ? {
+      metadata: {
         requestedMs: params.duration_ms,
         aborted: result.aborted,
         jobID: result.jobID,
         nextRun: result.nextRun,
         mode: result.mode,
         nonblocking: true,
-      } : withImmediateParkToolResultControl({
-        requestedMs: params.duration_ms,
-        aborted: result.aborted,
-        jobID: result.jobID,
-        nextRun: result.nextRun,
-        mode: result.mode,
-        nonblocking: true,
-      }),
+      },
     }
   },
 })

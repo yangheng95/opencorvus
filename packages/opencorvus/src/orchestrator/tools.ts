@@ -2172,7 +2172,8 @@ export function createOrchestratorTools(input: {
           WaitToolDescription +
           " In orchestrator context, wait is NOT a substitute for `question` (operator input required), `manage_task` action=fail_task (exact evidence proves force majeure beyond same-Task repair), or a real scheduler decision from the current task snapshot. Never use wait to poll child-agent completion, peer Delivery Slice reviews, or terminal evidence. After wait returns, decide from the refreshed task snapshot before the next dispatch.",
         inputSchema: WaitToolParameters,
-        execute: async ({ duration_ms, reason }) => {
+        execute: async ({ duration_ms, reason }, executionInput) => {
+          const execution = requireOrchestratorToolExecutionContext(executionInput, "wait")
           const result = await executeWait({
             duration_ms,
             reason,
@@ -2180,6 +2181,12 @@ export function createOrchestratorTools(input: {
             sessionID: input.agentSessionID,
             taskID: input.taskID,
             logPhase: "orchestrator",
+            occurrence: {
+              sessionID: execution.orchestratorSessionID,
+              messageID: execution.orchestratorMessageID,
+              toolPartID: execution.toolPartID,
+              toolCallID: execution.toolCallID,
+            },
           })
           return {
             title: result.aborted ? "Wait Not Scheduled" : "Wait Scheduled",

@@ -59,9 +59,10 @@ write transaction 重读并核对完整 snapshot、取得 promotion fence，首�
 列中，作为字节相等和防冲突事实；紧凑业务 ID 不是截断后冒充的密码学摘要。Project ID 由完整
 normalized repository identity material 经 `Identifier.deterministic("project", material)` 生成不超过
 24 字符的 `prj_*` 身份；包含旧 expanded Project primary key 的 pre-release Database 在 bootstrap
-返回 `DATA_RESET_REQUIRED`，不创建第二个 Project。延迟 Task wait 的 fire identity 由完整 Automation
-job identity 确定性派生为不超过 24 字符的 `cal_*`；pending delay 尚未签发 fire identity，而签发与
-accepted `task_root_ingress` 持久化、delay 消费处于同一事务，因此 restart 只重放一个 durable ingress。其他手工或
+返回 `DATA_RESET_REQUIRED`，不创建第二个 Project。Task wait 由 exact Tool Part 确定性派生一个 native
+Task-control registration identity；due ingress 与该 wait 的 `due_ingress_accepted` settlement 在同一事务提交，
+因此 restart 只重放一个 durable ingress。Automation `cal_*` fire identity 只属于 Session delay、recurring 与
+manual Automation occurrence，不再承担 Task wait 业务身份。其他手工或
 caller-supplied 新落盘身份尚未迁入该默认签发面，属于后续迁移契约。Project Memory 的 pending
 user-input file/chunk 与 Project `MEMORY.MD` envelope file/chunk 分别使用 domain-separated 的 compact
 `memory` / `memchunk` identity；完整 Project、occurrence、content 和 provenance 仍在关系与 payload 中。
@@ -371,13 +372,9 @@ foreign attachment 来“修复”。Attachment bytes 的物理池在
 | `quick_note`                                                  | `quicknote/quicknote.sql.ts` | quicknote                                       |
 | `session_share`                                               | `share/share.sql.ts`         | 分享                                            |
 | `protocol_event` · `protocol_inbox` · `protocol_stream_chunk` | `protocol/protocol.sql.ts`   | 可观测协议事件与流分片                          |
-| `automation` · `automation_run` · `event_job`                 | `scheduler/*.sql.ts`         | 定时与事件触发                                  |
+| `automation` · `automation_definition_tombstone` · `automation_fire` · `automation_fire_attempt` · `automation_fire_attempt_receipt` · `automation_run` · `automation_run_receipt` · `automation_delay_settlement` · `event_job` | `scheduler/*.sql.ts` | 定时、逻辑 Fire、物理尝试、目标执行、Session admission 与事件触发 |
 
-Scheduler 表按 service 分层写入：`automation` 与 `automation_run` 的唯一直接表写入文件是
-`scheduler/automation-service.ts`；`event_job` 的唯一直接表写入文件是
-`scheduler/event-service.ts`。Tool、server route 和 engine 层只能通过
-scheduler service 创建、更新或删除 scheduler job，不能直接写 scheduler 表。业务 Task
-没有 Host 调度表；Mission/Orchestrator 决定何时创建并行或依赖 Task。
+Scheduler 表按事实 owner 分层写入：Automation service 拥有 definition revision、tombstone、Fire、attempt、run 与 receipt；Session assistant-admission transaction 可以追加唯一的 `automation_delay_settlement`，并在同一事务追加该 one-shot delay 的 superseded run receipt 与 definition tombstone。两者共用同一个 transaction-local fact reducer，后者不是第二个 Automation service。Assistant admission 通过 `(session_id, kind, status, definition_id, revision)` frontier index 只查询调用方给出的 Session 集合中的 latest active delay，并按同一有界 definition page 批量读取 lease、Fire、run/receipt 与 attempt summary；它不扫描其他 Project 或全局 Automation。Global poll 的 definition cursor 本身由 SQL index、`definition_id` cursor 和固定 limit 分页；每页以五个固定 set-query stage 读取 definitions、latest/boundary Fires、当前 fan-out runs 与 latest receipt/retry count、attempt summary 和 latest leases。只有选出的 due definition 才在 writer transaction 中逐项重验与 claim，完整 immutable Fire history只在显式 history API 中归约。`event_job` 事实由 `scheduler/event-service.ts` 拥有。Tool、server route 和 engine 层只能通过这些领域入口创建、更新或删除 scheduler definition。Task wait 不使用 Automation 表，而是 `engine_task_wait_registration` 加可选 `engine_task_wait_settlement` 的 epoch-bound Task-control 事实。
 
 ## Trace — 统一运行追踪（横切）
 

@@ -1,7 +1,7 @@
 import { Bus } from "@/bus"
 import { Instance } from "@/project/instance"
 import { createInstanceState } from "@/project/instance-state"
-import { Database, and, eq, inArray, sql } from "@/storage/db"
+import { Database, and, desc, eq, inArray, sql } from "@/storage/db"
 import { Log } from "@/util/log"
 import { Session } from "@/session"
 import { MessageTable, SessionTable } from "@/session/session.sql"
@@ -50,10 +50,16 @@ import {
   type MissionSchedulerOccurrenceDisposition,
 } from "@/protocol/delivery"
 import { schedulerMissionReservationInTransaction } from "./mission-reservation"
+import {
+  assertScheduledToolOccurrenceInTransaction,
+  scheduledToolOccurrenceConflict,
+  type ScheduledToolOccurrence,
+} from "./tool-occurrence"
 
 type Match = Record<string, string | number | boolean>
 type EventEnvelope = Bus.Envelope
 type EventJob = EventJobRow
+type ScheduleToolCausation = { occurrence: ScheduledToolOccurrence; inputDigest: string }
 type EventJobFire = EventJobFireRow
 
 export type EventJobView = {
@@ -173,12 +179,18 @@ export namespace EventService {
     db: Database.TxOrDb,
     row: typeof EventJobTable.$inferSelect,
     now: number,
+    causation?: ScheduleToolCausation,
   ) {
+    if (causation) assertScheduledToolOccurrenceInTransaction(db, causation.occurrence)
     db.insert(EventJobDefinitionTombstoneTable)
       .values({
-        id: Identifier.ascending("event_job"),
+        id: causation
+          ? Identifier.deterministic("event_job", `event-job-tombstone-v1\0${causation.occurrence.toolPartID}`)
+          : Identifier.ascending("event_job"),
         definition_id: row.definition_id,
         revision: row.revision + 1,
+        tool_part_id: causation?.occurrence.toolPartID,
+        tool_input_digest: causation?.inputDigest,
         time_created: now,
       })
       .run()
@@ -361,9 +373,59 @@ export namespace EventService {
   }
 
   export async function create(input: CreateEventJobInput): Promise<{ id: string; name: string; eventType: string }> {
+    return createEventJob(input)
+  }
+
+  export async function createFromTool(
+    input: CreateEventJobInput,
+    causation: ScheduleToolCausation,
+  ): Promise<{ id: string; name: string; eventType: string }> {
+    return createEventJob(input, causation)
+  }
+
+  async function createEventJob(
+    input: CreateEventJobInput,
+    causation?: ScheduleToolCausation,
+  ): Promise<{ id: string; name: string; eventType: string }> {
+    if (causation) {
+      const replay = Database.immediateTransaction((db) => {
+        assertScheduledToolOccurrenceInTransaction(db, causation.occurrence)
+        const existing = db
+          .select()
+          .from(EventJobTable)
+          .where(eq(EventJobTable.tool_part_id, causation.occurrence.toolPartID))
+          .get()
+        if (!existing) return undefined
+        const expectedID = Identifier.deterministic(
+          "event_job",
+          `event-job-definition-v1\0${causation.occurrence.toolPartID}`,
+        )
+        if (existing.id !== expectedID || existing.tool_input_digest !== causation.inputDigest) {
+          throw scheduledToolOccurrenceConflict(causation.occurrence, "changed its Event create input")
+        }
+        return existing
+      })
+      if (replay) return { id: replay.definition_id, name: replay.name, eventType: replay.event_type }
+    }
     await assertSessionInProject({ sessionId: input.sessionId, projectId: input.projectId })
-    const id = Identifier.ascending("event_job")
-    Database.use((db) =>
+    const id = causation
+      ? Identifier.deterministic("event_job", `event-job-definition-v1\0${causation.occurrence.toolPartID}`)
+      : Identifier.ascending("event_job")
+    const row = Database.immediateTransaction((db) => {
+      if (causation) {
+        assertScheduledToolOccurrenceInTransaction(db, causation.occurrence)
+        const existing = db
+          .select()
+          .from(EventJobTable)
+          .where(eq(EventJobTable.tool_part_id, causation.occurrence.toolPartID))
+          .get()
+        if (existing) {
+          if (existing.id !== id || existing.tool_input_digest !== causation.inputDigest) {
+            throw scheduledToolOccurrenceConflict(causation.occurrence, "changed its Event create input")
+          }
+          return existing
+        }
+      }
       db
         .insert(EventJobTable)
         .values({
@@ -379,13 +441,54 @@ export namespace EventService {
           enabled: true,
           one_shot: input.oneShot ?? false,
           cooldown_ms: input.cooldownMs ?? 0,
+          tool_part_id: causation?.occurrence.toolPartID,
+          tool_input_digest: causation?.inputDigest,
         })
-        .run(),
-    )
-    return { id, name: input.name, eventType: input.eventType }
+        .run()
+      return db.select().from(EventJobTable).where(eq(EventJobTable.id, id)).get()!
+    })
+    return { id: row.definition_id, name: row.name, eventType: row.event_type }
   }
 
   export function remove(id: string, projectID: string): boolean {
+    return removeEventJob(id, projectID)
+  }
+
+  export function removeFromTool(
+    id: string,
+    projectID: string,
+    causation: ScheduleToolCausation,
+  ): { id: string; name: string } | undefined {
+    return Database.immediateTransaction((db) => {
+      assertScheduledToolOccurrenceInTransaction(db, causation.occurrence)
+      const replay = db
+        .select()
+        .from(EventJobDefinitionTombstoneTable)
+        .where(eq(EventJobDefinitionTombstoneTable.tool_part_id, causation.occurrence.toolPartID))
+        .get()
+      if (replay) {
+        if (replay.definition_id !== id || replay.tool_input_digest !== causation.inputDigest) {
+          throw scheduledToolOccurrenceConflict(causation.occurrence, "changed its Event cancel input")
+        }
+        const definition = db
+          .select()
+          .from(EventJobTable)
+          .where(eq(EventJobTable.definition_id, replay.definition_id))
+          .orderBy(desc(EventJobTable.revision))
+          .get()
+        if (!definition || definition.project_id !== projectID) {
+          throw new Error(`Cancelled Event task ${id} lost its immutable definition`)
+        }
+        return { id, name: definition.name }
+      }
+      const row = latestEventDefinitionInTransaction(db, id)
+      if (!row || row.project_id !== projectID) return undefined
+      appendEventDefinitionTombstoneInTransaction(db, row, Date.now(), causation)
+      return { id, name: row.name }
+    })
+  }
+
+  function removeEventJob(id: string, projectID: string): boolean {
     return Database.immediateTransaction((db) => {
       const row = latestEventDefinitionInTransaction(db, id)
       if (!row || row.project_id !== projectID) return false

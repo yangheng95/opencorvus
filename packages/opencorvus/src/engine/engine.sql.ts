@@ -1,7 +1,7 @@
 import { check, foreignKey, integer, sqliteTable, text, index, primaryKey, uniqueIndex } from "drizzle-orm/sqlite-core"
 import { sql } from "drizzle-orm"
 import { ProjectTable } from "@/project/project.sql"
-import { SessionTable } from "@/session/session.sql"
+import { SessionTable, ToolPartRequestTable } from "@/session/session.sql"
 import { Timestamps } from "@/storage/schema.sql"
 import type { ProductPillar } from "@opencorvus-ai/sdk/expert-squad-manifest-v2"
 import type { SelectedWorkflowBinding } from "./workflow-binding"
@@ -162,7 +162,7 @@ export const EngineTaskRootIngressPolicyTable = sqliteTable("engine_task_root_in
   time_created: integer().notNull(),
 })
 
-export type EngineTaskRootIngressSource = "message" | "protocol_event" | "automation_run" | "engine_artifact" | "task" | "inline"
+export type EngineTaskRootIngressSource = "message" | "protocol_event" | "engine_artifact" | "task" | "inline"
 
 /** One accepted business input. Readiness and outcome are reduced from its
  * causal facts; this row never carries a delivery/status/attempt projection. */
@@ -175,7 +175,7 @@ export const EngineTaskRootIngressTable = sqliteTable(
       .references(() => EngineTaskTable.id, { onDelete: "cascade" }),
     execution_epoch: integer().notNull(),
     sequence: integer().notNull(),
-    source: text({ enum: ["message", "protocol_event", "automation_run", "engine_artifact", "task", "inline"] })
+    source: text({ enum: ["message", "protocol_event", "engine_artifact", "task", "inline"] })
       .notNull()
       .$type<EngineTaskRootIngressSource>(),
     source_id: text().notNull(),
@@ -190,6 +190,60 @@ export const EngineTaskRootIngressTable = sqliteTable(
     uniqueIndex("engine_task_root_ingress_source_idx").on(table.task_id, table.source, table.source_id),
     index("engine_task_root_ingress_epoch_idx").on(table.task_id, table.execution_epoch, table.sequence),
   ],
+)
+
+/** One immutable Task-control wait intent. Current state is reduced from this
+ * registration, its optional settlement, and the Task lifecycle occurrence;
+ * Automation does not own Task waits. New writes always name the exact Tool
+ * request Part. The legacy Automation origin exists only for the one-time
+ * migration of already-durable waits. */
+export const EngineTaskWaitRegistrationTable = sqliteTable(
+  "engine_task_wait_registration",
+  {
+    id: text().primaryKey(),
+    task_id: text()
+      .notNull()
+      .references(() => EngineTaskTable.id, { onDelete: "cascade" }),
+    execution_epoch: integer().notNull(),
+    due_at: integer().notNull(),
+    reason: text().notNull(),
+    tool_part_id: text(),
+    creator_ingress_id: text().references(() => EngineTaskRootIngressTable.id, { onDelete: "cascade" }),
+    creator_activation_id: text(),
+    legacy_automation_definition_id: text(),
+    input_digest: text().notNull(),
+    time_created: integer().notNull(),
+  },
+  (table) => [
+    uniqueIndex("engine_task_wait_tool_occurrence_idx")
+      .on(table.tool_part_id)
+      .where(sql`${table.tool_part_id} IS NOT NULL`),
+    uniqueIndex("engine_task_wait_legacy_automation_idx")
+      .on(table.legacy_automation_definition_id)
+      .where(sql`${table.legacy_automation_definition_id} IS NOT NULL`),
+    index("engine_task_wait_task_epoch_due_idx").on(table.task_id, table.execution_epoch, table.due_at),
+    check("engine_task_wait_origin_shape", sql`
+        (${table.tool_part_id} IS NOT NULL AND ${table.creator_ingress_id} IS NOT NULL AND ${table.creator_activation_id} IS NOT NULL AND ${table.legacy_automation_definition_id} IS NULL)
+        OR (${table.tool_part_id} IS NULL AND ${table.creator_ingress_id} IS NULL AND ${table.creator_activation_id} IS NULL AND ${table.legacy_automation_definition_id} IS NOT NULL)
+      `),
+  ],
+)
+
+/** The exact Task-root ingress that consumed one wait. One ingress may
+ * supersede several current waits, but each wait has one terminal settlement. */
+export const EngineTaskWaitSettlementTable = sqliteTable(
+  "engine_task_wait_settlement",
+  {
+    wait_id: text()
+      .primaryKey()
+      .references(() => EngineTaskWaitRegistrationTable.id, { onDelete: "cascade" }),
+    ingress_id: text()
+      .notNull()
+      .references(() => EngineTaskRootIngressTable.id, { onDelete: "cascade" }),
+    disposition: text({ enum: ["due_ingress_accepted", "superseded"] }).notNull(),
+    time_created: integer().notNull(),
+  },
+  (table) => [index("engine_task_wait_settlement_ingress_idx").on(table.ingress_id)],
 )
 
 export type EngineControlActivationTarget =
