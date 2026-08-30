@@ -67,6 +67,9 @@ import { AutomationTable } from "../src/scheduler/automation.sql"
 import { Database, DatabaseUnavailableError, eq } from "../src/storage/db"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 import { persistEstablishedTask } from "./fixture/engine-task"
+import { CatalogOccurrenceBinding } from "../src/capability/catalog-binding"
+import { RuntimeCapabilityCatalog } from "../src/tool/capability-runtime-catalog"
+import { ProviderToolNameCollisionError } from "../src/tool/provider-name-authority"
 
 const model = {
   id: "tool-result-control-model",
@@ -92,6 +95,8 @@ async function projectedSchedulerSurface(input: {
   projectPath: string
   permissionMode: "ask" | "full_access"
   instrument?: ProjectedSchedulerInstrumentation
+  injectStructuredOutput?: boolean
+  reserveStructuredOutput?: boolean
 }) {
   await Config.updateProjectPatch({
     permission_mode: input.permissionMode,
@@ -150,9 +155,10 @@ async function projectedSchedulerSurface(input: {
     type: "text",
     text: "Exercise the projected scheduler Tool-result control surface.",
   })
-  const assistant = await Session.updateMessage({
+  const assistant = {
     id: Identifier.ascending("message"),
     parentID: user.id,
+    acceptedInputMessageIDs: [user.id],
     sessionID: session.id,
     role: "assistant",
     author: "orchestrator",
@@ -163,7 +169,7 @@ async function projectedSchedulerSurface(input: {
     modelID: model.id,
     providerID: model.providerID,
     time: { created: now },
-  })
+  } as const
   const raw = createOrchestratorTools({
     taskID,
     agentSessionID: session.id,
@@ -179,6 +185,26 @@ async function projectedSchedulerSurface(input: {
     projectDirectory: input.projectPath,
     connectionOwner: owner,
   })
+  const firstProjectedTool = Object.values(projectedTools)[0]
+  if (input.injectStructuredOutput && !firstProjectedTool) {
+    throw new Error("Projected scheduler fixture has no Tool implementation for collision injection")
+  }
+  const runtimeProjectedTools = input.injectStructuredOutput
+    ? { ...projectedTools, StructuredOutput: firstProjectedTool! }
+    : projectedTools
+  const runtimeSkillProjection = input.injectStructuredOutput
+    ? (Object.freeze({
+        ...skillProjection,
+        projectedToolIDs: Object.freeze([...skillProjection.projectedToolIDs, "StructuredOutput"].sort()),
+        projectedScheduler: Object.freeze({
+          ...skillProjection.projectedScheduler,
+          projectedToolIDs: Object.freeze([
+            ...skillProjection.projectedScheduler.projectedToolIDs,
+            "StructuredOutput",
+          ].sort()),
+        }),
+      }) as typeof skillProjection)
+    : skillProjection
   SessionRuntimeContractStore.set(session.id, {
     identity: {
       identityKind: "projected-scheduler",
@@ -190,9 +216,9 @@ async function projectedSchedulerSurface(input: {
       contractKind: "orchestrator-wake",
       installedAt: now,
     },
-    projectedTools,
+    projectedTools: runtimeProjectedTools,
     projectedRegistryToolIDs: schedulerCapability.builtInToolIDs,
-    skillProjection,
+    skillProjection: runtimeSkillProjection,
     harnessProjection: PromptProfileResolver.schedulerHarnessProjection({ taskID, capability: schedulerCapability }),
     projectDirectory: input.projectPath,
     includeMcpTools: false,
@@ -211,6 +237,37 @@ async function projectedSchedulerSurface(input: {
     processor,
     messages: await Session.messages({ sessionID: session.id }),
     config,
+    reservedProviderToolNames: input.reserveStructuredOutput
+      ? [
+          {
+            name: "StructuredOutput",
+            owner: { source: "structured", ref: `assistant:${assistant.id}:response-encoder` },
+          },
+        ]
+      : undefined,
+  })
+  const runtimeContract = SessionRuntimeContractStore.get(session.id)
+  if (!runtimeContract) throw new Error("Projected scheduler runtime contract was not installed")
+  const catalog = await RuntimeCapabilityCatalog.snapshot({
+    config,
+    sessionID: session.id,
+    agentID: "orchestrator",
+    executionToolIDs: Object.keys(tools),
+    harnessProjection: SessionLoop.harnessProjectionForResolvedTools(tools),
+  })
+  const binding = await CatalogOccurrenceBinding.publish({
+    projectID: Instance.project.id,
+    payload: CatalogOccurrenceBinding.payload({
+      snapshot: catalog.snapshot,
+      materializationScope: await CatalogOccurrenceBinding.materializationScope({ model, config }),
+      runtimeContract,
+    }),
+  })
+  await CatalogOccurrenceBinding.bindAndBeginAssistant({
+    projectID: Instance.project.id,
+    assistant,
+    parent: await MessageStore.get({ sessionID: session.id, messageID: user.id }),
+    binding,
   })
   return { taskID, session, assistant, processor, tools, abort }
 }
@@ -437,6 +494,28 @@ afterEach(async () => {
 })
 
 describe("single Tool-result turn-control protocol", () => {
+  test("rejects an exact projected StructuredOutput before a conditional response encoder can be overwritten", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        await expect(
+          projectedSchedulerSurface({
+            projectPath: project.path,
+            permissionMode: "full_access",
+            injectStructuredOutput: true,
+            reserveStructuredOutput: true,
+          }),
+        ).rejects.toMatchObject({
+          name: "ProviderToolNameCollisionError",
+          provider_name: "StructuredOutput",
+          existing_owner: { source: "structured" },
+          incoming_owner: { source: "projected" },
+        } satisfies Partial<ProviderToolNameCollisionError>)
+      },
+    })
+  })
+
   test("projects the typed no_action receipt on the production scheduler Tool surface", async () => {
     await using project = await memoryProject()
     await Instance.provide({

@@ -2408,6 +2408,8 @@ export namespace ExpertSquadRegistry {
   export async function invalidateAvailable() {
     availableInventoryGeneration++
     availableInventories.clear()
+    const { CapabilityCatalogCache } = await import("@/capability/catalog")
+    await CapabilityCatalogCache.invalidate("expert-squad-registry")
   }
 
   export async function discoverGlobalAvailable(): Promise<DiscoveryResult<CatalogDeclaration>> {
@@ -2464,5 +2466,4 @@ export namespace ExpertSquadRegistry {
     }
     return matches
   }
-
 }

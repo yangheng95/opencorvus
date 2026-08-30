@@ -303,5 +303,5 @@ server/routes/panel.ts          ControlMessage HTTP 入口 + control stream SSE
 
 ## 相关文档
 
-- [01-agents.md](01-agents.md) — 进入 EngineService 之后的 Task Control Loop
+- [task-control-plane.md](task-control-plane.md) — 进入 EngineService 之后的 Task Control Loop
 - [04-extensions.md](04-extensions.md) — channel 类型与 ACP/MCP/plugin 的边界

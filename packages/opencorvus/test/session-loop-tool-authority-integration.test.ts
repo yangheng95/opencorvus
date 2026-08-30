@@ -9,7 +9,7 @@ import { Identifier } from "../src/id/id"
 import { PermissionAuthority } from "../src/permission/authority"
 import { Instance } from "../src/project/instance"
 import { Provider } from "../src/provider/provider"
-import { Session } from "../src/session"
+import { Message, Session } from "../src/session"
 import { LLM } from "../src/session/llm"
 import { SessionLoop } from "../src/session/loop"
 import { MessageStore } from "../src/session/message-store"
@@ -41,6 +41,10 @@ import { bindInternalStageTool, stageToolMaterializerBindingOf } from "../src/ag
 import { createDecisionLog } from "../src/decision-log"
 import { Database } from "../src/storage/db"
 import { ToolTurnExecutionConflictError } from "../src/tool/execution-mode"
+import { RuntimeCapabilityCatalog } from "../src/tool/capability-runtime-catalog"
+import { CatalogOccurrenceBinding } from "../src/capability/catalog-binding"
+import { ProviderToolNameCollisionError } from "../src/tool/provider-name-authority"
+import type { Tool as AITool } from "ai"
 
 function providerModel(): Provider.Model {
   return {
@@ -62,12 +66,105 @@ function providerModel(): Provider.Model {
   } as Provider.Model
 }
 
+async function bindResolvedCatalogOccurrence(input: {
+  config: Config.Info
+  model: Provider.Model
+  session: Session.Info
+  assistant: Message.Assistant
+  agentID: string
+  tools: Record<string, AITool>
+}) {
+  const catalog = await RuntimeCapabilityCatalog.snapshot({
+    config: input.config,
+    sessionID: input.session.id,
+    agentID: input.agentID,
+    executionToolIDs: Object.keys(input.tools),
+    harnessProjection: SessionLoop.harnessProjectionForResolvedTools(input.tools),
+  })
+  const payload = CatalogOccurrenceBinding.payload({
+    snapshot: catalog.snapshot,
+    materializationScope: await CatalogOccurrenceBinding.materializationScope({
+      model: input.model,
+      config: input.config,
+    }),
+    runtimeContract: SessionRuntimeContractStore.get(input.session.id),
+  })
+  const binding = await CatalogOccurrenceBinding.publish({ projectID: Instance.project.id, payload })
+  const parent = await MessageStore.get({ sessionID: input.session.id, messageID: input.assistant.parentID })
+  const admitted = await CatalogOccurrenceBinding.bindAndBeginAssistant({
+    projectID: Instance.project.id,
+    assistant: { ...input.assistant, acceptedInputMessageIDs: [input.assistant.parentID] },
+    parent,
+    binding,
+  })
+  return { admitted, payload, binding }
+}
+
 afterEach(async () => {
   await Instance.disposeAll()
   await resetMemoryDatabase()
 })
 
 describe("SessionLoop Tool execution authority integration", () => {
+  test("reserves a conditional response encoder before resolving the executable Provider surface", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const model = providerModel()
+        const config = await Config.get()
+        const agent = sessionRuntimeFromNativeAgent(await PrimaryAssistantRegistry.get("coding", { config }))
+        const session = await Session.create({ kind: "assistant", title: "Provider response encoder reservation" })
+        const user = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: session.id,
+          role: "user",
+          author: "coding",
+          agent: "coding",
+          time: { created: Date.now() },
+          model: { providerID: model.providerID, modelID: model.id },
+        })
+        const assistant: Message.Assistant = {
+          id: Identifier.ascending("message"),
+          parentID: user.id,
+          sessionID: session.id,
+          role: "assistant",
+          author: "coding",
+          agent: "coding",
+          path: { cwd: project.path, root: project.path },
+          cost: 0,
+          tokens: { total: 0, input: 0, output: 0, reasoning: 0, cache: { read: 0, write: 0 } },
+          modelID: model.id,
+          providerID: model.providerID,
+          time: { created: Date.now() },
+        }
+        const processor = SessionProcessor.create({
+          assistantMessage: assistant,
+          sessionID: session.id,
+          model,
+          abort: new AbortController().signal,
+        })
+        await expect(
+          SessionLoop.resolveTools({
+            agent,
+            agentID: "coding",
+            model,
+            session,
+            processor,
+            messages: await Session.messages({ sessionID: session.id }),
+            config,
+            reservedProviderToolNames: [
+              {
+                name: "read",
+                owner: { source: "structured", ref: `assistant:${assistant.id}:response-encoder` },
+              },
+            ],
+          }),
+        ).rejects.toBeInstanceOf(ProviderToolNameCollisionError)
+      },
+    })
+  })
+
   test("restores a persisted turn decision after database reopen and refuses a conflicting call", async () => {
     // A surface is resolved once per Provider step; a Task-root assistant Message
     // spans several. When the coordinator was built with no knowledge of that
@@ -401,7 +498,7 @@ describe("SessionLoop Tool execution authority integration", () => {
           type: "text",
           text: "Write the restart-safe permission evidence file.",
         })
-        const assistant = await Session.updateMessage({
+        const assistant: Message.Assistant = {
           id: Identifier.ascending("message"),
           parentID: user.id,
           sessionID: session.id,
@@ -414,7 +511,7 @@ describe("SessionLoop Tool execution authority integration", () => {
           modelID: model.id,
           providerID: model.providerID,
           time: { created: Date.now() },
-        })
+        }
         const abort = new AbortController().signal
         const processor = SessionProcessor.create({ assistantMessage: assistant, sessionID: session.id, model, abort })
         const tools = await SessionLoop.resolveTools({
@@ -426,6 +523,7 @@ describe("SessionLoop Tool execution authority integration", () => {
           messages: await Session.messages({ sessionID: session.id }),
           config,
         })
+        await bindResolvedCatalogOccurrence({ config, model, session, assistant, agentID: "coding", tools })
         let resolveAsked!: (request: PermissionAuthority.Request) => void
         const asked = new Promise<PermissionAuthority.Request>((resolve) => (resolveAsked = resolve))
         const stopAsked = Bus.subscribe(PermissionAuthority.Event.Asked, ({ properties }) => resolveAsked(properties))
@@ -647,7 +745,7 @@ describe("SessionLoop Tool execution authority integration", () => {
           ...user,
           extra: { workerTurnDescriptor: { id: descriptor.id, hash: descriptor.hash } },
         })
-        const assistant = await Session.updateMessage({
+        const assistant: Message.Assistant = {
           id: Identifier.ascending("message"),
           parentID: user.id,
           sessionID: session.id,
@@ -660,7 +758,7 @@ describe("SessionLoop Tool execution authority integration", () => {
           modelID: model.id,
           providerID: model.providerID,
           time: { created: Date.now() },
-        })
+        }
         SessionRuntimeContractStore.set(session.id, {
           identity: {
             identityKind: "projected-worker",
@@ -707,6 +805,14 @@ describe("SessionLoop Tool execution authority integration", () => {
           processor,
           messages: await Session.messages({ sessionID: session.id }),
           config,
+        })
+        await bindResolvedCatalogOccurrence({
+          config,
+          model,
+          session,
+          assistant,
+          agentID: projection.workerCapability.identity.agentID,
+          tools,
         })
         let resolveAsked!: (request: PermissionAuthority.Request) => void
         const asked = new Promise<PermissionAuthority.Request>((resolve) => (resolveAsked = resolve))
@@ -895,9 +1001,7 @@ describe("SessionLoop Tool execution authority integration", () => {
             lifecycle: { taskID, workScope: { kind: "task" }, attemptID: "architect-attempt-1" },
             messageAuthority: {
               user_message_id: architectUser.id,
-              control_text_parts: [
-                { part_id: architectUserPart.id, text_sha256: textSHA256(architectUserPart.text) },
-              ],
+              control_text_parts: [{ part_id: architectUserPart.id, text_sha256: textSHA256(architectUserPart.text) }],
             },
           },
         })
@@ -953,6 +1057,21 @@ describe("SessionLoop Tool execution authority integration", () => {
           projectDirectory: project.path,
           resources: { mcp: architectOwner },
         })
+        const architectCatalog = await RuntimeCapabilityCatalog.snapshot({
+          config,
+          sessionID: architectSession.id,
+          agentID: architectProjection.workerCapability.identity.agentID,
+          executionToolIDs: architectEnabled,
+        })
+        expect(
+          architectCatalog.snapshot.descriptors
+            .filter(
+              (item) =>
+                item.ref.owner_ref ===
+                `dispatch-stage:${architectProjection.workerCapability.identity.dispatchAdapterID}`,
+            )
+            .map((item) => item.ref.local_ref),
+        ).toEqual([...architectStageOwned].sort())
         const architectAbort = new AbortController().signal
         const architectProcessor = SessionProcessor.create({
           assistantMessage: architectAssistant,
@@ -973,11 +1092,14 @@ describe("SessionLoop Tool execution authority integration", () => {
           config,
         })
         const architectToolCallID = "call_architect_draft_identity"
-        const architectResult = await architectTools.view_architect_draft!.execute!({}, {
-          toolCallId: architectToolCallID,
-          messages: [],
-          abortSignal: architectAbort,
-        })
+        const architectResult = await architectTools.view_architect_draft!.execute!(
+          {},
+          {
+            toolCallId: architectToolCallID,
+            messages: [],
+            abortSignal: architectAbort,
+          },
+        )
         const architectMessage = await MessageStore.get({
           sessionID: architectSession.id,
           messageID: architectAssistant.id,
@@ -1074,7 +1196,7 @@ describe("SessionLoop Tool execution authority integration", () => {
           ...user,
           extra: { workerTurnDescriptor: { id: descriptor.id, hash: descriptor.hash } },
         })
-        const assistant = await Session.updateMessage({
+        const assistant: Message.Assistant = {
           id: Identifier.ascending("message"),
           parentID: user.id,
           sessionID: session.id,
@@ -1087,7 +1209,7 @@ describe("SessionLoop Tool execution authority integration", () => {
           modelID: model.id,
           providerID: model.providerID,
           time: { created: Date.now() },
-        })
+        }
         SessionRuntimeContractStore.set(session.id, {
           identity: {
             identityKind: "projected-worker",
@@ -1135,6 +1257,14 @@ describe("SessionLoop Tool execution authority integration", () => {
           processor,
           messages: await Session.messages({ sessionID: session.id }),
           config,
+        })
+        await bindResolvedCatalogOccurrence({
+          config,
+          model,
+          session,
+          assistant,
+          agentID: projection.workerCapability.identity.agentID,
+          tools,
         })
         let resolveAsked!: (request: PermissionAuthority.Request) => void
         const asked = new Promise<PermissionAuthority.Request>((resolve) => (resolveAsked = resolve))
@@ -1340,7 +1470,7 @@ describe("SessionLoop Tool execution authority integration", () => {
           ...user,
           extra: { workerTurnDescriptor: { id: descriptor.id, hash: descriptor.hash } },
         })
-        const assistant = await Session.updateMessage({
+        const assistant: Message.Assistant = {
           id: Identifier.ascending("message"),
           parentID: user.id,
           sessionID: session.id,
@@ -1353,7 +1483,7 @@ describe("SessionLoop Tool execution authority integration", () => {
           modelID: model.id,
           providerID: model.providerID,
           time: { created: now },
-        })
+        }
         SessionRuntimeContractStore.set(session.id, {
           identity: {
             identityKind: "projected-worker",
@@ -1402,9 +1532,31 @@ describe("SessionLoop Tool execution authority integration", () => {
           messages: await Session.messages({ sessionID: session.id }),
           config,
         })
+        await bindResolvedCatalogOccurrence({
+          config,
+          model,
+          session,
+          assistant,
+          agentID: projection.workerCapability.identity.agentID,
+          tools,
+        })
         let resolveAsked!: (request: PermissionAuthority.Request) => void
         const asked = new Promise<PermissionAuthority.Request>((resolve) => (resolveAsked = resolve))
         const stop = Bus.subscribe(PermissionAuthority.Event.Asked, ({ properties }) => resolveAsked(properties))
+        const catalogOccurrence = {
+          payload: await CatalogOccurrenceBinding.readAssistant({
+            projectID: Instance.project.id,
+            sessionID: session.id,
+            assistantMessageID: assistant.id,
+          }),
+        }
+        const stageBinding = catalogOccurrence.payload.occurrence_owner_bindings[0]
+        expect(stageBinding?.effectful_tools.map((tool) => tool.ref.local_ref)).toEqual(["register_decision"])
+        expect(stageBinding?.collector_tools.map((tool) => tool.ref.local_ref)).toEqual(["register_requirement"])
+        expect(catalogOccurrence.payload.fixed_package_digests).toEqual({
+          [`${packageRevision.scope}:${packageRevision.projectID ?? "global"}:${packageRevision.namespace}:${packageRevision.id}:${packageRevision.version}`]:
+            packageRevision.packageDigest,
+        })
         const pending = tools.register_decision!.execute!(toolInput, {
           toolCallId: toolCallID,
           messages: [],

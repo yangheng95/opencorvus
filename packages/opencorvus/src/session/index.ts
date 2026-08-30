@@ -1430,8 +1430,17 @@ export namespace Session {
     return upsertMessageRow(msg, { publishCreated: true, publishUpdated: true })
   })
 
-  /** Persist one assistant Turn and consume its accepted delivery batch atomically. */
-  export const beginAssistantReply = fn(Message.Assistant, async (msg) => {
+  /**
+   * Persist one assistant Turn, consume its accepted delivery batch, and
+   * commit one synchronous occurrence owner in the same transaction. The
+   * owner callback must perform no I/O; Catalog binding uses it only after its
+   * content-addressed blob has been fully published and verified.
+   */
+  export async function beginAssistantReplyWithCommit(
+    raw: z.input<typeof Message.Assistant>,
+    commit: (db: Database.TxOrDb) => void,
+  ) {
+    const msg = Message.Assistant.parse(raw)
     const acceptedInputMessageIDs = msg.acceptedInputMessageIDs
     if (!acceptedInputMessageIDs) {
       throw new Error(`New assistant Message ${msg.id} is missing its accepted input Message identities`)
@@ -1467,8 +1476,14 @@ export namespace Session {
         db.update(MessageTable).set({ data }).where(eq(MessageTable.id, messageID)).run()
         Bus.publishOwnedInTransaction(Message.Event.Updated, { info: persisted })
       }
+      commit(db)
     })
-  })
+  }
+
+  /** Persist one assistant Turn and consume its accepted delivery batch atomically. */
+  export const beginAssistantReply = fn(Message.Assistant, async (msg) =>
+    beginAssistantReplyWithCommit(msg, () => undefined),
+  )
 
   const PublishCompactionCheckpointInput = z.object({
     info: Message.Assistant,

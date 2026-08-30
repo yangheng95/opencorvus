@@ -1,6 +1,7 @@
 import z from "zod"
 
 export const CapabilityKind = z.enum([
+  "capability_set",
   "skill",
   "tool",
   "mcp_server",

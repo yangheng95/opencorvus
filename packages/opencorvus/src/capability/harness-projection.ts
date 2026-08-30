@@ -1,6 +1,6 @@
-import { createHash } from "node:crypto"
 import z from "zod"
 import { CapabilityRef, CapabilityRefCodec } from "./ref"
+import { canonicalDigestSource, compareCanonicalStrings } from "@/util/canonical-digest"
 
 export const HarnessContext = z.discriminatedUnion("kind", [
   z.object({ kind: z.literal("conversation"), agent_id: z.enum(["chat", "work"]) }).strict(),
@@ -53,13 +53,12 @@ function canonicalRefs(refs: readonly CapabilityRef[], label: string): Capabilit
     byID.set(id, ref)
   }
   return [...byID.entries()]
-    .sort(([left], [right]) => left.localeCompare(right))
+    .sort(([left], [right]) => compareCanonicalStrings(left, right))
     .map(([, ref]) => Object.freeze({ ...ref }))
 }
 
 function hashProjection(input: HarnessProjectionInput): string {
-  // SHA-256 means Secure Hash Algorithm with a 256-bit digest.
-  return createHash("sha256").update(JSON.stringify(input)).digest("hex")
+  return canonicalDigestSource("harness-projection-v1", input).sha256
 }
 
 function freezeParsedRefs(refs: CapabilityRef[]): CapabilityRef[] {

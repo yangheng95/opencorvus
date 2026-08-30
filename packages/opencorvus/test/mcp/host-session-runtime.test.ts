@@ -196,6 +196,9 @@ describe("host-owned native Session MCP composition", () => {
     const createOwner = spyOn(MCP, "createScopedConnectionOwner").mockImplementation((id) => {
       const owner: MCP.ScopedConnectionOwner = {
         id,
+        catalogSnapshot() {
+          return { owner_id: id, owner_revision: "0".repeat(64), entries: [] }
+        },
         async close() {
           closed.set(id, (closed.get(id) ?? 0) + 1)
         },

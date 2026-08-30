@@ -1,5 +1,11 @@
 # Specs Storage Index
 
+Latest search-native Capability Phase A2 implementation: [`2026-08-30-search-native-capability-phase-a2.md`](records/2026-08/2026-08-30-search-native-capability-phase-a2.md).
+
+Previous search-native Capability Phase A1 implementation: [`2026-08-30-search-native-capability-phase-a1.md`](records/2026-08/2026-08-30-search-native-capability-phase-a1.md).
+
+Latest search-native capability Harness investigation and refactor design: [`2026-08-30-search-native-capability-harness-refactor.md`](records/2026-08/2026-08-30-search-native-capability-harness-refactor.md).
+
 Latest scheduling algorithm razor audit: [`2026-08-30-scheduling-algorithm-razor-audit.md`](records/2026-08/2026-08-30-scheduling-algorithm-razor-audit.md).
 
 Latest scheduling architecture remediation: [`2026-08-30-scheduling-architecture-remediation.md`](records/2026-08/2026-08-30-scheduling-architecture-remediation.md).
@@ -963,8 +969,6 @@ Latest Chat automatic Work-routing removal: [`2026-07-29-chat-automatic-work-rou
 
 Current Code and Work Agent platform architecture: [`17-code-work-agent-platform.md`](current/architecture/17-code-work-agent-platform.md).
 
-Current Scheduled Automation scope and lifecycle architecture: [`18-scheduled-automations.md`](current/architecture/18-scheduled-automations.md).
-
 Latest Work harness and Chat/Mission infrastructure convergence: [`2026-07-29-work-harness-chat-mission-infrastructure-convergence.md`](records/2026-07/2026-07-29-work-harness-chat-mission-infrastructure-convergence.md).
 
 Latest anonymous Project deletion and suffix repair: [`2026-07-29-anonymous-project-deletion-and-suffix.md`](records/2026-07/2026-07-29-anonymous-project-deletion-and-suffix.md).
@@ -1338,9 +1342,6 @@ Latest completed message-card auto-collapse repair: [`2026-07-24-completed-messa
 Latest delegated-context prominence repair: [`2026-07-24-delegated-context-prominence.md`](records/2026-07/2026-07-24-delegated-context-prominence.md).
 
 Latest Agent card palette and running Tool motion: [`2026-07-24-agent-card-palette-and-running-tool-wave.md`](records/2026-07/2026-07-24-agent-card-palette-and-running-tool-wave.md).
-
-Current Agent facts, prompt projection, domain artifact, physical turn, and
-handoff refactor: [`15-agent-facts-and-turns.md`](current/architecture/15-agent-facts-and-turns.md).
 
 Latest Mirror Prism single-squad cutover: [`2026-07-23-mirror-prism-single-squad-cutover.md`](records/2026-07/2026-07-23-mirror-prism-single-squad-cutover.md).
 

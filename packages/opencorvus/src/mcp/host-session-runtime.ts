@@ -6,6 +6,9 @@ import { BrowserMCPBuiltin } from "./browser/builtin"
 import { ComputerMCPBuiltin } from "./computer/builtin"
 import { ComputerHostRuntime } from "./computer/host-runtime"
 import { computerRuntimeScopeIdentity } from "./computer/runtime-scope"
+import { canonicalDigestSource, compareCanonicalStrings } from "@/util/canonical-digest"
+import { capabilityRef, type CapabilityRef } from "@/capability/ref"
+import { mergeProviderToolMaps } from "@/tool/provider-name-authority"
 
 type HostSessionRuntimeKind = "browser" | "computer"
 
@@ -19,6 +22,7 @@ const connectionOwners = createInstanceState(
   },
   "host-session-runtime-mcp",
 )
+const catalogToolIDs = new WeakMap<MCP.ScopedConnectionOwner, readonly string[]>()
 
 function ownerKey(kind: HostSessionRuntimeKind, sessionID: string): string {
   return `${kind}:${sessionID}`
@@ -71,16 +75,66 @@ async function ownedBuiltinTools(input: {
     connectionOwner: owner,
     connectionIdentity: owner.id,
   }
-  if (!input.toolNames) return MCP.scopedToolsForServer(scope)
-  const tools = await Promise.all(
-    input.toolNames.map(
-      async (toolName) => [`${input.serverName}_${toolName}`, await MCP.scopedTool({ ...scope, toolName })] as const,
-    ),
-  )
-  return Object.fromEntries(tools)
+  const tools = !input.toolNames
+    ? await MCP.scopedToolsForServer(scope)
+    : Object.fromEntries(
+        await Promise.all(
+          input.toolNames.map(
+            async (toolName) =>
+              [`${input.serverName}_${toolName}`, await MCP.scopedTool({ ...scope, toolName })] as const,
+          ),
+        ),
+      )
+  catalogToolIDs.set(owner, Object.freeze(Object.keys(tools).sort(compareCanonicalStrings)))
+  return tools
 }
 
 export namespace HostSessionMcpRuntime {
+  export function catalogOwnerRef(ownerID: string): string {
+    return `host-session-mcp:${ownerID}`
+  }
+
+  export function catalogSnapshots(sessionID: string): readonly {
+    owner_revision: string
+    owner: MCP.ScopedCatalogSnapshot
+    tool_ids: readonly string[]
+  }[] {
+    const owners = connectionOwners()
+    return Object.freeze(
+      (["browser", "computer"] as const).flatMap((kind) => {
+        const owner = owners.get(ownerKey(kind, sessionID))
+        if (!owner) return []
+        const snapshot = owner.catalogSnapshot()
+        const toolIDs = catalogToolIDs.get(owner) ?? Object.freeze([])
+        return [
+          Object.freeze({
+            owner_revision: canonicalDigestSource("host-session-mcp-catalog-v1", {
+              scoped_owner_revision: snapshot.owner_revision,
+              tool_ids: toolIDs,
+            }).sha256,
+            owner: snapshot,
+            tool_ids: toolIDs,
+          }),
+        ]
+      }),
+    )
+  }
+
+  export function catalogToolRefs(sessionID: string): readonly CapabilityRef[] {
+    return Object.freeze(
+      catalogSnapshots(sessionID).flatMap((snapshot) =>
+        snapshot.tool_ids.map((toolID) =>
+          capabilityRef({
+            kind: "mcp_tool",
+            source: "project",
+            owner_ref: catalogOwnerRef(snapshot.owner.owner_id),
+            local_ref: toolID,
+          }),
+        ),
+      ),
+    )
+  }
+
   export function computerOwnerIdentity(sessionID: string): string {
     return computerRuntimeScopeIdentity({ ownerKind: "session", sessionID })
   }
@@ -129,8 +183,7 @@ export namespace HostSessionMcpRuntime {
             config,
             sessionID,
             serverName: BrowserMCPBuiltin.ServerName,
-            owner: () =>
-              connectionOwner("browser", sessionID, browserOwnerIdentity(sessionID)),
+            owner: () => connectionOwner("browser", sessionID, browserOwnerIdentity(sessionID)),
             bindRuntime: (declaration) => declaration,
           })
         : {}
@@ -146,8 +199,7 @@ export namespace HostSessionMcpRuntime {
             sessionID,
             serverName: ComputerMCPBuiltin.ServerName,
             toolNames: ComputerMCPBuiltin.ImportableToolNames,
-            owner: () =>
-              connectionOwner("computer", sessionID, computerOwnerIdentity(sessionID)),
+            owner: () => connectionOwner("computer", sessionID, computerOwnerIdentity(sessionID)),
             bindRuntime: (declaration, owner) =>
               ComputerMCPBuiltin.withRuntimeScope(
                 declaration as typeof computerDeclaration.config,
@@ -157,6 +209,11 @@ export namespace HostSessionMcpRuntime {
           })
         : {}
 
-    return { ...ordinaryTools, ...browserTools, ...computerTools }
+    const authorityRef = (group: string) => (name: string) => `host-session:${group}:${name}`
+    return mergeProviderToolMaps([
+      { source: "mcp", tools: ordinaryTools, ref: authorityRef("ordinary") },
+      { source: "mcp", tools: browserTools, ref: authorityRef("browser") },
+      { source: "mcp", tools: computerTools, ref: authorityRef("computer") },
+    ])
   }
 }

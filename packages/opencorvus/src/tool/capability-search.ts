@@ -1,38 +1,34 @@
-import { Config } from "@/config/config"
 import { EffectiveConfig } from "@/config/effective"
-import { CapabilityCatalog, CapabilitySearchInput, searchCapabilityCatalog } from "./capability-catalog"
+import { CapabilitySearchInput } from "@/capability/descriptor"
+import { searchCapabilityCatalog } from "@/capability/catalog"
+import { CatalogOccurrenceBinding } from "@/capability/catalog-binding"
 import { tool as aiTool } from "ai"
 import { createAiSdkToolFromInfo } from "./ai-sdk-adapter"
 import { Tool } from "./tool"
-import { missionVisibleExpertSquadIDs, requireMissionSession } from "@/mission/session"
+import { Instance } from "@/project/instance"
 
 export const CAPABILITY_SEARCH_TOOL_ID = "capability_search" as const
 export const CAPABILITY_SEARCH_DESCRIPTION =
   'Search the caller-visible capability catalog by fuzzy text and exact filters. Stored kind "tool" means a platform tool and "mcp_tool" means a Model Context Protocol tool; omit kinds to search both, or use next_owner_kinds:["call_tool"] for every executable capability. Results are metadata references only: this tool never mounts, authenticates, approves, or executes a capability.'
 
-export const CapabilitySearchTool = Tool.define(CAPABILITY_SEARCH_TOOL_ID, async (initContext) => {
-  const config = initContext?.config ?? (await Config.get())
+export const CapabilitySearchTool = Tool.define(CAPABILITY_SEARCH_TOOL_ID, async () => {
   return {
     description: CAPABILITY_SEARCH_DESCRIPTION,
     parameters: CapabilitySearchInput,
     async execute(params, ctx) {
       const input = CapabilitySearchInput.parse(params)
-      const { caller, snapshot } = await CapabilityCatalog.runtimeSnapshot({
-        config,
+      const payload = await CatalogOccurrenceBinding.readAssistant({
+        projectID: Instance.project.id,
         sessionID: ctx.sessionID,
-        agentID: ctx.agent,
-        executionToolIDs: ctx.executionSurface.toolIDs,
-        harnessProjection: ctx.executionSurface.harness_projection,
+        assistantMessageID: ctx.messageID,
       })
-      const mission = caller === "mission" ? await requireMissionSession(ctx.sessionID) : undefined
-      const effectiveInput = mission ? { ...input, product_pillar: mission.productPillar } : input
-      const results = searchCapabilityCatalog(snapshot, caller, effectiveInput)
-      const visibleExpertSquadCount = snapshot.entries.filter(
-        (entry) => entry.ref.kind === "expert_squad" && entry.discoverable_by.includes(caller),
+      const snapshot = CatalogOccurrenceBinding.searchSnapshot(payload)
+      const caller = payload.context.caller
+      const results = searchCapabilityCatalog(snapshot, caller, input)
+      const visibleExpertSquadCount = snapshot.views.filter(
+        (entry) => entry.descriptor_ref.kind === "expert_squad" && entry.discoverable_by.includes(caller),
       ).length
-      const heldExpertSquadCount = mission ? missionVisibleExpertSquadIDs(mission).length : undefined
-      const productPillar = mission?.productPillar ?? input.product_pillar
-      const requestedProductPillar = input.product_pillar
+      const productPillar = input.product_pillar
       return {
         title: "Capability search",
         metadata: {
@@ -40,22 +36,14 @@ export const CapabilitySearchTool = Tool.define(CAPABILITY_SEARCH_TOOL_ID, async
           caller,
           result_count: results.length,
           visible_expert_squad_count: visibleExpertSquadCount,
-          ...(heldExpertSquadCount !== undefined ? { held_expert_squad_count: heldExpertSquadCount } : {}),
           ...(productPillar ? { product_pillar: productPillar } : {}),
-          ...(requestedProductPillar && requestedProductPillar !== productPillar
-            ? { requested_product_pillar: requestedProductPillar }
-            : {}),
         },
         output: JSON.stringify(
           {
             catalog_revision: snapshot.catalog_revision,
             caller,
             visible_expert_squad_count: visibleExpertSquadCount,
-            ...(heldExpertSquadCount !== undefined ? { held_expert_squad_count: heldExpertSquadCount } : {}),
             ...(productPillar ? { product_pillar: productPillar } : {}),
-            ...(requestedProductPillar && requestedProductPillar !== productPillar
-              ? { requested_product_pillar: requestedProductPillar }
-              : {}),
             results,
           },
           null,

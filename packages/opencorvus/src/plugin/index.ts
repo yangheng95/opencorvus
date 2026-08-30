@@ -25,15 +25,19 @@ import { SnowflakeCortexAuthPlugin } from "./snowflake-cortex"
 import { XaiAuthPlugin } from "./xai"
 import { GitlabAuthPlugin } from "./gitlab"
 import { IN_PROCESS_BASE_URL } from "@/server/in-process-client"
-import { readFile } from "node:fs/promises"
+import { chmod, lstat, mkdir, readFile, readdir, realpath, rename, rm, writeFile } from "node:fs/promises"
 import path from "node:path"
-import { fileURLToPath } from "node:url"
+import { fileURLToPath, pathToFileURL } from "node:url"
+import { createHash, randomUUID } from "node:crypto"
 import z from "zod"
 import { lazy } from "@/util/lazy"
 import { Auth } from "@/auth"
 import { ProviderCredentialExchange } from "@/provider/credential-exchange"
 import { Session } from "@/session"
 import { MessageStore } from "@/session/message-store"
+import { canonicalDigestSource, compareCanonicalStrings } from "@/util/canonical-digest"
+import { Installation } from "@/installation"
+import { Global } from "@/global"
 
 export type ChatParamsOutput = Parameters<Required<Hooks>["chat.params"]>[1]
 type ChatHeadersOutput = Parameters<Required<Hooks>["chat.headers"]>[1]
@@ -50,7 +54,13 @@ export type PhysicalProviderHooks = {
 }
 
 type RuntimeHooks = Hooks & PhysicalProviderHooks
-type HookEntry = { owner: "internal" | "project"; specifier: string; serviceID?: string; hook: RuntimeHooks }
+type HookEntry = {
+  owner: "internal" | "project"
+  specifier: string
+  serviceID?: string
+  revision: string
+  hook: RuntimeHooks
+}
 
 export namespace Plugin {
   const log = Log.create({ service: "plugin" })
@@ -207,30 +217,309 @@ export namespace Plugin {
     return selected
   }
 
-  function createPluginResources(manifestPath: string, resources: PluginResourceManifestEntry[]): PluginResources {
+  async function createPluginResources(
+    manifestPath: string,
+    resources: PluginResourceManifestEntry[],
+  ): Promise<{ resources: PluginResources; revision: string }> {
     const root = pluginManifestResourceRoot(manifestPath)
-    const resolved = resources.map((resource): PluginResource => {
+    const seen = new Set<string>()
+    const budget = { files: 0, bytes: 0 }
+    const resolved: PluginResource[] = []
+    const revisions: Array<{ id: string; kind: string; selected_path: string; artifact_digest: string }> = []
+    for (const resource of resources) {
+      if (seen.has(resource.id)) throw new Error(`Plugin resource ID is duplicated: ${resource.id}`)
+      seen.add(resource.id)
       const selectedPath = resourceManifestPath(resource)
-      return {
+      const captured = await capturePluginResource(path.resolve(root, selectedPath), budget)
+      const absolutePath = await publishPluginResource(captured, resource.id)
+      resolved.push({
         id: resource.id,
         kind: resource.kind,
         path: selectedPath,
-        absolutePath: path.resolve(root, selectedPath),
-      }
-    })
+        absolutePath,
+      })
+      revisions.push({
+        id: resource.id,
+        kind: resource.kind,
+        selected_path: selectedPath,
+        artifact_digest: captured.digest,
+      })
+    }
     return {
-      all: () => [...resolved],
-      get(id) {
-        const resource = resolved.find((item) => item.id === id)
-        if (!resource) throw new Error(`Plugin resource not available: ${id}`)
-        return resource
+      resources: {
+        all: () => [...resolved],
+        get(id) {
+          const resource = resolved.find((item) => item.id === id)
+          if (!resource) throw new Error(`Plugin resource not available: ${id}`)
+          return resource
+        },
       },
+      revision: canonicalDigestSource("plugin-resource-snapshot-v1", {
+        platform: process.platform,
+        resources: revisions.sort((left, right) => compareCanonicalStrings(left.id, right.id)),
+      }).sha256,
     }
   }
 
   function pluginFailure(phase: string, specifier: string, cause: unknown) {
     const message = cause instanceof Error ? cause.message : String(cause)
     return new Error(`Plugin ${phase} failed for ${specifier}: ${message}`, { cause })
+  }
+
+  const PLUGIN_ARTIFACT_MAX_FILES = 20_000
+  const PLUGIN_ARTIFACT_MAX_BYTES = 512 * 1024 * 1024
+  type PluginModuleArtifact = Readonly<{
+    entry: string
+    revision: string
+    bytes: Buffer
+  }>
+
+  type CapturedPluginResourceEntry =
+    | Readonly<{ kind: "directory"; relative: string }>
+    | Readonly<{ kind: "file"; relative: string; mode: number; bytes: Buffer }>
+
+  type CapturedPluginResource = Readonly<{
+    rootKind: "directory" | "file"
+    digest: string
+    entries: readonly CapturedPluginResourceEntry[]
+  }>
+
+  function bytesSHA256(bytes: Uint8Array): string {
+    return createHash("sha256").update(bytes).digest("hex")
+  }
+
+  async function pluginModuleEntry(specifier: string): Promise<string> {
+    let candidate = specifier.startsWith("file://") ? fileURLToPath(specifier) : specifier
+    try {
+      if (!path.isAbsolute(candidate)) candidate = await Bun.resolve(candidate, Instance.directory)
+      const resolved = await realpath(candidate)
+      const stat = await lstat(resolved)
+      if (stat.isFile()) return resolved
+      if (!stat.isDirectory()) throw new Error("resolved entry is not a file or directory")
+      return realpath(await Bun.resolve(resolved, Instance.directory))
+    } catch (cause) {
+      throw new Error(`Plugin module ${specifier} has no Bun-resolvable deployment entry`, { cause })
+    }
+  }
+
+  async function buildPluginModuleArtifact(specifier: string): Promise<PluginModuleArtifact> {
+    const entry = await pluginModuleEntry(specifier)
+    const build = await Bun.build({
+      entrypoints: [entry],
+      target: "bun",
+      format: "esm",
+      metafile: true,
+      splitting: false,
+      packages: "bundle",
+    })
+    if (!build.success) {
+      throw new Error(
+        `Plugin module ${specifier} could not be materialized by the Bun loader: ${build.logs.map((log) => log.message).join("; ")}`,
+      )
+    }
+    if (!build.metafile) throw new Error(`Plugin module ${specifier} build produced no module graph`)
+    if (build.outputs.length !== 1) {
+      throw new Error(`Plugin module ${specifier} build produced ${build.outputs.length} outputs; expected one`)
+    }
+    const bytes = Buffer.from(await build.outputs[0]!.arrayBuffer())
+    const inputCount = Object.keys(build.metafile.inputs).length
+    if (inputCount > PLUGIN_ARTIFACT_MAX_FILES || bytes.byteLength > PLUGIN_ARTIFACT_MAX_BYTES) {
+      throw new Error(
+        `Plugin module artifact exceeds ${PLUGIN_ARTIFACT_MAX_FILES} inputs or ${PLUGIN_ARTIFACT_MAX_BYTES} output bytes`,
+      )
+    }
+    return Object.freeze({ entry, revision: bytesSHA256(bytes), bytes })
+  }
+
+  const pluginModulePublications = new Map<string, Promise<string>>()
+
+  async function publishPluginModuleArtifact(artifact: PluginModuleArtifact): Promise<string> {
+    const active = pluginModulePublications.get(artifact.revision)
+    if (active) return active
+    const publication = (async () => {
+      const outdir = path.join(Global.Path.cache, "plugin-modules", "bundle-v1")
+      const target = path.join(outdir, `${artifact.revision}.mjs`)
+      await mkdir(outdir, { recursive: true })
+      const existing = await readFile(target).catch((error: NodeJS.ErrnoException) => {
+        if (error.code === "ENOENT") return undefined
+        throw error
+      })
+      if (existing) {
+        if (bytesSHA256(existing) !== artifact.revision) {
+          throw new Error(`Plugin module content-addressed cache is corrupt at ${target}`)
+        }
+        return target
+      }
+      const temporary = path.join(outdir, `.${artifact.revision}.${process.pid}.${randomUUID()}.tmp`)
+      await writeFile(temporary, artifact.bytes, { flag: "wx" })
+      try {
+        await rename(temporary, target)
+      } catch (error) {
+        const winner = await readFile(target).catch((readError: NodeJS.ErrnoException) => {
+          if (readError.code === "ENOENT") return undefined
+          throw readError
+        })
+        if (!winner || bytesSHA256(winner) !== artifact.revision) throw error
+      } finally {
+        await rm(temporary, { force: true })
+      }
+      return target
+    })()
+    pluginModulePublications.set(artifact.revision, publication)
+    try {
+      return await publication
+    } finally {
+      pluginModulePublications.delete(artifact.revision)
+    }
+  }
+
+  async function capturePluginResource(
+    source: string,
+    budget: { files: number; bytes: number },
+  ): Promise<CapturedPluginResource> {
+    const root = await realpath(source)
+    const rootStat = await lstat(root)
+    const rootKind = rootStat.isDirectory() ? "directory" : rootStat.isFile() ? "file" : undefined
+    if (!rootKind) throw new Error(`Unsupported Plugin resource artifact: ${source}`)
+    const captured: CapturedPluginResourceEntry[] = []
+    const visit = async (absolute: string, relative: string, ancestors: ReadonlySet<string>): Promise<void> => {
+      const stat = await lstat(absolute)
+      if (stat.isSymbolicLink()) {
+        const target = await realpath(absolute)
+        if (ancestors.has(target)) throw new Error(`Plugin resource contains a symlink cycle at ${relative || "."}`)
+        await visit(target, relative, new Set([...ancestors, target]))
+        return
+      }
+      if (stat.isDirectory()) {
+        captured.push(Object.freeze({ kind: "directory", relative }))
+        const children = (await readdir(absolute, { withFileTypes: true })).sort((left, right) =>
+          compareCanonicalStrings(left.name, right.name),
+        )
+        for (const child of children) {
+          await visit(
+            path.join(absolute, child.name),
+            relative ? `${relative}/${child.name}` : child.name,
+            ancestors,
+          )
+        }
+        return
+      }
+      if (!stat.isFile()) throw new Error(`Unsupported Plugin resource entry: ${absolute}`)
+      const bytes = await readFile(absolute)
+      budget.files++
+      budget.bytes += bytes.byteLength
+      if (budget.files > PLUGIN_ARTIFACT_MAX_FILES || budget.bytes > PLUGIN_ARTIFACT_MAX_BYTES) {
+        throw new Error(
+          `Plugin resources exceed ${PLUGIN_ARTIFACT_MAX_FILES} files or ${PLUGIN_ARTIFACT_MAX_BYTES} bytes`,
+        )
+      }
+      captured.push(Object.freeze({ kind: "file", relative, mode: stat.mode & 0o777, bytes }))
+    }
+    await visit(root, "", new Set([root]))
+    const hash = createHash("sha256").update(`plugin-resource-artifact-v1\0${rootKind}\0`)
+    for (const entry of captured) {
+      hash.update(`${entry.kind === "directory" ? "d" : "f"}\0${entry.relative}\0`)
+      if (entry.kind === "file") {
+        hash.update(`${entry.mode}\0${entry.bytes.byteLength}\0`)
+        hash.update(entry.bytes)
+      }
+    }
+    return Object.freeze({ rootKind, digest: hash.digest("hex"), entries: Object.freeze(captured) })
+  }
+
+  function pluginResourcePayloadPath(root: string, kind: CapturedPluginResource["rootKind"]): string {
+    return path.join(root, kind === "directory" ? "directory" : "file")
+  }
+
+  async function writeCapturedPluginResource(root: string, captured: CapturedPluginResource): Promise<string> {
+    const payload = pluginResourcePayloadPath(root, captured.rootKind)
+    if (captured.rootKind === "directory") await mkdir(payload, { recursive: true })
+    for (const entry of captured.entries) {
+      const target = entry.relative
+        ? path.join(payload, ...entry.relative.split("/"))
+        : payload
+      if (entry.kind === "directory") {
+        await mkdir(target, { recursive: true })
+        continue
+      }
+      await mkdir(path.dirname(target), { recursive: true })
+      await writeFile(target, entry.bytes, { flag: "wx", mode: entry.mode })
+      await chmod(target, entry.mode)
+    }
+    await writeFile(
+      path.join(root, "receipt.json"),
+      `${JSON.stringify({ schema_version: 1, digest: captured.digest, root_kind: captured.rootKind })}\n`,
+      { flag: "wx" },
+    )
+    return payload
+  }
+
+  async function verifyPublishedPluginResource(
+    root: string,
+    expected: CapturedPluginResource,
+  ): Promise<string | undefined> {
+    const receipt = await readFile(path.join(root, "receipt.json"), "utf8").catch((error: NodeJS.ErrnoException) => {
+      if (error.code === "ENOENT") return undefined
+      throw error
+    })
+    if (!receipt) return undefined
+    const parsed = z
+      .object({
+        schema_version: z.literal(1),
+        digest: z.string().regex(/^[a-f0-9]{64}$/),
+        root_kind: z.enum(["directory", "file"]),
+      })
+      .strict()
+      .safeParse(JSON.parse(receipt))
+    if (!parsed.success || parsed.data.digest !== expected.digest || parsed.data.root_kind !== expected.rootKind) {
+      throw new Error(`Plugin resource content-addressed cache receipt is corrupt at ${root}`)
+    }
+    const payload = pluginResourcePayloadPath(root, expected.rootKind)
+    const verified = await capturePluginResource(payload, { files: 0, bytes: 0 })
+    if (verified.digest !== expected.digest) {
+      throw new Error(`Plugin resource content-addressed cache payload is corrupt at ${payload}`)
+    }
+    return payload
+  }
+
+  const pluginResourcePublications = new Map<string, Promise<string>>()
+
+  async function publishPluginResource(captured: CapturedPluginResource, resourceID: string): Promise<string> {
+    const active = pluginResourcePublications.get(captured.digest)
+    if (active) return active
+    const publication = (async () => {
+      const outdir = path.join(Global.Path.cache, "plugin-resources", "snapshot-v1")
+      const target = path.join(outdir, captured.digest)
+      await mkdir(outdir, { recursive: true })
+      const existing = await verifyPublishedPluginResource(target, captured)
+      if (existing) return existing
+      const staging = path.join(outdir, `.${captured.digest}.${process.pid}.${randomUUID()}.tmp`)
+      await mkdir(staging, { recursive: false })
+      try {
+        await writeCapturedPluginResource(staging, captured)
+        try {
+          await rename(staging, target)
+        } catch (error) {
+          const winner = await verifyPublishedPluginResource(target, captured)
+          if (!winner) throw error
+        }
+      } finally {
+        await rm(staging, { recursive: true, force: true })
+      }
+      const published = await verifyPublishedPluginResource(target, captured)
+      if (!published) throw new Error(`Plugin resource ${resourceID} was not published at ${target}`)
+      return published
+    })()
+    pluginResourcePublications.set(captured.digest, publication)
+    try {
+      return await publication
+    } finally {
+      pluginResourcePublications.delete(captured.digest)
+    }
+  }
+
+  async function pluginModuleRevision(specifier: string): Promise<string> {
+    return (await buildPluginModuleArtifact(specifier)).revision
   }
 
   const state = createInstanceState(
@@ -261,6 +550,10 @@ export namespace Plugin {
           hooks.push({
             owner: "internal",
             specifier,
+            revision: canonicalDigestSource("internal-plugin-v1", {
+              specifier,
+              opencorvus_version: Installation.VERSION,
+            }).sha256,
             hook: (await plugin(pluginInput(emptyResources(), specifier))) as RuntimeHooks,
           })
         } catch (cause) {
@@ -283,9 +576,17 @@ export namespace Plugin {
         diagnosticSpecifier = plugin,
         serviceID?: string,
         resources = emptyResources(),
+        options: { artifact?: PluginModuleArtifact; revision?: string } = {},
       ) {
         try {
-          const mod = await import(plugin)
+          const artifact = options.artifact ?? (await buildPluginModuleArtifact(plugin))
+          const moduleRevision = options.revision ?? artifact.revision
+          await TestHooks.afterModuleArtifactBuilt?.({
+            specifier: diagnosticSpecifier,
+            revision: artifact.revision,
+          })
+          const modulePath = await publishPluginModuleArtifact(artifact)
+          const mod = await import(pathToFileURL(modulePath).href)
           const seen = new Set<PluginInstance>()
           const loaded: HookEntry[] = []
           for (const [_name, fn] of Object.entries<PluginInstance>(mod)) {
@@ -295,6 +596,7 @@ export namespace Plugin {
               owner: "project",
               specifier: diagnosticSpecifier,
               serviceID,
+              revision: moduleRevision,
               hook: await fn(pluginInput(resources, diagnosticSpecifier)),
             })
           }
@@ -312,14 +614,28 @@ export namespace Plugin {
             const raw = await readFile(manifestPath, "utf8")
             const manifest = PluginManifest.parse(JSON.parse(raw))
             const backend = manifestModuleSpecifier(manifest)
-            const resources = createPluginResources(manifestPath, manifest.resources)
+            const backendArtifact = await buildPluginModuleArtifact(backend)
+            const resourceSnapshot = await createPluginResources(manifestPath, manifest.resources)
             log.info("loading plugin manifest", {
               path: plugin,
               packageSpecifier: manifest.packageSpecifier,
               backendExport: manifest.backendExport,
               serviceID: manifest.serviceID,
             })
-            await loadPluginModule(backend, plugin, manifest.serviceID, resources)
+            await loadPluginModule(
+              backend,
+              plugin,
+              manifest.serviceID,
+              resourceSnapshot.resources,
+              {
+                artifact: backendArtifact,
+                revision: canonicalDigestSource("plugin-manifest-module-v2", {
+                  manifest_bytes: raw,
+                  backend_revision: backendArtifact.revision,
+                  resource_revision: resourceSnapshot.revision,
+                }).sha256,
+              },
+            )
           } catch (cause) {
             throw pluginFailure("manifest load", plugin, cause)
           }
@@ -476,6 +792,41 @@ export namespace Plugin {
 
   export async function list() {
     return state().then((x) => x.hooks.map((entry) => entry.hook))
+  }
+
+  /** Exact identity of the loaded hook surface for occurrence materialization. */
+  export async function revision(): Promise<string> {
+    const [current, config] = await Promise.all([state(), Config.get()])
+    return canonicalDigestSource("plugin-materialization-revision-v1", {
+      opencorvus_version: Installation.VERSION,
+      configured_specifiers: [...(config.plugin ?? [])].sort(compareCanonicalStrings),
+      loaded_hooks: current.hooks
+        .map((entry) => ({
+          owner: entry.owner,
+          specifier: entry.specifier,
+          service_id: entry.serviceID ?? null,
+          hook_names: Reflect.ownKeys(entry.hook)
+            .filter((key): key is string => typeof key === "string")
+            .sort(compareCanonicalStrings),
+          revision: entry.revision,
+        }))
+        .sort((left, right) =>
+          compareCanonicalStrings(
+            `${left.owner}\u0000${left.specifier}\u0000${left.service_id ?? ""}`,
+            `${right.owner}\u0000${right.specifier}\u0000${right.service_id ?? ""}`,
+          ),
+        ),
+    }).sha256
+  }
+
+  export namespace TestHooks {
+    export let afterModuleArtifactBuilt:
+      | ((input: { specifier: string; revision: string }) => void | Promise<void>)
+      | undefined
+
+    export function moduleRevision(specifier: string): Promise<string> {
+      return pluginModuleRevision(specifier)
+    }
   }
 
   /**

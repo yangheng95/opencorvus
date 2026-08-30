@@ -3906,14 +3906,27 @@ export namespace PromptProfileResolver {
     }),
   )
 
-  export async function recommendationCatalog(input: {
+  /** Complete owner-published index. Caller product-pillar and held-set
+   * filtering belongs to the runtime catalog projection, not this revision. */
+  export async function catalogIndexSnapshot(projectDirectory: string): Promise<{
+    revision: string
+    entries: readonly ExpertSquadCatalogIndexEntry[]
+  }> {
+    const { effectiveRows, revision } = await catalogInventory(projectDirectory)
+    return Object.freeze({
+      revision,
+      entries: Object.freeze(effectiveRows.map((row) => ExpertSquadCatalogIndexEntrySchema.parse(row.index))),
+    })
+  }
+
+  export async function recommendationCatalogSnapshot(input: {
     projectDirectory: string
     productPillar: "code" | "work"
     restrictToExpertSquadIDs?: readonly string[]
-  }): Promise<ExpertSquadCatalogIndexEntry[]> {
+  }): Promise<{ revision: string; entries: readonly ExpertSquadCatalogIndexEntry[] }> {
     const restrictedIDs = input.restrictToExpertSquadIDs ? [...new Set(input.restrictToExpertSquadIDs)] : undefined
-    const { effectiveRows, revision } = await catalogInventory(input.projectDirectory)
-    const byID = new Map(effectiveRows.map((row) => [row.index.id, row.index]))
+    const { entries, revision } = await catalogIndexSnapshot(input.projectDirectory)
+    const byID = new Map(entries.map((entry) => [entry.id, entry]))
     const unknown = (restrictedIDs ?? []).filter((id) => !byID.has(id))
     const requested =
       restrictedIDs === undefined
@@ -3938,7 +3951,18 @@ export namespace PromptProfileResolver {
       })
     }
     const selected = requested.filter((squad) => squad.product_pillars.includes(input.productPillar))
-    return selected.map((squad) => ExpertSquadCatalogIndexEntrySchema.parse(squad))
+    return Object.freeze({
+      revision,
+      entries: Object.freeze(selected.map((squad) => ExpertSquadCatalogIndexEntrySchema.parse(squad))),
+    })
+  }
+
+  export async function recommendationCatalog(input: {
+    projectDirectory: string
+    productPillar: "code" | "work"
+    restrictToExpertSquadIDs?: readonly string[]
+  }): Promise<ExpertSquadCatalogIndexEntry[]> {
+    return [...(await recommendationCatalogSnapshot(input)).entries]
   }
 
   export async function catalogInspection(input: {

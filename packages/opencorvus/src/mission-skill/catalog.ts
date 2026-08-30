@@ -9,6 +9,7 @@ import { Glob } from "@/util/glob"
 import { Filesystem } from "@/util/filesystem"
 import { builtinMissionSkillSources } from "./builtin-payload"
 import { MissionSkillRoots } from "./roots"
+import { canonicalDigestSource, compareCanonicalStrings } from "@/util/canonical-digest"
 
 export namespace MissionSkillCatalog {
   const PATTERN = "*/SKILL.md"
@@ -238,7 +239,7 @@ export namespace MissionSkillCatalog {
         })
         return
       }
-      for (const match of matches.sort()) await addSkill(match, source)
+      for (const match of matches.sort(compareCanonicalStrings)) await addSkill(match, source)
     }
 
     const globalRoot = path.resolve(MissionSkillRoots.global())
@@ -264,11 +265,56 @@ export namespace MissionSkillCatalog {
     "mission-skill",
   )
 
-  export async function all(options?: { refresh?: boolean }) {
-    if (options?.refresh) await state.reset()
-    return state().then((value) =>
-      Object.values(value.skills).sort((left, right) => left.name.localeCompare(right.name)),
+  export function canonicalCatalogSnapshot(input: { skills: readonly Skill.Info[]; issues: readonly Issue[] }): {
+    revision: string
+    skills: readonly Skill.Info[]
+    issues: readonly Issue[]
+  } {
+    const skills = [...input.skills].sort((left, right) => compareCanonicalStrings(left.name, right.name))
+    const issues = [...input.issues].sort((left, right) =>
+      compareCanonicalStrings(
+        JSON.stringify([left.kind, left.source, left.path, left.message]),
+        JSON.stringify([right.kind, right.source, right.path, right.message]),
+      ),
     )
+    const revision = canonicalDigestSource("mission-skill-catalog-v1", {
+      skills: skills.map((skill) => ({
+        name: skill.name,
+        description: skill.description,
+        aliases: [...skill.aliases],
+        builtin: skill.builtin,
+        location: skill.location,
+        content: skill.content,
+        required_tools: [...skill.required_tools],
+      })),
+      issues,
+    }).sha256
+    return Object.freeze({
+      revision,
+      skills: Object.freeze(skills),
+      issues: Object.freeze(issues),
+    })
+  }
+
+  export async function catalogSnapshot(options?: { refresh?: boolean }): Promise<{
+    revision: string
+    skills: readonly Skill.Info[]
+    issues: readonly Issue[]
+  }> {
+    if (options?.refresh) {
+      await state.reset()
+      const { CapabilityCatalogCache } = await import("@/capability/catalog")
+      await CapabilityCatalogCache.invalidate("mission-skill-registry")
+    }
+    const value = await state()
+    return canonicalCatalogSnapshot({
+      skills: Object.values(value.skills),
+      issues: value.issues,
+    })
+  }
+
+  export async function all(options?: { refresh?: boolean }) {
+    return [...(await catalogSnapshot(options)).skills]
   }
 
   export async function get(name: string) {
@@ -293,7 +339,7 @@ export namespace MissionSkillCatalog {
 
   export async function globalSummaries(): Promise<Response> {
     const snapshot = await loadCatalogState()
-    const skills = Object.values(snapshot.skills).sort((left, right) => left.name.localeCompare(right.name))
+    const skills = Object.values(snapshot.skills).sort((left, right) => compareCanonicalStrings(left.name, right.name))
     return {
       mission_skills: skills.map((skill) => ({
         name: skill.name,
@@ -305,9 +351,13 @@ export namespace MissionSkillCatalog {
   }
 
   export async function settings(options?: { refresh?: boolean }): Promise<SettingsResponse> {
-    if (options?.refresh) await state.reset()
+    if (options?.refresh) {
+      await state.reset()
+      const { CapabilityCatalogCache } = await import("@/capability/catalog")
+      await CapabilityCatalogCache.invalidate("mission-skill-registry")
+    }
     const snapshot = await state()
-    const skills = Object.values(snapshot.skills).sort((left, right) => left.name.localeCompare(right.name))
+    const skills = Object.values(snapshot.skills).sort((left, right) => compareCanonicalStrings(left.name, right.name))
     return {
       roots: {
         global: MissionSkillRoots.global(),

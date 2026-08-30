@@ -56,14 +56,22 @@ async function isLiveFile(target: string): Promise<boolean> {
   )
 }
 
+export function specsIndexTargetBelongsToArchitecture(input: {
+  target: string
+  specsRoot: string
+  architectureRoot: string
+}): boolean {
+  const resolved = path.resolve(input.specsRoot, input.target)
+  const relative = path.relative(input.architectureRoot, resolved)
+  return relative === "" || (!path.isAbsolute(relative) && relative !== ".." && !relative.startsWith(`..${path.sep}`))
+}
+
 async function main() {
   const documents = (await markdownFilesUnder(architectureRoot)).filter((entry) => entry !== "README.md")
   const index = await readFile(indexFile, "utf8")
   // Reachability is a real markdown link whose target is the document, not the
   // document's name appearing somewhere in the file.
-  const indexed = new Set(
-    linkTargets(index).map((target) => path.posix.normalize(target.replace(/^\.\//, ""))),
-  )
+  const indexed = new Set(linkTargets(index).map((target) => path.posix.normalize(target.replace(/^\.\//, ""))))
 
   const failures: string[] = []
   for (const document of documents) {
@@ -74,14 +82,19 @@ async function main() {
 
   // Links out of the index, out of every current document, and out of the
   // specs index that points into this directory, must all resolve to a live file.
-  const sources: Array<{ label: string; file: string; root: string }> = [
+  const sources: Array<{ label: string; file: string; root: string; architectureTargetsOnly?: boolean }> = [
     { label: "README.md", file: indexFile, root: architectureRoot },
     ...documents.map((document) => ({
       label: document,
       file: path.join(architectureRoot, document),
       root: path.dirname(path.join(architectureRoot, document)),
     })),
-    { label: "specs/README.md", file: path.join(specsRoot, "README.md"), root: specsRoot },
+    {
+      label: "specs/README.md",
+      file: path.join(specsRoot, "README.md"),
+      root: specsRoot,
+      architectureTargetsOnly: true,
+    },
   ]
   for (const source of sources) {
     const body = await readFile(source.file, "utf8").catch(() => undefined)
@@ -89,6 +102,12 @@ async function main() {
     for (const target of linkTargets(body)) {
       if (/^[a-z][a-z0-9+.-]*:/i.test(target)) continue
       if (!target.endsWith(".md")) continue
+      if (
+        source.architectureTargetsOnly &&
+        !specsIndexTargetBelongsToArchitecture({ target, specsRoot, architectureRoot })
+      ) {
+        continue
+      }
       if (!(await isLiveFile(path.resolve(source.root, target)))) {
         failures.push(`${source.label} links a document that is not live: ${target}`)
       }
@@ -103,4 +122,4 @@ async function main() {
   console.log(`architecture-index ok — ${documents.length} current documents indexed, every link live`)
 }
 
-await main()
+if (import.meta.main) await main()

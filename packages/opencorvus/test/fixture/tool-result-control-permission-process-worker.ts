@@ -26,6 +26,8 @@ import { toolResultControl } from "@/session/tool-result-control"
 import { Database, eq } from "@/storage/db"
 import { installDefaultControlPlaneToolLoaders } from "@/tool/control-plane-tool-composition"
 import { persistEstablishedTask } from "./engine-task"
+import { CatalogOccurrenceBinding } from "@/capability/catalog-binding"
+import { RuntimeCapabilityCatalog } from "@/tool/capability-runtime-catalog"
 
 type State = {
   request: PermissionAuthority.Request
@@ -169,9 +171,10 @@ async function initializeCut(): Promise<never> {
         type: "text",
         text: "Schedule one exact projected wait.",
       })
-      const assistant = await Session.updateMessage({
+      const assistant = {
         id: Identifier.ascending("message"),
         parentID: user.id,
+        acceptedInputMessageIDs: [user.id],
         sessionID: session.id,
         role: "assistant",
         author: "orchestrator",
@@ -182,7 +185,7 @@ async function initializeCut(): Promise<never> {
         modelID: model.id,
         providerID: model.providerID,
         time: { created: now },
-      })
+      } as const
       const raw = createOrchestratorTools({
         taskID,
         agentSessionID: session.id,
@@ -229,6 +232,29 @@ async function initializeCut(): Promise<never> {
         processor,
         messages: await Session.messages({ sessionID: session.id }),
         config,
+      })
+      const runtimeContract = SessionRuntimeContractStore.get(session.id)
+      if (!runtimeContract) throw new Error("Projected scheduler runtime contract was not installed")
+      const catalog = await RuntimeCapabilityCatalog.snapshot({
+        config,
+        sessionID: session.id,
+        agentID: "orchestrator",
+        executionToolIDs: Object.keys(tools),
+        harnessProjection: SessionLoop.harnessProjectionForResolvedTools(tools),
+      })
+      const binding = await CatalogOccurrenceBinding.publish({
+        projectID: Instance.project.id,
+        payload: CatalogOccurrenceBinding.payload({
+          snapshot: catalog.snapshot,
+          materializationScope: await CatalogOccurrenceBinding.materializationScope({ model, config }),
+          runtimeContract,
+        }),
+      })
+      await CatalogOccurrenceBinding.bindAndBeginAssistant({
+        projectID: Instance.project.id,
+        assistant,
+        parent: await MessageStore.get({ sessionID: session.id, messageID: user.id }),
+        binding,
       })
       const wait = tools.wait
       if (!wait?.execute) throw new Error("Projected scheduler wait is unavailable")
