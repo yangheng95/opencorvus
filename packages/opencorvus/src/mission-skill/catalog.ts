@@ -301,7 +301,11 @@ export namespace MissionSkillCatalog {
     skills: readonly Skill.Info[]
     issues: readonly Issue[]
   }> {
-    if (options?.refresh) await state.reset()
+    if (options?.refresh) {
+      await state.reset()
+      const { CapabilityCatalogCache } = await import("@/capability/catalog")
+      await CapabilityCatalogCache.invalidate("mission-skill-registry")
+    }
     const value = await state()
     return canonicalCatalogSnapshot({
       skills: Object.values(value.skills),
@@ -347,7 +351,11 @@ export namespace MissionSkillCatalog {
   }
 
   export async function settings(options?: { refresh?: boolean }): Promise<SettingsResponse> {
-    if (options?.refresh) await state.reset()
+    if (options?.refresh) {
+      await state.reset()
+      const { CapabilityCatalogCache } = await import("@/capability/catalog")
+      await CapabilityCatalogCache.invalidate("mission-skill-registry")
+    }
     const snapshot = await state()
     const skills = Object.values(snapshot.skills).sort((left, right) => compareCanonicalStrings(left.name, right.name))
     return {

@@ -361,6 +361,8 @@ export namespace SkillManager {
   async function resetInstalledDiscoveryState() {
     await Skill.state.resetAll()
     await installedInventoryState.resetAll()
+    const { CapabilityCatalogCache } = await import("@/capability/catalog")
+    await CapabilityCatalogCache.invalidate("skill-manager")
   }
 
   async function installedAtPublication(publicationRevision: string) {

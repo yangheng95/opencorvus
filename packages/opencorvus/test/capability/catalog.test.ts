@@ -25,6 +25,7 @@ import { createHarnessProjection } from "../../src/capability/harness-projection
 import { memoryProject } from "../fixture/memory"
 import { Instance } from "../../src/project/instance"
 import { ensureMissionSession } from "../../src/mission/session"
+import { Session } from "../../src/session"
 import { Config } from "../../src/config/config"
 import { ExpertSquadPackageManager } from "../../src/expert-squad/manager"
 import { PromptProfileResolver } from "../../src/expert-squad/prompt-profile-resolver"
@@ -218,9 +219,10 @@ describe("capability catalog executable discovery", () => {
       fn: async () => {
         await CapabilityCatalogCache.reset()
         const config = await Config.get()
+        const session = await Session.create({ kind: "assistant", title: "Concurrent capability Catalog" })
         const request = {
           config,
-          sessionID: "concurrent-capability-catalog",
+          sessionID: session.id,
           agentID: "work",
           executionToolIDs: ["capability_search"],
         }
@@ -619,9 +621,10 @@ describe("capability catalog executable discovery", () => {
           }),
         )
         try {
+          const session = await Session.create({ kind: "assistant", title: "MCP status Catalog" })
           const { caller, snapshot } = await RuntimeCapabilityCatalog.snapshot({
             config,
-            sessionID: "mcp-status-catalog",
+            sessionID: session.id,
             agentID: "chat",
             executionToolIDs: ["capability_search"],
           })
@@ -685,16 +688,20 @@ describe("capability catalog executable discovery", () => {
             mcp_resource_refs: [],
           })
         try {
+          const [firstSession, secondSession] = await Promise.all([
+            Session.create({ kind: "assistant", title: "MCP projection one" }),
+            Session.create({ kind: "assistant", title: "MCP projection two" }),
+          ])
           const first = await RuntimeCapabilityCatalog.snapshot({
             config,
-            sessionID: "mcp-projection-one",
+            sessionID: firstSession.id,
             agentID: "chat",
             executionToolIDs: ["exact_one"],
             harnessProjection: harness("exact_one"),
           })
           const second = await RuntimeCapabilityCatalog.snapshot({
             config,
-            sessionID: "mcp-projection-two",
+            sessionID: secondSession.id,
             agentID: "chat",
             executionToolIDs: ["exact_two"],
             harnessProjection: harness("exact_two"),
@@ -745,6 +752,7 @@ describe("capability catalog executable discovery", () => {
         expect(second.owner_revision).not.toBe(first.owner_revision)
         expect(Object.keys(first).sort()).toEqual([
           "config_digest",
+          "inventory_revision_vector",
           "owner_revision",
           "provenance",
           "statuses",

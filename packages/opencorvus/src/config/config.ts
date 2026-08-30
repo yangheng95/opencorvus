@@ -2045,6 +2045,15 @@ export namespace Config {
     ])
     const failures = settled.flatMap((result) => (result.status === "rejected" ? [result.reason] : []))
     if (failures.length > 0) throw new ProjectConfigCommittedReconcileError(failures, transition.after)
+    const { CapabilityCatalogCache } = await import("@/capability/catalog")
+    await CapabilityCatalogCache.invalidate([
+      "project-config",
+      "mcp-config",
+      "skill-manager",
+      "mission-skill-registry",
+      "expert-squad-registry",
+      "tool-registry",
+    ])
     try {
       await GlobalBus.emitAndWait("event", {
         directory: transition.directory,

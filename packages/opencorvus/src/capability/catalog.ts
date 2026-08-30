@@ -1,5 +1,6 @@
 import z from "zod"
 import { createInstanceState } from "@/project/instance-state"
+import { ProjectInstanceContext } from "@/project/instance-context"
 import { canonicalDigestSource, canonicalJSONValue, compareCanonicalStrings } from "@/util/canonical-digest"
 import { scoreDiscoveryFields, type DiscoverySearchField } from "./fuzzy"
 import {
@@ -42,7 +43,8 @@ export class CapabilityCatalogContractError extends Error {
       | "unknown_behavior_target"
       | "view_digest_mismatch"
       | "unknown_set_member"
-      | "source_revision_conflict",
+      | "source_revision_conflict"
+      | "noncanonical_snapshot",
     message: string,
   ) {
     super(message)
@@ -67,10 +69,10 @@ function exactStringRecord(value: unknown): value is Record<string, string> {
   )
 }
 
-const OwnerRevisionRecord = z.custom<Record<string, string>>(exactStringRecord, {
+export const CapabilityOwnerRevisionVector = z.custom<Record<string, string>>(exactStringRecord, {
   message: "Owner revisions must be an own-key string record.",
 })
-const ProjectionRevisionRecord = OwnerRevisionRecord.refine(
+export const CapabilityProjectionRevisionVector = CapabilityOwnerRevisionVector.refine(
   (value) => Object.values(value).every((revision) => /^[a-f0-9]{64}$/.test(revision)),
   { message: "Projection revisions must be SHA-256 strings." },
 )
@@ -79,8 +81,8 @@ export const CapabilityCatalogSnapshot = z
   .object({
     catalog_revision: z.string().regex(/^[a-f0-9]{64}$/),
     context: CapabilityCatalogContext,
-    owner_revisions: OwnerRevisionRecord,
-    projection_revisions: ProjectionRevisionRecord,
+    owner_revisions: CapabilityOwnerRevisionVector,
+    projection_revisions: CapabilityProjectionRevisionVector,
     descriptors: z.array(CapabilityDescriptor),
     views: z.array(CapabilityCatalogViewEntry),
     sets: z.array(CapabilitySetDescriptor),
@@ -158,6 +160,24 @@ function freezeSource(source: CapabilityCatalogSourceValue): CapabilityCatalogSo
 
 function ownRecord(entries: ReadonlyMap<string, string>): Record<string, string> {
   return Object.fromEntries([...entries.entries()].sort(([left], [right]) => compareCanonicalStrings(left, right)))
+}
+
+export function capabilityCatalogRevision(input: {
+  context: z.input<typeof CapabilityCatalogContext>
+  owner_revisions: Record<string, string>
+  projection_revisions: Record<string, string>
+  descriptors: readonly CapabilityDescriptorValue[]
+  views: readonly CapabilityCatalogViewEntryValue[]
+  sets: readonly CapabilitySetDescriptorValue[]
+}): string {
+  return canonicalDigestSource("capability-catalog-snapshot-v3", {
+    context: CapabilityCatalogContext.parse(input.context),
+    owner_revisions: CapabilityOwnerRevisionVector.parse(input.owner_revisions),
+    projection_revisions: CapabilityProjectionRevisionVector.parse(input.projection_revisions),
+    descriptors: input.descriptors,
+    views: input.views,
+    sets: input.sets,
+  }).sha256
 }
 
 function canonicalSnapshot(input: {
@@ -316,7 +336,7 @@ function canonicalSnapshot(input: {
     views,
     sets,
   }
-  const catalogRevision = canonicalDigestSource("capability-catalog-snapshot-v3", payload).sha256
+  const catalogRevision = capabilityCatalogRevision(payload)
   return Object.freeze({
     catalog_revision: catalogRevision,
     context: Object.freeze({ ...context }),
@@ -331,10 +351,11 @@ function canonicalSnapshot(input: {
 type CatalogCacheState = {
   sources: Map<string, CapabilityCatalogSourceValue>
   snapshots: Map<string, CapabilityCatalogSnapshot>
+  ownerGenerations: Map<string, number>
 }
 
 const cacheState = createInstanceState<CatalogCacheState>(
-  () => ({ sources: new Map(), snapshots: new Map() }),
+  () => ({ sources: new Map(), snapshots: new Map(), ownerGenerations: new Map() }),
   undefined,
   "capability-catalog-v3",
 )
@@ -383,6 +404,41 @@ export namespace CapabilityCatalogCache {
   export async function reset(): Promise<void> {
     await cacheState.reset()
   }
+
+  /**
+   * Advance only process-local composition lifecycle for exact owners. Durable
+   * owner revisions remain the cross-process fact, and already-bound Catalog
+   * payloads remain immutable. Clearing matching content-addressed entries
+   * prevents a mutation event from retaining stale process references without
+   * introducing a second inventory or a generation-based read shortcut.
+   */
+  export async function invalidate(ownerRefs: string | readonly string[]): Promise<Record<string, number>> {
+    const owners = [...new Set((typeof ownerRefs === "string" ? [ownerRefs] : ownerRefs).map((owner) => owner.trim()))]
+    if (owners.some((owner) => owner.length === 0)) throw new Error("Capability owner invalidation requires exact IDs")
+    const ownerSet = new Set(owners)
+    const caches = ProjectInstanceContext.tryUse()
+      ? [await cacheState()]
+      : cacheState.inspectAll().map((entry) => entry.state)
+    const advanced = new Map<string, number>()
+    for (const cache of caches) {
+      for (const [key, source] of [...cache.sources]) {
+        if (ownerSet.has(source.owner_ref)) cache.sources.delete(key)
+      }
+      for (const [key, snapshot] of [...cache.snapshots]) {
+        if (owners.some((owner) => Object.hasOwn(snapshot.owner_revisions, owner))) cache.snapshots.delete(key)
+      }
+      for (const owner of owners.sort(compareCanonicalStrings)) {
+        const generation = (cache.ownerGenerations.get(owner) ?? 0) + 1
+        cache.ownerGenerations.set(owner, generation)
+        advanced.set(owner, Math.max(advanced.get(owner) ?? 0, generation))
+      }
+    }
+    return Object.fromEntries(advanced)
+  }
+
+  export async function ownerGeneration(ownerRef: string): Promise<number> {
+    return (await cacheState()).ownerGenerations.get(ownerRef) ?? 0
+  }
 }
 
 export function createCapabilityCatalogSnapshot(input: {
@@ -391,6 +447,38 @@ export function createCapabilityCatalogSnapshot(input: {
   projections: readonly CapabilityCatalogProjectionValue[]
 }): CapabilityCatalogSnapshot {
   return canonicalSnapshot(input)
+}
+
+/** Rebuild and cross-validate every source/projection relation in a persisted view. */
+export function validateCapabilityCatalogSnapshot(raw: unknown): CapabilityCatalogSnapshot {
+  const parsed = CapabilityCatalogSnapshot.parse(raw)
+  const ownerRefs = Object.keys(parsed.owner_revisions).sort(compareCanonicalStrings)
+  const projectionOwnerRefs = Object.keys(parsed.projection_revisions).sort(compareCanonicalStrings)
+  const canonical = canonicalSnapshot({
+    context: parsed.context,
+    sources: ownerRefs.map((ownerRef) =>
+      createCapabilityCatalogSource({
+        owner_ref: ownerRef,
+        owner_revision: parsed.owner_revisions[ownerRef]!,
+        descriptors: parsed.descriptors.filter((descriptor) => descriptor.ref.owner_ref === ownerRef),
+        sets: parsed.sets.filter((set) => set.ref.owner_ref === ownerRef),
+      }),
+    ),
+    projections: projectionOwnerRefs.map((ownerRef) =>
+      createCapabilityCatalogProjection({
+        owner_ref: ownerRef,
+        projection_revision: parsed.projection_revisions[ownerRef]!,
+        entries: parsed.views.filter((view) => view.descriptor_ref.owner_ref === ownerRef),
+      }),
+    ),
+  })
+  if (canonicalJSONValue(canonical) !== canonicalJSONValue(parsed)) {
+    throw new CapabilityCatalogContractError(
+      "noncanonical_snapshot",
+      `Capability catalog snapshot ${parsed.catalog_revision} is not in canonical owner/ref order.`,
+    )
+  }
+  return canonical
 }
 
 function searchFields(descriptor: CapabilityDescriptorValue): DiscoverySearchField[] {

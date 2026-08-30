@@ -8,6 +8,7 @@ import { ComputerHostRuntime } from "./computer/host-runtime"
 import { computerRuntimeScopeIdentity } from "./computer/runtime-scope"
 import { canonicalDigestSource, compareCanonicalStrings } from "@/util/canonical-digest"
 import { capabilityRef, type CapabilityRef } from "@/capability/ref"
+import { mergeProviderToolMaps } from "@/tool/provider-name-authority"
 
 type HostSessionRuntimeKind = "browser" | "computer"
 
@@ -208,6 +209,11 @@ export namespace HostSessionMcpRuntime {
           })
         : {}
 
-    return { ...ordinaryTools, ...browserTools, ...computerTools }
+    const authorityRef = (group: string) => (name: string) => `host-session:${group}:${name}`
+    return mergeProviderToolMaps([
+      { source: "mcp", tools: ordinaryTools, ref: authorityRef("ordinary") },
+      { source: "mcp", tools: browserTools, ref: authorityRef("browser") },
+      { source: "mcp", tools: computerTools, ref: authorityRef("computer") },
+    ])
   }
 }

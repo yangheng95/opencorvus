@@ -14,6 +14,7 @@ import { Message } from "../../src/session/message"
 import { timelineMessageOrderKey } from "../../src/timeline/order"
 import { ProjectGitLock } from "../../src/worktree/git-lock"
 import { ProjectRuntimePaths } from "../../src/project/runtime-paths"
+import { CatalogOccurrenceBinding } from "../../src/capability/catalog-binding"
 import { resetDatabase } from "../fixture/db"
 import { tmpdir } from "../fixture/fixture"
 
@@ -179,6 +180,22 @@ test("SessionLoop binds each accepted user message to its streaming execution oc
           expect(first.info.parentID).not.toBe(second.info.parentID)
           expect(second.info.parentID).not.toBe(third.info.parentID)
           expect(SessionStatus.executionOccurrence(session.id)?.inputMessageID).toBe(third.info.parentID)
+          const boundPayloads = await Promise.all(
+            [first, second, third].map((reply) =>
+              CatalogOccurrenceBinding.readAssistant({
+                projectID: Instance.project.id,
+                sessionID: session.id,
+                assistantMessageID: reply.info.id,
+              }),
+            ),
+          )
+          expect(boundPayloads.map((payload) => payload.schema_version)).toEqual([2, 2, 2])
+          expect(boundPayloads.map((payload) => payload.context.caller)).toEqual([
+            "conversation",
+            "conversation",
+            "conversation",
+          ])
+          expect(boundPayloads.every((payload) => payload.descriptors.length > 0)).toBe(true)
         } finally {
           processorSpy.mockRestore()
           providerSpy.mockRestore()

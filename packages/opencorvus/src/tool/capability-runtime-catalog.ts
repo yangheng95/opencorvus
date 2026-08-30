@@ -27,6 +27,8 @@ import {
 } from "@/capability/descriptor"
 import { capabilityRef, CapabilityRefCodec, type CapabilityRef } from "@/capability/ref"
 import type { HarnessProjection } from "@/capability/harness-projection"
+import { resolveCapabilityCaller } from "@/capability/caller-authority"
+import { Session } from "@/session"
 
 export class CapabilityOwnerUnavailableError extends Error {
   override readonly name = "CapabilityOwnerUnavailableError"
@@ -46,14 +48,6 @@ function titleFromID(id: string): string {
     .filter(Boolean)
     .map((part) => part[0]?.toUpperCase() + part.slice(1))
     .join(" ")
-}
-
-function runtimeCaller(input: { agentID: string; sessionID: string }): CapabilityCaller {
-  const contract = SessionRuntimeContractStore.get(input.sessionID)
-  if (contract?.identity.identityKind === "projected-scheduler") return "task_scheduler"
-  if (contract?.identity.identityKind === "projected-worker") return "task_agent"
-  if (input.agentID === "mission") return "mission"
-  return "conversation"
 }
 
 async function readOwner<T>(ownerRef: string, read: () => T | Promise<T>): Promise<T> {
@@ -311,8 +305,13 @@ async function buildRuntimeSnapshot(input: RuntimeInput): Promise<{
   caller: CapabilityCaller
   snapshot: CapabilityCatalogSnapshot
 }> {
-  const caller = runtimeCaller(input)
   const contract = SessionRuntimeContractStore.get(input.sessionID)
+  const session = await Session.get(input.sessionID)
+  const caller = resolveCapabilityCaller({
+    sessionKind: session.kind,
+    agentID: input.agentID,
+    runtimeIdentityKind: contract?.identity.identityKind,
+  })
   const harnessProjection = input.harnessProjection ?? contract?.harnessProjection
   const publications = new Map<string, PublicationDraft>()
   const toolInventory = await readOwner("tool-registry", () => ToolCapabilityInventory.snapshot())

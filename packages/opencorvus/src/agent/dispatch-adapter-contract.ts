@@ -295,6 +295,17 @@ export namespace DispatchAdapterContractRegistry {
     return new Set(get(id).permissionBearingStageToolIDs)
   }
 
+  /**
+   * Version of the deterministic ToolPart-history reducer contract for the
+   * adapter's pure collector/control stage Tools. All current adapters share
+   * ABI v1; a future reducer semantic change must advance this value before a
+   * new occurrence can publish a different Catalog binding.
+   */
+  export function collectorReducerVersion(id: string): 1 {
+    get(id)
+    return 1
+  }
+
   export function coordinationHandoffToolID(id: string): "request_orchestrator_decision" {
     return get(id).coordinationHandoffToolID
   }

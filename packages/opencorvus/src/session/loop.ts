@@ -56,6 +56,7 @@ import { fn } from "@/util/fn"
 import { SessionProcessor } from "./processor"
 import { MissionSkillTool, SkillTool } from "@/tool/skill"
 import { Tool } from "@/tool/tool"
+import { admitProviderToolName, type ProviderToolNameOwner } from "@/tool/provider-name-authority"
 import { withTaskToolInvocation } from "@/tool/task-tool-invocation"
 import { bindProjectedTaskToolRuntime, projectedTaskToolRuntimeBindingOf } from "@/tool/task-tool-execution-scope"
 import type { ResolvedSkillSurface } from "@/skill/surface"
@@ -113,6 +114,8 @@ import {
 import { createMcpAppToolLifecycle, mcpAppAuthorityForRuntimeTool } from "@/interactive-artifact/mcp-app-lifecycle"
 import { visibleMentionDirectiveRanges } from "@opencorvus-ai/transport-protocol"
 import type { HarnessProjection } from "@/capability/harness-projection"
+import { CatalogOccurrenceBinding, CorruptCatalogOccurrenceError } from "@/capability/catalog-binding"
+import { RuntimeCapabilityCatalog } from "@/tool/capability-runtime-catalog"
 import { compareTimelineOrderKeys, timelineMessageOrderKey } from "@/timeline/order"
 import { PermissionAuthority } from "@/permission/authority"
 import { composeProjectedWorkerSystemPrompt } from "@/agent/projected-worker-system-prompt"
@@ -242,11 +245,13 @@ export namespace SessionLoop {
     Record<string, AITool>,
     (availableToolNames: Iterable<string>) => Promise<ResolvedSkillSurface | undefined>
   >()
+  const resolvedProviderToolNameOwners = new WeakMap<Record<string, AITool>, Map<string, ProviderToolNameOwner>>()
   const resolvedToolExecutionSurfaces = new WeakMap<
     Record<string, AITool>,
     {
       coordinator: ToolTurnExecutionCoordinator
       coordinatedTools: WeakSet<object>
+      harnessProjection?: HarnessProjection
     }
   >()
 
@@ -269,6 +274,22 @@ export namespace SessionLoop {
 
   export function executionCoordinatorForResolvedTools(tools: Record<string, AITool>) {
     return resolvedToolExecutionSurfaces.get(tools)?.coordinator
+  }
+
+  export function harnessProjectionForResolvedTools(tools: Record<string, AITool>) {
+    return resolvedToolExecutionSurfaces.get(tools)?.harnessProjection
+  }
+
+  function bindReservedProviderTool(
+    tools: Record<string, AITool>,
+    name: string,
+    owner: ProviderToolNameOwner,
+    value: AITool,
+  ): void {
+    const owners = resolvedProviderToolNameOwners.get(tools)
+    if (!owners) throw new Error("Resolved Tool surface is missing its Provider name authority")
+    admitProviderToolName(owners, name, owner)
+    tools[name] = value
   }
 
   /**
@@ -1606,12 +1627,12 @@ export namespace SessionLoop {
         `Task-root activation ${taskRootActivation} open assistant ${openTaskRootAssistant.info.id} identity changed before its next Provider step`,
       )
     }
-    const assistantMessage = openTaskRootAssistant
-      ? ({
+    const assistantMessage: Message.Assistant = openTaskRootAssistant
+      ? Message.Assistant.parse({
           ...openTaskRootAssistant.info,
           acceptedInputMessageIDs: [...input.acceptedInputMessageIDs],
-        } as Message.Assistant)
-      : ((await Session.beginAssistantReply({
+        })
+      : Message.Assistant.parse({
           id: taskRootActivation
             ? Identifier.deterministic("message", `task-root-assistant-v1\0${input.lastUser.id}`)
             : Identifier.ascending("message"),
@@ -1640,7 +1661,7 @@ export namespace SessionLoop {
             created: Date.now(),
           },
           sessionID: input.sessionID,
-        })) as Message.Assistant)
+        })
     if (
       openTaskRootAssistant &&
       JSON.stringify(Message.acceptedInputMessageIDs(openTaskRootAssistant.info)) !==
@@ -1650,9 +1671,6 @@ export namespace SessionLoop {
         `Task-root assistant ${assistantMessage.id} accepted input identities changed within one activation`,
       )
     }
-    if (openTaskRootAssistant) await Session.beginAssistantReply(assistantMessage)
-    SessionPromptState.bindMessageOwner(input.sessionID, assistantMessage.id, input.abort)
-    await SessionStatus.set(input.sessionID, { type: "streaming" }, { promptGenerationOwner: input.abort })
     const processor = SessionProcessor.create({
       assistantMessage,
       sessionID: input.sessionID,
@@ -1678,6 +1696,10 @@ export namespace SessionLoop {
     using _ = defer(() => InstructionPrompt.clear(processor.message.id))
 
     const format = input.lastUser.format ?? { type: "text" }
+    const structuredOutputOwner: ProviderToolNameOwner | undefined =
+      format.type === "json_schema"
+        ? { source: "structured", ref: `assistant:${processor.message.id}:response-encoder` }
+        : undefined
     const messagePromptProjection = controlPromptProjection(agentID, input.sessionID)
     const controlRuntimeContext = controlToolContext(input.sessionID)
     const tools = await resolveTools({
@@ -1694,6 +1716,9 @@ export namespace SessionLoop {
       extra: controlRuntimeContext ? { controlPromptContext: controlRuntimeContext } : input.lastUser.extra,
       messages: input.msgs,
       config,
+      reservedProviderToolNames: structuredOutputOwner
+        ? [{ name: "StructuredOutput", owner: structuredOutputOwner }]
+        : undefined,
     })
     const structuredOutputTool =
       input.lastUser.format?.type === "json_schema"
@@ -1714,10 +1739,55 @@ export namespace SessionLoop {
       structuredOutputTool ? [...Object.keys(tools), "StructuredOutput"] : Object.keys(tools),
     )
     coordinateResolvedToolExecutionSurface(tools)
+    const occurrenceToolIDs = Object.keys(tools)
+    const occurrenceHarness = harnessProjectionForResolvedTools(tools)
+    const materializationScope = await CatalogOccurrenceBinding.materializationScope({ model: input.model, config })
+    const parentInput =
+      input.msgs.find((message) => message.info.id === input.lastUser.id) ??
+      (await MessageStore.get({ sessionID: input.sessionID, messageID: input.lastUser.id }))
+    const existingCatalogBinding = CatalogOccurrenceBinding.bindingFromInput(parentInput)
+    if (existingCatalogBinding) {
+      const payload = await CatalogOccurrenceBinding.read({
+        projectID: Instance.project.id,
+        binding: existingCatalogBinding,
+      })
+      CatalogOccurrenceBinding.assertCurrent({ payload, materializationScope, runtimeContract })
+      await Session.beginAssistantReply(assistantMessage)
+    } else {
+      if (openTaskRootAssistant) {
+        throw new CorruptCatalogOccurrenceError(
+          "unbound",
+          `Open assistant ${assistantMessage.id} has no Catalog binding on input ${input.lastUser.id}.`,
+        )
+      }
+      const catalog = await RuntimeCapabilityCatalog.snapshot({
+        config,
+        sessionID: input.sessionID,
+        agentID,
+        executionToolIDs: occurrenceToolIDs,
+        harnessProjection: occurrenceHarness,
+      })
+      const payload = CatalogOccurrenceBinding.payload({
+        snapshot: catalog.snapshot,
+        materializationScope,
+        runtimeContract,
+      })
+      const binding = await CatalogOccurrenceBinding.publish({ projectID: Instance.project.id, payload })
+      await CatalogOccurrenceBinding.bindAndBeginAssistant({
+        projectID: Instance.project.id,
+        assistant: assistantMessage,
+        parent: parentInput,
+        binding,
+      })
+    }
+    SessionPromptState.bindMessageOwner(input.sessionID, assistantMessage.id, input.abort)
+    await SessionStatus.set(input.sessionID, { type: "streaming" }, { promptGenerationOwner: input.abort })
     // StructuredOutput encodes the assistant response. It is not an executable
     // effect, permission occurrence, or turn-control producer, so it is added
     // only after the final executable Tool surface has been coordinated.
-    if (structuredOutputTool) tools.StructuredOutput = structuredOutputTool
+    if (structuredOutputTool && structuredOutputOwner) {
+      bindReservedProviderTool(tools, "StructuredOutput", structuredOutputOwner, structuredOutputTool)
+    }
     if (input.step === 1) {
       await SessionSummary.summarize({
         sessionID: input.sessionID,
@@ -3002,6 +3072,10 @@ export namespace SessionLoop {
     extra?: Record<string, unknown>
     messages: Message.WithParts[]
     config: Config.Info
+    reservedProviderToolNames?: readonly {
+      name: string
+      owner: ProviderToolNameOwner
+    }[]
   }) {
     using _ = log.time("resolveTools")
     const tools: Record<string, AITool> = {}
@@ -3017,6 +3091,11 @@ export namespace SessionLoop {
       coordinatedTools: new WeakSet<object>(),
     })
     const toolSources = new Map<string, ProviderToolSource>()
+    const providerToolNameOwners = new Map<string, ProviderToolNameOwner>()
+    resolvedProviderToolNameOwners.set(tools, providerToolNameOwners)
+    for (const reservation of input.reservedProviderToolNames ?? []) {
+      admitProviderToolName(providerToolNameOwners, reservation.name, reservation.owner)
+    }
     const executionPermission = CapabilityRules.merge(input.agent.permission, input.session.permission)
     const runtimeContract = getSessionRuntimeContract(input.session.id)
     assertSessionLoopRuntimeContract(runtimeContract, `SessionLoop tool resolver ${input.session.id}`)
@@ -3092,17 +3171,20 @@ export namespace SessionLoop {
       }
     }
 
-    const bindRegistryTool = (item: {
-      id: string
-      description: string
-      parameters: z.ZodType
-      execute: Tool.Info["init"] extends (...args: any[]) => Promise<infer Result>
-        ? Result extends { execute: infer Execute }
-          ? Execute
+    const bindRegistryTool = (
+      item: {
+        id: string
+        description: string
+        parameters: z.ZodType
+        execute: Tool.Info["init"] extends (...args: any[]) => Promise<infer Result>
+          ? Result extends { execute: infer Execute }
+            ? Execute
+            : never
           : never
-        : never
-      executionMode?: ToolExecutionModeDeclaration
-    }) => {
+        executionMode?: ToolExecutionModeDeclaration
+      },
+      options: { declaredRuntimeFinalization?: boolean } = {},
+    ) => {
       const registryTool = tool({
         id: item.id as any,
         description: item.description,
@@ -3221,6 +3303,12 @@ export namespace SessionLoop {
         tool: registryTool,
       })
       bindToolExecutionMode(preparedRegistryTool as object, item.executionMode ?? "ordinary")
+      admitProviderToolName(
+        providerToolNameOwners,
+        item.id,
+        { source: "registry", ref: item.id },
+        { declaredRuntimeFinalization: options.declaredRuntimeFinalization },
+      )
       tools[item.id] = preparedRegistryTool
       toolSources.set(item.id, "registry")
     }
@@ -3300,13 +3388,17 @@ export namespace SessionLoop {
         ? {}
         : (nativeHostSessionMcpTools ?? (await MCP.tools(defaultMcpProcessAuthority)))
     for (const [key, item] of Object.entries(resolvedMcpTools)) {
-      const execute = item.execute
+      const execute = (item as AITool).execute
       if (!execute) continue
       const mcpAppBinding = MCP.appToolBinding(item)
       const mcpAuthorityBinding = MCP.toolAuthorityBinding(item)
       if (!mcpAuthorityBinding) {
         throw new Error(`MCP Tool ${key} is missing its immutable authorization binding`)
       }
+      admitProviderToolName(providerToolNameOwners, key, {
+        source: "mcp",
+        ref: `${mcpAuthorityBinding.serverID}:${mcpAuthorityBinding.configDigest}:${mcpAuthorityBinding.toolDigest}`,
+      })
       const mcpAppLifecycle = mcpAppBinding
         ? createMcpAppToolLifecycle({
             sessionID: input.session.id,
@@ -3472,6 +3564,16 @@ export namespace SessionLoop {
           input.processor.ensureToolPart(toolCallID, toolName, toolInput),
         mcpAppLifecycle,
       })
+      const declaredStageShadow = Object.hasOwn(runtimeToolRecords.stageTools, name)
+      admitProviderToolName(
+        providerToolNameOwners,
+        name,
+        {
+          source: declaredStageShadow ? "stage" : "projected",
+          ref: `${runtimeContract?.identity.agentID ?? input.agentID}:${name}`,
+        },
+        { declaredRuntimeShadow: true },
+      )
       tools[name] = prepareProviderTool({
         name,
         source: "extra",
@@ -3608,7 +3710,7 @@ export namespace SessionLoop {
           ...skillTool,
           description: output.description,
           parameters: output.parameters,
-        })
+        }, { declaredRuntimeFinalization: true })
       }
       return surface
     }
@@ -3675,6 +3777,8 @@ export namespace SessionLoop {
         executionToolIDs: Object.keys(tools),
       })
     }
+
+    resolvedToolExecutionSurfaces.get(tools)!.harnessProjection = executionHarnessProjection
 
     coordinateResolvedToolExecutionSurface(tools)
     const finalizeWithCoordination = resolvedToolSkillFinalizers.get(tools)
@@ -3791,6 +3895,16 @@ export namespace SessionLoop {
       session,
       requestedAgentID: assistant.agent,
       config,
+    })
+    const catalogPayload = await CatalogOccurrenceBinding.readAssistant({
+      projectID: Instance.project.id,
+      sessionID: request.sessionID,
+      assistantMessageID: assistant.id,
+    })
+    CatalogOccurrenceBinding.assertCurrent({
+      payload: catalogPayload,
+      materializationScope: await CatalogOccurrenceBinding.materializationScope({ model, config }),
+      runtimeContract: getSessionRuntimeContract(request.sessionID),
     })
     const abortController = new AbortController()
     const processor = SessionProcessor.create({

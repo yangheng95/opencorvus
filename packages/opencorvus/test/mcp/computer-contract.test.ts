@@ -31,6 +31,7 @@ import { EngineService } from "../../src/task-api"
 import { configureTaskIngressRunner } from "../../src/engine/task-root-ingress-delivery"
 import { artifactRuntimeNodeModuleNames } from "../../script/build-artifact"
 import { SessionRuntimeContractStore } from "../../src/session/runtime-contract"
+import { Session } from "../../src/session"
 import { CapabilityRefCodec } from "../../src/capability/ref"
 
 function pngBase64(width: number, height: number) {
@@ -538,10 +539,11 @@ describe("Computer Use exact control contract", () => {
           expect(settings.mcp.configured_server_refs).toContain(ComputerMCPBuiltin.ServerName)
 
           const config = await Config.get()
+          const catalogSession = await Session.create({ kind: "assistant", title: "Computer Catalog contract" })
           const tools = await ConversationCapability.runtimeMcpTools(
             config,
             "work",
-            "session-computer-catalog-contract",
+            catalogSession.id,
           )
           expect(Object.keys(tools).sort()).toEqual(
             ComputerMCPBuiltin.ImportableToolNames.map((name) => `computer_${name}`).sort(),
@@ -551,18 +553,18 @@ describe("Computer Use exact control contract", () => {
           const harnessProjection = await ConversationCapability.harnessProjection("work", {
             config,
             executionToolIDs: executionMcpToolIDs,
-            executionMcpToolRefs: HostSessionMcpRuntime.catalogToolRefs("session-computer-catalog-contract"),
+            executionMcpToolRefs: HostSessionMcpRuntime.catalogToolRefs(catalogSession.id),
           })
           const { caller, snapshot } = await RuntimeCapabilityCatalog.snapshot({
             config,
-            sessionID: "session-computer-catalog-contract",
+            sessionID: catalogSession.id,
             agentID: "work",
             executionToolIDs: executionMcpToolIDs,
             harnessProjection,
           })
           const mcpEntries = searchCapabilityCatalog(snapshot, caller, { kinds: ["mcp_server", "mcp_tool"] })
           const exactHostOwner = `host-session-mcp:${HostSessionMcpRuntime.computerOwnerIdentity(
-            "session-computer-catalog-contract",
+            catalogSession.id,
           )}`
           expect(mcpEntries.map((entry) => [entry.ref.kind, entry.ref.local_ref, entry.availability])).toEqual([
             ["mcp_server", "browser", "installed_unbound"],
@@ -791,7 +793,9 @@ describe("Computer Use exact control contract", () => {
           )
 
           const owner = MCP.createScopedConnectionOwner("test:computer-harness-contract")
-          const catalogSessionID = "computer-harness-contract-scheduler"
+          const catalogSessionID = (
+            await Session.create({ kind: "orchestrator", title: "Computer Harness contract scheduler" })
+          ).id
           let contractInstalled = false
           try {
             const projected = await PromptProfileResolver.projectOrchestratorTools(
