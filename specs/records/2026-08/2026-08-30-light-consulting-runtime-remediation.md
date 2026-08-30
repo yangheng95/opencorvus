@@ -182,3 +182,42 @@ commit. After that commit removes the six dirty-path merge hazards, the fetched
 upstream must be merged without rebasing; the complete merged outgoing set must
 be revalidated before push. Real Luna consultation acceptance remains a
 post-push requirement bound to the exact pushed SHA.
+
+## Post-merge outgoing evidence
+
+The Light candidate received independent FINAL PASS with P0-P3 all zero and was
+committed as `97092b9d36f14c6f7fade8d64014a8096aff636b`. It was then merged without
+rebasing with fetched search-native parent
+`139fff2f90240fbcb04ae32a3f22eb03f17ba399`; the resulting integration commit is
+`183f112fe41b47b79af85258a0a0bd14db9d42bc`. The automatic merge retained both
+the occurrence-bound capability catalog and Provider Tool-name ownership from
+upstream and Light's exact seven-Tool scheduler contract, bounded worker Provider
+Tool payloads and immutable projected Tool restart checks.
+
+One current positive Market-detail test still named Evolution Lab's historical
+`2026.08.19.1` internal revision. The merged runtime and package payload correctly
+reported the shipped `2026.08.30.1` revision, so the stale expected value was
+updated to the current immutable package contract; no production fallback or
+version alias was added.
+
+Because the shared worktree preserves three unrelated unstaged files, all
+outgoing code validation ran from a materialized exact-index snapshot whose
+tracked blobs match the merge candidate. Root typecheck passed all eight package
+tasks. The ten-file Light/Dynamic/generated closure passed 37/37 tests and 257
+assertions after providing the snapshot's Git index to the payload generator.
+The search-native merge matrix established 113 passing tests in its combined run;
+every environment-timeout or stale-baseline occurrence was then rerun in
+isolation: SessionLoop Tool authority 8/8, the affected capability-catalog
+occurrence, Market catalog index 14/14, Session execution occurrence 2/2 and
+payload sync 2/2 all passed. Documentation, routes, architecture and package
+topology passed at 338 operations/25 groups, 6 rules/34 files, 15 indexed current
+documents and 10 packages. Control leases passed at 17 owners/19 sites,
+control-state redundancy at 45 tables/7 allowed fact classes, release mutation
+topology at five authorities, public package publication and public version
+`0.0.58-beta` were aligned, and exact-index module topology passed at 1077
+modules/5333 runtime edges/zero retained cycles/four clean imports.
+
+This closes the deterministic post-merge gate only. Push hook evidence and a new
+uninvolved post-merge read-only review are still required before the branch can be
+pushed. The four real Luna consultation cases remain a post-push acceptance gate
+and cannot be inferred from deterministic tests.
