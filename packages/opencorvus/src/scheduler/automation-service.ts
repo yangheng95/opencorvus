@@ -190,7 +190,7 @@ export type AutomationFireHistoryView = {
   fireId: string
   automationId: string
   automationRevisionId: string
-  origin: "scheduled" | "manual_api" | "manual_tool" | "legacy"
+  origin: "scheduled" | "manual_api" | "manual_tool"
   scheduledDueAt: number
   startedAt: number
   completedAt: number | null

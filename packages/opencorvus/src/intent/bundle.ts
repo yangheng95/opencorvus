@@ -22,15 +22,18 @@
 // — NOT Instance.directory, which can drift) so writers and readers always
 // agree on the location.
 //
-// Bundle is written before `persistTask` runs so it is on disk by the
-// time the orchestrator wakes the pipeline agents. The contents are deterministic
-// from {request, attachments}; rerunning is idempotent.
+// The bundle is an idempotent projection of a committed Task. Creation and
+// startup reconciliation both ensure it before physical activation; no final
+// Task root is written for a request that never committed.
 
 import { Project } from "@/project/project"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
 import { Log } from "@/util/log"
 import type { AttachmentStore } from "@/storage/attachment-store"
 import { Filesystem } from "@/util/filesystem"
+import fs from "node:fs/promises"
+import path from "node:path"
+import { findTask } from "@/engine/store"
 
 const log = Log.create({ service: "intent-bundle" })
 
@@ -129,6 +132,11 @@ export namespace IntentBundle {
     }
     const abs = paths(input.projectID, input.taskID).absolute
     const body = renderRequest(input)
+    try {
+      if ((await fs.readFile(abs, "utf8")) === body) return abs
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error
+    }
     await Filesystem.writeAtomic(abs, body)
     log.info("intent bundle written", {
       taskID: input.taskID,
@@ -138,5 +146,31 @@ export namespace IntentBundle {
       attachments: input.attachments?.length ?? 0,
     })
     return abs
+  }
+
+  /** Materialize the canonical file projection from the durable Task row.
+   * This is the only production writer used by creation and recovery. */
+  export async function ensure(taskID: string): Promise<string> {
+    const task = findTask(taskID)
+    if (!task) throw new Error(`IntentBundle.ensure: unknown committed Task ${taskID}`)
+    return write({
+      projectID: task.project_id,
+      taskID: task.id,
+      request: task.request,
+      attachments: task.attachments ?? undefined,
+      source: task.source,
+      createdAt: task.time_created,
+    })
+  }
+
+  /** Remove only the derived intent directory after the owning Task row has
+   * been durably retained away. */
+  export async function removeProjection(input: { projectDirectory: string; taskID: string }): Promise<void> {
+    const intent = ProjectRuntimePaths.intentPaths(input.projectDirectory, input.taskID).absolute
+    await fs.rm(path.dirname(intent), {
+      recursive: true,
+      force: true,
+    })
+    log.info("intent bundle removed", { taskID: input.taskID, path: intent })
   }
 }

@@ -10,8 +10,13 @@ import { Identifier } from "@/id/id"
 import { SessionPrompt } from "@/session/prompt"
 import { SessionProcessor } from "@/session/processor"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
+import { GlobalCreationAllocationTable, ProjectTable } from "@/project/project.sql"
+import { Database, eq } from "@/storage/db"
+import { EngineService } from "@/task-api"
+import { exportMysqlTransferSnapshot, preflightMysqlTransferSnapshot } from "@/storage/mysql-transfer"
 
 const model = { providerID: "global-chat-start-test", modelID: "stream-model" }
+const laterModelID = "later-session-model"
 
 function providerModel(): ProviderType.Model {
   return {
@@ -48,6 +53,12 @@ beforeAll(async () => {
         models: {
           [model.modelID]: {
             name: "Global Chat Start Test Model",
+            tool_call: true,
+            modalities: { input: ["text"], output: ["text"] },
+            limit: { context: 1_000_000, output: 4_096 },
+          },
+          [laterModelID]: {
+            name: "Later Session Model",
             tool_call: true,
             modalities: { input: ["text"], output: ["text"] },
             limit: { context: 1_000_000, output: 4_096 },
@@ -141,7 +152,7 @@ describe("global Chat start API", () => {
         text: "Start one canonical global Chat",
         attachments: [
           {
-            data: Buffer.from("global Chat start attachment", "utf8").toString("base64"),
+            data: "TQ==",
             filename: "brief.txt",
             mime: "text/plain",
           },
@@ -154,18 +165,33 @@ describe("global Chat start API", () => {
           body: JSON.stringify(value),
         })
 
-      const firstResponse = await send(body)
+      const [firstResponse, concurrentResponse] = await Promise.all([
+        send(body),
+        send({ ...body, attachments: [{ ...body.attachments[0], data: "TQ" }] }),
+      ])
       const first = (await firstResponse.json()) as {
         requestID: string
         session: Session.Info
         messageID: string
       }
+      const concurrent = (await concurrentResponse.json()) as typeof first
       const streamResponse = await Server.App().request(
         `/session/${encodeURIComponent(first.session.id)}/events?directory=${encodeURIComponent(first.session.directory)}`,
       )
       const events = sessionEventReader(streamResponse)
       const connected = await events.next("session.connected")
-      const liveAssistantPartPromise = events.next("message.part.updated")
+      const liveAssistantPartPromise = (async () => {
+        while (true) {
+          const event = await events.next("message.part.updated")
+          if (
+            event.payload.part.messageID !== first.messageID &&
+            event.payload.part.type === "text" &&
+            event.payload.part.text === "global Chat streamed reply"
+          ) {
+            return event
+          }
+        }
+      })()
       releaseAssistant()
       const liveAssistantPart = await liveAssistantPartPromise
       await SessionPrompt.waitForFinish(first.session.id, first.session.directory)
@@ -176,7 +202,10 @@ describe("global Chat start API", () => {
         rows: Array<{ kind: string; sessionID?: string }>
       }
       const visibleChat = ledger.rows.find((row) => row.kind === "chat" && row.sessionID === first.session.id)
-      const retryResponse = await send(body)
+      const retryResponse = await send({
+        ...body,
+        attachments: [{ ...body.attachments[0], data: "TQ" }],
+      })
       const retry = (await retryResponse.json()) as typeof first
       await SessionPrompt.waitForFinish(first.session.id, first.session.directory)
       const promotionParent = path.join(process.env.OPENCORVUS_TEST_PROCESS_ROOT!, "promoted-global-chat")
@@ -192,9 +221,22 @@ describe("global Chat start API", () => {
       const promotion = (await promotionResponse.json()) as { directory: string }
       const promotedRetryResponse = await send(body)
       const promotedRetry = (await promotedRetryResponse.json()) as typeof first
+      const currentDefaults = spyOn(Config, "getGlobal").mockRejectedValue(
+        new Error("current Global Chat defaults are no longer resolvable"),
+      )
+      const invalidDefaultRetryResponse = await send(body)
+      const invalidDefaultRetry = (await invalidDefaultRetryResponse.json()) as typeof first
+      const invalidDefaultConflictResponse = await send({
+        ...body,
+        text: "Changed payload while the current model default is invalid",
+      })
+      currentDefaults.mockRestore()
 
       expect({
         status: firstResponse.status,
+        concurrentStatus: concurrentResponse.status,
+        concurrentSessionID: concurrent.session.id,
+        concurrentMessageID: concurrent.messageID,
         retryStatus: retryResponse.status,
         requestID: first.requestID,
         sessionID: first.session.id,
@@ -224,9 +266,16 @@ describe("global Chat start API", () => {
         promotedDirectory: promotedRetry.session.directory,
         promotedRetrySessionID: promotedRetry.session.id,
         promotedRetryMessageID: promotedRetry.messageID,
+        invalidDefaultRetryStatus: invalidDefaultRetryResponse.status,
+        invalidDefaultRetrySessionID: invalidDefaultRetry.session.id,
+        invalidDefaultConflictStatus: invalidDefaultConflictResponse.status,
+        invalidDefaultConflictName: ((await invalidDefaultConflictResponse.json()) as any).name,
         physicalTurns,
       }).toEqual({
         status: 202,
+        concurrentStatus: 202,
+        concurrentSessionID: first.session.id,
+        concurrentMessageID: first.messageID,
         retryStatus: 202,
         requestID: body.requestID,
         sessionID: expect.stringMatching(/^ses_/),
@@ -256,6 +305,10 @@ describe("global Chat start API", () => {
         promotedDirectory: promotion.directory,
         promotedRetrySessionID: first.session.id,
         promotedRetryMessageID: first.messageID,
+        invalidDefaultRetryStatus: 202,
+        invalidDefaultRetrySessionID: first.session.id,
+        invalidDefaultConflictStatus: 409,
+        invalidDefaultConflictName: "GlobalChatStartIdentityConflictError",
         physicalTurns: 1,
       })
 
@@ -266,6 +319,128 @@ describe("global Chat start API", () => {
           name: "GlobalChatStartIdentityConflictError",
           data: { requestID: body.requestID, sessionID: first.session.id },
         },
+      })
+      await Instance.provide({
+        directory: promotion.directory,
+        fn: () =>
+          Session.mergeConfigOverlayInProject({
+            sessionID: first.session.id,
+            projectID: first.session.projectID,
+            patch: { model: `${model.providerID}/${laterModelID}` },
+          }),
+      })
+      expect(preflightMysqlTransferSnapshot(exportMysqlTransferSnapshot())).toMatchObject({
+        schemaFingerprint: expect.stringMatching(/^[a-f0-9]{64}$/),
+      })
+
+      const deterministicMessageID = Identifier.deterministic(
+        "message",
+        `global.chat.start.v1\0${body.requestID}\0message`,
+      )
+      const deterministicTextPartID = Identifier.deterministic(
+        "part",
+        `global.chat.start.v1\0${body.requestID}\0text`,
+      )
+      const deterministicAttachmentPartID = Identifier.deterministic(
+        "part",
+        `global.chat.start.v1\0${body.requestID}\0attachment\0${0}`,
+      )
+      const deterministicControlID = Identifier.deterministic(
+        "session_control",
+        `global.chat.start.v1\0${body.requestID}\0control`,
+      )
+      const transferMutations: Array<{
+        expected: string
+        mutate: (snapshot: ReturnType<typeof exportMysqlTransferSnapshot>) => void
+      }> = [
+        {
+          expected: "input Message diverges",
+          mutate(snapshot) {
+            const row = snapshot.tables
+              .find((table) => table.name === "message")
+              ?.rows.find((candidate) => candidate.id === deterministicMessageID)
+            if (!row) throw new Error("Global Chat transfer omitted its deterministic Message")
+            const data = JSON.parse(String(row.data)) as Record<string, any>
+            data.extra.wake_reason.requestFingerprint = "0".repeat(64)
+            row.data = JSON.stringify(data)
+          },
+        },
+        {
+          expected: "input text Part diverges",
+          mutate(snapshot) {
+            const row = snapshot.tables
+              .find((table) => table.name === "part")
+              ?.rows.find((candidate) => candidate.id === deterministicTextPartID)
+            if (!row) throw new Error("Global Chat transfer omitted its deterministic text Part")
+            const data = JSON.parse(String(row.data)) as Record<string, any>
+            data.text = "divergent transferred text"
+            row.data = JSON.stringify(data)
+          },
+        },
+        {
+          expected: "attachment Part 1 diverges",
+          mutate(snapshot) {
+            const row = snapshot.tables
+              .find((table) => table.name === "part")
+              ?.rows.find((candidate) => candidate.id === deterministicAttachmentPartID)
+            if (!row) throw new Error("Global Chat transfer omitted its deterministic attachment Part")
+            const data = JSON.parse(String(row.data)) as Record<string, any>
+            data.url = "/attachment/foreign/sha.txt"
+            row.data = JSON.stringify(data)
+          },
+        },
+        {
+          expected: "wake control diverges",
+          mutate(snapshot) {
+            const row = snapshot.tables
+              .find((table) => table.name === "session_control_record")
+              ?.rows.find((candidate) => candidate.id === deterministicControlID)
+            if (!row) throw new Error("Global Chat transfer omitted its deterministic wake control")
+            const payload = JSON.parse(String(row.payload)) as Record<string, any>
+            payload.messageID = Identifier.ascending("message")
+            row.payload = JSON.stringify(payload)
+          },
+        },
+      ]
+      for (const mutation of transferMutations) {
+        const changed = structuredClone(exportMysqlTransferSnapshot())
+        mutation.mutate(changed)
+        expect(() => preflightMysqlTransferSnapshot(changed)).toThrow(
+          expect.objectContaining({
+            name: "MysqlTransferValidationError",
+            data: expect.objectContaining({ message: expect.stringContaining(mutation.expected) }),
+          }),
+        )
+      }
+      const malformedTransfer = structuredClone(exportMysqlTransferSnapshot())
+      const acceptedSession = malformedTransfer.tables
+        .find((table) => table.name === "session")
+        ?.rows.find((row) => row.id === first.session.id)
+      if (!acceptedSession) throw new Error("Global Chat transfer omitted its accepted Session")
+      const acceptedMetadata = JSON.parse(String(acceptedSession.metadata)) as Record<string, any>
+      acceptedMetadata.globalChatStart.messageID = Identifier.ascending("message")
+      acceptedSession.metadata = JSON.stringify(acceptedMetadata)
+      expect(() => preflightMysqlTransferSnapshot(malformedTransfer)).toThrow(
+        expect.objectContaining({
+          name: "MysqlTransferValidationError",
+          data: expect.objectContaining({
+            message: expect.stringContaining("deterministic request identity"),
+          }),
+        }),
+      )
+      expect(await EngineService.deleteSession(first.session.id, { projectID: first.session.projectID })).toBe(true)
+      const deletedReplay = await send(body)
+      expect({ status: deletedReplay.status, body: await deletedReplay.json() }).toMatchObject({
+        status: 410,
+        body: {
+          name: "GlobalCreationAcceptedTargetUnavailableError",
+          data: { requestID: body.requestID, projectID: first.session.projectID, targetID: first.session.id },
+        },
+      })
+      await Instance.disposeAll()
+      Database.transaction((db) => db.delete(ProjectTable).where(eq(ProjectTable.id, first.session.projectID)).run())
+      expect(preflightMysqlTransferSnapshot(exportMysqlTransferSnapshot())).toMatchObject({
+        schemaFingerprint: expect.any(String),
       })
     } finally {
       processor.mockRestore()
@@ -329,5 +504,30 @@ describe("global Chat start API", () => {
         error: [{ code: "too_small", path: ["attachments", 0, "mime"] }],
       },
     })
+  })
+
+  test("rejects an unavailable explicit model before reserving a Global Chat allocation or Project", async () => {
+    const facts = () => Database.use((db) => ({
+      allocations: db.select().from(GlobalCreationAllocationTable).all(),
+      projects: db.select().from(ProjectTable).all(),
+    }))
+    const before = facts()
+    const response = await Server.App().request("/global/chat/start", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        requestID: "global-chat-start-unavailable-model",
+        text: "Validate this model before publishing a carrying Project",
+        model: "missing-provider/missing-model",
+      }),
+    })
+    expect({ status: response.status, body: await response.json() }).toMatchObject({
+      status: 400,
+      body: {
+        name: "ProviderModelNotFoundError",
+        data: { providerID: "missing-provider", modelID: "missing-model" },
+      },
+    })
+    expect(facts()).toEqual(before)
   })
 })

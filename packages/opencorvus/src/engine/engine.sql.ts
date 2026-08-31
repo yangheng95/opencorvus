@@ -75,6 +75,9 @@ export const EngineTaskTable = sqliteTable(
       .references(() => ProjectTable.id, { onDelete: "cascade" }),
     session_id: text().references(() => SessionTable.id, { onDelete: "set null" }),
     request_id: text(),
+    /** Reverse proof for a Task accepted by one Global creation occurrence.
+     * Appended once by allocation acceptance, including an external winner. */
+    global_creation_allocation_id: text(),
     source: text().notNull().default("api"),
     product_pillar: text({ enum: ["code", "work"] })
       .notNull()
@@ -147,7 +150,37 @@ export const EngineTaskTable = sqliteTable(
     index("engine_task_time_archived_idx").on(table.time_archived),
     index("engine_task_time_pinned_idx").on(table.time_pinned),
     uniqueIndex("engine_task_project_request_idx").on(table.project_id, table.request_id),
+    uniqueIndex("engine_task_global_creation_allocation_idx").on(table.global_creation_allocation_id),
     check("engine_task_excludes_git_projection", sql`json_type(${table.metadata}, '$.git') IS NULL`),
+  ],
+)
+
+/** Immutable accepted creation envelope for one Task. Request, channel and
+ * persisted Tool identities are claims on this one contract; they are never
+ * independent replay authorities. */
+export const EngineTaskCreationContractTable = sqliteTable(
+  "engine_task_creation_contract",
+  {
+    task_id: text()
+      .primaryKey()
+      .references(() => EngineTaskTable.id, { onDelete: "cascade" }),
+    fingerprint: text().notNull(),
+    contract: text({ mode: "json" }).notNull().$type<Record<string, unknown>>(),
+    creator_tool_part_id: text().references(() => ToolPartRequestTable.id, { onDelete: "restrict" }),
+    time_created: integer().notNull(),
+  },
+  (table) => [
+    uniqueIndex("engine_task_creation_contract_tool_part_idx").on(table.creator_tool_part_id),
+      check(
+        "engine_task_creation_contract_fingerprint_shape",
+        sql`length(${table.fingerprint}) = 64
+          AND json_type(${table.contract}) = 'object'
+          AND json_extract(${table.contract}, '$.protocol') = 'task-creation-contract-v2'
+          AND json_type(${table.contract}, '$.request') = 'object'
+          AND json_type(${table.contract}, '$.resolved') = 'object'
+          AND ${table.creator_tool_part_id} IS json_extract(${table.contract}, '$.request.input.creator.tool_part_id')
+          AND ${table.creator_tool_part_id} IS json_extract(${table.contract}, '$.resolved.creator.tool_part_id')`,
+      ),
   ],
 )
 
@@ -194,9 +227,8 @@ export const EngineTaskRootIngressTable = sqliteTable(
 
 /** One immutable Task-control wait intent. Current state is reduced from this
  * registration, its optional settlement, and the Task lifecycle occurrence;
- * Automation does not own Task waits. New writes always name the exact Tool
- * request Part. The legacy Automation origin exists only for the one-time
- * migration of already-durable waits. */
+ * Automation does not own Task waits. Every write names the exact Tool request
+ * Part and its creator ingress/activation. */
 export const EngineTaskWaitRegistrationTable = sqliteTable(
   "engine_task_wait_registration",
   {
@@ -207,25 +239,17 @@ export const EngineTaskWaitRegistrationTable = sqliteTable(
     execution_epoch: integer().notNull(),
     due_at: integer().notNull(),
     reason: text().notNull(),
-    tool_part_id: text(),
-    creator_ingress_id: text().references(() => EngineTaskRootIngressTable.id, { onDelete: "cascade" }),
-    creator_activation_id: text(),
-    legacy_automation_definition_id: text(),
+    tool_part_id: text().notNull(),
+    creator_ingress_id: text()
+      .notNull()
+      .references(() => EngineTaskRootIngressTable.id, { onDelete: "cascade" }),
+    creator_activation_id: text().notNull(),
     input_digest: text().notNull(),
     time_created: integer().notNull(),
   },
   (table) => [
-    uniqueIndex("engine_task_wait_tool_occurrence_idx")
-      .on(table.tool_part_id)
-      .where(sql`${table.tool_part_id} IS NOT NULL`),
-    uniqueIndex("engine_task_wait_legacy_automation_idx")
-      .on(table.legacy_automation_definition_id)
-      .where(sql`${table.legacy_automation_definition_id} IS NOT NULL`),
+    uniqueIndex("engine_task_wait_tool_occurrence_idx").on(table.tool_part_id),
     index("engine_task_wait_task_epoch_due_idx").on(table.task_id, table.execution_epoch, table.due_at),
-    check("engine_task_wait_origin_shape", sql`
-        (${table.tool_part_id} IS NOT NULL AND ${table.creator_ingress_id} IS NOT NULL AND ${table.creator_activation_id} IS NOT NULL AND ${table.legacy_automation_definition_id} IS NULL)
-        OR (${table.tool_part_id} IS NULL AND ${table.creator_ingress_id} IS NULL AND ${table.creator_activation_id} IS NULL AND ${table.legacy_automation_definition_id} IS NOT NULL)
-      `),
   ],
 )
 

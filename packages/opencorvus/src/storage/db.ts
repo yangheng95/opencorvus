@@ -17,16 +17,8 @@ import { ApplicationSchema, DatabaseAuthorityTable } from "./schema"
 import { SCHEMA_DDL } from "./ddl"
 import {
   findSchemaDrift,
-  hasApplicationSchema,
-  reconcileSchemaTriggers,
   schemaObjectFingerprint,
 } from "./schema-contract"
-import { migrateFactKernelSchema, migratePermissionLedgerProjectRetentionSchema } from "./fact-kernel-migration"
-import { migrateSessionPromptOwnerSchema } from "./session-prompt-owner-migration"
-import { migrateDispatchLineageDeliveryOwners } from "./dispatch-lineage-owner-migration"
-import { migrateDispatchCollectionOccurrences } from "./dispatch-collection-occurrence-migration"
-import { migrateMissionExecutionReconciliationFacts } from "./mission-execution-reconciliation-migration"
-import { migrateSchedulingOccurrences } from "./scheduling-occurrence-migration"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
 import { Identifier } from "@/id/id"
 import {
@@ -45,6 +37,23 @@ export const NotFoundError = NamedError.create(
     message: z.string(),
   }),
 )
+
+/** Driver-level classification for a durable unique winner. Callers may
+ * re-read their canonical fact after this code, but must never parse SQLite's
+ * localized or version-dependent English message text. */
+export function isSqliteUniqueConstraintError(error: unknown): boolean {
+  return Boolean(
+    error &&
+      typeof error === "object" &&
+      (error as { code?: unknown }).code === "SQLITE_CONSTRAINT_UNIQUE",
+  )
+}
+
+export function isSqliteIdentityConstraintError(error: unknown): boolean {
+  if (!error || typeof error !== "object") return false
+  const code = (error as { code?: unknown }).code
+  return code === "SQLITE_CONSTRAINT_UNIQUE" || code === "SQLITE_CONSTRAINT_PRIMARYKEY"
+}
 
 export type DatabaseUnavailableErrorData = {
   message: string
@@ -93,41 +102,6 @@ export class DatabaseEffectAdmissionClosedError extends Error {
 }
 
 const log = Log.create({ service: "db" })
-
-function migrateProjectMaintenanceFenceSchema(sqlite: BunDatabase): void {
-  sqlite.exec(`
-CREATE TABLE IF NOT EXISTS "project_maintenance_fence" (
-  "project_id" text PRIMARY KEY NOT NULL,
-  "project_generation" text NOT NULL,
-  "operation_id" text NOT NULL,
-  "kind" text NOT NULL,
-  "owner_occurrence_id" text NOT NULL,
-  "owner_pid" integer NOT NULL,
-  "owner_process_instance_id" text NOT NULL,
-  "time_created" integer NOT NULL,
-  FOREIGN KEY ("project_id") REFERENCES "project"("id") ON DELETE CASCADE
-);
-CREATE INDEX IF NOT EXISTS "project_maintenance_fence_operation_idx" ON "project_maintenance_fence" ("operation_id");
-CREATE INDEX IF NOT EXISTS "project_maintenance_fence_owner_idx" ON "project_maintenance_fence" ("owner_occurrence_id");`)
-}
-
-function migrateProjectDirectoryAdmissionSchema(sqlite: BunDatabase): void {
-  sqlite.exec(`
-CREATE TABLE IF NOT EXISTS "project_directory_admission" (
-  "directory_key" text PRIMARY KEY NOT NULL,
-  "directory" text NOT NULL,
-  "generation" text NOT NULL,
-  "operation_id" text NOT NULL,
-  "kind" text NOT NULL,
-  "owner_occurrence_id" text NOT NULL,
-  "owner_pid" integer NOT NULL,
-  "owner_process_instance_id" text NOT NULL,
-  "time_created" integer NOT NULL
-);
-CREATE UNIQUE INDEX IF NOT EXISTS "project_directory_admission_generation_idx" ON "project_directory_admission" ("generation");
-CREATE INDEX IF NOT EXISTS "project_directory_admission_operation_idx" ON "project_directory_admission" ("operation_id");
-CREATE INDEX IF NOT EXISTS "project_directory_admission_owner_idx" ON "project_directory_admission" ("owner_occurrence_id");`)
-}
 
 const SQLITE_UNAVAILABLE_CODE_PREFIXES = ["SQLITE_IOERR", "SQLITE_CANTOPEN", "SQLITE_CORRUPT", "SQLITE_READONLY"]
 const SQLITE_UNAVAILABLE_CODES = new Set(["SQLITE_NOTADB", "SQLITE_FULL"])
@@ -1005,6 +979,20 @@ export namespace Database {
     return sqlite
   }
 
+  function probeExistingSchemaReadonly(dbPath: string): void {
+    const sqlite = new BunDatabase(dbPath, { readonly: true })
+    let drift: string | undefined
+    let fingerprint = ""
+    try {
+      sqlite.run("PRAGMA busy_timeout = 5000")
+      drift = findSchemaDrift(sqlite)
+      fingerprint = schemaObjectFingerprint(sqlite)
+    } finally {
+      sqlite.close(false)
+    }
+    if (drift) throw schemaResetRequired(dbPath, drift, fingerprint)
+  }
+
   function schemaResetRequired(dbPath: string, reason: string, fingerprint: string) {
     return new DatabaseUnavailableError({
       message:
@@ -1096,26 +1084,14 @@ export namespace Database {
     fsSync.mkdirSync(path.dirname(dbPath), { recursive: true })
 
     try {
-      let sqlite = openOwnedSqlite(dbPath, { configure: false })
-      if (hasApplicationSchema(sqlite)) {
-        migrateProjectMaintenanceFenceSchema(sqlite)
-        migrateProjectDirectoryAdmissionSchema(sqlite)
-        migrateSessionPromptOwnerSchema(sqlite)
-        migratePermissionLedgerProjectRetentionSchema(sqlite)
-        migrateFactKernelSchema(sqlite)
-        migrateDispatchLineageDeliveryOwners(sqlite)
-        migrateDispatchCollectionOccurrences(sqlite)
-        migrateMissionExecutionReconciliationFacts(sqlite)
-        migrateSchedulingOccurrences(sqlite)
-        const reconciledTriggers = reconcileSchemaTriggers(sqlite)
-        if (reconciledTriggers.length > 0) {
-          log.info("schema triggers reconciled", { path: dbPath, triggers: reconciledTriggers })
-        }
-        const drift = findSchemaDrift(sqlite)
-        if (drift) {
-          const fingerprint = schemaObjectFingerprint(sqlite)
-          throw schemaResetRequired(dbPath, drift, fingerprint)
-        }
+      const existed = fsSync.existsSync(dbPath)
+      if (existed) probeExistingSchemaReadonly(dbPath)
+      const sqlite = openOwnedSqlite(dbPath, { configure: false })
+      if (existed) {
+        // The read-only probe is the epoch gate. Reassert the exact shape after
+        // obtaining the writable connection before any configuration PRAGMA.
+        const openingDrift = findSchemaDrift(sqlite)
+        if (openingDrift) throw schemaResetRequired(dbPath, openingDrift, schemaObjectFingerprint(sqlite))
         configureSqlite(sqlite)
         const integrityDB = drizzle({ client: sqlite, schema: ApplicationSchema })
         provideDatabaseContext(
@@ -1140,6 +1116,16 @@ export namespace Database {
   export function Client() {
     assertDatabaseAccess("Database.Client")
     return client()
+  }
+
+  /** Execute a read-only raw query and finalize its SQLite statement before
+   * the caller can cross a database close, rebuild, or checkpoint boundary. */
+  export function allFinalized<TResult>(sql: string): TResult[] {
+    assertDatabaseAccess("Database.allFinalized")
+    Client()
+    const sqlite = state.sqlite
+    if (!sqlite) throw new Error("Database.allFinalized requires an open SQLite connection")
+    return queryAllFinalized<TResult>(sqlite, sql)
   }
 
   /**

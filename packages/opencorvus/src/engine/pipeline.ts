@@ -32,6 +32,10 @@ import { Session } from "@/session"
 import { ProjectMemory } from "@/memory/project-memory"
 import { acceptTaskRootIngressInTransaction, DEFAULT_TASK_ROOT_INGRESS_POLICY } from "./task-root-fact-store"
 import { appendTaskOpenedInTransaction } from "./task-lifecycle"
+import {
+  insertTaskCreationContract,
+  type TaskCreationContractFact,
+} from "./task-creation-contract"
 
 const log = Log.create({ service: "engine-pipeline" })
 
@@ -49,7 +53,7 @@ type ChannelBindingInput = z.infer<typeof CreateTaskInput>["channelBinding"]
 // together. Host does not serialize Tasks; the model owns Task creation order.
 // ---------------------------------------------------------------------------
 
-export function persistTask(input: {
+export type PersistTaskInput = {
   taskID: string
   rootSession: Session.Info
   now: number
@@ -77,7 +81,11 @@ export function persistTask(input: {
   packageRevision: PromptProfileResolver.ResolvedPackageRevision
   creationExpectedPackageDigest?: string
   executionCapsuleBinding: TaskProcessBindingPayload
-}) {
+  creationContract: TaskCreationContractFact
+  acceptanceCommit?: (db: Database.TxOrDb) => void
+}
+
+export function persistTask(input: PersistTaskInput) {
   if (input.projectID === "global") {
     throw new TaskGlobalProjectBindingError({
       message: `Refusing to persist task ${input.taskID} under project global. Task persistence requires a concrete Git project.`,
@@ -116,6 +124,11 @@ export function persistTask(input: {
       priority: input.priority ?? "normal",
       budget: budgetRow(input.budget),
       metadata: input.metadata,
+      timeCreated: input.now,
+    })
+    insertTaskCreationContract(db, {
+      taskID: input.taskID,
+      fact: input.creationContract,
       timeCreated: input.now,
     })
     if (input.metadata.actor === "user") {
@@ -172,6 +185,7 @@ export function persistTask(input: {
       ...DEFAULT_TASK_ROOT_INGRESS_POLICY,
       now: input.now,
     }).id
+    input.acceptanceCommit?.(db)
     Database.effect(() =>
       EngineProtocol.emit(
         Event.TaskCreated,

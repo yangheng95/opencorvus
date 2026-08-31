@@ -55,23 +55,12 @@ export function bindMissionClosingChildTaskCanceller(canceller: MissionChildTask
 function cancellationOrigin(
   closure: Extract<MissionExecutionClosure, { state: "closing" | "closed" }>,
 ): TaskCancellationOrigin {
-  if (closure.provenance.kind === "request") {
-    return {
-      actor: "user",
-      source: closure.source,
-      surface: closure.provenance.surface,
-      requestID: closure.requestID,
-      reason: closure.provenance.reason,
-      sessionID: closure.sessionID,
-      missionID: closure.missionID,
-    }
-  }
   return {
-    actor: "mission",
+    actor: "user",
     source: closure.source,
-    surface: "runtime",
+    surface: closure.provenance.surface,
     requestID: closure.requestID,
-    reason: `Resume historical Mission close event ${closure.provenance.sourceEventID}`,
+    reason: closure.provenance.reason,
     sessionID: closure.sessionID,
     missionID: closure.missionID,
   }

@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test"
 import { TestHooks as TaskControlTestHooks } from "../src/engine/task-root-ingress-delivery"
-import { EngineTaskTable } from "../src/engine/engine.sql"
+import { EngineTaskCreationContractTable, EngineTaskTable } from "../src/engine/engine.sql"
 import { appendTaskOpenedInTransaction } from "../src/engine/task-lifecycle"
 import { deriveTaskStatus } from "../src/engine/task-status"
 import { listMissionTasks, requireTask } from "../src/engine/store"
@@ -8,21 +8,26 @@ import { closeMissionExecutionOperation, currentMissionExecutionClosure } from "
 import { ensureMissionSession } from "../src/mission/session"
 import { Instance } from "../src/project/instance"
 import { InstanceBootstrap } from "../src/project/bootstrap"
-import { TaskCreationCommitTestHooks } from "../src/task-api"
+import { EngineService, TaskCreationCommitTestHooks } from "../src/task-api"
 import {
   MissionTaskCreationClosureError,
 } from "../src/task-api/task-creator"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 import { openMissionThroughRealWake } from "./fixture/mission-opened"
 import { Session } from "../src/session"
-import { PanelTool } from "../src/tool/panel"
+import { PanelTool, recoverPanelCreationToolPart } from "../src/tool/panel"
+import type { Message } from "../src/session/message"
 import { Tool } from "../src/tool/tool"
 import { Identifier } from "../src/id/id"
 import { MissionClosingEffectsTestHooks } from "../src/mission/execution-close-effects"
 import { ProtocolStore } from "../src/protocol/store"
-import { ProjectRuntimePaths } from "../src/project/runtime-paths"
-import { Database } from "../src/storage/db"
-import path from "node:path"
+import { Database, eq } from "../src/storage/db"
+import {
+  exportMysqlTransferSnapshot,
+  MysqlTransferValidationError,
+  preflightMysqlTransferSnapshot,
+} from "../src/storage/mysql-transfer"
+import { taskCreationContractFingerprint } from "../src/engine/task-creation-contract"
 
 afterEach(async () => {
   await Instance.disposeAll()
@@ -48,18 +53,22 @@ async function missionFixture(label: string) {
   }
 }
 
-function panelTaskInput(label: string) {
+function panelTaskInput(label: string, explicitRuntime = true) {
   return {
     action: "create_task" as const,
     request_id: `${label}:task`,
     title: `Mission child ${label}`,
     request: `Create the Mission child for ${label}`,
-    model: "firmware/gpt-5",
     promptProfile: "base",
+    ...(explicitRuntime ? { model: "firmware/gpt-5" } : {}),
   }
 }
 
-async function executeMissionPanelCreateTask(mission: Awaited<ReturnType<typeof ensureMissionSession>>, label: string) {
+async function executeMissionPanelCreateTask(
+  mission: Awaited<ReturnType<typeof ensureMissionSession>>,
+  label: string,
+  explicitRuntime = true,
+) {
   const now = Date.now()
   const user = await Session.updateMessage({
     id: Identifier.ascending("message"),
@@ -94,13 +103,13 @@ async function executeMissionPanelCreateTask(mission: Awaited<ReturnType<typeof 
     tool: "panel",
     state: {
       status: "running",
-      input: panelTaskInput(label),
+      input: panelTaskInput(label, explicitRuntime),
       time: { start: now + 1 },
     },
   })
   const panel = await PanelTool.init({ agentID: "mission" })
   return panel.execute(
-    panelTaskInput(label),
+    panelTaskInput(label, explicitRuntime),
     {
       sessionID: mission.id,
       messageID: assistant.id,
@@ -180,6 +189,148 @@ async function seedMissionChild(
 }
 
 describe("Mission Task creation exact opened occurrence", () => {
+  test("replays a committed panel.create_task target from the exact persisted Tool occurrence", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      init: InstanceBootstrap,
+      fn: async () => {
+        using _runner = TaskControlTestHooks.replaceTaskIngressRunner({ runner: async () => ({}) })
+        const { mission } = await missionFixture("tool-replay")
+        const first = await executeMissionPanelCreateTask(mission, "tool-replay")
+        const taskID = JSON.parse(first.output).task_id as string
+        await Database.awaitEffectIdle(10_000)
+        const snapshot = exportMysqlTransferSnapshot()
+        expect(preflightMysqlTransferSnapshot(snapshot)).toMatchObject({
+          schemaFingerprint: snapshot.schemaFingerprint,
+        })
+        const staleOpened = structuredClone(snapshot)
+        const staleContractRow = staleOpened.tables.find((table) => table.name === "engine_task_creation_contract")
+          ?.rows.find((row) => row.task_id === taskID)
+        if (!staleContractRow) throw new Error("Mission transfer omitted its Task creation contract")
+        const staleContract = JSON.parse(String(staleContractRow.contract)) as Record<string, any>
+        staleContract.request.input.creator.opened_occurrence.event_id = "pev_missing_opened"
+        staleContract.resolved.creator.opened_occurrence.event_id = "pev_missing_opened"
+        staleContractRow.contract = JSON.stringify(staleContract)
+        staleContractRow.fingerprint = taskCreationContractFingerprint(staleContract.request)
+        expect(() => preflightMysqlTransferSnapshot(staleOpened)).toThrow(
+          expect.objectContaining<MysqlTransferValidationError>({
+            name: "MysqlTransferValidationError",
+            data: expect.objectContaining({
+              message: expect.stringContaining("invalid panel Tool creator lineage"),
+            }),
+          }),
+        )
+        const changedPanelCaller = structuredClone(snapshot)
+        const changedPanelContractRow = changedPanelCaller.tables
+          .find((table) => table.name === "engine_task_creation_contract")
+          ?.rows.find((row) => row.task_id === taskID)
+        if (!changedPanelContractRow) throw new Error("Mission transfer omitted its Task creation contract")
+        const changedPanelContract = JSON.parse(String(changedPanelContractRow.contract)) as Record<string, any>
+        changedPanelContract.request.input.request = "divergent transferred panel request"
+        changedPanelContractRow.contract = JSON.stringify(changedPanelContract)
+        changedPanelContractRow.fingerprint = taskCreationContractFingerprint(changedPanelContract.request)
+        expect(() => preflightMysqlTransferSnapshot(changedPanelCaller)).toThrow(
+          expect.objectContaining<MysqlTransferValidationError>({
+            name: "MysqlTransferValidationError",
+            data: expect.objectContaining({
+              message: expect.stringContaining("invalid panel Tool creator lineage"),
+            }),
+          }),
+        )
+        const transcript = await Session.messages({ sessionID: mission.id })
+        const owner = transcript
+          .flatMap((message) =>
+            message.parts
+              .filter(
+                (part): part is Message.ToolPart =>
+                  part.type === "tool" && part.callID === "panel-create-tool-replay",
+              )
+              .map((part) => ({ messageID: message.info.id, part })),
+          )
+          .at(0)
+        if (!owner) throw new Error("Persisted panel.create_task Tool occurrence was not found")
+        const replay = await recoverPanelCreationToolPart({
+          sessionID: mission.id,
+          messageID: owner.messageID,
+          agent: "mission",
+          part: owner.part,
+        })
+        expect(replay).toEqual(first)
+        const task = requireTask(taskID)
+        Database.immediateTransaction(() => {
+          ProtocolStore.appendEventInTransaction({
+            kind: "event",
+            type: "task.completed",
+            aggregate: "task",
+            aggregate_id: taskID,
+            task_id: null,
+            session_id: task.session_id,
+            source: "test.panel-create-retention",
+            emitted_at: Date.now(),
+            payload: { execution_epoch: 1 },
+          })
+        })
+        expect(await EngineService.deleteTask(taskID, { projectID: Instance.project.id })).toBe(true)
+        const unavailable = await recoverPanelCreationToolPart({
+          sessionID: mission.id,
+          messageID: owner.messageID,
+          agent: "mission",
+          part: owner.part,
+        })
+        expect(JSON.parse(unavailable!.output)).toEqual({
+          kind: "accepted_target_unavailable",
+          operation: "create_task",
+          target_id: taskID,
+          message: `The accepted create_task target ${taskID} is no longer available.`,
+        })
+      },
+    })
+  }, 120_000)
+
+  test("keeps inherited Mission runtime values out of the immutable caller request", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      init: InstanceBootstrap,
+      fn: async () => {
+        using _runner = TaskControlTestHooks.replaceTaskIngressRunner({ runner: async () => ({}) })
+        const { mission } = await missionFixture("inherited-caller-semantics")
+        const result = await executeMissionPanelCreateTask(mission, "inherited-caller-semantics", false)
+        const taskID = JSON.parse(result.output).task_id as string
+        const contract = Database.use((db) =>
+          db
+            .select({ contract: EngineTaskCreationContractTable.contract })
+            .from(EngineTaskCreationContractTable)
+            .where(eq(EngineTaskCreationContractTable.task_id, taskID))
+            .get()?.contract as any,
+        )
+        expect({
+          caller: {
+            model: contract.request.input.explicit_model,
+            profile: contract.request.input.explicit_prompt_profile,
+            source: contract.request.input.explicit_source,
+            productPillar: contract.request.input.explicit_product_pillar,
+          },
+          resolved: {
+            model: contract.resolved.effective_model,
+            profile: contract.resolved.prompt_profile_id,
+            source: contract.resolved.source,
+            productPillar: contract.resolved.product_pillar,
+          },
+        }).toEqual({
+          caller: { model: null, profile: "base", source: null, productPillar: null },
+          resolved: {
+            model: expect.any(String),
+            profile: "base",
+            source: "mission",
+            productPillar: "work",
+          },
+        })
+      },
+    })
+  }, 120_000)
+
   test("commits the Mission child first, then the durable close cancels that stable child and closes", async () => {
     await using project = await memoryProject()
     await Instance.provide({
@@ -318,13 +469,7 @@ describe("Mission Task creation exact opened occurrence", () => {
         using _runner = TaskControlTestHooks.replaceTaskIngressRunner({ runner: async () => ({}) })
         const { mission } = await missionFixture("close-first")
         const commit = barrier()
-        let preparedTaskID: string | undefined
-        let cleanupReceipt: { taskID: string; root: string; status: "removed" } | undefined
-        using _cleanup = TaskCreationCommitTestHooks.installAfterRejectedPreparationCleanup((receipt) => {
-          cleanupReceipt = receipt
-        })
-        using _persist = TaskCreationCommitTestHooks.installBeforePersist(async ({ taskID }) => {
-          preparedTaskID = taskID
+        using _persist = TaskCreationCommitTestHooks.installBeforePersist(async () => {
           commit.arrive()
           await commit.released
         })
@@ -365,7 +510,6 @@ describe("Mission Task creation exact opened occurrence", () => {
             missionID: mission.missionID,
             sessionID: mission.id,
           }).map((task) => task.id),
-          cleanupReceipt,
         }).toEqual({
           closedState: "closed",
           result: {
@@ -374,11 +518,6 @@ describe("Mission Task creation exact opened occurrence", () => {
             eventID: closed.eventID,
           },
           missionChildren: [],
-          cleanupReceipt: {
-            taskID: preparedTaskID,
-            root: path.resolve(ProjectRuntimePaths.taskRoot(project.path, preparedTaskID!)),
-            status: "removed",
-          },
         })
       },
     })

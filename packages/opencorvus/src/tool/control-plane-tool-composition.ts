@@ -7,6 +7,7 @@ const defaultControlPlaneToolLoaders: ControlPlaneToolLoaders = {
   requestOrchestratorDecision: async () =>
     (await import("./request-orchestrator-decision")).RequestOrchestratorDecisionTool,
   sendMailboxMessage: async () => (await import("./send-mailbox-message")).SendMailboxMessageTool,
+  recoverPanelCreation: async (input) => (await import("./panel")).recoverPanelCreationToolPart(input),
 }
 
 export function installDefaultControlPlaneToolLoaders(): void {

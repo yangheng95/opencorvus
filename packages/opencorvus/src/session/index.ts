@@ -10,7 +10,7 @@ import { Flag } from "../flag/flag"
 import { Identifier } from "../id/id"
 import { Installation } from "../installation"
 
-import { Database, NotFoundError, eq, and, gte, isNull, desc, like, inArray, or, sql } from "../storage/db"
+import { Database, NotFoundError, eq, and, gt, gte, isNull, desc, like, inArray, or, sql } from "../storage/db"
 import type { SQL } from "../storage/db"
 import {
   SessionTable,
@@ -81,6 +81,7 @@ import { normalizeToolResult } from "./tool-result-normalization"
 
 export namespace Session {
   const log = Log.create({ service: "session" })
+  const TREE_QUERY_PAGE_SIZE = 64
 
   const parentTitlePrefix = "New session - "
   const childTitlePrefix = "Child session - "
@@ -1131,65 +1132,91 @@ export namespace Session {
     return treeInProject({ sessionID, projectID: Instance.project.id })
   })
 
-  function treeIDsFromRows(rows: Array<{ id: string; parentID: string | null }>, sessionID: string): string[] {
-    const childrenByParent = new Map<string, string[]>()
-    for (const row of rows) {
-      if (!row.parentID) continue
-      const existing = childrenByParent.get(row.parentID)
-      if (existing) existing.push(row.id)
-      else childrenByParent.set(row.parentID, [row.id])
+  export function treeInProjectInTransaction(
+    db: Database.TxOrDb,
+    input: {
+      sessionID: string
+      projectID: string
+      includeDeletedRoot?: boolean
+      observePage?: (page: { stage: "children" | "task_owner" | "delete"; inputCount: number; rowCount: number }) => void
+    },
+  ): string[] {
+    const root = db
+      .select({ id: SessionTable.id })
+      .from(SessionTable)
+      .where(and(eq(SessionTable.id, input.sessionID), eq(SessionTable.project_id, input.projectID)))
+      .get()
+    if (!root || (!input.includeDeletedRoot && deletedInTransaction(db, input.sessionID))) {
+      throw new NotFoundError({ message: `Session not found: ${input.sessionID}` })
     }
-    const ids: string[] = [sessionID]
-    const queue: string[] = [sessionID]
+    const ids: string[] = [input.sessionID]
+    const queue: string[] = [input.sessionID]
     const seen = new Set(ids)
     while (queue.length > 0) {
-      const next = queue.shift()!
-      const direct = childrenByParent.get(next) ?? []
-      for (const childID of direct) {
-        if (seen.has(childID)) throw new Error(`Session tree cycle detected at ${childID}`)
-        seen.add(childID)
-        ids.push(childID)
-        queue.push(childID)
+      const parentIDs = queue.splice(0, TREE_QUERY_PAGE_SIZE)
+      let cursor: { timeCreated: number; id: string } | undefined
+      while (true) {
+        const children = db
+          .select({ id: SessionTable.id, timeCreated: SessionTable.time_created })
+          .from(SessionTable)
+          .where(
+            and(
+              eq(SessionTable.project_id, input.projectID),
+              inArray(SessionTable.parent_id, parentIDs),
+              cursor
+                ? or(
+                    gt(SessionTable.time_created, cursor.timeCreated),
+                    and(eq(SessionTable.time_created, cursor.timeCreated), gt(SessionTable.id, cursor.id)),
+                  )
+                : undefined,
+            ),
+          )
+          .orderBy(SessionTable.time_created, SessionTable.id)
+          .limit(TREE_QUERY_PAGE_SIZE)
+          .all()
+        input.observePage?.({ stage: "children", inputCount: parentIDs.length, rowCount: children.length })
+        for (const child of children) {
+          const childID = child.id
+          if (seen.has(childID)) throw new Error(`Session tree cycle detected at ${childID}`)
+          seen.add(childID)
+          ids.push(childID)
+          queue.push(childID)
+        }
+        if (children.length < TREE_QUERY_PAGE_SIZE) break
+        const last = children.at(-1)!
+        cursor = { timeCreated: last.timeCreated, id: last.id }
       }
     }
     return ids
   }
 
   export const treeInProject = fn(SessionProjectInput, async ({ sessionID, projectID }) => {
-    const rows = Database.use((db) =>
-      db
-        .select({
-          id: SessionTable.id,
-          parentID: SessionTable.parent_id,
-        })
-        .from(SessionTable)
-        .where(eq(SessionTable.project_id, projectID))
-        .orderBy(SessionTable.time_created, SessionTable.id)
-        .all(),
-    )
-    if (Database.use((db) => deletedInTransaction(db, sessionID))) {
-      throw new NotFoundError({ message: `Session not found: ${sessionID}` })
-    }
-    return treeIDsFromRows(rows, sessionID)
+    return Database.use((db) => treeInProjectInTransaction(db, { sessionID, projectID }))
   })
 
   export function deleteExactTreeInProject(
     tx: Database.TxOrDb,
-    input: { sessionID: string; projectID: string; expectedSessionIDs: string[] },
+    input: {
+      sessionID: string
+      projectID: string
+      expectedSessionIDs: string[]
+      observePage?: (page: { stage: "children" | "task_owner" | "delete"; inputCount: number; rowCount: number }) => void
+    },
   ): number {
-    const rows = tx
-      .select({ id: SessionTable.id, parentID: SessionTable.parent_id })
-      .from(SessionTable)
-      .where(eq(SessionTable.project_id, input.projectID))
-      .orderBy(SessionTable.time_created, SessionTable.id)
-      .all()
-    if (!rows.some((row) => row.id === input.sessionID)) {
-      throw new NotFoundError({ message: `Session not found: ${input.sessionID}` })
+    const currentSessionIDs = treeInProjectInTransaction(tx, input)
+    for (let offset = 0; offset < currentSessionIDs.length; offset += TREE_QUERY_PAGE_SIZE) {
+      const sessionIDs = currentSessionIDs.slice(offset, offset + TREE_QUERY_PAGE_SIZE)
+      const taskOwner = tx
+        .select({ id: EngineTaskTable.id })
+        .from(EngineTaskTable)
+        .where(inArray(EngineTaskTable.session_id, sessionIDs))
+        .limit(1)
+        .get()
+      input.observePage?.({ stage: "task_owner", inputCount: sessionIDs.length, rowCount: taskOwner ? 1 : 0 })
+      if (taskOwner) {
+        throw new Error(`Session tree ${input.sessionID} is immutable while owned by Task ${taskOwner.id}`)
+      }
     }
-    const currentSessionIDs = treeIDsFromRows(rows, input.sessionID)
-    const taskOwner = tx.select({ id: EngineTaskTable.id }).from(EngineTaskTable)
-      .where(inArray(EngineTaskTable.session_id, currentSessionIDs)).get()
-    if (taskOwner) throw new Error(`Session tree ${input.sessionID} is immutable while owned by Task ${taskOwner.id}`)
     const expectedSessionIDs = [...new Set(input.expectedSessionIDs)]
     if (expectedSessionIDs.length !== input.expectedSessionIDs.length) {
       throw new Error(`Session deletion settlement contains duplicate session identifiers for ${input.sessionID}`)
@@ -1203,14 +1230,20 @@ export namespace Session {
         `Session tree ${input.sessionID} changed after settlement: expected ${expectedSessionIDs.join(", ")}; current ${currentSessionIDs.join(", ")}`,
       )
     }
-    const deleted = tx
-      .delete(SessionTable)
-      .where(and(eq(SessionTable.project_id, input.projectID), inArray(SessionTable.id, currentSessionIDs)))
-      .returning({ id: SessionTable.id })
-      .all()
-    if (deleted.length !== currentSessionIDs.length) {
+    let deletedCount = 0
+    for (let offset = 0; offset < currentSessionIDs.length; offset += TREE_QUERY_PAGE_SIZE) {
+      const sessionIDs = currentSessionIDs.slice(offset, offset + TREE_QUERY_PAGE_SIZE)
+      const deleted = tx
+        .delete(SessionTable)
+        .where(and(eq(SessionTable.project_id, input.projectID), inArray(SessionTable.id, sessionIDs)))
+        .returning({ id: SessionTable.id })
+        .all()
+      input.observePage?.({ stage: "delete", inputCount: sessionIDs.length, rowCount: deleted.length })
+      deletedCount += deleted.length
+    }
+    if (deletedCount !== currentSessionIDs.length) {
       throw new Error(
-        `Session tree ${input.sessionID} deletion removed ${deleted.length} rows, expected ${currentSessionIDs.length}`,
+        `Session tree ${input.sessionID} deletion removed ${deletedCount} rows, expected ${currentSessionIDs.length}`,
       )
     }
     Database.effect(async () => {
@@ -1222,7 +1255,7 @@ export namespace Session {
         }
       }
     })
-    return deleted.length
+    return deletedCount
   }
 
   export const childrenInProject = fn(

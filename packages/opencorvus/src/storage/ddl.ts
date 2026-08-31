@@ -211,6 +211,491 @@ BEGIN
   SELECT RAISE(ABORT, 'project: generation is immutable');
 END;
 
+CREATE TRIGGER IF NOT EXISTS global_creation_allocation_identity_immutable_update
+BEFORE UPDATE OF id, kind, request_id, request_fingerprint, request_contract, resolution_seed, task_resolution, directory, time_created
+ON global_creation_allocation
+FOR EACH ROW
+BEGIN
+  SELECT RAISE(ABORT, 'global_creation_allocation: immutable request allocation');
+END;
+
+CREATE TRIGGER IF NOT EXISTS global_creation_allocation_project_write_once
+BEFORE UPDATE OF materialized_project_id, materialized_project_generation, time_materialized
+ON global_creation_allocation FOR EACH ROW
+WHEN OLD.materialized_project_id IS NOT NULL
+  OR OLD.materialized_project_generation IS NOT NULL
+  OR OLD.time_materialized IS NOT NULL
+  OR NEW.materialized_project_id IS NULL
+  OR NEW.materialized_project_generation IS NULL
+  OR NEW.time_materialized IS NULL
+  OR NOT EXISTS (
+    SELECT 1 FROM project
+    WHERE id=NEW.materialized_project_id
+      AND generation=NEW.materialized_project_generation
+  )
+BEGIN
+  SELECT RAISE(ABORT, 'global_creation_allocation: carrying Project is append-only');
+END;
+
+CREATE TRIGGER IF NOT EXISTS global_creation_allocation_project_insert
+BEFORE INSERT ON global_creation_allocation FOR EACH ROW
+WHEN NEW.materialized_project_id IS NOT NULL
+  AND NOT EXISTS (
+  SELECT 1 FROM project
+  WHERE id=NEW.materialized_project_id
+    AND generation=NEW.materialized_project_generation
+)
+BEGIN
+  SELECT RAISE(ABORT, 'global_creation_allocation: carrying Project occurrence is invalid');
+END;
+
+CREATE TRIGGER IF NOT EXISTS global_creation_allocation_rejection_write_once
+BEFORE UPDATE OF rejected_error, time_rejected ON global_creation_allocation
+FOR EACH ROW
+WHEN OLD.rejected_error IS NOT NULL
+  OR OLD.time_rejected IS NOT NULL
+  OR NEW.rejected_error IS NULL
+  OR NEW.time_rejected IS NULL
+  OR NEW.accepted_target_id IS NOT NULL
+BEGIN
+  SELECT RAISE(ABORT, 'global_creation_allocation: rejection is append-only');
+END;
+
+CREATE TRIGGER IF NOT EXISTS global_creation_allocation_acceptance_write_once
+BEFORE UPDATE OF accepted_project_id, accepted_target_id, accepted_initial_config_overlay, time_accepted ON global_creation_allocation
+FOR EACH ROW
+WHEN OLD.accepted_project_id IS NOT NULL
+  OR OLD.accepted_target_id IS NOT NULL
+  OR OLD.accepted_initial_config_overlay IS NOT NULL
+  OR OLD.time_accepted IS NOT NULL
+  OR NEW.accepted_project_id IS NULL
+  OR NEW.accepted_target_id IS NULL
+  OR NEW.accepted_initial_config_overlay IS NULL
+  OR NEW.time_accepted IS NULL
+  OR OLD.rejected_error IS NOT NULL
+  OR NEW.materialized_project_id IS NOT NEW.accepted_project_id
+BEGIN
+  SELECT RAISE(ABORT, 'global_creation_allocation: aggregate acceptance is append-only');
+END;
+
+CREATE TRIGGER IF NOT EXISTS global_creation_allocation_pending_project_no_delete
+BEFORE DELETE ON project FOR EACH ROW
+WHEN EXISTS (
+  SELECT 1 FROM global_creation_allocation
+  WHERE materialized_project_id=OLD.id
+    AND materialized_project_generation=OLD.generation
+    AND accepted_target_id IS NULL
+    AND rejected_error IS NULL
+)
+BEGIN
+  SELECT RAISE(ABORT, 'project: pending global creation allocation owns this Project');
+END;
+
+CREATE TRIGGER IF NOT EXISTS global_creation_allocation_project_retention_write_once
+BEFORE UPDATE OF time_project_retained ON global_creation_allocation
+FOR EACH ROW
+WHEN OLD.time_project_retained IS NOT NULL
+  OR NEW.time_project_retained IS NULL
+  OR (NEW.accepted_target_id IS NULL AND NEW.rejected_error IS NULL)
+  OR NOT EXISTS (
+    SELECT 1 FROM project
+    WHERE id=NEW.materialized_project_id AND generation=NEW.materialized_project_generation
+  )
+BEGIN
+  SELECT RAISE(ABORT, 'global_creation_allocation: Project retention is append-only');
+END;
+
+CREATE TRIGGER IF NOT EXISTS global_creation_allocation_project_retention_insert
+BEFORE INSERT ON global_creation_allocation
+FOR EACH ROW WHEN NEW.time_project_retained IS NOT NULL
+BEGIN
+  SELECT RAISE(ABORT, 'global_creation_allocation: Project retention must be produced by Project deletion');
+END;
+
+CREATE TRIGGER IF NOT EXISTS global_creation_allocation_project_retention_delete
+BEFORE DELETE ON project FOR EACH ROW
+WHEN EXISTS (
+  SELECT 1 FROM global_creation_allocation
+  WHERE materialized_project_id=OLD.id
+    AND materialized_project_generation=OLD.generation
+    AND (accepted_target_id IS NOT NULL OR rejected_error IS NOT NULL)
+    AND time_project_retained IS NULL
+)
+BEGIN
+  UPDATE global_creation_allocation
+  SET time_project_retained=MAX(
+    OLD.time_updated,
+    COALESCE(time_accepted,time_rejected,time_materialized,OLD.time_updated)
+  )
+  WHERE materialized_project_id=OLD.id
+    AND materialized_project_generation=OLD.generation
+    AND (accepted_target_id IS NOT NULL OR rejected_error IS NOT NULL)
+    AND time_project_retained IS NULL;
+END;
+
+CREATE TRIGGER IF NOT EXISTS global_creation_allocation_acceptance_target_update
+BEFORE UPDATE OF accepted_project_id, accepted_target_id, accepted_initial_config_overlay, time_accepted ON global_creation_allocation
+FOR EACH ROW
+WHEN NEW.accepted_project_id IS NOT NULL AND NOT (
+  (
+    NEW.kind='global_task' AND EXISTS (
+      SELECT 1 FROM engine_task AS task
+      WHERE task.id=NEW.accepted_target_id
+        AND task.project_id=NEW.accepted_project_id
+        AND task.request_id=NEW.request_id
+        AND task.global_creation_allocation_id=NEW.id
+    )
+  ) OR (
+    NEW.kind='global_chat_start' AND EXISTS (
+      SELECT 1 FROM session AS target_session
+      WHERE target_session.id=NEW.accepted_target_id
+        AND target_session.project_id=NEW.accepted_project_id
+        AND json_extract(target_session.metadata,'$.globalChatStart.requestID')=NEW.request_id
+        AND json_extract(target_session.metadata,'$.globalChatStart.version')=2
+        AND json_extract(target_session.metadata,'$.globalChatStart.requestFingerprint')=NEW.request_fingerprint
+    )
+  )
+)
+BEGIN
+  SELECT RAISE(ABORT, 'global_creation_allocation: accepted target does not match request aggregate');
+END;
+
+CREATE TRIGGER IF NOT EXISTS global_creation_allocation_acceptance_target_insert
+BEFORE INSERT ON global_creation_allocation
+FOR EACH ROW
+WHEN NEW.accepted_project_id IS NOT NULL AND NOT (
+  (NEW.kind='global_task' AND EXISTS (
+    SELECT 1 FROM engine_task AS task
+    WHERE task.id=NEW.accepted_target_id
+      AND task.project_id=NEW.accepted_project_id
+      AND task.request_id=NEW.request_id
+      AND task.global_creation_allocation_id=NEW.id
+  )) OR
+  (NEW.kind='global_chat_start' AND EXISTS (
+    SELECT 1 FROM session AS target_session
+    WHERE target_session.id=NEW.accepted_target_id
+      AND target_session.project_id=NEW.accepted_project_id
+      AND json_extract(target_session.metadata,'$.globalChatStart.requestID')=NEW.request_id
+      AND json_extract(target_session.metadata,'$.globalChatStart.version')=2
+      AND json_extract(target_session.metadata,'$.globalChatStart.requestFingerprint')=NEW.request_fingerprint
+  ))
+)
+BEGIN
+  SELECT RAISE(ABORT, 'global_creation_allocation: accepted target does not match request aggregate');
+END;
+
+CREATE TRIGGER IF NOT EXISTS global_creation_allocation_no_delete
+BEFORE DELETE ON global_creation_allocation
+FOR EACH ROW
+BEGIN
+  SELECT RAISE(ABORT, 'global_creation_allocation: immutable request allocation');
+END;
+
+CREATE TRIGGER IF NOT EXISTS engine_task_creation_contract_no_update
+BEFORE UPDATE ON engine_task_creation_contract
+FOR EACH ROW
+BEGIN
+  SELECT RAISE(ABORT, 'engine_task_creation_contract: immutable accepted contract');
+END;
+
+CREATE TRIGGER IF NOT EXISTS engine_task_creation_contract_no_delete
+BEFORE DELETE ON engine_task_creation_contract
+FOR EACH ROW
+WHEN EXISTS (SELECT 1 FROM engine_task WHERE id=OLD.task_id)
+BEGIN
+  SELECT RAISE(ABORT, 'engine_task_creation_contract: immutable accepted contract');
+END;
+
+CREATE TRIGGER IF NOT EXISTS engine_task_request_identity_append_only
+BEFORE UPDATE OF request_id ON engine_task
+FOR EACH ROW
+WHEN OLD.request_id IS NOT NULL OR NEW.request_id IS NULL
+BEGIN
+  SELECT RAISE(ABORT, 'engine_task: accepted request identity is append-only');
+END;
+
+CREATE TRIGGER IF NOT EXISTS engine_task_global_creation_allocation_append_only
+BEFORE UPDATE OF global_creation_allocation_id ON engine_task
+FOR EACH ROW
+WHEN OLD.global_creation_allocation_id IS NOT NULL OR NEW.global_creation_allocation_id IS NULL
+BEGIN
+  SELECT RAISE(ABORT, 'engine_task: Global creation allocation identity is append-only');
+END;
+
+CREATE TRIGGER IF NOT EXISTS engine_channel_binding_no_update
+BEFORE UPDATE ON engine_channel_binding
+FOR EACH ROW
+BEGIN
+  SELECT RAISE(ABORT, 'engine_channel_binding: immutable accepted channel claim');
+END;
+
+CREATE TRIGGER IF NOT EXISTS engine_channel_binding_no_delete
+BEFORE DELETE ON engine_channel_binding
+FOR EACH ROW
+WHEN EXISTS (SELECT 1 FROM engine_task WHERE id=OLD.task_id)
+BEGIN
+  SELECT RAISE(ABORT, 'engine_channel_binding: immutable accepted channel claim');
+END;
+
+CREATE TRIGGER IF NOT EXISTS engine_task_creation_contract_tool_lineage_insert
+BEFORE INSERT ON engine_task_creation_contract FOR EACH ROW
+WHEN NEW.creator_tool_part_id IS NOT NULL AND NOT EXISTS (
+  SELECT 1 FROM tool_part_request AS request
+  JOIN message AS creator_message ON creator_message.id=request.message_id
+  JOIN message AS caller_message
+    ON caller_message.id=json_extract(creator_message.data,'$.parentID')
+   AND caller_message.session_id=creator_message.session_id
+   AND json_extract(caller_message.data,'$.role')='user'
+  JOIN session AS creator_session ON creator_session.id=creator_message.session_id
+  JOIN engine_task AS task ON task.id=NEW.task_id
+  WHERE request.id=NEW.creator_tool_part_id
+    AND json_extract(request.data,'$.tool')='panel'
+    AND json_extract(request.data,'$.input.action')='create_task'
+    AND json_extract(creator_message.data,'$.role')='assistant'
+    AND json_extract(NEW.contract,'$.request.input.creator.tool_part_id')=request.id
+    AND json_extract(NEW.contract,'$.request.input.creator.message_id')=request.message_id
+    AND json_extract(NEW.contract,'$.request.input.creator.tool_call_id')=json_extract(request.data,'$.callID')
+    AND json_extract(NEW.contract,'$.request.input.creator.session_id')=creator_message.session_id
+    AND json_extract(NEW.contract,'$.protocol')='task-creation-contract-v2'
+    AND json_extract(NEW.contract,'$.request.protocol')='task-create-request-v1'
+    AND json_extract(NEW.contract,'$.request.input.request')=json_extract(request.data,'$.input.request')
+    AND json_extract(NEW.contract,'$.request.input.requested_project') IS NULL
+    AND json_extract(NEW.contract,'$.request.input.requested_directory') IS json_extract(request.data,'$.input.directory')
+    AND json_extract(NEW.contract,'$.request.input.explicit_source') IS json_extract(request.data,'$.input.source')
+    AND json_extract(NEW.contract,'$.request.input.explicit_product_pillar') IS json_extract(request.data,'$.input.productPillar')
+    AND json_extract(NEW.contract,'$.request.input.explicit_title') IS (
+      CASE
+        WHEN length(trim(json_extract(request.data,'$.input.title'))) > 0
+        THEN trim(json_extract(request.data,'$.input.title'))
+        ELSE NULL
+      END
+    )
+    AND json_extract(NEW.contract,'$.request.input.explicit_priority') IS json_extract(request.data,'$.input.priority')
+    AND json_extract(NEW.contract,'$.request.input.explicit_model') IS json_extract(request.data,'$.input.model')
+    AND json_extract(NEW.contract,'$.request.input.explicit_prompt_profile') IS json_extract(request.data,'$.input.promptProfile')
+    AND json_extract(NEW.contract,'$.request.input.expected_package_digest') IS json_extract(request.data,'$.input.expectedPackageDigest')
+    AND json_type(NEW.contract,'$.request.input.attachments')='array'
+    AND NOT EXISTS (
+      SELECT substr(fullkey,length('$.v')+1),type,atom
+      FROM json_tree(
+        json_object('v',json(COALESCE((
+          SELECT json_group_array(json_object(
+            'url',json_extract(caller_part.data,'$.url'),
+            'mime',json_extract(caller_part.data,'$.mime'),
+            'filename',json_extract(caller_part.data,'$.filename')
+          ))
+          FROM (
+            SELECT data FROM part
+            WHERE message_id=caller_message.id AND json_extract(data,'$.type')='file'
+            ORDER BY time_created,id
+          ) AS caller_part
+        ),'[]'))),'$.v')
+      EXCEPT
+      SELECT substr(fullkey,length('$.request.input.attachments')+1),type,atom
+      FROM json_tree(NEW.contract,'$.request.input.attachments')
+    )
+    AND NOT EXISTS (
+      SELECT substr(fullkey,length('$.request.input.attachments')+1),type,atom
+      FROM json_tree(NEW.contract,'$.request.input.attachments')
+      EXCEPT
+      SELECT substr(fullkey,length('$.v')+1),type,atom
+      FROM json_tree(
+        json_object('v',json(COALESCE((
+          SELECT json_group_array(json_object(
+            'url',json_extract(caller_part.data,'$.url'),
+            'mime',json_extract(caller_part.data,'$.mime'),
+            'filename',json_extract(caller_part.data,'$.filename')
+          ))
+          FROM (
+            SELECT data FROM part
+            WHERE message_id=caller_message.id AND json_extract(data,'$.type')='file'
+            ORDER BY time_created,id
+          ) AS caller_part
+        ),'[]'))),'$.v')
+    )
+    AND NOT EXISTS (
+      SELECT substr(fullkey,length('$.v')+1),type,atom
+      FROM json_tree(json_object('v',json_extract(request.data,'$.input.budget')),'$.v')
+      EXCEPT
+      SELECT substr(fullkey,length('$.request.input.budget')+1),type,atom
+      FROM json_tree(NEW.contract,'$.request.input.budget')
+    )
+    AND NOT EXISTS (
+      SELECT substr(fullkey,length('$.request.input.budget')+1),type,atom
+      FROM json_tree(NEW.contract,'$.request.input.budget')
+      EXCEPT
+      SELECT substr(fullkey,length('$.v')+1),type,atom
+      FROM json_tree(json_object('v',json_extract(request.data,'$.input.budget')),'$.v')
+    )
+    AND NOT EXISTS (
+      SELECT substr(fullkey,length('$.v')+1),type,atom
+      FROM json_tree(json_object('v',json_extract(request.data,'$.input.checks')),'$.v')
+      EXCEPT
+      SELECT substr(fullkey,length('$.request.input.checks')+1),type,atom
+      FROM json_tree(NEW.contract,'$.request.input.checks')
+    )
+    AND NOT EXISTS (
+      SELECT substr(fullkey,length('$.request.input.checks')+1),type,atom
+      FROM json_tree(NEW.contract,'$.request.input.checks')
+      EXCEPT
+      SELECT substr(fullkey,length('$.v')+1),type,atom
+      FROM json_tree(json_object('v',json_extract(request.data,'$.input.checks')),'$.v')
+    )
+    AND NOT EXISTS (
+      SELECT substr(fullkey,length('$.v')+1),type,atom
+      FROM json_tree(json_object('v',json_extract(request.data,'$.input.metadata')),'$.v')
+      EXCEPT
+      SELECT substr(fullkey,length('$.request.input.metadata')+1),type,atom
+      FROM json_tree(NEW.contract,'$.request.input.metadata')
+    )
+    AND NOT EXISTS (
+      SELECT substr(fullkey,length('$.request.input.metadata')+1),type,atom
+      FROM json_tree(NEW.contract,'$.request.input.metadata')
+      EXCEPT
+      SELECT substr(fullkey,length('$.v')+1),type,atom
+      FROM json_tree(json_object('v',json_extract(request.data,'$.input.metadata')),'$.v')
+    )
+    AND NOT EXISTS (
+      SELECT substr(fullkey,length('$.v')+1),type,atom
+      FROM json_tree(json_object('v',COALESCE(json_extract(request.data,'$.input.artifact_sources'),json('[]'))),'$.v')
+      EXCEPT
+      SELECT substr(fullkey,length('$.request.input.artifact_sources')+1),type,atom
+      FROM json_tree(NEW.contract,'$.request.input.artifact_sources')
+    )
+    AND NOT EXISTS (
+      SELECT substr(fullkey,length('$.request.input.artifact_sources')+1),type,atom
+      FROM json_tree(NEW.contract,'$.request.input.artifact_sources')
+      EXCEPT
+      SELECT substr(fullkey,length('$.v')+1),type,atom
+      FROM json_tree(json_object('v',COALESCE(json_extract(request.data,'$.input.artifact_sources'),json('[]'))),'$.v')
+    )
+    AND json_extract(NEW.contract,'$.request.input.creator.actor') IN ('mission','control_agent','right_sidebar_conversation')
+    AND (
+      (json_extract(NEW.contract,'$.request.input.creator.actor')='mission'
+        AND creator_session.kind='mission'
+        AND json_extract(creator_session.metadata,'$.mission.id')=json_extract(NEW.contract,'$.request.input.creator.mission_id')
+        AND EXISTS (
+          SELECT 1 FROM protocol_event AS opened
+          WHERE opened.id=json_extract(NEW.contract,'$.request.input.creator.opened_occurrence.event_id')
+            AND opened.aggregate_type='session'
+            AND opened.aggregate_id=creator_session.id
+            AND opened.type='mission.execution.opened'
+            AND opened.correlation_id=json_extract(NEW.contract,'$.request.input.creator.opened_occurrence.operation_id')
+            AND json_extract(opened.payload,'$.missionID')=json_extract(NEW.contract,'$.request.input.creator.mission_id')
+        ))
+      OR (json_extract(NEW.contract,'$.request.input.creator.actor')='control_agent'
+        AND creator_session.kind='assistant'
+        AND json_type(creator_session.metadata,'$.conversation') IS NULL)
+      OR (json_extract(NEW.contract,'$.request.input.creator.actor')='right_sidebar_conversation'
+        AND creator_session.kind='assistant'
+        AND json_extract(creator_session.metadata,'$.conversation.surface')='right-sidebar'
+        AND json_extract(creator_session.metadata,'$.conversation.experience') IN ('chat','work'))
+    )
+    AND creator_session.project_id=task.project_id
+    AND NOT EXISTS (
+      SELECT substr(fullkey,length('$.input')+1),type,atom
+      FROM json_tree(request.data,'$.input')
+      EXCEPT
+      SELECT substr(fullkey,length('$.request.input.creator.tool_input')+1),type,atom
+      FROM json_tree(NEW.contract,'$.request.input.creator.tool_input')
+    )
+    AND NOT EXISTS (
+      SELECT substr(fullkey,length('$.request.input.creator.tool_input')+1),type,atom
+      FROM json_tree(NEW.contract,'$.request.input.creator.tool_input')
+      EXCEPT
+      SELECT substr(fullkey,length('$.input')+1),type,atom
+      FROM json_tree(request.data,'$.input')
+    )
+    AND (
+      json_type(request.data,'$.input.request_id') IS NULL
+      OR task.request_id=json_extract(request.data,'$.input.request_id')
+    )
+)
+BEGIN
+  SELECT RAISE(ABORT, 'engine_task_creation_contract: invalid panel Tool creator lineage');
+END;
+
+CREATE TRIGGER IF NOT EXISTS session_panel_creation_immutable_update
+BEFORE UPDATE OF metadata ON session
+FOR EACH ROW
+WHEN json_type(OLD.metadata,'$.panelCreation') IS NOT NULL
+  AND json_extract(NEW.metadata,'$.panelCreation') IS NOT json_extract(OLD.metadata,'$.panelCreation')
+BEGIN
+  SELECT RAISE(ABORT, 'session: panel creation occurrence is immutable');
+END;
+
+CREATE TRIGGER IF NOT EXISTS session_panel_creation_insert_only_update
+BEFORE UPDATE OF metadata ON session
+FOR EACH ROW
+WHEN json_type(OLD.metadata,'$.panelCreation') IS NULL
+  AND json_type(NEW.metadata,'$.panelCreation') IS NOT NULL
+BEGIN
+  SELECT RAISE(ABORT, 'session: panel creation occurrence must be bound at insert');
+END;
+
+CREATE UNIQUE INDEX IF NOT EXISTS session_panel_creation_tool_part_idx
+ON session(json_extract(metadata,'$.panelCreation.tool_part_id'))
+WHERE json_type(metadata,'$.panelCreation') IS NOT NULL;
+
+CREATE TRIGGER IF NOT EXISTS session_panel_creation_lineage_insert
+BEFORE INSERT ON session
+FOR EACH ROW
+WHEN json_type(NEW.metadata,'$.panelCreation') IS NOT NULL AND NOT EXISTS (
+  SELECT 1
+  FROM tool_part_request AS request
+  JOIN message AS assistant_message ON assistant_message.id=request.message_id
+  JOIN session AS creator_session ON creator_session.id=assistant_message.session_id
+  JOIN message AS caller_message
+    ON caller_message.id=json_extract(assistant_message.data,'$.parentID')
+   AND caller_message.session_id=creator_session.id
+  WHERE request.id=json_extract(NEW.metadata,'$.panelCreation.tool_part_id')
+    AND json_extract(NEW.metadata,'$.panelCreation.protocol')='panel-creation-v1'
+    AND json_extract(NEW.metadata,'$.panelCreation.operation') IN ('wake_mission','wake_work')
+    AND json_extract(request.data,'$.tool')='panel'
+    AND json_extract(request.data,'$.callID')=json_extract(NEW.metadata,'$.panelCreation.tool_call_id')
+    AND request.message_id=json_extract(NEW.metadata,'$.panelCreation.message_id')
+    AND json_extract(request.data,'$.input.action')=json_extract(NEW.metadata,'$.panelCreation.operation')
+    AND json_extract(assistant_message.data,'$.role')='assistant'
+    AND caller_message.id=json_extract(NEW.metadata,'$.panelCreation.caller_user_message_id')
+    AND json_extract(caller_message.data,'$.role')='user'
+    AND creator_session.project_id=NEW.project_id
+    AND (SELECT COUNT(*) FROM json_each(json_extract(NEW.metadata,'$.panelCreation')))=8
+    AND NOT EXISTS (
+      SELECT substr(fullkey,length('$.input')+1),type,atom
+      FROM json_tree(request.data,'$.input')
+      EXCEPT
+      SELECT substr(fullkey,length('$.panelCreation.input')+1),type,atom
+      FROM json_tree(NEW.metadata,'$.panelCreation.input')
+    )
+    AND NOT EXISTS (
+      SELECT substr(fullkey,length('$.panelCreation.input')+1),type,atom
+      FROM json_tree(NEW.metadata,'$.panelCreation.input')
+      EXCEPT
+      SELECT substr(fullkey,length('$.input')+1),type,atom
+      FROM json_tree(request.data,'$.input')
+    )
+    AND json_extract(NEW.metadata,'$.panelCreation.target_id') = (
+      CASE json_extract(NEW.metadata,'$.panelCreation.operation')
+        WHEN 'wake_mission' THEN 'chat-p-' || lower(substr(json_extract(NEW.metadata,'$.panelCreation.tool_part_id'),-17))
+        WHEN 'wake_work' THEN 'ses_p' || lower(substr(json_extract(NEW.metadata,'$.panelCreation.tool_part_id'),-19))
+      END
+    )
+    AND (
+      (json_extract(NEW.metadata,'$.panelCreation.operation')='wake_work'
+        AND NEW.id=json_extract(NEW.metadata,'$.panelCreation.target_id')
+        AND NEW.kind='assistant'
+        AND json_extract(NEW.metadata,'$.conversation.surface')='right-sidebar'
+        AND json_extract(NEW.metadata,'$.conversation.experience')='work')
+      OR
+      (json_extract(NEW.metadata,'$.panelCreation.operation')='wake_mission'
+        AND NEW.kind='mission'
+        AND json_extract(NEW.metadata,'$.mission.id')=json_extract(NEW.metadata,'$.panelCreation.target_id'))
+    )
+)
+BEGIN
+  SELECT RAISE(ABORT, 'session: invalid panel creation occurrence');
+END;
+
 CREATE TRIGGER IF NOT EXISTS project_promotion_fence_update
 BEFORE UPDATE ON project
 FOR EACH ROW
@@ -401,34 +886,10 @@ WHEN NEW.kind = 'dispatch_lineage'
         AND json_extract(NEW.payload, '$.collection_member_index') < json_extract(NEW.payload, '$.collection_member_count')
       ), 0)
     )
-    OR NOT (
-      (
-        json_extract(NEW.payload, '$.delivery_owner.kind') = 'runtime_process'
-        AND json_type(NEW.payload, '$.delivery_owner.process_occurrence_id') = 'text'
-        AND length(trim(json_extract(NEW.payload, '$.delivery_owner.process_occurrence_id'))) > 0
-        AND (SELECT count(*) FROM json_each(NEW.payload, '$.delivery_owner')) = 2
-      )
-      OR (
-        json_extract(NEW.payload, '$.delivery_owner.kind') = 'historical_reconciliation'
-        AND json_type(NEW.payload, '$.delivery_owner.source') = 'object'
-        AND (SELECT count(*) FROM json_each(NEW.payload, '$.delivery_owner')) = 2
-        AND (SELECT count(*) FROM json_each(NEW.payload, '$.delivery_owner.source')) = 2
-        AND (
-          (
-            json_extract(NEW.payload, '$.delivery_owner.source.kind') = 'dispatch_settlement'
-            AND json_type(NEW.payload, '$.delivery_owner.source.artifact_id') = 'text'
-            AND length(trim(json_extract(NEW.payload, '$.delivery_owner.source.artifact_id'))) > 0
-            AND json_type(NEW.payload, '$.delivery_owner.source.event_id') IS NULL
-          )
-          OR (
-            json_extract(NEW.payload, '$.delivery_owner.source.kind') = 'agent_execution_lifecycle'
-            AND json_type(NEW.payload, '$.delivery_owner.source.event_id') = 'text'
-            AND length(trim(json_extract(NEW.payload, '$.delivery_owner.source.event_id'))) > 0
-            AND json_type(NEW.payload, '$.delivery_owner.source.artifact_id') IS NULL
-          )
-        )
-      )
-    )
+    OR json_extract(NEW.payload, '$.delivery_owner.kind') != 'runtime_process'
+    OR json_type(NEW.payload, '$.delivery_owner.process_occurrence_id') IS NOT 'text'
+    OR length(trim(json_extract(NEW.payload, '$.delivery_owner.process_occurrence_id'))) = 0
+    OR (SELECT count(*) FROM json_each(NEW.payload, '$.delivery_owner')) != 2
   )
 BEGIN
   SELECT RAISE(ABORT, 'engine_artifact: dispatch_lineage requires exact Tool occurrence, adapter_input and delivery_owner objects');
@@ -1571,8 +2032,7 @@ WHEN EXISTS (SELECT 1 FROM engine_task WHERE id=OLD.task_id)
 BEGIN SELECT RAISE(ABORT, 'engine_task_wait_registration: immutable wait intent'); END;
 CREATE TRIGGER IF NOT EXISTS engine_task_wait_registration_lineage_insert
 BEFORE INSERT ON engine_task_wait_registration FOR EACH ROW
-WHEN NEW.tool_part_id IS NOT NULL
-  AND NOT EXISTS (
+WHEN NOT EXISTS (
     SELECT 1
     FROM tool_part_request AS request
     JOIN message AS creator
@@ -1613,43 +2073,22 @@ WHEN NOT EXISTS (
           AND ingress.source_id=wait.id
           AND json_extract(ingress.inline_payload,'$.taskWaitWake.jobID')=wait.id
         )
-        AND (
-          wait.creator_ingress_id IS NULL
-          OR ingress.sequence>(
-            SELECT creator.sequence
-            FROM engine_task_root_ingress AS creator
-            WHERE creator.id=wait.creator_ingress_id
-          )
+        AND ingress.sequence>(
+          SELECT creator.sequence
+          FROM engine_task_root_ingress AS creator
+          WHERE creator.id=wait.creator_ingress_id
         )
       )
       OR (
         NEW.disposition='due_ingress_accepted'
-        AND (
-          (
-            ingress.source='inline'
-            AND ingress.source_id=wait.id
-            AND json_type(ingress.inline_payload,'$.taskWaitWake')='object'
-            AND json_extract(ingress.inline_payload,'$.taskWaitWake.jobID')=wait.id
-            AND json_extract(ingress.inline_payload,'$.taskWaitWake.fireID')=wait.id
-            AND json_extract(ingress.inline_payload,'$.taskWaitWake.dueAt')=wait.due_at
-            AND ingress.time_accepted>=wait.due_at
-            AND NEW.time_created>=ingress.time_accepted
-          )
-          OR (
-            wait.tool_part_id IS NULL
-            AND wait.legacy_automation_definition_id IS NOT NULL
-            AND wait.id=wait.legacy_automation_definition_id
-            AND ingress.source='automation_run'
-            AND EXISTS (
-              SELECT 1
-              FROM automation AS legacy_definition
-              JOIN automation_run AS legacy_run
-                ON legacy_run.automation_revision_id=legacy_definition.id
-                AND legacy_run.id=ingress.source_id
-              WHERE legacy_definition.definition_id=wait.legacy_automation_definition_id
-            )
-          )
-        )
+        AND ingress.source='inline'
+        AND ingress.source_id=wait.id
+        AND json_type(ingress.inline_payload,'$.taskWaitWake')='object'
+        AND json_extract(ingress.inline_payload,'$.taskWaitWake.jobID')=wait.id
+        AND json_extract(ingress.inline_payload,'$.taskWaitWake.fireID')=wait.id
+        AND json_extract(ingress.inline_payload,'$.taskWaitWake.dueAt')=wait.due_at
+        AND ingress.time_accepted>=wait.due_at
+        AND NEW.time_created>=ingress.time_accepted
       )
     )
 )

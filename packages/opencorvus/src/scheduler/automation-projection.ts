@@ -174,7 +174,7 @@ export type AutomationFireProjection = {
   id: string
   automationRevisionID: string
   automationID: string
-  origin: "scheduled" | "manual_api" | "manual_tool" | "legacy"
+  origin: "scheduled" | "manual_api" | "manual_tool"
   scheduledDueAt: number
   startedAt: number
   completedAt: number | null
@@ -380,7 +380,7 @@ export function projectAutomationInTransaction(db: Database.TxOrDb, row: typeof 
     .map((fire) => projectAutomationFireInTransaction(db, fire))
     .sort((left, right) => left.scheduledDueAt - right.scheduledDueAt || left.startedAt - right.startedAt || left.id.localeCompare(right.id))
   const latestFire = fires.at(-1)
-  const latestScheduledFire = fires.filter((fire) => fire.origin === "scheduled" || fire.origin === "legacy").at(-1)
+  const latestScheduledFire = fires.filter((fire) => fire.origin === "scheduled").at(-1)
   const pendingFires = fires.filter((fire) => fire.state === "running" || fire.state === "retry_wait")
   if (pendingFires.length > 1) {
     throw new Error(`Automation ${row.definition_id} has multiple unsettled logical fires`)
@@ -446,7 +446,7 @@ export function projectAutomationInTransaction(db: Database.TxOrDb, row: typeof 
 /**
  * Scheduling-only current frontier. Unlike the history projector above, this
  * reducer never walks terminal Fire history: it selects at most one unsettled
- * Fire, one scheduled/legacy recurrence boundary, and one latest run.
+ * Fire, one scheduled recurrence boundary, and one latest run.
  */
 export function projectAutomationFrontierInTransaction(
   db: Database.TxOrDb,
@@ -479,7 +479,7 @@ export function projectAutomationFrontierInTransaction(
     .where(
       and(
         eq(AutomationTable.definition_id, row.definition_id),
-        inArray(AutomationFireTable.origin, ["scheduled", "legacy"]),
+        eq(AutomationFireTable.origin, "scheduled"),
       ),
     )
     .orderBy(
@@ -642,7 +642,7 @@ function automationFrontierFireFactsInTransaction(
       FROM automation_fire AS candidate
       JOIN automation AS revision ON revision.id=candidate.automation_revision_id
       WHERE revision.definition_id=requested.definition_id
-        AND candidate.origin IN ('scheduled','legacy')
+        AND candidate.origin='scheduled'
       ORDER BY candidate.scheduled_due_at DESC, candidate.time_created DESC, candidate.id DESC
       LIMIT 1
     )

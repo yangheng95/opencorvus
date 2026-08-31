@@ -1,7 +1,6 @@
 import { Database as BunDatabase } from "bun:sqlite"
-import { SQL, sql as drizzleSql } from "drizzle-orm"
+import { SQL } from "drizzle-orm"
 import { getTableConfig } from "drizzle-orm/sqlite-core"
-import { createHash } from "node:crypto"
 import { Buffer } from "node:buffer"
 import z from "zod"
 import { NamedError } from "@opencorvus-ai/util/error"
@@ -14,51 +13,67 @@ import { HOST_OWNED_MEMORY_KINDS } from "@/memory/types"
 import type { EngineArtifactKind } from "@/engine/engine.sql"
 import { collectTables, SCHEMA_DDL, tableName } from "./ddl"
 import { Database, queryAllFinalized } from "./db"
+import { validateTaskCreationIdentitySnapshot } from "./task-creation-identity-validation"
+import { currentSchemaFingerprint, restoreCurrentTransferTriggers } from "./schema-contract"
+import { decodeCanonicalBase64Payload } from "@/util/base64"
+import { canonicalJSONValue } from "@/util/canonical-digest"
 
-export const MYSQL_TRANSFER_FORMAT = "opencorvus.mysql-transfer.v1" as const
+export const MYSQL_TRANSFER_FORMAT = "opencorvus.mysql-transfer.v2" as const
 
-const BlobCell = z.object({
-  opencorvusType: z.literal("blobBase64"),
-  base64: z.string(),
-})
+const BlobCell = z
+  .object({
+    opencorvusType: z.literal("blobBase64"),
+    base64: z.string(),
+  })
+  .strict()
 
-export const MysqlTransferTableSnapshot = z.object({
-  name: z.string(),
-  columns: z.array(z.string()),
-  rows: z.array(z.record(z.string(), z.unknown())),
-})
+export const MysqlTransferTableSnapshot = z
+  .object({
+    name: z.string(),
+    columns: z.array(z.string()),
+    rows: z.array(z.record(z.string(), z.unknown())),
+  })
+  .strict()
 
-export const MysqlTransferSnapshot = z.object({
-  format: z.literal(MYSQL_TRANSFER_FORMAT),
-  schemaFingerprint: z.string(),
-  tables: z.array(MysqlTransferTableSnapshot),
-})
+export const MysqlTransferSnapshot = z
+  .object({
+    format: z.literal(MYSQL_TRANSFER_FORMAT),
+    schemaFingerprint: z.string(),
+    tables: z.array(MysqlTransferTableSnapshot),
+  })
+  .strict()
 
 export type MysqlTransferSnapshot = z.infer<typeof MysqlTransferSnapshot>
 
-export const MysqlTransferSchemaExport = z.object({
-  format: z.literal(MYSQL_TRANSFER_FORMAT),
-  schemaFingerprint: z.string(),
-  mysqlDDL: z.string(),
-  tables: z.array(z.object({ name: z.string(), columns: z.array(z.string()) })),
-  derivedTables: z.array(z.string()),
-  skippedIndexes: z.array(z.object({ table: z.string(), index: z.string(), reason: z.string() })),
-})
+export const MysqlTransferSchemaExport = z
+  .object({
+    format: z.literal(MYSQL_TRANSFER_FORMAT),
+    schemaFingerprint: z.string(),
+    mysqlDDL: z.string(),
+    tables: z.array(z.object({ name: z.string(), columns: z.array(z.string()) }).strict()),
+    derivedTables: z.array(z.string()),
+    skippedIndexes: z.array(z.object({ table: z.string(), index: z.string(), reason: z.string() }).strict()),
+  })
+  .strict()
 
 export type MysqlTransferSchemaExport = z.infer<typeof MysqlTransferSchemaExport>
 
-export const MysqlTransferFullExport = z.object({
-  schema: MysqlTransferSchemaExport,
-  snapshot: MysqlTransferSnapshot,
-})
+export const MysqlTransferFullExport = z
+  .object({
+    schema: MysqlTransferSchemaExport,
+    snapshot: MysqlTransferSnapshot,
+  })
+  .strict()
 
 export type MysqlTransferFullExport = z.infer<typeof MysqlTransferFullExport>
 
-export const MysqlTransferImportResult = z.object({
-  ok: z.boolean(),
-  schemaFingerprint: z.string(),
-  tables: z.array(z.object({ name: z.string(), rows: z.number() })),
-})
+export const MysqlTransferImportResult = z
+  .object({
+    ok: z.boolean(),
+    schemaFingerprint: z.string(),
+    tables: z.array(z.object({ name: z.string(), rows: z.number() }).strict()),
+  })
+  .strict()
 
 export type MysqlTransferImportResult = z.infer<typeof MysqlTransferImportResult>
 
@@ -265,9 +280,7 @@ function schemaShapes() {
 }
 
 export function mysqlSchemaFingerprint() {
-  const hash = createHash("sha256")
-  hash.update(JSON.stringify(schemaShapes()))
-  return hash.digest("hex")
+  return currentSchemaFingerprint()
 }
 
 export function mysqlSchemaExport(): MysqlTransferSchemaExport {
@@ -333,8 +346,8 @@ function encodeSnapshotCell(value: unknown) {
 export function exportMysqlTransferSnapshot(): MysqlTransferSnapshot {
   try {
     const tables = schemaShapes().map((table) => {
-      const rows = Database.use((db) =>
-        db.all<Record<string, unknown>>(drizzleSql.raw(`SELECT * FROM ${sqliteIdentifier(table.name)}`)),
+      const rows = Database.allFinalized<Record<string, unknown>>(
+        `SELECT * FROM ${sqliteIdentifier(table.name)}`,
       ).map((row) => Object.fromEntries(Object.entries(row).map(([key, value]) => [key, encodeSnapshotCell(value)])))
       return { name: table.name, columns: table.columns.map((column) => column.name), rows }
     })
@@ -352,6 +365,9 @@ export function exportMysqlTransferPackage(): MysqlTransferFullExport {
 }
 
 function assertExactTableSet(snapshot: MysqlTransferSnapshot, expected: TableShape[]) {
+  if (new Set(snapshot.tables.map((table) => table.name)).size !== snapshot.tables.length) {
+    throw new Error("Duplicate table in MySQL transfer snapshot")
+  }
   const actualNames = new Set(snapshot.tables.map((table) => table.name))
   const expectedNames = new Set(expected.map((table) => table.name))
   for (const name of actualNames) {
@@ -387,14 +403,7 @@ function parsedJsonCell(value: unknown, table: string, column: string): unknown 
 }
 
 function canonicalComparable(value: unknown): string {
-  if (Array.isArray(value)) return `[${value.map(canonicalComparable).join(",")}]`
-  if (value && typeof value === "object") {
-    return `{${Object.entries(value as Record<string, unknown>)
-      .sort(([left], [right]) => left.localeCompare(right))
-      .map(([key, child]) => `${JSON.stringify(key)}:${canonicalComparable(child)}`)
-      .join(",")}}`
-  }
-  return JSON.stringify(value)
+  return canonicalJSONValue(value, "MySQL transfer metadata")
 }
 
 function assertEngineArtifactCatalogRows(table: z.infer<typeof MysqlTransferTableSnapshot>): void {
@@ -514,13 +523,12 @@ function assertEngineArtifactVersionPartition(snapshot: MysqlTransferSnapshot): 
   }
 }
 
-function isBlobCell(value: unknown): value is z.infer<typeof BlobCell> {
-  return BlobCell.safeParse(value).success
-}
-
 function decodeBlob(value: unknown, table: string, column: string) {
-  if (!isBlobCell(value)) throw new Error(`Expected blobBase64 cell for ${table}.${column}`)
-  return new Uint8Array(Buffer.from(value.base64, "base64"))
+  const parsed = BlobCell.safeParse(value)
+  if (!parsed.success) {
+    throw new Error(`Invalid blobBase64 cell for ${table}.${column}: ${parsed.error.message}`)
+  }
+  return new Uint8Array(decodeCanonicalBase64Payload(parsed.data.base64, `MySQL transfer ${table}.${column}`))
 }
 
 function normalizeNumber(value: unknown, table: string, column: string) {
@@ -609,7 +617,11 @@ function insertPreparedRows(
   expectedTables: TableShape[],
   tableByName: Map<string, z.infer<typeof MysqlTransferTableSnapshot>>,
 ) {
-  for (const expected of expectedTables) {
+  const ordered = [
+    ...expectedTables.filter((expected) => expected.name !== "engine_task_creation_contract"),
+    ...expectedTables.filter((expected) => expected.name === "engine_task_creation_contract"),
+  ]
+  for (const expected of ordered) {
     const table = tableByName.get(expected.name)
     if (!table) throw new Error(`Missing table in MySQL transfer snapshot: ${expected.name}`)
     insertRows(sqlite, expected, table.rows)
@@ -617,11 +629,38 @@ function insertPreparedRows(
   rebuildMemoryFts(sqlite)
 }
 
+const TRANSFER_DEFERRED_CREATION_TRIGGERS = [
+  // Current snapshots insert parent Message rows before their immutable Part
+  // children. These two guards enforce live append order, not snapshot
+  // validity; the complete current-fact validator runs before they are
+  // restored in the same transaction.
+  "completed_assistant_part_no_insert",
+  "completed_assistant_tool_request_no_insert",
+  "global_creation_allocation_acceptance_target_insert",
+  "global_creation_allocation_project_insert",
+  "global_creation_allocation_project_retention_insert",
+  "session_panel_creation_lineage_insert",
+] as const
+
+function beginValidatedCreationFactRestore(sqlite: BunDatabase): void {
+  for (const trigger of TRANSFER_DEFERRED_CREATION_TRIGGERS) sqlite.run(`DROP TRIGGER ${trigger}`)
+}
+
+function finishValidatedCreationFactRestore(sqlite: BunDatabase): void {
+  assertNoForeignKeyViolations(sqlite)
+  validateTaskCreationIdentitySnapshot(sqlite)
+  const restored = new Set(restoreCurrentTransferTriggers(sqlite))
+  for (const trigger of TRANSFER_DEFERRED_CREATION_TRIGGERS) {
+    if (!restored.has(trigger)) throw new Error(`MySQL transfer did not restore current trigger ${trigger}`)
+  }
+}
+
 function restorePreparedRows(
   sqlite: BunDatabase,
   expectedTables: TableShape[],
   tableByName: Map<string, z.infer<typeof MysqlTransferTableSnapshot>>,
 ) {
+  beginValidatedCreationFactRestore(sqlite)
   insertPreparedRows(sqlite, expectedTables, tableByName)
 }
 
@@ -654,7 +693,7 @@ function validatePreparedRows(
     sqlite.exec(SCHEMA_DDL)
     sqlite.run("BEGIN")
     restorePreparedRows(sqlite, expectedTables, tableByName)
-    assertNoForeignKeyViolations(sqlite)
+    finishValidatedCreationFactRestore(sqlite)
     sqlite.run("ROLLBACK")
   } finally {
     sqlite.close()
@@ -700,7 +739,10 @@ export function applyMysqlTransferPlan(plan: MysqlTransferImportPlan): MysqlTran
     rows: tableByName.get(table.name)?.rows.length ?? 0,
   }))
   try {
-    Database.rebuildSqlite((sqlite) => restorePreparedRows(sqlite, expectedTables, tableByName))
+    Database.rebuildSqlite((sqlite) => {
+      restorePreparedRows(sqlite, expectedTables, tableByName)
+      finishValidatedCreationFactRestore(sqlite)
+    })
   } catch (cause) {
     throw new MysqlTransferApplyError(
       {

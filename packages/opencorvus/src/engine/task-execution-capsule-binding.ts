@@ -14,10 +14,24 @@ import { executionCapsuleSourceTreeDigest } from "@/execution-capsule/tree-diges
 import { insertEngineArtifact } from "./artifact"
 import { EngineArtifactTable, EngineTaskTable } from "./engine.sql"
 import { listStartedIncompleteTaskIDs } from "./store"
-
-const SHA256 = z.string().regex(/^[a-f0-9]{64}$/)
-export const TASK_EXECUTION_CAPSULE_BINDING_PROTOCOL = "task-execution-capsule-binding-v1" as const
-export const TASK_NATIVE_PROCESS_BINDING_PROTOCOL = "task-native-process-binding-v1" as const
+import {
+  TASK_EXECUTION_CAPSULE_BINDING_PROTOCOL,
+  TASK_NATIVE_PROCESS_BINDING_PROTOCOL,
+  TaskExecutionCapsuleBindingPayloadSchema,
+  TaskNativeProcessBindingPayloadSchema,
+  TaskProcessBindingPayloadSchema,
+  type TaskExecutionCapsuleBindingPayload,
+  type TaskProcessBindingPayload,
+} from "./task-creation-facts"
+export {
+  TASK_EXECUTION_CAPSULE_BINDING_PROTOCOL,
+  TASK_NATIVE_PROCESS_BINDING_PROTOCOL,
+  TaskExecutionCapsuleBindingPayloadSchema,
+  TaskNativeProcessBindingPayloadSchema,
+  TaskProcessBindingPayloadSchema,
+  type TaskExecutionCapsuleBindingPayload,
+  type TaskProcessBindingPayload,
+} from "./task-creation-facts"
 
 export function configuredTaskProcessMode(): "native" | "capsule" {
   const mode = process.env[TASK_PROCESS_MODE_ENV]
@@ -26,55 +40,6 @@ export function configuredTaskProcessMode(): "native" | "capsule" {
     `${TASK_PROCESS_MODE_ENV} must explicitly declare native or capsule Task execution`,
   )
 }
-
-const TaskNativeProcessBindingPayloadSchema = z
-  .object({
-    protocol: z.literal(TASK_NATIVE_PROCESS_BINDING_PROTOCOL),
-    task_id: z.string().min(1),
-    project_id: z.string().min(1),
-    package_revision_sha256: SHA256,
-    mode: z.literal("native"),
-    workspace_root: z.string().min(1),
-    initial_tree_sha256: SHA256,
-    time_created: z.number().int().nonnegative(),
-  })
-  .strict()
-
-export const TaskExecutionCapsuleBindingPayloadSchema = z
-  .object({
-    protocol: z.literal(TASK_EXECUTION_CAPSULE_BINDING_PROTOCOL),
-    task_id: z.string().min(1),
-    project_id: z.string().min(1),
-    package_revision_sha256: SHA256,
-    runtime_descriptor_sha256: SHA256,
-    runtime_identity_sha256: SHA256,
-    workspace: z
-      .object({
-        root: z.string().min(1),
-        initial_tree_sha256: SHA256,
-        access: z.literal("read_write"),
-      })
-      .strict(),
-    network: z.literal("none"),
-    resources: z
-      .object({
-        memory_max_bytes: z.number().int().positive(),
-        tasks_max: z.number().int().positive(),
-        nofile_max: z.number().int().positive(),
-        tmpfs_max_bytes: z.number().int().positive(),
-        cpu_quota_percent: z.number().positive().max(100),
-      })
-      .strict(),
-    time_created: z.number().int().nonnegative(),
-  })
-  .strict()
-
-export type TaskExecutionCapsuleBindingPayload = z.infer<typeof TaskExecutionCapsuleBindingPayloadSchema>
-export const TaskProcessBindingPayloadSchema = z.discriminatedUnion("protocol", [
-  TaskNativeProcessBindingPayloadSchema,
-  TaskExecutionCapsuleBindingPayloadSchema,
-])
-export type TaskProcessBindingPayload = z.infer<typeof TaskProcessBindingPayloadSchema>
 
 export async function prepareTaskProcessBinding(input: {
   mode: "native" | "capsule"

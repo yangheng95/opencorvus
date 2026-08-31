@@ -51,6 +51,70 @@ function insertMessage(db: SQLite, input: { id: string; sessionID: string; data:
   )
 }
 
+function insertToolBackedWaits(
+  db: SQLite,
+  input: {
+    suffix: string
+    waits: Array<{ id: string; dueAt: number; reason: string }>
+  },
+): void {
+  const ingressID = `ing_creator_${input.suffix}`
+  const activationID = `lease_creator_${input.suffix}`
+  const messageID = `msg_creator_${input.suffix}`
+  db.query(`
+    INSERT INTO engine_task_root_ingress(
+      id,task_id,execution_epoch,sequence,source,source_id,inline_payload,policy_id,time_accepted
+    ) VALUES (?,?,?,?,?,?,?,?,?)
+  `).run(ingressID, "tsk_lineage", 1, 0, "inline", ingressID, '{"purpose":"Task wait creator"}', "pol_lineage", 5)
+  db.query(`
+    INSERT INTO engine_control_activation_lease(
+      id,target,target_id,owner_occurrence_id,time_activated,expires_at
+    ) VALUES (?,?,?,?,?,?)
+  `).run(activationID, "task_root_ingress", ingressID, `owner:${input.suffix}`, 6, 1_000)
+  insertMessage(db, {
+    id: messageID,
+    sessionID: "ses_creator",
+    data: {
+      role: "assistant",
+      author: "orchestrator",
+      activationID,
+      parentID: `msg_control_${input.suffix}`,
+    },
+  })
+  for (const wait of input.waits) {
+    const toolPartID = `part_${wait.id}`
+    db.query("INSERT INTO tool_part_request(id,message_id,data,time_created) VALUES(?,?,?,?)").run(
+      toolPartID,
+      messageID,
+      JSON.stringify({
+        type: "tool-request",
+        callID: `call_${wait.id}`,
+        tool: "wait",
+        input: { duration_ms: wait.dueAt - 10, reason: wait.reason },
+        time: { start: 7 },
+      }),
+      7,
+    )
+    db.query(`
+      INSERT INTO engine_task_wait_registration(
+        id,task_id,execution_epoch,due_at,reason,tool_part_id,
+        creator_ingress_id,creator_activation_id,input_digest,time_created
+      ) VALUES (?,?,?,?,?,?,?,?,?,?)
+    `).run(
+      wait.id,
+      "tsk_lineage",
+      1,
+      wait.dueAt,
+      wait.reason,
+      toolPartID,
+      ingressID,
+      activationID,
+      `digest:${wait.id}`,
+      10,
+    )
+  }
+}
+
 describe("scheduling occurrence DDL lineage", () => {
   test("uses Session and Fire frontier indexes instead of scanning unrelated immutable history", () => {
     const db = currentDatabase()
@@ -128,13 +192,17 @@ describe("scheduling occurrence DDL lineage", () => {
         FROM automation_fire AS fire
         JOIN automation AS definition ON definition.id=fire.automation_revision_id
         WHERE definition.definition_id='atm_delay'
-          AND fire.origin IN ('scheduled','legacy')
+          AND fire.origin='scheduled'
         ORDER BY fire.scheduled_due_at DESC,fire.time_created DESC,fire.id DESC
         LIMIT 1
       `).all().map((row) => row.detail)
-      expect(firePlan.some((detail) =>
-        detail.includes("automation_fire_revision_frontier_idx"),
-      )).toBe(true)
+      expect(
+        firePlan.some(
+          (detail) =>
+            detail.includes("automation_fire_revision_frontier_idx") ||
+            detail.includes("automation_fire_scheduled_occurrence_idx"),
+        ),
+      ).toBe(true)
     } finally {
       db.close(true)
     }
@@ -273,14 +341,16 @@ describe("scheduling occurrence DDL lineage", () => {
   test("rejects an ordinary Task ingress posing as the exact due wait ingress", () => {
     const db = currentDatabase()
     try {
+      insertToolBackedWaits(db, {
+        suffix: "settlement",
+        waits: [
+          { id: "wait_exact", dueAt: 100, reason: "exact" },
+          { id: "wait_wrong_fire", dueAt: 100, reason: "wrong fire" },
+          { id: "wait_wrong_due", dueAt: 100, reason: "wrong due" },
+          { id: "wait_early", dueAt: 100, reason: "early" },
+        ],
+      })
       db.exec(`
-        INSERT INTO engine_task_wait_registration(
-          id,task_id,execution_epoch,due_at,reason,legacy_automation_definition_id,input_digest,time_created
-        ) VALUES
-          ('wait_legacy','tsk_lineage',1,100,'legacy','wait_legacy','digest',10),
-          ('wait_wrong_fire','tsk_lineage',1,100,'wrong fire','wait_wrong_fire','digest',10),
-          ('wait_wrong_due','tsk_lineage',1,100,'wrong due','wait_wrong_due','digest',10),
-          ('wait_early','tsk_lineage',1,100,'early','wait_early','digest',10);
         INSERT INTO engine_task_root_ingress(
           id,task_id,execution_epoch,sequence,source,source_id,policy_id,time_accepted
         ) VALUES (
@@ -317,8 +387,8 @@ describe("scheduling occurrence DDL lineage", () => {
         INSERT INTO engine_task_root_ingress(
           id,task_id,execution_epoch,sequence,source,source_id,inline_payload,policy_id,time_accepted
         ) VALUES (
-          'ing_due','tsk_lineage',1,6,'inline','wait_legacy',
-          '{"taskWaitWake":{"jobID":"wait_legacy","fireID":"wait_legacy","dueAt":100}}',
+          'ing_due','tsk_lineage',1,6,'inline','wait_exact',
+          '{"taskWaitWake":{"jobID":"wait_exact","fireID":"wait_exact","dueAt":100}}',
           'pol_lineage',123
         );
       `)
@@ -329,7 +399,7 @@ describe("scheduling occurrence DDL lineage", () => {
             INSERT INTO engine_task_wait_settlement(wait_id,ingress_id,disposition,time_created)
             VALUES (?,?,?,?)
           `)
-          .run("wait_legacy", "ing_ordinary", "due_ingress_accepted", 30),
+          .run("wait_exact", "ing_ordinary", "due_ingress_accepted", 30),
       ).toThrow("engine_task_wait_settlement: wait and ingress lineage must match")
 
       expect(() =>
@@ -338,7 +408,7 @@ describe("scheduling occurrence DDL lineage", () => {
             INSERT INTO engine_task_wait_settlement(wait_id,ingress_id,disposition,time_created)
             VALUES (?,?,?,?)
           `)
-          .run("wait_legacy", "ing_wrong_job", "due_ingress_accepted", 30),
+          .run("wait_exact", "ing_wrong_job", "due_ingress_accepted", 30),
       ).toThrow("engine_task_wait_settlement: wait and ingress lineage must match")
 
       for (const [waitID, ingressID] of [
@@ -366,10 +436,10 @@ describe("scheduling occurrence DDL lineage", () => {
             ingress.time_accepted>=wait.due_at AS afterDue
           FROM engine_task_wait_registration AS wait
           JOIN engine_task_root_ingress AS ingress ON ingress.id='ing_due'
-          WHERE wait.id='wait_legacy'
+          WHERE wait.id='wait_exact'
         `).get(),
       ).toEqual({
-        sourceID: "wait_legacy",
+        sourceID: "wait_exact",
         wakeType: "object",
         jobMatches: 1,
         fireMatches: 1,
@@ -380,10 +450,10 @@ describe("scheduling occurrence DDL lineage", () => {
       db.query(`
         INSERT INTO engine_task_wait_settlement(wait_id,ingress_id,disposition,time_created)
         VALUES (?,?,?,?)
-      `).run("wait_legacy", "ing_due", "due_ingress_accepted", 131)
+      `).run("wait_exact", "ing_due", "due_ingress_accepted", 131)
       expect(
         db.query<{ ingress_id: string }, []>(
-          "SELECT ingress_id FROM engine_task_wait_settlement WHERE wait_id='wait_legacy'",
+          "SELECT ingress_id FROM engine_task_wait_settlement WHERE wait_id='wait_exact'",
         ).get(),
       ).toEqual({ ingress_id: "ing_due" })
     } finally {
@@ -486,17 +556,11 @@ describe("scheduling occurrence DDL lineage", () => {
         INSERT INTO engine_task_wait_settlement(wait_id,ingress_id,disposition,time_created)
         VALUES (?,?,?,?)
       `).run("wait_exact_creator", "ing_after_creator", "superseded", 24)
-      db.query(`
-        INSERT INTO engine_task_wait_registration(
-          id,task_id,execution_epoch,due_at,reason,legacy_automation_definition_id,input_digest,time_created
-        ) VALUES (?,?,?,?,?,?,?,?)
-      `).run("atm_legacy_allowed", "tsk_lineage", 1, 101, "legacy", "atm_legacy_allowed", "digest", 20)
-
       expect(
         db.query<{ id: string }, []>(
           "SELECT id FROM engine_task_wait_registration ORDER BY id",
         ).all(),
-      ).toEqual([{ id: "atm_legacy_allowed" }, { id: "wait_exact_creator" }])
+      ).toEqual([{ id: "wait_exact_creator" }])
     } finally {
       db.close(true)
     }
@@ -505,6 +569,14 @@ describe("scheduling occurrence DDL lineage", () => {
   test("retention deletes scheduled and settled waits with their owning Task", () => {
     const db = currentDatabase()
     try {
+      insertToolBackedWaits(db, {
+        suffix: "retention",
+        waits: [
+          { id: "wait_scheduled", dueAt: 500, reason: "scheduled" },
+          { id: "wait_due", dueAt: 100, reason: "due" },
+          { id: "wait_superseded", dueAt: 500, reason: "superseded" },
+        ],
+      })
       db.exec(`
         INSERT INTO engine_task_root_ingress(
           id,task_id,execution_epoch,sequence,source,source_id,inline_payload,policy_id,time_accepted
@@ -512,12 +584,6 @@ describe("scheduling occurrence DDL lineage", () => {
           ('ing_due','tsk_lineage',1,1,'inline','wait_due',
            '{"taskWaitWake":{"jobID":"wait_due","fireID":"wait_due","dueAt":100}}','pol_lineage',100),
           ('ing_supersede','tsk_lineage',1,2,'message','msg_new',NULL,'pol_lineage',101);
-        INSERT INTO engine_task_wait_registration(
-          id,task_id,execution_epoch,due_at,reason,legacy_automation_definition_id,input_digest,time_created
-        ) VALUES
-          ('wait_scheduled','tsk_lineage',1,500,'scheduled','wait_scheduled','digest',10),
-          ('wait_due','tsk_lineage',1,100,'due','wait_due','digest',10),
-          ('wait_superseded','tsk_lineage',1,500,'superseded','wait_superseded','digest',10);
         INSERT INTO engine_task_wait_settlement(wait_id,ingress_id,disposition,time_created)
         VALUES
           ('wait_due','ing_due','due_ingress_accepted',100),

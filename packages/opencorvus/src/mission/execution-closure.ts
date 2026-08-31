@@ -629,15 +629,10 @@ function missionExecutionWakeAdmission(
         const current = currentMissionExecutionClosure(closure.sessionID)
         if (current?.state === "opened" && current.eventID === closure.eventID) return
         const close = current?.state === "closing" || current?.state === "closed" ? current : undefined
-        const provenance =
-          close?.provenance.kind === "request"
-            ? close.provenance
-            : {
-                surface: "mission-lifecycle",
-                reason: close
-                  ? `Resume historical Mission close event ${close.provenance.sourceEventID}`
-                  : `Mission execution occurrence ${closure.eventID} was superseded`,
-              }
+        const provenance = close?.provenance ?? {
+          surface: "mission-lifecycle",
+          reason: `Mission execution occurrence ${closure.eventID} was superseded`,
+        }
         SessionPromptState.cancelOwned(closure.sessionID, undefined, owner, {
           settlementRequired: true,
           origin: createExecutionCancellationOrigin({

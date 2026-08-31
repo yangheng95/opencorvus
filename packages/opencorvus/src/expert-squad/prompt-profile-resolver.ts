@@ -113,6 +113,11 @@ type ConfigLike = {
 }
 
 export namespace PromptProfileResolver {
+  export const PromptProfileNotFoundError = NamedError.create(
+    "PromptProfileNotFoundError",
+    z.object({ message: z.string(), profileID: z.string(), scope: z.enum(["project", "global"]) }),
+  )
+
   export type ResolvedPackageRevision = ExpertSquadPackageRevision
   export interface ProjectScope {
     projectDirectory?: string
@@ -143,6 +148,7 @@ export namespace PromptProfileResolver {
 
   export interface SchedulerCapabilityInput extends ProjectScope {
     config: ConfigLike
+    scope?: "project" | "global"
     defaultSkills?: Skill.Info[]
     packageRevision?: ExpertSquadPackageRevision
     reconcileEvolutionMutations?: boolean
@@ -681,11 +687,18 @@ export namespace PromptProfileResolver {
       }
       return { profileID, builtIn: true, pkg: await loadBuiltInRuntimePackage(profileID) }
     }
-    const externalPackage = input.projectDirectory
-      ? await loadExternalPackageByID(input.projectDirectory, profileID, input.reconcileEvolutionMutations)
-      : undefined
+    const externalPackage =
+      input.scope === "global"
+        ? await loadGlobalExternalPackageByID(profileID)
+        : input.projectDirectory
+          ? await loadExternalPackageByID(input.projectDirectory, profileID, input.reconcileEvolutionMutations)
+          : undefined
     if (externalPackage) return { profileID, builtIn: false, pkg: externalPackage }
-    throw new Error(`Unknown prompt profile ${JSON.stringify(profileID)}`)
+    throw new PromptProfileNotFoundError({
+      message: `Unknown prompt profile ${JSON.stringify(profileID)}`,
+      profileID,
+      scope: input.scope ?? "project",
+    })
   }
 
   function skillInventoryByName(skills: Skill.Info[]): ReadonlyMap<string, Skill.Info> {
@@ -3642,7 +3655,11 @@ export namespace PromptProfileResolver {
     if (externalPackage) {
       return
     }
-    throw new Error(`Unknown prompt profile ${JSON.stringify(input.profileID)}`)
+    throw new PromptProfileNotFoundError({
+      message: `Unknown prompt profile ${JSON.stringify(input.profileID)}`,
+      profileID: input.profileID,
+      scope: input.scope ?? "project",
+    })
   }
 
   export async function assertProfileSupportsProductPillar(

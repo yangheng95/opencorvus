@@ -267,43 +267,6 @@ export namespace ChannelIngress {
     )
   }
 
-  export function bindThread(input: {
-    platform: string
-    channel: string
-    thread: string
-    taskID: string
-    payload?: Record<string, unknown>
-  }) {
-    const { EngineChannelBindingTable: T } = require("@/engine/engine.sql")
-    const { Identifier } = require("@/id/id")
-    Database.use((db) => {
-      const existing = db
-        .select({ task_id: T.task_id })
-        .from(T)
-        .where(and(eq(T.platform, input.platform), eq(T.channel, input.channel), eq(T.thread, input.thread)))
-        .get()
-      const now = Date.now()
-      if (existing) {
-        db.update(T)
-          .set({ task_id: input.taskID, payload: input.payload ?? {}, time_updated: now })
-          .where(and(eq(T.platform, input.platform), eq(T.channel, input.channel), eq(T.thread, input.thread)))
-          .run()
-      } else {
-        db.insert(T)
-          .values({
-            id: Identifier.ascending("binding"),
-            task_id: input.taskID,
-            platform: input.platform,
-            channel: input.channel,
-            thread: input.thread,
-            payload: input.payload ?? {},
-            time_created: now,
-            time_updated: now,
-          })
-          .run()
-      }
-    })
-  }
 }
 
 function findOutcome(requestID: string) {

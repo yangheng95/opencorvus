@@ -17324,7 +17324,7 @@ export type GlobalAutomationsFiresResponses = {
     completedAt: number | null
     error: string | null
     fireId: string
-    origin: "scheduled" | "manual_api" | "manual_tool" | "legacy"
+    origin: "scheduled" | "manual_api" | "manual_tool"
     retryAt: number | null
     runs: Array<{
       closureEventID: string | null
@@ -17488,9 +17488,16 @@ export type GlobalChatCreateData = {
 
 export type GlobalChatCreateErrors = {
   /**
-   * Bad request
+   * Chat creation rejected
    */
-  400: BadRequestError
+  400:
+    | BadRequestError
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "ProviderModelNotFoundError"
+      }
 }
 
 export type GlobalChatCreateError = GlobalChatCreateErrors[keyof GlobalChatCreateErrors]
@@ -17524,9 +17531,16 @@ export type GlobalChatStartData = {
 
 export type GlobalChatStartErrors = {
   /**
-   * Bad request
+   * Global Chat start rejected
    */
-  400: BadRequestError
+  400:
+    | BadRequestError
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "ProviderModelNotFoundError"
+      }
   /**
    * Global Chat start request identity is already bound to another payload
    */
@@ -17535,6 +17549,15 @@ export type GlobalChatStartErrors = {
       [key: string]: unknown
     }
     name: "GlobalChatStartIdentityConflictError"
+  }
+  /**
+   * Previously accepted Global Chat target is no longer retained
+   */
+  410: {
+    data: {
+      [key: string]: unknown
+    }
+    name: "GlobalCreationAcceptedTargetUnavailableError"
   }
   /**
    * Saved Provider credentials could not be observed safely
@@ -17744,7 +17767,7 @@ export type GlobalDbMysqlExportResponses = {
   200: {
     schema: {
       derivedTables: Array<string>
-      format: "opencorvus.mysql-transfer.v1"
+      format: "opencorvus.mysql-transfer.v2"
       mysqlDDL: string
       schemaFingerprint: string
       skippedIndexes: Array<{
@@ -17758,7 +17781,7 @@ export type GlobalDbMysqlExportResponses = {
       }>
     }
     snapshot: {
-      format: "opencorvus.mysql-transfer.v1"
+      format: "opencorvus.mysql-transfer.v2"
       schemaFingerprint: string
       tables: Array<{
         columns: Array<string>
@@ -17776,7 +17799,7 @@ export type GlobalDbMysqlExportResponse = GlobalDbMysqlExportResponses[keyof Glo
 export type GlobalDbMysqlImportData = {
   body: {
     snapshot: {
-      format: "opencorvus.mysql-transfer.v1"
+      format: "opencorvus.mysql-transfer.v2"
       schemaFingerprint: string
       tables: Array<{
         columns: Array<string>
@@ -17839,7 +17862,7 @@ export type GlobalDbMysqlSchemaResponses = {
    */
   200: {
     derivedTables: Array<string>
-    format: "opencorvus.mysql-transfer.v1"
+    format: "opencorvus.mysql-transfer.v2"
     mysqlDDL: string
     schemaFingerprint: string
     skippedIndexes: Array<{
@@ -18755,62 +18778,11 @@ export type TaskGlobalListResponse = TaskGlobalListResponses[keyof TaskGlobalLis
 
 export type TaskGlobalCreateData = {
   body: {
-    artifactSources?: Array<
-      | {
-          authority: "completion_decision"
-          source_task_id: string
-        }
-      | {
-          authority: "terminal_lifecycle"
-          locator:
-            | {
-                artifact_id: string
-                catalog_revision: number
-                expected_sha256: string
-                source: "engine_artifact"
-              }
-            | {
-                snapshot: {
-                  manifest_sha256: string
-                  project_id: string
-                  schema_version: 2
-                  snapshot_id: string
-                  task_id: string
-                }
-                source: "task_artifact_snapshot"
-              }
-            | {
-                ref: {
-                  bytes: number
-                  media_type: string
-                  path: string
-                  sha256: string
-                  snapshot: {
-                    manifest_sha256: string
-                    project_id: string
-                    schema_version: 2
-                    snapshot_id: string
-                    task_id: string
-                  }
-                  tree: string
-                }
-                source: "task_artifact_resource"
-              }
-          source_task_id: string
-        }
-    >
-    attachments?: Array<
-      | {
-          filename?: string
-          mime: string
-          url: string
-        }
-      | {
-          data: string
-          filename?: string
-          mime: string
-        }
-    >
+    attachments?: Array<{
+      data: string
+      filename?: string
+      mime: string
+    }>
     budget?: {
       maxExecutorGroups?: number
     }
@@ -18945,15 +18917,10 @@ export type TaskGlobalCreateData = {
         url: string
       }
     }
-    directory?: string
     expectedPackageDigest?: string
-    metadata?: {
-      [key: string]: unknown
-    }
     model?: string
     priority?: "critical" | "high" | "normal" | "low"
     productPillar: "code" | "work"
-    project?: string
     promptProfile?: string
     request: string
     requestID?: string
@@ -18989,6 +18956,24 @@ export type TaskGlobalCreateErrors = {
         }
         name: "TaskCreatorSessionError"
       }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "GlobalTaskRequestIdentityRequiredError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "PromptProfileNotFoundError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "ProviderModelNotFoundError"
+      }
   /**
    * Not found
    */
@@ -19019,13 +19004,59 @@ export type TaskGlobalCreateErrors = {
         data: {
           [key: string]: unknown
         }
-        name: "TaskCreationIdempotencyConflictError"
+        name: "TaskCreationContractConflictError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "TaskCreationIdentityConflictError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "TaskChannelBindingProjectConflictError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "TaskChannelBindingGlobalCreationConflictError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "GlobalCreationAllocationConflictError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "GlobalCreationAcceptedTargetConflictError"
       }
     | {
         data: {
           [key: string]: unknown
         }
         name: "TaskPackageRevisionBindingError"
+      }
+  /**
+   * Previously accepted Global Task target is no longer retained
+   */
+  410:
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "GlobalCreationAcceptedTargetUnavailableError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "GlobalCreationAllocatedProjectUnavailableError"
       }
 }
 
@@ -19083,9 +19114,16 @@ export type GlobalWorkCreateData = {
 
 export type GlobalWorkCreateErrors = {
   /**
-   * Bad request
+   * Work creation rejected
    */
-  400: BadRequestError
+  400:
+    | BadRequestError
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "ProviderModelNotFoundError"
+      }
 }
 
 export type GlobalWorkCreateError = GlobalWorkCreateErrors[keyof GlobalWorkCreateErrors]
@@ -28092,6 +28130,18 @@ export type TaskCreateErrors = {
         }
         name: "TaskCreatorSessionError"
       }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "PromptProfileNotFoundError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "ProviderModelNotFoundError"
+      }
   /**
    * Not found
    */
@@ -28122,7 +28172,19 @@ export type TaskCreateErrors = {
         data: {
           [key: string]: unknown
         }
-        name: "TaskCreationIdempotencyConflictError"
+        name: "TaskCreationContractConflictError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "TaskCreationIdentityConflictError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "TaskChannelBindingProjectConflictError"
       }
     | {
         data: {
@@ -28130,6 +28192,15 @@ export type TaskCreateErrors = {
         }
         name: "TaskPackageRevisionBindingError"
       }
+  /**
+   * Previously accepted Task target is no longer retained
+   */
+  410: {
+    data: {
+      [key: string]: unknown
+    }
+    name: "TaskCreationAcceptedTargetUnavailableError"
+  }
 }
 
 export type TaskCreateError = TaskCreateErrors[keyof TaskCreateErrors]

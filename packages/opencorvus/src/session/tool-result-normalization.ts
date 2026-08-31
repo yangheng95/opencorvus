@@ -7,11 +7,8 @@ export type CanonicalToolResult = {
   sources?: unknown
 }
 
-/**
- * Canonicalise every successful provider-stream Tool result at the persistence
- * boundary. Tool implementations may return a plain string or a richer object,
- * while Message.ToolPart deliberately persists one strict result shape.
- */
+/** Canonicalize every successful provider-stream Tool result at the Session
+ * persistence boundary. */
 export function normalizeToolResult(input: unknown): CanonicalToolResult {
   if (typeof input === "string") return { output: input, title: "", metadata: {} }
 

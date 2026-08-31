@@ -32,7 +32,12 @@ import {
   PermissionPolicyTable,
 } from "../permission/permission.sql"
 import { SessionShareTable } from "../share/share.sql"
-import { ProjectDirectoryAdmissionTable, ProjectMaintenanceFenceTable, ProjectTable } from "../project/project.sql"
+import {
+  GlobalCreationAllocationTable,
+  ProjectDirectoryAdmissionTable,
+  ProjectMaintenanceFenceTable,
+  ProjectTable,
+} from "../project/project.sql"
 import { WorkspaceTable } from "../workspace/workspace.sql"
 import { MemoryFileTable, MemoryChunkTable, MemoryEmbeddingTable } from "../memory/memory.sql"
 import {
@@ -57,6 +62,7 @@ import { TaskPlanTable } from "../memory/task-plan.sql"
 import { WorkbenchBriefSnapshotTable } from "../workbench/workbench.sql"
 import {
   EngineTaskTable,
+  EngineTaskCreationContractTable,
   EngineTaskRootIngressPolicyTable,
   EngineTaskRootIngressTable,
   EngineTaskWaitRegistrationTable,
@@ -115,6 +121,7 @@ export {
   ProjectTable,
   ProjectMaintenanceFenceTable,
   ProjectDirectoryAdmissionTable,
+  GlobalCreationAllocationTable,
   WorkspaceTable,
   MemoryFileTable,
   MemoryChunkTable,
@@ -136,6 +143,7 @@ export {
   TaskPlanTable,
   WorkbenchBriefSnapshotTable,
   EngineTaskTable,
+  EngineTaskCreationContractTable,
   EngineTaskRootIngressPolicyTable,
   EngineTaskRootIngressTable,
   EngineTaskWaitRegistrationTable,
@@ -197,6 +205,7 @@ export const ApplicationSchema = {
   ProjectTable,
   ProjectMaintenanceFenceTable,
   ProjectDirectoryAdmissionTable,
+  GlobalCreationAllocationTable,
   WorkspaceTable,
   MemoryFileTable,
   MemoryChunkTable,
@@ -218,6 +227,7 @@ export const ApplicationSchema = {
   TaskPlanTable,
   WorkbenchBriefSnapshotTable,
   EngineTaskTable,
+  EngineTaskCreationContractTable,
   EngineTaskRootIngressPolicyTable,
   EngineTaskRootIngressTable,
   EngineTaskWaitRegistrationTable,

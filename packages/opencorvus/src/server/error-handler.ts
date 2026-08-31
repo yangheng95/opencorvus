@@ -76,8 +76,11 @@ export function namedErrorStatus(err: { name: string }): ContentfulStatusCode {
   if (err.name === "ExternalChildTaskLineageError") return 400
   if (err.name === "TaskCreatorAuthorityError") return 400
   if (err.name === "TaskCreatorSessionError") return 400
+  if (err.name === "GlobalTaskRequestIdentityRequiredError") return 400
+  if (err.name === "PromptProfileNotFoundError") return 400
   if (err.name === "TaskGlobalProjectBindingError") return 409
   if (err.name === "TaskChannelBindingProjectConflictError") return 409
+  if (err.name === "TaskChannelBindingGlobalCreationConflictError") return 409
   if (err.name === "TaskCancellationIncompleteError") return 409
   if (err.name === "MissionExecutionClosingError") return 409
   if (err.name === "MissionExecutionWakeClosedError") return 409
@@ -88,7 +91,13 @@ export function namedErrorStatus(err: { name: string }): ContentfulStatusCode {
   if (err.name === "TaskBoundSessionDeletionError") return 409
   if (err.name === "TaskPackageRevisionBindingError") return 409
   if (err.name === "TaskExpectedPackageDigestConflictError") return 409
-  if (err.name === "TaskCreationIdempotencyConflictError") return 409
+  if (err.name === "TaskCreationContractConflictError") return 409
+  if (err.name === "TaskCreationIdentityConflictError") return 409
+  if (err.name === "TaskCreationAcceptedTargetUnavailableError") return 410
+  if (err.name === "GlobalCreationAllocationConflictError") return 409
+  if (err.name === "GlobalCreationAcceptedTargetConflictError") return 409
+  if (err.name === "GlobalCreationAcceptedTargetUnavailableError") return 410
+  if (err.name === "GlobalCreationAllocatedProjectUnavailableError") return 410
   if (err.name === "TaskPromptProfileImmutableError") return 409
   if (err.name === "MissingModelConfigError") return 400
   if (err.name === "NonCanonicalConfigFileError") return 409

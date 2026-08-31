@@ -11,7 +11,7 @@ async function runGit(directory: string, args: string[]) {
   if (result.exitCode !== 0) throw new Error(result.stderr.toString().trim() || `git ${args.join(" ")} failed`)
 }
 
-export async function memoryProject() {
+export async function memoryProject(identitySeed?: string) {
   declareNativeTaskProcessDeployment()
   const root = process.env.OPENCORVUS_TEST_PROCESS_ROOT
   if (!root) throw new Error("Memory tests require the repository test preload")
@@ -19,6 +19,10 @@ export async function memoryProject() {
   await runGit(directory, ["init"])
   await runGit(directory, ["config", "user.name", "OpenCorvus Test"])
   await runGit(directory, ["config", "user.email", "opencorvus-test@example.invalid"])
+  if (identitySeed) {
+    await fs.writeFile(path.join(directory, ".opencorvus-test-project-identity"), identitySeed)
+    await runGit(directory, ["add", ".opencorvus-test-project-identity"])
+  }
   await runGit(directory, ["commit", "--allow-empty", "--no-verify", "-m", "root"])
   return {
     path: await fs.realpath(directory),

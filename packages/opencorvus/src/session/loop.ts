@@ -139,6 +139,7 @@ import {
   type DispatchAgentsRecoveryTool,
 } from "@/orchestrator/dispatch-agents-recovery"
 import { recoverScheduledToolPart } from "@/scheduler/tool-recovery"
+import { requireControlPlaneToolLoaders } from "@/tool/control-plane-tool-provider"
 import { settleSessionDelaysAtAssistantAcceptanceInTransaction } from "@/scheduler/session-delay-admission"
 import { sendSchedulerMessage } from "@/protocol/scheduler-message"
 import {
@@ -2377,6 +2378,26 @@ export namespace SessionLoop {
       for (const part of candidate.parts) {
         signal?.throwIfAborted()
         if (part.type !== "tool" || (part.state.status !== "pending" && part.state.status !== "running")) continue
+        const recoveredPanelCreation = await requireControlPlaneToolLoaders().recoverPanelCreation({
+          sessionID,
+          messageID: candidate.info.id,
+          agent: candidate.info.agent,
+          part,
+        })
+        if (recoveredPanelCreation) {
+          await Session.updatePart({
+            ...part,
+            state: {
+              status: "completed",
+              input: part.state.input,
+              title: recoveredPanelCreation.title,
+              output: recoveredPanelCreation.output,
+              metadata: recoveredPanelCreation.metadata,
+              time: { start: part.state.time.start, end: Math.max(now, part.state.time.start + 1) },
+            },
+          })
+          continue
+        }
         const recoveredScheduledEffect = await recoverScheduledToolPart(part)
         if (recoveredScheduledEffect) {
           await Session.updatePart({

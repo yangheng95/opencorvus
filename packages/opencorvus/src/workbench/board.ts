@@ -259,8 +259,7 @@ function taskProcessIncidents(taskID: string, executionProjection: ReturnType<ty
     try {
       const isRecovery =
         operation === "handoff-process-owned-task-execution" || operation === "recover-interrupted-task-execution"
-      const parsed = isRecovery ? parseProcessRecoveryFactContext(payload.context, row.id) : undefined
-      const recovery = parsed?.kind === "v1" ? parsed.context : undefined
+      const recovery = isRecovery ? parseProcessRecoveryFactContext(payload.context, row.id) : undefined
       const affectedExecutions = recovery?.affected_subjects.map((subject) => {
         if (subject.kind !== "affected_created_session") recoveryInputMessageIDs.add(subject.input_message_id)
         return {

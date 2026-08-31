@@ -126,7 +126,7 @@ describe("global Chat start cross-process convergence", () => {
       if (!line) throw new Error(`Global Chat worker returned no JSON: ${stderr || stdout}`)
       return JSON.parse(line) as Record<string, unknown>
     }
-    const cut = async (mode: "cut-session" | "cut-message", requestID: string, exitCode: number) => {
+    const cut = async (mode: "cut-allocation" | "cut-message", requestID: string, exitCode: number) => {
       const child = spawn(mode, requestID)
       const [stderr, actualExit] = await Promise.all([new Response(child.stderr).text(), child.exited])
       expect(actualExit, stderr).toBe(exitCode)
@@ -141,13 +141,22 @@ describe("global Chat start cross-process convergence", () => {
         await Bun.sleep(5)
       }
     }
-    const waitForAccepted = async (requestID: string, count: number) => {
+    const waitForAccepted = async (
+      requestID: string,
+      count: number,
+      workers: ReadonlyArray<ReturnType<typeof spawn>>,
+    ) => {
       const deadline = Date.now() + 30_000
       while (
         (await fs.readdir(barrier)).filter((entry) => entry.startsWith(`${requestID}-`) && entry.endsWith(".accepted"))
           .length < count
       ) {
-        if (Date.now() >= deadline) throw new Error(`Global Chat ${requestID} workers were not both accepted`)
+        if (Date.now() >= deadline) {
+          const states = workers.map((worker) => ({ exitCode: worker.exitCode, pid: worker.pid }))
+          throw new Error(
+            `Global Chat ${requestID} workers were not both accepted: ${JSON.stringify(states)}`,
+          )
+        }
         await Bun.sleep(5)
       }
     }
@@ -160,7 +169,7 @@ describe("global Chat start cross-process convergence", () => {
       const second = spawn("race", raceID, "second")
       await waitForRace(raceID)
       await fs.writeFile(path.join(barrier, `${raceID}.go`), "go")
-      await waitForAccepted(raceID, 2)
+      await waitForAccepted(raceID, 2, [first, second])
       provider.releasePrompts()
       const raced = await Promise.all([read(first), read(second)])
       expect(raced).toEqual([
@@ -177,7 +186,14 @@ describe("global Chat start cross-process convergence", () => {
         assistantTexts: ["cross-process assistant reply"],
         assistantStates: [{ id: expect.any(String), finish: "stop" }],
         anonymousProjectCount: 1,
+        frozenModel: "global-chat-process-test/stream-model",
+        identityVersion: 2,
+        allocationProtocol: "global-chat-start-request-v2",
+        allocationFingerprint: expect.stringMatching(/^[a-f0-9]{64}$/),
+        allocationCanonicalFingerprint: expect.stringMatching(/^[a-f0-9]{64}$/),
       })
+      const canonicalAllocation = await read(spawn("inspect", raceID))
+      expect(canonicalAllocation.allocationFingerprint).toBe(canonicalAllocation.allocationCanonicalFingerprint)
       expect(provider.promptRequestCount()).toBe(1)
 
       const conflictRaceID = "global-chat-cross-process-payload-conflict"
@@ -198,10 +214,13 @@ describe("global Chat start cross-process convergence", () => {
       expect(provider.promptRequestCount()).toBe(2)
 
       for (const [mode, requestID, exitCode] of [
-        ["cut-session", "global-chat-session-cut", 86],
+        ["cut-allocation", "global-chat-allocation-cut", 86],
         ["cut-message", "global-chat-message-cut", 87],
       ] as const) {
         await cut(mode, requestID, exitCode)
+        if (mode === "cut-allocation") {
+          expect(await read(spawn("mutate-defaults", requestID))).toEqual({ mutated: true })
+        }
         const recovered = await read(spawn("recover", requestID))
         expect(recovered).toMatchObject({ status: 202 })
         expect(await read(spawn("inspect", requestID))).toMatchObject({
@@ -210,8 +229,21 @@ describe("global Chat start cross-process convergence", () => {
           userCount: 1,
           assistantCount: 1,
           assistantTexts: ["cross-process assistant reply"],
+          ...(mode === "cut-allocation" ? { frozenModel: "global-chat-process-test/stream-model" } : {}),
         })
       }
+
+      const retainedReplacementID = "global-chat-retained-replacement"
+      const retained = await read(spawn("recover", retainedReplacementID))
+      expect(retained).toMatchObject({ status: 202 })
+      expect(await read(spawn("replace-retained", retainedReplacementID))).toMatchObject({
+        replaced: true,
+        sessionID: retained.sessionID,
+      })
+      expect(await read(spawn("recover", retainedReplacementID))).toMatchObject({
+        status: 410,
+        error: { name: "GlobalCreationAcceptedTargetUnavailableError" },
+      })
     } finally {
       for (const child of children) {
         if (child.exitCode === null) child.kill()
@@ -221,5 +253,5 @@ describe("global Chat start cross-process convergence", () => {
       await removeManagedDirectoryTree(barrier)
       provider.server.stop(true)
     }
-  }, 120_000)
+  }, 360_000)
 })

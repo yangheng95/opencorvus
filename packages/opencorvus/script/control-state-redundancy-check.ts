@@ -78,7 +78,7 @@ const CONTROL_STATE_INVENTORY = {
     lease: ["time_activated", "expires_at"],
   }),
   EngineTaskTable: inventory({
-    identity: ["id", "project_id", "session_id", "request_id"],
+    identity: ["id", "project_id", "session_id", "request_id", "global_creation_allocation_id"],
     input: [
       "source",
       "product_pillar",
@@ -92,6 +92,12 @@ const CONTROL_STATE_INVENTORY = {
       "time_pinned",
       "metadata",
     ],
+    fact: ["time_created"],
+  }),
+  EngineTaskCreationContractTable: inventory({
+    identity: ["task_id", "fingerprint"],
+    causal: ["creator_tool_part_id"],
+    input: ["contract"],
     fact: ["time_created"],
   }),
   EngineBuildObservationCleanupTable: inventory({
@@ -216,12 +222,7 @@ const CONTROL_STATE_INVENTORY = {
   }),
   EngineTaskWaitRegistrationTable: inventory({
     identity: ["id", "task_id", "execution_epoch"],
-    causal: [
-      "tool_part_id",
-      "creator_ingress_id",
-      "creator_activation_id",
-      "legacy_automation_definition_id",
-    ],
+    causal: ["tool_part_id", "creator_ingress_id", "creator_activation_id"],
     input: ["due_at", "reason", "input_digest"],
     fact: ["time_created"],
   }),

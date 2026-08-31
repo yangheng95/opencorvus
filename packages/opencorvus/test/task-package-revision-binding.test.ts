@@ -4,14 +4,14 @@ import { Instance } from "../src/project/instance"
 import { Session } from "../src/session"
 import { Database, eq } from "../src/storage/db"
 import { EngineArtifactTable } from "../src/engine/engine.sql"
-import { persistTask } from "../src/engine/pipeline"
+import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import {
-  TaskCreationIdempotencyConflictError,
   TaskExpectedPackageDigestConflictError,
   TaskPromptProfileImmutableError,
   requireTaskPackageRevisionBinding,
   taskRootOwnsPackageRevisionBinding,
 } from "../src/engine/task-package-revision-binding"
+import { TaskCreationContractConflictError } from "../src/engine/task-creation-contract"
 import { requireTask, viewTask, viewTaskListTask } from "../src/engine/store"
 import { selectedWorkflowBinding } from "../src/engine/workflow-binding"
 import { assertTaskWorkflowBindingInTransaction } from "../src/engine/workflow-binding-facts"
@@ -366,12 +366,13 @@ describe("Task package revision binding", () => {
             await EngineService.createTask(conflictingInput, { actor: "user" })
             throw new Error("Expected immutable request replay contract")
           } catch (error) {
-            expect(error).toBeInstanceOf(TaskCreationIdempotencyConflictError)
-            expect((error as InstanceType<typeof TaskCreationIdempotencyConflictError>).toObject().data).toMatchObject({
+            expect(error).toBeInstanceOf(TaskCreationContractConflictError)
+            expect((error as InstanceType<typeof TaskCreationContractConflictError>).toObject().data).toMatchObject({
               taskID: firstTaskID,
               identityKind: "request",
               identity: requestID,
-              pinnedPackageRevision: requireTaskPackageRevisionBinding(firstTaskID),
+              expectedFingerprint: expect.stringMatching(/^[a-f0-9]{64}$/),
+              actualFingerprint: expect.stringMatching(/^[a-f0-9]{64}$/),
             })
           }
         }
@@ -427,11 +428,12 @@ describe("Task package revision binding", () => {
             await EngineService.createTask(conflictingInput, { actor: "user" })
             throw new Error("Expected immutable channel replay contract")
           } catch (error) {
-            expect(error).toBeInstanceOf(TaskCreationIdempotencyConflictError)
-            expect((error as InstanceType<typeof TaskCreationIdempotencyConflictError>).toObject().data).toMatchObject({
+            expect(error).toBeInstanceOf(TaskCreationContractConflictError)
+            expect((error as InstanceType<typeof TaskCreationContractConflictError>).toObject().data).toMatchObject({
               taskID: channelTaskID,
               identityKind: "channel",
-              pinnedPackageRevision: requireTaskPackageRevisionBinding(channelTaskID),
+              expectedFingerprint: expect.stringMatching(/^[a-f0-9]{64}$/),
+              actualFingerprint: expect.stringMatching(/^[a-f0-9]{64}$/),
             })
           }
         }

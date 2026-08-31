@@ -491,6 +491,7 @@ async function ensureMissionSessionInner(input: {
    *  instant, or a death right after publication runs it on the base model. */
   initialTitle?: string
   initialConfigOverlay?: Record<string, unknown>
+  creationMetadata?: Record<string, unknown>
 }) {
   const missionID = input.missionID
   const session = Database.immediateTransaction((db) => {
@@ -522,6 +523,7 @@ async function ensureMissionSessionInner(input: {
         title: input.initialTitle ?? MISSION_CONTROL_DEFAULT_TITLE,
         kind: "mission",
         metadata: {
+          ...(input.creationMetadata ?? {}),
           ...canonicalMissionMetadata(input),
           ...(input.initialConfigOverlay ? { configOverlay: input.initialConfigOverlay } : {}),
         },
@@ -543,6 +545,7 @@ export async function ensureMissionSession(input: {
   heldExpertSquadIDs: MissionVisibleExpertSquadIDs
   initialTitle?: string
   initialConfigOverlay?: Record<string, unknown>
+  creationMetadata?: Record<string, unknown>
 }) {
   const missionID = MissionID.parse(input.missionID)
   const directory = normalizeDirectory(input.defaultCwd)
@@ -564,6 +567,7 @@ export async function ensureMissionSession(input: {
     heldExpertSquadIDs: input.heldExpertSquadIDs,
     initialTitle: input.initialTitle,
     initialConfigOverlay: input.initialConfigOverlay,
+    creationMetadata: input.creationMetadata,
   }).finally(() => locks.delete(lockKey))
   locks.set(lockKey, promise)
   return promise

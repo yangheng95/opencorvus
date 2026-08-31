@@ -49,7 +49,7 @@ describe("scheduler immutable fact control", () => {
             id: fireID,
             automation_revision_id: automationID,
             scheduled_due_at: now,
-            origin: "legacy",
+            origin: "scheduled",
             time_created: now,
           }).run()
           db.insert(AutomationRunTable).values({

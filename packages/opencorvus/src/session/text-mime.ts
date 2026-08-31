@@ -124,17 +124,5 @@ export function decodeDataUrlBase64Bytes(dataUrl: string, context: string): Buff
   return decodeRawBase64Payload(decodeDataUrlBase64(dataUrl, context), context)
 }
 
-export function decodeRawBase64Payload(payload: string, context: string): Buffer {
-  if (typeof payload !== "string" || payload.length === 0) {
-    throw new Error(`${context}: expected non-empty base64 payload`)
-  }
-  if (payload.trim() !== payload || payload.length % 4 === 1 || !/^[A-Za-z0-9+/]+={0,2}$/.test(payload)) {
-    throw new Error(`${context}: invalid base64 payload`)
-  }
-  const padded = payload + "=".repeat((4 - (payload.length % 4)) % 4)
-  const bytes = Buffer.from(padded, "base64")
-  if (bytes.length === 0 || bytes.toString("base64").replace(/=+$/, "") !== payload.replace(/=+$/, "")) {
-    throw new Error(`${context}: invalid base64 payload`)
-  }
-  return bytes
-}
+import { decodeRawBase64Payload } from "@/util/base64"
+export { decodeRawBase64Payload } from "@/util/base64"

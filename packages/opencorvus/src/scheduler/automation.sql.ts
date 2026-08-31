@@ -112,7 +112,7 @@ export const AutomationFireTable = sqliteTable(
       .notNull()
       .references(() => AutomationTable.id, { onDelete: "restrict" }),
     scheduled_due_at: integer().notNull(),
-    origin: text({ enum: ["scheduled", "manual_api", "manual_tool", "legacy"] }).notNull(),
+    origin: text({ enum: ["scheduled", "manual_api", "manual_tool"] }).notNull(),
     tool_part_id: text(),
     input_digest: text(),
     time_created: integer().notNull(),
@@ -135,7 +135,6 @@ export const AutomationFireTable = sqliteTable(
       (${table.origin}='scheduled' AND ${table.tool_part_id} IS NULL AND ${table.input_digest} IS NULL)
       OR (${table.origin}='manual_api' AND ${table.tool_part_id} IS NULL AND ${table.input_digest} IS NULL)
       OR (${table.origin}='manual_tool' AND ${table.tool_part_id} IS NOT NULL AND ${table.input_digest} IS NOT NULL)
-      OR (${table.origin}='legacy' AND ${table.tool_part_id} IS NULL AND ${table.input_digest} IS NULL)
     `),
   ],
 )

@@ -1,5 +1,5 @@
 import { Identifier } from "@/id/id"
-import { Database, eq } from "@/storage/db"
+import { Database } from "@/storage/db"
 import { EngineChannelBindingTable, type EngineMetadata } from "./engine.sql"
 
 export interface InsertEngineChannelBindingInput {
@@ -27,8 +27,4 @@ export function insertEngineChannelBinding(db: Database.TxOrDb, input: InsertEng
     })
     .run()
   return id
-}
-
-export function deleteEngineChannelBindingsForTask(db: Database.TxOrDb, taskID: string): void {
-  db.delete(EngineChannelBindingTable).where(eq(EngineChannelBindingTable.task_id, taskID)).run()
 }

@@ -9,6 +9,8 @@ import { MissionVisibleExpertSquadIDs } from "@/mission/schema"
 import { createHash } from "node:crypto"
 import { currentMissionExecutionClosure, type MissionExecutionClosure } from "@/mission/execution-closure"
 import { Database } from "@/storage/db"
+import { MessageTable, ToolPartRequestTable } from "@/session/session.sql"
+import { and, eq } from "drizzle-orm"
 
 export const MissionTaskCreationOpenedOccurrence = z
   .object({
@@ -38,9 +40,18 @@ export const TaskCreator = z.discriminatedUnion("actor", [
       openedOccurrence: MissionTaskCreationOpenedOccurrence,
       messageID: Identifier.schema("message").optional(),
       toolCallID: z.string().min(1).optional(),
+      toolPartID: Identifier.schema("part").optional(),
     })
     .strict(),
-  z.object({ actor: SessionTaskCreatorActor, sessionID: Identifier.schema("session") }).strict(),
+  z
+    .object({
+      actor: SessionTaskCreatorActor,
+      sessionID: Identifier.schema("session"),
+      messageID: Identifier.schema("message").optional(),
+      toolCallID: z.string().min(1).optional(),
+      toolPartID: Identifier.schema("part").optional(),
+    })
+    .strict(),
 ])
 export type TaskCreator = z.infer<typeof TaskCreator>
 
@@ -55,9 +66,20 @@ const ResolvedTaskCreator = z.discriminatedUnion("actor", [
       openedOccurrence: MissionTaskCreationOpenedOccurrence,
       messageID: Identifier.schema("message").optional(),
       toolCallID: z.string().min(1).optional(),
+      toolPartID: Identifier.schema("part").optional(),
+      toolInput: z.record(z.string(), z.unknown()).optional(),
     })
     .strict(),
-  z.object({ actor: SessionTaskCreatorActor, sessionID: Identifier.schema("session") }).strict(),
+  z
+    .object({
+      actor: SessionTaskCreatorActor,
+      sessionID: Identifier.schema("session"),
+      messageID: Identifier.schema("message").optional(),
+      toolCallID: z.string().min(1).optional(),
+      toolPartID: Identifier.schema("part").optional(),
+      toolInput: z.record(z.string(), z.unknown()).optional(),
+    })
+    .strict(),
 ])
 
 export const TaskCreatorMetadata = z
@@ -202,6 +224,35 @@ export async function resolveTaskCreator(rawCreator: z.input<typeof TaskCreator>
     sessionID: creator.sessionID,
     projectID: Instance.project.id,
   })
+  const toolIdentity = [creator.messageID, creator.toolCallID, creator.toolPartID]
+  if (toolIdentity.some(Boolean) && !toolIdentity.every(Boolean)) {
+    throw new TaskCreatorAuthorityError({
+      message: "Task creator Tool provenance requires messageID, toolCallID and toolPartID together.",
+    })
+  }
+  let toolInput: Record<string, unknown> | undefined
+  if (creator.toolPartID) {
+    const request = Database.use((db) =>
+      db
+        .select({ data: ToolPartRequestTable.data })
+        .from(ToolPartRequestTable)
+        .innerJoin(MessageTable, eq(MessageTable.id, ToolPartRequestTable.message_id))
+        .where(
+          and(
+            eq(ToolPartRequestTable.id, creator.toolPartID!),
+            eq(ToolPartRequestTable.message_id, creator.messageID!),
+            eq(MessageTable.session_id, creator.sessionID),
+          ),
+        )
+        .get(),
+    )
+    if (!request || request.data.callID !== creator.toolCallID || request.data.tool !== "panel") {
+      throw new TaskCreatorAuthorityError({
+        message: `Task creator Tool occurrence ${creator.toolPartID} is not the exact persisted panel request.`,
+      })
+    }
+    toolInput = z.record(z.string(), z.unknown()).parse(request.data.input)
+  }
   if (creator.actor === "orchestrator" && session.kind !== "orchestrator") {
     throw new TaskCreatorSessionError({
       message: `Orchestrator task creator session ${creator.sessionID} must have kind orchestrator.`,
@@ -220,7 +271,7 @@ export async function resolveTaskCreator(rawCreator: z.input<typeof TaskCreator>
       message: `Control Agent task creator session ${creator.sessionID} must be a non-conversation assistant session.`,
     })
   }
-  if (creator.actor !== "mission") return creator
+  if (creator.actor !== "mission") return ResolvedTaskCreator.parse({ ...creator, ...(toolInput ? { toolInput } : {}) })
   if (session.kind !== "mission") {
     throw new TaskCreatorSessionError({
       message: `Mission task creator session ${creator.sessionID} must have kind mission.`,
@@ -239,7 +290,7 @@ export async function resolveTaskCreator(rawCreator: z.input<typeof TaskCreator>
   const heldExpertSquadIDs = MissionVisibleExpertSquadIDs.parse(
     (mission as Record<string, unknown>).visibleExpertSquadIDs,
   )
-  return ResolvedTaskCreator.parse({ ...creator, missionID, heldExpertSquadIDs })
+  return ResolvedTaskCreator.parse({ ...creator, missionID, heldExpertSquadIDs, ...(toolInput ? { toolInput } : {}) })
 }
 
 export function assertTaskCreatorExpertSquadAuthority(input: {

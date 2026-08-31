@@ -1,9 +1,11 @@
-import { createHash } from "node:crypto"
 import fs from "node:fs/promises"
 import path from "node:path"
 import { Config } from "@/config/config"
-import { GlobalConversationService } from "@/chat/global-chat-service"
-import { GlobalChatStartIdentityConflictError, startGlobalChat } from "@/chat/global-chat-start"
+import {
+  GlobalChatStartIdentityConflictError,
+  GlobalChatStartTestHooks,
+  startGlobalChat,
+} from "@/chat/global-chat-start"
 import { Identifier } from "@/id/id"
 import { Instance } from "@/project/instance"
 import { ImplicitProject } from "@/project/implicit-project"
@@ -13,6 +15,15 @@ import { Session } from "@/session"
 import { Message } from "@/session/message"
 import { SessionWake } from "@/session/wake"
 import { Database } from "@/storage/db"
+import { GlobalCreationAcceptedTargetUnavailableError } from "@/project/global-creation-allocation"
+import { GlobalCreationAllocationTable, ProjectTable } from "@/project/project.sql"
+import { and, eq } from "drizzle-orm"
+import { createRightSidebarConversationSession } from "@/chat/session"
+import { InstanceBootstrap } from "@/project/bootstrap"
+import {
+  canonicalTaskCreationContract,
+  taskCreationContractFingerprint,
+} from "@/engine/task-creation-contract"
 
 const [mode, barrierDirectory, requestID, apiURL, label, textOverride] = process.argv.slice(2)
 if (!mode || !barrierDirectory || !requestID || !apiURL) {
@@ -23,35 +34,6 @@ declareNativeTaskProcessDeployment()
 
 const model = { providerID: "global-chat-process-test", modelID: "stream-model" }
 const body = { requestID, text: textOverride ?? `Cross-process global Chat ${requestID}` }
-
-function startIdentity() {
-  const material = `global.chat.start.v1\0${requestID}`
-  return {
-    sessionID: Identifier.deterministic("session", material),
-    messageID: Identifier.deterministic("message", `${material}\0message`),
-    textPartID: Identifier.deterministic("part", `${material}\0text`),
-    requestFingerprint: createHash("sha256")
-      .update(JSON.stringify({ text: body.text, attachments: [], model: null }))
-      .digest("hex"),
-  }
-}
-
-async function createSessionOnly() {
-  const identity = startIdentity()
-  const created = await GlobalConversationService.create({
-    experience: "chat",
-    sessionID: identity.sessionID,
-    creationMetadata: {
-      globalChatStart: {
-        version: 1,
-        requestID,
-        requestFingerprint: identity.requestFingerprint,
-        messageID: identity.messageID,
-      },
-    },
-  })
-  return { ...identity, session: created.session }
-}
 
 async function start() {
   try {
@@ -77,7 +59,11 @@ async function start() {
     }
   } catch (error) {
     return {
-      status: GlobalChatStartIdentityConflictError.isInstance(error as Error) ? 409 : 500,
+      status: GlobalChatStartIdentityConflictError.isInstance(error as Error)
+        ? 409
+        : GlobalCreationAcceptedTargetUnavailableError.isInstance(error as Error)
+          ? 410
+          : 500,
       error: {
         name: error instanceof Error ? error.name : "UnknownError",
         message: error instanceof Error ? error.message : String(error),
@@ -96,6 +82,19 @@ async function inspect() {
   const assistant = messages.filter(
     (message) => message.info.role === "assistant" && Message.acceptsInputMessage(message.info, messageID),
   )
+  const allocation = Database.use((db) =>
+    db
+      .select()
+      .from(GlobalCreationAllocationTable)
+      .where(
+        and(
+          eq(GlobalCreationAllocationTable.kind, "global_chat_start"),
+          eq(GlobalCreationAllocationTable.request_id, requestID),
+        ),
+      )
+      .get(),
+  )
+  if (!allocation) throw new Error(`Global Chat ${requestID} has no allocation`)
   return {
     sessionID: session.id,
     messageID,
@@ -111,6 +110,13 @@ async function inspect() {
     ),
     anonymousProjectCount: Project.list().filter((project) => ImplicitProject.isAnonymousDirectory(project.worktree))
       .length,
+    frozenModel: ((session.metadata as Record<string, any> | undefined)?.configOverlay as Record<string, unknown> | undefined)?.model,
+    identityVersion: (session.metadata as Record<string, any> | undefined)?.globalChatStart?.version,
+    allocationProtocol: allocation.request_contract.protocol,
+    allocationFingerprint: allocation.request_fingerprint,
+    allocationCanonicalFingerprint: taskCreationContractFingerprint(
+      canonicalTaskCreationContract(allocation.request_contract),
+    ),
   }
 }
 
@@ -138,6 +144,51 @@ async function run() {
     return { initialized: true }
   }
   if (mode === "inspect") return inspect()
+  if (mode === "replace-retained") {
+    const sessionID = Identifier.deterministic("session", `global.chat.start.v1\0${requestID}`)
+    const original = await Session.get(sessionID)
+    const metadata = original.metadata ?? {}
+    await Instance.disposeAll()
+    Database.transaction((db) => db.delete(ProjectTable).where(eq(ProjectTable.id, original.projectID)).run())
+    const replacement = await ImplicitProject.create()
+    await Instance.provide({
+      directory: replacement.directory,
+      init: InstanceBootstrap,
+      fn: () =>
+        createRightSidebarConversationSession("chat", {
+          id: sessionID,
+          creationMetadata: metadata,
+        }),
+    })
+    return { replaced: true, sessionID, projectID: replacement.project.id }
+  }
+  if (mode === "mutate-defaults") {
+    await Config.updateGlobalPatch({
+      model: `${model.providerID}/stream-model-2`,
+      provider: {
+        [model.providerID]: {
+          name: "Global Chat process test provider",
+          npm: "@ai-sdk/openai-compatible",
+          api: apiURL,
+          models: {
+            [model.modelID]: {
+              name: "Global Chat process test model",
+              tool_call: true,
+              modalities: { input: ["text"], output: ["text"] },
+              limit: { context: 1_000_000, output: 4_096 },
+            },
+            "stream-model-2": {
+              name: "Changed default model",
+              tool_call: true,
+              modalities: { input: ["text"], output: ["text"] },
+              limit: { context: 1_000_000, output: 4_096 },
+            },
+          },
+        },
+      },
+    })
+    return { mutated: true }
+  }
 
   if (mode === "race") {
     if (!label) throw new Error("Race worker requires a label")
@@ -145,9 +196,10 @@ async function run() {
     while (!(await fs.stat(path.join(barrierDirectory, `${requestID}.go`)).catch(() => undefined))) await Bun.sleep(5)
     return start()
   }
-  if (mode === "cut-session") {
-    await createSessionOnly()
-    process.exit(86)
+  if (mode === "cut-allocation") {
+    using _cut = GlobalChatStartTestHooks.installAfterAllocation(() => process.exit(86))
+    await start()
+    await new Promise<never>(() => undefined)
   }
   if (mode === "cut-message") {
     using _activationCut = SessionWake.TestHooks.installBeforeWakeLoopActivation(() => process.exit(87))
@@ -161,7 +213,6 @@ async function run() {
 try {
   const output = await run()
   console.log(JSON.stringify(output))
-  Database.close()
   process.exit(0)
 } catch (error) {
   console.error(error instanceof Error ? error.stack : String(error))

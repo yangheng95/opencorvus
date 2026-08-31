@@ -6012,7 +6012,7 @@ export class Mysql extends HeyApiClient {
   public import<ThrowOnError extends boolean = false>(
     parameters: {
       snapshot: {
-        format: "opencorvus.mysql-transfer.v1"
+        format: "opencorvus.mysql-transfer.v2"
         schemaFingerprint: string
         tables: Array<{
           columns: Array<string>
@@ -6861,62 +6861,11 @@ export class Global2 extends HeyApiClient {
    */
   public create<ThrowOnError extends boolean = false>(
     parameters: {
-      artifactSources?: Array<
-        | {
-            authority: "completion_decision"
-            source_task_id: string
-          }
-        | {
-            authority: "terminal_lifecycle"
-            locator:
-              | {
-                  artifact_id: string
-                  catalog_revision: number
-                  expected_sha256: string
-                  source: "engine_artifact"
-                }
-              | {
-                  snapshot: {
-                    manifest_sha256: string
-                    project_id: string
-                    schema_version: 2
-                    snapshot_id: string
-                    task_id: string
-                  }
-                  source: "task_artifact_snapshot"
-                }
-              | {
-                  ref: {
-                    bytes: number
-                    media_type: string
-                    path: string
-                    sha256: string
-                    snapshot: {
-                      manifest_sha256: string
-                      project_id: string
-                      schema_version: 2
-                      snapshot_id: string
-                      task_id: string
-                    }
-                    tree: string
-                  }
-                  source: "task_artifact_resource"
-                }
-            source_task_id: string
-          }
-      >
-      attachments?: Array<
-        | {
-            filename?: string
-            mime: string
-            url: string
-          }
-        | {
-            data: string
-            filename?: string
-            mime: string
-          }
-      >
+      attachments?: Array<{
+        data: string
+        filename?: string
+        mime: string
+      }>
       budget?: {
         maxExecutorGroups?: number
       }
@@ -7051,15 +7000,10 @@ export class Global2 extends HeyApiClient {
           url: string
         }
       }
-      directory?: string
       expectedPackageDigest?: string
-      metadata?: {
-        [key: string]: unknown
-      }
       model?: string
       priority?: "critical" | "high" | "normal" | "low"
       productPillar: "code" | "work"
-      project?: string
       promptProfile?: string
       request: string
       requestID?: string
@@ -7073,18 +7017,14 @@ export class Global2 extends HeyApiClient {
       [
         {
           args: [
-            { in: "body", key: "artifactSources" },
             { in: "body", key: "attachments" },
             { in: "body", key: "budget" },
             { in: "body", key: "channelBinding" },
             { in: "body", key: "checks" },
-            { in: "body", key: "directory" },
             { in: "body", key: "expectedPackageDigest" },
-            { in: "body", key: "metadata" },
             { in: "body", key: "model" },
             { in: "body", key: "priority" },
             { in: "body", key: "productPillar" },
-            { in: "body", key: "project" },
             { in: "body", key: "promptProfile" },
             { in: "body", key: "request" },
             { in: "body", key: "requestID" },

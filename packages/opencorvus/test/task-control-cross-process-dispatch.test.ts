@@ -28,7 +28,7 @@ import { ProtocolStore } from "../src/protocol/store"
 import { currentRuntimeOccurrenceID } from "../src/runtime/process-occurrence"
 import { Session } from "../src/session"
 import { executionLifecycleOrderKey } from "../src/session/status"
-import { Database, eq, sql } from "../src/storage/db"
+import { Database, eq } from "../src/storage/db"
 import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
@@ -196,39 +196,6 @@ function recoveryIngressCount(taskID: string) {
   )
 }
 
-function replaceLineageDeliveryOwnerForTest(
-  lineageArtifactID: string,
-  deliveryOwner:
-    | { kind: "historical_reconciliation"; source: { kind: "dispatch_settlement"; artifact_id: string } }
-    | { kind: "historical_reconciliation"; source: { kind: "agent_execution_lifecycle"; event_id: string } },
-) {
-  Database.immediateTransaction((db) => {
-    const triggers = db.all<{ name: string; sql: string }>(
-      sql`SELECT name,sql FROM sqlite_schema WHERE type='trigger' AND tbl_name='engine_artifact' ORDER BY name`,
-    )
-    if (triggers.length === 0 || triggers.some((trigger) => !trigger.sql)) {
-      throw new Error("engine Artifact triggers are unavailable")
-    }
-    for (const trigger of triggers) {
-      db.run(sql.raw(`DROP TRIGGER "${trigger.name.replaceAll('"', '""')}"`))
-    }
-    try {
-      const lineage = db
-        .select()
-        .from(EngineArtifactTable)
-        .where(eq(EngineArtifactTable.id, lineageArtifactID))
-        .get()
-      if (!lineage) throw new Error(`Dispatch lineage ${lineageArtifactID} does not exist`)
-      db.update(EngineArtifactTable)
-        .set({ payload: { ...lineage.payload, delivery_owner: deliveryOwner } })
-        .where(eq(EngineArtifactTable.id, lineageArtifactID))
-        .run()
-    } finally {
-      for (const trigger of triggers) db.run(sql.raw(trigger.sql))
-    }
-  })
-}
-
 describe("cross-process dispatch abandonment", () => {
   test("leaves a peer backend's dispatch alone while that peer's liveness lease is current", async () => {
     await using project = await memoryProject()
@@ -367,61 +334,6 @@ describe("cross-process dispatch abandonment", () => {
     })
   }, 30_000)
 
-  test("replays the exact historical lifecycle source even after a later terminal event", async () => {
-    await using project = await memoryProject()
-    await Instance.provide({
-      directory: project.path,
-      fn: async () => {
-        const fixture = await seedPeerOwnedDispatch(project.path)
-        const inputMessageID = fixture.descriptor.payload.messageAuthority.user_message_id
-        const bound = await ProtocolStore.appendEvent({
-          id: "pev_historical_bound",
-          kind: "event",
-          type: "agent.execution.lifecycle",
-          aggregate: "task",
-          aggregate_id: fixture.taskID,
-          task_id: null,
-          session_id: fixture.child.id,
-          source: "task-control-cross-process-dispatch-test",
-          order_key: executionLifecycleOrderKey(fixture.child.id, inputMessageID),
-          payload: {
-            inputMessageID,
-            status: { type: "terminal", reason: "error", error: "bound historical failure" },
-          },
-        })
-        await ProtocolStore.appendEvent({
-          id: "pev_historical_later",
-          kind: "event",
-          type: "agent.execution.lifecycle",
-          aggregate: "task",
-          aggregate_id: fixture.taskID,
-          task_id: null,
-          session_id: fixture.child.id,
-          source: "task-control-cross-process-dispatch-test",
-          order_key: executionLifecycleOrderKey(fixture.child.id, inputMessageID),
-          emitted_at: bound.time.emitted + 1,
-          payload: {
-            inputMessageID,
-            status: { type: "terminal", reason: "error", error: "later sibling failure" },
-          },
-        })
-        replaceLineageDeliveryOwnerForTest(fixture.lineage.artifactID, {
-          kind: "historical_reconciliation",
-          source: { kind: "agent_execution_lifecycle", event_id: bound.id },
-        })
-
-        using _owner = TaskControlTestHooks.replaceTerminalIngressDeliveryRuntime("runtime:this-backend")
-        using _runner = TaskControlTestHooks.replaceTaskIngressRunner({ runner: async () => ({}) })
-        await reconcileTaskControlPlane(fixture.taskID)
-
-        expect(
-          findDispatchSettlementByDispatchID({ taskID: fixture.taskID, dispatchID: fixture.dispatchID })?.payload
-            .outcome,
-        ).toMatchObject({ kind: "infrastructure_failure", message: "bound historical failure" })
-      },
-    })
-  })
-
   test("preserves an exact failed lifecycle final Message instead of a later adjacent reply", async () => {
     await using project = await memoryProject()
     await Instance.provide({
@@ -524,7 +436,8 @@ describe("cross-process dispatch abandonment", () => {
     await Instance.provide({
       directory: project.path,
       fn: async () => {
-        const { taskID, dispatchID, descriptor, child, lineage } = await seedPeerOwnedDispatch(project.path)
+        const { taskID, dispatchID, descriptor, child } = await seedPeerOwnedDispatch(project.path)
+        claimPeerLiveness(PEER, Date.now() - 1)
         // The outcome is recorded before it is handed over, so a failure in
         // between leaves a settled dispatch that woke nothing. Abandonment
         // recovery cannot see it: by definition it looks for unsettled work.
@@ -558,11 +471,6 @@ describe("cross-process dispatch abandonment", () => {
             status: { type: "terminal", reason: "completed" },
           },
         })
-        replaceLineageDeliveryOwnerForTest(lineage.artifactID, {
-          kind: "historical_reconciliation",
-          source: { kind: "dispatch_settlement", artifact_id: settlement.artifactID },
-        })
-
         using _owner = TaskControlTestHooks.replaceTerminalIngressDeliveryRuntime("runtime:this-backend")
         using _runner = TaskControlTestHooks.replaceTaskIngressRunner({ runner: async () => ({}) })
         await reconcileTaskControlPlane(taskID)
@@ -598,7 +506,7 @@ describe("cross-process dispatch abandonment", () => {
           { kind: "runtime_process", process_occurrence_id: "" },
           { kind: "runtime_process", process_occurrence_id: "runtime", source: {} },
           {
-            kind: "historical_reconciliation",
+            kind: "predecessor_epoch",
             source: { kind: "dispatch_settlement", artifact_id: "settlement", extra: true },
           },
         ]

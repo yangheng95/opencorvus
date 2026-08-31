@@ -1,7 +1,6 @@
 import z from "zod"
 import { Config } from "@/config/config"
 import { Buffer } from "node:buffer"
-import { randomBytes } from "node:crypto"
 import { Tool } from "./tool"
 import { EngineService } from "@/task-api"
 import { requireMissionTaskCreationOpenedOccurrence } from "@/task-api/task-creator"
@@ -36,6 +35,7 @@ import { resolveMissionLaunchExpertSquadIDs } from "@/mission/expert-squad-autho
 import { SessionWake } from "@/session/wake"
 import { EffectiveConfig } from "@/config/effective"
 import { resolveConfiguredModelRef } from "@/agent/model"
+import { Provider } from "@/provider/provider"
 import { attachMissionCaller, publishMissionHandoff } from "@/mission/caller-receipt"
 import {
   missionOperatorAttachmentInputs,
@@ -48,6 +48,17 @@ import { Instance } from "@/project/instance"
 import { AttachmentStore } from "@/storage/attachment-store"
 import { withImmediateParkToolResultControl } from "@/session/tool-result-control"
 import { assertPublicSessionOperationAuthority } from "@/mission/public-session-authority"
+import { Identifier } from "@/id/id"
+import { Database, NotFoundError, and, eq, sql } from "@/storage/db"
+import { SessionTable } from "@/session/session.sql"
+import { taskIDForCreatorToolPart } from "@/engine/task-creation-contract"
+import { TaskCreationAcceptedTargetUnavailableError } from "@/engine/task-project-error"
+import {
+  buildPanelCreationFact,
+  PanelCreationFact,
+  panelCreationTargetID,
+} from "@/engine/panel-creation-fact"
+import { canonicalJSONValue } from "@/util/canonical-digest"
 
 import { ChannelId } from "@/channel/catalog"
 import { ControlPromptContext } from "@/control/prompt"
@@ -450,15 +461,14 @@ async function resolvePanelTaskCreator(actor: string, ctx: Tool.Context) {
   if (!parsed.success) {
     throw new Error(`panel.create_task is not permitted for non-author actor ${actor}.`)
   }
+  const toolIdentity = await requirePanelToolIdentity(ctx, "create_task")
   return parsed.data === "mission"
-    ? {
+      ? {
         actor: parsed.data,
-        sessionID: ctx.sessionID,
         openedOccurrence: requireMissionTaskCreationOpenedOccurrence(ctx.sessionID),
-        messageID: ctx.messageID,
-        ...(ctx.callID ? { toolCallID: ctx.callID } : {}),
+        ...toolIdentity,
       }
-    : { actor: parsed.data, sessionID: ctx.sessionID }
+    : { actor: parsed.data, ...toolIdentity }
 }
 
 function resolvePanelSurface(ctx: Tool.Context): z.infer<typeof PanelSurface> {
@@ -523,7 +533,15 @@ async function panelMutationIdentity(
 
 async function requirePanelToolIdentity(
   ctx: Tool.Context,
-  operation: "cancel_task" | "complete_mission" | "delete_session" | "read_task_artifact" | "resume_task",
+  operation:
+    | "cancel_task"
+    | "complete_mission"
+    | "create_task"
+    | "delete_session"
+    | "read_task_artifact"
+    | "resume_task"
+    | "wake_mission"
+    | "wake_work",
 ) {
   const callID = nonEmptyString(ctx.callID)
   if (!callID) {
@@ -570,8 +588,328 @@ function requireMissionTaskSemanticTitle(input: unknown): string {
   return input.trim().replace(/\s+/g, " ")
 }
 
-function newChatForwardedMissionID(): string {
-  return `chat-${randomBytes(6).toString("hex")}`
+function panelCreationMetadata(input: {
+  operation: "wake_mission" | "wake_work"
+  toolIdentity: Awaited<ReturnType<typeof requirePanelToolIdentity>>
+  params: unknown
+  callerUserMessageID: string
+}) {
+  return {
+    panelCreation: buildPanelCreationFact({
+      operation: input.operation,
+      toolPartID: input.toolIdentity.toolPartID,
+      toolCallID: input.toolIdentity.toolCallID,
+      messageID: input.toolIdentity.messageID,
+      callerUserMessageID: input.callerUserMessageID,
+      params: input.params,
+    }),
+  }
+}
+
+async function initialForwardedConversationOverlay(model: string): Promise<Record<string, unknown>> {
+  const base = await Config.get()
+  return Config.previewOverlayUpdate(base, {}, Config.Overlay.parse({ model, prompt_profile: null })).nextOverlay
+}
+
+function assertPanelCreationMetadata(
+  session: Session.Info,
+  expected: ReturnType<typeof panelCreationMetadata>["panelCreation"],
+): void {
+  const actual = (session.metadata as { panelCreation?: unknown } | undefined)?.panelCreation
+  if (
+    canonicalJSONValue(actual, `Session ${session.id} panel creation`) !==
+    canonicalJSONValue(expected, `Session ${session.id} expected panel creation`)
+  ) {
+    throw new Error(`Session ${session.id} is already bound to another persisted panel creation occurrence`)
+  }
+}
+
+function frozenPanelTargetModel(session: Session.Info) {
+  const metadata = session.metadata && typeof session.metadata === "object" ? session.metadata : {}
+  const overlay = Config.Overlay.parse((metadata as Record<string, unknown>).configOverlay ?? {})
+  if (!overlay.model) {
+    throw new Error(`Panel-created Session ${session.id} has no frozen model in its accepted config overlay`)
+  }
+  return { overlay, model: Provider.parseModel(overlay.model), modelID: overlay.model }
+}
+
+async function ensurePanelWorkSession(input: {
+  id: string
+  title?: string
+  configOverlay: Record<string, unknown>
+  creationMetadata: ReturnType<typeof panelCreationMetadata>
+}) {
+  const existing = await Session.get(input.id).catch((error) => {
+    if (NotFoundError.isInstance(error as Error)) return undefined
+    throw error
+  })
+  if (existing) {
+    if (rightSidebarConversationExperience(existing) !== "work") {
+      throw new Error(`Panel Work identity ${input.id} is already owned by another Session kind`)
+    }
+    assertPanelCreationMetadata(existing, input.creationMetadata.panelCreation)
+    return existing
+  }
+  try {
+    return await createRightSidebarConversationSession("work", input)
+  } catch (error) {
+    const winner = await Session.get(input.id).catch(() => undefined)
+    if (!winner) throw error
+    assertPanelCreationMetadata(winner, input.creationMetadata.panelCreation)
+    return winner
+  }
+}
+
+type RecoveredPanelCreationResult = {
+  title: string
+  output: string
+  metadata: Record<string, unknown>
+}
+
+function recoveredUnavailablePanelCreationResult(input: {
+  operation: "create_task" | "wake_mission" | "wake_work"
+  targetID: string
+  callerKind?: Session.Info["kind"]
+}): RecoveredPanelCreationResult {
+  return {
+    title: "Accepted target unavailable",
+    output: JSON.stringify({
+      kind: "accepted_target_unavailable",
+      operation: input.operation,
+      target_id: input.targetID,
+      message: `The accepted ${input.operation} target ${input.targetID} is no longer available.`,
+    }),
+    metadata:
+      input.operation === "create_task" && input.callerKind === "mission"
+        ? withImmediateParkToolResultControl({ truncated: false })
+        : { truncated: false },
+  }
+}
+
+function recoveredPanelCreationMetadata(input: {
+  session: Session.Info
+  operation: "wake_mission" | "wake_work"
+  messageID: string
+  part: Message.ToolPart
+  params: unknown
+}) {
+  const raw = (input.session.metadata as { panelCreation?: unknown } | undefined)?.panelCreation
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) return undefined
+  const parsed = PanelCreationFact.safeParse(raw)
+  if (!parsed.success) throw new Error(`Session ${input.session.id} has an invalid persisted panel creation fact`)
+  const value = parsed.data
+  if (
+    value.protocol !== "panel-creation-v1" ||
+    value.operation !== input.operation ||
+    value.tool_part_id !== input.part.id ||
+    value.tool_call_id !== input.part.callID ||
+    value.message_id !== input.messageID ||
+    value.target_id !== panelCreationTargetID(input.operation, input.part.id)
+  ) {
+    throw new Error(`Session ${input.session.id} conflicts with persisted panel Tool occurrence ${input.part.id}`)
+  }
+  return value as {
+    caller_user_message_id: string
+  }
+}
+
+/** Recover only creation effects whose durable target was already accepted.
+ * A pre-target interruption has no aggregate to replay and remains an ordinary
+ * interrupted Tool. A post-target interruption completes the exact same wake,
+ * caller receipt and visible Tool outcome. */
+export async function recoverPanelCreationToolPart(input: {
+  sessionID: string
+  messageID: string
+  agent: string
+  part: Message.ToolPart
+}): Promise<RecoveredPanelCreationResult | undefined> {
+  if (input.part.tool !== "panel") return undefined
+  const params = input.part.state.input as Record<string, unknown>
+  if (params.action === "create_task") {
+    let taskID: string | undefined
+    try {
+      taskID = taskIDForCreatorToolPart(input.part.id)
+    } catch (error) {
+      if (!TaskCreationAcceptedTargetUnavailableError.isInstance(error)) throw error
+      const caller = await Session.get(input.sessionID)
+      return recoveredUnavailablePanelCreationResult({
+        operation: "create_task",
+        targetID: error.data.taskID,
+        callerKind: caller.kind,
+      })
+    }
+    if (!taskID) return undefined
+    const caller = await Session.get(input.sessionID)
+    return {
+      title: "Task created",
+      output: JSON.stringify({
+        kind: "created",
+        task_id: taskID,
+        artifact_import_mappings: EngineService.getCrossTaskArtifactImportMappings(taskID),
+        message: `Task accepted: \`${taskID}\``,
+      }),
+      metadata: caller.kind === "mission" ? withImmediateParkToolResultControl({ truncated: false }) : { truncated: false },
+    }
+  }
+  if (params.action !== "wake_mission" && params.action !== "wake_work") return undefined
+  const callerSession = await Session.get(input.sessionID)
+  const request = typeof params.request === "string" ? params.request : undefined
+  if (!request) throw new Error(`Recovered panel.${params.action} has no persisted request text`)
+
+  if (params.action === "wake_mission") {
+    const missionID = panelCreationTargetID("wake_mission", input.part.id)
+    const target = Database.use(
+      (db) => {
+        const row = db
+          .select()
+          .from(SessionTable)
+          .where(
+            and(
+              eq(SessionTable.project_id, Instance.project.id),
+              sql`json_type(${SessionTable.metadata}, '$.panelCreation') IS NOT NULL`,
+              sql`json_extract(${SessionTable.metadata}, '$.panelCreation.tool_part_id') = ${input.part.id}`,
+            ),
+          )
+          .get()
+        return row ? { session: Session.fromRow(row), deleted: Session.deletedInTransaction(db, row.id) } : undefined
+      },
+    )
+    if (!target) return undefined
+    const missionSession = target.session
+    const creation = recoveredPanelCreationMetadata({
+      session: missionSession,
+      operation: "wake_mission",
+      messageID: input.messageID,
+      part: input.part,
+      params,
+    })!
+    if (target.deleted) {
+      return recoveredUnavailablePanelCreationResult({ operation: "wake_mission", targetID: missionSession.id })
+    }
+    const frozenTarget = frozenPanelTargetModel(missionSession)
+    const callerFileParts = await replayMissionCallerFileParts({
+      callerSession,
+      callerMessageID: creation.caller_user_message_id,
+    })
+    const attached = await attachMissionCaller({
+      missionSessionID: missionSession.id,
+      callerSession,
+      callerMessageID: creation.caller_user_message_id,
+    })
+    await openMissionExecutionWithWake({
+      missionID,
+      sessionID: missionSession.id,
+      source: "mission.wake",
+      requestID: input.part.id,
+      acceptedInput: {
+        text: request,
+        model: frozenTarget.modelID,
+        attachments: missionOperatorAttachmentInputs(callerFileParts),
+        configPatch: frozenTarget.overlay,
+        context: {
+          surface: "panel.wake_mission",
+          callerSessionID: callerSession.id,
+          callerMessageID: creation.caller_user_message_id,
+          title: typeof params.title === "string" ? params.title : null,
+          productPillar: missionProductPillar(missionSession),
+          heldExpertSquadIDs: missionVisibleExpertSquadIDs(missionSession),
+        },
+      },
+      wake: (admission) =>
+        SessionWake.wakeWithReceipt({
+          sessionID: missionSession.id,
+          messageID: admission.messageID,
+          textPartID: admission.textPartID,
+          controlID: admission.controlID,
+          prompt: request,
+          author: input.agent,
+          agent: "mission",
+          model: frozenTarget.model,
+          surface: "panel",
+          parts: callerFileParts,
+          reason: missionOperatorWakeReason(admission, missionID),
+          commitBundle: admission.commitBundle,
+          preflightBundle: admission.preflightBundle,
+          ownerPreflight: admission.ownerPreflight,
+          ownerLifecycle: admission.ownerLifecycle,
+        }),
+    })
+    await publishMissionHandoff(attached)
+    return {
+      title: "Mission started",
+      output: JSON.stringify({
+        kind: "mission_wake",
+        mission_id: missionID,
+        session_id: missionSession.id,
+        message: `Mission accepted: \`${missionID}\``,
+      }),
+      metadata: { truncated: false },
+    }
+  }
+
+  const workSessionID = panelCreationTargetID("wake_work", input.part.id)
+  const target = Database.use((db) => {
+    const row = db
+      .select()
+      .from(SessionTable)
+      .where(
+        and(
+          eq(SessionTable.id, workSessionID),
+          eq(SessionTable.project_id, Instance.project.id),
+          sql`json_type(${SessionTable.metadata}, '$.panelCreation') IS NOT NULL`,
+          sql`json_extract(${SessionTable.metadata}, '$.panelCreation.tool_part_id') = ${input.part.id}`,
+        ),
+      )
+      .get()
+    return row ? { session: Session.fromRow(row), deleted: Session.deletedInTransaction(db, row.id) } : undefined
+  })
+  if (!target) return undefined
+  const workSession = target.session
+  const creation = recoveredPanelCreationMetadata({
+    session: workSession,
+    operation: "wake_work",
+    messageID: input.messageID,
+    part: input.part,
+    params,
+  })!
+  if (target.deleted) {
+    return recoveredUnavailablePanelCreationResult({ operation: "wake_work", targetID: workSession.id })
+  }
+  const callerFileParts = await replayMissionCallerFileParts({
+    callerSession,
+    callerMessageID: creation.caller_user_message_id,
+  })
+  await SessionWake.wakeWithReceipt({
+    sessionID: workSession.id,
+    messageID: Identifier.deterministic("message", `panel.wake_work\0${input.part.id}\0message`),
+    textPartID: Identifier.deterministic("part", `panel.wake_work\0${input.part.id}\0text`),
+    controlID: Identifier.deterministic("session_control", `panel.wake_work\0${input.part.id}\0control`),
+    prompt: request,
+    author: input.agent,
+    agent: "work",
+    surface: "right-sidebar",
+    parts: callerFileParts,
+    reason: {
+      source: "conversation.handoff",
+      callerSessionID: callerSession.id,
+      callerMessageID: creation.caller_user_message_id,
+      targetExperience: "work",
+    },
+  })
+  await publishConversationHandoff({
+    targetSession: await Session.get(workSession.id),
+    callerSession,
+    callerMessageID: creation.caller_user_message_id,
+  })
+  return {
+    title: "Work started",
+    output: JSON.stringify({
+      kind: "work_wake",
+      session_id: workSession.id,
+      message: `Work accepted: \`${workSession.id}\``,
+    }),
+    metadata: { truncated: false },
+  }
 }
 
 async function requirePanelToolCallerUserMessageID(ctx: Tool.Context): Promise<string> {
@@ -993,10 +1331,13 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
         if (!productPillar) {
           throw new Error("panel.create_task requires a product pillar for direct Task creation.")
         }
+        if (panelUIRequest && params.request_id !== undefined && params.request_id !== panelUIRequest.requestID) {
+          throw new Error("panel.create_task request_id conflicts with the server-owned Panel UI request identity.")
+        }
         const taskID = await EngineService.createTask(
           {
             requestID: panelUIRequest
-              ? params.request_id
+              ? panelUIRequest.requestID
               : (params.request_id ??
                 (actor === "control_agent" ? controlContext(ctx).requestID : ctx.extra?.requestID)),
             artifactSources: params.artifact_sources,
@@ -1043,6 +1384,7 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
         if (!isRightSidebarConversationSession(callerSession)) {
           throw new Error(`panel.wake_mission requires a right-sidebar conversation: ${ctx.sessionID}`)
         }
+        const toolIdentity = await requirePanelToolIdentity(ctx, "wake_mission")
         const callerMessageID = await requirePanelToolCallerUserMessageID(ctx)
         const callerFileParts = await replayMissionCallerFileParts({ callerSession, callerMessageID })
         const missionDecision = await Question.askAndFormat({
@@ -1083,7 +1425,13 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
             metadata: {},
           }
         }
-        const missionID = newChatForwardedMissionID()
+        const missionID = panelCreationTargetID("wake_mission", toolIdentity.toolPartID)
+        const creationMetadata = panelCreationMetadata({
+          operation: "wake_mission",
+          toolIdentity,
+          params,
+          callerUserMessageID: callerMessageID,
+        })
         const capabilityProjectDirectory = await EffectiveConfig.capabilityProjectDirectory({
           sessionID: callerSession.id,
         })
@@ -1096,7 +1444,7 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
         // carrying the base model with its real one still unwritten.
         const callerModel = await resolveConfiguredModelRef({ sessionID: callerSession.id })
         const intendedModel = `${callerModel.providerID}/${callerModel.modelID}`
-        const intendedOverlay = Config.Overlay.parse({ model: intendedModel, prompt_profile: null })
+        const intendedOverlay = await initialForwardedConversationOverlay(intendedModel)
         const missionSession = await ensureMissionSession({
           missionID,
           defaultCwd: callerSession.directory,
@@ -1104,7 +1452,9 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
           heldExpertSquadIDs,
           initialTitle: params.title,
           initialConfigOverlay: intendedOverlay,
+          creationMetadata,
         })
+        assertPanelCreationMetadata(missionSession, creationMetadata.panelCreation)
         if (params.title && missionSession.title !== params.title) {
           await Session.setTitle({ sessionID: missionSession.id, title: params.title })
         }
@@ -1117,7 +1467,7 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
           missionID,
           sessionID: missionSession.id,
           source: "mission.wake",
-          requestID: ctx.callID || callerMessageID,
+          requestID: toolIdentity.toolPartID,
           acceptedInput: {
             text: params.request,
             model: intendedModel,
@@ -1175,6 +1525,7 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
         if (callerExperience !== "chat") {
           throw new Error(`panel.wake_work requires a Chat caller, found ${callerExperience ?? "unknown"}.`)
         }
+        const toolIdentity = await requirePanelToolIdentity(ctx, "wake_work")
         const callerMessageID = await requirePanelToolCallerUserMessageID(ctx)
         const callerFileParts = await replayMissionCallerFileParts({ callerSession, callerMessageID })
         const workDecision = await Question.askAndFormat({
@@ -1224,23 +1575,29 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
             metadata: {},
           }
         }
-        const workSession = await createRightSidebarConversationSession("work")
-        if (params.title) {
-          await Session.setTitle({
-            sessionID: workSession.id,
-            title: params.title,
-          })
-        }
         const callerModel = await resolveConfiguredModelRef({ sessionID: callerSession.id })
-        await Session.mergeConfigOverlay({
-          sessionID: workSession.id,
-          patch: {
-            model: `${callerModel.providerID}/${callerModel.modelID}`,
-            prompt_profile: null,
-          },
+        const creationMetadata = panelCreationMetadata({
+          operation: "wake_work",
+          toolIdentity,
+          params,
+          callerUserMessageID: callerMessageID,
         })
-        await SessionWake.wake({
+        const workSession = await ensurePanelWorkSession({
+          id: panelCreationTargetID("wake_work", toolIdentity.toolPartID),
+          title: params.title,
+          configOverlay: await initialForwardedConversationOverlay(
+            `${callerModel.providerID}/${callerModel.modelID}`,
+          ),
+          creationMetadata,
+        })
+        await SessionWake.wakeWithReceipt({
           sessionID: workSession.id,
+          messageID: Identifier.deterministic("message", `panel.wake_work\0${toolIdentity.toolPartID}\0message`),
+          textPartID: Identifier.deterministic("part", `panel.wake_work\0${toolIdentity.toolPartID}\0text`),
+          controlID: Identifier.deterministic(
+            "session_control",
+            `panel.wake_work\0${toolIdentity.toolPartID}\0control`,
+          ),
           prompt: params.request,
           author: ctx.agent,
           agent: "work",

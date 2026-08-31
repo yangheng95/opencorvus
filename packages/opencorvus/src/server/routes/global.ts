@@ -123,7 +123,7 @@ export const AutomationFireHistoryViewSchema = z
     fireId: z.string(),
     automationId: z.string(),
     automationRevisionId: z.string(),
-    origin: z.enum(["scheduled", "manual_api", "manual_tool", "legacy"]),
+    origin: z.enum(["scheduled", "manual_api", "manual_tool"]),
     scheduledDueAt: z.number(),
     startedAt: z.number(),
     completedAt: z.number().nullable(),
@@ -341,7 +341,7 @@ export const GlobalRoutes = lazy(() =>
             description: "Chat session with concrete temporary project ownership",
             content: { "application/json": { schema: resolver(RightSidebarConversationSessionResponse) } },
           },
-          ...errors(400),
+          400: badRequestOrNamedErrorResponse("Chat creation rejected", "ProviderModelNotFoundError"),
         },
       }),
       validator("json", GlobalConversationCreateRequest.optional()),
@@ -366,10 +366,14 @@ export const GlobalRoutes = lazy(() =>
             description: "Global Chat start accepted",
             content: { "application/json": { schema: resolver(GlobalChatStartResponse) } },
           },
-          ...errors(400),
+          400: badRequestOrNamedErrorResponse("Global Chat start rejected", "ProviderModelNotFoundError"),
           409: namedErrorResponse(
             "Global Chat start request identity is already bound to another payload",
             "GlobalChatStartIdentityConflictError",
+          ),
+          410: namedErrorResponse(
+            "Previously accepted Global Chat target is no longer retained",
+            "GlobalCreationAcceptedTargetUnavailableError",
           ),
           503: AuthReadUnavailableResponse,
         },
@@ -389,7 +393,7 @@ export const GlobalRoutes = lazy(() =>
             description: "Work session with concrete temporary project ownership",
             content: { "application/json": { schema: resolver(RightSidebarConversationSessionResponse) } },
           },
-          ...errors(400),
+          400: badRequestOrNamedErrorResponse("Work creation rejected", "ProviderModelNotFoundError"),
         },
       }),
       validator("json", GlobalConversationCreateRequest.optional()),
@@ -1338,7 +1342,7 @@ export const GlobalRoutes = lazy(() =>
           409: OwnedPromptControllersResponse,
         },
       }),
-      validator("json", z.object({ snapshot: MysqlTransferSnapshot })),
+      validator("json", z.object({ snapshot: MysqlTransferSnapshot }).strict()),
       async (c) => {
         const { ownedPromptControllersError, hasAnyOwnedPromptControllers } = await import("@/engine/runtime")
         if (hasAnyOwnedPromptControllers()) {

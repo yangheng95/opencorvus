@@ -32,23 +32,12 @@ export interface DispatchLineagePayload extends EngineMetadata {
   time_created: number
 }
 
-export const DispatchDeliveryOwnerSchema = z.discriminatedUnion("kind", [
-  z
-    .object({
-      kind: z.literal("runtime_process"),
-      process_occurrence_id: z.string().min(1),
-    })
-    .strict(),
-  z
-    .object({
-      kind: z.literal("historical_reconciliation"),
-      source: z.discriminatedUnion("kind", [
-        z.object({ kind: z.literal("dispatch_settlement"), artifact_id: z.string().min(1) }).strict(),
-        z.object({ kind: z.literal("agent_execution_lifecycle"), event_id: z.string().min(1) }).strict(),
-      ]),
-    })
-    .strict(),
-])
+export const DispatchDeliveryOwnerSchema = z
+  .object({
+    kind: z.literal("runtime_process"),
+    process_occurrence_id: z.string().min(1),
+  })
+  .strict()
 
 export type DispatchDeliveryOwner = z.infer<typeof DispatchDeliveryOwnerSchema>
 

@@ -133,7 +133,7 @@ describe("scheduler immutable definition and fire identity", () => {
     } })
   })
 
-  test("terminal legacy Fire history advances recurrence without replaying an old due occurrence", async () => {
+  test("terminal scheduled Fire history advances recurrence without replaying an old due occurrence", async () => {
     await using project = await memoryProject()
     await Instance.provide({ directory: project.path, fn: async () => {
       const now = Date.now()
@@ -149,14 +149,14 @@ describe("scheduler immutable definition and fire identity", () => {
       Database.transaction((db) => {
         for (let index = 0; index < 128; index += 1) {
           const outcome = index % 2 === 0 ? ("succeeded" as const) : ("failed" as const)
-          const fireID = `cal_legacy_${index}`
-          const runID = `atr_legacy_${index}`
+          const fireID = `cal_scheduled_history_${index}`
+          const runID = `atr_scheduled_history_${index}`
           const occurrenceTime = now - (128 - index) * 86_400_000
           db.insert(AutomationFireTable).values({
             id: fireID,
             automation_revision_id: definition.id,
             scheduled_due_at: occurrenceTime,
-            origin: "legacy",
+            origin: "scheduled",
             tool_part_id: null,
             input_digest: null,
             time_created: occurrenceTime,
@@ -169,7 +169,7 @@ describe("scheduler immutable definition and fire identity", () => {
             started_at: occurrenceTime,
           }).run()
           db.insert(AutomationRunReceiptTable).values({
-            id: `arc_legacy_${index}`,
+            id: `arc_scheduled_history_${index}`,
             run_id: runID,
             outcome,
             error: outcome === "failed" ? "historical failure" : null,
@@ -186,7 +186,7 @@ describe("scheduler immutable definition and fire identity", () => {
       expect(Database.use((db) =>
         db.select().from(AutomationFireTable).where(eq(AutomationFireTable.automation_revision_id, definition.id)).all().length,
       )).toBe(before)
-      expect(AutomationService.TestHooks.claim(automation.id, "legacy-boundary-owner", now, false)).toBeUndefined()
+      expect(AutomationService.TestHooks.claim(automation.id, "scheduled-boundary-owner", now, false)).toBeUndefined()
     } })
   })
 
@@ -219,7 +219,7 @@ describe("scheduler immutable definition and fire identity", () => {
               id: fireID,
               automation_revision_id: definitionID,
               scheduled_due_at: 100 + history,
-              origin: "legacy",
+              origin: "scheduled",
               time_created: 100 + history,
             }).run()
             db.insert(AutomationRunTable).values({
@@ -711,13 +711,14 @@ describe("scheduler immutable definition and fire identity", () => {
       await Instance.provide({ directory: project.path, fn: async () => {
       const outerProjectID = Instance.project.id
       const outerDirectory = Instance.directory
+      const globalConversationConfig = await Config.get()
       const creatorInputs: Array<{ experience: string; model?: string; sessionID?: string }> = []
       const wakeContexts: Array<{ sessionID: string; projectID: string; directory: string }> = []
       const originalCreate = GlobalConversationService.create
       const createGlobalConversation = spyOn(GlobalConversationService, "create").mockImplementation(
         async (input) => {
           creatorInputs.push(input)
-          const created = await originalCreate(input)
+          const created = await originalCreate({ ...input, configSnapshot: globalConversationConfig })
           carryingProjectID = created.session.projectID
           return created
         },

@@ -7,7 +7,6 @@ import { Message } from "@/session/message"
 import { MissionPanelActionSchema } from "@/panel/capability"
 import { materializeToolExecutionInput } from "@/provider/tool-execution-input"
 import { resolvePanelArtifactReadReferencesBeforeAction } from "@/agent/artifact-read-facts"
-import { ArtifactReadLocatorSchema } from "@opencorvus-ai/plugin/artifact-catalog"
 import type { MissionSession } from "./session"
 import {
   MissionCompletionActionInput,
@@ -15,29 +14,6 @@ import {
   MissionCompletionReceipt,
   type MissionCompletionFactValue,
 } from "./completion"
-
-const LegacyMissionCompletionActionInput = z
-  .object({
-    action: z.literal("complete_mission"),
-    summary: z.string().trim().min(1).max(4_000),
-    task_acceptances: z
-      .array(
-        z
-          .object({
-            task_id: z.string().min(1),
-            evidence_locators: z.array(ArtifactReadLocatorSchema).min(1).max(64),
-          })
-          .strict(),
-      )
-      .max(128),
-  })
-  .strict()
-
-function unwrapPersistedProviderOperation(input: unknown): unknown {
-  if (!input || typeof input !== "object" || Array.isArray(input)) return input
-  const entries = Object.entries(input as Record<string, unknown>)
-  return entries.length === 1 && entries[0]?.[0] === "operation" ? entries[0][1] : input
-}
 
 export const MissionBoardLane = z.enum(["backlog", "running", "attention", "review", "completed"])
 
@@ -126,16 +102,8 @@ function currentMissionCompletion(session: MissionSession): MissionCompletionFac
     const currentInput = MissionCompletionActionInput.safeParse(
       materializeToolExecutionInput(MissionPanelActionSchema, part.data.state.input),
     )
-    const legacyInput = currentInput.success
-      ? undefined
-      : LegacyMissionCompletionActionInput.safeParse(unwrapPersistedProviderOperation(part.data.state.input))
-    let input: z.infer<typeof MissionCompletionActionInput> | z.infer<typeof LegacyMissionCompletionActionInput>
-    let currentCompletionInput: z.infer<typeof MissionCompletionActionInput> | undefined
-    if (currentInput.success) {
-      input = currentInput.data
-      currentCompletionInput = currentInput.data
-    } else if (legacyInput?.success) input = legacyInput.data
-    else continue
+    if (!currentInput.success) continue
+    const input = currentInput.data
     let decoded: unknown
     try {
       decoded = JSON.parse(part.data.state.output)
@@ -147,27 +115,25 @@ function currentMissionCompletion(session: MissionSession): MissionCompletionFac
     const receiptInputAcceptances = receipt.data.task_acceptances.map(
       ({ terminal_lifecycle_reference: _reference, ...acceptance }) => acceptance,
     )
-    const canonicalInputAcceptances = currentCompletionInput
-      ? currentCompletionInput.task_acceptances.map((acceptance) => {
-          const receiptAcceptance = receipt.data.task_acceptances.find(
-            (candidate) => candidate.task_id === acceptance.task_id,
-          )
-          if (!receiptAcceptance) {
-            throw new Error(`Mission completion receipt omits Task ${acceptance.task_id}.`)
-          }
-          return {
-            task_id: acceptance.task_id,
-            evidence_locators: resolvePanelArtifactReadReferencesBeforeAction({
-              sessionID: session.id,
-              assistantMessageID: row.messageID,
-              toolPartID: row.part.id,
-              taskID: acceptance.task_id,
-              terminalLifecycleReference: receiptAcceptance.terminal_lifecycle_reference,
-              references: acceptance.evidence_read_refs,
-            }),
-          }
-        })
-      : input.task_acceptances
+    const canonicalInputAcceptances = input.task_acceptances.map((acceptance) => {
+      const receiptAcceptance = receipt.data.task_acceptances.find(
+        (candidate) => candidate.task_id === acceptance.task_id,
+      )
+      if (!receiptAcceptance) {
+        throw new Error(`Mission completion receipt omits Task ${acceptance.task_id}.`)
+      }
+      return {
+        task_id: acceptance.task_id,
+        evidence_locators: resolvePanelArtifactReadReferencesBeforeAction({
+          sessionID: session.id,
+          assistantMessageID: row.messageID,
+          toolPartID: row.part.id,
+          taskID: acceptance.task_id,
+          terminalLifecycleReference: receiptAcceptance.terminal_lifecycle_reference,
+          references: acceptance.evidence_read_refs,
+        }),
+      }
+    })
     if (
       receipt.data.mission_id !== session.missionID ||
       receipt.data.mission_session_id !== session.id ||

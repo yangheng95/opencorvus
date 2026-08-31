@@ -61712,8 +61712,7 @@
                         "enum": [
                           "scheduled",
                           "manual_api",
-                          "manual_tool",
-                          "legacy"
+                          "manual_tool"
                         ],
                         "type": "string"
                       },
@@ -62483,11 +62482,35 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/BadRequestError"
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/BadRequestError"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "ProviderModelNotFoundError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    }
+                  ]
                 }
               }
             },
-            "description": "Bad request"
+            "description": "Chat creation rejected"
           }
         },
         "summary": "Create Chat in a temporary project",
@@ -62590,11 +62613,35 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/BadRequestError"
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/BadRequestError"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "ProviderModelNotFoundError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    }
+                  ]
                 }
               }
             },
-            "description": "Bad request"
+            "description": "Global Chat start rejected"
           },
           "409": {
             "content": {
@@ -62622,6 +62669,33 @@
               }
             },
             "description": "Global Chat start request identity is already bound to another payload"
+          },
+          "410": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "data": {
+                      "additionalProperties": {},
+                      "propertyNames": {
+                        "type": "string"
+                      },
+                      "type": "object"
+                    },
+                    "name": {
+                      "const": "GlobalCreationAcceptedTargetUnavailableError",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "data"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Previously accepted Global Chat target is no longer retained"
           },
           "503": {
             "content": {
@@ -63078,8 +63152,10 @@
             "content": {
               "application/json": {
                 "schema": {
+                  "additionalProperties": false,
                   "properties": {
                     "schema": {
+                      "additionalProperties": false,
                       "properties": {
                         "derivedTables": {
                           "items": {
@@ -63088,7 +63164,7 @@
                           "type": "array"
                         },
                         "format": {
-                          "const": "opencorvus.mysql-transfer.v1",
+                          "const": "opencorvus.mysql-transfer.v2",
                           "type": "string"
                         },
                         "mysqlDDL": {
@@ -63099,6 +63175,7 @@
                         },
                         "skippedIndexes": {
                           "items": {
+                            "additionalProperties": false,
                             "properties": {
                               "index": {
                                 "type": "string"
@@ -63121,6 +63198,7 @@
                         },
                         "tables": {
                           "items": {
+                            "additionalProperties": false,
                             "properties": {
                               "columns": {
                                 "items": {
@@ -63152,9 +63230,10 @@
                       "type": "object"
                     },
                     "snapshot": {
+                      "additionalProperties": false,
                       "properties": {
                         "format": {
-                          "const": "opencorvus.mysql-transfer.v1",
+                          "const": "opencorvus.mysql-transfer.v2",
                           "type": "string"
                         },
                         "schemaFingerprint": {
@@ -63162,6 +63241,7 @@
                         },
                         "tables": {
                           "items": {
+                            "additionalProperties": false,
                             "properties": {
                               "columns": {
                                 "items": {
@@ -63229,11 +63309,13 @@
           "content": {
             "application/json": {
               "schema": {
+                "additionalProperties": false,
                 "properties": {
                   "snapshot": {
+                    "additionalProperties": false,
                     "properties": {
                       "format": {
-                        "const": "opencorvus.mysql-transfer.v1",
+                        "const": "opencorvus.mysql-transfer.v2",
                         "type": "string"
                       },
                       "schemaFingerprint": {
@@ -63241,6 +63323,7 @@
                       },
                       "tables": {
                         "items": {
+                          "additionalProperties": false,
                           "properties": {
                             "columns": {
                               "items": {
@@ -63294,6 +63377,7 @@
             "content": {
               "application/json": {
                 "schema": {
+                  "additionalProperties": false,
                   "properties": {
                     "ok": {
                       "type": "boolean"
@@ -63303,6 +63387,7 @@
                     },
                     "tables": {
                       "items": {
+                        "additionalProperties": false,
                         "properties": {
                           "name": {
                             "type": "string"
@@ -63387,6 +63472,7 @@
             "content": {
               "application/json": {
                 "schema": {
+                  "additionalProperties": false,
                   "properties": {
                     "derivedTables": {
                       "items": {
@@ -63395,7 +63481,7 @@
                       "type": "array"
                     },
                     "format": {
-                      "const": "opencorvus.mysql-transfer.v1",
+                      "const": "opencorvus.mysql-transfer.v2",
                       "type": "string"
                     },
                     "mysqlDDL": {
@@ -63406,6 +63492,7 @@
                     },
                     "skippedIndexes": {
                       "items": {
+                        "additionalProperties": false,
                         "properties": {
                           "index": {
                             "type": "string"
@@ -63428,6 +63515,7 @@
                     },
                     "tables": {
                       "items": {
+                        "additionalProperties": false,
                         "properties": {
                           "columns": {
                             "items": {
@@ -65916,263 +66004,26 @@
               "schema": {
                 "additionalProperties": false,
                 "properties": {
-                  "artifactSources": {
-                    "items": {
-                      "oneOf": [
-                        {
-                          "additionalProperties": false,
-                          "properties": {
-                            "authority": {
-                              "const": "completion_decision",
-                              "type": "string"
-                            },
-                            "source_task_id": {
-                              "maxLength": 512,
-                              "minLength": 1,
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "authority",
-                            "source_task_id"
-                          ],
-                          "type": "object"
-                        },
-                        {
-                          "additionalProperties": false,
-                          "properties": {
-                            "authority": {
-                              "const": "terminal_lifecycle",
-                              "type": "string"
-                            },
-                            "locator": {
-                              "oneOf": [
-                                {
-                                  "additionalProperties": false,
-                                  "properties": {
-                                    "artifact_id": {
-                                      "maxLength": 512,
-                                      "minLength": 1,
-                                      "type": "string"
-                                    },
-                                    "catalog_revision": {
-                                      "exclusiveMinimum": 0,
-                                      "maximum": 9007199254740991,
-                                      "type": "integer"
-                                    },
-                                    "expected_sha256": {
-                                      "pattern": "^[a-f0-9]{64}$",
-                                      "type": "string"
-                                    },
-                                    "source": {
-                                      "const": "engine_artifact",
-                                      "type": "string"
-                                    }
-                                  },
-                                  "required": [
-                                    "source",
-                                    "artifact_id",
-                                    "catalog_revision",
-                                    "expected_sha256"
-                                  ],
-                                  "type": "object"
-                                },
-                                {
-                                  "additionalProperties": false,
-                                  "properties": {
-                                    "snapshot": {
-                                      "additionalProperties": false,
-                                      "properties": {
-                                        "manifest_sha256": {
-                                          "pattern": "^[a-f0-9]{64}$",
-                                          "type": "string"
-                                        },
-                                        "project_id": {
-                                          "minLength": 1,
-                                          "type": "string"
-                                        },
-                                        "schema_version": {
-                                          "const": 2,
-                                          "type": "number"
-                                        },
-                                        "snapshot_id": {
-                                          "format": "uuid",
-                                          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-                                          "type": "string"
-                                        },
-                                        "task_id": {
-                                          "minLength": 1,
-                                          "type": "string"
-                                        }
-                                      },
-                                      "required": [
-                                        "schema_version",
-                                        "project_id",
-                                        "task_id",
-                                        "snapshot_id",
-                                        "manifest_sha256"
-                                      ],
-                                      "type": "object"
-                                    },
-                                    "source": {
-                                      "const": "task_artifact_snapshot",
-                                      "type": "string"
-                                    }
-                                  },
-                                  "required": [
-                                    "source",
-                                    "snapshot"
-                                  ],
-                                  "type": "object"
-                                },
-                                {
-                                  "additionalProperties": false,
-                                  "properties": {
-                                    "ref": {
-                                      "additionalProperties": false,
-                                      "properties": {
-                                        "bytes": {
-                                          "maximum": 9007199254740991,
-                                          "minimum": 0,
-                                          "type": "integer"
-                                        },
-                                        "media_type": {
-                                          "pattern": "^[a-z0-9][a-z0-9!#$&^_.+-]*\\/[a-z0-9][a-z0-9!#$&^_.+-]*$",
-                                          "type": "string"
-                                        },
-                                        "path": {
-                                          "minLength": 1,
-                                          "type": "string"
-                                        },
-                                        "sha256": {
-                                          "pattern": "^[a-f0-9]{64}$",
-                                          "type": "string"
-                                        },
-                                        "snapshot": {
-                                          "additionalProperties": false,
-                                          "properties": {
-                                            "manifest_sha256": {
-                                              "pattern": "^[a-f0-9]{64}$",
-                                              "type": "string"
-                                            },
-                                            "project_id": {
-                                              "minLength": 1,
-                                              "type": "string"
-                                            },
-                                            "schema_version": {
-                                              "const": 2,
-                                              "type": "number"
-                                            },
-                                            "snapshot_id": {
-                                              "format": "uuid",
-                                              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-                                              "type": "string"
-                                            },
-                                            "task_id": {
-                                              "minLength": 1,
-                                              "type": "string"
-                                            }
-                                          },
-                                          "required": [
-                                            "schema_version",
-                                            "project_id",
-                                            "task_id",
-                                            "snapshot_id",
-                                            "manifest_sha256"
-                                          ],
-                                          "type": "object"
-                                        },
-                                        "tree": {
-                                          "minLength": 1,
-                                          "type": "string"
-                                        }
-                                      },
-                                      "required": [
-                                        "snapshot",
-                                        "tree",
-                                        "path",
-                                        "media_type",
-                                        "bytes",
-                                        "sha256"
-                                      ],
-                                      "type": "object"
-                                    },
-                                    "source": {
-                                      "const": "task_artifact_resource",
-                                      "type": "string"
-                                    }
-                                  },
-                                  "required": [
-                                    "source",
-                                    "ref"
-                                  ],
-                                  "type": "object"
-                                }
-                              ]
-                            },
-                            "source_task_id": {
-                              "maxLength": 512,
-                              "minLength": 1,
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "authority",
-                            "source_task_id",
-                            "locator"
-                          ],
-                          "type": "object"
-                        }
-                      ]
-                    },
-                    "maxItems": 64,
-                    "type": "array"
-                  },
                   "attachments": {
                     "items": {
-                      "anyOf": [
-                        {
-                          "additionalProperties": false,
-                          "properties": {
-                            "filename": {
-                              "type": "string"
-                            },
-                            "mime": {
-                              "minLength": 1,
-                              "type": "string"
-                            },
-                            "url": {
-                              "pattern": "^\\/attachment\\/[^/\\\\?#]+\\/[^/\\\\?#]+$",
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "url",
-                            "mime"
-                          ],
-                          "type": "object"
+                      "additionalProperties": false,
+                      "properties": {
+                        "data": {
+                          "type": "string"
                         },
-                        {
-                          "additionalProperties": false,
-                          "properties": {
-                            "data": {
-                              "type": "string"
-                            },
-                            "filename": {
-                              "type": "string"
-                            },
-                            "mime": {
-                              "minLength": 1,
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "mime",
-                            "data"
-                          ],
-                          "type": "object"
+                        "filename": {
+                          "type": "string"
+                        },
+                        "mime": {
+                          "minLength": 1,
+                          "type": "string"
                         }
-                      ]
+                      },
+                      "required": [
+                        "mime",
+                        "data"
+                      ],
+                      "type": "object"
                     },
                     "maxItems": 13,
                     "type": "array"
@@ -66663,20 +66514,9 @@
                     },
                     "type": "object"
                   },
-                  "directory": {
-                    "minLength": 1,
-                    "type": "string"
-                  },
                   "expectedPackageDigest": {
                     "pattern": "^[a-f0-9]{64}$",
                     "type": "string"
-                  },
-                  "metadata": {
-                    "additionalProperties": {},
-                    "propertyNames": {
-                      "type": "string"
-                    },
-                    "type": "object"
                   },
                   "model": {
                     "type": "string"
@@ -66695,9 +66535,6 @@
                       "code",
                       "work"
                     ],
-                    "type": "string"
-                  },
-                  "project": {
                     "type": "string"
                   },
                   "promptProfile": {
@@ -66825,6 +66662,66 @@
                         "data"
                       ],
                       "type": "object"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "GlobalTaskRequestIdentityRequiredError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "PromptProfileNotFoundError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "ProviderModelNotFoundError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
                     }
                   ]
                 }
@@ -66918,7 +66815,107 @@
                           "type": "object"
                         },
                         "name": {
-                          "const": "TaskCreationIdempotencyConflictError",
+                          "const": "TaskCreationContractConflictError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "TaskCreationIdentityConflictError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "TaskChannelBindingProjectConflictError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "TaskChannelBindingGlobalCreationConflictError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "GlobalCreationAllocationConflictError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "GlobalCreationAcceptedTargetConflictError",
                           "type": "string"
                         }
                       },
@@ -66953,6 +66950,57 @@
               }
             },
             "description": "Global Task package revision conflict"
+          },
+          "410": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "GlobalCreationAcceptedTargetUnavailableError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "GlobalCreationAllocatedProjectUnavailableError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "Previously accepted Global Task target is no longer retained"
           }
         },
         "summary": "Create a task in an implicit project",
@@ -67059,11 +67107,35 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/BadRequestError"
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/BadRequestError"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "ProviderModelNotFoundError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    }
+                  ]
                 }
               }
             },
-            "description": "Bad request"
+            "description": "Work creation rejected"
           }
         },
         "summary": "Create Work in a temporary project",
@@ -94399,6 +94471,46 @@
                         "data"
                       ],
                       "type": "object"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "PromptProfileNotFoundError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "ProviderModelNotFoundError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
                     }
                   ]
                 }
@@ -94492,7 +94604,47 @@
                           "type": "object"
                         },
                         "name": {
-                          "const": "TaskCreationIdempotencyConflictError",
+                          "const": "TaskCreationContractConflictError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "TaskCreationIdentityConflictError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "TaskChannelBindingProjectConflictError",
                           "type": "string"
                         }
                       },
@@ -94527,6 +94679,33 @@
               }
             },
             "description": "Task package revision conflict"
+          },
+          "410": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "data": {
+                      "additionalProperties": {},
+                      "propertyNames": {
+                        "type": "string"
+                      },
+                      "type": "object"
+                    },
+                    "name": {
+                      "const": "TaskCreationAcceptedTargetUnavailableError",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "data"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Previously accepted Task target is no longer retained"
           }
         },
         "summary": "Create task",

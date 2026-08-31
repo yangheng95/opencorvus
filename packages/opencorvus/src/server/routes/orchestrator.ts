@@ -50,6 +50,7 @@ import { requireTask } from "@/engine/store"
 import { abortChildExecutionForSession } from "@/engine/execution-abort"
 import { EngineService, PlannerFailureError } from "@/task-api"
 import { GlobalTaskService } from "@/task-api/global-task-service"
+import { GlobalTaskCreateInput } from "@/task-api/global-task-request"
 import { ProtocolStore } from "@/protocol/store"
 import { ChannelIngress } from "@/channel/ingress"
 import { Identifier } from "@/id/id"
@@ -216,13 +217,21 @@ export const EngineRoutes = lazy(() =>
             "ExternalChildTaskLineageError",
             "TaskCreatorAuthorityError",
             "TaskCreatorSessionError",
+            "PromptProfileNotFoundError",
+            "ProviderModelNotFoundError",
           ),
           ...errors(404),
           409: namedErrorResponse(
             "Task package revision conflict",
             "TaskExpectedPackageDigestConflictError",
-            "TaskCreationIdempotencyConflictError",
+            "TaskCreationContractConflictError",
+            "TaskCreationIdentityConflictError",
+            "TaskChannelBindingProjectConflictError",
             "TaskPackageRevisionBindingError",
+          ),
+          410: namedErrorResponse(
+            "Previously accepted Task target is no longer retained",
+            "TaskCreationAcceptedTargetUnavailableError",
           ),
         },
       }),
@@ -297,18 +306,40 @@ export const EngineRoutes = lazy(() =>
             "ExternalChildTaskLineageError",
             "TaskCreatorAuthorityError",
             "TaskCreatorSessionError",
+            "GlobalTaskRequestIdentityRequiredError",
+            "PromptProfileNotFoundError",
+            "ProviderModelNotFoundError",
           ),
           ...errors(404),
           409: namedErrorResponse(
             "Global Task package revision conflict",
             "TaskExpectedPackageDigestConflictError",
-            "TaskCreationIdempotencyConflictError",
+            "TaskCreationContractConflictError",
+            "TaskCreationIdentityConflictError",
+            "TaskChannelBindingProjectConflictError",
+            "TaskChannelBindingGlobalCreationConflictError",
+            "GlobalCreationAllocationConflictError",
+            "GlobalCreationAcceptedTargetConflictError",
             "TaskPackageRevisionBindingError",
+          ),
+          410: namedErrorResponse(
+            "Previously accepted Global Task target is no longer retained",
+            "GlobalCreationAcceptedTargetUnavailableError",
+            "GlobalCreationAllocatedProjectUnavailableError",
           ),
         },
       }),
-      validator("json", CreateTaskInput),
-      async (c) => c.json(await GlobalTaskService.create(c.req.valid("json")), 202),
+      validator("json", GlobalTaskCreateInput),
+      async (c) => {
+        const input = c.req.valid("json")
+        return c.json(
+          await GlobalTaskService.create({
+            ...input,
+            requestID: input.requestID ?? c.req.header("x-opencorvus-request-id") ?? undefined,
+          }),
+          202,
+        )
+      },
     )
     .get(
       "/global/tasks",

@@ -39,6 +39,12 @@ import {
 } from "./task-root-ingress-integrity"
 import { orchestratorControlOccurrenceIdentity } from "@/orchestrator/control-message-identity"
 import { TaskDeletedError, taskDeletedInTransaction } from "./store"
+import {
+  DEFAULT_TASK_ROOT_INGRESS_POLICY,
+  taskRootIngressID,
+  taskRootIngressPolicyID,
+} from "./task-root-ingress-identity"
+export { DEFAULT_TASK_ROOT_INGRESS_POLICY } from "./task-root-ingress-identity"
 import { Project } from "@/project/project"
 import {
   acquireControlLeaseInTransaction,
@@ -76,24 +82,6 @@ const EMPTY_EVIDENCE: TaskRootIngressEvidence = {
 /** Frozen acceptance defaults. Each accepted ingress references its immutable
  * content-addressed copy, so later configuration changes cannot rewrite retry
  * or deadline semantics. */
-export const DEFAULT_TASK_ROOT_INGRESS_POLICY = {
-  semanticTurnLimit: 3,
-  activationLimit: 4,
-} as const
-
-function policyMaterial(input: {
-  semanticTurnLimit: number
-  activationLimit: number
-  absoluteDeadline?: number
-}): string {
-  return JSON.stringify([
-    "task-root-policy-v1",
-    input.semanticTurnLimit,
-    input.activationLimit,
-    input.absoluteDeadline ?? null,
-  ])
-}
-
 function assertPolicy(input: { semanticTurnLimit: number; activationLimit: number; absoluteDeadline?: number }): void {
   if (!Number.isSafeInteger(input.semanticTurnLimit) || input.semanticTurnLimit <= 0) {
     throw new Error("Task-root semantic Turn limit must be a positive safe integer")
@@ -114,7 +102,7 @@ export function ensureTaskRootIngressPolicyInTransaction(
   input: { semanticTurnLimit: number; activationLimit: number; absoluteDeadline?: number; now: number },
 ): string {
   assertPolicy(input)
-  const id = Identifier.deterministic("artifact", policyMaterial(input))
+  const id = taskRootIngressPolicyID(input)
   db.insert(EngineTaskRootIngressPolicyTable)
     .values({
       id,
@@ -237,10 +225,7 @@ export function acceptTaskRootIngressInTransaction(
     )
     .orderBy(desc(EngineTaskRootIngressTable.sequence))
     .get()
-  const id = Identifier.deterministic(
-    "artifact",
-    `task-root-ingress-v1\0${input.taskID}\0${input.source}\0${input.sourceID}`,
-  )
+  const id = taskRootIngressID({ taskID: input.taskID, source: input.source, sourceID: input.sourceID })
   db.insert(EngineTaskRootIngressTable)
     .values({
       id,

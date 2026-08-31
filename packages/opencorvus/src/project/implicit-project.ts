@@ -1150,7 +1150,13 @@ export namespace ImplicitProject {
     })
   }
 
-  export async function create() {
+  export async function create(input?: {
+    directory?: string
+    commitInTransaction?: (
+      db: Database.TxOrDb,
+      project: { id: string; generation: string; worktree: string; timeCreated: number },
+    ) => void
+  }) {
     // A creation killed before its Project row committed leaves a directory
     // nothing refers to. Sweep those first — but reclamation must never veto
     // creation. A journal directory this sweep cannot read (a corrupt intent,
@@ -1160,14 +1166,18 @@ export namespace ImplicitProject {
       log.error("anonymous project creation sweep failed", { error })
     })
     const now = new Date()
-    const parent = path.join(
+    const generatedParent = path.join(
       Global.Path.data,
       "projects",
       String(now.getFullYear()),
       calendarSegment(now.getMonth() + 1),
       calendarSegment(now.getDate()),
     )
-    const directory = path.join(parent, randomUUID())
+    const directory = input?.directory ? path.resolve(input.directory) : path.join(generatedParent, randomUUID())
+    if (!isAnonymousDirectory(directory)) {
+      throw new Error(`Implicit Project directory is outside the managed anonymous namespace: ${directory}`)
+    }
+    const parent = path.dirname(directory)
     // The intent is durable before the directory exists: physical existence is
     // never the record that a creation started.
     const occurrenceID = await ImplicitProjectCreation.begin(directory)
@@ -1188,7 +1198,7 @@ export namespace ImplicitProject {
       await ImplicitProjectCreation.markDirectoryCreated(occurrenceID).catch((error) => {
         log.error("anonymous project creation phase was not recorded", { directory, error })
       })
-      initialized = await Project.initGit(directory)
+      initialized = await Project.initGit(directory, { commitInTransaction: input?.commitInTransaction })
     } catch (error) {
       try {
         const compensation = await compensateCreation({ directory, occurrenceID, cause: error })

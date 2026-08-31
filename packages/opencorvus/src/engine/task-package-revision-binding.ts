@@ -10,23 +10,17 @@ import {
   type ExpertSquadPackageRevisionBinding,
 } from "./expert-squad-package-revision-binding"
 import type { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
-
-export const TASK_PACKAGE_REVISION_BINDING_PROTOCOL = "task-package-revision-binding-v1" as const
+import {
+  TASK_PACKAGE_REVISION_BINDING_PROTOCOL,
+  TaskPackageRevisionBindingPayloadSchema,
+  type TaskPackageRevisionBindingPayload,
+} from "./task-creation-facts"
+export {
+  TASK_PACKAGE_REVISION_BINDING_PROTOCOL,
+  TaskPackageRevisionBindingPayloadSchema,
+  type TaskPackageRevisionBindingPayload,
+} from "./task-creation-facts"
 export const TASK_PACKAGE_REVISION_BINDING_LABEL = "Task package revision binding" as const
-
-export const TaskPackageRevisionBindingPayloadSchema = z
-  .object({
-    protocol: z.literal(TASK_PACKAGE_REVISION_BINDING_PROTOCOL),
-    package_revision: ExpertSquadPackageRevisionBindingSchema,
-    creation_expected_package_digest: z
-      .string()
-      .regex(/^[a-f0-9]{64}$/)
-      .nullable(),
-    time_created: z.number().int().nonnegative(),
-  })
-  .strict()
-
-export type TaskPackageRevisionBindingPayload = z.infer<typeof TaskPackageRevisionBindingPayloadSchema>
 
 export const TaskPackageRevisionBindingError = NamedError.create(
   "TaskPackageRevisionBindingError",
@@ -44,19 +38,6 @@ export const TaskExpectedPackageDigestConflictError = NamedError.create(
     profileID: z.string(),
     expectedPackageDigest: z.string(),
     actualPackageDigest: z.string(),
-  }),
-)
-
-export const TaskCreationIdempotencyConflictError = NamedError.create(
-  "TaskCreationIdempotencyConflictError",
-  z.object({
-    message: z.string(),
-    taskID: z.string(),
-    identityKind: z.enum(["request", "channel"]),
-    identity: z.string(),
-    pinnedPackageRevision: ExpertSquadPackageRevisionBindingSchema,
-    requestedProfileID: z.string(),
-    expectedPackageDigest: z.string().optional(),
   }),
 )
 

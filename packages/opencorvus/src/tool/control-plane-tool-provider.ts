@@ -1,4 +1,18 @@
 import type { Tool } from "./tool"
+import type { Message } from "@/session/message"
+
+export type RecoveredControlPlaneToolResult = {
+  title: string
+  output: string
+  metadata: Record<string, unknown>
+}
+
+export type ControlPlaneToolRecovery = (input: {
+  sessionID: string
+  messageID: string
+  agent: string
+  part: Message.ToolPart
+}) => Promise<RecoveredControlPlaneToolResult | undefined>
 
 export interface ControlPlaneToolLoaders {
   schedule: () => Promise<Tool.Info>
@@ -6,6 +20,7 @@ export interface ControlPlaneToolLoaders {
   wait: () => Promise<Tool.Info>
   requestOrchestratorDecision: () => Promise<Tool.Info>
   sendMailboxMessage: () => Promise<Tool.Info>
+  recoverPanelCreation: ControlPlaneToolRecovery
 }
 
 let installedLoaders: ControlPlaneToolLoaders | undefined

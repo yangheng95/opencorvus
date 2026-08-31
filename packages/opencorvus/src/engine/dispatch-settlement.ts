@@ -122,42 +122,6 @@ export function findDispatchSettlementByDispatchID(input: {
   })
 }
 
-/** Resolve a historical reconciliation source by its immutable Artifact ID.
- * The source coordinate is authority: no dispatch-scoped latest lookup may
- * replace it after migration bound the lineage. */
-export function requireDispatchSettlementByArtifactID(input: {
-  artifactID: string
-  taskID: string
-  dispatchID: string
-  lineageArtifactID: string
-  sessionID: string
-}): DispatchSettlementRow {
-  const row = Database.use((db) =>
-    db
-      .select()
-      .from(EngineArtifactTable)
-      .where(
-        and(
-          eq(EngineArtifactTable.id, input.artifactID),
-          eq(EngineArtifactTable.task_id, input.taskID),
-          eq(EngineArtifactTable.kind, "dispatch_settlement"),
-        ),
-      )
-      .get(),
-  )
-  if (!row) throw new Error(`Historical dispatch settlement ${input.artifactID} does not exist`)
-  const payload = parsePayload(row.payload, row.id)
-  if (
-    payload.task_id !== input.taskID ||
-    payload.dispatch_id !== input.dispatchID ||
-    payload.dispatch_lineage_id !== input.lineageArtifactID ||
-    payload.session_id !== input.sessionID
-  ) {
-    throw new Error(`Historical dispatch settlement ${input.artifactID} identity drift`)
-  }
-  return { artifactID: row.id, payload }
-}
-
 export function recordDispatchSettlement(input: {
   taskID: string
   dispatchID: string

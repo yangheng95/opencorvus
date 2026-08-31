@@ -22,3 +22,25 @@ export const TaskChannelBindingProjectConflictError = NamedError.create(
     activeProjectID: z.string(),
   }),
 )
+
+export const TaskChannelBindingGlobalCreationConflictError = NamedError.create(
+  "TaskChannelBindingGlobalCreationConflictError",
+  z.object({
+    message: z.string(),
+    requestID: z.string(),
+    platform: z.string(),
+    channel: z.string(),
+    thread: z.string(),
+    taskID: z.string(),
+    projectID: z.string(),
+  }),
+)
+
+export const TaskCreationAcceptedTargetUnavailableError = NamedError.create(
+  "TaskCreationAcceptedTargetUnavailableError",
+  z.object({
+    message: z.string(),
+    taskID: z.string(),
+    projectID: z.string(),
+  }),
+)

@@ -1,89 +1,222 @@
 import z from "zod"
-import { findGlobalTaskByRequest } from "@/engine/store"
-import { CreateTaskInput } from "@/engine/model"
+import { NamedError } from "@opencorvus-ai/util/error"
 import { InstanceBootstrap } from "@/project/bootstrap"
-import { ImplicitProject } from "@/project/implicit-project"
 import { Instance } from "@/project/instance"
 import { EngineService } from "./index"
-import { deleteProject } from "@/project/delete"
-import { randomUUID } from "node:crypto"
-import { withGlobalTaskRequestOwner } from "@/engine/task-creation-owner"
+import {
+  GlobalCreationAcceptedTargetConflictError,
+  GlobalCreationAcceptedTargetUnavailableError,
+  GlobalCreationAllocation,
+} from "@/project/global-creation-allocation"
+import {
+  GlobalTaskCreateInput,
+  globalTaskCreateInputContract,
+} from "./global-task-request"
+import { Config } from "@/config/config"
+import { Database, and, eq } from "@/storage/db"
+import { EngineTaskTable } from "@/engine/engine.sql"
+import { ProjectTable } from "@/project/project.sql"
+import { taskDeletedInTransaction } from "@/engine/store"
+import {
+  TaskChannelBindingGlobalCreationConflictError,
+  TaskChannelBindingProjectConflictError,
+} from "@/engine/task-project-error"
+
+function acceptTaskWinner(allocationID: string, taskID: string): void {
+  try {
+    Database.immediateTransaction((db) => {
+      const task = db
+        .select({ projectID: EngineTaskTable.project_id, acceptedAt: EngineTaskTable.time_created })
+        .from(EngineTaskTable)
+        .where(eq(EngineTaskTable.id, taskID))
+        .get()
+      if (!task) throw new Error(`Global Task winner ${taskID} is not persisted`)
+      GlobalCreationAllocation.acceptInTransaction(db, {
+        allocationID,
+        kind: "global_task",
+        projectID: task.projectID,
+        targetID: taskID,
+        acceptedAt: task.acceptedAt,
+      })
+    })
+  } catch (error) {
+    if (!GlobalCreationAcceptedTargetConflictError.isInstance(error as Error)) throw error
+    const outcome = GlobalCreationAllocation.reject({ allocationID, error: error as Error })
+    if (outcome === "accepted") return
+    throw error
+  }
+}
+
+let afterAllocationForTest:
+  | ((input: { requestID: string; directory: string }) => void | Promise<void>)
+  | undefined
+let afterProjectForTest:
+  | ((input: { requestID: string; projectID: string; directory: string }) => void | Promise<void>)
+  | undefined
+
+export const GlobalTaskRequestIdentityRequiredError = NamedError.create(
+  "GlobalTaskRequestIdentityRequiredError",
+  z.object({ message: z.string() }),
+)
 
 export namespace GlobalTaskService {
-  let afterReplayLookupForTest: ((input: { requestID: string; committed: boolean }) => Promise<void>) | undefined
-
-  export async function create(raw: z.input<typeof CreateTaskInput>) {
-    const input = CreateTaskInput.parse(raw)
-    // The request identity must resolve BEFORE a Project is allocated: a
-    // retry that allocates first can never find the first attempt, because
-    // the per-project lookup is scoped to the Project it just created — a
-    // lost response then duplicated the Project and the Task.
-    const requestID = input.requestID
-    if (requestID) {
-      return withGlobalTaskRequestOwner(requestID, () => createOwned(input, requestID))
-    }
-    return createOwned(input, undefined)
+  export const TestHooks = {
+    replaceAfterAllocation(
+      hook: (input: { requestID: string; directory: string }) => void | Promise<void>,
+    ): Disposable {
+      if (afterAllocationForTest) throw new Error("Global Task allocation hook is already installed")
+      afterAllocationForTest = hook
+      return {
+        [Symbol.dispose]() {
+          if (afterAllocationForTest === hook) afterAllocationForTest = undefined
+        },
+      }
+    },
+    replaceAfterProjectMaterialized(
+      hook: (input: { requestID: string; projectID: string; directory: string }) => void | Promise<void>,
+    ): Disposable {
+      if (afterProjectForTest) throw new Error("Global Task Project hook is already installed")
+      afterProjectForTest = hook
+      return {
+        [Symbol.dispose]() {
+          if (afterProjectForTest === hook) afterProjectForTest = undefined
+        },
+      }
+    },
   }
 
-  async function createOwned(input: z.infer<typeof CreateTaskInput>, requestID: string | undefined) {
-    if (requestID) {
-      const committed = findGlobalTaskByRequest(requestID, ImplicitProject.isAnonymousDirectory)
-      await afterReplayLookupForTest?.({ requestID, committed: committed !== undefined })
-      if (committed) {
-        // Re-entering the owning Project runs the same per-project replay
-        // path every create uses — one idempotency implementation, including
-        // its pillar and artifact-import conflict checks.
-        return await Instance.provide({
-          directory: committed.directory,
-          init: InstanceBootstrap,
-          fn: async () => {
-            const taskID = await EngineService.createTask(input, { actor: "user" })
-            return {
-              task_id: taskID,
-              project_id: Instance.project.id,
-              directory: Instance.directory,
-            }
-          },
+  export async function create(raw: z.input<typeof GlobalTaskCreateInput>) {
+    const input = GlobalTaskCreateInput.parse(raw)
+    const requestID = input.requestID?.trim()
+    if (!requestID) {
+      throw new GlobalTaskRequestIdentityRequiredError({
+        message: "Global Task creation requires requestID or x-opencorvus-request-id",
+      })
+    }
+    const requestContract = globalTaskCreateInputContract(input)
+    let allocation = GlobalCreationAllocation.find({ kind: "global_task", requestID, requestContract })
+    if (!allocation) {
+      // A new occurrence resolves every mutable host default before it owns a
+      // directory. If a peer wins during that read-only preflight, reread the
+      // immutable allocation and join it instead of consulting current defaults.
+      const configSnapshot = await Config.getGlobal()
+      let preflight: Awaited<ReturnType<typeof EngineService.preflightGlobalTaskCreation>>
+      try {
+        preflight = await EngineService.preflightGlobalTaskCreation({
+          raw: input,
+          requestID,
+          configSnapshot,
+        })
+      } catch (error) {
+        allocation = GlobalCreationAllocation.find({ kind: "global_task", requestID, requestContract })
+        if (!allocation) throw error
+      }
+      allocation ??= GlobalCreationAllocation.reserve({
+        kind: "global_task",
+        requestID,
+        requestContract,
+        resolutionSeed: configSnapshot,
+        taskResolution: preflight!.taskResolution,
+      })
+    }
+    if (!allocation.task_resolution) {
+      throw new Error(`Global Task allocation ${allocation.id} has no frozen Task resolution`)
+    }
+    GlobalCreationAllocation.throwIfRejected(allocation)
+    const accepted = GlobalCreationAllocation.acceptedTarget(allocation)
+    if (accepted) {
+      const target = Database.use((db) =>
+        {
+          const row = db
+          .select({ taskID: EngineTaskTable.id, projectID: ProjectTable.id, directory: ProjectTable.worktree })
+          .from(EngineTaskTable)
+          .innerJoin(ProjectTable, eq(ProjectTable.id, EngineTaskTable.project_id))
+          .where(
+            and(
+              eq(EngineTaskTable.id, accepted.targetID),
+              eq(EngineTaskTable.project_id, accepted.projectID),
+            ),
+          )
+          .get()
+          return row && !taskDeletedInTransaction(db, row.taskID) ? row : undefined
+        },
+      )
+      if (!target) {
+        throw new GlobalCreationAcceptedTargetUnavailableError({
+          message:
+            `Global Task request ${requestID} was accepted as ${accepted.targetID}, ` +
+            "but that retained target is no longer available",
+          kind: "global_task",
+          requestID,
+          projectID: accepted.projectID,
+          targetID: accepted.targetID,
+          directory: allocation.directory,
         })
       }
-    }
-    const carryingProject = await ImplicitProject.create()
-    try {
-      return await Instance.provide({
-        directory: carryingProject.directory,
+      return Instance.provide({
+        directory: target.directory,
         init: InstanceBootstrap,
         fn: async () => {
-          const taskID = await EngineService.createTask(input, { actor: "user" })
+          const replayedTaskID = await EngineService.createTask(input, { actor: "user" }, {
+            taskConfigSnapshot: allocation.resolution_seed as Config.Info,
+            taskResolution: allocation.task_resolution,
+          })
+          if (replayedTaskID !== target.taskID || Instance.project.id !== target.projectID) {
+            throw new Error(`Global Task allocation ${allocation.id} replayed another accepted target`)
+          }
           return {
-            task_id: taskID,
-            project_id: Instance.project.id,
-            directory: Instance.directory,
+            task_id: replayedTaskID,
+            project_id: target.projectID,
+            directory: target.directory,
           }
         },
       })
-    } catch (error) {
-      await deleteProject(carryingProject.project, {
-        actor: "user",
-        source: "project.delete",
-        surface: "api",
-        requestID: randomUUID(),
-        reason: "Discard failed global Task Project creation",
-      })
-      throw error
     }
-  }
-
-  export namespace TestHooks {
-    export function replaceAfterReplayLookup(
-      hook: (input: { requestID: string; committed: boolean }) => Promise<void>,
-    ): Disposable {
-      const previous = afterReplayLookupForTest
-      afterReplayLookupForTest = hook
-      return {
-        [Symbol.dispose]() {
-          afterReplayLookupForTest = previous
-        },
-      }
-    }
+    await afterAllocationForTest?.({ requestID, directory: allocation.directory })
+    const carryingProject = await GlobalCreationAllocation.materializeProject(allocation)
+    await afterProjectForTest?.({
+      requestID,
+      projectID: carryingProject.project.id,
+      directory: carryingProject.directory,
+    })
+    return Instance.provide({
+      directory: carryingProject.directory,
+      init: InstanceBootstrap,
+      fn: async () => {
+        let taskID: string
+        try {
+          taskID = await EngineService.createTask(input, { actor: "user" }, {
+            taskConfigSnapshot: allocation.resolution_seed as Config.Info,
+            taskResolution: allocation.task_resolution,
+            acceptanceCommit: (db, acceptedTask) =>
+              GlobalCreationAllocation.acceptInTransaction(db, {
+                allocationID: allocation.id,
+                kind: "global_task",
+                projectID: acceptedTask.projectID,
+                targetID: acceptedTask.taskID,
+                acceptedAt: acceptedTask.acceptedAt,
+              }),
+          })
+        } catch (error) {
+          if (
+            TaskChannelBindingProjectConflictError.isInstance(error as Error) ||
+            TaskChannelBindingGlobalCreationConflictError.isInstance(error as Error)
+          ) {
+            const outcome = GlobalCreationAllocation.reject({ allocationID: allocation.id, error: error as Error })
+            if (outcome === "accepted") return GlobalTaskService.create(raw)
+          }
+          throw error
+        }
+        // A Task committed by another production entry can satisfy the exact
+        // request claim before this Global call. Append the same allocation
+        // acceptance before returning; a crash here is idempotently replayed.
+        acceptTaskWinner(allocation.id, taskID)
+        return {
+          task_id: taskID,
+          project_id: Instance.project.id,
+          directory: Instance.directory,
+        }
+      },
+    })
   }
 }

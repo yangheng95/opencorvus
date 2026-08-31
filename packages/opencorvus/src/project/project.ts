@@ -523,7 +523,16 @@ export namespace Project {
     }
   }
 
-  export async function fromDirectory(directory: string, options: { blockedProjectIDs?: ReadonlySet<string> } = {}) {
+  export async function fromDirectory(
+    directory: string,
+    options: {
+      blockedProjectIDs?: ReadonlySet<string>
+      commitInTransaction?: (
+        db: Database.TxOrDb,
+        project: { id: string; generation: string; worktree: string; timeCreated: number },
+      ) => void
+    } = {},
+  ) {
     await assertDirectoryIntegrity(directory)
     log.info("fromDirectory", { directory })
     const discoveredOccurrence = await ProjectDirectoryAdmission.observeDirectory(directory)
@@ -674,6 +683,12 @@ export namespace Project {
             time: { ...current.time, updated: changed ? resolvedAt : current.time.updated },
           }
           if (!changed) {
+            options.commitInTransaction?.(db, {
+              id: result.id,
+              generation,
+              worktree: result.worktree,
+              timeCreated: result.time.created,
+            })
             committed = { result, changed, generation }
             return
           }
@@ -709,6 +724,12 @@ export namespace Project {
               })
               .run()
           }
+          options.commitInTransaction?.(db, {
+            id: result.id,
+            generation,
+            worktree: result.worktree,
+            timeCreated: result.time.created,
+          })
           committed = { result, changed, generation }
         })
         settled = true
@@ -1109,9 +1130,12 @@ export namespace Project {
     return occurrence(id)?.project
   }
 
-  export async function initGit(directory: string) {
+  export async function initGit(
+    directory: string,
+    options?: Parameters<typeof fromDirectory>[1],
+  ) {
     if (isGitRepo(directory)) {
-      const current = await fromDirectory(directory)
+      const current = await fromDirectory(directory, options)
       return InitGitResult.parse({
         created: false,
         project: current.project,
@@ -1128,7 +1152,7 @@ export namespace Project {
     if (!(await Filesystem.exists(path.join(directory, ".git")))) {
       throw new Error("git init completed without creating .git")
     }
-    const next = await fromDirectory(directory)
+    const next = await fromDirectory(directory, options)
     // Cache refresh is the caller's responsibility. Doing it here would
     // dual-source with task-api/prepareProject and server/routes/project,
     // and — critically — when this path runs INSIDE Instance.provide's

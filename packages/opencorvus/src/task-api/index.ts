@@ -1,5 +1,5 @@
 import z from "zod"
-import { randomUUID } from "node:crypto"
+import { createHash, randomUUID } from "node:crypto"
 import fs from "node:fs/promises"
 import path from "node:path"
 import { NamedError } from "@opencorvus-ai/util/error"
@@ -10,6 +10,7 @@ import { ProjectedAgentWorkScope } from "@/agent/projected-agent-work-scope"
 import type { ProjectedWorkerBinding } from "@/agent/projected-worker-binding"
 import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
 import { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
+import type { ExpertSquadPackageRevision } from "@/expert-squad/package-revision"
 import { ExpertSquadInstallLock } from "@/expert-squad/install-lock"
 import { ExpertSquadPackageManager } from "@/expert-squad/manager"
 import { resolveAgentModelRef, resolveConfiguredModelRef } from "@/agent/model"
@@ -56,12 +57,22 @@ import { ProjectTable } from "@/project/project.sql"
 import { Worktree } from "@/worktree"
 import { Question } from "@/question"
 import { Session } from "@/session"
+import { SessionTable } from "@/session/session.sql"
 import { SessionContext } from "@/session/context"
 import { Message } from "@/session/message"
 import { decodeRawBase64Payload } from "@/session/text-mime"
 import { SessionPrompt } from "@/session/prompt"
 import { SessionStatus } from "@/session/status"
-import { Database, NotFoundError, and, eq, inArray, isNull, sql } from "@/storage/db"
+import {
+  Database,
+  NotFoundError,
+  and,
+  eq,
+  inArray,
+  isNull,
+  isSqliteUniqueConstraintError,
+  sql,
+} from "@/storage/db"
 import { Log } from "@/util/log"
 import { Filesystem } from "@/util/filesystem"
 import { awaitWithAbort } from "@/util/abort"
@@ -71,7 +82,6 @@ import { compileBoard, boardTag } from "@/workbench/board"
 import { compileBrief } from "@/workbench/brief"
 import {
   EngineArtifactTable,
-  EngineChannelBindingTable,
   EngineGoalTable,
   EngineTaskTable,
   EngineTaskRootIngressTable,
@@ -81,17 +91,9 @@ import {
 import { taskLifecycleProjectionInTransaction } from "@/engine/task-lifecycle"
 import { insertEngineArtifact } from "@/engine/artifact"
 import { buildObservationCleanupRowsForTask, settleBuildObservationCleanup } from "@/engine/build-observation-cleanup"
-import {
-  TaskCreationIdempotencyConflictError,
-  TaskExpectedPackageDigestConflictError,
-  requireTaskPackageRevisionBinding,
-} from "@/engine/task-package-revision-binding"
-import {
-  assertTaskExecutionCapsuleReplay,
-  configuredTaskProcessMode,
-  prepareTaskProcessBinding,
-} from "@/engine/task-execution-capsule-binding"
-import { deleteEngineChannelBindingsForTask } from "@/engine/channel-binding"
+import { TaskExpectedPackageDigestConflictError, requireTaskPackageRevisionBinding } from "@/engine/task-package-revision-binding"
+import { configuredTaskProcessMode, prepareTaskProcessBinding, type TaskProcessBindingPayload } from "@/engine/task-execution-capsule-binding"
+import { TaskCreationResolutionSeedSchema, type TaskCreationResolutionSeed } from "@/engine/task-creation-facts"
 import { resolveEngineInteractionRequest } from "@/engine/interaction-request"
 import {
   deleteEngineTask,
@@ -124,6 +126,7 @@ import { writeTaskChecks } from "@/engine/checks"
 import {
   deliverTaskRootIngress,
   dispatchPersistedTaskLoop,
+  requestTaskControlScanInBackground,
   dispatchTaskLoop,
   persistTaskRootMessageIngressInTransaction,
   persistMissionAcceptanceResumeIngressInTransaction,
@@ -163,7 +166,6 @@ import { SessionPromptState } from "@/session/prompt/state"
 import { ProcessSupervisor } from "@/shell/process-supervisor"
 import { createExecutionCancellationOrigin, type ExecutionCancellationOrigin } from "@/session/prompt/cancellation"
 import { RuntimeExecutionSettlement } from "@/runtime/execution-settlement"
-import { TaskChannelBindingProjectConflictError, TaskGlobalProjectBindingError } from "@/engine/task-project-error"
 import { ProjectMemory } from "@/memory/project-memory"
 import {
   SchedulerDeliveryReference,
@@ -209,7 +211,6 @@ import { sessionRole, taskIDForSession } from "@/engine/task-session-lineage"
 import {
   findInteractionByExternal,
   findTask,
-  findTaskByRequest,
   listGlobalTasks,
   listProjectTasks,
   listTaskRows,
@@ -248,10 +249,23 @@ import {
 import { appendTaskAcceptanceLedgerRevisionInTransaction } from "@/mission/acceptance-ledger"
 import { AttachmentStore } from "@/storage/attachment-store"
 import { SessionWake } from "@/session/wake"
-import { withTaskCreationOwnerLock } from "@/engine/task-creation-owner"
-import { taskPrimaryProjectRoot } from "@/project/task-runtime-root"
+import { IntentBundle } from "@/intent/bundle"
+import { taskRootDirectory } from "@/engine/task-directory"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
 import { removeTaskArtifactRoot } from "@/task-artifact/store"
+import {
+  buildTaskCreationContractFact,
+  buildTaskCreationRequestFact,
+  assertGlobalTaskChannelClaimAvailable,
+  canonicalInlineUploadAttachment,
+  panelTaskCreationCallerInput,
+  resolveTaskCreationClaims,
+  taskCreationCallerRequest,
+  type TaskCreationCallerInput,
+  type TaskCreationClaims,
+} from "@/engine/task-creation-contract"
+import { PersistedTaskCreationCreator } from "@/engine/task-creation-creator"
+import { expertSquadPackageRevisionBinding } from "@/engine/expert-squad-package-revision-binding"
 import { artifactCatalogAuthority, readTaskArtifact, searchTaskArtifacts } from "@/artifact-catalog"
 import {
   ArtifactReadInputSchema,
@@ -382,32 +396,6 @@ function selectedTaskProfileID(input: z.infer<typeof CreateTaskInput>, snapshot:
     ...(input.promptProfile ? { prompt_profile: { active: input.promptProfile } } : {}),
   })
   return PromptProfile.activeID(config)
-}
-
-async function assertTaskCreationReplayMatches(input: {
-  taskID: string
-  identityKind: "request" | "channel"
-  identity: string
-  selectedProfileID: string
-  expectedPackageDigest?: string
-}): Promise<void> {
-  const pinnedPackageRevision = requireTaskPackageRevisionBinding(input.taskID)
-  const profileMatches = pinnedPackageRevision.id === input.selectedProfileID
-  const digestMatches =
-    input.expectedPackageDigest === undefined || pinnedPackageRevision.package_digest === input.expectedPackageDigest
-  if (profileMatches && digestMatches) {
-    await assertTaskExecutionCapsuleReplay({ taskID: input.taskID, requestedRoot: Instance.directory })
-    return
-  }
-  throw new TaskCreationIdempotencyConflictError({
-    message: `${input.identityKind} ${input.identity} is already committed as Task ${input.taskID} with another immutable package revision`,
-    taskID: input.taskID,
-    identityKind: input.identityKind,
-    identity: input.identity,
-    pinnedPackageRevision,
-    requestedProfileID: input.selectedProfileID,
-    expectedPackageDigest: input.expectedPackageDigest,
-  })
 }
 
 function assertCurrentMissionTaskCreationAuthority(creator: ResolvedTaskCreationAuthority): void {
@@ -611,24 +599,44 @@ function assertTasksRemainTerminalForPhysicalDelete(db: Database.TxOrDb, tasks: 
   }
 }
 
+type TaskCleanupTarget = {
+  taskID: string
+  taskArtifactDirectory: string
+  intentProjectDirectory: string
+  cleanupOwners: ReturnType<typeof buildObservationCleanupRowsForTask>
+}
+
+function taskCleanupTarget(task: Pick<TaskRow, "id" | "project_id" | "session_id">): TaskCleanupTarget {
+  const project = Project.get(task.project_id)
+  if (!project) throw new Error(`Task ${task.id} has no owning Project for physical retention`)
+  return {
+    taskID: task.id,
+    taskArtifactDirectory: taskRootDirectory(task),
+    intentProjectDirectory: project.worktree,
+    cleanupOwners: buildObservationCleanupRowsForTask(task.id),
+  }
+}
+
 async function deleteRowsThenTaskArtifacts(tasks: readonly TaskRow[], deleteRows: () => void): Promise<void> {
   const cleanupTargets = tasks
-    .map((task) => ({
-      taskID: task.id,
-      projectDirectory: taskPrimaryProjectRoot(task.id, { activeProjectID: task.project_id }),
-      cleanupOwners: buildObservationCleanupRowsForTask(task.id),
-    }))
+    .map(taskCleanupTarget)
     .sort((left, right) => left.taskID.localeCompare(right.taskID))
   await settleTaskCleanupOwners(cleanupTargets)
   deleteRows()
   const cleanupFailures: unknown[] = []
   const residuePaths: string[] = []
   for (const target of cleanupTargets) {
-    try {
-      await removeTaskArtifactRoot(target)
-    } catch (cause) {
-      cleanupFailures.push(cause)
-      residuePaths.push(ProjectRuntimePaths.taskArtifactRoot(target.projectDirectory, target.taskID))
+    const removals = await Promise.allSettled([
+      removeTaskArtifactRoot({ taskID: target.taskID, projectDirectory: target.taskArtifactDirectory }),
+      IntentBundle.removeProjection({ taskID: target.taskID, projectDirectory: target.intentProjectDirectory }),
+    ])
+    if (removals[0].status === "rejected") {
+      cleanupFailures.push(removals[0].reason)
+      residuePaths.push(ProjectRuntimePaths.taskArtifactRoot(target.taskArtifactDirectory, target.taskID))
+    }
+    if (removals[1].status === "rejected") {
+      cleanupFailures.push(removals[1].reason)
+      residuePaths.push(ProjectRuntimePaths.intentPaths(target.intentProjectDirectory, target.taskID).absolute)
     }
   }
   if (cleanupFailures.length > 0) {
@@ -652,11 +660,7 @@ async function deleteRowsThenTaskArtifacts(tasks: readonly TaskRow[], deleteRows
 }
 
 async function settleTaskCleanupOwners(
-  cleanupTargets: ReadonlyArray<{
-    taskID: string
-    projectDirectory: string
-    cleanupOwners: ReturnType<typeof buildObservationCleanupRowsForTask>
-  }>,
+  cleanupTargets: readonly TaskCleanupTarget[],
 ): Promise<void> {
   // Cleanup owners remain immutable facts after a Task tombstone. Resolve all
   // pending/retained physical ref ownership before recording that boundary.
@@ -668,6 +672,29 @@ async function settleTaskCleanupOwners(
       })
     }
   }
+}
+
+async function removeTombstonedIntentProjections(cleanupTargets: readonly TaskCleanupTarget[]): Promise<void> {
+  const removals = await Promise.allSettled(
+    cleanupTargets.map((target) =>
+      IntentBundle.removeProjection({ taskID: target.taskID, projectDirectory: target.intentProjectDirectory }),
+    ),
+  )
+  const failures = removals
+    .map((result, index) => result.status === "rejected" ? { cause: result.reason, target: cleanupTargets[index]! } : undefined)
+    .filter((item): item is { cause: unknown; target: TaskCleanupTarget } => Boolean(item))
+  if (failures.length === 0) return
+  throw new TaskArtifactDeletionCommittedError(
+    {
+      message: `Task deletion committed, but ${failures.length} intent projection cleanup operation(s) failed.`,
+      committed: true,
+      taskIDs: failures.map((item) => item.target.taskID).sort(),
+      residuePaths: failures
+        .map((item) => ProjectRuntimePaths.intentPaths(item.target.intentProjectDirectory, item.target.taskID).absolute)
+        .sort(),
+    },
+    { cause: new AggregateError(failures.map((item) => item.cause), "Intent projection cleanup failed") },
+  )
 }
 
 function requireGoalInCurrentProject(goalID: string): GoalRow {
@@ -1344,8 +1371,11 @@ function taskItems(rows: TaskListRow[]) {
   })
 }
 
-async function taskChecks(checks?: z.input<typeof CheckConfig>) {
-  const found = await discoverChecks()
+async function taskChecks(
+  checks?: z.input<typeof CheckConfig>,
+  discovered?: Awaited<ReturnType<typeof discoverChecks>>,
+) {
+  const found = discovered ?? (await discoverChecks())
   const next = structuredClone(resolvedChecks(await resolveConfig(checks ? { checks } : undefined), found))
 
   if (found.lint.length > 0 && next.lint === false) {
@@ -1387,6 +1417,23 @@ export class PlannerFailureError extends Error {
 }
 
 type ApiAttachmentInput = NonNullable<z.infer<typeof CreateTaskInput>["attachments"]>[number]
+
+function taskCreationRequestAttachments(attachments: ApiAttachmentInput[] | undefined) {
+  return (attachments ?? []).map((attachment) => {
+    if (!("data" in attachment)) {
+      return {
+        url: attachment.url,
+        mime: attachment.mime,
+        filename: attachment.filename ?? null,
+      }
+    }
+    return canonicalInlineUploadAttachment(
+      attachment,
+      `Task creation attachment ${attachment.filename ?? attachment.mime}`,
+    )
+  })
+}
+
 async function materializeApiAttachments(input: {
   attachments: ApiAttachmentInput[] | undefined
   label: string
@@ -1446,30 +1493,7 @@ export const TaskExecutionDirectoryInitializerTestHooks = {
 let beforeTaskPersistForTest:
   | ((input: { taskID: string; creator: ResolvedTaskCreationAuthority }) => void | Promise<void>)
   | undefined
-type RejectedTaskPreparationCleanupReceipt = {
-  taskID: string
-  root: string
-  status: "removed"
-}
-let afterRejectedTaskPreparationCleanupForTest:
-  | ((receipt: RejectedTaskPreparationCleanupReceipt) => void | Promise<void>)
-  | undefined
-
-async function removeRejectedTaskPreparation(input: {
-  projectDirectory: string
-  taskID: string
-}): Promise<RejectedTaskPreparationCleanupReceipt> {
-  if (findTask(input.taskID)) {
-    throw new Error(`Cannot clean prepared Task root ${input.taskID} after its durable Task committed`)
-  }
-  const collection = path.resolve(ProjectRuntimePaths.taskCollectionRoot(input.projectDirectory))
-  const root = path.resolve(ProjectRuntimePaths.taskRoot(input.projectDirectory, input.taskID))
-  if (path.dirname(root) !== collection) {
-    throw new Error(`Prepared Task root ${root} is outside its managed Task collection ${collection}`)
-  }
-  await fs.rm(root, { recursive: true, force: true })
-  return { taskID: input.taskID, root, status: "removed" }
-}
+let beforeAcceptedReconciliationForTest: ((taskID: string) => void) | undefined
 
 export const TaskCreationCommitTestHooks = {
   installBeforePersist(
@@ -1483,21 +1507,148 @@ export const TaskCreationCommitTestHooks = {
       },
     }
   },
-  installAfterRejectedPreparationCleanup(
-    hook: (receipt: RejectedTaskPreparationCleanupReceipt) => void | Promise<void>,
-  ): Disposable {
-    if (afterRejectedTaskPreparationCleanupForTest) {
-      throw new Error("Task creation rejected-preparation cleanup hook is already installed")
+  installBeforeAcceptedReconciliation(hook: (taskID: string) => void): Disposable {
+    if (beforeAcceptedReconciliationForTest) {
+      throw new Error("Task creation accepted-reconciliation hook is already installed")
     }
-    afterRejectedTaskPreparationCleanupForTest = hook
+    beforeAcceptedReconciliationForTest = hook
     return {
       [Symbol.dispose]() {
-        if (afterRejectedTaskPreparationCleanupForTest === hook) {
-          afterRejectedTaskPreparationCleanupForTest = undefined
-        }
+        if (beforeAcceptedReconciliationForTest === hook) beforeAcceptedReconciliationForTest = undefined
       },
     }
   },
+}
+
+const EMPTY_TASK_CHECK_DISCOVERY: Awaited<ReturnType<typeof discoverChecks>> = {
+  build: [],
+  test: [],
+  lint: [],
+  named: {},
+}
+
+async function resolveTaskCreationResolution(input: {
+  task: z.infer<typeof CreateTaskInput>
+  configSnapshot: Config.Info
+  scope: "project" | "global"
+  projectDirectory?: string
+}) {
+  const selectedProfileID = selectedTaskProfileID(input.task, input.configSnapshot)
+  const profilePreviewConfig = Config.mergeOverlay(input.configSnapshot, {
+    ...(input.task.model ? { model: input.task.model } : {}),
+    prompt_profile: { active: selectedProfileID },
+  })
+  if (input.scope === "global") {
+    await validateConfigModelReferences(profilePreviewConfig, "globalTask.configOverlay", "global")
+  }
+  const packageRevision = await ExpertSquadInstallLock.run(selectedProfileID, async (lease) => {
+    if (input.scope === "project") {
+      await ExpertSquadPackageManager.reconcilePendingPackageMutationUnderLease({
+        projectDirectory: input.projectDirectory!,
+        id: selectedProfileID,
+        lease,
+      })
+    }
+    await PromptProfileResolver.assertProfileSupportsProductPillar({
+      ...(input.projectDirectory ? { projectDirectory: input.projectDirectory } : {}),
+      profileID: selectedProfileID,
+      productPillar: input.task.productPillar,
+      config: profilePreviewConfig,
+      scope: input.scope,
+    })
+    const resolved = await PromptProfileResolver.resolveActivePackageRevision({
+      ...(input.projectDirectory ? { projectDirectory: input.projectDirectory } : {}),
+      ...(input.scope === "global" ? { defaultSkills: [] } : {}),
+      config: profilePreviewConfig,
+      scope: input.scope,
+      reconcileEvolutionMutations: false,
+    })
+    if (input.task.expectedPackageDigest === undefined || input.task.expectedPackageDigest === resolved.packageDigest) {
+      return resolved
+    }
+    if (resolved.scope !== "built_in") {
+      return PromptProfileResolver.resolveExternalPackageRevisionSnapshot({
+        activeRevision: resolved,
+        expectedPackageDigest: input.task.expectedPackageDigest,
+      })
+    }
+    throw new TaskExpectedPackageDigestConflictError({
+      message: `Expert squad ${selectedProfileID} resolved package digest ${resolved.packageDigest}, expected ${input.task.expectedPackageDigest}`,
+      profileID: selectedProfileID,
+      expectedPackageDigest: input.task.expectedPackageDigest,
+      actualPackageDigest: resolved.packageDigest,
+    })
+  })
+  return TaskCreationResolutionSeedSchema.parse({
+    protocol: "task-creation-resolution-seed-v1",
+    selected_profile_id: selectedProfileID,
+    package_revision: packageRevision,
+    process_mode: configuredTaskProcessMode(),
+    resolved_checks: await taskChecks(
+      input.task.checks,
+      input.scope === "global" ? EMPTY_TASK_CHECK_DISCOVERY : undefined,
+    ),
+  })
+}
+
+type TaskCreationSeed = {
+  taskConfigSnapshot: Config.Info
+  taskResolution?: Record<string, unknown> | null
+  acceptanceCommit?: (db: Database.TxOrDb, input: { taskID: string; projectID: string; acceptedAt: number }) => void
+}
+
+function taskCreatorCreationEnvelope(creator: ResolvedTaskCreationAuthority) {
+  return PersistedTaskCreationCreator.parse({
+    actor: creator.actor,
+    ...(creator.actor === "user"
+      ? {}
+      : {
+          session_id: creator.sessionID,
+          ...(creator.messageID ? { message_id: creator.messageID } : {}),
+          ...(creator.toolCallID ? { tool_call_id: creator.toolCallID } : {}),
+          ...(creator.toolPartID ? { tool_part_id: creator.toolPartID } : {}),
+          ...(creator.toolInput ? { tool_input: creator.toolInput } : {}),
+        }),
+    ...(creator.actor === "mission"
+      ? {
+          mission_id: creator.missionID,
+          opened_occurrence: {
+            event_id: creator.openedOccurrence.eventID,
+            operation_id: creator.openedOccurrence.operationID,
+          },
+        }
+      : {}),
+  })
+}
+
+function taskProcessCreationEnvelope(binding: TaskProcessBindingPayload) {
+  if (binding.protocol === "task-native-process-binding-v1") {
+    return {
+      protocol: binding.protocol,
+      mode: binding.mode,
+      workspace_root: binding.workspace_root,
+      package_revision_sha256: binding.package_revision_sha256,
+    }
+  }
+  return {
+    protocol: binding.protocol,
+    workspace_root: binding.workspace.root,
+    package_revision_sha256: binding.package_revision_sha256,
+    runtime_descriptor_sha256: binding.runtime_descriptor_sha256,
+    runtime_identity_sha256: binding.runtime_identity_sha256,
+    network: binding.network,
+    resources: binding.resources,
+  }
+}
+
+function isTaskCreationIdentityCollision(error: unknown): boolean {
+  return isSqliteUniqueConstraintError(error)
+}
+
+function requestAcceptedTaskReconciliation(taskID: string): string {
+  beforeAcceptedReconciliationForTest?.(taskID)
+  requestTaskControlScanInBackground(taskID, "task-create-accepted")
+  return taskID
 }
 
 export namespace EngineService {
@@ -1647,12 +1798,50 @@ export namespace EngineService {
     }
   }
 
-  export async function createTask(raw: z.input<typeof CreateTaskInput>, rawCreator: z.input<typeof TaskCreator>) {
+  export async function createTask(
+    raw: z.input<typeof CreateTaskInput>,
+    rawCreator: z.input<typeof TaskCreator>,
+    creationSeed?: TaskCreationSeed,
+  ) {
+    const creator = await resolveTaskCreator(rawCreator)
+    const { input, caller, artifactImporter } = preflightTaskCreation(raw, creator)
+    return createTaskInExecutionDirectory(input, caller, creator, artifactImporter, creationSeed)
+  }
+
+  /**
+   * Pure creation semantics shared by every Task entry before an owner may
+   * reserve an aggregate. The caller supplies an already resolved creator;
+   * this function performs no persistence, Project allocation or mutable
+   * package/config resolution.
+   */
+  export function preflightTaskCreation(
+    raw: z.input<typeof CreateTaskInput>,
+    creator: ResolvedTaskCreationAuthority,
+    options?: { globalRequestID?: string },
+  ) {
     const parsed = CreateTaskInput.parse(raw)
     assertNoCallerSuppliedChildTaskLineage(parsed)
     assertNoCallerSuppliedTaskCreatorMetadata(parsed.metadata)
-    const creator = await resolveTaskCreator(rawCreator)
     assertTaskCreatorExpertSquadAuthority({ creator, promptProfile: parsed.promptProfile })
+    const caller: TaskCreationCallerInput = creator.actor !== "user" && creator.toolInput
+      ? panelTaskCreationCallerInput(creator.toolInput, taskCreationRequestAttachments(parsed.attachments))
+      : {
+          project: parsed.project,
+          directory: parsed.directory,
+          source: parsed.source,
+          productPillar: parsed.productPillar,
+          title: parsed.title,
+          request: parsed.request,
+          attachments: taskCreationRequestAttachments(parsed.attachments),
+          priority: parsed.priority,
+          budget: parsed.budget,
+          checks: parsed.checks,
+          metadata: parsed.metadata,
+          model: parsed.model,
+          promptProfile: parsed.promptProfile,
+          expectedPackageDigest: parsed.expectedPackageDigest,
+          artifactSources: parsed.artifactSources,
+        }
     const input = CreateTaskInput.parse({
       ...parsed,
       ...(creator.actor === "mission" ? { source: "mission" } : {}),
@@ -1672,24 +1861,48 @@ export namespace EngineService {
             }
           })()
         : undefined
-    return withTaskCreationOwnerLock(input, () => createTaskInExecutionDirectory(input, creator, artifactImporter))
+    if (options?.globalRequestID) {
+      assertGlobalTaskChannelClaimAvailable({
+        requestID: options.globalRequestID,
+        channelBinding: input.channelBinding,
+      })
+    }
+    return { input, caller, artifactImporter }
+  }
+
+  /** Freeze every Global Task semantic that can be decided without creating
+   * its carrying Project. The returned package/check/process snapshot is
+   * persisted with the allocation and reused by Task acceptance. */
+  export async function preflightGlobalTaskCreation(input: {
+    raw: z.input<typeof CreateTaskInput>
+    requestID: string
+    configSnapshot: Config.Info
+  }) {
+    const preflight = preflightTaskCreation(input.raw, { actor: "user" }, { globalRequestID: input.requestID })
+    const taskResolution = await resolveTaskCreationResolution({
+      task: preflight.input,
+      configSnapshot: input.configSnapshot,
+      scope: "global",
+    })
+    return { ...preflight, taskResolution }
   }
 
   async function createTaskInExecutionDirectory(
     input: z.infer<typeof CreateTaskInput>,
+    caller: TaskCreationCallerInput,
     creator: ResolvedTaskCreationAuthority,
     artifactImporter?: CrossTaskArtifactImporter,
+    creationSeed?: TaskCreationSeed,
   ) {
     const creationContext = {
       capabilityProjectDirectory: Instance.project.worktree,
-      taskConfigSnapshot: await EffectiveConfig.snapshotCurrent(),
-    }
-    if (!input.model) {
-      await resolveConfiguredModelRef()
+      taskConfigSnapshot: creationSeed?.taskConfigSnapshot ?? (await EffectiveConfig.snapshotCurrent()),
+      taskResolution: creationSeed?.taskResolution,
+      acceptanceCommit: creationSeed?.acceptanceCommit,
     }
     const directory = Filesystem.resolve(input.directory ?? Instance.directory)
     if (Project.samePath(directory, Instance.directory)) {
-      return createTaskInner(input, creator, { ...creationContext, artifactImporter })
+      return createTaskInner(input, caller, creator, { ...creationContext, artifactImporter })
     }
 
     const projectID = Instance.project.id
@@ -1705,7 +1918,7 @@ export namespace EngineService {
               `Task execution directory ${directory} resolved project ${Instance.project.id}, expected ${projectID}`,
             )
           }
-          return createTaskInner(input, creator, { ...creationContext, artifactImporter })
+          return createTaskInner(input, caller, creator, { ...creationContext, artifactImporter })
         },
       })
     })
@@ -1713,14 +1926,35 @@ export namespace EngineService {
 
   async function createTaskInner(
     input: z.infer<typeof CreateTaskInput>,
+    caller: TaskCreationCallerInput,
     creator: ResolvedTaskCreationAuthority,
     creationContext: {
       capabilityProjectDirectory: string
       taskConfigSnapshot: Config.Info
       artifactImporter?: CrossTaskArtifactImporter
+      taskResolution?: Record<string, unknown> | null
+      acceptanceCommit?: TaskCreationSeed["acceptanceCommit"]
     },
   ) {
     assertCurrentMissionTaskCreationAuthority(creator)
+    const title = resolveTaskTitle(input)
+    const requestID = input.requestID?.trim() || undefined
+    const requestFact = buildTaskCreationRequestFact({
+      creatorToolPartID: creator.actor === "user" ? undefined : creator.toolPartID,
+      request: taskCreationCallerRequest({
+        caller,
+        creator: taskCreatorCreationEnvelope(creator),
+      }),
+    })
+    const claims: TaskCreationClaims = {
+      projectID: Instance.project.id,
+      ...(requestID ? { requestID } : {}),
+      ...(input.channelBinding ? { channelBinding: input.channelBinding } : {}),
+      ...(requestFact.creatorToolPartID ? { creatorToolPartID: requestFact.creatorToolPartID } : {}),
+    }
+    const replay = resolveTaskCreationClaims({ claims, fact: requestFact })
+    if (replay) return requestAcceptedTaskReconciliation(replay)
+
     await prepareProject(input.project)
     const resolvedArtifactSources =
       input.artifactSources && input.artifactSources.length > 0
@@ -1732,97 +1966,30 @@ export namespace EngineService {
         : { imports: [], authorities: [] }
     const artifactImports = importsFromResolvedCrossTaskArtifactSources(resolvedArtifactSources)
     const taskConfigSnapshot = creationContext.taskConfigSnapshot
-    const selectedProfileID = selectedTaskProfileID(input, taskConfigSnapshot)
-    const existingBindingTask = existingTaskByChannelBinding(input.channelBinding)
-    if (existingBindingTask) {
-      const existing = findTask(existingBindingTask)
-      if (!existing || existing.product_pillar !== input.productPillar) {
-        throw new Error(`Channel-bound Task ${existingBindingTask} already exists with a different product pillar`)
+    let frozenResolution = creationContext.taskResolution
+      ? TaskCreationResolutionSeedSchema.parse(creationContext.taskResolution)
+      : undefined
+    if (frozenResolution) {
+      if (frozenResolution.selected_profile_id !== selectedTaskProfileID(input, taskConfigSnapshot)) {
+        throw new Error("Global Task resolution conflicts with its immutable configuration snapshot")
       }
-      const committedImports = importsFromMappings(listCrossTaskArtifactImportMappings(existingBindingTask))
-      if (!sameCrossTaskArtifactImportSet(artifactImports, committedImports)) {
-        throw new Error(
-          `Channel-bound Task ${existingBindingTask} already exists with a different exact Artifact import set`,
-        )
-      }
-      await assertTaskCreationReplayMatches({
-        taskID: existingBindingTask,
-        identityKind: "channel",
-        identity: `${input.channelBinding!.platform}/${input.channelBinding!.channel}/${input.channelBinding!.thread}`,
-        selectedProfileID,
-        expectedPackageDigest: input.expectedPackageDigest,
+    } else {
+      const candidate = await resolveTaskCreationResolution({
+        task: input,
+        configSnapshot: taskConfigSnapshot,
+        scope: "project",
+        projectDirectory: creationContext.capabilityProjectDirectory,
       })
-      assertCurrentMissionTaskCreationAuthority(creator)
-      await dispatchPersistedTaskLoop(existingBindingTask, requireTaskCreationIngressID(existingBindingTask))
-      return existingBindingTask
+      frozenResolution = candidate
     }
-    const requestID = input.requestID?.trim() || undefined
-    if (requestID) {
-      const existing = findTaskByRequest(Instance.project.id, requestID)
-      if (existing) {
-        if (existing.product_pillar !== input.productPillar) {
-          throw new Error(
-            `Task request ${requestID} already committed as ${existing.id} with a different product pillar`,
-          )
-        }
-        const committedImports = importsFromMappings(listCrossTaskArtifactImportMappings(existing.id))
-        if (!sameCrossTaskArtifactImportSet(artifactImports, committedImports)) {
-          throw new TaskArtifactImportIdempotencyConflictError({
-            message: `Task request ${requestID} already committed as ${existing.id} with a different exact Artifact import set`,
-            requestID,
-            taskID: existing.id,
-          })
-        }
-        await assertTaskCreationReplayMatches({
-          taskID: existing.id,
-          identityKind: "request",
-          identity: requestID,
-          selectedProfileID,
-          expectedPackageDigest: input.expectedPackageDigest,
-        })
-        assertCurrentMissionTaskCreationAuthority(creator)
-        await dispatchPersistedTaskLoop(existing.id, requireTaskCreationIngressID(existing.id))
-        return existing.id
-      }
-    }
+    const selectedProfileID = frozenResolution.selected_profile_id
+    const packageRevision = frozenResolution.package_revision
+    const resolvedChecks = frozenResolution.resolved_checks
+    const processMode = frozenResolution.process_mode
     const profilePreviewConfig = Config.mergeOverlay(taskConfigSnapshot, {
       ...(input.model ? { model: input.model } : {}),
       prompt_profile: { active: selectedProfileID },
     })
-    const packageRevision = await ExpertSquadInstallLock.run(selectedProfileID, async (lease) => {
-      await ExpertSquadPackageManager.reconcilePendingPackageMutationUnderLease({
-        projectDirectory: creationContext.capabilityProjectDirectory,
-        id: selectedProfileID,
-        lease,
-      })
-      await PromptProfileResolver.assertProfileSupportsProductPillar({
-        projectDirectory: creationContext.capabilityProjectDirectory,
-        profileID: selectedProfileID,
-        productPillar: input.productPillar,
-        config: profilePreviewConfig,
-      })
-      const resolved = await PromptProfileResolver.resolveActivePackageRevision({
-        projectDirectory: creationContext.capabilityProjectDirectory,
-        config: profilePreviewConfig,
-        reconcileEvolutionMutations: false,
-      })
-      if (input.expectedPackageDigest === undefined || input.expectedPackageDigest === resolved.packageDigest) {
-        return resolved
-      }
-      if (resolved.scope !== "built_in") {
-        return PromptProfileResolver.resolveExternalPackageRevisionSnapshot({
-          activeRevision: resolved,
-          expectedPackageDigest: input.expectedPackageDigest,
-        })
-      }
-      throw new TaskExpectedPackageDigestConflictError({
-        message: `Expert squad ${selectedProfileID} resolved package digest ${resolved.packageDigest}, expected ${input.expectedPackageDigest}`,
-        profileID: selectedProfileID,
-        expectedPackageDigest: input.expectedPackageDigest,
-        actualPackageDigest: resolved.packageDigest,
-      })
-    })
-    const title = resolveTaskTitle(input)
     const now = Date.now()
     const taskID = Identifier.ascending("task")
     const attachmentRefs = await materializeApiAttachments({
@@ -1830,7 +1997,6 @@ export namespace EngineService {
       label: `Task ${taskID} attachment`,
       projectID: Instance.project.id,
     })
-    const resolvedChecks = await taskChecks(input.checks)
     const metadata = {
       ...(input.metadata ?? {}),
       ...(Object.keys(resolvedChecks).length > 0 ? { checks: resolvedChecks } : {}),
@@ -1846,18 +2012,52 @@ export namespace EngineService {
     if ((metadata as any)?.web_search === true) {
       overrides.push({ permission: "websearch", pattern: "*", action: "allow" })
     }
-    // Canonicalize uploaded references or materialize API base64 bytes exactly
-    // once, then carry only neutral references through task persistence. The
-    // overlay reads task.attachments directly; domain adapters assign semantics
-    // through explicit contracts.
-    // Materialize the intent bundle on disk before the creation ingress can
-    // wake the Task, so when the orchestrator / planner / architect wake their stage
-    // prompts (which reference the task-scoped intent bundle path) resolve to
-    // a real file. Without this, architect-generated goal objectives like
-    // "see the intent bundle §3" point at nothing — the
-    // executor either misses the reference or hallucinates a body. See
-    // `src/intent/bundle.ts` header for the full rationale.
-    let session!: Session.Info
+    const executionCapsuleBinding = await prepareTaskProcessBinding({
+      mode: processMode,
+      taskID,
+      projectID: Instance.project.id,
+      rootDirectory: Instance.directory,
+      packageRevisionSHA256: packageRevision.packageDigest,
+      timeCreated: now,
+    })
+    const initialSessionConfigOverlay = Config.Overlay.parse({
+      ...(input.model ? { model: input.model } : {}),
+      prompt_profile: {
+        active: input.promptProfile ?? taskConfigSnapshot.prompt_profile.active,
+      },
+    })
+    const session = Session.prepareRootNext({
+      kind: "root",
+      directory: Instance.directory,
+      title,
+      permission: overrides.length > 0 ? overrides : undefined,
+      metadata: {
+        [EffectiveConfig.TASK_SNAPSHOT_KEY]: taskConfigSnapshot,
+        configOverlay: initialSessionConfigOverlay,
+      },
+    })
+    const creationContract = buildTaskCreationContractFact({
+      request: requestFact,
+      resolved: {
+        project_id: Instance.project.id,
+        directory: Instance.directory,
+        source: input.source ?? "api",
+        product_pillar: input.productPillar,
+        title,
+        request: input.request,
+        attachments: attachmentRefs,
+        priority: input.priority ?? "normal",
+        budget: budgetRow(input.budget) ?? null,
+        metadata,
+        effective_model: profilePreviewConfig.model ?? null,
+        prompt_profile_id: selectedProfileID,
+        package_revision: expertSquadPackageRevisionBinding(packageRevision),
+        creation_expected_package_digest: input.expectedPackageDigest ?? null,
+        artifact_imports: artifactImports,
+        process: taskProcessCreationEnvelope(executionCapsuleBinding),
+        creator: taskCreatorCreationEnvelope(creator),
+      },
+    })
     let initialIngressID: string | undefined
     try {
       const preparedArtifactSources =
@@ -1870,46 +2070,6 @@ export namespace EngineService {
               importer: creationContext.artifactImporter!,
             })
           : { imports: [], authorities: [] }
-      const { IntentBundle } = await import("@/intent/bundle")
-      await IntentBundle.write({
-        projectID: Instance.project.id,
-        taskID,
-        request: input.request,
-        attachments: attachmentRefs.length ? attachmentRefs : undefined,
-        source: input.source,
-        createdAt: now,
-      })
-      const executionCapsuleBinding = await prepareTaskProcessBinding({
-        mode: configuredTaskProcessMode(),
-        taskID,
-        projectID: Instance.project.id,
-        rootDirectory: Instance.directory,
-        packageRevisionSHA256: packageRevision.packageDigest,
-        timeCreated: now,
-      })
-
-      // The task's root session: it holds the user's original request and the
-      // pointer engine_task.session_id. Its children are the orchestrator's
-      // own session and each projected agent session.
-      const initialSessionConfigOverlay = Config.Overlay.parse({
-        ...(input.model ? { model: input.model } : {}),
-        prompt_profile: {
-          active: input.promptProfile ?? taskConfigSnapshot.prompt_profile.active,
-        },
-      })
-      // Prepared only: the root Session inserts inside persistTask's
-      // transaction, together with the Task aggregate it belongs to.
-      session = Session.prepareRootNext({
-        kind: "root",
-        directory: Instance.directory,
-        title,
-        permission: overrides.length > 0 ? overrides : undefined,
-        metadata: {
-          [EffectiveConfig.TASK_SNAPSHOT_KEY]: taskConfigSnapshot,
-          configOverlay: initialSessionConfigOverlay,
-        },
-      })
-
       // Task row, target-owned imports, and initial Engine facts commit together
       // only after every imported resource snapshot is durable.
       await beforeTaskPersistForTest?.({ taskID, creator })
@@ -1933,48 +2093,25 @@ export namespace EngineService {
         packageRevision,
         creationExpectedPackageDigest: input.expectedPackageDigest,
         executionCapsuleBinding,
+        creationContract,
+        acceptanceCommit: creationContext.acceptanceCommit
+          ? (db) =>
+              creationContext.acceptanceCommit!(db, {
+                taskID,
+                projectID: Instance.project.id,
+                acceptedAt: now,
+              })
+          : undefined,
       })
     } catch (error) {
-      let cleanupReceipt: RejectedTaskPreparationCleanupReceipt
-      try {
-        cleanupReceipt = await removeRejectedTaskPreparation({
-          projectDirectory: Instance.directory,
-          taskID,
-        })
-      } catch (cleanupError) {
-        throw new AggregateError(
-          [error, cleanupError],
-          `Task ${taskID} creation failed before commit and its prepared managed root cleanup also failed`,
-          { cause: error },
-        )
-      }
-      await afterRejectedTaskPreparationCleanupForTest?.(cleanupReceipt)
-      const existing = requestID ? recoverTaskByRequest(requestID, error) : undefined
-      if (existing) {
-        const committedImports = importsFromMappings(listCrossTaskArtifactImportMappings(existing))
-        if (!sameCrossTaskArtifactImportSet(artifactImports, committedImports)) {
-          throw new TaskArtifactImportIdempotencyConflictError({
-            message: `Task request ${requestID} already committed as ${existing} with a different exact Artifact import set`,
-            requestID: requestID!,
-            taskID: existing,
-          })
-        }
-        await assertTaskCreationReplayMatches({
-          taskID: existing,
-          identityKind: "request",
-          identity: requestID!,
-          selectedProfileID,
-          expectedPackageDigest: input.expectedPackageDigest,
-        })
-        assertCurrentMissionTaskCreationAuthority(creator)
-        await dispatchPersistedTaskLoop(existing, requireTaskCreationIngressID(existing))
-        return existing
+      if (isTaskCreationIdentityCollision(error)) {
+        const winner = resolveTaskCreationClaims({ claims, fact: creationContract })
+        if (winner) return requestAcceptedTaskReconciliation(winner)
       }
       throw error
     }
     if (!initialIngressID) throw new Error(`Task ${taskID} committed without its durable creation ingress`)
-    await dispatchPersistedTaskLoop(taskID, initialIngressID)
-    return taskID
+    return requestAcceptedTaskReconciliation(taskID)
   }
 
   export function getCrossTaskArtifactImportMappings(taskID: string) {
@@ -2282,7 +2419,7 @@ export namespace EngineService {
   export async function deleteTask(taskID: string, options?: DestructiveTaskOptions) {
     const deleted = Database.use((db) => {
       const row = db
-        .select({ projectID: EngineTaskTable.project_id })
+        .select()
         .from(EngineTaskTable)
         .where(eq(EngineTaskTable.id, taskID))
         .get()
@@ -2291,11 +2428,14 @@ export namespace EngineService {
     if (deleted) {
       const currentProjectID = Instance.current()?.project.id
       if (
-        (options?.projectID && deleted.projectID !== options.projectID) ||
-        (currentProjectID && deleted.projectID !== currentProjectID)
+        (options?.projectID && deleted.project_id !== options.projectID) ||
+        (currentProjectID && deleted.project_id !== currentProjectID)
       ) {
         throw new NotFoundError({ message: `Task not found: ${taskID}` })
       }
+      // The tombstone is the durable owner. A prior post-commit filesystem
+      // failure must converge when the operator repeats the same deletion.
+      await removeTombstonedIntentProjections([taskCleanupTarget(deleted)])
       return true
     }
     let task = requireTaskInCurrentProject(taskID)
@@ -2342,14 +2482,8 @@ export namespace EngineService {
       // creation input, Session/Message graph, effects, lifecycle, interactions,
       // progress and Artifacts remain one replayable fact graph; ordinary
       // queries hide the aggregate by reducing the tombstone.
-      const cleanupTargets = [
-        {
-          taskID: task.id,
-          projectDirectory: taskPrimaryProjectRoot(task.id, { activeProjectID: task.project_id }),
-          cleanupOwners: buildObservationCleanupRowsForTask(task.id),
-        },
-      ]
-      await settleTaskCleanupOwners(cleanupTargets)
+      const cleanupTarget = taskCleanupTarget(task)
+      await settleTaskCleanupOwners([cleanupTarget])
       Database.immediateTransaction((db) => {
         assertTasksRemainTerminalForPhysicalDelete(db, [task])
         deadLetterSchedulerTaskDeliveriesInTransaction(db, {
@@ -2364,6 +2498,7 @@ export namespace EngineService {
         })
         appendTaskDeletedBoundaryInTransaction(db, task)
       })
+      await removeTombstonedIntentProjections([cleanupTarget])
       return true
     } finally {
       destructiveScope.close()
@@ -2489,59 +2624,6 @@ export namespace EngineService {
     await publication
     return true
   }
-}
-
-function recoverTaskByRequest(requestID: string, error: unknown) {
-  const message = error instanceof Error ? error.message : String(error)
-  if (!message.includes("UNIQUE constraint failed")) return
-  if (!message.includes("engine_task.project_id, engine_task.request_id")) return
-  return findTaskByRequest(Instance.project.id, requestID)?.id
-}
-
-function existingTaskByChannelBinding(
-  binding:
-    | {
-        platform: string
-        channel: string
-        thread: string
-      }
-    | undefined,
-) {
-  if (!binding) return
-  const row = Database.use((db) =>
-    db
-      .select({ task_id: EngineChannelBindingTable.task_id, project_id: EngineTaskTable.project_id })
-      .from(EngineChannelBindingTable)
-      .innerJoin(EngineTaskTable, eq(EngineTaskTable.id, EngineChannelBindingTable.task_id))
-      .where(
-        and(
-          eq(EngineChannelBindingTable.platform, binding.platform),
-          eq(EngineChannelBindingTable.channel, binding.channel),
-          eq(EngineChannelBindingTable.thread, binding.thread),
-        ),
-      )
-      .get(),
-  )
-  if (!row) return
-  if (row.project_id === "global") {
-    throw new TaskGlobalProjectBindingError({
-      message: `Channel binding ${binding.platform}/${binding.channel}/${binding.thread} points to task ${row.task_id} bound to project global. Task execution requires a concrete Git project.`,
-      taskID: row.task_id,
-      projectID: row.project_id,
-    })
-  }
-  if (row.project_id !== Instance.project.id) {
-    throw new TaskChannelBindingProjectConflictError({
-      message: `Channel binding ${binding.platform}/${binding.channel}/${binding.thread} points to task ${row.task_id} in project ${row.project_id}, but the active project is ${Instance.project.id}.`,
-      platform: binding.platform,
-      channel: binding.channel,
-      thread: binding.thread,
-      taskID: row.task_id,
-      projectID: row.project_id,
-      activeProjectID: Instance.project.id,
-    })
-  }
-  return row.task_id
 }
 
 export namespace EngineService {
@@ -3067,7 +3149,6 @@ export namespace EngineService {
               cancellationRequest: { eventID: cancellationRequest.id },
               transactionEffect(db) {
                 convergenceOwner.assertInTransaction(db)
-                deleteEngineChannelBindingsForTask(db, taskID)
               },
             },
           ),
@@ -3103,6 +3184,29 @@ export namespace EngineService {
     }
   }
 
+  function boundTaskRowsForSessionsInTransaction(
+    db: Database.TxOrDb,
+    projectID: string,
+    sessionIDs: readonly string[],
+  ): Array<typeof EngineTaskTable.$inferSelect> {
+    const rows: Array<typeof EngineTaskTable.$inferSelect> = []
+    for (let offset = 0; offset < sessionIDs.length; offset += 64) {
+      rows.push(
+        ...db
+          .select()
+          .from(EngineTaskTable)
+          .where(
+            and(
+              eq(EngineTaskTable.project_id, projectID),
+              inArray(EngineTaskTable.session_id, sessionIDs.slice(offset, offset + 64)),
+            ),
+          )
+          .all(),
+      )
+    }
+    return rows
+  }
+
   export async function deleteSession(
     sessionID: string,
     input?: {
@@ -3112,6 +3216,35 @@ export namespace EngineService {
     },
   ) {
     const current = Instance.current()
+    const retainedRetry = Database.use((db) => {
+      const retainedRoot = db
+        .select({ projectID: SessionTable.project_id })
+        .from(SessionTable)
+        .where(eq(SessionTable.id, sessionID))
+        .get()
+      if (!retainedRoot || !Session.deletedInTransaction(db, sessionID)) return undefined
+      if (input?.projectID && retainedRoot.projectID !== input.projectID) return undefined
+      if (current && retainedRoot.projectID !== current.project.id) return undefined
+      const sessionIDs = Session.treeInProjectInTransaction(db, {
+        sessionID,
+        projectID: retainedRoot.projectID,
+        includeDeletedRoot: true,
+      })
+      const tasks = boundTaskRowsForSessionsInTransaction(db, retainedRoot.projectID, sessionIDs)
+      const active = tasks.filter((task) => !taskDeletedInTransaction(db, task.id))
+      if (active.length > 0) {
+        throw new TaskBoundSessionDeletionError({
+          message: `Tombstoned Session ${sessionID} still owns active Task${active.length === 1 ? "" : "s"} ${active.map((task) => task.id).join(", ")}`,
+          sessionID,
+          taskIDs: active.map((task) => task.id),
+        })
+      }
+      return tasks.map(taskCleanupTarget)
+    })
+    if (retainedRetry) {
+      await removeTombstonedIntentProjections(retainedRetry)
+      return true
+    }
     const root = input?.projectID
       ? await Session.getInProject({ sessionID, projectID: input.projectID })
       : current
@@ -3119,14 +3252,7 @@ export namespace EngineService {
         : await Session.get(sessionID)
     const sessionIDs = await Session.treeInProject({ sessionID, projectID: root.projectID })
     const readBoundTasks = (db: Database.TxOrDb) =>
-      projectTaskRowsInTransaction(
-        db,
-        db
-          .select()
-          .from(EngineTaskTable)
-          .where(and(eq(EngineTaskTable.project_id, root.projectID), inArray(EngineTaskTable.session_id, sessionIDs)))
-          .all(),
-      )
+      projectTaskRowsInTransaction(db, boundTaskRowsForSessionsInTransaction(db, root.projectID, sessionIDs))
     const bindingConflict = (tasks: TaskRow[], reason?: string) => {
       const taskIDs = tasks.map((task) => task.id)
       return new TaskBoundSessionDeletionError({
@@ -3196,14 +3322,15 @@ export namespace EngineService {
         await awaitTaskRootIngressSettled(item, CANCEL_INGRESS_SETTLE_INACTIVITY_MS)
       }
     }
-    if (tasksForDelete.length > 0 || root.kind === "mission") {
-      await settleTaskCleanupOwners(
-        tasksForDelete.map((task) => ({
-          taskID: task.id,
-          projectDirectory: taskPrimaryProjectRoot(task.id, { activeProjectID: task.project_id }),
-          cleanupOwners: buildObservationCleanupRowsForTask(task.id),
-        })),
-      )
+    const rootMetadata = root.metadata as Record<string, unknown> | undefined
+    if (
+      tasksForDelete.length > 0 ||
+      root.kind === "mission" ||
+      rootMetadata?.panelCreation !== undefined ||
+      rootMetadata?.globalChatStart !== undefined
+    ) {
+      const cleanupTargets = tasksForDelete.map(taskCleanupTarget)
+      await settleTaskCleanupOwners(cleanupTargets)
       Database.immediateTransaction((db) => {
         assertTasksRemainTerminalForPhysicalDelete(db, tasksForDelete)
         deadLetterSchedulerSessionDeliveriesInTransaction(db, {
@@ -3234,6 +3361,7 @@ export namespace EngineService {
           }),
         )
       })
+      await removeTombstonedIntentProjections(cleanupTargets)
       return true
     }
     await deleteRowsThenTaskArtifacts(tasksForDelete, () => {

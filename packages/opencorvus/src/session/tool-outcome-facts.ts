@@ -1,8 +1,8 @@
 import { PermissionExecutionResultTable } from "@/permission/permission.sql"
 import type { Database } from "@/storage/db"
 import { eq } from "drizzle-orm"
-import { normalizeToolResult } from "./tool-result-normalization"
 import type { ToolOutcomePartData } from "./session.sql"
+import { normalizeToolResult } from "./tool-result-normalization"
 
 /**
  * The canonical string output of a completed tool outcome. A completed outcome
@@ -16,15 +16,20 @@ export function completedToolOutcomeOutput(
   describe: () => string,
 ): string | undefined {
   if (outcome.outcome !== "completed") return undefined
-  if (!outcome.resultAttemptID) return outcome.output
-  const receipt = db
-    .select()
+  if (!("resultAttemptID" in outcome) || !outcome.resultAttemptID) {
+    return "output" in outcome ? outcome.output : undefined
+  }
+  const stored = db
+    .select({ result: PermissionExecutionResultTable.result })
     .from(PermissionExecutionResultTable)
     .where(eq(PermissionExecutionResultTable.attempt_id, outcome.resultAttemptID))
-    .get()
-  if (!receipt) throw new Error(`${describe()} references missing Permission result ${outcome.resultAttemptID}`)
-  const stored = receipt.result as { kind?: string; value?: unknown }
-  if (stored?.kind === "undefined") return ""
-  if (stored?.kind !== "json") throw new Error(`Permission result ${receipt.attempt_id} has an invalid durable result envelope`)
+    .get()?.result as { kind?: string; value?: unknown } | undefined
+  if (!stored) {
+    throw new Error(`${describe()} references missing Permission result ${outcome.resultAttemptID}`)
+  }
+  if (stored.kind === "undefined") return ""
+  if (stored.kind !== "json") {
+    throw new Error(`Permission result ${outcome.resultAttemptID} has an invalid durable result envelope`)
+  }
   return normalizeToolResult(stored.value).output
 }

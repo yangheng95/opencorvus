@@ -199,23 +199,12 @@ export function findMissionDeleteRetention(input: {
 }
 
 function cancellationOrigin(intent: MissionDeleteRetentionIntent): TaskCancellationOrigin {
-  if (intent.provenance.kind === "request") {
-    return {
-      actor: "user",
-      source: "mission.delete",
-      surface: intent.provenance.surface,
-      requestID: intent.requestID,
-      reason: intent.provenance.reason,
-      sessionID: intent.sessionID,
-      missionID: intent.missionID,
-    }
-  }
   return {
-    actor: "mission",
+    actor: "user",
     source: "mission.delete",
-    surface: "runtime",
+    surface: intent.provenance.surface,
     requestID: intent.requestID,
-    reason: `Resume historical Mission delete request ${intent.provenance.sourceEventID}`,
+    reason: intent.provenance.reason,
     sessionID: intent.sessionID,
     missionID: intent.missionID,
   }
