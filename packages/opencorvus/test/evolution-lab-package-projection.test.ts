@@ -5,6 +5,10 @@ import { PromptProfileResolver } from "../src/expert-squad/prompt-profile-resolv
 import { ExpertSquadPackageManager } from "../src/expert-squad/manager"
 import { Instance } from "../src/project/instance"
 import { resetMemoryDatabase, memoryProject } from "./fixture/memory"
+import { MCP } from "../src/mcp"
+import { projectedTaskToolRuntimeBindingOf } from "../src/tool/task-tool-execution-scope"
+import { configureTaskIngressRunner } from "../src/engine/task-root-ingress-delivery"
+import { EngineService } from "../src/task-api"
 
 afterAll(async () => {
   await resetMemoryDatabase()
@@ -74,7 +78,7 @@ describe("Evolution Lab complete package projection", () => {
             installationScope: "project",
             namespace: "builtin",
             id: "evolution-lab",
-            version: "2026.08.30.1",
+            version: "2026.08.30.3",
           },
         })
         const config = Config.mergeOverlay(await EffectiveConfig.snapshotCurrent(), {
@@ -87,7 +91,7 @@ describe("Evolution Lab complete package projection", () => {
         expect(revision).toMatchObject({
           id: "evolution-lab",
           namespace: "builtin",
-          version: "2026.08.30.1",
+          version: "2026.08.30.3",
         })
 
         const scheduler = await PromptProfileResolver.resolveSchedulerCapability({
@@ -124,6 +128,47 @@ describe("Evolution Lab complete package projection", () => {
           expect(worker.packageRevision).toEqual(revision)
           expect(worker.productionSkills.map((grant) => grant.ref)).toEqual(["evolution-lab/shared/campaign"])
           expect(worker.packageTools.map((entry) => entry.ref).sort()).toEqual([...expectedTools])
+        }
+
+        const observer = await PromptProfileResolver.resolveWorkerCapability({
+          projectDirectory: project.path,
+          config,
+          packageRevision: revision,
+          agentID: "evolution-observer",
+        })
+        const exactEntry = observer.packageTools[0]!
+        configureTaskIngressRunner(async () => {})
+        const exactTaskID = await EngineService.createTask(
+          {
+            requestID: "evolution-lab-exact-package-tool",
+            request: "Materialize one exact Evolution Lab package Tool definition",
+            productPillar: "code",
+            model: "firmware/gpt-5",
+            promptProfile: "evolution-lab",
+            expectedPackageDigest: revision.packageDigest,
+          },
+          { actor: "user" },
+        )
+        const owner = MCP.createScopedConnectionOwner("test:evolution-lab-exact-package-tool")
+        try {
+          const exact = await PromptProfileResolver.exactProjectedExtensionTool({
+            capability: observer,
+            providerName: exactEntry.providerName,
+            runtimeTools: {},
+            taskID: exactTaskID,
+            projectDirectory: project.path,
+            toolDirectory: project.path,
+            connectionOwner: owner,
+          })
+          expect(exact).toBeDefined()
+          expect(projectedTaskToolRuntimeBindingOf(exact as object)).toMatchObject({
+            providerKind: "package-tool",
+            providerName: exactEntry.providerName,
+            toolRef: exactEntry.ref,
+            packageRevision: revision,
+          })
+        } finally {
+          await owner.close()
         }
       },
     })

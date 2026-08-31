@@ -4,6 +4,7 @@ import { ConversationCapability } from "@/conversation/capability"
 import { BrowserMCPBuiltin } from "@/mcp/browser/builtin"
 import { Instance } from "@/project/instance"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
+import { prepareConversationMcpCatalog } from "../fixture/conversation-mcp"
 
 afterEach(async () => {
   await Instance.disposeAll()
@@ -46,12 +47,13 @@ describe("the reserved Browser server identity", () => {
           },
         })
 
+        const catalog = await prepareConversationMcpCatalog(config, "chat", "session-disabled-browser")
         expect({
           assignment: ConversationCapability.assignment(config, "chat"),
-          tools: await ConversationCapability.runtimeMcpTools(config, "chat", "session-disabled-browser"),
+          toolNames: catalog.names,
         }).toEqual({
           assignment: { skill_refs: [], mcp_server_refs: [BrowserMCPBuiltin.ServerName] },
-          tools: {},
+          toolNames: [],
         })
       },
     })

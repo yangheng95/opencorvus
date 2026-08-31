@@ -84,7 +84,6 @@ export function createSkillLoaderTool(input: { id: SkillSurfaceToolID; family: S
     }
     const mounted = surface.skills
     const compatible = mounted.filter((skill) => skill.enabled).map((skill) => skill.skill)
-    const disabled = mounted.filter((skill) => !skill.enabled)
 
     const description =
       compatible.length === 0
@@ -97,12 +96,6 @@ export function createSkillLoaderTool(input: { id: SkillSurfaceToolID; family: S
             "Use search before planning when the task may match a specialized workflow. Search is fuzzy across mounted skill names, declared aliases, titles, descriptions, required tool hints, and SKILL.md contents.",
             "",
             `Search output returns up to ${DEFAULT_SKILL_SEARCH_RESULT_LIMIT} names, descriptions, required tool hints, and locations only. Loading by name returns a \`<skill_content name="...">\` block with the full SKILL.md body and sampled bundled file paths. Read those paths through this tool's \`file\` parameter, never through the project \`read\` tool.`,
-            disabled.length > 0
-              ? `${disabled.length} mounted skill(s) are disabled and will not appear in search results.`
-              : "",
-            surface.unmounted_pool_count > 0
-              ? `${surface.unmounted_pool_count} pool skill(s) are unmounted and unavailable to this agent.`
-              : "",
           ].join("\n")
 
     const parameters = z

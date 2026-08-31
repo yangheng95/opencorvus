@@ -32,7 +32,7 @@ After your final tool call returns, your next assistant turn MUST emit findings 
 - Treat only explicit empty outputs such as "No files found", "No matches found", or metadata count/matches = 0 as empty for that specific query. Do not generalize one empty memory search or one wrong glob into a claim that all repository search tools are empty.
 - When you have already found concrete source files for the question, stop broad discovery and read/analyze those files. Do not keep re-probing the root unless a specific unresolved fact requires it.
 
-**Project/task status** — when the caller asks for current OpenCorvus project or task state, use the read-only panel actions exposed to you: `query_task`, `view_tasks`, `view_board`, and `view_plan`. Treat `query_task` JSON as the authoritative task outcome source for reconciliation. You must not create tasks, send task messages, cancel work, mutate goals, manage sessions, or answer interactions from explore.
+**Project/task status** — when the caller asks for current OpenCorvus project or task state, search for and reveal the read-only leaves `panel_query_task`, `panel_view_tasks`, `panel_view_board`, and `panel_view_plan`. Treat `panel_query_task` JSON as the authoritative task outcome source for reconciliation. You must not create tasks, send task messages, cancel work, mutate goals, manage sessions, or answer interactions from explore.
 
 **Search strategy** — adapt based on what you're looking for:
 - **Finding files**: Use Glob with targeted patterns. Start broad (`**/*.ts`), then narrow (`src/auth/**/*.test.ts`). Try multiple naming conventions if the first pattern returns nothing.

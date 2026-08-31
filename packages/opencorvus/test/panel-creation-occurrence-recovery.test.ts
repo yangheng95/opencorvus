@@ -53,14 +53,15 @@ async function persistedPanelWake(action: "wake_mission" | "wake_work", label: s
     request: `Continue the exact ${action} occurrence ${label}`,
     reason: `The request belongs in ${action === "wake_mission" ? "Mission" : "Work"}`,
   }
+  const { action: _action, ...toolInput } = params
   const part = await Session.updatePart({
     id: Identifier.ascending("part"),
     sessionID: caller.id,
     messageID: assistant.id,
     type: "tool",
     callID,
-    tool: "panel",
-    state: { status: "running", input: params, time: { start: now + 1 } },
+    tool: `panel_${action}`,
+    state: { status: "running", input: toolInput, time: { start: now + 1 } },
   })
   if (part.type !== "tool") throw new Error("Panel wake fixture did not persist a Tool Part")
   const panel = await PanelTool.init({ agentID: "chat" })
@@ -71,7 +72,7 @@ async function persistedPanelWake(action: "wake_mission" | "wake_work", label: s
     agent: "chat",
     abort: new AbortController().signal,
     messages: [],
-    executionSurface: Tool.executionSurface(["panel"], []),
+    executionSurface: Tool.executionSurface([`panel_${action}`], []),
     extra: { surface: "right-sidebar" },
     metadata() {},
   })

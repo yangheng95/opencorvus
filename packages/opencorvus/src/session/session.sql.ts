@@ -190,6 +190,11 @@ export const MessageTable = sqliteTable(
   (table) => [
     index("message_session_idx").on(table.session_id),
     index("message_session_time_idx").on(table.session_id, table.time_created),
+    index("message_session_unfinished_assistant_idx")
+      .on(table.session_id, table.time_created, table.id)
+      .where(
+        sql`json_extract(${table.data}, '$.role') = 'assistant' AND json_extract(${table.data}, '$.time.completed') IS NULL`,
+      ),
   ],
 )
 

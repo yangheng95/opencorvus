@@ -1,6 +1,6 @@
 import path from "node:path"
 import { createHash, randomUUID } from "node:crypto"
-import { jsonSchema, tool } from "ai"
+import { jsonSchema, tool, type Tool as AITool } from "ai"
 import z from "zod"
 import {
   DEFAULT_PROMPT_PROFILE_ID,
@@ -37,8 +37,7 @@ import {
   type PackageToolRuntimeBinding,
   type ProjectedTaskToolRuntimeBinding,
 } from "@/tool/task-tool-execution-scope"
-import { assertBuiltInToolProviderClosure, builtInToolProviderState } from "@/tool/global-tools"
-import { assertNoInlineBase64Payload } from "@/util/inline-base64"
+import { builtInToolProviderState } from "@/tool/global-tools"
 import { builtInPackageSources, getLoadedBuiltInPackages } from "./builtin"
 import { executePackageToolInCapsule, introspectPackageToolInCapsule } from "./package-tool-capsule"
 import {
@@ -81,7 +80,7 @@ import {
   compareCanonicalStrings,
   textSHA256,
 } from "./projection-hash"
-import { TASK_ARTIFACT_TOOL_IDS } from "@/tool/tool-id-catalog"
+import { CAPABILITY_SEARCH_TOOL_ID } from "@/tool/capability-search"
 import { ExpertSquadRegistry } from "./registry"
 import {
   materializeExpertSquadCapabilities,
@@ -92,7 +91,7 @@ import { runtimeOverrideLayers } from "@/agent/runtime-override"
 import { sessionRuntimeFromProjectedTemplate, type SessionAgentRuntime } from "@/agent/session-agent-runtime"
 import { configuredProjectedWorkerModelRef } from "@/agent/model"
 import { ExpertSquadConfigurationStore } from "./configuration"
-import { createHarnessProjection } from "@/capability/harness-projection"
+import { createHarnessGrantSet, harnessLeafAccess } from "@/capability/harness-projection"
 import {
   capabilityRef,
   CapabilityRefCodec,
@@ -282,10 +281,23 @@ export namespace PromptProfileResolver {
     )
   }
 
-  function capabilityHarnessRefs(capability: ResolvedSchedulerCapability | ResolvedWorkerCapability) {
+  function capabilityHarnessRefs(
+    capability: ResolvedSchedulerCapability | ResolvedWorkerCapability,
+    projectedToolIDs: readonly string[],
+  ) {
+    const projectedToolIDSet = new Set(projectedToolIDs)
     return {
       tool_refs: [
-        ...harnessRefs("tool", "platform", "tool-registry", capability.builtInToolIDs),
+        ...capability.builtInToolIDs.map((toolID) =>
+          capabilityRef({
+            kind: "tool",
+            source: "platform",
+            owner_ref: projectedToolIDSet.has(toolID)
+              ? `runtime-projection:${capability.identity.agentID}`
+              : "tool-registry",
+            local_ref: toolID,
+          }),
+        ),
         ...harnessRefs(
           "tool",
           "platform",
@@ -356,23 +368,33 @@ export namespace PromptProfileResolver {
     }
   }
 
-  export function schedulerHarnessProjection(input: { taskID: string; capability: ResolvedSchedulerCapability }) {
-    const refs = capabilityHarnessRefs(input.capability)
-    return createHarnessProjection({
+  export function schedulerHarnessGrants(input: {
+    taskID: string
+    capability: ResolvedSchedulerCapability
+    projectedToolIDs: readonly string[]
+  }) {
+    const refs = capabilityHarnessRefs(input.capability, input.projectedToolIDs)
+    return createHarnessGrantSet({
       context: {
         kind: "task_scheduler",
         task_id: input.taskID,
         profile_id: input.capability.expertSquadID,
       },
       owner_revision: input.capability.projectionHash,
-      ...refs,
-      mission_skill_refs: [],
+      grants: Object.values(refs)
+        .flat()
+        .map((ref) => ({ ref, access: harnessLeafAccess(ref) })),
     })
   }
 
-  export function workerHarnessProjection(input: { taskID: string; capability: ResolvedWorkerCapability }) {
-    const refs = capabilityHarnessRefs(input.capability)
-    return createHarnessProjection({
+  export function workerHarnessGrants(input: {
+    taskID: string
+    capability: ResolvedWorkerCapability
+    projectedToolIDs: readonly string[]
+    stageToolIDs: readonly string[]
+  }) {
+    const refs = capabilityHarnessRefs(input.capability, input.projectedToolIDs)
+    return createHarnessGrantSet({
       context: {
         kind: "task_agent",
         task_id: input.taskID,
@@ -380,8 +402,20 @@ export namespace PromptProfileResolver {
         agent_id: input.capability.identity.agentID,
       },
       owner_revision: input.capability.identity.projectionHash,
-      ...refs,
-      mission_skill_refs: [],
+      grants: [
+        ...Object.values(refs)
+          .flat()
+          .map((ref) => ({ ref, access: harnessLeafAccess(ref) })),
+        ...input.stageToolIDs.map((toolID) => {
+          const ref = capabilityRef({
+            kind: "tool" as const,
+            source: "platform" as const,
+            owner_ref: `dispatch-stage:${input.capability.identity.dispatchAdapterID}`,
+            local_ref: toolID,
+          })
+          return { ref, access: harnessLeafAccess(ref) }
+        }),
+      ],
     })
   }
 
@@ -403,11 +437,6 @@ export namespace PromptProfileResolver {
     virtualWorkflows: ExpertSquadRegistry.VirtualWorkflows
     builtInToolIDs: string[]
     projectedToolIDs: string[]
-  }
-
-  export interface ResolvedWorkerRuntimeTools<T> {
-    projectedTools: Record<string, T>
-    stageTools: Record<string, T>
   }
 
   export interface SkillProjectionInput extends ProjectScope {
@@ -860,7 +889,8 @@ export namespace PromptProfileResolver {
   export const defaultMcpToolProviderName = defaultMcpToolProviderNameFromRef
   export const defaultMcpPromptProviderName = defaultMcpPromptProviderNameFromRef
   export const defaultMcpResourceProviderName = defaultMcpResourceProviderNameFromRef
-  const defaultToolNameFromRef = defaultToolNameFromCapabilityRef
+  export const defaultToolRuntimeName = defaultToolNameFromCapabilityRef
+  const defaultToolNameFromRef = defaultToolRuntimeName
 
   function contentDigest(content: string | undefined): string | null {
     return content === undefined ? null : textSHA256(content)
@@ -1167,6 +1197,14 @@ export namespace PromptProfileResolver {
     ])
   }
 
+  export function schedulerRuntimeToolIDs(capability: ResolvedSchedulerCapability): string[] {
+    return activeProjectedSchedulerToolIDs(capability).filter((toolID) => toolID !== CAPABILITY_SEARCH_TOOL_ID)
+  }
+
+  export function workerRuntimeToolIDs(capability: ResolvedWorkerCapability): string[] {
+    return capability.defaultTools.map((entry) => entry.providerName)
+  }
+
   function assertProjectableBuiltInToolIDs(
     toolIDs: Iterable<string>,
     projectableToolIDs: ReadonlySet<string>,
@@ -1180,7 +1218,7 @@ export namespace PromptProfileResolver {
   }
 
   function providerEnvironment(config: ConfigLike) {
-    return { batchToolEnabled: config.experimental?.batch_tool === true }
+    return {}
   }
 
   function expandedProjectedBuiltInToolIDs(input: {
@@ -1202,7 +1240,6 @@ export namespace PromptProfileResolver {
       toolIDs.add(toolID)
     }
     assertProjectableBuiltInToolIDs(toolIDs, input.projectableToolIDs, input.context)
-    assertBuiltInToolProviderClosure(toolIDs, environment, input.context)
     return [...toolIDs]
   }
 
@@ -1884,10 +1921,11 @@ export namespace PromptProfileResolver {
   async function schedulerPackageTools<T>(
     capability: ResolvedSchedulerCapability,
     input: { taskID: string; projectDirectory: string },
+    entries: readonly ResolvedPackageTool[] = capability.packageTools,
   ): Promise<Record<string, T>> {
-    if (capability.builtIn || capability.packageTools.length === 0) return {}
+    if (capability.builtIn || entries.length === 0) return {}
     const result: Record<string, T> = {}
-    for (const packageTool of capability.packageTools) {
+    for (const packageTool of entries) {
       if (Object.hasOwn(result, packageTool.providerName)) {
         throw new Error(`Package tool provider name collision for ${packageTool.ref}: ${packageTool.providerName}`)
       }
@@ -1925,10 +1963,11 @@ export namespace PromptProfileResolver {
       projectDirectory: string
       toolDirectory: string
     },
+    entries: readonly ResolvedPackageTool[] = capability.packageTools,
   ): Promise<Record<string, T>> {
-    if (capability.builtIn || capability.packageTools.length === 0) return {}
+    if (capability.builtIn || entries.length === 0) return {}
     const result: Record<string, T> = {}
-    for (const packageTool of capability.packageTools) {
+    for (const packageTool of entries) {
       if (Object.hasOwn(result, packageTool.providerName)) {
         throw new Error(`Package tool provider name collision for ${packageTool.ref}: ${packageTool.providerName}`)
       }
@@ -1966,171 +2005,6 @@ export namespace PromptProfileResolver {
     return Config.Mcp.parse(config)
   }
 
-  export interface ProjectedMcpPrompt extends Pick<MCP.PromptInfo, "name" | "description" | "arguments"> {
-    ref: string
-    providerName: string
-    source?: string
-    get(args?: Record<string, string>): Promise<MCP.GetPromptResult>
-    getProjectionPayload(args?: Record<string, string>): Promise<MCP.ProjectionPromptPayload>
-  }
-
-  export interface ProjectedMcpResource extends Pick<MCP.ResourceInfo, "name" | "description" | "mimeType"> {
-    ref: string
-    providerName: string
-    source?: string
-    read(): Promise<MCP.ReadResourceResult>
-    readProjectionPayload(): Promise<MCP.ProjectionResourcePayload>
-  }
-
-  async function defaultMcpPromptFromConfig(input: {
-    taskID: string
-    ref: string
-    providerName: string
-    mcpServers: Record<string, Config.Mcp>
-    cwd: string
-    globalMcpTimeout?: number
-  }): Promise<ProjectedMcpPrompt> {
-    const { serverName, promptName } = defaultMcpPromptPartsFromRef(input.ref)
-    const mcp = input.mcpServers[serverName]
-    if (!mcp) throw new Error(`Active expert squad projects missing default MCP server default/mcp/${serverName}.`)
-    return {
-      name: promptName,
-      ref: input.ref,
-      providerName: input.providerName,
-      get: (args?: Record<string, string>) =>
-        MCP.getScopedPrompt({
-          key: input.providerName,
-          mcp,
-          promptName,
-          cwd: input.cwd,
-          globalTimeout: input.globalMcpTimeout,
-          args,
-          processAuthority: MCP.taskProcessAuthority(input.taskID, input.cwd),
-        }),
-      getProjectionPayload: (args?: Record<string, string>) =>
-        MCP.getScopedPromptProjectionPayload({
-          key: input.providerName,
-          mcp,
-          promptName,
-          cwd: input.cwd,
-          globalTimeout: input.globalMcpTimeout,
-          args,
-          processAuthority: MCP.taskProcessAuthority(input.taskID, input.cwd),
-        }),
-    }
-  }
-
-  async function defaultMcpResourceFromConfig(input: {
-    taskID: string
-    ref: string
-    providerName: string
-    mcpServers: Record<string, Config.Mcp>
-    cwd: string
-    globalMcpTimeout?: number
-  }): Promise<ProjectedMcpResource> {
-    const { serverName, resourceName } = defaultMcpResourcePartsFromRef(input.ref)
-    const mcp = input.mcpServers[serverName]
-    if (!mcp) throw new Error(`Active expert squad projects missing default MCP server default/mcp/${serverName}.`)
-    return {
-      name: resourceName,
-      ref: input.ref,
-      providerName: input.providerName,
-      read: () =>
-        MCP.readScopedResource({
-          key: input.providerName,
-          mcp,
-          resourceName,
-          cwd: input.cwd,
-          globalTimeout: input.globalMcpTimeout,
-          processAuthority: MCP.taskProcessAuthority(input.taskID, input.cwd),
-        }),
-      readProjectionPayload: () =>
-        MCP.readScopedResourceProjectionPayload({
-          key: input.providerName,
-          mcp,
-          resourceName,
-          cwd: input.cwd,
-          globalTimeout: input.globalMcpTimeout,
-          processAuthority: MCP.taskProcessAuthority(input.taskID, input.cwd),
-        }),
-    }
-  }
-
-  async function packageMcpPromptFromDefinition(input: {
-    taskID: string
-    cwd: string
-    prepared: ExpertSquadRegistry.PreparedPackageMcpCapability
-    providerName: string
-    globalMcpTimeout?: number
-  }): Promise<ProjectedMcpPrompt> {
-    if (input.prepared.kind !== "prompt") {
-      throw new Error(`Prepared package MCP item ${input.prepared.ref} is not a prompt.`)
-    }
-    const mcp = mcpConfigFromDefinition(input.prepared.declaration.definition)
-    return {
-      name: input.prepared.name,
-      ref: input.prepared.ref,
-      providerName: input.providerName,
-      source: input.prepared.declaration.snapshot.source,
-      get: (args?: Record<string, string>) =>
-        MCP.getScopedPrompt({
-          key: input.providerName,
-          mcp,
-          promptName: input.prepared.name,
-          cwd: input.cwd,
-          globalTimeout: input.globalMcpTimeout,
-          args,
-          processAuthority: MCP.taskProcessAuthority(input.taskID, input.cwd),
-        }),
-      getProjectionPayload: (args?: Record<string, string>) =>
-        MCP.getScopedPromptProjectionPayload({
-          key: input.providerName,
-          mcp,
-          promptName: input.prepared.name,
-          cwd: input.cwd,
-          globalTimeout: input.globalMcpTimeout,
-          args,
-          processAuthority: MCP.taskProcessAuthority(input.taskID, input.cwd),
-        }),
-    }
-  }
-
-  async function packageMcpResourceFromDefinition(input: {
-    taskID: string
-    cwd: string
-    prepared: ExpertSquadRegistry.PreparedPackageMcpCapability
-    providerName: string
-    globalMcpTimeout?: number
-  }): Promise<ProjectedMcpResource> {
-    if (input.prepared.kind !== "resource") {
-      throw new Error(`Prepared package MCP item ${input.prepared.ref} is not a resource.`)
-    }
-    const mcp = mcpConfigFromDefinition(input.prepared.declaration.definition)
-    return {
-      name: input.prepared.name,
-      ref: input.prepared.ref,
-      providerName: input.providerName,
-      source: input.prepared.declaration.snapshot.source,
-      read: () =>
-        MCP.readScopedResource({
-          key: input.providerName,
-          mcp,
-          resourceName: input.prepared.name,
-          cwd: input.cwd,
-          globalTimeout: input.globalMcpTimeout,
-          processAuthority: MCP.taskProcessAuthority(input.taskID, input.cwd),
-        }),
-      readProjectionPayload: () =>
-        MCP.readScopedResourceProjectionPayload({
-          key: input.providerName,
-          mcp,
-          resourceName: input.prepared.name,
-          cwd: input.cwd,
-          globalTimeout: input.globalMcpTimeout,
-          processAuthority: MCP.taskProcessAuthority(input.taskID, input.cwd),
-        }),
-    }
-  }
 
   async function packageMcpToolFromDefinition(input: {
     packageID: string
@@ -2144,7 +2018,7 @@ export namespace PromptProfileResolver {
     if (input.prepared.kind !== "tool") {
       throw new Error(`Prepared package MCP item ${input.prepared.ref} is not a tool.`)
     }
-    const rawTool = await MCP.scopedTool({
+    const rawTool = await MCP.exactScopedTool({
       key: input.providerName,
       mcp: mcpConfigFromDefinition(input.prepared.declaration.definition),
       toolName: input.prepared.name,
@@ -2199,27 +2073,6 @@ export namespace PromptProfileResolver {
     return bindProjectedTaskToolRuntime(runtimeTool, input.binding)
   }
 
-  function defaultToolsFromRuntimeMap<T>(input: {
-    tools: Record<string, T>
-    entries: readonly ResolvedProviderRef[]
-    context: string
-  }): Record<string, T> {
-    const result: Record<string, T> = {}
-    for (const entry of input.entries) {
-      if (Object.hasOwn(result, entry.providerName)) {
-        throw new Error(`${input.context} default tool provider name collision for ${entry.ref}: ${entry.providerName}`)
-      }
-      const runtimeToolName = defaultToolNameFromRef(entry.ref)
-      if (!Object.hasOwn(input.tools, runtimeToolName)) {
-        throw new Error(
-          `${input.context} projects default tool ${entry.ref}, but runtime tool ${runtimeToolName} is not available.`,
-        )
-      }
-      result[entry.providerName] = input.tools[runtimeToolName]!
-    }
-    return result
-  }
-
   async function defaultMcpToolFromConfig(input: {
     ref: string
     providerName: string
@@ -2242,7 +2095,7 @@ export namespace PromptProfileResolver {
           )
         : configuredMcp
     if (!mcp) throw new Error(`Active expert squad projects missing default MCP server default/mcp/${serverName}.`)
-    const rawTool = await MCP.scopedTool({
+    const rawTool = await MCP.exactScopedTool({
       key: input.providerName,
       mcp,
       toolName,
@@ -2300,150 +2153,15 @@ export namespace PromptProfileResolver {
     return bindProjectedTaskToolRuntime(runtimeTool, input.binding)
   }
 
-  async function defaultMcpTools<T>(input: {
-    entries: readonly ResolvedProviderRef[]
-    mcpServers: Record<string, Config.Mcp>
-    cwd: string
-    context: string
-    bindingFor: (entry: ResolvedProviderRef) => ProjectedTaskToolRuntimeBinding
-    connectionOwner: MCP.ScopedConnectionOwner
-    globalMcpTimeout?: number
-  }): Promise<Record<string, T>> {
-    const result: Record<string, T> = {}
-    for (const entry of input.entries) {
-      if (Object.hasOwn(result, entry.providerName)) {
-        throw new Error(
-          `${input.context} default MCP tool provider name collision for ${entry.ref}: ${entry.providerName}`,
-        )
-      }
-      result[entry.providerName] = (await defaultMcpToolFromConfig({
-        ref: entry.ref,
-        providerName: entry.providerName,
-        mcpServers: input.mcpServers,
-        cwd: input.cwd,
-        binding: input.bindingFor(entry),
-        connectionOwner: input.connectionOwner,
-        globalMcpTimeout: input.globalMcpTimeout,
-      })) as T
-    }
-    return result
-  }
-
-  async function defaultMcpPrompts(input: {
-    taskID: string
-    entries: readonly ResolvedProviderRef[]
-    mcpServers: Record<string, Config.Mcp>
-    cwd: string
-    context: string
-    globalMcpTimeout?: number
-  }): Promise<Record<string, ProjectedMcpPrompt>> {
-    const result: Record<string, ProjectedMcpPrompt> = {}
-    for (const entry of input.entries) {
-      if (Object.hasOwn(result, entry.providerName)) {
-        throw new Error(
-          `${input.context} default MCP prompt provider name collision for ${entry.ref}: ${entry.providerName}`,
-        )
-      }
-      result[entry.providerName] = await defaultMcpPromptFromConfig({
-        ref: entry.ref,
-        taskID: input.taskID,
-        providerName: entry.providerName,
-        mcpServers: input.mcpServers,
-        cwd: input.cwd,
-        globalMcpTimeout: input.globalMcpTimeout,
-      })
-    }
-    return result
-  }
-
-  async function defaultMcpResources(input: {
-    taskID: string
-    entries: readonly ResolvedProviderRef[]
-    mcpServers: Record<string, Config.Mcp>
-    cwd: string
-    context: string
-    globalMcpTimeout?: number
-  }): Promise<Record<string, ProjectedMcpResource>> {
-    const result: Record<string, ProjectedMcpResource> = {}
-    for (const entry of input.entries) {
-      if (Object.hasOwn(result, entry.providerName)) {
-        throw new Error(
-          `${input.context} default MCP resource provider name collision for ${entry.ref}: ${entry.providerName}`,
-        )
-      }
-      result[entry.providerName] = await defaultMcpResourceFromConfig({
-        ref: entry.ref,
-        taskID: input.taskID,
-        providerName: entry.providerName,
-        mcpServers: input.mcpServers,
-        cwd: input.cwd,
-        globalMcpTimeout: input.globalMcpTimeout,
-      })
-    }
-    return result
-  }
-
-  type PackageMcpProjectionCapability = {
-    builtIn: boolean
-    expertSquadID: string
-    globalMcpTimeout?: number
-  }
-
-  async function packageMcpPrompts(input: {
-    taskID: string
-    capability: PackageMcpProjectionCapability
-    entries: readonly ResolvedPackageMcpRef[]
-    cwd: string
-    context: string
-  }): Promise<Record<string, ProjectedMcpPrompt>> {
-    if (input.capability.builtIn || input.entries.length === 0) return {}
-    const result: Record<string, ProjectedMcpPrompt> = {}
-    for (const entry of input.entries) {
-      if (Object.hasOwn(result, entry.providerName)) {
-        throw new Error(`Package MCP prompt provider name collision for ${entry.ref}: ${entry.providerName}`)
-      }
-      result[entry.providerName] = await packageMcpPromptFromDefinition({
-        cwd: input.cwd,
-        taskID: input.taskID,
-        prepared: entry.prepared,
-        providerName: entry.providerName,
-        globalMcpTimeout: input.capability.globalMcpTimeout,
-      })
-    }
-    return result
-  }
-
-  async function packageMcpResources(input: {
-    taskID: string
-    capability: PackageMcpProjectionCapability
-    entries: readonly ResolvedPackageMcpRef[]
-    cwd: string
-    context: string
-  }): Promise<Record<string, ProjectedMcpResource>> {
-    if (input.capability.builtIn || input.entries.length === 0) return {}
-    const result: Record<string, ProjectedMcpResource> = {}
-    for (const entry of input.entries) {
-      if (Object.hasOwn(result, entry.providerName)) {
-        throw new Error(`Package MCP resource provider name collision for ${entry.ref}: ${entry.providerName}`)
-      }
-      result[entry.providerName] = await packageMcpResourceFromDefinition({
-        cwd: input.cwd,
-        taskID: input.taskID,
-        prepared: entry.prepared,
-        providerName: entry.providerName,
-        globalMcpTimeout: input.capability.globalMcpTimeout,
-      })
-    }
-    return result
-  }
 
   async function schedulerPackageMcpTools<T>(
     capability: ResolvedSchedulerCapability,
     input: { taskID: string; projectDirectory: string; connectionOwner: MCP.ScopedConnectionOwner },
+    entries: readonly ResolvedPackageMcpRef[] = capability.packageMcpTools,
   ): Promise<Record<string, T>> {
-    if (capability.builtIn || capability.packageMcpTools.length === 0) return {}
+    if (capability.builtIn || entries.length === 0) return {}
     const result: Record<string, T> = {}
-    for (const entry of capability.packageMcpTools) {
+    for (const entry of entries) {
       if (Object.hasOwn(result, entry.providerName)) {
         throw new Error(`Package MCP tool provider name collision for ${entry.ref}: ${entry.providerName}`)
       }
@@ -2477,10 +2195,11 @@ export namespace PromptProfileResolver {
       toolDirectory: string
       connectionOwner: MCP.ScopedConnectionOwner
     },
+    entries: readonly ResolvedPackageMcpRef[] = capability.packageMcpTools,
   ): Promise<Record<string, T>> {
-    if (capability.builtIn || capability.packageMcpTools.length === 0) return {}
+    if (capability.builtIn || entries.length === 0) return {}
     const result: Record<string, T> = {}
-    for (const entry of capability.packageMcpTools) {
+    for (const entry of entries) {
       if (Object.hasOwn(result, entry.providerName)) {
         throw new Error(`Package MCP tool provider name collision for ${entry.ref}: ${entry.providerName}`)
       }
@@ -2506,696 +2225,72 @@ export namespace PromptProfileResolver {
     return result
   }
 
-  function mergeMcpProjectionMap<T>(
-    defaults: Record<string, T>,
-    packageItems: Record<string, T>,
-    context: string,
-    kind: string,
-  ): Record<string, T> {
-    const projected: Record<string, T> = { ...defaults }
-    for (const [providerName, item] of Object.entries(packageItems)) {
-      if (Object.hasOwn(projected, providerName)) {
-        throw new Error(
-          `${context} package MCP ${kind} provider name ${JSON.stringify(providerName)} collides with a default MCP ${kind}.`,
-        )
-      }
-      projected[providerName] = item
-    }
-    return projected
-  }
 
-  export async function projectSchedulerMcpPrompts(
-    capability: ResolvedSchedulerCapability,
-    input: { taskID: string; projectDirectory: string },
-  ): Promise<Record<string, ProjectedMcpPrompt>> {
-    const context = `Active expert squad ${JSON.stringify(capability.expertSquadID)}`
-    const defaults =
-      capability.defaultMcpPrompts.length > 0
-        ? await defaultMcpPrompts({
-            entries: capability.defaultMcpPrompts,
-            taskID: input.taskID,
-            mcpServers: capability.defaultMcpServers,
-            cwd: input.projectDirectory,
-            context,
-            globalMcpTimeout: capability.globalMcpTimeout,
-          })
-        : {}
-    const packageItems = await packageMcpPrompts({
-      capability,
-      taskID: input.taskID,
-      entries: capability.packageMcpPrompts,
-      cwd: input.projectDirectory,
-      context: "package MCP prompts",
-    })
-    return mergeMcpProjectionMap(defaults, packageItems, context, "prompt")
-  }
-
-  export async function projectWorkerMcpPrompts(
-    capability: ResolvedWorkerCapability,
-    input: { taskID: string; projectDirectory: string },
-  ): Promise<Record<string, ProjectedMcpPrompt>> {
-    const context = `Active expert squad ${JSON.stringify(capability.expertSquadID)} ${capability.identity.agentID}`
-    const defaults =
-      capability.defaultMcpPrompts.length > 0
-        ? await defaultMcpPrompts({
-            entries: capability.defaultMcpPrompts,
-            taskID: input.taskID,
-            mcpServers: capability.defaultMcpServers,
-            cwd: input.projectDirectory,
-            context,
-            globalMcpTimeout: capability.globalMcpTimeout,
-          })
-        : {}
-    const packageItems = await packageMcpPrompts({
-      capability,
-      taskID: input.taskID,
-      entries: capability.packageMcpPrompts,
-      cwd: input.projectDirectory,
-      context: "worker package MCP prompts",
-    })
-    return mergeMcpProjectionMap(defaults, packageItems, context, "prompt")
-  }
-
-  export async function projectSchedulerMcpResources(
-    capability: ResolvedSchedulerCapability,
-    input: { taskID: string; projectDirectory: string },
-  ): Promise<Record<string, ProjectedMcpResource>> {
-    const context = `Active expert squad ${JSON.stringify(capability.expertSquadID)}`
-    const defaults =
-      capability.defaultMcpResources.length > 0
-        ? await defaultMcpResources({
-            entries: capability.defaultMcpResources,
-            taskID: input.taskID,
-            mcpServers: capability.defaultMcpServers,
-            cwd: input.projectDirectory,
-            context,
-            globalMcpTimeout: capability.globalMcpTimeout,
-          })
-        : {}
-    const packageItems = await packageMcpResources({
-      capability,
-      taskID: input.taskID,
-      entries: capability.packageMcpResources,
-      cwd: input.projectDirectory,
-      context: "package MCP resources",
-    })
-    return mergeMcpProjectionMap(defaults, packageItems, context, "resource")
-  }
-
-  export async function projectWorkerMcpResources(
-    capability: ResolvedWorkerCapability,
-    input: { taskID: string; projectDirectory: string },
-  ): Promise<Record<string, ProjectedMcpResource>> {
-    const context = `Active expert squad ${JSON.stringify(capability.expertSquadID)} ${capability.identity.agentID}`
-    const defaults =
-      capability.defaultMcpResources.length > 0
-        ? await defaultMcpResources({
-            entries: capability.defaultMcpResources,
-            taskID: input.taskID,
-            mcpServers: capability.defaultMcpServers,
-            cwd: input.projectDirectory,
-            context,
-            globalMcpTimeout: capability.globalMcpTimeout,
-          })
-        : {}
-    const packageItems = await packageMcpResources({
-      capability,
-      taskID: input.taskID,
-      entries: capability.packageMcpResources,
-      cwd: input.projectDirectory,
-      context: "worker package MCP resources",
-    })
-    return mergeMcpProjectionMap(defaults, packageItems, context, "resource")
-  }
-
-  type SanitizedMcpPromptProjection = {
-    description?: string
-    messages: Array<{
-      role: string
-      content:
-        | { type: "text"; text: string; annotations?: SanitizedMcpAnnotations }
-        | { type: "resource_text"; uri?: string; mimeType?: string; text: string }
-        | {
-            type: "resource_link"
-            uri: string
-            name?: string
-            title?: string
-            description?: string
-            mimeType?: string
-            annotations?: SanitizedMcpAnnotations
-            icons?: SanitizedMcpIcon[]
-          }
-    }>
-  }
-
-  type SanitizedMcpResourceProjection = {
-    contents: Array<{ uri: string; mimeType?: string; text: string }>
-  }
-
-  type SanitizedMcpAnnotations = {
-    audience?: Array<"user" | "assistant">
-    priority?: number
-    lastModified?: string
-  }
-
-  type SanitizedMcpIcon = {
-    src: string
-    mimeType?: string
-    sizes?: string[]
-    theme?: "light" | "dark"
-  }
-
-  function stringifySanitizedMcpProjectionPayload(payload: unknown, context: string): string {
-    const text = JSON.stringify(payload, null, 2)
-    if (typeof text !== "string") throw new Error(`${context} returned no JSON-serializable payload.`)
-    return text
-  }
-
-  function requireMcpProjectionRecord(value: unknown, context: string): Record<string, unknown> {
-    if (!value || typeof value !== "object" || Array.isArray(value)) {
-      throw new Error(`${context} returned an invalid MCP projection payload.`)
-    }
-    const record = value as Record<string, unknown>
-    if (Object.hasOwn(record, "_meta")) {
-      throw new Error(`${context} returned MCP _meta; projected context accepts text and link metadata only.`)
-    }
-    return record
-  }
-
-  function requireMcpProjectionString(value: unknown, context: string): string {
-    if (typeof value !== "string") throw new Error(`${context} must be a string.`)
-    assertNoInlineBase64Payload(value, context)
-    return value
-  }
-
-  function optionalMcpProjectionString(value: unknown, context: string): string | undefined {
-    if (value === undefined) return undefined
-    if (typeof value !== "string") throw new Error(`${context} must be a string.`)
-    assertNoInlineBase64Payload(value, context)
-    return value
-  }
-
-  function requireMcpProjectionArray(value: unknown, context: string): unknown[] {
-    if (!Array.isArray(value)) throw new Error(`${context} must be an array.`)
-    return value
-  }
-
-  function assertMcpProjectionFields(
-    record: Record<string, unknown>,
-    allowedFields: readonly string[],
-    context: string,
-  ): void {
-    const allowed = new Set(allowedFields)
-    for (const field of Object.keys(record)) {
-      if (!allowed.has(field)) throw new Error(`${context} contains unsupported field ${JSON.stringify(field)}.`)
-    }
-  }
-
-  function optionalMcpProjectionAnnotations(value: unknown, context: string): SanitizedMcpAnnotations | undefined {
-    if (value === undefined) return undefined
-    const record = requireMcpProjectionRecord(value, context)
-    assertMcpProjectionFields(record, ["audience", "priority", "lastModified"], context)
-    const annotations: SanitizedMcpAnnotations = {}
-    if (record.audience !== undefined) {
-      const audience = requireMcpProjectionArray(record.audience, `${context}.audience`).map((item, index) => {
-        const role = requireMcpProjectionString(item, `${context}.audience[${index}]`)
-        if (role !== "user" && role !== "assistant") {
-          throw new Error(`${context}.audience[${index}] must be user or assistant.`)
-        }
-        return role
-      })
-      annotations.audience = audience
-    }
-    if (record.priority !== undefined) {
-      if (
-        typeof record.priority !== "number" ||
-        !Number.isFinite(record.priority) ||
-        record.priority < 0 ||
-        record.priority > 1
-      ) {
-        throw new Error(`${context}.priority must be a finite number from 0 to 1.`)
-      }
-      annotations.priority = record.priority
-    }
-    const lastModified = optionalMcpProjectionString(record.lastModified, `${context}.lastModified`)
-    if (lastModified !== undefined) annotations.lastModified = lastModified
-    return annotations
-  }
-
-  function optionalMcpProjectionIcons(value: unknown, context: string): SanitizedMcpIcon[] | undefined {
-    if (value === undefined) return undefined
-    return requireMcpProjectionArray(value, context).map((item, index) => {
-      const iconContext = `${context}[${index}]`
-      const record = requireMcpProjectionRecord(item, iconContext)
-      assertMcpProjectionFields(record, ["src", "mimeType", "sizes", "theme"], iconContext)
-      const icon: SanitizedMcpIcon = {
-        src: requireMcpProjectionString(record.src, `${iconContext}.src`),
-      }
-      const mimeType = optionalMcpProjectionString(record.mimeType, `${iconContext}.mimeType`)
-      if (mimeType !== undefined) icon.mimeType = mimeType
-      if (record.sizes !== undefined) {
-        icon.sizes = requireMcpProjectionArray(record.sizes, `${iconContext}.sizes`).map((size, sizeIndex) =>
-          requireMcpProjectionString(size, `${iconContext}.sizes[${sizeIndex}]`),
-        )
-      }
-      const theme = optionalMcpProjectionString(record.theme, `${iconContext}.theme`)
-      if (theme !== undefined) {
-        if (theme !== "light" && theme !== "dark") throw new Error(`${iconContext}.theme must be light or dark.`)
-        icon.theme = theme
-      }
-      return icon
-    })
-  }
-
-  function sanitizeMcpPromptContent(
-    content: unknown,
-    context: string,
-  ): SanitizedMcpPromptProjection["messages"][number]["content"] {
-    const record = requireMcpProjectionRecord(content, context)
-    const type = requireMcpProjectionString(record.type, `${context}.type`)
-    if (type === "text") {
-      assertMcpProjectionFields(record, ["type", "text", "annotations"], context)
-      const annotations = optionalMcpProjectionAnnotations(record.annotations, `${context}.annotations`)
-      return {
-        type,
-        text: requireMcpProjectionString(record.text, `${context}.text`),
-        ...(annotations !== undefined ? { annotations } : {}),
-      }
-    }
-    if (type === "resource") {
-      assertMcpProjectionFields(record, ["type", "resource"], context)
-      const resource = requireMcpProjectionRecord(record.resource, `${context}.resource`)
-      if (Object.hasOwn(resource, "blob")) {
-        throw new Error(`${context}.resource contains binary blob content; projected context accepts text only.`)
-      }
-      assertMcpProjectionFields(resource, ["uri", "mimeType", "text"], `${context}.resource`)
-      return {
-        type: "resource_text",
-        uri: optionalMcpProjectionString(resource.uri, `${context}.resource.uri`),
-        mimeType: optionalMcpProjectionString(resource.mimeType, `${context}.resource.mimeType`),
-        text: requireMcpProjectionString(resource.text, `${context}.resource.text`),
-      }
-    }
-    if (type === "resource_link") {
-      assertMcpProjectionFields(
-        record,
-        ["type", "uri", "name", "title", "description", "mimeType", "annotations", "icons"],
-        context,
-      )
-      const annotations = optionalMcpProjectionAnnotations(record.annotations, `${context}.annotations`)
-      const icons = optionalMcpProjectionIcons(record.icons, `${context}.icons`)
-      return {
-        type,
-        uri: requireMcpProjectionString(record.uri, `${context}.uri`),
-        name: optionalMcpProjectionString(record.name, `${context}.name`),
-        title: optionalMcpProjectionString(record.title, `${context}.title`),
-        description: optionalMcpProjectionString(record.description, `${context}.description`),
-        mimeType: optionalMcpProjectionString(record.mimeType, `${context}.mimeType`),
-        ...(annotations !== undefined ? { annotations } : {}),
-        ...(icons !== undefined ? { icons } : {}),
-      }
-    }
-    if (type === "image" || type === "audio") {
-      throw new Error(`${context} contains ${type} content; projected context accepts text and link metadata only.`)
-    }
-    throw new Error(`${context} contains unsupported MCP content type ${JSON.stringify(type)}.`)
-  }
-
-  function sanitizeMcpPromptProjectionPayload(payload: unknown, context: string): SanitizedMcpPromptProjection {
-    const record = requireMcpProjectionRecord(payload, context)
-    assertMcpProjectionFields(record, ["description", "messages"], context)
-    return {
-      description: optionalMcpProjectionString(record.description, `${context}.description`),
-      messages: requireMcpProjectionArray(record.messages, `${context}.messages`).map((message, index) => {
-        const messageContext = `${context}.messages[${index}]`
-        const messageRecord = requireMcpProjectionRecord(message, messageContext)
-        assertMcpProjectionFields(messageRecord, ["role", "content"], messageContext)
-        return {
-          role: requireMcpProjectionString(messageRecord.role, `${messageContext}.role`),
-          content: sanitizeMcpPromptContent(messageRecord.content, `${messageContext}.content`),
-        }
-      }),
-    }
-  }
-
-  function sanitizeMcpResourceProjectionPayload(payload: unknown, context: string): SanitizedMcpResourceProjection {
-    const record = requireMcpProjectionRecord(payload, context)
-    assertMcpProjectionFields(record, ["contents"], context)
-    return {
-      contents: requireMcpProjectionArray(record.contents, `${context}.contents`).map((content, index) => {
-        const contentContext = `${context}.contents[${index}]`
-        const contentRecord = requireMcpProjectionRecord(content, contentContext)
-        if (Object.hasOwn(contentRecord, "blob")) {
-          throw new Error(`${contentContext} contains binary blob content; projected context accepts text only.`)
-        }
-        assertMcpProjectionFields(contentRecord, ["uri", "mimeType", "text"], contentContext)
-        return {
-          uri: requireMcpProjectionString(contentRecord.uri, `${contentContext}.uri`),
-          mimeType: optionalMcpProjectionString(contentRecord.mimeType, `${contentContext}.mimeType`),
-          text: requireMcpProjectionString(contentRecord.text, `${contentContext}.text`),
-        }
-      }),
-    }
-  }
-
-  function renderMcpProjectionBlock(input: {
-    kind: "prompt" | "resource"
-    providerName: string
-    ref: string
-    source?: string
-    payload: unknown
-  }): string {
-    const context = `MCP ${input.kind} ${input.ref}`
-    const payload =
-      input.kind === "prompt"
-        ? sanitizeMcpPromptProjectionPayload(input.payload, context)
-        : sanitizeMcpResourceProjectionPayload(input.payload, context)
-    return [
-      `### MCP ${input.kind}: ${input.providerName}`,
-      "",
-      `ref: ${input.ref}`,
-      ...(input.source ? [`source: ${input.source}`] : []),
-      "",
-      "```json",
-      stringifySanitizedMcpProjectionPayload(payload, context),
-      "```",
-    ].join("\n")
-  }
-
-  async function renderProjectedMcpContext(input: {
-    prompts: Record<string, ProjectedMcpPrompt>
-    resources: Record<string, ProjectedMcpResource>
-  }): Promise<string | undefined> {
-    return MCP.withScopedConnectionPool(async () => {
-      const promptEntries = Object.entries(input.prompts)
-      const resourceEntries = Object.entries(input.resources)
-      if (promptEntries.length === 0 && resourceEntries.length === 0) return undefined
-      const promptBlocks: string[] = []
-      for (const [providerName, prompt] of promptEntries) {
-        promptBlocks.push(
-          renderMcpProjectionBlock({
-            kind: "prompt",
-            providerName,
-            ref: prompt.ref,
-            source: prompt.source,
-            payload: await prompt.getProjectionPayload({}),
-          }),
-        )
-      }
-      const resourceBlocks: string[] = []
-      for (const [providerName, resource] of resourceEntries) {
-        resourceBlocks.push(
-          renderMcpProjectionBlock({
-            kind: "resource",
-            providerName,
-            ref: resource.ref,
-            source: resource.source,
-            payload: await resource.readProjectionPayload(),
-          }),
-        )
-      }
-      return [
-        "## Projected MCP Context",
-        "",
-        "These MCP prompts and resources are explicitly projected by the active expert-squad capability for this agent. They are loaded from the active/default scoped MCP definitions only.",
-        "",
-        ...promptBlocks,
-        ...resourceBlocks,
-      ].join("\n\n")
-    })
-  }
-
-  async function resolvedMcpPromptContext(input: {
-    taskID: string
+  /** Materialize one exact non-Registry Task projection leaf. */
+  export async function exactProjectedExtensionTool(input: {
     capability: ResolvedSchedulerCapability | ResolvedWorkerCapability
+    providerName: string
+    runtimeTools?: Readonly<Record<string, AITool>>
+    runtimeTool?: (runtimeToolID: string) => AITool | undefined | Promise<AITool | undefined>
+    taskID: string
     projectDirectory: string
-  }): Promise<string | undefined> {
-    if ("scheduler" in input.capability) {
-      return renderProjectedMcpContext({
-        prompts: await projectSchedulerMcpPrompts(input.capability, {
+    toolDirectory: string
+    connectionOwner: MCP.ScopedConnectionOwner
+  }): Promise<AITool | undefined> {
+    const defaultTool = input.capability.defaultTools.find((entry) => entry.providerName === input.providerName)
+    if (defaultTool) {
+      const runtimeName = defaultToolNameFromRef(defaultTool.ref)
+      const exact = input.runtimeTools?.[runtimeName] ?? (await input.runtimeTool?.(runtimeName))
+      if (!exact) {
+        throw new Error(
+          `Active expert squad ${JSON.stringify(input.capability.expertSquadID)} projects default Tool ${defaultTool.ref}, but runtime Tool ${runtimeName} is unavailable.`,
+        )
+      }
+      return exact
+    }
+
+    const packageTool = input.capability.packageTools.find((entry) => entry.providerName === input.providerName)
+    if (packageTool) {
+      const record =
+        "scheduler" in input.capability
+          ? await schedulerPackageTools<AITool>(input.capability, input, [packageTool])
+          : await workerPackageTools<AITool>(input.capability, input, [packageTool])
+      return record[input.providerName]
+    }
+
+    const defaultMcp = input.capability.defaultMcpTools.find((entry) => entry.providerName === input.providerName)
+    if (defaultMcp) {
+      return (await defaultMcpToolFromConfig({
+        ref: defaultMcp.ref,
+        providerName: defaultMcp.providerName,
+        mcpServers: input.capability.defaultMcpServers,
+        cwd: "scheduler" in input.capability ? input.projectDirectory : input.toolDirectory,
+        binding: projectedTaskToolBinding({
+          capability: input.capability,
           taskID: input.taskID,
           projectDirectory: input.projectDirectory,
+          ownerKind: "scheduler" in input.capability ? "projected-scheduler" : "projected-worker",
+          providerKind: "default-mcp-tool",
+          toolRef: defaultMcp.ref,
+          providerName: defaultMcp.providerName,
+          mcpServerConfigSHA256: mcpServerConfigSHA256(
+            input.capability.defaultMcpServers[defaultMcpToolPartsFromRef(defaultMcp.ref).serverName],
+          ),
         }),
-        resources: await projectSchedulerMcpResources(input.capability, {
-          taskID: input.taskID,
-          projectDirectory: input.projectDirectory,
-        }),
-      })
-    }
-    return renderProjectedMcpContext({
-      prompts: await projectWorkerMcpPrompts(input.capability, {
-        taskID: input.taskID,
-        projectDirectory: input.projectDirectory,
-      }),
-      resources: await projectWorkerMcpResources(input.capability, {
-        taskID: input.taskID,
-        projectDirectory: input.projectDirectory,
-      }),
-    })
-  }
-
-  export async function projectOrchestratorTools<T>(
-    tools: Record<string, T>,
-    capability: ResolvedSchedulerCapability,
-    input: {
-      taskID: string
-      projectDirectory: string
-      connectionOwner: MCP.ScopedConnectionOwner
-    },
-  ): Promise<Record<string, T>> {
-    if (!input.taskID.trim()) throw new Error("Orchestrator runtime tool projection requires a nonempty taskID")
-    const projected: Record<string, T> = {}
-    for (const toolID of capability.builtInToolIDs) {
-      if (!Object.hasOwn(tools, toolID)) {
-        throw new Error(
-          `Active expert squad ${JSON.stringify(capability.expertSquadID)} projects Orchestrator tool ${JSON.stringify(
-            toolID,
-          )}, but createOrchestratorTools did not build that tool.`,
-        )
-      }
-      projected[toolID] = tools[toolID]
-    }
-    const defaultTools = defaultToolsFromRuntimeMap<T>({
-      tools,
-      entries: capability.defaultTools,
-      context: `Active expert squad ${JSON.stringify(capability.expertSquadID)}`,
-    })
-    for (const [providerName, defaultTool] of Object.entries(defaultTools)) {
-      if (Object.hasOwn(projected, providerName)) {
-        throw new Error(
-          `Active expert squad ${JSON.stringify(
-            capability.expertSquadID,
-          )} default tool provider name ${JSON.stringify(providerName)} collides with an existing Orchestrator tool.`,
-        )
-      }
-      projected[providerName] = defaultTool
-    }
-    const packageTools = await schedulerPackageTools<T>(capability, input)
-    for (const [providerName, packageTool] of Object.entries(packageTools)) {
-      if (Object.hasOwn(projected, providerName) || Object.hasOwn(tools, providerName)) {
-        throw new Error(
-          `Active expert squad ${JSON.stringify(
-            capability.expertSquadID,
-          )} package tool provider name ${JSON.stringify(providerName)} collides with an existing Orchestrator tool.`,
-        )
-      }
-      projected[providerName] = packageTool
-    }
-    if (capability.defaultMcpTools.length + capability.packageMcpTools.length > 0 && !input.connectionOwner) {
-      throw new Error("Orchestrator MCP tool projection requires a session-scoped connection owner")
-    }
-    if (capability.defaultMcpTools.length > 0) {
-      const defaultMcpRuntimeTools = await defaultMcpTools<T>({
-        entries: capability.defaultMcpTools,
-        mcpServers: capability.defaultMcpServers,
-        cwd: input.projectDirectory,
-        context: `Active expert squad ${JSON.stringify(capability.expertSquadID)}`,
-        bindingFor: (entry) =>
-          projectedTaskToolBinding({
-            capability,
-            taskID: input.taskID,
-            projectDirectory: input.projectDirectory,
-            ownerKind: "projected-scheduler",
-            providerKind: "default-mcp-tool",
-            toolRef: entry.ref,
-            providerName: entry.providerName,
-            mcpServerConfigSHA256: mcpServerConfigSHA256(
-              capability.defaultMcpServers[defaultMcpToolPartsFromRef(entry.ref).serverName],
-            ),
-          }),
         connectionOwner: input.connectionOwner,
-        globalMcpTimeout: capability.globalMcpTimeout,
-      })
-      for (const [providerName, defaultMcpTool] of Object.entries(defaultMcpRuntimeTools)) {
-        if (Object.hasOwn(projected, providerName) || Object.hasOwn(tools, providerName)) {
-          throw new Error(
-            `Active expert squad ${JSON.stringify(
-              capability.expertSquadID,
-            )} default MCP tool provider name ${JSON.stringify(providerName)} collides with an existing Orchestrator tool.`,
-          )
-        }
-        projected[providerName] = defaultMcpTool
-      }
-    }
-    const packageMcpTools = await schedulerPackageMcpTools<T>(capability, input)
-    for (const [providerName, packageMcpTool] of Object.entries(packageMcpTools)) {
-      if (Object.hasOwn(projected, providerName) || Object.hasOwn(tools, providerName)) {
-        throw new Error(
-          `Active expert squad ${JSON.stringify(
-            capability.expertSquadID,
-          )} package MCP tool provider name ${JSON.stringify(providerName)} collides with an existing Orchestrator tool.`,
-        )
-      }
-      projected[providerName] = packageMcpTool
-    }
-    return projected
-  }
-
-  export async function projectWorkerTools<T>(
-    tools: Record<string, T>,
-    capability: ResolvedWorkerCapability,
-    input: {
-      taskID: string
-      projectDirectory: string
-      toolDirectory: string
-      stageOwnedToolIDs: readonly string[]
-      connectionOwner: MCP.ScopedConnectionOwner
-    },
-  ): Promise<ResolvedWorkerRuntimeTools<T>> {
-    if (!input.taskID.trim()) {
-      throw new Error(`Agent ${capability.identity.agentID} runtime tool projection requires a nonempty taskID`)
-    }
-    for (const toolID of TASK_ARTIFACT_TOOL_IDS) {
-      if (Object.hasOwn(tools, toolID)) {
-        throw new Error(
-          `Agent ${capability.identity.agentID} cannot supply reserved Task Artifact transport ${JSON.stringify(
-            toolID,
-          )}; SessionLoop materializes its canonical registry provider.`,
-        )
-      }
-    }
-    const projectedTools: Record<string, T> = {}
-    const stageTools: Record<string, T> = {}
-    const builtInToolIDs = new Set(capability.builtInToolIDs)
-    const defaultToolProviderNames = new Set(capability.defaultTools.map((entry) => entry.providerName))
-    for (const [toolID, item] of Object.entries(tools)) {
-      if (defaultToolProviderNames.has(toolID)) continue
-      if (!builtInToolIDs.has(toolID)) continue
-      projectedTools[toolID] = item
+        globalMcpTimeout: input.capability.globalMcpTimeout,
+      })) as AITool
     }
 
-    const defaultTools = defaultToolsFromRuntimeMap<T>({
-      tools,
-      entries: capability.defaultTools,
-      context: `Active expert squad ${JSON.stringify(capability.expertSquadID)} ${capability.identity.agentID}`,
-    })
-    for (const [providerName, defaultTool] of Object.entries(defaultTools)) {
-      if (Object.hasOwn(projectedTools, providerName)) {
-        throw new Error(
-          `Active expert squad ${JSON.stringify(
-            capability.expertSquadID,
-          )} default tool provider name ${JSON.stringify(providerName)} collides with an existing ${capability.identity.agentID} tool.`,
-        )
-      }
-      projectedTools[providerName] = defaultTool
+    const packageMcp = input.capability.packageMcpTools.find((entry) => entry.providerName === input.providerName)
+    if (packageMcp) {
+      const record =
+        "scheduler" in input.capability
+          ? await schedulerPackageMcpTools<AITool>(input.capability, input, [packageMcp])
+          : await workerPackageMcpTools<AITool>(input.capability, input, [packageMcp])
+      return record[input.providerName]
     }
-    const packageTools = await workerPackageTools<T>(capability, input)
-    for (const [providerName, packageTool] of Object.entries(packageTools)) {
-      if (Object.hasOwn(projectedTools, providerName) || Object.hasOwn(tools, providerName)) {
-        throw new Error(
-          `Active expert squad ${JSON.stringify(
-            capability.expertSquadID,
-          )} package tool provider name ${JSON.stringify(providerName)} collides with an existing ${capability.identity.agentID} tool.`,
-        )
-      }
-      projectedTools[providerName] = packageTool
-    }
-    if (capability.defaultMcpTools.length + capability.packageMcpTools.length > 0 && !input.connectionOwner) {
-      throw new Error(
-        `Agent ${capability.identity.agentID} MCP tool projection requires a session-scoped connection owner`,
-      )
-    }
-    if (capability.defaultMcpTools.length > 0) {
-      const defaultMcpRuntimeTools = await defaultMcpTools<T>({
-        entries: capability.defaultMcpTools,
-        mcpServers: capability.defaultMcpServers,
-        cwd: input.toolDirectory,
-        context: `Active expert squad ${JSON.stringify(capability.expertSquadID)} ${capability.identity.agentID}`,
-        bindingFor: (entry) =>
-          projectedTaskToolBinding({
-            capability,
-            taskID: input.taskID,
-            projectDirectory: input.projectDirectory,
-            ownerKind: "projected-worker",
-            providerKind: "default-mcp-tool",
-            toolRef: entry.ref,
-            providerName: entry.providerName,
-            mcpServerConfigSHA256: mcpServerConfigSHA256(
-              capability.defaultMcpServers[defaultMcpToolPartsFromRef(entry.ref).serverName],
-            ),
-          }),
-        connectionOwner: input.connectionOwner,
-        globalMcpTimeout: capability.globalMcpTimeout,
-      })
-      for (const [providerName, defaultMcpTool] of Object.entries(defaultMcpRuntimeTools)) {
-        if (Object.hasOwn(projectedTools, providerName) || Object.hasOwn(tools, providerName)) {
-          throw new Error(
-            `Active expert squad ${JSON.stringify(
-              capability.expertSquadID,
-            )} default MCP tool provider name ${JSON.stringify(providerName)} collides with an existing ${capability.identity.agentID} tool.`,
-          )
-        }
-        projectedTools[providerName] = defaultMcpTool
-      }
-    }
-    const packageMcpTools = await workerPackageMcpTools<T>(capability, input)
-    for (const [providerName, packageMcpTool] of Object.entries(packageMcpTools)) {
-      if (Object.hasOwn(projectedTools, providerName) || Object.hasOwn(tools, providerName)) {
-        throw new Error(
-          `Active expert squad ${JSON.stringify(
-            capability.expertSquadID,
-          )} package MCP tool provider name ${JSON.stringify(providerName)} collides with an existing ${capability.identity.agentID} tool.`,
-        )
-      }
-      projectedTools[providerName] = packageMcpTool
-    }
-    if (!Array.isArray(input.stageOwnedToolIDs)) {
-      throw new Error(`Agent ${capability.identity.agentID} runtime projection requires explicit stage-owned tool IDs`)
-    }
-    const allowedStageToolIDs = DispatchAdapterContractRegistry.privateStageToolIDSet(
-      capability.identity.dispatchAdapterID,
-    )
-    const seenStageToolIDs = new Set<string>()
-    for (const toolID of input.stageOwnedToolIDs) {
-      if (seenStageToolIDs.has(toolID)) {
-        throw new Error(
-          `Agent ${capability.identity.agentID} repeats stage-owned worker tool ${JSON.stringify(toolID)}`,
-        )
-      }
-      seenStageToolIDs.add(toolID)
-      if (!allowedStageToolIDs.has(toolID)) {
-        throw new Error(
-          `Active expert squad ${JSON.stringify(capability.expertSquadID)} ${capability.identity.agentID} stage-owned worker tool ${JSON.stringify(toolID)} is not part of the ${capability.identity.dispatchAdapterID} dispatch adapter ABI.`,
-        )
-      }
-      if (!Object.hasOwn(tools, toolID)) {
-        throw new Error(
-          `Active expert squad ${JSON.stringify(
-            capability.expertSquadID,
-          )} ${capability.identity.agentID} stage-owned worker tool ${JSON.stringify(toolID)} is not registered in the runtime map.`,
-        )
-      }
-      const stageOwnedTool = tools[toolID]!
-      if (Object.hasOwn(projectedTools, toolID)) {
-        throw new Error(
-          `Active expert squad ${JSON.stringify(
-            capability.expertSquadID,
-          )} ${capability.identity.agentID} declares worker tool ${JSON.stringify(toolID)} as both projected and stage-owned.`,
-        )
-      }
-      stageTools[toolID] = stageOwnedTool
-    }
-    return { projectedTools, stageTools }
+    return undefined
   }
 
   function unique(input: Iterable<string>): string[] {
@@ -3580,11 +2675,6 @@ export namespace PromptProfileResolver {
             "</expert_squad_virtual_workflows>",
           ].join("\n")
         : undefined
-    const mcpContext = await resolvedMcpPromptContext({
-      taskID: input.taskID,
-      capability: input.capability,
-      projectDirectory: input.projectDirectory,
-    })
     const artifactCatalogProtocol =
       input.capability.builtInToolIDs.includes("artifact_search") &&
       input.capability.builtInToolIDs.includes("artifact_read") &&
@@ -3617,7 +2707,6 @@ export namespace PromptProfileResolver {
       readme,
       virtualWorkflows,
       input.capability.promptOverlay,
-      mcpContext,
       input.userAppend,
     ]
       .filter((part): part is string => typeof part === "string" && part.trim().length > 0)

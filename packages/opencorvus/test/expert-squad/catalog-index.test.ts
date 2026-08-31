@@ -13,14 +13,14 @@ import { createManagedTemporaryDirectory, removeManagedDirectoryTree } from "@op
 import { Hono } from "hono"
 import { ExpertSquadRoutes } from "../../src/server/routes/expert-squad"
 import { ensureMissionSession } from "../../src/mission/session"
-import { CapabilitySearchTool } from "../../src/tool/capability-search"
-import { Tool } from "../../src/tool/tool"
 import { payloadPackageSources } from "../../generated/expert-squad-payload"
-import { RuntimeCapabilityCatalog } from "../../src/tool/capability-runtime-catalog"
-import { CatalogOccurrenceBinding } from "../../src/capability/catalog-binding"
 import { Config } from "../../src/config/config"
 import { Session } from "../../src/session"
 import { Identifier } from "../../src/id/id"
+import { PrimaryAssistantRegistry } from "../../src/agent/primary-assistant-registry"
+import { sessionRuntimeFromNativeAgent } from "../../src/agent/session-agent-runtime"
+import { SessionProcessor } from "../../src/session/processor"
+import { resolveTestCapabilityTools } from "../fixture/capability-occurrence"
 
 function scalePackageDefinition(id: string): ExpertSquadPackageDefinition {
   const emptyResources = { capability_refs: [] as string[] }
@@ -260,25 +260,8 @@ describe("Expert Squad catalog index", () => {
           heldExpertSquadIDs: heldExpertSquadIDs as [string, ...string[]],
         })
         const config = await Config.get()
-        const catalog = await RuntimeCapabilityCatalog.snapshot({
-          config,
-          sessionID: mission.id,
-          agentID: "mission",
-          executionToolIDs: ["capability_search"],
-        })
-        const payload = CatalogOccurrenceBinding.payload({
-          snapshot: catalog.snapshot,
-          materializationScope: {
-            provider_id: "test-provider",
-            model_id: "test-model",
-            api_npm: "@ai-sdk/openai-compatible",
-            config_revision: "a".repeat(64),
-            plugin_revision: "b".repeat(64),
-          },
-        })
-        const binding = await CatalogOccurrenceBinding.publish({ projectID: Instance.project.id, payload })
         const userMessageID = Identifier.ascending("message")
-        const parent = await Session.persistMessage({
+        await Session.persistMessage({
           info: {
             id: userMessageID,
             sessionID: mission.id,
@@ -298,77 +281,102 @@ describe("Expert Squad catalog index", () => {
             },
           ],
         })
-        const assistantMessageID = Identifier.ascending("message")
-        await CatalogOccurrenceBinding.bindAndBeginAssistant({
-          projectID: Instance.project.id,
-          parent,
-          binding,
-          assistant: {
-            id: assistantMessageID,
-            sessionID: mission.id,
-            parentID: userMessageID,
-            acceptedInputMessageIDs: [userMessageID],
-            role: "assistant",
-            author: "mission",
-            agent: "mission",
-            providerID: "test-provider",
-            modelID: "test-model",
-            path: { cwd: project.path, root: project.path },
-            cost: 0,
-            tokens: { total: 0, input: 0, output: 0, reasoning: 0, cache: { read: 0, write: 0 } },
-            time: { created: Date.now() },
+        const model = {
+          id: "test-model",
+          providerID: "test-provider",
+          name: "Capability catalog test",
+          limit: { context: 1_000_000, input: 900_000, output: 4_096 },
+          cost: { available: true, input: 0, output: 0, cache: { read: 0, write: 0 } },
+          capabilities: {
+            toolcall: true,
+            attachment: false,
+            reasoning: false,
+            temperature: true,
+            input: { text: true, image: false, audio: false, video: false },
+            output: { text: true, image: false, audio: false, video: false },
           },
-        })
-        const search = await CapabilitySearchTool.init({ agentID: "mission" })
-        const context = {
+          api: { id: "test-model", npm: "@ai-sdk/openai-compatible" },
+          options: {},
+        } as any
+        const assistant = {
+          id: Identifier.ascending("message"),
           sessionID: mission.id,
-          messageID: assistantMessageID,
-          callID: "call_hundred_held_capability_search",
+          parentID: userMessageID,
+          role: "assistant" as const,
+          author: "mission",
           agent: "mission",
-          abort: new AbortController().signal,
-          messages: [],
-          executionSurface: Tool.executionSurface(["capability_search"], []),
-          metadata() {},
-          async ask() {},
+          providerID: model.providerID,
+          modelID: model.id,
+          path: { cwd: project.path, root: project.path },
+          cost: 0,
+          tokens: { total: 0, input: 0, output: 0, reasoning: 0, cache: { read: 0, write: 0 } },
+          time: { created: Date.now() },
         }
-        const result = await search.execute({ query: "", kinds: ["expert_squad"], limit: 20 }, context)
+        const processor = SessionProcessor.create({
+          assistantMessage: assistant,
+          sessionID: mission.id,
+          model,
+          abort: new AbortController().signal,
+        })
+        const { tools, occurrence } = await resolveTestCapabilityTools({
+          config,
+          model,
+          session: mission,
+          assistant,
+          processor,
+          agent: sessionRuntimeFromNativeAgent(await PrimaryAssistantRegistry.get("mission", { config })),
+          agentID: "mission",
+          messages: await Session.messages({ sessionID: mission.id }),
+          activeLocalRefs: [],
+        })
+        const search = tools.capability_search
+        if (!search?.execute) throw new Error("Mission capability_search is unavailable")
+        const result = await search.execute(
+          { queries: [""], kinds: ["expert_squad"], exact_refs: [], deactivate_refs: [], limit: 5 },
+          { toolCallId: "call_hundred_held_capability_search", messages: [], abortSignal: new AbortController().signal },
+        )
         const output = JSON.parse(result.output) as {
           catalog_revision: string
           caller: string
-          visible_expert_squad_count: number
           results: Array<Record<string, unknown>>
         }
         const mismatchedPillarResult = await search.execute(
-          { query: "", kinds: ["expert_squad"], product_pillar: "work", limit: 1 },
-          { ...context, callID: "call_mismatched_pillar_capability_search" },
+          { queries: [""], kinds: ["expert_squad"], product_pillar: "work", exact_refs: [], deactivate_refs: [], limit: 1 },
+          { toolCallId: "call_mismatched_pillar_capability_search", messages: [], abortSignal: new AbortController().signal },
         )
         const mismatchedPillarOutput = JSON.parse(mismatchedPillarResult.output) as {
-          product_pillar: string
           results: Array<Record<string, unknown>>
         }
         expect(result.metadata.catalog_revision).toMatch(/^[a-f0-9]{64}$/)
-        const { catalog_revision: _catalogRevision, ...metadata } = result.metadata
+        const {
+          catalog_revision: _catalogRevision,
+          catalog_snapshot_hash: _catalogSnapshotHash,
+          opencorvus_capability_reveal_v2: _receipt,
+          ...metadata
+        } = result.metadata
         expect({
           metadata,
           caller: output.caller,
-          visibleCount: output.visible_expert_squad_count,
+          visibleCount: occurrence.payload.views.filter((entry) => entry.descriptor_ref.kind === "expert_squad").length,
           resultCount: output.results.length,
           resultKeys: [...new Set(output.results.flatMap((entry) => Object.keys(entry)))].sort(),
           outputBytes: Buffer.byteLength(result.output, "utf8") < 50_000,
           mismatchedPillar: {
-            requested: mismatchedPillarOutput.product_pillar,
             resultCount: mismatchedPillarOutput.results.length,
           },
         }).toEqual({
           metadata: {
             caller: "mission",
-            result_count: 20,
-            visible_expert_squad_count: 100,
+            result_count: 5,
+            reveal_revision: 1,
+            active_ref_count: 0,
+            active_payload_chars: expect.any(Number),
+            active_payload_tokens: expect.any(Number),
             truncated: false,
           },
           caller: "mission",
           visibleCount: 100,
-          resultCount: 20,
+          resultCount: 5,
           resultKeys: [
             "aliases",
             "availability",
@@ -382,8 +390,12 @@ describe("Expert Squad catalog index", () => {
             "score",
           ],
           outputBytes: true,
-          mismatchedPillar: { requested: "work", resultCount: 0 },
+          mismatchedPillar: { resultCount: 0 },
         })
+        expect(metadata.active_payload_chars).toBeGreaterThan(0)
+        expect(metadata.active_payload_chars).toBeLessThanOrEqual(4_000)
+        expect(metadata.active_payload_tokens).toBeGreaterThan(0)
+        expect(metadata.active_payload_tokens).toBeLessThanOrEqual(1_000)
       },
     })
   }, 0)

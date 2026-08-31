@@ -7,13 +7,14 @@ import {
   type ArtifactReadLocator,
 } from "@opencorvus-ai/plugin/artifact-catalog"
 import { Database } from "@/storage/db"
-import { MissionPanelActionSchema } from "@/panel/capability"
-import { materializeToolExecutionInput } from "@/provider/tool-execution-input"
+import { panelLeafActionSchemaForAgent } from "@/panel/capability"
 import {
   sameTerminalLifecycleReference,
   TerminalLifecycleReferenceSchema,
   type TerminalLifecycleReference,
 } from "@/engine/terminal-lifecycle-reference-schema"
+
+const MissionPanelQueryTaskArtifactsInput = panelLeafActionSchemaForAgent("query_task_artifacts", "mission")
 import {
   ArtifactReferenceAmbiguityError,
   ArtifactReferenceResolutionError,
@@ -146,12 +147,9 @@ export function resolvePanelArtifactLocatorReferenceBeforeRead(input: {
     sessionID: input.sessionID,
     assistantMessageID: input.assistantMessageID,
     toolPartID: input.toolPartID,
-    toolNames: ["panel"],
+    toolNames: ["panel_query_task_artifacts"],
     acceptInput: (rawInput) => {
-      const parsed = MissionPanelActionSchema.safeParse(
-        materializeToolExecutionInput(MissionPanelActionSchema, rawInput),
-      )
-      return parsed.success && parsed.data.action === "query_task_artifacts"
+      return MissionPanelQueryTaskArtifactsInput.safeParse(rawInput).success
     },
   })) {
     const page = PanelArtifactReferencePageFactSchema.safeParse(value)

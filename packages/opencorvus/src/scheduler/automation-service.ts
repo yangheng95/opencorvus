@@ -41,7 +41,7 @@ import { Log } from "@/util/log"
 import { Instance } from "@/project/instance"
 import { createInstanceState } from "@/project/instance-state"
 import { Identifier } from "@/id/id"
-import { SessionStatus } from "@/session/status"
+import { SessionPromptOwner } from "@/session/prompt/owner"
 import { Worktree } from "@/worktree"
 import { PanelSurface } from "@/panel/capability"
 import { Provider } from "@/provider/provider"
@@ -830,6 +830,13 @@ export namespace AutomationService {
         const projectedFire = projectAutomationFireInTransaction(db, existing)
         const terminal = ["succeeded", "failed", "partial", "disposition"].includes(projectedFire.state)
         if (terminal) return { fire: existing, terminal: true as const }
+        const activeExecution = activeAutomationSessionExecutionInTransaction(db, definition)
+        if (activeExecution) {
+          throw new AutomationRunningConflictError({
+            message: `Automation ${id} cannot run while session ${definition.session_id} is busy`,
+            automationID: id,
+          })
+        }
         const acquired = acquireControlLeaseInTransaction(db, {
           target: "automation",
           targetID: id,
@@ -843,10 +850,30 @@ export namespace AutomationService {
       }
       const definition = latestAutomationDefinitionInTransaction(db, id)
       if (!definition || definition.kind === "delay") throw new NotFoundError({ message: `Automation not found: ${id}` })
+      const activeExecution = activeAutomationSessionExecutionInTransaction(db, definition)
+      if (activeExecution) {
+        throw new AutomationRunningConflictError({
+          message: `Automation ${id} cannot run while session ${definition.session_id} is busy`,
+          automationID: id,
+        })
+      }
       const pendingFireID = projectAutomationFrontierInTransaction(db, definition).pending_fire_id
       if (pendingFireID) {
         throw new AutomationRunningConflictError({
           message: `Automation ${id} already has unsettled fire ${pendingFireID}`,
+          automationID: id,
+        })
+      }
+      const acquired = acquireControlLeaseInTransaction(db, {
+        target: "automation",
+        targetID: id,
+        ownerOccurrenceID: owner,
+        now,
+        leaseMilliseconds: LEASE_MS,
+      })
+      if (!acquired.acquired) {
+        throw new AutomationRunningConflictError({
+          message: `Automation ${id} manual Tool occurrence is owned by another runtime`,
           automationID: id,
         })
       }
@@ -861,14 +888,6 @@ export namespace AutomationService {
           time_created: now,
         })
         .run()
-      const acquired = acquireControlLeaseInTransaction(db, {
-        target: "automation",
-        targetID: id,
-        ownerOccurrenceID: owner,
-        now,
-        leaseMilliseconds: LEASE_MS,
-      })
-      if (!acquired.acquired) throw new Error(`Fresh manual Automation fire ${fireID} could not acquire its owner`)
       reserveAutomationFireAttemptInTransaction(db, { fireID, owner, now })
       return {
         fire: db.select().from(AutomationFireTable).where(eq(AutomationFireTable.id, fireID)).get()!,
@@ -910,16 +929,6 @@ export namespace AutomationService {
     if (automation.pending_fire_id) {
       throw new AutomationRunningConflictError({
         message: `Automation ${id} already has unsettled fire ${automation.pending_fire_id}`,
-        automationID: id,
-      })
-    }
-    if (
-      automation.scope === "session" &&
-      automation.session_id &&
-      ["streaming", "retry"].includes(SessionStatus.get(automation.session_id).type)
-    ) {
-      throw new AutomationRunningConflictError({
-        message: `Automation ${id} cannot run while session ${automation.session_id} is busy`,
         automationID: id,
       })
     }
@@ -1210,7 +1219,7 @@ export namespace AutomationService {
           if (!row) return
           const claimNow = (claimClockForTest ?? Date.now)()
           const owner = `${process.pid}:${claimNow}:${Identifier.ascending("call")}`
-          const candidate = await validateDueAutomationBeforeClaim(row.id, claimNow)
+          const candidate = validateDueAutomationBeforeClaim(row.id, claimNow)
           if (!candidate) continue
           const job = claim(row.id, owner, claimNow)
           if (!job) continue
@@ -1223,24 +1232,20 @@ export namespace AutomationService {
     )
   }
 
-  async function validateDueAutomationBeforeClaim(id: string, now: number) {
+  function validateDueAutomationBeforeClaim(id: string, now: number) {
     const persisted = Database.use((db) => latestAutomationDefinitionInTransaction(db, id))
     if (persisted?.status !== "active") return undefined
     const job = Database.use((db) => projectAutomationFrontierInTransaction(db, persisted))
     if (job.next_run > now || job.lease_until > now) return undefined
-    if (
-      job.scope === "session" &&
-      job.session_id &&
-      ["streaming", "retry"].includes(SessionStatus.get(job.session_id).type)
-    ) {
-      log.info("session automation delayed while its conversation is busy", {
-        automationID: job.id,
-        sessionID: job.session_id,
-        retryAt: new Date(now + HEARTBEAT_BUSY_RETRY_MS).toISOString(),
-      })
-      return undefined
-    }
     return job
+  }
+
+  function activeAutomationSessionExecutionInTransaction(
+    db: Database.TxOrDb,
+    definition: typeof AutomationTable.$inferSelect,
+  ) {
+    if (definition.kind !== "recurring" || definition.scope !== "session" || !definition.session_id) return undefined
+    return SessionPromptOwner.activeExecutionInTransaction(db, definition.session_id)
   }
 
   function concurrency() {
@@ -1267,6 +1272,33 @@ export namespace AutomationService {
       if (!persisted || persisted.status !== "active") return undefined
       const projected = projectAutomationFrontierInTransaction(db, persisted)
       if (!force && projected.next_run > now) return undefined
+      const activeExecution = activeAutomationSessionExecutionInTransaction(db, persisted)
+      if (activeExecution) {
+        if (force) return undefined
+        const ownerOccurrenceID = Identifier.deterministic(
+          "call",
+          `automation-busy-session-delay-v1\0${id}\0${projected.next_run}`,
+        )
+        const delayed = acquireControlLeaseInTransaction(db, {
+          target: "automation",
+          targetID: id,
+          ownerOccurrenceID,
+          now,
+          leaseMilliseconds: HEARTBEAT_BUSY_RETRY_MS,
+        })
+        if (delayed.acquired) {
+          log.info("session automation delayed while its conversation is busy", {
+            automationID: id,
+            sessionID: persisted.session_id,
+            assistantMessageID: activeExecution.assistantMessageID,
+            promptOwnerGeneration: activeExecution.authority.generation,
+            promptOwnerObservation: activeExecution.observation,
+            ownerOccurrenceID,
+            retryAt: new Date(delayed.lease.expires_at).toISOString(),
+          })
+        }
+        return undefined
+      }
       const acquired = acquireControlLeaseInTransaction(db, {
         target: "automation",
         targetID: id,

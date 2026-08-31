@@ -449,8 +449,8 @@ WHEN NEW.creator_tool_part_id IS NOT NULL AND NOT EXISTS (
   JOIN session AS creator_session ON creator_session.id=creator_message.session_id
   JOIN engine_task AS task ON task.id=NEW.task_id
   WHERE request.id=NEW.creator_tool_part_id
-    AND json_extract(request.data,'$.tool')='panel'
-    AND json_extract(request.data,'$.input.action')='create_task'
+    AND json_extract(request.data,'$.tool')='panel_create_task'
+    AND json_type(request.data,'$.input.action') IS NULL
     AND json_extract(creator_message.data,'$.role')='assistant'
     AND json_extract(NEW.contract,'$.request.input.creator.tool_part_id')=request.id
     AND json_extract(NEW.contract,'$.request.input.creator.message_id')=request.message_id
@@ -651,10 +651,10 @@ WHEN json_type(NEW.metadata,'$.panelCreation') IS NOT NULL AND NOT EXISTS (
   WHERE request.id=json_extract(NEW.metadata,'$.panelCreation.tool_part_id')
     AND json_extract(NEW.metadata,'$.panelCreation.protocol')='panel-creation-v1'
     AND json_extract(NEW.metadata,'$.panelCreation.operation') IN ('wake_mission','wake_work')
-    AND json_extract(request.data,'$.tool')='panel'
+    AND json_extract(request.data,'$.tool')=('panel_' || json_extract(NEW.metadata,'$.panelCreation.operation'))
     AND json_extract(request.data,'$.callID')=json_extract(NEW.metadata,'$.panelCreation.tool_call_id')
     AND request.message_id=json_extract(NEW.metadata,'$.panelCreation.message_id')
-    AND json_extract(request.data,'$.input.action')=json_extract(NEW.metadata,'$.panelCreation.operation')
+    AND json_type(request.data,'$.input.action') IS NULL
     AND json_extract(assistant_message.data,'$.role')='assistant'
     AND caller_message.id=json_extract(NEW.metadata,'$.panelCreation.caller_user_message_id')
     AND json_extract(caller_message.data,'$.role')='user'

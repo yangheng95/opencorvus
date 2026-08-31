@@ -51,17 +51,6 @@ export class CapabilityCatalogContractError extends Error {
   }
 }
 
-export class StaleCapabilityCatalogError extends Error {
-  override readonly name = "StaleCapabilityCatalogError"
-
-  constructor(
-    public readonly expected: string,
-    public readonly actual: string,
-  ) {
-    super(`Capability catalog revision is stale: expected ${expected}, current revision is ${actual}.`)
-  }
-}
-
 function exactStringRecord(value: unknown): value is Record<string, string> {
   if (!value || typeof value !== "object" || Array.isArray(value)) return false
   return Reflect.ownKeys(value).every(
@@ -500,9 +489,6 @@ export function searchCapabilityCatalog(
   rawInput: z.input<typeof CapabilitySearchInput>,
 ): CapabilitySearchResultValue[] {
   const input = CapabilitySearchInput.parse(rawInput)
-  if (input.expected_catalog_revision && input.expected_catalog_revision !== snapshot.catalog_revision) {
-    throw new StaleCapabilityCatalogError(input.expected_catalog_revision, snapshot.catalog_revision)
-  }
   const kinds = input.kinds ? new Set(input.kinds) : undefined
   const nextOwnerKinds = input.next_owner_kinds ? new Set(input.next_owner_kinds) : undefined
   const owners = input.owner_refs ? new Set(input.owner_refs) : undefined
@@ -524,19 +510,23 @@ export function searchCapabilityCatalog(
     }
     return [{ descriptor, view }]
   })
-  const needle = input.query.trim()
+  const needles = [...new Set(input.queries.map((query) => query.trim()))]
   const ranked: Array<{
     descriptor: CapabilityDescriptorValue
     view: CapabilityCatalogViewEntryValue
     score: number | null
   }> = []
   for (const candidate of candidates) {
-    if (!needle) {
+    if (needles.every((needle) => !needle)) {
       ranked.push({ ...candidate, score: null })
       continue
     }
-    const score = scoreDiscoveryFields(needle, searchFields(candidate.descriptor))
-    if (score !== undefined) ranked.push({ ...candidate, score })
+    const scores = needles.flatMap((needle) => {
+      if (!needle) return []
+      const score = scoreDiscoveryFields(needle, searchFields(candidate.descriptor))
+      return score === undefined ? [] : [score]
+    })
+    if (scores.length > 0) ranked.push({ ...candidate, score: Math.max(...scores) })
   }
   ranked.sort((left, right) => {
     if (left.score !== right.score) {

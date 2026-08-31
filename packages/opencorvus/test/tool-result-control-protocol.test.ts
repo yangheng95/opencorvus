@@ -7,8 +7,6 @@ import z from "zod"
 import { sessionRuntimeFromNativeAgent } from "../src/agent/session-agent-runtime"
 import { sessionRuntimeWithResolvedModel } from "../src/agent/session-agent-runtime"
 import { WorkerTurnDescriptor } from "../src/agent/worker-turn-descriptor"
-import { createAgentCoordinationRuntimeTools } from "../src/agent/coordination-runtime-tools"
-import { filterAgentTools } from "../src/agent/filter-tools"
 import { HostAgentRegistry } from "../src/agent/host-agent-registry"
 import { Bus } from "../src/bus"
 import { Config } from "../src/config/config"
@@ -33,7 +31,11 @@ import { PermissionAuthority } from "../src/permission/authority"
 import { Identifier } from "../src/id/id"
 import { MCP } from "../src/mcp"
 import { computerRuntimeScopeIdentity } from "../src/mcp/computer/runtime-scope"
-import { createOrchestratorTools, OrchestratorToolsTestHooks } from "../src/orchestrator/tools"
+import {
+  createExactOrchestratorTool,
+  createOrchestratorTools,
+  OrchestratorToolsTestHooks,
+} from "../src/orchestrator/tools"
 import { currentOrchestratorControlMessage } from "../src/orchestrator/agent"
 import { sendSchedulerMessage } from "../src/protocol/scheduler-message"
 import { taskRequestSHA256 } from "../src/orchestrator/dispatch-turn-projection"
@@ -55,7 +57,6 @@ import {
   withHandoffDrainToolResultControl,
   withImmediateParkToolResultControl,
 } from "../src/session/tool-result-control"
-import { createBatchTool } from "../src/tool/batch"
 import { RequestOrchestratorDecisionTool } from "../src/tool/request-orchestrator-decision"
 import { Tool } from "../src/tool/tool"
 import {
@@ -65,15 +66,17 @@ import {
   toolExecutionModeOf,
 } from "../src/tool/execution-mode"
 import { WaitTool } from "../src/tool/wait"
-import { withTaskToolInvocation } from "../src/tool/task-tool-invocation"
 import { textSHA256 } from "../src/expert-squad/projection-hash"
-import { AutomationTable } from "../src/scheduler/automation.sql"
 import { Database, DatabaseUnavailableError, eq } from "../src/storage/db"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 import { persistEstablishedTask } from "./fixture/engine-task"
-import { CatalogOccurrenceBinding } from "../src/capability/catalog-binding"
-import { RuntimeCapabilityCatalog } from "../src/tool/capability-runtime-catalog"
 import { ProviderToolNameCollisionError } from "../src/tool/provider-name-authority"
+import { capabilityRef } from "@opencorvus-ai/util/capability-ref"
+import { createHarnessGrantSet } from "../src/capability/harness-projection"
+import { harnessGrantedRefs } from "../src/capability/harness-projection"
+import { resolveTestCapabilityTools } from "./fixture/capability-occurrence"
+import { createRuntimeToolOwner } from "../src/session/runtime-tool-owner"
+import { testRuntimeToolFactories } from "./fixture/runtime-tool-owner"
 
 const model = {
   id: "tool-result-control-model",
@@ -101,6 +104,7 @@ async function projectedSchedulerSurface(input: {
   instrument?: ProjectedSchedulerInstrumentation
   injectStructuredOutput?: boolean
   reserveStructuredOutput?: boolean
+  activeLocalRefs: readonly string[]
   taskActivation?: boolean
 }) {
   await Config.updateProjectPatch({
@@ -223,21 +227,38 @@ async function projectedSchedulerSurface(input: {
     time: { created: now },
     ...(activationID ? { activationID } : {}),
   } as const
-  const raw = createOrchestratorTools({
-    taskID,
-    agentSessionID: session.id,
-    sendSchedulerMessage,
-    dispatchAgents: [...skillProjection.schedulerOnlyAgents, ...skillProjection.projectedAgents],
-  }).tools as Record<string, any>
-  input.instrument?.(raw)
   const owner = MCP.createScopedConnectionOwner(
     computerRuntimeScopeIdentity({ ownerKind: "orchestrator", taskID, sessionID: session.id }),
   )
-  const projectedTools = await PromptProfileResolver.projectOrchestratorTools(raw, schedulerCapability, {
-    taskID,
-    projectDirectory: input.projectPath,
-    connectionOwner: owner,
-  })
+  const dispatchAgents = [...skillProjection.schedulerOnlyAgents, ...skillProjection.projectedAgents]
+  const materializeBuiltIn = (toolID: string) =>
+    createExactOrchestratorTool({
+      toolID,
+      taskID,
+      agentSessionID: session.id,
+      sendSchedulerMessage,
+      dispatchAgents,
+    })
+  const projectedTools = Object.fromEntries(
+    await Promise.all(
+      PromptProfileResolver.schedulerRuntimeToolIDs(schedulerCapability).map(async (toolID) => {
+        const exact = schedulerCapability.builtInToolIDs.includes(toolID)
+          ? materializeBuiltIn(toolID)
+          : await PromptProfileResolver.exactProjectedExtensionTool({
+              capability: schedulerCapability,
+              providerName: toolID,
+              runtimeTool: materializeBuiltIn,
+              taskID,
+              projectDirectory: input.projectPath,
+              toolDirectory: input.projectPath,
+              connectionOwner: owner,
+            })
+        if (!exact) throw new Error(`Projected scheduler fixture cannot materialize ${toolID}`)
+        return [toolID, exact] as const
+      }),
+    ),
+  ) as Record<string, any>
+  input.instrument?.(projectedTools)
   const firstProjectedTool = Object.values(projectedTools)[0]
   if (input.injectStructuredOutput && !firstProjectedTool) {
     throw new Error("Projected scheduler fixture has no Tool implementation for collision injection")
@@ -258,7 +279,32 @@ async function projectedSchedulerSurface(input: {
         }),
       }) as typeof skillProjection)
     : skillProjection
-  SessionRuntimeContractStore.set(session.id, {
+  const baseHarnessGrants = PromptProfileResolver.schedulerHarnessGrants({
+    taskID,
+    capability: schedulerCapability,
+    projectedToolIDs: Object.keys(projectedTools),
+  })
+  const harnessGrants = input.injectStructuredOutput
+    ? createHarnessGrantSet({
+        context: baseHarnessGrants.context,
+        owner_revision: baseHarnessGrants.owner_revision,
+        grants: [
+          ...baseHarnessGrants.grants,
+          {
+            ref: capabilityRef({
+              kind: "tool",
+              source: "platform",
+              owner_ref: "runtime-projection:orchestrator",
+              local_ref: "StructuredOutput",
+            }),
+            access: "discover_execute",
+          },
+        ],
+      })
+    : baseHarnessGrants
+  let runtimeInstalled = false
+  try {
+    SessionRuntimeContractStore.set(session.id, {
     identity: {
       identityKind: "projected-scheduler",
       sessionID: session.id,
@@ -269,60 +315,50 @@ async function projectedSchedulerSurface(input: {
       contractKind: "orchestrator-wake",
       installedAt: now,
     },
-    projectedTools: runtimeProjectedTools,
-    projectedRegistryToolIDs: schedulerCapability.builtInToolIDs,
     skillProjection: runtimeSkillProjection,
-    harnessProjection: PromptProfileResolver.schedulerHarnessProjection({ taskID, capability: schedulerCapability }),
+    harnessGrants,
     projectDirectory: input.projectPath,
     includeMcpTools: false,
     system: [],
     systemMode: "complete",
-    resources: { mcp: owner },
-  })
-  const runtime = sessionRuntimeFromNativeAgent(await HostAgentRegistry.get("orchestrator", { config }))
-  const abort = new AbortController().signal
-  const processor = SessionProcessor.create({ assistantMessage: assistant, sessionID: session.id, model, abort })
-  const tools = await SessionLoop.resolveTools({
-    agent: runtime,
-    agentID: "orchestrator",
-    model,
-    session,
-    processor,
-    messages: await Session.messages({ sessionID: session.id }),
-    config,
-    reservedProviderToolNames: input.reserveStructuredOutput
-      ? [
-          {
-            name: "StructuredOutput",
-            owner: { source: "structured", ref: `assistant:${assistant.id}:response-encoder` },
-          },
-        ]
-      : undefined,
-  })
-  const runtimeContract = SessionRuntimeContractStore.get(session.id)
-  if (!runtimeContract) throw new Error("Projected scheduler runtime contract was not installed")
-  const catalog = await RuntimeCapabilityCatalog.snapshot({
-    config,
-    sessionID: session.id,
-    agentID: "orchestrator",
-    executionToolIDs: Object.keys(tools),
-    harnessProjection: SessionLoop.harnessProjectionForResolvedTools(tools),
-  })
-  const binding = await CatalogOccurrenceBinding.publish({
-    projectID: Instance.project.id,
-    payload: CatalogOccurrenceBinding.payload({
-      snapshot: catalog.snapshot,
-      materializationScope: await CatalogOccurrenceBinding.materializationScope({ model, config }),
-      runtimeContract,
-    }),
-  })
-  await CatalogOccurrenceBinding.bindAndBeginAssistant({
-    projectID: Instance.project.id,
-    assistant,
-    parent: await MessageStore.get({ sessionID: session.id, messageID: user.id }),
-    binding,
-  })
-  return { taskID, session, assistant, processor, tools, abort }
+    resources: {
+      mcp: owner,
+      tools: createRuntimeToolOwner({
+        leaves: testRuntimeToolFactories(runtimeProjectedTools, "projected", {
+          source: "scheduler-projection",
+        }),
+      }),
+    },
+    })
+    runtimeInstalled = true
+    const runtime = sessionRuntimeFromNativeAgent(await HostAgentRegistry.get("orchestrator", { config }))
+    const abort = new AbortController().signal
+    const processor = SessionProcessor.create({ assistantMessage: assistant, sessionID: session.id, model, abort })
+    const { tools } = await resolveTestCapabilityTools({
+      agent: runtime,
+      agentID: "orchestrator",
+      model,
+      session,
+      assistant,
+      processor,
+      messages: await Session.messages({ sessionID: session.id }),
+      config,
+      activeLocalRefs: input.activeLocalRefs,
+      reservedProviderToolNames: input.reserveStructuredOutput
+        ? [
+            {
+              name: "StructuredOutput",
+              owner: { source: "structured", ref: `assistant:${assistant.id}:response-encoder` },
+            },
+          ]
+        : undefined,
+    })
+    return { taskID, session, assistant, processor, tools, abort }
+  } catch (error) {
+    if (runtimeInstalled) await SessionRuntimeContractStore.dispose(session.id)
+    else await owner.close()
+    throw error
+  }
 }
 
 async function projectedWorkerDecisionSurface(input: { projectPath: string }) {
@@ -393,22 +429,18 @@ async function projectedWorkerDecisionSurface(input: { projectPath: string }) {
   const owner = MCP.createScopedConnectionOwner(
     computerRuntimeScopeIdentity({ ownerKind: "worker", taskID, sessionID: session.id }),
   )
-  const contextTools = await filterAgentTools(
-    await createAgentCoordinationRuntimeTools({
-      agentID: projection.workerCapability.identity.agentID,
-      taskID,
-    }),
-    projection.workerCapability.identity.baseRole,
-    { taskID, sessionID: root.id },
-  )
-  const projected = await PromptProfileResolver.projectWorkerTools(contextTools, projection.workerCapability, {
+  const contextTools = {}
+  const projected = { projectedTools: {}, stageTools: {} }
+  const workerHarnessGrants = PromptProfileResolver.workerHarnessGrants({
     taskID,
-    projectDirectory: input.projectPath,
-    toolDirectory: input.projectPath,
-    stageOwnedToolIDs: [],
-    connectionOwner: owner,
+    capability: projection.workerCapability,
+    projectedToolIDs: Object.keys(projected.projectedTools),
+    stageToolIDs: Object.keys(projected.stageTools),
   })
-  const enabledTools = [...Object.keys(projected.projectedTools), ...Object.keys(projected.stageTools)].sort()
+  const enabledTools = harnessGrantedRefs(workerHarnessGrants, "execute")
+    .filter((ref) => ref.kind === "tool" || ref.kind === "mcp_tool")
+    .map((ref) => ref.local_ref)
+    .sort()
   const descriptor = WorkerTurnDescriptor.create({
     sessionID: session.id,
     payload: {
@@ -472,18 +504,26 @@ async function projectedWorkerDecisionSurface(input: { projectPath: string }) {
       providerID: model.providerID,
       modelID: model.id,
     }),
-    projectedTools: projected.projectedTools,
-    stageTools: projected.stageTools,
     system: [],
     systemMode: "complete",
-    projectedRegistryToolIDs: projection.workerCapability.builtInToolIDs,
     skillProjection: projection.skillProjection,
-    harnessProjection: PromptProfileResolver.workerHarnessProjection({
-      taskID,
-      capability: projection.workerCapability,
-    }),
+    harnessGrants: workerHarnessGrants,
     projectDirectory: input.projectPath,
-    resources: { mcp: owner },
+    resources: {
+      mcp: owner,
+      tools: createRuntimeToolOwner({
+        leaves: [
+          ...testRuntimeToolFactories(projected.projectedTools, "projected", {
+            workerTurnDescriptorHash: descriptor.hash,
+            projectionHash: projection.workerCapability.identity.projectionHash,
+          }),
+          ...testRuntimeToolFactories(projected.stageTools, "stage", {
+            workerTurnDescriptorHash: descriptor.hash,
+            projectionHash: projection.workerCapability.identity.projectionHash,
+          }),
+        ],
+      }),
+    },
   })
   const assistant = await Session.updateMessage({
     id: Identifier.ascending("message"),
@@ -501,30 +541,25 @@ async function projectedWorkerDecisionSurface(input: { projectPath: string }) {
   })
   const abort = new AbortController().signal
   const processor = SessionProcessor.create({ assistantMessage: assistant, sessionID: session.id, model, abort })
-  const tools = projected.projectedTools
+  const projectedRuntime = sessionRuntimeWithResolvedModel(projection.workerCapability.runtime, {
+    providerID: model.providerID,
+    modelID: model.id,
+  })
+  const { tools } = await resolveTestCapabilityTools({
+    config,
+    model,
+    session,
+    assistant,
+    processor,
+    agent: projectedRuntime,
+    agentID: projection.workerCapability.identity.agentID,
+    messages: await Session.messages({ sessionID: session.id }),
+    activeLocalRefs: ["request_orchestrator_decision"],
+  })
   const executeWorkerTool = async (name: string, args: unknown, callID: string) => {
     const selected = tools[name] as { execute?: (args: unknown, options: unknown) => Promise<unknown> } | undefined
     if (!selected?.execute) throw new Error(`Projected worker Tool ${name} is unavailable`)
-    const part = await processor.ensureToolPart(callID, name, args)
-    const identity = {
-      projectID: Instance.project.id,
-      sessionID: session.id,
-      messageID: assistant.id,
-      toolCallID: callID,
-      toolPartID: part.id,
-      providerName: name,
-      providerKind: "builtin" as const,
-      providerID: name,
-      args,
-    }
-    return withTaskToolInvocation(identity, Tool.executionSurface(Object.keys(tools), []), (invocationAuthority) =>
-      selected.execute!(args, {
-        toolCallId: callID,
-        messages: [],
-        abortSignal: abort,
-        opencorvus: { ...identity, invocationAuthority },
-      }),
-    )
+    return selected.execute(args, { toolCallId: callID, messages: [], abortSignal: abort })
   }
   return {
     taskID,
@@ -558,6 +593,7 @@ describe("single Tool-result turn-control protocol", () => {
             permissionMode: "full_access",
             injectStructuredOutput: true,
             reserveStructuredOutput: true,
+            activeLocalRefs: ["StructuredOutput"],
           }),
         ).rejects.toMatchObject({
           name: "ProviderToolNameCollisionError",
@@ -577,6 +613,7 @@ describe("single Tool-result turn-control protocol", () => {
         const fixture = await projectedSchedulerSurface({
           projectPath: project.path,
           permissionMode: "full_access",
+          activeLocalRefs: ["no_action"],
         })
         const projected = fixture.tools.no_action
         if (!projected?.execute) throw new Error("Production scheduler projection omitted no_action")
@@ -790,55 +827,6 @@ describe("single Tool-result turn-control protocol", () => {
     })
   })
 
-  test("projects ordinary batch targets while exclusive control Tools remain direct-only", async () => {
-    const ordinary = await Tool.define("ordinary", {
-      description: "ordinary",
-      parameters: z.object({ value: z.string() }),
-      async execute({ value }) {
-        return { title: "ordinary", output: value, metadata: {} }
-      },
-    }).init()
-    const wait = await WaitTool.init()
-    const decision = await RequestOrchestratorDecisionTool.init()
-    const ordinaryWithoutControl = bindToolExecutionMode(
-      await Tool.define("ordinary_exclusive", {
-        description: "ordinary exclusive",
-        parameters: z.object({}),
-        executionMode: "turn_control_exclusive",
-        async execute() {
-          return { title: "ordinary", output: "ordinary", metadata: {} }
-        },
-      }).init(),
-      "turn_control_exclusive",
-    )
-    const batch = await createBatchTool([
-      { id: "ordinary", ...ordinary },
-      { id: "wait", ...wait },
-      { id: "request_orchestrator_decision", ...decision },
-    ]).init()
-
-    expect({ wait: wait.executionMode, decision: decision.executionMode }).toEqual({
-      wait: "turn_control_exclusive",
-      decision: "turn_control_exclusive",
-    })
-    expect(batch.parameters.parse({ tool_calls: [{ tool: "ordinary", parameters: { value: "ok" } }] })).toEqual({
-      tool_calls: [{ tool: "ordinary", parameters: { value: "ok" } }],
-    })
-    expect(() =>
-      batch.parameters.parse({ tool_calls: [{ tool: "wait", parameters: { duration_ms: 1000, reason: "later" } }] }),
-    ).toThrow()
-    expect(toolResultControl({})).toBeUndefined()
-    const coordinator = new ToolTurnExecutionCoordinator()
-    expect(
-      await coordinator.run("turn_control_exclusive", () => ordinaryWithoutControl.execute({}, {} as any)),
-    ).toEqual({
-      title: "ordinary",
-      output: "ordinary",
-      metadata: { truncated: false },
-    })
-    expect(await coordinator.run("ordinary", async () => ({ metadata: {} }))).toEqual({ metadata: {} })
-  })
-
   test("executes the normal Wait Tool producer and keeps an aborted occurrence ordinary", async () => {
     await using project = await memoryProject()
     await Instance.provide({
@@ -847,6 +835,7 @@ describe("single Tool-result turn-control protocol", () => {
         const fixture = await projectedSchedulerSurface({
           projectPath: project.path,
           permissionMode: "full_access",
+          activeLocalRefs: [],
         })
         const initialized = await WaitTool.init()
         const context = async (
@@ -942,6 +931,7 @@ describe("single Tool-result turn-control protocol", () => {
         const fixture = await projectedSchedulerSurface({
           projectPath: project.path,
           permissionMode: "full_access",
+          activeLocalRefs: ["wait"],
           taskActivation: true,
         })
         const wait = fixture.tools.wait
@@ -973,6 +963,7 @@ describe("single Tool-result turn-control protocol", () => {
           const fixture = await projectedSchedulerSurface({
             projectPath: project.path,
             permissionMode: "full_access",
+            activeLocalRefs: ["manage_task"],
           })
           const manageTask = fixture.tools.manage_task
           if (!manageTask?.execute) throw new Error("Projected scheduler manage_task is unavailable")
@@ -1023,6 +1014,7 @@ describe("single Tool-result turn-control protocol", () => {
         const fixture = await projectedSchedulerSurface({
           projectPath: project.path,
           permissionMode: "full_access",
+          activeLocalRefs: ["manage_task"],
         })
         await terminalTask(
           requireTask(fixture.taskID),
@@ -1051,7 +1043,7 @@ describe("single Tool-result turn-control protocol", () => {
     })
   }, 120_000)
 
-  test("creates and exactly replays the production worker coordination handoff writer", async () => {
+  test("creates one production worker coordination handoff and seals the committed turn", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
@@ -1070,23 +1062,17 @@ describe("single Tool-result turn-control protocol", () => {
           args,
           "call_worker_decision",
         )
-        const replayed = await fixture.executeWorkerTool(
-          "request_orchestrator_decision",
-          args,
-          "call_worker_decision",
-        )
+        const replayed = fixture.executeWorkerTool("request_orchestrator_decision", args, "call_worker_decision")
         const createdControl = toolResultControl((created as any).metadata)
-        const replayedControl = toolResultControl((replayed as any).metadata)
         const request = createdControl?.kind === "handoff_drain"
           ? findAgentCoordinationRequest({ taskID: fixture.taskID, requestID: createdControl.request_id })
           : undefined
-        expect({ createdControl, replayedControl, request }).toMatchObject({
+        expect({ createdControl, request }).toMatchObject({
           createdControl: {
             kind: "handoff_drain",
             request_id: expect.any(String),
             dispatch_lineage_id: fixture.dispatchLineage.artifactID,
           },
-          replayedControl: createdControl,
           request: {
             payload: {
               request_id: createdControl?.kind === "handoff_drain" ? createdControl.request_id : "",
@@ -1095,6 +1081,7 @@ describe("single Tool-result turn-control protocol", () => {
             },
           },
         })
+        await expect(replayed).rejects.toBeInstanceOf(ToolTurnExecutionConflictError)
         await SessionRuntimeContractStore.dispose(fixture.session.id)
       },
     })
@@ -1567,6 +1554,7 @@ describe("single Tool-result turn-control protocol", () => {
         const fixture = await projectedSchedulerSurface({
           projectPath: project.path,
           permissionMode: "full_access",
+          activeLocalRefs: ["read_context", "wait"],
           taskActivation: true,
           instrument(raw) {
             const originalReadContext = raw.read_context
@@ -1649,7 +1637,7 @@ describe("single Tool-result turn-control protocol", () => {
           control: toolResultControl((waitResult as any).metadata),
           automations,
           parts: persisted.parts
-            .filter((part) => part.type === "tool")
+            .filter((part) => part.type === "tool" && part.tool !== "capability_search")
             .map((part) => ({ callID: part.callID, status: part.state.status })),
         }).toMatchObject({
           order: ["ordinary:start", "ordinary:end", "exclusive:start"],
@@ -1677,6 +1665,7 @@ describe("single Tool-result turn-control protocol", () => {
         const fixture = await projectedSchedulerSurface({
           projectPath: project.path,
           permissionMode: "ask",
+          activeLocalRefs: ["wait"],
           taskActivation: true,
           instrument(raw) {
             const originalWait = raw.wait
@@ -1793,6 +1782,7 @@ describe("single Tool-result turn-control protocol", () => {
         const fixture = await projectedSchedulerSurface({
           projectPath: project.path,
           permissionMode: "ask",
+          activeLocalRefs: ["wait"],
           taskActivation: true,
           instrument(raw) {
             const originalWait = raw.wait
@@ -2210,14 +2200,16 @@ describe("single Tool-result turn-control protocol", () => {
         const abort = new AbortController().signal
         const processor = SessionProcessor.create({ assistantMessage: assistant, sessionID: session.id, model, abort })
         const executionSurface = async () => {
-          const tools = await SessionLoop.resolveTools({
+          const { tools } = await resolveTestCapabilityTools({
             agent,
             agentID: "coding",
             model,
             session,
+            assistant,
             processor,
             messages: await Session.messages({ sessionID: session.id }),
             config,
+            activeLocalRefs: ["wait"],
           })
           const wait = tools.wait
           if (!wait?.execute) throw new Error("Wait Tool was not projected")

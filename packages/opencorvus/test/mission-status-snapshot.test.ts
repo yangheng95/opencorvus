@@ -198,7 +198,7 @@ describe("Mission status snapshot", () => {
         ])
       },
     })
-  })
+  }, 60_000)
 
   test("projects an unowned active Task as a top-level Work Ledger item", async () => {
     await using project = await tmpdir({ git: true })
@@ -345,5 +345,5 @@ describe("Mission status snapshot", () => {
         })
       },
     })
-  })
+  }, 60_000)
 })

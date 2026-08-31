@@ -14,9 +14,12 @@ import {
   panelActionKind,
   panelActionSetForActor,
   panelActionSchemaForAgent,
+  panelLeafActionSchemaForAgent,
+  panelLeafCapability,
   PanelSurface,
   type PanelActor,
 } from "@/panel/capability"
+import { PANEL_ACTIONS, panelLeafToolID } from "@/panel/action-ids"
 import {
   RIGHT_SIDEBAR_CONVERSATION_SOURCE,
   createRightSidebarConversationSession,
@@ -559,7 +562,8 @@ async function requirePanelToolIdentity(
     throw new Error(`panel.${operation} message ${ctx.messageID} is not an assistant message.`)
   }
   const parts = message.parts.filter(
-    (part): part is Message.ToolPart => part.type === "tool" && part.callID === callID && part.tool === "panel",
+    (part): part is Message.ToolPart =>
+      part.type === "tool" && part.callID === callID && part.tool === `panel_${operation}`,
   )
   if (parts.length !== 1) {
     throw new Error(
@@ -594,6 +598,10 @@ function panelCreationMetadata(input: {
   params: unknown
   callerUserMessageID: string
 }) {
+  const { action, ...toolInput } = z.record(z.string(), z.unknown()).parse(input.params)
+  if (action !== input.operation) {
+    throw new Error(`panel.${input.operation} received a divergent umbrella action`)
+  }
   return {
     panelCreation: buildPanelCreationFact({
       operation: input.operation,
@@ -601,7 +609,7 @@ function panelCreationMetadata(input: {
       toolCallID: input.toolIdentity.toolCallID,
       messageID: input.toolIdentity.messageID,
       callerUserMessageID: input.callerUserMessageID,
-      params: input.params,
+      params: toolInput,
     }),
   }
 }
@@ -704,7 +712,9 @@ function recoveredPanelCreationMetadata(input: {
     value.tool_part_id !== input.part.id ||
     value.tool_call_id !== input.part.callID ||
     value.message_id !== input.messageID ||
-    value.target_id !== panelCreationTargetID(input.operation, input.part.id)
+    value.target_id !== panelCreationTargetID(input.operation, input.part.id) ||
+    canonicalJSONValue(value.input, `Session ${input.session.id} persisted panel input`) !==
+      canonicalJSONValue(input.params, `Session ${input.session.id} recovered panel input`)
   ) {
     throw new Error(`Session ${input.session.id} conflicts with persisted panel Tool occurrence ${input.part.id}`)
   }
@@ -723,9 +733,20 @@ export async function recoverPanelCreationToolPart(input: {
   agent: string
   part: Message.ToolPart
 }): Promise<RecoveredPanelCreationResult | undefined> {
-  if (input.part.tool !== "panel") return undefined
-  const params = input.part.state.input as Record<string, unknown>
-  if (params.action === "create_task") {
+  const operation =
+    input.part.tool === panelLeafToolID("create_task")
+      ? "create_task"
+      : input.part.tool === panelLeafToolID("wake_mission")
+        ? "wake_mission"
+        : input.part.tool === panelLeafToolID("wake_work")
+          ? "wake_work"
+          : undefined
+  if (!operation) return undefined
+  const params = z.record(z.string(), z.unknown()).parse(input.part.state.input)
+  if (Object.hasOwn(params, "action")) {
+    throw new Error(`Recovered ${input.part.tool} input must not repeat its Tool action`)
+  }
+  if (operation === "create_task") {
     let taskID: string | undefined
     try {
       taskID = taskIDForCreatorToolPart(input.part.id)
@@ -751,12 +772,11 @@ export async function recoverPanelCreationToolPart(input: {
       metadata: caller.kind === "mission" ? withImmediateParkToolResultControl({ truncated: false }) : { truncated: false },
     }
   }
-  if (params.action !== "wake_mission" && params.action !== "wake_work") return undefined
   const callerSession = await Session.get(input.sessionID)
   const request = typeof params.request === "string" ? params.request : undefined
-  if (!request) throw new Error(`Recovered panel.${params.action} has no persisted request text`)
+  if (!request) throw new Error(`Recovered panel.${operation} has no persisted request text`)
 
-  if (params.action === "wake_mission") {
+  if (operation === "wake_mission") {
     const missionID = panelCreationTargetID("wake_mission", input.part.id)
     const target = Database.use(
       (db) => {
@@ -1909,3 +1929,24 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
     }
   },
 }))
+
+/** Model-facing Panel leaves. The umbrella remains only for the non-model UI route. */
+export const PanelLeafTools = Object.freeze(
+  PANEL_ACTIONS.map(({ action }) =>
+    Tool.define(panelLeafToolID(action), async (initCtx) => {
+      const capability = panelLeafCapability(action)
+      const umbrella = await PanelTool.init(initCtx)
+      return {
+        description: capability.description,
+        parameters: panelLeafActionSchemaForAgent(action, initCtx?.agentID),
+        executionMode:
+          initCtx?.agentID === "mission" && capability.kind === "mutation"
+            ? ("turn_control_exclusive" as const)
+            : ("ordinary" as const),
+        async execute(params: Record<string, unknown>, ctx: Tool.Context) {
+          return umbrella.execute({ action, ...params } as never, ctx)
+        },
+      }
+    }),
+  ),
+)

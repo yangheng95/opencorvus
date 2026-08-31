@@ -20,8 +20,6 @@ import {
   TerminalLifecycleReferenceSchema,
   type TerminalLifecycleReference,
 } from "@/engine/terminal-lifecycle-reference-schema"
-import { MissionPanelActionSchema } from "@/panel/capability"
-import { materializeToolExecutionInput } from "@/provider/tool-execution-input"
 import {
   MessageTable,
   PartTable as SessionPartTable,
@@ -39,14 +37,6 @@ export const PanelArtifactReadReferenceFactSchema = ArtifactReadReferenceChunkSc
   terminal_lifecycle_reference: TerminalLifecycleReferenceSchema,
 })
 
-export const LegacyPanelArtifactReadInputSchema = z
-  .object({
-    action: z.literal("read_task_artifact"),
-    taskID: z.string().min(1),
-    ...ArtifactReadInputSchema.shape,
-  })
-  .strict()
-
 export const PanelArtifactReadReferenceInputSchema = z
   .object({
     action: z.literal("read_task_artifact"),
@@ -54,12 +44,6 @@ export const PanelArtifactReadReferenceInputSchema = z
     ...ArtifactReadReferenceInputSchema.shape,
   })
   .strict()
-
-export function unwrapPersistedProviderOperation(input: unknown): unknown {
-  if (!input || typeof input !== "object" || Array.isArray(input)) return input
-  const entries = Object.entries(input as Record<string, unknown>)
-  return entries.length === 1 && entries[0]?.[0] === "operation" ? entries[0][1] : input
-}
 
 export class ArtifactReferenceResolutionError extends Error {
   readonly code = "ARTIFACT_REFERENCE_UNRESOLVED"
@@ -293,7 +277,7 @@ export function completeArtifactReadLocatorsForSessionInTransaction(
         ...(options?.afterTimeCreated !== undefined ? [gt(PartTable.time_created, options.afterTimeCreated)] : []),
         ...factScopeConditions(options),
         sql`json_extract(${PartTable.data}, '$.type') = 'tool-request'`,
-        sql`json_extract(${PartTable.data}, '$.tool') IN ('artifact_read', 'panel')`,
+        sql`json_extract(${PartTable.data}, '$.tool') IN ('artifact_read', 'panel_read_task_artifact')`,
         sql`json_extract(${ToolPartOutcomeTable.data}, '$.outcome') = 'completed'`,
       ),
     )
@@ -311,18 +295,14 @@ export function completeArtifactReadLocatorsForSessionInTransaction(
   for (const row of rows) {
     const data = row.request as { tool?: unknown; input?: unknown }
     const rawInput = data.input
-    if (data.tool === "panel") {
+    if (data.tool === "panel_read_task_artifact") {
       if (!rawInput || typeof rawInput !== "object" || Array.isArray(rawInput)) continue
-      const unwrappedInput = unwrapPersistedProviderOperation(rawInput)
-      const materialized = materializeToolExecutionInput(MissionPanelActionSchema, rawInput)
-      const parsed = PanelArtifactReadReferenceInputSchema.safeParse(materialized)
-      const legacy = parsed.success ? undefined : LegacyPanelArtifactReadInputSchema.safeParse(unwrappedInput)
-      let panelInput:
-        | z.infer<typeof PanelArtifactReadReferenceInputSchema>
-        | z.infer<typeof LegacyPanelArtifactReadInputSchema>
-      if (parsed.success) panelInput = parsed.data
-      else if (legacy?.success) panelInput = legacy.data
-      else continue
+      const parsed = PanelArtifactReadReferenceInputSchema.safeParse({
+        action: "read_task_artifact",
+        ...(rawInput as Record<string, unknown>),
+      })
+      if (!parsed.success) continue
+      const panelInput = parsed.data
       const { action: _action, taskID, ...read } = panelInput
       if (options?.panelTaskID !== undefined && taskID !== options.panelTaskID) continue
       if (typeof row.canonicalOutput !== "string") {
@@ -577,12 +557,13 @@ function panelArtifactReadReferenceLocatorsBeforeActionInTransaction(
     sessionID: input.sessionID,
     assistantMessageID: input.assistantMessageID,
     toolPartID: input.toolPartID,
-    toolNames: ["panel"],
+    toolNames: ["panel_read_task_artifact"],
     acceptInput: (rawInput) => {
-      const parsed = MissionPanelActionSchema.safeParse(
-        materializeToolExecutionInput(MissionPanelActionSchema, rawInput),
-      )
-      return parsed.success && parsed.data.action === "read_task_artifact"
+      if (!rawInput || typeof rawInput !== "object" || Array.isArray(rawInput)) return false
+      return PanelArtifactReadReferenceInputSchema.safeParse({
+        action: "read_task_artifact",
+        ...(rawInput as Record<string, unknown>),
+      }).success
     },
   })) {
     const chunk = PanelArtifactReadReferenceFactSchema.safeParse(value)
@@ -761,7 +742,7 @@ export function artifactProvenanceFactHighWatermarkForSessionInTransaction(
       and(
         eq(MessageTable.session_id, sessionID),
         sql`json_extract(${PartTable.data}, '$.type') = 'tool-request'`,
-        sql`json_extract(${PartTable.data}, '$.tool') IN ('artifact_read', 'artifact_select', 'panel')`,
+        sql`json_extract(${PartTable.data}, '$.tool') IN ('artifact_read', 'artifact_select', 'panel_query_task_artifacts', 'panel_read_task_artifact')`,
       ),
     )
     .orderBy(desc(PartTable.time_created), desc(PartTable.id))

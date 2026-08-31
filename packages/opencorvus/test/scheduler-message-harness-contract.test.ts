@@ -10,7 +10,7 @@ describe("scheduler message model harness", () => {
       "Use it proactively when a running Task needs a Mission decision, a dependency-bearing directive, or context that another scheduler must receive",
       "Delivery means the recipient ingress is durable; it is not the answer",
       "Use `reply` only for the current scheduler request and pass its exact `event_id` as `reply_to`",
-      "Use `panel.query_task` for lifecycle and acceptance facts, `resume_task` for a reviewed inactive Task",
+      "Use `panel_query_task` for lifecycle and acceptance facts, `panel_resume_task` for a reviewed inactive Task",
       "Resolve it in this wake and send the correlated reply before unrelated reconciliation",
     ]
 

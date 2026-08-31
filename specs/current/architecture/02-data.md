@@ -259,6 +259,16 @@ tool instance、callback 与 Promise 仍只属于当前进程。`session_prompt_
 终态化废弃 assistant。服务重启只销毁 Runtime，不能使 Session、message、descriptor
 或 durable coordination request 失效。
 
+跨进程调度准入不能读取进程内 `SessionStatus` 作为共享 busy 权威。一个 Session 的当前
+共享执行事实是同一数据库快照中 `session_prompt_owner` 的精确进程 occurrence 仍为
+`exact_live` 或 `unknown_live`，且该 Session 存在 `time.completed` 为空的 assistant Message；
+standby owner 没有 unfinished assistant，已证实 `dead_or_reused` 的 owner 也不阻止接管。
+Recurring Session Automation 在创建 Fire 前，必须在同一个 immediate writer transaction
+内重验该组合事实与 definition/due/lease frontier。busy 时只获取绑定原 due occurrence 的
+短 `automation` admission-delay lease，不创建 Fire、attempt、run 或 receipt；lease 到期后
+下一 poll 重新读取全部事实。manual API/Tool run 在同一事务看到该事实时返回 typed running
+conflict，同样不得先创建 Fire。
+
 空闲 Session 的一个 Turn 可以按顺序接受该 Turn 开始时完整的待投递 user Message
 批次。新 assistant Message 持久化完整的 accepted input Message identity 集合，且
 `parentID` 等于集合尾项；删除这些输入的 `pendingDelivery` 标记与插入 assistant

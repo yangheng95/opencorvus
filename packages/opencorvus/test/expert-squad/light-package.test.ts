@@ -38,12 +38,14 @@ import { SessionLoop } from "../../src/session/loop"
 import { Message } from "../../src/session/message"
 import { SessionProcessor } from "../../src/session/processor"
 import { SkillMount } from "../../src/skill/mounts"
+import { CapabilitySearchTool } from "../../src/tool/capability-search"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
 import { allCapabilityGrants } from "./capability-grant-fixture"
 
 const packageRoot = path.resolve(import.meta.dir, "../../../../expert-squads/builtin/light")
 const skillRef = "light/shared/method"
 const schedulerTools = [
+  "capability_search",
   "dispatch_agents",
   "manage_task",
   "no_action",
@@ -381,8 +383,12 @@ describe("Light Expert Squad package", () => {
             sendSchedulerMessage,
             dispatchAgents: [...skillProjection.schedulerOnlyAgents, ...skillProjection.projectedAgents],
           }).tools
+          const capabilitySearch = await CapabilitySearchTool.init({ agentID: "orchestrator" })
           const projectedSchedulerTools = Object.fromEntries(
-            schedulerCapability.builtInToolIDs.map((toolID) => [toolID, rawSchedulerTools[toolID]!]),
+            schedulerCapability.builtInToolIDs.map((toolID) => [
+              toolID,
+              toolID === "capability_search" ? capabilitySearch : rawSchedulerTools[toolID]!,
+            ]),
           )
           const schedulerToolBudget = SessionLoop.estimateToolPayload(projectedSchedulerTools)
           expect({

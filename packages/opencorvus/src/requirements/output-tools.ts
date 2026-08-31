@@ -100,10 +100,10 @@ function emptyCollector(): RequirementsCollector {
 // Tool factory
 // ---------------------------------------------------------------------------
 
-export function createRequirementsOutputTools(options: RequirementsOutputToolOptions = {}) {
+export function createRequirementsOutputToolFactory(options: RequirementsOutputToolOptions = {}) {
   let collector = emptyCollector()
-  const tools = {
-    register_requirement: tool({
+  const materializeExact = (toolID: string) => {
+    const exact = toolID === "register_requirement" ? tool({
       description: "Register a parsed requirement from user input. Call once per requirement.",
       inputSchema: RequirementRegistrationSchema,
       execute: async ({ id, type, description, acceptance, non_goals, evidence_refs = [] }) => {
@@ -111,9 +111,7 @@ export function createRequirementsOutputTools(options: RequirementsOutputToolOpt
         collector.requirements.push({ id, type, description, acceptance, non_goals, evidence_refs })
         return `OK: ${id} registered (${collector.requirements.length} total)`
       },
-    }),
-
-    register_decision: options.taskID
+    }) : toolID === "register_decision" ? options.taskID
       ? materializeRequirementsRegisterDecisionTool(
           { taskID: options.taskID, decisionPhase: options.decisionPhase ?? "requirements" },
           {
@@ -128,8 +126,7 @@ export function createRequirementsOutputTools(options: RequirementsOutputToolOpt
             collector.decisions.push({ key, value, reason })
             return `OK: decision "${key}=${value}" registered`
           },
-        }),
-    finalize_requirements: tool({
+        }) : toolID === "finalize_requirements" ? tool({
       description:
         "Finalize the typed Requirements coverage declaration exactly once after registering every requirement and decision. " +
         "Bind the current request SHA-256, exact registered REQ-N identities, exact selected source Artifact locators, and every unresolved item. " +
@@ -140,12 +137,12 @@ export function createRequirementsOutputTools(options: RequirementsOutputToolOpt
         collector.finalization = RequirementCoverageDeclarationSchema.parse(raw)
         return `OK: Requirements coverage declared ${collector.finalization.status}`
       },
-    }),
+    }) : undefined
+    return exact
   }
 
   return {
-    tools,
-    collector,
+    materializeExact,
     /** Reset collector between retry attempts. */
     reset() {
       collector = emptyCollector()

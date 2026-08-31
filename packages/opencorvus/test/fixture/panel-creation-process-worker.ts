@@ -88,14 +88,15 @@ async function seed() {
         request: `Recover ${action} after its target commits`,
         reason: "Cross-process recovery acceptance",
       }
+  const { action: _action, ...toolInput } = params
   const part = await Session.updatePart({
     id: Identifier.ascending("part"),
     sessionID: caller.id,
     messageID: assistant.id,
     type: "tool",
     callID,
-    tool: "panel",
-    state: { status: "running", input: params, time: { start: now + 1 } },
+    tool: `panel_${action}`,
+    state: { status: "running", input: toolInput, time: { start: now + 1 } },
   })
   await fs.writeFile(identityPath, JSON.stringify({ callerID: caller.id, messageID: assistant.id, partID: part.id }))
   const cut = action === "create_task"
@@ -116,7 +117,7 @@ async function seed() {
     agent: "chat",
     abort: new AbortController().signal,
     messages: [],
-    executionSurface: Tool.executionSurface(["panel"], []),
+    executionSurface: Tool.executionSurface([`panel_${action}`], []),
     extra: { surface: "right-sidebar" },
     metadata() {},
   })

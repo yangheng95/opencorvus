@@ -7,7 +7,7 @@ import { ConversationCapability } from "../../src/conversation/capability"
 import { HostSessionMcpRuntime } from "../../src/mcp/host-session-runtime"
 import { BrowserMCPBuiltin } from "../../src/mcp/browser/builtin"
 import { ComputerMCPBuiltin } from "../../src/mcp/computer/builtin"
-import { SessionLoop } from "../../src/session/loop"
+import { prepareConversationMcpCatalog } from "../fixture/conversation-mcp"
 
 afterEach(async () => {
   Server.resetProjectRoutesAppForTest()
@@ -64,17 +64,16 @@ describe("native conversation capability routes", () => {
         const config = await Config.get()
         const payloads = await Promise.all(
           (["chat", "work"] as const).map(async (agentID) => {
-            const tools = await ConversationCapability.runtimeMcpTools(config, agentID, `default-${agentID}-catalog`)
+            const catalog = await prepareConversationMcpCatalog(config, agentID, `default-${agentID}-catalog`)
             return {
               agentID,
-              toolNames: Object.keys(tools),
-              schemaChars: SessionLoop.estimateToolPayloadChars(tools),
+              toolNames: catalog.names,
             }
           }),
         )
         expect(payloads).toEqual([
-          { agentID: "chat", toolNames: [], schemaChars: 0 },
-          { agentID: "work", toolNames: [], schemaChars: 0 },
+          { agentID: "chat", toolNames: [] },
+          { agentID: "work", toolNames: [] },
         ])
       },
     })
@@ -124,8 +123,8 @@ describe("native conversation capability routes", () => {
       fn: async () => {
         const sessionID = "default-browser-computer-catalog"
         try {
-          const tools = await ConversationCapability.runtimeMcpTools(await Config.get(), "work", sessionID)
-          const toolNames = Object.keys(tools).sort()
+          const catalog = await prepareConversationMcpCatalog(await Config.get(), "work", sessionID)
+          const toolNames = catalog.names
           const browserToolNames = toolNames.filter((name) => name.startsWith(`${BrowserMCPBuiltin.ServerName}_`))
           const computerToolNames = toolNames.filter((name) => name.startsWith(`${ComputerMCPBuiltin.ServerName}_`))
           expect({ total: toolNames.length, browser: browserToolNames.length, computer: computerToolNames }).toEqual({
@@ -133,8 +132,7 @@ describe("native conversation capability routes", () => {
             browser: 45,
             computer: ComputerMCPBuiltin.ImportableToolNames.map((name) => `computer_${name}`).sort(),
           })
-          const schemaChars = SessionLoop.estimateToolPayloadChars(tools)
-          expect(schemaChars).toBeGreaterThan(0)
+          expect(toolNames.length).toBeGreaterThan(0)
         } finally {
           await HostSessionMcpRuntime.dispose(sessionID)
         }

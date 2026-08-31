@@ -7,6 +7,7 @@ import path from "node:path"
 import z from "zod"
 import { Shell } from "@/shell/shell"
 import { canonicalShellScope } from "./shell-scope"
+import { PANEL_MUTATION_TOOL_IDS, PANEL_QUERY_TOOL_IDS } from "@/panel/action-ids"
 
 export const PermissionProviderKind = z.enum([
   "builtin",
@@ -48,16 +49,18 @@ const OBSERVATION_ONLY_BUILTINS = new Set<string>([
   "todoread",
   "todowrite",
   "planner",
-  "panel",
+  ...PANEL_QUERY_TOOL_IDS,
   "mission_state",
   "wait",
   "analytics",
   "work_artifact_inspect",
   "request_orchestrator_decision",
-  "batch",
 ])
 
 const BUILTIN_EFFECTS = new Map<string, PermissionEffectClass>([
+  ...PANEL_MUTATION_TOOL_IDS.map((toolID) => [toolID, "external_effect"] as const),
+  ["panel_cancel_task", "destructive"],
+  ["panel_delete_session", "destructive"],
   ["delegate_agent", "external_effect"],
   ["bash", "process"],
   ["browser_preview", "process"],

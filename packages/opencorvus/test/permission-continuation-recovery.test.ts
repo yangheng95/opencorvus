@@ -13,6 +13,7 @@ import { SessionPromptState } from "@/session/prompt/state"
 import { TOOL_RESULT_CONTROL_METADATA_KEY } from "@/session/tool-result-control"
 import { Database, and, eq } from "@/storage/db"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
+import { DispatchStageRecoveryAuthorityError } from "@/agent/dispatch-stage-tool-factory"
 
 afterEach(async () => {
   await Instance.disposeAll()
@@ -119,6 +120,29 @@ const TERMINAL_FAILURE = {
 } as const
 
 describe("Permission continuation recovery", () => {
+  test("retires deterministic dispatch-stage reducer drift and converges the next scan", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        await approvedInvocation({ directory: project.path, callID: "collector-reducer-drift" })
+        const resume = spyOn(SessionLoop, "resumePermissionContinuation").mockImplementation(async (request) => {
+          throw new DispatchStageRecoveryAuthorityError(request.id, "collector reducer output changed")
+        })
+        try {
+          expect(await PermissionAuthority.resumeApprovedContinuations()).toBe(0)
+          expect(ledgerEvents("stale")).toMatchObject([
+            { reason: expect.stringContaining("collector reducer output changed") },
+          ])
+          expect(await PermissionAuthority.resumeApprovedContinuations()).toBe(0)
+          expect(resume.mock.calls).toHaveLength(1)
+        } finally {
+          resume.mockRestore()
+        }
+      },
+    })
+  })
+
   test("retires a continuation whose ToolPart already holds a terminal failure", async () => {
     await using project = await memoryProject()
     await Instance.provide({

@@ -1,4 +1,5 @@
-import { tool, type ToolSet } from "ai"
+import { tool } from "ai"
+import { materializeExactTool } from "@/agent/exact-tool-factory"
 import fs from "node:fs/promises"
 import path from "node:path"
 import z from "zod"
@@ -83,12 +84,13 @@ type MaterializedVisualRegionAtlasImage = {
   height?: number
 }
 
-export function createVisualRegionBindingPackageTool(input: {
+export function createVisualRegionBindingPackageToolFactory(input: {
   taskID?: string
   onToolEvent?: (event: FrontendVisualRegionBindingToolEvent) => void | Promise<void>
-}): ToolSet {
-  return {
-    create_visual_region_coordinate_atlas: tool({
+  onToolMaterialized?: (toolID: string) => void
+}) {
+  const toolFactories = {
+    create_visual_region_coordinate_atlas: () => tool({
       description:
         "Create a screenshot coordinate atlas from a real full-page source PNG before authoring VisualRegionBinding bboxes. " +
         "Writes an overview plus vertical band images with absolute x/y grid labels, returns those PNGs as visible tool attachments, and writes an atlas manifest. " +
@@ -148,7 +150,7 @@ export function createVisualRegionBindingPackageTool(input: {
         }
       },
     }),
-    create_visual_region_binding_package: tool({
+    create_visual_region_binding_package: () => tool({
       description:
         "Materialize a VisualRegionBinding handoff package from a real source reference PNG and source bboxes. " +
         "Writes real per-region PNG crops, a bbox overlay image, a region contact sheet, and a JSON manifest with source_reference_artifact, source_bbox, viewport, region_scope, crop_intent, target_route, implementation_locator, and component_files. " +
@@ -221,6 +223,10 @@ export function createVisualRegionBindingPackageTool(input: {
         }
       },
     }),
+  }
+  return {
+    materializeExact: (toolID: string) =>
+      materializeExactTool(toolFactories, toolID, input.onToolMaterialized),
   }
 }
 

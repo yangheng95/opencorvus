@@ -7,11 +7,7 @@ import { UnauthorizedError } from "@modelcontextprotocol/sdk/client/auth.js"
 import {
   type CallToolResult,
   CallToolResultSchema,
-  GetPromptResultSchema,
-  type GetPromptRequest,
   type JSONRPCMessage,
-  ReadResourceResultSchema,
-  type ReadResourceRequest,
   type Tool as MCPToolDef,
   PromptListChangedNotificationSchema,
   ResourceListChangedNotificationSchema,
@@ -40,6 +36,7 @@ import { McpOAuthCallback, type CallbackResolution } from "./oauth-callback"
 import { oauthAuthorizationLogFields, oauthConnectionFailureLogFields } from "./oauth-log"
 import { McpAuth } from "./auth"
 import { BrowserMCPBuiltin } from "./browser/builtin"
+import { ComputerMCPBuiltin } from "./computer/builtin"
 import { BusEvent } from "../bus/bus-event"
 import { Bus } from "@/bus"
 import { GlobalBus } from "@/bus/global"
@@ -179,6 +176,7 @@ export namespace MCP {
   }
   const appToolBindings = new WeakMap<object, AppToolBinding>()
   const toolAuthorityBindings = new WeakMap<object, ToolAuthorityBinding>()
+  const exactToolAssertions = new WeakMap<object, () => Promise<void>>()
   const appToolResults = new WeakMap<object, CallToolResult>()
 
   function stableToolUiResourceUri(tool: MCPToolDef): string | undefined {
@@ -194,28 +192,6 @@ export namespace MCP {
     }
     return resourceURI
   }
-
-  const ProjectionPromptPayloadSchema = z
-    .object({
-      description: z.unknown().optional(),
-      messages: z.array(
-        z
-          .object({
-            role: z.unknown(),
-            content: z.unknown(),
-          })
-          .passthrough(),
-      ),
-    })
-    .passthrough()
-  export type ProjectionPromptPayload = z.infer<typeof ProjectionPromptPayloadSchema>
-
-  const ProjectionResourcePayloadSchema = z
-    .object({
-      contents: z.array(z.object({}).passthrough()),
-    })
-    .passthrough()
-  export type ProjectionResourcePayload = z.infer<typeof ProjectionResourcePayloadSchema>
 
   export const Status = z
     .discriminatedUnion("status", [
@@ -382,6 +358,14 @@ export namespace MCP {
     return toolAuthorityBindings.get(tool)
   }
 
+  export function exactToolAssertion(tool: object): (() => Promise<void>) | undefined {
+    return exactToolAssertions.get(tool)
+  }
+
+  export function bindExactToolAssertion(tool: object, assertCurrent: () => Promise<void>): void {
+    exactToolAssertions.set(tool, assertCurrent)
+  }
+
   export function toolDefinitionDigest(tool: MCPToolDef): string {
     return createHash("sha256")
       .update(JSON.stringify(canonicalConfigValue(tool)))
@@ -424,6 +408,8 @@ export namespace MCP {
     if (binding) appToolBindings.set(target, binding)
     const authority = toolAuthorityBindings.get(source)
     if (authority) toolAuthorityBindings.set(target, authority)
+    const assertCurrent = exactToolAssertions.get(source)
+    if (assertCurrent) exactToolAssertions.set(target, assertCurrent)
   }
 
   export function bindAppToolResult<T extends object>(output: T, result: CallToolResult): T {
@@ -454,14 +440,6 @@ export namespace MCP {
 
   export interface ScopedToolInput extends ScopedConnectionInput {
     toolName: string
-  }
-
-  export interface ScopedPromptInput extends ScopedConnectionInput {
-    promptName: string
-  }
-
-  export interface ScopedResourceInput extends ScopedConnectionInput {
-    resourceName: string
   }
 
   export const ScopedCapabilityInventory = z
@@ -513,6 +491,14 @@ export namespace MCP {
       super(
         `MCP owner ${owner_ref} maps distinct capabilities ${capability_refs.join(", ")} to runtime name ${runtime_name}`,
       )
+    }
+  }
+
+  export class CatalogBindingStaleError extends Error {
+    override readonly name = "McpCatalogBindingStaleError"
+
+    constructor(public readonly mismatches: readonly string[]) {
+      super(`MCP Catalog binding is stale: ${mismatches.join(", ")}.`)
     }
   }
 
@@ -693,7 +679,7 @@ export namespace MCP {
             connection_key: ownerKey,
             server_id: input.key,
             connection_identity: identity,
-            config_digest: mcpConfigDigest(input.mcp),
+            config_digest: mcpConfigDigest(input.key, input.mcp),
             inventory_revision:
               entry?.connection?.capabilitySnapshot.inventory_revision ?? emptyCapabilityInventoryRevision(),
             status: Object.freeze({ ...currentStatus }),
@@ -958,11 +944,11 @@ export namespace MCP {
     },
   ): ScopedCapabilitySnapshot | undefined {
     const snapshot = immutableCapabilitySnapshot(input)
-    if (
-      connection.capabilitySnapshot !== expected.snapshot ||
-      connection.listChangeGeneration !== expected.generation
-    ) {
-      return undefined
+    if (connection.listChangeGeneration !== expected.generation) return undefined
+    if (connection.capabilitySnapshot !== expected.snapshot) {
+      return connection.capabilitySnapshot.inventory_revision === snapshot.inventory_revision
+        ? connection.capabilitySnapshot
+        : undefined
     }
     connection.capabilitySnapshot = snapshot
     return snapshot
@@ -1063,14 +1049,14 @@ export namespace MCP {
     })
     toolAuthorityBindings.set(tool, {
       serverID: input.key,
-      configDigest: mcpConfigDigest(input.mcp),
+      configDigest: mcpConfigDigest(input.key, input.mcp),
       toolDigest: toolDefinitionDigest(mcpTool),
     })
     const resourceURI = stableToolUiResourceUri(mcpTool)
     if (resourceURI) {
       appToolBindings.set(tool, {
         serverID: input.key,
-        configDigest: mcpConfigDigest(input.mcp),
+        configDigest: mcpConfigDigest(input.key, input.mcp),
         tool: mcpTool,
         resourceURI,
         withClient: (run) => withScopedClient(input, run),
@@ -1084,42 +1070,51 @@ export namespace MCP {
     return scopedToolFromDefinition(input, mcpTool)
   }
 
-  /**
-   * Every tool a server exposes, projected under a scoped connection owner.
-   *
-   * The shared-connection projection enumerates whatever the server actually
-   * exposes; an owned projection must enumerate the same thing, or moving a
-   * server onto an owner would silently narrow the model's tool surface to
-   * whatever list the caller happened to hold. Names are sanitized the same
-   * way too, so the same server yields the same tool identifiers either way.
-   *
-   * A server that will not connect contributes nothing and does not fail the
-   * caller's whole projection, which is how the shared path already behaves —
-   * one unavailable builtin must not cost a Session every other tool it has.
-   */
-  export async function scopedToolsForServer(input: Omit<ScopedToolInput, "toolName">): Promise<Record<string, Tool>> {
-    let definitions: readonly MCPToolDef[]
-    try {
-      definitions = await withScopedClient(
-        input,
-        async (_client, _timeout, connection) => connection.capabilitySnapshot.tool_definitions,
-      )
-    } catch (error) {
-      log.error("scoped MCP server did not list its tools", {
-        key: input.key,
-        connectionIdentity: input.connectionIdentity,
-        error: error instanceof Error ? error.message : String(error),
-      })
-      return {}
+  /** Re-read one scoped inventory and materialize only the immutable bound leaf. */
+  export async function exactScopedCatalogTool(
+    input: ScopedConnectionInput & { binding: CatalogToolBinding },
+  ): Promise<Tool> {
+    const binding = input.binding
+    if (runtimeToolName(binding.server_id, binding.tool_name) !== binding.runtime_name) {
+      throw new Error(`MCP Catalog Tool binding ${binding.runtime_name} has a noncanonical runtime name.`)
     }
-    const entries = projectMcpRuntimeNames({
-      ownerRef: input.connectionOwner ? `scoped-mcp:${input.connectionOwner.id}` : `mcp-server:${input.key}`,
-      separator: "_",
-      capabilities: definitions
-        .filter((tool) => !isToolVisibilityAppOnly(tool))
-        .map((tool) => ({ serverID: input.key, capabilityName: tool.name, value: tool })),
-    }).map(({ runtimeName, value }) => [runtimeName, scopedToolFromDefinition(input, value)] as const)
-    return Object.fromEntries(entries)
+    if (input.key !== binding.server_id || mcpConfigDigest(input.key, input.mcp) !== binding.config_digest) {
+      throw new CatalogBindingStaleError([`tool_binding.${binding.runtime_name}.config_digest`])
+    }
+    const exactDefinition = async () => {
+      const snapshot = await inspectScopedCapabilitySnapshot(input)
+      const definition = snapshot.tool_definitions.find((candidate) => candidate.name === binding.tool_name)
+      if (!definition || toolDefinitionDigest(definition) !== binding.tool_digest) {
+        throw new CatalogBindingStaleError([`tool_binding.${binding.runtime_name}.tool_digest`])
+      }
+      return definition
+    }
+    const tool = scopedToolFromDefinition(input, await exactDefinition())
+    bindExactToolAssertion(tool, async () => {
+      await exactDefinition()
+    })
+    return tool
+  }
+
+  /** Freeze the currently observed scoped leaf into an exact call-time binding. */
+  export async function exactScopedTool(input: ScopedToolInput): Promise<Tool> {
+    const snapshot = await inspectScopedCapabilitySnapshot(input)
+    const binding = catalogToolBindings(input.key, input.mcp, snapshot).find(
+      (candidate) => candidate.tool_name === input.toolName,
+    )
+    if (!binding) {
+      throw new CatalogBindingStaleError([`tool_binding.${runtimeToolName(input.key, input.toolName)}.tool_digest`])
+    }
+    return exactScopedCatalogTool({
+      key: input.key,
+      mcp: input.mcp,
+      cwd: input.cwd,
+      globalTimeout: input.globalTimeout,
+      connectionOwner: input.connectionOwner,
+      connectionIdentity: input.connectionIdentity,
+      processAuthority: input.processAuthority,
+      binding,
+    })
   }
 
   export async function scopedToolInfo(input: ScopedToolInput): Promise<MCPToolDef> {
@@ -1153,99 +1148,6 @@ export namespace MCP {
         if (!tool) throw new Error(`Scoped MCP server ${input.key} does not expose tool ${input.toolName}`)
         assertMcpCapability(`MCP ${input.key}/${tool.name}`, input.mcp.type, input.processAuthority)
         return callToolWithTaskRecovery({ client, tool, args: input.args, timeout })
-      },
-      { skipToolListVerification: true },
-    )
-  }
-
-  export async function scopedPromptInfo(input: ScopedPromptInput): Promise<PromptInfo> {
-    const snapshot = await inspectScopedCapabilitySnapshot(input)
-    const prompt = snapshot.prompt_definitions.find((item) => item.name === input.promptName)
-    if (!prompt) throw new Error(`Scoped MCP server ${input.key} does not expose prompt ${input.promptName}`)
-    return prompt
-  }
-
-  export async function getScopedPrompt(
-    input: ScopedPromptInput & { args?: Record<string, string> },
-  ): Promise<GetPromptResult> {
-    return withScopedClient(
-      input,
-      async (client, timeout) =>
-        GetPromptResultSchema.parse(
-          await client.getPrompt(
-            {
-              name: input.promptName,
-              arguments: input.args,
-            },
-            mcpRequestOptions(timeout),
-          ),
-        ),
-      { skipToolListVerification: true },
-    )
-  }
-
-  export async function getScopedPromptProjectionPayload(
-    input: ScopedPromptInput & { args?: Record<string, string> },
-  ): Promise<ProjectionPromptPayload> {
-    return withScopedClient(
-      input,
-      async (client, timeout) =>
-        client.request(
-          {
-            method: "prompts/get",
-            params: {
-              name: input.promptName,
-              arguments: input.args,
-            },
-          } satisfies GetPromptRequest,
-          ProjectionPromptPayloadSchema,
-          mcpRequestOptions(timeout),
-        ),
-      { skipToolListVerification: true },
-    )
-  }
-
-  export async function scopedResourceInfo(input: ScopedResourceInput): Promise<ResourceInfo> {
-    const snapshot = await inspectScopedCapabilitySnapshot(input)
-    const resource = snapshot.resource_definitions.find((item) => item.name === input.resourceName)
-    if (!resource) throw new Error(`Scoped MCP server ${input.key} does not expose resource ${input.resourceName}`)
-    return resource
-  }
-
-  export async function readScopedResource(input: ScopedResourceInput): Promise<ReadResourceResult> {
-    const resource = await scopedResourceInfo(input)
-    return withScopedClient(
-      input,
-      async (client, timeout) =>
-        ReadResourceResultSchema.parse(
-          await client.readResource(
-            {
-              uri: resource.uri,
-            },
-            mcpRequestOptions(timeout),
-          ),
-        ),
-      { skipToolListVerification: true },
-    )
-  }
-
-  export async function readScopedResourceProjectionPayload(
-    input: ScopedResourceInput,
-  ): Promise<ProjectionResourcePayload> {
-    const resource = await scopedResourceInfo(input)
-    return withScopedClient(
-      input,
-      async (client, timeout) => {
-        return client.request(
-          {
-            method: "resources/read",
-            params: {
-              uri: resource.uri,
-            },
-          } satisfies ReadResourceRequest,
-          ProjectionResourcePayloadSchema,
-          mcpRequestOptions(timeout),
-        )
       },
       { skipToolListVerification: true },
     )
@@ -2112,8 +2014,13 @@ export namespace MCP {
     return JSON.stringify(canonicalConfigValue({ ...mcp, enabled: mcp.enabled !== false }))
   }
 
-  function mcpConfigDigest(mcp: McpEntry) {
-    return createHash("sha256").update(mcpConfigIdentity(mcp)).digest("hex")
+  function mcpConfigDigest(serverID: string, mcp: McpEntry) {
+    const identity =
+      serverID === ComputerMCPBuiltin.ServerName && isMcpConfigured(mcp) && mcp.type === "local"
+        ? ComputerMCPBuiltin.catalogIdentityConfig(mcp)
+        : mcp
+    const value = isMcpConfigured(identity) ? { ...identity, enabled: identity.enabled !== false } : identity
+    return createHash("sha256").update(JSON.stringify(canonicalConfigValue(value))).digest("hex")
   }
 
   interface CreateOptions {
@@ -3693,7 +3600,96 @@ export namespace MCP {
     readonly provenance: "config_only" | "runtime_observed"
     readonly statuses: Readonly<Record<string, Status>>
     readonly tool_ids: readonly string[]
+    readonly tool_bindings: Readonly<Record<string, CatalogToolBinding>>
     readonly inventory_revision_vector: Readonly<Record<string, string>>
+  }
+
+  export interface CatalogToolBinding {
+    readonly runtime_name: string
+    readonly server_id: string
+    readonly tool_name: string
+    readonly config_digest: string
+    readonly tool_digest: string
+  }
+
+  export interface CatalogMetadataBinding {
+    readonly runtime_name: string
+    readonly server_id: string
+    readonly capability_name: string
+    readonly description?: string
+  }
+
+  function catalogMetadataBindings(
+    kind: "prompt" | "resource",
+    serverID: string,
+    definitions: readonly { name: string; description?: string }[],
+  ): readonly CatalogMetadataBinding[] {
+    return Object.freeze(
+      projectMcpRuntimeNames({
+        ownerRef: `mcp-server:${serverID}:${kind}`,
+        separator: "_",
+        capabilities: definitions.map((definition) => ({
+          serverID,
+          capabilityName: definition.name,
+          value: definition,
+        })),
+      }).map(({ runtimeName, value }) =>
+        Object.freeze({
+          runtime_name: runtimeName,
+          server_id: serverID,
+          capability_name: value.name,
+          ...(typeof value.description === "string" ? { description: value.description } : {}),
+        }),
+      ),
+    )
+  }
+
+  export function catalogPromptBindings(
+    serverID: string,
+    snapshot: ScopedCapabilitySnapshot,
+  ): readonly CatalogMetadataBinding[] {
+    return catalogMetadataBindings("prompt", serverID, snapshot.prompt_definitions)
+  }
+
+  export function catalogResourceBindings(
+    serverID: string,
+    snapshot: ScopedCapabilitySnapshot,
+  ): readonly CatalogMetadataBinding[] {
+    return catalogMetadataBindings("resource", serverID, snapshot.resource_definitions)
+  }
+
+  export function catalogToolBindings(
+    serverID: string,
+    mcp: Config.Mcp,
+    snapshot: ScopedCapabilitySnapshot,
+  ): readonly CatalogToolBinding[] {
+    return Object.freeze(
+      projectMcpRuntimeNames({
+        ownerRef: `mcp-server:${serverID}`,
+        separator: "_",
+        capabilities: snapshot.tool_definitions
+          .filter((tool) => !isToolVisibilityAppOnly(tool))
+          .map((tool) => ({ serverID, capabilityName: tool.name, value: tool })),
+      })
+        .map(({ runtimeName, value: tool }) => {
+          return Object.freeze({
+            runtime_name: runtimeName,
+            server_id: serverID,
+            tool_name: tool.name,
+            config_digest: mcpConfigDigest(serverID, mcp),
+            tool_digest: toolDefinitionDigest(tool),
+          })
+        })
+        .sort((left, right) => compareCanonicalStrings(left.runtime_name, right.runtime_name)),
+    )
+  }
+
+  export function runtimeToolName(serverID: string, toolName: string): string {
+    return projectMcpRuntimeNames({
+      ownerRef: "mcp-runtime-name",
+      separator: "_",
+      capabilities: [{ serverID, capabilityName: toolName, value: null }],
+    })[0]!.runtimeName
   }
 
   /** Publish a complete config/status identity without initializing MCP state.
@@ -3720,7 +3716,11 @@ export namespace MCP {
         .sort(([left], [right]) => compareCanonicalStrings(left, right))
         .map(([key, value]) => [key, Object.freeze({ ...value })]),
     )
-    const toolCapabilities: Array<{ serverID: string; capabilityName: string; value: null }> = []
+    const toolCapabilities: Array<{
+      serverID: string
+      capabilityName: string
+      value: { tool: MCPToolDef; configDigest: string }
+    }> = []
     const inventoryRevisions: Record<string, string> = {}
     if (observedState) {
       for (const [serverID, configuredMcp] of entries(config)) {
@@ -3731,13 +3731,35 @@ export namespace MCP {
         const inventory = connection.capabilitySnapshot
         inventoryRevisions[serverID] = inventory.inventory_revision
         for (const tool of inventory.tool_definitions) {
-          toolCapabilities.push({ serverID, capabilityName: tool.name, value: null })
+          toolCapabilities.push({
+            serverID,
+            capabilityName: tool.name,
+            value: { tool, configDigest: mcpConfigDigest(serverID, mcp) },
+          })
         }
       }
     }
-    const orderedToolIDs = Object.freeze(
-      projectMcpRuntimeNames({ ownerRef: "mcp-config", separator: "_", capabilities: toolCapabilities }).map(
-        (entry) => entry.runtimeName,
+    const projectedTools = projectMcpRuntimeNames({
+      ownerRef: "mcp-config",
+      separator: "_",
+      capabilities: toolCapabilities,
+    })
+    const orderedToolIDs = Object.freeze(projectedTools.map((entry) => entry.runtimeName))
+    const toolBindings = Object.freeze(
+      Object.fromEntries(
+        projectedTools.map(({ runtimeName, value }) => [
+          runtimeName,
+          Object.freeze({
+            runtime_name: runtimeName,
+            server_id: toolCapabilities.find(
+              (candidate) =>
+                candidate.capabilityName === value.tool.name && candidate.value.tool === value.tool,
+            )!.serverID,
+            tool_name: value.tool.name,
+            config_digest: value.configDigest,
+            tool_digest: toolDefinitionDigest(value.tool),
+          }),
+        ]),
       ),
     )
     const orderedInventoryRevisions = Object.freeze(
@@ -3758,6 +3780,7 @@ export namespace MCP {
             config_digest: configDigest,
             statuses: orderedStatuses,
             tool_ids: orderedToolIDs,
+            tool_bindings: toolBindings,
             inventory_revision_vector: orderedInventoryRevisions,
           }),
         ),
@@ -3769,8 +3792,111 @@ export namespace MCP {
       provenance,
       statuses: Object.freeze(orderedStatuses),
       tool_ids: orderedToolIDs,
+      tool_bindings: toolBindings,
       inventory_revision_vector: orderedInventoryRevisions,
     })
+  }
+
+  /** Materialize one exact Tool from an immutable observed catalog binding. */
+  export async function exactCatalogTool(input: {
+    config: Config.Info
+    binding: CatalogToolBinding
+    processAuthority: ProcessAuthority
+    expectedOwnerRevision: string
+  }): Promise<Tool> {
+    const binding = input.binding
+    if (runtimeToolName(binding.server_id, binding.tool_name) !== binding.runtime_name) {
+      throw new Error(`MCP Catalog Tool binding ${binding.runtime_name} has a noncanonical runtime name.`)
+    }
+    const config = (input.config.mcp ?? {}) as NonNullable<Config.Info["mcp"]>
+    const configured = requireMcpEntry(config, binding.server_id)
+    if (!isMcpConfigured(configured) || configured.enabled === false) {
+      throw new CatalogBindingStaleError([`tool_binding.${binding.runtime_name}.server_enabled`])
+    }
+    if (mcpConfigDigest(binding.server_id, configured) !== binding.config_digest) {
+      throw new CatalogBindingStaleError([`tool_binding.${binding.runtime_name}.config_digest`])
+    }
+    const assertOwnerRevision = async () => {
+      const current = await observedCatalogSnapshot(input.config)
+      if (current.owner_revision !== input.expectedOwnerRevision) {
+        throw new CatalogBindingStaleError(["owner_revision_vector.mcp-config"])
+      }
+    }
+    await assertOwnerRevision()
+    if (input.processAuthority.kind === "task") {
+      const tool = await exactScopedCatalogTool({
+        key: binding.server_id,
+        mcp: configured,
+        binding,
+        cwd: input.processAuthority.cwd,
+        globalTimeout: input.config.experimental?.mcp_timeout,
+        processAuthority: input.processAuthority,
+      })
+      await assertOwnerRevision()
+      const scopedAssertion = exactToolAssertion(tool)
+      bindExactToolAssertion(tool, async () => {
+        await scopedAssertion?.()
+        await assertOwnerRevision()
+      })
+      return tool
+    }
+    const s = await state()
+    await ensureConfiguredConnections(s, { [binding.server_id]: configured })
+    const runtime = exactConnectedRuntime(s, binding.server_id, configured)
+    if (!runtime) throw new Error(`MCP Catalog Tool ${binding.runtime_name} server is not connected.`)
+    await refreshConnectionCapabilityInventory(
+      runtime.connection,
+      effectiveTimeout(runtime.mcp, input.config.experimental?.mcp_timeout),
+      "tool",
+    )
+    const definition = runtime.connection.capabilitySnapshot.tool_definitions.find(
+      (candidate) => candidate.name === binding.tool_name,
+    )
+    if (!definition || toolDefinitionDigest(definition) !== binding.tool_digest) {
+      throw new CatalogBindingStaleError([`tool_binding.${binding.runtime_name}.tool_digest`])
+    }
+    const tool = convertMcpTool(
+      definition,
+      runtime.client,
+      effectiveTimeout(runtime.mcp, input.config.experimental?.mcp_timeout),
+      {
+        serverID: binding.server_id,
+        configDigest: binding.config_digest,
+        type: configured.type,
+        processAuthority: input.processAuthority,
+      },
+    )
+    await assertOwnerRevision()
+    bindExactToolAssertion(tool, async () => {
+      const currentConfig = (input.config.mcp ?? {}) as NonNullable<Config.Info["mcp"]>
+      const currentConfigured = requireMcpEntry(currentConfig, binding.server_id)
+      if (
+        !isMcpConfigured(currentConfigured) ||
+        currentConfigured.enabled === false ||
+        mcpConfigDigest(binding.server_id, currentConfigured) !== binding.config_digest
+      ) {
+        throw new CatalogBindingStaleError([`tool_binding.${binding.runtime_name}.config_digest`])
+      }
+      const currentState = await state()
+      await ensureConfiguredConnections(currentState, { [binding.server_id]: currentConfigured })
+      const currentRuntime = exactConnectedRuntime(currentState, binding.server_id, currentConfigured)
+      if (!currentRuntime) {
+        throw new CatalogBindingStaleError([`tool_binding.${binding.runtime_name}.server_enabled`])
+      }
+      await refreshConnectionCapabilityInventory(
+        currentRuntime.connection,
+        effectiveTimeout(currentRuntime.mcp, input.config.experimental?.mcp_timeout),
+        "tool",
+      )
+      const currentDefinition = currentRuntime.connection.capabilitySnapshot.tool_definitions.find(
+        (candidate) => candidate.name === binding.tool_name,
+      )
+      if (!currentDefinition || toolDefinitionDigest(currentDefinition) !== binding.tool_digest) {
+        throw new CatalogBindingStaleError([`tool_binding.${binding.runtime_name}.tool_digest`])
+      }
+      await assertOwnerRevision()
+    })
+    return tool
   }
 
   function exactConfiguredServers(
@@ -3915,119 +4041,6 @@ export namespace MCP {
         return
       s.status[name] = { status: "disabled" }
       s.statusIdentity[name] = ownerIdentity
-    })
-  }
-
-  export async function tools(processAuthority: ProcessAuthority) {
-    const cfg = await Config.get()
-    return toolsForConfig(
-      (cfg.mcp ?? {}) as NonNullable<Config.Info["mcp"]>,
-      cfg.experimental?.mcp_timeout,
-      processAuthority,
-    )
-  }
-
-  async function toolsForConfig(
-    config: NonNullable<Config.Info["mcp"]>,
-    defaultTimeout: number | undefined,
-    processAuthority: ProcessAuthority,
-  ) {
-    if (processAuthority.kind === "task") {
-      const enabled = entries(config).filter(
-        (entry): entry is [string, Config.Mcp] => isMcpConfigured(entry[1]) && entry[1].enabled !== false,
-      )
-      for (const [key, mcp] of enabled) assertMcpCapability(`MCP ${key}`, mcp.type, processAuthority)
-      const inventories = await Promise.all(
-        enabled.map(async ([key, mcp]) => ({
-          key,
-          scope: {
-            key,
-            mcp,
-            cwd: processAuthority.cwd,
-            processAuthority,
-            globalTimeout: defaultTimeout,
-          },
-          inventory: await inspectScopedCapabilitySnapshot({
-            key,
-            mcp,
-            cwd: processAuthority.cwd,
-            processAuthority,
-            globalTimeout: defaultTimeout,
-          }),
-        })),
-      )
-      return Object.fromEntries(
-        projectMcpRuntimeNames({
-          ownerRef: `task-mcp:${processAuthority.taskID}`,
-          separator: "_",
-          capabilities: inventories.flatMap(({ key, scope, inventory }) =>
-            inventory.tool_definitions
-              .filter((tool) => !isToolVisibilityAppOnly(tool))
-              .map((tool) => ({ serverID: key, capabilityName: tool.name, value: { scope, tool } })),
-          ),
-        }).map(({ runtimeName, value }) => [runtimeName, scopedToolFromDefinition(value.scope, value.tool)]),
-      )
-    }
-    const result: Record<string, Tool> = {}
-    const s = await state()
-    await ensureConfiguredConnections(s, config)
-    const clientsSnapshot = await clients()
-    const selectedServerIDs = new Set(Object.keys(config))
-
-    const connectedClients = entries(clientsSnapshot).filter(([clientName]) => {
-      if (!selectedServerIDs.has(clientName)) return false
-      return exactConnectedRuntime(s, clientName, config[clientName])?.client === clientsSnapshot[clientName]
-    })
-
-    const toolsResults = await Promise.all(
-      connectedClients.map(async ([clientName, client]) => {
-        const runtime = exactConnectedRuntime(s, clientName, config[clientName])
-        if (!runtime || runtime.client !== client) return
-        let toolDefinitions: MCPToolDef[]
-        try {
-          const timeout = effectiveTimeout(runtime.mcp, defaultTimeout)
-          await refreshConnectionCapabilityInventory(runtime.connection, timeout, "tool")
-          toolDefinitions = [...runtime.connection.capabilitySnapshot.tool_definitions]
-          if (exactConnectedRuntime(s, clientName, config[clientName])?.connection !== runtime.connection) return
-        } catch (error) {
-          return failClientList(s, clientName, "tools", error, runtime.connection)
-        }
-        return { clientName, client, toolDefinitions, mcp: runtime.mcp }
-      }),
-    )
-
-    const projected = projectMcpRuntimeNames({
-      ownerRef: "mcp-config",
-      separator: "_",
-      capabilities: toolsResults.flatMap((toolResult) =>
-        toolResult
-          ? toolResult.toolDefinitions
-              .filter((tool) => !isToolVisibilityAppOnly(tool))
-              .map((tool) => ({
-                serverID: toolResult.clientName,
-                capabilityName: tool.name,
-                value: { tool, result: toolResult },
-              }))
-          : [],
-      ),
-    })
-    for (const { runtimeName, value } of projected) {
-      const { clientName, client, mcp } = value.result
-      result[runtimeName] = await convertMcpTool(value.tool, client, effectiveTimeout(mcp, defaultTimeout), {
-        serverID: clientName,
-        configDigest: mcpConfigDigest(mcp),
-        type: mcp.type,
-        processAuthority: { kind: "host", cwd: Instance.directory },
-      })
-    }
-    return result
-  }
-
-  export async function toolsForServers(configSnapshot: Config.Info, serverIDs: readonly string[]) {
-    const config = exactConfiguredServers((configSnapshot.mcp ?? {}) as NonNullable<Config.Info["mcp"]>, serverIDs)
-    return toolsForConfig(config, configSnapshot.experimental?.mcp_timeout, {
-      kind: "host",
-      cwd: Instance.directory,
     })
   }
 
@@ -4186,7 +4199,7 @@ export namespace MCP {
     if (!isMcpConfigured(runtimeEntry) || runtimeEntry.enabled === false) {
       throw new Error(`MCP App server ${input.serverID} is not enabled`)
     }
-    const currentDigest = mcpConfigDigest(runtimeEntry)
+    const currentDigest = mcpConfigDigest(input.serverID, runtimeEntry)
     if (currentDigest !== input.configDigest) {
       throw new Error(`MCP App server ${input.serverID} configuration changed after the artifact was created`)
     }
@@ -4197,7 +4210,7 @@ export namespace MCP {
     if (!runtime) {
       throw new Error(`MCP App server ${input.serverID} is not connected`)
     }
-    if (mcpConfigDigest(runtime.mcp) !== input.configDigest) {
+    if (mcpConfigDigest(input.serverID, runtime.mcp) !== input.configDigest) {
       throw new Error(`MCP App server ${input.serverID} configuration changed after the artifact was created`)
     }
     return run(runtime.client, effectiveTimeout(runtime.mcp, currentConfig.experimental?.mcp_timeout))
@@ -4208,6 +4221,14 @@ export namespace MCP {
    * Returns the authorization URL that should be opened in a browser.
    */
   export namespace TestHooks {
+    export function runtimeConfigIdentity(mcp: Config.Mcp): string {
+      return mcpConfigIdentity(mcp)
+    }
+
+    export function catalogConfigDigest(serverID: string, mcp: Config.Mcp): string {
+      return mcpConfigDigest(serverID, mcp)
+    }
+
     export async function collectToolDefinitionPages(
       list: (cursor: string | undefined) => Promise<{ tools: MCPToolDef[]; nextCursor?: string }>,
     ): Promise<MCPToolDef[]> {

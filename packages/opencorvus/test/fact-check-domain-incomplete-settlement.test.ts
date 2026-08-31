@@ -475,7 +475,7 @@ describe("Fact Check domain-incomplete settlement", () => {
         const fixture = await createFixture("Fact Check invalid review")
         const invalidReview = { ...reviewFor(fixture), overall_verdict: "inconclusive" as const }
         const outputTools = createFactCheckOutputTools()
-        const record = outputTools.tools.record_fact_check_review
+        const record = outputTools.materializeExact("record_fact_check_review")!
         if (!record.execute) throw new Error("record_fact_check_review is missing its executor")
         const toolResult = await record.execute(invalidReview, {
           toolCallId: "call-invalid-review",

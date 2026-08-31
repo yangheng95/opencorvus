@@ -79,6 +79,17 @@ export namespace Message {
       metadata: z.record(z.string(), z.string()).optional(),
     }),
   )
+  export const CatalogOccurrenceStaleError = z
+    .object({
+      name: z.literal("StaleCatalogOccurrenceError"),
+      data: z
+        .object({
+          message: z.string(),
+          mismatches: z.array(z.string()),
+        })
+        .strict(),
+    })
+    .strict()
   export type APIError = z.infer<typeof APIError.Schema>
   export const ContextOverflowError = NamedError.create(
     "ContextOverflowError",
@@ -665,6 +676,7 @@ export namespace Message {
         ToolSchemaBudgetError.Schema,
         ModelImageInputTooLargeError.Schema,
         APIError.Schema,
+        CatalogOccurrenceStaleError,
       ])
       .optional(),
     failureOccurrence: FailureOccurrenceAnchor.optional(),
@@ -1734,6 +1746,16 @@ export namespace Message {
           },
           { cause: e },
         ).toObject()
+      case e instanceof Error &&
+        e.name === "StaleCatalogOccurrenceError" &&
+        Array.isArray((e as Error & { mismatches?: unknown }).mismatches):
+        return {
+          name: "StaleCatalogOccurrenceError" as const,
+          data: {
+            message: e.message,
+            mismatches: [...((e as Error & { mismatches: string[] }).mismatches)],
+          },
+        }
       case e instanceof Error:
         return new NamedError.Unknown({ message: e.toString() }, { cause: e }).toObject()
       default:

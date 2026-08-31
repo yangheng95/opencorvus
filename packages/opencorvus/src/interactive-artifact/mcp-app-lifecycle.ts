@@ -9,6 +9,7 @@ import {
 import { materializeMcpAppArtifact } from "./mcp-app"
 import { updateMcpAppToolLifecycle } from "./persist"
 import { McpAppToolLifecycle, type InteractiveArtifactRecord } from "./schema"
+import { canonicalDigestSource, canonicalJSONValue } from "@/util/canonical-digest"
 
 type ExpertSquadAuthority = {
   kind: "expert-squad"
@@ -23,6 +24,28 @@ type ExpertSquadAuthority = {
 }
 
 export type McpAppAuthority = { kind: "configured" } | ExpertSquadAuthority
+
+export type McpAppToolLifecycleIdentity = Readonly<{
+  session_id: string
+  message_id: string
+  server_id: string
+  config_digest: string
+  tool_definition_digest: string
+  resource_uri: string
+  authority: McpAppAuthority
+}>
+
+export class McpAppToolLifecycleOwnerConflictError extends Error {
+  override readonly name = "McpAppToolLifecycleOwnerConflictError"
+
+  constructor(
+    public readonly tool_name: string,
+    public readonly existing_identity: McpAppToolLifecycleIdentity,
+    public readonly candidate_identity: McpAppToolLifecycleIdentity,
+  ) {
+    super(`MCP App lifecycle owner conflict for provider Tool ${tool_name}`)
+  }
+}
 
 function expertSquadAuthority(binding: ProjectedTaskToolRuntimeBinding): ExpertSquadAuthority {
   if (
@@ -60,6 +83,16 @@ export function createMcpAppToolLifecycle(input: {
   binding: MCP.AppToolBinding
   authority: McpAppAuthority
 }) {
+  const identity: McpAppToolLifecycleIdentity = Object.freeze({
+    session_id: input.sessionID,
+    message_id: input.messageID,
+    server_id: input.binding.serverID,
+    config_digest: input.binding.configDigest,
+    tool_definition_digest: MCP.toolDefinitionDigest(input.binding.tool),
+    resource_uri: input.binding.resourceURI,
+    authority: Object.freeze({ ...input.authority }),
+  })
+  const identitySha256 = canonicalDigestSource("mcp-app-tool-lifecycle-identity-v1", identity).sha256
   const calls = new Map<string, Promise<RunningArtifact>>()
 
   const start = (toolCallID: string): Promise<RunningArtifact> => {
@@ -110,6 +143,11 @@ export function createMcpAppToolLifecycle(input: {
   }
 
   return {
+    identity,
+    identitySha256,
+    started(toolCallID: string) {
+      return calls.has(toolCallID)
+    },
     start,
     partial(toolCallID: string, partialInput: Record<string, unknown>) {
       return update(toolCallID, { status: "input-streaming", partialInput })
@@ -139,3 +177,22 @@ export function createMcpAppToolLifecycle(input: {
 }
 
 export type McpAppToolLifecycleController = ReturnType<typeof createMcpAppToolLifecycle>
+
+export function registerMcpAppToolLifecycleController(
+  registry: Map<string, McpAppToolLifecycleController>,
+  toolName: string,
+  candidate: McpAppToolLifecycleController,
+): McpAppToolLifecycleController {
+  const existing = registry.get(toolName)
+  if (!existing) {
+    registry.set(toolName, candidate)
+    return candidate
+  }
+  if (
+    existing.identitySha256 !== candidate.identitySha256 ||
+    canonicalJSONValue(existing.identity) !== canonicalJSONValue(candidate.identity)
+  ) {
+    throw new McpAppToolLifecycleOwnerConflictError(toolName, existing.identity, candidate.identity)
+  }
+  return existing
+}

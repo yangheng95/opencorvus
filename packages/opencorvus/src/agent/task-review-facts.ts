@@ -3,8 +3,9 @@ import { MessageTable, ToolPartRequestTable as PartTable, ToolPartOutcomeTable }
 import type { TerminalLifecycleReference } from "@/engine/terminal-lifecycle-reference"
 import { PanelQueryTaskOutput } from "@/panel/task-query"
 import { assistantActionFactScope } from "./artifact-read-facts"
-import { MissionPanelActionSchema } from "@/panel/capability"
-import { materializeToolExecutionInput } from "@/provider/tool-execution-input"
+import { panelLeafActionSchemaForAgent } from "@/panel/capability"
+
+const MissionPanelQueryTaskInput = panelLeafActionSchemaForAgent("query_task", "mission")
 
 export function reviewedTerminalLifecycleReferenceBeforePanelAction(input: {
   sessionID: string
@@ -28,7 +29,7 @@ export function reviewedTerminalLifecycleReferenceBeforePanelAction(input: {
             and(eq(PartTable.time_created, scope.before.timeCreated), sql`${PartTable.id} < ${scope.before.partID}`),
           ),
           sql`json_extract(${PartTable.data}, '$.type') = 'tool-request'`,
-          sql`json_extract(${PartTable.data}, '$.tool') = 'panel'`,
+          sql`json_extract(${PartTable.data}, '$.tool') = 'panel_query_task'`,
           sql`json_extract(${ToolPartOutcomeTable.data}, '$.outcome') = 'completed'`,
         ),
       )
@@ -41,10 +42,8 @@ export function reviewedTerminalLifecycleReferenceBeforePanelAction(input: {
       input: (row.request as { input?: unknown }).input,
       output: (row.outcome as { output?: unknown }).output,
     }
-    const panelInput = MissionPanelActionSchema.safeParse(
-      materializeToolExecutionInput(MissionPanelActionSchema, state?.input),
-    )
-    if (!panelInput.success || panelInput.data.action !== "query_task") continue
+    const panelInput = MissionPanelQueryTaskInput.safeParse(state?.input)
+    if (!panelInput.success) continue
     if (typeof state?.output !== "string") {
       throw new Error(`Completed panel.query_task tool part ${row.id} has no canonical string output.`)
     }

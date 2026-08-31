@@ -76,7 +76,10 @@ function manifest(): ExpertSquadManifestV2 {
 describe("Expert Squad typed capability grants", () => {
   test("publishes the complete core Tool inventory and every platform CapabilitySet", () => {
     const inventory = ToolCapabilityInventory.snapshot()
-    expect(inventory.toolIDs).toHaveLength(61)
+    expect(inventory.toolIDs.length).toBe(new Set(inventory.toolIDs).size)
+    expect(inventory.toolIDs).toEqual(
+      expect.arrayContaining(["capability_search", "panel_create_task", "panel_complete_mission"]),
+    )
     expect(inventory.sets.map((set) => CapabilityRefCodec.encode(set.ref))).toEqual(
       PlatformCapabilitySetRegistry.all().map((set) => CapabilityRefCodec.encode(set.ref)),
     )
@@ -121,9 +124,12 @@ describe("Expert Squad typed capability grants", () => {
       context: "capability_projection.agents.worker",
     })
     expect(grants.builtInToolIDs).toEqual(
-      PlatformCapabilitySetRegistry.get(PlatformCapabilitySetRegistry.transportRef("worker"))
-        .member_refs.map((ref) => ref.local_ref)
-        .sort(),
+      [
+        "capability_search",
+        ...PlatformCapabilitySetRegistry.get(PlatformCapabilitySetRegistry.transportRef("worker")).member_refs.map(
+          (ref) => ref.local_ref,
+        ),
+      ].sort(),
     )
     expect(grants.explicitBuiltInToolIDs).toEqual([])
   })

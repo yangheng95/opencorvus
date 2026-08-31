@@ -246,7 +246,7 @@ export async function resolveTaskCreator(rawCreator: z.input<typeof TaskCreator>
         )
         .get(),
     )
-    if (!request || request.data.callID !== creator.toolCallID || request.data.tool !== "panel") {
+    if (!request || request.data.callID !== creator.toolCallID || request.data.tool !== "panel_create_task") {
       throw new TaskCreatorAuthorityError({
         message: `Task creator Tool occurrence ${creator.toolPartID} is not the exact persisted panel request.`,
       })

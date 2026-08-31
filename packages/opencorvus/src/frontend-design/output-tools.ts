@@ -53,6 +53,7 @@ import { VisualRegionBindingManifestSchema, type VisualRegionBindingManifest } f
 import { markdownList } from "@/util/markdown"
 import { Filesystem } from "@/util/filesystem"
 import { bindStageToolMaterializer } from "@/agent/stage-tool-materializer"
+import { materializeExactTool } from "@/agent/exact-tool-factory"
 
 export type { FrontendDesignPayload } from "./schema"
 
@@ -1926,6 +1927,7 @@ export function createFrontendDesignOutputTools(
     workspaceRoot?: string
     taskID: string
   },
+  onMaterialize?: (toolID: string) => void,
 ) {
   const mode = FrontendDesignModeSchema.parse(options.mode)
   const artifactRoot = path.resolve(options.artifactRoot ?? process.cwd())
@@ -1966,39 +1968,40 @@ export function createFrontendDesignOutputTools(
     return `OK: ${category} spec "${input.id}" registered (${collector.specs.length} total)`
   }
 
-  const captureFrontendVisualEvidenceTool = materializeFrontendCaptureVisualEvidenceTool(
-    { mode, artifactRoot, artifactRootRelative, workspaceRoot, taskID: options.taskID },
-    (evidence) => {
-      const items = arrayField<VisualValidationEvidence>(collector.draft, "visual_validation_evidence")
-      const updateMode = upsertByStringKey(items, evidence, "id")
-      collector.semantic_error = undefined
-      return updateMode
-    },
-  )
+  const materializeCaptureFrontendVisualEvidenceTool = () =>
+    materializeFrontendCaptureVisualEvidenceTool(
+      { mode, artifactRoot, artifactRootRelative, workspaceRoot, taskID: options.taskID },
+      (evidence) => {
+        const items = arrayField<VisualValidationEvidence>(collector.draft, "visual_validation_evidence")
+        const updateMode = upsertByStringKey(items, evidence, "id")
+        collector.semantic_error = undefined
+        return updateMode
+      },
+    )
 
-  const tools = {
-    register_color_spec: tool({
+  const toolFactories = {
+    register_color_spec: () => tool({
       description:
         "Register an exact reusable color constraint from the visual input. Use exact hex values and consolidate repeated rows/items under one role spec instead of per-item specs.",
       inputSchema: ColorSchema,
       execute: async (input) => assertIdFree(input.id) ?? push("color", input),
     }),
 
-    register_typography_spec: tool({
+    register_typography_spec: () => tool({
       description:
         "Register an exact reusable typography constraint (font family + size + weight, plus line-height and letter-spacing when discernible). Register roles, not every repeated text instance.",
       inputSchema: TypographySchema,
       execute: async (input) => assertIdFree(input.id) ?? push("typography", input),
     }),
 
-    register_spacing_spec: tool({
+    register_spacing_spec: () => tool({
       description:
         "Register an exact reusable spacing constraint (margin / padding / gap / inset). Use declared evidence when applicable and consolidate repeated surfaces under one spacing role.",
       inputSchema: SpacingSchema,
       execute: async (input) => assertIdFree(input.id) ?? push("spacing", input),
     }),
 
-    register_layout_spec: tool({
+    register_layout_spec: () => tool({
       description:
         "Register a reusable layout section with position, dimensions, and layout method. Register parents before children and avoid one spec per repeated item.",
       inputSchema: LayoutSchema,
@@ -2029,7 +2032,7 @@ export function createFrontendDesignOutputTools(
       },
     }),
 
-    register_component_spec: tool({
+    register_component_spec: () => tool({
       description:
         "Register a reusable user-interface component. Reference the layout it lives in and avoid one spec per repeated data item.",
       inputSchema: ComponentSchema,
@@ -2052,7 +2055,7 @@ export function createFrontendDesignOutputTools(
       },
     }),
 
-    register_interaction_spec: tool({
+    register_interaction_spec: () => tool({
       description:
         "Register an interaction pattern (hover / click / focus / scroll effect). target_component_ids must all reference registered component specs.",
       inputSchema: InteractionSchema,
@@ -2071,7 +2074,7 @@ export function createFrontendDesignOutputTools(
       },
     }),
 
-    register_responsive_spec: tool({
+    register_responsive_spec: () => tool({
       description:
         "Register an explicitly authorized non-desktop or breakpoint rule. Use only when the current operator asked for tablet/mobile/responsive/multi-end migration as a separate task scope; affected_layout_ids must reference registered layout specs.",
       inputSchema: ResponsiveSchema,
@@ -2090,7 +2093,7 @@ export function createFrontendDesignOutputTools(
       },
     }),
 
-    update_frontend_basics: tool({
+    update_frontend_basics: () => tool({
       description:
         "Update the required top-level frontend result basics: design system, implementation stack hints, and acceptance mode.",
       inputSchema: FrontendDesignBasicsToolInputSchema,
@@ -2104,7 +2107,7 @@ export function createFrontendDesignOutputTools(
       },
     }),
 
-    update_frontend_text: tool({
+    update_frontend_text: () => tool({
       description:
         "Update one markdown/text section of the frontend result. Use compact, evidence-grounded prose; use update_frontend_item for repeatable rows.",
       inputSchema: FrontendDesignMarkdownSectionToolInputSchema,
@@ -2116,7 +2119,7 @@ export function createFrontendDesignOutputTools(
       },
     }),
 
-    update_frontend_item: tool({
+    update_frontend_item: () => tool({
       description:
         "Update one compact frontend result item for template sections, fillable modules, quality project requirements, visual consistency, or UI data. Items are keyed by title.",
       inputSchema: FrontendDesignCompactItemToolInputSchema,
@@ -2129,7 +2132,7 @@ export function createFrontendDesignOutputTools(
       },
     }),
 
-    update_frontend_design_direction: tool({
+    update_frontend_design_direction: () => tool({
       description:
         "Update one evidence-backed product design direction considered before handoff when the declared task calls for alternatives.",
       inputSchema: DesignDirectionSchema,
@@ -2142,7 +2145,7 @@ export function createFrontendDesignOutputTools(
       },
     }),
 
-    select_frontend_design_direction: tool({
+    select_frontend_design_direction: () => tool({
       description:
         "Select the registered design direction declared implementation consumers should implement. The id must match a direction registered with update_frontend_design_direction.",
       inputSchema: ToolDesignDirectionSelectionSchema,
@@ -2158,7 +2161,7 @@ export function createFrontendDesignOutputTools(
       },
     }),
 
-    update_frontend_anti_slop_review: tool({
+    update_frontend_anti_slop_review: () => tool({
       description:
         "Update one rejected-traits review row naming a shallow/generic design trait rejected from the selected direction and the resource-backed correction.",
       inputSchema: AntiSlopReviewItemSchema,
@@ -2171,7 +2174,7 @@ export function createFrontendDesignOutputTools(
       },
     }),
 
-    update_frontend_competitor_reference: tool({
+    update_frontend_competitor_reference: () => tool({
       description:
         "Update one evidence-backed competitor or design-reference row declared by the task. The URL must come from user input, frontend_research, deep_research, or task material evidence; never invent URLs.",
       inputSchema: CompetitorReferenceEvidenceSchema,
@@ -2184,7 +2187,7 @@ export function createFrontendDesignOutputTools(
       },
     }),
 
-    update_frontend_material: tool({
+    update_frontend_material: () => tool({
       description:
         "Update one material/asset inventory item. Include CSS/tokens, assets, data fixtures, text samples, icons, fonts, or dense resources needed for reproduction.",
       inputSchema: ToolMaterialInventoryItemSchema,
@@ -2197,7 +2200,7 @@ export function createFrontendDesignOutputTools(
       },
     }),
 
-    update_frontend_project: tool({
+    update_frontend_project: () => tool({
       description:
         "Update the concrete frontend project/skeleton output metadata, including role, root, source package, entrypoints, generation tool, and notes.",
       inputSchema: FrontendProjectToolInputSchema,
@@ -2208,7 +2211,7 @@ export function createFrontendDesignOutputTools(
       },
     }),
 
-    update_frontend_component_reuse: tool({
+    update_frontend_component_reuse: () => tool({
       description: "Update one structured component-family reuse plan item. Items are keyed by family_id.",
       inputSchema: ToolComponentReusePlanItemSchema,
       execute: async (rawInput) => {
@@ -2220,7 +2223,7 @@ export function createFrontendDesignOutputTools(
       },
     }),
 
-    update_frontend_baseline: tool({
+    update_frontend_baseline: () => tool({
       description: "Update one source-region baseline replacement/evolution plan item. Items are keyed by boundary_id.",
       inputSchema: ToolBaselineReplacementPlanItemSchema,
       execute: async (rawInput) => {
@@ -2232,7 +2235,7 @@ export function createFrontendDesignOutputTools(
       },
     }),
 
-    update_frontend_phase: tool({
+    update_frontend_phase: () => tool({
       description:
         "Update one maintainable-replacement implementation phase outcome. Required phases are keyed by phase.",
       inputSchema: ToolImplementationPhaseOutcomeSchema,
@@ -2245,9 +2248,9 @@ export function createFrontendDesignOutputTools(
       },
     }),
 
-    capture_frontend_visual_evidence: captureFrontendVisualEvidenceTool,
+    capture_frontend_visual_evidence: materializeCaptureFrontendVisualEvidenceTool,
 
-    update_frontend_visual_evidence: tool({
+    update_frontend_visual_evidence: () => tool({
       description:
         "Update one structured rendered screenshot validation evidence row for a visual HTML skeleton. Include capture_mode=viewport for viewport crops or capture_mode=full_page for complete document screenshots. Items are keyed by id.",
       inputSchema: ToolVisualValidationEvidenceSchema,
@@ -2266,7 +2269,7 @@ export function createFrontendDesignOutputTools(
       },
     }),
 
-    update_frontend_iteration_note: tool({
+    update_frontend_iteration_note: () => tool({
       description: "Update frontend review-pass notes. Repeated identical notes are ignored.",
       inputSchema: FrontendDesignStringItemToolInputSchema,
       execute: async (rawInput) => {
@@ -2278,7 +2281,7 @@ export function createFrontendDesignOutputTools(
       },
     }),
 
-    update_frontend_reference: tool({
+    update_frontend_reference: () => tool({
       description:
         "Update one canonical source/reference artifact path or id used as evidence. Repeated identical references are ignored. Rendered skeleton screenshots/previews must first be materialized under visual-html-skeleton/... and then registered only through update_frontend_visual_evidence.screenshot_artifact.",
       inputSchema: FrontendReferenceArtifactToolInputSchema,
@@ -2291,7 +2294,7 @@ export function createFrontendDesignOutputTools(
       },
     }),
 
-    update_frontend_visual_region_binding: tool({
+    update_frontend_visual_region_binding: () => tool({
       description:
         "Register one structured VisualRegionBinding manifest produced by create_visual_region_binding_package. Use the manifestPath returned by that tool; this reads the JSON manifest and stores verified crop rows for projected planning consumers that bind reference_coverage.",
       inputSchema: FrontendVisualRegionBindingManifestToolInputSchema,
@@ -2305,7 +2308,7 @@ export function createFrontendDesignOutputTools(
       },
     }),
 
-    update_frontend_question: tool({
+    update_frontend_question: () => tool({
       description: "Update one truly unobservable open question. Repeated identical questions are ignored.",
       inputSchema: FrontendDesignStringItemToolInputSchema,
       execute: async (rawInput) => {
@@ -2317,7 +2320,7 @@ export function createFrontendDesignOutputTools(
       },
     }),
 
-    inspect_frontend_result_status: tool({
+    inspect_frontend_result_status: () => tool({
       description:
         "Inspect the current frontend fact snapshot after update_* calls, including missing fragments and validation findings.",
       inputSchema: z.object({}).strict(),
@@ -2334,7 +2337,7 @@ export function createFrontendDesignOutputTools(
   }
 
   return {
-    tools,
+    materializeExact: (toolID: string) => materializeExactTool(toolFactories, toolID, onMaterialize),
     getCollector(): FrontendDesignCollector {
       return {
         specs: [...collector.specs],

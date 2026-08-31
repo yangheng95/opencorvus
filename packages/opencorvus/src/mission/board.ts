@@ -4,8 +4,6 @@ import { Database, and, desc, eq } from "@/storage/db"
 import { MessageTable, ToolPartRequestTable as PartTable } from "@/session/session.sql"
 import { projectToolPartInTransaction } from "@/session/tool-part-facts"
 import { Message } from "@/session/message"
-import { MissionPanelActionSchema } from "@/panel/capability"
-import { materializeToolExecutionInput } from "@/provider/tool-execution-input"
 import { resolvePanelArtifactReadReferencesBeforeAction } from "@/agent/artifact-read-facts"
 import type { MissionSession } from "./session"
 import {
@@ -98,10 +96,12 @@ function currentMissionCompletion(session: MissionSession): MissionCompletionFac
     if (row.messageData.role !== "assistant") continue
     if (latestUser && !orderedAfter({ id: row.messageID, timeCreated: row.messageTimeCreated }, latestUser)) continue
     const part = Message.ToolPart.safeParse(row.projected)
-    if (!part.success || part.data.tool !== "panel" || part.data.state.status !== "completed") continue
-    const currentInput = MissionCompletionActionInput.safeParse(
-      materializeToolExecutionInput(MissionPanelActionSchema, part.data.state.input),
-    )
+    if (!part.success || part.data.tool !== "panel_complete_mission" || part.data.state.status !== "completed") continue
+    if (!part.data.state.input || typeof part.data.state.input !== "object" || Array.isArray(part.data.state.input)) continue
+    const currentInput = MissionCompletionActionInput.safeParse({
+      action: "complete_mission",
+      ...(part.data.state.input as Record<string, unknown>),
+    })
     if (!currentInput.success) continue
     const input = currentInput.data
     let decoded: unknown

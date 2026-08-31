@@ -157,8 +157,8 @@ function validateTaskCreatorAuthority(
   if (
     !occurrence || occurrence.message_id !== input.creator.message_id ||
     occurrence.session_id !== input.creator.session_id || messageData?.role !== "assistant" ||
-    requestData?.tool !== "panel" || requestData?.callID !== input.creator.tool_call_id ||
-    requestData?.input?.action !== "create_task"
+    requestData?.tool !== "panel_create_task" || requestData?.callID !== input.creator.tool_call_id ||
+    Object.hasOwn(requestData?.input ?? {}, "action")
   ) {
     throw new Error(`Task ${input.taskID} creator Tool occurrence is not exact`)
   }
@@ -336,9 +336,9 @@ function validatePanelCreationSessions(db: BunDatabase): void {
     const callerData = request ? json(request.caller_data, `Panel caller ${fact.caller_user_message_id}`) as Row : undefined
     if (
       !request || request.message_id !== fact.message_id || request.creator_project_id !== session.project_id ||
-      requestData?.tool !== "panel" || requestData.callID !== fact.tool_call_id ||
+      requestData?.tool !== `panel_${fact.operation}` || requestData.callID !== fact.tool_call_id ||
       assistantData?.role !== "assistant" || request.caller_id !== fact.caller_user_message_id ||
-      callerData?.role !== "user" || requestData.input?.action !== fact.operation
+      callerData?.role !== "user" || Object.hasOwn(requestData.input ?? {}, "action")
     ) {
       throw new Error(`Panel-created Session ${String(session.id)} has no exact Tool/Message lineage`)
     }

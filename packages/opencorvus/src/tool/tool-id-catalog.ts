@@ -8,10 +8,10 @@ import {
 // import cycle: loading tool-id-catalog first threw a TDZ error on its own constants. The registry
 // module is pure data with no imports, so the catalog now loads standalone.
 import { WORK_ARTIFACT_TOOL_IDS } from "@/work-artifact/profile-registry"
+import { PANEL_LEAF_TOOL_IDS } from "@/panel/action-ids"
 
 export { WORK_ARTIFACT_TOOL_IDS } from "@/work-artifact/profile-registry"
 
-export const BATCH_TOOL_ID = "batch" as const
 export const SKILL_MARKET_TOOL_ID = "skill_market" as const
 export const PLATFORM_CAPABILITY_DISCOVERY_TOOL_IDS = ["capability_search"] as const
 
@@ -50,7 +50,7 @@ export const GLOBAL_TOOL_IDS = [
   "memory",
   "schedule",
   "planner",
-  "panel",
+  ...PANEL_LEAF_TOOL_IDS,
   "expert_squad_author",
   "evolve_expert_squad_from_feedback",
   "mission_state",
@@ -58,7 +58,6 @@ export const GLOBAL_TOOL_IDS = [
   "wait",
   ...WORKER_COMMUNICATION_TOOL_IDS,
   "analytics",
-  BATCH_TOOL_ID,
 ] as const
 
 export const GLOBAL_TOOL_ID_SET = new Set<string>(GLOBAL_TOOL_IDS)

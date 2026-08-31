@@ -33,7 +33,16 @@ import { configureTaskIngressRunner } from "../../src/engine/task-root-ingress-d
 import { artifactRuntimeNodeModuleNames } from "../../script/build-artifact"
 import { SessionRuntimeContractStore } from "../../src/session/runtime-contract"
 import { Session } from "../../src/session"
-import { CapabilityRefCodec } from "@opencorvus-ai/util/capability-ref"
+import { harnessGrantedRefs } from "../../src/capability/harness-projection"
+import { HostAgentRegistry } from "../../src/agent/host-agent-registry"
+import { sessionRuntimeFromNativeAgent } from "../../src/agent/session-agent-runtime"
+import { SessionProcessor } from "../../src/session/processor"
+import { Identifier } from "../../src/id/id"
+import { resolveTestCapabilityTools } from "../fixture/capability-occurrence"
+import { requireTask } from "../../src/engine/store"
+import { createRuntimeToolOwner } from "../../src/session/runtime-tool-owner"
+import { testRuntimeToolFactories } from "../fixture/runtime-tool-owner"
+import { prepareConversationMcpCatalog } from "../fixture/conversation-mcp"
 
 function pngBase64(width: number, height: number) {
   const image = new PNG({ width, height })
@@ -236,11 +245,14 @@ describe("Computer Use exact control contract", () => {
           destroyCalls.push(runtimeScope)
           await authority.destroy(runtimeScope)
         })
-        const scopedTool = spyOn(MCP, "scopedTool").mockResolvedValue({
-          description: "Computer route fixture",
-        } as never)
+        const inspect = spyOn(MCP, "inspectScopedCapabilitySnapshot").mockResolvedValue({
+          tool_definitions: [],
+          prompt_definitions: [],
+          resource_definitions: [],
+          inventory_revision: "4".repeat(64),
+        })
         try {
-          await HostSessionMcpRuntime.tools(await Config.get(), sessionID, [ComputerMCPBuiltin.ServerName])
+          await HostSessionMcpRuntime.prepareCatalog(await Config.get(), sessionID, [ComputerMCPBuiltin.ServerName])
           const hostAdapter = authority.adapter({ runtimeScope: scope })
           const controller = new ComputerController(
             new HostComputerBackend(
@@ -294,7 +306,7 @@ describe("Computer Use exact control contract", () => {
           await controller.close()
           await authority.close()
         } finally {
-          scopedTool.mockRestore()
+          inspect.mockRestore()
           destroy.mockRestore()
           returnControl.mockRestore()
           status.mockRestore()
@@ -541,17 +553,17 @@ describe("Computer Use exact control contract", () => {
 
           const config = await Config.get()
           const catalogSession = await Session.create({ kind: "assistant", title: "Computer Catalog contract" })
-          const tools = await ConversationCapability.runtimeMcpTools(
+          const catalog = await prepareConversationMcpCatalog(
             config,
             "work",
             catalogSession.id,
           )
-          expect(Object.keys(tools).sort()).toEqual(
+          expect(catalog.names).toEqual(
             ComputerMCPBuiltin.ImportableToolNames.map((name) => `computer_${name}`).sort(),
           )
 
-          const executionMcpToolIDs = Object.keys(tools)
-          const harnessProjection = await ConversationCapability.harnessProjection("work", {
+          const executionMcpToolIDs = catalog.names
+          const harnessGrants = await ConversationCapability.harnessGrants("work", {
             config,
             executionToolIDs: executionMcpToolIDs,
             executionMcpToolRefs: HostSessionMcpRuntime.catalogToolRefs(catalogSession.id),
@@ -561,9 +573,19 @@ describe("Computer Use exact control contract", () => {
             sessionID: catalogSession.id,
             agentID: "work",
             executionToolIDs: executionMcpToolIDs,
-            harnessProjection,
+            harnessGrants,
+            permission: [],
           })
-          const mcpEntries = searchCapabilityCatalog(snapshot, caller, { kinds: ["mcp_server", "mcp_tool"] })
+          const expectedMcpLocalRefs = ["browser", "computer", ...executionMcpToolIDs.sort()]
+          const mcpEntries = expectedMcpLocalRefs.map((localRef) => {
+            const exact = searchCapabilityCatalog(snapshot, caller, {
+              queries: [localRef],
+              kinds: ["mcp_server", "mcp_tool"],
+              limit: 5,
+            }).find((entry) => entry.ref.local_ref === localRef)
+            if (!exact) throw new Error(`Bounded capability search did not return ${localRef}.`)
+            return exact
+          })
           const exactHostOwner = `host-session-mcp:${HostSessionMcpRuntime.computerOwnerIdentity(
             catalogSession.id,
           )}`
@@ -578,15 +600,23 @@ describe("Computer Use exact control contract", () => {
               .map((entry) => [entry.ref.local_ref, entry.ref.owner_ref]),
           ).toEqual(executionMcpToolIDs.map((toolID) => [toolID, exactHostOwner]))
           expect(snapshot.owner_revisions[exactHostOwner]).toMatch(/^[a-f0-9]{64}$/)
-          const harnessMcpRefs = new Set(harnessProjection.mcp_tool_refs.map(CapabilityRefCodec.encode))
+          const harnessMcpRefs = new Set(
+            harnessGrants.grants
+              .filter((grant) => grant.ref.kind === "mcp_tool")
+              .map((grant) => CapabilityRefCodec.encode(grant.ref)),
+          )
           expect(
             mcpEntries
               .filter((entry) => entry.ref.kind === "mcp_tool")
               .map((entry) => harnessMcpRefs.has(CapabilityRefCodec.encode(entry.ref))),
           ).toEqual(executionMcpToolIDs.map(() => true))
           expect(
-            searchCapabilityCatalog(snapshot, caller, { next_owner_kinds: ["call_tool"] }).map(
-              (entry) => entry.ref.local_ref,
+            executionMcpToolIDs.map((toolID) =>
+              searchCapabilityCatalog(snapshot, caller, {
+                queries: [toolID],
+                next_owner_kinds: ["call_tool"],
+                limit: 5,
+              }).find((entry) => entry.ref.local_ref === toolID)?.ref.local_ref,
             ),
           ).toEqual(executionMcpToolIDs)
           expect(HostSessionMcpRuntime.computerOwnerIdentity("session-computer-catalog-contract")).toBe(
@@ -712,16 +742,26 @@ describe("Computer Use exact control contract", () => {
               },
               scheduler: {
                 prompt: "Coordinate the exact Computer harness contract.",
-                capability_refs: ComputerMCPBuiltin.ImportableToolRefs.map((localRef) =>
+                capability_refs: [
                   CapabilityRefCodec.encode(
                     capabilityRef({
-                      kind: "mcp_tool",
-                      source: "project",
-                      owner_ref: "default-mcp-registry",
-                      local_ref: localRef,
+                      kind: "tool",
+                      source: "platform",
+                      owner_ref: "tool-registry",
+                      local_ref: "capability_search",
                     }),
                   ),
-                ).sort(),
+                  ...ComputerMCPBuiltin.ImportableToolRefs.map((localRef) =>
+                    CapabilityRefCodec.encode(
+                      capabilityRef({
+                        kind: "mcp_tool",
+                        source: "project",
+                        owner_ref: "default-mcp-registry",
+                        local_ref: localRef,
+                      }),
+                    ),
+                  ),
+                ].sort(),
               },
               agents: {
                 "computer-contract-worker": {
@@ -787,11 +827,12 @@ describe("Computer Use exact control contract", () => {
             { actor: "user" },
           )
 
-          const harness = PromptProfileResolver.schedulerHarnessProjection({
+          const harness = PromptProfileResolver.schedulerHarnessGrants({
             taskID,
             capability,
+            projectedToolIDs: capability.builtInToolIDs.filter((toolID) => toolID !== "capability_search"),
           })
-          expect(harness.mcp_tool_refs).toEqual(
+          expect(harness.grants.filter((grant) => grant.ref.kind === "mcp_tool").map((grant) => grant.ref)).toEqual(
             capability.defaultMcpTools
               .map((entry) => ({
                 kind: "mcp_tool" as const,
@@ -804,32 +845,23 @@ describe("Computer Use exact control contract", () => {
 
           const owner = MCP.createScopedConnectionOwner("test:computer-harness-contract")
           const catalogSessionID = (
-            await Session.create({ kind: "orchestrator", title: "Computer Harness contract scheduler" })
+            await Session.create({
+              kind: "orchestrator",
+              parentID: requireTask(taskID).session_id!,
+              title: "Computer Harness contract scheduler",
+            })
           ).id
           let contractInstalled = false
           try {
-            const projected = await PromptProfileResolver.projectOrchestratorTools(
-              Object.fromEntries(capability.builtInToolIDs.map((toolID) => [toolID, {}])),
-              capability,
-              {
-                taskID,
-                projectDirectory: project.path,
-                connectionOwner: owner,
-              },
+            const projected = Object.fromEntries(
+              capability.builtInToolIDs
+                .filter((toolID) => toolID !== "capability_search")
+                .map((toolID) => [toolID, {}]),
             )
             expect(Object.keys(projected).sort()).toEqual(
-              [...capability.builtInToolIDs, ...capability.defaultMcpTools.map((entry) => entry.providerName)].sort(),
+              capability.builtInToolIDs.filter((toolID) => toolID !== "capability_search").sort(),
             )
-            const scopedCatalog = owner.catalogSnapshot()
-            expect(scopedCatalog.owner_revision).toMatch(/^[a-f0-9]{64}$/)
-            expect(
-              scopedCatalog.entries.map((entry) => [entry.server_id, entry.connection_identity, entry.status]),
-            ).toEqual(
-              capability.defaultMcpTools
-                .map((entry) => [entry.providerName, "default/mcp/computer", { status: "connected" }])
-                .sort(([left], [right]) => String(left).localeCompare(String(right))),
-            )
-            expect(scopedCatalog.entries.every((entry) => /^[a-f0-9]{64}$/.test(entry.config_digest))).toBe(true)
+            const initialScopedRevision = owner.catalogSnapshot().owner_revision
             SessionRuntimeContractStore.set(catalogSessionID, {
               identity: {
                 identityKind: "projected-scheduler",
@@ -841,37 +873,112 @@ describe("Computer Use exact control contract", () => {
                 contractKind: "orchestrator-wake",
                 installedAt: Date.now(),
               },
-              projectedTools: projected as never,
-              projectedRegistryToolIDs: capability.builtInToolIDs,
               skillProjection,
-              harnessProjection: harness,
+              harnessGrants: harness,
               projectDirectory: project.path,
               includeMcpTools: false,
               system: [],
               systemMode: "complete",
-              resources: { mcp: owner },
+              resources: {
+                mcp: owner,
+                tools: createRuntimeToolOwner({
+                  leaves: testRuntimeToolFactories(projected as never, "projected"),
+                }),
+              },
             })
             contractInstalled = true
             const taskCatalog = await RuntimeCapabilityCatalog.snapshot({
               config,
               sessionID: catalogSessionID,
               agentID: "orchestrator",
-              executionToolIDs: Object.keys(projected),
+              executionToolIDs: harnessGrantedRefs(harness, "execute")
+                .filter((ref) => ref.kind === "tool" || ref.kind === "mcp_tool")
+                .map((ref) => ref.local_ref),
+              permission: [],
             })
             expect(
-              searchCapabilityCatalog(taskCatalog.snapshot, taskCatalog.caller, { kinds: ["mcp_tool"] }).map(
-                (entry) => [entry.ref.local_ref, entry.availability],
-              ),
+              capability.defaultMcpTools.map((capabilityEntry) => {
+                const exact = searchCapabilityCatalog(taskCatalog.snapshot, taskCatalog.caller, {
+                  queries: [capabilityEntry.providerName],
+                  kinds: ["mcp_tool"],
+                  limit: 5,
+                }).find((entry) => entry.ref.local_ref === capabilityEntry.providerName)
+                return exact ? [exact.ref.local_ref, exact.availability] : undefined
+              }),
             ).toEqual(
               capability.defaultMcpTools
                 .map((entry) => [entry.providerName, "visible"])
                 .sort(([left], [right]) => String(left).localeCompare(String(right))),
             )
-            expect(taskCatalog.snapshot.owner_revisions[`scoped-mcp:${owner.id}`]).toBe(scopedCatalog.owner_revision)
-            for (const entry of capability.defaultMcpTools) {
-              const toolName = entry.ref.split("/").at(-1)!
-              expect(computerMcpPermissionKeyOf(projected[entry.providerName] as object)).toBe(`computer_${toolName}`)
+            expect(taskCatalog.snapshot.owner_revisions[`scoped-mcp:${owner.id}`]).toBe(initialScopedRevision)
+            const model = {
+              id: "exact-computer-reveal-model",
+              providerID: "exact-computer-reveal-provider",
+              name: "Exact Computer reveal",
+              limit: { context: 1_000_000, input: 900_000, output: 4_096 },
+              cost: { available: true, input: 0, output: 0, cache: { read: 0, write: 0 } },
+              capabilities: {
+                toolcall: true,
+                attachment: false,
+                reasoning: false,
+                temperature: true,
+                input: { text: true, image: false, audio: false, video: false },
+                output: { text: true, image: false, audio: false, video: false },
+              },
+              api: { id: "exact-computer-reveal", npm: "@ai-sdk/anthropic" },
+              options: {},
+            } as any
+            const user = await Session.updateMessage({
+              id: Identifier.ascending("message"),
+              sessionID: catalogSessionID,
+              role: "user",
+              author: "orchestrator",
+              agent: "orchestrator",
+              time: { created: Date.now() },
+              model: { providerID: model.providerID, modelID: model.id },
+            })
+            const assistant = {
+              id: Identifier.ascending("message"),
+              parentID: user.id,
+              sessionID: catalogSessionID,
+              role: "assistant" as const,
+              author: "orchestrator",
+              agent: "orchestrator",
+              path: { cwd: project.path, root: project.path },
+              cost: 0,
+              tokens: { total: 0, input: 0, output: 0, reasoning: 0, cache: { read: 0, write: 0 } },
+              modelID: model.id,
+              providerID: model.providerID,
+              time: { created: Date.now() },
             }
+            const processor = SessionProcessor.create({
+              assistantMessage: assistant,
+              sessionID: catalogSessionID,
+              model,
+              abort: new AbortController().signal,
+            })
+            const revealedProviderName = capability.defaultMcpTools[0]!.providerName
+            const revealed = await resolveTestCapabilityTools({
+              config,
+              model,
+              session: await Session.get(catalogSessionID),
+              assistant,
+              processor,
+              agent: sessionRuntimeFromNativeAgent(await HostAgentRegistry.get("orchestrator", { config })),
+              agentID: "orchestrator",
+              messages: await Session.messages({ sessionID: catalogSessionID }),
+              activeLocalRefs: [revealedProviderName],
+            })
+            expect(Object.keys(revealed.tools).sort()).toEqual(["capability_search", revealedProviderName].sort())
+            const scopedCatalog = owner.catalogSnapshot()
+            expect(scopedCatalog.owner_revision).toMatch(/^[a-f0-9]{64}$/)
+            expect(
+              scopedCatalog.entries.map((entry) => [entry.server_id, entry.connection_identity, entry.status]),
+            ).toEqual(
+              [[revealedProviderName, "default/mcp/computer", { status: "connected" }]],
+            )
+            expect(scopedCatalog.entries.every((entry) => /^[a-f0-9]{64}$/.test(entry.config_digest))).toBe(true)
+            expect(typeof revealed.tools[revealedProviderName]?.execute).toBe("function")
             await owner.close()
             expect(() => owner.catalogSnapshot()).toThrow(
               expect.objectContaining<Partial<MCP.ScopedConnectionOwnerClosedError>>({
@@ -885,6 +992,7 @@ describe("Computer Use exact control contract", () => {
                 sessionID: catalogSessionID,
                 agentID: "orchestrator",
                 executionToolIDs: Object.keys(projected),
+                permission: [],
               }),
             ).rejects.toMatchObject({
               name: "CapabilityOwnerUnavailableError",

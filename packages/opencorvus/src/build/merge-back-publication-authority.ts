@@ -2,10 +2,11 @@ import { Session } from "@/session"
 import { Message } from "@/session/message"
 import {
   SessionRuntimeContractStore,
-  sessionRuntimeToolRecords,
+  sessionRuntimeToolOwner,
   type SessionRuntimeContract,
 } from "@/session/runtime-contract"
 import type { TaskToolExecutionScope } from "@/tool/task-tool-execution-scope"
+import { runtimeToolOwnerIDs } from "@/session/runtime-tool-owner"
 import { GitObjectIDSchema, MergeBackToolOutputSchema } from "./merge-back-tool-contract"
 
 export type ArtifactSnapshotReadAuthority =
@@ -16,7 +17,8 @@ export function artifactSnapshotSourceForRuntimeContract(
   contract: SessionRuntimeContract | undefined,
 ): ArtifactSnapshotReadAuthority["kind"] {
   if (!contract) return "current_task_project"
-  const stageToolIDs = Object.keys(sessionRuntimeToolRecords(contract).stageTools).sort()
+  const runtimeOwner = sessionRuntimeToolOwner(contract)
+  const stageToolIDs = (runtimeOwner ? runtimeToolOwnerIDs(runtimeOwner, "stage") : []).sort()
   if (contract.identity.identityKind === "projected-scheduler") {
     if (stageToolIDs.length > 0) {
       throw new Error("artifact_snapshot: scheduler runtime has an invalid private stage-tool surface")

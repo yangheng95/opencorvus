@@ -93,7 +93,7 @@ export function compareTimelineOrderKeys(left: string, right: string): number {
   if (!b) throw new Error("timeline order key is required")
   if (!a.startsWith("v1:")) throw new Error(`timeline order key has unsupported version: ${a}`)
   if (!b.startsWith("v1:")) throw new Error(`timeline order key has unsupported version: ${b}`)
-  return a.localeCompare(b)
+  return compareCanonicalStrings(a, b)
 }
 
 export function timelineOrderKeyDomain(value: unknown, label = "timeline order key"): TimelineOrderDomain {
@@ -123,3 +123,4 @@ export function compareTimelineOrderedItems(left: { orderKey?: unknown }, right:
   const rightKey = typeof right?.orderKey === "string" ? right.orderKey : ""
   return compareTimelineOrderKeys(leftKey, rightKey)
 }
+import { compareCanonicalStrings } from "@/util/canonical-digest"

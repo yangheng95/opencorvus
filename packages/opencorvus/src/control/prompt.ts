@@ -46,15 +46,15 @@ export function renderControlSystemPrompt(input: ControlPromptContext): string {
   const lines = [
     "You are the core OpenCorvus agent operating in control-plane mode.",
     "Always respond in the language used by the user's authored message; quoted material and Host-projected context do not change that language.",
-    "Use the panel tool to inspect or mutate the control plane when the user requests task operations.",
+    "Use `capability_search` to reveal the exact `panel_<action>` leaf named below, then call that leaf to inspect or mutate the control plane when the user requests task operations.",
     "After tool calls finish, respond with an ordinary natural assistant message that directly acknowledges the result, limitations, or blocker.",
-    "Do not copy panel tool JSON into your answer. The Host reads action IDs and attachments from the completed tool result itself.",
+    "Do not copy Panel Tool JSON into your answer. The Host reads action IDs and attachments from the completed leaf result itself.",
     "When creating a task, explain in the final natural assistant message what you understand and will do.",
-    "When calling `panel.create_task`, set `create_task.request` to a complete, self-contained task request that includes an `Original user input` section with the task-relevant user text quoted verbatim. Do not compress the request to only a URL/title, and do not move load-bearing constraints from the same user input into `send_task_message`; `send_task_message` is only for real follow-up text after the task already exists.",
+    "When calling `panel_create_task`, set `request` to a complete, self-contained task request that includes an `Original user input` section with the task-relevant user text quoted verbatim. Do not compress the request to only a URL/title, and do not move load-bearing constraints from the same user input into `panel_send_task_message`; that Tool is only for real follow-up text after the task already exists.",
     TASK_REQUEST_SCOPE_GUIDANCE,
     "Write the task title and authored request narrative in the same language as the user's message. Quoted source material, code, paths, commands, identifiers, and API names retain their required source text.",
     "For greetings, general questions, or non-task messages, respond with a friendly, helpful natural message.",
-    "Never bypass the panel tool or rely on local UI shortcuts.",
+    "Never bypass the exact Panel leaf Tool or rely on local UI shortcuts.",
     "Use only the typed Host-projected identifiers below when selecting a control-plane target; do not infer hidden routing context.",
     "When the user specifies evaluation requirements, set explicit task checks through create_task.checks or update_checks instead of relying on planner goals alone.",
     "When a panel action returns file or image attachments, mention them naturally; the Host returns the attachment refs from the tool result.",
@@ -65,7 +65,7 @@ export function renderControlSystemPrompt(input: ControlPromptContext): string {
       ? "Local panel actions are allowed."
       : "Local panel focus actions are NOT allowed on this surface.",
     "",
-    "Available panel actions on this surface:",
+    "Available exact Panel leaf Tools on this surface:",
     panelCapabilityPrompt(input.surface),
   ]
   return lines.join("\n")
@@ -78,7 +78,7 @@ export function controlPromptProjection(
   | {
       system: string[]
       systemMode: "complete"
-      tools: Record<string, boolean>
+      tools?: Record<string, boolean>
       includeMcpTools: false
     }
   | undefined {
@@ -88,7 +88,6 @@ export function controlPromptProjection(
   return {
     system: [renderControlSystemPrompt(context)],
     systemMode: "complete",
-    tools: { "*": false, panel: true },
     includeMcpTools: false,
   }
 }

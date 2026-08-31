@@ -228,6 +228,7 @@ export namespace SkillMount {
     projectDirectory: string
     skillProjection: PromptProfileResolver.ResolvedSkillProjection
     availableToolNames?: Iterable<string>
+    activeSkillNames?: Iterable<string>
   }): Promise<ResolvedAgentSkillSurface> {
     if (input.identity.expertSquadID !== input.skillProjection.expertSquadID) {
       throw new Error(
@@ -262,7 +263,9 @@ export namespace SkillMount {
       availableToolNames,
     })
     const grants = grantMapForAgent(input.skillProjection, input.identity.agentID)
+    const activeSkillNames = input.activeSkillNames ? new Set(input.activeSkillNames) : undefined
     const skills = [...grants.values()]
+      .filter((grant) => !activeSkillNames || activeSkillNames.has(grant.skill.name))
       .sort((left, right) => compareCanonicalStrings(left.ref, right.ref))
       .map((grant) => {
         const reason = skillDisabledReason({

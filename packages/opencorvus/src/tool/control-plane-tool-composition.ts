@@ -2,7 +2,6 @@ import { configureControlPlaneToolLoaders, type ControlPlaneToolLoaders } from "
 
 const defaultControlPlaneToolLoaders: ControlPlaneToolLoaders = {
   schedule: async () => (await import("./schedule")).ScheduleTool,
-  panel: async () => (await import("./panel")).PanelTool,
   wait: async () => (await import("./wait")).WaitTool,
   requestOrchestratorDecision: async () =>
     (await import("./request-orchestrator-decision")).RequestOrchestratorDecisionTool,

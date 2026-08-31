@@ -5,6 +5,7 @@ import type { Config } from "@/config/config"
 import type { Provider } from "@/provider/provider"
 import { Plugin } from "@/plugin"
 import { AttachmentStore } from "@/storage/attachment-store"
+import type { Database } from "@/storage/db"
 import { MessageTable, PartTable, type PartData } from "@/session/session.sql"
 import { Message, Session } from "@/session"
 import { MessageStore } from "@/session/message-store"
@@ -33,7 +34,6 @@ import { canonicalDigestSource, canonicalJSONValue, compareCanonicalStrings } fr
 import { Bus } from "@/bus"
 import { timelineMessageOrderKey, timelinePartOrderKey } from "@/timeline/order"
 import { resolveCapabilityCaller } from "./caller-authority"
-import { settleSessionDelaysAtAssistantAcceptanceInTransaction } from "@/scheduler/session-delay-admission"
 
 export const CATALOG_SNAPSHOT_REF_METADATA_KEY = "catalog_snapshot_ref"
 export const CATALOG_SNAPSHOT_HASH_METADATA_KEY = "catalog_snapshot_hash"
@@ -137,6 +137,22 @@ export const DispatchStageOccurrenceBindingV2 = z
   })
 export type DispatchStageOccurrenceBindingV2 = z.infer<typeof DispatchStageOccurrenceBindingV2>
 
+export const McpToolParentBindingV2 = z
+  .object({
+    tool_ref: CapabilityRef,
+    server_ref: CapabilityRef,
+  })
+  .strict()
+  .superRefine((binding, context) => {
+    if (binding.tool_ref.kind !== "mcp_tool") {
+      context.addIssue({ code: "custom", path: ["tool_ref"], message: "MCP child binding requires mcp_tool." })
+    }
+    if (binding.server_ref.kind !== "mcp_server") {
+      context.addIssue({ code: "custom", path: ["server_ref"], message: "MCP child binding requires mcp_server." })
+    }
+  })
+export type McpToolParentBindingV2 = z.infer<typeof McpToolParentBindingV2>
+
 export const CatalogViewSnapshotPayloadV2 = z
   .object({
     schema_version: z.literal(2),
@@ -147,6 +163,7 @@ export const CatalogViewSnapshotPayloadV2 = z
     fixed_package_digests: Sha256Record,
     materialization_scope: CatalogMaterializationScopeV2,
     occurrence_owner_bindings: z.array(DispatchStageOccurrenceBindingV2),
+    mcp_tool_parent_bindings: z.array(McpToolParentBindingV2),
     descriptors: z.array(CapabilityDescriptor),
     views: z.array(CapabilityCatalogViewEntry),
     sets: z.array(CapabilitySetDescriptor),
@@ -235,6 +252,21 @@ function assertOccurrenceBindingTargets(payload: CatalogViewSnapshotPayloadV2): 
       }
     }
   }
+  const mcpChildren = new Set<string>()
+  for (const binding of payload.mcp_tool_parent_bindings) {
+    const child = CapabilityRefCodec.encode(binding.tool_ref)
+    const parent = CapabilityRefCodec.encode(binding.server_ref)
+    if (!descriptors.has(child) || !descriptors.has(parent)) {
+      throw new CorruptCatalogOccurrenceError(
+        "invalid_payload",
+        `Catalog MCP parent binding references unknown descriptor child=${child} parent=${parent}.`,
+      )
+    }
+    if (mcpChildren.has(child)) {
+      throw new CorruptCatalogOccurrenceError("invalid_payload", `Catalog repeats MCP parent binding for ${child}.`)
+    }
+    mcpChildren.add(child)
+  }
 }
 
 function packageDigestKey(contract: SessionRuntimeContract): string {
@@ -257,7 +289,7 @@ function exactStageRef(snapshot: CapabilityCatalogSnapshotValue, ownerRef: strin
   return matches[0]!.ref
 }
 
-function durableToolkitInputRefs(payload: WorkerTurnDescriptor.Payload): string[] {
+export function durableToolkitInputRefs(payload: WorkerTurnDescriptor.Payload): string[] {
   const refs = [
     `task:${payload.lifecycle.taskID}`,
     `message:${payload.messageAuthority.user_message_id}`,
@@ -356,6 +388,7 @@ export namespace CatalogOccurrenceBinding {
     snapshot: CapabilityCatalogSnapshotValue
     materializationScope: CatalogMaterializationScopeV2
     runtimeContract?: SessionRuntimeContract
+    mcpToolParentBindings?: readonly McpToolParentBindingV2[]
   }): CatalogViewSnapshotPayloadV2 {
     const snapshot = validateCapabilityCatalogSnapshot(input.snapshot)
     const result = CatalogViewSnapshotPayloadV2.parse({
@@ -367,6 +400,7 @@ export namespace CatalogOccurrenceBinding {
       fixed_package_digests: fixedPackageDigests(input.runtimeContract),
       materialization_scope: input.materializationScope,
       occurrence_owner_bindings: occurrenceOwnerBindings(snapshot, input.runtimeContract),
+      mcp_tool_parent_bindings: input.mcpToolParentBindings ?? [],
       descriptors: snapshot.descriptors,
       views: snapshot.views,
       sets: snapshot.sets,
@@ -456,6 +490,55 @@ export namespace CatalogOccurrenceBinding {
       throw new CorruptCatalogOccurrenceError(
         "partial_binding",
         `Catalog input ${input.info.id} has an invalid binding on Part ${carrier.part.id}.`,
+        { cause: parsed.error },
+      )
+    }
+    return parsed.data
+  }
+
+  export function bindingFromInputInTransaction(
+    db: Database.TxOrDb,
+    input: { sessionID: string; inputMessageID: string },
+  ): CatalogSnapshotBindingV2 | undefined {
+    const message = db
+      .select({ data: MessageTable.data })
+      .from(MessageTable)
+      .where(and(eq(MessageTable.id, input.inputMessageID), eq(MessageTable.session_id, input.sessionID)))
+      .get()
+    if (!message || (message.data as { role?: unknown }).role !== "user") {
+      throw new CorruptCatalogOccurrenceError(
+        "invalid_payload",
+        `Catalog input ${input.inputMessageID} is not a durable user Message.`,
+      )
+    }
+    const carriers = db
+      .select({ id: PartTable.id, data: PartTable.data })
+      .from(PartTable)
+      .where(eq(PartTable.message_id, input.inputMessageID))
+      .all()
+      .flatMap((row) => {
+        const data = row.data as { type?: unknown; metadata?: Record<string, unknown> }
+        if (data.type !== "text") return []
+        const metadata = data.metadata
+        const hasRef = metadata ? Object.hasOwn(metadata, CATALOG_SNAPSHOT_REF_METADATA_KEY) : false
+        const hasHash = metadata ? Object.hasOwn(metadata, CATALOG_SNAPSHOT_HASH_METADATA_KEY) : false
+        return hasRef || hasHash
+          ? [{ id: row.id, ref: metadata?.[CATALOG_SNAPSHOT_REF_METADATA_KEY], hash: metadata?.[CATALOG_SNAPSHOT_HASH_METADATA_KEY] }]
+          : []
+      })
+    if (carriers.length === 0) return undefined
+    if (carriers.length > 1) {
+      throw new CorruptCatalogOccurrenceError(
+        "duplicate_binding",
+        `Catalog input ${input.inputMessageID} has ${carriers.length} binding carriers.`,
+      )
+    }
+    const carrier = carriers[0]!
+    const parsed = CatalogSnapshotBindingV2.safeParse({ snapshot_ref: carrier.ref, snapshot_hash: carrier.hash })
+    if (!parsed.success) {
+      throw new CorruptCatalogOccurrenceError(
+        "partial_binding",
+        `Catalog input ${input.inputMessageID} has an invalid binding on Part ${carrier.id}.`,
         { cause: parsed.error },
       )
     }
@@ -628,6 +711,7 @@ export namespace CatalogOccurrenceBinding {
     assistant: Message.Assistant
     parent: Message.WithParts
     binding: CatalogSnapshotBindingV2
+    admitInTransaction?: (db: Database.TxOrDb) => void
   }): Promise<Message.Assistant> {
     if (input.parent.info.role !== "user" || input.parent.info.id !== input.assistant.parentID) {
       throw new Error(`Catalog assistant ${input.assistant.id} parent authority is invalid`)
@@ -648,12 +732,7 @@ export namespace CatalogOccurrenceBinding {
     const binding = CatalogSnapshotBindingV2.parse(input.binding)
     await read({ projectID: input.projectID, binding })
     const admitted = await Session.beginAssistantReplyWithCommit(input.assistant, (db) => {
-      settleSessionDelaysAtAssistantAcceptanceInTransaction(db, {
-        sessionID: input.assistant.sessionID,
-        assistantMessageID: input.assistant.id,
-        acceptedInputMessageIDs: input.assistant.acceptedInputMessageIDs ?? [],
-        now: Date.now(),
-      })
+      input.admitInTransaction?.(db)
       const parent = db
         .select({ data: MessageTable.data, timeCreated: MessageTable.time_created })
         .from(MessageTable)

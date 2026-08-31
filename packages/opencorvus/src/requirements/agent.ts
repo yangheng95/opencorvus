@@ -18,17 +18,17 @@
  * tool kit.
  */
 import { agentCoordinationHandoffResult, runAgentSession, type AgentCoordinationHandoffResult } from "@/agent/runner"
-import { createAgentContextTools, prefetchContext } from "@/agent/context-tools"
-import { createAgentCoordinationRuntimeTools } from "@/agent/coordination-runtime-tools"
-import { filterAgentTools } from "@/agent/filter-tools"
+import { prefetchContext } from "@/agent/context-tools"
 import { Log } from "@/util/log"
 import { clarificationTranscriptSection } from "@/engine"
 import type { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
 import { renderPromptSections, withAttachmentPromptSections } from "@/agent/prompt-projection"
 import { renderUserRequestSection } from "@/intent/request-prompt"
 import type { RequirementCoverageDeclaration, RequirementSet } from "./types"
-import { createRequirementsOutputTools, type RequirementsCollector } from "./output-tools"
+import { createRequirementsOutputToolFactory, type RequirementsCollector } from "./output-tools"
 import { createDecisionLog } from "@/decision-log"
+import { DispatchAdapterContractRegistry } from "@/agent/dispatch-adapter-contract"
+import { createStageToolMaterializerBinding } from "@/agent/stage-tool-materializer"
 import {
   projectRequirementsInput,
   type RequirementsInputRefs,
@@ -82,25 +82,13 @@ export namespace RequirementsAgent {
     const projection = projectRequirementsInput(input)
     // Rule 11 / rule 25: the working directory is a structural fact
     // (`Instance.directory`), not something to keyword-regex out of the
-    // user's free-form request. `createAgentContextTools()` resolves to the
-    // correct root via Instance.directory by default.
-    const coordinationTools = await createAgentCoordinationRuntimeTools({
-      agentID: input.agentID,
-      taskID: input.taskID,
-      signal: input.signal,
-    })
-    const contextTools = await filterAgentTools(
-      { ...createAgentContextTools(), ...coordinationTools },
-      "requirements",
-      {
-        taskID: input.taskID,
-        sessionID: input.parentSessionID,
-      },
-    )
-    const outputToolKit = createRequirementsOutputTools({
+    // user's free-form request. `prefetchContext()` reads the active Instance
+    // projection; executable context leaves come from the occurrence Registry.
+    const outputFactory = createRequirementsOutputToolFactory({
       taskID: input.taskID,
       decisionLog: createDecisionLog(input.taskID),
     })
+    const stageOwnedToolIDs = DispatchAdapterContractRegistry.privateStageToolIDs("requirements")
 
     const context = prefetchContext(projection.taskTitle, projection.taskRequest)
 
@@ -124,9 +112,18 @@ export namespace RequirementsAgent {
         : undefined,
       onRuntimeReady: input.onRuntimeReady ? (session) => input.onRuntimeReady!(session.id) : undefined,
       toolKit: {
-        tools: { ...contextTools, ...outputToolKit.tools },
-        stageOwnedToolIDs: Object.keys(outputToolKit.tools),
-        getCollector: () => outputToolKit.getCollector(),
+        stageOwnedToolIDs,
+        stageMaterializers: {
+          register_decision: createStageToolMaterializerBinding({
+            id: "requirements.register-decision",
+            input: { taskID: input.taskID, decisionPhase: "requirements" },
+          }),
+        },
+        async materializeExact(toolID) {
+          if (stageOwnedToolIDs.includes(toolID)) return outputFactory.materializeExact(toolID)
+          return undefined
+        },
+        getCollector: () => outputFactory.getCollector(),
       },
       buildUserPrompt: () => buildUserPrompt(projection, input.agentID, context),
     })

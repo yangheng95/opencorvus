@@ -16,7 +16,6 @@ export type ControlPlaneToolRecovery = (input: {
 
 export interface ControlPlaneToolLoaders {
   schedule: () => Promise<Tool.Info>
-  panel: () => Promise<Tool.Info>
   wait: () => Promise<Tool.Info>
   requestOrchestratorDecision: () => Promise<Tool.Info>
   sendMailboxMessage: () => Promise<Tool.Info>

@@ -1,7 +1,8 @@
 import { afterAll, describe, expect, test } from "bun:test"
 import { Identifier } from "../src/id/id"
+import { acquireControlLease, releaseControlLease } from "../src/engine/control-lease"
 import { Instance } from "../src/project/instance"
-import { AutomationService } from "../src/scheduler/automation-service"
+import { AutomationRunningConflictError, AutomationService } from "../src/scheduler/automation-service"
 import {
   ScheduledToolOccurrenceConflictError,
   scheduledToolInputDigest,
@@ -11,6 +12,7 @@ import { Session } from "../src/session"
 import { SessionLoop } from "../src/session/loop"
 import { MessageStore } from "../src/session/message-store"
 import type { Message } from "../src/session/message"
+import { SessionPromptOwner } from "../src/session/prompt/owner"
 import {
   executeScheduleToolInput,
   ScheduleToolParameters,
@@ -203,6 +205,128 @@ describe("schedule Tool exact lost-response recovery", () => {
           automationId: automationID,
         })
         await executeAndRecover(session.id, deletion)
+      },
+    })
+  }, 60_000)
+
+  test("manual Tool run preserves durable busy and delay owners before one terminal replay", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const target = await Session.create({ kind: "assistant", title: "Manual Tool busy target" })
+        const automation = await AutomationService.create({
+          name: "Manual Tool busy authority",
+          target: { scope: "session", sessionId: target.id },
+          recurrence: "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY",
+          prompt: "run only after the exact target is available",
+        })
+        const targetInput = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: target.id,
+          role: "user",
+          author: "user",
+          agent: "assistant",
+          model: { providerID: "test", modelID: "manual-tool-busy" },
+          time: { created: Date.now() },
+        })
+        const promptOwner = SessionPromptOwner.acquire({
+          sessionID: target.id,
+          projectID: Instance.project.id,
+          directory: Instance.directory,
+        })
+        if (!promptOwner.acquired) throw new Error("Manual Tool fixture did not acquire the target Prompt owner")
+        const targetAssistant = await Session.beginAssistantReply({
+          id: Identifier.ascending("message"),
+          sessionID: target.id,
+          role: "assistant",
+          author: "assistant",
+          parentID: targetInput.id,
+          acceptedInputMessageIDs: [targetInput.id],
+          agent: "assistant",
+          providerID: "test",
+          modelID: "manual-tool-busy",
+          path: { cwd: project.path, root: project.path },
+          cost: 0,
+          tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+          time: { created: Date.now() },
+        })
+        let promptOwnerReleased = false
+        try {
+          const caller = await Session.create({ kind: "root", title: "Manual Tool caller" })
+          const request = await persistedScheduleRequest(caller.id, {
+            action: "run",
+            automationId: automation.id,
+          })
+          const occurrence = {
+            sessionID: caller.id,
+            messageID: request.part.messageID,
+            toolPartID: request.part.id,
+            toolCallID: request.part.callID,
+            toolName: "schedule" as const,
+          }
+          await expect(
+            executeScheduleToolInput(request.input, {
+              sessionID: caller.id,
+              projectID: Instance.project.id,
+              occurrence,
+            }),
+          ).rejects.toBeInstanceOf(AutomationRunningConflictError)
+
+          targetAssistant.finish = "stop"
+          targetAssistant.time.completed = Date.now()
+          await Session.updateMessage(targetAssistant)
+          promptOwnerReleased = SessionPromptOwner.release(promptOwner.authority)
+          expect(promptOwnerReleased).toBe(true)
+
+          const delayOwner = acquireControlLease({
+            target: "automation",
+            targetID: automation.id,
+            ownerOccurrenceID: "manual-tool-delay-owner",
+            now: Date.now(),
+            leaseMilliseconds: 30_000,
+          })
+          if (!delayOwner.acquired) throw new Error("Manual Tool fixture did not acquire the delay lease")
+          await expect(
+            executeScheduleToolInput(request.input, {
+              sessionID: caller.id,
+              projectID: Instance.project.id,
+              occurrence,
+            }),
+          ).rejects.toBeInstanceOf(AutomationRunningConflictError)
+          expect(
+            releaseControlLease({
+              target: "automation",
+              targetID: automation.id,
+              leaseID: delayOwner.lease.id,
+              ownerOccurrenceID: delayOwner.lease.owner_occurrence_id,
+              now: Date.now(),
+            }),
+          ).toBe(true)
+
+          using _wake = AutomationService.TestHooks.installWakeExecutor(async (input) => ({
+            sessionID: input.sessionID!,
+            messageID: input.messageID!,
+            activation: Promise.resolve({ owner: new AbortController().signal }),
+            completion: Promise.resolve({ ok: true as const }),
+          }))
+          const completed = await executeScheduleToolInput(request.input, {
+            sessionID: caller.id,
+            projectID: Instance.project.id,
+            occurrence,
+          })
+          const replayed = await executeScheduleToolInput(request.input, {
+            sessionID: caller.id,
+            projectID: Instance.project.id,
+            occurrence,
+          })
+          expect(replayed).toEqual(completed)
+          expect(AutomationService.listFireHistory(automation.id)).toMatchObject([
+            { origin: "manual_tool", state: "succeeded", attemptCount: 1 },
+          ])
+        } finally {
+          if (!promptOwnerReleased) SessionPromptOwner.release(promptOwner.authority)
+        }
       },
     })
   }, 60_000)

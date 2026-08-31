@@ -1,16 +1,17 @@
 # Code and Work Agent Platform
 
-Status: Capability Catalog A1 implemented; search-native execution convergence pending
+Status: search-native Catalog, Harness V2, and exact reveal runtime implemented
 
-Implementation calibration (2026-08-30): typed `CapabilityRef`, `HarnessProjection`,
-`capability_search`, product pillars and immutable Task package binding are present in current source. Phase A1 has
-deleted the temporary Tool-owned catalog builder: `capability/descriptor.ts` and `capability/catalog.ts` now own
-the pure contracts, canonical context snapshots, bounded project-local source/snapshot caches, search, and typed
-stale/contract errors. `tool/capability-runtime-catalog.ts` is the only owner composition root and keeps the pure
-Capability layer from depending back on Tool/Skill/MCP/Expert Squad runtime. Tool Registry,
-Skill, Mission Skill, Expert Squad, Harness/Worker stage facts, and MCP config/status contribute exact revisions.
-Durable input-Part catalog binding, pre-materialization native Harness authority, unified Expert Squad capability
-declaration, and deferred Tool reveal are not complete. The evidence, industry comparison and hard-replacement plan are recorded in
+Implementation calibration (2026-08-30): typed `CapabilityRef`, immutable
+content-addressed Catalog occurrence binding, Harness grants, Expert Squad
+manifest V2, exact Tool/MCP/Skill materialization, and append-only
+`capability_search` reveal receipts are live. The executable Harness contributes
+only search at revision zero and a bounded receipt-derived active leaf set
+thereafter. Conditional `StructuredOutput` remains outside the Harness but
+inside the immutable Provider base and total definition budget. The
+complete current execution contract is
+[`capability-search-runtime.md`](capability-search-runtime.md). The evidence,
+industry comparison and hard-replacement plan are recorded in
 [`2026-08-30-search-native-capability-harness-refactor.md`](../../records/2026-08/2026-08-30-search-native-capability-harness-refactor.md).
 The exact A1 cut and exclusions are recorded in
 [`2026-08-30-search-native-capability-phase-a1.md`](../../records/2026-08/2026-08-30-search-native-capability-phase-a1.md).
@@ -284,7 +285,7 @@ dedicated `work` conversation experience. Either may hand off to Mission.
 | Prompt queue/recovery | Durable Task queue and Session wake paths already exist. | Reuse. |
 | External always-on host | Runtime services currently depend on an opened project instance. Full `InstanceBootstrap` also starts interactive services and registered directories include sandboxes. | Missing. Add one headless composition plus explicit daemon/desktop ownership. |
 | External provider ingress | No generic package-owned poll/webhook adapter emits normalized external events. | Partial future need; do not block the first paid slice. |
-| Capability fuzzy search | A typed cross-kind `capability_search` exists, while Skill/Mission Skill and Expert Squad retain additional search contracts. The current Tool surface remains eager, and Catalog snapshots are rebuilt per call instead of following the documented owner-revision lifecycle. | Converge local capability discovery and replace eager model schemas through the dated search-native refactor; keep external Market and business-data search under their own owners. |
+| Capability fuzzy search | Typed cross-kind `capability_search` binds one immutable occurrence Catalog and activates only exact receipt-selected leaves; revision zero has no eager domain Tool surface. | Remove the remaining local fuzzy/list branches from exact Skill/Mission Skill loaders; keep external Market and business-data search under their own owners. |
 | Authorization | One permission evaluator and MCP OAuth path exist, but generic non-Browser MCP execution has no provider-semantic argument mapper and unmatched permissions default to allow. | Add a package-owned typed action boundary that calls the existing evaluator; do not create a grant service. |
 
 ## Product-Pillar Contract
@@ -552,8 +553,9 @@ query produce the same result order.
 
 ### Snapshot lifecycle
 
-The snapshot is context-bound, project-cached, derived, and currently in
-memory. It is not a database or a second installation catalog. Its revision
+The snapshot is context-bound, project-cached, and derived. Its canonical bytes
+are content-addressed in AttachmentStore and atomically referenced by the
+authoritative input Part; it is not a database or a second installation catalog. Its revision
 input is a canonical vector of the current Tool Registry revision, Skill
 publication revision, irreversible full MCP configuration digest plus global
 observed status/inventory revision, exact Conversation Host Session MCP owner
@@ -583,9 +585,9 @@ post-mutation caller.
 Queries never receive a partially rebuilt snapshot, and an invalidated snapshot
 is not served as a silent stale fallback. An owner that cannot produce metadata
 raises `CapabilityOwnerUnavailableError`; the builder does not drop that owner
-and pretend the snapshot is complete. Durable binding of one exact snapshot to
-an authoritative input Part remains a later cut and is not implied by this
-in-memory cache.
+and pretend the snapshot is complete. The input Part ref/hash is the durable
+occurrence authority; a missing or mismatched blob is a typed corrupt
+occurrence and never falls back to the latest snapshot.
 
 The query contract includes normalized query text, optional exact filters,
 configured result limit, caller context, and expected catalog revision. Empty
@@ -608,13 +610,13 @@ interface HarnessProjection {
     | { kind: "task_scheduler"; task_id: string; profile_id: string }
     | { kind: "task_agent"; task_id: string; profile_id: string; agent_id: string }
   owner_revision: string
-  tool_refs: CapabilityRef[]
-  skill_refs: CapabilityRef[]
-  mission_skill_refs: CapabilityRef[]
-  mcp_server_refs: CapabilityRef[]
-  mcp_tool_refs: CapabilityRef[]
-  mcp_prompt_refs: CapabilityRef[]
-  mcp_resource_refs: CapabilityRef[]
+  catalog_snapshot_ref: string
+  catalog_snapshot_hash: string
+  grants: Array<{
+    ref: CapabilityRef
+    access: "discover" | "execute" | "discover_execute"
+    descendant_scope?: Array<"mcp_tool" | "mcp_prompt" | "mcp_resource">
+  }>
   projection_hash: string
 }
 ```
@@ -627,20 +629,22 @@ source of truth.
 
 ### Mount hierarchy and exact owners
 
-The mount hierarchy has five levels:
+The mount hierarchy has seven levels:
 
 | Level | Meaning | Existing owner | May expand the surface? |
 | --- | --- | --- | --- |
 | 0. Inventory | Installed/configured metadata exists | Skill Manager, Tool Registry, MCP and package Registry, Expert Squad Registry, Mission Skill Registry | No runtime authority |
-| 1. Runtime bounds | Built-in Tools the role/template can ever receive | `AgentToolPool` and runtime-template contract | Yes, but only as a static upper bound |
+| 1. Runtime bounds | Role/template upper bound and platform transport invariants | runtime-template contract and typed platform sets | Yes, before occurrence admission only |
 | 2. Harness assignment | Exact capability references for this context | Chat/Work `ConversationCapability`; Mission runtime; Task `PromptProfileResolver` | Yes: built-ins within level 1; package/provider refs within the owner's catalog |
-| 3. Turn materialization | Instantiate exact Tool, Skill, and MCP providers | `ToolRegistry`, `SkillTool`, MCP resolver, Session runtime contract | No |
-| 4. Operator narrowing | Tool switches plus Agent/Session denies | execution surface and `PermissionNext` | No |
-| 5. Call authorization | Evaluate exact semantic action and arguments | Tool wrapper, package action mapper, `PermissionNext`, OAuth | No |
+| 3. Turn reveal | Persist exact active leaves selected through search | reveal receipt reducer and occurrence compare-and-swap owner | No |
+| 4. Exact materialization | Instantiate only receipt-active Tool, Skill, and MCP providers | `ToolRegistry`, exact Skill/MCP owners, `RuntimeToolOwner` | No |
+| 5. Operator narrowing | Tool switches plus Agent/Session denies | execution surface and `PermissionNext` | No |
+| 6. Call authorization | Evaluate exact semantic action and arguments | Tool wrapper, package action mapper, `PermissionNext`, OAuth | No |
 
 The concrete context rules are:
 
-- Chat and Work use their fixed native role Tool pool. Their project
+- Chat and Work use fixed native role grants as an occurrence upper bound; the
+  Provider does not receive that whole Tool pool. Their project
   `primary_assistant_capabilities` assignment adds only exact installed Skill
   refs and configured MCP server refs. Their default MCP assignment is empty:
   configured inventory never activates a provider by itself. A message may reference an attached
@@ -735,7 +739,10 @@ interface CapabilitySearchResult {
 }
 ```
 
-The query supports fuzzy terms and optional exact filters for kind and pillar.
+The query supports one to four fuzzy terms, optional exact kind/owner filters,
+explicit `exact_refs` activation, explicit `deactivate_refs`, at most five
+results, and an expected snapshot hash. Fuzzy results remain metadata until the
+model copies an exact ref into `exact_refs`.
 Pillar filtering is exact only for Expert Squads; Skill, Tool, and MCP
 eligibility comes from their authoritative active projection rather than copied
 pillar metadata. Result references are typed, stable identifiers, not
@@ -1194,7 +1201,7 @@ Exit criteria:
 | `expert-squad/catalog.ts` | Project pillar metadata and exact filtered recommendations. |
 | `prompt-profile-resolver.ts` | Remain sole projection owner; validate Task pillar compatibility without reading a second active-squad field. |
 | expert-squad routes, generated OpenAPI/SDK | Carry exact schema and catalog filter. |
-| `panel.create_task`, Task API/model/runtime contract | Persist immutable Task pillar, atomically establish root `prompt_profile.active`, fingerprint the full creation contract, and reject conflicting idempotent reuse. |
+| `panel_create_task`, Task API/model/runtime contract | Persist immutable Task pillar, atomically establish root `prompt_profile.active`, fingerprint the full creation contract, and reject conflicting idempotent reuse. |
 | Task message and Mission Task tool projection | Remove later `promptProfile` mutation and profile-changing tools from every Task. |
 | Mission and Orchestrator prompts | Require explicit pillar/profile per Mission Task; keep provider execution inside the fixed domain Task. |
 | new capability catalog module | Own typed-ref codec, normalized snapshot, revision, caller discovery view, and fuzzy ranking; own no mounting or execution. |

@@ -94,22 +94,24 @@ async function executeMissionPanelCreateTask(
     tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
   })
   const callID = `panel-create-${label}`
+  const params = panelTaskInput(label, explicitRuntime)
+  const { action: _action, ...toolInput } = params
   await Session.updatePart({
     id: Identifier.ascending("part"),
     sessionID: mission.id,
     messageID: assistant.id,
     type: "tool",
     callID,
-    tool: "panel",
+    tool: "panel_create_task",
     state: {
       status: "running",
-      input: panelTaskInput(label, explicitRuntime),
+      input: toolInput,
       time: { start: now + 1 },
     },
   })
   const panel = await PanelTool.init({ agentID: "mission" })
   return panel.execute(
-    panelTaskInput(label, explicitRuntime),
+    params,
     {
       sessionID: mission.id,
       messageID: assistant.id,
@@ -117,7 +119,7 @@ async function executeMissionPanelCreateTask(
       agent: "mission",
       abort: new AbortController().signal,
       messages: [],
-      executionSurface: Tool.executionSurface(["panel"], []),
+      executionSurface: Tool.executionSurface(["panel_create_task"], []),
       extra: { surface: "panel" },
       metadata() {},
     },

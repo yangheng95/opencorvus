@@ -36,7 +36,10 @@ import {
 } from "./tool-failure-cause"
 import { toolResultControl, toolResultDisposition, type ToolResultControl } from "./tool-result-control"
 import { parsePartialJson } from "ai"
-import type { McpAppToolLifecycleController } from "@/interactive-artifact/mcp-app-lifecycle"
+import {
+  registerMcpAppToolLifecycleController,
+  type McpAppToolLifecycleController,
+} from "@/interactive-artifact/mcp-app-lifecycle"
 import {
   cloneToolInputForPersistence,
   materializeToolResultInlineAttachments,
@@ -44,6 +47,7 @@ import {
 import { Instance } from "@/project/instance"
 import { persistMessageSources } from "./source-persistence"
 import { normalizeToolResult } from "./tool-result-normalization"
+import { canonicalJSONValue } from "@/util/canonical-digest"
 
 export namespace SessionProcessor {
   const DOOM_LOOP_THRESHOLD = 3
@@ -230,11 +234,53 @@ export namespace SessionProcessor {
     // HTTP 400 (`Duplicate value for 'tool_call_id'`). Falling back to the
     // message's persisted parts keeps (messageID, callID) -> exactly one part
     // however many times the call is delivered.
-    const priorToolPart = async (toolCallID: string): Promise<Message.ToolPart | undefined> => {
-      const warm = toolcalls[toolCallID]
-      if (warm) return warm
+    const persistedToolPart = async (toolCallID: string): Promise<Message.ToolPart | undefined> => {
       const parts = await MessageStore.parts(input.assistantMessage.id)
       return parts.find((p): p is Message.ToolPart => p.type === "tool" && p.callID === toolCallID)
+    }
+
+    const priorToolPart = async (toolCallID: string): Promise<Message.ToolPart | undefined> =>
+      toolcalls[toolCallID] ?? (await persistedToolPart(toolCallID))
+
+    const preserveCompletedCapabilitySearch = (
+      part: Message.ToolPart | undefined,
+      toolName: string,
+      toolInput?: unknown,
+    ): Message.ToolPart | undefined => {
+      if (!part || part.state.status !== "completed") return undefined
+      if (part.tool !== "capability_search" && toolName !== "capability_search") return undefined
+      if (part.tool !== "capability_search" || toolName !== "capability_search") {
+        throw new Error(
+          `Capability search call ${part.callID} changed Tool identity from ${part.tool} to ${toolName}.`,
+        )
+      }
+      if (
+        toolInput !== undefined &&
+        canonicalJSONValue(part.state.input) !== canonicalJSONValue(cloneToolInputForPersistence(toolInput))
+      ) {
+        throw new Error(`Capability search call ${part.callID} changed persisted input during replay.`)
+      }
+      return part
+    }
+
+    const confirmCapabilitySearchCompletion = (
+      part: Message.ToolPart,
+      value: {
+        input?: unknown
+        output: { output: string; title: string; metadata: Record<string, unknown> }
+      },
+    ): boolean => {
+      if (part.state.status !== "completed" || part.tool !== "capability_search") return false
+      const resolvedInput = value.input === undefined ? part.state.input : cloneToolInputForPersistence(value.input)
+      if (
+        canonicalJSONValue(part.state.input) !== canonicalJSONValue(resolvedInput) ||
+        part.state.output !== value.output.output ||
+        part.state.title !== value.output.title ||
+        canonicalJSONValue(part.state.metadata) !== canonicalJSONValue(value.output.metadata)
+      ) {
+        throw new Error(`Capability search call ${part.callID} replay result changed after its CAS completion.`)
+      }
+      return true
     }
 
     const openToolParts = async (): Promise<Message.ToolPart[]> => {
@@ -399,8 +445,16 @@ export namespace SessionProcessor {
       const sourcePayloads = Array.isArray(value.output.sources)
         ? value.output.sources.map((source) => Message.SourcePayload.parse(source))
         : []
-      await withToolPartLock(value.toolCallId, async () => {
-        const match = toolcalls[value.toolCallId] ?? (await priorToolPart(value.toolCallId))
+      const alreadyCommitted = await withToolPartLock(value.toolCallId, async () => {
+        const persisted = await persistedToolPart(value.toolCallId)
+        const match =
+          persisted?.tool === "capability_search" && persisted.state.status === "completed"
+            ? persisted
+            : (toolcalls[value.toolCallId] ?? persisted)
+        if (match && confirmCapabilitySearchCompletion(match, value)) {
+          delete toolcalls[value.toolCallId]
+          return true
+        }
         if (!match || (match.state.status !== "running" && match.state.status !== "pending")) {
           throw new Error(`Open ToolPart not found for Tool call ${value.toolCallId}`)
         }
@@ -442,8 +496,10 @@ export namespace SessionProcessor {
           })
           for (const part of persisted) onPartCreated(part.id)
         }
+        return false
       })
       mcpAppCalls.delete(value.toolCallId)
+      if (alreadyCommitted) return control
       return control
     }
 
@@ -468,14 +524,26 @@ export namespace SessionProcessor {
         return toolcalls[toolCallID]
       },
       registerMcpAppToolLifecycle(toolName: string, lifecycle: McpAppToolLifecycleController) {
-        if (mcpAppToolLifecycles.has(toolName)) {
-          throw new Error(`MCP App lifecycle is already registered for tool ${toolName}`)
-        }
-        mcpAppToolLifecycles.set(toolName, lifecycle)
+        return registerMcpAppToolLifecycleController(mcpAppToolLifecycles, toolName, lifecycle)
       },
       async ensureToolPart(toolCallID: string, toolName: string, toolInput: Record<string, unknown>) {
         return withToolPartLock(toolCallID, async () => {
           const existing = await priorToolPart(toolCallID)
+          const committed = preserveCompletedCapabilitySearch(existing, toolName, toolInput)
+          if (committed) {
+            toolcalls[toolCallID] = committed
+            return committed
+          }
+          if (
+            existing &&
+            existing.state.status === "running" &&
+            existing.tool === toolName &&
+            canonicalJSONValue(existing.state.input) ===
+              canonicalJSONValue(cloneToolInputForPersistence(toolInput))
+          ) {
+            toolcalls[toolCallID] = existing
+            return existing
+          }
           const start = existing ? toolStartTime(existing) : Date.now()
           const part = await Session.updatePart({
             ...(existing ?? {
@@ -811,6 +879,8 @@ export namespace SessionProcessor {
                       }
                       const part = await withToolPartLock(toolCallID, async () => {
                         const existing = await priorToolPart(toolCallID)
+                        const committed = preserveCompletedCapabilitySearch(existing, value.toolName)
+                        if (committed) return committed
                         const start = existing ? toolStartTime(existing) : Date.now()
                         const part = await Session.updatePart({
                           id: existing?.id ?? Identifier.ascending("part"),
@@ -893,6 +963,12 @@ export namespace SessionProcessor {
                       const persistedToolInput = cloneToolInputForPersistence(value.input)
                       const part = await withToolPartLock(value.toolCallId, async () => {
                         const match = await priorToolPart(value.toolCallId)
+                        const committed = preserveCompletedCapabilitySearch(
+                          match,
+                          value.toolName,
+                          persistedToolInput,
+                        )
+                        if (committed) return committed
                         const part = await Session.updatePart({
                           ...(match ?? {
                             id: Identifier.ascending("part"),

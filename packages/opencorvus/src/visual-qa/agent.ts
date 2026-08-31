@@ -1,7 +1,4 @@
-import type { ToolSet } from "ai"
 import { agentCoordinationHandoffResult, runAgentSession, type AgentCoordinationHandoffResult } from "@/agent/runner"
-import { createAgentContextTools } from "@/agent/context-tools"
-import { filterAgentTools } from "@/agent/filter-tools"
 import { renderUserRequestSection } from "@/intent/request-prompt"
 import { Log } from "@/util/log"
 import { createAiSdkToolFromInfo } from "@/tool/ai-sdk-adapter"
@@ -12,23 +9,15 @@ import { BrowserPreviewLayoutGeometryTool } from "@/tool/browser-preview-layout-
 import { BrowserPreviewCaptureTool } from "@/tool/browser-preview-capture"
 import { BrowserPreviewCaptureInteractionStateTool } from "@/tool/browser-preview-capture-interaction-state"
 import { BrowserPreviewTool } from "@/tool/browser-preview"
-import { RequestOrchestratorDecisionTool } from "@/tool/request-orchestrator-decision"
-import { SendMailboxMessageTool } from "@/tool/send-mailbox-message"
-import {
-  VISUAL_QA_CONTEXT_TOOL_IDS,
-  VISUAL_QA_EVIDENCE_TOOL_IDS,
-  VISUAL_QA_RAW_RUNTIME_TOOL_IDS,
-  VISUAL_QA_RUNTIME_EVIDENCE_TOOL_IDS,
-  VISUAL_QA_OUTPUT_TOOL_IDS,
-  VISUAL_QA_UTILITY_TOOL_IDS,
-} from "./static-tools"
-import { createVisualQaOutputTools, type VisualQaCollector } from "./output-tools"
+import { VISUAL_QA_OUTPUT_TOOL_IDS } from "./static-tools"
+import { createVisualQaOutputTools } from "./output-tools"
 import type { VisualReview } from "./schema"
 import { renderVisualQaProductDesignPrinciples } from "./product-design-principles"
 import { renderPromptSections } from "@/agent/prompt-projection"
 import type { VisualQaDispatchContext } from "./context"
 import { Session } from "@/session"
 import type { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
+import { createStageToolMaterializerBinding } from "@/agent/stage-tool-materializer"
 
 const log = Log.create({ service: "visual-qa" })
 
@@ -74,34 +63,20 @@ export namespace VisualQaAgent {
 
   export async function analyze(input: AnalyzeInput): Promise<AnalyzeResult | AgentCoordinationHandoffResult> {
     const dispatchContext = input.dispatchContext ?? {}
-    const outputToolKit = createVisualQaOutputTools({
+    const outputFactoryInput = {
       taskID: input.taskID,
       projectRoot: input.projectRoot,
       referenceParityRequired: dispatchContext.referenceParityRequired,
       requiredReferenceRegions: dispatchContext.requiredReferenceRegions,
-    })
-    const contextTools = await createVisualQaContextTools({
-      agentID: input.agentID,
-      taskID: input.taskID,
-      sessionID: input.parentSessionID,
-    })
-    const evidenceTools = await createVisualQaEvidenceTools({
-      agentID: input.agentID,
-      taskID: input.taskID,
-      signal: input.signal,
-    })
-    const utilityTools = await createVisualQaUtilityTools({
-      agentID: input.agentID,
-      taskID: input.taskID,
-      signal: input.signal,
-    })
-    const agentTools = {
-      ...contextTools,
-      ...evidenceTools,
-      ...utilityTools,
-      ...outputToolKit.tools,
     }
-    assertVisualQaStaticToolSurface(agentTools)
+    const outputToolKit = createVisualQaOutputTools(outputFactoryInput)
+    const materializeExact = async (toolID: string) =>
+      outputToolKit.materializeExact(toolID) ??
+      createVisualQaEvidenceToolExact(toolID, {
+        agentID: input.agentID,
+        taskID: input.taskID,
+        signal: input.signal,
+      })
 
     log.info("visual QA starting", {
       taskID: input.taskID,
@@ -129,8 +104,16 @@ export namespace VisualQaAgent {
         : undefined,
       onRuntimeReady: input.onRuntimeReady ? (session) => input.onRuntimeReady!(session.id) : undefined,
       toolKit: {
-        tools: agentTools,
         stageOwnedToolIDs: VISUAL_QA_OUTPUT_TOOL_IDS,
+        stageMaterializers: {
+          register_visual_qa_problem_dom_region: createStageToolMaterializerBinding({
+            id: "visual-qa.problem-dom-region",
+            input: Object.fromEntries(
+              Object.entries(outputFactoryInput).filter(([, value]) => value !== undefined),
+            ),
+          }),
+        },
+        materializeExact,
         getCollector: () => outputToolKit.getCollector(),
       },
       buildUserPrompt: () => buildVisualQaUserPrompt(input, dispatchContext),
@@ -238,50 +221,20 @@ function buildVisualQaUserPrompt(
   return sections.join("\n\n")
 }
 
-async function createVisualQaContextTools(input: {
-  agentID: string
-  taskID?: string
-  sessionID?: string
-}): Promise<ToolSet> {
-  return selectVisualQaStaticTools(
-    await filterAgentTools(createAgentContextTools(), "visual-qa", input),
-    VISUAL_QA_CONTEXT_TOOL_IDS,
-    "visual-qa context",
-  )
-}
-
-async function createVisualQaEvidenceTools(input: {
-  agentID: string
-  taskID?: string
-  signal?: AbortSignal
-}): Promise<ToolSet> {
-  const tools = {
-    browser_preview: await createVisualQaTool(BrowserPreviewTool, input),
-    browser_preview_capture: await createVisualQaTool(BrowserPreviewCaptureTool, input),
-    browser_preview_capture_interaction_state: await createVisualQaTool(
-      BrowserPreviewCaptureInteractionStateTool,
-      input,
-    ),
-    browser_preview_compare_reference_regions: await createVisualQaTool(
-      BrowserPreviewCompareReferenceRegionsTool,
-      input,
-    ),
-    browser_preview_compare_scroll_slices: await createVisualQaTool(BrowserPreviewCompareScrollSlicesTool, input),
-    browser_preview_layout_geometry: await createVisualQaTool(BrowserPreviewLayoutGeometryTool, input),
+export async function createVisualQaEvidenceToolExact(
+  toolID: string,
+  input: { agentID: string; taskID?: string; signal?: AbortSignal },
+) {
+  const toolInfos: Record<string, Tool.Info> = {
+    browser_preview: BrowserPreviewTool,
+    browser_preview_capture: BrowserPreviewCaptureTool,
+    browser_preview_capture_interaction_state: BrowserPreviewCaptureInteractionStateTool,
+    browser_preview_compare_reference_regions: BrowserPreviewCompareReferenceRegionsTool,
+    browser_preview_compare_scroll_slices: BrowserPreviewCompareScrollSlicesTool,
+    browser_preview_layout_geometry: BrowserPreviewLayoutGeometryTool,
   }
-  return selectVisualQaStaticTools(tools, VISUAL_QA_RUNTIME_EVIDENCE_TOOL_IDS, "visual-qa evidence")
-}
-
-async function createVisualQaUtilityTools(input: {
-  agentID: string
-  taskID?: string
-  signal?: AbortSignal
-}): Promise<ToolSet> {
-  const tools = {
-    request_orchestrator_decision: await createVisualQaTool(RequestOrchestratorDecisionTool, input),
-    send_mailbox_message: await createVisualQaTool(SendMailboxMessageTool, input),
-  }
-  return selectVisualQaStaticTools(tools, VISUAL_QA_UTILITY_TOOL_IDS, "visual-qa utility")
+  const info = toolInfos[toolID]
+  return info ? createVisualQaTool(info, input) : undefined
 }
 
 async function createVisualQaTool(
@@ -298,35 +251,6 @@ async function createVisualQaTool(
   })
 }
 
-function selectVisualQaStaticTools(tools: ToolSet, ids: readonly string[], label: string): ToolSet {
-  const selected: ToolSet = {}
-  for (const id of ids) {
-    const item = tools[id]
-    if (!item) throw new Error(`${label} static tool is missing: ${id}`)
-    selected[id] = item
-  }
-  return selected
-}
-
-function assertVisualQaStaticToolSurface(tools: ToolSet): void {
-  const expected = [...VISUAL_QA_RAW_RUNTIME_TOOL_IDS].sort()
-  const actual = Object.keys(tools).sort()
-  const expectedSet = new Set<string>(expected)
-  const actualSet = new Set<string>(actual)
-  const missing = expected.filter((id) => !actualSet.has(id))
-  const extra = actual.filter((id) => !expectedSet.has(id))
-  if (missing.length > 0 || extra.length > 0) {
-    throw new Error(
-      "visual-qa runtime tool surface diverged from static definition: " +
-        `missing=[${missing.join(", ")}] extra=[${extra.join(", ")}]`,
-    )
-  }
-}
-
 export const VisualQaTestHooks = {
   buildVisualQaUserPrompt,
-  createVisualQaContextTools,
-  createVisualQaEvidenceTools,
-  createVisualQaUtilityTools,
-  assertVisualQaStaticToolSurface,
 }

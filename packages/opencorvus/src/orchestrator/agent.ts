@@ -74,8 +74,8 @@ import { Identifier } from "@/id/id"
 import { Log } from "@/util/log"
 import { cancelSessionPromptInScope } from "@/engine/cancellation-scope"
 import { createExecutionCancellationOrigin, isExecutionCancellationError } from "@/session/prompt/cancellation"
-import { toolGuard } from "@/util/tool-guard"
-import { createOrchestratorTools } from "./tools"
+import { bindRuntimeToolFactories, createRuntimeToolOwner } from "@/session/runtime-tool-owner"
+import { createExactOrchestratorTool } from "./tools"
 import { attachmentPromptSection } from "@/agent/prompt-projection"
 import { renderUserRequestSection } from "@/intent/request-prompt"
 import { requireTask, type TaskRow } from "@/engine/store"
@@ -476,27 +476,45 @@ export namespace Orchestrator {
       //    the durable task-level Orchestrator Session is reused on every wake.
       const schedulerDispatchAgents = [...skillProjection.schedulerOnlyAgents, ...skillProjection.projectedAgents]
 
-      // 3. Project the exact active expert-squad scheduler tool table before
-      //    guard/enable/runtime setup.
-      const { tools: rawTools } = createOrchestratorTools({
-        taskID,
-        agentSessionID: agentSession.id,
-        sendSchedulerMessage,
-        signal: executionSignal,
-        dispatchAgents: schedulerDispatchAgents,
-        rootMessage: event?.rootMessage,
-        missionAcceptanceResume: event?.missionAcceptanceResume,
-        terminalConversationAuthority,
-      })
       schedulerMcpOwner = createComputerRuntimeConnectionOwner(
         computerRuntimeScopeIdentity({ ownerKind: "orchestrator", taskID, sessionID: agentSession.id }),
       )
-      const tools = await PromptProfileResolver.projectOrchestratorTools(rawTools, schedulerCapability, {
-        taskID,
-        projectDirectory: schedulerProjectDirectory,
-        connectionOwner: schedulerMcpOwner,
-      })
-      const guard = toolGuard(tools)
+      const projectedToolIDs = [
+        ...schedulerCapability.builtInToolIDs.filter((toolID) => toolID !== "capability_search"),
+        ...schedulerCapability.defaultTools.map((entry) => entry.providerName),
+        ...schedulerCapability.packageTools.map((entry) => entry.providerName),
+        ...schedulerCapability.defaultMcpTools.map((entry) => entry.providerName),
+        ...schedulerCapability.packageMcpTools.map((entry) => entry.providerName),
+      ]
+      const builtInToolIDs = new Set(schedulerCapability.builtInToolIDs)
+      const materializeBuiltInTool = (toolID: string) =>
+        createExactOrchestratorTool({
+          toolID,
+          taskID,
+          agentSessionID: agentSession.id,
+          sendSchedulerMessage,
+          signal: executionSignal,
+          dispatchAgents: schedulerDispatchAgents,
+          rootMessage: event?.rootMessage,
+          missionAcceptanceResume: event?.missionAcceptanceResume,
+          terminalConversationAuthority,
+        })
+      const materializeProjectedTool = async (toolID: string) => {
+        if (builtInToolIDs.has(toolID)) return materializeBuiltInTool(toolID)
+        const exact = await PromptProfileResolver.exactProjectedExtensionTool({
+          capability: schedulerCapability,
+          providerName: toolID,
+          runtimeTool: materializeBuiltInTool,
+          taskID,
+          projectDirectory: schedulerProjectDirectory,
+          toolDirectory: schedulerProjectDirectory,
+          connectionOwner: schedulerMcpOwner!,
+        })
+        if (!exact) {
+          throw new Error(`Scheduler Tool factory ${toolID} did not materialize its exact leaf.`)
+        }
+        return exact
+      }
 
       // 4. Build prompt. Each newly constructed Orchestrator child receives
       //    the original task brief once, authored by the durable task creator.
@@ -602,8 +620,7 @@ export namespace Orchestrator {
         note: event?.note,
         sessionID: agentSession.id,
         model: `${model.providerID}/${model.id}`,
-        toolCount: Object.keys(tools).length,
-        rawToolCount: Object.keys(rawTools).length,
+        toolCount: projectedToolIDs.length,
         expertSquadID: schedulerCapability.expertSquadID,
         projectionHash: schedulerCapability.projectionHash,
       })
@@ -730,12 +747,11 @@ export namespace Orchestrator {
               ...(currentVisibleInputMessageID ? { inputMessageID: currentVisibleInputMessageID } : {}),
               installedAt: Date.now(),
             },
-            projectedTools: guard.tools as any,
-            projectedRegistryToolIDs: schedulerCapability.builtInToolIDs,
             skillProjection,
-            harnessProjection: PromptProfileResolver.schedulerHarnessProjection({
+            harnessGrants: PromptProfileResolver.schedulerHarnessGrants({
               taskID,
               capability: schedulerCapability,
+              projectedToolIDs,
             }),
             projectDirectory: schedulerProjectDirectory,
             includeMcpTools: false,
@@ -746,7 +762,17 @@ export namespace Orchestrator {
             // reaches the same boundary through Session standby instead of
             // arming a second wake during that Message's commit.
             runOnce: terminalConversation || !appendCreatorMessage,
-            resources: { mcp: schedulerMcpOwner },
+            resources: {
+              mcp: schedulerMcpOwner,
+              tools: createRuntimeToolOwner({
+                leaves: bindRuntimeToolFactories({
+                  toolIDs: projectedToolIDs,
+                  kind: "projected",
+                  factoryInput: (toolID) => ({ source: "scheduler-projection", tool_id: toolID }),
+                  materialize: materializeProjectedTool,
+                }),
+              }),
+            },
           },
           { armWake: !currentVisibleInputMessageID, notifyWake: !currentVisibleInputMessageID },
         )

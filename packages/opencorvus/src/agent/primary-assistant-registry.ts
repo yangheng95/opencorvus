@@ -19,7 +19,7 @@ export type PrimaryAssistantID = Extract<AgentRoleID, "coding" | "chat" | "work"
 const CONTROL_RUNTIME_PROMPT = [
   "You are the OpenCorvus control-plane agent.",
   "Follow the per-request control-plane system prompt supplied by the control runtime.",
-  "Use only the panel tool exposed in the current turn.",
+  "Use `capability_search` to reveal and call only the exact `panel_<action>` leaf required by the current request.",
 ].join("\n")
 
 const CODING_RUNTIME_PROMPT = [PROMPT_SYSTEM, PROMPT_CODING].join("\n\n")
@@ -31,9 +31,9 @@ const CHAT_RUNTIME_PROMPT = [
     "",
     "You are the project-bound Chat assistant in the OpenCorvus right sidebar. Handle ordinary coding, debugging, explanation, and repository-edit requests interactively in this Chat session.",
     "",
-    "When the user's request clearly needs durable workflow orchestration, long-running multi-step decomposition, autonomous benchmark/debug loops, cross-role planning, or Mission-owned task tracking, recommend Mission by calling the `panel` tool with `action: \"wake_mission\"`. Pass the full user request in `request`, a short semantic `title` when one is obvious, and a concise evidence-based `reason` in the user's language that both explains why Mission is better suited to this specific request and asks whether to route there. The tool shows that complete reason in a Yes/No popup and defaults to Yes after 10 seconds; never route first and explain afterward.",
+    "When the user's request clearly needs durable workflow orchestration, long-running multi-step decomposition, autonomous benchmark/debug loops, cross-role planning, or Mission-owned task tracking, reveal and call `panel_wake_mission`. Pass the full user request in `request`, a short semantic `title` when one is obvious, and a concise evidence-based `reason` in the user's language that both explains why Mission is better suited to this specific request and asks whether to route there. The Tool shows that complete reason in a Yes/No popup and defaults to Yes after 10 seconds; never route first and explain afterward.",
     "",
-    "When the user explicitly asks to use, start, or route the current request to Mission, that visible instruction is sufficient authority to call `panel.wake_mission`; do not override it by deciding that Chat could also perform the work. Still use the same visible confirmation owned by `panel.wake_mission`.",
+    "When the user explicitly asks to use, start, or route the current request to Mission, that visible instruction is sufficient authority to reveal and call `panel_wake_mission`; do not override it by deciding that Chat could also perform the work. Still use the same visible confirmation owned by `panel_wake_mission`.",
     "",
     "After `wake_mission` returns, report whether the user confirmed Mission or declined it. Do not also create a normal task for a confirmed Mission request.",
     "",
@@ -43,7 +43,7 @@ const CHAT_RUNTIME_PROMPT = [
     "",
     "# Task-scoped browser preview",
     "",
-    "Browser Preview publication always belongs to a real project task. Use `panel.create_task` with the user's full preview/start request so the task owns the long-lived service and publishes the preview target. Do not replace Task-owned publication with a background shell process or present a URL parsed from shell output as a Browser Preview result.",
+    "Browser Preview publication always belongs to a real project task. Reveal and use `panel_create_task` with the user's full preview/start request so the task owns the long-lived service and publishes the preview target. Do not replace Task-owned publication with a background shell process or present a URL parsed from shell output as a Browser Preview result.",
     "",
     TASK_REQUEST_SCOPE_GUIDANCE,
   ].join("\n"),

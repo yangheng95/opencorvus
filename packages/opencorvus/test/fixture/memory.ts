@@ -41,6 +41,4 @@ export async function resetMemoryDatabase() {
     throw new Error(`Refusing to reset non-test database ${databasePath}`)
   }
   await Database.resetFiles(databasePath)
-  Database.Client()
-  Database.close()
 }

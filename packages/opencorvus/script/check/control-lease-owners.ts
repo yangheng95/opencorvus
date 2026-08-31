@@ -117,9 +117,9 @@ const DECLARED_OWNERS: Record<string, Declaration> = {
   },
   "scheduler/automation-service.ts": {
     targets: ["automation"],
-    sites: 3,
+    sites: 4,
     release:
-      "The recurring, one-shot, activity and failure settlements each release with their receipts, inside the same transaction.",
+      "The recurring, one-shot, activity and failure settlements each release with their receipts, inside the same transaction. A busy recurring Session creates no Fire or receipt: its short admission-delay lease deliberately ends by expiry, preserving the original due occurrence for the next revalidated poll.",
   },
   "scheduler/event-service.ts": {
     targets: ["event_fire"],

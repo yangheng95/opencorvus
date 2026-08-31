@@ -4702,7 +4702,7 @@ export class Control extends HeyApiClient {
              */
             taskID: string
             /**
-             * Exact current terminal occurrence returned by panel.query_task for this source Task.
+             * Exact current terminal occurrence returned by panel_query_task for this source Task.
              */
             terminal_lifecycle_reference: {
               terminalEventID: string

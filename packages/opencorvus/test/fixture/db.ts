@@ -2,8 +2,6 @@ import path from "path"
 import { Instance } from "../../src/project/instance"
 import { Database } from "../../src/storage/db"
 
-export const TEST_DATABASE_LOCK_DIAGNOSTIC_TIMEOUT_MS = 60_000
-
 function inside(parent: string, child: string) {
   const relative = path.relative(path.resolve(parent), path.resolve(child))
   return relative === "" || (!!relative && !relative.startsWith("..") && !path.isAbsolute(relative))
@@ -23,8 +21,6 @@ export async function resetDatabase() {
   const dbPath = Database.Path()
   assertTestDatabasePath(dbPath)
   await Database.resetFiles(dbPath)
-  Database.Client()
-  Database.close()
 }
 
 export function rebuildTestDatabase() {

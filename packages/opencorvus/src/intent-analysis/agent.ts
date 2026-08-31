@@ -20,10 +20,8 @@
  */
 import { agentCoordinationHandoffResult, runAgentSession, type AgentCoordinationHandoffResult } from "@/agent/runner"
 import { renderUserRequestSection } from "@/intent/request-prompt"
-import { createAgentContextTools } from "@/agent/context-tools"
 import { renderPromptSections, withAttachmentPromptSections } from "@/agent/prompt-projection"
-import { createAgentCoordinationRuntimeTools } from "@/agent/coordination-runtime-tools"
-import { filterAgentTools } from "@/agent/filter-tools"
+import { DispatchAdapterContractRegistry } from "@/agent/dispatch-adapter-contract"
 import type { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
 import { Log } from "@/util/log"
 import type { IntentAnalysisResult } from "./types"
@@ -68,12 +66,7 @@ export namespace IntentAnalysisAgent {
 
   export async function analyze(input: AnalyzeInput): Promise<AnalyzeOutput | AgentCoordinationHandoffResult> {
     const projection = projectIntentAnalysisInput(input)
-    const toolKit = await buildToolKit({
-      agentID: input.agentID,
-      taskID: input.taskID,
-      sessionID: input.parentSessionID,
-      signal: input.signal,
-    })
+    const outputToolKit = createIntentOutputTools()
     const out = await runAgentSession({
       agentID: input.agentID,
       packageRevision: input.packageRevision,
@@ -94,9 +87,9 @@ export namespace IntentAnalysisAgent {
       onRuntimeReady: input.onRuntimeReady ? (session) => input.onRuntimeReady!(session.id) : undefined,
       onStatus: input.onStatus,
       toolKit: {
-        tools: toolKit.tools,
-        stageOwnedToolIDs: toolKit.stageOwnedToolIDs,
-        getCollector: toolKit.getCollector,
+        stageOwnedToolIDs: DispatchAdapterContractRegistry.privateStageToolIDs("analyze_intent"),
+        materializeExact: (toolID) => outputToolKit.materializeExact(toolID),
+        getCollector: () => outputToolKit.getCollector(),
       },
       buildUserPrompt: () => buildUserPrompt(projection, input.agentID),
     })
@@ -120,29 +113,6 @@ export namespace IntentAnalysisAgent {
       sessionID: out.session.id,
       finalMessageID: out.finalMessage.info.id,
     }
-  }
-}
-
-// ---------------------------------------------------------------------------
-// Tool kit — shared read-only context tools + intent-specific collector tools.
-// ---------------------------------------------------------------------------
-
-async function buildToolKit(opts: { agentID: string; taskID?: string; sessionID?: string; signal?: AbortSignal }) {
-  const coordinationTools = await createAgentCoordinationRuntimeTools({
-    agentID: opts.agentID,
-    taskID: opts?.taskID,
-    signal: opts?.signal,
-  })
-  const contextTools = await filterAgentTools(
-    { ...createAgentContextTools(), ...coordinationTools },
-    "intent-analysis",
-    opts,
-  )
-  const outputToolKit = createIntentOutputTools()
-  return {
-    tools: { ...contextTools, ...outputToolKit.tools },
-    stageOwnedToolIDs: Object.keys(outputToolKit.tools),
-    getCollector: () => outputToolKit.getCollector(),
   }
 }
 

@@ -1,18 +1,15 @@
 import fs from "node:fs/promises"
 import path from "node:path"
-import type { ToolSet } from "ai"
 import { createAiSdkToolFromInfo } from "@/tool/ai-sdk-adapter"
 import { agentCoordinationHandoffResult, runAgentSession, type AgentCoordinationHandoffResult } from "@/agent/runner"
 import { renderPromptSections } from "@/agent/prompt-projection"
-import { createAgentCoordinationRuntimeTools } from "@/agent/coordination-runtime-tools"
-import { filterAgentTools } from "@/agent/filter-tools"
-import { createReadonlyRetrievalTools } from "@/agent/retrieval-tools"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
 import type { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
 import { Instance } from "@/project/instance"
 import { taskPrimaryProjectRoot } from "@/project/task-runtime-root"
 import { requireTask } from "@/engine/store"
 import { Log } from "@/util/log"
+import { DispatchAdapterContractRegistry } from "@/agent/dispatch-adapter-contract"
 import { Session } from "@/session"
 import { renderUserRequestSection } from "@/intent/request-prompt"
 import type { FactCheckItem } from "@/fact-check/schema"
@@ -113,33 +110,16 @@ export async function runResearchSession(
   config: ResearchSessionConfig,
 ): Promise<DeepResearchAgent.RunResult | DeepResearchAgent.IncompleteRunResult | AgentCoordinationHandoffResult> {
   const sessionTitle = `${input.agentID} (${config.sessionTitlePrefix}): ${input.title}`
-  const retrievalTools =
-    config.retrievalTools === "readonly"
-      ? await filterAgentTools(createReadonlyRetrievalTools(), config.kind, {
-          taskID: input.taskID,
-          sessionID: input.parentSessionID,
-        })
-      : {}
-  const utilityTools = await filterAgentTools(
-    await createResearchUtilityTools(input.agentID, {
-      taskID: input.taskID,
-      signal: input.signal,
-    }),
-    config.kind,
-    {
-      taskID: input.taskID,
-      sessionID: input.parentSessionID,
-    },
-  )
-  const webpageEvidenceTools =
-    config.kind === "frontend-research"
-      ? await createResearchWebpageEvidenceTools(input.agentID, {
+  const expectedWebpageSourceUrl = config.kind === "frontend-research" ? input.sourceUrls?.[0] : undefined
+  const outputToolKit = createResearchOutputTools({ expectedWebpageSourceUrl })
+  const materializeExact = async (toolID: string) =>
+    outputToolKit.materializeExact(toolID) ??
+    (config.kind === "frontend-research"
+      ? createResearchWebpageEvidenceToolExact(toolID, input.agentID, {
           taskID: input.taskID,
           signal: input.signal,
         })
-      : {}
-  const expectedWebpageSourceUrl = config.kind === "frontend-research" ? input.sourceUrls?.[0] : undefined
-  const outputToolKit = createResearchOutputTools({ expectedWebpageSourceUrl })
+      : undefined)
   log.info(`${config.kind} starting`, {
     title: input.title,
     targetDeliverable: input.targetDeliverable,
@@ -168,9 +148,11 @@ export async function runResearchSession(
       : undefined,
     onRuntimeReady: input.onRuntimeReady ? (session) => input.onRuntimeReady!(session.id) : undefined,
     toolKit: {
-      tools: { ...retrievalTools, ...utilityTools, ...webpageEvidenceTools, ...outputToolKit.tools },
-      stageOwnedToolIDs: Object.keys(outputToolKit.tools),
-      getCollector: outputToolKit.getCollector,
+      stageOwnedToolIDs: DispatchAdapterContractRegistry.privateStageToolIDs(
+        config.kind === "frontend-research" ? "frontend_research" : "deep_research",
+      ),
+      materializeExact,
+      getCollector: () => outputToolKit.getCollector(),
     },
     buildUserPrompt: () => buildUserPrompt(input, config),
   })
@@ -259,32 +241,17 @@ async function completedResearchOutputToolCalls(sessionID: string): Promise<Rese
   return calls
 }
 
-async function createResearchUtilityTools(
+export async function createResearchWebpageEvidenceToolExact(
+  toolID: string,
   agentID: string,
   input: { taskID?: string; signal?: AbortSignal },
-): Promise<ToolSet> {
-  return await createAgentCoordinationRuntimeTools({
-    agentID,
-    taskID: input.taskID,
-    signal: input.signal,
-  })
-}
-
-export const ResearchTestHooks = { createResearchUtilityTools, createResearchWebpageEvidenceTools }
-
-async function createResearchWebpageEvidenceTools(
-  agentID: string,
-  input: { taskID?: string; signal?: AbortSignal },
-): Promise<ToolSet> {
-  const infos = [WebpageExtractTool, WebpageCompileTool, WebpageRuntimeStateTool] as const
-  return Object.fromEntries(
-    await Promise.all(
-      infos.map(async (info) => [
-        info.id,
-        await createAiSdkToolFromInfo({ info, agent: agentID, taskID: input.taskID, signal: input.signal }),
-      ]),
-    ),
+) {
+  const info = [WebpageExtractTool, WebpageCompileTool, WebpageRuntimeStateTool].find(
+    (candidate) => candidate.id === toolID,
   )
+  return info
+    ? createAiSdkToolFromInfo({ info, agent: agentID, taskID: input.taskID, signal: input.signal })
+    : undefined
 }
 
 function buildUserPrompt(input: DeepResearchAgent.RunInput, config: ResearchSessionConfig): string {

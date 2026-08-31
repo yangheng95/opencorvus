@@ -109,10 +109,10 @@ test("projects terminal acknowledgement into the exact host-authorized coordinat
   })
 })
 
-// Regression: an inheriting scheduler capability declares the Task Artifact
-// and interactive-publication Tools, and projectOrchestratorTools throws when a
-// declared Tool was not built. A terminal-only crop of the built table therefore
-// failed every terminal wake before the model saw anything.
+// Regression: the scheduler capability declares TASK_ARTIFACT_SCHEDULER_TOOL_IDS
+// and publish_interactive_artifact unconditionally, and exact materialization
+// throws when a declared Tool was not built. A terminal-only crop of the built
+// table therefore failed every terminal wake before the model saw anything.
 test("builds every declared scheduler Tool on a terminal conversation wake", async () => {
   await using project = await memoryProject()
   await Instance.provide({

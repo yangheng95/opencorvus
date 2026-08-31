@@ -104,6 +104,13 @@ export type AssistantMessage = {
     | ToolSchemaBudgetError
     | ModelImageInputTooLargeError
     | ApiError
+    | {
+        data: {
+          message: string
+          mismatches: Array<string>
+        }
+        name: "StaleCatalogOccurrenceError"
+      }
   failureOccurrence?: {
     assistant_message_id: string
     error_name: string
@@ -446,10 +453,6 @@ export type Config = {
      * Expire unanswered question interactions at the five-minute automatic deadline without attributing an operator decision. Independent fine-grained switch. When false, questions wait indefinitely for an operator reply.
      */
     auto_question?: boolean
-    /**
-     * Enable the batch tool
-     */
-    batch_tool?: boolean
     /**
      * Continue the agent loop when a tool call is denied
      */
@@ -1547,6 +1550,13 @@ export type EventSessionError = {
       | ToolSchemaBudgetError
       | ModelImageInputTooLargeError
       | ApiError
+      | {
+          data: {
+            message: string
+            mismatches: Array<string>
+          }
+          name: "StaleCatalogOccurrenceError"
+        }
     failureOccurrence?: {
       assistant_message_id: string
       error_name: string
@@ -5515,6 +5525,13 @@ export type VisibleMessage =
         | ToolSchemaBudgetError
         | ModelImageInputTooLargeError
         | ApiError
+        | {
+            data: {
+              message: string
+              mismatches: Array<string>
+            }
+            name: "StaleCatalogOccurrenceError"
+          }
       failureOccurrence?: {
         assistant_message_id: string
         error_name: string
@@ -16045,7 +16062,7 @@ export type GatewayControlActionData = {
          */
         taskID: string
         /**
-         * Exact current terminal occurrence returned by panel.query_task for this source Task.
+         * Exact current terminal occurrence returned by panel_query_task for this source Task.
          */
         terminal_lifecycle_reference: {
           terminalEventID: string
@@ -24555,6 +24572,13 @@ export type SessionCommandResponses = {
         | ToolSchemaBudgetError
         | ModelImageInputTooLargeError
         | ApiError
+        | {
+            data: {
+              message: string
+              mismatches: Array<string>
+            }
+            name: "StaleCatalogOccurrenceError"
+          }
       failureOccurrence?: {
         assistant_message_id: string
         error_name: string
@@ -26186,6 +26210,13 @@ export type SessionPromptResponses = {
         | ToolSchemaBudgetError
         | ModelImageInputTooLargeError
         | ApiError
+        | {
+            data: {
+              message: string
+              mismatches: Array<string>
+            }
+            name: "StaleCatalogOccurrenceError"
+          }
       failureOccurrence?: {
         assistant_message_id: string
         error_name: string

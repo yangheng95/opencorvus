@@ -233,14 +233,14 @@ try {
   const [
     { listenWithRecoveredServerRuntime, requireRecoveredServerRuntime },
     { Instance },
-    { Database, eq },
-    { AutomationTable },
+    { Database },
+    { currentAutomationFrontiersInTransaction },
     { declareNativeTaskProcessDeployment },
   ] = await Promise.all([
     import("../src/cli/server-runtime"),
     import("../src/project/instance"),
     import("../src/storage/db"),
-    import("../src/scheduler/automation.sql"),
+    import("../src/scheduler/automation-projection"),
     import("../src/runtime/task-process-deployment"),
   ])
   declareNativeTaskProcessDeployment()
@@ -350,7 +350,9 @@ try {
   })
   await Bun.sleep(3_500)
   const delayedBusy = Database.use((db) =>
-    db.select().from(AutomationTable).where(eq(AutomationTable.id, busyAutomation.id)).get(),
+    currentAutomationFrontiersInTransaction(db, { status: "active" }).find(
+      (candidate) => candidate.id === busyAutomation.id,
+    ),
   )
   if (!delayedBusy || delayedBusy.next_run !== busyAutomation.nextRun || delayedBusy.lease_until <= Date.now())
     findings.push("busy Session did not retain and delay its exact due occurrence")

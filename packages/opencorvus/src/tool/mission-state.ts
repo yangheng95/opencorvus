@@ -75,7 +75,7 @@ function missionFilePath(missionID: string, file: MissionFile) {
  * The missionID is server-owned, not an agent parameter. It lives in the
  * mission session's `metadata.mission.id` (written at wake) and is the SINGLE
  * source for which mission directory this tool touches — mirroring how
- * `panel.create_task` derives Mission → Squad provenance from the same field
+ * `panel_create_task` derives Mission → Squad provenance from the same field
  * (rule 8: no dual source). Taking it from the LLM instead let the agent
  * fabricate ids ("smoke-test", "mission_001") and write its durable memory to
  * a directory no later wake could find, silently breaking cross-wake recall.
@@ -154,7 +154,7 @@ export const MissionStateTool = Tool.define("mission_state", {
     "All I/O is confined to `.opencorvus/.r/missions/<this-mission-id>/` with a fixed",
     "file-name vocabulary: frontier.md, tasks.md, handoff.md, notes.md.",
     "Use this for authored Mission contracts, stage bindings, decisions, and next-wake notes — do NOT copy live Task status into it.",
-    "Read current Mission-owned Task identity and status through panel.view_tasks/query_task.",
+    "Read current Mission-owned Task identity and status through the search-revealed panel_view_tasks and panel_query_task leaves.",
     "Use this to carry mission reasoning across wake cycles — do NOT use read/write/glob.",
     "",
     "Actions:",

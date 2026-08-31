@@ -47,6 +47,7 @@ export async function withTaskToolInvocation<T>(
       permission: executionSurface.permission,
       permissionLayers: executionSurface.permission_layers,
       harnessProjection: executionSurface.harness_projection,
+      capabilityProjection: executionSurface.capability_projection,
     }),
     lifetime,
   })

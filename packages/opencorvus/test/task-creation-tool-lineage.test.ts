@@ -82,11 +82,11 @@ describe("Task creation persisted Tool lineage", () => {
         JSON.stringify({
           type: "tool-request",
           callID,
-          tool: input.tool ?? "panel",
+          tool: input.tool ?? "panel_create_task",
           input: {
-            action: input.action ?? "create_task",
             request: input.storedRequest ?? "Create exact Task",
             ...(input.storedMetadata ? { metadata: input.storedMetadata } : {}),
+            ...(input.action ? { action: input.action } : {}),
           },
           time: { start: now },
         }),
@@ -99,9 +99,9 @@ describe("Task creation persisted Tool lineage", () => {
       const toolInput =
         input.contractToolInput ??
         {
-          action: input.action ?? "create_task",
           request: input.storedRequest ?? "Create exact Task",
           ...(input.storedMetadata ? { metadata: input.storedMetadata } : {}),
+          ...(input.action ? { action: input.action } : {}),
         }
       const creator = {
             actor: "control_agent",
@@ -180,7 +180,7 @@ describe("Task creation persisted Tool lineage", () => {
     attempt({
       label: "metadata",
       storedMetadata: { intent: "exact" },
-      contractToolInput: { action: "create_task", request: "Create exact Task", metadata: { intent: "changed" } },
+      contractToolInput: { request: "Create exact Task", metadata: { intent: "changed" } },
     })
     attempt({
       label: "attachments",
@@ -195,11 +195,15 @@ describe("Task creation persisted Tool lineage", () => {
     }) => {
       const partID = `wake-part-${input.label}`
       const callID = `wake-call-${input.label}`
-      const toolInput = { action: "wake_work", text: `Wake ${input.label}` }
+      const toolInput = {
+        title: `Wake ${input.label}`,
+        request: `Wake ${input.label}`,
+        reason: "Exact persisted wake request",
+      }
       db.query("INSERT INTO tool_part_request(id,message_id,data,time_created) VALUES(?,?,?,?)").run(
         partID,
         "message",
-        JSON.stringify({ type: "tool-request", callID, tool: "panel", input: toolInput, time: { start: now } }),
+        JSON.stringify({ type: "tool-request", callID, tool: "panel_wake_work", input: toolInput, time: { start: now } }),
         now,
       )
       const fact = buildPanelCreationFact({
@@ -249,7 +253,7 @@ describe("Task creation persisted Tool lineage", () => {
     attemptPanelSession({ label: "call", mutate: (fact) => ({ ...fact, tool_call_id: "call-other" }) })
     attemptPanelSession({
       label: "input",
-      mutate: (fact) => ({ ...fact, input: { action: "wake_work", text: "changed" } }),
+      mutate: (fact) => ({ ...fact, input: { ...fact.input, request: "changed" } }),
     })
     attemptPanelSession({ label: "target", sessionID: "session-wrong-target" })
     attemptPanelSession({

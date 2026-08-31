@@ -45,6 +45,7 @@ import {
 import { ContractIRSchema } from "./contract-ir"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
 import { discriminatorRepairHint } from "@/llm/repair-hint"
+import { materializeExactTool } from "@/agent/exact-tool-factory"
 
 const RegisterContractToolInputBaseSchema = z.object(ArchitectContractRefSchema.shape).omit({
   ir: true,
@@ -429,6 +430,7 @@ export function createArchitectOutputTools(input: {
     options: unknown,
     toolName: string,
   ) => ArchitectSelectedExistingGoals | undefined
+  onToolMaterialized?: (toolID: string) => void
 }) {
   let collector = emptyCollector()
   let selectedExistingGoalSourceKey: string | undefined
@@ -471,8 +473,8 @@ export function createArchitectOutputTools(input: {
     return collector
   }
 
-  const tools = {
-    register_goal: tool({
+  const toolFactories = {
+    register_goal: () => tool({
       description:
         "Register a new Delivery Slice contract, or overwrite a prior registration with " +
         "the same id in this Architect turn. A Goal is a versioned delivery and acceptance subject, " +
@@ -523,7 +525,7 @@ export function createArchitectOutputTools(input: {
       },
     }),
 
-    modify_goal: tool({
+    modify_goal: () => tool({
       description:
         "Refine fields on an already-registered goal in this Architect Turn. Supply only the fields you want to change. Unknown " +
         "ids are rejected — use manage_goal action=register_goal if you intend a brand-new goal. " +
@@ -573,7 +575,7 @@ export function createArchitectOutputTools(input: {
       },
     }),
 
-    remove_goal: tool({
+    remove_goal: () => tool({
       description:
         "Remove a goal registered earlier in this Architect Turn when the assembled contract shows it is redundant or wrong. The goal " +
         "id and reason are recorded in the next immutable ContractGraph projection; prior Goal rows and evidence are never deleted. " +
@@ -664,7 +666,7 @@ export function createArchitectOutputTools(input: {
       },
     }),
 
-    register_source_coverage: tool({
+    register_source_coverage: () => tool({
       description:
         "Register which existing source files or modules are intentionally reused, modified, preserved, or replaced, and which goals own that work.",
       inputSchema: SourceCoverageEntrySchema,
@@ -681,7 +683,7 @@ export function createArchitectOutputTools(input: {
       },
     }),
 
-    register_reference_coverage: tool({
+    register_reference_coverage: () => tool({
       description:
         "Register which authoritative reference surface, visual spec ids, and Frontend Design reference_regions each goal must restore when this evidence is already clear.",
       inputSchema: ReferenceCoverageEntrySchema,
@@ -698,7 +700,7 @@ export function createArchitectOutputTools(input: {
       },
     }),
 
-    register_assembly_owner: tool({
+    register_assembly_owner: () => tool({
       description:
         "Register the single goal that owns final stitching for a shared user-visible or integration surface.",
       inputSchema: AssemblyOwnerEntrySchema,
@@ -715,7 +717,7 @@ export function createArchitectOutputTools(input: {
       },
     }),
 
-    register_contract: tool({
+    register_contract: () => tool({
       description:
         "Register one Architect Contract Graph interface. producer_goal_id owns the interface and consumer_goal_ids name its consumers without creating execution order. Use type/function/enum with ir_json for typed contracts; use route/component/static_data/render_surface/behavior_inventory for non-IR surfaces. evidence_refs is projected only when exact ResearchEvidence refs exist; never put an Engine Artifact ID or locator there.",
       inputSchema: registerContractInputSchema,
@@ -753,7 +755,7 @@ export function createArchitectOutputTools(input: {
 
   }
 
-  const manageGoalTool = tool({
+  const materializeManageGoalTool = () => tool({
     description:
       "Single Architect goal mutation tool. Use action=register_goal, action=modify_goal, or action=remove_goal. " +
       "This replaces separate visible goal tools while preserving exact action-specific schemas and collector semantics.",
@@ -763,7 +765,7 @@ export function createArchitectOutputTools(input: {
       const parsed = ManageGoalInputSchema.parse(input) as { action: ManageGoalActionName } & Record<string, unknown>
       const { action } = parsed
       const actionInput = normalizedManageGoalActionInput(parsed)
-      const actionTool = tools[action]
+      const actionTool = materializeExactTool(toolFactories, action, input.onToolMaterialized)
       if (!actionTool?.execute) {
         throw new Error(`manage_goal action ${action} is not backed by an internal Architect goal action`)
       }
@@ -771,9 +773,9 @@ export function createArchitectOutputTools(input: {
     },
   })
 
-  const visibleTools = {
-    manage_goal: manageGoalTool,
-    view_architect_draft: tool({
+  const visibleToolFactories = {
+    manage_goal: materializeManageGoalTool,
+    view_architect_draft: () => tool({
       description:
         "Read the exact current Architect collector facts without validating, finalizing, routing, or changing them.",
       inputSchema: z.object({}).strict(),
@@ -789,14 +791,15 @@ export function createArchitectOutputTools(input: {
         })
       },
     }),
-    register_source_coverage: tools.register_source_coverage,
-    register_reference_coverage: tools.register_reference_coverage,
-    register_assembly_owner: tools.register_assembly_owner,
-    register_contract: tools.register_contract,
+    register_source_coverage: () => materializeExactTool(toolFactories, "register_source_coverage")!,
+    register_reference_coverage: () => materializeExactTool(toolFactories, "register_reference_coverage")!,
+    register_assembly_owner: () => materializeExactTool(toolFactories, "register_assembly_owner")!,
+    register_contract: () => materializeExactTool(toolFactories, "register_contract")!,
   }
 
   return {
-    tools: visibleTools,
+    materializeExact: (toolID: string) =>
+      materializeExactTool(visibleToolFactories, toolID, input.onToolMaterialized),
     /** Reset the collector between retry attempts. */
     reset() {
       collector = emptyCollector()

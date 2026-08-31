@@ -21,15 +21,23 @@ import { PanelQueryTaskOutput } from "@/panel/task-query"
 import { Instance } from "@/project/instance"
 import { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
 import { Session } from "@/session"
-import { SessionLoop } from "@/session/loop"
 import { SessionProcessor } from "@/session/processor"
 import { Tool } from "@/tool/tool"
-import { PanelTool } from "@/tool/panel"
+import { PanelLeafTools } from "@/tool/panel"
+import { panelLeafToolID, type PanelActionID } from "@/panel/action-ids"
 import { ToolTurnExecutionConflictError } from "@/tool/execution-mode"
 import { toolResultControl } from "@/session/tool-result-control"
 import { EngineService } from "@/task-api"
 import { ArtifactSchemaLimits } from "@opencorvus-ai/plugin/artifact-catalog"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
+import { resolveTestCapabilityTools } from "./fixture/capability-occurrence"
+
+async function panelLeaf(action: PanelActionID, agentID = "mission") {
+  const id = panelLeafToolID(action)
+  const definition = PanelLeafTools.find((tool) => tool.id === id)
+  if (!definition) throw new Error(`Missing Panel leaf ${id}.`)
+  return { id, tool: await definition.init({ agentID }) }
+}
 
 const packageRevision = {
   scope: "built_in" as const,
@@ -71,18 +79,18 @@ afterEach(async () => {
 
 describe("Mission terminal Task authority", () => {
   test("projects Mission panel queries as ordinary work and mutations as exclusive turn control", async () => {
-    const missionPanel = await PanelTool.init({ agentID: "mission" })
-    const ordinaryPanel = await PanelTool.init({ agentID: "base" })
-    const missionMode = missionPanel.executionMode
-    if (typeof missionMode !== "function")
-      throw new Error("Mission panel did not project an action-aware execution mode.")
+    const missionViewTasks = await panelLeaf("view_tasks")
+    const missionInspectSquad = await panelLeaf("expert_squad_inspect")
+    const missionCreateTask = await panelLeaf("create_task")
+    const missionComplete = await panelLeaf("complete_mission")
+    const ordinaryCreateTask = await panelLeaf("create_task", "base")
 
     expect({
-      viewTasks: missionMode({ action: "view_tasks" }),
-      inspectSquad: missionMode({ action: "expert_squad_inspect", id: "base" }),
-      createTask: missionMode({ action: "create_task" }),
-      completeMission: missionMode({ action: "complete_mission" }),
-      ordinaryPanel: ordinaryPanel.executionMode,
+      viewTasks: missionViewTasks.tool.executionMode,
+      inspectSquad: missionInspectSquad.tool.executionMode,
+      createTask: missionCreateTask.tool.executionMode,
+      completeMission: missionComplete.tool.executionMode,
+      ordinaryPanel: ordinaryCreateTask.tool.executionMode,
     }).toEqual({
       viewTasks: "ordinary",
       inspectSquad: "ordinary",
@@ -140,19 +148,26 @@ describe("Mission terminal Task authority", () => {
           model: providerModel,
           abort: new AbortController().signal,
         })
-        const tools = await SessionLoop.resolveTools({
-          agent: sessionRuntimeFromNativeAgent(await PrimaryAssistantRegistry.get("mission", { config })),
+        const runtime = sessionRuntimeFromNativeAgent(await PrimaryAssistantRegistry.get("mission", { config }))
+        const { tools } = await resolveTestCapabilityTools({
+          agent: runtime,
           agentID: "mission",
           model: providerModel,
           session: mission,
+          assistant,
           processor,
           messages: await Session.messages({ sessionID: mission.id }),
           config,
           includeMcpTools: false,
           extra: { surface: "panel" },
+          activeLocalRefs: ["panel_expert_squad_inspect", "panel_view_tasks", "panel_create_task"],
         })
-        const panel = tools.panel
-        if (!panel?.execute) throw new Error("Final Mission SessionLoop surface did not project panel execution.")
+        const inspectSquad = tools.panel_expert_squad_inspect
+        const viewTasks = tools.panel_view_tasks
+        const createTask = tools.panel_create_task
+        if (!inspectSquad?.execute || !viewTasks?.execute || !createTask?.execute) {
+          throw new Error("Final Mission SessionLoop surface did not project the exact Panel leaves.")
+        }
         const options = (toolCallId: string) => ({
           toolCallId,
           messages: [],
@@ -180,16 +195,15 @@ describe("Mission terminal Task authority", () => {
         })
         const mappingSpy = spyOn(EngineService, "getCrossTaskArtifactImportMappings").mockReturnValue([])
         try {
-          const inspectionPromise = panel.execute(
-            { action: "expert_squad_inspect", id: "base" },
+          const inspectionPromise = inspectSquad.execute(
+            { id: "base" },
             options("call_final_surface_inspection"),
           )
           await inspectionEntered
-          const tasks = await panel.execute({ action: "view_tasks" }, options("call_final_surface_tasks"))
+          const tasks = await viewTasks.execute({}, options("call_final_surface_tasks"))
           order.push("tasks:done")
-          const mutationPromise = panel.execute(
+          const mutationPromise = createTask.execute(
             {
-              action: "create_task",
               title: "Verify action-aware Mission control",
               request: "Verify action-aware Mission control",
               model: "firmware/gpt-5",
@@ -197,8 +211,8 @@ describe("Mission terminal Task authority", () => {
             },
             options("call_final_surface_mutation"),
           )
-          const fencedQuery = await panel
-            .execute({ action: "view_tasks" }, options("call_query_behind_pending_mutation"))
+          const fencedQuery = await viewTasks
+            .execute({}, options("call_query_behind_pending_mutation"))
             .then(() => ({ kind: "completed" as const }))
             .catch((error) => ({
               kind: "rejected" as const,
@@ -297,11 +311,10 @@ describe("Mission terminal Task authority", () => {
           messageID: assistant.id,
           type: "tool",
           callID,
-          tool: "panel",
+          tool: "panel_create_task",
           state: {
             status: "running",
             input: {
-              action: "create_task",
               title: "Build one bounded game",
               request: "Build one bounded game",
             },
@@ -312,10 +325,9 @@ describe("Mission terminal Task authority", () => {
         const createSpy = spyOn(EngineService, "createTask").mockResolvedValue(taskID)
         const mappingSpy = spyOn(EngineService, "getCrossTaskArtifactImportMappings").mockReturnValue([])
         try {
-          const panel = await PanelTool.init({ agentID: "mission" })
-          const result = await panel.execute(
+          const panel = await panelLeaf("create_task")
+          const result = await panel.tool.execute(
             {
-              action: "create_task",
               title: "Build one bounded game",
               request: "Build one bounded game",
               model: "firmware/gpt-5",
@@ -328,7 +340,7 @@ describe("Mission terminal Task authority", () => {
               agent: "mission",
               abort: new AbortController().signal,
               messages: [],
-              executionSurface: Tool.executionSurface(["panel"], []),
+              executionSurface: Tool.executionSurface([panel.id], []),
               extra: { surface: "panel" },
               metadata() {},
               async ask() {},
@@ -437,19 +449,21 @@ describe("Mission terminal Task authority", () => {
           cost: 0,
           tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
         })
-        const panel = await PanelTool.init({ agentID: "mission" })
-        const context = {
+        const viewTasksLeaf = await panelLeaf("view_tasks")
+        const queryArtifactsLeaf = await panelLeaf("query_task_artifacts")
+        const readArtifactLeaf = await panelLeaf("read_task_artifact")
+        const context = (toolID: string) => ({
           sessionID: mission.id,
           messageID: caller.id,
           agent: "mission",
           abort: new AbortController().signal,
           messages: [],
-          executionSurface: Tool.executionSurface(["panel"], []),
+          executionSurface: Tool.executionSurface([toolID], []),
           extra: { surface: "panel" },
           metadata() {},
           async ask() {},
-        }
-        const missionTasks = await panel.execute({ action: "view_tasks" }, context)
+        })
+        const missionTasks = await viewTasksLeaf.tool.execute({}, context(viewTasksLeaf.id))
         expect({ output: missionTasks.output, metadata: missionTasks.metadata }).toEqual({
           output: `1. Paged terminal child [completed] (${taskID})`,
           metadata: { missionID: mission.missionID, count: 1, truncated: false },
@@ -460,10 +474,10 @@ describe("Mission terminal Task authority", () => {
           messageID: caller.id,
           type: "tool",
           callID: "view-mission-tasks-before-artifact-catalog",
-          tool: "panel",
+          tool: viewTasksLeaf.id,
           state: {
             status: "completed",
-            input: { action: "view_tasks" },
+            input: {},
             output: missionTasks.output,
             title: missionTasks.title,
             metadata: missionTasks.metadata,
@@ -474,16 +488,15 @@ describe("Mission terminal Task authority", () => {
         const visitedPageNumbers: number[] = []
         let pageNumber: number | null = 1
         while (pageNumber !== null) {
-          const result = await panel.execute(
+          const result = await queryArtifactsLeaf.tool.execute(
             {
-              action: "query_task_artifacts",
               taskID,
               terminal_lifecycle_reference: terminalReference,
               page_number: pageNumber,
               kinds: ["expert_output"],
               sort: "oldest",
             },
-            context,
+            context(queryArtifactsLeaf.id),
           )
           expect(Buffer.byteLength(result.output, "utf8")).toBeLessThanOrEqual(
             ArtifactSchemaLimits.structuredOutputBytes,
@@ -513,11 +526,10 @@ describe("Mission terminal Task authority", () => {
               messageID: caller.id,
               type: "tool",
               callID: "query-terminal-artifact-page-one",
-              tool: "panel",
+              tool: queryArtifactsLeaf.id,
               state: {
                 status: "completed",
                 input: {
-                  action: "query_task_artifacts",
                   taskID,
                   terminal_lifecycle_reference: terminalReference,
                   page_number: 1,
@@ -554,7 +566,6 @@ describe("Mission terminal Task authority", () => {
           tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
         })
         const readInput = {
-          action: "read_task_artifact" as const,
           taskID,
           artifact_transport_version: 2 as const,
           artifact_locator_ref: entries[0]!.artifact_locator_ref,
@@ -575,10 +586,14 @@ describe("Mission terminal Task authority", () => {
           messageID: readMessage.id,
           type: "tool",
           callID: readCallID,
-          tool: "panel",
+          tool: readArtifactLeaf.id,
           state: { status: "running", input: readInput, time: { start: now + 37 } },
         })
-        const read = await panel.execute(readInput, { ...context, messageID: readMessage.id, callID: readCallID })
+        const read = await readArtifactLeaf.tool.execute(readInput, {
+          ...context(readArtifactLeaf.id),
+          messageID: readMessage.id,
+          callID: readCallID,
+        })
         expect(JSON.parse(read.output)).toEqual(
           expect.objectContaining({
             taskID,
@@ -623,12 +638,16 @@ describe("Mission terminal Task authority", () => {
           messageID: staleReadMessage.id,
           type: "tool",
           callID: staleReadCallID,
-          tool: "panel",
+          tool: readArtifactLeaf.id,
           state: { status: "running", input: readInput, time: { start: now + 40 } },
         })
         let staleReadError: unknown
         try {
-          await panel.execute(readInput, { ...context, messageID: staleReadMessage.id, callID: staleReadCallID })
+          await readArtifactLeaf.tool.execute(readInput, {
+            ...context(readArtifactLeaf.id),
+            messageID: staleReadMessage.id,
+            callID: staleReadCallID,
+          })
         } catch (error) {
           staleReadError = error
         }
@@ -710,16 +729,17 @@ describe("Mission terminal Task authority", () => {
           tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
           finish: "tool-calls",
         })
-        const panel = await PanelTool.init({ agentID: "mission" })
-        const query = await panel.execute(
-          { action: "query_task", taskIDs: [taskID] },
+        const queryTaskLeaf = await panelLeaf("query_task")
+        const completeMissionLeaf = await panelLeaf("complete_mission")
+        const query = await queryTaskLeaf.tool.execute(
+          { taskIDs: [taskID] },
           {
             sessionID: mission.id,
             messageID: queryMessage.id,
             agent: "mission",
             abort: new AbortController().signal,
             messages: [],
-            executionSurface: Tool.executionSurface(["panel"], []),
+            executionSurface: Tool.executionSurface([queryTaskLeaf.id], []),
             extra: { surface: "panel" },
             metadata() {},
             async ask() {},
@@ -740,10 +760,10 @@ describe("Mission terminal Task authority", () => {
           messageID: queryMessage.id,
           type: "tool",
           callID: "query-terminal-task",
-          tool: "panel",
+          tool: queryTaskLeaf.id,
           state: {
             status: "completed",
-            input: { action: "query_task", taskIDs: [taskID] },
+            input: { taskIDs: [taskID] },
             output: query.output,
             title: query.title,
             metadata: query.metadata,
@@ -759,19 +779,16 @@ describe("Mission terminal Task authority", () => {
           messageID: queryMessage.id,
           type: "tool",
           callID: "read-terminal-evidence",
-          tool: "panel",
+          tool: "panel_read_task_artifact",
           state: {
             status: "completed",
             input: {
-              operation: {
-                action: "read_task_artifact",
-                taskID,
-                artifact_transport_version: 2,
-                artifact_locator_ref: locatorRef,
-                byte_offset: 0,
-                max_bytes: 65_536,
-                delivery: "inline",
-              },
+              taskID,
+              artifact_transport_version: 2,
+              artifact_locator_ref: locatorRef,
+              byte_offset: 0,
+              max_bytes: 65_536,
+              delivery: "inline",
             },
             output: JSON.stringify({
               taskID,
@@ -890,6 +907,7 @@ describe("Mission terminal Task authority", () => {
           summary: "Accepted terminal evidence",
           task_acceptances: [{ task_id: taskID, evidence_read_refs: [readRef] }],
         })
+        const { action: _completionAction, ...completionArgs } = completionInput
 
         const completionCallID = "complete-terminal-mission"
         const completionPartID = Identifier.ascending("part")
@@ -905,21 +923,21 @@ describe("Mission terminal Task authority", () => {
           messageID: mutationMessage.id,
           type: "tool",
           callID: completionCallID,
-          tool: "panel",
+          tool: completeMissionLeaf.id,
           state: {
             status: "running",
-            input: completionInput,
+            input: completionArgs,
             time: { start: now + 5 },
           },
         })
-        const completion = await panel.execute(completionInput, {
+        const completion = await completeMissionLeaf.tool.execute(completionArgs, {
           sessionID: mission.id,
           messageID: mutationMessage.id,
           callID: completionCallID,
           agent: "mission",
           abort: new AbortController().signal,
           messages: [],
-          executionSurface: Tool.executionSurface(["panel"], []),
+          executionSurface: Tool.executionSurface([completeMissionLeaf.id], []),
           extra: { surface: "panel" },
           metadata() {},
           async ask() {},
@@ -949,10 +967,10 @@ describe("Mission terminal Task authority", () => {
           messageID: mutationMessage.id,
           type: "tool",
           callID: completionCallID,
-          tool: "panel",
+          tool: completeMissionLeaf.id,
           state: {
             status: "completed",
-            input: completionInput,
+            input: completionArgs,
             output: completion.output,
             title: completion.title,
             metadata: completion.metadata,
@@ -1004,15 +1022,15 @@ describe("Mission terminal Task authority", () => {
           cost: 0,
           tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
         })
-        const currentQuery = await panel.execute(
-          { action: "query_task", taskIDs: [taskID] },
+        const currentQuery = await queryTaskLeaf.tool.execute(
+          { taskIDs: [taskID] },
           {
             sessionID: mission.id,
             messageID: currentQueryMessage.id,
             agent: "mission",
             abort: new AbortController().signal,
             messages: [],
-            executionSurface: Tool.executionSurface(["panel"], []),
+            executionSurface: Tool.executionSurface([queryTaskLeaf.id], []),
             extra: { surface: "panel" },
             metadata() {},
             async ask() {},
@@ -1024,10 +1042,10 @@ describe("Mission terminal Task authority", () => {
           messageID: currentQueryMessage.id,
           type: "tool",
           callID: "query-replacement-terminal-task",
-          tool: "panel",
+          tool: queryTaskLeaf.id,
           state: {
             status: "completed",
-            input: { action: "query_task", taskIDs: [taskID] },
+            input: { taskIDs: [taskID] },
             output: currentQuery.output,
             title: currentQuery.title,
             metadata: currentQuery.metadata,
@@ -1061,19 +1079,19 @@ describe("Mission terminal Task authority", () => {
           messageID: staleCompletionMessage.id,
           type: "tool",
           callID: staleCompletionCallID,
-          tool: "panel",
-          state: { status: "running", input: completionInput, time: { start: now + 11 } },
+          tool: completeMissionLeaf.id,
+          state: { status: "running", input: completionArgs, time: { start: now + 11 } },
         })
         let staleCompletionError: unknown
         try {
-          await panel.execute(completionInput, {
+          await completeMissionLeaf.tool.execute(completionArgs, {
             sessionID: mission.id,
             messageID: staleCompletionMessage.id,
             callID: staleCompletionCallID,
             agent: "mission",
             abort: new AbortController().signal,
             messages: [],
-            executionSurface: Tool.executionSurface(["panel"], []),
+            executionSurface: Tool.executionSurface([completeMissionLeaf.id], []),
             extra: { surface: "panel" },
             metadata() {},
             async ask() {},

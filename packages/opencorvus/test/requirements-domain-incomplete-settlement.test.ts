@@ -21,7 +21,7 @@ import type { RequirementCoverageDeclaration, RequirementSet } from "@/requireme
 import { Session } from "@/session"
 import { exactEngineArtifactLocator } from "@/artifact-catalog"
 import { createArtifactReadAiTool, createArtifactSearchAiTool, createArtifactSelectAiTool } from "@/tool/artifact-catalog"
-import { createRequirementsOutputTools } from "@/requirements/output-tools"
+import { createRequirementsOutputToolFactory } from "@/requirements/output-tools"
 import { EngineArtifactEnvelopeSchema } from "@opencorvus-ai/plugin"
 import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
 import { Database, DatabaseUnavailableError, and, eq } from "@/storage/db"
@@ -513,13 +513,13 @@ describe("Requirements domain-incomplete settlement", () => {
       directory: project.path,
       fn: async () => {
         const task = await fixture("Wire-valid Requirements")
-        const output = createRequirementsOutputTools()
-        await output.tools.register_requirement.execute?.({
+        const output = createRequirementsOutputToolFactory()
+        await output.materializeExact("register_requirement")!.execute?.({
           ...requirement,
           acceptance: "x",
         }, {} as never)
-        await output.tools.register_decision.execute?.({ key: "runtime", value: "Bun", reason: "" }, {} as never)
-        await output.tools.finalize_requirements.execute?.({
+        await output.materializeExact("register_decision")!.execute?.({ key: "runtime", value: "Bun", reason: "" }, {} as never)
+        await output.materializeExact("finalize_requirements")!.execute?.({
           ...completeDeclaration(task),
           requirement_ids: [requirement.id],
         }, {} as never)
