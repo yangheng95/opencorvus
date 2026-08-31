@@ -1,6 +1,6 @@
 # Scheduled busy-Session occurrence E2E repair
 
-Status: implemented, verified, and independently reviewed with no remaining findings; Git delivery pending.
+Status: implemented, verified, independently reviewed with no remaining findings, and delivered in commit `0e335444`.
 
 ## Recall
 
