@@ -1,12 +1,15 @@
 import { Identifier } from "@/id/id"
 import { currentRuntimeProcessOccurrence, observeRuntimeProcessOccurrence } from "@/runtime/process-occurrence"
-import { Database, and, eq, sql } from "@/storage/db"
+import { Database, and, desc, eq, sql } from "@/storage/db"
 import { Filesystem } from "@/util/filesystem"
 import { MessageTable, SessionPromptOwnerTable, SessionTable } from "../session.sql"
 import { MissionProcessRecoveryWakeReason } from "../mission-process-recovery-schema"
 
 export namespace SessionPromptOwner {
   export type Authority = typeof SessionPromptOwnerTable.$inferSelect
+  let activeExecutionObservationForTest:
+    | ((authority: Authority) => "exact_live" | "dead_or_reused" | "unknown_live")
+    | undefined
 
   export type Admission =
     | { acquired: true; authority: Authority }
@@ -142,12 +145,68 @@ export namespace SessionPromptOwner {
     return Database.use((db) => currentInTransaction(db, sessionID))
   }
 
+  /**
+   * Read the shared physical fact that one exact Session is currently inside
+   * an unfinished assistant execution owned by a live (or conservatively
+   * unobservable) process occurrence. A standby Prompt owner has no unfinished
+   * assistant and therefore is not an active execution.
+   */
+  export function activeExecutionInTransaction(
+    db: Database.TxOrDb,
+    sessionID: string,
+  ):
+    | {
+        authority: Authority
+        assistantMessageID: string
+        observation: "exact_live" | "unknown_live"
+      }
+    | undefined {
+    const authority = currentInTransaction(db, sessionID)
+    if (!authority) return undefined
+    const assistant = db
+      .select({ id: MessageTable.id })
+      .from(MessageTable)
+      .where(
+        and(
+          eq(MessageTable.session_id, sessionID),
+          sql`json_extract(${MessageTable.data}, '$.role') = 'assistant'`,
+          sql`json_extract(${MessageTable.data}, '$.time.completed') IS NULL`,
+        ),
+      )
+      .orderBy(desc(MessageTable.time_created), desc(MessageTable.id))
+      .get()
+    if (!assistant) return undefined
+    const observed = (activeExecutionObservationForTest ?? observation)(authority)
+    if (observed === "dead_or_reused") return undefined
+    return {
+      authority,
+      assistantMessageID: assistant.id,
+      observation: observed,
+    }
+  }
+
   export function observation(authority: Authority): "exact_live" | "dead_or_reused" | "unknown_live" {
     return observeRuntimeProcessOccurrence({
       pid: authority.owner_pid,
       processInstanceID: authority.owner_process_instance_id,
       occurrenceID: authority.owner_occurrence_id,
     })
+  }
+
+  export const TestHooks = {
+    installActiveExecutionObservation(
+      observe: (authority: Authority) => "exact_live" | "dead_or_reused" | "unknown_live",
+    ): Disposable {
+      if (activeExecutionObservationForTest) {
+        throw new Error("Session Prompt active-execution observation test hook is already installed")
+      }
+      activeExecutionObservationForTest = observe
+      return {
+        [Symbol.dispose]() {
+          if (activeExecutionObservationForTest === observe) activeExecutionObservationForTest = undefined
+        },
+      }
+    },
   }
 
   /**

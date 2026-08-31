@@ -21,6 +21,7 @@ import {
 import { AutomationRunningConflictError, AutomationService } from "../src/scheduler/automation-service"
 import {
   currentAutomationFrontiersInTransaction,
+  latestAutomationDefinitionInTransaction,
   projectAutomationFrontierInTransaction,
   projectAutomationInTransaction,
 } from "../src/scheduler/automation-projection"
@@ -34,6 +35,8 @@ import {
   openMissionExecutionWithWake,
 } from "@/mission/execution-closure"
 import { ensureMissionSession } from "@/mission/session"
+import { SessionPromptOwner } from "@/session/prompt/owner"
+import { SessionStatus } from "@/session/status"
 
 afterAll(resetMemoryDatabase)
 
@@ -73,7 +76,258 @@ async function openMissionOccurrence(
   })
 }
 
+async function acquireDurablePromptExecution(
+  session: Awaited<ReturnType<typeof Session.create>>,
+  projectPath: string,
+) {
+  const input = await Session.updateMessage({
+    id: Identifier.ascending("message"),
+    role: "user",
+    sessionID: session.id,
+    author: "user",
+    time: { created: Date.now() },
+    agent: "assistant",
+    model: { providerID: "test", modelID: "test" },
+  })
+  const owner = SessionPromptOwner.acquire({
+    sessionID: session.id,
+    projectID: Instance.project.id,
+    directory: Instance.directory,
+  })
+  if (!owner.acquired) throw new Error("Durable prompt execution fixture did not acquire its Prompt owner")
+  const assistant = await Session.beginAssistantReply({
+    id: Identifier.ascending("message"),
+    sessionID: session.id,
+    role: "assistant",
+    author: "assistant",
+    parentID: input.id,
+    acceptedInputMessageIDs: [input.id],
+    agent: "assistant",
+    modelID: "test",
+    providerID: "test",
+    path: { cwd: projectPath, root: projectPath },
+    cost: 0,
+    tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+    time: { created: Date.now() },
+  })
+  let released = false
+  return {
+    owner: owner.authority,
+    assistant,
+    async settle() {
+      if (assistant.time.completed === undefined) {
+        assistant.finish = "stop"
+        assistant.time.completed = Date.now()
+        await Session.updateMessage(assistant)
+      }
+      if (!released) released = SessionPromptOwner.release(owner.authority)
+      return released
+    },
+    release() {
+      if (!released) released = SessionPromptOwner.release(owner.authority)
+      return released
+    },
+  }
+}
+
 describe("scheduler immutable definition and fire identity", () => {
+  test("a busy Session retains its exact due occurrence behind one timed control lease", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({ directory: project.path, fn: async () => {
+      const session = await Session.create({ kind: "assistant", title: "busy Automation target" })
+      const input = await Session.updateMessage({
+        id: Identifier.ascending("message"),
+        role: "user",
+        sessionID: session.id,
+        author: "user",
+        time: { created: Date.now() },
+        agent: "assistant",
+        model: { providerID: "test", modelID: "test" },
+      })
+      const promptOwner = SessionPromptOwner.acquire({
+        sessionID: session.id,
+        projectID: Instance.project.id,
+        directory: Instance.directory,
+      })
+      if (!promptOwner.acquired) throw new Error("Focused busy-Session test did not acquire its Prompt owner")
+      let promptOwnerReleased = false
+      const assistant = await Session.beginAssistantReply({
+        id: Identifier.ascending("message"),
+        sessionID: session.id,
+        role: "assistant",
+        author: "assistant",
+        parentID: input.id,
+        acceptedInputMessageIDs: [input.id],
+        agent: "assistant",
+        modelID: "test",
+        providerID: "test",
+        path: { cwd: project.path, root: project.path },
+        cost: 0,
+        tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+        time: { created: Date.now() },
+      })
+
+      try {
+        const startsAt = Date.now() + 3_000
+        const stamp = new Date(startsAt)
+          .toISOString()
+          .replace(/[-:]/g, "")
+          .replace(/\.\d{3}Z$/, "Z")
+        const automation = await AutomationService.create({
+          name: "busy exact Session",
+          target: { scope: "session", sessionId: session.id },
+          recurrence: `DTSTART:${stamp}\nRRULE:FREQ=SECONDLY;INTERVAL=120`,
+          prompt: "retain this due occurrence",
+        })
+        await expect(AutomationService.runNow(automation.id)).rejects.toBeInstanceOf(AutomationRunningConflictError)
+        while (Date.now() <= automation.nextRun) await Bun.sleep(25)
+        await AutomationService.runDueNow()
+
+        const delayed = Database.use((db) =>
+          projectAutomationInTransaction(db, latestAutomationDefinitionInTransaction(db, automation.id)!),
+        )
+        const delayedLeaseUntil = delayed.lease_until
+        expect({
+          id: automation.id,
+          nextRun: delayed.next_run,
+          leaseOwner: delayed.lease_owner,
+        }).toEqual({
+          id: automation.id,
+          nextRun: automation.nextRun,
+          leaseOwner: Identifier.deterministic(
+            "call",
+            `automation-busy-session-delay-v1\0${automation.id}\0${automation.nextRun}`,
+          ),
+        })
+        expect(delayedLeaseUntil).toBeGreaterThan(Date.now())
+
+        assistant.finish = "stop"
+        assistant.time.completed = Date.now()
+        await Session.updateMessage(assistant)
+        promptOwnerReleased = SessionPromptOwner.release(promptOwner.authority)
+        expect(promptOwnerReleased).toBe(true)
+        await expect(AutomationService.runNow(automation.id)).rejects.toBeInstanceOf(AutomationRunningConflictError)
+        await expect(
+          AutomationService.update({ id: automation.id, prompt: "fenced mutation" }),
+        ).rejects.toBeInstanceOf(AutomationRunningConflictError)
+        expect(() => AutomationService.remove(automation.id)).toThrow(AutomationRunningConflictError)
+      } finally {
+        if (!promptOwnerReleased) SessionPromptOwner.release(promptOwner.authority)
+      }
+    } })
+  }, 15_000)
+
+  test("manual execution ignores stale local lifecycle when durable Session execution is idle", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({ directory: project.path, fn: async () => {
+      const session = await Session.create({ kind: "assistant", title: "stale local lifecycle" })
+      const input = await Session.updateMessage({
+        id: Identifier.ascending("message"),
+        role: "user",
+        sessionID: session.id,
+        author: "user",
+        time: { created: Date.now() },
+        agent: "assistant",
+        model: { providerID: "test", modelID: "test" },
+      })
+      const localOwner = new AbortController()
+      SessionStatus.beginExecutionOccurrence(session.id, input.id, localOwner.signal)
+      await SessionStatus.set(session.id, { type: "streaming" }, { inputMessageID: input.id })
+      try {
+        const automation = await AutomationService.create({
+          name: "durable idle wins",
+          target: { scope: "session", sessionId: session.id },
+          recurrence: "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY",
+          prompt: "run from the durable idle fact",
+        })
+        using _wake = AutomationService.TestHooks.installWakeExecutor(async (wake) => ({
+          sessionID: wake.sessionID!,
+          messageID: wake.messageID!,
+          activation: Promise.resolve({ owner: new AbortController().signal }),
+          completion: Promise.resolve({ ok: true as const }),
+        }))
+        const runs = await AutomationService.runNow(automation.id)
+        expect(runs.map((run) => run.outcome)).toEqual(["succeeded"])
+      } finally {
+        SessionStatus.release(session.id)
+      }
+    } })
+  }, 15_000)
+
+  test("a live standby Prompt owner without an unfinished assistant allows one manual claim", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({ directory: project.path, fn: async () => {
+      const session = await Session.create({ kind: "assistant", title: "standby Prompt owner" })
+      const standby = SessionPromptOwner.acquire({
+        sessionID: session.id,
+        projectID: Instance.project.id,
+        directory: Instance.directory,
+      })
+      if (!standby.acquired) throw new Error("Standby fixture did not acquire its Prompt owner")
+      try {
+        const automation = await AutomationService.create({
+          name: "standby claim",
+          target: { scope: "session", sessionId: session.id },
+          recurrence: "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY",
+          prompt: "claim while the Prompt owner is in standby",
+        })
+        const claimed = AutomationService.TestHooks.claim(automation.id, "standby-manual-owner", Date.now(), true)
+        expect(claimed).toMatchObject({
+          id: automation.id,
+          lease_owner: "standby-manual-owner",
+          pending_fire_id: expect.stringMatching(/^atm_/),
+        })
+      } finally {
+        SessionPromptOwner.release(standby.authority)
+      }
+    } })
+  }, 15_000)
+
+  test("a dead Prompt owner with an unfinished assistant permits one manual takeover claim", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({ directory: project.path, fn: async () => {
+      const session = await Session.create({ kind: "assistant", title: "dead Prompt owner" })
+      const execution = await acquireDurablePromptExecution(session, project.path)
+      using _dead = SessionPromptOwner.TestHooks.installActiveExecutionObservation(() => "dead_or_reused")
+      try {
+        const automation = await AutomationService.create({
+          name: "dead owner takeover",
+          target: { scope: "session", sessionId: session.id },
+          recurrence: "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY",
+          prompt: "take over after the exact owner died",
+        })
+        const claimed = AutomationService.TestHooks.claim(automation.id, "dead-owner-successor", Date.now(), true)
+        expect(claimed).toMatchObject({
+          id: automation.id,
+          lease_owner: "dead-owner-successor",
+          pending_fire_id: expect.stringMatching(/^atm_/),
+        })
+      } finally {
+        await execution.settle()
+      }
+    } })
+  }, 15_000)
+
+  test("an unknown-live Prompt owner with an unfinished assistant keeps manual execution fenced", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({ directory: project.path, fn: async () => {
+      const session = await Session.create({ kind: "assistant", title: "unknown-live Prompt owner" })
+      const execution = await acquireDurablePromptExecution(session, project.path)
+      using _unknown = SessionPromptOwner.TestHooks.installActiveExecutionObservation(() => "unknown_live")
+      try {
+        const automation = await AutomationService.create({
+          name: "unknown owner fence",
+          target: { scope: "session", sessionId: session.id },
+          recurrence: "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY",
+          prompt: "preserve the unknown live execution",
+        })
+        await expect(AutomationService.runNow(automation.id)).rejects.toBeInstanceOf(AutomationRunningConflictError)
+      } finally {
+        await execution.settle()
+      }
+    } })
+  }, 15_000)
+
   test("manual execution returns only runs bound to its exact definition revision and fire", async () => {
     await using project = await memoryProject()
     await Instance.provide({ directory: project.path, fn: async () => {
