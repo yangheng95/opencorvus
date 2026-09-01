@@ -14,6 +14,7 @@ import { Database, eq } from "@/storage/db"
 import { Filesystem } from "@/util/filesystem"
 import type { TaskCancellationOrigin } from "@/engine/cancellation-origin"
 import { createExecutionCancellationOrigin } from "@/session/prompt/cancellation"
+import { assertBuildObservationCleanupsCompleteInTransaction } from "@/engine/build-observation-cleanup"
 import { ImplicitProject } from "./implicit-project"
 import { Instance, type ProjectDeletionAdmission } from "./instance"
 import { Project } from "./project"
@@ -49,6 +50,25 @@ export const ProjectDeleteResult = z
   })
 
 export type ProjectDeleteResult = z.infer<typeof ProjectDeleteResult>
+
+type BeforeProjectDeletionDatabaseCommit = (input: {
+  projectID: string
+  taskIDs: readonly string[]
+}) => void | Promise<void>
+
+let beforeProjectDeletionDatabaseCommit: BeforeProjectDeletionDatabaseCommit | undefined
+
+export const ProjectDeleteTestHooks = {
+  replaceBeforeDatabaseCommit(hook: BeforeProjectDeletionDatabaseCommit) {
+    const previous = beforeProjectDeletionDatabaseCommit
+    beforeProjectDeletionDatabaseCommit = hook
+    return {
+      [Symbol.dispose]() {
+        if (beforeProjectDeletionDatabaseCommit === hook) beforeProjectDeletionDatabaseCommit = previous
+      },
+    }
+  },
+}
 
 export const ProjectDeletePendingError = NamedError.create(
   "ProjectDeletePendingError",
@@ -169,6 +189,7 @@ function projectTaskIDs(projectID: string): string[] {
       .select({ id: EngineTaskTable.id })
       .from(EngineTaskTable)
       .where(eq(EngineTaskTable.project_id, projectID))
+      .orderBy(EngineTaskTable.time_created, EngineTaskTable.id)
       .all()
       .map((row) => row.id),
   )
@@ -251,7 +272,7 @@ async function cancelRemainingProjectSessionPrompts(
 }
 
 function deleteProjectRows(admission: ProjectDeletionRegistryAdmission, projectID: string, taskIDs: string[]): void {
-  Database.transaction((db) => {
+  Database.immediateTransaction((db) => {
     const fence = db
       .select()
       .from(ProjectMaintenanceFenceTable)
@@ -284,6 +305,7 @@ function deleteProjectRows(admission: ProjectDeletionRegistryAdmission, projectI
     if (currentTaskIDs.length !== taskIDs.length || currentTaskIDs.some((taskID) => !taskIDs.includes(taskID))) {
       throw new Error(`Project ${projectID} Task ownership changed before deletion commit`)
     }
+    assertBuildObservationCleanupsCompleteInTransaction(db, currentTaskIDs)
     deleteDecisionLogsForTasks(taskIDs, db)
     deleteProjectNotes({ projectID }, db)
     expireProjectPermissionGrantsInTransaction({
@@ -358,6 +380,7 @@ export async function deleteProject(
     if (finalTaskIDs.length !== taskIDs.length || finalTaskIDs.some((taskID) => !taskIDs.includes(taskID))) {
       throw new Error(`Project ${projectID} Task ownership changed after deletion admission closed`)
     }
+    await beforeProjectDeletionDatabaseCommit?.({ projectID, taskIDs: finalTaskIDs })
     stage = "database-commit"
     deleteProjectRows(registryAdmission, projectID, finalTaskIDs)
     committed = true

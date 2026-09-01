@@ -41,6 +41,8 @@ import { EngineService } from "@/task-api"
 import { writeTaskUpdateInTransaction } from "@/engine/state"
 import { findTask } from "@/engine/store"
 import { TestHooks as TaskControlTestHooks } from "@/engine/task-root-ingress-delivery"
+import { deleteProject, ProjectDeleteTestHooks } from "@/project/delete"
+import { Project } from "@/project/project"
 
 const modelRef = { providerID: "test", modelID: "build-terminal-publication" }
 
@@ -212,12 +214,13 @@ async function createTaskDeletionObservation(input: {
   projectPath: string
   taskID: string
   retained: boolean
+  cleanupGitDir?: string
 }) {
   const observationID = Identifier.ascending("artifact")
   beginBuildObservationCleanup({
     observationID,
     taskID: input.taskID,
-    gitDir: await resolveBuildObservationGitDir(input.projectPath),
+    gitDir: input.cleanupGitDir ?? await resolveBuildObservationGitDir(input.projectPath),
     activate: false,
   })
   const baseRef = await pinBuildObservationTree({
@@ -626,4 +629,125 @@ describe.serial("Build terminal-fact publication", () => {
       })
     })
   }, 60_000)
+
+  test("Project deletion settles Build observation refs before deleting the aggregate", async () => {
+    await using project = await memoryProject()
+    let projectID = ""
+    let firstTaskID = ""
+    let secondTaskID = ""
+    let firstObservationID = ""
+    let secondObservationID = ""
+    let secondGitDirectory = ""
+    let secondCleanupDirectory = ""
+    await withBootstrappedProject(project.path, async () => {
+      using _spies = await installPhysicalBuildSpies()
+      const first = await createProductionFixture(project.path, "Project Build child cleanup first")
+      const second = await createProductionFixture(project.path, "Project Build child cleanup second")
+      projectID = Instance.project.id
+      firstTaskID = first.taskID
+      secondTaskID = second.taskID
+      await createTaskDeletionObservation({ projectPath: project.path, taskID: firstTaskID, retained: true })
+      secondGitDirectory = await resolveBuildObservationGitDir(project.path)
+      secondCleanupDirectory = path.join(project.path, ".git-unavailable")
+      await createTaskDeletionObservation({
+        projectPath: project.path,
+        taskID: secondTaskID,
+        retained: true,
+        cleanupGitDir: secondCleanupDirectory,
+      })
+      firstObservationID = buildObservationCleanupRowsForTask(firstTaskID)[0]!.observation_id
+      const secondOwner = buildObservationCleanupRowsForTask(secondTaskID)[0]!
+      secondObservationID = secondOwner.observation_id
+      completeTask(firstTaskID)
+      completeTask(secondTaskID)
+    })
+    const first = await deleteProject(Project.get(projectID)!, {
+      actor: "user",
+      source: "project.delete",
+      surface: "api",
+      requestID: "request_project_build_child_cleanup_first",
+      reason: "Prove Project deletion retains its aggregate until Build refs settle",
+    }).catch((cause) => cause)
+    const retainedAfterFirst = Project.get(projectID)?.id
+    const tasksAfterFirst = Database.use((db) =>
+      db
+        .select({ id: EngineTaskTable.id })
+        .from(EngineTaskTable)
+        .where(eq(EngineTaskTable.project_id, projectID))
+        .all()
+        .map((row) => row.id)
+        .sort(),
+    )
+    const ownersAfterFirst = [
+      buildObservationCleanupRowsForTask(firstTaskID)[0],
+      buildObservationCleanupRowsForTask(secondTaskID)[0],
+    ].map((owner) => ({ observationID: owner?.observation_id, status: owner?.status }))
+    await fs.symlink(secondGitDirectory, secondCleanupDirectory, "junction")
+    const lateObservationID = Identifier.ascending("artifact")
+    let lateAdmission: unknown
+    let lateOwnerPersisted: boolean | undefined
+    using _lateAdmission = ProjectDeleteTestHooks.replaceBeforeDatabaseCommit(() => {
+      try {
+        beginBuildObservationCleanup({
+          observationID: lateObservationID,
+          taskID: firstTaskID,
+          gitDir: secondGitDirectory,
+          activate: false,
+        })
+      } catch (cause) {
+        lateAdmission = cause
+      }
+      lateOwnerPersisted = Database.use((db) =>
+        Boolean(
+          db
+            .select({ observationID: EngineBuildObservationCleanupTable.observation_id })
+            .from(EngineBuildObservationCleanupTable)
+            .where(eq(EngineBuildObservationCleanupTable.observation_id, lateObservationID))
+            .get(),
+        ),
+      )
+    })
+    const retry = await deleteProject(Project.get(projectID)!, {
+      actor: "user",
+      source: "project.delete",
+      surface: "api",
+      requestID: "request_project_build_child_cleanup_retry",
+      reason: "Complete Project deletion after the same Build cleanup owner resumes",
+    })
+
+    expect({
+      first: first.name,
+      retainedAfterFirst,
+      tasksAfterFirst,
+      ownersAfterFirst,
+      lateAdmission: lateAdmission instanceof Error ? lateAdmission.message : lateAdmission,
+      lateOwnerPersisted,
+      retry,
+      projectAfterRetry: Project.get(projectID),
+      refs: await Promise.all([
+        gitRef(project.path, buildObservationRefName(firstObservationID, "head")),
+        gitRef(project.path, buildObservationRefName(secondObservationID, "head")),
+      ]),
+    }).toEqual({
+      first: "ProjectDeletePendingError",
+      retainedAfterFirst: projectID,
+      tasksAfterFirst: [firstTaskID, secondTaskID].sort(),
+      ownersAfterFirst: [
+        { observationID: firstObservationID, status: "complete" },
+        { observationID: secondObservationID, status: "pending" },
+      ],
+      lateAdmission: expect.stringContaining(`Project ${projectID} maintenance`),
+      lateOwnerPersisted: false,
+      retry: {
+        ok: true,
+        status: "committed",
+        projectID,
+        directory: project.path,
+        deletedTaskCount: 2,
+        residue: [],
+      },
+      projectAfterRetry: undefined,
+      refs: [undefined, undefined],
+    })
+  }, 90_000)
 })

@@ -2506,13 +2506,13 @@ export namespace EngineService {
         },
         options,
       )
+      const cleanupTarget = taskCleanupTarget(task)
+      await settleTaskCleanupOwners([cleanupTarget])
       if (options?.projectDeletionAdmission) return true
       // Explicit Task deletion is an immutable tombstone boundary. The Task
       // creation input, Session/Message graph, effects, lifecycle, interactions,
       // progress and Artifacts remain one replayable fact graph; ordinary
       // queries hide the aggregate by reducing the tombstone.
-      const cleanupTarget = taskCleanupTarget(task)
-      await settleTaskCleanupOwners([cleanupTarget])
       Database.immediateTransaction((db) => {
         assertTasksRemainTerminalForPhysicalDelete(db, [task])
         deadLetterSchedulerTaskDeliveriesInTransaction(db, {

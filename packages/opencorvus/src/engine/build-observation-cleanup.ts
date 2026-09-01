@@ -5,6 +5,7 @@ import { Identifier } from "@/id/id"
 import { hostGit as runGit } from "@/util/git"
 import { acquireControlLease, assertControlLeaseInTransaction, currentControlLeaseInTransaction, releaseControlLeaseInTransaction, renewControlLease } from "./control-lease"
 import { Log } from "@/util/log"
+import { ProjectMaintenanceFenceTable } from "@/project/project.sql"
 
 const log = Log.create({ service: "engine.build-observation-cleanup" })
 
@@ -70,7 +71,23 @@ export function beginBuildObservationCleanup(input: {
 }): BegunBuildObservationCleanup {
   const observationID = Identifier.schema("artifact").parse(input.observationID)
   const now = input.now ?? Date.now()
-  const row = Database.transaction((db) => {
+  const row = Database.immediateTransaction((db) => {
+    const task = db
+      .select({ projectID: EngineTaskTable.project_id })
+      .from(EngineTaskTable)
+      .where(eq(EngineTaskTable.id, input.taskID))
+      .get()
+    if (!task) throw new Error(`Build observation cleanup Task does not exist: ${input.taskID}`)
+    const projectFence = db
+      .select({ operationID: ProjectMaintenanceFenceTable.operation_id })
+      .from(ProjectMaintenanceFenceTable)
+      .where(eq(ProjectMaintenanceFenceTable.project_id, task.projectID))
+      .get()
+    if (projectFence) {
+      throw new Error(
+        `Build observation cleanup cannot begin while Project ${task.projectID} maintenance ${projectFence.operationID} is active`,
+      )
+    }
     db.insert(EngineBuildObservationCleanupTable)
       .values({
         observation_id: observationID,
@@ -343,4 +360,26 @@ export function buildObservationCleanupRowsForTask(taskID: string): BuildObserva
     db.select().from(EngineBuildObservationCleanupTable)
       .where(eq(EngineBuildObservationCleanupTable.task_id, taskID)).all().map((row) => project(db, row)),
   )
+}
+
+export function assertBuildObservationCleanupsCompleteInTransaction(
+  db: Database.TxOrDb,
+  taskIDs: readonly string[],
+): void {
+  for (const taskID of taskIDs) {
+    const owners = db
+      .select()
+      .from(EngineBuildObservationCleanupTable)
+      .where(eq(EngineBuildObservationCleanupTable.task_id, taskID))
+      .all()
+    for (const owner of owners) {
+      const current = project(db, owner)
+      if (current.status !== "complete") {
+        throw new BuildObservationCleanupPendingError(
+          current.observation_id,
+          new Error(`Project deletion requires a complete Build observation cleanup receipt for Task ${taskID}`),
+        )
+      }
+    }
+  }
 }
