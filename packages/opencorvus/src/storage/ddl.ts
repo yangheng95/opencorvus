@@ -890,9 +890,155 @@ WHEN NEW.kind = 'dispatch_lineage'
     OR json_type(NEW.payload, '$.delivery_owner.process_occurrence_id') IS NOT 'text'
     OR length(trim(json_extract(NEW.payload, '$.delivery_owner.process_occurrence_id'))) = 0
     OR (SELECT count(*) FROM json_each(NEW.payload, '$.delivery_owner')) != 2
+    OR json_type(NEW.payload, '$.dispatch_id') IS NOT 'text'
+    OR length(trim(json_extract(NEW.payload, '$.dispatch_id'))) = 0
+    OR json_type(NEW.payload, '$.child_session_id') IS NOT 'text'
+    OR length(trim(json_extract(NEW.payload, '$.child_session_id'))) = 0
+    OR json_type(NEW.payload, '$.target_agent_id') IS NOT 'text'
+    OR length(trim(json_extract(NEW.payload, '$.target_agent_id'))) = 0
+    OR json_type(NEW.payload, '$.workflow_occurrence_id') IS NOT 'text'
+    OR length(trim(json_extract(NEW.payload, '$.workflow_occurrence_id'))) = 0
+    OR json_type(NEW.payload, '$.task_id') IS NOT 'text'
+    OR json_extract(NEW.payload, '$.task_id') != NEW.task_id
   )
 BEGIN
-  SELECT RAISE(ABORT, 'engine_artifact: dispatch_lineage requires exact Tool occurrence, adapter_input and delivery_owner objects');
+  SELECT RAISE(ABORT, 'engine_artifact: dispatch_lineage requires exact Tool occurrence, workflow lineage, adapter_input and delivery_owner objects');
+END;
+
+CREATE TRIGGER IF NOT EXISTS engine_dispatch_lineage_workflow_binding_insert
+BEFORE INSERT ON engine_artifact
+FOR EACH ROW
+WHEN NEW.kind = 'dispatch_lineage'
+  AND NOT (
+    json_type(NEW.payload, '$.workflow_binding') = 'object'
+    AND json_type(NEW.payload, '$.workflow_binding.package_revision') = 'object'
+    AND (SELECT count(*) FROM json_each(NEW.payload, '$.workflow_binding.package_revision')) = 6
+    AND json_extract(NEW.payload, '$.workflow_binding.package_revision.scope') IN ('built_in','project','global')
+    AND (
+      (
+        json_extract(NEW.payload, '$.workflow_binding.package_revision.scope') = 'project'
+        AND json_type(NEW.payload, '$.workflow_binding.package_revision.project_id') = 'text'
+        AND length(trim(json_extract(NEW.payload, '$.workflow_binding.package_revision.project_id'))) > 0
+      )
+      OR (
+        json_extract(NEW.payload, '$.workflow_binding.package_revision.scope') IN ('built_in','global')
+        AND json_type(NEW.payload, '$.workflow_binding.package_revision.project_id') = 'null'
+      )
+    )
+    AND json_type(NEW.payload, '$.workflow_binding.package_revision.namespace') = 'text'
+    AND length(trim(json_extract(NEW.payload, '$.workflow_binding.package_revision.namespace'))) > 0
+    AND json_type(NEW.payload, '$.workflow_binding.package_revision.id') = 'text'
+    AND length(trim(json_extract(NEW.payload, '$.workflow_binding.package_revision.id'))) > 0
+    AND json_type(NEW.payload, '$.workflow_binding.package_revision.version') = 'text'
+    AND length(trim(json_extract(NEW.payload, '$.workflow_binding.package_revision.version'))) > 0
+    AND json_type(NEW.payload, '$.workflow_binding.package_revision.package_digest') = 'text'
+    AND length(json_extract(NEW.payload, '$.workflow_binding.package_revision.package_digest')) = 64
+    AND json_extract(NEW.payload, '$.workflow_binding.package_revision.package_digest') NOT GLOB '*[^0-9a-f]*'
+    AND (
+      (
+        json_extract(NEW.payload, '$.workflow_binding.kind') = 'direct'
+        AND (SELECT count(*) FROM json_each(NEW.payload, '$.workflow_binding')) = 2
+        AND json_type(NEW.payload, '$.workflow_node_id') = 'null'
+      )
+      OR (
+        json_extract(NEW.payload, '$.workflow_binding.kind') = 'virtual_workflow'
+        AND (SELECT count(*) FROM json_each(NEW.payload, '$.workflow_binding')) = 4
+        AND json_type(NEW.payload, '$.workflow_binding.workflow_id') = 'text'
+        AND length(trim(json_extract(NEW.payload, '$.workflow_binding.workflow_id'))) > 0
+        AND json_type(NEW.payload, '$.workflow_binding.nodes') = 'array'
+        AND json_array_length(json_extract(NEW.payload, '$.workflow_binding.nodes')) > 0
+        AND NOT EXISTS (
+          SELECT 1 FROM json_each(NEW.payload, '$.workflow_binding.nodes') AS node
+          WHERE node.type != 'object'
+            OR (SELECT count(*) FROM json_each(node.value)) != 3
+            OR json_type(node.value, '$.node_id') != 'text'
+            OR length(trim(json_extract(node.value, '$.node_id'))) = 0
+            OR json_type(node.value, '$.agent_id') != 'text'
+            OR length(trim(json_extract(node.value, '$.agent_id'))) = 0
+            OR json_type(node.value, '$.depends_on') != 'array'
+            OR EXISTS (SELECT 1 FROM json_each(node.value, '$.depends_on') WHERE type != 'text' OR length(trim(value)) = 0)
+        )
+        AND (
+          SELECT count(*) FROM json_each(NEW.payload, '$.workflow_binding.nodes')
+        ) = (
+          SELECT count(DISTINCT json_extract(value, '$.node_id'))
+          FROM json_each(NEW.payload, '$.workflow_binding.nodes')
+        )
+        AND json_type(NEW.payload, '$.workflow_node_id') = 'text'
+        AND length(trim(json_extract(NEW.payload, '$.workflow_node_id'))) > 0
+        AND EXISTS (
+          SELECT 1 FROM json_each(NEW.payload, '$.workflow_binding.nodes') AS selected
+          WHERE json_extract(selected.value, '$.node_id') = json_extract(NEW.payload, '$.workflow_node_id')
+            AND json_extract(selected.value, '$.agent_id') = json_extract(NEW.payload, '$.target_agent_id')
+        )
+      )
+    )
+  )
+BEGIN
+  SELECT RAISE(ABORT, 'engine_artifact: dispatch_lineage workflow binding is incomplete or selects the wrong target');
+END;
+
+CREATE TRIGGER IF NOT EXISTS engine_dispatch_lineage_source_insert
+BEFORE INSERT ON engine_artifact
+FOR EACH ROW
+WHEN NEW.kind = 'dispatch_lineage'
+  AND NOT (
+    (
+      json_type(NEW.payload, '$.continuation_of_dispatch_id') IS NULL
+      AND json_type(NEW.payload, '$.coordination_action_id') IS NULL
+      AND json_extract(NEW.payload, '$.workflow_occurrence_id') = json_extract(NEW.payload, '$.dispatch_id')
+    )
+    OR (
+      json_type(NEW.payload, '$.continuation_of_dispatch_id') = 'text'
+      AND length(trim(json_extract(NEW.payload, '$.continuation_of_dispatch_id'))) > 0
+      AND json_type(NEW.payload, '$.coordination_action_id') IS NULL
+      AND EXISTS (
+        SELECT 1 FROM engine_artifact AS source
+        WHERE source.task_id = NEW.task_id
+          AND source.kind = 'dispatch_lineage'
+          AND json_extract(source.payload, '$.dispatch_id') = json_extract(NEW.payload, '$.continuation_of_dispatch_id')
+          AND json_extract(source.payload, '$.child_session_id') = json_extract(NEW.payload, '$.child_session_id')
+          AND json_extract(source.payload, '$.target_agent_id') = json_extract(NEW.payload, '$.target_agent_id')
+          AND json_extract(source.payload, '$.workflow_binding') = json_extract(NEW.payload, '$.workflow_binding')
+          AND json_extract(source.payload, '$.workflow_node_id') IS json_extract(NEW.payload, '$.workflow_node_id')
+          AND json_extract(source.payload, '$.workflow_occurrence_id') = json_extract(NEW.payload, '$.workflow_occurrence_id')
+      )
+    )
+    OR (
+      json_type(NEW.payload, '$.continuation_of_dispatch_id') = 'text'
+      AND length(trim(json_extract(NEW.payload, '$.continuation_of_dispatch_id'))) > 0
+      AND json_type(NEW.payload, '$.coordination_action_id') = 'text'
+      AND length(trim(json_extract(NEW.payload, '$.coordination_action_id'))) > 0
+      AND EXISTS (
+        SELECT 1
+        FROM engine_artifact AS action
+        JOIN engine_artifact AS request
+          ON request.task_id = action.task_id
+          AND request.id = json_extract(action.payload, '$.request_id')
+          AND request.kind = 'agent_coordination_request'
+        JOIN engine_artifact AS source
+          ON source.task_id = action.task_id
+          AND source.id = json_extract(request.payload, '$.dispatch_lineage_id')
+          AND source.kind = 'dispatch_lineage'
+        WHERE action.task_id = NEW.task_id
+          AND action.id = json_extract(NEW.payload, '$.coordination_action_id')
+          AND action.kind = 'agent_coordination_action'
+          AND json_extract(action.payload, '$.action') = 'redispatch_worker'
+          AND json_extract(action.payload, '$.status') = 'pending'
+          AND json_extract(action.payload, '$.target_session_id') = json_extract(NEW.payload, '$.child_session_id')
+          AND json_extract(action.payload, '$.target_agent') = json_extract(NEW.payload, '$.target_agent_id')
+          AND json_extract(request.payload, '$.session_id') = json_extract(NEW.payload, '$.child_session_id')
+          AND json_extract(source.payload, '$.dispatch_id') = json_extract(NEW.payload, '$.continuation_of_dispatch_id')
+          AND json_extract(source.payload, '$.child_session_id') = json_extract(NEW.payload, '$.child_session_id')
+          AND json_extract(source.payload, '$.target_agent_id') = json_extract(NEW.payload, '$.target_agent_id')
+          AND json_extract(source.payload, '$.workflow_binding') = json_extract(NEW.payload, '$.workflow_binding')
+          AND json_extract(source.payload, '$.workflow_node_id') IS json_extract(NEW.payload, '$.workflow_node_id')
+          AND json_extract(source.payload, '$.workflow_occurrence_id') = json_extract(NEW.payload, '$.workflow_occurrence_id')
+      )
+    )
+  )
+BEGIN
+  SELECT RAISE(ABORT, 'engine_artifact: dispatch_lineage source authority is incomplete or unrelated');
 END;
 
 CREATE TRIGGER IF NOT EXISTS engine_dispatch_lineage_immutable
@@ -1572,11 +1718,6 @@ BEFORE INSERT ON engine_progress_snapshot FOR EACH ROW
 WHEN EXISTS (SELECT 1 FROM protocol_event WHERE aggregate_type='task' AND aggregate_id=NEW.task_id AND type='task.deleted')
 BEGIN SELECT RAISE(ABORT, 'engine_progress_snapshot: deleted Task rejects new facts'); END;
 
-CREATE TRIGGER IF NOT EXISTS deleted_task_workflow_no_insert
-BEFORE INSERT ON engine_workflow_node_occurrence FOR EACH ROW
-WHEN EXISTS (SELECT 1 FROM protocol_event WHERE aggregate_type='task' AND aggregate_id=NEW.task_id AND type='task.deleted')
-BEGIN SELECT RAISE(ABORT, 'engine_workflow_node_occurrence: deleted Task rejects new facts'); END;
-
 CREATE TRIGGER IF NOT EXISTS deleted_task_goal_no_insert
 BEFORE INSERT ON engine_goal FOR EACH ROW
 WHEN EXISTS (SELECT 1 FROM protocol_event WHERE aggregate_type='task' AND aggregate_id=NEW.task_id AND type='task.deleted')
@@ -2171,13 +2312,6 @@ WHEN EXISTS (
   WHERE session_control_record.id=OLD.control_id
 )
 BEGIN SELECT RAISE(ABORT, 'session_control_event: immutable receipt'); END;
-CREATE TRIGGER IF NOT EXISTS engine_workflow_node_occurrence_no_update
-BEFORE UPDATE ON engine_workflow_node_occurrence FOR EACH ROW
-BEGIN SELECT RAISE(ABORT, 'engine_workflow_node_occurrence: immutable causal fact'); END;
-CREATE TRIGGER IF NOT EXISTS engine_workflow_node_occurrence_no_delete
-BEFORE DELETE ON engine_workflow_node_occurrence FOR EACH ROW
-WHEN EXISTS (SELECT 1 FROM engine_task WHERE id=OLD.task_id)
-BEGIN SELECT RAISE(ABORT, 'engine_workflow_node_occurrence: immutable causal fact'); END;
 CREATE TRIGGER IF NOT EXISTS engine_progress_snapshot_no_update
 BEFORE UPDATE ON engine_progress_snapshot FOR EACH ROW
 BEGIN SELECT RAISE(ABORT, 'engine_progress_snapshot: immutable authored checkpoint'); END;

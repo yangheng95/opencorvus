@@ -16,7 +16,6 @@ export {
   EngineTaskTable,
   EngineGoalTable,
   EngineArtifactTable,
-  EngineWorkflowNodeOccurrenceTable,
   EngineProgressSnapshotTable,
   EngineInteractionRequestTable,
   EngineInteractionOutcomeTable,

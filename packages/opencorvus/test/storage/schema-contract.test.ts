@@ -50,7 +50,6 @@ test("creates the complete pre-0.1.0 schema directly from the canonical DDL", ()
       "engine_browser_preview_target_identity",
       "engine_control_activation_lease",
       "engine_task_root_ingress",
-      "engine_workflow_node_occurrence",
       "event_job_fire",
       "permission_execution_result",
       "protocol_delivery_receipt",

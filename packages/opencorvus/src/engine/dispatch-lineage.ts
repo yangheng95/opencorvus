@@ -7,12 +7,15 @@ import { currentRuntimeOccurrenceID } from "@/runtime/process-occurrence"
 import { WorkerTurnDescriptorTable } from "@/session/session.sql"
 import { and, asc, desc, eq, sql, Database } from "@/storage/db"
 import { isDeepStrictEqual } from "node:util"
-import { SelectedWorkflowBindingSchema, type SelectedWorkflowBinding } from "./workflow-binding"
+import {
+  SelectedWorkflowBindingSchema,
+  sameSelectedWorkflowBinding,
+  type SelectedWorkflowBinding,
+} from "./workflow-binding"
 import { assertCurrentDeliverySliceRevisionIDs, projectTaskRowInTransaction } from "./store"
 import { assertTaskWorkflowBindingInTransaction } from "./workflow-binding-facts"
 import { assertCurrentDeliverySliceRevisionIDsInTransaction } from "./delivery-slice-membership-facts"
 import type { DispatchOccurrenceAuthority } from "./dispatch-occurrence-authority"
-import { assertWorkflowNodeOccurrenceLineageInTransaction } from "./workflow-node-occurrence"
 import { taskCancellationAuthorityExecutionErrorInTransaction } from "./cancellation-projection"
 import { taskCompletionClosureInTransaction, TaskCompletionClosureConflictError } from "./task-completion-closure"
 import { assertProcessLivenessOwnerInTransaction, ProcessLivenessOwnerUnavailableError } from "./process-liveness"
@@ -45,6 +48,139 @@ export class TaskDispatchAdmissionClosedError extends Error {
     readonly dispatchID: string,
   ) {
     super(`Task ${taskID} completed at ${timeCompleted}; dispatch ${dispatchID} admission is closed`)
+  }
+}
+
+export type WorkflowNodeOccurrenceLineageReference = Readonly<{
+  artifactID: string
+  dispatchID: string
+  childSessionID: string
+  workflowOccurrenceID: string
+}>
+
+export class WorkflowNodeOccurrenceConflictError extends Error {
+  override readonly name = "WorkflowNodeOccurrenceConflictError"
+  readonly code = "workflow_node_occurrence_conflict"
+
+  constructor(
+    readonly taskID: string,
+    readonly workflowID: string,
+    readonly workflowNodeID: string,
+    readonly existing: readonly WorkflowNodeOccurrenceLineageReference[],
+  ) {
+    const authorities = existing.length
+      ? existing
+          .map(
+            (reference) =>
+              `${reference.artifactID}/${reference.dispatchID}/${reference.childSessionID}/${reference.workflowOccurrenceID}`,
+          )
+          .join(", ")
+      : "occurrence authority has no readable dispatch lineage"
+    super(
+      `Task ${taskID} workflow ${workflowID} node ${workflowNodeID} already has an initial logical occurrence: ${authorities}. Use one exact prior dispatch continuation authority; do not issue another initial dispatch.`,
+    )
+  }
+}
+
+function initialWorkflowNodeLineagesInTransaction(
+  db: Database.TxOrDb,
+  input: { taskID: string; workflowID: string; workflowNodeID: string },
+): DispatchLineageRow[] {
+  return db
+    .select()
+    .from(EngineArtifactTable)
+    .where(
+      and(
+        eq(EngineArtifactTable.task_id, input.taskID),
+        eq(EngineArtifactTable.kind, "dispatch_lineage"),
+        sql`json_extract(${EngineArtifactTable.payload}, '$.workflow_binding.kind') = 'virtual_workflow'`,
+        sql`json_extract(${EngineArtifactTable.payload}, '$.workflow_binding.workflow_id') = ${input.workflowID}`,
+        sql`json_extract(${EngineArtifactTable.payload}, '$.workflow_node_id') = ${input.workflowNodeID}`,
+        sql`json_type(${EngineArtifactTable.payload}, '$.continuation_of_dispatch_id') IS NULL`,
+        sql`json_type(${EngineArtifactTable.payload}, '$.coordination_action_id') IS NULL`,
+      ),
+    )
+    .orderBy(asc(EngineArtifactTable.time_created), asc(EngineArtifactTable.id))
+    .all()
+    .map(dispatchLineageRow)
+}
+
+function workflowLineageReferences(lineages: readonly DispatchLineageRow[]): WorkflowNodeOccurrenceLineageReference[] {
+  return lineages.map((lineage) => ({
+    artifactID: lineage.artifactID,
+    dispatchID: lineage.dispatchID,
+    childSessionID: lineage.payload.child_session_id,
+    workflowOccurrenceID: lineage.payload.workflow_occurrence_id,
+  }))
+}
+
+/**
+ * Admit one virtual-workflow node directly on its immutable lineage.
+ *
+ * This runs before the lineage insert while the caller holds SQLite's
+ * immediate writer reservation. The matching partial unique index is the
+ * current-schema cross-process fence; this read provides the typed winner and
+ * validates continuations without a second writable occurrence table.
+ */
+function assertWorkflowNodeLineageAdmissionInTransaction(input: {
+  db: Database.TxOrDb
+  taskID: string
+  workflowBinding: SelectedWorkflowBinding
+  workflowNodeID: string | null
+  dispatchID: string
+  workflowOccurrenceID: string
+  childSessionID: string
+  continuation: boolean
+}): void {
+  const binding = SelectedWorkflowBindingSchema.parse(input.workflowBinding)
+  if (binding.kind === "direct") {
+    if (input.workflowNodeID !== null) throw new Error("Direct workflow occurrence cannot name a workflow node")
+    return
+  }
+  const workflowNodeID = input.workflowNodeID
+  if (!workflowNodeID || !binding.nodes.some((node) => node.node_id === workflowNodeID)) {
+    throw new Error(`Workflow ${binding.workflow_id} does not declare node ${workflowNodeID}`)
+  }
+  assertTaskWorkflowBindingInTransaction({ db: input.db, taskID: input.taskID, workflowBinding: binding })
+  const initial = initialWorkflowNodeLineagesInTransaction(input.db, {
+    taskID: input.taskID,
+    workflowID: binding.workflow_id,
+    workflowNodeID,
+  })
+  if (initial.length > 1) {
+    throw new WorkflowNodeOccurrenceConflictError(
+      input.taskID,
+      binding.workflow_id,
+      workflowNodeID,
+      workflowLineageReferences(initial),
+    )
+  }
+  if (input.continuation) {
+    const authority = initial[0]
+    if (
+      !authority ||
+      authority.dispatchID !== input.workflowOccurrenceID ||
+      authority.payload.workflow_occurrence_id !== input.workflowOccurrenceID ||
+      authority.payload.child_session_id !== input.childSessionID
+    ) {
+      throw new Error(
+        `Task ${input.taskID} workflow ${binding.workflow_id} node ${workflowNodeID} continuation does not reuse its initial lineage occurrence and Session`,
+      )
+    }
+    return
+  }
+  if (input.workflowOccurrenceID !== input.dispatchID) {
+    throw new Error(
+      `Task ${input.taskID} workflow ${binding.workflow_id} node ${workflowNodeID} initial lineage must own its occurrence identity`,
+    )
+  }
+  if (initial.length > 0) {
+    throw new WorkflowNodeOccurrenceConflictError(
+      input.taskID,
+      binding.workflow_id,
+      workflowNodeID,
+      workflowLineageReferences(initial),
+    )
   }
 }
 
@@ -162,7 +298,13 @@ function assertCoordinationDispatchAdmissionInTransaction(
     )
     .get()
   const action = actionRow?.payload as
-    | { action?: unknown; status?: unknown; target_session_id?: unknown; target_agent?: unknown }
+    | {
+        action?: unknown
+        status?: unknown
+        target_session_id?: unknown
+        target_agent?: unknown
+        request_id?: unknown
+      }
     | undefined
   if (
     action?.action !== "redispatch_worker" ||
@@ -171,6 +313,101 @@ function assertCoordinationDispatchAdmissionInTransaction(
     action.target_agent !== input.targetAgentID
   ) {
     throw new Error(`Dispatch coordination action ${input.actionID} is not the exact pending redispatch authority`)
+  }
+  const requestID = action?.request_id
+  const requestRow =
+    typeof requestID === "string"
+      ? db
+          .select({ payload: EngineArtifactTable.payload })
+          .from(EngineArtifactTable)
+          .where(
+            and(
+              eq(EngineArtifactTable.task_id, input.taskID),
+              eq(EngineArtifactTable.id, requestID),
+              eq(EngineArtifactTable.kind, "agent_coordination_request"),
+            ),
+          )
+          .get()
+      : undefined
+  const request = requestRow?.payload as { dispatch_lineage_id?: unknown; session_id?: unknown } | undefined
+  if (typeof request?.dispatch_lineage_id !== "string" || request.session_id !== input.childSessionID) {
+    throw new Error(`Dispatch coordination action ${input.actionID} is not bound to one exact source lineage Session`)
+  }
+}
+
+function assertDispatchContinuationInTransaction(input: {
+  db: Database.TxOrDb
+  taskID: string
+  dispatchID: string
+  continuationOfDispatchID?: string
+  coordinationActionID?: string
+  workflowBinding: SelectedWorkflowBinding
+  workflowNodeID: string | null
+  workflowOccurrenceID: string
+  childSessionID: string
+  targetAgentID: string
+}): void {
+  if (!input.continuationOfDispatchID) {
+    if (input.coordinationActionID) {
+      throw new Error(`Dispatch coordination action ${input.coordinationActionID} has no exact source dispatch`)
+    }
+    if (input.workflowOccurrenceID !== input.dispatchID) {
+      throw new Error(`Initial dispatch ${input.dispatchID} must own its workflow occurrence identity`)
+    }
+    return
+  }
+  const source = findDispatchLineageByDispatchIDInTransaction({
+    db: input.db,
+    taskID: input.taskID,
+    dispatchID: input.continuationOfDispatchID,
+  })
+  if (
+    !source ||
+    source.payload.child_session_id !== input.childSessionID ||
+    source.payload.workflow_occurrence_id !== input.workflowOccurrenceID ||
+    source.payload.workflow_node_id !== input.workflowNodeID ||
+    source.payload.target_agent_id !== input.targetAgentID ||
+    !sameSelectedWorkflowBinding(source.payload.workflow_binding, input.workflowBinding)
+  ) {
+    throw new Error(
+      `Dispatch ${input.dispatchID} does not exactly continue source ${input.continuationOfDispatchID} and its Session`,
+    )
+  }
+  if (input.coordinationActionID) {
+    const action = input.db
+      .select({ payload: EngineArtifactTable.payload })
+      .from(EngineArtifactTable)
+      .where(
+        and(
+          eq(EngineArtifactTable.task_id, input.taskID),
+          eq(EngineArtifactTable.id, input.coordinationActionID),
+          eq(EngineArtifactTable.kind, "agent_coordination_action"),
+        ),
+      )
+      .get()?.payload as { request_id?: unknown } | undefined
+    const request =
+      typeof action?.request_id === "string"
+        ? input.db
+            .select({ payload: EngineArtifactTable.payload })
+            .from(EngineArtifactTable)
+            .where(
+              and(
+                eq(EngineArtifactTable.task_id, input.taskID),
+                eq(EngineArtifactTable.id, action.request_id),
+                eq(EngineArtifactTable.kind, "agent_coordination_request"),
+              ),
+            )
+            .get()?.payload
+        : undefined
+    if (
+      !request ||
+      typeof request !== "object" ||
+      (request as { dispatch_lineage_id?: unknown }).dispatch_lineage_id !== source.artifactID
+    ) {
+      throw new Error(
+        `Dispatch coordination action ${input.coordinationActionID} does not own source lineage ${source.artifactID}`,
+      )
+    }
   }
 }
 
@@ -236,6 +473,12 @@ export function createDispatchLineageOrigin(
       )
     }
   }
+  if (input.coordinationActionID && !input.continuationOfDispatchID) {
+    throw new Error(`Dispatch coordination action ${input.coordinationActionID} requires its exact source dispatch`)
+  }
+  if (!input.continuationOfDispatchID && (input.workflowOccurrenceID ?? dispatchID) !== dispatchID) {
+    throw new Error(`Initial dispatch ${dispatchID} must own its workflow occurrence identity`)
+  }
   return Object.freeze({
     ...input,
     toolName,
@@ -253,7 +496,6 @@ export function recordDispatchLineage(input: {
   origin: DispatchLineageOrigin
   childSessionID: string
   now?: number
-  deferWorkflowOccurrenceProjection?: boolean
 }): DispatchLineageRow {
   const now = input.now ?? Date.now()
   let ownerProcessOccurrenceID: string
@@ -307,7 +549,7 @@ export function recordDispatchLineage(input: {
     },
     artifactID,
   )
-  Database.transaction((db) => {
+  Database.immediateTransaction((db) => {
     assertProcessLivenessOwnerInTransaction(db, ownerProcessOccurrenceID, now)
     const cancellation = taskCancellationAuthorityExecutionErrorInTransaction(
       db,
@@ -342,6 +584,28 @@ export function recordDispatchLineage(input: {
       childSessionID: input.childSessionID,
       targetAgentID: input.origin.targetAgentID,
     })
+    assertDispatchContinuationInTransaction({
+      db,
+      taskID: input.origin.taskID,
+      dispatchID: input.origin.dispatchID,
+      continuationOfDispatchID: input.origin.continuationOfDispatchID,
+      coordinationActionID: input.origin.coordinationActionID,
+      workflowBinding: input.origin.workflowBinding,
+      workflowNodeID: input.origin.workflowNodeID,
+      workflowOccurrenceID: input.origin.workflowOccurrenceID ?? input.origin.dispatchID,
+      childSessionID: input.childSessionID,
+      targetAgentID: input.origin.targetAgentID,
+    })
+    assertWorkflowNodeLineageAdmissionInTransaction({
+      db,
+      taskID: input.origin.taskID,
+      workflowBinding: input.origin.workflowBinding,
+      workflowNodeID: input.origin.workflowNodeID,
+      dispatchID: input.origin.dispatchID,
+      workflowOccurrenceID: input.origin.workflowOccurrenceID ?? input.origin.dispatchID,
+      childSessionID: input.childSessionID,
+      continuation: !!input.origin.continuationOfDispatchID || !!input.origin.coordinationActionID,
+    })
     insertEngineArtifact(db, {
       id: artifactID,
       taskID: input.origin.taskID,
@@ -350,19 +614,6 @@ export function recordDispatchLineage(input: {
       payload,
       timeCreated: now,
     })
-    if (!input.deferWorkflowOccurrenceProjection) {
-      assertWorkflowNodeOccurrenceLineageInTransaction({
-        db,
-        taskID: input.origin.taskID,
-        workflowBinding: input.origin.workflowBinding,
-        workflowNodeID: input.origin.workflowNodeID,
-        dispatchID: input.origin.dispatchID,
-        workflowOccurrenceID: input.origin.workflowOccurrenceID ?? input.origin.dispatchID,
-        childSessionID: input.childSessionID,
-        lineageArtifactID: artifactID,
-        continuation: !!input.origin.continuationOfDispatchID || !!input.origin.coordinationActionID,
-      })
-    }
   })
   return {
     artifactID,
@@ -543,7 +794,7 @@ export function claimDispatchLineage(input: {
     let lineage: DispatchLineageRow
     let createdNow = false
     try {
-      lineage = recordDispatchLineage({ ...input, now, deferWorkflowOccurrenceProjection: true })
+      lineage = recordDispatchLineage({ ...input, now })
       createdNow = true
     } catch (error) {
       const winner =
@@ -644,7 +895,7 @@ export const DispatchLineageTestHooks = Object.freeze({
   },
 })
 
-/** Materialize the workflow-node projection after the claimed child Session is durable. */
+/** Consume the pre-effect admission after the claimed child Session and exact Turn are durable. */
 export function commitDispatchLineageSession(
   lineage: DispatchLineageRow,
   admission?: DispatchAdmissionOwner,
@@ -674,18 +925,6 @@ export function commitDispatchLineageSession(
         `Dispatch ${lineage.dispatchID} cannot materialize workflow occurrence without its exact durable Turn descriptor`,
       )
     }
-    assertWorkflowNodeOccurrenceLineageInTransaction({
-      db,
-      taskID: lineage.taskID,
-      workflowBinding: lineage.payload.workflow_binding,
-      workflowNodeID: lineage.payload.workflow_node_id,
-      dispatchID: lineage.dispatchID,
-      workflowOccurrenceID: lineage.payload.workflow_occurrence_id,
-      childSessionID: lineage.payload.child_session_id,
-      lineageArtifactID: lineage.artifactID,
-      continuation:
-        !!lineage.payload.continuation_of_dispatch_id || !!lineage.payload.coordination_action_id,
-    })
     if (admission) {
       const released = releaseControlLeaseInTransaction(db, {
         target: "dispatch_admission",

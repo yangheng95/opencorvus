@@ -1,15 +1,18 @@
 import { afterEach, describe, expect, test } from "bun:test"
-import { EngineWorkflowNodeOccurrenceTable } from "@/engine/engine.sql"
-import { createDispatchLineageOrigin, listDispatchLineage, resolveDispatchContinuationSourceID } from "@/engine/dispatch-lineage"
+import {
+  createDispatchLineageOrigin,
+  listDispatchLineage,
+  resolveDispatchContinuationSourceID,
+  WorkflowNodeOccurrenceConflictError,
+} from "@/engine/dispatch-lineage"
 import { recordTestDispatchLineage } from "./fixture/dispatch-lineage"
 import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
-import { WorkflowNodeOccurrenceConflictError } from "@/engine/workflow-node-occurrence"
 import type { SelectedWorkflowBinding } from "@/engine/workflow-binding"
 import { Identifier } from "@/id/id"
 import { Instance } from "@/project/instance"
 import { Session } from "@/session"
-import { Database, and, eq } from "@/storage/db"
+import { Database } from "@/storage/db"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
 const packageRevision = {
@@ -178,23 +181,6 @@ describe("workflow node occurrence authority", () => {
           { dispatchID: initialDispatchID, occurrenceID: initialDispatchID, childSessionID: child.id },
           { dispatchID: continuationDispatchID, occurrenceID: initialDispatchID, childSessionID: child.id },
         ])
-        expect(
-          Database.use((db) =>
-            db
-              .select()
-              .from(EngineWorkflowNodeOccurrenceTable)
-              .where(
-                and(
-                  eq(EngineWorkflowNodeOccurrenceTable.task_id, taskID),
-                  eq(EngineWorkflowNodeOccurrenceTable.workflow_node_id, "fundamentals"),
-                ),
-              )
-              .get(),
-          ),
-        ).toMatchObject({
-          initial_dispatch_id: initialDispatchID,
-          child_session_id: child.id,
-        })
         expect(continuation.payload.continuation_of_dispatch_id).toBe(initialDispatchID)
       },
     })

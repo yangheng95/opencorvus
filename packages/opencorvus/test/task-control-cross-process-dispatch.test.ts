@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, test } from "bun:test"
+import { afterEach, describe, expect, setDefaultTimeout, test } from "bun:test"
 import { Config } from "../src/config/config"
 import { DispatchOutcome } from "../src/agent/dispatch-outcome"
 import { WorkerTurnDescriptor } from "../src/agent/worker-turn-descriptor"
@@ -10,6 +10,7 @@ import {
   EngineControlActivationLeaseTable,
   EngineTaskRootIngressTable,
 } from "../src/engine/engine.sql"
+
 import {
   PROCESS_LIVENESS_LEASE_MS,
   ProcessLivenessOwnerUnavailableError,
@@ -31,6 +32,8 @@ import { executionLifecycleOrderKey } from "../src/session/status"
 import { Database, eq } from "../src/storage/db"
 import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
+
+setDefaultTimeout(30_000)
 
 afterEach(async () => {
   await Instance.disposeAll()
@@ -496,12 +499,26 @@ describe("cross-process dispatch abandonment", () => {
     })
   })
 
-  test("returns the exact SQLite contract error for malformed lineage Tool and owner shapes", async () => {
+  test("returns the exact SQLite contract error for malformed lineage Tool, workflow, and owner shapes", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
       fn: async () => {
         const fixture = await seedPeerOwnedDispatch(project.path)
+        const initialPayload = (dispatchID: string) => {
+          const { continuation_of_dispatch_id: _continuation, coordination_action_id: _action, ...payload } =
+            fixture.lineage.payload
+          return {
+            ...payload,
+            dispatch_id: dispatchID,
+            workflow_binding: {
+              kind: "direct" as const,
+              package_revision: fixture.lineage.payload.workflow_binding.package_revision,
+            },
+            workflow_node_id: null,
+            workflow_occurrence_id: dispatchID,
+          }
+        }
         const invalidOwners = [
           { kind: "runtime_process", process_occurrence_id: "" },
           { kind: "runtime_process", process_occurrence_id: "runtime", source: {} },
@@ -519,20 +536,22 @@ describe("cross-process dispatch abandonment", () => {
                 kind: "dispatch_lineage",
                 label: "dispatch-agent",
                 payload: {
+                  ...initialPayload(`dispatch-invalid-owner-${index}`),
                   tool_name: "dispatch_agent",
                   tool_part_id: `part-invalid-owner-${index}`,
                   tool_call_id: `call-invalid-owner-${index}`,
-                  adapter_input: {},
                   delivery_owner: deliveryOwner,
                 },
                 timeCreated: Date.now(),
               })
             }),
-          ).toThrow("engine_artifact: dispatch_lineage requires exact Tool occurrence, adapter_input and delivery_owner objects")
+          ).toThrow(
+            "engine_artifact: dispatch_lineage requires exact Tool occurrence, workflow lineage, adapter_input and delivery_owner objects",
+          )
         }
         const validOwner = { kind: "runtime_process", process_occurrence_id: "runtime" }
         const invalidToolOccurrences = [
-          {},
+          { tool_name: null },
           { tool_name: "dispatch_agent", collection_member_index: 0, collection_member_count: 1 },
           { tool_name: "dispatch_agents", collection_member_index: 0 },
           { tool_name: "dispatch_agents", collection_member_index: 2, collection_member_count: 2 },
@@ -546,16 +565,91 @@ describe("cross-process dispatch abandonment", () => {
                 kind: "dispatch_lineage",
                 label: "dispatch-agent",
                 payload: {
+                  ...initialPayload(`dispatch-invalid-tool-${index}`),
                   tool_part_id: `part-invalid-tool-${index}`,
                   tool_call_id: `call-invalid-tool-${index}`,
                   ...toolOccurrence,
-                  adapter_input: {},
                   delivery_owner: validOwner,
                 },
                 timeCreated: Date.now(),
               })
             }),
-          ).toThrow("engine_artifact: dispatch_lineage requires exact Tool occurrence, adapter_input and delivery_owner objects")
+          ).toThrow(
+            "engine_artifact: dispatch_lineage requires exact Tool occurrence, workflow lineage, adapter_input and delivery_owner objects",
+          )
+        }
+        const invalidWorkflowLineages = [
+          {
+            workflow_binding: { kind: "direct" },
+            workflow_node_id: "unexpected-node",
+          },
+          {
+            workflow_occurrence_id: "not-the-new-dispatch",
+          },
+          {
+            workflow_binding: {
+              kind: "virtual_workflow",
+              workflow_id: "workflow-incomplete",
+              package_revision: fixture.lineage.payload.workflow_binding.package_revision,
+            },
+            workflow_node_id: "node-a",
+          },
+          {
+            workflow_binding: {
+              kind: "virtual_workflow",
+              workflow_id: "workflow-missing-initial",
+              package_revision: fixture.lineage.payload.workflow_binding.package_revision,
+              nodes: [{ node_id: "node-a", agent_id: "wrong-agent", depends_on: [] }],
+            },
+            workflow_node_id: "node-a",
+          },
+          {
+            workflow_binding: {
+              kind: "virtual_workflow",
+              workflow_id: "workflow-missing-initial",
+              package_revision: fixture.lineage.payload.workflow_binding.package_revision,
+              nodes: [{ node_id: "node-a", agent_id: fixture.lineage.payload.target_agent_id, depends_on: [] }],
+            },
+            workflow_node_id: "node-a",
+            workflow_occurrence_id: "unknown-initial",
+            continuation_of_dispatch_id: "unknown-initial",
+          },
+          {
+            workflow_binding: {
+              kind: "virtual_workflow",
+              workflow_id: "workflow-missing-initial",
+              package_revision: fixture.lineage.payload.workflow_binding.package_revision,
+              nodes: [{ node_id: "node-a", agent_id: fixture.lineage.payload.target_agent_id, depends_on: [] }],
+            },
+            workflow_node_id: "node-a",
+            continuation_of_dispatch_id: "unknown-initial",
+            coordination_action_id: "unrelated-action",
+          },
+          {
+            workflow_occurrence_id: fixture.lineage.payload.workflow_occurrence_id,
+            continuation_of_dispatch_id: fixture.lineage.dispatchID,
+            child_session_id: "session-wrong-continuation",
+          },
+        ]
+        for (const [index, workflowLineage] of invalidWorkflowLineages.entries()) {
+          expect(() =>
+            Database.immediateTransaction((db) => {
+              insertEngineArtifact(db, {
+                id: `art_invalid_dispatch_workflow_${index}`,
+                taskID: fixture.taskID,
+                kind: "dispatch_lineage",
+                label: "dispatch-agent",
+                payload: {
+                  ...initialPayload(`dispatch-invalid-workflow-${index}`),
+                  tool_part_id: `part-invalid-workflow-${index}`,
+                  tool_call_id: `call-invalid-workflow-${index}`,
+                  ...workflowLineage,
+                  delivery_owner: validOwner,
+                },
+                timeCreated: Date.now(),
+              })
+            }),
+          ).toThrow("engine_artifact: dispatch_lineage")
         }
       },
     })

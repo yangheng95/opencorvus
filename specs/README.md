@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest scheduling razor remediation Cut 8: [`2026-09-01-scheduling-razor-remediation-cut-8.md`](records/2026-09/2026-09-01-scheduling-razor-remediation-cut-8.md).
+
 Latest Scheduled busy-Session occurrence E2E repair: [`2026-08-31-scheduled-busy-occurrence-e2e-repair.md`](records/2026-08/2026-08-31-scheduled-busy-occurrence-e2e-repair.md).
 
 Latest search-native Capability Phase C/D implementation plan: [`2026-08-30-search-native-capability-phase-cd.md`](records/2026-08/2026-08-30-search-native-capability-phase-cd.md).

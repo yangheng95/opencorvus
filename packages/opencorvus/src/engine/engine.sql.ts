@@ -542,7 +542,7 @@ export const EngineArtifactTable = sqliteTable(
     uniqueIndex("engine_dispatch_lineage_initial_workflow_node_idx")
       .on(
         table.task_id,
-        sql<string>`json_extract(${table.payload}, '$.workflow_occurrence_id')`,
+        sql<string>`json_extract(${table.payload}, '$.workflow_binding.workflow_id')`,
         sql<string>`json_extract(${table.payload}, '$.workflow_node_id')`,
       )
       .where(
@@ -561,30 +561,6 @@ export const EngineArtifactTable = sqliteTable(
       .where(
         sql`${table.kind} = 'agent_coordination_request' AND json_extract(${table.payload}, '$.origin') = 'worker_handoff' AND json_extract(${table.payload}, '$.status') = 'pending'`,
       ),
-  ],
-)
-
-/** Single durable admission authority for one virtual workflow node in one
- * Task. A bound row is committed atomically with its child Session, first
- * message, Turn descriptor, and dispatch lineage. Historical duplicates are
- * retained as an explicit conflicted row instead of selecting a replacement. */
-export const EngineWorkflowNodeOccurrenceTable = sqliteTable(
-  "engine_workflow_node_occurrence",
-  {
-    task_id: text()
-      .notNull()
-      .references(() => EngineTaskTable.id, { onDelete: "cascade" }),
-    workflow_id: text().notNull(),
-    workflow_node_id: text().notNull(),
-    initial_dispatch_id: text(),
-    child_session_id: text().references(() => SessionTable.id, { onDelete: "restrict" }),
-    time_created: integer().notNull(),
-  },
-  (table) => [
-    primaryKey({ columns: [table.task_id, table.workflow_id, table.workflow_node_id] }),
-    uniqueIndex("engine_workflow_node_occurrence_identity_idx")
-      .on(table.task_id, table.initial_dispatch_id)
-      .where(sql`${table.initial_dispatch_id} IS NOT NULL`),
   ],
 )
 

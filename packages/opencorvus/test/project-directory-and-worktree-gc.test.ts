@@ -15,7 +15,7 @@ import { isExecutionCancellationError } from "@/session/prompt/cancellation"
 import { SessionProcessor } from "@/session/processor"
 import { SessionStatus } from "@/session/status"
 import { Database, eq } from "@/storage/db"
-import { EngineTaskTable, EngineWorkflowNodeOccurrenceTable } from "@/engine/engine.sql"
+import { EngineArtifactTable, EngineTaskTable } from "@/engine/engine.sql"
 import { PermissionLedgerTable, PermissionPolicyTable } from "@/permission/permission.sql"
 import { DecisionLogTable } from "@/decision-log/schema"
 import { EngineService } from "@/task-api"
@@ -46,6 +46,10 @@ import { ProtocolStore } from "@/protocol/store"
 import { McpAuth } from "@/mcp/auth"
 import { ProjectDeletionCleanupAdmissionTestHooks } from "@/project/deletion-cleanup-admission"
 import { ProjectDirectoryAdmission } from "@/project/directory-admission"
+import { createDispatchLineageOrigin, recordDispatchLineage } from "@/engine/dispatch-lineage"
+import { joinProcessLivenessLease } from "@/engine/process-liveness"
+import { currentRuntimeOccurrenceID } from "@/runtime/process-occurrence"
+import { insertTaskPackageRevisionBinding } from "@/engine/task-package-revision-binding"
 
 let rejectDeletionProbeDisposal = false
 let holdDeletionProbeDisposal: Promise<void> | undefined
@@ -852,26 +856,109 @@ describe("Project directory integrity", () => {
     }
   }, 90_000)
 
-  test("commits Project deletion while retaining immutable permission evidence and removing an admitted workflow node", async () => {
+  test("commits Project deletion while retaining immutable permission evidence and removing its Task Session tree", async () => {
     await using project = await memoryProject()
     const registered = await Project.fromDirectory(project.path)
     const projectID = registered.project.id
     const taskID = Identifier.ascending("task")
     const permissionRequestID = Identifier.ascending("permission")
+    const dispatchID = Identifier.ascending("artifact")
+    let lineageArtifactID!: string
     let policySessionID!: string
-    let childSessionID!: string
     await Instance.provide({
       directory: project.path,
       fn: async () => {
-        const root = await Session.create({ kind: "root", title: "Permission evidence host" })
+        const packageRevision = {
+          scope: "built_in" as const,
+          projectID: null,
+          namespace: "builtin",
+          id: "project-delete-workflow",
+          version: "2026.09.01.1",
+          packageDigest: "d".repeat(64),
+        }
+        const workflowBinding = {
+          kind: "virtual_workflow" as const,
+          workflow_id: "project-delete-workflow",
+          package_revision: {
+            scope: packageRevision.scope,
+            project_id: null,
+            namespace: packageRevision.namespace,
+            id: packageRevision.id,
+            version: packageRevision.version,
+            package_digest: packageRevision.packageDigest,
+          },
+          nodes: [{ node_id: "delete-node", agent_id: "project-delete-worker", depends_on: [] }],
+        }
+        const root = await Session.create({
+          kind: "root",
+          title: "Permission evidence host",
+          metadata: { configOverlay: { prompt_profile: { active: packageRevision.id } } },
+        })
         const child = await Session.create({
           kind: "delegated-worker",
           parentID: root.id,
           title: "Workflow node child Session",
         })
         policySessionID = root.id
-        childSessionID = child.id
         const now = Date.now()
+        const userMessageID = Identifier.ascending("message")
+        const assistantMessageID = Identifier.ascending("message")
+        const toolPartID = Identifier.ascending("part")
+        const toolCallID = Identifier.ascending("call")
+        await Session.updateMessage({
+          id: userMessageID,
+          sessionID: root.id,
+          role: "user",
+          author: "user",
+          agent: "orchestrator",
+          model: { providerID: "test", modelID: "test" },
+          time: { created: now + 1 },
+        })
+        await Session.updateMessage({
+          id: assistantMessageID,
+          parentID: userMessageID,
+          sessionID: root.id,
+          role: "assistant",
+          author: "orchestrator",
+          agent: "orchestrator",
+          providerID: "test",
+          modelID: "test",
+          path: { cwd: project.path, root: project.path },
+          cost: 0,
+          tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+          time: { created: now + 2 },
+        })
+        await Session.updatePart({
+          id: toolPartID,
+          sessionID: root.id,
+          messageID: assistantMessageID,
+          type: "tool",
+          callID: toolCallID,
+          tool: "dispatch_agent",
+          state: {
+            status: "completed",
+            input: { target: "project-delete-worker" },
+            output: "accepted",
+            title: "accepted",
+            metadata: {},
+            time: { start: now + 3, end: now + 4 },
+          },
+        })
+        await Session.updateMessage({
+          id: assistantMessageID,
+          parentID: userMessageID,
+          sessionID: root.id,
+          role: "assistant",
+          author: "orchestrator",
+          agent: "orchestrator",
+          providerID: "test",
+          modelID: "test",
+          path: { cwd: project.path, root: project.path },
+          cost: 0,
+          tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+          finish: "tool-calls",
+          time: { created: now + 2, completed: now + 4 },
+        })
         Database.transaction((db) => {
           insertEngineTask(db, {
             taskID,
@@ -886,17 +973,7 @@ describe("Project directory integrity", () => {
             timeCreated: now,
           })
           appendTaskOpenedInTransaction({ db, taskID, sessionID: root.id, now, source: "test" })
-          ProtocolStore.appendEventInTransaction({
-            kind: "event",
-            type: "task.completed",
-            aggregate: "task",
-            aggregate_id: taskID,
-            task_id: null,
-            session_id: root.id,
-            source: "test",
-            emitted_at: now,
-            payload: { execution_epoch: 1 },
-          })
+          insertTaskPackageRevisionBinding({ db, taskID, packageRevision, timeCreated: now })
           db.insert(PermissionPolicyTable)
             .values({
               session_id: root.id,
@@ -943,17 +1020,53 @@ describe("Project directory integrity", () => {
               time_created: now,
             })
             .run()
-          db.insert(EngineWorkflowNodeOccurrenceTable)
-            .values({
-              task_id: taskID,
-              workflow_id: "workflow-1",
-              workflow_node_id: "node-1",
-              initial_dispatch_id: Identifier.ascending("call"),
-              child_session_id: child.id,
-              time_created: now,
-            })
-            .run()
         })
+        const liveness = joinProcessLivenessLease(currentRuntimeOccurrenceID())
+        try {
+          const lineage = recordDispatchLineage({
+            origin: createDispatchLineageOrigin({
+              dispatchID,
+              taskID,
+              orchestratorSessionID: root.id,
+              orchestratorMessageID: assistantMessageID,
+              toolPartID,
+              toolCallID,
+              targetAgentID: "project-delete-worker",
+              projectedWorkerIdentity: {
+                agentID: "project-delete-worker",
+                baseRole: "delegated-worker",
+                sessionKind: "delegated-worker",
+                dispatchAdapterID: "delegated_worker",
+                runtimeTemplateABIVersion: 1,
+                dispatchAdapterABIVersion: 1,
+                projectionHash: "e".repeat(64),
+              },
+              workScope: { kind: "task" },
+              workflowBinding,
+              workflowNodeID: "delete-node",
+              adapterInput: { reason: "Verify Project deletion closes the canonical lineage authority" },
+            }),
+            childSessionID: child.id,
+            now: now + 5,
+          })
+          lineageArtifactID = lineage.artifactID
+          expect(lineage.dispatchID).toBe(dispatchID)
+        } finally {
+          liveness.release()
+        }
+        Database.transaction(() =>
+          ProtocolStore.appendEventInTransaction({
+            kind: "event",
+            type: "task.completed",
+            aggregate: "task",
+            aggregate_id: taskID,
+            task_id: null,
+            session_id: root.id,
+            source: "test",
+            emitted_at: now + 6,
+            payload: { execution_epoch: 1 },
+          }),
+        )
       },
     })
 
@@ -985,6 +1098,7 @@ describe("Project directory integrity", () => {
       remaining: Database.use((db) => ({
         tasks: db.select().from(EngineTaskTable).where(eq(EngineTaskTable.project_id, projectID)).all().length,
         sessions: db.select().from(SessionTable).where(eq(SessionTable.project_id, projectID)).all().length,
+        lineages: db.select().from(EngineArtifactTable).where(eq(EngineArtifactTable.id, lineageArtifactID)).all().length,
         policies: db.select().from(PermissionPolicyTable).where(eq(PermissionPolicyTable.project_id, projectID)).all()
           .length,
         ledger: db
@@ -994,11 +1108,6 @@ describe("Project directory integrity", () => {
           .all()
           .map((row) => row.event_type)
           .sort(),
-        occurrences: db
-          .select()
-          .from(EngineWorkflowNodeOccurrenceTable)
-          .where(eq(EngineWorkflowNodeOccurrenceTable.child_session_id, childSessionID))
-          .all().length,
       })),
     }).toEqual({
       evidenceHeldWhileProjectLives: "rejected",
@@ -1011,7 +1120,7 @@ describe("Project directory integrity", () => {
         residue: [],
       },
       projects: 0,
-      remaining: { tasks: 0, sessions: 0, policies: 0, ledger: ["denied", "requested"], occurrences: 0 },
+      remaining: { tasks: 0, sessions: 0, lineages: 0, policies: 0, ledger: ["denied", "requested"] },
     })
   }, 90_000)
 

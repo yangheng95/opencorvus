@@ -120,11 +120,6 @@ const CONTROL_STATE_INVENTORY = {
     causal: ["source_occurrence_id"],
     receipt: ["outcome", "response", "time_created"],
   }),
-  EngineWorkflowNodeOccurrenceTable: inventory({
-    identity: ["task_id", "workflow_id", "workflow_node_id"],
-    causal: ["initial_dispatch_id", "child_session_id"],
-    fact: ["time_created"],
-  }),
   EngineProgressSnapshotTable: inventory({
     identity: ["id", "task_id"],
     fact: ["summary", "payload", "time_created"],
@@ -350,7 +345,6 @@ const FORBIDDEN_REDUNDANT_COLUMNS = {
   automation_run: ["automation_id"],
   automation_project_target: ["automation_id"],
   event_job_fire: ["event_job_id", "project_id", "event_type"],
-  engine_workflow_node_occurrence: ["workflow_occurrence_id", "dispatch_lineage_artifact_id", "workflow_binding"],
 } as const
 
 function quoteIdentifier(value: string): string {
@@ -370,7 +364,6 @@ try {
     key === "EngineBuildObservationCleanupReceiptTable" ||
     key === "EngineInteractionRequestTable" ||
     key === "EngineInteractionOutcomeTable" ||
-    key === "EngineWorkflowNodeOccurrenceTable" ||
     key === "EngineProgressSnapshotTable" ||
     key.startsWith("EngineGitCheckpoint") ||
     key === "SessionControlRecordTable" ||

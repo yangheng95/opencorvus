@@ -3,7 +3,6 @@ import { DelegatedWorkerAgent } from "@/delegated-worker/agent"
 import { DispatchAdapterContractRegistry, type AgentDispatchAdapterID } from "@/agent/dispatch-adapter-contract"
 import { createDispatchLineageOrigin, listDispatchLineage } from "@/engine/dispatch-lineage"
 import { recordTestDispatchLineage } from "./fixture/dispatch-lineage"
-import { EngineWorkflowNodeOccurrenceTable } from "@/engine/engine.sql"
 import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import {
   reconcileTerminalAgentLifecycleDelivery,
@@ -326,26 +325,6 @@ test("fresh delegated worker commits Session, input authority, lineage, and occu
             expect(listDispatchLineage(taskID)).toMatchObject([
               { dispatchID, payload: { child_session_id: sessionID, workflow_occurrence_id: dispatchID } },
             ])
-            expect(
-              Database.use((db) =>
-                db
-                  .select()
-                  .from(EngineWorkflowNodeOccurrenceTable)
-                  .where(
-                    and(
-                      eq(EngineWorkflowNodeOccurrenceTable.task_id, taskID),
-                      eq(EngineWorkflowNodeOccurrenceTable.workflow_node_id, "base-planner"),
-                    ),
-                  )
-                  .get(),
-              ),
-            ).toMatchObject({
-              task_id: taskID,
-              workflow_id: workflowBinding.kind === "virtual_workflow" ? workflowBinding.workflow_id : undefined,
-              workflow_node_id: "base-planner",
-              initial_dispatch_id: dispatchID,
-              child_session_id: sessionID,
-            })
           },
         })
 

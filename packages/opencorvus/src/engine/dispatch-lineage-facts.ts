@@ -84,21 +84,57 @@ const DispatchLineagePayloadSchema = z
           message: "direct dispatch_agent lineage cannot carry collection member identity",
         })
       }
-      return
-    }
-    if (payload.collection_member_index === undefined || payload.collection_member_count === undefined) {
+    } else if (payload.collection_member_index === undefined || payload.collection_member_count === undefined) {
       context.addIssue({
         code: "custom",
         path: ["collection_member_index"],
         message: "dispatch_agents lineage requires exact collection member index and count",
       })
-      return
-    }
-    if (payload.collection_member_index >= payload.collection_member_count) {
+    } else if (payload.collection_member_index >= payload.collection_member_count) {
       context.addIssue({
         code: "custom",
         path: ["collection_member_index"],
         message: "collection member index must be smaller than collection member count",
+      })
+    }
+    const hasContinuation = payload.continuation_of_dispatch_id !== undefined
+    const hasCoordination = payload.coordination_action_id !== undefined
+    if (hasCoordination && !hasContinuation) {
+      context.addIssue({
+        code: "custom",
+        path: ["coordination_action_id"],
+        message: "coordination redispatch lineage requires its exact source dispatch",
+      })
+    }
+    if (!hasContinuation && payload.workflow_occurrence_id !== payload.dispatch_id) {
+      context.addIssue({
+        code: "custom",
+        path: ["workflow_occurrence_id"],
+        message: "initial dispatch lineage must own its workflow occurrence identity",
+      })
+    }
+    if (payload.workflow_binding.kind === "direct") {
+      if (payload.workflow_node_id !== null) {
+        context.addIssue({
+          code: "custom",
+          path: ["workflow_node_id"],
+          message: "direct dispatch lineage cannot claim a workflow node",
+        })
+      }
+      return
+    }
+    const node = payload.workflow_binding.nodes.find((candidate) => candidate.node_id === payload.workflow_node_id)
+    if (!node) {
+      context.addIssue({
+        code: "custom",
+        path: ["workflow_node_id"],
+        message: "virtual workflow lineage must select one declared node",
+      })
+    } else if (node.agent_id !== payload.target_agent_id) {
+      context.addIssue({
+        code: "custom",
+        path: ["target_agent_id"],
+        message: "virtual workflow lineage target must match the selected node agent",
       })
     }
   })
@@ -127,6 +163,9 @@ export function parseDispatchLineagePayload(payload: unknown, artifactID: string
 
 export function dispatchLineageRow(row: typeof EngineArtifactTable.$inferSelect): DispatchLineageRow {
   const payload = parseDispatchLineagePayload(row.payload, row.id)
+  if (payload.task_id !== row.task_id) {
+    throw new Error(`Invalid dispatch_lineage artifact ${row.id}: payload Task ${payload.task_id} != ${row.task_id}`)
+  }
   return {
     artifactID: row.id,
     taskID: row.task_id,

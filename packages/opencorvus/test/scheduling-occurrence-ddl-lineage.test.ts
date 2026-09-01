@@ -116,6 +116,32 @@ function insertToolBackedWaits(
 }
 
 describe("scheduling occurrence DDL lineage", () => {
+  test("uses the immutable dispatch lineage index as virtual workflow node admission", () => {
+    const db = currentDatabase()
+    try {
+      const plan = db
+        .query<{ detail: string }, []>(`
+          EXPLAIN QUERY PLAN
+          SELECT id
+          FROM engine_artifact
+          WHERE task_id='tsk_lineage'
+            AND kind='dispatch_lineage'
+            AND json_extract(payload,'$.workflow_binding.kind')='virtual_workflow'
+            AND json_extract(payload,'$.workflow_binding.workflow_id')='workflow-a'
+            AND json_extract(payload,'$.workflow_node_id')='node-a'
+            AND json_type(payload,'$.continuation_of_dispatch_id') IS NULL
+            AND json_type(payload,'$.coordination_action_id') IS NULL
+        `)
+        .all()
+        .map((row) => row.detail)
+      expect(plan).toEqual([
+        expect.stringContaining("engine_dispatch_lineage_initial_workflow_node_idx"),
+      ])
+    } finally {
+      db.close(true)
+    }
+  })
+
   test("uses Session and Fire frontier indexes instead of scanning unrelated immutable history", () => {
     const db = currentDatabase()
     try {
