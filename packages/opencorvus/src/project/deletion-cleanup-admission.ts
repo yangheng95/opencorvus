@@ -5,7 +5,7 @@ import { NamedError } from "@opencorvus-ai/util/error"
 import { Global } from "@/global"
 
 const CleanupAdmissionFact = z.object({
-  format: z.enum(["opencorvus.project-deletion-cleanup.v3", "opencorvus.project-deletion-cleanup.v4"]),
+  format: z.literal("opencorvus.project-deletion-cleanup.v5"),
   projectID: z.string().min(1),
 })
 let beforeManifestReadForTest: ((manifestPath: string) => void | Promise<void>) | undefined

@@ -20,9 +20,10 @@ import { PermissionLedgerTable, PermissionPolicyTable } from "@/permission/permi
 import { DecisionLogTable } from "@/decision-log/schema"
 import { EngineService } from "@/task-api"
 import { Identifier } from "@/id/id"
-import { ProjectTable } from "@/project/project.sql"
+import { ProjectDirectoryAdmissionTable, ProjectMaintenanceFenceTable, ProjectTable } from "@/project/project.sql"
 import { deleteProject } from "@/project/delete"
 import { closeProjectDeletionRegistryAdmission } from "@/project/deletion-registry"
+import { recoverProjectMaintenanceFences } from "@/project/deletion-registry"
 import {
   createProjectDeletionCleanupPlan,
   ProjectDeletionCleanupTestHooks,
@@ -44,6 +45,7 @@ import type { Provider as ProviderType } from "@/provider/provider"
 import { ProtocolStore } from "@/protocol/store"
 import { McpAuth } from "@/mcp/auth"
 import { ProjectDeletionCleanupAdmissionTestHooks } from "@/project/deletion-cleanup-admission"
+import { ProjectDirectoryAdmission } from "@/project/directory-admission"
 
 let rejectDeletionProbeDisposal = false
 let holdDeletionProbeDisposal: Promise<void> | undefined
@@ -171,6 +173,36 @@ afterEach(async () => {
 })
 
 describe("Project directory integrity", () => {
+  test("normalizes a missing durable namespace source to the shared ENOENT contract", async () => {
+    await using project = await memoryProject()
+    const missing = path.join(project.path, "missing-runtime-root")
+    const target = `${missing}.quarantine`
+    const error = await Filesystem.renameDurableNoReplace(missing, target).catch((cause) => cause as NodeJS.ErrnoException)
+
+    expect({ code: error.code, source: await fs.stat(missing).then(() => "present", () => "missing") }).toEqual({
+      code: "ENOENT",
+      source: "missing",
+    })
+  })
+
+  test("normalizes a non-directory namespace ancestor to the shared absent-source contract", async () => {
+    await using project = await memoryProject()
+    const parent = path.join(project.path, "not-a-directory")
+    await fs.writeFile(parent, "file")
+    const source = path.join(parent, "runtime-root")
+    const error = await Filesystem.renameDurableNoReplace(source, `${source}.quarantine`).catch(
+      (cause) => cause as NodeJS.ErrnoException,
+    )
+
+    expect({
+      acceptedCode: error.code === "ENOENT" || error.code === "ENOTDIR" ? error.code : "unexpected",
+      parent: await fs.readFile(parent, "utf8"),
+    }).toEqual({
+      acceptedCode: process.platform === "win32" ? expect.stringMatching(/^(ENOENT|ENOTDIR)$/) : "ENOTDIR",
+      parent: "file",
+    })
+  })
+
   test("binds an existing directory and returns typed missing and file-path errors through the HTTP boundary", async () => {
     await using project = await memoryProject()
     const bound = await Project.fromDirectory(project.path)
@@ -287,6 +319,10 @@ describe("Project directory integrity", () => {
   test("deletes a terminal Task and its managed root through one Project authority", async () => {
     await using project = await memoryProject()
     const registered = await Project.fromDirectory(project.path)
+    const configRoot = ProjectRuntimePaths.projectConfigRoot(project.path)
+    const runtimeRoot = ProjectRuntimePaths.projectRuntimeRoot(project.path)
+    await fs.mkdir(configRoot, { recursive: true })
+    await fs.writeFile(path.join(configRoot, "user-config.json"), '{"preserved":true}\n')
     const taskID = Identifier.ascending("task")
     await Instance.provide({
       directory: project.path,
@@ -318,14 +354,15 @@ describe("Project directory integrity", () => {
       requestID: "request_delete_project_terminal_task",
       reason: "Delete Project with terminal Task",
     })
-    const managedState = await fs.stat(ProjectRuntimePaths.projectConfigRoot(project.path)).then(
+    const runtimeState = await fs.stat(runtimeRoot).then(
       () => "present" as const,
       (error: NodeJS.ErrnoException) => (error.code === "ENOENT" ? ("missing" as const) : Promise.reject(error)),
     )
 
     expect({
       result,
-      managedState,
+      runtimeState,
+      userConfig: await fs.readFile(path.join(configRoot, "user-config.json"), "utf8"),
       projects: Project.list().length,
       tasks: Database.use((db) => db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, taskID)).all().length),
     }).toEqual({
@@ -337,10 +374,482 @@ describe("Project directory integrity", () => {
         deletedTaskCount: 1,
         residue: [],
       },
-      managedState: "missing",
+      runtimeState: "missing",
+      userConfig: '{"preserved":true}\n',
       projects: 0,
       tasks: 0,
     })
+  }, 90_000)
+
+  test("deletes every registered ordinary runtime root while preserving each configuration root", async () => {
+    await using project = await memoryProject()
+    const registered = await Project.fromDirectory(project.path)
+    const sandbox = path.join(project.path, "registered-sandbox")
+    await fs.mkdir(sandbox, { recursive: true })
+    await Project.addSandbox(registered.project.id, sandbox)
+    const directories = [project.path, sandbox]
+    for (const [index, directory] of directories.entries()) {
+      const configRoot = ProjectRuntimePaths.projectConfigRoot(directory)
+      const runtimeRoot = ProjectRuntimePaths.projectRuntimeRoot(directory)
+      await fs.mkdir(runtimeRoot, { recursive: true })
+      await fs.writeFile(path.join(runtimeRoot, "runtime.txt"), `runtime-${index}`)
+      await fs.writeFile(path.join(configRoot, "user-config.json"), `{"root":${index}}\n`)
+    }
+
+    const result = await deleteProject(Project.get(registered.project.id)!, {
+      actor: "user",
+      source: "project.delete",
+      surface: "api",
+      requestID: "request_delete_project_all_registered_runtime_roots",
+      reason: "Delete every exact registered runtime root without deleting user configuration",
+    })
+
+    expect({
+      result,
+      roots: await Promise.all(
+        directories.map(async (directory) => ({
+          runtime: await fs.stat(ProjectRuntimePaths.projectRuntimeRoot(directory)).then(
+            () => "present" as const,
+            (error: NodeJS.ErrnoException) =>
+              error.code === "ENOENT" ? ("missing" as const) : Promise.reject(error),
+          ),
+          config: await fs.readFile(
+            path.join(ProjectRuntimePaths.projectConfigRoot(directory), "user-config.json"),
+            "utf8",
+          ),
+        })),
+      ),
+    }).toEqual({
+      result: {
+        ok: true,
+        status: "committed",
+        projectID: registered.project.id,
+        directory: project.path,
+        deletedTaskCount: 0,
+        residue: [],
+      },
+      roots: [
+        { runtime: "missing", config: '{"root":0}\n' },
+        { runtime: "missing", config: '{"root":1}\n' },
+      ],
+    })
+  }, 90_000)
+
+  test("rolls back every staged registered runtime root when later quarantine fails", async () => {
+    await using project = await memoryProject()
+    const registered = await Project.fromDirectory(project.path)
+    const sandbox = path.join(project.path, "rollback-sandbox")
+    await fs.mkdir(sandbox, { recursive: true })
+    await Project.addSandbox(registered.project.id, sandbox)
+    const primaryRuntime = ProjectRuntimePaths.projectRuntimeRoot(project.path)
+    const sandboxRuntime = ProjectRuntimePaths.projectRuntimeRoot(sandbox)
+    await fs.mkdir(primaryRuntime, { recursive: true })
+    await fs.mkdir(sandboxRuntime, { recursive: true })
+    await fs.writeFile(path.join(primaryRuntime, "authority.txt"), "primary")
+    await fs.writeFile(path.join(sandboxRuntime, "authority.txt"), "sandbox")
+    const actualRename = Filesystem.renameDurableNoReplace.bind(Filesystem)
+    const rename = spyOn(Filesystem, "renameDurableNoReplace").mockImplementation(async (source, target) => {
+      if (path.resolve(source) === path.resolve(sandboxRuntime)) {
+        throw Object.assign(new Error("sandbox quarantine unavailable"), { code: "EACCES" })
+      }
+      return actualRename(source, target)
+    })
+    try {
+      const error = await deleteProject(Project.get(registered.project.id)!, {
+        actor: "user",
+        source: "project.delete",
+        surface: "api",
+        requestID: "request_delete_project_multiroot_rollback",
+        reason: "Prove multi-root quarantine rolls back as one occurrence",
+      }).catch((cause) => cause)
+      expect({
+        error: { name: error.name, stage: error.data?.stage },
+        primary: await fs.readFile(path.join(primaryRuntime, "authority.txt"), "utf8"),
+        sandbox: await fs.readFile(path.join(sandboxRuntime, "authority.txt"), "utf8"),
+        project: Project.get(registered.project.id)?.id,
+        manifests: await fs
+          .readdir(ProjectDeletionCleanupTestHooks.root())
+          .catch((cause: NodeJS.ErrnoException) => (cause.code === "ENOENT" ? [] : Promise.reject(cause))),
+      }).toEqual({
+        error: { name: "ProjectDeletePendingError", stage: "filesystem-quarantine" },
+        primary: "primary",
+        sandbox: "sandbox",
+        project: registered.project.id,
+        manifests: [],
+      })
+    } finally {
+      rename.mockRestore()
+    }
+  }, 90_000)
+
+  test("releases a partial multi-root admission so the same deletion can retry without restart", async () => {
+    await using project = await memoryProject()
+    const registered = await Project.fromDirectory(project.path)
+    const sandbox = path.join(project.path, "partial-admission-sandbox")
+    await fs.mkdir(sandbox, { recursive: true })
+    await Project.addSandbox(registered.project.id, sandbox)
+    const primaryRuntime = ProjectRuntimePaths.projectRuntimeRoot(project.path)
+    const sandboxRuntime = ProjectRuntimePaths.projectRuntimeRoot(sandbox)
+    await fs.mkdir(primaryRuntime, { recursive: true })
+    await fs.mkdir(sandboxRuntime, { recursive: true })
+    const blocker = await ProjectDirectoryAdmission.acquire({
+      directory: sandboxRuntime,
+      operationID: crypto.randomUUID(),
+      kind: "registration",
+    })
+    if (blocker.outcome !== "acquired") throw new Error("expected exact sandbox blocker")
+
+    const first = await deleteProject(Project.get(registered.project.id)!, {
+      actor: "user",
+      source: "project.delete",
+      surface: "api",
+      requestID: "request_delete_project_partial_admission_first",
+      reason: "Prove a partial multi-root admission is immediately retryable",
+    }).catch((cause) => cause)
+    const beforeRetry = {
+      error: first.name,
+      manifests: await fs
+        .readdir(ProjectDeletionCleanupTestHooks.root())
+        .catch((cause: NodeJS.ErrnoException) => (cause.code === "ENOENT" ? [] : Promise.reject(cause))),
+      fences: Database.use((db) => db.select().from(ProjectMaintenanceFenceTable).all().length),
+      admissions: Database.use((db) => db.select().from(ProjectDirectoryAdmissionTable).all().length),
+    }
+    ProjectDirectoryAdmission.settle(blocker.token, () => undefined)
+    const retry = await deleteProject(Project.get(registered.project.id)!, {
+      actor: "user",
+      source: "project.delete",
+      surface: "api",
+      requestID: "request_delete_project_partial_admission_retry",
+      reason: "Complete the same Project deletion after the transient blocker settles",
+    })
+
+    expect({
+      beforeRetry,
+      retry,
+      manifests: await fs
+        .readdir(ProjectDeletionCleanupTestHooks.root())
+        .catch((cause: NodeJS.ErrnoException) => (cause.code === "ENOENT" ? [] : Promise.reject(cause))),
+      fences: Database.use((db) => db.select().from(ProjectMaintenanceFenceTable).all().length),
+      admissions: Database.use((db) => db.select().from(ProjectDirectoryAdmissionTable).all().length),
+    }).toEqual({
+      beforeRetry: { error: "ProjectDeletePendingError", manifests: [], fences: 0, admissions: 1 },
+      retry: {
+        ok: true,
+        status: "committed",
+        projectID: registered.project.id,
+        directory: project.path,
+        deletedTaskCount: 0,
+        residue: [],
+      },
+      manifests: [],
+      fences: 0,
+      admissions: 0,
+    })
+  }, 90_000)
+
+  test("fails before quarantine when registered paths alias the same physical runtime root", async () => {
+    await using project = await memoryProject()
+    const registered = await Project.fromDirectory(project.path)
+    const alias = path.join(path.dirname(project.path), `${path.basename(project.path)}-physical-alias`)
+    await fs.symlink(project.path, alias, process.platform === "win32" ? "junction" : "dir")
+    const runtimeRoot = ProjectRuntimePaths.projectRuntimeRoot(project.path)
+    await fs.mkdir(runtimeRoot, { recursive: true })
+    await fs.writeFile(path.join(runtimeRoot, "authority.txt"), "retained")
+    Database.use((db) =>
+      db
+        .update(ProjectTable)
+        .set({ sandboxes: [alias], time_updated: Date.now() })
+        .where(eq(ProjectTable.id, registered.project.id))
+        .run(),
+    )
+    try {
+      const error = await deleteProject(Project.get(registered.project.id)!, {
+        actor: "user",
+        source: "project.delete",
+        surface: "api",
+        requestID: "request_delete_project_physical_alias",
+        reason: "Prove physical aliases cannot create duplicate deletion authority",
+      }).catch((cause) => cause)
+
+      expect({
+        error: { name: error.name, stage: error.data?.stage, cause: error.cause?.message },
+        authority: await fs.readFile(path.join(runtimeRoot, "authority.txt"), "utf8"),
+        project: Project.get(registered.project.id)?.id,
+      }).toEqual({
+        error: {
+          name: "ProjectDeletePendingError",
+          stage: "filesystem-preflight",
+          cause: expect.stringContaining("physical registered deletion roots overlap"),
+        },
+        authority: "retained",
+        project: registered.project.id,
+      })
+    } finally {
+      await fs.unlink(alias).catch(() => undefined)
+    }
+  }, 90_000)
+
+  test("reconciles post-rename durability errors in both quarantine directions", async () => {
+    await using project = await memoryProject()
+    const registered = await Project.fromDirectory(project.path)
+    const runtimeRoot = ProjectRuntimePaths.projectRuntimeRoot(project.path)
+    await fs.mkdir(runtimeRoot, { recursive: true })
+    await fs.writeFile(path.join(runtimeRoot, "authority.txt"), "retained")
+    const actualRename = Filesystem.renameDurableNoReplace.bind(Filesystem)
+    const registryDrift = path.join(project.path, "post-rename-registry-drift")
+    const rename = spyOn(Filesystem, "renameDurableNoReplace").mockImplementation(async (source, target) => {
+      await actualRename(source, target)
+      if (path.resolve(source) === path.resolve(runtimeRoot)) {
+        Database.use((db) =>
+          db
+            .update(ProjectTable)
+            .set({ sandboxes: [registryDrift] })
+            .where(eq(ProjectTable.id, registered.project.id))
+            .run(),
+        )
+      }
+      if (path.resolve(source) === path.resolve(runtimeRoot) || String(source).includes(".deleting-")) {
+        throw new Error(`durability sync failed after namespace rename: ${source}`)
+      }
+    })
+    try {
+      const error = await deleteProject(registered.project, {
+        actor: "user",
+        source: "project.delete",
+        surface: "api",
+        requestID: "request_project_post_rename_durability",
+        reason: "Prove namespace effects are reconciled after durability errors",
+      }).catch((cause) => cause)
+      expect({
+        error: { name: error.name, stage: error.data?.stage },
+        authority: await fs.readFile(path.join(runtimeRoot, "authority.txt"), "utf8"),
+        manifests: await fs
+          .readdir(ProjectDeletionCleanupTestHooks.root())
+          .catch((cause: NodeJS.ErrnoException) => (cause.code === "ENOENT" ? [] : Promise.reject(cause))),
+        fence: Database.use((db) =>
+          db
+            .select()
+            .from(ProjectMaintenanceFenceTable)
+            .where(eq(ProjectMaintenanceFenceTable.project_id, registered.project.id))
+            .get(),
+        ),
+      }).toEqual({
+        error: { name: "ProjectDeletePendingError", stage: "database-commit" },
+        authority: "retained",
+        manifests: [],
+        fence: undefined,
+      })
+    } finally {
+      rename.mockRestore()
+    }
+  }, 90_000)
+
+  test("retains the registry fence and manifest until rollback residue is recovered", async () => {
+    await using project = await memoryProject()
+    const registered = await Project.fromDirectory(project.path)
+    const runtimeRoot = ProjectRuntimePaths.projectRuntimeRoot(project.path)
+    await fs.mkdir(runtimeRoot, { recursive: true })
+    await fs.writeFile(path.join(runtimeRoot, "authority.txt"), "retained")
+    const registryDrift = path.join(project.path, "rollback-residue-registry-drift")
+    const actualRename = Filesystem.renameDurableNoReplace.bind(Filesystem)
+    const rename = spyOn(Filesystem, "renameDurableNoReplace").mockImplementation(async (source, target) => {
+      if (String(source).includes(".deleting-")) {
+        throw Object.assign(new Error("rollback target is temporarily busy"), { code: "EBUSY" })
+      }
+      await actualRename(source, target)
+      if (path.resolve(source) === path.resolve(runtimeRoot)) {
+        Database.use((db) =>
+          db
+            .update(ProjectTable)
+            .set({ sandboxes: [registryDrift] })
+            .where(eq(ProjectTable.id, registered.project.id))
+            .run(),
+        )
+      }
+    })
+    const error = await deleteProject(registered.project, {
+      actor: "user",
+      source: "project.delete",
+      surface: "api",
+      requestID: "request_project_rollback_residue_fence",
+      reason: "Prove rollback residue retains its complete registry authority",
+    }).catch((cause) => cause)
+    rename.mockRestore()
+    const blocked = await Project.removeSandbox(registered.project.id, registryDrift).catch((cause) => cause)
+    const activeManifest = (await fs.readdir(ProjectDeletionCleanupTestHooks.root()))[0]!
+    const operationID = path.basename(activeManifest, ".json")
+    const driftedRecovery = await recoverProjectDeletionCleanup(() => "dead_or_reused")
+    const driftedFenceRecovery = recoverProjectMaintenanceFences(() => "dead_or_reused", {
+      preserveOperationIDs: new Set(driftedRecovery.retainedOperationIDs),
+    })
+    const retainedDuringDrift = {
+      manifest: (await fs.readdir(ProjectDeletionCleanupTestHooks.root())).length,
+      fence: Database.use((db) => db.select().from(ProjectMaintenanceFenceTable).all().length),
+      directoryAdmission: Database.use((db) => db.select().from(ProjectDirectoryAdmissionTable).all().length),
+    }
+    Database.use((db) =>
+      db
+        .update(ProjectTable)
+        .set({ sandboxes: [] })
+        .where(eq(ProjectTable.id, registered.project.id))
+        .run(),
+    )
+    const recovery = await recoverProjectDeletionCleanup(() => "dead_or_reused")
+    const fenceRecovery = recoverProjectMaintenanceFences(() => "dead_or_reused", {
+      preserveOperationIDs: new Set(recovery.retainedOperationIDs),
+    })
+
+    expect({
+      error: { name: error.name, message: error.message },
+      blocked: blocked.name,
+      operationID,
+      driftedRecovery: {
+        unreconciled: driftedRecovery.unreconciled.map((item) => String(item)),
+        retained: driftedRecovery.retainedOperationIDs,
+      },
+      driftedFenceRecovery,
+      retainedDuringDrift,
+      recovery: { unreconciled: recovery.unreconciled.length, retained: recovery.retainedOperationIDs },
+      fenceRecovery,
+      authority: await fs.readFile(path.join(runtimeRoot, "authority.txt"), "utf8"),
+      manifests: await fs
+        .readdir(ProjectDeletionCleanupTestHooks.root())
+        .catch((cause: NodeJS.ErrnoException) => (cause.code === "ENOENT" ? [] : Promise.reject(cause))),
+      fences: Database.use((db) => db.select().from(ProjectMaintenanceFenceTable).all().length),
+      directoryAdmissions: Database.use((db) => db.select().from(ProjectDirectoryAdmissionTable).all().length),
+    }).toEqual({
+      error: { name: "AggregateError", message: expect.stringContaining("root rollback was incomplete") },
+      blocked: "ProjectDurableAdmissionClosedError",
+      operationID: expect.stringMatching(/^[0-9a-f-]{36}$/),
+      driftedRecovery: {
+        unreconciled: [expect.stringContaining("registry snapshot changed")],
+        retained: [operationID],
+      },
+      driftedFenceRecovery: { released: 0, unreconciled: [] },
+      retainedDuringDrift: { manifest: 1, fence: 1, directoryAdmission: 1 },
+      recovery: { unreconciled: 0, retained: [] },
+      fenceRecovery: { released: 1, unreconciled: [] },
+      authority: "retained",
+      manifests: [],
+      fences: 0,
+      directoryAdmissions: 0,
+    })
+  }, 90_000)
+
+  test("retains exact occurrence authority when a runtime root is replaced before quarantine", async () => {
+    await using project = await memoryProject()
+    const registered = await Project.fromDirectory(project.path)
+    const runtimeRoot = ProjectRuntimePaths.projectRuntimeRoot(project.path)
+    await fs.mkdir(runtimeRoot, { recursive: true })
+    await fs.writeFile(path.join(runtimeRoot, "authority.txt"), "original")
+    const actualRename = Filesystem.renameDurableNoReplace.bind(Filesystem)
+    let replaced = false
+    const rename = spyOn(Filesystem, "renameDurableNoReplace").mockImplementation(async (source, target) => {
+      if (!replaced && path.resolve(source) === path.resolve(runtimeRoot)) {
+        replaced = true
+        await fs.rm(runtimeRoot, { recursive: true, force: true })
+        await fs.mkdir(runtimeRoot, { recursive: true })
+        await fs.writeFile(path.join(runtimeRoot, "authority.txt"), "replacement")
+      }
+      return actualRename(source, target)
+    })
+    try {
+      const error = await deleteProject(registered.project, {
+        actor: "user",
+        source: "project.delete",
+        surface: "api",
+        requestID: "request_project_runtime_occurrence_replacement",
+        reason: "Prove a replacement directory cannot inherit deletion authority",
+      }).catch((cause) => cause)
+      expect({
+        error: { name: error.name, message: error.message },
+        replacement: await fs.readFile(path.join(runtimeRoot, "authority.txt"), "utf8"),
+        manifests: (await fs.readdir(ProjectDeletionCleanupTestHooks.root())).length,
+        fences: Database.use((db) => db.select().from(ProjectMaintenanceFenceTable).all().length),
+      }).toEqual({
+        error: { name: "AggregateError", message: expect.stringContaining("root rollback was incomplete") },
+        replacement: "replacement",
+        manifests: 1,
+        fences: 1,
+      })
+    } finally {
+      rename.mockRestore()
+      const manifests = await fs
+        .readdir(ProjectDeletionCleanupTestHooks.root())
+        .catch((cause: NodeJS.ErrnoException) => (cause.code === "ENOENT" ? [] : Promise.reject(cause)))
+      for (const manifest of manifests) {
+        const operationID = path.basename(manifest, ".json")
+        Database.use((db) =>
+          db.transaction((tx) => {
+            tx.delete(ProjectDirectoryAdmissionTable)
+              .where(eq(ProjectDirectoryAdmissionTable.operation_id, operationID))
+              .run()
+            tx.delete(ProjectMaintenanceFenceTable)
+              .where(eq(ProjectMaintenanceFenceTable.operation_id, operationID))
+              .run()
+          }),
+        )
+        await fs.unlink(path.join(ProjectDeletionCleanupTestHooks.root(), manifest))
+      }
+    }
+  }, 90_000)
+
+  test("retains exact occurrence authority when an anonymous root is replaced before quarantine", async () => {
+    await using project = await memoryProject()
+    const registered = await Project.fromDirectory(project.path)
+    await fs.writeFile(path.join(project.path, "authority.txt"), "original")
+    const actualRename = Filesystem.renameDurableNoReplace.bind(Filesystem)
+    const anonymous = spyOn(ImplicitProject, "isAnonymousDirectory").mockReturnValue(true)
+    let replaced = false
+    const rename = spyOn(Filesystem, "renameDurableNoReplace").mockImplementation(async (source, target) => {
+      if (!replaced && path.resolve(source) === path.resolve(project.path)) {
+        replaced = true
+        await fs.rm(project.path, { recursive: true, force: true })
+        await fs.mkdir(project.path, { recursive: true })
+        await fs.writeFile(path.join(project.path, "authority.txt"), "replacement")
+      }
+      return actualRename(source, target)
+    })
+    try {
+      const error = await deleteProject(registered.project, {
+        actor: "user",
+        source: "project.delete",
+        surface: "api",
+        requestID: "request_anonymous_occurrence_replacement",
+        reason: "Prove a replacement anonymous root cannot inherit deletion authority",
+      }).catch((cause) => cause)
+      expect({
+        error: { name: error.name, message: error.message },
+        replacement: await fs.readFile(path.join(project.path, "authority.txt"), "utf8"),
+        manifests: (await fs.readdir(ProjectDeletionCleanupTestHooks.root())).length,
+        fences: Database.use((db) => db.select().from(ProjectMaintenanceFenceTable).all().length),
+      }).toEqual({
+        error: { name: "AggregateError", message: expect.stringContaining("root rollback was incomplete") },
+        replacement: "replacement",
+        manifests: 1,
+        fences: 1,
+      })
+    } finally {
+      rename.mockRestore()
+      anonymous.mockRestore()
+      const manifests = await fs
+        .readdir(ProjectDeletionCleanupTestHooks.root())
+        .catch((cause: NodeJS.ErrnoException) => (cause.code === "ENOENT" ? [] : Promise.reject(cause)))
+      for (const manifest of manifests) {
+        const operationID = path.basename(manifest, ".json")
+        Database.use((db) =>
+          db.transaction((tx) => {
+            tx.delete(ProjectDirectoryAdmissionTable)
+              .where(eq(ProjectDirectoryAdmissionTable.operation_id, operationID))
+              .run()
+            tx.delete(ProjectMaintenanceFenceTable)
+              .where(eq(ProjectMaintenanceFenceTable.operation_id, operationID))
+              .run()
+          }),
+        )
+        await fs.unlink(path.join(ProjectDeletionCleanupTestHooks.root(), manifest))
+      }
+    }
   }, 90_000)
 
   test("commits Project deletion while retaining immutable permission evidence and removing an admitted workflow node", async () => {
@@ -1325,7 +1834,7 @@ describe("Project directory integrity", () => {
     })
     appendFixtureTaskLifecycle({ taskID, sessionID: session.id, now, terminal: true })
     await Instance.disposeAll()
-    const stateRoot = ProjectRuntimePaths.projectConfigRoot(project.path)
+    const stateRoot = ProjectRuntimePaths.projectRuntimeRoot(project.path)
     const actualLstat = fs.lstat.bind(fs)
     const lstat = spyOn(fs, "lstat").mockImplementation(async (target, options) => {
       if (String(target) === stateRoot) {
@@ -1406,8 +1915,8 @@ describe("Project directory integrity", () => {
     await using relocated = await memoryProject()
     const registered = await Project.fromDirectory(original.path)
     const stale = registered.project
-    await fs.mkdir(ProjectRuntimePaths.projectConfigRoot(original.path), { recursive: true })
-    await fs.mkdir(ProjectRuntimePaths.projectConfigRoot(relocated.path), { recursive: true })
+    await fs.mkdir(ProjectRuntimePaths.projectRuntimeRoot(original.path), { recursive: true })
+    await fs.mkdir(ProjectRuntimePaths.projectRuntimeRoot(relocated.path), { recursive: true })
     Database.use((db) =>
       db
         .update(ProjectTable)
@@ -1425,11 +1934,13 @@ describe("Project directory integrity", () => {
 
     expect({
       result,
-      oldRoot: await fs.stat(ProjectRuntimePaths.projectConfigRoot(original.path)).then(() => "present"),
-      currentRoot: await fs.stat(ProjectRuntimePaths.projectConfigRoot(relocated.path)).then(
+      oldRuntime: await fs.stat(ProjectRuntimePaths.projectRuntimeRoot(original.path)).then(() => "present"),
+      currentRuntime: await fs.stat(ProjectRuntimePaths.projectRuntimeRoot(relocated.path)).then(
         () => "present" as const,
         (error: NodeJS.ErrnoException) => (error.code === "ENOENT" ? ("missing" as const) : Promise.reject(error)),
       ),
+      oldConfig: await fs.stat(ProjectRuntimePaths.projectConfigRoot(original.path)).then(() => "present"),
+      currentConfig: await fs.stat(ProjectRuntimePaths.projectConfigRoot(relocated.path)).then(() => "present"),
     }).toEqual({
       result: {
         ok: true,
@@ -1439,8 +1950,10 @@ describe("Project directory integrity", () => {
         deletedTaskCount: 0,
         residue: [],
       },
-      oldRoot: "present",
-      currentRoot: "missing",
+      oldRuntime: "present",
+      currentRuntime: "missing",
+      oldConfig: "present",
+      currentConfig: "present",
     })
   }, 90_000)
 
@@ -1691,37 +2204,40 @@ describe("Project directory integrity", () => {
   test("recovers a retained Project root from the durable deletion cleanup manifest", async () => {
     await using project = await memoryProject()
     const registered = await Project.fromDirectory(project.path)
-    const source = ProjectRuntimePaths.projectConfigRoot(project.path)
-    await fs.mkdir(source, { recursive: true })
-    await fs.writeFile(path.join(source, "authority.txt"), "retained")
+    const sandbox = path.join(project.path, "recovery-sandbox")
+    await fs.mkdir(sandbox, { recursive: true })
+    await Project.addSandbox(registered.project.id, sandbox)
+    const sources = [project.path, sandbox].map((directory) => ProjectRuntimePaths.projectRuntimeRoot(directory))
+    for (const [index, source] of sources.entries()) {
+      await fs.mkdir(source, { recursive: true })
+      await fs.writeFile(path.join(source, "authority.txt"), `retained-${index}`)
+    }
     const plan = await createProjectDeletionCleanupPlan({
       projectID: registered.project.id,
       directory: project.path,
-      sources: [source],
     })
-    await fs.rename(source, plan.manifest.targets[0]!.quarantine)
+    for (const target of plan.manifest.targets) await fs.rename(target.source, target.quarantine)
     await Promise.all(Array.from({ length: 8 }, () => recoverProjectDeletionCleanup()))
 
     expect({
-      source: await fs.readFile(path.join(source, "authority.txt"), "utf8"),
+      sources: await Promise.all(sources.map((source) => fs.readFile(path.join(source, "authority.txt"), "utf8"))),
       manifest: await fs.stat(plan.manifestPath).then(
         () => "present" as const,
         (error: NodeJS.ErrnoException) => (error.code === "ENOENT" ? ("missing" as const) : Promise.reject(error)),
       ),
-    }).toEqual({ source: "retained", manifest: "missing" })
+    }).toEqual({ sources: ["retained-0", "retained-1"], manifest: "missing" })
   }, 90_000)
 
   test("preserves a live backend's in-flight Project deletion during startup recovery", async () => {
     await using project = await memoryProject()
     const registered = await Project.fromDirectory(project.path)
-    const source = ProjectRuntimePaths.projectConfigRoot(project.path)
+    const source = ProjectRuntimePaths.projectRuntimeRoot(project.path)
     await fs.mkdir(source, { recursive: true })
     await fs.writeFile(path.join(source, "authority.txt"), "live-deletion")
     const admission = closeProjectDeletionRegistryAdmission(registered.project.id)
     const plan = await createProjectDeletionCleanupPlan({
       projectID: registered.project.id,
       directory: project.path,
-      sources: [source],
       operationID: admission.operationID,
     })
     const quarantine = plan.manifest.targets[0]!.quarantine
@@ -1743,12 +2259,11 @@ describe("Project directory integrity", () => {
   test("cleans a committed Project quarantine from the durable deletion cleanup manifest", async () => {
     await using project = await memoryProject()
     const registered = await Project.fromDirectory(project.path)
-    const source = ProjectRuntimePaths.projectConfigRoot(project.path)
+    const source = ProjectRuntimePaths.projectRuntimeRoot(project.path)
     await fs.mkdir(source, { recursive: true })
     const plan = await createProjectDeletionCleanupPlan({
       projectID: registered.project.id,
       directory: project.path,
-      sources: [source],
     })
     const quarantine = plan.manifest.targets[0]!.quarantine
     await fs.rename(source, quarantine)
@@ -1771,6 +2286,51 @@ describe("Project directory integrity", () => {
       manifests: [],
       completed: [path.basename(plan.manifestPath)],
     })
+  }, 90_000)
+
+  test("preserves a replacement quarantine occurrence after committed deletion", async () => {
+    await using project = await memoryProject()
+    const registered = await Project.fromDirectory(project.path)
+    const source = ProjectRuntimePaths.projectRuntimeRoot(project.path)
+    await fs.mkdir(source, { recursive: true })
+    await fs.writeFile(path.join(source, "authority.txt"), "original")
+    const plan = await createProjectDeletionCleanupPlan({
+      projectID: registered.project.id,
+      directory: project.path,
+    })
+    const quarantine = plan.manifest.targets[0]!.quarantine
+    await fs.rename(source, quarantine)
+    Database.use((db) => db.delete(ProjectTable).where(eq(ProjectTable.id, registered.project.id)).run())
+    await fs.rm(quarantine, { recursive: true, force: true })
+    await fs.mkdir(quarantine, { recursive: true })
+    await fs.writeFile(path.join(quarantine, "authority.txt"), "replacement")
+
+    try {
+      const recovery = await recoverProjectDeletionCleanup(() => "dead_or_reused")
+      expect({
+        unreconciled: recovery.unreconciled.flatMap((item) =>
+          item instanceof AggregateError ? item.errors.map((error) => String(error)) : [String(item)],
+        ),
+        retained: recovery.retainedOperationIDs,
+        replacement: await fs.readFile(path.join(quarantine, "authority.txt"), "utf8"),
+        manifest: await fs.stat(plan.manifestPath).then(() => "present"),
+        admissions: Database.use((db) => db.select().from(ProjectDirectoryAdmissionTable).all().length),
+      }).toEqual({
+        unreconciled: [expect.stringContaining("quarantine occurrence changed")],
+        retained: [plan.manifest.operationID],
+        replacement: "replacement",
+        manifest: "present",
+        admissions: 1,
+      })
+    } finally {
+      Database.use((db) =>
+        db
+          .delete(ProjectDirectoryAdmissionTable)
+          .where(eq(ProjectDirectoryAdmissionTable.operation_id, plan.manifest.operationID))
+          .run(),
+      )
+      await fs.unlink(plan.manifestPath).catch(() => undefined)
+    }
   }, 90_000)
 
   test("Project credential cleanup and stale peer admission share one exact deletion boundary", async () => {
@@ -1839,12 +2399,11 @@ describe("Project directory integrity", () => {
   test("commits cleanup after the quarantined root parent is already absent", async () => {
     await using project = await memoryProject()
     const registered = await Project.fromDirectory(project.path)
-    const source = ProjectRuntimePaths.projectConfigRoot(project.path)
+    const source = ProjectRuntimePaths.projectRuntimeRoot(project.path)
     await fs.mkdir(source, { recursive: true })
     const plan = await createProjectDeletionCleanupPlan({
       projectID: registered.project.id,
       directory: project.path,
-      sources: [source],
     })
     await fs.rename(source, plan.manifest.targets[0]!.quarantine)
     await fs.rm(project.path, { recursive: true, force: true })
@@ -1871,15 +2430,14 @@ describe("Project directory integrity", () => {
     }).toEqual({ active: [], completed: [path.basename(plan.manifestPath)] })
   }, 90_000)
 
-  test("recovers a completed cleanup ledger after the canonical database identity changes", async () => {
+  test("preserves replacement residue in a completed cleanup ledger after database identity changes", async () => {
     await using project = await memoryProject()
     const registered = await Project.fromDirectory(project.path)
-    const source = ProjectRuntimePaths.projectConfigRoot(project.path)
+    const source = ProjectRuntimePaths.projectRuntimeRoot(project.path)
     await fs.mkdir(source, { recursive: true })
     const plan = await createProjectDeletionCleanupPlan({
       projectID: registered.project.id,
       directory: project.path,
-      sources: [source],
     })
     const quarantine = plan.manifest.targets[0]!.quarantine
     await fs.rename(source, quarantine)
@@ -1922,7 +2480,7 @@ describe("Project directory integrity", () => {
         .run(),
     )
 
-    await recoverProjectDeletionCleanup()
+    const replacementRecovery = await recoverProjectDeletionCleanup()
 
     expect({
       databaseInstanceID: Database.Identity(),
@@ -1933,11 +2491,15 @@ describe("Project directory integrity", () => {
         () => "present" as const,
         (error: NodeJS.ErrnoException) => (error.code === "ENOENT" ? ("missing" as const) : Promise.reject(error)),
       ),
+      recovery: replacementRecovery.unreconciled.flatMap((item) =>
+        item instanceof AggregateError ? item.errors.map((error) => String(error)) : [String(item)],
+      ),
       recreatedCredential: (await McpAuth.get(recreatedAuthKey))?.tokens?.accessToken,
     }).toEqual({
       databaseInstanceID: replacementDatabaseInstanceID,
       oldCompletedLedger: [path.basename(plan.manifestPath)],
-      quarantine: "missing",
+      quarantine: "present",
+      recovery: [expect.stringContaining("quarantine occurrence changed")],
       recreatedCredential: "recreated-completed-ledger-token",
     })
   }, 90_000)
@@ -1945,13 +2507,12 @@ describe("Project directory integrity", () => {
   test("does not restore an old quarantine into a recreated Project with the same deterministic ID", async () => {
     await using project = await memoryProject()
     const registered = await Project.fromDirectory(project.path)
-    const source = ProjectRuntimePaths.projectConfigRoot(project.path)
+    const source = ProjectRuntimePaths.projectRuntimeRoot(project.path)
     await fs.mkdir(source, { recursive: true })
     await fs.writeFile(path.join(source, "authority.txt"), "old-generation")
     const plan = await createProjectDeletionCleanupPlan({
       projectID: registered.project.id,
       directory: project.path,
-      sources: [source],
     })
     const quarantine = plan.manifest.targets[0]!.quarantine
     await fs.rename(source, quarantine)
@@ -2007,75 +2568,14 @@ describe("Project directory integrity", () => {
     })
   }, 90_000)
 
-  test("migrates active and completed v3 deletion facts before recovery", async () => {
+  test("serializes Project registration ahead of cleanup recovery and admits the exact retry", async () => {
     await using project = await memoryProject()
     const registered = await Project.fromDirectory(project.path)
-    const source = ProjectRuntimePaths.projectConfigRoot(project.path)
-    await fs.mkdir(source, { recursive: true })
-    const activePlan = await createProjectDeletionCleanupPlan({
-      projectID: registered.project.id,
-      directory: project.path,
-      sources: [source],
-    })
-    const quarantine = activePlan.manifest.targets[0]!.quarantine
-    await fs.rename(source, quarantine)
-    await fs.writeFile(
-      activePlan.manifestPath,
-      `${JSON.stringify({ ...activePlan.manifest, format: "opencorvus.project-deletion-cleanup.v3" }, null, 2)}\n`,
-    )
-    Database.use((db) => db.delete(ProjectTable).where(eq(ProjectTable.id, registered.project.id)).run())
-    const actualDurableWrite = Filesystem.writeDurableAtomic.bind(Filesystem)
-    let injectedAmbiguity = true
-    const durableWrite = spyOn(Filesystem, "writeDurableAtomic").mockImplementation(async (...args) => {
-      await actualDurableWrite(...args)
-      if (injectedAmbiguity && path.resolve(String(args[0])) === path.resolve(activePlan.manifestPath)) {
-        injectedAmbiguity = false
-        throw new Error("ambiguous v3 migration after durable rename")
-      }
-    })
-    try {
-      await recoverProjectDeletionCleanup()
-    } finally {
-      durableWrite.mockRestore()
-    }
-    const completedPath = path.join(
-      ProjectDeletionCleanupTestHooks.completedRoot(activePlan.manifest.databaseInstanceID),
-      path.basename(activePlan.manifestPath),
-    )
-    const migratedActive = JSON.parse(await fs.readFile(completedPath, "utf8")) as { format: string }
-    await fs.mkdir(quarantine, { recursive: true })
-    await fs.writeFile(
-      completedPath,
-      `${JSON.stringify({ ...activePlan.manifest, format: "opencorvus.project-deletion-cleanup.v3" }, null, 2)}\n`,
-    )
-    await recoverProjectDeletionCleanup()
-    const migratedCompleted = JSON.parse(await fs.readFile(completedPath, "utf8")) as { format: string }
-
-    expect({
-      activeFormat: migratedActive.format,
-      migrationPublication: injectedAmbiguity ? "not-observed" : "reconciled",
-      completedFormat: migratedCompleted.format,
-      completedResidue: await fs.stat(quarantine).then(
-        () => "present" as const,
-        (error: NodeJS.ErrnoException) => (error.code === "ENOENT" ? ("retired" as const) : Promise.reject(error)),
-      ),
-    }).toEqual({
-      activeFormat: "opencorvus.project-deletion-cleanup.v4",
-      migrationPublication: "reconciled",
-      completedFormat: "opencorvus.project-deletion-cleanup.v4",
-      completedResidue: "retired",
-    })
-  }, 90_000)
-
-  test("Project admission tolerates a concurrently completed cleanup manifest scan", async () => {
-    await using project = await memoryProject()
-    const registered = await Project.fromDirectory(project.path)
-    const source = ProjectRuntimePaths.projectConfigRoot(project.path)
+    const source = ProjectRuntimePaths.projectRuntimeRoot(project.path)
     await fs.mkdir(source, { recursive: true })
     const plan = await createProjectDeletionCleanupPlan({
       projectID: registered.project.id,
       directory: project.path,
-      sources: [source],
     })
     await fs.rename(source, plan.manifest.targets[0]!.quarantine)
     Database.use((db) => db.delete(ProjectTable).where(eq(ProjectTable.id, registered.project.id)).run())
@@ -2095,13 +2595,23 @@ describe("Project directory integrity", () => {
     try {
       const admission = Project.fromDirectory(project.path)
       await observed
-      await recoverProjectDeletionCleanup()
+      const blockedRecovery = await recoverProjectDeletionCleanup()
       releaseScan()
-      const recreated = await admission
+      const blockedAdmission = await admission.catch((cause) => cause)
+      const recovery = await recoverProjectDeletionCleanup()
+      const recreated = await Project.fromDirectory(project.path)
       expect({
+        blockedRecovery: blockedRecovery.unreconciled.map((item) => (item as Error).name),
+        retainedOperations: blockedRecovery.retainedOperationIDs,
+        blockedAdmission: blockedAdmission.name,
+        recovery: recovery.unreconciled,
         projectID: recreated.project.id,
         cleanup: await fs.readdir(ProjectDeletionCleanupTestHooks.root()),
       }).toEqual({
+        blockedRecovery: ["AggregateError"],
+        retainedOperations: [plan.manifest.operationID],
+        blockedAdmission: "ProjectDeletionCleanupAdmissionClosedError",
+        recovery: [],
         projectID: registered.project.id,
         cleanup: [],
       })
@@ -2114,12 +2624,11 @@ describe("Project directory integrity", () => {
   test("fails closed when a cleanup manifest belongs to another database instance", async () => {
     await using project = await memoryProject()
     const registered = await Project.fromDirectory(project.path)
-    const source = ProjectRuntimePaths.projectConfigRoot(project.path)
+    const source = ProjectRuntimePaths.projectRuntimeRoot(project.path)
     await fs.mkdir(source, { recursive: true })
     const plan = await createProjectDeletionCleanupPlan({
       projectID: registered.project.id,
       directory: project.path,
-      sources: [source],
     })
     await fs.rename(source, plan.manifest.targets[0]!.quarantine)
     const mismatched = { ...plan.manifest, databaseInstanceID: crypto.randomUUID() }
@@ -2145,17 +2654,22 @@ describe("Project directory integrity", () => {
   test("rejects a cleanup manifest whose target escapes the exact Project-owned root", async () => {
     await using project = await memoryProject()
     const registered = await Project.fromDirectory(project.path)
-    const source = ProjectRuntimePaths.projectConfigRoot(project.path)
+    const source = ProjectRuntimePaths.projectRuntimeRoot(project.path)
     await fs.mkdir(source, { recursive: true })
     const plan = await createProjectDeletionCleanupPlan({
       projectID: registered.project.id,
       directory: project.path,
-      sources: [source],
     })
     const escapedSource = path.join(path.dirname(project.path), "unowned-root")
     const escaped = {
       ...plan.manifest,
-      targets: [{ source: escapedSource, quarantine: `${escapedSource}.deleting-${plan.manifest.operationID}-0` }],
+      targets: [
+        {
+          ...plan.manifest.targets[0]!,
+          source: escapedSource,
+          quarantine: `${escapedSource}.deleting-${plan.manifest.operationID}-0`,
+        },
+      ],
     }
     await fs.writeFile(plan.manifestPath, `${JSON.stringify(escaped, null, 2)}\n`)
     // The escaping manifest is refused and reported, never acted on, and the
@@ -2178,7 +2692,7 @@ describe("Project directory integrity", () => {
   test("returns a committed cleanup receipt and converges its durable residue on recovery", async () => {
     await using project = await memoryProject()
     const registered = await Project.fromDirectory(project.path)
-    const source = ProjectRuntimePaths.projectConfigRoot(project.path)
+    const source = ProjectRuntimePaths.projectRuntimeRoot(project.path)
     await fs.mkdir(source, { recursive: true })
     await fs.writeFile(path.join(source, "authority.txt"), "committed")
     const actualRm = fs.rm.bind(fs)
@@ -2226,7 +2740,7 @@ describe("Project directory integrity", () => {
   test("rolls back staged Project state when the database commit fails", async () => {
     await using project = await memoryProject()
     const registered = await Project.fromDirectory(project.path)
-    const source = ProjectRuntimePaths.projectConfigRoot(project.path)
+    const source = ProjectRuntimePaths.projectRuntimeRoot(project.path)
     await fs.mkdir(source, { recursive: true })
     await fs.writeFile(path.join(source, "authority.txt"), "retained")
     const actualRename = Filesystem.renameDurableNoReplace

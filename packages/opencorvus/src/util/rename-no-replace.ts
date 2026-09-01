@@ -5,10 +5,25 @@ function nativeError(message: string, code: string, errno?: number): NodeJS.Errn
 function posixCode(errno: number): string {
   if (errno === 2) return "ENOENT"
   if (errno === 13) return "EACCES"
+  if (errno === 16) return "EBUSY"
   if (errno === 17) return "EEXIST"
   if (errno === 18) return "EXDEV"
+  if (errno === 20) return "ENOTDIR"
+  if (errno === 22) return "EINVAL"
   if (errno === 39 || errno === 66) return "ENOTEMPTY"
   return `ERRNO_${errno}`
+}
+
+function windowsCode(error: number): string {
+  if (error === 2 || error === 3) return "ENOENT"
+  if (error === 5) return "EACCES"
+  if (error === 17) return "EXDEV"
+  if (error === 32 || error === 33) return "EBUSY"
+  if (error === 80 || error === 183) return "EEXIST"
+  if (error === 87) return "EINVAL"
+  if (error === 145) return "ENOTEMPTY"
+  if (error === 267) return "ENOTDIR"
+  return `WIN32_${error}`
 }
 
 function cString(value: string): Buffer {
@@ -87,8 +102,7 @@ async function renameWindows(source: string, target: string, writeThrough: boole
   try {
     if (library.symbols.MoveFileExW(wideString(source), wideString(target), writeThrough ? 0x00000008 : 0)) return
     const error = library.symbols.GetLastError()
-    const code = error === 80 || error === 183 ? "EEXIST" : `WIN32_${error}`
-    throw nativeError(`MoveFileExW failed for ${source} -> ${target}`, code, error)
+    throw nativeError(`MoveFileExW failed for ${source} -> ${target}`, windowsCode(error), error)
   } finally {
     library.close()
   }
@@ -104,7 +118,7 @@ async function replaceWindows(source: string, target: string): Promise<void> {
     // MOVEFILE_REPLACE_EXISTING | MOVEFILE_WRITE_THROUGH
     if (library.symbols.MoveFileExW(wideString(source), wideString(target), 0x00000001 | 0x00000008)) return
     const error = library.symbols.GetLastError()
-    throw nativeError(`MoveFileExW replace failed for ${source} -> ${target}`, `WIN32_${error}`, error)
+    throw nativeError(`MoveFileExW replace failed for ${source} -> ${target}`, windowsCode(error), error)
   } finally {
     library.close()
   }

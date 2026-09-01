@@ -660,14 +660,24 @@ terminal poll 的 I/O rejection 被计数并在 waiter 边界转换为固定 dur
 canonical terminal。若 durable state 的 scoped Project row 已删除，broker 以 exact occurrence CAS 结算：pending 发布 `revoked`，
 finishing 发布 `exchange_uncertain`，并直接投影该 terminal；listener、本地 waiter 与 peer waiter 不等待 timeout。credential retirement 保留 terminal-only tombstone 时为每个 key
 预生成新的 revision；atomic rename 的 ambiguous catch 只有重读到 exact absent/tombstone footprint 才能视为提交，旧 revision 不能
-在 pre-rename failure 后复活 credential。Project 删除在 SQLite commit 前耐久发布唯一 v4 active cleanup manifest；commit 后同一个
-cleanup owner 才在一个 auth-store lock/read/write 中选择并退役该 `projectID` 下全部 MCP auth keys，再清理 quarantine；key enumeration
+在 pre-rename failure 后复活 credential。Project 删除在 SQLite commit 前耐久发布唯一 v5 active cleanup manifest；该 manifest 冻结
+Project generation、ordinary/anonymous kind、完整 `[worktree,...sandboxes]` logical/physical directory identity 与有序 target。ordinary
+Project 的每个 target 仅为该 registered directory 下的 `.opencorvus/.r` runtime root，用户维护的 `.opencorvus` configuration 保留；
+只有 anonymous carrying Project 删除其唯一专属 root。重复或物理 alias/overlap 在首次 quarantine 前失败，multi-target rollback 逆序恢复。
+每个 target 同时冻结 device/inode/birth occurrence，并在第一次 namespace mutation 前取得同一 operation 的 durable directory admission；
+ordinary 与 anonymous target 都必须在 rename 后、rollback 后和 startup recovery 时重读 exact source/quarantine occurrence。rename 已生效但
+directory metadata sync 失败时只按该重读事实收敛，不能把 `ENOENT` 当作独立成功证据。rollback 未完全恢复时，active manifest、全部
+directory admission 与 Project maintenance fence 一起保留；startup 先验证完整 worktree/sandboxes snapshot，再恢复并统一释放。
+多 target admission 在首次 namespace effect 前是 all-or-released：后续 target 的临时冲突会结算所有已取得 token，并退役尚未使用的
+manifest/fence，使同一进程可直接重试。commit 后的递归清理在删除每个 quarantine 前验证其仍为 manifest 冻结的 exact occurrence；
+同路径 replacement 保留，active manifest 与 admission 继续作为显式恢复边界。
+commit 后同一个 cleanup owner 才在一个 auth-store lock/read/write 中选择并退役该 `projectID` 下全部 MCP auth keys，再清理 quarantine；key enumeration
 不在 lock 外形成 TOCTOU window。同 Project 的 token/client/static/staged material 一并清除，
 其他 Project 的同名 key 保持完整。退役 publication 对 exact pre-rename failure 有界重试；连续失败返回
 `committed_with_residue` 并保留 active manifest，startup recovery 重试同一清理。active residue 关闭相同确定性 Project ID 的再准入，
 避免新 generation 与旧 credential 共用 key；completed ledger 只重试旧 quarantine，不再退役 MCP credential，因而不能删除重建
-Project 的新 token/client。已发布 v3 manifest 通过 fsync 完整新字节和 atomic write-through replace 一次性迁移为 v4；ambiguous
-replace 重读 exact current fact，迁移后只有 v4 是当前事实。退役为仍活跃的 callback 保留上述 terminal tombstone。
+Project 的新 token/client。v5 是唯一当前 manifest 事实；旧格式不会作为 compatibility reader、第二套 target authority 或 recovery
+fallback 继续执行。退役为仍活跃的 callback 保留上述 terminal tombstone。
 Instance 初始化在公共 `Project.Info` 之外捕获不可复用的 SQLite Project-row generation。所有 project-scoped OAuth lease admission、
 static credential stage/promote/rollback、reconcile invalidate/remove 与 stale-credential cleanup 都在 auth-store mutation 内复核 exact
 Project ID、worktree 和该 generation；删除前先获 auth lock 的 writer 会被后续 prefix cleanup 包含，删除后或 same-ID 重建后的旧 Instance

@@ -19,6 +19,7 @@ export interface ProjectDeletionRegistryAdmission extends Disposable {
   readonly projectID: string
   readonly operationID: string
   readonly snapshot: Snapshot
+  preserveFence(): void
 }
 
 const admissions = new Map<string, { token: symbol }>()
@@ -97,6 +98,7 @@ export type ProjectMaintenanceFenceRecoveryResult = {
 
 export function recoverProjectMaintenanceFences(
   observe: RuntimeProcessOccurrenceObserver,
+  options: { preserveOperationIDs?: ReadonlySet<string> } = {},
 ): ProjectMaintenanceFenceRecoveryResult {
   const unreconciled: unknown[] = []
   const released = Database.immediateTransaction((db) => {
@@ -104,6 +106,7 @@ export function recoverProjectMaintenanceFences(
     let count = 0
     for (const fence of fences) {
       try {
+        if (fence.kind === "delete" && options.preserveOperationIDs?.has(fence.operation_id)) continue
         // Promotion fences are released only by the promotion journal owner
         // after its terminal decision. Generic dead-process cleanup must not
         // expose a Project whose convergence is still pending.
@@ -162,12 +165,17 @@ export function closeProjectDeletionRegistryAdmission(projectID: string): Projec
       return row
     })
     admissions.set(projectID, { token })
+    let preserveFence = false
     const authority: ProjectDeletionRegistryAdmission = {
       projectID,
       operationID,
       snapshot,
+      preserveFence() {
+        preserveFence = true
+      },
       [Symbol.dispose]() {
         if (admissions.get(projectID)?.token === token) admissions.delete(projectID)
+        if (preserveFence) return
         Database.use((db) =>
           db
             .delete(ProjectMaintenanceFenceTable)

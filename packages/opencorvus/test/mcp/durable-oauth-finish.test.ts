@@ -1456,7 +1456,7 @@ describe("MCP OAuth finish from durable facts", () => {
         rejectedRetirements: 3,
         projectRegistry: "committed",
         beforeRecovery: "credential-awaiting-durable-retirement",
-        blockedAdmission: "ProjectDeletionCleanupAdmissionClosedError",
+        blockedAdmission: "ProjectDirectoryAdmissionClosedError",
         recovery: "settled",
         afterRecovery: "retired",
         recreatedProject: setup.project.id,

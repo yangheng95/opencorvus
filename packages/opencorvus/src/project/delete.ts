@@ -23,8 +23,16 @@ import { ProjectRuntimePaths } from "./runtime-paths"
 import {
   cleanupCommittedProjectDeletion,
   createProjectDeletionCleanupPlan,
+  acquireProjectDeletionDirectoryAdmissions,
+  assertProjectDeletionCleanupPlanCurrent,
+  assertProjectDeletionCleanupTargetRestored,
+  assertProjectDeletionRegisteredDirectoryAuthority,
+  projectDeletionCleanupTargetStaged,
+  ProjectDeletionDirectoryAdmissionRollbackError,
   removeProjectDeletionCleanupPlan,
+  settleProjectDeletionDirectoryAdmissions,
   type ProjectDeletionCleanupPlan,
+  type ProjectDeletionDirectoryAdmissions,
 } from "./deletion-cleanup"
 
 export const ProjectDeleteResult = z
@@ -52,11 +60,14 @@ export const ProjectDeletePendingError = NamedError.create(
   }),
 )
 
-function assertProjectConfigDeleteTarget(projectDir: string, target: string): string {
+function assertProjectRuntimeDeleteTarget(projectDir: string, target: string): string {
   const projectRoot = path.resolve(projectDir)
   const resolvedTarget = path.resolve(target)
   const relative = path.relative(projectRoot, resolvedTarget)
-  if (path.basename(resolvedTarget) !== ".opencorvus") {
+  if (
+    path.basename(resolvedTarget) !== ".r" ||
+    path.basename(path.dirname(resolvedTarget)) !== ".opencorvus"
+  ) {
     throw new Error(`Refusing to delete non-OpenCorvus project state directory: ${resolvedTarget}`)
   }
   if (!relative || relative.startsWith("..") || path.isAbsolute(relative)) {
@@ -69,7 +80,7 @@ type ProjectRootRemoval = {
   source: string
 }
 
-async function planProjectRootRemoval(target: string, label: string): Promise<ProjectRootRemoval | undefined> {
+async function planProjectRootRemoval(target: string, label: string): Promise<ProjectRootRemoval> {
   // Project deletion is idempotent across an interrupted previous attempt:
   // the database row can remain after the project-owned runtime directory was
   // already removed. Absence is an explicit deletion state, not an alternate
@@ -79,7 +90,7 @@ async function planProjectRootRemoval(target: string, label: string): Promise<Pr
     info = await fs.lstat(target)
   } catch (error) {
     const code = typeof error === "object" && error && "code" in error ? String(error.code) : ""
-    if (code === "ENOENT" || code === "ENOTDIR") return
+    if (code === "ENOENT" || code === "ENOTDIR") return { source: target }
     throw error
   }
   if (!info.isDirectory()) {
@@ -93,9 +104,16 @@ async function stageProjectRootRemoval(
 ): Promise<boolean> {
   try {
     await Filesystem.renameDurableNoReplace(plan.source, plan.quarantine)
-    return true
+    return projectDeletionCleanupTargetStaged(plan)
   } catch (error) {
     const code = typeof error === "object" && error && "code" in error ? String(error.code) : ""
+    let staged: boolean
+    try {
+      staged = await projectDeletionCleanupTargetStaged(plan)
+    } catch (settlementError) {
+      throw new AggregateError([error, settlementError], `Project deletion quarantine did not settle ${plan.source}`)
+    }
+    if (staged) return true
     if (code === "ENOENT" || code === "ENOTDIR") return false
     throw error
   }
@@ -106,21 +124,43 @@ async function rollbackProjectRootRemoval(
 ): Promise<void> {
   try {
     await Filesystem.renameDurableNoReplace(plan.quarantine, plan.source)
+    await assertProjectDeletionCleanupTargetRestored(plan)
   } catch (error) {
-    const code = typeof error === "object" && error && "code" in error ? String(error.code) : ""
-    if (code === "ENOENT" || code === "ENOTDIR") return
-    throw error
+    try {
+      await assertProjectDeletionCleanupTargetRestored(plan)
+    } catch (settlementError) {
+      throw new AggregateError([error, settlementError], `Project deletion rollback did not restore ${plan.source}`)
+    }
   }
 }
 
-async function projectRootRemovalPlans(projectDir: string): Promise<ProjectRootRemoval[]> {
+async function projectRootRemovalPlans(project: Project.Info): Promise<ProjectRootRemoval[]> {
+  const projectDir = path.resolve(project.worktree)
+  await assertProjectDeletionRegisteredDirectoryAuthority({
+    projectID: project.id,
+    directory: project.worktree,
+    sandboxes: project.sandboxes,
+  })
   if (ImplicitProject.isAnonymousDirectory(projectDir)) {
-    const anonymous = await planProjectRootRemoval(projectDir, "anonymous Project root")
-    return anonymous ? [anonymous] : []
+    if (project.sandboxes.length > 0) {
+      throw new Error(`Anonymous Project ${project.id} cannot own additional registered deletion roots`)
+    }
+    return [await planProjectRootRemoval(projectDir, "anonymous Project root")]
   }
-  const configRoot = assertProjectConfigDeleteTarget(projectDir, ProjectRuntimePaths.projectConfigRoot(projectDir))
-  const config = await planProjectRootRemoval(configRoot, "OpenCorvus project state")
-  return config ? [config] : []
+  const directories = [project.worktree, ...project.sandboxes].map((directory) => path.resolve(directory))
+  const roots = directories.map((directory) =>
+    assertProjectRuntimeDeleteTarget(directory, ProjectRuntimePaths.projectRuntimeRoot(directory)),
+  )
+  for (let index = 0; index < roots.length; index += 1) {
+    for (let peer = 0; peer < index; peer += 1) {
+      if (Filesystem.overlaps(roots[index]!, roots[peer]!)) {
+        throw new Error(
+          `Project ${project.id} registered deletion roots overlap: ${roots[peer]} and ${roots[index]}`,
+        )
+      }
+    }
+  }
+  return Promise.all(roots.map((root) => planProjectRootRemoval(root, "OpenCorvus project runtime state")))
 }
 
 function projectTaskIDs(projectID: string): string[] {
@@ -277,13 +317,14 @@ export async function deleteProject(
   })
   let taskIDs: string[] = []
   let cleanupPlan: ProjectDeletionCleanupPlan | undefined
+  let directoryAdmissions: ProjectDeletionDirectoryAdmissions | undefined
   const stagedPlans: ProjectDeletionCleanupPlan["manifest"]["targets"] = []
   let stage: "filesystem-preflight" | "runtime-settlement" | "filesystem-quarantine" | "database-commit" =
     "filesystem-preflight"
   let committed = false
 
   try {
-    await projectRootRemovalPlans(directory)
+    await projectRootRemovalPlans(currentProject)
     taskIDs = projectTaskIDs(projectID)
     stage = "runtime-settlement"
     for (const taskID of taskIDs) {
@@ -297,7 +338,7 @@ export async function deleteProject(
     await cancelRemainingProjectSessionPrompts(projectID, cancellationOrigin, admission)
     await Instance.disposeProjectEntries(projectID, CANCEL_INGRESS_SETTLE_INACTIVITY_MS)
     stage = "filesystem-quarantine"
-    const rootPlans = await projectRootRemovalPlans(directory)
+    await projectRootRemovalPlans(currentProject)
     // The durable cleanup owner exists even when the Project has no filesystem
     // root: it also owns post-commit retirement of every project-scoped MCP
     // credential. A committed deletion can therefore report residue and let
@@ -305,11 +346,13 @@ export async function deleteProject(
     cleanupPlan = await createProjectDeletionCleanupPlan({
       projectID,
       directory,
-      sources: rootPlans.map((plan) => plan.source),
       operationID: registryAdmission.operationID,
     })
+    directoryAdmissions = await acquireProjectDeletionDirectoryAdmissions(cleanupPlan)
+    await assertProjectDeletionCleanupPlanCurrent(cleanupPlan)
     for (const plan of cleanupPlan.manifest.targets) {
-      if (await stageProjectRootRemoval(plan)) stagedPlans.push(plan)
+      stagedPlans.push(plan)
+      if (!(await stageProjectRootRemoval(plan))) stagedPlans.pop()
     }
     const finalTaskIDs = projectTaskIDs(projectID)
     if (finalTaskIDs.length !== taskIDs.length || finalTaskIDs.some((taskID) => !taskIDs.includes(taskID))) {
@@ -323,19 +366,46 @@ export async function deleteProject(
     const rollbacks = await Promise.allSettled(stagedPlans.toReversed().map((plan) => rollbackProjectRootRemoval(plan)))
     const rollbackErrors = rollbacks.flatMap((result) => (result.status === "rejected" ? [result.reason] : []))
     if (rollbackErrors.length > 0) {
+      registryAdmission.preserveFence()
       throw new AggregateError(
         [error, ...rollbackErrors],
         `Project ${projectID} deletion failed and root rollback was incomplete`,
       )
     }
     if (cleanupPlan) {
-      try {
-        await removeProjectDeletionCleanupPlan(cleanupPlan)
-      } catch (cleanupError) {
-        throw new AggregateError(
-          [error, cleanupError],
-          `Project ${projectID} deletion failed and its rolled-back cleanup manifest could not be removed`,
-        )
+      if (!directoryAdmissions) {
+        if (error instanceof ProjectDeletionDirectoryAdmissionRollbackError) {
+          registryAdmission.preserveFence()
+          throw new ProjectDeletePendingError(
+            {
+              projectID,
+              directory,
+              stage,
+              message: `Project ${projectID} deletion is pending at ${stage}; retry after restoring filesystem access or resolving runtime settlement`,
+            },
+            { cause: error },
+          )
+        }
+        try {
+          await removeProjectDeletionCleanupPlan(cleanupPlan)
+        } catch (cleanupError) {
+          registryAdmission.preserveFence()
+          throw new AggregateError(
+            [error, cleanupError],
+            `Project ${projectID} deletion admission failed and its unused cleanup manifest could not be removed`,
+          )
+        }
+      } else {
+        try {
+          settleProjectDeletionDirectoryAdmissions(directoryAdmissions)
+          await removeProjectDeletionCleanupPlan(cleanupPlan)
+        } catch (cleanupError) {
+          registryAdmission.preserveFence()
+          throw new AggregateError(
+            [error, cleanupError],
+            `Project ${projectID} deletion failed and its rolled-back cleanup manifest could not be removed`,
+          )
+        }
       }
     }
     throw new ProjectDeletePendingError(
@@ -349,7 +419,9 @@ export async function deleteProject(
     )
   }
 
-  const residue = cleanupPlan ? await cleanupCommittedProjectDeletion(cleanupPlan) : []
+  const residue = cleanupPlan
+    ? await cleanupCommittedProjectDeletion(cleanupPlan, { directoryAdmissions })
+    : []
 
   return ProjectDeleteResult.parse({
     ok: true,

@@ -92,7 +92,9 @@ export async function prepareServerRuntimeForListener(input: {
     reportUnreconciledFailures("session deletion cleanup", sessionDeletionRecovery.unreconciled)
     const deletionRecovery = await recoverProjectDeletionCleanup(observeProcessOccurrence)
     reportUnreconciledFailures("project deletion cleanup", deletionRecovery.unreconciled)
-    const fenceRecovery = recoverProjectMaintenanceFences(observeProcessOccurrence)
+    const fenceRecovery = recoverProjectMaintenanceFences(observeProcessOccurrence, {
+      preserveOperationIDs: new Set(deletionRecovery.retainedOperationIDs),
+    })
     reportUnreconciledFailures("project maintenance fence", fenceRecovery.unreconciled)
     Server.initializeGlobalAutomation()
     return { occurrence }
