@@ -11,7 +11,7 @@ import { EOL } from "os"
 import path from "path"
 import * as prompts from "@clack/prompts"
 import { which } from "@/util/which"
-import { EngineService } from "@/task-api"
+import { EngineService, type SessionDeleteResult } from "@/task-api"
 import { randomUUID } from "node:crypto"
 import { assertPublicSessionOperationAuthority } from "@/mission/public-session-authority"
 
@@ -145,18 +145,27 @@ export const SessionDeleteCommand = cmd({
       const suffix = targets.length === 1 ? "" : "s"
       const spinner = prompts.spinner()
       spinner.start(`Deleting ${targets.length} session${suffix}...`)
+      const results: SessionDeleteResult[] = []
       for (const target of targets) {
-        await EngineService.deleteSession(target.id, {
-          cancellationOrigin: {
-            actor: "user",
-            source: "session.delete",
-            surface: "api",
-            requestID: randomUUID(),
-            reason: "session deleted from the command-line interface",
-          },
-        })
+        results.push(
+          await EngineService.deleteSession(target.id, {
+            cancellationOrigin: {
+              actor: "user",
+              source: "session.delete",
+              surface: "api",
+              requestID: randomUUID(),
+              reason: "session deleted from the command-line interface",
+            },
+          }),
+        )
       }
-      spinner.stop(`Deleted ${targets.length} session${suffix}`)
+      const retained = results.filter((result) => result.sessionHistoryRetained).length
+      const authorizationAudit = results.filter((result) => result.authorizationAuditRetained).length
+      const residue = results.filter((result) => result.status === "physically_deleted_with_residue").length
+      const physical = results.length - retained - residue
+      spinner.stop(
+        `Settled ${targets.length} session${suffix}: ${retained} with Session history retained, ${physical} physically deleted, ${residue} with runtime cleanup pending; authorization audit retained for ${authorizationAudit}`,
+      )
     })
   },
 })

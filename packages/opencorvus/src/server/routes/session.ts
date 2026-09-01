@@ -35,7 +35,7 @@ import { Message } from "../../session/message"
 import { MessageStore } from "../../session/message-store"
 import { Todo } from "../../session/todo"
 import { TodoStore } from "../../session/todo-store"
-import { EngineService } from "@/task-api"
+import { EngineService, SessionDeleteResult } from "@/task-api"
 import { Snapshot } from "@/snapshot"
 import { Log } from "../../util/log"
 import { AuthReadUnavailableResponse, badRequestBody, errors, namedErrorResponse } from "../error"
@@ -223,20 +223,23 @@ const PublicSessionPromptInput = SessionPrompt.PromptInput.omit({
   byteMaterializationProjectID: true,
 }).extend({
   messageID: Identifier.schema("message").meta({
-    description: "Caller-minted stable identity of the input Message; retries with the same identity converge on the first attempt",
+    description:
+      "Caller-minted stable identity of the input Message; retries with the same identity converge on the first attempt",
   }),
 })
 type SessionPromptRouteBody = z.infer<typeof PublicSessionPromptInput>
 
 const PublicSessionCommandInput = SessionPrompt.CommandInput.omit({ sessionID: true, extra: true }).extend({
   messageID: Identifier.schema("message").meta({
-    description: "Caller-minted stable identity of the input Message; retries with the same identity converge on the first attempt",
+    description:
+      "Caller-minted stable identity of the input Message; retries with the same identity converge on the first attempt",
   }),
 })
 
 const PublicSessionShellInput = SessionPrompt.ShellInput.omit({ sessionID: true, extra: true }).extend({
   messageID: Identifier.schema("message").meta({
-    description: "Caller-minted stable identity of the input Message; a retry with the same identity returns the durable occurrence instead of running the command again",
+    description:
+      "Caller-minted stable identity of the input Message; a retry with the same identity returns the durable occurrence instead of running the command again",
   }),
 })
 
@@ -1416,22 +1419,25 @@ export const SessionRoutes = lazy(() =>
       "/:sessionID",
       describeRoute({
         summary: "Delete session",
-        description: "Delete a session and permanently remove all associated data, including messages and history.",
+        description:
+          "Retire a Task-, Mission-, Panel- or Global-Chat-owned session as an immutable audit tombstone. " +
+          "A standalone session without durable domain ownership is physically deleted with its conversation runtime data.",
         operationId: "session.delete",
         responses: {
           200: {
-            description: "Successfully deleted session",
-            content: { "application/json": { schema: resolver(z.boolean()) } },
+            description: "Session deletion disposition",
+            content: { "application/json": { schema: resolver(SessionDeleteResult) } },
           },
           ...errors(400, 404),
           409: namedErrorResponse(
             "Session execution has not settled or still owns a Task",
             "MissionSessionAuthorityError",
+            "SessionDeletionInProgressError",
             "TaskCancellationIncompleteError",
             "TaskBoundSessionDeletionError",
           ),
           500: namedErrorResponse(
-            "Session deletion failed or committed with Task cleanup diagnostics",
+            "Session deletion failed or committed with cleanup diagnostics",
             "TaskArtifactDeletionCommittedError",
             "UnknownError",
           ),
@@ -1440,7 +1446,7 @@ export const SessionRoutes = lazy(() =>
       validator(
         "param",
         z.object({
-          sessionID: Session.remove.schema,
+          sessionID: Identifier.schema("session"),
         }),
       ),
       validator(
@@ -1452,9 +1458,14 @@ export const SessionRoutes = lazy(() =>
       async (c) => {
         const sessionID = c.req.valid("param").sessionID
         const projectID = PersistedProjectContext.currentProject().id
+        const replay = await EngineService.replaySessionDeletion(sessionID, {
+          projectID,
+          authority: { surface: "public_session" },
+        })
+        if (replay) return c.json(replay)
         const session = await Session.getInProject({ sessionID, projectID })
         assertPublicSessionOperationAuthority(session, "session.delete")
-        await EngineService.deleteSession(sessionID, {
+        const result = await EngineService.deleteSession(sessionID, {
           deleteTasks: c.req.valid("query").deleteTasks === true,
           projectID,
           cancellationOrigin: {
@@ -1466,7 +1477,7 @@ export const SessionRoutes = lazy(() =>
             sessionID,
           },
         })
-        return c.json(true)
+        return c.json(result)
       },
     )
     .patch(

@@ -97,15 +97,13 @@ export function createRequirementsStageDispatcher(dependencies: RequirementsStag
             finalization: result.finalization,
             now,
           })
-          Database.effect(() =>
-            EngineProtocol.emit(
-              EngineEvent.TaskUpdated,
-              {
-                taskID: dependencies.taskID,
-                summary: `Projected agent "${dispatch.agentID}" persisted requirements via the requirements adapter`,
-              },
-              { source: "orchestrator.requirements" },
-            ),
+          EngineProtocol.emitInTransaction(
+            EngineEvent.TaskUpdated,
+            {
+              taskID: dependencies.taskID,
+              summary: `Projected agent "${dispatch.agentID}" persisted requirements via the requirements adapter`,
+            },
+            { source: "orchestrator.requirements" },
           )
           return persisted
         })

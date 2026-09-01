@@ -33,6 +33,8 @@ import { SessionRuntimeContractStore } from "../runtime-contract"
 import { SessionPromptState } from "./state"
 import { SessionPromptOwner } from "./owner"
 import { resolveSessionExecutionAuthority } from "@/engine/task-session-lineage"
+import { Database } from "@/storage/db"
+import { assertSessionDeletionAdmissionInTransaction } from "../deletion-cleanup"
 
 const log = Log.create({ service: "session.prompt" })
 
@@ -258,6 +260,7 @@ export function preparedUserMessageFromPreflight(input: {
 }
 
 export async function prepareUserMessage(input: PromptInput): Promise<PreparedUserMessage> {
+  Database.immediateTransaction((db) => assertSessionDeletionAdmissionInTransaction(db, input.sessionID))
   const config = await EffectiveConfig.effective({ sessionID: input.sessionID })
   const session = await Session.get(input.sessionID)
   const identity = await resolveSessionMessageIdentity({
@@ -767,25 +770,24 @@ export async function persistMaterializedUserMessage(
     parts,
     controls: persistence.controls?.(info),
   }
+  const preflight = () => {
+    persistence.preflightBundle?.(info, parts)
+  }
   const persisted = persistence.commitBundle
     ? await Session.persistMessageWithCommit(
         bundle,
         () => persistence.commitBundle!(info, parts),
         persistence.beforeVisibilityEffects ? () => persistence.beforeVisibilityEffects!(info, parts) : undefined,
-        persistence.preflightBundle ? () => persistence.preflightBundle!(info, parts) : undefined,
+        preflight,
       )
     : persistence.beforeVisibilityEffects
       ? await Session.persistMessageWithCommit(
           bundle,
           () => undefined,
           () => persistence.beforeVisibilityEffects!(info, parts),
-          persistence.preflightBundle ? () => persistence.preflightBundle!(info, parts) : undefined,
+          preflight,
         )
-      : persistence.preflightBundle
-        ? await Session.persistMessageWithCommit(bundle, () => undefined, undefined, () =>
-            persistence.preflightBundle!(info, parts),
-          )
-        : await Session.persistMessage(bundle)
+      : await Session.persistMessageWithCommit(bundle, () => undefined, undefined, preflight)
   return persistedUserMessageReceipt(materialized, persisted)
 }
 
@@ -838,11 +840,14 @@ export function persistMaterializedUserMessageInTransaction(
     parts,
     controls: persistence.controls?.(info),
   }
+  const preflight = () => {
+    persistence.preflightBundle?.(info, parts)
+  }
   const persisted = Session.persistMessageWithCommitInTransaction(
     bundle,
     () => persistence.commitBundle(info, parts),
     persistence.beforeVisibilityEffects ? () => persistence.beforeVisibilityEffects!(info, parts) : undefined,
-    persistence.preflightBundle ? () => persistence.preflightBundle!(info, parts) : undefined,
+    preflight,
   )
   return {
     complete: async () => persistedUserMessageReceipt(materialized, await persisted.complete()),

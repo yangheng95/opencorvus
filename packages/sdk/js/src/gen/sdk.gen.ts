@@ -1359,7 +1359,7 @@ export class Session extends HeyApiClient {
   /**
    * Delete right sidebar Chat session
    *
-   * Delete a project-bound right sidebar Chat session and its canonical history.
+   * Retire a project-bound right sidebar Chat session. Domain-owned sessions retain immutable audit history; standalone sessions report their physical cleanup disposition.
    */
   public delete<ThrowOnError extends boolean = false>(
     parameters: {
@@ -1746,7 +1746,7 @@ export class Session2 extends HeyApiClient {
   /**
    * Delete right sidebar Work session
    *
-   * Delete a project-bound right sidebar Work session and its canonical history.
+   * Retire a project-bound right sidebar Work session. Domain-owned sessions retain immutable audit history; standalone sessions report their physical cleanup disposition.
    */
   public delete<ThrowOnError extends boolean = false>(
     parameters: {
@@ -9278,7 +9278,7 @@ export class Mission extends HeyApiClient {
   /**
    * Delete a Mission
    *
-   * Delete the Mission session and its conversation history.
+   * Retire the Mission and hide it from current readers while retaining its immutable Task, Session, Message and lifecycle audit history.
    */
   public delete<ThrowOnError extends boolean = false>(
     parameters: {
@@ -11723,7 +11723,7 @@ export class Session4 extends HeyApiClient {
   /**
    * Delete session
    *
-   * Delete a session and permanently remove all associated data, including messages and history.
+   * Retire a Task-, Mission-, Panel- or Global-Chat-owned session as an immutable audit tombstone. A standalone session without durable domain ownership is physically deleted with its conversation runtime data.
    */
   public delete<ThrowOnError extends boolean = false>(
     parameters: {

@@ -49,7 +49,6 @@ import { SessionControl } from "./control"
 import { CompactionHandoff } from "./compaction-handoff"
 import { SessionStatus as SessionStatusLifecycle } from "./status"
 import { SessionPromptState } from "./prompt/state"
-import { PermissionAuthority } from "@/permission/authority"
 import { PermissionExecutionResultTable, PermissionLedgerTable } from "@/permission/permission.sql"
 import {
   TaskPromptProfileImmutableError,
@@ -78,6 +77,7 @@ import {
 import { EngineTaskRootIngressTable, EngineTaskTable } from "@/engine/engine.sql"
 import { ProtocolEventTable } from "@/protocol/protocol.sql"
 import { normalizeToolResult } from "./tool-result-normalization"
+import { assertSessionDeletionAdmissionInTransaction } from "./deletion-cleanup"
 
 export namespace Session {
   const log = Log.create({ service: "session" })
@@ -169,6 +169,7 @@ export namespace Session {
     const rows = db.select().from(SessionTable).where(eq(SessionTable.project_id, input.projectID)).all()
     const updatedAt = Date.now()
     for (const row of rows) {
+      assertSessionDeletionAdmissionInTransaction(db, row.id)
       db.update(SessionTable)
         .set({
           directory: relocatedDirectory(row.directory, input.sourceDirectory, input.destinationDirectory),
@@ -225,6 +226,7 @@ export namespace Session {
       }
     }
     for (const before of input.snapshot) {
+      assertSessionDeletionAdmissionInTransaction(db, before.id)
       db.update(SessionTable)
         .set({ directory: before.directory, metadata: before.metadata, time_updated: before.timeUpdated })
         .where(and(eq(SessionTable.id, before.id), eq(SessionTable.project_id, input.projectID)))
@@ -439,7 +441,8 @@ export namespace Session {
 
   export const touch = fn(Identifier.schema("session"), async (sessionID) => {
     const now = Date.now()
-    Database.transaction((db) => {
+    Database.immediateTransaction((db) => {
+      assertSessionDeletionAdmissionInTransaction(db, sessionID)
       const row = db
         .update(SessionTable)
         .set({ time_updated: now })
@@ -506,6 +509,8 @@ export namespace Session {
    * transaction around their identity read. */
   export function persistPreparedNextInTransaction(db: Database.TxOrDb, result: Info): Info {
     Project.assertDurableAdmissionOpen(db, result.projectID)
+    assertSessionDeletionAdmissionInTransaction(db, result.id)
+    if (result.parentID) assertSessionDeletionAdmissionInTransaction(db, result.parentID)
     db.insert(SessionTable).values(toRow(result)).run()
     log.info("created", result)
     Bus.publishOwnedInTransaction(Event.Created, { info: result })
@@ -515,7 +520,7 @@ export namespace Session {
 
   /** Persist one exact prepared Session in its own transaction. */
   export function persistPreparedNext(result: Info): Info {
-    return Database.transaction((db) => persistPreparedNextInTransaction(db, result))
+    return Database.immediateTransaction((db) => persistPreparedNextInTransaction(db, result))
   }
 
   export async function createNext(input: Parameters<typeof prepareNext>[0]) {
@@ -572,7 +577,8 @@ export namespace Session {
       title: z.string(),
     }),
     async (input) => {
-      return Database.transaction((db) => {
+      return Database.immediateTransaction((db) => {
+        assertSessionDeletionAdmissionInTransaction(db, input.sessionID)
         const row = db
           .update(SessionTable)
           .set({ title: input.title, time_updated: Date.now() })
@@ -642,6 +648,7 @@ export namespace Session {
   })
 
   function mergeMetadataInTransaction(db: Database.TxOrDb, input: z.output<typeof MetadataPatchInput>): Info {
+    assertSessionDeletionAdmissionInTransaction(db, input.sessionID)
     const row = db.select().from(SessionTable).where(eq(SessionTable.id, input.sessionID)).get()
     if (!row) throw new NotFoundError({ message: `Session not found: ${input.sessionID}` })
     const current = (row.metadata ?? {}) as Record<string, unknown>
@@ -658,7 +665,7 @@ export namespace Session {
   }
 
   export const mergeMetadata = fn(MetadataPatchInput, async (input) =>
-    Database.transaction((db) => mergeMetadataInTransaction(db, input)),
+    Database.immediateTransaction((db) => mergeMetadataInTransaction(db, input)),
   )
 
   const MergeConfigOverlayInput = z.object({
@@ -738,6 +745,7 @@ export namespace Session {
         }
         return {
           commitInTransaction(db: Database.TxOrDb): Info {
+          assertSessionDeletionAdmissionInTransaction(db, input.sessionID)
           const row = db
             .select()
             .from(SessionTable)
@@ -795,7 +803,7 @@ export namespace Session {
       const lockKey = `${input.projectID}:${input.sessionID}`
       return withKeyedLock(configOverlayLocks, lockKey, async () => {
         const prepared = await prepareConfigOverlayMergeInProject(input)
-        return Database.transaction((db) => prepared.commitInTransaction(db))
+        return Database.immediateTransaction((db) => prepared.commitInTransaction(db))
       })
     },
   )
@@ -810,7 +818,8 @@ export namespace Session {
       time: z.number().nullable(),
     }),
     async (input) => {
-      return Database.transaction((db) => {
+      return Database.immediateTransaction((db) => {
+        assertSessionDeletionAdmissionInTransaction(db, input.sessionID)
         const row = db
           .update(SessionTable)
           .set({ time_archived: input.time, time_updated: Date.now() })
@@ -831,7 +840,8 @@ export namespace Session {
       time: z.number().nullable(),
     }),
     async (input) => {
-      return Database.transaction((db) => {
+      return Database.immediateTransaction((db) => {
+        assertSessionDeletionAdmissionInTransaction(db, input.sessionID)
         const row = db
           .update(SessionTable)
           .set({
@@ -855,7 +865,8 @@ export namespace Session {
       permission: CapabilityRules.Ruleset,
     }),
     async (input) => {
-      return Database.transaction((db) => {
+      return Database.immediateTransaction((db) => {
+        assertSessionDeletionAdmissionInTransaction(db, input.sessionID)
         const row = db
           .update(SessionTable)
           .set({ permission: input.permission, time_updated: Date.now() })
@@ -876,7 +887,8 @@ export namespace Session {
       summary: Info.shape.summary,
     }),
     async (input) => {
-      return Database.transaction((db) => {
+      return Database.immediateTransaction((db) => {
+        assertSessionDeletionAdmissionInTransaction(db, input.sessionID)
         const row = db
           .update(SessionTable)
           .set({
@@ -1275,44 +1287,6 @@ export namespace Session {
     },
   )
 
-  async function removeSessionTree(input: { sessionID: string; projectID: string; publishDeleted: boolean }) {
-    const { sessionID, projectID, publishDeleted } = input
-    const session = await get(sessionID)
-    if (session.projectID !== projectID) {
-      throw new Error(`Session ${sessionID} belongs to project ${session.projectID}, not ${projectID}`)
-    }
-    for (const child of await childrenInProject({ parentID: sessionID, projectID })) {
-      await removeSessionTree({ sessionID: child.id, projectID, publishDeleted })
-    }
-    await PermissionAuthority.cancelPendingForSession(sessionID, "Session deleted before the Tool invocation ran")
-    // CASCADE delete handles messages and parts automatically
-    Database.transaction((db) => {
-      const taskOwner = db.select({ id: EngineTaskTable.id }).from(EngineTaskTable)
-        .where(eq(EngineTaskTable.session_id, sessionID)).get()
-      if (taskOwner) throw new Error(`Task-root Session ${sessionID} is immutable while owned by Task ${taskOwner.id}`)
-      db.delete(SessionTable).where(eq(SessionTable.id, sessionID)).run()
-      Database.effect(() => Database.incrementalVacuum())
-      Database.effect(async () => {
-        try {
-          SessionStatusLifecycle.release(sessionID)
-        } finally {
-          await SessionPromptState.release(sessionID)
-        }
-      })
-      if (publishDeleted) {
-        Bus.publishOwnedInTransaction(Event.Deleted, { info: session })
-      }
-    })
-  }
-
-  export const remove = fn(Identifier.schema("session"), async (sessionID) => {
-    return removeSessionTree({ sessionID, projectID: Instance.project.id, publishDeleted: true })
-  })
-
-  export const removeInProject = fn(SessionProjectInput, async ({ sessionID, projectID }) => {
-    return removeSessionTree({ sessionID, projectID, publishDeleted: false })
-  })
-
   function messageWithPersistedCreated(msg: Message.Info, timeCreated: number): Message.VisibleInfo {
     const persisted = {
       ...msg,
@@ -1344,6 +1318,7 @@ export namespace Session {
   ): Message.VisibleInfo {
     let persisted: Message.VisibleInfo | undefined
     Database.immediateTransaction((db) => {
+      assertSessionDeletionAdmissionInTransaction(db, msg.sessionID)
       const existing = db
         .select({ time_created: MessageTable.time_created, data: MessageTable.data })
         .from(MessageTable)
@@ -1628,6 +1603,7 @@ export namespace Session {
       }
     }
     Database.immediateTransaction((db) => {
+      assertSessionDeletionAdmissionInTransaction(db, input.info.sessionID)
       preflightBundle?.()
       const existing = db
         .select({ id: MessageTable.id, timeCreated: MessageTable.time_created })
@@ -1799,7 +1775,8 @@ export namespace Session {
     }),
     async (input) => {
       // CASCADE delete handles parts automatically
-      Database.transaction((db) => {
+      Database.immediateTransaction((db) => {
+        assertSessionDeletionAdmissionInTransaction(db, input.sessionID)
         assertTaskRootMessageMutable(db, input.messageID)
         const current = db
           .select({ data: MessageTable.data, timeCreated: MessageTable.time_created })
@@ -1834,7 +1811,8 @@ export namespace Session {
       partID: Identifier.schema("part"),
     }),
     async (input) => {
-      Database.transaction((db) => {
+      Database.immediateTransaction((db) => {
+        assertSessionDeletionAdmissionInTransaction(db, input.sessionID)
         const message = db.select({ id: MessageTable.id }).from(MessageTable)
           .where(and(eq(MessageTable.id, input.messageID), eq(MessageTable.session_id, input.sessionID))).get()
         if (!message) throw new NotFoundError({ message: `Message not found: ${input.messageID}` })
@@ -1930,14 +1908,24 @@ export namespace Session {
 
   export const updatePartData = fn(UpdatePartDataInput, async (input) => {
     assertPartDataHasNoInlineBase64(input.partID, input.data)
-    const row = Database.use((db) => {
-      const toolRequest = db.select({ id: ToolPartRequestTable.id }).from(ToolPartRequestTable)
-        .where(eq(ToolPartRequestTable.id, input.partID)).get()
+    const row = Database.immediateTransaction((db) => {
+      const toolRequest = db
+        .select({ id: ToolPartRequestTable.id })
+        .from(ToolPartRequestTable)
+        .where(eq(ToolPartRequestTable.id, input.partID))
+        .get()
       if (toolRequest) {
         throw new Error(`Tool request Part ${input.partID} is immutable; append its exact outcome fact instead`)
       }
       const existing = db.select().from(PartTable).where(eq(PartTable.id, input.partID)).get()
       if (!existing) return undefined
+      const message = db
+        .select({ sessionID: MessageTable.session_id, data: MessageTable.data })
+        .from(MessageTable)
+        .where(eq(MessageTable.id, existing.message_id))
+        .get()
+      if (!message) return undefined
+      assertSessionDeletionAdmissionInTransaction(db, message.sessionID)
       if (jsonEquivalent(existing.data, input.data)) return { id: existing.id }
       assertAcceptedIngressMessageMutable(db, existing.message_id)
       const current = existing.data as { type?: string }
@@ -1945,9 +1933,7 @@ export namespace Session {
       if (!(["text", "reasoning"].includes(current.type ?? "") && current.type === next.type)) {
         throw new Error(`Non-streaming Part ${input.partID} is immutable`)
       }
-      const parent = db.select({ data: MessageTable.data }).from(MessageTable)
-        .where(eq(MessageTable.id, existing.message_id)).get()
-      const parentData = parent?.data as { role?: string; time?: { completed?: number } } | undefined
+      const parentData = message.data as { role?: string; time?: { completed?: number } } | undefined
       if (parentData?.role === "assistant" && parentData.time?.completed !== undefined) {
         throw new Error(`Part ${input.partID} is immutable after assistant completion`)
       }
@@ -1981,6 +1967,7 @@ export namespace Session {
     let projected: Message.ToolPart | undefined
     let orderKey = ""
     const write = (db: Database.TxOrDb) => {
+      assertSessionDeletionAdmissionInTransaction(db, input.sessionID)
       beforeWrite?.(db)
       const request = db.select().from(ToolPartRequestTable).where(eq(ToolPartRequestTable.id, input.partID)).get()
       if (!request || request.message_id !== input.messageID) {
@@ -2037,12 +2024,10 @@ export namespace Session {
       }
       return true
     }
-    const persisted = beforeWrite
-      ? Database.immediateTransaction((db) => {
-          publishAfterCommit = true
-          return write(db)
-        })
-      : Database.use(write)
+    const persisted = Database.immediateTransaction((db) => {
+      publishAfterCommit = true
+      return write(db)
+    })
     if (!projected) throw new HostProcessingFaultError(`Tool request Part ${input.partID} cannot be projected`)
     if (persisted && !publishAfterCommit) {
       await Bus.publish(Message.Event.PartUpdated, { orderKey, part: projected as Message.VisiblePart })
@@ -2086,6 +2071,7 @@ export namespace Session {
     const publishAfterCommit = options.publish && Database.hasActiveTransaction()
     let wrotePart = false
     const write = (db: Database.TxOrDb) => {
+      assertSessionDeletionAdmissionInTransaction(db, sessionID)
       const message = db
         .select({ id: MessageTable.id, timeCreated: MessageTable.time_created, data: MessageTable.data })
         .from(MessageTable)
@@ -2279,7 +2265,7 @@ export namespace Session {
       if (publishAfterCommit) publishPartUpdated()
     }
     if (transaction) write(transaction)
-    else Database.use(write)
+    else Database.immediateTransaction(write)
     return { outputPart, wrotePart }
   }
 
@@ -2372,6 +2358,8 @@ export namespace Session {
     async (input) => {
       Database.immediateTransaction((db) => {
         Project.assertDurableAdmissionOpen(db, input.info.projectID)
+        assertSessionDeletionAdmissionInTransaction(db, input.info.id)
+        if (input.info.parentID) assertSessionDeletionAdmissionInTransaction(db, input.info.parentID)
         const sessionRow = toRow(input.info)
         const { id: _sessionID, ...sessionSet } = sessionRow
         db.insert(SessionTable)

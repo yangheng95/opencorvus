@@ -133,6 +133,32 @@ describe("Task creation commits its root Session with the Task aggregate", () =>
         // lifecycle, ingress policy/ingress and durable publication outbox.
         expect(aggregateFootprint()).toEqual(before)
 
+        // The canonical task.created fact is part of the same aggregate
+        // transaction. Rejecting that insert must roll back the Task, root
+        // Session, bindings, lifecycle and ingress together; a post-commit
+        // best-effort publisher would leave the accepted aggregate behind.
+        Database.use((db) =>
+          db.run(
+            sql.raw(`
+            CREATE TEMP TRIGGER arc019_fail_task_created
+            BEFORE INSERT ON protocol_event
+            WHEN NEW.type = 'task.created'
+            BEGIN
+              SELECT RAISE(ABORT, 'injected task.created commit failure');
+            END
+          `),
+          ),
+        )
+        try {
+          await expect(EngineService.createTask(input, { actor: "user" })).rejects.toThrow(
+            "injected task.created commit failure",
+          )
+        } finally {
+          Database.use((db) => db.run(sql.raw("DROP TRIGGER arc019_fail_task_created")))
+        }
+        await Database.awaitEffectIdle(5_000)
+        expect(aggregateFootprint()).toEqual(before)
+
         // The same request retried creates the complete occurrence: Task and
         // root Session commit together and reference each other.
         const taskID = await EngineService.createTask(input, { actor: "user" })

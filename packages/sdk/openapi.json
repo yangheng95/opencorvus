@@ -16372,6 +16372,188 @@
         ],
         "type": "object"
       },
+      "SessionDeleteResult": {
+        "oneOf": [
+          {
+            "additionalProperties": false,
+            "properties": {
+              "authorizationAuditRetained": {
+                "const": true,
+                "type": "boolean"
+              },
+              "ok": {
+                "const": true,
+                "type": "boolean"
+              },
+              "residue": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "message": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "path": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "path",
+                    "message"
+                  ],
+                  "type": "object"
+                },
+                "maxItems": 0,
+                "type": "array"
+              },
+              "sessionHistoryRetained": {
+                "const": true,
+                "type": "boolean"
+              },
+              "sessionID": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "status": {
+                "const": "tombstoned",
+                "type": "string"
+              }
+            },
+            "required": [
+              "ok",
+              "status",
+              "sessionID",
+              "sessionHistoryRetained",
+              "authorizationAuditRetained",
+              "residue"
+            ],
+            "type": "object"
+          },
+          {
+            "additionalProperties": false,
+            "properties": {
+              "authorizationAuditRetained": {
+                "const": true,
+                "type": "boolean"
+              },
+              "cleanupOperationID": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "ok": {
+                "const": true,
+                "type": "boolean"
+              },
+              "residue": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "message": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "path": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "path",
+                    "message"
+                  ],
+                  "type": "object"
+                },
+                "maxItems": 0,
+                "type": "array"
+              },
+              "sessionHistoryRetained": {
+                "const": false,
+                "type": "boolean"
+              },
+              "sessionID": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "status": {
+                "const": "physically_deleted",
+                "type": "string"
+              }
+            },
+            "required": [
+              "ok",
+              "status",
+              "sessionID",
+              "sessionHistoryRetained",
+              "authorizationAuditRetained",
+              "cleanupOperationID",
+              "residue"
+            ],
+            "type": "object"
+          },
+          {
+            "additionalProperties": false,
+            "properties": {
+              "authorizationAuditRetained": {
+                "const": true,
+                "type": "boolean"
+              },
+              "cleanupOperationID": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "ok": {
+                "const": true,
+                "type": "boolean"
+              },
+              "residue": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "message": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "path": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "path",
+                    "message"
+                  ],
+                  "type": "object"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "sessionHistoryRetained": {
+                "const": false,
+                "type": "boolean"
+              },
+              "sessionID": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "status": {
+                "const": "physically_deleted_with_residue",
+                "type": "string"
+              }
+            },
+            "required": [
+              "ok",
+              "status",
+              "sessionID",
+              "sessionHistoryRetained",
+              "authorizationAuditRetained",
+              "cleanupOperationID",
+              "residue"
+            ],
+            "type": "object"
+          }
+        ]
+      },
       "SessionProtocolEvent": {
         "properties": {
           "emittedAt": {
@@ -21826,7 +22008,7 @@
     },
     "/coding/chat/session/{sessionID}": {
       "delete": {
-        "description": "Delete a project-bound right sidebar Chat session and its canonical history.",
+        "description": "Retire a project-bound right sidebar Chat session. Domain-owned sessions retain immutable audit history; standalone sessions report their physical cleanup disposition.",
         "operationId": "coding.chat.session.delete",
         "parameters": [
           {
@@ -21852,7 +22034,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "boolean"
+                  "$ref": "#/components/schemas/SessionDeleteResult"
                 }
               }
             },
@@ -21908,6 +22090,33 @@
               }
             },
             "description": "Not found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "data": {
+                      "additionalProperties": {},
+                      "propertyNames": {
+                        "type": "string"
+                      },
+                      "type": "object"
+                    },
+                    "name": {
+                      "const": "SessionDeletionInProgressError",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "data"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Session deletion is already in progress"
           }
         },
         "summary": "Delete right sidebar Chat session",
@@ -22833,7 +23042,7 @@
     },
     "/coding/work/session/{sessionID}": {
       "delete": {
-        "description": "Delete a project-bound right sidebar Work session and its canonical history.",
+        "description": "Retire a project-bound right sidebar Work session. Domain-owned sessions retain immutable audit history; standalone sessions report their physical cleanup disposition.",
         "operationId": "coding.work.session.delete",
         "parameters": [
           {
@@ -22859,7 +23068,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "boolean"
+                  "$ref": "#/components/schemas/SessionDeleteResult"
                 }
               }
             },
@@ -22915,6 +23124,33 @@
               }
             },
             "description": "Not found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "data": {
+                      "additionalProperties": {},
+                      "propertyNames": {
+                        "type": "string"
+                      },
+                      "type": "object"
+                    },
+                    "name": {
+                      "const": "SessionDeletionInProgressError",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "data"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Session deletion is already in progress"
           }
         },
         "summary": "Delete right sidebar Work session",
@@ -71971,7 +72207,7 @@
     },
     "/mission/{missionID}": {
       "delete": {
-        "description": "Delete the Mission session and its conversation history.",
+        "description": "Retire the Mission and hide it from current readers while retaining its immutable Task, Session, Message and lifecycle audit history.",
         "operationId": "mission.delete",
         "parameters": [
           {
@@ -80436,7 +80672,7 @@
     },
     "/session/{sessionID}": {
       "delete": {
-        "description": "Delete a session and permanently remove all associated data, including messages and history.",
+        "description": "Retire a Task-, Mission-, Panel- or Global-Chat-owned session as an immutable audit tombstone. A standalone session without durable domain ownership is physically deleted with its conversation runtime data.",
         "operationId": "session.delete",
         "parameters": [
           {
@@ -80475,11 +80711,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "boolean"
+                  "$ref": "#/components/schemas/SessionDeleteResult"
                 }
               }
             },
-            "description": "Successfully deleted session"
+            "description": "Session deletion disposition"
           },
           "400": {
             "content": {
@@ -80558,6 +80794,26 @@
                         },
                         "name": {
                           "const": "MissionSessionAuthorityError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "SessionDeletionInProgressError",
                           "type": "string"
                         }
                       },
@@ -80662,7 +80918,7 @@
                 }
               }
             },
-            "description": "Session deletion failed or committed with Task cleanup diagnostics"
+            "description": "Session deletion failed or committed with cleanup diagnostics"
           }
         },
         "summary": "Delete session",

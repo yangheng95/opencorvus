@@ -195,21 +195,15 @@ export namespace ProjectRuntimePaths {
   }
 
   export function rootSessionToolOutputDir(projectDir: string, sessionID: string): string {
-    return path.join(
-      projectRuntimeRoot(projectDir),
-      "conversations",
-      typedIdentitySegment("session", sessionID),
-      "tool-output",
-    )
+    return path.join(rootSessionRuntimeRoot(projectDir, sessionID), "tool-output")
   }
 
   export function rootSessionWorkArtifactRuntimeRoot(projectDir: string, sessionID: string): string {
-    return path.join(
-      projectRuntimeRoot(projectDir),
-      "conversations",
-      typedIdentitySegment("session", sessionID),
-      "work-artifacts",
-    )
+    return path.join(rootSessionRuntimeRoot(projectDir, sessionID), "work-artifacts")
+  }
+
+  export function rootSessionRuntimeRoot(projectDir: string, sessionID: string): string {
+    return path.join(projectRuntimeRoot(projectDir), "conversations", typedIdentitySegment("session", sessionID))
   }
 
   /** Current runtime-layout file patterns owned by tool-output retention. */

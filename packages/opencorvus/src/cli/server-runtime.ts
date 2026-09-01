@@ -8,6 +8,7 @@ import {
 import { ProcessSupervisor } from "@/shell/process-supervisor"
 import { recoverOrphanedIsolatedCheckWorkspaces } from "@/project/isolated-check-workspace"
 import { recoverProjectDeletionCleanup } from "@/project/deletion-cleanup"
+import { recoverSessionDeletionCleanup } from "@/session/deletion-cleanup"
 import { recoverProjectMaintenanceFences } from "@/project/deletion-registry"
 import { ImplicitProject } from "@/project/implicit-project"
 import { Log } from "@/util/log"
@@ -87,6 +88,8 @@ export async function prepareServerRuntimeForListener(input: {
       observeProcessOccurrence,
     })
     reportUnreconciledArtifacts("isolated check-workspace", workspaceRecovery)
+    const sessionDeletionRecovery = await recoverSessionDeletionCleanup(observeProcessOccurrence)
+    reportUnreconciledFailures("session deletion cleanup", sessionDeletionRecovery.unreconciled)
     const deletionRecovery = await recoverProjectDeletionCleanup(observeProcessOccurrence)
     reportUnreconciledFailures("project deletion cleanup", deletionRecovery.unreconciled)
     const fenceRecovery = recoverProjectMaintenanceFences(observeProcessOccurrence)

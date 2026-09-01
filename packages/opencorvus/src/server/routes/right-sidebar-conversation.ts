@@ -5,7 +5,7 @@ import { Session } from "@/session"
 import { Instance } from "@/project/instance"
 import { Config } from "@/config/config"
 import { validateConfigModelReferences } from "@/config/model-reference-validation"
-import { EngineService } from "@/task-api"
+import { EngineService, SessionDeleteResult } from "@/task-api"
 import { NotFoundError } from "@/storage/db"
 import { awaitSessionPromptFinishedInScope, cancelSessionPromptInScope } from "@/engine/cancellation-scope"
 import { createExecutionCancellationOrigin } from "@/session/prompt/cancellation"
@@ -21,7 +21,7 @@ import {
   setRightSidebarConversationSelectedTask,
   type ConversationExperience,
 } from "@/chat/session"
-import { AuthReadUnavailableResponse, errors } from "../error"
+import { AuthReadUnavailableResponse, errors, namedErrorResponse } from "../error"
 
 const ConversationSessionQuery = z
   .object({
@@ -236,25 +236,33 @@ export function RightSidebarConversationRoutes(experience: ConversationExperienc
       "/session/:sessionID",
       describeRoute({
         summary: `Delete right sidebar ${label} session`,
-        description: `Delete a project-bound right sidebar ${label} session and its canonical history.`,
+        description:
+          `Retire a project-bound right sidebar ${label} session. ` +
+          "Domain-owned sessions retain immutable audit history; standalone sessions report their physical cleanup disposition.",
         operationId: `${operation}.session.delete`,
         responses: {
           200: {
             description: `Deleted ${label} session`,
             content: {
               "application/json": {
-                schema: resolver(z.boolean()),
+                schema: resolver(SessionDeleteResult),
               },
             },
           },
           ...errors(404),
+          409: namedErrorResponse("Session deletion is already in progress", "SessionDeletionInProgressError"),
         },
       }),
       validator("param", z.object({ sessionID: z.string() })),
       async (c) => {
         const sessionID = c.req.valid("param").sessionID
+        const replay = await EngineService.replaySessionDeletion(sessionID, {
+          projectID: Instance.project.id,
+          authority: { surface: "right_sidebar", experience },
+        })
+        if (replay) return c.json(replay)
         await assertRightSidebarConversationSession(sessionID, experience)
-        await EngineService.deleteSession(sessionID, {
+        const result = await EngineService.deleteSession(sessionID, {
           cancellationOrigin: {
             actor: "user",
             source: "session.delete",
@@ -263,7 +271,7 @@ export function RightSidebarConversationRoutes(experience: ConversationExperienc
             reason: `${experienceLabel(experience)} deleted`,
           },
         })
-        return c.json(true)
+        return c.json(result)
       },
     )
     .patch(

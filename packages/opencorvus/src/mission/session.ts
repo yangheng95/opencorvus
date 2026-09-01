@@ -1,9 +1,11 @@
 import { Database, NotFoundError, and, desc, eq, isNull, like, or, sql } from "../storage/db"
 import fs from "node:fs/promises"
+import path from "node:path"
 import { Instance } from "@/project/instance"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
 import { Project } from "@/project/project"
 import { Session } from "@/session"
+import { assertSessionDeletionAdmissionInTransaction } from "@/session/deletion-cleanup"
 import { MessageTable, SessionTable } from "@/session/session.sql"
 import { Filesystem } from "@/util/filesystem"
 import { MISSION_CONTROL_DEFAULT_TITLE } from "@/session/first-message-title"
@@ -167,9 +169,24 @@ export async function setMissionPendingPrompt(input: {
   })
 }
 
-async function ensureMissionRuntimeDirectory(input: { directory: string; missionID: string }) {
-  await fs.mkdir(ProjectRuntimePaths.missionRoot(input.directory, input.missionID), { recursive: true })
+async function ensureMissionRuntimeDirectory(input: {
+  directory: string
+  missionID: string
+}): Promise<string | undefined> {
+  const root = ProjectRuntimePaths.missionRoot(input.directory, input.missionID)
+  await fs.mkdir(path.dirname(root), { recursive: true })
+  try {
+    await fs.mkdir(root)
+    return root
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code !== "EEXIST" || !(await fs.stat(root)).isDirectory()) throw error
+    return undefined
+  }
 }
+
+let beforeRuntimeMaterializationForTest:
+  | ((input: { sessionID: string; missionID: string }) => void | Promise<void>)
+  | undefined
 
 function normalizeDirectory(directory: string) {
   return Filesystem.resolve(directory)
@@ -508,6 +525,7 @@ async function ensureMissionSessionInner(input: {
       )
       .get()?.id
     if (existingID) {
+      assertSessionDeletionAdmissionInTransaction(db, existingID)
       const row = db.select().from(SessionTable).where(eq(SessionTable.id, existingID)).get()!
       const existing = Session.fromRow(row)
       const metadata = requireMissionLaunchMetadata(existing)
@@ -534,7 +552,22 @@ async function ensureMissionSessionInner(input: {
     throw new Error(`Mission ${missionID} already holds a different immutable product pillar.`)
   }
   assertMissionExpertSquadSnapshot(missionID, missionVisibleExpertSquadIDs(session), input.heldExpertSquadIDs)
-  await ensureMissionRuntimeDirectory({ directory: session.directory, missionID })
+  await beforeRuntimeMaterializationForTest?.({ sessionID: session.id, missionID })
+  const createdRuntimeRoot = await ensureMissionRuntimeDirectory({ directory: session.directory, missionID })
+  try {
+    Database.immediateTransaction((db) => assertSessionDeletionAdmissionInTransaction(db, session.id))
+  } catch (error) {
+    if (!createdRuntimeRoot) throw error
+    try {
+      await fs.rm(createdRuntimeRoot, { recursive: true })
+    } catch (cleanupError) {
+      throw new AggregateError(
+        [error, cleanupError],
+        `Mission ${missionID} deletion admission failed after runtime materialization and cleanup also failed`,
+      )
+    }
+    throw error
+  }
   return withMissionID(session, missionID)
 }
 
@@ -571,4 +604,20 @@ export async function ensureMissionSession(input: {
   }).finally(() => locks.delete(lockKey))
   locks.set(lockKey, promise)
   return promise
+}
+
+export const MissionSessionTestHooks = {
+  installBeforeRuntimeMaterialization(
+    hook: (input: { sessionID: string; missionID: string }) => void | Promise<void>,
+  ): Disposable {
+    if (beforeRuntimeMaterializationForTest) {
+      throw new Error("Mission runtime-materialization test hook is already installed")
+    }
+    beforeRuntimeMaterializationForTest = hook
+    return {
+      [Symbol.dispose]() {
+        if (beforeRuntimeMaterializationForTest === hook) beforeRuntimeMaterializationForTest = undefined
+      },
+    }
+  },
 }

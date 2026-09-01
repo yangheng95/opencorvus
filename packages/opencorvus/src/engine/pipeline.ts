@@ -32,10 +32,7 @@ import { Session } from "@/session"
 import { ProjectMemory } from "@/memory/project-memory"
 import { acceptTaskRootIngressInTransaction, DEFAULT_TASK_ROOT_INGRESS_POLICY } from "./task-root-fact-store"
 import { appendTaskOpenedInTransaction } from "./task-lifecycle"
-import {
-  insertTaskCreationContract,
-  type TaskCreationContractFact,
-} from "./task-creation-contract"
+import { insertTaskCreationContract, type TaskCreationContractFact } from "./task-creation-contract"
 
 const log = Log.create({ service: "engine-pipeline" })
 
@@ -95,7 +92,7 @@ export function persistTask(input: PersistTaskInput) {
   }
   const summary = "Task started"
   const source = "pipeline.active"
-  return Database.transaction((db) => {
+  return Database.immediateTransaction((db) => {
     if (input.rootSession.projectID !== input.projectID) {
       throw new Error(`Task ${input.taskID} root Session conflicts with its creation Project`)
     }
@@ -186,15 +183,13 @@ export function persistTask(input: PersistTaskInput) {
       now: input.now,
     }).id
     input.acceptanceCommit?.(db)
-    Database.effect(() =>
-      EngineProtocol.emit(
-        Event.TaskCreated,
-        {
-          taskID: input.taskID,
-          summary,
-        },
-        { source },
-      ),
+    EngineProtocol.emitInTransaction(
+      Event.TaskCreated,
+      {
+        taskID: input.taskID,
+        summary,
+      },
+      { source },
     )
     // No scan is requested here on purpose. Task creation is not complete at
     // this commit — the Orchestrator Session and its runtime authority are

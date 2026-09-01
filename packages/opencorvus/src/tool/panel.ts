@@ -56,11 +56,7 @@ import { Database, NotFoundError, and, eq, sql } from "@/storage/db"
 import { SessionTable } from "@/session/session.sql"
 import { taskIDForCreatorToolPart } from "@/engine/task-creation-contract"
 import { TaskCreationAcceptedTargetUnavailableError } from "@/engine/task-project-error"
-import {
-  buildPanelCreationFact,
-  PanelCreationFact,
-  panelCreationTargetID,
-} from "@/engine/panel-creation-fact"
+import { buildPanelCreationFact, PanelCreationFact, panelCreationTargetID } from "@/engine/panel-creation-fact"
 import { canonicalJSONValue } from "@/util/canonical-digest"
 
 import { ChannelId } from "@/channel/catalog"
@@ -466,7 +462,7 @@ async function resolvePanelTaskCreator(actor: string, ctx: Tool.Context) {
   }
   const toolIdentity = await requirePanelToolIdentity(ctx, "create_task")
   return parsed.data === "mission"
-      ? {
+    ? {
         actor: parsed.data,
         openedOccurrence: requireMissionTaskCreationOpenedOccurrence(ctx.sessionID),
         ...toolIdentity,
@@ -769,7 +765,8 @@ export async function recoverPanelCreationToolPart(input: {
         artifact_import_mappings: EngineService.getCrossTaskArtifactImportMappings(taskID),
         message: `Task accepted: \`${taskID}\``,
       }),
-      metadata: caller.kind === "mission" ? withImmediateParkToolResultControl({ truncated: false }) : { truncated: false },
+      metadata:
+        caller.kind === "mission" ? withImmediateParkToolResultControl({ truncated: false }) : { truncated: false },
     }
   }
   const callerSession = await Session.get(input.sessionID)
@@ -778,22 +775,20 @@ export async function recoverPanelCreationToolPart(input: {
 
   if (operation === "wake_mission") {
     const missionID = panelCreationTargetID("wake_mission", input.part.id)
-    const target = Database.use(
-      (db) => {
-        const row = db
-          .select()
-          .from(SessionTable)
-          .where(
-            and(
-              eq(SessionTable.project_id, Instance.project.id),
-              sql`json_type(${SessionTable.metadata}, '$.panelCreation') IS NOT NULL`,
-              sql`json_extract(${SessionTable.metadata}, '$.panelCreation.tool_part_id') = ${input.part.id}`,
-            ),
-          )
-          .get()
-        return row ? { session: Session.fromRow(row), deleted: Session.deletedInTransaction(db, row.id) } : undefined
-      },
-    )
+    const target = Database.use((db) => {
+      const row = db
+        .select()
+        .from(SessionTable)
+        .where(
+          and(
+            eq(SessionTable.project_id, Instance.project.id),
+            sql`json_type(${SessionTable.metadata}, '$.panelCreation') IS NOT NULL`,
+            sql`json_extract(${SessionTable.metadata}, '$.panelCreation.tool_part_id') = ${input.part.id}`,
+          ),
+        )
+        .get()
+      return row ? { session: Session.fromRow(row), deleted: Session.deletedInTransaction(db, row.id) } : undefined
+    })
     if (!target) return undefined
     const missionSession = target.session
     const creation = recoveredPanelCreationMetadata({
@@ -1605,9 +1600,7 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
         const workSession = await ensurePanelWorkSession({
           id: panelCreationTargetID("wake_work", toolIdentity.toolPartID),
           title: params.title,
-          configOverlay: await initialForwardedConversationOverlay(
-            `${callerModel.providerID}/${callerModel.modelID}`,
-          ),
+          configOverlay: await initialForwardedConversationOverlay(`${callerModel.providerID}/${callerModel.modelID}`),
           creationMetadata,
         })
         await SessionWake.wakeWithReceipt({
@@ -1879,24 +1872,37 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
         }
       }
       case "delete_session": {
-        const target = await Session.getInProject({ sessionID: params.sessionID, projectID: Instance.project.id })
-        assertPublicSessionOperationAuthority(target, "session.delete")
         const deletionIdentity = await panelMutationIdentity(ctx, actor, "delete_session")
-        await EngineService.deleteSession(params.sessionID, {
-          deleteTasks: true,
-          cancellationOrigin: {
-            ...deletionIdentity,
-            source: "session.delete",
-            surface,
-            reason: "Session deletion requested",
-          },
+        let deletion = await EngineService.replaySessionDeletion(params.sessionID, {
+          projectID: Instance.project.id,
+          authority: { surface: "panel" },
         })
+        if (!deletion) {
+          const target = await Session.getInProject({ sessionID: params.sessionID, projectID: Instance.project.id })
+          assertPublicSessionOperationAuthority(target, "session.delete")
+          deletion = await EngineService.deleteSession(params.sessionID, {
+            deleteTasks: true,
+            cancellationOrigin: {
+              ...deletionIdentity,
+              source: "session.delete",
+              surface,
+              reason: "Session deletion requested",
+            },
+          })
+        }
+        const retained = deletion.sessionHistoryRetained
+        const pendingRuntimeCleanup = deletion.status === "physically_deleted_with_residue"
         return {
-          title: "Session deleted",
+          title: retained ? "Session retired" : pendingRuntimeCleanup ? "Session cleanup pending" : "Session deleted",
           output: JSON.stringify({
             kind: "panel_response",
             session_id: params.sessionID,
-            message: `Session deleted: ${params.sessionID}`,
+            deletion,
+            message: retained
+              ? `Session retired with immutable Session history and authorization audit: ${params.sessionID}`
+              : pendingRuntimeCleanup
+                ? `Session causal history deleted; authorization audit retained; conversation runtime cleanup remains pending for ${params.sessionID}`
+                : `Session causal history and conversation runtime deleted; authorization audit retained: ${params.sessionID}`,
             ...(localOnly(ctx)
               ? {
                   local_action: {

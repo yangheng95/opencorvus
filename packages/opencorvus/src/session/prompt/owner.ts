@@ -4,6 +4,7 @@ import { Database, and, desc, eq, sql } from "@/storage/db"
 import { Filesystem } from "@/util/filesystem"
 import { MessageTable, SessionPromptOwnerTable, SessionTable } from "../session.sql"
 import { MissionProcessRecoveryWakeReason } from "../mission-process-recovery-schema"
+import { assertSessionDeletionAdmissionInTransaction } from "../deletion-cleanup"
 
 export namespace SessionPromptOwner {
   export type Authority = typeof SessionPromptOwnerTable.$inferSelect
@@ -235,6 +236,7 @@ export namespace SessionPromptOwner {
       ) {
         throw new Error(`Session prompt owner authority does not match Session ${input.sessionID}`)
       }
+      assertSessionDeletionAdmissionInTransaction(db, input.sessionID)
       input.preflight?.(db)
 
       const recoveryMessages = actionableRecoveryMessageIDsInTransaction(db, input.sessionID)

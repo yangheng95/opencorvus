@@ -282,6 +282,10 @@ export type EngineControlActivationTarget =
   | "bus_delivery"
   | "session_control"
   | "session_shell"
+  /** Durable fence for one standalone Session-tree deletion occurrence. The
+   * latest row blocks Prompt admission until the owner explicitly rolls back
+   * or commits the physical deletion. */
+  | "session_deletion"
   /** Fenced physical owner preparing the deterministic Session and first Turn
    * for one immutable dispatch lineage. The lineage is the logical request;
    * this lease is only its transferable pre-effect executor. */
@@ -298,7 +302,7 @@ export const EngineControlActivationLeaseTable = sqliteTable(
   "engine_control_activation_lease",
   {
     id: text().primaryKey(),
-    target: text({ enum: ["task_root_ingress", "lifecycle", "interaction", "effect", "automation", "event_fire", "build_cleanup", "protocol_delivery", "bus_delivery", "session_control", "session_shell", "dispatch_admission", "runtime_process"] })
+    target: text({ enum: ["task_root_ingress", "lifecycle", "interaction", "effect", "automation", "event_fire", "build_cleanup", "protocol_delivery", "bus_delivery", "session_control", "session_shell", "session_deletion", "dispatch_admission", "runtime_process"] })
       .notNull()
       .$type<EngineControlActivationTarget>(),
     target_id: text().notNull(),

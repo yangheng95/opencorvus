@@ -46,17 +46,15 @@ export function insertEngineInteractionRequest(
       time_created: input.source ? null : timeCreated,
     })
     .run()
-  Database.effect(() =>
-    EngineProtocol.emit(
-      Event.InteractionRequested,
-      {
-        taskID: input.taskID,
-        interactionID: id,
-        requestType: input.requestType,
-        summary: input.eventSummary,
-      },
-      { taskID: input.taskID, interactionID: id, source: input.eventSource },
-    ),
+  EngineProtocol.emitInTransaction(
+    Event.InteractionRequested,
+    {
+      taskID: input.taskID,
+      interactionID: id,
+      requestType: input.requestType,
+      summary: input.eventSummary,
+    },
+    { taskID: input.taskID, interactionID: id, source: input.eventSource },
   )
   return id
 }
@@ -84,41 +82,54 @@ export function resolveEngineInteractionRequest(
     rejected: "Interaction rejected by operator",
     expired: "Interaction deadline expired",
   }
-  const current = db.select().from(EngineInteractionRequestTable)
-    .where(eq(EngineInteractionRequestTable.id, input.row.id)).get()
+  const current = db
+    .select()
+    .from(EngineInteractionRequestTable)
+    .where(eq(EngineInteractionRequestTable.id, input.row.id))
+    .get()
   if (!current) throw new Error(`Interaction ${input.row.id} request fact disappeared before outcome append`)
   const id = Identifier.deterministic("interaction", `interaction-outcome\0${input.row.id}`)
-  const existing = db.select().from(EngineInteractionOutcomeTable).where(eq(EngineInteractionOutcomeTable.interaction_id, input.row.id)).get()
+  const existing = db
+    .select()
+    .from(EngineInteractionOutcomeTable)
+    .where(eq(EngineInteractionOutcomeTable.interaction_id, input.row.id))
+    .get()
   if (existing) {
     if (input.sourceOccurrenceID && existing.source_occurrence_id === input.sourceOccurrenceID) return
-    if (!input.sourceOccurrenceID && existing.source_occurrence_id === null && existing.outcome === input.status && JSON.stringify(existing.response) === JSON.stringify(input.response)) return
+    if (
+      !input.sourceOccurrenceID &&
+      existing.source_occurrence_id === null &&
+      existing.outcome === input.status &&
+      JSON.stringify(existing.response) === JSON.stringify(input.response)
+    )
+      return
     throw new Error(`Interaction ${input.row.id} has a conflicting immutable outcome ${existing.id}`)
   }
   if ((current.source_kind === "bus_question") !== Boolean(input.sourceOccurrenceID)) {
     throw new Error(`Interaction ${input.row.id} outcome does not match its immutable owner branch`)
   }
-  db.insert(EngineInteractionOutcomeTable).values({
-    id,
-    interaction_id: input.row.id,
-    source_occurrence_id: input.sourceOccurrenceID ?? null,
-    outcome: input.sourceOccurrenceID ? null : input.status,
-    response: input.sourceOccurrenceID ? null : input.response,
-    time_created: input.sourceOccurrenceID ? null : timeResolved,
-  }).run()
-  Database.effect(() =>
-    EngineProtocol.emit(
-      Event.InteractionResolved,
-      {
-        taskID: input.row.task_id,
-        interactionID: input.row.id,
-        status: input.status,
-        summary: summaryByStatus[input.status],
-      },
-      {
-        taskID: input.row.task_id,
-        interactionID: input.row.id,
-        source: input.eventSource,
-      },
-    ),
+  db.insert(EngineInteractionOutcomeTable)
+    .values({
+      id,
+      interaction_id: input.row.id,
+      source_occurrence_id: input.sourceOccurrenceID ?? null,
+      outcome: input.sourceOccurrenceID ? null : input.status,
+      response: input.sourceOccurrenceID ? null : input.response,
+      time_created: input.sourceOccurrenceID ? null : timeResolved,
+    })
+    .run()
+  EngineProtocol.emitInTransaction(
+    Event.InteractionResolved,
+    {
+      taskID: input.row.task_id,
+      interactionID: input.row.id,
+      status: input.status,
+      summary: summaryByStatus[input.status],
+    },
+    {
+      taskID: input.row.task_id,
+      interactionID: input.row.id,
+      source: input.eventSource,
+    },
   )
 }

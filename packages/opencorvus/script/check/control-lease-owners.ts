@@ -133,6 +133,12 @@ const DECLARED_OWNERS: Record<string, Declaration> = {
     release:
       "SessionControl.settle releases with the terminal event and when it finds the control already settled; a renewal failure hands ownership back.",
   },
+  "session/deletion-cleanup.ts": {
+    targets: ["session_deletion"],
+    sites: 1,
+    release:
+      "The exact physical-deletion transaction releases every Session fence with its terminal Protocol facts and row removal. Explicit rollback releases the same fence set; owner death leaves the durable fence for process-liveness-proved takeover.",
+  },
   "session/shell-exec.ts": {
     targets: ["session_shell"],
     sites: 1,

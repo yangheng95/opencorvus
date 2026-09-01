@@ -10,6 +10,7 @@ import type { ProtocolAggregate, ProtocolKind } from "./schema"
 import { requireTimelineOrderKeyDomain, timelineOrderKey } from "@/timeline/order"
 import { projectLifecycleProperties } from "./lifecycle-projection"
 import { projectMailboxAcknowledgementPayload, projectMailboxAgentMessagePayload } from "@/engine/mailbox-event"
+import { assertControlLeaseInTransaction } from "@/engine/control-lease"
 
 const eventLocks = new Map<string, Promise<void>>()
 const log = Log.create({ service: "protocol.store" })
@@ -42,6 +43,12 @@ export type EventInput = {
 type EventRow = typeof ProtocolEventTable.$inferSelect
 export type ProtocolEventView = ReturnType<typeof eventView>
 type EventView = ProtocolEventView
+const physicalSessionDeletionAuthority = Symbol("physicalSessionDeletionAuthority")
+export type PhysicalSessionDeletionAuthority = {
+  readonly [physicalSessionDeletionAuthority]: true
+  readonly sessionID: string
+  readonly cleanupOperationID: string
+}
 type EventFilter = {
   aggregate?: ProtocolAggregate
   taskID?: string
@@ -162,18 +169,30 @@ export function protocolTimelineOrderKey(
   return timelineOrderKey({ domain: "protocol", time: row.emitted_at, sequence: row.seq, id: row.id })
 }
 
-function insertProtocolEvent(input: EventInput, seq: number, now: number): EventView {
+function insertProtocolEvent(
+  input: EventInput,
+  seq: number,
+  now: number,
+  physicalDeletion?: PhysicalSessionDeletionAuthority,
+): EventView {
   const id = Identifier.ascending("protocol_event", input.id)
   const orderKey = persistedEventOrderKey(input, seq, now, id)
   const relatedTaskID = input.aggregate === "task" ? null : (input.task_id ?? null)
   const relatedSessionID = input.aggregate === "session" ? null : (input.session_id ?? null)
   const sessionReferenceID = input.aggregate === "session" ? input.aggregate_id : relatedSessionID
+  const exactPhysicalDeletion =
+    physicalDeletion?.[physicalSessionDeletionAuthority] === true &&
+    input.aggregate === "session" &&
+    input.type === "session.deleted" &&
+    input.aggregate_id === physicalDeletion.sessionID &&
+    input.payload?.cleanupOperationID === physicalDeletion.cleanupOperationID
   Database.use((db) => {
     if (
       sessionReferenceID &&
+      !exactPhysicalDeletion &&
       !db.select({ id: SessionTable.id }).from(SessionTable).where(eq(SessionTable.id, sessionReferenceID)).get()
     ) {
-      throw new Error(`Protocol event ${input.type} references missing Session ${input.session_id}`)
+      throw new Error(`Protocol event ${input.type} references missing Session ${sessionReferenceID}`)
     }
     db.insert(ProtocolEventTable)
       .values({
@@ -504,6 +523,58 @@ function taskLiveReplayExpiredEvent(taskID: string, reason: string): EventView {
 }
 
 export namespace ProtocolStore {
+  export function authorizePhysicalSessionDeletionInTransaction(input: {
+    sessionID: string
+    cleanupOperationID: string
+    leaseID: string
+    ownerOccurrenceID: string
+    now: number
+  }): PhysicalSessionDeletionAuthority {
+    Database.requireActiveTransaction("ProtocolStore.authorizePhysicalSessionDeletionInTransaction")
+    let ownerOperationID: unknown
+    try {
+      ownerOperationID = JSON.parse(input.ownerOccurrenceID).operationID
+    } catch {
+      throw new Error(`Physical deletion authority owner is malformed for Session ${input.sessionID}`)
+    }
+    if (ownerOperationID !== input.cleanupOperationID) {
+      throw new Error(`Physical deletion authority does not match cleanup occurrence ${input.cleanupOperationID}`)
+    }
+    Database.use((db) => {
+      assertControlLeaseInTransaction(db, {
+        target: "session_deletion",
+        targetID: input.sessionID,
+        leaseID: input.leaseID,
+        ownerOccurrenceID: input.ownerOccurrenceID,
+        now: input.now,
+      })
+      const session = db.select({ id: SessionTable.id }).from(SessionTable).where(eq(SessionTable.id, input.sessionID)).get()
+      if (!session) throw new Error(`Physical deletion authority references missing Session ${input.sessionID}`)
+    })
+    return {
+      [physicalSessionDeletionAuthority]: true,
+      sessionID: input.sessionID,
+      cleanupOperationID: input.cleanupOperationID,
+    }
+  }
+
+  export function appendPhysicalSessionDeletedInTransaction(authority: PhysicalSessionDeletionAuthority) {
+    Database.requireActiveTransaction("ProtocolStore.appendPhysicalSessionDeletedInTransaction")
+    const input: EventInput = {
+      kind: "event",
+      type: "session.deleted",
+      aggregate: "session",
+      aggregate_id: authority.sessionID,
+      source: "session.delete",
+      payload: { cleanupOperationID: authority.cleanupOperationID },
+    }
+    const now = Date.now()
+    const seq = nextAggregateSequence(input.aggregate, input.aggregate_id)
+    const event = insertProtocolEvent(input, seq, now, authority)
+    Database.effect(() => publishEventSideEffects(input, event))
+    return event
+  }
+
   export function requireEvent(eventID: string) {
     const row = Database.use((db) =>
       db.select().from(ProtocolEventTable).where(eq(ProtocolEventTable.id, eventID)).get(),

@@ -24,7 +24,7 @@ import { createArtifactReadAiTool, createArtifactSearchAiTool, createArtifactSel
 import { createRequirementsOutputToolFactory } from "@/requirements/output-tools"
 import { EngineArtifactEnvelopeSchema } from "@opencorvus-ai/plugin"
 import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
-import { Database, DatabaseUnavailableError, and, eq } from "@/storage/db"
+import { Database, DatabaseUnavailableError, and, eq, sql } from "@/storage/db"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
 const packageRevision = {
@@ -441,6 +441,40 @@ async function run(input: {
 }
 
 describe("Requirements domain-incomplete settlement", () => {
+  test("rolls back the RequirementSet when canonical task.updated publication is rejected", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const task = await fixture("Atomic Requirements publication")
+        Database.use((db) =>
+          db.run(
+            sql.raw(`
+              CREATE TEMP TRIGGER arc019_fail_requirements_task_updated
+              BEFORE INSERT ON protocol_event
+              WHEN NEW.type = 'task.updated' AND NEW.source = 'orchestrator.requirements'
+              BEGIN SELECT RAISE(ABORT, 'injected requirements task.updated commit failure'); END
+            `),
+          ),
+        )
+        let result: Awaited<ReturnType<typeof run>>
+        try {
+          result = await run({ task, requirements: [requirement], finalization: completeDeclaration(task) })
+        } finally {
+          Database.use((db) => db.run(sql.raw("DROP TRIGGER arc019_fail_requirements_task_updated")))
+        }
+        expect(result).toMatchObject({
+          outcome: {
+            kind: "partial",
+            failed_operation: "persist_requirement_set",
+            infrastructure_error: { source: "engine_artifact", artifact_id: expect.any(String) },
+          },
+          artifacts: [],
+        })
+      },
+    })
+  }, 30_000)
+
   test("missing and decisions-only coverage remain exact incomplete evidence with Architect closed", async () => {
     await using project = await memoryProject()
     await Instance.provide({

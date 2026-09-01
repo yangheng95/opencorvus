@@ -16,7 +16,7 @@ import { createArchitectStageDispatcher } from "@/orchestrator/architect-stage"
 import { taskRequestSHA256 } from "@/orchestrator/dispatch-turn-projection"
 import { Instance } from "@/project/instance"
 import { Session } from "@/session"
-import { Database } from "@/storage/db"
+import { Database, sql } from "@/storage/db"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
 const packageRevision = {
@@ -287,6 +287,61 @@ async function dispatchArchitect(input: {
 }
 
 describe("Architect domain-incomplete settlement", () => {
+  test("rolls back both Candidate and accepted projection when task.updated publication is rejected", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        Database.use((db) =>
+          db.run(
+            sql.raw(`
+              CREATE TEMP TRIGGER arc019_fail_architect_task_updated
+              BEFORE INSERT ON protocol_event
+              WHEN NEW.type = 'task.updated' AND NEW.source = 'orchestrator.architect'
+              BEGIN SELECT RAISE(ABORT, 'injected architect task.updated commit failure'); END
+            `),
+          ),
+        )
+        let conflict: Awaited<ReturnType<typeof dispatchArchitect>>
+        let accepted: Awaited<ReturnType<typeof dispatchArchitect>>
+        const conflictFixture = await createTask("Atomic Architect Candidate publication")
+        const acceptedFixture = await createTask("Atomic Architect projection publication")
+        const requirement = requirementSetLocator(acceptedFixture.taskID)
+        try {
+          conflict = await dispatchArchitect({
+            fixture: conflictFixture,
+            result: emptyArchitectResult({
+              sessionID: conflictFixture.child.id,
+              finalMessageID: conflictFixture.final.id,
+            }),
+          })
+          accepted = await dispatchArchitect({
+            fixture: acceptedFixture,
+            result: emptyArchitectResult({
+              sessionID: acceptedFixture.child.id,
+              finalMessageID: acceptedFixture.final.id,
+              requirementSetArtifactLocator: requirement,
+              sourceArtifactLocators: [requirement],
+            }),
+          })
+        } finally {
+          Database.use((db) => db.run(sql.raw("DROP TRIGGER arc019_fail_architect_task_updated")))
+        }
+        expect({
+          conflict: conflict.outcome,
+          conflictArtifacts: listGoalGraphProjectionArtifacts(conflictFixture.taskID),
+          accepted: accepted.outcome,
+          acceptedArtifacts: listGoalGraphProjectionArtifacts(acceptedFixture.taskID),
+        }).toMatchObject({
+          conflict: { kind: "partial", failed_operation: "persist-goals-and-contract-graph" },
+          conflictArtifacts: [],
+          accepted: { kind: "partial", failed_operation: "persist-goals-and-contract-graph" },
+          acceptedArtifacts: [],
+        })
+      },
+    })
+  }, 30_000)
+
   test("preflight conflict preserves its exact Candidate and closes the successor frontier", async () => {
     await using project = await memoryProject()
     await Instance.provide({

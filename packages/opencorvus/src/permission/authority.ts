@@ -8,6 +8,7 @@ import { createInstanceState } from "@/project/instance-state"
 import { Database, and, asc, desc, eq, inArray, isNotNull, sql } from "@/storage/db"
 import { fn } from "@/util/fn"
 import { Log } from "@/util/log"
+import { AwaitTimeoutError, withTimeout } from "@/util/await-with-timeout"
 import { createHash } from "node:crypto"
 import { AsyncLocalStorage } from "node:async_hooks"
 import z from "zod"
@@ -21,17 +22,33 @@ import {
   ToolInvocationProviderKind,
 } from "./invocation"
 import { PermissionExecutionResultTable, PermissionLedgerTable, PermissionPolicyTable } from "./permission.sql"
-import { acquireControlLease, assertControlLeaseInTransaction, releaseControlLeaseInTransaction, releaseControlLeaseOnErrorPath, renewControlLease } from "@/engine/control-lease"
+import {
+  acquireControlLease,
+  assertControlLeaseInTransaction,
+  releaseControlLeaseInTransaction,
+  releaseControlLeaseOnErrorPath,
+  renewControlLease,
+} from "@/engine/control-lease"
 import { PermissionDecision } from "./decision"
 import { permissionRequestOwnerBelongsToProject } from "./project-authority"
 // Type-only: the value import stays dynamic so the runtime module cycle with
 // SessionLoop is never created.
 import type { SessionLoop } from "@/session/loop"
+import {
+  assertSessionDeletionAdmissionInTransaction,
+  SessionDeletionRuntimeNotSettledError,
+} from "@/session/deletion-cleanup"
 
 type SessionLoopContinuationOutcome = SessionLoop.PermissionContinuationOutcome
 
 export namespace PermissionAuthority {
   const log = Log.create({ service: "permission-authority" })
+  let afterSessionDeletionBatchSelectedForTest:
+    | ((input: { sessionIDs: readonly string[]; requestIDs: readonly string[] }) => void | Promise<void>)
+    | undefined
+  let afterAuthorizationBeforeExecutionStartForTest:
+    | ((request: Request) => void | Promise<void>)
+    | undefined
   export const Identity = z
     .string()
     .max(Identifier.MAX_LENGTH)
@@ -281,7 +298,10 @@ export namespace PermissionAuthority {
       time_created: Date.now(),
       ...extra,
     }
-    Database.transaction((db) => db.insert(PermissionLedgerTable).values(row).run())
+    Database.immediateTransaction((db) => {
+      if (eventType === "requested") assertSessionDeletionAdmissionInTransaction(db, request.sessionID)
+      db.insert(PermissionLedgerTable).values(row).run()
+    })
     return row as LedgerRow
   }
 
@@ -300,9 +320,7 @@ export namespace PermissionAuthority {
       now: Date.now(),
       leaseMilliseconds: 120_000,
     })
-    return acquired.acquired
-      ? { id: acquired.lease.id, ownerOccurrenceID, targetID: attempt }
-      : undefined
+    return acquired.acquired ? { id: acquired.lease.id, ownerOccurrenceID, targetID: attempt } : undefined
   }
 
   async function executeUnderEffectLease<T>(lease: EffectLease, execute: () => Promise<T>): Promise<T> {
@@ -371,21 +389,23 @@ export namespace PermissionAuthority {
     } satisfies typeof PermissionLedgerTable.$inferInsert
     Database.immediateTransaction((db) => {
       const settledAt = Date.now()
-      if (lease) assertControlLeaseInTransaction(db, {
-        target: "effect",
-        targetID: lease.targetID,
-        leaseID: lease.id,
-        ownerOccurrenceID: lease.ownerOccurrenceID,
-        now: settledAt,
-      })
+      if (lease)
+        assertControlLeaseInTransaction(db, {
+          target: "effect",
+          targetID: lease.targetID,
+          leaseID: lease.id,
+          ownerOccurrenceID: lease.ownerOccurrenceID,
+          now: settledAt,
+        })
       db.insert(PermissionLedgerTable).values(row).run()
-      if (lease) releaseControlLeaseInTransaction(db, {
-        target: "effect",
-        targetID: lease.targetID,
-        leaseID: lease.id,
-        ownerOccurrenceID: lease.ownerOccurrenceID,
-        now: settledAt,
-      })
+      if (lease)
+        releaseControlLeaseInTransaction(db, {
+          target: "effect",
+          targetID: lease.targetID,
+          leaseID: lease.id,
+          ownerOccurrenceID: lease.ownerOccurrenceID,
+          now: settledAt,
+        })
     })
     return row as LedgerRow
   }
@@ -432,13 +452,14 @@ export namespace PermissionAuthority {
     }
     Database.immediateTransaction((db) => {
       const settledAt = Date.now()
-      if (input.lease) assertControlLeaseInTransaction(db, {
-        target: "effect",
-        targetID: input.lease.targetID,
-        leaseID: input.lease.id,
-        ownerOccurrenceID: input.lease.ownerOccurrenceID,
-        now: settledAt,
-      })
+      if (input.lease)
+        assertControlLeaseInTransaction(db, {
+          target: "effect",
+          targetID: input.lease.targetID,
+          leaseID: input.lease.id,
+          ownerOccurrenceID: input.lease.ownerOccurrenceID,
+          now: settledAt,
+        })
       db.insert(PermissionExecutionResultTable)
         .values({
           attempt_id: input.attempt,
@@ -469,24 +490,34 @@ export namespace PermissionAuthority {
       // The durable result is the terminal receipt for this attempt. Its lease
       // ends with it, so nothing else has to wait out the remaining duration.
       // The fence above already proved this owner holds it at `settledAt`.
-      if (input.lease) releaseControlLeaseInTransaction(db, {
-        target: "effect",
-        targetID: input.lease.targetID,
-        leaseID: input.lease.id,
-        ownerOccurrenceID: input.lease.ownerOccurrenceID,
-        now: settledAt,
-      })
+      if (input.lease)
+        releaseControlLeaseInTransaction(db, {
+          target: "effect",
+          targetID: input.lease.targetID,
+          leaseID: input.lease.id,
+          ownerOccurrenceID: input.lease.ownerOccurrenceID,
+          now: settledAt,
+        })
     })
     return input.result
   }
 
   function requestFromRow(row: LedgerRow): Request {
-    const authority = row.event_type === "requested"
-      ? row
-      : Database.use((db) => db.select().from(PermissionLedgerTable).where(and(
-          eq(PermissionLedgerTable.request_id, row.request_id),
-          eq(PermissionLedgerTable.event_type, "requested"),
-        )).get())
+    const authority =
+      row.event_type === "requested"
+        ? row
+        : Database.use((db) =>
+            db
+              .select()
+              .from(PermissionLedgerTable)
+              .where(
+                and(
+                  eq(PermissionLedgerTable.request_id, row.request_id),
+                  eq(PermissionLedgerTable.event_type, "requested"),
+                ),
+              )
+              .get(),
+          )
     if (!authority) throw new Error(`Permission event ${row.id} references missing request ${row.request_id}`)
     const resource =
       authority.scope && typeof authority.scope === "object" && !Array.isArray(authority.scope)
@@ -544,10 +575,11 @@ export namespace PermissionAuthority {
 
   function assertRequestIdentity(request: Request): void {
     const existing = Database.use((db) =>
-      db.select().from(PermissionLedgerTable).where(and(
-        eq(PermissionLedgerTable.request_id, request.id),
-        eq(PermissionLedgerTable.event_type, "requested"),
-      )).get(),
+      db
+        .select()
+        .from(PermissionLedgerTable)
+        .where(and(eq(PermissionLedgerTable.request_id, request.id), eq(PermissionLedgerTable.event_type, "requested")))
+        .get(),
     )
     if (!existing) return
     const exact = requestFromRow(existing)
@@ -577,12 +609,14 @@ export namespace PermissionAuthority {
       throw new PermissionIdentityCollisionError(attempt, "attempt")
     }
     const storedResult = Database.use((db) =>
-      db.select().from(PermissionExecutionResultTable).where(eq(PermissionExecutionResultTable.attempt_id, attempt)).get(),
+      db
+        .select()
+        .from(PermissionExecutionResultTable)
+        .where(eq(PermissionExecutionResultTable.attempt_id, attempt))
+        .get(),
     )
     if (!storedResult) return
-    const succeeded = existing.find(
-      (row) => row.event_type === "execution_succeeded" && row.outcome_slot === attempt,
-    )
+    const succeeded = existing.find((row) => row.event_type === "execution_succeeded" && row.outcome_slot === attempt)
     if (!succeeded) {
       throw new PermissionIdentityCollisionError(attempt, "attempt")
     }
@@ -667,9 +701,32 @@ export namespace PermissionAuthority {
     return waiters.length
   }
 
-  async function awaitExecutionSettlement(request: Request): Promise<void> {
+  function assertSessionDeletionDeadline(deadline: number | undefined, label: string): void {
+    if (deadline === undefined || Date.now() < deadline) return
+    throw new SessionDeletionRuntimeNotSettledError(`Session deletion exceeded its deadline while ${label}`)
+  }
+
+  async function awaitWithinSessionDeletionDeadline<T>(
+    settled: Promise<T>,
+    deadline: number | undefined,
+    label: string,
+  ): Promise<T> {
+    if (deadline === undefined) return await settled
+    assertSessionDeletionDeadline(deadline, label)
+    try {
+      return await withTimeout(settled, Math.max(1, deadline - Date.now()), label)
+    } catch (error) {
+      if (error instanceof AwaitTimeoutError) {
+        throw new SessionDeletionRuntimeNotSettledError(`Session deletion exceeded its deadline while ${label}`)
+      }
+      throw error
+    }
+  }
+
+  async function awaitExecutionSettlement(request: Request, deadline?: number): Promise<void> {
     const attempt = attemptID(request.id)
     for (let remaining = 0; remaining < 1_000; remaining += 1) {
+      assertSessionDeletionDeadline(deadline, `waiting for Permission execution ${attempt}`)
       const outcome = Database.use((db) =>
         db
           .select({ id: PermissionLedgerTable.id })
@@ -678,7 +735,7 @@ export namespace PermissionAuthority {
           .get(),
       )
       if (outcome) return
-      await Bun.sleep(10)
+      await Bun.sleep(deadline === undefined ? 10 : Math.max(1, Math.min(10, deadline - Date.now())))
     }
     throw new Error(`Permission execution ${attempt} did not settle before Session deletion`)
   }
@@ -701,10 +758,12 @@ export namespace PermissionAuthority {
       db
         .select()
         .from(PermissionLedgerTable)
-        .where(and(
-          eq(PermissionLedgerTable.event_type, "grant_created"),
-          permissionRequestOwnerBelongsToProject(request.projectID),
-        ))
+        .where(
+          and(
+            eq(PermissionLedgerTable.event_type, "grant_created"),
+            permissionRequestOwnerBelongsToProject(request.projectID),
+          ),
+        )
         .orderBy(desc(sql`rowid`))
         .all(),
     )
@@ -722,15 +781,15 @@ export namespace PermissionAuthority {
         .all(),
     )
     const inactive = new Set(terminal.map((row) => row.source).filter((value): value is string => Boolean(value)))
-    return grants.find(
-      (grant) => {
-        if (inactive.has(grant.id)) return false
-        const owner = requestFromRow(grant)
-        if (owner.projectID !== request.projectID || owner.fingerprint !== request.fingerprint) return false
-        return grant.decision_scope === "project" ||
-          (grant.decision_scope === "task" && Boolean(request.taskID) && owner.taskID === request.taskID)
-      },
-    )
+    return grants.find((grant) => {
+      if (inactive.has(grant.id)) return false
+      const owner = requestFromRow(grant)
+      if (owner.projectID !== request.projectID || owner.fingerprint !== request.fingerprint) return false
+      return (
+        grant.decision_scope === "project" ||
+        (grant.decision_scope === "task" && Boolean(request.taskID) && owner.taskID === request.taskID)
+      )
+    })
   }
 
   async function waitForDecision(request: Request): Promise<void> {
@@ -761,9 +820,10 @@ export namespace PermissionAuthority {
   async function authorize(request: Request): Promise<LedgerRow> {
     assertRequestIdentity(request)
     const pending = pendingRequest(request.id)
-    if (!pending) appendEvent(request, "requested", {
-      metadata: { choices: request.choices, projectGrantEligible: request.projectGrantEligible },
-    })
+    if (!pending)
+      appendEvent(request, "requested", {
+        metadata: { choices: request.choices, projectGrantEligible: request.projectGrantEligible },
+      })
     if (request.mode === "full_access") {
       const existing = decisionFor(request.id)
       if (existing) return existing
@@ -925,6 +985,7 @@ export namespace PermissionAuthority {
     const attempt = attemptID(request.id)
     assertAttemptIdentity(request, attempt)
     const authority = await authorize(request)
+    await afterAuthorizationBeforeExecutionStartForTest?.(request)
     const existingStart = Database.use((db) =>
       db
         .select()
@@ -957,11 +1018,16 @@ export namespace PermissionAuthority {
               abandonEffectLease(lease)
               throw error
             }
-            appendEffectOutcome(request, "execution_failed", {
-              attempt_id: attempt,
-              outcome_slot: attempt,
-              reason: error instanceof Error ? `${error.name}: ${error.message}` : String(error),
-            }, lease)
+            appendEffectOutcome(
+              request,
+              "execution_failed",
+              {
+                attempt_id: attempt,
+                outcome_slot: attempt,
+                reason: error instanceof Error ? `${error.name}: ${error.message}` : String(error),
+              },
+              lease,
+            )
             throw error
           }
           return completeExecution({
@@ -1013,10 +1079,21 @@ export namespace PermissionAuthority {
     const lease = acquireEffectLease(attempt)
     if (!lease) {
       await awaitExecutionSettlement(request)
-      return resolveExistingAttempt(existingStart ?? Database.use((db) => db.select().from(PermissionLedgerTable).where(and(
-        eq(PermissionLedgerTable.attempt_id, attempt),
-        eq(PermissionLedgerTable.event_type, "execution_started"),
-      )).get())!)
+      return resolveExistingAttempt(
+        existingStart ??
+          Database.use((db) =>
+            db
+              .select()
+              .from(PermissionLedgerTable)
+              .where(
+                and(
+                  eq(PermissionLedgerTable.attempt_id, attempt),
+                  eq(PermissionLedgerTable.event_type, "execution_started"),
+                ),
+              )
+              .get(),
+          )!,
+      )
     }
     let result: T
     try {
@@ -1033,11 +1110,16 @@ export namespace PermissionAuthority {
         abandonEffectLease(lease)
         throw error
       }
-      appendEffectOutcome(request, "execution_failed", {
-        attempt_id: attempt,
-        outcome_slot: attempt,
-        reason: error instanceof Error ? `${error.name}: ${error.message}` : String(error),
-      }, lease)
+      appendEffectOutcome(
+        request,
+        "execution_failed",
+        {
+          attempt_id: attempt,
+          outcome_slot: attempt,
+          reason: error instanceof Error ? `${error.name}: ${error.message}` : String(error),
+        },
+        lease,
+      )
       throw error
     }
     // A persistence failure here leaves a start without an outcome. Recovery
@@ -1159,9 +1241,7 @@ export namespace PermissionAuthority {
 
   async function resumeRequest(request: Request): Promise<SessionLoopContinuationOutcome> {
     const { SessionLoop } = await import("@/session/loop")
-    const outcome = await exactContinuation.run(request.id, () =>
-      SessionLoop.resumePermissionContinuation(request),
-    )
+    const outcome = await exactContinuation.run(request.id, () => SessionLoop.resumePermissionContinuation(request))
     if (outcome === "unresumable") {
       retireContinuation(request, "The persisted ToolPart is already terminal; no continuation can advance it")
       return outcome
@@ -1259,12 +1339,7 @@ export namespace PermissionAuthority {
       db
         .select()
         .from(PermissionLedgerTable)
-        .where(
-          and(
-            eq(PermissionLedgerTable.event_type, "requested"),
-            eq(PermissionLedgerTable.project_id, projectID),
-          ),
-        )
+        .where(and(eq(PermissionLedgerTable.event_type, "requested"), eq(PermissionLedgerTable.project_id, projectID)))
         .orderBy(asc(sql`rowid`))
         .all(),
     )
@@ -1319,9 +1394,14 @@ export namespace PermissionAuthority {
   }
 
   export async function history(projectID = Instance.project.id): Promise<LedgerRow[]> {
-    return Database.use((db) => db.select().from(PermissionLedgerTable)
-      .where(permissionRequestOwnerBelongsToProject(projectID))
-      .orderBy(desc(sql`rowid`)).all())
+    return Database.use((db) =>
+      db
+        .select()
+        .from(PermissionLedgerTable)
+        .where(permissionRequestOwnerBelongsToProject(projectID))
+        .orderBy(desc(sql`rowid`))
+        .all(),
+    )
   }
 
   export async function grants(projectID = Instance.project.id): Promise<LedgerRow[]> {
@@ -1426,24 +1506,165 @@ export namespace PermissionAuthority {
     reason: string,
     actorID = "system",
   ): Promise<number> {
-    const pending = (await list()).filter((request) => request.sessionID === sessionID)
-    let cancelled = 0
-    for (const request of pending) {
-      const { settled, won } = settleDecision(request, "cancelled", {
-        decision_scope: "invocation",
-        actor_id: actorID,
-        reason,
-      })
-      const waiterCount = await releaseDecisionWaiters(request, settled)
-      if (won) {
-        cancelled += 1
-        continue
+    return cancelPendingForSessions([sessionID], reason, actorID)
+  }
+
+  export function assertRequestsSettledForSessionsInTransaction(
+    db: Database.TxOrDb,
+    sessionIDs: readonly string[],
+  ): void {
+    const uniqueSessionIDs = [...new Set(sessionIDs)]
+    for (let offset = 0; offset < uniqueSessionIDs.length; offset += 64) {
+      const unsettled = db
+        .select({ requestID: PermissionLedgerTable.request_id, sessionID: PermissionLedgerTable.session_id })
+        .from(PermissionLedgerTable)
+        .where(
+          and(
+            eq(PermissionLedgerTable.event_type, "requested"),
+            inArray(PermissionLedgerTable.session_id, uniqueSessionIDs.slice(offset, offset + 64)),
+            sql`(
+              EXISTS (
+                SELECT 1 FROM permission_ledger AS execution_start
+                WHERE execution_start.request_id = ${PermissionLedgerTable.request_id}
+                  AND execution_start.event_type = 'execution_started'
+                  AND NOT EXISTS (
+                    SELECT 1 FROM permission_ledger AS execution_outcome
+                    WHERE execution_outcome.outcome_slot = execution_start.attempt_id
+                  )
+              )
+              OR (
+                NOT EXISTS (
+                  SELECT 1 FROM permission_ledger AS execution_start
+                  WHERE execution_start.request_id = ${PermissionLedgerTable.request_id}
+                    AND execution_start.event_type = 'execution_started'
+                )
+                AND NOT EXISTS (
+                  SELECT 1 FROM permission_ledger AS retirement
+                  WHERE retirement.request_id = ${PermissionLedgerTable.request_id}
+                    AND retirement.event_type IN ('denied', 'cancelled', 'stale')
+                )
+              )
+            )`,
+          ),
+        )
+        .orderBy(asc(sql`rowid`))
+        .get()
+      if (unsettled) {
+        throw new SessionDeletionRuntimeNotSettledError(
+          `Session deletion cannot settle while Permission request ${unsettled.requestID} for ${unsettled.sessionID} has no retired continuation or terminal execution outcome`,
+        )
       }
-      if (["denied", "cancelled", "stale"].includes(settled.event_type)) continue
-      if (waiterCount === 0) await resumeRequest(request)
-      await awaitExecutionSettlement(request)
+    }
+  }
+
+  export async function cancelPendingForSessions(
+    sessionIDs: readonly string[],
+    reason: string,
+    actorID = "system",
+    options: { maxBatchesPerPage?: number; deadline?: number } = {},
+  ): Promise<number> {
+    const uniqueSessionIDs = [...new Set(sessionIDs)]
+    let cancelled = 0
+    for (let offset = 0; offset < uniqueSessionIDs.length; offset += 64) {
+      const sessionPage = uniqueSessionIDs.slice(offset, offset + 64)
+      const maxBatches = options.maxBatchesPerPage ?? Number.POSITIVE_INFINITY
+      for (let batch = 0; batch < maxBatches; batch++) {
+        if (options.deadline !== undefined && Date.now() >= options.deadline) {
+          throw new SessionDeletionRuntimeNotSettledError(
+            `Session deletion Permission settlement exceeded its deadline for ${sessionPage[0]}`,
+          )
+        }
+        const pending = Database.use((db) =>
+          db
+            .select()
+            .from(PermissionLedgerTable)
+            .where(
+              and(
+                eq(PermissionLedgerTable.event_type, "requested"),
+                inArray(PermissionLedgerTable.session_id, sessionPage),
+                sql`NOT EXISTS (
+                  SELECT 1
+                  FROM permission_ledger AS decision
+                  WHERE decision.decision_slot = ${PermissionLedgerTable.request_id}
+                )`,
+              ),
+            )
+            .orderBy(asc(sql`rowid`))
+            .limit(64)
+            .all(),
+        )
+        if (pending.length === 0) break
+        if (afterSessionDeletionBatchSelectedForTest) {
+          await awaitWithinSessionDeletionDeadline(
+            Promise.resolve(
+              afterSessionDeletionBatchSelectedForTest({
+                sessionIDs: sessionPage,
+                requestIDs: pending.map((row) => row.request_id),
+              }),
+            ),
+            options.deadline,
+            `preparing Permission settlement for ${sessionPage[0]}`,
+          )
+        }
+        for (const row of pending) {
+          assertSessionDeletionDeadline(options.deadline, `settling Permission request ${row.request_id}`)
+          const request = requestFromRow(row)
+          const { settled, won } = settleDecision(request, "cancelled", {
+            decision_scope: "invocation",
+            actor_id: actorID,
+            reason,
+          })
+          const waiterCount = await awaitWithinSessionDeletionDeadline(
+            releaseDecisionWaiters(request, settled),
+            options.deadline,
+            `releasing Permission waiters for ${request.id}`,
+          )
+          if (won) {
+            cancelled += 1
+            continue
+          }
+          if (["denied", "cancelled", "stale"].includes(settled.event_type)) continue
+          if (waiterCount === 0) {
+            await awaitWithinSessionDeletionDeadline(
+              resumeRequest(request),
+              options.deadline,
+              `resuming Permission request ${request.id}`,
+            )
+          }
+          await awaitExecutionSettlement(request, options.deadline)
+        }
+      }
     }
     return cancelled
+  }
+
+  export const TestHooks = {
+    installAfterAuthorizationBeforeExecutionStart(hook: (request: Request) => void | Promise<void>): Disposable {
+      if (afterAuthorizationBeforeExecutionStartForTest) {
+        throw new Error("Permission authorization-before-execution hook is already installed")
+      }
+      afterAuthorizationBeforeExecutionStartForTest = hook
+      return {
+        [Symbol.dispose]() {
+          if (afterAuthorizationBeforeExecutionStartForTest === hook) {
+            afterAuthorizationBeforeExecutionStartForTest = undefined
+          }
+        },
+      }
+    },
+    installAfterSessionDeletionBatchSelected(
+      hook: (input: { sessionIDs: readonly string[]; requestIDs: readonly string[] }) => void | Promise<void>,
+    ): Disposable {
+      if (afterSessionDeletionBatchSelectedForTest) {
+        throw new Error("Session deletion Permission batch hook is already installed")
+      }
+      afterSessionDeletionBatchSelectedForTest = hook
+      return {
+        [Symbol.dispose]() {
+          if (afterSessionDeletionBatchSelectedForTest === hook) afterSessionDeletionBatchSelectedForTest = undefined
+        },
+      }
+    },
   }
 
   export function reconcileInterruptedAttempts(): number {
@@ -1458,7 +1679,11 @@ export namespace PermissionAuthority {
       try {
         if (!start.attempt_id) throw new Error(`Permission execution start ${start.id} has no attempt identity`)
         const outcome = Database.use((db) =>
-          db.select().from(PermissionLedgerTable).where(eq(PermissionLedgerTable.outcome_slot, start.attempt_id!)).get(),
+          db
+            .select()
+            .from(PermissionLedgerTable)
+            .where(eq(PermissionLedgerTable.outcome_slot, start.attempt_id!))
+            .get(),
         )
         if (outcome) continue
         if (currentTaskForAttempt(start.attempt_id)) continue

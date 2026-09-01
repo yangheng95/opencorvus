@@ -149,11 +149,21 @@ describe("persisted Panel creation occurrence recovery", () => {
           })
           expect(replay).toEqual(occurrence.first)
           const targetMessages = await Session.messages({ sessionID: targetID })
-          expect({ targetID, userMessages: targetMessages.filter((message) => message.info.role === "user").length }).toEqual({
+          expect({
+            targetID,
+            userMessages: targetMessages.filter((message) => message.info.role === "user").length,
+          }).toEqual({
             targetID: expect.any(String),
             userMessages: 1,
           })
-          expect(await EngineService.deleteSession(targetID, { projectID: Instance.project.id })).toBe(true)
+          expect(await EngineService.deleteSession(targetID, { projectID: Instance.project.id })).toEqual({
+            ok: true,
+            status: "tombstoned",
+            sessionID: targetID,
+            sessionHistoryRetained: true,
+            authorizationAuditRetained: true,
+            residue: [],
+          })
           const unavailable = await recoverPanelCreationToolPart({
             sessionID: occurrence.caller.id,
             messageID: occurrence.assistant.id,

@@ -3,12 +3,19 @@ import { Bus } from "@/bus"
 import { Config } from "@/config/config"
 import { PermissionAuthority } from "@/permission/authority"
 import { permissionDescriptor } from "@/permission/invocation"
-import { PermissionExecutionResultTable, PermissionLedgerTable, PermissionPolicyTable } from "@/permission/permission.sql"
+import {
+  PermissionExecutionResultTable,
+  PermissionLedgerTable,
+  PermissionPolicyTable,
+} from "@/permission/permission.sql"
 import { Identifier } from "@/id/id"
 import { Instance } from "@/project/instance"
 import { Project } from "@/project/project"
 import { deleteProject } from "@/project/delete"
 import { Session } from "@/session"
+import { EngineService } from "@/task-api"
+import { SessionPromptState } from "@/session/prompt/state"
+import { SessionDeletionCleanupTestHooks } from "@/session/deletion-cleanup"
 import { ToolPartOutcomeTable } from "@/session/session.sql"
 import { Database, and, eq } from "@/storage/db"
 import { randomUUID } from "node:crypto"
@@ -109,17 +116,20 @@ describe("two-mode permission authority", () => {
           "allowed_once",
           "requested",
         ])
-        const identities =
-          history.flatMap((row) =>
-            [row.id, row.request_id, row.attempt_id, row.source_event_id, row.decision_slot, row.outcome_slot].filter(
-              (value): value is string => Boolean(value),
-            ),
-          )
-        expect(identities.every((id) => id.length <= Identifier.MAX_LENGTH && Identifier.isCanonical("permission", id))).toBe(true)
+        const identities = history.flatMap((row) =>
+          [row.id, row.request_id, row.attempt_id, row.source_event_id, row.decision_slot, row.outcome_slot].filter(
+            (value): value is string => Boolean(value),
+          ),
+        )
+        expect(
+          identities.every((id) => id.length <= Identifier.MAX_LENGTH && Identifier.isCanonical("permission", id)),
+        ).toBe(true)
         const request = history.find((row) => row.event_type === "requested")!
-        expect([request.policy_revision, request.provider_digest, request.fingerprint].every(
-          (value) => value?.length === 64,
-        )).toBe(true)
+        expect(
+          [request.policy_revision, request.provider_digest, request.fingerprint].every(
+            (value) => value?.length === 64,
+          ),
+        ).toBe(true)
       },
     })
   })
@@ -255,10 +265,13 @@ describe("two-mode permission authority", () => {
       requestID: "permission_project_generation_boundary",
       reason: "Delete the Project occurrence that owns a reusable permission grant",
     })
-    const expired = Database.use((db) => db.select().from(PermissionLedgerTable).where(and(
-      eq(PermissionLedgerTable.event_type, "expired"),
-      eq(PermissionLedgerTable.source_event_id, grantID),
-    )).get())
+    const expired = Database.use((db) =>
+      db
+        .select()
+        .from(PermissionLedgerTable)
+        .where(and(eq(PermissionLedgerTable.event_type, "expired"), eq(PermissionLedgerTable.source_event_id, grantID)))
+        .get(),
+    )
     const recreated = await Project.fromDirectory(project.path)
     expect({
       expired: expired && { actor: expired.actor_id, source: expired.source_event_id },
@@ -369,15 +382,20 @@ describe("two-mode permission authority", () => {
       fn: async () => {
         await Config.updateProjectPatch({ permission_mode: "ask" })
         const orphanRequestID = Identifier.ascending("permission")
-        Database.transaction((db) => db.insert(PermissionLedgerTable).values({
-          id: Identifier.ascending("permission"),
-          request_id: orphanRequestID,
-          event_type: "grant_created",
-          decision_scope: "project",
-          decision_slot: orphanRequestID,
-          actor_id: "historical-owner",
-          time_created: Date.now(),
-        }).run())
+        Database.transaction((db) =>
+          db
+            .insert(PermissionLedgerTable)
+            .values({
+              id: Identifier.ascending("permission"),
+              request_id: orphanRequestID,
+              event_type: "grant_created",
+              decision_scope: "project",
+              decision_slot: orphanRequestID,
+              actor_id: "historical-owner",
+              time_created: Date.now(),
+            })
+            .run(),
+        )
         const session = await Session.create({ kind: "assistant", title: "Owned permission history" })
         let ownedRequestID = ""
         const stop = Bus.subscribe(PermissionAuthority.Event.Asked, ({ properties }) => {
@@ -437,7 +455,8 @@ describe("two-mode permission authority", () => {
           (row) => row.decision_slot === pending.request.id,
         )
         expect(decisions).toHaveLength(1)
-        if (reply.decision === "deny") await expect(pending.execution).rejects.toBeInstanceOf(PermissionAuthority.RejectedError)
+        if (reply.decision === "deny")
+          await expect(pending.execution).rejects.toBeInstanceOf(PermissionAuthority.RejectedError)
         else await expect(pending.execution).resolves.toBe("ran")
       },
     })
@@ -454,9 +473,60 @@ describe("two-mode permission authority", () => {
           PermissionAuthority.authorizeAndExecute(invocation(session.id, "cancelled"), async () => "must-not-run"),
         )
         const rejected = pending.execution.catch((error) => error)
-        await Session.remove(session.id)
+        await EngineService.deleteSession(session.id, { projectID: session.projectID })
         expect(await rejected).toBeInstanceOf(PermissionAuthority.RejectedError)
         expect((await PermissionAuthority.history()).map((row) => row.event_type)).toEqual(["cancelled", "requested"])
+      },
+    })
+  })
+
+  test("Session deletion fences a Permission admitted after real Prompt cancellation and settles its waiter", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        await Config.updateProjectPatch({ permission_mode: "ask" })
+        const session = await Session.create({ kind: "assistant", title: "Permission deletion admission race" })
+        const owner = SessionPromptState.start(session.id, session.directory)
+        if (!owner) throw new Error("Expected the real Session Prompt owner")
+        let executed = false
+        let permissionDisposition: Promise<unknown> | undefined
+        let hookRuns = 0
+        await using hook = SessionDeletionCleanupTestHooks.installBeforeManifestCreate(async (rootSessionID) => {
+          if (rootSessionID !== session.id || hookRuns++ > 0) return
+          const asked = nextRequest(() =>
+            PermissionAuthority.authorizeAndExecute(invocation(session.id, "delete-race"), async () => {
+              executed = true
+              return "must-not-run"
+            }),
+          )
+          const pending = await asked
+          permissionDisposition = pending.execution
+            .catch((error) => error)
+            .finally(() => SessionPromptState.finish(session.id, owner, session.directory))
+        })
+
+        const deletion = await EngineService.deleteSession(session.id, { projectID: session.projectID })
+        const settled = await permissionDisposition
+        expect({
+          deletion,
+          permissionRejected: settled instanceof PermissionAuthority.RejectedError,
+          history: (await PermissionAuthority.history()).map((row) => row.event_type),
+          executed,
+        }).toEqual({
+          deletion: {
+            ok: true,
+            status: "physically_deleted",
+            sessionID: session.id,
+            sessionHistoryRetained: false,
+            authorizationAuditRetained: true,
+            cleanupOperationID: expect.any(String),
+            residue: [],
+          },
+          permissionRejected: true,
+          history: ["cancelled", "requested"],
+          executed: false,
+        })
       },
     })
   })
@@ -534,15 +604,15 @@ describe("two-mode permission authority", () => {
           request_sha256: expect.any(String),
         })
         const structuredShell = (await permissionDescriptor({
-            providerKind: "builtin",
-            providerID: "builtin",
-            toolName: "bash",
-            args: {
-              command: "TOKEN=secret env curl https://example.test/path?secret=value | tee output.txt > audit.log",
-              workdir: project.path,
-              background: true,
-            },
-          }))!
+          providerKind: "builtin",
+          providerID: "builtin",
+          toolName: "bash",
+          args: {
+            command: "TOKEN=secret env curl https://example.test/path?secret=value | tee output.txt > audit.log",
+            workdir: project.path,
+            background: true,
+          },
+        }))!
         expect(structuredShell.scope.resource).toMatchObject({
           scope_type: "shell",
           ast_sha256: expect.any(String),
@@ -561,7 +631,8 @@ describe("two-mode permission authority", () => {
           providerID: "builtin",
           toolName: "bash",
           args: {
-            command: "TOKEN=secret   env curl https://example.test/path?secret=value | tee output.txt > audit.log # display-only spacing/comment",
+            command:
+              "TOKEN=secret   env curl https://example.test/path?secret=value | tee output.txt > audit.log # display-only spacing/comment",
             workdir: project.path,
             background: true,
           },
@@ -728,12 +799,10 @@ describe("two-mode permission authority", () => {
         let effects = 0
         const first = await PermissionAuthority.authorizeAndExecute(input, async () => ({ output: "durable result" }))
         const replay = await PermissionAuthority.authorizeAndExecute(input, async () => {
-            effects += 1
-            return { output: "duplicate" }
-          })
-        const outcome = (await PermissionAuthority.history()).find(
-          (row) => row.event_type === "execution_succeeded",
-        )!
+          effects += 1
+          return { output: "duplicate" }
+        })
+        const outcome = (await PermissionAuthority.history()).find((row) => row.event_type === "execution_succeeded")!
         const stored = Database.use((db) => db.select().from(PermissionExecutionResultTable).get())!
         expect({ first, replay, effects, metadata: outcome.metadata, stored }).toEqual({
           first: { output: "durable result" },
@@ -823,8 +892,9 @@ describe("two-mode permission authority", () => {
             time: { start: now + 2, end: now + 3 },
           },
         })
-        const receipt = Database.use((db) => db.select().from(ToolPartOutcomeTable)
-          .where(eq(ToolPartOutcomeTable.request_part_id, partID)).get())!
+        const receipt = Database.use((db) =>
+          db.select().from(ToolPartOutcomeTable).where(eq(ToolPartOutcomeTable.request_part_id, partID)).get(),
+        )!
         expect({ completed, receipt }).toMatchObject({
           completed: {
             state: {
@@ -845,5 +915,4 @@ describe("two-mode permission authority", () => {
       },
     })
   })
-
 })

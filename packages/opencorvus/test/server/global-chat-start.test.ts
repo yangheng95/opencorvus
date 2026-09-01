@@ -337,10 +337,7 @@ describe("global Chat start API", () => {
         "message",
         `global.chat.start.v1\0${body.requestID}\0message`,
       )
-      const deterministicTextPartID = Identifier.deterministic(
-        "part",
-        `global.chat.start.v1\0${body.requestID}\0text`,
-      )
+      const deterministicTextPartID = Identifier.deterministic("part", `global.chat.start.v1\0${body.requestID}\0text`)
       const deterministicAttachmentPartID = Identifier.deterministic(
         "part",
         `global.chat.start.v1\0${body.requestID}\0attachment\0${0}`,
@@ -428,7 +425,14 @@ describe("global Chat start API", () => {
           }),
         }),
       )
-      expect(await EngineService.deleteSession(first.session.id, { projectID: first.session.projectID })).toBe(true)
+      expect(await EngineService.deleteSession(first.session.id, { projectID: first.session.projectID })).toEqual({
+        ok: true,
+        status: "tombstoned",
+        sessionID: first.session.id,
+        sessionHistoryRetained: true,
+        authorizationAuditRetained: true,
+        residue: [],
+      })
       const deletedReplay = await send(body)
       expect({ status: deletedReplay.status, body: await deletedReplay.json() }).toMatchObject({
         status: 410,
@@ -507,10 +511,11 @@ describe("global Chat start API", () => {
   })
 
   test("rejects an unavailable explicit model before reserving a Global Chat allocation or Project", async () => {
-    const facts = () => Database.use((db) => ({
-      allocations: db.select().from(GlobalCreationAllocationTable).all(),
-      projects: db.select().from(ProjectTable).all(),
-    }))
+    const facts = () =>
+      Database.use((db) => ({
+        allocations: db.select().from(GlobalCreationAllocationTable).all(),
+        projects: db.select().from(ProjectTable).all(),
+      }))
     const before = facts()
     const response = await Server.App().request("/global/chat/start", {
       method: "POST",

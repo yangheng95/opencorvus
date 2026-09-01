@@ -469,7 +469,8 @@ export function MissionRoutes() {
       "/:missionID",
       describeRoute({
         summary: "Delete a Mission",
-        description: "Delete the Mission session and its conversation history.",
+        description:
+          "Retire the Mission and hide it from current readers while retaining its immutable Task, Session, Message and lifecycle audit history.",
         operationId: "mission.delete",
         responses: {
           200: {
@@ -501,13 +502,7 @@ export function MissionRoutes() {
         const body = c.req.valid("json")
         const requestID = resolveRequestID(c)
         while (true) {
-          const closure = await closeMissionExecution(
-            session,
-            "mission.delete",
-            requestID,
-            body,
-            c.req.raw.signal,
-          )
+          const closure = await closeMissionExecution(session, "mission.delete", requestID, body, c.req.raw.signal)
           if (closure.state !== "closed") throw new Error(`Mission ${missionID} delete close did not settle`)
           const requested = await requestMissionDeleteRetention({
             missionID,

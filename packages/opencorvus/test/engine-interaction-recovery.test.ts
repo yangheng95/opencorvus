@@ -1,8 +1,10 @@
 import { afterEach, describe, expect, spyOn, test } from "bun:test"
+import { sql } from "drizzle-orm"
 import { Bus } from "@/bus"
 import { Config } from "@/config/config"
 import { insertEngineArtifact } from "@/engine/artifact"
-import { insertEngineInteractionRequest } from "@/engine/interaction-request"
+import { insertEngineInteractionRequest, resolveEngineInteractionRequest } from "@/engine/interaction-request"
+import { EngineInteractionOutcomeTable, EngineInteractionRequestTable } from "@/engine/engine.sql"
 import { TestHooks as TaskControlTestHooks } from "@/engine/task-root-ingress-delivery"
 import { agentCoordinationQuestionID } from "@/engine/agent-coordination"
 import { EngineInteraction } from "@/engine/interaction"
@@ -18,6 +20,7 @@ import { Instance } from "@/project/instance"
 import { Question } from "@/question"
 import { Session } from "@/session"
 import { Database } from "@/storage/db"
+import { ProtocolEventTable } from "@/protocol/protocol.sql"
 import { EngineService } from "@/task-api"
 import { IntentAnalysisAgent } from "@/intent-analysis/agent"
 import z from "zod"
@@ -84,6 +87,110 @@ async function waitForTaskInteraction(taskID: string) {
 }
 
 describe("recovered pending interaction ownership", () => {
+  test("commits Interaction request and outcome with their canonical Protocol facts", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const { root, taskID, now } = await createTaskFixture("atomic interaction publication")
+        const externalID = `atomic-interaction-${Identifier.ascending("artifact")}`
+        const requestInput = {
+          taskID,
+          sessionID: root.id,
+          externalID,
+          requestType: "question" as const,
+          title: "Atomic interaction",
+          body: "Commit the request and event together",
+          payload: { questions: [] },
+          eventSource: "test.atomic-interaction",
+          eventSummary: "Atomic interaction requested",
+          timeCreated: now,
+        }
+        const footprint = () =>
+          Database.use((db) => ({
+            requests: db.select().from(EngineInteractionRequestTable).all().length,
+            outcomes: db.select().from(EngineInteractionOutcomeTable).all().length,
+            events: db
+              .select({ type: ProtocolEventTable.type })
+              .from(ProtocolEventTable)
+              .all()
+              .map((row) => row.type)
+              .filter((type) => type.startsWith("interaction."))
+              .sort(),
+          }))
+        const before = footprint()
+
+        Database.use((db) =>
+          db.run(
+            sql.raw(`
+              CREATE TEMP TRIGGER arc019_fail_interaction_requested
+              BEFORE INSERT ON protocol_event
+              WHEN NEW.type = 'interaction.requested'
+              BEGIN SELECT RAISE(ABORT, 'injected interaction.requested commit failure'); END
+            `),
+          ),
+        )
+        try {
+          expect(() => Database.transaction((db) => insertEngineInteractionRequest(db, requestInput))).toThrow(
+            "injected interaction.requested commit failure",
+          )
+        } finally {
+          Database.use((db) => db.run(sql.raw("DROP TRIGGER arc019_fail_interaction_requested")))
+        }
+        expect(footprint()).toEqual(before)
+
+        const interactionID = Database.transaction((db) => insertEngineInteractionRequest(db, requestInput))
+        const interaction = findInteractionByExternal(externalID)
+        expect(interaction?.id).toBe(interactionID)
+        Database.use((db) =>
+          db.run(
+            sql.raw(`
+              CREATE TEMP TRIGGER arc019_fail_interaction_resolved
+              BEFORE INSERT ON protocol_event
+              WHEN NEW.type = 'interaction.resolved'
+              BEGIN SELECT RAISE(ABORT, 'injected interaction.resolved commit failure'); END
+            `),
+          ),
+        )
+        try {
+          expect(() =>
+            Database.transaction((db) =>
+              resolveEngineInteractionRequest(db, {
+                row: interaction!,
+                status: "answered",
+                response: { answers: [["accepted"]] },
+                eventSource: "test.atomic-interaction",
+                timeResolved: now + 1,
+              }),
+            ),
+          ).toThrow("injected interaction.resolved commit failure")
+        } finally {
+          Database.use((db) => db.run(sql.raw("DROP TRIGGER arc019_fail_interaction_resolved")))
+        }
+        expect(footprint()).toEqual({
+          requests: before.requests + 1,
+          outcomes: before.outcomes,
+          events: ["interaction.requested"],
+        })
+
+        Database.transaction((db) =>
+          resolveEngineInteractionRequest(db, {
+            row: interaction!,
+            status: "answered",
+            response: { answers: [["accepted"]] },
+            eventSource: "test.atomic-interaction",
+            timeResolved: now + 1,
+          }),
+        )
+        expect(footprint()).toEqual({
+          requests: before.requests + 1,
+          outcomes: before.outcomes + 1,
+          events: ["interaction.requested", "interaction.resolved"],
+        })
+      },
+    })
+  }, 30_000)
+
   test("restores the exact ordinary durable Question and retains a durable Permission after restart", async () => {
     await using project = await memoryProject()
     const created = await Instance.provide({
@@ -417,9 +524,7 @@ describe("recovered pending interaction ownership", () => {
           abandoned: [],
           retainedRecoverableQuestions: [],
           retainedRecoverablePermissions: [],
-          retainedControlPlaneGates: [
-            { interactionID: created.interactionID, externalID: created.externalID },
-          ],
+          retainedControlPlaneGates: [{ interactionID: created.interactionID, externalID: created.externalID }],
           unreconciled: [],
         })
         expect((await Question.list()).map((item) => item.id)).not.toContain(created.externalID)
@@ -628,6 +733,7 @@ describe("recovered pending interaction ownership", () => {
             requireTask: () => requireTask(taskID),
           }).analyze_intent
           if (!analyzeTool.execute) throw new Error("analyze_intent is missing its executor")
+          const dispatchSignal = new AbortController().signal
           const output = analyzeTool.execute({ reason: "Resolve the implementation scope", attachment_refs: [] }, {
             agentID: "intent-fixture",
             projectedAgent: {
@@ -640,10 +746,14 @@ describe("recovered pending interaction ownership", () => {
               projectedToolIDs: [],
             },
             workScope: { kind: "task" },
+            existingSessionID: analysisSession.id,
+            signal: dispatchSignal,
             dispatch: {
               dispatchID: "dispatch_intent_fixture",
+              existingSessionID: analysisSession.id,
               deliverySliceRevisionIDs: [],
               adapterInput: {},
+              signal: dispatchSignal,
               turn: {
                 kind: "initial",
                 current_dispatch_id: "dispatch_intent_fixture",

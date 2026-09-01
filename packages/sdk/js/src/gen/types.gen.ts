@@ -4766,6 +4766,43 @@ export type SessionConversationConnectionSnapshot = {
   }
 }
 
+export type SessionDeleteResult =
+  | {
+      authorizationAuditRetained: true
+      ok: true
+      residue: Array<{
+        message: string
+        path: string
+      }>
+      sessionHistoryRetained: true
+      sessionID: string
+      status: "tombstoned"
+    }
+  | {
+      authorizationAuditRetained: true
+      cleanupOperationID: string
+      ok: true
+      residue: Array<{
+        message: string
+        path: string
+      }>
+      sessionHistoryRetained: false
+      sessionID: string
+      status: "physically_deleted"
+    }
+  | {
+      authorizationAuditRetained: true
+      cleanupOperationID: string
+      ok: true
+      residue: Array<{
+        message: string
+        path: string
+      }>
+      sessionHistoryRetained: false
+      sessionID: string
+      status: "physically_deleted_with_residue"
+    }
+
 export type SessionProtocolEvent = {
   emittedAt: number
   event_id: string
@@ -6646,6 +6683,15 @@ export type CodingChatSessionDeleteErrors = {
         }
         name: "LogFileNotFoundError"
       }
+  /**
+   * Session deletion is already in progress
+   */
+  409: {
+    data: {
+      [key: string]: unknown
+    }
+    name: "SessionDeletionInProgressError"
+  }
 }
 
 export type CodingChatSessionDeleteError = CodingChatSessionDeleteErrors[keyof CodingChatSessionDeleteErrors]
@@ -6654,7 +6700,7 @@ export type CodingChatSessionDeleteResponses = {
   /**
    * Deleted Chat session
    */
-  200: boolean
+  200: SessionDeleteResult
 }
 
 export type CodingChatSessionDeleteResponse = CodingChatSessionDeleteResponses[keyof CodingChatSessionDeleteResponses]
@@ -7084,6 +7130,15 @@ export type CodingWorkSessionDeleteErrors = {
         }
         name: "LogFileNotFoundError"
       }
+  /**
+   * Session deletion is already in progress
+   */
+  409: {
+    data: {
+      [key: string]: unknown
+    }
+    name: "SessionDeletionInProgressError"
+  }
 }
 
 export type CodingWorkSessionDeleteError = CodingWorkSessionDeleteErrors[keyof CodingWorkSessionDeleteErrors]
@@ -7092,7 +7147,7 @@ export type CodingWorkSessionDeleteResponses = {
   /**
    * Deleted Work session
    */
-  200: boolean
+  200: SessionDeleteResult
 }
 
 export type CodingWorkSessionDeleteResponse = CodingWorkSessionDeleteResponses[keyof CodingWorkSessionDeleteResponses]
@@ -24195,6 +24250,12 @@ export type SessionDeleteErrors = {
         data: {
           [key: string]: unknown
         }
+        name: "SessionDeletionInProgressError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
         name: "TaskCancellationIncompleteError"
       }
     | {
@@ -24204,7 +24265,7 @@ export type SessionDeleteErrors = {
         name: "TaskBoundSessionDeletionError"
       }
   /**
-   * Session deletion failed or committed with Task cleanup diagnostics
+   * Session deletion failed or committed with cleanup diagnostics
    */
   500:
     | {
@@ -24225,9 +24286,9 @@ export type SessionDeleteError = SessionDeleteErrors[keyof SessionDeleteErrors]
 
 export type SessionDeleteResponses = {
   /**
-   * Successfully deleted session
+   * Session deletion disposition
    */
-  200: boolean
+  200: SessionDeleteResult
 }
 
 export type SessionDeleteResponse = SessionDeleteResponses[keyof SessionDeleteResponses]

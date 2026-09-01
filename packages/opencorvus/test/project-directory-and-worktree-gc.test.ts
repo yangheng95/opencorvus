@@ -125,6 +125,42 @@ async function convergeExactDirectoryFromInstanceCache(target: string, retainedD
   throw new Error(`Instance convergence did not dispose the requested directory: ${target}`)
 }
 
+async function beginExactDirectoryConvergence(
+  target: string,
+  retainedDirectory: string,
+  selected: Promise<void>,
+) {
+  let retainedEntered!: () => void
+  const retainedEnteredPromise = new Promise<void>((resolve) => (retainedEntered = resolve))
+  let releaseRetained!: () => void
+  const releaseRetainedPromise = new Promise<void>((resolve) => (releaseRetained = resolve))
+  const retained = Instance.provideProjectIdentity({
+    directory: retainedDirectory,
+    fn: async () => {
+      retainedEntered()
+      await releaseRetainedPromise
+    },
+  })
+  await retainedEnteredPromise
+
+  const deadline = Date.now() + 5_000
+  let convergence: ReturnType<typeof Instance.converge> | undefined
+  try {
+    for (;;) {
+      convergence = Instance.converge({ maximumRetained: 1 })
+      const targetSelected = await Promise.race([selected.then(() => true), convergence.then(() => false)])
+      if (targetSelected) return { convergence }
+      if (Date.now() >= deadline) {
+        throw new Error(`Instance convergence did not select the requested idle directory: ${target}`)
+      }
+      await Bun.sleep(5)
+    }
+  } finally {
+    releaseRetained()
+    await retained
+  }
+}
+
 afterEach(async () => {
   rejectDeletionProbeDisposal = false
   holdDeletionProbeDisposal = undefined
@@ -804,11 +840,10 @@ describe("Project directory integrity", () => {
       selected()
       await releasePromise
     })
-    // This contract requires convergence to select the Project root before
-    // deletion closes admission. Make the sandbox the retained MRU entry
-    // explicitly so prior cache activity in this file cannot change the target.
-    await Instance.provideProjectIdentity({ directory: cacheSandbox, fn: () => undefined })
-    const convergence = Instance.converge({ maximumRetained: 1 })
+    // Keep the retained sandbox actively leased until convergence claims the
+    // Project root. The global config peer monitor may briefly lease either
+    // cache entry, so MRU order alone cannot select an exact idle entry.
+    const { convergence } = await beginExactDirectoryConvergence(project.path, cacheSandbox, selectedPromise)
     await Promise.race([
       selectedPromise,
       Bun.sleep(5_000).then(() => {
@@ -863,12 +898,10 @@ describe("Project directory integrity", () => {
         selected()
         await releasePromise
       })
-      // The contract below is about a selected root entry blocking deletion
-      // admission. Make the sandbox the retained MRU entry explicitly; without
-      // this touch, convergence may validly evict the sandbox and leave the
-      // root retained, in which case the hook this test waits for never runs.
-      await Instance.provideProjectIdentity({ directory: cacheSandbox, fn: () => undefined })
-      const convergence = Instance.converge({ maximumRetained: 1 })
+      // Select the root exactly even while the global config peer monitor
+      // briefly leases active entries; the tested timeout begins only after
+      // convergence owns the root disposal turn.
+      const { convergence } = await beginExactDirectoryConvergence(project.path, cacheSandbox, selectedPromise)
       await Promise.race([
         selectedPromise,
         Bun.sleep(5_000).then(() => {
@@ -1037,7 +1070,18 @@ describe("Project directory integrity", () => {
       headers: { "x-opencorvus-directory": project.path },
     })
 
-    expect({ status: response.status, body: await response.json() }).toEqual({ status: 200, body: true })
+    expect({ status: response.status, body: await response.json() }).toEqual({
+      status: 200,
+      body: {
+        ok: true,
+        status: "physically_deleted",
+        sessionID: session.id,
+        sessionHistoryRetained: false,
+        authorizationAuditRetained: true,
+        cleanupOperationID: expect.any(String),
+        residue: [],
+      },
+    })
   }, 90_000)
 
   test("deletes a persisted Task after its registered Project repository is already absent", async () => {
@@ -1130,7 +1174,14 @@ describe("Project directory integrity", () => {
 
     expect({ status: response.status, body: await response.json(), directoryState }).toEqual({
       status: 200,
-      body: true,
+      body: {
+        ok: true,
+        status: "tombstoned",
+        sessionID: session.id,
+        sessionHistoryRetained: true,
+        authorizationAuditRetained: true,
+        residue: [],
+      },
       directoryState: "missing",
     })
   }, 90_000)

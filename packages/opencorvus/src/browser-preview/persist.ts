@@ -7,7 +7,6 @@ import {
   insertEngineArtifact,
   patchEngineArtifact,
   recordEngineArtifact,
-  updateEngineArtifact,
   type EngineArtifactRow,
 } from "@/engine/artifact"
 import { BROWSER_PREVIEW_EVIDENCE_ARTIFACT_TYPE } from "@/engine/artifact-catalog-constants"
@@ -440,6 +439,11 @@ export function persistBrowserPreviewTarget(input: {
     const payload = { url: canonicalUrl, source: "engine-artifact" as const, viewports }
     if (existing) {
       patchEngineArtifact(db, { id: existing.id, label: "BrowserPreviewTarget", payload, timeUpdated: now })
+      EngineProtocol.emitInTransaction(
+        Event.TaskUpdated,
+        { taskID: input.taskID, summary: "Browser preview target updated" },
+        { source: "browser-preview.target" },
+      )
       return {
         id: existing.id,
         taskID: existing.task_id,
@@ -462,6 +466,11 @@ export function persistBrowserPreviewTarget(input: {
     db.insert(EngineBrowserPreviewTargetIdentityTable)
       .values({ task_id: input.taskID, canonical_url: canonicalUrl, artifact_id: id })
       .run()
+    EngineProtocol.emitInTransaction(
+      Event.TaskUpdated,
+      { taskID: input.taskID, summary: "Browser preview target updated" },
+      { source: "browser-preview.target" },
+    )
     return {
       id,
       taskID: input.taskID,
@@ -472,14 +481,7 @@ export function persistBrowserPreviewTarget(input: {
       timeUpdated: now,
     }
   })
-  return EngineProtocol.emit(
-    Event.TaskUpdated,
-    {
-      taskID: input.taskID,
-      summary: "Browser preview target updated",
-    },
-    { source: "browser-preview.target" },
-  ).then(() => persisted)
+  return Promise.resolve(persisted)
 }
 
 export function promoteBrowserPreviewTarget(input: {
@@ -487,26 +489,40 @@ export function promoteBrowserPreviewTarget(input: {
   targetID: string
   now?: number
 }): Promise<PersistedBrowserPreviewTarget | undefined> {
-  const existing = findBrowserPreviewTargetByID(input)
-  if (!existing) return Promise.resolve(undefined)
-  const now = Math.max(input.now ?? Date.now(), existing.timeUpdated + 1)
-  updateEngineArtifact({
-    id: existing.id,
-    label: "BrowserPreviewTarget",
-    timeUpdated: now,
-  })
-  const persisted: PersistedBrowserPreviewTarget = {
-    ...existing,
-    timeUpdated: now,
-  }
-  return EngineProtocol.emit(
-    Event.TaskUpdated,
-    {
-      taskID: input.taskID,
-      summary: "Browser preview target updated",
-    },
-    { source: "browser-preview.target" },
-  ).then(() => persisted)
+  return Promise.resolve(
+    Database.transaction((db) => {
+      const row = db
+        .select()
+        .from(EngineArtifactTable)
+        .where(
+          and(
+            eq(EngineArtifactTable.task_id, input.taskID),
+            eq(EngineArtifactTable.id, input.targetID),
+            eq(EngineArtifactTable.kind, BROWSER_PREVIEW_TARGET_KIND),
+          ),
+        )
+        .limit(1)
+        .get()
+      if (!row) return undefined
+      const payload = parseBrowserPreviewTargetPayload(row)
+      const now = Math.max(input.now ?? Date.now(), row.time_updated + 1)
+      patchEngineArtifact(db, { id: row.id, label: "BrowserPreviewTarget", timeUpdated: now })
+      EngineProtocol.emitInTransaction(
+        Event.TaskUpdated,
+        { taskID: input.taskID, summary: "Browser preview target updated" },
+        { source: "browser-preview.target" },
+      )
+      return {
+        id: row.id,
+        taskID: row.task_id,
+        url: payload.url,
+        source: payload.source,
+        viewports: payload.viewports,
+        timeCreated: row.time_created,
+        timeUpdated: now,
+      }
+    }),
+  )
 }
 
 export function findRecentBrowserPreviewTargets(taskID: string, limit = 12): PersistedBrowserPreviewTarget[] {

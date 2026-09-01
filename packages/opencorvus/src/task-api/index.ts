@@ -58,26 +58,34 @@ import { Worktree } from "@/worktree"
 import { Question } from "@/question"
 import { Session } from "@/session"
 import { SessionTable } from "@/session/session.sql"
+import {
+  assertSessionDeletionAuthorityInTransaction,
+  assertSessionDeletionPromptOwnersSettledInTransaction,
+  claimSessionDeletionCleanup,
+  closeSessionDeletionAuthority,
+  cleanupCommittedSessionDeletion,
+  createSessionDeletionCleanupPlan,
+  releaseSessionDeletionAuthorityInTransaction,
+  resumeSessionDeletionCleanup,
+  rollbackSessionDeletionCleanup,
+  runBeforeRetainedSessionDeletionBoundaryCommitForTest,
+  retainedSessionDeletionSettlementTimeoutForTest,
+  SessionDeletionRuntimeNotSettledError,
+  stageSessionDeletionCleanup,
+} from "@/session/deletion-cleanup"
 import { SessionContext } from "@/session/context"
 import { Message } from "@/session/message"
 import { decodeRawBase64Payload } from "@/session/text-mime"
 import { SessionPrompt } from "@/session/prompt"
 import { SessionStatus } from "@/session/status"
-import {
-  Database,
-  NotFoundError,
-  and,
-  eq,
-  inArray,
-  isNull,
-  isSqliteUniqueConstraintError,
-  sql,
-} from "@/storage/db"
+import { rightSidebarConversationExperience } from "@/chat/identity"
+import { Database, NotFoundError, and, eq, inArray, isNull, isSqliteUniqueConstraintError, sql } from "@/storage/db"
 import { Log } from "@/util/log"
 import { Filesystem } from "@/util/filesystem"
 import { awaitWithAbort } from "@/util/abort"
 import { bindMissionClosingChildTaskCanceller } from "@/mission/execution-close-effects"
 import { bindMissionRetentionSessionDeleter } from "@/mission/retention"
+import { MissionSessionAuthorityError } from "@/mission/public-session-authority"
 import { compileBoard, boardTag } from "@/workbench/board"
 import { compileBrief } from "@/workbench/brief"
 import {
@@ -91,8 +99,15 @@ import {
 import { taskLifecycleProjectionInTransaction } from "@/engine/task-lifecycle"
 import { insertEngineArtifact } from "@/engine/artifact"
 import { buildObservationCleanupRowsForTask, settleBuildObservationCleanup } from "@/engine/build-observation-cleanup"
-import { TaskExpectedPackageDigestConflictError, requireTaskPackageRevisionBinding } from "@/engine/task-package-revision-binding"
-import { configuredTaskProcessMode, prepareTaskProcessBinding, type TaskProcessBindingPayload } from "@/engine/task-execution-capsule-binding"
+import {
+  TaskExpectedPackageDigestConflictError,
+  requireTaskPackageRevisionBinding,
+} from "@/engine/task-package-revision-binding"
+import {
+  configuredTaskProcessMode,
+  prepareTaskProcessBinding,
+  type TaskProcessBindingPayload,
+} from "@/engine/task-execution-capsule-binding"
 import { TaskCreationResolutionSeedSchema, type TaskCreationResolutionSeed } from "@/engine/task-creation-facts"
 import { resolveEngineInteractionRequest } from "@/engine/interaction-request"
 import {
@@ -252,7 +267,6 @@ import { SessionWake } from "@/session/wake"
 import { IntentBundle } from "@/intent/bundle"
 import { taskRootDirectory } from "@/engine/task-directory"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
-import { removeTaskArtifactRoot } from "@/task-artifact/store"
 import {
   buildTaskCreationContractFact,
   buildTaskCreationRequestFact,
@@ -317,6 +331,59 @@ export const TaskArtifactDeletionCommittedError = NamedError.create(
     taskIDs: z.array(z.string()),
     residuePaths: z.array(z.string()),
   }),
+)
+
+const SessionDeletionResidue = z.object({ path: z.string().min(1), message: z.string().min(1) }).strict()
+
+export const SessionDeleteResult = z
+  .discriminatedUnion("status", [
+    z
+      .object({
+        ok: z.literal(true),
+        status: z.literal("tombstoned"),
+        sessionID: z.string().min(1),
+        sessionHistoryRetained: z.literal(true),
+        authorizationAuditRetained: z.literal(true),
+        residue: z.array(SessionDeletionResidue).max(0),
+      })
+      .strict(),
+    z
+      .object({
+        ok: z.literal(true),
+        status: z.literal("physically_deleted"),
+        sessionID: z.string().min(1),
+        sessionHistoryRetained: z.literal(false),
+        authorizationAuditRetained: z.literal(true),
+        cleanupOperationID: z.string().min(1),
+        residue: z.array(SessionDeletionResidue).max(0),
+      })
+      .strict(),
+    z
+      .object({
+        ok: z.literal(true),
+        status: z.literal("physically_deleted_with_residue"),
+        sessionID: z.string().min(1),
+        sessionHistoryRetained: z.literal(false),
+        authorizationAuditRetained: z.literal(true),
+        cleanupOperationID: z.string().min(1),
+        residue: z.array(SessionDeletionResidue).min(1),
+      })
+      .strict(),
+  ])
+  .meta({ ref: "SessionDeleteResult" })
+
+export type SessionDeleteResult = z.infer<typeof SessionDeleteResult>
+
+export const SessionDeletionInProgressError = NamedError.create(
+  "SessionDeletionInProgressError",
+  z
+    .object({
+      message: z.string(),
+      sessionID: z.string().min(1),
+      operationID: z.string().min(1),
+      ownerOccurrenceID: z.string().min(1),
+    })
+    .strict(),
 )
 
 export const TaskCancellationLifecycleConflictError = NamedError.create(
@@ -617,51 +684,7 @@ function taskCleanupTarget(task: Pick<TaskRow, "id" | "project_id" | "session_id
   }
 }
 
-async function deleteRowsThenTaskArtifacts(tasks: readonly TaskRow[], deleteRows: () => void): Promise<void> {
-  const cleanupTargets = tasks
-    .map(taskCleanupTarget)
-    .sort((left, right) => left.taskID.localeCompare(right.taskID))
-  await settleTaskCleanupOwners(cleanupTargets)
-  deleteRows()
-  const cleanupFailures: unknown[] = []
-  const residuePaths: string[] = []
-  for (const target of cleanupTargets) {
-    const removals = await Promise.allSettled([
-      removeTaskArtifactRoot({ taskID: target.taskID, projectDirectory: target.taskArtifactDirectory }),
-      IntentBundle.removeProjection({ taskID: target.taskID, projectDirectory: target.intentProjectDirectory }),
-    ])
-    if (removals[0].status === "rejected") {
-      cleanupFailures.push(removals[0].reason)
-      residuePaths.push(ProjectRuntimePaths.taskArtifactRoot(target.taskArtifactDirectory, target.taskID))
-    }
-    if (removals[1].status === "rejected") {
-      cleanupFailures.push(removals[1].reason)
-      residuePaths.push(ProjectRuntimePaths.intentPaths(target.intentProjectDirectory, target.taskID).absolute)
-    }
-  }
-  if (cleanupFailures.length > 0) {
-    const taskIDs = tasks.map((task) => task.id).sort()
-    const cause = new AggregateError(
-      cleanupFailures,
-      "Task rows were committed as deleted but TaskArtifact cleanup failed",
-    )
-    throw new TaskArtifactDeletionCommittedError(
-      {
-        message:
-          `Task rows ${taskIDs.join(", ")} were deleted, but ${cleanupFailures.length} ` +
-          "TaskArtifact cleanup operation(s) failed.",
-        committed: true,
-        taskIDs,
-        residuePaths: residuePaths.sort(),
-      },
-      { cause },
-    )
-  }
-}
-
-async function settleTaskCleanupOwners(
-  cleanupTargets: readonly TaskCleanupTarget[],
-): Promise<void> {
+async function settleTaskCleanupOwners(cleanupTargets: readonly TaskCleanupTarget[]): Promise<void> {
   // Cleanup owners remain immutable facts after a Task tombstone. Resolve all
   // pending/retained physical ref ownership before recording that boundary.
   for (const target of cleanupTargets) {
@@ -681,7 +704,9 @@ async function removeTombstonedIntentProjections(cleanupTargets: readonly TaskCl
     ),
   )
   const failures = removals
-    .map((result, index) => result.status === "rejected" ? { cause: result.reason, target: cleanupTargets[index]! } : undefined)
+    .map((result, index) =>
+      result.status === "rejected" ? { cause: result.reason, target: cleanupTargets[index]! } : undefined,
+    )
     .filter((item): item is { cause: unknown; target: TaskCleanupTarget } => Boolean(item))
   if (failures.length === 0) return
   throw new TaskArtifactDeletionCommittedError(
@@ -693,7 +718,12 @@ async function removeTombstonedIntentProjections(cleanupTargets: readonly TaskCl
         .map((item) => ProjectRuntimePaths.intentPaths(item.target.intentProjectDirectory, item.target.taskID).absolute)
         .sort(),
     },
-    { cause: new AggregateError(failures.map((item) => item.cause), "Intent projection cleanup failed") },
+    {
+      cause: new AggregateError(
+        failures.map((item) => item.cause),
+        "Intent projection cleanup failed",
+      ),
+    },
   )
 }
 
@@ -735,6 +765,8 @@ export const CANCEL_PROMPT_SETTLE_INACTIVITY_MS = 5_000
  * activity renews the window; this is not a wall-clock cancellation deadline.
  */
 export const CANCEL_INGRESS_SETTLE_INACTIVITY_MS = 60_000
+const RETAINED_SESSION_DELETION_MAX_TERMINAL_ROUNDS = 256
+const RETAINED_SESSION_DELETION_RETRY_INTERVAL_MS = 250
 
 function missionTaskTitleInput(input: z.infer<typeof CreateTaskInput>):
   | {
@@ -1823,25 +1855,26 @@ export namespace EngineService {
     assertNoCallerSuppliedChildTaskLineage(parsed)
     assertNoCallerSuppliedTaskCreatorMetadata(parsed.metadata)
     assertTaskCreatorExpertSquadAuthority({ creator, promptProfile: parsed.promptProfile })
-    const caller: TaskCreationCallerInput = creator.actor !== "user" && creator.toolInput
-      ? panelTaskCreationCallerInput(creator.toolInput, taskCreationRequestAttachments(parsed.attachments))
-      : {
-          project: parsed.project,
-          directory: parsed.directory,
-          source: parsed.source,
-          productPillar: parsed.productPillar,
-          title: parsed.title,
-          request: parsed.request,
-          attachments: taskCreationRequestAttachments(parsed.attachments),
-          priority: parsed.priority,
-          budget: parsed.budget,
-          checks: parsed.checks,
-          metadata: parsed.metadata,
-          model: parsed.model,
-          promptProfile: parsed.promptProfile,
-          expectedPackageDigest: parsed.expectedPackageDigest,
-          artifactSources: parsed.artifactSources,
-        }
+    const caller: TaskCreationCallerInput =
+      creator.actor !== "user" && creator.toolInput
+        ? panelTaskCreationCallerInput(creator.toolInput, taskCreationRequestAttachments(parsed.attachments))
+        : {
+            project: parsed.project,
+            directory: parsed.directory,
+            source: parsed.source,
+            productPillar: parsed.productPillar,
+            title: parsed.title,
+            request: parsed.request,
+            attachments: taskCreationRequestAttachments(parsed.attachments),
+            priority: parsed.priority,
+            budget: parsed.budget,
+            checks: parsed.checks,
+            metadata: parsed.metadata,
+            model: parsed.model,
+            promptProfile: parsed.promptProfile,
+            expectedPackageDigest: parsed.expectedPackageDigest,
+            artifactSources: parsed.artifactSources,
+          }
     const input = CreateTaskInput.parse({
       ...parsed,
       ...(creator.actor === "mission" ? { source: "mission" } : {}),
@@ -2418,11 +2451,7 @@ export namespace EngineService {
 
   export async function deleteTask(taskID: string, options?: DestructiveTaskOptions) {
     const deleted = Database.use((db) => {
-      const row = db
-        .select()
-        .from(EngineTaskTable)
-        .where(eq(EngineTaskTable.id, taskID))
-        .get()
+      const row = db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, taskID)).get()
       return row && taskDeletedInTransaction(db, taskID) ? row : undefined
     })
     if (deleted) {
@@ -3207,30 +3236,98 @@ export namespace EngineService {
     return rows
   }
 
-  export async function deleteSession(
+  type SessionDeletionReplayAuthority =
+    | { surface: "internal" }
+    | { surface: "public_session" | "panel" }
+    | { surface: "right_sidebar"; experience: "chat" | "work" }
+
+  function sessionDeletionRootIdentity(session: Pick<Session.Info, "kind" | "metadata">): {
+    kind: string
+    conversationExperience: "chat" | "work" | null
+  } {
+    return {
+      kind: session.kind,
+      conversationExperience: rightSidebarConversationExperience(session) ?? null,
+    }
+  }
+
+  function assertSessionDeletionReplayAuthority(
     sessionID: string,
-    input?: {
-      deleteTasks?: boolean
+    identity: { kind: string; conversationExperience: "chat" | "work" | null },
+    authority: SessionDeletionReplayAuthority,
+  ): void {
+    if (authority.surface === "internal") return
+    if (authority.surface === "right_sidebar") {
+      if (identity.kind === "assistant" && identity.conversationExperience === authority.experience) return
+      throw new NotFoundError({
+        message: `${authority.experience === "work" ? "Work" : "Chat"} session not found: ${sessionID}`,
+      })
+    }
+    if (identity.kind === "mission") {
+      throw new MissionSessionAuthorityError({
+        message: `session.delete cannot control a Mission Session; use mission.delete.`,
+        operation: "session.delete",
+        canonicalOperation: "mission.delete",
+        sessionID,
+      })
+    }
+  }
+
+  export async function replaySessionDeletion(
+    sessionID: string,
+    input: {
       projectID?: string
-      cancellationOrigin?: TaskCancellationOriginValue
+      authority: SessionDeletionReplayAuthority
     },
-  ) {
+  ): Promise<SessionDeleteResult | undefined> {
     const current = Instance.current()
+    const resumedCleanup = await resumeSessionDeletionCleanup(sessionID)
+    if (resumedCleanup?.status === "in_progress") {
+      if (
+        (input.projectID && input.projectID !== resumedCleanup.projectID) ||
+        (current && current.project.id !== resumedCleanup.projectID)
+      ) {
+        throw new NotFoundError({ message: `Session not found: ${sessionID}` })
+      }
+      assertSessionDeletionReplayAuthority(sessionID, resumedCleanup.rootIdentity, input.authority)
+      throw new SessionDeletionInProgressError({
+        message: `Session deletion ${resumedCleanup.operationID} is owned by a live runtime occurrence`,
+        sessionID,
+        operationID: resumedCleanup.operationID,
+        ownerOccurrenceID: resumedCleanup.ownerOccurrenceID,
+      })
+    }
+    if (resumedCleanup?.status === "committed") {
+      if (
+        (input.projectID && input.projectID !== resumedCleanup.projectID) ||
+        (current && current.project.id !== resumedCleanup.projectID)
+      ) {
+        throw new NotFoundError({ message: `Session not found: ${sessionID}` })
+      }
+      assertSessionDeletionReplayAuthority(sessionID, resumedCleanup.rootIdentity, input.authority)
+      return SessionDeleteResult.parse({
+        ok: true,
+        status: resumedCleanup.residue.length > 0 ? "physically_deleted_with_residue" : "physically_deleted",
+        sessionID,
+        sessionHistoryRetained: false,
+        authorizationAuditRetained: true,
+        cleanupOperationID: resumedCleanup.operationID,
+        residue: resumedCleanup.residue,
+      })
+    }
     const retainedRetry = Database.use((db) => {
-      const retainedRoot = db
-        .select({ projectID: SessionTable.project_id })
-        .from(SessionTable)
-        .where(eq(SessionTable.id, sessionID))
-        .get()
+      const retainedRoot = db.select().from(SessionTable).where(eq(SessionTable.id, sessionID)).get()
       if (!retainedRoot || !Session.deletedInTransaction(db, sessionID)) return undefined
-      if (input?.projectID && retainedRoot.projectID !== input.projectID) return undefined
-      if (current && retainedRoot.projectID !== current.project.id) return undefined
+      if (input.projectID && retainedRoot.project_id !== input.projectID) return undefined
+      if (current && retainedRoot.project_id !== current.project.id) return undefined
+      const rootInfo = Session.fromRow(retainedRoot)
+      assertSessionDeletionReplayAuthority(sessionID, sessionDeletionRootIdentity(rootInfo), input.authority)
       const sessionIDs = Session.treeInProjectInTransaction(db, {
         sessionID,
-        projectID: retainedRoot.projectID,
+        projectID: retainedRoot.project_id,
         includeDeletedRoot: true,
       })
-      const tasks = boundTaskRowsForSessionsInTransaction(db, retainedRoot.projectID, sessionIDs)
+      const tasks = boundTaskRowsForSessionsInTransaction(db, retainedRoot.project_id, sessionIDs)
       const active = tasks.filter((task) => !taskDeletedInTransaction(db, task.id))
       if (active.length > 0) {
         throw new TaskBoundSessionDeletionError({
@@ -3241,10 +3338,32 @@ export namespace EngineService {
       }
       return tasks.map(taskCleanupTarget)
     })
-    if (retainedRetry) {
-      await removeTombstonedIntentProjections(retainedRetry)
-      return true
-    }
+    if (!retainedRetry) return
+    await removeTombstonedIntentProjections(retainedRetry)
+    return SessionDeleteResult.parse({
+      ok: true,
+      status: "tombstoned",
+      sessionID,
+      sessionHistoryRetained: true,
+      authorizationAuditRetained: true,
+      residue: [],
+    })
+  }
+
+  export async function deleteSession(
+    sessionID: string,
+    input?: {
+      deleteTasks?: boolean
+      projectID?: string
+      cancellationOrigin?: TaskCancellationOriginValue
+    },
+  ): Promise<SessionDeleteResult> {
+    const current = Instance.current()
+    const replay = await replaySessionDeletion(sessionID, {
+      projectID: input?.projectID,
+      authority: { surface: "internal" },
+    })
+    if (replay) return replay
     const root = input?.projectID
       ? await Session.getInProject({ sessionID, projectID: input.projectID })
       : current
@@ -3281,91 +3400,197 @@ export namespace EngineService {
       handle: "EngineService.deleteSession",
       origin: executionCancellationOrigin,
     })
-    const ids = requested.sessionIDs
+    let ids = requested.sessionIDs
     const sessionsByDirectory = new Map<string, string[]>()
-    for (const id of ids) {
-      const session = await Session.getInProject({ sessionID: id, projectID: root.projectID })
-      const directorySessions = sessionsByDirectory.get(session.directory)
-      if (directorySessions) directorySessions.push(id)
-      else sessionsByDirectory.set(session.directory, [id])
+    const deletionSessions: Array<{ id: string; directory: string }> = []
+    const refreshDeletionSessions = async (sessionIDs: readonly string[]) => {
+      sessionsByDirectory.clear()
+      deletionSessions.length = 0
+      for (const id of sessionIDs) {
+        const session = await Session.getInProject({ sessionID: id, projectID: root.projectID })
+        deletionSessions.push({ id, directory: session.directory })
+        const directorySessions = sessionsByDirectory.get(session.directory)
+        if (directorySessions) directorySessions.push(id)
+        else sessionsByDirectory.set(session.directory, [id])
+      }
     }
-    await assertSessionPromptSubtreeFinished({
-      sessions: requested.cancelledSessions,
-      failures: requested.failures,
-      handle: "EngineService.deleteSession",
-      publishTerminalStatus: false,
-    })
-    await Promise.all(
-      [...sessionsByDirectory].map(([directory, sessionIDs]) =>
-        Instance.tryProvideActive({
-          directory,
-          fn: async () => {
-            await Promise.all(sessionIDs.map((id) => HostSessionMcpRuntime.dispose(id)))
-          },
-        }),
-      ),
-    )
-    const tasksForDelete: TaskRow[] = []
-    if (input?.deleteTasks) {
-      for (const item of boundTasks) {
-        if (isTaskTerminal(item)) {
-          tasksForDelete.push(item)
-          continue
-        }
-        if (!input.cancellationOrigin) {
-          throw new Error(`deleteSession requires cancellation origin while task ${item.id} is non-terminal.`)
-        }
-        await cancelTask(item.id, { origin: input.cancellationOrigin })
-        tasksForDelete.push(requireTaskInCurrentProject(item.id))
+    await refreshDeletionSessions(ids)
+    const settleRuntime = async (options: { allowTreeExpansion?: boolean; deadline?: number } = {}) => {
+      const cancellation = await requestSessionPromptSubtreeCancellation({
+        sessionID,
+        projectID: root.projectID,
+        handle: "EngineService.deleteSession",
+        origin: executionCancellationOrigin,
+      })
+      if (cancellation.sessionIDs.length !== ids.length || cancellation.sessionIDs.some((id) => !ids.includes(id))) {
+        if (!options.allowTreeExpansion) throw new Error(`Session tree ${sessionID} changed during deletion settlement`)
+        ids = cancellation.sessionIDs
+        await refreshDeletionSessions(ids)
       }
-      for (const item of tasksForDelete) {
-        await awaitTaskRootIngressSettled(item, CANCEL_INGRESS_SETTLE_INACTIVITY_MS)
-      }
+      const reason = `Session tree ${sessionID} deleted before the Tool invocation ran`
+      await PermissionAuthority.cancelPendingForSessions(ids, reason, "system", {
+        ...(options.deadline === undefined ? {} : { deadline: options.deadline }),
+        ...(options.allowTreeExpansion ? { maxBatchesPerPage: 1 } : {}),
+      })
+      await assertSessionPromptSubtreeFinished({
+        sessions: cancellation.cancelledSessions,
+        failures: cancellation.failures,
+        handle: "EngineService.deleteSession",
+        publishTerminalStatus: false,
+      })
+      // Prompt settlement is the closed producer boundary. A second fixed-page
+      // reduction catches requests admitted before cancellation was observed;
+      // the physical deletion fence rejects every later requested row.
+      await PermissionAuthority.cancelPendingForSessions(ids, reason, "system", {
+        ...(options.deadline === undefined ? {} : { deadline: options.deadline }),
+        ...(options.allowTreeExpansion ? { maxBatchesPerPage: 1 } : {}),
+      })
+      await Promise.all(
+        [...sessionsByDirectory].map(([directory, sessionIDs]) =>
+          Instance.tryProvideActive({
+            directory,
+            fn: async () => {
+              await Promise.all(sessionIDs.map((id) => HostSessionMcpRuntime.dispose(id)))
+            },
+          }),
+        ),
+      )
     }
     const rootMetadata = root.metadata as Record<string, unknown> | undefined
     if (
-      tasksForDelete.length > 0 ||
+      boundTasks.length > 0 ||
       root.kind === "mission" ||
       rootMetadata?.panelCreation !== undefined ||
       rootMetadata?.globalChatStart !== undefined
     ) {
+      const tasksForDelete: TaskRow[] = []
+      if (input?.deleteTasks) {
+        for (const item of boundTasks) {
+          if (isTaskTerminal(item)) {
+            tasksForDelete.push(item)
+            continue
+          }
+          if (!input.cancellationOrigin) {
+            throw new Error(`deleteSession requires cancellation origin while task ${item.id} is non-terminal.`)
+          }
+          await cancelTask(item.id, { origin: input.cancellationOrigin })
+          tasksForDelete.push(requireTaskInCurrentProject(item.id))
+        }
+        for (const item of tasksForDelete) {
+          await awaitTaskRootIngressSettled(item, CANCEL_INGRESS_SETTLE_INACTIVITY_MS)
+        }
+      }
       const cleanupTargets = tasksForDelete.map(taskCleanupTarget)
       await settleTaskCleanupOwners(cleanupTargets)
-      Database.immediateTransaction((db) => {
-        assertTasksRemainTerminalForPhysicalDelete(db, tasksForDelete)
-        deadLetterSchedulerSessionDeliveriesInTransaction(db, {
-          sessionIDs: ids,
-          errorName: "SchedulerRecipientDeletedError",
-          message: `Recipient Session tree ${sessionID} was tombstoned.`,
-        })
-        deadLetterSchedulerTaskDeliveriesInTransaction(db, {
-          taskIDs: tasksForDelete.map((task) => task.id),
-          errorName: "SchedulerRecipientDeletedError",
-          message: `Recipient Task tree for Session ${sessionID} was tombstoned.`,
-        })
-        deadLetterSchedulerSourceDeliveriesInTransaction(db, {
-          sessionIDs: ids,
-          errorName: "SchedulerSourceDeletedError",
-          message: `Source Session tree ${sessionID} was tombstoned.`,
-        })
-        for (const task of tasksForDelete) appendTaskDeletedBoundaryInTransaction(db, task)
-        for (const id of ids) appendSessionDeletedBoundaryInTransaction(db, id)
-        // The durable session.deleted Protocol fact above is the deletion
-        // authority. The Session Bus event is only an in-process projection for
-        // a retained runtime; deleting a persisted Session whose repository is
-        // absent must not fabricate an Instance merely to notify no listeners.
-        Database.effect(() =>
-          Instance.tryProvideActive({
-            directory: root.directory,
-            fn: () => Bus.publish(Session.Event.Deleted, { info: root }),
-          }),
-        )
-      })
+      const settlementDeadline =
+        Date.now() + retainedSessionDeletionSettlementTimeoutForTest(sessionID, CANCEL_INGRESS_SETTLE_INACTIVITY_MS)
+      let terminalRounds = 0
+      while (true) {
+        terminalRounds += 1
+        await settleRuntime({ allowTreeExpansion: true, deadline: settlementDeadline })
+        await runBeforeRetainedSessionDeletionBoundaryCommitForTest(sessionID)
+        try {
+          Database.immediateTransaction((db) => {
+            const terminalSessionIDs = Session.treeInProjectInTransaction(db, {
+              sessionID,
+              projectID: root.projectID,
+            })
+            if (terminalSessionIDs.length !== ids.length || terminalSessionIDs.some((id) => !ids.includes(id))) {
+              throw new SessionDeletionRuntimeNotSettledError(
+                `Session tree ${sessionID} changed before retained deletion committed`,
+              )
+            }
+            assertSessionDeletionPromptOwnersSettledInTransaction(db, ids)
+            PermissionAuthority.assertRequestsSettledForSessionsInTransaction(db, ids)
+            assertTasksRemainTerminalForPhysicalDelete(db, tasksForDelete)
+            deadLetterSchedulerSessionDeliveriesInTransaction(db, {
+              sessionIDs: ids,
+              errorName: "SchedulerRecipientDeletedError",
+              message: `Recipient Session tree ${sessionID} was tombstoned.`,
+            })
+            deadLetterSchedulerTaskDeliveriesInTransaction(db, {
+              taskIDs: tasksForDelete.map((task) => task.id),
+              errorName: "SchedulerRecipientDeletedError",
+              message: `Recipient Task tree for Session ${sessionID} was tombstoned.`,
+            })
+            deadLetterSchedulerSourceDeliveriesInTransaction(db, {
+              sessionIDs: ids,
+              errorName: "SchedulerSourceDeletedError",
+              message: `Source Session tree ${sessionID} was tombstoned.`,
+            })
+            for (const task of tasksForDelete) appendTaskDeletedBoundaryInTransaction(db, task)
+            for (const id of ids) appendSessionDeletedBoundaryInTransaction(db, id)
+            // The durable session.deleted Protocol fact above is the deletion
+            // authority. The Session Bus event is only an in-process projection for
+            // a retained runtime; deleting a persisted Session whose repository is
+            // absent must not fabricate an Instance merely to notify no listeners.
+            Database.effect(() =>
+              Instance.tryProvideActive({
+                directory: root.directory,
+                fn: () => Bus.publish(Session.Event.Deleted, { info: root }),
+              }),
+            )
+          })
+          break
+        } catch (error) {
+          if (!(error instanceof SessionDeletionRuntimeNotSettledError) || Date.now() >= settlementDeadline) throw error
+          if (terminalRounds >= RETAINED_SESSION_DELETION_MAX_TERMINAL_ROUNDS) {
+            throw new SessionDeletionRuntimeNotSettledError(
+              `Session deletion ${sessionID} did not settle within ${terminalRounds} terminal rounds`,
+            )
+          }
+          await Bun.sleep(
+            Math.max(1, Math.min(RETAINED_SESSION_DELETION_RETRY_INTERVAL_MS, settlementDeadline - Date.now())),
+          )
+        }
+      }
       await removeTombstonedIntentProjections(cleanupTargets)
-      return true
+      return SessionDeleteResult.parse({
+        ok: true,
+        status: "tombstoned",
+        sessionID,
+        sessionHistoryRetained: true,
+        authorizationAuditRetained: true,
+        residue: [],
+      })
     }
-    await deleteRowsThenTaskArtifacts(tasksForDelete, () => {
-      Database.transaction((db) => {
+    const tasksForDelete: TaskRow[] = []
+    let cleanupPlan = await createSessionDeletionCleanupPlan({
+      projectID: root.projectID,
+      rootSessionID: sessionID,
+      rootIdentity: sessionDeletionRootIdentity(root),
+      sessions: deletionSessions,
+    })
+    const claim = claimSessionDeletionCleanup(cleanupPlan)
+    if (!claim.acquired) {
+      const joined = await replaySessionDeletion(sessionID, {
+        projectID: root.projectID,
+        authority: { surface: "internal" },
+      })
+      if (joined) return joined
+      throw new SessionDeletionInProgressError({
+        message: `Session deletion ${cleanupPlan.manifest.operationID} is owned by a live runtime occurrence`,
+        sessionID,
+        operationID: cleanupPlan.manifest.operationID,
+        ownerOccurrenceID: claim.ownerOccurrenceID,
+      })
+    }
+    let committed = false
+    try {
+      // A recovery owner may have removed a pre-claim manifest. Reassert the
+      // exact immutable file only after this process owns every database
+      // fence, but remain inside the sole rollback/liveness boundary.
+      cleanupPlan = await createSessionDeletionCleanupPlan({
+        projectID: root.projectID,
+        rootSessionID: sessionID,
+        rootIdentity: sessionDeletionRootIdentity(root),
+        sessions: deletionSessions,
+      })
+      await settleRuntime()
+      await stageSessionDeletionCleanup(cleanupPlan)
+      Database.immediateTransaction((db) => {
+        assertSessionDeletionAuthorityInTransaction(db, claim.authority)
+        assertSessionDeletionPromptOwnersSettledInTransaction(db, ids)
         const currentBoundTasks = readBoundTasks(db)
         if (!input?.deleteTasks && currentBoundTasks.length > 0) {
           throw bindingConflict(currentBoundTasks)
@@ -3405,15 +3630,76 @@ export namespace EngineService {
         if (tasksForDelete.length > 0) {
           deleteEngineTasksForProjectSessions(db, { projectID: root.projectID, sessionIDs: ids })
         }
+        const deletionBoundaries = claim.authority.leases.map((lease) =>
+          ProtocolStore.authorizePhysicalSessionDeletionInTransaction({
+            sessionID: lease.sessionID,
+            cleanupOperationID: cleanupPlan.manifest.operationID,
+            leaseID: lease.leaseID,
+            ownerOccurrenceID: claim.authority.ownerOccurrenceID,
+            now: Date.now(),
+          }),
+        )
         deleteSettledSessionTreeRows(db, {
           sessionID,
           projectID: root.projectID,
           expectedSessionIDs: ids,
         })
+        for (const boundary of deletionBoundaries) {
+          ProtocolStore.appendPhysicalSessionDeletedInTransaction(boundary)
+        }
+        releaseSessionDeletionAuthorityInTransaction(db, claim.authority)
         Database.effect(() => Database.incrementalVacuum())
       })
+      committed = true
+    } catch (error) {
+      if (committed) throw error
+      let winner: Awaited<ReturnType<typeof resumeSessionDeletionCleanup>>
+      let reconciliationError: unknown
+      try {
+        winner = await resumeSessionDeletionCleanup(sessionID)
+      } catch (failure) {
+        reconciliationError = failure
+      }
+      if (winner?.status === "committed") {
+        if (
+          (input?.projectID && input.projectID !== winner.projectID) ||
+          (current && current.project.id !== winner.projectID)
+        ) {
+          throw new NotFoundError({ message: `Session not found: ${sessionID}` })
+        }
+        return SessionDeleteResult.parse({
+          ok: true,
+          status: winner.residue.length > 0 ? "physically_deleted_with_residue" : "physically_deleted",
+          sessionID,
+          sessionHistoryRetained: false,
+          authorizationAuditRetained: true,
+          cleanupOperationID: winner.operationID,
+          residue: winner.residue,
+        })
+      }
+      if (winner?.status === "rolled_back") throw error
+      try {
+        await rollbackSessionDeletionCleanup(cleanupPlan, claim.authority)
+      } catch (rollbackError) {
+        throw new AggregateError(
+          reconciliationError ? [error, reconciliationError, rollbackError] : [error, rollbackError],
+          `Session ${sessionID} deletion failed and its runtime-root rollback was incomplete`,
+        )
+      }
+      throw error
+    } finally {
+      closeSessionDeletionAuthority(claim.authority)
+    }
+    const residue = await cleanupCommittedSessionDeletion(cleanupPlan)
+    return SessionDeleteResult.parse({
+      ok: true,
+      status: residue.length > 0 ? "physically_deleted_with_residue" : "physically_deleted",
+      sessionID,
+      sessionHistoryRetained: false,
+      authorizationAuditRetained: true,
+      cleanupOperationID: cleanupPlan.manifest.operationID,
+      residue,
     })
-    return true
   }
 
   function missionTaskResumeReceipt(taskID: string, toolCallID: string) {
@@ -3851,7 +4137,10 @@ export namespace EngineService {
 }
 
 bindMissionClosingChildTaskCanceller((taskID, origin) => EngineService.cancelTask(taskID, { origin }))
-bindMissionRetentionSessionDeleter((sessionID, input) => EngineService.deleteSession(sessionID, input))
+bindMissionRetentionSessionDeleter(async (sessionID, input) => {
+  await EngineService.deleteSession(sessionID, input)
+  return true
+})
 
 function answersFromMessage(message?: string) {
   const text = message?.trim()

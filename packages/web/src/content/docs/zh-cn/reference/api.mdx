@@ -193,7 +193,7 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | POST | `/session` | Create session 请求体: `kind`, `metadata`, `parentID`, `permission`, `title`; 错误: `BadRequestError`, `MissionSessionAuthorityError`. | `session.create` |
 | GET | `/session/global` | List sessions across projects 错误: `BadRequestError`. | `session.listGlobal` |
 | GET | `/session/status` | Get session status 错误: `BadRequestError`. | `session.status` |
-| DELETE | `/session/{sessionID}` | Delete session 错误: `BadRequestError`, `LogFileNotFoundError`, `MissionSessionAuthorityError`, `NotFoundError`, `TaskArtifactDeletionCommittedError`, `TaskBoundSessionDeletionError`, `TaskCancellationIncompleteError`, `UnknownError`. | `session.delete` |
+| DELETE | `/session/{sessionID}` | Delete session 错误: `BadRequestError`, `LogFileNotFoundError`, `MissionSessionAuthorityError`, `NotFoundError`, `SessionDeletionInProgressError`, `TaskArtifactDeletionCommittedError`, `TaskBoundSessionDeletionError`, `TaskCancellationIncompleteError`, `UnknownError`. | `session.delete` |
 | GET | `/session/{sessionID}` | Get session 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.get` |
 | PATCH | `/session/{sessionID}` | Update session 请求体: `time`, `title`; 错误: `BadRequestError`, `LogFileNotFoundError`, `MissionSessionAuthorityError`, `NotFoundError`. | `session.update` |
 | POST | `/session/{sessionID}/abort` | Abort session 错误: `BadRequestError`, `LogFileNotFoundError`, `MissionSessionAuthorityError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `session.abort` |
@@ -228,7 +228,7 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | Method | 路径 | 说明 | operationId |
 |---|---|---|---|
 | POST | `/coding/chat/session` | Create right sidebar Chat session 请求体: `model`; 错误: `AuthReadError`. | `coding.chat.session.create` |
-| DELETE | `/coding/chat/session/{sessionID}` | Delete right sidebar Chat session 错误: `LogFileNotFoundError`, `NotFoundError`. | `coding.chat.session.delete` |
+| DELETE | `/coding/chat/session/{sessionID}` | Delete right sidebar Chat session 错误: `LogFileNotFoundError`, `NotFoundError`, `SessionDeletionInProgressError`. | `coding.chat.session.delete` |
 | GET | `/coding/chat/session/{sessionID}` | Claim right sidebar Chat session 错误: `LogFileNotFoundError`, `NotFoundError`. | `coding.chat.session.get` |
 | PATCH | `/coding/chat/session/{sessionID}` | Update right sidebar Chat session 请求体: `title`; 错误: `LogFileNotFoundError`, `NotFoundError`. | `coding.chat.session.update` |
 | POST | `/coding/chat/session/{sessionID}/abort` | Abort right sidebar Chat session 错误: `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `coding.chat.session.abort` |
@@ -238,7 +238,7 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | POST | `/coding/cli/open` | Open coding CLI 请求体: `cliID`, `cwd`, `terminalProfileID`; 错误: `BadRequestError`. | `coding.cli.open` |
 | GET | `/coding/cli/profiles` | List installed coding CLIs 错误: `BadRequestError`. | `coding.cli.profiles` |
 | POST | `/coding/work/session` | Create right sidebar Work session 请求体: `model`; 错误: `AuthReadError`. | `coding.work.session.create` |
-| DELETE | `/coding/work/session/{sessionID}` | Delete right sidebar Work session 错误: `LogFileNotFoundError`, `NotFoundError`. | `coding.work.session.delete` |
+| DELETE | `/coding/work/session/{sessionID}` | Delete right sidebar Work session 错误: `LogFileNotFoundError`, `NotFoundError`, `SessionDeletionInProgressError`. | `coding.work.session.delete` |
 | GET | `/coding/work/session/{sessionID}` | Claim right sidebar Work session 错误: `LogFileNotFoundError`, `NotFoundError`. | `coding.work.session.get` |
 | PATCH | `/coding/work/session/{sessionID}` | Update right sidebar Work session 请求体: `title`; 错误: `LogFileNotFoundError`, `NotFoundError`. | `coding.work.session.update` |
 | POST | `/coding/work/session/{sessionID}/abort` | Abort right sidebar Work session 错误: `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `coding.work.session.abort` |

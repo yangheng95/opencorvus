@@ -2,12 +2,14 @@ import { afterEach, describe, expect, test } from "bun:test"
 import fs from "node:fs/promises"
 import { createManagedTemporaryDirectory, removeManagedDirectoryTree } from "@opencorvus-ai/util/runtime-directories"
 import { Bus } from "@/bus"
-import { ensureMissionSession } from "@/mission/session"
+import { ensureMissionSession, MissionSessionTestHooks } from "@/mission/session"
 import { Instance } from "@/project/instance"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
 import { Session } from "@/session"
+import { SessionDeletionFenceError } from "@/session/deletion-cleanup"
 import { SessionTable } from "@/session/session.sql"
 import { Database, eq } from "@/storage/db"
+import { EngineService } from "@/task-api"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 import path from "node:path"
 
@@ -18,6 +20,60 @@ afterEach(async () => {
 })
 
 describe("Mission Session atomic identity", () => {
+  test("retained deletion fences deterministic Mission replay before runtime materialization", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const input = {
+          missionID: "retained-mission-replay",
+          defaultCwd: project.path,
+          productPillar: "code" as const,
+          heldExpertSquadIDs: ["base"] as [string, ...string[]],
+        }
+        const session = await ensureMissionSession(input)
+        const missionRoot = ProjectRuntimePaths.missionRoot(project.path, input.missionID)
+        expect((await fs.stat(missionRoot)).isDirectory()).toBe(true)
+
+        await fs.rm(missionRoot, { recursive: true, force: true })
+        const admitted = Promise.withResolvers<void>()
+        const release = Promise.withResolvers<void>()
+        await using _materializationCut = MissionSessionTestHooks.installBeforeRuntimeMaterialization(
+          async ({ sessionID }) => {
+            if (sessionID !== session.id) return
+            admitted.resolve()
+            await release.promise
+          },
+        )
+        const replayPromise = ensureMissionSession(input).catch((error) => error)
+        await admitted.promise
+        const deletion = await EngineService.deleteSession(session.id, { projectID: session.projectID })
+        release.resolve()
+        const replay = await replayPromise
+
+        expect({
+          deletion,
+          replayFenced: replay instanceof SessionDeletionFenceError,
+          runtimeRoot: await fs.stat(missionRoot).then(
+            () => "present" as const,
+            (error: NodeJS.ErrnoException) => (error.code === "ENOENT" ? ("missing" as const) : Promise.reject(error)),
+          ),
+        }).toEqual({
+          deletion: {
+            ok: true,
+            status: "tombstoned",
+            sessionID: session.id,
+            sessionHistoryRetained: true,
+            authorizationAuditRetained: true,
+            residue: [],
+          },
+          replayFenced: true,
+          runtimeRoot: "missing",
+        })
+      },
+    })
+  })
+
   test("restarts after the post-commit runtime-directory cut with the same complete Session and Created fact", async () => {
     await using project = await memoryProject()
     const input = {

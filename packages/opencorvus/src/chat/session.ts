@@ -74,7 +74,7 @@ export async function createRightSidebarConversationSession(
       ...(options?.configOverlay ? { configOverlay: options.configOverlay } : {}),
     },
   })
-  return Database.transaction((db) => {
+  return Database.immediateTransaction((db) => {
     const session = SessionApi.persistPreparedNextInTransaction(db, prepared)
     options?.commitInTransaction?.(db, session)
     return session

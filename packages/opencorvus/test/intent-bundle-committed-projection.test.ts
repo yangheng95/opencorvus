@@ -99,9 +99,19 @@ describe("committed Task intent projection", () => {
           })
           const projectionState = await fs.stat(recovered).then(
             () => "present" as const,
-            (error: NodeJS.ErrnoException) => error.code === "ENOENT" ? "removed" as const : Promise.reject(error),
+            (error: NodeJS.ErrnoException) => (error.code === "ENOENT" ? ("removed" as const) : Promise.reject(error)),
           )
-          expect({ deleted, projectionState }).toEqual({ deleted: true, projectionState: "removed" })
+          expect({ deleted, projectionState }).toEqual({
+            deleted: {
+              ok: true,
+              status: "tombstoned",
+              sessionID: rootSession.id,
+              sessionHistoryRetained: true,
+              authorizationAuditRetained: true,
+              residue: [],
+            },
+            projectionState: "removed",
+          })
 
           // Model one committed cleanup failure by restoring only the derived
           // residue. Repeating the same tombstoned deletion must converge it.
@@ -112,7 +122,14 @@ describe("committed Task intent projection", () => {
               deleteTasks: true,
               projectID: Instance.project.id,
             }),
-          ).toBe(true)
+          ).toEqual({
+            ok: true,
+            status: "tombstoned",
+            sessionID: rootSession.id,
+            sessionHistoryRetained: true,
+            authorizationAuditRetained: true,
+            residue: [],
+          })
           await expect(fs.stat(recovered)).rejects.toMatchObject({ code: "ENOENT" })
         },
       })

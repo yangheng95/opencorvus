@@ -303,15 +303,13 @@ export function createArchitectStageDispatcher(dependencies: ArchitectStageDepen
                 conflicts: candidateConflicts,
                 now,
               })
-              Database.effect(() =>
-                EngineProtocol.emit(
-                  EngineEvent.TaskUpdated,
-                  {
-                    taskID,
-                    summary: `Projected agent "${dispatch.agentID}" persisted a conflicting ContractGraph fact for Orchestrator judgment`,
-                  },
-                  { source: "orchestrator.architect" },
-                ),
+              EngineProtocol.emitInTransaction(
+                EngineEvent.TaskUpdated,
+                {
+                  taskID,
+                  summary: `Projected agent "${dispatch.agentID}" persisted a conflicting ContractGraph fact for Orchestrator judgment`,
+                },
+                { source: "orchestrator.architect" },
               )
               return candidate.candidateProjectionArtifactLocator
             })
@@ -344,15 +342,13 @@ export function createArchitectStageDispatcher(dependencies: ArchitectStageDepen
                 now,
               })
 
-              Database.effect(() =>
-                EngineProtocol.emit(
-                  EngineEvent.TaskUpdated,
-                  {
-                    taskID,
-                    summary: `Projected agent "${dispatch.agentID}" persisted a Delivery Slice graph via the architect adapter`,
-                  },
-                  { source: "orchestrator.architect" },
-                ),
+              EngineProtocol.emitInTransaction(
+                EngineEvent.TaskUpdated,
+                {
+                  taskID,
+                  summary: `Projected agent "${dispatch.agentID}" persisted a Delivery Slice graph via the architect adapter`,
+                },
+                { source: "orchestrator.architect" },
               )
             })
           } catch (projectionError) {

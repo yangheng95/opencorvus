@@ -3,10 +3,15 @@ import z from "zod"
 import { createDecisionLog } from "@/decision-log"
 import { Event as EngineEvent } from "@/engine/model"
 import { EngineProtocol } from "@/engine/protocol"
-import { applyGoalGraphMutation } from "@/engine/persist"
+import {
+  applyGoalGraphMutationInTransaction,
+  type ApplyGoalGraphMutationInput,
+  type ApplyGoalGraphMutationResult,
+} from "@/engine/persist"
 import { requireCurrentGoalContext, requireTask } from "@/engine/store"
 import { GoalContractFieldsSchema, GoalContractUpdateSchema } from "@/pipeline/goal-contract.schema"
 import { requireTaskOrchestratorToolExecutionContext } from "./tool-execution-context"
+import { Database } from "@/storage/db"
 
 export const ModifyGoalInputSchema = z
   .object({
@@ -26,14 +31,22 @@ export const AddGoalInputSchema = z
     reason: z
       .string()
       .min(1)
-      .describe("Evidence that this new Delivery Slice belongs to the latest operator instruction or current Task findings."),
+      .describe(
+        "Evidence that this new Delivery Slice belongs to the latest operator instruction or current Task findings.",
+      ),
   })
   .strict()
 
 export const DeleteGoalInputSchema = z
   .object({
-    goalID: z.string().min(1).describe("The exact current Delivery Slice revision ID to retract without deleting history."),
-    reason: z.string().min(1).describe("Concrete evidence proving this Delivery Slice is obsolete or outside current Task scope."),
+    goalID: z
+      .string()
+      .min(1)
+      .describe("The exact current Delivery Slice revision ID to retract without deleting history."),
+    reason: z
+      .string()
+      .min(1)
+      .describe("Concrete evidence proving this Delivery Slice is obsolete or outside current Task scope."),
   })
   .strict()
 
@@ -41,14 +54,7 @@ export function computeContractFieldChanges(
   updates: Record<string, unknown>,
   goal: Record<string, unknown>,
 ): Record<string, unknown> {
-  const contractFields = [
-    "title",
-    "objective",
-    "acceptance_specs",
-    "owned_paths",
-    "priority",
-    "kind",
-  ] as const
+  const contractFields = ["title", "objective", "acceptance_specs", "owned_paths", "priority", "kind"] as const
   const setValues: Record<string, unknown> = {}
   for (const field of contractFields) {
     const incoming = updates[field]
@@ -59,10 +65,25 @@ export function computeContractFieldChanges(
   return setValues
 }
 
-export function createDeliverySliceContractTools(input: {
-  taskID: string
-  agentSessionID: string
-}) {
+export function applyDeliverySliceContractMutation(input: {
+  mutation: ApplyGoalGraphMutationInput
+  publication: (result: ApplyGoalGraphMutationResult) => { summary: string; source: string } | undefined
+}): ApplyGoalGraphMutationResult {
+  return Database.transaction((db) => {
+    const result = applyGoalGraphMutationInTransaction(db, input.mutation)
+    const publication = input.publication(result)
+    if (publication) {
+      EngineProtocol.emitInTransaction(
+        EngineEvent.TaskUpdated,
+        { taskID: input.mutation.taskID, summary: publication.summary },
+        { source: publication.source },
+      )
+    }
+    return result
+  })
+}
+
+export function createDeliverySliceContractTools(input: { taskID: string; agentSessionID: string }) {
   const { taskID } = input
   const producer = async (
     options: unknown,
@@ -70,14 +91,10 @@ export function createDeliverySliceContractTools(input: {
     reason: string,
     targetGoalID: string | null,
   ) => {
-    const execution = await requireTaskOrchestratorToolExecutionContext(
-      options,
-      `${operation}_goal`,
-      {
-        taskID,
-        agentSessionID: input.agentSessionID,
-      },
-    )
+    const execution = await requireTaskOrchestratorToolExecutionContext(options, `${operation}_goal`, {
+      taskID,
+      agentSessionID: input.agentSessionID,
+    })
     return {
       kind: "orchestrator_decision" as const,
       session_id: execution.orchestratorSessionID,
@@ -95,37 +112,38 @@ export function createDeliverySliceContractTools(input: {
       inputSchema: AddGoalInputSchema,
       execute: async ({ goal, reason }, options) => {
         requireTask(taskID)
-        const mutation = applyGoalGraphMutation({
-          taskID,
-          producer: await producer(options, "add", reason, null),
+        const mutationProducer = await producer(options, "add", reason, null)
+        const mutation = applyDeliverySliceContractMutation({
           mutation: {
-            operation: "add",
-            goal: {
-              title: goal.title,
-              objective: goal.objective,
-              acceptance_specs: goal.acceptance_specs,
-              owned_paths: goal.owned_paths,
-              kind: goal.kind,
-              priority: goal.priority,
-              source: "system",
-              metadata: { add_goal_reason: reason },
+            taskID,
+            producer: mutationProducer,
+            mutation: {
+              operation: "add",
+              goal: {
+                title: goal.title,
+                objective: goal.objective,
+                acceptance_specs: goal.acceptance_specs,
+                owned_paths: goal.owned_paths,
+                kind: goal.kind,
+                priority: goal.priority,
+                source: "system",
+                metadata: { add_goal_reason: reason },
+              },
             },
           },
+          publication(result) {
+            if (result.status !== "applied" || !result.goalID) {
+              throw new Error("GoalGraph add did not produce a current Delivery Slice revision")
+            }
+            return { summary: `Goal ${result.goalID} added by Orchestrator`, source: "orchestrator.add_goal" }
+          },
         })
-        if (mutation.status !== "applied" || !mutation.goalID) {
-          throw new Error("GoalGraph add did not produce a current Delivery Slice revision")
-        }
         createDecisionLog(taskID).append({
           phase: "orchestrator",
           key: `added_goal_${mutation.goalID}`,
           value: `Added goal ${mutation.goalID}: ${goal.title}\n\nReason: ${reason}\n\nObjective: ${goal.objective}`,
           reason: "add_goal",
         })
-        await EngineProtocol.emit(
-          EngineEvent.TaskUpdated,
-          { taskID, summary: `Goal ${mutation.goalID} added by Orchestrator` },
-          { source: "orchestrator.add_goal" },
-        )
         return mutation
       },
     }),
@@ -143,13 +161,24 @@ export function createDeliverySliceContractTools(input: {
           goal as unknown as Record<string, unknown>,
         )
         const changed = Object.keys(setValues)
-        const revision = applyGoalGraphMutation({
-          taskID,
-          producer: await producer(options, "modify", toolInput.reason, goalID),
+        const mutationProducer = await producer(options, "modify", toolInput.reason, goalID)
+        const revision = applyDeliverySliceContractMutation({
           mutation: {
-            operation: "modify",
-            goalID,
-            values: setValues,
+            taskID,
+            producer: mutationProducer,
+            mutation: {
+              operation: "modify",
+              goalID,
+              values: setValues,
+            },
+          },
+          publication(result) {
+            if (result.status === "unchanged") return
+            if (!result.goalID) throw new Error(`Goal ${goalID} revision produced no Goal identity`)
+            return {
+              summary: `Goal ${goalID} revised as ${result.goalID} by Orchestrator`,
+              source: "orchestrator.modify_goal",
+            }
           },
         })
         if (revision.status === "unchanged") {
@@ -164,14 +193,6 @@ export function createDeliverySliceContractTools(input: {
           value: `Revised Goal ${goalID} as ${revision.goalID}. Fields: ${changed.join(", ")}.\n\nReason: ${toolInput.reason}`,
           reason: "modify_goal",
         })
-        await EngineProtocol.emit(
-          EngineEvent.TaskUpdated,
-          {
-            taskID,
-            summary: `Goal ${goalID} revised as ${revision.goalID} by Orchestrator`,
-          },
-          { source: "orchestrator.modify_goal" },
-        )
         return revision
       },
     }),
@@ -183,10 +204,17 @@ export function createDeliverySliceContractTools(input: {
         requireTask(taskID)
         const { goal: currentGoal } = requireCurrentGoalContext({ taskID, goalID })
         const goal = currentGoal.goal
-        const removal = applyGoalGraphMutation({
-          taskID,
-          producer: await producer(options, "remove", reason, goalID),
-          mutation: { operation: "remove", goalID },
+        const mutationProducer = await producer(options, "remove", reason, goalID)
+        const removal = applyDeliverySliceContractMutation({
+          mutation: {
+            taskID,
+            producer: mutationProducer,
+            mutation: { operation: "remove", goalID },
+          },
+          publication: () => ({
+            summary: `Goal ${goalID} retracted by Orchestrator`,
+            source: "orchestrator.delete_goal",
+          }),
         })
         createDecisionLog(taskID).append({
           phase: "orchestrator",
@@ -194,11 +222,6 @@ export function createDeliverySliceContractTools(input: {
           value: `Removed Goal ${goalID} from current GoalGraph: ${goal.title}\n\nReason: ${reason}\n\nProjection: ${JSON.stringify(removal.goalGraphProjectionArtifactLocator)}`,
           reason: "delete_goal",
         })
-        await EngineProtocol.emit(
-          EngineEvent.TaskUpdated,
-          { taskID, summary: `Goal ${goalID} retracted by Orchestrator` },
-          { source: "orchestrator.delete_goal" },
-        )
         return removal
       },
     }),
