@@ -508,7 +508,7 @@ export namespace Session {
    * operations may reserve a writer and call it without opening a second
    * transaction around their identity read. */
   export function persistPreparedNextInTransaction(db: Database.TxOrDb, result: Info): Info {
-    Project.assertDurableAdmissionOpen(db, result.projectID)
+    Project.assertDirectoryOwnerAdmissionOpen(db, result.projectID, result.directory)
     assertSessionDeletionAdmissionInTransaction(db, result.id)
     if (result.parentID) assertSessionDeletionAdmissionInTransaction(db, result.parentID)
     db.insert(SessionTable).values(toRow(result)).run()

@@ -73,7 +73,7 @@ export namespace WorktreeOwnershipCriticalSection {
     remove(proof: Extract<Proof, { status: "ownerless" }>): Promise<T>
   }): Promise<{ status: "removed"; value: T } | { status: "owned" }> {
     const { key, ownership } = state(input.directory)
-    if (ownership.removing) throw new ConflictError(key)
+    if (ownership.removing) return { status: "owned" }
     if (ownership.acquisitions.size > 0) return { status: "owned" }
     ownership.removing = true
     try {
@@ -81,6 +81,25 @@ export namespace WorktreeOwnershipCriticalSection {
       if (proof.status === "owned") return { status: "owned" }
       if (proof[ownerlessProof] !== true) throw new Error(`Invalid ownerless proof for ${key}`)
       return { status: "removed", value: await input.remove(proof) }
+    } finally {
+      ownership.removing = false
+      discardEmpty(key, ownership)
+    }
+  }
+
+  /** Own a non-removal directory rewrite such as reset across every active
+   * process-local use. Durable cross-process exclusion is supplied by the
+   * caller's ProjectDirectoryAdmission generation. */
+  export async function mutate<T>(input: {
+    directory: string
+    mutate(): Promise<T>
+  }): Promise<{ status: "mutated"; value: T } | { status: "owned" }> {
+    const { key, ownership } = state(input.directory)
+    if (ownership.removing) return { status: "owned" }
+    if (ownership.acquisitions.size > 0) return { status: "owned" }
+    ownership.removing = true
+    try {
+      return { status: "mutated", value: await input.mutate() }
     } finally {
       ownership.removing = false
       discardEmpty(key, ownership)

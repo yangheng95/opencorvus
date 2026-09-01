@@ -1,4 +1,6 @@
 import { randomUUID } from "node:crypto"
+import { AsyncLocalStorage } from "node:async_hooks"
+import * as fsSync from "node:fs"
 import * as fs from "node:fs/promises"
 import path from "node:path"
 import z from "zod"
@@ -10,7 +12,7 @@ import {
   type RuntimeProcessOccurrenceInfo,
   type RuntimeProcessOccurrenceObserver,
 } from "@/runtime/process-occurrence"
-import { and, Database, eq } from "@/storage/db"
+import { and, Database, eq, gte, lt } from "@/storage/db"
 import { Filesystem } from "@/util/filesystem"
 import { Log } from "@/util/log"
 import { ProcessLockCompromisedError, withSharedJsonFactLock } from "@/util/process-lock"
@@ -29,6 +31,7 @@ import { ProjectDirectoryAdmissionTable } from "./project.sql"
 export namespace ProjectDirectoryAdmission {
   const log = Log.create({ service: "project-directory-admission" })
   const locks = new Map<string, Promise<unknown>>()
+  const tokenContext = new AsyncLocalStorage<Token>()
   type Row = typeof ProjectDirectoryAdmissionTable.$inferSelect
   type BeforeAcquireHook = () => void | Promise<void>
   type AfterDurableAcquireHook = (token: Token) => void | Promise<void>
@@ -54,6 +57,10 @@ export namespace ProjectDirectoryAdmission {
     operationID: string
     kind: "registration" | "reclamation" | "promotion_restore" | "promotion_publish" | "promotion_workspace"
     owner: RuntimeProcessOccurrenceInfo
+    /** Exact physical occurrence observed before this generation was published.
+     * Registration and destructive callers must revalidate it at their final
+     * authority boundary; the path key alone is not replacement-safe. */
+    occurrence?: DirectoryOccurrence
   }
 
   export type DirectoryOccurrence = {
@@ -61,6 +68,15 @@ export namespace ProjectDirectoryAdmission {
     device: number
     inode: number
     birthtimeMs: number
+  }
+
+  export function current(): Token | undefined {
+    return tokenContext.getStore()
+  }
+
+  export async function provide<T>(token: Token, run: () => Promise<T>): Promise<T> {
+    assertOwnedNow(token)
+    return tokenContext.run(token, run)
   }
 
   export namespace TestHooks {
@@ -123,6 +139,35 @@ export namespace ProjectDirectoryAdmission {
     }
   }
 
+  /** Synchronous counterpart for an already active SQLite owner-writer
+   * transaction. It performs one bounded ancestor walk and never mutates the
+   * namespace. */
+  export function keySync(directory: string): string {
+    let candidate = path.resolve(directory)
+    const missing: string[] = []
+    while (true) {
+      try {
+        const physical = fsSync.realpathSync.native(candidate)
+        return normalizeKey(path.join(physical, ...missing.reverse()))
+      } catch (error) {
+        if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error
+        const parent = path.dirname(candidate)
+        if (parent === candidate) return normalizeKey(path.resolve(directory))
+        missing.push(path.basename(candidate))
+        candidate = parent
+      }
+    }
+  }
+
+  export function directoryPresentSync(directory: string): boolean {
+    try {
+      return fsSync.statSync(directory).isDirectory()
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code === "ENOENT") return false
+      throw error
+    }
+  }
+
   export async function observeDirectory(directory: string): Promise<DirectoryOccurrence> {
     const [directoryKey, info] = await Promise.all([key(directory), fs.stat(directory)])
     if (!info.isDirectory()) throw new Error(`Project directory is not a directory: ${directory}`)
@@ -141,6 +186,49 @@ export namespace ProjectDirectoryAdmission {
   /** Recursive mutation and durable ownership conflict in either direction. */
   export function overlaps(left: string, right: string): boolean {
     return Filesystem.overlaps(left, right)
+  }
+
+  function projectOperationPrefix(projectID: string): string {
+    return `project-directory:${Buffer.from(projectID, "utf8").toString("base64url")}:`
+  }
+
+  /** Bind a domain operation to one immutable Project without adding another
+   * directory-owner table column or relying on a sandbox alias spelling. */
+  export function scopeOperationID(projectID: string, operationID: string): string {
+    return `${projectOperationPrefix(projectID)}${operationID}`
+  }
+
+  export function domainOperationID(projectID: string, operationID: string): string | undefined {
+    const prefix = projectOperationPrefix(projectID)
+    return operationID.startsWith(prefix) ? operationID.slice(prefix.length) : undefined
+  }
+
+  /** Indexed Project-scoped reclamation lookup used inside Session/Task owner
+   * writer transactions. A reclamation fences its exact namespace and
+   * descendants, but reclaiming one child does not freeze its parent or a
+   * sibling namespace. */
+  export function projectReclamation(
+    db: Database.TxOrDb,
+    projectID: string,
+    directory?: string,
+  ): Row | undefined {
+    const prefix = projectOperationPrefix(projectID)
+    const directoryKey = directory === undefined ? undefined : keySync(directory)
+    return db
+      .select()
+      .from(ProjectDirectoryAdmissionTable)
+      .where(
+        and(
+          gte(ProjectDirectoryAdmissionTable.operation_id, prefix),
+          lt(ProjectDirectoryAdmissionTable.operation_id, `${prefix}\uffff`),
+        ),
+      )
+      .all()
+      .find(
+        (row) =>
+          row.kind === "reclamation" &&
+          (directoryKey === undefined || Filesystem.contains(row.directory_key, directoryKey)),
+      )
   }
 
   export async function run<T>(operation: () => Promise<T>): Promise<T> {
@@ -184,7 +272,7 @@ export namespace ProjectDirectoryAdmission {
     }
   }
 
-  function tokenOf(row: Row): Token {
+  function tokenOf(row: Row, occurrence?: DirectoryOccurrence): Token {
     return {
       directoryKey: row.directory_key,
       directory: row.directory,
@@ -192,6 +280,7 @@ export namespace ProjectDirectoryAdmission {
       operationID: row.operation_id,
       kind: row.kind,
       owner: ownerOf(row),
+      occurrence,
     }
   }
 
@@ -239,8 +328,21 @@ export namespace ProjectDirectoryAdmission {
     kind: Token["kind"]
     findOwner?: (db: Database.TxOrDb) => T | undefined
     observe?: RuntimeProcessOccurrenceObserver
+    occurrence?: DirectoryOccurrence
+    expectedDirectoryKey?: string
   }): Promise<{ outcome: "owned"; owner: T } | { outcome: "acquired"; token: Token }> {
     const directoryKey = await key(input.directory)
+    if (input.expectedDirectoryKey && input.expectedDirectoryKey !== directoryKey) {
+      throw new ClosedError({
+        directory: input.directory,
+        operationID: input.operationID,
+        kind: input.kind,
+        message: `Project directory key changed before admission: ${input.directory}`,
+      })
+    }
+    if (input.occurrence && input.occurrence.directoryKey !== directoryKey) {
+      throw new Error(`Project directory occurrence does not match admission key: ${input.directory}`)
+    }
     const owner = currentRuntimeProcessOccurrence()
     const observed = Database.use((db) =>
       db
@@ -282,7 +384,7 @@ export namespace ProjectDirectoryAdmission {
           current.kind === input.kind &&
           sameOwner(ownerOf(current), owner)
         ) {
-          return { outcome: "acquired" as const, token: tokenOf(current) }
+          return { outcome: "acquired" as const, token: tokenOf(current, input.occurrence) }
         }
         if (current.generation !== observed?.generation || (!recoverExactOperation && !discardDeadRegistration)) {
           throw closed(current)
@@ -320,11 +422,39 @@ export namespace ProjectDirectoryAdmission {
           operationID: input.operationID,
           kind: input.kind,
           owner,
+          occurrence: input.occurrence,
         },
       }
     })
     if (result.outcome === "acquired") await afterDurableAcquire?.(result.token)
     return result
+  }
+
+  /** Re-observe the physical directory and prove it is the exact occurrence
+   * captured before admission. Callers choose their domain-specific typed
+   * error, while this helper supplies the shared fact comparison. */
+  export async function ownsCurrentOccurrence(token: Token, directory = token.directory): Promise<boolean> {
+    if (!token.occurrence) return false
+    const current = await observeDirectory(directory).catch(() => undefined)
+    return current !== undefined && sameOccurrence(token.occurrence, current)
+  }
+
+  /** Read the exact active operation only for a path whose physical occurrence
+   * is already gone. This lets a partial destructive operation resume cleanup
+   * without ever adopting a present replacement at the same pathname. */
+  export async function activeExactOperation(
+    directory: string,
+    kind: Token["kind"],
+  ): Promise<{ operationID: string; generation: string } | undefined> {
+    const directoryKey = await key(directory)
+    return Database.use((db) => {
+      const row = db
+        .select()
+        .from(ProjectDirectoryAdmissionTable)
+        .where(eq(ProjectDirectoryAdmissionTable.directory_key, directoryKey))
+        .get()
+      return row && row.kind === kind ? { operationID: row.operation_id, generation: row.generation } : undefined
+    })
   }
 
   /** Apply the final registry mutation and release this exact generation in

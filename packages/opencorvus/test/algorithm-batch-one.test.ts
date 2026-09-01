@@ -22,9 +22,10 @@ import {
 } from "../src/engine/cancellation-scope"
 import { ProjectRuntimePaths } from "../src/project/runtime-paths"
 import { Bus } from "../src/bus"
-import { Database, eq } from "../src/storage/db"
-import { ProjectTable } from "../src/project/project.sql"
+import { Database, eq, sql } from "../src/storage/db"
+import { ProjectDirectoryAdmissionTable, ProjectTable } from "../src/project/project.sql"
 import { Project } from "../src/project/project"
+import { ProjectDirectoryAdmission } from "../src/project/directory-admission"
 import { EngineService, TaskExecutionDirectoryInitializerTestHooks } from "../src/task-api"
 import { TestHooks as TaskControlTestHooks } from "../src/engine/task-root-ingress-delivery"
 import { InstanceBootstrap } from "../src/project/bootstrap"
@@ -407,6 +408,7 @@ describe("worktree ownership critical section", () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
+      init: InstanceBootstrap,
       fn: async () => {
         const taskID = Identifier.ascending("task")
         const firstSessionID = Identifier.ascending("session")
@@ -478,6 +480,61 @@ describe("worktree ownership critical section", () => {
     })
   })
 
+  test("preserves public remove and reset while a durable Session owns the worktree, then admits both after settlement", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      init: InstanceBootstrap,
+      fn: async () => {
+        const worktree = await Worktree.create({ name: `durable-session-owner-${Date.now()}` })
+        const session = await Session.createNext({
+          kind: "assistant",
+          directory: worktree.directory,
+          title: "Durable worktree owner",
+        })
+        const scratch = path.join(worktree.directory, "reset-owner-proof.txt")
+        await fs.writeFile(scratch, "durable owner\n", "utf8")
+
+        const preservedRemoval = await Worktree.removeManagedProjectWorktreeDirectory({
+          projectID: Instance.project.id,
+          directory: worktree.directory,
+          releaseSandboxOwnership: true,
+        })
+        const preservedReset = await Worktree.resetProjectWorktree({ directory: worktree.directory }).catch(
+          (error) => error,
+        )
+
+        await EngineService.deleteSession(session.id, { projectID: session.projectID })
+        const resetAfterSettlement = await Worktree.resetProjectWorktree({ directory: worktree.directory })
+        const scratchAfterReset = await fs.stat(scratch).then(() => "present", () => "absent")
+        const removalAfterSettlement = await Worktree.removeManagedProjectWorktreeDirectory({
+          projectID: Instance.project.id,
+          directory: worktree.directory,
+          releaseSandboxOwnership: true,
+        })
+
+        expect({
+          preservedRemoval,
+          preservedReset: preservedReset?.name,
+          resetAfterSettlement: path.resolve(resetAfterSettlement.directory),
+          scratchAfterReset,
+          removalAfterSettlement,
+        }).toEqual({
+          preservedRemoval: { directory: worktree.directory, removed: false, proof: "owned" },
+          preservedReset: "WorktreeResetFailedError",
+          resetAfterSettlement: path.resolve(worktree.directory),
+          scratchAfterReset: "absent",
+          removalAfterSettlement: {
+            directory: worktree.directory,
+            removed: true,
+            proof: "ownerless",
+            receipt: { ok: true, status: "removed" },
+          },
+        })
+      },
+    })
+  }, 90_000)
+
   test("releases the exact stored sandbox alias authorized by physical identity", async () => {
     await using project = await memoryProject()
     await Instance.provide({
@@ -504,6 +561,75 @@ describe("worktree ownership critical section", () => {
       },
     })
   })
+
+  test("preserves an alias replacement at the occurrence-bound quarantine cut", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const worktree = await Worktree.create({ name: `delete-alias-replacement-${Date.now()}` })
+        const alias = path.join(path.dirname(worktree.directory), `${path.basename(worktree.directory)}-alias`)
+        await fs.symlink(worktree.directory, alias, process.platform === "win32" ? "junction" : "dir")
+        const current = Project.get(Instance.project.id)!
+        Database.use((db) =>
+          db
+            .update(ProjectTable)
+            .set({ sandboxes: [alias], time_updated: Date.now() })
+            .where(eq(ProjectTable.id, current.id))
+            .run(),
+        )
+        let replaced = false
+        using _replace = Worktree.TestHooks.installAfterSandboxAliasObservation(async (observed) => {
+          if (replaced || !Project.samePath(observed, alias)) return
+          replaced = true
+          await fs.rm(alias, { recursive: true, force: true })
+          await fs.mkdir(alias, { recursive: true })
+          await fs.writeFile(path.join(alias, "replacement.txt"), "preserve alias replacement\n", "utf8")
+        })
+
+        const preserved = await Worktree.removeManagedProjectWorktreeDirectory({
+          projectID: current.id,
+          directory: worktree.directory,
+          releaseSandboxOwnership: true,
+        })
+        const replacement = await fs.readFile(path.join(alias, "replacement.txt"), "utf8")
+        const retainedAdmissions = Database.use(
+          (db) => db.select().from(ProjectDirectoryAdmissionTable).all().length,
+        )
+        await fs.rm(alias, { recursive: true, force: true })
+        const resumed = await Worktree.removeManagedProjectWorktreeDirectory({
+          projectID: current.id,
+          directory: worktree.directory,
+          releaseSandboxOwnership: true,
+        })
+
+        expect({
+          replaced,
+          preserved,
+          replacement,
+          retainedAdmissions,
+          resumed,
+          sandboxes: Project.get(current.id)?.sandboxes,
+          finalAdmissions: Database.use(
+            (db) => db.select().from(ProjectDirectoryAdmissionTable).all().length,
+          ),
+        }).toEqual({
+          replaced: true,
+          preserved: { directory: worktree.directory, removed: false, proof: "owned" },
+          replacement: "preserve alias replacement\n",
+          retainedAdmissions: 1,
+          resumed: {
+            directory: worktree.directory,
+            removed: true,
+            proof: "ownerless",
+            receipt: { ok: true, status: "removed" },
+          },
+          sandboxes: [],
+          finalAdmissions: 0,
+        })
+      },
+    })
+  }, 90_000)
 
   test("holds production Task directory admission until its durable process binding exists", async () => {
     await using project = await memoryProject()
@@ -580,19 +706,14 @@ describe("worktree ownership critical section", () => {
           )
           await registrationStarted
 
-          const deletion = Worktree.removeManagedProjectWorktreeDirectory({
+          const preservedDuringAdmission = await Worktree.removeManagedProjectWorktreeDirectory({
             projectID: Instance.project.id,
             directory: worktree.directory,
             releaseSandboxOwnership: true,
           })
-          const settledBeforeRelease = await Promise.race([
-            deletion.then(() => "settled" as const),
-            new Promise<"pending">((resolve) => setTimeout(() => resolve("pending"), 25)),
-          ])
           releaseRegistration()
           const taskID = await creation
           const task = await EngineService.getTask(taskID)
-          const registrationRelease = await deletion
           const replayedRelease = await Worktree.removeManagedProjectWorktreeDirectory({
             projectID: Instance.project.id,
             directory: worktree.directory,
@@ -604,16 +725,14 @@ describe("worktree ownership critical section", () => {
             ingressRunnerCalls,
             taskKind: Identifier.schema("task").parse(taskID) === taskID,
             taskDirectory: task.directory,
-            settledBeforeRelease,
-            registrationRelease,
+            preservedDuringAdmission,
             replayedRelease,
           }).toEqual({
             initializerCalls: 1,
             ingressRunnerCalls: 1,
             taskKind: true,
             taskDirectory: worktree.directory,
-            settledBeforeRelease: "pending",
-            registrationRelease: {
+            preservedDuringAdmission: {
               directory: worktree.directory,
               removed: false,
               proof: "owned",
@@ -629,6 +748,527 @@ describe("worktree ownership critical section", () => {
           register.mockRestore()
           targetIngressRunner?.[Symbol.dispose]()
         }
+      },
+    })
+  }, 90_000)
+
+  test("rejects a replacement filesystem occurrence before durable Task binding", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      init: InstanceBootstrap,
+      fn: async () => {
+        const worktree = await Worktree.create({ name: `directory-occurrence-${Date.now()}` })
+        let replaced = false
+        using _replace = Project.TestHooks.installBeforeDiscoveryCommit(async ({ directory }) => {
+          if (replaced || !Project.samePath(directory, worktree.directory)) return
+          replaced = true
+          await fs.rm(worktree.directory, { recursive: true, force: true })
+          await fs.mkdir(worktree.directory, { recursive: true })
+        })
+        const failure = await EngineService.createTask(
+          {
+            requestID: `directory-occurrence-${Identifier.ascending("artifact")}`,
+            request: "Bind only the admitted filesystem occurrence",
+            directory: worktree.directory,
+            productPillar: "code",
+            model: "firmware/gpt-5",
+            promptProfile: "base",
+          },
+          { actor: "user" },
+        ).catch((error) => error)
+        const cleanup = await Worktree.removeManagedProjectWorktreeDirectory({
+          projectID: Instance.project.id,
+          directory: worktree.directory,
+          releaseSandboxOwnership: true,
+        })
+        expect({ replaced, failure: failure?.name, cleanup }).toEqual({
+          replaced: true,
+          failure: "ProjectDirectoryOccurrenceChangedError",
+          cleanup: {
+            directory: worktree.directory,
+            removed: true,
+            proof: "ownerless",
+            receipt: { ok: true, status: "removed" },
+          },
+        })
+      },
+    })
+  }, 90_000)
+
+  test("fences a new durable Session while reclamation owns its Project directory", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      init: InstanceBootstrap,
+      fn: async () => {
+        const worktree = await Worktree.create({ name: `session-reclamation-${Date.now()}` })
+        const alias = path.join(path.dirname(worktree.directory), `${path.basename(worktree.directory)}-session-alias`)
+        await fs.symlink(worktree.directory, alias, process.platform === "win32" ? "junction" : "dir")
+        Database.use((db) =>
+          db
+            .update(ProjectTable)
+            .set({ sandboxes: [alias], time_updated: Date.now() })
+            .where(eq(ProjectTable.id, Instance.project.id))
+            .run(),
+        )
+        const occurrence = await ProjectDirectoryAdmission.observeDirectory(worktree.directory)
+        const acquired = await ProjectDirectoryAdmission.acquire({
+          directory: worktree.directory,
+          operationID: ProjectDirectoryAdmission.scopeOperationID(
+            Instance.project.id,
+            `session-reclamation-${Identifier.ascending("artifact")}`,
+          ),
+          kind: "reclamation",
+          occurrence,
+        })
+        if (acquired.outcome !== "acquired") throw new Error("Expected reclamation admission")
+        const operationPrefix = ProjectDirectoryAdmission.scopeOperationID(Instance.project.id, "")
+        const plan = Database.Client().all<{ detail: string }>(sql`
+          EXPLAIN QUERY PLAN
+          SELECT operation_id FROM project_directory_admission
+          WHERE operation_id >= ${operationPrefix} AND operation_id < ${`${operationPrefix}\uffff`}
+        `)
+        const fenced = await Session.createNext({
+          kind: "assistant",
+          directory: alias,
+          title: "Fenced Session",
+        }).catch((error) => error)
+        const fencedTask = await EngineService.createTask(
+          {
+            requestID: `task-reclamation-${Identifier.ascending("artifact")}`,
+            request: "Fence a Task owner behind directory reclamation",
+            directory: worktree.directory,
+            productPillar: "code",
+            model: "firmware/gpt-5",
+            promptProfile: "base",
+          },
+          { actor: "user" },
+        ).catch((error) => error)
+        const siblingSession = await Session.createNext({
+          kind: "assistant",
+          directory: project.path,
+          title: "Unrelated primary Session",
+        })
+        using _primaryIngress = TaskControlTestHooks.replaceTaskIngressRunner({
+          runner: async () => ({}),
+        })
+        const siblingTask = await EngineService.createTask(
+          {
+            requestID: `task-primary-progress-${Identifier.ascending("artifact")}`,
+            request: "Continue an unrelated primary Task while a sibling directory is reclaimed",
+            directory: project.path,
+            productPillar: "code",
+            model: "firmware/gpt-5",
+            promptProfile: "base",
+          },
+          { actor: "user" },
+        )
+        ProjectDirectoryAdmission.settle(acquired.token, () => undefined)
+        const admitted = await Session.createNext({
+          kind: "assistant",
+          directory: alias,
+          title: "Admitted Session",
+        })
+        expect({
+          indexed: plan.some((entry) => entry.detail.includes("project_directory_admission_operation_idx")),
+          fenced: fenced?.name,
+          fencedTask: fencedTask?.name,
+          siblingSessionDirectory: siblingSession.directory,
+          siblingTaskID: siblingTask,
+          admittedDirectory: admitted.directory,
+        }).toEqual({
+          indexed: true,
+          fenced: "ProjectDirectoryAdmissionClosedError",
+          fencedTask: "ProjectDirectoryAdmissionClosedError",
+          siblingSessionDirectory: project.path,
+          siblingTaskID: expect.stringContaining("tsk_"),
+          admittedDirectory: alias,
+        })
+      },
+    })
+  })
+
+  test("releases process-local registration ownership after durable acquire and settle failures", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const worktree = await Worktree.create({ name: `registration-release-${Date.now()}` })
+        const occurrence = await ProjectDirectoryAdmission.observeDirectory(worktree.directory)
+        const reclamation = await ProjectDirectoryAdmission.acquire({
+          directory: worktree.directory,
+          operationID: ProjectDirectoryAdmission.scopeOperationID(
+            Instance.project.id,
+            `registration-conflict-${Identifier.ascending("artifact")}`,
+          ),
+          kind: "reclamation",
+          occurrence,
+        })
+        if (reclamation.outcome !== "acquired") throw new Error("Expected reclamation admission")
+        const acquireFailure = await Worktree.withSandboxAdmission(worktree.directory, async () => undefined).catch(
+          (error) => error,
+        )
+        ProjectDirectoryAdmission.settle(reclamation.token, () => undefined)
+        const afterAcquireFailure = await WorktreeOwnershipCriticalSection.mutate({
+          directory: occurrence.directoryKey,
+          mutate: async () => "released",
+        })
+
+        const settleFailure = await Worktree.withSandboxAdmission(worktree.directory, async (token) => {
+          Database.use((db) =>
+            db
+              .delete(ProjectDirectoryAdmissionTable)
+              .where(eq(ProjectDirectoryAdmissionTable.generation, token.generation))
+              .run(),
+          )
+        }).catch((error) => error)
+        const afterSettleFailure = await WorktreeOwnershipCriticalSection.mutate({
+          directory: occurrence.directoryKey,
+          mutate: async () => "released",
+        })
+        expect({
+          acquireFailure: acquireFailure?.name,
+          afterAcquireFailure,
+          settleFailure: settleFailure?.message,
+          afterSettleFailure,
+        }).toEqual({
+          acquireFailure: "ProjectDirectoryAdmissionClosedError",
+          afterAcquireFailure: { status: "mutated", value: "released" },
+          settleFailure: expect.stringContaining("is no longer authoritative"),
+          afterSettleFailure: { status: "mutated", value: "released" },
+        })
+      },
+    })
+  })
+
+  test("maps process-local mutation ownership to the public preservation contracts", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const worktree = await Worktree.create({ name: `local-public-conflict-${Date.now()}` })
+        const occurrence = await ProjectDirectoryAdmission.observeDirectory(worktree.directory)
+        const local = WorktreeOwnershipCriticalSection.acquire(occurrence.directoryKey)
+        const removal = await Worktree.removeManagedProjectWorktreeDirectory({
+          projectID: Instance.project.id,
+          directory: worktree.directory,
+          releaseSandboxOwnership: true,
+        })
+        const reset = await Worktree.resetProjectWorktree({ directory: worktree.directory }).catch((error) => error)
+        local[Symbol.dispose]()
+        const cleanup = await Worktree.removeManagedProjectWorktreeDirectory({
+          projectID: Instance.project.id,
+          directory: worktree.directory,
+          releaseSandboxOwnership: true,
+        })
+        expect({ removal, reset: reset?.name, cleanup }).toEqual({
+          removal: { directory: worktree.directory, removed: false, proof: "owned" },
+          reset: "WorktreeResetFailedError",
+          cleanup: {
+            directory: worktree.directory,
+            removed: true,
+            proof: "ownerless",
+            receipt: { ok: true, status: "removed" },
+          },
+        })
+      },
+    })
+  }, 90_000)
+
+  test("preserves a present replacement before public removal reaches its destructive effect", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const worktree = await Worktree.create({ name: `remove-replacement-${Date.now()}` })
+        const original = `${worktree.directory}-original`
+        let replaced = false
+        using _replace = ProjectDirectoryAdmission.TestHooks.installAfterDurableAcquire(async (token) => {
+          if (replaced || token.kind !== "reclamation" || token.directory !== path.resolve(worktree.directory)) return
+          replaced = true
+          await fs.rename(worktree.directory, original)
+          await fs.mkdir(worktree.directory, { recursive: true })
+          await fs.writeFile(path.join(worktree.directory, "replacement.txt"), "preserve\n", "utf8")
+        })
+        const failure = await Worktree.removeManagedProjectWorktreeDirectory({
+          projectID: Instance.project.id,
+          directory: worktree.directory,
+          releaseSandboxOwnership: true,
+        }).catch((error) => error)
+        const replacement = await fs.readFile(path.join(worktree.directory, "replacement.txt"), "utf8")
+        await fs.rm(worktree.directory, { recursive: true, force: true })
+        await fs.rename(original, worktree.directory)
+        const cleanup = await Worktree.removeManagedProjectWorktreeDirectory({
+          projectID: Instance.project.id,
+          directory: worktree.directory,
+          releaseSandboxOwnership: true,
+        })
+        expect({ replaced, failure: failure?.name, replacement, cleanup }).toEqual({
+          replaced: true,
+          failure: "WorktreeRemoveFailedError",
+          replacement: "preserve\n",
+          cleanup: {
+            directory: worktree.directory,
+            removed: true,
+            proof: "ownerless",
+            receipt: { ok: true, status: "removed" },
+          },
+        })
+      },
+    })
+  }, 90_000)
+
+  test("preserves a present replacement before public reset reaches its destructive effect", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const worktree = await Worktree.create({ name: `reset-replacement-${Date.now()}` })
+        const original = `${worktree.directory}-original`
+        let replaced = false
+        using _replace = ProjectDirectoryAdmission.TestHooks.installAfterDurableAcquire(async (token) => {
+          if (replaced || token.kind !== "reclamation" || token.directory !== path.resolve(worktree.directory)) return
+          replaced = true
+          await fs.rename(worktree.directory, original)
+          await fs.mkdir(worktree.directory, { recursive: true })
+          await fs.writeFile(path.join(worktree.directory, "replacement.txt"), "preserve reset\n", "utf8")
+        })
+        const failure = await Worktree.resetProjectWorktree({ directory: worktree.directory }).catch((error) => error)
+        const replacement = await fs.readFile(path.join(worktree.directory, "replacement.txt"), "utf8")
+        await fs.rm(worktree.directory, { recursive: true, force: true })
+        await fs.rename(original, worktree.directory)
+        const cleanup = await Worktree.removeManagedProjectWorktreeDirectory({
+          projectID: Instance.project.id,
+          directory: worktree.directory,
+          releaseSandboxOwnership: true,
+        })
+        expect({ replaced, failure: failure?.name, replacement, cleanup }).toEqual({
+          replaced: true,
+          failure: "WorktreeResetFailedError",
+          replacement: "preserve reset\n",
+          cleanup: {
+            directory: worktree.directory,
+            removed: true,
+            proof: "ownerless",
+            receipt: { ok: true, status: "removed" },
+          },
+        })
+      },
+    })
+  }, 90_000)
+
+  test("retains the exact reclamation generation across a partial physical removal and resumes cleanup", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const worktree = await Worktree.create({ name: `partial-removal-${Date.now()}` })
+        const alias = path.join(path.dirname(worktree.directory), `${path.basename(worktree.directory)}-partial-alias`)
+        await fs.symlink(worktree.directory, alias, process.platform === "win32" ? "junction" : "dir")
+        Database.use((db) =>
+          db
+            .update(ProjectTable)
+            .set({ sandboxes: [alias], time_updated: Date.now() })
+            .where(eq(ProjectTable.id, Instance.project.id))
+            .run(),
+        )
+        let injected = false
+        const hook = Worktree.TestHooks.installAfterPhysicalDirectoryRemoval(() => {
+          if (injected) return
+          injected = true
+          throw new Worktree.RemoveFailedError({ message: "Injected post-removal registry interruption" })
+        })
+        const first = await Worktree.removeManagedProjectWorktreeDirectory({
+          projectID: Instance.project.id,
+          directory: worktree.directory,
+          releaseSandboxOwnership: true,
+        }).catch((error) => error)
+        hook[Symbol.dispose]()
+        const directoryKey = await ProjectDirectoryAdmission.key(worktree.directory)
+        const preservedAdmissions = Database.use(
+          (db) =>
+            db
+              .select()
+              .from(ProjectDirectoryAdmissionTable)
+              .where(eq(ProjectDirectoryAdmissionTable.directory_key, directoryKey))
+              .all().length,
+        )
+        const danglingAlias = await fs.lstat(alias).then(() => "retained", () => "missing")
+        let replaced = false
+        using _replace = ProjectDirectoryAdmission.TestHooks.installAfterDurableAcquire(async (token) => {
+          if (replaced || token.kind !== "reclamation" || token.directory !== path.resolve(worktree.directory)) return
+          replaced = true
+          await fs.mkdir(worktree.directory, { recursive: true })
+          await fs.writeFile(path.join(worktree.directory, "replacement.txt"), "preserve retained replacement\n", "utf8")
+        })
+        const preservedReplacement = await Worktree.removeManagedProjectWorktreeDirectory({
+          projectID: Instance.project.id,
+          directory: worktree.directory,
+          releaseSandboxOwnership: true,
+        })
+        const replacement = await fs.readFile(path.join(worktree.directory, "replacement.txt"), "utf8")
+        const retainedAdmissions = Database.use(
+          (db) =>
+            db
+              .select()
+              .from(ProjectDirectoryAdmissionTable)
+              .where(eq(ProjectDirectoryAdmissionTable.directory_key, directoryKey))
+              .all().length,
+        )
+        await fs.rm(worktree.directory, { recursive: true, force: true })
+        const resumed = await Worktree.removeManagedProjectWorktreeDirectory({
+          projectID: Instance.project.id,
+          directory: worktree.directory,
+          releaseSandboxOwnership: true,
+        })
+        const finalAdmissions = Database.use(
+          (db) =>
+            db
+              .select()
+              .from(ProjectDirectoryAdmissionTable)
+              .where(eq(ProjectDirectoryAdmissionTable.directory_key, directoryKey))
+              .all().length,
+        )
+        const aliasAfterSettlement = await fs.lstat(alias).then(() => "retained", () => "removed")
+        expect({
+          first: first?.name,
+          danglingAlias,
+          preservedAdmissions,
+          replaced,
+          preservedReplacement,
+          replacement,
+          retainedAdmissions,
+          resumed,
+          aliasAfterSettlement,
+          sandboxes: Project.get(Instance.project.id)?.sandboxes,
+          finalAdmissions,
+        }).toEqual({
+          first: "WorktreeRemoveFailedError",
+          danglingAlias: "retained",
+          preservedAdmissions: 1,
+          replaced: true,
+          preservedReplacement: { directory: worktree.directory, removed: false, proof: "owned" },
+          replacement: "preserve retained replacement\n",
+          retainedAdmissions: 1,
+          resumed: {
+            directory: worktree.directory,
+            removed: true,
+            proof: "ownerless",
+            receipt: { ok: true, status: "removed" },
+          },
+          aliasAfterSettlement: "removed",
+          sandboxes: [],
+          finalAdmissions: 0,
+        })
+      },
+    })
+  }, 90_000)
+
+  test("preserves a replacement introduced at the final filesystem-to-database settlement cut", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const worktree = await Worktree.create({ name: `settlement-replacement-${Date.now()}` })
+        let replaced = false
+        using _replace = Worktree.TestHooks.installBeforeRemovalSettlement(async (directory) => {
+          if (replaced || !Project.samePath(directory, worktree.directory)) return
+          replaced = true
+          await fs.mkdir(worktree.directory, { recursive: true })
+          await fs.writeFile(path.join(worktree.directory, "replacement.txt"), "preserve final replacement\n", "utf8")
+        })
+
+        const preserved = await Worktree.removeManagedProjectWorktreeDirectory({
+          projectID: Instance.project.id,
+          directory: worktree.directory,
+          releaseSandboxOwnership: true,
+        })
+        const replacement = await fs.readFile(path.join(worktree.directory, "replacement.txt"), "utf8")
+        const retainedAdmissions = Database.use(
+          (db) => db.select().from(ProjectDirectoryAdmissionTable).all().length,
+        )
+        await fs.rm(worktree.directory, { recursive: true, force: true })
+        const resumed = await Worktree.removeManagedProjectWorktreeDirectory({
+          projectID: Instance.project.id,
+          directory: worktree.directory,
+          releaseSandboxOwnership: true,
+        })
+
+        expect({
+          replaced,
+          preserved,
+          replacement,
+          retainedAdmissions,
+          resumed,
+          finalAdmissions: Database.use(
+            (db) => db.select().from(ProjectDirectoryAdmissionTable).all().length,
+          ),
+        }).toEqual({
+          replaced: true,
+          preserved: { directory: worktree.directory, removed: false, proof: "owned" },
+          replacement: "preserve final replacement\n",
+          retainedAdmissions: 1,
+          resumed: {
+            directory: worktree.directory,
+            removed: true,
+            proof: "ownerless",
+            receipt: { ok: true, status: "removed" },
+          },
+          finalAdmissions: 0,
+        })
+      },
+    })
+  }, 90_000)
+
+  test("binds a retained reset generation to its immutable branch and commit intent", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const git = (...args: string[]) => {
+          const result = Bun.spawnSync(["git", ...args], { cwd: project.path, stdout: "pipe", stderr: "pipe" })
+          if (result.exitCode !== 0) throw new Error(result.stderr.toString() || `git ${args.join(" ")} failed`)
+          return result.stdout.toString().trim()
+        }
+        const worktree = await Worktree.create({ name: `reset-intent-${Date.now()}` })
+        await fs.writeFile(path.join(project.path, "reset-intent.txt"), "next\n", "utf8")
+        git("add", "--", "reset-intent.txt")
+        git("-c", "user.name=OpenCorvus Test", "-c", "user.email=test@opencorvus.ai", "commit", "-m", "next reset target")
+        const nextCommit = git("rev-parse", "HEAD")
+        let injected = false
+        const hook = Worktree.TestHooks.installAfterResetHard(() => {
+          if (injected) return
+          injected = true
+          throw new Worktree.ResetFailedError({ message: "Injected post-reset interruption" })
+        })
+        const first = await Worktree.resetProjectWorktree({ directory: worktree.directory }).catch((error) => error)
+        hook[Symbol.dispose]()
+        await fs.writeFile(path.join(project.path, "reset-intent-later.txt"), "later\n", "utf8")
+        git("add", "--", "reset-intent-later.txt")
+        git("-c", "user.name=OpenCorvus Test", "-c", "user.email=test@opencorvus.ai", "commit", "-m", "advance moving reset ref")
+        const advancedCommit = git("rev-parse", "HEAD")
+        const conflictingIntent = await Worktree.resetProjectWorktree({
+          directory: worktree.directory,
+          baseRef: advancedCommit,
+        }).catch((error) => error)
+        const resumed = await Worktree.resetProjectWorktree({ directory: worktree.directory })
+        const finalHead = Bun.spawnSync(["git", "rev-parse", "HEAD"], {
+          cwd: worktree.directory,
+          stdout: "pipe",
+          stderr: "pipe",
+        }).stdout.toString().trim()
+        expect({
+          first: first?.name,
+          conflictingIntent: conflictingIntent?.name,
+          resumed: path.resolve(resumed.directory),
+          finalHead,
+        }).toEqual({
+          first: "WorktreeResetFailedError",
+          conflictingIntent: "WorktreeResetFailedError",
+          resumed: path.resolve(worktree.directory),
+          finalHead: nextCommit,
+        })
       },
     })
   }, 90_000)

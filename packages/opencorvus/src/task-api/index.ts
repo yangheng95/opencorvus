@@ -53,6 +53,7 @@ import {
   runWithProjectDeletionIdentity,
 } from "@/project/independent-project-owner"
 import { Project } from "@/project/project"
+import { ProjectDirectoryAdmission } from "@/project/directory-admission"
 import { ProjectTable } from "@/project/project.sql"
 import { Worktree } from "@/worktree"
 import { Question } from "@/question"
@@ -1940,8 +1941,8 @@ export namespace EngineService {
 
     const projectID = Instance.project.id
     const initializeExecutionDirectory = requireTaskExecutionDirectoryInitializer()
-    return Worktree.withSandboxAdmission(directory, async () => {
-      await Project.registerExecutionDirectory(projectID, directory)
+    return Worktree.withSandboxAdmission(directory, async (directoryAdmission) => {
+      await Project.registerExecutionDirectory(projectID, directory, directoryAdmission)
       return Instance.provide({
         directory,
         init: initializeExecutionDirectory,
@@ -1950,6 +1951,12 @@ export namespace EngineService {
             throw new Error(
               `Task execution directory ${directory} resolved project ${Instance.project.id}, expected ${projectID}`,
             )
+          }
+          if (!(await ProjectDirectoryAdmission.ownsCurrentOccurrence(directoryAdmission, directory))) {
+            throw new Project.DirectoryOccurrenceChangedError({
+              directory,
+              message: `Task execution directory occurrence changed before durable Task binding: ${directory}`,
+            })
           }
           return createTaskInner(input, caller, creator, { ...creationContext, artifactImporter })
         },

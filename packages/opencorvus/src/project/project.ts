@@ -24,11 +24,39 @@ export namespace Project {
   export const DurableAdmissionClosedError = ProjectDurableAdmissionClosedError
 
   export function assertDurableAdmissionOpen(db: Database.TxOrDb, projectID: string): void {
-    if (assertProjectDurableAdmissionOpen(db, projectID)) return
-    throw new DurableAdmissionClosedError({
-      projectID,
-      message: `Project ${projectID} durable admission is closed during deletion`,
-    })
+    if (!assertProjectDurableAdmissionOpen(db, projectID)) {
+      throw new DurableAdmissionClosedError({
+        projectID,
+        message: `Project ${projectID} durable admission is closed during deletion`,
+      })
+    }
+  }
+
+  /** Admit a new durable Session/Task owner only when its exact physical
+   * directory is outside every active reclamation for this Project. Existing
+   * Task facts keep using `assertDurableAdmissionOpen` and therefore continue
+   * on primary or sibling directories. */
+  export function assertDirectoryOwnerAdmissionOpen(
+    db: Database.TxOrDb,
+    projectID: string,
+    directory: string,
+  ): void {
+    assertDurableAdmissionOpen(db, projectID)
+    let reclamation = ProjectDirectoryAdmission.projectReclamation(db, projectID, directory)
+    if (!reclamation && !ProjectDirectoryAdmission.directoryPresentSync(directory)) {
+      const project = db.select().from(ProjectTable).where(eq(ProjectTable.id, projectID)).get()
+      if (project?.sandboxes.some((sandbox) => samePath(sandbox, directory))) {
+        reclamation = ProjectDirectoryAdmission.projectReclamation(db, projectID)
+      }
+    }
+    if (reclamation) {
+      throw new ProjectDirectoryAdmission.ClosedError({
+        directory: reclamation.directory,
+        operationID: reclamation.operation_id,
+        kind: reclamation.kind,
+        message: `Project ${projectID} durable owner admission is closed by directory reclamation ${reclamation.operation_id}`,
+      })
+    }
   }
 
   function assertRegistryAdmissionOpen(db: Database.TxOrDb, projectID: string) {
@@ -603,6 +631,61 @@ export namespace Project {
       data.worktree,
       ...(proposedSandbox ? [proposedSandbox] : []),
     ])
+
+    const inheritedAdmission = ProjectDirectoryAdmission.current()
+    if (
+      inheritedAdmission &&
+      inheritedAdmission.kind === "registration" &&
+      inheritedAdmission.directoryKey === (await ProjectDirectoryAdmission.key(directory))
+    ) {
+      const admittedOccurrence = await ProjectDirectoryAdmission.observeDirectory(directory)
+      if (
+        !inheritedAdmission.occurrence ||
+        !ProjectDirectoryAdmission.sameOccurrence(discoveredOccurrence, inheritedAdmission.occurrence) ||
+        !ProjectDirectoryAdmission.sameOccurrence(inheritedAdmission.occurrence, admittedOccurrence)
+      ) {
+        throw new DirectoryOccurrenceChangedError({
+          directory,
+          message: `Project directory occurrence changed during inherited durable admission: ${directory}`,
+        })
+      }
+      await physicalRegistration.revalidate()
+      await assertDirectoryIntegrity(directory)
+      const admittedIdentity = await discoverIdentity()
+      if (
+        admittedIdentity.id !== data.id ||
+        !samePath(admittedIdentity.sandbox, data.sandbox) ||
+        !samePath(admittedIdentity.worktree, data.worktree)
+      ) {
+        throw new DirectoryOccurrenceChangedError({
+          directory,
+          message: `Project directory identity changed during inherited durable admission: ${directory}`,
+        })
+      }
+      return Database.immediateTransaction((db) => {
+        ProjectDirectoryAdmission.assertOwned(db, inheritedAdmission)
+        assertRegistryAdmissionOpen(db, data.id)
+        const row = db.select().from(ProjectTable).where(eq(ProjectTable.id, data.id)).get()
+        if (!row || !samePath(row.worktree, data.worktree)) {
+          throw new WorktreeIdentityConflictError({
+            projectID: data.id,
+            existingWorktree: row?.worktree ?? "",
+            nextWorktree: data.worktree,
+          })
+        }
+        if (proposedSandbox && !row.sandboxes.some((sandbox) => samePath(sandbox, proposedSandbox))) {
+          throw new Error(`Project sandbox was not published under inherited admission: ${proposedSandbox}`)
+        }
+        const result = fromRow(row)
+        options.commitInTransaction?.(db, {
+          id: result.id,
+          generation: row.generation,
+          worktree: result.worktree,
+          timeCreated: result.time.created,
+        })
+        return { project: result, sandbox: data.sandbox, generation: row.generation }
+      })
+    }
 
     return ProjectDirectoryAdmission.run(async () => {
       const registrations = await acquireRegistrationAdmissions([
@@ -1270,6 +1353,27 @@ export namespace Project {
   async function addSandboxWithValidation(id: string, target: string, validate?: () => void | Promise<void>) {
     const discoveredOccurrence = await ProjectDirectoryAdmission.observeDirectory(target)
     const physicalRegistration = await capturePhysicalRegistrationAuthority(id, [target])
+    const inherited = ProjectDirectoryAdmission.current()
+    if (inherited && inherited.directoryKey === discoveredOccurrence.directoryKey) {
+      await physicalRegistration.revalidate()
+      const admittedOccurrence = await ProjectDirectoryAdmission.observeDirectory(target)
+      if (!ProjectDirectoryAdmission.sameOccurrence(discoveredOccurrence, admittedOccurrence)) {
+        throw new DirectoryOccurrenceChangedError({
+          directory: target,
+          message: `Project sandbox occurrence changed during inherited durable admission: ${target}`,
+        })
+      }
+      await validate?.()
+      let result!: Info
+      Database.immediateTransaction((db) => {
+        ProjectDirectoryAdmission.assertOwned(db, inherited)
+        result = addSandboxRow(db, id, target)
+      })
+      GlobalBus.emit("event", {
+        payload: { type: Event.Updated.type, properties: result },
+      })
+      return result
+    }
     return ProjectDirectoryAdmission.run(async () => {
       const registrations = await acquireRegistrationAdmissions([target])
       let settled = false
@@ -1307,7 +1411,11 @@ export namespace Project {
    * this directory as the project's sandbox without re-identifying a nested
    * standalone clone as a second storage project.
    */
-  export async function registerExecutionDirectory(projectID: string, directory: string) {
+  export async function registerExecutionDirectory(
+    projectID: string,
+    directory: string,
+    admission?: ProjectDirectoryAdmission.Token,
+  ) {
     const target = Filesystem.resolve(directory)
     const ownerExists = Database.use((db) =>
       db.select({ id: ProjectTable.id }).from(ProjectTable).where(eq(ProjectTable.id, projectID)).get(),
@@ -1320,6 +1428,42 @@ export namespace Project {
           `Task execution directory ${target} belongs to project ${registered.project.id}, expected ${projectID}`,
         )
       }
+      if (admission) {
+        ProjectDirectoryAdmission.assertOwnedNow(admission)
+        if (!(await ProjectDirectoryAdmission.ownsCurrentOccurrence(admission, target))) {
+          throw new DirectoryOccurrenceChangedError({
+            directory: target,
+            message: `Task execution directory occurrence changed during durable admission: ${target}`,
+          })
+        }
+      }
+      return target
+    }
+    if (admission) {
+      if (!isGitRepo(target)) throw new Error(`Task execution directory is not a git repository: ${target}`)
+      if (!(await ProjectDirectoryAdmission.ownsCurrentOccurrence(admission, target))) {
+        throw new DirectoryOccurrenceChangedError({
+          directory: target,
+          message: `Task execution directory occurrence changed before durable registration: ${target}`,
+        })
+      }
+      const physicalRegistration = await capturePhysicalRegistrationAuthority(projectID, [target])
+      await physicalRegistration.revalidate()
+      const admittedOccurrence = await ProjectDirectoryAdmission.observeDirectory(target)
+      if (!admission.occurrence || !ProjectDirectoryAdmission.sameOccurrence(admission.occurrence, admittedOccurrence)) {
+        throw new DirectoryOccurrenceChangedError({
+          directory: target,
+          message: `Task execution directory occurrence changed during durable admission: ${target}`,
+        })
+      }
+      let result!: Info
+      Database.immediateTransaction((db) => {
+        ProjectDirectoryAdmission.assertOwned(db, admission)
+        result = addSandboxRow(db, projectID, target)
+      })
+      GlobalBus.emit("event", {
+        payload: { type: Event.Updated.type, properties: result },
+      })
       return target
     }
     await addSandboxWithValidation(projectID, target, () => {
@@ -1353,49 +1497,68 @@ export namespace Project {
     return data
   }
 
+  function removeExactSandboxRows(
+    db: Database.TxOrDb,
+    id: string,
+    directories: readonly string[],
+    expected: { sandboxes: readonly string[]; timeUpdated: number },
+  ): Info {
+    const targets = new Set(directories)
+    assertRegistryAdmissionOpen(db, id)
+    const row = db.select().from(ProjectTable).where(eq(ProjectTable.id, id)).get()
+    if (!row) throw new Error(`Project not found: ${id}`)
+    if (
+      row.time_updated !== expected.timeUpdated ||
+      row.sandboxes.length !== expected.sandboxes.length ||
+      row.sandboxes.some((sandbox, index) => sandbox !== expected.sandboxes[index])
+    ) {
+      throw new Error(`Project sandbox authority changed during explicit release: ${id}`)
+    }
+    const remainingTargets = new Set(targets)
+    for (const sandbox of row.sandboxes) remainingTargets.delete(sandbox)
+    if (remainingTargets.size > 0) {
+      throw new Error(`Project sandbox authority changed during explicit release: ${id}`)
+    }
+    if (targets.size === 0) return fromRow(row)
+    return fromRow(
+      db
+        .update(ProjectTable)
+        .set({ sandboxes: row.sandboxes.filter((sandbox) => !targets.has(sandbox)), time_updated: Date.now() })
+        .where(eq(ProjectTable.id, id))
+        .returning()
+        .get(),
+    )
+  }
+
+  function emitSandboxRelease(result: Info): Info {
+    GlobalBus.emit("event", {
+      payload: { type: Event.Updated.type, properties: result },
+    })
+    return result
+  }
+
   export async function removeExactSandboxes(
     id: string,
     directories: readonly string[],
     expected: { sandboxes: readonly string[]; timeUpdated: number },
   ) {
-    const targets = new Set(directories)
-    if (targets.size === 0) {
-      const project = get(id)
-      if (!project) throw new Error(`Project not found: ${id}`)
-      return project
-    }
-    const result = Database.transaction((db) => {
-      assertRegistryAdmissionOpen(db, id)
-      const row = db.select().from(ProjectTable).where(eq(ProjectTable.id, id)).get()
-      if (!row) throw new Error(`Project not found: ${id}`)
-      if (
-        row.time_updated !== expected.timeUpdated ||
-        row.sandboxes.length !== expected.sandboxes.length ||
-        row.sandboxes.some((sandbox, index) => sandbox !== expected.sandboxes[index])
-      ) {
-        throw new Error(`Project sandbox authority changed during explicit release: ${id}`)
-      }
-      const remainingTargets = new Set(targets)
-      for (const sandbox of row.sandboxes) remainingTargets.delete(sandbox)
-      if (remainingTargets.size > 0) {
-        throw new Error(`Project sandbox authority changed during explicit release: ${id}`)
-      }
-      return db
-        .update(ProjectTable)
-        .set({ sandboxes: row.sandboxes.filter((sandbox) => !targets.has(sandbox)), time_updated: Date.now() })
-        .where(eq(ProjectTable.id, id))
-        .returning()
-        .get()
+    const result = Database.immediateTransaction((db) => removeExactSandboxRows(db, id, directories, expected))
+    return emitSandboxRelease(result)
+  }
+
+  export function removeExactSandboxesWithAdmission(input: {
+    id: string
+    directories: readonly string[]
+    expected: { sandboxes: readonly string[]; timeUpdated: number }
+    admission: ProjectDirectoryAdmission.Token
+    assertFilesystemSettlement?: () => void
+  }): Info {
+    let result!: Info
+    ProjectDirectoryAdmission.settle(input.admission, (db) => {
+      input.assertFilesystemSettlement?.()
+      result = removeExactSandboxRows(db, input.id, input.directories, input.expected)
     })
-    if (!result) throw new Error(`Project not found: ${id}`)
-    const data = fromRow(result)
-    GlobalBus.emit("event", {
-      payload: {
-        type: Event.Updated.type,
-        properties: data,
-      },
-    })
-    return data
+    return emitSandboxRelease(result)
   }
 
   export function exactSandboxAuthority(id: string): { sandboxes: string[]; timeUpdated: number } | undefined {
