@@ -472,8 +472,8 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | GET | `/experimental/tool` | List tools 错误: `BadRequestError`. | `tool.list` |
 | GET | `/experimental/tool/ids` | List tool IDs 错误: `BadRequestError`. | `tool.ids` |
 | GET | `/experimental/workspace` | List workspaces | `experimental.workspace.list` |
-| DELETE | `/experimental/workspace/{id}` | Remove workspace 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `experimental.workspace.remove` |
-| POST | `/experimental/workspace/{id}` | Create workspace 错误: `BadRequestError`. | `experimental.workspace.create` |
+| DELETE | `/experimental/workspace/{id}` | Remove workspace 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`, `WorktreeOwnershipObservationError`. | `experimental.workspace.remove` |
+| POST | `/experimental/workspace/{id}` | Create workspace 错误: `BadRequestError`, `TaskCancellationIncompleteError`, `WorktreeOwnershipObservationError`. | `experimental.workspace.create` |
 | DELETE | `/experimental/worktree` | Remove worktree 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `WorktreeOwnershipObservationError`. | `worktree.remove` |
 | GET | `/experimental/worktree` | List worktrees | `worktree.list` |
 | POST | `/experimental/worktree` | Create worktree 错误: `BadRequestError`. | `worktree.create` |

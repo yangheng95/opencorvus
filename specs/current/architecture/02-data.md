@@ -438,6 +438,48 @@ revision、Session/dispatch、Artifact、review 与 Task decision 的真实事�
 
 ## Task Input 与 Design Resource 语义
 
+## Workspace 与受管 Git 子项
+
+Workspace 数据库行不是 Git worktree 的创建或删除 receipt（收据）。当前事实源是
+`workspace-lifecycle` durable publication occurrence：Database 实例、Project、Workspace 与
+`creating` / `deleting` 共同确定 occurrence，immutable intent（不可变意图）在任何 Git mutation
+之前冻结 Project generation、primary repository、managed directory、branch 与 branch target。
+创建依次记录 Git registration、worktree readiness、Project sandbox ownership 和 Workspace-row
+publication；只有四者完整时才提交 occurrence。删除依次记录 physical directory removal、Git
+registration prune、exact branch retirement、sandbox settlement 和 Workspace-row retirement；只有
+外部子项完整结算后才删除 aggregate row。重启与 API retry 都重放同一个 occurrence，不从目录是否
+存在、最新 registry entry 或随机 worktree name 推导结果。
+
+创建或删除在 journal 和任何 Git effect 之前，先在 `workspace_lifecycle_admission` 发布当前 frontier：
+exact Project generation、Workspace identity、`creating` / `deleting`、`public` / `project_delete` authority
+与 physical process occurrence。每个 frontier 通过 Database、Project 与 Workspace scope 直接定位自己的
+durable journal，不枚举全局永久历史。Project deletion fence 和 Project identity convergence 都在自己的
+SQLite immediate writer transaction 中检查这张表；Project 关闭阻止 `public` frontier，只接管同一
+Project deletion fence 已发布的 delete frontier，Workspace row publication 也在同一事实源中重验 exact
+owner。这样 create、public delete 与 Project delete/convergence 只能按数据库 writer 顺序线性化，而不是
+依赖进程内锁或 Bus。启动恢复仅在物理 owner 被证明 `dead_or_reused` 后接管无 journal frontier；open
+journal 继续同一 reducer。public terminal frontier 结算即删除，Project-delete terminal frontier 保留到
+Project row cascade，使 Workspace row 已退休后的 Project retry 仍可直接找到其 frozen child receipt。
+
+Project 删除在第一个 child effect 前冻结全部 Workspace rows 和其余 registered managed worktrees。
+Workspace child 复用其 canonical deleting occurrence；没有 Workspace row 的 managed worktree 使用按
+Database、Project generation 与 directory occurrence 确定的 Project-child journal。两类 journal 都
+复用同一个 directory admission 和 Git writer lease，并在 Project deletion fence 下保留原 sandbox
+snapshot，直到 final Project transaction 证明 Workspace set 为空、所有 child receipts terminal，才允许
+删除 Project row。已经在 intent capture 前被证明不存在的 registered directory 仍保留在 registry
+snapshot 中，但不会制造一个虚假的 physical cleanup target。
+
+Project managed-child journal 把 device、inode 与 birth time 纳入 occurrence ID，并以显式 predecessor
+连接同一 Project generation、registration/sandbox path 上的后继物理 occurrence。retry 只选择唯一 chain
+head；每个 Project generation 与 frozen child path 使用自己的 publication scope，建立后继后退休已结算
+的历史 predecessor，所以 lookup 与 retained history 都不随其他 Project 或永久历史增长。present namespace
+必须匹配该 exact occurrence，只有 namespace 已消失时才能重放 head 的 frozen plan。因此 retry 不从已被
+删除的 alias/registry 重新计算 child identity，同路径后继也不会被历史 terminal journal 吞掉。普通
+garbage-collection（GC，垃圾回收）候选本来没有
+Project sandbox owner；其 public removal plan 冻结“无匹配 sandbox 且不释放 sandbox authority”的事实，
+仍须证明 exact Git registration、branch target、directory occurrence 和 ownerless marker，不能制造
+sandbox ownership。Workspace/public delete 与 Project delete 仍必须持有并结算其 frozen exact sandbox。
+
 `task.attachments` 只保存用户上传的中性输入。每条记录固定为
 `intent="task_input"`、`source="user-upload"`；MIME（Multipurpose Internet Mail
 Extensions，多用途互联网邮件扩展类型）、文件名和扩展名都不能推导领域语义。

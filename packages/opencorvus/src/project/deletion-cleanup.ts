@@ -43,7 +43,7 @@ const CleanupManifest = z.object({
   projectKind: z.enum(["ordinary", "anonymous"]),
   directory: z.string().min(1),
   registeredDirectories: z.array(RegisteredDirectory).min(1).max(256),
-  targets: z.array(CleanupTarget).min(1).max(256),
+  targets: z.array(CleanupTarget).max(256),
   timeCreated: z.number().int().nonnegative(),
 })
 
@@ -132,9 +132,7 @@ async function captureRegisteredDirectories(input: {
     throw new Error(`Anonymous Project ${input.projectID} cannot own additional registered deletion roots`)
   }
   const physicalRoots = registeredDirectories.flatMap((registeredDirectory) =>
-    registeredDirectory.physicalPath
-      ? [ProjectRuntimePaths.projectRuntimeRoot(registeredDirectory.physicalPath)]
-      : [],
+    registeredDirectory.physicalPath ? [ProjectRuntimePaths.projectRuntimeRoot(registeredDirectory.physicalPath)] : [],
   )
   for (let index = 0; index < physicalRoots.length; index += 1) {
     for (let peer = 0; peer < index; peer += 1) {
@@ -195,10 +193,10 @@ function validateManifest(manifest: ProjectDeletionCleanupManifest): void {
   }
   const expectedSources = anonymous
     ? [directory]
-    : registeredDirectories.map((registeredDirectory) =>
-        path.resolve(
-          ProjectRuntimePaths.projectRuntimeRoot(registeredDirectory.physicalPath ?? registeredDirectory.path),
-        ),
+    : registeredDirectories.flatMap((registeredDirectory) =>
+        registeredDirectory.physicalPath
+          ? [path.resolve(ProjectRuntimePaths.projectRuntimeRoot(registeredDirectory.physicalPath))]
+          : [],
       )
   for (let index = 0; index < expectedSources.length; index += 1) {
     for (let peer = 0; peer < index; peer += 1) {
@@ -242,9 +240,7 @@ async function assertRegisteredDirectoryIdentities(manifest: ProjectDeletionClea
     const current = await physicalDirectoryPath(registeredDirectory.path)
     const expected = registeredDirectory.physicalPath
     if ((current === null) !== (expected === null) || (current && expected && !samePath(current, expected))) {
-      throw new Error(
-        `Project deletion cleanup registered directory occurrence changed: ${registeredDirectory.path}`,
-      )
+      throw new Error(`Project deletion cleanup registered directory occurrence changed: ${registeredDirectory.path}`)
     }
     if (current) physicalRoots.push(ProjectRuntimePaths.projectRuntimeRoot(current))
   }
@@ -265,10 +261,8 @@ async function assertTargetRecoverable(target: z.infer<typeof CleanupTarget>): P
     if (!current.source && !current.quarantine) return
     throw new Error(`Project deletion cleanup absent target changed before recovery: ${target.source}`)
   }
-  const sourceMatches =
-    current.source && ProjectDirectoryAdmission.sameOccurrence(target.occurrence, current.source)
-  const quarantineMatches =
-    current.quarantine && samePhysicalOccurrence(target.occurrence, current.quarantine)
+  const sourceMatches = current.source && ProjectDirectoryAdmission.sameOccurrence(target.occurrence, current.source)
+  const quarantineMatches = current.quarantine && samePhysicalOccurrence(target.occurrence, current.quarantine)
   if ((sourceMatches && !current.quarantine) || (!current.source && quarantineMatches)) return
   throw new Error(`Project deletion cleanup target occurrence is ambiguous during recovery: ${target.source}`)
 }
@@ -295,9 +289,7 @@ async function assertTargetSourceOccurrence(target: z.infer<typeof CleanupTarget
   }
 }
 
-export async function projectDeletionCleanupTargetStaged(
-  target: z.infer<typeof CleanupTarget>,
-): Promise<boolean> {
+export async function projectDeletionCleanupTargetStaged(target: z.infer<typeof CleanupTarget>): Promise<boolean> {
   const current = await targetOccurrences(target)
   if (!target.occurrence) {
     if (current.source === null && current.quarantine === null) return false
@@ -309,15 +301,17 @@ export async function projectDeletionCleanupTargetStaged(
   throw new Error(`Project deletion cleanup target did not settle in quarantine: ${target.source}`)
 }
 
-export async function assertProjectDeletionCleanupTargetRestored(
-  target: z.infer<typeof CleanupTarget>,
-): Promise<void> {
+export async function assertProjectDeletionCleanupTargetRestored(target: z.infer<typeof CleanupTarget>): Promise<void> {
   const current = await targetOccurrences(target)
   if (!target.occurrence) {
     if (!current.source && !current.quarantine) return
     throw new Error(`Project deletion cleanup absent target changed during rollback: ${target.source}`)
   }
-  if (current.source && !current.quarantine && ProjectDirectoryAdmission.sameOccurrence(target.occurrence, current.source)) {
+  if (
+    current.source &&
+    !current.quarantine &&
+    ProjectDirectoryAdmission.sameOccurrence(target.occurrence, current.source)
+  ) {
     return
   }
   throw new Error(`Project deletion cleanup target did not restore its exact occurrence: ${target.source}`)
@@ -396,8 +390,10 @@ export async function createProjectDeletionCleanupPlan(input: {
   const sources =
     projectKind === "anonymous"
       ? [directory]
-      : registeredDirectories.map((registeredDirectory) =>
-          ProjectRuntimePaths.projectRuntimeRoot(registeredDirectory.physicalPath ?? registeredDirectory.path),
+      : registeredDirectories.flatMap((registeredDirectory) =>
+          registeredDirectory.physicalPath
+            ? [ProjectRuntimePaths.projectRuntimeRoot(registeredDirectory.physicalPath)]
+            : [],
         )
   const targets = await Promise.all(
     sources.map(async (source, index) => {
@@ -490,9 +486,7 @@ export async function acquireProjectDeletionDirectoryAdmissions(
   return tokens
 }
 
-export function settleProjectDeletionDirectoryAdmissions(
-  admissions: ProjectDeletionDirectoryAdmissions,
-): void {
+export function settleProjectDeletionDirectoryAdmissions(admissions: ProjectDeletionDirectoryAdmissions): void {
   ProjectDirectoryAdmission.settleMany(admissions, () => undefined)
 }
 
@@ -507,10 +501,7 @@ export async function cleanupCommittedProjectDeletion(
   const residue: Array<{ path: string; message: string }> = []
   let directoryAdmissions = options.directoryAdmissions
   try {
-    directoryAdmissions ??= await acquireProjectDeletionDirectoryAdmissions(
-      plan,
-      options.observeProcessOccurrence,
-    )
+    directoryAdmissions ??= await acquireProjectDeletionDirectoryAdmissions(plan, options.observeProcessOccurrence)
   } catch (error) {
     return [
       {

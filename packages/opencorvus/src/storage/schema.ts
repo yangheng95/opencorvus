@@ -38,7 +38,7 @@ import {
   ProjectMaintenanceFenceTable,
   ProjectTable,
 } from "../project/project.sql"
-import { WorkspaceTable } from "../workspace/workspace.sql"
+import { WorkspaceLifecycleAdmissionTable, WorkspaceTable } from "../workspace/workspace.sql"
 import { MemoryFileTable, MemoryChunkTable, MemoryEmbeddingTable } from "../memory/memory.sql"
 import {
   AutomationDefinitionTombstoneTable,
@@ -122,6 +122,7 @@ export {
   ProjectDirectoryAdmissionTable,
   GlobalCreationAllocationTable,
   WorkspaceTable,
+  WorkspaceLifecycleAdmissionTable,
   MemoryFileTable,
   MemoryChunkTable,
   MemoryEmbeddingTable,
@@ -205,6 +206,7 @@ export const ApplicationSchema = {
   ProjectDirectoryAdmissionTable,
   GlobalCreationAllocationTable,
   WorkspaceTable,
+  WorkspaceLifecycleAdmissionTable,
   MemoryFileTable,
   MemoryChunkTable,
   MemoryEmbeddingTable,

@@ -18,6 +18,8 @@ import { ProjectRuntimePaths } from "../src/project/runtime-paths"
 import { insertTaskProcessBinding } from "../src/engine/task-execution-capsule-binding"
 import { Identifier } from "../src/id/id"
 import { SessionPromptOwnerTable, SessionTable } from "../src/session/session.sql"
+import { currentRuntimeProcessOccurrence } from "../src/runtime/process-occurrence"
+import { WorkspaceLifecycleAdmissionTable } from "../src/workspace/workspace.sql"
 
 function insertProject(input: {
   id: string
@@ -227,6 +229,66 @@ describe("explicit Project identity convergence", () => {
       name: "ProjectIdentityConvergenceConflictError",
       canonicalProjectID,
       rows: before,
+    })
+  })
+
+  test("an admitted Workspace creation preserves its exact duplicate Project occurrence", async () => {
+    await using fixture = await memoryProject()
+    const canonicalProjectID = `project_${crypto.randomUUID()}`
+    const duplicateProjectID = `project_${crypto.randomUUID()}`
+    insertProject({ id: canonicalProjectID, worktree: fixture.path })
+    insertProject({ id: duplicateProjectID, worktree: fixture.path })
+    const duplicate = Database.use((db) =>
+      db.select().from(ProjectTable).where(eq(ProjectTable.id, duplicateProjectID)).get(),
+    )
+    if (!duplicate) throw new Error("Duplicate Project fixture was not inserted")
+    const owner = currentRuntimeProcessOccurrence()
+    const occurrenceID = crypto.randomUUID()
+    Database.use((db) =>
+      db
+        .insert(WorkspaceLifecycleAdmissionTable)
+        .values({
+          occurrence_id: occurrenceID,
+          project_id: duplicateProjectID,
+          project_generation: duplicate.generation,
+          workspace_id: Identifier.ascending("workspace"),
+          lifecycle: "creating",
+          authority: "public",
+          owner_occurrence_id: owner.occurrenceID,
+          owner_pid: owner.pid,
+          owner_process_instance_id: owner.processInstanceID,
+          time_created: Date.now(),
+        })
+        .run(),
+    )
+
+    const conflict = await convergeProjectIdentity({ worktree: fixture.path, canonicalProjectID }).catch(
+      (cause) => cause,
+    )
+    expect({
+      name: conflict instanceof Error ? conflict.name : undefined,
+      message: ProjectIdentityConvergence.ConflictError.isInstance(conflict) ? conflict.data.message : undefined,
+      projects: Database.use((db) =>
+        db
+          .select({ id: ProjectTable.id })
+          .from(ProjectTable)
+          .all()
+          .filter((row) => row.id === canonicalProjectID || row.id === duplicateProjectID)
+          .map((row) => row.id)
+          .sort(),
+      ),
+      admission: Database.use((db) =>
+        db
+          .select({ occurrenceID: WorkspaceLifecycleAdmissionTable.occurrence_id })
+          .from(WorkspaceLifecycleAdmissionTable)
+          .where(eq(WorkspaceLifecycleAdmissionTable.occurrence_id, occurrenceID))
+          .get(),
+      ),
+    }).toEqual({
+      name: "ProjectIdentityConvergenceConflictError",
+      message: `Workspace creation admission ${occurrenceID} blocks Project identity convergence`,
+      projects: [canonicalProjectID, duplicateProjectID].sort(),
+      admission: { occurrenceID },
     })
   })
 

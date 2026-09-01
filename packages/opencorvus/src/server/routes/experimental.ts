@@ -35,7 +35,7 @@ const WorkspaceRoutes = lazy(() =>
             description: "Workspace created",
             content: { "application/json": { schema: resolver(Workspace.Info) } },
           },
-          ...errors(400),
+          ...errors(400, 409, 503),
         },
       }),
       validator(
@@ -82,7 +82,7 @@ const WorkspaceRoutes = lazy(() =>
             description: "Workspace removed",
             content: { "application/json": { schema: resolver(Workspace.Info) } },
           },
-          ...errors(400, 404),
+          ...errors(400, 404, 409, 503),
         },
       }),
       validator(
@@ -465,7 +465,9 @@ export const ExperimentalRoutes = lazy(() =>
         responses: {
           200: {
             description: "Memory Organizer result",
-            content: { "application/json": { schema: resolver(z.object({ result: z.unknown(), document: z.unknown() })) } },
+            content: {
+              "application/json": { schema: resolver(z.object({ result: z.unknown(), document: z.unknown() })) },
+            },
           },
         },
       }),

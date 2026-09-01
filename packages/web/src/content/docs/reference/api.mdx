@@ -472,8 +472,8 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 | GET | `/experimental/tool` | List tools Errors: `BadRequestError`. | `tool.list` |
 | GET | `/experimental/tool/ids` | List tool IDs Errors: `BadRequestError`. | `tool.ids` |
 | GET | `/experimental/workspace` | List workspaces | `experimental.workspace.list` |
-| DELETE | `/experimental/workspace/{id}` | Remove workspace Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `experimental.workspace.remove` |
-| POST | `/experimental/workspace/{id}` | Create workspace Errors: `BadRequestError`. | `experimental.workspace.create` |
+| DELETE | `/experimental/workspace/{id}` | Remove workspace Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`, `WorktreeOwnershipObservationError`. | `experimental.workspace.remove` |
+| POST | `/experimental/workspace/{id}` | Create workspace Errors: `BadRequestError`, `TaskCancellationIncompleteError`, `WorktreeOwnershipObservationError`. | `experimental.workspace.create` |
 | DELETE | `/experimental/worktree` | Remove worktree Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `WorktreeOwnershipObservationError`. | `worktree.remove` |
 | GET | `/experimental/worktree` | List worktrees | `worktree.list` |
 | POST | `/experimental/worktree` | Create worktree Errors: `BadRequestError`. | `worktree.create` |

@@ -66,6 +66,9 @@ export function namedErrorStatus(err: { name: string }): ContentfulStatusCode {
   if (err.name === "ProjectDurableAdmissionClosedError") return 409
   if (err.name === "ProjectDeletePendingError") return 409
   if (err.name === "ProjectDeletionCleanupDatabaseMismatchError") return 409
+  if (err.name === "WorkspaceLifecycleIdentityConflictError") return 409
+  if (err.name === "WorkspaceLifecycleAdmissionConflictError") return 409
+  if (err.name === "WorkspaceLifecyclePendingError") return 409
   if (err.name === "ChildSessionConfigError") return 400
   if (err.name === "WorktreeNotGitError") return 412
   if (err.name === "VcsPrerequisiteError") return 412

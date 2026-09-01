@@ -12,6 +12,7 @@ import { recoverSessionDeletionCleanup } from "@/session/deletion-cleanup"
 import { recoverProjectMaintenanceFences } from "@/project/deletion-registry"
 import { ImplicitProject } from "@/project/implicit-project"
 import { Log } from "@/util/log"
+import { Workspace } from "@/workspace/workspace"
 
 const log = Log.create({ service: "startup-recovery" })
 
@@ -96,6 +97,11 @@ export async function prepareServerRuntimeForListener(input: {
       preserveOperationIDs: new Set(deletionRecovery.retainedOperationIDs),
     })
     reportUnreconciledFailures("project maintenance fence", fenceRecovery.unreconciled)
+    const workspaceLifecycles = await Workspace.recoverOpenLifecycles(observeProcessOccurrence)
+    if (workspaceLifecycles.recovered > 0) {
+      log.info("Workspace lifecycle recovery completed", { recovered: workspaceLifecycles.recovered })
+    }
+    reportUnreconciledFailures("Workspace lifecycle", workspaceLifecycles.failures)
     Server.initializeGlobalAutomation()
     return { occurrence }
   } catch (preparationError) {

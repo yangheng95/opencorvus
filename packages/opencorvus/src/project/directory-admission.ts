@@ -207,11 +207,7 @@ export namespace ProjectDirectoryAdmission {
    * writer transactions. A reclamation fences its exact namespace and
    * descendants, but reclaiming one child does not freeze its parent or a
    * sibling namespace. */
-  export function projectReclamation(
-    db: Database.TxOrDb,
-    projectID: string,
-    directory?: string,
-  ): Row | undefined {
+  export function projectReclamation(db: Database.TxOrDb, projectID: string, directory?: string): Row | undefined {
     const prefix = projectOperationPrefix(projectID)
     const directoryKey = directory === undefined ? undefined : keySync(directory)
     return db
@@ -455,6 +451,41 @@ export namespace ProjectDirectoryAdmission {
         .get()
       return row && row.kind === kind ? { operationID: row.operation_id, generation: row.generation } : undefined
     })
+  }
+
+  /** Read the current overlapping mutation before a caller enters another
+   * external writer lease. This is a liveness preflight only: the later
+   * durable acquire remains the authority and revalidates the same overlap in
+   * its immediate transaction. */
+  export async function activeOverlappingOperation(
+    directory: string,
+    observe: RuntimeProcessOccurrenceObserver = observeRuntimeProcessOccurrence,
+  ): Promise<
+    | {
+        operationID: string
+        generation: string
+        kind: Token["kind"]
+        ownerObservation: "exact_live" | "dead_or_reused" | "unknown_live"
+      }
+    | undefined
+  > {
+    const directoryKey = await key(directory)
+    const row = Database.use((db) =>
+      db
+        .select()
+        .from(ProjectDirectoryAdmissionTable)
+        .all()
+        .find((candidate) => overlaps(candidate.directory_key, directoryKey)),
+    )
+    if (!row) return undefined
+    const owner = ownerOf(row)
+    const current = currentRuntimeProcessOccurrence()
+    return {
+      operationID: row.operation_id,
+      generation: row.generation,
+      kind: row.kind,
+      ownerObservation: sameOwner(owner, current) ? "exact_live" : observe(owner),
+    }
   }
 
   /** Apply the final registry mutation and release this exact generation in

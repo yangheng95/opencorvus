@@ -49,6 +49,28 @@
 
 两者最终都调 `EngineService.createTask` 或 `Session` / `Question` 等既有 API。
 
+Workspace create/delete API 只触发 durable lifecycle reducer，不直接把 Git mutation 当作完成结果。
+调用者提供的 Workspace ID 是 aggregate identity；Host 在 mutation 前冻结 named worktree plan 或 exact
+removal plan，之后每次 retry 都校验相同 Project generation、directory occurrence、registration、branch
+target 与 sandbox authority。identity drift 返回 typed conflict，未完整的外部阶段返回 typed pending；
+不存在 catch-only rollback、随机重建或 registry-prune 后丢弃 branch authority 的成功路径。
+
+Workspace create 在 journal/Git 之前写入 transaction-local lifecycle admission，并一直持有到 lifecycle
+terminal。Project deletion 关闭 registry admission 的同一 immediate transaction 必须证明该 Project 没有
+Workspace create admission；Project identity convergence 也必须保留其 exact Project occurrence。恢复只在
+旧 physical process occurrence 确认死亡或复用后接管，未知或仍存活的 owner 返回 typed conflict。
+
+Worktree remove 在进入 Git writer lease 前只把 live/unknown overlapping registration 当作 owned；死亡
+registration 会继续进入 canonical directory-admission acquire，由该 immediate transaction 原子删除旧
+generation 并取得 reclamation generation。该 preflight 只避免 live registration 与 Git lease 互等，不是
+第二个 mutation authority。
+
+Project deletion 的 runtime-settlement 先让 Task/Session 与 Build-observation owner 收敛，再在仍持有
+Project admission 和 deletion fence 时结算全部 Workspace/managed-worktree children。Project cascade
+transaction 必须再次校验 exact fenced registry snapshot、零 Workspace rows 和 canonical child terminal
+receipts。Project-specific child reducer不会另造 filesystem bypass；它只把 sandbox-row removal延后到
+同一个 aggregate transaction。
+
 `cancelTask` 在显式停止窗口内持有 root-Session destructive scope，遍历真实
 Session tree，并只取消当前进程实际持有的 `SessionPromptState` controller。
 controller 不存在时必须返回物理 ownership mismatch 并保留记录，不能用

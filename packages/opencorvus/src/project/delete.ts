@@ -9,6 +9,9 @@ import { EngineTaskTable } from "@/engine/engine.sql"
 import { expireProjectPermissionGrantsInTransaction } from "@/permission/project-authority"
 import { deleteProjectNotes } from "@/quicknote/service"
 import { SessionTable } from "@/session/session.sql"
+import { WorkspaceTable } from "@/workspace/workspace.sql"
+import { Workspace } from "@/workspace/workspace"
+import { Worktree } from "@/worktree"
 import { CANCEL_INGRESS_SETTLE_INACTIVITY_MS, EngineService } from "@/task-api"
 import { Database, eq } from "@/storage/db"
 import { Filesystem } from "@/util/filesystem"
@@ -21,6 +24,7 @@ import { Project } from "./project"
 import { closeProjectDeletionRegistryAdmission, type ProjectDeletionRegistryAdmission } from "./deletion-registry"
 import { ProjectMaintenanceFenceTable, ProjectTable } from "./project.sql"
 import { ProjectRuntimePaths } from "./runtime-paths"
+import { ProjectWorktreeDeletion, type ProjectWorktreeDeletionEntry } from "./worktree-deletion"
 import {
   cleanupCommittedProjectDeletion,
   createProjectDeletionCleanupPlan,
@@ -84,10 +88,7 @@ function assertProjectRuntimeDeleteTarget(projectDir: string, target: string): s
   const projectRoot = path.resolve(projectDir)
   const resolvedTarget = path.resolve(target)
   const relative = path.relative(projectRoot, resolvedTarget)
-  if (
-    path.basename(resolvedTarget) !== ".r" ||
-    path.basename(path.dirname(resolvedTarget)) !== ".opencorvus"
-  ) {
+  if (path.basename(resolvedTarget) !== ".r" || path.basename(path.dirname(resolvedTarget)) !== ".opencorvus") {
     throw new Error(`Refusing to delete non-OpenCorvus project state directory: ${resolvedTarget}`)
   }
   if (!relative || relative.startsWith("..") || path.isAbsolute(relative)) {
@@ -171,16 +172,17 @@ async function projectRootRemovalPlans(project: Project.Info): Promise<ProjectRo
   const roots = directories.map((directory) =>
     assertProjectRuntimeDeleteTarget(directory, ProjectRuntimePaths.projectRuntimeRoot(directory)),
   )
-  for (let index = 0; index < roots.length; index += 1) {
-    for (let peer = 0; peer < index; peer += 1) {
-      if (Filesystem.overlaps(roots[index]!, roots[peer]!)) {
-        throw new Error(
-          `Project ${project.id} registered deletion roots overlap: ${roots[peer]} and ${roots[index]}`,
-        )
-      }
-    }
-  }
   return Promise.all(roots.map((root) => planProjectRootRemoval(root, "OpenCorvus project runtime state")))
+}
+
+async function projectRootRemovalPreflightBeforeManagedChildSettlement(
+  project: Project.Info,
+): Promise<ProjectRootRemoval[]> {
+  const retainedRoots: string[] = []
+  for (const sandbox of project.sandboxes) {
+    if (!(await Worktree.isManagedWorktreeDirectory(project.worktree, sandbox))) retainedRoots.push(sandbox)
+  }
+  return projectRootRemovalPlans({ ...project, sandboxes: retainedRoots })
 }
 
 function projectTaskIDs(projectID: string): string[] {
@@ -212,6 +214,55 @@ function projectPromptSessions(projectID: string): ProjectPromptSession[] {
       .orderBy(SessionTable.time_created, SessionTable.id)
       .all(),
   )
+}
+
+async function settleProjectWorktreeChildren(
+  project: Project.Info,
+  generation: string,
+  registryAdmission: ProjectDeletionRegistryAdmission,
+): Promise<string[]> {
+  const workspaceRows = Database.use((db) =>
+    db.select().from(WorkspaceTable).where(eq(WorkspaceTable.project_id, project.id)).orderBy(WorkspaceTable.id).all(),
+  )
+  const workspaceEntriesByID = new Map(
+    (await Workspace.projectDeletionEntries(project.id)).map((entry) => [entry.workspaceID, entry]),
+  )
+  for (const workspace of workspaceRows) {
+    if (workspaceEntriesByID.has(workspace.id)) continue
+    const entry = await Workspace.prepareDeleteForProjectDeletion(
+      { id: workspace.id, projectID: project.id },
+      registryAdmission,
+    )
+    workspaceEntriesByID.set(entry.workspaceID, entry)
+  }
+  const workspaceEntries = [...workspaceEntriesByID.values()].sort((left, right) =>
+    left.workspaceID.localeCompare(right.workspaceID),
+  )
+  const workspaceDirectories = [
+    ...workspaceRows.map((row) => row.config.directory),
+    ...workspaceEntries.map((entry) => entry.removal.registration.directory),
+  ]
+  const managedDirectories: string[] = []
+  for (const directory of registryAdmission.snapshot.sandboxes) {
+    if (workspaceDirectories.some((workspace) => Project.samePath(workspace, directory))) continue
+    if (await Worktree.isManagedWorktreeDirectory(project.worktree, directory)) managedDirectories.push(directory)
+  }
+  const managedEntries: ProjectWorktreeDeletionEntry[] = []
+  for (const directory of managedDirectories) {
+    managedEntries.push(
+      await ProjectWorktreeDeletion.prepare({ projectID: project.id, projectGeneration: generation, directory }),
+    )
+  }
+  // The complete immutable child set exists before the first destructive
+  // effect. A crash can therefore resume from the Workspace/Project journals
+  // even after Git prune removed the only registry copy of a branch identity.
+  for (const entry of workspaceEntries) {
+    await Workspace.reducePreparedDeleteForProjectDeletion(entry, registryAdmission)
+  }
+  await Workspace.assertProjectDeletionEntriesCommitted(workspaceEntries)
+  for (const entry of managedEntries) await ProjectWorktreeDeletion.reduce(entry, registryAdmission)
+  await ProjectWorktreeDeletion.assertCommitted(managedEntries)
+  return workspaceEntries.map((entry) => entry.occurrenceID)
 }
 
 function projectDeletionInstanceDirectories(project: Project.Info): string[] {
@@ -271,7 +322,12 @@ async function cancelRemainingProjectSessionPrompts(
   })
 }
 
-function deleteProjectRows(admission: ProjectDeletionRegistryAdmission, projectID: string, taskIDs: string[]): void {
+function deleteProjectRows(
+  admission: ProjectDeletionRegistryAdmission,
+  projectID: string,
+  taskIDs: string[],
+  workspaceDeletionOccurrenceIDs: readonly string[],
+): void {
   Database.immediateTransaction((db) => {
     const fence = db
       .select()
@@ -306,6 +362,15 @@ function deleteProjectRows(admission: ProjectDeletionRegistryAdmission, projectI
       throw new Error(`Project ${projectID} Task ownership changed before deletion commit`)
     }
     assertBuildObservationCleanupsCompleteInTransaction(db, currentTaskIDs)
+    const remainingWorkspaces = db
+      .select({ id: WorkspaceTable.id })
+      .from(WorkspaceTable)
+      .where(eq(WorkspaceTable.project_id, projectID))
+      .all()
+    if (remainingWorkspaces.length > 0) {
+      throw new Error(`Project ${projectID} still owns unsettled Workspace children`)
+    }
+    Workspace.assertProjectDeletionFrontiers(db, projectID, workspaceDeletionOccurrenceIDs)
     deleteDecisionLogsForTasks(taskIDs, db)
     deleteProjectNotes({ projectID }, db)
     expireProjectPermissionGrantsInTransaction({
@@ -327,7 +392,9 @@ export async function deleteProject(
   cancellationOrigin: TaskCancellationOrigin,
 ): Promise<ProjectDeleteResult> {
   const projectID = project.id
-  using registryAdmission = closeProjectDeletionRegistryAdmission(projectID)
+  using registryAdmission = closeProjectDeletionRegistryAdmission(projectID, {
+    assertCanClose: (db) => Workspace.assertLifecycleAdmissionsClear(db, projectID),
+  })
   const currentProject = Project.fromRow(registryAdmission.snapshot)
   const directory = currentProject.worktree
   using admission = await Instance.closeProjectAdmission({
@@ -337,13 +404,14 @@ export async function deleteProject(
   let taskIDs: string[] = []
   let cleanupPlan: ProjectDeletionCleanupPlan | undefined
   let directoryAdmissions: ProjectDeletionDirectoryAdmissions | undefined
+  let workspaceDeletionOccurrenceIDs: string[] = []
   const stagedPlans: ProjectDeletionCleanupPlan["manifest"]["targets"] = []
   let stage: "filesystem-preflight" | "runtime-settlement" | "filesystem-quarantine" | "database-commit" =
     "filesystem-preflight"
   let committed = false
 
   try {
-    await projectRootRemovalPlans(currentProject)
+    await projectRootRemovalPreflightBeforeManagedChildSettlement(currentProject)
     taskIDs = projectTaskIDs(projectID)
     stage = "runtime-settlement"
     for (const taskID of taskIDs) {
@@ -355,6 +423,21 @@ export async function deleteProject(
     }
 
     await cancelRemainingProjectSessionPrompts(projectID, cancellationOrigin, admission)
+    const childrenSettled = await Instance.tryProvideActive({
+      directory: currentProject.worktree,
+      projectDeletionAdmission: admission,
+      fn: async () => {
+        workspaceDeletionOccurrenceIDs = await settleProjectWorktreeChildren(
+          currentProject,
+          registryAdmission.snapshot.generation,
+          registryAdmission,
+        )
+        return true as const
+      },
+    })
+    if (childrenSettled === undefined) {
+      throw new Error(`Project ${projectID} has no active Instance identity for external-child settlement`)
+    }
     await Instance.disposeProjectEntries(projectID, CANCEL_INGRESS_SETTLE_INACTIVITY_MS)
     stage = "filesystem-quarantine"
     await projectRootRemovalPlans(currentProject)
@@ -379,7 +462,7 @@ export async function deleteProject(
     }
     await beforeProjectDeletionDatabaseCommit?.({ projectID, taskIDs: finalTaskIDs })
     stage = "database-commit"
-    deleteProjectRows(registryAdmission, projectID, finalTaskIDs)
+    deleteProjectRows(registryAdmission, projectID, finalTaskIDs, workspaceDeletionOccurrenceIDs)
     committed = true
   } catch (error) {
     if (committed) throw error
@@ -439,9 +522,7 @@ export async function deleteProject(
     )
   }
 
-  const residue = cleanupPlan
-    ? await cleanupCommittedProjectDeletion(cleanupPlan, { directoryAdmissions })
-    : []
+  const residue = cleanupPlan ? await cleanupCommittedProjectDeletion(cleanupPlan, { directoryAdmissions }) : []
 
   return ProjectDeleteResult.parse({
     ok: true,

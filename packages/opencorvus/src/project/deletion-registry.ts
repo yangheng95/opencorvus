@@ -22,6 +22,41 @@ export interface ProjectDeletionRegistryAdmission extends Disposable {
   preserveFence(): void
 }
 
+/**
+ * Revalidate the exact durable Project-deletion fence inside an existing
+ * writer transaction. External-child reducers use this authority to settle
+ * filesystem/Git children while deliberately retaining the frozen Project
+ * registry row for the final aggregate delete.
+ */
+export function assertProjectDeletionRegistryAdmission(
+  db: Database.TxOrDb,
+  admission: ProjectDeletionRegistryAdmission,
+): void {
+  const fence = db
+    .select()
+    .from(ProjectMaintenanceFenceTable)
+    .where(eq(ProjectMaintenanceFenceTable.project_id, admission.projectID))
+    .get()
+  if (
+    !fence ||
+    fence.operation_id !== admission.operationID ||
+    fence.project_generation !== admission.snapshot.generation ||
+    fence.kind !== "delete"
+  ) {
+    throw new Error(`Project ${admission.projectID} deletion admission changed`)
+  }
+  const project = db.select().from(ProjectTable).where(eq(ProjectTable.id, admission.projectID)).get()
+  if (
+    !project ||
+    project.generation !== admission.snapshot.generation ||
+    project.worktree !== admission.snapshot.worktree ||
+    project.time_updated !== admission.snapshot.time_updated ||
+    JSON.stringify(project.sandboxes) !== JSON.stringify(admission.snapshot.sandboxes)
+  ) {
+    throw new Error(`Project ${admission.projectID} registry identity changed during deletion`)
+  }
+}
+
 const admissions = new Map<string, { token: symbol }>()
 
 export function assertProjectDurableAdmissionOpen(db: Database.TxOrDb, projectID: string): boolean {
@@ -139,12 +174,13 @@ export function releaseProjectMaintenanceFencesInTransaction(
   db: Database.TxOrDb,
   input: { operationID: string },
 ): void {
-  db.delete(ProjectMaintenanceFenceTable)
-    .where(eq(ProjectMaintenanceFenceTable.operation_id, input.operationID))
-    .run()
+  db.delete(ProjectMaintenanceFenceTable).where(eq(ProjectMaintenanceFenceTable.operation_id, input.operationID)).run()
 }
 
-export function closeProjectDeletionRegistryAdmission(projectID: string): ProjectDeletionRegistryAdmission {
+export function closeProjectDeletionRegistryAdmission(
+  projectID: string,
+  options: { assertCanClose?: (db: Database.TxOrDb) => void } = {},
+): ProjectDeletionRegistryAdmission {
   if (admissions.has(projectID)) {
     throw new ProjectDurableAdmissionClosedError({
       projectID,
@@ -157,6 +193,7 @@ export function closeProjectDeletionRegistryAdmission(projectID: string): Projec
     const snapshot = Database.immediateTransaction((db) => {
       const row = db.select().from(ProjectTable).where(eq(ProjectTable.id, projectID)).get()
       if (!row) throw new Error(`Project ${projectID} no longer exists`)
+      options.assertCanClose?.(db)
       acquireProjectMaintenanceFencesInTransaction(db, {
         projectRows: [row],
         operationID,

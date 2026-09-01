@@ -16,7 +16,7 @@ import { MemoryChunkTable, MemoryFileTable } from "@/memory/memory.sql"
 import { PermissionLedgerTable, PermissionPolicyTable } from "@/permission/permission.sql"
 import { QuickNoteTable } from "@/quicknote/quicknote.sql"
 import { SessionPromptOwnerTable, SessionTable } from "@/session/session.sql"
-import { WorkspaceTable } from "@/workspace/workspace.sql"
+import { WorkspaceLifecycleAdmissionTable, WorkspaceTable } from "@/workspace/workspace.sql"
 import { ProjectRuntimePaths } from "./runtime-paths"
 import { ProjectTable } from "./project.sql"
 import { Project } from "./project"
@@ -94,6 +94,7 @@ export namespace ProjectIdentityConvergence {
     { table: "event_occurrence", settlement: "preserve" as const },
     { table: "session_prompt_owner", settlement: "preserve" as const },
     { table: "project_maintenance_fence", settlement: "maintenance_fence" as const },
+    { table: "workspace_lifecycle_admission", settlement: "block" as const },
   ]
 
   function conflict(input: {
@@ -300,6 +301,19 @@ export namespace ProjectIdentityConvergence {
             projectIDs:
               observedProjectIDs.length >= 2 ? observedProjectIDs : [canonicalProjectID, "<duplicate-required>"],
             message: `Expected one unchanged duplicate Project occurrence set for ${worktree}`,
+          })
+        }
+        const workspaceAdmission = db
+          .select({ occurrenceID: WorkspaceLifecycleAdmissionTable.occurrence_id })
+          .from(WorkspaceLifecycleAdmissionTable)
+          .where(inArray(WorkspaceLifecycleAdmissionTable.project_id, observedProjectIDs))
+          .get()
+        if (workspaceAdmission) {
+          conflict({
+            worktree,
+            canonicalProjectID,
+            projectIDs: observedProjectIDs,
+            message: `Workspace creation admission ${workspaceAdmission.occurrenceID} blocks Project identity convergence`,
           })
         }
         const maintenanceOperationID = randomUUID()
