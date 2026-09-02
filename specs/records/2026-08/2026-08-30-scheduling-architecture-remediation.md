@@ -18,13 +18,13 @@
 
 | Group | IDs | Current disposition |
 | --- | --- | --- |
-| Frontier and dispatch ownership | A1-A2 | A1 is closed for this implementation cut by Cut 3 and the independent FINAL PASS on tree `919115f0b0768618d7d11386f7d98eed0e08724c`; A2 is closed by Cut 2 with exact writer, migration, recovery and independent-review evidence. |
-| Mission close/recovery | A3-A4, B4 | Closed by Cut 4 and the zero-finding independent review of documentation-corrected tree `bfda61c5908107b2c57bfc6160b8c92885244872`. |
-| Wait/Automation occurrence | A5-A9, B3, B6-B7 | Closed by Cut 5 and the zero-finding independent review of tree `cb33421b3232918b0cb59dc1fc2a7c1f2bd82d14`; the documentation-only closure update is re-reviewed before delivery. |
+| Frontier and dispatch ownership | A1-A2 | Closed by the independently reviewed exact dispatch-owner delivery `58c200e813a89b29deced00af518310c6d3bc658` and canonical occurrence delivery `34ab15e9539ffdc5948fc89262ab750a1587d681`. |
+| Mission close/recovery | A3-A4, B4 | Closed by the independently reviewed canonical Mission lifecycle delivery `a8d8617d819359e3b991c4dd54493bcd3b58e191`. |
+| Wait/Automation occurrence | A5-A9, B3, B6-B7 | Closed by the independently reviewed scheduler occurrence delivery `ba38035d294b0ec25319ec709006f3db1d2fdce6`. |
 | Task/Mission/Work creation identity | A10-A17 | Closed by Cut 6 commit `8edac6017cac97727a67762a155c9aaf002a5608`, whose independently reviewed merge tree passed the full creation/reset matrix and was verified as the exact `origin/v0.0.55beta` head. |
-| Deletion, Project, Workspace and Git lifecycle | A18a-A24 | Cut 7a A18a/A18b corrections are under validation after independent review; A20-A24 remain open, and no deletion row closes before a newly frozen candidate receives zero-finding independent review. |
-| Shared protocol and scheduling complexity | A19, B1-B2, B5, B8-B9 | Cut 7a is validating the complete A19 atomic-publication writer set; B1 is closed and B2/B5/B8-B9 remain open. |
-| Architecture documentation | C1-C2 | Open until implementation semantics are selected and the current documents are corrected. |
+| Deletion, Project, Workspace and Git lifecycle | A18a-A24 | Closed by the independently reviewed Cut 7 delivery sequence: retention boundary `81606d1dc7cbdb6202fbaca27894ca67b28eef7b`, Project deletion occurrence `c98bf06c1a66a48e04bfdf898578e7b5d9831a7e`, Build child settlement `aa6b4a20aa4bbf956432ab457784dfdecc9368a8`, directory mutation fencing `8c305720e7b3a0bd27a1335b110d54350dcd0c53`, and durable Workspace lifecycle `7f725d0defb2a76fcb67dec5771d005a7c08b2fc`. |
+| Shared protocol and scheduling complexity | A19, B1-B2, B5, B8-B9 | A19 is delivered by `81606d1dc7cbdb6202fbaca27894ca67b28eef7b`; B1 by `af143d43e197ff1f929714580e352b595b0f82a4`; B8 by `79ff01b64296c1acd0561b05ed923cb8b96ec831`; B9 dispatch/Task-ingress by `4abdaea58fd4e677cb481fdc7a684c7b5b7b790b`; B5 by `5f29648659dced0900f0ddb2445f39bd52bc1b84`; and B2 by `551733a6831deda453430c189de19f10a2a87463`. B9 Event and Automation global due discovery remain open because their production hot paths still materialize every current definition/page before selecting due work. |
+| Architecture documentation | C1-C2 | Closed in current source. C1 names Task-root ingress admission/reduction/delivery plus `SessionWake` instead of the nonexistent `TaskQueueService`; C2 keeps Automation and Event as distinct identity domains with their existing single service owners. |
 
 The ledger is intentionally not marked closed by historical commits, narrow tests or the previous ARC-059 Mission. Any current-source evidence that a row is already repaired must still identify the exact implementing commit and prove the audit's trigger and root no longer exist.
 

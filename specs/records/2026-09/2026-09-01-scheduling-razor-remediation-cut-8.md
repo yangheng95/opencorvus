@@ -210,8 +210,32 @@ Each closure must prove fixed query stages per page, multi-page correctness, res
 
 ### C1/C2 — current documentation must describe running source
 
-- Remove every current-architecture claim that `TaskQueueService` exists. The current owners are Task-root ingress reduction/activation and `SessionWake`.
-- C2 is closed in current source: the obsolete `18-scheduled-automations.md` no longer exists, while `task-control-plane.md` and `02-data.md` already distinguish Automation and Event. Keep Event as a distinct event-identity domain; the experimental HTTP route and schedule Tool are adapters to the same `EventService`, not parallel implementations. Update only the stale audit ledger claim.
+- C1 is closed by removing every current-architecture claim that
+  `TaskQueueService` exists. The running owners are Task-root ingress
+  admission/reduction/delivery and `SessionWake`; the daemon design reuses
+  those owners and does not invent a queue service.
+- C2 is closed in current source: the obsolete
+  `18-scheduled-automations.md` no longer exists, while
+  `task-control-plane.md` and `02-data.md` distinguish Automation and Event.
+  Event remains a distinct event-identity domain; the experimental HTTP route
+  and schedule Tool are adapters to the same `EventService`, not parallel
+  implementations.
+
+Current closure evidence is bound to committed source rather than the old
+audit line numbers. `79ff01b64296c1acd0561b05ed923cb8b96ec831` removes the
+duplicate workflow-node occurrence authority, while
+`4abdaea58fd4e677cb481fdc7a684c7b5b7b790b`,
+`5f29648659dced0900f0ddb2445f39bd52bc1b84`, and
+`551733a6831deda453430c189de19f10a2a87463` deliver the bounded recovery,
+capacity, and immutable coordination cuts. `4abdaea58` closes only the B9
+dispatch/Task-ingress subcase; B9 Event and Automation due discovery remain
+open for their separate selected designs. A current-source search reports
+zero Task-queue class, module-path, or current-owner references under current
+architecture. The remaining production strings `task_queue.prompt` and
+`task_queue.compaction` are immutable origin identifiers mapped to
+`mission.wake`, not a service or scheduling authority. `docs:check` passes 339
+operations/25 groups and the architecture index passes all 16 current
+documents with every link live.
 
 ## Implementation sequence
 

@@ -54,7 +54,8 @@ The exact A1 cut and exclusions are recorded in
 7. It extends the existing permission and MCP authorization paths instead of
    introducing another grant engine.
 8. It reduces daemon work to process lifetime and external ingress around the
-   existing scheduler, event service, task queue, and session wake path.
+   existing scheduler, event service, Task-root ingress delivery, and Session
+   wake path.
 9. It names one narrow paid Work scenario, measurable product outcomes, staged
    implementation owners, and explicit exit criteria.
 10. It defines one typed capability identity and revisioned metadata catalog
@@ -118,7 +119,8 @@ The exact A1 cut and exclusions are recorded in
 - `packages/opencorvus/src/skill/{mounts,eligibility,surface}.ts`
 - `packages/opencorvus/src/permission/next.ts`
 - `packages/opencorvus/src/mcp/{auth,oauth-provider,index}.ts`
-- `packages/opencorvus/src/scheduler/{index,automation-service,event-service,task-queue-service,task-wake-runtime}.ts`
+- `packages/opencorvus/src/scheduler/{index,automation-service,event-service,delayed-wake-schedule,session-delay-admission,task-owner,task-wait-fire-identity,tool-occurrence,tool-recovery}.ts`
+- `packages/opencorvus/src/engine/{task-root-ingress-reducer,task-root-ingress-delivery}.ts`
 - `packages/opencorvus/src/project/bootstrap.ts`
 - `packages/opencorvus/src/session/{loop,wake,runtime-contract}.ts`
 - `packages/opencorvus/src/prompt/core/{mission-core,orchestrator-core}.txt`
@@ -140,7 +142,7 @@ promptProfile / prompt_profile / Task package revision binding
 ExpertSquadManifestV2Schema / ExpertSquadCatalog* / capability_projection / capability_sets
 PermissionNext.ask / PermissionNext.evaluate / ctx.ask
 McpAuth / OAuth / mcpPermissionPlan
-AutomationService / EventService / TaskQueueService / SessionWake.wake
+AutomationService / EventService / Task-root ingress delivery / SessionWake.wake
 fuzzysort / skill search / artifact search
 CreateTaskInput / TaskMessageInput / requestID / channel binding idempotency
 InstanceBootstrap / registeredDirectories / Instance.disposeAll
@@ -155,7 +157,9 @@ The scheduler search proved three existing runtime owners:
 
 - `AutomationService` is a persistent, lease-based timer poller;
 - `EventService` persists internal Bus match rules and wakes Sessions;
-- `TaskQueueService` serializes and recovers queued Session prompts.
+- Task-root ingress admission, reduction and delivery serialize Task execution
+  inputs and recover their exact durable occurrences; `SessionWake` owns the
+  corresponding durable Session wake boundary.
 
 All three are initialized by project bootstrap. The missing unattended
 capability is therefore not another scheduler. It is a host process that keeps
@@ -282,7 +286,7 @@ dedicated `work` conversation experience. Either may hand off to Mission.
 | Office capability | First Work production slice already creates, validates, renders, reviews, and delivers PPTX through typed tools. | Use as the first proof that Work can ship vertical capability. |
 | Time scheduling | Lease-based recurring automation and run history already exist. | Reuse. |
 | Internal event scheduling | Persistent Bus event jobs already match, cool down, and wake Sessions. | Reuse for normalized events. |
-| Prompt queue/recovery | Durable Task queue and Session wake paths already exist. | Reuse. |
+| Task execution ingress/recovery | Durable Task-root ingress and Session wake paths already exist. | Reuse. |
 | External always-on host | Runtime services currently depend on an opened project instance. Full `InstanceBootstrap` also starts interactive services and registered directories include sandboxes. | Missing. Add one headless composition plus explicit daemon/desktop ownership. |
 | External provider ingress | No generic package-owned poll/webhook adapter emits normalized external events. | Partial future need; do not block the first paid slice. |
 | Capability fuzzy search | Typed cross-kind `capability_search` binds one immutable occurrence Catalog and activates only exact receipt-selected leaves; revision zero has no eager domain Tool surface. | Remove the remaining local fuzzy/list branches from exact Skill/Mission Skill loaders; keep external Market and business-data search under their own owners. |
@@ -441,8 +445,8 @@ Core owns only provider-neutral contracts:
 - generic MCP transport and OAuth lifecycle;
 - permission evaluation and visible operator questions;
 - immutable attachment/artifact storage;
-- scheduler leases, normalized event delivery, Task queue, Session wake, and
-  audit facts.
+- scheduler leases, normalized event delivery, Task-root ingress facts and
+  delivery, Session wake, and audit facts.
 
 For the first Gmail slice, Gmail is an MCP server assigned by the Work package.
 OAuth tokens remain in the existing MCP auth owner. The package stores only the
@@ -862,12 +866,12 @@ OpenCorvusDaemon
   -> initializes the headless project runtime composition
   -> AutomationService polls due work
   -> EventService receives normalized internal events
-  -> TaskQueueService serializes/retries prompts
+  -> Task-root ingress delivery serializes/retries Task execution inputs
   -> SessionWake wakes Work or Mission
 ```
 
 The daemon does not contain an LLM, business workflow, Gmail parser, second
-cron engine, second Task queue, or second Session store. It owns process
+cron engine, generic prompt scheduler, or second Session store. It owns process
 lifetime, project activation, health, sleep/wake recovery, and graceful
 disposal only.
 
@@ -880,12 +884,12 @@ through the existing Task contract after its canonical project runtime is
 active.
 
 The headless composition reuses the existing configuration, package resolver,
-permission, MCP auth, AutomationService, EventService, TaskQueueService,
-EngineService, SessionWake, receipt bridges, recovery, and disposal owners. It
-does not initialize Overlay-only or interactive development services such as
-FileWatcher, interactive Version Control System
-(VCS) watchers, or ChannelSupervisor unless a separately installed capability
-explicitly requires and owns one.
+permission, MCP auth, AutomationService, EventService, Task-root ingress
+admission/reduction/delivery, EngineService, SessionWake, receipt bridges,
+recovery, and disposal owners. It does not initialize Overlay-only or
+interactive development services such as FileWatcher, interactive Version
+Control System (VCS) watchers, or ChannelSupervisor unless a separately
+installed capability explicitly requires and owns one.
 
 The daemon and desktop cannot independently bootstrap the same project
 scheduler. The daemon holds the project runtime lease while unattended mode is
@@ -1149,8 +1153,9 @@ Changes:
 1. Add one OS-managed daemon entrypoint using the headless runtime composition.
 2. Add one explicit project `unattended.enabled` activation source and load only
    canonical worktrees for enabled projects.
-3. Reuse AutomationService, TaskQueueService, SessionWake, Mission receipts,
-   recovery, and disposal without initializing interactive project services.
+3. Reuse AutomationService, Task-root ingress delivery, SessionWake, Mission
+   receipts, recovery, and disposal without initializing interactive project
+   services.
 4. Add process-level project ownership, health, wake-from-sleep catch-up,
    bounded retry, and visible daemon status.
 5. Keep the desktop application as management and inspection UI, not a second
@@ -1212,7 +1217,7 @@ Exit criteria:
 | MCP index/auth/OAuth | Publish safe metadata and auth status; remain transport/auth owner; authentication does not mount; raw transactional provider tools are not separately model-visible. |
 | package ToolHost MCP invocation adapter | Accept one typed generic permission plan plus exact MCP reference; own no provider semantics. |
 | `PermissionNext` | Centralize precedence/non-expansion and evaluate package-action exact patterns through the existing store; no new grant engine. |
-| Automation/Event/TaskQueue/SessionWake | Remain scheduling, event matching, queue, and wake owners. |
+| Automation/Event/Task-root ingress/SessionWake | Remain scheduling, event matching, Task execution ingress, and wake owners. |
 | project bootstrap/instance lifecycle | Extract reusable headless composition and project runtime ownership; never activate every registered sandbox. |
 | Work harness/conversation capability | Keep direct Work identity and assignments; hand durable work to Mission. |
 | Overlay Settings/Composer/Ledger | Consume backend facts; do not infer pillar or capability authority. |
@@ -1258,9 +1263,9 @@ one typed package-action surface; MCP remains its transport.
 
 ### Rejected: new daemon scheduler
 
-AutomationService, EventService, TaskQueueService, and SessionWake already
-provide scheduling semantics. The daemon extends runtime lifetime; it does not
-replace those services.
+AutomationService, EventService, Task-root ingress admission/reduction/delivery,
+and SessionWake already provide scheduling semantics. The daemon extends
+runtime lifetime; it does not replace those owners.
 
 ### Rejected: daemon reuse of the complete interactive bootstrap
 

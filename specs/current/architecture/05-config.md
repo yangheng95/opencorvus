@@ -26,7 +26,7 @@
            username · locale · prompt_profile · runtime_templates · expert_squads
 
 assistant: activity{} · max_executor_groups
-           activity 只拥有流式模型与 task queue 的真实无活动阈值；
+           activity 只拥有流式模型、真实 Tool progress 与 Provider execution 的无活动阈值；
            max_executor_groups 是 task 未显式覆盖时的并行 agent 上限；
            未配置时唯一 EngineConfig 默认值为 5。
 
