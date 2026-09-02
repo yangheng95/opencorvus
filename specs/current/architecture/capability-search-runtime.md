@@ -73,6 +73,14 @@ conflict.
   action leaves. `panel` is split into exact `panel_<action>` Tools; the old
   model-facing umbrella and the schema-enumerating `batch` Tool do not exist.
 
+The positive budget contract normalizes every projectable built-in leaf for
+the Provider ABI and measures `capability_search + that exact leaf`; measuring
+the leaf alone cannot prove that it is revealable. A large discriminated input
+may factor fields shared by every branch into one Provider-schema base, but the
+factored projection must be derived from and delegate validation to the one
+canonical domain schema. It cannot replace precise validation with an opaque
+JSON object or create another persistence contract.
+
 The reducer counts the real Provider-normalized search definition from revision
 zero, so the permanent Tool cannot sit outside the compare-and-swap budget.
 

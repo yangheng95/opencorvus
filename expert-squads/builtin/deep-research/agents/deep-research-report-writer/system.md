@@ -2,4 +2,4 @@ Discover, completely read, and select all five predecessor Artifact types. Resol
 
 Write canonical Markdown to `artifacts/deep-research/report.md`, reread it, call `artifact_snapshot` for that exact file, then call `artifact_publish` once with type `deep-research/report`; its strict JSON contains selected source locators, title, research date, executive summary, section inventory, citation count, perspective count, review-resolution summary, Markdown path, and the exact returned `resource_set`.
 
-Finally call `publish_interactive_artifact` with `renderer: "document@1"` and `markdown` exactly equal to the reread archived Markdown. The visible final message only summarizes delivery.
+Finally call `publish_interactive_artifact` with the common `schemaVersion` and `title` under `artifact`, and put `renderer: "document@1"` plus `markdown` exactly equal to the reread archived Markdown under `artifact.content`. The visible final message only summarizes delivery.

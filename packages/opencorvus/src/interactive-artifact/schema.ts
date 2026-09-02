@@ -735,31 +735,96 @@ export const InteractiveArtifactMcpApp = InteractiveArtifactBase.extend({
     .strict(),
 }).strict()
 
+const PublishableInteractiveArtifactVariants = [
+  InteractiveArtifactDocument,
+  InteractiveArtifactTable,
+  InteractiveArtifactChart,
+  InteractiveArtifactDiagram,
+  InteractiveArtifactCode,
+  InteractiveArtifactDiff,
+  InteractiveArtifactCandlestick,
+  InteractiveArtifactMedia,
+  InteractiveArtifactFilePreview,
+  InteractiveArtifactMap,
+  InteractiveArtifactNotebook,
+  InteractiveArtifactPresentation,
+  InteractiveArtifactSpreadsheet,
+  InteractiveArtifactDashboard,
+  InteractiveArtifactTimeline,
+  InteractiveArtifactNetwork,
+  InteractiveArtifactTree,
+  InteractiveArtifactTerminal,
+  InteractiveArtifactModel3d,
+] as const
+
 export const PublishableInteractiveArtifactPayload = z
-  .discriminatedUnion("renderer", [
-    InteractiveArtifactDocument,
-    InteractiveArtifactTable,
-    InteractiveArtifactChart,
-    InteractiveArtifactDiagram,
-    InteractiveArtifactCode,
-    InteractiveArtifactDiff,
-    InteractiveArtifactCandlestick,
-    InteractiveArtifactMedia,
-    InteractiveArtifactFilePreview,
-    InteractiveArtifactMap,
-    InteractiveArtifactNotebook,
-    InteractiveArtifactPresentation,
-    InteractiveArtifactSpreadsheet,
-    InteractiveArtifactDashboard,
-    InteractiveArtifactTimeline,
-    InteractiveArtifactNetwork,
-    InteractiveArtifactTree,
-    InteractiveArtifactTerminal,
-    InteractiveArtifactModel3d,
-  ])
+  .discriminatedUnion("renderer", PublishableInteractiveArtifactVariants)
   .meta({ ref: "PublishableInteractiveArtifactPayload" })
 
 export type PublishableInteractiveArtifactPayload = z.infer<typeof PublishableInteractiveArtifactPayload>
+
+const PublishableInteractiveArtifactToolBase = z.object({
+  schemaVersion: InteractiveArtifactBase.shape.schemaVersion,
+  title: InteractiveArtifactBase.shape.title,
+  presentation: InteractiveArtifactBase.shape.presentation,
+}).strict()
+
+function interactiveArtifactToolVariant(schema: z.ZodObject<z.ZodRawShape>) {
+  const { schemaVersion: _schemaVersion, title: _title, presentation: _presentation, ...shape } = schema.shape
+  return z.object(shape).strict()
+}
+
+const PublishableInteractiveArtifactToolVariants = PublishableInteractiveArtifactVariants.map((schema) =>
+  interactiveArtifactToolVariant(schema as unknown as z.ZodObject<z.ZodRawShape>),
+) as unknown as [
+  z.ZodObject<z.ZodRawShape>,
+  z.ZodObject<z.ZodRawShape>,
+  ...z.ZodObject<z.ZodRawShape>[],
+]
+
+/**
+ * Provider-facing projection of the canonical payload schema. Shared envelope
+ * fields appear once instead of being repeated in every renderer branch. The
+ * canonical schema remains the only validator for cross-field refinements.
+ */
+export const PublishableInteractiveArtifactToolPayload = z
+  .object({
+    schemaVersion: PublishableInteractiveArtifactToolBase.shape.schemaVersion,
+    title: PublishableInteractiveArtifactToolBase.shape.title,
+    presentation: PublishableInteractiveArtifactToolBase.shape.presentation,
+    content: z.discriminatedUnion("renderer", PublishableInteractiveArtifactToolVariants),
+  })
+  .strict()
+  .superRefine((payload, context) => {
+    const parsed = PublishableInteractiveArtifactPayload.safeParse({
+      schemaVersion: payload.schemaVersion,
+      title: payload.title,
+      presentation: payload.presentation,
+      ...payload.content,
+    })
+    if (parsed.success) return
+    for (const issue of parsed.error.issues) {
+      const [head, ...tail] = issue.path
+      context.addIssue({
+        code: "custom",
+        message: issue.message,
+        path: head === "schemaVersion" || head === "title" || head === "presentation" ? issue.path : ["content", head, ...tail],
+      })
+    }
+  })
+
+export type PublishableInteractiveArtifactToolPayload = z.infer<typeof PublishableInteractiveArtifactToolPayload>
+
+export function canonicalPublishableInteractiveArtifactFromToolPayload(
+  payload: PublishableInteractiveArtifactToolPayload,
+): PublishableInteractiveArtifactPayload {
+  return PublishableInteractiveArtifactPayload.parse({
+    schemaVersion: payload.schemaVersion,
+    title: payload.title,
+    presentation: payload.presentation,
+    ...payload.content,
+  })
+}
 
 export const InteractiveArtifactPayload = z
   .discriminatedUnion("renderer", [

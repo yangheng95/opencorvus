@@ -720,6 +720,16 @@ sheet navigation, graph/timeline/tree exploration, terminal transcript search,
 3D camera control, and other presentation-only interactions remain
 renderer-local.
 
+The nineteen model-publishable renderers have one canonical payload validator.
+The search-native Provider Tool projection factors their shared
+`schemaVersion`, `title`, and `presentation` fields once and keeps only the
+renderer-specific shapes in its discriminated union; it delegates all
+cross-field refinements back to that canonical validator before persistence.
+This is a size-bounded ABI projection, not a second Artifact schema. It keeps
+the exact publication leaf revealable beside the permanent
+`capability_search` definition without weakening the payload or raising the
+shared Harness budget.
+
 A completed conversation turn that owns an `interactive-artifact` part remains
 expanded by default so its only renderer stays mounted and the published work
 is immediately visible. The existing conversation disclosure remains the sole

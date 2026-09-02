@@ -1994,3 +1994,173 @@ The corrected completion branch explicitly performs that production preflight
 inside the same causal closure, and the positive Prompt contract binds the
 complete-set/current-Turn requirement. The real Provider run must pass the
 actual Host preflight; static Prompt evidence cannot substitute for it.
+
+#### Exact-remote completion-reveal failure
+
+The first exact-remote run after commit
+`acdb3e6adb09b43471c454d1d921372d0f93a929` used an isolated archive of that
+commit, the separately verified configured Provider credential and model
+catalog, and the requested `openai/gpt-5.6-sol` model. Its source archive digest
+was `7E9E77BABF4D83BD19076CE9C405D57B90938645F23B745BF22AD9EDC9F34FD9`.
+The retained database proves that the scheduling plane itself completed the
+intended chain: exactly two child Tasks were created in the required order;
+all ten authored duplex messages plus both terminal notifications were unique;
+all inboxes and terminal receipts settled; all three request/reply pairs were
+correlated; recipient FIFO, endpoint authority, semantic order and
+DONE-before-terminal order passed; both Tasks completed normally; and the
+Mission wrote the required post-A_DONE acknowledgement. The run nevertheless
+failed after three minutes without semantic progress because the Mission never
+published its final Artifact or committed `panel_complete_mission`. At the
+failure boundary the checker reported two terminal Tasks, twelve scheduler
+events, twelve terminal deliveries, 104 Mission assistant Messages and 323
+Mission Parts.
+
+The exact Tool facts locate the direct trigger. Final completion requires the
+Mission to publish, re-query the child set and exact Task evidence, then close
+the Mission in one physical response. The model first tried to activate four
+exact leaves together and received the expected aggregate budget error. It then
+successfully revealed the query/read leaves one group at a time, accepted both
+Tasks from canonical Completion Decisions, and attempted the final publication
+sequence. Activating `publish_interactive_artifact` by itself still produced a
+34,039-character Provider Tool payload against the immutable 32,000-character
+occurrence budget. Repeated exact attempts could never commit a reveal receipt;
+after deactivating the query leaves the occurrence therefore contained only
+`capability_search`, and the model generated search-only Turns until the
+semantic inactivity boundary stopped the run. Two aggregate reveal attempts
+also exceeded the limit, but they are not the root because the single exact
+publication leaf is independently impossible to activate.
+
+This is a search-native Tool ABI defect, not a scheduler delivery, persistence,
+Mission-state or Provider-capability failure. The current budget test proves
+only that each leaf definition is individually no larger than 32,000
+characters; it omits the permanent `capability_search` base that the reducer
+always counts. The interactive publication leaf exposes one discriminated
+union containing nineteen renderer payloads and repeats the common
+`schemaVersion`, `title` and `presentation` fields in every JSON Schema branch.
+That projection violates the current architecture's requirement that any exact
+leaf fit beside the permanent base. Prompt wording cannot make an impossible
+leaf executable, and raising the shared limit would remove the bounded Harness
+contract rather than fix the leaf.
+
+The same retained database exposed one remaining checker projection drift.
+Every scheduler-message source Tool has an immutable request and terminal
+outcome, but `allSourceToolsCompleted` searched the legacy `part` table for a
+mutable completed Tool state. Current DDL excludes Tool requests from that
+table; their visible state is produced only by
+`projectToolPartInTransaction`. The acceptance helper will therefore project
+the exact `tool_part_request` rows with their outcome facts and the checker will
+compare the authored chain against those canonical visible Tool Parts. A
+focused positive fact-storage test must prove the projected completed
+scheduler Tool together with terminal Task and delivery projections.
+
+Three recoverable model mistakes are also visible and must not be accepted as
+a clean trajectory. Both Task schedulers first copied scheduler Protocol event
+IDs into `coordination_request` completion evidence before correcting to their
+own Session evidence. Initiator A also tried a scheduled `wait` after its peer
+request, although the durably delivered request already assigned the future
+reply to another scheduler and the reply ingress itself owns the wake. During
+the first terminal reconciliation, Mission twice supplied the notification
+event ID as a Task terminal reference before calling `panel_query_task` and
+using its returned canonical reference. These are discoverability conflicts in
+the participant Prompts, not reasons for a Host keyword gate. Orchestrator
+guidance will bind scheduler-conversation completion evidence to the current
+Orchestrator Session, reserve `coordination_request` for an actual
+`agent_coordination_request` Artifact, and use `no_action` rather than `wait`
+after a delivered outbound scheduler request. Mission terminal-notification
+guidance will require `panel_query_task` first and carry only its returned
+`terminal_lifecycle_reference` into Artifact enumeration. The next exact run
+must contain no failed Tool occurrence from any of these paths.
+
+The correction keeps one canonical persistence schema and one public action.
+Its Provider input schema is a derived factored projection: the shared base is
+declared once, the nineteen renderer-specific shapes remain a discriminated
+union, and the projection delegates every refinement to
+`PublishableInteractiveArtifactPayload` before execution. Persistence still
+parses the same canonical payload; no generic JSON escape hatch, compatibility
+reader, fallback or second artifact contract is added. The capability budget
+matrix must normalize every projectable exact built-in leaf for the strict
+OpenAI ABI and prove that `capability_search + one exact leaf` fits both the
+32,000-character and 8,000-token limits. Focused artifact tests must also prove
+one valid document publication input and a cross-field-invalid payload against
+the canonical refinements. Mission final-completion guidance will activate and
+invoke one exact final-preflight leaf at a time, explicitly deactivating a leaf
+after its result is durable before revealing the next; all steps still remain
+inside the same physical response and use the same append-only reveal receipts.
+After focused/typecheck/checker verification and an uninvolved zero-finding
+review, a new exact pushed snapshot must repeat the real duplex run to durable
+Mission completion before release.
+
+The pre-review correction candidate passed the five-file focused matrix with
+10 tests and 35 assertions, OpenCorvus package typecheck, root typecheck across
+all eight workspaces, documentation validation with 339 operations and 25
+groups, route validation with six rules across 34 files, the 16-document
+current-architecture index, the ten-workspace package topology, control-state
+validation with 53 tables and seven allowed fact classes, and control-lease
+validation with 18 owners and 22 acquisition sites. Its exact index tree also
+passed release-mutation topology with five canonical authorities and module
+topology with 1,103 modules, 5,530 runtime edges, no retained strongly
+connected component, and four clean-import boundaries. These checks establish
+the review input only; delivery still requires an uninvolved zero-finding
+review, commit and push, followed by a fresh exact-remote Provider run from the
+new pushed source.
+
+The first uninvolved review reproduced three release-blocking gaps. Joining
+two separately closed JSON Schema objects with `allOf` made the compact Tool
+schema unsatisfiable for both OpenAI and Anthropic even though local Zod parsing
+succeeded. The first projection also stripped unknown properties before the
+canonical strict validator could inspect the submitted input. Finally, the
+duplex checker recorded usage only as diagnostics and checked completed child
+Task hydration, but it did not require the completion-Message-owned final
+interactive Artifact or the Mission and both Task scheduler usage owners.
+
+The corrected Provider contract is one closed envelope containing the common
+fields once and one closed discriminated `content` union. Execution flattens
+that accepted projection exactly once and parses it with the sole canonical
+`PublishableInteractiveArtifactPayload` before persistence. A production-shape
+test now obtains the actual OpenAI and Anthropic schemas through
+`SessionLoop.prepareProviderTool` and validates a document instance with the
+matching draft-07 validator; strict unknown-property and canonical cross-field
+error contracts are also covered. The duplex acceptance state now requires
+exactly one canonical interactive Artifact owned by the Mission completion
+Message and containing the run nonce. It also requires non-empty usage for the
+Mission Session under `mission` and for each exact child Task scheduler Session
+under `orchestrator`; only those exact Session rows contribute to reported
+per-role usage. Completion, Artifact and usage therefore form one PASS gate.
+
+After these corrections the five-file focused matrix passed 13 tests and 42
+assertions, OpenCorvus package typecheck passed, root typecheck passed all eight
+workspaces, and documentation, route, architecture-index and package-topology
+checks remained green. A fresh exact tree, its topology checks and a new
+uninvolved zero-finding review remain required before delivery.
+
+The next uninvolved review confirmed that the Provider schema, canonical
+validation and final Artifact/usage gate were closed, then found one remaining
+production ABI conflict: shared Chat/Work examples and seven shipped Expert
+Squad writer Prompts still described the former flat renderer fields. The
+runtime Tool schema correctly rejected those examples, so shipping both would
+teach models an impossible call even though the revealed schema was valid.
+No compatibility reader was added. The shared examples and every explicit
+shipped invocation instruction now keep `schemaVersion`, `title` and optional
+`presentation` under `artifact`, and place renderer-specific fields under the
+strict `artifact.content` union. The Prompt test parses both shared example JSON
+values through the current Tool parameters. Expert package content revisions
+and the embedded payload were regenerated from the same source bytes.
+
+The expanded Prompt, schema, budget and seven affected Expert Squad package
+matrix passed 28 tests and 235 assertions; the Expert Squad TypeScript check
+and the 121-manifest/133-workflow topology check also passed. Full typecheck,
+repository gates, a newly frozen exact tree and another uninvolved review remain
+required before commit.
+
+The final pre-review source passed the complete affected Mission/schema matrix
+with 13 tests and 42 assertions and the expanded Prompt/Expert Squad matrix
+with 28 tests and 235 assertions. Root typecheck passed all eight workspaces.
+Documentation remained at 339 operations and 25 groups; routes passed six
+rules across 34 files; the current architecture index covered 16 documents;
+package topology covered ten workspaces; Expert Squad topology covered 121
+manifests and 133 workflows; control-state and lease checks covered 53 tables,
+seven allowed fact classes, 18 owners and 22 acquisition sites. Public package
+ordering passed, release-family versions remained aligned at `0.0.58-beta`,
+and exact-index module topology passed with 1,103 modules, 5,530 runtime edges,
+no retained strongly connected component and four clean imports. The exact
+tree still requires the mandated final uninvolved review before commit.

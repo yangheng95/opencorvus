@@ -17,10 +17,15 @@ describe("scheduler message model harness", () => {
       "Send the correlated reply, then end the response immediately so the Session can accept the next durable inbox",
       "end the response immediately so the Session can accept the next durable inbox",
       "complete only that exact fact's causal closure in this response",
-      "query its exact Task and the canonical Artifacts required for acceptance",
+      "first reveal and call `panel_query_task` for its exact Task",
+      "carry only the returned `terminal_lifecycle_reference` into canonical Artifact enumeration",
       "execute every newly ready consumer dispatch or exact-Task recovery made due by that fact",
       "If accepting that exact Task makes final Mission completion due, expand this causal closure only to the completion preflight",
       "re-query the complete current child-Task set, read and bind every accepted Task's required canonical evidence in this same physical Turn, and then call `panel_complete_mission`",
+      "Before the first final-preflight activation, deactivate every active leaf whose final result is already durable",
+      "Activate at most one new final-preflight Tool exact ref in each `capability_search`",
+      "deactivate it in the same search that activates the next exact leaf",
+      "Do not combine this large publication leaf with another exact activation",
       "End the response only after that exact causal closure reaches its next durable stop",
     ]
 
@@ -42,6 +47,10 @@ describe("scheduler message model harness", () => {
       "A scheduler reply or notification does not itself provide future Task progress",
       "A Mission acceptance resume always opened a new non-terminal repair occurrence",
       "send its correlated reply and make that lifecycle decision in the same wake",
+      "bind that evidence with one `session` locator naming the current Orchestrator Session",
+      "scheduler Protocol event IDs are not coordination-request evidence",
+      "the recipient scheduler independently owns the answer and its reply ingress owns the future wake",
+      "do not schedule `wait` for that reply",
     ]
 
     expect(requiredOrchestratorGuidance.map((clause) => ORCHESTRATOR_CORE.includes(clause))).toEqual(

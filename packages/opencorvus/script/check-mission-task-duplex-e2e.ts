@@ -93,12 +93,18 @@ const [
   { Instance },
   { Database, eq },
   { ProtocolEventTable, ProtocolInboxTable },
-  { MessageTable, PartTable },
+  { InteractiveArtifactTable, MessageTable, PartTable, ToolPartRequestTable },
   { EngineTaskTable },
-  { projectMissionTaskDuplexControlStateInTransaction, missionTaskDuplexProgressKey },
+  {
+    missionTaskDuplexFinalEvidenceState,
+    projectMissionTaskDuplexControlStateInTransaction,
+    missionTaskDuplexProgressKey,
+    missionTaskDuplexToolHealth,
+  },
   { requireMissionSession },
   { missionRecord },
   { ProcessSupervisor },
+  { ProviderUsageEventTable },
 ] = await Promise.all([
   import("@/cli/server-runtime"),
   import("@/engine/host-recovery"),
@@ -111,6 +117,7 @@ const [
   import("@/mission/session"),
   import("@/mission/projection"),
   import("@/shell/process-supervisor"),
+  import("@/usage/usage.sql"),
 ])
 
 const prepared = await requireRecoveredServerRuntime(await listenWithRecoveredServerRuntime({
@@ -164,6 +171,10 @@ let evidence:
       missionCompletion: NonNullable<ReturnType<typeof missionRecord>["completion"]>
       duplexContract: ReturnType<typeof assertMissionTaskDuplexContract>
       terminalOrder: ReturnType<typeof assertMissionTaskTerminalOrder>
+      finalArtifactID: string
+      usageByAgent: ReturnType<typeof missionTaskDuplexFinalEvidenceState>["usageByAgent"]
+      messageCount: number
+      toolPartCount: number
     }
   | undefined
 while (Date.now() < deadline && Date.now() < absoluteDeadline) {
@@ -171,16 +182,30 @@ while (Date.now() < deadline && Date.now() < absoluteDeadline) {
     const persistedTasks = db.select().from(EngineTaskTable).all()
     const events = db.select().from(ProtocolEventTable).where(eq(ProtocolEventTable.type, "scheduler.message")).all()
     const persistedInboxes = db.select().from(ProtocolInboxTable).all()
-    const { tasks, inboxes } = projectMissionTaskDuplexControlStateInTransaction(db, {
+    const toolRequests = db.select().from(ToolPartRequestTable).all()
+    const artifacts = db.select().from(InteractiveArtifactTable).all()
+    const usage = db.select().from(ProviderUsageEventTable).all()
+    const { tasks, inboxes, toolParts } = projectMissionTaskDuplexControlStateInTransaction(db, {
       tasks: persistedTasks,
       inboxes: persistedInboxes,
+      toolRequests,
     })
     const messages = db.select().from(MessageTable).all()
     const parts = db.select().from(PartTable).all()
-    return { tasks, events, inboxes, messages, parts }
+    return {
+      tasks,
+      events,
+      inboxes,
+      messages,
+      parts,
+      toolParts,
+      artifacts,
+      usage,
+      toolHealth: missionTaskDuplexToolHealth(toolParts),
+    }
   })
   const missionProjection = missionRecord(await requireMissionSession(mission.sessionID))
-  const activityKey = `${snapshot.tasks.length}:${snapshot.events.length}:${snapshot.inboxes.filter((row) => row.status === "delivered").length}:${snapshot.messages.length}:${snapshot.parts.length}`
+  const activityKey = `${snapshot.tasks.length}:${snapshot.events.length}:${snapshot.inboxes.filter((row) => row.status === "delivered").length}:${snapshot.messages.length}:${snapshot.parts.length + snapshot.toolParts.length}`
   if (activityKey !== lastActivityKey) {
     lastActivityKey = activityKey
     process.stdout.write(`[duplex-e2e] activity=${activityKey}\n`)
@@ -357,15 +382,11 @@ while (Date.now() < deadline && Date.now() < absoluteDeadline) {
         (item) => protocolInboxes.find((row) => row.envelope_id === item.event.id)?.status === "delivered",
       )
       const sourceToolParts = exactChain.map((item) =>
-        snapshot.parts.find((row) => row.id === item.payload.source_part_id),
+        snapshot.toolParts.find((row) => row.id === item.payload.source_part_id),
       )
       const allSourceToolsCompleted = sourceToolParts.every((row, index) => {
         if (!row) return false
-        const part = row.data as {
-          type?: string
-          tool?: string
-          state?: { status?: string; input?: { kind?: string; reply_to?: string; message?: string } }
-        }
+        const part = row
         const sourceMessage = snapshot.messages.find(
           (message) => message.id === exactChain[index]!.payload.source_message_id,
         )
@@ -448,6 +469,15 @@ while (Date.now() < deadline && Date.now() < absoluteDeadline) {
       const taskTerminalNotifications = terminalNotifications.filter((item) =>
         [taskA.id, taskB.id].includes(taskEndpointID(item.source) ?? ""),
       )
+      const expectedEventIDs = new Set([
+        ...exactChain.map((item) => item.event.id),
+        ...taskTerminalNotifications.map((item) => item.event.id),
+      ])
+      const exactSchedulerEventSet =
+        taskTerminalNotifications.length === 2 &&
+        messages.length === 12 &&
+        expectedEventIDs.size === 12 &&
+        messages.every((item) => expectedEventIDs.has(item.event.id))
       const taskATerminal = taskTerminalNotifications.find((item) => taskEndpointID(item.source) === taskA.id)
       const taskBTerminal = taskTerminalNotifications.find((item) => taskEndpointID(item.source) === taskB.id)
       const terminalOrder =
@@ -489,6 +519,33 @@ while (Date.now() < deadline && Date.now() < absoluteDeadline) {
             )
           })
         })
+      const noFailedToolOccurrences = snapshot.toolHealth.failedToolPartIDs.length === 0
+      const finalEvidence = missionTaskDuplexFinalEvidenceState({
+        missionSessionID: mission.sessionID,
+        completionMessageID: missionProjection.completion?.messageID,
+        nonce,
+        artifacts: snapshot.artifacts.map((artifact) => ({
+          id: artifact.id,
+          messageID: artifact.message_id,
+          sessionID: snapshot.messages.find((message) => message.id === artifact.message_id)?.session_id ?? "",
+          payload: artifact.payload,
+        })),
+        usage: snapshot.usage.map((row) => ({
+          sessionID: row.session_id,
+          agentID: row.agent_id,
+          inputTokens: row.input_tokens,
+          outputTokens: row.output_tokens,
+          reasoningTokens: row.reasoning_tokens,
+          cacheReadTokens: row.cache_read_tokens,
+          cacheWriteTokens: row.cache_write_tokens,
+          totalTokens: row.total_tokens,
+        })),
+        requiredUsageOwners: [
+          { sessionID: mission.sessionID, agentID: "mission" },
+          { sessionID: taskA.session_id, agentID: "orchestrator" },
+          { sessionID: taskB.session_id, agentID: "orchestrator" },
+        ],
+      })
       lastAcceptanceState = {
         chainLength: exactChain.length,
         allDelivered,
@@ -499,6 +556,12 @@ while (Date.now() < deadline && Date.now() < absoluteDeadline) {
         taskBCompleted: taskB.time_completed !== null,
         terminalReceiptsDelivered,
         terminalWakeRepliesCompleted,
+        exactSchedulerEventSet,
+        noFailedToolOccurrences,
+        finalEvidenceReady: finalEvidence.ready,
+        finalEvidenceBlockingReasons: finalEvidence.blockingReasons,
+        finalArtifactID: finalEvidence.finalArtifactID,
+        missingUsageOwners: finalEvidence.missingUsageOwners,
         missionBoardLane: missionProjection.boardLane,
         missionCompleted: missionProjection.completion !== undefined,
         duplexContract,
@@ -519,8 +582,12 @@ while (Date.now() < deadline && Date.now() < absoluteDeadline) {
         terminalReceiptsDelivered &&
         terminalOrder &&
         terminalWakeRepliesCompleted &&
+        exactSchedulerEventSet &&
+        noFailedToolOccurrences &&
         missionProjection.boardLane === "completed" &&
-        missionProjection.completion !== undefined
+        missionProjection.completion !== undefined &&
+        finalEvidence.ready &&
+        finalEvidence.finalArtifactID !== undefined
       ) {
         terminal = true
         evidence = {
@@ -533,6 +600,10 @@ while (Date.now() < deadline && Date.now() < absoluteDeadline) {
           missionCompletion: missionProjection.completion,
           duplexContract,
           terminalOrder,
+          finalArtifactID: finalEvidence.finalArtifactID,
+          usageByAgent: finalEvidence.usageByAgent,
+          messageCount: snapshot.messages.length,
+          toolPartCount: snapshot.toolParts.length,
         }
         break
       }
@@ -594,6 +665,15 @@ while (Date.now() < deadline && Date.now() < absoluteDeadline) {
     sourceToolPartIDs: evidence.sourceToolPartIDs,
     missionAckMessageID: evidence.missionAckMessageID,
     missionCompletion: evidence.missionCompletion,
+    finalArtifactID: evidence.finalArtifactID,
+    trajectory: {
+      schedulerEventCount: evidence.events.length,
+      messageCount: evidence.messageCount,
+      toolPartCount: evidence.toolPartCount,
+      failedToolPartCount: 0,
+      exactSchedulerEventSet: true,
+    },
+    usageByAgent: evidence.usageByAgent,
     turnArtifactMessageIDs: turnArtifacts.flatMap((entry) => (entry.messageID ? [entry.messageID] : [])),
     events: eventSummary,
     inboxes: evidence.inboxes.map((row) => ({

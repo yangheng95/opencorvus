@@ -36,27 +36,31 @@ export const CHAT_INTERACTIVE_ARTIFACT_EXAMPLE_INPUTS = {
   chart: JSON.stringify({
     artifact: {
       schemaVersion: "1",
-      renderer: "chart@1",
       title: "Issues by status",
-      spec: {
-        mark: "bar",
-        encoding: {
-          x: { field: "status", type: "nominal" },
-          y: { field: "count", type: "quantitative" },
+      content: {
+        renderer: "chart@1",
+        spec: {
+          mark: "bar",
+          encoding: {
+            x: { field: "status", type: "nominal" },
+            y: { field: "count", type: "quantitative" },
+          },
         },
+        data: [
+          { status: "Open", count: 8 },
+          { status: "Closed", count: 5 },
+        ],
       },
-      data: [
-        { status: "Open", count: 8 },
-        { status: "Closed", count: 5 },
-      ],
     },
   }),
   diagram: JSON.stringify({
     artifact: {
       schemaVersion: "1",
-      renderer: "diagram@1",
       title: "Request flow",
-      source: "flowchart LR\n  User --> Chat\n  Chat --> Tool",
+      content: {
+        renderer: "diagram@1",
+        source: "flowchart LR\n  User --> Chat\n  Chat --> Tool",
+      },
     },
   }),
 } as const
@@ -74,8 +78,8 @@ export const CHAT_INTERACTIVE_ARTIFACT_GUIDANCE = [
   "Source and safety boundaries:",
   `- ${MCP_STRUCTURED_RESULT_ARTIFACT_GUIDANCE}`,
   `- ${MCP_APP_SINGLE_PRESENTATION_GUIDANCE}`,
-  "- Put chart rows in `artifact.data`; a Vega-Lite `spec` must not fetch an external data URL.",
-  "- Put map features directly in `artifact.geojson`; do not add remote tiles or data sources.",
+  "- Put renderer-specific fields under `artifact.content`. Put chart rows in `artifact.content.data`; a Vega-Lite `spec` must not fetch an external data URL.",
+  "- Put map features directly in `artifact.content.geojson`; do not add remote tiles or data sources.",
   "- A notebook is a presentation of cells and existing outputs. It never executes code.",
   "- Presentation slides are ordered Markdown content, not arbitrary Hypertext Markup Language (HTML) or scripts. Speaker notes remain local to the deck.",
   "- Spreadsheet formulas are declarative cell content. Do not publish macros, scripts, external workbook links, or hidden execution.",

@@ -202,6 +202,8 @@ Complete the Task only when the whole request is supported. Call `manage_task ac
 - every exact user-consumable Artifact in `deliverable_artifact_locators`;
 - every accepted current Delivery Slice revision ID.
 
+When completion relies on this Task scheduler's own persisted scheduler conversation, bind that evidence with one `session` locator naming the current Orchestrator Session. A `coordination_request` locator names only an actual `agent_coordination_request` Artifact returned by worker coordination; scheduler Protocol event IDs are not coordination-request evidence.
+
 Use an empty deliverable list only when the Task truthfully produced no Artifact deliverable. Internal lifecycle, ingress, coordination, or error facts are not deliverables unless the operator requested them as the output.
 
 There is no prose-only completion, `deliver`, or host-owned final acceptance object.
@@ -256,6 +258,8 @@ SCHEDULER COMMUNICATION
 - Target `mission` for an owning-Mission decision or update. Target a sibling Task only when its scheduler owns the needed peer action or fact. Never target this Task itself, a projected worker Session, an unrelated Mission, or a Task outside the same Mission.
 
 When a scheduler request is the current root Message, resolve its requested scheduler action in this wake and send the exact correlated reply even when more Task work remains. When a scheduler reply is current, treat it as the conclusive answer to the named request and continue the dependent decision without polling history or requesting another acknowledgement. Use worker coordination tools only inside this Task; never emulate scheduler communication with operator messages, worker mailboxes, hidden prose, or lifecycle completion.
+
+After this Task sends a scheduler request and its delivery is durable, the recipient scheduler independently owns the answer and its reply ingress owns the future wake. Record `no_action` for the reconciled current ingress and end the response; do not schedule `wait` for that reply.
 
 ──────────────────────────────────────────────────────────────────────
 DECISION EPOCH AND TOOL EXIT

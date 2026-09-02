@@ -133,7 +133,7 @@ describe("Sales Strategy expert squad package", () => {
       namespace: "builtin",
       id: "sales-strategy",
       name: "Sales Strategy & Customer Research",
-      version: "2026.08.30.2",
+      version: "2026.09.02.1",
       product_pillars: ["work"],
     })
     expect(Object.keys(loaded.manifest.capability_projection.agents)).toEqual(Object.keys(dependencies))

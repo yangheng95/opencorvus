@@ -1,5 +1,8 @@
 import { publishInteractiveArtifact } from "@/interactive-artifact/persist"
-import { PublishableInteractiveArtifactPayload } from "@/interactive-artifact/schema"
+import {
+  canonicalPublishableInteractiveArtifactFromToolPayload,
+  PublishableInteractiveArtifactToolPayload,
+} from "@/interactive-artifact/schema"
 import { PUBLISH_INTERACTIVE_ARTIFACT_DESCRIPTION } from "@/prompt/fragments/interactive-artifact-guidance"
 import { tool as aiTool } from "ai"
 import z from "zod"
@@ -7,7 +10,7 @@ import { Tool } from "./tool"
 
 export const PublishInteractiveArtifactParameters = z
   .object({
-    artifact: PublishableInteractiveArtifactPayload.describe(
+    artifact: PublishableInteractiveArtifactToolPayload.describe(
       "A strictly versioned document, data view, code view, attachment-backed preview, or notebook to render inside the assistant message card. MCP Apps are produced automatically from real MCP tool UI resources and cannot be authored through this tool.",
     ),
   })
@@ -17,10 +20,11 @@ export const PublishInteractiveArtifactTool = Tool.define("publish_interactive_a
   description: PUBLISH_INTERACTIVE_ARTIFACT_DESCRIPTION,
   parameters: PublishInteractiveArtifactParameters,
   async execute(args, ctx) {
+    const payload = canonicalPublishableInteractiveArtifactFromToolPayload(args.artifact)
     const artifact = await publishInteractiveArtifact({
       sessionID: ctx.sessionID,
       messageID: ctx.messageID,
-      payload: args.artifact,
+      payload,
     })
     return resultForArtifact(artifact)
   },
@@ -54,7 +58,8 @@ export function createPublishInteractiveArtifactAiTool() {
       if (!sessionID || !messageID) {
         throw new Error("publish_interactive_artifact requires real SessionLoop message ownership")
       }
-      return resultForArtifact(await publishInteractiveArtifact({ sessionID, messageID, payload: args.artifact }))
+      const payload = canonicalPublishableInteractiveArtifactFromToolPayload(args.artifact)
+      return resultForArtifact(await publishInteractiveArtifact({ sessionID, messageID, payload }))
     },
   })
 }

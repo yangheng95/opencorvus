@@ -22,7 +22,7 @@ describe("Research Studio report-quality package", () => {
     expect(loaded.manifest).toMatchObject({
       id: "research-studio",
       name: "Research Studio",
-      version: "2026.08.30.2",
+      version: "2026.09.02.1",
       product_pillars: ["code", "work"],
     })
     expect(reportSkill?.snapshot.files.map((file) => file.path)).toEqual([
