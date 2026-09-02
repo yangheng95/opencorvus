@@ -1860,3 +1860,137 @@ release gate reports five canonical authorities and module topology reports
 Cached/working diff checks remain clean with only the three declared working
 exclusions. A fresh uninvolved zero-finding review is the only remaining
 pre-commit gate.
+
+### Exact-remote Mission duplex acceptance after Cut 8
+
+#### Recall
+
+- The user requires the complete scheduling remediation to be pushed first,
+  followed by a real end-to-end Mission run whose complete scheduling
+  trajectory is inspected. A release may proceed only when that trajectory is
+  free of unexplained duplication, stale authority, missing delivery, or
+  unbounded scheduler churn.
+- The run must use the exact pushed tree, an isolated runtime and Project, the
+  configured Provider credential plus its matching model catalog, and the
+  actual requested model. Credential contents must never enter logs, this
+  record, or a commit.
+- The working tree still contains the three declared exclusions. They must not
+  influence the exact-remote source snapshot or enter this correction.
+- Current protocol storage keeps immutable inbox ingress, immutable delivery
+  receipts, and control leases as separate facts. Public delivery status and
+  result are produced only by `projectProtocolDeliveryInTransaction`.
+  Current Task lifecycle is likewise reduced by `projectTaskRowsInTransaction`;
+  raw `engine_task` rows no longer contain terminal timestamps.
+- Full-repository search found that
+  `check-mission-task-duplex-e2e.ts` still read `status`, `delivery_result`, and
+  `time_completed` directly from those raw rows. On the exact pushed
+  `cd7904714395e34a38f9d21434ba70123c8e19b5` snapshot, this made the delivered
+  count permanently zero and made terminal Task detection impossible. The
+  model continued making progress-shaped Message/Part writes, so the old
+  inactivity clock was renewed indefinitely even though the checker could
+  never accept the run.
+- The retained isolated run used `openai/gpt-5.6-sol`, created exactly two
+  Mission child Tasks, and persisted nine scheduler-message events before it
+  was stopped after this checker defect was proven. Its ordinary Message/Part
+  chatter had reached 79/251 and the Mission had exceeded one hundred Tool
+  calls; this evidence is diagnostic, not a product pass or failure.
+- Independent agent feedback before implementation: none. A fresh uninvolved
+  read-only review is required after the correction and focused verification.
+
+#### Correction and acceptance boundary
+
+The checker will obtain Task and delivery state through the same current
+projection functions as production readers. One small snapshot helper owns
+that composition so the real checker and its focused test cannot silently drift
+back to raw-row shadow state.
+
+The three-minute inactivity budget will be renewed only by semantic acceptance
+progress: a new exact Mission Task, scheduler-message event, terminal delivery
+projection, or terminal Task lifecycle projection. Message and Part counts
+remain visible diagnostics but cannot extend the run. A separate absolute run
+deadline bounds a scenario that keeps producing irrelevant or duplicate
+protocol facts. Neither boundary changes production scheduling or teaches the
+model a workflow; they only make the external acceptance fail closed with a
+retained database for diagnosis.
+
+Positive verification must prove that one current raw Task plus lifecycle facts
+projects a terminal timestamp, one immutable inbox plus terminal receipt
+projects a delivered result, and Message/Part-only count changes leave the
+semantic progress key unchanged. Then the exact pushed source must be rebuilt,
+the real Provider run repeated, and its retained database audited for the full
+ten-message duplex chain, two terminal notifications, exact correlation and
+ordering, duplicate/extra occurrences, waits, ownership/lease settlement,
+errors, and per-role usage. Any confirmed product anomaly is repaired and the
+fresh exact-remote run repeated before release.
+
+#### Retained-run scheduling finding
+
+The retained database proves a separate product-level latency fault after the
+checker drift is removed. The nine scheduler-message events were unique and in
+the required semantic order through A's `DECISION` request. Seven earlier
+inboxes reached one terminal receipt each. B's `B_DONE` notification waited
+about 137 seconds for the Mission Session, while the later Task-terminal
+notification and `DECISION` request were still pending when the diagnostic run
+was stopped.
+
+The Mission Tool facts explain that delay. Every scheduler wake began a new
+revision-zero capability occurrence, then the Mission obeyed the global
+"On every wake" checklist: it re-read `frontier.md`, `handoff.md`, and
+`tasks.md`, listed Tasks, queried Tasks, and frequently re-read other Mission
+state before ending the Turn. A direct scheduler request therefore competed
+with broad ordinary reconciliation, and even an informational notification
+kept the Session busy long enough to block the next durable inbox. This is a
+Prompt contract conflict, not missing persistence or duplicate delivery.
+
+The production correction remains inside the allowed LLM interaction surface.
+The Mission Prompt will distinguish ordinary operator/lifecycle wakes from a
+visible scheduler Message. A scheduler request must use its first
+`capability_search` to activate the canonical `scheduler_message` Tool ref,
+read only an exact fact indispensable to the answer, send the correlated reply,
+and end that response immediately. A notification uses the visible immutable
+fact directly; when it changes no stage/ready-frontier fact it ends the Turn.
+When it does change one, the same wake completes only that fact's exact causal
+closure: terminal acceptance reads the exact Task and required canonical
+Artifacts, updates the exact stale Mission-state file, and performs every
+newly-ready dispatch or exact-Task recovery made due by that fact. When that
+acceptance makes final completion due, the same bounded closure publishes the
+final Artifact, re-queries the complete current child set, binds every accepted
+Task's current-Turn evidence and calls `panel_complete_mission`. It never runs
+the unconditional full-wake checklist.
+This changes no Host routing, Tool selection, delivery authority, or hidden
+state and adds no special-case gate. The Prompt contract test records this
+positive model contract; the fresh real-provider trajectory must now prove both
+the duplex chain and terminal Task acceptance through durable Mission
+completion.
+
+#### First exact-tree review and correction
+
+The uninvolved review of exact tree
+`8fdf5d1a4dbaeaa84765cbcff317c443166394e3` returned P0=0, P1=2,
+P2=1 and P3=0. The checker projection and bounded-progress implementation were
+confirmed correct. The first P1 showed that "reply before reconciliation"
+still permitted broad work after the reply while the production inbox drain
+waited for the entire assistant response. The second showed that ending a
+terminal wake immediately after its state write could strand a newly-ready
+consumer or final Mission completion because no later ordinary wake is
+guaranteed. The P2 identified that the first Prompt test and communication-only
+real scenario could not detect either regression.
+
+The accepted correction makes a completed correlated reply the immediate
+durable stop of a scheduler-request response. A terminal notification instead
+owns one bounded causal closure: exact Task and evidence reconciliation, exact
+state update, and the newly due dispatch, recovery, or Mission completion before
+the response stops. The real duplex acceptance now requires both terminal Task
+results to be accepted and a `panel_complete_mission` durable completion fact;
+communication success alone cannot pass. Focused verification, exact staging,
+and a fresh uninvolved review remain required before delivery.
+
+The next exact-tree review confirmed the request-reply durable stop and ordinary
+terminal causal closure, then found one P1 and one P2 in the final-completion
+branch. Production `panel_complete_mission` requires the complete current child
+set plus each Task's query and evidence-read references from the same physical
+Turn, while the first correction still said to query only the notifying Task.
+The corrected completion branch explicitly performs that production preflight
+inside the same causal closure, and the positive Prompt contract binds the
+complete-set/current-Turn requirement. The real Provider run must pass the
+actual Host preflight; static Prompt evidence cannot substitute for it.

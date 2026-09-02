@@ -14,6 +14,7 @@ const AUTH_SOURCE = "MISSION_TASK_DUPLEX_E2E_AUTH_SOURCE"
 const MODEL = "MISSION_TASK_DUPLEX_E2E_MODEL"
 const RESULT = "MISSION_TASK_DUPLEX_E2E_RESULT"
 const INACTIVITY_MS = 180_000
+const MAX_RUN_MS = 900_000
 
 if (process.env[ALLOW_REAL_PROVIDER] !== "1") {
   throw new Error(`${ALLOW_REAL_PROVIDER}=1 is required because this checker performs real streaming model calls.`)
@@ -94,6 +95,9 @@ const [
   { ProtocolEventTable, ProtocolInboxTable },
   { MessageTable, PartTable },
   { EngineTaskTable },
+  { projectMissionTaskDuplexControlStateInTransaction, missionTaskDuplexProgressKey },
+  { requireMissionSession },
+  { missionRecord },
   { ProcessSupervisor },
 ] = await Promise.all([
   import("@/cli/server-runtime"),
@@ -103,6 +107,9 @@ const [
   import("@/protocol/protocol.sql"),
   import("@/session/session.sql"),
   import("@/engine/engine.sql"),
+  import("./mission-task-duplex-snapshot"),
+  import("@/mission/session"),
+  import("@/mission/projection"),
   import("@/shell/process-supervisor"),
 ])
 
@@ -126,7 +133,7 @@ const missionPrompt = [
   "After both readiness facts arrive, the Mission asks A to START_PEER and includes B's exact Task ID and the nonce. When A asks for DECISION, answer that exact request with the nonce.",
   `When A_DONE arrives, acknowledge the successful Mission-to-Task, Task-to-Mission, and sibling duplex chain in the next normal Mission response, including the exact literal ${nonce}.`,
   "Every live coordination fact and answer in this scenario must contain the nonce and travel directly between the real schedulers with durable correlation. The operator is not a relay: do not substitute panel or operator messages, Task-history polling, or lifecycle completion for a missing coordination answer.",
-  "This focused run accepts only the scheduler communication chain; it does not ask the Mission to accept Task deliverables or complete the Mission. After the A_DONE acknowledgement, end that response and keep the Mission active. On each later Task terminal notification, acknowledge the durable terminal fact and end that response without final acceptance, interactive artifacts, or unrelated follow-up work.",
+  `After each Task terminal notification, reconcile that exact Task and its canonical acceptance evidence. When accepting the last terminal Task makes completion due, publish one final interactive Artifact that summarizes the proven duplex chain and includes ${nonce}; then, in that same response, re-query both current child Tasks, bind each Task's required canonical evidence from that physical Turn, and durably complete the Mission with exactly those two accepted child Tasks.`,
 ].join("\n")
 
 const wake = await fetch(missionURL, {
@@ -139,36 +146,55 @@ const mission = (await wake.json()) as { missionID: string; sessionID: string }
 process.stdout.write(`[duplex-e2e] mission=${mission.missionID} session=${mission.sessionID} model=${model}\n`)
 
 let lastActivityKey = ""
+let lastProgressKey = ""
 let lastAcceptanceKey = ""
-let deadline = Date.now() + INACTIVITY_MS
+const absoluteDeadline = Date.now() + MAX_RUN_MS
+let deadline = Math.min(absoluteDeadline, Date.now() + INACTIVITY_MS)
 let terminal = false
 let lastAcceptanceState: Record<string, unknown> = {}
+type DuplexControlState = ReturnType<typeof projectMissionTaskDuplexControlStateInTransaction>
 let evidence:
   | {
       taskAID: string
       taskBID: string
       events: Array<typeof ProtocolEventTable.$inferSelect>
-      inboxes: Array<typeof ProtocolInboxTable.$inferSelect>
+      inboxes: DuplexControlState["inboxes"]
       sourceToolPartIDs: string[]
       missionAckMessageID: string
+      missionCompletion: NonNullable<ReturnType<typeof missionRecord>["completion"]>
       duplexContract: ReturnType<typeof assertMissionTaskDuplexContract>
       terminalOrder: ReturnType<typeof assertMissionTaskTerminalOrder>
     }
   | undefined
-while (Date.now() < deadline) {
+while (Date.now() < deadline && Date.now() < absoluteDeadline) {
   const snapshot = Database.use((db) => {
-    const tasks = db.select().from(EngineTaskTable).all()
+    const persistedTasks = db.select().from(EngineTaskTable).all()
     const events = db.select().from(ProtocolEventTable).where(eq(ProtocolEventTable.type, "scheduler.message")).all()
-    const inboxes = db.select().from(ProtocolInboxTable).all()
+    const persistedInboxes = db.select().from(ProtocolInboxTable).all()
+    const { tasks, inboxes } = projectMissionTaskDuplexControlStateInTransaction(db, {
+      tasks: persistedTasks,
+      inboxes: persistedInboxes,
+    })
     const messages = db.select().from(MessageTable).all()
     const parts = db.select().from(PartTable).all()
     return { tasks, events, inboxes, messages, parts }
   })
+  const missionProjection = missionRecord(await requireMissionSession(mission.sessionID))
   const activityKey = `${snapshot.tasks.length}:${snapshot.events.length}:${snapshot.inboxes.filter((row) => row.status === "delivered").length}:${snapshot.messages.length}:${snapshot.parts.length}`
   if (activityKey !== lastActivityKey) {
     lastActivityKey = activityKey
-    deadline = Date.now() + INACTIVITY_MS
     process.stdout.write(`[duplex-e2e] activity=${activityKey}\n`)
+  }
+  const progressKey = missionTaskDuplexProgressKey({
+    tasks: snapshot.tasks,
+    inboxes: snapshot.inboxes,
+    schedulerEventCount: snapshot.events.length,
+    missionCompleted: missionProjection.completion !== undefined,
+  })
+  if (progressKey !== lastProgressKey) {
+    lastProgressKey = progressKey
+    deadline = Math.min(absoluteDeadline, Date.now() + INACTIVITY_MS)
+    process.stdout.write(`[duplex-e2e] progress=${progressKey}\n`)
   }
   const missionTasks = snapshot.tasks.filter((row) => {
     const metadata = row.metadata as { actor?: string; mission?: { id?: string } } | null
@@ -473,6 +499,8 @@ while (Date.now() < deadline) {
         taskBCompleted: taskB.time_completed !== null,
         terminalReceiptsDelivered,
         terminalWakeRepliesCompleted,
+        missionBoardLane: missionProjection.boardLane,
+        missionCompleted: missionProjection.completion !== undefined,
         duplexContract,
         terminalOrder,
       }
@@ -490,7 +518,9 @@ while (Date.now() < deadline) {
         taskB.time_completed !== null &&
         terminalReceiptsDelivered &&
         terminalOrder &&
-        terminalWakeRepliesCompleted
+        terminalWakeRepliesCompleted &&
+        missionProjection.boardLane === "completed" &&
+        missionProjection.completion !== undefined
       ) {
         terminal = true
         evidence = {
@@ -500,6 +530,7 @@ while (Date.now() < deadline) {
           inboxes: protocolInboxes,
           sourceToolPartIDs: sourceToolParts.map((row) => row!.id),
           missionAckMessageID: missionAck.id,
+          missionCompletion: missionProjection.completion,
           duplexContract,
           terminalOrder,
         }
@@ -512,7 +543,7 @@ while (Date.now() < deadline) {
 
   if (!evidence) {
     throw new Error(
-      `Mission/Task scheduler duplex did not converge after activity ${lastActivityKey}: ${JSON.stringify(lastAcceptanceState)}`,
+      `Mission/Task scheduler duplex did not converge after progress ${lastProgressKey} and activity ${lastActivityKey}: ${JSON.stringify(lastAcceptanceState)}`,
     )
   }
   const turnArtifactsURL = new URL(`${base}/session/${encodeURIComponent(mission.sessionID)}/turn-artifacts`)
@@ -562,6 +593,7 @@ while (Date.now() < deadline) {
     terminal,
     sourceToolPartIDs: evidence.sourceToolPartIDs,
     missionAckMessageID: evidence.missionAckMessageID,
+    missionCompletion: evidence.missionCompletion,
     turnArtifactMessageIDs: turnArtifacts.flatMap((entry) => (entry.messageID ? [entry.messageID] : [])),
     events: eventSummary,
     inboxes: evidence.inboxes.map((row) => ({

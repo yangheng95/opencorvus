@@ -11,7 +11,17 @@ describe("scheduler message model harness", () => {
       "Delivery means the recipient ingress is durable; it is not the answer",
       "Use `reply` only for the current scheduler request and pass its exact `event_id` as `reply_to`",
       "Use `panel_query_task` for lifecycle and acceptance facts, `panel_resume_task` for a reviewed inactive Task",
-      "Resolve it in this wake and send the correlated reply before unrelated reconciliation",
+      "treat the exact visible Message as the sufficient current coordination fact and resolve it in this wake",
+      "A visible scheduler Message instead follows the bounded coordination path under SCHEDULER COMMUNICATION",
+      "In the first `capability_search`, activate the canonical `{kind:\"tool\",source:\"platform\",owner_ref:\"tool-registry\",local_ref:\"scheduler_message\"}` exact ref",
+      "Send the correlated reply, then end the response immediately so the Session can accept the next durable inbox",
+      "end the response immediately so the Session can accept the next durable inbox",
+      "complete only that exact fact's causal closure in this response",
+      "query its exact Task and the canonical Artifacts required for acceptance",
+      "execute every newly ready consumer dispatch or exact-Task recovery made due by that fact",
+      "If accepting that exact Task makes final Mission completion due, expand this causal closure only to the completion preflight",
+      "re-query the complete current child-Task set, read and bind every accepted Task's required canonical evidence in this same physical Turn, and then call `panel_complete_mission`",
+      "End the response only after that exact causal closure reaches its next durable stop",
     ]
 
     expect(requiredMissionGuidance.map((clause) => MISSION_CORE.includes(clause))).toEqual(
