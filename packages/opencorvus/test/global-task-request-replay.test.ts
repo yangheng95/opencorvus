@@ -19,7 +19,11 @@ import { ImplicitProject } from "@/project/implicit-project"
 import { Project } from "@/project/project"
 import { Server } from "@/server/server"
 import { createManagedTemporaryDirectory, removeManagedDirectoryTree } from "@opencorvus-ai/util/runtime-directories"
-import { exportMysqlTransferSnapshot, importMysqlTransferSnapshot, preflightMysqlTransferSnapshot } from "@/storage/mysql-transfer"
+import {
+  exportMysqlTransferSnapshot,
+  importMysqlTransferSnapshot,
+  preflightMysqlTransferSnapshot,
+} from "@/storage/mysql-transfer"
 import { TaskChannelBindingProjectConflictError } from "@/engine/task-project-error"
 import { ProtocolEventTable } from "@/protocol/protocol.sql"
 import { TestHooks as TaskControlTestHooks } from "@/engine/task-root-ingress-delivery"
@@ -78,10 +82,11 @@ describe("global Task request occurrence", () => {
     })
     const callerProject = await send({ ...base, requestID: Identifier.ascending("call"), directory: "C:/caller" })
     expect(callerProject.status).toBe(400)
-    const identities = () => Database.use((db) => ({
-      allocations: db.select({ id: GlobalCreationAllocationTable.id }).from(GlobalCreationAllocationTable).all(),
-      projects: db.select({ id: ProjectTable.id }).from(ProjectTable).all(),
-    }))
+    const identities = () =>
+      Database.use((db) => ({
+        allocations: db.select({ id: GlobalCreationAllocationTable.id }).from(GlobalCreationAllocationTable).all(),
+        projects: db.select({ id: ProjectTable.id }).from(ProjectTable).all(),
+      }))
     const before = identities()
     for (const unsupported of [
       { artifactSources: [{ authority: "completion_decision", source_task_id: "task-source" }] },
@@ -139,14 +144,22 @@ describe("global Task request occurrence", () => {
     expect(
       Database.use((db) =>
         db
-          .select({ projectID: GlobalCreationAllocationTable.accepted_project_id, targetID: GlobalCreationAllocationTable.accepted_target_id })
+          .select({
+            projectID: GlobalCreationAllocationTable.accepted_project_id,
+            targetID: GlobalCreationAllocationTable.accepted_target_id,
+          })
           .from(GlobalCreationAllocationTable)
           .where(eq(GlobalCreationAllocationTable.request_id, requestID))
           .get(),
       ),
     ).toEqual({ projectID: first.project_id, targetID: first.task_id })
-    const rootSessionID = Database.use((db) =>
-      db.select({ id: EngineTaskTable.session_id }).from(EngineTaskTable).where(eq(EngineTaskTable.id, first.task_id)).get()?.id,
+    const rootSessionID = Database.use(
+      (db) =>
+        db
+          .select({ id: EngineTaskTable.session_id })
+          .from(EngineTaskTable)
+          .where(eq(EngineTaskTable.id, first.task_id))
+          .get()?.id,
     )
     if (!rootSessionID) throw new Error("Accepted Global Task has no root Session")
     await Instance.provide({
@@ -224,10 +237,11 @@ describe("global Task request occurrence", () => {
       },
     })
     await Instance.disposeAll()
-    const facts = () => Database.use((db) => ({
-      allocations: db.select().from(GlobalCreationAllocationTable).all(),
-      projects: db.select().from(ProjectTable).all(),
-    }))
+    const facts = () =>
+      Database.use((db) => ({
+        allocations: db.select().from(GlobalCreationAllocationTable).all(),
+        projects: db.select().from(ProjectTable).all(),
+      }))
     const before = facts()
     const channelRequestID = Identifier.ascending("call")
     await expect(
@@ -356,7 +370,10 @@ describe("global Task request occurrence", () => {
     expect(
       Database.use((db) =>
         db
-          .select({ rejected: GlobalCreationAllocationTable.rejected_error, accepted: GlobalCreationAllocationTable.accepted_target_id })
+          .select({
+            rejected: GlobalCreationAllocationTable.rejected_error,
+            accepted: GlobalCreationAllocationTable.accepted_target_id,
+          })
           .from(GlobalCreationAllocationTable)
           .where(eq(GlobalCreationAllocationTable.request_id, requestID))
           .get(),
@@ -419,26 +436,34 @@ describe("global Task request occurrence", () => {
       data: { taskID: winnerTaskID },
     })
     expect(
-      Database.use((db) =>
-        db
-          .select({ id: GlobalCreationAllocationTable.id })
-          .from(GlobalCreationAllocationTable)
-          .where(eq(GlobalCreationAllocationTable.request_id, requestID))
-          .all().length,
+      Database.use(
+        (db) =>
+          db
+            .select({ id: GlobalCreationAllocationTable.id })
+            .from(GlobalCreationAllocationTable)
+            .where(eq(GlobalCreationAllocationTable.request_id, requestID))
+            .all().length,
       ),
     ).toBe(1)
     await Instance.disposeAll()
     Database.transaction((db) => db.delete(ProjectTable).where(eq(ProjectTable.id, terminal!.projectID!)).run())
     expect(
       Database.use((db) => ({
-        project: db.select({ id: ProjectTable.id }).from(ProjectTable).where(eq(ProjectTable.id, terminal!.projectID!)).get(),
+        project: db
+          .select({ id: ProjectTable.id })
+          .from(ProjectTable)
+          .where(eq(ProjectTable.id, terminal!.projectID!))
+          .get(),
         rejection: db
           .select({ rejected: GlobalCreationAllocationTable.rejected_error })
           .from(GlobalCreationAllocationTable)
           .where(eq(GlobalCreationAllocationTable.request_id, requestID))
           .get(),
       })),
-    ).toEqual({ project: undefined, rejection: { rejected: expect.objectContaining({ name: "TaskChannelBindingProjectConflictError" }) } })
+    ).toEqual({
+      project: undefined,
+      rejection: { rejected: expect.objectContaining({ name: "TaskChannelBindingProjectConflictError" }) },
+    })
   }, 120_000)
 
   test("accepted replay follows the retained Project after anonymous promotion", async () => {
@@ -505,18 +530,20 @@ describe("global Task request occurrence", () => {
       taskResolution: retainedAccepted.task_resolution,
     })
     const rejectedProject = await GlobalCreationAllocation.materializeProject(rejectedAllocation)
-    expect(GlobalCreationAllocation.reject({
-      allocationID: rejectedAllocation.id,
-      error: new TaskChannelBindingProjectConflictError({
-        message: "retained rejection",
-        platform: "slack",
-        channel: "retained",
-        thread: "retained",
-        taskID: "retained-winner",
-        projectID: "retained-winner-project",
-        activeProjectID: rejectedProject.project.id,
+    expect(
+      GlobalCreationAllocation.reject({
+        allocationID: rejectedAllocation.id,
+        error: new TaskChannelBindingProjectConflictError({
+          message: "retained rejection",
+          platform: "slack",
+          channel: "retained",
+          thread: "retained",
+          taskID: "retained-winner",
+          projectID: "retained-winner-project",
+          activeProjectID: rejectedProject.project.id,
+        }),
       }),
-    })).toBe("rejected")
+    ).toBe("rejected")
     Database.transaction((db) => db.delete(ProjectTable).where(eq(ProjectTable.id, rejectedProject.project.id)).run())
     expect(
       Database.allFinalized<{ terminal: string }>(
@@ -538,9 +565,13 @@ describe("global Task request occurrence", () => {
     })
     expect(importMysqlTransferSnapshot(retainedSnapshot)).toMatchObject({ ok: true })
     expect(
-      Database.use((db) => db.select({ retainedAt: GlobalCreationAllocationTable.time_project_retained })
-        .from(GlobalCreationAllocationTable)
-        .where(eq(GlobalCreationAllocationTable.request_id, rejectedRequestID)).get()),
+      Database.use((db) =>
+        db
+          .select({ retainedAt: GlobalCreationAllocationTable.time_project_retained })
+          .from(GlobalCreationAllocationTable)
+          .where(eq(GlobalCreationAllocationTable.request_id, rejectedRequestID))
+          .get(),
+      ),
     ).toEqual({ retainedAt: expect.any(Number) })
   }, 120_000)
 
@@ -548,20 +579,27 @@ describe("global Task request occurrence", () => {
     const requestID = Identifier.ascending("call")
     const accepted = await GlobalTaskService.create({ ...base, requestID })
     Database.immediateTransaction((db) => {
-      const seq = db.select({ seq: ProtocolEventTable.seq }).from(ProtocolEventTable)
-        .where(eq(ProtocolEventTable.aggregate_id, accepted.task_id)).all()
-        .reduce((maximum, event) => Math.max(maximum, event.seq), 0) + 1
-      db.insert(ProtocolEventTable).values({
-        id: Identifier.ascending("protocol_event"),
-        kind: "event",
-        type: "task.deleted",
-        aggregate_type: "task",
-        aggregate_id: accepted.task_id,
-        source: "task.delete",
-        seq,
-        emitted_at: Date.now(),
-        payload: { executionEpoch: 1, summary: "Task deleted" },
-      }).run()
+      const seq =
+        db
+          .select({ seq: ProtocolEventTable.seq })
+          .from(ProtocolEventTable)
+          .where(eq(ProtocolEventTable.aggregate_id, accepted.task_id))
+          .all()
+          .reduce((maximum, event) => Math.max(maximum, event.seq), 0) + 1
+      db.insert(ProtocolEventTable)
+        .values({
+          id: Identifier.ascending("protocol_event"),
+          kind: "event",
+          type: "task.deleted",
+          aggregate_type: "task",
+          aggregate_id: accepted.task_id,
+          project_id: accepted.project_id,
+          source: "task.delete",
+          seq,
+          emitted_at: Date.now(),
+          payload: { executionEpoch: 1, summary: "Task deleted" },
+        })
+        .run()
     })
     await expect(GlobalTaskService.create({ ...base, requestID })).rejects.toMatchObject({
       name: "GlobalCreationAcceptedTargetUnavailableError",
@@ -578,16 +616,27 @@ describe("global Task request occurrence", () => {
     await expect(GlobalTaskService.create({ ...base, requestID })).rejects.toBe(allocationCut)
     _cut[Symbol.dispose]()
 
-    const frozenResolution = Database.use((db) => db.select({ value: GlobalCreationAllocationTable.task_resolution })
-      .from(GlobalCreationAllocationTable).where(eq(GlobalCreationAllocationTable.request_id, requestID)).get())
+    const frozenResolution = Database.use((db) =>
+      db
+        .select({ value: GlobalCreationAllocationTable.task_resolution })
+        .from(GlobalCreationAllocationTable)
+        .where(eq(GlobalCreationAllocationTable.request_id, requestID))
+        .get(),
+    )
     expect(() =>
       Database.Client().run(
         `UPDATE global_creation_allocation SET task_resolution='{}' WHERE request_id='${requestID}'`,
       ),
     ).toThrow()
-    expect(Database.use((db) => db.select({ value: GlobalCreationAllocationTable.task_resolution })
-      .from(GlobalCreationAllocationTable).where(eq(GlobalCreationAllocationTable.request_id, requestID)).get()))
-      .toEqual(frozenResolution)
+    expect(
+      Database.use((db) =>
+        db
+          .select({ value: GlobalCreationAllocationTable.task_resolution })
+          .from(GlobalCreationAllocationTable)
+          .where(eq(GlobalCreationAllocationTable.request_id, requestID))
+          .get(),
+      ),
+    ).toEqual(frozenResolution)
 
     const variants = [
       { request: `${base.request} changed` },
@@ -621,7 +670,14 @@ describe("global Task request occurrence", () => {
     const children: ReturnType<typeof Bun.spawn>[] = []
     const spawn = (mode: string, occurrenceID = requestID) => {
       const child = Bun.spawn(
-        [process.execPath, `--config=${path.join(import.meta.dir, "empty-bunfig.toml")}`, worker, mode, barrier, occurrenceID],
+        [
+          process.execPath,
+          `--config=${path.join(import.meta.dir, "empty-bunfig.toml")}`,
+          worker,
+          mode,
+          barrier,
+          occurrenceID,
+        ],
         { cwd: path.join(import.meta.dir, ".."), env: environment, stdout: "pipe", stderr: "pipe" },
       )
       children.push(child)
@@ -634,7 +690,10 @@ describe("global Task request occurrence", () => {
         child.exited,
       ])
       expect(exitCode, stderr).toBe(0)
-      const line = stdout.trim().split(/\r?\n/).findLast((candidate) => candidate.startsWith("{"))
+      const line = stdout
+        .trim()
+        .split(/\r?\n/)
+        .findLast((candidate) => candidate.startsWith("{"))
       if (!line) throw new Error(`Global Task worker returned no JSON: ${stderr || stdout}`)
       return JSON.parse(line) as any
     }

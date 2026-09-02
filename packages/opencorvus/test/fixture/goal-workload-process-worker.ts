@@ -2,7 +2,7 @@ import fs from "node:fs/promises"
 import path from "node:path"
 import { DispatchOutcome } from "@/agent/dispatch-outcome"
 import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
-import { createDispatchLineageOrigin, recordDispatchLineage } from "@/engine/dispatch-lineage"
+import { createDispatchLineageOrigin } from "@/engine/dispatch-lineage"
 import { findDispatchSettlementByDispatchID, settleDispatchOrReturnExisting } from "@/engine/dispatch-settlement"
 import { persistArchitectGoalProjection } from "@/engine/persist"
 import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
@@ -21,6 +21,7 @@ import { declareNativeTaskProcessDeployment } from "@/runtime/task-process-deplo
 import { currentRuntimeOccurrenceID } from "@/runtime/process-occurrence"
 import { joinProcessLivenessLease } from "@/engine/process-liveness"
 import { persistEstablishedTask } from "./engine-task"
+import { recordTestDispatchLineage } from "./dispatch-lineage"
 
 type Fixture = Awaited<ReturnType<typeof createFixture>>
 
@@ -172,7 +173,7 @@ async function createFixture(label: string, publish = false) {
     workflowNodeID: workloadNodeID,
     adapterInput: { goal_ids: [goalID], reason: "Verify exact workload coverage" },
   })
-  recordDispatchLineage({ origin, childSessionID: child.id, now: now + 11 })
+  recordTestDispatchLineage({ origin, childSessionID: child.id, now: now + 11 })
   const descriptor = WorkerTurnDescriptor.create({
     sessionID: child.id,
     payload: {

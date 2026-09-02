@@ -5,7 +5,8 @@ import { ToolPartProgressTable } from "@/session/session.sql"
 import { Database, asc, eq } from "@/storage/db"
 import { toolFailureCauseFromUnknown } from "@/session/tool-failure-cause"
 import { bindToolDecisionDeclaration } from "@/tool/execution-mode"
-import { tool } from "ai"
+import { jsonSchema, tool } from "ai"
+import type { JSONSchema7 } from "@ai-sdk/provider"
 import { isDeepStrictEqual } from "node:util"
 import z from "zod"
 import {
@@ -15,6 +16,7 @@ import {
   type DispatchCollectionMemberResult,
 } from "./dispatch-agents-contract"
 import { requireOrchestratorToolExecutionContext } from "./tool-execution-context"
+import { dispatchAgentExecutionInputSchema } from "./dispatch-agent-tool"
 
 type DispatchAgentTool = {
   inputSchema: unknown
@@ -58,15 +60,27 @@ const productionRuntime: DispatchAgentsRuntime = {}
  * index; the Host never manufactures child Tool calls or a second frontier
  * state. Individual workers still use the canonical dispatch_agent runtime.
  */
-function createDispatchAgentsToolWithRuntime(dispatchAgentTool: DispatchAgentTool, runtime: DispatchAgentsRuntime) {
+function createDispatchAgentsToolWithRuntime(
+  dispatchAgentTool: DispatchAgentTool,
+  runtime: DispatchAgentsRuntime,
+  childInputSchema: z.ZodType,
+) {
   if (!dispatchAgentTool.execute) throw new Error("dispatch_agents requires an executable dispatch_agent Tool")
-  const childInputSchema = dispatchAgentTool.inputSchema as z.ZodType
   const inputSchema = createDispatchAgentsInputSchema(childInputSchema)
+  const providerInputSchema = jsonSchema<z.infer<typeof inputSchema>>(
+    z.toJSONSchema(inputSchema, { cycles: "ref", reused: "ref" }) as unknown as JSONSchema7,
+    {
+      validate(value) {
+        const parsed = inputSchema.safeParse(value)
+        return parsed.success ? { success: true, value: parsed.data } : { success: false, error: parsed.error }
+      },
+    },
+  )
 
   const collectionTool = tool({
     description:
       "Describe and submit one complete dependency-ready Agent frontier in this visible Tool call. team is the structured Task-local team/workflow description and aligns by index with dispatches. The persisted call is the one collection occurrence; each member binds its exact index to this call and starts through the canonical dispatch runtime. The Host does not choose members, infer dependencies, add work, or manufacture nested Tool calls. Use one call for all currently independent members; use a later call only after real predecessor evidence opens another frontier.",
-    inputSchema,
+    inputSchema: providerInputSchema,
     execute: async (rawInput, options) => {
       const parsed = inputSchema.parse(rawInput)
       const outer = requireOrchestratorToolExecutionContext(options, "dispatch_agents")
@@ -147,19 +161,21 @@ function createDispatchAgentsToolWithRuntime(dispatchAgentTool: DispatchAgentToo
           if (persisted) return persisted
           let result: DispatchCollectionMemberResult
           try {
-            const outcome = DispatchOutcomeSchema.parse(await dispatchAgentTool.execute!(member.request, {
-              ...(optionRecord as object),
-              toolCallId: outer.toolCallID,
-              opencorvus: {
-                ...outerMeta,
-                sessionID: outer.orchestratorSessionID,
-                messageID: outer.orchestratorMessageID,
-                toolCallID: outer.toolCallID,
-                toolPartID: outer.toolPartID,
-                visibleToolName: "dispatch_agents",
-                collectionMember: { index: member.index, count: members.length },
-              },
-            }))
+            const outcome = DispatchOutcomeSchema.parse(
+              await dispatchAgentTool.execute!(member.request, {
+                ...(optionRecord as object),
+                toolCallId: outer.toolCallID,
+                opencorvus: {
+                  ...outerMeta,
+                  sessionID: outer.orchestratorSessionID,
+                  messageID: outer.orchestratorMessageID,
+                  toolCallID: outer.toolCallID,
+                  toolPartID: outer.toolPartID,
+                  visibleToolName: "dispatch_agents",
+                  collectionMember: { index: member.index, count: members.length },
+                },
+              }),
+            )
             result = {
               member_index: member.index,
               name: member.name,
@@ -214,11 +230,15 @@ function createDispatchAgentsToolWithRuntime(dispatchAgentTool: DispatchAgentToo
 }
 
 export function createDispatchAgentsTool(dispatchAgentTool: DispatchAgentTool) {
-  return createDispatchAgentsToolWithRuntime(dispatchAgentTool, productionRuntime)
+  return createDispatchAgentsToolWithRuntime(
+    dispatchAgentTool,
+    productionRuntime,
+    dispatchAgentExecutionInputSchema(dispatchAgentTool),
+  )
 }
 
 export const DispatchAgentsToolTestHooks = Object.freeze({
-  create(dispatchAgentTool: DispatchAgentTool, input: DispatchAgentsRuntime = {}) {
-    return createDispatchAgentsToolWithRuntime(dispatchAgentTool, input)
+  create(dispatchAgentTool: DispatchAgentTool, input: DispatchAgentsRuntime, childInputSchema: z.ZodType) {
+    return createDispatchAgentsToolWithRuntime(dispatchAgentTool, input, childInputSchema)
   },
 })

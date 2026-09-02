@@ -1346,9 +1346,9 @@ export function currentOrchestratorControlMessage(
   predecessorID?: string,
 ): CurrentOrchestratorControlMessage | undefined {
   if (!event) return undefined
-  const exactWakeID = wakeID?.trim()
-  if (!exactWakeID) throw new Error("Orchestrator control occurrence requires exact durable ingress identity")
-  const predecessor = predecessorID?.trim() || exactWakeID
+  if (!wakeID) throw new Error("Orchestrator control occurrence requires exact durable ingress identity")
+  const exactWakeID = wakeID
+  const predecessor = predecessorID || exactWakeID
   if (event.rootMessage?.messageID === predecessor) return undefined
   const identity = {
     ingress_id: exactWakeID,
@@ -1526,10 +1526,12 @@ export type TaskProjectionChange =
   | { op: "append"; path: string; values: unknown[] }
   | { op: "remove"; path: string }
 
-const TaskProjectionPointerSchema = z.string().refine(
-  (path) => path === "" || (path.startsWith("/") && !/~(?:[^01]|$)/.test(path)),
-  "Task projection operation path must be a strict JSON Pointer.",
-)
+const TaskProjectionPointerSchema = z
+  .string()
+  .refine(
+    (path) => path === "" || (path.startsWith("/") && !/~(?:[^01]|$)/.test(path)),
+    "Task projection operation path must be a strict JSON Pointer.",
+  )
 const TaskProjectionChangeSchema = z.discriminatedUnion("op", [
   z.object({ op: z.literal("replace"), path: TaskProjectionPointerSchema, value: z.unknown() }).strict(),
   z.object({ op: z.literal("append"), path: TaskProjectionPointerSchema, values: z.array(z.unknown()) }).strict(),

@@ -1,5 +1,7 @@
 import { afterEach, expect, spyOn, test } from "bun:test"
 import { MockLanguageModelV3, simulateReadableStream } from "ai/test"
+import { capabilityRef } from "@opencorvus-ai/util/capability-ref"
+import { CAPABILITY_REVEAL_MAX_ACTIVE_CHARS, CAPABILITY_REVEAL_MAX_ACTIVE_TOKENS } from "@/capability/reveal-receipt"
 import { Auth } from "@/auth"
 import { Bus } from "@/bus"
 import { Config } from "@/config/config"
@@ -77,6 +79,7 @@ test("a streamed dispatch decision settles from one Task-root Provider request",
           ).then((finalMessageID) => ({ finalMessageID })),
       })
 
+      let capabilityRevealRequests = 0
       let rootProviderRequests = 0
       let workerProviderRequests = 0
       let releaseWorker!: () => void
@@ -90,24 +93,42 @@ test("a streamed dispatch decision settles from one Task-root Provider request",
           const toolNames = Array.isArray(options.tools)
             ? options.tools.map((item) => item.name)
             : Object.keys(options.tools ?? {})
+          if (
+            toolNames.length === 1 &&
+            toolNames[0] === "capability_search" &&
+            (rootProviderRequests === 0 || workerProviderRequests > 0)
+          ) {
+            const localRef = rootProviderRequests === 0 ? "dispatch_agent" : "no_action"
+            capabilityRevealRequests++
+            return {
+              stream: simulateReadableStream({
+                chunks: [
+                  { type: "stream-start", warnings: [] },
+                  {
+                    type: "tool-call",
+                    toolCallId: `call_reveal_${localRef}`,
+                    toolName: "capability_search",
+                    input: JSON.stringify({
+                      queries: [localRef === "dispatch_agent" ? "dispatch one worker" : "settle this wake"],
+                      exact_refs: [
+                        capabilityRef({
+                          kind: "tool",
+                          source: "platform",
+                          owner_ref: "runtime-projection:orchestrator",
+                          local_ref: localRef,
+                        }),
+                      ],
+                      deactivate_refs: [],
+                      limit: 5,
+                    }),
+                  },
+                  { type: "finish", finishReason: { unified: "tool-calls", raw: "tool_calls" }, usage },
+                ],
+              }),
+            }
+          }
           if (toolNames.includes("dispatch_agent")) {
             rootProviderRequests++
-            if (rootProviderRequests > 1) {
-              return {
-                stream: simulateReadableStream({
-                  chunks: [
-                    { type: "stream-start", warnings: [] },
-                    {
-                      type: "tool-call",
-                      toolCallId: `call_lifecycle_reconciled_${rootProviderRequests}`,
-                      toolName: "no_action",
-                      input: JSON.stringify({ reason: "The worker lifecycle fact has no newly ready frontier." }),
-                    },
-                    { type: "finish", finishReason: { unified: "tool-calls", raw: "tool_calls" }, usage },
-                  ],
-                }),
-              }
-            }
             return {
               stream: simulateReadableStream({
                 chunks: [
@@ -143,6 +164,23 @@ test("a streamed dispatch decision settles from one Task-root Provider request",
                         },
                       },
                     }),
+                  },
+                  { type: "finish", finishReason: { unified: "tool-calls", raw: "tool_calls" }, usage },
+                ],
+              }),
+            }
+          }
+          if (toolNames.includes("no_action")) {
+            rootProviderRequests++
+            return {
+              stream: simulateReadableStream({
+                chunks: [
+                  { type: "stream-start", warnings: [] },
+                  {
+                    type: "tool-call",
+                    toolCallId: `call_lifecycle_reconciled_${rootProviderRequests}`,
+                    toolName: "no_action",
+                    input: JSON.stringify({ reason: "The worker lifecycle fact has no newly ready frontier." }),
                   },
                   { type: "finish", finishReason: { unified: "tool-calls", raw: "tool_calls" }, usage },
                 ],
@@ -216,19 +254,37 @@ test("a streamed dispatch decision settles from one Task-root Provider request",
                 .all(),
         )
         const toolParts = messages.flatMap((message) => message.parts).filter((part) => part.type === "tool")
+        const revealReceipt = toolParts.find(
+          (part) => part.tool === "capability_search" && part.state.status === "completed",
+        )?.state.metadata?.opencorvus_capability_reveal_v2 as
+          | {
+              activated?: Array<{ provider_name?: string; payload_chars?: number; payload_tokens?: number }>
+            }
+          | undefined
+        const dispatchActivation = revealReceipt?.activated?.find((entry) => entry.provider_name === "dispatch_agent")
         expect({
           taskError: task.error,
+          capabilityRevealRequests,
           rootProviderRequests,
           providerFacts,
           dispatchReceipts: toolParts.filter((part) => part.tool === "dispatch_agent").map((part) => part.state.status),
-          decisions: toolParts.map((part) => part.tool),
+          dispatchDefinitionWithinRevealBudget:
+            Boolean(dispatchActivation) &&
+            dispatchActivation!.payload_chars! <= CAPABILITY_REVEAL_MAX_ACTIVE_CHARS &&
+            dispatchActivation!.payload_tokens! <= CAPABILITY_REVEAL_MAX_ACTIVE_TOKENS,
+          calls: toolParts.map((part) => part.tool),
           ingress: taskRootIngressDebugProjection(taskID).map((entry) => entry.projection.state),
         }).toEqual({
           taskError: null,
+          capabilityRevealRequests: 1,
           rootProviderRequests: 1,
-          providerFacts: [{ id: expect.any(String), messageID: assistantIDs[0] }],
+          providerFacts: [
+            { id: expect.any(String), messageID: assistantIDs[0] },
+            { id: expect.any(String), messageID: assistantIDs[0] },
+          ],
           dispatchReceipts: ["completed"],
-          decisions: ["dispatch_agent"],
+          dispatchDefinitionWithinRevealBudget: true,
+          calls: ["capability_search", "dispatch_agent"],
           ingress: ["resolved"],
         })
         releaseWorker()
@@ -238,7 +294,11 @@ test("a streamed dispatch decision settles from one Task-root Provider request",
         await waitForIngressDeliveryHooksForTest()
         await SessionPrompt.waitForFinish(orchestrator.id, project.path)
         await Database.awaitEffectIdle(30_000)
-        expect(workerProviderRequests).toBe(1)
+        expect({ capabilityRevealRequests, rootProviderRequests, workerProviderRequests }).toEqual({
+          capabilityRevealRequests: 2,
+          rootProviderRequests: 2,
+          workerProviderRequests: 1,
+        })
       } finally {
         releaseWorker()
         gitCompleteSpy.mockRestore()

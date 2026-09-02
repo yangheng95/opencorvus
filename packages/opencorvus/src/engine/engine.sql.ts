@@ -45,6 +45,8 @@ export const ENGINE_ARTIFACT_KINDS = [
   "goal_workload",
   "dispatch_lineage",
   "dispatch_settlement",
+  "dispatch_delivery_disposition",
+  "task_root_ingress_disposition",
   "mission_acceptance_resume_receipt",
   "task_acceptance_ledger",
   "task_checkpoint_settlement",
@@ -171,16 +173,16 @@ export const EngineTaskCreationContractTable = sqliteTable(
   },
   (table) => [
     uniqueIndex("engine_task_creation_contract_tool_part_idx").on(table.creator_tool_part_id),
-      check(
-        "engine_task_creation_contract_fingerprint_shape",
-        sql`length(${table.fingerprint}) = 64
+    check(
+      "engine_task_creation_contract_fingerprint_shape",
+      sql`length(${table.fingerprint}) = 64
           AND json_type(${table.contract}) = 'object'
           AND json_extract(${table.contract}, '$.protocol') = 'task-creation-contract-v2'
           AND json_type(${table.contract}, '$.request') = 'object'
           AND json_type(${table.contract}, '$.resolved') = 'object'
           AND ${table.creator_tool_part_id} IS json_extract(${table.contract}, '$.request.input.creator.tool_part_id')
           AND ${table.creator_tool_part_id} IS json_extract(${table.contract}, '$.resolved.creator.tool_part_id')`,
-      ),
+    ),
   ],
 )
 
@@ -206,6 +208,9 @@ export const EngineTaskRootIngressTable = sqliteTable(
     task_id: text()
       .notNull()
       .references(() => EngineTaskTable.id, { onDelete: "cascade" }),
+    project_id: text()
+      .notNull()
+      .references(() => ProjectTable.id, { onDelete: "cascade" }),
     execution_epoch: integer().notNull(),
     sequence: integer().notNull(),
     source: text({ enum: ["message", "protocol_event", "engine_artifact", "task", "inline"] })
@@ -222,6 +227,9 @@ export const EngineTaskRootIngressTable = sqliteTable(
     uniqueIndex("engine_task_root_ingress_sequence_idx").on(table.task_id, table.execution_epoch, table.sequence),
     uniqueIndex("engine_task_root_ingress_source_idx").on(table.task_id, table.source, table.source_id),
     index("engine_task_root_ingress_epoch_idx").on(table.task_id, table.execution_epoch, table.sequence),
+    // SQLite stores rowid as the implicit final key of this ordinary index;
+    // the control frontier keysets on that database-assigned append locator.
+    index("engine_task_root_ingress_frontier_idx").on(table.project_id),
   ],
 )
 
@@ -236,6 +244,9 @@ export const EngineTaskWaitRegistrationTable = sqliteTable(
     task_id: text()
       .notNull()
       .references(() => EngineTaskTable.id, { onDelete: "cascade" }),
+    project_id: text()
+      .notNull()
+      .references(() => ProjectTable.id, { onDelete: "cascade" }),
     execution_epoch: integer().notNull(),
     due_at: integer().notNull(),
     reason: text().notNull(),
@@ -250,6 +261,7 @@ export const EngineTaskWaitRegistrationTable = sqliteTable(
   (table) => [
     uniqueIndex("engine_task_wait_tool_occurrence_idx").on(table.tool_part_id),
     index("engine_task_wait_task_epoch_due_idx").on(table.task_id, table.execution_epoch, table.due_at),
+    index("engine_task_wait_due_frontier_idx").on(table.project_id),
   ],
 )
 
@@ -302,7 +314,24 @@ export const EngineControlActivationLeaseTable = sqliteTable(
   "engine_control_activation_lease",
   {
     id: text().primaryKey(),
-    target: text({ enum: ["task_root_ingress", "lifecycle", "interaction", "effect", "automation", "event_fire", "build_cleanup", "protocol_delivery", "bus_delivery", "session_control", "session_shell", "session_deletion", "dispatch_admission", "runtime_process"] })
+    target: text({
+      enum: [
+        "task_root_ingress",
+        "lifecycle",
+        "interaction",
+        "effect",
+        "automation",
+        "event_fire",
+        "build_cleanup",
+        "protocol_delivery",
+        "bus_delivery",
+        "session_control",
+        "session_shell",
+        "session_deletion",
+        "dispatch_admission",
+        "runtime_process",
+      ],
+    })
       .notNull()
       .$type<EngineControlActivationTarget>(),
     target_id: text().notNull(),
@@ -337,7 +366,9 @@ export const EngineBuildObservationCleanupReceiptTable = sqliteTable(
   "engine_build_observation_cleanup_receipt",
   {
     id: text().primaryKey(),
-    observation_id: text().notNull().references(() => EngineBuildObservationCleanupTable.observation_id, { onDelete: "cascade" }),
+    observation_id: text()
+      .notNull()
+      .references(() => EngineBuildObservationCleanupTable.observation_id, { onDelete: "cascade" }),
     outcome: text({ enum: ["retained", "failed", "complete"] }).notNull(),
     error: text(),
     time_created: integer().notNull(),
@@ -414,8 +445,7 @@ export const EngineInteractionRequestTable = sqliteTable(
   "engine_interaction_request",
   {
     id: text().primaryKey(),
-    task_id: text()
-      .references(() => EngineTaskTable.id, { onDelete: "cascade" }),
+    task_id: text().references(() => EngineTaskTable.id, { onDelete: "cascade" }),
     /** Exact owner locator for externally accepted interaction input. */
     source_kind: text({ enum: ["bus_question", "permission_request"] }),
     source_id: text(),
@@ -428,9 +458,15 @@ export const EngineInteractionRequestTable = sqliteTable(
     time_created: integer(),
   },
   (table) => [
-    uniqueIndex("engine_interaction_external_idx").on(table.external_id).where(sql`${table.external_id} IS NOT NULL`),
-    uniqueIndex("engine_interaction_source_idx").on(table.source_kind, table.source_id).where(sql`${table.source_id} IS NOT NULL`),
-    check("engine_interaction_request_owner_shape", sql`
+    uniqueIndex("engine_interaction_external_idx")
+      .on(table.external_id)
+      .where(sql`${table.external_id} IS NOT NULL`),
+    uniqueIndex("engine_interaction_source_idx")
+      .on(table.source_kind, table.source_id)
+      .where(sql`${table.source_id} IS NOT NULL`),
+    check(
+      "engine_interaction_request_owner_shape",
+      sql`
       (${table.source_kind} IS NOT NULL AND ${table.source_id} IS NOT NULL AND ${table.task_id} IS NULL AND ${table.session_id} IS NULL AND ${table.external_id} IS NULL
         AND ${table.request_type} IS NULL AND ${table.title} IS NULL AND ${table.body} IS NULL
         AND ${table.payload} IS NULL AND ${table.time_created} IS NULL)
@@ -438,7 +474,8 @@ export const EngineInteractionRequestTable = sqliteTable(
       (${table.source_kind} IS NULL AND ${table.source_id} IS NULL AND ${table.task_id} IS NOT NULL AND ${table.session_id} IS NOT NULL AND ${table.external_id} IS NOT NULL
         AND ${table.request_type} IS NOT NULL AND ${table.title} IS NOT NULL AND ${table.body} IS NOT NULL
         AND ${table.payload} IS NOT NULL AND ${table.time_created} IS NOT NULL)
-    `),
+    `,
+    ),
   ],
 )
 
@@ -448,7 +485,9 @@ export const EngineInteractionOutcomeTable = sqliteTable(
   "engine_interaction_outcome",
   {
     id: text().primaryKey(),
-    interaction_id: text().notNull().references(() => EngineInteractionRequestTable.id, { onDelete: "cascade" }),
+    interaction_id: text()
+      .notNull()
+      .references(() => EngineInteractionRequestTable.id, { onDelete: "cascade" }),
     /** Exact terminal Question publication. Inline-only interactions instead
      * own the minimal outcome fields below. */
     source_occurrence_id: text(),
@@ -458,12 +497,17 @@ export const EngineInteractionOutcomeTable = sqliteTable(
   },
   (table) => [
     uniqueIndex("engine_interaction_outcome_request_idx").on(table.interaction_id),
-    uniqueIndex("engine_interaction_outcome_source_idx").on(table.source_occurrence_id).where(sql`${table.source_occurrence_id} IS NOT NULL`),
-    check("engine_interaction_outcome_owner_shape", sql`
+    uniqueIndex("engine_interaction_outcome_source_idx")
+      .on(table.source_occurrence_id)
+      .where(sql`${table.source_occurrence_id} IS NOT NULL`),
+    check(
+      "engine_interaction_outcome_owner_shape",
+      sql`
       (${table.source_occurrence_id} IS NOT NULL AND ${table.outcome} IS NULL AND ${table.response} IS NULL AND ${table.time_created} IS NULL)
       OR
       (${table.source_occurrence_id} IS NULL AND ${table.outcome} IS NOT NULL AND ${table.response} IS NOT NULL AND ${table.time_created} IS NOT NULL)
-    `),
+    `,
+    ),
   ],
 )
 
@@ -548,6 +592,18 @@ export const EngineArtifactTable = sqliteTable(
       .where(
         sql`${table.kind} = 'dispatch_lineage' AND json_extract(${table.payload}, '$.workflow_binding.kind') = 'virtual_workflow' AND json_type(${table.payload}, '$.continuation_of_dispatch_id') IS NULL AND json_type(${table.payload}, '$.coordination_action_id') IS NULL`,
       ),
+    uniqueIndex("engine_dispatch_lineage_dispatch_id_idx")
+      .on(table.task_id, sql<string>`json_extract(${table.payload}, '$.dispatch_id')`)
+      .where(sql`${table.kind} = 'dispatch_lineage'`),
+    uniqueIndex("engine_dispatch_settlement_dispatch_id_idx")
+      .on(table.task_id, sql<string>`json_extract(${table.payload}, '$.dispatch_id')`)
+      .where(sql`${table.kind} = 'dispatch_settlement'`),
+    uniqueIndex("engine_dispatch_delivery_disposition_dispatch_id_idx")
+      .on(table.task_id, sql<string>`json_extract(${table.payload}, '$.dispatch_id')`)
+      .where(sql`${table.kind} = 'dispatch_delivery_disposition'`),
+    uniqueIndex("engine_task_root_ingress_disposition_ingress_idx")
+      .on(table.task_id, table.kind, sql<string>`json_extract(${table.payload}, '$.ingress_id')`)
+      .where(sql`${table.kind} = 'task_root_ingress_disposition'`),
     uniqueIndex("engine_dispatch_lineage_coordination_action_idx")
       .on(table.task_id, sql<string>`json_extract(${table.payload}, '$.coordination_action_id')`)
       .where(
@@ -648,9 +704,12 @@ export const EngineProgressSnapshotTable = sqliteTable(
   },
   (table) => [
     index("engine_progress_task_idx").on(table.task_id),
-    check("engine_progress_excludes_git_projection", sql`
+    check(
+      "engine_progress_excludes_git_projection",
+      sql`
       json_extract(${table.payload}, '$.kind') IS NULL OR json_extract(${table.payload}, '$.kind') <> 'git'
-    `),
+    `,
+    ),
   ],
 )
 
@@ -661,8 +720,12 @@ export const EngineGitCheckpointRequestTable = sqliteTable(
   "engine_git_checkpoint_request",
   {
     id: text().primaryKey(),
-    task_id: text().notNull().references(() => EngineTaskTable.id, { onDelete: "cascade" }),
-    stage: text({ enum: ["baseline", "result", "acceptance_round"] }).notNull().$type<EngineGitCheckpointStage>(),
+    task_id: text()
+      .notNull()
+      .references(() => EngineTaskTable.id, { onDelete: "cascade" }),
+    stage: text({ enum: ["baseline", "result", "acceptance_round"] })
+      .notNull()
+      .$type<EngineGitCheckpointStage>(),
     operation_key: text().notNull(),
     input: text({ mode: "json" }).notNull().$type<EngineMetadata>(),
     time_created: integer().notNull(),
@@ -674,14 +737,13 @@ export const EngineGitCheckpointRequestTable = sqliteTable(
 )
 
 /** Canonical immutable outcome for a repository-tree checkpoint request. */
-export const EngineGitCheckpointOutcomeTable = sqliteTable(
-  "engine_git_checkpoint_outcome",
-  {
-    request_id: text().primaryKey().references(() => EngineGitCheckpointRequestTable.id, { onDelete: "cascade" }),
-    result: text({ mode: "json" }).notNull().$type<EngineMetadata>(),
-    time_created: integer().notNull(),
-  },
-)
+export const EngineGitCheckpointOutcomeTable = sqliteTable("engine_git_checkpoint_outcome", {
+  request_id: text()
+    .primaryKey()
+    .references(() => EngineGitCheckpointRequestTable.id, { onDelete: "cascade" }),
+  result: text({ mode: "json" }).notNull().$type<EngineMetadata>(),
+  time_created: integer().notNull(),
+})
 
 export const EngineChannelBindingTable = sqliteTable(
   "engine_channel_binding",

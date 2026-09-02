@@ -11,6 +11,7 @@ import { requireTimelineOrderKeyDomain, timelineOrderKey } from "@/timeline/orde
 import { projectLifecycleProperties } from "./lifecycle-projection"
 import { projectMailboxAcknowledgementPayload, projectMailboxAgentMessagePayload } from "@/engine/mailbox-event"
 import { assertControlLeaseInTransaction } from "@/engine/control-lease"
+import { EngineTaskTable } from "@/engine/engine.sql"
 
 const eventLocks = new Map<string, Promise<void>>()
 const log = Log.create({ service: "protocol.store" })
@@ -180,6 +181,7 @@ function insertProtocolEvent(
   const relatedTaskID = input.aggregate === "task" ? null : (input.task_id ?? null)
   const relatedSessionID = input.aggregate === "session" ? null : (input.session_id ?? null)
   const sessionReferenceID = input.aggregate === "session" ? input.aggregate_id : relatedSessionID
+  let projectID: string | null = null
   const exactPhysicalDeletion =
     physicalDeletion?.[physicalSessionDeletionAuthority] === true &&
     input.aggregate === "session" &&
@@ -187,6 +189,18 @@ function insertProtocolEvent(
     input.aggregate_id === physicalDeletion.sessionID &&
     input.payload?.cleanupOperationID === physicalDeletion.cleanupOperationID
   Database.use((db) => {
+    const projectTaskID = input.aggregate === "task" ? input.aggregate_id : relatedTaskID
+    if (projectTaskID) {
+      projectID =
+        db
+          .select({ projectID: EngineTaskTable.project_id })
+          .from(EngineTaskTable)
+          .where(eq(EngineTaskTable.id, projectTaskID))
+          .get()?.projectID ?? null
+      if (input.aggregate === "task" && !projectID) {
+        throw new Error(`Protocol Task event ${input.type} references missing Task ${projectTaskID}`)
+      }
+    }
     if (
       sessionReferenceID &&
       !exactPhysicalDeletion &&
@@ -201,6 +215,7 @@ function insertProtocolEvent(
         type: input.type,
         aggregate_type: input.aggregate,
         aggregate_id: input.aggregate_id,
+        project_id: projectID,
         task_id: relatedTaskID,
         session_id: relatedSessionID,
         interaction_id: input.interaction_id ?? null,
@@ -223,6 +238,7 @@ function insertProtocolEvent(
     type: input.type,
     aggregate_type: input.aggregate,
     aggregate_id: input.aggregate_id,
+    project_id: projectID,
     task_id: relatedTaskID,
     session_id: relatedSessionID,
     interaction_id: input.interaction_id ?? null,
@@ -548,7 +564,11 @@ export namespace ProtocolStore {
         ownerOccurrenceID: input.ownerOccurrenceID,
         now: input.now,
       })
-      const session = db.select({ id: SessionTable.id }).from(SessionTable).where(eq(SessionTable.id, input.sessionID)).get()
+      const session = db
+        .select({ id: SessionTable.id })
+        .from(SessionTable)
+        .where(eq(SessionTable.id, input.sessionID))
+        .get()
       if (!session) throw new Error(`Physical deletion authority references missing Session ${input.sessionID}`)
     })
     return {

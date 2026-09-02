@@ -1,5 +1,4 @@
 import {
-  CoordinationRequestEvidenceLocatorSchema,
   EngineArtifactLocatorSchema,
   type EngineArtifactLocator,
 } from "@opencorvus-ai/plugin/artifact-catalog"
@@ -10,14 +9,41 @@ import {
 } from "@/engine/dispatch-occurrence-authority"
 import { Identifier } from "@/id/id"
 
-const IdentifierSchema = z.string().min(1).max(512)
 const MESSAGE_LIMIT = 4_096
+
+/** SQLite length() and this durable parser both count Unicode code points.
+ * JavaScript's native string.length counts UTF-16 code units and is not a
+ * portable persistence boundary for astral characters. */
+function codePointBoundedString(maximum: number) {
+  return z
+    .string()
+    .min(1)
+    .refine((value) => [...value].length <= maximum, { message: `String must contain at most ${maximum} code points` })
+}
+
+const IdentifierSchema = codePointBoundedString(512)
+const InfrastructureMessageSchema = codePointBoundedString(MESSAGE_LIMIT)
+const CanonicalQuestionIdentifierSchema = z
+  .string()
+  .regex(Identifier.canonicalPattern("question"))
+  .refine((value) => [...value].length <= 512, { message: "Question identity must contain at most 512 code points" })
+const CoordinationRequestEvidenceLocatorSchema = z
+  .object({
+    source: z.literal("coordination_request"),
+    request_id: z
+      .string()
+      .regex(Identifier.canonicalPattern("artifact"))
+      .refine((value) => [...value].length <= 512, {
+        message: "Coordination request identity must contain at most 512 code points",
+      }),
+  })
+  .strict()
 
 export const DispatchFailureIssueSchema = z
   .object({
     code: IdentifierSchema.optional(),
     path: z.array(z.union([z.string(), z.number().int()])),
-    message: z.string().min(1).max(MESSAGE_LIMIT),
+    message: InfrastructureMessageSchema,
   })
   .strict()
   .describe(
@@ -28,12 +54,14 @@ export type DispatchFailureIssue = z.infer<typeof DispatchFailureIssueSchema>
 
 function normalizeIdentifier(value: string, fallback: string): string {
   const normalized = value.trim()
-  return (normalized.length > 0 ? normalized : fallback).slice(0, 512)
+  return [...(normalized.length > 0 ? normalized : fallback)].slice(0, 512).join("")
 }
 
 function normalizeInfrastructureMessage(value: string): string {
   const normalized = value.trim()
-  return (normalized.length > 0 ? normalized : "Unknown infrastructure failure").slice(0, MESSAGE_LIMIT)
+  return [...(normalized.length > 0 ? normalized : "Unknown infrastructure failure")]
+    .slice(0, MESSAGE_LIMIT)
+    .join("")
 }
 
 function normalizeFailureIssues(
@@ -67,7 +95,7 @@ export const DispatchInfrastructureFailureOutcomeSchema = z
   .object({
     kind: z.literal("infrastructure_failure"),
     operation: IdentifierSchema,
-    message: z.string().min(1).max(MESSAGE_LIMIT),
+    message: InfrastructureMessageSchema,
     recovery_authority: DispatchOccurrenceAuthoritySchema,
     session_id: IdentifierSchema.optional(),
     final_message_id: IdentifierSchema.optional().describe(
@@ -116,7 +144,7 @@ export const DispatchOutcomeSchema = z.discriminatedUnion("kind", [
     domain_artifact: EngineArtifactLocatorSchema,
     blocking_question: z
       .object({
-        request_id: Identifier.schema("question"),
+        request_id: CanonicalQuestionIdentifierSchema,
         status: z.enum(["rejected", "expired"]),
       })
       .strict(),

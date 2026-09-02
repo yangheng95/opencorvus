@@ -8,6 +8,7 @@ import { OrchestratorEventSchema } from "@/orchestrator/event"
 import { authorizedTaskRootMessagesForWake } from "@/orchestrator/interaction-tools"
 import { ProtocolStore } from "@/protocol/store"
 import { orchestratorControlOccurrenceIdentity } from "@/orchestrator/control-message-identity"
+import { Identifier } from "@/id/id"
 
 afterEach(() => {
   ;(ProtocolStore.requireEvent as { mockRestore?: () => void }).mockRestore?.()
@@ -101,6 +102,8 @@ test("Mission acceptance resume projects current message authority and real-deci
 })
 
 test("agent lifecycle delivery projects its exact current occurrence", () => {
+  const wakeID = Identifier.deterministic("artifact", "mission-resume-lifecycle-wake")
+  const predecessorID = Identifier.deterministic("message", "mission-resume-lifecycle-predecessor")
   const requireEvent = spyOn(ProtocolStore, "requireEvent").mockReturnValue({
     id: "pev_worker_terminal_delivery",
     kind: "event",
@@ -129,10 +132,10 @@ test("agent lifecycle delivery projects its exact current occurrence", () => {
       },
     }),
     "tsk_lifecycle_delivery",
-    "art_lifecycle_delivery_wake",
+    wakeID,
   )
 
-  expect(notice).toContain("Current durable wake occurrence=art_lifecycle_delivery_wake")
+  expect(notice).toContain(`Current durable wake occurrence=${wakeID}`)
   expect(notice).toContain("CURRENT LIFECYCLE CONTROL FACT")
   expect(notice).toContain("event_id=pev_worker_terminal_delivery")
   expect(notice).toContain("session_id=ses_worker_terminal_delivery")
@@ -152,15 +155,15 @@ test("agent lifecycle delivery projects its exact current occurrence", () => {
       },
     }),
     "tsk_lifecycle_delivery",
-    "art_lifecycle_delivery_wake",
-    "msg_prior_lifecycle_turn",
+    wakeID,
+    predecessorID,
   )!
   expect(control).toMatchObject({
-    ...orchestratorControlOccurrenceIdentity("art_lifecycle_delivery_wake", "msg_prior_lifecycle_turn"),
+    ...orchestratorControlOccurrenceIdentity(wakeID, predecessorID),
     extra: {
       orchestrator_control_ingress: {
-        ingress_id: "art_lifecycle_delivery_wake",
-        predecessor_id: "msg_prior_lifecycle_turn",
+        ingress_id: wakeID,
+        predecessor_id: predecessorID,
       },
     },
   })

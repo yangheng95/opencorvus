@@ -944,6 +944,8 @@ export type EventArtifactPersisted = {
       | "goal_workload"
       | "dispatch_lineage"
       | "dispatch_settlement"
+      | "dispatch_delivery_disposition"
+      | "task_root_ingress_disposition"
       | "mission_acceptance_resume_receipt"
       | "task_acceptance_ledger"
       | "task_checkpoint_settlement"
@@ -8316,6 +8318,19 @@ export type ExperimentalWorkspaceRemoveErrors = {
         }
         name: "LogFileNotFoundError"
       }
+  /**
+   * Conflict
+   */
+  409: {
+    data: {
+      [key: string]: unknown
+    }
+    name: "TaskCancellationIncompleteError"
+  }
+  /**
+   * Required ownership authority could not be observed safely
+   */
+  503: WorktreeOwnershipObservationError
 }
 
 export type ExperimentalWorkspaceRemoveError =
@@ -8352,6 +8367,19 @@ export type ExperimentalWorkspaceCreateErrors = {
    * Bad request
    */
   400: BadRequestError
+  /**
+   * Conflict
+   */
+  409: {
+    data: {
+      [key: string]: unknown
+    }
+    name: "TaskCancellationIncompleteError"
+  }
+  /**
+   * Required ownership authority could not be observed safely
+   */
+  503: WorktreeOwnershipObservationError
 }
 
 export type ExperimentalWorkspaceCreateError =
@@ -29015,6 +29043,8 @@ export type TaskBoardResponses = {
         | "goal_workload"
         | "dispatch_lineage"
         | "dispatch_settlement"
+        | "dispatch_delivery_disposition"
+        | "task_root_ingress_disposition"
         | "mission_acceptance_resume_receipt"
         | "task_acceptance_ledger"
         | "task_checkpoint_settlement"
@@ -31049,6 +31079,8 @@ export type TaskConversationResponses = {
           | "goal_workload"
           | "dispatch_lineage"
           | "dispatch_settlement"
+          | "dispatch_delivery_disposition"
+          | "task_root_ingress_disposition"
           | "mission_acceptance_resume_receipt"
           | "task_acceptance_ledger"
           | "task_checkpoint_settlement"

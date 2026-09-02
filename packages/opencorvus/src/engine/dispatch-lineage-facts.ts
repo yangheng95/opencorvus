@@ -10,6 +10,7 @@ import { SelectedWorkflowBindingSchema, type SelectedWorkflowBinding } from "./w
 export interface DispatchLineagePayload extends EngineMetadata {
   dispatch_id: string
   task_id: string
+  execution_epoch: number
   orchestrator_session_id: string
   orchestrator_message_id: string
   tool_part_id: string
@@ -53,6 +54,7 @@ const DispatchLineagePayloadSchema = z
   .object({
     dispatch_id: z.string().min(1),
     task_id: z.string().min(1),
+    execution_epoch: z.number().int().positive().max(Number.MAX_SAFE_INTEGER),
     orchestrator_session_id: z.string().min(1),
     orchestrator_message_id: z.string().min(1),
     tool_part_id: z.string().min(1),
@@ -72,10 +74,17 @@ const DispatchLineagePayloadSchema = z
     continuation_of_dispatch_id: z.string().min(1).optional(),
     delivery_owner: DispatchDeliveryOwnerSchema,
     adapter_input: z.record(z.string(), z.unknown()),
-    time_created: z.number().positive(),
+    time_created: z.number().positive().max(Number.MAX_SAFE_INTEGER),
   })
   .strict()
   .superRefine((payload, context) => {
+    if (payload.target_agent_id !== payload.projected_worker_identity.agentID) {
+      context.addIssue({
+        code: "custom",
+        path: ["target_agent_id"],
+        message: "dispatch lineage target must equal the projected worker agent identity",
+      })
+    }
     if (payload.tool_name === "dispatch_agent") {
       if (payload.collection_member_index !== undefined || payload.collection_member_count !== undefined) {
         context.addIssue({
@@ -166,6 +175,11 @@ export function dispatchLineageRow(row: typeof EngineArtifactTable.$inferSelect)
   if (payload.task_id !== row.task_id) {
     throw new Error(`Invalid dispatch_lineage artifact ${row.id}: payload Task ${payload.task_id} != ${row.task_id}`)
   }
+  if (payload.time_created !== row.time_created) {
+    throw new Error(
+      `Invalid dispatch_lineage artifact ${row.id}: payload time ${payload.time_created} != ${row.time_created}`,
+    )
+  }
   return {
     artifactID: row.id,
     taskID: row.task_id,
@@ -180,7 +194,7 @@ export function findDispatchLineageByDispatchIDInTransaction(input: {
   taskID: string
   dispatchID: string
 }): DispatchLineageRow | undefined {
-  const matches = input.db
+  const match = input.db
     .select()
     .from(EngineArtifactTable)
     .where(
@@ -190,11 +204,6 @@ export function findDispatchLineageByDispatchIDInTransaction(input: {
         sql`json_extract(${EngineArtifactTable.payload}, '$.dispatch_id') = ${input.dispatchID}`,
       ),
     )
-    .orderBy(asc(EngineArtifactTable.time_created), asc(EngineArtifactTable.id))
-    .all()
-    .map(dispatchLineageRow)
-  if (matches.length > 1) {
-    throw new Error(`Dispatch identity ${input.dispatchID} has ${matches.length} lineages in Task ${input.taskID}`)
-  }
-  return matches[0]
+    .get()
+  return match ? dispatchLineageRow(match) : undefined
 }

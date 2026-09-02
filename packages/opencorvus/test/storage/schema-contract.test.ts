@@ -35,6 +35,8 @@ import { persistEstablishedTask } from "../fixture/engine-task"
 import { memoryProject } from "../fixture/memory"
 import { MemoryChunkTable, MemoryEmbeddingTable, MemoryFileTable } from "../../src/memory/memory.sql"
 import { Server } from "../../src/server/server"
+import { TestHooks as TaskControlTestHooks } from "../../src/engine/task-root-ingress-delivery"
+import { restartTaskControlProjectFrontier } from "../../src/engine/task-root-ingress-disposition"
 
 test("creates the complete pre-0.1.0 schema directly from the canonical DDL", () => {
   const sqlite = new BunDatabase(":memory:")
@@ -534,6 +536,9 @@ test("round-trips one production-written current Task through the strict transfe
           }).run()
         })
 
+        const frontierBeforeImport = TaskControlTestHooks.currentProjectFrontierSlice()
+        expect(frontierBeforeImport.taskIDs).toContain(taskID)
+        const preImportCursor = restartTaskControlProjectFrontier(frontierBeforeImport.checkpoint)
         const snapshot = exportMysqlTransferSnapshot()
         const plan = preflightMysqlTransferSnapshot(snapshot)
         expect(plan.schemaFingerprint).toBe(snapshot.schemaFingerprint)
@@ -810,6 +815,9 @@ test("round-trips one production-written current Task through the strict transfe
             { name: "engine_task_root_ingress", rows: 1 },
           ]),
         })
+        expect(TaskControlTestHooks.currentProjectFrontierSlice(preImportCursor).taskIDs).toContain(
+          taskID,
+        )
         expect(
           Database.use((db) =>
             db

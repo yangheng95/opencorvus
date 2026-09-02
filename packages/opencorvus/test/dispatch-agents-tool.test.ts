@@ -121,16 +121,20 @@ describe("dispatch_agents canonical collection occurrence", () => {
         const input = frontierInput(["a", "b"])
         const identity = await persistedOuter(input)
         const invocations: unknown[] = []
-        const frontier = DispatchAgentsToolTestHooks.create({
-          inputSchema: childSchema,
-          execute: async (_request: unknown, options: unknown) => {
-            invocations.push(options)
-            return DispatchOutcome.accepted({
-              sessionID: Identifier.descending("session"),
-              dispatchLineageID: Identifier.ascending("artifact"),
-            })
+        const frontier = DispatchAgentsToolTestHooks.create(
+          {
+            inputSchema: childSchema,
+            execute: async (_request: unknown, options: unknown) => {
+              invocations.push(options)
+              return DispatchOutcome.accepted({
+                sessionID: Identifier.descending("session"),
+                dispatchLineageID: Identifier.ascending("artifact"),
+              })
+            },
           },
-        })
+          {},
+          childSchema,
+        )
         if (!frontier.execute) throw new Error("dispatch_agents has no executor")
         const result = (await frontier.execute(input as never, executionOptions(identity) as never)) as {
           output: string
@@ -175,16 +179,20 @@ describe("dispatch_agents canonical collection occurrence", () => {
         const input = frontierInput(["a", "b", "c"])
         const identity = await persistedOuter(input)
         const observed: string[] = []
-        const frontier = DispatchAgentsToolTestHooks.create({
-          inputSchema: childSchema,
-          execute: async (request: { dispatch: { target: string } }, options: any) => {
-            observed.push(`${request.dispatch.target}:${options.opencorvus.collectionMember.index}`)
-            return DispatchOutcome.accepted({
-              sessionID: Identifier.descending("session"),
-              dispatchLineageID: Identifier.ascending("artifact"),
-            })
+        const frontier = DispatchAgentsToolTestHooks.create(
+          {
+            inputSchema: childSchema,
+            execute: async (request: { dispatch: { target: string } }, options: any) => {
+              observed.push(`${request.dispatch.target}:${options.opencorvus.collectionMember.index}`)
+              return DispatchOutcome.accepted({
+                sessionID: Identifier.descending("session"),
+                dispatchLineageID: Identifier.ascending("artifact"),
+              })
+            },
           },
-        })
+          {},
+          childSchema,
+        )
         if (!frontier.execute) throw new Error("dispatch_agents has no executor")
         const first = await frontier.execute(input as never, executionOptions(identity) as never)
         const replay = await frontier.execute(input as never, executionOptions(identity) as never)
@@ -204,13 +212,18 @@ describe("dispatch_agents canonical collection occurrence", () => {
       fn: async () => {
         const persisted = frontierInput(["a"])
         const identity = await persistedOuter(persisted)
-        const frontier = DispatchAgentsToolTestHooks.create({
-          inputSchema: childSchema,
-          execute: async () => DispatchOutcome.accepted({
-            sessionID: Identifier.descending("session"),
-            dispatchLineageID: Identifier.ascending("artifact"),
-          }),
-        })
+        const frontier = DispatchAgentsToolTestHooks.create(
+          {
+            inputSchema: childSchema,
+            execute: async () =>
+              DispatchOutcome.accepted({
+                sessionID: Identifier.descending("session"),
+                dispatchLineageID: Identifier.ascending("artifact"),
+              }),
+          },
+          {},
+          childSchema,
+        )
         if (!frontier.execute) throw new Error("dispatch_agents has no executor")
         await expect(
           frontier.execute(frontierInput(["b"]) as never, executionOptions(identity) as never),
@@ -228,16 +241,20 @@ describe("dispatch_agents canonical collection occurrence", () => {
       fn: async () => {
         const input = frontierInput(["a", "b"])
         const identity = await persistedOuter(input)
-        const frontier = DispatchAgentsToolTestHooks.create({
-          inputSchema: childSchema,
-          execute: async (request: { dispatch: { target: string } }) => {
-            if (request.dispatch.target === "b") throw new Error("member b admission failed")
-            return DispatchOutcome.accepted({
-              sessionID: Identifier.descending("session"),
-              dispatchLineageID: Identifier.ascending("artifact"),
-            })
+        const frontier = DispatchAgentsToolTestHooks.create(
+          {
+            inputSchema: childSchema,
+            execute: async (request: { dispatch: { target: string } }) => {
+              if (request.dispatch.target === "b") throw new Error("member b admission failed")
+              return DispatchOutcome.accepted({
+                sessionID: Identifier.descending("session"),
+                dispatchLineageID: Identifier.ascending("artifact"),
+              })
+            },
           },
-        })
+          {},
+          childSchema,
+        )
         if (!frontier.execute) throw new Error("dispatch_agents has no executor")
         const result = (await frontier.execute(input as never, executionOptions(identity) as never)) as {
           output: string
@@ -263,13 +280,17 @@ describe("dispatch_agents canonical collection occurrence", () => {
         const identity = await persistedOuter(input)
         const controller = new AbortController()
         const reason = new DOMException("caller stopped collection", "AbortError")
-        const frontier = DispatchAgentsToolTestHooks.create({
-          inputSchema: childSchema,
-          execute: async () => {
-            controller.abort(reason)
-            controller.signal.throwIfAborted()
+        const frontier = DispatchAgentsToolTestHooks.create(
+          {
+            inputSchema: childSchema,
+            execute: async () => {
+              controller.abort(reason)
+              controller.signal.throwIfAborted()
+            },
           },
-        })
+          {},
+          childSchema,
+        )
         if (!frontier.execute) throw new Error("dispatch_agents has no executor")
         let failure: unknown
         try {

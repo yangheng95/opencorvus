@@ -180,14 +180,27 @@ RequirementSet、ContractGraph 和 evidence artifact 引用同样由
 
 `engine_artifact.payload` 的严格领域 schema 也是持久化契约。任何让既有 row 无法被当前
 严格 reader 解释的 breaking payload 变更，必须在同一提交里修改 canonical
-`SCHEMA_DDL` 的对应数据完整性 trigger，并登记精确前置 schema 指纹与 payload 转换，
-使非空旧 Database 在业务读取前事务化升级；未知 drift 以 `SCHEMA_MIGRATION_REQUIRED`
-失败关闭。禁止只升级 Zod reader 后让旧 payload 在任意 Board、
-Conversation 或 continuation 读取点才抛出普通错误，也禁止用 optional 字段、默认值、
-row patch 或兼容 reader 猜测新权威。`dispatch_lineage.adapter_input` 由
+`SCHEMA_DDL` 的对应数据完整性 trigger，形成新的唯一 current-schema 指纹。启动时只读
+比较完整 schema/object 指纹和 current 数据完整性；任何旧 schema、payload epoch、trigger
+差异或未知 drift 都在业务读取前以 `SCHEMA_RESET_REQUIRED` 失败关闭，并要求用户显式重建
+Database。当前产品不执行 historical migration、payload conversion、trigger repair、兼容
+reader 或双读写。禁止只升级 Zod reader 后让旧 payload 在任意 Board、Conversation 或
+continuation 读取点才抛出普通错误，也禁止用 optional 字段、默认值或 row patch 猜测新权威。
+`dispatch_lineage` 的整个 payload 由
 `engine_dispatch_lineage_payload_insert` 约束为精确 JSON（JavaScript Object Notation，
-JavaScript 对象表示法）object，整个 lineage row 不可更新；它的 breaking 变更必须同步改变
-该 trigger，形成显式 current-DDL 结构断点。
+JavaScript 对象表示法）shape：顶层 key、Tool occurrence、projected worker identity、Task work
+scope、Delivery Slice revision、delivery owner、adapter input 与创建时间必须完整且无重复 key；
+projected target、runtime template、Session kind 与 dispatch adapter 必须属于同一执行身份。整个
+lineage row 不可更新；它的 breaking 变更必须同步改变该 trigger，形成显式 current-DDL 结构断点。
+MySQL transfer 的 preflight 与 apply 都在 current `SCHEMA_DDL` 下恢复 snapshot，所以 malformed
+lineage 在替换本地数据库之前失败关闭，不存在 transfer-only parser 或兼容 reader。
+
+Dispatch recovery 每次最多接收 64 个去重的 exact
+`(task_id, child_session_id, dispatch_id)` descriptor。lineage 查询按完整 triple 命中；后续
+delivery disposition、settlement ingress 与 terminal lifecycle ingress 只消费实际命中的
+descriptor，并通过 bounded `VALUES` request 与 correlated `EXISTS` 返回每个 request 至多一行。
+不能把独立 Task ID 集合和 dispatch ID 集合做笛卡尔候选，也不能让重复 ingress fact 放大立即事务内
+的读取量。lifecycle membership 还必须匹配 descriptor 的 exact child Session。
 
 TaskArtifact 的 Engine envelope 与 exact resource identity 进入 SQLite，当前不可变
 manifest 和资源字节则由 TaskArtifactStore 发布。资源完整性错误必须由 exact
@@ -486,9 +499,9 @@ Extensions，多用途互联网邮件扩展类型）、文件名和扩展名都�
 `AttachmentStore` 只负责 canonical bytes 与 metadata sidecar，也不拥有领域语义。
 每个物理 project attachment 目录还必须由 `.authority.json` 绑定到唯一
 `project_id`、解析后的 worktree 和 Database 内部持久实例 ID。该实例 ID 在结构严格匹配的
-普通 reopen 和已登记 schema migration 后保持不变，在同一路径显式 reset、删除重建或
-fresh rebuild 后变化；未知 schema drift 只返回 `SCHEMA_MIGRATION_REQUIRED`，不会猜测
-refresh、重写该身份或选择 migration。
+current-schema 普通 reopen 中保持不变，在同一路径显式 reset、删除重建或 fresh rebuild 后变化；
+不匹配的旧 schema 或未知 drift 只返回 `SCHEMA_RESET_REQUIRED`，不会猜测 refresh、重写该身份
+或选择 migration。
 它是本机物理 Database metadata，不进入 MySQL transfer schema 或 snapshot；import
 目标在业务数据恢复后生成自己的新实例 ID。
 首次绑定时，空目录可由当前 Database 认领；已有 blobs 的旧目录只有在全部 blobs 都被

@@ -1,16 +1,16 @@
-import { Identifier } from "@/id/id"
-
 /** One real continuation edge is identified only by its business ingress and
- * exact predecessor. Ordinals and attempts are derived from the chain. */
+ * exact predecessor. The reversible current-epoch identity lets SQLite enforce
+ * the same occurrence without a second binding table or a hash extension. */
 export function orchestratorControlOccurrenceIdentity(ingressID: string, predecessorID: string) {
-  const ingress = ingressID.trim()
-  const predecessor = predecessorID.trim()
-  if (!ingress || !predecessor) {
-    throw new Error("Orchestrator control occurrence requires exact ingress and predecessor identities")
+  if (!/^art_h[A-Za-z0-9]{19}$/.test(ingressID)) {
+    throw new Error("Orchestrator control occurrence requires one canonical Task-root ingress identity")
   }
-  const material = `orchestrator-control-v2\0${ingress}\0${predecessor}`
+  if (!/^(?:art|msg)_[gh-][A-Za-z0-9]{19}$/.test(predecessorID)) {
+    throw new Error("Orchestrator control occurrence requires one canonical predecessor identity")
+  }
+  const suffix = `task-root-control_${ingressID}_${predecessorID}`
   return {
-    messageID: Identifier.deterministic("message", material),
-    partID: Identifier.deterministic("part", material),
+    messageID: `msg_${suffix}`,
+    partID: `prt_${suffix}`,
   }
 }

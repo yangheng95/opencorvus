@@ -61,16 +61,31 @@ function insertToolBackedWaits(
   const ingressID = `ing_creator_${input.suffix}`
   const activationID = `lease_creator_${input.suffix}`
   const messageID = `msg_creator_${input.suffix}`
-  db.query(`
+  db.query(
+    `
     INSERT INTO engine_task_root_ingress(
-      id,task_id,execution_epoch,sequence,source,source_id,inline_payload,policy_id,time_accepted
-    ) VALUES (?,?,?,?,?,?,?,?,?)
-  `).run(ingressID, "tsk_lineage", 1, 0, "inline", ingressID, '{"purpose":"Task wait creator"}', "pol_lineage", 5)
-  db.query(`
+      id,task_id,project_id,execution_epoch,sequence,source,source_id,inline_payload,policy_id,time_accepted
+    ) VALUES (?,?,?,?,?,?,?,?,?,?)
+  `,
+  ).run(
+    ingressID,
+    "tsk_lineage",
+    "prj_lineage",
+    1,
+    0,
+    "inline",
+    ingressID,
+    '{"purpose":"Task wait creator"}',
+    "pol_lineage",
+    5,
+  )
+  db.query(
+    `
     INSERT INTO engine_control_activation_lease(
       id,target,target_id,owner_occurrence_id,time_activated,expires_at
     ) VALUES (?,?,?,?,?,?)
-  `).run(activationID, "task_root_ingress", ingressID, `owner:${input.suffix}`, 6, 1_000)
+  `,
+  ).run(activationID, "task_root_ingress", ingressID, `owner:${input.suffix}`, 6, 1_000)
   insertMessage(db, {
     id: messageID,
     sessionID: "ses_creator",
@@ -95,14 +110,17 @@ function insertToolBackedWaits(
       }),
       7,
     )
-    db.query(`
+    db.query(
+      `
       INSERT INTO engine_task_wait_registration(
-        id,task_id,execution_epoch,due_at,reason,tool_part_id,
+        id,task_id,project_id,execution_epoch,due_at,reason,tool_part_id,
         creator_ingress_id,creator_activation_id,input_digest,time_created
-      ) VALUES (?,?,?,?,?,?,?,?,?,?)
-    `).run(
+      ) VALUES (?,?,?,?,?,?,?,?,?,?,?)
+    `,
+    ).run(
       wait.id,
       "tsk_lineage",
+      "prj_lineage",
       1,
       wait.dueAt,
       wait.reason,
@@ -120,7 +138,8 @@ describe("scheduling occurrence DDL lineage", () => {
     const db = currentDatabase()
     try {
       const plan = db
-        .query<{ detail: string }, []>(`
+        .query<{ detail: string }, []>(
+          `
           EXPLAIN QUERY PLAN
           SELECT id
           FROM engine_artifact
@@ -131,12 +150,348 @@ describe("scheduling occurrence DDL lineage", () => {
             AND json_extract(payload,'$.workflow_node_id')='node-a'
             AND json_type(payload,'$.continuation_of_dispatch_id') IS NULL
             AND json_type(payload,'$.coordination_action_id') IS NULL
-        `)
+        `,
+        )
         .all()
         .map((row) => row.detail)
-      expect(plan).toEqual([
-        expect.stringContaining("engine_dispatch_lineage_initial_workflow_node_idx"),
+      expect(plan).toEqual([expect.stringContaining("engine_dispatch_lineage_initial_workflow_node_idx")])
+    } finally {
+      db.close(true)
+    }
+  })
+
+  test("uses exact dispatch and Task-root disposition indexes for bounded recovery", () => {
+    const db = currentDatabase()
+    try {
+      const dispatchPlans = [
+        db
+          .query<{ detail: string }, []>(
+            `
+          EXPLAIN QUERY PLAN SELECT id FROM engine_artifact
+          WHERE task_id='tsk_lineage' AND kind='dispatch_lineage'
+            AND json_extract(payload,'$.dispatch_id')='dispatch-a'
+        `,
+          )
+          .all(),
+        db
+          .query<{ detail: string }, []>(
+            `
+          EXPLAIN QUERY PLAN SELECT id FROM engine_artifact
+          WHERE task_id='tsk_lineage' AND kind='dispatch_settlement'
+            AND json_extract(payload,'$.dispatch_id')='dispatch-a'
+        `,
+          )
+          .all(),
+        db
+          .query<{ detail: string }, []>(
+            `
+          EXPLAIN QUERY PLAN SELECT id FROM worker_turn_descriptor
+          WHERE session_id='ses_worker'
+            AND json_extract(payload,'$.dispatchTurn.current_dispatch_id')='dispatch-a'
+        `,
+          )
+          .all(),
+      ].map((rows) => rows.map((row) => row.detail).join("\n"))
+      expect(dispatchPlans).toEqual([
+        expect.stringContaining("engine_dispatch_lineage_dispatch_id_idx"),
+        expect.stringContaining("engine_dispatch_settlement_dispatch_id_idx"),
+        expect.stringContaining("worker_turn_descriptor_dispatch_idx"),
       ])
+      const rawRecoveryPlan = db
+        .query<{ detail: string }, []>(
+          `
+          EXPLAIN QUERY PLAN
+          SELECT rowid,id
+          FROM worker_turn_descriptor
+          WHERE task_id='tsk_lineage' AND rowid>0
+          ORDER BY rowid
+          LIMIT 32
+        `,
+        )
+        .all()
+        .map((row) => row.detail)
+      const recoveryPlan = db
+        .query<{ detail: string }, []>(
+          `
+          EXPLAIN QUERY PLAN
+          SELECT lineage.id
+          FROM engine_artifact AS lineage
+          WHERE lineage.task_id='tsk_lineage'
+            AND lineage.kind='dispatch_lineage'
+            AND lineage.id IN ('art_dispatch_page_member')
+            AND NOT EXISTS (
+              SELECT 1 FROM engine_artifact disposition
+              WHERE disposition.task_id=lineage.task_id
+                AND disposition.kind='dispatch_delivery_disposition'
+                AND json_extract(disposition.payload,'$.dispatch_id')=json_extract(lineage.payload,'$.dispatch_id')
+            )
+            AND NOT EXISTS (
+              SELECT 1
+              FROM engine_task_root_ingress ingress
+              JOIN engine_artifact settlement
+                ON settlement.task_id=lineage.task_id
+               AND settlement.kind='dispatch_settlement'
+               AND json_extract(settlement.payload,'$.dispatch_id')=json_extract(lineage.payload,'$.dispatch_id')
+              WHERE ingress.task_id=lineage.task_id
+                AND ingress.source='engine_artifact'
+                AND (
+                  ingress.source_id=settlement.id
+                  OR ingress.source_id=json_extract(settlement.payload,'$.outcome.infrastructure_error.artifact_id')
+                )
+            )
+            AND NOT EXISTS (
+              SELECT 1
+              FROM engine_task_root_ingress ingress
+              JOIN protocol_event lifecycle ON lifecycle.id=ingress.source_id
+              JOIN worker_turn_descriptor descriptor
+                ON descriptor.session_id=json_extract(lineage.payload,'$.child_session_id')
+               AND json_extract(descriptor.payload,'$.dispatchTurn.current_dispatch_id')
+                 = json_extract(lineage.payload,'$.dispatch_id')
+              WHERE ingress.task_id=lineage.task_id
+                AND ingress.source='protocol_event'
+                AND lifecycle.type='agent.execution.lifecycle'
+                AND lifecycle.aggregate_type='task'
+                AND lifecycle.aggregate_id=lineage.task_id
+                AND lifecycle.session_id=json_extract(lineage.payload,'$.child_session_id')
+                AND json_extract(lifecycle.payload,'$.inputMessageID')
+                  = json_extract(descriptor.payload,'$.messageAuthority.user_message_id')
+                AND json_extract(lifecycle.payload,'$.status.type')='terminal'
+            )
+        `,
+        )
+        .all()
+        .map((row) => row.detail)
+      expect(rawRecoveryPlan.some((detail) => detail.includes("worker_turn_descriptor_task_frontier_idx"))).toBe(true)
+      expect(rawRecoveryPlan.some((detail) => detail.startsWith("SCAN worker_turn_descriptor"))).toBe(false)
+      expect(recoveryPlan.some((detail) => detail.includes("worker_turn_descriptor_dispatch_idx"))).toBe(true)
+      expect(
+        recoveryPlan.some((detail) => detail.includes("engine_dispatch_delivery_disposition_dispatch_id_idx")),
+      ).toBe(true)
+      expect(recoveryPlan.some((detail) => detail.includes("engine_dispatch_settlement_dispatch_id_idx"))).toBe(true)
+      expect(recoveryPlan.some((detail) => detail.includes("engine_task_root_ingress_source_idx"))).toBe(true)
+      expect(recoveryPlan.some((detail) => detail.includes("worker_turn_descriptor_dispatch_idx"))).toBe(true)
+      expect(recoveryPlan.some((detail) => detail.includes("protocol_event"))).toBe(true)
+      expect(
+        recoveryPlan.some((detail) =>
+          /SCAN (lineage|descriptor|disposition|settlement|lifecycle|ingress)/.test(detail),
+        ),
+      ).toBe(false)
+
+      db.exec(`
+        INSERT INTO engine_task_root_ingress(
+          id,task_id,project_id,execution_epoch,sequence,source,source_id,inline_payload,policy_id,time_accepted
+        ) VALUES ('ing_frontier','tsk_lineage','prj_lineage',1,1,'inline','frontier','{}','pol_lineage',10);
+      `)
+      const frontierPlan = db
+        .query<{ detail: string }, []>(
+          `
+        EXPLAIN QUERY PLAN
+        SELECT ingress.id
+        FROM engine_task_root_ingress AS ingress
+        WHERE ingress.task_id='tsk_lineage'
+          AND ingress.execution_epoch=1
+          AND NOT EXISTS (
+            SELECT 1 FROM engine_artifact disposition
+            WHERE disposition.task_id=ingress.task_id
+              AND disposition.kind='task_root_ingress_disposition'
+              AND json_extract(disposition.payload,'$.ingress_id')=ingress.id
+          )
+        ORDER BY ingress.sequence,ingress.id
+        LIMIT 32
+      `,
+        )
+        .all()
+        .map((row) => row.detail)
+      expect(
+        frontierPlan.some(
+          (detail) =>
+            detail.includes("engine_task_root_ingress_epoch_idx") ||
+            detail.includes("engine_task_root_ingress_sequence_idx"),
+        ),
+      ).toBe(true)
+      expect(frontierPlan.some((detail) => detail.startsWith("SCAN ingress"))).toBe(false)
+      expect(frontierPlan.some((detail) => detail.includes("engine_task_root_ingress_disposition_ingress_idx"))).toBe(
+        true,
+      )
+    } finally {
+      db.close(true)
+    }
+  })
+
+  test("uses four bounded immutable source frontiers instead of traversing Project Task history", () => {
+    const db = currentDatabase()
+    try {
+      const sourcePlans = [
+        `SELECT rowid,id,task_id FROM engine_task_root_ingress
+         WHERE project_id='prj_lineage' AND rowid>0 ORDER BY rowid LIMIT 8`,
+        `SELECT rowid,id,task_id FROM engine_task_wait_registration
+         WHERE project_id='prj_lineage' AND rowid>0 ORDER BY rowid LIMIT 8`,
+        `SELECT rowid,id,aggregate_id FROM protocol_event
+         WHERE project_id='prj_lineage' AND aggregate_type='task' AND type='task.cancellation.requested'
+           AND rowid>0 ORDER BY rowid LIMIT 8`,
+        `SELECT rowid,id,task_id FROM worker_turn_descriptor
+         WHERE project_id='prj_lineage' AND rowid>0 ORDER BY rowid LIMIT 8`,
+      ].map((query) =>
+        db
+          .query<{ detail: string }, []>(`EXPLAIN QUERY PLAN ${query}`)
+          .all()
+          .map((row) => row.detail),
+      )
+      const classificationPlans = [
+        `SELECT ingress.id,ingress.task_id,ingress.time_accepted
+         FROM engine_task_root_ingress ingress
+         WHERE ingress.id IN ('ing_frontier')
+           AND ingress.execution_epoch=(
+             SELECT MAX(json_extract(opened.payload,'$.execution_epoch'))
+             FROM protocol_event opened
+             WHERE opened.aggregate_type='task'
+               AND opened.aggregate_id=ingress.task_id
+               AND opened.type IN ('task.execution.opened','task.execution.reopened')
+           )
+           AND NOT EXISTS (
+             SELECT 1 FROM protocol_event terminal INDEXED BY protocol_event_task_epoch_terminal_idx
+             WHERE terminal.aggregate_type='task'
+               AND terminal.aggregate_id=ingress.task_id
+               AND terminal.type IN ('task.cancelled','task.completed','task.failed')
+               AND json_extract(terminal.payload,'$.execution_epoch')=ingress.execution_epoch
+               AND terminal.emitted_at>ingress.time_accepted
+           )
+           AND NOT EXISTS (
+             SELECT 1 FROM engine_artifact disposition
+             WHERE disposition.task_id=ingress.task_id
+               AND disposition.kind='task_root_ingress_disposition'
+               AND json_extract(disposition.payload,'$.ingress_id')=ingress.id
+           )
+           AND NOT EXISTS (
+             SELECT 1 FROM protocol_event deleted
+             WHERE deleted.aggregate_type='task' AND deleted.aggregate_id=ingress.task_id
+               AND deleted.type='task.deleted'
+           )
+        `,
+        `SELECT wait.id,wait.task_id,wait.due_at
+         FROM engine_task_wait_registration wait
+         WHERE wait.id IN ('wait_exact')
+           AND wait.execution_epoch=(
+             SELECT MAX(json_extract(opened.payload,'$.execution_epoch'))
+             FROM protocol_event opened
+             WHERE opened.aggregate_type='task'
+               AND opened.aggregate_id=wait.task_id
+               AND opened.type IN ('task.execution.opened','task.execution.reopened')
+           )
+           AND NOT EXISTS (
+             SELECT 1 FROM protocol_event terminal INDEXED BY protocol_event_task_epoch_terminal_idx
+             WHERE terminal.aggregate_type='task'
+               AND terminal.aggregate_id=wait.task_id
+               AND terminal.type IN ('task.cancelled','task.completed','task.failed')
+               AND json_extract(terminal.payload,'$.execution_epoch')=wait.execution_epoch
+           )
+           AND NOT EXISTS (
+             SELECT 1 FROM engine_task_wait_settlement settlement WHERE settlement.wait_id=wait.id
+           )
+           AND NOT EXISTS (
+             SELECT 1 FROM protocol_event deleted
+             WHERE deleted.aggregate_type='task' AND deleted.aggregate_id=wait.task_id
+               AND deleted.type='task.deleted'
+           )
+        `,
+        `SELECT cancellation.id,cancellation.aggregate_id,cancellation.emitted_at
+         FROM protocol_event cancellation
+         WHERE cancellation.id IN ('pev_frontier')
+           AND cancellation.aggregate_type='task'
+           AND cancellation.type='task.cancellation.requested'
+           AND NOT EXISTS (
+             SELECT 1 FROM protocol_event later_boundary
+             WHERE later_boundary.aggregate_type='task'
+               AND later_boundary.aggregate_id=cancellation.aggregate_id
+               AND later_boundary.seq>cancellation.seq
+               AND later_boundary.type IN (
+                 'task.cancelled','task.completed','task.failed',
+                 'task.execution.opened','task.execution.reopened','task.deleted'
+               )
+           )
+        `,
+      ].map((query) =>
+        db
+          .query<{ detail: string }, []>(`EXPLAIN QUERY PLAN ${query}`)
+          .all()
+          .map((row) => row.detail),
+      )
+      for (const [index, expected] of [
+        [0, "engine_task_root_ingress_frontier_idx"],
+        [1, "engine_task_wait_due_frontier_idx"],
+        [2, "protocol_event_task_cancellation_frontier_idx"],
+        [3, "worker_turn_descriptor_project_frontier_idx"],
+      ] as const) {
+        expect(sourcePlans[index].some((detail) => detail.includes(expected))).toBe(true)
+        expect(sourcePlans[index].some((detail) => detail.includes("USE TEMP B-TREE"))).toBe(false)
+      }
+      const combinedPlan = classificationPlans.flat()
+      for (const index of [
+        "protocol_event_task_epoch_open_idx",
+        "protocol_event_task_epoch_terminal_idx",
+        "protocol_event_aggregate_seq_idx",
+        "engine_task_root_ingress_disposition_ingress_idx",
+      ]) {
+        expect(combinedPlan.some((detail) => detail.includes(index))).toBe(true)
+      }
+      for (const source of ["ingress", "wait", "cancellation"]) {
+        expect(combinedPlan.some((detail) => detail.startsWith(`SEARCH ${source}`) && detail.endsWith("(id=?)"))).toBe(
+          true,
+        )
+      }
+      expect(combinedPlan.some((detail) => detail.includes("USE TEMP B-TREE"))).toBe(false)
+      expect(combinedPlan.some((detail) => /SCAN (ingress|wait|cancellation|lineage)/.test(detail))).toBe(false)
+    } finally {
+      db.close(true)
+    }
+  })
+
+  test("binds every Project-keyed control source to its exact Task owner", () => {
+    const db = currentDatabase()
+    try {
+      db.exec(`
+        INSERT INTO project(id,worktree,sandboxes,generation,time_created,time_updated)
+        VALUES('prj_other','C:/other','[]','22222222-2222-4222-8222-222222222222',1,1);
+      `)
+      expect(() =>
+        db
+          .query(
+            `
+          INSERT INTO engine_task_root_ingress(
+            id,task_id,project_id,execution_epoch,sequence,source,source_id,policy_id,time_accepted
+          ) VALUES('ing_wrong_project','tsk_lineage','prj_other',1,1,'inline','wrong','pol_lineage',10);
+        `,
+          )
+          .run(),
+      ).toThrow("engine_task_root_ingress: Task Project authority mismatch")
+      expect(() =>
+        db
+          .query(
+            `
+          INSERT INTO protocol_event(
+            id,kind,type,aggregate_type,aggregate_id,project_id,source,seq,emitted_at,payload
+          ) VALUES(
+            'pev_wrong_project','event','task.cancellation.requested','task','tsk_lineage','prj_other',
+            'test',1,10,'{"execution_epoch":1}'
+          );
+        `,
+          )
+          .run(),
+      ).toThrow("protocol_event: Task Project authority mismatch")
+      expect(() =>
+        db
+          .query(
+            `
+          INSERT INTO worker_turn_descriptor(
+            id,task_id,project_id,session_id,hash,agent,payload,time_created,time_updated
+          ) VALUES(
+            'wtd_wrong_project','tsk_lineage','prj_other','ses_creator','hash','worker',
+            '{"lifecycle":{"taskID":"tsk_lineage"}}',10,10
+          );
+        `,
+          )
+          .run(),
+      ).toThrow("worker_turn_descriptor: Task Project or dispatch lineage authority mismatch")
     } finally {
       db.close(true)
     }
@@ -154,13 +509,7 @@ describe("scheduling occurrence DDL lineage", () => {
       db.exec("BEGIN")
       try {
         for (let index = 0; index < 500; index += 1) {
-          insert.run(
-            `atm_external_${index}`,
-            `atm_external_${index}`,
-            1,
-            `ses_external_${index}`,
-            `external ${index}`,
-          )
+          insert.run(`atm_external_${index}`, `atm_external_${index}`, 1, `ses_external_${index}`, `external ${index}`)
         }
         db.exec("COMMIT")
       } catch (error) {
@@ -169,7 +518,9 @@ describe("scheduling occurrence DDL lineage", () => {
       } finally {
         insert.finalize()
       }
-      const definitions = db.query<{ id: string }, []>(`
+      const definitions = db
+        .query<{ id: string }, []>(
+          `
         SELECT current.id
         FROM automation AS current
         WHERE current.session_id='ses_delay'
@@ -188,8 +539,12 @@ describe("scheduling occurrence DDL lineage", () => {
             WHERE tombstone.definition_id=current.definition_id
               AND tombstone.revision>=current.revision
           )
-      `).all()
-      const sessionPlan = db.query<{ detail: string }, []>(`
+      `,
+        )
+        .all()
+      const sessionPlan = db
+        .query<{ detail: string }, []>(
+          `
         EXPLAIN QUERY PLAN
         SELECT current.id
         FROM automation AS current
@@ -201,18 +556,25 @@ describe("scheduling occurrence DDL lineage", () => {
             WHERE candidate.definition_id=current.definition_id
               AND candidate.revision>current.revision
           )
-      `).all().map((row) => row.detail)
+      `,
+        )
+        .all()
+        .map((row) => row.detail)
       expect(definitions).toEqual([{ id: "atm_delay" }])
-      expect(sessionPlan.some((detail) =>
-        detail.includes("SEARCH current") && detail.includes("automation_session_delay_frontier_idx"),
-      )).toBe(true)
+      expect(
+        sessionPlan.some(
+          (detail) => detail.includes("SEARCH current") && detail.includes("automation_session_delay_frontier_idx"),
+        ),
+      ).toBe(true)
       expect(sessionPlan.some((detail) => detail.startsWith("SCAN current"))).toBe(false)
 
       db.exec(`
         INSERT INTO automation_fire(id,automation_revision_id,scheduled_due_at,origin,time_created)
         VALUES ('cal_frontier','atm_delay',100,'scheduled',100);
       `)
-      const firePlan = db.query<{ detail: string }, []>(`
+      const firePlan = db
+        .query<{ detail: string }, []>(
+          `
         EXPLAIN QUERY PLAN
         SELECT fire.id
         FROM automation_fire AS fire
@@ -221,7 +583,10 @@ describe("scheduling occurrence DDL lineage", () => {
           AND fire.origin='scheduled'
         ORDER BY fire.scheduled_due_at DESC,fire.time_created DESC,fire.id DESC
         LIMIT 1
-      `).all().map((row) => row.detail)
+      `,
+        )
+        .all()
+        .map((row) => row.detail)
       expect(
         firePlan.some(
           (detail) =>
@@ -251,11 +616,13 @@ describe("scheduling occurrence DDL lineage", () => {
 
       expect(() =>
         db
-          .query(`
+          .query(
+            `
             INSERT INTO automation_delay_settlement(
               definition_id,disposition,assistant_message_id,accepted_input_message_ids,time_created
             ) VALUES (?,?,?,?,?)
-          `)
+          `,
+          )
           .run("atm_delay", "input_accepted", "msg_missing", '["msg_input"]', 20),
       ).toThrow("automation_delay_settlement: invalid Session delay admission lineage")
 
@@ -271,23 +638,30 @@ describe("scheduling occurrence DDL lineage", () => {
       })
       expect(() =>
         db
-          .query(`
+          .query(
+            `
             INSERT INTO automation_delay_settlement(
               definition_id,disposition,assistant_message_id,accepted_input_message_ids,time_created
             ) VALUES (?,?,?,?,?)
-          `)
+          `,
+          )
           .run("atm_delay", "input_accepted", "msg_assistant", '["msg_other"]', 21),
       ).toThrow("automation_delay_settlement: invalid Session delay admission lineage")
 
-      db.query(`
+      db.query(
+        `
         INSERT INTO automation_delay_settlement(
           definition_id,disposition,assistant_message_id,accepted_input_message_ids,time_created
         ) VALUES (?,?,?,?,?)
-      `).run("atm_delay", "input_accepted", "msg_assistant", '["msg_input"]', 22)
+      `,
+      ).run("atm_delay", "input_accepted", "msg_assistant", '["msg_input"]', 22)
       expect(
-        db.query<{ assistant_message_id: string }, []>(
-          "SELECT assistant_message_id FROM automation_delay_settlement WHERE definition_id='atm_delay'",
-        ).get(),
+        db
+          .query<
+            { assistant_message_id: string },
+            []
+          >("SELECT assistant_message_id FROM automation_delay_settlement WHERE definition_id='atm_delay'")
+          .get(),
       ).toEqual({ assistant_message_id: "msg_assistant" })
     } finally {
       db.close(true)
@@ -341,23 +715,30 @@ describe("scheduling occurrence DDL lineage", () => {
 
       expect(() =>
         db
-          .query(`
+          .query(
+            `
             INSERT INTO automation_delay_settlement(
               definition_id,disposition,assistant_message_id,accepted_input_message_ids,fire_id,time_created
             ) VALUES (?,?,?,?,?,?)
-          `)
+          `,
+          )
           .run("atm_delay", "due_accepted", "msg_due_assistant", '["msg_wake"]', "cal_other", 30),
       ).toThrow("automation_delay_settlement: invalid Session delay admission lineage")
 
-      db.query(`
+      db.query(
+        `
         INSERT INTO automation_delay_settlement(
           definition_id,disposition,assistant_message_id,accepted_input_message_ids,fire_id,time_created
         ) VALUES (?,?,?,?,?,?)
-      `).run("atm_delay", "due_accepted", "msg_due_assistant", '["msg_wake"]', "cal_exact", 31)
+      `,
+      ).run("atm_delay", "due_accepted", "msg_due_assistant", '["msg_wake"]', "cal_exact", 31)
       expect(
-        db.query<{ fire_id: string }, []>(
-          "SELECT fire_id FROM automation_delay_settlement WHERE definition_id='atm_delay'",
-        ).get(),
+        db
+          .query<
+            { fire_id: string },
+            []
+          >("SELECT fire_id FROM automation_delay_settlement WHERE definition_id='atm_delay'")
+          .get(),
       ).toEqual({ fire_id: "cal_exact" })
     } finally {
       db.close(true)
@@ -378,42 +759,42 @@ describe("scheduling occurrence DDL lineage", () => {
       })
       db.exec(`
         INSERT INTO engine_task_root_ingress(
-          id,task_id,execution_epoch,sequence,source,source_id,policy_id,time_accepted
+          id,task_id,project_id,execution_epoch,sequence,source,source_id,policy_id,time_accepted
         ) VALUES (
-          'ing_ordinary','tsk_lineage',1,1,'message','msg_ordinary','pol_lineage',20
+          'ing_ordinary','tsk_lineage','prj_lineage',1,1,'message','msg_ordinary','pol_lineage',20
         );
         INSERT INTO engine_task_root_ingress(
-          id,task_id,execution_epoch,sequence,source,source_id,inline_payload,policy_id,time_accepted
+          id,task_id,project_id,execution_epoch,sequence,source,source_id,inline_payload,policy_id,time_accepted
         ) VALUES (
-          'ing_wrong_job','tsk_lineage',1,2,'inline','wait_other',
+          'ing_wrong_job','tsk_lineage','prj_lineage',1,2,'inline','wait_other',
           '{"taskWaitWake":{"jobID":"wait_other","fireID":"wait_other","dueAt":100}}',
           'pol_lineage',121
         );
         INSERT INTO engine_task_root_ingress(
-          id,task_id,execution_epoch,sequence,source,source_id,inline_payload,policy_id,time_accepted
+          id,task_id,project_id,execution_epoch,sequence,source,source_id,inline_payload,policy_id,time_accepted
         ) VALUES (
-          'ing_wrong_fire','tsk_lineage',1,3,'inline','wait_wrong_fire',
+          'ing_wrong_fire','tsk_lineage','prj_lineage',1,3,'inline','wait_wrong_fire',
           '{"taskWaitWake":{"jobID":"wait_wrong_fire","fireID":"cal_wrong","dueAt":100}}',
           'pol_lineage',122
         );
         INSERT INTO engine_task_root_ingress(
-          id,task_id,execution_epoch,sequence,source,source_id,inline_payload,policy_id,time_accepted
+          id,task_id,project_id,execution_epoch,sequence,source,source_id,inline_payload,policy_id,time_accepted
         ) VALUES (
-          'ing_wrong_due','tsk_lineage',1,4,'inline','wait_wrong_due',
+          'ing_wrong_due','tsk_lineage','prj_lineage',1,4,'inline','wait_wrong_due',
           '{"taskWaitWake":{"jobID":"wait_wrong_due","fireID":"wait_wrong_due","dueAt":101}}',
           'pol_lineage',122
         );
         INSERT INTO engine_task_root_ingress(
-          id,task_id,execution_epoch,sequence,source,source_id,inline_payload,policy_id,time_accepted
+          id,task_id,project_id,execution_epoch,sequence,source,source_id,inline_payload,policy_id,time_accepted
         ) VALUES (
-          'ing_early','tsk_lineage',1,5,'inline','wait_early',
+          'ing_early','tsk_lineage','prj_lineage',1,5,'inline','wait_early',
           '{"taskWaitWake":{"jobID":"wait_early","fireID":"wait_early","dueAt":100}}',
           'pol_lineage',99
         );
         INSERT INTO engine_task_root_ingress(
-          id,task_id,execution_epoch,sequence,source,source_id,inline_payload,policy_id,time_accepted
+          id,task_id,project_id,execution_epoch,sequence,source,source_id,inline_payload,policy_id,time_accepted
         ) VALUES (
-          'ing_due','tsk_lineage',1,6,'inline','wait_exact',
+          'ing_due','tsk_lineage','prj_lineage',1,6,'inline','wait_exact',
           '{"taskWaitWake":{"jobID":"wait_exact","fireID":"wait_exact","dueAt":100}}',
           'pol_lineage',123
         );
@@ -421,19 +802,23 @@ describe("scheduling occurrence DDL lineage", () => {
 
       expect(() =>
         db
-          .query(`
+          .query(
+            `
             INSERT INTO engine_task_wait_settlement(wait_id,ingress_id,disposition,time_created)
             VALUES (?,?,?,?)
-          `)
+          `,
+          )
           .run("wait_exact", "ing_ordinary", "due_ingress_accepted", 30),
       ).toThrow("engine_task_wait_settlement: wait and ingress lineage must match")
 
       expect(() =>
         db
-          .query(`
+          .query(
+            `
             INSERT INTO engine_task_wait_settlement(wait_id,ingress_id,disposition,time_created)
             VALUES (?,?,?,?)
-          `)
+          `,
+          )
           .run("wait_exact", "ing_wrong_job", "due_ingress_accepted", 30),
       ).toThrow("engine_task_wait_settlement: wait and ingress lineage must match")
 
@@ -444,16 +829,20 @@ describe("scheduling occurrence DDL lineage", () => {
       ] as const) {
         expect(() =>
           db
-            .query(`
+            .query(
+              `
               INSERT INTO engine_task_wait_settlement(wait_id,ingress_id,disposition,time_created)
               VALUES (?,?,?,?)
-            `)
+            `,
+            )
             .run(waitID, ingressID, "due_ingress_accepted", 130),
         ).toThrow("engine_task_wait_settlement: wait and ingress lineage must match")
       }
 
       expect(
-        db.query<Record<string, unknown>, []>(`
+        db
+          .query<Record<string, unknown>, []>(
+            `
           SELECT ingress.source_id AS sourceID,
             json_type(ingress.inline_payload,'$.taskWaitWake') AS wakeType,
             json_extract(ingress.inline_payload,'$.taskWaitWake.jobID')=wait.id AS jobMatches,
@@ -463,7 +852,9 @@ describe("scheduling occurrence DDL lineage", () => {
           FROM engine_task_wait_registration AS wait
           JOIN engine_task_root_ingress AS ingress ON ingress.id='ing_due'
           WHERE wait.id='wait_exact'
-        `).get(),
+        `,
+          )
+          .get(),
       ).toEqual({
         sourceID: "wait_exact",
         wakeType: "object",
@@ -473,14 +864,19 @@ describe("scheduling occurrence DDL lineage", () => {
         afterDue: 1,
       })
 
-      db.query(`
+      db.query(
+        `
         INSERT INTO engine_task_wait_settlement(wait_id,ingress_id,disposition,time_created)
         VALUES (?,?,?,?)
-      `).run("wait_exact", "ing_due", "due_ingress_accepted", 131)
+      `,
+      ).run("wait_exact", "ing_due", "due_ingress_accepted", 131)
       expect(
-        db.query<{ ingress_id: string }, []>(
-          "SELECT ingress_id FROM engine_task_wait_settlement WHERE wait_id='wait_exact'",
-        ).get(),
+        db
+          .query<
+            { ingress_id: string },
+            []
+          >("SELECT ingress_id FROM engine_task_wait_settlement WHERE wait_id='wait_exact'")
+          .get(),
       ).toEqual({ ingress_id: "ing_due" })
     } finally {
       db.close(true)
@@ -492,9 +888,9 @@ describe("scheduling occurrence DDL lineage", () => {
     try {
       db.exec(`
         INSERT INTO engine_task_root_ingress(
-          id,task_id,execution_epoch,sequence,source,source_id,inline_payload,policy_id,time_accepted
+          id,task_id,project_id,execution_epoch,sequence,source,source_id,inline_payload,policy_id,time_accepted
         ) VALUES (
-          'ing_creator','tsk_lineage',1,1,'inline','creator',
+          'ing_creator','tsk_lineage','prj_lineage',1,1,'inline','creator',
           '{"purpose":"Task wait creator"}','pol_lineage',10
         );
         INSERT INTO engine_control_activation_lease(
@@ -528,15 +924,18 @@ describe("scheduling occurrence DDL lineage", () => {
 
       expect(() =>
         db
-          .query(`
+          .query(
+            `
             INSERT INTO engine_task_wait_registration(
-              id,task_id,execution_epoch,due_at,reason,tool_part_id,
+              id,task_id,project_id,execution_epoch,due_at,reason,tool_part_id,
               creator_ingress_id,creator_activation_id,input_digest,time_created
-            ) VALUES (?,?,?,?,?,?,?,?,?,?)
-          `)
+            ) VALUES (?,?,?,?,?,?,?,?,?,?,?)
+          `,
+          )
           .run(
             "wait_wrong_creator",
             "tsk_lineage",
+            "prj_lineage",
             1,
             100,
             "lineage",
@@ -548,14 +947,17 @@ describe("scheduling occurrence DDL lineage", () => {
           ),
       ).toThrow("engine_task_wait_registration: invalid Tool creator lineage")
 
-      db.query(`
+      db.query(
+        `
         INSERT INTO engine_task_wait_registration(
-          id,task_id,execution_epoch,due_at,reason,tool_part_id,
+          id,task_id,project_id,execution_epoch,due_at,reason,tool_part_id,
           creator_ingress_id,creator_activation_id,input_digest,time_created
-        ) VALUES (?,?,?,?,?,?,?,?,?,?)
-      `).run(
+        ) VALUES (?,?,?,?,?,?,?,?,?,?,?)
+      `,
+      ).run(
         "wait_exact_creator",
         "tsk_lineage",
+        "prj_lineage",
         1,
         100,
         "lineage",
@@ -567,26 +969,30 @@ describe("scheduling occurrence DDL lineage", () => {
       )
       db.exec(`
         INSERT INTO engine_task_root_ingress(
-          id,task_id,execution_epoch,sequence,source,source_id,policy_id,time_accepted
+          id,task_id,project_id,execution_epoch,sequence,source,source_id,policy_id,time_accepted
         ) VALUES
-          ('ing_before_creator','tsk_lineage',1,0,'message','msg_before','pol_lineage',21),
-          ('ing_after_creator','tsk_lineage',1,2,'message','msg_after','pol_lineage',22);
+          ('ing_before_creator','tsk_lineage','prj_lineage',1,0,'message','msg_before','pol_lineage',21),
+          ('ing_after_creator','tsk_lineage','prj_lineage',1,2,'message','msg_after','pol_lineage',22);
       `)
       expect(() =>
-        db.query(`
+        db
+          .query(
+            `
           INSERT INTO engine_task_wait_settlement(wait_id,ingress_id,disposition,time_created)
           VALUES (?,?,?,?)
-        `).run("wait_exact_creator", "ing_before_creator", "superseded", 23),
+        `,
+          )
+          .run("wait_exact_creator", "ing_before_creator", "superseded", 23),
       ).toThrow("engine_task_wait_settlement: wait and ingress lineage must match")
-      db.query(`
+      db.query(
+        `
         INSERT INTO engine_task_wait_settlement(wait_id,ingress_id,disposition,time_created)
         VALUES (?,?,?,?)
-      `).run("wait_exact_creator", "ing_after_creator", "superseded", 24)
-      expect(
-        db.query<{ id: string }, []>(
-          "SELECT id FROM engine_task_wait_registration ORDER BY id",
-        ).all(),
-      ).toEqual([{ id: "wait_exact_creator" }])
+      `,
+      ).run("wait_exact_creator", "ing_after_creator", "superseded", 24)
+      expect(db.query<{ id: string }, []>("SELECT id FROM engine_task_wait_registration ORDER BY id").all()).toEqual([
+        { id: "wait_exact_creator" },
+      ])
     } finally {
       db.close(true)
     }
@@ -605,11 +1011,11 @@ describe("scheduling occurrence DDL lineage", () => {
       })
       db.exec(`
         INSERT INTO engine_task_root_ingress(
-          id,task_id,execution_epoch,sequence,source,source_id,inline_payload,policy_id,time_accepted
+          id,task_id,project_id,execution_epoch,sequence,source,source_id,inline_payload,policy_id,time_accepted
         ) VALUES
-          ('ing_due','tsk_lineage',1,1,'inline','wait_due',
+          ('ing_due','tsk_lineage','prj_lineage',1,1,'inline','wait_due',
            '{"taskWaitWake":{"jobID":"wait_due","fireID":"wait_due","dueAt":100}}','pol_lineage',100),
-          ('ing_supersede','tsk_lineage',1,2,'message','msg_new',NULL,'pol_lineage',101);
+          ('ing_supersede','tsk_lineage','prj_lineage',1,2,'message','msg_new',NULL,'pol_lineage',101);
         INSERT INTO engine_task_wait_settlement(wait_id,ingress_id,disposition,time_created)
         VALUES
           ('wait_due','ing_due','due_ingress_accepted',100),
@@ -618,9 +1024,12 @@ describe("scheduling occurrence DDL lineage", () => {
       `)
       expect({
         tasks: db.query<{ count: number }, []>("SELECT count(*) AS count FROM engine_task").get()!.count,
-        waits: db.query<{ count: number }, []>("SELECT count(*) AS count FROM engine_task_wait_registration").get()!.count,
-        settlements: db.query<{ count: number }, []>("SELECT count(*) AS count FROM engine_task_wait_settlement").get()!.count,
-        ingresses: db.query<{ count: number }, []>("SELECT count(*) AS count FROM engine_task_root_ingress").get()!.count,
+        waits: db.query<{ count: number }, []>("SELECT count(*) AS count FROM engine_task_wait_registration").get()!
+          .count,
+        settlements: db.query<{ count: number }, []>("SELECT count(*) AS count FROM engine_task_wait_settlement").get()!
+          .count,
+        ingresses: db.query<{ count: number }, []>("SELECT count(*) AS count FROM engine_task_root_ingress").get()!
+          .count,
         foreignKeys: db.query<Record<string, unknown>, []>("PRAGMA foreign_key_check").all(),
       }).toEqual({ tasks: 0, waits: 0, settlements: 0, ingresses: 0, foreignKeys: [] })
     } finally {

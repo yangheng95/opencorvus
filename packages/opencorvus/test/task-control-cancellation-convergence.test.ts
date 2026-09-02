@@ -20,6 +20,8 @@ import { ProtocolStore } from "@/protocol/store"
 import { Session } from "@/session"
 import { Database } from "@/storage/db"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
+import { TaskControlDriver } from "@/engine/task-control-driver"
+import { restartTaskControlProjectFrontier } from "@/engine/task-root-ingress-disposition"
 
 afterEach(async () => {
   await Instance.disposeAll()
@@ -88,6 +90,124 @@ function settleCancellation(taskID: string, rootSessionID: string) {
 }
 
 describe("cancellation convergence from the control-plane scan", () => {
+  test("a cancellation coalesced after pass zero is converged by the fresh revision", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const root = await Session.create({ kind: "root", title: "Late cancellation root" })
+        const taskID = Identifier.ascending("task")
+        const now = Date.now()
+        Database.immediateTransaction((db) => {
+          db.insert(EngineTaskTable)
+            .values({
+              id: taskID,
+              project_id: Instance.project.id,
+              session_id: root.id,
+              source: "test",
+              product_pillar: "code",
+              title: "Late coalesced cancellation",
+              request: "Observe a cancellation appended after pass zero crossed its lifecycle check",
+              time_created: now,
+            })
+            .run()
+          appendTaskOpenedInTransaction({ db, taskID, sessionID: root.id, now, source: "test.cancel.coalesced" })
+        })
+        const seedTaskID = Identifier.ascending("task")
+        Database.immediateTransaction((db) => {
+          db.insert(EngineTaskTable)
+            .values({
+              id: seedTaskID,
+              project_id: Instance.project.id,
+              session_id: root.id,
+              source: "test",
+              product_pillar: "code",
+              title: "Cancellation physical tail seed",
+              request: "Establish the prior Project cancellation cursor",
+              time_created: now,
+            })
+            .run()
+          appendTaskOpenedInTransaction({
+            db,
+            taskID: seedTaskID,
+            sessionID: root.id,
+            now,
+            source: "test.cancel.cursor-seed",
+          })
+          ProtocolStore.appendEventInTransaction({
+            kind: "event",
+            type: "task.cancellation.requested",
+            aggregate: "task",
+            aggregate_id: seedTaskID,
+            task_id: null,
+            session_id: root.id,
+            source: "test.cancel.cursor-seed",
+            emitted_at: now + 1_000,
+            payload: { execution_epoch: 1 },
+          })
+        })
+        let projectFrontier = TaskControlTestHooks.currentProjectFrontierSlice()
+        while (projectFrontier.next) {
+          projectFrontier = TaskControlTestHooks.currentProjectFrontierSlice(projectFrontier.next)
+        }
+        const projectCheckpoint = restartTaskControlProjectFrontier(projectFrontier.checkpoint)
+        let attempts = 0
+        configureTaskCancellationReconciler(async (requestedTaskID) => {
+          expect(requestedTaskID).toBe(taskID)
+          attempts += 1
+          settleCancellation(taskID, root.id)
+        })
+        const productionDriver = new TaskControlDriver({
+          scan: (requestedTaskID, context) =>
+            TaskControlTestHooks.scanTaskControlPlane(requestedTaskID, context),
+        })
+        using _driver = { [Symbol.dispose]: () => productionDriver.dispose() }
+        const sourcePasses: number[] = []
+        const coalescedRequests: number[] = []
+        let lateCancellationProjectDiscovery = false
+        let appended = false
+        using _interleaving = TaskControlTestHooks.replaceAfterSourceReconciliation(
+          async ({ taskID: scannedTaskID, pass }) => {
+            if (scannedTaskID !== taskID) return
+            sourcePasses.push(pass)
+            if (pass !== 0 || appended) return
+            appended = true
+            Database.immediateTransaction((db) => {
+              ProtocolStore.appendEventInTransaction({
+                kind: "event",
+                type: "task.cancellation.requested",
+                aggregate: "task",
+                aggregate_id: taskID,
+                task_id: null,
+                session_id: root.id,
+                source: "test.cancel.coalesced",
+                emitted_at: now - 1_000,
+                payload: { execution_epoch: 1 },
+              })
+            })
+            lateCancellationProjectDiscovery = TaskControlTestHooks.currentProjectFrontierSlice(
+              projectCheckpoint,
+            ).taskIDs.includes(taskID)
+            coalescedRequests.push(await productionDriver.request(taskID))
+          },
+        )
+
+        await productionDriver.request(taskID, { propagateFailure: true })
+        expect({
+          attempts,
+          coalescedRequests,
+          freshPassObserved: sourcePasses.includes(1),
+          lateCancellationProjectDiscovery,
+        }).toEqual({
+          attempts: 1,
+          coalescedRequests: [0],
+          freshPassObserved: true,
+          lateCancellationProjectDiscovery: true,
+        })
+      },
+    })
+  })
+
   test("re-attempts a stalled cancellation and keeps a finite wake until it converges", async () => {
     await using project = await memoryProject()
     await Instance.provide({

@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, test } from "bun:test"
-import { EngineTaskTable } from "@/engine/engine.sql"
+import { EngineArtifactTable, EngineTaskTable } from "@/engine/engine.sql"
 import { TaskControlDriver } from "@/engine/task-control-driver"
 import {
   reconcileTaskControlPlane,
@@ -9,12 +9,14 @@ import {
 import { acceptTaskRootIngressInTransaction, projectTaskRootIngress } from "@/engine/task-root-fact-store"
 import { appendTaskOpenedInTransaction } from "@/engine/task-lifecycle"
 import { taskRootIngressWakeInstant } from "@/engine/task-root-ingress-reducer"
+import { restartTaskControlProjectFrontier } from "@/engine/task-root-ingress-disposition"
 import { currentOrchestratorControlMessage } from "@/orchestrator/agent"
 import { Identifier } from "@/id/id"
 import { Instance } from "@/project/instance"
+import { ProtocolStore } from "@/protocol/store"
 import { Session } from "@/session"
 import { Message } from "@/session/message"
-import { Database } from "@/storage/db"
+import { Database, eq, sql } from "@/storage/db"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
 afterEach(async () => {
@@ -245,6 +247,7 @@ describe("Task-control compaction coexistence", () => {
           })
         })
 
+        let compactionMessageID: string | undefined
         using _runner = TaskControlTestHooks.replaceTaskIngressRunner({
           runner: async ({ wakeID, activationID, predecessorID }) => {
             if (!wakeID || !activationID || !predecessorID) throw new Error("Missing exact activation identity")
@@ -279,7 +282,7 @@ describe("Task-control compaction coexistence", () => {
                 } satisfies Message.TextPart,
               ],
             })
-            await Session.updateMessage({
+            const compaction = await Session.updateMessage({
               id: Identifier.ascending("message"),
               sessionID: orchestrator.id,
               parentID: control.messageID,
@@ -294,6 +297,7 @@ describe("Task-control compaction coexistence", () => {
               tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
               finish: "stop",
             })
+            compactionMessageID = compaction.id
             return commitDecision({
               projectPath: project.path,
               orchestratorSessionID: orchestrator.id,
@@ -306,10 +310,21 @@ describe("Task-control compaction coexistence", () => {
         })
 
         const activated = await reconcileTaskControlPlane(taskID)
+        const disposition = Database.use((db) =>
+          db
+            .select({ payload: EngineArtifactTable.payload })
+            .from(EngineArtifactTable)
+            .where(eq(EngineArtifactTable.kind, "task_root_ingress_disposition"))
+            .get(),
+        )
+        const decisionAssistant = (disposition?.payload as { decision_occurrence?: { assistant_message_id?: string } })
+          .decision_occurrence?.assistant_message_id
         expect({
           activated,
           projection: projectTaskRootIngress(ingress.id, Date.now(), readTaskRootIngressEvidence).state,
-        }).toEqual({ activated: 1, projection: "resolved" })
+          decisionAssistant,
+        }).toEqual({ activated: 1, projection: "resolved", decisionAssistant: expect.any(String) })
+        expect(decisionAssistant).not.toBe(compactionMessageID)
       },
     })
   })
@@ -431,12 +446,7 @@ describe("Task-control driver", () => {
       entered,
       settledSnapshot: driver.snapshot(),
     }).toEqual({
-      admittedTaskIDs: [
-        "mission-bounded-0",
-        "mission-bounded-1",
-        "mission-bounded-2",
-        "mission-bounded-3",
-      ],
+      admittedTaskIDs: ["mission-bounded-0", "mission-bounded-1", "mission-bounded-2", "mission-bounded-3"],
       outcomes: [1, 1, 1, 1, 0, 0, 0],
       entered: ["mission-bounded-0", "mission-bounded-1", "mission-bounded-2", "mission-bounded-3"],
       settledSnapshot: [],
@@ -467,7 +477,7 @@ describe("Task-control driver", () => {
         })
         return { activated: 0 }
       },
-      liveTasks: () => ["mission-heartbeat-a", "mission-heartbeat-b"],
+      liveTasks: () => ({ taskIDs: ["mission-heartbeat-a", "mission-heartbeat-b"], hasMore: false, commit() {} }),
       heartbeatMilliseconds: 5_000,
       minimumWakeDelayMilliseconds: 25,
       maximumWakeDelayMilliseconds: 5_000,
@@ -694,7 +704,7 @@ describe("Task-control driver", () => {
         scanned.push(taskID)
         return { activated: 0 }
       },
-      liveTasks: () => ["task-a", "task-b"],
+      liveTasks: () => ({ taskIDs: ["task-a", "task-b"], hasMore: false, commit() {} }),
       heartbeatMilliseconds: 5_000,
       setTimer: (fn, delay) => {
         // Only the heartbeat arms at its own period here; settled scans in this
@@ -711,11 +721,415 @@ describe("Task-control driver", () => {
     driver.dispose()
   })
 
+  test("retries one provisional heartbeat slice after shared capacity is released", async () => {
+    type Timer = { delay: number; fire: () => void; cancelled: boolean }
+    const timers: Timer[] = []
+    let releaseActive!: () => void
+    const activeGate = new Promise<void>((resolve) => {
+      releaseActive = resolve
+    })
+    let releasePending!: () => void
+    const pendingGate = new Promise<void>((resolve) => {
+      releasePending = resolve
+    })
+    const scanned: string[] = []
+    let commits = 0
+    const driver = new TaskControlDriver({
+      scan: async (taskID) => {
+        scanned.push(taskID)
+        if (taskID === "active") await activeGate
+        if (taskID === "pending") await pendingGate
+        return { activated: 0 }
+      },
+      liveTasks: () => ({
+        taskIDs: ["heartbeat"],
+        hasMore: false,
+        commit() {
+          commits += 1
+        },
+      }),
+      maximumConcurrentScans: 1,
+      maximumPendingScans: 1,
+      heartbeatMilliseconds: 5_000,
+      minimumWakeDelayMilliseconds: 25,
+      setTimer: (fn, delay) => {
+        const timer = { delay, fire: fn, cancelled: false }
+        timers.push(timer)
+        return { cancel: () => (timer.cancelled = true) }
+      },
+    })
+    const active = driver.request("active")
+    await waitUntil(() => scanned.includes("active"), "active scan")
+    const pending = driver.request("pending")
+    const firstHeartbeat = timers.find((timer) => !timer.cancelled && timer.delay === 5_000)!
+    firstHeartbeat.fire()
+    await waitUntil(
+      () => timers.some((timer) => !timer.cancelled && timer.delay === 25),
+      "rejected heartbeat retry",
+    )
+    expect({ commits, scanned }).toEqual({ commits: 0, scanned: ["active"] })
+
+    releaseActive()
+    await active
+    await waitUntil(() => scanned.includes("pending"), "pending scan admission")
+    releasePending()
+    await pending
+    const retry = timers.find((timer) => !timer.cancelled && timer.delay === 25)!
+    retry.fire()
+    await waitUntil(() => commits === 1, "heartbeat cursor commit after admission")
+    expect(scanned).toEqual(["active", "pending", "heartbeat"])
+    driver.dispose()
+  })
+
+  test("re-arms a Task when one timer re-entry faults", async () => {
+    type Timer = { delay: number; fire: () => void; cancelled: boolean }
+    const timers: Timer[] = []
+    let clock = 1_000
+    let scans = 0
+    let reentries = 0
+    const driver = new TaskControlDriver({
+      scan: async () => {
+        scans += 1
+        return scans === 1 ? { activated: 0, wakeAt: clock + 100 } : { activated: 0 }
+      },
+      now: () => clock,
+      reenter: async (run) => {
+        reentries += 1
+        if (reentries === 1) throw new Error("closed instance cache lease")
+        await run()
+      },
+      initialBackoffMilliseconds: 200,
+      heartbeatMilliseconds: 5_000,
+      setTimer: (fn, delay) => {
+        const timer = { delay, fire: fn, cancelled: false }
+        timers.push(timer)
+        return { cancel: () => (timer.cancelled = true) }
+      },
+    })
+    await driver.request("timer-retry")
+    const due = timers.find((timer) => !timer.cancelled && timer.delay === 100)!
+    clock += 100
+    due.fire()
+    await waitUntil(
+      () => timers.some((timer) => !timer.cancelled && timer.delay === 200),
+      "timer backoff after re-entry fault",
+    )
+    const retry = timers.find((timer) => !timer.cancelled && timer.delay === 200)!
+    clock += 200
+    retry.fire()
+    await waitUntil(() => scans === 2, "timer scan after re-entry recovery")
+    expect({ scans, reentries }).toEqual({ scans: 2, reentries: 2 })
+    driver.dispose()
+  })
+
+  test("Project bootstrap commits one fixed source slice and arms continuation", async () => {
+    const timers: Array<{ delay: number; cancelled: boolean }> = []
+    let reads = 0
+    let commits = 0
+    const driver = new TaskControlDriver({
+      scan: async () => ({ activated: 0 }),
+      liveTasks: () => {
+        reads += 1
+        return {
+          taskIDs: ["bootstrap-task"],
+          hasMore: true,
+          commit() {
+            commits += 1
+          },
+        }
+      },
+      heartbeatMilliseconds: 5_000,
+      minimumWakeDelayMilliseconds: 25,
+      setTimer: (_fn, delay) => {
+        const timer = { delay, cancelled: false }
+        timers.push(timer)
+        return { cancel: () => (timer.cancelled = true) }
+      },
+    })
+    await driver.bootstrapHeartbeatSlice()
+    expect({ reads, commits, activeTimers: timers.filter((timer) => !timer.cancelled).map((timer) => timer.delay) }).toEqual(
+      { reads: 1, commits: 1, activeTimers: [25] },
+    )
+    driver.dispose()
+  })
+
+  test("one real heartbeat work slice stays constant across retained Task history and continues immediately", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const root = await Session.create({ kind: "root", title: "Bounded heartbeat root" })
+        const now = Date.now()
+        const candidateIDs = Database.immediateTransaction((db) => {
+          for (let index = 0; index < 2_048; index += 1) {
+            const taskID = Identifier.ascending("task")
+            db.insert(EngineTaskTable)
+              .values({
+                id: taskID,
+                project_id: Instance.project.id,
+                session_id: root.id,
+                source: "test",
+                product_pillar: "code",
+                title: `Terminal heartbeat history ${index}`,
+                request: "Retained Task history must not enter the heartbeat source slice",
+                time_created: now + index,
+              })
+              .run()
+            appendTaskOpenedInTransaction({
+              db,
+              taskID,
+              sessionID: root.id,
+              now: now + index,
+              source: "test.heartbeat",
+            })
+            acceptTaskRootIngressInTransaction(db, {
+              taskID,
+              executionEpoch: 1,
+              source: "inline",
+              sourceID: `settled-heartbeat-history-${index}`,
+              inlinePayload: { index },
+              semanticTurnLimit: 2,
+              activationLimit: 2,
+              now: now + index,
+            })
+            ProtocolStore.appendEventInTransaction({
+              kind: "event",
+              type: "task.completed",
+              aggregate: "task",
+              aggregate_id: taskID,
+              task_id: null,
+              session_id: root.id,
+              source: "test.heartbeat",
+              emitted_at: now + index + 1,
+              payload: { execution_epoch: 1 },
+            })
+          }
+          return Array.from({ length: 33 }, (_, index) => {
+            const taskID = Identifier.ascending("task")
+            db.insert(EngineTaskTable)
+              .values({
+                id: taskID,
+                project_id: Instance.project.id,
+                session_id: root.id,
+                source: "test",
+                product_pillar: "code",
+                title: `Heartbeat candidate ${index}`,
+                request: "Bounded heartbeat continuations must discover this candidate",
+                time_created: now + 10_000 + index,
+              })
+              .run()
+            appendTaskOpenedInTransaction({
+              db,
+              taskID,
+              sessionID: root.id,
+              now: now + 10_000 + index,
+              source: "test.heartbeat",
+            })
+            acceptTaskRootIngressInTransaction(db, {
+              taskID,
+              executionEpoch: 1,
+              source: "inline",
+              sourceID: `heartbeat-candidate-${index}`,
+              inlinePayload: { index },
+              semanticTurnLimit: 2,
+              activationLimit: 2,
+              now: now + 10_001 + index,
+            })
+            return taskID
+          })
+        })
+        const scanned: string[] = []
+        const observedSlices: Array<{ scannedCount: number; taskCount: number }> = []
+        type Timer = { delay: number; fire: () => void; cancelled: boolean; fired: boolean }
+        const timers: Timer[] = []
+        let traversal: { cursor?: Parameters<typeof TaskControlTestHooks.currentProjectFrontierSlice>[0] } = {}
+        let checkpoint: Parameters<typeof TaskControlTestHooks.currentProjectFrontierSlice>[0]
+        const driver = new TaskControlDriver({
+          scan: async (taskID) => {
+            scanned.push(taskID)
+            return { activated: 0 }
+          },
+          liveTasks: () => {
+            const slice = TaskControlTestHooks.currentProjectFrontierSlice(traversal.cursor)
+            observedSlices.push({ scannedCount: slice.scannedCount, taskCount: slice.taskIDs.length })
+            return {
+              taskIDs: slice.taskIDs,
+              hasMore: slice.next !== undefined,
+              commit() {
+                if (slice.next) {
+                  traversal = { cursor: slice.next }
+                } else {
+                  checkpoint = restartTaskControlProjectFrontier(slice.checkpoint)
+                  traversal = { cursor: checkpoint }
+                }
+              },
+            }
+          },
+          maximumConcurrentScans: 4,
+          maximumPendingScans: 28,
+          retireSettledEntries: true,
+          heartbeatMilliseconds: 5_000,
+          setTimer: (fn, delay) => {
+            const timer: Timer = { delay, fire: fn, cancelled: false, fired: false }
+            timers.push(timer)
+            return {
+              cancel() {
+                timer.cancelled = true
+              },
+            }
+          },
+        })
+        const fireNext = async (delay: number, expectedSlices: number, expectedScans: number) => {
+          const timer = timers.find(
+            (candidate) => !candidate.cancelled && !candidate.fired && candidate.delay === delay,
+          )
+          if (!timer) throw new Error(`Expected a ${delay}ms heartbeat timer`)
+          timer.fired = true
+          timer.fire()
+          await waitUntil(
+            () => observedSlices.length === expectedSlices && scanned.length === expectedScans,
+            `${expectedSlices} bounded source slices and ${expectedScans} heartbeat candidates`,
+          )
+        }
+
+        await fireNext(5_000, 1, 0)
+        for (let page = 2; page <= 256; page += 1) await fireNext(25, page, 0)
+        await fireNext(25, 257, 8)
+        await fireNext(25, 258, 16)
+        await fireNext(25, 259, 24)
+        await fireNext(25, 260, 32)
+        await fireNext(25, 261, 33)
+        await waitUntil(
+          () => timers.some((timer) => !timer.cancelled && !timer.fired && timer.delay === 5_000),
+          "periodic heartbeat after source traversal",
+        )
+        await fireNext(5_000, 262, 33)
+        expect(scanned.toSorted()).toEqual(candidateIDs.toSorted())
+        expect(observedSlices.slice(0, 256).every((slice) => slice.scannedCount === 8 && slice.taskCount === 0)).toBe(
+          true,
+        )
+        expect(observedSlices.slice(256)).toEqual([
+          { scannedCount: 8, taskCount: 8 },
+          { scannedCount: 8, taskCount: 8 },
+          { scannedCount: 8, taskCount: 8 },
+          { scannedCount: 8, taskCount: 8 },
+          { scannedCount: 1, taskCount: 1 },
+          { scannedCount: 0, taskCount: 0 },
+        ])
+        expect(timers.some((timer) => !timer.cancelled && !timer.fired && timer.delay === 5_000)).toBe(true)
+        driver.dispose()
+      },
+    })
+  }, 60_000)
+
+  test("resets only a deleted physical tail and discovers its reused rowid", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const root = await Session.create({ kind: "root", title: "Physical source tail" })
+        const insertCandidate = (taskID: string, sourceID: string, now: number) =>
+          Database.immediateTransaction((db) => {
+            db.insert(EngineTaskTable)
+              .values({
+                id: taskID,
+                project_id: Instance.project.id,
+                session_id: root.id,
+                source: "test",
+                product_pillar: "code",
+                title: taskID,
+                request: "Validate physical append tail reuse",
+                time_created: now,
+              })
+              .run()
+            appendTaskOpenedInTransaction({ db, taskID, sessionID: root.id, now, source: "test.rowid" })
+            acceptTaskRootIngressInTransaction(db, {
+              taskID,
+              executionEpoch: 1,
+              source: "inline",
+              sourceID,
+              inlinePayload: { sourceID },
+              semanticTurnLimit: 1,
+              activationLimit: 1,
+              now,
+            })
+          })
+        const firstTaskID = Identifier.ascending("task")
+        insertCandidate(firstTaskID, "physical-tail-first", 10_000)
+        const first = TaskControlTestHooks.currentProjectFrontierSlice()
+        expect(first.taskIDs).toEqual([firstTaskID])
+        const checkpoint = restartTaskControlProjectFrontier(first.checkpoint)
+
+        Database.immediateTransaction((db) => {
+          db.delete(EngineTaskTable).where(eq(EngineTaskTable.id, firstTaskID)).run()
+        })
+        const replacementTaskID = Identifier.ascending("task")
+        // The semantic timestamp is deliberately older and SQLite may reuse
+        // the deleted maximum rowid. The durable tail-ID validation must reset
+        // this source rather than hide the replacement behind the old cursor.
+        insertCandidate(replacementTaskID, "physical-tail-replacement", 1)
+        const replacement = TaskControlTestHooks.currentProjectFrontierSlice(checkpoint)
+        expect(replacement.taskIDs).toEqual([replacementTaskID])
+      },
+    })
+  })
+
+  test("invalidates an in-connection physical cursor after VACUUM renumbers its durable tail", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const root = await Session.create({ kind: "root", title: "VACUUM cursor validation" })
+        const insertCandidate = (taskID: string, sourceID: string, acceptedAt: number) =>
+          Database.immediateTransaction((db) => {
+            db.insert(EngineTaskTable)
+              .values({
+                id: taskID,
+                project_id: Instance.project.id,
+                session_id: root.id,
+                source: "test",
+                product_pillar: "code",
+                title: taskID,
+                request: "Validate the durable source ID after rowid renumbering",
+                time_created: acceptedAt,
+              })
+              .run()
+            appendTaskOpenedInTransaction({ db, taskID, sessionID: root.id, now: acceptedAt, source: "test.vacuum" })
+            acceptTaskRootIngressInTransaction(db, {
+              taskID,
+              executionEpoch: 1,
+              source: "inline",
+              sourceID,
+              inlinePayload: { sourceID },
+              semanticTurnLimit: 1,
+              activationLimit: 1,
+              now: acceptedAt,
+            })
+          })
+        const fillerTaskID = Identifier.ascending("task")
+        const tailTaskID = Identifier.ascending("task")
+        insertCandidate(fillerTaskID, "vacuum-filler", 10_000)
+        insertCandidate(tailTaskID, "vacuum-tail", 20_000)
+        const beforeVacuum = TaskControlTestHooks.currentProjectFrontierSlice()
+        expect(beforeVacuum.taskIDs).toEqual([fillerTaskID, tailTaskID])
+        const checkpoint = restartTaskControlProjectFrontier(beforeVacuum.checkpoint)
+
+        Database.immediateTransaction((db) => {
+          db.delete(EngineTaskTable).where(eq(EngineTaskTable.id, fillerTaskID)).run()
+        })
+        Database.use((db) => db.run(sql.raw("VACUUM")))
+        const replacementTaskID = Identifier.ascending("task")
+        insertCandidate(replacementTaskID, "vacuum-late-older-time", 1)
+        expect(TaskControlTestHooks.currentProjectFrontierSlice(checkpoint).taskIDs).toContain(replacementTaskID)
+      },
+    })
+  })
+
   test("cancels the heartbeat timer during disposal", () => {
     const cancelled: number[] = []
     const driver = new TaskControlDriver({
       scan: async () => ({ activated: 0 }),
-      liveTasks: () => ["task-a"],
+      liveTasks: () => ({ taskIDs: ["task-a"], hasMore: false, commit() {} }),
       heartbeatMilliseconds: 5_000,
       setTimer: (_fn, delay) => ({
         cancel() {

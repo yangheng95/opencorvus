@@ -346,9 +346,9 @@ function encodeSnapshotCell(value: unknown) {
 export function exportMysqlTransferSnapshot(): MysqlTransferSnapshot {
   try {
     const tables = schemaShapes().map((table) => {
-      const rows = Database.allFinalized<Record<string, unknown>>(
-        `SELECT * FROM ${sqliteIdentifier(table.name)}`,
-      ).map((row) => Object.fromEntries(Object.entries(row).map(([key, value]) => [key, encodeSnapshotCell(value)])))
+      const rows = Database.allFinalized<Record<string, unknown>>(`SELECT * FROM ${sqliteIdentifier(table.name)}`).map(
+        (row) => Object.fromEntries(Object.entries(row).map(([key, value]) => [key, encodeSnapshotCell(value)])),
+      )
       return { name: table.name, columns: table.columns.map((column) => column.name), rows }
     })
     return { format: MYSQL_TRANSFER_FORMAT, schemaFingerprint: mysqlSchemaFingerprint(), tables }
@@ -442,8 +442,7 @@ function assertEngineArtifactCatalogRows(table: z.infer<typeof MysqlTransferTabl
     const actual = {
       payload_sha256: row.payload_sha256,
       payload_bytes: normalizeNumber(row.payload_bytes, table.name, "payload_bytes"),
-      payload_block_sha256s:
-        parsedJsonCell(row.payload_block_sha256s, table.name, "payload_block_sha256s") ?? [],
+      payload_block_sha256s: parsedJsonCell(row.payload_block_sha256s, table.name, "payload_block_sha256s") ?? [],
       payload_block_index_sha256: row.payload_block_index_sha256,
       catalog_artifact_type: row.catalog_artifact_type ?? null,
       catalog_schema_diagnostic: row.catalog_schema_diagnostic ?? null,
@@ -471,9 +470,7 @@ function assertEngineArtifactVersionPartition(snapshot: MysqlTransferSnapshot): 
   const revisions = new Set(
     snapshot.tables
       .find((table) => table.name === "engine_artifact_catalog_revision")
-      ?.rows.map((row) =>
-        normalizeNumber(row.revision, "engine_artifact_catalog_revision", "revision"),
-      ) ?? [],
+      ?.rows.map((row) => normalizeNumber(row.revision, "engine_artifact_catalog_revision", "revision")) ?? [],
   )
   const observedRevisions = new Map<number, string>()
   const currentRows = new Map<string, Record<string, unknown>>()
@@ -491,9 +488,7 @@ function assertEngineArtifactVersionPartition(snapshot: MysqlTransferSnapshot): 
       const identity = `${artifactID}@${revision}`
       const previousIdentity = observedRevisions.get(revision)
       if (previousIdentity) {
-        throw new Error(
-          `Engine Artifact catalog revision ${revision} is shared by ${previousIdentity} and ${identity}`,
-        )
+        throw new Error(`Engine Artifact catalog revision ${revision} is shared by ${previousIdentity} and ${identity}`)
       }
       observedRevisions.set(revision, identity)
       if (tableName === "engine_artifact_version") {
@@ -501,21 +496,13 @@ function assertEngineArtifactVersionPartition(snapshot: MysqlTransferSnapshot): 
         if (!current) {
           throw new Error(`Engine Artifact history ${identity} has no current partition row`)
         }
-        const currentRevision = normalizeNumber(
-          current.catalog_revision,
-          "engine_artifact",
-          "catalog_revision",
-        )
+        const currentRevision = normalizeNumber(current.catalog_revision, "engine_artifact", "catalog_revision")
         if (revision >= currentRevision) {
-          throw new Error(
-            `Engine Artifact history ${identity} must precede current revision ${currentRevision}`,
-          )
+          throw new Error(`Engine Artifact history ${identity} must precede current revision ${currentRevision}`)
         }
         for (const column of ["task_id", "kind", "time_created"] as const) {
           if ((row[column] ?? null) !== (current[column] ?? null)) {
-            throw new Error(
-              `Engine Artifact history ${identity} changes immutable partition authority ${column}`,
-            )
+            throw new Error(`Engine Artifact history ${identity} changes immutable partition authority ${column}`)
           }
         }
       }
@@ -618,7 +605,11 @@ function insertPreparedRows(
   tableByName: Map<string, z.infer<typeof MysqlTransferTableSnapshot>>,
 ) {
   const ordered = [
-    ...expectedTables.filter((expected) => expected.name !== "engine_task_creation_contract"),
+    ...expectedTables.filter(
+      (expected) => !["protocol_event", "engine_artifact", "engine_task_creation_contract"].includes(expected.name),
+    ),
+    ...expectedTables.filter((expected) => expected.name === "protocol_event"),
+    ...expectedTables.filter((expected) => expected.name === "engine_artifact"),
     ...expectedTables.filter((expected) => expected.name === "engine_task_creation_contract"),
   ]
   for (const expected of ordered) {
@@ -640,6 +631,9 @@ const TRANSFER_DEFERRED_CREATION_TRIGGERS = [
   "global_creation_allocation_project_insert",
   "global_creation_allocation_project_retention_insert",
   "session_panel_creation_lineage_insert",
+  "protocol_event_task_project_insert",
+  "worker_turn_descriptor_task_project_insert",
+  "engine_task_root_ingress_project_insert",
 ] as const
 
 function beginValidatedCreationFactRestore(sqlite: BunDatabase): void {
@@ -648,6 +642,7 @@ function beginValidatedCreationFactRestore(sqlite: BunDatabase): void {
 
 function finishValidatedCreationFactRestore(sqlite: BunDatabase): void {
   assertNoForeignKeyViolations(sqlite)
+  assertTaskControlProjectAuthority(sqlite)
   validateTaskCreationIdentitySnapshot(sqlite)
   const restored = new Set(restoreCurrentTransferTriggers(sqlite))
   for (const trigger of TRANSFER_DEFERRED_CREATION_TRIGGERS) {
@@ -681,6 +676,42 @@ function assertNoForeignKeyViolations(sqlite: BunDatabase) {
     )
     .join(", ")
   throw new Error(`MySQL transfer foreign key check found ${violations.length} violation(s): ${sample}`)
+}
+
+function assertTaskControlProjectAuthority(sqlite: BunDatabase): void {
+  const invalid = queryAllFinalized<{ kind: string; id: string }>(
+    sqlite,
+    `SELECT 'ingress' AS kind, ingress.id AS id
+     FROM engine_task_root_ingress ingress
+     LEFT JOIN engine_task task ON task.id=ingress.task_id
+     WHERE task.id IS NULL OR ingress.project_id<>task.project_id
+     UNION ALL
+     SELECT 'protocol_event' AS kind, event.id AS id
+     FROM protocol_event event
+     LEFT JOIN engine_task task ON task.id=event.aggregate_id
+     WHERE event.aggregate_type='task'
+       AND (event.project_id IS NULL OR (task.id IS NOT NULL AND event.project_id<>task.project_id))
+     UNION ALL
+     SELECT 'worker_turn_descriptor' AS kind, descriptor.id AS id
+     FROM worker_turn_descriptor descriptor
+     LEFT JOIN engine_task task ON task.id=descriptor.task_id
+     LEFT JOIN session ON session.id=descriptor.session_id
+     WHERE task.id IS NULL OR session.id IS NULL
+       OR descriptor.project_id<>task.project_id
+       OR descriptor.project_id<>session.project_id
+       OR json_extract(descriptor.payload,'$.lifecycle.taskID') IS NOT descriptor.task_id
+       OR NOT EXISTS (
+         SELECT 1 FROM engine_artifact lineage
+         WHERE lineage.kind='dispatch_lineage'
+           AND lineage.task_id=descriptor.task_id
+           AND json_extract(lineage.payload,'$.child_session_id')=descriptor.session_id
+           AND json_extract(lineage.payload,'$.dispatch_id')
+             = json_extract(descriptor.payload,'$.dispatchTurn.current_dispatch_id')
+       )
+     ORDER BY kind,id
+     LIMIT 1`,
+  )[0]
+  if (invalid) throw new Error(`${invalid.kind} ${invalid.id} has invalid Task Project or dispatch lineage authority`)
 }
 
 function validatePreparedRows(

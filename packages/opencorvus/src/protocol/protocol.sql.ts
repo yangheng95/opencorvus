@@ -1,12 +1,7 @@
 import { check, integer, index, sqliteTable, text, uniqueIndex } from "drizzle-orm/sqlite-core"
 import { and, eq, or, sql } from "drizzle-orm"
 import { Identifier } from "@/id/id"
-import type {
-  ProtocolAggregate,
-  ProtocolDeliveryReceipt,
-  ProtocolInboxStatus,
-  ProtocolKind,
-} from "./schema"
+import type { ProtocolAggregate, ProtocolDeliveryReceipt, ProtocolInboxStatus, ProtocolKind } from "./schema"
 
 type ProtocolPayload = Record<string, unknown>
 
@@ -20,6 +15,8 @@ export const ProtocolEventTable = sqliteTable(
     type: text().notNull(),
     aggregate_type: text().notNull().$type<ProtocolAggregate>(),
     aggregate_id: text().notNull(),
+    /** Immutable Project owner for Task-correlated scheduling frontiers. */
+    project_id: text(),
     /** Immutable causal correlation. This is deliberately not an ownership
      * foreign key: deleting a mutable Task projection must not rewrite facts. */
     task_id: text(),
@@ -60,9 +57,12 @@ export const ProtocolEventTable = sqliteTable(
       ),
     uniqueIndex("protocol_event_task_epoch_boundary_request_idx")
       .on(table.aggregate_id, sql<number>`json_extract(${table.payload}, '$.execution_epoch')`)
-      .where(
-        sql`${table.aggregate_type} = 'task' AND ${table.type} IN ('task.cancellation.requested')`,
-      ),
+      .where(sql`${table.aggregate_type} = 'task' AND ${table.type} IN ('task.cancellation.requested')`),
+    index("protocol_event_task_cancellation_frontier_idx").on(
+      table.project_id,
+      table.aggregate_type,
+      table.type,
+    ),
     uniqueIndex("protocol_event_task_deleted_idx")
       .on(table.aggregate_id)
       .where(sql`${table.aggregate_type} = 'task' AND ${table.type} = 'task.deleted'`),
@@ -71,9 +71,7 @@ export const ProtocolEventTable = sqliteTable(
       .where(sql`${table.aggregate_type} = 'session' AND ${table.type} = 'session.deleted'`),
     uniqueIndex("protocol_event_mission_delete_retention_idx")
       .on(table.aggregate_id)
-      .where(
-        sql`${table.aggregate_type} = 'session' AND ${table.type} = 'mission.retention.delete_requested'`,
-      ),
+      .where(sql`${table.aggregate_type} = 'session' AND ${table.type} = 'mission.retention.delete_requested'`),
     uniqueIndex("protocol_event_mission_operation_boundary_idx")
       .on(table.aggregate_id, table.correlation_id, table.type)
       .where(
@@ -81,15 +79,21 @@ export const ProtocolEventTable = sqliteTable(
       ),
     index("protocol_event_task_idx").on(table.task_id, table.seq),
     check("protocol_event_task_identity_shape", sql`${table.aggregate_type} <> 'task' OR ${table.task_id} IS NULL`),
-    check("protocol_event_session_identity_shape", sql`${table.aggregate_type} <> 'session' OR ${table.session_id} IS NULL`),
-    check("protocol_event_payload_envelope_shape", sql`
+    check(
+      "protocol_event_session_identity_shape",
+      sql`${table.aggregate_type} <> 'session' OR ${table.session_id} IS NULL`,
+    ),
+    check(
+      "protocol_event_payload_envelope_shape",
+      sql`
       json_type(${table.payload}, '$.taskID') IS NULL
       AND json_type(${table.payload}, '$.sessionID') IS NULL
       AND json_type(${table.payload}, '$.interactionID') IS NULL
       AND json_type(${table.payload}, '$.orderKey') IS NULL
       AND (${table.type} <> 'task.updated' OR json_type(${table.payload}, '$.status') IS NULL)
       AND (${table.type} NOT IN ('task.completed','task.failed','task.cancelled') OR json_type(${table.payload}, '$.timeCompleted') IS NULL)
-    `),
+    `,
+    ),
     index("protocol_event_session_idx").on(table.session_id, table.seq),
     index("protocol_event_interaction_idx").on(table.interaction_id, table.seq),
     index("protocol_event_stream_idx").on(table.stream_id, table.seq),
@@ -136,7 +140,9 @@ export const ProtocolDeliveryReceiptTable = sqliteTable(
   "protocol_delivery_receipt",
   {
     id: text().primaryKey(),
-    inbox_id: text().notNull().references(() => ProtocolInboxTable.id, { onDelete: "cascade" }),
+    inbox_id: text()
+      .notNull()
+      .references(() => ProtocolInboxTable.id, { onDelete: "cascade" }),
     receipt: text({ mode: "json" }).notNull().$type<ProtocolDeliveryReceipt>(),
     time_created: integer().notNull(),
   },

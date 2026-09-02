@@ -816,6 +816,7 @@ export namespace Database {
     sqlite: undefined as BunDatabase | undefined,
     unavailable: undefined as DatabaseUnavailableErrorData | undefined,
     rollbackRequired: false,
+    connectionEpoch: 0,
   }
 
   type EffectOwner = { closed: boolean }
@@ -970,6 +971,7 @@ export namespace Database {
   function openOwnedSqlite(dbPath: string, options: { configure: boolean } = { configure: true }) {
     const sqlite = new BunDatabase(dbPath, { create: true })
     state.sqlite = sqlite
+    state.connectionEpoch += 1
     state.rollbackRequired = false
     // Install the connection's busy handler before even inspecting schema.
     // Independent OpenCorvus processes can open the same database while
@@ -1116,6 +1118,15 @@ export namespace Database {
   export function Client() {
     assertDatabaseAccess("Database.Client")
     return client()
+  }
+
+  /** Process-local identity of the currently open physical SQLite handle.
+   * Rebuild/import closes and reopens that handle, invalidating every rowid
+   * cursor even when the durable database identity is restored from a
+   * snapshot. */
+  export function physicalConnectionEpoch(): number {
+    if (!state.sqlite) Client()
+    return state.connectionEpoch
   }
 
   /** Execute a read-only raw query and finalize its SQLite statement before

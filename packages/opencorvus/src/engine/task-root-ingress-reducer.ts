@@ -18,6 +18,7 @@ export type TaskLifecycleFact = {
   id: string
   kind: "opened" | "cancellation_requested" | "cancelled" | "closed" | "reopened" | "deleted"
   epoch: number
+  sequence: number
   time: number
 }
 
@@ -87,6 +88,9 @@ export type TaskRootIngressFacts = {
   interactions: readonly InteractionFact[]
   activityRequests: readonly ActivityRequestFact[]
   activityOutcomes: readonly ActivityOutcomeFact[]
+  /** Immutable operator decision that this broken occurrence will never run.
+   * Other disposition kinds are already derivable from their immutable facts. */
+  operatorAbandoned?: { evidenceIDs: readonly string[] }
 }
 
 /**
@@ -117,6 +121,7 @@ export type TaskRootIngressProjection =
   | { state: "exhausted"; reason: "semantic_limit" | "activation_limit" | "deadline" }
   | { state: "terminal_inapplicable"; boundary: "cancelled" | "closed" | "reopened" | "deleted" }
   | { state: "resolved"; decisionIDs: readonly string[] }
+  | { state: "operator_abandoned"; evidenceIDs: readonly string[] }
   | { state: "leased"; activationID: string; ownerOccurrenceID: string; expiresAt: number }
   | { state: "reconcile_required"; requestIDs: readonly string[] }
   | { state: "waiting"; interactionID: string; resumeAt?: number }
@@ -133,11 +138,10 @@ function exactlyOne<T>(values: readonly T[]): T | undefined {
  * Head-of-line order exists so one ingress's pending decision cannot be
  * overtaken by the next one's. An ingress that will never decide anything has
  * nothing left to protect: `resolved` and `terminal_inapplicable` reached their
- * verdict, `exhausted` gave up its budget, and `host_fault` executed no effect
- * and never will, because the reduction returns it before any decision can be
- * read. Holding the line for such an ingress stalls every later operator
- * message behind a state that nothing but an operator can change — which is
- * exactly how one broken Host write used to wedge a whole Task.
+ * verdict, `exhausted` gave up its budget, and `operator_abandoned` proves that
+ * a surfaced Host fault was durably retired. A bare `host_fault` does not
+ * release: the gate and abandonment receipt must commit before a successor can
+ * acquire, otherwise a crash between those facts can reorder physical work.
  *
  * This is the single definition of that release, shared by the durable
  * acquisition fence and the scan.
@@ -147,7 +151,7 @@ export function taskRootIngressReleasesHeadOfLine(projection: TaskRootIngressPro
     projection.state === "resolved" ||
     projection.state === "terminal_inapplicable" ||
     projection.state === "exhausted" ||
-    projection.state === "host_fault"
+    projection.state === "operator_abandoned"
   )
 }
 
@@ -304,6 +308,7 @@ export function classifyTaskRootIngressWake(
   switch (projection.state) {
     case "resolved":
     case "terminal_inapplicable":
+    case "operator_abandoned":
       return { class: "absorbing" }
     case "leased":
       return finiteWake(projection.expiresAt, absoluteDeadline)
@@ -343,6 +348,9 @@ export function taskRootIngressWakeInstant(
  * correctness contract: a Host fault wins before any apparent completion, so
  * no ambiguous evidence can be read as a decision and executed. */
 export function reduceTaskRootIngressFacts(facts: TaskRootIngressFacts, now: number): TaskRootIngressProjection {
+  if (facts.operatorAbandoned) {
+    return { state: "operator_abandoned", evidenceIDs: facts.operatorAbandoned.evidenceIDs }
+  }
   if (facts.integrityViolation) return { state: "host_fault", reason: "evidence_violation" }
   const fault = hostFault(facts)
   if (fault) return { state: "host_fault", reason: fault }

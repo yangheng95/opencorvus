@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, test } from "bun:test"
-import { EngineTaskRootIngressTable, EngineTaskTable } from "@/engine/engine.sql"
+import { EngineArtifactTable, EngineTaskRootIngressTable, EngineTaskTable } from "@/engine/engine.sql"
 import { eq } from "@/storage/db"
-import { appendTaskOpenedInTransaction } from "@/engine/task-lifecycle"
+import { appendTaskOpenedInTransaction, appendTaskReopenedInTransaction } from "@/engine/task-lifecycle"
 import { acceptTaskRootIngressInTransaction } from "@/engine/task-root-fact-store"
 import {
   reconcileTaskControlPlane,
@@ -20,12 +20,7 @@ afterEach(async () => {
   await resetMemoryDatabase()
 })
 
-function seedTask(input: {
-  rootSessionID: string
-  title: string
-  terminal?: boolean
-  postTerminalIngress?: boolean
-}) {
+function seedTask(input: { rootSessionID: string; title: string; terminal?: boolean; postTerminalIngress?: boolean }) {
   const taskID = Identifier.ascending("task")
   const now = Date.now()
   Database.immediateTransaction((db) => {
@@ -156,6 +151,122 @@ describe("Task-control sweep scope", () => {
           // The pre-terminal head ingress reduced to terminal_inapplicable, so
           // the post-terminal conversation is the activated frontier.
           activatedIngressSources: [`post-terminal-${finished}`],
+        })
+      },
+    })
+  })
+
+  test("keeps only the current reopened epoch and conservatively admits an equal-time terminal ingress", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const root = await Session.create({ kind: "root", title: "Reopened frontier root" })
+        const reopened = seedTask({
+          rootSessionID: root.id,
+          title: "Reopened Task",
+          terminal: true,
+          postTerminalIngress: true,
+        })
+        const equalBoundary = Identifier.ascending("task")
+        let equalIngressID = ""
+        const now = Date.now() + 100
+        Database.immediateTransaction((db) => {
+          appendTaskReopenedInTransaction({
+            db,
+            taskID: reopened,
+            sessionID: root.id,
+            now,
+            source: "test.sweep.reopen",
+          })
+          acceptTaskRootIngressInTransaction(db, {
+            taskID: reopened,
+            executionEpoch: 2,
+            source: "inline",
+            sourceID: `current-epoch-${reopened}`,
+            inlinePayload: { note: "current epoch" },
+            semanticTurnLimit: 3,
+            activationLimit: 4,
+            now: now + 1,
+          })
+
+          db.insert(EngineTaskTable)
+            .values({
+              id: equalBoundary,
+              project_id: Instance.project.id,
+              session_id: root.id,
+              source: "test",
+              product_pillar: "code",
+              title: "Equal boundary Task",
+              request: "Keep an ingress accepted at the exact terminal instant",
+              time_created: now + 2,
+            })
+            .run()
+          appendTaskOpenedInTransaction({
+            db,
+            taskID: equalBoundary,
+            sessionID: root.id,
+            now: now + 2,
+            source: "test.sweep.equal",
+          })
+          ProtocolStore.appendEventInTransaction({
+            kind: "event",
+            type: "task.completed",
+            aggregate: "task",
+            aggregate_id: equalBoundary,
+            task_id: null,
+            session_id: root.id,
+            source: "test.sweep.equal",
+            emitted_at: now + 3,
+            payload: { execution_epoch: 1 },
+          })
+          equalIngressID = acceptTaskRootIngressInTransaction(db, {
+            taskID: equalBoundary,
+            executionEpoch: 1,
+            source: "inline",
+            sourceID: `equal-terminal-${equalBoundary}`,
+            inlinePayload: { note: "equal terminal instant" },
+            semanticTurnLimit: 3,
+            activationLimit: 4,
+            now: now + 3,
+          }).id
+        })
+
+        const activatedSources: string[] = []
+        using _runner = TaskControlTestHooks.replaceTaskIngressRunner({
+          runner: async ({ wakeID }) => {
+            const source = Database.use((db) =>
+              db
+                .select({ sourceID: EngineTaskRootIngressTable.source_id })
+                .from(EngineTaskRootIngressTable)
+                .where(eq(EngineTaskRootIngressTable.id, wakeID!))
+                .get(),
+            )
+            if (source) activatedSources.push(source.sourceID)
+          },
+        })
+
+        await reconcileTaskControlPlane()
+
+        expect({
+          swept: taskControlDriverSnapshot()
+            .map((entry) => entry.taskID)
+            .toSorted(),
+          activatedSources,
+          equalBoundaryDisposition: Database.use((db) =>
+            db
+              .select({ disposition: EngineArtifactTable.payload })
+              .from(EngineArtifactTable)
+              .where(eq(EngineArtifactTable.kind, "task_root_ingress_disposition"))
+              .all()
+              .find((row) => row.disposition?.ingress_id === equalIngressID)?.disposition.disposition,
+          ),
+        }).toEqual({
+          // Equality stays a conservative discovery boundary. The exact
+          // reducer then records it terminal-inapplicable without executing.
+          swept: [reopened],
+          activatedSources: [`current-epoch-${reopened}`],
+          equalBoundaryDisposition: "terminal_inapplicable",
         })
       },
     })

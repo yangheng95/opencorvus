@@ -1,6 +1,7 @@
 import { DispatchAdapterContractRegistry, type AgentDispatchAdapterID } from "@/agent/dispatch-adapter-contract"
 import type { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
-import { tool } from "ai"
+import { jsonSchema, tool } from "ai"
+import type { JSONSchema7 } from "@ai-sdk/provider"
 import z from "zod"
 import { ProjectedAgentWorkScopeSchema } from "@/agent/projected-agent-work-scope"
 import {
@@ -379,6 +380,18 @@ export function bindDispatchAdapterExecutors(
 }
 
 const dispatchAgentToolLineageHooks = new WeakMap<object, OpenDispatchAgentLineage>()
+const dispatchAgentToolExecutionInputSchemas = new WeakMap<object, z.ZodType>()
+
+/**
+ * Return the canonical execution validator behind the Provider-facing compact
+ * JSON Schema projection. Collection dispatch composes this validator instead
+ * of treating the projection wrapper as a Zod schema.
+ */
+export function dispatchAgentExecutionInputSchema(tool: object): z.ZodType {
+  const canonical = dispatchAgentToolExecutionInputSchemas.get(tool)
+  if (canonical) return canonical
+  throw new Error("Dispatch Agent Tool canonical execution input schema is unavailable")
+}
 
 export const DispatchAgentToolTestHooks = Object.freeze({
   openLineage(tool: object): OpenDispatchAgentLineage {
@@ -407,6 +420,70 @@ export function createDispatchAgentTool(input: {
   const agentsByID = new Map<string, PromptProfileResolver.ResolvedProjectedAgent>()
   const handlersByAgentID = new Map<string, DispatchAgentExecute>()
   const variants: z.ZodObject<any>[] = []
+  // These are one Provider contract shared by every target variant. Keeping
+  // one schema identity lets the emitted JSON Schema reference the common
+  // workflow/continuation definitions instead of inlining the same contract
+  // once per projected agent. The canonical Zod parser below remains the only
+  // execution authority.
+  const workflowSubjectSchema = DispatchWorkflowSubjectSchema.describe(
+    "Exact Task workflow subject for this first logical node occurrence. After any virtual workflow node has committed, every later initial dispatch must name another node from that same selected virtual workflow; direct is valid only before the Task has selected a virtual workflow.",
+  )
+  const useWorktreeSchema = z
+    .boolean()
+    .describe(
+      "Whether this Task-scoped dispatched agent runs in an isolated managed Git worktree. Use true for concurrent write-capable dispatches whose repository ownership requires isolation; read-only or proven-disjoint dispatches may use false. This choice belongs to the initial Turn alone: it fixes the worker Session's directory, which every continuation of that Session then inherits.",
+    )
+  const continuationAuthoritySchema = z.discriminatedUnion("kind", [
+    z
+      .object({
+        kind: z.literal("coordination_action"),
+        coordination_action_id: z.string().min(1),
+      })
+      .strict(),
+    z
+      .object({
+        kind: z.literal("prior_dispatch"),
+        continuation_dispatch_id: z.string().min(1),
+      })
+      .strict(),
+  ])
+  const continuationTurnSchema = z
+    .object({
+      kind: z.literal("continuation"),
+      authority: continuationAuthoritySchema.describe("Exact persisted lineage authority for this successor Turn."),
+      guidance: z
+        .string()
+        .trim()
+        .min(1)
+        .describe("Only new instruction for this successor Turn; original adapter input remains frozen."),
+      evidence_locators: EvidenceLocatorInputListSchema.default([]).describe(
+        "Exact new durable evidence identities selected for this successor Turn. Name each Artifact by its exact revision or snapshot path only; the Host reads the digest, byte count, and media type itself, so never restate a content digest here. A session_message locator must be Task-owned and pair the Message with its actual producing Session; for a Mission acceptance-repair Task-root message, use the Task root Session authority and never missionSessionID.",
+      ),
+      ...(input.acceptanceRepair
+        ? {
+            acceptance_gap_id: z
+              .literal(input.acceptanceRepair.revision.gap.gap_id)
+              .describe("Exact current Mission acceptance gap consumed by this continuation."),
+            criterion_ids: z
+              .array(
+                z
+                  .string()
+                  .refine(
+                    (criterionID) =>
+                      input.acceptanceRepair!.revision.gap.criteria.some(
+                        (criterion) => criterion.criterion_id === criterionID,
+                      ),
+                    "Criterion is not open in the current Mission acceptance gap.",
+                  ),
+              )
+              .min(1)
+              .max(64)
+              .describe("Only current gap criteria this worker continuation must consume."),
+          }
+        : {}),
+    })
+    .strict()
+    .describe("Exact persisted continuation Turn authority and new guidance.")
   const projectedInputs = input.projectedAgents.map((projectedAgent) => {
     const adapterInputSchema = DispatchAdapterContractRegistry.inputSchema(
       projectedAgent.identity.dispatchAdapterID,
@@ -441,73 +518,18 @@ export function createDispatchAgentTool(input: {
         ),
       work_scope: ProjectedAgentWorkScopeSchema,
     } as const
-    const continuationAuthoritySchema = z.discriminatedUnion("kind", [
-      z
-        .object({
-          kind: z.literal("coordination_action"),
-          coordination_action_id: z.string().min(1),
-        })
-        .strict(),
-      z
-        .object({
-          kind: z.literal("prior_dispatch"),
-          continuation_dispatch_id: z.string().min(1),
-        })
-        .strict(),
-    ])
     const turnSchema = z.discriminatedUnion("kind", [
       z
         .object({
           kind: z.literal("initial"),
-          workflow_subject: DispatchWorkflowSubjectSchema.describe(
-            "Exact Task workflow subject for this first logical node occurrence. After any virtual workflow node has committed, every later initial dispatch must name another node from that same selected virtual workflow; direct is valid only before the Task has selected a virtual workflow.",
-          ),
-          use_worktree: z
-            .boolean()
-            .describe(
-              "Whether this Task-scoped dispatched agent runs in an isolated managed Git worktree. Use true for concurrent write-capable dispatches whose repository ownership requires isolation; read-only or proven-disjoint dispatches may use false. This choice belongs to the initial Turn alone: it fixes the worker Session's directory, which every continuation of that Session then inherits.",
-            ),
+          workflow_subject: workflowSubjectSchema,
+          use_worktree: useWorktreeSchema,
           input: publicAdapterInputSchema.describe(
             `Exact immutable ${agentID} adapter input for the initial worker Turn.`,
           ),
         })
         .strict(),
-      z
-        .object({
-          kind: z.literal("continuation"),
-          authority: continuationAuthoritySchema.describe("Exact persisted lineage authority for this successor Turn."),
-          guidance: z
-            .string()
-            .trim()
-            .min(1)
-            .describe("Only new instruction for this successor Turn; original adapter input remains frozen."),
-          evidence_locators: EvidenceLocatorInputListSchema.default([]).describe(
-            "Exact new durable evidence identities selected for this successor Turn. Name each Artifact by its exact revision or snapshot path only; the Host reads the digest, byte count, and media type itself, so never restate a content digest here. A session_message locator must be Task-owned and pair the Message with its actual producing Session; for a Mission acceptance-repair Task-root message, use the Task root Session authority and never missionSessionID.",
-          ),
-          ...(input.acceptanceRepair
-            ? {
-                acceptance_gap_id: z
-                  .literal(input.acceptanceRepair.revision.gap.gap_id)
-                  .describe("Exact current Mission acceptance gap consumed by this continuation."),
-                criterion_ids: z
-                  .array(
-                    z
-                      .string()
-                      .refine(
-                        (criterionID) =>
-                          input.acceptanceRepair!.revision.gap.criteria.some(
-                            (criterion) => criterion.criterion_id === criterionID,
-                          ),
-                        "Criterion is not open in the current Mission acceptance gap.",
-                      ),
-                  )
-                  .min(1)
-                  .max(64)
-                  .describe("Only current gap criteria this worker continuation must consume."),
-              }
-            : {}),
-        })
-        .strict(),
+      continuationTurnSchema,
     ])
     variants.push(
       z
@@ -529,6 +551,15 @@ export function createDispatchAgentTool(input: {
       ),
     })
     .strict()
+  const providerInputSchema = jsonSchema<z.infer<typeof inputSchema>>(
+    z.toJSONSchema(inputSchema, { cycles: "ref", reused: "ref" }) as unknown as JSONSchema7,
+    {
+      validate(value) {
+        const parsed = inputSchema.safeParse(value)
+        return parsed.success ? { success: true, value: parsed.data } : { success: false, error: parsed.error }
+      },
+    },
+  )
 
   const dispatchTool = tool({
     description:
@@ -537,7 +568,7 @@ export function createDispatchAgentTool(input: {
       "Every call must declare use_worktree. Concurrent write-capable Task dispatches use managed worktrees when repository ownership requires isolation; read-only or proven-disjoint dispatches may use false. " +
       "A newly started worker returns accepted as soon as its durable lineage and Session exist; continue the root control Turn without waiting for that worker. A fast worker may instead return terminal_success, domain_incomplete, domain_blocked, partial, infrastructure_failure, or a coordination request. domain_incomplete carries the exact durable but incomplete domain Artifact and never opens workflow successors. domain_blocked carries the exact domain Artifact and unanswered blocker Question occurrence and also keeps successors closed. terminal_success is already terminal: never call wait for it; discover persisted domain facts through artifact_search, read each artifact_locator_ref completely, and select semantic sources with artifact_read_ref. " +
       "This replaces separate visible worker-stage tools such as requirements, architect, build, visual_qa, integrity, fact_check, research, workload, intent analysis, and explore.",
-    inputSchema,
+    inputSchema: providerInputSchema,
     outputSchema: DispatchOutcomeSchema,
     execute: async (toolInput, options) => {
       const parsed = inputSchema.parse(toolInput) as {
@@ -812,11 +843,7 @@ export function createDispatchAgentTool(input: {
               sessionID: completedSessionID,
               dispatchID: dispatch.dispatchID,
             })
-            if (
-              result !== "delivered" &&
-              result !== "already_delivered" &&
-              result !== "suppressed_budget_exhausted"
-            ) {
+            if (result !== "delivered" && result !== "already_delivered" && result !== "suppressed_budget_exhausted") {
               throw new Error(
                 `dispatch_agent ${target} completion delivery is ${result} for Session ${completedSessionID}`,
               )
@@ -901,11 +928,8 @@ export function createDispatchAgentTool(input: {
               sessionID: completedSessionID,
               dispatchID: dispatch.dispatchID,
             })
-            if (
-              result === "delivered" ||
-              result === "already_delivered" ||
-              result === "suppressed_budget_exhausted"
-            ) return
+            if (result === "delivered" || result === "already_delivered" || result === "suppressed_budget_exhausted")
+              return
             throw new Error(`Detached worker lifecycle recovery is ${result} for Session ${completedSessionID}`)
           },
           onPipelineOwnerCleanupFailure: async ({ sessionID: completedSessionID, error }) => {
@@ -1038,5 +1062,6 @@ export function createDispatchAgentTool(input: {
     },
   })
   dispatchAgentToolLineageHooks.set(dispatchTool, input.openLineage)
+  dispatchAgentToolExecutionInputSchemas.set(dispatchTool, inputSchema)
   return dispatchTool
 }

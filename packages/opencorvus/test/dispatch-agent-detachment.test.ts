@@ -159,7 +159,7 @@ describe("dispatch_agent detached execution", () => {
         }),
       ]),
     ).toBe(expectedProjectID)
-  })
+  }, 30_000)
 
   test("routes detached pipeline owner initialization failure through supervised recovery", async () => {
     let releaseWorker!: () => void

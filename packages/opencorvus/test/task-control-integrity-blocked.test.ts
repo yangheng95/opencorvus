@@ -12,7 +12,7 @@ import { Identifier } from "@/id/id"
 import { Instance } from "@/project/instance"
 import { Session } from "@/session"
 import { MessageTable } from "@/session/session.sql"
-import { Database } from "@/storage/db"
+import { Database, eq } from "@/storage/db"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
 afterEach(async () => {
@@ -139,7 +139,7 @@ describe("Task-control integrity violations", () => {
           projection: projection.state,
           activated,
           activations,
-          failures: entry?.failures,
+          retired: entry === undefined,
           // An operator gate is not a fault: the driver must not arm a retry
           // timer for a state no retry can change.
           armedTimer: entry?.wakeAt !== undefined,
@@ -147,14 +147,14 @@ describe("Task-control integrity violations", () => {
           projection: "host_fault",
           activated: 0,
           activations: 0,
-          failures: 0,
+          retired: true,
           armedTimer: false,
         })
       },
     })
   })
 
-  test("lets a later operator ingress run past a Host-faulted head", async () => {
+  test("commits the Host-fault gate and abandonment receipt before a later operator ingress runs", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
@@ -168,19 +168,48 @@ describe("Task-control integrity violations", () => {
           },
         })
 
+        {
+          using _failedGate = TaskControlTestHooks.replaceOperatorGateWriter(() => {
+            throw new Error("injected gate publication failure")
+          })
+          const activatedBeforeAtomicCommit = await reconcileTaskControlPlane(taskID)
+          const durableBeforeAtomicCommit = Database.use((db) =>
+            db
+              .select({ kind: EngineArtifactTable.kind })
+              .from(EngineArtifactTable)
+              .where(eq(EngineArtifactTable.task_id, taskID))
+              .all()
+              .filter(
+                (row) => row.kind === "task-infrastructure-error" || row.kind === "task_root_ingress_disposition",
+              ),
+          )
+          expect({
+            head: projectTaskRootIngress(ingressID, Date.now(), readTaskRootIngressEvidence).state,
+            followUp: projectTaskRootIngress(followUpID, Date.now(), readTaskRootIngressEvidence).state,
+            activated: activatedBeforeAtomicCommit,
+            ran,
+            durableBeforeAtomicCommit,
+          }).toEqual({
+            head: "host_fault",
+            followUp: "ready",
+            activated: 0,
+            ran: [],
+            durableBeforeAtomicCommit: [],
+          })
+        }
+
         const activated = await reconcileTaskControlPlane(taskID)
 
-        // This is the defect the slice removes: the corrupt head used to hold
-        // the whole FIFO, so every later operator message queued behind it
-        // forever and the only exits were an epoch-bumping Retry or hand
-        // repair of the database.
+        // The successor acquires only after the gate and abandonment receipt
+        // commit together. A crash or injected fault cannot expose either half
+        // and therefore cannot reorder the FIFO.
         expect({
           head: projectTaskRootIngress(ingressID, Date.now(), readTaskRootIngressEvidence).state,
           followUp: projectTaskRootIngress(followUpID, Date.now(), readTaskRootIngressEvidence).state,
           activated,
           ran,
         }).toEqual({
-          head: "host_fault",
+          head: "operator_abandoned",
           followUp: "leased",
           activated: 1,
           // Only the follow-up ran: the faulted head never reaches the runner,
@@ -230,11 +259,11 @@ describe("Task-control integrity violations", () => {
           // Only the seeded lease exists: a Host fault is refused before
           // acquisition, so repeated scans cannot exhaust the budget.
           leases: state.leases,
-          // The settlement is durable and operator-visible, and the
-          // deterministic artifact identity keeps repeated observations
-          // idempotent even though the verdict is deliberately not memoized.
+          // The surfaced gate and its disposition are durable and
+          // operator-visible, so repeated observations reduce to the same
+          // irreversible release rather than reconsidering repaired evidence.
           gates: state.gates,
-        }).toEqual({ projection: "host_fault", leases: 1, gates: 1 })
+        }).toEqual({ projection: "operator_abandoned", leases: 1, gates: 1 })
       },
     })
   })

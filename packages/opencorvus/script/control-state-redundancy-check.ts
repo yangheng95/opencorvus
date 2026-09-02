@@ -68,7 +68,7 @@ const CONTROL_STATE_INVENTORY = {
     fact: ["time_created"],
   }),
   EngineTaskRootIngressTable: inventory({
-    identity: ["id", "task_id"],
+    identity: ["id", "task_id", "project_id"],
     causal: ["execution_epoch", "sequence", "source", "source_id", "policy_id"],
     fact: ["inline_payload", "time_accepted"],
   }),
@@ -216,7 +216,7 @@ const CONTROL_STATE_INVENTORY = {
     receipt: ["outcome", "disposition", "closure_event_id", "error", "time_created"],
   }),
   EngineTaskWaitRegistrationTable: inventory({
-    identity: ["id", "task_id", "execution_epoch"],
+    identity: ["id", "task_id", "project_id", "execution_epoch"],
     causal: ["tool_part_id", "creator_ingress_id", "creator_activation_id"],
     input: ["due_at", "reason", "input_digest"],
     fact: ["time_created"],
@@ -271,7 +271,16 @@ const CONTROL_STATE_INVENTORY = {
     receipt: ["outcome", "disposition", "closure_event_id", "message_id", "error", "time_created"],
   }),
   ProtocolEventTable: inventory({
-    identity: ["id", "aggregate_type", "aggregate_id", "task_id", "session_id", "interaction_id", "stream_id"],
+    identity: [
+      "id",
+      "aggregate_type",
+      "aggregate_id",
+      "project_id",
+      "task_id",
+      "session_id",
+      "interaction_id",
+      "stream_id",
+    ],
     causal: ["kind", "type", "source", "target", "causation_id", "correlation_id", "reply_to", "seq"],
     policy: ["deadline_ms"],
     fact: ["emitted_at", "payload"],

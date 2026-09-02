@@ -100,6 +100,7 @@ async function createTaskWithUnresolvedProviderEffect(label: string) {
         type: "agent.execution.lifecycle",
         aggregate_type: "task",
         aggregate_id: taskID,
+        project_id: Instance.project.id,
         task_id: null,
         session_id: orchestrator.id,
         source: "test.destructive-control",

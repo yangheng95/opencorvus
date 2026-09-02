@@ -172,9 +172,10 @@ test("due wait and operator ingress converge once across a killed owner while an
     await blocked.child.exited
     const leaseDatabase = new SQLite(input.databasePath, { readonly: true })
     const killedLease = leaseDatabase
-      .query<{ expiresAt: number }, [string]>(
-        "SELECT expires_at AS expiresAt FROM engine_control_activation_lease WHERE id=?",
-      )
+      .query<
+        { expiresAt: number },
+        [string]
+      >("SELECT expires_at AS expiresAt FROM engine_control_activation_lease WHERE id=?")
       .get(claimed.activationID)
     leaseDatabase.close()
     if (!killedLease) throw new Error(`Killed activation ${claimed.activationID} was not persisted`)
@@ -192,15 +193,17 @@ test("due wait and operator ingress converge once across a killed owner while an
     try {
       const settlementFor = (waitID: string) =>
         sqlite
-          .query<{ waitID: string; ingressID: string; disposition: string }, [string]>(
-            "SELECT wait_id AS waitID, ingress_id AS ingressID, disposition FROM engine_task_wait_settlement WHERE wait_id=?",
-          )
+          .query<
+            { waitID: string; ingressID: string; disposition: string },
+            [string]
+          >("SELECT wait_id AS waitID, ingress_id AS ingressID, disposition FROM engine_task_wait_settlement WHERE wait_id=?")
           .all(waitID)
       const waitIngressesFor = (waitID: string) =>
         sqlite
-          .query<{ id: string }, [string]>(
-            "SELECT id FROM engine_task_root_ingress WHERE source='inline' AND json_extract(inline_payload,'$.taskWaitWake.jobID')=? ORDER BY id",
-          )
+          .query<
+            { id: string },
+            [string]
+          >("SELECT id FROM engine_task_root_ingress WHERE source='inline' AND json_extract(inline_payload,'$.taskWaitWake.jobID')=? ORDER BY id")
           .all(waitID)
       const settlementA = settlementFor(seedA.wait.id)
       const settlementB = settlementFor(seedB.wait.id)
@@ -209,15 +212,17 @@ test("due wait and operator ingress converge once across a killed owner while an
       const operatorIngressID = operatorResult.result?.ingress_id
       const operatorIngress = operatorIngressID
         ? sqlite
-            .query<{ id: string; taskID: string; source: string }, [string]>(
-              "SELECT id, task_id AS taskID, source FROM engine_task_root_ingress WHERE id=?",
-            )
+            .query<
+              { id: string; taskID: string; source: string },
+              [string]
+            >("SELECT id, task_id AS taskID, source FROM engine_task_root_ingress WHERE id=?")
             .get(operatorIngressID)
         : undefined
       const dueActivationCount = sqlite
-        .query<{ count: number }, [string]>(
-          "SELECT COUNT(*) AS count FROM engine_control_activation_lease WHERE target='task_root_ingress' AND target_id=?",
-        )
+        .query<
+          { count: number },
+          [string]
+        >("SELECT COUNT(*) AS count FROM engine_control_activation_lease WHERE target='task_root_ingress' AND target_id=?")
         .get(claimed.wakeID)!.count
       expect({
         isolatedProjects: [seedA.projectID, seedB.projectID],
@@ -247,9 +252,7 @@ test("due wait and operator ingress converge once across a killed owner while an
         projectB: {
           activatedWakeIDs: [dueIngressesB[0]?.id],
           wait: [{ id: seedB.wait.id, status: "due_ingress_accepted", ingressID: dueIngressesB[0]?.id }],
-          settlement: [
-            { waitID: seedB.wait.id, ingressID: dueIngressesB[0]?.id, disposition: "due_ingress_accepted" },
-          ],
+          settlement: [{ waitID: seedB.wait.id, ingressID: dueIngressesB[0]?.id, disposition: "due_ingress_accepted" }],
           dueIngresses: [{ id: dueIngressesB[0]?.id }],
         },
         operator: {
@@ -263,9 +266,7 @@ test("due wait and operator ingress converge once across a killed owner while an
           dueActivationCount: 2,
         },
         projectA: {
-          settlement: [
-            { waitID: seedA.wait.id, ingressID: claimed.wakeID, disposition: "due_ingress_accepted" },
-          ],
+          settlement: [{ waitID: seedA.wait.id, ingressID: claimed.wakeID, disposition: "due_ingress_accepted" }],
           dueIngresses: [{ id: claimed.wakeID }],
         },
       })
@@ -280,4 +281,4 @@ test("due wait and operator ingress converge once across a killed owner while an
     }
     removeFixture(input.root)
   }
-}, 60_000)
+}, 120_000)

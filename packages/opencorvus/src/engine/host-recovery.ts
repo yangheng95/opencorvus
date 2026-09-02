@@ -140,20 +140,20 @@ const missionProjectReconciliationState = createInstanceState(
       maximumPendingScans: MISSION_RECOVERY_CONCURRENCY,
       retireSettledEntries: true,
       liveTasks: () => {
-        let page = listGlobalMissionProcessRecoveryCandidates({
+        const page = listGlobalMissionProcessRecoveryCandidates({
           scopeProjectID: projectID,
           afterSessionID: heartbeatCursor,
           limit: MISSION_RECOVERY_PAGE_SIZE,
         })
-        if (page.length === 0 && heartbeatCursor) {
-          heartbeatCursor = undefined
-          page = listGlobalMissionProcessRecoveryCandidates({
-            scopeProjectID: projectID,
-            limit: MISSION_RECOVERY_PAGE_SIZE,
-          })
+        const hasMore = page.length === MISSION_RECOVERY_PAGE_SIZE
+        const nextCursor = hasMore ? page.at(-1)?.sessionID : undefined
+        return {
+          taskIDs: page.map((candidate) => candidate.sessionID),
+          hasMore,
+          commit() {
+            heartbeatCursor = nextCursor
+          },
         }
-        heartbeatCursor = page.at(-1)?.sessionID
-        return page.map((candidate) => candidate.sessionID)
       },
       heartbeatMilliseconds: MISSION_LIVENESS_RECHECK_MS,
       minimumWakeDelayMilliseconds: 25,
@@ -293,13 +293,11 @@ export async function recoverStartedTaskExecutions(input?: {
         fn: async () => {
           const projectID = Instance.project.id
           await Promise.all([
-            requestMissionProjectReconciliation({ projectID, directory, failures: missionFailures }).then(
-              (mission) => {
-                missionAttempted += mission.attempted
-                missionWoken += mission.woken
-                missionCompleted += mission.completed
-              },
-            ),
+            requestMissionProjectReconciliation({ projectID, directory, failures: missionFailures }).then((mission) => {
+              missionAttempted += mission.attempted
+              missionWoken += mission.woken
+              missionCompleted += mission.completed
+            }),
             drainSchedulerMessagesForProject(),
           ])
         },

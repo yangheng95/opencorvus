@@ -15,7 +15,12 @@ import { isExecutionCancellationError } from "@/session/prompt/cancellation"
 import { SessionProcessor } from "@/session/processor"
 import { SessionStatus } from "@/session/status"
 import { Database, eq } from "@/storage/db"
-import { EngineArtifactTable, EngineTaskTable } from "@/engine/engine.sql"
+import {
+  EngineArtifactTable,
+  EngineTaskRootIngressPolicyTable,
+  EngineTaskRootIngressTable,
+  EngineTaskTable,
+} from "@/engine/engine.sql"
 import { PermissionLedgerTable, PermissionPolicyTable } from "@/permission/permission.sql"
 import { DecisionLogTable } from "@/decision-log/schema"
 import { EngineService } from "@/task-api"
@@ -46,10 +51,11 @@ import { ProtocolStore } from "@/protocol/store"
 import { McpAuth } from "@/mcp/auth"
 import { ProjectDeletionCleanupAdmissionTestHooks } from "@/project/deletion-cleanup-admission"
 import { ProjectDirectoryAdmission } from "@/project/directory-admission"
-import { createDispatchLineageOrigin, recordDispatchLineage } from "@/engine/dispatch-lineage"
+import { createDispatchLineageOrigin } from "@/engine/dispatch-lineage"
 import { joinProcessLivenessLease } from "@/engine/process-liveness"
 import { currentRuntimeOccurrenceID } from "@/runtime/process-occurrence"
 import { insertTaskPackageRevisionBinding } from "@/engine/task-package-revision-binding"
+import { recordTestDispatchLineage } from "./fixture/dispatch-lineage"
 
 let rejectDeletionProbeDisposal = false
 let holdDeletionProbeDisposal: Promise<void> | undefined
@@ -905,6 +911,8 @@ describe("Project directory integrity", () => {
         const assistantMessageID = Identifier.ascending("message")
         const toolPartID = Identifier.ascending("part")
         const toolCallID = Identifier.ascending("call")
+        const creatorIngressID = Identifier.ascending("artifact")
+        const creatorPolicyID = Identifier.ascending("artifact")
         await Session.updateMessage({
           id: userMessageID,
           sessionID: root.id,
@@ -913,51 +921,6 @@ describe("Project directory integrity", () => {
           agent: "orchestrator",
           model: { providerID: "test", modelID: "test" },
           time: { created: now + 1 },
-        })
-        await Session.updateMessage({
-          id: assistantMessageID,
-          parentID: userMessageID,
-          sessionID: root.id,
-          role: "assistant",
-          author: "orchestrator",
-          agent: "orchestrator",
-          providerID: "test",
-          modelID: "test",
-          path: { cwd: project.path, root: project.path },
-          cost: 0,
-          tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
-          time: { created: now + 2 },
-        })
-        await Session.updatePart({
-          id: toolPartID,
-          sessionID: root.id,
-          messageID: assistantMessageID,
-          type: "tool",
-          callID: toolCallID,
-          tool: "dispatch_agent",
-          state: {
-            status: "completed",
-            input: { target: "project-delete-worker" },
-            output: "accepted",
-            title: "accepted",
-            metadata: {},
-            time: { start: now + 3, end: now + 4 },
-          },
-        })
-        await Session.updateMessage({
-          id: assistantMessageID,
-          parentID: userMessageID,
-          sessionID: root.id,
-          role: "assistant",
-          author: "orchestrator",
-          agent: "orchestrator",
-          providerID: "test",
-          modelID: "test",
-          path: { cwd: project.path, root: project.path },
-          cost: 0,
-          tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
-          finish: "tool-calls",
-          time: { created: now + 2, completed: now + 4 },
         })
         Database.transaction((db) => {
           insertEngineTask(db, {
@@ -973,6 +936,23 @@ describe("Project directory integrity", () => {
             timeCreated: now,
           })
           appendTaskOpenedInTransaction({ db, taskID, sessionID: root.id, now, source: "test" })
+          db.insert(EngineTaskRootIngressPolicyTable)
+            .values({ id: creatorPolicyID, semantic_turn_limit: 1, activation_limit: 1, time_created: now })
+            .run()
+          db.insert(EngineTaskRootIngressTable)
+            .values({
+              id: creatorIngressID,
+              task_id: taskID,
+              project_id: projectID,
+              execution_epoch: 1,
+              sequence: 0,
+              source: "inline",
+              source_id: creatorIngressID,
+              inline_payload: { purpose: "Project deletion dispatch creator" },
+              policy_id: creatorPolicyID,
+              time_accepted: now,
+            })
+            .run()
           insertTaskPackageRevisionBinding({ db, taskID, packageRevision, timeCreated: now })
           db.insert(PermissionPolicyTable)
             .values({
@@ -1023,7 +1003,7 @@ describe("Project directory integrity", () => {
         })
         const liveness = joinProcessLivenessLease(currentRuntimeOccurrenceID())
         try {
-          const lineage = recordDispatchLineage({
+          const lineage = recordTestDispatchLineage({
             origin: createDispatchLineageOrigin({
               dispatchID,
               taskID,

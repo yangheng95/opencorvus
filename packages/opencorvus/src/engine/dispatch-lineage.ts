@@ -1,10 +1,15 @@
 import { ProjectedAgentWorkScopeSchema, type ProjectedAgentWorkScope } from "@/agent/projected-agent-work-scope"
 import { ProjectedWorkerIdentitySchema, type ProjectedWorkerIdentity } from "@/agent/projected-worker-identity"
 import { insertEngineArtifact } from "@/engine/artifact"
-import { EngineArtifactTable, EngineTaskTable } from "@/engine/engine.sql"
+import {
+  EngineArtifactTable,
+  EngineControlActivationLeaseTable,
+  EngineTaskRootIngressTable,
+  EngineTaskTable,
+} from "@/engine/engine.sql"
 import { Identifier } from "@/id/id"
 import { currentRuntimeOccurrenceID } from "@/runtime/process-occurrence"
-import { WorkerTurnDescriptorTable } from "@/session/session.sql"
+import { MessageTable, ToolPartRequestTable, WorkerTurnDescriptorTable } from "@/session/session.sql"
 import { and, asc, desc, eq, sql, Database } from "@/storage/db"
 import { isDeepStrictEqual } from "node:util"
 import {
@@ -281,6 +286,53 @@ export interface DispatchLineageOrigin {
   adapterInput: Record<string, unknown>
 }
 
+function dispatchCreatorExecutionEpochInTransaction(
+  db: Database.TxOrDb,
+  origin: DispatchLineageOrigin,
+): number {
+  const creator = db
+    .select({ executionEpoch: EngineTaskRootIngressTable.execution_epoch })
+    .from(ToolPartRequestTable)
+    .innerJoin(
+      MessageTable,
+      and(
+        eq(MessageTable.id, ToolPartRequestTable.message_id),
+        eq(MessageTable.id, origin.orchestratorMessageID),
+        eq(MessageTable.session_id, origin.orchestratorSessionID),
+        sql`json_extract(${MessageTable.data}, '$.role') = 'assistant'`,
+        sql`json_extract(${MessageTable.data}, '$.author') = 'orchestrator'`,
+      ),
+    )
+    .innerJoin(
+      EngineControlActivationLeaseTable,
+      and(
+        eq(EngineControlActivationLeaseTable.target, "task_root_ingress"),
+        sql`${EngineControlActivationLeaseTable.id} = json_extract(${MessageTable.data}, '$.activationID')`,
+      ),
+    )
+    .innerJoin(
+      EngineTaskRootIngressTable,
+      and(
+        eq(EngineTaskRootIngressTable.id, EngineControlActivationLeaseTable.target_id),
+        eq(EngineTaskRootIngressTable.task_id, origin.taskID),
+      ),
+    )
+    .where(
+      and(
+        eq(ToolPartRequestTable.id, origin.toolPartID),
+        sql`json_extract(${ToolPartRequestTable.data}, '$.callID') = ${origin.toolCallID}`,
+        sql`json_extract(${ToolPartRequestTable.data}, '$.tool') = ${origin.toolName ?? "dispatch_agent"}`,
+      ),
+    )
+    .get()
+  if (!creator) {
+    throw new Error(
+      `Dispatch ${origin.dispatchID} has no exact Task-root creator occurrence for Tool ${origin.toolPartID}/${origin.toolCallID}`,
+    )
+  }
+  return creator.executionEpoch
+}
+
 function assertCoordinationDispatchAdmissionInTransaction(
   db: Database.TxOrDb,
   input: { taskID: string; actionID?: string; childSessionID: string; targetAgentID: string },
@@ -513,43 +565,46 @@ export function recordDispatchLineage(input: {
     deliverySliceRevisionIDs: input.origin.deliverySliceRevisionIDs ?? [],
     subject: "Dispatch lineage",
   })
-  const payload = parseDispatchLineagePayload(
-    {
-      dispatch_id: input.origin.dispatchID,
-      task_id: input.origin.taskID,
-      orchestrator_session_id: input.origin.orchestratorSessionID,
-      orchestrator_message_id: input.origin.orchestratorMessageID,
-      tool_part_id: input.origin.toolPartID,
-      tool_call_id: input.origin.toolCallID,
-      tool_name: input.origin.toolName ?? "dispatch_agent",
-      ...(input.origin.toolName === "dispatch_agents"
-        ? {
-            collection_member_index: input.origin.collectionMemberIndex,
-            collection_member_count: input.origin.collectionMemberCount,
-          }
-        : {}),
-      child_session_id: input.childSessionID,
-      target_agent_id: input.origin.targetAgentID,
-      projected_worker_identity: input.origin.projectedWorkerIdentity,
-      work_scope: input.origin.workScope,
-      delivery_slice_revision_ids: deliverySliceRevisionIDs,
-      workflow_binding: input.origin.workflowBinding,
-      workflow_node_id: input.origin.workflowNodeID,
-      workflow_occurrence_id: input.origin.workflowOccurrenceID ?? input.origin.dispatchID,
-      ...(input.origin.coordinationActionID ? { coordination_action_id: input.origin.coordinationActionID } : {}),
-      ...(input.origin.continuationOfDispatchID
-        ? { continuation_of_dispatch_id: input.origin.continuationOfDispatchID }
-        : {}),
-      delivery_owner: {
-        kind: "runtime_process",
-        process_occurrence_id: ownerProcessOccurrenceID,
-      },
-      adapter_input: input.origin.adapterInput,
-      time_created: now,
-    },
-    artifactID,
-  )
+  let payload!: DispatchLineageRow["payload"]
   Database.immediateTransaction((db) => {
+    const executionEpoch = dispatchCreatorExecutionEpochInTransaction(db, input.origin)
+    payload = parseDispatchLineagePayload(
+      {
+        dispatch_id: input.origin.dispatchID,
+        task_id: input.origin.taskID,
+        execution_epoch: executionEpoch,
+        orchestrator_session_id: input.origin.orchestratorSessionID,
+        orchestrator_message_id: input.origin.orchestratorMessageID,
+        tool_part_id: input.origin.toolPartID,
+        tool_call_id: input.origin.toolCallID,
+        tool_name: input.origin.toolName ?? "dispatch_agent",
+        ...(input.origin.toolName === "dispatch_agents"
+          ? {
+              collection_member_index: input.origin.collectionMemberIndex,
+              collection_member_count: input.origin.collectionMemberCount,
+            }
+          : {}),
+        child_session_id: input.childSessionID,
+        target_agent_id: input.origin.targetAgentID,
+        projected_worker_identity: input.origin.projectedWorkerIdentity,
+        work_scope: input.origin.workScope,
+        delivery_slice_revision_ids: deliverySliceRevisionIDs,
+        workflow_binding: input.origin.workflowBinding,
+        workflow_node_id: input.origin.workflowNodeID,
+        workflow_occurrence_id: input.origin.workflowOccurrenceID ?? input.origin.dispatchID,
+        ...(input.origin.coordinationActionID ? { coordination_action_id: input.origin.coordinationActionID } : {}),
+        ...(input.origin.continuationOfDispatchID
+          ? { continuation_of_dispatch_id: input.origin.continuationOfDispatchID }
+          : {}),
+        delivery_owner: {
+          kind: "runtime_process",
+          process_occurrence_id: ownerProcessOccurrenceID,
+        },
+        adapter_input: input.origin.adapterInput,
+        time_created: now,
+      },
+      artifactID,
+    )
     assertProcessLivenessOwnerInTransaction(db, ownerProcessOccurrenceID, now)
     const cancellation = taskCancellationAuthorityExecutionErrorInTransaction(
       db,

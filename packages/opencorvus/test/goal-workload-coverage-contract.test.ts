@@ -14,7 +14,10 @@ import {
   releaseDispatchAdmissionOnError,
 } from "@/engine/dispatch-lineage"
 import { joinProcessLivenessLease } from "@/engine/process-liveness"
-import { recordTestDispatchLineage } from "./fixture/dispatch-lineage"
+import {
+  materializeTestDispatchCreatorOccurrence,
+  recordTestDispatchLineage,
+} from "./fixture/dispatch-lineage"
 import {
   findDispatchSettlementByDispatchID,
   recordDispatchSettlement,
@@ -538,6 +541,11 @@ async function executeProductionWorkloadDispatch(input: {
           },
         }
         const childSessionID = Identifier.deterministic("session", `goal-workload-dispatch\0${origin.dispatchID}`)
+        materializeTestDispatchCreatorOccurrence({
+          origin,
+          childSessionID,
+          now: input.task.now + 11,
+        })
         const claim = claimDispatchLineage({ origin, childSessionID, now: input.task.now + 11 })
         expect(claim.createdNow).toBe(true)
         const admission = claim.admission

@@ -447,6 +447,10 @@ export const WorkerTurnDescriptorTable = sqliteTable(
   "worker_turn_descriptor",
   {
     id: text().primaryKey(),
+    task_id: text().notNull(),
+    project_id: text()
+      .notNull()
+      .references(() => ProjectTable.id, { onDelete: "cascade" }),
     session_id: text()
       .notNull()
       .references(() => SessionTable.id, { onDelete: "cascade" }),
@@ -458,6 +462,12 @@ export const WorkerTurnDescriptorTable = sqliteTable(
   (table) => [
     index("worker_turn_descriptor_session_idx").on(table.session_id),
     index("worker_turn_descriptor_hash_idx").on(table.hash),
+    index("worker_turn_descriptor_task_frontier_idx").on(table.task_id),
+    index("worker_turn_descriptor_project_frontier_idx").on(table.project_id),
+    uniqueIndex("worker_turn_descriptor_dispatch_idx").on(
+      table.session_id,
+      sql<string>`json_extract(${table.payload}, '$.dispatchTurn.current_dispatch_id')`,
+    ),
   ],
 )
 

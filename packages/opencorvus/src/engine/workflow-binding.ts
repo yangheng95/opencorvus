@@ -17,22 +17,37 @@ export const SelectedWorkflowNodeBindingSchema = z
   })
   .strict()
 
-export const SelectedWorkflowBindingSchema = z.discriminatedUnion("kind", [
-  z
-    .object({
-      kind: z.literal("direct"),
-      package_revision: ExpertSquadPackageRevisionBindingSchema,
-    })
-    .strict(),
-  z
-    .object({
-      kind: z.literal("virtual_workflow"),
-      workflow_id: z.string().min(1),
-      package_revision: ExpertSquadPackageRevisionBindingSchema,
-      nodes: z.array(SelectedWorkflowNodeBindingSchema).min(1),
-    })
-    .strict(),
-])
+export const SelectedWorkflowBindingSchema = z
+  .discriminatedUnion("kind", [
+    z
+      .object({
+        kind: z.literal("direct"),
+        package_revision: ExpertSquadPackageRevisionBindingSchema,
+      })
+      .strict(),
+    z
+      .object({
+        kind: z.literal("virtual_workflow"),
+        workflow_id: z.string().min(1),
+        package_revision: ExpertSquadPackageRevisionBindingSchema,
+        nodes: z.array(SelectedWorkflowNodeBindingSchema).min(1),
+      })
+      .strict(),
+  ])
+  .superRefine((binding, context) => {
+    if (binding.kind !== "virtual_workflow") return
+    const nodeIDs = new Set<string>()
+    for (const [index, node] of binding.nodes.entries()) {
+      if (nodeIDs.has(node.node_id)) {
+        context.addIssue({
+          code: "custom",
+          path: ["nodes", index, "node_id"],
+          message: `virtual workflow repeats node ${node.node_id}`,
+        })
+      }
+      nodeIDs.add(node.node_id)
+    }
+  })
 
 export type SelectedWorkflowBinding = z.infer<typeof SelectedWorkflowBindingSchema>
 

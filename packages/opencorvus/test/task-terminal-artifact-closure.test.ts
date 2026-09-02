@@ -16,7 +16,12 @@ import { recordEngineArtifact, updateEngineArtifact } from "@/engine/artifact"
 import { createDispatchLineageOrigin, listDispatchLineage } from "@/engine/dispatch-lineage"
 import { recordTestDispatchLineage } from "./fixture/dispatch-lineage"
 import { assertTaskDispatchesSettledInTransaction, recordDispatchSettlement } from "@/engine/dispatch-settlement"
-import { EngineArtifactTable, EngineTaskTable } from "@/engine/engine.sql"
+import {
+  EngineArtifactTable,
+  EngineTaskRootIngressPolicyTable,
+  EngineTaskRootIngressTable,
+  EngineTaskTable,
+} from "@/engine/engine.sql"
 import {
   CrossTaskArtifactDeliveryAuthorityError,
   importsFromResolvedCrossTaskArtifactSources,
@@ -560,6 +565,27 @@ test("closes continuation admission before the real completion checkpoint and im
     init: InstanceBootstrap,
     fn: async () => {
       const task = await taskFixture(project.path)
+      const creatorIngressID = Identifier.ascending("artifact")
+      const creatorPolicyID = Identifier.ascending("artifact")
+      Database.immediateTransaction((db) => {
+        db.insert(EngineTaskRootIngressPolicyTable)
+          .values({ id: creatorPolicyID, semantic_turn_limit: 1, activation_limit: 1, time_created: Date.now() })
+          .run()
+        db.insert(EngineTaskRootIngressTable)
+          .values({
+            id: creatorIngressID,
+            task_id: task.taskID,
+            project_id: Instance.project.id,
+            execution_epoch: 1,
+            sequence: 0,
+            source: "inline",
+            source_id: creatorIngressID,
+            inline_payload: { purpose: "Completion closure dispatch creator" },
+            policy_id: creatorPolicyID,
+            time_accepted: Date.now(),
+          })
+          .run()
+      })
       const childSessionID = Identifier.ascending("session")
       const origin = createDispatchLineageOrigin({
         taskID: task.taskID,
@@ -641,6 +667,12 @@ test("closes continuation admission before the real completion checkpoint and im
       const lateOrigin = createDispatchLineageOrigin({
         ...origin,
         dispatchID: undefined,
+        continuationOfDispatchID: lineage.dispatchID,
+        targetAgentID: lineage.payload.target_agent_id,
+        workflowBinding: lineage.payload.workflow_binding,
+        workflowNodeID: lineage.payload.workflow_node_id,
+        workflowOccurrenceID: lineage.payload.workflow_occurrence_id,
+        orchestratorMessageID: Identifier.ascending("message"),
         toolPartID: Identifier.ascending("part"),
         toolCallID: "call_late_dispatch",
       })
@@ -681,7 +713,7 @@ test("closes continuation admission before the real completion checkpoint and im
       const originalPrepare = EngineGit.prepare.bind(EngineGit)
       using _checkpointRace = spyOn(EngineGit, "prepare").mockImplementation(async (row) => {
         try {
-          recordTestDispatchLineage({ origin: lateOrigin, childSessionID: Identifier.ascending("session") })
+          recordTestDispatchLineage({ origin: lateOrigin, childSessionID })
         } catch (error) {
           lateDispatch = error
         }
@@ -821,7 +853,7 @@ test("closes continuation admission before the real completion checkpoint and im
       }).toEqual({ error: undefined, baselineMode: "recorded_head", priorResultMode: "recorded_head" })
       const reopenedLineage = recordTestDispatchLineage({
         origin: lateOrigin,
-        childSessionID: Identifier.ascending("session"),
+        childSessionID,
       })
       recordDispatchSettlement({
         taskID: task.taskID,

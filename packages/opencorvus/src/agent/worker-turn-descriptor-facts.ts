@@ -167,7 +167,7 @@ export function findWorkerTurnDescriptorForDispatchInTransaction(
   db: Database.TxOrDb,
   input: { sessionID: string; dispatchID: string },
 ): WorkerTurnDescriptorInfo | undefined {
-  const rows = db
+  const row = db
     .select()
     .from(WorkerTurnDescriptorTable)
     .where(
@@ -176,9 +176,6 @@ export function findWorkerTurnDescriptorForDispatchInTransaction(
         sql`json_extract(${WorkerTurnDescriptorTable.payload}, '$.dispatchTurn.current_dispatch_id') = ${input.dispatchID}`,
       ),
     )
-    .all()
-  if (rows.length > 1) {
-    throw new Error(`Session ${input.sessionID} dispatch ${input.dispatchID} has ${rows.length} Worker Turn descriptors`)
-  }
-  return rows[0] ? workerTurnDescriptorInfoFromRow(rows[0]) : undefined
+    .get()
+  return row ? workerTurnDescriptorInfoFromRow(row) : undefined
 }

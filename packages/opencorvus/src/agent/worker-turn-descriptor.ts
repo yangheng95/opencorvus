@@ -2,7 +2,7 @@ import z from "zod"
 import { and, desc, eq, sql } from "@/storage/db"
 import { Database } from "@/storage/db"
 import { Identifier } from "@/id/id"
-import { WorkerTurnDescriptorTable } from "@/session/session.sql"
+import { SessionTable, WorkerTurnDescriptorTable } from "@/session/session.sql"
 import { ProjectedAgentWorkScope } from "./projected-agent-work-scope"
 import { materializeProjectedWorkerBinding, type ProjectedWorkerBinding } from "./projected-worker-binding"
 import {
@@ -47,16 +47,13 @@ export namespace WorkerTurnDescriptor {
   export function prepare(input: { sessionID: string; payload: Payload }): Info {
     const now = Date.now()
     const parsed = Payload.parse(input.payload)
-    const row = {
+    return Info.parse({
       id: Identifier.ascending("worker_turn_descriptor"),
-      session_id: input.sessionID,
+      sessionID: input.sessionID,
       hash: hash(parsed),
-      agent: parsed.identity.agentID,
       payload: parsed,
-      time_created: now,
-      time_updated: now,
-    } satisfies typeof WorkerTurnDescriptorTable.$inferInsert
-    return fromRow(row)
+      time: { created: now, updated: now },
+    })
   }
 
   export function persistPrepared(input: { descriptor: Info; onPersisted?: (descriptor: Info) => void }): Info {
@@ -65,16 +62,25 @@ export namespace WorkerTurnDescriptor {
     if (descriptor.hash !== hash(parsed)) {
       throw new Error(`Prepared worker turn descriptor ${descriptor.id} hash does not match its payload`)
     }
-    const row = {
-      id: descriptor.id,
-      session_id: descriptor.sessionID,
-      hash: descriptor.hash,
-      agent: parsed.identity.agentID,
-      payload: parsed,
-      time_created: descriptor.time.created,
-      time_updated: descriptor.time.updated,
-    } satisfies typeof WorkerTurnDescriptorTable.$inferInsert
     Database.transaction((db) => {
+      const session = db
+        .select({ projectID: SessionTable.project_id })
+        .from(SessionTable)
+        .where(eq(SessionTable.id, descriptor.sessionID))
+        .get()
+      if (!session)
+        throw new Error(`Worker turn descriptor ${descriptor.id} Session ${descriptor.sessionID} is missing`)
+      const row = {
+        id: descriptor.id,
+        task_id: parsed.lifecycle.taskID,
+        project_id: session.projectID,
+        session_id: descriptor.sessionID,
+        hash: descriptor.hash,
+        agent: parsed.identity.agentID,
+        payload: parsed,
+        time_created: descriptor.time.created,
+        time_updated: descriptor.time.updated,
+      } satisfies typeof WorkerTurnDescriptorTable.$inferInsert
       db.insert(WorkerTurnDescriptorTable).values(row).run()
       input.onPersisted?.(descriptor)
     })
@@ -109,7 +115,7 @@ export namespace WorkerTurnDescriptor {
       db
         .select()
         .from(WorkerTurnDescriptorTable)
-        .where(sql`json_extract(${WorkerTurnDescriptorTable.payload}, '$.lifecycle.taskID') = ${taskID}`)
+        .where(eq(WorkerTurnDescriptorTable.task_id, taskID))
         .orderBy(WorkerTurnDescriptorTable.time_created, WorkerTurnDescriptorTable.id)
         .all()
         .map(fromRow),

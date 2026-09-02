@@ -8,6 +8,7 @@ import { deleteEngineTasksForProjectSessions } from "../src/engine/task"
 import {
   dispatchTaskLoop,
   reconcileTaskControlPlane,
+  taskControlDriverSnapshot,
   TestHooks as TaskControlTestHooks,
   waitForIngressDeliveryHooksForTest,
 } from "../src/engine/task-root-ingress-delivery"
@@ -45,6 +46,7 @@ import { persistEstablishedTask } from "./fixture/engine-task"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 import { Tool } from "../src/tool/tool"
 import { WaitTool } from "../src/tool/wait"
+import { restartTaskControlProjectFrontier } from "../src/engine/task-root-ingress-disposition"
 
 afterAll(async () => {
   await waitForIngressDeliveryHooksForTest()
@@ -108,20 +110,24 @@ async function persistedTaskWaitOccurrence(input: {
       .where(eq(EngineTaskRootIngressTable.task_id, input.taskID))
       .orderBy(asc(EngineTaskRootIngressTable.sequence), asc(EngineTaskRootIngressTable.id))
       .get()
-    return existing ?? acceptTaskRootIngressInTransaction(db, {
-      taskID: input.taskID,
-      executionEpoch: 1,
-      source: "inline",
-      sourceID: `task-wait-source-${Identifier.uuid4First8()}`,
-      inlinePayload: { purpose: "Task wait Tool occurrence" },
-      semanticTurnLimit: 1,
-      activationLimit: 1,
-      now,
-    })
+    return (
+      existing ??
+      acceptTaskRootIngressInTransaction(db, {
+        taskID: input.taskID,
+        executionEpoch: 1,
+        source: "inline",
+        sourceID: `task-wait-source-${Identifier.uuid4First8()}`,
+        inlinePayload: { purpose: "Task wait Tool occurrence" },
+        semanticTurnLimit: 1,
+        activationLimit: 1,
+        now,
+      })
+    )
   })
+  const ownerOccurrenceID = `task-wait-owner-${Identifier.uuid4First8()}`
   const lease = acquireTaskRootIngressLease({
     ingressID: ingress.id,
-    ownerOccurrenceID: `task-wait-owner-${Identifier.uuid4First8()}`,
+    ownerOccurrenceID,
     now: now + 1,
     leaseMilliseconds: 60_000,
     assertControlOwnerInTransaction: () => undefined,
@@ -145,15 +151,17 @@ async function persistedTaskWaitOccurrence(input: {
       time: { created: now + 2 },
       extra: control.extra,
     },
-    parts: [{
-      id: control.partID,
-      sessionID: input.sessionID,
-      messageID: control.messageID,
-      type: "text",
-      text: control.text,
-      kind: "control",
-      source: "system",
-    }],
+    parts: [
+      {
+        id: control.partID,
+        sessionID: input.sessionID,
+        messageID: control.messageID,
+        type: "text",
+        text: control.text,
+        kind: "control",
+        source: "system",
+      },
+    ],
   })
   const messageID = Identifier.ascending("message")
   await Session.updateMessage({
@@ -182,7 +190,15 @@ async function persistedTaskWaitOccurrence(input: {
     tool: "wait",
     state: { status: "running", input: input.toolInput, time: { start: now + 4 } },
   })
-  return { sessionID: input.sessionID, messageID, toolPartID, toolCallID }
+  return {
+    sessionID: input.sessionID,
+    messageID,
+    toolPartID,
+    toolCallID,
+    ingressID: ingress.id,
+    activationID: lease.activationID,
+    ownerOccurrenceID,
+  }
 }
 
 async function establishedTask(title: string) {
@@ -223,6 +239,65 @@ async function establishedTask(title: string) {
 }
 
 describe("native Task wait occurrence", () => {
+  test("discovers a wait committed after the Project checkpoint with an older due time", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const task = await establishedTask("Late physical wait source")
+        const now = Date.now()
+        const firstOccurrence = await persistedTaskWaitOccurrence({
+          taskID: task.taskID,
+          sessionID: task.scheduler.id,
+          toolInput: { duration_ms: 120_000, reason: "seed physical wait tail" },
+          now,
+        })
+        createTaskWait({
+          taskID: task.taskID,
+          projectID: Instance.project.id,
+          durationMs: 120_000,
+          reason: "seed physical wait tail",
+          occurrence: firstOccurrence,
+          now,
+        })
+        releaseControlLease({
+          target: "task_root_ingress",
+          targetID: firstOccurrence.ingressID,
+          leaseID: firstOccurrence.activationID,
+          ownerOccurrenceID: firstOccurrence.ownerOccurrenceID,
+          now: Date.now(),
+        })
+        let frontier = TaskControlTestHooks.currentProjectFrontierSlice()
+        while (frontier.next) frontier = TaskControlTestHooks.currentProjectFrontierSlice(frontier.next)
+        const checkpoint = restartTaskControlProjectFrontier(frontier.checkpoint)
+
+        const lateTask = await establishedTask("Late physical wait commit")
+        const lateOccurrence = await persistedTaskWaitOccurrence({
+          taskID: lateTask.taskID,
+          sessionID: lateTask.scheduler.id,
+          toolInput: { duration_ms: 60_000, reason: "late commit with older due time" },
+          now: Date.now(),
+        })
+        const lateWait = createTaskWait({
+          taskID: lateTask.taskID,
+          projectID: Instance.project.id,
+          durationMs: 60_000,
+          reason: "late commit with older due time",
+          occurrence: lateOccurrence,
+          now: Date.now(),
+        })
+        expect(TaskControlTestHooks.currentProjectFrontierSlice(checkpoint).taskIDs).toContain(lateTask.taskID)
+
+        using _runner = TaskControlTestHooks.replaceTaskIngressRunner({ runner: async () => ({}) })
+        await reconcileTaskControlPlane(lateTask.taskID)
+        const armedWake = taskControlDriverSnapshot().find((entry) => entry.taskID === lateTask.taskID)?.wakeAt
+        expect(armedWake).toBeDefined()
+        expect(armedWake!).toBeLessThanOrEqual(lateWait.dueAt)
+        expect(armedWake!).toBeGreaterThanOrEqual(lateWait.dueAt - 1_000)
+      },
+    })
+  })
+
   test("materializes one due ingress and settles the exact wait in the current execution epoch", async () => {
     await using project = await memoryProject()
     await Instance.provide({
@@ -247,10 +322,18 @@ describe("native Task wait occurrence", () => {
         await waitForIngressDeliveryHooksForTest()
 
         const settlement = Database.use((db) =>
-          db.select().from(EngineTaskWaitSettlementTable).where(eq(EngineTaskWaitSettlementTable.wait_id, wait.id)).get(),
+          db
+            .select()
+            .from(EngineTaskWaitSettlementTable)
+            .where(eq(EngineTaskWaitSettlementTable.wait_id, wait.id))
+            .get(),
         )
         const ingress = Database.use((db) =>
-          db.select().from(EngineTaskRootIngressTable).where(eq(EngineTaskRootIngressTable.id, settlement!.ingress_id)).get(),
+          db
+            .select()
+            .from(EngineTaskRootIngressTable)
+            .where(eq(EngineTaskRootIngressTable.id, settlement!.ingress_id))
+            .get(),
         )
         expect({ settlement, ingress, projection: listTaskWaits(task.taskID) }).toMatchObject({
           settlement: { wait_id: wait.id, disposition: "due_ingress_accepted" },
@@ -327,14 +410,24 @@ describe("native Task wait occurrence", () => {
         }
         expect(rejected).toBeInstanceOf(TaskWaitIngressLineageError)
         expect(rejected).toMatchObject({ code: "malformed_due_identity", waitID: wait.id })
-        expect(Database.use((db) =>
-          db.select().from(EngineTaskWaitSettlementTable).where(eq(EngineTaskWaitSettlementTable.wait_id, wait.id)).get(),
-        )).toBeUndefined()
+        expect(
+          Database.use((db) =>
+            db
+              .select()
+              .from(EngineTaskWaitSettlementTable)
+              .where(eq(EngineTaskWaitSettlementTable.wait_id, wait.id))
+              .get(),
+          ),
+        ).toBeUndefined()
 
         await reconcileTaskControlPlane(task.taskID)
         await waitForIngressDeliveryHooksForTest()
         const settlements = Database.use((db) =>
-          db.select().from(EngineTaskWaitSettlementTable).where(eq(EngineTaskWaitSettlementTable.wait_id, wait.id)).all(),
+          db
+            .select()
+            .from(EngineTaskWaitSettlementTable)
+            .where(eq(EngineTaskWaitSettlementTable.wait_id, wait.id))
+            .all(),
         )
         const dueIngresses = Database.use((db) =>
           db.select().from(EngineTaskRootIngressTable).where(eq(EngineTaskRootIngressTable.source_id, wait.id)).all(),
@@ -485,17 +578,26 @@ describe("native Task wait occurrence", () => {
         })
         expect(
           Database.use((db) => ({
-            registrations: db.select().from(EngineTaskWaitRegistrationTable)
-              .where(eq(EngineTaskWaitRegistrationTable.task_id, task.taskID)).all(),
-            settlements: db.select().from(EngineTaskWaitSettlementTable)
-              .where(eq(EngineTaskWaitSettlementTable.wait_id, wait.id)).all(),
-            ingresses: db.select().from(EngineTaskRootIngressTable).where(eq(EngineTaskRootIngressTable.task_id, task.taskID)).all(),
+            registrations: db
+              .select()
+              .from(EngineTaskWaitRegistrationTable)
+              .where(eq(EngineTaskWaitRegistrationTable.task_id, task.taskID))
+              .all(),
+            settlements: db
+              .select()
+              .from(EngineTaskWaitSettlementTable)
+              .where(eq(EngineTaskWaitSettlementTable.wait_id, wait.id))
+              .all(),
+            ingresses: db
+              .select()
+              .from(EngineTaskRootIngressTable)
+              .where(eq(EngineTaskRootIngressTable.task_id, task.taskID))
+              .all(),
           })),
         ).toEqual({ registrations: [], settlements: [], ingresses: [] })
       },
     })
   }, 30_000)
-
 })
 
 function assistantAccepting(sessionID: string, inputMessageID: string, now: number): Message.Assistant {
@@ -565,8 +667,8 @@ describe("Session one-shot delay admission", () => {
           prompt: "resume after expired owner",
           occurrence,
         })
-        const definition = Database.use((db) =>
-          db.select().from(AutomationTable).where(eq(AutomationTable.definition_id, delay.id)).get()!,
+        const definition = Database.use(
+          (db) => db.select().from(AutomationTable).where(eq(AutomationTable.definition_id, delay.id)).get()!,
         )
         const owner = `expired-session-delay-${Identifier.uuid4First8()}`
         const claimedAt = delay.nextRun + 1
@@ -695,8 +797,8 @@ describe("Session one-shot delay admission", () => {
           prompt: "resume due production race",
           occurrence,
         })
-        const definition = Database.use((db) =>
-          db.select().from(AutomationTable).where(eq(AutomationTable.definition_id, delay.id)).get()!,
+        const definition = Database.use(
+          (db) => db.select().from(AutomationTable).where(eq(AutomationTable.definition_id, delay.id)).get()!,
         )
         const owner = `session-delay-race-${Identifier.uuid4First8()}`
         const claimedAt = delay.nextRun + 1
@@ -749,7 +851,12 @@ describe("Session one-shot delay admission", () => {
             .where(eq(AutomationRunTable.automation_revision_id, definition.id))
             .get()
           const receipt = run
-            ? db.select().from(AutomationRunReceiptTable).where(eq(AutomationRunReceiptTable.run_id, run.id)).all().at(-1)
+            ? db
+                .select()
+                .from(AutomationRunReceiptTable)
+                .where(eq(AutomationRunReceiptTable.run_id, run.id))
+                .all()
+                .at(-1)
             : undefined
           const tombstone = db
             .select()
@@ -768,8 +875,10 @@ describe("Session one-shot delay admission", () => {
           receipt: { outcome: "succeeded" },
           tombstone: { definition_id: delay.id, revision: 2 },
         })
-        expect((await MessageStore.get({ sessionID: session.id, messageID: ordinary.id })).info)
-          .toMatchObject({ id: ordinary.id, pendingDelivery: true })
+        expect((await MessageStore.get({ sessionID: session.id, messageID: ordinary.id })).info).toMatchObject({
+          id: ordinary.id,
+          pendingDelivery: true,
+        })
       },
     })
   }, 60_000)
@@ -925,8 +1034,8 @@ describe("Session one-shot delay admission", () => {
           prompt: "resume due",
           occurrence,
         })
-        const definition = Database.use((db) =>
-          db.select().from(AutomationTable).where(eq(AutomationTable.definition_id, delay.id)).get()!,
+        const definition = Database.use(
+          (db) => db.select().from(AutomationTable).where(eq(AutomationTable.definition_id, delay.id)).get()!,
         )
         const fireID = Identifier.ascending("call")
         Database.immediateTransaction((db) => {

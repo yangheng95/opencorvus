@@ -7,8 +7,20 @@ import { and, asc, eq, sql, Database } from "@/storage/db"
 import z from "zod"
 import { findDispatchLineageByDispatchID } from "./dispatch-lineage"
 
-const FinalDispatchOutcomeSchema = DispatchOutcomeSchema.refine((outcome) => outcome.kind !== "accepted", {
-  message: "A dispatch settlement must be final",
+const FinalDispatchOutcomeSchema = DispatchOutcomeSchema.superRefine((outcome, context) => {
+  if (outcome.kind === "accepted") {
+    context.addIssue({ code: "custom", message: "A dispatch settlement must be final" })
+    return
+  }
+  if (!("session_id" in outcome)) {
+    context.addIssue({ code: "custom", message: "A dispatch settlement must name its durable Session" })
+  }
+  if (
+    outcome.kind === "infrastructure_failure" &&
+    outcome.recovery_authority.occurrence_status !== "occurrence_committed"
+  ) {
+    context.addIssue({ code: "custom", message: "A dispatch settlement requires committed occurrence authority" })
+  }
 })
 
 export interface DispatchSettlementPayload extends EngineMetadata {
@@ -27,7 +39,7 @@ const DispatchSettlementPayloadSchema = z
     dispatch_id: z.string().min(1),
     session_id: z.string().min(1),
     outcome: FinalDispatchOutcomeSchema,
-    time_created: z.number().positive(),
+    time_created: z.number().int().positive(),
   })
   .strict()
 
@@ -102,7 +114,7 @@ export function findDispatchSettlementByDispatchID(input: {
   dispatchID: string
 }): DispatchSettlementRow | undefined {
   return Database.use((db) => {
-    const rows = db
+    const row = db
       .select()
       .from(EngineArtifactTable)
       .where(
@@ -112,12 +124,7 @@ export function findDispatchSettlementByDispatchID(input: {
           sql`json_extract(${EngineArtifactTable.payload}, '$.dispatch_id') = ${input.dispatchID}`,
         ),
       )
-      .orderBy(asc(EngineArtifactTable.time_created), asc(EngineArtifactTable.id))
-      .all()
-    if (rows.length > 1) {
-      throw new Error(`Dispatch ${input.dispatchID} has ${rows.length} durable settlements`)
-    }
-    const row = rows[0]
+      .get()
     return row ? { artifactID: row.id, payload: parsePayload(row.payload, row.id) } : undefined
   })
 }
@@ -151,7 +158,7 @@ export function recordDispatchSettlement(input: {
     input.dispatchID,
   )
   return Database.transaction((db) => {
-    const rows = db
+    const row = db
       .select()
       .from(EngineArtifactTable)
       .where(
@@ -161,14 +168,13 @@ export function recordDispatchSettlement(input: {
           sql`json_extract(${EngineArtifactTable.payload}, '$.dispatch_id') = ${input.dispatchID}`,
         ),
       )
-      .all()
-    if (rows.length > 1) throw new Error(`Dispatch ${input.dispatchID} has ${rows.length} durable settlements`)
-    if (rows[0]) {
-      const existing = parsePayload(rows[0].payload, rows[0].id)
+      .get()
+    if (row) {
+      const existing = parsePayload(row.payload, row.id)
       if (!isDeepStrictEqual(existing.outcome, payload.outcome)) {
         throw new Error(`Dispatch ${input.dispatchID} durable settlement outcome drift`)
       }
-      return { artifactID: rows[0].id, payload: existing }
+      return { artifactID: row.id, payload: existing }
     }
     const artifactID = Identifier.ascending("artifact")
     insertEngineArtifact(db, {

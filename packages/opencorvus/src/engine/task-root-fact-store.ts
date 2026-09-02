@@ -51,10 +51,12 @@ import {
   currentControlLeaseInTransaction,
   renewControlLeaseInTransaction,
 } from "./control-lease"
+import { exactDueTaskWaitForIngressInTransaction, supersedeCurrentTaskWaitsForIngressInTransaction } from "./task-wait"
 import {
-  exactDueTaskWaitForIngressInTransaction,
-  supersedeCurrentTaskWaitsForIngressInTransaction,
-} from "./task-wait"
+  taskRootIngressDispositionInTransaction,
+  taskRootIngressReconciliationPageInTransaction,
+  type TaskRootIngressFrontierCursor,
+} from "./task-root-ingress-disposition"
 
 export type TaskRootIngressEvidence = {
   turns: readonly AssistantTurnFact[]
@@ -174,8 +176,11 @@ export function acceptTaskRootIngressInTransaction(
     if (JSON.stringify(existing.inline_payload) !== JSON.stringify(expectedInline)) {
       throw new Error(`Task-root source ${input.source}:${input.sourceID} replay changed its immutable payload`)
     }
-    const policy = db.select().from(EngineTaskRootIngressPolicyTable)
-      .where(eq(EngineTaskRootIngressPolicyTable.id, existing.policy_id)).get()
+    const policy = db
+      .select()
+      .from(EngineTaskRootIngressPolicyTable)
+      .where(eq(EngineTaskRootIngressPolicyTable.id, existing.policy_id))
+      .get()
     if (
       !policy ||
       policy.semantic_turn_limit !== input.semanticTurnLimit ||
@@ -186,6 +191,12 @@ export function acceptTaskRootIngressInTransaction(
     }
     return existing
   }
+  const task = db
+    .select({ projectID: EngineTaskTable.project_id, sessionID: EngineTaskTable.session_id })
+    .from(EngineTaskTable)
+    .where(eq(EngineTaskTable.id, input.taskID))
+    .get()
+  if (!task) throw new Error(`Task-root ingress Task does not exist: ${input.taskID}`)
   const lifecycle = taskLifecycleProjectionInTransaction(db, input.taskID)
   if (lifecycle.epoch !== input.executionEpoch) {
     throw new Error(
@@ -193,24 +204,43 @@ export function acceptTaskRootIngressInTransaction(
     )
   }
   if (input.source === "message") {
-    const task = db.select({ sessionID: EngineTaskTable.session_id }).from(EngineTaskTable).where(eq(EngineTaskTable.id, input.taskID)).get()
-    const source = db.select({ id: MessageTable.id, sessionID: MessageTable.session_id }).from(MessageTable).where(eq(MessageTable.id, input.sourceID)).get()
+    const source = db
+      .select({ id: MessageTable.id, sessionID: MessageTable.session_id })
+      .from(MessageTable)
+      .where(eq(MessageTable.id, input.sourceID))
+      .get()
     if (!source) throw new Error(`Task-root ingress source Message does not exist: ${input.sourceID}`)
     if (!task?.sessionID || source.sessionID !== task.sessionID) {
       throw new Error(`Task-root ingress source Message ${input.sourceID} is outside Task ${input.taskID} root Session`)
     }
   }
   if (input.source === "protocol_event") {
-    const source = db.select({ id: ProtocolEventTable.id, aggregate: ProtocolEventTable.aggregate_type, aggregateID: ProtocolEventTable.aggregate_id }).from(ProtocolEventTable).where(eq(ProtocolEventTable.id, input.sourceID)).get()
+    const source = db
+      .select({
+        id: ProtocolEventTable.id,
+        aggregate: ProtocolEventTable.aggregate_type,
+        aggregateID: ProtocolEventTable.aggregate_id,
+      })
+      .from(ProtocolEventTable)
+      .where(eq(ProtocolEventTable.id, input.sourceID))
+      .get()
     if (!source) throw new Error(`Task-root ingress source Protocol Event does not exist: ${input.sourceID}`)
     if (source.aggregate !== "task" || source.aggregateID !== input.taskID) {
-      throw new Error(`Task-root ingress source Protocol Event ${input.sourceID} belongs to ${source.aggregate}:${source.aggregateID}`)
+      throw new Error(
+        `Task-root ingress source Protocol Event ${input.sourceID} belongs to ${source.aggregate}:${source.aggregateID}`,
+      )
     }
   }
-  if (input.source === "task" && input.sourceID !== input.taskID) throw new Error(`Task-root Task source must equal Task identity`)
+  if (input.source === "task" && input.sourceID !== input.taskID)
+    throw new Error(`Task-root Task source must equal Task identity`)
   if (input.source === "engine_artifact") {
-    const source = db.select({ taskID: EngineArtifactTable.task_id }).from(EngineArtifactTable).where(eq(EngineArtifactTable.id, input.sourceID)).get()
-    if (!source || source.taskID !== input.taskID) throw new Error(`Task-root ingress Engine Artifact ${input.sourceID} is outside Task ${input.taskID}`)
+    const source = db
+      .select({ taskID: EngineArtifactTable.task_id })
+      .from(EngineArtifactTable)
+      .where(eq(EngineArtifactTable.id, input.sourceID))
+      .get()
+    if (!source || source.taskID !== input.taskID)
+      throw new Error(`Task-root ingress Engine Artifact ${input.sourceID} is outside Task ${input.taskID}`)
   }
   const dueWaitID = exactDueTaskWaitForIngressInTransaction(db, input)
   const policyID = ensureTaskRootIngressPolicyInTransaction(db, input)
@@ -230,6 +260,7 @@ export function acceptTaskRootIngressInTransaction(
     .values({
       id,
       task_id: input.taskID,
+      project_id: task.projectID,
       execution_epoch: input.executionEpoch,
       sequence: (previous?.sequence ?? 0) + 1,
       source: input.source,
@@ -265,6 +296,7 @@ function lifecycleFacts(db: Database.TxOrDb, taskID: string): TaskLifecycleFact[
       id: ProtocolEventTable.id,
       type: ProtocolEventTable.type,
       payload: ProtocolEventTable.payload,
+      sequence: ProtocolEventTable.seq,
       time: ProtocolEventTable.emitted_at,
     })
     .from(ProtocolEventTable)
@@ -278,7 +310,7 @@ function lifecycleFacts(db: Database.TxOrDb, taskID: string): TaskLifecycleFact[
       if (!Number.isSafeInteger(epoch) || Number(epoch) <= 0) {
         throw new Error(`Task lifecycle event ${row.id} is missing a positive execution_epoch`)
       }
-      return [{ id: row.id, kind, epoch: Number(epoch), time: row.time }]
+      return [{ id: row.id, kind, epoch: Number(epoch), sequence: row.sequence, time: row.time }]
     })
 }
 
@@ -287,11 +319,7 @@ export function taskRootIngressFactsInTransaction(
   ingressID: string,
   readEvidence: TaskRootIngressEvidenceReader = () => EMPTY_EVIDENCE,
 ): TaskRootIngressFacts {
-  const ingress = db
-    .select()
-    .from(EngineTaskRootIngressTable)
-    .where(eq(EngineTaskRootIngressTable.id, ingressID))
-    .get()
+  const ingress = db.select().from(EngineTaskRootIngressTable).where(eq(EngineTaskRootIngressTable.id, ingressID)).get()
   if (!ingress) throw new Error(`Task-root ingress not found: ${ingressID}`)
   const policy = db
     .select()
@@ -308,6 +336,10 @@ export function taskRootIngressFactsInTransaction(
     evidence = EMPTY_EVIDENCE
     integrityViolation = { message: error.message }
   }
+  const disposition = taskRootIngressDispositionInTransaction(db, {
+    taskID: ingress.task_id,
+    ingressID: ingress.id,
+  })
   return {
     ...(integrityViolation ? { integrityViolation } : {}),
     ingress: {
@@ -343,6 +375,9 @@ export function taskRootIngressFactsInTransaction(
         timeActivated: lease.time_activated,
         expiresAt: lease.expires_at,
       })),
+    ...(disposition?.disposition === "operator_abandoned"
+      ? { operatorAbandoned: { evidenceIDs: disposition.evidence_ids } }
+      : {}),
     ...evidence,
   }
 }
@@ -352,7 +387,9 @@ export function projectTaskRootIngress(
   now: number,
   readEvidence?: TaskRootIngressEvidenceReader,
 ): TaskRootIngressProjection {
-  return Database.use((db) => reduceTaskRootIngressFacts(taskRootIngressFactsInTransaction(db, ingressID, readEvidence), now))
+  return Database.use((db) =>
+    reduceTaskRootIngressFacts(taskRootIngressFactsInTransaction(db, ingressID, readEvidence), now),
+  )
 }
 
 export type AcquireTaskRootIngressLeaseResult =
@@ -382,26 +419,27 @@ export function acquireTaskRootIngressLease(input: {
     Project.assertDurableAdmissionOpen(db, task.projectID)
     const projection = reduceTaskRootIngressFacts(facts, input.now)
     if (projection.state !== "ready") return { acquired: false, projection }
-    const prior = db
-      .select({ id: EngineTaskRootIngressTable.id })
-      .from(EngineTaskRootIngressTable)
-      .where(
-        and(
-          eq(EngineTaskRootIngressTable.task_id, facts.ingress.taskID),
-          eq(EngineTaskRootIngressTable.execution_epoch, facts.ingress.executionEpoch),
-          lt(EngineTaskRootIngressTable.sequence, facts.ingress.sequence),
-        ),
-      )
-      .orderBy(asc(EngineTaskRootIngressTable.sequence), asc(EngineTaskRootIngressTable.id))
-      .all()
-    for (const candidate of prior) {
-      const preceding = reduceTaskRootIngressFacts(
-        taskRootIngressFactsInTransaction(db, candidate.id, input.readEvidence),
-        input.now,
-      )
-      if (!taskRootIngressReleasesHeadOfLine(preceding)) {
-        return { acquired: false, projection, blockedByIngressID: candidate.id }
+    let after: TaskRootIngressFrontierCursor | undefined
+    for (;;) {
+      const prior = taskRootIngressReconciliationPageInTransaction(db, {
+        taskID: facts.ingress.taskID,
+        executionEpoch: facts.ingress.executionEpoch,
+        beforeSequence: facts.ingress.sequence,
+        ...(after ? { after } : {}),
+        limit: 32,
+      })
+      if (prior.scannedCount === 0) break
+      for (const candidate of prior.ingresses) {
+        const preceding = reduceTaskRootIngressFacts(
+          taskRootIngressFactsInTransaction(db, candidate.id, input.readEvidence),
+          input.now,
+        )
+        if (!taskRootIngressReleasesHeadOfLine(preceding)) {
+          return { acquired: false, projection, blockedByIngressID: candidate.id }
+        }
       }
+      if (!prior.next) break
+      after = prior.next
     }
     const activationID = Identifier.ascending("activity")
     input.assertControlOwnerInTransaction(db)
@@ -534,12 +572,13 @@ export function assertTaskRootActivationLeaseFenceInTransaction(
     )
     return !outstandingTool && !outstandingProvider && (Boolean(message.error) || !message.finish?.includes("tool"))
   })
-  const terminalConversation =
-    lifecycle.terminalAt !== undefined && lifecycle.terminalAt < ingress.time_accepted
+  const terminalConversation = lifecycle.terminalAt !== undefined && lifecycle.terminalAt < ingress.time_accepted
   if (
     latest?.id !== lease.id ||
     (!input.allowAcceptedActivitySettlement && lease.expires_at <= input.now) ||
-    (!input.allowAcceptedActivitySettlement && policy.absoluteDeadline !== null && input.now >= policy.absoluteDeadline) ||
+    (!input.allowAcceptedActivitySettlement &&
+      policy.absoluteDeadline !== null &&
+      input.now >= policy.absoluteDeadline) ||
     activationConsumed ||
     lifecycle.epoch !== ingress.execution_epoch ||
     (lifecycle.status !== "active" && !terminalConversation && !input.allowAcceptedActivitySettlement)
@@ -548,8 +587,7 @@ export function assertTaskRootActivationLeaseFenceInTransaction(
     // permanent: no later attempt can make this activation current again.
     // Typing the rejection lets recovery retire the continuations that hold
     // it, instead of replaying a dead backlog on every project open.
-    const permanent =
-      activationConsumed || lifecycle.epoch !== ingress.execution_epoch || latest?.id !== lease.id
+    const permanent = activationConsumed || lifecycle.epoch !== ingress.execution_epoch || latest?.id !== lease.id
     const detail =
       `Task-root activation fence rejected ${input.activationID}; ` +
       `latest=${latest?.id ?? "none"} expiry=${lease.expires_at} deadline=${policy.absoluteDeadline ?? "none"} consumed=${activationConsumed} epoch=${lifecycle.epoch}/${ingress.execution_epoch} status=${lifecycle.status}`
@@ -577,8 +615,9 @@ export function assertTaskRootAssistantActivationFenceInTransaction(
     .from(MessageTable)
     .where(eq(MessageTable.id, input.assistantMessageID))
     .get()
-  const activationID = input.candidate?.activationID ?? (
-    message?.data && typeof message.data === "object" && "activationID" in message.data
+  const activationID =
+    input.candidate?.activationID ??
+    (message?.data && typeof message.data === "object" && "activationID" in message.data
       ? (message.data as { activationID?: unknown }).activationID
       : undefined)
   if (activationID === undefined) return
@@ -598,14 +637,21 @@ export function assertTaskRootAssistantActivationFenceInTransaction(
     })
     acceptedActivitySettlementRequired = true
   }
-  const task = db.select({ sessionID: EngineTaskTable.session_id, projectID: EngineTaskTable.project_id }).from(EngineTaskTable)
-    .where(eq(EngineTaskTable.id, fence.taskID)).get()
+  const task = db
+    .select({ sessionID: EngineTaskTable.session_id, projectID: EngineTaskTable.project_id })
+    .from(EngineTaskTable)
+    .where(eq(EngineTaskTable.id, fence.taskID))
+    .get()
   const assistant = input.candidate ?? (message?.data as { parentID?: unknown } | undefined)
   const sessionID = input.candidate?.sessionID ?? message?.sessionID
-  const session = typeof sessionID === "string"
-    ? db.select({ parentID: SessionTable.parent_id, projectID: SessionTable.project_id, kind: SessionTable.kind })
-        .from(SessionTable).where(eq(SessionTable.id, sessionID)).get()
-    : undefined
+  const session =
+    typeof sessionID === "string"
+      ? db
+          .select({ parentID: SessionTable.parent_id, projectID: SessionTable.project_id, kind: SessionTable.kind })
+          .from(SessionTable)
+          .where(eq(SessionTable.id, sessionID))
+          .get()
+      : undefined
   if (
     !task?.sessionID ||
     !session ||
@@ -616,10 +662,16 @@ export function assertTaskRootAssistantActivationFenceInTransaction(
   ) {
     throw new Error(`Assistant Message ${input.assistantMessageID} is outside Task-root activation ${activationID}`)
   }
-  const parent = db.select({ data: MessageTable.data, sessionID: MessageTable.session_id }).from(MessageTable)
-    .where(eq(MessageTable.id, assistant.parentID)).get()
-  const control = (parent?.data as { extra?: { orchestrator_control_ingress?: { ingress_id?: unknown; predecessor_id?: unknown } } } | undefined)
-    ?.extra?.orchestrator_control_ingress
+  const parent = db
+    .select({ data: MessageTable.data, sessionID: MessageTable.session_id })
+    .from(MessageTable)
+    .where(eq(MessageTable.id, assistant.parentID))
+    .get()
+  const control = (
+    parent?.data as
+      | { extra?: { orchestrator_control_ingress?: { ingress_id?: unknown; predecessor_id?: unknown } } }
+      | undefined
+  )?.extra?.orchestrator_control_ingress
   if (
     parent?.sessionID !== sessionID ||
     control?.ingress_id !== fence.ingressID ||
@@ -633,8 +685,11 @@ export function assertTaskRootAssistantActivationFenceInTransaction(
   // operator-gated condition the control plane already reduces to `blocked` —
   // apart from an ordinary execution fault, and therefore stop terminally
   // failing the whole Task over one refused append.
-  const peers = db.select({ id: MessageTable.id }).from(MessageTable)
-    .where(sql`json_extract(${MessageTable.data}, '$.activationID') = ${activationID}`).all()
+  const peers = db
+    .select({ id: MessageTable.id })
+    .from(MessageTable)
+    .where(sql`json_extract(${MessageTable.data}, '$.activationID') = ${activationID}`)
+    .all()
   if (peers.some((peer) => peer.id !== input.assistantMessageID)) {
     throw new TaskRootIngressIntegrityError(
       fence.ingressID,
@@ -652,7 +707,9 @@ export function assertTaskRootAssistantActivationFenceInTransaction(
   // `IS` rather than `=`: a sibling missing its author field entirely must
   // stay counted, and under three-valued logic `NULL = 'compaction'` would
   // drop the whole row from the conflict instead of failing the exemption.
-  const siblingAssistants = db.select({ id: MessageTable.id }).from(MessageTable)
+  const siblingAssistants = db
+    .select({ id: MessageTable.id })
+    .from(MessageTable)
     .where(
       sql`json_extract(${MessageTable.data}, '$.role') = 'assistant' AND json_extract(${MessageTable.data}, '$.parentID') = ${assistant.parentID}
         AND NOT (json_extract(${MessageTable.data}, '$.author') IS 'compaction' AND json_extract(${MessageTable.data}, '$.activationID') IS NULL)`,
@@ -665,20 +722,34 @@ export function assertTaskRootAssistantActivationFenceInTransaction(
     )
   }
   if (acceptedActivitySettlementRequired) {
-    const providerRequests = db.select({ id: ProviderActivityRequestTable.id })
+    const providerRequests = db
+      .select({ id: ProviderActivityRequestTable.id })
       .from(ProviderActivityRequestTable)
-      .where(eq(ProviderActivityRequestTable.assistant_message_id, input.assistantMessageID)).all()
-    const toolRequests = db.select({ id: ToolPartRequestTable.id })
+      .where(eq(ProviderActivityRequestTable.assistant_message_id, input.assistantMessageID))
+      .all()
+    const toolRequests = db
+      .select({ id: ToolPartRequestTable.id })
       .from(ToolPartRequestTable)
-      .where(eq(ToolPartRequestTable.message_id, input.assistantMessageID)).all()
-    const providerSettled = providerRequests.every((request) => Boolean(
-      db.select({ id: ProviderActivityOutcomeTable.id }).from(ProviderActivityOutcomeTable)
-        .where(eq(ProviderActivityOutcomeTable.request_id, request.id)).get(),
-    ))
-    const toolsSettled = toolRequests.every((request) => Boolean(
-      db.select({ id: ToolPartOutcomeTable.id }).from(ToolPartOutcomeTable)
-        .where(eq(ToolPartOutcomeTable.request_part_id, request.id)).get(),
-    ))
+      .where(eq(ToolPartRequestTable.message_id, input.assistantMessageID))
+      .all()
+    const providerSettled = providerRequests.every((request) =>
+      Boolean(
+        db
+          .select({ id: ProviderActivityOutcomeTable.id })
+          .from(ProviderActivityOutcomeTable)
+          .where(eq(ProviderActivityOutcomeTable.request_id, request.id))
+          .get(),
+      ),
+    )
+    const toolsSettled = toolRequests.every((request) =>
+      Boolean(
+        db
+          .select({ id: ToolPartOutcomeTable.id })
+          .from(ToolPartOutcomeTable)
+          .where(eq(ToolPartOutcomeTable.request_part_id, request.id))
+          .get(),
+      ),
+    )
     if (providerRequests.length + toolRequests.length === 0 || !providerSettled || !toolsSettled) {
       throw new Error(
         `Task-root assistant ${input.assistantMessageID} cannot settle before every accepted activity has an exact outcome`,

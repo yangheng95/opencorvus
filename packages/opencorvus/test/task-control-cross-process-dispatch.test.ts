@@ -2,7 +2,7 @@ import { afterEach, describe, expect, setDefaultTimeout, test } from "bun:test"
 import { Config } from "../src/config/config"
 import { DispatchOutcome } from "../src/agent/dispatch-outcome"
 import { WorkerTurnDescriptor } from "../src/agent/worker-turn-descriptor"
-import { createDispatchLineageOrigin, recordDispatchLineage } from "../src/engine/dispatch-lineage"
+import { createDispatchLineageOrigin } from "../src/engine/dispatch-lineage"
 import { findDispatchSettlementByDispatchID, settleDispatchOrReturnExisting } from "../src/engine/dispatch-settlement"
 import { insertEngineArtifact } from "../src/engine/artifact"
 import {
@@ -31,6 +31,7 @@ import { Session } from "../src/session"
 import { executionLifecycleOrderKey } from "../src/session/status"
 import { Database, eq } from "../src/storage/db"
 import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
+import { recordTestDispatchLineage } from "./fixture/dispatch-lineage"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
 setDefaultTimeout(30_000)
@@ -97,25 +98,28 @@ async function seedPeerOwnedDispatch(projectPath: string, claimOwner = true) {
     workflowID: null,
   })
   const liveness = claimOwner ? joinProcessLivenessLease(currentRuntimeOccurrenceID()) : undefined
-  let lineage: ReturnType<typeof recordDispatchLineage>
+  let lineage: ReturnType<typeof recordTestDispatchLineage>
   try {
-    lineage = recordDispatchLineage({
-      origin: createDispatchLineageOrigin({
-        dispatchID,
-        taskID,
-        orchestratorSessionID: task.session_id!,
-        orchestratorMessageID: Identifier.ascending("message"),
-        toolPartID: Identifier.ascending("part"),
-        toolCallID: Identifier.ascending("call"),
-        targetAgentID: worker.identity.agentID,
-        projectedWorkerIdentity: worker.identity,
-        workScope: { kind: "task" },
-        workflowBinding,
-        workflowNodeID: null,
-        adapterInput: {},
-      }),
-      childSessionID: child.id,
-    })
+    lineage = recordTestDispatchLineage(
+      {
+        origin: createDispatchLineageOrigin({
+          dispatchID,
+          taskID,
+          orchestratorSessionID: task.session_id!,
+          orchestratorMessageID: Identifier.ascending("message"),
+          toolPartID: Identifier.ascending("part"),
+          toolCallID: Identifier.ascending("call"),
+          targetAgentID: worker.identity.agentID,
+          projectedWorkerIdentity: worker.identity,
+          workScope: { kind: "task" },
+          workflowBinding,
+          workflowNodeID: null,
+          adapterInput: {},
+        }),
+        childSessionID: child.id,
+      },
+      { joinLiveness: claimOwner },
+    )
   } finally {
     liveness?.release()
   }
@@ -538,8 +542,6 @@ describe("cross-process dispatch abandonment", () => {
                 payload: {
                   ...initialPayload(`dispatch-invalid-owner-${index}`),
                   tool_name: "dispatch_agent",
-                  tool_part_id: `part-invalid-owner-${index}`,
-                  tool_call_id: `call-invalid-owner-${index}`,
                   delivery_owner: deliveryOwner,
                 },
                 timeCreated: Date.now(),
@@ -550,6 +552,64 @@ describe("cross-process dispatch abandonment", () => {
           )
         }
         const validOwner = { kind: "runtime_process", process_occurrence_id: "runtime" }
+        const invalidImmutablePayloadShapes = [
+          { alternate_delivery_authority: true },
+          {
+            projected_worker_identity: {
+              ...fixture.lineage.payload.projected_worker_identity,
+              alternate_projection_authority: true,
+            },
+          },
+          {
+            projected_worker_identity: {
+              ...fixture.lineage.payload.projected_worker_identity,
+              agentID: "shared",
+            },
+          },
+          {
+            projected_worker_identity: {
+              ...fixture.lineage.payload.projected_worker_identity,
+              baseRole: "unknown-runtime-template",
+            },
+          },
+          {
+            projected_worker_identity: {
+              ...fixture.lineage.payload.projected_worker_identity,
+              sessionKind: "build",
+            },
+          },
+          {
+            projected_worker_identity: {
+              ...fixture.lineage.payload.projected_worker_identity,
+              dispatchAdapterID: "build",
+            },
+          },
+          { target_agent_id: "different-agent" },
+          { work_scope: { kind: "task", alternate_scope: true } },
+          { delivery_slice_revision_ids: ["not-a-goal-revision"] },
+          { delivery_slice_revision_ids: ["GOL_uppercase"] },
+          { time_created: 0 },
+        ]
+        for (const [index, invalidShape] of invalidImmutablePayloadShapes.entries()) {
+          expect(() =>
+            Database.immediateTransaction((db) => {
+              insertEngineArtifact(db, {
+                id: `art_invalid_dispatch_shape_${index}`,
+                taskID: fixture.taskID,
+                kind: "dispatch_lineage",
+                label: "dispatch-agent",
+                payload: {
+                  ...initialPayload(`dispatch-invalid-shape-${index}`),
+                  ...invalidShape,
+                  delivery_owner: validOwner,
+                },
+                timeCreated: Date.now(),
+              })
+            }),
+          ).toThrow(
+            "engine_artifact: dispatch_lineage requires exact Tool occurrence, workflow lineage, adapter_input and delivery_owner objects",
+          )
+        }
         const invalidToolOccurrences = [
           { tool_name: null },
           { tool_name: "dispatch_agent", collection_member_index: 0, collection_member_count: 1 },
@@ -566,8 +626,6 @@ describe("cross-process dispatch abandonment", () => {
                 label: "dispatch-agent",
                 payload: {
                   ...initialPayload(`dispatch-invalid-tool-${index}`),
-                  tool_part_id: `part-invalid-tool-${index}`,
-                  tool_call_id: `call-invalid-tool-${index}`,
                   ...toolOccurrence,
                   delivery_owner: validOwner,
                 },
@@ -575,7 +633,9 @@ describe("cross-process dispatch abandonment", () => {
               })
             }),
           ).toThrow(
-            "engine_artifact: dispatch_lineage requires exact Tool occurrence, workflow lineage, adapter_input and delivery_owner objects",
+            index === 1
+              ? "engine_artifact: dispatch_lineage requires exact Tool occurrence, workflow lineage, adapter_input and delivery_owner objects"
+              : "engine_artifact: dispatch_lineage requires exact Task-root Tool creator occurrence",
           )
         }
         const invalidWorkflowLineages = [

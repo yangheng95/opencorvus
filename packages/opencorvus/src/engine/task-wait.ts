@@ -71,11 +71,7 @@ export function createTaskWait(input: {
         durationMs: input.durationMs,
         reason: input.reason,
       })
-      if (
-        existing.task_id !== input.taskID ||
-        existing.input_digest !== digest ||
-        existing.reason !== input.reason
-      ) {
+      if (existing.task_id !== input.taskID || existing.input_digest !== digest || existing.reason !== input.reason) {
         throw scheduledToolOccurrenceConflict(
           { toolName: "wait", toolPartID: input.occurrence.toolPartID },
           "changed its immutable input",
@@ -99,11 +95,7 @@ export function createTaskWait(input: {
       durationMs: input.durationMs,
       reason: input.reason,
     })
-    const creatorMessage = db
-      .select()
-      .from(MessageTable)
-      .where(eq(MessageTable.id, input.occurrence.messageID))
-      .get()
+    const creatorMessage = db.select().from(MessageTable).where(eq(MessageTable.id, input.occurrence.messageID)).get()
     const creatorActivationID =
       creatorMessage?.data.role === "assistant" && "activationID" in creatorMessage.data
         ? (creatorMessage.data as { activationID?: unknown }).activationID
@@ -138,6 +130,7 @@ export function createTaskWait(input: {
       .values({
         id,
         task_id: input.taskID,
+        project_id: creatorIngress.project_id,
         execution_epoch: lifecycle.epoch,
         due_at: now + input.durationMs,
         reason: input.reason,
@@ -148,7 +141,11 @@ export function createTaskWait(input: {
         time_created: now,
       })
       .run()
-    const row = db.select().from(EngineTaskWaitRegistrationTable).where(eq(EngineTaskWaitRegistrationTable.id, id)).get()!
+    const row = db
+      .select()
+      .from(EngineTaskWaitRegistrationTable)
+      .where(eq(EngineTaskWaitRegistrationTable.id, id))
+      .get()!
     const newerIngress = db
       .select()
       .from(EngineTaskRootIngressTable)
@@ -232,11 +229,7 @@ export function listTaskWaits(taskID: string, now = Date.now()): TaskWaitProject
  * registrations. The lifecycle is projected once, then the current rows are
  * selected, ordered and capped by one SQL query without per-wait reads.
  */
-export function listCurrentTaskWaits(input: {
-  taskID: string
-  limit: number
-  now?: number
-}): TaskWaitProjection[] {
+export function listCurrentTaskWaits(input: { taskID: string; limit: number; now?: number }): TaskWaitProjection[] {
   if (!Number.isSafeInteger(input.limit) || input.limit <= 0) {
     throw new Error("Current Task wait query limit must be a positive safe integer")
   }
@@ -350,11 +343,7 @@ export function exactDueTaskWaitForIngressInTransaction(
     )
   }
   if (wait.due_at > input.now) {
-    throw new TaskWaitIngressLineageError(
-      `Task wait wake ${jobID} is not due until ${wait.due_at}`,
-      "not_due",
-      jobID,
-    )
+    throw new TaskWaitIngressLineageError(`Task wait wake ${jobID} is not due until ${wait.due_at}`, "not_due", jobID)
   }
   const settlement = db
     .select({ waitID: EngineTaskWaitSettlementTable.wait_id })
@@ -362,11 +351,7 @@ export function exactDueTaskWaitForIngressInTransaction(
     .where(eq(EngineTaskWaitSettlementTable.wait_id, jobID))
     .get()
   if (settlement) {
-    throw new TaskWaitIngressLineageError(
-      `Task wait wake ${jobID} is already settled`,
-      "already_settled",
-      jobID,
-    )
+    throw new TaskWaitIngressLineageError(`Task wait wake ${jobID} is already settled`, "already_settled", jobID)
   }
   return jobID
 }
@@ -412,12 +397,7 @@ export function settleTaskWaitForIngressInTransaction(
     .from(EngineTaskRootIngressTable)
     .where(eq(EngineTaskRootIngressTable.id, input.ingressID))
     .get()
-  if (
-    !wait ||
-    !ingress ||
-    wait.task_id !== ingress.task_id ||
-    wait.execution_epoch !== ingress.execution_epoch
-  ) {
+  if (!wait || !ingress || wait.task_id !== ingress.task_id || wait.execution_epoch !== ingress.execution_epoch) {
     throw new Error(`Task wait ${input.waitID} cannot settle against unrelated ingress ${input.ingressID}`)
   }
   const existing = db

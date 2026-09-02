@@ -2760,6 +2760,8 @@
                   "goal_workload",
                   "dispatch_lineage",
                   "dispatch_settlement",
+                  "dispatch_delivery_disposition",
+                  "task_root_ingress_disposition",
                   "mission_acceptance_resume_receipt",
                   "task_acceptance_ledger",
                   "task_checkpoint_settlement",
@@ -25859,6 +25861,43 @@
               }
             },
             "description": "Not found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "data": {
+                      "additionalProperties": {},
+                      "propertyNames": {
+                        "type": "string"
+                      },
+                      "type": "object"
+                    },
+                    "name": {
+                      "const": "TaskCancellationIncompleteError",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "data"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorktreeOwnershipObservationError"
+                }
+              }
+            },
+            "description": "Required ownership authority could not be observed safely"
           }
         },
         "summary": "Remove workspace",
@@ -25923,6 +25962,43 @@
               }
             },
             "description": "Bad request"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "data": {
+                      "additionalProperties": {},
+                      "propertyNames": {
+                        "type": "string"
+                      },
+                      "type": "object"
+                    },
+                    "name": {
+                      "const": "TaskCancellationIncompleteError",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "data"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorktreeOwnershipObservationError"
+                }
+              }
+            },
+            "description": "Required ownership authority could not be observed safely"
           }
         },
         "summary": "Create workspace",
@@ -97262,6 +97338,8 @@
                               "goal_workload",
                               "dispatch_lineage",
                               "dispatch_settlement",
+                              "dispatch_delivery_disposition",
+                              "task_root_ingress_disposition",
                               "mission_acceptance_resume_receipt",
                               "task_acceptance_ledger",
                               "task_checkpoint_settlement",
@@ -104142,6 +104220,8 @@
                                   "goal_workload",
                                   "dispatch_lineage",
                                   "dispatch_settlement",
+                                  "dispatch_delivery_disposition",
+                                  "task_root_ingress_disposition",
                                   "mission_acceptance_resume_receipt",
                                   "task_acceptance_ledger",
                                   "task_checkpoint_settlement",
