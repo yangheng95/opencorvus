@@ -70,6 +70,7 @@ export async function executeRequestOrchestratorDecision(params: RequestOrchestr
     workerBinding,
     messageID: ctx.messageID,
     callID: ctx.callID,
+    toolInput: params,
     summary: params.summary,
     details: params.details,
     blocking: params.blocking,

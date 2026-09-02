@@ -23,6 +23,7 @@ import { assertCurrentDeliverySliceRevisionIDsInTransaction } from "./delivery-s
 import type { DispatchOccurrenceAuthority } from "./dispatch-occurrence-authority"
 import { taskCancellationAuthorityExecutionErrorInTransaction } from "./cancellation-projection"
 import { taskCompletionClosureInTransaction, TaskCompletionClosureConflictError } from "./task-completion-closure"
+import { taskLifecycleProjectionInTransaction } from "./task-lifecycle"
 import { assertProcessLivenessOwnerInTransaction, ProcessLivenessOwnerUnavailableError } from "./process-liveness"
 import {
   acquireControlLeaseInTransaction,
@@ -352,15 +353,28 @@ function assertCoordinationDispatchAdmissionInTransaction(
   const action = actionRow?.payload as
     | {
         action?: unknown
-        status?: unknown
+        execution_epoch?: unknown
         target_session_id?: unknown
         target_agent?: unknown
         request_id?: unknown
       }
     | undefined
+  const terminalOutcome = db
+    .select({ id: EngineArtifactTable.id })
+    .from(EngineArtifactTable)
+    .where(
+      and(
+        eq(EngineArtifactTable.task_id, input.taskID),
+        eq(EngineArtifactTable.kind, "agent_coordination_action_outcome"),
+        sql`json_extract(${EngineArtifactTable.payload}, '$.action_id') = ${input.actionID}`,
+        sql`json_extract(${EngineArtifactTable.payload}, '$.status') IN ('completed','failed')`,
+      ),
+    )
+    .get()
   if (
     action?.action !== "redispatch_worker" ||
-    action.status !== "pending" ||
+    action.execution_epoch !== taskLifecycleProjectionInTransaction(db, input.taskID).epoch ||
+    terminalOutcome ||
     action.target_session_id !== input.childSessionID ||
     action.target_agent !== input.targetAgentID
   ) {
@@ -954,6 +968,7 @@ export const DispatchLineageTestHooks = Object.freeze({
 export function commitDispatchLineageSession(
   lineage: DispatchLineageRow,
   admission?: DispatchAdmissionOwner,
+  onAccepted?: (db: Database.TxOrDb) => void,
 ): void {
   Database.transaction((db) => {
     if (admission) {
@@ -980,6 +995,7 @@ export function commitDispatchLineageSession(
         `Dispatch ${lineage.dispatchID} cannot materialize workflow occurrence without its exact durable Turn descriptor`,
       )
     }
+    onAccepted?.(db)
     if (admission) {
       const released = releaseControlLeaseInTransaction(db, {
         target: "dispatch_admission",

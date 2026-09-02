@@ -7237,7 +7237,7 @@ export class Session3 extends HeyApiClient {
   /**
    * Steer a task agent session through operator coordination
    *
-   * Accept a human-authored steer message for one target sub-agent session. The route records a durable operator-originated agent_coordination_request and wakes the orchestrator. It never appends a task-root operator message and never writes a direct child-session reply.
+   * Accept a human-authored steer message for one target sub-agent session. The route records a durable operator-originated agent_coordination_request and wakes the orchestrator. The caller must generate request_id before the first attempt and reuse it only with the identical task, target session, and canonical message after a lost response; that replay returns the original accepted occurrence, while changed semantics return HTTP 409. The server never generates a replacement ID. It never appends a task-root operator message and never writes a direct child-session reply.
    */
   public operatorSteer<ThrowOnError extends boolean = false>(
     parameters: {
@@ -7245,6 +7245,7 @@ export class Session3 extends HeyApiClient {
       sessionID: string
       directory?: string
       message: string
+      request_id: string
     },
     options?: Options<never, ThrowOnError>,
   ) {
@@ -7257,6 +7258,7 @@ export class Session3 extends HeyApiClient {
             { in: "path", key: "sessionID" },
             { in: "query", key: "directory" },
             { in: "body", key: "message" },
+            { in: "body", key: "request_id" },
           ],
         },
       ],

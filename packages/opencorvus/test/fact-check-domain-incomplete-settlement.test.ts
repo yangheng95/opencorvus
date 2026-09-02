@@ -180,6 +180,24 @@ async function createFixture(title: string) {
     type: "text",
     text: "Fact Check streamed Turn finished with the visible result above.",
   })
+  const dispatchID = Identifier.ascending("artifact")
+  const lineage = recordTestDispatchLineage({
+    origin: createDispatchLineageOrigin({
+      dispatchID,
+      taskID,
+      orchestratorSessionID: root.id,
+      orchestratorMessageID: Identifier.ascending("message"),
+      toolPartID: Identifier.ascending("part"),
+      toolCallID: Identifier.ascending("call"),
+      targetAgentID: projectedFactChecker.identity.agentID,
+      projectedWorkerIdentity: projectedFactChecker.identity,
+      workScope: { kind: "task" },
+      workflowBinding,
+      workflowNodeID: "research-studio-fact-checker",
+      adapterInput: { reason: "Verify the selected analysis" },
+    }),
+    childSessionID: worker.id,
+  })
   WorkerTurnDescriptor.create({
     sessionID: worker.id,
     payload: {
@@ -195,6 +213,21 @@ async function createFixture(title: string) {
         user_message_id: workerUser.id,
         control_text_parts: [{ part_id: workerControl.id, text_sha256: taskRequestSHA256(workerControl.text) }],
       },
+      dispatchTurn: {
+        kind: "initial",
+        current_dispatch_id: dispatchID,
+        workflow_binding: workflowBinding,
+        workflow_node_id: "research-studio-fact-checker",
+        workflow_occurrence_id: dispatchID,
+        delivery_slice_revision_ids: [],
+        evidence_locators: [],
+        task_authority: {
+          task_id: taskID,
+          root_session_id: root.id,
+          request_sha256: taskRequestSHA256(requireTask(taskID).request),
+          initial_control_text_parts: [],
+        },
+      },
     },
   })
 
@@ -202,7 +235,7 @@ async function createFixture(title: string) {
   // immutable, and one case below appends its own Tool request Part to it.
   const completeWorkerFinal = () =>
     Session.updateMessage({ ...workerFinal, time: { ...workerFinal.time, completed: now + 6 } })
-  return { taskID, root, target, targetMessage, worker, workerFinal, completeWorkerFinal }
+  return { taskID, root, target, targetMessage, worker, workerFinal, completeWorkerFinal, dispatchID, lineage }
 }
 
 function reviewFor(fixture: Awaited<ReturnType<typeof createFixture>>): FactCheckReview {
@@ -263,25 +296,7 @@ function executionContext(taskID: string, dispatchID: string): DispatchAdapterEx
 }
 
 function recordLineage(fixture: Awaited<ReturnType<typeof createFixture>>) {
-  const dispatchID = Identifier.ascending("artifact")
-  const lineage = recordTestDispatchLineage({
-    origin: createDispatchLineageOrigin({
-      dispatchID,
-      taskID: fixture.taskID,
-      orchestratorSessionID: fixture.root.id,
-      orchestratorMessageID: Identifier.ascending("message"),
-      toolPartID: Identifier.ascending("part"),
-      toolCallID: Identifier.ascending("call"),
-      targetAgentID: projectedFactChecker.identity.agentID,
-      projectedWorkerIdentity: projectedFactChecker.identity,
-      workScope: { kind: "task" },
-      workflowBinding,
-      workflowNodeID: "research-studio-fact-checker",
-      adapterInput: { reason: "Verify the selected analysis" },
-    }),
-    childSessionID: fixture.worker.id,
-  })
-  return { dispatchID, lineage }
+  return { dispatchID: fixture.dispatchID, lineage: fixture.lineage }
 }
 
 async function executeAdapter(input: {
@@ -534,7 +549,7 @@ describe("Fact Check domain-incomplete settlement", () => {
         const { dispatchID, lineage } = recordLineage(fixture)
         const handoff: AgentCoordinationHandoffResult = {
           outcome: "coordination_handoff",
-          requestID: Identifier.ascending("question"),
+          requestID: Identifier.ascending("artifact"),
           dispatchLineageID: lineage.artifactID,
           sessionID: fixture.worker.id,
         }

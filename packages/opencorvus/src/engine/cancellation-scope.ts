@@ -6,6 +6,7 @@ import { AwaitTimeoutError } from "@/util/await-with-timeout"
 import { createTaskCancellationIncomplete } from "./cancellation-error"
 import type { ExecutionCancellationOrigin } from "@/session/prompt/cancellation"
 import type { ProjectDeletionAdmission } from "@/project/instance"
+import { Database } from "@/storage/db"
 
 type SessionInfo = Awaited<ReturnType<typeof Session.get>>
 type PromptSession = Pick<SessionInfo, "id" | "directory">
@@ -134,6 +135,9 @@ export async function requestSessionPromptSubtreeCancellation(input: {
   taskID?: string
   handle?: string
   origin: Omit<ExecutionCancellationOrigin, "targetSessionID">
+  /** Optional durable owner assertion held under the same immediate write
+   * transaction that admits the in-memory prompt cancellations. */
+  admission?: (db: Database.TxOrDb) => void
 }): Promise<{ sessionIDs: string[]; cancelledSessions: PromptSession[]; failures: unknown[] }> {
   const handle = input.handle ?? "SessionPrompt.cancel"
   const sessionIDs = await Session.treeInProject({ sessionID: input.sessionID, projectID: input.projectID })
@@ -143,21 +147,31 @@ export async function requestSessionPromptSubtreeCancellation(input: {
   const cancelledSessions: PromptSession[] = []
   const failures: unknown[] = []
 
-  for (const session of sessions.slice().reverse()) {
-    try {
-      const cancelled = cancelSessionPromptInScope({
-        session,
-        taskID: input.taskID,
-        handle,
-        origin: { ...input.origin, targetSessionID: session.id },
-        settleBeforeReuse: true,
-      })
-      if (cancelled) {
-        cancelledSessions.push(session)
+  const admit = () => {
+    for (const session of sessions.slice().reverse()) {
+      try {
+        const cancelled = cancelSessionPromptInScope({
+          session,
+          taskID: input.taskID,
+          handle,
+          origin: { ...input.origin, targetSessionID: session.id },
+          settleBeforeReuse: true,
+        })
+        if (cancelled) {
+          cancelledSessions.push(session)
+        }
+      } catch (error) {
+        failures.push(error)
       }
-    } catch (error) {
-      failures.push(error)
     }
+  }
+  if (input.admission) {
+    Database.immediateTransaction((db) => {
+      input.admission!(db)
+      admit()
+    })
+  } else {
+    admit()
   }
 
   return { sessionIDs, cancelledSessions, failures }

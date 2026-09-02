@@ -262,17 +262,28 @@ Task 内的 worker 调度只有一个入口：`dispatch_agent dispatch.target=<a
 `workflow_occurrence_id`；首次 dispatch 令它等于自身 `dispatch_id`，continuation
 沿用原值与原 `child_session_id`。面板可以在同一 Session 下列出多个 Turn，同时仍只投影一个逻辑 node occurrence。
 
-worker 的 `redispatch` 请求也不直接执行 adapter。`respond_agent_coordination` 只持久化可见的 pending
-action；Orchestrator 随后必须显式调用带 `coordination_action_id` 且不带 `workflow_subject` 的
+Agent coordination 只追加四类不可变事实：request、scheduler response、action plan 和 terminal
+action outcome。request 没有可变 status，action 没有 progress row；当前 frontier 由单一 reducer
+按 `(task_id, execution_epoch, target_session_id)` 从这些事实推导。response 精确 claim request 本身，
+或上一条 failed outcome；同一 frontier 只能有一个 response，Task reopen 只通过既有
+`execution_epoch` 使旧 epoch 的 pending request 失效，不再写第二套 cancellation authority。
+
+worker 的 `redispatch` 请求也不直接执行 adapter。`respond_agent_coordination` 只追加可见的
+response 与 action；Orchestrator 随后必须显式调用带 `coordination_action_id` 且不带 `workflow_subject` 的
 `dispatch_agent`。action 冻结原 dispatch lineage、完整 workflow binding、node、logical occurrence
 和 Slice subjects；Host 从该绑定派生 continuation，caller 不能另选 workflow 或制造第二 occurrence。
-action 绑定到不可变 child Session，进程重启后仍从持久 action 继续。
+action 绑定到不可变 child Session，进程重启后仍从同一持久 action 继续。只有 completed 或 failed
+terminal outcome；completed outcome 必须由 action-specific durable effect authority 证明，不能由 Tool
+输出文本或 generic receipt 自证完成。
 
 Targeted operator steer 的入口是
 `POST /task/:taskID/session/:sessionID/operator-steer`。入口只校验持久化
-Task/Session/project lineage 与 descriptor 数据完整性，从目标 Session 最新的
-hash-verified `WorkerTurnDescriptor` 冻结 exact projected identity，随后写入
-`origin="operator_steer"` 的 durable coordination request 并唤醒 root Session。
+Task/Session/project lineage 与 descriptor 数据完整性。caller 必须提供 `request_id`；服务先全局查找
+该 identity 的 immutable request，再决定是否需要读取目标 Session，从而让丢失响应后的 replay 不依赖
+当前可变 target 状态。新 request 从目标 Session 最新的 hash-verified `WorkerTurnDescriptor` 冻结
+exact projected identity，并在同一个 immediate transaction 写入
+`origin="operator_steer"` 的 durable coordination request 与 Task-root ingress。相同 identity 与相同
+canonical input 返回原 receipt；相同 identity 与不同 input 返回稳定 typed conflict，不能产生第二次 wake。
 旧进程中的 `SessionRuntimeContract` 是否存在、历史 `session.status` 是否 terminal，
 都不是准入条件。
 

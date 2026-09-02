@@ -60,6 +60,7 @@ export const ENGINE_ARTIFACT_KINDS = [
   "agent_coordination_request",
   "agent_coordination_response",
   "agent_coordination_action",
+  "agent_coordination_action_outcome",
   "task_completion_decision",
   "task_package_revision_binding",
   "task_execution_capsule_binding",
@@ -612,10 +613,73 @@ export const EngineArtifactTable = sqliteTable(
     uniqueIndex("engine_artifact_task_completion_decision_time_idx")
       .on(table.task_id, table.time_created)
       .where(sql`${table.kind} = 'task_completion_decision'`),
-    uniqueIndex("engine_artifact_pending_worker_handoff_lineage_idx")
+    uniqueIndex("engine_agent_coordination_worker_occurrence_idx")
+      .on(
+        table.task_id,
+        sql<string>`json_extract(${table.payload}, '$.session_id')`,
+        sql<string>`json_extract(${table.payload}, '$.message_id')`,
+        sql<string>`json_extract(${table.payload}, '$.tool_call_id')`,
+      )
+      .where(sql`${table.kind} = 'agent_coordination_request' AND json_extract(${table.payload}, '$.origin') = 'worker_handoff'`),
+    uniqueIndex("engine_agent_coordination_worker_lineage_idx")
       .on(table.task_id, sql<string>`json_extract(${table.payload}, '$.dispatch_lineage_id')`)
       .where(
-        sql`${table.kind} = 'agent_coordination_request' AND json_extract(${table.payload}, '$.origin') = 'worker_handoff' AND json_extract(${table.payload}, '$.status') = 'pending'`,
+        sql`${table.kind} = 'agent_coordination_request' AND json_extract(${table.payload}, '$.origin') = 'worker_handoff'`,
+      ),
+    index("engine_agent_coordination_request_session_idx")
+      .on(
+        table.task_id,
+        sql<number>`json_extract(${table.payload}, '$.execution_epoch')`,
+        sql<string>`json_extract(${table.payload}, '$.session_id')`,
+        table.time_created,
+        table.id,
+      )
+      .where(sql`${table.kind} = 'agent_coordination_request'`),
+    index("engine_agent_coordination_request_epoch_idx")
+      .on(
+        table.task_id,
+        sql<number>`json_extract(${table.payload}, '$.execution_epoch')`,
+        table.time_created,
+        table.id,
+      )
+      .where(sql`${table.kind} = 'agent_coordination_request'`),
+    uniqueIndex("engine_agent_coordination_frontier_winner_idx")
+      .on(
+        table.task_id,
+        sql<string>`json_extract(${table.payload}, '$.request_id')`,
+        sql<string>`json_extract(${table.payload}, '$.frontier_id')`,
+      )
+      .where(sql`${table.kind} = 'agent_coordination_response'`),
+    uniqueIndex("engine_agent_coordination_response_tool_occurrence_idx")
+      .on(sql<string>`json_extract(${table.payload}, '$.orchestrator_tool_part_id')`)
+      .where(sql`${table.kind} = 'agent_coordination_response'`),
+    uniqueIndex("engine_agent_coordination_action_response_idx")
+      .on(table.task_id, sql<string>`json_extract(${table.payload}, '$.response_id')`)
+      .where(sql`${table.kind} = 'agent_coordination_action'`),
+    index("engine_agent_coordination_action_request_idx")
+      .on(table.task_id, sql<string>`json_extract(${table.payload}, '$.request_id')`, table.time_created, table.id)
+      .where(sql`${table.kind} = 'agent_coordination_action'`),
+    index("engine_agent_coordination_outcome_action_idx")
+      .on(
+        table.task_id,
+        sql<string>`json_extract(${table.payload}, '$.action_id')`,
+        table.time_created,
+        table.id,
+      )
+      .where(sql`${table.kind} = 'agent_coordination_action_outcome'`),
+    index("engine_agent_coordination_outcome_request_idx")
+      .on(
+        table.task_id,
+        sql<string>`json_extract(${table.payload}, '$.request_id')`,
+        sql<string>`json_extract(${table.payload}, '$.status')`,
+        table.time_created,
+        table.id,
+      )
+      .where(sql`${table.kind} = 'agent_coordination_action_outcome'`),
+    uniqueIndex("engine_agent_coordination_action_terminal_idx")
+      .on(table.task_id, sql<string>`json_extract(${table.payload}, '$.action_id')`)
+      .where(
+        sql`${table.kind} = 'agent_coordination_action_outcome' AND json_extract(${table.payload}, '$.status') IN ('completed','failed')`,
       ),
   ],
 )

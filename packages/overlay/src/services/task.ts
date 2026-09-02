@@ -860,6 +860,7 @@ export class OperatorSteerInputError extends Error {
 export async function sendOperatorSteer(
   taskID: string,
   sessionID: string,
+  requestID: string,
   message: string,
 ): Promise<OperatorSteerResult> {
   const text = message.trim()
@@ -869,7 +870,7 @@ export async function sendOperatorSteer(
   return (await apiJson(taskPath(taskID, `/session/${encodeURIComponent(sessionID)}/operator-steer`), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ message: text }),
+    body: JSON.stringify({ request_id: requestID, message: text }),
   })) as OperatorSteerResult
 }
 

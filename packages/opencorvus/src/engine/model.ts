@@ -1139,9 +1139,17 @@ export const TaskConversationSessionPage = TaskConversationHistoryPage.extend({
 
 export const AgentSessionOperatorSteerInput = z
   .object({
-    message: z.string().trim().min(1),
+    request_id: Identifier.schema("artifact").describe(
+      "Caller-generated stable operator-steer occurrence ID. Generate it before the first attempt and reuse it only for an exact retry of the same task, target session, and canonical message after a lost response. Exact replay returns the original receipt; changed semantics return OperatorSteerRequestConflictError (HTTP 409). The server never generates this ID for the caller.",
+    ),
+    message: z
+      .string()
+      .trim()
+      .min(1)
+      .describe("Canonical operator steer message bound to request_id; an exact retry must send the same message."),
   })
   .strict()
+  .describe("A caller-owned idempotent operator-steer occurrence for one task and target session.")
 
 export const AgentSessionOperatorSteerResult = z.object({
   task_id: Identifier.schema("task"),
@@ -1369,22 +1377,11 @@ export const Event = {
       actionID: Identifier.schema("artifact"),
       sessionID: Identifier.schema("session"),
       action: z.enum(["cancel_worker", "redispatch_worker", "fail_task", "ask_user", "acknowledge_terminal"]),
-      status: z.enum(["pending", "completed", "failed"]),
+      status: z.enum(["pending", "completed", "failed", "superseded"]),
       summary: z.string(),
     }),
     { tier: 2 },
   ),
-  AgentCoordinationCancelled: BusEvent.define(
-    "agent.coordination.cancelled",
-    z.object({
-      taskID: Identifier.schema("task"),
-      requestID: Identifier.schema("artifact"),
-      sessionID: Identifier.schema("session"),
-      summary: z.string(),
-    }),
-    { tier: 3 },
-  ),
-
   ReviewStreamStarted: BusEvent.define(
     "review.stream.started",
     z.object({

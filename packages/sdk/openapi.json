@@ -2229,9 +2229,6 @@
             "$ref": "#/components/schemas/Event.agent.coordination.action"
           },
           {
-            "$ref": "#/components/schemas/Event.agent.coordination.cancelled"
-          },
-          {
             "$ref": "#/components/schemas/Event.agent.coordination.requested"
           },
           {
@@ -2492,7 +2489,8 @@
                 "enum": [
                   "pending",
                   "completed",
-                  "failed"
+                  "failed",
+                  "superseded"
                 ],
                 "type": "string"
               },
@@ -2518,45 +2516,6 @@
           },
           "type": {
             "const": "agent.coordination.action",
-            "type": "string"
-          }
-        },
-        "required": [
-          "type",
-          "properties"
-        ],
-        "type": "object"
-      },
-      "Event.agent.coordination.cancelled": {
-        "properties": {
-          "properties": {
-            "properties": {
-              "requestID": {
-                "pattern": "^art.*",
-                "type": "string"
-              },
-              "sessionID": {
-                "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
-                "type": "string"
-              },
-              "summary": {
-                "type": "string"
-              },
-              "taskID": {
-                "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
-                "type": "string"
-              }
-            },
-            "required": [
-              "taskID",
-              "requestID",
-              "sessionID",
-              "summary"
-            ],
-            "type": "object"
-          },
-          "type": {
-            "const": "agent.coordination.cancelled",
             "type": "string"
           }
         },
@@ -2778,6 +2737,7 @@
                   "agent_coordination_request",
                   "agent_coordination_response",
                   "agent_coordination_action",
+                  "agent_coordination_action_outcome",
                   "task_completion_decision",
                   "task_package_revision_binding",
                   "task_execution_capsule_binding",
@@ -97383,6 +97343,7 @@
                               "agent_coordination_request",
                               "agent_coordination_response",
                               "agent_coordination_action",
+                              "agent_coordination_action_outcome",
                               "task_completion_decision",
                               "task_package_revision_binding",
                               "task_execution_capsule_binding",
@@ -104265,6 +104226,7 @@
                                   "agent_coordination_request",
                                   "agent_coordination_response",
                                   "agent_coordination_action",
+                                  "agent_coordination_action_outcome",
                                   "task_completion_decision",
                                   "task_package_revision_binding",
                                   "task_execution_capsule_binding",
@@ -115032,7 +114994,7 @@
     },
     "/task/{taskID}/session/{sessionID}/operator-steer": {
       "post": {
-        "description": "Accept a human-authored steer message for one target sub-agent session. The route records a durable operator-originated agent_coordination_request and wakes the orchestrator. It never appends a task-root operator message and never writes a direct child-session reply.",
+        "description": "Accept a human-authored steer message for one target sub-agent session. The route records a durable operator-originated agent_coordination_request and wakes the orchestrator. The caller must generate request_id before the first attempt and reuse it only with the identical task, target session, and canonical message after a lost response; that replay returns the original accepted occurrence, while changed semantics return HTTP 409. The server never generates a replacement ID. It never appends a task-root operator message and never writes a direct child-session reply.",
         "operationId": "task.session.operatorSteer",
         "parameters": [
           {
@@ -115068,13 +115030,21 @@
             "application/json": {
               "schema": {
                 "additionalProperties": false,
+                "description": "A caller-owned idempotent operator-steer occurrence for one task and target session.",
                 "properties": {
                   "message": {
+                    "description": "Canonical operator steer message bound to request_id; an exact retry must send the same message.",
                     "minLength": 1,
+                    "type": "string"
+                  },
+                  "request_id": {
+                    "description": "Caller-generated stable operator-steer occurrence ID. Generate it before the first attempt and reuse it only for an exact retry of the same task, target session, and canonical message after a lost response. Exact replay returns the original receipt; changed semantics return OperatorSteerRequestConflictError (HTTP 409). The server never generates this ID for the caller.",
+                    "pattern": "^art.*",
                     "type": "string"
                   }
                 },
                 "required": [
+                  "request_id",
                   "message"
                 ],
                 "type": "object"
@@ -115216,7 +115186,7 @@
                       "type": "object"
                     },
                     "name": {
-                      "const": "TaskCancellationIncompleteError",
+                      "const": "OperatorSteerRequestConflictError",
                       "type": "string"
                     }
                   },
@@ -115228,7 +115198,7 @@
                 }
               }
             },
-            "description": "Conflict"
+            "description": "Operator steer request identity conflicts with an accepted occurrence"
           }
         },
         "summary": "Steer a task agent session through operator coordination",

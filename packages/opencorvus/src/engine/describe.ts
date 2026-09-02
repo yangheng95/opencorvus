@@ -21,7 +21,7 @@ import { deriveTaskStatus } from "./task-status"
 import { ToolFailureCause, renderToolFailureCause } from "@/session/tool-failure-cause"
 import { SessionStatus } from "@/session/status"
 import { Database, and, asc, desc, eq, isNotNull, or, sql } from "@/storage/db"
-import { listAgentCoordinationResponses, listPendingAgentCoordinationRequests } from "./agent-coordination"
+import { countPendingAgentCoordinationRequests, listPendingAgentCoordinationRequests } from "./agent-coordination"
 import { listRecentTaskMailboxMessages, type MailboxSchedulerMessage } from "./mailbox"
 import { EngineArtifactTable } from "./engine.sql"
 import { findDispatchLineageByArtifactID } from "./dispatch-lineage"
@@ -898,9 +898,11 @@ async function describeTaskFromRow(task: TaskRow): Promise<TaskDesc> {
       reason: entry.value,
       goal_id: entry.goalID ?? undefined,
     }))
-  const allPendingAgentCoordination = listPendingAgentCoordinationRequests(task.id)
+  const pendingAgentCoordinationTotal = countPendingAgentCoordinationRequests(task.id)
+  const allPendingAgentCoordination = listPendingAgentCoordinationRequests(task.id, undefined, {
+    limit: AGENT_COORDINATION_PROMPT_CAP,
+  })
   const pendingAgentCoordination: AgentCoordinationRequestDesc[] = allPendingAgentCoordination
-    .slice(0, AGENT_COORDINATION_PROMPT_CAP)
     .map((row) => ({
       request_id: row.payload.request_id,
       time_created: row.timeCreated,
@@ -923,9 +925,6 @@ async function describeTaskFromRow(task: TaskRow): Promise<TaskDesc> {
       last_action_failed_at: row.payload.last_action_failed_at,
     }))
   const recentMailboxMessages = listRecentTaskMailboxMessages(task.id)
-  // Validate the full A2A mailbox while building the orchestrator view. Response rows are
-  // not prompt material, but malformed durable responses must fail loudly instead of hiding.
-  listAgentCoordinationResponses(task.id)
   const openToolCallsWithoutCurrentOwner = listOpenToolCallsWithoutCurrentOwner(task)
   const completedToolCallRefs = listCompletedToolCallRefs(task)
   const agentMessageRefs = listAgentMessageRefs(task)
@@ -956,9 +955,9 @@ async function describeTaskFromRow(task: TaskRow): Promise<TaskDesc> {
     recent_agent_failures: recentAgentFailures.length > 0 ? recentAgentFailures : undefined,
     pending_agent_coordination: pendingAgentCoordination.length > 0 ? pendingAgentCoordination : undefined,
     pending_agent_coordination_total:
-      allPendingAgentCoordination.length > 0 ? allPendingAgentCoordination.length : undefined,
+      pendingAgentCoordinationTotal > 0 ? pendingAgentCoordinationTotal : undefined,
     pending_agent_coordination_truncated:
-      allPendingAgentCoordination.length > pendingAgentCoordination.length ? true : undefined,
+      pendingAgentCoordinationTotal > pendingAgentCoordination.length ? true : undefined,
     recent_mailbox_messages: recentMailboxMessages.length > 0 ? recentMailboxMessages : undefined,
   }
 }

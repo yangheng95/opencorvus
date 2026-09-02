@@ -162,6 +162,10 @@ const OPERATOR_STEER_400_RESPONSE = badRequestOrNamedErrorResponse(
   "Operator steer target or request body rejected",
   "OperatorSteerTargetError",
 )
+const OPERATOR_STEER_409_RESPONSE = namedErrorResponse(
+  "Operator steer request identity conflicts with an accepted occurrence",
+  "OperatorSteerRequestConflictError",
+)
 
 export const OwnedPromptControllersResponse = namedErrorResponse(
   "Owned prompt controllers prevent this operation",
@@ -179,6 +183,13 @@ export const AuthReadUnavailableResponse = {
 
 export function operatorSteerRouteErrors(...codes: number[]) {
   return Object.fromEntries(
-    codes.map((code) => [code, code === 400 ? OPERATOR_STEER_400_RESPONSE : ERRORS[code as keyof typeof ERRORS]]),
+    codes.map((code) => [
+      code,
+      code === 400
+        ? OPERATOR_STEER_400_RESPONSE
+        : code === 409
+          ? OPERATOR_STEER_409_RESPONSE
+          : ERRORS[code as keyof typeof ERRORS],
+    ]),
   )
 }

@@ -778,7 +778,6 @@ export type DiscoveredProject = {
 
 export type Event =
   | EventAgentCoordinationAction
-  | EventAgentCoordinationCancelled
   | EventAgentCoordinationRequested
   | EventAgentCoordinationResponded
   | EventAgentExecutionLifecycle
@@ -862,21 +861,11 @@ export type EventAgentCoordinationAction = {
     requestID: string
     responseID: string
     sessionID: string
-    status: "pending" | "completed" | "failed"
+    status: "pending" | "completed" | "failed" | "superseded"
     summary: string
     taskID: string
   }
   type: "agent.coordination.action"
-}
-
-export type EventAgentCoordinationCancelled = {
-  properties: {
-    requestID: string
-    sessionID: string
-    summary: string
-    taskID: string
-  }
-  type: "agent.coordination.cancelled"
 }
 
 export type EventAgentCoordinationRequested = {
@@ -960,6 +949,7 @@ export type EventArtifactPersisted = {
       | "agent_coordination_request"
       | "agent_coordination_response"
       | "agent_coordination_action"
+      | "agent_coordination_action_outcome"
       | "task_completion_decision"
       | "task_package_revision_binding"
       | "task_execution_capsule_binding"
@@ -29069,6 +29059,7 @@ export type TaskBoardResponses = {
         | "agent_coordination_request"
         | "agent_coordination_response"
         | "agent_coordination_action"
+        | "agent_coordination_action_outcome"
         | "task_completion_decision"
         | "task_package_revision_binding"
         | "task_execution_capsule_binding"
@@ -31105,6 +31096,7 @@ export type TaskConversationResponses = {
           | "agent_coordination_request"
           | "agent_coordination_response"
           | "agent_coordination_action"
+          | "agent_coordination_action_outcome"
           | "task_completion_decision"
           | "task_package_revision_binding"
           | "task_execution_capsule_binding"
@@ -33972,8 +33964,18 @@ export type TaskSessionCancelResponses = {
 export type TaskSessionCancelResponse = TaskSessionCancelResponses[keyof TaskSessionCancelResponses]
 
 export type TaskSessionOperatorSteerData = {
+  /**
+   * A caller-owned idempotent operator-steer occurrence for one task and target session.
+   */
   body: {
+    /**
+     * Canonical operator steer message bound to request_id; an exact retry must send the same message.
+     */
     message: string
+    /**
+     * Caller-generated stable operator-steer occurrence ID. Generate it before the first attempt and reuse it only for an exact retry of the same task, target session, and canonical message after a lost response. Exact replay returns the original receipt; changed semantics return OperatorSteerRequestConflictError (HTTP 409). The server never generates this ID for the caller.
+     */
+    request_id: string
   }
   path: {
     taskID: string
@@ -34017,13 +34019,13 @@ export type TaskSessionOperatorSteerErrors = {
         name: "LogFileNotFoundError"
       }
   /**
-   * Conflict
+   * Operator steer request identity conflicts with an accepted occurrence
    */
   409: {
     data: {
       [key: string]: unknown
     }
-    name: "TaskCancellationIncompleteError"
+    name: "OperatorSteerRequestConflictError"
   }
 }
 

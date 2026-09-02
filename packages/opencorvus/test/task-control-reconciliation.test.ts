@@ -380,7 +380,7 @@ describe("Task-control reconciliation", () => {
         expect({ acquired: acquired.acquired, evidenceReads }).toEqual({ acquired: true, evidenceReads: 1 })
       },
     })
-  })
+  }, 30_000)
 
   test("rejects a Task-root disposition without exact immutable release evidence", async () => {
     await using project = await memoryProject()

@@ -99,6 +99,7 @@ import { decodeDataUrlBase64Bytes } from "./text-mime"
 import { normalizeToolInput } from "./tool-input-norm"
 import { configureSessionShellResume } from "./shell-exec"
 import { bindMissionClosingAssistantTerminalizer } from "@/mission/execution-close-effects"
+import { AgentCoordinationActionSupersededError } from "@/engine/agent-coordination-errors"
 import {
   assertSessionLoopRuntimeContract,
   isProjectedSchedulerRuntimeContract,
@@ -181,6 +182,9 @@ import { recoverScheduledToolPart } from "@/scheduler/tool-recovery"
 import { requireControlPlaneToolLoaders } from "@/tool/control-plane-tool-provider"
 import { settleSessionDelaysAtAssistantAcceptanceInTransaction } from "@/scheduler/session-delay-admission"
 import { sendSchedulerMessage } from "@/protocol/scheduler-message"
+import { findAgentCoordinationRequest } from "@/engine/agent-coordination"
+import { listTaskRootIngresses } from "@/engine/task-root-fact-store"
+import { createTerminalConversationAuthority } from "@/orchestrator/terminal-conversation-authority"
 import {
   orchestratorCommittedDecisionInParts,
   type OrchestratorDecisionToolName,
@@ -2448,6 +2452,68 @@ export namespace SessionLoop {
   }
 
   /**
+   * Resume the exact durable coordination Tool occurrence abandoned by a dead
+   * Session owner. The Tool's deterministic response/action identities and
+   * append-only downstream facts make executing the same persisted input the
+   * single recovery path; no recovery-only coordination state is introduced.
+   */
+  async function recoverInterruptedAgentCoordinationPart(input: {
+    sessionID: string
+    messageID: string
+    part: Message.ToolPart
+    signal?: AbortSignal
+  }): Promise<ReturnType<typeof normalizeToolResult> | undefined> {
+    if (input.part.tool !== "respond_agent_coordination" || input.part.state.status !== "running") return undefined
+    input.signal?.throwIfAborted()
+    const taskID = taskIDForSession(input.sessionID)
+    if (!taskID) throw new Error(`Recovered coordination Session ${input.sessionID} is not bound to a Task`)
+    const session = await Session.get(input.sessionID)
+    const persistedInput = input.part.state.input as { request_id?: unknown; decision?: unknown }
+    if (typeof persistedInput.request_id !== "string") {
+      throw new Error(`Recovered coordination Tool ${input.part.id} has no persisted request identity`)
+    }
+    const request = findAgentCoordinationRequest({ taskID, requestID: persistedInput.request_id })
+    if (!request) throw new Error(`Recovered coordination request ${persistedInput.request_id} is missing`)
+    let terminalConversationAuthority: ReturnType<typeof createTerminalConversationAuthority> | undefined
+    if (persistedInput.decision === "acknowledge_terminal") {
+      const ingress = listTaskRootIngresses(taskID, request.payload.execution_epoch).find(
+        (candidate) => candidate.source === "engine_artifact" && candidate.source_id === request.artifactID,
+      )
+      if (!ingress) throw new Error(`Recovered coordination request ${request.artifactID} has no exact Task-root ingress`)
+      terminalConversationAuthority = createTerminalConversationAuthority({
+        taskID,
+        ingressID: ingress.id,
+        event: { coordinationRequest: { requestID: request.artifactID } },
+      })
+    }
+    const tool = createExactOrchestratorTool({
+      toolID: "respond_agent_coordination",
+      taskID,
+      agentSessionID: session.id,
+      sendSchedulerMessage,
+      // The response/action/request facts already freeze the worker authority.
+      // Recovery must not reinterpret that occurrence through mutable current
+      // config, profile, package, or projected-agent defaults.
+      dispatchAgents: [],
+      ...(terminalConversationAuthority ? { terminalConversationAuthority } : {}),
+    })
+    if (!tool?.execute) throw new Error("Recovered respond_agent_coordination Tool is no longer projected")
+    const raw = await tool.execute(input.part.state.input, {
+      toolCallId: input.part.callID,
+      messages: [],
+      abortSignal: input.signal ?? new AbortController().signal,
+      opencorvus: {
+        sessionID: input.sessionID,
+        messageID: input.messageID,
+        toolCallID: input.part.callID,
+        toolPartID: input.part.id,
+        visibleToolName: input.part.tool,
+      },
+    } as ToolExecutionOptions)
+    return normalizeToolResult(raw)
+  }
+
+  /**
    * Close the exact assistant/tool execution abandoned by a previous process.
    *
    * Prompt ownership is durable and bound to one exact operating-system
@@ -2489,6 +2555,7 @@ export namespace SessionLoop {
     for (const { message: recoveredCandidate, completedAt } of candidates) {
       signal?.throwIfAborted()
       let candidate = recoveredCandidate
+      let recoveredCoordinationPart = false
       if (candidate.info.role !== "assistant") continue
       const now = completedAt ?? defaultCompletedAt
       const interruption = new Error(
@@ -2523,6 +2590,71 @@ export namespace SessionLoop {
       for (const part of candidate.parts) {
         signal?.throwIfAborted()
         if (part.type !== "tool" || (part.state.status !== "pending" && part.state.status !== "running")) continue
+        let recoveredCoordination: Awaited<ReturnType<typeof recoverInterruptedAgentCoordinationPart>>
+        try {
+          recoveredCoordination = await recoverInterruptedAgentCoordinationPart({
+            sessionID,
+            messageID: candidate.info.id,
+            part,
+            signal,
+          })
+        } catch (error) {
+          if (!AgentCoordinationActionSupersededError.isInstance(error)) throw error
+          recoveredCoordinationPart = true
+          const recoveryCompletedAt = Date.now()
+          const failure = toolFailureCauseFromUnknown({
+            error,
+            originSite: "SessionLoop.recoverInterruptedAgentCoordinationPart",
+            classification: "tool-execution",
+            kind: "agent-coordination-action-superseded",
+            data: {
+              sessionID,
+              messageID: candidate.info.id,
+              toolPartID: part.id,
+              toolCallID: part.callID,
+              taskID: error.data.taskID,
+              actionID: error.data.actionID,
+              expectedExecutionEpoch: error.data.expectedExecutionEpoch,
+              currentExecutionEpoch: error.data.currentExecutionEpoch,
+              currentTaskStatus: error.data.currentTaskStatus,
+            },
+          })
+          await Session.updatePart({
+            ...part,
+            state: {
+              status: "error",
+              input: part.state.input,
+              failure,
+              time: {
+                start: part.state.time.start,
+                end: Math.max(recoveryCompletedAt, part.state.time.start + 1),
+              },
+            },
+          })
+          continue
+        }
+        if (recoveredCoordination) {
+          recoveredCoordinationPart = true
+          const recoveryCompletedAt = Date.now()
+          await Session.updatePart({
+            ...part,
+            state: {
+              status: "completed",
+              input: part.state.input,
+              title: recoveredCoordination.title,
+              output: recoveredCoordination.output,
+              metadata: recoveredCoordination.metadata,
+              ...(Array.isArray(recoveredCoordination.attachments)
+                ? { attachments: recoveredCoordination.attachments as Message.FilePart[] }
+                : {}),
+              time: {
+                start: part.state.time.start,
+                end: Math.max(recoveryCompletedAt, part.state.time.start + 1),
+              },
+            },
+          })
+          continue
+        }
         const recoveredPanelCreation = await requireControlPlaneToolLoaders().recoverPanelCreation({
           sessionID,
           messageID: candidate.info.id,
@@ -2621,8 +2753,10 @@ export namespace SessionLoop {
           requestIDs: abandonedProviderActivity,
         })
       }
-      candidate.info.error = Message.fromError(interruption, { providerID: candidate.info.providerID })
-      candidate.info.finish = "error"
+      candidate.info.error = recoveredCoordinationPart
+        ? undefined
+        : Message.fromError(interruption, { providerID: candidate.info.providerID })
+      candidate.info.finish = recoveredCoordinationPart ? "tool-calls" : "error"
       candidate.info.time.completed = now
       await Session.updateMessage(candidate.info)
       signal?.throwIfAborted()

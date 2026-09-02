@@ -9,19 +9,38 @@ import { sessionRuntimeWithResolvedModel } from "../src/agent/session-agent-runt
 import { WorkerTurnDescriptor } from "../src/agent/worker-turn-descriptor"
 import { HostAgentRegistry } from "../src/agent/host-agent-registry"
 import { Bus } from "../src/bus"
+import { BusPublicationOutboxTable } from "../src/bus/bus.sql"
 import { Config } from "../src/config/config"
 import { requireTask } from "../src/engine/store"
-import { EngineTaskRootIngressTable, EngineTaskWaitRegistrationTable } from "../src/engine/engine.sql"
+import { insertEngineArtifact } from "../src/engine/artifact"
+import {
+  deriveEngineArtifactCatalogMetadata,
+  engineArtifactCatalogMetadataSHA256,
+} from "../src/engine/artifact-catalog-metadata"
+import { engineArtifactCatalogLabelIndex } from "../src/engine/artifact-catalog-constants"
+import {
+  EngineArtifactCatalogRevisionTable,
+  EngineArtifactTable,
+  EngineGitCheckpointOutcomeTable,
+  EngineGitCheckpointRequestTable,
+  EngineTaskRootIngressTable,
+  EngineTaskWaitRegistrationTable,
+} from "../src/engine/engine.sql"
 import { acquireTaskRootIngressLease } from "../src/engine/task-root-fact-store"
 import { deriveTaskStatus } from "../src/engine/task-status"
-import { terminalTask } from "../src/engine/state"
+import { taskLifecycleProjection } from "../src/engine/task-lifecycle"
+import { Event } from "../src/engine/model"
+import { EngineProtocol } from "../src/engine/protocol"
+import { terminalTask, updateTask } from "../src/engine/state"
 import { createDispatchLineageOrigin, listDispatchLineage } from "../src/engine/dispatch-lineage"
-import { recordTestDispatchLineage } from "./fixture/dispatch-lineage"
+import { TestHooks as TaskControlTestHooks } from "../src/engine/task-root-ingress-delivery"
+import { materializeTestDispatchCreatorOccurrence, recordTestDispatchLineage } from "./fixture/dispatch-lineage"
 import { selectedWorkflowBinding } from "../src/engine/workflow-binding"
 import {
+  createAgentCoordinationResponse,
+  findAgentCoordinationAction,
   findAgentCoordinationRequest,
-  listAgentCoordinationActions,
-  listAgentCoordinationResponses,
+  findAgentCoordinationResponse,
 } from "../src/engine/agent-coordination"
 import { prepareTaskProcessBinding } from "../src/engine/task-execution-capsule-binding"
 import { PromptProfileResolver } from "../src/expert-squad/prompt-profile-resolver"
@@ -34,10 +53,12 @@ import { computerRuntimeScopeIdentity } from "../src/mcp/computer/runtime-scope"
 import {
   createExactOrchestratorTool,
   createOrchestratorTools,
+  AgentCoordinationToolTestHooks,
   OrchestratorToolsTestHooks,
 } from "../src/orchestrator/tools"
 import { currentOrchestratorControlMessage } from "../src/orchestrator/agent"
 import { sendSchedulerMessage } from "../src/protocol/scheduler-message"
+import { EngineService } from "../src/task-api"
 import { taskRequestSHA256 } from "../src/orchestrator/dispatch-turn-projection"
 import { Provider } from "../src/provider/provider"
 import { Instance } from "../src/project/instance"
@@ -48,6 +69,7 @@ import { LLM } from "../src/session/llm"
 import { SessionProcessor } from "../src/session/processor"
 import { SessionLoop } from "../src/session/loop"
 import { SessionRuntimeContractStore } from "../src/session/runtime-contract"
+import { Question } from "../src/question"
 import { joinProcessLivenessLease } from "../src/engine/process-liveness"
 import { currentRuntimeOccurrenceID } from "../src/runtime/process-occurrence"
 import {
@@ -67,7 +89,9 @@ import {
 } from "../src/tool/execution-mode"
 import { WaitTool } from "../src/tool/wait"
 import { textSHA256 } from "../src/expert-squad/projection-hash"
-import { Database, DatabaseUnavailableError, eq } from "../src/storage/db"
+import { and, Database, DatabaseUnavailableError, eq, inArray, sql } from "../src/storage/db"
+import { AgentCoordinationActionSupersededError } from "../src/engine/agent-coordination-errors"
+import { ProtocolEventTable } from "../src/protocol/protocol.sql"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 import { persistEstablishedTask } from "./fixture/engine-task"
 import { ProviderToolNameCollisionError } from "../src/tool/provider-name-authority"
@@ -95,6 +119,48 @@ const model = {
   api: { id: "tool-result-control", npm: "@ai-sdk/anthropic" },
   options: {},
 } as any
+
+function insertRawCoordinationOutcomePayload(input: {
+  db: Database.TxOrDb
+  id: string
+  taskID: string
+  payloadText: string
+  timeCreated: number
+}) {
+  const revision = input.db
+    .insert(EngineArtifactCatalogRevisionTable)
+    .values({})
+    .returning({ revision: EngineArtifactCatalogRevisionTable.revision })
+    .get()!.revision
+  const label = "completed"
+  const metadata = deriveEngineArtifactCatalogMetadata({
+    kind: "agent_coordination_action_outcome",
+    payloadText: input.payloadText,
+  })
+  input.db
+    .insert(EngineArtifactTable)
+    .values({
+      id: input.id,
+      task_id: input.taskID,
+      kind: "agent_coordination_action_outcome",
+      label,
+      payload: sql`${input.payloadText}` as never,
+      ...metadata,
+      catalog_metadata_sha256: engineArtifactCatalogMetadataSHA256({
+        artifact_id: input.id,
+        task_id: input.taskID,
+        kind: "agent_coordination_action_outcome",
+        label_index: engineArtifactCatalogLabelIndex(label),
+        time_created: input.timeCreated,
+        time_updated: input.timeCreated,
+        ...metadata,
+      }),
+      catalog_revision: revision,
+      time_created: input.timeCreated,
+      time_updated: input.timeCreated,
+    })
+    .run()
+}
 
 type ProjectedSchedulerInstrumentation = (tools: Record<string, any>) => void
 
@@ -441,28 +507,6 @@ async function projectedWorkerDecisionSurface(input: { projectPath: string }) {
     .filter((ref) => ref.kind === "tool" || ref.kind === "mcp_tool")
     .map((ref) => ref.local_ref)
     .sort()
-  const descriptor = WorkerTurnDescriptor.create({
-    sessionID: session.id,
-    payload: {
-      identity: projection.workerCapability.identity,
-      expertSquadID: projection.workerCapability.expertSquadID,
-      packageRevision,
-      model: { selection: "explicit", providerID: model.providerID, modelID: model.id },
-      prompt: { systemMode: "complete", systemSha256: "c".repeat(64) },
-      tools: {
-        enabled: enabledTools,
-        stageOwned: [],
-        stageMaterializers: {},
-      },
-      output: { format: "text", resultMode: "reply" },
-      lifecycle: { taskID, workScope: { kind: "task" } },
-      messageAuthority: {
-        user_message_id: user.id,
-        control_text_parts: [{ part_id: userPart.id, text_sha256: textSHA256(userPart.text) }],
-      },
-    },
-  })
-  await Session.updateMessage({ ...user, extra: { workerTurnDescriptor: { id: descriptor.id, hash: descriptor.hash } } })
   const workflowProjection = {
     packageRevision,
     virtualWorkflows: projection.workerCapability.virtualWorkflows,
@@ -486,6 +530,44 @@ async function projectedWorkerDecisionSurface(input: { projectPath: string }) {
     childSessionID: session.id,
     now: now + 2,
   })
+  const descriptor = WorkerTurnDescriptor.create({
+    sessionID: session.id,
+    payload: {
+      identity: projection.workerCapability.identity,
+      expertSquadID: projection.workerCapability.expertSquadID,
+      packageRevision,
+      model: { selection: "explicit", providerID: model.providerID, modelID: model.id },
+      prompt: { systemMode: "complete", systemSha256: "c".repeat(64) },
+      tools: {
+        enabled: enabledTools,
+        stageOwned: [],
+        stageMaterializers: {},
+      },
+      output: { format: "text", resultMode: "reply" },
+      lifecycle: { taskID, workScope: { kind: "task" } },
+      messageAuthority: {
+        user_message_id: user.id,
+        control_text_parts: [{ part_id: userPart.id, text_sha256: textSHA256(userPart.text) }],
+      },
+      dispatchTurn: {
+        kind: "initial",
+        current_dispatch_id: dispatchLineage.dispatchID,
+        workflow_binding: dispatchLineage.payload.workflow_binding,
+        workflow_node_id: dispatchLineage.payload.workflow_node_id,
+        workflow_occurrence_id: dispatchLineage.payload.workflow_occurrence_id,
+        delivery_slice_revision_ids: dispatchLineage.payload.delivery_slice_revision_ids,
+        evidence_locators: [],
+        task_authority: {
+          task_id: taskID,
+          root_session_id: root.id,
+          request_sha256: taskRequestSHA256(requireTask(taskID).request),
+          initial_user_message_id: user.id,
+          initial_control_text_parts: [{ part_id: userPart.id, text_sha256: textSHA256(userPart.text) }],
+        },
+      },
+    },
+  })
+  await Session.updateMessage({ ...user, extra: { workerTurnDescriptor: { id: descriptor.id, hash: descriptor.hash } } })
   SessionRuntimeContractStore.set(session.id, {
     identity: {
       identityKind: "projected-worker",
@@ -574,6 +656,96 @@ async function projectedWorkerDecisionSurface(input: { projectPath: string }) {
     projection,
     packageRevision,
   }
+}
+
+async function productionCoordinationResponder(input: {
+  worker: Awaited<ReturnType<typeof projectedWorkerDecisionSurface>>
+  requestID: string
+  decision: "cancel_worker" | "ask_user" | "fail_task" | "redispatch"
+  callID: string
+}) {
+  const orchestrator = await Session.create({
+    kind: "orchestrator",
+    parentID: input.worker.root.id,
+    title: `A2A ${input.decision} scheduler occurrence`,
+  })
+  const user = await Session.updateMessage({
+    id: Identifier.ascending("message"),
+    sessionID: orchestrator.id,
+    role: "user",
+    author: "user",
+    time: { created: Date.now() },
+    agent: "orchestrator",
+    model: { providerID: model.providerID, modelID: model.id },
+  })
+  const assistant = await Session.updateMessage({
+    id: Identifier.ascending("message"),
+    parentID: user.id,
+    sessionID: orchestrator.id,
+    role: "assistant",
+    author: "orchestrator",
+    agent: "orchestrator",
+    path: { cwd: Instance.directory, root: Instance.directory },
+    cost: 0,
+    tokens: { total: 0, input: 0, output: 0, reasoning: 0, cache: { read: 0, write: 0 } },
+    modelID: model.id,
+    providerID: model.providerID,
+    time: { created: Date.now() },
+  })
+  const args = {
+    request_id: input.requestID,
+    decision: input.decision,
+    message: `Execute the exact ${input.decision} action if this Task execution still owns it.`,
+    reason: `Production race acceptance for ${input.decision}`,
+  }
+  const part = await Session.updatePart({
+    id: Identifier.ascending("part"),
+    sessionID: orchestrator.id,
+    messageID: assistant.id,
+    type: "tool",
+    callID: input.callID,
+    tool: "respond_agent_coordination",
+    state: { status: "running", input: args, time: { start: Date.now() } },
+  })
+  const surface = createOrchestratorTools({
+    taskID: input.worker.taskID,
+    agentSessionID: orchestrator.id,
+    sendSchedulerMessage,
+    dispatchAgents: [
+      ...input.worker.scheduler.skillProjection.schedulerOnlyAgents,
+      ...input.worker.scheduler.skillProjection.projectedAgents,
+    ],
+  }).tools as Record<string, any>
+  const respond = surface.respond_agent_coordination
+  if (!respond?.execute) throw new Error("respond_agent_coordination is unavailable")
+  return {
+    orchestrator,
+    assistant,
+    part,
+    execute: () =>
+      respond.execute(args, {
+        toolCallId: input.callID,
+        messages: [],
+        abortSignal: new AbortController().signal,
+        opencorvus: {
+          sessionID: orchestrator.id,
+          messageID: assistant.id,
+          toolCallID: input.callID,
+          toolPartID: part.id,
+          visibleToolName: "respond_agent_coordination",
+        },
+      }),
+  }
+}
+
+function exactCoordinationForRequest(taskID: string, requestID: string) {
+  const request = findAgentCoordinationRequest({ taskID, requestID })
+  if (!request?.payload.response_id) throw new Error(`Coordination request ${requestID} has no exact response`)
+  const response = findAgentCoordinationResponse({ taskID, responseID: request.payload.response_id })
+  if (!response) throw new Error(`Coordination response ${request.payload.response_id} was not persisted`)
+  const action = findAgentCoordinationAction({ taskID, actionID: response.payload.action_id })
+  if (!action) throw new Error(`Coordination action ${response.payload.action_id} was not persisted`)
+  return { request, response, action }
 }
 
 afterEach(async () => {
@@ -1062,7 +1234,6 @@ describe("single Tool-result turn-control protocol", () => {
           args,
           "call_worker_decision",
         )
-        const replayed = fixture.executeWorkerTool("request_orchestrator_decision", args, "call_worker_decision")
         const createdControl = toolResultControl((created as any).metadata)
         const request = createdControl?.kind === "handoff_drain"
           ? findAgentCoordinationRequest({ taskID: fixture.taskID, requestID: createdControl.request_id })
@@ -1077,11 +1248,220 @@ describe("single Tool-result turn-control protocol", () => {
             payload: {
               request_id: createdControl?.kind === "handoff_drain" ? createdControl.request_id : "",
               dispatch_lineage_id: fixture.dispatchLineage.artifactID,
+              tool_input: args,
               status: "pending",
             },
           },
         })
-        await expect(replayed).rejects.toBeInstanceOf(ToolTurnExecutionConflictError)
+        if (!request) throw new Error("Production worker coordination request was not persisted")
+        const { status: _status, ...requestFact } = request.payload
+        const invalidRequestID = Identifier.ascending("artifact")
+        const invalidNow = Date.now()
+        expect(() =>
+          Database.transaction((db) =>
+            insertEngineArtifact(db, {
+              id: invalidRequestID,
+              taskID: fixture.taskID,
+              kind: "agent_coordination_request",
+              label: "pending",
+              payload: {
+                ...requestFact,
+                request_id: invalidRequestID,
+                tool_input: { ...args, summary: "Changed persisted Tool input" },
+                created_at: invalidNow,
+              },
+              timeCreated: invalidNow,
+            }),
+          ),
+        ).toThrow("invalid immutable agent coordination request fact")
+        const emptyCallRequestID = Identifier.ascending("artifact")
+        expect(() =>
+          Database.transaction((db) =>
+            insertEngineArtifact(db, {
+              id: emptyCallRequestID,
+              taskID: fixture.taskID,
+              kind: "agent_coordination_request",
+              label: "pending",
+              payload: {
+                ...requestFact,
+                request_id: emptyCallRequestID,
+                tool_call_id: "",
+                created_at: invalidNow + 1,
+              },
+              timeCreated: invalidNow + 1,
+            }),
+          ),
+        ).toThrow("invalid immutable agent coordination request fact")
+        const invalidDeliverySubjectRequestID = Identifier.ascending("artifact")
+        expect(() =>
+          Database.transaction((db) =>
+            insertEngineArtifact(db, {
+              id: invalidDeliverySubjectRequestID,
+              taskID: fixture.taskID,
+              kind: "agent_coordination_request",
+              label: "pending",
+              payload: {
+                ...requestFact,
+                request_id: invalidDeliverySubjectRequestID,
+                delivery_slice_subject: 42,
+                created_at: invalidNow + 1,
+              },
+              timeCreated: invalidNow + 1,
+            }),
+          ),
+        ).toThrow("invalid immutable agent coordination request fact")
+        const invalidLocatorRequestID = Identifier.ascending("artifact")
+        expect(() =>
+          Database.transaction((db) =>
+            insertEngineArtifact(db, {
+              id: invalidLocatorRequestID,
+              taskID: fixture.taskID,
+              kind: "agent_coordination_request",
+              label: "pending",
+              payload: {
+                ...requestFact,
+                request_id: invalidLocatorRequestID,
+                evidence_locators: [{ source: "session" }],
+                created_at: invalidNow + 1,
+              },
+              timeCreated: invalidNow + 1,
+            }),
+          ),
+        ).toThrow("invalid immutable agent coordination request fact")
+        const sourceDescriptor = WorkerTurnDescriptor.latestForSession(fixture.session.id)
+        if (!sourceDescriptor?.payload.dispatchTurn) throw new Error("Worker descriptor is missing its dispatch Turn")
+        const nextDispatchID = Identifier.ascending("artifact")
+        const nextLineage = recordTestDispatchLineage({
+          origin: createDispatchLineageOrigin({
+            dispatchID: nextDispatchID,
+            taskID: fixture.taskID,
+            orchestratorSessionID: fixture.root.id,
+            orchestratorMessageID: Identifier.ascending("message"),
+            toolPartID: Identifier.ascending("part"),
+            toolCallID: Identifier.ascending("call"),
+            targetAgentID: fixture.projection.workerCapability.identity.agentID,
+            projectedWorkerIdentity: fixture.projection.workerCapability.identity,
+            workScope: { kind: "task" },
+            workflowBinding: fixture.dispatchLineage.payload.workflow_binding,
+            workflowNodeID: fixture.dispatchLineage.payload.workflow_node_id,
+            adapterInput: {},
+          }),
+          childSessionID: fixture.session.id,
+        })
+        WorkerTurnDescriptor.create({
+          sessionID: fixture.session.id,
+          payload: {
+            ...sourceDescriptor.payload,
+            dispatchTurn: {
+              ...sourceDescriptor.payload.dispatchTurn,
+              current_dispatch_id: nextDispatchID,
+              workflow_occurrence_id: nextLineage.payload.workflow_occurrence_id,
+            },
+          },
+        })
+        const mixedLineageRequestID = Identifier.ascending("artifact")
+        expect(() =>
+          Database.transaction((db) =>
+            insertEngineArtifact(db, {
+              id: mixedLineageRequestID,
+              taskID: fixture.taskID,
+              kind: "agent_coordination_request",
+              label: "pending",
+              payload: {
+                ...requestFact,
+                request_id: mixedLineageRequestID,
+                dispatch_lineage_id: nextLineage.artifactID,
+                created_at: invalidNow + 2,
+              },
+              timeCreated: invalidNow + 2,
+            }),
+          ),
+        ).toThrow("invalid immutable agent coordination request fact")
+
+        const wrongAuthorCallID = "call_worker_wrong_participant"
+        const wrongAuthor = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          parentID: fixture.assistant.parentID,
+          sessionID: fixture.session.id,
+          role: "assistant",
+          author: "intruder-worker",
+          agent: "intruder-worker",
+          path: { cwd: project.path, root: project.path },
+          cost: 0,
+          tokens: { total: 0, input: 0, output: 0, reasoning: 0, cache: { read: 0, write: 0 } },
+          modelID: model.id,
+          providerID: model.providerID,
+          time: { created: invalidNow + 3 },
+        })
+        const wrongAuthorPart = await Session.updatePart({
+          id: Identifier.ascending("part"),
+          sessionID: fixture.session.id,
+          messageID: wrongAuthor.id,
+          type: "tool",
+          callID: wrongAuthorCallID,
+          tool: "request_orchestrator_decision",
+          state: { status: "running", input: args, time: { start: invalidNow + 3 } },
+        })
+        const wrongAuthorRequestID = Identifier.ascending("artifact")
+        expect(() =>
+          Database.transaction((db) =>
+            insertEngineArtifact(db, {
+              id: wrongAuthorRequestID,
+              taskID: fixture.taskID,
+              kind: "agent_coordination_request",
+              label: "pending",
+              payload: {
+                ...requestFact,
+                request_id: wrongAuthorRequestID,
+                message_id: wrongAuthor.id,
+                tool_call_id: wrongAuthorCallID,
+                tool_part_id: wrongAuthorPart.id,
+                created_at: invalidNow + 3,
+              },
+              timeCreated: invalidNow + 3,
+            }),
+          ),
+        ).toThrow("invalid immutable agent coordination request fact")
+
+        const locatorInput = {
+          ...args,
+          evidence_locators: [{ source: "session" as const, session_id: fixture.session.id }],
+        }
+        const locatorCallID = "call_worker_locator_mapping"
+        const locatorPart = await Session.updatePart({
+          id: Identifier.ascending("part"),
+          sessionID: fixture.session.id,
+          messageID: fixture.assistant.id,
+          type: "tool",
+          callID: locatorCallID,
+          tool: "request_orchestrator_decision",
+          state: { status: "running", input: locatorInput, time: { start: invalidNow + 4 } },
+        })
+        const mismatchedLocatorRequestID = Identifier.ascending("artifact")
+        expect(() =>
+          Database.transaction((db) =>
+            insertEngineArtifact(db, {
+              id: mismatchedLocatorRequestID,
+              taskID: fixture.taskID,
+              kind: "agent_coordination_request",
+              label: "pending",
+              payload: {
+                ...requestFact,
+                request_id: mismatchedLocatorRequestID,
+                message_id: fixture.assistant.id,
+                tool_call_id: locatorCallID,
+                tool_part_id: locatorPart.id,
+                tool_input: locatorInput,
+                evidence_locators: [{ source: "session", session_id: fixture.root.id }],
+                created_at: invalidNow + 4,
+              },
+              timeCreated: invalidNow + 4,
+            }),
+          ),
+        ).toThrow("invalid immutable agent coordination request fact")
+        await expect(
+          fixture.executeWorkerTool("request_orchestrator_decision", args, "call_worker_decision"),
+        ).rejects.toBeInstanceOf(ToolTurnExecutionConflictError)
         await SessionRuntimeContractStore.dispose(fixture.session.id)
       },
     })
@@ -1092,6 +1472,7 @@ describe("single Tool-result turn-control protocol", () => {
     await Instance.provide({
       directory: project.path,
       fn: async () => {
+        using _runner = TaskControlTestHooks.replaceTaskIngressRunner({ runner: async () => undefined })
         const worker = await projectedWorkerDecisionSurface({ projectPath: project.path })
         const requestResult = await worker.executeWorkerTool(
           "request_orchestrator_decision",
@@ -1108,29 +1489,9 @@ describe("single Tool-result turn-control protocol", () => {
         const requestControl = toolResultControl((requestResult as any).metadata)
         if (requestControl?.kind !== "handoff_drain") throw new Error("Worker request did not produce handoff control")
         const sourceDescriptor = WorkerTurnDescriptor.latestForSession(worker.session.id)
-        if (!sourceDescriptor) throw new Error("Source worker descriptor was not persisted")
-        WorkerTurnDescriptor.create({
-          sessionID: worker.session.id,
-          payload: {
-            ...sourceDescriptor.payload,
-            dispatchTurn: {
-              kind: "initial",
-              current_dispatch_id: worker.dispatchLineage.dispatchID,
-              workflow_binding: worker.dispatchLineage.payload.workflow_binding,
-              workflow_node_id: worker.dispatchLineage.payload.workflow_node_id,
-              workflow_occurrence_id: worker.dispatchLineage.payload.workflow_occurrence_id,
-              delivery_slice_revision_ids: worker.dispatchLineage.payload.delivery_slice_revision_ids,
-              evidence_locators: [],
-              task_authority: {
-                task_id: worker.taskID,
-                root_session_id: worker.root.id,
-                request_sha256: taskRequestSHA256(requireTask(worker.taskID).request),
-                initial_user_message_id: sourceDescriptor.payload.messageAuthority.user_message_id,
-                initial_control_text_parts: sourceDescriptor.payload.messageAuthority.control_text_parts,
-              },
-            },
-          },
-        })
+        if (!sourceDescriptor?.payload.dispatchTurn) {
+          throw new Error("Source worker descriptor did not freeze its dispatch authority")
+        }
         const orchestrator = await Session.create({
           kind: "orchestrator",
           parentID: worker.root.id,
@@ -1195,24 +1556,60 @@ describe("single Tool-result turn-control protocol", () => {
             },
           }
         }
-        const responseExecution = await runTool("respond_agent_coordination", "call_coordination_redispatch", {})
-        const respond = (surface.tools as Record<string, any>).respond_agent_coordination
-        await respond.execute(
-          {
-            request_id: requestControl.request_id,
-            decision: "redispatch",
-            message: "Continue with the scheduler's exact incremental guidance.",
-            reason: "The existing worker owns the same Task-scoped occurrence.",
-          },
-          responseExecution.options,
+        const responseArgs = {
+          request_id: requestControl.request_id,
+          decision: "redispatch" as const,
+          message: "Continue with the scheduler's exact incremental guidance.",
+          reason: "The existing worker owns the same Task-scoped occurrence.",
+        }
+        const responseExecution = await runTool(
+          "respond_agent_coordination",
+          "call_coordination_redispatch",
+          responseArgs,
         )
-        const action = listAgentCoordinationActions(worker.taskID)[0]
-        if (!action) throw new Error("Coordination redispatch action was not persisted")
+        const respond = (surface.tools as Record<string, any>).respond_agent_coordination
+        await respond.execute(responseArgs, responseExecution.options)
+        const { action } = exactCoordinationForRequest(worker.taskID, requestControl.request_id)
         const target = dispatchAgents.find(
           (candidate) => candidate.identity.agentID === worker.projection.workerCapability.identity.agentID,
         )
         if (!target) throw new Error("Coordination redispatch target was not projected")
-        const dispatchExecution = await runTool("dispatch_agent", "call_coordination_dispatch", {})
+        const dispatchMessageID = Identifier.ascending("message")
+        const dispatchPartID = Identifier.ascending("part")
+        const dispatchCallID = "call_coordination_dispatch"
+        materializeTestDispatchCreatorOccurrence({
+          origin: createDispatchLineageOrigin({
+            dispatchID: Identifier.ascending("artifact"),
+            taskID: worker.taskID,
+            orchestratorSessionID: orchestrator.id,
+            orchestratorMessageID: dispatchMessageID,
+            toolPartID: dispatchPartID,
+            toolCallID: dispatchCallID,
+            targetAgentID: target.identity.agentID,
+            projectedWorkerIdentity: target.identity,
+            workScope: { kind: "task" },
+            workflowBinding: worker.dispatchLineage.payload.workflow_binding,
+            workflowNodeID: worker.dispatchLineage.payload.workflow_node_id,
+            coordinationActionID: action.payload.action_id,
+            continuationOfDispatchID: worker.dispatchLineage.dispatchID,
+            adapterInput: {},
+          }),
+          childSessionID: worker.session.id,
+        })
+        const dispatchExecution = {
+          options: {
+            toolCallId: dispatchCallID,
+            messages: [],
+            abortSignal: new AbortController().signal,
+            opencorvus: {
+              sessionID: orchestrator.id,
+              messageID: dispatchMessageID,
+              toolCallID: dispatchCallID,
+              toolPartID: dispatchPartID,
+              visibleToolName: "dispatch_agent",
+            },
+          },
+        }
         const deliveryOwner = joinProcessLivenessLease(currentRuntimeOccurrenceID())
         const lineageHandle = await OrchestratorToolsTestHooks.openDispatchLineage(surface)({
           taskID: worker.taskID,
@@ -1226,6 +1623,90 @@ describe("single Tool-result turn-control protocol", () => {
           continuationGuidance: "Continue with the scheduler's exact incremental guidance.",
           evidenceLocators: [],
         })
+        const claimedLineage = listDispatchLineage(worker.taskID).find(
+          (lineage) => lineage.payload.coordination_action_id === action.payload.action_id,
+        )
+        if (!claimedLineage) throw new Error("Coordination redispatch lineage was not claimed")
+        const prematureOutcomeID = Identifier.ascending("artifact")
+        const prematureAt = Date.now()
+        expect(() =>
+          Database.transaction((db) =>
+            insertEngineArtifact(db, {
+              id: prematureOutcomeID,
+              taskID: worker.taskID,
+              kind: "agent_coordination_action_outcome",
+              label: "completed",
+              payload: {
+                outcome_id: prematureOutcomeID,
+                request_id: action.payload.request_id,
+                response_id: action.payload.response_id,
+                action_id: action.payload.action_id,
+                task_id: worker.taskID,
+                execution_epoch: action.payload.execution_epoch,
+                action: "redispatch_worker",
+                status: "completed",
+                result: {
+                  dispatch_lineage_id: claimedLineage.artifactID,
+                  dispatch_id: claimedLineage.dispatchID,
+                  dispatch_agent_id: target.identity.agentID,
+                  dispatch_session_id: worker.session.id,
+                  work_scope: { kind: "task" },
+                  dispatch_bound: true,
+                  awaiting_explicit_dispatch: false,
+                },
+                created_at: prematureAt,
+              },
+              timeCreated: prematureAt,
+            }),
+          ),
+        ).toThrow("invalid immutable agent coordination action outcome fact")
+        const previous = WorkerTurnDescriptor.latestForSession(worker.session.id)
+        if (!previous) throw new Error("Coordination source descriptor was not persisted")
+        const descriptor = WorkerTurnDescriptor.create({
+          sessionID: worker.session.id,
+          payload: { ...previous.payload, dispatchTurn: lineageHandle.turn },
+        })
+        expect({
+          descriptor: descriptor.payload.dispatchTurn?.current_dispatch_id,
+          action: findAgentCoordinationAction({ taskID: worker.taskID, actionID: action.payload.action_id }),
+        }).toMatchObject({
+          descriptor: claimedLineage.dispatchID,
+          action: { payload: { status: "pending" } },
+        })
+        const extraReceiptOutcomeID = Identifier.ascending("artifact")
+        const extraReceiptAt = Date.now()
+        expect(() =>
+          Database.transaction((db) =>
+            insertEngineArtifact(db, {
+              id: extraReceiptOutcomeID,
+              taskID: worker.taskID,
+              kind: "agent_coordination_action_outcome",
+              label: "completed",
+              payload: {
+                outcome_id: extraReceiptOutcomeID,
+                request_id: action.payload.request_id,
+                response_id: action.payload.response_id,
+                action_id: action.payload.action_id,
+                task_id: worker.taskID,
+                execution_epoch: action.payload.execution_epoch,
+                action: "redispatch_worker",
+                status: "completed",
+                result: {
+                  dispatch_lineage_id: claimedLineage.artifactID,
+                  dispatch_id: claimedLineage.dispatchID,
+                  dispatch_agent_id: target.identity.agentID,
+                  dispatch_session_id: worker.session.id,
+                  work_scope: { kind: "task" },
+                  dispatch_bound: true,
+                  awaiting_explicit_dispatch: false,
+                  unverified_presentation_metadata: "must not enter the durable receipt",
+                },
+                created_at: extraReceiptAt,
+              },
+              timeCreated: extraReceiptAt,
+            }),
+          ),
+        ).toThrow("invalid immutable agent coordination action outcome fact")
         const peerLineageHandle = OrchestratorToolsTestHooks.openDispatchLineage(surface)({
           taskID: worker.taskID,
           targetAgentID: target.identity.agentID,
@@ -1238,47 +1719,693 @@ describe("single Tool-result turn-control protocol", () => {
           continuationGuidance: "Continue with the scheduler's exact incremental guidance.",
           evidenceLocators: [],
         })
-        const previous = WorkerTurnDescriptor.latestForSession(worker.session.id)
-        if (!previous) throw new Error("Coordination source descriptor was not persisted")
-        const descriptor = WorkerTurnDescriptor.create({
-          sessionID: worker.session.id,
-          payload: { ...previous.payload, dispatchTurn: lineageHandle.turn },
-        })
         try {
-          lineageHandle.commitSession(worker.session.id, descriptor)
+          const peer = await peerLineageHandle
+          const continuation = listDispatchLineage(worker.taskID).find(
+            (lineage) => lineage.payload.coordination_action_id === action.payload.action_id,
+          )
+          const persistedDescriptor = continuation
+            ? WorkerTurnDescriptor.findForDispatch({
+                sessionID: continuation.payload.child_session_id,
+                dispatchID: continuation.dispatchID,
+              })
+            : undefined
+          const durableOutcome = Database.use((db) =>
+            db
+              .select({ payload: EngineArtifactTable.payload })
+              .from(EngineArtifactTable)
+              .where(
+                and(
+                  eq(EngineArtifactTable.task_id, worker.taskID),
+                  eq(EngineArtifactTable.kind, "agent_coordination_action_outcome"),
+                ),
+              )
+              .get(),
+          )
+          expect({
+            lineageSource: continuation?.payload.continuation_of_dispatch_id,
+            descriptorSource:
+              persistedDescriptor?.payload.dispatchTurn?.kind === "continuation"
+                ? persistedDescriptor.payload.dispatchTurn.source_dispatch_id
+                : undefined,
+            peerReplay: peer.replayOutcome,
+            action: findAgentCoordinationAction({ taskID: worker.taskID, actionID: action.payload.action_id }),
+            durableReceipt: durableOutcome?.payload,
+          }).toMatchObject({
+            lineageSource: worker.dispatchLineage.dispatchID,
+            descriptorSource: worker.dispatchLineage.dispatchID,
+            peerReplay: {
+              kind: "accepted",
+              session_id: worker.session.id,
+              dispatch_lineage_id: continuation?.artifactID,
+            },
+            action: {
+              payload: {
+                status: "completed",
+                result: {
+                  dispatch_lineage_id: continuation?.artifactID,
+                  dispatch_id: continuation?.dispatchID,
+                  dispatch_session_id: worker.session.id,
+                  dispatch_agent_id: target.identity.agentID,
+                  work_scope: { kind: "task" },
+                  dispatch_bound: true,
+                  awaiting_explicit_dispatch: false,
+                },
+              },
+            },
+            durableReceipt: {
+              action_id: action.payload.action_id,
+              status: "completed",
+              result: {
+                dispatch_lineage_id: continuation?.artifactID,
+                dispatch_id: continuation?.dispatchID,
+                dispatch_session_id: worker.session.id,
+                dispatch_agent_id: target.identity.agentID,
+                work_scope: { kind: "task" },
+                dispatch_bound: true,
+                awaiting_explicit_dispatch: false,
+              },
+            },
+          })
+          expect((durableOutcome?.payload as any)?.result).not.toHaveProperty("redispatch_binding")
+          if (!durableOutcome || !continuation) throw new Error("Redispatch outcome was not persisted")
+          const duplicateReceiptOutcomeID = Identifier.ascending("artifact")
+          const duplicateReceiptAt = Date.now()
+          const duplicateReceiptPayload = {
+            ...(durableOutcome.payload as Record<string, unknown>),
+            outcome_id: duplicateReceiptOutcomeID,
+            created_at: duplicateReceiptAt,
+            result: {
+              ...((durableOutcome.payload as any).result as Record<string, unknown>),
+              dispatch_lineage_id: Identifier.ascending("artifact"),
+            },
+          }
+          const duplicateReceiptJSON = JSON.stringify(duplicateReceiptPayload).replace(
+            '"result":{',
+            `"result":{"dispatch_lineage_id":${JSON.stringify(continuation.artifactID)},`,
+          )
+          expect(() =>
+            Database.transaction((db) =>
+              insertRawCoordinationOutcomePayload({
+                db,
+                id: duplicateReceiptOutcomeID,
+                taskID: worker.taskID,
+                payloadText: duplicateReceiptJSON,
+                timeCreated: duplicateReceiptAt,
+              }),
+            ),
+          ).toThrow("invalid immutable agent coordination action outcome fact")
         } finally {
+          lineageHandle.releaseAdmission()
           deliveryOwner.release()
         }
-        const peer = await peerLineageHandle
-        const continuation = listDispatchLineage(worker.taskID).find(
-          (lineage) => lineage.payload.coordination_action_id === action.payload.action_id,
-        )
-        const persistedDescriptor = continuation
-          ? WorkerTurnDescriptor.findForDispatch({
-              sessionID: continuation.payload.child_session_id,
-              dispatchID: continuation.dispatchID,
-            })
-          : undefined
-        expect({
-          lineageSource: continuation?.payload.continuation_of_dispatch_id,
-          descriptorSource:
-            persistedDescriptor?.payload.dispatchTurn?.kind === "continuation"
-              ? persistedDescriptor.payload.dispatchTurn.source_dispatch_id
-              : undefined,
-          peerReplay: peer.replayOutcome,
-        }).toEqual({
-          lineageSource: worker.dispatchLineage.dispatchID,
-          descriptorSource: worker.dispatchLineage.dispatchID,
-          peerReplay: {
-            kind: "accepted",
-            session_id: worker.session.id,
-            dispatch_lineage_id: continuation?.artifactID,
-          },
-        })
         await SessionRuntimeContractStore.dispose(worker.session.id)
       },
     })
   }, 120_000)
+
+  test.each(["cancel_worker", "ask_user", "fail_task"] as const)(
+    "fences a live production %s owner after Task terminal and reopen",
+    async (decision) => {
+      await using project = await memoryProject()
+      await Instance.provide({
+        directory: project.path,
+        fn: async () => {
+          const worker = await projectedWorkerDecisionSurface({ projectPath: project.path })
+          const requestResult = await worker.executeWorkerTool(
+            "request_orchestrator_decision",
+            {
+              summary: `Fence stale ${decision}`,
+              details: `The exact ${decision} effect must remain owned by its accepting Task execution.`,
+              blocking: true,
+              requested_decision: `Choose ${decision} only for this exact execution`,
+              evidence_locators: [],
+              severity: "blocked",
+            },
+            `call_request_${decision}`,
+          )
+          const requestControl = toolResultControl((requestResult as any).metadata)
+          if (requestControl?.kind !== "handoff_drain") throw new Error("Worker request did not produce handoff control")
+          const responder = await productionCoordinationResponder({
+            worker,
+            requestID: requestControl.request_id,
+            decision,
+            callID: `call_response_${decision}`,
+          })
+          let release!: () => void
+          let reached!: (actionID: string) => void
+          const admission = new Promise<string>((resolve) => (reached = resolve))
+          const gate = new Promise<void>((resolve) => (release = resolve))
+          using _hook = AgentCoordinationToolTestHooks.replaceEffectAdmission(async ({ actionID }) => {
+            reached(actionID)
+            await gate
+          })
+          const execution = responder.execute()
+          const actionID = await admission
+
+          await terminalTask(
+            requireTask(worker.taskID),
+            { status: "failed", error: `Concurrent terminal before ${decision}` },
+            `Concurrent terminal before ${decision}`,
+            {
+              preExecutionInfrastructureFailure: {
+                code: "IMMUTABLE_CREATION_WORKSPACE_MISMATCH",
+                initialTreeSHA256: "1".repeat(64),
+                executionTreeSHA256: "2".repeat(64),
+              },
+            },
+          )
+          await updateTask(requireTask(worker.taskID), { status: "active" }, `Reopen before stale ${decision}`)
+          const before = Database.use((db) => ({
+            questions: db
+              .select({ id: BusPublicationOutboxTable.occurrence_id })
+              .from(BusPublicationOutboxTable)
+              .where(eq(BusPublicationOutboxTable.event_type, "question.asked"))
+              .all().length,
+            checkpoints: db.select().from(EngineGitCheckpointRequestTable).all().length,
+            checkpointOutcomes: db.select().from(EngineGitCheckpointOutcomeTable).all().length,
+            outcomes: db
+              .select({ id: EngineArtifactTable.id })
+              .from(EngineArtifactTable)
+              .where(
+                and(
+                  eq(EngineArtifactTable.kind, "agent_coordination_action_outcome"),
+                  eq(EngineArtifactTable.task_id, worker.taskID),
+                ),
+              )
+              .all().length,
+            taskFailures: db
+              .select({ id: ProtocolEventTable.id })
+              .from(ProtocolEventTable)
+              .where(
+                and(
+                  eq(ProtocolEventTable.aggregate_type, "task"),
+                  eq(ProtocolEventTable.aggregate_id, worker.taskID),
+                  eq(ProtocolEventTable.type, "task.failed"),
+                ),
+              )
+              .all().length,
+          }))
+          release()
+          await expect(execution).rejects.toMatchObject({ name: "AgentCoordinationActionSupersededError" })
+          const after = Database.use((db) => ({
+            questions: db
+              .select({ id: BusPublicationOutboxTable.occurrence_id })
+              .from(BusPublicationOutboxTable)
+              .where(eq(BusPublicationOutboxTable.event_type, "question.asked"))
+              .all().length,
+            checkpoints: db.select().from(EngineGitCheckpointRequestTable).all().length,
+            checkpointOutcomes: db.select().from(EngineGitCheckpointOutcomeTable).all().length,
+            outcomes: db
+              .select({ id: EngineArtifactTable.id })
+              .from(EngineArtifactTable)
+              .where(
+                and(
+                  eq(EngineArtifactTable.kind, "agent_coordination_action_outcome"),
+                  eq(EngineArtifactTable.task_id, worker.taskID),
+                ),
+              )
+              .all().length,
+            taskFailures: db
+              .select({ id: ProtocolEventTable.id })
+              .from(ProtocolEventTable)
+              .where(
+                and(
+                  eq(ProtocolEventTable.aggregate_type, "task"),
+                  eq(ProtocolEventTable.aggregate_id, worker.taskID),
+                  eq(ProtocolEventTable.type, "task.failed"),
+                ),
+              )
+              .all().length,
+          }))
+          expect({
+            after,
+            before,
+            action: findAgentCoordinationAction({ taskID: worker.taskID, actionID }),
+            taskStatus: deriveTaskStatus(requireTask(worker.taskID)),
+          }).toEqual({
+            after: before,
+            before,
+            action: expect.objectContaining({ payload: expect.objectContaining({ status: "superseded" }) }),
+            taskStatus: "active",
+          })
+          await SessionRuntimeContractStore.dispose(worker.session.id)
+        },
+      })
+    },
+    180_000,
+  )
+
+  test("terminalizes a running old-epoch coordination Tool without replaying its effect", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const worker = await projectedWorkerDecisionSurface({ projectPath: project.path })
+        const requestResult = await worker.executeWorkerTool(
+          "request_orchestrator_decision",
+          {
+            summary: "Recover an old coordination Tool",
+            details: "The dead process left a running Tool Part before the Task reopened.",
+            blocking: true,
+            requested_decision: "Ask the operator only in the accepting execution",
+            evidence_locators: [],
+            severity: "blocked",
+          },
+          "call_request_old_epoch_recovery",
+        )
+        const requestControl = toolResultControl((requestResult as any).metadata)
+        if (requestControl?.kind !== "handoff_drain") throw new Error("Worker request did not produce handoff control")
+        const responder = await productionCoordinationResponder({
+          worker,
+          requestID: requestControl.request_id,
+          decision: "ask_user",
+          callID: "call_running_old_epoch_recovery",
+        })
+        const committedResponse = await createAgentCoordinationResponse({
+          taskID: worker.taskID,
+          requestID: requestControl.request_id,
+          orchestratorSessionID: responder.orchestrator.id,
+          orchestratorMessageID: responder.assistant.id,
+          orchestratorToolCallID: responder.part.callID,
+          orchestratorToolPartID: responder.part.id,
+          decision: "ask_user",
+          message: "Execute the exact ask_user action if this Task execution still owns it.",
+          reason: "Production race acceptance for ask_user",
+        })
+        expect(findAgentCoordinationAction({ taskID: worker.taskID, actionID: committedResponse.payload.action_id })).toMatchObject({
+          payload: { status: "pending", action: "ask_user" },
+        })
+
+        await terminalTask(
+          requireTask(worker.taskID),
+          { status: "failed", error: "Old coordination owner ended" },
+          "Old coordination owner ended",
+          {
+            preExecutionInfrastructureFailure: {
+              code: "IMMUTABLE_CREATION_WORKSPACE_MISMATCH",
+              initialTreeSHA256: "1".repeat(64),
+              executionTreeSHA256: "2".repeat(64),
+            },
+          },
+        )
+        await updateTask(requireTask(worker.taskID), { status: "active" }, "Reopen after old coordination owner ended")
+        const effectsBefore = Database.use((db) => ({
+          questions: db
+            .select({ id: BusPublicationOutboxTable.occurrence_id })
+            .from(BusPublicationOutboxTable)
+            .where(eq(BusPublicationOutboxTable.event_type, "question.asked"))
+            .all().length,
+          outcomes: db
+            .select({ id: EngineArtifactTable.id })
+            .from(EngineArtifactTable)
+            .where(
+              and(
+                eq(EngineArtifactTable.task_id, worker.taskID),
+                eq(EngineArtifactTable.kind, "agent_coordination_action_outcome"),
+              ),
+            )
+            .all().length,
+        }))
+
+        expect(await SessionLoop.terminalizeRecoveredIncompleteAssistant(responder.orchestrator.id)).toBe(true)
+        const recoveredSnapshot = JSON.stringify(await Session.messages({ sessionID: responder.orchestrator.id }))
+        expect(await SessionLoop.terminalizeRecoveredIncompleteAssistant(responder.orchestrator.id)).toBe(false)
+        expect(JSON.stringify(await Session.messages({ sessionID: responder.orchestrator.id }))).toBe(recoveredSnapshot)
+
+        const recovered = (await Session.messages({ sessionID: responder.orchestrator.id })).find(
+          (entry) => entry.info.id === responder.assistant.id,
+        )
+        const recoveredPart = recovered?.parts.find(
+          (entry) => entry.type === "tool" && entry.callID === responder.part.callID,
+        )
+        expect({
+          request: findAgentCoordinationRequest({ taskID: worker.taskID, requestID: requestControl.request_id }),
+          taskEpoch: taskLifecycleProjection(worker.taskID).epoch,
+          assistantFinish: recovered?.info.role === "assistant" ? recovered.info.finish : undefined,
+          tool: recoveredPart,
+          effectsAfter: Database.use((db) => ({
+            questions: db
+              .select({ id: BusPublicationOutboxTable.occurrence_id })
+              .from(BusPublicationOutboxTable)
+              .where(eq(BusPublicationOutboxTable.event_type, "question.asked"))
+              .all().length,
+            outcomes: db
+              .select({ id: EngineArtifactTable.id })
+              .from(EngineArtifactTable)
+              .where(
+                and(
+                  eq(EngineArtifactTable.task_id, worker.taskID),
+                  eq(EngineArtifactTable.kind, "agent_coordination_action_outcome"),
+                ),
+              )
+              .all().length,
+          })),
+        }).toMatchObject({
+          request: { payload: { status: "superseded", execution_epoch: 1 } },
+          taskEpoch: 2,
+          assistantFinish: "tool-calls",
+          tool: {
+            type: "tool",
+            state: {
+              status: "error",
+              failure: {
+                kind: "agent-coordination-action-superseded",
+                name: "AgentCoordinationActionSupersededError",
+                data: {
+                  taskID: worker.taskID,
+                  actionID: committedResponse.payload.action_id,
+                  expectedExecutionEpoch: 1,
+                  currentExecutionEpoch: 2,
+                  currentTaskStatus: "active",
+                },
+              },
+            },
+          },
+          effectsAfter: effectsBefore,
+        })
+        await SessionRuntimeContractStore.dispose(worker.session.id)
+      },
+    })
+  }, 180_000)
+
+  test.each(["answered", "expired", "rejected"] as const)(
+    "replays a completed ask_user %s decision into its still-running ToolPart after owner loss",
+    async (terminalStatus) => {
+      await using project = await memoryProject()
+      await Instance.provide({
+        directory: project.path,
+        fn: async () => {
+        EngineService.init()
+        let effectAdmissions = 0
+        using _effectAdmission = AgentCoordinationToolTestHooks.replaceEffectAdmission(() => {
+          effectAdmissions += 1
+        })
+        const worker = await projectedWorkerDecisionSurface({ projectPath: project.path })
+        const requestResult = await worker.executeWorkerTool(
+          "request_orchestrator_decision",
+          {
+            summary: "Preserve the exact operator decision across recovery",
+            details: "The action outcome may commit before the Session ToolPart completes.",
+            blocking: true,
+            requested_decision: "Ask the operator once and replay the durable answer",
+            evidence_locators: [],
+            severity: "blocked",
+          },
+          "call_request_completed_ask_user_recovery",
+        )
+        const requestControl = toolResultControl((requestResult as any).metadata)
+        if (requestControl?.kind !== "handoff_drain") throw new Error("Worker request did not produce handoff control")
+        const responder = await productionCoordinationResponder({
+          worker,
+          requestID: requestControl.request_id,
+          decision: "ask_user",
+          callID: "call_completed_ask_user_recovery",
+        })
+        const priorQuestionTimeout = process.env.OPENCORVUS_QUESTION_TIMEOUT_MS
+        using _questionTimeout = {
+          [Symbol.dispose]() {
+            if (priorQuestionTimeout === undefined) delete process.env.OPENCORVUS_QUESTION_TIMEOUT_MS
+            else process.env.OPENCORVUS_QUESTION_TIMEOUT_MS = priorQuestionTimeout
+          },
+        }
+        if (terminalStatus === "expired") process.env.OPENCORVUS_QUESTION_TIMEOUT_MS = "1"
+        const firstExecution = responder.execute()
+        let question: Awaited<ReturnType<typeof Question.list>>[number] | undefined
+        for (let attempt = 0; attempt < 80 && !question; attempt += 1) {
+          question = (await Question.list()).find((candidate) => candidate.sessionID === responder.orchestrator.id)
+          if (!question) await Bun.sleep(25)
+        }
+        if (!question) throw new Error("Production ask_user did not publish its exact Question")
+        if (terminalStatus === "answered") {
+          await Question.reply({ requestID: question.id, answers: [["retain-exact-decision"]] })
+        } else if (terminalStatus === "rejected") {
+          await Question.reject(question.id)
+        }
+        const firstOutput = await firstExecution
+        const expectedOutput =
+          terminalStatus === "answered"
+            ? "retain-exact-decision"
+            : terminalStatus === "expired"
+              ? "automatic deadline elapsed without an operator decision"
+              : "user rejected the question"
+        expect(firstOutput).toContain(expectedOutput)
+        const { action } = exactCoordinationForRequest(worker.taskID, requestControl.request_id)
+        expect(action.payload).toMatchObject({
+          status: "completed",
+          action: "ask_user",
+          result: {
+            question_id: question.id,
+            interaction_status: terminalStatus,
+          },
+        })
+        const before = Database.use((db) => ({
+          outcomes: db
+            .select({ id: EngineArtifactTable.id })
+            .from(EngineArtifactTable)
+            .where(
+              and(
+                eq(EngineArtifactTable.task_id, worker.taskID),
+                eq(EngineArtifactTable.kind, "agent_coordination_action_outcome"),
+              ),
+            )
+            .all(),
+          terminals: db
+            .select({ id: BusPublicationOutboxTable.occurrence_id })
+            .from(BusPublicationOutboxTable)
+            .where(eq(BusPublicationOutboxTable.occurrence_id, `bus-occurrence:question-terminal:${question.id}`))
+            .all(),
+        }))
+
+        expect(await SessionLoop.terminalizeRecoveredIncompleteAssistant(responder.orchestrator.id)).toBe(true)
+        const recoveredSnapshot = JSON.stringify(await Session.messages({ sessionID: responder.orchestrator.id }))
+        expect(await SessionLoop.terminalizeRecoveredIncompleteAssistant(responder.orchestrator.id)).toBe(false)
+        expect(JSON.stringify(await Session.messages({ sessionID: responder.orchestrator.id }))).toBe(recoveredSnapshot)
+        const recovered = (await Session.messages({ sessionID: responder.orchestrator.id })).find(
+          (entry) => entry.info.id === responder.assistant.id,
+        )
+        const recoveredPart = recovered?.parts.find(
+          (entry) => entry.type === "tool" && entry.callID === responder.part.callID,
+        )
+        expect({
+          finish: recovered?.info.role === "assistant" ? recovered.info.finish : undefined,
+          part: recoveredPart,
+          facts: Database.use((db) => ({
+            outcomes: db
+              .select({ id: EngineArtifactTable.id })
+              .from(EngineArtifactTable)
+              .where(
+                and(
+                  eq(EngineArtifactTable.task_id, worker.taskID),
+                  eq(EngineArtifactTable.kind, "agent_coordination_action_outcome"),
+                ),
+              )
+              .all(),
+            terminals: db
+              .select({ id: BusPublicationOutboxTable.occurrence_id })
+              .from(BusPublicationOutboxTable)
+              .where(eq(BusPublicationOutboxTable.occurrence_id, `bus-occurrence:question-terminal:${question.id}`))
+              .all(),
+          })),
+        }).toMatchObject({
+          finish: "tool-calls",
+          part: {
+            type: "tool",
+            state: {
+              status: "completed",
+              output: expect.stringContaining(expectedOutput),
+            },
+          },
+          facts: before,
+        })
+        if (recoveredPart?.type !== "tool" || recoveredPart.state.status !== "completed") {
+          throw new Error("Recovered ask_user ToolPart did not complete")
+        }
+        expect(JSON.stringify(recoveredPart.state.output)).not.toContain("already completed as ask_user")
+        expect(effectAdmissions).toBe(1)
+        await SessionRuntimeContractStore.dispose(worker.session.id)
+        },
+      })
+    },
+    180_000,
+  )
+
+  test("rejects an old-epoch pending redispatch before a successor lineage can commit", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const worker = await projectedWorkerDecisionSurface({ projectPath: project.path })
+        const requestResult = await worker.executeWorkerTool(
+          "request_orchestrator_decision",
+          {
+            summary: "Fence an old redispatch action",
+            details: "A successor lineage must remain owned by the Task execution that accepted it.",
+            blocking: true,
+            requested_decision: "Redispatch only in this exact execution",
+            evidence_locators: [],
+            severity: "blocked",
+          },
+          "call_request_old_epoch_redispatch",
+        )
+        const requestControl = toolResultControl((requestResult as any).metadata)
+        if (requestControl?.kind !== "handoff_drain") throw new Error("Worker request did not produce handoff control")
+        const responder = await productionCoordinationResponder({
+          worker,
+          requestID: requestControl.request_id,
+          decision: "redispatch",
+          callID: "call_response_old_epoch_redispatch",
+        })
+        await responder.execute()
+        const { action } = exactCoordinationForRequest(worker.taskID, requestControl.request_id)
+        if (!action || action.payload.action !== "redispatch_worker") {
+          throw new Error("Pending redispatch action was not persisted")
+        }
+
+        await terminalTask(
+          requireTask(worker.taskID),
+          { status: "failed", error: "Concurrent terminal before redispatch" },
+          "Concurrent terminal before redispatch",
+          {
+            preExecutionInfrastructureFailure: {
+              code: "IMMUTABLE_CREATION_WORKSPACE_MISMATCH",
+              initialTreeSHA256: "1".repeat(64),
+              executionTreeSHA256: "2".repeat(64),
+            },
+          },
+        )
+        await updateTask(requireTask(worker.taskID), { status: "active" }, "Reopen before stale redispatch")
+        const target = worker.projection.workerCapability
+        const workflowProjection = {
+          packageRevision: worker.packageRevision,
+          virtualWorkflows: target.virtualWorkflows,
+        }
+        expect(() =>
+          recordTestDispatchLineage({
+            origin: createDispatchLineageOrigin({
+              dispatchID: Identifier.ascending("artifact"),
+              taskID: worker.taskID,
+              orchestratorSessionID: responder.orchestrator.id,
+              orchestratorMessageID: Identifier.ascending("message"),
+              toolPartID: Identifier.ascending("part"),
+              toolCallID: "call_stale_coordination_dispatch",
+              targetAgentID: target.identity.agentID,
+              projectedWorkerIdentity: target.identity,
+              workScope: { kind: "task" },
+              workflowBinding: selectedWorkflowBinding({ projection: workflowProjection, workflowID: null }),
+              workflowNodeID: worker.dispatchLineage.payload.workflow_node_id,
+              coordinationActionID: action.payload.action_id,
+              continuationOfDispatchID: worker.dispatchLineage.dispatchID,
+              adapterInput: {},
+            }),
+            childSessionID: worker.session.id,
+          }),
+        ).toThrow(
+          `Dispatch coordination action ${action.payload.action_id} is not the exact pending redispatch authority`,
+        )
+        expect({
+          taskStatus: deriveTaskStatus(requireTask(worker.taskID)),
+          action: findAgentCoordinationAction({ taskID: worker.taskID, actionID: action.payload.action_id }),
+          successor: listDispatchLineage(worker.taskID).filter(
+            (lineage) => lineage.payload.coordination_action_id === action.payload.action_id,
+          ),
+        }).toMatchObject({
+          taskStatus: "active",
+          action: { payload: { status: "superseded" } },
+          successor: [],
+        })
+        await SessionRuntimeContractStore.dispose(worker.session.id)
+      },
+    })
+  }, 180_000)
+
+  test("rejects same-epoch terminal and deleted Tasks before persisting an active coordination action", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        for (const boundary of ["terminal", "deleted"] as const) {
+          const worker = await projectedWorkerDecisionSurface({ projectPath: project.path })
+          const requestResult = await worker.executeWorkerTool(
+            "request_orchestrator_decision",
+            {
+              summary: `Fence a same-epoch ${boundary} response`,
+              details: "No active coordination action may be born after the Task execution closes.",
+              blocking: true,
+              requested_decision: "Ask the user only while this execution is active",
+              evidence_locators: [],
+              severity: "blocked",
+            },
+            `call_request_same_epoch_${boundary}`,
+          )
+          const requestControl = toolResultControl((requestResult as any).metadata)
+          if (requestControl?.kind !== "handoff_drain") throw new Error("Worker request did not produce handoff control")
+          const responder = await productionCoordinationResponder({
+            worker,
+            requestID: requestControl.request_id,
+            decision: "ask_user",
+            callID: `call_response_same_epoch_${boundary}`,
+          })
+          await terminalTask(
+            requireTask(worker.taskID),
+            { status: "failed", error: `Same-epoch ${boundary} boundary` },
+            `Same-epoch ${boundary} boundary`,
+            {
+              preExecutionInfrastructureFailure: {
+                code: "IMMUTABLE_CREATION_WORKSPACE_MISMATCH",
+                initialTreeSHA256: "3".repeat(64),
+                executionTreeSHA256: "4".repeat(64),
+              },
+            },
+          )
+          if (boundary === "deleted") {
+            Database.immediateTransaction(() => {
+              EngineProtocol.emitInTransaction(
+                Event.TaskDeleted,
+                {
+                  taskID: worker.taskID,
+                  executionEpoch: 1,
+                  summary: "Task deleted by explicit operator action",
+                },
+                { source: "task.delete", taskID: worker.taskID },
+              )
+            })
+          }
+          const before = Database.use((db) =>
+            db
+              .select({ id: EngineArtifactTable.id })
+              .from(EngineArtifactTable)
+              .where(
+                and(
+                  eq(EngineArtifactTable.task_id, worker.taskID),
+                  inArray(EngineArtifactTable.kind, ["agent_coordination_response", "agent_coordination_action"]),
+                ),
+              )
+              .all(),
+          )
+          if (boundary === "terminal") {
+            await expect(responder.execute()).rejects.toBeInstanceOf(AgentCoordinationActionSupersededError)
+          } else {
+            await expect(responder.execute()).rejects.toMatchObject({ name: "NotFoundError" })
+          }
+          const after = Database.use((db) =>
+            db
+              .select({ id: EngineArtifactTable.id })
+              .from(EngineArtifactTable)
+              .where(
+                and(
+                  eq(EngineArtifactTable.task_id, worker.taskID),
+                  inArray(EngineArtifactTable.kind, ["agent_coordination_response", "agent_coordination_action"]),
+                ),
+              )
+              .all(),
+          )
+          expect({ before, after }).toEqual({ before: [], after: [] })
+          await SessionRuntimeContractStore.dispose(worker.session.id)
+        }
+      },
+    })
+  }, 180_000)
 
   test("settles and replays the production A2A fail_task control writer", async () => {
     await using project = await memoryProject()
@@ -1379,7 +2506,19 @@ describe("single Tool-result turn-control protocol", () => {
             visibleToolName: "respond_agent_coordination",
           },
         }
-        const settled = await respond.execute(args, options)
+        let crashInjected = false
+        using _failSettlementCut = AgentCoordinationToolTestHooks.replaceAfterFailSettlement(() => {
+          if (crashInjected) return
+          crashInjected = true
+          throw new Error("Injected crash after atomic TaskFailed coordination settlement")
+        })
+        await expect(respond.execute(args, options)).rejects.toThrow(
+          "Injected crash after atomic TaskFailed coordination settlement",
+        )
+        const committedBeforeProjectionRepair = {
+          taskStatus: deriveTaskStatus(requireTask(worker.taskID)),
+          action: exactCoordinationForRequest(worker.taskID, requestControl.request_id).action,
+        }
         const replaySurface = createOrchestratorTools({
           taskID: worker.taskID,
           agentSessionID: orchestrator.id,
@@ -1392,19 +2531,23 @@ describe("single Tool-result turn-control protocol", () => {
         const replayRespond = replaySurface.respond_agent_coordination
         if (!replayRespond?.execute) throw new Error("respond_agent_coordination replay is unavailable")
         const replayed = await replayRespond.execute(args, options)
-        const response = listAgentCoordinationResponses(worker.taskID)[0]
-        const action = listAgentCoordinationActions(worker.taskID)[0]
+        const { response, action } = exactCoordinationForRequest(worker.taskID, requestControl.request_id)
         expect({
-          settledControl: toolResultControl(settled.metadata),
+          crashInjected,
+          committedBeforeProjectionRepair,
           replayedControl: toolResultControl(replayed.metadata),
           replayedOutput: replayed.output,
           taskStatus: deriveTaskStatus(requireTask(worker.taskID)),
           response,
           action,
         }).toMatchObject({
-          settledControl: { kind: "immediate_park" },
+          crashInjected: true,
+          committedBeforeProjectionRepair: {
+            taskStatus: "failed",
+            action: { payload: { action: "fail_task", status: "completed" } },
+          },
           replayedControl: { kind: "immediate_park" },
-          replayedOutput: expect.stringContaining("already completed as fail_task"),
+          replayedOutput: expect.stringContaining("Repaired the exact worker Turn projection from the committed outcome"),
           taskStatus: "failed",
           response: { payload: { request_id: requestControl.request_id, decision: "fail_task" } },
           action: { payload: { action: "fail_task", status: "completed" } },

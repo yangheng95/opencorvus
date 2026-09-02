@@ -8,40 +8,64 @@ import {
   EvidenceLocatorListSchema,
   type EvidenceLocator,
 } from "@opencorvus-ai/plugin/artifact-catalog"
-import { SelectedWorkflowBindingSchema, sameSelectedWorkflowBinding } from "./workflow-binding"
+import { sameSelectedWorkflowBinding } from "./workflow-binding"
 import { Event } from "@/engine/model"
 import { EngineProtocol } from "@/engine/protocol"
 import { Identifier } from "@/id/id"
 import { taskIDForSession } from "@/engine/task-session-lineage"
-import { and, desc, eq, sql } from "@/storage/db"
+import { and, asc, desc, eq, inArray, sql } from "@/storage/db"
 import { Database } from "@/storage/db"
 import { EngineArtifactTable, EngineTaskTable, type EngineArtifactKind, type EngineMetadata } from "./engine.sql"
-import { insertEngineArtifact, updateEngineArtifactsWhere, updateEngineArtifactWhereReturning } from "./artifact"
+import { insertEngineArtifact } from "./artifact"
 import { findDispatchLineageBySession } from "./dispatch-lineage"
 import { parseDispatchLineagePayload } from "./dispatch-lineage-facts"
 import { persistCoordinationIngressInTransaction } from "./task-root-ingress-delivery"
 import { assertTaskEvidenceLocators } from "./evidence-locator"
 import type { AgentCoordinationDecision } from "./agent-coordination-decision"
+import { taskLifecycleProjection, taskLifecycleProjectionInTransaction } from "./task-lifecycle"
+import {
+  AgentCoordinationActionFactSchema,
+  AgentCoordinationActionOutcomeFactSchema,
+  AgentCoordinationRequestFactSchema,
+  AgentCoordinationWorkerToolInputSchema,
+  AgentCoordinationResponseFactSchema,
+  reduceAgentCoordinationFacts,
+  reduceAgentCoordinationActionFacts,
+  type AgentCoordinationActionFact,
+  type AgentCoordinationActionOutcomeFact,
+  type AgentCoordinationProjection,
+  type AgentCoordinationRequestFact,
+  type AgentCoordinationResponseFact,
+} from "./agent-coordination-facts"
+import { canonicalDigestSource } from "@/util/canonical-digest"
+import { ToolPartRequestTable } from "@/session/session.sql"
+import { AgentCoordinationFrontierConflictError, OperatorSteerRequestConflictError } from "./agent-coordination-errors"
+import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
+import { findDispatchLineageByDispatchIDInTransaction } from "./dispatch-lineage-facts"
+import { taskDeletedInTransaction } from "./store"
+import { AgentCoordinationActionSupersededError } from "./agent-coordination-errors"
+import { ProtocolEventTable } from "@/protocol/protocol.sql"
 
 export type { AgentCoordinationDecision } from "./agent-coordination-decision"
 
-export const AgentCoordinationRedispatchBindingSchema = ProjectedWorkerBindingSchema.safeExtend({
-  sourceDispatchLineageID: z.string().min(1),
-  sourceDispatchID: z.string().min(1),
-  workflowBinding: SelectedWorkflowBindingSchema,
-  workflowNodeID: z.string().min(1).nullable(),
-  workflowOccurrenceID: z.string().min(1),
-  deliverySliceRevisionIDs: z.array(Identifier.schema("goal")),
-}).strict()
-
-export type AgentCoordinationRedispatchBinding = z.infer<typeof AgentCoordinationRedispatchBindingSchema>
+export {
+  AgentCoordinationRedispatchBindingSchema,
+  type AgentCoordinationRedispatchBinding,
+} from "./agent-coordination-redispatch"
+import {
+  AgentCoordinationRedispatchBindingSchema,
+  type AgentCoordinationRedispatchBinding,
+} from "./agent-coordination-redispatch"
 
 export type AgentCoordinationSeverity = "info" | "blocked" | "failure"
 
 export function agentCoordinationQuestionID(actionID: string): string {
   return Identifier.ascending("question", `que_agent_coordination_${actionID}`)
 }
-export type AgentCoordinationRequestStatus = "pending" | "responded" | "cancelled"
+export function agentCoordinationQuestionAskedOccurrenceID(actionID: string): string {
+  return `bus-occurrence:agent-coordination-question:${actionID}`
+}
+export type AgentCoordinationRequestStatus = "pending" | "responded" | "superseded"
 export type AgentCoordinationRequestOrigin = "worker_handoff" | "operator_steer"
 export type AgentCoordinationActionKind =
   | "cancel_worker"
@@ -49,34 +73,17 @@ export type AgentCoordinationActionKind =
   | "fail_task"
   | "ask_user"
   | "acknowledge_terminal"
-export type AgentCoordinationActionStatus = "pending" | "completed" | "failed"
+export type AgentCoordinationActionStatus = "pending" | "completed" | "failed" | "superseded"
 export type AgentCoordinationSessionLineageSource = "task_session_tree" | "dispatch_lineage"
 
 export interface AgentCoordinationSessionLineage {
   source: AgentCoordinationSessionLineageSource
+  executionEpoch: number
   dispatchLineageID?: string
 }
 
-export interface AgentCoordinationRequestPayload extends EngineMetadata {
-  request_id: string
-  task_id: string
-  session_id: string
-  agent: string
-  worker_binding: ProjectedWorkerBinding
-  origin: AgentCoordinationRequestOrigin
-  message_id?: string
-  tool_call_id?: string
-  operator_steer_id?: string
-  operator_message?: string
-  delivery_slice_subject?: string
-  summary: string
-  details: string
-  blocking: boolean
-  requested_decision: string
-  evidence_locators?: EvidenceLocator[]
-  severity: AgentCoordinationSeverity
+export type AgentCoordinationRequestPayload = AgentCoordinationRequestFact & {
   status: AgentCoordinationRequestStatus
-  created_at: number
   responded_at?: number
   response_id?: string
   last_failed_response_id?: string
@@ -85,45 +92,14 @@ export interface AgentCoordinationRequestPayload extends EngineMetadata {
   last_action_failed_at?: number
   cancelled_at?: number
   cancel_reason?: string
-  session_lineage_source?: AgentCoordinationSessionLineageSource
-  dispatch_lineage_id?: string
 }
 
-export interface AgentCoordinationResponsePayload extends EngineMetadata {
-  response_id: string
-  request_id: string
-  action_id: string
-  task_id: string
-  orchestrator_session_id: string
-  orchestrator_message_id: string
-  orchestrator_tool_call_id: string
-  orchestrator_tool_part_id: string
-  decision: AgentCoordinationDecision
-  reason: string
-  message?: string
-  created_at: number
-}
+export type AgentCoordinationResponsePayload = AgentCoordinationResponseFact
 
-export interface AgentCoordinationActionPayload extends EngineMetadata {
-  action_id: string
-  request_id: string
-  response_id: string
-  task_id: string
-  orchestrator_session_id: string
-  orchestrator_message_id: string
-  orchestrator_tool_call_id: string
-  orchestrator_tool_part_id: string
-  action: AgentCoordinationActionKind
-  decision: AgentCoordinationDecision
-  target_session_id: string
-  target_agent: string
-  delivery_slice_subject?: string
-  reason: string
+export type AgentCoordinationActionPayload = AgentCoordinationActionFact & {
   status: AgentCoordinationActionStatus
-  created_at: number
   completed_at?: number
   failed_at?: number
-  worker_message_id?: string
   error?: string
   result?: Record<string, unknown>
 }
@@ -207,7 +183,7 @@ function requestForInvocationInTransaction(
     )
   }
   const row = rows[0]
-  return row ? requestRowFromArtifact(row) : undefined
+  return row ? requestRowFromArtifact(db, row) : undefined
 }
 
 function operatorSteerRequestInTransaction(
@@ -223,8 +199,8 @@ function operatorSteerRequestInTransaction(
     .where(
       and(
         eq(EngineArtifactTable.task_id, input.taskID),
+        eq(EngineArtifactTable.id, input.operatorSteerID),
         eq(EngineArtifactTable.kind, "agent_coordination_request"),
-        sql`json_extract(${EngineArtifactTable.payload}, '$.operator_steer_id') = ${input.operatorSteerID}`,
       ),
     )
     .all()
@@ -234,14 +210,192 @@ function operatorSteerRequestInTransaction(
     )
   }
   const row = rows[0]
-  return row ? requestRowFromArtifact(row) : undefined
+  return row ? requestRowFromArtifact(db, row) : undefined
 }
 
-function requestRowFromArtifact(row: AgentCoordinationArtifactRow): AgentCoordinationRequestRow {
-  const payload = normalizeAgentCoordinationRequestPayload(row.payload)
-  if (!payload) {
-    throw new Error(`Malformed agent coordination request artifact ${row.id} for task ${row.task_id}`)
+function requestFactFromArtifact(row: AgentCoordinationArtifactRow): AgentCoordinationRequestFact {
+  const parsed = AgentCoordinationRequestFactSchema.safeParse(row.payload)
+  if (!parsed.success) throw new Error(`Malformed agent coordination request artifact ${row.id} for task ${row.task_id}`)
+  return parsed.data
+}
+
+function responseFactFromArtifact(row: AgentCoordinationArtifactRow): AgentCoordinationResponseFact {
+  const parsed = AgentCoordinationResponseFactSchema.safeParse(row.payload)
+  if (!parsed.success) throw new Error(`Malformed agent coordination response artifact ${row.id} for task ${row.task_id}`)
+  return parsed.data
+}
+
+function actionFactFromArtifact(row: AgentCoordinationArtifactRow): AgentCoordinationActionFact {
+  const parsed = AgentCoordinationActionFactSchema.safeParse(row.payload)
+  if (!parsed.success) throw new Error(`Malformed agent coordination action artifact ${row.id} for task ${row.task_id}`)
+  return parsed.data
+}
+
+function outcomeFactFromArtifact(row: AgentCoordinationArtifactRow): AgentCoordinationActionOutcomeFact {
+  const parsed = AgentCoordinationActionOutcomeFactSchema.safeParse(row.payload)
+  if (!parsed.success) throw new Error(`Malformed agent coordination outcome artifact ${row.id} for task ${row.task_id}`)
+  return parsed.data
+}
+
+function coordinationProjectionInTransaction(
+  db: Database.TxOrDb,
+  request: AgentCoordinationRequestFact,
+): AgentCoordinationProjection {
+  const rows = db
+    .select()
+    .from(EngineArtifactTable)
+    .where(
+      and(
+        eq(EngineArtifactTable.task_id, request.task_id),
+        inArray(EngineArtifactTable.kind, [
+          "agent_coordination_response",
+          "agent_coordination_action",
+          "agent_coordination_action_outcome",
+        ]),
+        sql`json_extract(${EngineArtifactTable.payload}, '$.request_id') = ${request.request_id}`,
+      ),
+    )
+    .orderBy(asc(EngineArtifactTable.time_created), asc(EngineArtifactTable.id))
+    .all()
+  return reduceAgentCoordinationFacts({
+    request,
+    responses: rows.filter((row) => row.kind === "agent_coordination_response").map(responseFactFromArtifact),
+    actions: rows.filter((row) => row.kind === "agent_coordination_action").map(actionFactFromArtifact),
+    outcomes: rows.filter((row) => row.kind === "agent_coordination_action_outcome").map(outcomeFactFromArtifact),
+    currentExecutionEpoch: taskLifecycleProjectionInTransaction(db, request.task_id).epoch,
+  })
+}
+
+function requestRowsFromArtifacts(
+  db: Database.TxOrDb,
+  rows: readonly AgentCoordinationArtifactRow[],
+): AgentCoordinationRequestRow[] {
+  if (rows.length === 0) return []
+  const requests = rows.map((row) => ({ row, fact: requestFactFromArtifact(row) }))
+  const requestIDs = requests.map(({ fact }) => fact.request_id)
+  const frontierOutcomes = db
+    .select()
+    .from(EngineArtifactTable)
+    .where(
+      and(
+        eq(EngineArtifactTable.task_id, requests[0]!.fact.task_id),
+        eq(EngineArtifactTable.kind, "agent_coordination_action_outcome"),
+        sql`${EngineArtifactTable.id} IN (
+          SELECT (
+            SELECT candidate.id
+            FROM engine_artifact candidate INDEXED BY engine_agent_coordination_outcome_request_idx
+            WHERE candidate.task_id=${requests[0]!.fact.task_id}
+              AND candidate.kind='agent_coordination_action_outcome'
+              AND json_extract(candidate.payload,'$.request_id')=selected.value
+              AND json_extract(candidate.payload,'$.status')='failed'
+            ORDER BY candidate.time_created DESC, candidate.id DESC
+            LIMIT 1
+          )
+          FROM json_each(${JSON.stringify(requestIDs)}) selected
+        )`,
+      ),
+    )
+    .all()
+  if (frontierOutcomes.length > requests.length) {
+    throw new Error(`Agent coordination pending frontier contains more terminal outcomes than requests`)
   }
+  const actionIDs = frontierOutcomes.map((row) => outcomeFactFromArtifact(row).action_id)
+  const actionRows =
+    actionIDs.length === 0
+      ? []
+      : db
+          .select()
+          .from(EngineArtifactTable)
+          .where(
+            and(
+              eq(EngineArtifactTable.task_id, requests[0]!.fact.task_id),
+              eq(EngineArtifactTable.kind, "agent_coordination_action"),
+              inArray(EngineArtifactTable.id, actionIDs),
+            ),
+          )
+          .all()
+  const responseIDs = actionRows.map((row) => actionFactFromArtifact(row).response_id)
+  const responseRows =
+    responseIDs.length === 0
+      ? []
+      : db
+          .select()
+          .from(EngineArtifactTable)
+          .where(
+            and(
+              eq(EngineArtifactTable.task_id, requests[0]!.fact.task_id),
+              eq(EngineArtifactTable.kind, "agent_coordination_response"),
+              inArray(EngineArtifactTable.id, responseIDs),
+            ),
+          )
+          .all()
+  const outcomeByRequest = new Map<string, AgentCoordinationActionOutcomeFact>()
+  for (const row of frontierOutcomes) {
+    const fact = outcomeFactFromArtifact(row)
+    if (outcomeByRequest.has(fact.request_id)) {
+      throw new Error(`Agent coordination request ${fact.request_id} has multiple pending frontier outcomes`)
+    }
+    outcomeByRequest.set(fact.request_id, fact)
+  }
+  const actionByID = new Map(actionRows.map((row) => [row.id, actionFactFromArtifact(row)]))
+  const responseByID = new Map(responseRows.map((row) => [row.id, responseFactFromArtifact(row)]))
+  return requests.map(({ row, fact }) => {
+    const lastFailedOutcome = outcomeByRequest.get(fact.request_id)
+    const lastFailedAction = lastFailedOutcome ? actionByID.get(lastFailedOutcome.action_id) : undefined
+    const lastFailedResponse = lastFailedAction ? responseByID.get(lastFailedAction.response_id) : undefined
+    if (lastFailedOutcome && (!lastFailedAction || !lastFailedResponse)) {
+      throw new Error(`Agent coordination request ${fact.request_id} has an incomplete pending frontier`)
+    }
+    const projection: AgentCoordinationProjection = {
+      status: "pending",
+      frontierID: lastFailedOutcome?.outcome_id ?? fact.request_id,
+      previousFailedOutcomeID: lastFailedOutcome?.outcome_id,
+      lastFailedResponse,
+      lastFailedAction,
+      lastFailedOutcome,
+      failedAttempts: lastFailedOutcome ? 1 : 0,
+    }
+    return {
+      artifactID: row.id,
+      taskID: row.task_id,
+      payload: projectedRequestPayload(fact, projection),
+      timeCreated: row.time_created,
+      timeUpdated: row.time_updated,
+      createdNow: false,
+    }
+  })
+}
+
+function projectedRequestPayload(
+  request: AgentCoordinationRequestFact,
+  projection: AgentCoordinationProjection,
+): AgentCoordinationRequestPayload {
+  return {
+    ...request,
+    status: projection.status,
+    ...(projection.response
+      ? { responded_at: projection.response.created_at, response_id: projection.response.response_id }
+      : {}),
+    ...(projection.previousFailedOutcomeID
+      ? {
+          last_failed_response_id: projection.lastFailedResponse?.response_id,
+          last_failed_action_id: projection.lastFailedAction?.action_id,
+          last_action_error: projection.lastFailedOutcome?.error,
+          last_action_failed_at: projection.lastFailedOutcome?.created_at,
+        }
+      : {}),
+    ...(projection.status === "superseded"
+      ? {
+          cancelled_at: request.created_at,
+          cancel_reason: "superseded by a newer Task execution epoch",
+        }
+      : {}),
+  }
+}
+
+function requestRowFromArtifact(db: Database.TxOrDb, row: AgentCoordinationArtifactRow): AgentCoordinationRequestRow {
+  const request = requestFactFromArtifact(row)
+  const payload = projectedRequestPayload(request, coordinationProjectionInTransaction(db, request))
   return {
     artifactID: row.id,
     taskID: row.task_id,
@@ -253,10 +407,7 @@ function requestRowFromArtifact(row: AgentCoordinationArtifactRow): AgentCoordin
 }
 
 function responseRowFromArtifact(row: AgentCoordinationArtifactRow): AgentCoordinationResponseRow {
-  const payload = normalizeAgentCoordinationResponsePayload(row.payload)
-  if (!payload) {
-    throw new Error(`Malformed agent coordination response artifact ${row.id} for task ${row.task_id}`)
-  }
+  const payload = responseFactFromArtifact(row)
   return {
     artifactID: row.id,
     taskID: row.task_id,
@@ -272,11 +423,55 @@ function actionKindForDecision(decision: AgentCoordinationDecision): AgentCoordi
   return decision
 }
 
-function actionRowFromArtifact(row: AgentCoordinationArtifactRow): AgentCoordinationActionRow {
-  const payload = normalizeAgentCoordinationActionPayload(row.payload)
-  if (!payload) {
-    throw new Error(`Malformed agent coordination action artifact ${row.id} for task ${row.task_id}`)
+function projectedActionPayload(
+  action: AgentCoordinationActionFact,
+  outcomes: readonly AgentCoordinationActionOutcomeFact[],
+  superseded = false,
+): AgentCoordinationActionPayload {
+  const projection = reduceAgentCoordinationActionFacts({
+    action,
+    outcomes,
+    currentExecutionEpoch: superseded ? action.execution_epoch + 1 : action.execution_epoch,
+  })
+  const terminal = projection.terminalOutcome
+  const result = Object.assign(
+    {},
+    ...(action.redispatch_binding ? [{ redispatch_binding: action.redispatch_binding }] : []),
+    projection.result,
+  ) as Record<string, unknown>
+  return {
+    ...action,
+    status: projection.status,
+    ...(Object.keys(result).length > 0 ? { result } : {}),
+    ...(terminal?.status === "completed" ? { completed_at: terminal.created_at } : {}),
+    ...(terminal?.status === "failed" || projection.status === "superseded"
+      ? {
+          failed_at: terminal?.created_at ?? action.created_at,
+          error: terminal?.error ?? "superseded by a newer Task execution epoch",
+        }
+      : {}),
   }
+}
+
+function actionRowFromArtifact(db: Database.TxOrDb, row: AgentCoordinationArtifactRow): AgentCoordinationActionRow {
+  const action = actionFactFromArtifact(row)
+  const outcomeRows = db
+    .select()
+    .from(EngineArtifactTable)
+    .where(
+      and(
+        eq(EngineArtifactTable.task_id, action.task_id),
+        eq(EngineArtifactTable.kind, "agent_coordination_action_outcome"),
+        sql`json_extract(${EngineArtifactTable.payload}, '$.action_id') = ${action.action_id}`,
+      ),
+    )
+    .all()
+  const lifecycle = taskLifecycleProjectionInTransaction(db, action.task_id)
+  const payload = projectedActionPayload(
+    action,
+    outcomeRows.map(outcomeFactFromArtifact),
+    lifecycle.epoch !== action.execution_epoch,
+  )
   return {
     artifactID: row.id,
     taskID: row.task_id,
@@ -286,8 +481,8 @@ function actionRowFromArtifact(row: AgentCoordinationArtifactRow): AgentCoordina
   }
 }
 
-function assertAgentCoordinationActionPayload(payload: AgentCoordinationActionPayload): void {
-  if (!normalizeAgentCoordinationActionPayload(payload)) {
+function assertAgentCoordinationActionPayload(payload: AgentCoordinationActionFact): void {
+  if (!AgentCoordinationActionFactSchema.safeParse(payload).success) {
     throw new Error(`Malformed agent coordination action payload: ${payload.action_id}`)
   }
 }
@@ -427,29 +622,6 @@ function redispatchBindingFromExistingAction(input: {
   return binding
 }
 
-function mergeAgentCoordinationActionResult(input: {
-  current: AgentCoordinationActionPayload
-  patch: Record<string, unknown>
-}): Record<string, unknown> {
-  const currentResult = input.current.result ?? {}
-  if (input.current.action !== "redispatch_worker") return { ...currentResult, ...input.patch }
-
-  const currentBinding = normalizeRedispatchBinding(currentResult.redispatch_binding, input.current.target_agent)
-  if (!currentBinding) {
-    throw new Error(`Agent coordination redispatch action ${input.current.action_id} has invalid redispatch_binding`)
-  }
-  if (Object.hasOwn(input.patch, "redispatch_binding")) {
-    const patchBinding = normalizeRedispatchBinding(input.patch.redispatch_binding, input.current.target_agent)
-    if (!sameRedispatchBinding(patchBinding, currentBinding)) {
-      throw new Error(
-        `Agent coordination redispatch action ${input.current.action_id} cannot replace scheduler-derived redispatch_binding`,
-      )
-    }
-  }
-  const { redispatch_binding: _redispatchBinding, ...patchWithoutBinding } = input.patch
-  return { ...currentResult, ...patchWithoutBinding, redispatch_binding: currentResult.redispatch_binding }
-}
-
 function assertReplayMatchesExistingResponse(input: {
   existingResponse: AgentCoordinationResponseRow
   existingAction: AgentCoordinationActionRow
@@ -476,11 +648,17 @@ function assertReplayMatchesExistingResponse(input: {
   if (response.decision !== input.decision) mismatches.push("decision")
   if (response.reason !== input.reason) mismatches.push("reason")
   if ((response.message ?? undefined) !== (input.message ?? undefined)) mismatches.push("message")
-  if (!sameRedispatchBinding(action.result?.redispatch_binding, input.redispatchBinding)) {
+  if (!sameRedispatchBinding(action.redispatch_binding, input.redispatchBinding)) {
     mismatches.push("redispatch_binding")
   }
   if (mismatches.length > 0) {
-    throw new Error(`Agent coordination response replay mismatch for ${input.requestID}: ${mismatches.join(", ")}`)
+    throw new AgentCoordinationFrontierConflictError({
+      message: `Agent coordination response replay mismatch for ${input.requestID}: ${mismatches.join(", ")}`,
+      taskID: input.taskID,
+      requestID: input.requestID,
+      frontierID: input.existingResponse.payload.frontier_id,
+      mismatches,
+    })
   }
 }
 
@@ -503,6 +681,7 @@ function assertReplayMatchesExistingRequest(input: {
   details: string
   blocking: boolean
   requestedDecision: string
+  toolInput: z.input<typeof AgentCoordinationWorkerToolInputSchema>
   evidenceLocators?: EvidenceLocator[]
   severity: AgentCoordinationSeverity
   deliverySliceSubject?: string
@@ -513,6 +692,12 @@ function assertReplayMatchesExistingRequest(input: {
   if ((payload.tool_call_id ?? "") !== (input.callID ?? "")) mismatches.push("tool_call_id")
   if (payload.agent !== input.agent) mismatches.push("agent")
   if (!sameProjectedWorkerBinding(payload.worker_binding, input.workerBinding)) mismatches.push("worker_binding")
+  if (
+    canonicalDigestSource("agent-coordination-worker-tool-input.v1", payload.tool_input ?? {}).bytes !==
+    canonicalDigestSource("agent-coordination-worker-tool-input.v1", input.toolInput).bytes
+  ) {
+    mismatches.push("tool_input")
+  }
   if (payload.summary !== input.summary) mismatches.push("summary")
   if (payload.details !== input.details) mismatches.push("details")
   if (payload.blocking !== input.blocking) mismatches.push("blocking")
@@ -532,28 +717,37 @@ function assertReplayMatchesExistingRequest(input: {
 
 function assertReplayMatchesExistingOperatorSteerRequest(input: {
   existing: AgentCoordinationRequestRow
-  agent: string
-  workerBinding: ProjectedWorkerBinding
+  taskID: string
+  sessionID: string
+  requestID: string
   operatorMessage: string
-  summary: string
-  details: string
-  deliverySliceSubject?: string
 }): void {
   const payload = input.existing.payload
   const mismatches: string[] = []
   if (payload.origin !== "operator_steer") mismatches.push("origin")
-  if (payload.agent !== input.agent) mismatches.push("agent")
-  if (!sameProjectedWorkerBinding(payload.worker_binding, input.workerBinding)) mismatches.push("worker_binding")
+  if (payload.task_id !== input.taskID) mismatches.push("task_id")
+  if (payload.session_id !== input.sessionID) mismatches.push("session_id")
+  if (payload.operator_steer_id !== input.requestID) mismatches.push("request_id")
   if ((payload.operator_message ?? "") !== input.operatorMessage) mismatches.push("operator_message")
-  if (payload.summary !== input.summary) mismatches.push("summary")
-  if (payload.details !== input.details) mismatches.push("details")
-  if ((payload.delivery_slice_subject ?? undefined) !== (input.deliverySliceSubject ?? undefined)) {
-    mismatches.push("delivery_slice_subject")
-  }
   if (mismatches.length === 0) return
-  throw new Error(
-    `Operator steer request replay for ${payload.operator_steer_id ?? payload.request_id} conflicts with existing request ${payload.request_id}: ${mismatches.join(", ")}`,
-  )
+  throw new OperatorSteerRequestConflictError({
+    message: `Operator steer request ${input.requestID} conflicts with its immutable accepted request: ${mismatches.join(", ")}`,
+    taskID: input.taskID,
+    sessionID: input.sessionID,
+    requestID: input.requestID,
+    mismatches,
+  })
+}
+
+export function assertOperatorSteerCoordinationRequestReplay(input: {
+  existing: AgentCoordinationRequestRow
+  taskID: string
+  sessionID: string
+  requestID: string
+  operatorMessage: string
+}): AgentCoordinationRequestRow {
+  assertReplayMatchesExistingOperatorSteerRequest(input)
+  return input.existing
 }
 
 export function resolveAgentCoordinationSessionLineage(input: {
@@ -570,10 +764,13 @@ export function resolveAgentCoordinationSessionLineage(input: {
   if (dispatchLineage) {
     return {
       source: "dispatch_lineage",
+      executionEpoch: dispatchLineage.payload.execution_epoch,
       dispatchLineageID: dispatchLineage.artifactID,
     }
   }
-  if (owningTask === input.taskID) return { source: "task_session_tree" }
+  if (owningTask === input.taskID) {
+    return { source: "task_session_tree", executionEpoch: taskLifecycleProjection(input.taskID).epoch }
+  }
   throw new Error(`Agent coordination session ${input.sessionID} is not owned by task ${input.taskID}`)
 }
 
@@ -588,6 +785,7 @@ export async function createAgentCoordinationRequest(input: {
   details: string
   blocking: boolean
   requestedDecision: string
+  toolInput: z.input<typeof AgentCoordinationWorkerToolInputSchema>
   evidenceLocators?: EvidenceLocator[]
   severity?: AgentCoordinationSeverity
   deliverySliceSubject?: string
@@ -601,6 +799,7 @@ export async function createAgentCoordinationRequest(input: {
   assertRequestedDecisionIsNotRedispatchActionLiteral(input.requestedDecision)
   const severity = input.severity ?? (input.blocking ? "blocked" : "info")
   const workerBinding = ProjectedWorkerBindingSchema.parse(input.workerBinding)
+  const toolInput = AgentCoordinationWorkerToolInputSchema.parse(input.toolInput)
   if (workerBinding.identity.agentID !== input.agent) {
     throw new Error(
       `Agent coordination request agent ${input.agent} does not match worker binding ${workerBinding.identity.agentID}`,
@@ -611,9 +810,9 @@ export async function createAgentCoordinationRequest(input: {
   const requestID = Identifier.ascending("artifact")
 
   let replay: AgentCoordinationRequestRow | undefined
-  let payload: AgentCoordinationRequestPayload | undefined
+  let payload: AgentCoordinationRequestFact | undefined
   try {
-    Database.transaction((db) => {
+    Database.immediateTransaction((db) => {
       replay = requestForInvocationInTransaction(db, {
         taskID: input.taskID,
         sessionID: input.sessionID,
@@ -626,6 +825,7 @@ export async function createAgentCoordinationRequest(input: {
           callID: input.callID,
           agent: input.agent,
           workerBinding,
+          toolInput,
           summary: input.summary,
           details: input.details,
           blocking: input.blocking,
@@ -637,19 +837,82 @@ export async function createAgentCoordinationRequest(input: {
         return
       }
 
-      const lineage = resolveAgentCoordinationSessionLineage(input)
-      if (lineage.source !== "dispatch_lineage" || !lineage.dispatchLineageID) {
-        throw new Error(`Worker coordination handoff ${input.sessionID} requires immutable dispatch lineage`)
+      const descriptor = WorkerTurnDescriptor.getInDatabase(db, {
+        id: workerBinding.workerTurnDescriptorID,
+        sessionID: input.sessionID,
+      })
+      if (!descriptor) {
+        throw new Error(
+          `Worker coordination handoff ${input.sessionID} requires exact descriptor ${workerBinding.workerTurnDescriptorID}`,
+        )
       }
-      payload = {
+      const descriptorBinding = ProjectedWorkerBindingSchema.parse({
+        identity: descriptor.payload.identity,
+        expertSquadID: descriptor.payload.expertSquadID,
+        workerTurnDescriptorID: descriptor.id,
+        workerTurnDescriptorHash: descriptor.hash,
+      })
+      if (!sameProjectedWorkerBinding(workerBinding, descriptorBinding)) {
+        throw new Error(`Worker coordination handoff ${input.sessionID} changed its persisted worker binding`)
+      }
+      const dispatchTurn = descriptor.payload.dispatchTurn
+      if (!dispatchTurn) {
+        throw new Error(`Worker coordination descriptor ${descriptor.id} has no dispatch Turn`)
+      }
+      const dispatchLineage = findDispatchLineageByDispatchIDInTransaction({
+        db,
+        taskID: input.taskID,
+        dispatchID: dispatchTurn.current_dispatch_id,
+      })
+      if (
+        !dispatchLineage ||
+        dispatchLineage.payload.child_session_id !== input.sessionID ||
+        dispatchLineage.payload.target_agent_id !== input.agent ||
+        !sameSelectedWorkflowBinding(dispatchLineage.payload.workflow_binding, dispatchTurn.workflow_binding) ||
+        (dispatchLineage.payload.workflow_node_id ?? null) !== (dispatchTurn.workflow_node_id ?? null) ||
+        dispatchLineage.payload.workflow_occurrence_id !== dispatchTurn.workflow_occurrence_id ||
+        dispatchLineage.payload.delivery_slice_revision_ids.length !== dispatchTurn.delivery_slice_revision_ids.length ||
+        dispatchLineage.payload.delivery_slice_revision_ids.some(
+          (revisionID, index) => revisionID !== dispatchTurn.delivery_slice_revision_ids[index],
+        )
+      ) {
+        throw new Error(
+          `Worker coordination descriptor ${descriptor.id} does not map to one exact dispatch lineage for ${input.sessionID}`,
+        )
+      }
+      const lineage: AgentCoordinationSessionLineage = {
+        source: "dispatch_lineage",
+        executionEpoch: dispatchLineage.payload.execution_epoch,
+        dispatchLineageID: dispatchLineage.artifactID,
+      }
+      const toolParts = db
+        .select({ id: ToolPartRequestTable.id })
+        .from(ToolPartRequestTable)
+        .where(
+          and(
+            eq(ToolPartRequestTable.message_id, input.messageID),
+            sql`json_extract(${ToolPartRequestTable.data}, '$.callID') = ${input.callID}`,
+            sql`json_extract(${ToolPartRequestTable.data}, '$.tool') = 'request_orchestrator_decision'`,
+          ),
+        )
+        .all()
+      if (toolParts.length !== 1) {
+        throw new Error(
+          `Worker coordination request ${input.messageID}/${input.callID} requires one exact Tool Part; found ${toolParts.length}`,
+        )
+      }
+      payload = AgentCoordinationRequestFactSchema.parse({
         request_id: requestID,
         task_id: input.taskID,
+        execution_epoch: lineage.executionEpoch,
         session_id: input.sessionID,
         agent: input.agent,
         worker_binding: workerBinding,
         origin: "worker_handoff",
         message_id: input.messageID,
         tool_call_id: input.callID,
+        tool_part_id: toolParts[0]!.id,
+        tool_input: toolInput,
         ...(input.deliverySliceSubject ? { delivery_slice_subject: input.deliverySliceSubject } : {}),
         summary: input.summary,
         details: input.details,
@@ -659,11 +922,10 @@ export async function createAgentCoordinationRequest(input: {
           ? { evidence_locators: evidenceLocators }
           : {}),
         severity,
-        status: "pending",
         created_at: now,
         session_lineage_source: lineage.source,
         dispatch_lineage_id: lineage.dispatchLineageID,
-      }
+      })
 
       insertEngineArtifact(db, {
         id: requestID,
@@ -708,34 +970,43 @@ export async function createAgentCoordinationRequest(input: {
 
   if (replay) return replay
   if (!payload) throw new Error(`Agent coordination request ${requestID} was not created`)
-  return { artifactID: requestID, taskID: input.taskID, payload, timeCreated: now, timeUpdated: now, createdNow: true }
+  return {
+    artifactID: requestID,
+    taskID: input.taskID,
+    payload: { ...payload, status: "pending" },
+    timeCreated: now,
+    timeUpdated: now,
+    createdNow: true,
+  }
 }
 
 export async function createOperatorSteerCoordinationRequest(input: {
   taskID: string
   sessionID: string
-  agent: string
-  workerBinding: ProjectedWorkerBinding
+  sessionKind: string
   operatorMessage: string
   deliverySliceSubject?: string
-  operatorSteerID?: string
+  operatorSteerID: string
   now?: number
 }): Promise<AgentCoordinationRequestRow> {
   requireTask(input.taskID)
   const now = input.now ?? Date.now()
-  const requestID = input.operatorSteerID ?? Identifier.ascending("artifact")
-  const summary = `Operator steer for ${input.agent} session ${input.sessionID}`
+  const requestID = Identifier.schema("artifact").parse(input.operatorSteerID)
   const details = input.operatorMessage
-  const workerBinding = ProjectedWorkerBindingSchema.parse(input.workerBinding)
-  if (workerBinding.identity.agentID !== input.agent) {
-    throw new Error(
-      `Operator steer agent ${input.agent} does not match worker binding ${workerBinding.identity.agentID}`,
-    )
-  }
 
   let replay: AgentCoordinationRequestRow | undefined
-  let payload: AgentCoordinationRequestPayload | undefined
-  Database.transaction((db) => {
+  let payload: AgentCoordinationRequestFact | undefined
+  Database.immediateTransaction((db) => {
+    const collision = db.select().from(EngineArtifactTable).where(eq(EngineArtifactTable.id, requestID)).get()
+    if (collision && (collision.task_id !== input.taskID || collision.kind !== "agent_coordination_request")) {
+      throw new OperatorSteerRequestConflictError({
+        message: `Operator steer request ${requestID} already identifies another durable occurrence`,
+        taskID: input.taskID,
+        sessionID: input.sessionID,
+        requestID,
+        mismatches: [collision.task_id !== input.taskID ? "task_id" : "artifact_kind"],
+      })
+    }
     const task = db
       .select({ rootSessionID: EngineTaskTable.session_id })
       .from(EngineTaskTable)
@@ -751,28 +1022,44 @@ export async function createOperatorSteerCoordinationRequest(input: {
     if (replay) {
       assertReplayMatchesExistingOperatorSteerRequest({
         existing: replay,
-        agent: input.agent,
-        workerBinding,
-        operatorMessage: input.operatorMessage,
-        summary,
-        details,
-        deliverySliceSubject: input.deliverySliceSubject,
-      })
-      persistCoordinationIngressInTransaction(db, {
         taskID: input.taskID,
-        rootSessionID: task.rootSessionID,
+        sessionID: input.sessionID,
         requestID,
-        now,
+        operatorMessage: input.operatorMessage,
       })
       return
     }
-    const lineage = resolveAgentCoordinationSessionLineage(input)
-    payload = {
+    const target = WorkerTurnDescriptor.latestProjectedBindingForSessionInDatabase(db, {
+      sessionID: input.sessionID,
+      taskID: input.taskID,
+      sessionKind: input.sessionKind,
+    })
+    if (!target) {
+      throw new Error(`Operator steer session ${input.sessionID} has no persisted WorkerTurnDescriptor identity`)
+    }
+    const dispatchID = target.descriptor.payload.dispatchTurn?.current_dispatch_id
+    if (!dispatchID) {
+      throw new Error(`Operator steer descriptor ${target.descriptor.id} has no current dispatch identity`)
+    }
+    const lineage = findDispatchLineageByDispatchIDInTransaction({ db, taskID: input.taskID, dispatchID })
+    if (
+      !lineage ||
+      lineage.payload.child_session_id !== input.sessionID ||
+      lineage.payload.target_agent_id !== target.binding.identity.agentID
+    ) {
+      throw new Error(
+        `Operator steer descriptor ${target.descriptor.id} does not map to one exact dispatch lineage for ${input.sessionID}`,
+      )
+    }
+    const agent = target.binding.identity.agentID
+    const summary = `Operator steer for ${agent} session ${input.sessionID}`
+    payload = AgentCoordinationRequestFactSchema.parse({
       request_id: requestID,
       task_id: input.taskID,
+      execution_epoch: lineage.payload.execution_epoch,
       session_id: input.sessionID,
-      agent: input.agent,
-      worker_binding: workerBinding,
+      agent,
+      worker_binding: target.binding,
       origin: "operator_steer",
       operator_steer_id: requestID,
       operator_message: input.operatorMessage,
@@ -782,11 +1069,10 @@ export async function createOperatorSteerCoordinationRequest(input: {
       blocking: true,
       requested_decision: "operator_steer",
       severity: "blocked",
-      status: "pending",
       created_at: now,
-      session_lineage_source: lineage.source,
-      ...(lineage.dispatchLineageID ? { dispatch_lineage_id: lineage.dispatchLineageID } : {}),
-    }
+      session_lineage_source: "dispatch_lineage",
+      dispatch_lineage_id: lineage.artifactID,
+    })
 
     insertEngineArtifact(db, {
       id: requestID,
@@ -802,7 +1088,7 @@ export async function createOperatorSteerCoordinationRequest(input: {
         taskID: input.taskID,
         requestID,
         sessionID: input.sessionID,
-        agent: input.agent,
+        agent,
         blocking: true,
         severity: "blocked",
         summary,
@@ -825,31 +1111,69 @@ export async function createOperatorSteerCoordinationRequest(input: {
 
   if (replay) return replay
   if (!payload) throw new Error(`Operator steer request ${requestID} was not created`)
-  return { artifactID: requestID, taskID: input.taskID, payload, timeCreated: now, timeUpdated: now, createdNow: true }
-}
-
-export function listAgentCoordinationRequests(
-  taskID: string,
-  transaction?: Database.TxOrDb,
-): AgentCoordinationRequestRow[] {
-  const select = (db: Database.TxOrDb) =>
-    db
-      .select()
-      .from(EngineArtifactTable)
-      .where(and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.kind, "agent_coordination_request")))
-      .orderBy(desc(EngineArtifactTable.time_updated), desc(EngineArtifactTable.id))
-      .all()
-  const rows = transaction ? select(transaction) : Database.use(select)
-  return rows.map((row) => requestRowFromArtifact(row))
+  return {
+    artifactID: requestID,
+    taskID: input.taskID,
+    payload: { ...payload, status: "pending" },
+    timeCreated: now,
+    timeUpdated: now,
+    createdNow: true,
+  }
 }
 
 export function listPendingAgentCoordinationRequests(
   taskID: string,
   transaction?: Database.TxOrDb,
+  options?: { sessionID?: string; limit?: number },
 ): AgentCoordinationRequestRow[] {
-  return listAgentCoordinationRequests(taskID, transaction)
-    .filter((row) => row.payload.status === "pending")
-    .sort((left, right) => left.timeCreated - right.timeCreated || left.artifactID.localeCompare(right.artifactID))
+  const read = (db: Database.TxOrDb) => {
+    const epoch = taskLifecycleProjectionInTransaction(db, taskID).epoch
+    const limit = options?.limit ?? 64
+    const rows = db
+      .select()
+      .from(EngineArtifactTable)
+      .where(pendingAgentCoordinationPredicate(taskID, epoch, options?.sessionID))
+      .orderBy(asc(EngineArtifactTable.time_created), asc(EngineArtifactTable.id))
+      .limit(limit)
+      .all()
+    return requestRowsFromArtifacts(db, rows).filter((row) => row.payload.status === "pending")
+  }
+  return transaction ? read(transaction) : Database.use(read)
+}
+
+function pendingAgentCoordinationPredicate(taskID: string, epoch: number, sessionID?: string) {
+  return and(
+    eq(EngineArtifactTable.task_id, taskID),
+    eq(EngineArtifactTable.kind, "agent_coordination_request"),
+    sql`json_extract(${EngineArtifactTable.payload}, '$.execution_epoch') = ${epoch}`,
+    ...(sessionID ? [sql`json_extract(${EngineArtifactTable.payload}, '$.session_id') = ${sessionID}`] : []),
+    sql`NOT EXISTS (
+      SELECT 1 FROM engine_artifact action INDEXED BY engine_agent_coordination_action_request_idx
+      WHERE action.task_id=${EngineArtifactTable.task_id}
+        AND action.kind='agent_coordination_action'
+        AND json_extract(action.payload,'$.request_id')=${EngineArtifactTable.id}
+        AND NOT EXISTS (
+          SELECT 1 FROM engine_artifact failed INDEXED BY engine_agent_coordination_outcome_action_idx
+          WHERE failed.task_id=action.task_id
+            AND failed.kind='agent_coordination_action_outcome'
+            AND json_extract(failed.payload,'$.action_id')=action.id
+            AND json_extract(failed.payload,'$.status')='failed'
+        )
+    )`,
+  )
+}
+
+export function countPendingAgentCoordinationRequests(taskID: string): number {
+  return Database.use((db) => {
+    const epoch = taskLifecycleProjectionInTransaction(db, taskID).epoch
+    return (
+      db
+        .select({ count: sql<number>`count(*)` })
+        .from(EngineArtifactTable)
+        .where(pendingAgentCoordinationPredicate(taskID, epoch))
+        .get()?.count ?? 0
+    )
+  })
 }
 
 /**
@@ -862,17 +1186,15 @@ export function listPendingAgentCoordinationSessionControlRequests(input: {
   taskID: string
   sessionID: string
 }): AgentCoordinationRequestRow[] {
-  return listPendingAgentCoordinationRequests(input.taskID).filter(
-    (request) => request.payload.session_id === input.sessionID,
-  )
+  return listPendingAgentCoordinationRequests(input.taskID, undefined, { sessionID: input.sessionID })
 }
 
 export function findAgentCoordinationRequest(input: {
   taskID: string
   requestID: string
 }): AgentCoordinationRequestRow | undefined {
-  const row = Database.use((db) =>
-    db
+  return Database.use((db) => {
+    const row = db
       .select()
       .from(EngineArtifactTable)
       .where(
@@ -882,22 +1204,9 @@ export function findAgentCoordinationRequest(input: {
           eq(EngineArtifactTable.kind, "agent_coordination_request"),
         ),
       )
-      .get(),
-  )
-  if (!row) return undefined
-  return requestRowFromArtifact(row)
-}
-
-export function listAgentCoordinationResponses(taskID: string): AgentCoordinationResponseRow[] {
-  const rows = Database.use((db) =>
-    db
-      .select()
-      .from(EngineArtifactTable)
-      .where(and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.kind, "agent_coordination_response")))
-      .orderBy(desc(EngineArtifactTable.time_updated), desc(EngineArtifactTable.id))
-      .all(),
-  )
-  return rows.map((row) => responseRowFromArtifact(row))
+      .get()
+    return row ? requestRowFromArtifact(db, row) : undefined
+  })
 }
 
 export function findAgentCoordinationResponse(input: {
@@ -921,24 +1230,12 @@ export function findAgentCoordinationResponse(input: {
   return responseRowFromArtifact(row)
 }
 
-export function listAgentCoordinationActions(taskID: string): AgentCoordinationActionRow[] {
-  const rows = Database.use((db) =>
-    db
-      .select()
-      .from(EngineArtifactTable)
-      .where(and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.kind, "agent_coordination_action")))
-      .orderBy(desc(EngineArtifactTable.time_updated), desc(EngineArtifactTable.id))
-      .all(),
-  )
-  return rows.map((row) => actionRowFromArtifact(row))
-}
-
 export function findAgentCoordinationAction(input: {
   taskID: string
   actionID: string
 }): AgentCoordinationActionRow | undefined {
-  const row = Database.use((db) =>
-    db
+  return Database.use((db) => {
+    const row = db
       .select()
       .from(EngineArtifactTable)
       .where(
@@ -948,10 +1245,164 @@ export function findAgentCoordinationAction(input: {
           eq(EngineArtifactTable.kind, "agent_coordination_action"),
         ),
       )
-      .get(),
-  )
-  if (!row) return undefined
-  return actionRowFromArtifact(row)
+      .get()
+    return row ? actionRowFromArtifact(db, row) : undefined
+  })
+}
+
+/** Resolve one bounded recovery page without scanning Task action history or
+ * issuing one outcome query per Interaction. */
+export function findAgentCoordinationActionsByIDs(actionIDs: readonly string[]): AgentCoordinationActionRow[] {
+  if (actionIDs.length === 0) return []
+  if (actionIDs.length > 64) throw new Error(`Agent coordination recovery page exceeds 64 actions`)
+  const exactIDs = [...new Set(actionIDs.map((id) => Identifier.schema("artifact").parse(id)))]
+  return Database.use((db) => {
+    const rows = db
+      .select()
+      .from(EngineArtifactTable)
+      .where(
+        and(
+          eq(EngineArtifactTable.kind, "agent_coordination_action"),
+          inArray(EngineArtifactTable.id, exactIDs),
+        ),
+      )
+      .all()
+    const taskIDs = [...new Set(rows.map((row) => row.task_id))]
+    const outcomeRows = db
+      .select()
+      .from(EngineArtifactTable)
+      .where(
+        and(
+          eq(EngineArtifactTable.kind, "agent_coordination_action_outcome"),
+          inArray(sql<string>`json_extract(${EngineArtifactTable.payload}, '$.action_id')`, exactIDs),
+        ),
+      )
+      .all()
+    const epochRows = taskIDs.length === 0
+      ? []
+      : db
+          .select({
+            taskID: ProtocolEventTable.aggregate_id,
+            epoch: sql<number>`MAX(json_extract(${ProtocolEventTable.payload}, '$.execution_epoch'))`,
+          })
+          .from(ProtocolEventTable)
+          .where(
+            and(
+              eq(ProtocolEventTable.aggregate_type, "task"),
+              inArray(ProtocolEventTable.aggregate_id, taskIDs),
+              inArray(ProtocolEventTable.type, ["task.execution.opened", "task.execution.reopened"]),
+            ),
+          )
+          .groupBy(ProtocolEventTable.aggregate_id)
+          .all()
+    const currentEpochByTask = new Map(epochRows.map((row) => [row.taskID, Number(row.epoch)]))
+    const outcomesByAction = new Map<string, AgentCoordinationActionOutcomeFact[]>()
+    for (const outcomeRow of outcomeRows) {
+      const outcome = outcomeFactFromArtifact(outcomeRow)
+      const current = outcomesByAction.get(outcome.action_id) ?? []
+      current.push(outcome)
+      outcomesByAction.set(outcome.action_id, current)
+    }
+    return rows.map((row) => {
+      const action = actionFactFromArtifact(row)
+      return {
+        artifactID: row.id,
+        taskID: row.task_id,
+        payload: projectedActionPayload(
+          action,
+          outcomesByAction.get(action.action_id) ?? [],
+          currentEpochByTask.get(action.task_id) !== action.execution_epoch,
+        ),
+        timeCreated: row.time_created,
+        timeUpdated: row.time_updated,
+      }
+    })
+  })
+}
+
+/** Admit an action-owned downstream effect at its real commit boundary.
+ * The caller must invoke this from the same immediate transaction (or while
+ * holding that transaction's write lock) that makes the effect observable. */
+export function assertCurrentAgentCoordinationActionInTransaction(
+  db: Database.TxOrDb,
+  input: {
+    taskID: string
+    actionID: string
+    executionEpoch: number
+    action: AgentCoordinationActionKind
+  },
+): AgentCoordinationActionFact {
+  const row = db
+    .select()
+    .from(EngineArtifactTable)
+    .where(
+      and(
+        eq(EngineArtifactTable.task_id, input.taskID),
+        eq(EngineArtifactTable.id, input.actionID),
+        eq(EngineArtifactTable.kind, "agent_coordination_action"),
+      ),
+    )
+    .get()
+  if (!row) throw new Error(`Agent coordination action not found: ${input.actionID}`)
+  const action = actionFactFromArtifact(row)
+  if (action.execution_epoch !== input.executionEpoch || action.action !== input.action) {
+    throw new Error(
+      `Agent coordination action ${input.actionID} authority mismatch: ` +
+        `expected ${input.action}@${input.executionEpoch}, found ${action.action}@${action.execution_epoch}`,
+    )
+  }
+  const lifecycle = taskLifecycleProjectionInTransaction(db, input.taskID)
+  if (lifecycle.epoch !== input.executionEpoch) {
+    throw new AgentCoordinationActionSupersededError({
+      message:
+        `Agent coordination action ${input.actionID} belongs to execution epoch ${input.executionEpoch}, ` +
+        `current=${lifecycle.epoch}`,
+      taskID: input.taskID,
+      actionID: input.actionID,
+      expectedExecutionEpoch: input.executionEpoch,
+      currentExecutionEpoch: lifecycle.epoch,
+      currentTaskStatus: lifecycle.status,
+    })
+  }
+  const projection = actionRowFromArtifact(db, row)
+  if (projection.payload.status === "superseded") {
+    throw new AgentCoordinationActionSupersededError({
+      message: `Agent coordination action ${input.actionID} is superseded`,
+      taskID: input.taskID,
+      actionID: input.actionID,
+      expectedExecutionEpoch: input.executionEpoch,
+      currentExecutionEpoch: lifecycle.epoch,
+      currentTaskStatus: lifecycle.status,
+    })
+  }
+  if (projection.payload.status !== "pending") {
+    throw new Error(`Agent coordination action ${input.actionID} is ${projection.payload.status}`)
+  }
+  return action
+}
+
+/** Admit an action effect that is only legal while its Task execution is
+ * active. Terminal fail_task settlement deliberately uses the narrower
+ * current-action assertion after appending task.failed in the same transaction. */
+export function assertActiveAgentCoordinationActionInTransaction(
+  db: Database.TxOrDb,
+  input: Parameters<typeof assertCurrentAgentCoordinationActionInTransaction>[1],
+): AgentCoordinationActionFact {
+  const action = assertCurrentAgentCoordinationActionInTransaction(db, input)
+  const lifecycle = taskLifecycleProjectionInTransaction(db, input.taskID)
+  if (lifecycle.status !== "active" || taskDeletedInTransaction(db, input.taskID)) {
+    throw new AgentCoordinationActionSupersededError({
+      message:
+        `Agent coordination action ${input.actionID} cannot affect Task ${input.taskID}: ` +
+        `execution ${lifecycle.epoch} is ${taskDeletedInTransaction(db, input.taskID) ? "deleted" : lifecycle.status}`,
+      taskID: input.taskID,
+      actionID: input.actionID,
+      expectedExecutionEpoch: input.executionEpoch,
+      currentExecutionEpoch: lifecycle.epoch,
+      currentTaskStatus: taskDeletedInTransaction(db, input.taskID) ? "deleted" : lifecycle.status,
+    })
+  }
+  return action
 }
 
 export async function createAgentCoordinationResponse(input: {
@@ -967,18 +1418,14 @@ export async function createAgentCoordinationResponse(input: {
   now?: number
 }): Promise<AgentCoordinationResponseRow> {
   const now = input.now ?? Date.now()
-  const responseID = Identifier.ascending("artifact")
-  const actionID = Identifier.ascending("artifact")
-  let responseArtifactID = responseID
-  let responseTimeCreated = now
-  let responseTimeUpdated = now
-  let createdNow = true
-  let request: AgentCoordinationRequestRow | undefined
-  let payload: AgentCoordinationResponsePayload | undefined
-  let actionPayload: AgentCoordinationActionPayload | undefined
-  let redispatchBinding: AgentCoordinationRedispatchBinding | undefined
+  const responseID = Identifier.deterministic(
+    "artifact",
+    `agent-coordination-response.v1\0${input.taskID}\0${input.orchestratorToolPartID}`,
+  )
+  const actionID = Identifier.deterministic("artifact", `agent-coordination-action.v1\0${responseID}`)
+  let result: AgentCoordinationResponseRow | undefined
 
-  Database.transaction((db) => {
+  Database.immediateTransaction((db) => {
     const requestRow = db
       .select()
       .from(EngineArtifactTable)
@@ -990,165 +1437,106 @@ export async function createAgentCoordinationResponse(input: {
         ),
       )
       .get()
-    request = requestRow ? requestRowFromArtifact(requestRow) : undefined
+    const request = requestRow ? requestRowFromArtifact(db, requestRow) : undefined
     if (!request) throw new Error(`Agent coordination request not found: ${input.requestID}`)
-    if (request.payload.status !== "pending") {
-      if (request.payload.status === "responded" && request.payload.response_id) {
-        const existingResponseRow = db
-          .select()
-          .from(EngineArtifactTable)
-          .where(
-            and(
-              eq(EngineArtifactTable.task_id, input.taskID),
-              eq(EngineArtifactTable.id, request.payload.response_id),
-              eq(EngineArtifactTable.kind, "agent_coordination_response"),
-            ),
-          )
-          .get()
-        const existingResponse = existingResponseRow ? responseRowFromArtifact(existingResponseRow) : undefined
-        if (!existingResponse) {
-          throw new Error(
-            `Agent coordination request ${input.requestID} points to missing response ${request.payload.response_id}`,
-          )
-        }
-        const existingActionRow = db
-          .select()
-          .from(EngineArtifactTable)
-          .where(
-            and(
-              eq(EngineArtifactTable.task_id, input.taskID),
-              eq(EngineArtifactTable.id, existingResponse.payload.action_id),
-              eq(EngineArtifactTable.kind, "agent_coordination_action"),
-            ),
-          )
-          .get()
-        const existingAction = existingActionRow ? actionRowFromArtifact(existingActionRow) : undefined
-        if (!existingAction) {
-          throw new Error(
-            `Agent coordination response ${existingResponse.payload.response_id} points to missing action ${existingResponse.payload.action_id}`,
-          )
-        }
-        assertReplayMatchesExistingResponse({
-          existingResponse,
-          existingAction,
-          requestID: input.requestID,
-          taskID: input.taskID,
-          orchestratorSessionID: input.orchestratorSessionID,
-          orchestratorMessageID: input.orchestratorMessageID,
-          orchestratorToolCallID: input.orchestratorToolCallID,
-          orchestratorToolPartID: input.orchestratorToolPartID,
-          decision: input.decision,
-          reason: input.reason,
-          ...(input.message ? { message: input.message } : {}),
-          ...(input.decision === "redispatch"
-            ? {
-                redispatchBinding: redispatchBindingFromExistingAction({
-                  request,
-                  existingAction,
-                }),
-              }
-            : {}),
-        })
-        responseArtifactID = existingResponse.artifactID
-        responseTimeCreated = existingResponse.timeCreated
-        responseTimeUpdated = existingResponse.timeUpdated
-        payload = existingResponse.payload
-        actionPayload = existingAction.payload
-        createdNow = false
-        return
-      }
-      throw new Error(`Agent coordination request ${input.requestID} is ${request.payload.status}`)
-    }
-
-    redispatchBinding = deriveAgentCoordinationRedispatchBinding({
-      decision: input.decision,
-      request,
-      db,
-    })
-
-    if (request.payload.last_failed_response_id || request.payload.last_failed_action_id) {
-      if (!request.payload.last_failed_response_id || !request.payload.last_failed_action_id) {
-        throw new Error(`Agent coordination request ${input.requestID} has incomplete failed action replay pointers`)
-      }
-      const failedResponseRow = db
+    const existingResponseRow = db
+      .select()
+      .from(EngineArtifactTable)
+      .where(
+        and(
+          eq(EngineArtifactTable.task_id, input.taskID),
+          eq(EngineArtifactTable.id, responseID),
+          eq(EngineArtifactTable.kind, "agent_coordination_response"),
+        ),
+      )
+      .get()
+    if (existingResponseRow) {
+      const existingResponse = responseRowFromArtifact(existingResponseRow)
+      const existingActionRow = db
         .select()
         .from(EngineArtifactTable)
         .where(
           and(
             eq(EngineArtifactTable.task_id, input.taskID),
-            eq(EngineArtifactTable.id, request.payload.last_failed_response_id),
-            eq(EngineArtifactTable.kind, "agent_coordination_response"),
-          ),
-        )
-        .get()
-      const failedResponse = failedResponseRow ? responseRowFromArtifact(failedResponseRow) : undefined
-      if (!failedResponse) {
-        throw new Error(
-          `Agent coordination request ${input.requestID} points to missing failed response ${request.payload.last_failed_response_id}`,
-        )
-      }
-      const failedActionRow = db
-        .select()
-        .from(EngineArtifactTable)
-        .where(
-          and(
-            eq(EngineArtifactTable.task_id, input.taskID),
-            eq(EngineArtifactTable.id, request.payload.last_failed_action_id),
+            eq(EngineArtifactTable.id, existingResponse.payload.action_id),
             eq(EngineArtifactTable.kind, "agent_coordination_action"),
           ),
         )
         .get()
-      const failedAction = failedActionRow ? actionRowFromArtifact(failedActionRow) : undefined
-      if (!failedAction) {
-        throw new Error(
-          `Agent coordination request ${input.requestID} points to missing failed action ${request.payload.last_failed_action_id}`,
-        )
-      }
-      if (failedResponse.payload.action_id !== failedAction.payload.action_id) {
-        throw new Error(
-          `Agent coordination failed response ${failedResponse.payload.response_id} points to action ${failedResponse.payload.action_id}, not ${failedAction.payload.action_id}`,
-        )
-      }
-      if (failedAction.payload.status !== "failed") {
-        throw new Error(
-          `Agent coordination failed action ${failedAction.payload.action_id} is ${failedAction.payload.status}`,
-        )
-      }
-      const sameToolExecution =
-        failedResponse.payload.orchestrator_session_id === input.orchestratorSessionID &&
-        failedResponse.payload.orchestrator_message_id === input.orchestratorMessageID &&
-        failedResponse.payload.orchestrator_tool_call_id === input.orchestratorToolCallID &&
-        failedResponse.payload.orchestrator_tool_part_id === input.orchestratorToolPartID
-      if (sameToolExecution) {
-        assertReplayMatchesExistingResponse({
-          existingResponse: failedResponse,
-          existingAction: failedAction,
-          requestID: input.requestID,
+      const existingAction = existingActionRow ? actionRowFromArtifact(db, existingActionRow) : undefined
+      if (!existingAction) throw new Error(`Agent coordination response ${responseID} has no exact action plan`)
+      assertReplayMatchesExistingResponse({
+        existingResponse,
+        existingAction,
+        requestID: input.requestID,
+        taskID: input.taskID,
+        orchestratorSessionID: input.orchestratorSessionID,
+        orchestratorMessageID: input.orchestratorMessageID,
+        orchestratorToolCallID: input.orchestratorToolCallID,
+        orchestratorToolPartID: input.orchestratorToolPartID,
+        decision: input.decision,
+        reason: input.reason,
+        ...(input.message ? { message: input.message } : {}),
+        ...(input.decision === "redispatch"
+          ? { redispatchBinding: redispatchBindingFromExistingAction({ request, existingAction }) }
+          : {}),
+      })
+      if (existingAction.payload.status === "superseded") {
+        assertCurrentAgentCoordinationActionInTransaction(db, {
           taskID: input.taskID,
-          orchestratorSessionID: input.orchestratorSessionID,
-          orchestratorMessageID: input.orchestratorMessageID,
-          orchestratorToolCallID: input.orchestratorToolCallID,
-          orchestratorToolPartID: input.orchestratorToolPartID,
-          decision: input.decision,
-          reason: input.reason,
-          ...(input.message ? { message: input.message } : {}),
-          ...(redispatchBinding ? { redispatchBinding } : {}),
+          actionID: existingAction.payload.action_id,
+          executionEpoch: existingAction.payload.execution_epoch,
+          action: existingAction.payload.action,
         })
-        responseArtifactID = failedResponse.artifactID
-        responseTimeCreated = failedResponse.timeCreated
-        responseTimeUpdated = failedResponse.timeUpdated
-        payload = failedResponse.payload
-        actionPayload = failedAction.payload
-        createdNow = false
-        return
+        throw new Error(`Superseded agent coordination action ${existingAction.payload.action_id} was admitted`)
       }
+      result = { ...existingResponse, createdNow: false }
+      return
     }
-
-    payload = {
+    if (request.payload.status !== "pending") {
+      const projection = coordinationProjectionInTransaction(db, requestFactFromArtifact(requestRow!))
+      throw new AgentCoordinationFrontierConflictError({
+        message: `Agent coordination request ${input.requestID} frontier ${projection.frontierID} is already claimed`,
+        taskID: input.taskID,
+        requestID: input.requestID,
+        frontierID: projection.frontierID,
+        mismatches: ["orchestrator_tool_part_id"],
+      })
+    }
+    const requestFact = requestFactFromArtifact(requestRow!)
+    const lifecycle = taskLifecycleProjectionInTransaction(db, input.taskID)
+    const deleted = taskDeletedInTransaction(db, input.taskID)
+    const terminalAcknowledgement = input.decision === "acknowledge_terminal"
+    const lifecycleAcceptsDecision = terminalAcknowledgement
+      ? lifecycle.status === "completed" || lifecycle.status === "failed" || lifecycle.status === "cancelled"
+      : lifecycle.status === "active"
+    if (deleted || !lifecycleAcceptsDecision) {
+      throw new AgentCoordinationActionSupersededError({
+        message:
+          `Agent coordination request ${input.requestID} cannot accept ${input.decision}: ` +
+          `Task ${input.taskID} execution ${lifecycle.epoch} is ${deleted ? "deleted" : lifecycle.status}`,
+        taskID: input.taskID,
+        actionID,
+        expectedExecutionEpoch: requestFact.execution_epoch,
+        currentExecutionEpoch: lifecycle.epoch,
+        currentTaskStatus: deleted ? "deleted" : lifecycle.status,
+      })
+    }
+    const projection = coordinationProjectionInTransaction(db, requestFact)
+    const redispatchBinding = deriveAgentCoordinationRedispatchBinding({
+      decision: input.decision,
+      request,
+      db,
+    })
+    const factTime = Math.max(now, (projection.lastFailedOutcome?.created_at ?? requestFact.created_at) + 1)
+    const payload = AgentCoordinationResponseFactSchema.parse({
       response_id: responseID,
       request_id: input.requestID,
+      frontier_id: projection.frontierID,
+      previous_failed_outcome_id: projection.previousFailedOutcomeID ?? null,
       action_id: actionID,
       task_id: input.taskID,
+      execution_epoch: requestFact.execution_epoch,
       orchestrator_session_id: input.orchestratorSessionID,
       orchestrator_message_id: input.orchestratorMessageID,
       orchestrator_tool_call_id: input.orchestratorToolCallID,
@@ -1156,13 +1544,14 @@ export async function createAgentCoordinationResponse(input: {
       decision: input.decision,
       reason: input.reason,
       ...(input.message ? { message: input.message } : {}),
-      created_at: now,
-    }
-    actionPayload = {
+      created_at: factTime,
+    })
+    const actionPayload = AgentCoordinationActionFactSchema.parse({
       action_id: actionID,
       request_id: input.requestID,
       response_id: responseID,
       task_id: input.taskID,
+      execution_epoch: requestFact.execution_epoch,
       orchestrator_session_id: input.orchestratorSessionID,
       orchestrator_message_id: input.orchestratorMessageID,
       orchestrator_tool_call_id: input.orchestratorToolCallID,
@@ -1175,47 +1564,25 @@ export async function createAgentCoordinationResponse(input: {
         ? { delivery_slice_subject: request.payload.delivery_slice_subject }
         : {}),
       reason: input.reason,
-      status: "pending",
-      ...(redispatchBinding ? { result: { redispatch_binding: redispatchBinding } } : {}),
-      created_at: now,
-    }
-    assertAgentCoordinationActionPayload(actionPayload)
-
-    const updated = updateEngineArtifactWhereReturning(db, {
-      kind: "agent_coordination_request",
-      label: "responded",
-      payload: {
-        ...request.payload,
-        status: "responded",
-        responded_at: now,
-        response_id: responseID,
-      } satisfies AgentCoordinationRequestPayload,
-      timeUpdated: now,
-      where: and(
-        eq(EngineArtifactTable.task_id, input.taskID),
-        eq(EngineArtifactTable.id, input.requestID),
-        eq(EngineArtifactTable.kind, "agent_coordination_request"),
-        eq(EngineArtifactTable.label, "pending"),
-        sql`json_extract(${EngineArtifactTable.payload}, '$.status') = 'pending'`,
-      )!,
+      ...(redispatchBinding ? { redispatch_binding: redispatchBinding } : {}),
+      created_at: factTime,
     })
-    if (!updated) throw new Error(`Agent coordination request ${input.requestID} was already claimed`)
-
+    assertAgentCoordinationActionPayload(actionPayload)
     insertEngineArtifact(db, {
       id: responseID,
       taskID: input.taskID,
       kind: "agent_coordination_response" as EngineArtifactKind,
       label: input.decision,
       payload,
-      timeCreated: now,
+      timeCreated: factTime,
     })
     insertEngineArtifact(db, {
       id: actionID,
       taskID: input.taskID,
       kind: "agent_coordination_action" as EngineArtifactKind,
-      label: "pending",
+      label: actionPayload.action,
       payload: actionPayload,
-      timeCreated: now,
+      timeCreated: factTime,
     })
     EngineProtocol.emitInTransaction(
       Event.AgentCoordinationResponded,
@@ -1240,202 +1607,170 @@ export async function createAgentCoordinationResponse(input: {
     emitAgentCoordinationActionEventInTransaction({
       taskID: input.taskID,
       sessionID: request.payload.session_id,
-      payload: actionPayload,
+      payload: { ...actionPayload, status: "pending" },
       summary: `Action ${actionPayload.action} is pending`,
     })
+    result = {
+      artifactID: responseID,
+      taskID: input.taskID,
+      payload,
+      timeCreated: factTime,
+      timeUpdated: factTime,
+      createdNow: true,
+    }
   })
-
-  if (!request || !payload || !actionPayload) {
-    throw new Error(`Agent coordination response transaction failed: ${input.requestID}`)
-  }
-
-  return {
-    artifactID: responseArtifactID,
-    taskID: input.taskID,
-    payload,
-    timeCreated: responseTimeCreated,
-    timeUpdated: responseTimeUpdated,
-    createdNow,
-  }
+  if (!result) throw new Error(`Agent coordination response transaction failed: ${input.requestID}`)
+  return result
 }
 
-async function updateAgentCoordinationAction(input: {
+function coordinationOutcomeIdentity(input: {
+  actionID: string
+  action: AgentCoordinationActionKind
+  status: "completed" | "failed"
+  result?: Record<string, unknown>
+  error?: string
+}): string {
+  const digest = canonicalDigestSource("agent-coordination-action-outcome.v1", input)
+  return Identifier.deterministic("artifact", digest.bytes)
+}
+
+type AppendAgentCoordinationActionOutcomeInput = {
   taskID: string
   actionID: string
   status: "completed" | "failed"
-  workerMessageID?: string
   result?: Record<string, unknown>
   error?: unknown
-  summary?: string
-  now?: number
-}): Promise<AgentCoordinationActionRow> {
-  const now = input.now ?? Date.now()
-  let updated: AgentCoordinationArtifactRow | undefined
-
-  Database.transaction((db) => {
-    const currentRow = db
-      .select()
-      .from(EngineArtifactTable)
-      .where(
-        and(
-          eq(EngineArtifactTable.task_id, input.taskID),
-          eq(EngineArtifactTable.id, input.actionID),
-          eq(EngineArtifactTable.kind, "agent_coordination_action"),
-        ),
-      )
-      .get()
-    const current = currentRow ? actionRowFromArtifact(currentRow) : undefined
-    if (!current) throw new Error(`Agent coordination action not found: ${input.actionID}`)
-    if (current.payload.status !== "pending") {
-      throw new Error(`Agent coordination action ${input.actionID} is ${current.payload.status}`)
-    }
-
-    const payload: AgentCoordinationActionPayload = {
-      ...current.payload,
-      status: input.status,
-      ...(input.workerMessageID ? { worker_message_id: input.workerMessageID } : {}),
-      ...(input.result !== undefined
-        ? { result: mergeAgentCoordinationActionResult({ current: current.payload, patch: input.result }) }
-        : {}),
-      ...(input.status === "completed" ? { completed_at: now } : {}),
-      ...(input.status === "failed" ? { failed_at: now, error: actionErrorMessage(input.error) } : {}),
-    }
-    assertAgentCoordinationActionPayload(payload)
-
-    updated = updateEngineArtifactWhereReturning(db, {
-      kind: "agent_coordination_action",
-      label: input.status,
-      payload,
-      timeUpdated: now,
-      where: and(
-        eq(EngineArtifactTable.task_id, input.taskID),
-        eq(EngineArtifactTable.id, input.actionID),
-        eq(EngineArtifactTable.kind, "agent_coordination_action"),
-        eq(EngineArtifactTable.label, "pending"),
-        sql`json_extract(${EngineArtifactTable.payload}, '$.status') = 'pending'`,
-      )!,
-    })
-    if (!updated) throw new Error(`Agent coordination action ${input.actionID} was already completed`)
-
-    if (input.status === "failed") {
-      const requestRow = db
-        .select()
-        .from(EngineArtifactTable)
-        .where(
-          and(
-            eq(EngineArtifactTable.task_id, input.taskID),
-            eq(EngineArtifactTable.id, current.payload.request_id),
-            eq(EngineArtifactTable.kind, "agent_coordination_request"),
-          ),
-        )
-        .get()
-      const request = requestRow ? requestRowFromArtifact(requestRow) : undefined
-      if (request?.payload.status === "responded" && request.payload.response_id === current.payload.response_id) {
-        const { response_id: _responseID, responded_at: _respondedAt, ...requestPayload } = request.payload
-        updateEngineArtifactsWhere(db, {
-          kind: "agent_coordination_request",
-          label: "pending",
-          payload: {
-            ...requestPayload,
-            status: "pending",
-            last_failed_response_id: current.payload.response_id,
-            last_failed_action_id: current.payload.action_id,
-            last_action_error: actionErrorMessage(input.error),
-            last_action_failed_at: now,
-          } satisfies AgentCoordinationRequestPayload,
-          timeUpdated: now,
-          where: and(
-            eq(EngineArtifactTable.task_id, input.taskID),
-            eq(EngineArtifactTable.id, current.payload.request_id),
-            eq(EngineArtifactTable.kind, "agent_coordination_request"),
-            eq(EngineArtifactTable.label, "responded"),
-            sql`json_extract(${EngineArtifactTable.payload}, '$.response_id') = ${current.payload.response_id}`,
-          )!,
-        })
-      }
-    }
-    emitAgentCoordinationActionEventInTransaction({
-      taskID: input.taskID,
-      sessionID: payload.target_session_id,
-      payload,
-      summary: input.summary ?? `Action ${payload.action} ${payload.status}`,
-    })
-  })
-
-  if (!updated) throw new Error(`Agent coordination action update failed: ${input.actionID}`)
-  return actionRowFromArtifact(updated)
-}
-
-export async function recordAgentCoordinationActionProgress(input: {
-  taskID: string
-  actionID: string
-  result: Record<string, unknown>
   summary: string
   now?: number
-}): Promise<AgentCoordinationActionRow> {
+}
+
+function appendAgentCoordinationActionOutcomeInTransaction(
+  db: Database.TxOrDb,
+  input: AppendAgentCoordinationActionOutcomeInput,
+): { row: AgentCoordinationActionRow; createdNow: boolean } {
   const now = input.now ?? Date.now()
-  let updated: AgentCoordinationArtifactRow | undefined
-  Database.transaction((db) => {
-    const currentRow = db
-      .select()
-      .from(EngineArtifactTable)
-      .where(
-        and(
-          eq(EngineArtifactTable.task_id, input.taskID),
-          eq(EngineArtifactTable.id, input.actionID),
-          eq(EngineArtifactTable.kind, "agent_coordination_action"),
-        ),
-      )
-      .get()
-    const current = currentRow ? actionRowFromArtifact(currentRow) : undefined
-    if (!current) throw new Error(`Agent coordination action not found: ${input.actionID}`)
-    if (current.payload.status !== "pending") {
-      throw new Error(`Agent coordination action ${input.actionID} is ${current.payload.status}`)
-    }
-    const payload: AgentCoordinationActionPayload = {
-      ...current.payload,
-      result: mergeAgentCoordinationActionResult({ current: current.payload, patch: input.result }),
-    }
-    assertAgentCoordinationActionPayload(payload)
-    updated = updateEngineArtifactWhereReturning(db, {
-      kind: "agent_coordination_action",
-      payload,
-      timeUpdated: now,
-      where: and(
+  const error = input.status === "failed" ? actionErrorMessage(input.error) : undefined
+  const actionRow = db
+    .select()
+    .from(EngineArtifactTable)
+    .where(
+      and(
         eq(EngineArtifactTable.task_id, input.taskID),
         eq(EngineArtifactTable.id, input.actionID),
         eq(EngineArtifactTable.kind, "agent_coordination_action"),
-        eq(EngineArtifactTable.label, "pending"),
-        sql`json_extract(${EngineArtifactTable.payload}, '$.status') = 'pending'`,
-      )!,
-    })
-    if (!updated) throw new Error(`Agent coordination action ${input.actionID} was already completed`)
-    emitAgentCoordinationActionEventInTransaction({
-      taskID: input.taskID,
-      sessionID: payload.target_session_id,
-      payload,
-      summary: input.summary,
-    })
+      ),
+    )
+    .get()
+  if (!actionRow) throw new Error(`Agent coordination action not found: ${input.actionID}`)
+  const action = actionFactFromArtifact(actionRow)
+  const outcomeID = coordinationOutcomeIdentity({
+    actionID: input.actionID,
+    action: action.action,
+    status: input.status,
+    ...(input.result ? { result: input.result } : {}),
+    ...(error ? { error } : {}),
   })
-  if (!updated) throw new Error(`Agent coordination action progress update failed: ${input.actionID}`)
-  return actionRowFromArtifact(updated)
+  const lifecycle = taskLifecycleProjectionInTransaction(db, input.taskID)
+  if (lifecycle.epoch !== action.execution_epoch) {
+    throw new AgentCoordinationActionSupersededError({
+      message:
+        `Agent coordination action ${input.actionID} belongs to execution epoch ${action.execution_epoch}, ` +
+        `current=${lifecycle.epoch}`,
+      taskID: input.taskID,
+      actionID: input.actionID,
+      expectedExecutionEpoch: action.execution_epoch,
+      currentExecutionEpoch: lifecycle.epoch,
+      currentTaskStatus: lifecycle.status,
+    })
+  }
+  const current = actionRowFromArtifact(db, actionRow)
+  const existingOutcome = db
+    .select()
+    .from(EngineArtifactTable)
+    .where(
+      and(
+        eq(EngineArtifactTable.task_id, input.taskID),
+        eq(EngineArtifactTable.id, outcomeID),
+        eq(EngineArtifactTable.kind, "agent_coordination_action_outcome"),
+      ),
+    )
+    .get()
+  if (existingOutcome) {
+    const exact = outcomeFactFromArtifact(existingOutcome)
+    if (
+      exact.action_id !== input.actionID ||
+      exact.status !== input.status ||
+      canonicalDigestSource("agent-coordination-outcome-result.v1", exact.result ?? {}).bytes !==
+        canonicalDigestSource("agent-coordination-outcome-result.v1", input.result ?? {}).bytes ||
+      (exact.error ?? undefined) !== error
+    ) {
+      throw new Error(`Agent coordination outcome replay mismatch: ${outcomeID}`)
+    }
+    return { row: current, createdNow: false }
+  }
+  if (current.payload.status !== "pending") {
+    throw new Error(`Agent coordination action ${input.actionID} is ${current.payload.status}`)
+  }
+  const factTime = Math.max(now, action.created_at)
+  const payload = AgentCoordinationActionOutcomeFactSchema.parse({
+    outcome_id: outcomeID,
+    request_id: action.request_id,
+    response_id: action.response_id,
+    action_id: action.action_id,
+    task_id: action.task_id,
+    execution_epoch: action.execution_epoch,
+    action: action.action,
+    status: input.status,
+    ...(input.result ? { result: input.result } : {}),
+    ...(error ? { error } : {}),
+    created_at: factTime,
+  })
+  insertEngineArtifact(db, {
+    id: outcomeID,
+    taskID: input.taskID,
+    kind: "agent_coordination_action_outcome",
+    label: input.status,
+    payload,
+    timeCreated: factTime,
+  })
+  const projected = actionRowFromArtifact(db, actionRow)
+  emitAgentCoordinationActionEventInTransaction({
+    taskID: input.taskID,
+    sessionID: action.target_session_id,
+    payload: projected.payload,
+    summary: input.summary,
+  })
+  return { row: projected, createdNow: true }
+}
+
+function appendAgentCoordinationActionOutcome(
+  input: AppendAgentCoordinationActionOutcomeInput,
+): { row: AgentCoordinationActionRow; createdNow: boolean } {
+  return Database.immediateTransaction((db) => appendAgentCoordinationActionOutcomeInTransaction(db, input))
+}
+
+export function completeAgentCoordinationActionInTransaction(
+  db: Database.TxOrDb,
+  input: Omit<AppendAgentCoordinationActionOutcomeInput, "status" | "error">,
+): { row: AgentCoordinationActionRow; createdNow: boolean } {
+  return appendAgentCoordinationActionOutcomeInTransaction(db, { ...input, status: "completed" })
 }
 
 export async function completeAgentCoordinationAction(input: {
   taskID: string
   actionID: string
-  workerMessageID?: string
   result?: Record<string, unknown>
   summary?: string
   now?: number
 }): Promise<AgentCoordinationActionRow> {
-  return await updateAgentCoordinationAction({
+  return appendAgentCoordinationActionOutcome({
     ...input,
     status: "completed",
-  })
+    summary: input.summary ?? "agent coordination action completed",
+  }).row
 }
 
-export function bindAgentCoordinationRedispatchSuccessor(input: {
+export function bindAgentCoordinationRedispatchSuccessorInTransaction(db: Database.TxOrDb, input: {
   taskID: string
   actionID: string
   dispatchID: string
@@ -1445,388 +1780,57 @@ export function bindAgentCoordinationRedispatchSuccessor(input: {
   summary: string
   now?: number
 }): { action: AgentCoordinationActionRow; createdNow: boolean } {
-  const now = input.now ?? Date.now()
-  let updated: AgentCoordinationArtifactRow | undefined
-  let existing: AgentCoordinationArtifactRow | undefined
-
-  Database.transaction((db) => {
-    const currentRow = db
-      .select()
-      .from(EngineArtifactTable)
-      .where(
-        and(
-          eq(EngineArtifactTable.task_id, input.taskID),
-          eq(EngineArtifactTable.id, input.actionID),
-          eq(EngineArtifactTable.kind, "agent_coordination_action"),
-        ),
-      )
-      .get()
-    const current = currentRow ? actionRowFromArtifact(currentRow) : undefined
-    if (!current) throw new Error(`Agent coordination action not found: ${input.actionID}`)
-    if (current.payload.action !== "redispatch_worker") {
-      throw new Error(`Agent coordination action ${input.actionID} is ${current.payload.action}, not redispatch_worker`)
-    }
-
-    if (current.payload.status === "completed") {
-      const result = current.payload.result
-      if (
-        result?.dispatch_id !== input.dispatchID ||
-        result.dispatch_session_id !== input.childSessionID ||
-        result.dispatch_agent_id !== input.targetAgentID ||
-        typeof result.dispatch_lineage_id !== "string"
-      ) {
-        throw new Error(
-          `Agent coordination action ${input.actionID} is already bound to another redispatch successor`,
-        )
-      }
-      existing = currentRow
-      return
-    }
-    if (current.payload.status !== "pending") {
-      throw new Error(`Agent coordination action ${input.actionID} is ${current.payload.status}`)
-    }
-
-    const successorResult = input.bindSuccessor()
-    const payload: AgentCoordinationActionPayload = {
-      ...current.payload,
-      status: "completed",
-      completed_at: now,
-      result: mergeAgentCoordinationActionResult({ current: current.payload, patch: successorResult }),
-    }
-    assertAgentCoordinationActionPayload(payload)
-    updated = updateEngineArtifactWhereReturning(db, {
-      kind: "agent_coordination_action",
-      label: "completed",
-      payload,
-      timeUpdated: now,
-      where: and(
+  const currentRow = db
+    .select()
+    .from(EngineArtifactTable)
+    .where(
+      and(
         eq(EngineArtifactTable.task_id, input.taskID),
         eq(EngineArtifactTable.id, input.actionID),
         eq(EngineArtifactTable.kind, "agent_coordination_action"),
-        eq(EngineArtifactTable.label, "pending"),
-        sql`json_extract(${EngineArtifactTable.payload}, '$.status') = 'pending'`,
-      )!,
-    })
-    if (!updated) throw new Error(`Agent coordination action ${input.actionID} was already completed`)
-    emitAgentCoordinationActionEventInTransaction({
-      taskID: input.taskID,
-      sessionID: payload.target_session_id,
-      payload,
-      summary: input.summary,
-    })
+      ),
+    )
+    .get()
+  const current = currentRow ? actionRowFromArtifact(db, currentRow) : undefined
+  if (!current) throw new Error(`Agent coordination action not found: ${input.actionID}`)
+  if (current.payload.action !== "redispatch_worker") {
+    throw new Error(`Agent coordination action ${input.actionID} is ${current.payload.action}, not redispatch_worker`)
+  }
+  if (current.payload.status === "completed") {
+    const result = current.payload.result
+    if (
+      result?.dispatch_id !== input.dispatchID ||
+      result.dispatch_session_id !== input.childSessionID ||
+      result.dispatch_agent_id !== input.targetAgentID ||
+      typeof result.dispatch_lineage_id !== "string"
+    ) {
+      throw new Error(`Agent coordination action ${input.actionID} is already bound to another redispatch successor`)
+    }
+    return { action: current, createdNow: false }
+  }
+  const result = input.bindSuccessor()
+  const appended = appendAgentCoordinationActionOutcomeInTransaction(db, {
+    taskID: input.taskID,
+    actionID: input.actionID,
+    status: "completed",
+    result,
+    summary: input.summary,
+    now: input.now,
   })
-
-  const row = updated ?? existing
-  if (!row) throw new Error(`Agent coordination redispatch binding failed: ${input.actionID}`)
-  return { action: actionRowFromArtifact(row), createdNow: updated !== undefined }
+  return { action: appended.row, createdNow: appended.createdNow }
 }
 
 export async function failAgentCoordinationAction(input: {
   taskID: string
   actionID: string
-  workerMessageID?: string
   error: unknown
   result?: Record<string, unknown>
   summary?: string
   now?: number
 }): Promise<AgentCoordinationActionRow> {
-  return await updateAgentCoordinationAction({
+  return appendAgentCoordinationActionOutcome({
     ...input,
     status: "failed",
-  })
-}
-
-type CancelPendingAgentCoordinationRequestsInput = {
-  taskID: string
-  reason: string
-  filter?: (row: AgentCoordinationRequestRow) => boolean
-  now?: number
-  signal?: AbortSignal
-}
-
-export function cancelPendingAgentCoordinationRequestsInTransaction(
-  db: Database.TxOrDb,
-  input: CancelPendingAgentCoordinationRequestsInput,
-): number {
-  input.signal?.throwIfAborted()
-  const pending = listPendingAgentCoordinationRequests(input.taskID, db).filter((row) => input.filter?.(row) ?? true)
-  const now = input.now ?? Date.now()
-  let cancelled = 0
-  for (const request of pending) {
-    input.signal?.throwIfAborted()
-    const payload: AgentCoordinationRequestPayload = {
-      ...request.payload,
-      status: "cancelled",
-      cancelled_at: now,
-      cancel_reason: input.reason,
-    }
-    const updated = updateEngineArtifactWhereReturning(db, {
-      kind: "agent_coordination_request",
-      label: "cancelled",
-      payload,
-      timeUpdated: now,
-      where: and(
-        eq(EngineArtifactTable.task_id, input.taskID),
-        eq(EngineArtifactTable.id, request.artifactID),
-        eq(EngineArtifactTable.kind, "agent_coordination_request"),
-        eq(EngineArtifactTable.label, "pending"),
-        sql`json_extract(${EngineArtifactTable.payload}, '$.status') = 'pending'`,
-      )!,
-    })
-    if (!updated) continue
-    EngineProtocol.emitInTransaction(
-      Event.AgentCoordinationCancelled,
-      {
-        taskID: input.taskID,
-        requestID: request.payload.request_id,
-        sessionID: request.payload.session_id,
-        summary: input.reason,
-      },
-      {
-        taskID: input.taskID,
-        sessionID: request.payload.session_id,
-        source: "orchestrator",
-        target: request.payload.agent,
-        correlationID: request.payload.request_id,
-      },
-    )
-    cancelled += 1
-  }
-  return cancelled
-}
-
-async function cancelPendingAgentCoordinationRequests(
-  input: CancelPendingAgentCoordinationRequestsInput,
-): Promise<number> {
-  return Database.transaction((db) => cancelPendingAgentCoordinationRequestsInTransaction(db, input))
-}
-
-export async function cancelPendingAgentCoordinationRequestsForSession(input: {
-  taskID: string
-  sessionID: string
-  reason: string
-  now?: number
-}): Promise<number> {
-  return await cancelPendingAgentCoordinationRequests({
-    taskID: input.taskID,
-    reason: input.reason,
-    now: input.now,
-    filter: (row) => row.payload.session_id === input.sessionID,
-  })
-}
-
-export async function cancelPendingAgentCoordinationRequest(input: {
-  taskID: string
-  requestID: string
-  reason: string
-  now?: number
-}): Promise<number> {
-  return await cancelPendingAgentCoordinationRequests({
-    taskID: input.taskID,
-    reason: input.reason,
-    now: input.now,
-    filter: (row) => row.payload.request_id === input.requestID,
-  })
-}
-
-export async function cancelPendingAgentCoordinationRequestsForTask(input: {
-  taskID: string
-  reason: string
-  now?: number
-  signal?: AbortSignal
-}): Promise<number> {
-  return await cancelPendingAgentCoordinationRequests(input)
-}
-
-function normalizeAgentCoordinationRequestPayload(payload: unknown): AgentCoordinationRequestPayload | undefined {
-  if (!payload || typeof payload !== "object" || Array.isArray(payload)) return undefined
-  const value = payload as Record<string, unknown>
-  if (typeof value.request_id !== "string" || value.request_id.length === 0) return undefined
-  if (typeof value.task_id !== "string" || value.task_id.length === 0) return undefined
-  if (typeof value.session_id !== "string" || value.session_id.length === 0) return undefined
-  if (typeof value.agent !== "string" || value.agent.length === 0) return undefined
-  const workerBinding = ProjectedWorkerBindingSchema.safeParse(value.worker_binding)
-  if (!workerBinding.success || workerBinding.data.identity.agentID !== value.agent) return undefined
-  if (value.origin !== "worker_handoff" && value.origin !== "operator_steer") return undefined
-  if (value.origin === "operator_steer") {
-    if (typeof value.operator_steer_id !== "string" || value.operator_steer_id.length === 0) return undefined
-    if (typeof value.operator_message !== "string" || value.operator_message.length === 0) return undefined
-    if (value.message_id !== undefined && (typeof value.message_id !== "string" || value.message_id.length === 0)) {
-      return undefined
-    }
-  } else {
-    if (typeof value.message_id !== "string" || value.message_id.length === 0) return undefined
-    if (typeof value.tool_call_id !== "string" || value.tool_call_id.length === 0) return undefined
-    if (typeof value.dispatch_lineage_id !== "string" || value.dispatch_lineage_id.length === 0) return undefined
-  }
-  if (value.tool_call_id !== undefined && (typeof value.tool_call_id !== "string" || value.tool_call_id.length === 0)) {
-    return undefined
-  }
-  if (
-    value.operator_steer_id !== undefined &&
-    (typeof value.operator_steer_id !== "string" || value.operator_steer_id.length === 0)
-  ) {
-    return undefined
-  }
-  if (
-    value.operator_message !== undefined &&
-    (typeof value.operator_message !== "string" || value.operator_message.length === 0)
-  ) {
-    return undefined
-  }
-  if (
-    value.delivery_slice_subject !== undefined &&
-    (typeof value.delivery_slice_subject !== "string" || value.delivery_slice_subject.length === 0)
-  ) {
-    return undefined
-  }
-  if (typeof value.summary !== "string" || value.summary.length === 0) return undefined
-  if (typeof value.details !== "string" || value.details.length === 0) return undefined
-  if (typeof value.blocking !== "boolean") return undefined
-  if (typeof value.requested_decision !== "string" || value.requested_decision.length === 0) return undefined
-  const evidenceLocators =
-    value.evidence_locators === undefined
-      ? undefined
-      : EvidenceLocatorListSchema.safeParse(value.evidence_locators)
-  if (value.evidence_refs !== undefined) return undefined
-  if (evidenceLocators && !evidenceLocators.success) return undefined
-  if (value.severity !== "info" && value.severity !== "blocked" && value.severity !== "failure") return undefined
-  if (value.status !== "pending" && value.status !== "responded" && value.status !== "cancelled") return undefined
-  if (typeof value.created_at !== "number" || !(value.created_at > 0)) return undefined
-  if (
-    value.session_lineage_source !== undefined &&
-    value.session_lineage_source !== "task_session_tree" &&
-    value.session_lineage_source !== "dispatch_lineage"
-  ) {
-    return undefined
-  }
-  if (
-    value.dispatch_lineage_id !== undefined &&
-    (typeof value.dispatch_lineage_id !== "string" || value.dispatch_lineage_id.length === 0)
-  ) {
-    return undefined
-  }
-  return {
-    ...value,
-    worker_binding: workerBinding.data,
-    ...(evidenceLocators?.success ? { evidence_locators: evidenceLocators.data } : {}),
-  } as unknown as AgentCoordinationRequestPayload
-}
-
-function normalizeAgentCoordinationResponsePayload(payload: unknown): AgentCoordinationResponsePayload | undefined {
-  if (!payload || typeof payload !== "object" || Array.isArray(payload)) return undefined
-  const value = payload as Record<string, unknown>
-  if (typeof value.response_id !== "string" || value.response_id.length === 0) return undefined
-  if (typeof value.request_id !== "string" || value.request_id.length === 0) return undefined
-  if (typeof value.action_id !== "string" || value.action_id.length === 0) return undefined
-  if (typeof value.task_id !== "string" || value.task_id.length === 0) return undefined
-  if (typeof value.orchestrator_session_id !== "string" || value.orchestrator_session_id.length === 0) {
-    return undefined
-  }
-  if (typeof value.orchestrator_message_id !== "string" || value.orchestrator_message_id.length === 0) {
-    return undefined
-  }
-  if (typeof value.orchestrator_tool_call_id !== "string" || value.orchestrator_tool_call_id.length === 0) {
-    return undefined
-  }
-  if (typeof value.orchestrator_tool_part_id !== "string" || value.orchestrator_tool_part_id.length === 0) {
-    return undefined
-  }
-  if (
-    value.decision !== "cancel_worker" &&
-    value.decision !== "redispatch" &&
-    value.decision !== "fail_task" &&
-    value.decision !== "ask_user" &&
-    value.decision !== "acknowledge_terminal"
-  ) {
-    return undefined
-  }
-  if (typeof value.reason !== "string" || value.reason.length === 0) return undefined
-  if (value.message !== undefined && (typeof value.message !== "string" || value.message.length === 0)) {
-    return undefined
-  }
-  if (typeof value.created_at !== "number" || !(value.created_at > 0)) return undefined
-  return value as unknown as AgentCoordinationResponsePayload
-}
-
-function normalizeAgentCoordinationActionPayload(payload: unknown): AgentCoordinationActionPayload | undefined {
-  if (!payload || typeof payload !== "object" || Array.isArray(payload)) return undefined
-  const value = payload as Record<string, unknown>
-  if (typeof value.action_id !== "string" || value.action_id.length === 0) return undefined
-  if (typeof value.request_id !== "string" || value.request_id.length === 0) return undefined
-  if (typeof value.response_id !== "string" || value.response_id.length === 0) return undefined
-  if (typeof value.task_id !== "string" || value.task_id.length === 0) return undefined
-  if (typeof value.orchestrator_session_id !== "string" || value.orchestrator_session_id.length === 0) {
-    return undefined
-  }
-  if (typeof value.orchestrator_message_id !== "string" || value.orchestrator_message_id.length === 0) {
-    return undefined
-  }
-  if (typeof value.orchestrator_tool_call_id !== "string" || value.orchestrator_tool_call_id.length === 0) {
-    return undefined
-  }
-  if (typeof value.orchestrator_tool_part_id !== "string" || value.orchestrator_tool_part_id.length === 0) {
-    return undefined
-  }
-  if (
-    value.decision !== "cancel_worker" &&
-    value.decision !== "redispatch" &&
-    value.decision !== "fail_task" &&
-    value.decision !== "ask_user" &&
-    value.decision !== "acknowledge_terminal"
-  ) {
-    return undefined
-  }
-  if (
-    value.action !== "cancel_worker" &&
-    value.action !== "redispatch_worker" &&
-    value.action !== "fail_task" &&
-    value.action !== "ask_user" &&
-    value.action !== "acknowledge_terminal"
-  ) {
-    return undefined
-  }
-  if (value.action !== actionKindForDecision(value.decision)) return undefined
-  if (typeof value.target_session_id !== "string" || value.target_session_id.length === 0) return undefined
-  if (typeof value.target_agent !== "string" || value.target_agent.length === 0) return undefined
-  if (
-    value.delivery_slice_subject !== undefined &&
-    (typeof value.delivery_slice_subject !== "string" || value.delivery_slice_subject.length === 0)
-  ) {
-    return undefined
-  }
-  if (typeof value.reason !== "string" || value.reason.length === 0) return undefined
-  if (value.status !== "pending" && value.status !== "completed" && value.status !== "failed") return undefined
-  if (typeof value.created_at !== "number" || !(value.created_at > 0)) return undefined
-  if (
-    value.worker_message_id !== undefined &&
-    (typeof value.worker_message_id !== "string" || value.worker_message_id.length === 0)
-  ) {
-    return undefined
-  }
-  if (
-    value.result !== undefined &&
-    (!value.result || typeof value.result !== "object" || Array.isArray(value.result))
-  ) {
-    return undefined
-  }
-  const result = value.result as Record<string, unknown> | undefined
-  if (value.action === "redispatch_worker") {
-    if (!result || !normalizeRedispatchBinding(result.redispatch_binding, value.target_agent)) return undefined
-  } else if (result?.redispatch_binding !== undefined) {
-    return undefined
-  }
-  if (value.status === "pending") {
-    if (value.completed_at !== undefined || value.failed_at !== undefined || value.error !== undefined) return undefined
-  }
-  if (value.status === "completed") {
-    if (typeof value.completed_at !== "number" || !(value.completed_at > 0)) return undefined
-    if (value.failed_at !== undefined || value.error !== undefined) return undefined
-  }
-  if (value.status === "failed") {
-    if (typeof value.failed_at !== "number" || !(value.failed_at > 0)) return undefined
-    if (typeof value.error !== "string" || value.error.length === 0) return undefined
-    if (value.completed_at !== undefined) return undefined
-  }
-  return value as unknown as AgentCoordinationActionPayload
+    summary: input.summary ?? "agent coordination action failed",
+  }).row
 }

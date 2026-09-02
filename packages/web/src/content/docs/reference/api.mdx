@@ -172,7 +172,7 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 | POST | `/task/{taskID}/rewind` | Rewind the visible Task conversation timeline Body: `anchor`, `reason`; Errors: `LogFileNotFoundError`, `NotFoundError`. | `task.rewind` |
 | POST | `/task/{taskID}/rewind/clear` | Clear the Task conversation visibility cursor Errors: `LogFileNotFoundError`, `NotFoundError`. | `task.clearRewindCursor` |
 | POST | `/task/{taskID}/session/{sessionID}/cancel` | Cancel a task agent session Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `task.session.cancel` |
-| POST | `/task/{taskID}/session/{sessionID}/operator-steer` | Steer a task agent session through operator coordination Body: `message`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `OperatorSteerTargetError`, `TaskCancellationIncompleteError`. | `task.session.operatorSteer` |
+| POST | `/task/{taskID}/session/{sessionID}/operator-steer` | Steer a task agent session through operator coordination Body: `message`, `request_id`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `OperatorSteerRequestConflictError`, `OperatorSteerTargetError`. | `task.session.operatorSteer` |
 | GET | `/task/{taskID}/status` | Get task status Errors: `LogFileNotFoundError`, `NotFoundError`. | `task.status` |
 | PATCH | `/task/{taskID}/title` | Update task title Body: `title`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `task.updateTitle` |
 | GET | `/task/{taskID}/trace` | Get task AgentTrace events (all sessions) Errors: `LogFileNotFoundError`, `NotFoundError`. | `task.trace` |

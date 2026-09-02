@@ -1,6 +1,7 @@
 import { Session } from "@/session"
 import { assertSessionPromptSubtreeFinished, requestSessionPromptSubtreeCancellation } from "./cancellation-scope"
 import type { ExecutionCancellationOrigin } from "@/session/prompt/cancellation"
+import type { Database } from "@/storage/db"
 
 export type AbortChildExecutionResult = {
   cancelled: boolean
@@ -12,6 +13,7 @@ export async function abortChildExecutionForSession(input: {
   sessionID: string
   origin: Omit<ExecutionCancellationOrigin, "targetSessionID">
   promptSettleInactivityMs?: number
+  admission?: (db: Database.TxOrDb) => void
 }): Promise<AbortChildExecutionResult> {
   const result = emptyResult()
   const session = await Session.get(input.sessionID)
@@ -20,6 +22,7 @@ export async function abortChildExecutionForSession(input: {
     projectID: session.projectID,
     taskID: input.taskID,
     origin: input.origin,
+    admission: input.admission,
   })
   result.promptCancelled = promptCancellation.cancelledSessions.length > 0
 

@@ -66,7 +66,7 @@ function ChatBubbleAgentChildBody(props: {
   child: CardNode
   depth: number
   rootTaskSessionID?: string
-  onOperatorSteer: (sessionID: string, message: string) => Promise<OperatorSteerResult>
+  onOperatorSteer: (sessionID: string, requestID: string, message: string) => Promise<OperatorSteerResult>
 }) {
   const visibleChildIDs = createMemo(() => visibleChildIDsForCard(props.child))
   const steerTargetSessionID = createMemo(() => workerSteerTargetSessionID(props.child, props.rootTaskSessionID))
@@ -105,7 +105,10 @@ function ChatBubbleAgentChildBody(props: {
         </div>
       </Show>
       <Show when={steerTargetSessionID()}>
-        <OperatorSteerBox onSend={(message) => props.onOperatorSteer(steerTargetSessionID()!, message)} />
+        <OperatorSteerBox
+          stateKey={steerTargetSessionID()!}
+          onSend={(requestID, message) => props.onOperatorSteer(steerTargetSessionID()!, requestID, message)}
+        />
       </Show>
     </>
   )
@@ -116,7 +119,7 @@ function ChatBubbleChild(props: {
   depth: number
   parentID: string
   rootTaskSessionID?: string
-  onOperatorSteer: (sessionID: string, message: string) => Promise<OperatorSteerResult>
+  onOperatorSteer: (sessionID: string, requestID: string, message: string) => Promise<OperatorSteerResult>
 }) {
   const child = () => storeCardNode(props.childID, props.parentID)
   const childStyle = createMemo<Record<string, string> | undefined>(() => {
@@ -212,17 +215,17 @@ export function ChatBubble(props: { node: CardNode; depth: number; collapsible?:
 
   const steerTargetSessionID = createMemo(() => workerSteerTargetSessionID(props.node, rootTaskSessionID()))
 
-  const onOperatorSteer = async (sessionID: string, message: string) => {
+  const onOperatorSteer = async (sessionID: string, requestID: string, message: string) => {
     const taskID = activeTaskID()
     if (!taskID) throw new Error(t("card.agent_reply_missing_task"))
-    return await sendOperatorSteer(taskID, sessionID, message)
+    return await sendOperatorSteer(taskID, sessionID, requestID, message)
   }
 
-  const steerController = createOperatorSteerController(async (message) => {
+  const steerController = createOperatorSteerController(async (requestID, message) => {
     const sessionID = steerTargetSessionID()
     if (!sessionID) throw new Error(t("card.agent_reply_missing_task"))
-    return await onOperatorSteer(sessionID, message)
-  })
+    return await onOperatorSteer(sessionID, requestID, message)
+  }, steerTargetSessionID())
   const onAgentSteerToggle = () => {
     const nextOpen = !steerController.open()
     setExpanded(true)

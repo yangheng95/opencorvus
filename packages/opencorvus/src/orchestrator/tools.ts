@@ -35,16 +35,16 @@ import { assertTaskEvidenceLocators } from "@/engine/evidence-locator"
 import { AGENT_COORDINATION_ACTIVE_DECISIONS, AGENT_COORDINATION_DECISIONS } from "@/engine/agent-coordination-decision"
 import { DecisionLogTable } from "@/decision-log/schema"
 import {
-  bindAgentCoordinationRedispatchSuccessor,
+  bindAgentCoordinationRedispatchSuccessorInTransaction,
   agentCoordinationQuestionID,
+  agentCoordinationQuestionAskedOccurrenceID,
+  assertActiveAgentCoordinationActionInTransaction,
   completeAgentCoordinationAction,
   createAgentCoordinationResponse,
   failAgentCoordinationAction,
   findAgentCoordinationAction,
   findAgentCoordinationRequest,
   findAgentCoordinationResponse,
-  listAgentCoordinationActions,
-  recordAgentCoordinationActionProgress,
   resolveAgentCoordinationSessionLineage,
   AgentCoordinationRedispatchBindingSchema,
   type AgentCoordinationRedispatchBinding,
@@ -67,7 +67,9 @@ import {
   findDispatchLineageByCollectionMember,
   listDispatchLineage,
   recordDispatchLineage,
+  type DispatchAdmissionOwner,
 } from "@/engine/dispatch-lineage"
+import type { DispatchLineageRow } from "@/engine/dispatch-lineage-facts"
 import { findDispatchSettlementByDispatchID } from "@/engine/dispatch-settlement"
 import { abortChildExecutionForSession } from "@/engine/execution-abort"
 import { clarificationTranscriptSection } from "@/engine/helpers"
@@ -92,7 +94,6 @@ import {
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
 import { taskPrimaryProjectRoot } from "@/project/task-runtime-root"
 import { Session } from "@/session"
-import { MessageStore } from "@/session/message-store"
 import type { TaskRootMessageKind } from "@/protocol/task-root-message-schema"
 import {
   isProjectedWorkerRuntimeContract,
@@ -115,6 +116,7 @@ import { tool, type Tool as AITool } from "ai"
 import fs from "node:fs/promises"
 import z from "zod"
 import { ArtifactReadLocatorSchema, type EvidenceLocator } from "@opencorvus-ai/plugin/artifact-catalog"
+import { AgentCoordinationActionSupersededError } from "@/engine/agent-coordination-errors"
 
 import { Question } from "@/question"
 import { isHttpWebpageUrl } from "@/util/web-url"
@@ -193,6 +195,50 @@ import {
 
 const orchestratorToolLineageHooks = new WeakMap<object, OpenDispatchAgentLineage>()
 const replayDispatchSignal = new AbortController().signal
+
+type AgentCoordinationEffectAdmissionHook = (input: {
+  taskID: string
+  requestID: string
+  responseID: string
+  actionID: string
+  decision: AgentCoordinationDecision
+}) => void | Promise<void>
+let agentCoordinationEffectAdmissionHookForTest: AgentCoordinationEffectAdmissionHook | undefined
+let afterAgentCoordinationFailSettlementForTest: AgentCoordinationEffectAdmissionHook | undefined
+
+export namespace AgentCoordinationToolTestHooks {
+  export function replaceEffectAdmission(hook: AgentCoordinationEffectAdmissionHook): Disposable {
+    if (agentCoordinationEffectAdmissionHookForTest) {
+      throw new Error("Agent coordination effect-admission test hook is already installed")
+    }
+    agentCoordinationEffectAdmissionHookForTest = hook
+    return {
+      [Symbol.dispose]() {
+        if (agentCoordinationEffectAdmissionHookForTest === hook) {
+          agentCoordinationEffectAdmissionHookForTest = undefined
+        }
+      },
+    }
+  }
+
+  export function replaceAfterFailSettlement(hook: AgentCoordinationEffectAdmissionHook): Disposable {
+    if (afterAgentCoordinationFailSettlementForTest) {
+      throw new Error("Agent coordination fail-settlement test hook is already installed")
+    }
+    afterAgentCoordinationFailSettlementForTest = hook
+    return {
+      [Symbol.dispose]() {
+        if (afterAgentCoordinationFailSettlementForTest === hook) {
+          afterAgentCoordinationFailSettlementForTest = undefined
+        }
+      },
+    }
+  }
+}
+
+async function runAgentCoordinationEffectAdmissionHook(input: Parameters<AgentCoordinationEffectAdmissionHook>[0]) {
+  await agentCoordinationEffectAdmissionHookForTest?.(input)
+}
 let afterDispatchLineageClaimForTest:
   | ((input: {
       lineage: ReturnType<typeof claimDispatchLineage>["lineage"]
@@ -283,6 +329,51 @@ function readDispatchLineageReplay(input: {
       sessionID: input.lineage.payload.child_session_id,
       dispatchLineageID: input.lineage.artifactID,
     }),
+  }
+}
+
+function commitAcceptedDispatchLineage(
+  lineage: DispatchLineageRow,
+  admission?: DispatchAdmissionOwner,
+): void {
+  const actionID = lineage.payload.coordination_action_id
+  const expectedResult = actionID
+    ? {
+        dispatch_lineage_id: lineage.artifactID,
+        dispatch_id: lineage.dispatchID,
+        dispatch_agent_id: lineage.payload.target_agent_id,
+        dispatch_session_id: lineage.payload.child_session_id,
+        work_scope: lineage.payload.work_scope,
+        dispatch_bound: true,
+        awaiting_explicit_dispatch: false,
+      }
+    : undefined
+  let bound: ReturnType<typeof bindAgentCoordinationRedispatchSuccessorInTransaction> | undefined
+  commitDispatchLineageSession(
+    lineage,
+    admission,
+    actionID && expectedResult
+      ? (db) => {
+          bound = bindAgentCoordinationRedispatchSuccessorInTransaction(db, {
+            taskID: lineage.taskID,
+            actionID,
+            dispatchID: lineage.dispatchID,
+            childSessionID: lineage.payload.child_session_id,
+            targetAgentID: lineage.payload.target_agent_id,
+            bindSuccessor: () => expectedResult,
+            summary: `Completed explicit redispatch with immutable lineage for session ${lineage.payload.child_session_id}`,
+          })
+        }
+      : undefined,
+  )
+  if (!actionID || !expectedResult) return
+  if (!bound) throw new Error(`dispatch_agent coordination action ${actionID} was not settled`)
+  const { redispatch_binding: _binding, ...settledResult } = bound.action.payload.result ?? {}
+  if (!isDeepStrictEqual(settledResult, expectedResult)) {
+    throw new Error(
+      `dispatch_agent coordination action ${actionID} bound another redispatch successor: ` +
+        `expected=${JSON.stringify(expectedResult)} actual=${JSON.stringify(settledResult)}`,
+    )
   }
 }
 
@@ -379,17 +470,6 @@ function buildAgentContextSections(
 
 function projectedCoordinationActor(binding: ProjectedWorkerBinding): string {
   return `Projected agent "${binding.identity.agentID}" via the "${binding.identity.dispatchAdapterID}" typed adapter`
-}
-
-function projectedCoordinationActionSummary(binding: ProjectedWorkerBinding, event: string): string {
-  return `${projectedCoordinationActor(binding)} ${event}`
-}
-
-function projectedCoordinationActionIdentity(binding: ProjectedWorkerBinding) {
-  return {
-    redispatch_agent_id: binding.identity.agentID,
-    redispatch_adapter_id: binding.identity.dispatchAdapterID,
-  }
 }
 
 const FactCheckStageInputSchema = z
@@ -588,9 +668,6 @@ function requireAgentCoordinationRequestForResponse(input: {
   if (!request) {
     throw new Error(`agent coordination request ${input.requestID} does not belong to task ${input.taskID}`)
   }
-  if (request.payload.status !== "pending" && request.payload.status !== "responded") {
-    throw new Error(`agent coordination request ${input.requestID} is ${request.payload.status}`)
-  }
   return request
 }
 
@@ -610,15 +687,7 @@ function persistedRedispatchBindingForRespondedRequest(input: {
         actionID: response.payload.action_id,
       })
     : undefined
-  const action =
-    responseAction?.payload.action === "redispatch_worker"
-      ? responseAction
-      : listAgentCoordinationActions(input.taskID).find(
-          (candidate) =>
-            candidate.payload.request_id === input.request.payload.request_id &&
-            candidate.payload.action === "redispatch_worker" &&
-            (candidate.payload.status === "pending" || candidate.payload.status === "completed"),
-        )
+  const action = responseAction?.payload.action === "redispatch_worker" ? responseAction : undefined
   if (!action) return undefined
   const binding = redispatchBindingFromActionResult({
     actionID: action.payload.action_id,
@@ -711,6 +780,11 @@ function requireInstalledAgentCoordinationWorkerBinding(input: {
 function replayedAgentCoordinationActionResult(input: {
   taskID: string
   response: Awaited<ReturnType<typeof createAgentCoordinationResponse>>
+  askUser?: {
+    sessionID: string
+    questions: Question.Info[]
+    tool: { messageID: string; callID: string }
+  }
 }): string | undefined {
   if (input.response.createdNow !== false) return undefined
   const action = findAgentCoordinationAction({
@@ -733,6 +807,52 @@ function replayedAgentCoordinationActionResult(input: {
   }
   const actor = projectedCoordinationActor(request.payload.worker_binding)
   if (action.payload.status === "completed") {
+    if (action.payload.action === "ask_user") {
+      if (!input.askUser) return undefined
+      const result = z
+        .object({
+          question_id: z.string().min(1),
+          interaction_id: Identifier.schema("interaction"),
+          interaction_status: z.enum(["answered", "rejected", "expired"]),
+        })
+        .strict()
+        .parse(action.payload.result)
+      const expectedQuestionID = agentCoordinationQuestionID(action.payload.action_id)
+      if (result.question_id !== expectedQuestionID) {
+        throw new Error(
+          `Completed A2A ask_user action ${action.payload.action_id} points to question ${result.question_id}, expected ${expectedQuestionID}`,
+        )
+      }
+      const interaction = findInteractionByExternal(expectedQuestionID)
+      if (!interaction || interaction.id !== result.interaction_id) {
+        throw new Error(
+          `Completed A2A ask_user action ${action.payload.action_id} points to missing interaction ${result.interaction_id}`,
+        )
+      }
+      requireAgentCoordinationQuestionInteraction({
+        action,
+        actionID: action.payload.action_id,
+        taskID: input.taskID,
+        sessionID: input.askUser.sessionID,
+        questions: input.askUser.questions,
+        tool: input.askUser.tool,
+        interaction,
+      })
+      if (interaction.status !== result.interaction_status) {
+        throw new Error(
+          `Completed A2A ask_user action ${action.payload.action_id} settled as ${result.interaction_status}, but interaction ${interaction.id} is ${interaction.status}`,
+        )
+      }
+      return renderAgentCoordinationAskUserTerminal({
+        requestID: request.payload.request_id,
+        responseID: input.response.payload.response_id,
+        actionID: action.payload.action_id,
+        questionID: expectedQuestionID,
+        interaction,
+        questions: input.askUser.questions,
+        replayed: true,
+      })
+    }
     return (
       `${actor} replayed coordination response ${input.response.payload.response_id}; ` +
       `action=${action.payload.action_id} already completed as ${action.payload.action}.`
@@ -747,35 +867,6 @@ function replayedAgentCoordinationActionResult(input: {
   return undefined
 }
 
-function agentCoordinationWorkerMessageID(actionID: string): string {
-  return Identifier.ascending("message", `msg_agent_coordination_${actionID}`)
-}
-
-function agentCoordinationWorkerMessagePartID(actionID: string): string {
-  return Identifier.ascending("part", `prt_agent_coordination_${actionID}`)
-}
-
-function recordedAgentCoordinationWorkerMessageID(
-  action: NonNullable<ReturnType<typeof findAgentCoordinationAction>>,
-): string | undefined {
-  const value = action.payload.result?.worker_message_id
-  return typeof value === "string" && value.length > 0 ? value : undefined
-}
-
-function recordedAgentCoordinationQuestionID(
-  action: NonNullable<ReturnType<typeof findAgentCoordinationAction>>,
-): string | undefined {
-  const value = action.payload.result?.question_id
-  return typeof value === "string" && value.length > 0 ? value : undefined
-}
-
-function recordedAgentCoordinationInteractionID(
-  action: NonNullable<ReturnType<typeof findAgentCoordinationAction>>,
-): string | undefined {
-  const value = action.payload.result?.interaction_id
-  return typeof value === "string" && value.length > 0 ? value : undefined
-}
-
 function requireAgentCoordinationQuestionInteraction(input: {
   action: NonNullable<ReturnType<typeof findAgentCoordinationAction>>
   actionID: string
@@ -786,21 +877,6 @@ function requireAgentCoordinationQuestionInteraction(input: {
   interaction: NonNullable<ReturnType<typeof findInteractionByExternal>>
 }) {
   const questionID = agentCoordinationQuestionID(input.actionID)
-  const recordedQuestionID = recordedAgentCoordinationQuestionID(input.action)
-  const recordedInteractionID = recordedAgentCoordinationInteractionID(input.action)
-  if ((recordedQuestionID === undefined) !== (recordedInteractionID === undefined)) {
-    throw new Error(`A2A ask_user action ${input.actionID} has incomplete question interaction binding`)
-  }
-  if (recordedQuestionID && recordedQuestionID !== questionID) {
-    throw new Error(
-      `A2A ask_user action ${input.actionID} records question ${recordedQuestionID}, expected ${questionID}`,
-    )
-  }
-  if (recordedInteractionID && recordedInteractionID !== input.interaction.id) {
-    throw new Error(
-      `A2A ask_user action ${input.actionID} records interaction ${recordedInteractionID}, found ${input.interaction.id}`,
-    )
-  }
   if (input.interaction.external_id !== questionID) {
     throw new Error(
       `A2A ask_user interaction ${input.interaction.id} has question ${input.interaction.external_id}, expected ${questionID}`,
@@ -862,33 +938,41 @@ function operatorRejectionFromInteraction(interaction: NonNullable<ReturnType<ty
   return z.object({ origin: z.literal("operator") }).parse(interaction.response)
 }
 
-async function findAgentCoordinationWorkerMessage(input: {
-  sessionID: string
-  messageID: string
-}): Promise<Awaited<ReturnType<typeof MessageStore.get>> | undefined> {
-  try {
-    return await MessageStore.get({ sessionID: input.sessionID, messageID: input.messageID })
-  } catch (error) {
-    if (!NotFoundError.isInstance(error as Error)) throw error
-    return undefined
-  }
-}
-
-async function requireAgentCoordinationWorkerMessage(input: {
-  sessionID: string
-  messageID: string
+function renderAgentCoordinationAskUserTerminal(input: {
+  requestID: string
+  responseID: string
   actionID: string
-}): Promise<Awaited<ReturnType<typeof MessageStore.get>>> {
-  const message = await findAgentCoordinationWorkerMessage({
-    sessionID: input.sessionID,
-    messageID: input.messageID,
-  })
-  if (!message) {
-    throw new Error(
-      `A2A continue action ${input.actionID} records worker message ${input.messageID}, but the message is missing`,
+  questionID: string
+  interaction: NonNullable<ReturnType<typeof findInteractionByExternal>>
+  questions: Question.Info[]
+  replayed?: boolean
+}): string {
+  const prefix =
+    `Responded to coordination request ${input.requestID} with ask_user. ` +
+    `response=${input.responseID}; action=${input.actionID}; ` +
+    `interaction=${input.interaction.id}; question=${input.questionID}`
+  const replay = input.replayed ? " recovered from the completed durable action" : ""
+  if (input.interaction.status === "answered") {
+    const answers = answersFromInteraction(input.interaction)
+    const renderedAnswers = input.questions
+      .map((question, index) => `"${question.question}" -> ${(answers[index] ?? []).join(", ") || "(no answer)"}`)
+      .join("\n")
+    return `${prefix}${replay}.\nUser answered:\n${renderedAnswers}`
+  }
+  if (input.interaction.status === "expired") {
+    expiryFromInteraction(input.interaction)
+    return (
+      `${prefix}${replay}; automatic deadline elapsed without an operator decision. ` +
+      "Choose a concrete same-Task repair action or an explicitly named wait from the available evidence."
     )
   }
-  return message
+  if (input.interaction.status === "rejected") {
+    operatorRejectionFromInteraction(input.interaction)
+    return `${prefix}${replay}; user rejected the question.`
+  }
+  throw new Error(
+    `Completed A2A ask_user interaction ${input.interaction.id} is ${input.interaction.status}, expected a terminal status`,
+  )
 }
 
 async function waitForQuestionInteraction(input: { questionID: string; taskID: string; resolved?: boolean }) {
@@ -1559,9 +1643,6 @@ export function createOrchestratorTools(input: {
               result: {
                 terminal_lifecycle_reference: currentReference,
                 terminal_ingress_id: authority.ingressID,
-                ...(authority.completionDecisionArtifactID
-                  ? { completion_decision_artifact_id: authority.completionDecisionArtifactID }
-                  : {}),
               },
               summary: `acknowledged terminal event ${currentReference.terminalEventID}`,
             })
@@ -1583,11 +1664,6 @@ export function createOrchestratorTools(input: {
             const replayResult = replayedAgentCoordinationActionResult({ taskID, response })
             if (replayResult) {
               if (decision !== "fail_task") return replayResult
-              return {
-                title: "Task Failure Replayed",
-                output: replayResult,
-                metadata: withImmediateParkToolResultControl({}),
-              }
             }
           }
 
@@ -1595,19 +1671,6 @@ export function createOrchestratorTools(input: {
             const workScope = requireAgentCoordinationWorkerWorkScope({
               request,
               binding: request.payload.worker_binding,
-            })
-            const activeAgent = input.dispatchAgents.find(
-              (candidate) => candidate.identity.agentID === request.payload.worker_binding.identity.agentID,
-            )
-            if (!activeAgent) {
-              throw new Error(
-                `respond_agent_coordination redispatch agent ${request.payload.worker_binding.identity.agentID} is absent from the current projection`,
-              )
-            }
-            assertProjectedWorkerContinuationCompatible({
-              previous: request.payload.worker_binding.identity,
-              current: activeAgent.identity,
-              subject: `respond_agent_coordination redispatch agent ${activeAgent.identity.agentID}`,
             })
             const response = await createAgentCoordinationResponse({
               taskID,
@@ -1628,18 +1691,6 @@ export function createOrchestratorTools(input: {
             const binding = redispatchBindingFromActionResult({
               actionID: action.payload.action_id,
               result: action.payload.result ?? {},
-            })
-            await recordAgentCoordinationActionProgress({
-              taskID,
-              actionID: response.payload.action_id,
-              result: {
-                ...projectedCoordinationActionIdentity(binding),
-                redispatch_binding: binding,
-                source_session_id: request.payload.session_id,
-                work_scope: workScope,
-                awaiting_explicit_dispatch: true,
-              },
-              summary: projectedCoordinationActionSummary(binding, "recorded pending explicit dispatch"),
             })
             return (
               `Responded to coordination request ${request.payload.request_id} with a pending redispatch action. ` +
@@ -1696,6 +1747,13 @@ export function createOrchestratorTools(input: {
             if (action.payload.status !== "pending") {
               throw new Error(`agent coordination action ${response.payload.action_id} is ${action.payload.status}`)
             }
+            await runAgentCoordinationEffectAdmissionHook({
+              taskID,
+              requestID: request.payload.request_id,
+              responseID: response.payload.response_id,
+              actionID: action.payload.action_id,
+              decision,
+            })
             let cancellation: Awaited<ReturnType<typeof cancelDispatchedSession>> | undefined
             try {
               cancellation = await cancelDispatchedSession({
@@ -1704,26 +1762,18 @@ export function createOrchestratorTools(input: {
                 reason,
                 reasonPrefix: "respond_agent_coordination",
                 requestID: response.payload.action_id,
-              })
-              await recordAgentCoordinationActionProgress({
-                taskID,
-                actionID: response.payload.action_id,
-                result: {
-                  session_id: request.payload.session_id,
-                  kind,
-                  physical_cancelled: cancellation.cancelled,
-                  prompt_cancelled: cancellation.promptCancelled,
+                coordinationAction: {
+                  actionID: action.payload.action_id,
+                  executionEpoch: action.payload.execution_epoch,
                 },
-                summary: cancellation.promptCancelled
-                  ? "cancel_worker physical prompt cancelled and settled"
-                  : "cancel_worker found no current physical prompt resource",
               })
             } catch (error) {
+              if (AgentCoordinationActionSupersededError.isInstance(error as Error)) throw error
               await failAgentCoordinationAction({
                 taskID,
                 actionID: response.payload.action_id,
                 error,
-                result: { session_id: request.payload.session_id, kind },
+                result: { session_id: request.payload.session_id },
                 summary: "cancel_worker failed",
               })
               throw error
@@ -1733,7 +1783,6 @@ export function createOrchestratorTools(input: {
               actionID: response.payload.action_id,
               result: {
                 session_id: request.payload.session_id,
-                kind,
                 physical_cancelled: cancellation.cancelled,
                 prompt_cancelled: cancellation.promptCancelled,
                 summary: cancellation.summary,
@@ -1748,26 +1797,6 @@ export function createOrchestratorTools(input: {
           }
 
           if (decision === "ask_user") {
-            const response = await createAgentCoordinationResponse({
-              taskID,
-              requestID: request.payload.request_id,
-              ...responseAudit,
-              decision,
-              reason,
-              ...(guidance ? { message: guidance } : {}),
-            })
-            const replayResult = replayedAgentCoordinationActionResult({ taskID, response })
-            if (replayResult) return replayResult
-            const action = findAgentCoordinationAction({
-              taskID,
-              actionID: response.payload.action_id,
-            })
-            if (!action) {
-              throw new Error(`agent coordination response ${response.payload.response_id} has no action row`)
-            }
-            if (action.payload.status !== "pending") {
-              throw new Error(`agent coordination action ${response.payload.action_id} is ${action.payload.status}`)
-            }
             const questionItems = questions?.length
               ? questions.map((question) => ({
                   question: question.question,
@@ -1787,11 +1816,46 @@ export function createOrchestratorTools(input: {
                     custom: true,
                   },
                 ]
-            const questionID = agentCoordinationQuestionID(response.payload.action_id)
             const questionToolBinding = {
               messageID: toolExecution.orchestratorMessageID,
               callID: toolExecution.toolCallID,
             }
+            const response = await createAgentCoordinationResponse({
+              taskID,
+              requestID: request.payload.request_id,
+              ...responseAudit,
+              decision,
+              reason,
+              ...(guidance ? { message: guidance } : {}),
+            })
+            const replayResult = replayedAgentCoordinationActionResult({
+              taskID,
+              response,
+              askUser: {
+                sessionID: input.agentSessionID,
+                questions: questionItems,
+                tool: questionToolBinding,
+              },
+            })
+            if (replayResult) return replayResult
+            const action = findAgentCoordinationAction({
+              taskID,
+              actionID: response.payload.action_id,
+            })
+            if (!action) {
+              throw new Error(`agent coordination response ${response.payload.response_id} has no action row`)
+            }
+            if (action.payload.status !== "pending") {
+              throw new Error(`agent coordination action ${response.payload.action_id} is ${action.payload.status}`)
+            }
+            await runAgentCoordinationEffectAdmissionHook({
+              taskID,
+              requestID: request.payload.request_id,
+              responseID: response.payload.response_id,
+              actionID: action.payload.action_id,
+              decision,
+            })
+            const questionID = agentCoordinationQuestionID(response.payload.action_id)
             let interaction = findInteractionByExternal(questionID)
             let interactionContract = interaction
               ? requireAgentCoordinationQuestionInteraction({
@@ -1814,25 +1878,20 @@ export function createOrchestratorTools(input: {
                     question_id: questionID,
                     interaction_id: interaction.id,
                     interaction_status: interaction.status,
-                    answers,
-                    recovered: true,
                   },
                   summary: "ask_user interaction recovered answered",
                 })
-                const renderedAnswers = questionItems
-                  .map(
-                    (question, index) =>
-                      `"${question.question}" -> ${(answers[index] ?? []).join(", ") || "(no answer)"}`,
-                  )
-                  .join("\n")
-                return (
-                  `Responded to coordination request ${request.payload.request_id} with ask_user. ` +
-                  `response=${response.payload.response_id}; action=${response.payload.action_id}; ` +
-                  `interaction=${interaction.id}; question=${questionID} recovered as answered.\nUser answered:\n${renderedAnswers}`
-                )
+                return renderAgentCoordinationAskUserTerminal({
+                  requestID: request.payload.request_id,
+                  responseID: response.payload.response_id,
+                  actionID: response.payload.action_id,
+                  questionID,
+                  interaction,
+                  questions: questionItems,
+                })
               }
               if (interaction.status === "expired") {
-                const expiry = expiryFromInteraction(interaction)
+                expiryFromInteraction(interaction)
                 await completeAgentCoordinationAction({
                   taskID,
                   actionID: response.payload.action_id,
@@ -1840,18 +1899,17 @@ export function createOrchestratorTools(input: {
                     question_id: questionID,
                     interaction_id: interaction.id,
                     interaction_status: "expired",
-                    time_expires: expiry.timeExpires,
-                    time_resolved: expiry.timeResolved,
-                    recovered: true,
                   },
                   summary: "ask_user interaction recovered expired",
                 })
-                return (
-                  `Responded to coordination request ${request.payload.request_id} with ask_user. ` +
-                  `response=${response.payload.response_id}; action=${response.payload.action_id}; ` +
-                  `interaction=${interaction.id}; question=${questionID} recovered as expired; ` +
-                  "the automatic deadline elapsed without an operator decision."
-                )
+                return renderAgentCoordinationAskUserTerminal({
+                  requestID: request.payload.request_id,
+                  responseID: response.payload.response_id,
+                  actionID: response.payload.action_id,
+                  questionID,
+                  interaction,
+                  questions: questionItems,
+                })
               }
               operatorRejectionFromInteraction(interaction)
               await completeAgentCoordinationAction({
@@ -1861,16 +1919,17 @@ export function createOrchestratorTools(input: {
                   question_id: questionID,
                   interaction_id: interaction.id,
                   interaction_status: interaction.status,
-                  rejected: true,
-                  recovered: true,
                 },
                 summary: "ask_user interaction recovered rejected",
               })
-              return (
-                `Responded to coordination request ${request.payload.request_id} with ask_user. ` +
-                `response=${response.payload.response_id}; action=${response.payload.action_id}; ` +
-                `interaction=${interaction.id}; question=${questionID} recovered as ${interaction.status}.`
-              )
+              return renderAgentCoordinationAskUserTerminal({
+                requestID: request.payload.request_id,
+                responseID: response.payload.response_id,
+                actionID: response.payload.action_id,
+                questionID,
+                interaction,
+                questions: questionItems,
+              })
             }
             let questionPromise: Promise<Question.Answer[]> | undefined
             let setupCompleted = false
@@ -1880,6 +1939,14 @@ export function createOrchestratorTools(input: {
                 requestID: questionID,
                 questions: questionItems,
                 tool: questionToolBinding,
+                acceptanceEffects: (db) =>
+                  assertActiveAgentCoordinationActionInTransaction(db, {
+                    taskID,
+                    actionID: action.payload.action_id,
+                    executionEpoch: action.payload.execution_epoch,
+                    action: "ask_user",
+                  }),
+                acceptanceOccurrenceID: agentCoordinationQuestionAskedOccurrenceID(action.payload.action_id),
                 ...(interactionContract
                   ? {
                       expiry: interactionContract.payload.expiry ?? null,
@@ -1887,6 +1954,12 @@ export function createOrchestratorTools(input: {
                     }
                   : { expireOnDeadline: (await Config.get()).experimental?.auto_question === true }),
               })
+              // A rejected owner admission is observed immediately while the
+              // original Promise remains the exact error returned by the
+              // setup/recovery path below. This prevents a stale action from
+              // becoming an unhandled rejection while no Interaction can be
+              // projected from its rejected outbox transaction.
+              void questionPromise.catch(() => undefined)
               interaction = interaction ?? (await waitForQuestionInteraction({ questionID, taskID }))
               interactionContract = requireAgentCoordinationQuestionInteraction({
                 action,
@@ -1897,18 +1970,6 @@ export function createOrchestratorTools(input: {
                 tool: questionToolBinding,
                 interaction,
               })
-              if (recordedAgentCoordinationQuestionID(action) !== questionID) {
-                await recordAgentCoordinationActionProgress({
-                  taskID,
-                  actionID: response.payload.action_id,
-                  result: {
-                    question_id: questionID,
-                    interaction_id: interaction.id,
-                    interaction_status: interaction.status,
-                  },
-                  summary: "ask_user interaction opened",
-                })
-              }
               setupCompleted = true
               try {
                 const answers = await questionPromise
@@ -1938,21 +1999,17 @@ export function createOrchestratorTools(input: {
                     question_id: questionID,
                     interaction_id: interaction!.id,
                     interaction_status: resolvedInteraction.status,
-                    answers,
                   },
                   summary: "ask_user interaction answered",
                 })
-                const renderedAnswers = questionItems
-                  .map(
-                    (question, index) =>
-                      `"${question.question}" -> ${(answers[index] ?? []).join(", ") || "(no answer)"}`,
-                  )
-                  .join("\n")
-                return (
-                  `Responded to coordination request ${request.payload.request_id} with ask_user. ` +
-                  `response=${response.payload.response_id}; action=${response.payload.action_id}; ` +
-                  `interaction=${interaction!.id}; question=${questionID}.\nUser answered:\n${renderedAnswers}`
-                )
+                return renderAgentCoordinationAskUserTerminal({
+                  requestID: request.payload.request_id,
+                  responseID: response.payload.response_id,
+                  actionID: response.payload.action_id,
+                  questionID,
+                  interaction: resolvedInteraction,
+                  questions: questionItems,
+                })
               } catch (error) {
                 if (error instanceof Question.ExpiredError) {
                   const resolvedInteraction = await waitForQuestionInteraction({ questionID, taskID, resolved: true })
@@ -1984,17 +2041,17 @@ export function createOrchestratorTools(input: {
                       question_id: questionID,
                       interaction_id: interaction!.id,
                       interaction_status: resolvedInteraction.status,
-                      time_expires: error.timeExpires,
-                      time_resolved: error.timeResolved,
                     },
                     summary: "ask_user interaction expired at its automatic deadline",
                   })
-                  return (
-                    `Responded to coordination request ${request.payload.request_id} with ask_user. ` +
-                    `response=${response.payload.response_id}; action=${response.payload.action_id}; ` +
-                    `interaction=${interaction!.id}; question=${questionID}; automatic deadline elapsed without an operator decision. ` +
-                    "Choose a concrete same-Task repair action or an explicitly named wait from the available evidence."
-                  )
+                  return renderAgentCoordinationAskUserTerminal({
+                    requestID: request.payload.request_id,
+                    responseID: response.payload.response_id,
+                    actionID: response.payload.action_id,
+                    questionID,
+                    interaction: resolvedInteraction,
+                    questions: questionItems,
+                  })
                 }
                 if (error instanceof Question.RejectedError) {
                   const resolvedInteraction = await waitForQuestionInteraction({ questionID, taskID, resolved: true })
@@ -2026,15 +2083,17 @@ export function createOrchestratorTools(input: {
                       question_id: questionID,
                       interaction_id: interaction!.id,
                       interaction_status: resolvedInteraction.status,
-                      rejected: true,
                     },
                     summary: "ask_user interaction rejected",
                   })
-                  return (
-                    `Responded to coordination request ${request.payload.request_id} with ask_user. ` +
-                    `response=${response.payload.response_id}; action=${response.payload.action_id}; ` +
-                    `interaction=${interaction!.id}; question=${questionID}; user rejected the question.`
-                  )
+                  return renderAgentCoordinationAskUserTerminal({
+                    requestID: request.payload.request_id,
+                    responseID: response.payload.response_id,
+                    actionID: response.payload.action_id,
+                    questionID,
+                    interaction: resolvedInteraction,
+                    questions: questionItems,
+                  })
                 }
                 await failAgentCoordinationAction({
                   taskID,
@@ -2047,6 +2106,7 @@ export function createOrchestratorTools(input: {
               }
             } catch (error) {
               if (setupCompleted) throw error
+              if (AgentCoordinationActionSupersededError.isInstance(error as Error)) throw error
               await Question.abandon({ requestID: questionID, error }).catch((abandoned) => {
                 if (NotFoundError.isInstance(abandoned as Error)) return
                 throw abandoned
@@ -2078,12 +2138,14 @@ export function createOrchestratorTools(input: {
               ...(guidance ? { message: guidance } : {}),
             })
             const replayResult = replayedAgentCoordinationActionResult({ taskID, response })
-            if (replayResult) {
-              return {
-                title: "Task Failure Replayed",
-                output: replayResult,
-                metadata: withImmediateParkToolResultControl({}),
-              }
+            if (!replayResult) {
+              await runAgentCoordinationEffectAdmissionHook({
+                taskID,
+                requestID: request.payload.request_id,
+                responseID: response.payload.response_id,
+                actionID: response.payload.action_id,
+                decision,
+              })
             }
             const errorText = guidance && guidance.length > 0 ? guidance : reason
             const errorMessage = `A2A request ${request.payload.request_id}: ${errorText}`
@@ -2100,36 +2162,43 @@ export function createOrchestratorTools(input: {
                   `A2A request ${request.payload.request_id} has no exact Worker Turn descriptor authority`,
                 )
               }
+              if (!replayResult) {
+                await failTaskLifecycle({
+                  taskID,
+                  error: errorMessage,
+                  coordinationAction: {
+                    actionID: response.payload.action_id,
+                    executionEpoch: request.payload.execution_epoch,
+                  },
+                })
+                await afterAgentCoordinationFailSettlementForTest?.({
+                  taskID,
+                  requestID: request.payload.request_id,
+                  responseID: response.payload.response_id,
+                  actionID: response.payload.action_id,
+                  decision,
+                })
+              }
               await publishFailedAgentCoordinationTurnStatus({
                 taskID,
                 sessionID: request.payload.session_id,
                 inputMessageID: requestDescriptor.payload.messageAuthority.user_message_id,
                 status: { type: "terminal", reason: "error", error: errorMessage },
               })
-              const { recoveredTerminalFailure } = await failTaskLifecycle({
-                taskID,
-                error: errorMessage,
-                a2aRequestID: request.payload.request_id,
-              })
-              await completeAgentCoordinationAction({
-                taskID,
-                actionID: response.payload.action_id,
-                result: {
-                  task_id: taskID,
-                  task_status: "failed",
-                  recovered_terminal_failure: recoveredTerminalFailure,
-                },
-                summary: "fail_task completed",
-              })
+              const terminalReference = requireCurrentTerminalLifecycleReference(taskID)
               return {
-                title: "Task Failed",
+                title: replayResult ? "Task Failure Replayed" : "Task Failed",
                 output:
                   `Responded to coordination request ${request.payload.request_id} with fail_task. ` +
-                  `response=${response.payload.response_id}; action=${response.payload.action_id}; task=${taskID} failed.` +
-                  `${recoveredTerminalFailure ? " Recovered existing terminal task failure." : ""}`,
+                  `response=${response.payload.response_id}; action=${response.payload.action_id}; ` +
+                  `task=${taskID} failed at ${terminalReference.terminalEventID}.` +
+                  `${replayResult ? " Repaired the exact worker Turn projection from the committed outcome." : ""}`,
                 metadata: withImmediateParkToolResultControl({}),
               }
             } catch (error) {
+              if (AgentCoordinationActionSupersededError.isInstance(error as Error)) throw error
+              const committed = findAgentCoordinationAction({ taskID, actionID: response.payload.action_id })
+              if (committed?.payload.status === "completed") throw error
               await failAgentCoordinationAction({
                 taskID,
                 actionID: response.payload.action_id,
@@ -2373,7 +2442,7 @@ export function createOrchestratorTools(input: {
           lineage: replayLineage,
         })
         if (replay) {
-          if (replay.descriptor) commitDispatchLineageSession(replayLineage)
+          if (replay.descriptor) commitAcceptedDispatchLineage(replayLineage)
           return {
           dispatchID: replayLineage.dispatchID,
           deliverySliceRevisionIDs: [...replayLineage.payload.delivery_slice_revision_ids],
@@ -2648,7 +2717,7 @@ export function createOrchestratorTools(input: {
           })
           if (committedDuringPreparation) {
             if (committedDuringPreparation.descriptor) {
-              commitDispatchLineageSession(claim.lineage, admission)
+              commitAcceptedDispatchLineage(claim.lineage, admission)
             } else if (!releaseDispatchAdmission(admission)) {
               throw new Error(`Dispatch terminal replay could not consume admission ${admission.leaseID}`)
             }
@@ -2679,7 +2748,7 @@ export function createOrchestratorTools(input: {
         const replay = readDispatchLineageReplay({ taskID: ownershipTaskID, lineage: claim.lineage })
         if (replay) {
           const winner = claim.lineage
-          if (replay.descriptor) commitDispatchLineageSession(winner)
+          if (replay.descriptor) commitAcceptedDispatchLineage(winner)
           return {
             dispatchID: winner.dispatchID,
             deliverySliceRevisionIDs: [...winner.payload.delivery_slice_revision_ids],
@@ -2840,38 +2909,7 @@ export function createOrchestratorTools(input: {
           }
           const lineage = recordedLineage
           if (!lineage) throw new Error(`dispatch_agent ${targetAgentID} has no preclaimed lineage`)
-          if (!coordinationActionID) {
-            commitDispatchLineageSession(lineage, admission)
-            closeAdmissionHold()
-            return { artifactID: lineage.artifactID }
-          }
-          if (!coordinationSourceSessionID) {
-            throw new Error(`dispatch_agent coordination action ${coordinationActionID} has no source session`)
-          }
-
-          const bound = bindAgentCoordinationRedispatchSuccessor({
-            taskID: ownershipTaskID,
-            actionID: coordinationActionID,
-            dispatchID: origin.dispatchID,
-            childSessionID: sessionID,
-            targetAgentID,
-            bindSuccessor: () => {
-              return {
-                dispatch_lineage_id: lineage.artifactID,
-                dispatch_id: lineage.dispatchID,
-                dispatch_agent_id: targetAgentID,
-                dispatch_session_id: sessionID,
-                work_scope: workScope,
-                dispatch_bound: true,
-                awaiting_explicit_dispatch: false,
-              }
-            },
-            summary: `Completed explicit redispatch with immutable lineage for session ${sessionID}`,
-          })
-          if (bound.action.payload.result?.dispatch_lineage_id !== lineage.artifactID) {
-            throw new Error(`dispatch_agent coordination action ${coordinationActionID} bound another lineage`)
-          }
-          commitDispatchLineageSession(lineage, admission)
+          commitAcceptedDispatchLineage(lineage, admission)
           closeAdmissionHold()
           return { artifactID: lineage.artifactID }
         },

@@ -8,6 +8,99 @@ type IndexColumn = ReturnType<typeof getTableConfig>["indexes"][number]["config"
 
 const dialect = new SQLiteSyncDialect()
 
+// These predicates mirror the two persisted Evidence Locator unions. They are
+// deliberately expressed against the `locator` alias used by the coordination
+// request trigger so a raw SQL writer cannot bypass the production Zod parse.
+const EVIDENCE_LOCATOR_INPUT_ITEM_SQL = /* sql */ `
+  locator.type='object'
+  AND CASE json_extract(locator.value,'$.source')
+    WHEN 'engine_artifact' THEN
+      (SELECT COUNT(*) FROM json_each(locator.value))=3
+      AND json_type(locator.value,'$.artifact_id')='text'
+      AND length(json_extract(locator.value,'$.artifact_id'))>0
+      AND json_type(locator.value,'$.catalog_revision')='integer'
+      AND json_extract(locator.value,'$.catalog_revision')>0
+    WHEN 'task_artifact_snapshot' THEN
+      (SELECT COUNT(*) FROM json_each(locator.value))=2
+      AND json_type(locator.value,'$.snapshot')='object'
+      AND (SELECT COUNT(*) FROM json_each(locator.value,'$.snapshot'))=5
+      AND json_extract(locator.value,'$.snapshot.schema_version')=2
+      AND json_type(locator.value,'$.snapshot.project_id')='text'
+      AND length(json_extract(locator.value,'$.snapshot.project_id'))>0
+      AND json_type(locator.value,'$.snapshot.task_id')='text'
+      AND length(json_extract(locator.value,'$.snapshot.task_id'))>0
+      AND json_type(locator.value,'$.snapshot.snapshot_id')='text'
+      AND length(json_extract(locator.value,'$.snapshot.snapshot_id'))>0
+      AND json_type(locator.value,'$.snapshot.manifest_sha256')='text'
+      AND length(json_extract(locator.value,'$.snapshot.manifest_sha256'))=64
+    WHEN 'task_artifact_resource' THEN
+      (SELECT COUNT(*) FROM json_each(locator.value))=2
+      AND json_type(locator.value,'$.ref')='object'
+      AND (SELECT COUNT(*) FROM json_each(locator.value,'$.ref'))=3
+      AND json_type(locator.value,'$.ref.snapshot')='object'
+      AND (SELECT COUNT(*) FROM json_each(locator.value,'$.ref.snapshot'))=5
+      AND json_extract(locator.value,'$.ref.snapshot.schema_version')=2
+      AND json_type(locator.value,'$.ref.snapshot.project_id')='text'
+      AND length(json_extract(locator.value,'$.ref.snapshot.project_id'))>0
+      AND json_type(locator.value,'$.ref.snapshot.task_id')='text'
+      AND length(json_extract(locator.value,'$.ref.snapshot.task_id'))>0
+      AND json_type(locator.value,'$.ref.snapshot.snapshot_id')='text'
+      AND length(json_extract(locator.value,'$.ref.snapshot.snapshot_id'))>0
+      AND json_type(locator.value,'$.ref.snapshot.manifest_sha256')='text'
+      AND length(json_extract(locator.value,'$.ref.snapshot.manifest_sha256'))=64
+      AND json_type(locator.value,'$.ref.tree')='text'
+      AND length(json_extract(locator.value,'$.ref.tree'))>0
+      AND json_type(locator.value,'$.ref.path')='text'
+      AND length(json_extract(locator.value,'$.ref.path'))>0
+    WHEN 'session' THEN
+      (SELECT COUNT(*) FROM json_each(locator.value))=2
+      AND json_type(locator.value,'$.session_id')='text'
+      AND length(json_extract(locator.value,'$.session_id'))>0
+    WHEN 'session_message' THEN
+      (SELECT COUNT(*) FROM json_each(locator.value))=3
+      AND json_type(locator.value,'$.session_id')='text'
+      AND length(json_extract(locator.value,'$.session_id'))>0
+      AND json_type(locator.value,'$.message_id')='text'
+      AND length(json_extract(locator.value,'$.message_id'))>0
+    WHEN 'goal_revision' THEN
+      (SELECT COUNT(*) FROM json_each(locator.value))=2
+      AND json_type(locator.value,'$.goal_id')='text'
+      AND length(json_extract(locator.value,'$.goal_id'))>0
+    WHEN 'coordination_request' THEN
+      (SELECT COUNT(*) FROM json_each(locator.value))=2
+      AND json_type(locator.value,'$.request_id')='text'
+      AND length(json_extract(locator.value,'$.request_id'))>0
+    ELSE 0
+  END
+`
+
+const EVIDENCE_LOCATOR_DURABLE_ITEM_SQL = /* sql */ `
+  ${EVIDENCE_LOCATOR_INPUT_ITEM_SQL.replace(
+    "(SELECT COUNT(*) FROM json_each(locator.value))=3\n      AND json_type(locator.value,'$.artifact_id')",
+    "(SELECT COUNT(*) FROM json_each(locator.value))=4\n      AND json_type(locator.value,'$.expected_sha256')='text'\n      AND length(json_extract(locator.value,'$.expected_sha256'))=64\n      AND json_type(locator.value,'$.artifact_id')",
+  ).replace(
+    "(SELECT COUNT(*) FROM json_each(locator.value,'$.ref'))=3\n      AND json_type(locator.value,'$.ref.snapshot')",
+    "(SELECT COUNT(*) FROM json_each(locator.value,'$.ref'))=6\n      AND json_type(locator.value,'$.ref.media_type')='text'\n      AND length(json_extract(locator.value,'$.ref.media_type'))>0\n      AND json_type(locator.value,'$.ref.bytes')='integer'\n      AND json_extract(locator.value,'$.ref.bytes')>=0\n      AND json_type(locator.value,'$.ref.sha256')='text'\n      AND length(json_extract(locator.value,'$.ref.sha256'))=64\n      AND json_type(locator.value,'$.ref.snapshot')",
+  )}
+`
+
+// Match the model-supplied locator to the Host-completed durable locator at
+// the same array position. Host-owned digests and resource metadata may be
+// added, but the source identity selected by the Tool input may not change.
+const EVIDENCE_LOCATOR_INPUT_DURABLE_MATCH_SQL = /* sql */ `
+  json_extract(input_locator.value,'$.source')=json_extract(durable_locator.value,'$.source')
+  AND CASE json_extract(input_locator.value,'$.source')
+    WHEN 'engine_artifact' THEN
+      json_extract(input_locator.value,'$.artifact_id')=json_extract(durable_locator.value,'$.artifact_id')
+      AND json_extract(input_locator.value,'$.catalog_revision')=json_extract(durable_locator.value,'$.catalog_revision')
+    WHEN 'task_artifact_resource' THEN
+      json(input_locator.value -> '$.ref.snapshot')=json(durable_locator.value -> '$.ref.snapshot')
+      AND json_extract(input_locator.value,'$.ref.tree')=json_extract(durable_locator.value,'$.ref.tree')
+      AND json_extract(input_locator.value,'$.ref.path')=json_extract(durable_locator.value,'$.ref.path')
+    ELSE json(input_locator.value)=json(durable_locator.value)
+  END
+`
+
 function quoteIdentifier(name: string) {
   return `"${name.replaceAll('"', '""')}"`
 }
@@ -1160,7 +1253,31 @@ WHEN NEW.kind = 'dispatch_lineage'
           AND action.id = json_extract(NEW.payload, '$.coordination_action_id')
           AND action.kind = 'agent_coordination_action'
           AND json_extract(action.payload, '$.action') = 'redispatch_worker'
-          AND json_extract(action.payload, '$.status') = 'pending'
+          AND json_extract(action.payload, '$.execution_epoch') = json_extract(NEW.payload, '$.execution_epoch')
+          AND json_extract(action.payload, '$.execution_epoch') = (
+            SELECT MAX(json_extract(opened.payload,'$.execution_epoch'))
+            FROM protocol_event opened
+            WHERE opened.aggregate_type='task'
+              AND opened.aggregate_id=NEW.task_id
+              AND opened.type IN ('task.execution.opened','task.execution.reopened')
+          )
+          AND NOT EXISTS (
+            SELECT 1 FROM protocol_event boundary
+            WHERE boundary.aggregate_type='task'
+              AND boundary.aggregate_id=NEW.task_id
+              AND boundary.type IN ('task.completed','task.failed','task.cancelled','task.deleted')
+              AND (
+                boundary.type='task.deleted'
+                OR json_extract(boundary.payload,'$.execution_epoch')=json_extract(NEW.payload,'$.execution_epoch')
+              )
+          )
+          AND NOT EXISTS (
+            SELECT 1 FROM engine_artifact outcome
+            WHERE outcome.task_id=action.task_id
+              AND outcome.kind='agent_coordination_action_outcome'
+              AND json_extract(outcome.payload,'$.action_id')=action.id
+              AND json_extract(outcome.payload,'$.status') IN ('completed','failed')
+          )
           AND json_extract(action.payload, '$.target_session_id') = json_extract(NEW.payload, '$.child_session_id')
           AND json_extract(action.payload, '$.target_agent') = json_extract(NEW.payload, '$.target_agent_id')
           AND json_extract(request.payload, '$.session_id') = json_extract(NEW.payload, '$.child_session_id')
@@ -2321,6 +2438,768 @@ AND EXISTS (
 )
 BEGIN
   SELECT RAISE(ABORT, 'engine_artifact_version: prior versions are immutable');
+END;
+
+-- Agent Coordination is an append-only fact chain. Current state is reduced
+-- from request, response/action plan, terminal outcome, and Task execution epoch.
+CREATE TRIGGER IF NOT EXISTS engine_agent_coordination_request_insert
+BEFORE INSERT ON engine_artifact
+FOR EACH ROW
+WHEN NEW.kind = 'agent_coordination_request'
+  AND NOT (
+    json_valid(NEW.payload)
+    AND json_type(NEW.payload) = 'object'
+    AND (SELECT COUNT(*) FROM json_each(NEW.payload)) = (SELECT COUNT(DISTINCT key) FROM json_each(NEW.payload))
+    AND NOT EXISTS (
+      SELECT 1 FROM json_each(NEW.payload)
+      WHERE key NOT IN (
+        'request_id','task_id','execution_epoch','session_id','agent','worker_binding','origin',
+        'message_id','tool_call_id','tool_part_id','tool_input','operator_steer_id','operator_message',
+        'delivery_slice_subject','summary','details','blocking','requested_decision','evidence_locators',
+        'severity','created_at','session_lineage_source','dispatch_lineage_id'
+      )
+    )
+    AND json_extract(NEW.payload,'$.request_id') = NEW.id
+    AND json_extract(NEW.payload,'$.task_id') = NEW.task_id
+    AND json_type(NEW.payload,'$.execution_epoch') = 'integer'
+    AND json_extract(NEW.payload,'$.execution_epoch') > 0
+    AND json_extract(NEW.payload,'$.execution_epoch') <= 9007199254740991
+    AND json_type(NEW.payload,'$.session_id') = 'text'
+    AND length(json_extract(NEW.payload,'$.session_id')) > 0
+    AND json_type(NEW.payload,'$.agent') = 'text'
+    AND length(json_extract(NEW.payload,'$.agent')) > 0
+    AND json_type(NEW.payload,'$.worker_binding') = 'object'
+    AND (SELECT COUNT(*) FROM json_each(NEW.payload,'$.worker_binding')) = 4
+    AND (SELECT COUNT(*) FROM json_each(NEW.payload,'$.worker_binding')) = (SELECT COUNT(DISTINCT key) FROM json_each(NEW.payload,'$.worker_binding'))
+    AND NOT EXISTS (
+      SELECT 1 FROM json_each(NEW.payload,'$.worker_binding')
+      WHERE key NOT IN ('identity','expertSquadID','workerTurnDescriptorID','workerTurnDescriptorHash')
+    )
+    AND json_type(NEW.payload,'$.worker_binding.identity') = 'object'
+    AND (SELECT COUNT(*) FROM json_each(NEW.payload,'$.worker_binding.identity')) = 7
+    AND (SELECT COUNT(*) FROM json_each(NEW.payload,'$.worker_binding.identity')) = (SELECT COUNT(DISTINCT key) FROM json_each(NEW.payload,'$.worker_binding.identity'))
+    AND NOT EXISTS (
+      SELECT 1 FROM json_each(NEW.payload,'$.worker_binding.identity')
+      WHERE key NOT IN ('agentID','baseRole','sessionKind','dispatchAdapterID','runtimeTemplateABIVersion','dispatchAdapterABIVersion','projectionHash')
+    )
+    AND json_extract(NEW.payload,'$.worker_binding.identity.agentID') = json_extract(NEW.payload,'$.agent')
+    AND EXISTS (
+      SELECT 1 FROM worker_turn_descriptor descriptor
+      WHERE descriptor.id=json_extract(NEW.payload,'$.worker_binding.workerTurnDescriptorID')
+        AND descriptor.task_id=NEW.task_id
+        AND descriptor.session_id=json_extract(NEW.payload,'$.session_id')
+        AND descriptor.hash=json_extract(NEW.payload,'$.worker_binding.workerTurnDescriptorHash')
+        AND descriptor.agent=json_extract(NEW.payload,'$.agent')
+        AND json_extract(descriptor.payload,'$.expertSquadID')=json_extract(NEW.payload,'$.worker_binding.expertSquadID')
+        AND json_extract(descriptor.payload,'$.identity.agentID')=json_extract(NEW.payload,'$.worker_binding.identity.agentID')
+        AND json_extract(descriptor.payload,'$.identity.baseRole')=json_extract(NEW.payload,'$.worker_binding.identity.baseRole')
+        AND json_extract(descriptor.payload,'$.identity.sessionKind')=json_extract(NEW.payload,'$.worker_binding.identity.sessionKind')
+        AND json_extract(descriptor.payload,'$.identity.dispatchAdapterID')=json_extract(NEW.payload,'$.worker_binding.identity.dispatchAdapterID')
+        AND json_extract(descriptor.payload,'$.identity.runtimeTemplateABIVersion')=json_extract(NEW.payload,'$.worker_binding.identity.runtimeTemplateABIVersion')
+        AND json_extract(descriptor.payload,'$.identity.dispatchAdapterABIVersion')=json_extract(NEW.payload,'$.worker_binding.identity.dispatchAdapterABIVersion')
+        AND json_extract(descriptor.payload,'$.identity.projectionHash')=json_extract(NEW.payload,'$.worker_binding.identity.projectionHash')
+    )
+    AND json_type(NEW.payload,'$.summary') = 'text'
+    AND length(json_extract(NEW.payload,'$.summary')) > 0
+    AND json_type(NEW.payload,'$.details') = 'text'
+    AND length(json_extract(NEW.payload,'$.details')) > 0
+    AND json_type(NEW.payload,'$.blocking') IN ('true','false')
+    AND json_type(NEW.payload,'$.requested_decision') = 'text'
+    AND length(json_extract(NEW.payload,'$.requested_decision')) > 0
+    AND (
+      json_type(NEW.payload,'$.delivery_slice_subject') IS NULL
+      OR (
+        json_type(NEW.payload,'$.delivery_slice_subject')='text'
+        AND length(json_extract(NEW.payload,'$.delivery_slice_subject')) > 0
+      )
+    )
+    AND json_extract(NEW.payload,'$.severity') IN ('info','blocked','failure')
+    AND (
+      json_type(NEW.payload,'$.evidence_locators') IS NULL
+      OR (
+        json_type(NEW.payload,'$.evidence_locators')='array'
+        AND NOT EXISTS (
+          SELECT 1 FROM json_each(NEW.payload,'$.evidence_locators') locator
+          WHERE NOT (${EVIDENCE_LOCATOR_DURABLE_ITEM_SQL})
+        )
+        AND NOT EXISTS (
+          SELECT 1
+          FROM json_each(NEW.payload,'$.evidence_locators') locator
+          GROUP BY json(locator.value)
+          HAVING COUNT(*)>1
+        )
+      )
+    )
+    AND json_type(NEW.payload,'$.created_at') = 'integer'
+    AND json_extract(NEW.payload,'$.created_at') BETWEEN 1 AND 9007199254740991
+    AND json_extract(NEW.payload,'$.created_at')=NEW.time_created
+    AND json_extract(NEW.payload,'$.execution_epoch') = (
+      SELECT MAX(json_extract(opened.payload,'$.execution_epoch'))
+      FROM protocol_event opened
+      WHERE opened.aggregate_type='task'
+        AND opened.aggregate_id=NEW.task_id
+        AND opened.type IN ('task.execution.opened','task.execution.reopened')
+    )
+    AND (
+      (
+        json_extract(NEW.payload,'$.origin') = 'worker_handoff'
+        AND json_extract(NEW.payload,'$.session_lineage_source') = 'dispatch_lineage'
+        AND json_type(NEW.payload,'$.message_id') = 'text'
+        AND json_type(NEW.payload,'$.tool_call_id') = 'text'
+        AND length(json_extract(NEW.payload,'$.tool_call_id')) > 0
+        AND json_type(NEW.payload,'$.tool_part_id') = 'text'
+        AND json_type(NEW.payload,'$.tool_input')='object'
+        AND (SELECT COUNT(*) FROM json_each(NEW.payload,'$.tool_input'))=
+            (SELECT COUNT(DISTINCT key) FROM json_each(NEW.payload,'$.tool_input'))
+        AND NOT EXISTS (
+          SELECT 1 FROM json_each(NEW.payload,'$.tool_input')
+          WHERE key NOT IN ('summary','details','blocking','requested_decision','evidence_locators','severity')
+        )
+        AND json_type(NEW.payload,'$.tool_input.summary')='text'
+        AND length(json_extract(NEW.payload,'$.tool_input.summary')) > 0
+        AND json_type(NEW.payload,'$.tool_input.details')='text'
+        AND length(json_extract(NEW.payload,'$.tool_input.details')) > 0
+        AND json_type(NEW.payload,'$.tool_input.blocking') IN ('true','false')
+        AND json_type(NEW.payload,'$.tool_input.requested_decision')='text'
+        AND length(json_extract(NEW.payload,'$.tool_input.requested_decision')) > 0
+        AND (json_type(NEW.payload,'$.tool_input.severity') IS NULL OR json_extract(NEW.payload,'$.tool_input.severity') IN ('info','blocked','failure'))
+        AND (
+          json_type(NEW.payload,'$.tool_input.evidence_locators') IS NULL
+          OR (
+            json_type(NEW.payload,'$.tool_input.evidence_locators')='array'
+            AND NOT EXISTS (
+              SELECT 1 FROM json_each(NEW.payload,'$.tool_input.evidence_locators') locator
+              WHERE NOT (${EVIDENCE_LOCATOR_INPUT_ITEM_SQL})
+            )
+            AND NOT EXISTS (
+              SELECT 1
+              FROM json_each(NEW.payload,'$.tool_input.evidence_locators') locator
+              GROUP BY json(locator.value)
+              HAVING COUNT(*)>1
+            )
+          )
+        )
+        AND json_extract(NEW.payload,'$.summary')=json_extract(NEW.payload,'$.tool_input.summary')
+        AND json_extract(NEW.payload,'$.details')=json_extract(NEW.payload,'$.tool_input.details')
+        AND json_extract(NEW.payload,'$.blocking')=json_extract(NEW.payload,'$.tool_input.blocking')
+        AND json_extract(NEW.payload,'$.requested_decision')=json_extract(NEW.payload,'$.tool_input.requested_decision')
+        AND json_extract(NEW.payload,'$.severity')=COALESCE(
+          json_extract(NEW.payload,'$.tool_input.severity'),
+          CASE WHEN json_extract(NEW.payload,'$.tool_input.blocking') THEN 'blocked' ELSE 'info' END
+        )
+        AND json_type(NEW.payload,'$.dispatch_lineage_id') = 'text'
+        AND json_type(NEW.payload,'$.operator_steer_id') IS NULL
+        AND json_type(NEW.payload,'$.operator_message') IS NULL
+        AND EXISTS (
+          SELECT 1
+          FROM tool_part_request part
+          JOIN message ON message.id=part.message_id
+          WHERE part.id=json_extract(NEW.payload,'$.tool_part_id')
+            AND part.message_id=json_extract(NEW.payload,'$.message_id')
+            AND message.session_id=json_extract(NEW.payload,'$.session_id')
+            AND json_extract(message.data,'$.role')='assistant'
+            AND json_extract(message.data,'$.author')=json_extract(NEW.payload,'$.agent')
+            AND json_extract(part.data,'$.callID')=json_extract(NEW.payload,'$.tool_call_id')
+            AND json_extract(part.data,'$.tool')='request_orchestrator_decision'
+            AND json(part.data -> '$.input')=json(NEW.payload -> '$.tool_input')
+        )
+        AND COALESCE(json_array_length(NEW.payload,'$.tool_input.evidence_locators'),0)=
+            COALESCE(json_array_length(NEW.payload,'$.evidence_locators'),0)
+        AND NOT EXISTS (
+          SELECT 1
+          FROM json_each(NEW.payload,'$.tool_input.evidence_locators') input_locator
+          LEFT JOIN json_each(NEW.payload,'$.evidence_locators') durable_locator
+            ON durable_locator.key=input_locator.key
+          WHERE durable_locator.key IS NULL
+             OR NOT (${EVIDENCE_LOCATOR_INPUT_DURABLE_MATCH_SQL})
+        )
+        AND EXISTS (
+          SELECT 1
+          FROM worker_turn_descriptor descriptor
+          JOIN engine_artifact lineage
+            ON lineage.id=json_extract(NEW.payload,'$.dispatch_lineage_id')
+           AND lineage.task_id=NEW.task_id
+           AND lineage.kind='dispatch_lineage'
+          WHERE descriptor.id=json_extract(NEW.payload,'$.worker_binding.workerTurnDescriptorID')
+            AND descriptor.task_id=NEW.task_id
+            AND descriptor.session_id=json_extract(NEW.payload,'$.session_id')
+            AND descriptor.hash=json_extract(NEW.payload,'$.worker_binding.workerTurnDescriptorHash')
+            AND json_type(descriptor.payload,'$.dispatchTurn')='object'
+            AND json_extract(descriptor.payload,'$.dispatchTurn.current_dispatch_id')=json_extract(lineage.payload,'$.dispatch_id')
+            AND json_extract(lineage.payload,'$.execution_epoch')=json_extract(NEW.payload,'$.execution_epoch')
+            AND json_extract(lineage.payload,'$.child_session_id')=json_extract(NEW.payload,'$.session_id')
+            AND json_extract(lineage.payload,'$.target_agent_id')=json_extract(NEW.payload,'$.agent')
+            AND json(lineage.payload -> '$.projected_worker_identity')=json(NEW.payload -> '$.worker_binding.identity')
+            AND json(lineage.payload -> '$.workflow_binding')=json(descriptor.payload -> '$.dispatchTurn.workflow_binding')
+            AND json_extract(lineage.payload,'$.workflow_node_id') IS json_extract(descriptor.payload,'$.dispatchTurn.workflow_node_id')
+            AND json_extract(lineage.payload,'$.workflow_occurrence_id')=json_extract(descriptor.payload,'$.dispatchTurn.workflow_occurrence_id')
+            AND json(lineage.payload -> '$.delivery_slice_revision_ids')=json(descriptor.payload -> '$.dispatchTurn.delivery_slice_revision_ids')
+        )
+      )
+      OR (
+        json_extract(NEW.payload,'$.origin') = 'operator_steer'
+        AND json_extract(NEW.payload,'$.operator_steer_id')=NEW.id
+        AND json_type(NEW.payload,'$.operator_message')='text'
+        AND length(json_extract(NEW.payload,'$.operator_message')) > 0
+        AND json_extract(NEW.payload,'$.details')=json_extract(NEW.payload,'$.operator_message')
+        AND json_extract(NEW.payload,'$.requested_decision')='operator_steer'
+        AND json_extract(NEW.payload,'$.blocking')=1
+        AND json_extract(NEW.payload,'$.severity')='blocked'
+        AND json_extract(NEW.payload,'$.summary')=
+          'Operator steer for ' || json_extract(NEW.payload,'$.agent') ||
+          ' session ' || json_extract(NEW.payload,'$.session_id')
+        AND json_type(NEW.payload,'$.message_id') IS NULL
+        AND json_type(NEW.payload,'$.tool_call_id') IS NULL
+        AND json_type(NEW.payload,'$.tool_part_id') IS NULL
+        AND json_type(NEW.payload,'$.tool_input') IS NULL
+        AND json_type(NEW.payload,'$.evidence_locators') IS NULL
+        AND json_extract(NEW.payload,'$.session_lineage_source')='dispatch_lineage'
+        AND json_type(NEW.payload,'$.dispatch_lineage_id')='text'
+        AND EXISTS (
+          SELECT 1
+          FROM worker_turn_descriptor descriptor
+          JOIN engine_artifact lineage
+            ON lineage.id=json_extract(NEW.payload,'$.dispatch_lineage_id')
+           AND lineage.task_id=NEW.task_id
+           AND lineage.kind='dispatch_lineage'
+          WHERE descriptor.id=json_extract(NEW.payload,'$.worker_binding.workerTurnDescriptorID')
+            AND descriptor.task_id=NEW.task_id
+            AND descriptor.session_id=json_extract(NEW.payload,'$.session_id')
+            AND descriptor.hash=json_extract(NEW.payload,'$.worker_binding.workerTurnDescriptorHash')
+            AND json_type(descriptor.payload,'$.dispatchTurn')='object'
+            AND json_extract(descriptor.payload,'$.dispatchTurn.current_dispatch_id')=json_extract(lineage.payload,'$.dispatch_id')
+            AND json_extract(lineage.payload,'$.execution_epoch')=json_extract(NEW.payload,'$.execution_epoch')
+            AND json_extract(lineage.payload,'$.child_session_id')=json_extract(NEW.payload,'$.session_id')
+            AND json_extract(lineage.payload,'$.target_agent_id')=json_extract(NEW.payload,'$.agent')
+            AND json(lineage.payload -> '$.projected_worker_identity')=json(NEW.payload -> '$.worker_binding.identity')
+            AND json(lineage.payload -> '$.workflow_binding')=json(descriptor.payload -> '$.dispatchTurn.workflow_binding')
+            AND json_extract(lineage.payload,'$.workflow_node_id') IS json_extract(descriptor.payload,'$.dispatchTurn.workflow_node_id')
+            AND json_extract(lineage.payload,'$.workflow_occurrence_id')=json_extract(descriptor.payload,'$.dispatchTurn.workflow_occurrence_id')
+            AND json(lineage.payload -> '$.delivery_slice_revision_ids')=json(descriptor.payload -> '$.dispatchTurn.delivery_slice_revision_ids')
+        )
+      )
+    )
+  )
+BEGIN
+  SELECT RAISE(ABORT, 'engine_artifact: invalid immutable agent coordination request fact');
+END;
+
+CREATE TRIGGER IF NOT EXISTS engine_agent_coordination_response_insert
+BEFORE INSERT ON engine_artifact
+FOR EACH ROW
+WHEN NEW.kind = 'agent_coordination_response'
+  AND NOT (
+    json_valid(NEW.payload)
+    AND json_type(NEW.payload)='object'
+    AND (SELECT COUNT(*) FROM json_each(NEW.payload))=(SELECT COUNT(DISTINCT key) FROM json_each(NEW.payload))
+    AND NOT EXISTS (
+      SELECT 1 FROM json_each(NEW.payload)
+      WHERE key NOT IN (
+        'response_id','request_id','frontier_id','previous_failed_outcome_id','action_id','task_id',
+        'execution_epoch','orchestrator_session_id','orchestrator_message_id','orchestrator_tool_call_id',
+        'orchestrator_tool_part_id','decision','reason','message','created_at'
+      )
+    )
+    AND json_extract(NEW.payload,'$.response_id')=NEW.id
+    AND json_extract(NEW.payload,'$.task_id')=NEW.task_id
+    AND json_type(NEW.payload,'$.request_id')='text'
+    AND json_type(NEW.payload,'$.frontier_id')='text'
+    AND json_type(NEW.payload,'$.action_id')='text'
+    AND json_type(NEW.payload,'$.execution_epoch')='integer'
+    AND json_extract(NEW.payload,'$.execution_epoch') BETWEEN 1 AND 9007199254740991
+    AND json_type(NEW.payload,'$.orchestrator_session_id')='text'
+    AND json_type(NEW.payload,'$.orchestrator_message_id')='text'
+    AND json_type(NEW.payload,'$.orchestrator_tool_call_id')='text'
+    AND length(json_extract(NEW.payload,'$.orchestrator_tool_call_id')) > 0
+    AND json_type(NEW.payload,'$.orchestrator_tool_part_id')='text'
+    AND json_extract(NEW.payload,'$.decision') IN ('cancel_worker','redispatch','fail_task','ask_user','acknowledge_terminal')
+    AND json_type(NEW.payload,'$.reason')='text'
+    AND length(json_extract(NEW.payload,'$.reason')) > 0
+    AND (json_type(NEW.payload,'$.message') IS NULL OR (json_type(NEW.payload,'$.message')='text' AND length(json_extract(NEW.payload,'$.message')) > 0))
+    AND json_type(NEW.payload,'$.created_at')='integer'
+    AND json_extract(NEW.payload,'$.created_at') BETWEEN 1 AND 9007199254740991
+    AND json_extract(NEW.payload,'$.created_at')=NEW.time_created
+    AND EXISTS (
+      SELECT 1 FROM engine_artifact request
+      WHERE request.id=json_extract(NEW.payload,'$.request_id')
+        AND request.task_id=NEW.task_id
+        AND request.kind='agent_coordination_request'
+        AND json_extract(request.payload,'$.execution_epoch')=json_extract(NEW.payload,'$.execution_epoch')
+        AND NEW.time_created > request.time_created
+    )
+    AND json_extract(NEW.payload,'$.execution_epoch') = (
+      SELECT MAX(json_extract(opened.payload,'$.execution_epoch'))
+      FROM protocol_event opened
+      WHERE opened.aggregate_type='task'
+        AND opened.aggregate_id=NEW.task_id
+        AND opened.type IN ('task.execution.opened','task.execution.reopened')
+    )
+    AND NOT EXISTS (
+      SELECT 1 FROM protocol_event deleted
+      WHERE deleted.aggregate_type='task'
+        AND deleted.aggregate_id=NEW.task_id
+        AND deleted.type='task.deleted'
+    )
+    AND (
+      (
+        json_extract(NEW.payload,'$.decision')='acknowledge_terminal'
+        AND EXISTS (
+          SELECT 1 FROM protocol_event terminal
+          WHERE terminal.aggregate_type='task'
+            AND terminal.aggregate_id=NEW.task_id
+            AND terminal.type IN ('task.completed','task.failed','task.cancelled')
+            AND json_extract(terminal.payload,'$.execution_epoch')=json_extract(NEW.payload,'$.execution_epoch')
+        )
+      )
+      OR (
+        json_extract(NEW.payload,'$.decision')!='acknowledge_terminal'
+        AND NOT EXISTS (
+          SELECT 1 FROM protocol_event boundary
+          WHERE boundary.aggregate_type='task'
+            AND boundary.aggregate_id=NEW.task_id
+            AND boundary.type IN ('task.completed','task.failed','task.cancelled','task.cancellation.requested')
+            AND json_extract(boundary.payload,'$.execution_epoch')=json_extract(NEW.payload,'$.execution_epoch')
+        )
+      )
+    )
+    AND (
+      (
+        json_type(NEW.payload,'$.previous_failed_outcome_id')='null'
+        AND json_extract(NEW.payload,'$.frontier_id')=json_extract(NEW.payload,'$.request_id')
+      )
+      OR (
+        json_type(NEW.payload,'$.previous_failed_outcome_id')='text'
+        AND json_extract(NEW.payload,'$.frontier_id')=json_extract(NEW.payload,'$.previous_failed_outcome_id')
+        AND EXISTS (
+          SELECT 1 FROM engine_artifact failed
+          WHERE failed.id=json_extract(NEW.payload,'$.previous_failed_outcome_id')
+            AND failed.task_id=NEW.task_id
+            AND failed.kind='agent_coordination_action_outcome'
+            AND json_extract(failed.payload,'$.request_id')=json_extract(NEW.payload,'$.request_id')
+            AND json_extract(failed.payload,'$.status')='failed'
+            AND NEW.time_created > failed.time_created
+        )
+      )
+    )
+    AND EXISTS (
+      SELECT 1
+      FROM tool_part_request part
+      JOIN message ON message.id=part.message_id
+      JOIN session orchestrator ON orchestrator.id=message.session_id
+      WHERE part.id=json_extract(NEW.payload,'$.orchestrator_tool_part_id')
+        AND part.message_id=json_extract(NEW.payload,'$.orchestrator_message_id')
+        AND message.session_id=json_extract(NEW.payload,'$.orchestrator_session_id')
+        AND json_extract(part.data,'$.callID')=json_extract(NEW.payload,'$.orchestrator_tool_call_id')
+        AND json_extract(part.data,'$.tool')='respond_agent_coordination'
+        AND orchestrator.kind='orchestrator'
+        AND EXISTS (
+          WITH RECURSIVE task_session_tree(id) AS (
+            SELECT task.session_id FROM engine_task task
+            WHERE task.id=NEW.task_id
+              AND task.project_id=orchestrator.project_id
+              AND task.session_id IS NOT NULL
+            UNION ALL
+            SELECT child.id FROM session child
+            JOIN task_session_tree parent ON child.parent_id=parent.id
+          )
+          SELECT 1 FROM task_session_tree WHERE id=orchestrator.id
+        )
+        AND json_extract(message.data,'$.role')='assistant'
+        AND json_extract(message.data,'$.author')='orchestrator'
+        AND json_extract(part.data,'$.input.request_id')=json_extract(NEW.payload,'$.request_id')
+        AND json_extract(part.data,'$.input.decision')=json_extract(NEW.payload,'$.decision')
+        AND json_extract(part.data,'$.input.reason')=json_extract(NEW.payload,'$.reason')
+        AND (
+          (json_type(NEW.payload,'$.message') IS NULL AND json_type(part.data,'$.input.message') IS NULL)
+          OR json_extract(part.data,'$.input.message')=json_extract(NEW.payload,'$.message')
+        )
+    )
+  )
+BEGIN
+  SELECT RAISE(ABORT, 'engine_artifact: invalid immutable agent coordination response fact');
+END;
+
+CREATE TRIGGER IF NOT EXISTS engine_agent_coordination_action_insert
+BEFORE INSERT ON engine_artifact
+FOR EACH ROW
+WHEN NEW.kind = 'agent_coordination_action'
+  AND NOT (
+    json_valid(NEW.payload)
+    AND json_type(NEW.payload)='object'
+    AND (SELECT COUNT(*) FROM json_each(NEW.payload))=(SELECT COUNT(DISTINCT key) FROM json_each(NEW.payload))
+    AND NOT EXISTS (
+      SELECT 1 FROM json_each(NEW.payload)
+      WHERE key NOT IN (
+        'action_id','request_id','response_id','task_id','execution_epoch','orchestrator_session_id',
+        'orchestrator_message_id','orchestrator_tool_call_id','orchestrator_tool_part_id','action','decision',
+        'target_session_id','target_agent','delivery_slice_subject','reason','redispatch_binding','created_at'
+      )
+    )
+    AND json_extract(NEW.payload,'$.action_id')=NEW.id
+    AND json_extract(NEW.payload,'$.task_id')=NEW.task_id
+    AND json_type(NEW.payload,'$.request_id')='text'
+    AND json_type(NEW.payload,'$.response_id')='text'
+    AND json_type(NEW.payload,'$.execution_epoch')='integer'
+    AND json_extract(NEW.payload,'$.execution_epoch') BETWEEN 1 AND 9007199254740991
+    AND json_type(NEW.payload,'$.orchestrator_session_id')='text'
+    AND json_type(NEW.payload,'$.orchestrator_message_id')='text'
+    AND json_type(NEW.payload,'$.orchestrator_tool_call_id')='text'
+    AND length(json_extract(NEW.payload,'$.orchestrator_tool_call_id')) > 0
+    AND json_type(NEW.payload,'$.orchestrator_tool_part_id')='text'
+    AND json_type(NEW.payload,'$.target_session_id')='text'
+    AND json_type(NEW.payload,'$.target_agent')='text'
+    AND length(json_extract(NEW.payload,'$.target_agent')) > 0
+    AND (
+      json_type(NEW.payload,'$.delivery_slice_subject') IS NULL
+      OR (
+        json_type(NEW.payload,'$.delivery_slice_subject')='text'
+        AND length(json_extract(NEW.payload,'$.delivery_slice_subject')) > 0
+      )
+    )
+    AND json_type(NEW.payload,'$.reason')='text'
+    AND length(json_extract(NEW.payload,'$.reason')) > 0
+    AND json_type(NEW.payload,'$.created_at')='integer'
+    AND json_extract(NEW.payload,'$.created_at') BETWEEN 1 AND 9007199254740991
+    AND json_extract(NEW.payload,'$.created_at')=NEW.time_created
+    AND json_extract(NEW.payload,'$.execution_epoch') = (
+      SELECT MAX(json_extract(opened.payload,'$.execution_epoch'))
+      FROM protocol_event opened
+      WHERE opened.aggregate_type='task'
+        AND opened.aggregate_id=NEW.task_id
+        AND opened.type IN ('task.execution.opened','task.execution.reopened')
+    )
+    AND NOT EXISTS (
+      SELECT 1 FROM protocol_event deleted
+      WHERE deleted.aggregate_type='task'
+        AND deleted.aggregate_id=NEW.task_id
+        AND deleted.type='task.deleted'
+    )
+    AND (
+      (
+        json_extract(NEW.payload,'$.decision')='acknowledge_terminal'
+        AND EXISTS (
+          SELECT 1 FROM protocol_event terminal
+          WHERE terminal.aggregate_type='task'
+            AND terminal.aggregate_id=NEW.task_id
+            AND terminal.type IN ('task.completed','task.failed','task.cancelled')
+            AND json_extract(terminal.payload,'$.execution_epoch')=json_extract(NEW.payload,'$.execution_epoch')
+        )
+      )
+      OR (
+        json_extract(NEW.payload,'$.decision')!='acknowledge_terminal'
+        AND NOT EXISTS (
+          SELECT 1 FROM protocol_event boundary
+          WHERE boundary.aggregate_type='task'
+            AND boundary.aggregate_id=NEW.task_id
+            AND boundary.type IN ('task.completed','task.failed','task.cancelled','task.cancellation.requested')
+            AND json_extract(boundary.payload,'$.execution_epoch')=json_extract(NEW.payload,'$.execution_epoch')
+        )
+      )
+    )
+    AND (
+      (json_extract(NEW.payload,'$.decision')='redispatch' AND json_extract(NEW.payload,'$.action')='redispatch_worker' AND json_type(NEW.payload,'$.redispatch_binding')='object')
+      OR (json_extract(NEW.payload,'$.decision')!='redispatch' AND json_extract(NEW.payload,'$.action')=json_extract(NEW.payload,'$.decision') AND json_type(NEW.payload,'$.redispatch_binding') IS NULL)
+    )
+    AND EXISTS (
+      SELECT 1
+      FROM engine_artifact response
+      JOIN engine_artifact request
+        ON request.id=json_extract(response.payload,'$.request_id')
+       AND request.task_id=response.task_id
+       AND request.kind='agent_coordination_request'
+      WHERE response.id=json_extract(NEW.payload,'$.response_id')
+        AND response.task_id=NEW.task_id
+        AND response.kind='agent_coordination_response'
+        AND NEW.time_created=response.time_created
+        AND json_extract(response.payload,'$.action_id')=NEW.id
+        AND json_extract(response.payload,'$.request_id')=json_extract(NEW.payload,'$.request_id')
+        AND json_extract(response.payload,'$.execution_epoch')=json_extract(NEW.payload,'$.execution_epoch')
+        AND json_extract(response.payload,'$.decision')=json_extract(NEW.payload,'$.decision')
+        AND json_extract(response.payload,'$.orchestrator_session_id')=json_extract(NEW.payload,'$.orchestrator_session_id')
+        AND json_extract(response.payload,'$.orchestrator_message_id')=json_extract(NEW.payload,'$.orchestrator_message_id')
+        AND json_extract(response.payload,'$.orchestrator_tool_call_id')=json_extract(NEW.payload,'$.orchestrator_tool_call_id')
+        AND json_extract(response.payload,'$.orchestrator_tool_part_id')=json_extract(NEW.payload,'$.orchestrator_tool_part_id')
+        AND json_extract(response.payload,'$.reason')=json_extract(NEW.payload,'$.reason')
+        AND json_extract(request.payload,'$.session_id')=json_extract(NEW.payload,'$.target_session_id')
+        AND json_extract(request.payload,'$.agent')=json_extract(NEW.payload,'$.target_agent')
+        AND json_extract(request.payload,'$.delivery_slice_subject') IS json_extract(NEW.payload,'$.delivery_slice_subject')
+        AND (
+          json_extract(NEW.payload,'$.decision')!='redispatch'
+          OR (
+            (SELECT COUNT(*) FROM json_each(NEW.payload,'$.redispatch_binding'))=10
+            AND (SELECT COUNT(*) FROM json_each(NEW.payload,'$.redispatch_binding'))=(SELECT COUNT(DISTINCT key) FROM json_each(NEW.payload,'$.redispatch_binding'))
+            AND NOT EXISTS (
+              SELECT 1 FROM json_each(NEW.payload,'$.redispatch_binding')
+              WHERE key NOT IN (
+                'identity','expertSquadID','workerTurnDescriptorID','workerTurnDescriptorHash',
+                'sourceDispatchLineageID','sourceDispatchID','workflowBinding','workflowNodeID',
+                'workflowOccurrenceID','deliverySliceRevisionIDs'
+              )
+            )
+            AND json_extract(NEW.payload,'$.redispatch_binding.sourceDispatchLineageID')=json_extract(request.payload,'$.dispatch_lineage_id')
+            AND json_extract(NEW.payload,'$.redispatch_binding.workerTurnDescriptorID')=json_extract(request.payload,'$.worker_binding.workerTurnDescriptorID')
+            AND json_extract(NEW.payload,'$.redispatch_binding.workerTurnDescriptorHash')=json_extract(request.payload,'$.worker_binding.workerTurnDescriptorHash')
+            AND json_extract(NEW.payload,'$.redispatch_binding.expertSquadID')=json_extract(request.payload,'$.worker_binding.expertSquadID')
+            AND json(NEW.payload -> '$.redispatch_binding.identity')=json(request.payload -> '$.worker_binding.identity')
+            AND EXISTS (
+              SELECT 1 FROM engine_artifact lineage
+              WHERE lineage.id=json_extract(NEW.payload,'$.redispatch_binding.sourceDispatchLineageID')
+                AND lineage.task_id=NEW.task_id
+                AND lineage.kind='dispatch_lineage'
+                AND json_extract(lineage.payload,'$.dispatch_id')=json_extract(NEW.payload,'$.redispatch_binding.sourceDispatchID')
+                AND json(lineage.payload -> '$.workflow_binding')=json(NEW.payload -> '$.redispatch_binding.workflowBinding')
+                AND json_extract(lineage.payload,'$.workflow_node_id') IS json_extract(NEW.payload,'$.redispatch_binding.workflowNodeID')
+                AND json_extract(lineage.payload,'$.workflow_occurrence_id')=json_extract(NEW.payload,'$.redispatch_binding.workflowOccurrenceID')
+                AND json(lineage.payload -> '$.delivery_slice_revision_ids')=json(NEW.payload -> '$.redispatch_binding.deliverySliceRevisionIDs')
+            )
+          )
+        )
+    )
+  )
+BEGIN
+  SELECT RAISE(ABORT, 'engine_artifact: invalid immutable agent coordination action fact');
+END;
+
+CREATE TRIGGER IF NOT EXISTS engine_agent_coordination_outcome_insert
+BEFORE INSERT ON engine_artifact
+FOR EACH ROW
+WHEN NEW.kind = 'agent_coordination_action_outcome'
+  AND NOT (
+    json_valid(NEW.payload)
+    AND json_type(NEW.payload)='object'
+    AND (SELECT COUNT(*) FROM json_each(NEW.payload))=(SELECT COUNT(DISTINCT key) FROM json_each(NEW.payload))
+    AND NOT EXISTS (
+      SELECT 1 FROM json_each(NEW.payload)
+      WHERE key NOT IN ('outcome_id','request_id','response_id','action_id','task_id','execution_epoch','action','status','result','error','created_at')
+    )
+    AND json_extract(NEW.payload,'$.outcome_id')=NEW.id
+    AND json_extract(NEW.payload,'$.task_id')=NEW.task_id
+    AND json_type(NEW.payload,'$.request_id')='text'
+    AND json_type(NEW.payload,'$.response_id')='text'
+    AND json_type(NEW.payload,'$.action_id')='text'
+    AND json_type(NEW.payload,'$.execution_epoch')='integer'
+    AND json_extract(NEW.payload,'$.execution_epoch') BETWEEN 1 AND 9007199254740991
+    AND json_extract(NEW.payload,'$.action') IN ('cancel_worker','redispatch_worker','fail_task','ask_user','acknowledge_terminal')
+    AND json_extract(NEW.payload,'$.status') IN ('completed','failed')
+    AND (json_type(NEW.payload,'$.result') IS NULL OR json_type(NEW.payload,'$.result')='object')
+    AND ((json_extract(NEW.payload,'$.status')='failed' AND json_type(NEW.payload,'$.error')='text' AND length(json_extract(NEW.payload,'$.error')) > 0) OR (json_extract(NEW.payload,'$.status')!='failed' AND json_type(NEW.payload,'$.error') IS NULL))
+    AND json_type(NEW.payload,'$.created_at')='integer'
+    AND json_extract(NEW.payload,'$.created_at') BETWEEN 1 AND 9007199254740991
+    AND json_extract(NEW.payload,'$.created_at')=NEW.time_created
+    AND json_extract(NEW.payload,'$.execution_epoch') = (
+      SELECT MAX(json_extract(opened.payload,'$.execution_epoch'))
+      FROM protocol_event opened
+      WHERE opened.aggregate_type='task'
+        AND opened.aggregate_id=NEW.task_id
+        AND opened.type IN ('task.execution.opened','task.execution.reopened')
+    )
+    AND EXISTS (
+      SELECT 1 FROM engine_artifact action
+      WHERE action.id=json_extract(NEW.payload,'$.action_id')
+        AND action.task_id=NEW.task_id
+        AND action.kind='agent_coordination_action'
+        AND NEW.time_created >= action.time_created
+        AND json_extract(action.payload,'$.request_id')=json_extract(NEW.payload,'$.request_id')
+        AND json_extract(action.payload,'$.response_id')=json_extract(NEW.payload,'$.response_id')
+        AND json_extract(action.payload,'$.execution_epoch')=json_extract(NEW.payload,'$.execution_epoch')
+        AND json_extract(action.payload,'$.action')=json_extract(NEW.payload,'$.action')
+    )
+    AND (
+      json_extract(NEW.payload,'$.status')='failed'
+      OR (
+        json_extract(NEW.payload,'$.status')='completed'
+        AND json_type(NEW.payload,'$.result')='object'
+        AND (SELECT COUNT(*) FROM json_each(NEW.payload,'$.result'))=(
+          SELECT COUNT(DISTINCT key) FROM json_each(NEW.payload,'$.result')
+        )
+        AND (
+          (
+            json_extract(NEW.payload,'$.action')='redispatch_worker'
+            AND NOT EXISTS (
+              SELECT 1 FROM json_each(NEW.payload,'$.result')
+              WHERE key NOT IN (
+                'dispatch_lineage_id','dispatch_id','dispatch_session_id','dispatch_agent_id',
+                'work_scope','dispatch_bound','awaiting_explicit_dispatch'
+              )
+            )
+            AND json_type(NEW.payload,'$.result.dispatch_lineage_id')='text'
+            AND json_type(NEW.payload,'$.result.dispatch_id')='text'
+            AND json_type(NEW.payload,'$.result.dispatch_session_id')='text'
+            AND json_type(NEW.payload,'$.result.dispatch_agent_id')='text'
+            AND json(NEW.payload -> '$.result.work_scope')=json('{"kind":"task"}')
+            AND json_extract(NEW.payload,'$.result.dispatch_bound')=1
+            AND json_extract(NEW.payload,'$.result.awaiting_explicit_dispatch')=0
+            AND EXISTS (
+              SELECT 1
+              FROM engine_artifact lineage
+              JOIN worker_turn_descriptor descriptor
+                ON descriptor.task_id=NEW.task_id
+               AND descriptor.session_id=json_extract(NEW.payload,'$.result.dispatch_session_id')
+               AND json_extract(descriptor.payload,'$.dispatchTurn.current_dispatch_id')=json_extract(lineage.payload,'$.dispatch_id')
+              WHERE lineage.id=json_extract(NEW.payload,'$.result.dispatch_lineage_id')
+                AND lineage.task_id=NEW.task_id
+                AND lineage.kind='dispatch_lineage'
+                AND json_extract(lineage.payload,'$.coordination_action_id')=json_extract(NEW.payload,'$.action_id')
+                AND json_extract(lineage.payload,'$.dispatch_id')=json_extract(NEW.payload,'$.result.dispatch_id')
+                AND json_extract(lineage.payload,'$.child_session_id')=json_extract(NEW.payload,'$.result.dispatch_session_id')
+                AND json_extract(lineage.payload,'$.target_agent_id')=json_extract(NEW.payload,'$.result.dispatch_agent_id')
+                AND json(lineage.payload -> '$.projected_worker_identity')=json(descriptor.payload -> '$.identity')
+                AND json(lineage.payload -> '$.workflow_binding')=json(descriptor.payload -> '$.dispatchTurn.workflow_binding')
+                AND json_extract(lineage.payload,'$.workflow_node_id') IS json_extract(descriptor.payload,'$.dispatchTurn.workflow_node_id')
+                AND json_extract(lineage.payload,'$.workflow_occurrence_id')=json_extract(descriptor.payload,'$.dispatchTurn.workflow_occurrence_id')
+                AND json(lineage.payload -> '$.delivery_slice_revision_ids')=json(descriptor.payload -> '$.dispatchTurn.delivery_slice_revision_ids')
+            )
+          )
+          OR (
+            json_extract(NEW.payload,'$.action')='ask_user'
+            AND NOT EXISTS (
+              SELECT 1 FROM json_each(NEW.payload,'$.result')
+              WHERE key NOT IN ('question_id','interaction_id','interaction_status')
+            )
+            AND json_type(NEW.payload,'$.result.question_id')='text'
+            AND json_type(NEW.payload,'$.result.interaction_id')='text'
+            AND json_extract(NEW.payload,'$.result.interaction_status') IN ('answered','rejected','expired')
+            AND EXISTS (
+              SELECT 1 FROM engine_interaction_request interaction
+              JOIN engine_artifact action
+                ON action.id=json_extract(NEW.payload,'$.action_id')
+               AND action.task_id=NEW.task_id
+               AND action.kind='agent_coordination_action'
+              JOIN engine_interaction_outcome outcome ON outcome.interaction_id=interaction.id
+              JOIN bus_publication_outbox publication ON publication.occurrence_id=outcome.source_occurrence_id
+              JOIN bus_publication_outbox request_publication ON request_publication.occurrence_id=interaction.source_id
+              WHERE interaction.id=json_extract(NEW.payload,'$.result.interaction_id')
+                AND interaction.source_kind='bus_question'
+                AND request_publication.occurrence_id='bus-occurrence:agent-coordination-question:' || action.id
+                AND request_publication.event_type='question.asked'
+                AND json_extract(NEW.payload,'$.result.question_id')='que_agent_coordination_' || action.id
+                AND COALESCE(interaction.external_id,json_extract(request_publication.properties,'$.id'))=json_extract(NEW.payload,'$.result.question_id')
+                AND COALESCE(interaction.task_id,NEW.task_id)=NEW.task_id
+                AND COALESCE(interaction.session_id,json_extract(request_publication.properties,'$.sessionID'))=json_extract(action.payload,'$.orchestrator_session_id')
+                AND json_extract(request_publication.properties,'$.sessionID')=json_extract(action.payload,'$.orchestrator_session_id')
+                AND json_extract(request_publication.properties,'$.tool.messageID')=json_extract(action.payload,'$.orchestrator_message_id')
+                AND json_extract(request_publication.properties,'$.tool.callID')=json_extract(action.payload,'$.orchestrator_tool_call_id')
+                AND json_type(request_publication.properties,'$.questions')='array'
+                AND (
+                  interaction.payload IS NULL
+                  OR (
+                    json(interaction.payload -> '$.questions')=json(request_publication.properties -> '$.questions')
+                    AND json(interaction.payload -> '$.tool')=json(request_publication.properties -> '$.tool')
+                  )
+                )
+                AND outcome.outcome IS NULL
+                AND outcome.response IS NULL
+                AND outcome.time_created IS NULL
+                AND publication.occurrence_id='bus-occurrence:question-terminal:' || json_extract(NEW.payload,'$.result.question_id')
+                AND json_extract(publication.properties,'$.requestID')=COALESCE(interaction.external_id,json_extract(request_publication.properties,'$.id'))
+                AND json_extract(publication.properties,'$.sessionID')=COALESCE(interaction.session_id,json_extract(request_publication.properties,'$.sessionID'))
+                AND (
+                  (publication.event_type='question.replied' AND json_extract(NEW.payload,'$.result.interaction_status')='answered')
+                  OR (publication.event_type='question.rejected' AND json_extract(NEW.payload,'$.result.interaction_status')='rejected')
+                  OR (publication.event_type='question.expired' AND json_extract(NEW.payload,'$.result.interaction_status')='expired')
+                )
+            )
+          )
+          OR (
+            json_extract(NEW.payload,'$.action')='fail_task'
+            AND NOT EXISTS (
+              SELECT 1 FROM json_each(NEW.payload,'$.result')
+              WHERE key NOT IN ('task_id','task_status','terminal_event_id')
+            )
+            AND json_extract(NEW.payload,'$.result.task_id')=NEW.task_id
+            AND json_extract(NEW.payload,'$.result.task_status')='failed'
+            AND EXISTS (
+              SELECT 1 FROM protocol_event terminal
+              WHERE terminal.id=json_extract(NEW.payload,'$.result.terminal_event_id')
+                AND terminal.aggregate_type='task'
+                AND terminal.aggregate_id=NEW.task_id
+                AND terminal.type='task.failed'
+                AND json_extract(terminal.payload,'$.execution_epoch')=json_extract(NEW.payload,'$.execution_epoch')
+            )
+          )
+          OR (
+            json_extract(NEW.payload,'$.action')='acknowledge_terminal'
+            AND NOT EXISTS (
+              SELECT 1 FROM json_each(NEW.payload,'$.result')
+              WHERE key NOT IN ('terminal_lifecycle_reference','terminal_ingress_id')
+            )
+            AND json_type(NEW.payload,'$.result.terminal_lifecycle_reference')='object'
+            AND (SELECT COUNT(*) FROM json_each(NEW.payload,'$.result.terminal_lifecycle_reference'))=1
+            AND (SELECT COUNT(*) FROM json_each(NEW.payload,'$.result.terminal_lifecycle_reference'))=(
+              SELECT COUNT(DISTINCT key) FROM json_each(NEW.payload,'$.result.terminal_lifecycle_reference')
+            )
+            AND NOT EXISTS (
+              SELECT 1 FROM json_each(NEW.payload,'$.result.terminal_lifecycle_reference')
+              WHERE key != 'terminalEventID'
+            )
+            AND json_type(NEW.payload,'$.result.terminal_lifecycle_reference.terminalEventID')='text'
+            AND length(json_extract(NEW.payload,'$.result.terminal_lifecycle_reference.terminalEventID')) > 0
+            AND EXISTS (
+              SELECT 1 FROM protocol_event terminal
+              WHERE terminal.id=json_extract(NEW.payload,'$.result.terminal_lifecycle_reference.terminalEventID')
+                AND terminal.aggregate_type='task'
+                AND terminal.aggregate_id=NEW.task_id
+                AND terminal.type IN ('task.cancelled','task.completed','task.failed')
+                AND json_extract(terminal.payload,'$.execution_epoch')=json_extract(NEW.payload,'$.execution_epoch')
+            )
+            AND EXISTS (
+              SELECT 1 FROM engine_task_root_ingress ingress
+              WHERE ingress.id=json_extract(NEW.payload,'$.result.terminal_ingress_id')
+                AND ingress.task_id=NEW.task_id
+                AND ingress.source='engine_artifact'
+                AND ingress.source_id=json_extract(NEW.payload,'$.request_id')
+            )
+          )
+          OR (
+            json_extract(NEW.payload,'$.action')='cancel_worker'
+            AND NOT EXISTS (
+              SELECT 1 FROM json_each(NEW.payload,'$.result')
+              WHERE key NOT IN ('session_id','physical_cancelled','prompt_cancelled','summary')
+            )
+            AND json_type(NEW.payload,'$.result.session_id')='text'
+            AND json_type(NEW.payload,'$.result.physical_cancelled') IN ('true','false')
+            AND json_type(NEW.payload,'$.result.prompt_cancelled') IN ('true','false')
+            AND json_extract(NEW.payload,'$.result.physical_cancelled')=json_extract(NEW.payload,'$.result.prompt_cancelled')
+            AND json_type(NEW.payload,'$.result.summary')='text'
+            AND length(json_extract(NEW.payload,'$.result.summary')) > 0
+            AND EXISTS (
+              SELECT 1 FROM engine_artifact action
+              JOIN session target ON target.id=json_extract(action.payload,'$.target_session_id')
+              JOIN engine_task task ON task.id=action.task_id AND task.project_id=target.project_id
+              WHERE action.id=json_extract(NEW.payload,'$.action_id')
+                AND action.task_id=NEW.task_id
+                AND json_extract(action.payload,'$.target_session_id')=json_extract(NEW.payload,'$.result.session_id')
+            )
+          )
+        )
+      )
+    )
+  )
+BEGIN
+  SELECT RAISE(ABORT, 'engine_artifact: invalid immutable agent coordination action outcome fact');
+END;
+
+CREATE TRIGGER IF NOT EXISTS engine_agent_coordination_fact_no_update
+BEFORE UPDATE ON engine_artifact
+FOR EACH ROW
+WHEN OLD.kind IN (
+  'agent_coordination_request','agent_coordination_response','agent_coordination_action',
+  'agent_coordination_action_outcome'
+)
+BEGIN
+  SELECT RAISE(ABORT, 'engine_artifact: agent coordination facts are immutable');
+END;
+
+CREATE TRIGGER IF NOT EXISTS engine_agent_coordination_fact_no_delete
+BEFORE DELETE ON engine_artifact
+FOR EACH ROW
+WHEN OLD.kind IN (
+  'agent_coordination_request','agent_coordination_response','agent_coordination_action',
+  'agent_coordination_action_outcome'
+)
+AND EXISTS (SELECT 1 FROM engine_task task WHERE task.id=OLD.task_id)
+BEGIN
+  SELECT RAISE(ABORT, 'engine_artifact: agent coordination facts are immutable until Task retention');
 END;
 
 -- Architect ContractGraph and GoalGraphProjection rows are immutable

@@ -172,7 +172,7 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | POST | `/task/{taskID}/rewind` | Rewind the visible Task conversation timeline 请求体: `anchor`, `reason`; 错误: `LogFileNotFoundError`, `NotFoundError`. | `task.rewind` |
 | POST | `/task/{taskID}/rewind/clear` | Clear the Task conversation visibility cursor 错误: `LogFileNotFoundError`, `NotFoundError`. | `task.clearRewindCursor` |
 | POST | `/task/{taskID}/session/{sessionID}/cancel` | Cancel a task agent session 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `task.session.cancel` |
-| POST | `/task/{taskID}/session/{sessionID}/operator-steer` | Steer a task agent session through operator coordination 请求体: `message`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `OperatorSteerTargetError`, `TaskCancellationIncompleteError`. | `task.session.operatorSteer` |
+| POST | `/task/{taskID}/session/{sessionID}/operator-steer` | Steer a task agent session through operator coordination 请求体: `message`, `request_id`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `OperatorSteerRequestConflictError`, `OperatorSteerTargetError`. | `task.session.operatorSteer` |
 | GET | `/task/{taskID}/status` | Get task status 错误: `LogFileNotFoundError`, `NotFoundError`. | `task.status` |
 | PATCH | `/task/{taskID}/title` | Update task title 请求体: `title`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `task.updateTitle` |
 | GET | `/task/{taskID}/trace` | Get task AgentTrace events (all sessions) 错误: `LogFileNotFoundError`, `NotFoundError`. | `task.trace` |

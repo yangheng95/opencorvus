@@ -25,6 +25,12 @@ import {
 } from "@/engine/task-completion-closure"
 import { Log } from "@/util/log"
 import { CancelTaskInputSchema, CompleteTaskInputSchema, FailTaskInputSchema } from "./task-lifecycle-input"
+import {
+  assertActiveAgentCoordinationActionInTransaction,
+  assertCurrentAgentCoordinationActionInTransaction,
+  completeAgentCoordinationActionInTransaction,
+} from "@/engine/agent-coordination"
+import { taskLifecycleProjectionInTransaction } from "@/engine/task-lifecycle"
 
 const log = Log.create({ service: "orchestrator.task-lifecycle-tools" })
 
@@ -33,22 +39,54 @@ export { CancelTaskInputSchema, CompleteTaskInputSchema, FailTaskInputSchema } f
 export async function failTaskLifecycle(input: {
   taskID: string
   error: string
-  a2aRequestID?: string
-}): Promise<{ recoveredTerminalFailure: boolean }> {
+  coordinationAction?: { actionID: string; executionEpoch: number }
+}): Promise<{ terminalEventID?: string; coordinationOutcomeCreatedNow: boolean }> {
   const task = requireTask(input.taskID)
-  const recoveredTerminalFailure =
-    input.a2aRequestID !== undefined &&
-    deriveTaskStatus(task) === "failed" &&
-    input.error.startsWith(`A2A request ${input.a2aRequestID}:`) &&
-    task.error === input.error
-  if (!recoveredTerminalFailure) {
-    await terminalTask(
-      task,
-      { status: "failed", error: input.error },
-      `Failed: ${input.error}`,
-    )
+  let terminalEventID: string | undefined
+  let coordinationOutcomeCreatedNow = false
+  const coordinationAuthority = input.coordinationAction
+    ? {
+        taskID: input.taskID,
+        actionID: input.coordinationAction.actionID,
+        executionEpoch: input.coordinationAction.executionEpoch,
+        action: "fail_task" as const,
+      }
+    : undefined
+  await terminalTask(
+    task,
+    { status: "failed", error: input.error },
+    `Failed: ${input.error}`,
+    coordinationAuthority
+      ? {
+          checkpointAdmission: {
+            executionEpoch: coordinationAuthority.executionEpoch,
+            effect: (db) => assertActiveAgentCoordinationActionInTransaction(db, coordinationAuthority),
+          },
+          transactionEffect: (db) => {
+            assertCurrentAgentCoordinationActionInTransaction(db, coordinationAuthority)
+            const lifecycle = taskLifecycleProjectionInTransaction(db, input.taskID)
+            if (lifecycle.status !== "failed" || !lifecycle.terminalEventID) {
+              throw new Error(`Task ${input.taskID} did not append its exact failed lifecycle fact`)
+            }
+            terminalEventID = lifecycle.terminalEventID
+            coordinationOutcomeCreatedNow = completeAgentCoordinationActionInTransaction(db, {
+              taskID: input.taskID,
+              actionID: coordinationAuthority.actionID,
+              result: {
+                task_id: input.taskID,
+                task_status: "failed",
+                terminal_event_id: lifecycle.terminalEventID,
+              },
+              summary: "fail_task completed",
+            }).createdNow
+          },
+        }
+      : undefined,
+  )
+  if (coordinationAuthority && !terminalEventID) {
+    throw new Error(`Agent coordination fail action ${coordinationAuthority.actionID} did not own a new Task failure`)
   }
-  return { recoveredTerminalFailure }
+  return { terminalEventID, coordinationOutcomeCreatedNow }
 }
 
 export function createTaskLifecycleTools(input: {

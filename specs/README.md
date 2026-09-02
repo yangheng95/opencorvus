@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest scheduling razor remediation Cut 8c: [`2026-09-02-scheduling-razor-remediation-cut-8c.md`](records/2026-09/2026-09-02-scheduling-razor-remediation-cut-8c.md).
+
 Latest scheduling razor remediation Cut 8: [`2026-09-01-scheduling-razor-remediation-cut-8.md`](records/2026-09/2026-09-01-scheduling-razor-remediation-cut-8.md).
 
 Latest Scheduled busy-Session occurrence E2E repair: [`2026-08-31-scheduled-busy-occurrence-e2e-repair.md`](records/2026-08/2026-08-31-scheduled-busy-occurrence-e2e-repair.md).

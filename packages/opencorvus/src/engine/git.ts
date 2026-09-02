@@ -78,6 +78,7 @@ function beginCheckpointRequest(input: {
   stage: "baseline" | "result" | "acceptance_round"
   operationKey: string
   effectInput: Record<string, unknown>
+  admission?: (db: Database.TxOrDb) => void
 }) {
   return Database.immediateTransaction((db) => {
     const id = checkpointRequestID(input.taskID, input.operationKey)
@@ -96,6 +97,7 @@ function beginCheckpointRequest(input: {
       ) throw new Error(`Git checkpoint request ${id} replay changed its exact input`)
       throw new GitCheckpointOutcomeUnknownError(id)
     }
+    input.admission?.(db)
     const request = {
       id,
       task_id: input.taskID,
@@ -1699,7 +1701,10 @@ export namespace EngineGit {
     }
   }
 
-  export async function prepare(task: TaskRow) {
+  export async function prepare(
+    task: TaskRow,
+    admission?: Readonly<{ executionEpoch: number; effect: (db: Database.TxOrDb) => void }>,
+  ) {
     if (baseline(task)) return { task: projectGitTask(task) }
     const processBinding = readTaskProcessBinding(task.id)
     const initialTreeSHA256 =
@@ -1727,7 +1732,7 @@ export namespace EngineGit {
         },
       }
     }
-    const operationKey = checkpointOperationKey(task.id, "baseline")
+    const operationKey = checkpointOperationKey(task.id, "baseline", admission?.executionEpoch)
     let admitted: ReturnType<typeof beginCheckpointRequest>
     try {
       admitted = beginCheckpointRequest({
@@ -1735,6 +1740,7 @@ export namespace EngineGit {
         stage: "baseline",
         operationKey,
         effectInput: { root: taskRootDirectory(task), initialTreeSHA256, executionBaselineTreeSHA256 },
+        admission: admission?.effect,
       })
     } catch (error) {
       if (error instanceof GitCheckpointOutcomeUnknownError) return { task: projectGitTask(task), error: error.message }
@@ -1780,16 +1786,26 @@ export namespace EngineGit {
     return { task: projectGitTask(task) }
   }
 
-  export async function complete(task: TaskRow) {
+  export async function complete(
+    task: TaskRow,
+    admission?: Readonly<{ executionEpoch: number; effect: (db: Database.TxOrDb) => void }>,
+  ) {
     if (result(task)) return { task: projectGitTask(task) }
-    const operationKey = checkpointOperationKey(task.id, "result")
+    const operationKey = checkpointOperationKey(task.id, "result", admission?.executionEpoch)
     let admitted: ReturnType<typeof beginCheckpointRequest>
     try {
       admitted = beginCheckpointRequest({
         taskID: task.id,
         stage: "result",
         operationKey,
-        effectInput: { root: taskRootDirectory(task), baselineRequest: checkpointRequestID(task.id, checkpointOperationKey(task.id, "baseline")) },
+        effectInput: {
+          root: taskRootDirectory(task),
+          baselineRequest: checkpointRequestID(
+            task.id,
+            checkpointOperationKey(task.id, "baseline", admission?.executionEpoch),
+          ),
+        },
+        admission: admission?.effect,
       })
     } catch (error) {
       if (error instanceof GitCheckpointOutcomeUnknownError) return { task: projectGitTask(task), error: error.message }

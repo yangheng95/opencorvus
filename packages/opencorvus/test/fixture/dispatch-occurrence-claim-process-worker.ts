@@ -1,6 +1,8 @@
 import { Config } from "@/config/config"
 import { joinProcessLivenessLease } from "@/engine/process-liveness"
 import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
+import { EngineTaskRootIngressTable } from "@/engine/engine.sql"
+import { acquireTaskRootIngressLease } from "@/engine/task-root-fact-store"
 import {
   reconcileTaskControlPlane,
   TestHooks as TaskControlTestHooks,
@@ -9,6 +11,7 @@ import { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
 import { Identifier } from "@/id/id"
 import { BrowserMCPBuiltin } from "@/mcp/browser/builtin"
 import { createOrchestratorTools, OrchestratorToolsTestHooks } from "@/orchestrator/tools"
+import { currentOrchestratorControlMessage } from "@/orchestrator/agent"
 import { Provider } from "@/provider/provider"
 import { Instance } from "@/project/instance"
 import { sendSchedulerMessage } from "@/protocol/scheduler-message"
@@ -17,7 +20,7 @@ import { declareNativeTaskProcessDeployment } from "@/runtime/task-process-deplo
 import { Session } from "@/session"
 import { MessageStore } from "@/session/message-store"
 import { SessionProcessor } from "@/session/processor"
-import { Database } from "@/storage/db"
+import { Database, eq } from "@/storage/db"
 import fs from "node:fs"
 import path from "node:path"
 import { persistEstablishedTask } from "../fixture/engine-task"
@@ -44,7 +47,7 @@ declareNativeTaskProcessDeployment()
 
 const TASK_ID = Identifier.deterministic("task", "cross-process-dispatch-occurrence-claim")
 const ROOT_SESSION_ID = Identifier.deterministic("session", "cross-process-dispatch-occurrence-root")
-const USER_MESSAGE_ID = Identifier.deterministic("message", "cross-process-dispatch-occurrence-user")
+const ORCHESTRATOR_SESSION_ID = Identifier.deterministic("session", "cross-process-dispatch-occurrence-orchestrator")
 const ASSISTANT_MESSAGE_ID = Identifier.deterministic("message", "cross-process-dispatch-occurrence-assistant")
 const TOOL_PART_ID = Identifier.deterministic("part", "cross-process-dispatch-occurrence-tool-part")
 const TOOL_CALL_ID = Identifier.deterministic("call", "cross-process-dispatch-occurrence-tool-call")
@@ -184,19 +187,61 @@ async function run() {
             timeCreated: now,
           }),
         })
+        const ingress = Database.use((db) =>
+          db
+            .select()
+            .from(EngineTaskRootIngressTable)
+            .where(eq(EngineTaskRootIngressTable.task_id, TASK_ID))
+            .orderBy(EngineTaskRootIngressTable.sequence, EngineTaskRootIngressTable.id)
+            .get(),
+        )
+        if (!ingress) throw new Error(`Cross-process dispatch Task ${TASK_ID} has no creation ingress`)
+        const activation = acquireTaskRootIngressLease({
+          ingressID: ingress.id,
+          ownerOccurrenceID: `dispatch-claim-seed:${TASK_ID}`,
+          now: now + 1,
+          leaseMilliseconds: 120_000,
+          assertControlOwnerInTransaction: () => undefined,
+        })
+        if (!activation.acquired) throw new Error(`Cross-process dispatch Task ${TASK_ID} could not acquire its ingress`)
+        const orchestrator = await Session.createNext({
+          id: ORCHESTRATOR_SESSION_ID,
+          kind: "orchestrator",
+          parentID: root.id,
+          directory: projectPath,
+          title: "Cross-process dispatch occurrence orchestrator",
+        })
+        const control = currentOrchestratorControlMessage(
+          { taskCreation: { taskID: TASK_ID } },
+          TASK_ID,
+          ingress.id,
+          ingress.id,
+        )
+        if (!control) throw new Error(`Cross-process dispatch Task ${TASK_ID} has no control Message`)
         await Session.updateMessage({
-          id: USER_MESSAGE_ID,
-          sessionID: root.id,
+          id: control.messageID,
+          sessionID: orchestrator.id,
           role: "user",
-          author: "user",
+          author: "orchestrator",
           agent: "orchestrator",
           model: { providerID: "test", modelID: "test-model" },
+          extra: control.extra,
           time: { created: now + 1 },
+        })
+        await Session.updatePart({
+          id: control.partID,
+          sessionID: orchestrator.id,
+          messageID: control.messageID,
+          type: "text",
+          text: control.text,
+          kind: "control",
+          source: "system",
         })
         await Session.updateMessage({
           id: ASSISTANT_MESSAGE_ID,
-          parentID: USER_MESSAGE_ID,
-          sessionID: root.id,
+          parentID: control.messageID,
+          acceptedInputMessageIDs: [control.messageID],
+          sessionID: orchestrator.id,
           role: "assistant",
           author: "orchestrator",
           agent: "orchestrator",
@@ -205,11 +250,12 @@ async function run() {
           path: { cwd: projectPath, root: projectPath },
           cost: 0,
           tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+          activationID: activation.activationID,
           time: { created: now + 2 },
         })
         await Session.updatePart({
           id: TOOL_PART_ID,
-          sessionID: root.id,
+          sessionID: orchestrator.id,
           messageID: ASSISTANT_MESSAGE_ID,
           type: "tool",
           callID: TOOL_CALL_ID,
@@ -242,7 +288,7 @@ async function run() {
             : undefined
         const surface = createOrchestratorTools({
           taskID: TASK_ID,
-          agentSessionID: ROOT_SESSION_ID,
+          agentSessionID: ORCHESTRATOR_SESSION_ID,
           sendSchedulerMessage,
           dispatchAgents: [worker],
         })
@@ -253,14 +299,14 @@ async function run() {
         const result = (await frontier.execute(input, {
           toolCallId: TOOL_CALL_ID,
           opencorvus: {
-            sessionID: ROOT_SESSION_ID,
+            sessionID: ORCHESTRATOR_SESSION_ID,
             messageID: ASSISTANT_MESSAGE_ID,
             toolCallID: TOOL_CALL_ID,
             toolPartID: TOOL_PART_ID,
             visibleToolName: "dispatch_agents",
           },
         })) as { title: string; output: string; metadata: Record<string, unknown> }
-        const existing = await MessageStore.get({ sessionID: ROOT_SESSION_ID, messageID: ASSISTANT_MESSAGE_ID })
+        const existing = await MessageStore.get({ sessionID: ORCHESTRATOR_SESSION_ID, messageID: ASSISTANT_MESSAGE_ID })
         const part = existing.parts.find((candidate) => candidate.id === TOOL_PART_ID)
         if (!part || part.type !== "tool") {
           throw new Error("Production dispatch_agents outer occurrence is missing")
@@ -270,7 +316,7 @@ async function run() {
         if (part.state.status === "running" && ownsOuterOutcome) {
           await Session.updatePart({
             id: TOOL_PART_ID,
-            sessionID: ROOT_SESSION_ID,
+            sessionID: ORCHESTRATOR_SESSION_ID,
             messageID: ASSISTANT_MESSAGE_ID,
             type: "tool",
             callID: TOOL_CALL_ID,

@@ -112,10 +112,10 @@ export function Card(props: { node: CardNode; depth: number }) {
     await submitTaskRewind({ taskID, cursorTime, anchorID, resetWorktree: opts.resetWorktree })
   }
 
-  const onOperatorSteer = async (sessionID: string, message: string) => {
+  const onOperatorSteer = async (sessionID: string, requestID: string, message: string) => {
     const taskID = activeTaskID()
     if (!taskID) throw new Error(t("card.agent_reply_missing_task"))
-    return await sendOperatorSteer(taskID, sessionID, message)
+    return await sendOperatorSteer(taskID, sessionID, requestID, message)
   }
 
   const onAgentCancel = async (sessionID: string) => {
@@ -252,7 +252,10 @@ export function Card(props: { node: CardNode; depth: number }) {
               card. All sessions use the operator-steer route so guidance is
               recorded as a coordination request for the orchestrator. */}
           <Show when={steerTargetSessionID()}>
-            <OperatorSteerBox onSend={(message) => onOperatorSteer(steerTargetSessionID()!, message)} />
+            <OperatorSteerBox
+              stateKey={steerTargetSessionID()!}
+              onSend={(requestID, message) => onOperatorSteer(steerTargetSessionID()!, requestID, message)}
+            />
           </Show>
         </div>
       </Show>

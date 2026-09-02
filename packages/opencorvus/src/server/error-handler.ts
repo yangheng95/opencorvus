@@ -74,6 +74,7 @@ export function namedErrorStatus(err: { name: string }): ContentfulStatusCode {
   if (err.name === "VcsPrerequisiteError") return 412
   if (err.name.startsWith("Worktree")) return 400
   if (err.name === "OperatorSteerTargetError") return 400
+  if (err.name === "OperatorSteerRequestConflictError") return 409
   if (err.name === "SessionRuntimeContractMissingError") return 410
   if (err.name === "TaskEmptyMessageError") return 400
   if (err.name === "ExternalChildTaskLineageError") return 400

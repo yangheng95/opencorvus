@@ -1,9 +1,14 @@
 import { Bus } from "@/bus"
-import { agentCoordinationQuestionID, listAgentCoordinationActions } from "./agent-coordination"
+import { Identifier } from "@/id/id"
+import {
+  agentCoordinationQuestionID,
+  findAgentCoordinationActionsByIDs,
+  type AgentCoordinationActionRow,
+} from "./agent-coordination"
 import { PermissionAuthority } from "@/permission/authority"
 import { Instance } from "@/project/instance"
 import { Question } from "@/question"
-import { Database, and, eq } from "@/storage/db"
+import { Database, and, asc, eq, gt } from "@/storage/db"
 import { MessageStore } from "@/session/message-store"
 import {
   EngineInteractionRequestTable,
@@ -72,15 +77,6 @@ export namespace EngineInteraction {
         `Recovered interaction reconciliation project ${input.projectID} does not match active project ${Instance.project.id}`,
       )
     }
-    const pending = Database.use((db) =>
-      db
-        .select()
-        .from(EngineInteractionRequestTable)
-        .orderBy(EngineInteractionRequestTable.time_created, EngineInteractionRequestTable.id)
-        .all()
-        .map((row) => projectInteractionRowInTransaction(db, row))
-        .filter((row) => row.status === "pending" && db.select({ projectID: EngineTaskTable.project_id }).from(EngineTaskTable).where(eq(EngineTaskTable.id, row.task_id)).get()?.projectID === input.projectID),
-    )
     const abandoned: Array<{
       interactionID: string
       externalID: string
@@ -95,7 +91,44 @@ export namespace EngineInteraction {
     const retainedControlPlaneGates: Array<{ interactionID: string; externalID: string }> = []
     const unreconciled: Array<{ interactionID: string; externalID: string; error: string }> = []
 
-    for (const interaction of pending) {
+    let cursor = ""
+    while (true) {
+      const rawPage = Database.use((db) =>
+        db
+          .select()
+          .from(EngineInteractionRequestTable)
+          .where(cursor ? gt(EngineInteractionRequestTable.id, cursor) : undefined)
+          .orderBy(asc(EngineInteractionRequestTable.id))
+          .limit(64)
+          .all(),
+      )
+      if (rawPage.length === 0) break
+      cursor = rawPage.at(-1)!.id
+      const pending = Database.use((db) =>
+        rawPage
+          .map((row) => projectInteractionRowInTransaction(db, row))
+          .filter(
+            (row) =>
+              row.status === "pending" &&
+              db
+                .select({ projectID: EngineTaskTable.project_id })
+                .from(EngineTaskTable)
+                .where(eq(EngineTaskTable.id, row.task_id))
+                .get()?.projectID === input.projectID,
+          ),
+      )
+      const actionIDs = pending.flatMap((interaction) => {
+        if (interaction.request_type !== "question") return []
+        const prefix = "que_agent_coordination_"
+        if (!interaction.external_id.startsWith(prefix)) return []
+        const parsed = Identifier.schema("artifact").safeParse(interaction.external_id.slice(prefix.length))
+        return parsed.success ? [parsed.data] : []
+      })
+      const actionsByID = new Map(
+        findAgentCoordinationActionsByIDs(actionIDs).map((action) => [action.artifactID, action]),
+      )
+
+      for (const interaction of pending) {
       try {
         if (!interaction.session_id) {
           throw new Error(`Pending interaction ${interaction.id} has no Session identity during project recovery`)
@@ -123,7 +156,7 @@ export namespace EngineInteraction {
             ...(payload.automatic ? { automatic: payload.automatic } : {}),
             ...(payload.expiry ? { expiry: payload.expiry } : {}),
           }))
-          const recoverableAction = await recoverableAgentCoordinationQuestion(interaction)
+          const recoverableAction = await recoverableAgentCoordinationQuestion(interaction, actionsByID)
           if (recoverableAction) {
             retainedRecoverableQuestions.push({
               interactionID: interaction.id,
@@ -162,6 +195,8 @@ export namespace EngineInteraction {
           error: message,
         })
       }
+      }
+      if (rawPage.length < 64) break
     }
     return {
       abandoned,
@@ -215,19 +250,21 @@ function requireInteractionSession(
   }
 }
 
-async function recoverableAgentCoordinationQuestion(interaction: InteractionRow): Promise<string | undefined> {
-  const candidates = listAgentCoordinationActions(interaction.task_id).filter(
-    (action) =>
-      action.payload.action === "ask_user" &&
-      agentCoordinationQuestionID(action.payload.action_id) === interaction.external_id,
-  )
-  if (candidates.length === 0) return undefined
-  if (candidates.length !== 1) {
-    throw new Error(
-      `Pending interaction ${interaction.id} matches ${candidates.length} A2A ask_user actions; refusing ambiguous recovery`,
-    )
+async function recoverableAgentCoordinationQuestion(
+  interaction: InteractionRow,
+  actionsByID: ReadonlyMap<string, AgentCoordinationActionRow>,
+): Promise<string | undefined> {
+  const questionID = interaction.external_id
+  const prefix = "que_agent_coordination_"
+  if (!questionID?.startsWith(prefix)) return undefined
+  const actionID = questionID.slice(prefix.length)
+  const parsedActionID = Identifier.schema("artifact").safeParse(actionID)
+  if (!parsedActionID.success) return undefined
+  const action = actionsByID.get(parsedActionID.data)
+  if (!action || action.payload.action !== "ask_user") return undefined
+  if (agentCoordinationQuestionID(action.payload.action_id) !== questionID) {
+    throw new Error(`Pending interaction ${interaction.id} changed its deterministic A2A action identity`)
   }
-  const action = candidates[0]!
   if (action.payload.status !== "pending" || action.payload.decision !== "ask_user") {
     throw new Error(
       `Pending A2A interaction ${interaction.id} points to ${action.payload.status}/${action.payload.decision} action ${action.artifactID}`,
@@ -241,18 +278,6 @@ async function recoverableAgentCoordinationQuestion(interaction: InteractionRow)
   }
   if (taskIDForSession(action.payload.orchestrator_session_id) !== interaction.task_id) {
     throw new Error(`Pending A2A interaction ${interaction.id} Orchestrator Session is not owned by its Task`)
-  }
-  const result = action.payload.result
-  const recordedQuestionID = typeof result?.question_id === "string" ? result.question_id : undefined
-  const recordedInteractionID = typeof result?.interaction_id === "string" ? result.interaction_id : undefined
-  if ((recordedQuestionID === undefined) !== (recordedInteractionID === undefined)) {
-    throw new Error(`Pending A2A action ${action.artifactID} has incomplete question interaction pointers`)
-  }
-  if (recordedQuestionID && recordedQuestionID !== interaction.external_id) {
-    throw new Error(`Pending A2A action ${action.artifactID} changed its deterministic Question identity`)
-  }
-  if (recordedInteractionID && recordedInteractionID !== interaction.id) {
-    throw new Error(`Pending A2A action ${action.artifactID} changed its Engine interaction identity`)
   }
   const payload = z
     .object({

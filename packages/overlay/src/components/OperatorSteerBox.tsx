@@ -10,11 +10,12 @@
 // operator steer route must not rewrite failed steer into task-root input or a
 // direct child-session reply.
 
-import { createSignal, Show, type Accessor } from "solid-js"
+import { createSignal, onCleanup, Show, type Accessor } from "solid-js"
 import { t } from "../utils/i18n"
 import { Icon } from "./ui/Icon"
 import { AutoGrowTextarea } from "./ui/AutoGrowTextarea"
 import { Button } from "./ui/Button"
+import { randomUUID } from "../utils/random-id"
 
 /** Backend NamedError names the operator steer route may surface. Kept here as a
  *  closed string union so the JSX branches stay exhaustive at the type
@@ -61,7 +62,11 @@ function messageForError(info: OperatorSteerErrorInfo, defaultMessage: string): 
 export interface OperatorSteerBoxProps {
   /** Persist operator guidance for the target Session's Orchestrator.
    * Resolves when the durable coordination request is accepted. */
-  onSend: (message: string) => Promise<{ request_id: string }>
+  onSend: (requestID: string, message: string) => Promise<{ request_id: string }>
+  /** Stable target identity. The same worker can be projected in the main
+   * conversation and the right dock, and either surface may remount when the
+   * accepted coordination request refreshes durable task facts. */
+  stateKey?: string
 }
 
 export interface OperatorSteerController {
@@ -77,29 +82,121 @@ export interface OperatorSteerController {
   submit: (event: SubmitEvent | KeyboardEvent) => Promise<void>
 }
 
-export function createOperatorSteerController(
-  onSend: (message: string) => Promise<{ request_id: string }>,
-): OperatorSteerController {
+interface OperatorSteerState {
+  open: Accessor<boolean>
+  setOpen: OperatorSteerController["setOpen"]
+  text: Accessor<string>
+  setText: OperatorSteerController["setText"]
+  sending: Accessor<boolean>
+  setSending: (value: boolean) => void
+  error: Accessor<string>
+  setError: OperatorSteerController["setError"]
+  receiptRequestID: Accessor<string>
+  setReceiptRequestID: (value: string) => void
+  pendingRequest?: { requestID: string; message: string }
+  admissionBlocked: boolean
+  consumers: number
+  lastUsed: number
+}
+
+const operatorSteerStateByTarget = new Map<string, OperatorSteerState>()
+const OPERATOR_STEER_STATE_CACHE_LIMIT = 64
+
+function createOperatorSteerState(admissionBlocked = false): OperatorSteerState {
   const [text, setText] = createSignal("")
   const [sending, setSending] = createSignal(false)
-  const [error, setError] = createSignal<string>("")
+  const [error, setError] = createSignal<string>(
+    admissionBlocked
+      ? "Too many unresolved guidance requests are retained. Reopen this agent after another request settles."
+      : "",
+  )
   const [receiptRequestID, setReceiptRequestID] = createSignal("")
   const [open, setOpen] = createSignal(false)
+  return {
+    open,
+    setOpen,
+    text,
+    setText,
+    sending,
+    setSending,
+    error,
+    setError,
+    receiptRequestID,
+    setReceiptRequestID,
+    admissionBlocked,
+    consumers: 0,
+    lastUsed: Date.now(),
+  }
+}
 
-  const canSend = () => !sending() && text().trim().length > 0
+function pruneOperatorSteerStateCache(maximumSize = OPERATOR_STEER_STATE_CACHE_LIMIT): void {
+  if (operatorSteerStateByTarget.size <= maximumSize) return
+  const inactive = [...operatorSteerStateByTarget.entries()]
+    .filter(([, state]) => state.consumers === 0 && !state.sending() && !state.pendingRequest)
+    .sort((left, right) => left[1].lastUsed - right[1].lastUsed)
+  for (const [key] of inactive) {
+    if (operatorSteerStateByTarget.size <= maximumSize) break
+    operatorSteerStateByTarget.delete(key)
+  }
+}
+
+function operatorSteerState(stateKey: string | undefined): OperatorSteerState {
+  const key = stateKey?.trim()
+  if (!key) return createOperatorSteerState()
+  const existing = operatorSteerStateByTarget.get(key)
+  if (existing) {
+    existing.lastUsed = Date.now()
+    return existing
+  }
+  pruneOperatorSteerStateCache(OPERATOR_STEER_STATE_CACHE_LIMIT - 1)
+  if (operatorSteerStateByTarget.size >= OPERATOR_STEER_STATE_CACHE_LIMIT) {
+    return createOperatorSteerState(true)
+  }
+  const created = createOperatorSteerState()
+  operatorSteerStateByTarget.set(key, created)
+  pruneOperatorSteerStateCache()
+  return created
+}
+
+export function createOperatorSteerController(
+  onSend: (requestID: string, message: string) => Promise<{ request_id: string }>,
+  stateKey?: string,
+): OperatorSteerController {
+  const state = operatorSteerState(stateKey)
+  state.consumers += 1
+  state.lastUsed = Date.now()
+  onCleanup(() => {
+    state.consumers = Math.max(0, state.consumers - 1)
+    state.lastUsed = Date.now()
+    pruneOperatorSteerStateCache()
+  })
+  const { open, setOpen, text, setText, sending, setSending, error, setError, receiptRequestID, setReceiptRequestID } =
+    state
+
+  const canSend = () => !state.admissionBlocked && !sending() && text().trim().length > 0
 
   const submit = async (event: SubmitEvent | KeyboardEvent) => {
     event.preventDefault()
     if (!canSend()) return
     const message = text().trim()
+    const request =
+      state.pendingRequest?.message === message
+        ? state.pendingRequest
+        : {
+            requestID: `art_${randomUUID().replaceAll("-", "").slice(0, 20)}`,
+            message,
+          }
+    state.pendingRequest = request
+    state.lastUsed = Date.now()
     setSending(true)
     setError("")
     setReceiptRequestID("")
     try {
-      const receipt = await onSend(message)
+      const receipt = await onSend(request.requestID, message)
       // Only clear the textarea on success — failed sends should keep
       // the operator's text so they don't have to retype after a retry.
       setText("")
+      state.pendingRequest = undefined
       setReceiptRequestID(receipt.request_id)
     } catch (e) {
       const info = pickErrorInfo(e)
@@ -107,6 +204,8 @@ export function createOperatorSteerController(
       setError(messageForError(info, defaultMessage))
     } finally {
       setSending(false)
+      state.lastUsed = Date.now()
+      pruneOperatorSteerStateCache()
     }
   }
 
@@ -210,7 +309,7 @@ export function OperatorSteerForm(props: { controller: OperatorSteerController }
 }
 
 export function OperatorSteerBox(props: OperatorSteerBoxProps) {
-  const controller = createOperatorSteerController(props.onSend)
+  const controller = createOperatorSteerController(props.onSend, props.stateKey)
   return (
     <div class="card__agent-reply-shell" data-open={controller.open() ? "true" : "false"}>
       <OperatorSteerTrigger controller={controller} />

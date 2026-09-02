@@ -99,15 +99,17 @@ export namespace WorkerTurnDescriptor {
   }
 
   export function latestForSession(sessionID: string): Info | undefined {
-    return Database.use((db) => {
-      const row = db
-        .select()
-        .from(WorkerTurnDescriptorTable)
-        .where(eq(WorkerTurnDescriptorTable.session_id, sessionID))
-        .orderBy(desc(WorkerTurnDescriptorTable.time_created), desc(WorkerTurnDescriptorTable.id))
-        .get()
-      return row ? fromRow(row) : undefined
-    })
+    return Database.use((db) => latestForSessionInDatabase(db, sessionID))
+  }
+
+  export function latestForSessionInDatabase(db: Database.TxOrDb, sessionID: string): Info | undefined {
+    const row = db
+      .select()
+      .from(WorkerTurnDescriptorTable)
+      .where(eq(WorkerTurnDescriptorTable.session_id, sessionID))
+      .orderBy(desc(WorkerTurnDescriptorTable.time_created), desc(WorkerTurnDescriptorTable.id))
+      .get()
+    return row ? fromRow(row) : undefined
   }
 
   export function listForTask(taskID: string): Info[] {
@@ -159,7 +161,14 @@ export namespace WorkerTurnDescriptor {
     taskID: string
     sessionKind: string
   }): { descriptor: Info; binding: ProjectedWorkerBinding } | undefined {
-    const descriptor = latestForSession(input.sessionID)
+    return Database.use((db) => latestProjectedBindingForSessionInDatabase(db, input))
+  }
+
+  export function latestProjectedBindingForSessionInDatabase(
+    db: Database.TxOrDb,
+    input: { sessionID: string; taskID: string; sessionKind: string },
+  ): { descriptor: Info; binding: ProjectedWorkerBinding } | undefined {
+    const descriptor = latestForSessionInDatabase(db, input.sessionID)
     if (!descriptor) return undefined
     if (descriptor.payload.lifecycle.taskID !== input.taskID) {
       throw new Error(
@@ -183,10 +192,23 @@ export namespace WorkerTurnDescriptor {
   }
 
   export function get(input: { id: string; sessionID: string }): Info | undefined {
-    return Database.use((db) => {
-      const row = db.select().from(WorkerTurnDescriptorTable).where(eq(WorkerTurnDescriptorTable.id, input.id)).get()
-      if (!row || row.session_id !== input.sessionID) return undefined
-      return fromRow(row)
-    })
+    return Database.use((db) => getInDatabase(db, input))
+  }
+
+  export function getInDatabase(
+    db: Database.TxOrDb,
+    input: { id: string; sessionID: string },
+  ): Info | undefined {
+    const row = db
+      .select()
+      .from(WorkerTurnDescriptorTable)
+      .where(
+        and(
+          eq(WorkerTurnDescriptorTable.id, input.id),
+          eq(WorkerTurnDescriptorTable.session_id, input.sessionID),
+        ),
+      )
+      .get()
+    return row ? fromRow(row) : undefined
   }
 }

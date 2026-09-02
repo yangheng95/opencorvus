@@ -7,8 +7,6 @@ import { HostAgentRegistry } from "@/agent/host-agent-registry"
 import { PromptProfile } from "@/agent/prompt-profile"
 import { RuntimeTemplateRegistry } from "@/agent/runtime-template-registry"
 import { ProjectedAgentWorkScope } from "@/agent/projected-agent-work-scope"
-import type { ProjectedWorkerBinding } from "@/agent/projected-worker-binding"
-import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
 import { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
 import type { ExpertSquadPackageRevision } from "@/expert-squad/package-revision"
 import { ExpertSquadInstallLock } from "@/expert-squad/install-lock"
@@ -98,6 +96,7 @@ import {
   type EngineMetadata,
 } from "@/engine/engine.sql"
 import { taskLifecycleProjectionInTransaction } from "@/engine/task-lifecycle"
+import { OperatorSteerRequestConflictError } from "@/engine/agent-coordination-errors"
 import { insertEngineArtifact } from "@/engine/artifact"
 import { buildObservationCleanupRowsForTask, settleBuildObservationCleanup } from "@/engine/build-observation-cleanup"
 import {
@@ -216,8 +215,9 @@ import {
 } from "@/engine/cancellation-projection"
 import { requestTaskAgentLifecycleCancellation } from "@/engine/task-agent-lifecycle"
 import {
+  assertOperatorSteerCoordinationRequestReplay,
   createOperatorSteerCoordinationRequest,
-  resolveAgentCoordinationSessionLineage,
+  findAgentCoordinationRequest,
 } from "@/engine/agent-coordination"
 import { createDecisionLog } from "@/decision-log"
 import { OperatorSteerTargetError } from "@/orchestrator/operator-steer"
@@ -1014,14 +1014,27 @@ function physicalTaskCancellationOrigin(input: {
 
 type OperatorSteerDispatch = typeof dispatchTaskLoop
 
+type OperatorSteerAfterTargetHook = (input: { taskID: string; sessionID: string }) => void | Promise<void>
+let operatorSteerAfterTargetHookForTest: OperatorSteerAfterTargetHook | undefined
+
+export const OperatorSteerTestHooks = {
+  replaceAfterTargetPreflight(hook: OperatorSteerAfterTargetHook): Disposable {
+    if (operatorSteerAfterTargetHookForTest) throw new Error("Operator steer target-preflight hook is already installed")
+    operatorSteerAfterTargetHookForTest = hook
+    return {
+      [Symbol.dispose]() {
+        if (operatorSteerAfterTargetHookForTest === hook) operatorSteerAfterTargetHookForTest = undefined
+      },
+    }
+  },
+}
+
 function isOperatorSteerTargetSessionKind(kind: string): boolean {
   return RuntimeTemplateRegistry.isWorkerSessionKind(kind)
 }
 
 async function resolveOperatorSteerTarget(input: { task: TaskRow; sessionID: string }): Promise<{
   session: Awaited<ReturnType<typeof Session.get>>
-  agent: string
-  workerBinding: ProjectedWorkerBinding
 }> {
   await assertTaskRootSessionLineageInCurrentProject(input.task)
   const session = await Session.assertLineageInProject({
@@ -1062,52 +1075,7 @@ async function resolveOperatorSteerTarget(input: { task: TaskRow; sessionID: str
     })
   }
 
-  let persistedTarget: ReturnType<typeof WorkerTurnDescriptor.latestProjectedBindingForSession>
-  try {
-    persistedTarget = WorkerTurnDescriptor.latestProjectedBindingForSession({
-      sessionID: session.id,
-      taskID: input.task.id,
-      sessionKind: session.kind,
-    })
-  } catch (error) {
-    throw new OperatorSteerTargetError({
-      message:
-        error instanceof Error
-          ? `operatorSteerAgentSession: ${error.message}`
-          : `operatorSteerAgentSession: ${String(error)}`,
-      taskID: input.task.id,
-      sessionID: session.id,
-      reason: "descriptor_mismatch",
-    })
-  }
-  if (!persistedTarget) {
-    throw new OperatorSteerTargetError({
-      message: `operatorSteerAgentSession: session ${session.id} has no persisted WorkerTurnDescriptor identity.`,
-      taskID: input.task.id,
-      sessionID: session.id,
-      reason: "descriptor_missing",
-    })
-  }
-  const agent = persistedTarget.binding.identity.agentID
-  const workerBinding = persistedTarget.binding
-  try {
-    resolveAgentCoordinationSessionLineage({
-      taskID: input.task.id,
-      sessionID: session.id,
-    })
-  } catch (error) {
-    throw new OperatorSteerTargetError({
-      message:
-        error instanceof Error
-          ? `operatorSteerAgentSession: ${error.message}`
-          : `operatorSteerAgentSession: ${String(error)}`,
-      taskID: input.task.id,
-      sessionID: session.id,
-      reason: "unowned_session",
-    })
-  }
-
-  return { session, agent, workerBinding }
+  return { session }
 }
 
 async function continueTaskMessage(
@@ -2671,14 +2639,84 @@ export namespace EngineService {
   ) {
     const input = AgentSessionOperatorSteerInput.parse(raw)
     const task = requireTaskInCurrentProject(taskID)
+    const globalIdentity = Database.use((db) =>
+      db
+        .select({ taskID: EngineArtifactTable.task_id, kind: EngineArtifactTable.kind })
+        .from(EngineArtifactTable)
+        .where(eq(EngineArtifactTable.id, input.request_id))
+        .get(),
+    )
+    if (globalIdentity && (globalIdentity.taskID !== task.id || globalIdentity.kind !== "agent_coordination_request")) {
+      throw new OperatorSteerRequestConflictError({
+        message: `Operator steer request ${input.request_id} already identifies another durable occurrence`,
+        taskID: task.id,
+        sessionID,
+        requestID: input.request_id,
+        mismatches: [globalIdentity.taskID !== task.id ? "task_id" : "artifact_kind"],
+      })
+    }
+    const existing = findAgentCoordinationRequest({ taskID: task.id, requestID: input.request_id })
+    if (existing) {
+      const replay = assertOperatorSteerCoordinationRequestReplay({
+        existing,
+        taskID: task.id,
+        sessionID,
+        requestID: input.request_id,
+        operatorMessage: input.message,
+      })
+      await deliverTaskRootIngress(task.id).catch((error) => {
+        log.warn("operator steer exact replay left durable ingress for the existing recovery owner", {
+          taskID: task.id,
+          sessionID,
+          requestID: replay.payload.request_id,
+          error: error instanceof Error ? `${error.name}: ${error.message}` : String(error),
+        })
+      })
+      return {
+        task_id: task.id,
+        session_id: replay.payload.session_id,
+        request_id: replay.payload.request_id,
+        wake_status: "accepted" as const,
+      }
+    }
     const target = await resolveOperatorSteerTarget({ task, sessionID })
-    const request = await createOperatorSteerCoordinationRequest({
-      taskID: task.id,
-      sessionID: target.session.id,
-      agent: target.agent,
-      workerBinding: target.workerBinding,
-      operatorMessage: input.message,
-    })
+    await operatorSteerAfterTargetHookForTest?.({ taskID: task.id, sessionID: target.session.id })
+    let request: Awaited<ReturnType<typeof createOperatorSteerCoordinationRequest>>
+    try {
+      request = await createOperatorSteerCoordinationRequest({
+        taskID: task.id,
+        sessionID: target.session.id,
+        sessionKind: target.session.kind,
+        operatorSteerID: input.request_id,
+        operatorMessage: input.message,
+      })
+    } catch (error) {
+      if (OperatorSteerRequestConflictError.isInstance(error as Error)) throw error
+      const detail = error instanceof Error ? error.message : String(error)
+      throw new OperatorSteerTargetError({
+        message: `operatorSteerAgentSession: ${detail}`,
+        taskID: task.id,
+        sessionID: target.session.id,
+        reason: detail.includes("no persisted WorkerTurnDescriptor") ? "descriptor_missing" : "descriptor_mismatch",
+      })
+    }
+
+    if (!request.createdNow) {
+      await deliverTaskRootIngress(task.id).catch((error) => {
+        log.warn("operator steer concurrent replay left durable ingress for the existing recovery owner", {
+          taskID: task.id,
+          sessionID,
+          requestID: request.payload.request_id,
+          error: error instanceof Error ? `${error.name}: ${error.message}` : String(error),
+        })
+      })
+      return {
+        task_id: task.id,
+        session_id: request.payload.session_id,
+        request_id: request.payload.request_id,
+        wake_status: "accepted" as const,
+      }
+    }
 
     let dispatchResult: "accepted"
     try {

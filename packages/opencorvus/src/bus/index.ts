@@ -941,9 +941,10 @@ export namespace Bus {
     properties: z.output<Definition["properties"]>,
     owner: { projectID: string; directory: string },
     operation: string,
+    exactOccurrenceID?: string,
   ): Publication {
     Database.requireActiveTransaction(operation)
-    const id = occurrenceID()
+    const id = exactOccurrenceID ?? occurrenceID()
     const parsed = BusEvent.parseProperties(def, properties)
     const causation = causationContext.tryUse()
     const accepted = Promise.resolve() as Publication
@@ -952,7 +953,22 @@ export namespace Bus {
       retry: { value: () => retryDurableOccurrence(id), enumerable: false },
     })
     const now = Date.now()
-    Database.use((db) =>
+    const inserted = Database.use((db) => {
+      const existing = exactOccurrenceID
+        ? db.select().from(BusPublicationOutboxTable)
+            .where(eq(BusPublicationOutboxTable.occurrence_id, exactOccurrenceID)).get()
+        : undefined
+      if (existing) {
+        if (
+          existing.project_id !== owner.projectID ||
+          existing.directory !== owner.directory ||
+          existing.event_type !== def.type ||
+          JSON.stringify(existing.properties) !== JSON.stringify(parsed)
+        ) {
+          throw new Error(`Durable Bus occurrence ${exactOccurrenceID} has conflicting immutable input`)
+        }
+        return false
+      }
       db
         .insert(BusPublicationOutboxTable)
         .values({
@@ -964,10 +980,11 @@ export namespace Bus {
           causation,
           time_created: now,
         })
-        .run(),
-    )
+        .run()
+      return true
+    })
     Database.effect(() => {
-      if (automaticDrainSuppressedForTest) return
+      if (!inserted || automaticDrainSuppressedForTest) return
       Database.runOutsideContext(() => {
         const publication = executeDurableOccurrence(id)
         const entry = {
@@ -993,6 +1010,23 @@ export namespace Bus {
       properties,
       { projectID: Instance.project.id, directory: currentProjectDirectory() },
       "Bus.publishOwnedInTransaction",
+    )
+  }
+
+  /** Append or replay one deterministic durable occurrence inside the
+   * caller's active transaction. The transaction can therefore atomically
+   * validate the occurrence owner and persist the outbox fact. */
+  export function publishOwnedExactInTransaction<Definition extends BusEvent.Definition>(
+    def: Definition,
+    properties: z.output<Definition["properties"]>,
+    exactOccurrenceID: string,
+  ): Publication {
+    return publishForProjectInTransaction(
+      def,
+      properties,
+      { projectID: Instance.project.id, directory: currentProjectDirectory() },
+      "Bus.publishOwnedExactInTransaction",
+      exactOccurrenceID,
     )
   }
 

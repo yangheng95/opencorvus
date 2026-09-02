@@ -1494,6 +1494,9 @@ export const EngineRoutes = lazy(() =>
         description:
           "Accept a human-authored steer message for one target sub-agent session. " +
           "The route records a durable operator-originated agent_coordination_request and wakes the orchestrator. " +
+          "The caller must generate request_id before the first attempt and reuse it only with the identical task, " +
+          "target session, and canonical message after a lost response; that replay returns the original accepted " +
+          "occurrence, while changed semantics return HTTP 409. The server never generates a replacement ID. " +
           "It never appends a task-root operator message and never writes a direct child-session reply.",
         operationId: "task.session.operatorSteer",
         responses: {

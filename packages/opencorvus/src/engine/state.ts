@@ -61,6 +61,12 @@ export type TerminalTaskOptions = TaskUpdateOptions & {
   /** Runs inside the single winning terminal-transition transaction after the
    * Task row update and before its progress snapshot and protocol events. */
   transactionEffect?: (db: Database.TxOrDb, task: TaskRow) => void
+  /** Optional exact owner for terminal Git checkpoint admission. The existing
+   * checkpoint request remains the only write-ahead physical-effect fact. */
+  checkpointAdmission?: Readonly<{
+    executionEpoch: number
+    effect: (db: Database.TxOrDb) => void
+  }>
 }
 
 export type TerminalTaskStatus = "completed" | "failed" | "cancelled"
@@ -120,9 +126,9 @@ export async function terminalTask(
     !options?.preExecutionInfrastructureFailure
   ) {
     const { EngineGit } = await import("./git")
-    const baseline = await EngineGit.prepare(terminalRow)
+    const baseline = await EngineGit.prepare(terminalRow, options?.checkpointAdmission)
     if (baseline.error) throw new Error(`Task ${row.id} terminal checkpoint baseline failed: ${baseline.error}`)
-    const checkpoint = await EngineGit.complete(baseline.task)
+    const checkpoint = await EngineGit.complete(baseline.task, options?.checkpointAdmission)
     if (checkpoint.error) throw new Error(`Task ${row.id} terminal result checkpoint failed: ${checkpoint.error}`)
     terminalRow = checkpoint.task
   }

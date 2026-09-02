@@ -257,7 +257,6 @@ export namespace Question {
       const current = takePending(pending, requestID)
       if (!current) return
       void (async () => {
-        const timeResolved = Date.now()
         const deadline = current.info.expiry!
         log.info("automatic question deadline elapsed", { id: requestID, questions: current.info.questions.length })
         try {
@@ -271,7 +270,11 @@ export namespace Question {
           await publication.retry()
           rejectWaiters(
             current,
-            new ExpiredError({ requestID: current.info.id, timeExpires: deadline.timeExpires, timeResolved }),
+            new ExpiredError({
+              requestID: current.info.id,
+              timeExpires: deadline.timeExpires,
+              timeResolved: deadline.timeExpires,
+            }),
           )
         } catch (error) {
           rejectWaiters(current, error)
@@ -317,6 +320,11 @@ export namespace Question {
     expireOnDeadline?: boolean
     /** Exact durable creation time reused by recovery callers. */
     timeCreated?: number
+    /** Optional owner admission executed in the exact transaction that accepts
+     * the durable question publication. */
+    acceptanceEffects?: (db: Database.TxOrDb) => void
+    /** Exact durable Bus occurrence for an owner-admitted question. */
+    acceptanceOccurrenceID?: string
   }): Promise<Answer[]> {
     const s = await state()
     const id = input.requestID ? Identifier.ascending("question", input.requestID) : Identifier.ascending("question")
@@ -371,14 +379,28 @@ export namespace Question {
         existing.waiters.push({ resolve, reject })
         return
       }
-      s.pending[id] = {
-        info,
-        durableContinuation: input.requestID !== undefined,
-        waiters: [{ resolve, reject }],
-        timer: undefined,
+      try {
+        if (input.acceptanceEffects || input.acceptanceOccurrenceID) {
+          if (!input.acceptanceEffects || !input.acceptanceOccurrenceID) {
+            throw new Error(`Question ${id} owner admission requires both effect and exact occurrence identity`)
+          }
+          Database.immediateTransaction((db) => {
+            input.acceptanceEffects!(db)
+            Bus.publishOwnedExactInTransaction(Event.Asked, info, input.acceptanceOccurrenceID!)
+          })
+        } else {
+          Bus.publishOwned(Event.Asked, info)
+        }
+        s.pending[id] = {
+          info,
+          durableContinuation: input.requestID !== undefined,
+          waiters: [{ resolve, reject }],
+          timer: undefined,
+        }
+        armPendingTimer(s.pending, id)
+      } catch (error) {
+        reject(error)
       }
-      Bus.publishOwned(Event.Asked, info)
-      armPendingTimer(s.pending, id)
     })
   }
 
