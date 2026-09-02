@@ -90,6 +90,88 @@ export interface ActivityTrackedReadableStreamOptions<T> {
   onSettlement?: (settlement: ReadableStreamActivitySettlement) => void
 }
 
+export interface SettlementTrackedReadableStreamOptions<T> {
+  source: ReadableStream<T>
+  signal?: AbortSignal
+  onChunk?: () => void
+  onSettlement: (settlement: ReadableStreamActivitySettlement) => void
+}
+
+/** Own one upstream reader and converge EOF, error, consumer cancellation and
+ * owner abort on one exact physical settlement callback. */
+export function settlementTrackedReadableStream<T>(
+  options: SettlementTrackedReadableStreamOptions<T>,
+): ReadableStream<T> {
+  const reader = options.source.getReader()
+  let controller: ReadableStreamDefaultController<T> | undefined
+  let settlementStarted = false
+  let settlementFinished = false
+  let cancelPromise: Promise<void> | undefined
+
+  const cancelUnderlying = (reason: unknown) => {
+    cancelPromise ??= reader.cancel(reason)
+    return cancelPromise
+  }
+  const beginSettlement = () => {
+    if (settlementStarted) return false
+    settlementStarted = true
+    options.signal?.removeEventListener("abort", onAbort)
+    return true
+  }
+  const finishSettlement = (settlement: ReadableStreamActivitySettlement) => {
+    if (settlementFinished) return
+    settlementFinished = true
+    options.onSettlement(settlement)
+  }
+  const onAbort = () => {
+    if (!beginSettlement()) return
+    const reason = options.signal?.reason ?? new DOMException("stream owner aborted", "AbortError")
+    try {
+      controller?.error(reason)
+    } catch {
+      // The consumer may already have closed its side of the stream.
+    }
+    void cancelUnderlying(reason).then(
+      () => finishSettlement("aborted"),
+      () => finishSettlement("aborted"),
+    )
+  }
+
+  return new ReadableStream<T>({
+    start(streamController) {
+      controller = streamController
+      if (options.signal?.aborted) onAbort()
+      else options.signal?.addEventListener("abort", onAbort, { once: true })
+    },
+    async pull(streamController) {
+      try {
+        const result = await reader.read()
+        if (settlementStarted) return
+        if (result.done) {
+          if (!beginSettlement()) return
+          finishSettlement("eof")
+          streamController.close()
+          return
+        }
+        options.onChunk?.()
+        streamController.enqueue(result.value)
+      } catch (error) {
+        if (!beginSettlement()) return
+        finishSettlement("error")
+        streamController.error(error)
+      }
+    },
+    async cancel(reason) {
+      if (!beginSettlement()) return
+      try {
+        await cancelUnderlying(reason)
+      } finally {
+        finishSettlement("cancelled")
+      }
+    },
+  })
+}
+
 /**
  * Project one physical ReadableStream through the shared activity monitor.
  *
@@ -100,59 +182,13 @@ export interface ActivityTrackedReadableStreamOptions<T> {
  * consumer cancel still awaits the upstream cleanup contract.
  */
 export function activityTrackedReadableStream<T>(options: ActivityTrackedReadableStreamOptions<T>): ReadableStream<T> {
-  const reader = options.source.getReader()
-  let controller: ReadableStreamDefaultController<T> | undefined
-  let settled = false
-  let cancelPromise: Promise<void> | undefined
-
-  const cancelUnderlying = (reason: unknown) => {
-    cancelPromise ??= reader.cancel(reason)
-    return cancelPromise
-  }
-  const settle = (settlement: ReadableStreamActivitySettlement) => {
-    if (settled) return false
-    settled = true
-    options.activity.signal.removeEventListener("abort", onAbort)
-    options.activity.dispose()
-    options.onSettlement?.(settlement)
-    return true
-  }
-  const onAbort = () => {
-    if (!settle("aborted")) return
-    const reason = options.activity.signal.reason ?? new DOMException("stream activity aborted", "AbortError")
-    try {
-      controller?.error(reason)
-    } catch {
-      // The consumer may already have closed its side of the stream.
-    }
-    void cancelUnderlying(reason).catch(() => undefined)
-  }
-
-  return new ReadableStream<T>({
-    start(streamController) {
-      controller = streamController
-      if (options.activity.signal.aborted) onAbort()
-      else options.activity.signal.addEventListener("abort", onAbort, { once: true })
-    },
-    async pull(streamController) {
-      try {
-        const result = await reader.read()
-        if (settled) return
-        if (result.done) {
-          settle("eof")
-          streamController.close()
-          return
-        }
-        options.activity.observe()
-        streamController.enqueue(result.value)
-      } catch (error) {
-        if (!settle("error")) return
-        streamController.error(error)
-      }
-    },
-    async cancel(reason) {
-      if (!settle("cancelled")) return
-      await cancelUnderlying(reason)
+  return settlementTrackedReadableStream({
+    source: options.source,
+    signal: options.activity.signal,
+    onChunk: () => options.activity.observe(),
+    onSettlement: (settlement) => {
+      options.activity.dispose()
+      options.onSettlement?.(settlement)
     },
   })
 }

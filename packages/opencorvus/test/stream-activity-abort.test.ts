@@ -84,23 +84,31 @@ describe("activity-tracked response stream settlement", () => {
     const activity = withStreamActivity({ idleMs: 20, signal: external.signal, label: "provider-response-abort" })
     const reason = new DOMException("semantic activity replaced this provider attempt", "AbortError")
     const settlements: ReadableStreamActivitySettlement[] = []
+    const settlementReported = Promise.withResolvers<void>()
     let cancelledWith: unknown
     let reportCancellation!: () => void
     const cancellationRequested = new Promise<void>((resolve) => {
       reportCancellation = resolve
     })
+    let completeCancellation!: () => void
     const parked = new Promise<void>(() => undefined)
     const source = new ReadableStream<string>({
       pull: () => parked,
       cancel(cancelReason) {
         cancelledWith = cancelReason
         reportCancellation()
+        return new Promise<void>((resolve) => {
+          completeCancellation = resolve
+        })
       },
     })
     const reader = activityTrackedReadableStream({
       source,
       activity,
-      onSettlement: (settlement) => settlements.push(settlement),
+      onSettlement: (settlement) => {
+        settlements.push(settlement)
+        settlementReported.resolve()
+      },
     }).getReader()
     const outcome = reader.read().then(
       (value) => ({ kind: "value" as const, value }),
@@ -111,7 +119,10 @@ describe("activity-tracked response stream settlement", () => {
     await cancellationRequested
 
     expect(await outcome).toEqual({ kind: "aborted", error: reason })
-    expect({ settlements, cancelledWith }).toEqual({ settlements: ["aborted"], cancelledWith: reason })
+    expect({ settlements, cancelledWith }).toEqual({ settlements: [], cancelledWith: reason })
+    completeCancellation()
+    await settlementReported.promise
+    expect(settlements).toEqual(["aborted"])
     await new Promise((resolve) => setTimeout(resolve, 40))
     expect({ settlement: settlements[0], physicalTimeout: activity.timedOut() }).toEqual({
       settlement: "aborted",
@@ -148,7 +159,7 @@ describe("activity-tracked response stream settlement", () => {
     completeCleanup()
     await closed
 
-    expect(events).toEqual(["settled:cancelled", "upstream cleanup completed", "consumer close completed"])
+    expect(events).toEqual(["upstream cleanup completed", "settled:cancelled", "consumer close completed"])
   })
 
   test("reports ordinary EOF and response read failure through the same settlement contract", async () => {

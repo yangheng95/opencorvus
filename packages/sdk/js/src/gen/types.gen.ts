@@ -448,6 +448,7 @@ export type Config = {
    * When set, ONLY these providers will be enabled. All other providers will be ignored
    */
   enabled_providers?: Array<string>
+  execution_capacity?: ExecutionCapacityConfig
   experimental?: {
     /**
      * Expire unanswered question interactions at the five-minute automatic deadline without attributing an operator decision. Independent fine-grained switch. When false, questions wait indefinitely for an operator reply.
@@ -1841,6 +1842,16 @@ export type EventWorktreeReady = {
     name: string
   }
   type: "worktree.ready"
+}
+
+/**
+ * Global physical execution limits. These bound resource use without owning scheduling, retry, or completion state.
+ */
+export type ExecutionCapacityConfig = {
+  automation?: number
+  event?: number
+  provider?: number
+  scheduler_message?: number
 }
 
 export type ExpertSquadCatalogIndexEntry = {

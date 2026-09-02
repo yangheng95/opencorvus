@@ -76,6 +76,8 @@ import {
   scheduledToolOccurrenceConflict,
   type ScheduledToolOccurrence,
 } from "./tool-occurrence"
+import { FifoPermitPool, settledWork } from "@/util/queue"
+import { globalExecutionCapacity } from "@/runtime/execution-capacity"
 
 export { AutomationRunOutcomes }
 
@@ -229,6 +231,7 @@ export namespace AutomationService {
   let beforeMissionSessionAdmissionForTest: (() => void | Promise<void>) | undefined
   let beforeRunReservationForTest: (() => void | Promise<void>) | undefined
   let afterRunReservationForTest: ((input: { runIDs: string[] }) => void | Promise<void>) | undefined
+  let afterExecutionPermitForTest: (() => void | Promise<void>) | undefined
   let claimClockForTest: (() => number) | undefined
   let globalConversationCreator: GlobalConversationCreator | undefined
   const log = Log.create({ service: "automation-service" })
@@ -239,9 +242,17 @@ export namespace AutomationService {
   const HEARTBEAT_BUSY_RETRY_MS = 30 * 1000
   const MAX_BACKOFF_MS = 5 * 60 * 1000
   const MAX_FIRE_ATTEMPTS = 5
-  const CONCURRENCY_ENV = "OPENCORVUS_AUTOMATION_CONCURRENCY"
-  const CONCURRENCY_DEFAULT = 4
-  const CONCURRENCY_MAX = 32
+  const executionPermits = new FifoPermitPool(4)
+  let executionCapacityForTest: number | undefined
+
+  async function executionCapacity(): Promise<number> {
+    return executionCapacityForTest ?? (await globalExecutionCapacity("automation"))
+  }
+
+  async function acquireExecutionPermit(signal?: AbortSignal): Promise<() => void> {
+    executionPermits.resize(await executionCapacity())
+    return executionPermits.acquire(signal)
+  }
 
   type ScheduleToolCausation = {
     occurrence: ScheduledToolOccurrence
@@ -792,12 +803,40 @@ export namespace AutomationService {
   }
 
   export async function runNow(id: string): Promise<AutomationRunView[]> {
-    return runNowWithExecutor(id, executeWithRuntimeSettlement)
+    const release = await acquireExecutionPermit()
+    let handedOff = false
+    try {
+      return await runNowWithExecutor(id, (job, owner, now, reschedule) => {
+        const execution = executeWithRuntimeSettlement(job, owner, now, reschedule, execute, undefined, release)
+        handedOff = true
+        return execution
+      })
+    } finally {
+      if (!handedOff) release()
+    }
   }
 
   export async function runNowFromTool(
     id: string,
     causation: ScheduleToolCausation,
+  ): Promise<AutomationFireHistoryView> {
+    const release = await acquireExecutionPermit()
+    let handedOff = false
+    try {
+      const result = await runNowFromToolWithPermit(id, causation, release, () => {
+        handedOff = true
+      })
+      return result
+    } finally {
+      if (!handedOff) release()
+    }
+  }
+
+  async function runNowFromToolWithPermit(
+    id: string,
+    causation: ScheduleToolCausation,
+    capacityRelease: () => void,
+    handOffCapacity: () => void,
   ): Promise<AutomationFireHistoryView> {
     const now = claimClockForTest?.() ?? Date.now()
     const fireID = Identifier.deterministic(
@@ -912,7 +951,9 @@ export namespace AutomationService {
       lease_until: now + LEASE_MS,
     }
     try {
-      await executeWithRuntimeSettlement(job, owner, now, false)
+      const execution = executeWithRuntimeSettlement(job, owner, now, false, execute, undefined, capacityRelease)
+      handOffCapacity()
+      await execution
     } catch (error) {
       const fire = fireHistoryForID(fireID)
       if (["succeeded", "failed", "partial", "disposition"].includes(fire.state)) return fire
@@ -950,6 +991,30 @@ export namespace AutomationService {
   export const TestHooks = {
     runNowWithExecutor,
     claim,
+    runDueWithSignal(signal: AbortSignal): Promise<void> {
+      return poll(signal)
+    },
+    installAfterExecutionPermit(hook: () => void | Promise<void>): Disposable {
+      if (afterExecutionPermitForTest) throw new Error("Automation post-permit test hook is already installed")
+      afterExecutionPermitForTest = hook
+      return {
+        [Symbol.dispose]() {
+          if (afterExecutionPermitForTest === hook) afterExecutionPermitForTest = undefined
+        },
+      }
+    },
+    installExecutionCapacity(limit: number): Disposable {
+      if (executionCapacityForTest !== undefined) {
+        throw new Error("Automation execution capacity test override is installed")
+      }
+      executionCapacityForTest = limit
+      executionPermits.resize(limit)
+      return {
+        [Symbol.dispose]() {
+          executionCapacityForTest = undefined
+        },
+      }
+    },
     isolateGlobalConversationCreator(): Disposable {
       const prior = globalConversationCreator
       globalConversationCreator = undefined
@@ -1203,33 +1268,37 @@ export namespace AutomationService {
     if (due.length === 0) return
     log.info("found due automations", { count: due.length })
 
-    const slots = Math.min(concurrency(), due.length)
-    let offset = 0
-    const pick = () => {
-      const row = due[offset]
-      offset += 1
-      return row
-    }
-
-    await Promise.all(
-      Array.from({ length: slots }, async () => {
-        while (true) {
+    executionPermits.resize(await executionCapacity())
+    const settled = await settledWork({
+      concurrency: executionPermits.limit,
+      items: due,
+      signal,
+      run: async (row) => {
+        const release = await executionPermits.acquire(signal)
+        let handedOff = false
+        try {
+          await afterExecutionPermitForTest?.()
           signal?.throwIfAborted()
-          const row = pick()
-          if (!row) return
           const claimNow = (claimClockForTest ?? Date.now)()
           const owner = `${process.pid}:${claimNow}:${Identifier.ascending("call")}`
           const candidate = validateDueAutomationBeforeClaim(row.id, claimNow)
-          if (!candidate) continue
+          if (!candidate) return
           const job = claim(row.id, owner, claimNow)
-          if (!job) continue
-          await executeWithRuntimeSettlement(job, owner, claimNow, true, execute, signal).catch((error) => {
+          if (!job) return
+          const execution = executeWithRuntimeSettlement(job, owner, claimNow, true, execute, signal, release)
+          handedOff = true
+          await execution.catch((error) => {
             signal?.throwIfAborted()
             return undefined
           })
+        } finally {
+          if (!handedOff) release()
         }
-      }),
-    )
+      },
+    })
+    const failures = settled.flatMap((result) => (result.status === "rejected" ? [result.reason] : []))
+    if (failures.length === 1) throw failures[0]
+    if (failures.length > 1) throw new AggregateError(failures, "Automation execution frontier failed")
   }
 
   function validateDueAutomationBeforeClaim(id: string, now: number) {
@@ -1246,15 +1315,6 @@ export namespace AutomationService {
   ) {
     if (definition.kind !== "recurring" || definition.scope !== "session" || !definition.session_id) return undefined
     return SessionPromptOwner.activeExecutionInTransaction(db, definition.session_id)
-  }
-
-  function concurrency() {
-    const raw = process.env[CONCURRENCY_ENV]
-    if (!raw) return CONCURRENCY_DEFAULT
-    const value = Number(raw)
-    if (!Number.isFinite(value)) return CONCURRENCY_DEFAULT
-    if (value < 1) return 1
-    return Math.min(Math.floor(value), CONCURRENCY_MAX)
   }
 
   /**
@@ -1430,6 +1490,7 @@ export namespace AutomationService {
     now: number,
     reschedule: boolean,
     runtimeSignal: AbortSignal,
+    capacityRelease?: () => void,
   ): Promise<string> {
     const scheduledDue = reschedule ? (job.scheduled_due_at ?? job.next_run) : now
     const fireID =
@@ -1438,17 +1499,18 @@ export namespace AutomationService {
         : deterministicAutomationID("cal", job.id, String(scheduledDue))
     log.info("executing automation", { jobId: job.id, fireID, name: job.name, prompt: job.prompt.slice(0, 100) })
 
-    const leaseFence = createAutomationLeaseFence(job.id, owner, fireID)
-    using inactivityFence = await createSchedulerExecutionInactivityFence({
-      occurrence: `Automation fire ${fireID}`,
-      signals: [leaseFence.signal, runtimeSignal],
-      initialPhase: "claimed",
-      configurationOwner: "global",
-    })
-    const executionSignal = inactivityFence.signal
-    const leaseRenewTimer = startLeaseRenewTimer(() => leaseFence.renewOrAbort())
-
+    let reservedCapacityRelease: (() => void) | undefined =
+      capacityRelease ?? (await acquireExecutionPermit(runtimeSignal))
     try {
+      const leaseFence = createAutomationLeaseFence(job.id, owner, fireID)
+      using inactivityFence = await createSchedulerExecutionInactivityFence({
+        occurrence: `Automation fire ${fireID}`,
+        signals: [leaseFence.signal, runtimeSignal],
+        initialPhase: "claimed",
+        configurationOwner: "global",
+      })
+      const executionSignal = inactivityFence.signal
+      using _leaseRenewTimer = startLeaseRenewTimer(() => leaseFence.renewOrAbort())
       if (job.kind === "delay") {
         const runID = deterministicAutomationID("atr", fireID, "delay")
         if (!job.session_id) throw new Error(`Session delay ${job.id} has no Session target`)
@@ -1724,8 +1786,18 @@ export namespace AutomationService {
         | { kind: "target_deleted" }
         | Extract<MissionSchedulerOccurrenceDisposition, { kind: "mission_closed" }>
       >[] = []
-      results = await Promise.allSettled(
-        targets.map(async (target, index) => {
+      results = await settledWork({
+        concurrency: executionPermits.limit,
+        items: targets,
+        run: async (target, index) => {
+          const release =
+            index === 0 && reservedCapacityRelease
+              ? (() => {
+                  const reserved = reservedCapacityRelease
+                  reservedCapacityRelease = undefined
+                  return reserved
+                })()
+              : await acquireExecutionPermit(executionSignal)
           const reserved = reservedRuns.get(runIDs[index]!)
           try {
             if (reserved?.outcome === "succeeded") {
@@ -1778,9 +1850,10 @@ export namespace AutomationService {
             throw error
           } finally {
             inactivityFence.touch(`target ${index + 1}/${targets.length} settled`)
+            release()
           }
-        }),
-      )
+        },
+      })
       const committedAt = Date.now()
       const failures = results
         .map((result, index) =>
@@ -1872,7 +1945,7 @@ export namespace AutomationService {
       })
       return fireID
     } finally {
-      leaseRenewTimer[Symbol.dispose]()
+      reservedCapacityRelease?.()
     }
   }
 
@@ -1883,13 +1956,14 @@ export namespace AutomationService {
     reschedule: boolean,
     executeFire: typeof execute = execute,
     lifecycleSignal?: AbortSignal,
+    capacityRelease?: () => void,
   ): Promise<string> {
     const reservation = RuntimeExecutionSettlement.reserve(
       "scheduler_automation_fire",
       `automation-fire:${job.id}:${job.pending_fire_id ?? job.next_run}`,
     )
     const signal = lifecycleSignal ? AbortSignal.any([reservation.signal, lifecycleSignal]) : reservation.signal
-    const operation = executeFire(job, owner, now, reschedule, signal).catch(async (error) => {
+    const operation = executeFire(job, owner, now, reschedule, signal, capacityRelease).catch(async (error) => {
       await fail(job, owner, error, now)
       throw error
     })

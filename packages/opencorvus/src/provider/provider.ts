@@ -28,7 +28,13 @@ import { BUNDLED_PROVIDERS } from "./bundled"
 import { dashscopeKey } from "./dashscope"
 import { canonicalDigestSource, containsRuntimeCapability } from "@/util/canonical-digest"
 import { CanonicalCache } from "@/util/canonical-cache"
-import { activityTrackedReadableStream, withStreamActivity } from "@/util/stream-activity"
+import {
+  activityTrackedReadableStream,
+  settlementTrackedReadableStream,
+  withStreamActivity,
+} from "@/util/stream-activity"
+import { DurableExecutionCapacity } from "@/runtime/durable-execution-capacity"
+import { globalExecutionCapacity } from "@/runtime/execution-capacity"
 
 export namespace Provider {
   const log = Log.create({ service: "provider" })
@@ -855,6 +861,31 @@ export namespace Provider {
           ...model.headers,
         }
 
+      const selectedAPIKey =
+        typeof options["apiKey"] === "string"
+          ? options["apiKey"]
+          : typeof provider.key === "string"
+            ? provider.key
+            : undefined
+      const credentialObservation = selectedAPIKey === undefined ? await Auth.inspect(model.providerID) : undefined
+      const credentialGeneration =
+        selectedAPIKey !== undefined
+          ? canonicalDigestSource("opencorvus.provider.selected-credential.v1", {
+              providerID: model.providerID,
+              key: selectedAPIKey,
+            }).sha256
+          : (credentialObservation?.generation ??
+            canonicalDigestSource("opencorvus.provider.credential-fallback.v1", {
+              providerID: model.providerID,
+              source: provider.source,
+              baseURL: typeof baseURL === "string" ? baseURL : null,
+            }).sha256)
+      const capacityResourceKey = canonicalDigestSource("opencorvus.provider.capacity-resource.v1", {
+        providerID: model.providerID,
+        credentialGeneration,
+        resourceClass: "language-model",
+      }).sha256
+
       const customFetch = options["fetch"]
       const proxyUrl = customFetch ? undefined : resolveFetchProxy(config)
       const declarativeOptions = { ...options }
@@ -873,7 +904,20 @@ export namespace Provider {
       options["fetch"] = async (input: any, init?: BunFetchRequestInit) => {
         // Preserve custom fetch if it exists, wrap it with timeout logic
         const fetchFn = customFetch ?? fetch
-        const opts = init ?? {}
+        const opts: BunFetchRequestInit = { ...(init ?? {}) }
+        const capacity = await DurableExecutionCapacity.acquire({
+          resourceKey: capacityResourceKey,
+          limit: await globalExecutionCapacity("provider"),
+          signal: opts.signal ?? undefined,
+        })
+        let capacityReleased = false
+        const requestSignal = opts.signal ? AbortSignal.any([opts.signal, capacity.signal]) : capacity.signal
+        const releaseCapacity = () => {
+          if (capacityReleased) return
+          capacityReleased = true
+          capacity.release()
+        }
+        opts.signal = requestSignal
 
         // Stable providers retain the 5min minimum for long model thinking.
         // alibaba-coding-plan-cn is documented to hang during peak hours, so
@@ -993,6 +1037,7 @@ export namespace Provider {
             const wrapped = activityTrackedReadableStream({
               source: response.body,
               activity: fetchActivity,
+              onSettlement: releaseCapacity,
             })
 
             // Return a new Response with the wrapped body, preserving headers/status
@@ -1003,11 +1048,26 @@ export namespace Provider {
             })
           }
 
+          if (response.body) {
+            const wrapped = settlementTrackedReadableStream({
+              source: response.body,
+              signal: opts.signal ?? undefined,
+              onSettlement: releaseCapacity,
+            })
+            return new Response(wrapped, {
+              status: response.status,
+              statusText: response.statusText,
+              headers: response.headers,
+            })
+          }
+
           // Non-streaming response — clear the inactivity timer
           fetchActivity?.dispose()
+          releaseCapacity()
           return response
         } catch (error) {
           fetchActivity?.dispose()
+          releaseCapacity()
           throw error
         }
       }

@@ -311,6 +311,129 @@ describe("Event Job durable fact authority", () => {
     } })
   })
 
+  test("runs distinct Event Job heads across Projects through one physical capacity frontier", async () => {
+    await using firstProject = await memoryProject()
+    await using secondProject = await memoryProject()
+    const projects = [firstProject, secondProject]
+    const jobs = (
+      await Promise.all(
+        projects.map((project, projectIndex) =>
+          Instance.provide({
+            directory: project.path,
+            fn: () =>
+              Promise.all(
+                Array.from({ length: projectIndex === 0 ? 2 : 1 }, (_, jobIndex) =>
+                  EventService.create({
+                    name: `capacity job ${projectIndex}:${jobIndex}`,
+                    eventType: TYPE,
+                    prompt: `wake capacity job ${projectIndex}:${jobIndex}`,
+                    projectId: Instance.project.id,
+                  }),
+                ),
+              ),
+          }),
+        ),
+      )
+    ).flat()
+    const firstStarted = Promise.withResolvers<void>()
+    const releaseFirst = Promise.withResolvers<void>()
+    let active = 0
+    let maximumActive = 0
+    let starts = 0
+    const within = <T>(label: string, operation: Promise<T>) =>
+      Promise.race([
+        operation,
+        Bun.sleep(15_000).then(() => {
+          throw new Error(`${label} did not settle`)
+        }),
+      ])
+    using _capacity = EventService.TestHooks.installExecutionCapacity(1)
+    using _wake = EventService.TestHooks.installWakeExecutor(async ({ fire }) => {
+      starts += 1
+      const start = starts
+      active += 1
+      maximumActive = Math.max(maximumActive, active)
+      if (start === 1) {
+        firstStarted.resolve()
+        await releaseFirst.promise
+      }
+      active -= 1
+      return { sessionID: fire.target_session_id, messageID: `message:${fire.id}` }
+    })
+    const executions = projects.map((project, index) =>
+      Instance.provide({
+        directory: project.path,
+        fn: async () => {
+          await EventService.TestHooks.acceptEnvelope({
+            occurrenceID: `event:physical-capacity:${index}`,
+            type: TYPE,
+            properties: { capacity: index },
+          })
+          await EventService.TestHooks.waitForIdle()
+          return EventService.TestHooks.fires(Instance.project.id)
+        },
+      }),
+    )
+    await within("first cross-Project Event fire", firstStarted.promise)
+    await Bun.sleep(25)
+    const readFires = (project: typeof firstProject) =>
+      Instance.provide({
+        directory: project.path,
+        fn: () => EventService.TestHooks.fires(Instance.project.id),
+      })
+    const saturated = (await Promise.all(projects.map(readFires))).flat()
+    expect({ active, starts, states: saturated.map((fire) => fire.status).toSorted() }).toEqual({
+      active: 1,
+      starts: 1,
+      states: ["pending", "pending", "running"],
+    })
+    releaseFirst.resolve()
+    const settled = (await within("cross-Project Event settlement", Promise.all(executions))).flat()
+    expect({
+      jobIDs: settled.map((fire) => fire.event_job_id).toSorted(),
+      maximumActive,
+      starts,
+      states: settled.map((fire) => fire.status),
+    }).toEqual({
+      jobIDs: jobs.map((job) => job.id).toSorted(),
+      maximumActive: 1,
+      starts: 3,
+      states: ["succeeded", "succeeded", "succeeded"],
+    })
+  }, 30_000)
+
+  test("keeps an accepted Event fire pending when its owner is cancelled after permit grant", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({ directory: project.path, fn: async () => {
+      const job = await EventService.create({
+        name: "post-permit cancellation",
+        eventType: TYPE,
+        prompt: "do not claim after owner cancellation",
+        projectId: Instance.project.id,
+      })
+      const reason = new DOMException("Event owner cancelled after permit grant", "AbortError")
+      let wakeCalls = 0
+      using _capacity = EventService.TestHooks.installExecutionCapacity(1)
+      using _postPermit = EventService.TestHooks.installAfterExecutionPermit((cancel) => cancel(reason))
+      using _wake = EventService.TestHooks.installWakeExecutor(async ({ fire }) => {
+        wakeCalls += 1
+        return { sessionID: fire.target_session_id, messageID: `message:${fire.id}` }
+      })
+
+      await EventService.TestHooks.acceptEnvelope({
+        occurrenceID: "event:post-permit-cancellation:1",
+        type: TYPE,
+        properties: { cancelled: true },
+      })
+      await EventService.TestHooks.waitForIdle()
+
+      expect({ wakeCalls, fires: EventService.TestHooks.fires(Instance.project.id) }).toEqual({
+        wakeCalls: 0,
+        fires: [expect.objectContaining({ event_job_id: job.id, status: "pending", attempt: 0 })],
+      })
+    } })
+  })
+
   test("definition removal appends a tombstone without erasing an already accepted fire", async () => {
     await using project = await memoryProject()
     await Instance.provide({ directory: project.path, fn: async () => {

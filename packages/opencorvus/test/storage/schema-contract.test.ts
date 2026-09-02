@@ -60,6 +60,7 @@ test("creates the complete pre-0.1.0 schema directly from the canonical DDL", ()
       "project_generation_required_insert",
       "provider_usage_event",
       "provider_activity_request",
+      "runtime_execution_capacity_lease",
       "tool_part_request",
       "tool_part_progress",
     ]

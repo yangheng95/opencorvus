@@ -42,15 +42,16 @@ import {
   currentMissionExecutionClosure,
 } from "@/mission/execution-closure"
 import { requireMissionSession } from "@/mission/session"
+import { FifoPermitPool, settledWork } from "@/util/queue"
+import { globalExecutionCapacity } from "@/runtime/execution-capacity"
 
 const DELIVERY_LEASE_MS = 120_000
 const MAX_DELIVERY_ATTEMPTS = 5
 const DELIVERY_POLL_INTERVAL_MS = 1_000
 const DELIVERY_RECIPIENT_PAGE_SIZE = 32
-const DELIVERY_RECIPIENT_CONCURRENCY = 4
 const DELIVERY_PROJECT_PAGE_SIZE = 32
-const DELIVERY_PROJECT_CONCURRENCY = 4
 const log = Log.create({ service: "scheduler-message-delivery" })
+const recipientExecutionPermits = new FifoPermitPool(4)
 const drainTails = new Map<string, Promise<void>>()
 let beforeMissionMaterializationForTest: (() => void | Promise<void>) | undefined
 let beforeTaskMaterializationForTest: (() => void | Promise<void>) | undefined
@@ -138,9 +139,10 @@ export async function sendSchedulerMessage(input: {
     return persisted
   })
   if (target.kind === "task_scheduler") {
+    recipientExecutionPermits.resize(await globalExecutionCapacity("scheduler_message"))
     const wakeStatus =
       receipt.status !== "delivered" && receipt.status !== "dead_letter"
-        ? await drainTaskRecipient(target.task_id, receipt.inboxID)
+        ? await recipientExecutionPermits.run(() => drainTaskRecipient(target.task_id, receipt.inboxID))
         : undefined
     const delivered = requireSchedulerDelivery(receipt.inboxID)
     if (delivered.deliveryResult?.kind === "task_ingress") {
@@ -380,88 +382,141 @@ export async function drainSchedulerMessagesForCurrentProject(input?: {
 }): Promise<void> {
   const current = Instance.current()
   if (!current) return
-  let afterWakeInboxID: string | undefined
-  while (true) {
-    const wakes = listUnansweredSchedulerSessionWakes({
-      projectID: current.project.id,
-      afterInboxID: afterWakeInboxID,
-      limit: 64,
-    })
-    if (wakes.length === 0) break
-    for (const wake of wakes) {
-      if (input?.excludeSessionIDs?.has(wake.sessionID)) continue
-      const closure = currentMissionExecutionClosure(wake.sessionID)
-      if (closure?.state === "closing" || closure?.state === "closed") continue
-      if (!schedulerSessionWakeNeedsRecovery(wake)) continue
-      const mission = await requireMissionSession(wake.sessionID)
-      const reconciliation = await admitMissionExecutionWake({
-        missionID: mission.missionID,
-        sessionID: wake.sessionID,
-        wake: async (missionAdmission) => {
-          assertMissionSchedulerOccurrenceAdmission({
-            sessionID: wake.sessionID,
-            openedEventID: wake.openedEventID,
-            admissionOpenedEventID: missionAdmission.closureEventID,
-          })
-          const receipt = requireSessionWake().resumePersistedWakeWithReceipt({
-            sessionID: wake.sessionID,
-            messageID: wake.messageID,
-            directory: current.project.worktree,
-            retryFailedReply: true,
-            ownerPreflight: missionAdmission.ownerPreflight,
-            ownerLifecycle: missionAdmission.ownerLifecycle,
-          })
-          await receipt.activation
-          return { activation: Promise.resolve(undefined), completion: receipt.completion }
-        },
-      })
-      if (reconciliation) await reconciliation.completion
-    }
-    afterWakeInboxID = wakes.at(-1)!.inboxID
-  }
-
-  await drainRecipientPages({
-    actor: "session",
+  await drainSchedulerRecipientFrontier({
     projectID: current.project.id,
-    excludeActorIDs: input?.excludeSessionIDs,
-    drain: drainMissionRecipient,
+    projectWorktree: current.project.worktree,
+    excludeSessionIDs: input?.excludeSessionIDs,
   })
-  await drainRecipientPages({ actor: "task", projectID: current.project.id, drain: drainTaskRecipient })
 }
 
-async function drainRecipientPages(input: {
-  actor: "task" | "session"
-  projectID: string
-  excludeActorIDs?: ReadonlySet<string>
-  drain: (actorID: string) => Promise<unknown>
-}): Promise<void> {
-  let afterActorID: string | undefined
-  while (true) {
-    const actorIDs = listPendingSchedulerRecipientIDs({
-      actor: input.actor,
-      projectID: input.projectID,
-      afterActorID,
-      limit: DELIVERY_RECIPIENT_PAGE_SIZE,
-    })
-    if (actorIDs.length === 0) return
-    for (let offset = 0; offset < actorIDs.length; offset += DELIVERY_RECIPIENT_CONCURRENCY) {
-      const batch = actorIDs
-        .slice(offset, offset + DELIVERY_RECIPIENT_CONCURRENCY)
-        .filter((actorID) => !input.excludeActorIDs?.has(actorID))
-      const settled = await Promise.allSettled(batch.map((actorID) => input.drain(actorID)))
-      const failures = settled.flatMap((result) => (result.status === "rejected" ? [result.reason] : []))
-      if (failures.length === 1) throw failures[0]
-      if (failures.length > 1) {
-        throw new AggregateError(failures, `Scheduler ${input.actor} recipient drain batch failed`)
-      }
+type SchedulerRecipientWorkItem =
+  | {
+      kind: "wake"
+      wake: ReturnType<typeof listUnansweredSchedulerSessionWakes>[number]
     }
-    afterActorID = actorIDs.at(-1)
+  | {
+      kind: "session"
+      actorID: string
+    }
+  | {
+      kind: "task"
+      actorID: string
+    }
+
+function interleaveSchedulerRecipientPages(
+  pages: readonly (readonly SchedulerRecipientWorkItem[])[],
+): SchedulerRecipientWorkItem[] {
+  const result: SchedulerRecipientWorkItem[] = []
+  const length = Math.max(0, ...pages.map((page) => page.length))
+  for (let index = 0; index < length; index += 1) {
+    for (const page of pages) {
+      const item = page[index]
+      if (item) result.push(item)
+    }
+  }
+  return result
+}
+
+async function drainSchedulerRecipientFrontier(input: {
+  projectID: string
+  projectWorktree: string
+  excludeSessionIDs?: ReadonlySet<string>
+}): Promise<void> {
+  const concurrency = await globalExecutionCapacity("scheduler_message")
+  recipientExecutionPermits.resize(concurrency)
+  let afterWakeInboxID: string | undefined
+  let afterSessionID: string | undefined
+  let afterTaskID: string | undefined
+  let wakesExhausted = false
+  let sessionsExhausted = false
+  let tasksExhausted = false
+  while (true) {
+    const wakes = wakesExhausted
+      ? []
+      : listUnansweredSchedulerSessionWakes({
+          projectID: input.projectID,
+          afterInboxID: afterWakeInboxID,
+          limit: DELIVERY_RECIPIENT_PAGE_SIZE,
+        })
+    const sessionIDs = sessionsExhausted
+      ? []
+      : listPendingSchedulerRecipientIDs({
+          actor: "session",
+          projectID: input.projectID,
+          afterActorID: afterSessionID,
+          limit: DELIVERY_RECIPIENT_PAGE_SIZE,
+        })
+    const taskIDs = tasksExhausted
+      ? []
+      : listPendingSchedulerRecipientIDs({
+          actor: "task",
+          projectID: input.projectID,
+          afterActorID: afterTaskID,
+          limit: DELIVERY_RECIPIENT_PAGE_SIZE,
+        })
+    wakesExhausted = wakes.length === 0
+    sessionsExhausted = sessionIDs.length === 0
+    tasksExhausted = taskIDs.length === 0
+    if (wakesExhausted && sessionsExhausted && tasksExhausted) return
+    const work = interleaveSchedulerRecipientPages([
+      wakes
+        .filter((wake) => !input.excludeSessionIDs?.has(wake.sessionID))
+        .map((wake) => ({ kind: "wake", wake }) satisfies SchedulerRecipientWorkItem),
+      sessionIDs
+        .filter((sessionID) => !input.excludeSessionIDs?.has(sessionID))
+        .map((actorID) => ({ kind: "session", actorID }) satisfies SchedulerRecipientWorkItem),
+      taskIDs.map((actorID) => ({ kind: "task", actorID }) satisfies SchedulerRecipientWorkItem),
+    ])
+    const settled = await settledWork({
+      concurrency,
+      items: work,
+      run: (item) => recipientExecutionPermits.run(async () => {
+        if (item.kind === "session") return drainMissionRecipient(item.actorID)
+        if (item.kind === "task") return drainTaskRecipient(item.actorID)
+        const { wake } = item
+        const closure = currentMissionExecutionClosure(wake.sessionID)
+        if (closure?.state === "closing" || closure?.state === "closed") return
+        if (!schedulerSessionWakeNeedsRecovery(wake)) return
+        const mission = await requireMissionSession(wake.sessionID)
+        const reconciliation = await admitMissionExecutionWake({
+          missionID: mission.missionID,
+          sessionID: wake.sessionID,
+          wake: async (missionAdmission) => {
+            assertMissionSchedulerOccurrenceAdmission({
+              sessionID: wake.sessionID,
+              openedEventID: wake.openedEventID,
+              admissionOpenedEventID: missionAdmission.closureEventID,
+            })
+            const receipt = requireSessionWake().resumePersistedWakeWithReceipt({
+              sessionID: wake.sessionID,
+              messageID: wake.messageID,
+              directory: input.projectWorktree,
+              retryFailedReply: true,
+              ownerPreflight: missionAdmission.ownerPreflight,
+              ownerLifecycle: missionAdmission.ownerLifecycle,
+            })
+            await receipt.activation
+            return { activation: Promise.resolve(undefined), completion: receipt.completion }
+          },
+        })
+        if (reconciliation) await reconciliation.completion
+      }),
+    })
+    const failures = settled.flatMap((result) => (result.status === "rejected" ? [result.reason] : []))
+    if (failures.length === 1) throw failures[0]
+    if (failures.length > 1) {
+      throw new AggregateError(failures, "Scheduler recipient drain frontier failed")
+    }
+    afterWakeInboxID = wakes.at(-1)?.inboxID ?? afterWakeInboxID
+    afterSessionID = sessionIDs.at(-1) ?? afterSessionID
+    afterTaskID = taskIDs.at(-1) ?? afterTaskID
   }
 }
 
 async function pollSchedulerMessageDeliveries(signal: AbortSignal): Promise<void> {
   await beforeGlobalPollForTest?.()
   const now = Date.now()
+  const concurrency = await globalExecutionCapacity("scheduler_message")
   let afterProjectID: string | undefined
   while (true) {
     const projectIDs = listPendingSchedulerProjectIDs({
@@ -469,20 +524,23 @@ async function pollSchedulerMessageDeliveries(signal: AbortSignal): Promise<void
       limit: DELIVERY_PROJECT_PAGE_SIZE,
     })
     if (projectIDs.length === 0) return
-    for (let offset = 0; offset < projectIDs.length; offset += DELIVERY_PROJECT_CONCURRENCY) {
-      if (signal.aborted) throw signal.reason
-      const drains = projectIDs.slice(offset, offset + DELIVERY_PROJECT_CONCURRENCY).flatMap((projectID) => {
+    const results = await settledWork({
+      concurrency,
+      items: projectIDs,
+      signal,
+      run: async (projectID) => {
         const dueAt = nextSchedulerDeliveryDueAt(projectID, now)
         const hasUnansweredWake = listUnansweredSchedulerSessionWakes({ projectID, limit: 1 }).length > 0
-        if (!hasUnansweredWake && (dueAt === undefined || dueAt > now)) return []
+        if (!hasUnansweredWake && (dueAt === undefined || dueAt > now)) return
         const project = Project.get(projectID)
-        return project ? [requestSchedulerMessageDrainForProject(projectID, project.worktree, signal)] : []
-      })
-      const results = await Promise.allSettled(drains)
-      if (signal.aborted) throw signal.reason
-      const failures = results.flatMap((result) => (result.status === "rejected" ? [result.reason] : []))
-      if (failures.length === 1) throw failures[0]
-      if (failures.length > 1) throw new AggregateError(failures, "Scheduler Message Project drain batch failed")
+        if (project) await requestSchedulerMessageDrainForProject(projectID, project.worktree, signal)
+      },
+    })
+    if (signal.aborted) throw signal.reason
+    const failures = results.flatMap((result) => (result.status === "rejected" ? [result.reason] : []))
+    if (failures.length === 1) throw failures[0]
+    if (failures.length > 1) {
+      throw new AggregateError(failures, "Scheduler Message Project drain page failed")
     }
     afterProjectID = projectIDs.at(-1)
   }

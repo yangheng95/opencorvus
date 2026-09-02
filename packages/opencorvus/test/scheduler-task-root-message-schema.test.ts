@@ -42,6 +42,7 @@ import { successfulSchedulerWakeReplyExistsInTransaction } from "@/protocol/sess
 import { ProtocolInboxTable } from "@/protocol/protocol.sql"
 import { ProtocolStore } from "@/protocol/store"
 import { TaskRootMessageProvenance } from "@/protocol/task-root-message-schema"
+import { ExecutionCapacityTestHooks } from "@/runtime/execution-capacity"
 import { Session } from "@/session"
 import { Message } from "@/session/message"
 import { MessageStore } from "@/session/message-store"
@@ -399,6 +400,30 @@ describe("scheduler Task-root Message protocol", () => {
           project.path,
           "Scheduler delivery target",
         )
+        const peerRoot = await Session.create({ kind: "root", title: "Scheduler delivery peer target" })
+        const peerTaskID = Identifier.ascending("task")
+        Database.immediateTransaction((db) => {
+          db.insert(EngineTaskTable)
+            .values({
+              id: peerTaskID,
+              project_id: Instance.project.id,
+              session_id: peerRoot.id,
+              source: "mission",
+              product_pillar: "code",
+              title: "Scheduler delivery peer target",
+              request: "Receive the peer direct Scheduler Message",
+              metadata: { actor: "mission", mission: { id: missionID, session_id: mission.id } },
+              time_created: now + 1,
+            })
+            .run()
+          appendTaskOpenedInTransaction({
+            db,
+            taskID: peerTaskID,
+            sessionID: peerRoot.id,
+            now: now + 1,
+            source: "test.scheduler-direct-capacity",
+          })
+        })
 
         const sourceUser = await Session.updateMessage({
           id: Identifier.ascending("message"),
@@ -439,15 +464,26 @@ describe("scheduler Task-root Message protocol", () => {
           },
         })
 
-        let observedWake: unknown
+        const observedWakes: unknown[] = []
         using _runner = TaskControlTestHooks.replaceTaskIngressRunner({
           runner: async ({ event }) => {
-            if (event?.rootMessage) observedWake = event
+            if (event?.rootMessage) observedWakes.push(event)
             return {}
           },
         })
+        using _capacity = ExecutionCapacityTestHooks.install({ scheduler_message: 1 })
+        let materializationStarts = 0
+        const firstStarted = Promise.withResolvers<void>()
+        const releaseFirst = Promise.withResolvers<void>()
+        using _materialization = SchedulerMessageTestHooks.installBeforeTaskMaterialization(async () => {
+          materializationStarts += 1
+          if (materializationStarts === 1) {
+            firstStarted.resolve()
+            await releaseFirst.promise
+          }
+        })
         const invocationID = `scheduler-delivery-${Identifier.uuid4First8()}`
-        const receipt = await sendSchedulerMessage({
+        const receiptPending = sendSchedulerMessage({
           invocationID,
           kind: "notification",
           source: {
@@ -466,6 +502,30 @@ describe("scheduler Task-root Message protocol", () => {
           sourceMessageID: sourceMessage.id,
           sourcePartID: sourcePart.id,
         })
+        await firstStarted.promise
+        const peerReceiptPending = sendSchedulerMessage({
+          invocationID: `scheduler-delivery-peer-${Identifier.uuid4First8()}`,
+          kind: "notification",
+          source: {
+            kind: "mission_scheduler",
+            project_id: Instance.project.id,
+            mission_id: missionID,
+            session_id: mission.id,
+          },
+          target: {
+            kind: "task_scheduler",
+            project_id: Instance.project.id,
+            task_id: peerTaskID,
+            root_session_id: peerRoot.id,
+          },
+          subject: "Peer exact scheduler delivery",
+          sourceMessageID: sourceMessage.id,
+          sourcePartID: sourcePart.id,
+        })
+        await Bun.sleep(50)
+        expect(materializationStarts).toBe(1)
+        releaseFirst.resolve()
+        const [receipt, peerReceipt] = await Promise.all([receiptPending, peerReceiptPending])
         await drainSchedulerMessagesForProject()
         const delivery = requireSchedulerDelivery(receipt.inboxID)
         if (delivery.status !== "delivered") {
@@ -491,11 +551,18 @@ describe("scheduler Task-root Message protocol", () => {
           ingressID: expect.any(String),
         })
         expect(persisted).toBeDefined()
-        expect(observedWake).toBeDefined()
+        expect({ materializationStarts, peerStatus: peerReceipt.status, observedWakeCount: observedWakes.length }).toEqual({
+          materializationStarts: 2,
+          peerStatus: "delivered",
+          observedWakeCount: 2,
+        })
         const provenance = TaskRootMessageProvenance.parse(
           (persisted?.data as { extra?: { task_root_message?: unknown } } | undefined)?.extra?.task_root_message,
         )
-        const wake = OrchestratorEventSchema.parse(observedWake)
+        const wake = observedWakes.map((value) => OrchestratorEventSchema.parse(value)).find(
+          (value) => value.rootMessage?.schedulerDelivery?.inboxID === receipt.inboxID,
+        )
+        if (!wake) throw new Error("Scheduler delivery wake was not observed")
 
         expect(provenance).toEqual({
           protocol: "task-root-message",
@@ -511,9 +578,9 @@ describe("scheduler Task-root Message protocol", () => {
         })
       },
     })
-  })
+  }, 30_000)
 
-  test("pages only due unresolved recipient heads and drains them with fixed production concurrency", async () => {
+  test("pages only due unresolved recipient heads and refills the shared production capacity", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
@@ -799,13 +866,30 @@ describe("scheduler Task-root Message protocol", () => {
 
         let active = 0
         let maximumActive = 0
+        let starts = 0
+        const releaseFirst = Promise.withResolvers<void>()
+        const fifthStarted = Promise.withResolvers<void>()
         using _capacity = SchedulerMessageTestHooks.installBeforeTaskMaterialization(async () => {
+          starts += 1
+          const start = starts
           active += 1
           maximumActive = Math.max(maximumActive, active)
-          await new Promise<void>((resolve) => setTimeout(resolve, 5))
+          if (start === 1) await releaseFirst.promise
+          else {
+            if (start === 5) fifthStarted.resolve()
+            await new Promise<void>((resolve) => setTimeout(resolve, 5))
+          }
           active -= 1
         })
-        await drainSchedulerMessagesForProject()
+        const drain = drainSchedulerMessagesForProject()
+        await Promise.race([
+          fifthStarted.promise,
+          new Promise<never>((_, reject) =>
+            setTimeout(() => reject(new Error("Scheduler recipient frontier did not refill a settled capacity slot")), 5_000),
+          ),
+        ])
+        releaseFirst.resolve()
+        await drain
 
         const dueHead = listPendingSchedulerRecipientIDs({
           actor: "task",
@@ -824,6 +908,7 @@ describe("scheduler Task-root Message protocol", () => {
 
         expect({
           maximumActive,
+          starts,
           remaining: listPendingSchedulerRecipientIDs({
             actor: "task",
             projectID: Instance.project.id,
@@ -838,6 +923,7 @@ describe("scheduler Task-root Message protocol", () => {
           }),
         }).toEqual({
           maximumActive: 4,
+          starts: 65,
           remaining: [],
           dueHead: [recipients[0]!.taskID],
           claimedDueHead: futureHead.inboxID,

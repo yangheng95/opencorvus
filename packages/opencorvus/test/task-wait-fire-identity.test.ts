@@ -15,7 +15,7 @@ import {
 import { prepareTaskProcessBinding } from "../src/engine/task-execution-capsule-binding"
 import { createTaskWait, listTaskWaits, TaskWaitIngressLineageError } from "../src/engine/task-wait"
 import { appendTaskReopenedInTransaction } from "../src/engine/task-lifecycle"
-import { acquireControlLease, releaseControlLease } from "../src/engine/control-lease"
+import { acquireControlLease, currentControlLeaseInTransaction, releaseControlLease } from "../src/engine/control-lease"
 import { acceptTaskRootIngressInTransaction, acquireTaskRootIngressLease } from "../src/engine/task-root-fact-store"
 import { Identifier } from "../src/id/id"
 import { Instance } from "../src/project/instance"
@@ -955,9 +955,14 @@ describe("Session one-shot delay admission", () => {
           )
         }
         await new Promise<void>((resolve) => setTimeout(resolve, 5))
+        const manualSession = await Session.create({ kind: "root", title: "Manual capacity peer" })
+        const manualAutomation = await AutomationService.create({
+          name: "manual capacity peer",
+          target: { scope: "session", sessionId: manualSession.id },
+          recurrence: "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY",
+          prompt: "run after the scheduled capacity owner settles",
+        })
 
-        const priorConcurrency = process.env.OPENCORVUS_AUTOMATION_CONCURRENCY
-        process.env.OPENCORVUS_AUTOMATION_CONCURRENCY = "1"
         const firstClaimAt = Date.now()
         let workerClaimAt = firstClaimAt
         let releaseFirst!: () => void
@@ -969,6 +974,7 @@ describe("Session one-shot delay admission", () => {
           announceFirst = resolve
         })
         let reservationCount = 0
+        using _capacity = AutomationService.TestHooks.installExecutionCapacity(1)
         using _clock = AutomationService.TestHooks.installClaimClock(() => workerClaimAt)
         using _reservation = AutomationService.TestHooks.installAfterRunReservation(async () => {
           reservationCount += 1
@@ -982,16 +988,19 @@ describe("Session one-shot delay admission", () => {
           activation: Promise.resolve({ owner: new AbortController().signal }),
           completion: Promise.resolve({ ok: true as const }),
         }))
+        const run = AutomationService.runDueNow()
+        await firstReserved
+        const manualRun = AutomationService.runNow(manualAutomation.id)
         try {
-          const run = AutomationService.runDueNow()
-          await firstReserved
+          await Bun.sleep(25)
+          expect(
+            Database.use((db) => currentControlLeaseInTransaction(db, "automation", manualAutomation.id)),
+          ).toBeUndefined()
+        } finally {
           workerClaimAt = firstClaimAt + 10 * 60 * 1000
           releaseFirst()
-          await run
-        } finally {
-          if (priorConcurrency === undefined) delete process.env.OPENCORVUS_AUTOMATION_CONCURRENCY
-          else process.env.OPENCORVUS_AUTOMATION_CONCURRENCY = priorConcurrency
         }
+        const [, manualRuns] = await Promise.all([run, manualRun])
 
         const attemptTimes = delays
           .map((delay) =>
@@ -1010,7 +1019,10 @@ describe("Session one-shot delay admission", () => {
             }),
           )
           .sort((left, right) => left - right)
-        expect(attemptTimes).toEqual([firstClaimAt, firstClaimAt + 10 * 60 * 1000])
+        expect({ attemptTimes, manualOutcomes: manualRuns.map((entry) => entry.outcome) }).toEqual({
+          attemptTimes: [firstClaimAt, firstClaimAt + 10 * 60 * 1000],
+          manualOutcomes: ["succeeded"],
+        })
       },
     })
   }, 60_000)

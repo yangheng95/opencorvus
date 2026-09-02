@@ -178,9 +178,17 @@ export namespace Config {
     })
     .passthrough()
 
+  const ProjectWritableConfigBoundary = z
+    .object({
+      execution_capacity: z.never().optional(),
+    })
+    .passthrough()
+
   function assertProjectOwnedConfigSource(data: unknown, source: string, loadOptions?: ConfigLoadOptions) {
-    if (loadOptions?.projectOwnedSource === "project") return
-    const parsed = NonProjectOwnedConfigBoundary.safeParse(data)
+    const parsed =
+      loadOptions?.projectOwnedSource === "project"
+        ? ProjectWritableConfigBoundary.safeParse(data)
+        : NonProjectOwnedConfigBoundary.safeParse(data)
     if (parsed.success) return
     throw new InvalidError({ path: source, issues: parsed.error.issues })
   }
@@ -1430,6 +1438,17 @@ export namespace Config {
     })
   export type Network = z.infer<typeof Network>
 
+  export const ExecutionCapacity = z
+    .object({
+      scheduler_message: z.number().int().min(1).max(64).optional(),
+      automation: z.number().int().min(1).max(64).optional(),
+      event: z.number().int().min(1).max(64).optional(),
+      provider: z.number().int().min(1).max(64).optional(),
+    })
+    .strict()
+    .meta({ ref: "ExecutionCapacityConfig" })
+  export type ExecutionCapacity = z.infer<typeof ExecutionCapacity>
+
   export const LocalEnvironment = z
     .object({
       name: z.string().trim().min(1).describe("Display name for this project-local environment"),
@@ -1454,6 +1473,9 @@ export namespace Config {
       logLevel: Log.Level.optional().describe("Log level"),
       server: Server.optional().describe("Server configuration for opencorvus serve"),
       network: Network.optional().describe("Network transport configuration"),
+      execution_capacity: ExecutionCapacity.optional().describe(
+        "Global physical execution limits. These bound resource use without owning scheduling, retry, or completion state.",
+      ),
       local_environment: LocalEnvironment.optional().describe(
         "Project-owned environment variables and shell setup source applied to OpenCorvus Bash and session shell commands.",
       ),
@@ -2414,6 +2436,7 @@ export namespace Config {
           await fs.mkdir(path.dirname(target), { recursive: true })
           return writeConfigFile(target, patch, {
             async commit(merged, _appliedPatch, persist) {
+              assertProjectOwnedConfigSource(merged, target, { projectOwnedSource: "project" })
               await state.reset()
               const before = structuredClone(await get())
               const candidate = await resolveProjectCandidate(merged)

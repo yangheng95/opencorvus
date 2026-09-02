@@ -136,6 +136,10 @@ parser 必须消费生成该 digest 的同一份 snapshot；完成层级合并�
 显式 writer 在 canonical-file owner 内一次性写入最终 `$schema` 与配置正文，读取路径不得再把已提交的
 业务配置拆成第二个 schema generation。
 
+`execution_capacity` 是 global JSONC 独有的物理资源策略，分别限定 Scheduler Message、Automation、
+Event 和 Provider 的活跃 effect 数。Project source 在 commit 前按 canonical typed config error 拒绝该
+字段，不能覆盖或影子化全局策略；这些数值不拥有 occurrence、FIFO、重试、租约或业务终态。
+
 `Config.get()`、`Config.getGlobal()` 与本进程 Project/global writer 共享一个 generation
 read/write owner；writer 从 candidate、canonical replace、cache reset、runtime projection 到事件确认均在
 同一 write generation 内。写 generation 中自然产生的嵌套读取会被登记并在释放前排空；继承 context 但在

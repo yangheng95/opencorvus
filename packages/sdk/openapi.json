@@ -1447,6 +1447,9 @@
             },
             "type": "array"
           },
+          "execution_capacity": {
+            "$ref": "#/components/schemas/ExecutionCapacityConfig"
+          },
           "experimental": {
             "properties": {
               "auto_question": {
@@ -6101,6 +6104,33 @@
           "type",
           "properties"
         ],
+        "type": "object"
+      },
+      "ExecutionCapacityConfig": {
+        "additionalProperties": false,
+        "description": "Global physical execution limits. These bound resource use without owning scheduling, retry, or completion state.",
+        "properties": {
+          "automation": {
+            "maximum": 64,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "event": {
+            "maximum": 64,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "provider": {
+            "maximum": 64,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "scheduler_message": {
+            "maximum": 64,
+            "minimum": 1,
+            "type": "integer"
+          }
+        },
         "type": "object"
       },
       "ExpertSquadCatalogIndexEntry": {

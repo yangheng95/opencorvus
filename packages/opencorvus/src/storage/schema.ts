@@ -87,6 +87,7 @@ import { QuickNoteTable } from "../quicknote/quicknote.sql"
 import { DecisionLogTable } from "../decision-log/schema"
 import { EngineMetricSpecTable, EngineMetricResultTable } from "../metrics/metrics.sql"
 import { ProviderUsageEventTable } from "../usage/usage.sql"
+import { RuntimeExecutionCapacityLeaseTable } from "../runtime/execution-capacity.sql"
 
 export {
   ControlAccountTable,
@@ -170,6 +171,7 @@ export {
   EngineMetricSpecTable,
   EngineMetricResultTable,
   ProviderUsageEventTable,
+  RuntimeExecutionCapacityLeaseTable,
 }
 
 export const ApplicationSchema = {
@@ -254,4 +256,5 @@ export const ApplicationSchema = {
   EngineMetricSpecTable,
   EngineMetricResultTable,
   ProviderUsageEventTable,
+  RuntimeExecutionCapacityLeaseTable,
 } as const satisfies Record<string, AnySQLiteTable>

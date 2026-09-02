@@ -55,6 +55,8 @@ import {
   scheduledToolOccurrenceConflict,
   type ScheduledToolOccurrence,
 } from "./tool-occurrence"
+import { FifoPermitPool } from "@/util/queue"
+import { globalExecutionCapacity } from "@/runtime/execution-capacity"
 
 type Match = Record<string, string | number | boolean>
 type EventEnvelope = Bus.Envelope
@@ -130,6 +132,14 @@ export namespace EventService {
   const FIRE_LEASE_RENEW_MS = 5_000
   const FIRE_RETRY_BASE_MS = 1_000
   const FIRE_RETRY_MAX_MS = 60_000
+  const executionPermits = new FifoPermitPool(4)
+  let executionCapacityForTest: number | undefined
+  let afterExecutionPermitForTest: ((cancel: (reason: unknown) => void) => void | Promise<void>) | undefined
+
+  async function acquireExecutionPermit(signal: AbortSignal): Promise<() => void> {
+    executionPermits.resize(executionCapacityForTest ?? (await globalExecutionCapacity("event")))
+    return executionPermits.acquire(signal)
+  }
 
   let wakeExecutorForTest: EventWakeExecutor | undefined
   let fireAcceptedHookForTest: EventFireAcceptedHook | undefined
@@ -739,7 +749,14 @@ export namespace EventService {
       .then(async () => {
         if (s.lifecycle.signal.aborted) return
         runtimeReservation.signal.throwIfAborted()
-        await processFire(fireID, runtimeReservation.signal)
+        const release = await acquireExecutionPermit(runtimeReservation.signal)
+        try {
+          await afterExecutionPermitForTest?.((reason) => runtimeReservation.cancel(reason))
+          runtimeReservation.signal.throwIfAborted()
+          await processFire(fireID, runtimeReservation.signal)
+        } finally {
+          release()
+        }
       })
       .catch((error) => {
         log.error("event fire execution failed", {
@@ -1438,6 +1455,25 @@ export namespace EventService {
   }
 
   export const TestHooks = {
+    installAfterExecutionPermit(hook: (cancel: (reason: unknown) => void) => void | Promise<void>): Disposable {
+      if (afterExecutionPermitForTest) throw new Error("Event post-permit test hook is already installed")
+      afterExecutionPermitForTest = hook
+      return {
+        [Symbol.dispose]() {
+          if (afterExecutionPermitForTest === hook) afterExecutionPermitForTest = undefined
+        },
+      }
+    },
+    installExecutionCapacity(limit: number): Disposable {
+      if (executionCapacityForTest !== undefined) throw new Error("Event execution capacity test override is installed")
+      executionCapacityForTest = limit
+      executionPermits.resize(limit)
+      return {
+        [Symbol.dispose]() {
+          executionCapacityForTest = undefined
+        },
+      }
+    },
     installBeforeProcessRollbackRecovery(hook: () => void | Promise<void>): Disposable {
       if (beforeProcessRollbackRecoveryForTest) {
         throw new Error("Event fire rollback recovery test hook is already installed")

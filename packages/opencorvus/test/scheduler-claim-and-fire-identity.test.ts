@@ -132,6 +132,36 @@ async function acquireDurablePromptExecution(
 }
 
 describe("scheduler immutable definition and fire identity", () => {
+  test("does not claim a due Automation after its execution permit is granted to an aborted owner", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({ directory: project.path, fn: async () => {
+      const startsAt = Date.now() + 1_000
+      const stamp = new Date(startsAt)
+        .toISOString()
+        .replace(/[-:]/g, "")
+        .replace(/\.\d{3}Z$/, "Z")
+      const automation = await AutomationService.create({
+        name: "post-permit abort",
+        target: { scope: "project", projectIds: [Instance.project.id] },
+        recurrence: `DTSTART:${stamp}\nRRULE:FREQ=SECONDLY;INTERVAL=120`,
+        prompt: "do not claim after owner cancellation",
+      })
+      while (Date.now() <= automation.nextRun) await Bun.sleep(10)
+
+      const controller = new AbortController()
+      const reason = new DOMException("Automation owner cancelled after permit grant", "AbortError")
+      using _capacity = AutomationService.TestHooks.installExecutionCapacity(1)
+      using _postPermit = AutomationService.TestHooks.installAfterExecutionPermit(() => controller.abort(reason))
+      const outcome = await AutomationService.TestHooks.runDueWithSignal(controller.signal).catch((error) => error)
+
+      expect({
+        outcome,
+        fires: Database.use((db) => db.select().from(AutomationFireTable).all()),
+        lease: Database.use((db) => currentControlLeaseInTransaction(db, "automation", automation.id)),
+      }).toEqual({ outcome: reason, fires: [], lease: undefined })
+    } })
+  }, 30_000)
+
   test("uses the unfinished-assistant frontier index across long idle and busy Session histories", async () => {
     await using project = await memoryProject()
     await Instance.provide({ directory: project.path, fn: async () => {
@@ -1004,17 +1034,27 @@ describe("scheduler immutable definition and fire identity", () => {
       const firstProjectID = Instance.project.id
       const calls: string[] = []
       let refuseSecondTarget = true
+      let active = 0
+      let maximumActive = 0
+      using _capacity = AutomationService.TestHooks.installExecutionCapacity(1)
       using _wake = AutomationService.TestHooks.installWakeExecutor(async (input) => {
         const projectID = Instance.project.id
         calls.push(projectID)
+        active += 1
+        maximumActive = Math.max(maximumActive, active)
+        await Bun.sleep(5)
         const refused = projectID === secondProjectID && refuseSecondTarget
-        return {
-          sessionID: input.sessionID!,
-          messageID: input.messageID!,
-          activation: Promise.resolve({ owner: new AbortController().signal }),
-          completion: Promise.resolve(
-            refused ? { ok: false as const, error: "second target refused once" } : { ok: true as const },
-          ),
+        try {
+          return {
+            sessionID: input.sessionID!,
+            messageID: input.messageID!,
+            activation: Promise.resolve({ owner: new AbortController().signal }),
+            completion: Promise.resolve(
+              refused ? { ok: false as const, error: "second target refused once" } : { ok: true as const },
+            ),
+          }
+        } finally {
+          active -= 1
         }
       })
       const automation = await AutomationService.create({
@@ -1058,7 +1098,8 @@ describe("scheduler immutable definition and fire identity", () => {
       expect({
         first: calls.filter((projectID) => projectID === firstProjectID).length,
         second: calls.filter((projectID) => projectID === secondProjectID).length,
-      }).toEqual({ first: 1, second: 2 })
+        maximumActive,
+      }).toEqual({ first: 1, second: 2, maximumActive: 1 })
     } })
   }, 60_000)
 

@@ -108,7 +108,45 @@ Selected direction and razor boundary:
 - retry backoff releases the physical slot; the next actual stream attempt reacquires it;
 - capacity admission records no business status and scans no domain table.
 
-This work is a later sub-cut. It must not be used to delay the independent B8/B9 deletion/query corrections, and it must not introduce a generic job framework.
+Implementation keeps the independent B8/B9 and B2 owners unblocked. It adds
+no generic job framework and does not change any domain occurrence identity:
+
+- one global-only `execution_capacity` surface owns the Scheduler Message,
+  Automation, Event, and Provider physical limits; Project config receives the
+  canonical typed config error for this global policy;
+- Scheduler Message uses fixed SQL pages but interleaves active wake recovery,
+  Mission recipients, and Task recipients through one work-conserving pump;
+  Project discovery uses the same bounded worker primitive;
+- the production Task-control owner was rechecked after the independent B9
+  delivery and already injects four active scans plus a bounded pending page
+  budget; B5 does not reopen or duplicate that finished capacity boundary;
+- scheduled Automation, manual API, manual Tool, delay, and multi-target fan-out
+  share one process-wide FIFO permit pool. Admission happens before the durable
+  business claim, and the initially reserved permit transfers to the first
+  target so a capacity-one multi-target fire cannot deadlock itself;
+- distinct Event jobs preserve their existing per-job FIFO tails while sharing
+  one process-wide physical permit pool across Projects;
+- the final Provider SDK fetch obtains one SQLite-backed slot keyed by a
+  non-secret Provider/credential-generation/resource-class digest. Response
+  EOF, read error, consumer cancellation, caller/activity abort, transport
+  failure, and no-body responses converge on exact release; expiry is the only
+  crash takeover authority.
+
+Pre-freeze positive evidence on the shared working tree:
+
+- final B5 matrix: 85/85 tests, 363 assertions, 0 failures across Scheduler
+  Message, Automation, Wait, Event, Provider, config, durable capacity, and
+  current-schema contracts, including stream settlement and bounded pause;
+- two real Bun backend processes over one SQLite data root and one real local
+  streaming HTTP transport prove that the second Provider request cannot enter
+  fetch while the first body owns capacity, then proceeds after EOF;
+- capacity reduction waits for active old slots to fall below the new bound;
+  a saturated waiter settles with the caller's exact abort reason;
+- OpenCorvus package typecheck passes on the shared tree. The uninvolved B5
+  reviewer rechecked the direct Task, Provider physical-settlement, and
+  post-permit cancellation corrections and returned P0-P3=0. B5 does not
+  invalidate or block the independently owned B2 work and still requires exact
+  staging plus repository checkers before commit.
 
 ### B8 — delete duplicate workflow-node occurrence authority
 

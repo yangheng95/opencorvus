@@ -1,6 +1,11 @@
 import { describe, expect, test } from "bun:test"
-import { mkdir, readFile, writeFile } from "node:fs/promises"
+import { mkdir, readFile, stat, writeFile } from "node:fs/promises"
 import path from "node:path"
+import { Database as BunDatabase } from "bun:sqlite"
+import {
+  createManagedTemporaryDirectory,
+  removeManagedDirectoryTree,
+} from "@opencorvus-ai/util/runtime-directories"
 import { Provider } from "@/provider/provider"
 import { CanonicalCache } from "@/util/canonical-cache"
 import { CanonicalDigestContractError, canonicalDigestSource, sha256Text } from "@/util/canonical-digest"
@@ -9,6 +14,7 @@ import { Config } from "@/config/config"
 import { BUNDLED_PROVIDERS } from "@/provider/bundled"
 import { Instance } from "@/project/instance"
 import { memoryProject } from "./fixture/memory"
+import { ExecutionCapacityTestHooks } from "@/runtime/execution-capacity"
 
 describe.serial("Provider cache identity", () => {
   test("canonical sources are runtime-independent and exact bytes remain the cache authority", () => {
@@ -308,7 +314,7 @@ describe.serial("Provider cache identity", () => {
       preservedPeerExplicit: true,
       disposedDefaultHolder: false,
     })
-  })
+  }, 30_000)
 
   test("production runtime capabilities execute without entering the declarative SDK cache", async () => {
     await using project = await memoryProject()
@@ -352,6 +358,269 @@ describe.serial("Provider cache identity", () => {
       },
     })
   })
+
+  test("releases one Provider capacity slot on response EOF, cancel, abort and transport error", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({ directory: project.path, fn: async () => {
+      const originalFactory = BUNDLED_PROVIDERS["@ai-sdk/openai-compatible"]
+      let providerFetch: ((input: string, init?: RequestInit) => Promise<Response>) | undefined
+      let starts = 0
+      let active = 0
+      let maximumActive = 0
+      let cancellations = 0
+      let closeFirst!: () => void
+      let completeAbortedCleanup!: () => void
+      const customFetch = async (input: string) => {
+        starts += 1
+        const start = starts
+        active += 1
+        maximumActive = Math.max(maximumActive, active)
+        if (input.endsWith("/error")) {
+          active -= 1
+          throw new Error("capacity fixture transport error")
+        }
+        return new Response(
+          new ReadableStream<Uint8Array>({
+            start(controller) {
+              controller.enqueue(new TextEncoder().encode(`response-${start}`))
+              if (start === 1) {
+                closeFirst = () => {
+                  active -= 1
+                  controller.close()
+                }
+              } else {
+                if (start !== 3 && start !== 7) {
+                  active -= 1
+                  controller.close()
+                }
+              }
+            },
+            cancel() {
+              cancellations += 1
+              if (start === 7) {
+                return new Promise<void>((resolve) => {
+                  completeAbortedCleanup = () => {
+                    active -= 1
+                    resolve()
+                  }
+                })
+              }
+              active -= 1
+            },
+          }),
+        )
+      }
+      BUNDLED_PROVIDERS["@ai-sdk/openai-compatible"] = (options: Record<string, unknown>) => {
+        providerFetch = options.fetch as typeof providerFetch
+        return { languageModel: (modelId: string) => ({ modelId }) as never }
+      }
+      using _capacity = ExecutionCapacityTestHooks.install({ provider: 1 })
+      const config = Config.Info.parse({
+        enabled_providers: ["capacity-fixture"],
+        provider: {
+          "capacity-fixture": {
+            name: "Provider capacity fixture",
+            npm: "@ai-sdk/openai-compatible",
+            api: "http://127.0.0.1:9/v1",
+            options: { apiKey: "capacity-fixture-key", fetch: customFetch, timeout: false },
+            models: { model: {} },
+          },
+        },
+      })
+      try {
+        await Provider.getLanguage(await Provider.getModel("capacity-fixture", "model", { config }), { config })
+        if (!providerFetch) throw new Error("Provider fixture did not receive the production fetch boundary")
+        const first = await providerFetch("http://capacity.invalid/first")
+        const secondPending = providerFetch("http://capacity.invalid/second")
+        await Bun.sleep(50)
+        expect({ active, starts }).toEqual({ active: 1, starts: 1 })
+        closeFirst()
+        expect(await first.text()).toBe("response-1")
+        const second = await secondPending
+        expect(await second.text()).toBe("response-2")
+        const third = await providerFetch("http://capacity.invalid/third")
+        const fourthPending = providerFetch("http://capacity.invalid/fourth")
+        await Bun.sleep(50)
+        expect({ active, starts }).toEqual({ active: 1, starts: 3 })
+        await third.body!.cancel("consumer settled")
+        const fourth = await fourthPending
+        expect(await fourth.text()).toBe("response-4")
+
+        const transportError = providerFetch("http://capacity.invalid/error")
+        const afterError = providerFetch("http://capacity.invalid/after-error")
+        expect(await transportError.catch((error: Error) => error.message)).toBe("capacity fixture transport error")
+        expect(await (await afterError).text()).toBe("response-6")
+
+        const controller = new AbortController()
+        const aborted = await providerFetch("http://capacity.invalid/aborted-body", { signal: controller.signal })
+        const abortedRead = aborted.text()
+        const afterAbort = providerFetch("http://capacity.invalid/after-abort")
+        await Bun.sleep(50)
+        expect({ active, starts }).toEqual({ active: 1, starts: 7 })
+        controller.abort(new DOMException("capacity fixture caller abort", "AbortError"))
+        expect((await abortedRead.catch((error: Error) => error)).name).toBe("AbortError")
+        await Bun.sleep(50)
+        expect({ active, starts }).toEqual({ active: 1, starts: 7 })
+        completeAbortedCleanup()
+        expect(await (await afterAbort).text()).toBe("response-8")
+        expect({ cancellations, maximumActive, starts }).toEqual({ cancellations: 2, maximumActive: 1, starts: 8 })
+      } finally {
+        if (originalFactory) BUNDLED_PROVIDERS["@ai-sdk/openai-compatible"] = originalFactory
+        else delete BUNDLED_PROVIDERS["@ai-sdk/openai-compatible"]
+        await Provider.resetAll()
+      }
+    } })
+  })
+
+  test("shares the final Provider stream capacity lease across two backend processes", async () => {
+    const processRoot = process.env.OPENCORVUS_TEST_PROCESS_ROOT
+    if (!processRoot) throw new Error("Cross-process Provider capacity test requires the repository test runtime")
+    await using project = await memoryProject()
+    const runtime = await createManagedTemporaryDirectory(processRoot, "provider-capacity-runtime-")
+    const barrier = await createManagedTemporaryDirectory(processRoot, "provider-capacity-barrier-")
+    const requests: Array<{
+      label: string
+      release: () => void
+      responded: Promise<void>
+    }> = []
+    const server = Bun.serve({
+      hostname: "127.0.0.1",
+      port: 0,
+      fetch(request) {
+        const label = new URL(request.url).pathname.split("/").at(-1) ?? "unknown"
+        const released = Promise.withResolvers<void>()
+        const responded = Promise.withResolvers<void>()
+        const body = new ReadableStream<Uint8Array>({
+          start(controller) {
+            controller.enqueue(new TextEncoder().encode(`body-${label}`))
+            void released.promise.then(() => {
+              controller.close()
+              responded.resolve()
+            })
+          },
+        })
+        requests.push({ label, release: released.resolve, responded: responded.promise })
+        return new Response(body)
+      },
+    })
+    const apiURL = `http://127.0.0.1:${server.port}`
+    const worker = path.join(import.meta.dir, "fixture", "provider-capacity-process-worker.ts")
+    const environment = { ...process.env, OPENCORVUS_HOME: runtime }
+    const children: ReturnType<typeof Bun.spawn>[] = []
+    const spawn = (mode: "seed" | "run", label: string) => {
+      const child = Bun.spawn(
+        [
+          process.execPath,
+          `--config=${path.join(import.meta.dir, "empty-bunfig.toml")}`,
+          worker,
+          mode,
+          project.path,
+          barrier,
+          apiURL,
+          label,
+        ],
+        { cwd: path.join(import.meta.dir, ".."), env: environment, stdout: "pipe", stderr: "pipe" },
+      )
+      children.push(child)
+      return child
+    }
+    const read = async (child: ReturnType<typeof spawn>) => {
+      const [exitCode, stdout, stderr] = await Promise.all([
+        child.exited,
+        new Response(child.stdout).text(),
+        new Response(child.stderr).text(),
+      ])
+      expect(exitCode, stderr).toBe(0)
+      return JSON.parse(stdout.trim()) as {
+        mode: string
+        label?: string
+        status?: number
+        body?: string
+        providerID?: string
+        modelID?: string
+        configuredProviders?: string[]
+      }
+    }
+    const waitFor = async (predicate: () => boolean | Promise<boolean>, message: string) => {
+      const deadline = Date.now() + 30_000
+      while (!(await predicate())) {
+        if (Date.now() >= deadline) throw new Error(message)
+        await Bun.sleep(10)
+      }
+    }
+
+    try {
+      expect(await read(spawn("seed", "seed"))).toEqual({
+        mode: "seed",
+        providerID: "provider-capacity-process",
+        modelID: "stream-model",
+        configuredProviders: ["provider-capacity-process"],
+      })
+      const first = spawn("run", "first")
+      const second = spawn("run", "second")
+      const readyDeadline = Date.now() + 30_000
+      while (true) {
+        const ready =
+          Boolean(await stat(path.join(barrier, "first.ready")).catch(() => undefined)) &&
+          Boolean(await stat(path.join(barrier, "second.ready")).catch(() => undefined))
+        if (ready) break
+        const exited = [first, second].find((child) => child.exitCode !== null)
+        if (exited) {
+          const stderr = await new Response(exited.stderr).text()
+          throw new Error(`Provider capacity worker exited before readiness: ${exited.exitCode}\n${stderr}`)
+        }
+        if (Date.now() >= readyDeadline) throw new Error("Provider capacity workers did not initialize")
+        await Bun.sleep(10)
+      }
+      await writeFile(path.join(barrier, "first.start"), "start")
+      await waitFor(() => requests.length === 1, "First backend did not reach the Provider transport")
+      await writeFile(path.join(barrier, "second.start"), "start")
+      await Bun.sleep(250)
+      expect(requests.map((request) => request.label)).toEqual(["first"])
+
+      requests[0]!.release()
+      await requests[0]!.responded
+      await waitFor(() => requests.length === 2, "Second backend did not acquire the released Provider slot")
+      requests[1]!.release()
+      await requests[1]!.responded
+      const [firstResult, secondResult] = await Promise.all([read(first), read(second)])
+
+      const sqlite = new BunDatabase(path.join(runtime, "data", "opencorvus.db"), { readonly: true })
+      const leases = sqlite
+        .query<
+          { slot: number; lease_id: string; owner_id: string; time_acquired: number; expires_at: number },
+          []
+        >(
+          "SELECT slot, lease_id, owner_id, time_acquired, expires_at FROM runtime_execution_capacity_lease ORDER BY slot",
+        )
+        .all()
+      sqlite.close()
+      expect({ firstResult, secondResult, requestOrder: requests.map((request) => request.label), leases }).toEqual({
+        firstResult: { mode: "run", label: "first", status: 200, body: "body-first" },
+        secondResult: { mode: "run", label: "second", status: 200, body: "body-second" },
+        requestOrder: ["first", "second"],
+        leases: [
+          {
+            slot: 0,
+            lease_id: expect.any(String),
+            owner_id: expect.stringMatching(/^runtime:/),
+            time_acquired: expect.any(Number),
+            expires_at: expect.any(Number),
+          },
+        ],
+      })
+      expect(leases[0]!.expires_at).toBeLessThanOrEqual(Date.now())
+    } finally {
+      for (const request of requests) request.release()
+      server.stop(true)
+      for (const child of children) {
+        child.kill()
+        await child.exited
+      }
+      await removeManagedDirectoryTree(barrier)
+      await removeManagedDirectoryTree(runtime)
+    }
+  }, 90_000)
 
   test("production Bedrock credential capability initializes without cache serialization", async () => {
     await using project = await memoryProject()

@@ -151,6 +151,20 @@ Zod 开放 record 的 provider projection 必须保留可接受非空 JSON map �
 delivery，也不得通过兼容输入、Host 重试或 prompt 顺序指令另建协议。`@ai-sdk/openai-compatible`
 不暴露 parallel-call request option，不能伪装为已约束；其他 Provider 保留其显式配置的并行策略。
 
+## Provider 物理容量
+
+每个真实语言模型 SDK fetch 在进入网络传输前取得一个跨进程物理容量槽。槽的资源键只包含
+Provider ID、credential generation 的非明文 SHA-256 身份和 `language-model` resource class；
+表中不保存 key、URL、请求、Session、Task、重试或业务状态。全局
+`execution_capacity.provider` 是唯一配置来源，Project 配置不能覆盖它。
+
+容量槽是当前物理租约，不是第二套 scheduler。请求等待槽时尚未进入网络；响应 body 的正常 EOF、
+读取错误、consumer cancel、调用方 abort、activity timeout 和无 body 响应都收敛到同一次 fenced
+release。abort 可立即终止下游读取，但只有上游 reader 的 cancel 已完成或拒绝后才释放容量；无法证明
+物理清理完成时继续持有并续租该槽。进程崩溃由有限 lease expiry 接管，同一 SQLite data root 上的并行 backend 因而共享同一
+上限。Provider 的业务重试、幂等、usage 和 Message 终态仍由原有 occurrence owner 管理；退避期间
+不持有物理槽，下一次真实 fetch 重新 admission。
+
 ## Token 与计费统计单一链路
 
 所有 bundled 与动态安装的语言模型 Provider 都必须通过 `llm/api.ts` 的共享流式
