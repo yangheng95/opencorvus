@@ -17441,7 +17441,7 @@ export type GlobalAutomationsFiresResponses = {
     }>
     scheduledDueAt: number
     startedAt: number
-    state: "running" | "retry_wait" | "succeeded" | "failed" | "partial" | "disposition"
+    state: "scheduled" | "running" | "retry_wait" | "succeeded" | "failed" | "partial" | "disposition"
   }>
 }
 

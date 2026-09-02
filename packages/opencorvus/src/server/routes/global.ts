@@ -127,7 +127,7 @@ export const AutomationFireHistoryViewSchema = z
     scheduledDueAt: z.number(),
     startedAt: z.number(),
     completedAt: z.number().nullable(),
-    state: z.enum(["running", "retry_wait", "succeeded", "failed", "partial", "disposition"]),
+    state: z.enum(["scheduled", "running", "retry_wait", "succeeded", "failed", "partial", "disposition"]),
     attemptCount: z.number(),
     retryAt: z.number().nullable(),
     error: z.string().nullable(),

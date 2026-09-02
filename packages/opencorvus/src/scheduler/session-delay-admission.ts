@@ -12,6 +12,7 @@ import {
 } from "./automation.sql"
 import { SessionWakeReason } from "@/session/wake-reason"
 import { currentSessionDelayDefinitionsInTransaction } from "./automation-projection"
+import { clearAutomationFireFrontierInTransaction } from "./automation-fire-frontier"
 
 function acceptedInputsInTransaction(db: Database.TxOrDb, sessionID: string, messageIDs: readonly string[]) {
   if (messageIDs.length === 0) return []
@@ -145,17 +146,6 @@ export function settleSessionDelaysAtAssistantAcceptanceInTransaction(
     if (fireIDs.length > 1) {
       throw new Error(`Session delay ${delay.definition_id} owns multiple unsettled due occurrences`)
     }
-    for (const run of unsettled) {
-      db.insert(AutomationRunReceiptTable)
-        .values({
-          id: Identifier.ascending("automation"),
-          run_id: run.id,
-          outcome: "disposition",
-          disposition: "superseded",
-          time_created: input.now,
-        })
-        .run()
-    }
     const unacceptedWake = pendingWakes.some(
       (wake) =>
         wake.source === "scheduler.automation" &&
@@ -178,6 +168,18 @@ export function settleSessionDelaysAtAssistantAcceptanceInTransaction(
         time_created: input.now,
       })
       .run()
+    clearAutomationFireFrontierInTransaction(db, delay.definition_id)
+    for (const run of unsettled) {
+      db.insert(AutomationRunReceiptTable)
+        .values({
+          id: Identifier.ascending("automation"),
+          run_id: run.id,
+          outcome: "disposition",
+          disposition: "superseded",
+          time_created: input.now,
+        })
+        .run()
+    }
     db.insert(AutomationDelaySettlementTable)
       .values({
         definition_id: delay.definition_id,

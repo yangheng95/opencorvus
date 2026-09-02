@@ -142,9 +142,9 @@ test("a peer poller retains one busy Session due occurrence before one successor
       delayedUntilFuture: true,
       delayOwner,
       pendingFire: null,
-      scheduledDue: null,
+      scheduledDue: seeded.nextRun,
       attemptOrdinal: 0,
-      fireCount: 0,
+      fireCount: 1,
       attemptCount: 0,
       runCount: 0,
     })
@@ -158,6 +158,10 @@ test("a peer poller retains one busy Session due occurrence before one successor
     try {
       sqlite.run(
         "UPDATE engine_control_activation_lease SET expires_at=? WHERE target='automation' AND target_id=?",
+        [Date.now() - 1, seeded.automationID],
+      )
+      sqlite.run(
+        "UPDATE automation_fire_frontier SET available_at=? WHERE definition_id=?",
         [Date.now() - 1, seeded.automationID],
       )
     } finally {
@@ -176,7 +180,10 @@ test("a peer poller retains one busy Session due occurrence before one successor
       receipts: completed.facts?.receipts.map((receipt) => receipt.outcome),
     }).toEqual({
       automationID: seeded.automationID,
-      fireFacts: [{ due: seeded.nextRun, origin: "scheduled" }],
+      fireFacts: [
+        { due: seeded.nextRun, origin: "scheduled" },
+        { due: seeded.nextRun + 120_000, origin: "scheduled" },
+      ],
       attempts: [{ fireID: completed.facts?.fires[0]?.id, ordinal: 1 }],
       runFireIDs: [completed.facts?.fires[0]?.id],
       receipts: ["succeeded"],

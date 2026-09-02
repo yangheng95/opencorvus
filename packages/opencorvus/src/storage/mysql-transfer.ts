@@ -634,6 +634,11 @@ const TRANSFER_DEFERRED_CREATION_TRIGGERS = [
   "protocol_event_task_project_insert",
   "worker_turn_descriptor_task_project_insert",
   "engine_task_root_ingress_project_insert",
+  "automation_fire_frontier_authority_insert",
+  "automation_fire_frontier_authority_update",
+  "engine_control_activation_lease_grant_insert",
+  "automation_fire_attempt_admission_insert",
+  "automation_run_mission_reservation_insert",
   "event_job_fire_definition_insert",
   "event_job_fire_mission_reservation_insert",
   "event_job_fire_receipt_frontier_insert",
@@ -648,11 +653,274 @@ function beginValidatedCreationFactRestore(sqlite: BunDatabase): void {
 function finishValidatedCreationFactRestore(sqlite: BunDatabase): void {
   assertNoForeignKeyViolations(sqlite)
   assertTaskControlProjectAuthority(sqlite)
+  assertAutomationFireFrontierAuthority(sqlite)
+  assertAutomationRunMissionReservationAuthority(sqlite)
   assertEventFireSnapshotAuthority(sqlite)
   validateTaskCreationIdentitySnapshot(sqlite)
   const restored = new Set(restoreCurrentTransferTriggers(sqlite))
   for (const trigger of TRANSFER_DEFERRED_CREATION_TRIGGERS) {
     if (!restored.has(trigger)) throw new Error(`MySQL transfer did not restore current trigger ${trigger}`)
+  }
+}
+
+function assertAutomationFireFrontierAuthority(sqlite: BunDatabase): void {
+  const invalidGrant = queryAllFinalized<{ lease_id: string; ordinal: number }>(
+    sqlite,
+    `WITH ordered_grant AS (
+       SELECT grant_authority.lease_id,grant_authority.ordinal,grant_authority.expires_at,
+         grant_authority.time_created,
+         row_number() OVER (
+           PARTITION BY grant_authority.lease_id
+           ORDER BY grant_authority.ordinal
+         ) AS expected_ordinal,
+         lag(grant_authority.time_created) OVER (
+           PARTITION BY grant_authority.lease_id
+           ORDER BY grant_authority.ordinal
+         ) AS prior_time_created
+       FROM engine_control_activation_lease_grant AS grant_authority
+     )
+     SELECT grant_authority.lease_id,grant_authority.ordinal
+     FROM ordered_grant AS grant_authority
+     LEFT JOIN engine_control_activation_lease AS lease ON lease.id=grant_authority.lease_id
+     WHERE lease.id IS NULL
+        OR grant_authority.ordinal<>grant_authority.expected_ordinal
+        OR grant_authority.expires_at<=grant_authority.time_created
+        OR grant_authority.time_created<lease.time_activated
+        OR (
+          grant_authority.prior_time_created IS NOT NULL
+          AND grant_authority.time_created<grant_authority.prior_time_created
+        )
+        OR (
+          NOT EXISTS (
+            SELECT 1 FROM engine_control_activation_lease_grant AS later_grant
+            WHERE later_grant.lease_id=grant_authority.lease_id
+              AND later_grant.ordinal>grant_authority.ordinal
+          )
+          AND lease.expires_at>grant_authority.expires_at
+        )
+     ORDER BY grant_authority.lease_id,grant_authority.ordinal
+     LIMIT 1`,
+  )[0]
+  if (invalidGrant) {
+    throw new Error(
+      `Control lease ${invalidGrant.lease_id} grant ${invalidGrant.ordinal} has invalid immutable authority`,
+    )
+  }
+
+  const invalidAttempt = queryAllFinalized<{ id: string }>(
+    sqlite,
+    `WITH ordered_attempt AS (
+       SELECT attempt.id,attempt.fire_id,attempt.ordinal,attempt.owner_occurrence_id,
+         attempt.lease_id,attempt.lease_grant_ordinal,attempt.lease_expires_at,attempt.time_created,
+         row_number() OVER (PARTITION BY attempt.fire_id ORDER BY attempt.ordinal,attempt.id) AS expected_ordinal
+       FROM automation_fire_attempt AS attempt
+     )
+     SELECT attempt.id
+     FROM ordered_attempt AS attempt
+     JOIN automation_fire AS fire ON fire.id=attempt.fire_id
+     JOIN automation AS definition ON definition.id=fire.automation_revision_id
+      WHERE attempt.ordinal<>attempt.expected_ordinal
+        OR attempt.lease_grant_ordinal<=0
+        OR attempt.lease_expires_at<=attempt.time_created
+        OR NOT EXISTS (
+          SELECT 1
+          FROM engine_control_activation_lease AS lease
+           WHERE lease.id=attempt.lease_id
+             AND lease.target='automation'
+             AND lease.target_id=definition.definition_id
+             AND lease.owner_occurrence_id=attempt.owner_occurrence_id
+             AND lease.time_activated<=attempt.time_created
+             AND lease.expires_at>=attempt.time_created
+             AND EXISTS (
+               SELECT 1
+                FROM engine_control_activation_lease_grant AS grant_authority
+                WHERE grant_authority.lease_id=lease.id
+                  AND grant_authority.ordinal=attempt.lease_grant_ordinal
+                  AND grant_authority.expires_at=attempt.lease_expires_at
+                  AND grant_authority.time_created<=attempt.time_created
+                  AND NOT EXISTS (
+                    SELECT 1
+                    FROM engine_control_activation_lease_grant AS later_grant
+                    WHERE later_grant.lease_id=grant_authority.lease_id
+                      AND later_grant.ordinal>grant_authority.ordinal
+                      AND later_grant.time_created<attempt.time_created
+                  )
+              )
+        )
+     ORDER BY attempt.id
+     LIMIT 1`,
+  )[0]
+  if (invalidAttempt) {
+    throw new Error(`Automation Fire attempt ${invalidAttempt.id} has invalid admission authority`)
+  }
+
+  const invalid = queryAllFinalized<{ definition_id: string }>(
+    sqlite,
+    `SELECT frontier.definition_id
+     FROM automation_fire_frontier AS frontier
+     LEFT JOIN automation AS revision ON revision.id=frontier.automation_revision_id
+     LEFT JOIN automation_fire AS fire ON fire.id=frontier.fire_id
+     WHERE revision.id IS NULL
+       OR fire.id IS NULL
+       OR revision.definition_id<>frontier.definition_id
+       OR revision.status<>'active'
+       OR fire.automation_revision_id<>revision.id
+       OR frontier.available_at<fire.scheduled_due_at
+       OR EXISTS (
+         SELECT 1 FROM automation AS later
+         WHERE later.definition_id=frontier.definition_id
+           AND (
+             later.revision>revision.revision
+             OR (later.revision=revision.revision AND later.id>revision.id)
+           )
+       )
+       OR EXISTS (
+         SELECT 1 FROM automation_definition_tombstone AS tombstone
+         WHERE tombstone.definition_id=frontier.definition_id
+           AND tombstone.revision>=revision.revision
+       )
+       OR (
+         EXISTS (SELECT 1 FROM automation_run AS run WHERE run.fire_id=fire.id)
+         AND NOT EXISTS (
+           SELECT 1
+           FROM automation_run AS run
+           LEFT JOIN automation_run_receipt AS receipt ON receipt.id=(
+             SELECT latest.id
+             FROM automation_run_receipt AS latest
+             WHERE latest.run_id=run.id
+             ORDER BY latest.time_created DESC,latest.id DESC
+             LIMIT 1
+           )
+           WHERE run.fire_id=fire.id
+             AND (receipt.id IS NULL OR receipt.outcome='retry_wait')
+         )
+       )
+       OR (
+         NOT EXISTS (SELECT 1 FROM automation_run AS run WHERE run.fire_id=fire.id)
+         AND EXISTS (
+           SELECT 1
+           FROM automation_fire_attempt AS attempt
+           JOIN automation_fire_attempt_receipt AS receipt ON receipt.attempt_id=attempt.id
+           WHERE attempt.fire_id=fire.id
+             AND receipt.outcome='failed'
+             AND NOT EXISTS (
+               SELECT 1 FROM automation_fire_attempt AS later
+               WHERE later.fire_id=fire.id
+                 AND (
+                   later.ordinal>attempt.ordinal
+                   OR (later.ordinal=attempt.ordinal AND later.id>attempt.id)
+                 )
+             )
+         )
+       )
+     ORDER BY frontier.definition_id
+     LIMIT 1`,
+  )[0]
+  if (invalid) {
+    throw new Error(`Automation ${invalid.definition_id} has an invalid Fire delivery frontier`)
+  }
+
+  const missing = queryAllFinalized<{ definition_id: string; status: string }>(
+    sqlite,
+    `WITH current_definition AS (
+       SELECT revision.definition_id,revision.id,revision.status
+       FROM automation AS revision
+       WHERE NOT EXISTS (
+         SELECT 1 FROM automation AS later
+         WHERE later.definition_id=revision.definition_id
+           AND (
+             later.revision>revision.revision
+             OR (later.revision=revision.revision AND later.id>revision.id)
+           )
+       )
+         AND NOT EXISTS (
+           SELECT 1 FROM automation_definition_tombstone AS tombstone
+           WHERE tombstone.definition_id=revision.definition_id
+             AND tombstone.revision>=revision.revision
+         )
+     )
+     SELECT current_definition.definition_id,current_definition.status
+     FROM current_definition
+     LEFT JOIN automation_fire_frontier AS frontier
+       ON frontier.definition_id=current_definition.definition_id
+     WHERE (current_definition.status='active' AND frontier.definition_id IS NULL)
+        OR (current_definition.status='paused' AND frontier.definition_id IS NOT NULL)
+     ORDER BY current_definition.definition_id
+     LIMIT 1`,
+  )[0]
+  if (missing) {
+    throw new Error(
+      `Automation ${missing.definition_id} ${missing.status} revision has an invalid Fire frontier presence`,
+    )
+  }
+}
+
+function assertAutomationRunMissionReservationAuthority(sqlite: BunDatabase): void {
+  const invalid = queryAllFinalized<{ id: string }>(
+    sqlite,
+    `SELECT run.id
+     FROM automation_run AS run
+     JOIN automation AS definition ON definition.id=run.automation_revision_id
+     LEFT JOIN session AS target ON target.id=definition.session_id
+     LEFT JOIN protocol_event AS opened ON opened.id=run.mission_opened_event_id
+     LEFT JOIN protocol_event AS closure ON closure.id=run.mission_closure_event_id
+     WHERE (
+        target.kind='mission'
+        AND NOT (
+          (
+            run.mission_opened_event_id IS NOT NULL
+            AND run.mission_disposition IS NULL
+            AND run.mission_closure_event_id IS NULL
+            AND opened.aggregate_type='session'
+            AND opened.aggregate_id=definition.session_id
+            AND opened.type='mission.execution.opened'
+          )
+          OR (
+            run.mission_opened_event_id IS NULL
+            AND run.mission_disposition='mission_closed'
+            AND run.mission_closure_event_id IS NOT NULL
+            AND closure.aggregate_type='session'
+            AND closure.aggregate_id=definition.session_id
+            AND closure.type IN ('mission.execution.closing','mission.execution.closed')
+          )
+        )
+      ) OR (
+       (target.kind IS NULL OR target.kind<>'mission')
+       AND (
+         run.mission_opened_event_id IS NOT NULL
+         OR run.mission_disposition IS NOT NULL
+         OR run.mission_closure_event_id IS NOT NULL
+       )
+     )
+     ORDER BY run.id
+     LIMIT 1`,
+  )[0]
+  if (invalid) {
+    throw new Error(`Automation run ${invalid.id} has invalid Mission reservation authority`)
+  }
+
+  const invalidTerminalReceipt = queryAllFinalized<{ id: string }>(
+    sqlite,
+    `SELECT run.id
+     FROM automation_run AS run
+     WHERE run.mission_disposition='mission_closed'
+       AND (
+         (SELECT count(*) FROM automation_run_receipt AS receipt WHERE receipt.run_id=run.id)<>1
+         OR NOT EXISTS (
+           SELECT 1
+           FROM automation_run_receipt AS receipt
+           WHERE receipt.run_id=run.id
+             AND receipt.outcome='disposition'
+             AND receipt.disposition='mission_closed'
+             AND receipt.closure_event_id IS run.mission_closure_event_id
+             AND receipt.error IS NULL
+         )
+       )
+     ORDER BY run.id
+     LIMIT 1`,
+  )[0]
+  if (invalidTerminalReceipt) {
+    throw new Error(`Automation run ${invalidTerminalReceipt.id} has invalid terminal Mission receipt authority`)
   }
 }
 

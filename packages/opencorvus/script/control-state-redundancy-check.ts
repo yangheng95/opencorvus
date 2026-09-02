@@ -77,6 +77,11 @@ const CONTROL_STATE_INVENTORY = {
     causal: ["target", "target_id", "owner_occurrence_id"],
     lease: ["time_activated", "expires_at"],
   }),
+  EngineControlActivationLeaseGrantTable: inventory({
+    identity: ["lease_id", "ordinal"],
+    lease: ["expires_at"],
+    fact: ["time_created"],
+  }),
   EngineTaskTable: inventory({
     identity: ["id", "project_id", "session_id", "request_id", "global_creation_allocation_id"],
     input: [
@@ -185,9 +190,14 @@ const CONTROL_STATE_INVENTORY = {
     input: ["scheduled_due_at", "origin", "input_digest"],
     fact: ["time_created"],
   }),
+  AutomationFireFrontierTable: inventory({
+    identity: ["definition_id", "automation_revision_id", "fire_id"],
+    lease: ["available_at"],
+  }),
   AutomationFireAttemptTable: inventory({
     identity: ["id", "fire_id", "ordinal"],
-    causal: ["owner_occurrence_id"],
+    causal: ["owner_occurrence_id", "lease_id", "lease_grant_ordinal"],
+    lease: ["lease_expires_at"],
     fact: ["time_created"],
   }),
   AutomationFireAttemptReceiptTable: inventory({
@@ -370,6 +380,7 @@ try {
     key.startsWith("ChannelIngress") ||
     key.startsWith("EngineTask") ||
     key === "EngineControlActivationLeaseTable" ||
+    key === "EngineControlActivationLeaseGrantTable" ||
     key === "EngineBuildObservationCleanupTable" ||
     key === "EngineBuildObservationCleanupReceiptTable" ||
     key === "EngineInteractionRequestTable" ||

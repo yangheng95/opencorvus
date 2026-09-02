@@ -571,7 +571,44 @@ describe("scheduling occurrence DDL lineage", () => {
       db.exec(`
         INSERT INTO automation_fire(id,automation_revision_id,scheduled_due_at,origin,time_created)
         VALUES ('cal_frontier','atm_delay',100,'scheduled',100);
+        INSERT INTO automation_fire_frontier(definition_id,automation_revision_id,fire_id,available_at)
+        VALUES ('atm_delay','atm_delay','cal_frontier',100);
       `)
+      expect(
+        db.query("SELECT definition_id,fire_id,available_at FROM automation_fire_frontier").all(),
+      ).toEqual([{ definition_id: "atm_delay", fire_id: "cal_frontier", available_at: 100 }])
+      expect(() => db.run("UPDATE automation_fire_frontier SET available_at=99 WHERE definition_id='atm_delay'"))
+        .toThrow("automation_fire_frontier: invalid current Fire authority")
+      db.run(`
+        INSERT INTO automation_run(id,automation_revision_id,fire_id,started_at)
+        VALUES ('atr_frontier','atm_delay','cal_frontier',100)
+      `)
+      expect(() =>
+        db.run(`
+          INSERT INTO automation_run_receipt(id,run_id,outcome,time_created)
+          VALUES ('arr_frontier','atr_frontier','succeeded',101)
+        `),
+      ).toThrow("automation_run_receipt: terminal settlement must advance the Fire frontier")
+      db.exec(`
+        INSERT INTO automation(
+          id,definition_id,revision,name,kind,scope,recurrence,prompt,status,time_created
+        ) VALUES(
+          'atm_terminal','atm_terminal',1,'terminal frontier','recurring','global',
+          'DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY','terminal','active',100
+        );
+        INSERT INTO automation_fire(id,automation_revision_id,scheduled_due_at,origin,time_created)
+        VALUES ('cal_terminal','atm_terminal',200,'scheduled',100);
+        INSERT INTO automation_run(id,automation_revision_id,fire_id,started_at)
+        VALUES ('atr_terminal','atm_terminal','cal_terminal',200);
+        INSERT INTO automation_run_receipt(id,run_id,outcome,time_created)
+        VALUES ('arr_terminal','atr_terminal','succeeded',201);
+      `)
+      expect(() =>
+        db.run(`
+          INSERT INTO automation_fire_frontier(definition_id,automation_revision_id,fire_id,available_at)
+          VALUES ('atm_terminal','atm_terminal','cal_terminal',200)
+        `),
+      ).toThrow("automation_fire_frontier: invalid current Fire authority")
       const firePlan = db
         .query<{ detail: string }, []>(
           `
@@ -594,6 +631,16 @@ describe("scheduling occurrence DDL lineage", () => {
             detail.includes("automation_fire_scheduled_occurrence_idx"),
         ),
       ).toBe(true)
+      const duePlan = db.query<{ detail: string }, []>(`
+        EXPLAIN QUERY PLAN
+        SELECT fire_id
+        FROM automation_fire_frontier INDEXED BY automation_fire_frontier_due_idx
+        WHERE available_at<=100
+        ORDER BY available_at,definition_id,fire_id
+        LIMIT 64
+      `).all().map((row) => row.detail)
+      expect(duePlan.some((detail) => detail.includes("automation_fire_frontier_due_idx"))).toBe(true)
+      expect(duePlan.some((detail) => detail.includes("TEMP B-TREE"))).toBe(false)
     } finally {
       db.close(true)
     }

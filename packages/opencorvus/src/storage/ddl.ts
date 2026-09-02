@@ -3313,6 +3313,130 @@ CREATE TRIGGER IF NOT EXISTS automation_fire_no_delete
 BEFORE DELETE ON automation_fire FOR EACH ROW
 BEGIN SELECT RAISE(ABORT, 'automation_fire: immutable logical occurrence'); END;
 
+CREATE TRIGGER IF NOT EXISTS automation_fire_frontier_authority_insert
+BEFORE INSERT ON automation_fire_frontier FOR EACH ROW
+WHEN NOT EXISTS (
+  SELECT 1
+  FROM automation AS revision
+  JOIN automation_fire AS fire
+    ON fire.id=NEW.fire_id
+    AND fire.automation_revision_id=revision.id
+  WHERE revision.id=NEW.automation_revision_id
+    AND revision.definition_id=NEW.definition_id
+    AND revision.status='active'
+    AND NEW.available_at>=fire.scheduled_due_at
+    AND NOT EXISTS (
+      SELECT 1 FROM automation AS later
+      WHERE later.definition_id=revision.definition_id
+        AND (
+          later.revision>revision.revision
+          OR (later.revision=revision.revision AND later.id>revision.id)
+        )
+    )
+    AND NOT EXISTS (
+      SELECT 1 FROM automation_definition_tombstone AS tombstone
+      WHERE tombstone.definition_id=revision.definition_id
+        AND tombstone.revision>=revision.revision
+    )
+    AND NOT (
+      EXISTS (SELECT 1 FROM automation_run AS run WHERE run.fire_id=fire.id)
+      AND NOT EXISTS (
+        SELECT 1
+        FROM automation_run AS run
+        LEFT JOIN automation_run_receipt AS receipt ON receipt.id=(
+          SELECT latest.id
+          FROM automation_run_receipt AS latest
+          WHERE latest.run_id=run.id
+          ORDER BY latest.time_created DESC,latest.id DESC
+          LIMIT 1
+        )
+        WHERE run.fire_id=fire.id
+          AND (receipt.id IS NULL OR receipt.outcome='retry_wait')
+      )
+    )
+    AND NOT (
+      NOT EXISTS (SELECT 1 FROM automation_run AS run WHERE run.fire_id=fire.id)
+      AND EXISTS (
+        SELECT 1
+        FROM automation_fire_attempt AS attempt
+        JOIN automation_fire_attempt_receipt AS receipt ON receipt.attempt_id=attempt.id
+        WHERE attempt.fire_id=fire.id
+          AND receipt.outcome='failed'
+          AND NOT EXISTS (
+            SELECT 1 FROM automation_fire_attempt AS later
+            WHERE later.fire_id=fire.id
+              AND (
+                later.ordinal>attempt.ordinal
+                OR (later.ordinal=attempt.ordinal AND later.id>attempt.id)
+              )
+          )
+      )
+    )
+)
+BEGIN SELECT RAISE(ABORT, 'automation_fire_frontier: invalid current Fire authority'); END;
+
+CREATE TRIGGER IF NOT EXISTS automation_fire_frontier_authority_update
+BEFORE UPDATE ON automation_fire_frontier FOR EACH ROW
+WHEN NOT EXISTS (
+  SELECT 1
+  FROM automation AS revision
+  JOIN automation_fire AS fire
+    ON fire.id=NEW.fire_id
+    AND fire.automation_revision_id=revision.id
+  WHERE revision.id=NEW.automation_revision_id
+    AND revision.definition_id=NEW.definition_id
+    AND revision.status='active'
+    AND NEW.available_at>=fire.scheduled_due_at
+    AND NOT EXISTS (
+      SELECT 1 FROM automation AS later
+      WHERE later.definition_id=revision.definition_id
+        AND (
+          later.revision>revision.revision
+          OR (later.revision=revision.revision AND later.id>revision.id)
+        )
+    )
+    AND NOT EXISTS (
+      SELECT 1 FROM automation_definition_tombstone AS tombstone
+      WHERE tombstone.definition_id=revision.definition_id
+        AND tombstone.revision>=revision.revision
+    )
+    AND NOT (
+      EXISTS (SELECT 1 FROM automation_run AS run WHERE run.fire_id=fire.id)
+      AND NOT EXISTS (
+        SELECT 1
+        FROM automation_run AS run
+        LEFT JOIN automation_run_receipt AS receipt ON receipt.id=(
+          SELECT latest.id
+          FROM automation_run_receipt AS latest
+          WHERE latest.run_id=run.id
+          ORDER BY latest.time_created DESC,latest.id DESC
+          LIMIT 1
+        )
+        WHERE run.fire_id=fire.id
+          AND (receipt.id IS NULL OR receipt.outcome='retry_wait')
+      )
+    )
+    AND NOT (
+      NOT EXISTS (SELECT 1 FROM automation_run AS run WHERE run.fire_id=fire.id)
+      AND EXISTS (
+        SELECT 1
+        FROM automation_fire_attempt AS attempt
+        JOIN automation_fire_attempt_receipt AS receipt ON receipt.attempt_id=attempt.id
+        WHERE attempt.fire_id=fire.id
+          AND receipt.outcome='failed'
+          AND NOT EXISTS (
+            SELECT 1 FROM automation_fire_attempt AS later
+            WHERE later.fire_id=fire.id
+              AND (
+                later.ordinal>attempt.ordinal
+                OR (later.ordinal=attempt.ordinal AND later.id>attempt.id)
+              )
+          )
+      )
+    )
+)
+BEGIN SELECT RAISE(ABORT, 'automation_fire_frontier: invalid current Fire authority'); END;
+
 CREATE TRIGGER IF NOT EXISTS automation_delay_settlement_no_update
 BEFORE UPDATE ON automation_delay_settlement FOR EACH ROW
 BEGIN SELECT RAISE(ABORT, 'automation_delay_settlement: immutable admission settlement'); END;
@@ -3382,6 +3506,28 @@ BEGIN SELECT RAISE(ABORT, 'automation_fire_attempt: immutable physical attempt')
 CREATE TRIGGER IF NOT EXISTS automation_fire_attempt_no_delete
 BEFORE DELETE ON automation_fire_attempt FOR EACH ROW
 BEGIN SELECT RAISE(ABORT, 'automation_fire_attempt: immutable physical attempt'); END;
+CREATE TRIGGER IF NOT EXISTS engine_control_activation_lease_grant_no_update
+BEFORE UPDATE ON engine_control_activation_lease_grant FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'engine_control_activation_lease_grant: immutable lease grant'); END;
+CREATE TRIGGER IF NOT EXISTS engine_control_activation_lease_grant_no_delete
+BEFORE DELETE ON engine_control_activation_lease_grant FOR EACH ROW
+BEGIN SELECT RAISE(ABORT, 'engine_control_activation_lease_grant: immutable lease grant'); END;
+CREATE TRIGGER IF NOT EXISTS engine_control_activation_lease_grant_insert
+BEFORE INSERT ON engine_control_activation_lease_grant FOR EACH ROW
+WHEN NEW.ordinal<>(
+    SELECT COALESCE(max(existing.ordinal),0)+1
+    FROM engine_control_activation_lease_grant AS existing
+    WHERE existing.lease_id=NEW.lease_id
+  )
+  OR NOT EXISTS (
+    SELECT 1
+    FROM engine_control_activation_lease AS lease
+    WHERE lease.id=NEW.lease_id
+      AND lease.expires_at=NEW.expires_at
+      AND lease.time_activated<=NEW.time_created
+      AND NEW.expires_at>NEW.time_created
+  )
+BEGIN SELECT RAISE(ABORT, 'engine_control_activation_lease_grant: invalid grant authority'); END;
 CREATE TRIGGER IF NOT EXISTS automation_fire_attempt_admission_insert
 BEFORE INSERT ON automation_fire_attempt FOR EACH ROW
 WHEN
@@ -3396,15 +3542,31 @@ WHEN
     JOIN automation AS definition ON definition.id=fire.automation_revision_id
     JOIN engine_control_activation_lease AS lease
       ON lease.target='automation'
+      AND lease.id=NEW.lease_id
       AND lease.target_id=definition.definition_id
       AND lease.owner_occurrence_id=NEW.owner_occurrence_id
-      AND lease.expires_at>NEW.time_created
+      AND NEW.lease_expires_at=lease.expires_at
+      AND NEW.lease_expires_at>NEW.time_created
+    JOIN engine_control_activation_lease_grant AS grant_authority
+      ON grant_authority.lease_id=lease.id
+      AND grant_authority.ordinal=NEW.lease_grant_ordinal
+      AND grant_authority.expires_at=NEW.lease_expires_at
+      AND grant_authority.time_created<=NEW.time_created
+      AND NOT EXISTS (
+        SELECT 1 FROM engine_control_activation_lease_grant AS later_grant
+        WHERE later_grant.lease_id=grant_authority.lease_id
+          AND later_grant.ordinal>grant_authority.ordinal
+      )
     WHERE fire.id=NEW.fire_id
-      AND lease.time_activated=(
-        SELECT max(current.time_activated)
-        FROM engine_control_activation_lease AS current
-        WHERE current.target='automation'
-          AND current.target_id=definition.definition_id
+      AND NOT EXISTS (
+        SELECT 1
+        FROM engine_control_activation_lease AS later
+        WHERE later.target='automation'
+          AND later.target_id=definition.definition_id
+          AND (
+            later.time_activated>lease.time_activated
+            OR (later.time_activated=lease.time_activated AND later.id>lease.id)
+          )
       )
   )
 BEGIN SELECT RAISE(ABORT, 'automation_fire_attempt: invalid ordinal or owner admission'); END;
@@ -3414,6 +3576,24 @@ BEGIN SELECT RAISE(ABORT, 'automation_fire_attempt_receipt: immutable attempt re
 CREATE TRIGGER IF NOT EXISTS automation_fire_attempt_receipt_no_delete
 BEFORE DELETE ON automation_fire_attempt_receipt FOR EACH ROW
 BEGIN SELECT RAISE(ABORT, 'automation_fire_attempt_receipt: immutable attempt receipt'); END;
+CREATE TRIGGER IF NOT EXISTS automation_fire_attempt_terminal_frontier_insert
+BEFORE INSERT ON automation_fire_attempt_receipt FOR EACH ROW
+WHEN NEW.outcome='failed' AND EXISTS (
+  SELECT 1
+  FROM automation_fire_attempt AS attempt
+  JOIN automation_fire_frontier AS frontier ON frontier.fire_id=attempt.fire_id
+  WHERE attempt.id=NEW.attempt_id
+    AND NOT EXISTS (SELECT 1 FROM automation_run AS run WHERE run.fire_id=attempt.fire_id)
+    AND NOT EXISTS (
+      SELECT 1 FROM automation_fire_attempt AS later
+      WHERE later.fire_id=attempt.fire_id
+        AND (
+          later.ordinal>attempt.ordinal
+          OR (later.ordinal=attempt.ordinal AND later.id>attempt.id)
+        )
+    )
+)
+BEGIN SELECT RAISE(ABORT, 'automation_fire_attempt_receipt: terminal settlement must advance the Fire frontier'); END;
 
 CREATE TRIGGER IF NOT EXISTS automation_run_no_update
 BEFORE UPDATE ON automation_run
@@ -3443,26 +3623,42 @@ END;
 CREATE TRIGGER IF NOT EXISTS automation_run_mission_reservation_insert
 BEFORE INSERT ON automation_run
 FOR EACH ROW
-WHEN (
-  EXISTS (
-    SELECT 1 FROM automation AS definition
-    JOIN session AS target ON target.id=definition.session_id
-    WHERE definition.id=NEW.automation_revision_id AND target.kind='mission'
-  )
-  AND NEW.mission_opened_event_id IS NULL
-  AND NEW.mission_disposition IS NULL
-  AND NEW.mission_closure_event_id IS NULL
-) OR (
-  NOT EXISTS (
-    SELECT 1 FROM automation AS definition
-    JOIN session AS target ON target.id=definition.session_id
-    WHERE definition.id=NEW.automation_revision_id AND target.kind='mission'
-  )
-  AND (
-    NEW.mission_opened_event_id IS NOT NULL
-    OR NEW.mission_disposition IS NOT NULL
-    OR NEW.mission_closure_event_id IS NOT NULL
-  )
+WHEN NOT EXISTS (
+  SELECT 1
+  FROM automation AS definition
+  LEFT JOIN session AS target ON target.id=definition.session_id
+  LEFT JOIN protocol_event AS opened ON opened.id=NEW.mission_opened_event_id
+  LEFT JOIN protocol_event AS closure ON closure.id=NEW.mission_closure_event_id
+  WHERE definition.id=NEW.automation_revision_id
+    AND (
+      (
+        target.kind='mission'
+        AND (
+          (
+            NEW.mission_opened_event_id IS NOT NULL
+            AND NEW.mission_disposition IS NULL
+            AND NEW.mission_closure_event_id IS NULL
+            AND opened.aggregate_type='session'
+            AND opened.aggregate_id=definition.session_id
+            AND opened.type='mission.execution.opened'
+          )
+          OR (
+            NEW.mission_opened_event_id IS NULL
+            AND NEW.mission_disposition='mission_closed'
+            AND NEW.mission_closure_event_id IS NOT NULL
+            AND closure.aggregate_type='session'
+            AND closure.aggregate_id=definition.session_id
+            AND closure.type IN ('mission.execution.closing','mission.execution.closed')
+          )
+        )
+      )
+      OR (
+        COALESCE(target.kind,'')<>'mission'
+        AND NEW.mission_opened_event_id IS NULL
+        AND NEW.mission_disposition IS NULL
+        AND NEW.mission_closure_event_id IS NULL
+      )
+    )
 )
 BEGIN
   SELECT RAISE(ABORT, 'automation_run: Mission target requires one exact active or terminal reservation');
@@ -4025,6 +4221,45 @@ BEGIN SELECT RAISE(ABORT, 'automation_run_receipt: immutable receipt'); END;
 CREATE TRIGGER IF NOT EXISTS automation_run_receipt_no_delete
 BEFORE DELETE ON automation_run_receipt FOR EACH ROW
 BEGIN SELECT RAISE(ABORT, 'automation_run_receipt: immutable receipt'); END;
+CREATE TRIGGER IF NOT EXISTS automation_run_terminal_frontier_insert
+BEFORE INSERT ON automation_run_receipt FOR EACH ROW
+WHEN NEW.outcome<>'retry_wait' AND EXISTS (
+  SELECT 1
+  FROM automation_run AS settled
+  JOIN automation_fire_frontier AS frontier ON frontier.fire_id=settled.fire_id
+  WHERE settled.id=NEW.run_id
+    AND NOT EXISTS (
+      SELECT 1
+      FROM automation_run AS candidate
+      LEFT JOIN automation_run_receipt AS receipt ON receipt.id=(
+        SELECT latest.id
+        FROM automation_run_receipt AS latest
+        WHERE latest.run_id=candidate.id
+        ORDER BY latest.time_created DESC,latest.id DESC
+        LIMIT 1
+      )
+      WHERE candidate.fire_id=settled.fire_id
+        AND candidate.id<>NEW.run_id
+        AND (receipt.id IS NULL OR receipt.outcome='retry_wait')
+    )
+)
+BEGIN SELECT RAISE(ABORT, 'automation_run_receipt: terminal settlement must advance the Fire frontier'); END;
+CREATE TRIGGER IF NOT EXISTS automation_run_terminal_mission_reservation_insert
+BEFORE INSERT ON automation_run_receipt FOR EACH ROW
+WHEN EXISTS (
+  SELECT 1
+  FROM automation_run AS run
+  WHERE run.id=NEW.run_id
+    AND run.mission_disposition='mission_closed'
+    AND (
+      NEW.outcome<>'disposition'
+      OR NEW.disposition<>'mission_closed'
+      OR NEW.closure_event_id IS NOT run.mission_closure_event_id
+      OR NEW.error IS NOT NULL
+      OR EXISTS (SELECT 1 FROM automation_run_receipt AS existing WHERE existing.run_id=run.id)
+    )
+)
+BEGIN SELECT RAISE(ABORT, 'automation_run_receipt: terminal Mission reservation requires its exact closure receipt'); END;
 CREATE TRIGGER IF NOT EXISTS event_job_fire_receipt_no_update
 BEFORE UPDATE ON event_job_fire_receipt FOR EACH ROW
 BEGIN SELECT RAISE(ABORT, 'event_job_fire_receipt: immutable receipt'); END;

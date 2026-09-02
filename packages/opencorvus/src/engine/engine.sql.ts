@@ -347,6 +347,32 @@ export const EngineControlActivationLeaseTable = sqliteTable(
   ],
 )
 
+/** Immutable grant history for one physical control lease. `expires_at` on
+ * the lease row is the mutable live fence and may be renewed or released;
+ * these rows preserve every expiry boundary that was actually granted so a
+ * durable business attempt can retain the exact admission it observed. */
+export const EngineControlActivationLeaseGrantTable = sqliteTable(
+  "engine_control_activation_lease_grant",
+  {
+    lease_id: text()
+      .notNull()
+      .references(() => EngineControlActivationLeaseTable.id, { onDelete: "restrict" }),
+    ordinal: integer().notNull(),
+    expires_at: integer().notNull(),
+    time_created: integer().notNull(),
+  },
+  (table) => [
+    primaryKey({ columns: [table.lease_id, table.ordinal] }),
+    index("engine_control_activation_lease_grant_time_idx").on(
+      table.lease_id,
+      table.time_created,
+      table.ordinal,
+    ),
+    check("engine_control_activation_lease_grant_positive_ordinal", sql`${table.ordinal}>0`),
+    check("engine_control_activation_lease_grant_future_expiry", sql`${table.expires_at}>${table.time_created}`),
+  ],
+)
+
 /** Durable owner for private Git refs created while materializing one Build
  * terminal observation. A row exists before the first ref write, so a crash,
  * publication failure, or vanished linked worktree cannot orphan the refs. */

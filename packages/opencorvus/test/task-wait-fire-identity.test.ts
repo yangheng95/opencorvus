@@ -1049,17 +1049,11 @@ describe("Session one-shot delay admission", () => {
         const definition = Database.use(
           (db) => db.select().from(AutomationTable).where(eq(AutomationTable.definition_id, delay.id)).get()!,
         )
-        const fireID = Identifier.ascending("call")
+        const fireID = Database.use(
+          (db) => db.select({ id: AutomationFireTable.id }).from(AutomationFireTable)
+            .where(eq(AutomationFireTable.automation_revision_id, definition.id)).get()!.id,
+        )
         Database.immediateTransaction((db) => {
-          db.insert(AutomationFireTable)
-            .values({
-              id: fireID,
-              automation_revision_id: definition.id,
-              scheduled_due_at: delay.nextRun,
-              origin: "scheduled",
-              time_created: Date.now(),
-            })
-            .run()
           db.insert(AutomationRunTable)
             .values({
               id: Identifier.ascending("automation"),

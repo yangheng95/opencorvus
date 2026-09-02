@@ -1,7 +1,11 @@
 import { Identifier } from "@/id/id"
 import { Log } from "@/util/log"
 import { Database, and, desc, eq, gt, inArray, sql } from "@/storage/db"
-import { EngineControlActivationLeaseTable, type EngineControlActivationTarget } from "./engine.sql"
+import {
+  EngineControlActivationLeaseGrantTable,
+  EngineControlActivationLeaseTable,
+  type EngineControlActivationTarget,
+} from "./engine.sql"
 
 const log = Log.create({ service: "control-lease" })
 
@@ -109,6 +113,12 @@ export function acquireControlLeaseInTransaction(
     expires_at: input.now + input.leaseMilliseconds,
   }
   db.insert(EngineControlActivationLeaseTable).values(lease).run()
+  db.insert(EngineControlActivationLeaseGrantTable).values({
+    lease_id: lease.id,
+    ordinal: 1,
+    expires_at: lease.expires_at,
+    time_created: input.now,
+  }).run()
   return { acquired: true as const, lease }
 }
 
@@ -221,6 +231,19 @@ export function renewControlLeaseInTransaction(db: Database.TxOrDb, input: Renew
     .where(and(eq(EngineControlActivationLeaseTable.id, input.leaseID), eq(EngineControlActivationLeaseTable.expires_at, current.expires_at), gt(EngineControlActivationLeaseTable.expires_at, input.now)))
     .returning({ id: EngineControlActivationLeaseTable.id }).get()
   if (!updated) throw new ControlLeaseFenceLostError(`Control lease renewal lost fence ${input.leaseID}`)
+  const latestGrant = db
+    .select({ ordinal: EngineControlActivationLeaseGrantTable.ordinal })
+    .from(EngineControlActivationLeaseGrantTable)
+    .where(eq(EngineControlActivationLeaseGrantTable.lease_id, input.leaseID))
+    .orderBy(desc(EngineControlActivationLeaseGrantTable.ordinal))
+    .limit(1)
+    .get()
+  db.insert(EngineControlActivationLeaseGrantTable).values({
+    lease_id: input.leaseID,
+    ordinal: (latestGrant?.ordinal ?? 0) + 1,
+    expires_at: input.expiresAt,
+    time_created: input.now,
+  }).run()
 }
 
 export function renewControlLease(input: RenewControlLeaseInput): void {

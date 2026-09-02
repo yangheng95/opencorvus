@@ -4,6 +4,7 @@ import { PanelSurface } from "@/panel/capability"
 import { Session } from "@/session"
 import { Database, NotFoundError, eq } from "@/storage/db"
 import { AutomationTable } from "./automation.sql"
+import { ensureScheduledAutomationFireFrontierInTransaction } from "./automation-fire-frontier"
 import {
   assertScheduledToolOccurrenceInTransaction,
   scheduledToolOccurrenceConflict,
@@ -109,7 +110,9 @@ export async function createDelayedSessionWake(input: CreateDelayedSessionWakeIn
         tool_input_digest: digest,
       })
       .run()
-    return db.select().from(AutomationTable).where(eq(AutomationTable.id, id)).get()!
+    const inserted = db.select().from(AutomationTable).where(eq(AutomationTable.id, id)).get()!
+    ensureScheduledAutomationFireFrontierInTransaction(db, inserted, inserted.due_at!, inserted.time_created)
+    return inserted
   })
   return { id, name: row.name, nextRun: row.due_at! }
 }

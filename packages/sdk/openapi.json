@@ -62241,6 +62241,7 @@
                       },
                       "state": {
                         "enum": [
+                          "scheduled",
                           "running",
                           "retry_wait",
                           "succeeded",

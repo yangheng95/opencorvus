@@ -1,7 +1,10 @@
 import { afterAll, describe, expect, spyOn, test } from "bun:test"
 import { randomUUID } from "node:crypto"
 import { acquireControlLease, currentControlLeaseInTransaction } from "../src/engine/control-lease"
-import { EngineControlActivationLeaseTable } from "../src/engine/engine.sql"
+import {
+  EngineControlActivationLeaseGrantTable,
+  EngineControlActivationLeaseTable,
+} from "../src/engine/engine.sql"
 import { Identifier } from "../src/id/id"
 import { Instance } from "../src/project/instance"
 import { Project } from "../src/project/project"
@@ -13,13 +16,16 @@ import {
   AutomationDefinitionTombstoneTable,
   AutomationFireAttemptTable,
   AutomationFireAttemptReceiptTable,
+  AutomationFireFrontierTable,
   AutomationFireTable,
   AutomationRunReceiptTable,
   AutomationRunTable,
   AutomationTable,
 } from "../src/scheduler/automation.sql"
 import { AutomationRunningConflictError, AutomationService } from "../src/scheduler/automation-service"
+import { restoreScheduledAutomationFireFrontierInTransaction } from "../src/scheduler/automation-fire-frontier"
 import {
+  currentDueAutomationFrontiersInTransaction,
   currentAutomationFrontiersInTransaction,
   latestAutomationDefinitionInTransaction,
   projectAutomationFrontierInTransaction,
@@ -38,6 +44,15 @@ import { ensureMissionSession } from "@/mission/session"
 import { SessionPromptOwner } from "@/session/prompt/owner"
 import { SessionStatus } from "@/session/status"
 import { MessageTable } from "@/session/session.sql"
+import {
+  applyMysqlTransferPlan,
+  exportMysqlTransferSnapshot,
+  importMysqlTransferSnapshot,
+  MysqlTransferApplyError,
+  MysqlTransferValidationError,
+  preflightMysqlTransferSnapshot,
+} from "@/storage/mysql-transfer"
+import { ProtocolEventTable } from "@/protocol/protocol.sql"
 
 afterAll(resetMemoryDatabase)
 
@@ -74,6 +89,24 @@ async function openMissionOccurrence(
         ownerPreflight: admission.ownerPreflight,
         ownerLifecycle: admission.ownerLifecycle,
       }),
+  })
+}
+
+function retireSyntheticAutomationDefinitions(definitionIDs: string[]): void {
+  Database.immediateTransaction((db) => {
+    for (const definitionID of definitionIDs) {
+      const current = latestAutomationDefinitionInTransaction(db, definitionID)
+      if (!current) continue
+      db.delete(AutomationFireFrontierTable)
+        .where(eq(AutomationFireFrontierTable.definition_id, definitionID))
+        .run()
+      db.insert(AutomationDefinitionTombstoneTable).values({
+        id: `adt_fixture_${definitionID}`,
+        definition_id: definitionID,
+        revision: current.revision,
+        time_created: Date.now(),
+      }).run()
+    }
   })
 }
 
@@ -154,11 +187,330 @@ describe("scheduler immutable definition and fire identity", () => {
       using _postPermit = AutomationService.TestHooks.installAfterExecutionPermit(() => controller.abort(reason))
       const outcome = await AutomationService.TestHooks.runDueWithSignal(controller.signal).catch((error) => error)
 
+      const definition = Database.use((db) => latestAutomationDefinitionInTransaction(db, automation.id))!
       expect({
         outcome,
-        fires: Database.use((db) => db.select().from(AutomationFireTable).all()),
+        fires: Database.use((db) => db.select().from(AutomationFireTable)
+          .where(eq(AutomationFireTable.automation_revision_id, definition.id)).all())
+          .map((fire) => ({ origin: fire.origin, revisionID: fire.automation_revision_id })),
+        attempts: Database.use((db) => db.select().from(AutomationFireAttemptTable).all()),
         lease: Database.use((db) => currentControlLeaseInTransaction(db, "automation", automation.id)),
-      }).toEqual({ outcome: reason, fires: [], lease: undefined })
+      }).toEqual({
+        outcome: reason,
+        fires: [{ origin: "scheduled", revisionID: definition.id }],
+        attempts: [],
+        lease: undefined,
+      })
+    } })
+  }, 30_000)
+
+  test("scheduled settlement publishes the next immutable Fire in the terminal transaction", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({ directory: project.path, fn: async () => {
+      const stamp = new Date(Date.now() + 1_000).toISOString().replace(/[-:]/g, "").replace(/\.\d{3}Z$/, "Z")
+      const automation = await AutomationService.create({
+        name: "scheduled successor",
+        target: { scope: "project", projectIds: [Instance.project.id] },
+        recurrence: `DTSTART:${stamp}\nRRULE:FREQ=SECONDLY;INTERVAL=120`,
+        prompt: "publish one successor",
+      })
+      const definition = Database.use((db) => latestAutomationDefinitionInTransaction(db, automation.id))!
+      const first = Database.use((db) => db.select().from(AutomationFireTable)
+        .where(eq(AutomationFireTable.automation_revision_id, definition.id)).get())!
+      expect({ origin: first.origin, dueAt: first.scheduled_due_at })
+        .toEqual({ origin: "scheduled", dueAt: automation.nextRun })
+      using _wake = AutomationService.TestHooks.installWakeExecutor(async (input) => ({
+        sessionID: input.sessionID!,
+        messageID: input.messageID!,
+        activation: Promise.resolve({ owner: new AbortController().signal }),
+        completion: Promise.resolve({ ok: true as const }),
+      }))
+      while (Date.now() <= automation.nextRun) await Bun.sleep(10)
+      await AutomationService.TestHooks.runDueWithSignal(new AbortController().signal)
+      const result = Database.use((db) => {
+        const fires = db.select().from(AutomationFireTable)
+          .where(eq(AutomationFireTable.automation_revision_id, definition.id))
+          .orderBy(AutomationFireTable.scheduled_due_at).all()
+        const fireIDs = new Set(fires.map((fire) => fire.id))
+        return {
+          fires,
+          attempts: db.select().from(AutomationFireAttemptTable).all().filter((attempt) => fireIDs.has(attempt.fire_id)),
+          projected: projectAutomationFrontierInTransaction(db, definition),
+        }
+      })
+      expect(result.fires).toHaveLength(2)
+      expect(result.fires.map((fire) => fire.origin)).toEqual(["scheduled", "scheduled"])
+      expect(result.attempts.map((attempt) => attempt.fire_id)).toEqual([result.fires[0]!.id])
+      expect({ nextRun: result.projected.next_run, pendingFireID: result.projected.pending_fire_id, scheduledDueAt: result.projected.scheduled_due_at })
+        .toEqual({ nextRun: result.fires[1]!.scheduled_due_at, pendingFireID: null, scheduledDueAt: result.fires[1]!.scheduled_due_at })
+    } })
+  }, 30_000)
+
+  test("a retrying manual Fire is the sole due candidate before its scheduled sibling", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({ directory: project.path, fn: async () => {
+      const stamp = new Date(Date.now() + 1_000).toISOString().replace(/[-:]/g, "").replace(/\.\d{3}Z$/, "Z")
+      const automation = await AutomationService.create({
+        name: "manual retry frontier",
+        target: { scope: "project", projectIds: [Instance.project.id] },
+        recurrence: `DTSTART:${stamp}\nRRULE:FREQ=SECONDLY;INTERVAL=120`,
+        prompt: "retry the manual occurrence first",
+      })
+      using _beforeReservation = AutomationService.TestHooks.installBeforeRunReservation(() => {
+        throw new Error("manual retry frontier")
+      })
+      await expect(AutomationService.runNow(automation.id)).rejects.toThrow("manual retry frontier")
+      const manual = AutomationService.listFireHistory(automation.id).find((fire) => fire.origin === "manual_api")!
+      expect(manual).toMatchObject({ state: "retry_wait", attemptCount: 1 })
+      const due = Database.use((db) => currentDueAutomationFrontiersInTransaction(db, manual.retryAt!))
+        .filter((entry) => entry.row.id === automation.id)
+      expect(due.map((entry) => ({ fireID: entry.fireID, pendingFireID: entry.row.pending_fire_id })))
+        .toEqual([{ fireID: manual.fireId, pendingFireID: manual.fireId }])
+    } })
+  }, 30_000)
+
+  test("strict transfer preserves the active Automation Fire delivery authority", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({ directory: project.path, fn: async () => {
+      const stamp = new Date(Date.now() + 2_000).toISOString().replace(/[-:]/g, "").replace(/\.\d{3}Z$/, "Z")
+      const automation = await AutomationService.create({
+        name: "strict Automation frontier transfer",
+        target: { scope: "project", projectIds: [Instance.project.id] },
+        recurrence: `DTSTART:${stamp}\nRRULE:FREQ=SECONDLY;INTERVAL=120`,
+        prompt: "preserve the exact due authority",
+      })
+      using _wake = AutomationService.TestHooks.installWakeExecutor(async (input) => ({
+        sessionID: input.sessionID!,
+        messageID: input.messageID!,
+        activation: Promise.resolve({ owner: new AbortController().signal }),
+        completion: Promise.resolve({ ok: true as const }),
+      }))
+      while (Date.now() <= automation.nextRun) await Bun.sleep(10)
+      const owner = `strict-transfer:${automation.nextRun}`
+      const claimedAt = Date.now()
+      const claimed = AutomationService.TestHooks.claim(automation.id, owner, claimedAt, false)!
+      await AutomationService.TestHooks.executeClaimedDueOccurrence({ job: claimed, owner, now: claimedAt })
+      const snapshot = exportMysqlTransferSnapshot()
+      expect(preflightMysqlTransferSnapshot(snapshot).schemaFingerprint).toBe(snapshot.schemaFingerprint)
+
+      const invalidAttemptAuthority = structuredClone(snapshot)
+      const attemptTable = invalidAttemptAuthority.tables.find((table) => table.name === "automation_fire_attempt")
+      const leaseTable = invalidAttemptAuthority.tables.find(
+        (table) => table.name === "engine_control_activation_lease",
+      )
+      const definitionTable = invalidAttemptAuthority.tables.find((table) => table.name === "automation")
+      const fireAuthorityTable = invalidAttemptAuthority.tables.find((table) => table.name === "automation_fire")
+      if (!attemptTable || !leaseTable || !definitionTable || !fireAuthorityTable) {
+        throw new Error("Automation transfer fixture omitted attempt authority")
+      }
+      const revisionIDs = new Set(
+        definitionTable.rows.filter((row) => row.definition_id === automation.id).map((row) => row.id),
+      )
+      const fireIDs = new Set(
+        fireAuthorityTable.rows
+          .filter((row) => revisionIDs.has(row.automation_revision_id))
+          .map((row) => row.id),
+      )
+      const attempt = attemptTable.rows.find((row) => fireIDs.has(row.fire_id))
+      const ownerLease = leaseTable.rows.find(
+        (row) =>
+          row.target === "automation" &&
+          row.target_id === automation.id &&
+          row.owner_occurrence_id === attempt?.owner_occurrence_id,
+      )
+      if (!attempt || !ownerLease) throw new Error("Automation transfer fixture omitted its exact attempt lease")
+      attempt.lease_expires_at = attempt.time_created
+      expect(() => preflightMysqlTransferSnapshot(invalidAttemptAuthority)).toThrow(
+        expect.objectContaining<MysqlTransferValidationError>({
+          name: "MysqlTransferValidationError",
+          data: expect.objectContaining({ message: expect.stringContaining("invalid admission authority") }),
+        }),
+      )
+
+      for (const forgedExpiry of [Number(attempt.time_created) + 1, Number(ownerLease.expires_at) + 1_000]) {
+        const forged = structuredClone(snapshot)
+        const forgedAttempt = forged.tables
+          .find((table) => table.name === "automation_fire_attempt")
+          ?.rows.find((row) => row.id === attempt.id)
+        if (!forgedAttempt) throw new Error("Automation transfer fixture omitted its exact attempt")
+        forgedAttempt.lease_expires_at = forgedExpiry
+        expect(() => preflightMysqlTransferSnapshot(forged)).toThrow(
+          expect.objectContaining<MysqlTransferValidationError>({
+            name: "MysqlTransferValidationError",
+            data: expect.objectContaining({ message: expect.stringContaining("invalid admission authority") }),
+          }),
+        )
+      }
+
+      const terminalAuthority = structuredClone(snapshot)
+      const terminalFrontierTable = terminalAuthority.tables.find(
+        (table) => table.name === "automation_fire_frontier",
+      )
+      const terminalFireTable = terminalAuthority.tables.find((table) => table.name === "automation_fire")
+      const terminalRunTable = terminalAuthority.tables.find((table) => table.name === "automation_run")
+      if (!terminalFrontierTable || !terminalFireTable || !terminalRunTable) {
+        throw new Error("Automation transfer fixture omitted execution tables")
+      }
+      const terminalFrontier = terminalFrontierTable.rows.find((row) => row.definition_id === automation.id)
+      const terminalRun = terminalRunTable.rows.find((row) => row.automation_revision_id === terminalFrontier?.automation_revision_id)
+      const terminalFire = terminalFireTable.rows.find((row) => row.id === terminalRun?.fire_id)
+      if (!terminalFrontier || !terminalFire) throw new Error("Automation transfer fixture omitted its terminal Fire")
+      terminalFrontier.fire_id = terminalFire.id
+      terminalFrontier.available_at = terminalFire.scheduled_due_at
+      expect(() => preflightMysqlTransferSnapshot(terminalAuthority)).toThrow(
+        expect.objectContaining<MysqlTransferValidationError>({
+          name: "MysqlTransferValidationError",
+          data: expect.objectContaining({ message: expect.stringContaining("invalid Fire delivery frontier") }),
+        }),
+      )
+
+      const missingAuthority = structuredClone(snapshot)
+      const frontierTable = missingAuthority.tables.find((table) => table.name === "automation_fire_frontier")
+      const fireTable = missingAuthority.tables.find((table) => table.name === "automation_fire")
+      if (!frontierTable || !fireTable) throw new Error("Automation transfer fixture omitted frontier tables")
+      const frontier = frontierTable.rows.find((row) => row.definition_id === automation.id)
+      if (!frontier) throw new Error("Automation transfer fixture omitted its current frontier")
+      frontierTable.rows = frontierTable.rows.filter((row) => row.definition_id !== automation.id)
+      fireTable.rows = fireTable.rows.filter((row) => row.id !== frontier.fire_id)
+      expect(() => preflightMysqlTransferSnapshot(missingAuthority)).toThrow(
+        expect.objectContaining<MysqlTransferValidationError>({
+          name: "MysqlTransferValidationError",
+          data: expect.objectContaining({ message: expect.stringContaining("invalid Fire frontier presence") }),
+        }),
+      )
+    } })
+  }, 60_000)
+
+  test("same-millisecond lease ordering admits only the current owner while retaining an earlier valid attempt", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({ directory: project.path, fn: async () => {
+      const historical = await AutomationService.create({
+        name: "Historical same-millisecond lease",
+        target: { scope: "project", projectIds: [Instance.project.id] },
+        recurrence: "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY",
+        prompt: "retain the admitted attempt",
+      })
+      const current = await AutomationService.create({
+        name: "Current same-millisecond lease",
+        target: { scope: "project", projectIds: [Instance.project.id] },
+        recurrence: "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY",
+        prompt: "admit only the latest lease",
+      })
+      const activatedAt = Date.now()
+      const expiresAt = activatedAt + 60_000
+      const renewedExpiresAt = expiresAt + 60_000
+      Database.immediateTransaction((db) => {
+        const authority = (definitionID: string) => {
+          const revision = db.select({ id: AutomationTable.id }).from(AutomationTable)
+            .where(eq(AutomationTable.definition_id, definitionID)).get()!
+          const frontier = db.select().from(AutomationFireFrontierTable)
+            .where(eq(AutomationFireFrontierTable.definition_id, definitionID)).get()!
+          return { revision, frontier }
+        }
+        const insertLease = (input: { leaseID: string; definitionID: string; ownerID: string }) => {
+          db.insert(EngineControlActivationLeaseTable).values({
+            id: input.leaseID,
+            target: "automation",
+            target_id: input.definitionID,
+            owner_occurrence_id: input.ownerID,
+            time_activated: activatedAt,
+            expires_at: expiresAt,
+          }).run()
+          db.insert(EngineControlActivationLeaseGrantTable).values({
+            lease_id: input.leaseID,
+            ordinal: 1,
+            expires_at: expiresAt,
+            time_created: activatedAt,
+          }).run()
+        }
+
+        const historicalAuthority = authority(historical.id)
+        insertLease({ leaseID: "call_same_ms_history_a", definitionID: historical.id, ownerID: "history-owner-a" })
+        db.insert(AutomationFireAttemptTable).values({
+          id: "afa_same_ms_history",
+          fire_id: historicalAuthority.frontier.fire_id,
+          ordinal: 1,
+          owner_occurrence_id: "history-owner-a",
+          lease_id: "call_same_ms_history_a",
+          lease_grant_ordinal: 1,
+          lease_expires_at: expiresAt,
+          time_created: activatedAt + 1,
+        }).run()
+        db.update(EngineControlActivationLeaseTable)
+          .set({ expires_at: renewedExpiresAt })
+          .where(eq(EngineControlActivationLeaseTable.id, "call_same_ms_history_a"))
+          .run()
+        db.insert(EngineControlActivationLeaseGrantTable).values({
+          lease_id: "call_same_ms_history_a",
+          ordinal: 2,
+          expires_at: renewedExpiresAt,
+          time_created: activatedAt + 2,
+        }).run()
+        insertLease({ leaseID: "call_same_ms_history_z", definitionID: historical.id, ownerID: "history-owner-z" })
+
+        const currentAuthority = authority(current.id)
+        insertLease({ leaseID: "call_same_ms_current_a", definitionID: current.id, ownerID: "current-owner-a" })
+        insertLease({ leaseID: "call_same_ms_current_z", definitionID: current.id, ownerID: "current-owner-z" })
+        expect(() => db.insert(AutomationFireAttemptTable).values({
+          id: "afa_same_ms_stale",
+          fire_id: currentAuthority.frontier.fire_id,
+          ordinal: 1,
+          owner_occurrence_id: "current-owner-a",
+          lease_id: "call_same_ms_current_a",
+          lease_grant_ordinal: 1,
+          lease_expires_at: expiresAt,
+          time_created: activatedAt + 1,
+        }).run()).toThrow("automation_fire_attempt: invalid ordinal or owner admission")
+        db.update(EngineControlActivationLeaseTable)
+          .set({ expires_at: renewedExpiresAt })
+          .where(eq(EngineControlActivationLeaseTable.id, "call_same_ms_current_z"))
+          .run()
+        db.insert(EngineControlActivationLeaseGrantTable).values({
+          lease_id: "call_same_ms_current_z",
+          ordinal: 2,
+          expires_at: renewedExpiresAt,
+          time_created: activatedAt + 1,
+        }).run()
+        expect(() => db.insert(AutomationFireAttemptTable).values({
+          id: "afa_same_ms_superseded_grant",
+          fire_id: currentAuthority.frontier.fire_id,
+          ordinal: 1,
+          owner_occurrence_id: "current-owner-z",
+          lease_id: "call_same_ms_current_z",
+          lease_grant_ordinal: 1,
+          lease_expires_at: expiresAt,
+          time_created: activatedAt + 2,
+        }).run()).toThrow("automation_fire_attempt: invalid ordinal or owner admission")
+        db.insert(AutomationFireAttemptTable).values({
+          id: "afa_same_ms_current",
+          fire_id: currentAuthority.frontier.fire_id,
+          ordinal: 1,
+          owner_occurrence_id: "current-owner-z",
+          lease_id: "call_same_ms_current_z",
+          lease_grant_ordinal: 2,
+          lease_expires_at: renewedExpiresAt,
+          time_created: activatedAt + 2,
+        }).run()
+      })
+
+      const snapshot = exportMysqlTransferSnapshot()
+      expect(preflightMysqlTransferSnapshot(snapshot).schemaFingerprint).toBe(snapshot.schemaFingerprint)
+      const staleGrantSnapshot = structuredClone(snapshot)
+      const staleGrantAttempt = staleGrantSnapshot.tables
+        .find((table) => table.name === "automation_fire_attempt")
+        ?.rows.find((row) => row.id === "afa_same_ms_current")
+      if (!staleGrantAttempt) throw new Error("Automation transfer fixture omitted the renewed attempt")
+      staleGrantAttempt.lease_grant_ordinal = 1
+      staleGrantAttempt.lease_expires_at = expiresAt
+      expect(() => preflightMysqlTransferSnapshot(staleGrantSnapshot)).toThrow(
+        expect.objectContaining<MysqlTransferValidationError>({
+          name: "MysqlTransferValidationError",
+          data: expect.objectContaining({ message: expect.stringContaining("invalid admission authority") }),
+        }),
+      )
+      expect(() => Database.use((db) => db.delete(EngineControlActivationLeaseTable)
+        .where(eq(EngineControlActivationLeaseTable.id, "call_same_ms_history_a")).run()))
+        .toThrow()
     } })
   }, 30_000)
 
@@ -481,6 +833,9 @@ describe("scheduler immutable definition and fire identity", () => {
         const runID = Identifier.ascending("automation")
         Database.transaction((db) => {
           db.insert(AutomationRunTable).values({ id: runID, automation_revision_id: job.revision_id, fire_id: fireID, target_project_id: Instance.project.id, started_at: Date.now() }).run()
+          const latest = latestAutomationDefinitionInTransaction(db, automation.id)
+          if (!latest) throw new Error(`Automation ${automation.id} lost its definition during manual execution`)
+          restoreScheduledAutomationFireFrontierInTransaction(db, latest)
           db.insert(AutomationRunReceiptTable).values({ id: Identifier.ascending("automation"), run_id: runID, outcome: "succeeded", time_created: Date.now() }).run()
         })
         return fireID
@@ -644,7 +999,24 @@ describe("scheduler immutable definition and fire identity", () => {
               time_created: 200 + history,
             }).run()
           }
-          if (index % 2 !== 0) continue
+          if (index % 2 !== 0) {
+            const fireID = `cal_frontier_${index}_scheduled`
+            const scheduledDueAt = Date.parse("2099-01-01T00:00:00Z")
+            db.insert(AutomationFireTable).values({
+              id: fireID,
+              automation_revision_id: definitionID,
+              scheduled_due_at: scheduledDueAt,
+              origin: "scheduled",
+              time_created: 1,
+            }).run()
+            db.insert(AutomationFireFrontierTable).values({
+              definition_id: definitionID,
+              automation_revision_id: definitionID,
+              fire_id: fireID,
+              available_at: scheduledDueAt,
+            }).run()
+            continue
+          }
           const fireID = `cal_frontier_${index}_pending`
           const attemptID = `afa_frontier_${index}`
           const retryAt = index % 4 === 0 ? now - 1 : now + 60_000
@@ -663,11 +1035,20 @@ describe("scheduler immutable definition and fire identity", () => {
             time_activated: now - 2_000,
             expires_at: now - 500,
           }).run()
+          db.insert(EngineControlActivationLeaseGrantTable).values({
+            lease_id: `lease_frontier_${index}`,
+            ordinal: 1,
+            expires_at: now - 500,
+            time_created: now - 2_000,
+          }).run()
           db.insert(AutomationFireAttemptTable).values({
             id: attemptID,
             fire_id: fireID,
             ordinal: 1,
             owner_occurrence_id: `owner:${index}`,
+            lease_id: `lease_frontier_${index}`,
+            lease_grant_ordinal: 1,
+            lease_expires_at: now - 500,
             time_created: now - 1_000,
           }).run()
           db.insert(AutomationFireAttemptReceiptTable).values({
@@ -772,16 +1153,151 @@ describe("scheduler immutable definition and fire identity", () => {
       expect(definitionPlan.some((entry) => entry.detail.includes("automation_definition_latest_idx"))).toBe(true)
       expect(definitionPlan.some((entry) => entry.detail.includes("automation_definition_tombstone_latest_idx")))
         .toBe(true)
+      retireSyntheticAutomationDefinitions(definitionIDs)
+    } })
+  })
+
+  test("global due discovery reads one indexed Fire page without materializing future definitions", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({ directory: project.path, fn: async () => {
+      const now = Date.now()
+      const dueDefinitionIDs = Array.from({ length: 96 }, (_, index) => `atm_due_page_${index.toString().padStart(3, "0")}`)
+      const futureDefinitionIDs = Array.from({ length: 257 }, (_, index) => `atm_future_page_${index.toString().padStart(3, "0")}`)
+      Database.transaction((db) => {
+        for (const [index, definitionID] of [...dueDefinitionIDs, ...futureDefinitionIDs].entries()) {
+          const dueIndex = index < dueDefinitionIDs.length ? index : index - dueDefinitionIDs.length
+          const scheduledDueAt = index < dueDefinitionIDs.length ? now - 10_000 + dueIndex : now + 60_000 + dueIndex
+          db.insert(AutomationTable).values({
+            id: definitionID,
+            definition_id: definitionID,
+            revision: 1,
+            project_id: Instance.project.id,
+            name: definitionID,
+            kind: "recurring",
+            scope: "project",
+            recurrence: "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY",
+            execution_mode: "local",
+            prompt: "bounded due Fire",
+            agent: "default",
+            status: "active",
+            time_created: 1,
+          }).run()
+          db.insert(AutomationFireTable).values({
+            id: `cal_${definitionID}`,
+            automation_revision_id: definitionID,
+            scheduled_due_at: scheduledDueAt,
+            origin: "scheduled",
+            time_created: 1,
+          }).run()
+          let frontierFireID = `cal_${definitionID}`
+          let availableAt = scheduledDueAt
+          if (index >= dueDefinitionIDs.length && dueIndex < 96) {
+            const manualFireID = `atm_retry_${definitionID}`
+            const attemptID = `afa_retry_${definitionID}`
+            db.insert(AutomationFireTable).values({
+              id: manualFireID,
+              automation_revision_id: definitionID,
+              scheduled_due_at: now - 20_000 + dueIndex,
+              origin: "manual_api",
+              time_created: 2,
+            }).run()
+            db.insert(EngineControlActivationLeaseTable).values({
+              id: `lease_retry_${definitionID}`,
+              target: "automation",
+              target_id: definitionID,
+              owner_occurrence_id: `owner:${definitionID}`,
+              time_activated: 2,
+              expires_at: 4,
+            }).run()
+            db.insert(EngineControlActivationLeaseGrantTable).values({
+              lease_id: `lease_retry_${definitionID}`,
+              ordinal: 1,
+              expires_at: 4,
+              time_created: 2,
+            }).run()
+            db.insert(AutomationFireAttemptTable).values({
+              id: attemptID,
+              fire_id: manualFireID,
+              ordinal: 1,
+              owner_occurrence_id: `owner:${definitionID}`,
+              lease_id: `lease_retry_${definitionID}`,
+              lease_grant_ordinal: 1,
+              lease_expires_at: 4,
+              time_created: 3,
+            }).run()
+            db.insert(AutomationFireAttemptReceiptTable).values({
+              attempt_id: attemptID,
+              outcome: "retry_wait",
+              retry_at: now + 120_000 + dueIndex,
+              error: "future retry",
+              time_created: 4,
+            }).run()
+            frontierFireID = manualFireID
+            availableAt = now + 120_000 + dueIndex
+          }
+          db.insert(AutomationFireFrontierTable).values({
+            definition_id: definitionID,
+            automation_revision_id: definitionID,
+            fire_id: frontierFireID,
+            available_at: availableAt,
+          }).run()
+        }
+        for (let index = 0; index < 257; index += 1) {
+          const definitionID = dueDefinitionIDs[index % dueDefinitionIDs.length]!
+          const fireID = `cal_retained_terminal_${index}`
+          const runID = `atr_retained_terminal_${index}`
+          db.insert(AutomationFireTable).values({
+            id: fireID,
+            automation_revision_id: definitionID,
+            scheduled_due_at: now - 100_000 - index,
+            origin: "manual_api",
+            time_created: 1,
+          }).run()
+          db.insert(AutomationRunTable).values({
+            id: runID,
+            automation_revision_id: definitionID,
+            fire_id: fireID,
+            target_project_id: Instance.project.id,
+            started_at: 2,
+          }).run()
+          db.insert(AutomationRunReceiptTable).values({
+            id: `arc_retained_terminal_${index}`,
+            run_id: runID,
+            outcome: "succeeded",
+            time_created: 3,
+          }).run()
+        }
+      })
+      const { due, stages } = Database.use((db) => {
+        const stages: string[] = []
+        return { due: currentDueAutomationFrontiersInTransaction(db, now, (stage) => stages.push(stage)), stages }
+      })
+      expect(due).toHaveLength(64)
+      expect(due.map((entry) => entry.row.definition_id)).toEqual(dueDefinitionIDs.slice(0, 64))
+      expect(due.every((entry) => entry.fireID === `cal_${entry.row.definition_id}`)).toBe(true)
+      expect(stages).toEqual(["due", "definitions", "fires", "runs", "attempts", "leases"])
+      const plan = Database.use((db) => db.all<{ detail: string }>(sql`
+        EXPLAIN QUERY PLAN
+        SELECT fire_id
+        FROM automation_fire_frontier INDEXED BY automation_fire_frontier_due_idx
+        WHERE available_at<=${now}
+        ORDER BY available_at,definition_id,fire_id
+        LIMIT 64
+      `))
+      expect(plan.some((entry) => entry.detail.includes("automation_fire_frontier_due_idx"))).toBe(true)
+      expect(plan.some((entry) => entry.detail.includes("TEMP B-TREE"))).toBe(false)
+      retireSyntheticAutomationDefinitions([...dueDefinitionIDs, ...futureDefinitionIDs])
     } })
   })
 
   test("manual API and scheduled Fires at the same due millisecond retain distinct occurrence identities", async () => {
     await using project = await memoryProject()
     await Instance.provide({ directory: project.path, fn: async () => {
+      const stamp = new Date(Date.now() + 2_000).toISOString().replace(/[-:]/g, "").replace(/\.\d{3}Z$/, "Z")
       const automation = await AutomationService.create({
         name: "manual and scheduled identity",
-        target: { scope: "session", sessionId: (await Session.create({ kind: "root", title: "Fire identity" })).id },
-        recurrence: "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY",
+        target: { scope: "project", projectIds: [Instance.project.id] },
+        recurrence: `DTSTART:${stamp}\nRRULE:FREQ=DAILY`,
         prompt: "run",
       })
       using _wake = AutomationService.TestHooks.installWakeExecutor(async (input) => ({
@@ -791,13 +1307,15 @@ describe("scheduler immutable definition and fire identity", () => {
         completion: Promise.resolve({ ok: true as const }),
       }))
       const exactDue = AutomationService.list().find((row) => row.id === automation.id)!.nextRun
+      while (Date.now() < exactDue) await Bun.sleep(10)
       const manualOwner = `manual-exact-due:${exactDue}`
       const manual = AutomationService.TestHooks.claim(automation.id, manualOwner, exactDue, true)!
       expect(manual).toBeDefined()
-      await AutomationService.TestHooks.executeClaimedDueOccurrence({ job: manual, owner: manualOwner, now: exactDue })
+      await AutomationService.TestHooks.executeClaimedManualOccurrence({ job: manual, owner: manualOwner, now: exactDue })
+      await Bun.sleep(10)
 
       const scheduledOwner = `scheduled-exact-due:${exactDue}`
-      const scheduled = AutomationService.TestHooks.claim(automation.id, scheduledOwner, exactDue, false)!
+      const scheduled = AutomationService.TestHooks.claim(automation.id, scheduledOwner, Date.now(), false)!
       expect(scheduled).toBeDefined()
       expect(scheduled.pending_fire_id).not.toBe(manual.pending_fire_id)
       const fires = Database.use((db) =>
@@ -888,6 +1406,158 @@ describe("scheduler immutable definition and fire identity", () => {
     } })
   }, 60_000)
 
+  test("active Mission transfer preserves only the exact opened occurrence authority", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({ directory: project.path, fn: async () => {
+      await Config.updateProjectPatch({
+        model: "scheduler-automation-mission/wake-model",
+        provider: {
+          "scheduler-automation-mission": {
+            name: "Scheduler Automation Mission test",
+            npm: "@ai-sdk/openai-compatible",
+            api: "http://127.0.0.1:1/v1",
+            models: {
+              "wake-model": {
+                name: "Scheduler Automation Mission model",
+                tool_call: true,
+                modalities: { input: ["text"], output: ["text"] },
+                limit: { context: 32_000, output: 4_096 },
+              },
+            },
+          },
+        },
+      })
+      const mission = await ensureMissionSession({
+        missionID: `automation-active-transfer-${Date.now()}`,
+        defaultCwd: project.path,
+        productPillar: "work",
+        heldExpertSquadIDs: ["base"],
+      })
+      const sibling = await ensureMissionSession({
+        missionID: `automation-active-transfer-sibling-${Date.now()}`,
+        defaultCwd: project.path,
+        productPillar: "work",
+        heldExpertSquadIDs: ["base"],
+      })
+      const ordinary = await Session.create({ kind: "assistant", title: "Non-Mission transfer target" })
+      using _loop = SessionWake.TestHooks.installWakeLoopExecutor(async () => undefined)
+      await openMissionOccurrence(mission, "automation-active-transfer-open")
+      await openMissionOccurrence(sibling, "automation-active-transfer-sibling-open")
+      const automation = await AutomationService.create({
+        name: "Active Mission transfer",
+        target: { scope: "session", sessionId: mission.id },
+        recurrence: "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY",
+        prompt: "retain this exact opened occurrence",
+      })
+      const runID = Identifier.ascending("automation")
+      const authority = Database.immediateTransaction((db) => {
+        const revision = db.select().from(AutomationTable)
+          .where(eq(AutomationTable.definition_id, automation.id)).get()!
+        const frontier = db.select().from(AutomationFireFrontierTable)
+          .where(eq(AutomationFireFrontierTable.definition_id, automation.id)).get()!
+        const opened = db.select().from(ProtocolEventTable)
+          .where(and(
+            eq(ProtocolEventTable.aggregate_type, "session"),
+            eq(ProtocolEventTable.aggregate_id, mission.id),
+            eq(ProtocolEventTable.type, "mission.execution.opened"),
+          )).get()!
+        const siblingOpened = db.select().from(ProtocolEventTable)
+          .where(and(
+            eq(ProtocolEventTable.aggregate_type, "session"),
+            eq(ProtocolEventTable.aggregate_id, sibling.id),
+            eq(ProtocolEventTable.type, "mission.execution.opened"),
+          )).get()!
+        const unrelatedEventID = Identifier.ascending("protocol_event")
+        db.insert(ProtocolEventTable).values({
+          id: unrelatedEventID,
+          kind: "event",
+          type: "unrelated.event",
+          aggregate_type: "bus",
+          aggregate_id: `bus_active_transfer_${Date.now()}`,
+          project_id: null,
+          task_id: null,
+          session_id: null,
+          interaction_id: null,
+          stream_id: null,
+          source: "test.scheduler-automation",
+          target: null,
+          causation_id: null,
+          correlation_id: null,
+          reply_to: null,
+          seq: 1,
+          deadline_ms: null,
+          emitted_at: Date.now(),
+          payload: {},
+        }).run()
+        for (const [invalidID, invalidEventID] of [
+          ["atr_active_wrong_session", siblingOpened.id],
+          ["atr_active_wrong_type", unrelatedEventID],
+        ] as const) {
+          expect(() => db.insert(AutomationRunTable).values({
+            id: invalidID,
+            automation_revision_id: revision.id,
+            fire_id: frontier.fire_id,
+            target_project_id: null,
+            mission_opened_event_id: invalidEventID,
+            mission_disposition: null,
+            mission_closure_event_id: null,
+            started_at: Date.now(),
+          }).run()).toThrow("automation_run: Mission target requires one exact active or terminal reservation")
+        }
+        db.insert(AutomationRunTable).values({
+          id: runID,
+          automation_revision_id: revision.id,
+          fire_id: frontier.fire_id,
+          target_project_id: null,
+          mission_opened_event_id: opened.id,
+          mission_disposition: null,
+          mission_closure_event_id: null,
+          started_at: Date.now(),
+        }).run()
+        return { revisionID: revision.id, openedEventID: opened.id, siblingOpenedEventID: siblingOpened.id }
+      })
+      const snapshot = exportMysqlTransferSnapshot()
+      const expectInvalidAuthority = (mutate: (copy: typeof snapshot) => void) => {
+        const copy = structuredClone(snapshot)
+        mutate(copy)
+        expect(() => preflightMysqlTransferSnapshot(copy)).toThrow(
+          expect.objectContaining<MysqlTransferValidationError>({
+            name: "MysqlTransferValidationError",
+            data: expect.objectContaining({ message: expect.stringContaining("invalid Mission reservation authority") }),
+          }),
+        )
+      }
+      expectInvalidAuthority((copy) => {
+        const opened = copy.tables.find((table) => table.name === "protocol_event")
+          ?.rows.find((row) => row.id === authority.openedEventID)
+        if (!opened) throw new Error("Active Mission transfer omitted its opened event")
+        opened.type = "unrelated.event"
+      })
+      expectInvalidAuthority((copy) => {
+        const run = copy.tables.find((table) => table.name === "automation_run")
+          ?.rows.find((row) => row.id === runID)
+        if (!run) throw new Error("Active Mission transfer omitted its run")
+        run.mission_opened_event_id = authority.siblingOpenedEventID
+      })
+      expectInvalidAuthority((copy) => {
+        const revision = copy.tables.find((table) => table.name === "automation")
+          ?.rows.find((row) => row.id === authority.revisionID)
+        if (!revision) throw new Error("Active Mission transfer omitted its definition revision")
+        revision.session_id = ordinary.id
+      })
+      expect(importMysqlTransferSnapshot(snapshot)).toMatchObject({
+        ok: true,
+        schemaFingerprint: snapshot.schemaFingerprint,
+      })
+      expect(Database.use((db) => db.select().from(AutomationRunTable)
+        .where(eq(AutomationRunTable.id, runID)).get())).toMatchObject({
+        mission_opened_event_id: authority.openedEventID,
+        mission_disposition: null,
+        mission_closure_event_id: null,
+      })
+    } })
+  }, 60_000)
+
   test("a closed Mission reservation atomically survives a post-commit crash and a later reopen", async () => {
     await using project = await memoryProject()
     const missionID = `automation-closed-reservation-${Date.now()}`
@@ -935,16 +1605,120 @@ describe("scheduler immutable definition and fire identity", () => {
       using _crash = AutomationService.TestHooks.installAfterRunReservation(() => {
         throw new Error("simulated Automation process crash after durable reservation")
       })
-      await expect(AutomationService.runNow(automation.id)).rejects.toThrow("simulated Automation process crash")
-      const [run] = Database.use((db) => {
+      const owner = `scheduled-closed-reservation:${automation.nextRun}`
+      const claimed = AutomationService.TestHooks.claim(automation.id, owner, automation.nextRun, false)!
+      await expect(
+        AutomationService.TestHooks.executeClaimedDueOccurrence({ job: claimed, owner, now: automation.nextRun }),
+      ).rejects.toThrow("simulated Automation process crash")
+      const { run, fires, frontier, attempt, lease } = Database.use((db) => {
         const revision = db.select({ id: AutomationTable.id }).from(AutomationTable)
           .where(eq(AutomationTable.definition_id, automation.id)).get()!
-        return db.select().from(AutomationRunTable)
-          .where(eq(AutomationRunTable.automation_revision_id, revision.id)).all()
+        const run = db.select().from(AutomationRunTable)
+          .where(eq(AutomationRunTable.automation_revision_id, revision.id)).get()!
+        return {
+          run,
+          fires: db.select().from(AutomationFireTable)
+            .where(eq(AutomationFireTable.automation_revision_id, revision.id))
+            .orderBy(AutomationFireTable.scheduled_due_at).all(),
+          frontier: db.select().from(AutomationFireFrontierTable)
+            .where(eq(AutomationFireFrontierTable.definition_id, automation.id)).get()!,
+          attempt: db.select().from(AutomationFireAttemptTable)
+            .where(eq(AutomationFireAttemptTable.fire_id, run.fire_id)).get()!,
+          lease: currentControlLeaseInTransaction(db, "automation", automation.id)!,
+        }
       })
       const receipts = Database.use((db) => db.select().from(AutomationRunReceiptTable)
-        .where(eq(AutomationRunReceiptTable.run_id, run!.id)).all())
-      return { missionSessionID: mission.id, automationID: automation.id, runID: run!.id, closureEventID: closed.eventID, run, receipts }
+        .where(eq(AutomationRunReceiptTable.run_id, run.id)).all())
+      expect(() => Database.use((db) => db.insert(AutomationRunReceiptTable).values({
+        id: Identifier.ascending("automation"),
+        run_id: run.id,
+        outcome: "succeeded",
+        disposition: null,
+        closure_event_id: null,
+        retry_at: null,
+        error: null,
+        time_created: Date.now(),
+      }).run())).toThrow("automation_run_receipt: terminal Mission reservation requires its exact closure receipt")
+      expect({ finalLeaseExpiry: lease.expires_at, attemptCreatedAt: attempt.time_created })
+        .toEqual({ finalLeaseExpiry: attempt.time_created, attemptCreatedAt: attempt.time_created })
+      expect(attempt.lease_expires_at).toBeGreaterThan(attempt.time_created)
+      const snapshot = exportMysqlTransferSnapshot()
+      const attemptRows = snapshot.tables.find((table) => table.name === "automation_fire_attempt")?.rows ?? []
+      const leaseRows = snapshot.tables.find((table) => table.name === "engine_control_activation_lease")?.rows ?? []
+      expect(attemptRows.flatMap((candidate) => {
+        const exactLease = leaseRows.find((row) => row.id === candidate.lease_id)
+        return exactLease &&
+          exactLease.owner_occurrence_id === candidate.owner_occurrence_id &&
+          exactLease.expires_at >= candidate.time_created &&
+          candidate.lease_expires_at > candidate.time_created
+          ? []
+          : [{ candidate, exactLease }]
+      })).toEqual([])
+      const validPlan = preflightMysqlTransferSnapshot(snapshot)
+      expect(validPlan.schemaFingerprint).toBe(snapshot.schemaFingerprint)
+      for (const mutateReceipt of [
+        (copy: typeof snapshot) => {
+          const table = copy.tables.find((candidate) => candidate.name === "automation_run_receipt")
+          if (!table) throw new Error("Closed Mission transfer omitted its receipt table")
+          table.rows = table.rows.filter((row) => row.run_id !== run.id)
+        },
+        (copy: typeof snapshot) => {
+          const receipt = copy.tables.find((table) => table.name === "automation_run_receipt")
+            ?.rows.find((row) => row.run_id === run.id)
+          if (!receipt) throw new Error("Closed Mission transfer omitted its receipt")
+          const opened = copy.tables.find((table) => table.name === "protocol_event")
+            ?.rows.find((row) =>
+              row.aggregate_type === "session" &&
+              row.aggregate_id === mission.id &&
+              row.type === "mission.execution.opened"
+            )
+          if (!opened) throw new Error("Closed Mission transfer omitted its opened event")
+          receipt.closure_event_id = opened.id
+        },
+      ]) {
+        const invalidReceipt = structuredClone(snapshot)
+        mutateReceipt(invalidReceipt)
+        expect(() => preflightMysqlTransferSnapshot(invalidReceipt)).toThrow(
+          expect.objectContaining<MysqlTransferValidationError>({
+            name: "MysqlTransferValidationError",
+            data: expect.objectContaining({ message: expect.stringContaining("invalid terminal Mission receipt authority") }),
+          }),
+        )
+      }
+      const failedApplyPlan = structuredClone(validPlan)
+      const failedRun = failedApplyPlan.snapshot.tables
+        .find((table) => table.name === "automation_run")
+        ?.rows.find((row) => row.id === run.id)
+      const failedReceipt = failedApplyPlan.snapshot.tables
+        .find((table) => table.name === "automation_run_receipt")
+        ?.rows.find((row) => row.run_id === run.id)
+      const openedEvent = failedApplyPlan.snapshot.tables
+        .find((table) => table.name === "protocol_event")
+        ?.rows.find((row) =>
+          row.aggregate_type === "session" &&
+          row.aggregate_id === mission.id &&
+          row.type === "mission.execution.opened"
+        )
+      if (!failedRun || !failedReceipt || !openedEvent) {
+        throw new Error("Closed Mission transfer fixture omitted its exact causal facts")
+      }
+      failedRun.mission_closure_event_id = openedEvent.id
+      failedReceipt.closure_event_id = openedEvent.id
+      expect(() => applyMysqlTransferPlan(failedApplyPlan)).toThrow(MysqlTransferApplyError)
+      expect(Database.use((db) => db.select().from(AutomationRunTable)
+        .where(eq(AutomationRunTable.id, run.id)).get()?.mission_closure_event_id)).toBe(closed.eventID)
+      expect(Database.use((db) => db.all<{ name: string }>(sql`
+        SELECT name FROM sqlite_master
+        WHERE type='trigger' AND name='automation_run_mission_reservation_insert'
+      `))).toEqual([{ name: "automation_run_mission_reservation_insert" }])
+      expect(importMysqlTransferSnapshot(snapshot)).toMatchObject({
+        ok: true,
+        schemaFingerprint: snapshot.schemaFingerprint,
+      })
+      expect(fires).toHaveLength(2)
+      expect(frontier.fire_id).toBe(fires[1]!.id)
+      expect(frontier.available_at).toBe(fires[1]!.scheduled_due_at)
+      return { missionSessionID: mission.id, automationID: automation.id, runID: run.id, closureEventID: closed.eventID, run, receipts }
     } })
 
     await Instance.provide({ directory: project.path, fn: async () => {

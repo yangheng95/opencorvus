@@ -321,9 +321,8 @@ describe("schedule Tool exact lost-response recovery", () => {
             occurrence,
           })
           expect(replayed).toEqual(completed)
-          expect(AutomationService.listFireHistory(automation.id)).toMatchObject([
-            { origin: "manual_tool", state: "succeeded", attemptCount: 1 },
-          ])
+          expect(AutomationService.listFireHistory(automation.id).find((fire) => fire.origin === "manual_tool"))
+            .toMatchObject({ origin: "manual_tool", state: "succeeded", attemptCount: 1 })
         } finally {
           if (!promptOwnerReleased) SessionPromptOwner.release(promptOwner.authority)
         }
@@ -441,7 +440,7 @@ describe("schedule Tool exact lost-response recovery", () => {
               occurrence,
             }),
           ).rejects.toThrow("target resolution refused before reservation")
-          const [fire] = AutomationService.listFireHistory(automationID)
+          const fire = AutomationService.listFireHistory(automationID).find((entry) => entry.origin === "manual_tool")
           expect(fire).toMatchObject({ state: "retry_wait", attemptCount: attempt, runs: [] })
           now = fire!.retryAt!
         }
@@ -450,7 +449,7 @@ describe("schedule Tool exact lost-response recovery", () => {
           projectID: Instance.project.id,
           occurrence,
         })
-        const [fire] = AutomationService.listFireHistory(automationID)
+        const fire = AutomationService.listFireHistory(automationID).find((entry) => entry.origin === "manual_tool")
         expect(fire).toMatchObject({ state: "failed", attemptCount: 5, runs: [], error: "target resolution refused before reservation" })
         expect(JSON.parse(terminal.output)).toEqual(fire)
         expect(await recoverScheduledToolPart(run.part)).toEqual(terminal)

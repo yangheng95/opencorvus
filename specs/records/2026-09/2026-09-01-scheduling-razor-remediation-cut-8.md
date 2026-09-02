@@ -1503,3 +1503,360 @@ failure rolls back without repair, the live closed-Mission receipt trigger is
 fail-closed, and both new production-shaped cases exercise the actual runtime
 and database replacement boundaries. This review record is documentation only;
 the reviewed production and test blobs remain unchanged.
+
+### Cut 8b.3 — B9 Automation bounded due-Fire frontier
+
+#### Recall and current-source proof
+
+- **User requirement:** close the final scheduling ledger gap without delaying
+  another delivered cut, then push, run an exact-remote real Mission trajectory
+  and continue repairing every observed anomaly before the three-component beta
+  and website release.
+- **Observable trigger:** the one-second Automation poll calls
+  `currentAutomationFrontiersInTransaction({ status: "active" })`. That helper
+  pages definitions in groups of 64 but deliberately exhausts every page, loads
+  five fact sets for every definition and only then filters `next_run <= now` in
+  JavaScript. Runtime work is therefore proportional to all active definitions,
+  even when no Automation is due.
+- **Root cause:** a recurring scheduled Fire is created only after claim. The
+  existing `automation_fire_due_idx` cannot discover work that has no Fire row,
+  so the definition projection and recurrence calculation have become a second
+  global due queue. Increasing the page size, caching projections or adding a
+  mutable current-state table would preserve that duplicate authority.
+- **Old-path limitation:** Cut 5 correctly bounded each definition page and the
+  Session-specific one-shot delay frontier, but it did not change the global
+  selection source. Its fixed five query stages prove bounded work *per page*,
+  not bounded due discovery across the database.
+- **Sources searched:** Automation definition/Fire/run/attempt/receipt tables,
+  full and frontier reducers, create/update/delete/manual run, poll/claim,
+  retry/terminal/Mission-close settlement, Session delay consumption, current
+  schema DDL/transfer, claim/fire identity tests and current architecture.
+- **Independent feedback:** none at implementation start. A fresh uninvolved
+  read-only review is mandatory after the exact tree and complete evidence are
+  frozen.
+
+#### Single-authority design
+
+1. Every active recurring definition revision owns exactly one immutable
+   pristine `scheduled` Fire for its next recurrence. Create, active update and
+   resume insert it in the same definition transaction. Terminal settlement of
+   that scheduled Fire inserts its successor in the same transaction as the
+   terminal run/attempt receipts and lease release. Retry keeps the same Fire;
+   manual Fires never advance or replace the scheduled recurrence.
+2. Scheduled Fire identity binds both immutable revision ID and exact due time.
+   A later revision may legitimately choose the same timestamp but cannot reuse
+   the older revision's occurrence. Paused revisions and tombstones have no live
+   due authority; their historical Fires remain immutable history.
+3. A pristine Fire is a distinct `scheduled` state: it is not running, does not
+   block update/delete/manual run, and is never exposed as `pending_fire_id`.
+   Current projection separately identifies the latest executed Fire for public
+   history and the current revision's scheduled Fire for `next_run`; ordering a
+   manual Fire and a future scheduled Fire by timestamp is not a state reducer.
+4. Global poll starts at the Fire due index and returns at most one 64-row page
+   of current active recurring candidates whose effective deadline is due and
+   whose latest lease is absent or expired. Retry deadlines come only from the
+   latest attempt/run receipts of that exact Fire. It does not enumerate future
+   definitions, terminal Fire history or unrelated Session delays.
+5. Exact claim receives the selected Fire identity and revalidates, in one
+   immediate transaction, current revision, active recurring status, scheduled
+   origin, effective deadline, lease and Session-busy authority before reserving
+   an attempt. The claim does not synthesize a missing scheduled Fire. Manual
+   API/Tool claims retain their separate immutable Fire occurrences.
+6. Session one-shot delay discovery and its transaction-local consume callback
+   remain unchanged. No compatibility reader, fallback, mutable frontier table,
+   process-local shadow set or second recurrence calculator is added.
+7. The latest physical attempt is a single indexed point lookup. Public history
+   may still reduce complete history on explicit reads; heartbeat discovery may
+   not.
+
+#### Positive acceptance matrix
+
+- create, update, pause/resume and terminal settlement expose exactly one current
+  pristine scheduled Fire, with revision-bound deterministic identity;
+- a manual run earlier or later than the scheduled due time leaves the scheduled
+  occurrence and recurrence frontier unchanged;
+- retry reuses the same Fire and becomes due only at its exact retry deadline;
+  success, terminal failure, partial fan-out and Mission-closed settlement
+  atomically publish one successor when the definition remains active;
+- 257 future definitions plus more than one page of due definitions yield one
+  bounded due page in stable due/Fire order, fixed query stages and no duplicate
+  or missing work across ticks; two Projects remain isolated;
+- deep terminal history does not change the due query count or plan, and
+  `EXPLAIN QUERY PLAN` uses the Fire due/revision and retry/lease indexes without
+  a full Automation-definition scan;
+- owner loss, expired lease, process restart and exact claim collision converge
+  on the same Fire/attempt chain; abort after permit acquisition leaves the
+  pristine scheduled Fire and no attempt or lease;
+- current-schema DDL, strict transfer and retention preserve the new Fire-state
+  contract; stale schema continues to fail through the existing reset boundary.
+
+#### Working-source evidence before final freeze
+
+The implementation publishes the first recurring scheduled Fire in the create
+or active-revision transaction, publishes a successor with terminal scheduled
+settlement, keeps manual and retry identities distinct, and drives the heartbeat
+from a 64-row recurring Fire due page plus a 64-row one-shot delay due page. The
+two pages are ordered into one 64-item execution frontier; exact claim still
+owns the immediate revalidation. Public history and generated OpenAPI/SDK now
+include the explicit pristine `scheduled` state.
+
+The complete directly affected non-UI matrix passes 70/70 tests with 282
+assertions: Automation claim/Fire identity 24/24, schedule Tool lost-response
+recovery 8/8, native Task and Session delay waits 12/12, immutable scheduler
+facts 2/2, scheduling DDL lineage 10/10, Mission wake projection 3/3 and current
+schema/strict transfer 11/11. The 96-due/257-future positive case returns the
+first exact 64 Fire identities through six fixed query stages and confirms the
+Fire due index. The same page skips 96 earlier-base-due manual Fires whose exact
+retry deadline is still future, and another production-path case proves a due
+scheduled sibling yields to the one retrying manual Fire for that definition.
+A real scheduled execution retains one attempted Fire and publishes one pristine
+successor in its terminal transaction. A first combined
+multi-file Bun run reached the known output-channel failure while waiting for
+the Session-delay capacity case; isolating that case exposed a real omitted
+delay frontier, not a runner-only failure. The correction adds the indexed
+one-shot delay due page, after which the full Task/Session file passes 12/12 in
+25.96 seconds.
+
+OpenCorvus package typecheck and root typecheck pass, with all eight root
+workspace tasks successful. Routes pass 6 rules across 34 files; generated API
+documentation passes 339 operations across 25 groups. Architecture indexes 16
+current documents, package topology covers ten cycle-free workspaces, control
+leases cover 18 owners and 22 acquisition sites, control-state redundancy
+covers 51 tables and seven allowed fact classes, public-package publication is
+ordered, and the three-component release family remains `0.0.58-beta`. Exact
+index release/module/diff evidence and a fresh uninvolved review remain required
+before commit.
+
+The preserved pre-correction review snapshot
+`7d5741b00bf751f673d490f0c308ae48c8f79b76`
+passes release mutation with five canonical authorities and module topology with
+1,102 modules, 5,523 runtime edges, no retained strongly connected component
+and four clean imports. Cached and working diff checks pass; the working tree is
+limited to the pre-existing `session/index.ts` formatting delta and two Web
+content exclusions. This evidence paragraph changes only the review record; a
+new exact tree and fresh uninvolved read-only review still gate commit.
+
+#### First exact-tree review and architectural correction
+
+The first uninvolved review of exact tree
+`9fa42bee3cd684e886d1038393a42cd62ebb71fe` is **NOT PASS** with
+P0=0, P1=3, P2=0 and P3=1. Its independently executed production query plans
+prove that both recurring and one-shot delay SQL return at most 64 rows but
+still scan retained terminal/future-retry history and allocate a temporary
+ordering B-tree before that limit. It also proves a scheduled recurring owner
+can die after terminal Mission/target receipts commit but before successor
+publication, leaving no due fact that can restart the recurrence, and that
+strict transfer accepts an active recurring definition after its sole scheduled
+Fire is removed. The independently reproduced matrix is 70/70 with 280, not
+282, assertions.
+
+Those findings correct one premise in the initial design while preserving the
+immutable Fire history. A global query cannot simultaneously retain an
+unbounded immutable history, select only unresolved effective deadlines, and
+perform work bounded independently of that history unless one indexed relation
+owns the current physical delivery frontier. Correlated anti-joins and computed
+retry deadlines only move the unbounded work behind a result-row limit. The
+correction therefore introduces one domain-specific
+`automation_fire_frontier` control relation instead of another business-state
+projection:
+
+1. Exactly one row per live Automation definition owns the one Fire currently
+   eligible for physical delivery and its `available_at` fence. Immutable
+   definition, Fire, attempt, run and receipt rows remain the complete business
+   history; heartbeat selection no longer reduces them.
+2. Definition acceptance or active revision, manual occurrence admission,
+   retry, lease acquisition/renewal, terminal settlement, pause/tombstone and
+   successor publication update that one relation in the same immediate writer
+   transaction as the fact that changes delivery authority. The relation is the
+   sole scheduling source, not a cache reconciled after commit.
+3. Scheduled success or terminal failure replaces the current row with the
+   successor Fire atomically. A manual terminal occurrence restores the
+   already-published scheduled Fire. A one-shot delay terminal or ordinary
+   Session-input settlement removes the row. Terminal-at-reservation therefore
+   cannot commit without either a successor or a closed one-shot frontier.
+4. Claim and renewal move `available_at` to the exact lease expiry; retry moves
+   it to the immutable retry deadline. Poll is one indexed
+   `(available_at,definition_id,fire_id)` LIMIT page with no history scan or
+   temporary ordering tree, and exact claim still revalidates current revision,
+   Fire and lease under the writer lock.
+5. Current-schema DDL and strict transfer require every current active
+   definition to own exactly one structurally valid frontier and every paused or
+   tombstoned definition to own none. Missing Fire/frontier, wrong revision,
+   stale definition or terminal pointed Fire is a typed transfer validation
+   failure. There is no compatibility reader, fallback or second due selector.
+
+Positive correction evidence must cover the complete production SQL plan,
+257 retained terminal Fires, at least 96 future retries, more than one due page,
+scheduled terminal-reservation crash closure, manual-to-scheduled restoration,
+one-shot input settlement, cross-process lease takeover and strict transfer with
+both a valid frontier and each structurally invalid variant. A fresh exact tree,
+the complete affected matrix and a new uninvolved read-only review are mandatory
+before delivery.
+
+#### Architectural-correction first-green evidence
+
+The directly affected matrix now passes 84/84 tests with 325 assertions across
+nine files. It includes the production indexed frontier plan, retained terminal
+and future-retry history, atomic scheduled successor publication, manual Fire
+restoration, one-shot Session settlement, strict transfer shape and terminal
+Fire rejection, and a real two-process busy-Session lease takeover. The latter
+proves the first poll retains the exact scheduled occurrence without an attempt,
+then the expired physical owner converges on one attempted Fire, one successful
+receipt and one exact scheduled successor. This is first-green source evidence,
+not a delivery receipt. OpenCorvus/root typecheck passes all eight workspace
+tasks; docs pass at 339 operations/25 groups, routes at 6 rules/34 files,
+architecture at 16 current documents, package topology at ten workspaces,
+control state at 52 tables/seven fact classes, leases at 18 owners/22 acquire
+sites, version alignment at `0.0.58-beta`, and public-package publication order
+is clean. An exact new index tree and fresh uninvolved read-only review still
+gate commit and push.
+
+#### Final-review authority-equivalence corrections
+
+The next uninvolved review found no P0 or P1 and two P2 gaps between live DDL
+and strict transfer. Transfer proved the attempt's historical lease identity and
+ordering but omitted the live admission condition `lease.expires_at >
+attempt.time_created`. Live frontier insert/update proved current revision and
+deadline shape but did not reject a Fire whose run or latest zero-run attempt
+was already terminal.
+
+The correction makes transfer apply the same lease-expiry predicate as live
+attempt admission. Frontier insert/update now applies the same pending-Fire
+reducer as transfer. The reverse edge is fenced too: the last terminal run or
+zero-run attempt receipt cannot commit while that Fire still owns the frontier.
+Production settlement transactions therefore advance, restore or clear the
+frontier before their terminal receipts; retry receipts retain the same Fire and
+deadline. This preserves one committed delivery authority without a second
+state table or post-commit reconciliation.
+
+The corrected nine-file matrix passes 84/84 tests with 328 assertions. New
+positive contracts reject an attempt whose exact historical lease expires at
+its creation time, reject insertion of a terminal Fire as the live frontier,
+and reject terminal receipt settlement until the frontier has advanced. The
+existing scheduled/manual/retry/one-shot/Mission/cross-process and strict
+transfer paths all continue to pass. A new exact tree and fresh read-only review
+still gate delivery.
+
+#### Strict-transfer admission and Mission-reservation correction
+
+Fresh review confirmed the terminal-frontier equivalence correction, then found
+two P1 restore gaps. The attempt validator compared admission time with the
+lease row's *final* mutable expiry. Normal same-millisecond terminal reservation
+shortens that row to the attempt timestamp, so a legal production snapshot was
+rejected even though the lease was live when the attempt was admitted. Separately,
+`automation_run_mission_reservation_insert` executed before transfer had restored
+the Automation definition and Mission Session, so any legal run carrying an
+opened or closed Mission reservation was rejected by restore ordering.
+
+The selected single-source correction freezes the exact `lease_id`,
+`lease_grant_ordinal`, and `lease_expires_at` on the immutable physical attempt at admission. Acquisition
+and renewal append an immutable ordered lease-grant fact; live DDL requires the
+attempt grant ordinal and expiry to equal the latest grant of the current owner selected by the
+same `(time_activated,id)` order as the production reducer. The attempt retains
+its lease and grant by foreign key. Transfer validates the exact grant while permitting
+the lease row's final mutable expiry to equal its later release boundary; it
+does not reinterpret an already-admitted historical attempt against a later
+same-millisecond lease. This is current-schema grant history, not a legacy
+compatibility inference.
+Automation Mission reservation insertion joins the existing
+validated-restore protocol: its live trigger is temporarily deferred only
+during restore, then one set-based validator checks every restored run against
+its fully restored definition, exact same-Session opened/closure Protocol Event
+and, for terminal-at-reservation runs, its one exact `mission_closed` receipt.
+The live run and receipt triggers enforce the same causal union before all
+current triggers are reinstalled and the transaction may commit.
+
+Positive evidence must round-trip an unchanged real terminal-at-reservation
+snapshot whose release time equals attempt creation time, preserve active and
+terminal Mission reservation shapes, reject a forged frozen admission expiry,
+and prove validator/restore failure rolls back without replacing the current
+database. A new exact tree and fresh read-only review remain mandatory.
+
+The previous correction snapshot's exact nine-file serial matrix passed 73/73
+tests with 302 assertions, including `storage/schema-contract.test.ts`. Its
+directly runnable command was:
+
+```powershell
+bun test --max-concurrency 1 test/scheduler-claim-and-fire-identity.test.ts test/scheduler-tool-recovery.test.ts test/task-wait-fire-identity.test.ts test/task-wait-current-prompt.test.ts test/scheduler-fact-control.test.ts test/scheduling-occurrence-ddl-lineage.test.ts test/mission-execution-wake-occurrence.test.ts test/scheduler-busy-session-cross-process.test.ts test/storage/schema-contract.test.ts
+```
+
+The final-review correction keeps that exact command and adds positive contracts
+for same-ms current-lease ordering, retention of an earlier legal attempt, exact
+immutable grant ordinal/expiry, active and terminal Mission event authority,
+terminal receipt equivalence, persistent transfer apply, and rollback with
+trigger restoration.
+
+That exact command now reaches its natural terminal result with 75/75 tests,
+323 assertions and zero failures in 136.26 seconds. The four correction-focused
+contracts pass independently with 4/4 tests and 34 assertions. OpenCorvus
+package typecheck exits zero after the final source and test changes.
+
+The historical snapshot round-tripped the real closed-Mission
+terminal-at-reservation snapshot after the lease row had been released to the
+attempt timestamp, rejected one forged frozen attempt expiry, and retained the
+existing current-schema rollback test.
+The matrix also exposed two fixture defects rather than weakening validation:
+a 2099 claim followed by a 2026 release created an impossible reversed clock,
+and bulk query-plan fixtures left active definitions without their mandatory
+frontier after Project cleanup. The fixtures now use real elapsed time and
+append exact tombstones after their assertions. Manual/scheduled identity uses
+the manual execution hook rather than the scheduled-only hook and proves the
+already-published scheduled sibling remains claimable. Bun's default test
+concurrency is deliberately not used for these shared global Database/Instance
+fixtures; the authoritative command fixes concurrency at one. Static gates, a
+new exact tree and a fresh uninvolved read-only review still gate delivery.
+
+Post-correction static evidence is green: OpenCorvus package typecheck exits
+zero and root typecheck passes all eight workspace tasks; docs report 339
+operations/25 groups, routes 6 rules/34 files, architecture 16 current
+documents, package topology ten cycle-free workspaces, control state 53 tables
+across seven fact classes, and control leases 18 owners/22 acquire sites.
+Public-package publication order passes and the three-component release family
+remains `0.0.58-beta`. Exact-index release/module/diff evidence and independent
+review remain the final pre-commit gates.
+
+The final-review correction is re-staged across 23 owned paths; the immutable
+tree identity is recorded in the external review receipt rather than in the
+tree itself. Its release gate reports five canonical mutation authorities and module topology reports
+1,103 modules, 5,529 runtime edges, no retained SCC and four clean imports.
+Cached and working diff checks pass with zero intersection; the only working
+paths are the pre-existing `session/index.ts` formatting delta and two Web
+content exclusions. A fresh uninvolved review of this exact tree remains the
+only pre-commit gate.
+
+#### Lease-grant ordinal final-review correction
+
+The next exact-tree review confirmed the Mission reservation union, attempt-to-
+lease retention and same-millisecond current-lease ordering, then found one P1
+and two P2 closure gaps. Strict transfer could still accept an attempt that
+selected an older grant from the same lease when a later renewal grant had
+already committed before that attempt. The new grant table was absent from the
+control-state inventory, and the recorded verification command split its ninth
+file into prose while incorrectly describing the preceding 73-test count.
+
+The single-source correction adds `lease_grant_ordinal` to the immutable attempt
+and binds `(lease_id, lease_grant_ordinal)` to the retained grant by composite
+foreign key. The production writer freezes the current latest ordinal and
+expiry in one transaction; live DDL requires that exact latest grant. Strict
+transfer requires the same ordinal/expiry and rejects any later ordinal whose
+grant was already visible before attempt creation, while a renewal appended
+after the attempt remains valid history. The positive test executes both orders
+and mutates the accepted transfer snapshot back to the superseded grant to prove
+rejection. `EngineControlActivationLeaseGrantTable` is now an explicit
+control-state fact inventory entry, so the checker directly covers all 53
+tables/seven fact classes. The exact nine-file command above is the sole final
+matrix command and its 73-test historical attribution now includes the schema
+contract honestly.
+
+Post-correction evidence is 27/27 tests and 112 assertions for the full
+Automation identity file, 4/4 and 34 assertions for the authority-focused set,
+and 75/75 with 323 assertions for the exact nine-file serial matrix. OpenCorvus
+package typecheck exits zero and the control-state checker reports 53 tables
+across seven allowed fact classes. Root typecheck passes all eight workspaces;
+docs, routes, architecture, package topology, control-lease ownership, public
+package order, and `0.0.58-beta` version alignment all pass. The exact-index
+release gate reports five canonical authorities and module topology reports
+1,103 modules, 5,530 runtime edges, no retained SCC and four clean imports.
+Cached/working diff checks remain clean with only the three declared working
+exclusions. A fresh uninvolved zero-finding review is the only remaining
+pre-commit gate.

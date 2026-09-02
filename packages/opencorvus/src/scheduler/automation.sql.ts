@@ -1,6 +1,10 @@
-import { check, sqliteTable, text, integer, index, primaryKey, uniqueIndex } from "drizzle-orm/sqlite-core"
+import { check, foreignKey, sqliteTable, text, integer, index, primaryKey, uniqueIndex } from "drizzle-orm/sqlite-core"
 import { sql } from "drizzle-orm"
 import { ProtocolEventTable } from "@/protocol/protocol.sql"
+import {
+  EngineControlActivationLeaseGrantTable,
+  EngineControlActivationLeaseTable,
+} from "@/engine/engine.sql"
 import { ProjectTable } from "../project/project.sql"
 import { SessionTable } from "../session/session.sql"
 
@@ -139,6 +143,28 @@ export const AutomationFireTable = sqliteTable(
   ],
 )
 
+/** Sole physical-delivery authority for one live Automation definition.
+ * Immutable definition, Fire, attempt, run and receipt rows retain business
+ * history; this row alone answers which exact Fire may be claimed next and
+ * when. Every authority change commits beside its owning durable fact. */
+export const AutomationFireFrontierTable = sqliteTable(
+  "automation_fire_frontier",
+  {
+    definition_id: text().primaryKey(),
+    automation_revision_id: text()
+      .notNull()
+      .references(() => AutomationTable.id, { onDelete: "restrict" }),
+    fire_id: text()
+      .notNull()
+      .references(() => AutomationFireTable.id, { onDelete: "restrict" }),
+    available_at: integer().notNull(),
+  },
+  (table) => [
+    uniqueIndex("automation_fire_frontier_fire_idx").on(table.fire_id),
+    index("automation_fire_frontier_due_idx").on(table.available_at, table.definition_id, table.fire_id),
+  ],
+)
+
 /** One physical claim of a logical fire. Capacity waiting and owner takeover
  * create new attempts without changing fire identity. */
 export const AutomationFireAttemptTable = sqliteTable(
@@ -148,12 +174,31 @@ export const AutomationFireAttemptTable = sqliteTable(
     fire_id: text().notNull().references(() => AutomationFireTable.id, { onDelete: "restrict" }),
     ordinal: integer().notNull(),
     owner_occurrence_id: text().notNull(),
+    lease_id: text()
+      .notNull()
+      .references(() => EngineControlActivationLeaseTable.id, { onDelete: "restrict" }),
+    /** Exact immutable grant that was current when this attempt was admitted.
+     * The ordinal disambiguates renewals that share the same wall-clock time. */
+    lease_grant_ordinal: integer().notNull(),
+    /** Exact lease boundary observed in the same writer transaction that
+     * admitted this immutable physical attempt. Later lease release must not
+     * rewrite the historical admission proof. */
+    lease_expires_at: integer().notNull(),
     time_created: integer().notNull(),
   },
   (table) => [
+    foreignKey({
+      columns: [table.lease_id, table.lease_grant_ordinal],
+      foreignColumns: [
+        EngineControlActivationLeaseGrantTable.lease_id,
+        EngineControlActivationLeaseGrantTable.ordinal,
+      ],
+      name: "automation_fire_attempt_lease_grant_fk",
+    }).onDelete("restrict"),
     uniqueIndex("automation_fire_attempt_ordinal_idx").on(table.fire_id, table.ordinal),
     index("automation_fire_attempt_owner_idx").on(table.owner_occurrence_id),
     check("automation_fire_attempt_positive_ordinal", sql`${table.ordinal}>0`),
+    check("automation_fire_attempt_positive_lease_grant_ordinal", sql`${table.lease_grant_ordinal}>0`),
   ],
 )
 
