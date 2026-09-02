@@ -137,14 +137,19 @@ describe("scheduler immutable fact control", () => {
           }).run()
           db.insert(EventJobFireTable).values({
             id: fireID,
+            definition_id: jobID,
+            queue_position: 1,
             event_job_revision_id: jobID,
             event_occurrence_id: "event-occurrence:fact",
+            causal_cycle: false,
             created_session_id: "session:fact-target",
             time_created: now + 1,
           }).run()
           db.insert(EventJobFireReceiptTable).values({
             id: Identifier.ascending("call"),
             fire_id: fireID,
+            definition_id: jobID,
+            queue_position: 1,
             outcome: "retry_wait",
             retry_at: now + 1_000,
             error: "temporary failure",
@@ -160,6 +165,8 @@ describe("scheduler immutable fact control", () => {
         Database.use((db) => db.insert(EventJobFireReceiptTable).values({
           id: Identifier.ascending("call"),
           fire_id: fireID,
+          definition_id: jobID,
+          queue_position: 1,
           outcome: "succeeded",
           message_id: "message:fact-event",
           time_created: now + 4,

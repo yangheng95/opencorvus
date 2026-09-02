@@ -342,7 +342,7 @@ export const EngineControlActivationLeaseTable = sqliteTable(
   },
   (table) => [
     index("engine_control_activation_owner_idx").on(table.target, table.target_id, table.owner_occurrence_id),
-    index("engine_control_activation_target_idx").on(table.target, table.target_id, table.time_activated),
+    index("engine_control_activation_target_idx").on(table.target, table.target_id, table.time_activated, table.id),
     index("engine_control_activation_expiry_idx").on(table.expires_at),
   ],
 )

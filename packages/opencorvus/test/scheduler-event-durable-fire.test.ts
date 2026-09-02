@@ -14,6 +14,12 @@ import {
   openMissionExecutionWithWake,
 } from "@/mission/execution-closure"
 import { ensureMissionSession } from "@/mission/session"
+import {
+  exportMysqlTransferSnapshot,
+  importMysqlTransferSnapshot,
+  MysqlTransferValidationError,
+  preflightMysqlTransferSnapshot,
+} from "@/storage/mysql-transfer"
 
 afterAll(resetMemoryDatabase)
 
@@ -52,6 +58,27 @@ async function openMissionOccurrence(
         ownerPreflight: admission.ownerPreflight,
         ownerLifecycle: admission.ownerLifecycle,
       }),
+  })
+}
+
+async function configureMissionWakeModel(): Promise<void> {
+  await Config.updateProjectPatch({
+    model: "scheduler-event-mission/wake-model",
+    provider: {
+      "scheduler-event-mission": {
+        name: "Scheduler Event Mission test",
+        npm: "@ai-sdk/openai-compatible",
+        api: "http://127.0.0.1:1/v1",
+        models: {
+          "wake-model": {
+            name: "Scheduler Event Mission model",
+            tool_call: true,
+            modalities: { input: ["text"], output: ["text"] },
+            limit: { context: 32_000, output: 4_096 },
+          },
+        },
+      },
+    },
   })
 }
 
@@ -122,7 +149,7 @@ describe("Event Job durable fact authority", () => {
     })
   }, 60_000)
 
-  test("a closed Mission fire and its terminal receipt survive acceptance crash and recovery after reopen", async () => {
+  test("a closed Mission fire survives acceptance crash and terminalizes in FIFO recovery after reopen", async () => {
     await using project = await memoryProject()
     const missionID = `event-closed-reservation-${Date.now()}`
     const first = await Instance.provide({ directory: project.path, fn: async () => {
@@ -198,21 +225,236 @@ describe("Event Job durable fact authority", () => {
       EventService.TestHooks.recoverProjectFires(Instance.project.id)
       await EventService.TestHooks.waitForIdle()
       const recovered = EventService.TestHooks.fires(Instance.project.id).find((fire) => fire.id === first.fireID)
-      expect({ first, recovered }).toMatchObject({
+      const recoveredReceipts = Database.use((db) =>
+        db.select().from(EventJobFireReceiptTable).where(eq(EventJobFireReceiptTable.fire_id, first.fireID)).all(),
+      )
+      expect({ first, recovered, recoveredReceipts }).toMatchObject({
         first: {
           fire: {
             mission_opened_event_id: null,
             mission_disposition: "mission_closed",
             mission_closure_event_id: first.closureEventID,
           },
-          receipts: [{ outcome: "disposition", disposition: "mission_closed", closure_event_id: first.closureEventID }],
+          receipts: [],
         },
         recovered: {
           status: "disposition",
           disposition: "mission_closed",
           closure_event_id: first.closureEventID,
         },
+        recoveredReceipts: [
+          { outcome: "disposition", disposition: "mission_closed", closure_event_id: first.closureEventID },
+        ],
       })
+    } })
+  }, 60_000)
+
+  test("a closed-Mission causal-cycle successor settles by its frozen Mission reservation at the FIFO head", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({ directory: project.path, fn: async () => {
+      await configureMissionWakeModel()
+      const mission = await ensureMissionSession({
+        missionID: `event-closed-cycle-${Date.now()}`,
+        defaultCwd: project.path,
+        productPillar: "work",
+        heldExpertSquadIDs: ["base"],
+      })
+      using _loop = SessionWake.TestHooks.installWakeLoopExecutor(async () => undefined)
+      await openMissionOccurrence(mission, "event-closed-cycle-open")
+      const job = await EventService.create({
+        name: "Closed Mission causal cycle",
+        eventType: TYPE,
+        prompt: "Settle the frozen closed Mission occurrence.",
+        projectId: Instance.project.id,
+        sessionId: mission.id,
+      })
+      const closed = await closeMissionExecutionOperation({
+        missionID: mission.missionID,
+        sessionID: mission.id,
+        source: "mission.abort",
+        requestID: "event-closed-cycle-close",
+        provenance: { kind: "request", surface: "api", reason: "Close before both Event reservations" },
+        signal: AbortSignal.timeout(20_000),
+      })
+      const firstOccurrenceID = `event:closed-cycle:head:${Date.now()}`
+      const secondOccurrenceID = `event:closed-cycle:successor:${Date.now()}`
+      {
+        using _crash = EventService.TestHooks.installFireAcceptedHook(() => {
+          throw new Error("simulated Event process crash before FIFO processing")
+        })
+        await expect(EventService.TestHooks.acceptEnvelope({
+          occurrenceID: firstOccurrenceID,
+          type: TYPE,
+          properties: { queue: 1 },
+        })).rejects.toThrow("simulated Event process crash")
+        const firstFireID = Database.use((db) =>
+          db.select({ id: EventJobFireTable.id }).from(EventJobFireTable)
+            .where(eq(EventJobFireTable.event_occurrence_id, firstOccurrenceID)).get()?.id,
+        )
+        if (!firstFireID) throw new Error("Closed Mission FIFO fixture omitted its first Fire")
+        await expect(EventService.TestHooks.acceptEnvelope({
+          occurrenceID: secondOccurrenceID,
+          type: TYPE,
+          properties: { queue: 2 },
+          causation: { source: "scheduler.event", occurrenceID: firstFireID },
+        })).rejects.toThrow("simulated Event process crash")
+      }
+
+      EventService.TestHooks.recoverProjectFires(Instance.project.id)
+      await EventService.TestHooks.waitForIdle()
+      const fires = EventService.TestHooks.fires(Instance.project.id).filter((fire) => fire.event_job_id === job.id)
+      expect(fires.map((fire) => ({
+        queuePosition: fire.queue_position,
+        causalCycle: fire.causal_cycle,
+        status: fire.status,
+        disposition: fire.disposition,
+        closureEventID: fire.closure_event_id,
+      }))).toEqual([
+        {
+          queuePosition: 1,
+          causalCycle: false,
+          status: "disposition",
+          disposition: "mission_closed",
+          closureEventID: closed.eventID,
+        },
+        {
+          queuePosition: 2,
+          causalCycle: true,
+          status: "disposition",
+          disposition: "mission_closed",
+          closureEventID: closed.eventID,
+        },
+      ])
+    } })
+  }, 60_000)
+
+  test("round-trips complete Event retry, terminal frontier and Mission reservation facts through strict transfer", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({ directory: project.path, fn: async () => {
+      await configureMissionWakeModel()
+      const mission = await ensureMissionSession({
+        missionID: `event-transfer-${Date.now()}`,
+        defaultCwd: project.path,
+        productPillar: "work",
+        heldExpertSquadIDs: ["base"],
+      })
+      using _loop = SessionWake.TestHooks.installWakeLoopExecutor(async () => undefined)
+      await openMissionOccurrence(mission, "event-transfer-open")
+      const missionJob = await EventService.create({
+        name: "Transferred closed Mission Event",
+        eventType: `${TYPE}.transfer.mission`,
+        prompt: "Persist an exact terminal Mission reservation.",
+        projectId: Instance.project.id,
+        sessionId: mission.id,
+      })
+      await closeMissionExecutionOperation({
+        missionID: mission.missionID,
+        sessionID: mission.id,
+        source: "mission.abort",
+        requestID: "event-transfer-close",
+        provenance: { kind: "request", surface: "api", reason: "Freeze the transfer Mission closure" },
+        signal: AbortSignal.timeout(20_000),
+      })
+      await EventService.TestHooks.acceptEnvelope({
+        occurrenceID: `event:transfer:mission:${Date.now()}`,
+        type: `${TYPE}.transfer.mission`,
+        properties: { authority: "mission" },
+      })
+      await EventService.TestHooks.waitForIdle()
+
+      const retryJob = await EventService.create({
+        name: "Transferred retry Event",
+        eventType: `${TYPE}.transfer.retry`,
+        prompt: "Persist retry and terminal receipts.",
+        projectId: Instance.project.id,
+      })
+      let attempts = 0
+      using _wake = EventService.TestHooks.installWakeExecutor(async ({ fire }) => {
+        attempts += 1
+        if (attempts === 1) throw new Error("transient transfer fixture failure")
+        return { sessionID: fire.target_session_id, messageID: `message:${fire.id}` }
+      })
+      await EventService.TestHooks.acceptEnvelope({
+        occurrenceID: `event:transfer:retry:${Date.now()}`,
+        type: `${TYPE}.transfer.retry`,
+        properties: { authority: "retry" },
+      })
+      await EventService.TestHooks.waitForIdle()
+      await Bun.sleep(1_250)
+      await EventService.TestHooks.waitForIdle()
+      expect(attempts).toBe(2)
+
+      const snapshot = exportMysqlTransferSnapshot()
+      const eventTables = new Set([
+        "event_job",
+        "event_occurrence",
+        "event_job_fire",
+        "event_job_fire_receipt",
+      ])
+      const expectedEventRows = snapshot.tables
+        .filter((table) => eventTables.has(table.name))
+        .map((table) => ({ name: table.name, rows: table.rows }))
+      const fireRows = snapshot.tables.find((table) => table.name === "event_job_fire")?.rows ?? []
+      const receiptRows = snapshot.tables.find((table) => table.name === "event_job_fire_receipt")?.rows ?? []
+      const missionFire = fireRows.find((row) => row.definition_id === missionJob.id)
+      const retryFire = fireRows.find((row) => row.definition_id === retryJob.id)
+      if (!missionFire || !retryFire) throw new Error("Strict Event transfer fixture omitted one immutable Fire")
+      expect({
+        missionJobID: missionJob.id,
+        missionReceipts: receiptRows.filter((row) => row.fire_id === missionFire.id).map((row) => ({
+          outcome: row.outcome,
+          disposition: row.disposition,
+          closureEventID: row.closure_event_id,
+        })),
+        retryOutcomes: receiptRows.filter((row) => row.fire_id === retryFire.id).map((row) => row.outcome),
+      }).toEqual({
+        missionJobID: missionFire.definition_id,
+        missionReceipts: [{
+          outcome: "disposition",
+          disposition: "mission_closed",
+          closureEventID: missionFire.mission_closure_event_id,
+        }],
+        retryOutcomes: ["retry_wait", "succeeded"],
+      })
+
+      expect(preflightMysqlTransferSnapshot(snapshot).schemaFingerprint).toBe(snapshot.schemaFingerprint)
+
+      const wrongFrontier = structuredClone(snapshot)
+      const wrongFrontierReceipt = wrongFrontier.tables
+        .find((table) => table.name === "event_job_fire_receipt")
+        ?.rows.find((row) => row.fire_id === retryFire.id && row.outcome === "retry_wait")
+      if (!wrongFrontierReceipt) throw new Error("Strict Event transfer fixture omitted its retry receipt")
+      wrongFrontierReceipt.definition_id = missionJob.id
+      expect(() => preflightMysqlTransferSnapshot(wrongFrontier)).toThrow(
+        expect.objectContaining<MysqlTransferValidationError>({
+          name: "MysqlTransferValidationError",
+          data: expect.objectContaining({ message: expect.stringContaining("invalid Fire frontier") }),
+        }),
+      )
+
+      const wrongMissionReceipt = structuredClone(snapshot)
+      const changedMissionReceipt = wrongMissionReceipt.tables
+        .find((table) => table.name === "event_job_fire_receipt")
+        ?.rows.find((row) => row.fire_id === missionFire.id)
+      if (!changedMissionReceipt) throw new Error("Strict Event transfer fixture omitted its Mission receipt")
+      Object.assign(changedMissionReceipt, {
+        disposition: "causal_cycle",
+        closure_event_id: null,
+        error: "divergent terminal disposition",
+      })
+      expect(() => preflightMysqlTransferSnapshot(wrongMissionReceipt)).toThrow(
+        expect.objectContaining<MysqlTransferValidationError>({
+          name: "MysqlTransferValidationError",
+          data: expect.objectContaining({ message: expect.stringContaining("Mission authority") }),
+        }),
+      )
+
+      expect(importMysqlTransferSnapshot(snapshot)).toMatchObject({ ok: true })
+      expect(
+        exportMysqlTransferSnapshot().tables
+          .filter((table) => eventTables.has(table.name))
+          .map((table) => ({ name: table.name, rows: table.rows })),
+      ).toEqual(expectedEventRows)
     } })
   }, 60_000)
 

@@ -2,8 +2,6 @@ import { check, sqliteTable, text, integer, index, uniqueIndex } from "drizzle-o
 import { sql } from "drizzle-orm"
 import { BusPublicationOutboxTable } from "@/bus/bus.sql"
 import { ProtocolEventTable } from "@/protocol/protocol.sql"
-import { ProjectTable } from "../project/project.sql"
-import { SessionTable } from "../session/session.sql"
 
 type Match = Record<string, string | number | boolean>
 
@@ -34,7 +32,12 @@ export const EventJobTable = sqliteTable(
   },
   (table) => [
     uniqueIndex("event_job_definition_revision_idx").on(table.definition_id, table.revision),
-    index("event_job_project_idx").on(table.project_id),
+    index("event_job_project_definition_latest_idx").on(
+      table.project_id,
+      table.definition_id,
+      table.revision,
+      table.id,
+    ),
     index("event_job_type_idx").on(table.event_type),
     index("event_job_enabled_idx").on(table.enabled),
     uniqueIndex("event_job_tool_occurrence_idx")
@@ -93,9 +96,12 @@ export const EventJobFireTable = sqliteTable(
   "event_job_fire",
   {
     id: text().primaryKey(),
+    definition_id: text().notNull(),
+    queue_position: integer().notNull(),
     event_job_revision_id: text().notNull().references(() => EventJobTable.id, { onDelete: "restrict" }),
     event_occurrence_id: text().notNull().references(() => EventOccurrenceTable.id, { onDelete: "restrict" }),
     causation_fire_id: text(),
+    causal_cycle: integer({ mode: "boolean" }).notNull().default(false),
     /** Present only when this fire pre-allocates a new Session. Existing
      * Session targets are owned by the exact definition revision. */
     created_session_id: text(),
@@ -108,13 +114,19 @@ export const EventJobFireTable = sqliteTable(
   },
   (table) => [
     uniqueIndex("event_job_fire_occurrence_idx").on(table.event_job_revision_id, table.event_occurrence_id),
+    uniqueIndex("event_job_fire_definition_frontier_idx").on(table.definition_id, table.queue_position),
+    index("event_job_fire_revision_idx").on(table.event_job_revision_id),
     index("event_job_fire_causation_idx").on(table.causation_fire_id),
-    index("event_job_fire_target_session_idx").on(table.created_session_id),
+    uniqueIndex("event_job_fire_target_session_idx")
+      .on(table.created_session_id)
+      .where(sql`${table.created_session_id} IS NOT NULL`),
     check("event_job_fire_mission_reservation_shape", sql`
       (${table.mission_opened_event_id} IS NULL AND ${table.mission_disposition} IS NULL AND ${table.mission_closure_event_id} IS NULL)
       OR (${table.mission_opened_event_id} IS NOT NULL AND ${table.mission_disposition} IS NULL AND ${table.mission_closure_event_id} IS NULL)
       OR (${table.mission_opened_event_id} IS NULL AND ${table.mission_disposition}='mission_closed' AND ${table.mission_closure_event_id} IS NOT NULL)
     `),
+    check("event_job_fire_queue_position_positive", sql`${table.queue_position}>0`),
+    check("event_job_fire_causal_cycle_shape", sql`${table.causal_cycle}=0 OR ${table.causation_fire_id} IS NOT NULL`),
   ],
 )
 
@@ -123,6 +135,8 @@ export const EventJobFireReceiptTable = sqliteTable(
   {
     id: text().primaryKey(),
     fire_id: text().notNull().references(() => EventJobFireTable.id, { onDelete: "cascade" }),
+    definition_id: text().notNull(),
+    queue_position: integer().notNull(),
     outcome: text({ enum: ["retry_wait", "succeeded", "disposition"] }).notNull(),
     disposition: text({ enum: ["causal_cycle", "cooldown", "job_disabled", "mission_closed"] }),
     closure_event_id: text().references(() => ProtocolEventTable.id, { onDelete: "restrict" }),
@@ -132,14 +146,21 @@ export const EventJobFireReceiptTable = sqliteTable(
     time_created: integer().notNull(),
   },
   (table) => [
-    index("event_job_fire_receipt_fire_idx").on(table.fire_id, table.time_created),
+    index("event_job_fire_receipt_fire_idx").on(table.fire_id, table.outcome, table.time_created, table.id),
     uniqueIndex("event_job_fire_terminal_receipt_idx").on(table.fire_id)
       .where(sql`${table.outcome} <> 'retry_wait'`),
+    uniqueIndex("event_job_fire_terminal_frontier_idx")
+      .on(table.definition_id, table.queue_position)
+      .where(sql`${table.outcome} <> 'retry_wait'`),
+    index("event_job_fire_success_frontier_idx")
+      .on(table.definition_id, table.queue_position)
+      .where(sql`${table.outcome} = 'succeeded'`),
     check("event_job_fire_receipt_shape", sql`
       (${table.outcome}='retry_wait' AND ${table.disposition} IS NULL AND ${table.closure_event_id} IS NULL AND ${table.message_id} IS NULL AND ${table.retry_at} IS NOT NULL AND ${table.error} IS NOT NULL)
       OR (${table.outcome}='succeeded' AND ${table.disposition} IS NULL AND ${table.closure_event_id} IS NULL AND ${table.message_id} IS NOT NULL AND ${table.retry_at} IS NULL AND ${table.error} IS NULL)
       OR (${table.outcome}='disposition' AND ${table.disposition} IN ('causal_cycle','cooldown','job_disabled') AND ${table.closure_event_id} IS NULL AND ${table.message_id} IS NULL AND ${table.retry_at} IS NULL)
       OR (${table.outcome}='disposition' AND ${table.disposition}='mission_closed' AND ${table.closure_event_id} IS NOT NULL AND ${table.message_id} IS NULL AND ${table.retry_at} IS NULL AND ${table.error} IS NULL)
     `),
+    check("event_job_fire_receipt_queue_position_positive", sql`${table.queue_position}>0`),
   ],
 )

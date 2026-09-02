@@ -1,6 +1,6 @@
 import { Identifier } from "@/id/id"
 import { Log } from "@/util/log"
-import { Database, and, desc, eq, gt, inArray } from "@/storage/db"
+import { Database, and, desc, eq, gt, inArray, sql } from "@/storage/db"
 import { EngineControlActivationLeaseTable, type EngineControlActivationTarget } from "./engine.sql"
 
 const log = Log.create({ service: "control-lease" })
@@ -28,15 +28,31 @@ export function currentControlLeasesInTransaction(
   for (const row of db
     .select()
     .from(EngineControlActivationLeaseTable)
-    .where(and(eq(EngineControlActivationLeaseTable.target, target), inArray(EngineControlActivationLeaseTable.target_id, ids)))
+    .where(
+      and(
+        eq(EngineControlActivationLeaseTable.target, target),
+        inArray(EngineControlActivationLeaseTable.target_id, ids),
+        sql`NOT EXISTS (
+          SELECT 1
+          FROM engine_control_activation_lease AS later
+          WHERE later.target=${EngineControlActivationLeaseTable.target}
+            AND later.target_id=${EngineControlActivationLeaseTable.target_id}
+            AND (
+              later.time_activated>${EngineControlActivationLeaseTable.time_activated}
+              OR (
+                later.time_activated=${EngineControlActivationLeaseTable.time_activated}
+                AND later.id>${EngineControlActivationLeaseTable.id}
+              )
+            )
+        )`,
+      ),
+    )
     .orderBy(
       EngineControlActivationLeaseTable.target_id,
       desc(EngineControlActivationLeaseTable.time_activated),
       desc(EngineControlActivationLeaseTable.id),
     )
-    .all()) {
-    if (!current.has(row.target_id)) current.set(row.target_id, row)
-  }
+    .all()) current.set(row.target_id, row)
   return current
 }
 

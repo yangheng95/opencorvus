@@ -3912,6 +3912,14 @@ BEGIN SELECT RAISE(ABORT, 'event_job_fire: occurrence input is immutable; append
 CREATE TRIGGER IF NOT EXISTS event_job_fire_no_delete
 BEFORE DELETE ON event_job_fire FOR EACH ROW
 BEGIN SELECT RAISE(ABORT, 'event_job_fire: occurrence history is immutable'); END;
+CREATE TRIGGER IF NOT EXISTS event_job_fire_definition_insert
+BEFORE INSERT ON event_job_fire FOR EACH ROW
+WHEN NOT EXISTS (
+  SELECT 1 FROM event_job AS definition
+  WHERE definition.id=NEW.event_job_revision_id
+    AND definition.definition_id=NEW.definition_id
+)
+BEGIN SELECT RAISE(ABORT, 'event_job_fire: definition queue authority mismatch'); END;
 CREATE TRIGGER IF NOT EXISTS event_job_fire_mission_reservation_insert
 BEFORE INSERT ON event_job_fire FOR EACH ROW
 WHEN (
@@ -4023,6 +4031,42 @@ BEGIN SELECT RAISE(ABORT, 'event_job_fire_receipt: immutable receipt'); END;
 CREATE TRIGGER IF NOT EXISTS event_job_fire_receipt_no_delete
 BEFORE DELETE ON event_job_fire_receipt FOR EACH ROW
 BEGIN SELECT RAISE(ABORT, 'event_job_fire_receipt: immutable receipt'); END;
+CREATE TRIGGER IF NOT EXISTS event_job_fire_receipt_frontier_insert
+BEFORE INSERT ON event_job_fire_receipt FOR EACH ROW
+WHEN NOT EXISTS (
+  SELECT 1 FROM event_job_fire AS fire
+  WHERE fire.id=NEW.fire_id
+    AND fire.definition_id=NEW.definition_id
+    AND fire.queue_position=NEW.queue_position
+)
+BEGIN SELECT RAISE(ABORT, 'event_job_fire_receipt: Fire frontier authority mismatch'); END;
+CREATE TRIGGER IF NOT EXISTS event_job_fire_terminal_fifo_insert
+BEFORE INSERT ON event_job_fire_receipt FOR EACH ROW
+WHEN NEW.outcome<>'retry_wait' AND NEW.queue_position<>(
+  COALESCE((
+    SELECT terminal.queue_position
+    FROM event_job_fire_receipt AS terminal
+    WHERE terminal.definition_id=NEW.definition_id
+      AND terminal.outcome<>'retry_wait'
+    ORDER BY terminal.queue_position DESC
+    LIMIT 1
+  ), 0) + 1
+)
+BEGIN SELECT RAISE(ABORT, 'event_job_fire_receipt: terminal settlement must advance the FIFO frontier'); END;
+CREATE TRIGGER IF NOT EXISTS event_job_fire_terminal_mission_reservation_insert
+BEFORE INSERT ON event_job_fire_receipt FOR EACH ROW
+WHEN EXISTS (
+  SELECT 1 FROM event_job_fire AS fire
+  WHERE fire.id=NEW.fire_id
+    AND fire.mission_disposition='mission_closed'
+    AND (
+      NEW.outcome<>'disposition'
+      OR NEW.disposition<>'mission_closed'
+      OR NEW.closure_event_id IS NOT fire.mission_closure_event_id
+      OR NEW.error IS NOT NULL
+    )
+)
+BEGIN SELECT RAISE(ABORT, 'event_job_fire_receipt: terminal Mission reservation requires its exact closure receipt'); END;
 CREATE TRIGGER IF NOT EXISTS engine_task_root_ingress_project_insert
 BEFORE INSERT ON engine_task_root_ingress FOR EACH ROW
 WHEN NOT EXISTS (

@@ -634,6 +634,11 @@ const TRANSFER_DEFERRED_CREATION_TRIGGERS = [
   "protocol_event_task_project_insert",
   "worker_turn_descriptor_task_project_insert",
   "engine_task_root_ingress_project_insert",
+  "event_job_fire_definition_insert",
+  "event_job_fire_mission_reservation_insert",
+  "event_job_fire_receipt_frontier_insert",
+  "event_job_fire_terminal_fifo_insert",
+  "event_job_fire_terminal_mission_reservation_insert",
 ] as const
 
 function beginValidatedCreationFactRestore(sqlite: BunDatabase): void {
@@ -643,10 +648,114 @@ function beginValidatedCreationFactRestore(sqlite: BunDatabase): void {
 function finishValidatedCreationFactRestore(sqlite: BunDatabase): void {
   assertNoForeignKeyViolations(sqlite)
   assertTaskControlProjectAuthority(sqlite)
+  assertEventFireSnapshotAuthority(sqlite)
   validateTaskCreationIdentitySnapshot(sqlite)
   const restored = new Set(restoreCurrentTransferTriggers(sqlite))
   for (const trigger of TRANSFER_DEFERRED_CREATION_TRIGGERS) {
     if (!restored.has(trigger)) throw new Error(`MySQL transfer did not restore current trigger ${trigger}`)
+  }
+}
+
+function assertEventFireSnapshotAuthority(sqlite: BunDatabase): void {
+  const invalidDefinition = queryAllFinalized<{ id: string }>(
+    sqlite,
+    `SELECT fire.id
+     FROM event_job_fire AS fire
+     LEFT JOIN event_job AS definition ON definition.id=fire.event_job_revision_id
+     WHERE definition.id IS NULL OR definition.definition_id<>fire.definition_id
+     ORDER BY fire.id
+     LIMIT 1`,
+  )[0]
+  if (invalidDefinition) {
+    throw new Error(`Event fire ${invalidDefinition.id} has invalid definition queue authority`)
+  }
+
+  const invalidMissionReservation = queryAllFinalized<{ id: string }>(
+    sqlite,
+    `SELECT fire.id
+     FROM event_job_fire AS fire
+     JOIN event_job AS definition ON definition.id=fire.event_job_revision_id
+     LEFT JOIN session AS target ON target.id=definition.session_id
+     LEFT JOIN protocol_event AS opened ON opened.id=fire.mission_opened_event_id
+     LEFT JOIN protocol_event AS closure ON closure.id=fire.mission_closure_event_id
+     WHERE (
+       target.kind='mission'
+       AND NOT (
+         (
+           fire.mission_opened_event_id IS NOT NULL
+           AND fire.mission_disposition IS NULL
+           AND fire.mission_closure_event_id IS NULL
+           AND opened.aggregate_type='session'
+           AND opened.aggregate_id=definition.session_id
+           AND opened.type='mission.execution.opened'
+         )
+         OR (
+           fire.mission_opened_event_id IS NULL
+           AND fire.mission_disposition='mission_closed'
+           AND fire.mission_closure_event_id IS NOT NULL
+           AND closure.aggregate_type='session'
+           AND closure.aggregate_id=definition.session_id
+           AND closure.type IN ('mission.execution.closing','mission.execution.closed')
+         )
+       )
+     ) OR (
+       COALESCE(target.kind,'')<>'mission'
+       AND (
+         fire.mission_opened_event_id IS NOT NULL
+         OR fire.mission_disposition IS NOT NULL
+         OR fire.mission_closure_event_id IS NOT NULL
+       )
+     )
+     ORDER BY fire.id
+     LIMIT 1`,
+  )[0]
+  if (invalidMissionReservation) {
+    throw new Error(`Event fire ${invalidMissionReservation.id} has invalid Mission reservation authority`)
+  }
+
+  const invalidReceipt = queryAllFinalized<{ id: string }>(
+    sqlite,
+    `SELECT receipt.id
+     FROM event_job_fire_receipt AS receipt
+     LEFT JOIN event_job_fire AS fire ON fire.id=receipt.fire_id
+     WHERE fire.id IS NULL
+       OR fire.definition_id<>receipt.definition_id
+       OR fire.queue_position<>receipt.queue_position
+       OR (
+         fire.mission_disposition='mission_closed'
+         AND (
+           receipt.outcome<>'disposition'
+           OR receipt.disposition<>'mission_closed'
+           OR receipt.closure_event_id IS NOT fire.mission_closure_event_id
+           OR receipt.error IS NOT NULL
+         )
+       )
+     ORDER BY receipt.id
+     LIMIT 1`,
+  )[0]
+  if (invalidReceipt) {
+    throw new Error(`Event receipt ${invalidReceipt.id} has invalid Fire frontier or Mission authority`)
+  }
+
+  const invalidTerminalFrontier = queryAllFinalized<{ id: string }>(
+    sqlite,
+    `WITH terminal AS (
+       SELECT receipt.id, receipt.queue_position,
+         row_number() OVER (
+           PARTITION BY receipt.definition_id
+           ORDER BY receipt.queue_position,receipt.id
+         ) AS expected_position
+       FROM event_job_fire_receipt AS receipt
+       WHERE receipt.outcome<>'retry_wait'
+     )
+     SELECT id
+     FROM terminal
+     WHERE queue_position<>expected_position
+     ORDER BY id
+     LIMIT 1`,
+  )[0]
+  if (invalidTerminalFrontier) {
+    throw new Error(`Event receipt ${invalidTerminalFrontier.id} breaks its definition terminal FIFO frontier`)
   }
 }
 

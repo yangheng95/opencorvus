@@ -219,7 +219,21 @@ Automation and Event configuration changes append immutable definition revisions
 - Automation: immutable definition revision/tombstone, logical `automation_fire`, ordered physical `automation_fire_attempt` plus attempt receipt, real `automation_run` plus ordered run receipts, and the generic Automation lease. A zero-run terminal Fire is a real public occurrence, not a synthetic run. Current writers emit only `scheduled`, `manual_api`, or Tool-bound `manual_tool` provenance. Retry identity and supersession are represented directly by current Fire, attempt and receipt facts; no current reader interprets predecessor-era successor IDs or legacy provenance;
 - Event: `event_job_fire` input plus ordered `event_job_fire_receipt` facts and leases;
 
-When either target is a Mission, the immutable run/fire reservation is a strict union committed under the same immediate writer boundary: an active target carries its exact `mission.execution.opened` event, while a target already closing or closed carries `mission_closed` plus its exact closure event and receives the matching terminal receipt in that transaction. A non-Mission target carries none of those fields. Projection validates the stored event aggregate/type and the atomic terminal receipt; it never resolves a nullable Mission row against a later reopen. Rows without an exact causal pointer are not a current-schema fact and cannot be opened.
+Event acceptance keyset-pages only the latest untombstoned definition revisions
+for the active Project and creates matching Fires under that same immediate
+writer snapshot. Each Fire receives one immutable definition-local queue
+position. A terminal receipt carries the same DDL-verified relation and may
+advance only the contiguous terminal frontier. Startup recovery, exact claim,
+same-definition handoff and lease recovery seek that frontier through the
+partial terminal index and then seek exactly its Fire successor. Each
+64-definition page loads latest retry receipts and current leases through fixed
+set queries; retained terminal Fires never enter the scheduling work set.
+Exact claim repeats that head reduction inside the immediate lease transaction,
+and a recovery timer rereads the definition frontier instead of assuming its
+seed Fire is still current. Public Event history remains an explicit history
+projection and is not reused as a scheduler selector.
+
+When either target is a Mission, the immutable run/fire reservation is a strict union committed under the same immediate writer boundary: an active target carries its exact `mission.execution.opened` event, while a target already closing or closed carries `mission_closed` plus its exact closure event. Automation writes its matching terminal run receipt at admission; Event preserves definition FIFO and writes the matching Fire receipt only when that reserved Fire becomes the head. A non-Mission target carries none of those fields. Projection validates the stored event aggregate/type and, once terminal, the exact receipt; it never resolves a nullable Mission row against a later reopen. Rows without an exact causal pointer are not a current-schema fact and cannot be opened.
 - Bus: publication/delivery inputs plus phase, attempt, and delivery receipts;
 - Session control: `session_control_record` input plus amendment/consumed/failed events.
 

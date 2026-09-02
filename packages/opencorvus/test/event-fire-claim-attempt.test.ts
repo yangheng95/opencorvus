@@ -47,8 +47,11 @@ function seedFire(input: { projectID: string; directory: string; now: number }) 
     }).run()
     db.insert(EventJobFireTable).values({
       id: fireID,
+      definition_id: jobID,
+      queue_position: 1,
       event_job_revision_id: jobID,
       event_occurrence_id: occurrenceID,
+      causal_cycle: false,
       created_session_id: `session:${fireID}`,
       time_created: input.now + 1,
     }).run()
@@ -67,7 +70,7 @@ describe("event fire claim attempt counting", () => {
       directory: project.path,
       fn: async () => {
         const now = Date.now()
-        const { fireID } = seedFire({ projectID: Instance.project.id, directory: project.path, now })
+        const { jobID, fireID } = seedFire({ projectID: Instance.project.id, directory: project.path, now })
 
         const first = EventService.TestHooks.claimFire(fireID, "owner:attempt-one")
         expect(first).toMatchObject({ id: fireID, status: "running", attempt: 1, owner_id: "owner:attempt-one" })
@@ -78,6 +81,8 @@ describe("event fire claim attempt counting", () => {
           db.insert(EventJobFireReceiptTable).values({
             id: Identifier.ascending("call"),
             fire_id: fireID,
+            definition_id: jobID,
+            queue_position: 1,
             outcome: "retry_wait",
             retry_at: now - 1,
             error: "temporary failure",

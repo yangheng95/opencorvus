@@ -249,9 +249,10 @@ const CONTROL_STATE_INVENTORY = {
     fact: ["time_created"],
   }),
   EventJobFireTable: inventory({
-    identity: ["id", "event_job_revision_id", "event_occurrence_id"],
+    identity: ["id", "definition_id", "queue_position", "event_job_revision_id", "event_occurrence_id"],
     causal: [
       "causation_fire_id",
+      "causal_cycle",
       "created_session_id",
       "mission_opened_event_id",
       "mission_disposition",
@@ -266,7 +267,7 @@ const CONTROL_STATE_INVENTORY = {
     fact: ["time_created"],
   }),
   EventJobFireReceiptTable: inventory({
-    identity: ["id", "fire_id"],
+    identity: ["id", "fire_id", "definition_id", "queue_position"],
     policy: ["retry_at"],
     receipt: ["outcome", "disposition", "closure_event_id", "message_id", "error", "time_created"],
   }),

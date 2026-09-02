@@ -17,7 +17,10 @@
 5. Physical execution capacity is bounded and work-conserving at the real activation boundary. Domain FIFO, retry, settlement, and recovery remain owned by their existing reducers; capacity admission must not become a second job framework.
 6. Add production-shaped positive tests for exact replay, cross-process collision/recovery, bounded pages/query counts, FIFO, work conservation, and Project isolation as applicable.
 7. Run focused and aggregate tests, package/root typecheck, docs/routes/control/schema/architecture/package/release/module-topology checkers, and both cached and working diff checks.
-8. Freeze an exact tree and obtain a fresh, uninvolved, read-only review. Any valid finding invalidates that tree; repeat until P0–P3 are all zero.
+8. Freeze an exact tree and obtain a fresh, uninvolved, read-only review. A
+   valid finding preserves that tree as review evidence but supersedes it as
+   the commit candidate; repeat corrections and review until P0–P3 are all
+   zero.
 9. Commit only owned paths, fetch and merge upstream, inspect the full outgoing set, run hooks, push, and verify zero ahead/behind.
 
 ### Hard constraints and ownership
@@ -1242,3 +1245,261 @@ Post-correction freeze evidence:
 
 This freeze is review input, not delivery. A fresh uninvolved reviewer must
 return no unresolved P0-P3 finding before commit.
+
+### Cut 8b.2 — B9 Event bounded current frontier
+
+#### Recall
+
+- **User requirement:** continue from the pushed scheduling ledger until every
+  real problem is closed, then run one exact-remote end-to-end Mission and
+  inspect its complete scheduling trajectory before release. Do not reopen or
+  delay already delivered cuts.
+- **Acceptance:** Event definition discovery is Project-scoped and keyset
+  paged; every production recovery, claim, same-job handoff and lease-recovery
+  path reduces the same bounded unresolved FIFO head; retained terminal history
+  does not enter that hot set; restart and multiple Projects preserve identical
+  due work; query stages and plans are proven on the production queries.
+- **Hard constraints:** immutable Event definitions, occurrences, Fires,
+  receipts and generic control leases remain the only facts. Add no head table,
+  mutable projection, process-local cache, compatibility reader, generic queue
+  or second scheduler. Explicit history APIs may still project retained
+  history, but scheduling paths may not call that history projector.
+- **Sources read:** the complete B9 selection above; current
+  `event-service.ts`, `event-projection.ts`, `event.sql.ts`, generic control
+  lease implementation and schema; Event durable-fire, claim-attempt,
+  scheduler fact-control and schema/index tests; all current references to
+  `currentEventDefinitions`, `projectEventJobInTransaction`,
+  `projectEventFireInTransaction`, `recoverProjectFires`, `claimFire`,
+  `enqueueNextFireForJob` and `scheduleLeaseRecovery`.
+- **Independent feedback:** the C1/C2 correction reviewer rechecked committed
+  source and proved B9 Event was not part of `4abdaea58`; current Event still
+  loads all definition revisions and Fire histories on scheduling paths. It
+  did not participate in this implementation.
+
+#### Current-source root analysis
+
+The observable cost is not one large public history response. A single Bus
+event calls `currentEventDefinitions`, which materializes every revision and
+then performs one tombstone query per definition before full-history job
+projection. Startup and rollback recovery scan every Fire in the database and
+project every receipt and lease. An exact claim and every same-job handoff scan
+all Fires again, and lease recovery repeats a per-job version of the same
+projection. Retained terminal history therefore increases the one-event,
+one-claim and one-heartbeat cost after every restart.
+
+The direct trigger is reuse of `projectEventJobInTransaction` and
+`projectEventFireInTransaction`—explicit history/view projectors—as the
+scheduler's current-work selector. The data-flow root is the absence of a SQL
+current-definition page and unresolved-fire head. FIFO correctness is then
+reconstructed in JavaScript from permanent history, so the runtime maps and
+physical-capacity permits can limit concurrent effects but cannot bound the DB
+work needed to discover one effect. Increasing caches or indexes around the
+same `.all()` readers would retain the wrong authority and would still regress
+on restart.
+
+#### Selected single-source design
+
+1. A Project-scoped definition query selects only the newest untombstoned row
+   for each `definition_id`, ordered by `(definition_id, revision, id)` and
+   limited to 64 plus one cursor row. Event matching and Fire creation stream
+   those pages inside one immediate writer snapshot, so definition/tombstone,
+   one-shot settlement and accepted Fire have one serial order. A fixed page
+   query determines completed one-shot definitions; no per-row tombstone or
+   Fire history query remains.
+2. Every immutable Fire carries its definition-local monotonic queue position,
+   allocated for the selected definition set in one fixed query inside the
+   existing immediate acceptance transaction. Every terminal receipt carries
+   the same definition and queue-position relation, enforced against its Fire
+   by current-schema DDL. A partial terminal-frontier index seeks the latest
+   contiguous terminal position, and the Fire index seeks exactly position
+   `terminal + 1`; retained terminal rows are never walked to prove the head.
+   It returns at most one FIFO head per definition in a Project-scoped page.
+   Latest retry receipt and current lease are loaded only for those selected
+   IDs in fixed set queries. Attempt count and first-start time are aggregate
+   queries only when the exact selected Fire is projected or claimed; lease
+   history is never materialized.
+3. Recovery pages only these heads. Exact claim re-runs the same head reduction
+   for its Fire inside the immediate lease-acquire transaction. Success or
+   disposition asks the same reducer for that job's next head. A lease-recovery
+   timer is definition-level even when seeded by one Fire: when it wakes it
+   rereads and enqueues the then-current head. Therefore a remote owner crash
+   after terminal commit but before its process-local handoff cannot strand the
+   successor. Lease recovery derives its deadline from the same selected head
+   instead of scanning that job's Fire history. Process settlement enumerates
+   Project IDs from the same bounded unresolved pages.
+4. The explicit Event list/fire views retain immutable history semantics, but
+   exact Fire projection uses latest-receipt and aggregate lease queries rather
+   than loading full child arrays. No production scheduler entry calls the
+   retained-history job projector.
+5. Composite definition/Fire indexes serve the exact Project, definition and
+   Fire-order joins. The terminal receipt remains the sole absorbing boundary;
+   retry receipts and generic control leases remain immutable facts rather
+   than copied current state.
+
+#### Positive verification plan
+
+- Create more than two definition pages across two Projects with historical
+  revisions and tombstones; production matching sees every and only current
+  definition in the active Project with fixed query stages per page.
+- Retain hundreds of terminal Fires plus multiple unresolved Fires per job;
+  production recovery selects exactly one FIFO head per job, hands off the next
+  after settlement, and keeps the due set identical after runtime restart.
+- Prove pending, live-running, expired-owner and future-retry heads; exact claim
+  revalidates under the writer transaction and cannot skip an older head.
+- Exercise accept, startup/rollback recovery, claim, next-fire and lease
+  recovery through production hooks; none may invoke the retained-history
+  selector.
+- Run `EXPLAIN QUERY PLAN` against the exported production queries and prove the
+  Project/definition, Fire order, terminal receipt, retry receipt and current
+  lease indexes. Reject a 65-ID set before issuing child queries.
+- Run the complete affected non-UI Event matrix, OpenCorvus/root typecheck,
+  docs/routes/control/schema/architecture/package/release/module-topology
+  checks, precision staging and a fresh uninvolved read-only review before
+  commit and push. Cut 8b.3 Automation starts only from that pushed baseline.
+
+#### Implementation evidence before first independent review
+
+The final affected non-UI matrix reaches its natural terminal result with
+84/84 tests and 309 assertions across ten files. The new production-frontier
+file contributes 4/4 tests and 22 assertions: 129 current definitions across
+three pages and two Projects, fixed definition/one-shot and head/retry/lease
+query stages, 260 retained terminal Fires plus 65 FIFO heads, exact queued-head
+claim refusal, a real 65-definition recovery and next-Fire handoff, sibling
+Project isolation, and first-run versus predecessor cooldown behavior. Existing
+Event Mission reservation, durable Fire/retry/replay, Automation frontier,
+generic lease, Session deletion, Task wait and current-schema contracts remain
+green in the same run.
+
+OpenCorvus package typecheck passes, and root typecheck passes all eight
+workspace tasks. Docs pass at 339 operations / 25 groups, routes at 6 rules /
+34 files, architecture at 16 current documents, package topology at ten
+workspaces, control leases at 18 owners / 22 acquisition sites, control-state
+redundancy at 51 tables / seven allowed classes, and the three-component
+release family remains `0.0.58-beta`. Pre-evidence exact index tree
+`d5e0c8676c131cd54a77d37ce1388f56a44baf6d` passes release mutation with five
+canonical authorities and module topology with 1,102 modules, 5,523 runtime
+edges, no retained strongly connected component and four clean imports. The
+only working-only exclusions are the pre-existing `session/index.ts` formatting
+change and two Web content changes. This evidence paragraph is staged next;
+the resulting exact tree is the sole input to a fresh uninvolved read-only
+review, and commit remains contingent on zero unresolved P0-P3 findings.
+
+#### First exact-tree review corrections
+
+The uninvolved review of exact tree
+`824dffb52cc4edd992387715707c8c13a2a2840e` returned P0=0, P1=1, P2=1 and
+preserves that tree as the evidence for these corrections:
+
+- the timer seeded by a remote FIFO head stopped when that exact Fire became
+  terminal. A crash between terminal commit and the owner's process-local
+  `enqueueNextFireForJob` therefore left the successor pending with no recovery
+  owner;
+- the anti-join query returned only 64 heads but still walked all retained
+  terminal Fires to find each one. The test explained a handwritten similar
+  query rather than the exact production statement and used only four terminal
+  rows per definition.
+
+The correction keeps the same immutable facts and no head table. It adds the
+definition-local queue relation and terminal-frontier indexes described above,
+uses one exported SQL statement for both production and `EXPLAIN QUERY PLAN`,
+and adds a positive remote-terminal crash cut plus deep retained-history
+fixture. The old snapshot is not a delivery candidate, but neither its green
+evidence nor another agent's delivered work is reopened.
+
+#### Correction verification before repeated review
+
+The corrected non-UI matrix reaches its natural terminal result with 65/65
+tests and 250 assertions across nine files. `event-current-frontier` contributes
+6/6 tests and 29 assertions. Its retained-history fixture keeps 1,024 terminal
+Fires before one head, and `EXPLAIN QUERY PLAN` runs the exported production
+head statement itself: it seeks `event_job_fire_terminal_frontier_idx` and
+`event_job_fire_definition_frontier_idx` and uses no temporary B-tree. The
+terminal crash cut arms recovery for a remote-owned head, commits its terminal
+receipt and lease release, omits the owner's handoff, and proves that the
+surviving timer rereads the definition frontier and executes only the
+successor. A separate causal-cycle case proves that an admission disposition
+cannot terminalize ahead of its older FIFO head. The 65-definition multipage
+recovery now completes both same-definition Fires without a second explicit
+recovery sweep.
+
+OpenCorvus package typecheck exits zero and root typecheck passes all eight
+workspace tasks. Docs pass at 339 operations / 25 groups, routes at 6 rules /
+34 files, architecture at 16 current documents, package topology at ten
+workspaces, control leases at 18 owners / 22 acquisition sites, control-state
+redundancy at 51 tables / seven allowed fact classes, version alignment at
+`0.0.58-beta`, and public-package publication order is clean. Exact staged tree
+`336827bdcad32db116106c882b644ca71f776c5a` passes release mutation with five
+canonical authorities and module topology with 1,102 modules, 5,523 runtime
+edges, no retained strongly connected component and four clean imports.
+
+The staged closure contains fourteen owned Event/schema/test/document paths.
+The pre-existing `session/index.ts` formatting delta and two Web content files
+remain working-only with zero cached intersection. This evidence update creates
+the next exact review tree; it receives the same diff, docs, release and module
+checks before a fresh uninvolved read-only review.
+
+#### Repeated-review transfer and disposition corrections
+
+The uninvolved review of exact tree
+`76fabc03cade92563dfc2715aea764305f1fd2de` confirmed the definition-frontier
+timer and indexed point-seek corrections, then found two remaining current
+contract gaps. The canonical MySQL transfer table order restores Event receipts
+and Fires before their referenced Event definitions and target Sessions, while
+the new live insert triggers were not part of the existing validated snapshot
+restore boundary. A strict current snapshot containing Event history therefore
+could not be replayed. Separately, a Fire could persist both a terminal Mission
+reservation and `causal_cycle`; runtime disposition precedence selected the
+cycle even though the immutable Mission authority requires the exact
+`mission_closed` receipt.
+
+The correction reuses the existing validated creation-fact restore primitive:
+all four Event creation-order triggers are deferred only inside the transfer
+transaction, a complete set-based validator proves definition/queue authority,
+Mission reservation ownership, receipt/Fire identity, contiguous terminal FIFO
+positions and terminal Mission receipt equivalence, and the current triggers
+are restored before commit. No alternate insertion order, fallback reader or
+transfer-only repair is introduced. The same Mission receipt equivalence is
+enforced by the live receipt trigger. Runtime processing gives the already
+frozen terminal Mission reservation precedence over causal-cycle disposition.
+
+Positive acceptance must round-trip a strict current snapshot containing a
+definition, occurrence, queued Fires, retry and terminal receipts, plus an
+actual Mission-target Fire, then reproduce the exact immutable rows after
+import. A separate FIFO case must place a closed-Mission causal-cycle successor
+behind an older head and prove that it settles once, at its queue position, as
+`mission_closed` with the frozen closure event. Mutated transfer snapshots must
+fail typed preflight when either frontier or Mission receipt authority diverges.
+
+The corrected nine-file affected matrix reaches its natural terminal result
+with 78/78 tests and 272 assertions. The two new production-shaped contracts
+pass independently: a real closed Mission produces two accepted FIFO Fires,
+the causal-cycle successor reaches queue position two and both settle against
+the one frozen closure event; a second case writes a closed-Mission Fire and a
+separate Event Fire with retry plus success receipts, preflights and imports the
+strict current MySQL snapshot, and reproduces all Event tables byte-for-byte.
+Typed divergent-frontier and divergent-Mission snapshot inputs are rejected by
+the same preflight transaction before database replacement.
+
+OpenCorvus package typecheck exits zero and root typecheck passes all eight
+workspace tasks. Docs pass at 339 operations / 25 groups, routes at 6 rules /
+34 files, architecture at 16 current documents, package topology at ten
+workspaces, control leases at 18 owners / 22 acquisition sites, control-state
+redundancy at 51 tables / seven allowed fact classes, version alignment remains
+`0.0.58-beta`, and public-package publication order is clean. Pre-evidence
+exact staged tree `2513c3eb2d8a369f2e51e95a471578df5e16965e` passes release mutation
+with five canonical authorities and module topology with 1,102 modules, 5,523
+runtime edges, no retained strongly connected component and four clean
+imports. The evidence paragraph alone changes the next review tree; code,
+tests and all three working-only exclusions remain otherwise frozen.
+
+The uninvolved final review of exact tree
+`5b3e766d8e6365cabcdde08898fc85dbae6a0e41` returns FINAL PASS with P0-P3 all
+zero. The reviewer independently reproduced 37/37 core tests with 163
+assertions, OpenCorvus and root typecheck, docs/routes/architecture/control/
+package/release/publication checks, and exact-index module topology. It
+confirmed that preflight and apply share the one transactional restore path,
+all five deferred triggers are restored before commit, validator or restore
+failure rolls back without repair, the live closed-Mission receipt trigger is
+fail-closed, and both new production-shaped cases exercise the actual runtime
+and database replacement boundaries. This review record is documentation only;
+the reviewed production and test blobs remain unchanged.
