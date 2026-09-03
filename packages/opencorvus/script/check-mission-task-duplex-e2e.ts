@@ -110,6 +110,7 @@ const [
     projectMissionTaskDuplexControlStateInTransaction,
     missionTaskDuplexProgressKey,
     missionTaskDuplexToolHealth,
+    missionTaskDuplexTrajectoryEvidence,
     missionTaskDuplexUsageOwnerRequirements,
   },
   { requireMissionSession },
@@ -190,6 +191,7 @@ let evidence:
       terminalOrder: ReturnType<typeof assertMissionTaskTerminalOrder>
       finalArtifactID: string
       usageByAgent: ReturnType<typeof missionTaskDuplexFinalEvidenceState>["usageByAgent"]
+      trajectoryEvidence: ReturnType<typeof missionTaskDuplexTrajectoryEvidence>
       messageCount: number
       toolPartCount: number
     }
@@ -662,6 +664,24 @@ while (Date.now() < activityDeadline.deadlineMs && Date.now() < absoluteDeadline
           terminalOrder,
           finalArtifactID: finalEvidence.finalArtifactID,
           usageByAgent: finalEvidence.usageByAgent,
+          trajectoryEvidence: missionTaskDuplexTrajectoryEvidence({
+            missionCreatedAtMs: missionProjection.created,
+            missionCompletedAtMs: missionProjection.completion.timeRecorded,
+            tasks: [taskA, taskB].map((task) => ({
+              createdAtMs: task.time_created,
+              completedAtMs: task.time_completed!,
+            })),
+            schedulerEvents: snapshot.events.map((event) => ({ emittedAtMs: event.emitted_at })),
+            messages: snapshot.messages.map((message) => ({
+              id: message.id,
+              role: message.data.role,
+              agentID: message.data.role === "assistant" ? message.data.agent : undefined,
+            })),
+            toolRequests: snapshot.toolRequests.map((request) => ({
+              messageID: request.message_id,
+              tool: request.data.tool,
+            })),
+          }),
           messageCount: snapshot.messages.length,
           toolPartCount: snapshot.toolParts.length,
         }
@@ -732,6 +752,11 @@ while (Date.now() < activityDeadline.deadlineMs && Date.now() < absoluteDeadline
       toolPartCount: evidence.toolPartCount,
       failedToolPartCount: 0,
       exactSchedulerEventSet: true,
+      phaseTiming: {
+        milestones: evidence.trajectoryEvidence.milestones,
+        durationsMs: evidence.trajectoryEvidence.durationsMs,
+      },
+      toolCallsByAgent: evidence.trajectoryEvidence.toolCallsByAgent,
     },
     usageByAgent: evidence.usageByAgent,
     turnArtifactMessageIDs: turnArtifacts.flatMap((entry) => (entry.messageID ? [entry.messageID] : [])),

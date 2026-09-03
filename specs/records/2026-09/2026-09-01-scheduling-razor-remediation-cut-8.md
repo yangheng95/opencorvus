@@ -3042,3 +3042,53 @@ canonical authorities, module topology repeats at 1,103 modules, 5,531 runtime
 edges, no retained strongly connected component and four clean imports, and
 both cached and working diff checks pass. The three pre-existing excluded paths
 still have zero cached intersection.
+
+##### Exact-remote trajectory evidence projection
+
+The exact-remote acceptance contract above requires the result itself to expose
+the evidence needed to distinguish functional convergence from an expensive
+per-wake loop. The existing checker recorded aggregate Tool, Message and token
+counts but did not record Tool names by producing agent or persisted phase
+timing. Repeating the Provider run without that projection would leave the
+native-transport outcome dependent on a manual database reconstruction.
+
+The checker now derives one read-only trajectory projection from its terminal
+database snapshot. Every Tool request is joined to its parent assistant Message
+and grouped by canonical assistant agent and Tool name. Phase milestones come
+from persisted Mission Session creation, first persisted Task creation, first
+and last scheduler events, last child-Task completion and the durable Mission
+completion receipt; the result records both those timestamps and their six
+named elapsed durations. Each Task's completion is checked against its own
+creation before aggregation. An unmatched Tool request parent or an impossible
+negative duration fails the evidence projection instead of being hidden under
+an unknown bucket. No scheduler input, Host gate, cache, runtime policy or
+acceptance state was added.
+
+The positive snapshot contract passes 5/5 tests with 19 assertions and proves
+the exact sorted per-agent Tool-name counts plus all milestone and duration
+fields. OpenCorvus package typecheck passes after integration into the real
+Provider checker. A scoped exact-tree review and normal push are still required
+before the next Provider run; that run must assemble the pushed source from the
+existing dependency cache without invoking an installer.
+
+The first uninvolved review of trajectory-evidence tree
+`f480ae948f39b88aa50509d760f03d7d870d1c55` returned P0=0, P1=2, P2=0 and
+P3=0. The process-local pre-request clock could not be reconstructed from the
+retained database, and aggregate minimum/maximum Task times could hide one
+Task whose completion preceded its own creation. The corrected projection uses
+the persisted Mission Session creation as its sole start milestone and checks
+every Task's creation/completion pair before calculating aggregate phases. The
+same positive contract now covers the typed impossible-time result, and the
+focused 5/5 matrix, package typecheck and docs checker pass again. Because the
+review findings changed the evidence implementation, a newly frozen tree and
+fresh zero-finding review remain required before commit.
+
+The corrected implementation tree is
+`7542f6d2a3eb520a7976889a313cda775681d379`. A fresh uninvolved read-only
+reviewer returned FINAL PASS with P0=0, P1=0, P2=0 and P3=0, independently
+repeating the focused 5/5 tests with 19 assertions and OpenCorvus package
+typecheck. The review verified the persisted Mission creation authority, each
+Task's independent time ordering, missing Tool-parent failure, deterministic
+agent/Tool ordering, real result integration and zero cached intersection with
+the three excluded working paths. The tree remained exact after review and the
+reviewer made no edits or external calls.

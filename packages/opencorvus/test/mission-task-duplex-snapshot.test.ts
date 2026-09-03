@@ -19,6 +19,7 @@ import {
   missionTaskDuplexActivityKey,
   missionTaskDuplexProgressKey,
   missionTaskDuplexToolHealth,
+  missionTaskDuplexTrajectoryEvidence,
   missionTaskDuplexUsageOwnerRequirements,
   observeMissionTaskDuplexActivity,
   projectMissionTaskDuplexControlStateInTransaction,
@@ -31,6 +32,84 @@ afterEach(async () => {
 })
 
 describe("Mission Task duplex snapshot", () => {
+  test("reports persisted phase timing and per-agent Tool-name counts", () => {
+    expect(
+      missionTaskDuplexTrajectoryEvidence({
+        missionCreatedAtMs: 1_000,
+        missionCompletedAtMs: 9_000,
+        tasks: [
+          { createdAtMs: 2_000, completedAtMs: 7_000 },
+          { createdAtMs: 2_500, completedAtMs: 8_000 },
+        ],
+        schedulerEvents: [
+          { emittedAtMs: 3_000 },
+          { emittedAtMs: 6_000 },
+        ],
+        messages: [
+          { id: "message-mission", role: "assistant", agentID: "mission" },
+          { id: "message-orchestrator-a", role: "assistant", agentID: "orchestrator" },
+          { id: "message-orchestrator-b", role: "assistant", agentID: "orchestrator" },
+        ],
+        toolRequests: [
+          { messageID: "message-mission", tool: "scheduler_message" },
+          { messageID: "message-mission", tool: "mission_state" },
+          { messageID: "message-mission", tool: "mission_state" },
+          { messageID: "message-orchestrator-a", tool: "scheduler_message" },
+          { messageID: "message-orchestrator-b", tool: "no_action" },
+        ],
+      }),
+    ).toEqual({
+      milestones: {
+        missionCreatedAtMs: 1_000,
+        firstTaskCreatedAtMs: 2_000,
+        firstSchedulerEventAtMs: 3_000,
+        lastSchedulerEventAtMs: 6_000,
+        tasksTerminalAtMs: 8_000,
+        missionCompletedAtMs: 9_000,
+      },
+      durationsMs: {
+        missionToFirstTask: 1_000,
+        missionToFirstSchedulerEvent: 2_000,
+        schedulerEventWindow: 3_000,
+        taskLifecycleWindow: 6_000,
+        tasksTerminalToMissionCompletion: 1_000,
+        missionToCompletion: 8_000,
+      },
+      toolCallsByAgent: [
+        {
+          agentID: "mission",
+          totalCalls: 3,
+          tools: [
+            { tool: "mission_state", count: 2 },
+            { tool: "scheduler_message", count: 1 },
+          ],
+        },
+        {
+          agentID: "orchestrator",
+          totalCalls: 2,
+          tools: [
+            { tool: "no_action", count: 1 },
+            { tool: "scheduler_message", count: 1 },
+          ],
+        },
+      ],
+    })
+
+    expect(() =>
+      missionTaskDuplexTrajectoryEvidence({
+        missionCreatedAtMs: 1_000,
+        missionCompletedAtMs: 9_000,
+        tasks: [
+          { createdAtMs: 2_000, completedAtMs: 7_000 },
+          { createdAtMs: 5_000, completedAtMs: 4_000 },
+        ],
+        schedulerEvents: [{ emittedAtMs: 3_000 }],
+        messages: [],
+        toolRequests: [],
+      }),
+    ).toThrow("Mission Task duplex Task 2 completion cannot precede creation")
+  })
+
   test("resolves Task-root usage requirements to their exact orchestrator child Sessions", () => {
     expect(
       missionTaskDuplexUsageOwnerRequirements({

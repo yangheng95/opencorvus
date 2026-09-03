@@ -29,6 +29,96 @@ export type MissionTaskDuplexUsageOwner = {
   agentID: "mission" | "orchestrator"
 }
 
+function compareIdentity(left: string, right: string) {
+  return left < right ? -1 : left > right ? 1 : 0
+}
+
+export function missionTaskDuplexTrajectoryEvidence(input: {
+  missionCreatedAtMs: number
+  missionCompletedAtMs: number
+  tasks: readonly { createdAtMs: number; completedAtMs: number }[]
+  schedulerEvents: readonly { emittedAtMs: number }[]
+  messages: readonly { id: string; role: string; agentID?: string }[]
+  toolRequests: readonly { messageID: string; tool: string }[]
+}) {
+  if (input.tasks.length === 0 || input.schedulerEvents.length === 0) {
+    throw new Error("Mission Task duplex trajectory requires Task and scheduler-event milestones")
+  }
+  const times = [
+    ["Mission creation", input.missionCreatedAtMs],
+    ["Mission completion", input.missionCompletedAtMs],
+    ...input.tasks.flatMap((task, index) => [
+      [`Task ${index + 1} creation`, task.createdAtMs] as const,
+      [`Task ${index + 1} completion`, task.completedAtMs] as const,
+    ]),
+    ...input.schedulerEvents.map((event, index) => [`scheduler event ${index + 1}`, event.emittedAtMs] as const),
+  ] as const
+  for (const [label, value] of times) {
+    if (!Number.isSafeInteger(value) || value < 0) {
+      throw new Error(`Mission Task duplex ${label} time must be a non-negative safe integer`)
+    }
+  }
+  for (const [index, task] of input.tasks.entries()) {
+    if (task.completedAtMs < task.createdAtMs) {
+      throw new Error(`Mission Task duplex Task ${index + 1} completion cannot precede creation`)
+    }
+  }
+
+  const firstTaskCreatedAtMs = Math.min(...input.tasks.map((task) => task.createdAtMs))
+  const tasksTerminalAtMs = Math.max(...input.tasks.map((task) => task.completedAtMs))
+  const firstSchedulerEventAtMs = Math.min(...input.schedulerEvents.map((event) => event.emittedAtMs))
+  const lastSchedulerEventAtMs = Math.max(...input.schedulerEvents.map((event) => event.emittedAtMs))
+  const durationsMs = {
+    missionToFirstTask: firstTaskCreatedAtMs - input.missionCreatedAtMs,
+    missionToFirstSchedulerEvent: firstSchedulerEventAtMs - input.missionCreatedAtMs,
+    schedulerEventWindow: lastSchedulerEventAtMs - firstSchedulerEventAtMs,
+    taskLifecycleWindow: tasksTerminalAtMs - firstTaskCreatedAtMs,
+    tasksTerminalToMissionCompletion: input.missionCompletedAtMs - tasksTerminalAtMs,
+    missionToCompletion: input.missionCompletedAtMs - input.missionCreatedAtMs,
+  }
+  for (const [label, value] of Object.entries(durationsMs)) {
+    if (value < 0) throw new Error(`Mission Task duplex ${label} duration cannot be negative`)
+  }
+
+  const agentByMessageID = new Map(
+    input.messages
+      .filter((message) => message.role === "assistant" && message.agentID)
+      .map((message) => [message.id, message.agentID!] as const),
+  )
+  const counts = new Map<string, Map<string, number>>()
+  for (const request of input.toolRequests) {
+    const agentID = agentByMessageID.get(request.messageID)
+    if (!agentID) {
+      throw new Error(`Mission Task duplex Tool request parent ${request.messageID} has no assistant agent`)
+    }
+    const tools = counts.get(agentID) ?? new Map<string, number>()
+    tools.set(request.tool, (tools.get(request.tool) ?? 0) + 1)
+    counts.set(agentID, tools)
+  }
+  const toolCallsByAgent = [...counts.entries()]
+    .sort(([left], [right]) => compareIdentity(left, right))
+    .map(([agentID, tools]) => ({
+      agentID,
+      totalCalls: [...tools.values()].reduce((total, count) => total + count, 0),
+      tools: [...tools.entries()]
+        .sort(([left], [right]) => compareIdentity(left, right))
+        .map(([tool, count]) => ({ tool, count })),
+    }))
+
+  return {
+    milestones: {
+      missionCreatedAtMs: input.missionCreatedAtMs,
+      firstTaskCreatedAtMs,
+      firstSchedulerEventAtMs,
+      lastSchedulerEventAtMs,
+      tasksTerminalAtMs,
+      missionCompletedAtMs: input.missionCompletedAtMs,
+    },
+    durationsMs,
+    toolCallsByAgent,
+  }
+}
+
 export function missionTaskDuplexUsageOwnerRequirements(input: {
   missionSessionID: string
   taskRootSessionIDs: readonly string[]
