@@ -1,6 +1,6 @@
 import { afterAll, describe, expect, test } from "bun:test"
 import { capabilityRef } from "@opencorvus-ai/util/capability-ref"
-import { asSchema } from "ai"
+import { asSchema, tool as aiTool } from "ai"
 import path from "node:path"
 import { DispatchAdapterContractRegistry, type AgentDispatchAdapterID } from "../../src/agent/dispatch-adapter-contract"
 import { PrimaryAssistantRegistry } from "../../src/agent/primary-assistant-registry"
@@ -20,7 +20,6 @@ import { SessionLoop } from "../../src/session/loop"
 import { MessageStore } from "../../src/session/message-store"
 import { CapabilitySearchTool } from "../../src/tool/capability-search"
 import { createAiSdkToolFromInfo } from "../../src/tool/ai-sdk-adapter"
-import { createPublishInteractiveArtifactAiTool } from "../../src/tool/publish-interactive-artifact"
 import { ToolRegistry } from "../../src/tool/registry"
 import {
   ActivatedCapability,
@@ -336,84 +335,122 @@ describe("search-native Tool definition budgets", () => {
     })
   }, 0)
 
-  test("admits the exact interactive artifact publication leaf beside capability search", async () => {
-    const capabilitySearch = await createAiSdkToolFromInfo({
-      info: CapabilitySearchTool,
-      agent: "mission",
-      taskID: "tsk_artifact_tool_budget",
+  test("admits grouped Mission terminal reconciliation while keeping publication isolated", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const config = await Config.get()
+        const runtime = sessionRuntimeFromNativeAgent(await PrimaryAssistantRegistry.get("mission", { config }))
+        const auditToolIDs = ["panel_query_task", "panel_query_task_artifacts", "panel_read_task_artifact"] as const
+        const completionToolIDs = [...auditToolIDs, "panel_complete_mission"] as const
+        const allToolIDs = [...completionToolIDs, "publish_interactive_artifact"] as const
+        const measurements: Array<{
+          provider: string
+          group: "audit" | "completion" | "publication"
+          chars: number
+          tokens: number
+        }> = []
+
+        for (const model of providerModels()) {
+          const capabilitySearch = await createAiSdkToolFromInfo({
+            info: CapabilitySearchTool,
+            agent: "mission",
+            taskID: "tsk_mission_terminal_tool_budget",
+          })
+          const searchDefinition = normalizedProviderToolDefinition(
+            "capability_search",
+            SessionLoop.prepareProviderTool({
+              name: "capability_search",
+              source: "registry",
+              model,
+              tool: capabilitySearch,
+            }),
+          )
+          const materialized = await ToolRegistry.exactRuntimeTools(
+            { providerID: model.providerID, modelID: model.id },
+            runtime,
+            "mission",
+            config,
+            allToolIDs,
+          )
+          const definitions = new Map(
+            materialized.map((tool) => [
+              tool.id,
+              normalizedProviderToolDefinition(
+                tool.id,
+                SessionLoop.prepareProviderTool({
+                  name: tool.id,
+                  source: "registry",
+                  model,
+                  tool: aiTool({ description: tool.description, inputSchema: tool.parameters }),
+                }),
+              ),
+            ]),
+          )
+          const prior = foldCapabilityRevealReceipts({
+            occurrenceID: `msg_mission_terminal_tool_budget_${model.providerID}`,
+            parts: [],
+            harnessProjectionHash: "3".repeat(64),
+            catalogSnapshotRef: `artifact:mission-terminal-tool-budget:${model.providerID}`,
+            catalogSnapshotHash: "4".repeat(64),
+            baseDefinition: capabilityRevealBaseDefinitions([searchDefinition]),
+          })
+          const candidate = (toolIDs: readonly string[], binding: string) =>
+            reduceCapabilityRevealCandidate({
+              prior,
+              deactivateRefs: [],
+              activated: toolIDs.map((toolID) => {
+                const definition = definitions.get(toolID)
+                if (!definition) throw new Error(`Missing normalized Mission Tool definition ${toolID}`)
+                const ref = capabilityRef({
+                  kind: "tool",
+                  source: "platform",
+                  owner_ref: "tool-registry",
+                  local_ref: toolID,
+                })
+                return ActivatedCapability.parse({
+                  requested_ref: ref,
+                  executable_ref: ref,
+                  provider_name: toolID,
+                  definition,
+                  definition_digest: providerToolDefinitionDigest(definition),
+                  payload_chars: providerToolDefinitionChars(definition),
+                  payload_tokens: providerToolDefinitionTokens(definition),
+                  materializer_binding_digest: binding.repeat(64),
+                })
+              }),
+            })
+
+          for (const [group, toolIDs, binding] of [
+            ["audit", auditToolIDs, "5"],
+            ["completion", completionToolIDs, "6"],
+            ["publication", ["publish_interactive_artifact"], "7"],
+          ] as const) {
+            const result = candidate(toolIDs, binding)
+            expect([...result.active.values()].map((entry) => entry.provider_name).sort()).toEqual(
+              [...toolIDs].sort(),
+            )
+            expect(result.payloadChars).toBeLessThanOrEqual(CAPABILITY_REVEAL_MAX_ACTIVE_CHARS)
+            expect(result.payloadTokens).toBeLessThanOrEqual(CAPABILITY_REVEAL_MAX_ACTIVE_TOKENS)
+            measurements.push({
+              provider: model.providerID,
+              group,
+              chars: result.payloadChars,
+              tokens: result.payloadTokens,
+            })
+          }
+        }
+
+        expect(measurements.map(({ provider, group }) => `${provider}:${group}`).sort()).toEqual([
+          "anthropic:audit",
+          "anthropic:completion",
+          "anthropic:publication",
+          "openai:audit",
+          "openai:completion",
+          "openai:publication",
+        ])
+      },
     })
-    const artifactTool = createPublishInteractiveArtifactAiTool()
-    const measurements: Array<{ provider: string; chars: number; tokens: number }> = []
-    for (const model of providerModels()) {
-      const searchDefinition = normalizedProviderToolDefinition(
-        "capability_search",
-        SessionLoop.prepareProviderTool({
-          name: "capability_search",
-          source: "registry",
-          model,
-          tool: capabilitySearch,
-        }),
-      )
-      const artifactDefinition = normalizedProviderToolDefinition(
-        "publish_interactive_artifact",
-        SessionLoop.prepareProviderTool({
-          name: "publish_interactive_artifact",
-          source: "registry",
-          model,
-          tool: artifactTool,
-        }),
-      )
-      const prior = foldCapabilityRevealReceipts({
-        occurrenceID: "msg_artifact_tool_budget",
-        parts: [],
-        harnessProjectionHash: "3".repeat(64),
-        catalogSnapshotRef: "artifact:interactive-artifact-tool-budget",
-        catalogSnapshotHash: "4".repeat(64),
-        baseDefinition: capabilityRevealBaseDefinitions([searchDefinition]),
-      })
-      const ref = capabilityRef({
-        kind: "tool",
-        source: "platform",
-        owner_ref: "tool-registry",
-        local_ref: "publish_interactive_artifact",
-      })
-      const candidate = reduceCapabilityRevealCandidate({
-        prior,
-        deactivateRefs: [],
-        activated: [
-          ActivatedCapability.parse({
-            requested_ref: ref,
-            executable_ref: ref,
-            provider_name: "publish_interactive_artifact",
-            definition: artifactDefinition,
-            definition_digest: providerToolDefinitionDigest(artifactDefinition),
-            payload_chars: providerToolDefinitionChars(artifactDefinition),
-            payload_tokens: providerToolDefinitionTokens(artifactDefinition),
-            materializer_binding_digest: "5".repeat(64),
-          }),
-        ],
-      })
-      measurements.push({
-        provider: model.providerID,
-        chars: candidate.payloadChars,
-        tokens: candidate.payloadTokens,
-      })
-    }
-    expect(measurements).toEqual([
-      {
-        provider: "anthropic",
-        chars: expect.any(Number),
-        tokens: expect.any(Number),
-      },
-      {
-        provider: "openai",
-        chars: expect.any(Number),
-        tokens: expect.any(Number),
-      },
-    ])
-    for (const measurement of measurements) {
-      expect(measurement.chars).toBeLessThanOrEqual(CAPABILITY_REVEAL_MAX_ACTIVE_CHARS)
-      expect(measurement.tokens).toBeLessThanOrEqual(CAPABILITY_REVEAL_MAX_ACTIVE_TOKENS)
-    }
   }, 0)
 })

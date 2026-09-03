@@ -2628,3 +2628,157 @@ weakens terminal evidence: every required Completion Decision, deliverable,
 report, review, and evidence Artifact remains a complete read, while an audit
 fact is additionally read whenever a concrete contradiction or missing
 acceptance fact requires it.
+
+#### Exact-remote terminal-convergence correction after `b104c84d0`
+
+##### Recall
+
+The operator requires the complete remediation ledger to converge without
+agents blocking one another, then requires real Provider Mission acceptance
+with no abnormal scheduling trajectory. The exact run keeps the immutable
+fifteen-minute absolute deadline; extending it, retrying until variance passes,
+hiding participant turns, eagerly exposing the former broad Tool surface, or
+adding a Host workflow gate are not acceptable corrections. Dependency
+assembly must reuse the existing third-party cache and exact workspace source;
+no installer is part of this correction.
+
+Read material includes exact pushed commit
+`b104c84d03b023940cb5b6aeefa41b7b935baec0`, retained runtime database
+`opencorvus-mission-task-duplex-e2e-PPnrEL`, all Mission and child scheduler
+Message/Tool facts, Provider usage facts, `mission-core.txt`,
+`orchestrator-core.txt`, the General Mission Skill, the Harness/reveal reducer,
+runtime Tool ownership, strict Provider Tool budgets, and the real duplex
+checker. Whole-repository search covered every Mission/Task scheduler
+communication instruction, every revision-zero construction point, and all
+current budget tests. Independent-agent feedback for this post-run correction
+is none; an uninvolved read-only review is required after implementation and
+focused verification.
+
+##### Failure evidence and horizontal root-cause audit
+
+The exact source archive has SHA-256
+`750830F58F7032597D79E3050455D3859CA006F9C8F3D83948FCDC29611452ED` and
+used the separately verified `openai/gpt-5.6-sol` model. Browser and Computer
+MCP started successfully. Exactly two Tasks, twelve scheduler events, twelve
+terminal inbox deliveries and all three correlated replies completed; both
+Tasks completed normally; every source Tool had one terminal outcome; no Tool
+occurrence failed; endpoint authority, FIFO, semantic order and terminal order
+all passed. Mission remained running and did not publish the nonce-bearing
+interactive Artifact or call `panel_complete_mission`. The failure is therefore
+terminal convergence after a successful scheduling chain, not scheduler
+delivery, persistence, Browser startup, Task lifecycle, or checker projection.
+
+The immutable facts quantify the cost. Mission made 65 Provider calls and 59
+Tool calls, including 18 `capability_search` and 31 `mission_state` calls. The
+two child schedulers made 32 Provider/Tool calls, including another 18
+`capability_search` calls. Across the scenario, 36 of 91 Tool calls only
+discovered or activated another Tool. Several Task occurrences first searched
+for a named scheduler Tool and then issued a second search carrying the exact
+runtime-projection ref even though the canonical ref is determined by the
+projected Orchestrator owner. Non-terminal READY/DONE facts were also copied
+through repeated Mission-state reads and full-file writes even though their
+immutable scheduler Messages already are the durable coordination evidence.
+
+After the last Task terminal notification, Mission correctly called
+`panel_query_task`, `panel_query_task_artifacts`, and
+`panel_read_task_artifact`, but current Prompt text forced a separate
+`capability_search` before each small leaf and then another search for
+`mission_state`. At the deadline its latest action was only the state reveal;
+publication had not started. This serial tail is required by the current phrase
+"activate at most one new final-preflight Tool" even though the canonical
+reveal reducer permits five exact leaves and the actual strict Provider
+definitions leave ample room. In the retained occurrence, search plus
+`panel_query_task`, `panel_query_task_artifacts`, and
+`panel_read_task_artifact` individually measured 4,221, 8,812, and 4,929
+characters. Their leaf increments over the 3,252-character base, together with
+`panel_complete_mission`, remain far below the 32,000-character and 8,000-token
+limits. `publish_interactive_artifact` remains the one large leaf and must stay
+alone.
+
+The shared audit reaches the same boundary for Mission, Task scheduler,
+ordinary/terminal scheduler Messages, retry/restart-safe reveal receipts,
+serial and sibling-Task paths, and multi-Project isolation. The immutable
+Catalog/Harness binding, explicit exact refs, per-input revision reset, Tool
+permission, and owner-specific execution checks remain correct. Persisting
+active reveals across inputs would create a second mutable authority and is
+rejected. Eagerly exposing every scheduler capability would restore the broad
+payload that search-native projection removed and is also rejected. The
+remaining abnormality is the Prompt's failure to use the reducer's existing
+bounded multi-leaf transaction and its unnecessary duplication of already
+durable scheduler facts.
+
+##### Single correction and acceptance boundary
+
+Mission terminal reconciliation will activate the complete small audit group
+in one `capability_search`: `panel_query_task`,
+`panel_query_task_artifacts`, `panel_read_task_artifact`, and, only for final
+completion, `panel_complete_mission`. It will page and call those leaves in the
+required causal order. `publish_interactive_artifact` remains a separate
+single-leaf activation. After publication, Mission deactivates it while
+activating the complete small completion group, re-queries the full current
+child set, completely reads every relied-on canonical evidence Artifact, and
+calls `panel_complete_mission` in that same physical Turn. This uses the
+existing five-ref compare-and-swap reducer and immutable payload limits; it
+does not add a workflow Tool, batch executor, hidden selection, fallback, or
+Host route.
+
+A visible scheduler notification is already a durable participant fact. The
+Mission Prompt will prohibit copying its subject, body, correlation, delivery,
+or progress into Mission state. A state write remains required only when the
+fact actually changes the authored stage graph, ownership, acceptance judgment,
+dependency frontier, force-majeure blocker, or next-wake action. READY, DONE,
+and correlated replies remain directly inspectable evidence and are not
+shadowed by markdown.
+
+The Task Orchestrator Prompt will name the existing canonical projected refs
+for `scheduler_message`, `no_action`, and `manage_task`. When one or more of
+those actions are already determined by the current scheduler ingress, the
+first search activates their exact refs directly instead of spending a fuzzy
+discovery Turn and a second activation Turn. This changes no grant, owner,
+schema, permission, lifecycle or decision authority.
+
+Positive verification must normalize the actual strict OpenAI and Anthropic
+definitions and prove both the terminal audit group and final completion group
+fit beside the permanent search base, while publication alone still fits and
+is not combined with another leaf. Prompt-contract tests must prove exact ref
+activation, durable-message non-duplication, ordered grouped reconciliation,
+and the publication/group handoff. Existing reveal reducer, scheduler-message,
+terminal authority and duplex snapshot tests must remain green. After package
+and root typecheck, docs/routes/topology gates, exact staging, and uninvolved
+zero-finding review, the commit is pushed and the same exact-remote run is
+reassembled from the existing cache. Acceptance requires a result file,
+exactly one nonce-bearing final Artifact, durable Mission completion, no failed
+Tool occurrence, the exact duplex chain, and a materially shorter terminal
+tail without duplicate dispatch, state shadowing, or search-only loops.
+
+##### Implemented candidate and local verification
+
+The implemented correction changes only the two role-core Prompt contracts and
+their positive contract/budget tests. Mission now uses one bounded reveal for
+the three-leaf terminal audit group, one isolated publication reveal, and one
+four-leaf completion group. It treats the visible scheduler Message as the sole
+durable owner of communication fields and writes only authored Mission facts.
+The Task Orchestrator now activates the already determined canonical
+`runtime-projection:orchestrator` refs for `scheduler_message`, `no_action`, and
+`manage_task` directly and together when one ingress requires them.
+
+The focused Prompt and strict Provider budget matrix passes 5/5 tests and 37
+assertions. The budget test materializes the real Mission Tool definitions,
+normalizes them through both Anthropic and strict OpenAI adapters, and proves
+the exact three-leaf audit group, four-leaf completion group, and isolated
+publication leaf all fit the canonical reveal limits. Reveal receipt and owner,
+scheduler delivery, Mission/Task duplex contract and snapshot, Mission terminal
+authority, Prompt contract, and budget coverage pass 27/27 tests when the one
+Execution Capsule source-enumeration race from the parallel run is rerun in its
+own file; that file passes 5/5 and 30 assertions. OpenCorvus package typecheck
+passes, and root typecheck passes 8/8 workspaces.
+
+Current checkers pass: docs 339 operations/25 groups, routes 6 rules/34 files,
+architecture index 16 current documents, package topology 10 workspaces,
+control leases 18 owners/22 acquisition sites, control-state redundancy 53
+tables/7 allowed fact classes, release mutation topology 5 authorities,
+publication order 3 packages, and release-family version `0.0.58-beta`.
+Exact staged-tree module topology passes with 1,103 modules, 5,530 runtime
+edges, no retained cycle, and four clean imports. Exact staged-tree release
+mutation topology also reports the same five canonical authorities. No
+dependency installer ran.
