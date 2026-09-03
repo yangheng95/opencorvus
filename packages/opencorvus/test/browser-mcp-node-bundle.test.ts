@@ -96,7 +96,7 @@ describe("Browser Model Context Protocol Node sidecar bundle", () => {
     await fs.mkdir(barrierRoot, { recursive: true })
     const children = ["one", "two"].map((workerID) =>
       Bun.spawn([process.execPath, worker, cacheRoot, barrierRoot, workerID], {
-        cwd: path.resolve(import.meta.dir, ".."),
+        cwd: isolatedRoot,
         env: { ...Bun.env, OPENCORVUS_HOME: path.join(isolatedRoot, "runtime") },
         stdout: "pipe",
         stderr: "pipe",

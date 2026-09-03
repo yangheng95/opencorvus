@@ -22,6 +22,8 @@ describe("scheduler message model harness", () => {
       "execute every newly ready consumer dispatch or exact-Task recovery made due by that fact",
       "If accepting that exact Task makes final Mission completion due, expand this causal closure only to the completion preflight",
       "re-query the complete current child-Task set, read and bind every accepted Task's required canonical evidence in this same physical Turn, and then call `panel_complete_mission`",
+      "Package-revision bindings, execution-capsule bindings, and Task-root ingress dispositions are control-plane audit facts, not acceptance inputs merely because they appear in the same catalog",
+      "read its current Completion Decision as the required terminal Artifact and read an additional control-plane fact only to resolve a concrete contradiction or missing acceptance fact",
       "Before the first final-preflight activation, deactivate every active leaf whose final result is already durable",
       "Activate at most one new final-preflight Tool exact ref in each `capability_search`",
       "deactivate it in the same search that activates the next exact leaf",

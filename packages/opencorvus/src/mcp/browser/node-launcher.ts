@@ -196,6 +196,7 @@ export namespace BrowserMCPNodeLauncher {
         "build",
         path.join(import.meta.dir, `${transport}.ts`),
         "--target=node",
+        "--conditions=source",
         "--external=electron",
         `--outfile=${staging}`,
       ],

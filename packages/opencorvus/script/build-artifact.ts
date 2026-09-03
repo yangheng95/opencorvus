@@ -79,6 +79,7 @@ export async function buildArtifactBrowserMcpNodeBundle(input: {
     entrypoints: [input.entrypoint],
     ...(input.outdir ? { outdir: input.outdir } : {}),
     target: "node",
+    conditions: ["source"],
     external: artifactBrowserMcpNodeExternalModules(),
   })
 }

@@ -2501,3 +2501,130 @@ An uninvolved read-only reviewer inspected exact tree
 matrix, and returned FINAL PASS with P0-P3 all zero. The only post-review source
 change is this evidence record; no implementation, test or current architecture
 fact changed.
+
+#### Exact-remote source bundle and terminal-evidence correction
+
+##### Recall
+
+The operator requires dependency reuse rather than repeated installation and
+requires the exact-remote Mission run to close inside the existing fifteen-minute
+absolute bound with no abnormal scheduler trajectory. A clean result may not be
+manufactured by extending that bound, suppressing runtime errors, omitting Task
+evidence, or rerunning until model variance happens to pass. The source snapshot
+must reuse already available third-party dependency bytes while resolving every
+`@opencorvus-ai/*` workspace import against that exact snapshot. Mission must
+still completely read every deliverable, report, review, and evidence Artifact
+on which acceptance relies. It must not turn unrelated package bindings or
+Task-root ingress audit facts into mandatory acceptance inputs merely because
+they share the terminal Artifact catalog.
+
+Read material for this correction includes the retained runtime database and
+Tool facts, `mission-core.txt`, the General Mission Skill, Panel Artifact Tool
+descriptions, Browser MCP source launcher and bundle checks, package export
+maps, the exact source cache layout, and the previous successful retained run.
+Whole-repository search found one Browser source launcher and one Mission
+terminal-reconciliation contract. No independent-agent feedback exists for
+this correction yet; an uninvolved read-only review is required after the
+implementation and focused verification.
+
+##### Failure evidence and root cause
+
+Exact pushed commit `cc0e86a70119f0d277612ea3d141ffaff8d597a1` was
+archived with SHA-256
+`A27CFEADA873EDCE6DC28E222586BA497E18A8CEF054B188D9A82356D1402CF1`
+and run with the separately verified credential/model catalog and actual
+`openai/gpt-5.6-sol` request. The retained runtime root is
+`opencorvus-mission-task-duplex-e2e-shX2IE`; it contains no production user
+data. The immutable deadline ended at `2:12:12:2:0`. All twelve scheduler
+events and inbox deliveries were durable, all source Tools completed, both
+Tasks completed, the Mission acknowledged `A_DONE`, all terminal replies were
+complete, direct endpoint/correlation/FIFO/semantic-order checks passed, no
+Tool occurrence failed, and no usage owner was missing. The Mission had not yet
+published its final Artifact or completed, so the run is diagnostic rather
+than acceptance evidence.
+
+The runtime repeatedly reported that the Browser MCP Node bundle could not
+resolve `@opencorvus-ai/util/runtime-paths`, `runtime-directories`, and
+`process-node`. Reproducing the launcher's exact `bun build --target=node`
+command from both the Project directory and package directory failed under the
+same already-populated cache. The imports resolve through Bun's runtime
+resolver, and the same bundle succeeds immediately with
+`--conditions=source` (266 modules, one 1.72 MB output). The package export map
+routes Node `import` to unbuilt `dist/*.js` and source/Bun conditions to the
+tracked TypeScript. The launcher omitted the source condition; installing the
+same dependency graph cannot create those workspace build outputs and is not
+the fix. The exact cache view also exposed an assembly error: package-local
+workspace Junctions pointed at an older source snapshot. Correct reuse retains
+third-party cache targets but binds every workspace package to the exact source
+being evaluated.
+
+The Mission itself made 86 completed Tool calls. After the two Tasks finished,
+it correctly enumerated one bounded Artifact page per Task but then read seven
+control/evidence entries individually: both Completion Decisions plus two and
+three Task-root ingress dispositions. The final A catalog also contained only
+package/runtime bindings in addition to those facts. The Mission had already
+observed every nonce-bearing scheduler message and durable correlation in its
+own visible history; the current Completion Decision was the required terminal
+evidence, and there was no Task deliverable/report Artifact. Reading internal
+ingress dispositions did not strengthen this stage acceptance and consumed the
+remaining completion window. Current prompt text says to select only the
+entries needed by stage acceptance, but does not explicitly distinguish
+control-plane audit entries from acceptance evidence, so model variance can
+turn bounded catalog enumeration into an unnecessary serial read walk.
+
+##### Single correction
+
+The Browser source launcher and the release artifact's shared Browser bundle
+builder will pass Bun's `source` condition to their existing build operations.
+Packaged Browser runtime selection, cache publication, digest verification,
+process supervision, external runtime modules, and Node target remain
+unchanged. The artifact check will build the complete entry, while the
+concurrency test will run the real source launcher from an unrelated temporary
+Project working directory. Together they prove that the package's tracked
+source exports rather than Project-local build products satisfy both bundles.
+
+Mission terminal reconciliation will retain complete catalog pagination and
+complete reads for every selected semantic input. It will state positively
+that package-revision bindings, execution-capsule bindings, and Task-root
+ingress dispositions are control-plane audit facts, while the current
+Completion Decision plus every actual deliverable/report/review/evidence item
+needed by the stage are acceptance inputs. When a direct scheduler protocol is
+already present in the Mission's visible durable messages, the Completion
+Decision is the required terminal Artifact; additional control-plane facts are
+read only to resolve a concrete contradiction or missing acceptance fact. This
+changes model guidance, not Host acceptance gates, lifecycle authority,
+Artifact truth, or evidence retention.
+
+Positive verification must prove the real Browser source bundle from a
+dependency-free temporary Project directory, the Mission prompt's exact
+evidence-selection contract, the existing duplex snapshot matrix, package/root
+typecheck, docs/routes/topology gates, and an uninvolved zero-finding review.
+After commit, fetch/merge and push, the final exact-remote source cache will be
+assembled without an installer: third-party package entries reference the
+existing cache and workspace links reference the exact archived source. The
+same immutable checker must then produce a result file with no Browser startup
+error, no failed Tool occurrence, one nonce-bearing final Artifact, and durable
+Mission completion.
+
+##### Validation and independent review
+
+The combined Browser bundle, Mission guidance, and duplex snapshot matrix
+passed eleven tests and thirty assertions. Root typecheck passed all eight
+workspace tasks. Documentation passed at 339 operations and 25 groups; routes
+passed six rules across 34 files; the architecture index covered 16 current
+documents; package topology covered ten workspaces; module topology covered
+1,103 modules and 5,530 runtime edges with no retained strongly connected
+component and four clean imports. Control-lease ownership passed 18 owners and
+22 acquire sites, control-state redundancy passed 53 tables and seven fact
+classes, release mutation retained five authorities, and public-package,
+Expert Squad, and `0.0.58-beta` version checks passed.
+
+An uninvolved read-only reviewer inspected exact staged tree
+`9a89dbba91177dff7577f0ef326443d34f4e6e60`, independently reran the real
+concurrent Browser source launcher, complete release bundle, and Mission
+guidance tests, and returned FINAL PASS with P0-P3 all zero. The reviewer
+confirmed that the correction neither changes packaged runtime selection nor
+weakens terminal evidence: every required Completion Decision, deliverable,
+report, review, and evidence Artifact remains a complete read, while an audit
+fact is additionally read whenever a concrete contradiction or missing
+acceptance fact requires it.
