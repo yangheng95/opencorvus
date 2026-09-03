@@ -441,10 +441,14 @@ operator-authority, or explicitly requested lifecycle boundary. Every
 Task, not Mission, is the execution and capability-projection boundary.
 
 The Mission Panel exposes `query_task_artifacts` for complete catalog paging.
-The caller binds the exact terminal lifecycle reference returned by
-`query_task` and follows one-based `next_page_number` values; the Host alone
-retains, authenticates, and replays the underlying opaque frozen-membership
-catalog cursors. `read_task_artifact` performs exact canonical body reads under
+For a Session-bound model caller, the Host binds the exact persisted terminal
+row returned by `panel_query_task` earlier in the same physical Turn; the model
+does not copy a terminal event identifier. A stateless Panel or gateway request
+instead binds the current canonical terminal occurrence at request start. Both
+paths use the same current terminal-lifecycle fact and revalidate it before and
+after each numbered page while the Host alone retains, authenticates, and
+replays the underlying opaque frozen-membership catalog cursors.
+`panel_read_task_artifact` performs exact canonical body reads under
 same-Mission terminal-child authority. `resume_task` is the separate mutation for an
 evidence-backed acceptance gap: it binds the reviewed terminal occurrence and
 fully read locators, writes one visible Mission participant message, and

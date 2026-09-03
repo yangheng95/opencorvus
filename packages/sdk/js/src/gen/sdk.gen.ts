@@ -4702,12 +4702,6 @@ export class Control extends HeyApiClient {
              */
             taskID: string
             /**
-             * Exact current terminal occurrence returned by panel_query_task for this source Task.
-             */
-            terminal_lifecycle_reference: {
-              terminalEventID: string
-            }
-            /**
              * Engine version scope at the frozen catalog revision. Task Artifact snapshots are immutable.
              */
             version_scope?: "current" | "historical" | "all"

@@ -438,6 +438,12 @@ describe("occurrence capability reveal owner", () => {
         const second = assistant(occurrence.session.id, occurrence.userMessageID)
         await Session.beginAssistantReply(second)
         const deactivate = CapabilitySearchInput.parse({ queries: [""], deactivate_refs: [readRef] })
+        expect(deactivate).toEqual({
+          queries: [""],
+          exact_refs: [],
+          deactivate_refs: [readRef],
+          limit: 5,
+        })
         const secondPart = await runningSearchPart({
           sessionID: occurrence.session.id,
           messageID: second.id,
@@ -451,6 +457,22 @@ describe("occurrence capability reveal owner", () => {
           toolPartID: secondPart.id,
         })
         expect(secondResult.metadata).toMatchObject({ reveal_revision: 2, active_ref_count: 0 })
+
+        const third = assistant(occurrence.session.id, occurrence.userMessageID)
+        await Session.beginAssistantReply(third)
+        const idempotentPart = await runningSearchPart({
+          sessionID: occurrence.session.id,
+          messageID: third.id,
+          callID: "call_deactivate_read_again",
+          params: deactivate,
+        })
+        const idempotentResult = await owner.execute(deactivate, {
+          callID: "call_deactivate_read_again",
+          messageID: third.id,
+          sessionID: occurrence.session.id,
+          toolPartID: idempotentPart.id,
+        })
+        expect(idempotentResult.metadata).toMatchObject({ reveal_revision: 3, active_ref_count: 0 })
       },
     })
   }, 0)

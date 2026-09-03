@@ -100,6 +100,7 @@ const [
     ToolPartOutcomeTable,
     ToolPartProgressTable,
     ToolPartRequestTable,
+    SessionTable,
   },
   { EngineTaskTable },
   {
@@ -109,6 +110,7 @@ const [
     projectMissionTaskDuplexControlStateInTransaction,
     missionTaskDuplexProgressKey,
     missionTaskDuplexToolHealth,
+    missionTaskDuplexUsageOwnerRequirements,
   },
   { requireMissionSession },
   { missionRecord },
@@ -202,6 +204,7 @@ while (Date.now() < activityDeadline.deadlineMs && Date.now() < absoluteDeadline
     const toolOutcomes = db.select().from(ToolPartOutcomeTable).all()
     const artifacts = db.select().from(InteractiveArtifactTable).all()
     const usage = db.select().from(ProviderUsageEventTable).all()
+    const sessions = db.select().from(SessionTable).all()
     const { tasks, inboxes, toolParts } = projectMissionTaskDuplexControlStateInTransaction(db, {
       tasks: persistedTasks,
       inboxes: persistedInboxes,
@@ -221,6 +224,7 @@ while (Date.now() < activityDeadline.deadlineMs && Date.now() < absoluteDeadline
       toolParts,
       artifacts,
       usage,
+      sessions,
       toolHealth: missionTaskDuplexToolHealth(toolParts),
     }
   })
@@ -555,6 +559,15 @@ while (Date.now() < activityDeadline.deadlineMs && Date.now() < absoluteDeadline
           })
         })
       const noFailedToolOccurrences = snapshot.toolHealth.failedToolPartIDs.length === 0
+      const requiredUsage = missionTaskDuplexUsageOwnerRequirements({
+        missionSessionID: mission.sessionID,
+        taskRootSessionIDs: [taskA.session_id, taskB.session_id],
+        sessions: snapshot.sessions.map((session) => ({
+          id: session.id,
+          parentID: session.parent_id,
+          kind: session.kind,
+        })),
+      })
       const finalEvidence = missionTaskDuplexFinalEvidenceState({
         missionSessionID: mission.sessionID,
         completionMessageID: missionProjection.completion?.messageID,
@@ -575,11 +588,10 @@ while (Date.now() < activityDeadline.deadlineMs && Date.now() < absoluteDeadline
           cacheWriteTokens: row.cache_write_tokens,
           totalTokens: row.total_tokens,
         })),
-        requiredUsageOwners: [
-          { sessionID: mission.sessionID, agentID: "mission" },
-          { sessionID: taskA.session_id, agentID: "orchestrator" },
-          { sessionID: taskB.session_id, agentID: "orchestrator" },
-        ],
+        requiredUsageOwners: requiredUsage.owners,
+        unresolvedUsageOwners: requiredUsage.unresolvedTaskRootSessionIDs.map(
+          (sessionID) => `orchestrator-child:${sessionID}`,
+        ),
       })
       lastAcceptanceState = {
         chainLength: exactChain.length,

@@ -15,7 +15,6 @@ import {
 import { MissionCompletionInput } from "@/mission/completion"
 import { MissionAcceptanceGapInputSchema } from "@/mission/acceptance-gap"
 import { TaskCancellationReason } from "@opencorvus-ai/transport-protocol"
-import { TerminalLifecycleReferenceSchema } from "@/engine/terminal-lifecycle-reference-schema"
 import {
   EXPLORE_PANEL_ACTION_IDS,
   MISSION_PANEL_ACTION_IDS,
@@ -277,14 +276,11 @@ export const PanelCapabilityRegistry = list(
   item({
     action: "query_task_artifacts",
     description:
-      "Enumerate one terminal Task occurrence's canonical Artifact catalog through a bounded numbered page. Start with page_number 1 and repeat with next_page_number until null; the Host retains and authenticates opaque catalog cursors internally. Empty entries are a valid result. Each entry returns a short Host-minted artifact_locator_ref for read_task_artifact; the model never reconstructs its canonical locator.",
+      "Enumerate one terminal Task occurrence's canonical Artifact catalog through a bounded numbered page. A Session-bound model call first uses panel_query_task in the same physical Turn, while a stateless Panel or gateway request binds the current canonical terminal occurrence at request start. Start with page_number 1 and repeat with next_page_number until null; the Host owns both authorities, retains and authenticates opaque catalog cursors internally, and revalidates the occurrence. Empty entries are a valid result. Each entry returns a short Host-minted artifact_locator_ref for panel_read_task_artifact; the model never reconstructs its canonical locator or copies a terminal event ID.",
     kind: "query",
     surfaces: allProjectSurfaces,
     params: {
       taskID: z.string().min(1).describe("Source Task whose Artifact catalog should be enumerated."),
-      terminal_lifecycle_reference: TerminalLifecycleReferenceSchema.describe(
-        "Exact current terminal occurrence returned by panel_query_task for this source Task.",
-      ),
       page_number: z
         .number()
         .int()

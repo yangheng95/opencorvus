@@ -131,9 +131,7 @@ describe("SessionLoop provider Tool execution input", () => {
       validate?: (input: unknown) => Promise<{ success: boolean; value?: unknown; error?: unknown }>
     }
     const provider = schema.jsonSchema
-    expect(provider.required).toEqual(
-      expect.arrayContaining(["taskID", "terminal_lifecycle_reference", "page_number"]),
-    )
+    expect(provider.required).toEqual(expect.arrayContaining(["taskID", "page_number"]))
     expect(Object.keys(provider.properties).sort()).toEqual(
       [
         "artifact_types",
@@ -152,14 +150,12 @@ describe("SessionLoop provider Tool execution input", () => {
         "sort",
         "sources",
         "taskID",
-        "terminal_lifecycle_reference",
         "version_scope",
       ].sort(),
     )
     expect(provider.properties.page_number).toEqual(
       expect.objectContaining({ type: "integer", minimum: 1, maximum: 1_000 }),
     )
-    expect(provider.properties.terminal_lifecycle_reference).toEqual(expect.objectContaining({ type: "object" }))
   })
 
   test("sends the prepared Tool in a serialized OpenAI Responses request", async () => {

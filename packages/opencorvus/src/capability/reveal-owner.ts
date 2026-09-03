@@ -246,14 +246,6 @@ export function createCapabilityRevealOwner(input: {
           `Capability reveal Harness Catalog ${input.harness.catalog_snapshot_hash} does not match occurrence payload ${payloadHash}.`,
         )
       }
-      if (
-        params.expected_catalog_snapshot_hash &&
-        params.expected_catalog_snapshot_hash !== input.harness.catalog_snapshot_hash
-      ) {
-        throw new CapabilityRevealConflictError(
-          `Capability search expected Catalog ${params.expected_catalog_snapshot_hash}, current occurrence is ${input.harness.catalog_snapshot_hash}.`,
-        )
-      }
       const parts = await capabilityRevealOccurrenceParts({
         sessionID: context.sessionID,
         occurrenceID: input.occurrenceID,
@@ -295,12 +287,6 @@ export function createCapabilityRevealOwner(input: {
       }
       const snapshot = CatalogOccurrenceBinding.searchSnapshot(payload)
       const results = searchCapabilityCatalog(snapshot, payload.context.caller, params)
-      for (const ref of params.deactivate_refs) {
-        const encoded = CapabilityRefCodec.encode(ref)
-        if (!prior.active.has(encoded)) {
-          throw new Error(`Capability ${encoded} is not active in reveal revision ${prior.revision}.`)
-        }
-      }
       const activated = await Promise.all(
         params.exact_refs.map(async (requestedRef) => {
           if (

@@ -58109,20 +58109,6 @@
                         "minLength": 1,
                         "type": "string"
                       },
-                      "terminal_lifecycle_reference": {
-                        "additionalProperties": false,
-                        "description": "Exact current terminal occurrence returned by panel_query_task for this source Task.",
-                        "properties": {
-                          "terminalEventID": {
-                            "minLength": 1,
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "terminalEventID"
-                        ],
-                        "type": "object"
-                      },
                       "version_scope": {
                         "default": "current",
                         "description": "Engine version scope at the frozen catalog revision. Task Artifact snapshots are immutable.",
@@ -58137,7 +58123,6 @@
                     "required": [
                       "action",
                       "taskID",
-                      "terminal_lifecycle_reference",
                       "page_number"
                     ],
                     "type": "object"

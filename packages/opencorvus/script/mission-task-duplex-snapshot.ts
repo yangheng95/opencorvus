@@ -29,6 +29,28 @@ export type MissionTaskDuplexUsageOwner = {
   agentID: "mission" | "orchestrator"
 }
 
+export function missionTaskDuplexUsageOwnerRequirements(input: {
+  missionSessionID: string
+  taskRootSessionIDs: readonly string[]
+  sessions: readonly { id: string; parentID?: string | null; kind: string }[]
+}) {
+  const owners: MissionTaskDuplexUsageOwner[] = [
+    { sessionID: input.missionSessionID, agentID: "mission" },
+  ]
+  const unresolvedTaskRootSessionIDs: string[] = []
+  for (const taskRootSessionID of input.taskRootSessionIDs) {
+    const orchestrators = input.sessions.filter(
+      (session) => session.parentID === taskRootSessionID && session.kind === "orchestrator",
+    )
+    if (orchestrators.length !== 1) {
+      unresolvedTaskRootSessionIDs.push(taskRootSessionID)
+      continue
+    }
+    owners.push({ sessionID: orchestrators[0]!.id, agentID: "orchestrator" })
+  }
+  return { owners, unresolvedTaskRootSessionIDs }
+}
+
 export function missionTaskDuplexFinalEvidenceState(input: {
   missionSessionID: string
   completionMessageID?: string
@@ -36,6 +58,7 @@ export function missionTaskDuplexFinalEvidenceState(input: {
   artifacts: readonly { id: string; messageID: string; sessionID: string; payload: unknown }[]
   usage: readonly MissionTaskDuplexUsageRow[]
   requiredUsageOwners: readonly MissionTaskDuplexUsageOwner[]
+  unresolvedUsageOwners?: readonly string[]
 }) {
   const completionArtifacts = input.completionMessageID
     ? input.artifacts.filter(
@@ -55,7 +78,9 @@ export function missionTaskDuplexFinalEvidenceState(input: {
   const exactUsage = input.usage.filter(
     (row) => row.sessionID !== null && requiredSessionIDs.has(row.sessionID),
   )
-  const missingUsageOwners = input.requiredUsageOwners
+  const missingUsageOwners = [
+    ...(input.unresolvedUsageOwners ?? []),
+    ...input.requiredUsageOwners
     .filter(
       (owner) =>
         !exactUsage.some(
@@ -65,7 +90,8 @@ export function missionTaskDuplexFinalEvidenceState(input: {
             row.totalTokens > 0,
         ),
     )
-    .map((owner) => `${owner.agentID}:${owner.sessionID}`)
+    .map((owner) => `${owner.agentID}:${owner.sessionID}`),
+  ]
   const usageByAgent = Object.values(
     exactUsage.reduce<
       Record<

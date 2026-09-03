@@ -537,6 +537,7 @@ async function requirePanelToolIdentity(
     | "complete_mission"
     | "create_task"
     | "delete_session"
+    | "query_task_artifacts"
     | "read_task_artifact"
     | "resume_task"
     | "wake_mission"
@@ -1132,9 +1133,20 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
             sessionID: mission.id,
           })
         }
+        const terminalLifecycleReference = panelUIRequestContext(ctx)
+          ? requireCurrentTerminalLifecycleReference(taskID)
+          : reviewedTerminalLifecycleReferenceBeforePanelAction({
+              sessionID: ctx.sessionID,
+              assistantMessageID: ctx.messageID,
+              toolPartID: (await requirePanelToolIdentity(ctx, "query_task_artifacts")).toolPartID,
+              taskID,
+            })
         return {
           title: "Task Artifacts",
-          output: await panelTaskArtifactPage(taskID, search),
+          output: await panelTaskArtifactPage(taskID, {
+            ...search,
+            terminal_lifecycle_reference: terminalLifecycleReference,
+          }),
           metadata: { truncated: false },
         }
       }

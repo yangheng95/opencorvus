@@ -2224,3 +2224,80 @@ positive test creates a real running Tool in the memory database, appends a
 real progress row, proves the exact persisted progress frontier and observes
 the resulting deadline renewal while retaining the absolute cap. This closes
 the review findings without changing production scheduling behavior.
+
+#### Exact-remote final-reconciliation failure
+
+Commit `ae1f6fe1d877a4cb71db6dc34abb693c27407d73` passed the exact
+checker review, pre-push gates and remote-divergence check. A fresh real
+Provider run from that pushed source used `openai/gpt-5.6-sol` and retained its
+failure database under
+`mission-scheduling-ae1f6fe1d-20260903-084100/temp/opencorvus-mission-task-duplex-e2e-596LhT`.
+The run is diagnostic rather than acceptance evidence because the optional
+Browser MCP could not resolve its separately bundled source dependencies in
+the isolated assembly and the Mission did not reach its durable completion
+boundary before the immutable fifteen-minute cap.
+
+The scheduling trajectory itself reached the complete intended frontier:
+exactly two child Tasks, twelve scheduler events, twelve delivered inboxes,
+all ten authored duplex messages plus both terminal notifications, exact
+recipient FIFO and endpoints, three correlated replies, both normal Task
+terminal states, the Mission acknowledgement after `A_DONE`, and both terminal
+wake replies. The Mission nevertheless published no final interactive Artifact
+and did not call `panel_complete_mission`. The final acceptance state was
+`2:12:12:2:0`.
+
+The retained canonical Tool facts identify four avoidable failures and one
+checker projection error rather than an inactivity-boundary defect:
+
+- `capability_search` accepted a model-supplied
+  `expected_catalog_snapshot_hash` even though the Host already binds the exact
+  occurrence Catalog snapshot. After the first Task changed the current
+  occurrence snapshot, the model copied a historical hash and received a
+  conflict. This field is a redundant identity authority; Tool-call replay is
+  already bound by the exact call, Message, occurrence Harness and persisted
+  reveal receipt.
+- one Task scheduler attempted to deactivate `wait` when the active-set
+  revision already excluded it. Deactivation is mathematical set subtraction;
+  treating an absent member as an execution failure adds no integrity and makes
+  the desired active set non-idempotent.
+- Mission guidance and the Artifact-page Tool description alternated between
+  the nonexistent `read_task_artifact` name and the actual
+  `panel_read_task_artifact` leaf.
+- `panel_query_task_artifacts` required the model to copy a raw
+  `terminalEventID` that the Host had just returned. The model changed
+  `pev_g0VU...` to `pev_g00VU...` three times, re-querying and re-revealing the
+  same facts for roughly fifty seconds. The Host already has the exact earlier
+  `panel_query_task` receipt in the same physical Turn and already uses that
+  receipt as the sole terminal authority for `panel_complete_mission`.
+- the checker required Orchestrator usage on each Task root Session. Real
+  Provider usage is correctly owned by the exact child Session whose kind and
+  agent are `orchestrator`; both usage streams existed and were non-empty in the
+  retained database.
+
+The selected correction removes both redundant model-owned identity fields.
+`capability_search` always uses the occurrence Harness snapshot. Artifact page
+enumeration requires a prior completed `panel_query_task` row for the Task in
+the same physical Turn, derives its exact terminal reference from that
+persisted output, verifies it before and after every bounded page read, and
+continues returning the reference as an audit fact. It does not select the
+latest terminal state, accept a notification ID, fall back to caller input, or
+add a compatibility schema. Stateless Panel and gateway requests have no
+Session Turn; their explicit current-catalog request binds the canonical
+current terminal occurrence at request start and performs the same before/after
+revalidation without accepting caller-owned lifecycle identity. Inactive
+capability deactivation becomes an idempotent no-op in the one reveal-set reducer while the exact requested
+transition remains in the immutable receipt. Mission text names only
+`panel_read_task_artifact`. The E2E checker resolves exactly one child
+`orchestrator` Session for each Task root and binds required usage to those
+Sessions; ambiguity or absence is an explicit checker failure.
+
+Positive verification must cover the production Provider schema without a raw
+terminal reference, a real persisted `panel_query_task` receipt driving an
+Artifact page and rejecting a page without that receipt, exact current-terminal
+revalidation, idempotent inactive-set subtraction, absence of the redundant
+Catalog-hash input, and Task-root-to-child-Orchestrator usage-owner resolution.
+After focused tests, package/root typecheck and repository gates, a newly frozen
+exact tree requires an uninvolved zero-finding review, commit and push. One
+fresh exact-remote run from that pushed source must contain no failed Tool
+occurrence and must durably publish the nonce-bearing final Artifact and close
+the Mission before release.

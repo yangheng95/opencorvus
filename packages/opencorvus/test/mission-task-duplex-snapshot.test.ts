@@ -19,6 +19,7 @@ import {
   missionTaskDuplexActivityKey,
   missionTaskDuplexProgressKey,
   missionTaskDuplexToolHealth,
+  missionTaskDuplexUsageOwnerRequirements,
   observeMissionTaskDuplexActivity,
   projectMissionTaskDuplexControlStateInTransaction,
 } from "../script/mission-task-duplex-snapshot"
@@ -30,6 +31,30 @@ afterEach(async () => {
 })
 
 describe("Mission Task duplex snapshot", () => {
+  test("resolves Task-root usage requirements to their exact orchestrator child Sessions", () => {
+    expect(
+      missionTaskDuplexUsageOwnerRequirements({
+        missionSessionID: "session-mission",
+        taskRootSessionIDs: ["session-task-a", "session-task-b", "session-task-ambiguous"],
+        sessions: [
+          { id: "session-task-a", parentID: null, kind: "root" },
+          { id: "session-orchestrator-a", parentID: "session-task-a", kind: "orchestrator" },
+          { id: "session-planner-a", parentID: "session-task-a", kind: "planner" },
+          { id: "session-orchestrator-b", parentID: "session-task-b", kind: "orchestrator" },
+          { id: "session-orchestrator-left", parentID: "session-task-ambiguous", kind: "orchestrator" },
+          { id: "session-orchestrator-right", parentID: "session-task-ambiguous", kind: "orchestrator" },
+        ],
+      }),
+    ).toEqual({
+      owners: [
+        { sessionID: "session-mission", agentID: "mission" },
+        { sessionID: "session-orchestrator-a", agentID: "orchestrator" },
+        { sessionID: "session-orchestrator-b", agentID: "orchestrator" },
+      ],
+      unresolvedTaskRootSessionIDs: ["session-task-ambiguous"],
+    })
+  })
+
   test("renews the bounded inactivity deadline from persisted running Tool progress", async () => {
     await using project = await memoryProject()
     await Instance.provide({

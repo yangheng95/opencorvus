@@ -23,7 +23,7 @@ import { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
 import { Session } from "@/session"
 import { SessionProcessor } from "@/session/processor"
 import { Tool } from "@/tool/tool"
-import { PanelLeafTools } from "@/tool/panel"
+import { createPanelUIRequestToolContext, PanelLeafTools, PanelTool } from "@/tool/panel"
 import { panelLeafToolID, type PanelActionID } from "@/panel/action-ids"
 import { ToolTurnExecutionConflictError } from "@/tool/execution-mode"
 import { toolResultControl } from "@/session/tool-result-control"
@@ -449,12 +449,20 @@ describe("Mission terminal Task authority", () => {
           cost: 0,
           tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
         })
-        const viewTasksLeaf = await panelLeaf("view_tasks")
-        const queryArtifactsLeaf = await panelLeaf("query_task_artifacts")
-        const readArtifactLeaf = await panelLeaf("read_task_artifact")
-        const context = (toolID: string) => ({
+        await Session.updatePart({
+          id: Identifier.ascending("part"),
           sessionID: mission.id,
           messageID: caller.id,
+          type: "step-start",
+        })
+        const viewTasksLeaf = await panelLeaf("view_tasks")
+        const queryTaskLeaf = await panelLeaf("query_task")
+        const queryArtifactsLeaf = await panelLeaf("query_task_artifacts")
+        const readArtifactLeaf = await panelLeaf("read_task_artifact")
+        const context = (toolID: string, callID?: string, messageID = caller.id) => ({
+          sessionID: mission.id,
+          messageID,
+          callID,
           agent: "mission",
           abort: new AbortController().signal,
           messages: [],
@@ -484,19 +492,96 @@ describe("Mission terminal Task authority", () => {
             time: { start: now + 36, end: now + 37 },
           },
         })
+        const unboundCatalogCallID = "query-terminal-artifacts-before-task-query"
+        await Session.updatePart({
+          id: Identifier.ascending("part"),
+          sessionID: mission.id,
+          messageID: caller.id,
+          type: "tool",
+          callID: unboundCatalogCallID,
+          tool: queryArtifactsLeaf.id,
+          state: { status: "running", input: { taskID, page_number: 1 }, time: { start: now + 37 } },
+        })
+        await expect(
+          queryArtifactsLeaf.tool.execute(
+            { taskID, page_number: 1 },
+            context(queryArtifactsLeaf.id, unboundCatalogCallID),
+          ),
+        ).rejects.toThrow(
+          `requires a completed panel.query_task terminal row for Task ${taskID} earlier in the same Turn`,
+        )
+        const queriedTask = await queryTaskLeaf.tool.execute(
+          { taskIDs: [taskID] },
+          context(queryTaskLeaf.id),
+        )
+        expect(PanelQueryTaskOutput.parse(JSON.parse(queriedTask.output))).toEqual({
+          tasks: [
+            expect.objectContaining({
+              taskID,
+              status: "completed",
+              terminal_lifecycle_reference: terminalReference,
+            }),
+          ],
+        })
+        await Session.updatePart({
+          id: Identifier.ascending("part"),
+          sessionID: mission.id,
+          messageID: caller.id,
+          type: "tool",
+          callID: "query-terminal-task-before-artifact-catalog",
+          tool: queryTaskLeaf.id,
+          state: {
+            status: "completed",
+            input: { taskIDs: [taskID] },
+            output: queriedTask.output,
+            title: queriedTask.title,
+            metadata: queriedTask.metadata,
+            time: { start: now + 37, end: now + 38 },
+          },
+        })
+        const catalogMessage = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: mission.id,
+          role: "assistant",
+          author: "mission",
+          parentID: user.id,
+          time: { created: now + 38 },
+          agent: "mission",
+          providerID: "openai",
+          modelID: "gpt-5.6-terra",
+          path: { cwd: project.path, root: project.path },
+          cost: 0,
+          tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+        })
         const entries: Array<{ locator: unknown; artifact_locator_ref: string }> = []
         const visitedPageNumbers: number[] = []
         let pageNumber: number | null = 1
         while (pageNumber !== null) {
+          const queryInput = {
+            taskID,
+            page_number: pageNumber,
+            kinds: ["expert_output"] as const,
+            sort: "oldest" as const,
+          }
+          const queryCallID = `query-terminal-artifact-page-${pageNumber}`
+          await Session.updatePart({
+            id: Identifier.ascending("part"),
+            sessionID: mission.id,
+            messageID: catalogMessage.id,
+            type: "step-start",
+          })
+          const queryPart = await Session.updatePart({
+            id: Identifier.ascending("part"),
+            sessionID: mission.id,
+            messageID: catalogMessage.id,
+            type: "tool",
+            callID: queryCallID,
+            tool: queryArtifactsLeaf.id,
+            state: { status: "running", input: queryInput, time: { start: now + 38 + pageNumber } },
+          })
           const result = await queryArtifactsLeaf.tool.execute(
-            {
-              taskID,
-              terminal_lifecycle_reference: terminalReference,
-              page_number: pageNumber,
-              kinds: ["expert_output"],
-              sort: "oldest",
-            },
-            context(queryArtifactsLeaf.id),
+            queryInput,
+            context(queryArtifactsLeaf.id, queryCallID, catalogMessage.id),
           )
           expect(Buffer.byteLength(result.output, "utf8")).toBeLessThanOrEqual(
             ArtifactSchemaLimits.structuredOutputBytes,
@@ -519,30 +604,17 @@ describe("Mission terminal Task authority", () => {
               catalog_complete: true,
             }),
           )
-          if (page.page_number === 1) {
-            await Session.updatePart({
-              id: Identifier.ascending("part"),
-              sessionID: mission.id,
-              messageID: caller.id,
-              type: "tool",
-              callID: "query-terminal-artifact-page-one",
-              tool: queryArtifactsLeaf.id,
-              state: {
-                status: "completed",
-                input: {
-                  taskID,
-                  terminal_lifecycle_reference: terminalReference,
-                  page_number: 1,
-                  kinds: ["expert_output"],
-                  sort: "oldest",
-                },
-                output: result.output,
-                title: result.title,
-                metadata: result.metadata,
-                time: { start: now + 36, end: now + 37 },
-              },
-            })
-          }
+          await Session.updatePart({
+            ...queryPart,
+            state: {
+              status: "completed",
+              input: queryInput,
+              output: result.output,
+              title: result.title,
+              metadata: result.metadata,
+              time: { start: now + 38 + page.page_number, end: now + 39 + page.page_number },
+            },
+          })
           visitedPageNumbers.push(page.page_number)
           entries.push(...page.entries)
           pageNumber = page.next_page_number
@@ -551,6 +623,22 @@ describe("Mission terminal Task authority", () => {
         expect(entries).toHaveLength(33)
         expect(new Set(entries.map((entry) => JSON.stringify(entry.locator))).size).toBe(33)
         expect(new Set(entries.map((entry) => entry.artifact_locator_ref)).size).toBe(33)
+        const panelUI = await PanelTool.init({ agentID: "panel_ui" })
+        const panelUIPage = await panelUI.execute(
+          { action: "query_task_artifacts", taskID, page_number: 1, kinds: ["expert_output"], sort: "oldest" },
+          createPanelUIRequestToolContext({
+            surface: "gateway",
+            requestID: "00000000-0000-4000-8000-000000000001",
+          }),
+        )
+        expect(JSON.parse(panelUIPage.output)).toEqual(
+          expect.objectContaining({
+            taskID,
+            terminal_lifecycle_reference: terminalReference,
+            page_number: 1,
+            filtered_total: 33,
+          }),
+        )
         const readMessage = await Session.updateMessage({
           id: Identifier.ascending("message"),
           sessionID: mission.id,

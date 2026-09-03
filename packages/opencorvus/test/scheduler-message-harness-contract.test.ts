@@ -18,7 +18,7 @@ describe("scheduler message model harness", () => {
       "end the response immediately so the Session can accept the next durable inbox",
       "complete only that exact fact's causal closure in this response",
       "first reveal and call `panel_query_task` for its exact Task",
-      "carry only the returned `terminal_lifecycle_reference` into canonical Artifact enumeration",
+      "call `panel_query_task_artifacts` without copying any terminal event ID",
       "execute every newly ready consumer dispatch or exact-Task recovery made due by that fact",
       "If accepting that exact Task makes final Mission completion due, expand this causal closure only to the completion preflight",
       "re-query the complete current child-Task set, read and bind every accepted Task's required canonical evidence in this same physical Turn, and then call `panel_complete_mission`",

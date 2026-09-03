@@ -297,10 +297,6 @@ export const CapabilitySearchInput = z
       .default([]),
     product_pillar: z.enum(["code", "work"]).optional(),
     limit: z.number().int().min(1).max(5).default(5),
-    expected_catalog_snapshot_hash: z
-      .string()
-      .regex(/^[a-f0-9]{64}$/)
-      .optional(),
   })
   .strict()
   .superRefine((input, context) => {
