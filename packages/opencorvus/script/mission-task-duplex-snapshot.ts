@@ -54,16 +54,24 @@ export function missionTaskDuplexUsageOwnerRequirements(input: {
 export function missionTaskDuplexFinalEvidenceState(input: {
   missionSessionID: string
   completionMessageID?: string
+  completionParentMessageID?: string
   nonce: string
-  artifacts: readonly { id: string; messageID: string; sessionID: string; payload: unknown }[]
+  artifacts: readonly {
+    id: string
+    messageID: string
+    sessionID: string
+    parentMessageID?: string
+    payload: unknown
+  }[]
   usage: readonly MissionTaskDuplexUsageRow[]
   requiredUsageOwners: readonly MissionTaskDuplexUsageOwner[]
   unresolvedUsageOwners?: readonly string[]
 }) {
-  const completionArtifacts = input.completionMessageID
+  const completionArtifacts = input.completionMessageID && input.completionParentMessageID
     ? input.artifacts.filter(
         (artifact) =>
-          artifact.sessionID === input.missionSessionID && artifact.messageID === input.completionMessageID,
+          artifact.sessionID === input.missionSessionID &&
+          artifact.parentMessageID === input.completionParentMessageID,
       )
     : []
   const parsedArtifact =
@@ -132,6 +140,9 @@ export function missionTaskDuplexFinalEvidenceState(input: {
   ).sort((left, right) => left.agentID.localeCompare(right.agentID))
   const blockingReasons = [
     ...(!input.completionMessageID ? ["mission_completion_missing" as const] : []),
+    ...(input.completionMessageID && !input.completionParentMessageID
+      ? ["mission_completion_occurrence_missing" as const]
+      : []),
     ...(completionArtifacts.length !== 1 ? ["final_artifact_occurrence_missing" as const] : []),
     ...(!canonicalArtifact ? ["final_artifact_payload_invalid" as const] : []),
     ...(!artifactContainsNonce ? ["final_artifact_nonce_missing" as const] : []),

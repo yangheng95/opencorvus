@@ -161,12 +161,14 @@ describe("Mission Task duplex snapshot", () => {
     const base = {
       missionSessionID: "session-mission",
       completionMessageID: "message-completion",
+      completionParentMessageID: "message-input",
       nonce,
       artifacts: [
         {
           id: "artifact-final",
-          messageID: "message-completion",
+          messageID: "message-artifact",
           sessionID: "session-mission",
+          parentMessageID: "message-input",
           payload: {
             schemaVersion: "1",
             renderer: "document@1",
@@ -249,6 +251,7 @@ describe("Mission Task duplex snapshot", () => {
       missionTaskDuplexFinalEvidenceState({
         ...base,
         completionMessageID: undefined,
+        completionParentMessageID: undefined,
         usage: base.usage.filter((row) => row.sessionID !== "session-task-b"),
       }).blockingReasons,
     ).toEqual([
@@ -257,6 +260,46 @@ describe("Mission Task duplex snapshot", () => {
       "final_artifact_payload_invalid",
       "final_artifact_nonce_missing",
       "required_usage_missing",
+    ])
+
+    expect(
+      missionTaskDuplexFinalEvidenceState({
+        ...base,
+        artifacts: base.artifacts.map((artifact) => ({
+          ...artifact,
+          parentMessageID: "message-previous-input",
+        })),
+      }).blockingReasons,
+    ).toEqual([
+      "final_artifact_occurrence_missing",
+      "final_artifact_payload_invalid",
+      "final_artifact_nonce_missing",
+    ])
+
+    expect(
+      missionTaskDuplexFinalEvidenceState({
+        ...base,
+        completionParentMessageID: undefined,
+      }).blockingReasons,
+    ).toEqual([
+      "mission_completion_occurrence_missing",
+      "final_artifact_occurrence_missing",
+      "final_artifact_payload_invalid",
+      "final_artifact_nonce_missing",
+    ])
+
+    expect(
+      missionTaskDuplexFinalEvidenceState({
+        ...base,
+        artifacts: [
+          ...base.artifacts,
+          { ...base.artifacts[0]!, id: "artifact-duplicate", messageID: "message-artifact-2" },
+        ],
+      }).blockingReasons,
+    ).toEqual([
+      "final_artifact_occurrence_missing",
+      "final_artifact_payload_invalid",
+      "final_artifact_nonce_missing",
     ])
   })
 

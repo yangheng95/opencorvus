@@ -2411,3 +2411,93 @@ completed Tool output without a failed Tool occurrence. After focused tests and
 typecheck, the exact staged tree requires one uninvolved review. Delivery then
 requires commit, fetch/merge, push, and a fresh exact-remote duplex run; the
 earlier failed run remains diagnostic evidence only.
+
+#### Exact-remote final Artifact occurrence correction
+
+##### Recall
+
+The operator requires the real Mission duplex checker to prove a normal
+scheduler trajectory from an exact pushed commit before release. The checker
+must retain the immutable fifteen-minute absolute bound, exact two-Task
+cardinality, the twelve-event scheduler set, direct durable correlation, final
+Artifact, canonical Task evidence, exact usage owners and durable Mission
+completion. It must not broaden evidence across separate Session inputs or turn
+a successful Mission into a PASS by ignoring a missing Artifact. Read material
+for this correction includes the retained exact-remote database, the Mission
+frontier and Task event logs, the persisted Message/Tool/Artifact facts,
+`mission-task-duplex-snapshot.ts`, the real checker, its focused test, and the
+current Panel physical-Turn contract. Whole-repository search found no second
+duplex final-evidence reducer. No independent-agent feedback exists for this
+correction yet; a new uninvolved read-only review is required after
+implementation and verification.
+
+##### Failure evidence and root cause
+
+Exact pushed commit `04404da4e642f3fb3fa76554895a349bd7983a1e`
+was run from a fresh Git archive with archive SHA-256
+`CC0E381DB6A3ED4ED28D6CE9B878E7C3E2739C813D5F8FD398977E36826CEC81`,
+the separately verified credential and model catalog, and the actual model
+`openai/gpt-5.6-sol`. The retained runtime root is
+`opencorvus-mission-task-duplex-e2e-6aDtu9`; it contains no production user
+data. The result file was absent because the immutable absolute deadline
+expired, so this run remains diagnostic rather than acceptance evidence.
+
+The production trajectory itself completed. Exactly two Tasks were created in
+the required order. Responder B delivered `READY_B`, directly answered A's
+correlated `PEER_CONFIRM`, delivered `B_DONE`, and completed normally. Initiator
+A delivered `READY_A`, acknowledged Mission `START_PEER` with B's exact Task
+identity, completed the sibling exchange, received Mission's correlated
+`DECISION`, delivered `A_DONE`, and completed normally. Mission accepted both
+canonical Completion Decisions, published nonce-bearing interactive Artifact
+`art_g0VU7ltKm00j5BdfSexD`, re-queried exactly both Tasks, re-enumerated and
+fully read both evidence artifacts, called `panel_complete_mission`, and
+persisted `boardLane=completed`. Exact usage existed for Mission and both child
+Orchestrator owners; no third Task or operator relay existed.
+
+The sole remaining gate reported
+`final_artifact_occurrence_missing`, `final_artifact_payload_invalid`, and
+`final_artifact_nonce_missing`. The final Artifact was persisted under assistant
+Message `msg_g0VU7lnNi00Z1K9Zh5V1`; completion was persisted under later
+assistant Message `msg_g0VU7mCdP00GUaQnrCHy`. Both Messages belong to the same
+Mission Session and have the exact common parent input Message
+`msg_hL7P984rEzmk6BlmxUC3`. The checker nevertheless required the Artifact
+Message ID to equal the completion Message ID. That equality contradicts the
+real streaming Tool loop: publish must finish before its result is available,
+and the model must then query and read current evidence before it can submit the
+irreversible completion call. Each sequential Tool result creates another
+assistant Message, while the common parent remains the canonical physical-Turn
+occurrence.
+
+##### Single correction
+
+The one duplex final-evidence reducer will keep Mission completion mandatory,
+resolve its exact parent input occurrence, and accept exactly one canonical
+nonce-bearing interactive Artifact from the same Mission Session and the same
+parent occurrence. An Artifact from a previous or later input remains rejected;
+multiple Artifacts in the completion occurrence remain ambiguous and rejected.
+The result continues to report the exact Artifact ID and exact usage owners. No
+production Mission, scheduler, Provider, Artifact or completion behavior changes.
+
+Positive verification must cover the real sequential shape: Artifact and
+completion in different assistant Messages with one common parent are accepted;
+an otherwise valid Artifact under a different parent is rejected; absent
+completion occurrence authority and multiple same-occurrence Artifacts remain
+typed blockers. After focused tests, package/root typecheck and repository
+gates, the exact staged tree requires an uninvolved zero-finding review, commit,
+fetch/merge and push. A fresh exact-remote run must then produce its result file
+and independently prove the complete trajectory before release.
+
+##### Validation and independent review
+
+The focused final-evidence matrix passed four tests and seventeen assertions.
+The retained real-run database projected `ready=true`, one exact nonce-bearing
+Artifact, no missing usage owner, two completed Tasks and a completed Mission
+after the correction. Root typecheck passed eight of eight workspaces;
+documentation, routes, architecture index, package topology, release-mutation
+topology and exact-index module topology remained green at 1,103 modules, 5,530
+runtime edges, no retained strongly connected component and four clean imports.
+An uninvolved read-only reviewer inspected exact tree
+`ccde2a8dd1ed5ff49661b26e1c60d834b4550785`, independently reran the focused
+matrix, and returned FINAL PASS with P0-P3 all zero. The only post-review source
+change is this evidence record; no implementation, test or current architecture
+fact changed.

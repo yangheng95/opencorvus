@@ -568,16 +568,29 @@ while (Date.now() < activityDeadline.deadlineMs && Date.now() < absoluteDeadline
           kind: session.kind,
         })),
       })
+      const completionMessage = missionProjection.completion
+        ? snapshot.messages.find((message) => message.id === missionProjection.completion!.messageID)
+        : undefined
+      const completionMessageData = completionMessage?.data as
+        | { role?: string; parentID?: string }
+        | undefined
       const finalEvidence = missionTaskDuplexFinalEvidenceState({
         missionSessionID: mission.sessionID,
         completionMessageID: missionProjection.completion?.messageID,
+        completionParentMessageID:
+          completionMessageData?.role === "assistant" ? completionMessageData.parentID : undefined,
         nonce,
-        artifacts: snapshot.artifacts.map((artifact) => ({
-          id: artifact.id,
-          messageID: artifact.message_id,
-          sessionID: snapshot.messages.find((message) => message.id === artifact.message_id)?.session_id ?? "",
-          payload: artifact.payload,
-        })),
+        artifacts: snapshot.artifacts.map((artifact) => {
+          const message = snapshot.messages.find((candidate) => candidate.id === artifact.message_id)
+          const data = message?.data as { role?: string; parentID?: string } | undefined
+          return {
+            id: artifact.id,
+            messageID: artifact.message_id,
+            sessionID: message?.session_id ?? "",
+            parentMessageID: data?.role === "assistant" ? data.parentID : undefined,
+            payload: artifact.payload,
+          }
+        }),
         usage: snapshot.usage.map((row) => ({
           sessionID: row.session_id,
           agentID: row.agent_id,

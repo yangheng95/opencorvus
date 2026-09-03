@@ -448,6 +448,15 @@ instead binds the current canonical terminal occurrence at request start. Both
 paths use the same current terminal-lifecycle fact and revalidate it before and
 after each numbered page while the Host alone retains, authenticates, and
 replays the underlying opaque frozen-membership catalog cursors.
+One physical Turn is the exact Session input occurrence named by the assistant
+Messages' common `parentID`; sequential streaming Tool-call Messages produced
+while resolving that input do not create new Turns. Mission completion evidence
+therefore owns an interactive Artifact when the Artifact-producing assistant
+Message and the completion assistant Message belong to the same Mission Session
+and have that exact common parent. Equality of those two assistant Message IDs
+would incorrectly reject the required publish, query, read, then complete Tool
+sequence, while a different parent remains a different occurrence and is never
+accepted as completion evidence.
 `panel_read_task_artifact` performs exact canonical body reads under
 same-Mission terminal-child authority. `resume_task` is the separate mutation for an
 evidence-backed acceptance gap: it binds the reviewed terminal occurrence and
