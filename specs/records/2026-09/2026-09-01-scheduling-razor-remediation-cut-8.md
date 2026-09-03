@@ -2164,3 +2164,63 @@ ordering passed, release-family versions remained aligned at `0.0.58-beta`,
 and exact-index module topology passed with 1,103 modules, 5,530 runtime edges,
 no retained strongly connected component and four clean imports. The exact
 tree still requires the mandated final uninvolved review before commit.
+
+#### Exact-remote activity-deadline correction
+
+Commit `f7f3bded4129576c3b9aefe7e29776af484e587b` passed the final
+uninvolved review, the complete pre-push gate and was pushed with local and
+remote divergence at zero. A fresh Git archive of that exact remote commit was
+then run with the separately verified Provider credential, model catalog and
+actual `openai/gpt-5.6-sol` request. The archive SHA-256 was
+`AC887F1EA74161896FA423CBA0313F012AD400F1AC9958213FE68DBA1C9BC548`.
+The retained run database is under
+`opencorvus-mission-task-duplex-e2e-6SquWV` and contains no production user
+data.
+
+The scheduling contract itself reached its complete ten-message business
+chain: exactly two Tasks existed, all ten authored messages were delivered,
+every source Tool had a terminal outcome, all three request/reply correlations,
+exact endpoints, recipient FIFO and semantic ordering passed, the Mission
+acknowledged `A_DONE`, and Task B completed. Task A then dispatched the
+canonical Base planner to publish its required evidence plan. The planner
+remained observably live: it completed 21 real Tool calls, enumerated and fully
+read the eight current same-Task Engine Artifacts, selected the material
+authority facts, reread the immutable Task request and stated that authority
+closure was complete with no planning blocker. It was processing the next
+Provider turn when the checker closed the runtime.
+
+The direct cause is in the checker deadline reducer, not the production
+scheduler or Provider. `INACTIVITY_MS` is documented and reported as an
+activity boundary, and the checker already calculates a durable activity key
+from Task, scheduler event, delivered inbox, Message and canonical Part/Tool
+facts. However, only the much coarser milestone progress key renewed the
+deadline. Message, Part and completed Tool facts were printed as activity but
+could not extend the three-minute window, so a legitimate evidence worker was
+terminated while continuously progressing. Raising the timeout or removing the
+absolute bound would hide the defect. The single correction is to renew the
+inactivity deadline only when the durable activity key changes, while retaining
+the immutable fifteen-minute absolute deadline. An unchanged key never renews
+the boundary.
+
+The correction will expose one pure deadline reducer beside the duplex snapshot
+projection. Its positive contract proves initial observation, a stable cursor,
+a later Message/Tool activity cursor, and the absolute-deadline cap. The real
+checker will use that reducer and continue reporting the independent milestone
+progress key only for diagnostics. After focused tests, typecheck and checker
+gates, an uninvolved reviewer must inspect the exact staged tree. Only then may
+the corrected checker be committed and pushed, followed by one fresh
+exact-remote run. No production scheduling, Task, Mission, Artifact or Provider
+contract changes are authorized by this correction.
+
+The first uninvolved review of exact tree
+`e31de039360f93143d198fac36f035f5373004af` identified one remaining
+activity-source gap: a running Tool writes append-only progress to
+`ToolPartProgress`, while the projected running Tool state carries only its
+start time. The first positive test also exercised synthetic cursor strings
+rather than the persisted production facts. The same bounded checker cut now
+derives its cursor from the count and latest `(time, id)` frontier of canonical
+Message and Part rows plus Tool request, progress and outcome rows. Its focused
+positive test creates a real running Tool in the memory database, appends a
+real progress row, proves the exact persisted progress frontier and observes
+the resulting deadline renewal while retaining the absolute cap. This closes
+the review findings without changing production scheduling behavior.

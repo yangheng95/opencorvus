@@ -93,10 +93,19 @@ const [
   { Instance },
   { Database, eq },
   { ProtocolEventTable, ProtocolInboxTable },
-  { InteractiveArtifactTable, MessageTable, PartTable, ToolPartRequestTable },
+  {
+    InteractiveArtifactTable,
+    MessageTable,
+    PartTable,
+    ToolPartOutcomeTable,
+    ToolPartProgressTable,
+    ToolPartRequestTable,
+  },
   { EngineTaskTable },
   {
     missionTaskDuplexFinalEvidenceState,
+    missionTaskDuplexActivityKey,
+    observeMissionTaskDuplexActivity,
     projectMissionTaskDuplexControlStateInTransaction,
     missionTaskDuplexProgressKey,
     missionTaskDuplexToolHealth,
@@ -155,8 +164,14 @@ process.stdout.write(`[duplex-e2e] mission=${mission.missionID} session=${missio
 let lastActivityKey = ""
 let lastProgressKey = ""
 let lastAcceptanceKey = ""
-const absoluteDeadline = Date.now() + MAX_RUN_MS
-let deadline = Math.min(absoluteDeadline, Date.now() + INACTIVITY_MS)
+const startedAt = Date.now()
+const absoluteDeadline = startedAt + MAX_RUN_MS
+let activityDeadline = observeMissionTaskDuplexActivity({
+  activityKey: "runtime-start",
+  observedAtMs: startedAt,
+  inactivityWindowMs: INACTIVITY_MS,
+  absoluteDeadlineMs: absoluteDeadline,
+})
 let terminal = false
 let lastAcceptanceState: Record<string, unknown> = {}
 type DuplexControlState = ReturnType<typeof projectMissionTaskDuplexControlStateInTransaction>
@@ -177,12 +192,14 @@ let evidence:
       toolPartCount: number
     }
   | undefined
-while (Date.now() < deadline && Date.now() < absoluteDeadline) {
+while (Date.now() < activityDeadline.deadlineMs && Date.now() < absoluteDeadline) {
   const snapshot = Database.use((db) => {
     const persistedTasks = db.select().from(EngineTaskTable).all()
     const events = db.select().from(ProtocolEventTable).where(eq(ProtocolEventTable.type, "scheduler.message")).all()
     const persistedInboxes = db.select().from(ProtocolInboxTable).all()
     const toolRequests = db.select().from(ToolPartRequestTable).all()
+    const toolProgress = db.select().from(ToolPartProgressTable).all()
+    const toolOutcomes = db.select().from(ToolPartOutcomeTable).all()
     const artifacts = db.select().from(InteractiveArtifactTable).all()
     const usage = db.select().from(ProviderUsageEventTable).all()
     const { tasks, inboxes, toolParts } = projectMissionTaskDuplexControlStateInTransaction(db, {
@@ -198,6 +215,9 @@ while (Date.now() < deadline && Date.now() < absoluteDeadline) {
       inboxes,
       messages,
       parts,
+      toolRequests,
+      toolProgress,
+      toolOutcomes,
       toolParts,
       artifacts,
       usage,
@@ -205,8 +225,24 @@ while (Date.now() < deadline && Date.now() < absoluteDeadline) {
     }
   })
   const missionProjection = missionRecord(await requireMissionSession(mission.sessionID))
-  const activityKey = `${snapshot.tasks.length}:${snapshot.events.length}:${snapshot.inboxes.filter((row) => row.status === "delivered").length}:${snapshot.messages.length}:${snapshot.parts.length + snapshot.toolParts.length}`
-  if (activityKey !== lastActivityKey) {
+  const activityKey = missionTaskDuplexActivityKey({
+    taskCount: snapshot.tasks.length,
+    schedulerEventCount: snapshot.events.length,
+    deliveredInboxCount: snapshot.inboxes.filter((row) => row.status === "delivered").length,
+    messages: snapshot.messages,
+    parts: snapshot.parts,
+    toolRequests: snapshot.toolRequests,
+    toolProgress: snapshot.toolProgress,
+    toolOutcomes: snapshot.toolOutcomes,
+  })
+  activityDeadline = observeMissionTaskDuplexActivity({
+    previous: activityDeadline,
+    activityKey,
+    observedAtMs: Date.now(),
+    inactivityWindowMs: INACTIVITY_MS,
+    absoluteDeadlineMs: absoluteDeadline,
+  })
+  if (activityDeadline.activityKey !== lastActivityKey) {
     lastActivityKey = activityKey
     process.stdout.write(`[duplex-e2e] activity=${activityKey}\n`)
   }
@@ -218,7 +254,6 @@ while (Date.now() < deadline && Date.now() < absoluteDeadline) {
   })
   if (progressKey !== lastProgressKey) {
     lastProgressKey = progressKey
-    deadline = Math.min(absoluteDeadline, Date.now() + INACTIVITY_MS)
     process.stdout.write(`[duplex-e2e] progress=${progressKey}\n`)
   }
   const missionTasks = snapshot.tasks.filter((row) => {

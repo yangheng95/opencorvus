@@ -6,12 +6,20 @@ import { Instance } from "@/project/instance"
 import { ProtocolDeliveryReceiptTable, ProtocolInboxTable } from "@/protocol/protocol.sql"
 import { ProtocolStore } from "@/protocol/store"
 import { Session } from "@/session"
-import { ToolPartRequestTable } from "@/session/session.sql"
+import {
+  MessageTable,
+  PartTable,
+  ToolPartOutcomeTable,
+  ToolPartProgressTable,
+  ToolPartRequestTable,
+} from "@/session/session.sql"
 import { Database } from "@/storage/db"
 import {
   missionTaskDuplexFinalEvidenceState,
+  missionTaskDuplexActivityKey,
   missionTaskDuplexProgressKey,
   missionTaskDuplexToolHealth,
+  observeMissionTaskDuplexActivity,
   projectMissionTaskDuplexControlStateInTransaction,
 } from "../script/mission-task-duplex-snapshot"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
@@ -22,6 +30,107 @@ afterEach(async () => {
 })
 
 describe("Mission Task duplex snapshot", () => {
+  test("renews the bounded inactivity deadline from persisted running Tool progress", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const now = 1_000
+        const root = await Session.create({ kind: "root", title: "Duplex activity" })
+        const user = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: root.id,
+          role: "user",
+          author: "user",
+          time: { created: now },
+          agent: "mission",
+          model: { providerID: "openai", modelID: "gpt-5.6-sol" },
+        })
+        const assistant = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: root.id,
+          parentID: user.id,
+          role: "assistant",
+          author: "mission",
+          time: { created: now + 1 },
+          agent: "mission",
+          providerID: "openai",
+          modelID: "gpt-5.6-sol",
+          path: { cwd: project.path, root: project.path },
+          cost: 0,
+          tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+        })
+        const runningTool = await Session.updatePart({
+          id: Identifier.ascending("part"),
+          sessionID: root.id,
+          messageID: assistant.id,
+          type: "tool",
+          callID: "call_duplex_activity",
+          tool: "bash",
+          state: { status: "running", input: { command: "train" }, time: { start: now + 2 } },
+        })
+        const activityKey = () => Database.use((db) => missionTaskDuplexActivityKey({
+          taskCount: 0,
+          schedulerEventCount: 0,
+          deliveredInboxCount: 0,
+          messages: db.select().from(MessageTable).all(),
+          parts: db.select().from(PartTable).all(),
+          toolRequests: db.select().from(ToolPartRequestTable).all(),
+          toolProgress: db.select().from(ToolPartProgressTable).all(),
+          toolOutcomes: db.select().from(ToolPartOutcomeTable).all(),
+        }))
+        const initialKey = activityKey()
+        const initial = observeMissionTaskDuplexActivity({
+          activityKey: initialKey,
+          observedAtMs: now + 3,
+          inactivityWindowMs: 3_000,
+          absoluteDeadlineMs: 10_000,
+        })
+        expect(initial.deadlineMs).toBe(4_003)
+
+        const stable = observeMissionTaskDuplexActivity({
+          previous: initial,
+          activityKey: activityKey(),
+          observedAtMs: now + 1_000,
+          inactivityWindowMs: 3_000,
+          absoluteDeadlineMs: 10_000,
+        })
+        expect(stable).toEqual(initial)
+
+        const progressID = Identifier.ascending("part")
+        Database.use((db) => db.insert(ToolPartProgressTable).values({
+          id: progressID,
+          request_part_id: runningTool.id,
+          metadata: { output_bytes: 31_337 },
+          time_created: now + 2_500,
+        }).run())
+        const progressKey = activityKey()
+        expect(JSON.parse(progressKey).toolProgress).toEqual({
+          count: 1,
+          latestTime: now + 2_500,
+          latestID: progressID,
+        })
+        const renewed = observeMissionTaskDuplexActivity({
+          previous: stable,
+          activityKey: progressKey,
+          observedAtMs: now + 2_600,
+          inactivityWindowMs: 3_000,
+          absoluteDeadlineMs: 10_000,
+        })
+        expect(renewed.deadlineMs).toBe(6_600)
+
+        const capped = observeMissionTaskDuplexActivity({
+          previous: renewed,
+          activityKey: `${progressKey}:terminal`,
+          observedAtMs: 9_000,
+          inactivityWindowMs: 3_000,
+          absoluteDeadlineMs: 10_000,
+        })
+        expect(capped.deadlineMs).toBe(10_000)
+      },
+    })
+  })
+
   test("accepts one completion-owned canonical Artifact and exact scheduler usage owners", () => {
     const nonce = "DUPLEX-final-evidence"
     const base = {

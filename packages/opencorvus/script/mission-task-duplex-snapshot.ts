@@ -3,7 +3,13 @@ import { projectTaskRowsInTransaction } from "@/engine/store"
 import { PublishableInteractiveArtifactPayload } from "@/interactive-artifact/schema"
 import { projectProtocolDeliveryInTransaction } from "@/protocol/delivery-projection"
 import { ProtocolInboxTable } from "@/protocol/protocol.sql"
-import { ToolPartRequestTable } from "@/session/session.sql"
+import {
+  MessageTable,
+  PartTable,
+  ToolPartOutcomeTable,
+  ToolPartProgressTable,
+  ToolPartRequestTable,
+} from "@/session/session.sql"
 import { projectToolPartInTransaction } from "@/session/tool-part-facts"
 import type { Database } from "@/storage/db"
 
@@ -145,6 +151,84 @@ export function missionTaskDuplexProgressKey(
   ).length
   const terminalTasks = input.tasks.filter((row) => row.time_completed !== null).length
   return `${input.tasks.length}:${input.schedulerEventCount}:${terminalDeliveries}:${terminalTasks}:${input.missionCompleted ? 1 : 0}`
+}
+
+function durableActivityFrontier(rows: readonly { id: string; time: number }[]) {
+  let latestTime = 0
+  let latestID = ""
+  for (const row of rows) {
+    if (row.time > latestTime || (row.time === latestTime && row.id > latestID)) {
+      latestTime = row.time
+      latestID = row.id
+    }
+  }
+  return { count: rows.length, latestTime, latestID }
+}
+
+export function missionTaskDuplexActivityKey(input: {
+  taskCount: number
+  schedulerEventCount: number
+  deliveredInboxCount: number
+  messages: readonly Pick<typeof MessageTable.$inferSelect, "id" | "time_updated">[]
+  parts: readonly Pick<typeof PartTable.$inferSelect, "id" | "time_updated">[]
+  toolRequests: readonly Pick<typeof ToolPartRequestTable.$inferSelect, "id" | "time_created">[]
+  toolProgress: readonly Pick<typeof ToolPartProgressTable.$inferSelect, "id" | "time_created">[]
+  toolOutcomes: readonly Pick<typeof ToolPartOutcomeTable.$inferSelect, "id" | "time_created">[]
+}) {
+  return JSON.stringify({
+    tasks: input.taskCount,
+    schedulerEvents: input.schedulerEventCount,
+    deliveredInboxes: input.deliveredInboxCount,
+    messages: durableActivityFrontier(
+      input.messages.map((row) => ({ id: row.id, time: row.time_updated })),
+    ),
+    parts: durableActivityFrontier(input.parts.map((row) => ({ id: row.id, time: row.time_updated }))),
+    toolRequests: durableActivityFrontier(
+      input.toolRequests.map((row) => ({ id: row.id, time: row.time_created })),
+    ),
+    toolProgress: durableActivityFrontier(
+      input.toolProgress.map((row) => ({ id: row.id, time: row.time_created })),
+    ),
+    toolOutcomes: durableActivityFrontier(
+      input.toolOutcomes.map((row) => ({ id: row.id, time: row.time_created })),
+    ),
+  })
+}
+
+export type MissionTaskDuplexActivityDeadline = {
+  activityKey: string
+  deadlineMs: number
+}
+
+export function observeMissionTaskDuplexActivity(input: {
+  previous?: MissionTaskDuplexActivityDeadline
+  activityKey: string
+  observedAtMs: number
+  inactivityWindowMs: number
+  absoluteDeadlineMs: number
+}): MissionTaskDuplexActivityDeadline {
+  if (input.activityKey.length === 0) throw new Error("Mission Task duplex activity key must not be empty")
+  for (const [label, value] of [
+    ["observation time", input.observedAtMs],
+    ["inactivity window", input.inactivityWindowMs],
+    ["absolute deadline", input.absoluteDeadlineMs],
+  ] as const) {
+    if (!Number.isSafeInteger(value) || value < 0) {
+      throw new Error(`Mission Task duplex ${label} must be a non-negative safe integer`)
+    }
+  }
+  if (input.inactivityWindowMs === 0) {
+    throw new Error("Mission Task duplex inactivity window must be positive")
+  }
+  if (input.previous?.activityKey === input.activityKey) return input.previous
+  const renewedDeadline = input.observedAtMs + input.inactivityWindowMs
+  if (!Number.isSafeInteger(renewedDeadline)) {
+    throw new Error("Mission Task duplex inactivity deadline must be a safe integer")
+  }
+  return {
+    activityKey: input.activityKey,
+    deadlineMs: Math.min(input.absoluteDeadlineMs, renewedDeadline),
+  }
 }
 
 export function missionTaskDuplexToolHealth(
