@@ -16,15 +16,18 @@ universal executable interface.
 3. The authoritative input Message is atomically bound to a content-addressed
    `CatalogViewSnapshotPayloadV2`. `HarnessProjection` binds the same snapshot
    ref/hash and cannot expand it.
-4. `capability_search` is the only executable Harness Tool on revision zero.
+4. `capability_search` is the permanent discovery Tool on revision zero. Native
+   Mission additionally receives only its fixed `mission_state` and
+   `scheduler_message` transport leaves; other runtimes receive no eager domain
+   Tool.
    A caller-requested JSON-schema response can additionally use the existing
    reserved `StructuredOutput` response encoder; it is not a capability grant,
    effect, or permission occurrence, but its normalized Provider definition is
    included in the immutable base and total payload budget. Fuzzy results are metadata; only
    caller-supplied `exact_refs` can activate executable leaves.
 5. A completed search ToolPart carries the append-only reveal receipt. The next
-   Provider step folds receipts and materializes only `capability_search` plus
-   the exact active leaves and an already-budgeted conditional response encoder.
+   Provider step folds receipts and materializes the exact permanent base, exact
+   active leaves, and an already-budgeted conditional response encoder.
 6. The specialized Tool/MCP/Skill owner and the existing permission authority
    still validate and execute each concrete call. Search is neither approval
    nor execution.
@@ -72,8 +75,10 @@ conflict.
 
 ## Provider budgets
 
-- Revision zero's executable Harness contains only `capability_search`, at most
-  4,000 normalized characters and 1,000 estimated tokens. The conditional
+- Revision zero's executable Harness contains the permanent
+  `capability_search` discovery Tool and, only for native Mission, the exact
+  `mission_state` and `scheduler_message` transport leaves. Search itself is at
+  most 4,000 normalized characters and 1,000 estimated tokens. The conditional
   response encoder remains outside the Harness but is counted in the immutable
   Provider base and total payload budget.
 - One search activates at most five exact leaves.
@@ -92,12 +97,26 @@ factored projection must be derived from and delegate validation to the one
 canonical domain schema. It cannot replace precise validation with an opaque
 JSON object or create another persistence contract.
 
-The reducer counts the real Provider-normalized search definition from revision
-zero, so the permanent Tool cannot sit outside the compare-and-swap budget.
+The reducer counts every real Provider-normalized permanent definition from
+revision zero, so neither search nor the native Mission transport leaves can sit
+outside the compare-and-swap budget. Base Provider names are immutable reducer
+input; a reveal that tries to reuse one of those names is corrupt rather than a
+second definition owner.
 
 ## Exact materialization owners
 
 - Tool Registry initializes only requested Tool IDs.
+- Native Mission re-materializes `mission_state` and `scheduler_message` from
+  the current frozen Catalog and Harness on every Provider step, applies the
+  ordinary permission and per-message Tool-switch narrowing, and exposes them
+  beside search without a persisted active set. These two fixed transport
+  identities are not a substitute for reveal-selected domain or terminal
+  Tools.
+- The Provider base is immutable per input occurrence. If an older occurrence
+  contains a valid reveal receipt for a Tool later promoted into a native base,
+  that occurrence continues reducing against its recorded pre-promotion base;
+  new occurrences use the current base. This is derived from the append-only
+  receipt chain, not a compatibility store or cross-occurrence cache.
 - Runtime-projected and dispatch-stage Tools live behind one
   `RuntimeToolOwner.leaves` binding list. The runtime contract contains no Tool
   record, `projectedTools`, `stageTools`, or parallel projected/stage ID arrays.
@@ -164,8 +183,21 @@ Every Provider step re-reads and hashes the input-bound Catalog before
 materializing definitions. Persisted receipt definitions and exact materializer
 digests must match on the next step. Permission continuation reconstructs the
 same Worker Turn descriptor, package revision, Harness grants, and dispatch-stage
-occurrence binding; it does not recreate a broad Tool table. When an effectful
-stage Tool pauses beside active pure collectors, recovery validates the
+occurrence binding; it does not recreate a broad Tool table. An effectful
+permanent Registry leaf has no reveal receipt, so its canonical permission
+Provider digest binds the same normalized definition digest and the same
+Catalog/Harness materializer-binding digest used by reveal materialization.
+Direct execution and permission continuation derive that authority through the
+same Registry wrapper. A changed definition or owner binding therefore changes
+the existing permission request identity, retires the approved continuation as
+typed stale, and performs no external effect; there is no name-only built-in
+fallback. Recovery also reconstructs the persisted JSON-schema
+`StructuredOutput` reservation before folding reveal receipts. A missing
+Harness grant, missing exact Registry materialization, or Tool removed by the
+current permission/switch projection terminalizes the recovered ToolPart and
+retires the continuation as typed stale; these failures cannot remain in every
+later startup scan. When an effectful stage Tool pauses beside active pure collectors,
+recovery validates the
 exact effectful Tool set and materializer digests, validates the versioned
 reducer/toolkit binding, and folds completed collector ToolParts in one
 canonical total order before materializing the exact active leaves. A

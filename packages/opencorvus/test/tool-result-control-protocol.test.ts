@@ -3315,7 +3315,10 @@ describe("single Tool-result turn-control protocol", () => {
         ).href
         await Config.updateProjectPatch({ permission_mode: "full_access", plugin: [pluginURL] })
         const config = await Config.get()
-        const agent = sessionRuntimeFromNativeAgent({ options: {}, tools: { global: ["wait"] } })
+        const agent = sessionRuntimeFromNativeAgent({
+          options: {},
+          tools: { global: ["capability_search", "wait"] },
+        })
         const session = await Session.create({ kind: "assistant", title: "Plugin control preservation" })
         const user = await Session.updateMessage({
           id: Identifier.ascending("message"),

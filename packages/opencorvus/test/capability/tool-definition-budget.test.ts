@@ -21,6 +21,7 @@ import { MessageStore } from "../../src/session/message-store"
 import { CapabilitySearchTool } from "../../src/tool/capability-search"
 import { createAiSdkToolFromInfo } from "../../src/tool/ai-sdk-adapter"
 import { ToolRegistry } from "../../src/tool/registry"
+import { NATIVE_MISSION_TRANSPORT_TOOL_IDS } from "../../src/tool/tool-id-catalog"
 import {
   ActivatedCapability,
   CAPABILITY_REVEAL_MAX_ACTIVE_CHARS,
@@ -344,10 +345,14 @@ describe("search-native Tool definition budgets", () => {
         const runtime = sessionRuntimeFromNativeAgent(await PrimaryAssistantRegistry.get("mission", { config }))
         const auditToolIDs = ["panel_query_task", "panel_query_task_artifacts", "panel_read_task_artifact"] as const
         const completionToolIDs = [...auditToolIDs, "panel_complete_mission"] as const
-        const allToolIDs = [...completionToolIDs, "publish_interactive_artifact"] as const
+        const allToolIDs = [
+          ...NATIVE_MISSION_TRANSPORT_TOOL_IDS,
+          ...completionToolIDs,
+          "publish_interactive_artifact",
+        ] as const
         const measurements: Array<{
           provider: string
-          group: "audit" | "completion" | "publication"
+          group: "base" | "audit" | "completion" | "publication"
           chars: number
           tokens: number
         }> = []
@@ -394,7 +399,27 @@ describe("search-native Tool definition budgets", () => {
             harnessProjectionHash: "3".repeat(64),
             catalogSnapshotRef: `artifact:mission-terminal-tool-budget:${model.providerID}`,
             catalogSnapshotHash: "4".repeat(64),
-            baseDefinition: capabilityRevealBaseDefinitions([searchDefinition]),
+            baseDefinition: capabilityRevealBaseDefinitions([
+              searchDefinition,
+              ...NATIVE_MISSION_TRANSPORT_TOOL_IDS.map((toolID) => {
+                const definition = definitions.get(toolID)
+                if (!definition) throw new Error(`Missing normalized Mission base Tool definition ${toolID}`)
+                return definition
+              }),
+            ]),
+          })
+          expect(prior.baseDefinition.providerNames).toEqual([
+            "capability_search",
+            "mission_state",
+            "scheduler_message",
+          ])
+          expect(prior.payloadChars).toBeLessThanOrEqual(CAPABILITY_REVEAL_MAX_ACTIVE_CHARS)
+          expect(prior.payloadTokens).toBeLessThanOrEqual(CAPABILITY_REVEAL_MAX_ACTIVE_TOKENS)
+          measurements.push({
+            provider: model.providerID,
+            group: "base",
+            chars: prior.payloadChars,
+            tokens: prior.payloadTokens,
           })
           const candidate = (toolIDs: readonly string[], binding: string) =>
             reduceCapabilityRevealCandidate({
@@ -444,9 +469,11 @@ describe("search-native Tool definition budgets", () => {
 
         expect(measurements.map(({ provider, group }) => `${provider}:${group}`).sort()).toEqual([
           "anthropic:audit",
+          "anthropic:base",
           "anthropic:completion",
           "anthropic:publication",
           "openai:audit",
+          "openai:base",
           "openai:completion",
           "openai:publication",
         ])

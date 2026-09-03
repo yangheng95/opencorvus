@@ -21,6 +21,10 @@ import { PrimaryAssistantRegistry } from "../../src/agent/primary-assistant-regi
 import { sessionRuntimeFromNativeAgent } from "../../src/agent/session-agent-runtime"
 import { SessionProcessor } from "../../src/session/processor"
 import { resolveTestCapabilityTools } from "../fixture/capability-occurrence"
+import {
+  CAPABILITY_REVEAL_MAX_ACTIVE_CHARS,
+  CAPABILITY_REVEAL_MAX_ACTIVE_TOKENS,
+} from "../../src/capability/reveal-receipt"
 
 function scalePackageDefinition(id: string): ExpertSquadPackageDefinition {
   const emptyResources = { capability_refs: [] as string[] }
@@ -329,6 +333,11 @@ describe("Expert Squad catalog index", () => {
           messages: await Session.messages({ sessionID: mission.id }),
           activeLocalRefs: [],
         })
+        expect(Object.keys(tools).sort()).toEqual([
+          "capability_search",
+          "mission_state",
+          "scheduler_message",
+        ])
         const search = tools.capability_search
         if (!search?.execute) throw new Error("Mission capability_search is unavailable")
         const result = await search.execute(
@@ -419,9 +428,9 @@ describe("Expert Squad catalog index", () => {
           },
         })
         expect(metadata.active_payload_chars).toBeGreaterThan(0)
-        expect(metadata.active_payload_chars).toBeLessThanOrEqual(4_000)
+        expect(metadata.active_payload_chars).toBeLessThanOrEqual(CAPABILITY_REVEAL_MAX_ACTIVE_CHARS)
         expect(metadata.active_payload_tokens).toBeGreaterThan(0)
-        expect(metadata.active_payload_tokens).toBeLessThanOrEqual(1_000)
+        expect(metadata.active_payload_tokens).toBeLessThanOrEqual(CAPABILITY_REVEAL_MAX_ACTIVE_TOKENS)
       },
     })
   }, 0)
@@ -632,9 +641,19 @@ describe("Expert Squad catalog index", () => {
       nextCursor: null,
       entries: [{ id: "evolution-lab", installationScopes: ["project"] }],
     })
-    expect(detail).toMatchObject({
+    expect({
+      id: detail.id,
+      installations: detail.installations,
+    }).toEqual({
       id: "evolution-lab",
-      installations: [{ installationScope: "project", installedVersion: "2026.08.30.3" }],
+      installations: [
+        {
+          installationScope: "project",
+          installedVersion: detail.version,
+          installedPackageDigest: detail.packageDigest,
+          updateAvailable: false,
+        },
+      ],
     })
   }, 0)
 

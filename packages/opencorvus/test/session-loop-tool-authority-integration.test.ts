@@ -49,6 +49,10 @@ import { harnessGrantedRefs } from "../src/capability/harness-projection"
 import { createRuntimeToolOwner } from "../src/session/runtime-tool-owner"
 import { testRuntimeToolFactories } from "./fixture/runtime-tool-owner"
 import { capabilityRef } from "@opencorvus-ai/util/capability-ref"
+import { createDispatchLineageOrigin } from "../src/engine/dispatch-lineage"
+import { expertSquadPackageRevisionBinding } from "../src/engine/expert-squad-package-revision-binding"
+import { taskRequestSHA256 } from "../src/orchestrator/dispatch-turn-projection"
+import { recordTestDispatchLineage } from "./fixture/dispatch-lineage"
 
 function workerHarness(input: Parameters<typeof PromptProfileResolver.workerHarnessGrants>[0]) {
   const grants = PromptProfileResolver.workerHarnessGrants(input)
@@ -79,6 +83,54 @@ function providerModel(): Provider.Model {
     api: { id: "authority-integration", npm: "@ai-sdk/anthropic" },
     options: {},
   } as Provider.Model
+}
+
+function recordDirectWorkerDispatch(input: {
+  taskID: string
+  taskRequest: string
+  rootSessionID: string
+  workerSessionID: string
+  identity: Parameters<typeof createDispatchLineageOrigin>[0]["projectedWorkerIdentity"]
+  packageRevision: PromptProfileResolver.ResolvedPackageRevision
+  adapterInput: Record<string, unknown>
+}) {
+  const dispatchID = Identifier.ascending("artifact")
+  const workflowBinding = {
+    kind: "direct" as const,
+    package_revision: expertSquadPackageRevisionBinding(input.packageRevision),
+  }
+  recordTestDispatchLineage({
+    origin: createDispatchLineageOrigin({
+      dispatchID,
+      taskID: input.taskID,
+      orchestratorSessionID: input.rootSessionID,
+      orchestratorMessageID: Identifier.ascending("message"),
+      toolPartID: Identifier.ascending("part"),
+      toolCallID: Identifier.ascending("call"),
+      targetAgentID: input.identity.agentID,
+      projectedWorkerIdentity: input.identity,
+      workScope: { kind: "task" },
+      workflowBinding,
+      workflowNodeID: null,
+      adapterInput: input.adapterInput,
+    }),
+    childSessionID: input.workerSessionID,
+  })
+  return {
+    kind: "initial" as const,
+    current_dispatch_id: dispatchID,
+    workflow_binding: workflowBinding,
+    workflow_node_id: null,
+    workflow_occurrence_id: dispatchID,
+    delivery_slice_revision_ids: [],
+    evidence_locators: [],
+    task_authority: {
+      task_id: input.taskID,
+      root_session_id: input.rootSessionID,
+      request_sha256: taskRequestSHA256(input.taskRequest),
+      initial_control_text_parts: [],
+    },
+  }
 }
 
 afterEach(async () => {
@@ -792,12 +844,13 @@ describe("SessionLoop Tool execution authority integration", () => {
           metadata: { configOverlay: { prompt_profile: { active: "base" } } },
         })
         const now = Date.now()
+        const taskRequest = "Prove projected permission recovery"
         persistTask({
           taskID,
           rootSession: root,
           now,
           title: "Projected permission root",
-          request: "Prove projected permission recovery",
+          request: taskRequest,
           productPillar: "work",
           metadata: {},
           projectID: Instance.project.id,
@@ -854,6 +907,15 @@ describe("SessionLoop Tool execution authority integration", () => {
           projectedToolIDs: Object.keys(projectedTools.projectedTools),
           stageToolIDs: Object.keys(projectedTools.stageTools),
         })
+        const dispatchTurn = recordDirectWorkerDispatch({
+          taskID,
+          taskRequest,
+          rootSessionID: root.id,
+          workerSessionID: session.id,
+          identity: projection.workerCapability.identity,
+          packageRevision,
+          adapterInput: { reason: "Write the projected restart evidence file." },
+        })
         const descriptor = WorkerTurnDescriptor.create({
           sessionID: session.id,
           payload: {
@@ -873,6 +935,7 @@ describe("SessionLoop Tool execution authority integration", () => {
               user_message_id: user.id,
               control_text_parts: [{ part_id: userPart.id, text_sha256: textSHA256(userPart.text) }],
             },
+            dispatchTurn,
           },
         })
         await Session.updateMessage({
@@ -1028,12 +1091,13 @@ describe("SessionLoop Tool execution authority integration", () => {
           metadata: { configOverlay: { prompt_profile: { active: "advanced" } } },
         })
         const now = Date.now()
+        const taskRequest = "Persist one requirements decision"
         persistTask({
           taskID,
           rootSession: root,
           now,
           title: "Requirements stage permission root",
-          request: "Persist one requirements decision",
+          request: taskRequest,
           productPillar: "work",
           metadata: {},
           projectID: Instance.project.id,
@@ -1105,6 +1169,15 @@ describe("SessionLoop Tool execution authority integration", () => {
           stageToolIDs: Object.keys(architectProjectedTools.stageTools),
         })
         const architectEnabled = architectHarness.toolIDs
+        const architectDispatchTurn = recordDirectWorkerDispatch({
+          taskID,
+          taskRequest,
+          rootSessionID: root.id,
+          workerSessionID: architectSession.id,
+          identity: architectProjection.workerCapability.identity,
+          packageRevision,
+          adapterInput: { reason: "Inspect the current Architect draft through persisted Tool authority." },
+        })
         const architectDescriptor = WorkerTurnDescriptor.create({
           sessionID: architectSession.id,
           payload: {
@@ -1120,6 +1193,7 @@ describe("SessionLoop Tool execution authority integration", () => {
               user_message_id: architectUser.id,
               control_text_parts: [{ part_id: architectUserPart.id, text_sha256: textSHA256(architectUserPart.text) }],
             },
+            dispatchTurn: architectDispatchTurn,
           },
         })
         await Session.updateMessage({
@@ -1286,6 +1360,15 @@ describe("SessionLoop Tool execution authority integration", () => {
           stageToolIDs: Object.keys(projectedTools.stageTools),
         })
         const enabled = requirementsHarness.toolIDs
+        const requirementsDispatchTurn = recordDirectWorkerDispatch({
+          taskID,
+          taskRequest,
+          rootSessionID: root.id,
+          workerSessionID: session.id,
+          identity: projection.workerCapability.identity,
+          packageRevision,
+          adapterInput: { reason: "Register the persisted runtime decision." },
+        })
         const descriptor = WorkerTurnDescriptor.create({
           sessionID: session.id,
           payload: {
@@ -1305,6 +1388,7 @@ describe("SessionLoop Tool execution authority integration", () => {
               user_message_id: user.id,
               control_text_parts: [{ part_id: userPart.id, text_sha256: textSHA256(userPart.text) }],
             },
+            dispatchTurn: requirementsDispatchTurn,
           },
         })
         await Session.updateMessage({
@@ -1491,12 +1575,13 @@ describe("SessionLoop Tool execution authority integration", () => {
           metadata: { configOverlay: { prompt_profile: { active: "advanced" } } },
         })
         const now = Date.now()
+        const taskRequest = "process stage"
         persistTask({
           taskID,
           rootSession: root,
           now,
           title: "Process stage root",
-          request: "process stage",
+          request: taskRequest,
           productPillar: "work",
           metadata: {},
           projectID: Instance.project.id,
@@ -1561,6 +1646,15 @@ describe("SessionLoop Tool execution authority integration", () => {
           projectedToolIDs: Object.keys(projected.projectedTools),
           stageToolIDs: Object.keys(projected.stageTools),
         })
+        const processDispatchTurn = recordDirectWorkerDispatch({
+          taskID,
+          taskRequest,
+          rootSessionID: root.id,
+          workerSessionID: session.id,
+          identity: projection.workerCapability.identity,
+          packageRevision,
+          adapterInput: { reason: "Execute the recovered process stage decision." },
+        })
         const descriptor = WorkerTurnDescriptor.create({
           sessionID: session.id,
           payload: {
@@ -1580,6 +1674,7 @@ describe("SessionLoop Tool execution authority integration", () => {
               user_message_id: user.id,
               control_text_parts: [{ part_id: userPart.id, text_sha256: textSHA256(userPart.text) }],
             },
+            dispatchTurn: processDispatchTurn,
           },
         })
         await Session.updateMessage({

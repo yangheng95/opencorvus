@@ -246,6 +246,7 @@ function revealOwner(input: { occurrenceID: string; binding: CatalogSnapshotBind
     occurrenceID: input.occurrenceID,
     harness,
     baseDefinition: {
+      providerNames: ["capability_search"],
       definitionDigest: "e".repeat(64),
       payloadChars: 120,
       payloadTokens: 30,
@@ -459,7 +460,12 @@ describe("occurrence capability reveal owner", () => {
           model: {} as never,
           occurrenceID: userMessageID,
           harness,
-          baseDefinition: { definitionDigest: "e".repeat(64), payloadChars: 120, payloadTokens: 30 },
+          baseDefinition: {
+            providerNames: ["capability_search"],
+            definitionDigest: "e".repeat(64),
+            payloadChars: 120,
+            payloadTokens: 30,
+          },
           async materialize(_requestedRef, executableRef) {
             return {
               providerName: executableRef.local_ref,

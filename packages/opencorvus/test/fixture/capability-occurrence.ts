@@ -13,6 +13,7 @@ import { SessionRuntimeContractStore } from "../../src/session/runtime-contract"
 import type { SessionAgentRuntime } from "../../src/agent/session-agent-runtime"
 import { RuntimeCapabilityCatalog } from "../../src/tool/capability-runtime-catalog"
 import { ToolRegistry } from "../../src/tool/registry"
+import { NATIVE_MISSION_TRANSPORT_TOOL_IDS } from "../../src/tool/tool-id-catalog"
 import type { ProviderToolNameOwner } from "../../src/tool/provider-name-authority"
 import { jsonSchema, tool, type Tool as AITool } from "ai"
 import {
@@ -137,20 +138,23 @@ export async function resolveTestCapabilityTools(input: {
   includeMcpTools?: boolean
   extra?: Record<string, unknown>
   reservedProviderToolNames?: readonly { name: string; owner: ProviderToolNameOwner }[]
+  reservedProviderTools?: readonly { name: string; owner: ProviderToolNameOwner; tool: AITool }[]
 }): Promise<{ tools: Record<string, AITool>; occurrence: Awaited<ReturnType<typeof bindTestCapabilityOccurrence>> }> {
   const occurrence = await bindTestCapabilityOccurrence(input)
   const stableHarnessProjection = occurrence.harnessProjection
-  const reservedProviderTools = (input.reservedProviderToolNames ?? []).map((reservation) => ({
-    ...reservation,
-    tool: tool({
-      description: `Reserved Provider Tool ${reservation.name}.`,
-      inputSchema: jsonSchema({ type: "object", additionalProperties: false }),
-      async execute() {
-        return { output: "reserved", title: reservation.name, metadata: {} }
-      },
-    }),
-  }))
-  const resolve = (reservations?: typeof input.reservedProviderToolNames) =>
+  const reservedProviderTools =
+    input.reservedProviderTools ??
+    (input.reservedProviderToolNames ?? []).map((reservation) => ({
+      ...reservation,
+      tool: tool({
+        description: `Reserved Provider Tool ${reservation.name}.`,
+        inputSchema: jsonSchema({ type: "object", additionalProperties: false }),
+        async execute() {
+          return { output: "reserved", title: reservation.name, metadata: {} }
+        },
+      }),
+    }))
+  const resolve = () =>
     SessionLoop.resolveTools({
       agent: input.agent,
       agentID: input.agentID,
@@ -164,17 +168,17 @@ export async function resolveTestCapabilityTools(input: {
       extra: input.extra,
       harnessProjection: stableHarnessProjection,
       occurrenceID: input.assistant.parentID,
-      reservedProviderTools: reservations?.map((reservation) => {
-        const reserved = reservedProviderTools.find((candidate) => candidate.name === reservation.name)
-        if (!reserved) throw new Error(`Missing reserved test Provider Tool ${reservation.name}.`)
-        return reserved
-      }),
+      reservedProviderTools,
     })
-  let tools = await resolve(input.reservedProviderToolNames)
+  let tools = await resolve()
   const searchTool = tools.capability_search
   if (!searchTool) throw new Error("Test occurrence has no capability_search Tool.")
+  const baseProviderNames = [
+    "capability_search",
+    ...(input.agentID === "mission" && input.session.kind === "mission" ? NATIVE_MISSION_TRANSPORT_TOOL_IDS : []),
+  ].filter((name) => Object.hasOwn(tools, name))
   const baseDefinition = capabilityRevealBaseDefinitions([
-    normalizedProviderToolDefinition("capability_search", searchTool),
+    ...baseProviderNames.map((name) => normalizedProviderToolDefinition(name, tools[name]!)),
     ...reservedProviderTools.map((reservation) =>
       normalizedProviderToolDefinition(reservation.name, reservation.tool),
     ),
@@ -192,9 +196,10 @@ export async function resolveTestCapabilityTools(input: {
   })
   if (prior.revision === 0) {
     const initialToolNames = Object.keys(tools).sort()
-    if (JSON.stringify(initialToolNames) !== JSON.stringify(["capability_search"])) {
+    const expectedInitialToolNames = [...baseProviderNames].sort()
+    if (JSON.stringify(initialToolNames) !== JSON.stringify(expectedInitialToolNames)) {
       throw new Error(
-        `Initial Provider surface must contain only capability_search; found ${initialToolNames.join(",") || "<none>"}.`,
+        `Initial Provider surface must contain ${expectedInitialToolNames.join(",")}; found ${initialToolNames.join(",") || "<none>"}.`,
       )
     }
   }
@@ -221,7 +226,7 @@ export async function resolveTestCapabilityTools(input: {
         `Test reveal Harness changed during execution: ${String(receipt?.harness_projection_hash)} != ${occurrence.harnessProjection.projection_hash}.`,
       )
     }
-    tools = await resolve(input.reservedProviderToolNames)
+    tools = await resolve()
   }
   return { tools, occurrence }
 }

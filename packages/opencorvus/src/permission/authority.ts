@@ -1202,7 +1202,7 @@ export namespace PermissionAuthority {
       })
     const waiterCount = await releaseDecisionWaiters(request, settled)
     if (wonDecision && !["denied", "cancelled", "stale"].includes(settled.event_type) && waiterCount === 0) {
-      await resumeRequest(request)
+      await resumeRequestWithStaleRetirement(request)
     }
     return Resolution.parse({
       request: requestFromRow(requested),
@@ -1280,6 +1280,17 @@ export namespace PermissionAuthority {
     }
   }
 
+  async function resumeRequestWithStaleRetirement(request: Request): Promise<SessionLoopContinuationOutcome> {
+    try {
+      return await resumeRequest(request)
+    } catch (error) {
+      if (error instanceof StaleContinuationError || error instanceof TaskRootActivationSupersededError) {
+        retireContinuation(request, error.message)
+      }
+      throw error
+    }
+  }
+
   /**
    * Recovery is deliberately fault-isolated: one continuation that cannot run
    * must leave the remaining continuations — and the project bootstrap that
@@ -1301,10 +1312,9 @@ export namespace PermissionAuthority {
    */
   async function recoverContinuation(request: Request): Promise<SessionLoopContinuationOutcome | "failed"> {
     try {
-      return await resumeRequest(request)
+      return await resumeRequestWithStaleRetirement(request)
     } catch (error) {
       const stale = error instanceof StaleContinuationError || error instanceof TaskRootActivationSupersededError
-      if (stale) retireContinuation(request, (error as Error).message)
       log.error("permission continuation recovery failed", {
         requestID: request.id,
         sessionID: request.sessionID,
@@ -1626,7 +1636,7 @@ export namespace PermissionAuthority {
           if (["denied", "cancelled", "stale"].includes(settled.event_type)) continue
           if (waiterCount === 0) {
             await awaitWithinSessionDeletionDeadline(
-              resumeRequest(request),
+              resumeRequestWithStaleRetirement(request),
               options.deadline,
               `resuming Permission request ${request.id}`,
             )

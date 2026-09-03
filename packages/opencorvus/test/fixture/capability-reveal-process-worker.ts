@@ -55,6 +55,7 @@ await Instance.provide({
       occurrenceID: state.occurrenceID,
       harness,
       baseDefinition: {
+        providerNames: ["capability_search"],
         definitionDigest: "e".repeat(64),
         payloadChars: 120,
         payloadTokens: 30,

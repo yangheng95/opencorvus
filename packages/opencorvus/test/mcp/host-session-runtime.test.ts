@@ -413,7 +413,12 @@ describe("host-owned native Session MCP composition", () => {
           expect(HostSessionMcpRuntime.catalogSnapshots(mission.id).map((snapshot) => snapshot.owner.owner_id).sort()).toEqual(
             resolved.map((entry) => entry.connectionIdentity).filter((entry): entry is string => Boolean(entry)).sort(),
           )
-          expect(Object.keys(tools).sort()).toEqual(["capability_search", "wait"])
+          expect(Object.keys(tools).sort()).toEqual([
+            "capability_search",
+            "mission_state",
+            "scheduler_message",
+            "wait",
+          ])
         } finally {
           native.mockRestore()
         }

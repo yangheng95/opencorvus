@@ -4,6 +4,7 @@ import { Message } from "../../src/session/message"
 import {
   CAPABILITY_REVEAL_RECEIPT_METADATA_KEY,
   ActivatedCapability,
+  CapabilityRevealBaseDefinitionConflictError,
   capabilityRevealMaterializationFingerprint,
   CorruptCapabilityRevealError,
   createCapabilityRevealReceipt,
@@ -44,6 +45,7 @@ const activation = ActivatedCapability.parse({
 })
 
 const baseDefinition = {
+  providerNames: ["capability_search"],
   definitionDigest: "4".repeat(64),
   payloadChars: 120,
   payloadTokens: 30,
@@ -233,6 +235,7 @@ describe("occurrence capability reveal receipts", () => {
       catalogSnapshotRef,
       catalogSnapshotHash,
       baseDefinition: {
+        providerNames: ["capability_search"],
         definitionDigest: "5".repeat(64),
         payloadChars: 31_950,
         payloadTokens: 7_990,
@@ -241,6 +244,24 @@ describe("occurrence capability reveal receipts", () => {
     expect(() =>
       reduceCapabilityRevealCandidate({ prior, deactivateRefs: [], activated: [activation] }),
     ).toThrow("maximum is 32000")
+  })
+
+  test("reports a typed conflict when a reveal reuses a permanent base Provider name", () => {
+    const prior = foldCapabilityRevealReceipts({
+      occurrenceID,
+      parts: [],
+      harnessProjectionHash,
+      catalogSnapshotRef,
+      catalogSnapshotHash,
+      baseDefinition: { ...baseDefinition, providerNames: ["read"] },
+    })
+    expect(() => reduceCapabilityRevealCandidate({ prior, deactivateRefs: [], activated: [activation] })).toThrow(
+      CapabilityRevealBaseDefinitionConflictError,
+    )
+    expect({ revision: prior.revision, activeRefs: [...prior.active.keys()] }).toEqual({
+      revision: 0,
+      activeRefs: [],
+    })
   })
 
   test("reports typed corruption when a completed search has no receipt", () => {

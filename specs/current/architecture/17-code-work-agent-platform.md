@@ -6,8 +6,9 @@ Implementation calibration (2026-08-30): typed `CapabilityRef`, immutable
 content-addressed Catalog occurrence binding, Harness grants, Expert Squad
 manifest V2, exact Tool/MCP/Skill materialization, and append-only
 `capability_search` reveal receipts are live. The executable Harness contributes
-only search at revision zero and a bounded receipt-derived active leaf set
-thereafter. Conditional `StructuredOutput` remains outside the Harness but
+search at revision zero plus native Mission's two fixed transport leaves,
+`mission_state` and `scheduler_message`, and a bounded receipt-derived active
+leaf set thereafter. Conditional `StructuredOutput` remains outside the Harness but
 inside the immutable Provider base and total definition budget. The
 complete current execution contract is
 [`capability-search-runtime.md`](capability-search-runtime.md). The evidence,
@@ -1218,7 +1219,7 @@ Exit criteria:
 | Mission and Orchestrator prompts | Require explicit pillar/profile per Mission Task; keep provider execution inside the fixed domain Task. |
 | new capability catalog module | Own typed-ref codec, normalized snapshot, revision, caller discovery view, and fuzzy ranking; own no mounting or execution. |
 | `ConversationCapability`, Mission Skill runtime, `PromptProfileResolver` | Publish the ephemeral Harness projection through their existing specialized ownership; do not create a generic mount Registry. |
-| `AgentToolPool` and runtime-template contracts | Remain static runtime upper bounds and declare platform base/transport Tools. |
+| `AgentToolPool` and runtime-template contracts | Remain static runtime upper bounds and declare platform base/transport Tools. Native Mission has exactly `mission_state` and `scheduler_message` in its permanent transport base; every other domain or terminal leaf remains reveal-selected. |
 | `tool/skill.ts` and `skill/mounts.ts` | Remain exact Skill loader/projector; share indexing metadata, not loading authority. |
 | ToolRegistry/execution surface/SessionLoop | Materialize exact projected refs, then apply switches and permission narrowing; remain exact execution owner. |
 | MCP index/auth/OAuth | Publish safe metadata and auth status; remain transport/auth owner; authentication does not mount; raw transactional provider tools are not separately model-visible. |

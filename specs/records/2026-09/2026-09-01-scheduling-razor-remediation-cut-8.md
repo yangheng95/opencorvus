@@ -2782,3 +2782,263 @@ Exact staged-tree module topology passes with 1,103 modules, 5,530 runtime
 edges, no retained cycle, and four clean imports. Exact staged-tree release
 mutation topology also reports the same five canonical authorities. No
 dependency installer ran.
+
+##### Exact-remote success and remaining trajectory abnormality
+
+Commit `ff9a8d4d114ac7ae681e4657c7bf78e7cc074b75` was pushed and verified at
+zero local/remote divergence. A fresh Git archive of that exact commit was
+assembled without an installer: the existing root and all ten workspace
+dependency caches, generated SDK distribution and native process-supervisor
+binary were reused through filesystem links, while every `@opencorvus-ai/*`
+workspace import still resolved to the archived source. The source archive
+SHA-256 was
+`5C9D520F9C0084B1766252AF786E6D58C616E5467F069774E3333AC23864431F`.
+The authority source separately proved a configured OpenAI credential and an
+`openai/gpt-5.6-sol` model projection without exposing either file's content.
+
+The real Provider run returned `ok: true` in
+`D:\myhexin-local\.codex-benchmarks\mission-scheduling-ff9a8d4d1-20260903-final\result.json`.
+It created exactly two Tasks, delivered the exact 12-event duplex set through
+12 inboxes, preserved the three correlated replies, recipient FIFO and semantic
+order, completed both Tasks after their DONE facts, produced no failed Tool
+Part, published nonce-bearing Artifact `art_g0VU8S6BE005ernStFRw`, and durably
+completed Mission `fbb38fe01ceeeceb`. The terminal audit group, isolated
+publication leaf and four-leaf final completion group all appeared in the
+intended order and the final completion transaction succeeded.
+
+This is functional acceptance, not a clean scheduling trajectory. From the
+first durable READY fact to Mission completion the run took about 671 seconds.
+Mission made 66 Provider calls and accounted for 2,136,664 total tokens when
+cache reads are included; the two Task schedulers together made another 20
+calls and accounted for 487,411 tokens. The preceding failed exact-remote run
+made 65 Mission calls. The terminal grouping correction therefore closed the
+missing final Artifact/completion defect but did not materially reduce the
+per-wake call tax.
+
+The current source explains that fixed cost. Every authoritative scheduler
+Message starts a new input occurrence, and every input correctly resets dynamic
+reveal state to revision zero. Native Mission nevertheless accesses its two
+small, role-invariant transport leaves, `mission_state` and
+`scheduler_message`, only by first calling `capability_search`. The visible
+message is already the durable input and these Tool identities are already
+fixed by the native Mission role; repeatedly discovering them is not a business
+decision, permission decision, Catalog refresh or recovery boundary. Persisting
+the prior input's active reveal would create a mutable cross-occurrence shadow
+and remains rejected.
+
+##### Native Mission transport correction
+
+The single correction is a platform-declared native Mission transport base
+containing exactly `mission_state` and `scheduler_message` beside the permanent
+`capability_search` definition. The Tool-pool catalog is the one membership
+source. On every Provider step, SessionLoop re-materializes those exact Registry
+definitions from the current input's immutable Catalog/Harness binding, applies
+the same permission and Tool-switch policies, and includes their normalized
+definitions in the reveal base digest and the existing 32,000-character /
+8,000-token total budget. There is no Session cache, persisted active set,
+workflow gate, inferred message router, compatibility branch or alternate Tool
+executor.
+
+The base names are part of the reducer's immutable base description. An exact
+search cannot activate a Provider name already owned by that base; this closes
+the duplicate-definition ambiguity for all permanent Provider definitions,
+including `capability_search` itself. Rare Mission management leaves remain
+search-revealed. In particular `panel_create_task`, the terminal audit group,
+the isolated large publication leaf and the final completion group keep their
+existing exact reveal receipts and causal order.
+
+Positive acceptance must prove with the actual strict OpenAI and Anthropic
+normalizations that the three-leaf native base fits the total budget, that the
+base plus isolated publication still fits, and that the base plus terminal and
+completion groups still fits. A real SessionLoop Mission occurrence must expose
+the three base Tools before any reveal, preserve them after a reveal/deactivate
+cycle, and execute both native transport leaves through their ordinary persisted
+ToolPart path. Reducer tests must prove a permanent-base activation is rejected
+without changing revision or active refs. Prompt tests must stop instructing
+Mission to reveal either base leaf. Existing Task projected capability authority,
+StructuredOutput base accounting, reveal recovery, permission, terminal and
+duplex contracts must remain green. After exact staging and uninvolved zero-
+finding review, the pushed source requires one fresh exact-remote run whose
+result includes per-agent Tool-name counts and phase timing; functional PASS
+alone is insufficient if the repeated search/state loop remains.
+
+##### Native Mission transport implementation evidence
+
+The implementation keeps one membership declaration,
+`NATIVE_MISSION_TRANSPORT_TOOL_IDS`, in the pure Tool-ID catalog and projects
+that exact set into the native Mission role. SessionLoop selects the eligible
+subset with the merged execution permission and current Message Tool switches,
+requires exact occurrence Harness execution grants, materializes only those
+Registry leaves, binds them through the ordinary persisted ToolPart wrapper,
+and includes their real Provider-normalized definitions in the immutable base
+digest and total payload budget. The reveal reducer now carries the canonically
+sorted permanent Provider names and returns a typed base-definition conflict
+before a candidate can duplicate one; persisted conflicting receipts remain
+corrupt occurrence evidence.
+
+The positive runtime contract creates real native Mission occurrences. Revision
+zero exposes exactly `capability_search`, `mission_state`, and
+`scheduler_message`; Tool switches and merged permission each narrow the base;
+one exact `wait` reveal and deactivation preserves the three-leaf base; and both
+transport leaves execute through their persisted Mission assistant ToolParts,
+including a real durable scheduler notification to a Mission-owned Task. The
+strict Anthropic and OpenAI budget contract measures the three-leaf base, the
+base plus the terminal audit group, the base plus the completion group, and the
+base plus the isolated publication leaf against the 32,000-character and
+8,000-token ceilings.
+
+Before final review, the focused non-UI matrix passed 26 tests with 121
+assertions across reveal ownership/recovery, receipt reduction, Structured
+Output accounting, Skill reveal, strict Provider budgets, terminal Mission
+authority and scheduler prompt contracts. The dedicated native base/reducer
+matrix then passed 10 tests with 17 assertions. OpenCorvus package typecheck and
+root typecheck passed, with the latter completing all eight workspaces. Docs
+reported 339 operations and 25 groups; routes reported six rules across 34
+files; architecture and package topology, version alignment at `0.0.58-beta`,
+control-state (53 tables/seven allowed fact classes), control-lease (18 owners/
+22 acquire sites), and release-mutation topology (five authorities) all passed.
+The exact code/test/documentation index before this evidence paragraph was
+`5403aef4a6f7295fc270fada676b128778e85d2a`; its module topology contained
+1,103 modules, 5,531 runtime edges, no retained strongly connected component,
+and four clean imports. No dependency installer or network package fetch ran.
+
+The first independent review of tree
+`fd0fd4bd0af3e742a4ba40270abdf3d8c4f8f1d8` returned P2=1: a reveal whose
+Provider name collided with a conditional StructuredOutput reservation reached
+the new base-name conflict before the established Provider-name authority and
+therefore lost the exact structured/incoming owner diagnostic. SessionLoop now
+checks an existing structured reservation at exact materialization and returns
+the original `ProviderToolNameCollisionError`; identical permanent Registry
+ownership still reaches the reducer's base-definition conflict, so the two
+contracts no longer shadow each other. Both the native base/reducer matrix and
+the existing Registry and projected StructuredOutput collision tests pass after
+the correction. Because source changed, `fd0fd4...` is historical review input
+and the corrected exact tree requires a fresh independent review.
+
+The fresh independent review of corrected tree
+`30d3b9d770b5d36250161091bfe9655810409add` kept the StructuredOutput correction
+and all non-Mission checks at zero findings, but found one P1 recovery gap.
+Revision-zero `scheduler_message` has no reveal receipt. Its ToolPart and
+permission request therefore persisted only the old name-derived built-in
+Provider digest; after an approved Ask-me request lost its process before the
+effect began, a same-name definition or materializer change reconstructed a new
+Tool under the old authorization and could execute it. The tree remains review
+evidence only and is not a delivery candidate.
+
+The correction reuses the existing permission invocation as the only durable
+authority. Every Registry built-in wrapper now derives its permission Provider
+digest from the real normalized Provider definition digest and the same exact
+materializer-binding digest already used by reveal receipts, including the
+frozen Harness owner revision and Catalog snapshot. Direct execution and
+permission continuation call that one wrapper; no base cache, shadow state,
+compatibility reader, alternate executor, or name-only fallback was added.
+
+Two production-shaped operating-system process cuts exercise native Mission's
+real `scheduler_message` Tool under Ask-me policy. Both first persist the ToolPart
+and permission request, then terminate the producer process before effect start.
+With the same authority, a second process resumes the exact request, writes one
+scheduler event, completes the ToolPart, and retires the continuation once. With
+a changed Provider definition under the same Tool ID, the second process records
+one `StaleContinuationError`, terminalizes the ToolPart as an error, and writes
+zero scheduler events. The complete native transport file passes 6/6. The
+permission continuation plus native file matrix passes 14/14; existing
+SessionLoop/Tool-result permission recovery passes 7/7, including both result-
+and Part-boundary process cuts; reveal/budget/prompt coverage passes 16/16; and
+the full two-mode permission authority passes 17/17. OpenCorvus package
+typecheck passes after the production correction. A new exact tree and fresh
+uninvolved review remain mandatory before delivery.
+
+Post-correction verification is now complete. The affected matrices pass 54/54:
+14 permission-continuation/native-transport cases with 33 assertions, seven
+SessionLoop and Tool-result permission-recovery cases with 22 assertions, 16
+reveal/budget/prompt cases with 73 assertions, and all 17 two-mode permission
+authority cases with 56 assertions. The native file's two process cuts each
+start from a different isolated Project and reach their natural terminal result.
+OpenCorvus package typecheck passes; root typecheck passes all eight workspaces,
+with OpenCorvus executed fresh. Docs pass at 339 operations/25 groups, routes at
+six rules/34 files, architecture index at 16 current documents, package topology
+at ten workspaces, control leases at 18 owners/22 acquisition sites,
+control-state redundancy at 53 tables/seven allowed fact classes, and version
+alignment at the three-component `0.0.58-beta`. Pre-evidence exact tree
+`6e231c50596be5d25d7f720ea4924aa695cb1dba` passes release topology with five
+canonical authorities and module topology with 1,103 modules, 5,531 runtime
+edges, no retained strongly connected component, and four clean imports. After
+this evidence paragraph is staged, the new exact tree must repeat diff/docs/
+release/module gates and receive a fresh uninvolved zero-finding review.
+
+The next uninvolved review of exact tree
+`8612f5caf8910411438aa9061863b596f29f07f6` returned P0=0, P1=2, P2=2 and
+P3=0. It proved four concrete closure gaps: Ask recovery did not reconstruct a
+persisted JSON-schema StructuredOutput reservation before folding an existing
+reveal receipt; Harness or Registry disappearance and a permission/switch-
+removed Tool failed before the permission wrapper and therefore did not retire
+the request; the Mission prompt stated the two native leaves were always
+visible despite legitimate permission/switch narrowing; and an existing real
+post-execution plugin fixture omitted the now-mandatory discovery grant. The
+tree is review evidence only and was not committed.
+
+The correction keeps the input occurrence as the authority boundary. Live and
+recovered turns now build the same StructuredOutput reservation from the same
+persisted format, model and assistant identity. A valid historical receipt that
+activated a later-promoted native transport leaf proves the older occurrence's
+pre-promotion base and is reduced against that immutable base; new occurrences
+use the current native base. The receipt remains the sole fact and no version
+switch, shadow state, fallback executor or cross-occurrence cache was added.
+Harness and exact Registry materialization drift now raise the existing typed
+Catalog-stale contract, recovery maps that determinate surface drift to the
+permission continuation's typed stale outcome, terminalizes the ToolPart, and
+retires the ledger request through the same direct-reply and startup-recovery
+path. A Tool removed by current permission or Message switches reaches the same
+terminal contract. The prompt now tells Mission to use either transport leaf
+directly only when it is visible on the current Provider surface.
+
+Five new operating-system process paths extend the original same-authority and
+definition-drift pair: a StructuredOutput occurrence first persists a real
+`wait` reveal before losing the scheduler permission owner; an older occurrence
+first persists `scheduler_message` as a revealed leaf before base promotion;
+and exact Registry disappearance and Harness-grant disappearance each recover
+under zero external effect. The complete native file passes 10/10. Every stale
+case ends with an error ToolPart, one durable stale retirement and zero
+scheduler events; the exact StructuredOutput and historical-base cases each
+write one scheduler event and retire once. The full SessionLoop authority file
+passes 9/9 after its three projected-worker fixtures were brought onto the
+current canonical Task/dispatch-lineage authority rather than bypassing the
+database trigger. The real post-execution plugin case passes inside its full
+36-case Tool-result file, and the full two-mode permission authority passes
+17/17 with 56 assertions. The bounded Expert Squad catalog file passes 14/14
+after its installation assertion was bound to the exact current package
+version and digest instead of a stale literal. A new exact staged tree, full
+checkers and a fresh zero-finding independent review remain mandatory before
+commit.
+
+The final source-corrected staged tree reviewed before recording the review is
+`baa01b05b44860b59357d628f38882ccd61c94d6`. Its full gates pass: OpenCorvus
+package typecheck and root typecheck (eight workspaces); docs at 339
+operations/25 groups; routes at six rules/34 files; architecture index at 16
+current documents; package topology at ten workspaces; control leases at 18
+owners/22 acquisition sites; control-state redundancy at 53 tables/seven
+allowed fact classes; release topology with five canonical authorities;
+three-component version alignment at `0.0.58-beta`; and module topology at
+1,103 modules, 5,531 runtime edges, no retained strongly connected component
+and four clean imports. Cached and working diff checks pass, and the existing
+Session formatting difference plus two Web content differences have zero
+cached intersection.
+
+A fresh uninvolved read-only reviewer returned FINAL PASS for that exact tree
+with P0=0, P1=0, P2=0 and P3=0. The reviewer independently ran the affected
+nine-file non-UI matrix at 90/90 with 317 assertions and the startup-recovery
+plus complete two-mode permission matrix at 25/25 with 81 assertions, for
+115/115 total, and reran OpenCorvus package typecheck successfully. It also
+verified that the tree hash remained unchanged after review and that no UI
+tests, generators, edits, staging, commits, pushes or process termination were
+performed during the review.
+
+Appending only those two evidence paragraphs produced documentation checkpoint
+tree `cf48ec57f235a8b7abacf822f75cc2f381c133a6`: its difference from reviewed
+tree `baa01b05b44860b59357d628f38882ccd61c94d6` is exactly 22 inserted lines in
+this record and no source, test or architecture change. On that checkpoint,
+docs repeat at 339 operations/25 groups, release topology repeats with five
+canonical authorities, module topology repeats at 1,103 modules, 5,531 runtime
+edges, no retained strongly connected component and four clean imports, and
+both cached and working diff checks pass. The three pre-existing excluded paths
+still have zero cached intersection.

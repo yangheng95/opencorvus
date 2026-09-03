@@ -8,6 +8,7 @@ import {
 import {
   GLOBAL_TOOL_IDS,
   GLOBAL_TOOL_ID_SET,
+  NATIVE_MISSION_TRANSPORT_TOOL_IDS,
   PLATFORM_CAPABILITY_DISCOVERY_TOOL_IDS,
   SKILL_MARKET_TOOL_ID,
   TASK_ARTIFACT_SCHEDULER_TOOL_IDS,
@@ -170,6 +171,10 @@ const primaryExecutionGlobal = [
   "mission_state",
 ] as const
 
+const primaryExecutionGlobalWithoutNativeMissionTransport = primaryExecutionGlobal.filter(
+  (toolID) => !NATIVE_MISSION_TRANSPORT_TOOL_IDS.some((transportToolID) => transportToolID === toolID),
+)
+
 const codingGlobal = ["delegate_agent", SKILL_MARKET_TOOL_ID, ...primaryExecutionGlobal] as const
 
 const taskBuildGlobal = [
@@ -312,10 +317,10 @@ export const roleAssignments = Object.freeze({
   mission: createToolPool({
     global: [
       SKILL_MARKET_TOOL_ID,
-      ...primaryExecutionGlobal,
+      ...primaryExecutionGlobalWithoutNativeMissionTransport,
       "mission_skill",
       ...MISSION_PANEL_LEAF_TOOL_IDS,
-      "scheduler_message",
+      ...NATIVE_MISSION_TRANSPORT_TOOL_IDS,
       "wait",
     ],
   }),

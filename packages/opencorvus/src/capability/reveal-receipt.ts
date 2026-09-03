@@ -43,6 +43,7 @@ export function providerToolDefinitionTokens(definition: NormalizedProviderToolD
 }
 
 export type CapabilityRevealBaseDefinition = Readonly<{
+  providerNames: readonly string[]
   definitionDigest: string
   payloadChars: number
   payloadTokens: number
@@ -59,6 +60,7 @@ export function capabilityRevealBaseDefinitions(
     throw new Error("Capability reveal base Provider Tool definitions must have unique names.")
   }
   return Object.freeze({
+    providerNames: Object.freeze(names),
     definitionDigest: canonicalDigestSource(
       "capability-reveal-base-provider-tool-definitions-v2",
       parsed.map((definition) => ({
@@ -72,7 +74,13 @@ export function capabilityRevealBaseDefinitions(
 }
 
 function parseBaseDefinition(value: CapabilityRevealBaseDefinition): CapabilityRevealBaseDefinition {
+  const providerNamesResult = z.array(z.string().trim().min(1)).safeParse(value.providerNames)
+  if (!providerNamesResult.success) throw new Error("Capability reveal base Tool definition is invalid.")
+  const providerNames = providerNamesResult.data
+  const sortedProviderNames = [...providerNames].sort(compareCanonicalStrings)
   if (
+    new Set(providerNames).size !== providerNames.length ||
+    canonicalJSONValue(providerNames) !== canonicalJSONValue(sortedProviderNames) ||
     !SHA256.test(value.definitionDigest) ||
     !Number.isSafeInteger(value.payloadChars) ||
     value.payloadChars < 0 ||
@@ -81,7 +89,10 @@ function parseBaseDefinition(value: CapabilityRevealBaseDefinition): CapabilityR
   ) {
     throw new Error("Capability reveal base Tool definition is invalid.")
   }
-  return value
+  return Object.freeze({
+    ...value,
+    providerNames: Object.freeze(providerNames),
+  })
 }
 
 export const ActivatedCapability = z
@@ -184,6 +195,52 @@ export class CorruptCapabilityRevealError extends Error {
   override readonly name = "CorruptCapabilityRevealError"
 }
 
+export class CapabilityRevealBaseDefinitionConflictError extends Error {
+  override readonly name = "CapabilityRevealBaseDefinitionConflictError"
+}
+
+function persistedRevealReceiptEntries(parts: readonly Message.Part[]) {
+  return parts.flatMap((part) => {
+    if (part.type !== "tool" || part.tool !== "capability_search" || part.state.status !== "completed") return []
+    const raw = part.state.metadata[CAPABILITY_REVEAL_RECEIPT_METADATA_KEY]
+    if (raw === undefined) {
+      throw new CorruptCapabilityRevealError(
+        `Completed capability_search ToolPart ${part.id} has no reveal receipt.`,
+      )
+    }
+    try {
+      return [{ part, receipt: CapabilityRevealReceiptV2.parse(raw) }]
+    } catch (error) {
+      if (error instanceof CorruptCapabilityRevealError) throw error
+      throw new CorruptCapabilityRevealError(`Capability reveal receipt on ToolPart ${part.id} is invalid.`, {
+        cause: error,
+      })
+    }
+  })
+}
+
+/**
+ * A reveal receipt makes the Provider base immutable for its occurrence. When
+ * a later binary promotes one of those exact leaves into the base for new
+ * occurrences, the old occurrence must continue reducing against the base it
+ * actually recorded instead of being reinterpreted as corrupt.
+ */
+export function persistedCapabilityRevealProviderNames(input: {
+  occurrenceID: string
+  parts: readonly Message.Part[]
+}): readonly string[] {
+  const names = new Set<string>()
+  for (const { receipt } of persistedRevealReceiptEntries(input.parts)) {
+    if (receipt.occurrence_id !== input.occurrenceID) {
+      throw new CorruptCapabilityRevealError(
+        `Capability reveal revision ${receipt.revision} belongs to occurrence ${receipt.occurrence_id}, not ${input.occurrenceID}.`,
+      )
+    }
+    for (const activation of receipt.activated) names.add(activation.provider_name)
+  }
+  return Object.freeze([...names].sort(compareCanonicalStrings))
+}
+
 function canonicalRefs(refs: readonly CapabilityRef[]): CapabilityRef[] {
   const values = new Map<string, CapabilityRef>()
   for (const value of refs) {
@@ -241,8 +298,14 @@ function activeDefinitionState(
   baseDefinition: CapabilityRevealBaseDefinition,
 ) {
   const base = parseBaseDefinition(baseDefinition)
+  const baseProviderNames = new Set(base.providerNames)
   const byProviderName = new Map<string, ActivatedCapability>()
   for (const activation of active.values()) {
+    if (baseProviderNames.has(activation.provider_name)) {
+      throw new CorruptCapabilityRevealError(
+        `Provider Tool name ${activation.provider_name} is already owned by the permanent base definition.`,
+      )
+    }
     const previous = byProviderName.get(activation.provider_name)
     if (
       previous &&
@@ -347,23 +410,7 @@ export function foldCapabilityRevealReceipts(input: {
   catalogSnapshotHash: string
   baseDefinition: CapabilityRevealBaseDefinition
 }): CapabilityRevealState {
-  const entries = input.parts.flatMap((part) => {
-    if (part.type !== "tool" || part.tool !== "capability_search" || part.state.status !== "completed") return []
-    const raw = part.state.metadata[CAPABILITY_REVEAL_RECEIPT_METADATA_KEY]
-    if (raw === undefined) {
-      throw new CorruptCapabilityRevealError(
-        `Completed capability_search ToolPart ${part.id} has no reveal receipt.`,
-      )
-    }
-    try {
-      return [{ part, receipt: CapabilityRevealReceiptV2.parse(raw) }]
-    } catch (error) {
-      if (error instanceof CorruptCapabilityRevealError) throw error
-      throw new CorruptCapabilityRevealError(`Capability reveal receipt on ToolPart ${part.id} is invalid.`, {
-        cause: error,
-      })
-    }
-  })
+  const entries = persistedRevealReceiptEntries(input.parts)
   entries.sort((left, right) => left.receipt.revision - right.receipt.revision)
   const callIDs = new Set<string>()
   const active = new Map<string, ActivatedCapability>()
@@ -488,9 +535,15 @@ export function reduceCapabilityRevealCandidate(input: {
   deactivateRefs: readonly CapabilityRef[]
   activated: readonly ActivatedCapability[]
 }) {
+  const baseProviderNames = new Set(parseBaseDefinition(input.prior.baseDefinition).providerNames)
   const active = new Map(input.prior.active)
   for (const ref of canonicalRefs(input.deactivateRefs)) active.delete(CapabilityRefCodec.encode(ref))
   for (const activation of canonicalActivations(input.activated)) {
+    if (baseProviderNames.has(activation.provider_name)) {
+      throw new CapabilityRevealBaseDefinitionConflictError(
+        `Provider Tool name ${activation.provider_name} is already owned by the permanent base definition.`,
+      )
+    }
     active.set(CapabilityRefCodec.encode(activation.requested_ref), activation)
   }
   if (active.size > CAPABILITY_REVEAL_MAX_ACTIVE_REFS) {

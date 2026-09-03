@@ -57,7 +57,11 @@ import { fn } from "@/util/fn"
 import { SessionProcessor } from "./processor"
 import { MissionSkillTool, SkillTool } from "@/tool/skill"
 import { Tool } from "@/tool/tool"
-import { admitProviderToolName, type ProviderToolNameOwner } from "@/tool/provider-name-authority"
+import {
+  admitProviderToolName,
+  ProviderToolNameCollisionError,
+  type ProviderToolNameOwner,
+} from "@/tool/provider-name-authority"
 import { withTaskToolInvocation } from "@/tool/task-tool-invocation"
 import { bindProjectedTaskToolRuntime, projectedTaskToolRuntimeBindingOf } from "@/tool/task-tool-execution-scope"
 import type { ResolvedSkillSurface } from "@/skill/surface"
@@ -146,17 +150,21 @@ import {
   type CapabilityRevealOwner,
 } from "@/capability/reveal-owner"
 import {
+  CAPABILITY_REVEAL_MAX_ACTIVE_CHARS,
+  CAPABILITY_REVEAL_MAX_ACTIVE_TOKENS,
   CAPABILITY_SEARCH_INITIAL_MAX_CHARS,
   CAPABILITY_SEARCH_INITIAL_MAX_TOKENS,
   capabilityRevealBaseDefinitions,
   foldCapabilityRevealReceipts,
   createTurnCapabilityProjection,
+  persistedCapabilityRevealProviderNames,
   providerToolDefinitionChars,
   providerToolDefinitionDigest,
   providerToolDefinitionTokens,
   type TurnCapabilityProjectionV2,
 } from "@/capability/reveal-receipt"
 import { CAPABILITY_SEARCH_TOOL_ID } from "@/tool/capability-search"
+import { NATIVE_MISSION_TRANSPORT_TOOL_IDS } from "@/tool/tool-id-catalog"
 import { canonicalDigestSource } from "@/util/canonical-digest"
 import { compareTimelineOrderKeys, timelineMessageOrderKey } from "@/timeline/order"
 import { PermissionAuthority } from "@/permission/authority"
@@ -334,6 +342,28 @@ export namespace SessionLoop {
     if (!owners) throw new Error("Resolved Tool surface is missing its Provider name authority")
     admitProviderToolName(owners, name, owner)
     tools[name] = value
+  }
+
+  function structuredOutputReservation(input: {
+    format: Message.OutputFormat | undefined
+    model: Provider.Model
+    assistantMessageID: string
+    onSuccess: (output: unknown) => void
+  }): { name: "StructuredOutput"; owner: ProviderToolNameOwner; tool: AITool } | undefined {
+    if (input.format?.type !== "json_schema") return undefined
+    return {
+      name: "StructuredOutput",
+      owner: { source: "structured", ref: `assistant:${input.assistantMessageID}:response-encoder` },
+      tool: prepareProviderTool({
+        name: "StructuredOutput",
+        source: "structured",
+        model: input.model,
+        tool: createStructuredOutputTool({
+          schema: input.format.schema,
+          onSuccess: input.onSuccess,
+        }),
+      }),
+    }
   }
 
   /**
@@ -1799,11 +1829,14 @@ export namespace SessionLoop {
     })
     using _ = defer(() => InstructionPrompt.clear(processor.message.id))
 
-    const format = input.lastUser.format ?? { type: "text" }
-    const structuredOutputOwner: ProviderToolNameOwner | undefined =
-      format.type === "json_schema"
-        ? { source: "structured", ref: `assistant:${processor.message.id}:response-encoder` }
-        : undefined
+    const structuredOutput = structuredOutputReservation({
+      format: input.lastUser.format,
+      model: input.model,
+      assistantMessageID: processor.message.id,
+      onSuccess(output) {
+        structured = output
+      },
+    })
     const messagePromptProjection = controlPromptProjection(agentID, input.sessionID)
     const controlRuntimeContext = controlToolContext(input.sessionID)
     const occurrenceIncludeMcpTools = messagePromptProjection?.includeMcpTools ?? input.lastUser.includeMcpTools
@@ -1906,20 +1939,7 @@ export namespace SessionLoop {
       })
     }
     const occurrenceHarness = bindHarnessProjection(occurrenceGrants, catalogBinding)
-    const structuredOutputTool =
-      input.lastUser.format?.type === "json_schema"
-        ? prepareProviderTool({
-            name: "StructuredOutput",
-            source: "structured",
-            model: input.model,
-            tool: createStructuredOutputTool({
-              schema: input.lastUser.format.schema,
-              onSuccess(output) {
-                structured = output
-              },
-            }),
-          })
-        : undefined
+    const structuredOutputTool = structuredOutput?.tool
     const tools = await resolveTools({
       agent,
       agentID,
@@ -1933,10 +1953,7 @@ export namespace SessionLoop {
       config,
       harnessProjection: occurrenceHarness,
       occurrenceID: input.lastUser.id,
-      reservedProviderTools:
-        structuredOutputOwner && structuredOutputTool
-          ? [{ name: "StructuredOutput", owner: structuredOutputOwner, tool: structuredOutputTool }]
-        : undefined,
+      reservedProviderTools: structuredOutput ? [structuredOutput] : undefined,
     })
     const skillSurface = await finalizeResolvedToolSkillSurface(
       tools,
@@ -1948,8 +1965,8 @@ export namespace SessionLoop {
     // StructuredOutput encodes the assistant response. It is not Harness-
     // discoverable, but its Provider definition is admitted into the immutable
     // revision-0 budget before the executable surface is finalized.
-    if (structuredOutputTool && structuredOutputOwner) {
-      bindReservedProviderTool(tools, "StructuredOutput", structuredOutputOwner, structuredOutputTool)
+    if (structuredOutput) {
+      bindReservedProviderTool(tools, structuredOutput.name, structuredOutput.owner, structuredOutput.tool)
     }
     if (input.step === 1) {
       await SessionSummary.summarize({
@@ -3462,6 +3479,22 @@ export namespace SessionLoop {
     }
     let capabilityRevealOwner: CapabilityRevealOwner | undefined
     let turnCapabilityProjection: TurnCapabilityProjectionV2 | undefined
+    const capabilityMaterializerBindingDigest = (binding: {
+      executableRef: CapabilityRef
+      source: ProviderToolSource
+      mcpAuthority?: unknown
+      projectedAuthority?: unknown
+      stageAuthority?: unknown
+    }) =>
+      canonicalDigestSource("capability-materializer-binding-v2", {
+        executable_ref: binding.executableRef,
+        source: binding.source,
+        mcp_authority: binding.mcpAuthority ?? null,
+        projected_authority: binding.projectedAuthority ?? null,
+        stage_authority: binding.stageAuthority ?? null,
+        owner_revision: executionHarnessProjection.owner_revision,
+        catalog_snapshot_hash: executionHarnessProjection.catalog_snapshot_hash,
+      }).sha256
     const context = (
       args: any,
       options: ToolExecutionOptions,
@@ -3546,6 +3579,7 @@ export namespace SessionLoop {
       },
       options: { declaredRuntimeFinalization?: boolean; bind?: boolean } = {},
     ) => {
+      let permissionProviderDigest: string | undefined
       const registryTool = tool({
         id: item.id as any,
         description: item.description,
@@ -3557,6 +3591,9 @@ export namespace SessionLoop {
           const projectID = Instance.project.id
           const persistedInput = cloneToolInputForPersistence(normalizedInput.ok ? normalizedInput.value : {})
           const toolPart = await input.processor.ensureToolPart(toolCallID, item.id, persistedInput)
+          if (!permissionProviderDigest) {
+            throw new Error(`${item.id}: registry permission Provider authority was not materialized.`)
+          }
           const executionSurface = createToolExecutionSurface({
             toolIDs: Object.keys(tools),
             permission: executionPermission,
@@ -3576,6 +3613,7 @@ export namespace SessionLoop {
             providerName: item.id,
             providerKind: "builtin" as const,
             providerID: item.id,
+            providerDigest: permissionProviderDigest,
             args: normalizedInput.ok ? normalizedInput.value : {},
           }
           return withTaskToolInvocation(invocationIdentity, executionSurface, async (invocationAuthority) => {
@@ -3669,6 +3707,21 @@ export namespace SessionLoop {
         model: input.model,
         tool: registryTool,
       })
+      const materializerBindingDigest = capabilityMaterializerBindingDigest({
+        executableRef: capabilityRef({
+          kind: "tool",
+          source: "platform",
+          owner_ref: "tool-registry",
+          local_ref: item.id,
+        }),
+        source: "registry",
+      })
+      permissionProviderDigest = canonicalDigestSource("registry-permission-provider-authority-v1", {
+        definition_digest: providerToolDefinitionDigest(
+          normalizedProviderToolDefinition(item.id, preparedRegistryTool),
+        ),
+        materializer_binding_digest: materializerBindingDigest,
+      }).sha256
       bindToolExecutionMode(preparedRegistryTool as object, item.executionMode ?? "ordinary")
       if (options.bind !== false) {
         admitProviderToolName(
@@ -3763,21 +3816,50 @@ export namespace SessionLoop {
     const artifactSnapshotSource = runtimeContract
       ? artifactSnapshotSourceForRuntimeContract(runtimeContract)
       : "current_task_project"
-    const [searchRegistryTool] = await ToolRegistry.exactRuntimeTools(
+    const nativeMissionTransportToolIDs =
+      input.agentID === "mission" && input.session.kind === "mission"
+        ? visibleExecutionToolIDs({
+            toolIDs: [...NATIVE_MISSION_TRANSPORT_TOOL_IDS],
+            permission: executionPermission,
+            switches: input.tools,
+          })
+        : []
+    const baseRegistryToolIDs = [CAPABILITY_SEARCH_TOOL_ID, ...nativeMissionTransportToolIDs]
+    const baseRegistryExecutionGrantIDs = new Set(
+      harnessGrantedRefs(executionHarnessProjection, "execute")
+        .filter((ref) => ref.kind === "tool" && ref.owner_ref === "tool-registry")
+        .map((ref) => ref.local_ref),
+    )
+    for (const toolID of baseRegistryToolIDs) {
+      if (!baseRegistryExecutionGrantIDs.has(toolID)) {
+        throw new StaleCatalogOccurrenceError([`harness_projection.execute.${toolID}`])
+      }
+    }
+    const baseRegistryTools = await ToolRegistry.exactRuntimeTools(
       { modelID: input.model.api.id, providerID: input.model.providerID },
       input.agent,
       input.agentID,
       input.config,
-      [CAPABILITY_SEARCH_TOOL_ID],
+      baseRegistryToolIDs,
       { artifactSnapshotSource },
     )
+    const baseRegistryToolsByID = new Map(baseRegistryTools.map((item) => [item.id, item]))
+    const searchRegistryTool = baseRegistryToolsByID.get(CAPABILITY_SEARCH_TOOL_ID)
     if (!searchRegistryTool || searchRegistryTool.id !== CAPABILITY_SEARCH_TOOL_ID) {
-      throw new Error("Tool Registry did not materialize the exact capability_search leaf.")
+      throw new StaleCatalogOccurrenceError(["tool_registry.capability_search"])
     }
     if (projectedRegistryToolIDs && !projectedRegistryToolIDs.has(searchRegistryTool.id)) {
-      throw new Error("Projected runtime does not grant the mandatory capability_search leaf.")
+      throw new StaleCatalogOccurrenceError(["projected_runtime.capability_search"])
     }
     const preparedSearchTool = bindRegistryTool(searchRegistryTool)
+    const nativeMissionTransportTools = nativeMissionTransportToolIDs.map((toolID) => {
+      const item = baseRegistryToolsByID.get(toolID)
+      if (!item) throw new StaleCatalogOccurrenceError([`tool_registry.${toolID}`])
+      return { toolID, tool: bindRegistryTool(item) }
+    })
+    if (baseRegistryToolsByID.size !== baseRegistryToolIDs.length) {
+      throw new StaleCatalogOccurrenceError(["tool_registry.permanent_provider_surface"])
+    }
     const searchDefinition = normalizedProviderToolDefinition(CAPABILITY_SEARCH_TOOL_ID, preparedSearchTool)
     const searchPayloadChars = providerToolDefinitionChars(searchDefinition)
     const searchPayloadTokens = providerToolDefinitionTokens(searchDefinition)
@@ -3789,18 +3871,39 @@ export namespace SessionLoop {
         `Initial capability_search payload is ${searchPayloadChars} chars/${searchPayloadTokens} estimated tokens; maximum is ${CAPABILITY_SEARCH_INITIAL_MAX_CHARS}/${CAPABILITY_SEARCH_INITIAL_MAX_TOKENS}.`,
       )
     }
+    const occurrenceRevealParts = await capabilityRevealOccurrenceParts({
+      sessionID: input.session.id,
+      occurrenceID: input.occurrenceID,
+    })
+    const historicallyRevealedProviderNames = new Set(
+      persistedCapabilityRevealProviderNames({
+        occurrenceID: input.occurrenceID,
+        parts: occurrenceRevealParts,
+      }),
+    )
+    const occurrenceNativeMissionTransportTools = nativeMissionTransportTools.filter(
+      ({ toolID }) => !historicallyRevealedProviderNames.has(toolID),
+    )
     const searchBaseDefinition = capabilityRevealBaseDefinitions([
       searchDefinition,
+      ...occurrenceNativeMissionTransportTools.map(({ toolID, tool }) =>
+        normalizedProviderToolDefinition(toolID, tool),
+      ),
       ...(input.reservedProviderTools ?? []).map((reservation) =>
         normalizedProviderToolDefinition(reservation.name, reservation.tool),
       ),
     ])
+    if (
+      searchBaseDefinition.payloadChars > CAPABILITY_REVEAL_MAX_ACTIVE_CHARS ||
+      searchBaseDefinition.payloadTokens > CAPABILITY_REVEAL_MAX_ACTIVE_TOKENS
+    ) {
+      throw new Error(
+        `Permanent Provider Tool payload is ${searchBaseDefinition.payloadChars} chars/${searchBaseDefinition.payloadTokens} estimated tokens; maximum is ${CAPABILITY_REVEAL_MAX_ACTIVE_CHARS}/${CAPABILITY_REVEAL_MAX_ACTIVE_TOKENS}.`,
+      )
+    }
     const revealState = foldCapabilityRevealReceipts({
       occurrenceID: input.occurrenceID,
-      parts: await capabilityRevealOccurrenceParts({
-        sessionID: input.session.id,
-        occurrenceID: input.occurrenceID,
-      }),
+      parts: occurrenceRevealParts,
       harnessProjectionHash: executionHarnessProjection.projection_hash,
       catalogSnapshotRef: executionHarnessProjection.catalog_snapshot_ref,
       catalogSnapshotHash: executionHarnessProjection.catalog_snapshot_hash,
@@ -3814,7 +3917,7 @@ export namespace SessionLoop {
       state: revealState,
     })
     const activeProviderNames = new Set(revealState.definitions.map((activation) => activation.provider_name))
-    activeProviderNames.add(CAPABILITY_SEARCH_TOOL_ID)
+    for (const providerName of searchBaseDefinition.providerNames) activeProviderNames.add(providerName)
     const activeProductionSkillNames = [...revealState.active.values()]
       .filter((activation) => activation.requested_ref.kind === "skill")
       .map((activation) => activation.requested_ref.local_ref)
@@ -4418,19 +4521,35 @@ export namespace SessionLoop {
       const mcpAuthority = MCP.toolAuthorityBinding(executable as object)
       const projectedAuthority = projectedTaskToolRuntimeBindingOf(executable as object)
       const stageAuthority = stageToolMaterializerBindingOf(executable as object)
+      const reservedOwner = providerToolNameOwners.get(providerName)
+      if (reservedOwner?.source === "structured") {
+        const incomingOwner: ProviderToolNameOwner =
+          source === "registry"
+            ? { source: "registry", ref: providerName }
+            : source === "mcp"
+              ? {
+                  source: "mcp",
+                  ref: mcpAuthority
+                    ? `${mcpAuthority.serverID}:${mcpAuthority.configDigest}:${mcpAuthority.toolDigest}`
+                    : providerName,
+                }
+              : {
+                  source: stageAuthority ? "stage" : "projected",
+                  ref: `${runtimeContract?.identity.agentID ?? input.agentID}:${providerName}`,
+                }
+        throw new ProviderToolNameCollisionError(providerName, reservedOwner, incomingOwner)
+      }
       return {
         providerName,
         executableRef,
         tool: executable,
-        materializerBindingDigest: canonicalDigestSource("capability-materializer-binding-v2", {
-          executable_ref: executableRef,
+        materializerBindingDigest: capabilityMaterializerBindingDigest({
+          executableRef,
           source,
-          mcp_authority: mcpAuthority ?? null,
-          projected_authority: projectedAuthority ?? null,
-          stage_authority: stageAuthority ?? null,
-          owner_revision: executionHarnessProjection.owner_revision,
-          catalog_snapshot_hash: executionHarnessProjection.catalog_snapshot_hash,
-        }).sha256,
+          mcpAuthority,
+          projectedAuthority,
+          stageAuthority,
+        }),
       }
     }
     capabilityRevealOwner = createCapabilityRevealOwner({
@@ -4615,23 +4734,60 @@ export namespace SessionLoop {
       abort: abortController.signal,
     })
     const messages = await Session.messages({ sessionID: request.sessionID })
-    const tools = await resolveTools({
-      agent: messageIdentity.runtime,
-      agentID: messageIdentity.agentID,
+    const recoveredStructuredOutput = structuredOutputReservation({
+      format: persistedUser.info.format,
       model,
-      session,
-      tools: persistedUser.info.tools,
-      includeMcpTools: persistedUser.info.includeMcpTools,
-      processor,
-      extra: persistedUser.info.extra,
-      messages,
-      config,
-      harnessProjection: bindHarnessProjection(continuationGrants, continuationBinding),
-      occurrenceID: persistedUser.info.id,
+      assistantMessageID: assistant.id,
+      onSuccess(output) {
+        assistant.structured = output
+      },
     })
+    const staleRecoveredSurface = async (error: Error): Promise<never> => {
+      const stale =
+        error instanceof PermissionAuthority.StaleContinuationError
+          ? error
+          : new PermissionAuthority.StaleContinuationError(request.id, error.message)
+      await processor.failRecoveredToolPart(
+        request.toolCallID,
+        toolFailureCauseFromUnknown({
+          error: stale,
+          originSite: "SessionLoop.resumePermissionContinuation",
+          classification: "tool-execution",
+          kind: "stale-permission-tool-surface",
+          data: { requestID: request.id, toolCallID: request.toolCallID },
+        }),
+      )
+      throw stale
+    }
+    let tools: Record<string, AITool>
+    try {
+      tools = await resolveTools({
+        agent: messageIdentity.runtime,
+        agentID: messageIdentity.agentID,
+        model,
+        session,
+        tools: persistedUser.info.tools,
+        includeMcpTools: persistedUser.info.includeMcpTools,
+        processor,
+        extra: persistedUser.info.extra,
+        messages,
+        config,
+        harnessProjection: bindHarnessProjection(continuationGrants, continuationBinding),
+        occurrenceID: persistedUser.info.id,
+        reservedProviderTools: recoveredStructuredOutput ? [recoveredStructuredOutput] : undefined,
+      })
+    } catch (error) {
+      if (error instanceof StaleCatalogOccurrenceError) return await staleRecoveredSurface(error)
+      throw error
+    }
     const recoveredTool = tools[request.toolName]
     if (!recoveredTool?.execute) {
-      throw new Error(`Permission continuation ${request.id} Tool ${request.toolName} is no longer projected`)
+      return await staleRecoveredSurface(
+        new PermissionAuthority.StaleContinuationError(
+          request.id,
+          `Permission continuation Tool ${request.toolName} is no longer projected`,
+        ),
+      )
     }
     let raw: unknown
     try {

@@ -14,6 +14,7 @@ export { WORK_ARTIFACT_TOOL_IDS } from "@/work-artifact/profile-registry"
 
 export const SKILL_MARKET_TOOL_ID = "skill_market" as const
 export const PLATFORM_CAPABILITY_DISCOVERY_TOOL_IDS = ["capability_search"] as const
+export const NATIVE_MISSION_TRANSPORT_TOOL_IDS = ["mission_state", "scheduler_message"] as const
 
 export const WORKER_COMMUNICATION_TOOL_IDS = ["request_orchestrator_decision", "send_mailbox_message"] as const
 export const TASK_ARTIFACT_DISCOVERY_TOOL_IDS = PLATFORM_ARTIFACT_DISCOVERY_TOOL_IDS
@@ -53,8 +54,7 @@ export const GLOBAL_TOOL_IDS = [
   ...PANEL_LEAF_TOOL_IDS,
   "expert_squad_author",
   "evolve_expert_squad_from_feedback",
-  "mission_state",
-  "scheduler_message",
+  ...NATIVE_MISSION_TRANSPORT_TOOL_IDS,
   "wait",
   ...WORKER_COMMUNICATION_TOOL_IDS,
   "analytics",
