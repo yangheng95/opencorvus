@@ -43,8 +43,20 @@ const readRef = capabilityRef({
   owner_ref: "tool-registry",
   local_ref: "read",
 })
+const createTaskRef = capabilityRef({
+  kind: "tool",
+  source: "platform",
+  owner_ref: "tool-registry",
+  local_ref: "panel_create_task",
+})
+const baseSquadRef = capabilityRef({
+  kind: "expert_squad",
+  source: "platform",
+  owner_ref: "expert-squad-registry",
+  local_ref: "base",
+})
 
-function catalogSnapshot() {
+function catalogSnapshot(options: { includeExpertSquad?: boolean } = {}) {
   const search = createCapabilityDescriptor({
     ref: searchRef,
     name: "Capability search",
@@ -61,21 +73,50 @@ function catalogSnapshot() {
     search_terms: ["file"],
     behavior: { kind: "call_tool", tool_ref: readRef },
   })
+  const createTask = createCapabilityDescriptor({
+    ref: createTaskRef,
+    name: "Panel Create Task",
+    description: "Create one fixed-profile Task.",
+    aliases: [],
+    search_terms: ["Task"],
+    behavior: { kind: "call_tool", tool_ref: createTaskRef },
+  })
+  const base = options.includeExpertSquad
+    ? createCapabilityDescriptor({
+        ref: baseSquadRef,
+        name: "Base",
+        description: "General fixed-profile delivery Task owner.",
+        aliases: ["base"],
+        search_terms: ["code", "work"],
+        product_pillars: ["code", "work"],
+        behavior: { kind: "create_task", action_tool_ref: createTaskRef, profile_id: "base" },
+      })
+    : undefined
   return createCapabilityCatalogSnapshot({
     context: { caller: "conversation", context_ref: "conversation:work", context_revision: SHA_A },
     sources: [
       createCapabilityCatalogSource({
         owner_ref: "tool-registry",
         owner_revision: SHA_A,
-        descriptors: [search, read],
+        descriptors: [search, read, createTask],
         sets: [],
       }),
+      ...(base
+        ? [
+            createCapabilityCatalogSource({
+              owner_ref: "expert-squad-registry",
+              owner_revision: SHA_B,
+              descriptors: [base],
+              sets: [],
+            }),
+          ]
+        : []),
     ],
     projections: [
       createCapabilityCatalogProjection({
         owner_ref: "tool-registry",
         projection_revision: SHA_B,
-        entries: [search, read].map((descriptor) =>
+        entries: [search, read, createTask].map((descriptor) =>
           createCapabilityCatalogViewEntry({
             descriptor_ref: descriptor.ref,
             descriptor_digest: descriptor.metadata_digest,
@@ -85,6 +126,23 @@ function catalogSnapshot() {
           }),
         ),
       }),
+      ...(base
+        ? [
+            createCapabilityCatalogProjection({
+              owner_ref: "expert-squad-registry",
+              projection_revision: SHA_A,
+              entries: [
+                createCapabilityCatalogViewEntry({
+                  descriptor_ref: base.ref,
+                  descriptor_digest: base.metadata_digest,
+                  discoverable_by: ["conversation"],
+                  availability: "installed_unbound",
+                  next_owner: { kind: "create_task_with_expert_squad", profile_id: "base" },
+                }),
+              ],
+            }),
+          ]
+        : []),
     ],
   })
 }
@@ -134,7 +192,7 @@ async function runningSearchPart(input: {
   }) as Promise<Message.ToolPart>
 }
 
-async function boundOccurrence() {
+async function boundOccurrence(snapshot = catalogSnapshot()) {
   const session = await Session.create({ kind: "assistant", title: "Reveal occurrence" })
   const userMessageID = Identifier.ascending("message")
   const user = await Session.persistMessage({
@@ -159,7 +217,7 @@ async function boundOccurrence() {
     ],
   })
   const payload = CatalogOccurrenceBinding.payload({
-    snapshot: catalogSnapshot(),
+    snapshot,
     materializationScope: materializationScope(),
   })
   const binding = await CatalogOccurrenceBinding.publish({ projectID: Instance.project.id, payload })
@@ -215,6 +273,61 @@ afterAll(async () => {
 })
 
 describe("occurrence capability reveal owner", () => {
+  test("persists an exact diagnostic for mutually exclusive Expert Squad filters", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const occurrence = await boundOccurrence(catalogSnapshot({ includeExpertSquad: true }))
+        const params = CapabilitySearchInput.parse({
+          queries: [""],
+          kinds: ["expert_squad"],
+          next_owner_kinds: ["call_tool"],
+          product_pillar: "work",
+        })
+        const part = await runningSearchPart({
+          sessionID: occurrence.session.id,
+          messageID: occurrence.first.id,
+          callID: "call_expert_squad_filter_diagnostic",
+          params,
+        })
+        const result = await revealOwner({
+          occurrenceID: occurrence.userMessageID,
+          binding: occurrence.binding,
+        }).execute(params, {
+          callID: "call_expert_squad_filter_diagnostic",
+          messageID: occurrence.first.id,
+          sessionID: occurrence.session.id,
+          toolPartID: part.id,
+        })
+        expect(JSON.parse(result.output)).toMatchObject({
+          caller: "conversation",
+          visible_expert_squad_count: 1,
+          product_pillar: "work",
+          filter_diagnostic: {
+            code: "incompatible_structural_filters",
+            requested_kinds: ["expert_squad"],
+            requested_next_owner_kinds: ["call_tool"],
+            compatible_next_owner_kinds: ["create_task_with_expert_squad"],
+          },
+          results: [],
+        })
+        expect(result.metadata).toMatchObject({
+          result_count: 0,
+          visible_expert_squad_count: 1,
+          product_pillar: "work",
+          filter_diagnostic_code: "incompatible_structural_filters",
+          reveal_revision: 1,
+        })
+        const persisted = await MessageStore.parts(occurrence.first.id)
+        const completed = persisted.find(
+          (candidate): candidate is Message.ToolPart => candidate.type === "tool" && candidate.id === part.id,
+        )
+        expect(completed?.state.status).toBe("completed")
+      },
+    })
+  })
+
   test("binds an MCP server execute grant to that server's exact child Tools", async () => {
     await using project = await memoryProject()
     await Instance.provide({

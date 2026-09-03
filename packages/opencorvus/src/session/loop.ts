@@ -99,6 +99,7 @@ import { decodeDataUrlBase64Bytes } from "./text-mime"
 import { normalizeToolInput } from "./tool-input-norm"
 import { configureSessionShellResume } from "./shell-exec"
 import { bindMissionClosingAssistantTerminalizer } from "@/mission/execution-close-effects"
+import { missionVisibleExpertSquadIDs, requireMissionSession } from "@/mission/session"
 import { AgentCoordinationActionSupersededError } from "@/engine/agent-coordination-errors"
 import {
   assertSessionLoopRuntimeContract,
@@ -4438,6 +4439,13 @@ export namespace SessionLoop {
       occurrenceID: input.occurrenceID,
       harness: executionHarnessProjection,
       baseDefinition: searchBaseDefinition,
+      async resolveMissionSearchAuthority(sessionID) {
+        const mission = await requireMissionSession(sessionID)
+        return {
+          productPillar: mission.productPillar,
+          heldExpertSquadCount: missionVisibleExpertSquadIDs(mission).length,
+        }
+      },
       materialize: materializeRevealCandidate,
     })
     for (const activation of revealState.definitions) {

@@ -6,7 +6,7 @@ import { Message, Session } from "@/session"
 import { MessageStore } from "@/session/message-store"
 import { MessageTable, ToolPartRequestTable } from "@/session/session.sql"
 import { projectToolPartInTransaction } from "@/session/tool-part-facts"
-import { searchCapabilityCatalog } from "./catalog"
+import { projectCapabilityCatalogSearch } from "./catalog"
 import { CapabilitySearchInput, type CapabilityDescriptor } from "./descriptor"
 import type { CatalogViewSnapshotPayloadV2 } from "./catalog-binding"
 import { CatalogOccurrenceBinding } from "./catalog-binding"
@@ -44,6 +44,11 @@ export interface CapabilityRevealOwner {
     output: string
     metadata: Record<string, unknown>
   }>
+}
+
+export type MissionCapabilitySearchAuthority = {
+  productPillar: "code" | "work"
+  heldExpertSquadCount: number
 }
 
 export class CapabilityRevealConflictError extends Error {
@@ -224,6 +229,7 @@ export function createCapabilityRevealOwner(input: {
   occurrenceID: string
   harness: HarnessProjection
   baseDefinition: CapabilityRevealBaseDefinition
+  resolveMissionSearchAuthority?: (sessionID: string) => Promise<MissionCapabilitySearchAuthority>
   materialize: (requestedRef: CapabilityRef, executableRef: CapabilityRef) => Promise<MaterializedExecutable>
 }): CapabilityRevealOwner {
   return {
@@ -286,7 +292,30 @@ export function createCapabilityRevealOwner(input: {
         }
       }
       const snapshot = CatalogOccurrenceBinding.searchSnapshot(payload)
-      const results = searchCapabilityCatalog(snapshot, payload.context.caller, params)
+      const missionAuthority =
+        payload.context.caller === "mission"
+          ? await input.resolveMissionSearchAuthority?.(context.sessionID)
+          : undefined
+      if (payload.context.caller === "mission" && !missionAuthority) {
+        throw new Error("Mission capability search requires its canonical Mission authority.")
+      }
+      if (
+        missionAuthority &&
+        (!Number.isSafeInteger(missionAuthority.heldExpertSquadCount) || missionAuthority.heldExpertSquadCount < 0)
+      ) {
+        throw new Error("Mission held Expert Squad count must be a non-negative safe integer.")
+      }
+      const effectiveParams = missionAuthority
+        ? { ...params, product_pillar: missionAuthority.productPillar }
+        : params
+      const search = projectCapabilityCatalogSearch(snapshot, payload.context.caller, effectiveParams)
+      const results = search.results
+      const visibleExpertSquadCount = snapshot.views.filter(
+        (entry) =>
+          entry.descriptor_ref.kind === "expert_squad" && entry.discoverable_by.includes(payload.context.caller),
+      ).length
+      const productPillar = missionAuthority?.productPillar ?? params.product_pillar
+      const requestedProductPillar = params.product_pillar
       const activated = await Promise.all(
         params.exact_refs.map(async (requestedRef) => {
           if (
@@ -372,6 +401,13 @@ export function createCapabilityRevealOwner(input: {
         active_refs: receipt.active_refs,
         active_payload_chars: receipt.active_payload_chars,
         active_payload_tokens: receipt.active_payload_tokens,
+        visible_expert_squad_count: visibleExpertSquadCount,
+        ...(missionAuthority ? { held_expert_squad_count: missionAuthority.heldExpertSquadCount } : {}),
+        ...(productPillar ? { product_pillar: productPillar } : {}),
+        ...(requestedProductPillar && requestedProductPillar !== productPillar
+          ? { requested_product_pillar: requestedProductPillar }
+          : {}),
+        filter_diagnostic: search.filterDiagnostic,
         results,
       }
       const output = JSON.stringify(visible, null, 2)
@@ -384,6 +420,13 @@ export function createCapabilityRevealOwner(input: {
         active_ref_count: receipt.active_refs.length,
         active_payload_chars: receipt.active_payload_chars,
         active_payload_tokens: receipt.active_payload_tokens,
+        visible_expert_squad_count: visibleExpertSquadCount,
+        ...(missionAuthority ? { held_expert_squad_count: missionAuthority.heldExpertSquadCount } : {}),
+        ...(productPillar ? { product_pillar: productPillar } : {}),
+        ...(requestedProductPillar && requestedProductPillar !== productPillar
+          ? { requested_product_pillar: requestedProductPillar }
+          : {}),
+        ...(search.filterDiagnostic ? { filter_diagnostic_code: search.filterDiagnostic.code } : {}),
         [CAPABILITY_REVEAL_RECEIPT_METADATA_KEY]: receipt,
         truncated: false,
       }

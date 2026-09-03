@@ -338,6 +338,9 @@ describe("Expert Squad catalog index", () => {
         const output = JSON.parse(result.output) as {
           catalog_revision: string
           caller: string
+          visible_expert_squad_count: number
+          held_expert_squad_count: number
+          product_pillar: string
           results: Array<Record<string, unknown>>
         }
         const mismatchedPillarResult = await search.execute(
@@ -345,6 +348,10 @@ describe("Expert Squad catalog index", () => {
           { toolCallId: "call_mismatched_pillar_capability_search", messages: [], abortSignal: new AbortController().signal },
         )
         const mismatchedPillarOutput = JSON.parse(mismatchedPillarResult.output) as {
+          visible_expert_squad_count: number
+          held_expert_squad_count: number
+          product_pillar: string
+          requested_product_pillar: string
           results: Array<Record<string, unknown>>
         }
         expect(result.metadata.catalog_revision).toMatch(/^[a-f0-9]{64}$/)
@@ -358,10 +365,17 @@ describe("Expert Squad catalog index", () => {
           metadata,
           caller: output.caller,
           visibleCount: occurrence.payload.views.filter((entry) => entry.descriptor_ref.kind === "expert_squad").length,
+          outputVisibleCount: output.visible_expert_squad_count,
+          outputHeldCount: output.held_expert_squad_count,
+          outputProductPillar: output.product_pillar,
           resultCount: output.results.length,
           resultKeys: [...new Set(output.results.flatMap((entry) => Object.keys(entry)))].sort(),
           outputBytes: Buffer.byteLength(result.output, "utf8") < 50_000,
           mismatchedPillar: {
+            visibleCount: mismatchedPillarOutput.visible_expert_squad_count,
+            heldCount: mismatchedPillarOutput.held_expert_squad_count,
+            productPillar: mismatchedPillarOutput.product_pillar,
+            requestedProductPillar: mismatchedPillarOutput.requested_product_pillar,
             resultCount: mismatchedPillarOutput.results.length,
           },
         }).toEqual({
@@ -372,10 +386,16 @@ describe("Expert Squad catalog index", () => {
             active_ref_count: 0,
             active_payload_chars: expect.any(Number),
             active_payload_tokens: expect.any(Number),
+            visible_expert_squad_count: 100,
+            held_expert_squad_count: 100,
+            product_pillar: "code",
             truncated: false,
           },
           caller: "mission",
           visibleCount: 100,
+          outputVisibleCount: 100,
+          outputHeldCount: 100,
+          outputProductPillar: "code",
           resultCount: 5,
           resultKeys: [
             "aliases",
@@ -390,7 +410,13 @@ describe("Expert Squad catalog index", () => {
             "score",
           ],
           outputBytes: true,
-          mismatchedPillar: { resultCount: 0 },
+          mismatchedPillar: {
+            visibleCount: 100,
+            heldCount: 100,
+            productPillar: "code",
+            requestedProductPillar: "work",
+            resultCount: 1,
+          },
         })
         expect(metadata.active_payload_chars).toBeGreaterThan(0)
         expect(metadata.active_payload_chars).toBeLessThanOrEqual(4_000)

@@ -5,6 +5,7 @@ import {
   CapabilityCatalogContractError,
   CapabilityCatalogSnapshot,
   createCapabilityCatalogSnapshot,
+  projectCapabilityCatalogSearch,
   searchCapabilityCatalog,
 } from "../../src/capability/catalog"
 import {
@@ -119,6 +120,30 @@ describe("capability catalog executable discovery", () => {
         const results = searchCapabilityCatalog(snapshot, caller, { kinds: ["expert_squad"] })
         expect(results.map((item) => item.ref.local_ref)).toEqual(["base"])
         expect(results[0]?.next_owner).toEqual({ kind: "create_task_with_expert_squad", profile_id: "base" })
+        const conflict = projectCapabilityCatalogSearch(snapshot, caller, {
+          queries: [""],
+          kinds: ["expert_squad"],
+          next_owner_kinds: ["call_tool"],
+          product_pillar: "code",
+        })
+        expect(conflict).toEqual({
+          results: [],
+          filterDiagnostic: {
+            code: "incompatible_structural_filters",
+            requested_kinds: ["expert_squad"],
+            requested_next_owner_kinds: ["call_tool"],
+            compatible_next_owner_kinds: ["create_task_with_expert_squad"],
+            message:
+              'The requested capability kinds are visible, but none have the requested next-owner kinds. Use one of ["create_task_with_expert_squad"] or omit next_owner_kinds.',
+          },
+        })
+        expect(
+          projectCapabilityCatalogSearch(snapshot, caller, {
+            queries: [""],
+            kinds: ["mcp_prompt"],
+            next_owner_kinds: ["call_tool"],
+          }),
+        ).toEqual({ results: [], filterDiagnostic: null })
         expect(snapshot.owner_revisions["expert-squad-registry"]).toMatch(/^[a-f0-9]{64}$/)
         expect(snapshot.descriptors.filter((item) => item.ref.kind === "expert_squad").length).toBeGreaterThan(1)
       },

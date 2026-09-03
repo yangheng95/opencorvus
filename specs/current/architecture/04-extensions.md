@@ -276,9 +276,15 @@ Mission Session 的首次数据库提交就是唯一身份提交：`kind="missio
 并拒绝缺失或事后改写 Mission ID；进程内锁不是唯一性 authority。`missions/<mission-id>/` runtime
 directory 只是可重试的 derived state，若文件系统创建在 Session 提交后失败，重启会复用同一完整
 Session 再创建目录，不新增或推断 orphan Session。
-Search diagnostics expose only the held count, pillar-filtered visible count, Mission product pillar, catalog revision,
-and bounded result count. A zero result therefore distinguishes held authority, pillar/catalog visibility, and query
-matching without enumerating the held identifiers or broadening the immutable snapshot.
+Core Mission search diagnostics expose the held count, pillar-filtered visible
+count, Mission product pillar, catalog revision, and bounded result count. A
+zero result therefore distinguishes held authority, pillar/catalog visibility,
+and query matching without enumerating the held identifiers or broadening the
+immutable snapshot. Exact kind and next-owner filters are conjunctive. When the
+complete structural candidate set is non-empty and the requested next-owner
+kinds remove every candidate, the completed search additionally reports that
+incompatible intersection and its compatible next-owner kinds; it does not
+select a Squad, broaden the query, or retry on the model's behalf.
 For a Mission caller the persisted Mission product pillar is canonical even if
 the model supplies a contradictory request filter; diagnostics expose that
 requested pillar separately while search remains inside the canonical pillar.

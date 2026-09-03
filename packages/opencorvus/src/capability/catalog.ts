@@ -10,6 +10,7 @@ import {
   CapabilityCatalogSource,
   CapabilityCatalogViewEntry,
   CapabilityDescriptor,
+  CapabilitySearchFilterDiagnostic,
   CapabilitySearchInput,
   CapabilitySearchResult,
   CapabilitySetDescriptor,
@@ -20,6 +21,7 @@ import {
   type CapabilityCatalogViewEntry as CapabilityCatalogViewEntryValue,
   type CapabilityBehavior as CapabilityBehaviorValue,
   type CapabilityDescriptor as CapabilityDescriptorValue,
+  type CapabilitySearchFilterDiagnostic as CapabilitySearchFilterDiagnosticValue,
   type CapabilitySearchResult as CapabilitySearchResultValue,
   type CapabilitySetDescriptor as CapabilitySetDescriptorValue,
 } from "./descriptor"
@@ -488,6 +490,19 @@ export function searchCapabilityCatalog(
   caller: z.infer<typeof CapabilityCaller>,
   rawInput: z.input<typeof CapabilitySearchInput>,
 ): CapabilitySearchResultValue[] {
+  return projectCapabilityCatalogSearch(snapshot, caller, rawInput).results
+}
+
+export type CapabilityCatalogSearchProjection = {
+  results: CapabilitySearchResultValue[]
+  filterDiagnostic: CapabilitySearchFilterDiagnosticValue | null
+}
+
+export function projectCapabilityCatalogSearch(
+  snapshot: CapabilityCatalogSnapshot,
+  caller: z.infer<typeof CapabilityCaller>,
+  rawInput: z.input<typeof CapabilitySearchInput>,
+): CapabilityCatalogSearchProjection {
   const input = CapabilitySearchInput.parse(rawInput)
   const kinds = input.kinds ? new Set(input.kinds) : undefined
   const nextOwnerKinds = input.next_owner_kinds ? new Set(input.next_owner_kinds) : undefined
@@ -495,11 +510,10 @@ export function searchCapabilityCatalog(
   const descriptorByRef = new Map(
     snapshot.descriptors.map((descriptor) => [CapabilityRefCodec.encode(descriptor.ref), descriptor]),
   )
-  const candidates = snapshot.views.flatMap((view) => {
+  const structuralCandidates = snapshot.views.flatMap((view) => {
     const descriptor = descriptorByRef.get(CapabilityRefCodec.encode(view.descriptor_ref))!
     if (!view.discoverable_by.includes(caller)) return []
     if (kinds && !kinds.has(descriptor.ref.kind)) return []
-    if (nextOwnerKinds && !nextOwnerKinds.has(view.next_owner.kind)) return []
     if (owners && !owners.has(descriptor.ref.owner_ref)) return []
     if (
       input.product_pillar &&
@@ -510,6 +524,29 @@ export function searchCapabilityCatalog(
     }
     return [{ descriptor, view }]
   })
+  const candidates = nextOwnerKinds
+    ? structuralCandidates.filter(({ view }) => nextOwnerKinds.has(view.next_owner.kind))
+    : structuralCandidates
+  const requestedKinds = [...new Set(input.kinds ?? [])].sort(compareCanonicalStrings)
+  const requestedNextOwnerKinds = [...new Set(input.next_owner_kinds ?? [])].sort(compareCanonicalStrings)
+  const compatibleNextOwnerKinds = [...new Set(structuralCandidates.map(({ view }) => view.next_owner.kind))].sort(
+    compareCanonicalStrings,
+  )
+  const filterDiagnostic =
+    requestedKinds.length > 0 &&
+    requestedNextOwnerKinds.length > 0 &&
+    structuralCandidates.length > 0 &&
+    candidates.length === 0
+      ? CapabilitySearchFilterDiagnostic.parse({
+          code: "incompatible_structural_filters",
+          requested_kinds: requestedKinds,
+          requested_next_owner_kinds: requestedNextOwnerKinds,
+          compatible_next_owner_kinds: compatibleNextOwnerKinds,
+          message:
+            `The requested capability kinds are visible, but none have the requested next-owner kinds. ` +
+            `Use one of ${JSON.stringify(compatibleNextOwnerKinds)} or omit next_owner_kinds.`,
+        })
+      : null
   const needles = [...new Set(input.queries.map((query) => query.trim()))]
   const ranked: Array<{
     descriptor: CapabilityDescriptorValue
@@ -539,18 +576,21 @@ export function searchCapabilityCatalog(
       CapabilityRefCodec.encode(right.descriptor.ref),
     )
   })
-  return ranked.slice(0, input.limit).map(({ descriptor, view, score }) =>
-    CapabilitySearchResult.parse({
-      ref: descriptor.ref,
-      name: descriptor.name,
-      description: descriptor.description,
-      aliases: descriptor.aliases,
-      discoverable_by: view.discoverable_by,
-      ...(descriptor.product_pillars ? { product_pillars: descriptor.product_pillars } : {}),
-      availability: view.availability,
-      next_owner: view.next_owner,
-      catalog_revision: snapshot.catalog_revision,
-      score,
-    }),
-  )
+  return {
+    results: ranked.slice(0, input.limit).map(({ descriptor, view, score }) =>
+      CapabilitySearchResult.parse({
+        ref: descriptor.ref,
+        name: descriptor.name,
+        description: descriptor.description,
+        aliases: descriptor.aliases,
+        discoverable_by: view.discoverable_by,
+        ...(descriptor.product_pillars ? { product_pillars: descriptor.product_pillars } : {}),
+        availability: view.availability,
+        next_owner: view.next_owner,
+        catalog_revision: snapshot.catalog_revision,
+        score,
+      }),
+    ),
+    filterDiagnostic,
+  }
 }

@@ -2301,3 +2301,113 @@ exact tree requires an uninvolved zero-finding review, commit and push. One
 fresh exact-remote run from that pushed source must contain no failed Tool
 occurrence and must durably publish the nonce-bearing final Artifact and close
 the Mission before release.
+
+#### Exact-remote pre-dispatch capability-filter correction
+
+##### Recall
+
+The operator requires the scheduling remediation to continue until a real
+Mission run has a normal trajectory, then requires the current three-component
+beta version and website to be published. Delivered work from other owners must
+not be invalidated or restaged. This correction is accepted only when the same
+production-shaped duplex checker, run from an exact pushed commit with the
+separately verified Provider and model catalog, creates exactly two Tasks,
+completes their direct durable scheduler protocol, publishes the nonce-bearing
+interactive Artifact, and durably closes the Mission. A passing static test or
+mock is not end-to-end evidence.
+
+Hard constraints remain: preserve the immutable Mission-held Expert Squad
+snapshot; require one exact held `promptProfile` for each Mission-created Task;
+do not let the Host choose a Squad, infer a fallback profile, or bypass the
+catalog; retain streaming Provider calls and the existing reveal-receipt
+identity; do not modify the unrelated working changes in `session/index.ts` or
+the two Web content files. Read material for this cut includes the retained
+Mission state and SQLite Tool facts, the frozen capability Catalog attachment,
+`capability/descriptor.ts`, `capability/catalog.ts`,
+`capability/reveal-owner.ts`, `tool/capability-search.ts`, the Mission launch
+authority and General Mission Skill, current capability and Expert Squad
+architecture, focused catalog/reveal tests, and the introduction history of
+`next_owner_kinds`. Whole-repository search found only the canonical input and
+catalog implementation plus two focused test uses; there is no separate public
+API implementation. No independent-agent feedback exists for this correction
+yet; an uninvolved read-only review is required after implementation and
+verification.
+
+##### Failure evidence and root cause
+
+Exact remote commit `c0b5f7620342961ed82824c520779bc1b417522c`
+was run with the actual `openai/gpt-5.6-sol` model. The retained root is
+`mission-scheduling-c0b5f7620-20260903-final/temp/opencorvus-mission-task-duplex-e2e-KEKOWi`.
+The three-minute durable-activity deadline ended the run at progress
+`0:0:0:0:0`: zero Tasks, scheduler events and delivered inboxes, with 14
+Messages, 40 Parts and twelve completed Tool requests/outcomes. The Mission had
+already written an explicit authority-blocked frontier and entered standby, so
+this is a terminal pre-dispatch failure rather than an observation timeout.
+
+The frozen Catalog attachment proves that the Mission held four visible Expert
+Squads: `advanced`, `base`, `research-studio` and `squad-sdk`. All have
+`next_owner.kind=create_task_with_expert_squad`. Every one of the six Expert
+Squad searches, including the empty enumeration query, supplied both
+`kinds=[expert_squad]` and `next_owner_kinds=[call_tool]`. The catalog correctly
+applied filters conjunctively and therefore returned an empty set. The Tool
+contract, however, did not make the conjunction or the incompatible owner kind
+visible, and the completed empty result was indistinguishable from a genuinely
+empty held-Squad set. The model consequently converted a malformed filter
+intersection into a false durable authority blocker.
+
+The direct trigger is therefore not Task creation, scheduler delivery, Expert
+Squad installation, fuzzy ranking or the held snapshot. It is an ambiguous
+search contract: two valid independent filter dimensions can form an
+impossible intersection and silently report capability absence. Existing tests
+prove each dimension separately but do not cover this production combination.
+Adding Squad keywords would only hide the issue because the incompatible owner
+filter eliminates every candidate before ranking. Letting Task creation inherit
+the active profile would violate the fixed held-owner contract.
+
+Repository history identifies a second part of the same regression. Before the
+Phase B occurrence-bound reveal migration, the production Tool reported
+`visible_expert_squad_count`, Mission-only `held_expert_squad_count`, the
+canonical persisted Mission `product_pillar`, and a divergent
+`requested_product_pillar`; it also searched with the canonical Mission pillar.
+Commit `36fdc0495` moved execution into the reveal owner but dropped those facts
+and used the raw request pillar. The current Mission Prompt still instructs the
+model to read the visible count, and current architecture still requires all
+four diagnostics. The retained run records `Held Squad count: not exposed`, so
+the missing diagnostics materially converted the filter error into a false
+authority blocker rather than merely reducing observability.
+
+##### Single correction
+
+Keep both useful filter dimensions and their conjunctive meaning. The one
+catalog candidate reducer will also compute, from the same frozen views, a
+structured filter diagnostic whenever requested `kinds` have visible
+candidates under all other structural filters but none can satisfy the supplied
+`next_owner_kinds`. The completed `capability_search` result will expose the
+requested kinds, requested next-owner kinds, and the actual compatible
+next-owner kinds. A genuine empty held set or a text query with no fuzzy match
+will not be mislabeled. Tool and field descriptions will state that filters are
+ANDed, that an empty query enumerates structural matches, and that Expert Squad
+search either omits `next_owner_kinds` or uses
+`create_task_with_expert_squad`. The Host still does not select, broaden or
+retry any query; the model receives exact facts and must submit the corrected
+search itself.
+
+The occurrence-bound reveal owner will also restore the existing Mission
+diagnostic contract. The original persisted Tool input remains the immutable
+replay and materialization identity, while result projection uses the canonical
+Mission product pillar supplied by the Session authority. Output and metadata
+report visible and held counts, the canonical pillar, and a divergent requested
+pillar. Non-Mission callers retain an explicitly requested pillar as their
+effective filter. No compatibility reader or second catalog projection is
+introduced.
+
+Positive tests must use a real Mission-visible Catalog containing an Expert
+Squad and a callable Tool. They must prove that the production-invalid
+`expert_squad + call_tool` query completes with zero results plus the exact
+compatible-owner diagnostic, that the corrected empty Expert Squad query
+returns the held Squad, and that a genuinely absent requested kind has no false
+diagnostic. A reveal-owner test must prove the diagnostic reaches the persisted
+completed Tool output without a failed Tool occurrence. After focused tests and
+typecheck, the exact staged tree requires one uninvolved review. Delivery then
+requires commit, fetch/merge, push, and a fresh exact-remote duplex run; the
+earlier failed run remains diagnostic evidence only.

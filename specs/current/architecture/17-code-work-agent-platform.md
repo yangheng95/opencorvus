@@ -744,9 +744,12 @@ interface CapabilitySearchResult {
 ```
 
 The query supports one to four fuzzy terms, optional exact kind/owner filters,
-explicit `exact_refs` activation, explicit `deactivate_refs`, at most five
-results, and an expected snapshot hash. Fuzzy results remain metadata until the
-model copies an exact ref into `exact_refs`.
+explicit `exact_refs` activation, explicit `deactivate_refs`, and at most five
+results. Supplied structural filters are conjunctive; an empty query enumerates
+their matches. When the complete structural candidate set is non-empty and a
+requested next-owner filter removes every candidate, search returns a structured
+incompatible-filter diagnostic with the compatible next-owner kinds. Fuzzy results remain metadata until the model
+copies an exact ref into `exact_refs`.
 Pillar filtering is exact only for Expert Squads; Skill, Tool, and MCP
 eligibility comes from their authoritative active projection rather than copied
 pillar metadata. Result references are typed, stable identifiers, not
@@ -755,6 +758,10 @@ perform the next operation; it is not a promise that the current Agent owns
 that tool. Before load or execution, the owning resolver rechecks the exact
 reference and current catalog revision. A stale result produces a visible
 stale-reference error and a new search, never a compatibility fallback.
+For Mission, the persisted Mission product pillar overrides a contradictory
+request filter while the requested pillar remains visible as diagnostics. The
+result also exposes held and pillar-filtered visible Expert Squad counts without
+enumerating held identifiers or selecting a Task owner.
 
 `availability` is descriptive current state, not a permission decision:
 

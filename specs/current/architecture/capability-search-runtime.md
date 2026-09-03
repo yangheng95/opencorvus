@@ -36,10 +36,21 @@ starts at revision zero.
 ## Search and reveal contract
 
 One search accepts one to four queries, exact kind/owner filters, at most five
-metadata results, exact activation refs, explicit deactivation refs, and an
-optional expected snapshot hash. The frozen Catalog view and Harness must both
-authorize every requested leaf and its behavior target. A Capability Set is
-never executable and fuzzy ranking never activates a result.
+metadata results, exact activation refs, and explicit deactivation refs. Every
+supplied structural filter is conjunctive; an empty query enumerates the
+structural matches. If the complete structural candidate set is non-empty and
+the supplied next-owner kinds remove every candidate, the same frozen view
+returns a structured incompatible-filter diagnostic instead of making the empty
+result look like an absent capability. The frozen Catalog view and Harness must both authorize every
+requested leaf and its behavior target. A Capability Set is never executable
+and fuzzy ranking never activates a result.
+
+Mission search additionally reports the held Expert Squad count, the
+pillar-filtered visible Expert Squad count, and the canonical persisted Mission
+product pillar. A contradictory model-supplied pillar is reported separately
+but cannot narrow the occurrence Catalog away from that canonical pillar. These
+diagnostics never enumerate held identifiers, select a Squad, broaden the
+frozen view, or retry the query.
 
 The receipt records occurrence/search identity, prior and new revision,
 Harness/Catalog identity, materialization fingerprint, result refs,

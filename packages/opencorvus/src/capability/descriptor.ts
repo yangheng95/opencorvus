@@ -271,13 +271,15 @@ export const CapabilitySearchInput = z
       .max(20)
       .optional()
       .describe(
-        'Exact stored capability kinds. "tool" selects platform tools and "mcp_tool" selects Model Context Protocol tools; omit this field to search across stored kinds.',
+        'Exact stored capability kinds. All supplied filters are ANDed. "tool" selects platform tools, "mcp_tool" selects Model Context Protocol tools, and "expert_squad" selects held Task owners; omit this field to search across stored kinds.',
       ),
     next_owner_kinds: z
       .array(CapabilityNextOwnerKind)
       .max(20)
       .optional()
-      .describe('Exact next-step kinds. Use ["call_tool"] to search every executable platform or MCP tool.'),
+      .describe(
+        'Exact next-step kinds, ANDed with kinds. Use ["call_tool"] for executable platform or MCP tools. For kinds=["expert_squad"], omit this field or use ["create_task_with_expert_squad"]; call_tool excludes every Expert Squad.',
+      ),
     owner_refs: z.array(z.string().trim().min(1).max(320)).max(20).optional(),
     exact_refs: z
       .array(
@@ -308,6 +310,17 @@ export const CapabilitySearchInput = z
     }
   })
 export type CapabilitySearchInput = z.infer<typeof CapabilitySearchInput>
+
+export const CapabilitySearchFilterDiagnostic = z
+  .object({
+    code: z.literal("incompatible_structural_filters"),
+    requested_kinds: z.array(CapabilityKind).min(1),
+    requested_next_owner_kinds: z.array(CapabilityNextOwnerKind).min(1),
+    compatible_next_owner_kinds: z.array(CapabilityNextOwnerKind).min(1),
+    message: z.string().min(1),
+  })
+  .strict()
+export type CapabilitySearchFilterDiagnostic = z.infer<typeof CapabilitySearchFilterDiagnostic>
 
 export const CapabilitySearchResult = z
   .object({
