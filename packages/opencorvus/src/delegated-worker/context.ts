@@ -14,7 +14,7 @@ export function delegatedWorkerContextSections(input: {
       `Reason: ${input.reason}`,
       `Exact Delivery Slice revision subjects: ${input.deliverySliceRevisionIDs.join(", ") || "(none)"}`,
       "These immutable subjects scope work and evidence only; they do not create execution or lifecycle instances.",
-      "Discover durable Task evidence with artifact_search, then read every selected locator to complete=true.",
+      "For an explicit repository path, reveal and use the read Tool on that exact path. For durable Task Artifact evidence, use artifact_search and then read every selected Artifact locator to complete=true. Do not substitute one source authority for the other.",
     ].join("\n"),
     renderUserRequestSection({ heading: "## Original request", request: input.task.request, taskID: input.task.id }),
   ]

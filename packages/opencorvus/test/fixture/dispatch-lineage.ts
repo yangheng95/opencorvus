@@ -12,6 +12,7 @@ import type { Message } from "../../src/session/message"
 
 export function materializeTestDispatchCreatorOccurrence(
   input: Parameters<typeof recordDispatchLineage>[0],
+  options: { completeAssistant?: boolean } = {},
 ): void {
   Database.immediateTransaction((db) => {
     const existing = db
@@ -82,7 +83,7 @@ export function materializeTestDispatchCreatorOccurrence(
         time_created: now,
       })
       .run()
-    if (createdAssistantData) {
+    if (createdAssistantData && options.completeAssistant !== false) {
       const completedAssistantData: Omit<Message.Assistant, "id" | "sessionID"> = {
         ...createdAssistantData,
         time: { created: now, completed: now },
@@ -115,11 +116,11 @@ export function materializeTestDispatchCreatorOccurrence(
  * its writer transaction, then expire that fixture owner. */
 export function recordTestDispatchLineage(
   input: Parameters<typeof recordDispatchLineage>[0],
-  options: { joinLiveness?: boolean } = {},
+  options: { joinLiveness?: boolean; completeCreatorAssistant?: boolean } = {},
 ) {
   const liveness = options.joinLiveness === false ? undefined : joinProcessLivenessLease(currentRuntimeOccurrenceID())
   try {
-    materializeTestDispatchCreatorOccurrence(input)
+    materializeTestDispatchCreatorOccurrence(input, { completeAssistant: options.completeCreatorAssistant })
     return recordDispatchLineage(input)
   } finally {
     liveness?.release()

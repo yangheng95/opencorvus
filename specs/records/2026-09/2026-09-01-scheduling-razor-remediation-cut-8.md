@@ -4122,3 +4122,92 @@ generated closure, positive package coverage and the three-path working-tree
 exclusion. The reviewer did not rerun the long matrix. This closes the
 code/test/doc review gate; the one exact post-push Luna case remains the real
 budget acceptance.
+
+The exact post-push Luna run for commit
+`6c5647f5761ac0a428f074c418714516d05eebc0` again reused 236 dependency links
+and the existing native helper with zero installs, downloads, builds or native
+compilation. It completed the Task in about 150 seconds and reduced Orchestrator
+usage to 158,397 tokens, below the 220,000 budget. Four workers overlapped and
+one collection wake opened the final reconciliation. The run still failed the
+no-failed-Tool contract, so it is evidence rather than acceptance.
+
+The retained Database proves that one batched input changed the real final ID
+`msg_g0VUHu0hd00Lddhu0sQB` into the non-existent
+`msg_g0VUHtu0hd00Lddhu0sQB`. The immutable settlement, persisted Message and
+later completion evidence all retained the correct value; only the Provider
+Tool argument drifted. The structural schema allowed any non-empty string, so
+prompt prose could not enforce exact selection. The same run exposed a second
+source-routing defect: every delegated worker received an unconditional
+instruction to use `artifact_search`, even when its bounded instruction named a
+repository file. One risk investigator therefore spent its decision budget on
+the Artifact catalog and correctly reported that it had not read the file.
+
+The next repair keeps the existing fact owners. The Message reader's Provider
+schema will enumerate the latest exact Task dispatch group while its executor
+continues to resolve the persisted Session and verify Task ownership for every
+submitted ID. A collection group is bound by the exact execution epoch,
+Orchestrator Message and outer Tool occurrence and reuses the canonical
+eight-member maximum; a direct dispatch group is the ordered sibling decision
+set owned by one assistant Message. Historical groups are neither scanned nor
+copied into the Tool schema. This constrains generation; it
+does not add latest selection, guessed correction, retry, compatibility input or
+a second reader. The delegated-worker context will state the existing source
+distinction directly: explicit repository paths use the projected `read` Tool,
+whereas durable Task Artifact locators use `artifact_search` followed by the
+Artifact reader. A positive schema test and source-routing prompt test will bind
+both contracts before another real run is considered.
+
+The deterministic correction passed 10 focused tests across the Light,
+Dynamic, scheduler-policy and delegated-worker source-routing surfaces with 207
+assertions. OpenCorvus package typecheck passed, and root typecheck completed all
+8 workspace tasks while reusing 7 cached results. The repository checks also
+passed: docs 339/25, routes 6/34, architecture 16, package topology 10, control
+leases 18 owners/22 acquisition sites, control-state redundancy 53 tables/7
+fact classes, and the aligned release family remained `0.0.58-beta`. No install,
+download, build or native compilation was performed. A new real Provider run is
+intentionally deferred until this exact code/test/architecture cut completes
+independent review and delivery.
+
+The exact-index gates also passed: release mutation topology retained its 5
+canonical authorities, module topology covered 1,104 modules and 5,552 runtime
+edges with no retained strongly connected component and 4 clean imports, and
+the public package release order remained consistent. Cached and working diff
+format checks were clean, with the pre-existing Session formatting change and
+two web-content paths excluded from this cut.
+
+The first independent review found one P2 in the initial candidate: it scanned
+every historical Task settlement and copied all final Message IDs into the Tool
+schema. The correction replaced that scan with the latest exact dispatch group
+described above. The positive Light test now materializes four settled members,
+then a later two-sibling direct decision set in the same Task; the first schema
+exposes the four-member collection, while the successor schema exposes only the
+two current direct-group Message IDs. This proves older settlements neither
+enlarge nor displace the current bounded authority set.
+
+The next independent pass found that one assistant Turn may legally own a
+sibling `dispatch_agent` fan-out, so a direct group cannot be reduced to its
+last lineage. It also found that the collection query omitted the exact
+`tool_name` predicate needed by SQLite's partial collection-occurrence index.
+The direct reducer now reads that assistant Message's ordered Tool requests via
+`tool_part_request_message_idx`, resolves their exact direct occurrence
+lineages, and exposes all settled sibling IDs; calls consume more than eight in
+ordered chunks. The collection query now includes the partial-index predicate,
+and its positive test requires the real query plan to use
+`engine_dispatch_lineage_collection_member_idx`.
+
+The following pass showed that an `OR` of direct Tool occurrence pairs made
+SQLite use only the first `task_id` column of the direct partial index. The
+direct reducer now materializes the current assistant Message's exact
+`(ordinal, tool_part_id, tool_call_id)` values once and joins each row through
+the full `engine_dispatch_lineage_direct_tool_occurrence_idx` key, then fetches
+the selected Artifact IDs through the primary key. The positive query-plan
+contract requires both `tool_part_request_message_idx (message_id=?)` and the
+full direct key `(task_id, <expr>, <expr>)`; Task direct history is no longer a
+scan input.
+
+An uninvolved read-only reviewer then inspected exact staged tree
+`48adc1f00f7ffc6ed6aaae590d5a2dd7d2ef1204` and returned FINAL PASS with
+P0-P3 all zero. It confirmed the fixed-query-count VALUES join and full-key
+index seek, direct sibling and collection grouping, Provider/runtime/executor
+fail-closed chain, source routing, positive evidence and the three-path working
+tree exclusion. The reviewer did not rerun the long real Provider case.

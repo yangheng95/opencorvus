@@ -1,11 +1,13 @@
 import { afterEach, describe, expect, spyOn, test } from "bun:test"
 import path from "node:path"
-import type { Tool as AITool } from "ai"
+import { asSchema, type Tool as AITool } from "ai"
 import { DispatchAdapterContractRegistry, type AgentDispatchAdapterID } from "../../src/agent/dispatch-adapter-contract"
+import { DispatchOutcome } from "../../src/agent/dispatch-outcome"
 import { WorkerTurnDescriptor } from "../../src/agent/worker-turn-descriptor"
 import { Config } from "../../src/config/config"
 import { EffectiveConfig } from "../../src/config/effective"
 import { createDispatchLineageOrigin, listDispatchLineage } from "../../src/engine/dispatch-lineage"
+import { DispatchSettlementTestHooks, recordDispatchSettlement } from "../../src/engine/dispatch-settlement"
 import { recordTestDispatchLineage } from "../fixture/dispatch-lineage"
 import { persistEstablishedTask } from "../fixture/engine-task"
 import { EngineTaskRootIngressTable } from "../../src/engine/engine.sql"
@@ -759,6 +761,11 @@ describe("Light Expert Squad package", () => {
           const lineages = listDispatchLineage(taskID)
           dispatchIDs = lineages.map((lineage) => lineage.dispatchID)
           expect(new Set(dispatchIDs).size).toBe(4)
+          expect(
+            Database.use((db) =>
+              DispatchSettlementTestHooks.collectionGroupQueryPlan(db, lineages[0]!.artifactID),
+            ).join("\n"),
+          ).toContain("engine_dispatch_lineage_collection_member_idx")
           expect(lineages.map((lineage) => lineage.payload.target_agent_id).sort()).toEqual([...targets].sort())
           expect(lineages.map((lineage) => lineage.payload.orchestrator_message_id)).toEqual(
             targets.map(() => orchestratorMessageID),
@@ -850,6 +857,32 @@ describe("Light Expert Squad package", () => {
               finish: "stop",
             })
           }
+          const providerContract = asSchema(reader.inputSchema) as {
+            jsonSchema: any
+            validate?: (
+              value: unknown,
+            ) => Promise<
+              { success: true; value: { message_ids: string[] } } | { success: false; error: Error }
+            >
+          }
+          const providerSchema = providerContract.jsonSchema
+          expect(providerSchema.properties.message_ids).toMatchObject({
+            type: "array",
+            minItems: 1,
+            maxItems: 8,
+            uniqueItems: true,
+            items: { type: "string" },
+          })
+          expect(providerSchema.properties.message_ids.items.enum.toSorted()).toEqual(finalIDs.toSorted())
+          expect(await providerContract.validate?.({ message_ids: finalIDs })).toEqual({
+            success: true,
+            value: { message_ids: finalIDs },
+          })
+          const rejected = await providerContract.validate?.({ message_ids: ["msg_not_a_current_settlement"] })
+          expect(rejected?.success).toBe(false)
+          if (rejected?.success === false) {
+            expect(rejected.error.message).toContain("not current terminal dispatch settlements")
+          }
           const output = JSON.parse(
             (await reader.execute!(
               { message_ids: finalIDs },
@@ -878,6 +911,70 @@ describe("Light Expert Squad package", () => {
               expect.arrayContaining([expect.objectContaining({ tool_name: "read", status: "completed" })]),
             )
           }
+
+          const directDecisionMessageID = Identifier.ascending("message")
+          const laterNow = Date.now() + 1_000
+          const laterDirectLineages = lineages.slice(0, 2).map((sourceLineage, index) => {
+            const laterOrigin = createDispatchLineageOrigin({
+              taskID,
+              orchestratorSessionID: orchestrator.id,
+              orchestratorMessageID: directDecisionMessageID,
+              toolPartID: Identifier.ascending("part"),
+              toolCallID: Identifier.ascending("call"),
+              toolName: "dispatch_agent",
+              targetAgentID: sourceLineage.payload.target_agent_id,
+              projectedWorkerIdentity: sourceLineage.payload.projected_worker_identity,
+              workScope: sourceLineage.payload.work_scope,
+              deliverySliceRevisionIDs: sourceLineage.payload.delivery_slice_revision_ids,
+              workflowBinding: sourceLineage.payload.workflow_binding,
+              workflowNodeID: sourceLineage.payload.workflow_node_id,
+              adapterInput: sourceLineage.payload.adapter_input,
+            })
+            const laterLineage = recordTestDispatchLineage({
+              origin: laterOrigin,
+              childSessionID: sourceLineage.payload.child_session_id,
+              now: laterNow + index,
+            }, { completeCreatorAssistant: false })
+            recordDispatchSettlement({
+              taskID,
+              dispatchID: laterLineage.dispatchID,
+              outcome: DispatchOutcome.terminal({
+                sessionID: sourceLineage.payload.child_session_id,
+                finalMessageID: finalIDs[index]!,
+              }),
+              now: laterNow + 10 + index,
+            })
+            return { lineage: laterLineage, origin: laterOrigin }
+          })
+          for (const [index, direct] of laterDirectLineages.entries()) {
+            await Session.updatePart({
+              id: direct.origin.toolPartID,
+              sessionID: orchestrator.id,
+              messageID: directDecisionMessageID,
+              type: "tool",
+              callID: direct.origin.toolCallID,
+              tool: "dispatch_agent",
+              state: {
+                status: "completed",
+                input: {},
+                output: JSON.stringify({ dispatchID: direct.lineage.dispatchID }),
+                title: "Direct sibling dispatch",
+                metadata: {},
+                time: { start: laterNow + index, end: laterNow + 10 + index },
+              },
+            })
+          }
+          dispatchIDs.push(...laterDirectLineages.map(({ lineage }) => lineage.dispatchID))
+          const directPlans = Database.use((db) =>
+            DispatchSettlementTestHooks.directGroupQueryPlans(db, laterDirectLineages[0]!.lineage.artifactID),
+          )
+          expect(directPlans.requests.join("\n")).toContain("tool_part_request_message_idx (message_id=?)")
+          expect(directPlans.lineages.join("\n")).toContain(
+            "engine_dispatch_lineage_direct_tool_occurrence_idx (task_id=? AND <expr>=? AND <expr>=?)",
+          )
+          const latestGroupSchema = asSchema(createReadAgentMessageTool({ taskID }).read_agent_message.inputSchema)
+            .jsonSchema as any
+          expect(latestGroupSchema.properties.message_ids.items.enum).toEqual(finalIDs.slice(0, 2))
         },
       })
 

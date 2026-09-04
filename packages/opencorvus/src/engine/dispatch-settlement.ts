@@ -1,11 +1,14 @@
 import { isDeepStrictEqual } from "node:util"
 import { DispatchOutcomeSchema, type DispatchOutcome } from "@/agent/dispatch-outcome"
 import { insertEngineArtifact } from "@/engine/artifact"
+import { MAX_DISPATCH_COLLECTION_SIZE } from "@/engine/dispatch-collection-contract"
 import { EngineArtifactTable, type EngineMetadata } from "@/engine/engine.sql"
 import { Identifier } from "@/id/id"
-import { and, asc, eq, sql, Database } from "@/storage/db"
+import { ToolPartRequestTable } from "@/session/session.sql"
+import { and, asc, desc, eq, inArray, or, sql, Database } from "@/storage/db"
 import z from "zod"
 import { findDispatchLineageByDispatchID } from "./dispatch-lineage"
+import { dispatchLineageRow } from "./dispatch-lineage-facts"
 
 const FinalDispatchOutcomeSchema = DispatchOutcomeSchema.superRefine((outcome, context) => {
   if (outcome.kind === "accepted") {
@@ -128,6 +131,226 @@ export function findDispatchSettlementByDispatchID(input: {
     return row ? { artifactID: row.id, payload: parseDispatchSettlementPayload(row.payload, row.id) } : undefined
   })
 }
+
+/**
+ * Return the immutable terminal worker Message authorities from the Task's
+ * latest dispatch group. A dispatch_agents group is identified by its exact
+ * outer Tool occurrence and cannot exceed the canonical collection size; a
+ * direct dispatch_agent group is the ordered sibling decision set owned by the
+ * latest assistant Message. Historical groups are neither scanned nor
+ * projected into the Provider schema.
+ */
+function collectionGroupLineagePredicate(latest: ReturnType<typeof dispatchLineageRow>) {
+  return and(
+    eq(EngineArtifactTable.task_id, latest.taskID),
+    eq(EngineArtifactTable.kind, "dispatch_lineage"),
+    sql`json_extract(${EngineArtifactTable.payload}, '$.tool_name') = 'dispatch_agents'`,
+    sql`json_extract(${EngineArtifactTable.payload}, '$.execution_epoch') = ${latest.payload.execution_epoch}`,
+    sql`json_extract(${EngineArtifactTable.payload}, '$.orchestrator_session_id') = ${latest.payload.orchestrator_session_id}`,
+    sql`json_extract(${EngineArtifactTable.payload}, '$.orchestrator_message_id') = ${latest.payload.orchestrator_message_id}`,
+    sql`json_extract(${EngineArtifactTable.payload}, '$.tool_part_id') = ${latest.payload.tool_part_id}`,
+    sql`json_extract(${EngineArtifactTable.payload}, '$.tool_call_id') = ${latest.payload.tool_call_id}`,
+  )
+}
+
+function collectionGroupLineageQuery(db: Database.TxOrDb, latest: ReturnType<typeof dispatchLineageRow>) {
+  return db
+    .select()
+    .from(EngineArtifactTable)
+    .where(collectionGroupLineagePredicate(latest))
+    .limit(MAX_DISPATCH_COLLECTION_SIZE + 1)
+}
+
+type DirectGroupRequest = { partID: string; callID: string }
+
+function directGroupRequests(db: Database.TxOrDb, latest: ReturnType<typeof dispatchLineageRow>) {
+  return db
+    .select({
+      partID: ToolPartRequestTable.id,
+      callID: sql<string>`json_extract(${ToolPartRequestTable.data}, '$.callID')`,
+    })
+    .from(ToolPartRequestTable)
+    .where(
+      and(
+        eq(ToolPartRequestTable.message_id, latest.payload.orchestrator_message_id),
+        sql`json_extract(${ToolPartRequestTable.data}, '$.tool') = 'dispatch_agent'`,
+      ),
+    )
+    .orderBy(asc(ToolPartRequestTable.time_created), asc(ToolPartRequestTable.id))
+    .all()
+}
+
+function directGroupLineageIDQuery(
+  latest: ReturnType<typeof dispatchLineageRow>,
+  requests: readonly DirectGroupRequest[],
+) {
+  const requested = sql.join(
+    requests.map((request, ordinal) => sql`(${ordinal}, ${request.partID}, ${request.callID})`),
+    sql`, `,
+  )
+  return sql`
+    WITH requested(ordinal, tool_part_id, tool_call_id) AS (VALUES ${requested})
+    SELECT requested.ordinal AS ordinal, lineage.id AS id
+    FROM requested
+    INNER JOIN engine_artifact AS lineage INDEXED BY engine_dispatch_lineage_direct_tool_occurrence_idx
+      ON lineage.task_id = ${latest.taskID}
+      AND lineage.kind = 'dispatch_lineage'
+      AND json_extract(lineage.payload, '$.tool_name') = 'dispatch_agent'
+      AND json_extract(lineage.payload, '$.execution_epoch') = ${latest.payload.execution_epoch}
+      AND json_extract(lineage.payload, '$.orchestrator_session_id') = ${latest.payload.orchestrator_session_id}
+      AND json_extract(lineage.payload, '$.orchestrator_message_id') = ${latest.payload.orchestrator_message_id}
+      AND json_extract(lineage.payload, '$.tool_part_id') = requested.tool_part_id
+      AND json_extract(lineage.payload, '$.tool_call_id') = requested.tool_call_id
+    ORDER BY requested.ordinal
+    LIMIT ${requests.length + 1}
+  `
+}
+
+function directGroupLineages(db: Database.TxOrDb, latest: ReturnType<typeof dispatchLineageRow>) {
+  const requests = directGroupRequests(db, latest)
+  if (requests.length === 0) {
+    throw new Error(`Latest direct dispatch ${latest.dispatchID} has no assistant decision-set Tool request`)
+  }
+  const identities = db.all<{ ordinal: number; id: string }>(directGroupLineageIDQuery(latest, requests))
+  const ids = identities.map((identity) => identity.id)
+  if (ids.length !== new Set(ids).size || identities.length > requests.length) {
+    throw new Error(`Latest direct dispatch decision set for Message ${latest.payload.orchestrator_message_id} is ambiguous`)
+  }
+  const rows = ids.length === 0
+    ? []
+    : db
+        .select()
+        .from(EngineArtifactTable)
+        .where(inArray(EngineArtifactTable.id, ids))
+        .all()
+        .map(dispatchLineageRow)
+  const byID = new Map(rows.map((lineage) => [lineage.artifactID, lineage]))
+  return identities.flatMap((identity) => {
+    const lineage = byID.get(identity.id)
+    return lineage ? [lineage] : []
+  })
+}
+
+export function latestTaskDispatchGroupFinalMessageIDs(taskID: string): string[] {
+  return Database.use((db) => {
+    const latestRow = db
+      .select()
+      .from(EngineArtifactTable)
+      .where(and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.kind, "dispatch_lineage")))
+      .orderBy(desc(EngineArtifactTable.time_created), desc(EngineArtifactTable.id))
+      .limit(1)
+      .get()
+    if (!latestRow) return []
+
+    const latest = dispatchLineageRow(latestRow)
+    const lineages =
+      latest.payload.tool_name === "dispatch_agents"
+        ? collectionGroupLineageQuery(db, latest)
+            .all()
+            .map(dispatchLineageRow)
+            .toSorted(
+              (left, right) =>
+                (left.payload.collection_member_index ?? -1) - (right.payload.collection_member_index ?? -1),
+            )
+        : directGroupLineages(db, latest)
+    if (latest.payload.tool_name === "dispatch_agents" && lineages.length > MAX_DISPATCH_COLLECTION_SIZE) {
+      throw new Error(
+        `Latest Task dispatch group ${latest.payload.tool_part_id}/${latest.payload.tool_call_id} exceeds ${MAX_DISPATCH_COLLECTION_SIZE} members`,
+      )
+    }
+    const settlementRows = db
+      .select({ id: EngineArtifactTable.id, payload: EngineArtifactTable.payload })
+      .from(EngineArtifactTable)
+      .where(
+        and(
+          eq(EngineArtifactTable.task_id, taskID),
+          eq(EngineArtifactTable.kind, "dispatch_settlement"),
+          or(
+            ...lineages.map(
+              (lineage) => sql`json_extract(${EngineArtifactTable.payload}, '$.dispatch_id') = ${lineage.dispatchID}`,
+            ),
+          ),
+        ),
+      )
+      .limit(lineages.length + 1)
+      .all()
+    const settlementByDispatchID = new Map(
+      settlementRows.map((row) => {
+        const payload = parseDispatchSettlementPayload(row.payload, row.id)
+        return [payload.dispatch_id, payload] as const
+      }),
+    )
+    if (settlementRows.length !== settlementByDispatchID.size || settlementRows.length > lineages.length) {
+      throw new Error(`Latest Task dispatch group ${latest.payload.tool_part_id}/${latest.payload.tool_call_id} has ambiguous settlements`)
+    }
+    const seen = new Set<string>()
+    return lineages.flatMap((lineage) => {
+      const outcome = settlementByDispatchID.get(lineage.dispatchID)?.outcome
+      const messageID = outcome && "final_message_id" in outcome ? outcome.final_message_id : undefined
+      if (typeof messageID !== "string" || seen.has(messageID)) return []
+      seen.add(messageID)
+      return [messageID]
+    })
+  })
+}
+
+export const DispatchSettlementTestHooks = Object.freeze({
+  collectionGroupQueryPlan(db: Database.TxOrDb, latestArtifactID: string): string[] {
+    const row = db
+      .select()
+      .from(EngineArtifactTable)
+      .where(
+        and(
+          eq(EngineArtifactTable.id, latestArtifactID),
+          eq(EngineArtifactTable.kind, "dispatch_lineage"),
+        ),
+      )
+      .get()
+    if (!row) throw new Error(`Dispatch lineage ${latestArtifactID} does not exist`)
+    const latest = dispatchLineageRow(row)
+    if (latest.payload.tool_name !== "dispatch_agents") {
+      throw new Error(`Dispatch lineage ${latestArtifactID} is not a collection member`)
+    }
+    return db.all<{ detail: string }>(sql`
+      EXPLAIN QUERY PLAN
+      SELECT ${EngineArtifactTable.id}
+      FROM ${EngineArtifactTable}
+      WHERE ${collectionGroupLineagePredicate(latest)}
+      LIMIT ${MAX_DISPATCH_COLLECTION_SIZE + 1}
+    `).map((entry) => entry.detail)
+  },
+  directGroupQueryPlans(
+    db: Database.TxOrDb,
+    latestArtifactID: string,
+  ): { requests: string[]; lineages: string[] } {
+    const row = db
+      .select()
+      .from(EngineArtifactTable)
+      .where(and(eq(EngineArtifactTable.id, latestArtifactID), eq(EngineArtifactTable.kind, "dispatch_lineage")))
+      .get()
+    if (!row) throw new Error(`Dispatch lineage ${latestArtifactID} does not exist`)
+    const latest = dispatchLineageRow(row)
+    if (latest.payload.tool_name !== "dispatch_agent") {
+      throw new Error(`Dispatch lineage ${latestArtifactID} is not a direct dispatch`)
+    }
+    const requests = directGroupRequests(db, latest)
+    if (requests.length === 0) throw new Error(`Direct dispatch ${latestArtifactID} has no Tool requests`)
+    const requestPlan = db.all<{ detail: string }>(sql`
+      EXPLAIN QUERY PLAN
+      SELECT ${ToolPartRequestTable.id}
+      FROM ${ToolPartRequestTable}
+      WHERE ${ToolPartRequestTable.message_id} = ${latest.payload.orchestrator_message_id}
+        AND json_extract(${ToolPartRequestTable.data}, '$.tool') = 'dispatch_agent'
+      ORDER BY ${ToolPartRequestTable.time_created}, ${ToolPartRequestTable.id}
+    `)
+    return {
+      requests: requestPlan.map((entry) => entry.detail),
+      lineages: db
+        .all<{ detail: string }>(sql`EXPLAIN QUERY PLAN ${directGroupLineageIDQuery(latest, requests)}`)
+        .map((entry) => entry.detail),
+    }
+  },
+})
 
 export function recordDispatchSettlement(input: {
   taskID: string

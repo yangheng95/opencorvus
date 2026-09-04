@@ -131,12 +131,23 @@ inventory retains each recorded `finish` reason because a completed Tool step
 is not by itself a terminal worker report. The exact Message reader exposes the
 same finish/completion facts without inferring success. Its sole current input
 is an ordered set of one to eight globally unique Message IDs. The reader
-resolves and verifies every persisted Session owner against the current Task,
-then returns the exact Message projections in caller order. It does not accept a
-second caller-supplied Session identity, select a latest Message, or retain a
-singular compatibility input. Fresh and reconstructed Task baseline/delta views
-carry these facts through the existing single read path; a sibling's terminal
-wake never establishes another sibling's completion.
+projects the latest exact dispatch group as a Provider enum and validates the
+submitted ordered subset against that same immutable set. A `dispatch_agents`
+group is bound by execution epoch, Orchestrator Message and outer Tool
+occurrence and has the same maximum of eight members as its collection; a
+direct group is the sibling `dispatch_agent` decision set owned by the same
+execution epoch and assistant Message. Its Tool requests are read through the
+Message index and lineages through exact Tool-occurrence authority, rather than
+scanning Task history. Historical groups are neither scanned nor copied into
+the Tool schema. One collection fits one read; a larger legal direct fan-out is
+read in ordered chunks of at most eight. Its executor still resolves and
+verifies every persisted Session owner
+against the current Task, then returns the exact Message projections in caller
+order. It does not accept a second caller-supplied Session identity, select a
+latest Message, guess or correct an identifier, retry a rejected read, or retain
+a singular compatibility input. Fresh and reconstructed Task baseline/delta
+views carry these facts through the existing single read path; a sibling's
+terminal wake never establishes another sibling's completion.
 
 ```text
 accepted ingress
