@@ -749,3 +749,51 @@ This is not described as clean cleanup or silently discarded; its terminal
 shutdown/ownership path requires read-only root analysis before another real run.
 It does not invalidate the independently verified empty-filter correction or
 other cases' completed evidence. Only this evidence paragraph follows the review.
+
+### Terminal shutdown correction Recall
+
+User authorization remains completion of real acceptance and release 0.0.59-beta,
+with existing caches reused and unrelated work preserved. Empty-filter repair
+39d124efd is pushed with zero divergence. This cut addresses the real single-case
+cleanup failure only; historical passing evidence remains valid.
+
+The observed stack is Server.stop -> settleCurrentProcessExecution ->
+terminateCurrentProcessOwnedExecution -> persistProcessShutdownRecoveryHandoffs ->
+TaskRootIngressError(task_terminal). A physical Prompt may remain in its final
+cleanup tail after task.completed. The writer correctly enumerates actual owners,
+but its transaction unconditionally creates an ordinary recovery ingress for every
+associated Task, conflicting with the existing active-only ingress authority.
+One terminal sibling rolls back the whole batch before physical cancellation.
+Existing runtime settlement tests cover gates and listener cleanup, not a terminal
+Task with a still-owned Prompt.
+
+Repository search covered all writer callers: Server.stop, CLI completion,
+preparation/listener failure and restart all share this settlement path. Mission
+and standalone Session owners use physical cancellation without Task handoffs;
+Mission-linked Tasks use the same lifecycle projection. Task control separately
+reconciles cancelling occurrences. Terminal conversation input retains its exact
+existing ingress/result authority; global startup also discovers pending scheduler
+deliveries, and the Project control driver scans durable ingress. This correction
+does not change those recovery readers, receipts, retry/reopen or epoch policies.
+No schema, public API, dependency, UI, version or migration change is required.
+
+Inside the existing handoff transaction, consult the canonical lifecycle before
+writing either infrastructure evidence or recovery ingress; only active Tasks
+receive a new handoff. Keep every actual Prompt in the physical cancellation and
+finish set, including cancelling and terminal Tasks. Do not catch/suppress the
+ingress error or relax terminal admission. Verify mixed active/cancelling/terminal
+Tasks across Projects, exact active handoff source, retained lifecycle projections,
+and real Server settlement/stop with an owned terminal Prompt tail. Run related
+runtime/cancellation/recovery positive tests, typecheck and independent read-only
+review. Independent feedback for this cut: none yet. Real Provider acceptance
+remains pending and is not replaced by these deterministic runtime tests.
+
+The affected six-file matrix passes 36/36, 66 assertions; package typecheck,
+explicit new-test-root typecheck (zero diagnostics), docs 339/25 and both diff
+checks pass. Independent read-only review of tree
+`30d7cbb1177e11263a38d242ffcc4b988ee6cee8` returned FINAL PASS, P0-P3=0,
+and independently reran the new positive tests 2/2, 5 assertions. The test's
+expected ingress source required an explicit literal type (`as const`), with
+unchanged runtime assertions; review includes that correction. Prior failed-run
+temporary directories were checked and contain no auth.json or models.json.
+Only this evidence paragraph follows review; real acceptance remains pending.

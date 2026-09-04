@@ -97,6 +97,14 @@ prompt owner and activity monitor, and its origin is preserved in the assistant
 error and durable `session.error` event. Downstream layers never reconstruct a
 caller from the reason string.
 
+Graceful shutdown distinguishes physical Prompt ownership from Task execution.
+The handoff transaction reads the canonical lifecycle and writes new recovery
+evidence/ingress only for active Task occurrences. Cancelling and terminal Tasks
+retain their existing cancellation or conversation-input authority. All physically
+owned Prompts, including terminal cleanup tails and non-Task Sessions, still receive
+cancellation and are awaited before runtime ownership is released. One terminal
+Task therefore does not reject an active sibling's durable shutdown handoff.
+
 `retryTask` / `replanTask` 只接受 terminal Task，已有 workflow occurrence 仍作为不可变执行证据保留。
 Lifecycle 校验、本次 intent wake 写入，以及同 epoch native Task wait 的 `superseded` settlement 位于
 同一数据库事务；active/queued Task 返回 typed lifecycle conflict。历史 `task_wait_activity` 只作为已落盘

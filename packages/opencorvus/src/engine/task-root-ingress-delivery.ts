@@ -2264,6 +2264,11 @@ export function persistProcessShutdownRecoveryHandoffs(input: {
     input.tasks.flatMap((item) => {
       const task = findTask(item.taskID)
       if (!task || item.ownedSessionIDs.length === 0) return []
+      // Physical Prompt cleanup can outlive Task execution. Only an active
+      // occurrence admits a new recovery input; cancellation and terminal
+      // conversations retain their existing durable authorities. The caller
+      // still cancels and awaits every physical owner in all lifecycle states.
+      if (taskLifecycleProjectionInTransaction(db, task.id).status !== "active") return []
       // Write the exact current context consumed by the single strict reader.
       // A predecessor payload belongs to an incompatible database epoch.
       const affectedSubjects = item.ownedSessionIDs.toSorted().flatMap((sessionID) => {

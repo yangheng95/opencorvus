@@ -153,8 +153,8 @@ export async function terminateCurrentProcessOwnedExecution(input: {
 
   try {
     // Freeze every Task root in each affected serialization directory before
-    // persisting one handoff occurrence and recovery wake per physically owned
-    // Task. This closes both re-entry and concurrent-sibling launch races while the
+    // persisting a recovery wake for each physically owned, still-active Task.
+    // This closes both re-entry and concurrent-sibling launch races while the
     // current process settles its owners.
     for (const rootSessionID of new Set(affectedRootSessionIDs)) {
       const taskID = taskIDForSession(rootSessionID)
