@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, spyOn, test } from "bun:test"
 import path from "node:path"
+import type { Tool as AITool } from "ai"
 import { DispatchAdapterContractRegistry, type AgentDispatchAdapterID } from "../../src/agent/dispatch-adapter-contract"
 import { WorkerTurnDescriptor } from "../../src/agent/worker-turn-descriptor"
 import { Config } from "../../src/config/config"
@@ -7,6 +8,10 @@ import { EffectiveConfig } from "../../src/config/effective"
 import { createDispatchLineageOrigin, listDispatchLineage } from "../../src/engine/dispatch-lineage"
 import { recordTestDispatchLineage } from "../fixture/dispatch-lineage"
 import { persistEstablishedTask } from "../fixture/engine-task"
+import { EngineTaskRootIngressTable } from "../../src/engine/engine.sql"
+import { acquireTaskRootIngressLease } from "../../src/engine/task-root-fact-store"
+import { currentRuntimeOccurrenceID } from "../../src/runtime/process-occurrence"
+import { Database, eq } from "../../src/storage/db"
 import { requireTask } from "../../src/engine/store"
 import {
   TestHooks as IngressTestHooks,
@@ -18,6 +23,7 @@ import { PromptProfileResolver } from "../../src/expert-squad/prompt-profile-res
 import { ExpertSquadRegistry } from "../../src/expert-squad/registry"
 import { Identifier } from "../../src/id/id"
 import { orchestratorControlOccurrenceIdentity } from "../../src/orchestrator/control-message-identity"
+import { currentOrchestratorControlMessage } from "../../src/orchestrator/agent"
 import {
   createDispatchAgentTool,
   type DispatchAdapterExecutors,
@@ -226,7 +232,7 @@ describe("Light Expert Squad package", () => {
   test("runs two Planner and two Investigator dispatches as overlapping real sibling Sessions", async () => {
     await using project = await memoryProject()
     const ingressRunner = {
-      runner: async ({ taskID, wakeID, predecessorID }) => {
+      runner: async ({ taskID, wakeID, predecessorID, activationID }) => {
         if (!wakeID || !predecessorID) throw new Error("Light lifecycle delivery lost its exact ingress identity")
         const task = requireTask(taskID)
         if (!task.session_id) throw new Error(`Task ${taskID} has no root Session`)
@@ -263,7 +269,7 @@ describe("Light Expert Squad package", () => {
           cost: 0,
           tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
           finish: "stop",
-          taskIngress: { id: wakeID, kind: "agent_lifecycle_delivery" },
+          activationID,
         }
         await Session.persistMessage({ info: assistant, parts: [] })
         return { finalMessageID: assistant.id }
@@ -285,7 +291,6 @@ describe("Light Expert Squad package", () => {
           await ExpertSquadPackageManager.importDirectory({
             projectDirectory: project.path,
             sourceDirectory: packageRoot,
-            replace: false,
             installationScope: "project",
           })
           const config = Config.mergeOverlay(await EffectiveConfig.snapshotCurrent(), {
@@ -340,24 +345,48 @@ describe("Light Expert Squad package", () => {
               timeCreated: now,
             }),
           })
+          const creatorIngress = Database.use((db) => db.select().from(EngineTaskRootIngressTable)
+            .where(eq(EngineTaskRootIngressTable.task_id, taskID)).get())
+          if (!creatorIngress) throw new Error("Light fixture has no Task creation ingress")
+          const activation = acquireTaskRootIngressLease({
+            ingressID: creatorIngress.id,
+            ownerOccurrenceID: currentRuntimeOccurrenceID(),
+            now: now + 1,
+            leaseMilliseconds: 120_000,
+            assertControlOwnerInTransaction: () => undefined,
+          })
+          if (!activation.acquired) throw new Error("Light fixture could not acquire its creator ingress")
           const orchestrator = await Session.create({
             kind: "orchestrator",
             parentID: root.id,
             title: "Light dispatching Turn",
           })
-          const parentMessageID = Identifier.ascending("message")
+          const control = currentOrchestratorControlMessage(
+            { taskCreation: { taskID } }, taskID, creatorIngress.id, creatorIngress.id,
+          )
+          if (!control) throw new Error("Light fixture has no canonical creator control Message")
+          const parentMessageID = control.messageID
           const orchestratorMessageID = Identifier.ascending("message")
           await Session.persistMessage({
             info: {
               id: parentMessageID,
               sessionID: orchestrator.id,
               role: "user",
-              author: "user",
+              author: "orchestrator",
+              extra: control.extra,
               time: { created: now + 1 },
               agent: "orchestrator",
               model,
             },
-            parts: [],
+            parts: [{
+              id: control.partID,
+              sessionID: orchestrator.id,
+              messageID: parentMessageID,
+              type: "text",
+              text: control.text,
+              kind: "control",
+              source: "system",
+            }],
           })
           await Session.persistMessage({
             info: {
@@ -367,6 +396,7 @@ describe("Light Expert Squad package", () => {
               role: "assistant",
               author: "orchestrator",
               time: { created: now + 2 },
+              activationID: activation.activationID,
               agent: "orchestrator",
               providerID: model.providerID,
               modelID: model.modelID,
@@ -384,10 +414,12 @@ describe("Light Expert Squad package", () => {
             dispatchAgents: [...skillProjection.schedulerOnlyAgents, ...skillProjection.projectedAgents],
           }).tools
           const capabilitySearch = await CapabilitySearchTool.init({ agentID: "orchestrator" })
-          const projectedSchedulerTools = Object.fromEntries(
+          const projectedSchedulerTools: Record<string, AITool> = Object.fromEntries(
             schedulerCapability.builtInToolIDs.map((toolID) => [
               toolID,
-              toolID === "capability_search" ? capabilitySearch : rawSchedulerTools[toolID]!,
+              toolID === "capability_search"
+                ? { description: capabilitySearch.description, inputSchema: capabilitySearch.parameters }
+                : rawSchedulerTools[toolID] as AITool,
             ]),
           )
           const schedulerToolBudget = SessionLoop.estimateToolPayload(projectedSchedulerTools)
@@ -593,7 +625,14 @@ describe("Light Expert Squad package", () => {
               },
             } as never,
           )) as { output: string }
-          const receipts = JSON.parse(collectionResult.output).members.map(
+          const collectionMembers = JSON.parse(collectionResult.output).members
+          expect(collectionMembers).toMatchObject(targets.map((target, member_index) => ({
+            member_index,
+            target,
+            status: "completed",
+            outcome: { kind: "accepted" },
+          })))
+          const receipts = collectionMembers.map(
             (member: { status: string; outcome?: { kind: string; session_id?: string } }) => member.outcome,
           ) as Array<{ kind: string; session_id?: string }>
           expect(receipts.map((receipt) => receipt.kind)).toEqual(["accepted", "accepted", "accepted", "accepted"])
@@ -658,6 +697,7 @@ describe("Light Expert Squad package", () => {
           ).toEqual([...targets].sort())
           expect(requests.map((request) => request.dispatch.turn.use_worktree)).toEqual([false, false, false, false])
 
+          if (!releaseWorkers) throw new Error("Light worker release callback was not initialized")
           releaseWorkers()
           await requireWithin(allFinished, "four completed Light worker processors")
           await requireWithin(waitForDetachedDispatchPipelinesForTest(), "detached Light dispatch pipelines")

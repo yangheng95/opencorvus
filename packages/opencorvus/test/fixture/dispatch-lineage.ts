@@ -8,6 +8,7 @@ import {
 import { MessageTable, ToolPartRequestTable } from "../../src/session/session.sql"
 import { Database, and, desc, eq, sql } from "../../src/storage/db"
 import { Identifier } from "../../src/id/id"
+import type { Message } from "../../src/session/message"
 
 export function materializeTestDispatchCreatorOccurrence(
   input: Parameters<typeof recordDispatchLineage>[0],
@@ -32,7 +33,7 @@ export function materializeTestDispatchCreatorOccurrence(
       .from(MessageTable)
       .where(eq(MessageTable.id, input.origin.orchestratorMessageID))
       .get()
-    let createdAssistantData: typeof MessageTable.$inferInsert.data | undefined
+    let createdAssistantData: Omit<Message.Assistant, "id" | "sessionID"> | undefined
     if (!existingMessage) {
       const activationID = Identifier.ascending("artifact")
       db.insert(EngineControlActivationLeaseTable)
@@ -45,24 +46,25 @@ export function materializeTestDispatchCreatorOccurrence(
           expires_at: now + 60_000,
         })
         .run()
+      createdAssistantData = {
+        parentID: Identifier.ascending("message"),
+        role: "assistant",
+        author: "orchestrator",
+        time: { created: now },
+        agent: "orchestrator",
+        providerID: "test",
+        modelID: "test-model",
+        path: { cwd: "test", root: "test" },
+        cost: 0,
+        tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+        activationID,
+      }
       db.insert(MessageTable)
         .values({
           id: input.origin.orchestratorMessageID,
           session_id: input.origin.orchestratorSessionID,
           time_created: now,
-          data: (createdAssistantData = {
-            parentID: Identifier.ascending("message"),
-            role: "assistant",
-            author: "orchestrator",
-            time: { created: now },
-            agent: "orchestrator",
-            providerID: "test",
-            modelID: "test-model",
-            path: { cwd: "test", root: "test" },
-            cost: 0,
-            tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
-            activationID,
-          }),
+          data: createdAssistantData,
         })
         .run()
     }
@@ -81,13 +83,14 @@ export function materializeTestDispatchCreatorOccurrence(
       })
       .run()
     if (createdAssistantData) {
+      const completedAssistantData: Omit<Message.Assistant, "id" | "sessionID"> = {
+        ...createdAssistantData,
+        time: { created: now, completed: now },
+        finish: "stop",
+      }
       db.update(MessageTable)
         .set({
-          data: {
-            ...createdAssistantData,
-            time: { created: now, completed: now },
-            finish: "stop",
-          },
+          data: completedAssistantData,
         })
         .where(eq(MessageTable.id, input.origin.orchestratorMessageID))
         .run()

@@ -308,3 +308,124 @@ frozen index, complete diff, tests, generated closure and this record with no
 unresolved P0-P3 findings. The reviewed result must then be committed with both
 parents above, revalidated against any newer upstream, passed through the full
 push hook, and pushed before the real four-case Luna acceptance can begin.
+
+## 2026-09-04 current-source real acceptance — Recall and plan
+
+The user requires every reported issue to be closed before release, including
+the original four real Light consultation cases and budgets, with benchmark code
+kept outside the delivery branch. On September 4 the user approved the next
+public release identity `0.0.59-beta`; existing 56/57/58 tags must remain intact.
+The typed-ref/Light implementation above has since been delivered. Current HEAD
+is `dbc867f10637a3af894e03a02101168984744a4e`; its parent
+`7a2fc56f8473462fb870b8116bac8d843296c2e5` has identical runtime source and a
+verified cached isolated archive. The four real cases still have only their
+pre-correction `34ab15e9` results, so the prior candidate wording is historical,
+not proof that the current release acceptance has passed.
+
+Current-source analysis: `builtin/light` is manifest v2/revision `2026.08.30.1`
+with seven explicit scheduler Tools, including `dispatch_agents`. The canonical
+collection returns typed per-member outcomes and immutable outer progress;
+there are no separate visible child `dispatch_agent` Tool Parts to count.
+`POST /task` now returns accepted identity and requests background reconciliation,
+so a question does not intentionally block the create response. Interactions
+are projected as pending/answered with an exact durable response. Provider
+capacity is acquired inside the SDK fetch boundary, after the broader Provider
+activity request, so activity intervals alone cannot prove physical overlap.
+Provider usage events carry exact Session/Agent ownership and are the accounting
+source; counting transcript snapshots alone can miss repeated Provider steps.
+
+The old external runner was read in full. It still asserts the v1 manifest,
+counts removed child Tool Parts, and compares an early interaction snapshot with
+a local replied-ID set; it also aborts before writing useful aggregate evidence
+on budget/trajectory failures. Reusing it unchanged would test an obsolete
+contract. The repair is external-only, not a second production mechanism:
+
+1. Preserve all four original scenario requests, expected facts, workers, model
+   `openai/gpt-5.6-luna`, and latency/Task/scheduler token budgets. Reuse the
+   exact-source archive and installed dependency/native caches; no dependency
+   install, build, formal runtime mutation or UI automation.
+2. Verify the generated current manifest and installed package digest. Read the
+   one real collection input/result using current schemas, then bind every
+   accepted Session to immutable lineage and WorkerTurnDescriptor, canonical
+   final reply and exact completion evidence. Check the entire Task transcript
+   for failed Tools, repeated frontiers, duplicate workers and operator steering.
+3. Answer the one expected clarification through the real interaction endpoint;
+   reread its durable answered response and use that for accounting. Keep this
+   separate from the unchanged operator question and worker ordering criteria.
+4. Observe real streaming HTTP calls after production capacity admission using
+   ambient Session identity, without logging headers, credentials or body text.
+   Preserve streaming/backpressure/cancellation. Report physical intervals and
+   maximum concurrency; every parallel-case worker must overlap a peer. Bind
+   requested model and complete Provider outcomes independently of this observer.
+5. Use canonical Provider usage rows for role totals (including cache-read),
+   retain timing and all observations even on a failed criterion, and wait for
+   Task/assistant/Provider settlement before success or cleanup. Cases settle
+   independently; do not repeat completed cases just because another case fails.
+6. Verify the external runner's types and focused production package contracts,
+   then obtain an uninvolved read-only review before real calls. Run the cases
+   with timed progress checks; any product failure triggers the repository's
+   shared-mechanism audit before a production fix and its required review/push.
+
+Relevant current definitions/callers inspected: Light manifest and scheduler
+prompt; dispatch-agents Tool/contracts; Task create/reconciliation and interaction
+routes/reducers; Session context and Provider SDK capacity/fetch wrapper;
+Provider activity/usage schemas; existing Dynamic checker/contracts and complete
+old Light runner. No independent feedback on this new runner cut yet. No public
+API, schema, package revision or production implementation change is proposed
+unless the real evidence demonstrates a current defect.
+
+Initial current package verification passed manifest/install projection (2 cases)
+but the four-worker dispatch case stopped while mapping an absent `outcome` to
+`receipt.kind`. Its unchecked cast hides the collection's typed member failure.
+Before classifying production versus stale test setup, strengthen that test to
+assert the exact completed member/accepted outcome contract, exposing the actual
+typed failure. No production change is justified by the TypeError alone.
+
+The typed results identify a stale fixture: its manually persisted Orchestrator
+assistant has no `activationID`, so all four lineage commits correctly reject
+the missing exact Task-root creator occurrence. The shared lineage fixture
+intentionally does not rewrite an already-present Tool request. Keep that guard
+and bind this test's assistant to the real acquired creation-ingress activation,
+using the existing Task-root lease primitive as other current cross-process
+fixtures do. This is a test setup correction, not a Light scheduling workaround.
+
+The complete current Light package file now passes 3/3 tests and 49 assertions,
+including the four-member real sibling-Session dispatch. No production source
+was changed. Current search-native discovery necessarily permits the existing
+platform `capability_search` before dispatch (and `question` only in the one
+clarification case); this does not authorize scheduler Skill/artifact pre-reads
+or change any original request, worker count, duration or token budget.
+
+The external observer's positive contracts passed 4/4 with 13 assertions:
+exact streamed bytes/model/Session ownership, backpressure, propagated reader
+cancellation, upstream failure classification, and measured overlap/concurrency.
+This is harness verification only, not real Provider or Light acceptance. The
+runner uses persisted interaction resolution time for ordering and requires
+assistant plus Provider-outcome settlement before ending the case. Its code and
+temporary fixture projects remain outside the delivery branch.
+
+An explicit test-file typecheck (tests are excluded by the package's normal
+configuration) exposed four stale Light fixture contracts: removed `taskIngress`
+and package-import `replace` fields, an unnormalised capability-search Tool in
+the schema budget estimate, and an unchecked release callback. Correct these to
+current activation identity, current import input, the actual AI Tool schema,
+and an explicit initialized callback. The imported lineage fixture also typed
+assistant-only fields as the common union storage projection; retain its exact
+persisted data and use the actual Assistant type before storage. These are
+test-only corrections; do not change production Message storage or admission.
+
+Independent review of the initial two-file candidate found no main-repository
+issue and two external harness findings: evidence I/O could bypass cleanup, and
+accepted receipts alone could omit extra persisted workers. The external runner
+now executes every cleanup step despite evidence failure and compares the full
+Task-owned Session/lineage population with accepted identities. Six external
+positive tests (18 assertions) pass; real calls remain pending fresh review.
+
+Fresh independent read-only review returned FINAL PASS, P0-P3=0, on staged tree
+`8c0881685847cba847864d814b64e63a894112a8` and the frozen external runner closure.
+The reviewer independently reran Light 3/3 (49 assertions) and external observer/
+contracts 6/6 (18 assertions). The main agent additionally verified dispatch
+recovery 1/1 (4 assertions), explicit current test-file TypeScript 0 diagnostics,
+external four-root TypeScript 0 diagnostics, docs 339/25, and diff checks. This
+closes acceptance preparation, not the four real cases. Production source and
+package revision remain unchanged; existing Mission real acceptance is retained.
