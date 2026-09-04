@@ -3820,6 +3820,62 @@ installation was performed. It establishes live-owner retention and actual
 successor recovery after helper death, but does not reconstruct the unknown
 trigger of the older incident. Final real Provider response/cleanup acceptance
 remains outstanding.
+
+### 2026-09-04 final-response acceptance delivered
+
+The checker correction was independently approved at tree
+`b320616c692ea399140de813cbd4342277251508` and delivered as
+`7a2fc56f8473462fb870b8116bac8d843296c2e5`. Fetch/merge found no upstream
+changes; the complete outgoing set contained only this reviewed four-file
+commit. Normal push checks passed root typecheck 8/8 (seven cache hits),
+routes 6/34, docs 339/25, control leases 18/22, architecture 16, package topology
+10, release authorities 5, exact-source module topology 1,103/5,537/zero cycles/
+four clean imports, and secret scan zero. A fetch in the main checkout verified
+zero ahead/behind. The archived source is intentionally not a Git checkout;
+initial Git verification commands there failed and were rerun successfully in
+the main checkout, without restarting the already-running acceptance.
+
+Real Provider acceptance used this exact commit, archive SHA-256
+`401630aa425fd848f89565900432223a0ea2ab20fd4cda82bd375bdfc8e63051`,
+237 reused dependency links, the cached source-fingerprinted native helper, and
+a separately verified current credential/model catalog. Its streaming authority
+preflight returned HTTP 200 and exact model `gpt-5.6-sol`; no formal credential,
+dependency installation, download or native compilation was performed.
+
+Evidence root:
+`D:\myhexin-local\.codex-benchmarks\mission-scheduling-7a2fc56f8-20260904-final-response`.
+`result.json` SHA-256 is
+`0e6553a84c238a8d9d197ca88001a601742da5e41966b07b1c54393a79046374`.
+The process naturally exited zero. Mission `3b37557459fe202e`, actual model
+`openai/gpt-5.6-sol`, produced exactly two child Tasks, 12 exact scheduler events
+and delivered inboxes, three correlated replies, correct recipient FIFO and
+semantic order, and terminal notifications after DONE. All 48 Tool occurrences
+succeeded. Each child was queried once, catalogued once, read once and accepted
+using the same Host-minted read reference. Publication and completion each
+occurred once.
+
+The final response `msg_g0VUGOOfv00VPDyOwJrv` settled at
+`1788533532101`, 8,138 ms after the completion receipt. Only then did the checker
+accept and clean up. The full log contains zero error-level records, no final
+response cancellation error, and completes both server and database cleanup;
+the isolated temporary directory is empty afterward. This closes the concrete
+premature-checker-teardown defect; previous core-chain evidence remains valid.
+
+Duration was 671,024 ms to the Mission receipt and 679,162 ms to the settled
+final response; last Task terminal to receipt was 165,623 ms. Usage totals were
+Mission 1,084,177 (including 630,400 cache-read), Orchestrator 481,890 (including
+197,120 cache-read), and Memory 3,480. These include cached transport-accounted
+tokens and do not establish a performance improvement.
+
+Full-goal boundary: this passed Mission protocol/response/cleanup case is not a
+substitute for the older four-case Light consulting acceptance. Read-only review
+of its task and evidence found only the pre-correction `34ab15e9` real results;
+the subsequent typed-ref/Light implementation tests do not supply a fresh real
+four-case result. That acceptance must be rerun with the original cases/budgets,
+current package identity, exact model and corrected clarification accounting.
+The historical helper's original exit trigger remains unknown, although its
+actual live-peer/dead-owner recovery contract is now demonstrated above. No
+Release, tag or website deployment has been changed.
 Then run focused checker contracts, explicit script typechecking, docs/diff
 checks and independent review; commit/push the scoped correction and perform
 the final cache-reusing real Provider run after the remaining diagnostic work
