@@ -111,6 +111,7 @@ const [
     missionTaskDuplexProgressKey,
     missionTaskDuplexToolHealth,
     missionTaskDuplexTrajectoryEvidence,
+    missionTaskDuplexReconciliationEvidence,
     missionTaskDuplexUsageOwnerRequirements,
   },
   { requireMissionSession },
@@ -134,7 +135,7 @@ const [
 
 const prepared = await requireRecoveredServerRuntime(await listenWithRecoveredServerRuntime({
   options: { hostname: "127.0.0.1", port: 0, randomPort: true },
-  recover: async () => assertStartedTaskProjectRecoverySucceeded(await recoverStartedTaskExecutions()),
+  recover: async () => { assertStartedTaskProjectRecoverySucceeded(await recoverStartedTaskExecutions()) },
   disposeInstances: () => Instance.disposeAll(),
 }))
 const server = prepared.server
@@ -152,7 +153,7 @@ const missionPrompt = [
   "After both readiness facts arrive, the Mission asks A to START_PEER and includes B's exact Task ID and the nonce. When A asks for DECISION, answer that exact request with the nonce.",
   `When A_DONE arrives, acknowledge the successful Mission-to-Task, Task-to-Mission, and sibling duplex chain in the next normal Mission response, including the exact literal ${nonce}.`,
   "Every live coordination fact and answer in this scenario must contain the nonce and travel directly between the real schedulers with durable correlation. The operator is not a relay: do not substitute panel or operator messages, Task-history polling, or lifecycle completion for a missing coordination answer.",
-  `After each Task terminal notification, reconcile that exact Task and its canonical acceptance evidence. When accepting the last terminal Task makes completion due, publish one final interactive Artifact that summarizes the proven duplex chain and includes ${nonce}; then, in that same response, re-query both current child Tasks, bind each Task's required canonical evidence from that physical Turn, and durably complete the Mission with exactly those two accepted child Tasks.`,
+  `After each Task terminal notification, reconcile that exact Task and its canonical acceptance evidence once and retain the complete Host-minted read-reference set beside its authored acceptance. When accepting the last terminal Task makes completion due, publish one final interactive Artifact that summarizes the proven duplex chain and includes ${nonce}; then, in that same response, durably complete the Mission with exactly those two accepted child Tasks using those retained references for their unchanged terminal occurrences.`,
 ].join("\n")
 
 const wake = await fetch(missionURL, {
@@ -187,6 +188,7 @@ let evidence:
       sourceToolPartIDs: string[]
       missionAckMessageID: string
       missionCompletion: NonNullable<ReturnType<typeof missionRecord>["completion"]>
+      reconciliationEvidence: ReturnType<typeof missionTaskDuplexReconciliationEvidence>
       duplexContract: ReturnType<typeof assertMissionTaskDuplexContract>
       terminalOrder: ReturnType<typeof assertMissionTaskTerminalOrder>
       finalArtifactID: string
@@ -255,6 +257,7 @@ while (Date.now() < activityDeadline.deadlineMs && Date.now() < absoluteDeadline
   const progressKey = missionTaskDuplexProgressKey({
     tasks: snapshot.tasks,
     inboxes: snapshot.inboxes,
+    toolParts: snapshot.toolParts,
     schedulerEventCount: snapshot.events.length,
     missionCompleted: missionProjection.completion !== undefined,
   })
@@ -428,6 +431,8 @@ while (Date.now() < activityDeadline.deadlineMs && Date.now() < absoluteDeadline
       const allSourceToolsCompleted = sourceToolParts.every((row, index) => {
         if (!row) return false
         const part = row
+        if (!part.state.input || typeof part.state.input !== "object" || Array.isArray(part.state.input)) return false
+        const toolInput = part.state.input as Record<string, unknown>
         const sourceMessage = snapshot.messages.find(
           (message) => message.id === exactChain[index]!.payload.source_message_id,
         )
@@ -443,10 +448,10 @@ while (Date.now() < activityDeadline.deadlineMs && Date.now() < absoluteDeadline
           part.type === "tool" &&
           part.tool === "scheduler_message" &&
           part.state?.status === "completed" &&
-          part.state.input?.kind === exactChain[index]!.payload.message_kind &&
-          part.state.input?.message?.includes(nonce) === true &&
+          toolInput.kind === exactChain[index]!.payload.message_kind &&
+          typeof toolInput.message === "string" && toolInput.message.includes(nonce) &&
           (exactChain[index]!.payload.message_kind !== "reply" ||
-            part.state.input?.reply_to === exactChain[index]!.event.reply_to) &&
+            toolInput.reply_to === exactChain[index]!.event.reply_to) &&
           sourceData?.role === "assistant" &&
           Boolean(sourceData.providerID && sourceData.time?.completed && !sourceData.error)
         )
@@ -561,6 +566,12 @@ while (Date.now() < activityDeadline.deadlineMs && Date.now() < absoluteDeadline
           })
         })
       const noFailedToolOccurrences = snapshot.toolHealth.failedToolPartIDs.length === 0
+      const reconciliationEvidence = missionTaskDuplexReconciliationEvidence({
+        missionSessionID: mission.sessionID,
+        completionPartID: missionProjection.completion?.toolPartID,
+        taskIDs: [taskA.id, taskB.id],
+        toolParts: snapshot.toolParts,
+      })
       const requiredUsage = missionTaskDuplexUsageOwnerRequirements({
         missionSessionID: mission.sessionID,
         taskRootSessionIDs: [taskA.session_id, taskB.session_id],
@@ -620,6 +631,7 @@ while (Date.now() < activityDeadline.deadlineMs && Date.now() < absoluteDeadline
         terminalWakeRepliesCompleted,
         exactSchedulerEventSet,
         noFailedToolOccurrences,
+        reconciliationEvidence,
         finalEvidenceReady: finalEvidence.ready,
         finalEvidenceBlockingReasons: finalEvidence.blockingReasons,
         finalArtifactID: finalEvidence.finalArtifactID,
@@ -634,6 +646,10 @@ while (Date.now() < activityDeadline.deadlineMs && Date.now() < absoluteDeadline
         lastAcceptanceKey = acceptanceKey
         process.stdout.write(`[duplex-e2e] acceptance=${acceptanceKey}\n`)
       }
+      if (reconciliationEvidence.completionObserved && terminalWakeRepliesCompleted && finalEvidence.ready &&
+        (!noFailedToolOccurrences || !reconciliationEvidence.ready)) {
+        throw new Error(`Completed Mission has a terminal trajectory mismatch: ${acceptanceKey}`)
+      }
       if (
         allDelivered &&
         allSourceToolsCompleted &&
@@ -646,6 +662,7 @@ while (Date.now() < activityDeadline.deadlineMs && Date.now() < absoluteDeadline
         terminalWakeRepliesCompleted &&
         exactSchedulerEventSet &&
         noFailedToolOccurrences &&
+        reconciliationEvidence.ready &&
         missionProjection.boardLane === "completed" &&
         missionProjection.completion !== undefined &&
         finalEvidence.ready &&
@@ -660,6 +677,7 @@ while (Date.now() < activityDeadline.deadlineMs && Date.now() < absoluteDeadline
           sourceToolPartIDs: sourceToolParts.map((row) => row!.id),
           missionAckMessageID: missionAck.id,
           missionCompletion: missionProjection.completion,
+          reconciliationEvidence,
           duplexContract,
           terminalOrder,
           finalArtifactID: finalEvidence.finalArtifactID,
@@ -753,6 +771,7 @@ while (Date.now() < activityDeadline.deadlineMs && Date.now() < absoluteDeadline
       toolPartCount: evidence.toolPartCount,
       failedToolPartCount: 0,
       exactSchedulerEventSet: true,
+      reconciliation: evidence.reconciliationEvidence,
       phaseTiming: {
         milestones: evidence.trajectoryEvidence.milestones,
         durationsMs: evidence.trajectoryEvidence.durationsMs,

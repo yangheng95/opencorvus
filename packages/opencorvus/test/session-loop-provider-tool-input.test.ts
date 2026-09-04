@@ -124,6 +124,15 @@ function acceptanceGap(
 }
 
 describe("SessionLoop provider Tool execution input", () => {
+  test("executes minimal Mission creation through its exact Provider input contract", async () => {
+    const prepared = preparedMissionPanelTool("create_task")
+    const input = { title: "Duplex responder B", request: "Answer the exact scheduler request.", promptProfile: "base" }
+    expect(await prepared.execute(input, executionOptions)).toEqual({ action: "create_task", ...input })
+    await expect(
+      prepared.execute({ ...input, allow_create_task: true }, executionOptions),
+    ).rejects.toBeInstanceOf(InvalidToolInputError)
+  })
+
   test("projects one exact OpenAI panel leaf with action-specific required fields", async () => {
     const prepared = preparedMissionPanelTool("query_task_artifacts") as unknown as { inputSchema: unknown }
     const schema = asSchema(prepared.inputSchema as never) as {

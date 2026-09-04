@@ -25,6 +25,16 @@ test("classifies typed runtime shutdown cancellation as an expected wake settlem
   expect(SessionWake.loopFailureDisposition(new Error("provider failed"), undefined)).toBe("failed")
 })
 
+test("classifies the exact aborted reservation reason and preserves unrelated failures", () => {
+  const controller = new AbortController()
+  const reason = new Error("graceful runtime settlement")
+  controller.abort(reason)
+
+  expect(SessionWake.loopFailureDisposition(reason, controller.signal.reason)).toBe("cancelled")
+  expect(SessionWake.loopFailureDisposition(new Error(reason.message), controller.signal.reason)).toBe("failed")
+  expect(SessionWake.loopFailureDisposition(undefined, undefined)).toBe("failed")
+})
+
 test("recognizes an exact cancellation protocol value after a module-realm clone", () => {
   const error = new ExecutionCancellationError({
     source: "session_prompt",

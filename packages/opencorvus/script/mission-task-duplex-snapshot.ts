@@ -12,6 +12,100 @@ import {
 } from "@/session/session.sql"
 import { projectToolPartInTransaction } from "@/session/tool-part-facts"
 import type { Database } from "@/storage/db"
+import { PanelArtifactReadReferenceFactSchema } from "@/agent/artifact-provenance-facts"
+import { MissionCompletionInput } from "@/mission/completion"
+
+// This bounded protocol case produces one small Completion Decision per Task.
+// Its acceptance trajectory is stricter than the general paged Artifact API.
+export function missionTaskDuplexReconciliationEvidence(input: {
+  missionSessionID: string
+  completionPartID?: string
+  taskIDs: readonly string[]
+  toolParts: readonly {
+    id: string
+    sessionID: string
+    tool: string
+    state: {
+      status: string
+      input: unknown
+      output?: string
+      time?: { start?: number; end?: number }
+    }
+  }[]
+}) {
+  const parts = input.toolParts.filter((part) => part.sessionID === input.missionSessionID).map((part) => ({
+    ...part,
+    args: part.state.input && typeof part.state.input === "object" && !Array.isArray(part.state.input)
+      ? part.state.input as Record<string, unknown> : undefined,
+  }))
+  const endsBefore = (left: (typeof parts)[number], right: (typeof parts)[number]) => {
+    const end = left.state.time?.end
+    const start = right.state.time?.start
+    return typeof end === "number" && typeof start === "number" && end <= start
+  }
+  const publications = parts.filter((part) => part.tool === "publish_interactive_artifact")
+  const completions = parts.filter((part) => part.tool === "panel_complete_mission")
+  const completionObserved = completions.some((part) =>
+    part.id === input.completionPartID && part.state.status === "completed")
+  const creationCount = parts.filter((part) => part.tool === "panel_create_task").length
+  const completion = completions.length === 1 && completions[0]!.state.status === "completed"
+    ? MissionCompletionInput.safeParse(completions[0]!.state.input)
+    : undefined
+  const publication = publications.length === 1 && publications[0]!.state.status === "completed"
+    ? publications[0]!
+    : undefined
+  const tasks = input.taskIDs.map((taskID) => {
+    const queries = parts.filter((part) => part.tool === "panel_query_task" &&
+      Array.isArray(part.args?.taskIDs) && part.args.taskIDs.includes(taskID))
+    const catalogs = parts.filter((part) => part.tool === "panel_query_task_artifacts" && part.args?.taskID === taskID)
+    const reads = parts.filter((part) => part.tool === "panel_read_task_artifact" && part.args?.taskID === taskID)
+    const read = reads.length === 1 && reads[0]!.state.status === "completed" ? reads[0]! : undefined
+    let readReference: string | undefined
+    if (read?.state.output) {
+      try {
+        const raw = JSON.parse(read.state.output)
+        const parsed = PanelArtifactReadReferenceFactSchema.safeParse(raw)
+        if (parsed.success && parsed.data.taskID === taskID && parsed.data.complete &&
+          parsed.data.byte_start === 0 && parsed.data.byte_end === parsed.data.total_bytes) {
+          readReference = parsed.data.artifact_read_ref
+        }
+      } catch { /* A malformed output cannot prove a complete read. */ }
+    }
+    const acceptances = completion?.success
+      ? completion.data.task_acceptances.filter((acceptance) => acceptance.task_id === taskID)
+      : []
+    const retainedReadAccepted = readReference !== undefined && acceptances.length === 1 &&
+      acceptances[0]!.evidence_read_refs.length === 1 && acceptances[0]!.evidence_read_refs[0] === readReference
+    const causalOrder = queries.length === 1 && catalogs.length === 1 && read !== undefined &&
+      queries[0]!.state.status === "completed" && catalogs[0]!.state.status === "completed" &&
+      endsBefore(queries[0]!, catalogs[0]!) &&
+      endsBefore(catalogs[0]!, read) && publication !== undefined &&
+      endsBefore(read, publication)
+    return {
+      taskID,
+      queryCount: queries.length,
+      catalogCount: catalogs.length,
+      readCount: reads.length,
+      readReference,
+      retainedReadAccepted,
+      causalOrder,
+    }
+  })
+  const exactChildSet = completion?.success && input.taskIDs.length === 2 && new Set(input.taskIDs).size === 2 &&
+    completion.data.task_acceptances.length === 2 && tasks.every((task) => task.retainedReadAccepted)
+  const ready = Boolean(completionObserved && exactChildSet && creationCount === 2 && publication &&
+      endsBefore(publication, completions[0]!) &&
+      tasks.every((task) => task.causalOrder && task.queryCount === 1 && task.catalogCount === 1 && task.readCount === 1))
+  return {
+    ready,
+    status: !completionObserved ? "pending_completion" as const : ready ? "accepted" as const : "trajectory_mismatch" as const,
+    completionObserved,
+    creationCount,
+    publicationCount: publications.length,
+    completionCount: completions.length,
+    tasks,
+  }
+}
 
 export type MissionTaskDuplexUsageRow = {
   sessionID: string | null

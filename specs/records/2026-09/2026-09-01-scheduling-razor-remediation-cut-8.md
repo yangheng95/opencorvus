@@ -3530,3 +3530,141 @@ all passed. It confirmed supplied-only occurrence isolation, the fixed-count
 indexed reducer including Permission-owned results, current terminal-lifecycle
 binding, Project Memory redrive, typed shutdown classification, generated API
 alignment, and zero cached intersection with the three working-only exclusions.
+
+###### Post-push exact-source trajectory audit
+
+Commit `029304700c033d754add1d203316611bebfb24b3` was pushed to
+`origin/v0.0.55beta` with zero divergence after the complete pre-push hook. The
+post-push acceptance source archive has SHA-256
+`7057F5ECCE749D8CE94CBAEE014244E653F62850DFD367F1009D53982D6B2A63`.
+It again reused 46 exact-source workspace dependency targets, 191 existing
+external cache targets and the existing process-supervisor executable; no
+installer or dependency download ran. One first launch failed before scheduling
+because the old isolated OAuth authority had expired and its refresh settled as
+an uncertain exchange. A second isolated authority copied the already-valid
+current OAuth authority and its separately verified canonical `models.json`;
+credential contents were never logged or persisted in this record.
+
+The retained second-run root is
+`D:\myhexin-local\.codex-benchmarks\mission-scheduling-029304700-20260904-postfix-r2\temp\opencorvus-mission-task-duplex-e2e-gpaxUS`.
+The requested model and actual Provider model were both
+`openai/gpt-5.6-sol`. Both Tasks completed, all twelve scheduler events reached
+their twelve inboxes, all three correlated replies preserved order and
+identity, terminal ordering passed, Project Memory advanced to revision one,
+the final interactive Artifact was ready, and the Mission durably completed.
+The checker correctly returned nonzero because one of 52 Tool occurrences
+failed.
+
+Read-only database inspection proves two independent trajectory defects and
+one checker defect. First, the initial `panel_create_task` request supplied the
+schema-foreign `allow_create_task` field plus null-valued optional fields. The
+strict Tool rejected it and the model immediately repeated the same semantic
+creation successfully. Whole-repository search found no `allow_create_task`
+definition or guidance; the actual optional parameter is `allow_create`.
+Therefore calling that field "obsolete" was not supported by evidence. The
+shared schema's optional knobs may contribute ambiguity, but that causal claim
+is not proven and does not authorize deleting valid Mission/channel inputs.
+This cut preserves their semantics and adds production Provider-schema execution
+coverage for minimal Mission creation and explicit schema-invalid input. The
+corrected real run must still prove one successful creation occurrence per
+child, with no failed Tool. A repeated failure requires further actual Provider
+input investigation, not a compatibility alias or an inferred new API.
+
+Second, the Mission did persist the first complete read references
+`ar_nQouZUa5WyyJtoUt` and `ar_LQZWdLvvckWZZmqs` in both `tasks.md` and authored
+acceptance state. It nevertheless performed a final extra Task query, two
+extra catalog queries and two extra reads and completed with newly minted
+references. The direct trigger is not the production reducer or prompt: the
+E2E request itself still says to re-query both Tasks and bind evidence from the
+final physical Turn. That stale request contradicts the current architecture,
+which requires retained immutable references and prohibits rereading an
+unchanged accepted occurrence. The E2E request must state the current contract,
+and its acceptance predicate must positively require exactly one terminal
+query/catalog/read chain per child Task rather than merely serialize counts for
+later inspection.
+
+Finally, graceful server settlement passes a plain cancellation `Error` through
+the runtime execution reservation. `SessionWake.loopFailureDisposition`
+recognizes typed cancellation values but not the exact plain object stored in
+the reservation's aborted signal, so seven expected wake settlements are logged
+as failures during checker cleanup. Exact object identity between the rejected
+operation and its aborted-signal reason is sufficient cancellation authority;
+an unrelated error remains a failure. The correction will add that exact
+identity branch and a positive classification test without message matching or
+a shutdown-specific fallback.
+
+Verification for this correction must prove the exact Mission create Tool
+schema, one successful creation occurrence per requested child, exactly two
+Mission terminal query/catalog/read chains, completion from the earlier
+retained references, and expected shutdown cancellation classification. It must
+then pass focused tests, package typecheck, one uninvolved read-only review, a
+scoped commit and push, followed by the same cache-reusing exact-source real
+Provider Mission run. Independent-agent feedback before implementation is none.
+
+Implementation preserves the production Mission evidence reducer and all
+creation parameters. Minimal Mission creation passes the actual
+`SessionLoop.prepareProviderTool` execution boundary; the unknown field produces
+the existing `InvalidToolInputError`. The checker now records a typed
+`accepted`/`trajectory_mismatch` projection for its bounded single-decision
+per-Task case: one query, catalog and complete read per Task, exact read-reference
+reuse, causal query-to-read-to-publication-to-completion order, two creation
+occurrences and one final publication/completion. A durably completed Mission
+with settled terminal replies and final evidence immediately reports an
+irreversible failed-Tool or reconciliation mismatch instead of waiting another
+inactivity interval.
+
+The first affected verification passed 19/19 tests and 50 assertions for the
+Provider input contract, trajectory and cancellation classification. The
+runtime-settlement file exposed a pre-existing stale fixture: it appended a
+Task aggregate event without creating that Task, violating the current Protocol
+foreign-authority check after the database gate reopened. The fixture now uses
+a real persisted Session aggregate while preserving both the exact database
+admission error and successful post-gate append contract. The whole file then
+passed 16/16 tests and 30 assertions, including the real server settlement reason
+flow. No production Protocol authority or Panel input schema changed.
+
+The complete affected six-file matrix subsequently passed 41/41 tests with 118
+assertions in 42.17 seconds. OpenCorvus package typecheck exited zero, docs
+passed at 339 operations/25 groups, and working diff validation passed. A
+read-only replay of the retained real run through the new reconciliation
+projection returned `trajectory_mismatch`, with three creation attempts and
+two queries/catalogs/reads for each Task, matching the manually audited facts.
+The current candidate still requires independent read-only review and the
+complete normal pre-push hook before delivery; none of these deterministic
+results constitutes the required fresh real Provider acceptance.
+
+The independent review of `0832345f1f716cc22154e14d8eeb5555641772e9`
+found one P2 and one P3, both in the checker: its captured Tool snapshot can lag
+the later awaited Mission projection, and the new reconciliation field was
+missing from the explicit evidence type and final result serialization. The
+reviewer independently passed 35 tests with 80 assertions and found no additional
+production wake or ownership defect. Corrections require the projection's exact
+completed Tool Part to exist in the captured snapshot before classifying a
+terminal mismatch; an earlier snapshot is explicitly `pending_completion` and
+the next settled snapshot becomes `accepted`. The projection is now present in
+both the typed evidence and final `trajectory.reconciliation` report. Positive
+tests cover running-to-settled and newer-completion identity observations. The
+real checker script is also included explicitly in a TypeScript program check,
+because the normal package configuration excludes scripts.
+The corrected complete six-file matrix passed 41/41 tests with 120 assertions
+in 45.60 seconds; the explicit script-inclusive TypeScript check is still
+running and is not yet claimed green.
+That check completed with seven diagnostics in the checker closure: a recovery
+callback returned a non-void value, progress-key input omitted its declared
+Tool collection, old scheduler assertions accessed unknown Tool input, the new
+helper assumed every Tool input/time was materialized, and the existing custom
+Error lacked `override`. These are now corrected at the exact call/type
+boundaries. Node-hosted TypeScript semantic and syntax checks for all three
+checker modules report zero diagnostics; the package source was separately
+typechecked. Snapshot/duplex-contract verification passes 8/8 with 27 assertions.
+An uninvolved re-review already returned zero findings for the snapshot/report
+corrections; these final script type refinements still require its focused
+confirmation before commit.
+
+That focused independent review returned `FINAL PASS`, P0-P3=0, for exact
+staged tree `e05193030346ec28397c374f1ab74ed3b60e1caa`. The reviewer
+independently reran the eight snapshot/duplex-contract cases with 27 assertions,
+confirmed the type refinements and preserved exclusions, and made no changes.
+This paragraph records the completed review only; production and checker
+behavior are unchanged. Fresh real Provider acceptance remains required after
+the normal scoped commit and push.

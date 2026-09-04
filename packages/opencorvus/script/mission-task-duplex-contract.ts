@@ -47,7 +47,7 @@ export type MissionTaskDuplexAuthority = {
 }
 
 export class MissionTaskDuplexContractError extends Error {
-  name = "MissionTaskDuplexContractError"
+  override name = "MissionTaskDuplexContractError"
 }
 
 const ENDPOINT_PREFIX = "scheduler-endpoint:"

@@ -60,7 +60,9 @@ export namespace SessionWake {
   export type WakeReason = z.infer<typeof WakeReason>
 
   export function loopFailureDisposition(error: unknown, cancellationReason: unknown): "cancelled" | "failed" {
-    return isExecutionCancellationError(error) || isExecutionCancellationError(cancellationReason)
+    return (cancellationReason !== undefined && error === cancellationReason) ||
+      isExecutionCancellationError(error) ||
+      isExecutionCancellationError(cancellationReason)
       ? "cancelled"
       : "failed"
   }

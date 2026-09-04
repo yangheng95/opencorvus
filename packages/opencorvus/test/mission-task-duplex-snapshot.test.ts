@@ -20,6 +20,7 @@ import {
   missionTaskDuplexProgressKey,
   missionTaskDuplexToolHealth,
   missionTaskDuplexTrajectoryEvidence,
+  missionTaskDuplexReconciliationEvidence,
   missionTaskDuplexUsageOwnerRequirements,
   observeMissionTaskDuplexActivity,
   projectMissionTaskDuplexControlStateInTransaction,
@@ -32,6 +33,63 @@ afterEach(async () => {
 })
 
 describe("Mission Task duplex snapshot", () => {
+  test("accepts one causal terminal reconciliation per Task and reports repeated-read trajectory mismatch", () => {
+    const part = (tool: string, input: Record<string, unknown>, start: number, output = "{}") => ({
+      id: `${tool}:${start}`, sessionID: "mission", tool, state: { status: "completed", input, output, time: { start, end: start + 1 } },
+    })
+    const readOutput = (taskID: string, readRef: string) => JSON.stringify({
+      taskID,
+      terminal_lifecycle_reference: { terminalEventID: `terminal-${taskID}` },
+      artifact_transport_version: 2,
+      artifact_locator_ref: "al_1234567890abcdef",
+      artifact_read_ref: readRef,
+      locator: { source: "engine_artifact", artifact_id: `artifact-${taskID}`, catalog_revision: 1, expected_sha256: "a".repeat(64) },
+      media_type: "application/json", byte_start: 0, byte_end: 1, next_offset: null, total_bytes: 1,
+      complete: true, sha256: "a".repeat(64), text: "x", attachment: false,
+    })
+    const parts = [
+      part("panel_create_task", { title: "B" }, 1),
+      part("panel_create_task", { title: "A" }, 3),
+      part("panel_query_task", { taskIDs: ["B"] }, 5),
+      part("panel_query_task_artifacts", { taskID: "B", page_number: 1 }, 7),
+      part("panel_read_task_artifact", { taskID: "B" }, 9, readOutput("B", "ar_1234567890abcdeB")),
+      part("panel_query_task", { taskIDs: ["A"] }, 11),
+      part("panel_query_task_artifacts", { taskID: "A", page_number: 1 }, 13),
+      part("panel_read_task_artifact", { taskID: "A" }, 15, readOutput("A", "ar_1234567890abcdeA")),
+      part("publish_interactive_artifact", {}, 17),
+      part("panel_complete_mission", {
+        summary: "Both exact terminal occurrences accepted",
+        task_acceptances: [
+          { task_id: "A", evidence_read_refs: ["ar_1234567890abcdeA"] },
+          { task_id: "B", evidence_read_refs: ["ar_1234567890abcdeB"] },
+        ],
+      }, 21),
+    ]
+    const evaluate = (toolParts = parts) => missionTaskDuplexReconciliationEvidence({
+      missionSessionID: "mission", completionPartID: "panel_complete_mission:21", taskIDs: ["A", "B"], toolParts,
+    })
+    expect(evaluate()).toEqual({
+      ready: true, status: "accepted", completionObserved: true, creationCount: 2, publicationCount: 1, completionCount: 1,
+      tasks: ["A", "B"].map((taskID) => ({
+        taskID, queryCount: 1, catalogCount: 1, readCount: 1,
+        readReference: `ar_1234567890abcde${taskID}`, retainedReadAccepted: true, causalOrder: true,
+      })),
+    })
+    const repeated = evaluate([...parts, part("panel_read_task_artifact", { taskID: "A" }, 19, readOutput("A", "ar_abcdefghijklmnop"))])
+    expect({ status: repeated.status, counts: repeated.tasks.map(({ taskID, readCount }) => ({ taskID, readCount })) }).toEqual({
+      status: "trajectory_mismatch", counts: [{ taskID: "A", readCount: 2 }, { taskID: "B", readCount: 1 }],
+    })
+    const premature = evaluate(parts.map((item) => item.tool === "publish_interactive_artifact"
+      ? part(item.tool, item.state.input, 6) : item))
+    expect(premature.status).toBe("trajectory_mismatch")
+    const pendingSnapshot = parts.map((item) => item.tool === "panel_complete_mission"
+      ? { ...item, state: { ...item.state, status: "running" } } : item)
+    expect([evaluate(pendingSnapshot).status, evaluate().status]).toEqual(["pending_completion", "accepted"])
+    expect(missionTaskDuplexReconciliationEvidence({
+      missionSessionID: "mission", completionPartID: "newer-completion", taskIDs: ["A", "B"], toolParts: parts,
+    }).status).toBe("pending_completion")
+  })
+
   test("reports persisted phase timing and per-agent Tool-name counts", () => {
     expect(
       missionTaskDuplexTrajectoryEvidence({

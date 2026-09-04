@@ -104,6 +104,25 @@ describe("runtime execution settlement authority", () => {
     RuntimeExecutionSettlement.reserve("protocol_publication", "post-shutdown-rollback").settle()
   })
 
+  test("classifies a wake rejected by the production server settlement reason", async () => {
+    const execution = RuntimeExecutionSettlement.reserve("session_wake_loop", "shutdown-rejected-wake")
+    const operation = new Promise<void>((_resolve, reject) => {
+      execution.signal.addEventListener("abort", () => reject(execution.signal.reason), { once: true })
+    })
+    execution.settleWith(operation)
+    const disposition = operation.catch((error) => SessionWake.loopFailureDisposition(error, execution.signal.reason))
+
+    const settled = await Server.settleCurrentProcessExecution("exact wake shutdown contract", {
+      disposeInstances: async () => {},
+    })
+    try {
+      expect(await disposition).toBe("cancelled")
+      expect(execution.signal.reason).toEqual(expect.objectContaining({ message: "exact wake shutdown contract" }))
+    } finally {
+      await settled.releaseHandoff(false)
+    }
+  })
+
   test("cancels an unfinished protocol subscriber after terminal facts are fenced", async () => {
     let observedReason = ""
     const publication = RuntimeExecutionSettlement.reserve(
@@ -335,11 +354,15 @@ describe("runtime execution settlement authority", () => {
     const { ProtocolStore } = await import("@/protocol/store")
     const { DatabaseEffectAdmissionClosedError } = await import("@/storage/db")
     await using project = await memoryProject()
-    const aggregateID = Identifier.ascending("task")
+    const session = await Instance.provide({
+      directory: project.path,
+      fn: () => Session.createNext({ directory: Instance.directory, kind: "assistant", title: "Protocol settlement" }),
+    })
+    const aggregateID = session.id
     const input = {
       kind: "event" as const,
       type: "runtime.database-settlement",
-      aggregate: "task" as const,
+      aggregate: "session" as const,
       aggregate_id: aggregateID,
       source: "runtime-settlement-test",
       seq: 1,
