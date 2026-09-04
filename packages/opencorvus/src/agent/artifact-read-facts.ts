@@ -30,11 +30,14 @@ import {
   completedToolOutputValuesBeforeActionInTransaction,
   resolveArtifactReadReferenceBeforeSelectionInTransaction,
   resolveArtifactSelectionReferencesBeforePublicationInTransaction,
+  resolveMissionArtifactReadAcceptancesBeforeCompletionInTransaction,
   resolvePanelArtifactReadReferencesBeforeActionInTransaction,
   selectedArtifactLocatorsBeforePublicationInTransaction,
   selectedArtifactFactsForSessionInTransaction,
   type ArtifactFactScope,
   type ArtifactSelectionFact,
+  type MissionArtifactReadAcceptanceInput,
+  type MissionArtifactReadAcceptanceResolution,
 } from "./artifact-provenance-facts"
 
 export { ArtifactReferenceAmbiguityError, ArtifactReferenceResolutionError } from "./artifact-provenance-facts"
@@ -59,15 +62,12 @@ const PanelArtifactReferencePageFactSchema = z
   })
   .passthrough()
 
-
 export function assistantTurnFactScope(sessionID: string, assistantMessageID: string) {
   return Database.use((db) => assistantTurnFactScopeInTransaction(db, sessionID, assistantMessageID))
 }
 
 export function assistantActionFactScope(sessionID: string, assistantMessageID: string, toolPartID: string) {
-  return Database.use((db) =>
-    assistantActionFactScopeInTransaction(db, sessionID, assistantMessageID, toolPartID),
-  )
+  return Database.use((db) => assistantActionFactScopeInTransaction(db, sessionID, assistantMessageID, toolPartID))
 }
 
 function completedToolOutputValuesBeforeAction(input: {
@@ -163,10 +163,7 @@ export function resolvePanelArtifactLocatorReferenceBeforeRead(input: {
       if (
         prior &&
         (locatorKey(prior.locator) !== locatorKey(candidate.locator) ||
-          !sameTerminalLifecycleReference(
-            prior.terminalLifecycleReference,
-            candidate.terminalLifecycleReference,
-          ))
+          !sameTerminalLifecycleReference(prior.terminalLifecycleReference, candidate.terminalLifecycleReference))
       ) {
         throw new ArtifactReferenceAmbiguityError(
           entry.artifact_locator_ref,
@@ -223,9 +220,7 @@ export function artifactProvenanceForSession(
 }
 
 export function artifactProvenanceForAgentTurn(sessionID: string, finalAssistantMessageID: string) {
-  return Database.use((db) =>
-    artifactProvenanceForAgentTurnInTransaction(db, sessionID, finalAssistantMessageID),
-  )
+  return Database.use((db) => artifactProvenanceForAgentTurnInTransaction(db, sessionID, finalAssistantMessageID))
 }
 
 export function completeArtifactReadsBeforePublication(input: {
@@ -265,6 +260,15 @@ export function resolvePanelArtifactReadReferencesBeforeAction(input: {
   return Database.use((db) => resolvePanelArtifactReadReferencesBeforeActionInTransaction(db, input))
 }
 
+export function resolveMissionArtifactReadAcceptancesBeforeCompletion(input: {
+  sessionID: string
+  assistantMessageID: string
+  toolPartID: string
+  acceptances: readonly MissionArtifactReadAcceptanceInput[]
+}): MissionArtifactReadAcceptanceResolution[] {
+  return Database.use((db) => resolveMissionArtifactReadAcceptancesBeforeCompletionInTransaction(db, input))
+}
+
 export function selectedArtifactLocatorsBeforePublication(input: {
   sessionID: string
   assistantMessageID: string
@@ -279,9 +283,7 @@ export function resolveArtifactSelectionReferencesBeforePublication(input: {
   toolPartID: string
   references: readonly string[]
 }): ArtifactReadLocator[] {
-  return Database.use((db) =>
-    resolveArtifactSelectionReferencesBeforePublicationInTransaction(db, input),
-  )
+  return Database.use((db) => resolveArtifactSelectionReferencesBeforePublicationInTransaction(db, input))
 }
 
 /**

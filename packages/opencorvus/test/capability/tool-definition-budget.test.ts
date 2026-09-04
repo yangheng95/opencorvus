@@ -336,7 +336,7 @@ describe("search-native Tool definition budgets", () => {
     })
   }, 0)
 
-  test("admits grouped Mission terminal reconciliation while keeping publication isolated", async () => {
+  test("admits Mission terminal audit and final completion while keeping publication isolated", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
@@ -344,9 +344,10 @@ describe("search-native Tool definition budgets", () => {
         const config = await Config.get()
         const runtime = sessionRuntimeFromNativeAgent(await PrimaryAssistantRegistry.get("mission", { config }))
         const auditToolIDs = ["panel_query_task", "panel_query_task_artifacts", "panel_read_task_artifact"] as const
-        const completionToolIDs = [...auditToolIDs, "panel_complete_mission"] as const
+        const completionToolIDs = ["panel_complete_mission"] as const
         const allToolIDs = [
           ...NATIVE_MISSION_TRANSPORT_TOOL_IDS,
+          ...auditToolIDs,
           ...completionToolIDs,
           "publish_interactive_artifact",
         ] as const

@@ -287,6 +287,15 @@ export const ToolPartOutcomeTable = sqliteTable(
   },
   (table) => [
     uniqueIndex("tool_part_outcome_request_idx").on(table.request_part_id),
+    index("tool_part_outcome_artifact_read_reference_idx").on(
+      sql<string>`
+        CASE
+          WHEN json_valid(json_extract(${table.data}, '$.output'))
+          THEN json_extract(json_extract(${table.data}, '$.output'), '$.artifact_read_ref')
+        END
+      `,
+    ),
+    index("tool_part_outcome_result_attempt_idx").on(sql<string>`json_extract(${table.data}, '$.resultAttemptID')`),
     check(
       "tool_part_outcome_fact_shape",
       sql`

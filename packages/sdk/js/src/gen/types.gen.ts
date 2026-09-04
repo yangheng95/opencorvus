@@ -16185,7 +16185,7 @@ export type GatewayControlActionData = {
          */
         task_acceptances: Array<{
           /**
-           * Host-minted references returned by complete Task Artifact reads earlier in this Mission Turn.
+           * Complete supplied reference set whose persisted chunks cover every byte of each accepted Artifact in this Task's exact current terminal occurrence.
            */
           evidence_read_refs: Array<string>
           /**

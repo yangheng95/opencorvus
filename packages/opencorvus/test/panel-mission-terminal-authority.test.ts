@@ -1,7 +1,6 @@
 import { afterEach, describe, expect, spyOn, test } from "bun:test"
 import { PrimaryAssistantRegistry } from "@/agent/primary-assistant-registry"
 import { sessionRuntimeFromNativeAgent } from "@/agent/session-agent-runtime"
-import { reviewedTerminalLifecycleReferenceBeforePanelAction } from "@/agent/task-review-facts"
 import { ArtifactReferenceResolutionError } from "@/agent/artifact-read-facts"
 import { Config } from "@/config/config"
 import { recordEngineArtifact } from "@/engine/artifact"
@@ -195,10 +194,7 @@ describe("Mission terminal Task authority", () => {
         })
         const mappingSpy = spyOn(EngineService, "getCrossTaskArtifactImportMappings").mockReturnValue([])
         try {
-          const inspectionPromise = inspectSquad.execute(
-            { id: "base" },
-            options("call_final_surface_inspection"),
-          )
+          const inspectionPromise = inspectSquad.execute({ id: "base" }, options("call_final_surface_inspection"))
           await inspectionEntered
           const tasks = await viewTasks.execute({}, options("call_final_surface_tasks"))
           order.push("tasks:done")
@@ -510,10 +506,7 @@ describe("Mission terminal Task authority", () => {
         ).rejects.toThrow(
           `requires a completed panel.query_task terminal row for Task ${taskID} earlier in the same Turn`,
         )
-        const queriedTask = await queryTaskLeaf.tool.execute(
-          { taskIDs: [taskID] },
-          context(queryTaskLeaf.id),
-        )
+        const queriedTask = await queryTaskLeaf.tool.execute({ taskIDs: [taskID] }, context(queryTaskLeaf.id))
         expect(PanelQueryTaskOutput.parse(JSON.parse(queriedTask.output))).toEqual({
           tasks: [
             expect.objectContaining({
@@ -748,7 +741,7 @@ describe("Mission terminal Task authority", () => {
     })
   }, 30_000)
 
-  test("binds resume and completion authority from the canonical same-Turn query receipt", async () => {
+  test("completes a Mission from canonical terminal reads retained across Mission inputs", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
@@ -887,12 +880,12 @@ describe("Mission terminal Task authority", () => {
               locator,
               media_type: "application/json",
               byte_start: 0,
-              byte_end: 1,
+              byte_end: 2,
               next_offset: null,
-              total_bytes: 1,
+              total_bytes: 2,
               complete: true,
               sha256: locator.expected_sha256,
-              text: "x",
+              text: "xy",
               attachment: false,
             }),
             title: "Task Artifact",
@@ -906,13 +899,22 @@ describe("Mission terminal Task authority", () => {
           finish: "tool-calls",
         })
 
+        const completionUser = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: mission.id,
+          role: "user",
+          author: "user",
+          time: { created: now + 5 },
+          agent: "mission",
+          model: { providerID: "openai", modelID: "gpt-5.6-terra" },
+        })
         const mutationMessage = await Session.updateMessage({
           id: Identifier.ascending("message"),
           sessionID: mission.id,
           role: "assistant",
           author: "mission",
-          parentID: user.id,
-          time: { created: now + 5 },
+          parentID: completionUser.id,
+          time: { created: now + 6 },
           agent: "mission",
           providerID: "openai",
           modelID: "gpt-5.6-terra",
@@ -1015,7 +1017,7 @@ describe("Mission terminal Task authority", () => {
           state: {
             status: "running",
             input: completionArgs,
-            time: { start: now + 5 },
+            time: { start: now + 6 },
           },
         })
         const completion = await completeMissionLeaf.tool.execute(completionArgs, {
@@ -1062,12 +1064,12 @@ describe("Mission terminal Task authority", () => {
             output: completion.output,
             title: completion.title,
             metadata: completion.metadata,
-            time: { start: now + 5, end: now + 6 },
+            time: { start: now + 6, end: now + 7 },
           },
         })
         await Session.updateMessage({
           ...mutationMessage,
-          time: { ...mutationMessage.time, completed: now + 6 },
+          time: { ...mutationMessage.time, completed: now + 7 },
           finish: "tool-calls",
         })
         expect(
@@ -1086,15 +1088,10 @@ describe("Mission terminal Task authority", () => {
         )
         const currentReference = requireCurrentTerminalLifecycleReference(taskID)
         expect({
-          reviewed: reviewedTerminalLifecycleReferenceBeforePanelAction({
-            sessionID: mission.id,
-            assistantMessageID: mutationMessage.id,
-            toolPartID: completionPartID,
-            taskID,
-          }),
+          accepted: receipt.task_acceptances[0]!.terminal_lifecycle_reference,
           current: currentReference,
           sameOccurrence: sameTerminalLifecycleReference(initialReference, currentReference),
-        }).toEqual({ reviewed: initialReference, current: currentReference, sameOccurrence: false })
+        }).toEqual({ accepted: initialReference, current: currentReference, sameOccurrence: false })
 
         const currentQueryMessage = await Session.updateMessage({
           id: Identifier.ascending("message"),
@@ -1139,6 +1136,91 @@ describe("Mission terminal Task authority", () => {
             metadata: currentQuery.metadata,
             time: { start: now + 9, end: now + 10 },
           },
+        })
+        const currentPartialReadRef = "ar_currentpartial00"
+        await Session.updatePart({
+          id: Identifier.ascending("part"),
+          sessionID: mission.id,
+          messageID: currentQueryMessage.id,
+          type: "tool",
+          callID: "read-partial-current-terminal-task",
+          tool: "panel_read_task_artifact",
+          state: {
+            status: "completed",
+            input: {
+              taskID,
+              artifact_transport_version: 2,
+              artifact_locator_ref: locatorRef,
+              byte_offset: 0,
+              max_bytes: 1,
+              delivery: "inline",
+            },
+            output: JSON.stringify({
+              taskID,
+              terminal_lifecycle_reference: currentReference,
+              artifact_transport_version: 2,
+              artifact_locator_ref: locatorRef,
+              artifact_read_ref: currentPartialReadRef,
+              locator,
+              media_type: "application/json",
+              byte_start: 0,
+              byte_end: 1,
+              next_offset: 1,
+              total_bytes: 2,
+              complete: false,
+              sha256: locator.expected_sha256,
+              text: "x",
+              attachment: false,
+            }),
+            title: "Partial current Task Artifact",
+            metadata: { truncated: true },
+            time: { start: now + 10, end: now + 11 },
+          },
+        })
+        const currentFinalReadRef = "ar_currentfinal0000"
+        await Session.updatePart({
+          id: Identifier.ascending("part"),
+          sessionID: mission.id,
+          messageID: currentQueryMessage.id,
+          type: "tool",
+          callID: "read-final-current-terminal-task",
+          tool: "panel_read_task_artifact",
+          state: {
+            status: "completed",
+            input: {
+              taskID,
+              artifact_transport_version: 2,
+              artifact_locator_ref: locatorRef,
+              byte_offset: 1,
+              max_bytes: 1,
+              delivery: "inline",
+            },
+            output: JSON.stringify({
+              taskID,
+              terminal_lifecycle_reference: currentReference,
+              artifact_transport_version: 2,
+              artifact_locator_ref: locatorRef,
+              artifact_read_ref: currentFinalReadRef,
+              locator,
+              media_type: "application/json",
+              byte_start: 1,
+              byte_end: 2,
+              next_offset: null,
+              total_bytes: 2,
+              complete: true,
+              sha256: locator.expected_sha256,
+              text: "y",
+              attachment: false,
+            }),
+            title: "Final current Task Artifact chunk",
+            metadata: { truncated: false },
+            time: { start: now + 10, end: now + 11 },
+          },
+        })
+        await Session.updateMessage({
+          ...currentQueryMessage,
+          time: { ...currentQueryMessage.time, completed: now + 11 },
+          finish: "tool-calls",
         })
         const staleCompletionMessage = await Session.updateMessage({
           id: Identifier.ascending("message"),
@@ -1194,6 +1276,85 @@ describe("Mission terminal Task authority", () => {
             reference: readRef,
           }),
         )
+
+        const partialCompletionInput = MissionCompletionActionInput.parse({
+          action: "complete_mission",
+          summary: "Reject incomplete current evidence",
+          task_acceptances: [{ task_id: taskID, evidence_read_refs: [currentPartialReadRef] }],
+        })
+        const { action: _partialCompletionAction, ...partialCompletionArgs } = partialCompletionInput
+        const partialCompletionCallID = "complete-with-partial-current-read"
+        await Session.updatePart({
+          id: Identifier.ascending("part"),
+          sessionID: mission.id,
+          messageID: staleCompletionMessage.id,
+          type: "tool",
+          callID: partialCompletionCallID,
+          tool: completeMissionLeaf.id,
+          state: { status: "running", input: partialCompletionArgs, time: { start: now + 12 } },
+        })
+        let partialCompletionError: unknown
+        try {
+          await completeMissionLeaf.tool.execute(partialCompletionArgs, {
+            sessionID: mission.id,
+            messageID: staleCompletionMessage.id,
+            callID: partialCompletionCallID,
+            agent: "mission",
+            abort: new AbortController().signal,
+            messages: [],
+            executionSurface: Tool.executionSurface([completeMissionLeaf.id], []),
+            extra: { surface: "panel" },
+            metadata() {},
+            async ask() {},
+          })
+        } catch (error) {
+          partialCompletionError = error
+        }
+        expect(partialCompletionError).toBeInstanceOf(ArtifactReferenceResolutionError)
+        expect(partialCompletionError).toEqual(
+          expect.objectContaining({
+            code: "ARTIFACT_REFERENCE_UNRESOLVED",
+            reference: currentPartialReadRef,
+          }),
+        )
+
+        const currentCompletionInput = MissionCompletionActionInput.parse({
+          action: "complete_mission",
+          summary: "Accept the complete current evidence sequence",
+          task_acceptances: [
+            { task_id: taskID, evidence_read_refs: [currentPartialReadRef, currentFinalReadRef] },
+          ],
+        })
+        const { action: _currentCompletionAction, ...currentCompletionArgs } = currentCompletionInput
+        const currentCompletionCallID = "complete-with-current-read-sequence"
+        await Session.updatePart({
+          id: Identifier.ascending("part"),
+          sessionID: mission.id,
+          messageID: staleCompletionMessage.id,
+          type: "tool",
+          callID: currentCompletionCallID,
+          tool: completeMissionLeaf.id,
+          state: { status: "running", input: currentCompletionArgs, time: { start: now + 13 } },
+        })
+        const currentCompletion = await completeMissionLeaf.tool.execute(currentCompletionArgs, {
+          sessionID: mission.id,
+          messageID: staleCompletionMessage.id,
+          callID: currentCompletionCallID,
+          agent: "mission",
+          abort: new AbortController().signal,
+          messages: [],
+          executionSurface: Tool.executionSurface([completeMissionLeaf.id], []),
+          extra: { surface: "panel" },
+          metadata() {},
+          async ask() {},
+        })
+        expect(MissionCompletionReceipt.parse(JSON.parse(currentCompletion.output)).task_acceptances).toEqual([
+          {
+            task_id: taskID,
+            evidence_locators: [locator],
+            terminal_lifecycle_reference: currentReference,
+          },
+        ])
       },
     })
   }, 30_000)

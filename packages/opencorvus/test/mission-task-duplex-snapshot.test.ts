@@ -51,9 +51,9 @@ describe("Mission Task duplex snapshot", () => {
           { id: "message-orchestrator-b", role: "assistant", agentID: "orchestrator" },
         ],
         toolRequests: [
-          { messageID: "message-mission", tool: "scheduler_message" },
-          { messageID: "message-mission", tool: "mission_state" },
-          { messageID: "message-mission", tool: "mission_state" },
+          { messageID: "message-mission", tool: "scheduler_message", input: { action: "send" } },
+          { messageID: "message-mission", tool: "mission_state", input: { action: "snapshot" } },
+          { messageID: "message-mission", tool: "mission_state", input: { action: "commit" } },
           { messageID: "message-orchestrator-a", tool: "scheduler_message" },
           { messageID: "message-orchestrator-b", tool: "no_action" },
         ],
@@ -90,6 +90,16 @@ describe("Mission Task duplex snapshot", () => {
           tools: [
             { tool: "no_action", count: 1 },
             { tool: "scheduler_message", count: 1 },
+          ],
+        },
+      ],
+      toolActionsByAgent: [
+        {
+          agentID: "mission",
+          actions: [
+            { action: "mission_state:commit", count: 1 },
+            { action: "mission_state:snapshot", count: 1 },
+            { action: "scheduler_message:send", count: 1 },
           ],
         },
       ],

@@ -75,6 +75,7 @@ import {
 
 import {
   completeArtifactReadsBeforePanelAction,
+  resolveMissionArtifactReadAcceptancesBeforeCompletion,
   resolvePanelArtifactLocatorReferenceBeforeRead,
   resolvePanelArtifactReadReferencesBeforeAction,
 } from "@/agent/artifact-read-facts"
@@ -1238,41 +1239,42 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
               `Expected [${expectedTaskIDs.join(", ")}], received [${acceptedTaskIDs.join(", ")}].`,
           )
         }
-        const authoritativeAcceptances: Array<z.infer<typeof MissionCompletionTaskAcceptance>> = []
+        const currentReferenceByTaskID = new Map<
+          string,
+          z.infer<typeof MissionCompletionTaskAcceptance>["terminal_lifecycle_reference"]
+        >()
         for (const acceptance of params.task_acceptances) {
           EngineService.requireMissionArtifactSource(acceptance.task_id, {
             missionID: mission.missionID,
             sessionID: mission.id,
           })
           const currentReference = requireCurrentTerminalLifecycleReference(acceptance.task_id)
-          const reviewedReference = reviewedTerminalLifecycleReferenceBeforePanelAction({
-            sessionID: ctx.sessionID,
-            assistantMessageID: ctx.messageID,
-            toolPartID: identity.toolPartID,
-            taskID: acceptance.task_id,
-          })
-          if (
-            resolveTerminalLifecycleReference(acceptance.task_id, currentReference).terminalStatus !== "completed" ||
-            !sameTerminalLifecycleReference(currentReference, reviewedReference)
-          ) {
+          if (resolveTerminalLifecycleReference(acceptance.task_id, currentReference).terminalStatus !== "completed") {
             throw new Error(
               `panel.complete_mission Task ${acceptance.task_id} must cite its exact current completed occurrence.`,
             )
           }
-          const evidenceLocators = resolvePanelArtifactReadReferencesBeforeAction({
-            sessionID: ctx.sessionID,
-            assistantMessageID: ctx.messageID,
-            toolPartID: identity.toolPartID,
-            taskID: acceptance.task_id,
-            terminalLifecycleReference: reviewedReference,
-            references: acceptance.evidence_read_refs,
-          })
-          authoritativeAcceptances.push({
-            task_id: acceptance.task_id,
-            evidence_locators: evidenceLocators,
-            terminal_lifecycle_reference: reviewedReference,
-          })
+          currentReferenceByTaskID.set(acceptance.task_id, currentReference)
         }
+        const resolvedAcceptances = resolveMissionArtifactReadAcceptancesBeforeCompletion({
+          sessionID: ctx.sessionID,
+          assistantMessageID: ctx.messageID,
+          toolPartID: identity.toolPartID,
+          acceptances: params.task_acceptances.map((acceptance) => ({
+            taskID: acceptance.task_id,
+            terminalLifecycleReference: currentReferenceByTaskID.get(acceptance.task_id)!,
+            references: acceptance.evidence_read_refs,
+          })),
+        })
+        const resolvedByTaskID = new Map(
+          resolvedAcceptances.map((acceptance) => [acceptance.taskID, acceptance.evidenceLocators]),
+        )
+        const authoritativeAcceptances: Array<z.infer<typeof MissionCompletionTaskAcceptance>> =
+          params.task_acceptances.map((acceptance) => ({
+            task_id: acceptance.task_id,
+            evidence_locators: resolvedByTaskID.get(acceptance.task_id)!,
+            terminal_lifecycle_reference: currentReferenceByTaskID.get(acceptance.task_id)!,
+          }))
         return {
           title: "Mission completed",
           output: JSON.stringify(

@@ -39,7 +39,7 @@ export function missionTaskDuplexTrajectoryEvidence(input: {
   tasks: readonly { createdAtMs: number; completedAtMs: number }[]
   schedulerEvents: readonly { emittedAtMs: number }[]
   messages: readonly { id: string; role: string; agentID?: string }[]
-  toolRequests: readonly { messageID: string; tool: string }[]
+  toolRequests: readonly { messageID: string; tool: string; input?: unknown }[]
 }) {
   if (input.tasks.length === 0 || input.schedulerEvents.length === 0) {
     throw new Error("Mission Task duplex trajectory requires Task and scheduler-event milestones")
@@ -86,6 +86,7 @@ export function missionTaskDuplexTrajectoryEvidence(input: {
       .map((message) => [message.id, message.agentID!] as const),
   )
   const counts = new Map<string, Map<string, number>>()
+  const actionCounts = new Map<string, Map<string, number>>()
   for (const request of input.toolRequests) {
     const agentID = agentByMessageID.get(request.messageID)
     if (!agentID) {
@@ -94,6 +95,16 @@ export function missionTaskDuplexTrajectoryEvidence(input: {
     const tools = counts.get(agentID) ?? new Map<string, number>()
     tools.set(request.tool, (tools.get(request.tool) ?? 0) + 1)
     counts.set(agentID, tools)
+    const action =
+      request.input && typeof request.input === "object" && !Array.isArray(request.input)
+        ? (request.input as { action?: unknown }).action
+        : undefined
+    if (typeof action === "string") {
+      const actions = actionCounts.get(agentID) ?? new Map<string, number>()
+      const key = `${request.tool}:${action}`
+      actions.set(key, (actions.get(key) ?? 0) + 1)
+      actionCounts.set(agentID, actions)
+    }
   }
   const toolCallsByAgent = [...counts.entries()]
     .sort(([left], [right]) => compareIdentity(left, right))
@@ -103,6 +114,14 @@ export function missionTaskDuplexTrajectoryEvidence(input: {
       tools: [...tools.entries()]
         .sort(([left], [right]) => compareIdentity(left, right))
         .map(([tool, count]) => ({ tool, count })),
+    }))
+  const toolActionsByAgent = [...actionCounts.entries()]
+    .sort(([left], [right]) => compareIdentity(left, right))
+    .map(([agentID, actions]) => ({
+      agentID,
+      actions: [...actions.entries()]
+        .sort(([left], [right]) => compareIdentity(left, right))
+        .map(([action, count]) => ({ action, count })),
     }))
 
   return {
@@ -116,6 +135,7 @@ export function missionTaskDuplexTrajectoryEvidence(input: {
     },
     durationsMs,
     toolCallsByAgent,
+    toolActionsByAgent,
   }
 }
 

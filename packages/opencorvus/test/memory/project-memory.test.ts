@@ -393,58 +393,58 @@ describe("Project MEMORY.MD pending input and organizer document", () => {
   })
 
   for (const legacyKind of ["file", "chunk"] as const) test(`requires a pre-release reset for an expanded Project Memory ${legacyKind} identity`, async () => {
-    await using project = await memoryProject()
-    await Instance.provide({
-      directory: project.path,
-      fn: async () => {
-        const now = Date.now()
-        const legacyFileID = legacyKind === "file" ? `mem_user_${"a".repeat(64)}` : Identifier.ascending("memory")
-        const legacyChunkID = `mck_user_${"b".repeat(64)}`
-        Database.use((db) => {
-          db.insert(MemoryFileTable)
-            .values({
-              id: legacyFileID,
-              project_id: Instance.project.id,
-              title: "Legacy Project Memory",
-              source: "user",
-              kind: "user_message",
-              importance: 100,
-              confidence: 100,
-              time_created: now,
-              time_updated: now,
-            })
-            .run()
-          if (legacyKind === "chunk") {
-            db.insert(MemoryChunkTable)
+      await using project = await memoryProject()
+      await Instance.provide({
+        directory: project.path,
+        fn: async () => {
+          const now = Date.now()
+          const legacyFileID = legacyKind === "file" ? `mem_user_${"a".repeat(64)}` : Identifier.ascending("memory")
+          const legacyChunkID = `mck_user_${"b".repeat(64)}`
+          Database.use((db) => {
+            db.insert(MemoryFileTable)
               .values({
-                id: legacyChunkID,
-                file_id: legacyFileID,
+                id: legacyFileID,
                 project_id: Instance.project.id,
-                content: "{}",
-                token_count: 1,
+                title: "Legacy Project Memory",
+                source: "user",
+                kind: "user_message",
+                importance: 100,
+                confidence: 100,
                 time_created: now,
                 time_updated: now,
               })
               .run()
-          }
-        })
-        await Database.awaitEffectIdle(30_000)
-        Database.close()
+            if (legacyKind === "chunk") {
+              db.insert(MemoryChunkTable)
+                .values({
+                  id: legacyChunkID,
+                  file_id: legacyFileID,
+                  project_id: Instance.project.id,
+                  content: "{}",
+                  token_count: 1,
+                  time_created: now,
+                  time_updated: now,
+                })
+                .run()
+            }
+          })
+          await Database.awaitEffectIdle(30_000)
+          Database.close()
 
-        let observed: unknown
-        try {
+          let observed: unknown
+          try {
+            Database.Client()
+          } catch (error) {
+            observed = error
+          }
+          expect(DatabaseUnavailableError.isInstance(observed) ? observed.data : undefined).toMatchObject({
+            code: "DATA_RESET_REQUIRED",
+            operation: "Database.Client.dataIntegrity.compactProjectMemoryIdentity",
+          })
+          await Database.resetFiles(Database.Path())
           Database.Client()
-        } catch (error) {
-          observed = error
-        }
-        expect(DatabaseUnavailableError.isInstance(observed) ? observed.data : undefined).toMatchObject({
-          code: "DATA_RESET_REQUIRED",
-          operation: "Database.Client.dataIntegrity.compactProjectMemoryIdentity",
-        })
-        await Database.resetFiles(Database.Path())
-        Database.Client()
-      },
-    })
+        },
+      })
   }, 60_000)
 
   test("keeps general Memory outside the Project Memory reset epoch", async () => {
@@ -828,7 +828,7 @@ describe("Project MEMORY.MD pending input and organizer document", () => {
     })
   })
 
-  test("reports a committed project config projection failure and advances the Organizer barrier on retry", async () => {
+  test("reports a committed runtime projection failure and advances the Organizer barrier on retry", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
@@ -845,43 +845,43 @@ describe("Project MEMORY.MD pending input and organizer document", () => {
         expect(originalLease).toMatchObject({ availabilityGeneration: 0 })
 
         const { MCP } = await import("../../src/mcp")
-        const invalidateSpy = spyOn(
-          ProjectMemory,
-          "invalidateOrganizerAvailabilityInTransaction",
-        ).mockImplementationOnce(() => {
-          throw new Error("injected Organizer config projection failure")
-        })
-        const mcpSpy = spyOn(MCP, "reconcileProjectConfig").mockRejectedValueOnce(
-          new Error("injected MCP config reconciliation failure"),
-        )
-        let committedError: Config.ProjectConfigCommittedReconcileError | undefined
+        const mcpSpy = spyOn(MCP, "reconcileProjectConfig")
+          .mockRejectedValueOnce(new Error("injected MCP config reconciliation failure"))
+          .mockResolvedValue(undefined)
         try {
+          let committedError: Config.ProjectConfigCommittedReconcileError | undefined
           try {
             await Config.updateProjectPatch({ permission_mode: "ask" })
           } catch (error) {
             expect(error).toBeInstanceOf(Config.ProjectConfigCommittedReconcileError)
             committedError = error as Config.ProjectConfigCommittedReconcileError
           }
-          expect(mcpSpy).toHaveBeenCalledTimes(1)
+          await waitFor(
+            () => mcpSpy.mock.calls.length >= 2,
+            "Committed runtime projection failure did not receive its queued peer retry",
+          )
+          expect(committedError?.committed).toBe(true)
+          expect(committedError?.config).toMatchObject({ permission_mode: "ask" })
+          expect(committedError?.errors).toHaveLength(1)
+          expect(committedError?.errors[0]).toEqual(
+            expect.objectContaining({ message: "injected MCP config reconciliation failure" }),
+          )
+
+          await waitFor(
+            () => ProjectMemory.read(projectID).status === "retry_wait",
+            "Queued peer retry did not publish the committed config change to Project Memory",
+          )
+          const replacementLease = Database.transaction((db) =>
+            ProjectMemory.beginOrganizerAttemptInTransaction(db, {
+              projectID,
+              leaseID: "post-config-projection-retry",
+              expectedRevision: 0,
+            }),
+          )
+          expect(replacementLease).toMatchObject({ availabilityGeneration: 1 })
         } finally {
-          invalidateSpy.mockRestore()
           mcpSpy.mockRestore()
         }
-        expect(committedError).toMatchObject({
-          committed: true,
-          config: { permission_mode: "ask" },
-          errors: [expect.any(AggregateError), expect.any(Error)],
-        })
-
-        await Config.updateProjectPatch({ permission_mode: "ask" })
-        const replacementLease = Database.transaction((db) =>
-          ProjectMemory.beginOrganizerAttemptInTransaction(db, {
-            projectID,
-            leaseID: "post-config-projection-retry",
-            expectedRevision: 0,
-          }),
-        )
-        expect(replacementLease).toMatchObject({ availabilityGeneration: 1 })
       },
     })
   })
@@ -1408,6 +1408,102 @@ describe("Project MEMORY.MD pending input and organizer document", () => {
       },
     })
   })
+
+  test("consumes the queued config-generation redrive after an in-flight Organizer lease is revoked", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const session = await Session.create({ kind: "assistant", title: "Organizer config-generation redrive" })
+        await Session.persistMessage(
+          userMessage(
+            session.id,
+            "Retain the current model generation after configuration changes.",
+            25_001,
+            ProjectMemory.userInputExtra({
+              surface: "test.organizer.config-redrive",
+              literalText: "Retain the current model generation after configuration changes.",
+            }),
+          ),
+        )
+        const pending = ProjectMemory.pending(Instance.project.id)
+        const candidate = JSON.stringify({
+          baseRevision: 0,
+          coveredOccurrenceIDs: pending.map((entry) => entry.occurrenceID),
+          disposition: "organized",
+          markdown: "# Project context\n\nThe current model generation owns organized Project memory.",
+        })
+        const modelSpy = spyOn(Provider, "getModel").mockResolvedValue(organizerModel())
+        const configSpy = spyOn(EffectiveConfig, "effective").mockResolvedValue({
+          model: `${model.providerID}/${model.modelID}`,
+          experimental: { memory: { enabled: true } },
+        } as never)
+        const baseSpy = spyOn(EffectiveConfig, "base").mockResolvedValue({
+          model: `${model.providerID}/${model.modelID}`,
+        } as never)
+        let releaseFirst!: () => void
+        const firstHeld = new Promise<void>((resolve) => {
+          releaseFirst = resolve
+        })
+        let firstStarted!: () => void
+        const started = new Promise<void>((resolve) => {
+          firstStarted = resolve
+        })
+        let streamCalls = 0
+        const streamSpy = spyOn(LLM, "stream").mockImplementation(async () => {
+          streamCalls += 1
+          if (streamCalls === 1) {
+            firstStarted()
+            await firstHeld
+          }
+          return textOnlyLLMStream(candidate)
+        })
+        try {
+          ProjectMemoryOrganizer.init()
+          await started
+          await waitFor(
+            () => ProjectMemory.read(Instance.project.id).status === "organizing",
+            "Organizer did not acquire its first durable lease",
+          )
+
+          await GlobalBus.emitAndWait("event", {
+            directory: project.path,
+            payload: { type: "config.changed" },
+          })
+          await waitFor(
+            () =>
+              ProjectMemory.read(Instance.project.id).status === "retry_wait" &&
+              Bus.TestHooks.outbox().length === 0,
+            "Config change did not revoke the old lease and deliver its queued redrive",
+          )
+          releaseFirst()
+          await waitFor(
+            () => {
+              const snapshot = ProjectMemory.read(Instance.project.id)
+              return snapshot.revision === 1 && snapshot.pendingCount === 0 && snapshot.status === "idle"
+            },
+            "Queued Organizer redrive did not settle the pending occurrence",
+            15_000,
+          )
+          expect({ streamCalls, memory: ProjectMemory.read(Instance.project.id) }).toMatchObject({
+            streamCalls: 2,
+            memory: {
+              revision: 1,
+              pendingCount: 0,
+              status: "idle",
+              content: expect.stringContaining("current model generation"),
+            },
+          })
+        } finally {
+          releaseFirst()
+          streamSpy.mockRestore()
+          baseSpy.mockRestore()
+          configSpy.mockRestore()
+          modelSpy.mockRestore()
+        }
+      },
+    })
+  }, 60_000)
 
   test("instance disposal cancels an in-flight Organizer run and releases its durable owner for the next attempt", async () => {
     // The Organizer runs as instance background work: the request's own

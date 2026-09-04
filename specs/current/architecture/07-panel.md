@@ -457,6 +457,20 @@ and have that exact common parent. Equality of those two assistant Message IDs
 would incorrectly reject the required publish, query, read, then complete Tool
 sequence, while a different parent remains a different occurrence and is never
 accepted as completion evidence.
+
+Task evidence reads are independently immutable completed Tool facts. A
+Mission may retain every Host-minted `artifact_read_ref` from a complete chunk
+sequence across later inputs and use that full supplied set for final completion
+without re-reading unchanged terminal Tasks. The completion writer resolves all
+Task acceptance sets through one fixed-count indexed batch reducer, considers only the supplied prior
+reads in that Mission Session, requires those chunks alone to prove complete
+byte coverage, and compares every read's bound terminal lifecycle reference with
+the Task's exact current completed occurrence. It does not scan Session history
+once per Task or mix another occurrence's chunks into completeness. Reopening a
+Task therefore makes its former references ineligible and requires fresh
+reconciliation; no mutable acceptance cache or Host-selected Artifact is
+introduced.
+
 `panel_read_task_artifact` performs exact canonical body reads under
 same-Mission terminal-child authority. `resume_task` is the separate mutation for an
 evidence-backed acceptance gap: it binds the reviewed terminal occurrence and

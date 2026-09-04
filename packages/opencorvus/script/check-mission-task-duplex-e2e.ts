@@ -680,6 +680,7 @@ while (Date.now() < activityDeadline.deadlineMs && Date.now() < absoluteDeadline
             toolRequests: snapshot.toolRequests.map((request) => ({
               messageID: request.message_id,
               tool: request.data.tool,
+              input: request.data.input,
             })),
           }),
           messageCount: snapshot.messages.length,
@@ -757,6 +758,7 @@ while (Date.now() < activityDeadline.deadlineMs && Date.now() < absoluteDeadline
         durationsMs: evidence.trajectoryEvidence.durationsMs,
       },
       toolCallsByAgent: evidence.trajectoryEvidence.toolCallsByAgent,
+      toolActionsByAgent: evidence.trajectoryEvidence.toolActionsByAgent,
     },
     usageByAgent: evidence.usageByAgent,
     turnArtifactMessageIDs: turnArtifacts.flatMap((entry) => (entry.messageID ? [entry.messageID] : [])),

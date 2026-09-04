@@ -5,6 +5,25 @@ import {
   isExecutionCancellationError,
 } from "@/session/prompt/cancellation"
 import { TaskCancellationOrigin } from "@/engine/cancellation-origin"
+import { SessionWake } from "@/session/wake"
+
+test("classifies typed runtime shutdown cancellation as an expected wake settlement", () => {
+  const cancellation = new ExecutionCancellationError({
+    source: "session_prompt",
+    message: "Runtime settlement cancelled the exact wake owner",
+    sessionID: "ses_runtime_shutdown",
+    origin: createExecutionCancellationOrigin({
+      actor: "runtime",
+      source: "process.shutdown",
+      surface: "session-wake-loop",
+      reason: "runtime settlement",
+      targetSessionID: "ses_runtime_shutdown",
+    }),
+  })
+
+  expect(SessionWake.loopFailureDisposition(cancellation, undefined)).toBe("cancelled")
+  expect(SessionWake.loopFailureDisposition(new Error("provider failed"), undefined)).toBe("failed")
+})
 
 test("recognizes an exact cancellation protocol value after a module-realm clone", () => {
   const error = new ExecutionCancellationError({

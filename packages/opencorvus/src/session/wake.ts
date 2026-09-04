@@ -22,7 +22,7 @@ import {
 import z from "zod"
 import { TerminalLifecycleReferenceSchema } from "@/engine/terminal-lifecycle-reference-schema"
 import { RuntimeExecutionSettlement } from "@/runtime/execution-settlement"
-import { createExecutionCancellationOrigin } from "./prompt/cancellation"
+import { createExecutionCancellationOrigin, isExecutionCancellationError } from "./prompt/cancellation"
 import { ProjectMemory } from "@/memory/project-memory"
 import type { Database } from "@/storage/db"
 import { MessageStore } from "./message-store"
@@ -58,6 +58,12 @@ export namespace SessionWake {
 
   export const WakeReason = SessionWakeReason
   export type WakeReason = z.infer<typeof WakeReason>
+
+  export function loopFailureDisposition(error: unknown, cancellationReason: unknown): "cancelled" | "failed" {
+    return isExecutionCancellationError(error) || isExecutionCancellationError(cancellationReason)
+      ? "cancelled"
+      : "failed"
+  }
 
   export interface WakeInput {
     /** Existing session ID to wake. If omitted, creates a new session. */
@@ -408,7 +414,11 @@ export namespace SessionWake {
           activationSettled = true
           rejectActivation(err)
         }
-        log.error("wake loop failed", { sessionID: input.sessionID, messageID: input.messageID, err })
+        if (loopFailureDisposition(err, reservation.signal.reason) === "cancelled") {
+          log.info("wake loop cancelled", { sessionID: input.sessionID, messageID: input.messageID })
+        } else {
+          log.error("wake loop failed", { sessionID: input.sessionID, messageID: input.messageID, err })
+        }
         settleReply({ ok: false, error: err instanceof Error ? err.message : String(err) })
       },
     )

@@ -4,7 +4,7 @@ import { Database, and, desc, eq } from "@/storage/db"
 import { MessageTable, ToolPartRequestTable as PartTable } from "@/session/session.sql"
 import { projectToolPartInTransaction } from "@/session/tool-part-facts"
 import { Message } from "@/session/message"
-import { resolvePanelArtifactReadReferencesBeforeAction } from "@/agent/artifact-read-facts"
+import { resolveMissionArtifactReadAcceptancesBeforeCompletion } from "@/agent/artifact-read-facts"
 import type { MissionSession } from "./session"
 import {
   MissionCompletionActionInput,
@@ -97,7 +97,8 @@ function currentMissionCompletion(session: MissionSession): MissionCompletionFac
     if (latestUser && !orderedAfter({ id: row.messageID, timeCreated: row.messageTimeCreated }, latestUser)) continue
     const part = Message.ToolPart.safeParse(row.projected)
     if (!part.success || part.data.tool !== "panel_complete_mission" || part.data.state.status !== "completed") continue
-    if (!part.data.state.input || typeof part.data.state.input !== "object" || Array.isArray(part.data.state.input)) continue
+    if (!part.data.state.input || typeof part.data.state.input !== "object" || Array.isArray(part.data.state.input))
+      continue
     const currentInput = MissionCompletionActionInput.safeParse({
       action: "complete_mission",
       ...(part.data.state.input as Record<string, unknown>),
@@ -115,23 +116,32 @@ function currentMissionCompletion(session: MissionSession): MissionCompletionFac
     const receiptInputAcceptances = receipt.data.task_acceptances.map(
       ({ terminal_lifecycle_reference: _reference, ...acceptance }) => acceptance,
     )
-    const canonicalInputAcceptances = input.task_acceptances.map((acceptance) => {
-      const receiptAcceptance = receipt.data.task_acceptances.find(
-        (candidate) => candidate.task_id === acceptance.task_id,
-      )
-      if (!receiptAcceptance) {
-        throw new Error(`Mission completion receipt omits Task ${acceptance.task_id}.`)
-      }
-      return {
-        task_id: acceptance.task_id,
-        evidence_locators: resolvePanelArtifactReadReferencesBeforeAction({
-          sessionID: session.id,
-          assistantMessageID: row.messageID,
-          toolPartID: row.part.id,
+    const receiptAcceptanceByTaskID = new Map(
+      receipt.data.task_acceptances.map((acceptance) => [acceptance.task_id, acceptance]),
+    )
+    const resolvedAcceptances = resolveMissionArtifactReadAcceptancesBeforeCompletion({
+      sessionID: session.id,
+      assistantMessageID: row.messageID,
+      toolPartID: row.part.id,
+      acceptances: input.task_acceptances.map((acceptance) => {
+        const receiptAcceptance = receiptAcceptanceByTaskID.get(acceptance.task_id)
+        if (!receiptAcceptance) {
+          throw new Error(`Mission completion receipt omits Task ${acceptance.task_id}.`)
+        }
+        return {
           taskID: acceptance.task_id,
           terminalLifecycleReference: receiptAcceptance.terminal_lifecycle_reference,
           references: acceptance.evidence_read_refs,
-        }),
+        }
+      }),
+    })
+    const evidenceLocatorsByTaskID = new Map(
+      resolvedAcceptances.map((acceptance) => [acceptance.taskID, acceptance.evidenceLocators]),
+    )
+    const canonicalInputAcceptances = input.task_acceptances.map((acceptance) => {
+      return {
+        task_id: acceptance.task_id,
+        evidence_locators: evidenceLocatorsByTaskID.get(acceptance.task_id)!,
       }
     })
     if (

@@ -3367,3 +3367,166 @@ or excluded-path overlap. The reviewer made no file, index, commit, network,
 Provider or process changes, and its final `git write-tree` remained exact.
 This paragraph records that completed review only; it changes no production or
 test contract.
+
+##### Exact-source acceptance and remaining terminal-trajectory correction
+
+###### Recall
+
+The operator requires the current three-component release-family source on
+branch `v0.0.55beta` (package version `0.0.58-beta`) to pass a real Provider
+Mission run with a normal scheduling trajectory before any beta or website
+release. The run must reuse the existing dependency, SDK and native caches,
+must not install or download packages, and a functional PASS is insufficient
+when the persisted trajectory still exposes repeated reconciliation or a
+background ownership failure. The unrelated Session formatting difference and
+two Web content paths remain outside this cut. Read material for this
+correction includes the exact run result, Mission Prompt and Panel completion
+contracts, persisted Artifact-read and Task-review fact reducers, Project
+Memory lease and Organizer drivers, their production entry points and focused
+tests, and current Panel/search-native architecture. Whole-repository search
+found one Mission completion writer, one Project Memory Organizer driver, and
+no alternate acceptance or memory-retry authority. Independent-agent feedback
+before implementation is none; an uninvolved read-only review remains required
+after the corrected current tree is green.
+
+###### Exact run evidence
+
+The real run used pushed commit
+`d51dc38cde73ee36e63338da55b1432e54cfb792`, exact source archive SHA-256
+`52CF7C1E0E684163F75A2F3BA538B9A875B02E23A9B66B4C096254FEF50E188F`,
+and the separately verified `openai/gpt-5.6-sol` projection. It invoked no
+installer and made no dependency download: 237 existing dependency junctions,
+46 exact-source workspace targets, 191 external cache targets and the existing
+process-supervisor binary were reused. The first launch exposed an assembly
+mistake because the isolated source lacked the Rust target cache; it failed
+before Provider use and the same exact source was relaunched with
+`OPENCORVUS_PROCESS_SUPERVISOR` bound to the existing cached executable. This
+is retained as harness evidence and is not a product scheduling failure.
+
+The parseable PASS result is
+`D:\myhexin-local\.codex-benchmarks\mission-scheduling-d51dc38cd-20260904-state-snapshot\result.json`,
+19,374 bytes with SHA-256
+`8FE37500A3CD2400BA70548702825A538CCE0CCBA2152860C318985EE56B5AF4`.
+Exactly two Tasks, twelve scheduler events, twelve delivered inboxes, all three
+correlated replies, recipient FIFO, semantic order, terminal ordering, both
+Task completions, the nonce-bearing final Artifact and durable Mission
+completion passed. Every source Tool settled and no Tool occurrence failed.
+
+The trajectory is still not release acceptance. Mission completion took
+614,483 ms; the final 175,517 ms elapsed after both Tasks were already
+terminal. Mission made 32 Tool calls and 38 Provider calls, accounting for
+1,213,437 total tokens including cache reads. The two Task Orchestrators made
+20 calls and accounted for another 485,375 tokens. Mission repeated three
+Task queries, four Artifact catalog queries and four Artifact reads even though
+only two terminal Task occurrences existed. It also used eight
+`mission_state` calls and seven `capability_search` calls; the next result must
+retain action-level trajectory evidence so a bounded state commit cannot be
+confused with an unnecessary snapshot.
+
+The run independently exposed one Project Memory control-plane failure. The
+Organizer reported `ProjectMemoryInvariantError` because its organization
+lease was stale for revision zero; every later prompt projection remained
+`revision=0`, `pendingCount=1`, and `recalled=false`. The final server shutdown
+then logged expected runtime cancellation as errors after the checker had
+already written PASS. The shutdown messages are observability noise rather
+than a Mission failure, but the stale Organizer lease is a real unfinished
+background occurrence.
+
+###### Horizontal root cause and single replacements
+
+Mission currently mints complete Artifact-read references during each terminal
+Task wake, but `panel_complete_mission` resolves them only inside the current
+input occurrence and separately requires a current-Turn `panel_query_task`
+receipt. A completed Task's terminal lifecycle reference and every complete
+read window are already immutable persisted facts. Repeating both Task queries,
+both catalogs and both bodies in the final wake therefore does not protect
+against reopen: the completion writer already compares each read's exact
+terminal lifecycle reference with the Task's current reference. It only adds a
+fixed five-call tail in this two-Task scenario.
+
+The replacement keeps those existing facts as the sole authority. Terminal
+Task reconciliation records every Host-minted `artifact_read_ref` emitted by a
+complete chunk sequence with the authored stage acceptance in Mission state.
+Final completion resolves all Task acceptance sets through one fixed-count
+indexed batch reducer from
+only those supplied references in earlier completed assistant actions in the
+same Mission Session. The supplied chunks alone must prove complete byte
+coverage, every read must precede the completion Tool, and every bound terminal
+lifecycle reference must equal that Task's current completed occurrence. No
+other Session read may fill a gap, so old and current occurrences cannot be
+mixed into false completeness. No Task status, Artifact body, locator or
+acceptance projection is copied. Reopen makes the old reference ineligible by
+the same lifecycle comparison. `panel_complete_mission` still requires the
+complete current child set and remains the only durable Mission completion
+writer, but the final wake no longer re-queries or re-reads already accepted
+immutable evidence or performs one Session-history scan per Task.
+
+Project Memory has a separate lost-redrive race. A Session or Project config
+change intentionally advances `availabilityGeneration`, revokes the active
+Organizer lease and publishes another organization request. The in-process
+driver correctly marks that request as `again` while the old Provider call is
+running, but a stale commit throws before the `do/while` condition is reached;
+the `finally` block then deletes the scheduled slot and silently discards the
+queued redrive. The replacement keeps the durable lease and pending evidence
+as sole facts, settles the revoked attempt to `retry_wait`, and lets the same
+scheduled owner consume its already-recorded `again` request with the current
+configuration. It does not renew a revoked lease, accept stale model output,
+drop pending evidence, add a timer, or create a second queue.
+
+Positive verification must prove completion in a later Mission input from
+earlier complete reads of the unchanged terminal occurrences, continued
+rejection after a real reopen changes that occurrence, exact completion receipt
+locators, and Prompt/architecture removal of final rereads. Memory verification
+must hold an actual Organizer Provider turn, invalidate its lease through the
+production config-change request path, let the stale attempt settle, and prove
+the queued second attempt consumes the same pending occurrence into revision
+one. Focused tests, package/root typecheck and repository checkers precede one
+new exact tree and an uninvolved read-only review. A fresh exact-source real
+Provider run must then preserve the functional duplex result, omit the stale
+Memory lease failure, and show the reduced Task query/catalog/read tail before
+release.
+
+###### Review corrections and current verification
+
+The first uninvolved review of exact tree
+`b080a0df4a6e60e211ba46be74c76b21d9ff9cfc` returned `NOT PASS` with two P1,
+two P2 and one P3 findings. A Session-wide completeness projection could mix
+an old complete read with a current partial read; completion and board replay
+also repeated that history projection per Task. A touched config-recovery test
+asserted one MCP invocation even though the current peer-convergence owner
+correctly retries the committed transition. The completion item schema still
+described a same-Turn reference, and Recall named the branch as though it were
+the package version.
+
+The corrected reducer accepts only the full chunk-reference sets supplied by
+the completion request, requires every chunk to bind the same exact current
+terminal occurrence, and computes byte completeness from those chunks alone.
+It resolves all Tasks through a fixed-count indexed batch across both inline
+Tool outcomes and Permission-owned durable results; query-plan tests prove the
+three reference and join-frontier expression indexes. The config recovery test
+now proves the production queued peer retry publishes the committed config
+change and advances the Organizer generation without a second writer call.
+The canonical SDK generator synchronized the Mission completion item and outer
+descriptions. Typed process-shutdown cancellation now settles a wake at info
+severity while an untyped Provider failure remains an error.
+
+The final affected matrix passed 58 tests with 330 assertions across Mission
+completion, Artifact facts, Prompt guidance, trajectory projection, Project
+Memory, storage schema and cancellation classification. Root typecheck passed
+8/8 workspaces. Repository checks passed for docs (339 operations, 25 groups),
+routes (6 rules, 34 files), architecture index (16 documents), package topology
+(10 workspaces), control-state ownership (53 tables, 7 allowed fact classes),
+control leases (18 owners, 22 acquire sites), release mutation (5 canonical
+authorities), public-package publication, and three-component release-family
+version `0.0.58-beta`. Exact-index module topology passed with 1,103 modules,
+5,537 runtime edges, no retained cycle and four clean imports. Cached and
+working diff checks passed. The Session formatting difference and two Web
+content files remain working-only and have zero cached intersection. A fresh
+uninvolved review of corrected exact index tree
+`1714d4696135ff39a063fdd0d1837aa9e5193b29` returned `FINAL PASS`, P0-P3=0.
+The reviewer independently reran 44 focused tests with 251 assertions, eleven
+storage-schema tests with 76 assertions, and the OpenCorvus package typecheck;
+all passed. It confirmed supplied-only occurrence isolation, the fixed-count
+indexed reducer including Permission-owned results, current terminal-lifecycle
+binding, Project Memory redrive, typed shutdown classification, generated API
+alignment, and zero cached intersection with the three working-only exclusions.

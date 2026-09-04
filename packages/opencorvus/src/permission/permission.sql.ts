@@ -26,7 +26,9 @@ export const PermissionPolicyTable = sqliteTable(
   {
     // Immutable policy evidence outlives physical Session retention.
     session_id: text().primaryKey(),
-    project_id: text().notNull().references(() => ProjectTable.id, { onDelete: "cascade" }),
+    project_id: text()
+      .notNull()
+      .references(() => ProjectTable.id, { onDelete: "cascade" }),
     mode: text().notNull().$type<PermissionMode>(),
     revision: text().notNull(),
     time_created: integer().notNull(),
@@ -82,7 +84,9 @@ export const PermissionLedgerTable = sqliteTable(
       .on(table.attempt_id)
       .where(sql`${table.event_type} = 'execution_started'`),
     uniqueIndex("permission_ledger_outcome_slot_idx").on(table.outcome_slot),
-    check("permission_ledger_request_owner_shape", sql`
+    check(
+      "permission_ledger_request_owner_shape",
+      sql`
       (${table.event_type}='requested'
         AND ${table.project_id} IS NOT NULL AND ${table.session_id} IS NOT NULL
         AND ${table.message_id} IS NOT NULL AND ${table.tool_call_id} IS NOT NULL
@@ -100,7 +104,8 @@ export const PermissionLedgerTable = sqliteTable(
         AND ${table.provider_digest} IS NULL AND ${table.tool_name} IS NULL
         AND ${table.effect_class} IS NULL AND ${table.scope_version} IS NULL
         AND ${table.scope} IS NULL AND ${table.fingerprint} IS NULL AND ${table.summary} IS NULL)
-    `),
+    `,
+    ),
   ],
 )
 
@@ -114,4 +119,15 @@ export const PermissionExecutionResultTable = sqliteTable(
     result: text({ mode: "json" }).notNull().$type<unknown>(),
     time_created: integer().notNull(),
   },
+  (table) => [
+    index("permission_execution_result_artifact_read_reference_idx").on(
+      sql<string>`
+        CASE
+          WHEN json_extract(${table.result}, '$.kind') = 'json'
+            AND json_valid(json_extract(${table.result}, '$.value.output'))
+          THEN json_extract(json_extract(${table.result}, '$.value.output'), '$.artifact_read_ref')
+        END
+      `,
+    ),
+  ],
 )

@@ -30,6 +30,14 @@ When the document cannot incorporate pending meaning within the configured ceili
 
 FIFO applies only to the pending inbox when the Organizer has independently resolved the same closed missing-model configuration as unavailable on two consecutive serialized attempts and pending count exceeds the configured availability limit. A database-persisted exclusive lease carries a fencing token, expiry, current availability generation, and Project revision into both semantic commit and deletion transactions. A competing runtime cannot overwrite an unexpired lease; expiry permits crash recovery, while configuration changes immediately increment the generation and revoke the lease before another organization request is published. Known failed attempts release only their own lease. The first unavailable attempt only records a visible notice and deletes nothing. FIFO never edits Project `MEMORY.MD` and is never semantic organization. Provider request, authentication, transport, timeout, output, parse, capacity, and evidence-size failures are not closed-unavailable deletion authority.
 
+The one per-Project background driver coalesces a request that arrives during an
+active Organizer attempt into the same scheduled slot. When a configuration
+change revokes that attempt, the persisted envelope moves to `retry_wait`; the
+old model output cannot commit, and the scheduled slot consumes the already
+queued request with the new availability generation before it is released. A
+stale attempt cannot erase that redrive, leave an `organizing` shadow without a
+lease, or discard pending evidence.
+
 The unavailable proof is bound to the exact FIFO-head occurrence, its canonical Task/Session owner, the closed reason, and the configured model. One proof may remove at most that head after the second matching attempt; it cannot delete or advance the retry count for later evidence owned by another Task or Session.
 
 The protected notice is available in Project reads and through the Project-memory Server-Sent Events stream. Overlay startup/project switching hydrates it and renders an actionable banner until the user acknowledges it or an Organizer commit clears it.

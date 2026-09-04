@@ -804,7 +804,7 @@ export namespace ProjectMemory {
       ...envelope,
       availabilityGeneration: envelope.availabilityGeneration + 1,
       organizerLease: undefined,
-      status: envelope.status === "unavailable" ? "retry_wait" : envelope.status,
+      status: envelope.organizerLease || envelope.status === "unavailable" ? "retry_wait" : envelope.status,
       timeUpdated: input.timeUpdated ?? Date.now(),
     })
     writeEnvelope(db, input.projectID, next)

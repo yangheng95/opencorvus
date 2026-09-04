@@ -1,18 +1,21 @@
 import z from "zod"
-import {
-  ArtifactReadLocatorSchema,
-  ArtifactReadReferenceSchema,
-} from "@opencorvus-ai/plugin/artifact-catalog"
+import { ArtifactReadLocatorSchema, ArtifactReadReferenceSchema } from "@opencorvus-ai/plugin/artifact-catalog"
 import { TerminalLifecycleReferenceSchema } from "@/engine/terminal-lifecycle-reference-schema"
 
 export const MissionCompletionTaskAcceptanceInput = z
   .object({
     task_id: z.string().min(1).describe("Current child Task accepted by this Mission decision."),
     evidence_read_refs: z
-      .array(ArtifactReadReferenceSchema)
+      .array(
+        ArtifactReadReferenceSchema.describe(
+          "Host-minted reference to one persisted read chunk in this Mission Session for the Task's exact current terminal occurrence.",
+        ),
+      )
       .min(1)
       .max(64)
-      .describe("Host-minted references returned by complete Task Artifact reads earlier in this Mission Turn."),
+      .describe(
+        "Complete supplied reference set whose persisted chunks cover every byte of each accepted Artifact in this Task's exact current terminal occurrence.",
+      ),
   })
   .strict()
 
@@ -21,7 +24,7 @@ export const MissionCompletionTaskAcceptance = z
     task_id: z.string().min(1),
     evidence_locators: z.array(ArtifactReadLocatorSchema).min(1).max(64),
     terminal_lifecycle_reference: TerminalLifecycleReferenceSchema.describe(
-      "Exact current completed occurrence reviewed through panel_query_task earlier in the same Mission Turn.",
+      "Exact current completed occurrence bound to every accepted complete Artifact read.",
     ),
   })
   .strict()

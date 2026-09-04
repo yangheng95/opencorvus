@@ -361,7 +361,15 @@ export namespace ProjectMemoryOrganizer {
         try {
           do {
             entry.again = false
-            await run({ projectID, abort: signal })
+            try {
+              await run({ projectID, abort: signal })
+            } catch (error) {
+              if (!entry.again || signal.aborted) throw error
+              log.info("Project MEMORY.MD Organizer attempt was superseded; consuming queued redrive", {
+                projectID,
+                error: error instanceof Error ? error.message : String(error),
+              })
+            }
           } while (entry.again && !signal.aborted)
         } finally {
           if (scheduledRuns.get(projectID) === entry) scheduledRuns.delete(projectID)

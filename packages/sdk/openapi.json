@@ -58199,9 +58199,9 @@
                           "additionalProperties": false,
                           "properties": {
                             "evidence_read_refs": {
-                              "description": "Host-minted references returned by complete Task Artifact reads earlier in this Mission Turn.",
+                              "description": "Complete supplied reference set whose persisted chunks cover every byte of each accepted Artifact in this Task's exact current terminal occurrence.",
                               "items": {
-                                "description": "Host-minted reference to persisted complete-read facts for one exact locator in this Session Turn.",
+                                "description": "Host-minted reference to one persisted read chunk in this Mission Session for the Task's exact current terminal occurrence.",
                                 "pattern": "^ar_[A-Za-z0-9_-]{16}$",
                                 "type": "string"
                               },
