@@ -182,6 +182,7 @@ describe("Light Expert Squad package", () => {
         expect(scheduler.productionSkills.map((entry) => entry.ref)).toEqual([])
         expect(skillProjection.projectedAgentIDs).toEqual(Object.keys(agentRoles).sort())
         expect(scheduler.promptOverlay).toContain('reveal `read_agent_message` and `manage_task` together in one `capability_search` call')
+        expect(scheduler.promptOverlay).toContain("submit the ordered list in one `read_agent_message` call")
         expect(scheduler.promptOverlay).toContain('Preserve every user-required exact output line in the `complete_task` summary after verification')
 
         const workers = await Promise.all(
@@ -838,25 +839,44 @@ describe("Light Expert Squad package", () => {
           const dispatches = settled.workflow_execution!.nodes.flatMap((node) => node.dispatches)
           expect(dispatches.length).toBe(4)
           const reader = createReadAgentMessageTool({ taskID }).read_agent_message
+          const finalIDs: string[] = []
           for (const dispatch of dispatches) {
             expect(dispatch.settlement).toMatchObject({ outcome_kind: "terminal_success" })
             const finalID = dispatch.settlement!.final_message_id
             if (!finalID) throw new Error("Settled Light dispatch has no final report reference")
+            finalIDs.push(finalID)
             expect(settled.agent_message_refs!.find((message) => message.message_id === finalID)).toMatchObject({
               session_id: dispatch.session_id,
               finish: "stop",
             })
-            const output = JSON.parse(await reader.execute!({ message_id: finalID }, {
-              toolCallId: `read_${dispatch.dispatch_id}`,
-              messages: [],
-            }) as string)
-            expect(output).toMatchObject({
-              session_id: dispatch.session_id,
-              message_id: finalID,
-              finish: "stop",
-              text: [`completed ${dispatch.session_id}`],
-            })
-            expect(output.time_completed).toBeGreaterThan(0)
+          }
+          const output = JSON.parse(
+            (await reader.execute!(
+              { message_ids: finalIDs },
+              {
+                toolCallId: "read_collection_reports",
+                messages: [],
+              },
+            )) as string,
+          )
+          expect(output.messages).toEqual(
+            dispatches.map((dispatch, index) =>
+              expect.objectContaining({
+                session_id: dispatch.session_id,
+                message_id: finalIDs[index],
+                role: "assistant",
+                author: dispatch.target_agent_id,
+                finish: "stop",
+                text: [`completed ${dispatch.session_id}`],
+                time_completed: expect.any(Number),
+              }),
+            ),
+          )
+          for (const message of output.messages) {
+            expect(message.time_completed).toBeGreaterThan(0)
+            expect(message.tool_facts).toEqual(
+              expect.arrayContaining([expect.objectContaining({ tool_name: "read", status: "completed" })]),
+            )
           }
         },
       })

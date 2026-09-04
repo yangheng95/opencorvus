@@ -1106,8 +1106,8 @@ function renderCompletedSpecialistMessageRefs(refs: AgentMessageRefDesc[] | unde
   }
   lines.push(
     `These are stable references to real completed assistant messages, grouped only to avoid repeating shared ` +
-      `Session identity. Every exact message ref remains listed in durable order. Use read_agent_message with an ` +
-      `exact message ref when text or tool facts matter; the Tool resolves and verifies its persisted Session owner. ` +
+      `Session identity. Every exact message ref remains listed in durable order. Use read_agent_message with the ` +
+      `ordered exact message refs that matter in one bounded call; the Tool resolves and verifies every persisted Session owner. ` +
       `A completed assistant step is not necessarily a terminal worker report. Use each exact dispatch settlement's ` +
       `final_message_id for that report; neither a finish string nor the newest inventory entry replaces settlement authority.`,
   )
@@ -1162,8 +1162,8 @@ function renderOrphanedCompletedToolCallRefs(input: {
   lines.push(
     `These tool results have no matching entry in the completed assistant-message projection above. The enclosing ` +
       `message may be incomplete, or it may be completed but lack the parent/agent identity required for that ` +
-      `projection. Use read_agent_message with the exact message ref when payload matters; the Tool resolves and ` +
-      `verifies its persisted Session owner. The remaining ` +
+      `projection. Use read_agent_message with the ordered exact message refs that matter; the Tool resolves and ` +
+      `verifies every persisted Session owner. The remaining ` +
       `${input.toolRefs.length - orphaned.length} completed tool refs belong to completed messages listed above and ` +
       `are returned by that same exact-message reader. Missing, partial, or conflicting registrations remain evidence ` +
       `for natural Orchestrator judgment; they do not imply business success.`,

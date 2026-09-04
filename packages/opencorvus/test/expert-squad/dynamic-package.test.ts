@@ -7,6 +7,8 @@ import { EffectiveConfig } from "../../src/config/effective"
 import { createDispatchLineageOrigin, listDispatchLineage } from "../../src/engine/dispatch-lineage"
 import { recordTestDispatchLineage } from "../fixture/dispatch-lineage"
 import { persistEstablishedTask } from "../fixture/engine-task"
+import { EngineTaskRootIngressTable } from "../../src/engine/engine.sql"
+import { acquireTaskRootIngressLease } from "../../src/engine/task-root-fact-store"
 import { requireTask } from "../../src/engine/store"
 import {
   TestHooks as IngressTestHooks,
@@ -18,6 +20,7 @@ import { PromptProfileResolver } from "../../src/expert-squad/prompt-profile-res
 import { ExpertSquadRegistry } from "../../src/expert-squad/registry"
 import { Identifier } from "../../src/id/id"
 import { orchestratorControlOccurrenceIdentity } from "../../src/orchestrator/control-message-identity"
+import { currentOrchestratorControlMessage } from "../../src/orchestrator/agent"
 import {
   createDispatchAgentTool,
   type DispatchAdapterExecutors,
@@ -28,6 +31,7 @@ import { taskRequestSHA256 } from "../../src/orchestrator/dispatch-turn-projecti
 import { createDelegatedWorkerTool } from "../../src/orchestrator/delegated-worker-tool"
 import { createReadAgentMessageTool } from "../../src/orchestrator/read-agent-message-tool"
 import { Instance } from "../../src/project/instance"
+import { currentRuntimeOccurrenceID } from "../../src/runtime/process-occurrence"
 import { Provider } from "../../src/provider/provider"
 import type { Provider as ProviderType } from "../../src/provider/provider"
 import { ProtocolStore } from "../../src/protocol/store"
@@ -36,6 +40,7 @@ import { Message } from "../../src/session/message"
 import { MessageStore } from "../../src/session/message-store"
 import { SessionProcessor } from "../../src/session/processor"
 import { SessionStatus } from "../../src/session/status"
+import { Database, eq } from "../../src/storage/db"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
 import { allCapabilityGrants } from "./capability-grant-fixture"
 
@@ -162,7 +167,7 @@ describe("Dynamic Expert Squad package", () => {
           "skill",
         ])
         expect(scheduler.promptOverlay).toContain(
-          "call `read_agent_message` once with that worker's exact Task-projected `final_message_id`",
+          "submit the ordered list in one `read_agent_message` call",
         )
         expect({
           generalist: {
@@ -317,24 +322,58 @@ describe("Dynamic Expert Squad package", () => {
               timeCreated: now,
             }),
           })
+          const creatorIngress = Database.use((db) =>
+            db
+              .select()
+              .from(EngineTaskRootIngressTable)
+              .where(eq(EngineTaskRootIngressTable.task_id, taskID))
+              .get(),
+          )
+          if (!creatorIngress) throw new Error("Dynamic fixture has no Task creation ingress")
+          const activation = acquireTaskRootIngressLease({
+            ingressID: creatorIngress.id,
+            ownerOccurrenceID: currentRuntimeOccurrenceID(),
+            now: now + 1,
+            leaseMilliseconds: 120_000,
+            assertControlOwnerInTransaction: () => undefined,
+          })
+          if (!activation.acquired) throw new Error("Dynamic fixture could not acquire its creator ingress")
           const orchestrator = await Session.create({
             kind: "orchestrator",
             parentID: root.id,
             title: "Dynamic direct dispatch",
           })
-          const parentMessageID = Identifier.ascending("message")
+          const control = currentOrchestratorControlMessage(
+            { taskCreation: { taskID } },
+            taskID,
+            creatorIngress.id,
+            creatorIngress.id,
+          )
+          if (!control) throw new Error("Dynamic fixture has no canonical creator control Message")
+          const parentMessageID = control.messageID
           const orchestratorMessageID = Identifier.ascending("message")
           await Session.persistMessage({
             info: {
               id: parentMessageID,
               sessionID: orchestrator.id,
               role: "user",
-              author: "user",
+              author: "orchestrator",
+              extra: control.extra,
               time: { created: now + 1 },
               agent: "orchestrator",
               model,
             },
-            parts: [],
+            parts: [
+              {
+                id: control.partID,
+                sessionID: orchestrator.id,
+                messageID: parentMessageID,
+                type: "text",
+                text: control.text,
+                kind: "control",
+                source: "system",
+              },
+            ],
           })
           await Session.persistMessage({
             info: {
@@ -344,6 +383,7 @@ describe("Dynamic Expert Squad package", () => {
               role: "assistant",
               author: "orchestrator",
               time: { created: now + 2 },
+              activationID: activation.activationID,
               agent: "orchestrator",
               providerID: model.providerID,
               modelID: model.modelID,
@@ -595,7 +635,12 @@ describe("Dynamic Expert Squad package", () => {
               time: { start: now + 3, end: Date.now() },
             },
           })
-          const receipts = frontierResult.metadata.members.map((member) => member.outcome)
+          const receipts = frontierResult.metadata.members.map((member) => {
+            if (member.status !== "completed") {
+              throw new Error(`Expected completed Dynamic collection member, got ${JSON.stringify(member)}`)
+            }
+            return member.outcome
+          })
           for (const receipt of receipts) {
             if (receipt.kind !== "accepted") {
               throw new Error(`Expected accepted Dynamic dispatch, got ${JSON.stringify(receipt)}`)
@@ -665,6 +710,7 @@ describe("Dynamic Expert Squad package", () => {
           await requireWithin(waitForIngressDeliveryHooksForTest(), "Dynamic lifecycle ingress deliveries")
           const readAgentMessage = createReadAgentMessageTool({ taskID }).read_agent_message
           if (!readAgentMessage.execute) throw new Error("read_agent_message has no production executor")
+          const finalMessages: { sessionID: string; messageID: string }[] = []
           for (const sessionID of childSessionIDs) {
             const descriptor = WorkerTurnDescriptor.latestForSession(sessionID)
             expect(descriptor).toBeDefined()
@@ -672,21 +718,7 @@ describe("Dynamic Expert Squad package", () => {
               .filter((message) => message.info.role === "assistant")
               .at(-1)
             if (!finalMessage) throw new Error(`Dynamic worker ${sessionID} has no final assistant Message`)
-            const exactMessage = await readAgentMessage.execute(
-              { message_id: finalMessage.info.id },
-              {
-                toolCallId: Identifier.ascending("call"),
-                messages: [],
-                abortSignal: new AbortController().signal,
-              },
-            )
-            expect(JSON.parse(String(exactMessage))).toMatchObject({
-              session_id: sessionID,
-              message_id: finalMessage.info.id,
-              role: "assistant",
-              author: "dynamic-generalist",
-              text: [`completed ${sessionID}`],
-            })
+            finalMessages.push({ sessionID, messageID: finalMessage.info.id })
             expect(
               ProtocolStore.latestSessionOccurrenceEvent(
                 sessionID,
@@ -704,6 +736,23 @@ describe("Dynamic Expert Squad package", () => {
               },
             })
           }
+          const exactMessages = await readAgentMessage.execute(
+            { message_ids: finalMessages.map((message) => message.messageID) },
+            {
+              toolCallId: Identifier.ascending("call"),
+              messages: [],
+              abortSignal: new AbortController().signal,
+            },
+          )
+          expect(JSON.parse(String(exactMessages)).messages).toMatchObject(
+            finalMessages.map((message) => ({
+              session_id: message.sessionID,
+              message_id: message.messageID,
+              role: "assistant",
+              author: "dynamic-generalist",
+              text: [`completed ${message.sessionID}`],
+            })),
+          )
 
           const foreignTaskID = Identifier.ascending("task")
           const foreignRoot = Session.prepareRootNext({
@@ -772,7 +821,7 @@ describe("Dynamic Expert Squad package", () => {
           })
           await expect(
             readAgentMessage.execute(
-              { message_id: foreignFinalID },
+              { message_ids: [foreignFinalID] },
               {
                 toolCallId: Identifier.ascending("call"),
                 messages: [],

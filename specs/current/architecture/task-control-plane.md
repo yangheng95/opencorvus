@@ -129,9 +129,14 @@ and declared workflows. This is the persisted settlement's participant report
 reference, not a latest-Message selection. The completed assistant-Message
 inventory retains each recorded `finish` reason because a completed Tool step
 is not by itself a terminal worker report. The exact Message reader exposes the
-same finish/completion facts without inferring success. Fresh and reconstructed
-Task baseline/delta views carry these facts through the existing single read
-path; a sibling's terminal wake never establishes another sibling's completion.
+same finish/completion facts without inferring success. Its sole current input
+is an ordered set of one to eight globally unique Message IDs. The reader
+resolves and verifies every persisted Session owner against the current Task,
+then returns the exact Message projections in caller order. It does not accept a
+second caller-supplied Session identity, select a latest Message, or retain a
+singular compatibility input. Fresh and reconstructed Task baseline/delta views
+carry these facts through the existing single read path; a sibling's terminal
+wake never establishes another sibling's completion.
 
 ```text
 accepted ingress

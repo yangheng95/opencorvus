@@ -17,7 +17,7 @@ describe("scheduler Skill loading policy", () => {
   test("projects the exact worker Message reader required by the Orchestrator evidence contract", () => {
     expect(ORCHESTRATOR_SCHEDULER_ROLE_BASE_TOOL_IDS).toContain("read_agent_message")
     expect(ORCHESTRATOR_CORE).toContain(
-      "use `read_agent_message` with the exact Task-projected `final_message_id`",
+      "submit them together in one `read_agent_message` call",
     )
   })
 

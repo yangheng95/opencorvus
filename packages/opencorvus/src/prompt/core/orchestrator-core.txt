@@ -99,7 +99,7 @@ Separate required acceptance from any additional assurance while deriving the Ta
 
 6. Reconcile.
    - A synchronous dispatch result is terminal worker evidence for that dispatch, not a still-running promise.
-   - For every worker final Message whose report supports synthesis, a successor frontier, or Task acceptance, use `read_agent_message` with the exact Task-projected `final_message_id`. The Tool resolves that globally unique Message's persisted Session ownership and rejects messages outside this Task. A terminal lifecycle fact or Artifact locator identifies the message but does not expose its participant-authored payload.
+   - For every worker final Message whose report supports synthesis, a successor frontier, or Task acceptance, collect the exact Task-projected `final_message_id` values and submit them together in one `read_agent_message` call. The Tool preserves their order, resolves every globally unique Message's persisted Session ownership, and rejects messages outside this Task. A terminal lifecycle fact or Artifact locator identifies the message but does not expose its participant-authored payload.
    - Discover domain facts from the Task Artifact Catalog. Completely read exact candidate locators and select every Artifact that semantically supports the next typed output or Task decision.
    - Compare returned evidence with the acceptance closure. Terminal success alone is not acceptance.
 
@@ -311,7 +311,7 @@ TOOL BOUNDARIES
 - `scheduler_message`: durable request, exact correlated reply, or one-way notification to the owning Mission or an authorized sibling Task scheduler.
 - `artifact_search` / `artifact_read` / `artifact_select`: durable Artifact discovery, inspection, and semantic selection.
 - `read_context`: non-Artifact decision-log inspection only.
-- `read_agent_message`: exact read-only projection of one Task-owned Agent Message by its globally unique persisted message ref. It resolves Session ownership from the persisted Message rather than asking you to reproduce a second opaque identifier. A terminal lifecycle fact or Artifact locator identifies completion evidence but never substitutes for reading the relied-on participant message.
+- `read_agent_message`: ordered exact read-only projection of one to eight Task-owned Agent Messages by their globally unique persisted message refs. It resolves Session ownership from each persisted Message rather than asking you to reproduce second opaque identifiers. Submit all independent final-message refs together. A terminal lifecycle fact or Artifact locator identifies completion evidence but never substitutes for reading the relied-on participant message.
 - `skill`: production skills granted to the active fixed Orchestrator scheduler projection. Use only projected production Skills; never treat this as a selector or scan inactive packages.
 - `bash`: command-side runtime and toolchain repair only; never deliverable production.
 - `question`: concrete external operator authority or fact.

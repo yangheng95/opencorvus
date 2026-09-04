@@ -4059,3 +4059,66 @@ runtime validator and strict persisted engine parser remain intact, while the
 generated Provider item is now the single direct wrapper proven by the positive
 schema test. The reviewer did not rerun tests. The corrected Provider behavior
 still requires one new exact-source Luna run after this reviewed cut is pushed.
+
+That exact post-push Luna rerun used source commit
+`442f98f1bf03036b499c2712761b996095665f02`, the existing native helper and 236
+linked dependency-cache entries, with zero installs, downloads, builds or
+compilation. The four workers again overlapped physically, settled through one
+collection wake and produced the exact requested facts and sources without a
+failed Tool call. The schema defect is therefore closed. The completed Task took
+151,403 ms and 517,818 total tokens. The Orchestrator used 223,142 tokens, 3,142
+above its fixed 220,000 budget.
+
+The remaining excess was not worker execution or wake amplification. After the
+single collection wake, the Orchestrator made four sequential
+`read_agent_message` Provider rounds because the Tool accepted only one Message
+ID. Each round replayed the same large Task context and Tool schema even though
+all four immutable settlement `final_message_id` values were already available
+and independent. The prompt's request to batch reads could not express that
+operation through the singular schema.
+
+The current repair changes that one read boundary instead of adding a cache or
+host-side workflow choice. `read_agent_message` now accepts one ordered list of
+one to eight unique globally scoped Message IDs, resolves each persisted Session
+owner, verifies every owner belongs to the current Task and returns the exact
+participant projections in caller order. There is no singular compatibility
+field, latest selection, guessed Session identity, fallback reader or hidden
+summary. Light, Dynamic and core Orchestrator prompts all require one bounded
+call for an independent final-report set. Positive package tests exercise four
+ordered Light reports, two ordered Dynamic reports and cross-Task rejection
+through the same production Tool.
+
+This code and prompt cut still requires focused tests, typechecks, repository
+checkers and a fresh uninvolved exact-tree review. Only after that reviewed cut
+is pushed will the same exact four-member Luna case be run once more. No adjacent
+benchmark case is authorized by this acceptance step.
+
+Verification checkpoint: the Dynamic package completed 2/2 tests with 35
+assertions, including ordered two-report reading and cross-Task rejection. The
+Light package completed 4/4 tests with 150 assertions, including ordered
+four-report reading with the real Tool facts preserved. The scheduler prompt
+contract completed 3/3 tests with 9 assertions. The Dynamic fixture was also
+updated to use the canonical Task-creation control occurrence and ingress lease;
+its former ordinary user parent no longer satisfied the current dispatch
+authority and was not retained as a parallel test path.
+
+OpenCorvus package typecheck and root typecheck are green; root completed 8/8
+workspace tasks with seven cache hits. Generation is reproducible: rerunning the
+existing payload generator left the generated diff hash unchanged. Repository
+checks report docs 339/25, routes 6/34, architecture index 16, package topology
+10, control leases 18 owners/22 acquire sites, control-state redundancy 53
+tables/7 allowed fact classes and release mutation topology 5 authorities. The
+exact staged module graph contains 1,104 modules, 5,548 runtime edges, zero
+retained strongly connected components and four clean imports. Installs,
+downloads, builds and native compilation remain zero. A fresh uninvolved review
+of the final exact staged tree remains mandatory before commit.
+
+Final independent review: exact staged tree
+`2c817a9f8a0a351ea7089ff142eb923568e967b4` received FINAL PASS with P0-P3 all
+zero. The uninvolved reviewer confirmed the sole ordered `message_ids` Provider
+schema, per-Message persisted Session and Task ownership checks, caller-order
+preservation, complete Tool-fact projection, current Dynamic creator authority,
+generated closure, positive package coverage and the three-path working-tree
+exclusion. The reviewer did not rerun the long matrix. This closes the
+code/test/doc review gate; the one exact post-push Luna case remains the real
+budget acceptance.
