@@ -101,9 +101,12 @@ import { insertEngineInteractionRequest } from "./interaction-request"
 import { orchestratorControlOccurrenceIdentity } from "@/orchestrator/control-message-identity"
 import { resolveDispatchOccurrenceAuthority } from "./dispatch-lineage"
 import {
+  dispatchCollectionWakeCandidateMatchesInTransaction,
+  dispatchCollectionWakeDecisionInTransaction,
   dispatchRecoveryCandidateExistsInTransaction,
   recordDispatchBudgetSuppressionInTransaction,
   unresolvedDispatchRecoveryPageInTransaction,
+  type DispatchCollectionWakeSource,
   type DispatchRecoveryFrontierCursor,
 } from "./dispatch-delivery-disposition"
 import {
@@ -1394,7 +1397,25 @@ async function reconcileAbandonedDispatches(
         recovered += 1
         continue
       }
-      if (delivery === "suppressed_budget_exhausted" || delivery === "already_delivered") continue
+      if (
+        delivery === "collection_pending" ||
+        delivery === "suppressed_budget_exhausted" ||
+        delivery === "already_delivered"
+      )
+        continue
+      const collection = collectionDeliveryPlan({ taskID, sessionID: childSessionID, dispatchID: lineage.dispatchID })
+      if (collection.kind === "delivered") continue
+      if (collection.kind === "ready") {
+        const collectionDelivery = await deliverReadyCollection({
+          taskID,
+          sessionID: childSessionID,
+          dispatchID: lineage.dispatchID,
+          source: collection.source,
+          event: collection.event,
+        })
+        if (collectionDelivery === "delivered") recovered += 1
+        continue
+      }
       if (await settleAbandonedDispatch({ taskID, lineage })) recovered += 1
     } catch (error) {
       // One unrecoverable dispatch must not stop the sweep: its siblings and
@@ -1448,72 +1469,22 @@ async function recoverSettledUndeliveredDispatch(input: {
     }
   }
 }): Promise<number> {
+  const result = await reconcileSettledDispatchDelivery({
+    taskID: input.taskID,
+    sessionID: input.lineage.payload.child_session_id,
+    dispatchID: input.lineage.dispatchID,
+  })
+  if (result !== "delivered") return 0
   const settlement = findDispatchSettlementByDispatchID({
     taskID: input.taskID,
     dispatchID: input.lineage.dispatchID,
   })
-  if (!settlement) return 0
-  if (
-    dispatchRecoveryExcluded({
-      taskID: input.taskID,
-      sessionID: input.lineage.payload.child_session_id,
-      dispatchID: input.lineage.dispatchID,
-    })
-  )
-    return 0
-  // The exact settlement is the terminal authority. Wake the Orchestrator on
-  // that fact itself, keyed so the ingress source index makes replay
-  // idempotent; a later adjacent lifecycle cannot reinterpret the outcome.
-  //
-  // An infrastructure settlement must re-enter through the same gate its
-  // original wake would have used. Routing it as `processRecovery` would slip
-  // past the epoch's infrastructure-failure budget — the exact loop the budget
-  // terminates would continue at one wake per crash cycle, just under a
-  // different event name.
-  const outcome = settlement.payload.outcome
-  const infrastructureFactID =
-    outcome.kind === "infrastructure_failure" ? outcome.infrastructure_error?.artifact_id : undefined
-  await beforeDispatchSettlementDeliveryForTest?.({
-    taskID: input.taskID,
-    dispatchID: input.lineage.dispatchID,
-    settlementArtifactID: settlement.artifactID,
-  })
-  const result = await dispatchTaskLoop({
-    taskID: input.taskID,
-    admitInTransaction: (db) =>
-      dispatchRecoveryCandidateExistsInTransaction(db, {
-        taskID: input.taskID,
-        sessionID: input.lineage.payload.child_session_id,
-        dispatchID: input.lineage.dispatchID,
-      }),
-    event:
-      outcome.kind === "infrastructure_failure" && infrastructureFactID
-        ? {
-            note: `Dispatch ${input.lineage.dispatchID} settled as infrastructure failure without reaching the Orchestrator`,
-            dispatchInfrastructureFailure: { infrastructureFactID, outcome },
-          }
-        : {
-            note: `Dispatch ${input.lineage.dispatchID} settled without reaching the Orchestrator`,
-            processRecovery: { recoveryFactID: settlement.artifactID },
-          },
-  })
-  if (result === "suppressed_budget_exhausted") {
-    // The budget already surfaced its own durable gate; this dispatch is
-    // deliberately, permanently quiet.
-    return 0
-  }
-  if (result === "ignored") return 0
   log.warn("recovered a settled dispatch that never reached the Orchestrator", {
     taskID: input.taskID,
     dispatchID: input.lineage.dispatchID,
-    settlementArtifactID: settlement.artifactID,
+    settlementArtifactID: settlement?.artifactID,
   })
   return 1
-}
-
-/** Whether some accepted ingress already carries this settlement's outcome. */
-function dispatchRecoveryExcluded(input: { taskID: string; sessionID: string; dispatchID: string }): boolean {
-  return !Database.use((db) => dispatchRecoveryCandidateExistsInTransaction(db, input))
 }
 
 /**
@@ -1620,32 +1591,8 @@ async function settleAbandonedDispatch(input: {
     }
   }
 }): Promise<boolean> {
-  const settlement = await recordAbandonedDispatchSettlement(input)
-  const outcome = settlement.payload.outcome
-  const infrastructureFactID =
-    outcome.kind === "infrastructure_failure" ? outcome.infrastructure_error?.artifact_id : undefined
-  if (outcome.kind !== "infrastructure_failure" || !infrastructureFactID) {
-    return (await recoverSettledUndeliveredDispatch(input)) > 0
-  }
-  await beforeDispatchSettlementDeliveryForTest?.({
-    taskID: input.taskID,
-    dispatchID: input.lineage.dispatchID,
-    settlementArtifactID: settlement.artifactID,
-  })
-  const result = await dispatchTaskLoop({
-    taskID: input.taskID,
-    admitInTransaction: (db) =>
-      dispatchRecoveryCandidateExistsInTransaction(db, {
-        taskID: input.taskID,
-        sessionID: input.lineage.payload.child_session_id,
-        dispatchID: input.lineage.dispatchID,
-      }),
-    event: {
-      note: `Worker Session ${input.lineage.payload.child_session_id} was abandoned before completing dispatch ${input.lineage.dispatchID}`,
-      dispatchInfrastructureFailure: { infrastructureFactID, outcome },
-    },
-  })
-  return result !== "ignored"
+  await recordAbandonedDispatchSettlement(input)
+  return (await recoverSettledUndeliveredDispatch(input)) > 0
 }
 
 /**
@@ -2315,10 +2262,140 @@ export function persistProcessShutdownRecoveryHandoffs(input: {
 export type TerminalAgentLifecycleDeliveryReconciliation =
   | "missing_lineage"
   | "missing_descriptor"
+  | "missing_settlement"
   | "nonterminal"
+  | "collection_pending"
   | "already_delivered"
   | "suppressed_budget_exhausted"
   | "delivered"
+
+function orchestratorEventForCollectionWakeSource(source: DispatchCollectionWakeSource): OrchestratorEvent {
+  const outcome = source.settlement.payload.outcome
+  if (source.kind === "protocol_event") {
+    return {
+      note: `Dispatch collection completed at worker lifecycle ${source.sourceID}`,
+      agentLifecycleDelivery: {
+        eventID: source.sourceID,
+        sessionID: source.sessionID,
+        dispatchID: source.dispatchID,
+      },
+    }
+  }
+  if (outcome.kind === "infrastructure_failure" && outcome.infrastructure_error?.artifact_id === source.sourceID) {
+    return {
+      note: `Dispatch collection completed with infrastructure failure ${source.sourceID}`,
+      dispatchInfrastructureFailure: { infrastructureFactID: source.sourceID, outcome },
+    }
+  }
+  if (source.sourceID !== source.settlement.artifactID) {
+    throw new Error(`Dispatch collection wake source ${source.sourceID} does not match its representative settlement`)
+  }
+  return {
+    note: `Dispatch collection settled without a terminal lifecycle projection`,
+    processRecovery: { recoveryFactID: source.settlement.artifactID },
+  }
+}
+
+function collectionDeliveryPlan(input: {
+  taskID: string
+  sessionID: string
+  dispatchID: string
+}):
+  | { kind: "direct" }
+  | { kind: "pending" }
+  | { kind: "delivered" }
+  | { kind: "ready"; source: DispatchCollectionWakeSource; event: OrchestratorEvent } {
+  const decision = Database.use((db) => dispatchCollectionWakeDecisionInTransaction(db, input))
+  if (decision.kind === "direct" || decision.kind === "pending") return decision
+  if (decision.delivered) return { kind: "delivered" }
+  return { kind: "ready", source: decision.source, event: orchestratorEventForCollectionWakeSource(decision.source) }
+}
+
+async function deliverReadyCollection(input: {
+  taskID: string
+  sessionID: string
+  dispatchID: string
+  source: DispatchCollectionWakeSource
+  event: OrchestratorEvent
+}): Promise<TerminalAgentLifecycleDeliveryReconciliation> {
+  await beforeTerminalLifecycleDeliveryForTest?.({
+    taskID: input.taskID,
+    dispatchID: input.source.dispatchID,
+    settlementArtifactID: input.source.settlement.artifactID,
+  })
+  const result = await dispatchTaskLoop({
+    taskID: input.taskID,
+    admitInTransaction: (db) =>
+      dispatchCollectionWakeCandidateMatchesInTransaction(db, {
+        taskID: input.taskID,
+        sessionID: input.sessionID,
+        dispatchID: input.dispatchID,
+        source: input.source,
+      }),
+    event: input.event,
+  })
+  if (result === "suppressed_budget_exhausted") return "suppressed_budget_exhausted"
+  return result === "ignored" ? "already_delivered" : "delivered"
+}
+
+export async function reconcileSettledDispatchDelivery(input: {
+  taskID: string
+  sessionID: string
+  dispatchID: string
+}): Promise<TerminalAgentLifecycleDeliveryReconciliation> {
+  const lineage = findDispatchLineageByDispatchID({ taskID: input.taskID, dispatchID: input.dispatchID })
+  if (!lineage || lineage.payload.child_session_id !== input.sessionID) return "missing_lineage"
+  const settlement = findDispatchSettlementByDispatchID({ taskID: input.taskID, dispatchID: input.dispatchID })
+  if (!settlement) return "missing_settlement"
+  const collection = collectionDeliveryPlan(input)
+  if (collection.kind === "pending") return "collection_pending"
+  if (collection.kind === "delivered") return "already_delivered"
+  if (collection.kind === "ready") {
+    return deliverReadyCollection({ ...input, source: collection.source, event: collection.event })
+  }
+  const outcome = settlement.payload.outcome
+  const infrastructureFactID =
+    outcome.kind === "infrastructure_failure" ? outcome.infrastructure_error?.artifact_id : undefined
+  if (outcome.kind === "infrastructure_failure" && !infrastructureFactID) {
+    throw new Error(`Dispatch ${input.dispatchID} infrastructure settlement has no exact Artifact source`)
+  }
+  const sourceID = infrastructureFactID ?? settlement.artifactID
+  const existed = Database.use((db) =>
+    db
+      .select({ id: EngineTaskRootIngressTable.id })
+      .from(EngineTaskRootIngressTable)
+      .where(
+        and(
+          eq(EngineTaskRootIngressTable.task_id, input.taskID),
+          eq(EngineTaskRootIngressTable.source, "engine_artifact"),
+          eq(EngineTaskRootIngressTable.source_id, sourceID),
+        ),
+      )
+      .get(),
+  )
+  if (existed) return "already_delivered"
+  await beforeDispatchSettlementDeliveryForTest?.({
+    taskID: input.taskID,
+    dispatchID: input.dispatchID,
+    settlementArtifactID: settlement.artifactID,
+  })
+  const result = await dispatchTaskLoop({
+    taskID: input.taskID,
+    admitInTransaction: (db) => dispatchRecoveryCandidateExistsInTransaction(db, input),
+    event:
+      outcome.kind === "infrastructure_failure" && infrastructureFactID
+        ? {
+            note: `Accepted worker Session ${input.sessionID} failed ${outcome.operation}`,
+            dispatchInfrastructureFailure: { infrastructureFactID, outcome },
+          }
+        : {
+            note: `Dispatch ${input.dispatchID} settled without reaching the Orchestrator`,
+            processRecovery: { recoveryFactID: settlement.artifactID },
+          },
+  })
+  if (result === "suppressed_budget_exhausted") return "suppressed_budget_exhausted"
+  return result === "ignored" ? "already_delivered" : "delivered"
+}
 
 function requireTerminalLifecycleFinalMessageAuthority(input: {
   lifecycleID: string
@@ -2490,6 +2567,12 @@ export async function reconcileTerminalAgentLifecycleDelivery(input: {
       )
     }
     const infrastructureError = outcome.infrastructure_error
+    const collection = collectionDeliveryPlan(input)
+    if (collection.kind === "pending") return "collection_pending"
+    if (collection.kind === "delivered") return "already_delivered"
+    if (collection.kind === "ready") {
+      return deliverReadyCollection({ ...input, source: collection.source, event: collection.event })
+    }
     const existed = Database.use((db) =>
       db
         .select({ id: EngineTaskRootIngressTable.id })
@@ -2556,6 +2639,12 @@ export async function reconcileTerminalAgentLifecycleDelivery(input: {
   }
   const settlement = findDispatchSettlementByDispatchID({ taskID: input.taskID, dispatchID: input.dispatchID })
   if (!settlement) throw new Error(`Terminal lifecycle ${lifecycle.id} did not settle dispatch ${input.dispatchID}`)
+  const collection = collectionDeliveryPlan(input)
+  if (collection.kind === "pending") return "collection_pending"
+  if (collection.kind === "delivered") return "already_delivered"
+  if (collection.kind === "ready") {
+    return deliverReadyCollection({ ...input, source: collection.source, event: collection.event })
+  }
   const existed = Database.use((db) =>
     db
       .select({ id: EngineTaskRootIngressTable.id })
@@ -2596,6 +2685,9 @@ export async function waitForIngressDeliveryHooksForTest(): Promise<void> {
 }
 
 export const TestHooks = {
+  reconcileAbandonedDispatches(taskID: string) {
+    return reconcileAbandonedDispatches(taskID)
+  },
   taskRootLifecycleDispositionEvidence(input: Parameters<typeof taskRootLifecycleDispositionEvidence>[0]) {
     return taskRootLifecycleDispositionEvidence(input)
   },

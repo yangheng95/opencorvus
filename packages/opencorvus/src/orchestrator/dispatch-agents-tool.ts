@@ -1,6 +1,16 @@
-import { DispatchOutcomeSchema } from "@/agent/dispatch-outcome"
+import { DispatchOutcome, DispatchOutcomeSchema } from "@/agent/dispatch-outcome"
+import { exactEngineArtifactLocator } from "@/artifact-catalog"
+import {
+  findDispatchLineageByCollectionMember,
+  resolveDispatchOccurrenceAuthority,
+} from "@/engine/dispatch-lineage"
+import { findDispatchSettlementByDispatchID, recordDispatchSettlement } from "@/engine/dispatch-settlement"
+import { recordTaskInfrastructureErrorInTransaction } from "@/engine/persist"
+import { taskIDForSession } from "@/engine/task-session-lineage"
+import { Identifier } from "@/id/id"
 import { MessageStore } from "@/session/message-store"
 import { Session } from "@/session"
+import { isExecutionCancellationError } from "@/session/prompt/cancellation"
 import { ToolPartProgressTable } from "@/session/session.sql"
 import { Database, asc, eq } from "@/storage/db"
 import { toolFailureCauseFromUnknown } from "@/session/tool-failure-cause"
@@ -52,6 +62,65 @@ function persistedMemberProgress(outerToolPartID: string): DispatchCollectionMem
 }
 
 const productionRuntime: DispatchAgentsRuntime = {}
+
+function settleCommittedMemberExecutionFailure(input: {
+  outer: ReturnType<typeof requireOrchestratorToolExecutionContext>
+  member: { index: number; name: string; target: string }
+  memberCount: number
+  error: unknown
+}): DispatchOutcome | undefined {
+  const taskID = taskIDForSession(input.outer.orchestratorSessionID)
+  if (!taskID) return undefined
+  return Database.immediateTransaction((db) => {
+    const lineage = findDispatchLineageByCollectionMember({
+      taskID,
+      toolPartID: input.outer.toolPartID,
+      toolCallID: input.outer.toolCallID,
+      memberIndex: input.member.index,
+      memberCount: input.memberCount,
+    })
+    if (!lineage) return undefined
+    if (lineage.payload.target_agent_id !== input.member.target) {
+      throw new Error(
+        `dispatch_agents committed member ${input.member.index} target ${lineage.payload.target_agent_id} does not match ${input.member.target}`,
+      )
+    }
+    const existing = findDispatchSettlementByDispatchID({ taskID, dispatchID: lineage.dispatchID })
+    if (existing) return existing.payload.outcome
+    const message = input.error instanceof Error ? input.error.message : String(input.error)
+    const errorName = input.error instanceof Error ? input.error.name : "DispatchCollectionMemberExecutionError"
+    const infrastructureFactID = recordTaskInfrastructureErrorInTransaction(db, {
+      id: Identifier.deterministic(
+        "artifact",
+        `dispatch-collection-member-execution-failure-v1\0${taskID}\0${lineage.dispatchID}`,
+      ),
+      taskID,
+      component: "dispatch-agents",
+      operation: "settle-committed-member-execution",
+      reason: message,
+      errorName,
+      sessionID: lineage.payload.child_session_id,
+      context: {
+        dispatchID: lineage.dispatchID,
+        outerToolPartID: input.outer.toolPartID,
+        memberIndex: input.member.index,
+        name: input.member.name,
+        target: input.member.target,
+      },
+    })
+    const outcome = DispatchOutcome.infrastructureFailure({
+      operation: "settle-committed-member-execution",
+      message,
+      errorName,
+      sessionID: lineage.payload.child_session_id,
+      recoveryAuthority: resolveDispatchOccurrenceAuthority({ taskID, dispatchID: lineage.dispatchID }),
+      infrastructureError: exactEngineArtifactLocator({ taskID, artifactID: infrastructureFactID }),
+    })
+    recordDispatchSettlement({ taskID, dispatchID: lineage.dispatchID, outcome })
+    return outcome
+  })
+}
+
 /**
  * Execute the one real model-authored dispatch collection occurrence.
  *
@@ -184,23 +253,38 @@ function createDispatchAgentsToolWithRuntime(
               outcome,
             }
           } catch (error) {
-            result = {
-              member_index: member.index,
-              name: member.name,
-              target: member.target,
-              status: "failed",
-              failure: toolFailureCauseFromUnknown({
-                error,
-                originSite: "orchestrator.dispatch-agents.member",
-                classification: "tool-execution",
-                kind: "tool-execute-error",
-                data: {
-                  outerToolPartID: outer.toolPartID,
-                  memberIndex: member.index,
+            if (isExecutionCancellationError(error) || callerSignal?.aborted) throw error
+            const committedOutcome = settleCommittedMemberExecutionFailure({
+              outer,
+              member,
+              memberCount: members.length,
+              error,
+            })
+            result = committedOutcome
+              ? {
+                  member_index: member.index,
+                  name: member.name,
                   target: member.target,
-                },
-              }),
-            }
+                  status: "completed",
+                  outcome: committedOutcome,
+                }
+              : {
+                  member_index: member.index,
+                  name: member.name,
+                  target: member.target,
+                  status: "failed",
+                  failure: toolFailureCauseFromUnknown({
+                    error,
+                    originSite: "orchestrator.dispatch-agents.member",
+                    classification: "tool-execution",
+                    kind: "tool-execute-error",
+                    data: {
+                      outerToolPartID: outer.toolPartID,
+                      memberIndex: member.index,
+                      target: member.target,
+                    },
+                  }),
+                }
           }
           await checkpoint(result)
           await runtime.afterMemberSettled?.({ outerToolPartID: outer.toolPartID, memberIndex: member.index })
@@ -241,4 +325,5 @@ export const DispatchAgentsToolTestHooks = Object.freeze({
   create(dispatchAgentTool: DispatchAgentTool, input: DispatchAgentsRuntime, childInputSchema: z.ZodType) {
     return createDispatchAgentsToolWithRuntime(dispatchAgentTool, input, childInputSchema)
   },
+  settleCommittedMemberExecutionFailure,
 })

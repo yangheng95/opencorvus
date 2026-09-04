@@ -809,7 +809,7 @@ export function createDispatchAgentTool(input: {
           runDetachedRecovery: input.runDetachedRecovery,
           committedLineage,
           deliver: async ({ sessionID: completedSessionID, outcome, executionError }) => {
-            const { dispatchTaskLoop, reconcileTerminalAgentLifecycleDelivery } = await import(
+            const { reconcileSettledDispatchDelivery, reconcileTerminalAgentLifecycleDelivery } = await import(
               "@/engine/task-root-ingress-delivery"
             )
             const completedOutcome =
@@ -822,19 +822,21 @@ export function createDispatchAgentTool(input: {
                   })
                 : undefined)
             if (completedOutcome?.kind === "infrastructure_failure") {
-              const infrastructureFactID = completedOutcome.infrastructure_error?.artifact_id
-              if (!infrastructureFactID) {
+              const result = await reconcileSettledDispatchDelivery({
+                taskID: input.taskID,
+                sessionID: completedSessionID,
+                dispatchID: dispatch.dispatchID,
+              })
+              if (
+                result !== "delivered" &&
+                result !== "already_delivered" &&
+                result !== "collection_pending" &&
+                result !== "suppressed_budget_exhausted"
+              ) {
                 throw new Error(
-                  `dispatch_agent ${target} infrastructure outcome has no durable Artifact for Session ${completedSessionID}`,
+                  `dispatch_agent ${target} infrastructure delivery is ${result} for Session ${completedSessionID}`,
                 )
               }
-              await dispatchTaskLoop({
-                taskID: input.taskID,
-                event: {
-                  note: `Accepted worker Session ${completedSessionID} failed ${completedOutcome.operation}`,
-                  dispatchInfrastructureFailure: { infrastructureFactID, outcome: completedOutcome },
-                },
-              })
               return
             }
             if (executionError) throw executionError
@@ -843,7 +845,12 @@ export function createDispatchAgentTool(input: {
               sessionID: completedSessionID,
               dispatchID: dispatch.dispatchID,
             })
-            if (result !== "delivered" && result !== "already_delivered" && result !== "suppressed_budget_exhausted") {
+            if (
+              result !== "delivered" &&
+              result !== "already_delivered" &&
+              result !== "collection_pending" &&
+              result !== "suppressed_budget_exhausted"
+            ) {
               throw new Error(
                 `dispatch_agent ${target} completion delivery is ${result} for Session ${completedSessionID}`,
               )
@@ -907,20 +914,25 @@ export function createDispatchAgentTool(input: {
                   `Detached dispatch infrastructure recovery has no durable fact for ${completedSessionID}`,
                 )
               }
-              const { dispatchTaskLoop } = await import("@/engine/task-root-ingress-delivery")
-              const result = await dispatchTaskLoop({
+              settleDispatchOrReturnExisting({
                 taskID: input.taskID,
-                event: {
-                  note: `Accepted worker Session ${completedSessionID} failed ${infrastructureOutcome.operation}`,
-                  dispatchInfrastructureFailure: { infrastructureFactID, outcome: infrastructureOutcome },
-                },
+                dispatchID: dispatch.dispatchID,
+                outcome: infrastructureOutcome,
               })
-              if (result === "accepted") return
-              // A suppressed wake is a deliberate, surfaced stop: this epoch
-              // has spent its infrastructure-failure retry budget. Escalating
-              // it would only re-enter the loop the budget exists to end.
-              if (result === "suppressed_budget_exhausted") return
-              throw new Error(`Detached dispatch infrastructure ingress was not accepted for ${completedSessionID}`)
+              const { reconcileSettledDispatchDelivery } = await import("@/engine/task-root-ingress-delivery")
+              const result = await reconcileSettledDispatchDelivery({
+                taskID: input.taskID,
+                sessionID: completedSessionID,
+                dispatchID: dispatch.dispatchID,
+              })
+              if (
+                result === "delivered" ||
+                result === "already_delivered" ||
+                result === "collection_pending" ||
+                result === "suppressed_budget_exhausted"
+              )
+                return
+              throw new Error(`Detached dispatch infrastructure recovery is ${result} for ${completedSessionID}`)
             }
             const { reconcileTerminalAgentLifecycleDelivery } = await import("@/engine/task-root-ingress-delivery")
             const result = await reconcileTerminalAgentLifecycleDelivery({
@@ -928,7 +940,12 @@ export function createDispatchAgentTool(input: {
               sessionID: completedSessionID,
               dispatchID: dispatch.dispatchID,
             })
-            if (result === "delivered" || result === "already_delivered" || result === "suppressed_budget_exhausted")
+            if (
+              result === "delivered" ||
+              result === "already_delivered" ||
+              result === "collection_pending" ||
+              result === "suppressed_budget_exhausted"
+            )
               return
             throw new Error(`Detached worker lifecycle recovery is ${result} for Session ${completedSessionID}`)
           },

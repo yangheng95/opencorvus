@@ -10,6 +10,7 @@ import { recordTestDispatchLineage } from "../fixture/dispatch-lineage"
 import { persistEstablishedTask } from "../fixture/engine-task"
 import { EngineTaskRootIngressTable } from "../../src/engine/engine.sql"
 import { acquireTaskRootIngressLease } from "../../src/engine/task-root-fact-store"
+import { dispatchCollectionWakeDecisionInTransaction } from "../../src/engine/dispatch-delivery-disposition"
 import { currentRuntimeOccurrenceID } from "../../src/runtime/process-occurrence"
 import { Database, eq } from "../../src/storage/db"
 import { requireTask } from "../../src/engine/store"
@@ -241,6 +242,8 @@ describe("Light Expert Squad package", () => {
   test.each([false, true])("settles four overlapping Light dispatches (injected fixture failure: %s)", async (failAfterStarted) => {
     await using project = await memoryProject()
     const injectedFailure = new Error("injected Light fixture failure after worker admission")
+    let processorFinishes = 0
+    const collectionAdmissionObservedFinishedCounts: number[] = []
     const ingressRunner = {
       runner: async ({ taskID, wakeID, predecessorID, activationID }) => {
         if (!wakeID || !predecessorID) throw new Error("Light lifecycle delivery lost its exact ingress identity")
@@ -288,6 +291,7 @@ describe("Light Expert Squad package", () => {
 
     let releaseWorkers: (() => void) | undefined
     let ingressRunnerLease: Disposable | undefined
+    let collectionAdmissionLease: Disposable | undefined
     let providerSpy: ReturnType<typeof spyOn> | undefined
     let processorSpy: ReturnType<typeof spyOn> | undefined
     let taskID = ""
@@ -357,6 +361,9 @@ describe("Light Expert Squad package", () => {
               packageRevisionSHA256: packageRevision.packageDigest,
               timeCreated: now,
             }),
+          })
+          collectionAdmissionLease = IngressTestHooks.replaceBeforeTerminalLifecycleDelivery((input) => {
+            if (input.taskID === taskID) collectionAdmissionObservedFinishedCounts.push(processorFinishes)
           })
           const creatorIngress = Database.use((db) => db.select().from(EngineTaskRootIngressTable)
             .where(eq(EngineTaskRootIngressTable.task_id, taskID)).get())
@@ -445,7 +452,6 @@ describe("Light Expert Squad package", () => {
           })
 
           let processorStarts = 0
-          let processorFinishes = 0
           const workerToolBudgets = new Map<string, ReturnType<typeof SessionLoop.estimateToolPayload>>()
           let resolveAllStarted!: () => void
           let resolveAllFinished!: () => void
@@ -793,6 +799,37 @@ describe("Light Expert Squad package", () => {
           await requireWithin(allFinished, "four completed Light worker processors")
           await requireWithin(waitForDetachedDispatchPipelinesForTest(), "detached Light dispatch pipelines")
           await requireWithin(waitForIngressDeliveryHooksForTest(), "Light lifecycle ingress deliveries")
+          const collectionDecisions = Database.use((db) =>
+            lineages.map((lineage) =>
+              dispatchCollectionWakeDecisionInTransaction(db, {
+                taskID,
+                sessionID: lineage.payload.child_session_id,
+                dispatchID: lineage.dispatchID,
+              }),
+            ),
+          )
+          expect(
+            collectionDecisions.map((decision) =>
+              decision.kind === "ready"
+                ? { kind: decision.kind, delivered: decision.delivered, source: decision.source.kind }
+                : { kind: decision.kind },
+            ),
+          ).toEqual(targets.map(() => ({ kind: "ready", delivered: true, source: "protocol_event" })))
+          expect(collectionAdmissionObservedFinishedCounts).toEqual([4])
+          const collectionSourceIDs = new Set(
+            collectionDecisions.flatMap((decision) => (decision.kind === "ready" ? [decision.source.sourceID] : [])),
+          )
+          expect(collectionSourceIDs.size).toBe(1)
+          expect(
+            Database.use((db) =>
+              db
+                .select({ source: EngineTaskRootIngressTable.source, sourceID: EngineTaskRootIngressTable.source_id })
+                .from(EngineTaskRootIngressTable)
+                .where(eq(EngineTaskRootIngressTable.task_id, taskID))
+                .all()
+                .filter((ingress) => collectionSourceIDs.has(ingress.sourceID)),
+            ),
+          ).toEqual([{ source: "protocol_event", sourceID: [...collectionSourceIDs][0] }])
           const settled = await describeTask(taskID)
           const projected = renderTaskProjectionContext(runningProjection.baseline, settled)
           expect(applyTaskProjectionDelta(JSON.parse(projected.parts[0]!), projected.parts[1]!)).toEqual(
@@ -859,6 +896,7 @@ describe("Light Expert Squad package", () => {
       await waitForDetachedDispatchPipelinesForTest().catch(() => undefined)
       await waitForIngressDeliveryHooksForTest().catch(() => undefined)
       ingressRunnerLease?.[Symbol.dispose]()
+      collectionAdmissionLease?.[Symbol.dispose]()
       processorSpy?.mockRestore()
       providerSpy?.mockRestore()
     }

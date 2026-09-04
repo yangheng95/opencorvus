@@ -201,6 +201,14 @@ delivery disposition、settlement ingress 与 terminal lifecycle ingress 只消�
 descriptor，并通过 bounded `VALUES` request 与 correlated `EXISTS` 返回每个 request 至多一行。
 不能把独立 Task ID 集合和 dispatch ID 集合做笛卡尔候选，也不能让重复 ingress fact 放大立即事务内
 的读取量。lifecycle membership 还必须匹配 descriptor 的 exact child Session。
+`dispatch_agents` member 的恢复还会按同一 Task/epoch/orchestrator Message/Tool part/call
+读取 declared member set。没有 lineage 的 index 只能由 exact outer Tool request append-only progress
+中的 typed failed checkpoint，或明确带 `occurrence_not_committed` authority 的 completed infrastructure
+outcome 终结；一旦 lineage 已存在，该 member 必须有 immutable settlement，且只有带
+`occurrence_committed` authority 的 infrastructure settlement 可以在 descriptor 前终结。其余 index
+必须由 exact lineage/descriptor/settlement 终结。只有完整 set 才能导出一个
+确定性 representative ingress；该 ingress 或其 budget-suppressed disposition 一旦存在，整个 set 都从
+recovery frontier 消失，而不是继续按 member 重放 scheduler Turn。
 
 TaskArtifact 的 Engine envelope 与 exact resource identity 进入 SQLite，当前不可变
 manifest 和资源字节则由 TaskArtifactStore 发布。资源完整性错误必须由 exact

@@ -69,7 +69,7 @@ export class TaskDispatchSettlementPendingError extends Error {
   }
 }
 
-function parsePayload(value: unknown, _artifactID: string): DispatchSettlementPayload {
+export function parseDispatchSettlementPayload(value: unknown, _artifactID: string): DispatchSettlementPayload {
   const parsed = DispatchSettlementPayloadSchema.parse(value)
   return parsed as DispatchSettlementPayload
 }
@@ -103,7 +103,7 @@ export function assertTaskDispatchesSettledInTransaction(db: Database.TxOrDb, ta
       .from(EngineArtifactTable)
       .where(and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.kind, "dispatch_settlement")))
       .all()
-      .map((row) => parsePayload(row.payload, taskID).dispatch_id),
+      .map((row) => parseDispatchSettlementPayload(row.payload, taskID).dispatch_id),
   )
   const unsettled = lineages.filter((lineage) => !settledDispatchIDs.has(lineage.dispatchID))
   if (unsettled.length > 0) throw new TaskDispatchSettlementPendingError(taskID, unsettled)
@@ -125,7 +125,7 @@ export function findDispatchSettlementByDispatchID(input: {
         ),
       )
       .get()
-    return row ? { artifactID: row.id, payload: parsePayload(row.payload, row.id) } : undefined
+    return row ? { artifactID: row.id, payload: parseDispatchSettlementPayload(row.payload, row.id) } : undefined
   })
 }
 
@@ -146,7 +146,7 @@ export function recordDispatchSettlement(input: {
     throw new Error(`Dispatch ${input.dispatchID} coordination outcome lineage identity drift`)
   }
   const now = input.now ?? Date.now()
-  const payload = parsePayload(
+  const payload = parseDispatchSettlementPayload(
     {
       task_id: input.taskID,
       dispatch_lineage_id: lineage.artifactID,
@@ -170,7 +170,7 @@ export function recordDispatchSettlement(input: {
       )
       .get()
     if (row) {
-      const existing = parsePayload(row.payload, row.id)
+      const existing = parseDispatchSettlementPayload(row.payload, row.id)
       if (!isDeepStrictEqual(existing.outcome, payload.outcome)) {
         throw new Error(`Dispatch ${input.dispatchID} durable settlement outcome drift`)
       }

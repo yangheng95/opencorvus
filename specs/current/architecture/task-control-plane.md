@@ -326,6 +326,27 @@ Worker completion is delivered by the dispatching runtime's own in-process owner
 
 The same scan closes the opposite gap. A dispatch is settled before its outcome is handed to the Orchestrator, so a failure in between leaves a settled lineage — invisible to abandonment recovery, which looks for unsettled work — that woke nothing. Every ingress reduces to `resolved`, no timer is owed, and the Task rests permanently behind a database that looks healthy. A settled lineage with no ingress carrying its outcome is therefore replayed, keyed to the settlement artifact so the replay collapses through the ingress source index.
 
+`dispatch_agents` completion is reduced at the collection boundary rather than
+delivered once per member. The exact Task epoch, orchestrator Message, Tool
+part/call and member count in every immutable lineage identify the collection.
+An index with no lineage is terminal only when the exact outer Tool request's
+append-only progress contains a typed failed checkpoint or a completed
+infrastructure outcome whose authority says `occurrence_not_committed`. Once a
+lineage exists, outer wrapper status cannot replace the occurrence: its immutable
+settlement is required, and only an `occurrence_committed` infrastructure
+settlement may terminalize the member before its Worker Turn descriptor. Every
+other declared index requires matching lineage, descriptor and settlement. The representative
+source is deterministic among admitted, settled workers: the lowest-index
+infrastructure failure when one exists, otherwise the lowest-index terminal
+lifecycle (or its settlement when recovery proves no lifecycle projection).
+Any member callback or restart scan can admit that same source, but the
+immediate admission transaction accepts it only once. An accepted ingress or
+the representative's budget-suppressed disposition excludes all sibling
+lineages from later recovery. Participant Messages, lifecycle events,
+settlements and typed pre-lineage outer-member failures remain individually visible; only
+redundant root scheduler Turns are removed. A direct `dispatch_agent` retains
+its one-dispatch/one-wake contract.
+
 **Owner liveness is durable, never process-local or Project-owned.** Deciding that a worker is abandoned destroys live work if it is wrong, and two backends may share one database, where each sees an empty local registry for every dispatch the other owns. Each runtime process therefore owns exactly one fenced `runtime_process` lease even when it serves several Projects: the first Task-control driver acquires the process receipt, later Project drivers join the same in-process reference owner, intermediate Project disposal leaves it live, and only the final reference publishes graceful expiry. Physical acquire, renewal, assertion and release use the canonical control-lease primitive. Renewal or assertion fence loss is absorbing for that process owner; explicit requests, queued scan passes, activation admission and dispatch-lineage admission refuse new work instead of reacquiring an occurrence that peers may already have treated as dead. Each current lineage commits the exact process occurrence that owes its delivery and asserts that occurrence's lease inside the same writer transaction; "the owner is gone" means that exact occurrence lease has expired. Local registries remain a fast path for this process's own lineages, where memory is authoritative. Current lineage rows require their exact delivery owner; ownerless predecessor rows belong to another database epoch. Recovery never infers owner liveness from commit time.
 
 ### Wake totality
@@ -352,6 +373,14 @@ The budget binds every path back in, not just the original wake. A settlement re
 A boundary request that fails midway leaves the Task in `cancelling`, a status no fact append can leave. Convergence is therefore re-attempted by the scan on every pass over such a Task, with a finite wake until it settles; running it only at project bootstrap made a restart the sole escape. Ownership of that convergence is bounded in the same spirit: the durable lease guarantees some process eventually acquires, so waiting forever only hides a stuck owner.
 
 The completion closure is committed before the terminal transaction runs, and that transaction can refuse — an unsettled dispatch is the common case. The closure is released on refusal. Otherwise the Task rejects every completion for the full lease while the model retries into that window, and the conflict and the retry feed each other.
+
+Fresh-worker authority starts from the write-ahead lineage claimed before child
+Session creation. The later user Message and Worker Turn descriptor transaction
+therefore sees that exact lineage at descriptor insertion, as required by the
+current-DDL foreign-authority trigger. Its synchronous post-insert callback
+materializes the descriptor-backed workflow occurrence and consumes the
+admission lease before the same transaction commits; it does not create a
+second lineage.
 
 The reduction accepts one assistant turn's decision set only when it is a sibling `dispatch_agent` fan-out or one single decision. `dispatch_agents` is one such single decision: its real persisted Tool request owns the complete member array, and each immutable lineage binds that request plus exact member index/count rather than a fabricated child Tool occurrence. Initial direct and collection-member lineages atomically insert that write-ahead request and acquire its fenced `dispatch_admission` owner before any child Session, worktree or Provider effect, using the deterministic child Session identity derived from the dispatch. Coordination continuations use the same admission before reopening their existing Session. A concurrent claimant waits for the exact descriptor or terminal settlement; after an expired owner it may take over the same occurrence, but a lineage by itself never returns `accepted`. The owner renews the lease while preparation runs; exact fence loss aborts the combined per-dispatch signal consumed by every physical adapter, and the stale executor cannot publish descriptor or workflow authority under the successor's lease. Descriptor persistence, workflow projection and lease consumption commit together. Lease consumption retains the latest `dispatch_admission` attempt row as the descriptor-backed lineage's delivery-owner transfer receipt; peer recovery checks that latest attempt's process owner even after its preparation lease is consumed, while the immutable runtime-process lineage owner remains the write-ahead owner fact before descriptor acceptance. No predecessor owner variant is accepted in the current database epoch. For a virtual workflow, the claim reserves the initial node occurrence first; its workflow-node projection is materialized only after that exact child Session is durable, so neither the Session foreign key nor the single-effect boundary is weakened. Each collection member disposition is also appended to the outer Tool request's canonical progress facts before the aggregate completes; recovery merges all immutable member checkpoints and never reruns a settled member. Anything mixed is `host_fault/decision_ambiguous` — fail-closed for that ingress, never a guess at which decision was meant. Because a model can emit that combination in ordinary output, the turn coordinator refuses the second, different decision while it is still only a call. A refused call leaves no completed receipt, so the model may still commit a different decision; once a valid collection starts, typed member failures settle inside that collection and cannot release or erase the occurrence. The fault verdict survives as the backstop rather than the mechanism.
 

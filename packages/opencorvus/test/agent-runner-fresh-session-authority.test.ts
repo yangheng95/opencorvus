@@ -1,7 +1,11 @@
 import { afterEach, expect, spyOn, test } from "bun:test"
 import { DelegatedWorkerAgent } from "@/delegated-worker/agent"
 import { DispatchAdapterContractRegistry, type AgentDispatchAdapterID } from "@/agent/dispatch-adapter-contract"
-import { createDispatchLineageOrigin, listDispatchLineage } from "@/engine/dispatch-lineage"
+import {
+  commitDispatchLineageSession,
+  createDispatchLineageOrigin,
+  listDispatchLineage,
+} from "@/engine/dispatch-lineage"
 import { recordTestDispatchLineage } from "./fixture/dispatch-lineage"
 import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import {
@@ -182,6 +186,7 @@ test("fresh delegated worker commits Session, input authority, lineage, and occu
       })
 
       const dispatchID = Identifier.ascending("artifact")
+      const freshSessionID = Identifier.deterministic("session", `fresh-runner-authority\0${dispatchID}`)
       const turn = {
         kind: "initial" as const,
         current_dispatch_id: dispatchID,
@@ -212,6 +217,7 @@ test("fresh delegated worker commits Session, input authority, lineage, and occu
         workflowOccurrenceID: dispatchID,
         adapterInput: { instruction: taskRequest },
       })
+      const lineage = recordTestDispatchLineage({ origin, childSessionID: freshSessionID })
 
       let processorStarts = 0
       let firstAssistantMessageID: string | undefined
@@ -253,6 +259,7 @@ test("fresh delegated worker commits Session, input authority, lineage, and occu
           packageRevision,
           instruction: taskRequest,
           sessionTitle: "Planner",
+          newSessionID: freshSessionID,
           taskID,
           workScope: { kind: "task" },
           parentSessionID: root.id,
@@ -260,7 +267,8 @@ test("fresh delegated worker commits Session, input authority, lineage, and occu
           model,
           onDispatchAuthorityCommit(sessionID, descriptor) {
             expect(WorkerTurnDescriptor.get({ id: descriptor.id, sessionID })).toEqual(descriptor)
-            lineageArtifactID = recordTestDispatchLineage({ origin, childSessionID: sessionID }).artifactID
+            commitDispatchLineageSession(lineage)
+            lineageArtifactID = lineage.artifactID
           },
           async onSessionCreated(sessionID) {
             committedSessionID = sessionID
@@ -363,7 +371,7 @@ test("fresh delegated worker commits Session, input authority, lineage, and occu
         })
         expect(
           await reconcileTerminalAgentLifecycleDelivery({ taskID, sessionID: committedSessionID!, dispatchID }),
-        ).toBe("delivered")
+        ).toBe("already_delivered")
         expect(
           await reconcileTerminalAgentLifecycleDelivery({ taskID, sessionID: committedSessionID!, dispatchID }),
         ).toBe("already_delivered")

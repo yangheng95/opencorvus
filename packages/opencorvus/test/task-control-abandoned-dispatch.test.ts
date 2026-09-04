@@ -13,6 +13,7 @@ import {
 } from "../src/engine/engine.sql"
 import { insertEngineArtifact } from "../src/engine/artifact"
 import {
+  dispatchCollectionWakeDecisionInTransaction,
   dispatchRecoveryCandidatesInTransaction,
   DispatchDeliveryDispositionTestHooks,
   unresolvedDispatchRecoveryPageInTransaction,
@@ -31,6 +32,7 @@ import {
 import { recordTaskInfrastructureError } from "../src/engine/persist"
 import { resolveDispatchOccurrenceAuthority } from "../src/engine/dispatch-lineage"
 import { DispatchOutcome } from "../src/agent/dispatch-outcome"
+import { writeDispatchCollectionProgress } from "../src/engine/dispatch-collection-contract"
 import { exactEngineArtifactLocator } from "../src/artifact-catalog"
 import {
   deriveEngineArtifactCatalogMetadata,
@@ -41,14 +43,17 @@ import { PromptProfileResolver } from "../src/expert-squad/prompt-profile-resolv
 import { Identifier } from "../src/id/id"
 import { BrowserMCPBuiltin } from "../src/mcp/browser/builtin"
 import { taskRequestSHA256 } from "../src/orchestrator/dispatch-turn-projection"
+import { currentOrchestratorControlMessage } from "../src/orchestrator/agent"
+import { DispatchAgentsToolTestHooks } from "../src/orchestrator/dispatch-agents-tool"
 import { Instance } from "../src/project/instance"
 import { Session } from "../src/session"
+import { toolFailureCauseFromUnknown } from "../src/session/tool-failure-cause"
 import { MessageTable, SessionTable, WorkerTurnDescriptorTable } from "../src/session/session.sql"
 import { ProjectTable } from "../src/project/project.sql"
-import { Database, and, eq, inArray } from "../src/storage/db"
+import { Database, and, desc, eq, inArray, sql } from "../src/storage/db"
 import { ProtocolStore } from "../src/protocol/store"
 import { executionLifecycleOrderKey } from "../src/session/status"
-import { acceptTaskRootIngressInTransaction } from "../src/engine/task-root-fact-store"
+import { acceptTaskRootIngressInTransaction, acquireTaskRootIngressLease } from "../src/engine/task-root-fact-store"
 import { appendTaskReopenedInTransaction } from "../src/engine/task-lifecycle"
 import { restartTaskControlProjectFrontier } from "../src/engine/task-root-ingress-disposition"
 import { acquireControlLease } from "../src/engine/control-lease"
@@ -166,6 +171,31 @@ async function commitAcceptedDispatchDescriptor(input: {
         ? prepared
         : { ...prepared, time: { created: input.timeCreated, updated: input.timeCreated } },
   })
+}
+
+function persistedDispatchCollectionInput(target: string, names: readonly string[]) {
+  return {
+    team: names.map((name, index) => ({
+      name,
+      target,
+      responsibility: `Own collection member ${index}`,
+      boundary: `Use only collection partition ${index}`,
+      expected_result: `Return collection member ${index} evidence`,
+      depends_on: [],
+    })),
+    dispatches: names.map(() => ({
+      dispatch: {
+        target,
+        work_scope: { kind: "task" },
+        turn: {
+          kind: "initial",
+          workflow_subject: { kind: "direct" },
+          use_worktree: false,
+          input: {},
+        },
+      },
+    })),
+  }
 }
 
 /**
@@ -930,6 +960,405 @@ describe("abandoned dispatch recovery", () => {
     })
   }, 60_000)
 
+  test("restarts a partially admitted collection without false abandonment and emits one failure-aware wake", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const config = Config.Info.parse({
+          prompt_profile: { active: "base" },
+          mcp: { [BrowserMCPBuiltin.ServerName]: BrowserMCPBuiltin.localConfig() },
+        })
+        const scheduler = await PromptProfileResolver.resolveSchedulerCapability({
+          projectDirectory: project.path,
+          config,
+        })
+        const worker = await PromptProfileResolver.resolveWorkerCapability({
+          projectDirectory: project.path,
+          config,
+          packageRevision: scheduler.packageRevision,
+          agentID: "base-developer",
+        })
+        const taskID = Identifier.ascending("task")
+        const root = Session.prepareRootNext({
+          kind: "root",
+          directory: Instance.directory,
+          title: "Collection terminal convergence",
+          metadata: { configOverlay: { prompt_profile: { active: scheduler.packageRevision.id } } },
+        })
+        const now = Date.now()
+        persistTask({
+          taskID,
+          rootSession: root,
+          now,
+          title: "Collection terminal convergence",
+          request: "Prove one failure-aware collection wake",
+          productPillar: "code",
+          source: "test",
+          priority: "normal",
+          metadata: { actor: "user" },
+          projectID: Instance.project.id,
+          packageRevision: scheduler.packageRevision,
+          executionCapsuleBinding: await prepareTaskProcessBinding({
+            mode: "native",
+            taskID,
+            projectID: Instance.project.id,
+            rootDirectory: Instance.directory,
+            packageRevisionSHA256: scheduler.packageRevision.packageDigest,
+            timeCreated: now,
+          }),
+        })
+        const creatorIngress = Database.use((db) =>
+          db
+            .select({ id: EngineTaskRootIngressTable.id })
+            .from(EngineTaskRootIngressTable)
+            .where(eq(EngineTaskRootIngressTable.task_id, taskID))
+            .get(),
+        )
+        if (!creatorIngress) throw new Error("Collection recovery fixture has no Task creation ingress")
+        const activation = acquireTaskRootIngressLease({
+          ingressID: creatorIngress.id,
+          ownerOccurrenceID: currentRuntimeOccurrenceID(),
+          now: now + 1,
+          leaseMilliseconds: 120_000,
+          assertControlOwnerInTransaction: () => undefined,
+        })
+        if (!activation.acquired) throw new Error("Collection recovery fixture could not acquire its creator ingress")
+        using _runner = TaskControlTestHooks.replaceTaskIngressRunner({ runner: async () => ({}) })
+        const orchestrator = await Session.create({
+          kind: "orchestrator",
+          parentID: root.id,
+          title: "Collection recovery orchestrator",
+        })
+        const control = currentOrchestratorControlMessage(
+          { taskCreation: { taskID } },
+          taskID,
+          creatorIngress.id,
+          creatorIngress.id,
+        )
+        if (!control) throw new Error("Collection recovery fixture has no canonical control Message")
+        await Session.persistMessage({
+          info: {
+            id: control.messageID,
+            sessionID: orchestrator.id,
+            role: "user",
+            author: "orchestrator",
+            extra: control.extra,
+            time: { created: now },
+            agent: "orchestrator",
+            model: { providerID: "test", modelID: "test-model" },
+          },
+          parts: [
+            {
+              id: control.partID,
+              sessionID: orchestrator.id,
+              messageID: control.messageID,
+              type: "text",
+              text: control.text,
+              kind: "control",
+              source: "system",
+            },
+          ],
+        })
+        const orchestratorMessageID = Identifier.ascending("message")
+        const toolPartID = Identifier.ascending("part")
+        const toolCallID = Identifier.ascending("call")
+        const collectionInput = persistedDispatchCollectionInput(worker.identity.agentID, [
+          "terminal-before-restart",
+          "not-committed",
+          "failed-after-lineage",
+          "terminal-error-before-restart",
+        ])
+        await Session.updateMessage({
+          id: orchestratorMessageID,
+          sessionID: orchestrator.id,
+          parentID: control.messageID,
+          activationID: activation.activationID,
+          role: "assistant",
+          author: "orchestrator",
+          time: { created: now + 1 },
+          agent: "orchestrator",
+          providerID: "test",
+          modelID: "test-model",
+          path: { cwd: Instance.directory, root: Instance.directory },
+          cost: 0,
+          tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+        })
+        await Session.updatePart({
+          id: toolPartID,
+          sessionID: orchestrator.id,
+          messageID: orchestratorMessageID,
+          type: "tool",
+          callID: toolCallID,
+          tool: "dispatch_agents",
+          state: { status: "running", input: collectionInput, time: { start: now + 1 } },
+        })
+        await Session.appendToolProgress({
+          sessionID: orchestrator.id,
+          messageID: orchestratorMessageID,
+          partID: toolPartID,
+          title: "Settled frontier (2/4)",
+          metadata: writeDispatchCollectionProgress(undefined, [
+            {
+              member_index: 1,
+              name: "not-committed",
+              target: worker.identity.agentID,
+              status: "completed",
+              outcome: DispatchOutcome.infrastructureFailure({
+                operation: "reserve-dispatch-occurrence",
+                message: "injected occurrence conflict before lineage",
+                errorName: "WorkflowNodeOccurrenceConflictError",
+                recoveryAuthority: { occurrence_status: "occurrence_not_committed" },
+              }),
+            },
+            {
+              member_index: 2,
+              name: "failed-after-lineage",
+              target: worker.identity.agentID,
+              status: "failed",
+              failure: toolFailureCauseFromUnknown({
+                error: new Error("injected failure before Worker Turn descriptor creation"),
+                originSite: "orchestrator.dispatch-agents.member",
+                classification: "tool-execution",
+                kind: "tool-execute-error",
+                data: { outerToolPartID: toolPartID, memberIndex: 2, target: worker.identity.agentID },
+              }),
+            },
+          ]),
+        })
+        const workflowBinding = selectedWorkflowBinding({
+          projection: {
+            packageRevision: scheduler.packageRevision,
+            virtualWorkflows: scheduler.virtualWorkflows,
+          },
+          workflowID: null,
+        })
+        const members = [] as Array<{
+          childSessionID: string
+          dispatchID: string
+          inputMessageID: string
+        }>
+        for (const memberIndex of [0, 2, 3]) {
+          const child = await Session.create({
+            kind: worker.identity.sessionKind,
+            parentID: orchestrator.id,
+            title: `Collection member ${memberIndex}`,
+          })
+          const origin = createDispatchLineageOrigin({
+            taskID,
+            orchestratorSessionID: orchestrator.id,
+            orchestratorMessageID,
+            toolPartID,
+            toolCallID,
+            toolName: "dispatch_agents",
+            collectionMemberIndex: memberIndex,
+            collectionMemberCount: 4,
+            targetAgentID: worker.identity.agentID,
+            projectedWorkerIdentity: worker.identity,
+            workScope: { kind: "task" },
+            workflowBinding,
+            workflowNodeID: null,
+            adapterInput: {},
+          })
+          recordTestDispatchLineage({ origin, childSessionID: child.id })
+          const descriptor =
+            memberIndex === 2
+              ? undefined
+              : await commitAcceptedDispatchDescriptor({
+                  taskID,
+                  childSessionID: child.id,
+                  dispatchID: origin.dispatchID,
+                  worker,
+                  scheduler,
+                  workflowBinding,
+                })
+          members.push({
+            childSessionID: child.id,
+            dispatchID: origin.dispatchID,
+            inputMessageID: descriptor?.payload.messageAuthority.user_message_id ?? "",
+          })
+        }
+        const failedAfterLineage = members[1]!
+        expect(
+          Database.use((db) =>
+            dispatchCollectionWakeDecisionInTransaction(db, {
+              taskID,
+              sessionID: failedAfterLineage.childSessionID,
+              dispatchID: failedAfterLineage.dispatchID,
+            }),
+          ),
+        ).toEqual({ kind: "pending" })
+        expect(
+          DispatchAgentsToolTestHooks.settleCommittedMemberExecutionFailure({
+            outer: {
+              orchestratorSessionID: orchestrator.id,
+              orchestratorMessageID,
+              toolCallID,
+              toolPartID,
+              visibleToolName: "dispatch_agents",
+            },
+            member: {
+              index: 2,
+              name: "failed-after-lineage",
+              target: worker.identity.agentID,
+            },
+            memberCount: 4,
+            error: new Error("injected failure after lineage and before descriptor"),
+          }),
+        ).toMatchObject({
+          kind: "infrastructure_failure",
+          recovery_authority: { occurrence_status: "occurrence_committed" },
+        })
+        const first = members[0]!
+        if (!first.inputMessageID) throw new Error("Terminal collection member has no input Message")
+        const firstFinal = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: first.childSessionID,
+          role: "assistant",
+          author: worker.identity.agentID,
+          parentID: first.inputMessageID,
+          time: { created: now + 10, completed: now + 11 },
+          agent: worker.identity.agentID,
+          providerID: "test",
+          modelID: "test-model",
+          path: { cwd: Instance.directory, root: Instance.directory },
+          cost: 0,
+          tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+          finish: "stop",
+        })
+        const firstLifecycle = await ProtocolStore.appendEvent({
+          kind: "event",
+          type: "agent.execution.lifecycle",
+          aggregate: "task",
+          aggregate_id: taskID,
+          task_id: null,
+          session_id: first.childSessionID,
+          source: "test.collection-terminal",
+          order_key: executionLifecycleOrderKey(first.childSessionID, first.inputMessageID),
+          payload: {
+            inputMessageID: first.inputMessageID,
+            status: { type: "terminal", reason: "completed", final_message_id: firstFinal.id },
+          },
+        })
+        expect(
+          Database.use((db) =>
+            dispatchCollectionWakeDecisionInTransaction(db, {
+              taskID,
+              sessionID: first.childSessionID,
+              dispatchID: first.dispatchID,
+            }),
+          ),
+        ).toEqual({ kind: "pending" })
+        expect(
+          Database.use((db) =>
+            db
+              .select({ id: EngineTaskRootIngressTable.id })
+              .from(EngineTaskRootIngressTable)
+              .where(
+                and(
+                  eq(EngineTaskRootIngressTable.task_id, taskID),
+                  eq(EngineTaskRootIngressTable.source, "protocol_event"),
+                  eq(EngineTaskRootIngressTable.source_id, firstLifecycle.id),
+                ),
+              )
+              .all(),
+          ),
+        ).toEqual([])
+
+        const second = members[2]!
+        if (!second.inputMessageID) throw new Error("Terminal error collection member has no input Message")
+        const secondLifecycle = await ProtocolStore.appendEvent({
+          kind: "event",
+          type: "agent.execution.lifecycle",
+          aggregate: "task",
+          aggregate_id: taskID,
+          task_id: null,
+          session_id: second.childSessionID,
+          source: "test.collection-terminal",
+          order_key: executionLifecycleOrderKey(second.childSessionID, second.inputMessageID),
+          payload: {
+            inputMessageID: second.inputMessageID,
+            status: { type: "terminal", reason: "error", error: "injected collection member failure" },
+          },
+        })
+        expect(secondLifecycle.payload).toMatchObject({ status: { type: "terminal", reason: "error" } })
+        expect(await TaskControlTestHooks.reconcileAbandonedDispatches(taskID)).toMatchObject({
+          recovered: 1,
+          hasMore: false,
+          retryRequired: false,
+        })
+        expect(
+          members.map((member) =>
+            findDispatchSettlementByDispatchID({ taskID, dispatchID: member.dispatchID })?.payload.outcome.kind,
+          ),
+        ).toEqual(["partial", "infrastructure_failure", "infrastructure_failure"])
+        expect(
+          Database.use((db) =>
+            db
+              .select({ payload: EngineArtifactTable.payload })
+              .from(EngineArtifactTable)
+              .where(
+                and(
+                  eq(EngineArtifactTable.task_id, taskID),
+                  eq(EngineArtifactTable.kind, "task-infrastructure-error"),
+                  eq(sql`json_extract(${EngineArtifactTable.payload}, '$.errorName')`, "AbandonedDispatchError"),
+                ),
+              )
+              .all(),
+          ),
+        ).toEqual([])
+        const decisions = Database.use((db) =>
+          members.map((member) =>
+            dispatchCollectionWakeDecisionInTransaction(db, {
+              taskID,
+              sessionID: member.childSessionID,
+              dispatchID: member.dispatchID,
+            }),
+          ),
+        )
+        expect(
+          decisions.map((decision) =>
+            decision.kind === "ready"
+              ? { kind: decision.kind, delivered: decision.delivered, source: decision.source.kind }
+              : { kind: decision.kind },
+          ),
+        ).toEqual([
+          { kind: "ready", delivered: true, source: "engine_artifact" },
+          { kind: "ready", delivered: true, source: "engine_artifact" },
+          { kind: "ready", delivered: true, source: "engine_artifact" },
+        ])
+        const sourceIDs = new Set(
+          decisions.flatMap((decision) => (decision.kind === "ready" ? [decision.source.sourceID] : [])),
+        )
+        expect(sourceIDs.size).toBe(1)
+        expect(
+          Database.use((db) =>
+            db
+              .select({ source: EngineTaskRootIngressTable.source, sourceID: EngineTaskRootIngressTable.source_id })
+              .from(EngineTaskRootIngressTable)
+              .where(eq(EngineTaskRootIngressTable.task_id, taskID))
+              .all()
+              .filter((ingress) => sourceIDs.has(ingress.sourceID)),
+          ),
+        ).toEqual([{ source: "engine_artifact", sourceID: [...sourceIDs][0] }])
+        expect(
+          await reconcileTerminalAgentLifecycleDelivery({
+            taskID,
+            sessionID: first.childSessionID,
+            dispatchID: first.dispatchID,
+          }),
+        ).toBe("already_delivered")
+        expect(
+          Database.use((db) =>
+            unresolvedDispatchRecoveryPageInTransaction(db, { taskID, limit: 64 }).lineages.filter((lineage) =>
+              members.some((member) => member.dispatchID === lineage.dispatchID),
+            ),
+          ),
+        ).toEqual([])
+      },
+    })
+  }, 60_000)
+
   test("keeps an epoch-one settlement out after terminalization and reopen", async () => {
     await using project = await memoryProject()
     await Instance.provide({
@@ -1256,6 +1685,8 @@ describe("abandoned dispatch recovery", () => {
             deliveryPlanText.settlementDeliveries.includes("engine_dispatch_settlement_dispatch_id_idx"),
             deliveryPlanText.settlementDeliveries.includes("engine_task_root_ingress_source_idx"),
             deliveryPlanText.lifecycleDeliveries.includes("worker_turn_descriptor_dispatch_idx"),
+            deliveryPlanText.collectionDeliveries.includes("engine_dispatch_lineage_dispatch_id_idx"),
+            deliveryPlanText.collectionDeliveries.includes("engine_task_root_ingress_source_idx"),
           ],
         }).toEqual({
           boundedCandidates: 0,
@@ -1264,6 +1695,7 @@ describe("abandoned dispatch recovery", () => {
             { stage: "dispositions", rowCount: 0 },
             { stage: "settlement-deliveries", rowCount: 0 },
             { stage: "lifecycle-deliveries", rowCount: 0 },
+            { stage: "collection-deliveries", rowCount: 0 },
             { stage: "execution-occurrences", rowCount: 1 },
           ],
           occurrenceFacts: [
@@ -1271,7 +1703,7 @@ describe("abandoned dispatch recovery", () => {
           ],
           taskLocalDue: 0,
           projectDue: false,
-          indexed: [true, true, true, true, true, true, true],
+          indexed: [true, true, true, true, true, true, true, true, true],
         })
         Database.immediateTransaction((db) =>
           db.delete(EngineTaskTable).where(eq(EngineTaskTable.id, taskID)).run(),
@@ -1716,7 +2148,7 @@ describe("abandoned dispatch recovery", () => {
     })
   }, 45_000)
 
-  test("a spent infrastructure budget silences the recovery sweep too", async () => {
+  test("one spent-budget disposition silences every member of the recovered collection", async () => {
     await using project = await memoryProject()
 
     await Instance.provide({
@@ -1768,6 +2200,7 @@ describe("abandoned dispatch recovery", () => {
         using _runner = TaskControlTestHooks.replaceTaskIngressRunner({ runner: async () => ({}) })
 
         // Spend the whole epoch budget on unrelated failures.
+        let lastFillerEvent: Parameters<typeof currentOrchestratorControlMessage>[0] | undefined
         for (let attempt = 0; attempt < TASK_EPOCH_INFRASTRUCTURE_INGRESS_BUDGET; attempt += 1) {
           const filler = await Session.create({
             kind: "delegated-worker",
@@ -1784,39 +2217,128 @@ describe("abandoned dispatch recovery", () => {
             context: { target: "base-developer", dispatchID: `filler-${attempt}` },
             now: Date.now(),
           })
-          await dispatchTaskLoop({
-            taskID,
-            event: {
-              note: `Filler worker ${attempt} failed`,
-              dispatchInfrastructureFailure: {
-                infrastructureFactID: artifactID,
-                outcome: DispatchOutcome.infrastructureFailure({
-                  operation: "recover-abandoned-dispatch",
-                  message: `Filler worker ${attempt} failed`,
-                  errorName: "AbandonedDispatchError",
-                  sessionID: filler.id,
-                  recoveryAuthority: resolveDispatchOccurrenceAuthority({ taskID, dispatchID: `filler-${attempt}` }),
-                  infrastructureError: exactEngineArtifactLocator({ taskID, artifactID }),
-                }),
-              },
+          lastFillerEvent = {
+            note: `Filler worker ${attempt} failed`,
+            dispatchInfrastructureFailure: {
+              infrastructureFactID: artifactID,
+              outcome: DispatchOutcome.infrastructureFailure({
+                operation: "recover-abandoned-dispatch",
+                message: `Filler worker ${attempt} failed`,
+                errorName: "AbandonedDispatchError",
+                sessionID: filler.id,
+                recoveryAuthority: resolveDispatchOccurrenceAuthority({ taskID, dispatchID: `filler-${attempt}` }),
+                infrastructureError: exactEngineArtifactLocator({ taskID, artifactID }),
+              }),
             },
-          })
+          }
+          await dispatchTaskLoop({ taskID, event: lastFillerEvent })
         }
+        if (!lastFillerEvent) throw new Error("Budget-silenced collection fixture has no filler event")
 
         // An abandoned dispatch settles after the budget is spent: its own
         // wake is suppressed, and the settled-undelivered recovery sweep must
         // not smuggle a replacement wake past the gate as `processRecovery`.
-        const task = requireTask(taskID)
-        const child = await Session.create({ kind: "delegated-worker", parentID: root.id, title: "Silenced worker" })
+        const orchestrator = await Session.create({
+          kind: "orchestrator",
+          parentID: root.id,
+          title: "Budget-silenced collection orchestrator",
+        })
+        const activation = Database.use((db) =>
+          db
+            .select({ id: EngineControlActivationLeaseTable.id, ingressID: EngineControlActivationLeaseTable.target_id })
+            .from(EngineControlActivationLeaseTable)
+            .innerJoin(
+              EngineTaskRootIngressTable,
+              eq(EngineTaskRootIngressTable.id, EngineControlActivationLeaseTable.target_id),
+            )
+            .where(
+              and(
+                eq(EngineControlActivationLeaseTable.target, "task_root_ingress"),
+                eq(EngineTaskRootIngressTable.task_id, taskID),
+              ),
+            )
+            .orderBy(desc(EngineControlActivationLeaseTable.time_activated), desc(EngineControlActivationLeaseTable.id))
+            .get(),
+        )
+        if (!activation) throw new Error("Budget-silenced collection fixture has no Task-root activation")
+        const control = currentOrchestratorControlMessage(
+          lastFillerEvent,
+          taskID,
+          activation.ingressID,
+          activation.ingressID,
+        )
+        if (!control) throw new Error("Budget-silenced collection fixture has no canonical control Message")
+        await Session.persistMessage({
+          info: {
+            id: control.messageID,
+            sessionID: orchestrator.id,
+            role: "user",
+            author: "orchestrator",
+            extra: control.extra,
+            time: { created: now },
+            agent: "orchestrator",
+            model: { providerID: "test", modelID: "test-model" },
+          },
+          parts: [
+            {
+              id: control.partID,
+              sessionID: orchestrator.id,
+              messageID: control.messageID,
+              type: "text",
+              text: control.text,
+              kind: "control",
+              source: "system",
+            },
+          ],
+        })
+        const orchestratorMessageID = Identifier.ascending("message")
+        const toolPartID = Identifier.ascending("part")
+        const toolCallID = Identifier.ascending("call")
+        const collectionInput = persistedDispatchCollectionInput(worker.identity.agentID, [
+          "silenced-worker-0",
+          "silenced-worker-1",
+        ])
+        await Session.updateMessage({
+          id: orchestratorMessageID,
+          sessionID: orchestrator.id,
+          parentID: control.messageID,
+          activationID: activation.id,
+          role: "assistant",
+          author: "orchestrator",
+          time: { created: now + 1 },
+          agent: "orchestrator",
+          providerID: "test",
+          modelID: "test-model",
+          path: { cwd: Instance.directory, root: Instance.directory },
+          cost: 0,
+          tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+        })
+        await Session.updatePart({
+          id: toolPartID,
+          sessionID: orchestrator.id,
+          messageID: orchestratorMessageID,
+          type: "tool",
+          callID: toolCallID,
+          tool: "dispatch_agents",
+          state: { status: "running", input: collectionInput, time: { start: now + 1 } },
+        })
+        const child = await Session.create({
+          kind: "delegated-worker",
+          parentID: orchestrator.id,
+          title: "Silenced worker 0",
+        })
         const dispatchID = Identifier.ascending("artifact")
         const lineage = recordTestDispatchLineage({
           origin: createDispatchLineageOrigin({
             dispatchID,
             taskID,
-            orchestratorSessionID: task.session_id!,
-            orchestratorMessageID: Identifier.ascending("message"),
-            toolPartID: Identifier.ascending("part"),
-            toolCallID: Identifier.ascending("call"),
+            orchestratorSessionID: orchestrator.id,
+            orchestratorMessageID,
+            toolPartID,
+            toolCallID,
+            toolName: "dispatch_agents",
+            collectionMemberIndex: 0,
+            collectionMemberCount: 2,
             targetAgentID: worker.identity.agentID,
             projectedWorkerIdentity: worker.identity,
             workScope: { kind: "task" },
@@ -1841,6 +2363,41 @@ describe("abandoned dispatch recovery", () => {
           scheduler,
           workflowBinding: lineage.payload.workflow_binding,
         })
+        const sibling = await Session.create({
+          kind: "delegated-worker",
+          parentID: orchestrator.id,
+          title: "Silenced worker 1",
+        })
+        const siblingDispatchID = Identifier.ascending("artifact")
+        const siblingLineage = recordTestDispatchLineage({
+          origin: createDispatchLineageOrigin({
+            dispatchID: siblingDispatchID,
+            taskID,
+            orchestratorSessionID: orchestrator.id,
+            orchestratorMessageID,
+            toolPartID,
+            toolCallID,
+            toolName: "dispatch_agents",
+            collectionMemberIndex: 1,
+            collectionMemberCount: 2,
+            targetAgentID: worker.identity.agentID,
+            projectedWorkerIdentity: worker.identity,
+            workScope: { kind: "task" },
+            workflowBinding: lineage.payload.workflow_binding,
+            workflowNodeID: null,
+            adapterInput: {},
+          }),
+          childSessionID: sibling.id,
+          ownerProcessOccurrenceID: "runtime:vanished-owner",
+        })
+        await commitAcceptedDispatchDescriptor({
+          taskID,
+          childSessionID: sibling.id,
+          dispatchID: siblingDispatchID,
+          worker,
+          scheduler,
+          workflowBinding: siblingLineage.payload.workflow_binding,
+        })
 
         const ingressCount = () =>
           Database.use(
@@ -1855,6 +2412,8 @@ describe("abandoned dispatch recovery", () => {
         await reconcileTaskControlPlane(taskID)
         const afterSettlement = {
           settled: findDispatchSettlementByDispatchID({ taskID, dispatchID })?.payload.outcome.kind,
+          siblingSettled: findDispatchSettlementByDispatchID({ taskID, dispatchID: siblingDispatchID })?.payload
+            .outcome.kind,
           ingresses: ingressCount(),
           dispositions: Database.use((db) =>
             db
@@ -2215,6 +2774,7 @@ describe("abandoned dispatch recovery", () => {
           ingressesAfterSweeps: ingressCount(),
         }).toMatchObject({
           settled: "infrastructure_failure",
+          siblingSettled: "infrastructure_failure",
           // Creation ingress + the budgeted failures; the silenced dispatch
           // minted nothing, then and later.
           ingresses: 1 + TASK_EPOCH_INFRASTRUCTURE_INGRESS_BUDGET,

@@ -3880,3 +3880,152 @@ Then run focused checker contracts, explicit script typechecking, docs/diff
 checks and independent review; commit/push the scoped correction and perform
 the final cache-reusing real Provider run after the remaining diagnostic work
 is settled. Prior successful chain evidence is not discarded.
+
+### 2026-09-05 Light collection lifecycle wake convergence Recall
+
+User requirement: finish the scheduling remediation without discarding valid
+evidence, delaying unrelated agents, reinstalling dependencies, or changing the
+public version beyond three numeric components. The approved release identity
+is `0.0.59-beta`. Before release, the real Light consulting acceptance must meet
+its existing correctness, concurrency, Tool-error, cleanup, latency and token
+budgets on the exact reviewed source.
+
+Current evidence: the exact `94e135262851592851ebd52adfdd10d0a4ad05fb`
+rerun reused 236 dependency links and the existing native helper; it performed
+zero installs, downloads or builds. The two-investigator case passed both the
+runner and manual source-grounding review. The four-member case produced the
+correct exact answer, four source reads, four physically overlapping workers,
+zero Tool errors and zero cleanup failures, but failed the scheduler budget:
+158,364 ms, 583,373 total tokens and 396,890 Orchestrator tokens.
+
+The four member terminal facts were emitted within roughly 4.8 seconds. The
+first three each opened a separate Orchestrator control Turn containing
+`capability_search` followed by `no_action`; the fourth opened the useful Turn
+that read all four reports and completed the Task. There were 15 Orchestrator
+Provider calls. This establishes a control-plane wake amplification defect, not
+a worker-concurrency, source-grounding, package-installation or cache defect.
+Each participant terminal Message and lifecycle fact remains valid audit data.
+
+Horizontal source audit covers all production entrances that can terminalize a
+member: normal lifecycle completion, typed infrastructure failure, detached
+delivery recovery, abandoned-owner settlement and process restart. The durable
+`dispatch_lineage` already gives every `dispatch_agents` member the same exact
+Task, execution epoch, orchestrator Message, Tool part/call and member count;
+`dispatch_settlement` is the one terminal outcome fact. The current callback
+instead admits one Task-root ingress per member. Existing single-dispatch
+behavior, infrastructure retry budgets, multi-Project isolation and visible
+participant facts must remain unchanged.
+
+The affected direct-dispatch test also exposed a stale fixture in this same
+authority bundle. Current DDL correctly requires the write-ahead lineage before
+a Worker Turn descriptor insert, and production claims that lineage before
+creating the child Session. The fixture instead tried to create the lineage in
+the descriptor's post-insert callback, so it failed the real trigger before
+Provider processing. The positive fixture now preclaims the deterministic
+child Session lineage and uses the callback only for its production purpose:
+descriptor-backed workflow materialization and admission consumption in the
+same transaction.
+
+Implementation contract: reduce one collection readiness decision from its
+immutable lineages, descriptors and settlements inside the same immediate
+transaction that admits the wake. A collection is ready only when every exact
+index in its declared count has one matching lineage, descriptor and terminal
+settlement, or the exact outer Tool progress proves that member failed before
+worker authority completed. Its deterministic representative source is derived
+from the admitted worker facts, so any final callback or recovery scan converges on the same one ingress;
+the representative ingress also excludes every sibling from future recovery.
+No timer debounce, latest-guess, hidden Message, synthetic participant output,
+fallback protocol, delivery-status table or host-side workflow choice is
+allowed. Incomplete collections remain pending; malformed or ambiguous
+collection identity fails closed. Direct dispatch remains one-dispatch/one-wake.
+
+Positive verification will prove: arbitrary completion order yields zero wake
+before collection readiness and exactly one wake afterward; replay and a
+concurrent recovery scan preserve that exact ingress; terminal failure still
+settles the member and joins the same collection boundary; a direct dispatch
+retains its current delivery contract; and separate Tasks/Projects do not share
+readiness. The real four-member Light case will then be rerun once from an exact
+reviewed archive with the same Luna model and existing caches. Independent
+implementation feedback for this subsection: none yet; a fresh uninvolved
+read-only review is mandatory after the final diff and evidence are frozen.
+
+Implementation checkpoint: the collection reducer now derives readiness and
+the deterministic representative from exact immutable lineage, Worker Turn
+descriptor, settlement and terminal lifecycle facts. Normal completion,
+infrastructure settlement, detached recovery and abandoned-owner recovery all
+enter that reducer. The paged recovery classifier uses one bounded SQL stage to
+exclude every sibling after the canonical collection ingress; the immediate
+admission transaction revalidates the full collection and representative source.
+No timer, new status table, parallel parser, hidden participant fact or alternate
+direct-dispatch path was introduced.
+
+The affected positive matrix completed 9/9 tests with 256 assertions. It covers
+four physically overlapping Light members, arbitrary completion order, a mixed
+success/infrastructure-failure collection, exact single-ingress replay, recovery
+page exclusion and the pre-existing direct-dispatch recovery contracts. The
+fresh Session authority contract completed 1/1 with 18 assertions. Real OS
+process claim/takeover and cross-process recovery completed 10/10 with 37
+assertions. OpenCorvus package typecheck and root typecheck completed successfully
+(8/8 workspace tasks, seven cache hits). Repository checks completed with docs
+339/25, routes 6/34, architecture index 16, package topology 10, control leases
+18 owners/22 acquire sites, control-state redundancy 53 tables/7 fact classes and
+release mutation topology 5 authorities. Dependency installation, download,
+native compilation and package build count remain zero.
+
+The first independent exact-tree review found three valid convergence gaps.
+Restart reconciliation did not consume `collection_pending` and could therefore
+append a contradictory `AbandonedDispatchError` after proving a real terminal
+lifecycle. An outer member that failed before lineage or descriptor completion
+was terminal in the append-only Tool progress but absent from the initial
+lineage-only reducer. Finally, a representative budget disposition excluded
+only that dispatch rather than its collection siblings. The reviewed tree was
+not committed.
+
+The correction keeps one fact source. The existing dispatch collection progress
+schema/parser now lives in the engine boundary and is re-exported to the outer
+Tool writer; the reducer accepts only progress attached to the exact persisted
+`dispatch_agents` request, Message, Session and call. A declared index with no
+lineage is terminal only through a typed failed checkpoint or a completed
+infrastructure outcome with `occurrence_not_committed` authority. Once lineage
+exists, wrapper failure cannot hide it: the production outer Tool catch records
+one deterministic infrastructure Artifact and immutable occurrence settlement,
+and the reducer requires that settlement. A descriptorless lineage is terminal
+only through that exact `occurrence_committed` infrastructure settlement.
+Restart reconciliation can then deliver a ready collection from any member
+without inventing abandonment evidence. The collection recovery SQL also
+recognizes a sibling representative's immutable budget disposition.
+
+After these corrections the abandoned/restart/budget suite completed 5/5 with
+110 assertions, including a real partial-admission fixture with one failed outer
+member, two accepted workers, terminal lifecycle recovery, no false abandonment
+Artifact and one representative ingress. The Light package suite completed 4/4
+with 148 assertions, including both its normal and injected-failure paths. Fresh
+Session authority remained 1/1 with 18 assertions, and the OS-process
+claim/takeover/recovery matrix remained 10/10 with 37 assertions. Package and
+root typecheck remained green (8/8 root tasks, seven cache hits).
+
+A second exact-tree review found one further occurrence-boundary defect and one
+fixture-authority defect. It correctly rejected treating every outer wrapper
+failure as proof that no dispatch occurrence existed: a lineage may already have
+committed before the descriptor or Provider call fails. It also required progress
+member name and target to match the actual persisted outer Tool input rather than
+a test-only empty input. The shared contract and production settlement described
+above close both findings. The positive partial-admission test now invokes that
+production failure writer and first proves that failed progress with a committed
+lineage remains pending until the exact infrastructure settlement exists.
+The writer checks the immutable lineage target before mutation and commits its
+deterministic failure Artifact and settlement in one immediate transaction.
+Typed or caller-signal cancellation remains cancellation and bypasses this
+infrastructure path, so it does not consume the Task infrastructure budget.
+
+A new exact tree review is still required before commit; the Luna Provider rerun
+remains a post-commit acceptance and is not replaced by these tests.
+
+Final independent review: exact staged tree
+`7e38d2a9e2498a0da172ba27f34e16706a288ba6` received FINAL PASS with P0-P3 all
+zero. The uninvolved reviewer confirmed the occurrence-authority distinction,
+transactional failure settlement, cancellation preservation, persisted outer
+input binding, collection-wide budget exclusion, bounded Task-scoped queries,
+direct-dispatch preservation and the three-path working-tree exclusion. The
+reviewer did not rerun the long matrix. This review closes the code/test/doc
+cut only; the one exact Luna four-member rerun remains the real acceptance gate.

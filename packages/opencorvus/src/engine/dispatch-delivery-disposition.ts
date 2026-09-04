@@ -1,11 +1,22 @@
 import { isDeepStrictEqual } from "node:util"
 import z from "zod"
 import { insertEngineArtifact } from "./artifact"
+import {
+  PersistedDispatchAgentsInputSchema,
+  readDispatchCollectionProgress,
+} from "./dispatch-collection-contract"
 import { dispatchLineageRow, type DispatchLineageRow } from "./dispatch-lineage-facts"
-import { EngineArtifactTable, type EngineMetadata } from "./engine.sql"
+import { parseDispatchSettlementPayload, type DispatchSettlementRow } from "./dispatch-settlement"
+import { EngineArtifactTable, EngineTaskRootIngressTable, type EngineMetadata } from "./engine.sql"
 import { Identifier } from "@/id/id"
-import { Database, and, asc, eq, gt, or, sql } from "@/storage/db"
-import { WorkerTurnDescriptorTable } from "@/session/session.sql"
+import { ProtocolEventTable } from "@/protocol/protocol.sql"
+import { Database, and, asc, desc, eq, gt, or, sql } from "@/storage/db"
+import {
+  MessageTable,
+  ToolPartProgressTable,
+  ToolPartRequestTable,
+  WorkerTurnDescriptorTable,
+} from "@/session/session.sql"
 
 const MAX_DISPATCH_RECOVERY_PAGE_SIZE = 64
 
@@ -14,6 +25,7 @@ export type DispatchRecoveryQueryStage =
   | "dispositions"
   | "settlement-deliveries"
   | "lifecycle-deliveries"
+  | "collection-deliveries"
   | "execution-occurrences"
 
 type DispatchRecoveryQueryObserver = (stage: DispatchRecoveryQueryStage, rowCount: number) => void
@@ -121,9 +133,325 @@ export type DispatchRecoveryFrontierCursor = {
 
 export type DispatchRecoveryDescriptor = { taskID: string; sessionID: string; dispatchID: string }
 
+export type DispatchCollectionWakeSource =
+  | {
+      kind: "protocol_event"
+      sourceID: string
+      taskID: string
+      sessionID: string
+      dispatchID: string
+      settlement: DispatchSettlementRow
+    }
+  | {
+      kind: "engine_artifact"
+      sourceID: string
+      taskID: string
+      sessionID: string
+      dispatchID: string
+      settlement: DispatchSettlementRow
+    }
+
+export type DispatchCollectionWakeDecision =
+  | { kind: "direct" }
+  | { kind: "pending" }
+  | { kind: "ready"; source: DispatchCollectionWakeSource; delivered: boolean }
+
 const dispatchPairKey = (taskID: string, dispatchID: string) => `${taskID}\0${dispatchID}`
 const dispatchDescriptorKey = (input: DispatchRecoveryDescriptor) =>
   `${input.taskID}\0${input.sessionID}\0${input.dispatchID}`
+function dispatchCollectionWakeDecisionForLineageInTransaction(
+  db: Database.TxOrDb,
+  lineage: DispatchLineageRow,
+): DispatchCollectionWakeDecision {
+  const memberCount = lineage.payload.collection_member_count
+  if (lineage.payload.tool_name !== "dispatch_agents") return { kind: "direct" }
+  if (lineage.payload.collection_member_index === undefined || memberCount === undefined) {
+    throw new Error(`Dispatch collection lineage ${lineage.artifactID} has no exact member identity`)
+  }
+  const collectionIdentity = `${lineage.payload.tool_part_id}/${lineage.payload.tool_call_id}`
+  const outerRequest = db
+    .select({ id: ToolPartRequestTable.id, data: ToolPartRequestTable.data })
+    .from(ToolPartRequestTable)
+    .innerJoin(MessageTable, eq(MessageTable.id, ToolPartRequestTable.message_id))
+    .where(
+      and(
+        eq(ToolPartRequestTable.id, lineage.payload.tool_part_id),
+        eq(ToolPartRequestTable.message_id, lineage.payload.orchestrator_message_id),
+        eq(MessageTable.session_id, lineage.payload.orchestrator_session_id),
+        sql`json_extract(${ToolPartRequestTable.data}, '$.tool') = 'dispatch_agents'`,
+        sql`json_extract(${ToolPartRequestTable.data}, '$.callID') = ${lineage.payload.tool_call_id}`,
+      ),
+    )
+    .all()
+  if (outerRequest.length !== 1) {
+    throw new Error(`Dispatch collection ${collectionIdentity} has no exact outer Tool request`)
+  }
+  const outerInput = PersistedDispatchAgentsInputSchema.parse(
+    (outerRequest[0]!.data as { input?: unknown }).input,
+  )
+  if (outerInput.team.length !== memberCount) {
+    throw new Error(
+      `Dispatch collection ${collectionIdentity} outer member count ${outerInput.team.length} does not match ${memberCount}`,
+    )
+  }
+  const progressByIndex = new Map<number, ReturnType<typeof readDispatchCollectionProgress>[number]>()
+  const progressRows = db
+    .select({ metadata: ToolPartProgressTable.metadata })
+    .from(ToolPartProgressTable)
+    .where(eq(ToolPartProgressTable.request_part_id, lineage.payload.tool_part_id))
+    .orderBy(asc(ToolPartProgressTable.time_created), asc(ToolPartProgressTable.id))
+    .all()
+  for (const progressRow of progressRows) {
+    for (const member of readDispatchCollectionProgress(progressRow.metadata)) {
+      if (member.member_index >= memberCount) {
+        throw new Error(`Dispatch collection ${collectionIdentity} progress member ${member.member_index} is out of range`)
+      }
+      const expected = outerInput.team[member.member_index]
+      if (!expected || member.name !== expected.name || member.target !== expected.target) {
+        throw new Error(`Dispatch collection ${collectionIdentity} progress member ${member.member_index} identity drift`)
+      }
+      const existing = progressByIndex.get(member.member_index)
+      if (existing && !isDeepStrictEqual(existing, member)) {
+        throw new Error(`Dispatch collection ${collectionIdentity} progress member ${member.member_index} conflicts`)
+      }
+      progressByIndex.set(member.member_index, member)
+    }
+  }
+  const siblingRows = db
+    .select()
+    .from(EngineArtifactTable)
+    .where(
+      and(
+        eq(EngineArtifactTable.task_id, lineage.taskID),
+        eq(EngineArtifactTable.kind, "dispatch_lineage"),
+        sql`json_extract(${EngineArtifactTable.payload}, '$.tool_name') = 'dispatch_agents'`,
+        sql`json_extract(${EngineArtifactTable.payload}, '$.execution_epoch') = ${lineage.payload.execution_epoch}`,
+        sql`json_extract(${EngineArtifactTable.payload}, '$.orchestrator_session_id') = ${lineage.payload.orchestrator_session_id}`,
+        sql`json_extract(${EngineArtifactTable.payload}, '$.orchestrator_message_id') = ${lineage.payload.orchestrator_message_id}`,
+        sql`json_extract(${EngineArtifactTable.payload}, '$.tool_part_id') = ${lineage.payload.tool_part_id}`,
+        sql`json_extract(${EngineArtifactTable.payload}, '$.tool_call_id') = ${lineage.payload.tool_call_id}`,
+      ),
+    )
+    .all()
+  const siblings = siblingRows
+    .map(dispatchLineageRow)
+    .toSorted(
+      (left, right) => (left.payload.collection_member_index ?? -1) - (right.payload.collection_member_index ?? -1),
+    )
+  if (siblings.length > memberCount) {
+    throw new Error(
+      `Dispatch collection ${collectionIdentity} has ${siblings.length} immutable members; expected ${memberCount}`,
+    )
+  }
+  const siblingByIndex = new Map<number, DispatchLineageRow>()
+  for (const sibling of siblings) {
+    const memberIndex = sibling.payload.collection_member_index
+    if (
+      memberIndex === undefined ||
+      sibling.payload.execution_epoch !== lineage.payload.execution_epoch ||
+      sibling.payload.collection_member_count !== memberCount ||
+      memberIndex >= memberCount ||
+      siblingByIndex.has(memberIndex)
+    ) {
+      throw new Error(`Dispatch collection ${collectionIdentity} immutable identity drift`)
+    }
+    siblingByIndex.set(memberIndex, sibling)
+  }
+
+  const descriptors = db
+    .select({
+      id: WorkerTurnDescriptorTable.id,
+      sessionID: WorkerTurnDescriptorTable.session_id,
+      dispatchID: sql<string>`json_extract(${WorkerTurnDescriptorTable.payload}, '$.dispatchTurn.current_dispatch_id')`,
+      inputMessageID: sql<string>`json_extract(${WorkerTurnDescriptorTable.payload}, '$.messageAuthority.user_message_id')`,
+    })
+    .from(WorkerTurnDescriptorTable)
+    .where(
+      and(
+        eq(WorkerTurnDescriptorTable.task_id, lineage.taskID),
+        or(
+          ...siblings.map((sibling) =>
+            and(
+              eq(WorkerTurnDescriptorTable.session_id, sibling.payload.child_session_id),
+              sql`json_extract(${WorkerTurnDescriptorTable.payload}, '$.dispatchTurn.current_dispatch_id') = ${sibling.dispatchID}`,
+            ),
+          ),
+        ),
+      ),
+    )
+    .all()
+  const descriptorByDispatch = new Map(descriptors.map((descriptor) => [descriptor.dispatchID, descriptor]))
+  if (descriptors.length !== descriptorByDispatch.size) {
+    throw new Error(`Dispatch collection ${collectionIdentity} has ambiguous Worker Turn descriptors`)
+  }
+
+  const settlementRows = db
+    .select()
+    .from(EngineArtifactTable)
+    .where(
+      and(
+        eq(EngineArtifactTable.task_id, lineage.taskID),
+        eq(EngineArtifactTable.kind, "dispatch_settlement"),
+        or(
+          ...siblings.map(
+            (sibling) => sql`json_extract(${EngineArtifactTable.payload}, '$.dispatch_id') = ${sibling.dispatchID}`,
+          ),
+        ),
+      ),
+    )
+    .all()
+  const settlementByDispatch = new Map(
+    settlementRows.map((row) => {
+      const payload = parseDispatchSettlementPayload(row.payload, row.id)
+      return [payload.dispatch_id, { artifactID: row.id, payload } satisfies DispatchSettlementRow]
+    }),
+  )
+  if (settlementRows.length !== settlementByDispatch.size) {
+    throw new Error(`Dispatch collection ${collectionIdentity} has ambiguous settlements`)
+  }
+
+  const settledSiblings: DispatchLineageRow[] = []
+  for (let memberIndex = 0; memberIndex < memberCount; memberIndex += 1) {
+    const sibling = siblingByIndex.get(memberIndex)
+    const progress = progressByIndex.get(memberIndex)
+    if (!sibling) {
+      if (progress?.status === "failed") continue
+      if (
+        progress?.status === "completed" &&
+        progress.outcome.kind === "infrastructure_failure" &&
+        progress.outcome.recovery_authority.occurrence_status === "occurrence_not_committed"
+      )
+        continue
+      if (progress?.status === "completed") {
+        throw new Error(`Dispatch collection ${collectionIdentity} committed member ${memberIndex} has no lineage`)
+      }
+      return { kind: "pending" }
+    }
+    const expected = outerInput.team[memberIndex]
+    if (!expected || sibling.payload.target_agent_id !== expected.target) {
+      throw new Error(`Dispatch collection ${collectionIdentity} lineage member ${memberIndex} identity drift`)
+    }
+    if (
+      progress?.status === "completed" &&
+      progress.outcome.kind === "infrastructure_failure" &&
+      progress.outcome.recovery_authority.occurrence_status === "occurrence_not_committed"
+    ) {
+      throw new Error(`Dispatch collection ${collectionIdentity} member ${memberIndex} denies its existing lineage`)
+    }
+    const descriptor = descriptorByDispatch.get(sibling.dispatchID)
+    const settlement = settlementByDispatch.get(sibling.dispatchID)
+    if (!settlement) return { kind: "pending" }
+    const settledBeforeDescriptor =
+      !descriptor &&
+      settlement.payload.outcome.kind === "infrastructure_failure" &&
+      settlement.payload.outcome.recovery_authority.occurrence_status === "occurrence_committed"
+    if (!descriptor && !settledBeforeDescriptor) return { kind: "pending" }
+    if (
+      (descriptor && descriptor.sessionID !== sibling.payload.child_session_id) ||
+      settlement.payload.task_id !== sibling.taskID ||
+      settlement.payload.dispatch_lineage_id !== sibling.artifactID ||
+      settlement.payload.session_id !== sibling.payload.child_session_id
+    ) {
+      throw new Error(`Dispatch collection ${collectionIdentity} terminal authority drift`)
+    }
+    settledSiblings.push(sibling)
+  }
+
+  const representative =
+    settledSiblings.find(
+      (sibling) => settlementByDispatch.get(sibling.dispatchID)?.payload.outcome.kind === "infrastructure_failure",
+    ) ?? settledSiblings[0]
+  if (!representative) return { kind: "pending" }
+  const settlement = settlementByDispatch.get(representative.dispatchID)
+  const descriptor = descriptorByDispatch.get(representative.dispatchID)
+  if (!settlement) return { kind: "pending" }
+
+  let source: DispatchCollectionWakeSource
+  if (settlement.payload.outcome.kind === "infrastructure_failure") {
+    const sourceID = settlement.payload.outcome.infrastructure_error?.artifact_id
+    if (!sourceID) {
+      throw new Error(`Dispatch collection representative ${representative.dispatchID} has no infrastructure source`)
+    }
+    source = {
+      kind: "engine_artifact",
+      sourceID,
+      taskID: representative.taskID,
+      sessionID: representative.payload.child_session_id,
+      dispatchID: representative.dispatchID,
+      settlement,
+    }
+  } else {
+    if (!descriptor) {
+      throw new Error(`Dispatch collection representative ${representative.dispatchID} has no Worker Turn descriptor`)
+    }
+    const lifecycle = db
+      .select({ id: ProtocolEventTable.id })
+      .from(ProtocolEventTable)
+      .where(
+        and(
+          eq(ProtocolEventTable.type, "agent.execution.lifecycle"),
+          eq(ProtocolEventTable.aggregate_type, "task"),
+          eq(ProtocolEventTable.aggregate_id, representative.taskID),
+          eq(ProtocolEventTable.session_id, representative.payload.child_session_id),
+          sql`json_extract(${ProtocolEventTable.payload}, '$.inputMessageID') = ${descriptor.inputMessageID}`,
+          sql`json_extract(${ProtocolEventTable.payload}, '$.status.type') = 'terminal'`,
+        ),
+      )
+      .orderBy(desc(ProtocolEventTable.emitted_at), desc(ProtocolEventTable.seq), desc(ProtocolEventTable.id))
+      .get()
+    source = lifecycle
+      ? {
+          kind: "protocol_event",
+          sourceID: lifecycle.id,
+          taskID: representative.taskID,
+          sessionID: representative.payload.child_session_id,
+          dispatchID: representative.dispatchID,
+          settlement,
+        }
+      : {
+          kind: "engine_artifact",
+          sourceID: settlement.artifactID,
+          taskID: representative.taskID,
+          sessionID: representative.payload.child_session_id,
+          dispatchID: representative.dispatchID,
+          settlement,
+        }
+  }
+  const delivered =
+    db
+      .select({ id: EngineTaskRootIngressTable.id })
+      .from(EngineTaskRootIngressTable)
+      .where(
+        and(
+          eq(EngineTaskRootIngressTable.task_id, source.taskID),
+          eq(EngineTaskRootIngressTable.source, source.kind),
+          eq(EngineTaskRootIngressTable.source_id, source.sourceID),
+        ),
+      )
+      .get() !== undefined
+  return { kind: "ready", source, delivered }
+}
+
+export function dispatchCollectionWakeDecisionInTransaction(
+  db: Database.TxOrDb,
+  input: DispatchRecoveryDescriptor,
+): DispatchCollectionWakeDecision {
+  const lineageRows = db
+    .select()
+    .from(EngineArtifactTable)
+    .where(
+      and(
+        eq(EngineArtifactTable.task_id, input.taskID),
+        eq(EngineArtifactTable.kind, "dispatch_lineage"),
+        sql`json_extract(${EngineArtifactTable.payload}, '$.dispatch_id') = ${input.dispatchID}`,
+        sql`json_extract(${EngineArtifactTable.payload}, '$.child_session_id') = ${input.sessionID}`,
+      ),
+    )
+    .all()
+  if (lineageRows.length === 0) return { kind: "pending" }
+  if (lineageRows.length > 1) throw new Error(`Dispatch ${input.dispatchID} has ambiguous immutable lineages`)
+  return dispatchCollectionWakeDecisionForLineageInTransaction(db, dispatchLineageRow(lineageRows[0]!))
+}
 
 function dispatchRecoveryRequestedValues(descriptors: readonly DispatchRecoveryDescriptor[]) {
   return sql.join(
@@ -212,6 +540,83 @@ function dispatchRecoveryLifecycleDeliveryQuery(descriptors: readonly DispatchRe
                 AND ingress.source='protocol_event'
                 AND ingress.source_id=lifecycle.id
             )
+        )
+    )
+  `
+}
+
+function dispatchRecoveryCollectionDeliveryQuery(descriptors: readonly DispatchRecoveryDescriptor[]) {
+  const requested = dispatchRecoveryRequestedValues(descriptors)
+  return sql`
+    WITH requested(task_id, session_id, dispatch_id) AS (VALUES ${requested})
+    SELECT requested.task_id AS taskID, requested.dispatch_id AS dispatchID
+    FROM requested
+    JOIN engine_artifact AS current_lineage
+      ON current_lineage.task_id=requested.task_id
+      AND current_lineage.kind='dispatch_lineage'
+      AND json_extract(current_lineage.payload, '$.dispatch_id')=requested.dispatch_id
+      AND json_extract(current_lineage.payload, '$.child_session_id')=requested.session_id
+      AND json_extract(current_lineage.payload, '$.tool_name')='dispatch_agents'
+    WHERE EXISTS (
+      SELECT 1
+      FROM engine_artifact AS sibling_lineage
+      WHERE sibling_lineage.task_id=current_lineage.task_id
+        AND sibling_lineage.kind='dispatch_lineage'
+        AND json_extract(sibling_lineage.payload, '$.tool_name')='dispatch_agents'
+        AND json_extract(sibling_lineage.payload, '$.execution_epoch')
+          = json_extract(current_lineage.payload, '$.execution_epoch')
+        AND json_extract(sibling_lineage.payload, '$.orchestrator_session_id')
+          = json_extract(current_lineage.payload, '$.orchestrator_session_id')
+        AND json_extract(sibling_lineage.payload, '$.orchestrator_message_id')
+          = json_extract(current_lineage.payload, '$.orchestrator_message_id')
+        AND json_extract(sibling_lineage.payload, '$.tool_part_id')
+          = json_extract(current_lineage.payload, '$.tool_part_id')
+        AND json_extract(sibling_lineage.payload, '$.tool_call_id')
+          = json_extract(current_lineage.payload, '$.tool_call_id')
+        AND (
+          EXISTS (
+            SELECT 1
+            FROM worker_turn_descriptor AS descriptor
+            JOIN protocol_event AS lifecycle
+              ON lifecycle.type='agent.execution.lifecycle'
+              AND lifecycle.aggregate_type='task'
+              AND lifecycle.aggregate_id=sibling_lineage.task_id
+              AND lifecycle.session_id=json_extract(sibling_lineage.payload, '$.child_session_id')
+              AND json_extract(lifecycle.payload, '$.inputMessageID')
+                = json_extract(descriptor.payload, '$.messageAuthority.user_message_id')
+              AND json_extract(lifecycle.payload, '$.status.type')='terminal'
+            JOIN engine_task_root_ingress AS ingress
+              ON ingress.task_id=sibling_lineage.task_id
+              AND ingress.source='protocol_event'
+              AND ingress.source_id=lifecycle.id
+            WHERE descriptor.task_id=sibling_lineage.task_id
+              AND descriptor.session_id=json_extract(sibling_lineage.payload, '$.child_session_id')
+              AND json_extract(descriptor.payload, '$.dispatchTurn.current_dispatch_id')
+                = json_extract(sibling_lineage.payload, '$.dispatch_id')
+          )
+          OR EXISTS (
+            SELECT 1
+            FROM engine_artifact AS settlement
+            JOIN engine_task_root_ingress AS ingress
+              ON ingress.task_id=settlement.task_id
+              AND ingress.source='engine_artifact'
+              AND ingress.source_id IN (
+                settlement.id,
+                json_extract(settlement.payload, '$.outcome.infrastructure_error.artifact_id')
+              )
+            WHERE settlement.task_id=sibling_lineage.task_id
+              AND settlement.kind='dispatch_settlement'
+              AND json_extract(settlement.payload, '$.dispatch_id')
+                = json_extract(sibling_lineage.payload, '$.dispatch_id')
+          )
+          OR EXISTS (
+            SELECT 1
+            FROM engine_artifact AS disposition
+            WHERE disposition.task_id=sibling_lineage.task_id
+              AND disposition.kind='dispatch_delivery_disposition'
+              AND json_extract(disposition.payload, '$.dispatch_id')
+                = json_extract(sibling_lineage.payload, '$.dispatch_id')
+          )
         )
     )
   `
@@ -365,6 +770,18 @@ export function dispatchRecoveryCandidatesInTransaction(
     if (lineagePairs.has(key)) excluded.add(key)
   }
 
+  const collectionDeliveryRows =
+    matchedDescriptors.length === 0
+      ? []
+      : db.all<{ taskID: string; dispatchID: string }>(
+          dispatchRecoveryCollectionDeliveryQuery(matchedDescriptors),
+        )
+  input.observe?.("collection-deliveries", collectionDeliveryRows.length)
+  for (const row of collectionDeliveryRows) {
+    const key = dispatchPairKey(row.taskID, row.dispatchID)
+    if (lineagePairs.has(key)) excluded.add(key)
+  }
+
   const executionOccurrences = dispatchRecoveryExecutionOccurrencesInTransaction(db, lineages)
   input.observe?.("execution-occurrences", executionOccurrences.length)
   const executionOccurrenceByKey = new Map(
@@ -403,7 +820,7 @@ export const DispatchDeliveryDispositionTestHooks = {
   deliveryQueryPlans(
     db: Database.TxOrDb,
     descriptors: readonly DispatchRecoveryDescriptor[],
-  ): Record<"dispositions" | "settlementDeliveries" | "lifecycleDeliveries", string[]> {
+  ): Record<"dispositions" | "settlementDeliveries" | "lifecycleDeliveries" | "collectionDeliveries", string[]> {
     if (descriptors.length === 0 || descriptors.length > MAX_DISPATCH_RECOVERY_PAGE_SIZE) {
       throw new Error(`Dispatch recovery query plan requires 1-${MAX_DISPATCH_RECOVERY_PAGE_SIZE} descriptors`)
     }
@@ -413,6 +830,7 @@ export const DispatchDeliveryDispositionTestHooks = {
       dispositions: explain(dispatchRecoveryDispositionQuery(descriptors)),
       settlementDeliveries: explain(dispatchRecoverySettlementDeliveryQuery(descriptors)),
       lifecycleDeliveries: explain(dispatchRecoveryLifecycleDeliveryQuery(descriptors)),
+      collectionDeliveries: explain(dispatchRecoveryCollectionDeliveryQuery(descriptors)),
     }
   },
 }
@@ -421,7 +839,23 @@ export function dispatchRecoveryCandidateExistsInTransaction(
   db: Database.TxOrDb,
   input: DispatchRecoveryDescriptor,
 ): boolean {
-  return dispatchRecoveryCandidatesInTransaction(db, { descriptors: [input] }).length === 1
+  if (dispatchRecoveryCandidatesInTransaction(db, { descriptors: [input] }).length !== 1) return false
+  const collection = dispatchCollectionWakeDecisionInTransaction(db, input)
+  return collection.kind === "direct" || (collection.kind === "ready" && !collection.delivered)
+}
+
+export function dispatchCollectionWakeCandidateMatchesInTransaction(
+  db: Database.TxOrDb,
+  input: DispatchRecoveryDescriptor & { source: Pick<DispatchCollectionWakeSource, "kind" | "sourceID"> },
+): boolean {
+  if (dispatchRecoveryCandidatesInTransaction(db, { descriptors: [input] }).length !== 1) return false
+  const decision = dispatchCollectionWakeDecisionInTransaction(db, input)
+  return (
+    decision.kind === "ready" &&
+    !decision.delivered &&
+    decision.source.kind === input.source.kind &&
+    decision.source.sourceID === input.source.sourceID
+  )
 }
 
 /**
