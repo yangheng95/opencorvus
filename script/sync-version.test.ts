@@ -17,10 +17,16 @@ async function runVersionCheck(version: string) {
 }
 
 describe("release version metadata", () => {
-  test("projects stable, semantic prerelease, and compact product versions to GitHub release metadata", () => {
+  test("projects stable, canonical beta, and compact product versions to GitHub release metadata", () => {
     expect(releaseVersionMetadata("0.0.35")).toEqual({ version: "0.0.35", prerelease: false })
-    expect(releaseVersionMetadata("v0.0.35-beta.4")).toEqual({ version: "0.0.35-beta.4", prerelease: true })
+    expect(releaseVersionMetadata("v0.0.35-beta")).toEqual({ version: "0.0.35-beta", prerelease: true })
     expect(releaseVersionMetadata("v0.0.38beta")).toEqual({ version: "0.0.38-beta", prerelease: true })
+    expect(() => releaseVersionMetadata("v0.0.35-beta.4")).toThrow(
+      "Invalid version: v0.0.35-beta.4. Use x.y.z or x.y.z-beta (compact x.y.zbeta is also accepted).",
+    )
+    expect(() => releaseVersionMetadata("0.0.059-beta")).toThrow(
+      "Invalid version: 0.0.059-beta. Use x.y.z or x.y.z-beta (compact x.y.zbeta is also accepted).",
+    )
   })
 
   test("maps aligned and drifted dispatch versions to exact source-check terminal results", async () => {
@@ -31,10 +37,10 @@ describe("release version metadata", () => {
       stderr: "",
     })
 
-    const drift = await runVersionCheck("0.0.0-release-source-mismatch")
+    const drift = await runVersionCheck("0.0.0-beta")
     expect({
       exitCode: drift.exitCode,
-      headline: drift.stderr.includes("Version drift detected. Expected 0.0.0-release-source-mismatch."),
+      headline: drift.stderr.includes("Version drift detected. Expected 0.0.0-beta."),
       canonicalSourceNamed: drift.stderr.includes("packages/opencorvus/package.json"),
     }).toEqual({ exitCode: 1, headline: true, canonicalSourceNamed: true })
   })

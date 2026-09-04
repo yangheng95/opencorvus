@@ -38,7 +38,14 @@ const bunLockTarget = "bun.lock"
 
 // MSI (Microsoft Installer) accepts only numeric major.minor.patch.build values.
 export function windowsMsiVersion(version: string) {
-  const match = version.match(/^(\d+)\.(\d+)\.(\d+)(?:-([0-9A-Za-z]+(?:[.-][0-9A-Za-z]+)*))?$/)
+  let canonical: string | undefined
+  try {
+    canonical = normalizeReleaseVersion(version)
+  } catch {
+    throw new Error(`Cannot project invalid release version to MSI: ${version}`)
+  }
+  if (canonical !== version) throw new Error(`Cannot project invalid release version to MSI: ${version}`)
+  const match = canonical.match(/^(\d+)\.(\d+)\.(\d+)(?:-(beta))?$/)
   if (!match) throw new Error(`Cannot project invalid release version to MSI: ${version}`)
 
   const [, majorText, minorText, patchText, prerelease] = match
@@ -48,9 +55,7 @@ export function windowsMsiVersion(version: string) {
   }
   if (!prerelease) return fields.join(".")
 
-  const numericPrerelease = /^\d+$/.test(prerelease) ? Number(prerelease) : 0
-  if (numericPrerelease > 65_535) throw new Error(`Release prerelease exceeds MSI numeric limits: ${version}`)
-  return `${fields.join(".")}.${numericPrerelease}`
+  return `${fields.join(".")}.0`
 }
 
 function absolute(relative: string) {

@@ -4,9 +4,29 @@
 
 ## 未发布
 
+## 0.0.59beta - 2026-09-05
+
+本版本从最后一个公开版本 `0.0.54-beta` 继续发布，包含下方未公开 `0.0.58-beta` 候选的全部改动，并完成其后的调度架构收敛、Search-native 能力迁移与 Light 专家团验收。桌面端、命令行、更新清单和公开网站都绑定到同一份 `0.0.59-beta` 源码；产品版本只允许 `major.minor.patch` 三段数字以及可选的 `beta` 标签，不再接受 `beta.1` 一类第四段编号。
+
+### Changed
+
+- Task、Mission、Session、Wait、Automation、Project 与 Work 的创建、派发、唤醒、重试、恢复、关闭和保留统一绑定到持久化 occurrence 与明确的租约/结算事实；跨进程接管使用同一事实来源，不再由进程内回调或时间猜测决定。
+- Expert Squad 能力引用迁移到类型化、occurrence-bound 的 Search-native 目录；Light 调度器只获得清单显式授权的 7 个 Tool，worker 仍使用平台统一 transport，安装继续遵循下一回合才激活的边界。
+- Mission 接受与最终关闭绑定到精确输入、Task epoch、证据 lineage、最终 artifact 和可见 assistant response；worker 报告只接受本轮已派发 Session 的精确消息引用。
+
+### Fixed
+
+- 修复并发 collection wake、重复派发、跨 Project 容量竞争、延迟消息、Automation recurrence/retry、Task wait ingress、关闭后 archive/delete，以及进程退出恢复中的重复、遗漏和错误接管。
+- 修复并行 worker 结果逐条读取造成的额外 Turn：编排器现在一次读取精确的 `message_ids` 集合，并在单次 completion 中核对完整派发集合。
+- 修复 Light 咨询在来源约束、工具预算和并行调查上的漂移；真实四成员咨询以一次派发、四个重叠 Provider Session、一次批量读取和一次完成收敛，没有 Tool 失败或 operator correction。
+
+### Performance
+
+- Automation、Wait 与 recovery 热路径改为带索引的有界分页/批量 reducer；查询次数按页而不是按定义、Fire 或历史记录增长。
+
 ## 0.0.58beta - 2026-08-29
 
-本版本完成全仓架构债清理与真实 Mission 调度验收：统一 Task、Mission、Session、Provider、MCP、调度器、持久化与 Overlay 的事实和组合边界；新增全局 Chat、运行时 Skill Market、Inspect AI benchmark 适配与 Light 专家团；桌面端、命令行与公开网站由同一份 `0.0.58-beta` 不可变源码发布。SDK、util 与 plugin 的源码包元数据同步到同一版本并通过打包安装预检；npm registry 发布不属于本轮应用/网站发布范围。`v0.0.56-beta` 因 frozen lockfile 漂移在共享依赖安装阶段失败关闭，`v0.0.57-beta` 又因干净 runner 的 Overlay 未选择工作区 `source` export condition 而在打包阶段失败关闭；两个标签均保留为不可变审计证据。`0.0.58-beta` 修正身份包含同步后的单一锁文件事实、前置发布门禁和工作区源码解析契约，并保持最多三段数字版本字段。
+这是未公开的候选版本，记录当时已完成的全仓架构债清理与真实 Mission 调度验收：统一 Task、Mission、Session、Provider、MCP、调度器、持久化与 Overlay 的事实和组合边界；新增全局 Chat、运行时 Skill Market、Inspect AI benchmark 适配与 Light 专家团。SDK、util 与 plugin 的源码包元数据同步到同一候选版本并通过打包安装预检；npm registry 发布不属于该候选范围。`v0.0.56-beta` 因 frozen lockfile 漂移在共享依赖安装阶段失败关闭，`v0.0.57-beta` 又因干净 runner 的 Overlay 未选择工作区 `source` export condition 而在打包阶段失败关闭；这些标签与 `v0.0.58-beta` 均保留为不可变审计证据，其改动由 `0.0.59-beta` 公开发布。
 
 ### Security
 

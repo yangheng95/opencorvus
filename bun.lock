@@ -32,7 +32,7 @@
     },
     "packages/channel-config": {
       "name": "@opencorvus-ai/channel-config",
-      "version": "0.0.58-beta",
+      "version": "0.0.59-beta",
       "dependencies": {
         "zod": "catalog:",
       },
@@ -43,7 +43,7 @@
     },
     "packages/channel-runtime": {
       "name": "@opencorvus-ai/channel-runtime",
-      "version": "0.0.58-beta",
+      "version": "0.0.59-beta",
       "dependencies": {
         "@opencorvus-ai/channel-config": "workspace:*",
         "@opencorvus-ai/sdk": "workspace:*",
@@ -71,7 +71,7 @@
     },
     "packages/opencorvus": {
       "name": "opencorvus",
-      "version": "0.0.58-beta",
+      "version": "0.0.59-beta",
       "bin": {
         "opencorvus": "./bin/opencorvus",
       },
@@ -194,7 +194,7 @@
     },
     "packages/overlay": {
       "name": "@opencorvus-ai/overlay",
-      "version": "0.0.58-beta",
+      "version": "0.0.59-beta",
       "dependencies": {
         "@codemirror/autocomplete": "^6.20.3",
         "@codemirror/commands": "^6.10.4",
@@ -259,7 +259,7 @@
     },
     "packages/plugin": {
       "name": "@opencorvus-ai/plugin",
-      "version": "0.0.58-beta",
+      "version": "0.0.59-beta",
       "dependencies": {
         "@opencorvus-ai/sdk": "workspace:*",
         "@opencorvus-ai/util": "workspace:*",
@@ -283,7 +283,7 @@
     },
     "packages/sdk/js": {
       "name": "@opencorvus-ai/sdk",
-      "version": "0.0.58-beta",
+      "version": "0.0.59-beta",
       "dependencies": {
         "@opencorvus-ai/util": "workspace:*",
         "zod": "catalog:",
@@ -298,7 +298,7 @@
     },
     "packages/transport-protocol": {
       "name": "@opencorvus-ai/transport-protocol",
-      "version": "0.0.58-beta",
+      "version": "0.0.59-beta",
       "dependencies": {
         "@opencorvus-ai/util": "workspace:*",
         "zod": "catalog:",
@@ -310,7 +310,7 @@
     },
     "packages/util": {
       "name": "@opencorvus-ai/util",
-      "version": "0.0.58-beta",
+      "version": "0.0.59-beta",
       "dependencies": {
         "@types/node": "catalog:",
         "proper-lockfile": "4.1.2",

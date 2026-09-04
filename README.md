@@ -234,7 +234,7 @@ For terminal or headless use, the same Release publishes a complete
 platforms also publish a `-baseline.tar.gz` variant for processors without Advanced
 Vector Extensions 2 (AVX2).
 
-Replace `<version>` with the version shown on the release, for example `0.0.44-beta.1`.
+Replace `<version>` with the version shown on the release, for example `0.0.59-beta`.
 Download only the file you intend to install.
 
 ### Install from source
