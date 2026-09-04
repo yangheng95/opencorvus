@@ -66,7 +66,6 @@ export const PersistedDispatchCollectionMemberInputSchema = z
   .strict()
 
 export function createDispatchAgentsInputSchema(childInputSchema: z.ZodType) {
-  const collectionMemberSchema = PersistedDispatchCollectionMemberInputSchema.and(childInputSchema)
   return z
     .object({
       team: z
@@ -75,7 +74,7 @@ export function createDispatchAgentsInputSchema(childInputSchema: z.ZodType) {
         .max(MAX_DISPATCH_COLLECTION_SIZE)
         .describe("Visible structured description of the exact members in this frontier, aligned with dispatches."),
       dispatches: z
-        .array(collectionMemberSchema)
+        .array(childInputSchema)
         .min(1)
         .max(MAX_DISPATCH_COLLECTION_SIZE)
         .describe(
@@ -86,6 +85,7 @@ export function createDispatchAgentsInputSchema(childInputSchema: z.ZodType) {
     })
     .strict()
     .superRefine((input, context) => {
+      const dispatches = input.dispatches as z.output<typeof PersistedDispatchCollectionMemberInputSchema>[]
       if (input.team.length !== input.dispatches.length) {
         context.addIssue({ code: "custom", path: ["team"], message: "team and dispatches must describe the same frontier size" })
         return
@@ -96,7 +96,7 @@ export function createDispatchAgentsInputSchema(childInputSchema: z.ZodType) {
           context.addIssue({ code: "custom", path: ["team", index, "name"], message: "member names must be unique" })
         }
         names.add(member.name)
-        if (member.target !== input.dispatches[index]?.dispatch.target) {
+        if (member.target !== dispatches[index]?.dispatch.target) {
           context.addIssue({
             code: "custom",
             path: ["team", index, "target"],

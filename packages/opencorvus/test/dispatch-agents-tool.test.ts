@@ -137,9 +137,17 @@ describe("dispatch_agents canonical collection occurrence", () => {
           childSchema,
         )
         if (!frontier.execute) throw new Error("dispatch_agents has no executor")
-        expect(JSON.stringify(asSchema(frontier.inputSchema).jsonSchema)).toContain(
-          "Each item has exactly one outer field: { dispatch: ... }",
-        )
+        const providerSchema = asSchema(frontier.inputSchema).jsonSchema as any
+        const dispatchesSchema = Object.values(providerSchema.$defs as Record<string, any>).find(
+          (definition: any) => definition.description?.startsWith("The complete dependency-ready frontier."),
+        ) as any
+        const memberDefinitionID = dispatchesSchema.items.$ref.split("/").at(-1)
+        expect((providerSchema.$defs as Record<string, any>)[memberDefinitionID]).toMatchObject({
+          type: "object",
+          properties: { dispatch: { type: "object" } },
+          required: ["dispatch"],
+          additionalProperties: false,
+        })
         const result = await frontier.execute(input as never, executionOptions(identity) as never)
         if (!("output" in result)) throw new Error("Expected a completed dispatch collection output")
         expect(invocations.map((options) => (options as any).opencorvus)).toEqual([

@@ -4029,3 +4029,33 @@ input binding, collection-wide budget exclusion, bounded Task-scoped queries,
 direct-dispatch preservation and the three-path working-tree exclusion. The
 reviewer did not rerun the long matrix. This review closes the code/test/doc
 cut only; the one exact Luna four-member rerun remains the real acceptance gate.
+
+The first exact post-push Luna rerun reused 236 dependency links, the existing
+native helper and the verified model/credential authority with zero installs,
+downloads, builds or compilation. The collection-wake correction worked: four
+physical workers overlapped, all four terminal reports produced one later
+Task-root control occurrence rather than four, and the Task completed in
+158,254 ms with 458,877 total and 269,220 Orchestrator tokens. The runner still
+failed its no-failed-Tool contract because Luna's first collection call nested
+the fourth item as `{ dispatch: { dispatch: ... } }`; schema validation rejected
+that item before any worker started, and the model then corrected the call.
+
+The Provider JSON Schema explained the error. Every `dispatches[]` item was an
+`allOf` intersection between the generic persisted `{ dispatch: ... }` wrapper
+and the canonical target-discriminated child schema, which already owns that
+same wrapper. The runtime validator needed no such duplicate. The collection
+schema now projects the canonical child schema directly, while engine recovery
+continues to use the generic persisted parser at its own read boundary. A
+positive schema test resolves the generated definition and requires one direct
+object with exactly the `dispatch` field. Focused validation is 6/6 with 14
+assertions and OpenCorvus package typecheck is green. This is a real schema
+clarity repair prompted by the failed run, not authorization to rerun an
+unchanged candidate.
+
+Independent review: exact staged tree
+`f0467bedfd2bc55eca19b89ca638663597f8dd36` received FINAL PASS with P0-P3 all
+zero. The uninvolved reviewer confirmed that the canonical target-discriminated
+runtime validator and strict persisted engine parser remain intact, while the
+generated Provider item is now the single direct wrapper proven by the positive
+schema test. The reviewer did not rerun tests. The corrected Provider behavior
+still requires one new exact-source Luna run after this reviewed cut is pushed.
