@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, test } from "bun:test"
+import { asSchema } from "ai"
 import { DispatchOutcome } from "@/agent/dispatch-outcome"
 import { Identifier } from "@/id/id"
 import { DispatchAgentsToolTestHooks } from "@/orchestrator/dispatch-agents-tool"
@@ -136,10 +137,11 @@ describe("dispatch_agents canonical collection occurrence", () => {
           childSchema,
         )
         if (!frontier.execute) throw new Error("dispatch_agents has no executor")
-        const result = (await frontier.execute(input as never, executionOptions(identity) as never)) as {
-          output: string
-          metadata: { completed_count: number; member_names: string[] }
-        }
+        expect(JSON.stringify(asSchema(frontier.inputSchema).jsonSchema)).toContain(
+          "Each item has exactly one outer field: { dispatch: ... }",
+        )
+        const result = await frontier.execute(input as never, executionOptions(identity) as never)
+        if (!("output" in result)) throw new Error("Expected a completed dispatch collection output")
         expect(invocations.map((options) => (options as any).opencorvus)).toEqual([
           {
             sessionID: identity.sessionID,
@@ -256,10 +258,8 @@ describe("dispatch_agents canonical collection occurrence", () => {
           childSchema,
         )
         if (!frontier.execute) throw new Error("dispatch_agents has no executor")
-        const result = (await frontier.execute(input as never, executionOptions(identity) as never)) as {
-          output: string
-          metadata: { completed_count: number }
-        }
+        const result = await frontier.execute(input as never, executionOptions(identity) as never)
+        if (!("output" in result)) throw new Error("Expected a completed dispatch collection output")
         const members = JSON.parse(result.output).members
         expect(result.metadata.completed_count).toBe(1)
         expect(members.map((member: any) => ({ index: member.member_index, status: member.status }))).toEqual([

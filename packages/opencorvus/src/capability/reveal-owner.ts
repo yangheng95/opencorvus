@@ -411,6 +411,7 @@ export function createCapabilityRevealOwner(input: {
           ? { requested_product_pillar: requestedProductPillar }
           : {}),
         filter_diagnostic: search.filterDiagnostic,
+        search_window: search.resultWindow,
         results,
       }
       const output = JSON.stringify(visible, null, 2)

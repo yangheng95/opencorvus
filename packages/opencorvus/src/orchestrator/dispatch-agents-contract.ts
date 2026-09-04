@@ -9,7 +9,7 @@ export const MAX_DISPATCH_COLLECTION_SIZE = 8
 
 const DispatchCollectionTeamMemberSchema = z
   .object({
-    name: z.string().min(1).max(96).describe("Task-local member name used only in this visible frontier."),
+    name: z.string().min(1).max(96).describe("Task-local member name owned by this team row; its array index identifies the aligned dispatch wrapper."),
     target: z.string().min(1).describe("Exact projected Agent target used by the aligned dispatch item."),
     responsibility: z.string().min(1).describe("One non-overlapping responsibility."),
     boundary: z.string().min(1).describe("Explicit owned facts, files, or effects and prohibited overlap."),
@@ -85,7 +85,8 @@ export function createDispatchAgentsInputSchema(childInputSchema: z.ZodType) {
         .min(1)
         .max(MAX_DISPATCH_COLLECTION_SIZE)
         .describe(
-          "The complete dependency-ready frontier. Each item is one exact dispatch member. " +
+          "The complete dependency-ready frontier. Each item has exactly one outer field: { dispatch: ... }. " +
+            "team[index] owns the member name and responsibility; dispatches[index] owns only that member's dispatch envelope. " +
             "Include every currently independent member once; keep dependent or conflicting work for a later frontier.",
         ),
     })

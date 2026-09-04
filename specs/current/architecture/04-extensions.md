@@ -282,6 +282,12 @@ zero result therefore distinguishes held authority, pillar/catalog visibility,
 and query matching without enumerating the held identifiers or broadening the
 immutable snapshot. Non-empty kind, next-owner and owner filters are conjunctive;
 omitted or empty filter arrays do not narrow that authorized occurrence view.
+Every new completed capability search exposes a `search_window` derived from the
+same authorized reducer: `candidate_count` after structural filters,
+`matched_count` after query matching, `returned_count` after the five-result bound,
+and `complete` for that query/filter combination. A blank browse is only its first
+bounded window, not an inventory of all available capabilities. Counts do not
+expose identities outside the caller's authorized view or broaden execution.
 This interpretation belongs to the shared catalog search reducer, not a caller
 retry or permission expansion. Completed search receipts retain their exact
 stored result on replay, including results from older search semantics. When the

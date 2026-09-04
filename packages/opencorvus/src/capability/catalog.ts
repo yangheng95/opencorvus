@@ -496,6 +496,12 @@ export function searchCapabilityCatalog(
 export type CapabilityCatalogSearchProjection = {
   results: CapabilitySearchResultValue[]
   filterDiagnostic: CapabilitySearchFilterDiagnosticValue | null
+  resultWindow: {
+    candidate_count: number
+    matched_count: number
+    returned_count: number
+    complete: boolean
+  }
 }
 
 export function projectCapabilityCatalogSearch(
@@ -576,8 +582,15 @@ export function projectCapabilityCatalogSearch(
       CapabilityRefCodec.encode(right.descriptor.ref),
     )
   })
+  const selected = ranked.slice(0, input.limit)
   return {
-    results: ranked.slice(0, input.limit).map(({ descriptor, view, score }) =>
+    resultWindow: {
+      candidate_count: candidates.length,
+      matched_count: ranked.length,
+      returned_count: selected.length,
+      complete: selected.length === ranked.length,
+    },
+    results: selected.map(({ descriptor, view, score }) =>
       CapabilitySearchResult.parse({
         ref: descriptor.ref,
         name: descriptor.name,

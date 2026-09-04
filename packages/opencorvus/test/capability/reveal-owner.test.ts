@@ -299,6 +299,39 @@ describe("occurrence capability reveal owner", () => {
     }, readRef)).toThrow("Catalog occurrence publishes 2 descriptors")
   })
 
+  test("persists bounded search coverage and replays the exact completed result", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const occurrence = await boundOccurrence()
+        const owner = revealOwner({ occurrenceID: occurrence.userMessageID, binding: occurrence.binding })
+        const searches = [
+          { query: "", limit: 1, matched: 3, returned: 1, complete: false },
+          { query: "read", limit: 1, matched: 2, returned: 1, complete: false },
+          { query: "read", limit: 5, matched: 2, returned: 2, complete: true },
+        ]
+        for (const [index, search] of searches.entries()) {
+          const params = CapabilitySearchInput.parse({ queries: [search.query], limit: search.limit })
+          const callID = `call_window_${index}`
+          const part = await runningSearchPart({
+            sessionID: occurrence.session.id, messageID: occurrence.first.id, callID, params,
+          })
+          const execution = { callID, messageID: occurrence.first.id, sessionID: occurrence.session.id, toolPartID: part.id }
+          const result = await owner.execute(params, execution)
+          const visible = JSON.parse(result.output)
+          expect(visible.search_window).toEqual({
+            candidate_count: 3, matched_count: search.matched, returned_count: search.returned, complete: search.complete,
+          })
+          if (search.query) expect(visible.results[0].ref).toEqual(readRef)
+          const persisted = (await MessageStore.parts(occurrence.first.id)).find((candidate) => candidate.id === part.id)
+          expect(persisted?.type === "tool" && persisted.state.status === "completed" && persisted.state.output).toBe(result.output)
+          expect(await owner.execute(params, execution)).toEqual(result)
+        }
+      },
+    })
+  })
+
   test("persists an exact diagnostic for mutually exclusive Expert Squad filters", async () => {
     await using project = await memoryProject()
     await Instance.provide({

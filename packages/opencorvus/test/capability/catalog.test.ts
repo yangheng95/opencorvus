@@ -132,6 +132,29 @@ describe("capability catalog executable discovery", () => {
     }
   })
 
+  test("reports bounded browsing and targeted read coverage for every caller", () => {
+    const tools = ["artifact_catalog", "artifact_publish", "artifact_search", "artifact_select", "artifact_snapshot", "read"]
+      .map((name) => entry("tool", name, "tool-registry"))
+    const hidden = entry("tool", "write", "tool-registry")
+    for (const caller of ["conversation", "mission", "task_scheduler", "task_agent"] as const) {
+      const visible = projection("tool-registry", tools)
+      const snapshot = createCapabilityCatalogSnapshot({
+        context: { ...context(), caller },
+        sources: [source("tool-registry", "tools", [...tools, hidden])],
+        projections: [createCapabilityCatalogProjection({
+          ...visible,
+          entries: visible.entries.map((view) => ({ ...view, discoverable_by: [caller] })),
+        })],
+      })
+      const broad = projectCapabilityCatalogSearch(snapshot, caller, { queries: [""], limit: 5 })
+      expect(broad.resultWindow).toEqual({ candidate_count: 6, matched_count: 6, returned_count: 5, complete: false })
+      expect(broad.results.map((item) => item.ref.local_ref)).toEqual(tools.slice(0, 5).map((item) => item.ref.local_ref))
+      const targeted = projectCapabilityCatalogSearch(snapshot, caller, { queries: ["read"], kinds: ["tool"], limit: 5 })
+      expect(targeted.resultWindow).toEqual({ candidate_count: 6, matched_count: 1, returned_count: 1, complete: true })
+      expect(targeted.results.map((item) => item.ref)).toEqual([tools[5]!.ref])
+    }
+  })
+
   test("projects exactly the immutable Mission-held Expert Squad set", async () => {
     await using project = await memoryProject()
     await Instance.provide({
@@ -161,6 +184,7 @@ describe("capability catalog executable discovery", () => {
         })
         expect(conflict).toEqual({
           results: [],
+          resultWindow: { candidate_count: 0, matched_count: 0, returned_count: 0, complete: true },
           filterDiagnostic: {
             code: "incompatible_structural_filters",
             requested_kinds: ["expert_squad"],
@@ -176,7 +200,11 @@ describe("capability catalog executable discovery", () => {
             kinds: ["mcp_prompt"],
             next_owner_kinds: ["call_tool"],
           }),
-        ).toEqual({ results: [], filterDiagnostic: null })
+        ).toEqual({
+          results: [],
+          filterDiagnostic: null,
+          resultWindow: { candidate_count: 0, matched_count: 0, returned_count: 0, complete: true },
+        })
         expect(snapshot.owner_revisions["expert-squad-registry"]).toMatch(/^[a-f0-9]{64}$/)
         expect(snapshot.descriptors.filter((item) => item.ref.kind === "expert_squad").length).toBeGreaterThan(1)
       },

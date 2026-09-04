@@ -895,3 +895,96 @@ The external next-run scripts change only the Light package pin to .3 and the
 runner-source directory; cases, budgets and cleanup remain unchanged. Only this
 evidence paragraph follows review. Real Provider acceptance on this package is
 still pending and is not inferred from deterministic tests or review.
+
+### Bounded discovery and dispatch-envelope correction Recall
+
+The .3 package was accepted by the normal push hooks at source
+`2ad041e011c7391fce33a9568637739ffb356178`; its exact archive SHA-256 is
+`033625c145395911aab51b9649c4f00ccc29eb0a62c69041a2a36e85fc4b2d7a`.
+The unchanged four-case runner completed naturally with actual Luna, 236 reused
+links, zero installs/builds, and clean shutdown in every case. External evidence
+is `D:\myhexin-local\.codex-benchmarks\light-consulting-2ad041e01-20260905`,
+including `grounding-audit.json`. No earlier run or successful slot was replaced.
+
+| Case | Duration ms | Total tokens | Scheduler tokens | Grounded manual result |
+| --- | ---: | ---: | ---: | --- |
+| Single advice | 82,383 | 153,988 | 108,467 | PASS; assigned file read, verified Option B and exact output. |
+| Four workers | 140,461 | 435,962 | 255,071 | NOT PASS; 4/4 files read and correct outputs, but one rejected dispatch and excess scheduler tokens. |
+| Minimal clarification | 95,894 | 170,012 | 122,236 | PASS; one real question, assigned route file read, exact final output. |
+| Short synthesis | 102,333 | 270,521 | 167,841 | NOT PASS despite raw runner pass; north source never read. |
+
+Every case has one successful collection and physical worker concurrency 1/4/1/2.
+Scheduler Skill loads and cleanup failures are zero. The four-member rejected
+call precedes the successful collection: it repeats each `team[].name` beside
+`dispatches[].dispatch`. The strict schema correctly rejects those extra keys
+before execution. The model then submits the canonical envelope successfully.
+The Tool/schema prose says aligned members but does not explicitly locate the
+name solely in `team[index]`; fix that input explanation, not the accepted shape
+or dispatch/recovery/lease machinery.
+
+The short-synthesis north worker searched its Skill, then activated it with
+`queries=[""]`. The returned five entries were the Skill and the first four
+alphabetical Artifact Tools. A later blank Tool browse again showed five Artifact
+entries. It activated Artifact search/read, searched the file path and field name
+in the Artifact catalog, got no match, and claimed direct file reading was
+unavailable. Its final report repeated supplied values with an explicit
+unverified-source caveat, which the scheduler failed to preserve. South read its
+actual file. This is not evidence that the north Session lacked a read grant.
+
+Shared root: `projectCapabilityCatalogSearch` ranks the complete authorized,
+filtered match set then silently slices to `limit <= 5`. The visible search result
+does not expose match count or window completeness, and the Tool description says
+blank queries enumerate matches. A bounded first window can therefore be mistaken
+for the available inventory. This affects conversation, Mission, Task scheduler
+and Task worker callers equally. Exact-ref activation remains explicit and search
+never executes, broadens grants or chooses an alternative Tool on the model's
+behalf. A failed Artifact search is not proof of unavailable repository access.
+
+Implement a single derived search-window projection with candidate, matched and
+returned counts plus completeness at the shared catalog reducer; render it in the
+new completed Tool output. Describe bounded browsing and query refinement in the
+canonical search Tool definition. Keep existing query/filter/ranking/activation
+semantics and five-result bound. Completed Tool output is persisted opaque text;
+the existing replay branch returns that exact text and metadata before projecting
+a new result, so old receipts need neither reinterpretation nor migration. No
+new durable state, cursor, fallback, schema alias, automatic retry or grant is
+introduced. Public routes/SDK transport, UI, Provider policy, package source and
+versions are otherwise unchanged.
+
+The current OpenAI policy deliberately serializes Tool calls inside one Provider
+step (current Provider architecture and transform tests); independent worker
+Sessions remain physically parallel. Do not change that policy or blame each
+separate report read on failed batching. The measured extra invalid dispatch is
+the concrete additional scheduler roundtrip in this run.
+
+Read/search scope: catalog reducer, descriptor input, runtime catalog metadata,
+reveal owner and exact receipt replay, search Tool definition, all four caller
+projections, dispatch collection contract/Tool/current guidance and their tests,
+current extension/Provider architecture, real completed Tool inputs and outputs.
+Validate bounded broad-query then targeted-read output for all four callers,
+persisted search output and exact replay, canonical dispatch envelope execution,
+affected real search/Tool paths and budgets. Run only the two failed real scenarios
+after review and delivery; retain the two already-grounded passes with their exact
+source identity. Independent feedback for this correction: none yet.
+
+The five-file affected matrix passes 39/39, 226 assertions, 69.02 seconds,
+including actual Tool execution, persisted search output/replay, Processor
+idempotency, cross-process reveal settlement and real Tool-definition budgets.
+Package typecheck exits zero; docs remain 339/25. Initial test expectations were
+corrected to inspect the emitted referenced JSON schema and to count the existing
+fuzzy match set (the runtime fixture's `read` query also matches a second Tool).
+Neither correction changes production matching or validation. Explicit test-root
+typecheck and independent review are still pending at this checkpoint. The
+external remaining-case launcher differs from the reviewed v3 launcher only in
+selecting the two failed cases and defining suite completion as two results;
+package pin, case prompts, budgets, hashes, cache reuse and cleanup stay identical.
+
+Final explicit typecheck of the three affected test roots reports zero
+diagnostics. Independent read-only review of exact staged tree
+`41402b7cf85c24b77875593768326c719fd45489` returned FINAL PASS, P0-P3=0.
+The reviewer independently passed 8/8 tests and 138 assertions in 35.59 seconds,
+covering all dispatch collection tests plus the Light normal and injected-error
+search/reveal/worker paths. It also verified the historical-replay boundary,
+authorized count derivation and the two-line external launcher delta. Only this
+evidence paragraph follows review. The two real failed scenarios remain pending
+and are not inferred from these deterministic results.
