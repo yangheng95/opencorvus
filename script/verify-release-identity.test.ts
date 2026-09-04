@@ -35,15 +35,19 @@ function releaseBody(runID: string, ownerSHA = sourceSHA): string {
   return `<!-- opencorvus-release-owner-v1 run-id=${runID} source-sha=${ownerSHA} -->\n\n## Generated notes`
 }
 
+function publicationRecord(runID: string, draft = true, ownerSHA = sourceSHA, prerelease = true) {
+  return {
+    id: 5601,
+    tag_name: "v0.0.57-beta",
+    draft,
+    prerelease,
+    body: releaseBody(runID, ownerSHA),
+  }
+}
+
 function releaseRecord(runID: string, draft = true, ownerSHA = sourceSHA, prerelease = true): GitHubApiResult {
   return response({
-    stdout: JSON.stringify({
-      id: 5601,
-      tag_name: "v0.0.57-beta",
-      draft,
-      prerelease,
-      body: releaseBody(runID, ownerSHA),
-    }),
+    stdout: JSON.stringify([publicationRecord(runID, draft, ownerSHA, prerelease)]),
   })
 }
 
@@ -193,6 +197,59 @@ describe("immutable release identity", () => {
       "-F",
       "generate_release_notes=true",
     ])
+    expect(requests[1]).toEqual([
+      "api",
+      "--include",
+      "--silent",
+      `repos/${repository}/releases?per_page=100&page=1`,
+    ])
+    expect(requests[2]).toEqual(["api", `repos/${repository}/releases?per_page=100&page=1`])
+  })
+
+  test("maps an absent draft in the canonical release inventory to the missing publication contract", async () => {
+    await expect(
+      enforceReleasePublication(
+        "verify-publication",
+        { repository, version: "0.0.57-beta", sourceSHA, runID: "1001", prerelease: true },
+        responses(response({ stdout: "HTTP/2.0 200 OK\n" }), response({ stdout: "[]" })),
+      ),
+    ).rejects.toMatchObject<Partial<ReleasePublicationError>>({ code: "release_publication_missing" })
+  })
+
+  test("finds one draft after a full inventory page and rejects the same tag on a later page", async () => {
+    const unrelated = Array.from({ length: 100 }, (_, index) => ({ tag_name: `v9.9.${index}-beta` }))
+    await expect(
+      enforceReleasePublication(
+        "verify-publication",
+        { repository, version: "0.0.57-beta", sourceSHA, runID: "1001", prerelease: true },
+        responses(
+          response({ stdout: "HTTP/2.0 200 OK\n" }),
+          response({ stdout: JSON.stringify(unrelated) }),
+          response({ stdout: "HTTP/2.0 200 OK\n" }),
+          releaseRecord("1001"),
+        ),
+      ),
+    ).resolves.toEqual({
+      kind: "publication-owned",
+      tag: "v0.0.57-beta",
+      sourceSHA,
+      runID: "1001",
+    })
+
+    await expect(
+      enforceReleasePublication(
+        "verify-publication",
+        { repository, version: "0.0.57-beta", sourceSHA, runID: "1001", prerelease: true },
+        responses(
+          response({ stdout: "HTTP/2.0 200 OK\n" }),
+          response({
+            stdout: JSON.stringify([publicationRecord("1001"), ...unrelated.slice(1)]),
+          }),
+          response({ stdout: "HTTP/2.0 200 OK\n" }),
+          releaseRecord("1001"),
+        ),
+      ),
+    ).rejects.toMatchObject<Partial<ReleasePublicationError>>({ code: "release_publication_invalid" })
   })
 
   test("lets the same workflow run resume its draft on a later attempt", async () => {

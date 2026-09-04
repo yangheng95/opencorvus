@@ -1,6 +1,6 @@
 # Specs Storage Index
 
-Current approved application and website release preparation: [`0.0.59-beta`](records/2026-09/2026-09-05-v0.0.59-beta-release.md), real acceptance passed and not yet published.
+Current approved application and website release preparation: [`0.0.60-beta`](records/2026-09/2026-09-05-v0.0.60-beta-release.md), real acceptance passed and not yet published. The failed 59 publication boundary remains recorded separately.
 
 Latest scheduling razor remediation Cut 8c: [`2026-09-02-scheduling-razor-remediation-cut-8c.md`](records/2026-09/2026-09-02-scheduling-razor-remediation-cut-8c.md).
 

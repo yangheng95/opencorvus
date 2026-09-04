@@ -250,28 +250,57 @@ async function readPublicationOwner(
   request: GitHubApiRequest,
 ): Promise<ReleasePublicationRecord> {
   const tag = `v${input.version}`
-  const endpoint = `repos/${input.repository}/releases/tags/${tag}`
-  const probe = await request(["api", "--include", "--silent", endpoint])
-  const status = httpStatus(probe)
-  if (probe.exitCode !== 0) {
-    if (status === 404) {
+  let release: unknown
+  let inventoryComplete = false
+  for (let page = 1; page <= 100; page++) {
+    const endpoint = `repos/${input.repository}/releases?per_page=100&page=${page}`
+    const probe = await request(["api", "--include", "--silent", endpoint])
+    const status = httpStatus(probe)
+    if (probe.exitCode !== 0 || status !== 200) throw apiFailure(endpoint, probe)
+
+    const read = await request(["api", endpoint])
+    if (read.exitCode !== 0) throw apiFailure(endpoint, read)
+    let inventory: unknown
+    try {
+      inventory = JSON.parse(read.stdout)
+    } catch {
       throw new ReleasePublicationError(
-        "release_publication_missing",
-        `Release publication ${tag} is missing from ${input.repository}`,
-        status,
+        "release_publication_invalid",
+        `Release inventory page ${page} returned invalid JSON`,
       )
     }
-    throw apiFailure(endpoint, probe)
+    if (!Array.isArray(inventory)) {
+      throw new ReleasePublicationError(
+        "release_publication_invalid",
+        `Release inventory page ${page} returned a non-array authority record`,
+      )
+    }
+    const matches = inventory.filter(
+      (candidate) => typeof candidate === "object" && candidate !== null && candidate.tag_name === tag,
+    )
+    if (matches.length > 1 || (matches.length === 1 && release !== undefined)) {
+      throw new ReleasePublicationError(
+        "release_publication_invalid",
+        `Release inventory contains more than one publication for ${tag}`,
+      )
+    }
+    if (matches.length === 1) release = matches[0]
+    if (inventory.length < 100) {
+      inventoryComplete = true
+      break
+    }
   }
-  if (status !== 200) throw apiFailure(endpoint, probe)
-
-  const read = await request(["api", endpoint])
-  if (read.exitCode !== 0) throw apiFailure(endpoint, read)
-  let release: unknown
-  try {
-    release = JSON.parse(read.stdout)
-  } catch {
-    throw new ReleasePublicationError("release_publication_invalid", `Release publication ${tag} returned invalid JSON`)
+  if (!inventoryComplete) {
+    throw new ReleasePublicationError(
+      "release_publication_invalid",
+      `Release inventory exceeded the bounded lookup for ${tag}`,
+    )
+  }
+  if (release === undefined) {
+    throw new ReleasePublicationError(
+      "release_publication_missing",
+      `Release publication ${tag} is missing from ${input.repository}`,
+    )
   }
   if (
     typeof release !== "object" ||
