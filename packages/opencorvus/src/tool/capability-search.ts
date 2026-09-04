@@ -7,7 +7,7 @@ import { Tool } from "./tool"
 
 export const CAPABILITY_SEARCH_TOOL_ID = "capability_search" as const
 export const CAPABILITY_SEARCH_DESCRIPTION =
-  'Search the occurrence-bound capability catalog, explicitly reveal up to five exact result refs for the next model step, and deactivate refs no longer needed. Structural filters are ANDed; queries=[""] enumerates their matches. For held Expert Squads use kinds=["expert_squad"] and omit next_owner_kinds or use ["create_task_with_expert_squad"]. Search never executes, authenticates, mounts, or approves a capability. Copy exact refs from results into exact_refs; fuzzy hits are never activated implicitly.'
+  'Search the occurrence-bound capability catalog, explicitly reveal up to five exact result refs for the next model step, and deactivate refs no longer needed. Non-empty structural filters are ANDed; omitted or empty filters do not narrow the authorized view. queries=[""] enumerates their matches. For held Expert Squads use kinds=["expert_squad"] and omit next_owner_kinds or use ["create_task_with_expert_squad"]. Search never executes, authenticates, mounts, or approves a capability. Copy exact refs from results into exact_refs; fuzzy hits are never activated implicitly.'
 
 export const CapabilitySearchTool = Tool.define(CAPABILITY_SEARCH_TOOL_ID, async () => {
   return {

@@ -648,3 +648,104 @@ Final independent read-only review of tree
 The reviewer confirmed the sole README finding and its complete generated
 closure are resolved. This paragraph is the only post-review evidence update;
 fresh real acceptance, release and website publication remain pending.
+
+### Empty structural-filter correction Recall
+
+The preceding production correction is delivered as `cc67555ac17309386b39867c04972d77aabda0bb`,
+with normal hooks and remote zero divergence. Its evidence is retained. The new
+external source archive has SHA-256 `7f1917f2b1daad285ab52cec1c9be5c85c972faeaeac81d6058e6114e3774086`.
+It reuses 236 verified dependency links and the existing source-fingerprinted
+native helper, with zero installs. Two obsolete root dependency links were mapped
+to their exact installed lock versions; an unrelated broken Astro backup link
+was not copied. Workspace links bind to the new archive. The external runner
+passed explicit TypeScript checking and 7/7 helper tests, plus independent launch
+review. Its first launch stopped before any Provider call because its package pin
+still named `2026.08.30.1`; the pin was corrected to the real `2026.09.04.2`, with
+a read-only pre-case package check and a separate result directory. The correction
+was independently approved. Historical outputs were not overwritten.
+
+Real acceptance is now running only the original four cases at
+`D:\myhexin-local\.codex-benchmarks\light-consulting-cc67555ac-20260905-package-pin`.
+The completed single case took 91,934 ms and 155,771 Task tokens; its scheduler
+used 121,633 against the unchanged 120,000 budget. More importantly, the worker
+never read its assigned file. It loaded the correct Skill successfully, then
+searched for Tools with `owner_refs: []` and obtained no results. Its report
+repeated the user-supplied expected answer while admitting missing file evidence.
+Exact output strings and a terminal Task therefore do not prove grounded accuracy;
+that case remains failed independently of the token overrun.
+
+Read-only replay against its real persisted catalog attachment
+`49aa7de299daf29204981dd3f9af74b4ff20b8504920a3443f235570b155780a.json`
+proves the root: `read` is visible and executable by `task_agent`, but all three
+optional structural filter arrays become a `Set` whenever present, including
+empty arrays. Empty `owner_refs` removes every candidate before matching and
+returns no filter diagnostic. Removing only that empty filter from the exact
+request returns `read` first (score 0.846667) and the available Artifact Tools.
+Neither a missing grant nor fuzzy matching is the cause. The shared reducer is
+used by conversation, Mission, Task scheduler and Task worker callers; the same
+defect affects empty `kinds` and `next_owner_kinds`, fresh/reconstructed catalogs,
+and concurrent isolated Projects. Existing tests exercise omitted or populated
+filters, not model-produced empty lists.
+
+Implement one explicit search contract: an omitted or empty structural filter
+does not narrow the already-authorized occurrence view; populated filters remain
+conjunctive. Apply that rule only in the shared catalog search reducer and describe
+it in the existing schema/Tool/current architecture. Keep raw Tool inputs and
+immutable completed reveal receipts unchanged, including exact replay of old
+results; no migration, alias, retry, automatic activation or permission expansion.
+Tests will cover all caller kinds, every empty-filter combination, populated
+intersection and a real Light worker search/reveal/read/receipt reconstruction.
+Benchmark acceptance additionally requires reviewing actual assigned-file evidence,
+not merely requested answer literals. The remaining real cases continue on their
+unchanged archive; no concurrent heavy verification or input mutation. Token-cost
+and other case findings are evaluated after that run completes. Independent
+implementation feedback for this new correction: none yet.
+
+The four-case run naturally finished (suite exit 1), without interrupting or
+repeating a case. Final transport-accounted totals, including cache reads, are:
+
+| Case | Duration ms | Total tokens | Scheduler tokens | Worker source reads | Acceptance |
+| --- | ---: | ---: | ---: | --- | --- |
+| single advice | 91,934 | 155,771 | 121,633 | 0 of 1 | Not pass: scheduler budget and ungrounded answer. |
+| four independent workers | 188,992 | 741,193 | 464,452 | 0 of 4 | Not pass: token budgets and ungrounded answers. |
+| minimal clarification | 94,963 | 169,723 | 141,589 | 0 of 1 | Runner protocol/budget pass, grounded correctness not pass. |
+| short parallel synthesis | 100,491 | 231,619 | 140,338 | 1 of 2 | Runner protocol/budget pass, north source unverified. |
+
+All four have one successful collection, exact 1/4/1/2 accepted and persisted
+worker populations, no failed Tools, zero scheduler Skill loads, and physical
+Provider concurrency 1/4/1/2. Exact final report refs are now correctly read.
+Only the south investigator in the fourth case actually read its assigned file;
+the other final reports repeat supplied expected values or explicitly retain a
+missing-source limitation. `grounding-audit.json` retains this independent review
+beside the immutable machine outputs. The result is not relabeled as successful
+because an expected literal appeared in the answer. The result-check reminder
+was paused after all cases finished. No release or website mutation occurred.
+
+The correction now passes catalog plus real Light search/reveal/read/replay
+24/24 tests, 209 assertions, including all four caller classes and all eight
+empty/omitted structural-filter combinations. Related reveal/receipt/Processor/
+strict-provider definition-budget checks pass 17/17, 83 assertions, including a
+real two-process revision race. Package typecheck and docs 339/25 pass. Explicit
+test-root typechecking found two pre-existing unsupported Bun matcher generic
+annotations in the touched catalog test; they now use `satisfies` on the same
+expected typed error objects, with no change to runtime assertions. The real
+trace also supplied incorrect non-empty owners such as `package` and the Skill
+name; the parameter guidance now explicitly requires copied `owner_ref` values,
+or an empty/omitted unknown owner, rather than guessing. No automatic broadening
+of a populated filter was added. Final focused/typechecking and independent
+review of this correction remain required before commit and fresh acceptance.
+
+Final explicit two-test-root typecheck reports zero diagnostics. The unchanged
+typed matcher cases pass 3/3 (42 assertions); final Tool-definition budgets pass
+3/3 (40 assertions). Independent read-only review of exact tree
+`45bcecd875861b7a1553a6375ce45bf47a886e6c` returned FINAL PASS, P0-P3=0,
+and independently reran catalog plus real Light at 24/24 (209 assertions).
+
+The reviewer also correctly retained a separate cleanup diagnostic in the first
+real case: server shutdown called `terminateCurrentProcessOwnedExecution`, which
+attempted ordinary ingress on an already-completed Task and received typed
+`TaskRootIngressError(code=task_terminal)`. Subsequent cleanup steps still ran.
+This is not described as clean cleanup or silently discarded; its terminal
+shutdown/ownership path requires read-only root analysis before another real run.
+It does not invalidate the independently verified empty-filter correction or
+other cases' completed evidence. Only this evidence paragraph follows the review.

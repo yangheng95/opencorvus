@@ -99,6 +99,39 @@ function projection(
 }
 
 describe("capability catalog executable discovery", () => {
+  test("empty structural filters preserve the authorized view for every caller", () => {
+    const tools = [entry("tool", "read", "tool-registry"), entry("tool", "write", "tool-registry")]
+    const mcp = [entry("mcp_tool", "lookup", "mcp-config")]
+    for (const caller of ["conversation", "mission", "task_scheduler", "task_agent"] as const) {
+      const projections = [projection("tool-registry", [tools[0]!]), projection("mcp-config", mcp)]
+        .map((item) => createCapabilityCatalogProjection({
+          ...item,
+          entries: item.entries.map((view) => ({ ...view, discoverable_by: [caller] })),
+        }))
+      const snapshot = createCapabilityCatalogSnapshot({
+        context: { ...context(), caller },
+        sources: [source("tool-registry", "tools", tools), source("mcp-config", "mcp", mcp)],
+        projections,
+      })
+      for (let mask = 0; mask < 8; mask++) {
+        const filters = {
+          ...(mask & 1 ? { kinds: [] } : {}),
+          ...(mask & 2 ? { next_owner_kinds: [] } : {}),
+          ...(mask & 4 ? { owner_refs: [] } : {}),
+        }
+        expect(searchCapabilityCatalog(snapshot, caller, { queries: [""], ...filters })
+          .map((item) => [item.ref.kind, item.ref.local_ref]))
+          .toEqual([["mcp_tool", "lookup"], ["tool", "read"]])
+      }
+      expect(searchCapabilityCatalog(snapshot, caller, {
+        queries: ["read"], kinds: ["tool", "mcp_tool"], next_owner_kinds: ["call_tool"], owner_refs: [],
+      }).map((item) => item.ref)).toEqual([tools[0]!.ref])
+      expect(searchCapabilityCatalog(snapshot, caller, {
+        queries: [""], kinds: ["tool"], next_owner_kinds: ["call_tool"], owner_refs: ["tool-registry"],
+      }).map((item) => item.ref)).toEqual([tools[0]!.ref])
+    }
+  })
+
   test("projects exactly the immutable Mission-held Expert Squad set", async () => {
     await using project = await memoryProject()
     await Instance.provide({
@@ -312,10 +345,10 @@ describe("capability catalog executable discovery", () => {
         const conflict = CapabilityCatalogCache.publishSource(
           source("mcp-config", "fixed-revision", [entry("mcp_server", "browser")]),
         )
-        await expect(conflict).rejects.toMatchObject<Partial<CapabilityCatalogContractError>>({
+        await expect(conflict).rejects.toMatchObject({
           name: "CapabilityCatalogContractError",
           code: "source_revision_conflict",
-        })
+        } satisfies Partial<CapabilityCatalogContractError>)
       },
     })
   })
@@ -445,10 +478,10 @@ describe("capability catalog executable discovery", () => {
       })
 
     expect(run).toThrow(
-      expect.objectContaining<Partial<CapabilityCatalogContractError>>({
+      expect.objectContaining({
         name: "CapabilityCatalogContractError",
         code: "unknown_set_member",
-      }),
+      } satisfies Partial<CapabilityCatalogContractError>),
     )
   })
 

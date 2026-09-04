@@ -504,9 +504,9 @@ export function projectCapabilityCatalogSearch(
   rawInput: z.input<typeof CapabilitySearchInput>,
 ): CapabilityCatalogSearchProjection {
   const input = CapabilitySearchInput.parse(rawInput)
-  const kinds = input.kinds ? new Set(input.kinds) : undefined
-  const nextOwnerKinds = input.next_owner_kinds ? new Set(input.next_owner_kinds) : undefined
-  const owners = input.owner_refs ? new Set(input.owner_refs) : undefined
+  const kinds = input.kinds?.length ? new Set(input.kinds) : undefined
+  const nextOwnerKinds = input.next_owner_kinds?.length ? new Set(input.next_owner_kinds) : undefined
+  const owners = input.owner_refs?.length ? new Set(input.owner_refs) : undefined
   const descriptorByRef = new Map(
     snapshot.descriptors.map((descriptor) => [CapabilityRefCodec.encode(descriptor.ref), descriptor]),
   )

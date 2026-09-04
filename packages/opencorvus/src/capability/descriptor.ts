@@ -271,16 +271,20 @@ export const CapabilitySearchInput = z
       .max(20)
       .optional()
       .describe(
-        'Exact stored capability kinds. All supplied filters are ANDed. "tool" selects platform tools, "mcp_tool" selects Model Context Protocol tools, and "expert_squad" selects held Task owners; omit this field to search across stored kinds.',
+        'Exact stored capability kinds. Non-empty filters are ANDed; omitted or empty filters do not narrow the authorized view. "tool" selects platform tools, "mcp_tool" selects Model Context Protocol tools, and "expert_squad" selects held Task owners.',
       ),
     next_owner_kinds: z
       .array(CapabilityNextOwnerKind)
       .max(20)
       .optional()
       .describe(
-        'Exact next-step kinds, ANDed with kinds. Use ["call_tool"] for executable platform or MCP tools. For kinds=["expert_squad"], omit this field or use ["create_task_with_expert_squad"]; call_tool excludes every Expert Squad.',
+        'Exact next-step kinds, ANDed with kinds when non-empty. Omitted or empty means any next owner. Use ["call_tool"] for executable platform or MCP tools. For kinds=["expert_squad"], omit this field or use ["create_task_with_expert_squad"]; call_tool excludes every Expert Squad.',
       ),
-    owner_refs: z.array(z.string().trim().min(1).max(320)).max(20).optional(),
+    owner_refs: z
+      .array(z.string().trim().min(1).max(320))
+      .max(20)
+      .optional()
+      .describe("Exact owner_ref values copied from catalog results, not capability names or kinds. Omit or use [] when unknown; this keeps every owner in the authorized occurrence view."),
     exact_refs: z
       .array(
         CapabilityRef.refine((ref) => ref.kind !== "capability_set", {

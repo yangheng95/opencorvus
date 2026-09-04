@@ -280,7 +280,11 @@ Core Mission search diagnostics expose the held count, pillar-filtered visible
 count, Mission product pillar, catalog revision, and bounded result count. A
 zero result therefore distinguishes held authority, pillar/catalog visibility,
 and query matching without enumerating the held identifiers or broadening the
-immutable snapshot. Exact kind and next-owner filters are conjunctive. When the
+immutable snapshot. Non-empty kind, next-owner and owner filters are conjunctive;
+omitted or empty filter arrays do not narrow that authorized occurrence view.
+This interpretation belongs to the shared catalog search reducer, not a caller
+retry or permission expansion. Completed search receipts retain their exact
+stored result on replay, including results from older search semantics. When the
 complete structural candidate set is non-empty and the requested next-owner
 kinds remove every candidate, the completed search additionally reports that
 incompatible intersection and its compatible next-owner kinds; it does not

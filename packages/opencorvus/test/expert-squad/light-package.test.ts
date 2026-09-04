@@ -498,6 +498,37 @@ describe("Light Expert Squad package", () => {
                       toolInput: { name: skill.behavior.name },
                       output: loaded,
                     })
+                    const searchInput = {
+                      queries: ["read repository file"], kinds: ["tool", "mcp_tool"],
+                      next_owner_kinds: ["call_tool"], owner_refs: [], exact_refs: [], deactivate_refs: [], limit: 5,
+                    }
+                    const searchID = `call_find_light_read_${assistant.id}`
+                    const searchContext = { toolCallId: searchID, messages: [], abortSignal: input.abort }
+                    const found = await reconstructed.tools.capability_search!.execute!(searchInput, searchContext) as
+                      Parameters<typeof processor.completeRecoveredToolPart>[0]["output"]
+                    const readRef = JSON.parse(found.output).results[0].ref
+                    expect(readRef).toEqual({ kind: "tool", source: "platform", owner_ref: "tool-registry", local_ref: "read" })
+                    await processor.completeRecoveredToolPart({ toolCallID: searchID, toolInput: searchInput, output: found })
+                    const replayed = await reconstructed.tools.capability_search!.execute!(searchInput, searchContext) as
+                      Parameters<typeof processor.completeRecoveredToolPart>[0]["output"]
+                    expect(replayed.output).toBe(found.output)
+                    const revealInput = { ...searchInput, exact_refs: [readRef] }
+                    const revealID = `call_reveal_light_read_${assistant.id}`
+                    const opened = await reconstructed.tools.capability_search!.execute!(revealInput, {
+                      toolCallId: revealID, messages: [], abortSignal: input.abort,
+                    }) as Parameters<typeof processor.completeRecoveredToolPart>[0]["output"]
+                    await processor.completeRecoveredToolPart({ toolCallID: revealID, toolInput: revealInput, output: opened })
+                    const readable = await resolveTestCapabilityTools(common)
+                    const filePath = path.join(project.path, `evidence-${assistant.id}.txt`)
+                    const evidence = `EXACT_SOURCE=${assistant.sessionID}`
+                    await Bun.write(filePath, evidence)
+                    const readInput = { filePath }
+                    const readID = `call_read_light_evidence_${assistant.id}`
+                    const contents = await readable.tools.read!.execute!(readInput, {
+                      toolCallId: readID, messages: [], abortSignal: input.abort,
+                    }) as Parameters<typeof processor.completeRecoveredToolPart>[0]["output"]
+                    expect(contents.output).toContain(evidence)
+                    await processor.completeRecoveredToolPart({ toolCallID: readID, toolInput: readInput, output: contents })
                   }
                   processorStarts++
                   if (processorStarts === 4) resolveAllStarted()
