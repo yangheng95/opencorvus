@@ -289,6 +289,7 @@ export interface CompletedToolCallRefDesc {
 
 export interface AgentMessageRefDesc {
   time_completed: number
+  finish: string | null
   session_id: string
   session_kind: string
   message_id: string
@@ -312,7 +313,7 @@ export interface TaskWorkflowDispatchDesc {
     summary?: string
     emitted_at: number
   } | null
-  settlement: { artifact_id: string; outcome_kind: string } | null
+  settlement: { artifact_id: string; outcome_kind: string; final_message_id: string | null } | null
   terminal_success: boolean
 }
 
@@ -531,6 +532,7 @@ function listAgentMessageRefs(task: TaskRow): AgentMessageRefDesc[] {
   const messages = Database.use((db) =>
     db.all<{
       time_completed: number
+      finish: string | null
       session_id: string
       session_kind: string
       message_id: string
@@ -551,6 +553,7 @@ function listAgentMessageRefs(task: TaskRow): AgentMessageRefDesc[] {
       )
       SELECT
         CAST(json_extract(m.data, '$.time.completed') AS INTEGER) AS time_completed,
+        json_extract(m.data, '$.finish') AS finish,
         m.session_id AS session_id,
         st.kind AS session_kind,
         m.id AS message_id,
@@ -601,6 +604,7 @@ function listAgentMessageRefs(task: TaskRow): AgentMessageRefDesc[] {
     return [
       {
         time_completed: message.time_completed,
+        finish: message.finish,
         session_id: message.session_id,
         session_kind: message.session_kind,
         message_id: message.message_id,
@@ -671,7 +675,13 @@ function describeTaskWorkflowExecution(task: TaskRow): TaskWorkflowExecutionDesc
             }
           : null,
         settlement: settlement
-          ? { artifact_id: settlement.artifactID, outcome_kind: settlement.payload.outcome.kind }
+          ? {
+              artifact_id: settlement.artifactID,
+              outcome_kind: settlement.payload.outcome.kind,
+              final_message_id: "final_message_id" in settlement.payload.outcome
+                ? settlement.payload.outcome.final_message_id ?? null
+                : null,
+            }
           : null,
         terminal_success: settlement?.payload.outcome.kind === "terminal_success",
       }
@@ -717,7 +727,13 @@ function describeTaskWorkflowExecution(task: TaskRow): TaskWorkflowExecutionDesc
           }
         : null,
       settlement: settlement
-        ? { artifact_id: settlement.artifactID, outcome_kind: settlement.payload.outcome.kind }
+        ? {
+            artifact_id: settlement.artifactID,
+            outcome_kind: settlement.payload.outcome.kind,
+            final_message_id: "final_message_id" in settlement.payload.outcome
+              ? settlement.payload.outcome.final_message_id ?? null
+              : null,
+          }
         : null,
       terminal_success: settlement?.payload.outcome.kind === "terminal_success",
     })
@@ -1007,6 +1023,7 @@ function renderTaskWorkflowExecution(execution: TaskWorkflowExecutionDesc | unde
       lines.push(
         `  - dispatch_artifact=${dispatch.artifact_id}; dispatch=${dispatch.dispatch_id}; session=${dispatch.session_id}; ` +
           `target=${dispatch.target_agent_id}; session_status=${status}; settlement=${dispatch.settlement?.outcome_kind ?? "unsettled"}; terminal_success=${dispatch.terminal_success}; ` +
+          `final_message_id=${dispatch.settlement?.final_message_id ?? "(unavailable)"}; ` +
           `delivery_slice_subjects=${dispatch.delivery_slice_revision_ids.join(",") || "(none)"}`,
       )
     }
@@ -1078,7 +1095,7 @@ function renderCompletedSpecialistMessageRefs(refs: AgentMessageRefDesc[] | unde
   for (const group of groups.values()) {
     lines.push(
       `- agent=${group.agent_id} session=${group.session_id} kind=${group.session_kind} ` +
-        `messages_oldest_to_newest=${group.messages.map((message) => message.message_id).join(",")}`,
+        `messages_oldest_to_newest=${group.messages.map((message) => `${message.message_id}(finish=${message.finish ?? "unreported"})`).join(",")}`,
     )
     for (const message of group.messages) {
       if (!message.worker_turn_descriptor_error) continue
@@ -1090,7 +1107,9 @@ function renderCompletedSpecialistMessageRefs(refs: AgentMessageRefDesc[] | unde
   lines.push(
     `These are stable references to real completed assistant messages, grouped only to avoid repeating shared ` +
       `Session identity. Every exact message ref remains listed in durable order. Use read_agent_message with an ` +
-      `exact message ref when text or tool facts matter; the Tool resolves and verifies its persisted Session owner.`,
+      `exact message ref when text or tool facts matter; the Tool resolves and verifies its persisted Session owner. ` +
+      `A completed assistant step is not necessarily a terminal worker report. Use each exact dispatch settlement's ` +
+      `final_message_id for that report; neither a finish string nor the newest inventory entry replaces settlement authority.`,
   )
   return lines
 }

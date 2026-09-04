@@ -123,6 +123,16 @@ A prose-only Provider step is visible content, not a business completion. While 
 
 Every Provider step receives two JSON values: the canonical current `TaskDesc` baseline and a strict `task-projection-delta-v1` envelope. The first step uses that same shape with an empty, cursor-bound operation list. Later steps apply ordered JSON Pointer `replace`, `append`, and `remove` operations only when the envelope's previous cursor matches the supplied baseline; the resulting cursor must match the envelope's current cursor. Optional TypeScript fields are omitted by normal JSON value materialization before canonical key ordering, so `undefined` never becomes a second projection contract.
 
+Every dispatch settlement projection retains its existing outcome's exact
+`final_message_id` (or explicit null when that outcome has none), for both direct
+and declared workflows. This is the persisted settlement's participant report
+reference, not a latest-Message selection. The completed assistant-Message
+inventory retains each recorded `finish` reason because a completed Tool step
+is not by itself a terminal worker report. The exact Message reader exposes the
+same finish/completion facts without inferring success. Fresh and reconstructed
+Task baseline/delta views carry these facts through the existing single read
+path; a sibling's terminal wake never establishes another sibling's completion.
+
 ```text
 accepted ingress
   -> Orchestrator control/participant Message

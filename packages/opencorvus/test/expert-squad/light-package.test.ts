@@ -13,6 +13,7 @@ import { acquireTaskRootIngressLease } from "../../src/engine/task-root-fact-sto
 import { currentRuntimeOccurrenceID } from "../../src/runtime/process-occurrence"
 import { Database, eq } from "../../src/storage/db"
 import { requireTask } from "../../src/engine/store"
+import { describeTask } from "../../src/engine/describe"
 import {
   TestHooks as IngressTestHooks,
   waitForIngressDeliveryHooksForTest,
@@ -23,7 +24,8 @@ import { PromptProfileResolver } from "../../src/expert-squad/prompt-profile-res
 import { ExpertSquadRegistry } from "../../src/expert-squad/registry"
 import { Identifier } from "../../src/id/id"
 import { orchestratorControlOccurrenceIdentity } from "../../src/orchestrator/control-message-identity"
-import { currentOrchestratorControlMessage } from "../../src/orchestrator/agent"
+import { applyTaskProjectionDelta, currentOrchestratorControlMessage, renderTaskProjectionContext } from "../../src/orchestrator/agent"
+import { createReadAgentMessageTool } from "../../src/orchestrator/read-agent-message-tool"
 import {
   createDispatchAgentTool,
   type DispatchAdapterExecutors,
@@ -127,7 +129,7 @@ describe("Light Expert Squad package", () => {
     expect(source.manifest).toMatchObject({
       namespace: "builtin",
       id: "light",
-      version: "2026.08.30.1",
+      version: "2026.09.04.2",
       product_pillars: ["code", "work"],
     })
     expect(Object.keys(source.manifest.capability_projection.agents).sort()).toEqual(Object.keys(agentRoles).sort())
@@ -152,7 +154,7 @@ describe("Light Expert Squad package", () => {
         })
         expect(receipt).toMatchObject({
           operation: "installed",
-          after: { installationScope: "project", namespace: "builtin", id: "light", version: "2026.08.30.1" },
+          after: { installationScope: "project", namespace: "builtin", id: "light", version: "2026.09.04.2" },
         })
 
         const config = Config.mergeOverlay(await EffectiveConfig.snapshotCurrent(), {
@@ -173,7 +175,7 @@ describe("Light Expert Squad package", () => {
           packageRevision: revision,
         })
 
-        expect(revision).toMatchObject({ namespace: "builtin", id: "light", version: "2026.08.30.1" })
+        expect(revision).toMatchObject({ namespace: "builtin", id: "light", version: "2026.09.04.2" })
         expect(scheduler.virtualWorkflows).toEqual({})
         expect(scheduler.builtInToolIDs).toEqual(schedulerTools)
         expect(scheduler.productionSkills.map((entry) => entry.ref)).toEqual([])
@@ -738,11 +740,43 @@ describe("Light Expert Squad package", () => {
           ).toEqual([...targets].sort())
           expect(requests.map((request) => request.dispatch.turn.use_worktree)).toEqual([false, false, false, false])
 
+          const runningProjection = renderTaskProjectionContext(undefined, await describeTask(taskID))
+          expect(runningProjection.baseline.workflow_execution?.nodes.flatMap((node) => node.dispatches)
+            .map((dispatch) => dispatch.settlement)).toEqual(targets.map(() => null))
+
           if (!releaseWorkers) throw new Error("Light worker release callback was not initialized")
           releaseWorkers()
           await requireWithin(allFinished, "four completed Light worker processors")
           await requireWithin(waitForDetachedDispatchPipelinesForTest(), "detached Light dispatch pipelines")
           await requireWithin(waitForIngressDeliveryHooksForTest(), "Light lifecycle ingress deliveries")
+          const settled = await describeTask(taskID)
+          const projected = renderTaskProjectionContext(runningProjection.baseline, settled)
+          expect(applyTaskProjectionDelta(JSON.parse(projected.parts[0]!), projected.parts[1]!)).toEqual(
+            JSON.parse(JSON.stringify(settled)),
+          )
+          const dispatches = settled.workflow_execution!.nodes.flatMap((node) => node.dispatches)
+          expect(dispatches.length).toBe(4)
+          const reader = createReadAgentMessageTool({ taskID }).read_agent_message
+          for (const dispatch of dispatches) {
+            expect(dispatch.settlement).toMatchObject({ outcome_kind: "terminal_success" })
+            const finalID = dispatch.settlement!.final_message_id
+            if (!finalID) throw new Error("Settled Light dispatch has no final report reference")
+            expect(settled.agent_message_refs!.find((message) => message.message_id === finalID)).toMatchObject({
+              session_id: dispatch.session_id,
+              finish: "stop",
+            })
+            const output = JSON.parse(await reader.execute!({ message_id: finalID }, {
+              toolCallId: `read_${dispatch.dispatch_id}`,
+              messages: [],
+            }) as string)
+            expect(output).toMatchObject({
+              session_id: dispatch.session_id,
+              message_id: finalID,
+              finish: "stop",
+              text: [`completed ${dispatch.session_id}`],
+            })
+            expect(output.time_completed).toBeGreaterThan(0)
+          }
         },
       })
 

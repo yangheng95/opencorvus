@@ -544,3 +544,107 @@ the reviewer independently passed 10/10 tests, 91 assertions. Only this evidence
 paragraph was updated after review. The real case failures, prompt
 ref/name ambiguity, four-member cost correction, and external answer-checker
 correction remain open; this runtime cut alone is not release acceptance.
+
+### Consultation evidence projection and cost correction Recall
+
+User scope and budgets remain the original four consultation cases, exact final
+worker reads, no rejected/duplicate dispatch, and no operator correction, followed
+by release `0.0.59-beta` and the website. The Skill runtime correction is delivered
+as `f205fa054`; its tests and independent PASS are retained, not invalidated.
+
+Offline reconciliation of the four-member transcript establishes another real
+acceptance failure before any new model call: the scheduler read ten Messages,
+but only two were the actual terminal reports. Market and finance closure locators
+named earlier `tool-calls` steps. The risk lifecycle wake arrived while siblings
+were still running. `describeTask` refreshes each Provider step through the exact
+baseline/delta reducer, but its dispatch settlement projection discards the already
+persisted `outcome.final_message_id`, and its completed-Message inventory discards
+the persisted finish reason. A physically completed Tool step is consequently
+hard to distinguish from a worker final report. The sole current wake's lifecycle
+ID cannot supply the other siblings' terminal report identities. No new terminal
+writer, latest-Message guess, polling gate or hidden Message is needed: project
+the exact existing dispatch settlement reference and retain each Message's actual
+finish reason. The same read-only correction covers direct/declared workflows,
+successful/partial/blocked settlements, continuation histories and restart reads;
+Task/Project lineage remains the existing ownership boundary. Missing references
+stay explicit. Physical completion is not inferred from a finish string.
+
+The worker trace also proves unnecessary complete Artifact catalog enumeration
+before reading explicitly assigned fresh repository paths. The shared projected
+Artifact protocol currently tells every holder to enumerate the complete catalog,
+even with no Artifact evidence need. Correct this shared guidance to distinguish
+published Artifact evidence from authorized fresh files/web evidence, prefer exact
+Artifact filters, and retain complete pagination/read/selection when Artifact
+evidence is required. Never substitute live paths for user-pinned immutable
+evidence. This is guidance, not a Host route or permission change.
+
+Light's worker overlays still say `Load light/shared/method`; clarify exact
+capability activation versus the returned loader name. Its scheduler overlay
+must use per-dispatch settlement final refs, batch independent reads, and emit
+only the selected nested initial dispatch schema (no continuation placeholders).
+Keep worker roles, ready-frontier semantics and all existing budgets unchanged.
+Regenerate the single immutable Light revision/payload with existing generators;
+do not include the two pre-existing website working changes. Positive checks cover
+real four-worker settlement-to-description-to-exact-reader facts, native partial
+settlement, fresh baseline/delta reconstruction, current package loading, and
+Artifact protocol compatibility. No UI automation or benchmark code enters Git.
+
+The external summary-only answer gate must separately validate the exact settled
+completion Message's visible text and successful completion summary, after the
+existing exact worker final-read and closure-locator checks. It must not accept
+arbitrary earlier transcript text. Preserve the original runner/results and use
+a reviewed successor runner for new exact-source acceptance. No additional real
+calls before this correction is independently reviewed. Source search includes
+DispatchOutcome/settlement, task describe and live projection reducer, exact
+Message reader, Light/core prompts, shared prompt composer and current architecture.
+Independent feedback for this new cut: none yet. Existing caches and isolated
+credential/model authority are reusable; original completed slots are immutable.
+
+Implementation checkpoint: the existing settlement outcome now supplies
+`settlement.final_message_id` for both workflow branches; the Message inventory
+and exact reader retain real finish/completion facts. Light's method/dispatch/
+final-read guidance and the shared Artifact evidence guidance are corrected.
+Only Light package bytes changed; the canonical revision generator stamped
+`2026.09.04.1` and the payload generator refreshed that exact package closure.
+Main positive checks: Light/partial-dispatch/payload 6/6 (87 assertions), including
+four real parallel worker pipelines, runtime settlement, baseline/delta and exact
+reader results; affected Mission baseline/delta 7/7 (10 assertions); actual
+Artifact cursor 1/1 (19 assertions). Package typecheck, explicit two-test-root
+typecheck and docs 339/25 pass. No dependencies were installed.
+
+The separate successor runner is outside Git at
+`D:\myhexin-local\.codex-benchmarks\light-consulting-runner-v2-20260905`.
+Its only behavior changes are an explicit exact-source SHA input and the settled
+completion-Message answer authority; all cases, budgets, worker final-reference
+checks, physical overlap checks, cleanup and prior output remain unchanged.
+Observer/contract tests pass 7/7 (24 assertions); read-only replay confirms the
+four existing completion answers contain the exact requested facts in that
+authority, including the previously misclassified clarification. This does not
+waive production failures or relabel old runs. Independent review and fresh
+exact-source real acceptance are pending.
+
+Independent review of tree `3bcf0599cf32743b707704c8771296bad1ee3a45`
+found only one P3: the Light README still instructed the scheduler to load the
+worker Skill. Corrected that exact sentence; the existing generator consequently
+stamped Light `2026.09.04.2` and synchronized the payload and version expectations.
+No production TypeScript or external runner changed in this correction. Reviewer
+confirmed the production projection and external answer authority have no other
+findings; external tests independently pass 7/7, 24 assertions. A reviewer test
+overlapped the package stamp and saw the old `.1` expectation against `.2`; this
+is recorded as mixed input, not a production regression or invalidation of prior
+evidence. Final Light checks pass 3/3 (80 assertions). The first post-generation
+payload-render check reached its existing 120-second timeout; no process remained.
+An isolated rerun of the unchanged exact checker passed in 50.99 seconds. The
+timeout's specific scheduling/I/O cause is unknown; no timeout or implementation
+was weakened. Docs 339/25 and diff checks pass. Standalone external TypeScript
+initially lacked Bun ambient types outside the repository. Resolving the already
+installed cache's physical `bun-types` declaration root produced zero diagnostics
+for the four external implementation/test roots, without installing or changing
+dependencies. Full runner typechecking after placement in the next exact source
+archive remains a preparation step before real execution.
+
+Final independent read-only review of tree
+`e86d907eca6b99802603ec0ecb6e9fab7136e43f` returned FINAL PASS, P0-P3=0.
+The reviewer confirmed the sole README finding and its complete generated
+closure are resolved. This paragraph is the only post-review evidence update;
+fresh real acceptance, release and website publication remain pending.

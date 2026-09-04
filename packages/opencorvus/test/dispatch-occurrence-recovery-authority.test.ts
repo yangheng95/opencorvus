@@ -145,7 +145,11 @@ describe("dispatch occurrence recovery authority", () => {
                   artifact_id: lineage.artifactID,
                   dispatch_id: dispatchID,
                   terminal_success: false,
-                  settlement: { artifact_id: settlement.artifactID, outcome_kind: "partial" },
+                  settlement: {
+                    artifact_id: settlement.artifactID,
+                    outcome_kind: "partial",
+                    final_message_id: "final_message_id" in partialOutcome ? partialOutcome.final_message_id : undefined,
+                  },
                 },
               ],
             },

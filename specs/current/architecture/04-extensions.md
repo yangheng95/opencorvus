@@ -803,6 +803,9 @@ Artifact 的 `artifact_search` / `artifact_read` / `artifact_select` 只在 sche
 `capability:capability_set:platform:tool-registry:scheduler-transport` typed ref 或相应 direct Tool refs 时投影给
 scheduler；scheduler base set 不包含 transport，runtime 不在 resolved projection 后追加隐藏 scheduler Tool。
 所有 worker 的 Artifact transport 仍由 platform worker transport 唯一追加，manifest 不复制或覆盖该 set；
+Artifact transport 可用不等于当前任务必须先枚举目录：明确授权的新鲜项目文件或网页可经已有只读工具直接检查。
+用户固定的不可变 Artifact 和 package 要求的已发布 Artifact 仍必须经原有精确读取与选择契约，不能替换为 live path。
+Artifact discovery 优先使用已知精确筛选并完整遍历该查询的分页；只有明确证据缺口仍未解决时才扩大为完整目录枚举。
 consumer 必须先完整精确读取，再对 typed output 的每个语义来源调用 `artifact_select`。完整但未选择的读取只进入
 `observed_artifact_locators`，成功选择的来源进入 `source_artifact_locators`，且 source 必须是 observed 的子集；
 零选择与缺省可选字段均合法。即时 `artifact_publish` 显式提交本次发布专属的

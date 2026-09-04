@@ -9,7 +9,8 @@ export function createReadAgentMessageTool(input: { taskID: string }) {
     read_agent_message: tool({
       description:
         "Read one exact persisted Agent message and its tool parts by its globally unique message ref from the Task description. " +
-        "This is a read-only fact projection: it does not select a latest message, infer success, or materialize an artifact.",
+        "This is a read-only fact projection: it does not select a latest message, infer success, or materialize an artifact. " +
+        "For a final worker report, use its exact dispatch settlement final_message_id; a completed Tool step is not a final report.",
       inputSchema: z
         .object({
           message_id: z
@@ -49,6 +50,8 @@ export function createReadAgentMessageTool(input: { taskID: string }) {
             message_id,
             role: message.info.role,
             author: message.info.author,
+            finish: message.info.role === "assistant" ? message.info.finish ?? null : null,
+            time_completed: message.info.role === "assistant" ? message.info.time.completed ?? null : null,
             text,
             tool_facts: toolFacts,
           },
