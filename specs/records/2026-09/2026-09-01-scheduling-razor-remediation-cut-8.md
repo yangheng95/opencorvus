@@ -3749,3 +3749,78 @@ Release is not complete. Read-only remote inspection found occupied tags
 is `0.0.58-beta`. The original requested 0.0.56 beta cannot be rebound to this
 source without rewriting an existing immutable identity. Version direction has
 been requested from the user; no tag, Release or website deployment was changed.
+
+### Final-response settlement correction — Recall and implementation plan
+
+The user still requires the complete Mission trajectory to finish without an
+anomaly before release, while retaining already proven work and reusing caches.
+The directly observed trigger is checker cleanup 471 ms after the completion
+receipt, while the Provider is still streaming the final assistant response.
+The existing predicate proves domain completion, tool/evidence success and
+earlier terminal-notification replies, but not settlement of the physical
+response carrying the final completion. Production `SessionProcessor` correctly
+persists the cancellation it receives from `Server.stop`; muting that log would
+not fix the premature shutdown.
+
+Read/search scope: the checker and all callers/tests of its final-evidence
+projection; `SessionStatus` exact input-generation lifecycle; Prompt state
+ownership/wait APIs; `SessionProcessor` assistant completion; and the Panel
+completion receipt. No public route, schema, durable table, scheduler queue,
+retry, Project capacity, Prompt owner or UI implementation changes are needed.
+Task and Mission event/retry/terminal checks remain unchanged. The issue is a
+read-only acceptance boundary in this isolated checker, not a new production
+scheduler mechanism. Independent feedback confirms the previous core-chain
+evidence remains valid, but full-response settlement was not established.
+
+The final-evidence projection will additionally require the exact completion
+assistant to be durably finished, every assistant of its exact input occurrence
+to be finished without an error, a successful stop response at or after that
+completion assistant, and the actual `SessionStatus` for that same input to be
+idle or successfully terminal. A missing/earlier/other-input observation remains
+pending; an actual failed response is explicit failure. The checker will keep
+its existing bounded activity loop until these conditions hold, then capture
+the final usage and response identity before cleanup. A retained standby Prompt
+owner is not itself failure: the physical execution lifecycle, not owner-slot
+existence, determines readiness. No sleeps, new completion facts or host-side
+workflow decisions will be added. Cleanup failures retain the diagnostic root.
+
+Positive verification will cover receipt-before-response, streaming/retry,
+settled stop response, wrong input generation, earlier stop response and typed
+failed response. At least one check will use real persisted Session Messages
+and the real execution lifecycle rather than only manually prepared booleans.
+
+Implementation verification: the snapshot and duplex-contract files passed
+9/9 tests with 36 assertions, including real persisted assistant Messages and
+the exact Session execution lifecycle. A TypeScript program using the package
+configuration plus both checker script entrypoints returned zero diagnostics.
+No production source, dependencies, generated payloads or native binaries were
+changed. Independent review and a fresh real final-response/cleanup observation
+are still required; the previous real core-chain pass remains valid evidence.
+
+Independent review returned FINAL PASS, P0-P3=0, on implementation tree
+`1cd295e755e4cb0e4c4fac69b22b8fcee2418b83`; its independent rerun also passed
+9/9 with 36 assertions. Docs validation passed 339 operations/25 groups.
+
+A separate isolated Windows helper-death observation then exercised the real
+default process-instance observer, without a constant test observer or changing
+production code. Evidence is retained at
+`D:\myhexin-local\.codex-benchmarks\mission-scheduling-a97eed212-20260904-retained-refs\helper-death-ugSGvk\evidence.json`;
+the parent directory's `helper-death-recovery.mjs` is the diagnostic runner. Its first
+two launches exposed harness setup errors (missing test process-root isolation,
+then listener readiness preceding Bun server startup); both were corrected
+before the successful observation, not classified as production failures.
+The successful run injected death only into its exact test-owned helper,
+observed the expected missing-settlement error and retained live registry owner,
+and kept the helper/ready/request records. A real peer inspected one request
+and retained that live owner. After the exact test owner was killed, a fresh
+successor inspected and removed precisely one request, with zero unknown or
+quarantined requests. Rebinding the exact target port proved physical listener
+release. This used the cached source-fingerprinted native helper; no build or
+installation was performed. It establishes live-owner retention and actual
+successor recovery after helper death, but does not reconstruct the unknown
+trigger of the older incident. Final real Provider response/cleanup acceptance
+remains outstanding.
+Then run focused checker contracts, explicit script typechecking, docs/diff
+checks and independent review; commit/push the scoped correction and perform
+the final cache-reusing real Provider run after the remaining diagnostic work
+is settled. Prior successful chain evidence is not discarded.

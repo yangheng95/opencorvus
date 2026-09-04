@@ -118,6 +118,8 @@ const [
   { missionRecord },
   { ProcessSupervisor },
   { ProviderUsageEventTable },
+  { SessionStatus },
+  { Message },
 ] = await Promise.all([
   import("@/cli/server-runtime"),
   import("@/engine/host-recovery"),
@@ -131,6 +133,8 @@ const [
   import("@/mission/projection"),
   import("@/shell/process-supervisor"),
   import("@/usage/usage.sql"),
+  import("@/session/status"),
+  import("@/session/message"),
 ])
 
 const prepared = await requireRecoveredServerRuntime(await listenWithRecoveredServerRuntime({
@@ -193,6 +197,7 @@ let evidence:
       terminalOrder: ReturnType<typeof assertMissionTaskTerminalOrder>
       finalArtifactID: string
       usageByAgent: ReturnType<typeof missionTaskDuplexFinalEvidenceState>["usageByAgent"]
+      finalReply: ReturnType<typeof missionTaskDuplexFinalEvidenceState>["finalReply"]
       trajectoryEvidence: ReturnType<typeof missionTaskDuplexTrajectoryEvidence>
       messageCount: number
       toolPartCount: number
@@ -229,6 +234,10 @@ while (Date.now() < activityDeadline.deadlineMs && Date.now() < absoluteDeadline
       artifacts,
       usage,
       sessions,
+      missionExecution: {
+        inputMessageID: SessionStatus.executionOccurrence(mission.sessionID)?.inputMessageID,
+        status: SessionStatus.get(mission.sessionID),
+      },
       toolHealth: missionTaskDuplexToolHealth(toolParts),
     }
   })
@@ -592,6 +601,23 @@ while (Date.now() < activityDeadline.deadlineMs && Date.now() < absoluteDeadline
         completionMessageID: missionProjection.completion?.messageID,
         completionParentMessageID:
           completionMessageData?.role === "assistant" ? completionMessageData.parentID : undefined,
+        messages: snapshot.messages.map((row) => {
+          const message = Message.Info.parse({ ...row.data, id: row.id, sessionID: row.session_id })
+          return {
+            id: message.id,
+            sessionID: message.sessionID,
+            role: message.role,
+            ...(message.role === "assistant"
+              ? {
+                  parentMessageID: message.parentID,
+                  completedAtMs: message.time.completed,
+                  finish: message.finish,
+                  error: message.error,
+                }
+              : {}),
+          }
+        }),
+        execution: snapshot.missionExecution,
         nonce,
         artifacts: snapshot.artifacts.map((artifact) => {
           const message = snapshot.messages.find((candidate) => candidate.id === artifact.message_id)
@@ -636,6 +662,7 @@ while (Date.now() < activityDeadline.deadlineMs && Date.now() < absoluteDeadline
         finalEvidenceBlockingReasons: finalEvidence.blockingReasons,
         finalArtifactID: finalEvidence.finalArtifactID,
         missingUsageOwners: finalEvidence.missingUsageOwners,
+        finalReply: finalEvidence.finalReply,
         missionBoardLane: missionProjection.boardLane,
         missionCompleted: missionProjection.completion !== undefined,
         duplexContract,
@@ -649,6 +676,9 @@ while (Date.now() < activityDeadline.deadlineMs && Date.now() < absoluteDeadline
       if (reconciliationEvidence.completionObserved && terminalWakeRepliesCompleted && finalEvidence.ready &&
         (!noFailedToolOccurrences || !reconciliationEvidence.ready)) {
         throw new Error(`Completed Mission has a terminal trajectory mismatch: ${acceptanceKey}`)
+      }
+      if (reconciliationEvidence.completionObserved && finalEvidence.finalReply.status === "failed") {
+        throw new Error(`Completed Mission has a failed final response: ${acceptanceKey}`)
       }
       if (
         allDelivered &&
@@ -682,6 +712,7 @@ while (Date.now() < activityDeadline.deadlineMs && Date.now() < absoluteDeadline
           terminalOrder,
           finalArtifactID: finalEvidence.finalArtifactID,
           usageByAgent: finalEvidence.usageByAgent,
+          finalReply: finalEvidence.finalReply,
           trajectoryEvidence: missionTaskDuplexTrajectoryEvidence({
             missionCreatedAtMs: missionProjection.created,
             missionCompletedAtMs: missionProjection.completion.timeRecorded,
@@ -772,6 +803,7 @@ while (Date.now() < activityDeadline.deadlineMs && Date.now() < absoluteDeadline
       failedToolPartCount: 0,
       exactSchedulerEventSet: true,
       reconciliation: evidence.reconciliationEvidence,
+      finalReply: evidence.finalReply,
       phaseTiming: {
         milestones: evidence.trajectoryEvidence.milestones,
         durationsMs: evidence.trajectoryEvidence.durationsMs,
@@ -824,7 +856,7 @@ while (Date.now() < activityDeadline.deadlineMs && Date.now() < absoluteDeadline
     cleanupFailures.push(error)
   }
   process.stdout.write("[duplex-e2e] cleanup=database:done\n")
-  if (!primaryFailure) {
+  if (!primaryFailure && cleanupFailures.length === 0) {
     try {
       await fs.rm(root, { recursive: true, force: true, maxRetries: 3, retryDelay: 100 })
     } catch (error) {

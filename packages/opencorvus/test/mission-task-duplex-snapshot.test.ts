@@ -6,6 +6,8 @@ import { Instance } from "@/project/instance"
 import { ProtocolDeliveryReceiptTable, ProtocolInboxTable } from "@/protocol/protocol.sql"
 import { ProtocolStore } from "@/protocol/store"
 import { Session } from "@/session"
+import { Message } from "@/session/message"
+import { SessionStatus } from "@/session/status"
 import {
   MessageTable,
   PartTable,
@@ -309,6 +311,17 @@ describe("Mission Task duplex snapshot", () => {
       missionSessionID: "session-mission",
       completionMessageID: "message-completion",
       completionParentMessageID: "message-input",
+      messages: [
+        {
+          id: "message-completion",
+          sessionID: "session-mission",
+          role: "assistant",
+          parentMessageID: "message-input",
+          completedAtMs: 200,
+          finish: "stop",
+        },
+      ],
+      execution: { inputMessageID: "message-input", status: { type: "idle" as const } },
       nonce,
       artifacts: [
         {
@@ -370,6 +383,12 @@ describe("Mission Task duplex snapshot", () => {
       finalArtifactCount: 1,
       artifactContainsNonce: true,
       missingUsageOwners: [],
+      finalReply: {
+        status: "settled",
+        responseMessageIDs: ["message-completion"],
+        completedAtMs: 200,
+        failedReplyIDs: [],
+      },
       usageByAgent: [
         {
           agentID: "mission",
@@ -392,6 +411,44 @@ describe("Mission Task duplex snapshot", () => {
           totalTokens: 209,
         },
       ],
+    })
+
+    for (const status of [
+      { type: "streaming" as const },
+      { type: "retry" as const, attempt: 1, message: "retrying", next: 300 },
+    ]) {
+      expect(
+        missionTaskDuplexFinalEvidenceState({
+          ...base,
+          execution: { ...base.execution, status },
+        }).blockingReasons,
+      ).toEqual(["final_response_unsettled"])
+    }
+    expect(
+      missionTaskDuplexFinalEvidenceState({
+        ...base,
+        execution: { ...base.execution, inputMessageID: "another-input" },
+      }).finalReply.status,
+    ).toBe("pending")
+    expect(
+      missionTaskDuplexFinalEvidenceState({
+        ...base,
+        messages: [
+          { ...base.messages[0]!, finish: "tool-calls", completedAtMs: 200 },
+          { ...base.messages[0]!, id: "earlier-stop", completedAtMs: 100 },
+        ],
+      }).blockingReasons,
+    ).toEqual(["final_response_unsettled"])
+    expect(
+      missionTaskDuplexFinalEvidenceState({
+        ...base,
+        messages: [{ ...base.messages[0]!, error: { name: "MessageAbortedError", data: { message: "shutdown" } } }],
+      }).finalReply,
+    ).toEqual({
+      status: "failed",
+      responseMessageIDs: [],
+      completedAtMs: undefined,
+      failedReplyIDs: ["message-completion"],
     })
 
     expect(
@@ -417,11 +474,7 @@ describe("Mission Task duplex snapshot", () => {
           parentMessageID: "message-previous-input",
         })),
       }).blockingReasons,
-    ).toEqual([
-      "final_artifact_occurrence_missing",
-      "final_artifact_payload_invalid",
-      "final_artifact_nonce_missing",
-    ])
+    ).toEqual(["final_artifact_occurrence_missing", "final_artifact_payload_invalid", "final_artifact_nonce_missing"])
 
     expect(
       missionTaskDuplexFinalEvidenceState({
@@ -443,11 +496,124 @@ describe("Mission Task duplex snapshot", () => {
           { ...base.artifacts[0]!, id: "artifact-duplicate", messageID: "message-artifact-2" },
         ],
       }).blockingReasons,
-    ).toEqual([
-      "final_artifact_occurrence_missing",
-      "final_artifact_payload_invalid",
-      "final_artifact_nonce_missing",
-    ])
+    ).toEqual(["final_artifact_occurrence_missing", "final_artifact_payload_invalid", "final_artifact_nonce_missing"])
+  })
+
+  test("accepts the final reply only after persisted assistant and exact execution settlement", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const session = await Session.create({ kind: "assistant", title: "Final response settlement" })
+        const user = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: session.id,
+          role: "user",
+          author: "user",
+          agent: "work",
+          model: { providerID: "test", modelID: "test" },
+          time: { created: 100 },
+        })
+        const completion = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: session.id,
+          role: "assistant",
+          author: "work",
+          agent: "work",
+          parentID: user.id,
+          providerID: "test",
+          modelID: "test",
+          path: { cwd: project.path, root: project.path },
+          cost: 0,
+          tokens: { total: 1, input: 1, output: 0, reasoning: 0, cache: { read: 0, write: 0 } },
+          time: { created: 110, completed: 120 },
+          finish: "tool-calls",
+        })
+        if (completion.role !== "assistant") throw new Error("Expected persisted assistant completion")
+        const owner = new AbortController().signal
+        SessionStatus.beginPromptGeneration(session.id, owner)
+        SessionStatus.beginExecutionOccurrence(session.id, user.id, owner)
+        await SessionStatus.set(session.id, { type: "streaming" }, { promptGenerationOwner: owner })
+        const observe = () =>
+          missionTaskDuplexFinalEvidenceState({
+            missionSessionID: session.id,
+            completionMessageID: completion.id,
+            completionParentMessageID: user.id,
+            messages: Database.use((db) => db.select().from(MessageTable).all()).map((row) => {
+              const message = Message.Info.parse({ ...row.data, id: row.id, sessionID: row.session_id })
+              return {
+                id: message.id,
+                sessionID: message.sessionID,
+                role: message.role,
+                ...(message.role === "assistant"
+                  ? {
+                      parentMessageID: message.parentID,
+                      completedAtMs: message.time.completed,
+                      finish: message.finish,
+                      error: message.error,
+                    }
+                  : {}),
+              }
+            }),
+            execution: {
+              inputMessageID: SessionStatus.executionOccurrence(session.id)?.inputMessageID,
+              status: SessionStatus.get(session.id),
+            },
+            nonce: "final-response",
+            artifacts: [
+              {
+                id: "final",
+                messageID: completion.id,
+                sessionID: session.id,
+                parentMessageID: user.id,
+                payload: { schemaVersion: "1", renderer: "document@1", title: "Final", markdown: "final-response" },
+              },
+            ],
+            requiredUsageOwners: [{ sessionID: session.id, agentID: "mission" }],
+            usage: [
+              {
+                sessionID: session.id,
+                agentID: "mission",
+                inputTokens: 1,
+                outputTokens: 1,
+                reasoningTokens: 0,
+                cacheReadTokens: 0,
+                cacheWriteTokens: 0,
+                totalTokens: 2,
+              },
+            ],
+          })
+        try {
+          expect(observe().blockingReasons).toEqual(["final_response_unsettled"])
+          const { orderKey: _completionOrderKey, ...replyFields } = completion
+          const tail = await Session.updateMessage({
+            ...replyFields,
+            id: Identifier.ascending("message"),
+            time: { created: 130 },
+            finish: undefined,
+          })
+          if (tail.role !== "assistant") throw new Error("Expected persisted assistant response")
+          await SessionStatus.settleAcceptedExecutionOccurrence(session.id, owner)
+          expect(observe().finalReply.status).toBe("pending")
+          await SessionStatus.set(session.id, { type: "streaming" }, { promptGenerationOwner: owner })
+          await Session.updateMessage({ ...tail, time: { created: 130, completed: 140 }, finish: "stop" })
+          expect(observe().finalReply.status).toBe("pending")
+          await SessionStatus.settleAcceptedExecutionOccurrence(session.id, owner)
+          expect(observe()).toMatchObject({
+            ready: true,
+            blockingReasons: [],
+            finalReply: {
+              status: "settled",
+              responseMessageIDs: [tail.id],
+              completedAtMs: 140,
+              failedReplyIDs: [],
+            },
+          })
+        } finally {
+          SessionStatus.release(session.id)
+        }
+      },
+    })
   })
 
   test("projects terminal Task and delivery facts into one semantic acceptance frontier", async () => {
@@ -495,6 +661,7 @@ describe("Mission Task duplex snapshot", () => {
             time: { start: now + 2 },
           },
         })
+        if (runningTool.type !== "tool") throw new Error("Expected persisted Tool Part")
         await Session.updatePart({
           ...runningTool,
           state: {

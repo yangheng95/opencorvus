@@ -14,6 +14,7 @@ import { projectToolPartInTransaction } from "@/session/tool-part-facts"
 import type { Database } from "@/storage/db"
 import { PanelArtifactReadReferenceFactSchema } from "@/agent/artifact-provenance-facts"
 import { MissionCompletionInput } from "@/mission/completion"
+import type { SessionStatus } from "@/session/status"
 
 // This bounded protocol case produces one small Completion Decision per Task.
 // Its acceptance trajectory is stricter than the general paged Artifact API.
@@ -259,6 +260,16 @@ export function missionTaskDuplexFinalEvidenceState(input: {
   missionSessionID: string
   completionMessageID?: string
   completionParentMessageID?: string
+  messages: readonly {
+    id: string
+    sessionID: string
+    role: string
+    parentMessageID?: string
+    completedAtMs?: number
+    finish?: string
+    error?: unknown
+  }[]
+  execution: { inputMessageID?: string; status: SessionStatus.Info }
   nonce: string
   artifacts: readonly {
     id: string
@@ -271,7 +282,54 @@ export function missionTaskDuplexFinalEvidenceState(input: {
   requiredUsageOwners: readonly MissionTaskDuplexUsageOwner[]
   unresolvedUsageOwners?: readonly string[]
 }) {
-  const completionArtifacts = input.completionMessageID && input.completionParentMessageID
+  const replies = input.completionParentMessageID
+    ? input.messages.filter(
+        (message) =>
+          message.sessionID === input.missionSessionID &&
+          message.role === "assistant" &&
+          message.parentMessageID === input.completionParentMessageID,
+      )
+    : []
+  const completionReply = replies.find((message) => message.id === input.completionMessageID)
+  const sameExecution = input.execution.inputMessageID === input.completionParentMessageID
+  const failedReplyIDs = replies
+    .filter((message) => message.error != null)
+    .map((message) => message.id)
+    .sort()
+  const successfulStops =
+    completionReply?.completedAtMs !== undefined
+      ? replies.filter(
+          (message) =>
+            message.error == null &&
+            message.finish === "stop" &&
+            message.completedAtMs !== undefined &&
+            message.completedAtMs >= completionReply.completedAtMs!,
+        )
+      : []
+  const executionFailed =
+    sameExecution &&
+    input.execution.status.type === "terminal" &&
+    (input.execution.status.reason === "error" || input.execution.status.reason === "aborted")
+  const executionSettled =
+    sameExecution &&
+    (input.execution.status.type === "idle" ||
+      (input.execution.status.type === "terminal" && input.execution.status.reason === "completed"))
+  const replyFailed = failedReplyIDs.length > 0 || executionFailed
+  const replySettled = Boolean(
+    completionReply &&
+      successfulStops.length > 0 &&
+      replies.every((message) => message.completedAtMs !== undefined) &&
+      executionSettled &&
+      !replyFailed,
+  )
+  const finalReply = {
+    status: replyFailed ? ("failed" as const) : replySettled ? ("settled" as const) : ("pending" as const),
+    responseMessageIDs: successfulStops.map((message) => message.id).sort(),
+    completedAtMs: replySettled ? Math.max(...successfulStops.map((message) => message.completedAtMs!)) : undefined,
+    failedReplyIDs,
+  }
+  const completionArtifacts =
+    input.completionMessageID && input.completionParentMessageID
     ? input.artifacts.filter(
         (artifact) =>
           artifact.sessionID === input.missionSessionID &&
@@ -283,23 +341,16 @@ export function missionTaskDuplexFinalEvidenceState(input: {
       ? PublishableInteractiveArtifactPayload.safeParse(completionArtifacts[0]!.payload)
       : undefined
   const canonicalArtifact = parsedArtifact?.success === true ? parsedArtifact.data : undefined
-  const artifactContainsNonce = canonicalArtifact
-    ? JSON.stringify(canonicalArtifact).includes(input.nonce)
-    : false
+  const artifactContainsNonce = canonicalArtifact ? JSON.stringify(canonicalArtifact).includes(input.nonce) : false
   const requiredSessionIDs = new Set(input.requiredUsageOwners.map((owner) => owner.sessionID))
-  const exactUsage = input.usage.filter(
-    (row) => row.sessionID !== null && requiredSessionIDs.has(row.sessionID),
-  )
+  const exactUsage = input.usage.filter((row) => row.sessionID !== null && requiredSessionIDs.has(row.sessionID))
   const missingUsageOwners = [
     ...(input.unresolvedUsageOwners ?? []),
     ...input.requiredUsageOwners
     .filter(
       (owner) =>
         !exactUsage.some(
-          (row) =>
-            row.sessionID === owner.sessionID &&
-            row.agentID === owner.agentID &&
-            row.totalTokens > 0,
+            (row) => row.sessionID === owner.sessionID && row.agentID === owner.agentID && row.totalTokens > 0,
         ),
     )
     .map((owner) => `${owner.agentID}:${owner.sessionID}`),
@@ -347,6 +398,9 @@ export function missionTaskDuplexFinalEvidenceState(input: {
     ...(input.completionMessageID && !input.completionParentMessageID
       ? ["mission_completion_occurrence_missing" as const]
       : []),
+    ...(input.completionMessageID && input.completionParentMessageID && !replySettled
+      ? [replyFailed ? ("final_response_failed" as const) : ("final_response_unsettled" as const)]
+      : []),
     ...(completionArtifacts.length !== 1 ? ["final_artifact_occurrence_missing" as const] : []),
     ...(!canonicalArtifact ? ["final_artifact_payload_invalid" as const] : []),
     ...(!artifactContainsNonce ? ["final_artifact_nonce_missing" as const] : []),
@@ -360,6 +414,7 @@ export function missionTaskDuplexFinalEvidenceState(input: {
     artifactContainsNonce,
     missingUsageOwners,
     usageByAgent,
+    finalReply,
   }
 }
 
