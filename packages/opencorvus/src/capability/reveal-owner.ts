@@ -105,7 +105,10 @@ export function normalizedProviderToolDefinition(
   }
 }
 
-function exactDescriptor(payload: CatalogViewSnapshotPayloadV3, ref: CapabilityRef): CapabilityDescriptor {
+export function exactOccurrenceCapabilityDescriptor(
+  payload: CatalogViewSnapshotPayloadV3,
+  ref: CapabilityRef,
+): CapabilityDescriptor {
   const encoded = CapabilityRefCodec.encode(ref)
   const matches = payload.descriptors.filter((descriptor) => CapabilityRefCodec.encode(descriptor.ref) === encoded)
   if (matches.length !== 1) throw new Error(`Catalog occurrence publishes ${matches.length} descriptors for ${encoded}.`)
@@ -114,7 +117,7 @@ function exactDescriptor(payload: CatalogViewSnapshotPayloadV3, ref: CapabilityR
 
 function assertRevealable(payload: CatalogViewSnapshotPayloadV3, requested: CapabilityRef): CapabilityDescriptor {
   const encoded = CapabilityRefCodec.encode(requested)
-  const descriptor = exactDescriptor(payload, requested)
+  const descriptor = exactOccurrenceCapabilityDescriptor(payload, requested)
   const view = payload.views.find((candidate) => CapabilityRefCodec.encode(candidate.descriptor_ref) === encoded)
   if (!view || !view.discoverable_by.includes(payload.context.caller)) {
     throw new Error(`Capability ${encoded} is not discoverable by ${payload.context.caller}.`)

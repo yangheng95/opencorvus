@@ -25,6 +25,7 @@ import {
   CapabilityRevealAuthorizationError,
   CapabilityRevealConflictError,
   createCapabilityRevealOwner,
+  exactOccurrenceCapabilityDescriptor,
 } from "../../src/capability/reveal-owner"
 import { CAPABILITY_REVEAL_RECEIPT_METADATA_KEY } from "../../src/capability/reveal-receipt"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
@@ -281,6 +282,23 @@ afterAll(async () => {
 })
 
 describe("occurrence capability reveal owner", () => {
+  test("resolves one frozen descriptor and reports exact missing or ambiguous bindings", () => {
+    const payload = CatalogOccurrenceBinding.payload({
+      snapshot: catalogSnapshot(),
+      materializationScope: materializationScope(),
+      permanentProviderBaseDefinition: PERMANENT_BASE_DEFINITION,
+    })
+    const descriptor = exactOccurrenceCapabilityDescriptor(payload, readRef)
+    expect(descriptor.behavior).toEqual({ kind: "call_tool", tool_ref: readRef })
+    expect(() => exactOccurrenceCapabilityDescriptor(payload, baseSquadRef)).toThrow(
+      "Catalog occurrence publishes 0 descriptors",
+    )
+    expect(() => exactOccurrenceCapabilityDescriptor({
+      ...payload,
+      descriptors: [...payload.descriptors, descriptor],
+    }, readRef)).toThrow("Catalog occurrence publishes 2 descriptors")
+  })
+
   test("persists an exact diagnostic for mutually exclusive Expert Squad filters", async () => {
     await using project = await memoryProject()
     await Instance.provide({

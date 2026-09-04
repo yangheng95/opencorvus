@@ -47,6 +47,7 @@ import { SkillMount } from "../../src/skill/mounts"
 import { CapabilitySearchTool } from "../../src/tool/capability-search"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
 import { allCapabilityGrants } from "./capability-grant-fixture"
+import { resolveTestCapabilityTools } from "../fixture/capability-occurrence"
 
 const packageRoot = path.resolve(import.meta.dir, "../../../../expert-squads/builtin/light")
 const skillRef = "light/shared/method"
@@ -436,8 +437,10 @@ describe("Light Expert Squad package", () => {
           const workerToolBudgets = new Map<string, ReturnType<typeof SessionLoop.estimateToolPayload>>()
           let resolveAllStarted!: () => void
           let resolveAllFinished!: () => void
-          const allStarted = new Promise<void>((resolve) => {
+          let rejectAllStarted!: (reason: unknown) => void
+          const allStarted = new Promise<void>((resolve, reject) => {
             resolveAllStarted = resolve
+            rejectAllStarted = reject
           })
           const allFinished = new Promise<void>((resolve) => {
             resolveAllFinished = resolve
@@ -446,36 +449,74 @@ describe("Light Expert Squad package", () => {
             releaseWorkers = resolve
           })
           providerSpy = spyOn(Provider, "getModel").mockResolvedValue(providerModel())
+          const createProcessor = SessionProcessor.create
           processorSpy = spyOn(SessionProcessor, "create").mockImplementation((input: any) => {
             const assistant = input.assistantMessage
+            const processor = createProcessor(input)
             return {
-              message: assistant,
-              partFromToolCall() {
-                return undefined
-              },
+              ...processor,
               async process(streamInput: {
                 agentID: string
+                agent: Parameters<typeof SessionLoop.resolveTools>[0]["agent"]
                 tools: Parameters<typeof SessionLoop.estimateToolPayload>[0]
               }) {
-                if (Object.hasOwn(agentRoles, streamInput.agentID)) {
-                  workerToolBudgets.set(streamInput.agentID, SessionLoop.estimateToolPayload(streamInput.tools))
+                try {
+                  if (Object.hasOwn(agentRoles, streamInput.agentID)) {
+                    workerToolBudgets.set(streamInput.agentID, SessionLoop.estimateToolPayload(streamInput.tools))
+                    const common = {
+                      config: await EffectiveConfig.effective({ sessionID: assistant.sessionID }),
+                      model: providerModel(),
+                      session: await Session.get(assistant.sessionID),
+                      assistant,
+                      processor,
+                      agent: streamInput.agent,
+                      agentID: streamInput.agentID,
+                      messages: await Session.messages({ sessionID: assistant.sessionID }),
+                    }
+                    const revealed = await resolveTestCapabilityTools({
+                      ...common,
+                      activeLocalRefs: ["light/shared/method"],
+                    })
+                    const skill = revealed.occurrence.payload.descriptors.find(
+                      (descriptor) => descriptor.ref.kind === "skill" && descriptor.ref.local_ref === "light/shared/method",
+                    )
+                    if (!skill || skill.behavior.kind !== "open_skill") {
+                      throw new Error("Light method has no exact Skill behavior")
+                    }
+                    expect(skill.behavior.name).toBe("light-advisory-method")
+                    const reconstructed = await resolveTestCapabilityTools(common)
+                    const loaded = await reconstructed.tools.skill!.execute!(
+                      { name: skill.behavior.name },
+                      { toolCallId: `call_load_light_method_${assistant.id}`, messages: [], abortSignal: input.abort },
+                    ) as Parameters<typeof processor.completeRecoveredToolPart>[0]["output"]
+                    expect(loaded.metadata.name).toBe("light-advisory-method")
+                    expect(loaded.output).toContain('<skill_content name="light-advisory-method">')
+                    await processor.completeRecoveredToolPart({
+                      toolCallID: `call_load_light_method_${assistant.id}`,
+                      toolInput: { name: skill.behavior.name },
+                      output: loaded,
+                    })
+                  }
+                  processorStarts++
+                  if (processorStarts === 4) resolveAllStarted()
+                  await release
+                  await Session.updatePart({
+                    id: Identifier.ascending("part"),
+                    sessionID: assistant.sessionID,
+                    messageID: assistant.id,
+                    type: "text",
+                    text: `completed ${assistant.sessionID}`,
+                  })
+                  assistant.finish = "stop"
+                  assistant.time.completed = Date.now()
+                  await Session.updateMessage(assistant)
+                  processorFinishes++
+                  if (processorFinishes === 4) resolveAllFinished()
+                  return "stop"
+                } catch (error) {
+                  rejectAllStarted(error)
+                  throw error
                 }
-                processorStarts++
-                if (processorStarts === 4) resolveAllStarted()
-                await release
-                await Session.updatePart({
-                  id: Identifier.ascending("part"),
-                  sessionID: assistant.sessionID,
-                  messageID: assistant.id,
-                  type: "text",
-                  text: `completed ${assistant.sessionID}`,
-                })
-                assistant.finish = "stop"
-                assistant.time.completed = Date.now()
-                await Session.updateMessage(assistant)
-                processorFinishes++
-                if (processorFinishes === 4) resolveAllFinished()
-                return "stop"
               },
             } as any
           })

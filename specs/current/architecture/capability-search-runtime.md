@@ -156,7 +156,13 @@ second definition owner.
   that first constructs a complete Tool record is not an exact factory.
 - Skill and Mission Skill loaders are absent at revision zero. Revealing one
   exact Skill mounts only that Skill; supporting files remain exact loader
-  reads.
+  reads. Capability identity (`ref.local_ref`) and executable Skill `name` are
+  distinct: initial reveal and receipt reconstruction resolve the exact frozen
+  descriptor's `open_skill.name` or `open_mission_skill.name` before applying
+  the existing mount eligibility checks. They never treat a package ref as a
+  loader-name alias or consult a replacement live catalog. Selecting another
+  Skill rebuilds the loader from the selected identities even when that loader
+  already exists; its existence does not imply the new Skill is active.
 - A direct Conversation or Mission publishes callable MCP children only from
   its exact Host Session owner. The project/config inventory remains status and
   metadata authority; it is not a second executable owner for the same

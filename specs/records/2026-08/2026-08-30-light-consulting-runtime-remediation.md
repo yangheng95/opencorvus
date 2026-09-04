@@ -429,3 +429,118 @@ recovery 1/1 (4 assertions), explicit current test-file TypeScript 0 diagnostics
 external four-root TypeScript 0 diagnostics, docs 339/25, and diff checks. This
 closes acceptance preparation, not the four real cases. Production source and
 package revision remain unchanged; existing Mission real acceptance is retained.
+
+### Current four-case evidence and next correction Recall
+
+The preparation commit `740514cf60df71e0f2ce99c9cb881aa239802666` was normally
+pushed after the complete hook (root typecheck 8/8, seven cache hits; routes
+6/34, docs 339/25, lease 18/22, architecture 16, package topology 10, release
+authorities 5, exact module topology 1103/5537/four clean imports, secret scan
+zero). Fetch verified zero ahead/behind. No dependency installation or native
+compilation occurred. Runtime source remains the exact archived `7a2fc56f8`.
+
+All four original real Luna cases ran once, serially, to natural completion
+between 15:27 and 15:37 UTC on September 4. Full evidence, immutable runner
+hashes, credential/catalog preflight, per-case logs and diagnostic summary are
+outside Git at
+`D:\myhexin-local\.codex-benchmarks\light-consulting-7a2fc56f8-20260904-current`.
+The raw runner reports NOT PASS. Do not rerun these completed slots or relabel
+them PASS. Canonical usage includes cache-read and, where present, a separately
+reported Memory helper row.
+
+| Case | Settled duration | Task tokens | Orchestrator tokens | Physical worker maximum concurrency |
+| --- | ---: | ---: | ---: | ---: |
+| Single advice | 114,046 ms | 186,936 | 107,658 | 1 |
+| Four-member investigation | 227,922 ms | 849,577 | 564,509 | 4 |
+| Minimal clarification | 86,009 ms | 148,927 | 139,424 | 1 |
+| Two-investigator synthesis | 130,077 ms | 318,333 | 170,343 | 2 |
+
+Each parallel worker physically overlapped a peer, every scenario has one
+successful collection with the expected 1/4/1/2 accepted and observed worker
+Sessions, and scheduler Skill calls/operator steering are zero. These concrete
+improvements retain the prior implementation evidence, but do not erase the
+following failures. Four-member Task and Orchestrator token budgets fail; all
+other time/token budgets pass. Runtime cleanup reported no failure and removed
+both temporary credential/catalog files from every retained evidence root.
+
+1. Single, four-member and two-investigator cases contain failed production
+   Skill calls. The exact current catalog distinguishes capability local ref
+   `light/shared/method` from behavior/Skill name `light-advisory-method`.
+   Completed search receipts correctly activate the former but publish a loader
+   declaring no available Skills. `SessionLoop.resolveTools()` incorrectly maps
+   active refs and a fresh reveal candidate with `.requested_ref.local_ref`;
+   `SkillMount.resolve()` filters against `grant.skill.name`. Thus even the
+   correct `light-advisory-method` input fails. This is shared reference/name
+   conversion, not a missing install or a Light-only permission failure.
+   Conversation/Work and native Mission share these maps; existing default-Skill
+   tests use identical local ref/name and cannot expose it. Reconstructed
+   occurrences fold the same refs and retain the defect. Another boundary is
+   the cached loader path during selection of an additional Skill: a currently
+   materialized loader must not suppress exact new Skill materialization.
+2. The four-member scheduler first supplied null `acceptance_gap_id` and
+   `criterion_ids` beside each `dispatch`. The emitted frozen schema declares
+   these only inside a continuation Turn; production correctly rejected the
+   wrong nesting. Its next collection succeeded. Do not weaken that validator
+   or silently discard unknown fields. Audit collection schema/guidance and the
+   ten `read_agent_message` calls before proposing a narrow prompt/schema fix
+   for the measured cost; the source of all overhead is not yet established.
+3. Minimal clarification has one durable answered question (`regulated`), one
+   completed planner, no Tool failure, and the exact requested facts in the
+   visible completed delivery Message `msg_htvpTwkvQOuNGb7GWufE`. Its closure
+   summary paraphrases those facts, so the old runner's summary-only string
+   assertion is a false answer failure. Preserve the original expected facts,
+   but bind answer verification to the current authoritative visible delivery
+   and its completion evidence, not an internal summary's spelling. This
+   correction requires separate positive tests/review; it is not permission to
+   waive the three production Skill failures or the four-member cost failure.
+
+Next implementation scope, after this analysis: resolve exact Skill behavior
+names from the already frozen occurrence descriptor, reuse the existing exact
+descriptor lookup, and use that one mapping in initial activation and receipt
+reconstruction for production and Mission Skill families. No new alias lookup,
+live catalog fallback, grant, shadow activation table, migration writer, model
+special case or change to Skill frontmatter identity. Preserve permission,
+platform, required-Tool and Task/Project ownership checks. Exercise the real
+Light worker SessionLoop search/reveal/load path with differing ref/name and
+reconstruction, plus native Skill-family coverage and explicit unknown-ref
+errors. Keep valid immutable receipts authoritative and test stale/corrupt
+binding behavior rather than rewriting historical receipts. Public loader
+input remains exact Skill `name`; package prompts must distinguish catalog ref
+from that returned executable name. Only measured, independently reviewed
+corrections will justify a new exact-source real acceptance run.
+
+Read/search scope: current extensions Skill contract, search-native runtime
+contract, frozen descriptor/behavior and reveal-owner, SessionLoop materializer
+and finalizer, SkillMount, Conversation capability, Mission Skill runtime,
+Light prompts/frontmatter, full current collection schema/execution, Provider
+schema/input normalization, original and current raw evidence. No new independent
+implementation feedback yet; the previous review covered the preparation cut.
+UI, public routes, formal credential/database stores and the three preserved
+working paths are outside this correction. Release `0.0.59-beta` and website
+publication remain pending real acceptance, not cancelled.
+
+### Exact Skill behavior correction
+
+The deterministic Light worker test reproduced the real empty-compatible-Skill
+failure before the runtime change. The correction reuses the occurrence's exact
+descriptor lookup for both Skill families and both fresh/reconstructed active
+sets, and rematerializes a selected Skill even when its loader already exists.
+No grant, frontmatter identity, receipt, migration or runtime ownership changed.
+
+Current focused evidence: Light plus native Work Skill expansion/reconstruction
+4/4 (69 assertions); reveal owner/receipt/catalog/Processor matrix 31/31
+(91 assertions), including real cross-process reveal settlement; affected native
+Mission Skill/state/current-occurrence matrix 3/3 (14 assertions). Direct Tool
+test calls settle their actual returned output through the existing Processor
+completion primitive before another reveal, preserving the active-Tool fence.
+The new Mission test exposed two existing test-only TypeScript annotations:
+snapshot files omitted their actual `bytes` property and a partial stream stub
+needed an explicit `unknown` boundary. Their fixture types now describe the
+existing runtime output; their affected positive tests pass. Package typecheck
+and docs 339/25 pass. The explicit four-test-root typecheck reports zero
+diagnostics. Fresh independent read-only review of tree
+`6e5023ef6a692d1029b8fc1ffda4d8f733a9c75c` returned FINAL PASS, P0-P3=0;
+the reviewer independently passed 10/10 tests, 91 assertions. Only this evidence
+paragraph was updated after review. The real case failures, prompt
+ref/name ambiguity, four-member cost correction, and external answer-checker
+correction remain open; this runtime cut alone is not release acceptance.

@@ -15,14 +15,14 @@ afterEach(async () => {
 })
 
 describe("search-native Skill reveal", () => {
-  test("keeps the loader absent initially and mounts only the exact revealed Skill", async () => {
+  test("materializes exact selected Skills and reconstructs an expanded loader from receipts", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
       fn: async () => {
         await Config.updateProjectPatch({
           primary_assistant_capabilities: {
-            work: { skill_refs: ["work-artifacts"], mcp_server_refs: [] },
+            work: { skill_refs: ["work-artifacts", "research-report"], mcp_server_refs: [] },
           },
         })
         const config = await Config.get()
@@ -109,8 +109,36 @@ describe("search-native Skill reveal", () => {
         const loaded = (await skill.execute(
           { name: "work-artifacts" },
           { toolCallId: "call_load_exact_work_artifacts", messages: [], abortSignal: new AbortController().signal },
-        )) as { output: string }
+        )) as Parameters<typeof processor.completeRecoveredToolPart>[0]["output"]
         expect(loaded.output).toContain("Work Artifacts")
+        await processor.completeRecoveredToolPart({
+          toolCallID: "call_load_exact_work_artifacts",
+          toolInput: { name: "work-artifacts" },
+          output: loaded,
+        })
+        const expanded = await resolveTestCapabilityTools({ ...common, activeLocalRefs: ["research-report"] })
+        const expandedList = await expanded.tools.skill!.execute!(
+          {},
+          { toolCallId: "call_list_expanded_skills", messages: [], abortSignal: new AbortController().signal },
+        ) as Parameters<typeof processor.completeRecoveredToolPart>[0]["output"] & { metadata: { names: string[] } }
+        expect(expandedList.metadata.names.sort()).toEqual(["research-report", "work-artifacts"])
+        await processor.completeRecoveredToolPart({
+          toolCallID: "call_list_expanded_skills",
+          toolInput: {},
+          output: expandedList,
+        })
+        const reconstructed = await resolveTestCapabilityTools(common)
+        const report = await reconstructed.tools.skill!.execute!(
+          { name: "research-report" },
+          { toolCallId: "call_load_reconstructed_report", messages: [], abortSignal: new AbortController().signal },
+        ) as Parameters<typeof processor.completeRecoveredToolPart>[0]["output"]
+        expect(report.metadata.name).toBe("research-report")
+        expect(report.output).toContain('<skill_content name="research-report">')
+        await processor.completeRecoveredToolPart({
+          toolCallID: "call_load_reconstructed_report",
+          toolInput: { name: "research-report" },
+          output: report,
+        })
       },
     })
   }, 30_000)

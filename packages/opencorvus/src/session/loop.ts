@@ -146,6 +146,7 @@ import {
   CAPABILITY_REVEAL_OWNER_EXTRA_KEY,
   capabilityRevealOccurrenceParts,
   createCapabilityRevealOwner,
+  exactOccurrenceCapabilityDescriptor,
   normalizedProviderToolDefinition,
   type CapabilityRevealOwner,
 } from "@/capability/reveal-owner"
@@ -3998,12 +3999,22 @@ export namespace SessionLoop {
     })
     const activeProviderNames = new Set(revealState.definitions.map((activation) => activation.provider_name))
     for (const providerName of searchBaseDefinition.providerNames) activeProviderNames.add(providerName)
+    const exactSkillName = (ref: CapabilityRef): string => {
+      const { behavior } = exactOccurrenceCapabilityDescriptor(occurrenceCatalogPayload, ref)
+      if (
+        (ref.kind === "skill" && behavior.kind === "open_skill") ||
+        (ref.kind === "mission_skill" && behavior.kind === "open_mission_skill")
+      ) {
+        return behavior.name
+      }
+      throw new Error(`Skill capability ${CapabilityRefCodec.encode(ref)} has no exact matching loader behavior.`)
+    }
     const activeProductionSkillNames = [...revealState.active.values()]
       .filter((activation) => activation.requested_ref.kind === "skill")
-      .map((activation) => activation.requested_ref.local_ref)
+      .map((activation) => exactSkillName(activation.requested_ref))
     const activeMissionSkillNames = [...revealState.active.values()]
       .filter((activation) => activation.requested_ref.kind === "mission_skill")
-      .map((activation) => activation.requested_ref.local_ref)
+      .map((activation) => exactSkillName(activation.requested_ref))
     const activeRegistryToolIDs = [
       ...revealState.definitions.flatMap((activation) =>
         activation.executable_ref.kind === "tool" && activation.executable_ref.owner_ref === "tool-registry"
@@ -4511,13 +4522,13 @@ export namespace SessionLoop {
           materializedCandidates[providerName] = executable
         }
       }
-      if (!executable && (requestedRef.kind === "skill" || requestedRef.kind === "mission_skill")) {
+      if (requestedRef.kind === "skill" || requestedRef.kind === "mission_skill") {
         const candidateNames = new Set(Object.keys(tools))
         candidateNames.add(providerName)
         await finalizeSkillSurface(candidateNames, {
           ...(requestedRef.kind === "skill"
-            ? { productionSkillNames: [...new Set([...activeProductionSkillNames, requestedRef.local_ref])] }
-            : { missionSkillNames: [...new Set([...activeMissionSkillNames, requestedRef.local_ref])] }),
+            ? { productionSkillNames: [...new Set([...activeProductionSkillNames, exactSkillName(requestedRef)])] }
+            : { missionSkillNames: [...new Set([...activeMissionSkillNames, exactSkillName(requestedRef)])] }),
         })
         executable = tools[providerName]
         source = toolSources.get(providerName)

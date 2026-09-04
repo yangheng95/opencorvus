@@ -236,6 +236,36 @@ async function runMissionStateMigrationWorker(mode: "crash" | "recover", project
 }
 
 describe("native Mission transport base", () => {
+  test("loads the exact Mission Skill behavior after receipt reconstruction", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const { common, processor } = await createMissionOccurrence(project.path, "mission-skill-reconstruction")
+        const revealed = await resolveTestCapabilityTools({ ...common, activeLocalRefs: ["general"] })
+        const descriptor = revealed.occurrence.payload.descriptors.find(
+          (item) => item.ref.kind === "mission_skill" && item.ref.local_ref === "general",
+        )
+        if (descriptor?.behavior.kind !== "open_mission_skill") throw new Error("Missing exact Mission Skill behavior")
+        expect(descriptor.behavior.name).toBe("general")
+        const reconstructed = await resolveTestCapabilityTools(common)
+        const toolInput = { name: descriptor.behavior.name }
+        const output = await reconstructed.tools.mission_skill!.execute!(toolInput, {
+          toolCallId: "call_load_reconstructed_mission_skill",
+          messages: [],
+          abortSignal: new AbortController().signal,
+        }) as Parameters<typeof processor.completeRecoveredToolPart>[0]["output"]
+        expect(output.metadata.name).toBe("general")
+        expect(output.output).toContain("general")
+        await processor.completeRecoveredToolPart({
+          toolCallID: "call_load_reconstructed_mission_skill",
+          toolInput,
+          output,
+        })
+      },
+    })
+  }, 30_000)
+
   test("narrows the permanent transport base through the current message Tool switches", async () => {
     await using project = await memoryProject()
     await Instance.provide({
@@ -514,7 +544,7 @@ describe("native Mission transport base", () => {
           (await executeMissionState(occurrence.mission.id, { action: "snapshot" })).output,
         ) as {
           revision: string
-          files: Array<{ file: string; exists: boolean; content: string }>
+          files: Array<{ file: string; exists: boolean; bytes: number; content: string }>
         }
         expect(Buffer.byteLength(JSON.stringify(accepted), "utf8")).toBeLessThanOrEqual(50 * 1024)
         expect(accepted.revision).toBe(committed.revision)
@@ -893,7 +923,7 @@ describe("native Mission transport base", () => {
                 totalUsage: { inputTokens: 1, outputTokens: 1, totalTokens: 2 },
               }
             })(),
-          } as Awaited<ReturnType<typeof LLM.stream>>
+          } as unknown as Awaited<ReturnType<typeof LLM.stream>>
         })
         let observed: unknown
         try {
