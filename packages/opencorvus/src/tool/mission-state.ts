@@ -1,56 +1,117 @@
 import z from "zod"
 import path from "node:path"
-import fs from "node:fs/promises"
+import { readFile, rm } from "node:fs/promises"
+import { NamedError } from "@opencorvus-ai/util/error"
 import { Tool } from "./tool"
+import { Truncate } from "./truncation"
 import { MissionID } from "@/mission/schema"
 import { Instance } from "@/project/instance"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
 import { Session } from "@/session"
+import { Filesystem } from "@/util/filesystem"
+import { canonicalDigestSource, canonicalJSONValue } from "@/util/canonical-digest"
+import { withSharedJsonFactLock } from "@/util/process-lock"
 
 /**
  * Mission state tool — the Mission agent's durable, write-confined memory.
- * See mission split contract.
  *
- * Why this tool instead of giving Mission generic write/edit: Mission may
- * READ and analyse the project (read/glob/search_code/list), but its
- * only WRITE surface to the workspace is these four files. It must NOT
- * acquire edit/write/apply_patch. Mission does not own bash; runtime command
- * repair belongs to the Orchestrator scheduler and must not become an executor
- * lane (rule 11 — the orchestrator-core contract records how a coordination
- * agent with executor tools bypassed worker dispatch and tried to do work
- * itself). mission_state pins
- * the agent to a fixed directory tree and file-name vocabulary so it cannot
- * overwrite arbitrary repo files even by mistake; all real changes go through
- * dispatched engine_tasks.
- *
- * Directory layout (relative to the project directory at run time):
- *   .opencorvus/.r/missions/<mission-id>/
- *     frontier.md   — outstanding work + the mission contract
- *     tasks.md      — authored stage-to-engine_task bindings; live status is derived from Task facts
- *     handoff.md    — brief for the next wake of this same mission
- *     notes.md      — free-form scratchpad
- *
- * The four file names are an alphabet, not a schema — the LLM owns the
- * markdown contents, but the host owns where it lives. `.gitignore`
- * keeps the runtime tree out of the working copy.
+ * The public vocabulary remains four logical markdown files, but their only
+ * current physical authority is one canonical JSON document. Replacing that
+ * document through `writeDurableAtomic` gives a multi-file logical commit one
+ * filesystem publication point; a reader can observe either the complete old
+ * revision or the complete new revision, never a mixed generation.
  */
 
-// Hard-coded file vocabulary. New file names are a deliberate schema
-// change; do not add ad-hoc names from the LLM side.
 const MISSION_FILES = ["frontier.md", "tasks.md", "handoff.md", "notes.md"] as const
 type MissionFile = (typeof MISSION_FILES)[number]
+const SHA256 = /^[a-f0-9]{64}$/
+const MISSION_STATE_DOCUMENT = "state.json"
+const MISSION_STATE_LOCK = ".state.lock"
 
-// 256 KB cap on a single file write. Mission state is markdown notes,
-// not artifact storage; anything past this size belongs in a real
-// engine_artifact row.
-const MAX_CONTENT_BYTES = 256 * 1024
+const MissionStateUpdate = z
+  .object({
+    file: z.enum(MISSION_FILES).describe("Mission state file to replace."),
+    content: z.string().describe("Complete markdown content to write into the mission state file."),
+  })
+  .strict()
+
+function uniqueCanonicalEntries<T extends { file: MissionFile }>(entries: readonly T[], ctx: z.RefinementCtx) {
+  const seen = new Set<MissionFile>()
+  let previous = -1
+  for (const [index, entry] of entries.entries()) {
+    if (seen.has(entry.file)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: [index, "file"],
+        message: `Mission state file ${entry.file} appears more than once.`,
+      })
+    }
+    seen.add(entry.file)
+    const position = MISSION_FILES.indexOf(entry.file)
+    if (position <= previous) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: [index, "file"],
+        message: "Mission state document files must use canonical order.",
+      })
+    }
+    previous = position
+  }
+}
+
+const MissionStateDocument = z
+  .object({
+    schema_version: z.literal(1),
+    legacy_retired: z.boolean(),
+    files: z.array(MissionStateUpdate).max(MISSION_FILES.length),
+  })
+  .strict()
+  .superRefine((document, ctx) => {
+    uniqueCanonicalEntries(document.files, ctx)
+  })
+type MissionStateDocument = z.infer<typeof MissionStateDocument>
+
+const missionStateLocks = new Map<string, Promise<unknown>>()
+let afterLegacyDocumentPublicationForTest:
+  | ((input: { missionID: string; filepath: string }) => void | Promise<void>)
+  | undefined
+
+export const MissionStateRevisionConflictError = NamedError.create(
+  "MissionStateRevisionConflictError",
+  z.object({
+    expected_revision: z.string().regex(SHA256),
+    current_revision: z.string().regex(SHA256),
+    message: z.string(),
+  }),
+)
+
+export const MissionStateSnapshotLimitError = NamedError.create(
+  "MissionStateSnapshotLimitError",
+  z.object({
+    output_bytes: z.number().int().nonnegative(),
+    output_limit_bytes: z.number().int().positive(),
+    message: z.string(),
+  }),
+)
+
+export const MissionStateLegacyMigrationRequiredError = NamedError.create(
+  "MissionStateLegacyMigrationRequiredError",
+  z.object({
+    mission_id: MissionID,
+    recovery_directory: z.string().min(1),
+    files: z.array(
+      z.object({
+        file: z.enum(MISSION_FILES),
+        bytes: z.number().int().nonnegative(),
+      }),
+    ),
+    output_bytes: z.number().int().nonnegative(),
+    output_limit_bytes: z.number().int().positive(),
+    message: z.string(),
+  }),
+)
 
 function runtimeBase() {
-  // Instance.directory is the project's active working directory; the
-  // mission session is always tied to a single project / cwd, so we
-  // resolve relative to it. If a mission ever needs to switch cwd
-  // (multi-worktree mission), that decision is explicit at the wake
-  // boundary, not silently here.
   return path.resolve(ProjectRuntimePaths.projectRuntimeRoot(Instance.directory), "missions")
 }
 
@@ -58,9 +119,6 @@ function missionDir(missionID: string) {
   const parsedMissionID = MissionID.parse(missionID)
   const base = runtimeBase()
   const resolved = path.resolve(ProjectRuntimePaths.missionRoot(Instance.directory, parsedMissionID))
-  // Defense in depth: even though MissionID rejects ../ and slashes, verify
-  // the resolved path stays under the base. Catches future schema regressions
-  // and platform path quirks.
   if (!resolved.startsWith(base + path.sep)) {
     throw new Error(`missionID path traversal blocked: ${parsedMissionID}`)
   }
@@ -71,15 +129,14 @@ function missionFilePath(missionID: string, file: MissionFile) {
   return path.join(missionDir(missionID), file)
 }
 
-/**
- * The missionID is server-owned, not an agent parameter. It lives in the
- * mission session's `metadata.mission.id` (written at wake) and is the SINGLE
- * source for which mission directory this tool touches — mirroring how
- * `panel_create_task` derives Mission → Squad provenance from the same field
- * (rule 8: no dual source). Taking it from the LLM instead let the agent
- * fabricate ids ("smoke-test", "mission_001") and write its durable memory to
- * a directory no later wake could find, silently breaking cross-wake recall.
- */
+function missionStatePath(missionID: string) {
+  return path.join(missionDir(missionID), MISSION_STATE_DOCUMENT)
+}
+
+function missionStateLockPath(missionID: string) {
+  return path.join(missionDir(missionID), MISSION_STATE_LOCK)
+}
+
 async function resolveMissionID(sessionID: string): Promise<string> {
   const session = await Session.get(sessionID)
   const missionMeta = (session.metadata as Record<string, unknown> | undefined)?.mission as { id?: unknown } | undefined
@@ -93,124 +150,266 @@ async function resolveMissionID(sessionID: string): Promise<string> {
   return missionID
 }
 
-async function atomicWrite(target: string, content: string) {
-  await fs.mkdir(path.dirname(target), { recursive: true })
-  // temp + rename: avoids torn writes if the process crashes or another
-  // wake reads mid-write. process.pid + Date.now() suffix is enough —
-  // a single master session is the only writer per missionID (the route
-  // and wake path enforce single-loop-per-mission), and even racing
-  // writers would each get a distinct temp path.
-  const tmp = `${target}.${process.pid}.${Date.now()}.tmp`
-  try {
-    await fs.writeFile(tmp, content, "utf8")
-    await fs.rename(tmp, target)
-  } catch (err) {
-    // Best-effort cleanup if rename failed; ignore unlink errors so the
-    // original write error surfaces unmasked.
-    await fs.unlink(tmp).catch(() => {})
-    throw err
-  }
-}
-
 async function readIfExists(target: string): Promise<string | undefined> {
   try {
-    return await fs.readFile(target, "utf8")
-  } catch (err) {
-    if ((err as NodeJS.ErrnoException).code === "ENOENT") return undefined
-    throw err
+    return await readFile(target, "utf8")
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === "ENOENT") return undefined
+    throw error
   }
 }
 
-async function statIfExists(target: string) {
+function orderedFiles(files: ReadonlyMap<MissionFile, string>) {
+  return MISSION_FILES.flatMap((file) => {
+    const content = files.get(file)
+    return content === undefined ? [] : [{ file, content }]
+  })
+}
+
+function snapshotFiles(document: MissionStateDocument) {
+  const stored = new Map(document.files.map((entry) => [entry.file, entry.content]))
+  return MISSION_FILES.map((file) => {
+    const content = stored.get(file)
+    return {
+      file,
+      exists: content !== undefined,
+      bytes: Buffer.byteLength(content ?? "", "utf8"),
+      content: content ?? "",
+    }
+  })
+}
+
+function revisionFor(files: ReturnType<typeof snapshotFiles>) {
+  return canonicalDigestSource("mission-state-revision-v1", { files }).sha256
+}
+
+function snapshotOutput(document: MissionStateDocument) {
+  const files = snapshotFiles(document)
+  const revision = revisionFor(files)
+  const output = JSON.stringify({ revision, files })
+  const outputBytes = Buffer.byteLength(output, "utf8")
+  if (outputBytes > Truncate.MAX_BYTES) {
+    throw new MissionStateSnapshotLimitError({
+      output_bytes: outputBytes,
+      output_limit_bytes: Truncate.MAX_BYTES,
+      message:
+        `Mission state snapshot is ${outputBytes} bytes, above the ${Truncate.MAX_BYTES}-byte Tool output boundary. ` +
+        "Trim authored state or move bulk evidence to an engine artifact.",
+    })
+  }
+  return { files, revision, output }
+}
+
+async function readDocumentIfExists(filepath: string): Promise<MissionStateDocument | undefined> {
+  const bytes = await readIfExists(filepath)
+  if (bytes === undefined) return undefined
+  const document = MissionStateDocument.parse(JSON.parse(bytes))
+  if (bytes !== canonicalJSONValue(document)) {
+    throw new Error(`Mission state document is not canonical JSON: ${filepath}`)
+  }
+  return document
+}
+
+async function retireLegacyFiles(missionID: string): Promise<void> {
+  const directory = missionDir(missionID)
+  for (const file of MISSION_FILES) await rm(missionFilePath(missionID, file), { force: true })
+  await Filesystem.syncDirectoryMetadata(directory)
+}
+
+async function initializeDocument(missionID: string, filepath: string): Promise<MissionStateDocument> {
+  const files = new Map<MissionFile, string>()
+  for (const file of MISSION_FILES) {
+    const content = await readIfExists(missionFilePath(missionID, file))
+    if (content !== undefined) files.set(file, content)
+  }
+  const document = MissionStateDocument.parse({
+    schema_version: 1,
+    legacy_retired: files.size === 0,
+    files: orderedFiles(files),
+  })
   try {
-    return await fs.stat(target)
-  } catch (err) {
-    if ((err as NodeJS.ErrnoException).code === "ENOENT") return undefined
-    throw err
+    snapshotOutput(document)
+  } catch (error) {
+    if (!(error instanceof MissionStateSnapshotLimitError)) throw error
+    throw new MissionStateLegacyMigrationRequiredError({
+      mission_id: missionID,
+      recovery_directory: missionDir(missionID),
+      files: document.files.map((entry) => ({
+        file: entry.file,
+        bytes: Buffer.byteLength(entry.content, "utf8"),
+      })),
+      output_bytes: error.data.output_bytes,
+      output_limit_bytes: error.data.output_limit_bytes,
+      message:
+        `Mission ${missionID} has a valid legacy four-file state whose complete snapshot is ${error.data.output_bytes} bytes, ` +
+        `above the ${error.data.output_limit_bytes}-byte current Tool boundary. The legacy files remain authoritative and unchanged at ` +
+        `${missionDir(missionID)}. An operator must archive or trim them below the boundary, then retry snapshot to complete the one-time migration.`,
+    })
   }
+  await Filesystem.writeDurableAtomic(filepath, canonicalJSONValue(document))
+  if (document.legacy_retired) return document
+  await afterLegacyDocumentPublicationForTest?.({ missionID, filepath })
+  return completeLegacyRetirement(missionID, filepath, document)
 }
 
-const ReadAction = z.object({
-  action: z.literal("read"),
-  file: z.enum(MISSION_FILES).describe("Mission state file to read."),
-})
+async function completeLegacyRetirement(
+  missionID: string,
+  filepath: string,
+  document: MissionStateDocument,
+): Promise<MissionStateDocument> {
+  await retireLegacyFiles(missionID)
+  const retired = MissionStateDocument.parse({ ...document, legacy_retired: true })
+  await Filesystem.writeDurableAtomic(filepath, canonicalJSONValue(retired))
+  return retired
+}
 
-const WriteAction = z.object({
-  action: z.literal("write"),
-  file: z.enum(MISSION_FILES).describe("Mission state file to replace."),
-  content: z.string().describe("Complete markdown content to write into the mission state file."),
-})
+async function withMissionState<T>(
+  missionID: string,
+  abort: AbortSignal,
+  operation: (input: { filepath: string; document: MissionStateDocument }) => Promise<T>,
+): Promise<T> {
+  abort.throwIfAborted()
+  const filepath = missionStatePath(missionID)
+  return withSharedJsonFactLock({
+    locks: missionStateLocks,
+    filepath: missionStateLockPath(missionID),
+    empty: "{}",
+    run: async () => {
+      abort.throwIfAborted()
+      let document = await readDocumentIfExists(filepath)
+      if (!document) document = await initializeDocument(missionID, filepath)
+      else if (!document.legacy_retired) document = await completeLegacyRetirement(missionID, filepath, document)
+      abort.throwIfAborted()
+      return operation({ filepath, document })
+    },
+  })
+}
 
-const ListAction = z.object({
-  action: z.literal("list"),
-})
+const SnapshotAction = z.object({ action: z.literal("snapshot") }).strict()
 
-const MissionStateAction = z.discriminatedUnion("action", [ReadAction, WriteAction, ListAction])
+const CommitAction = z
+  .object({
+    action: z.literal("commit"),
+    base_revision: z
+      .string()
+      .regex(SHA256)
+      .describe("Exact revision returned by the snapshot on which these complete replacements are based."),
+    updates: z
+      .array(MissionStateUpdate)
+      .min(1)
+      .max(MISSION_FILES.length)
+      .superRefine((updates, ctx) => {
+        const seen = new Set<MissionFile>()
+        for (const [index, update] of updates.entries()) {
+          if (seen.has(update.file)) {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              path: [index, "file"],
+              message: `Mission state file ${update.file} appears more than once in one commit.`,
+            })
+          }
+          seen.add(update.file)
+        }
+      })
+      .describe("One to four unique complete-file replacements published as one revision."),
+  })
+  .strict()
+
+const MissionStateAction = z.discriminatedUnion("action", [SnapshotAction, CommitAction])
 
 export const MissionStateTool = Tool.define("mission_state", {
   description: [
-    "Read, write, or list the state files for the CURRENT mission.",
+    "Snapshot or atomically commit the state files for the CURRENT mission.",
     "The mission is resolved automatically from your session — you do NOT pass a missionID.",
-    "All I/O is confined to `.opencorvus/.r/missions/<this-mission-id>/` with a fixed",
-    "file-name vocabulary: frontier.md, tasks.md, handoff.md, notes.md.",
+    "The fixed logical file vocabulary is frontier.md, tasks.md, handoff.md, notes.md.",
     "Use this for authored Mission contracts, stage bindings, decisions, and next-wake notes — do NOT copy live Task status into it.",
-    "Read current Mission-owned Task identity and status through the search-revealed panel_view_tasks and panel_query_task leaves.",
+    "Read current Mission-owned Task identity and status through the search-revealed panel leaves.",
     "Use this to carry mission reasoning across wake cycles — do NOT use read/write/glob.",
     "",
     "Actions:",
-    "  read   { file } → returns the file content as a string (empty when not yet created).",
-    "  write  { file, content } → atomically replaces the file (≤256 KB).",
-    "  list   {} → returns metadata for each of the four files that currently exist.",
+    "  snapshot {} → returns one revision and all four complete logical files.",
+    "  commit { base_revision, updates:[{file,content}, ...] } → compares the snapshot revision and atomically publishes one to four complete replacements.",
+    `The complete encoded snapshot must remain within the ${Truncate.MAX_BYTES}-byte Tool output boundary; bulk evidence belongs in an engine artifact.`,
   ].join("\n"),
   parameters: MissionStateAction,
   async execute(params, ctx) {
     const missionID = await resolveMissionID(ctx.sessionID)
-    switch (params.action) {
-      case "read": {
-        const target = missionFilePath(missionID, params.file)
-        const content = (await readIfExists(target)) ?? ""
-        return {
-          title: `mission_state read ${missionID}/${params.file}`,
-          output: content,
-          metadata: { missionID, file: params.file, exists: content.length > 0 } as Record<string, unknown>,
+    return withMissionState(missionID, ctx.abort, async ({ filepath, document }) => {
+      switch (params.action) {
+        case "snapshot": {
+          const snapshot = snapshotOutput(document)
+          return {
+            title: `mission_state snapshot ${missionID}`,
+            output: snapshot.output,
+            metadata: {
+              missionID,
+              revision: snapshot.revision,
+              count: snapshot.files.filter((file) => file.exists).length,
+              bytes: snapshot.files.reduce((total, file) => total + file.bytes, 0),
+            } as Record<string, unknown>,
+          }
+        }
+        case "commit": {
+          const current = snapshotOutput(document)
+          if (params.base_revision !== current.revision) {
+            throw new MissionStateRevisionConflictError({
+              expected_revision: params.base_revision,
+              current_revision: current.revision,
+              message:
+                `Mission state changed after snapshot ${params.base_revision}; ` +
+                `take one current snapshot and recompute the complete replacements from ${current.revision}.`,
+            })
+          }
+          const files = new Map(document.files.map((entry) => [entry.file, entry.content]))
+          for (const update of params.updates) files.set(update.file, update.content)
+          const next = MissionStateDocument.parse({
+            schema_version: 1,
+            legacy_retired: true,
+            files: orderedFiles(files),
+          })
+          const committed = snapshotOutput(next)
+          ctx.abort.throwIfAborted()
+          await Filesystem.writeDurableAtomic(filepath, canonicalJSONValue(next))
+          return {
+            title: `mission_state commit ${missionID}`,
+            output: JSON.stringify({
+              revision: committed.revision,
+              files: params.updates
+                .map((update) => ({
+                  file: update.file,
+                  bytes: Buffer.byteLength(update.content, "utf8"),
+                }))
+                .sort((left, right) => MISSION_FILES.indexOf(left.file) - MISSION_FILES.indexOf(right.file)),
+            }),
+            metadata: {
+              missionID,
+              revision: committed.revision,
+              count: params.updates.length,
+              bytes: params.updates.reduce((total, update) => total + Buffer.byteLength(update.content, "utf8"), 0),
+            } as Record<string, unknown>,
+          }
         }
       }
-      case "write": {
-        const bytes = Buffer.byteLength(params.content, "utf8")
-        if (bytes > MAX_CONTENT_BYTES) {
-          throw new Error(
-            `mission_state.write content size ${bytes} bytes exceeds limit ${MAX_CONTENT_BYTES} bytes. ` +
-              `Trim the file or move bulk data to an engine_artifact.`,
-          )
-        }
-        const target = missionFilePath(missionID, params.file)
-        await atomicWrite(target, params.content)
-        return {
-          title: `mission_state write ${missionID}/${params.file}`,
-          output: `Wrote ${bytes} bytes to ${params.file}.`,
-          metadata: { missionID, file: params.file, exists: true, bytes } as Record<string, unknown>,
-        }
-      }
-      case "list": {
-        const dir = missionDir(missionID)
-        const entries = await Promise.all(
-          MISSION_FILES.map(async (file) => {
-            const stat = await statIfExists(path.join(dir, file))
-            return stat ? { file, size: stat.size, mtime: stat.mtimeMs } : null
-          }),
-        )
-        const present = entries.filter((entry): entry is { file: MissionFile; size: number; mtime: number } => !!entry)
-        return {
-          title: `mission_state list ${missionID}`,
-          output: JSON.stringify({ missionID, files: present }),
-          metadata: { missionID, count: present.length } as Record<string, unknown>,
-        }
-      }
-    }
+    })
   },
 })
 
-// Re-exported for tests and for callers that want to enumerate the
-// supported file names without re-deriving them from the Zod enum.
 export const MISSION_STATE_FILES = MISSION_FILES
+export const MISSION_STATE_DOCUMENT_FILENAME = MISSION_STATE_DOCUMENT
 export type MissionStateFile = MissionFile
+
+export const MissionStateTestHooks = {
+  installAfterLegacyDocumentPublication(
+    hook: (input: { missionID: string; filepath: string }) => void | Promise<void>,
+  ): Disposable {
+    if (afterLegacyDocumentPublicationForTest) {
+      throw new Error("Mission state legacy-publication test hook is already installed")
+    }
+    afterLegacyDocumentPublicationForTest = hook
+    return {
+      [Symbol.dispose]() {
+        if (afterLegacyDocumentPublicationForTest === hook) afterLegacyDocumentPublicationForTest = undefined
+      },
+    }
+  },
+}

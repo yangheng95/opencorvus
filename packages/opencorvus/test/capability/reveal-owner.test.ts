@@ -31,6 +31,12 @@ import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
 
 const SHA_A = "a".repeat(64)
 const SHA_B = "b".repeat(64)
+const PERMANENT_BASE_DEFINITION = {
+  providerNames: ["capability_search"],
+  definitionDigest: "e".repeat(64),
+  payloadChars: 120,
+  payloadTokens: 30,
+}
 const searchRef = capabilityRef({
   kind: "tool",
   source: "platform",
@@ -219,6 +225,7 @@ async function boundOccurrence(snapshot = catalogSnapshot()) {
   const payload = CatalogOccurrenceBinding.payload({
     snapshot,
     materializationScope: materializationScope(),
+    permanentProviderBaseDefinition: PERMANENT_BASE_DEFINITION,
   })
   const binding = await CatalogOccurrenceBinding.publish({ projectID: Instance.project.id, payload })
   const first = assistant(session.id, userMessageID)
@@ -430,6 +437,7 @@ describe("occurrence capability reveal owner", () => {
         const payload = CatalogOccurrenceBinding.payload({
           snapshot,
           materializationScope: materializationScope(),
+          permanentProviderBaseDefinition: PERMANENT_BASE_DEFINITION,
           mcpToolParentBindings: [
             { tool_ref: toolA, server_ref: serverA },
             { tool_ref: toolB, server_ref: serverB },

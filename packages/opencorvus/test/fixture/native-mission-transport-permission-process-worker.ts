@@ -17,11 +17,13 @@ import { MessageStore } from "@/session/message-store"
 import { SessionProcessor } from "@/session/processor"
 import { SessionLoop } from "@/session/loop"
 import { Database, eq } from "@/storage/db"
+import { AttachmentStore } from "@/storage/attachment-store"
 import { ToolRegistry } from "@/tool/registry"
 import { NATIVE_MISSION_TRANSPORT_TOOL_IDS } from "@/tool/tool-id-catalog"
 import { installDefaultControlPlaneToolLoaders } from "@/tool/control-plane-tool-composition"
 import { persistEstablishedTask } from "./engine-task"
 import { resolveTestCapabilityTools } from "./capability-occurrence"
+import { canonicalJSONValue } from "@/util/canonical-digest"
 
 type ProcessState = {
   requestID: string
@@ -29,7 +31,7 @@ type ProcessState = {
   assistantMessageID: string
   taskID: string
   toolCallID: string
-  scenario: "plain" | "structured-reveal" | "legacy-reveal"
+  scenario: "plain" | "structured-reveal" | "legacy-reveal" | "catalog-v2"
 }
 
 const [mode, projectPath, statePath] = process.argv.slice(2)
@@ -39,6 +41,7 @@ if (
       "prepare",
       "prepare-structured-reveal",
       "prepare-legacy-reveal",
+      "prepare-catalog-v2",
       "resume-same",
       "resume-drift",
       "resume-missing",
@@ -49,7 +52,7 @@ if (
   !statePath
 ) {
   throw new Error(
-    "usage: native-mission-transport-permission-process-worker <prepare|prepare-structured-reveal|prepare-legacy-reveal|resume-same|resume-drift|resume-missing|resume-harness-drift> <project> <state>",
+    "usage: native-mission-transport-permission-process-worker <prepare|prepare-structured-reveal|prepare-legacy-reveal|prepare-catalog-v2|resume-same|resume-drift|resume-missing|resume-harness-drift> <project> <state>",
   )
 }
 
@@ -189,8 +192,7 @@ async function prepare(scenario: ProcessState["scenario"]) {
       const mutableNativeTransportIDs = NATIVE_MISSION_TRANSPORT_TOOL_IDS as unknown as string[]
       const schedulerIndex = mutableNativeTransportIDs.indexOf("scheduler_message")
       if (scenario === "legacy-reveal" && schedulerIndex >= 0) mutableNativeTransportIDs.splice(schedulerIndex, 1)
-      const tools = (
-        await resolveTestCapabilityTools({
+      const resolved = await resolveTestCapabilityTools({
           config,
           model,
           session: mission,
@@ -204,9 +206,31 @@ async function prepare(scenario: ProcessState["scenario"]) {
           ...(scenario === "legacy-reveal" ? { activeLocalRefs: ["scheduler_message"] } : {}),
           ...(structuredOutput ? { reservedProviderTools: [structuredOutput] } : {}),
         })
-      ).tools
+      const tools = resolved.tools
       if (scenario === "legacy-reveal" && schedulerIndex >= 0) {
         mutableNativeTransportIDs.splice(schedulerIndex, 0, "scheduler_message")
+      }
+      if (scenario === "catalog-v2") {
+        const legacyPayload = { ...resolved.occurrence.payload } as Record<string, unknown>
+        legacyPayload.schema_version = 2
+        delete legacyPayload.permanent_provider_base_definition
+        const reference = await AttachmentStore.write(
+          Instance.project.id,
+          Buffer.from(canonicalJSONValue(legacyPayload), "utf8"),
+          "application/json",
+          "catalog-v2.json",
+        )
+        const parent = await MessageStore.get({ sessionID: mission.id, messageID: user.id })
+        const carrier = parent.parts.find((part) => part.type === "text")
+        if (!carrier || carrier.type !== "text") throw new Error("Catalog V2 fixture has no input carrier.")
+        await Session.updatePart({
+          ...carrier,
+          metadata: {
+            ...(carrier.metadata ?? {}),
+            catalog_snapshot_ref: reference.url,
+            catalog_snapshot_hash: reference.sha,
+          },
+        })
       }
       const schedulerMessage = tools.scheduler_message
       if (!schedulerMessage?.execute) throw new Error("Native Mission scheduler_message was not materialized.")
@@ -332,4 +356,5 @@ async function resume() {
 if (mode === "prepare") await prepare("plain")
 else if (mode === "prepare-structured-reveal") await prepare("structured-reveal")
 else if (mode === "prepare-legacy-reveal") await prepare("legacy-reveal")
+else if (mode === "prepare-catalog-v2") await prepare("catalog-v2")
 else await resume()

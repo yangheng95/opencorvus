@@ -8,7 +8,7 @@ import { MessageTable, ToolPartRequestTable } from "@/session/session.sql"
 import { projectToolPartInTransaction } from "@/session/tool-part-facts"
 import { projectCapabilityCatalogSearch } from "./catalog"
 import { CapabilitySearchInput, type CapabilityDescriptor } from "./descriptor"
-import type { CatalogViewSnapshotPayloadV2 } from "./catalog-binding"
+import type { CatalogViewSnapshotPayloadV3 } from "./catalog-binding"
 import { CatalogOccurrenceBinding } from "./catalog-binding"
 import { harnessGrantAllows, type HarnessProjection } from "./harness-projection"
 import {
@@ -105,14 +105,14 @@ export function normalizedProviderToolDefinition(
   }
 }
 
-function exactDescriptor(payload: CatalogViewSnapshotPayloadV2, ref: CapabilityRef): CapabilityDescriptor {
+function exactDescriptor(payload: CatalogViewSnapshotPayloadV3, ref: CapabilityRef): CapabilityDescriptor {
   const encoded = CapabilityRefCodec.encode(ref)
   const matches = payload.descriptors.filter((descriptor) => CapabilityRefCodec.encode(descriptor.ref) === encoded)
   if (matches.length !== 1) throw new Error(`Catalog occurrence publishes ${matches.length} descriptors for ${encoded}.`)
   return matches[0]!
 }
 
-function assertRevealable(payload: CatalogViewSnapshotPayloadV2, requested: CapabilityRef): CapabilityDescriptor {
+function assertRevealable(payload: CatalogViewSnapshotPayloadV3, requested: CapabilityRef): CapabilityDescriptor {
   const encoded = CapabilityRefCodec.encode(requested)
   const descriptor = exactDescriptor(payload, requested)
   const view = payload.views.find((candidate) => CapabilityRefCodec.encode(candidate.descriptor_ref) === encoded)
@@ -129,7 +129,7 @@ function assertRevealable(payload: CatalogViewSnapshotPayloadV2, requested: Capa
 }
 
 function assertExecutableGrant(
-  payload: CatalogViewSnapshotPayloadV2,
+  payload: CatalogViewSnapshotPayloadV3,
   harness: HarnessProjection,
   requested: CapabilityRef,
   executable: CapabilityRef,

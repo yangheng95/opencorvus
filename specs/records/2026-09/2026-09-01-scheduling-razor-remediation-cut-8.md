@@ -3092,3 +3092,278 @@ Task's independent time ordering, missing Tool-parent failure, deterministic
 agent/Tool ordering, real result integration and zero cached intersection with
 the three excluded working paths. The tree remained exact after review and the
 reviewer made no edits or external calls.
+
+##### Cache-reused native-transport run and Mission-state round-trip root cause
+
+The fresh real-Provider run used exact pushed source
+`0da07fa208abbdcfdb6875e212e4b80c609af3bf` and
+`openai/gpt-5.6-sol`. Its source archive SHA-256 is
+`BCFE706185395C95A697F9F1B87A3408D7BBB1899B2927BCF51A369FD8D41024`.
+Assembly invoked no installer and made no dependency download: 190 existing
+third-party cache targets were reused through 236 `node_modules` junctions,
+the existing SDK distribution and native process supervisor were reused, and
+only 46 workspace targets came from the exact source archive. The independently
+parseable result is
+`D:\myhexin-local\.codex-benchmarks\mission-scheduling-0da07fa20-20260903-native-transport\result.json`,
+19,474 bytes with SHA-256
+`F69428186BA5549F83DE364559C5F5F0A5E5F2DB3B5CBCA2693E085DD969929F`.
+
+Functional protocol acceptance passed. Mission `041b5702cf3d0138` created
+exactly Tasks `tsk_g00VU9INnz00pgyoXtjz` and
+`tsk_g00VU9IpfR001Dz5Yphw`; all twelve exact scheduler events reached twelve
+durable inboxes; every source Tool completed; all three correlated replies,
+recipient FIFO, semantic order and terminal order passed; both Tasks completed;
+Mission published nonce-bearing Artifact `art_g0VU9LAFE00kRa3Y6JQc`; and the
+durable Mission completion receipt was recorded. No Tool occurrence failed.
+
+The trajectory is not accepted. Mission took 125,175 ms to create its first
+Task, the child Task lifecycle occupied 472,472 ms, final reconciliation after
+both Tasks were terminal took another 264,253 ms, and Mission completion took
+861,900 ms from persisted Mission creation. Mission issued 53 Tool calls:
+26 `mission_state`, nine `capability_search`, three `panel_query_task`, four
+`panel_query_task_artifacts`, four `panel_read_task_artifact`, two
+`panel_create_task`, two `scheduler_message`, and one each of
+`panel_view_tasks`, `publish_interactive_artifact`, and
+`panel_complete_mission`. Its 59 Provider calls accounted for 2,116,207 total
+tokens including cache reads. The two Task Orchestrators issued 20 Tool and
+Provider calls and accounted for another 487,413 tokens. Native Mission
+transport therefore removed half of the former search tax, from eighteen
+Mission searches to nine, but did not close the dominant state round trips or
+produce a clean end-to-end trajectory.
+
+The direct trigger is the current `mission_state` public schema. It permits
+exactly one `read`, `write`, or `list` operation for one of four fixed files per
+Tool call, while the Mission contract requires three files to be read at the
+start of every ordinary wake and commonly changes more than one authored file
+before a dispatch or completion boundary. The Tool result and every file
+replacement are already bounded, but the interface forces independent model
+round trips for one logical Mission-state snapshot or commit. Prompt guidance
+can prevent scheduler Message shadow copies, but it cannot turn a one-file Tool
+schema into one bounded operation. The native transport correction addressed
+search activation only, so it could not remove this independent structural tax.
+
+Whole-repository search found one production definition in
+`tool/mission-state.ts`, Registry publication through `tool/global-tools.ts`,
+the native Mission materializer in `session/loop.ts`, one direct runtime
+acceptance use in `capability/native-mission-transport-base.test.ts`, prompt
+contracts in `mission-core.txt` and
+`scheduler-message-harness-contract.test.ts`, Provider budget coverage, and
+the current search-native architecture. There is no route, SDK, alternative
+Mission-state writer, database projection, or other model-visible caller to
+preserve. The three unrelated working paths remain outside this correction.
+Independent-agent feedback before implementation is none; a fresh uninvolved
+read-only review remains mandatory after verification.
+
+The single replacement is one bounded snapshot/commit protocol on the existing
+four-file authority. `snapshot` returns all four logical files, including exact
+existence, byte count and content, in canonical order. `commit` accepts one to
+four unique complete-file replacements, validates the existing 256 KiB
+per-file ceiling before writing anything, and applies them in canonical order
+with `handoff.md` last. Each replacement uses the repository's mature durable
+atomic file primitive. The four files remain the sole durable Mission memory;
+there is no bundle shadow, Session cache, cross-occurrence active state, Host
+workflow gate, inferred action, database mirror, fallback, or old model-facing
+action union. Re-executing the same complete replacement remains idempotent,
+and the existing last-written handoff boundary continues to make partial
+process interruption recoverable by the next snapshot.
+
+Mission uses one `snapshot` on an ordinary wake and one `commit` for all
+authored changes before the next irreversible boundary. A scheduler Message
+whose visible fact changes no authored Mission state uses neither operation; a
+scheduler causal closure that does change authored state includes only the
+changed files in one commit. Positive acceptance must prove the exact empty and
+populated four-file snapshot, a multi-file commit with exact byte metadata,
+native Mission execution through a persisted ToolPart, updated prompt
+contracts, and strict Provider budgets. Existing reveal/recovery, terminal
+grouping, scheduler-message, Mission completion, package typecheck and docs
+checks must remain green before exact staging and independent review.
+
+The implementation removes the per-file `read`/`write`/`list` action union and
+publishes only `snapshot` and `commit`. Snapshot distinguishes an absent file
+from a present empty file and reports UTF-8 bytes for all four canonical names.
+Commit rejects a non-unique update set during schema validation, measures every
+complete replacement before the first write, orders updates independently of
+model input, and uses `Filesystem.writeDurableAtomic`; `handoff.md` is the last
+possible replacement. Mission Prompt guidance now takes one snapshot on an
+ordinary wake, commits all current authored changes together, and explicitly
+performs no state operation for a scheduler Message that changes no authored
+fact. Current architecture records that same authority boundary.
+
+The first focused current-source matrix passes 15/15 with 55 assertions: ten
+native Mission transport/recovery cases, both Mission and Task scheduler Prompt
+contracts, and all three strict Provider Tool-budget cases. The native runtime
+case executes an empty snapshot, an intentionally input-reordered two-file
+commit, a populated snapshot, and `scheduler_message` through persisted Tool
+Parts; the observed commit order is `frontier.md` then `handoff.md`, and the
+snapshot reports exact existence, content and byte counts for all four files.
+The exact Mission trajectory projection repeats at 5/5 with 19 assertions, and
+the reveal owner repeats at 5/5 with 19 assertions including the real two-
+process compare-and-swap path. OpenCorvus package typecheck passes, and root
+typecheck passes all eight workspaces with OpenCorvus executed fresh.
+
+One exploratory six-file Bun invocation was not used as acceptance evidence:
+its first stateful test exceeded Bun's five-second default at 5.89 seconds,
+triggered global `Instance` disposal, and caused cascading timeouts in later
+files. Serial reruns closed the two task-relevant files above. A separate
+terminal-Panel file, which has no changed source or test path in this cut,
+completed its first three cases but its two process-supervisor-heavy cases
+exceeded their existing hard 30-second cleanup boundary on this host; no Panel
+failure is attributed to or hidden by the Mission-state protocol change.
+
+Exact staged tree `3118e424cf22ba07216922ffc70f464911d41242`
+contains only the six owned source, prompt, test, architecture and record paths.
+Docs pass at 339 operations/25 groups; routes at six rules/34 files;
+architecture index at 16 current documents; package topology at ten workspaces;
+control leases at 18 owners/22 acquisition sites; control-state redundancy at
+53 tables/seven allowed fact classes; version alignment at the three-component
+`0.0.58-beta`; release topology at five canonical authorities; and module
+topology at 1,103 modules, 5,532 runtime edges, no retained strongly connected
+component and four clean imports. Cached and working diff checks pass. The
+existing Session formatting difference and two Web content differences have
+zero cached intersection. Appending this evidence changes only this record;
+the newly staged tree requires one fresh uninvolved read-only review before
+commit.
+
+The uninvolved review of that first snapshot/commit tree returned NOT PASS
+with P1=3 and P2=1. The old 256 KiB per-file ceiling could create state that
+the shared 50 KiB Tool result boundary could never return. Four sequential
+durable replacements were individually atomic but did not publish one logical
+generation, so interruption could expose a mixed revision. The permanent
+native Mission Provider definitions were recomputed rather than bound to the
+authoritative input occurrence, allowing an old occurrence to cross a schema
+change. The focused tests did not exercise these three boundaries. That tree
+is retained only as review evidence and is not a delivery candidate.
+
+The correction uses one physical authority instead of a four-file commit
+simulation. The four public markdown names remain the logical vocabulary, but
+their current state is one canonical `state.json` document. Snapshot computes
+a digest revision from all four logical projections and validates its exact
+encoded output against `Truncate.MAX_BYTES`. Commit requires that exact
+`base_revision`, compares it while holding the shared cross-process fact lock,
+constructs the complete next snapshot in memory, validates the same output
+boundary, and publishes it with one durable atomic replacement. This makes an
+old or new complete revision the only observable outcomes. First access
+migrates the former four-file layout under that authority and deletes the old
+physical files after the canonical document is durable; current execution has
+no legacy read fallback.
+
+The Catalog input payload advances to version 3 and records the canonically
+ordered permanent Provider Tool names plus their normalized definition digest.
+Initial execution, continuation, and permission resume compare the exact
+current native base before exposing it. A version-2 payload is recognized only
+to raise the typed stale-occurrence result; it is never interpreted as current
+authority. Positive acceptance now additionally requires present-empty state,
+near-boundary escaped output, over-boundary rejection with an unchanged
+revision, stale-revision rejection, legacy-layout migration, one-winner
+cross-process compare-and-swap, and native-definition drift retirement before
+an external effect. New verification and a fresh uninvolved review are still
+required before this correction can be committed.
+
+The corrected current-source verification passes 41/41 focused tests with 140
+assertions when the process-heavy files run in isolated Bun processes: native
+Mission transport 13/13, occurrence Catalog 18/18, reveal reducer 5/5, and
+Prompt plus strict Provider budget 5/5. This includes the exact encoded-size
+boundary with JSON escaping, present-empty content, unchanged revision after
+an oversized proposal, typed stale revision, one-time legacy migration, one
+winner across two operating-system processes, version-2 Catalog retirement,
+definition drift with zero scheduler effect, StructuredOutput recovery, and
+the historical reveal-before-promotion path. OpenCorvus and root typecheck pass
+with all eight root workspaces. Docs pass at 339 operations/25 groups, routes
+at six rules/34 files, architecture index at 16 current documents, package
+topology at ten workspaces, control leases at 18 owners/22 acquisition sites,
+control-state redundancy at 53 tables/seven allowed fact classes, and version
+alignment at `0.0.58-beta`. Exact-index module topology passes at 1,103
+modules, 5,535 runtime edges, no retained strongly connected component and
+four clean imports; release topology finds the five canonical authorities.
+Cached and working diff checks pass, and the Session formatting difference and
+two Web content paths remain working-only with zero cached intersection.
+
+One exploratory combined Bun process is excluded from acceptance evidence. A
+pre-existing MCP process-supervisor cleanup lost its Windows physical
+settlement marker in the final Catalog case, poisoned shared Project disposal,
+and made later native/reveal cases inherit the same request ID. All three files
+then passed independently, including the same Catalog case. A separate first
+state-boundary run exposed Windows `MoveFileExW` contention when the data file
+itself was also the lock anchor. The correction now uses a stable sidecar lock
+anchor and leaves `state.json` as the sole state authority; the bounded,
+migration and real two-process cases pass after that change. No installer or
+dependency download was invoked. The staged correction still requires a fresh
+uninvolved exact-tree review before commit.
+
+The first uninvolved review of that exact correction found one P1 and two P2
+gaps. A valid former four-file layout could still be larger than the new 50 KiB
+complete snapshot boundary and therefore had no explicit migration recovery;
+same-input continuation materialized the permanent Provider base once before
+detecting the existing binding and again during Tool resolution; and acceptance
+did not yet cover the real post-publication migration crash cut or version-2
+Catalog retirement through both ordinary and permission continuation. The
+reviewed tree remains historical evidence while these narrow findings are
+corrected; the prior implementation and green evidence are not discarded.
+
+The correction keeps one authority at every boundary. An oversized valid
+former layout now produces `MissionStateLegacyMigrationRequiredError` before
+`state.json` is created, reports the exact Mission directory, per-file bytes,
+encoded output bytes and limit, and preserves the former files unchanged so an
+operator can archive or trim bulk evidence and retry the one migration. A real
+process test exits immediately after the canonical document is durably
+published with retirement pending; a fresh process reads that complete
+generation, retires every former file and marks the same document complete.
+The same-input binding branch no longer performs the pre-bind permanent-base
+materialization and performs exactly one actual base materialization per later
+Provider step. A version-2 Catalog on an ordinary continuation is detected
+after the current assistant is durably admitted and owner-bound, producing a
+terminal `StaleCatalogOccurrenceError` without a second Provider step. The
+permission continuation converts the same stale authority into its typed
+continuation error, terminalizes the exact Tool Part, and records zero scheduler
+effects. These reviewer corrections require the full focused matrix, typechecks,
+repository checkers, a new exact index tree and a fresh uninvolved zero-finding
+review before commit.
+
+The reviewer-correction matrix now passes all five added boundaries with 16
+assertions: one permanent-base materialization on a same-input continuation,
+typed oversized-former-layout recovery, a real publication-to-retirement
+process crash, version-2 permission continuation with zero scheduler effect,
+and version-2 ordinary continuation with one first Provider step followed by a
+terminal stale assistant before any second Provider step. The complete native
+Mission transport file passes 18/18 with 42 assertions. Reveal passes 5/5 with
+19 assertions, Mission/Task scheduler Prompt guidance 2/2 with three
+assertions, and StructuredOutput base budgeting 1/1 with four assertions. The
+Catalog file's 13 non-supervisor cases pass in its shared process; each of the
+five process-supervisor cases also passes in an independent process, for all 18
+current Catalog cases and 49 assertions. The single-process aggregate is not
+claimed green: one pre-existing Windows MCP supervisor loses its physical
+settlement marker and poisons later disposal in that process. This separate
+runtime defect remains open for a later cut instead of being attributed to or
+hidden by the Catalog correction.
+
+OpenCorvus package typecheck and root typecheck pass, with all eight root
+workspace tasks successful. Docs pass at 339 operations/25 groups, routes at
+six rules/34 files, architecture index at 16 current documents, package
+topology at ten workspaces, control leases at 18 owners/22 acquisition sites,
+control-state redundancy at 53 tables/seven allowed fact classes, release
+version alignment at `0.0.58-beta`, and public package publication order is
+valid. Exact index tree `e4b3fdb9c161562ad1bb526dfdc40627dd6e669d`
+passes release mutation topology with five authorities and module topology with
+1,103 modules, 5,535 runtime edges, no retained strongly connected component,
+and four clean imports. The host C volume contained 3,461 abandoned historical
+test roots and only 946,765,824 free bytes; no live Bun, Node or Git test process
+owned them. Recursive removal was rejected by the local safety policy, so this
+cut did not delete or bypass anything and directed its isolated test-owned
+temporary roots to `D:\\myhexin-local\\.opencorvus-test-temp`, where the
+existing owner-marker cleanup contract remains in force. No installer or
+dependency download was invoked. Appending this evidence changes only this
+record; the resulting exact tree still requires a fresh uninvolved zero-finding
+review before commit.
+
+The uninvolved final review of exact tree
+`1bc27619ac4f4ae1b4ce2e6f82f28c9f0f19035a` returned FINAL PASS with
+P0=P1=P2=P3=0. It independently confirmed the typed lossless oversized-legacy
+recovery boundary, real post-publication process-crash retirement, one
+permanent-base materialization on same-input continuation, and explicit
+ordinary/permission version-2 terminal paths with no unauthorized Provider or
+scheduler effect. It found no remaining legacy action, current four-file
+fallback, parallel state authority, Host workflow gate, Provider schema bypass,
+or excluded-path overlap. The reviewer made no file, index, commit, network,
+Provider or process changes, and its final `git write-tree` remained exact.
+This paragraph records that completed review only; it changes no production or
+test contract.

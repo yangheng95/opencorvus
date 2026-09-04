@@ -6,7 +6,7 @@ import { MessageStore } from "../../src/session/message-store"
 import { AttachmentStore } from "../../src/storage/attachment-store"
 import {
   CatalogOccurrenceBinding,
-  CatalogViewSnapshotPayloadV2,
+  CatalogViewSnapshotPayloadV3,
   CorruptCatalogOccurrenceError,
   StaleCatalogOccurrenceError,
 } from "../../src/capability/catalog-binding"
@@ -34,9 +34,14 @@ import { writeFile } from "node:fs/promises"
 import path from "node:path"
 import { resolveCapabilityCaller } from "../../src/capability/caller-authority"
 import { PermissionAuthority } from "../../src/permission/authority"
+import { canonicalJSONValue } from "../../src/util/canonical-digest"
 
 const SHA_A = "a".repeat(64)
 const SHA_B = "b".repeat(64)
+
+function permanentBaseDefinition() {
+  return { providerNames: ["capability_search"], definitionDigest: SHA_A, payloadChars: 1, payloadTokens: 1 }
+}
 
 function snapshot(caller: "conversation" | "mission" | "task_scheduler" | "task_agent" = "conversation") {
   const ref = capabilityRef({
@@ -148,9 +153,13 @@ function assistant(input: { sessionID: string; parentID: string; id?: string }) 
 
 describe("occurrence-bound capability catalog", () => {
   test("hashes the complete canonical payload including set, scope, and reducer bindings", () => {
-    const base = CatalogOccurrenceBinding.payload({ snapshot: snapshot(), materializationScope: scope() })
+    const base = CatalogOccurrenceBinding.payload({
+      snapshot: snapshot(),
+      materializationScope: scope(),
+      permanentProviderBaseDefinition: permanentBaseDefinition(),
+    })
     const ref = base.descriptors.find((descriptor) => descriptor.ref.owner_ref === "dispatch-stage:requirements")!.ref
-    const withReducer = CatalogViewSnapshotPayloadV2.parse({
+    const withReducer = CatalogViewSnapshotPayloadV3.parse({
       ...base,
       fixed_package_digests: { "built_in:global:opencorvus/base:base:2026.08.30.1": SHA_A },
       occurrence_owner_bindings: [
@@ -171,8 +180,8 @@ describe("occurrence-bound capability catalog", () => {
         },
       ],
     })
-    const reordered = CatalogViewSnapshotPayloadV2.parse(JSON.parse(JSON.stringify(withReducer)))
-    const changedToolkitInput = CatalogViewSnapshotPayloadV2.parse({
+    const reordered = CatalogViewSnapshotPayloadV3.parse(JSON.parse(JSON.stringify(withReducer)))
+    const changedToolkitInput = CatalogViewSnapshotPayloadV3.parse({
       ...withReducer,
       occurrence_owner_bindings: [
         {
@@ -186,12 +195,57 @@ describe("occurrence-bound capability catalog", () => {
     const changedScope = CatalogOccurrenceBinding.payload({
       snapshot: snapshot(),
       materializationScope: scope("c".repeat(64)),
+      permanentProviderBaseDefinition: permanentBaseDefinition(),
+    })
+    const changedPermanentBase = CatalogOccurrenceBinding.payload({
+      snapshot: snapshot(),
+      materializationScope: scope(),
+      permanentProviderBaseDefinition: {
+        ...permanentBaseDefinition(),
+        definitionDigest: SHA_B,
+      },
     })
 
     expect(CatalogOccurrenceBinding.hash(reordered)).toBe(CatalogOccurrenceBinding.hash(withReducer))
     expect(CatalogOccurrenceBinding.hash(changedToolkitInput)).not.toBe(CatalogOccurrenceBinding.hash(withReducer))
     expect(CatalogOccurrenceBinding.hash(changedScope)).not.toBe(CatalogOccurrenceBinding.hash(base))
+    expect(CatalogOccurrenceBinding.hash(changedPermanentBase)).not.toBe(CatalogOccurrenceBinding.hash(base))
     expect(CatalogOccurrenceBinding.hash(base)).not.toBe(CatalogOccurrenceBinding.hash(withReducer))
+  })
+
+  test("retires a version-two occurrence that has no permanent Provider base authority", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const current = CatalogOccurrenceBinding.payload({
+          snapshot: snapshot(),
+          materializationScope: scope(),
+          permanentProviderBaseDefinition: permanentBaseDefinition(),
+        })
+        const legacy = { ...current } as Record<string, unknown>
+        legacy.schema_version = 2
+        delete legacy.permanent_provider_base_definition
+        const reference = await AttachmentStore.write(
+          Instance.project.id,
+          Buffer.from(canonicalJSONValue(legacy), "utf8"),
+          "application/json",
+          "catalog-v2.json",
+        )
+        await expect(
+          CatalogOccurrenceBinding.read({
+            projectID: Instance.project.id,
+            binding: {
+              snapshot_ref: reference.url,
+              snapshot_hash: reference.sha,
+            },
+          }),
+        ).rejects.toMatchObject({
+          name: "StaleCatalogOccurrenceError",
+          mismatches: ["permanent_provider_base_definition"],
+        })
+      },
+    })
   })
 
   test("atomically binds the canonical input carrier and reuses it for later assistant steps", async () => {
@@ -224,7 +278,11 @@ describe("occurrence-bound capability catalog", () => {
             },
           ],
         })
-        const payload = CatalogOccurrenceBinding.payload({ snapshot: snapshot(), materializationScope: scope() })
+        const payload = CatalogOccurrenceBinding.payload({
+          snapshot: snapshot(),
+          materializationScope: scope(),
+          permanentProviderBaseDefinition: permanentBaseDefinition(),
+        })
         const binding = await CatalogOccurrenceBinding.publish({ projectID: Instance.project.id, payload })
         const first = assistant({ sessionID: session.id, parentID: userMessageID })
         await CatalogOccurrenceBinding.bindAndBeginAssistant({
@@ -354,7 +412,11 @@ describe("occurrence-bound capability catalog", () => {
             now,
           }),
         )
-        const payload = CatalogOccurrenceBinding.payload({ snapshot: snapshot(), materializationScope: scope() })
+        const payload = CatalogOccurrenceBinding.payload({
+          snapshot: snapshot(),
+          materializationScope: scope(),
+          permanentProviderBaseDefinition: permanentBaseDefinition(),
+        })
         const binding = await CatalogOccurrenceBinding.publish({ projectID: Instance.project.id, payload })
         const reply = assistant({ sessionID: root.id, parentID: messageID })
         await CatalogOccurrenceBinding.bindAndBeginAssistant({
@@ -378,7 +440,11 @@ describe("occurrence-bound capability catalog", () => {
     await Instance.provide({
       directory: project.path,
       fn: async () => {
-        const payload = CatalogOccurrenceBinding.payload({ snapshot: snapshot(), materializationScope: scope() })
+        const payload = CatalogOccurrenceBinding.payload({
+          snapshot: snapshot(),
+          materializationScope: scope(),
+          permanentProviderBaseDefinition: permanentBaseDefinition(),
+        })
         const binding = await CatalogOccurrenceBinding.publish({ projectID: Instance.project.id, payload })
         await expect(
           CatalogOccurrenceBinding.read({
@@ -473,7 +539,11 @@ describe("occurrence-bound capability catalog", () => {
         )
         const binding = await CatalogOccurrenceBinding.publish({
           projectID: Instance.project.id,
-          payload: CatalogOccurrenceBinding.payload({ snapshot: snapshot(), materializationScope: scope() }),
+          payload: CatalogOccurrenceBinding.payload({
+            snapshot: snapshot(),
+            materializationScope: scope(),
+            permanentProviderBaseDefinition: permanentBaseDefinition(),
+          }),
         })
         await expect(
           CatalogOccurrenceBinding.bindAndBeginAssistant({
@@ -545,6 +615,7 @@ describe("occurrence-bound capability catalog", () => {
           payload: CatalogOccurrenceBinding.payload({
             snapshot: snapshot("mission"),
             materializationScope: scope(),
+            permanentProviderBaseDefinition: permanentBaseDefinition(),
           }),
         })
         const reply = assistant({ sessionID: session.id, parentID: messageID })
@@ -569,7 +640,11 @@ describe("occurrence-bound capability catalog", () => {
   }, 0)
 
   test("maps partial carriers, duplicate carriers, and scope drift to exact occurrence errors", () => {
-    const payload = CatalogOccurrenceBinding.payload({ snapshot: snapshot(), materializationScope: scope() })
+    const payload = CatalogOccurrenceBinding.payload({
+      snapshot: snapshot(),
+      materializationScope: scope(),
+      permanentProviderBaseDefinition: permanentBaseDefinition(),
+    })
     const message = (parts: Array<Record<string, unknown>>) =>
       ({
         info: {
@@ -619,11 +694,27 @@ describe("occurrence-bound capability catalog", () => {
       CatalogOccurrenceBinding.assertCurrent({
         payload,
         materializationScope: scope("c".repeat(64)),
+        permanentProviderBaseDefinition: permanentBaseDefinition(),
       }),
     ).toThrow(
       expect.objectContaining<Partial<StaleCatalogOccurrenceError>>({
         name: "StaleCatalogOccurrenceError",
         mismatches: ["materialization_scope.config_revision"],
+      }),
+    )
+    expect(() =>
+      CatalogOccurrenceBinding.assertCurrent({
+        payload,
+        materializationScope: scope(),
+        permanentProviderBaseDefinition: {
+          ...permanentBaseDefinition(),
+          definitionDigest: SHA_B,
+        },
+      }),
+    ).toThrow(
+      expect.objectContaining<Partial<StaleCatalogOccurrenceError>>({
+        name: "StaleCatalogOccurrenceError",
+        mismatches: ["permanent_provider_base_definition"],
       }),
     )
   })
@@ -634,7 +725,11 @@ describe("occurrence-bound capability catalog", () => {
       directory: project.path,
       fn: async () => {
         await CapabilityCatalogCache.reset()
-        const payload = CatalogOccurrenceBinding.payload({ snapshot: snapshot(), materializationScope: scope() })
+        const payload = CatalogOccurrenceBinding.payload({
+          snapshot: snapshot(),
+          materializationScope: scope(),
+          permanentProviderBaseDefinition: permanentBaseDefinition(),
+        })
         const bound = CatalogOccurrenceBinding.searchSnapshot(payload)
         const before = searchCapabilityCatalog(bound, "conversation", { queries: ["discover"] })
         const firstGeneration = await CapabilityCatalogCache.invalidate("tool-registry")

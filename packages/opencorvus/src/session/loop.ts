@@ -139,7 +139,7 @@ import {
   CorruptCatalogOccurrenceError,
   StaleCatalogOccurrenceError,
   type CatalogSnapshotBindingV2,
-  type CatalogViewSnapshotPayloadV2,
+  type CatalogViewSnapshotPayloadV3,
 } from "@/capability/catalog-binding"
 import { RuntimeCapabilityCatalog } from "@/tool/capability-runtime-catalog"
 import {
@@ -161,11 +161,12 @@ import {
   providerToolDefinitionChars,
   providerToolDefinitionDigest,
   providerToolDefinitionTokens,
+  type CapabilityRevealBaseDefinition,
   type TurnCapabilityProjectionV2,
 } from "@/capability/reveal-receipt"
 import { CAPABILITY_SEARCH_TOOL_ID } from "@/tool/capability-search"
 import { NATIVE_MISSION_TRANSPORT_TOOL_IDS } from "@/tool/tool-id-catalog"
-import { canonicalDigestSource } from "@/util/canonical-digest"
+import { canonicalDigestSource, canonicalJSONValue } from "@/util/canonical-digest"
 import { compareTimelineOrderKeys, timelineMessageOrderKey } from "@/timeline/order"
 import { PermissionAuthority } from "@/permission/authority"
 import { composeProjectedWorkerSystemPrompt } from "@/agent/projected-worker-system-prompt"
@@ -1043,6 +1044,54 @@ export namespace SessionLoop {
     return prepared
   }
 
+  export async function resolvePermanentProviderBaseDefinition(input: {
+    model: Provider.Model
+    agent: SessionAgentRuntime
+    agentID: string
+    config: Config.Info
+    registryToolIDs: readonly string[]
+    artifactSnapshotSource?: "current_task_project" | "merged_primary_commit"
+    reservedProviderTools?: readonly { name: string; tool: AITool }[]
+  }): Promise<CapabilityRevealBaseDefinition> {
+    const registryItems = await ToolRegistry.exactRuntimeTools(
+      { modelID: input.model.api.id, providerID: input.model.providerID },
+      input.agent,
+      input.agentID,
+      input.config,
+      input.registryToolIDs,
+      { artifactSnapshotSource: input.artifactSnapshotSource },
+    )
+    const definitions = registryItems.map((item) => {
+      const definitionOnlyTool = tool({
+        description: item.description,
+        inputSchema: item.parameters as never,
+      })
+      return normalizedProviderToolDefinition(
+        item.id,
+        prepareProviderTool({
+          name: item.id,
+          source: "registry",
+          model: input.model,
+          tool: definitionOnlyTool,
+        }),
+      )
+    })
+    for (const reservation of input.reservedProviderTools ?? []) {
+      definitions.push(
+        normalizedProviderToolDefinition(
+          reservation.name,
+          prepareProviderTool({
+            name: reservation.name,
+            source: "structured",
+            model: input.model,
+            tool: reservation.tool,
+          }),
+        ),
+      )
+    }
+    return capabilityRevealBaseDefinitions(definitions)
+  }
+
   async function materializeProviderToolExecutionInput(input: {
     name: string
     model: Provider.Model
@@ -1882,14 +1931,8 @@ export namespace SessionLoop {
       (await MessageStore.get({ sessionID: input.sessionID, messageID: input.lastUser.id }))
     const existingCatalogBinding = CatalogOccurrenceBinding.bindingFromInput(parentInput)
     let catalogBinding: CatalogSnapshotBindingV2
-    let catalogPayload: CatalogViewSnapshotPayloadV2
+    let catalogPayload: CatalogViewSnapshotPayloadV3
     if (existingCatalogBinding) {
-      const payload = await CatalogOccurrenceBinding.read({
-        projectID: Instance.project.id,
-        binding: existingCatalogBinding,
-      })
-      CatalogOccurrenceBinding.assertCurrent({ payload, materializationScope, runtimeContract })
-      catalogPayload = payload
       await Session.beginAssistantReplyWithCommit(assistantMessage, (db) => {
         settleSessionDelaysAtAssistantAcceptanceInTransaction(db, {
           sessionID: assistantMessage.sessionID,
@@ -1898,6 +1941,17 @@ export namespace SessionLoop {
           now: Date.now(),
         })
       })
+      SessionPromptState.bindMessageOwner(input.sessionID, assistantMessage.id, input.abort)
+      const payload = await CatalogOccurrenceBinding.read({
+        projectID: Instance.project.id,
+        binding: existingCatalogBinding,
+      })
+      CatalogOccurrenceBinding.assertCurrent({
+        payload,
+        materializationScope,
+        runtimeContract,
+      })
+      catalogPayload = payload
       catalogBinding = existingCatalogBinding
     } else {
       if (openTaskRootAssistant) {
@@ -1906,6 +1960,23 @@ export namespace SessionLoop {
           `Open assistant ${assistantMessage.id} has no Catalog binding on input ${input.lastUser.id}.`,
         )
       }
+      const permanentRegistryToolIDs = [
+        CAPABILITY_SEARCH_TOOL_ID,
+        ...(agentID === "mission" && input.session.kind === "mission"
+          ? NATIVE_MISSION_TRANSPORT_TOOL_IDS.filter((toolID) => policyProviderToolIDs.includes(toolID))
+          : []),
+      ]
+      const permanentProviderBaseDefinition = await resolvePermanentProviderBaseDefinition({
+        model: input.model,
+        agent,
+        agentID,
+        config,
+        registryToolIDs: permanentRegistryToolIDs,
+        artifactSnapshotSource: runtimeContract
+          ? artifactSnapshotSourceForRuntimeContract(runtimeContract)
+          : "current_task_project",
+        reservedProviderTools: structuredOutput ? [structuredOutput] : undefined,
+      })
       const catalog = await RuntimeCapabilityCatalog.snapshot({
         config,
         sessionID: input.sessionID,
@@ -1919,6 +1990,7 @@ export namespace SessionLoop {
         snapshot: catalog.snapshot,
         mcpToolParentBindings: catalog.mcpToolParentBindings,
         materializationScope,
+        permanentProviderBaseDefinition,
         runtimeContract,
       })
       catalogPayload = payload
@@ -1937,6 +2009,7 @@ export namespace SessionLoop {
           })
         },
       })
+      SessionPromptState.bindMessageOwner(input.sessionID, assistantMessage.id, input.abort)
     }
     const occurrenceHarness = bindHarnessProjection(occurrenceGrants, catalogBinding)
     const structuredOutputTool = structuredOutput?.tool
@@ -1960,7 +2033,6 @@ export namespace SessionLoop {
       structuredOutputTool ? [...Object.keys(tools), "StructuredOutput"] : Object.keys(tools),
     )
     coordinateResolvedToolExecutionSurface(tools)
-    SessionPromptState.bindMessageOwner(input.sessionID, assistantMessage.id, input.abort)
     await SessionStatus.set(input.sessionID, { type: "streaming" }, { promptGenerationOwner: input.abort })
     // StructuredOutput encodes the assistant response. It is not Harness-
     // discoverable, but its Provider definition is admitted into the immutable
@@ -3894,6 +3966,14 @@ export namespace SessionLoop {
       ),
     ])
     if (
+      canonicalJSONValue({
+        provider_names: searchBaseDefinition.providerNames,
+        definition_digest: searchBaseDefinition.definitionDigest,
+      }) !== canonicalJSONValue(occurrenceCatalogPayload.permanent_provider_base_definition)
+    ) {
+      throw new StaleCatalogOccurrenceError(["permanent_provider_base_definition"])
+    }
+    if (
       searchBaseDefinition.payloadChars > CAPABILITY_REVEAL_MAX_ACTIVE_CHARS ||
       searchBaseDefinition.payloadTokens > CAPABILITY_REVEAL_MAX_ACTIVE_TOKENS
     ) {
@@ -4700,32 +4780,6 @@ export namespace SessionLoop {
       requestedAgentID: assistant.agent,
       config,
     })
-    const catalogPayload = await CatalogOccurrenceBinding.readAssistant({
-      projectID: Instance.project.id,
-      sessionID: request.sessionID,
-      assistantMessageID: assistant.id,
-    })
-    CatalogOccurrenceBinding.assertCurrent({
-      payload: catalogPayload,
-      materializationScope: await CatalogOccurrenceBinding.materializationScope({ model, config }),
-      runtimeContract: getSessionRuntimeContract(request.sessionID),
-    })
-    const continuationRuntimeContract = getSessionRuntimeContract(request.sessionID)
-    const continuationGrants = await resolveOccurrenceHarnessGrants({
-      runtimeContract: continuationRuntimeContract,
-      agentID: messageIdentity.agentID,
-      session,
-      agent: messageIdentity.runtime,
-      config,
-      includeMcpTools: persistedUser.info.includeMcpTools,
-    })
-    const continuationBinding = CatalogOccurrenceBinding.bindingFromInput(persistedUser)
-    if (!continuationBinding) {
-      throw new CorruptCatalogOccurrenceError(
-        "unbound",
-        `Permission continuation ${request.id} input ${persistedUser.info.id} has no Catalog binding.`,
-      )
-    }
     const abortController = new AbortController()
     const processor = SessionProcessor.create({
       assistantMessage: assistant,
@@ -4758,6 +4812,43 @@ export namespace SessionLoop {
         }),
       )
       throw stale
+    }
+    let catalogPayload: CatalogViewSnapshotPayloadV3
+    try {
+      catalogPayload = await CatalogOccurrenceBinding.readAssistant({
+        projectID: Instance.project.id,
+        sessionID: request.sessionID,
+        assistantMessageID: assistant.id,
+      })
+    } catch (error) {
+      if (error instanceof StaleCatalogOccurrenceError) return await staleRecoveredSurface(error)
+      throw error
+    }
+    const continuationRuntimeContract = getSessionRuntimeContract(request.sessionID)
+    const continuationGrants = await resolveOccurrenceHarnessGrants({
+      runtimeContract: continuationRuntimeContract,
+      agentID: messageIdentity.agentID,
+      session,
+      agent: messageIdentity.runtime,
+      config,
+      includeMcpTools: persistedUser.info.includeMcpTools,
+    })
+    const continuationBinding = CatalogOccurrenceBinding.bindingFromInput(persistedUser)
+    if (!continuationBinding) {
+      throw new CorruptCatalogOccurrenceError(
+        "unbound",
+        `Permission continuation ${request.id} input ${persistedUser.info.id} has no Catalog binding.`,
+      )
+    }
+    try {
+      CatalogOccurrenceBinding.assertCurrent({
+        payload: catalogPayload,
+        materializationScope: await CatalogOccurrenceBinding.materializationScope({ model, config }),
+        runtimeContract: continuationRuntimeContract,
+      })
+    } catch (error) {
+      if (error instanceof StaleCatalogOccurrenceError) return await staleRecoveredSurface(error)
+      throw error
     }
     let tools: Record<string, AITool>
     try {

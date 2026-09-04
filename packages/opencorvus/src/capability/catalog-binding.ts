@@ -34,6 +34,7 @@ import { canonicalDigestSource, canonicalJSONValue, compareCanonicalStrings } fr
 import { Bus } from "@/bus"
 import { timelineMessageOrderKey, timelinePartOrderKey } from "@/timeline/order"
 import { resolveCapabilityCaller } from "./caller-authority"
+import type { CapabilityRevealBaseDefinition } from "./reveal-receipt"
 
 export const CATALOG_SNAPSHOT_REF_METADATA_KEY = "catalog_snapshot_ref"
 export const CATALOG_SNAPSHOT_HASH_METADATA_KEY = "catalog_snapshot_hash"
@@ -153,15 +154,36 @@ export const McpToolParentBindingV2 = z
   })
 export type McpToolParentBindingV2 = z.infer<typeof McpToolParentBindingV2>
 
-export const CatalogViewSnapshotPayloadV2 = z
+const PermanentProviderBaseDefinitionV1 = z
   .object({
-    schema_version: z.literal(2),
+    provider_names: z.array(z.string().trim().min(1)),
+    definition_digest: z.string().regex(SHA256),
+  })
+  .strict()
+  .superRefine((definition, ctx) => {
+    const canonical = [...definition.provider_names].sort(compareCanonicalStrings)
+    if (
+      new Set(definition.provider_names).size !== definition.provider_names.length ||
+      canonicalJSONValue(definition.provider_names) !== canonicalJSONValue(canonical)
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["provider_names"],
+        message: "Permanent Provider Tool names must be unique and canonically ordered.",
+      })
+    }
+  })
+
+export const CatalogViewSnapshotPayloadV3 = z
+  .object({
+    schema_version: z.literal(3),
     catalog_revision: z.string().regex(SHA256),
     context: CapabilityCatalogContext,
     owner_revision_vector: CapabilityOwnerRevisionVector,
     projection_revision_vector: CapabilityProjectionRevisionVector,
     fixed_package_digests: Sha256Record,
     materialization_scope: CatalogMaterializationScopeV2,
+    permanent_provider_base_definition: PermanentProviderBaseDefinitionV1,
     occurrence_owner_bindings: z.array(DispatchStageOccurrenceBindingV2),
     mcp_tool_parent_bindings: z.array(McpToolParentBindingV2),
     descriptors: z.array(CapabilityDescriptor),
@@ -169,7 +191,7 @@ export const CatalogViewSnapshotPayloadV2 = z
     sets: z.array(CapabilitySetDescriptor),
   })
   .strict()
-export type CatalogViewSnapshotPayloadV2 = z.infer<typeof CatalogViewSnapshotPayloadV2>
+export type CatalogViewSnapshotPayloadV3 = z.infer<typeof CatalogViewSnapshotPayloadV3>
 
 export const CatalogSnapshotBindingV2 = z
   .object({
@@ -213,12 +235,12 @@ function sha256(bytes: Uint8Array): string {
   return createHash("sha256").update(bytes).digest("hex")
 }
 
-function canonicalPayloadBytes(raw: z.input<typeof CatalogViewSnapshotPayloadV2>): Buffer {
-  const payload = CatalogViewSnapshotPayloadV2.parse(raw)
+function canonicalPayloadBytes(raw: z.input<typeof CatalogViewSnapshotPayloadV3>): Buffer {
+  const payload = CatalogViewSnapshotPayloadV3.parse(raw)
   return Buffer.from(canonicalJSONValue(payload), "utf8")
 }
 
-function expectedCatalogRevision(payload: CatalogViewSnapshotPayloadV2): string {
+function expectedCatalogRevision(payload: CatalogViewSnapshotPayloadV3): string {
   return capabilityCatalogRevision({
     context: payload.context,
     owner_revisions: payload.owner_revision_vector,
@@ -229,7 +251,7 @@ function expectedCatalogRevision(payload: CatalogViewSnapshotPayloadV2): string 
   })
 }
 
-function assertCatalogRevision(payload: CatalogViewSnapshotPayloadV2): void {
+function assertCatalogRevision(payload: CatalogViewSnapshotPayloadV3): void {
   const expected = expectedCatalogRevision(payload)
   if (payload.catalog_revision !== expected) {
     throw new CorruptCatalogOccurrenceError(
@@ -239,7 +261,7 @@ function assertCatalogRevision(payload: CatalogViewSnapshotPayloadV2): void {
   }
 }
 
-function assertOccurrenceBindingTargets(payload: CatalogViewSnapshotPayloadV2): void {
+function assertOccurrenceBindingTargets(payload: CatalogViewSnapshotPayloadV3): void {
   const descriptors = new Set(payload.descriptors.map((descriptor) => CapabilityRefCodec.encode(descriptor.ref)))
   for (const binding of payload.occurrence_owner_bindings) {
     for (const tool of [...binding.effectful_tools, ...binding.collector_tools]) {
@@ -387,18 +409,23 @@ export namespace CatalogOccurrenceBinding {
   export function payload(input: {
     snapshot: CapabilityCatalogSnapshotValue
     materializationScope: CatalogMaterializationScopeV2
+    permanentProviderBaseDefinition: CapabilityRevealBaseDefinition
     runtimeContract?: SessionRuntimeContract
     mcpToolParentBindings?: readonly McpToolParentBindingV2[]
-  }): CatalogViewSnapshotPayloadV2 {
+  }): CatalogViewSnapshotPayloadV3 {
     const snapshot = validateCapabilityCatalogSnapshot(input.snapshot)
-    const result = CatalogViewSnapshotPayloadV2.parse({
-      schema_version: 2,
+    const result = CatalogViewSnapshotPayloadV3.parse({
+      schema_version: 3,
       catalog_revision: snapshot.catalog_revision,
       context: snapshot.context,
       owner_revision_vector: snapshot.owner_revisions,
       projection_revision_vector: snapshot.projection_revisions,
       fixed_package_digests: fixedPackageDigests(input.runtimeContract),
       materialization_scope: input.materializationScope,
+      permanent_provider_base_definition: {
+        provider_names: input.permanentProviderBaseDefinition.providerNames,
+        definition_digest: input.permanentProviderBaseDefinition.definitionDigest,
+      },
       occurrence_owner_bindings: occurrenceOwnerBindings(snapshot, input.runtimeContract),
       mcp_tool_parent_bindings: input.mcpToolParentBindings ?? [],
       descriptors: snapshot.descriptors,
@@ -410,19 +437,19 @@ export namespace CatalogOccurrenceBinding {
     return result
   }
 
-  export function bytes(payload: CatalogViewSnapshotPayloadV2): Buffer {
+  export function bytes(payload: CatalogViewSnapshotPayloadV3): Buffer {
     assertCatalogRevision(payload)
     assertOccurrenceBindingTargets(payload)
     return canonicalPayloadBytes(payload)
   }
 
-  export function hash(payload: CatalogViewSnapshotPayloadV2): string {
+  export function hash(payload: CatalogViewSnapshotPayloadV3): string {
     return sha256(bytes(payload))
   }
 
   export async function publish(input: {
     projectID: string
-    payload: CatalogViewSnapshotPayloadV2
+    payload: CatalogViewSnapshotPayloadV3
   }): Promise<CatalogSnapshotBindingV2> {
     const data = bytes(input.payload)
     const expected = sha256(data)
@@ -548,7 +575,7 @@ export namespace CatalogOccurrenceBinding {
   export async function read(input: {
     projectID: string
     binding: CatalogSnapshotBindingV2
-  }): Promise<CatalogViewSnapshotPayloadV2> {
+  }): Promise<CatalogViewSnapshotPayloadV3> {
     const binding = CatalogSnapshotBindingV2.parse(input.binding)
     const located = AttachmentStore.nameFromUrl(binding.snapshot_ref)
     if (!located) {
@@ -606,7 +633,10 @@ export namespace CatalogOccurrenceBinding {
         cause: error,
       })
     }
-    const parsed = CatalogViewSnapshotPayloadV2.safeParse(json)
+    if ((json as { schema_version?: unknown } | null)?.schema_version === 2) {
+      throw new StaleCatalogOccurrenceError(["permanent_provider_base_definition"])
+    }
+    const parsed = CatalogViewSnapshotPayloadV3.safeParse(json)
     if (!parsed.success) {
       throw new CorruptCatalogOccurrenceError("invalid_payload", "Catalog occurrence payload schema is invalid.", {
         cause: parsed.error,
@@ -633,7 +663,7 @@ export namespace CatalogOccurrenceBinding {
   export async function readInput(input: {
     projectID: string
     message: Message.WithParts
-  }): Promise<CatalogViewSnapshotPayloadV2> {
+  }): Promise<CatalogViewSnapshotPayloadV3> {
     const binding = bindingFromInput(input.message)
     if (!binding) {
       throw new CorruptCatalogOccurrenceError(
@@ -648,7 +678,7 @@ export namespace CatalogOccurrenceBinding {
     projectID: string
     sessionID: string
     assistantMessageID: string
-  }): Promise<CatalogViewSnapshotPayloadV2> {
+  }): Promise<CatalogViewSnapshotPayloadV3> {
     const assistant = await MessageStore.get({ sessionID: input.sessionID, messageID: input.assistantMessageID })
     if (assistant.info.role !== "assistant") {
       throw new CorruptCatalogOccurrenceError(
@@ -676,8 +706,9 @@ export namespace CatalogOccurrenceBinding {
   }
 
   export function assertCurrent(input: {
-    payload: CatalogViewSnapshotPayloadV2
+    payload: CatalogViewSnapshotPayloadV3
     materializationScope: CatalogMaterializationScopeV2
+    permanentProviderBaseDefinition?: CapabilityRevealBaseDefinition
     runtimeContract?: SessionRuntimeContract
   }): void {
     const mismatches: string[] = []
@@ -689,6 +720,16 @@ export namespace CatalogOccurrenceBinding {
     const expectedPackages = fixedPackageDigests(input.runtimeContract)
     if (canonicalJSONValue(input.payload.fixed_package_digests) !== canonicalJSONValue(expectedPackages)) {
       mismatches.push("fixed_package_digests")
+    }
+    if (
+      input.permanentProviderBaseDefinition &&
+      canonicalJSONValue(input.payload.permanent_provider_base_definition) !==
+      canonicalJSONValue({
+        provider_names: input.permanentProviderBaseDefinition.providerNames,
+        definition_digest: input.permanentProviderBaseDefinition.definitionDigest,
+      })
+    ) {
+      mismatches.push("permanent_provider_base_definition")
     }
     const snapshot = validateCapabilityCatalogSnapshot({
       catalog_revision: input.payload.catalog_revision,
@@ -820,7 +861,7 @@ export namespace CatalogOccurrenceBinding {
     return Message.Assistant.parse(admitted)
   }
 
-  export function searchSnapshot(payload: CatalogViewSnapshotPayloadV2): CapabilityCatalogSnapshotValue {
+  export function searchSnapshot(payload: CatalogViewSnapshotPayloadV3): CapabilityCatalogSnapshotValue {
     assertCatalogRevision(payload)
     return validateCapabilityCatalogSnapshot({
       catalog_revision: payload.catalog_revision,
@@ -833,7 +874,7 @@ export namespace CatalogOccurrenceBinding {
     })
   }
 
-  export function descriptorRefs(payload: CatalogViewSnapshotPayloadV2): string[] {
+  export function descriptorRefs(payload: CatalogViewSnapshotPayloadV3): string[] {
     return payload.descriptors.map((descriptor) => CapabilityRefCodec.encode(descriptor.ref))
   }
 }

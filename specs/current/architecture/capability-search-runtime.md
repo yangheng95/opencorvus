@@ -14,7 +14,7 @@ universal executable interface.
 2. `HarnessGrantSet` is pre-materialization authority. It contains one canonical
    list of `{ ref, access, descendant_scope? }` grants and no per-kind arrays.
 3. The authoritative input Message is atomically bound to a content-addressed
-   `CatalogViewSnapshotPayloadV2`. `HarnessProjection` binds the same snapshot
+   `CatalogViewSnapshotPayloadV3`. `HarnessProjection` binds the same snapshot
    ref/hash and cannot expand it.
 4. `capability_search` is the permanent discovery Tool on revision zero. Native
    Mission additionally receives only its fixed `mission_state` and
@@ -111,7 +111,36 @@ second definition owner.
   ordinary permission and per-message Tool-switch narrowing, and exposes them
   beside search without a persisted active set. These two fixed transport
   identities are not a substitute for reveal-selected domain or terminal
-  Tools.
+  Tools. The Catalog occurrence binds their exact normalized Provider names
+   and definition digest before the first Provider step. Continuation and
+   permission resume compare that input-bound definition before exposure; a
+   version-2 Catalog occurrence lacks this authority and retires through the
+   typed stale-input path rather than executing a new definition. A same-input
+   continuation materializes the permanent base exactly once for its Provider
+   step. Ordinary continuation first persists and owns that step's assistant,
+   so a stale Catalog reaches an explicit terminal assistant error without a
+   Provider call; permission continuation terminalizes its exact Tool Part and
+   likewise performs no external effect.
+- `mission_state` exposes one current snapshot/commit protocol over its four
+  fixed logical authored files. Their sole physical authority is one canonical
+  `state.json` document. A snapshot returns one revision plus all four files in
+  canonical order with exact existence, bytes, and content, and preflights the
+  exact encoded result against the shared Tool output boundary. A commit
+  compares the caller's exact `base_revision` under the cross-process fact
+  lock, builds and preflights the complete next snapshot in memory, then
+  publishes that generation through one durable atomic replacement. First
+  access migrates the former four-file layout once under the same authority and
+  retires those physical files; a process exit after publishing the canonical
+  document but before retirement is completed from that document on the next
+  access. If a valid former layout cannot fit the current complete-snapshot
+  boundary, migration writes nothing and returns one typed recovery result with
+  the exact Mission directory and per-file/output byte counts. Those former
+  files remain the sole authority until an operator archives or trims the bulk
+  evidence and retries migration. No current read or write path treats them as a
+  second source. One ordinary Mission wake takes at most one snapshot and makes
+  at most one commit; a scheduler Message that changes no authored state does
+  neither. Per-file model operations, a second bundle, a Session cache, and a
+  database mirror are not current authorities.
 - The Provider base is immutable per input occurrence. If an older occurrence
   contains a valid reveal receipt for a Tool later promoted into a native base,
   that occurrence continues reducing against its recorded pre-promotion base;

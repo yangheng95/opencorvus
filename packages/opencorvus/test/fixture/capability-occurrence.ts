@@ -14,6 +14,8 @@ import type { SessionAgentRuntime } from "../../src/agent/session-agent-runtime"
 import { RuntimeCapabilityCatalog } from "../../src/tool/capability-runtime-catalog"
 import { ToolRegistry } from "../../src/tool/registry"
 import { NATIVE_MISSION_TRANSPORT_TOOL_IDS } from "../../src/tool/tool-id-catalog"
+import { CapabilityRules } from "../../src/capability/rules"
+import { visibleExecutionToolIDs } from "../../src/tool/execution-surface"
 import type { ProviderToolNameOwner } from "../../src/tool/provider-name-authority"
 import { jsonSchema, tool, type Tool as AITool } from "ai"
 import {
@@ -33,6 +35,8 @@ export async function bindTestCapabilityOccurrence(input: {
   agent: SessionAgentRuntime
   agentID: string
   includeMcpTools?: boolean
+  tools?: Record<string, boolean>
+  reservedProviderTools?: readonly { name: string; owner: ProviderToolNameOwner; tool: AITool }[]
 }) {
   const parent = await MessageStore.get({ sessionID: input.session.id, messageID: input.assistant.parentID })
   if (!parent.parts.some((part) => part.type === "text")) {
@@ -85,6 +89,22 @@ export async function bindTestCapabilityOccurrence(input: {
     payload = await CatalogOccurrenceBinding.read({ projectID: Instance.project.id, binding })
     await Session.beginAssistantReply(occurrenceAssistant)
   } else {
+    const nativeTransportIDs =
+      input.agentID === "mission" && input.session.kind === "mission"
+        ? visibleExecutionToolIDs({
+            toolIDs: [...NATIVE_MISSION_TRANSPORT_TOOL_IDS],
+            permission: CapabilityRules.merge(input.agent.permission, input.session.permission),
+            switches: input.tools,
+          })
+        : []
+    const permanentProviderBaseDefinition = await SessionLoop.resolvePermanentProviderBaseDefinition({
+      model: input.model,
+      agent: input.agent,
+      agentID: input.agentID,
+      config: input.config,
+      registryToolIDs: ["capability_search", ...nativeTransportIDs],
+      reservedProviderTools: input.reservedProviderTools,
+    })
     const catalog = await RuntimeCapabilityCatalog.snapshot({
       config: input.config,
       sessionID: input.session.id,
@@ -97,6 +117,7 @@ export async function bindTestCapabilityOccurrence(input: {
       snapshot: catalog.snapshot,
       mcpToolParentBindings: catalog.mcpToolParentBindings,
       materializationScope,
+      permanentProviderBaseDefinition,
       runtimeContract,
     })
     binding = await CatalogOccurrenceBinding.publish({ projectID: Instance.project.id, payload })
@@ -140,8 +161,6 @@ export async function resolveTestCapabilityTools(input: {
   reservedProviderToolNames?: readonly { name: string; owner: ProviderToolNameOwner }[]
   reservedProviderTools?: readonly { name: string; owner: ProviderToolNameOwner; tool: AITool }[]
 }): Promise<{ tools: Record<string, AITool>; occurrence: Awaited<ReturnType<typeof bindTestCapabilityOccurrence>> }> {
-  const occurrence = await bindTestCapabilityOccurrence(input)
-  const stableHarnessProjection = occurrence.harnessProjection
   const reservedProviderTools =
     input.reservedProviderTools ??
     (input.reservedProviderToolNames ?? []).map((reservation) => ({
@@ -154,6 +173,8 @@ export async function resolveTestCapabilityTools(input: {
         },
       }),
     }))
+  const occurrence = await bindTestCapabilityOccurrence({ ...input, reservedProviderTools })
+  const stableHarnessProjection = occurrence.harnessProjection
   const resolve = () =>
     SessionLoop.resolveTools({
       agent: input.agent,
