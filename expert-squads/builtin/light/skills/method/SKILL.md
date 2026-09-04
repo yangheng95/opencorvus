@@ -31,7 +31,9 @@ Multiple Sessions may use `light-planner` or `light-investigator` concurrently. 
 
 ## Investigate evidence
 
-For each Investigator partition:
+For every Planner and Investigator partition, an explicitly assigned source is a verification obligation, even when the request supplies expected values or a proposed conclusion. Read the authorized source with the actual read-only Tool before claiming what it establishes. User-supplied constraints remain supplied facts; an expected answer is not an observation of a file. If access fails, report the exact access result and which conclusion remains unverified.
+
+For each evidence-bearing partition:
 
 1. prefer primary and current sources;
 2. record exact repository paths and line numbers or stable external references;
@@ -39,7 +41,7 @@ For each Investigator partition:
 4. name source date, version, scope, and applicability when material;
 5. stop at authorization, privacy, credential, access, or integrity boundaries.
 
-An investigation report contains its scope, sources, findings, conflicts, unknowns, confidence, and follow-up evidence needs in the worker's visible final assistant message. It never claims that advice was implemented.
+A source-backed report names the actual path/reference and observed values used for its conclusion. Explain the decisive comparison or calculation briefly; merely repeating the requested answer does not verify it. An investigation report contains its scope, sources, findings, conflicts, unknowns, confidence, and follow-up evidence needs in the worker's visible final assistant message. It never claims that advice was implemented.
 
 ## Plan and ask
 
@@ -56,7 +58,7 @@ The Orchestrator owns the real user-facing question. A worker proposes questions
 
 ## Reconcile and answer
 
-After all sibling reports settle, compare their complete visible final assistant messages and referenced evidence before synthesis. Preserve disagreements and explain which evidence would resolve them. The final message is the result fact for each Light dispatch; this package does not define or require a separate durable Artifact type. Present the final advisory result in this order when applicable:
+After all sibling reports settle, compare their complete visible final assistant messages and referenced evidence before synthesis. Preserve disagreements and explain which evidence would resolve them. The final message is the result fact for each Light dispatch; this package does not define or require a separate durable Artifact type. Preserve the user's explicit output fields, exact values and requested format after verifying them; a paraphrase is not a substitute for an explicitly required line. Otherwise present the final advisory result in this order when applicable:
 
 1. direct answer or recommendation;
 2. supporting evidence;

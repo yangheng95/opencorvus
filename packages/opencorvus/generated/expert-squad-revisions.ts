@@ -71,7 +71,7 @@ export const generatedExpertSquadRevisions: Readonly<
   "knowledge-base-operations": { version: "2026.08.30.2", contentDigest: "96dc5c089cab81b64e428ece9b0e748a60d26f9adbc82fd24818d0b379aa527f" },
   "laboratory-quality-assurance": { version: "2026.08.30.2", contentDigest: "3c54a269d2fbdb073da19ed07b8950884a4b9b950aac083e2f9de7bf256bc63b" },
   "life-sciences-regulatory": { version: "2026.08.30.2", contentDigest: "353d38e16101e2296a90dcc642f0d3651dbe42befe594f38478433471178878d" },
-  "light": { version: "2026.09.04.2", contentDigest: "a4b04bb41c1fb4629d66c6a0624dd39e4cdf5cae7f6680b1702961c50037ca2b" },
+  "light": { version: "2026.09.04.3", contentDigest: "00978a1acf1ad13a1c6b9170f7f95fa92e0d7c4235e98362f1356414324cc595" },
   "localization-adaptation": { version: "2026.08.30.2", contentDigest: "64fda7db8a8f5d33d19af3e566c3fa9dabbfc2ad253aa5ef055fb20741016c04" },
   "manufacturing-quality": { version: "2026.08.30.2", contentDigest: "9dcb6b9ce7f22dae1203b30dc42c8330d70e521b939ddc0ed928a1e5dc64e663" },
   "marine-vessel-survey-maintenance-assurance": { version: "2026.08.30.2", contentDigest: "743c46734ffbbfe9f1c583d920ce350f38eb3ff9d752cbaef3b3b5da97d9db82" },

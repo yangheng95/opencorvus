@@ -129,7 +129,7 @@ describe("Light Expert Squad package", () => {
     expect(source.manifest).toMatchObject({
       namespace: "builtin",
       id: "light",
-      version: "2026.09.04.2",
+      version: "2026.09.04.3",
       product_pillars: ["code", "work"],
     })
     expect(Object.keys(source.manifest.capability_projection.agents).sort()).toEqual(Object.keys(agentRoles).sort())
@@ -154,7 +154,7 @@ describe("Light Expert Squad package", () => {
         })
         expect(receipt).toMatchObject({
           operation: "installed",
-          after: { installationScope: "project", namespace: "builtin", id: "light", version: "2026.09.04.2" },
+          after: { installationScope: "project", namespace: "builtin", id: "light", version: "2026.09.04.3" },
         })
 
         const config = Config.mergeOverlay(await EffectiveConfig.snapshotCurrent(), {
@@ -175,11 +175,13 @@ describe("Light Expert Squad package", () => {
           packageRevision: revision,
         })
 
-        expect(revision).toMatchObject({ namespace: "builtin", id: "light", version: "2026.09.04.2" })
+        expect(revision).toMatchObject({ namespace: "builtin", id: "light", version: "2026.09.04.3" })
         expect(scheduler.virtualWorkflows).toEqual({})
         expect(scheduler.builtInToolIDs).toEqual(schedulerTools)
         expect(scheduler.productionSkills.map((entry) => entry.ref)).toEqual([])
         expect(skillProjection.projectedAgentIDs).toEqual(Object.keys(agentRoles).sort())
+        expect(scheduler.promptOverlay).toContain('reveal `read_agent_message` and `manage_task` together in one `capability_search` call')
+        expect(scheduler.promptOverlay).toContain('Preserve every user-required exact output line in the `complete_task` summary after verification')
 
         const workers = await Promise.all(
           Object.entries(agentRoles).map(async ([agentID, expectedBaseRole]) => {
@@ -189,6 +191,10 @@ describe("Light Expert Squad package", () => {
               packageRevision: revision,
               agentID,
             })
+            if (agentID === "light-planner") {
+              expect(worker.promptOverlay).toContain("When assigned a file or source, read it before deciding")
+              expect(worker.promptOverlay).toContain("Report the actual source locator, decisive observed values and comparison")
+            }
             return {
               agentID: worker.identity.agentID,
               baseRole: worker.identity.baseRole,
@@ -232,8 +238,9 @@ describe("Light Expert Squad package", () => {
     })
   }, 0)
 
-  test("runs two Planner and two Investigator dispatches as overlapping real sibling Sessions", async () => {
+  test.each([false, true])("settles four overlapping Light dispatches (injected fixture failure: %s)", async (failAfterStarted) => {
     await using project = await memoryProject()
+    const injectedFailure = new Error("injected Light fixture failure after worker admission")
     const ingressRunner = {
       runner: async ({ taskID, wakeID, predecessorID, activationID }) => {
         if (!wakeID || !predecessorID) throw new Error("Light lifecycle delivery lost its exact ingress identity")
@@ -287,9 +294,12 @@ describe("Light Expert Squad package", () => {
     let childSessionIDs: string[] = []
     let dispatchIDs: string[] = []
     try {
-      await Instance.provide({
+      const execution = Instance.provide({
         directory: project.path,
         fn: async () => {
+          // Release held workers before Instance.provide closes its activity
+          // lease, including when an assertion or the start deadline rejects.
+          using workerRelease = { [Symbol.dispose]: () => releaseWorkers?.() }
           ingressRunnerLease = IngressTestHooks.replaceTaskIngressRunner(ingressRunner)
           await ExpertSquadPackageManager.importDirectory({
             projectDirectory: project.path,
@@ -493,6 +503,8 @@ describe("Light Expert Squad package", () => {
                     ) as Parameters<typeof processor.completeRecoveredToolPart>[0]["output"]
                     expect(loaded.metadata.name).toBe("light-advisory-method")
                     expect(loaded.output).toContain('<skill_content name="light-advisory-method">')
+                    expect(loaded.output).toContain("For every Planner and Investigator partition, an explicitly assigned source is a verification obligation")
+                    expect(loaded.output).toContain("a paraphrase is not a substitute for an explicitly required line")
                     await processor.completeRecoveredToolPart({
                       toolCallID: `call_load_light_method_${assistant.id}`,
                       toolInput: { name: skill.behavior.name },
@@ -711,6 +723,7 @@ describe("Light Expert Squad package", () => {
           ) as Array<{ kind: string; session_id?: string }>
           expect(receipts.map((receipt) => receipt.kind)).toEqual(["accepted", "accepted", "accepted", "accepted"])
           await requireWithin(allStarted, "four overlapping Light worker processors")
+          if (failAfterStarted) throw injectedFailure
           childSessionIDs = receipts.map((receipt) => {
             if (receipt.kind !== "accepted") throw new Error(`Expected accepted dispatch, got ${receipt.kind}`)
             if (!receipt.session_id) throw new Error("Accepted Light dispatch lost its child Session")
@@ -811,6 +824,11 @@ describe("Light Expert Squad package", () => {
         },
       })
 
+      if (failAfterStarted) {
+        await expect(execution).rejects.toBe(injectedFailure)
+        return
+      }
+      await execution
       await waitForDetachedDispatchPipelinesForTest()
       await waitForIngressDeliveryHooksForTest()
       await Instance.provide({
@@ -838,7 +856,6 @@ describe("Light Expert Squad package", () => {
         },
       })
     } finally {
-      releaseWorkers?.()
       await waitForDetachedDispatchPipelinesForTest().catch(() => undefined)
       await waitForIngressDeliveryHooksForTest().catch(() => undefined)
       ingressRunnerLease?.[Symbol.dispose]()

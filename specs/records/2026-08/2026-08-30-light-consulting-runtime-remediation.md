@@ -797,3 +797,101 @@ expected ingress source required an explicit literal type (`as const`), with
 unchanged runtime assertions; review includes that correction. Prior failed-run
 temporary directories were checked and contain no auth.json or models.json.
 Only this evidence paragraph follows review; real acceptance remains pending.
+
+### Grounded advisory and exact-output correction Recall
+
+Runtime shutdown repair 82b0739074585115ab44e4017ed0ba2bed68f39d is pushed,
+normal hooks pass, and upstream equals HEAD. The new real run used that exact
+archive (SHA-256 b18074ed4c26a4490c9fb465195761cfb2778f8a8998d32a03dfb1e45abefb94),
+236 reused dependency links, unchanged runner hashes and cached native helper.
+Independent launch review passed; no installation or native compilation occurred.
+All four original cases ran once and naturally ended, and the reminder is paused.
+Evidence is outside Git at
+`D:\myhexin-local\.codex-benchmarks\light-consulting-82b073907-20260905`,
+including a separate manual `grounding-audit.json`; original results remain intact.
+
+| Case | Duration ms | Total tokens | Scheduler tokens | Actual source reads | Result |
+| --- | ---: | ---: | ---: | --- | --- |
+| Single advice | 85,217 | 150,407 | 130,222 | 0/1 | Unverified source and scheduler above unchanged 120,000 budget. |
+| Four workers | 131,120 | 404,327 | 218,499 | 4/4 | Grounded answer but paraphrased required `RECOMMENDATION=pilot` line. |
+| Minimal clarification | 91,972 | 176,540 | 154,890 | 0/1 | One correct real clarification, then unverified route and omitted exact output lines. |
+| Short synthesis | 110,728 | 244,836 | 154,790 | 2/2 | Full pass, including exact outputs and unchanged budgets. |
+
+Every case has one completed collection, exact accepted/persisted/lineage worker
+sets, physical concurrency 1/4/1/2, zero failed Tools, scheduler Skill loads,
+operator corrections and cleanup failures. These successes remain valid. The
+source-filter and terminal-shutdown defects did not recur.
+
+The remaining trigger is visible in the two Planner final reports: after loading
+the method, they repeat requested values without reading the explicitly assigned
+file; the clarification report even states that no source was accessed. The
+Planner prompt allows using available evidence conditionally, and the shared
+method's source-reading checklist applies only to Investigators. The dispatch
+instruction also pre-fills the desired recommendation as the expected result.
+That conflates a requested answer with independently observed evidence. The four
+Investigator/Planner partitions that do read their files now work correctly, so
+this is not a missing Tool grant, catalog result, loader or execution boundary.
+
+The other common failure is response transformation: exact worker facts are read,
+but the Orchestrator's final completion summary paraphrases user-required output
+lines. Its generic synthesis order never preserves explicit output contracts.
+For the simple case its seven Provider steps include early read-Tool activation,
+then a manage_task-only reveal followed immediately by another reveal of both
+read_agent_message and manage_task. Existing generic batching advice does not name
+this same-step dependency, adding one avoidable model roundtrip. The claim is
+limited to this observed sequence; no deterministic latency guarantee is inferred.
+
+Change only the Light source prompts/method: make assigned-source verification
+explicit for both roles; separate supplied constraints from unverified proposed
+conclusions; include the actual source observation and derivation in final reports;
+preserve user-required fields/format in the final completion summary; batch the
+known final-report and completion Tool reveals for the next decision. Keep exact
+catalog-ref discovery, real participant messages, access boundaries and every
+existing grant. Do not add a host workflow gate, synthetic evidence, automatic
+source read/retry, benchmark-specific answers or a relaxed budget. Regenerate the
+existing single Light revision and payload, verify installed prompt/Skill
+projection plus existing real Tool-path tests, and obtain independent review.
+Then run fresh original cases on the new exact package. Mission/shared runtime,
+API, schema, database, migration and UI implementations are unchanged by this cut.
+Independent implementation feedback: none yet.
+
+The existing generator stamped only Light to 2026.09.04.3; its payload/revision
+diff matches those same authoring bytes. Installed scheduler/Planner prompt
+projection and actual shared Skill load assert the new positive contracts.
+Explicit test-root typecheck has zero diagnostics; docs remain 339/25. The first
+three-file combined run passed both payload-render checks, all three definition
+budget checks and the first two Light tests, then stopped progressing after the
+four worker reads. Its exact isolated PID 2992 retained 21 Tool requests / 20
+outcomes and four unfinished assistants, with last log at 17:27:04 UTC and
+continuing CPU use; even the test's configured timeout did not return a result.
+Only that confirmed test-owned process was terminated, preserving its log and
+database at `C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-WzSKdm`.
+The unchanged overlapping-dispatch test then passed in isolation: 1/1,
+84 assertions, 14.43 seconds. This is not labeled a successful aggregate or a
+proved runtime repair; the combined-run stall cause remains under investigation.
+
+A reduced two-file run reproduced the fixture stall (test-owned PID 2016 only
+was stopped). Code inspection identified a real cleanup ordering defect:
+`Instance.provide` closes its activity lease before returning, while the held
+workers were released only in the test's outer finally. An assertion/start-wait
+failure could therefore wait for workers that only that unreachable finally
+released. The barrier now disposes inside the Instance scope, before lease
+closure. The original first trigger was not captured and remains unknown; this
+does not attribute it to package behavior. An injected primary fixture error
+after all four actual worker pipelines start now returns that exact error and
+settles their cleanup through the same barrier. The reduced matrix passes
+7/7 with 184 assertions in 33.62 seconds, including both normal and injected-error
+paths; the original deadlines remain unchanged. Temporary diagnostic console
+statements were removed. The previously passed payload render remains valid
+because neither source nor generated bytes changed during this test-only repair.
+
+Independent read-only review of exact staged tree
+`3484f5401489cd8cfc886ab72a2ef1e77005c807` returned FINAL PASS, P0-P3=0.
+The reviewer independently reran normal and injected-error cleanup paths:
+2/2, 124 assertions, 24.50 seconds, and verified all four generated prompt/Skill
+strings against their authoring bytes. Final explicit test-root typecheck ended
+with zero diagnostics; docs 339/25 and cached/working diff checks passed.
+The external next-run scripts change only the Light package pin to .3 and the
+runner-source directory; cases, budgets and cleanup remain unchanged. Only this
+evidence paragraph follows review. Real Provider acceptance on this package is
+still pending and is not inferred from deterministic tests or review.
