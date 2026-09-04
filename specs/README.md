@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Current approved application and website release preparation: [`0.0.59-beta`](records/2026-09/2026-09-05-v0.0.59-beta-release.md), acceptance pending and not published.
+
 Latest scheduling razor remediation Cut 8c: [`2026-09-02-scheduling-razor-remediation-cut-8c.md`](records/2026-09/2026-09-02-scheduling-razor-remediation-cut-8c.md).
 
 Latest scheduling razor remediation Cut 8: [`2026-09-01-scheduling-razor-remediation-cut-8.md`](records/2026-09/2026-09-01-scheduling-razor-remediation-cut-8.md).
@@ -26,7 +28,7 @@ Latest Light real-consultation runtime remediation: [`2026-08-30-light-consultin
 
 Latest Inspect FrontierScience Research GPT-5.6 Luna smoke: [`2026-08-29-inspect-frontier-science-research-luna-smoke.md`](records/2026-08/2026-08-29-inspect-frontier-science-research-luna-smoke.md).
 
-Current `v0.0.57-beta` corrective application and website release tracker, including the failed immutable `v0.0.56-beta` candidate: [`2026-08-29-v0.0.56-beta-release.md`](records/2026-08/2026-08-29-v0.0.56-beta-release.md).
+Historical `v0.0.56-beta` through `v0.0.58-beta` application and website release attempts: [`2026-08-29-v0.0.56-beta-release.md`](records/2026-08/2026-08-29-v0.0.56-beta-release.md).
 
 Latest Light consultation and investigation Expert Squad: [`2026-08-29-light-expert-squad.md`](records/2026-08/2026-08-29-light-expert-squad.md).
 
