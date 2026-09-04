@@ -3668,3 +3668,84 @@ confirmed the type refinements and preserved exclusions, and made no changes.
 This paragraph records the completed review only; production and checker
 behavior are unchanged. Fresh real Provider acceptance remains required after
 the normal scoped commit and push.
+
+### 2026-09-04 exact-source real acceptance and remaining diagnostic boundaries
+
+The correction was delivered as `a97eed21233bc0d50a04a98e5fdab9ccd84b107e`
+and pushed to `origin/v0.0.55beta`, with zero ahead/behind after fetch. Its normal
+hook passed root typecheck (8/8), routes (6/34), docs (339/25), control leases
+(18/22), architecture (16), package topology (10), release mutation (5), module
+topology (1,103 modules/5,537 edges/zero retained cycles/four clean imports),
+and zero secret-scan findings. The three unrelated working-only exclusions
+were preserved.
+
+The first exact-source launch used an older isolated credential copy. Although
+its expiry was in the future, the actual Provider returned HTTP 401 with an
+invalidated OAuth token before creating a Task. Checking expiry and model
+catalog alone had not proved usability. After that process naturally exited,
+the current authorized credential was copied into a new isolated authority,
+with the exact model catalog copied and checked independently. A minimal
+streaming request returned HTTP 200, completed text and response model
+`gpt-5.6-sol`. The formal credential/configuration was not modified. Both
+launches reused the same source archive, 237 existing dependency links and
+cached supervisor; no install, download or compilation was run.
+
+The subsequent real run's evidence root is
+`D:\myhexin-local\.codex-benchmarks\mission-scheduling-a97eed212-20260904-retained-refs-r2`.
+`authority-preflight.json` records the credential usability/model check without
+secrets. `result.json` reports `ok: true` for Mission `303aa45c8366b88c`, actual
+model `openai/gpt-5.6-sol`, exactly two child Tasks, 12 delivered scheduler
+events/inboxes, three correlated replies, correct recipient FIFO and semantic
+order, and both terminal notifications after the Tasks' DONE facts. All 47
+Tool occurrences succeeded. Reconciliation is `accepted`: each child has one
+query, one catalog, one complete read, and the original Host-minted reference
+is accepted at completion. Publication and Mission completion each occur once.
+The observed duration to durable Mission completion is 639,444 ms; 175,330 ms
+of that follows the last child terminal event. Provider usage is 923,342 total
+tokens for Mission (including 540,288 cache-read tokens), 499,996 for the two
+Orchestrators (including 204,672 cache-read tokens), and 3,413 for Memory.
+These are transport-accounted totals, not all newly processed input tokens.
+The process naturally returned zero and removed its own temporary runtime.
+
+This passing core-chain evidence is retained, not superseded merely because
+additional observations remain. The final log contains one typed
+`ExecutionCancellationError` in `session.processor` at 14:10:53.615 UTC, with
+origin `process.shutdown`; durable Mission completion was at 14:10:53.144 UTC.
+The checker starts cleanup as soon as its completion/evidence predicate passes,
+without proving that the final assistant stream has settled. The production
+processor logs every caught failure at error severity and persists its existing
+typed cancellation outcome. No wake-loop failure was reported. This proves an
+incomplete checker teardown boundary, not another failed duplex chain or failed
+Task. The next correction must wait for the actual final Prompt/assistant
+settlement before claiming a clean final response and closing the server; it
+must not hide the log or weaken cancellation/physical ownership semantics.
+The captured `trajectory-observation.json` is explicitly an incomplete,
+read-only pre-completion snapshot, not a replacement for the final result.
+
+The historical MCP supervisor incident also remains unclosed. Fresh current-
+source checks passed Catalog 18/18 (52 assertions), Catalog/native Mission/
+reveal 41/41 (113), and supervisor/terminal Panel/Catalog 37/37 (119). The last
+combination used the existing source-fingerprinted
+`runtime-889b1c65a33a506f` helper. A passive, test-only child-process observer
+then captured three focused long-call/listChanged executions: 3/3 (9 assertions),
+each MCP helper exiting with code zero, null signal and empty stderr after
+stdin closure. No production source was modified for these observations.
+
+Independent read-only review confirmed the historical directory retained only
+helper/ready/request facts for request
+`c4aa50eb-957f-4849-bb73-bc8183cae69b`. The old log lacks raw helper exit code,
+signal and pre-exit stderr, so the trigger is unknown. Live ownership correctly
+rejects missing physical settlement proof; startup recovery separately requires
+exact prior owner/helper death and the helper's kill-on-close Job ownership.
+The difference is not evidence of two settlement writers. Repeated in-process
+disposal propagates the same rejected handle, which explains the observed
+cascade but does not identify why the helper exited. Green reruns do not close
+that historical incident. The next diagnostic is an instrumented, isolated
+helper-death/real-successor crash cut, not repeated undiagnosed aggregates or
+relaxed marker validation.
+
+Release is not complete. Read-only remote inspection found occupied tags
+`v0.0.56-beta`, `v0.0.57-beta` and `v0.0.58-beta`, while current source version
+is `0.0.58-beta`. The original requested 0.0.56 beta cannot be rebound to this
+source without rewriting an existing immutable identity. Version direction has
+been requested from the user; no tag, Release or website deployment was changed.
