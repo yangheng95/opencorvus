@@ -367,6 +367,7 @@ export async function enforceReleasePublication(
   mode: ReleasePublicationMode,
   input: ReleasePublicationInput,
   request: GitHubApiRequest = runGitHubApi,
+  wait: (milliseconds: number) => Promise<unknown> = Bun.sleep,
 ): Promise<ReleasePublicationOwnership> {
   if (mode === "verify-publication") return verifyDraftPublicationOwner(input, request)
 
@@ -410,6 +411,12 @@ export async function enforceReleasePublication(
     )
   }
 
+  try {
+    return await verifyDraftPublicationOwner(input, request)
+  } catch (error) {
+    if (!(error instanceof ReleasePublicationError && error.code === "release_publication_missing")) throw error
+  }
+
   const tag = `v${input.version}`
   const endpoint = `repos/${input.repository}/releases`
   const create = await request([
@@ -435,10 +442,25 @@ export async function enforceReleasePublication(
   const status = httpStatus(create)
   if (!((status === 201 && create.exitCode === 0) || status === 422)) throw apiFailure(endpoint, create)
 
-  // 422 can mean an existing Release or an unrelated validation/rate failure. Only an exact,
-  // still-draft owner receipt can turn that response into a safe same-run rerun.
-  const owned = await verifyDraftPublicationOwner(input, request)
-  return status === 201 ? { ...owned, kind: "publication-claimed" } : owned
+  // GitHub can accept a draft before its Release inventory exposes it. Retry the same canonical
+  // inventory instead of issuing another create. A 422 can also mean a concurrent creator won;
+  // only an exact, still-draft owner receipt can turn either response into safe ownership.
+  let missing: ReleasePublicationError | undefined
+  for (const delay of [0, 250, 500, 1_000, 2_000, 4_000]) {
+    if (delay > 0) await wait(delay)
+    try {
+      const owned = await verifyDraftPublicationOwner(input, request)
+      return status === 201 ? { ...owned, kind: "publication-claimed" } : owned
+    } catch (error) {
+      if (error instanceof ReleasePublicationError && error.code === "release_publication_missing") {
+        missing = error
+        continue
+      }
+      throw error
+    }
+  }
+  if (status !== 201) throw apiFailure(endpoint, create)
+  throw missing ?? new ReleasePublicationError("release_publication_missing", `Release publication ${tag} is missing`)
 }
 
 function requiredEnvironment(name: string): string {

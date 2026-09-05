@@ -4,9 +4,9 @@
 
 ## 未发布
 
-## 0.0.60beta - 2026-09-05
+## 0.0.61beta - 2026-09-05
 
-本版本从最后一个公开版本 `0.0.54-beta` 继续发布，包含下方未公开候选的全部改动，并完成其后的调度架构收敛、Search-native 能力迁移与 Light 专家团验收。桌面端、命令行、更新清单和公开网站都绑定到同一份 `0.0.60-beta` 源码；产品版本只允许 `major.minor.patch` 三段数字以及可选的 `beta` 标签，不再接受 `beta.1` 一类第四段编号。
+本版本从最后一个公开版本 `0.0.54-beta` 继续发布，包含下方未公开候选的全部改动，并完成其后的调度架构收敛、Search-native 能力迁移与 Light 专家团验收。桌面端、命令行、更新清单和公开网站都绑定到同一份 `0.0.61-beta` 源码；产品版本只允许 `major.minor.patch` 三段数字以及可选的 `beta` 标签，不再接受 `beta.1` 一类第四段编号。
 
 ### Changed
 
@@ -24,13 +24,17 @@
 
 - Automation、Wait 与 recovery 热路径改为带索引的有界分页/批量 reducer；查询次数按页而不是按定义、Fire 或历史记录增长。
 
+## 0.0.60beta - 2026-09-05
+
+这是未公开的候选版本。五个平台的桌面端和命令行矩阵全部构建成功，但 GitHub 新建 draft 在 Release inventory 中存在短暂可见性延迟，首次 owner 回读失败；失败 job 续跑时 GitHub 又允许创建同 tag draft，唯一性守卫因此在资产上传前拒绝。重复的同 owner、零资产 draft 已精确移除，原 draft 与 tag 保留为审计证据。后续发布先从完整 inventory 复用 exact-owner draft，仅在已证明缺失时创建，并对创建后的同一 inventory 做有界可见性重试；workflow 级 publication concurrency 防止并行创建竞争。
+
 ## 0.0.59beta - 2026-09-05
 
-这是未公开的候选版本。五个平台的桌面端和命令行矩阵全部构建成功，但发布汇总在读取刚创建的 draft Release 时错误使用了只适用于公开 Release 的 tag endpoint，因此在任何资产上传、更新通道结算或网站部署前失败关闭。`v0.0.59-beta` tag 与 draft 保留为不可变审计证据；发布控制面改为从可见 draft 的唯一 Release inventory 读取并校验精确 owner，修正后由 `0.0.60-beta` 重新执行完整发布。
+这是未公开的候选版本。五个平台的桌面端和命令行矩阵全部构建成功，但发布汇总在读取刚创建的 draft Release 时错误使用了只适用于公开 Release 的 tag endpoint，因此在任何资产上传、更新通道结算或网站部署前失败关闭。`v0.0.59-beta` tag 与 draft 保留为不可变审计证据；发布控制面改为从可见 draft 的唯一 Release inventory 读取并校验精确 owner，修正后由后续候选重新执行完整发布。
 
 ## 0.0.58beta - 2026-08-29
 
-这是未公开的候选版本，记录当时已完成的全仓架构债清理与真实 Mission 调度验收：统一 Task、Mission、Session、Provider、MCP、调度器、持久化与 Overlay 的事实和组合边界；新增全局 Chat、运行时 Skill Market、Inspect AI benchmark 适配与 Light 专家团。SDK、util 与 plugin 的源码包元数据同步到同一候选版本并通过打包安装预检；npm registry 发布不属于该候选范围。`v0.0.56-beta` 因 frozen lockfile 漂移在共享依赖安装阶段失败关闭，`v0.0.57-beta` 又因干净 runner 的 Overlay 未选择工作区 `source` export condition 而在打包阶段失败关闭；这些标签与 `v0.0.58-beta` 均保留为不可变审计证据，其改动由 `0.0.60-beta` 公开发布。
+这是未公开的候选版本，记录当时已完成的全仓架构债清理与真实 Mission 调度验收：统一 Task、Mission、Session、Provider、MCP、调度器、持久化与 Overlay 的事实和组合边界；新增全局 Chat、运行时 Skill Market、Inspect AI benchmark 适配与 Light 专家团。SDK、util 与 plugin 的源码包元数据同步到同一候选版本并通过打包安装预检；npm registry 发布不属于该候选范围。`v0.0.56-beta` 因 frozen lockfile 漂移在共享依赖安装阶段失败关闭，`v0.0.57-beta` 又因干净 runner 的 Overlay 未选择工作区 `source` export condition 而在打包阶段失败关闭；这些标签与 `v0.0.58-beta` 均保留为不可变审计证据，其改动由 `0.0.61-beta` 公开发布。
 
 ### Security
 

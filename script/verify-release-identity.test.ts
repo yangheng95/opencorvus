@@ -166,6 +166,8 @@ describe("immutable release identity", () => {
         { repository, version: "0.0.57-beta", sourceSHA, runID: "1001", prerelease: true },
         recordingResponses(
           requests,
+          response({ stdout: "HTTP/2.0 200 OK\n" }),
+          response({ stdout: "[]" }),
           response({ stdout: "HTTP/2.0 201 Created\n" }),
           response({ stdout: "HTTP/2.0 200 OK\n" }),
           releaseRecord("1001"),
@@ -178,6 +180,13 @@ describe("immutable release identity", () => {
       runID: "1001",
     })
     expect(requests[0]).toEqual([
+      "api",
+      "--include",
+      "--silent",
+      `repos/${repository}/releases?per_page=100&page=1`,
+    ])
+    expect(requests[1]).toEqual(["api", `repos/${repository}/releases?per_page=100&page=1`])
+    expect(requests[2]).toEqual([
       "api",
       "--method",
       "POST",
@@ -197,13 +206,122 @@ describe("immutable release identity", () => {
       "-F",
       "generate_release_notes=true",
     ])
-    expect(requests[1]).toEqual([
+    expect(requests[3]).toEqual([
       "api",
       "--include",
       "--silent",
       `repos/${repository}/releases?per_page=100&page=1`,
     ])
-    expect(requests[2]).toEqual(["api", `repos/${repository}/releases?per_page=100&page=1`])
+    expect(requests[4]).toEqual(["api", `repos/${repository}/releases?per_page=100&page=1`])
+  })
+
+  test("waits for a newly created draft to become visible without creating it twice", async () => {
+    const delays: number[] = []
+    await expect(
+      enforceReleasePublication(
+        "claim-publication",
+        { repository, version: "0.0.57-beta", sourceSHA, runID: "1001", prerelease: true },
+        responses(
+          response({ stdout: "HTTP/2.0 200 OK\n" }),
+          response({ stdout: "[]" }),
+          response({ stdout: "HTTP/2.0 201 Created\n" }),
+          response({ stdout: "HTTP/2.0 200 OK\n" }),
+          response({ stdout: "[]" }),
+          response({ stdout: "HTTP/2.0 200 OK\n" }),
+          releaseRecord("1001"),
+        ),
+        async (milliseconds) => {
+          delays.push(milliseconds)
+        },
+      ),
+    ).resolves.toEqual({
+      kind: "publication-claimed",
+      tag: "v0.0.57-beta",
+      sourceSHA,
+      runID: "1001",
+    })
+    expect(delays).toEqual([250])
+  })
+
+  test("converges one 422 publication claim on the exact concurrent owner without creating twice", async () => {
+    const requests: string[][] = []
+    const delays: number[] = []
+    await expect(
+      enforceReleasePublication(
+        "claim-publication",
+        { repository, version: "0.0.57-beta", sourceSHA, runID: "1001", prerelease: true },
+        recordingResponses(
+          requests,
+          response({ stdout: "HTTP/2.0 200 OK\n" }),
+          response({ stdout: "[]" }),
+          response({ exitCode: 1, stdout: "HTTP/2.0 422 Unprocessable Entity\n" }),
+          response({ stdout: "HTTP/2.0 200 OK\n" }),
+          response({ stdout: "[]" }),
+          response({ stdout: "HTTP/2.0 200 OK\n" }),
+          releaseRecord("1001"),
+        ),
+        async (milliseconds) => {
+          delays.push(milliseconds)
+        },
+      ),
+    ).resolves.toEqual({
+      kind: "publication-owned",
+      tag: "v0.0.57-beta",
+      sourceSHA,
+      runID: "1001",
+    })
+    expect(requests.filter((args) => args.includes("POST"))).toHaveLength(1)
+    expect(delays).toEqual([250])
+  })
+
+  test("preserves the 422 API failure after bounded inventory visibility is exhausted", async () => {
+    const requests: string[][] = []
+    const delays: number[] = []
+    const missingInventory = [
+      response({ stdout: "HTTP/2.0 200 OK\n" }),
+      response({ stdout: "[]" }),
+    ]
+    await expect(
+      enforceReleasePublication(
+        "claim-publication",
+        { repository, version: "0.0.57-beta", sourceSHA, runID: "1001", prerelease: true },
+        recordingResponses(
+          requests,
+          ...missingInventory,
+          response({ exitCode: 1, stdout: "HTTP/2.0 422 Unprocessable Entity\n" }),
+          ...missingInventory,
+          ...missingInventory,
+          ...missingInventory,
+          ...missingInventory,
+          ...missingInventory,
+          ...missingInventory,
+        ),
+        async (milliseconds) => {
+          delays.push(milliseconds)
+        },
+      ),
+    ).rejects.toMatchObject<Partial<ReleasePublicationError>>({ code: "github_api_failure", status: 422 })
+    expect(requests.filter((args) => args.includes("POST"))).toHaveLength(1)
+    expect(delays).toEqual([250, 500, 1_000, 2_000, 4_000])
+  })
+
+  test("rejects a foreign owner that becomes visible after one 422 publication claim", async () => {
+    const requests: string[][] = []
+    await expect(
+      enforceReleasePublication(
+        "claim-publication",
+        { repository, version: "0.0.57-beta", sourceSHA, runID: "1001", prerelease: true },
+        recordingResponses(
+          requests,
+          response({ stdout: "HTTP/2.0 200 OK\n" }),
+          response({ stdout: "[]" }),
+          response({ exitCode: 1, stdout: "HTTP/2.0 422 Unprocessable Entity\n" }),
+          response({ stdout: "HTTP/2.0 200 OK\n" }),
+          releaseRecord("2002"),
+        ),
+      ),
+    ).rejects.toMatchObject<Partial<ReleasePublicationError>>({ code: "release_publication_owner_mismatch" })
+    expect(requests.filter((args) => args.includes("POST"))).toHaveLength(1)
   })
 
   test("maps an absent draft in the canonical release inventory to the missing publication contract", async () => {
@@ -257,11 +375,7 @@ describe("immutable release identity", () => {
       enforceReleasePublication(
         "claim-publication",
         { repository, version: "0.0.57-beta", sourceSHA, runID: "1001", prerelease: true },
-        responses(
-          response({ exitCode: 1, stdout: "HTTP/2.0 422 Unprocessable Entity\n" }),
-          response({ stdout: "HTTP/2.0 200 OK\n" }),
-          releaseRecord("1001"),
-        ),
+        responses(response({ stdout: "HTTP/2.0 200 OK\n" }), releaseRecord("1001")),
       ),
     ).resolves.toEqual({
       kind: "publication-owned",
@@ -276,11 +390,7 @@ describe("immutable release identity", () => {
       enforceReleasePublication(
         "claim-publication",
         { repository, version: "0.0.57-beta", sourceSHA, runID: "2002", prerelease: true },
-        responses(
-          response({ exitCode: 1, stdout: "HTTP/2.0 422 Unprocessable Entity\n" }),
-          response({ stdout: "HTTP/2.0 200 OK\n" }),
-          releaseRecord("1001"),
-        ),
+        responses(response({ stdout: "HTTP/2.0 200 OK\n" }), releaseRecord("1001")),
       ),
     ).rejects.toMatchObject<Partial<ReleasePublicationError>>({ code: "release_publication_owner_mismatch" })
   })

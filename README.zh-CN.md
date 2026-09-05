@@ -213,7 +213,7 @@ OpenCorvus 不会在后台改自己的专家团：这里没有自主重写循环
 x64 平台同时提供适用于不支持高级矢量扩展 2（Advanced Vector Extensions 2，AVX2）
 处理器的 `-baseline.tar.gz` 版本。
 
-把 `<version>` 替换成 Release 页面显示的版本，例如 `0.0.60-beta`。只需下载实际要
+把 `<version>` 替换成 Release 页面显示的版本，例如 `0.0.61-beta`。只需下载实际要
 安装的那一个文件。
 
 ### 从源码安装

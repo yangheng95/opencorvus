@@ -250,6 +250,11 @@ describe("GitHub Actions workflow contract", () => {
         },
       },
     })
+    expect(workflow.concurrency).toEqual({
+      group: "opencorvus-release-publication",
+      queue: "max",
+      "cancel-in-progress": false,
+    })
 
     const nativeMatrix = [
       { runner: "ubuntu-latest", platform: "linux-x64" },

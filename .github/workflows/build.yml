@@ -13,6 +13,11 @@ on:
         description: "Exact commit SHA already reviewed and pushed for this release."
         required: true
 
+concurrency:
+  group: opencorvus-release-publication
+  queue: max
+  cancel-in-progress: false
+
 jobs:
   prepare:
     name: prepare
