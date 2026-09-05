@@ -50,12 +50,18 @@ import { Message } from "../../src/session/message"
 import { SessionProcessor } from "../../src/session/processor"
 import { SkillMount } from "../../src/skill/mounts"
 import { CapabilitySearchTool } from "../../src/tool/capability-search"
+import { CapabilitySearchInput } from "../../src/capability/descriptor"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
 import { allCapabilityGrants } from "./capability-grant-fixture"
 import { resolveTestCapabilityTools } from "../fixture/capability-occurrence"
 
 const packageRoot = path.resolve(import.meta.dir, "../../../../expert-squads/builtin/light")
 const skillRef = "light/shared/method"
+function authoredRevealRefs(prompt: string) {
+  const blocks = [...prompt.matchAll(/```json\r?\n([\s\S]*?)\r?\n```/g)]
+  expect(blocks).toHaveLength(1)
+  return CapabilitySearchInput.parse({ exact_refs: JSON.parse(blocks[0]![1]!) }).exact_refs
+}
 const schedulerTools = [
   "capability_search",
   "dispatch_agents",
@@ -132,7 +138,7 @@ describe("Light Expert Squad package", () => {
     expect(source.manifest).toMatchObject({
       namespace: "builtin",
       id: "light",
-      version: "2026.09.04.3",
+      version: "2026.09.05.1",
       product_pillars: ["code", "work"],
     })
     expect(Object.keys(source.manifest.capability_projection.agents).sort()).toEqual(Object.keys(agentRoles).sort())
@@ -157,7 +163,7 @@ describe("Light Expert Squad package", () => {
         })
         expect(receipt).toMatchObject({
           operation: "installed",
-          after: { installationScope: "project", namespace: "builtin", id: "light", version: "2026.09.04.3" },
+          after: { installationScope: "project", namespace: "builtin", id: "light", version: "2026.09.05.1" },
         })
 
         const config = Config.mergeOverlay(await EffectiveConfig.snapshotCurrent(), {
@@ -178,10 +184,15 @@ describe("Light Expert Squad package", () => {
           packageRevision: revision,
         })
 
-        expect(revision).toMatchObject({ namespace: "builtin", id: "light", version: "2026.09.04.3" })
+        expect(revision).toMatchObject({ namespace: "builtin", id: "light", version: "2026.09.05.1" })
         expect(scheduler.virtualWorkflows).toEqual({})
         expect(scheduler.builtInToolIDs).toEqual(schedulerTools)
         expect(scheduler.productionSkills.map((entry) => entry.ref)).toEqual([])
+        expect(authoredRevealRefs(scheduler.promptOverlay)).toEqual(
+          ["dispatch_agents", "read_agent_message", "manage_task"].map((local_ref) => ({
+            kind: "tool", source: "platform", owner_ref: "runtime-projection:orchestrator", local_ref,
+          })),
+        )
         expect(skillProjection.projectedAgentIDs).toEqual(Object.keys(agentRoles).sort())
         expect(scheduler.promptOverlay).toContain('reveal `read_agent_message` and `manage_task` together in one `capability_search` call')
         expect(scheduler.promptOverlay).toContain("submit the ordered list in one `read_agent_message` call")
@@ -195,6 +206,10 @@ describe("Light Expert Squad package", () => {
               packageRevision: revision,
               agentID,
             })
+            expect(authoredRevealRefs(worker.promptOverlay)).toEqual([
+              { kind: "skill", source: "package", owner_ref: "light", local_ref: skillRef },
+              { kind: "tool", source: "platform", owner_ref: "tool-registry", local_ref: "read" },
+            ])
             if (agentID === "light-planner") {
               expect(worker.promptOverlay).toContain("When assigned a file or source, read it before deciding")
               expect(worker.promptOverlay).toContain("Report the actual source locator, decisive observed values and comparison")
@@ -496,16 +511,16 @@ describe("Light Expert Squad package", () => {
                     }
                     const revealed = await resolveTestCapabilityTools(common)
                     expect(Object.keys(revealed.tools)).toEqual(["capability_search"])
-                    // Complete known identities go directly through the real reveal
-                    // owner. No test-side local-ref lookup supplies these arguments.
+                    const authoredWorker = await PromptProfileResolver.resolveWorkerCapability({
+                      projectDirectory: project.path, config, packageRevision, agentID: streamInput.agentID,
+                    })
+                    // Use the exact installed prompt bytes, then validate them through
+                    // the real frozen Catalog/Harness and materialization owner.
                     const revealInput = {
                       queries: ["light/shared/method", "read"],
                       deactivate_refs: [],
                       limit: 5,
-                      exact_refs: [
-                        { kind: "skill", source: "package", owner_ref: "light", local_ref: "light/shared/method" },
-                        { kind: "tool", source: "platform", owner_ref: "tool-registry", local_ref: "read" },
-                      ],
+                      exact_refs: authoredRevealRefs(authoredWorker.promptOverlay),
                     }
                     const revealID = `call_reveal_light_method_and_read_${assistant.id}`
                     const revealContext = { toolCallId: revealID, messages: [], abortSignal: input.abort }

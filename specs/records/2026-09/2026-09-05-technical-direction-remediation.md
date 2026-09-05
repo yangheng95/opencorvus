@@ -16,7 +16,7 @@
   A graph metric or a test budget alone does not establish simplicity or
   product efficiency. Preserve proven cross-process execution, exact occurrence
   identity, atomic settlement, and explicit capability authority.
-- Constraints: no version changes, release/tag creation, public deployment,
+- Constraints: no application version changes, release/tag creation, public deployment,
   user database reset, new compatibility promise, UI automation, new worktree,
   or other-owner edits. Reuse installed dependencies and native helpers; do not
   reinstall or rebuild without proving an actual input mismatch. Real Provider
@@ -39,7 +39,7 @@
 | ID | Observation and direction | Current disposition |
 | --- | --- | --- |
 | TD-01 | Native build matrix precedes actual draft publication admission; publication inventory is fetched twice per page. Same-run retry is implemented, but admission failures waste all native build work. | Delivered as `7c19c4240debc86f5ecd3947dda85d01fb8fd295`; normal push hook passed and fetched HEAD/upstream were 0/0. |
-| TD-02 | Latest two-worker Light consultation takes 106,974 ms, 20 Provider requests and 11 capability searches for two file reads and short synthesis. 209,119 reported tokens include 92,416 cache-read tokens. | Shared known-ref instruction corrected in Cut 2 with executable batch/replay coverage. Package-authored exact refs and measured real-model efficiency remain open, awaiting the package revision/limited rerun choice. No speedup claim. |
+| TD-02 | Latest two-worker Light consultation takes 106,974 ms, 20 Provider requests and 11 capability searches for two file reads and short synthesis. 209,119 reported tokens include 92,416 cache-read tokens. | Shared known-ref instruction delivered in Cut 2; Cut 3 package-authored refs pass focused validation. Authorized real run stopped at production Provider probe: HTTP 401 token_revoked, before Task creation. Performance improvement remains unverified; valid Provider login is required. |
 | TD-03 | Mission close uses mutable module callback bindings from Session and Task bootstrap. | Retain the verified existing composition boundary. All production caller/binder paths audited; live/dead-owner and retention route tests pass. Module mutability is retained maintainability risk, not a reproduced defect warranting another refactor. |
 | TD-04 | Migration-heavy repairs were followed by removal of historical migrations and exact current-schema/reset admission. | Historical strategy rework confirmed; current explicit reset contract verified, including untouched stale database/WAL bytes. Obsolete permission-ledger migration promise corrected in Cut 2. Changing upgrade compatibility remains a product decision, not an inferred repair. |
 | TD-05 | Website cwd/root dependency workarounds were replaced by the actual bundler source-export condition. | Closed as already repaired by `ed92a5f37`; current source-only compilation, real Node execution and shared runtime reuse passed 3/3. |
@@ -231,3 +231,105 @@ still open and is not covered by this delivery verdict.
 - Updating the permanent search description changes its normalized definition
   digest. Existing occurrence-drift/reconstruction rules remain authoritative;
   this cut does not hot-rebind an already-frozen input or introduce compatibility.
+
+## Cut 3: authorized Light known-ref guidance and one measured consultation
+
+### Recall and selected repair
+
+The user explicitly confirmed the previously requested exception: update only
+Light's immutable content revision and run one bounded `openai/gpt-5.6-luna`
+two-worker consultation. Application version remains `0.0.61-beta`; no release,
+UI automation, other-owner changes, data reset or additional model suite.
+Cut 2 is delivered as `152001585cd44f733333cb4f21a98cb7168388ed` with a normal
+push and fetched 0/0. The old awaiting-authorization statements describe that
+cut's historical boundary; this confirmation now permits the work below.
+
+Root cause is the observed discovery/reveal split recorded under TD-02. The
+package must provide complete locator identities, not assume the model can infer
+their source/owner from a local name. Add exact Skill and read refs to each
+worker's authored prompt. A worker with an assigned repository file reveals
+both in one call, loads the method and reads its assigned evidence; other tasks
+reveal only the method and discover whichever source capability is actually
+needed. Give the scheduler exact dispatch/report-read/completion refs; reveal
+dispatch for the current frontier and group reader/completion at closure.
+No eagerly projected leaf, runtime decision gate, new owner or persistence.
+
+The manifest remains the capability authority. Prompt refs are validated
+locators, not grants. Existing install/projection and four-worker execution
+tests will parse the authored refs and prove they match the frozen executable
+catalog, survive receipt replay and reach real Skill/file reads. Generate the
+Light revision and embedded payload through the existing generators, verify
+that only Light changes, and retain the current loader-name/source-grounding
+and one-frontier/one-batch-final-read contracts. Independent feedback before
+this implementation: none; Cut 2's read-only reviewer established that direct
+reveal already preserves authority. A fresh delivery review follows validation.
+
+### Bounded measurement and reuse
+
+Reuse the external v3 runner and its verified dependency-link mechanism in a
+new source-tree archive; benchmark code/results remain outside Git. Historical
+source/result archives are immutable. Cache input review found only workspace
+release-version fields changed since the reusable archive: dependency ranges,
+resolved lock packages and SDK source are unchanged. Verify this structurally
+before linking dependencies; bind workspace imports to the candidate archive,
+not the dirty checkout. Reuse a source-fingerprinted native helper. Never install
+or rebuild merely because workspace version labels changed.
+
+Run only the original `parallel_short_synthesis` request and evidence files.
+Keep its 180-second/400,000-total/180,000-orchestrator acceptance ceilings for
+comparability, but require direct known-ref activation, actual file grounding,
+one two-member dispatch with physical Provider overlap, one batch report read,
+correct exact synthesis, and the existing error/interaction/population checks.
+Add an external harness physical-call ceiling of 20 and a 180-second model
+execution deadline; reject further requests at exhaustion and let the owned
+runtime settle/clean up. Inspect results even if the old loose ceilings pass:
+report request/search counts, elapsed time and role/cache-separated tokens
+against the saved 20-request/11-search/106,974-ms result. One observation can
+verify the path and measured improvement, not a statistical latency guarantee.
+
+The isolated OAuth shape/expiry and exact Luna catalog have been separately
+checked without printing credential values; the production Provider probe must
+also pass before the one Task. Preserve failed evidence and do not automatically
+consume another real-model case if this one fails. Any failure is audited and
+repaired within scope, with another paid acceptance requiring a new decision.
+
+The preserved runner's `ok` field is only its original automated contract, not
+the Cut 3 verdict. After the single case, the main agent and independent reviewer
+must inspect the saved raw transcript for direct known-ref activation, successful
+reads of both assigned files and their returned values, one two-member dispatch,
+one batch of exact terminal report IDs, physical cross-Session Provider overlap,
+and the exact completion answer. Report each result explicitly. No second paid
+case is implied by a failed manual criterion.
+
+Before measurement: package/reveal/generated tests passed 19/19 (248 assertions),
+package typecheck exited 0, docs passed 339/25, and the external observer/answer
+contract tests passed 9/9 (30 assertions). Preparation reused 236 dependency links
+with workspace imports bound to the candidate source; no install or native build.
+The revision generator also detected pre-existing Dynamic revision-record drift;
+its incidental Dynamic stamp was removed from this change. Only Light revision
+`2026.09.05.1` and its generated payload are included. Dynamic's existing mismatch
+is outside the specifically authorized revision change and is not called fixed.
+
+### Actual execution and remaining boundary
+
+At 2026-09-05 07:23 UTC, the single launch reached the production Provider test.
+It returned HTTP 401 with `token_revoked` / invalidated OAuth token. The credential
+shape and local expiry had passed, and both Provider and exact Luna model were
+projected; those checks cannot establish remote token validity. Exactly one
+physical connection-probe request failed before Task creation. No Task-model
+request or worker was started, and no latency/token improvement is measured.
+Do not label this a Light correctness failure or a successful consultation.
+
+Evidence is preserved outside Git in
+`D:/myhexin-local/.codex-benchmarks/light-consulting-a9fd55182-td02-20260905/`
+(`preflight.json`, `suite.json`, `parallel_short_synthesis.json` and log).
+Product source was frozen tree `a9fd55182255c7a442607341c2a606459523b5b6`,
+archive SHA-256 `bfadca006d50521c0874529311bfe286f4799cff71e616d9ed91a53e1aad13ae`.
+The final runner hash is
+`61737519ff33d68320cbb0aab34c939e09cb7e175933e1d28fde5d7cca4c5666`;
+its four explicit typecheck roots passed after parsing persisted members with
+the existing production member schema. The independent startup review passed
+with zero findings, independently running Light 4/4 (189 assertions) and external
+contracts 9/9 (30 assertions). Final review must distinguish the verified package
+change from the still-blocked real-model acceptance. No automatic retry, account
+reset, new login flow or additional paid case was attempted.
