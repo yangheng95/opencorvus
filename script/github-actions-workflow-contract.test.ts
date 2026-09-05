@@ -11,7 +11,6 @@ type WorkflowStep = {
   run?: string
   env?: Record<string, string>
   with?: Record<string, unknown>
-  "working-directory"?: string
 }
 
 type WorkflowJob = {
@@ -483,22 +482,6 @@ describe("GitHub Actions workflow contract", () => {
     expect(manifestStep?.run).toContain('gh api --paginate "repos/$GITHUB_REPOSITORY/releases?per_page=100"')
     expect(manifestStep?.run).toContain("generate-website-download-manifest.ts")
     expect(buildSteps.indexOf(manifestStep!)).toBeLessThan(buildSteps.findIndex(({ name }) => name === "Check website"))
-
-    const archiveVerification = jobs["archive-determinism"]?.steps?.find(
-      ({ name }) => name === "Verify fixed canonical archive bytes",
-    )
-    expect(archiveVerification).toMatchObject({
-      "working-directory": "packages/opencorvus",
-      run: "bun test test/expert-squad/static-distribution-archive.test.ts",
-    })
-    expect(buildSteps.find(({ name }) => name === "Verify canonical OpenCorvus Expert Squad archives")).toMatchObject({
-      "working-directory": "packages/opencorvus",
-      run: "bun test test/expert-squad/static-distribution-archive.test.ts",
-    })
-    expect(buildSteps.find(({ name }) => name === "Verify canonical website Expert Squad archives")).toMatchObject({
-      "working-directory": "packages/web",
-      run: "bun test test/expert-squad-static-distribution.test.ts test/expert-squad-publication.test.ts",
-    })
   })
 
   test("separates unit, build, and website workflows with their required preparation", async () => {

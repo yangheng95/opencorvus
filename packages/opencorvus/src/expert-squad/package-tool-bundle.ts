@@ -224,6 +224,7 @@ export namespace PackageToolBundle {
     const result = await Bun.build({
       entrypoints: [normalizeBundlerPath(entry)],
       target: "node",
+      conditions: ["source"],
       format: "esm",
       packages: "bundle",
       minify: true,

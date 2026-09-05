@@ -112,8 +112,7 @@ jobs:
         run: bun run --cwd packages/sdk/js build
 
       - name: Verify fixed canonical archive bytes
-        working-directory: packages/opencorvus
-        run: bun test test/expert-squad/static-distribution-archive.test.ts
+        run: bun test packages/opencorvus/test/expert-squad/static-distribution-archive.test.ts
 
   build:
     name: build and verify database-backed release
@@ -167,13 +166,8 @@ jobs:
           fi
           bun ./script/generate-website-download-manifest.ts "${ARGS[@]}"
 
-      - name: Verify canonical OpenCorvus Expert Squad archives
-        working-directory: packages/opencorvus
-        run: bun test test/expert-squad/static-distribution-archive.test.ts
-
-      - name: Verify canonical website Expert Squad archives
-        working-directory: packages/web
-        run: bun test test/expert-squad-static-distribution.test.ts test/expert-squad-publication.test.ts
+      - name: Verify canonical Expert Squad archives
+        run: bun test packages/opencorvus/test/expert-squad/static-distribution-archive.test.ts packages/web/test/expert-squad-static-distribution.test.ts packages/web/test/expert-squad-publication.test.ts
 
       - name: Verify website Registry database lifecycle
         run: bun run --cwd packages/web test:registry

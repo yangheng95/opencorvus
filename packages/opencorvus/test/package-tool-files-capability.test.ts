@@ -1,14 +1,93 @@
-import { describe, expect, test } from "bun:test"
+import { describe, expect, spyOn, test } from "bun:test"
 import * as nativeFiles from "node:fs/promises"
 import path from "node:path"
+import { pathToFileURL } from "node:url"
 import { Global } from "../src/global"
 import { ExpertSquadRegistry } from "../src/expert-squad/registry"
-import {
-  PACKAGE_TOOL_FILES_FACADE_IMPORT,
-  PackageToolBundle,
-} from "../src/expert-squad/package-tool-bundle"
+import { PACKAGE_TOOL_FILES_FACADE_IMPORT, PackageToolBundle } from "../src/expert-squad/package-tool-bundle"
 
 describe("Package tool filesystem capability", () => {
+  test("compiles real source-only plugin dependencies into an executable Node tool", async () => {
+    const root = await Global.createTemporaryDirectory("package-tool-source-only-")
+    const repository = path.resolve(import.meta.dir, "../../..")
+    const originalBuild = Bun.build.bind(Bun)
+    const loadedUtilFiles: string[] = []
+    const isolatedModules = path.join(root, "runtime", "node_modules", "@opencorvus-ai")
+    let buildSpy: ReturnType<typeof spyOn> | undefined
+    try {
+      for (const name of ["plugin", "util"]) {
+        const target = path.join(isolatedModules, name)
+        await nativeFiles.mkdir(target, { recursive: true })
+        await nativeFiles.copyFile(
+          path.join(repository, "packages", name, "package.json"),
+          path.join(target, "package.json"),
+        )
+        await nativeFiles.cp(path.join(repository, "packages", name, "src"), path.join(target, "src"), {
+          recursive: true,
+        })
+      }
+      const toolRoot = path.join(root, "source-probe")
+      const sourcePath = path.join(toolRoot, "tools", "probe.ts")
+      await nativeFiles.mkdir(path.dirname(sourcePath), { recursive: true })
+      await nativeFiles.writeFile(
+        sourcePath,
+        `import { tool } from "@opencorvus-ai/plugin"
+export default tool({ description: "Read a source-compiled value", args: { value: tool.schema.string() },
+  async execute(args) { return args.value } })`,
+      )
+      // Delegate every build to the real compiler. Only relocate its real plugin
+      // entry bytes so developer dist artifacts cannot satisfy package exports.
+      buildSpy = spyOn(Bun, "build").mockImplementation((config) => {
+        const pluginClosure = config.entrypoints?.some((entry) => /[\\/]plugin[\\/]src[\\/]tool\.ts$/.test(entry))
+        if (!pluginClosure) return originalBuild(config)
+        return originalBuild({
+          ...config,
+          entrypoints: [path.join(isolatedModules, "plugin", "src", "tool.ts")],
+          plugins: [
+            ...(config.plugins ?? []),
+            {
+              name: "observe-source-dependency",
+              setup(build) {
+                build.onLoad({ filter: /capability-ref\.(ts|js)$/ }, (args) => {
+                  loadedUtilFiles.push(args.path)
+                  return undefined
+                })
+              },
+            },
+          ],
+        })
+      })
+      const prepared = await PackageToolBundle.prepare({
+        packageID: "source-probe",
+        packageRoot: toolRoot,
+        ref: "source-probe/shared/probe",
+        owner: "shared",
+        sourcePath,
+      })
+      expect(loadedUtilFiles.map((file) => path.normalize(file))).toEqual([
+        path.join(isolatedModules, "util", "src", "capability-ref.ts"),
+      ])
+      const child = Bun.spawn(
+        [
+          "node",
+          "--input-type=module",
+          "-e",
+          `import tool from ${JSON.stringify(pathToFileURL(prepared.bundlePath).href)}; console.log(await tool.execute({value:"source-only"}, {host:{files:{}}}))`,
+        ],
+        { stdout: "pipe", stderr: "pipe" },
+      )
+      const [exitCode, stdout, stderr] = await Promise.all([
+        child.exited,
+        new Response(child.stdout).text(),
+        new Response(child.stderr).text(),
+      ])
+      expect({ exitCode, stdout: stdout.trim(), stderr }).toEqual({ exitCode: 0, stdout: "source-only", stderr: "" })
+    } finally {
+      buildSpy?.mockRestore()
+      await nativeFiles.rm(root, { recursive: true, force: true })
+    }
+  }, 60_000)
+
   test("freezes one plugin runtime ABI across separately prepared package tools", async () => {
     const packageRoot = await Global.createTemporaryDirectory("package-tool-files-")
     try {
@@ -97,7 +176,9 @@ export default tool({
     ] as const
     const loadedBundles: Array<[string, number]> = []
     for (const [relativeRoot] of expectedBundles) {
-      const loaded = await ExpertSquadRegistry.loadSourcePackage(path.resolve(import.meta.dir, `../../..`, relativeRoot))
+      const loaded = await ExpertSquadRegistry.loadSourcePackage(
+        path.resolve(import.meta.dir, `../../..`, relativeRoot),
+      )
       loadedBundles.push([relativeRoot, loaded.packageToolBundles.size])
     }
     expect(loadedBundles).toEqual(expectedBundles)
