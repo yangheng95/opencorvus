@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Current scheduling razor re-audit: [`2026-09-05-scheduling-razor-reaudit.md`](records/2026-09/2026-09-05-scheduling-razor-reaudit.md).
+
 Current technical direction audit and remediation: [`2026-09-05-technical-direction-remediation.md`](records/2026-09/2026-09-05-technical-direction-remediation.md).
 
 Current application and website release: [`0.0.61-beta`](records/2026-09/2026-09-05-v0.0.61-beta-release.md), published with source-bound runtime and website evidence. The failed 59 and 60 publication boundaries remain recorded separately.

@@ -1,5 +1,7 @@
 # 2026-09 Records
 
+- [当前调度算法剃刀复审](2026-09-05-scheduling-razor-reaudit.md)
+
 - [Technical direction audit and remediation](2026-09-05-technical-direction-remediation.md)
 - [0.0.61-beta release preparation](2026-09-05-v0.0.61-beta-release.md)
 - [0.0.60-beta release preparation](2026-09-05-v0.0.60-beta-release.md)
