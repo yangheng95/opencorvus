@@ -21,6 +21,9 @@ test("the canonical package graph and Bun lockfile inputs form one aligned topol
     path.join(repositoryRoot, "packages", "transport-protocol", "package.json"),
   ).json()
   const lock = Bun.JSONC.parse(await Bun.file(path.join(repositoryRoot, "bun.lock")).text())
+  const rootManifest = await Bun.file(path.join(repositoryRoot, "package.json")).json()
+  expect(rootManifest.dependencies["@opencorvus-ai/util"]).toBe("workspace:*")
+  expect(lock.workspaces[""].dependencies["@opencorvus-ai/util"]).toBe("workspace:*")
   const canonicalTransportDependencies = {
     "@opencorvus-ai/util": "workspace:*",
     zod: "catalog:",
