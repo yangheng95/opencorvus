@@ -166,10 +166,8 @@ describe("immutable release identity", () => {
         { repository, version: "0.0.57-beta", sourceSHA, runID: "1001", prerelease: true },
         recordingResponses(
           requests,
-          response({ stdout: "HTTP/2.0 200 OK\n" }),
           response({ stdout: "[]" }),
           response({ stdout: "HTTP/2.0 201 Created\n" }),
-          response({ stdout: "HTTP/2.0 200 OK\n" }),
           releaseRecord("1001"),
         ),
       ),
@@ -179,14 +177,8 @@ describe("immutable release identity", () => {
       sourceSHA,
       runID: "1001",
     })
-    expect(requests[0]).toEqual([
-      "api",
-      "--include",
-      "--silent",
-      `repos/${repository}/releases?per_page=100&page=1`,
-    ])
-    expect(requests[1]).toEqual(["api", `repos/${repository}/releases?per_page=100&page=1`])
-    expect(requests[2]).toEqual([
+    expect(requests[0]).toEqual(["api", `repos/${repository}/releases?per_page=100&page=1`])
+    expect(requests[1]).toEqual([
       "api",
       "--method",
       "POST",
@@ -206,13 +198,8 @@ describe("immutable release identity", () => {
       "-F",
       "generate_release_notes=true",
     ])
-    expect(requests[3]).toEqual([
-      "api",
-      "--include",
-      "--silent",
-      `repos/${repository}/releases?per_page=100&page=1`,
-    ])
-    expect(requests[4]).toEqual(["api", `repos/${repository}/releases?per_page=100&page=1`])
+    expect(requests[2]).toEqual(["api", `repos/${repository}/releases?per_page=100&page=1`])
+    expect(requests).toHaveLength(3)
   })
 
   test("waits for a newly created draft to become visible without creating it twice", async () => {
@@ -222,12 +209,9 @@ describe("immutable release identity", () => {
         "claim-publication",
         { repository, version: "0.0.57-beta", sourceSHA, runID: "1001", prerelease: true },
         responses(
-          response({ stdout: "HTTP/2.0 200 OK\n" }),
           response({ stdout: "[]" }),
           response({ stdout: "HTTP/2.0 201 Created\n" }),
-          response({ stdout: "HTTP/2.0 200 OK\n" }),
           response({ stdout: "[]" }),
-          response({ stdout: "HTTP/2.0 200 OK\n" }),
           releaseRecord("1001"),
         ),
         async (milliseconds) => {
@@ -252,12 +236,9 @@ describe("immutable release identity", () => {
         { repository, version: "0.0.57-beta", sourceSHA, runID: "1001", prerelease: true },
         recordingResponses(
           requests,
-          response({ stdout: "HTTP/2.0 200 OK\n" }),
           response({ stdout: "[]" }),
           response({ exitCode: 1, stdout: "HTTP/2.0 422 Unprocessable Entity\n" }),
-          response({ stdout: "HTTP/2.0 200 OK\n" }),
           response({ stdout: "[]" }),
-          response({ stdout: "HTTP/2.0 200 OK\n" }),
           releaseRecord("1001"),
         ),
         async (milliseconds) => {
@@ -278,7 +259,6 @@ describe("immutable release identity", () => {
     const requests: string[][] = []
     const delays: number[] = []
     const missingInventory = [
-      response({ stdout: "HTTP/2.0 200 OK\n" }),
       response({ stdout: "[]" }),
     ]
     await expect(
@@ -313,10 +293,8 @@ describe("immutable release identity", () => {
         { repository, version: "0.0.57-beta", sourceSHA, runID: "1001", prerelease: true },
         recordingResponses(
           requests,
-          response({ stdout: "HTTP/2.0 200 OK\n" }),
           response({ stdout: "[]" }),
           response({ exitCode: 1, stdout: "HTTP/2.0 422 Unprocessable Entity\n" }),
-          response({ stdout: "HTTP/2.0 200 OK\n" }),
           releaseRecord("2002"),
         ),
       ),
@@ -329,21 +307,21 @@ describe("immutable release identity", () => {
       enforceReleasePublication(
         "verify-publication",
         { repository, version: "0.0.57-beta", sourceSHA, runID: "1001", prerelease: true },
-        responses(response({ stdout: "HTTP/2.0 200 OK\n" }), response({ stdout: "[]" })),
+        responses(response({ stdout: "[]" })),
       ),
     ).rejects.toMatchObject<Partial<ReleasePublicationError>>({ code: "release_publication_missing" })
   })
 
   test("finds one draft after a full inventory page and rejects the same tag on a later page", async () => {
     const unrelated = Array.from({ length: 100 }, (_, index) => ({ tag_name: `v9.9.${index}-beta` }))
+    const requests: string[][] = []
     await expect(
       enforceReleasePublication(
         "verify-publication",
         { repository, version: "0.0.57-beta", sourceSHA, runID: "1001", prerelease: true },
-        responses(
-          response({ stdout: "HTTP/2.0 200 OK\n" }),
+        recordingResponses(
+          requests,
           response({ stdout: JSON.stringify(unrelated) }),
-          response({ stdout: "HTTP/2.0 200 OK\n" }),
           releaseRecord("1001"),
         ),
       ),
@@ -353,29 +331,58 @@ describe("immutable release identity", () => {
       sourceSHA,
       runID: "1001",
     })
+    expect(requests).toEqual([
+      ["api", `repos/${repository}/releases?per_page=100&page=1`],
+      ["api", `repos/${repository}/releases?per_page=100&page=2`],
+    ])
 
     await expect(
       enforceReleasePublication(
         "verify-publication",
         { repository, version: "0.0.57-beta", sourceSHA, runID: "1001", prerelease: true },
         responses(
-          response({ stdout: "HTTP/2.0 200 OK\n" }),
           response({
             stdout: JSON.stringify([publicationRecord("1001"), ...unrelated.slice(1)]),
           }),
-          response({ stdout: "HTTP/2.0 200 OK\n" }),
           releaseRecord("1001"),
         ),
       ),
     ).rejects.toMatchObject<Partial<ReleasePublicationError>>({ code: "release_publication_invalid" })
   })
 
+  test("maps one failed inventory request to the transport error before draft admission", async () => {
+    const requests: string[][] = []
+    await expect(
+      enforceReleasePublication(
+        "claim-publication",
+        { repository, version: "0.0.57-beta", sourceSHA, runID: "1001", prerelease: true },
+        recordingResponses(requests, response({ exitCode: 1, stderr: "gh: Service Unavailable (HTTP 503)\n" })),
+      ),
+    ).rejects.toMatchObject<Partial<ReleaseIdentityError>>({ code: "github_api_failure", status: 503 })
+    expect(requests).toEqual([["api", `repos/${repository}/releases?per_page=100&page=1`]])
+  })
+
+  test.each(["not json", '{"message":"not an inventory"}'])(
+    "maps malformed inventory %s to the exact publication contract error",
+    async (body) => {
+      const requests: string[][] = []
+      await expect(
+        enforceReleasePublication(
+          "claim-publication",
+          { repository, version: "0.0.57-beta", sourceSHA, runID: "1001", prerelease: true },
+          recordingResponses(requests, response({ stdout: body })),
+        ),
+      ).rejects.toMatchObject<Partial<ReleasePublicationError>>({ code: "release_publication_invalid" })
+      expect(requests).toEqual([["api", `repos/${repository}/releases?per_page=100&page=1`]])
+    },
+  )
+
   test("lets the same workflow run resume its draft on a later attempt", async () => {
     await expect(
       enforceReleasePublication(
         "claim-publication",
         { repository, version: "0.0.57-beta", sourceSHA, runID: "1001", prerelease: true },
-        responses(response({ stdout: "HTTP/2.0 200 OK\n" }), releaseRecord("1001")),
+        responses(releaseRecord("1001")),
       ),
     ).resolves.toEqual({
       kind: "publication-owned",
@@ -390,7 +397,7 @@ describe("immutable release identity", () => {
       enforceReleasePublication(
         "claim-publication",
         { repository, version: "0.0.57-beta", sourceSHA, runID: "2002", prerelease: true },
-        responses(response({ stdout: "HTTP/2.0 200 OK\n" }), releaseRecord("1001")),
+        responses(releaseRecord("1001")),
       ),
     ).rejects.toMatchObject<Partial<ReleasePublicationError>>({ code: "release_publication_owner_mismatch" })
   })
@@ -400,7 +407,7 @@ describe("immutable release identity", () => {
       enforceReleasePublication(
         "verify-publication",
         { repository, version: "0.0.57-beta", sourceSHA, runID: "1001", prerelease: true },
-        responses(response({ stdout: "HTTP/2.0 200 OK\n" }), releaseRecord("1001", false)),
+        responses(releaseRecord("1001", false)),
       ),
     ).rejects.toMatchObject<Partial<ReleasePublicationError>>({ code: "release_publication_not_draft" })
   })
@@ -411,9 +418,7 @@ describe("immutable release identity", () => {
         "settle-publication",
         { repository, version: "0.0.57-beta", sourceSHA, runID: "1001", prerelease: true },
         responses(
-          response({ stdout: "HTTP/2.0 200 OK\n" }),
           releaseRecord("1001"),
-          response({ stdout: "HTTP/2.0 200 OK\n" }),
           response({ stdout: "HTTP/2.0 200 OK\n" }),
           releaseRecord("1001", false),
         ),
@@ -432,10 +437,8 @@ describe("immutable release identity", () => {
         "settle-publication",
         { repository, version: "0.0.57-beta", sourceSHA, runID: "1001", prerelease: true },
         responses(
-          response({ stdout: "HTTP/2.0 200 OK\n" }),
           releaseRecord("1001"),
           response({ exitCode: 1, stderr: "connection closed after request" }),
-          response({ stdout: "HTTP/2.0 200 OK\n" }),
           releaseRecord("1001", false),
         ),
       ),
@@ -447,7 +450,7 @@ describe("immutable release identity", () => {
       enforceReleasePublication(
         "settle-publication",
         { repository, version: "0.0.57-beta", sourceSHA, runID: "1001", prerelease: true },
-        responses(response({ stdout: "HTTP/2.0 200 OK\n" }), releaseRecord("1001", false)),
+        responses(releaseRecord("1001", false)),
       ),
     ).resolves.toMatchObject({ kind: "publication-settled", runID: "1001" })
   })
@@ -457,7 +460,7 @@ describe("immutable release identity", () => {
       enforceReleasePublication(
         "settle-publication",
         { repository, version: "0.0.57-beta", sourceSHA, runID: "1001", prerelease: true },
-        responses(response({ stdout: "HTTP/2.0 200 OK\n" }), releaseRecord("1001", false, sourceSHA, false)),
+        responses(releaseRecord("1001", false, sourceSHA, false)),
       ),
     ).rejects.toMatchObject<Partial<ReleasePublicationError>>({
       code: "release_publication_prerelease_mismatch",

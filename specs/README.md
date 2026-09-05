@@ -1,6 +1,8 @@
 # Specs Storage Index
 
-Current approved application and website release preparation: [`0.0.61-beta`](records/2026-09/2026-09-05-v0.0.61-beta-release.md), real acceptance passed and not yet published. The failed 59 and 60 publication boundaries remain recorded separately.
+Current technical direction audit and remediation: [`2026-09-05-technical-direction-remediation.md`](records/2026-09/2026-09-05-technical-direction-remediation.md).
+
+Current application and website release: [`0.0.61-beta`](records/2026-09/2026-09-05-v0.0.61-beta-release.md), published with source-bound runtime and website evidence. The failed 59 and 60 publication boundaries remain recorded separately.
 
 Latest scheduling razor remediation Cut 8c: [`2026-09-02-scheduling-razor-remediation-cut-8c.md`](records/2026-09/2026-09-02-scheduling-razor-remediation-cut-8c.md).
 

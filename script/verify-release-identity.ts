@@ -94,8 +94,10 @@ async function runGitHubApi(args: string[]): Promise<GitHubApiResult> {
 }
 
 function httpStatus(result: GitHubApiResult): number | undefined {
-  const match = `${result.stdout}\n${result.stderr}`.match(/^HTTP\/\S+\s+(\d{3})\b/m)
-  return match ? Number(match[1]) : undefined
+  // --include writes an HTTP status line; ordinary `gh api` failures report
+  // the same status in stderr as `gh: ... (HTTP 503)`.
+  const match = `${result.stdout}\n${result.stderr}`.match(/(?:^HTTP\/\S+\s+(\d{3})\b|\(HTTP (\d{3})\))/m)
+  return match ? Number(match[1] ?? match[2]) : undefined
 }
 
 function apiFailure(endpoint: string, result: GitHubApiResult): ReleaseIdentityError {
@@ -254,10 +256,8 @@ async function readPublicationOwner(
   let inventoryComplete = false
   for (let page = 1; page <= 100; page++) {
     const endpoint = `repos/${input.repository}/releases?per_page=100&page=${page}`
-    const probe = await request(["api", "--include", "--silent", endpoint])
-    const status = httpStatus(probe)
-    if (probe.exitCode !== 0 || status !== 200) throw apiFailure(endpoint, probe)
-
+    // One CLI request owns both successful transport and this page's body.
+    // A headers-only probe would repeat the GET without validating these bytes.
     const read = await request(["api", endpoint])
     if (read.exitCode !== 0) throw apiFailure(endpoint, read)
     let inventory: unknown

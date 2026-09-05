@@ -104,12 +104,10 @@ describe("GitHub Actions workflow contract", () => {
     expect(resolve.run).toContain("normalizeReleaseVersion")
     expect(resolve.run).toContain('echo "version=$VERSION" >> "$GITHUB_OUTPUT"')
 
-    // The normalized value is what leaves the step, so the raw input must land somewhere else.
-    for (const assignment of ['VERSION="${GITHUB_REF_NAME#v}"', 'VERSION="${{ inputs.version }}"']) {
-      expect(resolve.run, `raw input still assigned straight to VERSION: ${assignment}`).not.toContain(
-        `\n            ${assignment}`,
-      )
-    }
+    expect(resolve.run.match(/^\s*RAW_VERSION=.*$/gm)?.map((line: string) => line.trim())).toEqual([
+      'RAW_VERSION="${GITHUB_REF_NAME#v}"',
+      'RAW_VERSION="${{ inputs.version }}"',
+    ])
   })
 
   test("dispatches the canonical release workflow from the exact checked upstream source", async () => {
@@ -141,19 +139,19 @@ describe("GitHub Actions workflow contract", () => {
     ])
   })
 
-  test("atomically owns the Release tag and draft writer at the commit its binaries were built from", async () => {
+  test("admits the exact Release tag and draft writer before native builds and verifies them before upload", async () => {
     /*
-     * prepare freezes source-sha at the start of the run. Two workflow dispatches can race after
-     * prepare has observed the same version as available, including when both use the same source.
-     * The publication boundary therefore atomically creates the Git ref and rereads its canonical
-     * target, then atomically assigns the draft to exactly one workflow-run receipt.
+     * prepare freezes source-sha and reserves the tag/draft before native work.
+     * A failed preparation never admits a matrix; the same run can resume its
+     * draft and retain successful artifacts when a later platform build fails.
      *
      * Upload and public publication each verify both authorities again before mutation.
      */
     const workflow = await readWorkflow("build.yml")
+    const prepareSteps = workflow.jobs?.prepare?.steps ?? []
     const assetSteps = workflow.jobs?.["publish-release-assets"]?.steps ?? []
-    const claim = assetSteps.find((step: { name?: string }) => step.name === "Claim immutable release identity")
-    const claimPublication = assetSteps.find((step: { name?: string }) => step.name === "Claim draft publication owner")
+    const claim = prepareSteps.find((step: { name?: string }) => step.name === "Claim immutable release identity")
+    const claimPublication = prepareSteps.find((step: { name?: string }) => step.name === "Claim draft publication owner")
     const verifyUpload = assetSteps.find((step: { name?: string }) => step.name === "Verify upload release identity")
     const verifyUploadPublication = assetSteps.find(
       (step: { name?: string }) => step.name === "Verify draft publication owner",
@@ -162,29 +160,40 @@ describe("GitHub Actions workflow contract", () => {
 
     expect(claim?.env).toEqual({
       GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}",
-      VERSION: "${{ needs.prepare.outputs.version }}",
-      SOURCE_SHA: "${{ needs.prepare.outputs.source-sha }}",
+      VERSION: "${{ steps.meta.outputs.version }}",
+      SOURCE_SHA: "${{ steps.meta.outputs.source-sha }}",
       EVENT_NAME: "${{ github.event_name }}",
       EXPECTED_SOURCE_SHA: "${{ inputs.expected_source_sha || '' }}",
       IDENTITY_MODE: "claim",
     })
     expect(claimPublication?.env).toEqual({
       GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}",
-      VERSION: "${{ needs.prepare.outputs.version }}",
-      SOURCE_SHA: "${{ needs.prepare.outputs.source-sha }}",
+      VERSION: "${{ steps.meta.outputs.version }}",
+      SOURCE_SHA: "${{ steps.meta.outputs.source-sha }}",
       EVENT_NAME: "${{ github.event_name }}",
       EXPECTED_SOURCE_SHA: "${{ inputs.expected_source_sha || '' }}",
       RELEASE_RUN_ID: "${{ github.run_id }}",
-      PRERELEASE: "${{ needs.prepare.outputs.prerelease }}",
+      PRERELEASE: "${{ steps.meta.outputs.prerelease }}",
       IDENTITY_MODE: "claim-publication",
     })
-    expect(verifyUpload?.env).toEqual({ ...claim?.env, IDENTITY_MODE: "verify-owned" })
+    expect(verifyUpload?.env).toEqual({
+      ...claim?.env,
+      VERSION: "${{ needs.prepare.outputs.version }}",
+      SOURCE_SHA: "${{ needs.prepare.outputs.source-sha }}",
+      IDENTITY_MODE: "verify-owned",
+    })
     expect(verifyUploadPublication?.env).toEqual({
       ...claimPublication?.env,
+      VERSION: "${{ needs.prepare.outputs.version }}",
+      SOURCE_SHA: "${{ needs.prepare.outputs.source-sha }}",
+      PRERELEASE: "${{ needs.prepare.outputs.prerelease }}",
       IDENTITY_MODE: "verify-publication",
     })
-    expect(assetSteps.indexOf(claim!)).toBeLessThan(assetSteps.indexOf(claimPublication!))
-    expect(assetSteps.indexOf(claimPublication!)).toBeLessThan(assetSteps.indexOf(verifyUpload!))
+    expect(prepareSteps.indexOf(claim!)).toBeLessThan(prepareSteps.indexOf(claimPublication!))
+    expect(["package-overlay", "package-cli"].map((job) => workflow.jobs?.[job]?.needs)).toEqual([
+      "prepare",
+      "prepare",
+    ])
     expect(assetSteps.indexOf(verifyUpload!)).toBeLessThan(assetSteps.indexOf(verifyUploadPublication!))
     expect(assetSteps.indexOf(verifyUploadPublication!)).toBeLessThan(assetSteps.indexOf(stage!))
     expect(stage, "build.yml lost its Release upload step").toBeDefined()
@@ -351,10 +360,12 @@ describe("GitHub Actions workflow contract", () => {
       run: "bun install --frozen-lockfile --no-progress --ignore-scripts",
     })
     const prepareStepNames = jobs.prepare?.steps?.map(({ name }) => name) ?? []
-    expect(prepareStepNames.slice(-3)).toEqual([
+    expect(prepareStepNames.slice(-5)).toEqual([
       "Verify version alignment",
       "Verify immutable release identity",
       "Verify frozen dependency graph",
+      "Claim immutable release identity",
+      "Claim draft publication owner",
     ])
     expect(
       ["prepare", "package-overlay", "package-cli"].flatMap((job) =>
@@ -380,9 +391,9 @@ describe("GitHub Actions workflow contract", () => {
       },
     ])
     expect(
-      jobs["publish-release-assets"]?.steps?.find(({ name }) => name === "Claim draft publication owner")?.env
+      jobs.prepare?.steps?.find(({ name }) => name === "Claim draft publication owner")?.env
         ?.PRERELEASE,
-    ).toBe("${{ needs.prepare.outputs.prerelease }}")
+    ).toBe("${{ steps.meta.outputs.prerelease }}")
     expect(jobs["package-overlay"]?.steps?.find(({ name }) => name === "Package GUI installers")?.env).toEqual({
       OPENCORVUS_VERSION: "${{ needs.prepare.outputs.version }}",
       OPENCORVUS_CHANNEL: "latest",

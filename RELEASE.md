@@ -42,12 +42,20 @@ Version inputs accept compact prerelease and canonical SemVer forms, but stored 
 
 The workflow does all of the following in one pipeline:
 
-1. Sync and verify `opencorvus` + `overlay` versions
-2. Run the native GUI installer matrix on Linux / Linux ARM64 / macOS ARM64 / macOS x64 / Windows x64
-3. Run the native command-line interface (CLI) archive matrix on the same five hosts
-4. Validate and stage GUI installers and CLI archives with `LICENSE`, `THIRD_PARTY_NOTICES.md`, and `SHA256SUMS`
-5. Upload the verified files to a draft GitHub Release
-6. Publish the draft only after every independent Release asset uploads successfully
+1. Verify release-family versions, the exact source, and the frozen dependency graph
+2. Claim the immutable tag and exact workflow-run/source-owned draft before native compilation
+3. Run the native GUI installer matrix on Linux / Linux ARM64 / macOS ARM64 / macOS x64 / Windows x64
+4. Run the native command-line interface (CLI) archive matrix on the same five hosts
+5. Validate and stage GUI installers and CLI archives with `LICENSE`, `THIRD_PARTY_NOTICES.md`, and `SHA256SUMS`
+6. Reverify both owners and upload the verified files to the draft GitHub Release
+7. Publish the draft only after every independent Release asset uploads successfully
+
+Early admission leaves an exact tag and empty draft if native compilation later
+fails. Re-run failed jobs in the same workflow run to retain that ownership and
+reuse successful platform artifacts. A new workflow run cannot adopt another
+run's draft. Publication admission failure stops the native matrix; network or
+service failures later in the run still require retry. The release inventory
+uses one request per bounded page and remains the sole draft lookup authority.
 
 `build-overlays.yml` is debug-only and is not the canonical release path.
 

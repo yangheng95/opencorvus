@@ -82,6 +82,32 @@ jobs:
           HUSKY: "0"
         run: bun install --frozen-lockfile --no-progress --ignore-scripts
 
+      # Reserve the same resumable owner before native compilation. A failed
+      # platform retries inside this workflow run and reuses the owned draft.
+      - name: Claim immutable release identity
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ steps.meta.outputs.version }}
+          SOURCE_SHA: ${{ steps.meta.outputs.source-sha }}
+          EVENT_NAME: ${{ github.event_name }}
+          EXPECTED_SOURCE_SHA: ${{ inputs.expected_source_sha || '' }}
+          IDENTITY_MODE: claim
+        run: bun ./script/verify-release-identity.ts
+
+      - name: Claim draft publication owner
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ steps.meta.outputs.version }}
+          SOURCE_SHA: ${{ steps.meta.outputs.source-sha }}
+          EVENT_NAME: ${{ github.event_name }}
+          EXPECTED_SOURCE_SHA: ${{ inputs.expected_source_sha || '' }}
+          RELEASE_RUN_ID: ${{ github.run_id }}
+          PRERELEASE: ${{ steps.meta.outputs.prerelease }}
+          IDENTITY_MODE: claim-publication
+        run: bun ./script/verify-release-identity.ts
+
   package-overlay:
     name: overlay (${{ matrix.platform }})
     needs: prepare
@@ -314,28 +340,6 @@ jobs:
       - uses: actions/download-artifact@v8
         with:
           path: /tmp/release-assets
-
-      - name: Claim immutable release identity
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          VERSION: ${{ needs.prepare.outputs.version }}
-          SOURCE_SHA: ${{ needs.prepare.outputs.source-sha }}
-          EVENT_NAME: ${{ github.event_name }}
-          EXPECTED_SOURCE_SHA: ${{ inputs.expected_source_sha || '' }}
-          IDENTITY_MODE: claim
-        run: bun ./script/verify-release-identity.ts
-
-      - name: Claim draft publication owner
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          VERSION: ${{ needs.prepare.outputs.version }}
-          SOURCE_SHA: ${{ needs.prepare.outputs.source-sha }}
-          EVENT_NAME: ${{ github.event_name }}
-          EXPECTED_SOURCE_SHA: ${{ inputs.expected_source_sha || '' }}
-          RELEASE_RUN_ID: ${{ github.run_id }}
-          PRERELEASE: ${{ needs.prepare.outputs.prerelease }}
-          IDENTITY_MODE: claim-publication
-        run: bun ./script/verify-release-identity.ts
 
       - name: Verify upload release identity
         env:
