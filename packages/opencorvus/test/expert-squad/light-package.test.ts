@@ -494,10 +494,31 @@ describe("Light Expert Squad package", () => {
                       agentID: streamInput.agentID,
                       messages: await Session.messages({ sessionID: assistant.sessionID }),
                     }
-                    const revealed = await resolveTestCapabilityTools({
-                      ...common,
-                      activeLocalRefs: ["light/shared/method"],
+                    const revealed = await resolveTestCapabilityTools(common)
+                    expect(Object.keys(revealed.tools)).toEqual(["capability_search"])
+                    // Complete known identities go directly through the real reveal
+                    // owner. No test-side local-ref lookup supplies these arguments.
+                    const revealInput = {
+                      queries: ["light/shared/method", "read"],
+                      deactivate_refs: [],
+                      limit: 5,
+                      exact_refs: [
+                        { kind: "skill", source: "package", owner_ref: "light", local_ref: "light/shared/method" },
+                        { kind: "tool", source: "platform", owner_ref: "tool-registry", local_ref: "read" },
+                      ],
+                    }
+                    const revealID = `call_reveal_light_method_and_read_${assistant.id}`
+                    const revealContext = { toolCallId: revealID, messages: [], abortSignal: input.abort }
+                    const opened = await revealed.tools.capability_search!.execute!(revealInput, revealContext) as
+                      Parameters<typeof processor.completeRecoveredToolPart>[0]["output"]
+                    expect(JSON.parse(opened.output)).toMatchObject({
+                      reveal_revision: 1,
+                      active_refs: revealInput.exact_refs,
                     })
+                    await processor.completeRecoveredToolPart({ toolCallID: revealID, toolInput: revealInput, output: opened })
+                    const replayed = await revealed.tools.capability_search!.execute!(revealInput, revealContext) as
+                      Parameters<typeof processor.completeRecoveredToolPart>[0]["output"]
+                    expect(replayed.output).toBe(opened.output)
                     const skill = revealed.occurrence.payload.descriptors.find(
                       (descriptor) => descriptor.ref.kind === "skill" && descriptor.ref.local_ref === "light/shared/method",
                     )
@@ -506,6 +527,7 @@ describe("Light Expert Squad package", () => {
                     }
                     expect(skill.behavior.name).toBe("light-advisory-method")
                     const reconstructed = await resolveTestCapabilityTools(common)
+                    expect(Object.keys(reconstructed.tools).sort()).toEqual(["capability_search", "read", "skill"])
                     const loaded = await reconstructed.tools.skill!.execute!(
                       { name: skill.behavior.name },
                       { toolCallId: `call_load_light_method_${assistant.id}`, messages: [], abortSignal: input.abort },
@@ -519,26 +541,6 @@ describe("Light Expert Squad package", () => {
                       toolInput: { name: skill.behavior.name },
                       output: loaded,
                     })
-                    const searchInput = {
-                      queries: ["read repository file"], kinds: ["tool", "mcp_tool"],
-                      next_owner_kinds: ["call_tool"], owner_refs: [], exact_refs: [], deactivate_refs: [], limit: 5,
-                    }
-                    const searchID = `call_find_light_read_${assistant.id}`
-                    const searchContext = { toolCallId: searchID, messages: [], abortSignal: input.abort }
-                    const found = await reconstructed.tools.capability_search!.execute!(searchInput, searchContext) as
-                      Parameters<typeof processor.completeRecoveredToolPart>[0]["output"]
-                    const readRef = JSON.parse(found.output).results[0].ref
-                    expect(readRef).toEqual({ kind: "tool", source: "platform", owner_ref: "tool-registry", local_ref: "read" })
-                    await processor.completeRecoveredToolPart({ toolCallID: searchID, toolInput: searchInput, output: found })
-                    const replayed = await reconstructed.tools.capability_search!.execute!(searchInput, searchContext) as
-                      Parameters<typeof processor.completeRecoveredToolPart>[0]["output"]
-                    expect(replayed.output).toBe(found.output)
-                    const revealInput = { ...searchInput, exact_refs: [readRef] }
-                    const revealID = `call_reveal_light_read_${assistant.id}`
-                    const opened = await reconstructed.tools.capability_search!.execute!(revealInput, {
-                      toolCallId: revealID, messages: [], abortSignal: input.abort,
-                    }) as Parameters<typeof processor.completeRecoveredToolPart>[0]["output"]
-                    await processor.completeRecoveredToolPart({ toolCallID: revealID, toolInput: revealInput, output: opened })
                     const readable = await resolveTestCapabilityTools(common)
                     const filePath = path.join(project.path, `evidence-${assistant.id}.txt`)
                     const evidence = `EXACT_SOURCE=${assistant.sessionID}`

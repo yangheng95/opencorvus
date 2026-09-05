@@ -48,6 +48,13 @@ result look like an absent capability. The frozen Catalog view and Harness must 
 requested leaf and its behavior target. A Capability Set is never executable
 and fuzzy ranking never activates a result.
 
+A complete exact ref supplied by current authored instructions can be submitted
+directly in `exact_refs`; a prior metadata-search result is not an admission
+prerequisite. Group leaves needed for the same current decision in one reveal.
+Unknown refs still require discovery. Instructions are locators, not grants:
+every exact ref passes the same frozen Catalog/Harness and materializer checks,
+and a new input still starts from its revision-zero surface.
+
 Mission search additionally reports the held Expert Squad count, the
 pillar-filtered visible Expert Squad count, and the canonical persisted Mission
 product pillar. A contradictory model-supplied pillar is reported separately

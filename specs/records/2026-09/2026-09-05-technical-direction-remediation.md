@@ -38,12 +38,12 @@
 
 | ID | Observation and direction | Current disposition |
 | --- | --- | --- |
-| TD-01 | Native build matrix precedes actual draft publication admission; publication inventory is fetched twice per page. Same-run retry is implemented, but admission failures waste all native build work. | Cut 1 implementation verified and independently reviewed; commit/push pending. |
-| TD-02 | Latest two-worker Light consultation takes 106,974 ms, 20 Provider requests and 11 capability searches for two file reads and short synthesis. 209,119 reported tokens include 92,416 cache-read tokens. | Confirmed cost; root-cause audit of discovery/activation, prompt/catalog payload and role boundaries remains open. Do not declare a regression from token totals alone or replace explicit activation with guessed routing. |
-| TD-03 | Mission close uses mutable module callback bindings from Session and Task bootstrap. | Design risk, not yet a reproduced missing-binding defect. Audit all direct, startup, recovery and terminal callers before choosing explicit composition or retaining a justified bootstrap boundary. |
-| TD-04 | Migration-heavy repairs were followed by removal of historical migrations and exact current-schema/reset admission. | Historical strategy rework confirmed. Audit current upgrade consequences and explicit prior decisions; do not restore removed migration machinery or change the data retention contract by assumption. |
-| TD-05 | Website cwd/root dependency workarounds were replaced by the actual bundler source-export condition. | Historical wrong repairs already removed by `ed92a5f37`; inspect source-only regression coverage, not another implementation. |
-| TD-06 | Cross-process Prompt ownership, wait/automation identity, Mission closure and deletion are safety-critical and were repeatedly revised. | Re-audit shared production entry points, transaction/lease boundaries, finite recovery, indexed discovery and terminal ownership. Existing positive runtime evidence is retained; no wholesale rollback. |
+| TD-01 | Native build matrix precedes actual draft publication admission; publication inventory is fetched twice per page. Same-run retry is implemented, but admission failures waste all native build work. | Delivered as `7c19c4240debc86f5ecd3947dda85d01fb8fd295`; normal push hook passed and fetched HEAD/upstream were 0/0. |
+| TD-02 | Latest two-worker Light consultation takes 106,974 ms, 20 Provider requests and 11 capability searches for two file reads and short synthesis. 209,119 reported tokens include 92,416 cache-read tokens. | Shared known-ref instruction corrected in Cut 2 with executable batch/replay coverage. Package-authored exact refs and measured real-model efficiency remain open, awaiting the package revision/limited rerun choice. No speedup claim. |
+| TD-03 | Mission close uses mutable module callback bindings from Session and Task bootstrap. | Retain the verified existing composition boundary. All production caller/binder paths audited; live/dead-owner and retention route tests pass. Module mutability is retained maintainability risk, not a reproduced defect warranting another refactor. |
+| TD-04 | Migration-heavy repairs were followed by removal of historical migrations and exact current-schema/reset admission. | Historical strategy rework confirmed; current explicit reset contract verified, including untouched stale database/WAL bytes. Obsolete permission-ledger migration promise corrected in Cut 2. Changing upgrade compatibility remains a product decision, not an inferred repair. |
+| TD-05 | Website cwd/root dependency workarounds were replaced by the actual bundler source-export condition. | Closed as already repaired by `ed92a5f37`; current source-only compilation, real Node execution and shared runtime reuse passed 3/3. |
+| TD-06 | Cross-process Prompt ownership, wait/automation identity, Mission closure and deletion are safety-critical and were repeatedly revised. | Retain audited current owners: immediate transaction/CAS, exact occurrence, finite per-Project queue, indexed Fire frontier and terminal ownership. Current focused matrix passes; no new correctness defect demonstrated in this scope. This is not a proof about every possible schedule or an unbounded full-repository audit. |
 | TD-07 | `specs/README.md` still describes 0.0.61 as unpublished although the final release record says published. | Pointer corrected in Cut 1; historical artifacts unchanged. |
 
 ## Cut 1: early publication admission using the existing owner
@@ -105,7 +105,7 @@ suppresses it and `--include` adds response headers. Sources checked 2026-09-05:
 
 ## Progress
 
-Cut 1 implementation is ready for independent review. The existing publication
+Cut 1 first-validation checkpoint (historical): the existing publication
 and workflow contracts pass 34/34 tests with 135 assertions. The seven release
 mutation topology tests pass with eight assertions against the pre-stage index;
 the candidate's exact-tree checker is still required after staging.
@@ -128,3 +128,106 @@ FINAL PASS with P0-P3 zero. Main verification repeated the same localhost CLI
 boundary and the full 41-test/143-assertion set. This validates real CLI error
 handling, not a live GitHub release. Exact-tree mutation topology retains five
 writers; no additional release authority or runtime production edit is present.
+
+## Cut 2: truthful exact-reveal instructions and audit dispositions
+
+### Recall and root-cause analysis
+
+The same user goal and exclusions apply. Cut 1 is delivered, not awaiting review.
+The current saved Light evidence is bound to `481596ffa`, package
+`2026.09.04.3`, and `openai/gpt-5.6-luna`. Its observations show each worker
+searching for the method Skill, revealing that Skill, searching for `read`,
+then revealing `read`: four searches per worker. The scheduler made three more.
+The actual reducer already accepts exact refs directly against the frozen
+Catalog/Harness; it does not require a prior search result. In contrast,
+`CAPABILITY_SEARCH_DESCRIPTION` says to copy refs from results, and Light's
+authored instructions name the method local ref without its complete identity.
+The first is a shared instruction defect; the second requires immutable package
+content revision and real-model acceptance, not an unmeasured speedup claim.
+
+Selected first repair: describe direct known-ref reveal and grouping of the
+currently needed leaves, retaining discovery for unknown refs and every existing
+authorization/reconstruction check. Exercise one direct Skill+read reveal in
+the existing four-worker production dispatch test, then reconstruct and execute
+the real loader and file reader. Provider decisions remain stubbed in that test;
+it establishes an executable contract, not consultation latency. Generic search,
+receipt replay and Provider-normalized payload-budget tests remain in scope.
+No runtime routing, eager activation, new grant, persistence or version change.
+The requested package revision/one bounded real-model rerun is a separate user
+choice; until answered this cut does not change Light package bytes or call a
+real Provider.
+
+### Additional source audit
+
+- TD-03: both module callbacks have exactly one production binder, in Session
+  loop and Task API. Direct Mission routes import SessionWake -> SessionPrompt
+  -> SessionLoop. The production server imports Project bootstrap -> Task API.
+  The only recovery close caller is host recovery; its executable Project owner
+  imports and awaits the same bootstrap. Process recovery also imports
+  SessionLoop. Close persists one occurrence, takes/revalidates its lifecycle
+  lease, propagates caller/deadline cancellation, and commits closed only after
+  exact closure/lease, absent durable Prompt owner, settled wakes and child Task
+  checks in one immediate transaction. Retain the existing composition boundary;
+  no missing-binding bug has been demonstrated. Module mutability is a future
+  maintainability risk, not a reason for another state owner or broad refactor.
+- TD-04: `storage/db.ts` probes existing schema read-only before writable open,
+  rechecks its complete shape before configuration, and requires explicit reset
+  on drift. `02-data.md` and `task-control-plane.md` explicitly select this
+  pre-release contract. No automatic data deletion or upgrade compatibility is
+  added. One current document is wrong: `security-permission.md` still promises
+  startup conversion of the old cascading permission ledger. Replace that
+  obsolete promise with the current reset boundary; retain current ledger
+  ownership and retention semantics. Historical migration engineering was
+  discarded work, not a justification to reintroduce it now.
+- TD-05: source-only package compilation and real Node execution passed 3/3,
+  12 assertions in `test/package-tool-files-capability.test.ts` on current source.
+  The bundler's existing `source` condition is the correct owner. No dependency
+  install, website cwd workaround or root dependency is needed. An initial
+  invocation used a nonexistent test path, exited with no matches, and is not
+  counted as evidence; the exact file above was subsequently run successfully.
+- TD-06: current recovery/readiness explicitly distinguishes global listener
+  readiness from concurrent Project recovery; per-Project Mission queues are
+  bounded. This audit retains the production Task/Session/Mission occurrence
+  owners and rechecks schema/retention/live-owner/dead-owner tests rather than
+  deriving safety from a zero-cycle graph. Further conclusions await their
+  actual terminal results and focused source review.
+
+Independent delivery review returned FINAL PASS (P0-P3 zero) on the complete
+five-path tree `0b9f05322b1bea67e2e8bca62c0ccfe4baa937b0`. It independently
+passed the Light/package-budget pair (7/7, 215 assertions) and verified the
+authority, default-input, bootstrap/schema and evidence boundaries. This final
+record-only update adds that result; commit/push follows after its read-only
+check. The three unrelated working paths remain out. TD-02 real efficiency is
+still open and is not covered by this delivery verdict.
+
+### Cut 2 first-validation evidence
+
+- Four changed/related capability files: 9/9 tests, 229 assertions. The first run
+  exposed a test-harness input mismatch: direct invocation bypassed Provider
+  schema default materialization, but its manual completion passed the original
+  object without `limit`/`deactivate_refs`. Supplying those existing defaults in
+  the test's exact input restored canonical equality. Production validation and
+  immutable completion checks were not relaxed. The complete four-file rerun,
+  not that failing intermediate run, supplies the result above.
+- Schema contract + Mission durable activity + real cross-process reconciliation:
+  25/25, 116 assertions. This includes stale WAL byte preservation, strict
+  current-schema transfer, fresh archive, delete retention/replay, exact operator
+  request join, close takeover and settling a live streamed peer Prompt.
+- Task wait OS-process race + all Session Prompt cross-process owner cases:
+  6/6, 44 assertions. The real wait Tool survives lost owner, expiry and exact
+  wake takeover while the sibling Project proceeds; live/queued/standby/dead
+  Prompt owner paths retain their canonical request/terminal identities.
+- Five selected Automation tests: 5/5, 26 assertions (22 unrelated cases filtered).
+  Fixed set-query page, indexed 64-row due selection against 96 due definitions,
+  257 future definitions and retained history, distinct manual/scheduled identity,
+  target retry and multi-Project partial retry all pass. Source confirms due
+  discovery reads the physical Fire frontier, then only that page's definitions
+  and current summaries; claim revalidates revision/Fire/lease atomically after
+  capacity admission. Full history remains an explicit history API concern.
+- Root typecheck: 8/8 tasks, seven cache hits; only the changed OpenCorvus task
+  rechecked. Documentation 339/25; architecture index 16 current documents.
+  No installation, native helper rebuild, user process interruption, Provider
+  invocation, app/Squad version change or schema mutation was performed.
+- Updating the permanent search description changes its normalized definition
+  digest. Existing occurrence-drift/reconstruction rules remain authoritative;
+  this cut does not hot-rebind an already-frozen input or introduce compatibility.
