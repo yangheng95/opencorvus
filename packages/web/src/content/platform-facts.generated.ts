@@ -5,11 +5,11 @@
 //   models              sum of Object.keys(provider.models).length across that catalog
 //   chatChannels        READY_CHANNELS.length      (channel-runtime/src/registry.ts)
 //   plannedChatChannels PLANNED_CHANNELS.length    (same file; not advertised as working)
-//   builtInTools        GLOBAL_TOOL_IDS minus the experimental batch tool
+//   builtInTools        GLOBAL_TOOL_IDS.length     (tool/tool-id-catalog.ts)
 export const generatedPlatformFacts = {
   "modelProviders": 87,
   "models": 2579,
   "chatChannels": 13,
   "plannedChatChannels": 14,
-  "builtInTools": 43
+  "builtInTools": 69
 } as const

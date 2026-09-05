@@ -25,21 +25,20 @@ OpenCorvus ships a set of built-in tools the agent can call. Tools live under `p
 | `external_code_search` | Search external code sources                            |
 | `skill`                | Load a projected Skill                                  |
 | `delegate_agent`       | Dispatch a bounded helper from coding or chat assistants |
-| `panel`                | Operate the OpenCorvus control panel                    |
+| `panel_*`              | Invoke the projected control-panel action tools        |
 | `planner`              | Manage the assistant planning surface                   |
 | `mission_state`        | Read Mission coordination state                         |
 | `wait`                 | Yield until an external wake condition                  |
 | `request_orchestrator_decision` / `send_mailbox_message` | Exchange visible worker coordination messages |
 | `question`             | Ask the user (when `OPENCORVUS_ENABLE_QUESTION_TOOL=1`) |
 | `schedule`             | Schedule follow-up actions                              |
-| `batch`                | Run a batch of tools in one turn                        |
 | `analytics`            | Emit telemetry events                                   |
 
 ## Task Orchestrator tools
 
 Task Orchestrator sessions receive scheduler tools from the active expert-squad projection. These are not global ToolRegistry entries:
 
-- `dispatch_agent` dispatches one exact dynamic agent ID declared under the active `capability_projection.agents` map.
+- `dispatch_agents` dispatches a collection of members using exact dynamic agent IDs declared by the active expert-squad projection.
 - `manage_task` owns Task lifecycle and creates or revises Delivery Slice contracts. It does not complete/reject/retry a Goal or bind Goal workspaces.
 
 ## Disabling a tool

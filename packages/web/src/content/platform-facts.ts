@@ -9,8 +9,8 @@ import { generatedPlatformFacts } from "./platform-facts.generated"
  * drifts. Every fact below is now derived: squad counts from the signed catalog, the platform counts
  * from the registries that own them (`script/generate-platform-facts.ts`). The `"manual"` variant is
  * kept so that a future hand-maintained number has to declare itself in code rather than hide in a
- * template string — `test/platform-facts.test.ts` asserts none exist, so adding one is a decision
- * that fails the suite until it is made deliberately.
+ * template string. Generator data contracts are checked against their owning registries;
+ * the presentation is verified on the actual page.
  *
  * Presentation rule that follows from this: lead with generated facts. A "manual" number may
  * support a claim but should not be the largest thing on the page.
@@ -51,7 +51,7 @@ export const platformFacts = {
   models: generated(grouped(generatedPlatformFacts.models)),
   /** Chat channels with a registered adapter. Excludes the 14 `planned` catalog entries. */
   chatChannels: generated(generatedPlatformFacts.chatChannels),
-  /** Materialized built-in tools, excluding the experimental `batch` tool. */
+  /** Global built-in tool IDs declared by the current catalog. */
   builtInTools: generated(generatedPlatformFacts.builtInTools),
 } as const satisfies Record<string, PlatformFact>
 

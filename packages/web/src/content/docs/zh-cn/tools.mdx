@@ -25,21 +25,20 @@ OpenCorvus 内置一组工具供 agent 调用。工具实现位于 `packages/ope
 | `external_code_search` | 搜索外部代码源                                       |
 | `skill`                | 加载 projected Skill                                 |
 | `delegate_agent`       | 从 coding 或 chat assistant 派发有边界的 helper     |
-| `panel`                | 操作 OpenCorvus 控制面板                             |
+| `panel_*`              | 调用当前投影的控制面板动作工具                       |
 | `planner`              | 管理 assistant planning surface                     |
 | `mission_state`        | 读取 Mission 协调状态                                |
 | `wait`                 | 等待外部 wake 条件                                   |
 | `request_orchestrator_decision` / `send_mailbox_message` | 交换可见的 worker 协调消息 |
 | `question`             | 向用户提问（需 `OPENCORVUS_ENABLE_QUESTION_TOOL=1`） |
 | `schedule`             | 安排后续动作                                         |
-| `batch`                | 一轮内批量执行多个工具                               |
 | `analytics`            | 上报遥测事件                                         |
 
 ## Task Orchestrator 工具
 
 Task Orchestrator session 从 active expert-squad projection 获得 scheduler 工具；它们不是全局 ToolRegistry 条目：
 
-- `dispatch_agent` 只派发 active `capability_projection.agents` map 中声明的精确 dynamic agent ID。
+- `dispatch_agents` 按当前 expert-squad projection 声明的精确 dynamic agent ID 派发成员集合。
 - `manage_task` 拥有 Task lifecycle，并创建或修订 Delivery Slice contract；它不完成、拒绝、retry Goal，也不绑定 Goal workspace。
 
 ## 禁用某个工具

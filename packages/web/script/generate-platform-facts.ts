@@ -2,7 +2,7 @@ import path from "node:path"
 import { fileURLToPath } from "node:url"
 import { readFile, writeFile, mkdir } from "node:fs/promises"
 import { READY_CHANNELS, PLANNED_CHANNELS } from "../../channel-runtime/src/registry"
-import { GLOBAL_TOOL_IDS, BATCH_TOOL_ID } from "../../opencorvus/src/tool/tool-id-catalog"
+import { GLOBAL_TOOL_IDS } from "../../opencorvus/src/tool/tool-id-catalog"
 
 /**
  * Derives the platform counts the landing page states from the registries that own them.
@@ -21,8 +21,7 @@ import { GLOBAL_TOOL_IDS, BATCH_TOOL_ID } from "../../opencorvus/src/tool/tool-i
  * - Channels are `READY_CHANNELS`, the adapters actually registered. The catalog holds 27 entries,
  *   14 of them `planned` (`qqbot` among them, which is why the docs sidebar listing it is not a
  *   count of working channels).
- * - Tools are the materialized built-ins: every global tool ID except `batch`, which is
- *   experimental, off by default, and synthesized per turn rather than living in the registry array.
+ * - Tools are the global built-in IDs declared by the current owning catalog.
  *
  * @see docs/website-restyle-plan.md 数字出处标记 — every published number carries its provenance.
  */
@@ -78,7 +77,7 @@ export async function derivePlatformFacts(): Promise<GeneratedPlatformFacts> {
   const models = Object.values(catalog).reduce((total, provider) => total + Object.keys(provider.models ?? {}).length, 0)
   const chatChannels = READY_CHANNELS.length
   const plannedChatChannels = PLANNED_CHANNELS.length
-  const builtInTools = GLOBAL_TOOL_IDS.filter((toolID) => toolID !== BATCH_TOOL_ID).length
+  const builtInTools = GLOBAL_TOOL_IDS.length
 
   // A count that silently reaches zero would publish "0 model providers" rather than fail the
   // build, so every derivation is asserted before it is written.
@@ -90,12 +89,6 @@ export async function derivePlatformFacts(): Promise<GeneratedPlatformFacts> {
   const overlap = READY_CHANNELS.filter((id) => (PLANNED_CHANNELS as readonly string[]).includes(id))
   if (overlap.length > 0) {
     throw new Error(`Channels cannot be both ready and planned: ${overlap.join(", ")}`)
-  }
-  if (!GLOBAL_TOOL_IDS.includes(BATCH_TOOL_ID)) {
-    throw new Error(`${BATCH_TOOL_ID} left GLOBAL_TOOL_IDS; the built-in tool derivation needs revisiting`)
-  }
-  if (builtInTools !== GLOBAL_TOOL_IDS.length - 1) {
-    throw new Error("Exactly one global tool ID is expected to be excluded from the published built-in tool count")
   }
   const duplicateToolIDs = GLOBAL_TOOL_IDS.length - new Set<string>(GLOBAL_TOOL_IDS).size
   if (duplicateToolIDs > 0) throw new Error(`GLOBAL_TOOL_IDS contains ${duplicateToolIDs} duplicate entries`)
@@ -113,7 +106,7 @@ export async function generatePlatformFacts(metadataPath = platformFactsMetadata
     "//   models              sum of Object.keys(provider.models).length across that catalog",
     "//   chatChannels        READY_CHANNELS.length      (channel-runtime/src/registry.ts)",
     "//   plannedChatChannels PLANNED_CHANNELS.length    (same file; not advertised as working)",
-    "//   builtInTools        GLOBAL_TOOL_IDS minus the experimental batch tool",
+    "//   builtInTools        GLOBAL_TOOL_IDS.length     (tool/tool-id-catalog.ts)",
     `export const generatedPlatformFacts = ${JSON.stringify(facts, null, 2)} as const`,
     "",
   ].join("\n")
