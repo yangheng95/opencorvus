@@ -130,12 +130,9 @@ export const InstanceBootstrap = markConversationCapabilityTransactionalInit(asy
   await ProjectOpenLifecycle.stage("permission.reconcile-interrupted-attempts", lifecycleContext, async () => {
     PermissionAuthority.reconcileInterruptedAttempts()
   })
-  // Recovery stays inside project open. Detaching it would let a scan outlive
-  // the project it reads: disposal cancels driver timers but does not join an
-  // in-flight scan, so a detached startup pass can reach a removed project
-  // directory. Startup Tasks are recovered concurrently rather than in
-  // sequence, which is what made this stage slow; the remaining cost is that
-  // one recovered Orchestrator Turn still delays open.
+  // Install recovery discovery during open. Every admitted scan later owns a
+  // separate serving lease for its full duration; a recovered Turn therefore
+  // cannot delay initialization or outlive the Project context it reads.
   await ProjectOpenLifecycle.stage("task-control.reconcile", lifecycleContext, () =>
     reconcileTaskControlPlane().then(() => undefined),
   )

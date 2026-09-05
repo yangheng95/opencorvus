@@ -37,7 +37,7 @@
                              ▼
                   EngineService (task-api/index.ts)
                   createTask / handleTaskMessage / replyInteraction /
-                  cancelTask / retryTask / …
+                  cancelTask / current Task control inputs / …
 ```
 
 ### 两个入站入口的分工
@@ -105,32 +105,11 @@ owned Prompts, including terminal cleanup tails and non-Task Sessions, still rec
 cancellation and are awaited before runtime ownership is released. One terminal
 Task therefore does not reject an active sibling's durable shutdown handoff.
 
-`retryTask` / `replanTask` 只接受 terminal Task，已有 workflow occurrence 仍作为不可变执行证据保留。
-Lifecycle 校验、本次 intent wake 写入，以及同 epoch native Task wait 的 `superseded` settlement 位于
-同一数据库事务；active/queued Task 返回 typed lifecycle conflict。历史 `task_wait_activity` 只作为已落盘
-旧 ingress 的可读来源存在，不再有当前 writer。用户消息、coordination request、
-infrastructure recovery 和既有 operator intent 是已接受的 durable input，retry/replan 不得删除它们。
-事务提交后 queue 只消费已经持久化的 intent，不再写第二个 wake。
-普通 operator/orchestrator message 与 coordination request 只产生可见 ingress 和 delivery fact，
-绝不清除 terminal row。terminal Task 上的普通消息通过 root Session 的 conversation-only Turn
-回答；它不占用 directory execution queue，也不能 dispatch product work。terminal-to-running authority
-只有两种显式来源：operator control API 写入的 `actor="operator", kind="retry|replan"` intent，以及
-同一 Mission lineage 基于完整 Artifact read 写入的 `mission_acceptance_resume`。后者必须携带当前
-terminal lifecycle reference、当前 Mission Turn 已完整读取的 exact locators，以及真实可见的
-Mission-authored Task-root message；消息、Task reopen、queued ingress 和 receipt 在同一事务提交。
-它只接受 completed/failed source，cancelled source 返回带 cancellation actor/source/event 的 operator
-authority response。Host 只校验 identity、provenance、byte coverage 和 occurrence 一致性，不从文本、
-Artifact type、verdict、消息年龄、idle 状态或 worker 数量选择修复路线。
-
-Retry/Replan 事务会原子 retire 旧 delivery notice，并把仍未消费的 operator-message ID 按原队列
-顺序写入新 intent 的 `superseded_operator_message_ids`。消息本体仍只存在于原可见 message；
-Orchestrator 只能通过 intent 暴露的精确 ID 调用 `read_task_message`，不能获得整个 root Session 的
-隐式读取权限。terminal conversation 的 durable answer/result 绑定 exact ingress ID；替换进程先
-收敛已有 result 再 drain notice，不能重复调用模型。
-Retry/Replan wake 中需要重新执行既有节点时，Orchestrator 通过
-`dispatch_agent.dispatch.turn.authority.continuation_dispatch_id` 指定精确旧 dispatch。Host 从该 lineage
-派生固定 worker identity、work scope、workflow binding/node、logical occurrence 和 Delivery
-Slice subjects；新 Session/Turn 是同一 occurrence 的物理续跑，不是新 Task 或第二个节点 occurrence。
+Task 的 execution epoch（执行轮次）、reopen（重新打开）准入、终态输入、native wait 和
+dispatch continuation 的唯一当前契约见 [Task control plane](task-control-plane.md)。
+公开控制输入进入同一 immutable ingress / protocol event（不可变入口与协议事件）链，
+由该契约的 reducer（归约器）和当前 lease（租约）决定可执行性。该概览不另行定义
+Retry/Replan 协议、可变 Task row 生命周期或兼容旧 wait writer。
 
 `Database.Path()` 同时是物理 Server runtime 的唯一 ownership scope。每个 `Server.listen`
 在初始化全局服务、绑定 listener 或恢复 started Task 前取得该数据库的进程级租约；同一进程的多个
@@ -254,14 +233,9 @@ provider/tool interruption 或本地环境问题都必须留在同一 Task、同
 被拒绝的破坏性批准、不同固定 Squad、不可约的 operator 产品决策，或 Task 无法修复也无法等待
 的外部平台条件。
 
-所有 terminal writer 在同一事务写入专用 `task.completed | task.failed | task.cancelled` protocol
-event。当前 terminal authority 是 Task 有序 protocol lineage 中、最后一次 nonterminal
-`task.updated` 之后的最新专用 terminal event，并必须与 Task row 的 status、`time_completed`、
-error 和 interrupted reason 精确一致。`task_completion_decision` 仅是 completed Task 的可选补充
-证据，不是 failed/interrupted/cancelled Task 的准入前提。terminal coordination 只能用与当前
-ingress、request 和 terminal occurrence 全匹配的 `acknowledge_terminal` 完成可见响应；其他
-scheduler/product Tool 保持 typed terminal conflict，并把可恢复工作指向同一 Task 的显式
-operator Retry/Replan。
+Task lifecycle（生命周期）以 [Task control plane](task-control-plane.md) 定义的当前 epoch
+和 canonical protocol events（规范协议事件）为权威。终态结算、终态对话和重新打开必须读取
+该同一投影；Task row 的展示字段、普通 `task.updated` 通知和 Tool 名称不产生第二份生命周期。
 
 Task 内的 worker 调度只有一个入口：`dispatch_agent dispatch.target=<active projected agent ID>`。每次调用创建一个
 不可变 `dispatch_lineage`，绑定调用方 tool part/call、精确 worker identity、work scope 与 child Session。

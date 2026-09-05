@@ -133,42 +133,46 @@ export async function executeScheduleToolInput(
           executionMode: params.scope === "session" ? "local" : params.executionMode,
           model: params.model,
           reasoningEffort: params.reasoningEffort,
-        }, causation)
-        return result(`Scheduled: ${automation.name}`, {
-          automationId: automation.id,
-          revisionId: automation.revisionId,
-          revision: automation.revision,
-          name: automation.name,
-          target: automation.target,
-          executionMode: automation.executionMode,
-          model: automation.model,
-          reasoningEffort: automation.reasoningEffort,
-          recurrence: automation.recurrence,
-          description: Recurrence.describe(automation.recurrence),
-          firstEligibleAt: new Date(automation.firstEligibleAt).toISOString(),
-        })
-      }
-      case "list": {
-        const automations = AutomationService.list()
-        return result(`${automations.length} scheduled automations`, {
-          automations: automations.map((automation) => ({
-            ...automation,
-            prompt: automation.prompt.slice(0, 200),
-            lastRun: automation.lastRun ? new Date(automation.lastRun).toISOString() : null,
-            nextRun: new Date(automation.nextRun).toISOString(),
-          })),
-        })
-      }
-      case "update": {
-        const target =
-          params.scope === undefined
-            ? undefined
-            : params.scope === "session"
-              ? ({ scope: "session", sessionId: ctx.sessionID } as const)
-              : params.scope === "project"
-                ? ({ scope: "project", projectIds: params.projectIds ?? [projectID] } as const)
-                : ({ scope: "global" } as const)
-        const automation = await AutomationService.updateFromTool({
+        },
+        causation,
+      )
+      return result(`Scheduled: ${automation.name}`, {
+        automationId: automation.id,
+        revisionId: automation.revisionId,
+        revision: automation.revision,
+        name: automation.name,
+        target: automation.target,
+        executionMode: automation.executionMode,
+        model: automation.model,
+        reasoningEffort: automation.reasoningEffort,
+        recurrence: automation.recurrence,
+        description: Recurrence.describe(automation.recurrence),
+        firstEligibleAt:
+          automation.firstEligibleAt === null ? null : new Date(automation.firstEligibleAt).toISOString(),
+      })
+    }
+    case "list": {
+      const automations = AutomationService.list()
+      return result(`${automations.length} scheduled automations`, {
+        automations: automations.map((automation) => ({
+          ...automation,
+          prompt: automation.prompt.slice(0, 200),
+          lastRun: automation.lastRun ? new Date(automation.lastRun).toISOString() : null,
+          nextRun: automation.nextRun === null ? null : new Date(automation.nextRun).toISOString(),
+        })),
+      })
+    }
+    case "update": {
+      const target =
+        params.scope === undefined
+          ? undefined
+          : params.scope === "session"
+            ? ({ scope: "session", sessionId: ctx.sessionID } as const)
+            : params.scope === "project"
+              ? ({ scope: "project", projectIds: params.projectIds ?? [projectID] } as const)
+              : ({ scope: "global" } as const)
+      const automation = await AutomationService.updateFromTool(
+        {
           id: params.automationId,
           name: params.name,
           target,

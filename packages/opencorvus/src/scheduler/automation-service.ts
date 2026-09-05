@@ -107,7 +107,7 @@ export type AutomationView = {
   prompt: string
   status: "active" | "paused"
   lastRun: number | null
-  nextRun: number
+  nextRun: number | null
   failureCount: number
   lastError: string | null
 }
@@ -124,7 +124,7 @@ export type AutomationDefinitionReceipt = {
   reasoningEffort: string | null
   prompt: string
   status: "active" | "paused"
-  firstEligibleAt: number
+  firstEligibleAt: number | null
 }
 
 export type PendingDelayedWakeView = {
@@ -277,6 +277,7 @@ export namespace AutomationService {
     "automation-service",
   )
   let globalRunning = false
+  let wakeActivePoll: (() => void) | undefined
 
   function appendAutomationTombstoneInTransaction(
     db: Database.TxOrDb,
@@ -336,7 +337,9 @@ export namespace AutomationService {
       currentAutomationDefinitionsInTransaction(db).filter((row) => row.kind !== "delay"),
     )
       .map((row) => Database.use((db) => projectAutomationInTransaction(db, row)))
-      .sort((left, right) => left.next_run - right.next_run || left.id.localeCompare(right.id))
+      .sort(
+        (left, right) => (left.next_run ?? Infinity) - (right.next_run ?? Infinity) || left.id.localeCompare(right.id),
+      )
     return rows.map(view)
   }
 
@@ -369,7 +372,7 @@ export namespace AutomationService {
             id: row.id,
             projectID: row.project_id,
             target,
-            nextRun: row.next_run,
+            nextRun: row.next_run!,
             leaseUntil: lease?.expires_at ?? 0,
             state: activeLease ? "leased" : "scheduled",
             claim: activeLease
@@ -382,7 +385,9 @@ export namespace AutomationService {
           },
         ]
       })
-      .sort((left, right) => left.nextRun - right.nextRun || left.id.localeCompare(right.id))
+      .sort(
+        (left, right) => (left.nextRun ?? Infinity) - (right.nextRun ?? Infinity) || left.id.localeCompare(right.id),
+      )
   }
 
   export function listRuns(id: string): AutomationRunView[] {
@@ -580,7 +585,9 @@ export namespace AutomationService {
     }
   }
 
-  export async function create(input: CreateAutomationInput): Promise<{ id: string; name: string; nextRun: number }> {
+  export async function create(
+    input: CreateAutomationInput,
+  ): Promise<{ id: string; name: string; nextRun: number | null }> {
     return createAutomation(input)
   }
 
@@ -598,11 +605,11 @@ export namespace AutomationService {
   async function createAutomation(
     input: CreateAutomationInput,
     causation?: undefined,
-  ): Promise<{ id: string; name: string; nextRun: number }>
+  ): Promise<{ id: string; name: string; nextRun: number | null }>
   async function createAutomation(
     input: CreateAutomationInput,
     causation?: ScheduleToolCausation,
-  ): Promise<AutomationDefinitionReceipt | { id: string; name: string; nextRun: number }> {
+  ): Promise<AutomationDefinitionReceipt | { id: string; name: string; nextRun: number | null }> {
     if (causation) {
       const replay = Database.immediateTransaction((tx) => {
         assertScheduledToolOccurrenceInTransaction(tx, causation.occurrence)
@@ -825,8 +832,8 @@ export namespace AutomationService {
     const release = await acquireExecutionPermit()
     let handedOff = false
     try {
-      return await runNowWithExecutor(id, (job, owner, now, reschedule) => {
-        const execution = executeWithRuntimeSettlement(job, owner, now, reschedule, execute, undefined, release)
+      return await runNowWithExecutor(id, (job, owner, now) => {
+        const execution = executeWithRuntimeSettlement(job, owner, now, execute, undefined, release)
         handedOff = true
         return execution
       })
@@ -981,7 +988,7 @@ export namespace AutomationService {
       lease_until: now + LEASE_MS,
     }
     try {
-      const execution = executeWithRuntimeSettlement(job, owner, now, false, execute, undefined, capacityRelease)
+      const execution = executeWithRuntimeSettlement(job, owner, now, execute, undefined, capacityRelease)
       handOffCapacity()
       await execution
     } catch (error) {
@@ -994,7 +1001,7 @@ export namespace AutomationService {
 
   async function runNowWithExecutor(
     id: string,
-    executeFire: (job: AutomationRow, owner: string, now: number, reschedule: boolean) => Promise<string>,
+    executeFire: (job: AutomationRow, owner: string, now: number) => Promise<string>,
   ): Promise<AutomationRunView[]> {
     const automation = assertPublicAutomation(id)
     if (automation.pending_fire_id) {
@@ -1012,7 +1019,7 @@ export namespace AutomationService {
         automationID: id,
       })
     }
-    const fireID = await executeFire(row, owner, now, false)
+    const fireID = await executeFire(row, owner, now)
     const runs = listRunsForAutomation(id, fireID)
     if (runs.length === 0) throw new Error(`Automation ${id} completed without run records`)
     return runs
@@ -1020,6 +1027,7 @@ export namespace AutomationService {
 
   export const TestHooks = {
     runNowWithExecutor,
+    acquireExecutionPermit,
     claim,
     runDueWithSignal(signal: AbortSignal): Promise<void> {
       return poll(signal)
@@ -1054,33 +1062,8 @@ export namespace AutomationService {
         },
       }
     },
-    executeClaimedDueOccurrence(input: {
-      job: typeof AutomationTable.$inferSelect
-      owner: string
-      now: number
-      runtimeSignal?: AbortSignal
-    }) {
-      return execute(
-        Database.use((db) => projectAutomationInTransaction(db, input.job)),
-        input.owner,
-        input.now,
-        true,
-        input.runtimeSignal ?? new AbortController().signal,
-      )
-    },
-    executeClaimedManualOccurrence(input: {
-      job: typeof AutomationTable.$inferSelect
-      owner: string
-      now: number
-      runtimeSignal?: AbortSignal
-    }) {
-      return execute(
-        Database.use((db) => projectAutomationInTransaction(db, input.job)),
-        input.owner,
-        input.now,
-        false,
-        input.runtimeSignal ?? new AbortController().signal,
-      )
+    executeClaimedOccurrence(input: { job: AutomationRow; owner: string; now: number; runtimeSignal?: AbortSignal }) {
+      return execute(input.job, input.owner, input.now, input.runtimeSignal ?? new AbortController().signal)
     },
     createLeaseFence: createAutomationLeaseFence,
     installLeaseRenewTimerFactory(factory: LeaseRenewTimerFactory): Disposable {
@@ -1289,51 +1272,101 @@ export namespace AutomationService {
   async function poll(signal?: AbortSignal): Promise<void> {
     signal?.throwIfAborted()
     if (globalRunning) {
-      log.info("poll skipped while previous run is still active")
+      wakeActivePoll?.()
       return
     }
     globalRunning = true
     await run(Date.now(), signal).finally(() => {
       globalRunning = false
+      wakeActivePoll = undefined
     })
   }
 
   async function run(now: number, signal?: AbortSignal): Promise<void> {
     signal?.throwIfAborted()
-    const due = Database.use((db) => currentDueAutomationFrontiersInTransaction(db, now))
-
-    if (due.length === 0) return
-    log.info("found due automations", { count: due.length })
+    let active = 0
+    let wakeRequested = false
+    let wakeWaiter: (() => void) | undefined
+    const wake = () => {
+      wakeRequested = true
+      wakeWaiter?.()
+    }
+    wakeActivePoll = wake
+    async function waitForWake() {
+      if (!wakeRequested) {
+        await new Promise<void>((resolve) => {
+          const finish = () => {
+            clearTimeout(timer)
+            signal?.removeEventListener("abort", finish)
+            wakeWaiter = undefined
+            resolve()
+          }
+          const timer = setTimeout(finish, POLL_INTERVAL_MS)
+          wakeWaiter = finish
+          signal?.addEventListener("abort", finish, { once: true })
+          if (signal?.aborted) finish()
+        })
+      }
+      wakeRequested = false
+      signal?.throwIfAborted()
+    }
+    async function* dueFrontiers() {
+      let cursor: { effectiveDueAt: number; definitionID: string; fireID: string } | undefined
+      while (true) {
+        const page = Database.use((db) => currentDueAutomationFrontiersInTransaction(db, now, undefined, cursor))
+        if (page.length === 0) {
+          if (active === 0) return
+          await waitForWake()
+          now = Date.now()
+          cursor = undefined
+          continue
+        }
+        for (const candidate of page) {
+          cursor = {
+            effectiveDueAt: candidate.effectiveDueAt,
+            definitionID: candidate.row.id,
+            fireID: candidate.fireID,
+          }
+          active++
+          yield candidate
+        }
+      }
+    }
 
     executionPermits.resize(await executionCapacity())
-    const settled = await settledWork({
+    let firstFailure: PromiseRejectedResult | undefined
+    await settledWork({
       concurrency: executionPermits.limit,
-      items: due,
+      items: dueFrontiers(),
       signal,
+      onSettled: (result) => {
+        if (result.status === "rejected") firstFailure ??= result
+      },
       run: async (candidate) => {
-        const release = await executionPermits.acquire(signal)
+        let release: (() => void) | undefined
         let handedOff = false
         try {
+          release = await executionPermits.acquire(signal)
           await afterExecutionPermitForTest?.()
           signal?.throwIfAborted()
           const claimNow = (claimClockForTest ?? Date.now)()
           const owner = `${process.pid}:${claimNow}:${Identifier.ascending("call")}`
           const job = claim(candidate.row.id, owner, claimNow, false, candidate.fireID ?? undefined)
           if (!job) return
-          const execution = executeWithRuntimeSettlement(job, owner, claimNow, true, execute, signal, release)
+          const execution = executeWithRuntimeSettlement(job, owner, claimNow, execute, signal, release)
           handedOff = true
           await execution.catch((error) => {
             signal?.throwIfAborted()
             return undefined
           })
         } finally {
-          if (!handedOff) release()
+          if (!handedOff) release?.()
+          active--
+          wake()
         }
       },
     })
-    const failures = settled.flatMap((result) => (result.status === "rejected" ? [result.reason] : []))
-    if (failures.length === 1) throw failures[0]
-    if (failures.length > 1) throw new AggregateError(failures, "Automation execution frontier failed")
+    if (firstFailure) throw firstFailure.reason
   }
 
   function activeAutomationSessionExecutionInTransaction(
@@ -1356,20 +1389,20 @@ export namespace AutomationService {
   function claim(id: string, owner: string, now: number, force = false, scheduledFireID?: string) {
     return Database.immediateTransaction((db) => {
       const persisted = latestAutomationDefinitionInTransaction(db, id)
-      if (!persisted || persisted.status !== "active") return undefined
+      if (!persisted) return undefined
       const projected = projectAutomationFrontierInTransaction(db, persisted)
       const frontier = currentAutomationFireFrontierInTransaction(db, id)
-      if (!frontier || frontier.automation_revision_id !== persisted.id) return undefined
+      if (!force && (!frontier || frontier.automation_revision_id !== persisted.id)) return undefined
       if (force && projected.pending_fire_id) return undefined
-      if (!force && (frontier.available_at > now || (scheduledFireID && frontier.fire_id !== scheduledFireID))) {
+      if (!force && (frontier!.available_at > now || (scheduledFireID && frontier!.fire_id !== scheduledFireID))) {
         return undefined
       }
-      const exactScheduledFire = db
-        .select()
-        .from(AutomationFireTable)
-        .where(eq(AutomationFireTable.id, frontier.fire_id))
-        .get()
-      if (!exactScheduledFire || exactScheduledFire.automation_revision_id !== persisted.id) return undefined
+      const exactScheduledFire = frontier
+        ? db.select().from(AutomationFireTable).where(eq(AutomationFireTable.id, frontier.fire_id)).get()
+        : undefined
+      if (!force && (!exactScheduledFire || exactScheduledFire.automation_revision_id !== persisted.id))
+        return undefined
+      if (!force && persisted.status !== "active" && exactScheduledFire!.origin === "scheduled") return undefined
       const activeExecution = activeAutomationSessionExecutionInTransaction(db, persisted)
       if (activeExecution) {
         if (force) return undefined
@@ -1387,7 +1420,7 @@ export namespace AutomationService {
         if (delayed.acquired) {
           deferAutomationFireFrontierInTransaction(db, {
             definitionID: id,
-            fireID: frontier.fire_id,
+            fireID: frontier!.fire_id,
             availableAt: delayed.lease.expires_at,
           })
           log.info("session automation delayed while its conversation is busy", {
@@ -1410,14 +1443,14 @@ export namespace AutomationService {
         leaseMilliseconds: LEASE_MS,
       })
       if (!acquired.acquired) return undefined
-      const scheduledDueAt = force ? now : exactScheduledFire.scheduled_due_at
-      const fireID = force ? Identifier.ascending("automation") : exactScheduledFire.id
+      const scheduledDueAt = force ? now : exactScheduledFire!.scheduled_due_at
+      const fireID = force ? Identifier.ascending("automation") : exactScheduledFire!.id
       ensureAutomationFireInTransaction(db, {
         job: projected,
         fireID,
         scheduledDueAt,
         now,
-        origin: force ? "manual_api" : "scheduled",
+        origin: force ? "manual_api" : exactScheduledFire!.origin,
       })
       const claimedFire = db.select().from(AutomationFireTable).where(eq(AutomationFireTable.id, fireID)).get()!
       if (force) {
@@ -1539,20 +1572,25 @@ export namespace AutomationService {
     job: AutomationRow,
     owner: string,
     now: number,
-    reschedule: boolean,
     runtimeSignal: AbortSignal,
     capacityRelease?: () => void,
   ): Promise<string> {
-    const scheduledDue = reschedule ? (job.scheduled_due_at ?? job.next_run) : now
-    const fireID =
-      job.pending_fire_id
-        ? job.pending_fire_id
-        : deterministicAutomationID("cal", job.id, String(scheduledDue))
-    log.info("executing automation", { jobId: job.id, fireID, name: job.name, prompt: job.prompt.slice(0, 100) })
-
-    let reservedCapacityRelease: (() => void) | undefined =
-      capacityRelease ?? (await acquireExecutionPermit(runtimeSignal))
+    let reservedCapacityRelease = capacityRelease
     try {
+      reservedCapacityRelease ??= await acquireExecutionPermit(runtimeSignal)
+      const fire = Database.use((db) =>
+        job.pending_fire_id
+          ? db.select().from(AutomationFireTable).where(eq(AutomationFireTable.id, job.pending_fire_id)).get()
+          : undefined,
+      )
+      if (!fire || fire.automation_revision_id !== job.revision_id) {
+        throw new Error(`Automation ${job.id} execution requires its exact claimed Fire`)
+      }
+      const scheduledDue = fire.scheduled_due_at
+      const fireID = fire.id
+      const reschedule = fire.origin === "scheduled"
+      log.info("executing automation", { jobId: job.id, fireID, name: job.name, prompt: job.prompt.slice(0, 100) })
+
       const leaseFence = createAutomationLeaseFence(job.id, owner, fireID)
       using inactivityFence = await createSchedulerExecutionInactivityFence({
         occurrence: `Automation fire ${fireID}`,
@@ -1583,7 +1621,7 @@ export namespace AutomationService {
               fireID,
               scheduledDueAt: scheduledDue,
               now,
-              origin: reschedule ? "scheduled" : "manual_api",
+              origin: fire.origin,
             })
             settleAutomationFireAttemptReservedInTransaction(db, job, Date.now())
             db.insert(AutomationRunTable)
@@ -1635,11 +1673,12 @@ export namespace AutomationService {
             fireID,
             scheduledDueAt: scheduledDue,
             now,
-            origin: reschedule ? "scheduled" : "manual_api",
+            origin: fire.origin,
           })
           settleAutomationFireAttemptReservedInTransaction(db, job, now)
           const reservation = schedulerMissionReservationInTransaction(db, job.session_id)
-          const inserted = db.insert(AutomationRunTable)
+          const inserted = db
+            .insert(AutomationRunTable)
             .values({
               id: runID,
               automation_revision_id: job.revision_id,
@@ -1776,13 +1815,14 @@ export namespace AutomationService {
           fireID,
           scheduledDueAt: scheduledDue,
           now,
-          origin: reschedule ? "scheduled" : "manual_api",
+          origin: fire.origin,
         })
         settleAutomationFireAttemptReservedInTransaction(db, job, now)
         const terminalReceipts: (typeof AutomationRunReceiptTable.$inferInsert)[] = []
         targets.forEach((target, index) => {
           const reservation = schedulerMissionReservationInTransaction(db, target.sessionID)
-          const inserted = db.insert(AutomationRunTable)
+          const inserted = db
+            .insert(AutomationRunTable)
             .values({
               id: runIDs[index],
               automation_revision_id: job.revision_id,
@@ -1838,7 +1878,7 @@ export namespace AutomationService {
           )
         if (allTerminal) {
           const latest = latestAutomationDefinitionInTransaction(db, job.id)
-          if (!latest || latest.id !== job.revision_id || latest.status !== "active") {
+          if (!latest || latest.id !== job.revision_id) {
             throw new AutomationRunningConflictError({
               message: `Automation ${job.id} definition changed before terminal reservation frontier settlement`,
               automationID: job.id,
@@ -1994,7 +2034,7 @@ export namespace AutomationService {
           })
         } else if (reschedule) {
           const latest = latestAutomationDefinitionInTransaction(tx, job.id)
-          if (!latest || latest.id !== job.revision_id || latest.status !== "active") {
+          if (!latest || latest.id !== job.revision_id) {
             throw new AutomationRunningConflictError({
               message: `Automation ${job.id} definition changed before successor publication`,
               automationID: job.id,
@@ -2003,7 +2043,7 @@ export namespace AutomationService {
           ensureScheduledAutomationFireFrontierInTransaction(tx, latest, nextRun, committedAt)
         } else if (job.kind === "recurring") {
           const latest = latestAutomationDefinitionInTransaction(tx, job.id)
-          if (!latest || latest.id !== job.revision_id || latest.status !== "active") {
+          if (!latest || latest.id !== job.revision_id) {
             throw new AutomationRunningConflictError({
               message: `Automation ${job.id} definition changed before manual frontier restoration`,
               automationID: job.id,
@@ -2069,7 +2109,7 @@ export namespace AutomationService {
         name: job.name,
         targets: targets.length,
         failures: failures.length,
-        nextRun: new Date(nextRun).toISOString(),
+        nextRun: nextRun === null ? null : new Date(nextRun).toISOString(),
         ...(retryAt ? { retryAt: new Date(retryAt).toISOString() } : {}),
       })
       return fireID
@@ -2082,7 +2122,6 @@ export namespace AutomationService {
     job: AutomationRow,
     owner: string,
     now: number,
-    reschedule: boolean,
     executeFire: typeof execute = execute,
     lifecycleSignal?: AbortSignal,
     capacityRelease?: () => void,
@@ -2092,7 +2131,7 @@ export namespace AutomationService {
       `automation-fire:${job.id}:${job.pending_fire_id ?? job.next_run}`,
     )
     const signal = lifecycleSignal ? AbortSignal.any([reservation.signal, lifecycleSignal]) : reservation.signal
-    const operation = executeFire(job, owner, now, reschedule, signal, capacityRelease).catch(async (error) => {
+    const operation = executeFire(job, owner, now, signal, capacityRelease).catch(async (error) => {
       await fail(job, owner, error, now)
       throw error
     })
@@ -2120,9 +2159,22 @@ export namespace AutomationService {
       fireID: string
       scheduledDueAt: number
       now: number
-      origin: "scheduled" | "manual_api"
+      origin: "scheduled" | "manual_api" | "manual_tool"
     },
   ): void {
+    const existing = db.select().from(AutomationFireTable).where(eq(AutomationFireTable.id, input.fireID)).get()
+    if (existing) {
+      if (
+        existing.automation_revision_id !== input.job.revision_id ||
+        existing.scheduled_due_at !== input.scheduledDueAt ||
+        existing.origin !== input.origin
+      ) {
+        throw new Error(`Automation logical fire ${input.fireID} changed its immutable occurrence`)
+      }
+      return
+    }
+    if (input.origin === "manual_tool")
+      throw new Error(`Automation manual Tool Fire ${input.fireID} lost its occurrence`)
     db.insert(AutomationFireTable)
       .values({
         id: input.fireID,
@@ -2137,7 +2189,8 @@ export namespace AutomationService {
     if (
       !fire ||
       fire.automation_revision_id !== input.job.revision_id ||
-      fire.scheduled_due_at !== input.scheduledDueAt
+      fire.scheduled_due_at !== input.scheduledDueAt ||
+      fire.origin !== input.origin
     ) {
       throw new Error(`Automation logical fire ${input.fireID} changed its immutable occurrence`)
     }
@@ -2712,7 +2765,7 @@ export namespace AutomationService {
         const latest = latestAutomationDefinitionInTransaction(tx, job.id)
         if (fire?.origin === "scheduled" && latest?.id === job.revision_id && latest.status === "active") {
           ensureScheduledAutomationFireFrontierInTransaction(tx, latest, Recurrence.nextRun(job.recurrence, now), now)
-        } else if (fire && latest?.id === job.revision_id && latest.status === "active") {
+        } else if (fire && latest?.id === job.revision_id) {
           restoreScheduledAutomationFireFrontierInTransaction(tx, latest)
         }
       } else if (job.kind === "delay") {
@@ -2776,21 +2829,13 @@ export namespace AutomationService {
       return
     }
     if (attemptReceipt.outcome !== "reserved") return
-    const revisions = db
-      .select({ id: AutomationTable.id })
-      .from(AutomationTable)
-      .where(eq(AutomationTable.definition_id, job.id))
+    if (!job.pending_fire_id) throw new Error(`Automation attempt ${job.attempt_id} has no Fire identity`)
+    const projectedRuns = db
+      .select()
+      .from(AutomationRunTable)
+      .where(eq(AutomationRunTable.fire_id, job.pending_fire_id))
       .all()
-      .map((row) => row.id)
-    const projectedRuns =
-      revisions.length === 0
-        ? []
-        : db
-            .select()
-            .from(AutomationRunTable)
-            .where(inArray(AutomationRunTable.automation_revision_id, revisions))
-            .all()
-            .map((run) => projectAutomationRunInTransaction(db, run))
+      .map((run) => projectAutomationRunInTransaction(db, run))
     if (
       executionStartedAt !== undefined &&
       projectedRuns.some(

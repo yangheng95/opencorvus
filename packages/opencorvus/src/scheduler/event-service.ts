@@ -1,5 +1,5 @@
 import { Bus } from "@/bus"
-import { Instance } from "@/project/instance"
+import { Instance, reenterActiveInstance, runInstanceBackgroundWork } from "@/project/instance"
 import { createInstanceState } from "@/project/instance-state"
 import { Database, and, desc, eq, sql } from "@/storage/db"
 import { Log } from "@/util/log"
@@ -199,8 +199,13 @@ export namespace EventService {
       unsub: undefined as undefined | (() => void),
       lifecycle: new AbortController(),
       ownerID: `event-fire-owner:${randomUUID()}`,
+      directory: Instance.directory,
       running: new Map<string, Promise<void>>(),
-      jobTails: new Map<string, Promise<void>>(),
+      discovery: undefined as Promise<void> | undefined,
+      discoveryRequested: false,
+      discoveryCursor: undefined as string | undefined,
+      discoveryWake: Promise.withResolvers<void>(),
+      discoveryRetry: undefined as ReturnType<typeof setTimeout> | undefined,
       recoveryTimers: new Map<string, ReturnType<typeof setTimeout>>(),
       recoveryOperations: new Set<Promise<void>>(),
       runtimeReopen: undefined as Disposable | undefined,
@@ -214,9 +219,10 @@ export namespace EventService {
       s.lifecycle.abort(new Error("EventService Instance is disposing"))
       for (const timer of s.recoveryTimers.values()) clearTimeout(timer)
       s.recoveryTimers.clear()
+      clearTimeout(s.discoveryRetry)
       while (s.recoveryOperations.size > 0) await Promise.allSettled([...s.recoveryOperations])
       while (s.running.size > 0) await Promise.allSettled([...s.running.values()])
-      s.jobTails.clear()
+      await s.discovery
       s.sessionWake = undefined
     },
     "event-service",
@@ -238,21 +244,8 @@ export namespace EventService {
       },
       { durableID: "scheduler.event-service", effect: "idempotent_by_occurrence" },
     )
-    const directory = Instance.directory
     s.runtimeReopen = RuntimeExecutionSettlement.onAdmissionReopened("scheduler_event_fire", () => {
-      let recovery!: Promise<void>
-      recovery = Instance.provide({
-        directory,
-        fn: () => {
-          if (state() !== s || s.lifecycle.signal.aborted) return
-          recoverProjectFires()
-        },
-      })
-        .catch((error) => {
-          log.error("event fire durable recovery after runtime admission reopen failed", { directory, error })
-        })
-        .finally(() => s.recoveryOperations.delete(recovery))
-      s.recoveryOperations.add(recovery)
+      runRecoveryOperation(s, recoverProjectFires)
     })
     recoverProjectFires()
     log.info("event service initialized")
@@ -552,8 +545,8 @@ export namespace EventService {
     processSettlementGate?.projectIDs.add(Instance.project.id)
     for (const fire of fires) {
       await fireAcceptedHookForTest?.(fire)
-      if (fire.status === "pending") enqueueFire(fire.id, fire.event_job_id)
     }
+    recoverProjectFires()
   }
 
   function createFires(input: {
@@ -725,8 +718,61 @@ export namespace EventService {
   }
 
   function recoverProjectFires(): void {
+    const s = state()
+    if (s.lifecycle.signal.aborted) return
+    s.discoveryRequested = true
+    s.discoveryWake.resolve()
+    if (s.discovery) return
+    s.discoveryRequested = false
+    let discovery!: Promise<void>
+    discovery = runInstanceBackgroundWork(
+      "event-fire-discovery",
+      async (signal) => {
+        try {
+          while (!signal.aborted && !s.lifecycle.signal.aborted) {
+            s.discoveryRequested = false
+            s.discoveryWake = Promise.withResolvers<void>()
+            const head = nextRunnableProjectHead()
+            if (!head) {
+              if (s.running.size === 0) return
+              await Promise.race([...s.running.values(), s.discoveryWake.promise])
+              continue
+            }
+            const release = await acquireExecutionPermit(signal)
+            try {
+              signal.throwIfAborted()
+              enqueueFire(head.fire.id, head.definitionID, release, signal)
+            } catch (error) {
+              release()
+              if (error instanceof RuntimeExecutionAdmissionClosedError && error.kind === "scheduler_event_fire") return
+              throw error
+            }
+          }
+        } catch (error) {
+          if (!signal.aborted && !s.lifecycle.signal.aborted && !s.discoveryRetry) {
+            s.discoveryRetry = setTimeout(() => {
+              s.discoveryRetry = undefined
+              runRecoveryOperation(s, recoverProjectFires)
+            }, FIRE_RECOVERY_MIN_DELAY_MS)
+          }
+          throw error
+        } finally {
+          await Promise.allSettled(s.running.values())
+        }
+      },
+      s.lifecycle.signal,
+    ).finally(() => {
+      if (s.discovery === discovery) s.discovery = undefined
+      if (s.discoveryRequested && !s.lifecycle.signal.aborted) runRecoveryOperation(s, recoverProjectFires)
+    })
+    s.discovery = discovery
+  }
+
+  function nextRunnableProjectHead() {
+    const s = state()
     const now = Date.now()
-    let afterDefinitionID: string | undefined
+    let afterDefinitionID = s.discoveryCursor
+    let wrapped = afterDefinitionID === undefined
     while (true) {
       const page = Database.use((db) =>
         currentEventFireHeadPageInTransaction(db, {
@@ -736,40 +782,38 @@ export namespace EventService {
         }),
       )
       for (const head of page.rows) {
-        try {
-          enqueueFire(head.fire.id, head.definitionID)
-        } catch (error) {
-          if (error instanceof RuntimeExecutionAdmissionClosedError && error.kind === "scheduler_event_fire") continue
-          throw error
+        if (s.running.has(head.fire.id) || s.recoveryTimers.has(head.fire.id)) continue
+        if (head.status === "pending") {
+          s.discoveryCursor = head.definitionID
+          return head
         }
+        scheduleLeaseRecovery(head.fire.id)
       }
-      if (!page.hasMore) break
+      if (!page.hasMore) {
+        if (wrapped) break
+        afterDefinitionID = undefined
+        wrapped = true
+        continue
+      }
       afterDefinitionID = page.nextDefinitionID
       if (!afterDefinitionID) throw new Error("Event Fire head page has no cursor")
     }
   }
 
-  function enqueueFire(fireID: string, jobID: string): void {
+  function enqueueFire(fireID: string, jobID: string, release: () => void, discoverySignal: AbortSignal): void {
     const s = state()
-    if (s.lifecycle.signal.aborted || s.running.has(fireID)) return
     const runtimeReservation = RuntimeExecutionSettlement.reserve("scheduler_event_fire", `event-fire:${fireID}`)
-    const previous = s.jobTails.get(jobID) ?? Promise.resolve()
     let current!: Promise<void>
-    current = previous
-      .catch(() => undefined)
+    current = Promise.resolve()
       .then(async () => {
         if (s.lifecycle.signal.aborted) return
         runtimeReservation.signal.throwIfAborted()
-        const release = await acquireExecutionPermit(runtimeReservation.signal)
-        try {
-          await afterExecutionPermitForTest?.((reason) => runtimeReservation.cancel(reason))
-          runtimeReservation.signal.throwIfAborted()
-          await processFire(fireID, runtimeReservation.signal)
-        } finally {
-          release()
-        }
+        await afterExecutionPermitForTest?.((reason) => runtimeReservation.cancel(reason))
+        runtimeReservation.signal.throwIfAborted()
+        await processFire(fireID, AbortSignal.any([runtimeReservation.signal, discoverySignal]))
       })
       .catch((error) => {
+        scheduleLeaseRecovery(fireID)
         log.error("event fire execution failed", {
           fireID,
           jobID,
@@ -778,10 +822,9 @@ export namespace EventService {
       })
       .finally(() => {
         if (s.running.get(fireID) === current) s.running.delete(fireID)
-        if (s.jobTails.get(jobID) === current) s.jobTails.delete(jobID)
+        release()
       })
     s.running.set(fireID, current)
-    s.jobTails.set(jobID, current)
     runtimeReservation.settleWith(current)
   }
 
@@ -873,17 +916,15 @@ export namespace EventService {
       inactivityFence.touch("job resolved")
       const missionDisposition = missionDispositionForEventFire(claimed)
       if (missionDisposition?.kind === "mission_closed") {
-        settleDisposition(
-          claimed,
-          s.ownerID,
-          "mission_closed",
-          null,
-          missionDisposition.closureEventID,
-        )
+        settleDisposition(claimed, s.ownerID, "mission_closed", null, missionDisposition.closureEventID)
         return
       }
       if (claimed.causal_cycle) {
         settleDisposition(claimed, s.ownerID, "causal_cycle", "Event causation cycle")
+        return
+      }
+      if (Database.use((db) => Session.deletedInTransaction(db, claimed.target_session_id))) {
+        settleDisposition(claimed, s.ownerID, "target_deleted", null)
         return
       }
       if (existingMessageID) {
@@ -924,13 +965,12 @@ export namespace EventService {
         if (missionAdmissionRejected && !leaseFence.lost) {
           const disposition = missionDispositionForEventFire(claimed)
           if (disposition?.kind !== "mission_closed") throw error
-          settleDisposition(
-            claimed,
-            s.ownerID,
-            "mission_closed",
-            null,
-            disposition.closureEventID,
-          )
+          settleDisposition(claimed, s.ownerID, "mission_closed", null, disposition.closureEventID)
+        } else if (
+          !leaseFence.lost &&
+          Database.use((db) => Session.deletedInTransaction(db, claimed.target_session_id))
+        ) {
+          settleDisposition(claimed, s.ownerID, "target_deleted", null)
         } else if (reconciledMessageID && !leaseFence.lost) {
           const session = await Session.get(claimed.target_session_id)
           throwIfAborted(leaseFence.signal)
@@ -1002,25 +1042,18 @@ export namespace EventService {
     })
   }
 
-  function enqueueNextFireForJob(jobID: string): void {
-    const next = Database.use((db) =>
-      currentEventFireHeadForDefinitionInTransaction(db, {
-        projectID: Instance.project.id,
-        definitionID: jobID,
-        now: Date.now(),
-      }),
-    )
-    if (next) enqueueFire(next.fire.id, jobID)
-  }
-
   function scheduleLeaseRecovery(fireID: string): void {
     const s = state()
     if (s.lifecycle.signal.aborted || s.recoveryTimers.has(fireID)) return
-    let row: { jobID: string; status: EventJobFire["status"]; lease: number } | undefined
+    let row: { status: EventJobFire["status"]; lease: number } | undefined
     try {
       row = Database.use((db) => {
         const persisted = db
-          .select({ fire: EventJobFireTable, projectID: EventJobTable.project_id, definitionID: EventJobTable.definition_id })
+          .select({
+            fire: EventJobFireTable,
+            projectID: EventJobTable.project_id,
+            definitionID: EventJobTable.definition_id,
+          })
           .from(EventJobFireTable)
           .innerJoin(EventJobTable, eq(EventJobTable.id, EventJobFireTable.event_job_revision_id))
           .where(eq(EventJobFireTable.id, fireID))
@@ -1032,24 +1065,16 @@ export namespace EventService {
           definitionID: persisted.definitionID,
           now,
         })
-        if (!head) return undefined
-        // The deadline belongs to whatever is actually deferring this fire.
-        // A queued Fire is inert until the selected FIFO head settles. A live
-        // head normally settles before its lease expires in another runtime,
-        // so poll only that exact head; retry uses its immutable due time.
+        if (!head || head.fire.id !== persisted.fire.id) return undefined
+        // Only the current head has an in-memory recovery timer. Remote
+        // completion may advance it before its lease expires; retry deadlines
+        // remain owned by their immutable receipt.
         const deadline =
-          head.fire.id === persisted.fire.id
-            ? head.status === "running"
-              ? head.leaseUntil
-              : (head.retryAt ?? head.leaseUntil)
-            : head.status === "running"
-              ? Math.min(head.leaseUntil, now + FIRE_RUNNING_HEAD_POLL_MS)
-              : head.status === "retry_wait"
-                ? (head.retryAt ?? now + FIRE_RUNNING_HEAD_POLL_MS)
-                : now + FIRE_RUNNING_HEAD_POLL_MS
+          head.status === "running"
+            ? Math.min(head.leaseUntil, now + FIRE_RUNNING_HEAD_POLL_MS)
+            : (head.retryAt ?? head.leaseUntil)
         return {
-          jobID: persisted.definitionID,
-          status: head.fire.id === persisted.fire.id ? head.status : "pending",
+          status: head.status,
           lease: deadline,
         }
       })
@@ -1067,7 +1092,7 @@ export namespace EventService {
           // to seed this timer. A remote owner may have terminalized that Fire
           // and crashed before its process-local FIFO handoff; rereading here
           // transfers recovery to the durable successor.
-          enqueueNextFireForJob(row.jobID)
+          runRecoveryOperation(s, recoverProjectFires)
         } catch (error) {
           if (error instanceof RuntimeExecutionAdmissionClosedError && error.kind === "scheduler_event_fire") {
             log.info("event fire recovery deferred while runtime admission is closed", { fireID })
@@ -1083,7 +1108,7 @@ export namespace EventService {
       // Re-asking immediately is
       // a poll for the whole of that other attempt, so every refused claim
       // backs off. The head-of-queue handoff inside this runtime does not come
-      // through here; `enqueueNextFireForJob` drives it directly.
+      // through here; completion requests durable head discovery directly.
       Math.max(FIRE_RECOVERY_MIN_DELAY_MS, row.lease - Date.now() + 1),
     )
     s.recoveryTimers.set(fireID, timer)
@@ -1093,9 +1118,27 @@ export namespace EventService {
     if (s.lifecycle.signal.aborted || s.recoveryTimers.has(fireID)) return
     const timer = setTimeout(() => {
       s.recoveryTimers.delete(fireID)
-      scheduleLeaseRecovery(fireID)
+      runRecoveryOperation(s, () => scheduleLeaseRecovery(fireID))
     }, 250)
     s.recoveryTimers.set(fireID, timer)
+  }
+
+  function runRecoveryOperation(s: ReturnType<typeof state>, recover: () => void): void {
+    if (s.lifecycle.signal.aborted) return
+    let operation!: Promise<void>
+    operation = reenterActiveInstance({
+      directory: s.directory,
+      signal: s.lifecycle.signal,
+      fn: () => {
+        if (state() === s && !s.lifecycle.signal.aborted) recover()
+      },
+    })
+      .catch((error) => {
+        if (s.lifecycle.signal.aborted) return
+        log.error("event recovery operation failed", { directory: s.directory, error: errorMessage(error) })
+      })
+      .finally(() => s.recoveryOperations.delete(operation))
+    s.recoveryOperations.add(operation)
   }
 
   function renewFireLease(fireID: string, ownerID: string): boolean {
@@ -1316,7 +1359,7 @@ export namespace EventService {
         now,
       })
     })
-    enqueueNextFireForJob(fire.event_job_id)
+    recoverProjectFires()
     log.info("event job fire settled", {
       jobId: fire.event_job_id,
       fireID: fire.id,
@@ -1330,7 +1373,7 @@ export namespace EventService {
   function settleDisposition(
     fire: EventJobFire,
     ownerID: string,
-    disposition: "causal_cycle" | "cooldown" | "job_disabled" | "mission_closed",
+    disposition: "causal_cycle" | "cooldown" | "job_disabled" | "mission_closed" | "target_deleted",
     error: string | null,
     closureEventID: string | null = null,
   ): void {
@@ -1379,7 +1422,7 @@ export namespace EventService {
       })
       return true
     })
-    if (settled) enqueueNextFireForJob(fire.event_job_id)
+    if (settled) recoverProjectFires()
   }
 
   function deferFire(fire: EventJobFire, ownerID: string, error: unknown): void {
@@ -1553,10 +1596,17 @@ export namespace EventService {
     },
     messageID: (fireID: string) => deterministicEventWakeID("msg", fireID),
     async waitForIdle(): Promise<void> {
-      while (state().recoveryOperations.size > 0) {
-        await Promise.allSettled([...state().recoveryOperations])
+      const s = state()
+      while (s.recoveryOperations.size > 0 || s.discovery || s.running.size > 0) {
+        await Promise.allSettled([
+          ...s.recoveryOperations,
+          ...s.running.values(),
+          ...(s.discovery ? [s.discovery] : []),
+        ])
       }
-      while (state().running.size > 0) await Promise.allSettled([...state().running.values()])
+    },
+    executionSnapshot() {
+      return { ...executionPermits.snapshot, reservations: state().running.size, discovery: Boolean(state().discovery) }
     },
     fires(projectID: string): EventJobFire[] {
       return Database.use((db) =>

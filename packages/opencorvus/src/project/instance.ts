@@ -24,6 +24,7 @@ import { conversationCapabilityInitPreflight } from "@/conversation/capability-t
 import { Flag } from "@/flag/flag"
 import { waitForRuntimeSettlementIdle } from "@/runtime/execution-settlement"
 import { AwaitTimeoutError, withTimeout } from "@/util/await-with-timeout"
+import { awaitWithAbort } from "@/util/abort"
 
 type TurnRelease = () => void
 
@@ -112,10 +113,13 @@ type StateFactory = <S>(
 }
 
 type InstanceApi = {
-  provide<R>(input: { directory: string; init?: InstanceInit; fn: () => R }): Promise<R>
+  /** signal cancels waits for lease admission; an admitted callback and its
+   * owned preparation/settlement still finish before the lease closes. */
+  provide<R>(input: { directory: string; init?: InstanceInit; signal?: AbortSignal; fn: () => R }): Promise<R>
   provideProjectIdentity<R>(input: { directory: string; fn: () => R }): Promise<R>
   tryProvideActive<R>(input: {
     directory: string
+    signal?: AbortSignal
     fn: () => R
     projectDeletionAdmission?: ProjectDeletionAdmission
   }): Promise<Awaited<R> | undefined>
@@ -399,14 +403,6 @@ async function drainOtherServing(entry: CacheEntry, chain: Lease | undefined): P
  * starving it, while the excused ambient chain keeps running to completion.
  */
 async function runTeardownTurn<T>(entry: CacheEntry, chain: Lease | undefined, fn: () => Promise<T>): Promise<T> {
-  cancelInstanceBackgroundWork(entry, "instance teardown")
-  if (holdsEntryTurn(entry)) {
-    // Already inside this entry's turn: the running turn itself gates
-    // admissions, so drain in place and run directly instead of queueing
-    // behind our own turn.
-    await drainOtherServing(entry, chain)
-    return await fn()
-  }
   let settlePark!: () => void
   const park: TeardownPark = {
     settled: new Promise<void>((resolve) => {
@@ -415,6 +411,13 @@ async function runTeardownTurn<T>(entry: CacheEntry, chain: Lease | undefined, f
   }
   entry.teardownParks.add(park)
   try {
+    // Close registration before notifying existing work: an abort listener
+    // may synchronously enqueue another background operation.
+    cancelInstanceBackgroundWork(entry, "instance teardown")
+    if (holdsEntryTurn(entry)) {
+      await drainOtherServing(entry, chain)
+      return await fn()
+    }
     for (;;) {
       const release = await acquireEntryTurn(entry)
       if (!otherServingOpen(entry, chain)) {
@@ -436,14 +439,15 @@ async function runTeardownTurn<T>(entry: CacheEntry, chain: Lease | undefined, f
 /** Admissions wait here until no teardown is parked and no tail turn is queued
  *  or running, then re-validate synchronously. Serving is deliberately not a
  *  condition: serving never blocks serving. */
-async function waitForLifecycleQuiet(entry: CacheEntry): Promise<void> {
+async function waitForLifecycleQuiet(entry: CacheEntry, signal?: AbortSignal): Promise<void> {
   for (;;) {
+    signal?.throwIfAborted()
     if (entry.teardownParks.size > 0) {
-      await Promise.all([...entry.teardownParks].map((park) => park.settled))
+      await awaitWithAbort(Promise.all([...entry.teardownParks].map((park) => park.settled)), signal)
       continue
     }
     if (entry.exclusive.depth > 0) {
-      await entry.exclusive.tail
+      await awaitWithAbort(entry.exclusive.tail, signal)
       continue
     }
     return
@@ -889,10 +893,9 @@ async function prepareContextExclusive(
     for (;;) {
       const outcome = await prepareContextInTurn(key, entry, lease, init, chain)
       if (outcome !== TEARDOWN_REQUIRED) return outcome
-      // Draining serving handles waits on background work's lease like any
-      // other; cancel it first, as every teardown-grade drain does.
-      cancelInstanceBackgroundWork(entry, "instance context refresh")
-      await drainOtherServing(entry, chain)
+      // Nested refresh shares the teardown admission closure while serving
+      // owners drain, including background work registered by cancellation.
+      await runTeardownTurn(entry, chain, async () => undefined)
     }
   }
   const release = await acquireEntryTurn(entry)
@@ -1121,8 +1124,15 @@ function cancelInstanceBackgroundWork(entry: CacheEntry, reason: string): void {
  * The work owns its own durable recovery. A cancelled or failed run is logged
  * and dropped here; whatever durable state the work maintains is what the
  * next trigger resumes from.
+ * An optional state owner also cancels admission when work is queued during
+ * teardown, after the instance has already cancelled earlier background work.
+ * Completion always includes settlement of work that acquired its lease.
  */
-export function runInstanceBackgroundWork(label: string, work: (signal: AbortSignal) => Promise<void>): void {
+export function runInstanceBackgroundWork(
+  label: string,
+  work: (signal: AbortSignal) => Promise<void>,
+  ownerSignal?: AbortSignal,
+): Promise<void> {
   // Only the instance context is required: schedulers such as a durable Bus
   // delivery replayed from the outbox run with a project identity but no
   // lease of their own, and background work must be schedulable from exactly
@@ -1133,26 +1143,34 @@ export function runInstanceBackgroundWork(label: string, work: (signal: AbortSig
     throw new Error(`Instance background work has no live instance for ${directory}`)
   }
   const controller = new AbortController()
+  const signal = ownerSignal ? AbortSignal.any([controller.signal, ownerSignal]) : controller.signal
   entry.backgroundWork.add(controller)
-  void runOutsideInstanceContext(() =>
+  // A serving owner being drained cannot wait for new work queued behind
+  // that same teardown. The exclusive lifecycle owner may still schedule its
+  // newly initialized state's recovery; it has already drained serving work.
+  if (entry.teardownParks.size > 0 && !holdsEntryTurn(entry)) {
+    controller.abort(new Error("Instance background admission is closed during teardown"))
+  }
+  return runOutsideInstanceContext(() =>
     Instance.provide({
       directory,
+      signal,
       fn: async () => {
-        controller.signal.throwIfAborted()
+        signal.throwIfAborted()
         // The controller guards exactly one entry. If that entry was replaced
         // or deleted between scheduling and admission — a teardown drained
         // and this provide re-created the instance — running here would put
         // uncancellable work on an entry whose teardown already cancelled,
         // which is the deadlock this primitive exists to prevent.
         if (cache.get(instanceCacheKey(directory)) !== entry) {
-          throw controller.signal.reason ?? new Error(`Instance background work outlived its instance: ${label}`)
+          throw signal.reason ?? new Error(`Instance background work outlived its instance: ${label}`)
         }
-        await work(controller.signal)
+        await work(signal)
       },
     }),
   )
     .catch((error) => {
-      if (controller.signal.aborted) return
+      if (signal.aborted) return
       Log.Default.warn("instance background work did not complete", {
         label,
         directory,
@@ -1162,6 +1180,7 @@ export function runInstanceBackgroundWork(label: string, work: (signal: AbortSig
     .finally(() => {
       entry.backgroundWork.delete(controller)
     })
+    .then(() => undefined)
 }
 
 export function runAsInstanceActivity<R>(fn: () => Promise<R>): Promise<R> {
@@ -1191,7 +1210,11 @@ function startLeaseActivity<R>(lease: Lease, fn: () => Promise<R>): Promise<R> {
   return activity
 }
 
-export function reenterActiveInstance<R>(input: { directory: string; fn: () => R }): Promise<Awaited<R> | undefined> {
+export function reenterActiveInstance<R>(input: {
+  directory: string
+  signal?: AbortSignal
+  fn: () => R
+}): Promise<Awaited<R> | undefined> {
   return runOutsideInstanceContext(() => Instance.tryProvideActive(input))
 }
 
@@ -1226,7 +1249,8 @@ export const Instance: InstanceApi = {
       },
     }
   },
-  async provide<R>(input: { directory: string; init?: InstanceInit; fn: () => R }): Promise<R> {
+  async provide<R>(input: { directory: string; init?: InstanceInit; signal?: AbortSignal; fn: () => R }): Promise<R> {
+    input.signal?.throwIfAborted()
     // Normalize project directories once so cache keys and boundary checks stay stable.
     const directory = Filesystem.resolve(input.directory)
     assertNotDisposing(directory)
@@ -1284,6 +1308,7 @@ export const Instance: InstanceApi = {
     }
     assertInheritedLeaseOpen(inheritedLease, "provide an instance")
     for (;;) {
+      input.signal?.throwIfAborted()
       assertNotDisposing(directory)
       const entry = getOrCreateCacheEntry(directory, key)
       entry.lastAccess = ++accessSequence
@@ -1292,7 +1317,7 @@ export const Instance: InstanceApi = {
       // returned to the caller once. The context promise removes its failed
       // cache entry, and treating that self-removal as a concurrent cache
       // replacement here would otherwise rebuild the same entry forever.
-      const initial = await entry.context
+      const initial = await awaitWithAbort(entry.context, input.signal)
       assertProjectAdmissionOpen(key, entry, initial)
       if (input.init) {
         try {
@@ -1333,7 +1358,7 @@ export const Instance: InstanceApi = {
       // Pending teardowns and queued lifecycle turns get the entry to
       // themselves; admissions wait out the quiet period and re-validate.
       if (!lifecycleQuiet(entry)) {
-        await waitForLifecycleQuiet(entry)
+        await waitForLifecycleQuiet(entry, input.signal)
         continue
       }
       // Every check between here and lease registration is synchronous, so a
@@ -1343,6 +1368,7 @@ export const Instance: InstanceApi = {
       // caller `fn` can never block other admissions.
       const needsPreparation = contextPreparationRequired(entry, initial, input.init)
       if (!needsPreparation) assertContextHealthy(entry)
+      input.signal?.throwIfAborted()
       const lease = createLease(key, entry, !needsPreparation)
       try {
         if (needsPreparation) {
@@ -1424,9 +1450,11 @@ export const Instance: InstanceApi = {
   },
   async tryProvideActive<R>(input: {
     directory: string
+    signal?: AbortSignal
     fn: () => R
     projectDeletionAdmission?: ProjectDeletionAdmission
   }): Promise<Awaited<R> | undefined> {
+    input.signal?.throwIfAborted()
     const directory = Filesystem.resolve(input.directory)
     const deletionAdmission = input.projectDeletionAdmission
     if (deletionAdmission) {
@@ -1462,19 +1490,20 @@ export const Instance: InstanceApi = {
       return await input.fn()
     }
     while (!lifecycleQuiet(entry)) {
-      await waitForLifecycleQuiet(entry)
+      await waitForLifecycleQuiet(entry, input.signal)
       if (cache.get(key) !== entry) return undefined
     }
     if (cache.get(key) !== entry) return undefined
     if (entry.rollback) throw rollbackError(entry.rollback)
     if (!entry.initialized && !deletionAdmission) return undefined
-    const ctx = await entry.context
+    const ctx = await awaitWithAbort(entry.context, input.signal)
     if (deletionAdmission && ctx.project.id !== deletionAdmission.projectID) {
       throw new Error(`Project deletion admission does not own active entry ${ctx.project.id}`)
     }
     if (cache.get(key) !== entry) return undefined
     if (!lifecycleQuiet(entry)) return undefined
     if (entry.initialized) assertContextHealthy(entry)
+    input.signal?.throwIfAborted()
     const lease = createLease(key, entry, true)
     try {
       return await leaseContext.provide(lease, () => provideLeaseContext(lease, ctx, async () => input.fn()))

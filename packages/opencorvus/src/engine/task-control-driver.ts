@@ -41,10 +41,11 @@
  * projection and re-settles immediately.
  *
  * That upgrades liveness from "every producer remembered to signal" to a
- * bounded-delay guarantee: for any state change that enables an ingress — a
- * fact appended by *any* process, a crossed deadline, or an edge that was never
- * wired — some scan observes it within `heartbeatMilliseconds`. Edges remain
- * for latency; correctness no longer depends on their completeness.
+ * periodic discovery guarantee: a fact appended by any process, a crossed
+ * deadline, or an unwired edge is observed on a later heartbeat admission.
+ * Physical capacity and fault retry deadlines bound admission separately;
+ * unadmitted page items remain pending so a fast prefix cannot starve them.
+ * Edges retain immediate latency when capacity and retry policy permit it.
  */
 import { Log } from "@/util/log"
 
@@ -119,6 +120,9 @@ export type TaskControlDriverOptions = {
   heartbeatMilliseconds?: number
   /** One bounded source slice for the heartbeat. Without it the heartbeat never arms. */
   liveTasks?: () => TaskControlHeartbeatSlice
+  /** Canonical input revision, read in the owning Project. Changed facts may
+   * retry immediately; duplicate physical hints keep the fault deadline. */
+  inputRevision?: (taskID: string) => string
   now?: () => number
   setTimer?: (fn: () => void, delayMilliseconds: number) => { cancel(): void }
   /**
@@ -140,6 +144,8 @@ type Entry = {
    * after a fault-free window, so an alternating fault/success Task still
    * escalates instead of pinning at the initial delay. */
   lastFaultAt: number | undefined
+  retryNotBefore: number | undefined
+  inputRevision: string | undefined
 }
 
 /** The earlier of two optional instants. A scan pass that reports no wake does
@@ -173,12 +179,14 @@ export class TaskControlDriver {
   private readonly reenter: (fn: () => Promise<void>) => Promise<void>
   private readonly heartbeatDelay: number
   private readonly liveTasks: (() => TaskControlHeartbeatSlice) | undefined
+  private readonly inputRevision: ((taskID: string) => string) | undefined
   private readonly maximumConcurrentScans: number
   private readonly maximumPendingScans: number
   private readonly retireSettledEntries: boolean
   private activeScans = 0
   private readonly scanWaiters: Array<(admitted: boolean) => void> = []
   private heartbeat: { cancel(): void } | undefined
+  private heartbeatSlice: { source: TaskControlHeartbeatSlice; remaining: readonly string[] } | undefined
   private disposed = false
 
   constructor(options: TaskControlDriverOptions) {
@@ -193,6 +201,7 @@ export class TaskControlDriver {
     this.reenter = options.reenter ?? ((fn) => fn())
     this.heartbeatDelay = options.heartbeatMilliseconds ?? 30_000
     this.liveTasks = options.liveTasks
+    this.inputRevision = options.inputRevision
     this.maximumConcurrentScans = options.maximumConcurrentScans ?? Number.MAX_SAFE_INTEGER
     this.maximumPendingScans = options.maximumPendingScans ?? Number.MAX_SAFE_INTEGER
     this.retireSettledEntries = options.retireSettledEntries ?? false
@@ -238,10 +247,43 @@ export class TaskControlDriver {
     taskID: string,
     options?: { propagateFailure?: boolean; runWithActivationOwner?: <T>(run: () => Promise<T>) => Promise<T> },
   ): Promise<TaskControlRequestAdmission> {
+    const request = this.startRequest(taskID, options)
+    if (request.status !== "admitted") return request
+    return { status: "admitted", activated: await request.completion }
+  }
+
+  private startRequest(
+    taskID: string,
+    options?: { propagateFailure?: boolean; runWithActivationOwner?: <T>(run: () => Promise<T>) => Promise<T> },
+  ): { status: "admitted"; completion: Promise<number> } | { status: "coalesced" | "rejected" } {
     if (this.disposed) return { status: "rejected" }
     const entry = this.entry(taskID)
     entry.revision += 1
     if (entry.running) return { status: "coalesced" }
+    // An unreadable revision cannot prove a new fact. Pace that read failure
+    // too, instead of querying the failed database on every physical hint.
+    const awaitingUnreadableRevision =
+      this.inputRevision &&
+      entry.inputRevision === undefined &&
+      entry.retryNotBefore !== undefined &&
+      this.now() < entry.retryNotBefore
+    if (!awaitingUnreadableRevision) {
+      try {
+        if (this.readInputRevision(taskID, entry) !== entry.inputRevision) entry.retryNotBefore = undefined
+      } catch (error) {
+        this.arm(taskID, entry, this.penalize(entry))
+        log.error("Task-control input revision read faulted; re-armed under backoff", { taskID, error })
+        return {
+          status: "admitted",
+          completion: options?.propagateFailure ? Promise.reject(error) : Promise.resolve(0),
+        }
+      }
+    }
+    if (entry.retryNotBefore !== undefined && this.now() < entry.retryNotBefore) {
+      this.arm(taskID, entry, entry.retryNotBefore)
+      return { status: "coalesced" }
+    }
+    entry.retryNotBefore = undefined
     entry.running = true
     const admission = this.acquireScanSlot()
     if (typeof admission === "boolean") {
@@ -252,7 +294,7 @@ export class TaskControlDriver {
       }
       return {
         status: "admitted",
-        activated: await this.runOwnedScan(
+        completion: this.runOwnedScan(
           taskID,
           entry,
           options?.propagateFailure === true,
@@ -260,20 +302,16 @@ export class TaskControlDriver {
         ),
       }
     }
-    const admitted = await admission
-    if (!admitted) {
-      entry.running = false
-      if (this.retireSettledEntries && !entry.timer) this.entries.delete(taskID)
-      return { status: "rejected" }
-    }
     return {
       status: "admitted",
-      activated: await this.runOwnedScan(
-        taskID,
-        entry,
-        options?.propagateFailure === true,
-        options?.runWithActivationOwner,
-      ),
+      completion: admission.then((admitted) => {
+        if (!admitted) {
+          entry.running = false
+          if (this.retireSettledEntries && !entry.timer) this.entries.delete(taskID)
+          return 0
+        }
+        return this.runOwnedScan(taskID, entry, options?.propagateFailure === true, options?.runWithActivationOwner)
+      }),
     }
   }
 
@@ -287,6 +325,25 @@ export class TaskControlDriver {
       return await this.own(taskID, entry, propagateFailure, runWithActivationOwner)
     } finally {
       this.releaseScanSlot()
+    }
+  }
+
+  private readInputRevision(taskID: string, entry: Entry): string | undefined {
+    try {
+      return this.inputRevision?.(taskID)
+    } catch (error) {
+      entry.inputRevision = undefined
+      throw error
+    }
+  }
+
+  private inputChangedAfterScan(taskID: string, entry: Entry): boolean {
+    if (!this.inputRevision || entry.inputRevision === undefined) return false
+    try {
+      return this.readInputRevision(taskID, entry) !== entry.inputRevision
+    } catch (error) {
+      log.error("Task-control could not compare the failed scan input revision", { taskID, error })
+      return false
     }
   }
 
@@ -305,6 +362,7 @@ export class TaskControlDriver {
     this.disposed = true
     this.heartbeat?.cancel()
     this.heartbeat = undefined
+    this.heartbeatSlice = undefined
     for (const release of this.scanWaiters.splice(0)) release(false)
     for (const entry of this.entries.values()) {
       entry.timer?.cancel()
@@ -316,15 +374,9 @@ export class TaskControlDriver {
 
   /**
    * Level-triggered sweep. Requests run through the driver's shared concurrency
-   * bound so one Project cannot create an unbounded recovery fan-out, while
-   * independent Project drivers remain isolated. The sweep *awaits* them inside the
-   * re-entered project context: `reenter` provides an instance lease exactly
-   * for the duration of its callback, and a scan detached past that boundary
-   * keeps the closed lease in its async context — every later database access
-   * then faults with "closed instance cache lease" on each tick, which is how
-   * the heartbeat silently broke the very liveness it exists to guarantee.
-   * The next tick therefore arms after the sweep settles; under long Turns the
-   * period stretches, which costs backstop latency, never correctness.
+   * bound. Each admitted scan owns a separate re-entered Project scope until
+   * completion. Discovery awaits admission only, so a slow Turn cannot hold a
+   * source page or the next heartbeat behind its completion.
    */
   private armHeartbeat(delay = this.heartbeatDelay): void {
     if (this.disposed || !this.liveTasks) return
@@ -333,19 +385,29 @@ export class TaskControlDriver {
       this.heartbeat = undefined
       let hasMore = false
       void this.reenter(async () => {
-        const slice = this.liveTasks!()
-        const admissions = await Promise.all(
-          slice.taskIDs.map((taskID) =>
-            this.requestWithAdmission(taskID).catch((error) => {
-              log.error("Task-control heartbeat request faulted", { taskID, error })
-              return { status: "rejected" } as const
-            }),
-          ),
-        )
-        const rejected = admissions.some((admission) => admission.status === "rejected")
-        if (!rejected) slice.commit()
-        hasMore = rejected || slice.hasMore
+        if (this.heartbeatSlice) return
+        const source = this.liveTasks!()
+        this.heartbeatSlice = { source, remaining: source.taskIDs }
       })
+        .then(async () => {
+          if (this.disposed) return
+          const slice = this.heartbeatSlice
+          if (!slice) return
+          const admissions = await Promise.all(
+            slice.remaining.map((taskID) =>
+              this.hintWithOwner(taskID).catch((error) => {
+                log.error("Task-control heartbeat request faulted", { taskID, error })
+                return { status: "rejected" } as const
+              }),
+            ),
+          )
+          slice.remaining = slice.remaining.filter((_taskID, index) => admissions[index]!.status === "rejected")
+          if (slice.remaining.length === 0) {
+            slice.source.commit()
+            this.heartbeatSlice = undefined
+          }
+          hasMore = slice.remaining.length > 0 || slice.source.hasMore
+        })
         .then(() => this.armHeartbeat(hasMore ? this.minimumWakeDelay : this.heartbeatDelay))
         .catch((error) => {
           log.error("Task-control heartbeat sweep faulted", { error })
@@ -354,39 +416,32 @@ export class TaskControlDriver {
     }, delay)
   }
 
-  /** Run one fixed heartbeat slice during Project bootstrap, then leave every
-   * continuation on the ordinary bounded timer. */
+  private hintWithOwner(taskID: string): Promise<{ status: "admitted" | "coalesced" | "rejected" }> {
+    let report!: (result: { status: "admitted" | "coalesced" | "rejected" }) => void
+    const admission = new Promise<{ status: "admitted" | "coalesced" | "rejected" }>((resolve) => {
+      report = resolve
+    })
+    void this.reenter(async () => {
+      const request = this.startRequest(taskID)
+      report({ status: request.status })
+      if (request.status === "admitted") await request.completion
+    })
+      .catch((error) => {
+        log.error("Task-control independent scan faulted", { taskID, error })
+      })
+      .finally(() => {
+        // Re-entry may be declined when the Project has already closed.
+        report({ status: "rejected" })
+      })
+    return admission
+  }
+
+  /** Bootstrap installs discovery. A physical Turn starts after Project open,
+   * under its own serving lease, so it cannot hold initialization hostage. */
   async bootstrapHeartbeatSlice(): Promise<number> {
     if (this.disposed || !this.liveTasks) return 0
-    this.heartbeat?.cancel()
-    this.heartbeat = undefined
-    let hasMore = false
-    let activated = 0
-    try {
-      // The bootstrap caller already owns the Project Instance lease.
-      // Re-entering here would wait on that same initialization boundary and
-      // deadlock Project open; only timer-fired sweeps need the adapter.
-      const slice = this.liveTasks!()
-      const admissions = await Promise.all(
-        slice.taskIDs.map((taskID) =>
-          this.requestWithAdmission(taskID).catch((error) => {
-            log.error("Task-control bootstrap request faulted", { taskID, error })
-            return { status: "rejected" } as const
-          }),
-        ),
-      )
-      for (const admission of admissions) {
-        if (admission.status === "admitted") activated += admission.activated
-      }
-      const rejected = admissions.some((admission) => admission.status === "rejected")
-      if (!rejected) slice.commit()
-      hasMore = rejected || slice.hasMore
-      return activated
-    } finally {
-      // A read fault may fail the explicit bootstrap caller, but it must not
-      // silently disarm the periodic liveness backstop.
-      this.armHeartbeat(hasMore ? this.minimumWakeDelay : this.heartbeatDelay)
-    }
+    this.armHeartbeat(this.minimumWakeDelay)
+    return 0
   }
 
   private entry(taskID: string): Entry {
@@ -399,6 +454,8 @@ export class TaskControlDriver {
       timerAt: undefined,
       failures: 0,
       lastFaultAt: undefined,
+      retryNotBefore: undefined,
+      inputRevision: undefined,
     }
     this.entries.set(taskID, created)
     return created
@@ -444,9 +501,10 @@ export class TaskControlDriver {
         this.decayFailures(entry)
         let result: TaskControlScanResult
         try {
+          entry.inputRevision = this.readInputRevision(taskID, entry)
           result = await this.scan(taskID, { pass, ...(runWithActivationOwner ? { runWithActivationOwner } : {}) })
         } catch (error) {
-          wakeAt = minDefined(wakeAt, this.penalize(entry))
+          wakeAt = this.penalize(entry)
           log.error("Task-control scan faulted; re-armed under backoff", {
             taskID,
             pass,
@@ -457,12 +515,18 @@ export class TaskControlDriver {
             failed = true
             failure = error
           }
+          if (pass + 1 < this.maxPasses && this.inputChangedAfterScan(taskID, entry)) {
+            entry.retryNotBefore = undefined
+            wakeAt = undefined
+            continue
+          }
           break
         }
         activated += result.activated
         wakeAt = minDefined(wakeAt, result.wakeAt)
         if (result.noProgress) {
-          wakeAt = minDefined(wakeAt, this.penalize(entry))
+          if (pass + 1 < this.maxPasses && this.inputChangedAfterScan(taskID, entry)) continue
+          wakeAt = this.penalize(entry)
           log.warn("Task-control scan made no reducible progress; paced under backoff", {
             taskID,
             pass,
@@ -475,7 +539,7 @@ export class TaskControlDriver {
           // A fixpoint that will not settle is a non-decreasing measure, which
           // is the same liveness fault as a scan that cannot reduce. Pacing it
           // at the minimum delay would run `maxPasses` full scans every 25ms.
-          wakeAt = minDefined(wakeAt, this.penalize(entry))
+          wakeAt = this.penalize(entry)
           log.warn("Task-control fixpoint did not settle; paced under backoff", {
             taskID,
             passes: this.maxPasses,
@@ -499,7 +563,8 @@ export class TaskControlDriver {
     entry.failures += 1
     entry.lastFaultAt = this.now()
     const exponent = Math.min(entry.failures - 1, 30)
-    return this.now() + Math.min(this.initialBackoff * 2 ** exponent, this.maximumBackoff)
+    entry.retryNotBefore = this.now() + Math.min(this.initialBackoff * 2 ** exponent, this.maximumBackoff)
+    return entry.retryNotBefore
   }
 
   /**
@@ -521,7 +586,10 @@ export class TaskControlDriver {
     entry.timer = undefined
     entry.timerAt = undefined
     if (this.disposed || wakeAt === undefined) return
-    const delay = Math.min(Math.max(wakeAt - this.now(), this.minimumWakeDelay), this.maximumWakeDelay)
+    const delay = Math.max(
+      Math.min(Math.max(wakeAt - this.now(), this.minimumWakeDelay), this.maximumWakeDelay),
+      (entry.retryNotBefore ?? 0) - this.now(),
+    )
     entry.timerAt = this.now() + delay
     entry.timer = this.setTimer(() => {
       entry.timer = undefined

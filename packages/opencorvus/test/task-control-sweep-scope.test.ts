@@ -20,6 +20,14 @@ afterEach(async () => {
   await resetMemoryDatabase()
 })
 
+async function waitForRecovery(ready: () => boolean) {
+  const deadline = Date.now() + 5000
+  while (!ready()) {
+    if (Date.now() >= deadline) throw new Error("Task recovery did not reach its expected activation")
+    await Bun.sleep(5)
+  }
+}
+
 function seedTask(input: { rootSessionID: string; title: string; terminal?: boolean; postTerminalIngress?: boolean }) {
   const taskID = Identifier.ascending("task")
   const now = Date.now()
@@ -97,6 +105,7 @@ describe("Task-control sweep scope", () => {
         })
 
         await reconcileTaskControlPlane()
+        await waitForRecovery(() => activated.length === 1)
 
         // A terminal Task whose history is settled absorbs every further fact,
         // so scanning it can only cost a full evidence read per heartbeat. It
@@ -142,6 +151,7 @@ describe("Task-control sweep scope", () => {
         // find it: this is the recovery path after the acceptance-time edge
         // was lost to a crash, where no direct request will ever arrive.
         await reconcileTaskControlPlane()
+        await waitForRecovery(() => activatedIngressSources.length === 1)
 
         expect({
           swept: taskControlDriverSnapshot().map((entry) => entry.taskID),
@@ -247,19 +257,21 @@ describe("Task-control sweep scope", () => {
         })
 
         await reconcileTaskControlPlane()
+        await waitForRecovery(() => activatedSources.length === 1)
 
         expect({
           swept: taskControlDriverSnapshot()
             .map((entry) => entry.taskID)
             .toSorted(),
           activatedSources,
-          equalBoundaryDisposition: Database.use((db) =>
-            db
-              .select({ disposition: EngineArtifactTable.payload })
-              .from(EngineArtifactTable)
-              .where(eq(EngineArtifactTable.kind, "task_root_ingress_disposition"))
-              .all()
-              .find((row) => row.disposition?.ingress_id === equalIngressID)?.disposition.disposition,
+          equalBoundaryDisposition: Database.use(
+            (db) =>
+              db
+                .select({ disposition: EngineArtifactTable.payload })
+                .from(EngineArtifactTable)
+                .where(eq(EngineArtifactTable.kind, "task_root_ingress_disposition"))
+                .all()
+                .find((row) => row.disposition?.ingress_id === equalIngressID)?.disposition.disposition,
           ),
         }).toEqual({
           // Equality stays a conservative discovery boundary. The exact

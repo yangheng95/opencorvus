@@ -369,6 +369,7 @@ export type GlobalMissionProcessRecoveryCandidate = {
  */
 export function listGlobalMissionProcessRecoveryCandidates(input: {
   scopeProjectID?: string
+  sessionID?: string
   afterSessionID?: string
   limit: number
 }): GlobalMissionProcessRecoveryCandidate[] {
@@ -383,6 +384,7 @@ export function listGlobalMissionProcessRecoveryCandidates(input: {
         and(
           eq(SessionTable.kind, "mission"),
           input.scopeProjectID ? eq(SessionTable.project_id, input.scopeProjectID) : undefined,
+          input.sessionID ? eq(SessionTable.id, input.sessionID) : undefined,
           input.afterSessionID ? sql`${SessionTable.id} > ${input.afterSessionID}` : undefined,
           sql`json_extract(${SessionTable.metadata}, '$.mission.id') IS NOT NULL`,
           sql`(

@@ -119,6 +119,62 @@ async function executeAndRecover(
 }
 
 describe("schedule Tool exact lost-response recovery", () => {
+  test("a paused manual Tool retries the same persisted occurrence at a later admission time", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const session = await Session.create({ kind: "root", title: "Paused manual recovery" })
+        const automation = await AutomationService.create({
+          name: "paused exact Tool retry",
+          target: { scope: "project", projectIds: [Instance.project.id] },
+          recurrence: "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY",
+          prompt: "retry exact manual input",
+        })
+        await AutomationService.update({ id: automation.id, status: "paused" })
+        const request = await persistedScheduleRequest(session.id, { action: "run", automationId: automation.id })
+        const context = {
+          sessionID: session.id,
+          projectID: Instance.project.id,
+          occurrence: {
+            sessionID: session.id,
+            messageID: request.part.messageID,
+            toolPartID: request.part.id,
+            toolCallID: request.part.callID,
+            toolName: "schedule" as const,
+          },
+        }
+        {
+          using _failure = AutomationService.TestHooks.installBeforeRunReservation(() => {
+            throw new Error("temporary reservation failure")
+          })
+          await expect(executeScheduleToolInput(request.input, context)).rejects.toThrow(
+            "temporary reservation failure",
+          )
+        }
+        const retry = AutomationService.listFireHistory(automation.id).find((entry) => entry.origin === "manual_tool")!
+        using _clock = AutomationService.TestHooks.installClaimClock(() => retry.retryAt!)
+        using _wake = AutomationService.TestHooks.installWakeExecutor(async (input) => ({
+          sessionID: input.sessionID!,
+          messageID: input.messageID!,
+          activation: Promise.resolve({ owner: new AbortController().signal }),
+          completion: Promise.resolve({ ok: true as const }),
+        }))
+        const result = await executeScheduleToolInput(request.input, context)
+        expect(await recoverScheduledToolPart(request.part)).toEqual(result)
+        expect(
+          AutomationService.listFireHistory(automation.id).find((entry) => entry.origin === "manual_tool"),
+        ).toMatchObject({
+          fireId: retry.fireId,
+          scheduledDueAt: retry.scheduledDueAt,
+          state: "succeeded",
+          attemptCount: 2,
+        })
+        expect(AutomationService.list().find((entry) => entry.id === automation.id)).toMatchObject({ status: "paused" })
+      },
+    })
+  }, 30_000)
+
   test("the real Session Wait Tool and outer recovery replay one exact result", async () => {
     await using project = await memoryProject()
     await Instance.provide({

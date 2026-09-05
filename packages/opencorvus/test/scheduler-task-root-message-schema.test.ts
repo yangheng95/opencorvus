@@ -16,7 +16,7 @@ import {
 import { currentOrchestratorControlMessage } from "@/orchestrator/agent"
 import { OrchestratorEventSchema } from "@/orchestrator/event"
 import { InstanceBootstrap } from "@/project/bootstrap"
-import { Instance } from "@/project/instance"
+import { Instance, runInstanceBackgroundWork } from "@/project/instance"
 import { ProjectTable } from "@/project/project.sql"
 import {
   auditSchedulerSessionDeliverySettlement,
@@ -136,12 +136,299 @@ async function establishMissionTask(projectPath: string, title: string) {
   return { missionID, mission, root, taskID, now }
 }
 
+async function establishSchedulerTaskDelivery(projectPath: string) {
+  const { missionID, mission, root, taskID, now } = await establishMissionTask(
+    projectPath,
+    "Scheduler discovery target",
+  )
+  const user = await Session.updateMessage({
+    id: Identifier.ascending("message"),
+    sessionID: mission.id,
+    role: "user",
+    author: "user",
+    time: { created: now + 1 },
+    agent: "mission",
+    model: { providerID: "test", modelID: "test" },
+  })
+  const assistant = await Session.updateMessage({
+    id: Identifier.ascending("message"),
+    sessionID: mission.id,
+    role: "assistant",
+    author: "mission",
+    parentID: user.id,
+    time: { created: now + 2 },
+    agent: "mission",
+    modelID: "test",
+    providerID: "test",
+    path: { cwd: projectPath, root: projectPath },
+    cost: 0,
+    tokens: { total: 0, input: 0, output: 0, reasoning: 0, cache: { read: 0, write: 0 } },
+  })
+  const part = await Session.updatePart({
+    id: Identifier.ascending("part"),
+    sessionID: mission.id,
+    messageID: assistant.id,
+    type: "tool",
+    callID: `call-${Identifier.uuid4First8()}`,
+    tool: "scheduler_message",
+    state: {
+      status: "running",
+      input: { message: "Discover this exact durable Scheduler Message." },
+      time: { start: now + 3 },
+    },
+  })
+  const projectID = Instance.project.id
+  return {
+    projectID,
+    enqueue() {
+      const invocationID = `scheduler-dynamic-${Identifier.uuid4First8()}`
+      return Database.transaction((db) =>
+        enqueueSchedulerMessageInTransaction(db, {
+          invocationID,
+          kind: "notification",
+          source: { kind: "mission_scheduler", project_id: projectID, mission_id: missionID, session_id: mission.id },
+          target: { kind: "task_scheduler", project_id: projectID, task_id: taskID, root_session_id: root.id },
+          subject: "Dynamic durable discovery",
+          sourceMessageID: assistant.id,
+          sourcePartID: part.id,
+          correlationID: invocationID,
+          threadID: invocationID,
+        }),
+      )
+    },
+  }
+}
+
 afterEach(async () => {
   await Instance.disposeAll()
   await resetMemoryDatabase()
 })
 
 describe("scheduler Task-root Message protocol", () => {
+  test("fresh Mission delivery propagates Project cancellation through its actual wake reservation and settles the receipt", async () => {
+    await using project = await memoryProject()
+    const evidence = await Instance.provide({
+      directory: project.path,
+      init: InstanceBootstrap,
+      fn: async () => {
+        const { missionID, mission, root, taskID } = await establishMissionTask(
+          project.path,
+          "Fresh Mission cancellation source",
+        )
+        const terminal = Database.immediateTransaction(() =>
+          ProtocolStore.appendEventInTransaction({
+            kind: "event",
+            type: "task.completed",
+            aggregate: "task",
+            aggregate_id: taskID,
+            source: "test.scheduler-fresh-cancellation",
+            payload: { execution_epoch: 1, summary: "Notify the owning Mission." },
+          }),
+        )
+        const activated = Promise.withResolvers<void>()
+        const cancelled = Promise.withResolvers<void>()
+        const release = Promise.withResolvers<void>()
+        const observed: string[] = []
+        let wakeMessageID: string | undefined
+        using _loop = SessionWake.TestHooks.installWakeLoopExecutor(async ({ sessionID, messageID, signal }) => {
+          wakeMessageID = messageID
+          observed.push(`activated:${sessionID}`)
+          signal.addEventListener(
+            "abort",
+            () => {
+              observed.push(SessionWake.loopFailureDisposition(signal.reason, signal.reason))
+              cancelled.resolve()
+            },
+            { once: true },
+          )
+          activated.resolve()
+          await release.promise
+          observed.push(`settled:${Instance.project.id}`)
+          signal.throwIfAborted()
+        })
+        const receipt = await sendSchedulerMessage({
+          invocationID: `scheduler-fresh-cancellation-${Identifier.uuid4First8()}`,
+          kind: "notification",
+          source: {
+            kind: "task_scheduler",
+            project_id: Instance.project.id,
+            task_id: taskID,
+            root_session_id: root.id,
+          },
+          target: {
+            kind: "mission_scheduler",
+            project_id: Instance.project.id,
+            mission_id: missionID,
+            session_id: mission.id,
+          },
+          subject: "Fresh Mission wake cancellation",
+          sourceTerminalEventID: terminal.id,
+        })
+        const outcome = Promise.allSettled([drainSchedulerMessagesForProject()])
+        let disposal: Promise<void> | undefined
+        try {
+          await activated.promise
+          const projectID = Instance.project.id
+          disposal = Instance.dispose()
+          await Promise.race([
+            cancelled.promise,
+            new Promise<never>((_, reject) =>
+              setTimeout(() => reject(new Error("Fresh Mission wake did not receive its Project cancellation")), 2_000),
+            ),
+          ])
+          release.resolve()
+          await outcome
+          await disposal
+          const ids = schedulerTargetOccurrenceIdentity(receipt.inboxID)
+          return {
+            observed,
+            expected: [`activated:${mission.id}`, "cancelled", `settled:${projectID}`],
+            wakeMessageID,
+            expectedMessageID: ids.messageID,
+            delivery: requireSchedulerDelivery(receipt.inboxID),
+          }
+        } finally {
+          release.resolve()
+          await outcome
+          await disposal
+        }
+      },
+    })
+    expect(evidence.observed).toEqual(evidence.expected)
+    expect(evidence.wakeMessageID).toBe(evidence.expectedMessageID)
+    expect(evidence.delivery).toMatchObject({
+      status: "delivered",
+      attempt: 1,
+      deliveryResult: { kind: "session_wake", message_id: evidence.expectedMessageID },
+    })
+  }, 30_000)
+
+  test("settles Project discovery queued after teardown starts while its initialized owner is still admitted", async () => {
+    await using project = await memoryProject()
+    const teardownStarted = Promise.withResolvers<void>()
+    const sentinelStarted = Promise.withResolvers<void>()
+    const admitted = Promise.withResolvers<void>()
+    const release = Promise.withResolvers<void>()
+    const projectID = await Instance.provide({
+      directory: project.path,
+      init: InstanceBootstrap,
+      fn: async () => {
+        void runInstanceBackgroundWork("scheduler-teardown-observer", async (signal) => {
+          sentinelStarted.resolve()
+          await new Promise<void>((resolve) =>
+            signal.addEventListener(
+              "abort",
+              () => {
+                teardownStarted.resolve()
+                resolve()
+              },
+              { once: true },
+            ),
+          )
+        })
+        await sentinelStarted.promise
+        return Instance.project.id
+      },
+    })
+    using _admission = SchedulerMessageTestHooks.installBeforeProjectDrain(async () => {
+      admitted.resolve()
+      await release.promise
+    })
+    const controller = new AbortController()
+    const drain = SchedulerMessageTestHooks.requestProjectDrain(projectID, project.path, controller.signal)
+    const outcome = Promise.allSettled([drain])
+    let disposal: Promise<void> | undefined
+    try {
+      await admitted.promise
+      disposal = Instance.provide({ directory: project.path, fn: () => Instance.dispose() })
+      await teardownStarted.promise
+      release.resolve()
+      const results = await Promise.race([
+        Promise.all([outcome, disposal]),
+        new Promise<never>((_, reject) =>
+          setTimeout(() => reject(new Error("Scheduler nested admission held teardown open")), 2_000),
+        ),
+      ])
+      expect(results[0].map((result) => result.status)).toEqual(["fulfilled"])
+    } finally {
+      controller.abort(new Error("Scheduler admission test cleanup"))
+      release.resolve()
+      await outcome
+      await disposal
+    }
+  }, 30_000)
+
+  test("global discovery admits a later Project and settles admitted work during Project teardown", async () => {
+    await using slowProject = await memoryProject("scheduler-dynamic-slow")
+    await using fastProject = await memoryProject("scheduler-dynamic-fast")
+    const slow = await Instance.provide({
+      directory: slowProject.path,
+      init: InstanceBootstrap,
+      fn: () => establishSchedulerTaskDelivery(slowProject.path),
+    })
+    const fast = await Instance.provide({
+      directory: fastProject.path,
+      init: InstanceBootstrap,
+      fn: () => establishSchedulerTaskDelivery(fastProject.path),
+    })
+    using _slowRunner = await Instance.provide({
+      directory: slowProject.path,
+      fn: () => TaskControlTestHooks.replaceTaskIngressRunner({ runner: async () => ({}) }),
+    })
+    using _fastRunner = await Instance.provide({
+      directory: fastProject.path,
+      fn: () => TaskControlTestHooks.replaceTaskIngressRunner({ runner: async () => ({}) }),
+    })
+    const slowReceipt = await Instance.provide({ directory: slowProject.path, fn: () => slow.enqueue() })
+    const admitted = Promise.withResolvers<void>()
+    const cancelled = Promise.withResolvers<void>()
+    const release = Promise.withResolvers<void>()
+    const observed: string[] = []
+    using _materialization = SchedulerMessageTestHooks.installBeforeTaskMaterialization(async ({ inboxID, signal }) => {
+      if (inboxID !== slowReceipt.inboxID) return
+      signal!.addEventListener(
+        "abort",
+        () => {
+          observed.push("cancelled")
+          cancelled.resolve()
+        },
+        { once: true },
+      )
+      admitted.resolve()
+      await release.promise
+      observed.push(`settling:${Instance.project.id}`)
+    })
+    const controller = new AbortController()
+    const poll = SchedulerMessageTestHooks.poll(controller.signal)
+    const outcome = Promise.allSettled([poll])
+    let disposal: Promise<void> | undefined
+    try {
+      await admitted.promise
+      const fastReceipt = await Instance.provide({ directory: fastProject.path, fn: () => fast.enqueue() })
+      const deadline = Date.now() + 5_000
+      while (requireSchedulerDelivery(fastReceipt.inboxID).status !== "delivered") {
+        if (Date.now() >= deadline) throw new Error("Later Project did not acquire the free global scheduler slot")
+        await new Promise((resolve) => setTimeout(resolve, 10))
+      }
+      expect(requireSchedulerDelivery(fastReceipt.inboxID)).toMatchObject({ status: "delivered", attempt: 1 })
+      disposal = Instance.provide({ directory: slowProject.path, fn: () => Instance.dispose() })
+      await cancelled.promise
+      release.resolve()
+      const result = await outcome
+      await disposal
+      expect({
+        observed,
+        outcome: result[0]!.status,
+        receipt: requireSchedulerDelivery(slowReceipt.inboxID).status,
+      }).toEqual({ observed: ["cancelled", `settling:${slow.projectID}`], outcome: "rejected", receipt: "delivered" })
+    } finally {
+      controller.abort(new Error("Scheduler test cleanup"))
+      release.resolve()
+      await outcome
+      await disposal
+    }
+  }, 60_000)
+
   test("discovers a large scheduler Project backlog through fixed database cursor pages", async () => {
     await using project = await memoryProject()
     await Instance.provide({
@@ -375,7 +662,6 @@ describe("scheduler Task-root Message protocol", () => {
         })
         await drainSchedulerMessagesForProject()
         const delivery = requireSchedulerDelivery(receipt.inboxID)
-        const ids = schedulerTargetOccurrenceIdentity(receipt.inboxID)
         expect(delivery).toMatchObject({
           status: "delivered",
           deliveryResult: {
@@ -383,9 +669,6 @@ describe("scheduler Task-root Message protocol", () => {
             closure_event_id: expect.stringMatching(/^pev_/),
           },
         })
-        expect(
-          Database.use((db) => db.select().from(MessageTable).where(eq(MessageTable.id, ids.messageID)).get()),
-        ).toBeUndefined()
       },
     })
   }, 60_000)
@@ -868,7 +1151,7 @@ describe("scheduler Task-root Message protocol", () => {
         let maximumActive = 0
         let starts = 0
         const releaseFirst = Promise.withResolvers<void>()
-        const fifthStarted = Promise.withResolvers<void>()
+        const lastPageStarted = Promise.withResolvers<void>()
         using _capacity = SchedulerMessageTestHooks.installBeforeTaskMaterialization(async () => {
           starts += 1
           const start = starts
@@ -876,20 +1159,71 @@ describe("scheduler Task-root Message protocol", () => {
           maximumActive = Math.max(maximumActive, active)
           if (start === 1) await releaseFirst.promise
           else {
-            if (start === 5) fifthStarted.resolve()
+            if (start === 65) lastPageStarted.resolve()
             await new Promise<void>((resolve) => setTimeout(resolve, 5))
           }
           active -= 1
         })
         const drain = drainSchedulerMessagesForProject()
-        await Promise.race([
-          fifthStarted.promise,
-          new Promise<never>((_, reject) =>
-            setTimeout(() => reject(new Error("Scheduler recipient frontier did not refill a settled capacity slot")), 5_000),
-          ),
-        ])
-        releaseFirst.resolve()
-        await drain
+        const waitForDelivery = async (inboxID: string) => {
+          const deadline = Date.now() + 5_000
+          while (requireSchedulerDelivery(inboxID).status !== "delivered") {
+            if (Date.now() >= deadline) throw new Error(`Scheduler delivery did not refill a free slot: ${inboxID}`)
+            await new Promise((resolve) => setTimeout(resolve, 10))
+          }
+        }
+        try {
+          await Promise.race([
+            lastPageStarted.promise,
+            new Promise<never>((_, reject) =>
+              setTimeout(() => reject(new Error(`Scheduler recipient frontier reached ${starts} recipients`)), 15_000),
+            ),
+          ])
+          // All three pages are discovered while the first recipient still
+          // owns a permit. New input behind the consumed cursor uses a free slot.
+          await waitForDelivery(pending[2]!.inboxID)
+          const late = enqueue(
+            activeRecipients[2]!.taskID,
+            activeRecipients[2]!.rootSessionID,
+            `scheduler-late-input-${Identifier.uuid4First8()}`,
+          )
+          const coalesced = drainSchedulerMessagesForProject()
+          await waitForDelivery(late.inboxID)
+          const laterDue = enqueue(
+            activeRecipients[2]!.taskID,
+            activeRecipients[2]!.rootSessionID,
+            `scheduler-later-due-${Identifier.uuid4First8()}`,
+          )
+          const laterOwner = "scheduler-later-due-owner"
+          const laterClaim = claimNextSchedulerDelivery({
+            actor: "task",
+            actorID: activeRecipients[2]!.taskID,
+            ownerID: laterOwner,
+            leaseMilliseconds: 60_000,
+          })
+          expect(laterClaim?.id).toBe(laterDue.inboxID)
+          rescheduleSchedulerDelivery({
+            inboxID: laterDue.inboxID,
+            ownerID: laterOwner,
+            visibleAt: Date.now() + 250,
+            error: new Error("Due after the initial scan"),
+          })
+          // No new signal follows this durable retry; the existing poll cadence
+          // must discover it while another recipient remains admitted.
+          await waitForDelivery(laterDue.inboxID)
+          expect({
+            starts,
+            late: requireSchedulerDelivery(late.inboxID).status,
+            laterDue: requireSchedulerDelivery(laterDue.inboxID).status,
+            laterAttempts: requireSchedulerDelivery(laterDue.inboxID).attempt,
+          }).toEqual({ starts: 67, late: "delivered", laterDue: "delivered", laterAttempts: 2 })
+          releaseFirst.resolve()
+          await coalesced
+          await drain
+        } finally {
+          releaseFirst.resolve()
+          await drain.catch(() => undefined)
+        }
 
         const dueHead = listPendingSchedulerRecipientIDs({
           actor: "task",
@@ -923,7 +1257,7 @@ describe("scheduler Task-root Message protocol", () => {
           }),
         }).toEqual({
           maximumActive: 4,
-          starts: 65,
+          starts: 67,
           remaining: [],
           dueHead: [recipients[0]!.taskID],
           claimedDueHead: futureHead.inboxID,

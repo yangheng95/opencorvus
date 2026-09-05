@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Current scheduling razor remediation: [`2026-09-05-scheduling-razor-remediation.md`](records/2026-09/2026-09-05-scheduling-razor-remediation.md).
+
 Current scheduling razor re-audit: [`2026-09-05-scheduling-razor-reaudit.md`](records/2026-09/2026-09-05-scheduling-razor-reaudit.md).
 
 Current technical direction audit and remediation: [`2026-09-05-technical-direction-remediation.md`](records/2026-09/2026-09-05-technical-direction-remediation.md).

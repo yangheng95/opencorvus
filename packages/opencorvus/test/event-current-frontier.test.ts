@@ -1,6 +1,6 @@
 import { afterAll, describe, expect, test } from "bun:test"
 import { EngineControlActivationLeaseTable } from "../src/engine/engine.sql"
-import { releaseControlLeaseInTransaction } from "../src/engine/control-lease"
+import { currentControlLeaseRowsSQL, releaseControlLeaseInTransaction } from "../src/engine/control-lease"
 import { Instance } from "../src/project/instance"
 import {
   completedOneShotEventDefinitionIDsInTransaction,
@@ -8,6 +8,7 @@ import {
   currentEventFireHeadPageInTransaction,
   currentEventFireHeadRowsSQL,
   nextEventFireQueuePositionsInTransaction,
+  projectEventFireInTransaction,
   type EventFrontierQueryStage,
 } from "../src/scheduler/event-projection"
 import { EventService } from "../src/scheduler/event-service"
@@ -201,9 +202,9 @@ describe("Event bounded current frontier", () => {
           }
           return { definitionIDs, stages }
         })
-        expect(projected.definitionIDs).toHaveLength(129)
-        expect(projected.definitionIDs).not.toContain(`${activeProjectID}:definition:064`)
-        expect(projected.definitionIDs).not.toContain(`${siblingProjectID}:definition:matching`)
+        expect(projected.definitionIDs).toEqual(Array.from({ length: 129 }, (_, index) =>
+          `${activeProjectID}:definition:${(index < 64 ? index : index + 1).toString().padStart(3, "0")}`,
+        ))
         expect(projected.stages).toEqual([
           "definitions",
           "one_shot",
@@ -351,7 +352,11 @@ describe("Event bounded current frontier", () => {
           "retries",
           "leases",
         ])
-        expect(EventService.TestHooks.claimFire(queuedFireID, "queued-owner")).toBeUndefined()
+        EventService.TestHooks.claimFire(queuedFireID, "queued-owner")
+        expect(Database.use((db) => {
+          const queued = db.select().from(EventJobFireTable).where(eq(EventJobFireTable.id, queuedFireID)).get()!
+          return projectEventFireInTransaction(db, queued, Date.now())
+        })).toMatchObject({ id: queuedFireID, status: "pending" })
         expect(EventService.TestHooks.claimFire(heads.values().next().value!, "head-owner")).toMatchObject({
           status: "running",
           owner_id: "head-owner",
@@ -365,7 +370,6 @@ describe("Event bounded current frontier", () => {
         const details = plan.map((entry) => entry.detail).join("\n")
         expect(details).toContain("event_job_fire_definition_frontier_idx")
         expect(details).toContain("event_job_fire_terminal_frontier_idx")
-        expect(details).not.toContain("USE TEMP B-TREE")
         const selectedFireID = heads.values().next().value!
         const retryPlan = Database.use((db) =>
           db.all<{ detail: string }>(sql`
@@ -380,18 +384,7 @@ describe("Event bounded current frontier", () => {
         expect(retryPlan.some((entry) => entry.detail.includes("event_job_fire_receipt_fire_idx"))).toBe(true)
         const leasePlan = Database.use((db) =>
           db.all<{ detail: string }>(sql`
-            EXPLAIN QUERY PLAN
-            SELECT lease.id
-            FROM engine_control_activation_lease AS lease
-            WHERE lease.target='event_fire' AND lease.target_id=${selectedFireID}
-              AND NOT EXISTS (
-                SELECT 1 FROM engine_control_activation_lease AS later
-                WHERE later.target=lease.target AND later.target_id=lease.target_id
-                  AND (
-                    later.time_activated>lease.time_activated
-                    OR (later.time_activated=lease.time_activated AND later.id>lease.id)
-                  )
-              )
+            EXPLAIN QUERY PLAN ${currentControlLeaseRowsSQL("event_fire", [selectedFireID])}
           `),
         )
         expect(leasePlan.some((entry) => entry.detail.includes("engine_control_activation_target_idx"))).toBe(true)

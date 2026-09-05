@@ -1,10 +1,8 @@
 import { createHash } from "node:crypto"
 import { Database, and, desc, eq, sql } from "@/storage/db"
-import {
-  AutomationFireFrontierTable,
-  AutomationFireTable,
-  AutomationTable,
-} from "./automation.sql"
+import { AutomationFireFrontierTable, AutomationFireTable, AutomationTable } from "./automation.sql"
+import { projectAutomationFireInTransaction } from "./automation-projection"
+import { Recurrence } from "./recurrence"
 
 export function scheduledAutomationFireID(revisionID: string, scheduledDueAt: number): string {
   const digest = createHash("sha256")
@@ -39,13 +37,10 @@ export function publishAutomationFireFrontierInTransaction(
   },
 ): typeof AutomationFireFrontierTable.$inferSelect {
   assertAvailableAt(input.availableAt)
-  if (input.definition.status !== "active") {
+  if (input.definition.status !== "active" && input.fire.origin === "scheduled") {
     throw new Error(`Paused Automation revision ${input.definition.id} cannot own a Fire frontier`)
   }
-  if (
-    input.fire.automation_revision_id !== input.definition.id ||
-    input.fire.scheduled_due_at > input.availableAt
-  ) {
+  if (input.fire.automation_revision_id !== input.definition.id || input.fire.scheduled_due_at > input.availableAt) {
     throw new Error(`Automation Fire ${input.fire.id} cannot own frontier ${input.definition.definition_id}`)
   }
   db.insert(AutomationFireFrontierTable)
@@ -96,21 +91,20 @@ export function deferAutomationFireFrontierInTransaction(
     .run()
 }
 
-export function clearAutomationFireFrontierInTransaction(
-  db: Database.TxOrDb,
-  definitionID: string,
-): void {
-  db.delete(AutomationFireFrontierTable)
-    .where(eq(AutomationFireFrontierTable.definition_id, definitionID))
-    .run()
+export function clearAutomationFireFrontierInTransaction(db: Database.TxOrDb, definitionID: string): void {
+  db.delete(AutomationFireFrontierTable).where(eq(AutomationFireFrontierTable.definition_id, definitionID)).run()
 }
 
 export function ensureScheduledAutomationFireFrontierInTransaction(
   db: Database.TxOrDb,
   definition: typeof AutomationTable.$inferSelect,
-  scheduledDueAt: number,
+  scheduledDueAt: number | null,
   now: number,
-): typeof AutomationFireTable.$inferSelect {
+): typeof AutomationFireTable.$inferSelect | undefined {
+  if (scheduledDueAt === null) {
+    clearAutomationFireFrontierInTransaction(db, definition.definition_id)
+    return undefined
+  }
   if (definition.status !== "active") {
     throw new Error(`Automation revision ${definition.id} cannot own a scheduled Fire frontier`)
   }
@@ -144,9 +138,13 @@ export function ensureScheduledAutomationFireFrontierInTransaction(
 export function restoreScheduledAutomationFireFrontierInTransaction(
   db: Database.TxOrDb,
   definition: typeof AutomationTable.$inferSelect,
-): typeof AutomationFireTable.$inferSelect {
-  if (definition.kind !== "recurring" || definition.status !== "active") {
+): typeof AutomationFireTable.$inferSelect | undefined {
+  if (definition.kind !== "recurring") {
     throw new Error(`Automation revision ${definition.id} cannot restore a scheduled Fire frontier`)
+  }
+  if (definition.status === "paused") {
+    clearAutomationFireFrontierInTransaction(db, definition.definition_id)
+    return undefined
   }
   const fire = db
     .select()
@@ -172,7 +170,27 @@ export function restoreScheduledAutomationFireFrontierInTransaction(
     )
     .limit(1)
     .get()
-  if (!fire) throw new Error(`Automation revision ${definition.id} has no pristine scheduled Fire`)
+  if (!fire) {
+    const lastScheduled = db
+      .select()
+      .from(AutomationFireTable)
+      .where(
+        and(eq(AutomationFireTable.automation_revision_id, definition.id), eq(AutomationFireTable.origin, "scheduled")),
+      )
+      .orderBy(desc(AutomationFireTable.scheduled_due_at), desc(AutomationFireTable.id))
+      .limit(1)
+      .get()
+    const completed = lastScheduled ? projectAutomationFireInTransaction(db, lastScheduled) : undefined
+    if (completed && completed.completedAt === null) {
+      throw new Error(`Automation revision ${definition.id} has an unsettled scheduled Fire`)
+    }
+    const completedAt = completed ? completed.completedAt! : definition.time_created
+    if (Recurrence.nextRun(definition.recurrence!, completedAt) !== null) {
+      throw new Error(`Automation revision ${definition.id} lost its scheduled Fire before recurrence exhaustion`)
+    }
+    clearAutomationFireFrontierInTransaction(db, definition.definition_id)
+    return undefined
+  }
   publishAutomationFireFrontierInTransaction(db, {
     definition,
     fire,

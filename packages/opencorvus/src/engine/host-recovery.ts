@@ -12,6 +12,9 @@ import { currentMissionDeleteRetentionIntent } from "@/mission/retention-facts"
 import { listPendingSchedulerProjectIDs } from "@/protocol/delivery"
 import { drainSchedulerMessagesForProject } from "@/protocol/scheduler-message"
 import { TaskControlDriver, type TaskControlScanResult } from "./task-control-driver"
+import { settledWork } from "@/util/queue"
+import { Database, desc, eq } from "@/storage/db"
+import { MessageTable } from "@/session/session.sql"
 
 const MISSION_RECOVERY_CONCURRENCY = 4
 const MISSION_RECOVERY_PAGE_SIZE = MISSION_RECOVERY_CONCURRENCY
@@ -135,6 +138,18 @@ const missionProjectReconciliationState = createInstanceState(
     const projectID = Instance.project.id
     let heartbeatCursor: string | undefined
     return new TaskControlDriver({
+      inputRevision: (sessionID) => {
+        const message = Database.use((db) =>
+          db
+            .select({ id: MessageTable.id })
+            .from(MessageTable)
+            .where(eq(MessageTable.session_id, sessionID))
+            .orderBy(desc(MessageTable.time_created), desc(MessageTable.id))
+            .limit(1)
+            .get(),
+        )
+        return `${message?.id ?? ""}:${currentMissionExecutionClosure(sessionID)?.eventID ?? ""}`
+      },
       scan: (sessionID) => scanMissionExecution(sessionID),
       maximumConcurrentScans: MISSION_RECOVERY_CONCURRENCY,
       maximumPendingScans: MISSION_RECOVERY_CONCURRENCY,
@@ -177,38 +192,42 @@ async function requestMissionProjectReconciliation(input: {
   let woken = 0
   let completed = 0
   let afterSessionID: string | undefined
-  while (true) {
-    const page = listGlobalMissionProcessRecoveryCandidates({
-      scopeProjectID: input.projectID,
-      afterSessionID,
-      limit: MISSION_RECOVERY_PAGE_SIZE,
-    })
-    if (page.length === 0) break
-    const pageStart = afterSessionID
-    attempted += page.length
-    await Promise.all(
-      page.map(async (candidate) => {
-        try {
-          const activated = await driver.request(candidate.sessionID, { propagateFailure: true })
-          woken += activated
-        } catch (error) {
-          input.failures.push({
-            directory: input.directory,
-            error: `Mission Session ${candidate.sessionID}: ${error instanceof Error ? error.message : String(error)}`,
-          })
-        }
-      }),
-    )
-    const remaining = new Set(
-      listGlobalMissionProcessRecoveryCandidates({
+  function* candidates() {
+    while (true) {
+      const page = listGlobalMissionProcessRecoveryCandidates({
         scopeProjectID: input.projectID,
-        afterSessionID: pageStart,
+        afterSessionID,
         limit: MISSION_RECOVERY_PAGE_SIZE,
-      }).map((candidate) => candidate.sessionID),
-    )
-    completed += page.filter((candidate) => !remaining.has(candidate.sessionID)).length
-    afterSessionID = page.at(-1)!.sessionID
+      })
+      if (page.length === 0) break
+      afterSessionID = page.at(-1)!.sessionID
+      yield* page
+    }
   }
+  await settledWork({
+    concurrency: MISSION_RECOVERY_CONCURRENCY,
+    items: candidates(),
+    run: async (candidate) => {
+      attempted += 1
+      try {
+        const activated = await driver.request(candidate.sessionID, { propagateFailure: true })
+        woken += activated
+        // Completion is derived from the exact candidate, not from its
+        // position in a page after independently completing siblings vanish.
+        const current = listGlobalMissionProcessRecoveryCandidates({
+          scopeProjectID: input.projectID,
+          sessionID: candidate.sessionID,
+          limit: 1,
+        })
+        if (current.length === 0) completed += 1
+      } catch (error) {
+        input.failures.push({
+          directory: input.directory,
+          error: `Mission Session ${candidate.sessionID}: ${error instanceof Error ? error.message : String(error)}`,
+        })
+      }
+    },
+  })
   return { attempted, woken, completed }
 }
 

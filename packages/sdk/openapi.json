@@ -61151,7 +61151,14 @@
                         "type": "string"
                       },
                       "nextRun": {
-                        "type": "number"
+                        "anyOf": [
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
                       },
                       "prompt": {
                         "type": "string"
@@ -61407,7 +61414,14 @@
                       "type": "string"
                     },
                     "nextRun": {
-                      "type": "number"
+                      "anyOf": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
                     }
                   },
                   "required": [
@@ -61834,7 +61848,14 @@
                       "type": "string"
                     },
                     "nextRun": {
-                      "type": "number"
+                      "anyOf": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
                     },
                     "prompt": {
                       "type": "string"

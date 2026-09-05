@@ -33,29 +33,44 @@ export async function work<T>(concurrency: number, items: T[], fn: (item: T) => 
 
 export async function settledWork<T, R>(input: {
   concurrency: number
-  items: readonly T[]
+  items: Iterable<T> | AsyncIterable<T>
   run: (item: T, index: number) => Promise<R>
   signal?: AbortSignal
+  /** Long-lived durable discovery consumes each result as it settles instead
+   * of retaining a second in-memory history. The returned array is then empty. */
+  onSettled?: (result: PromiseSettledResult<R>, index: number) => void
 }): Promise<PromiseSettledResult<R>[]> {
   if (!Number.isSafeInteger(input.concurrency) || input.concurrency < 1) {
     throw new Error(`Work concurrency must be a positive safe integer: ${input.concurrency}`)
   }
-  const results = new Array<PromiseSettledResult<R>>(input.items.length)
+  const results: PromiseSettledResult<R>[] = []
+  const iterator =
+    Symbol.asyncIterator in input.items ? input.items[Symbol.asyncIterator]() : input.items[Symbol.iterator]()
   let nextIndex = 0
   const worker = async () => {
     while (true) {
       input.signal?.throwIfAborted()
-      const index = nextIndex
-      nextIndex += 1
-      if (index >= input.items.length) return
+      const next = await iterator.next()
+      input.signal?.throwIfAborted()
+      if (next.done) return
+      const index = nextIndex++
+      let result: PromiseSettledResult<R>
       try {
-        results[index] = { status: "fulfilled", value: await input.run(input.items[index]!, index) }
+        result = { status: "fulfilled", value: await input.run(next.value, index) }
       } catch (reason) {
-        results[index] = { status: "rejected", reason }
+        result = { status: "rejected", reason }
       }
+      if (input.onSettled) input.onSettled(result, index)
+      else results[index] = result
     }
   }
-  await Promise.all(Array.from({ length: Math.min(input.concurrency, input.items.length) }, worker))
+  // Keep the caller's Project/settlement scope alive until all admitted work
+  // has unwound, including cancellation or a source read fault.
+  const workers = await Promise.allSettled(Array.from({ length: input.concurrency }, worker))
+  await iterator.return?.()
+  const faults = workers.flatMap((result) => (result.status === "rejected" ? [result.reason] : []))
+  if (faults.length === 1) throw faults[0]
+  if (faults.length > 1) throw new AggregateError(faults, "Work discovery failed")
   return results
 }
 

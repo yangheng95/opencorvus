@@ -88,7 +88,7 @@ const AutomationView = z
     prompt: z.string(),
     status: z.enum(["active", "paused"]),
     lastRun: z.number().nullable(),
-    nextRun: z.number(),
+    nextRun: z.number().nullable(),
     failureCount: z.number(),
     lastError: z.string().nullable(),
   })
@@ -240,7 +240,7 @@ export const GlobalRoutes = lazy(() =>
             description: "Created scheduled automation",
             content: {
               "application/json": {
-                schema: resolver(z.object({ id: z.string(), name: z.string(), nextRun: z.number() })),
+                schema: resolver(z.object({ id: z.string(), name: z.string(), nextRun: z.number().nullable() })),
               },
             },
           },

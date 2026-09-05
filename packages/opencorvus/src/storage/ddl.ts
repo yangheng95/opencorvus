@@ -3323,7 +3323,7 @@ WHEN NOT EXISTS (
     AND fire.automation_revision_id=revision.id
   WHERE revision.id=NEW.automation_revision_id
     AND revision.definition_id=NEW.definition_id
-    AND revision.status='active'
+    AND (revision.status='active' OR fire.origin IN ('manual_api','manual_tool'))
     AND NEW.available_at>=fire.scheduled_due_at
     AND NOT EXISTS (
       SELECT 1 FROM automation AS later
@@ -3385,7 +3385,7 @@ WHEN NOT EXISTS (
     AND fire.automation_revision_id=revision.id
   WHERE revision.id=NEW.automation_revision_id
     AND revision.definition_id=NEW.definition_id
-    AND revision.status='active'
+    AND (revision.status='active' OR fire.origin IN ('manual_api','manual_tool'))
     AND NEW.available_at>=fire.scheduled_due_at
     AND NOT EXISTS (
       SELECT 1 FROM automation AS later

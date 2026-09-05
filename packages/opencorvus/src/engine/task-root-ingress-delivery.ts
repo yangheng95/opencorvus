@@ -34,7 +34,7 @@ import {
   SessionTable,
 } from "@/session/session.sql"
 import { projectToolPartInTransaction } from "@/session/tool-part-facts"
-import { Database, and, asc, eq, inArray, sql } from "@/storage/db"
+import { Database, and, asc, desc, eq, inArray, sql } from "@/storage/db"
 import { Log } from "@/util/log"
 import { compareCanonicalStrings } from "@/util/canonical-digest"
 import { Filesystem } from "@/util/filesystem"
@@ -132,9 +132,7 @@ let leaseRenewalMilliseconds = 40_000
 const completionHooks = new Set<Promise<void>>()
 const activeProjectDirectories = new Set<string>()
 let operatorGateWriterForTest: ((input: Parameters<typeof recordTaskInfrastructureError>[0]) => void) | undefined
-let afterSourceReconciliationForTest:
-  | ((input: { taskID: string; pass: number }) => void | Promise<void>)
-  | undefined
+let afterSourceReconciliationForTest: ((input: { taskID: string; pass: number }) => void | Promise<void>) | undefined
 let beforeDispatchSettlementDeliveryForTest:
   | ((input: { taskID: string; dispatchID: string; settlementArtifactID: string }) => void | Promise<void>)
   | undefined
@@ -1835,6 +1833,27 @@ const driverState = createInstanceState(
     let heartbeatCheckpoint: TaskControlProjectFrontierCursor | undefined
     return {
       driver: new TaskControlDriver({
+        inputRevision: (taskID) =>
+          Database.use((db) => {
+            const ingress = db
+              .select({
+                epoch: EngineTaskRootIngressTable.execution_epoch,
+                sequence: EngineTaskRootIngressTable.sequence,
+              })
+              .from(EngineTaskRootIngressTable)
+              .where(eq(EngineTaskRootIngressTable.task_id, taskID))
+              .orderBy(desc(EngineTaskRootIngressTable.execution_epoch), desc(EngineTaskRootIngressTable.sequence))
+              .limit(1)
+              .get()
+            const event = db
+              .select({ sequence: ProtocolEventTable.seq })
+              .from(ProtocolEventTable)
+              .where(and(eq(ProtocolEventTable.aggregate_type, "task"), eq(ProtocolEventTable.aggregate_id, taskID)))
+              .orderBy(desc(ProtocolEventTable.seq))
+              .limit(1)
+              .get()
+            return `${ingress?.epoch ?? 0}:${ingress?.sequence ?? 0}:${event?.sequence ?? 0}`
+          }),
         scan: async (taskID, context) => {
           liveness.assertOwned(ownerOccurrenceID())
           return scanTaskControlPlane(taskID, context)
@@ -1899,8 +1918,8 @@ export async function reconcileTaskControlPlane(
       runWithActivationOwner: options?.runWithActivationOwner,
     })
   }
-  // Project bootstrap owns one fixed physical source slice. Continuation is
-  // armed before this returns and stays on the same bounded heartbeat path.
+  // Install the first discovery tick; physical Turns acquire their own Project
+  // scope after initialization and cannot delay Project open.
   return driver.bootstrapHeartbeatSlice()
 }
 

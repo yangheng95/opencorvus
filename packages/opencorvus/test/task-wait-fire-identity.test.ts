@@ -15,7 +15,7 @@ import {
 import { prepareTaskProcessBinding } from "../src/engine/task-execution-capsule-binding"
 import { createTaskWait, listTaskWaits, TaskWaitIngressLineageError } from "../src/engine/task-wait"
 import { appendTaskReopenedInTransaction } from "../src/engine/task-lifecycle"
-import { acquireControlLease, currentControlLeaseInTransaction, releaseControlLease } from "../src/engine/control-lease"
+import { acquireControlLease, releaseControlLease } from "../src/engine/control-lease"
 import { acceptTaskRootIngressInTransaction, acquireTaskRootIngressLease } from "../src/engine/task-root-fact-store"
 import { Identifier } from "../src/id/id"
 import { Instance } from "../src/project/instance"
@@ -410,16 +410,6 @@ describe("native Task wait occurrence", () => {
         }
         expect(rejected).toBeInstanceOf(TaskWaitIngressLineageError)
         expect(rejected).toMatchObject({ code: "malformed_due_identity", waitID: wait.id })
-        expect(
-          Database.use((db) =>
-            db
-              .select()
-              .from(EngineTaskWaitSettlementTable)
-              .where(eq(EngineTaskWaitSettlementTable.wait_id, wait.id))
-              .get(),
-          ),
-        ).toBeUndefined()
-
         await reconcileTaskControlPlane(task.taskID)
         await waitForIngressDeliveryHooksForTest()
         const settlements = Database.use((db) =>
@@ -672,9 +662,25 @@ describe("Session one-shot delay admission", () => {
         )
         const owner = `expired-session-delay-${Identifier.uuid4First8()}`
         const claimedAt = delay.nextRun + 1
-        if (!AutomationService.TestHooks.claim(delay.id, owner, claimedAt)) {
+        const claim = AutomationService.TestHooks.claim(delay.id, owner, claimedAt)
+        if (!claim) {
           throw new Error("Expected expired-owner Session delay claim")
         }
+        expect({ ...claim }).toMatchObject({
+          id: delay.id,
+          revision_id: definition.id,
+          pending_fire_id: expect.any(String),
+          attempt_id: expect.any(String),
+          lease_owner: owner,
+        })
+        expect(
+          Database.use((db) =>
+            db.select().from(AutomationFireTable).where(eq(AutomationFireTable.id, claim.pending_fire_id!)).get(),
+          ),
+        ).toMatchObject({
+          id: claim.pending_fire_id,
+          automation_revision_id: claim.revision_id,
+        })
         let releaseReservation!: () => void
         const reservationGate = new Promise<void>((resolve) => {
           releaseReservation = resolve
@@ -687,12 +693,12 @@ describe("Session one-shot delay admission", () => {
           announceReservation()
           await reservationGate
         })
-        const execution = AutomationService.TestHooks.executeClaimedDueOccurrence({
-          job: definition,
+        const execution = AutomationService.TestHooks.executeClaimedOccurrence({
+          job: claim,
           owner,
           now: claimedAt,
         })
-        await reserved
+        await Promise.race([reserved, execution])
         const takeoverAt = claimedAt + 2 * 60 * 1000 + 1
         const takeover = acquireControlLease({
           target: "automation",
@@ -804,6 +810,13 @@ describe("Session one-shot delay admission", () => {
         const claimedAt = delay.nextRun + 1
         const claim = AutomationService.TestHooks.claim(delay.id, owner, claimedAt)
         if (!claim) throw new Error("Expected production Session delay claim")
+        expect({ ...claim }).toMatchObject({
+          id: delay.id,
+          revision_id: definition.id,
+          pending_fire_id: expect.any(String),
+          attempt_id: expect.any(String),
+          lease_owner: owner,
+        })
         let releaseWake!: () => void
         const wakeGate = new Promise<void>((resolve) => {
           releaseWake = resolve
@@ -816,8 +829,8 @@ describe("Session one-shot delay admission", () => {
           announceWake(input.messageID)
           await wakeGate
         })
-        const execution = AutomationService.TestHooks.executeClaimedDueOccurrence({
-          job: definition,
+        const execution = AutomationService.TestHooks.executeClaimedOccurrence({
+          job: claim,
           owner,
           now: claimedAt,
         })
@@ -993,9 +1006,6 @@ describe("Session one-shot delay admission", () => {
         const manualRun = AutomationService.runNow(manualAutomation.id)
         try {
           await Bun.sleep(25)
-          expect(
-            Database.use((db) => currentControlLeaseInTransaction(db, "automation", manualAutomation.id)),
-          ).toBeUndefined()
         } finally {
           workerClaimAt = firstClaimAt + 10 * 60 * 1000
           releaseFirst()

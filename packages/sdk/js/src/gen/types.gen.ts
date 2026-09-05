@@ -17127,7 +17127,7 @@ export type GlobalAutomationsListResponses = {
       providerID: string
     } | null
     name: string
-    nextRun: number
+    nextRun: number | null
     prompt: string
     reasoningEffort: string | null
     recurrence: string
@@ -17210,7 +17210,7 @@ export type GlobalAutomationsCreateResponses = {
   201: {
     id: string
     name: string
-    nextRun: number
+    nextRun: number | null
   }
 }
 
@@ -17352,7 +17352,7 @@ export type GlobalAutomationsUpdateResponses = {
       providerID: string
     } | null
     name: string
-    nextRun: number
+    nextRun: number | null
     prompt: string
     reasoningEffort: string | null
     recurrence: string

@@ -13,6 +13,89 @@ async function waitFor(predicate: () => boolean, timeoutMs = 5_000): Promise<voi
 }
 
 describe("instance background work", () => {
+  test.each(["abort listener", "draining owner"])(
+    "settles nested background registration from a %s after teardown closes admission",
+    async (source) => {
+      await using project = await memoryProject()
+      const admitted = Promise.withResolvers<void>()
+      const observed: string[] = []
+      const outcome = await Instance.provide({
+        directory: project.path,
+        fn: async () => {
+          const completion = runInstanceBackgroundWork("outer-teardown-owner", async (signal) => {
+            let nested: Promise<void> | undefined
+            const schedule = () => runInstanceBackgroundWork("nested-during-teardown", async () => undefined)
+            const cancelled = new Promise<void>((resolve) => {
+              signal.addEventListener(
+                "abort",
+                () => {
+                  if (source === "abort listener") nested = schedule()
+                  resolve()
+                },
+                { once: true },
+              )
+            })
+            admitted.resolve()
+            await cancelled
+            if (source === "draining owner") nested = schedule()
+            await nested
+            observed.push("outer settled")
+          })
+          await admitted.promise
+          await Instance.dispose()
+          await completion
+          return "disposed"
+        },
+      })
+      expect({ outcome, observed }).toEqual({ outcome: "disposed", observed: ["outer settled"] })
+    },
+    10_000,
+  )
+
+  test("keeps an admitted background lease valid through its complete cancellation settlement", async () => {
+    await using project = await memoryProject()
+    const admitted = Promise.withResolvers<void>()
+    const cancelled = Promise.withResolvers<void>()
+    const release = Promise.withResolvers<void>()
+    const observed: string[] = []
+    const expectedProject = await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const projectID = Instance.project.id
+        const completion = runInstanceBackgroundWork("admitted-settlement", async (signal) => {
+          signal.addEventListener("abort", () => cancelled.resolve(), { once: true })
+          admitted.resolve()
+          await release.promise
+          observed.push(Instance.project.id)
+        })
+        await admitted.promise
+        const disposal = Instance.dispose()
+        await cancelled.promise
+        release.resolve()
+        await completion
+        await disposal
+        return projectID
+      },
+    })
+    expect(observed).toEqual([expectedProject])
+  }, 30_000)
+
+  test("returns a settled completion when teardown races background admission", async () => {
+    await using project = await memoryProject()
+    const result = await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const completion = runInstanceBackgroundWork("admission-race", async (signal) => {
+          signal.throwIfAborted()
+          await new Promise<void>((resolve) => signal.addEventListener("abort", () => resolve(), { once: true }))
+        })
+        await Instance.dispose()
+        return completion.then(() => "settled")
+      },
+    })
+    expect(result).toBe("settled")
+  }, 30_000)
+
   test("background work keeps a valid instance context for as long as it runs", async () => {
     await using project = await memoryProject()
     const observed: string[] = []

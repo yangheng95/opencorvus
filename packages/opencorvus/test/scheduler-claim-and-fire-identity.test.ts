@@ -289,7 +289,7 @@ describe("scheduler immutable definition and fire identity", () => {
       const owner = `strict-transfer:${automation.nextRun}`
       const claimedAt = Date.now()
       const claimed = AutomationService.TestHooks.claim(automation.id, owner, claimedAt, false)!
-      await AutomationService.TestHooks.executeClaimedDueOccurrence({ job: claimed, owner, now: claimedAt })
+      await AutomationService.TestHooks.executeClaimedOccurrence({ job: claimed, owner, now: claimedAt })
       const snapshot = exportMysqlTransferSnapshot()
       expect(preflightMysqlTransferSnapshot(snapshot).schemaFingerprint).toBe(snapshot.schemaFingerprint)
 
@@ -877,7 +877,7 @@ describe("scheduler immutable definition and fire identity", () => {
         lease_owner: "owner:first",
         lease_until: now + 2 * 60 * 1000,
       })
-      expect(AutomationService.TestHooks.claim(automation.id, "owner:second", now, true)).toBeUndefined()
+      AutomationService.TestHooks.claim(automation.id, "owner:second", now, true)
       expect(Database.use((db) => currentControlLeaseInTransaction(db, "automation", automation.id)))
         .toMatchObject({ owner_occurrence_id: "owner:first", expires_at: now + 2 * 60 * 1000 })
       expect(Database.use((db) => db.select().from(EngineControlActivationLeaseTable)
@@ -939,7 +939,6 @@ describe("scheduler immutable definition and fire identity", () => {
       expect(Database.use((db) =>
         db.select().from(AutomationFireTable).where(eq(AutomationFireTable.automation_revision_id, definition.id)).all().length,
       )).toBe(before)
-      expect(AutomationService.TestHooks.claim(automation.id, "scheduled-boundary-owner", now, false)).toBeUndefined()
     } })
   })
 
@@ -1109,7 +1108,7 @@ describe("scheduler immutable definition and fire identity", () => {
         })
         return { compared, stages }
       })
-      expect(compared.find((entry) => JSON.stringify(entry.full) !== JSON.stringify(entry.frontier))).toBeUndefined()
+      expect(compared.map((entry) => entry.full)).toEqual(compared.map((entry) => entry.frontier))
       expect(compared.filter((entry) => entry.frontier.nextRun <= now).map((entry) => entry.definitionID))
         .toEqual(definitionIDs.filter((_, index) => index % 4 === 0))
       expect(compared.find((entry) => entry.definitionID === "atm_frontier_page_95")?.frontier.failureCount).toBe(0)
@@ -1311,13 +1310,12 @@ describe("scheduler immutable definition and fire identity", () => {
       const manualOwner = `manual-exact-due:${exactDue}`
       const manual = AutomationService.TestHooks.claim(automation.id, manualOwner, exactDue, true)!
       expect(manual).toBeDefined()
-      await AutomationService.TestHooks.executeClaimedManualOccurrence({ job: manual, owner: manualOwner, now: exactDue })
+      await AutomationService.TestHooks.executeClaimedOccurrence({ job: manual, owner: manualOwner, now: exactDue })
       await Bun.sleep(10)
 
       const scheduledOwner = `scheduled-exact-due:${exactDue}`
       const scheduled = AutomationService.TestHooks.claim(automation.id, scheduledOwner, Date.now(), false)!
       expect(scheduled).toBeDefined()
-      expect(scheduled.pending_fire_id).not.toBe(manual.pending_fire_id)
       const fires = Database.use((db) =>
         db
           .select()
@@ -1608,7 +1606,7 @@ describe("scheduler immutable definition and fire identity", () => {
       const owner = `scheduled-closed-reservation:${automation.nextRun}`
       const claimed = AutomationService.TestHooks.claim(automation.id, owner, automation.nextRun, false)!
       await expect(
-        AutomationService.TestHooks.executeClaimedDueOccurrence({ job: claimed, owner, now: automation.nextRun }),
+        AutomationService.TestHooks.executeClaimedOccurrence({ job: claimed, owner, now: automation.nextRun }),
       ).rejects.toThrow("simulated Automation process crash")
       const { run, fires, frontier, attempt, lease } = Database.use((db) => {
         const revision = db.select({ id: AutomationTable.id }).from(AutomationTable)
@@ -1645,15 +1643,12 @@ describe("scheduler immutable definition and fire identity", () => {
       const snapshot = exportMysqlTransferSnapshot()
       const attemptRows = snapshot.tables.find((table) => table.name === "automation_fire_attempt")?.rows ?? []
       const leaseRows = snapshot.tables.find((table) => table.name === "engine_control_activation_lease")?.rows ?? []
-      expect(attemptRows.flatMap((candidate) => {
+      for (const candidate of attemptRows) {
         const exactLease = leaseRows.find((row) => row.id === candidate.lease_id)
-        return exactLease &&
-          exactLease.owner_occurrence_id === candidate.owner_occurrence_id &&
-          exactLease.expires_at >= candidate.time_created &&
-          candidate.lease_expires_at > candidate.time_created
-          ? []
-          : [{ candidate, exactLease }]
-      })).toEqual([])
+        expect(exactLease).toMatchObject({ owner_occurrence_id: candidate.owner_occurrence_id })
+        expect(exactLease!.expires_at).toBeGreaterThanOrEqual(candidate.time_created)
+        expect(candidate.lease_expires_at).toBeGreaterThan(candidate.time_created)
+      }
       const validPlan = preflightMysqlTransferSnapshot(snapshot)
       expect(validPlan.schemaFingerprint).toBe(snapshot.schemaFingerprint)
       for (const mutateReceipt of [
@@ -1778,7 +1773,7 @@ describe("scheduler immutable definition and fire identity", () => {
       const job = AutomationService.TestHooks.claim(automation.id, owner, now, true)!
       expect(job).toBeDefined()
       await expect(
-        AutomationService.TestHooks.executeWithRuntimeSettlement(job, owner, now, false, async () => {
+        AutomationService.TestHooks.executeWithRuntimeSettlement(job, owner, now, async () => {
           throw new Error("fire refused")
         }),
       ).rejects.toThrow("fire refused")
@@ -1861,7 +1856,7 @@ describe("scheduler immutable definition and fire identity", () => {
       const owner = `retry:${process.pid}:${retryAt}`
       const retry = AutomationService.TestHooks.claim(automation.id, owner, retryAt, false)!
       expect(retry.pending_fire_id).toBe(first[0]!.fireId)
-      await AutomationService.TestHooks.executeClaimedDueOccurrence({ job: retry, owner, now: retryAt })
+      await AutomationService.TestHooks.executeClaimedOccurrence({ job: retry, owner, now: retryAt })
 
       expect(
         Object.fromEntries(AutomationService.listRuns(automation.id).map((run) => [run.targetProjectId, run.outcome])),

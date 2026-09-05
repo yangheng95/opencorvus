@@ -611,6 +611,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
     const dueTimes = automations()
       .filter((automation) => automation.status === "active")
       .map((automation) => automation.nextRun)
+      .filter((instant): instant is number => instant !== null)
     if (dueTimes.length === 0 || loading() || saving() || busyAction() || showForm()) return
     const nextRun = Math.min(...dueTimes)
     const now = Date.now()

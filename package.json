@@ -110,6 +110,7 @@
     "@opencorvus-ai/plugin": "workspace:*",
     "@opencorvus-ai/script": "workspace:*",
     "@opencorvus-ai/sdk": "workspace:*",
+    "luxon": "catalog:",
     "sharp": "0.35.0",
     "typescript": "catalog:"
   },
@@ -161,6 +162,7 @@
   "patchedDependencies": {
     "@kobalte/core@0.13.11": "patches/@kobalte%2Fcore@0.13.11.patch",
     "@standard-community/standard-openapi@0.2.9": "patches/@standard-community%2Fstandard-openapi@0.2.9.patch",
-    "drizzle-orm@1.0.0-beta.12-a5629fb": "patches/drizzle-orm@1.0.0-beta.12-a5629fb.patch"
+    "drizzle-orm@1.0.0-beta.12-a5629fb": "patches/drizzle-orm@1.0.0-beta.12-a5629fb.patch",
+    "rrule@2.8.1": "patches/rrule@2.8.1.patch"
   }
 }

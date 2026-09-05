@@ -9,6 +9,7 @@ import {
   engineArtifactCatalogMetadataSHA256,
 } from "@/engine/artifact-catalog-metadata"
 import { engineArtifactCatalogLabelIndex } from "@/engine/artifact-catalog-constants"
+import { Recurrence } from "@/scheduler/recurrence"
 import { HOST_OWNED_MEMORY_KINDS } from "@/memory/types"
 import type { EngineArtifactKind } from "@/engine/engine.sql"
 import { collectTables, SCHEMA_DDL, tableName } from "./ddl"
@@ -763,7 +764,7 @@ function assertAutomationFireFrontierAuthority(sqlite: BunDatabase): void {
      WHERE revision.id IS NULL
        OR fire.id IS NULL
        OR revision.definition_id<>frontier.definition_id
-       OR revision.status<>'active'
+       OR (revision.status<>'active' AND fire.origin='scheduled')
        OR fire.automation_revision_id<>revision.id
        OR frontier.available_at<fire.scheduled_due_at
        OR EXISTS (
@@ -820,10 +821,16 @@ function assertAutomationFireFrontierAuthority(sqlite: BunDatabase): void {
     throw new Error(`Automation ${invalid.definition_id} has an invalid Fire delivery frontier`)
   }
 
-  const missing = queryAllFinalized<{ definition_id: string; status: string }>(
+  const missing = queryAllFinalized<{
+    definition_id: string
+    status: string
+    kind: string
+    recurrence: string | null
+    boundary: number
+  }>(
     sqlite,
     `WITH current_definition AS (
-       SELECT revision.definition_id,revision.id,revision.status
+       SELECT revision.definition_id,revision.id,revision.status,revision.kind,revision.recurrence,revision.time_created
        FROM automation AS revision
        WHERE NOT EXISTS (
          SELECT 1 FROM automation AS later
@@ -839,15 +846,23 @@ function assertAutomationFireFrontierAuthority(sqlite: BunDatabase): void {
              AND tombstone.revision>=revision.revision
          )
      )
-     SELECT current_definition.definition_id,current_definition.status
+     SELECT current_definition.definition_id,current_definition.status,current_definition.kind,current_definition.recurrence,
+       MAX(current_definition.time_created,
+         COALESCE((SELECT MAX(receipt.time_created) FROM automation_run_receipt AS receipt
+           JOIN automation_run AS run ON run.id=receipt.run_id
+           WHERE run.automation_revision_id=current_definition.id),0),
+         COALESCE((SELECT MAX(receipt.time_created) FROM automation_fire_attempt_receipt AS receipt
+           JOIN automation_fire_attempt AS attempt ON attempt.id=receipt.attempt_id
+           JOIN automation_fire AS fire ON fire.id=attempt.fire_id
+           WHERE fire.automation_revision_id=current_definition.id AND receipt.outcome='failed'),0)) AS boundary
      FROM current_definition
      LEFT JOIN automation_fire_frontier AS frontier
        ON frontier.definition_id=current_definition.definition_id
-     WHERE (current_definition.status='active' AND frontier.definition_id IS NULL)
-        OR (current_definition.status='paused' AND frontier.definition_id IS NOT NULL)
-     ORDER BY current_definition.definition_id
-     LIMIT 1`,
-  )[0]
+     WHERE current_definition.status='active' AND frontier.definition_id IS NULL
+     ORDER BY current_definition.definition_id`,
+  ).find(
+    (row) => row.kind !== "recurring" || !row.recurrence || Recurrence.nextRun(row.recurrence, row.boundary) !== null,
+  )
   if (missing) {
     throw new Error(
       `Automation ${missing.definition_id} ${missing.status} revision has an invalid Fire frontier presence`,

@@ -52,6 +52,7 @@ export async function provideInitializedProjectExecution<R>(input: {
   input.signal?.throwIfAborted()
   return await Instance.provide({
     directory: Filesystem.resolve(input.directory),
+    signal: input.signal,
     fn: async () => {
       input.signal?.throwIfAborted()
       const result = await input.fn()

@@ -1,0 +1,614 @@
+diff --git a/dist/esm/datewithzone.js b/dist/esm/datewithzone.js
+index 4cf4b5c..57bdaa9 100644
+--- a/dist/esm/datewithzone.js
++++ b/dist/esm/datewithzone.js
+@@ -1,4 +1,5 @@
+-import { dateInTimeZone, timeToUntilString } from './dateutil';
++import { DateTime as LuxonDateTime } from 'luxon';
++import { timeToUntilString } from './dateutil';
+ var DateWithZone = /** @class */ (function () {
+     function DateWithZone(date, tzid) {
+         if (isNaN(date.getTime())) {
+@@ -24,11 +25,19 @@ var DateWithZone = /** @class */ (function () {
+     DateWithZone.prototype.getTime = function () {
+         return this.date.getTime();
+     };
+-    DateWithZone.prototype.rezonedDate = function () {
+-        if (this.isUTC) {
+-            return this.date;
+-        }
+-        return dateInTimeZone(this.date, this.tzid);
++    DateWithZone.prototype.rezonedDate = function (strict) {
++        if (this.isUTC) return this.date;
++        var fields = {
++            year: this.date.getUTCFullYear(), month: this.date.getUTCMonth() + 1,
++            day: this.date.getUTCDate(), hour: this.date.getUTCHours(),
++            minute: this.date.getUTCMinutes(), second: this.date.getUTCSeconds(),
++            millisecond: this.date.getUTCMilliseconds()
++        };
++        var local = LuxonDateTime.fromObject(fields, { zone: this.tzid });
++        if (!local.isValid) throw new RangeError(local.invalidExplanation || 'Invalid recurrence timezone');
++        if (strict && Object.keys(fields).some(function (key) { return local[key] !== fields[key]; })) return null;
++        // RFC 5545 3.3.5 selects the first instant in a repeated local hour.
++        return new Date(Math.min.apply(Math, local.getPossibleOffsets().map(function (candidate) { return candidate.toMillis(); })));
+     };
+     return DateWithZone;
+ }());
+diff --git a/dist/esm/datewithzone.d.ts b/dist/esm/datewithzone.d.ts
+index 6d428c8..6162093 100644
+--- a/dist/esm/datewithzone.d.ts
++++ b/dist/esm/datewithzone.d.ts
+@@ -5,6 +5,7 @@ export declare class DateWithZone {
+     private get isUTC();
+     toString(): string;
+     getTime(): number;
+-    rezonedDate(): Date;
++    rezonedDate(strict: true): Date | null;
++    rezonedDate(strict?: false): Date;
+ }
+ //# sourceMappingURL=datewithzone.d.ts.map
+\ No newline at end of file
+diff --git a/dist/esm/dateutil.js b/dist/esm/dateutil.js
+index abfd43a..014bfb6 100644
+--- a/dist/esm/dateutil.js
++++ b/dist/esm/dateutil.js
+@@ -144,18 +144,4 @@ export var untilStringToDate = function (until) {
+         throw new Error("Invalid UNTIL value: ".concat(until));
+     return new Date(Date.UTC(parseInt(bits[1], 10), parseInt(bits[2], 10) - 1, parseInt(bits[3], 10), parseInt(bits[5], 10) || 0, parseInt(bits[6], 10) || 0, parseInt(bits[7], 10) || 0));
+ };
+-var dateTZtoISO8601 = function (date, timeZone) {
+-    // date format for sv-SE is almost ISO8601
+-    var dateStr = date.toLocaleString('sv-SE', { timeZone: timeZone });
+-    // '2023-02-07 10:41:36'
+-    return dateStr.replace(' ', 'T') + 'Z';
+-};
+-export var dateInTimeZone = function (date, timeZone) {
+-    var localTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+-    // Date constructor can only reliably parse dates in ISO8601 format
+-    var dateInLocalTZ = new Date(dateTZtoISO8601(date, localTimeZone));
+-    var dateInTargetTZ = new Date(dateTZtoISO8601(date, timeZone !== null && timeZone !== void 0 ? timeZone : 'UTC'));
+-    var tzOffset = dateInTargetTZ.getTime() - dateInLocalTZ.getTime();
+-    return new Date(date.getTime() - tzOffset);
+-};
+ //# sourceMappingURL=dateutil.js.map
+\ No newline at end of file
+diff --git a/dist/esm/dateutil.d.ts b/dist/esm/dateutil.d.ts
+index 57e7be1..7ebe1ff 100644
+--- a/dist/esm/dateutil.d.ts
++++ b/dist/esm/dateutil.d.ts
+@@ -70,6 +70,5 @@ export declare const cloneDates: (dates: Date[] | Time[]) => Date[];
+ export declare const sort: <T extends Datelike>(dates: T[]) => void;
+ export declare const timeToUntilString: (time: number, utc?: boolean) => string;
+ export declare const untilStringToDate: (until: string) => Date;
+-export declare const dateInTimeZone: (date: Date, timeZone: string) => Date;
+ export {};
+ //# sourceMappingURL=dateutil.d.ts.map
+\ No newline at end of file
+diff --git a/dist/esm/iter/poslist.js b/dist/esm/iter/poslist.js
+index 15501eb..2f83da2 100644
+--- a/dist/esm/iter/poslist.js
++++ b/dist/esm/iter/poslist.js
+@@ -1,42 +1,37 @@
+-import { combine, fromOrdinal, sort } from '../dateutil';
+-import { pymod, isPresent, includes } from '../helpers';
+-export function buildPoslist(bysetpos, timeset, start, end, ii, dayset) {
+-    var poslist = [];
+-    for (var j = 0; j < bysetpos.length; j++) {
+-        var daypos = void 0;
+-        var timepos = void 0;
+-        var pos = bysetpos[j];
+-        if (pos < 0) {
+-            daypos = Math.floor(pos / timeset.length);
+-            timepos = pymod(pos, timeset.length);
++import { DateWithZone } from '../datewithzone';
++import { combine, fromOrdinal } from '../dateutil';
++import { isPresent } from '../helpers';
++export function buildPoslist(bysetpos, timeset, start, end, ii, dayset, options) {
++    var days = [], total = 0;
++    for (var k = start; k < end; k++) {
++        if (!isPresent(dayset[k])) continue;
++        var date = fromOrdinal(ii.yearordinal + dayset[k]);
++        var validTimes = timeset;
++        if (options.tzid) {
++            var first = new DateWithZone(date, options.tzid).rezonedDate(true);
++            var last = new DateWithZone(new Date(date.getTime() + 86399999), options.tzid).rezonedDate(true);
++            // Normal days keep the indexed timeset. Only a transition day needs
++            // candidate validation before BYSETPOS selects an ordinal.
++            if (!first || !last || last.getTime() - first.getTime() !== 86399999) {
++                validTimes = timeset.filter(function (time) {
++                    return new DateWithZone(combine(date, time), options.tzid).rezonedDate(true) !== null;
++                });
++            }
+         }
+-        else {
+-            daypos = Math.floor((pos - 1) / timeset.length);
+-            timepos = pymod(pos - 1, timeset.length);
+-        }
+-        var tmp = [];
+-        for (var k = start; k < end; k++) {
+-            var val = dayset[k];
+-            if (!isPresent(val))
+-                continue;
+-            tmp.push(val);
+-        }
+-        var i = void 0;
+-        if (daypos < 0) {
+-            i = tmp.slice(daypos)[0];
+-        }
+-        else {
+-            i = tmp[daypos];
+-        }
+-        var time = timeset[timepos];
+-        var date = fromOrdinal(ii.yearordinal + i);
+-        var res = combine(date, time);
+-        // XXX: can this ever be in the array?
+-        // - compare the actual date instead?
+-        if (!includes(poslist, res))
+-            poslist.push(res);
++        days.push({ date: date, times: validTimes, start: total });
++        total += validTimes.length;
+     }
+-    sort(poslist);
+-    return poslist;
++    var positions = [];
++    bysetpos.forEach(function (pos) {
++        var ordinal = pos < 0 ? total + pos : pos - 1;
++        if (ordinal >= 0 && ordinal < total && positions.indexOf(ordinal) === -1) positions.push(ordinal);
++    });
++    positions.sort(function (a, b) { return a - b; });
++    return positions.map(function (ordinal) {
++        for (var i = 0; i < days.length; i++) {
++            var day = days[i];
++            if (ordinal < day.start + day.times.length) return combine(day.date, day.times[ordinal - day.start]);
++        }
++    });
+ }
+ //# sourceMappingURL=poslist.js.map
+\ No newline at end of file
+diff --git a/dist/esm/iter/poslist.d.ts b/dist/esm/iter/poslist.d.ts
+index d86bf9c..33d9544 100644
+--- a/dist/esm/iter/poslist.d.ts
++++ b/dist/esm/iter/poslist.d.ts
+@@ -1,4 +1,5 @@
++import { ParsedOptions } from '../types';
+ import Iterinfo from '../iterinfo/index';
+ import { Time } from '../datetime';
+-export declare function buildPoslist(bysetpos: number[], timeset: Time[], start: number, end: number, ii: Iterinfo, dayset: (number | null)[]): Date[];
++export declare function buildPoslist(bysetpos: number[], timeset: Time[], start: number, end: number, ii: Iterinfo, dayset: (number | null)[], options: ParsedOptions): Date[];
+ //# sourceMappingURL=poslist.d.ts.map
+\ No newline at end of file
+diff --git a/dist/esm/iter/index.js b/dist/esm/iter/index.js
+index 2dbadcf..327f742 100644
+--- a/dist/esm/iter/index.js
++++ b/dist/esm/iter/index.js
+@@ -1,3 +1,4 @@
++import { DateTime as LuxonDateTime } from 'luxon';
+ import { freqIsDailyOrGreater } from '../types';
+ import { combine, fromOrdinal, MAXYEAR } from '../dateutil';
+ import Iterinfo from '../iterinfo/index';
+@@ -10,6 +11,12 @@ import { DateTime } from '../datetime';
+ export function iter(iterResult, options) {
+     var dtstart = options.dtstart, freq = options.freq, interval = options.interval, until = options.until, bysetpos = options.bysetpos;
+     var count = options.count;
++    // RFC 5545 utc-offset is strictly less than 24 hours. COUNT must still
++    // visit valid historical instances; unbounded after/between queries need not.
++    var earliestWall = count == null && iterResult.minDate
++        ? iterResult.minDate.getTime() - 86400000 : null;
++    var untilWallEnd = until ? LuxonDateTime.fromJSDate(until, { zone: options.tzid || 'UTC' })
++        .plus({ days: 1 }).startOf('day').toUTC(0, { keepLocalTime: true }).toJSDate() : null;
+     if (count === 0 || interval === 0) {
+         return emitResult(iterResult);
+     }
+@@ -21,14 +28,17 @@ export function iter(iterResult, options) {
+         var _a = ii.getdayset(freq)(counterDate.year, counterDate.month, counterDate.day), dayset = _a[0], start = _a[1], end = _a[2];
+         var filtered = removeFilteredDays(dayset, start, end, ii, options);
+         if (notEmpty(bysetpos)) {
+-            var poslist = buildPoslist(bysetpos, timeset, start, end, ii, dayset);
++            var poslist = buildPoslist(bysetpos, timeset, start, end, ii, dayset, options);
+             for (var j = 0; j < poslist.length; j++) {
+                 var res = poslist[j];
+-                if (until && res > until) {
++                if (untilWallEnd && res >= untilWallEnd) {
+                     return emitResult(iterResult);
+                 }
++                if (earliestWall !== null && res.getTime() < earliestWall) continue;
+                 if (res >= dtstart) {
+                     var rezonedDate = rezoneIfNeeded(res, options);
++                    if (!rezonedDate) continue;
++                    if (until && rezonedDate > until) return emitResult(iterResult);
+                     if (!iterResult.accept(rezonedDate)) {
+                         return emitResult(iterResult);
+                     }
+@@ -51,11 +61,14 @@ export function iter(iterResult, options) {
+                 for (var k = 0; k < timeset.length; k++) {
+                     var time = timeset[k];
+                     var res = combine(date, time);
+-                    if (until && res > until) {
++                    if (untilWallEnd && res >= untilWallEnd) {
+                         return emitResult(iterResult);
+                     }
++                    if (earliestWall !== null && res.getTime() < earliestWall) continue;
+                     if (res >= dtstart) {
+                         var rezonedDate = rezoneIfNeeded(res, options);
++                    if (!rezonedDate) continue;
++                    if (until && rezonedDate > until) return emitResult(iterResult);
+                         if (!iterResult.accept(rezonedDate)) {
+                             return emitResult(iterResult);
+                         }
+@@ -102,7 +115,7 @@ function isFiltered(ii, currentDay, options) {
+                     !includes(byyearday, -ii.nextyearlen + currentDay - ii.yearlen)))));
+ }
+ function rezoneIfNeeded(date, options) {
+-    return new DateWithZone(date, options.tzid).rezonedDate();
++    return new DateWithZone(date, options.tzid).rezonedDate(true);
+ }
+ function emitResult(iterResult) {
+     return iterResult.getValue();
+diff --git a/dist/esm/rrulestr.js b/dist/esm/rrulestr.js
+index de4b5fc..88f9703 100644
+--- a/dist/esm/rrulestr.js
++++ b/dist/esm/rrulestr.js
+@@ -1,3 +1,4 @@
++import { DateWithZone } from './datewithzone';
+ import { __assign } from "tslib";
+ import { RRule } from './rrule';
+ import { RRuleSet } from './rruleset';
+@@ -38,11 +39,7 @@ export function parseInput(s, options) {
+                 rrulevals.push(parseString(line));
+                 break;
+             case 'RDATE':
+-                var _c = (_a = /RDATE(?:;TZID=([^:=]+))?/i.exec(line)) !== null && _a !== void 0 ? _a : [], rdateTzid = _c[1];
+-                if (rdateTzid && !tzid) {
+-                    tzid = rdateTzid;
+-                }
+-                rdatevals = rdatevals.concat(parseRDate(value, parms));
++                rdatevals = rdatevals.concat(parseRDate(value, parms, tzid));
+                 break;
+             case 'EXRULE':
+                 if (parms.length) {
+@@ -51,7 +48,7 @@ export function parseInput(s, options) {
+                 exrulevals.push(parseString(value));
+                 break;
+             case 'EXDATE':
+-                exdatevals = exdatevals.concat(parseRDate(value, parms));
++                exdatevals = exdatevals.concat(parseRDate(value, parms, tzid));
+                 break;
+             case 'DTSTART':
+                 break;
+@@ -181,8 +178,12 @@ function validateDateParm(parms) {
+         }
+     });
+ }
+-function parseRDate(rdateval, parms) {
++function parseRDate(rdateval, parms, defaultTzid) {
+     validateDateParm(parms);
+-    return rdateval.split(',').map(function (datestr) { return untilStringToDate(datestr); });
++    var zone = parms.filter(function (parm) { return /^TZID=/i.test(parm); })[0];
++    return rdateval.split(',').map(function (datestr) {
++        var date = untilStringToDate(datestr);
++        return /Z$/i.test(datestr) ? date : new DateWithZone(date, zone ? zone.slice(5) : defaultTzid).rezonedDate();
++    });
+ }
+ //# sourceMappingURL=rrulestr.js.map
+\ No newline at end of file
+diff --git a/dist/esm/iterset.js b/dist/esm/iterset.js
+index 356b845..802c215 100644
+--- a/dist/esm/iterset.js
++++ b/dist/esm/iterset.js
+@@ -1,4 +1,3 @@
+-import { DateWithZone } from './datewithzone';
+ import { iter } from './iter';
+ import { sort } from './dateutil';
+ export function iterSet(iterResult, _rrule, _exrule, _rdate, _exdate, tzid) {
+@@ -12,7 +11,7 @@ export function iterSet(iterResult, _rrule, _exrule, _rdate, _exdate, tzid) {
+         });
+     }
+     _exdate.forEach(function (date) {
+-        var zonedDate = new DateWithZone(date, tzid).rezonedDate();
++        var zonedDate = date;
+         _exdateHash[Number(zonedDate)] = true;
+     });
+     iterResult.accept = function (date) {
+@@ -40,7 +39,7 @@ export function iterSet(iterResult, _rrule, _exrule, _rdate, _exdate, tzid) {
+         };
+     }
+     for (var i = 0; i < _rdate.length; i++) {
+-        var zonedDate = new DateWithZone(_rdate[i], tzid).rezonedDate();
++        var zonedDate = _rdate[i];
+         if (!iterResult.accept(new Date(zonedDate.getTime())))
+             break;
+     }
+diff --git a/dist/esm/rruleset.js b/dist/esm/rruleset.js
+index 81a7b6a..9cae838 100644
+--- a/dist/esm/rruleset.js
++++ b/dist/esm/rruleset.js
+@@ -172,7 +172,7 @@ function _addDate(date, collection) {
+     }
+ }
+ function rdatesToString(param, rdates, tzid) {
+-    var isUTC = !tzid || tzid.toUpperCase() === 'UTC';
++    var isUTC = true;
+     var header = isUTC ? "".concat(param, ":") : "".concat(param, ";TZID=").concat(tzid, ":");
+     var dateString = rdates
+         .map(function (rdate) { return timeToUntilString(rdate.valueOf(), isUTC); })
+diff --git a/dist/es5/rrule.js b/dist/es5/rrule.js
+index 85b2446..2b04c99 100644
+--- a/dist/es5/rrule.js
++++ b/dist/es5/rrule.js
+@@ -1,13 +1,14 @@
+ (function webpackUniversalModuleDefinition(root, factory) {
+ 	if(typeof exports === 'object' && typeof module === 'object')
+-		module.exports = factory();
++		module.exports = factory(require("luxon"));
+ 	else if(typeof define === 'function' && define.amd)
+-		define([], factory);
++		define(["luxon"], factory);
+ 	else if(typeof exports === 'object')
+-		exports["rrule"] = factory();
++		exports["rrule"] = factory(root.luxon);
+ 	else
+-		root["rrule"] = factory();
+-})(typeof self !== 'undefined' ? self : this, () => {
++		root["rrule"] = factory(root.luxon);
++})(typeof self !== 'undefined' ? self : this, (luxon) => {
++var LuxonDateTime = luxon.DateTime;
+ return /******/ (() => { // webpackBootstrap
+ /******/ 	"use strict";
+ /******/ 	// The require scope
+@@ -370,20 +371,6 @@ var untilStringToDate = function (until) {
+         throw new Error("Invalid UNTIL value: ".concat(until));
+     return new Date(Date.UTC(parseInt(bits[1], 10), parseInt(bits[2], 10) - 1, parseInt(bits[3], 10), parseInt(bits[5], 10) || 0, parseInt(bits[6], 10) || 0, parseInt(bits[7], 10) || 0));
+ };
+-var dateTZtoISO8601 = function (date, timeZone) {
+-    // date format for sv-SE is almost ISO8601
+-    var dateStr = date.toLocaleString('sv-SE', { timeZone: timeZone });
+-    // '2023-02-07 10:41:36'
+-    return dateStr.replace(' ', 'T') + 'Z';
+-};
+-var dateInTimeZone = function (date, timeZone) {
+-    var localTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+-    // Date constructor can only reliably parse dates in ISO8601 format
+-    var dateInLocalTZ = new Date(dateTZtoISO8601(date, localTimeZone));
+-    var dateInTargetTZ = new Date(dateTZtoISO8601(date, timeZone !== null && timeZone !== void 0 ? timeZone : 'UTC'));
+-    var tzOffset = dateInTargetTZ.getTime() - dateInLocalTZ.getTime();
+-    return new Date(date.getTime() - tzOffset);
+-};
+ 
+ ;// CONCATENATED MODULE: ./src/iterresult.ts
+ /**
+@@ -2295,11 +2282,19 @@ var DateWithZone = /** @class */ (function () {
+     DateWithZone.prototype.getTime = function () {
+         return this.date.getTime();
+     };
+-    DateWithZone.prototype.rezonedDate = function () {
+-        if (this.isUTC) {
+-            return this.date;
+-        }
+-        return dateInTimeZone(this.date, this.tzid);
++    DateWithZone.prototype.rezonedDate = function (strict) {
++        if (this.isUTC) return this.date;
++        var fields = {
++            year: this.date.getUTCFullYear(), month: this.date.getUTCMonth() + 1,
++            day: this.date.getUTCDate(), hour: this.date.getUTCHours(),
++            minute: this.date.getUTCMinutes(), second: this.date.getUTCSeconds(),
++            millisecond: this.date.getUTCMilliseconds()
++        };
++        var local = LuxonDateTime.fromObject(fields, { zone: this.tzid });
++        if (!local.isValid) throw new RangeError(local.invalidExplanation || 'Invalid recurrence timezone');
++        if (strict && Object.keys(fields).some(function (key) { return local[key] !== fields[key]; })) return null;
++        // RFC 5545 3.3.5 selects the first instant in a repeated local hour.
++        return new Date(Math.min.apply(Math, local.getPossibleOffsets().map(function (candidate) { return candidate.toMillis(); })));
+     };
+     return DateWithZone;
+ }());
+@@ -2926,44 +2921,38 @@ var Iterinfo = /** @class */ (function () {
+ ;// CONCATENATED MODULE: ./src/iter/poslist.ts
+ 
+ 
+-function buildPoslist(bysetpos, timeset, start, end, ii, dayset) {
+-    var poslist = [];
+-    for (var j = 0; j < bysetpos.length; j++) {
+-        var daypos = void 0;
+-        var timepos = void 0;
+-        var pos = bysetpos[j];
+-        if (pos < 0) {
+-            daypos = Math.floor(pos / timeset.length);
+-            timepos = pymod(pos, timeset.length);
+-        }
+-        else {
+-            daypos = Math.floor((pos - 1) / timeset.length);
+-            timepos = pymod(pos - 1, timeset.length);
+-        }
+-        var tmp = [];
+-        for (var k = start; k < end; k++) {
+-            var val = dayset[k];
+-            if (!isPresent(val))
+-                continue;
+-            tmp.push(val);
+-        }
+-        var i = void 0;
+-        if (daypos < 0) {
+-            i = tmp.slice(daypos)[0];
+-        }
+-        else {
+-            i = tmp[daypos];
++function buildPoslist(bysetpos, timeset, start, end, ii, dayset, options) {
++    var days = [], total = 0;
++    for (var k = start; k < end; k++) {
++        if (!isPresent(dayset[k])) continue;
++        var date = fromOrdinal(ii.yearordinal + dayset[k]);
++        var validTimes = timeset;
++        if (options.tzid) {
++            var first = new DateWithZone(date, options.tzid).rezonedDate(true);
++            var last = new DateWithZone(new Date(date.getTime() + 86399999), options.tzid).rezonedDate(true);
++            // Normal days keep the indexed timeset. Only a transition day needs
++            // candidate validation before BYSETPOS selects an ordinal.
++            if (!first || !last || last.getTime() - first.getTime() !== 86399999) {
++                validTimes = timeset.filter(function (time) {
++                    return new DateWithZone(combine(date, time), options.tzid).rezonedDate(true) !== null;
++                });
++            }
+         }
+-        var time = timeset[timepos];
+-        var date = fromOrdinal(ii.yearordinal + i);
+-        var res = combine(date, time);
+-        // XXX: can this ever be in the array?
+-        // - compare the actual date instead?
+-        if (!includes(poslist, res))
+-            poslist.push(res);
++        days.push({ date: date, times: validTimes, start: total });
++        total += validTimes.length;
+     }
+-    sort(poslist);
+-    return poslist;
++    var positions = [];
++    bysetpos.forEach(function (pos) {
++        var ordinal = pos < 0 ? total + pos : pos - 1;
++        if (ordinal >= 0 && ordinal < total && positions.indexOf(ordinal) === -1) positions.push(ordinal);
++    });
++    positions.sort(function (a, b) { return a - b; });
++    return positions.map(function (ordinal) {
++        for (var i = 0; i < days.length; i++) {
++            var day = days[i];
++            if (ordinal < day.start + day.times.length) return combine(day.date, day.times[ordinal - day.start]);
++        }
++    });
+ }
+ 
+ ;// CONCATENATED MODULE: ./src/iter/index.ts
+@@ -2979,6 +2968,12 @@ function buildPoslist(bysetpos, timeset, start, end, ii, dayset) {
+ function iter(iterResult, options) {
+     var dtstart = options.dtstart, freq = options.freq, interval = options.interval, until = options.until, bysetpos = options.bysetpos;
+     var count = options.count;
++    // RFC 5545 utc-offset is strictly less than 24 hours. COUNT must still
++    // visit valid historical instances; unbounded after/between queries need not.
++    var earliestWall = count == null && iterResult.minDate
++        ? iterResult.minDate.getTime() - 86400000 : null;
++    var untilWallEnd = until ? LuxonDateTime.fromJSDate(until, { zone: options.tzid || 'UTC' })
++        .plus({ days: 1 }).startOf('day').toUTC(0, { keepLocalTime: true }).toJSDate() : null;
+     if (count === 0 || interval === 0) {
+         return emitResult(iterResult);
+     }
+@@ -2990,14 +2985,17 @@ function iter(iterResult, options) {
+         var _a = ii.getdayset(freq)(counterDate.year, counterDate.month, counterDate.day), dayset = _a[0], start = _a[1], end = _a[2];
+         var filtered = removeFilteredDays(dayset, start, end, ii, options);
+         if (notEmpty(bysetpos)) {
+-            var poslist = buildPoslist(bysetpos, timeset, start, end, ii, dayset);
++            var poslist = buildPoslist(bysetpos, timeset, start, end, ii, dayset, options);
+             for (var j = 0; j < poslist.length; j++) {
+                 var res = poslist[j];
+-                if (until && res > until) {
++                if (untilWallEnd && res >= untilWallEnd) {
+                     return emitResult(iterResult);
+                 }
++                if (earliestWall !== null && res.getTime() < earliestWall) continue;
+                 if (res >= dtstart) {
+                     var rezonedDate = rezoneIfNeeded(res, options);
++                    if (!rezonedDate) continue;
++                    if (until && rezonedDate > until) return emitResult(iterResult);
+                     if (!iterResult.accept(rezonedDate)) {
+                         return emitResult(iterResult);
+                     }
+@@ -3020,11 +3018,14 @@ function iter(iterResult, options) {
+                 for (var k = 0; k < timeset.length; k++) {
+                     var time = timeset[k];
+                     var res = combine(date, time);
+-                    if (until && res > until) {
++                    if (untilWallEnd && res >= untilWallEnd) {
+                         return emitResult(iterResult);
+                     }
++                    if (earliestWall !== null && res.getTime() < earliestWall) continue;
+                     if (res >= dtstart) {
+                         var rezonedDate = rezoneIfNeeded(res, options);
++                    if (!rezonedDate) continue;
++                    if (until && rezonedDate > until) return emitResult(iterResult);
+                         if (!iterResult.accept(rezonedDate)) {
+                             return emitResult(iterResult);
+                         }
+@@ -3071,7 +3072,7 @@ function isFiltered(ii, currentDay, options) {
+                     !includes(byyearday, -ii.nextyearlen + currentDay - ii.yearlen)))));
+ }
+ function rezoneIfNeeded(date, options) {
+-    return new DateWithZone(date, options.tzid).rezonedDate();
++    return new DateWithZone(date, options.tzid).rezonedDate(true);
+ }
+ function emitResult(iterResult) {
+     return iterResult.getValue();
+@@ -3353,7 +3354,7 @@ function iterSet(iterResult, _rrule, _exrule, _rdate, _exdate, tzid) {
+         });
+     }
+     _exdate.forEach(function (date) {
+-        var zonedDate = new DateWithZone(date, tzid).rezonedDate();
++        var zonedDate = date;
+         _exdateHash[Number(zonedDate)] = true;
+     });
+     iterResult.accept = function (date) {
+@@ -3381,7 +3382,7 @@ function iterSet(iterResult, _rrule, _exrule, _rdate, _exdate, tzid) {
+         };
+     }
+     for (var i = 0; i < _rdate.length; i++) {
+-        var zonedDate = new DateWithZone(_rdate[i], tzid).rezonedDate();
++        var zonedDate = _rdate[i];
+         if (!iterResult.accept(new Date(zonedDate.getTime())))
+             break;
+     }
+@@ -3443,11 +3444,7 @@ function parseInput(s, options) {
+                 rrulevals.push(parseString(line));
+                 break;
+             case 'RDATE':
+-                var _c = (_a = /RDATE(?:;TZID=([^:=]+))?/i.exec(line)) !== null && _a !== void 0 ? _a : [], rdateTzid = _c[1];
+-                if (rdateTzid && !tzid) {
+-                    tzid = rdateTzid;
+-                }
+-                rdatevals = rdatevals.concat(parseRDate(value, parms));
++                rdatevals = rdatevals.concat(parseRDate(value, parms, tzid));
+                 break;
+             case 'EXRULE':
+                 if (parms.length) {
+@@ -3456,7 +3453,7 @@ function parseInput(s, options) {
+                 exrulevals.push(parseString(value));
+                 break;
+             case 'EXDATE':
+-                exdatevals = exdatevals.concat(parseRDate(value, parms));
++                exdatevals = exdatevals.concat(parseRDate(value, parms, tzid));
+                 break;
+             case 'DTSTART':
+                 break;
+@@ -3586,9 +3583,13 @@ function validateDateParm(parms) {
+         }
+     });
+ }
+-function parseRDate(rdateval, parms) {
++function parseRDate(rdateval, parms, defaultTzid) {
+     validateDateParm(parms);
+-    return rdateval.split(',').map(function (datestr) { return untilStringToDate(datestr); });
++    var zone = parms.filter(function (parm) { return /^TZID=/i.test(parm); })[0];
++    return rdateval.split(',').map(function (datestr) {
++        var date = untilStringToDate(datestr);
++        return /Z$/i.test(datestr) ? date : new DateWithZone(date, zone ? zone.slice(5) : defaultTzid).rezonedDate();
++    });
+ }
+ 
+ ;// CONCATENATED MODULE: ./src/rruleset.ts
+@@ -3766,7 +3767,7 @@ function _addDate(date, collection) {
+     }
+ }
+ function rdatesToString(param, rdates, tzid) {
+-    var isUTC = !tzid || tzid.toUpperCase() === 'UTC';
++    var isUTC = true;
+     var header = isUTC ? "".concat(param, ":") : "".concat(param, ";TZID=").concat(tzid, ":");
+     var dateString = rdates
+         .map(function (rdate) { return timeToUntilString(rdate.valueOf(), isUTC); })
+diff --git a/package.json b/package.json
+index 4035e6f..7c4ed58 100644
+--- a/package.json
++++ b/package.json
+@@ -86,6 +86,7 @@
+   ],
+   "peerDependencies": {},
+   "dependencies": {
+-    "tslib": "^2.4.0"
++    "tslib": "^2.4.0",
++    "luxon": "^3.6.1"
+   }
+ }

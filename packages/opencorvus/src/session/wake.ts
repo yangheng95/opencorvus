@@ -297,6 +297,7 @@ export namespace SessionWake {
         sessionID,
         messageID: message.info.id,
         directory,
+        signal: input.signal,
         ownerPreflight: input.ownerPreflight,
         ownerLifecycle: input.ownerLifecycle,
       })

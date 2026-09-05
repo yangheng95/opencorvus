@@ -360,27 +360,44 @@ export type AutomationRow = typeof AutomationTable.$inferSelect & {
   last_error: string | null
   lease_until: number
   lease_owner: string | null
-  next_run: number
+  next_run: number | null
   pending_fire_id: string | null
   scheduled_due_at: number | null
   attempt_id: string | null
   attempt_ordinal: number
 }
 
-export function projectAutomationInTransaction(db: Database.TxOrDb, row: typeof AutomationTable.$inferSelect): AutomationRow {
-  const revisionIDs = db.select({ id: AutomationTable.id }).from(AutomationTable)
-    .where(eq(AutomationTable.definition_id, row.definition_id)).all().map((entry) => entry.id)
-  const fireRows = revisionIDs.length === 0
-    ? []
-    : db
-        .select()
-        .from(AutomationFireTable)
-        .where(inArray(AutomationFireTable.automation_revision_id, revisionIDs))
-        .orderBy(asc(AutomationFireTable.scheduled_due_at), asc(AutomationFireTable.time_created), asc(AutomationFireTable.id))
-        .all()
+export function projectAutomationInTransaction(
+  db: Database.TxOrDb,
+  row: typeof AutomationTable.$inferSelect,
+): AutomationRow {
+  const revisionIDs = db
+    .select({ id: AutomationTable.id })
+    .from(AutomationTable)
+    .where(eq(AutomationTable.definition_id, row.definition_id))
+    .all()
+    .map((entry) => entry.id)
+  const fireRows =
+    revisionIDs.length === 0
+      ? []
+      : db
+          .select()
+          .from(AutomationFireTable)
+          .where(inArray(AutomationFireTable.automation_revision_id, revisionIDs))
+          .orderBy(
+            asc(AutomationFireTable.scheduled_due_at),
+            asc(AutomationFireTable.time_created),
+            asc(AutomationFireTable.id),
+          )
+          .all()
   const fires = fireRows
     .map((fire) => projectAutomationFireInTransaction(db, fire))
-    .sort((left, right) => left.scheduledDueAt - right.scheduledDueAt || left.startedAt - right.startedAt || left.id.localeCompare(right.id))
+    .sort(
+      (left, right) =>
+        left.scheduledDueAt - right.scheduledDueAt ||
+        left.startedAt - right.startedAt ||
+        left.id.localeCompare(right.id),
+    )
   const latestFire = fires.filter((fire) => fire.state !== "scheduled").at(-1)
   const currentScheduledFire = fires
     .filter((fire) => fire.origin === "scheduled" && fire.automationRevisionID === row.id && fire.state === "scheduled")
@@ -422,7 +439,8 @@ export function projectAutomationInTransaction(db: Database.TxOrDb, row: typeof 
     ? (pendingFire.retryAt ?? pendingFire.scheduledDueAt)
     : row.kind === "delay"
       ? (row.due_at ?? row.time_created)
-      : (currentScheduledFire?.scheduledDueAt ?? Recurrence.nextRun(row.recurrence!, latestFire?.completedAt || row.time_created))
+      : (currentScheduledFire?.scheduledDueAt ??
+        Recurrence.nextRun(row.recurrence!, Math.max(row.time_created, latestFire?.completedAt ?? 0)))
   return {
     ...row,
     id: row.definition_id,
@@ -436,12 +454,12 @@ export function projectAutomationInTransaction(db: Database.TxOrDb, row: typeof 
     pending_fire_id: pendingFire?.id ?? null,
     scheduled_due_at: pendingFire?.scheduledDueAt ?? currentScheduledFire?.scheduledDueAt ?? null,
     attempt_id: pendingFire
-      ? db
+      ? (db
           .select({ id: AutomationFireAttemptTable.id })
           .from(AutomationFireAttemptTable)
           .where(eq(AutomationFireAttemptTable.fire_id, pendingFire.id))
           .orderBy(desc(AutomationFireAttemptTable.ordinal))
-          .get()?.id ?? null
+          .get()?.id ?? null)
       : null,
     attempt_ordinal: pendingFire?.attemptCount ?? 0,
   }
@@ -544,7 +562,8 @@ export function projectAutomationFrontierInTransaction(
     ? (pending.retryAt ?? pending.scheduledDueAt)
     : row.kind === "delay"
       ? (row.due_at ?? row.time_created)
-      : (scheduled?.scheduledDueAt ?? Recurrence.nextRun(row.recurrence!, latest?.completedAt ?? row.time_created))
+      : (scheduled?.scheduledDueAt ??
+        Recurrence.nextRun(row.recurrence!, Math.max(row.time_created, latest?.completedAt ?? 0)))
   const attempt = pendingFire
     ? db
         .select({ id: AutomationFireAttemptTable.id, ordinal: AutomationFireAttemptTable.ordinal })
@@ -861,7 +880,10 @@ function batchedAutomationFireStatesInTransaction(
   db: Database.TxOrDb,
   definitions: readonly (typeof AutomationTable.$inferSelect)[],
   observe?: AutomationFrontierQueryObserver,
-): { states: Map<string, BatchedAutomationFireState>; roles: Map<string, { latest?: string; pending?: string; boundary?: string }> } {
+): {
+  states: Map<string, BatchedAutomationFireState>
+  roles: Map<string, { latest?: string; pending?: string; boundary?: string }>
+} {
   const facts = automationFrontierFireFactsInTransaction(db, definitions, observe)
   const fires = new Map<string, typeof AutomationFireTable.$inferSelect>()
   const roles = new Map<string, { latest?: string; pending?: string; boundary?: string }>()
@@ -996,7 +1018,8 @@ export function automationFrontierEntriesForDefinitionsInTransaction(
         ? (pending.reduced.retryAt ?? pending.fire.scheduled_due_at)
         : row.kind === "delay"
           ? (row.due_at ?? row.time_created)
-          : (boundary?.fire.scheduled_due_at ?? Recurrence.nextRun(row.recurrence!, latest?.reduced.completedAt ?? row.time_created))
+          : (boundary?.fire.scheduled_due_at ??
+            Recurrence.nextRun(row.recurrence!, Math.max(row.time_created, latest?.reduced.completedAt ?? 0)))
       const projected: AutomationRow = {
         ...row,
         id: row.definition_id,
@@ -1061,27 +1084,41 @@ export function currentDueAutomationFrontiersInTransaction(
   db: Database.TxOrDb,
   now: number,
   observe?: AutomationFrontierQueryObserver,
+  cursor?: { effectiveDueAt: number; definitionID: string; fireID: string },
 ): DueAutomationFrontier[] {
   observe?.("due")
   const due = db.all<DueAutomationFireFact>(sql`
     SELECT fire_id,automation_revision_id,definition_id,available_at
     FROM automation_fire_frontier INDEXED BY automation_fire_frontier_due_idx
     WHERE available_at<=${now}
+      ${cursor ? sql`AND (available_at,definition_id,fire_id)>(${cursor.effectiveDueAt},${cursor.definitionID},${cursor.fireID})` : sql``}
     ORDER BY available_at,definition_id,fire_id
     LIMIT ${AUTOMATION_FRONTIER_PAGE_SIZE}
   `)
   if (due.length === 0) return []
   observe?.("definitions")
-  const definitions = db.select().from(AutomationTable)
-    .where(inArray(AutomationTable.id, due.map((entry) => entry.automation_revision_id))).all()
+  const definitions = db
+    .select()
+    .from(AutomationTable)
+    .where(
+      inArray(
+        AutomationTable.id,
+        due.map((entry) => entry.automation_revision_id),
+      ),
+    )
+    .all()
   const definitionByID = new Map(definitions.map((definition) => [definition.id, definition]))
-  const entries = automationFrontierEntriesForDefinitionsInTransaction(db, due.map((entry) => {
-    const definition = definitionByID.get(entry.automation_revision_id)
-    if (!definition || definition.definition_id !== entry.definition_id) {
-      throw new Error(`Automation due Fire ${entry.fire_id} lost its immutable definition revision`)
-    }
-    return definition
-  }), observe)
+  const entries = automationFrontierEntriesForDefinitionsInTransaction(
+    db,
+    due.map((entry) => {
+      const definition = definitionByID.get(entry.automation_revision_id)
+      if (!definition || definition.definition_id !== entry.definition_id) {
+        throw new Error(`Automation due Fire ${entry.fire_id} lost its immutable definition revision`)
+      }
+      return definition
+    }),
+    observe,
+  )
   const rowByRevision = new Map(entries.map((entry) => [entry.row.revision_id, entry.row]))
   return due.map((entry) => {
     const row = rowByRevision.get(entry.automation_revision_id)

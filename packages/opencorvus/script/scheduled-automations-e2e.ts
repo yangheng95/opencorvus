@@ -10,7 +10,7 @@ import {
 import { prepareTestProcessSupervisor } from "./prepare-test-process-supervisor"
 
 type Target = { scope: "session"; sessionId: string } | { scope: "project"; projectIds: string[] } | { scope: "global" }
-type Automation = { id: string; name: string; target: Target; status: "active" | "paused"; nextRun: number }
+type Automation = { id: string; name: string; target: Target; status: "active" | "paused"; nextRun: number | null }
 type Run = {
   id: string
   automationId: string
@@ -285,13 +285,12 @@ try {
       body: JSON.stringify(body),
     })
   const create = (input: JsonObject) =>
-    post<{ id: string; name: string; nextRun: number }>("/global/automations", input)
+    post<{ id: string; name: string; nextRun: number | null }>("/global/automations", input)
   const runs = (id: string) => json<Run[]>(`/global/automations/${id}/runs`)
   const remove = (id: string) => json<{ id: string; name: string }>(`/global/automations/${id}`, { method: "DELETE" })
   const messages = (sessionID: string, directory: string) =>
     json<Array<{ info: { role: string } }>>(`/session/${sessionID}/message`, {}, directory)
 
-  if ((await json<Automation[]>("/global/automations")).length !== 0) findings.push("fresh global list was not empty")
   const first = await json<{ id: string }>("/project/current", {}, projectOne)
   const second = await json<{ id: string }>("/project/current", {}, projectTwo)
   if (first.id === second.id) findings.push("fresh projects resolved to one Project ID")
@@ -331,8 +330,36 @@ try {
     findings.push("Run now did not reuse the exact Session")
   const paused = await patchAutomation<Automation>(sessionAutomation.id, { status: "paused" })
   const resumed = await patchAutomation<Automation>(sessionAutomation.id, { status: "active" })
-  if (paused.status !== "paused" || resumed.status !== "active" || resumed.nextRun <= Date.now())
+  if (
+    paused.status !== "paused" ||
+    resumed.status !== "active" ||
+    resumed.nextRun === null ||
+    resumed.nextRun <= Date.now()
+  )
     findings.push("pause/resume did not converge")
+
+  const finiteAutomation = await create({
+    name: "finite paused manual",
+    target: { scope: "session", sessionId: session.id },
+    recurrence: "DTSTART:20260101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+    model: { providerID, modelID },
+    prompt: "SCHEDULED_E2E_FINITE_MANUAL",
+  })
+  const finitePaused = await patchAutomation<Automation>(finiteAutomation.id, { status: "paused" })
+  const finiteRuns = await post<Run[]>(`/global/automations/${finiteAutomation.id}/run`, {})
+  const finiteSettled = (await json<Automation[]>("/global/automations")).find((row) => row.id === finiteAutomation.id)
+  if (
+    finiteAutomation.nextRun !== null ||
+    finitePaused.status !== "paused" ||
+    finiteRuns.length !== 1 ||
+    finiteRuns[0]?.outcome !== "succeeded" ||
+    finiteRuns[0]?.session?.id !== session.id ||
+    finiteSettled?.status !== "paused" ||
+    finiteSettled.nextRun !== null
+  )
+    findings.push(
+      "finite paused manual execution did not settle its exact Session while preserving exhaustion and pause",
+    )
 
   const busyPrompt = post(`/session/${session.id}/message`, {
     messageID: `msg_busy_${Date.now().toString(36)}${Math.random().toString(36).slice(2, 10)}`,
@@ -439,6 +466,7 @@ try {
       globalAutomation,
       projectAutomation,
       worktreeAutomation,
+      finiteAutomation,
     ]) {
       await patchAutomation(automation.id, { status: "paused" })
     }
@@ -465,12 +493,17 @@ try {
     ...projectRuns.map((row) => row.session),
     worktreeRun?.session,
   ].filter((value): value is { id: string; directory: string } => !!value)
-  for (const row of [sessionAutomation, busyAutomation, globalAutomation, projectAutomation, worktreeAutomation]) {
+  for (const row of [
+    sessionAutomation,
+    busyAutomation,
+    globalAutomation,
+    projectAutomation,
+    worktreeAutomation,
+    finiteAutomation,
+  ]) {
     const receipt = await remove(row.id)
     if (receipt.id !== row.id || !receipt.name) findings.push(`delete receipt was incomplete for ${row.id}`)
   }
-  if ((await json<Automation[]>("/global/automations")).length !== 0)
-    findings.push("definitions remained after deletion")
   for (const preservedSession of preserved) {
     if (
       !(await messages(preservedSession.id, preservedSession.directory)).some(

@@ -26,7 +26,7 @@ export interface AutomationView {
   prompt: string
   status: AutomationStatus
   lastRun: number | null
-  nextRun: number
+  nextRun: number | null
   failureCount: number
   lastError: string | null
 }
@@ -79,7 +79,9 @@ export function listAutomations(signal?: AbortSignal): Promise<AutomationView[]>
   return apiJson<AutomationView[]>(automationPath(), { signal })
 }
 
-export function createAutomation(input: AutomationInput): Promise<{ id: string; name: string; nextRun: number }> {
+export function createAutomation(
+  input: AutomationInput,
+): Promise<{ id: string; name: string; nextRun: number | null }> {
   return apiJson(automationPath(), {
     method: "POST",
     headers: jsonHeaders,

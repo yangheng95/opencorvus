@@ -1,5 +1,7 @@
 # 2026-09 Records
 
+- [Scheduling razor remediation](2026-09-05-scheduling-razor-remediation.md)
+
 - [当前调度算法剃刀复审](2026-09-05-scheduling-razor-reaudit.md)
 
 - [Technical direction audit and remediation](2026-09-05-technical-direction-remediation.md)

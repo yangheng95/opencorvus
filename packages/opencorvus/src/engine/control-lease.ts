@@ -1,6 +1,6 @@
 import { Identifier } from "@/id/id"
 import { Log } from "@/util/log"
-import { Database, and, desc, eq, gt, inArray, sql } from "@/storage/db"
+import { Database, and, desc, eq, gt, sql } from "@/storage/db"
 import {
   EngineControlActivationLeaseGrantTable,
   EngineControlActivationLeaseTable,
@@ -21,43 +21,31 @@ export class ControlLeaseFenceLostError extends Error {
 
 export type ControlLease = typeof EngineControlActivationLeaseTable.$inferSelect
 
+/** One indexed winner seek per requested target, in one database statement. */
+export function currentControlLeaseRowsSQL(target: EngineControlActivationTarget, targetIDs: readonly string[]) {
+  if (targetIDs.length === 0) throw new Error("Current lease query requires at least one target")
+  const requested = sql.join(
+    [...new Set(targetIDs)].map((id) => sql`(${id})`),
+    sql`, `,
+  )
+  return sql`
+    WITH requested(target_id) AS (VALUES ${requested})
+    SELECT lease.* FROM requested
+    JOIN engine_control_activation_lease AS lease ON lease.id=(
+      SELECT latest.id FROM engine_control_activation_lease AS latest
+      WHERE latest.target=${target} AND latest.target_id=requested.target_id
+      ORDER BY latest.time_activated DESC, latest.id DESC LIMIT 1
+    )
+  `
+}
+
 export function currentControlLeasesInTransaction(
   db: Database.TxOrDb,
   target: EngineControlActivationTarget,
   targetIDs: readonly string[],
 ): Map<string, ControlLease> {
-  const ids = [...new Set(targetIDs)]
-  if (ids.length === 0) return new Map()
-  const current = new Map<string, ControlLease>()
-  for (const row of db
-    .select()
-    .from(EngineControlActivationLeaseTable)
-    .where(
-      and(
-        eq(EngineControlActivationLeaseTable.target, target),
-        inArray(EngineControlActivationLeaseTable.target_id, ids),
-        sql`NOT EXISTS (
-          SELECT 1
-          FROM engine_control_activation_lease AS later
-          WHERE later.target=${EngineControlActivationLeaseTable.target}
-            AND later.target_id=${EngineControlActivationLeaseTable.target_id}
-            AND (
-              later.time_activated>${EngineControlActivationLeaseTable.time_activated}
-              OR (
-                later.time_activated=${EngineControlActivationLeaseTable.time_activated}
-                AND later.id>${EngineControlActivationLeaseTable.id}
-              )
-            )
-        )`,
-      ),
-    )
-    .orderBy(
-      EngineControlActivationLeaseTable.target_id,
-      desc(EngineControlActivationLeaseTable.time_activated),
-      desc(EngineControlActivationLeaseTable.id),
-    )
-    .all()) current.set(row.target_id, row)
-  return current
+  if (targetIDs.length === 0) return new Map()
+  return new Map(db.all<ControlLease>(currentControlLeaseRowsSQL(target, targetIDs)).map((row) => [row.target_id, row]))
 }
 
 export function currentControlLeaseInTransaction(
@@ -65,12 +53,12 @@ export function currentControlLeaseInTransaction(
   target: EngineControlActivationTarget,
   targetID: string,
 ): ControlLease | undefined {
+  // The target/time/id index seeks the winner directly, regardless of retained
+  // attempt history. Expiry is evaluated by the caller on that exact winner.
   return currentControlLeasesInTransaction(db, target, [targetID]).get(targetID)
 }
 
-export type ControlLeaseAcquisition =
-  | { acquired: true; lease: ControlLease }
-  | { acquired: false; lease: ControlLease }
+export type ControlLeaseAcquisition = { acquired: true; lease: ControlLease } | { acquired: false; lease: ControlLease }
 
 export interface AcquireControlLeaseInput {
   target: EngineControlActivationTarget
@@ -195,9 +183,10 @@ export function releaseControlLease(input: ReleaseControlLeaseInput): boolean {
  * take its place. The lease then ends by expiry, which is exactly the behavior
  * that existed before it was released here at all.
  */
-export function releaseControlLeaseOnErrorPath(
-  input: ReleaseControlLeaseInput,
-): { released: boolean; error?: unknown } {
+export function releaseControlLeaseOnErrorPath(input: ReleaseControlLeaseInput): {
+  released: boolean
+  error?: unknown
+} {
   try {
     return { released: releaseControlLease(input) }
   } catch (error) {

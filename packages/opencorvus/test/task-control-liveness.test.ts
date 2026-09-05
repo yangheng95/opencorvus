@@ -247,7 +247,7 @@ describe("Task-control compaction coexistence", () => {
           })
         })
 
-        let compactionMessageID: string | undefined
+        let expectedDecisionAssistant: string | undefined
         using _runner = TaskControlTestHooks.replaceTaskIngressRunner({
           runner: async ({ wakeID, activationID, predecessorID }) => {
             if (!wakeID || !activationID || !predecessorID) throw new Error("Missing exact activation identity")
@@ -282,7 +282,7 @@ describe("Task-control compaction coexistence", () => {
                 } satisfies Message.TextPart,
               ],
             })
-            const compaction = await Session.updateMessage({
+            await Session.updateMessage({
               id: Identifier.ascending("message"),
               sessionID: orchestrator.id,
               parentID: control.messageID,
@@ -297,8 +297,7 @@ describe("Task-control compaction coexistence", () => {
               tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
               finish: "stop",
             })
-            compactionMessageID = compaction.id
-            return commitDecision({
+            const decision = await commitDecision({
               projectPath: project.path,
               orchestratorSessionID: orchestrator.id,
               taskID,
@@ -306,6 +305,8 @@ describe("Task-control compaction coexistence", () => {
               activationID,
               predecessorID,
             })
+            expectedDecisionAssistant = decision.finalMessageID
+            return decision
           },
         })
 
@@ -323,8 +324,7 @@ describe("Task-control compaction coexistence", () => {
           activated,
           projection: projectTaskRootIngress(ingress.id, Date.now(), readTaskRootIngressEvidence).state,
           decisionAssistant,
-        }).toEqual({ activated: 1, projection: "resolved", decisionAssistant: expect.any(String) })
-        expect(decisionAssistant).not.toBe(compactionMessageID)
+        }).toEqual({ activated: 1, projection: "resolved", decisionAssistant: expectedDecisionAssistant })
       },
     })
   })
@@ -561,6 +561,7 @@ describe("Task-control driver", () => {
 
   test("paces a faulting Task under backoff and isolates it from its siblings", async () => {
     const timers: number[] = []
+    let clock = 0
     const driver = new TaskControlDriver({
       scan: async (taskID) => {
         if (taskID === "task-bad") throw new Error("scan fault")
@@ -568,7 +569,7 @@ describe("Task-control driver", () => {
       },
       initialBackoffMilliseconds: 100,
       maximumBackoffMilliseconds: 400,
-      now: () => 0,
+      now: () => clock,
       setTimer: (_fn, delay) => {
         timers.push(delay)
         return { cancel() {} }
@@ -579,6 +580,7 @@ describe("Task-control driver", () => {
       await driver.request("task-bad", { propagateFailure: true }).catch((error) => {
         propagated.push((error as Error).message)
       })
+      clock += timers.at(-1)!
     }
     expect({
       propagated,
@@ -594,17 +596,21 @@ describe("Task-control driver", () => {
 
   test("paces a scan that stops reducing under backoff instead of spinning", async () => {
     const timers: number[] = []
+    let clock = 0
     const driver = new TaskControlDriver({
       scan: async () => ({ activated: 0, noProgress: true }),
       initialBackoffMilliseconds: 100,
       maximumBackoffMilliseconds: 400,
-      now: () => 0,
+      now: () => clock,
       setTimer: (_fn, delay) => {
         timers.push(delay)
         return { cancel() {} }
       },
     })
-    for (let attempt = 0; attempt < 3; attempt += 1) await driver.request("task-stuck")
+    for (let attempt = 0; attempt < 3; attempt += 1) {
+      await driver.request("task-stuck")
+      clock += timers.at(-1)!
+    }
     expect(timers).toEqual([100, 200, 400])
     driver.dispose()
   })
@@ -629,7 +635,10 @@ describe("Task-control driver", () => {
         return { cancel() {} }
       },
     })
-    for (let attempt = 0; attempt < 3; attempt += 1) await driver.request("task-hot")
+    for (let attempt = 0; attempt < 3; attempt += 1) {
+      await driver.request("task-hot")
+      clock += timers.at(-1)!
+    }
     // 25 here would mean three full scans every 25ms, forever.
     expect(timers).toEqual([100, 200, 400])
     driver.dispose()
@@ -682,7 +691,7 @@ describe("Task-control driver", () => {
     })
     for (let round = 0; round < 6; round += 1) {
       await driver.request("task-flaky")
-      clock += 10
+      clock += attempt % 2 === 1 ? timers.at(-1)! : 10
     }
     const escalating = [...timers]
     // A fault-free window as long as the maximum backoff forgives the history.
@@ -822,7 +831,7 @@ describe("Task-control driver", () => {
     driver.dispose()
   })
 
-  test("Project bootstrap commits one fixed source slice and arms continuation", async () => {
+  test("Project bootstrap installs discovery before the first physical scan", async () => {
     const timers: Array<{ delay: number; cancelled: boolean }> = []
     let reads = 0
     let commits = 0
@@ -847,9 +856,11 @@ describe("Task-control driver", () => {
       },
     })
     await driver.bootstrapHeartbeatSlice()
-    expect({ reads, commits, activeTimers: timers.filter((timer) => !timer.cancelled).map((timer) => timer.delay) }).toEqual(
-      { reads: 1, commits: 1, activeTimers: [25] },
-    )
+    expect({
+      reads,
+      commits,
+      activeTimers: timers.filter((timer) => !timer.cancelled).map((timer) => timer.delay),
+    }).toEqual({ reads: 0, commits: 0, activeTimers: [25] })
     driver.dispose()
   })
 
@@ -980,6 +991,10 @@ describe("Task-control driver", () => {
           },
         })
         const fireNext = async (delay: number, expectedSlices: number, expectedScans: number) => {
+          await waitUntil(
+            () => timers.some((candidate) => !candidate.cancelled && !candidate.fired && candidate.delay === delay),
+            `armed ${delay}ms heartbeat continuation`,
+          )
           const timer = timers.find(
             (candidate) => !candidate.cancelled && !candidate.fired && candidate.delay === delay,
           )
@@ -1016,6 +1031,10 @@ describe("Task-control driver", () => {
           { scannedCount: 1, taskCount: 1 },
           { scannedCount: 0, taskCount: 0 },
         ])
+        await waitUntil(
+          () => timers.some((timer) => !timer.cancelled && !timer.fired && timer.delay === 5_000),
+          "periodic heartbeat armed after the final admitted slice",
+        )
         expect(timers.some((timer) => !timer.cancelled && !timer.fired && timer.delay === 5_000)).toBe(true)
         driver.dispose()
       },

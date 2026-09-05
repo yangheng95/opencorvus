@@ -134,11 +134,13 @@ export const EventJobFireReceiptTable = sqliteTable(
   "event_job_fire_receipt",
   {
     id: text().primaryKey(),
-    fire_id: text().notNull().references(() => EventJobFireTable.id, { onDelete: "cascade" }),
+    fire_id: text()
+      .notNull()
+      .references(() => EventJobFireTable.id, { onDelete: "cascade" }),
     definition_id: text().notNull(),
     queue_position: integer().notNull(),
     outcome: text({ enum: ["retry_wait", "succeeded", "disposition"] }).notNull(),
-    disposition: text({ enum: ["causal_cycle", "cooldown", "job_disabled", "mission_closed"] }),
+    disposition: text({ enum: ["causal_cycle", "cooldown", "job_disabled", "mission_closed", "target_deleted"] }),
     closure_event_id: text().references(() => ProtocolEventTable.id, { onDelete: "restrict" }),
     message_id: text(),
     retry_at: integer(),
@@ -155,12 +157,15 @@ export const EventJobFireReceiptTable = sqliteTable(
     index("event_job_fire_success_frontier_idx")
       .on(table.definition_id, table.queue_position)
       .where(sql`${table.outcome} = 'succeeded'`),
-    check("event_job_fire_receipt_shape", sql`
+    check(
+      "event_job_fire_receipt_shape",
+      sql`
       (${table.outcome}='retry_wait' AND ${table.disposition} IS NULL AND ${table.closure_event_id} IS NULL AND ${table.message_id} IS NULL AND ${table.retry_at} IS NOT NULL AND ${table.error} IS NOT NULL)
       OR (${table.outcome}='succeeded' AND ${table.disposition} IS NULL AND ${table.closure_event_id} IS NULL AND ${table.message_id} IS NOT NULL AND ${table.retry_at} IS NULL AND ${table.error} IS NULL)
-      OR (${table.outcome}='disposition' AND ${table.disposition} IN ('causal_cycle','cooldown','job_disabled') AND ${table.closure_event_id} IS NULL AND ${table.message_id} IS NULL AND ${table.retry_at} IS NULL)
+      OR (${table.outcome}='disposition' AND ${table.disposition} IN ('causal_cycle','cooldown','job_disabled','target_deleted') AND ${table.closure_event_id} IS NULL AND ${table.message_id} IS NULL AND ${table.retry_at} IS NULL)
       OR (${table.outcome}='disposition' AND ${table.disposition}='mission_closed' AND ${table.closure_event_id} IS NOT NULL AND ${table.message_id} IS NULL AND ${table.retry_at} IS NULL AND ${table.error} IS NULL)
-    `),
+    `,
+    ),
     check("event_job_fire_receipt_queue_position_positive", sql`${table.queue_position}>0`),
   ],
 )

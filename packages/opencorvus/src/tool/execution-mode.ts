@@ -62,6 +62,7 @@ export class ToolTurnExecutionCoordinator {
   #ordinarySettled: Promise<void> = Promise.resolve()
   #resolveOrdinarySettled: (() => void) | undefined
   #decisionCommand: string | undefined
+  readonly #pendingDecisions = new Map<symbol, string>()
 
   /**
    * An assistant turn is a persisted Message, not a Provider step.
@@ -97,22 +98,21 @@ export class ToolTurnExecutionCoordinator {
    * emit that combination in ordinary output, it has to be refused while the
    * call is still refusable, before it becomes a durable fact.
    */
-  #admitDecision(decision: { command: string; commits: boolean } | undefined): string | undefined {
-    if (!decision?.commits) return this.#decisionCommand
-    const prior = this.#decisionCommand
+  #admitDecision(decision: { command: string; commits: boolean } | undefined): symbol | undefined {
+    if (!decision?.commits) return undefined
+    const prior = this.#decisionCommand ?? this.#pendingDecisions.values().next().value
     if (prior !== undefined && !(prior === "dispatch_agent" && decision.command === "dispatch_agent")) {
       const expected =
-        prior === "dispatch_agent"
-          ? "another dispatch_agent, or no further decision Tool"
-          : "no further decision Tool"
+        prior === "dispatch_agent" ? "another dispatch_agent, or no further decision Tool" : "no further decision Tool"
       throw new ToolTurnExecutionConflictError(
         `Decision Tool ${decision.command} cannot join an assistant turn that already committed ${prior}. ` +
           `Expected: ${expected}. Received: ${decision.command}. ` +
           `End this Turn without another decision — ${prior} is already recorded as its decision.`,
       )
     }
-    this.#decisionCommand = decision.command
-    return prior
+    const admission = Symbol(decision.command)
+    this.#pendingDecisions.set(admission, decision.command)
+    return admission
   }
 
   async run<T>(
@@ -123,16 +123,20 @@ export class ToolTurnExecutionCoordinator {
     if (this.#sealed) {
       throw new ToolTurnExecutionConflictError("The assistant turn already committed an exclusive Tool result")
     }
-    // A refused call produces no completed receipt, so the model may still
-    // choose a different decision in the same turn; restore the prior claim.
-    const priorDecision = this.#admitDecision(decision)
+    if (this.#exclusivePending) {
+      throw new ToolTurnExecutionConflictError("An exclusive Tool occurrence is already pending in this assistant turn")
+    }
+    // Each call owns only its in-flight admission. Its failure cannot rewind
+    // a successful sibling or resurrect another sibling's failed admission.
+    const admission = this.#admitDecision(decision)
     const releaseDecisionOnFailure = () => {
-      if (decision?.commits) this.#decisionCommand = priorDecision
+      if (admission) this.#pendingDecisions.delete(admission)
+    }
+    const commitDecision = () => {
+      if (decision?.commits) this.#decisionCommand = decision.command
+      releaseDecisionOnFailure()
     }
     if (mode === "ordinary") {
-      if (this.#exclusivePending) {
-        throw new ToolTurnExecutionConflictError("An exclusive Tool occurrence is already pending in this assistant turn")
-      }
       if (this.#ordinary === 0) {
         this.#ordinarySettled = new Promise<void>((resolve) => (this.#resolveOrdinarySettled = resolve))
       }
@@ -140,13 +144,15 @@ export class ToolTurnExecutionCoordinator {
       try {
         try {
           const result = await execute()
-          const metadata = result && typeof result === "object" ? (result as { metadata?: unknown }).metadata : undefined
+          const metadata =
+            result && typeof result === "object" ? (result as { metadata?: unknown }).metadata : undefined
           if (toolResultControl(metadata)) {
             this.#sealed = true
             throw new ToolTurnExecutionConflictError(
               "A Tool that returns turn control must declare turn_control_exclusive execution",
             )
           }
+          commitDecision()
           return result
         } catch (error) {
           if (error instanceof InvalidToolResultControlError && error.committedControl) this.#sealed = true
@@ -162,21 +168,20 @@ export class ToolTurnExecutionCoordinator {
       }
     }
 
-    if (this.#exclusivePending) {
-      releaseDecisionOnFailure()
-      throw new ToolTurnExecutionConflictError("A second exclusive Tool occurrence cannot enter the same assistant turn")
-    }
     this.#exclusivePending = true
     try {
       await this.#ordinarySettled
       if (this.#sealed) {
         releaseDecisionOnFailure()
-        throw new ToolTurnExecutionConflictError("The assistant turn committed Tool control while exclusive work waited")
+        throw new ToolTurnExecutionConflictError(
+          "The assistant turn committed Tool control while exclusive work waited",
+        )
       }
       try {
         const result = await execute()
         const metadata = result && typeof result === "object" ? (result as { metadata?: unknown }).metadata : undefined
         if (toolResultControl(metadata)) this.#sealed = true
+        commitDecision()
         return result
       } catch (error) {
         if (error instanceof InvalidToolResultControlError && error.committedControl) this.#sealed = true

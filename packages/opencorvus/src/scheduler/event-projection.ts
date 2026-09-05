@@ -19,7 +19,7 @@ export type EventJobFireRow = typeof EventJobFireTable.$inferSelect & {
   target_session_id: string
   creates_session: boolean
   status: "pending" | "running" | "retry_wait" | "succeeded" | "disposition"
-  disposition: "causal_cycle" | "cooldown" | "job_disabled" | "mission_closed" | null
+  disposition: "causal_cycle" | "cooldown" | "job_disabled" | "mission_closed" | "target_deleted" | null
   closure_event_id: string | null
   message_id: string | null
   owner_id: string | null
@@ -35,13 +35,7 @@ export type EventJobFireRow = typeof EventJobFireTable.$inferSelect & {
 
 export const EVENT_FRONTIER_PAGE_SIZE = 64
 
-export type EventFrontierQueryStage =
-  | "definitions"
-  | "one_shot"
-  | "head_definitions"
-  | "heads"
-  | "retries"
-  | "leases"
+export type EventFrontierQueryStage = "definitions" | "one_shot" | "head_definitions" | "heads" | "retries" | "leases"
 export type EventFrontierQueryObserver = (stage: EventFrontierQueryStage) => void
 
 export type EventFireHead = {
