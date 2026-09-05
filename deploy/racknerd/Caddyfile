@@ -12,10 +12,20 @@
 	}
 	reverse_proxy @website_runtime 127.0.0.1:4321
 
-	@expert_squad_pointer path /expert-squads/catalog.json
-	header @expert_squad_pointer Cache-Control "no-store, max-age=0"
+	# Signed archives normalize mtimes; metadata cannot validate mutable pages.
+	@mutable_document {
+		method GET HEAD
+		path / */ *.html /downloads/latest.json /expert-squads/catalog.json
+	}
+	request_header @mutable_document -If-None-Match
+	request_header @mutable_document -If-Modified-Since
+	header @mutable_document {
+		Cache-Control "no-store, max-age=0"
+		-Etag
+		-Last-Modified
+	}
 
-	@expert_squad_immutable path_regexp expert_squad_immutable ^/expert-squads/(archives|catalogs|signatures|bundles)/[a-f0-9/._-]+$
+	@expert_squad_immutable path /expert-squads/archives/* /expert-squads/catalogs/* /expert-squads/signatures/* /expert-squads/bundles/*
 	header @expert_squad_immutable Cache-Control "public, max-age=31536000, immutable"
 
 	file_server

@@ -175,6 +175,22 @@ jobs:
       - name: Verify RackNerd activation and rollback paths
         run: bash deploy/racknerd/test-opencorvus-activate-release.sh
 
+      - name: Verify real Caddy release cache behavior
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          CADDY_DIR="$RUNNER_TEMP/caddy-2.11.4"
+          mkdir -p "$CADDY_DIR"
+          gh release download v2.11.4 --repo caddyserver/caddy \
+            --pattern caddy_2.11.4_linux_amd64.tar.gz --dir "$CADDY_DIR" --skip-existing
+          (cd "$CADDY_DIR" && printf '%s  %s\n' \
+            '8220d1f013b6f27510247b2360c9e0ca9f018feebd82515f07635318b34ff9777ccc8fd0b6e6f2486ce3a33fe389fbb7db12d05baa474f4587509fb4f5ebf1c9' \
+            caddy_2.11.4_linux_amd64.tar.gz | sha512sum --check)
+          tar -xzf "$CADDY_DIR/caddy_2.11.4_linux_amd64.tar.gz" -C "$CADDY_DIR" caddy
+          CADDY_BIN="$CADDY_DIR/caddy" node --test deploy/racknerd/caddy-cache.test.mjs
+
       - name: Check website
         run: bun run --cwd packages/web check
 
