@@ -17,6 +17,7 @@ import { Filesystem } from "../src/util/filesystem"
 import { Global } from "../src/global"
 import { DurablePublicationStore } from "@opencorvus-ai/util/durable-publication"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
+import { Identifier } from "../src/id/id"
 
 afterEach(async () => {
   await Instance.disposeAll()
@@ -129,13 +130,14 @@ describe("anonymous Project promotion journal", () => {
       recovered: { forward: number; backward: number; failures: string[] }
       project?: { worktree: string }
     }
+    const physicalDestination = await fs.realpath(path.join(destinationParent, "terminal-recovered"))
     expect({
       recovered: recovered.recovered,
       worktree: recovered.project?.worktree,
       destinationExists: await Filesystem.exists(path.join(destinationParent, "terminal-recovered")),
     }).toEqual({
       recovered: { forward: 1, backward: 0, failures: [] },
-      worktree: path.join(destinationParent, "terminal-recovered"),
+      worktree: physicalDestination,
       destinationExists: true,
     })
     await fs.rm(runtimeRoot, { recursive: true, force: true })
@@ -827,6 +829,79 @@ describe("anonymous Project promotion journal", () => {
     })
   }, 60_000)
 
+  test("restores a logical Project path under the admission's physical directory key", async () => {
+    await using anchor = await memoryProject()
+    const physicalSource = path.join(anchor.path, "physical-source")
+    const logicalSource = path.join(path.dirname(anchor.path), `${path.basename(anchor.path)}-source-alias`)
+    const destination = path.join(anchor.path, "published-destination")
+    await fs.mkdir(physicalSource)
+    await fs.mkdir(destination)
+    await fs.symlink(physicalSource, logicalSource, process.platform === "win32" ? "junction" : "dir")
+
+    const projectID = Identifier.ascending("project")
+    const projectGeneration = randomUUID()
+    const operationID = randomUUID()
+    const timeUpdated = Date.now() - 1_000
+    Database.use((db) =>
+      db
+        .insert(ProjectTable)
+        .values({
+          id: projectID,
+          generation: projectGeneration,
+          worktree: destination,
+          sandboxes: [],
+          time_created: timeUpdated,
+          time_updated: timeUpdated,
+        })
+        .run(),
+    )
+    Database.immediateTransaction((db) => {
+      const project = db.select().from(ProjectTable).where(eq(ProjectTable.id, projectID)).get()!
+      ensureProjectPromotionFenceInTransaction(db, { project, operationID })
+    })
+
+    try {
+      const admission = await ProjectDirectoryAdmission.acquire({
+        directory: physicalSource,
+        operationID,
+        kind: "promotion_restore",
+      })
+      if (admission.outcome === "owned") throw new Error("fixture source unexpectedly Project-owned")
+      ProjectDirectoryAdmission.settle(admission.token, (db) => {
+        Project.beginPromotionCommit({ projectID, operationID, expectedGeneration: projectGeneration }, db)
+        Project.restoreRelocation(
+          {
+            projectID,
+            operationID,
+            expectedGeneration: projectGeneration,
+            expectedWorktree: destination,
+            worktree: logicalSource,
+            name: null,
+            sandboxes: [],
+            timeUpdated,
+            directoryAdmission: admission.token,
+          },
+          db,
+        )
+        Project.finishPromotionCommit({ projectID, operationID, expectedGeneration: projectGeneration }, db)
+      })
+
+      expect({
+        worktree: Database.use((db) =>
+          db.select({ worktree: ProjectTable.worktree }).from(ProjectTable).where(eq(ProjectTable.id, projectID)).get(),
+        )?.worktree,
+        logicalKey: await ProjectDirectoryAdmission.key(logicalSource),
+        physicalKey: await ProjectDirectoryAdmission.key(physicalSource),
+      }).toEqual({
+        worktree: logicalSource,
+        logicalKey: await ProjectDirectoryAdmission.key(physicalSource),
+        physicalKey: await ProjectDirectoryAdmission.key(physicalSource),
+      })
+    } finally {
+      await fs.unlink(logicalSource).catch(() => undefined)
+    }
+  }, 60_000)
+
   test("the promotion fence returns one deterministic error contract for Project and Session writers", async () => {
     await using _anchor = await memoryProject()
     const anonymous = await ImplicitProject.create()
@@ -907,14 +982,15 @@ describe("anonymous Project promotion journal", () => {
           destinationParent,
         }),
     })
+    const physicalDestination = await fs.realpath(path.join(destinationParent, "fully-promoted"))
     expect({
       directory: promoted.directory,
       journal: await PromotionJournal.get(anonymous.project.id),
       worktree: Project.get(anonymous.project.id)?.worktree,
     }).toEqual({
-      directory: path.join(destinationParent, "fully-promoted"),
+      directory: physicalDestination,
       journal: undefined,
-      worktree: path.join(destinationParent, "fully-promoted"),
+      worktree: physicalDestination,
     })
   }, 60_000)
 
@@ -936,6 +1012,7 @@ describe("anonymous Project promotion journal", () => {
     } finally {
       settle.mockRestore()
     }
+    const physicalDestination = await fs.realpath(destination)
     const open = await PromotionJournal.get(anonymous.project.id)
     expect({
       operationID: open?.operationID,
@@ -943,7 +1020,7 @@ describe("anonymous Project promotion journal", () => {
         .worktree,
     }).toEqual({
       operationID: expect.any(String),
-      databaseWorktree: destination,
+      databaseWorktree: physicalDestination,
     })
     await fs.writeFile(path.join(destination, "live-change.txt"), "written after database relocation")
 
@@ -956,7 +1033,7 @@ describe("anonymous Project promotion journal", () => {
       liveContent: await fs.readFile(path.join(destination, "live-change.txt"), "utf8"),
     }).toEqual({
       recovered: "forward",
-      worktree: destination,
+      worktree: physicalDestination,
       journal: undefined,
       receipt: expect.objectContaining({ occurrenceID: open!.operationID, outcome: "committed" }),
       liveContent: "written after database relocation",

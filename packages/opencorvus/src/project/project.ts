@@ -906,7 +906,7 @@ export namespace Project {
   ) {
     assertPromotionFenceOwned(db, input, "promotion_commit")
     ProjectDirectoryAdmission.assertOwned(db, input.directoryAdmission)
-    if (!samePath(input.directoryAdmission.directory, input.worktree)) {
+    if (input.directoryAdmission.directoryKey !== ProjectDirectoryAdmission.keySync(input.worktree)) {
       throw new Error(`Project relocation directory admission does not own ${input.worktree}`)
     }
     const projects = db
@@ -955,7 +955,7 @@ export namespace Project {
   ) {
     assertPromotionFenceOwned(db, input, "promotion_commit")
     ProjectDirectoryAdmission.assertOwned(db, input.directoryAdmission)
-    if (!samePath(input.directoryAdmission.directory, input.worktree)) {
+    if (input.directoryAdmission.directoryKey !== ProjectDirectoryAdmission.keySync(input.worktree)) {
       throw new Error(`Project relocation restore admission does not own ${input.worktree}`)
     }
     const projects = db

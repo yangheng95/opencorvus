@@ -1,10 +1,10 @@
-import { afterAll, beforeAll, describe, expect, spyOn, test } from "bun:test"
+import { afterEach, beforeEach, describe, expect, spyOn, test } from "bun:test"
 import fs from "node:fs/promises"
 import path from "node:path"
 import { Config } from "@/config/config"
 import { Identifier } from "@/id/id"
 import { GlobalTaskService } from "@/task-api/global-task-service"
-import { EngineService } from "@/task-api"
+import { EngineService, TaskCreationCommitTestHooks } from "@/task-api"
 import {
   GlobalCreationAcceptedTargetConflictError,
   GlobalCreationAllocation,
@@ -26,7 +26,10 @@ import {
 } from "@/storage/mysql-transfer"
 import { TaskChannelBindingProjectConflictError } from "@/engine/task-project-error"
 import { ProtocolEventTable } from "@/protocol/protocol.sql"
-import { TestHooks as TaskControlTestHooks } from "@/engine/task-root-ingress-delivery"
+import {
+  TestHooks as TaskControlTestHooks,
+  waitForIngressDeliveryHooksForTest,
+} from "@/engine/task-root-ingress-delivery"
 import { Session } from "@/session"
 import { EngineTaskTable } from "@/engine/engine.sql"
 
@@ -37,7 +40,10 @@ const base = {
   source: "test",
 }
 
-beforeAll(async () => {
+let acceptedReconciliationHook: Disposable | undefined
+let ingressRunnerOverrides: Disposable[] = []
+
+beforeEach(async () => {
   process.env.OPENCORVUS_TASK_PROCESS_MODE = "native"
   await Config.updateGlobalPatch({
     model: "global-replay-provider/global-replay-model",
@@ -63,9 +69,19 @@ beforeAll(async () => {
       },
     },
   })
+  acceptedReconciliationHook = TaskCreationCommitTestHooks.installBeforeAcceptedReconciliation(() => {
+    ingressRunnerOverrides.push(TaskControlTestHooks.replaceTaskIngressRunner({ runner: async () => ({}) }))
+  })
 })
 
-afterAll(resetMemoryDatabase)
+afterEach(async () => {
+  acceptedReconciliationHook?.[Symbol.dispose]()
+  acceptedReconciliationHook = undefined
+  await waitForIngressDeliveryHooksForTest()
+  for (const override of ingressRunnerOverrides.reverse()) override[Symbol.dispose]()
+  ingressRunnerOverrides = []
+  await resetMemoryDatabase()
+}, 30_000)
 
 describe("global Task request occurrence", () => {
   test("the public Global Task boundary requires identity and rejects caller-owned Project fields", async () => {
@@ -361,26 +377,19 @@ describe("global Task request occurrence", () => {
   test("an external Task with another immutable root snapshot settles a typed Global allocation conflict", async () => {
     const requestID = Identifier.ascending("call")
     let externalTaskID = ""
-    let runner: Disposable | undefined
     using _winner = GlobalTaskService.TestHooks.replaceAfterProjectMaterialized(async ({ directory }) => {
       await Instance.provide({
         directory,
         init: InstanceBootstrap,
         fn: async () => {
-          runner = TaskControlTestHooks.replaceTaskIngressRunner({ runner: async () => ({}) })
           await Config.updateProjectPatch({ permission_mode: "ask" })
           externalTaskID = await EngineService.createTask({ ...base, requestID }, { actor: "user" })
         },
       })
     })
-    try {
-      await expect(GlobalTaskService.create({ ...base, requestID })).rejects.toBeInstanceOf(
-        GlobalCreationAcceptedTargetConflictError,
-      )
-    } finally {
-      await Database.awaitEffectIdle(10_000)
-      runner?.[Symbol.dispose]()
-    }
+    await expect(GlobalTaskService.create({ ...base, requestID })).rejects.toBeInstanceOf(
+      GlobalCreationAcceptedTargetConflictError,
+    )
     expect(
       Database.use((db) =>
         db
