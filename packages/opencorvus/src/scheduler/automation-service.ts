@@ -870,108 +870,139 @@ export namespace AutomationService {
       `automation-manual-fire-v1\0${causation.occurrence.toolPartID}`,
     )
     const owner = `manual-tool:${process.pid}:${causation.occurrence.toolPartID}`
-    const reserved = Database.immediateTransaction((db) => {
-      assertScheduledToolOccurrenceInTransaction(db, causation.occurrence)
-      const existing = db
-        .select()
-        .from(AutomationFireTable)
-        .where(eq(AutomationFireTable.tool_part_id, causation.occurrence.toolPartID))
-        .get()
-      if (existing) {
-        const definition = db
-          .select()
-          .from(AutomationTable)
-          .where(eq(AutomationTable.id, existing.automation_revision_id))
-          .get()
-        if (
-          !definition ||
-          definition.definition_id !== id ||
-          existing.id !== fireID ||
-          existing.input_digest !== causation.inputDigest ||
-          existing.origin !== "manual_tool"
-        ) {
-          throw scheduledToolOccurrenceConflict(causation.occurrence, "changed its manual run input")
-        }
-        const projectedFire = projectAutomationFireInTransaction(db, existing)
-        const terminal = ["succeeded", "failed", "partial", "disposition"].includes(projectedFire.state)
-        if (terminal) return { fire: existing, terminal: true as const }
-        const activeExecution = activeAutomationSessionExecutionInTransaction(db, definition)
-        if (activeExecution) {
-          throw new AutomationRunningConflictError({
-            message: `Automation ${id} cannot run while session ${definition.session_id} is busy`,
-            automationID: id,
+    const retry = Symbol("manual-automation-session-owner-observation-changed")
+    const reserved = (() => {
+      while (true) {
+        const observedDefinition = Database.use((db) => {
+          const existing = db
+            .select({ revisionID: AutomationFireTable.automation_revision_id })
+            .from(AutomationFireTable)
+            .where(eq(AutomationFireTable.tool_part_id, causation.occurrence.toolPartID))
+            .get()
+          return existing
+            ? db.select().from(AutomationTable).where(eq(AutomationTable.id, existing.revisionID)).get()
+            : latestAutomationDefinitionInTransaction(db, id)
+        })
+        const observedOwner =
+          observedDefinition?.kind === "recurring" &&
+          observedDefinition.scope === "session" &&
+          observedDefinition.session_id
+            ? SessionPromptOwner.observeCurrent(observedDefinition.session_id)
+            : undefined
+        const result = Database.immediateTransaction((db) => {
+          assertScheduledToolOccurrenceInTransaction(db, causation.occurrence)
+          const existing = db
+            .select()
+            .from(AutomationFireTable)
+            .where(eq(AutomationFireTable.tool_part_id, causation.occurrence.toolPartID))
+            .get()
+          if (existing) {
+            const definition = db
+              .select()
+              .from(AutomationTable)
+              .where(eq(AutomationTable.id, existing.automation_revision_id))
+              .get()
+            if (definition?.id !== observedDefinition?.id) return retry
+            if (
+              !definition ||
+              definition.definition_id !== id ||
+              existing.id !== fireID ||
+              existing.input_digest !== causation.inputDigest ||
+              existing.origin !== "manual_tool"
+            ) {
+              throw scheduledToolOccurrenceConflict(causation.occurrence, "changed its manual run input")
+            }
+            const projectedFire = projectAutomationFireInTransaction(db, existing)
+            const terminal = ["succeeded", "failed", "partial", "disposition"].includes(projectedFire.state)
+            if (terminal) return { fire: existing, terminal: true as const }
+            const activeExecutionResult = activeAutomationSessionExecutionInTransaction(db, definition, observedOwner)
+            if (!activeExecutionResult.stable) return retry
+            const activeExecution = activeExecutionResult.active
+            if (activeExecution) {
+              throw new AutomationRunningConflictError({
+                message: `Automation ${id} cannot run while session ${definition.session_id} is busy`,
+                automationID: id,
+              })
+            }
+            const acquired = acquireControlLeaseInTransaction(db, {
+              target: "automation",
+              targetID: id,
+              ownerOccurrenceID: owner,
+              now,
+              leaseMilliseconds: LEASE_MS,
+            })
+            if (!acquired.acquired) return { fire: existing, terminal: false as const, acquired: false as const }
+            publishAutomationFireFrontierInTransaction(db, {
+              definition,
+              fire: existing,
+              availableAt: acquired.lease.expires_at,
+            })
+            reserveAutomationFireAttemptInTransaction(db, { fireID: existing.id, owner, now })
+            return { fire: existing, terminal: false as const, acquired: true as const, definition }
+          }
+          const definition = latestAutomationDefinitionInTransaction(db, id)
+          if (definition?.id !== observedDefinition?.id) return retry
+          if (!definition || definition.kind === "delay") {
+            throw new NotFoundError({ message: `Automation not found: ${id}` })
+          }
+          const activeExecutionResult = activeAutomationSessionExecutionInTransaction(db, definition, observedOwner)
+          if (!activeExecutionResult.stable) return retry
+          const activeExecution = activeExecutionResult.active
+          if (activeExecution) {
+            throw new AutomationRunningConflictError({
+              message: `Automation ${id} cannot run while session ${definition.session_id} is busy`,
+              automationID: id,
+            })
+          }
+          const pendingFireID = projectAutomationFrontierInTransaction(db, definition).pending_fire_id
+          if (pendingFireID) {
+            throw new AutomationRunningConflictError({
+              message: `Automation ${id} already has unsettled fire ${pendingFireID}`,
+              automationID: id,
+            })
+          }
+          const acquired = acquireControlLeaseInTransaction(db, {
+            target: "automation",
+            targetID: id,
+            ownerOccurrenceID: owner,
+            now,
+            leaseMilliseconds: LEASE_MS,
           })
-        }
-        const acquired = acquireControlLeaseInTransaction(db, {
-          target: "automation",
-          targetID: id,
-          ownerOccurrenceID: owner,
-          now,
-          leaseMilliseconds: LEASE_MS,
+          if (!acquired.acquired) {
+            throw new AutomationRunningConflictError({
+              message: `Automation ${id} manual Tool occurrence is owned by another runtime`,
+              automationID: id,
+            })
+          }
+          db.insert(AutomationFireTable)
+            .values({
+              id: fireID,
+              automation_revision_id: definition.id,
+              scheduled_due_at: now,
+              origin: "manual_tool",
+              tool_part_id: causation.occurrence.toolPartID,
+              input_digest: causation.inputDigest,
+              time_created: now,
+            })
+            .run()
+          const fire = db.select().from(AutomationFireTable).where(eq(AutomationFireTable.id, fireID)).get()!
+          publishAutomationFireFrontierInTransaction(db, {
+            definition,
+            fire,
+            availableAt: acquired.lease.expires_at,
+          })
+          reserveAutomationFireAttemptInTransaction(db, { fireID, owner, now })
+          return {
+            fire,
+            terminal: false as const,
+            acquired: true as const,
+            definition,
+          }
         })
-        if (!acquired.acquired) return { fire: existing, terminal: false as const, acquired: false as const }
-        publishAutomationFireFrontierInTransaction(db, {
-          definition,
-          fire: existing,
-          availableAt: acquired.lease.expires_at,
-        })
-        reserveAutomationFireAttemptInTransaction(db, { fireID: existing.id, owner, now })
-        return { fire: existing, terminal: false as const, acquired: true as const, definition }
+        if (result === retry) continue
+        return result
       }
-      const definition = latestAutomationDefinitionInTransaction(db, id)
-      if (!definition || definition.kind === "delay") throw new NotFoundError({ message: `Automation not found: ${id}` })
-      const activeExecution = activeAutomationSessionExecutionInTransaction(db, definition)
-      if (activeExecution) {
-        throw new AutomationRunningConflictError({
-          message: `Automation ${id} cannot run while session ${definition.session_id} is busy`,
-          automationID: id,
-        })
-      }
-      const pendingFireID = projectAutomationFrontierInTransaction(db, definition).pending_fire_id
-      if (pendingFireID) {
-        throw new AutomationRunningConflictError({
-          message: `Automation ${id} already has unsettled fire ${pendingFireID}`,
-          automationID: id,
-        })
-      }
-      const acquired = acquireControlLeaseInTransaction(db, {
-        target: "automation",
-        targetID: id,
-        ownerOccurrenceID: owner,
-        now,
-        leaseMilliseconds: LEASE_MS,
-      })
-      if (!acquired.acquired) {
-        throw new AutomationRunningConflictError({
-          message: `Automation ${id} manual Tool occurrence is owned by another runtime`,
-          automationID: id,
-        })
-      }
-      db.insert(AutomationFireTable)
-        .values({
-          id: fireID,
-          automation_revision_id: definition.id,
-          scheduled_due_at: now,
-          origin: "manual_tool",
-          tool_part_id: causation.occurrence.toolPartID,
-          input_digest: causation.inputDigest,
-          time_created: now,
-        })
-        .run()
-      const fire = db.select().from(AutomationFireTable).where(eq(AutomationFireTable.id, fireID)).get()!
-      publishAutomationFireFrontierInTransaction(db, {
-        definition,
-        fire,
-        availableAt: acquired.lease.expires_at,
-      })
-      reserveAutomationFireAttemptInTransaction(db, { fireID, owner, now })
-      return {
-        fire,
-        terminal: false as const,
-        acquired: true as const,
-        definition,
-      }
-    })
+    })()
     if (reserved.terminal) return fireHistoryForID(fireID)
     if (!reserved.acquired || !reserved.definition) {
       throw new AutomationRunningConflictError({
@@ -1372,9 +1403,16 @@ export namespace AutomationService {
   function activeAutomationSessionExecutionInTransaction(
     db: Database.TxOrDb,
     definition: typeof AutomationTable.$inferSelect,
+    observedOwner: SessionPromptOwner.ObservedAuthority | undefined,
   ) {
-    if (definition.kind !== "recurring" || definition.scope !== "session" || !definition.session_id) return undefined
-    return SessionPromptOwner.activeExecutionInTransaction(db, definition.session_id)
+    if (definition.kind !== "recurring" || definition.scope !== "session" || !definition.session_id) {
+      return { stable: true as const }
+    }
+    return SessionPromptOwner.activeExecutionForObservedOwnerInTransaction(
+      db,
+      definition.session_id,
+      observedOwner,
+    )
   }
 
   /**
@@ -1387,97 +1425,113 @@ export namespace AutomationService {
    * selection all keep seeing the target as running until the lease expires.
    */
   function claim(id: string, owner: string, now: number, force = false, scheduledFireID?: string) {
-    return Database.immediateTransaction((db) => {
-      const persisted = latestAutomationDefinitionInTransaction(db, id)
-      if (!persisted) return undefined
-      const projected = projectAutomationFrontierInTransaction(db, persisted)
-      const frontier = currentAutomationFireFrontierInTransaction(db, id)
-      if (!force && (!frontier || frontier.automation_revision_id !== persisted.id)) return undefined
-      if (force && projected.pending_fire_id) return undefined
-      if (!force && (frontier!.available_at > now || (scheduledFireID && frontier!.fire_id !== scheduledFireID))) {
-        return undefined
-      }
-      const exactScheduledFire = frontier
-        ? db.select().from(AutomationFireTable).where(eq(AutomationFireTable.id, frontier.fire_id)).get()
-        : undefined
-      if (!force && (!exactScheduledFire || exactScheduledFire.automation_revision_id !== persisted.id))
-        return undefined
-      if (!force && persisted.status !== "active" && exactScheduledFire!.origin === "scheduled") return undefined
-      const activeExecution = activeAutomationSessionExecutionInTransaction(db, persisted)
-      if (activeExecution) {
-        if (force) return undefined
-        const ownerOccurrenceID = Identifier.deterministic(
-          "call",
-          `automation-busy-session-delay-v1\0${id}\0${projected.next_run}`,
-        )
-        const delayed = acquireControlLeaseInTransaction(db, {
+    const retry = Symbol("automation-session-owner-observation-changed")
+    while (true) {
+      const observedDefinition = Database.use((db) => latestAutomationDefinitionInTransaction(db, id))
+      const observedOwner =
+        observedDefinition?.kind === "recurring" &&
+        observedDefinition.scope === "session" &&
+        observedDefinition.session_id
+          ? SessionPromptOwner.observeCurrent(observedDefinition.session_id)
+          : undefined
+      const result = Database.immediateTransaction((db) => {
+        const persisted = latestAutomationDefinitionInTransaction(db, id)
+        if (persisted?.id !== observedDefinition?.id) return retry
+        if (!persisted) return undefined
+        const projected = projectAutomationFrontierInTransaction(db, persisted)
+        const frontier = currentAutomationFireFrontierInTransaction(db, id)
+        if (!force && (!frontier || frontier.automation_revision_id !== persisted.id)) return undefined
+        if (force && projected.pending_fire_id) return undefined
+        if (!force && (frontier!.available_at > now || (scheduledFireID && frontier!.fire_id !== scheduledFireID))) {
+          return undefined
+        }
+        const exactScheduledFire = frontier
+          ? db.select().from(AutomationFireTable).where(eq(AutomationFireTable.id, frontier.fire_id)).get()
+          : undefined
+        if (!force && (!exactScheduledFire || exactScheduledFire.automation_revision_id !== persisted.id)) {
+          return undefined
+        }
+        if (!force && persisted.status !== "active" && exactScheduledFire!.origin === "scheduled") return undefined
+        const activeExecutionResult = activeAutomationSessionExecutionInTransaction(db, persisted, observedOwner)
+        if (!activeExecutionResult.stable) return retry
+        const activeExecution = activeExecutionResult.active
+        if (activeExecution) {
+          if (force) return undefined
+          const ownerOccurrenceID = Identifier.deterministic(
+            "call",
+            `automation-busy-session-delay-v1\0${id}\0${projected.next_run}`,
+          )
+          const delayed = acquireControlLeaseInTransaction(db, {
+            target: "automation",
+            targetID: id,
+            ownerOccurrenceID,
+            now,
+            leaseMilliseconds: HEARTBEAT_BUSY_RETRY_MS,
+          })
+          if (delayed.acquired) {
+            deferAutomationFireFrontierInTransaction(db, {
+              definitionID: id,
+              fireID: frontier!.fire_id,
+              availableAt: delayed.lease.expires_at,
+            })
+            log.info("session automation delayed while its conversation is busy", {
+              automationID: id,
+              sessionID: persisted.session_id,
+              assistantMessageID: activeExecution.assistantMessageID,
+              promptOwnerGeneration: activeExecution.authority.generation,
+              promptOwnerObservation: activeExecution.observation,
+              ownerOccurrenceID,
+              retryAt: new Date(delayed.lease.expires_at).toISOString(),
+            })
+          }
+          return undefined
+        }
+        const acquired = acquireControlLeaseInTransaction(db, {
           target: "automation",
           targetID: id,
-          ownerOccurrenceID,
+          ownerOccurrenceID: owner,
           now,
-          leaseMilliseconds: HEARTBEAT_BUSY_RETRY_MS,
+          leaseMilliseconds: LEASE_MS,
         })
-        if (delayed.acquired) {
+        if (!acquired.acquired) return undefined
+        const scheduledDueAt = force ? now : exactScheduledFire!.scheduled_due_at
+        const fireID = force ? Identifier.ascending("automation") : exactScheduledFire!.id
+        ensureAutomationFireInTransaction(db, {
+          job: projected,
+          fireID,
+          scheduledDueAt,
+          now,
+          origin: force ? "manual_api" : exactScheduledFire!.origin,
+        })
+        const claimedFire = db.select().from(AutomationFireTable).where(eq(AutomationFireTable.id, fireID)).get()!
+        if (force) {
+          publishAutomationFireFrontierInTransaction(db, {
+            definition: persisted,
+            fire: claimedFire,
+            availableAt: acquired.lease.expires_at,
+          })
+        } else {
           deferAutomationFireFrontierInTransaction(db, {
             definitionID: id,
-            fireID: frontier!.fire_id,
-            availableAt: delayed.lease.expires_at,
-          })
-          log.info("session automation delayed while its conversation is busy", {
-            automationID: id,
-            sessionID: persisted.session_id,
-            assistantMessageID: activeExecution.assistantMessageID,
-            promptOwnerGeneration: activeExecution.authority.generation,
-            promptOwnerObservation: activeExecution.observation,
-            ownerOccurrenceID,
-            retryAt: new Date(delayed.lease.expires_at).toISOString(),
+            fireID,
+            availableAt: acquired.lease.expires_at,
           })
         }
-        return undefined
-      }
-      const acquired = acquireControlLeaseInTransaction(db, {
-        target: "automation",
-        targetID: id,
-        ownerOccurrenceID: owner,
-        now,
-        leaseMilliseconds: LEASE_MS,
-      })
-      if (!acquired.acquired) return undefined
-      const scheduledDueAt = force ? now : exactScheduledFire!.scheduled_due_at
-      const fireID = force ? Identifier.ascending("automation") : exactScheduledFire!.id
-      ensureAutomationFireInTransaction(db, {
-        job: projected,
-        fireID,
-        scheduledDueAt,
-        now,
-        origin: force ? "manual_api" : exactScheduledFire!.origin,
-      })
-      const claimedFire = db.select().from(AutomationFireTable).where(eq(AutomationFireTable.id, fireID)).get()!
-      if (force) {
-        publishAutomationFireFrontierInTransaction(db, {
-          definition: persisted,
-          fire: claimedFire,
-          availableAt: acquired.lease.expires_at,
-        })
-      } else {
-        deferAutomationFireFrontierInTransaction(db, {
-          definitionID: id,
+        reserveAutomationFireAttemptInTransaction(db, {
           fireID,
-          availableAt: acquired.lease.expires_at,
+          owner,
+          now,
         })
-      }
-      reserveAutomationFireAttemptInTransaction(db, {
-        fireID,
-        owner,
-        now,
+        const claimed = projectAutomationFrontierInTransaction(db, persisted)
+        return {
+          ...claimed,
+          lease_owner: acquired.lease.owner_occurrence_id,
+          lease_until: acquired.lease.expires_at,
+        }
       })
-      const claimed = projectAutomationFrontierInTransaction(db, persisted)
-      return {
-        ...claimed,
-        lease_owner: acquired.lease.owner_occurrence_id,
-        lease_until: acquired.lease.expires_at,
-      }
-    })
+      if (result === retry) continue
+      return result
+    }
   }
 
   function missionDispositionForAutomationRun(

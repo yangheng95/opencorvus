@@ -167,8 +167,12 @@ describe("direct Session prompt identity", () => {
           } as any
         })
         try {
+          const requestErrors: unknown[] = []
           const app = new Hono().route("/session", SessionRoutes())
-          app.onError(serverErrorResponse)
+          app.onError((error, context) => {
+            requestErrors.push(error)
+            return serverErrorResponse(error, context)
+          })
           const body = {
             messageID,
             model,
@@ -1104,7 +1108,33 @@ describe("direct Session prompt identity", () => {
             )
 
           const responses = sessions.map((session, index) => send(session.id, `parallel input ${index + 1}`))
-          await Promise.all(sessions.map((session) => started.get(session.id)!.promise))
+          await Promise.race([
+            Promise.all(sessions.map((session) => started.get(session.id)!.promise)),
+            Promise.race(
+              responses.map(async (response, index) => {
+                const settled = await response
+                throw new Error(
+                  `Different-Session request ${index + 1} settled before the physical start barrier: ` +
+                    `${settled.status} ${await settled.clone().text()} errors=${requestErrors
+                      .map((error) =>
+                        error instanceof Error ? `${error.name}: ${error.message}\n${error.stack}` : String(error),
+                      )
+                      .join("\n---\n")}`,
+                )
+              }),
+            ),
+            Bun.sleep(10_000).then(() => {
+              throw new Error(
+                `Different-Session prompt start barrier did not converge: ${JSON.stringify(
+                  sessions.map((session) => ({
+                    sessionID: session.id,
+                    started: physicalParents.has(session.id),
+                    resources: SessionPromptState.TestHooks.promptResourceSnapshot(session.id),
+                  })),
+                )}`,
+              )
+            }),
+          ])
           expect(
             sessions.map((session) => SessionPromptState.TestHooks.promptResourceSnapshot(session.id).promptOwners),
           ).toEqual([1, 1])

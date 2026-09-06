@@ -1,5 +1,10 @@
 import crypto, { randomUUID } from "node:crypto"
-import { acquireProcessLock } from "@/util/process-lock"
+import {
+  acquireProcessLock,
+  CROSS_PROCESS_LOCK_RETRY,
+  SHARED_JSON_FACT_QUEUE_TIMEOUT_MS,
+  withProcessLock,
+} from "@/util/process-lock"
 import fs from "node:fs/promises"
 import path from "node:path"
 import { pathToFileURL } from "node:url"
@@ -110,6 +115,15 @@ const authorityLocks = new Map<string, Promise<unknown>>()
 const AUTHORITY_LOCK_WAIT_MS = 30_000
 const AUTHORITY_LOCK_RETRY_MS = 25
 
+async function withAttachmentPairLock<T>(abs: string, operation: () => Promise<T>): Promise<T> {
+  return withKeyedLock(
+    publicationLocks,
+    abs,
+    () => withProcessLock(abs, { realpath: false, retries: CROSS_PROCESS_LOCK_RETRY }, operation),
+    SHARED_JSON_FACT_QUEUE_TIMEOUT_MS,
+  )
+}
+
 async function withAuthorityFileLock<T>(filePath: string, operation: () => Promise<T>): Promise<T> {
   const release = await acquireProcessLock(filePath, {
     realpath: false,
@@ -134,6 +148,10 @@ export namespace AttachmentStore {
   export const SCREENSHOT_BROWSER_THUMBNAIL_MIME = "image/webp"
   const SCREENSHOT_BROWSER_THUMBNAIL_WIDTH = 360
   const SCREENSHOT_BROWSER_THUMBNAIL_HEIGHT = 240
+
+  export const TestHooks: {
+    afterVerifiedBlobStat?: (input: { projectID: string; name: string; abs: string }) => void | Promise<void>
+  } = {}
 
   export type Reference = {
     sha: string
@@ -483,7 +501,7 @@ export namespace AttachmentStore {
       filename,
     }
     const metadataAbs = metadataPath(abs)
-    return await withKeyedLock(publicationLocks, abs, async () => {
+    return await withAttachmentPairLock(abs, async () => {
       if (
         await validatePublishedPair({
           projectID,
@@ -576,16 +594,20 @@ export namespace AttachmentStore {
   export async function read(projectID: string, name: string): Promise<Buffer> {
     const abs = resolveAbsolute(projectID, name)
     if (!abs) throw new Error(`attachment ${projectID}/${name} is not resolvable`)
-    return await fs.readFile(abs)
+    return await withAttachmentPairLock(abs, () => fs.readFile(abs))
+  }
+
+  async function readReferenceUnlocked(projectID: string, name: string, abs: string): Promise<Reference> {
+    const text = await fs.readFile(metadataPath(abs), "utf8")
+    const parsed = JSON.parse(text) as unknown
+    return parseReferenceMetadata(parsed, { projectID, name, abs })
   }
 
   /** Read the canonical metadata sidecar for a stored attachment reference. */
   export async function readReference(projectID: string, name: string): Promise<Reference> {
     const abs = resolveAbsolute(projectID, name)
     if (!abs) throw new Error(`attachment ${projectID}/${name} is not resolvable`)
-    const text = await fs.readFile(metadataPath(abs), "utf8")
-    const parsed = JSON.parse(text) as unknown
-    return parseReferenceMetadata(parsed, { projectID, name, abs })
+    return await withAttachmentPairLock(abs, () => readReferenceUnlocked(projectID, name, abs))
   }
 
   /**
@@ -604,35 +626,38 @@ export namespace AttachmentStore {
     if (located.projectID !== input.projectID) {
       throw new Error(`attachment belongs to project ${located.projectID}, expected ${input.projectID}: ${input.url}`)
     }
-    const reference = await readReference(located.projectID, located.name)
     const abs = resolveAbsolute(located.projectID, located.name)
     if (!abs) throw new Error(`attachment ${located.projectID}/${located.name} is not resolvable`)
-    const handle = await fs.open(abs, "r")
-    let bytes: Buffer
-    try {
-      const before = await handle.stat()
-      if (!before.isFile() || before.size !== reference.size) {
-        throw new Error(`attachment blob does not match canonical metadata: ${input.url}`)
+    return await withAttachmentPairLock(abs, async () => {
+      const reference = await readReferenceUnlocked(located.projectID, located.name, abs)
+      const handle = await fs.open(abs, "r")
+      let bytes: Buffer
+      try {
+        const before = await handle.stat()
+        if (!before.isFile() || before.size !== reference.size) {
+          throw new Error(`attachment blob does not match canonical metadata: ${input.url}`)
+        }
+        await TestHooks.afterVerifiedBlobStat?.({ projectID: located.projectID, name: located.name, abs })
+        if (input.maxBytes !== undefined && before.size > input.maxBytes) {
+          throw new Error(`attachment blob exceeds ${input.maxBytes} bytes: ${input.url}`)
+        }
+        bytes = await handle.readFile()
+        const after = await handle.stat()
+        if (after.size !== before.size || after.mtimeMs !== before.mtimeMs || after.ctimeMs !== before.ctimeMs) {
+          throw new Error(`attachment blob changed while being read: ${input.url}`)
+        }
+      } finally {
+        await handle.close()
       }
-      if (input.maxBytes !== undefined && before.size > input.maxBytes) {
-        throw new Error(`attachment blob exceeds ${input.maxBytes} bytes: ${input.url}`)
+      const digest = crypto.createHash("sha256").update(bytes).digest("hex")
+      if (digest !== reference.sha) {
+        throw new Error(`attachment blob digest does not match canonical metadata: ${input.url}`)
       }
-      bytes = await handle.readFile()
-      const after = await handle.stat()
-      if (after.size !== before.size || after.mtimeMs !== before.mtimeMs || after.ctimeMs !== before.ctimeMs) {
-        throw new Error(`attachment blob changed while being read: ${input.url}`)
+      if (input.mime !== undefined && input.mime !== reference.mime) {
+        throw new Error(`attachment MIME does not match canonical metadata: ${input.url}`)
       }
-    } finally {
-      await handle.close()
-    }
-    const digest = crypto.createHash("sha256").update(bytes).digest("hex")
-    if (digest !== reference.sha) {
-      throw new Error(`attachment blob digest does not match canonical metadata: ${input.url}`)
-    }
-    if (input.mime !== undefined && input.mime !== reference.mime) {
-      throw new Error(`attachment MIME does not match canonical metadata: ${input.url}`)
-    }
-    return { reference, bytes }
+      return { reference, bytes }
+    })
   }
 
   export async function requireReference(input: {
@@ -1423,12 +1448,25 @@ export namespace AttachmentStore {
         kept++
         continue
       }
-      if (now - f.mtimeMs < GC_MIN_AGE_MS) {
+      const metadata = metadataPath(f.abs)
+      const outcome = await withAttachmentPairLock(f.abs, async () => {
+        const current = await fs.stat(f.abs).catch((error: NodeJS.ErrnoException) => {
+          if (error.code === "ENOENT") return undefined
+          throw error
+        })
+        if (!current?.isFile()) return { status: "absent" as const }
+        // A deduplicating writer renews the immutable pair's grace timestamp
+        // while holding this same lock. Re-read it after waiting so a sweep
+        // selected from an older directory snapshot cannot delete the pair
+        // before that writer commits its durable reference.
+        if (now - current.mtimeMs < GC_MIN_AGE_MS) return { status: "young" as const }
+        return deleteAttachmentPair({ blob: f.abs, metadata, bytes: current.size })
+      })
+      if (outcome.status === "absent") continue
+      if (outcome.status === "young") {
         skippedYoung++
         continue
       }
-      const metadata = metadataPath(f.abs)
-      const outcome = await deleteAttachmentPair({ blob: f.abs, metadata, bytes: f.size })
       if (outcome.status === "retry") {
         retries.push({ blob: outcome.blob, metadata: outcome.metadata, code: outcome.code })
         continue

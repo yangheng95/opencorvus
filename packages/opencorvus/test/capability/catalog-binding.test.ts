@@ -1121,4 +1121,49 @@ describe("occurrence-bound capability catalog", () => {
       },
     })
   }, 0)
+
+  test("serializes a verified Catalog read with duplicate publication of the same immutable blob", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const payload = CatalogOccurrenceBinding.payload({
+          snapshot: snapshot(),
+          materializationScope: scope(),
+          permanentProviderBaseDefinition: permanentBaseDefinition(),
+        })
+        const binding = await CatalogOccurrenceBinding.publish({ projectID: Instance.project.id, payload })
+        const readOpened = Promise.withResolvers<void>()
+        const releaseRead = Promise.withResolvers<void>()
+        let read: Promise<typeof payload> | undefined
+        let duplicate: Promise<typeof binding> | undefined
+        let duplicateSettled = false
+        AttachmentStore.TestHooks.afterVerifiedBlobStat = async ({ name }) => {
+          if (!name.startsWith(binding.snapshot_hash)) return
+          readOpened.resolve()
+          await releaseRead.promise
+        }
+        try {
+          read = CatalogOccurrenceBinding.read({ projectID: Instance.project.id, binding })
+          await readOpened.promise
+          duplicate = CatalogOccurrenceBinding.publish({ projectID: Instance.project.id, payload }).then((value) => {
+            duplicateSettled = true
+            return value
+          })
+          await Bun.sleep(50)
+          expect(duplicateSettled).toBeFalse()
+          releaseRead.resolve()
+          const [restored, republished] = await Promise.all([read, duplicate])
+          expect({ hash: CatalogOccurrenceBinding.hash(restored), republished }).toEqual({
+            hash: binding.snapshot_hash,
+            republished: binding,
+          })
+        } finally {
+          AttachmentStore.TestHooks.afterVerifiedBlobStat = undefined
+          releaseRead.resolve()
+          await Promise.allSettled([read, duplicate].filter((value): value is Promise<unknown> => value !== undefined))
+        }
+      },
+    })
+  })
 })

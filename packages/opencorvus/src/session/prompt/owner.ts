@@ -11,6 +11,9 @@ export namespace SessionPromptOwner {
   let activeExecutionObservationForTest:
     | ((authority: Authority) => "exact_live" | "dead_or_reused" | "unknown_live")
     | undefined
+  let ownerObservationForTest:
+    | ((authority: Authority) => "exact_live" | "dead_or_reused" | "unknown_live")
+    | undefined
 
   export type Admission =
     | { acquired: true; authority: Authority }
@@ -99,28 +102,56 @@ export namespace SessionPromptOwner {
     })
   }
 
-  /** Release only the exact dead physical owner observed by the caller. */
+  export type ObservedAuthority = {
+    authority: Authority
+    observation: "exact_live" | "dead_or_reused" | "unknown_live"
+  }
+
+  function sameAuthority(left: Authority | undefined, right: Authority | undefined): boolean {
+    if (!left || !right) return left === right
+    return (
+      left.session_id === right.session_id &&
+      left.generation === right.generation &&
+      left.owner_pid === right.owner_pid &&
+      left.owner_process_instance_id === right.owner_process_instance_id &&
+      left.owner_occurrence_id === right.owner_occurrence_id
+    )
+  }
+
+  function observeAuthority(authority: Authority) {
+    return (ownerObservationForTest ?? observation)(authority)
+  }
+
+  export function observeCurrent(sessionID: string): ObservedAuthority | undefined {
+    const authority = current(sessionID)
+    if (!authority) return undefined
+    return { authority, observation: observeAuthority(authority) }
+  }
+
+  /**
+   * Release only the exact dead physical owner observed by the caller outside
+   * every database transaction. The transaction may consume that proof only
+   * while the complete immutable authority remains unchanged.
+   */
   export function releaseDeadInTransaction(
     db: Database.TxOrDb,
-    input: { sessionID: string; expectedGeneration?: string },
+    input: { observed: ObservedAuthority },
   ): Authority | undefined {
     Database.requireActiveTransaction("SessionPromptOwner.releaseDeadInTransaction")
-    const current = currentInTransaction(db, input.sessionID)
-    if (!current) {
-      if (input.expectedGeneration) {
-        throw new Error(
-          `Session ${input.sessionID} Prompt owner ${input.expectedGeneration} disappeared before recovery claim`,
-        )
-      }
-      return undefined
+    const expected = input.observed.authority
+    if (input.observed.observation !== "dead_or_reused") {
+      throw new Error(`Session ${expected.session_id} Prompt owner ${expected.generation} is still live`)
     }
-    if (input.expectedGeneration && current.generation !== input.expectedGeneration) {
+    const current = currentInTransaction(db, expected.session_id)
+    if (!current) {
       throw new Error(
-        `Session ${input.sessionID} Prompt owner changed from ${input.expectedGeneration} to ${current.generation}`,
+        `Session ${expected.session_id} Prompt owner ${expected.generation} disappeared before recovery claim`,
       )
     }
-    if (observation(current) !== "dead_or_reused") {
-      throw new Error(`Session ${input.sessionID} Prompt owner ${current.generation} is still live`)
+    if (!sameAuthority(current, expected)) {
+      throw new Error(
+        `Session ${expected.session_id} Prompt owner changed from ${expected.generation} to ${current.generation}`,
+      )
     }
     const removed = db
       .delete(SessionPromptOwnerTable)
@@ -132,8 +163,8 @@ export namespace SessionPromptOwner {
       )
       .returning({ sessionID: SessionPromptOwnerTable.session_id })
       .get()
-    if (removed?.sessionID !== input.sessionID) {
-      throw new Error(`Session ${input.sessionID} Prompt owner ${current.generation} changed during recovery claim`)
+    if (removed?.sessionID !== expected.session_id) {
+      throw new Error(`Session ${expected.session_id} Prompt owner ${current.generation} changed during recovery claim`)
     }
     return current
   }
@@ -152,18 +183,23 @@ export namespace SessionPromptOwner {
    * unobservable) process occurrence. A standby Prompt owner has no unfinished
    * assistant and therefore is not an active execution.
    */
-  export function activeExecutionInTransaction(
+  export function activeExecutionForObservedOwnerInTransaction(
     db: Database.TxOrDb,
     sessionID: string,
+    observed: ObservedAuthority | undefined,
   ):
+    | { stable: false }
     | {
-        authority: Authority
-        assistantMessageID: string
-        observation: "exact_live" | "unknown_live"
-      }
-    | undefined {
+        stable: true
+        active?: {
+          authority: Authority
+          assistantMessageID: string
+          observation: "exact_live" | "unknown_live"
+        }
+      } {
     const authority = currentInTransaction(db, sessionID)
-    if (!authority) return undefined
+    if (!sameAuthority(authority, observed?.authority)) return { stable: false }
+    if (!authority || !observed || observed.observation === "dead_or_reused") return { stable: true }
     const assistant = db
       .select({ id: MessageTable.id })
       .from(MessageTable)
@@ -176,18 +212,27 @@ export namespace SessionPromptOwner {
       )
       .orderBy(desc(MessageTable.time_created), desc(MessageTable.id))
       .get()
-    if (!assistant) return undefined
-    const observed = (activeExecutionObservationForTest ?? observation)(authority)
-    if (observed === "dead_or_reused") return undefined
+    if (!assistant) return { stable: true }
+    const observation = activeExecutionObservationForTest
+      ? activeExecutionObservationForTest(authority)
+      : observed.observation
+    if (observation === "dead_or_reused") return { stable: true }
     return {
-      authority,
-      assistantMessageID: assistant.id,
-      observation: observed,
+      stable: true,
+      active: {
+        authority,
+        assistantMessageID: assistant.id,
+        observation,
+      },
     }
   }
 
-  export function activeExecution(sessionID: string): ReturnType<typeof activeExecutionInTransaction> {
-    return Database.use((db) => activeExecutionInTransaction(db, sessionID))
+  export function activeExecution(sessionID: string) {
+    while (true) {
+      const observed = observeCurrent(sessionID)
+      const result = Database.use((db) => activeExecutionForObservedOwnerInTransaction(db, sessionID, observed))
+      if (result.stable) return result.active
+    }
   }
 
   export function observation(authority: Authority): "exact_live" | "dead_or_reused" | "unknown_live" {
@@ -199,6 +244,19 @@ export namespace SessionPromptOwner {
   }
 
   export const TestHooks = {
+    installOwnerObservation(
+      observe: (authority: Authority) => "exact_live" | "dead_or_reused" | "unknown_live",
+    ): Disposable {
+      if (ownerObservationForTest) {
+        throw new Error("Session Prompt owner observation test hook is already installed")
+      }
+      ownerObservationForTest = observe
+      return {
+        [Symbol.dispose]() {
+          if (ownerObservationForTest === observe) ownerObservationForTest = undefined
+        },
+      }
+    },
     installActiveExecutionObservation(
       observe: (authority: Authority) => "exact_live" | "dead_or_reused" | "unknown_live",
     ): Disposable {
@@ -227,67 +285,85 @@ export namespace SessionPromptOwner {
     preflight?: (db: Database.TxOrDb) => void
   }): Admission {
     const owner = currentRuntimeProcessOccurrence()
-    return Database.immediateTransaction((db) => {
-      const session = db
-        .select({ projectID: SessionTable.project_id, directory: SessionTable.directory })
-        .from(SessionTable)
-        .where(eq(SessionTable.id, input.sessionID))
-        .get()
-      if (!session) throw new Error(`Session prompt owner cannot acquire missing Session ${input.sessionID}`)
-      if (
-        session.projectID !== input.projectID ||
-        Filesystem.resolve(session.directory) !== Filesystem.resolve(input.directory)
-      ) {
-        throw new Error(`Session prompt owner authority does not match Session ${input.sessionID}`)
-      }
-      assertSessionDeletionAdmissionInTransaction(db, input.sessionID)
-      input.preflight?.(db)
-
-      const recoveryMessages = actionableRecoveryMessageIDsInTransaction(db, input.sessionID)
-      if (recoveryMessages.length > 1) {
-        throw new Error(`Session ${input.sessionID} has multiple actionable Mission recovery Messages`)
-      }
-      const recoveryMessageID = recoveryMessages[0]
-      if (recoveryMessageID) {
-        const permit = input.preflight ? recoveryFencePermits.get(input.preflight) : undefined
-        if (!permit || permit.sessionID !== input.sessionID || permit.messageID !== recoveryMessageID) {
-          throw new RecoveryFenceError(input.sessionID, recoveryMessageID)
-        }
-      }
-
-      const prior = currentInTransaction(db, input.sessionID)
-      if (prior) {
+    const retry = Symbol("session-prompt-owner-observation-changed")
+    while (true) {
+      const priorObservation = (() => {
+        const authority = current(input.sessionID)
+        if (!authority) return undefined
         const sameProcess =
-          prior.owner_pid === owner.pid &&
-          prior.owner_process_instance_id === owner.processInstanceID &&
-          prior.owner_occurrence_id === owner.occurrenceID
-        const observed = observation(prior)
-        if (!sameProcess && observed !== "dead_or_reused") {
-          return { acquired: false as const, authority: prior, observation: observed }
+          authority.owner_pid === owner.pid &&
+          authority.owner_process_instance_id === owner.processInstanceID &&
+          authority.owner_occurrence_id === owner.occurrenceID
+        return {
+          authority,
+          observation: sameProcess ? ("exact_live" as const) : observeAuthority(authority),
         }
-        db.delete(SessionPromptOwnerTable)
-          .where(
-            and(
-              eq(SessionPromptOwnerTable.session_id, prior.session_id),
-              eq(SessionPromptOwnerTable.generation, prior.generation),
-            ),
-          )
-          .run()
-      }
+      })()
+      const admission = Database.immediateTransaction((db) => {
+        const prior = currentInTransaction(db, input.sessionID)
+        if (!sameAuthority(prior, priorObservation?.authority)) return retry
+        const session = db
+          .select({ projectID: SessionTable.project_id, directory: SessionTable.directory })
+          .from(SessionTable)
+          .where(eq(SessionTable.id, input.sessionID))
+          .get()
+        if (!session) throw new Error(`Session prompt owner cannot acquire missing Session ${input.sessionID}`)
+        if (
+          session.projectID !== input.projectID ||
+          Filesystem.resolve(session.directory) !== Filesystem.resolve(input.directory)
+        ) {
+          throw new Error(`Session prompt owner authority does not match Session ${input.sessionID}`)
+        }
+        assertSessionDeletionAdmissionInTransaction(db, input.sessionID)
+        input.preflight?.(db)
 
-      const authority: Authority = {
-        session_id: input.sessionID,
-        project_id: input.projectID,
-        directory: Filesystem.resolve(input.directory),
-        generation: Identifier.ascending("call"),
-        owner_pid: owner.pid,
-        owner_process_instance_id: owner.processInstanceID,
-        owner_occurrence_id: owner.occurrenceID,
-        time_acquired: Date.now(),
-      }
-      db.insert(SessionPromptOwnerTable).values(authority).run()
-      return { acquired: true as const, authority }
-    })
+        const recoveryMessages = actionableRecoveryMessageIDsInTransaction(db, input.sessionID)
+        if (recoveryMessages.length > 1) {
+          throw new Error(`Session ${input.sessionID} has multiple actionable Mission recovery Messages`)
+        }
+        const recoveryMessageID = recoveryMessages[0]
+        if (recoveryMessageID) {
+          const permit = input.preflight ? recoveryFencePermits.get(input.preflight) : undefined
+          if (!permit || permit.sessionID !== input.sessionID || permit.messageID !== recoveryMessageID) {
+            throw new RecoveryFenceError(input.sessionID, recoveryMessageID)
+          }
+        }
+
+        if (prior) {
+          const sameProcess =
+            prior.owner_pid === owner.pid &&
+            prior.owner_process_instance_id === owner.processInstanceID &&
+            prior.owner_occurrence_id === owner.occurrenceID
+          const observed = priorObservation!.observation
+          if (!sameProcess && observed !== "dead_or_reused") {
+            return { acquired: false as const, authority: prior, observation: observed }
+          }
+          db.delete(SessionPromptOwnerTable)
+            .where(
+              and(
+                eq(SessionPromptOwnerTable.session_id, prior.session_id),
+                eq(SessionPromptOwnerTable.generation, prior.generation),
+              ),
+            )
+            .run()
+        }
+
+        const authority: Authority = {
+          session_id: input.sessionID,
+          project_id: input.projectID,
+          directory: Filesystem.resolve(input.directory),
+          generation: Identifier.ascending("call"),
+          owner_pid: owner.pid,
+          owner_process_instance_id: owner.processInstanceID,
+          owner_occurrence_id: owner.occurrenceID,
+          time_acquired: Date.now(),
+        }
+        db.insert(SessionPromptOwnerTable).values(authority).run()
+        return { acquired: true as const, authority }
+      })
+      if (admission === retry) continue
+      return admission
+    }
   }
 
   export function release(authority: Authority): boolean {

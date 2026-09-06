@@ -141,10 +141,17 @@ describe("Shell absolute deadline authority", () => {
 
   test("executes a real relative .venv Scripts Python from the isolated workspace", async () => {
     if (process.platform !== "win32") return
-    const python = spawnSync("where.exe", ["python"], { encoding: "utf8", windowsHide: true })
-      .stdout.split(/\r?\n/)
+    const setupPython = process.env.pythonLocation
+      ? path.join(process.env.pythonLocation, "python.exe")
+      : undefined
+    const python = [
+      setupPython,
+      which("python"),
+      ...spawnSync("where.exe", ["python"], { encoding: "utf8", windowsHide: true }).stdout.split(/\r?\n/),
+    ]
+      .filter((candidate): candidate is string => Boolean(candidate?.trim()))
       .map((candidate) => candidate.trim())
-      .filter(Boolean)
+      .filter((candidate, index, candidates) => candidates.indexOf(candidate) === index)
       .find(
         (candidate) =>
           spawnSync(candidate, ["--version"], { encoding: "utf8", timeout: 5_000, windowsHide: true }).status === 0,

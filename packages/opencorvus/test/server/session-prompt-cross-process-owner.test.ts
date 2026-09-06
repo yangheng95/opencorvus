@@ -63,6 +63,7 @@ describe("durable cross-process Session prompt ownership", () => {
       label = "-",
       text = "-",
       hold = "release",
+      ownerObservation = "none",
     ) => {
       const child = Bun.spawn(
         [
@@ -78,6 +79,7 @@ describe("durable cross-process Session prompt ownership", () => {
           provider.apiURL,
           text,
           hold,
+          ownerObservation,
         ],
         { cwd: path.join(import.meta.dir, "..", ".."), env: environment, stdout: "pipe", stderr: "pipe" },
       )
@@ -108,7 +110,7 @@ describe("durable cross-process Session prompt ownership", () => {
       const secondMessageID = Identifier.ascending("message")
       const owner = spawn("route", sessionID, firstMessageID, "owner", "first input", "hold")
       const duplicate = spawn("route", sessionID, firstMessageID, "duplicate", "first input", "hold")
-      const queued = spawn("route", sessionID, secondMessageID, "queued", "second input", "hold")
+      const queued = spawn("route", sessionID, secondMessageID, "queued", "second input", "hold", "block-once")
       await waitFor(
         async () =>
           Boolean(await fs.stat(path.join(barrier, "owner.ready")).catch(() => undefined)) &&
@@ -162,6 +164,10 @@ describe("durable cross-process Session prompt ownership", () => {
       // to A; the durable SQLite wake is the production cross-process path.
       await fs.writeFile(path.join(barrier, "queued.start"), "start")
       await waitFor(
+        async () => Boolean(await fs.stat(path.join(barrier, "queued.owner-observation")).catch(() => undefined)),
+        "Queued peer did not reach its out-of-transaction owner observation",
+      )
+      await waitFor(
         async () => {
           if (provider.promptRequests().length === 2) return true
           const response = await fs.readFile(path.join(barrier, "queued.response.json"), "utf8").catch(() => undefined)
@@ -173,6 +179,7 @@ describe("durable cross-process Session prompt ownership", () => {
         },
         "The standby durable owner did not observe the peer's next input",
       )
+      await fs.writeFile(path.join(barrier, "queued.owner-observation-release"), "release")
       const queuedAfterStandby = await read(spawn("inspect", sessionID, secondMessageID, "queued-after-standby"))
       expect(
         queuedAfterStandby.messages.filter((message: any) => message.role === "user").map((message: any) => message.id),

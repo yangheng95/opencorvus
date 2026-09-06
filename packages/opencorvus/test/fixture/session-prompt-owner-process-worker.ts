@@ -1,4 +1,5 @@
 import fs from "node:fs/promises"
+import fsSync from "node:fs"
 import path from "node:path"
 import { Config } from "@/config/config"
 import { Identifier } from "@/id/id"
@@ -9,9 +10,10 @@ import { Session } from "@/session"
 import { SessionPromptOwner } from "@/session/prompt/owner"
 import { SessionLoop } from "@/session/loop"
 import { Database } from "@/storage/db"
+import { observeRuntimeProcessOccurrence } from "@/runtime/process-occurrence"
 import { Hono } from "hono"
 
-const [mode, projectDirectory, barrierDirectory, sessionID, messageID, label, apiURL, text, hold] =
+const [mode, projectDirectory, barrierDirectory, sessionID, messageID, label, apiURL, text, hold, ownerObservation] =
   process.argv.slice(2)
 if (!mode || !projectDirectory || !barrierDirectory) {
   throw new Error("Session prompt owner worker requires mode, project directory and barrier directory")
@@ -132,6 +134,25 @@ async function run() {
 
       const app = new Hono().route("/session", SessionRoutes())
       let standbyCount = 0
+      let observationBlocked = false
+      const observationCapture =
+        ownerObservation === "block-once"
+          ? SessionPromptOwner.TestHooks.installOwnerObservation((authority) => {
+              if (!observationBlocked) {
+                observationBlocked = true
+                fsSync.writeFileSync(path.join(barrierDirectory, `${label}.owner-observation`), "observing")
+                const gate = new Int32Array(new SharedArrayBuffer(4))
+                while (!fsSync.existsSync(path.join(barrierDirectory, `${label}.owner-observation-release`))) {
+                  Atomics.wait(gate, 0, 0, 25)
+                }
+              }
+              return observeRuntimeProcessOccurrence({
+                pid: authority.owner_pid,
+                processInstanceID: authority.owner_process_instance_id,
+                occurrenceID: authority.owner_occurrence_id,
+              })
+            })
+          : undefined
       const standbyCapture = SessionLoop.TestHooks.installStandbyObserver(async (standbySessionID) => {
         if (standbySessionID !== sessionID) return
         standbyCount += 1
@@ -196,6 +217,7 @@ async function run() {
         }
       }
       standbyCapture[Symbol.dispose]()
+      observationCapture?.[Symbol.dispose]()
       return result
     },
   })

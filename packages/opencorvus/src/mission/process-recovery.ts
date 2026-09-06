@@ -196,11 +196,11 @@ export async function recoverMissionProcessSession(
       throw new Error(`Mission Session ${sessionID} has interrupted work without an opened execution occurrence`)
     }
 
-    const owner = SessionPromptOwner.current(sessionID)
-    if (owner) {
-      const observation = SessionPromptOwner.observation(owner)
-      if (observation === "exact_live" || observation === "unknown_live") {
-        return { status: "live", sessionID, ownerGeneration: owner.generation }
+    const observedOwner = SessionPromptOwner.observeCurrent(sessionID)
+    const owner = observedOwner?.authority
+    if (observedOwner) {
+      if (observedOwner.observation === "exact_live" || observedOwner.observation === "unknown_live") {
+        return { status: "live", sessionID, ownerGeneration: observedOwner.authority.generation }
       }
     }
 
@@ -306,10 +306,7 @@ export async function recoverMissionProcessSession(
                       sessionID,
                       messageIDs: exactIncompleteFrontier,
                     })
-                    SessionPromptOwner.releaseDeadInTransaction(db, {
-                      sessionID,
-                      ...(owner ? { expectedGeneration: owner.generation } : {}),
-                    })
+                    SessionPromptOwner.releaseDeadInTransaction(db, { observed: observedOwner! })
                   }),
               },
             },
@@ -337,10 +334,7 @@ export async function recoverMissionProcessSession(
               messageIDs: exactIncompleteFrontier,
             })
             if (owner) {
-              SessionPromptOwner.releaseDeadInTransaction(db, {
-                sessionID,
-                expectedGeneration: owner.generation,
-              })
+              SessionPromptOwner.releaseDeadInTransaction(db, { observed: observedOwner! })
             }
           })
         }
