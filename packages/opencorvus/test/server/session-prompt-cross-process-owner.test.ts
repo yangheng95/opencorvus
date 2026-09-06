@@ -40,6 +40,23 @@ function readPromptOwner(runtime: string, sessionID: string) {
   }
 }
 
+function readSessionLifecycle(runtime: string, sessionID: string) {
+  const sqlite = new BunDatabase(path.join(runtime, "data", "opencorvus.db"), { readonly: true })
+  try {
+    return sqlite
+      .query<
+        { seq: number; emitted_at: number; payload: string },
+        [string]
+      >(
+        "SELECT seq, emitted_at, payload FROM protocol_event " +
+          "WHERE session_id = ? AND type = 'agent.execution.lifecycle' ORDER BY emitted_at, seq",
+      )
+      .all(sessionID)
+  } finally {
+    sqlite.close()
+  }
+}
+
 afterEach(async () => {
   await Instance.disposeAll()
   await resetMemoryDatabase()
@@ -55,7 +72,13 @@ describe("durable cross-process Session prompt ownership", () => {
     const provider = startStreamingProvider()
     const worker = path.join(import.meta.dir, "..", "fixture", "session-prompt-owner-process-worker.ts")
     const environment = { ...process.env, OPENCORVUS_HOME: runtime }
-    const children: ReturnType<typeof Bun.spawn>[] = []
+    const children: Array<{
+      process: ReturnType<typeof Bun.spawn>
+      pid: number
+      label: string
+      stdout: Promise<string>
+      stderr: Promise<string>
+    }> = []
     const spawn = (
       mode: "init" | "route" | "inspect",
       sessionID = "-",
@@ -65,7 +88,7 @@ describe("durable cross-process Session prompt ownership", () => {
       hold = "release",
       ownerObservation = "none",
     ) => {
-      const child = Bun.spawn(
+      const subprocess = Bun.spawn(
         [
           process.execPath,
           `--config=${path.join(import.meta.dir, "..", "empty-bunfig.toml")}`,
@@ -83,29 +106,45 @@ describe("durable cross-process Session prompt ownership", () => {
         ],
         { cwd: path.join(import.meta.dir, "..", ".."), env: environment, stdout: "pipe", stderr: "pipe" },
       )
+      const child = {
+        process: subprocess,
+        pid: subprocess.pid,
+        label,
+        stdout: new Response(subprocess.stdout).text(),
+        stderr: new Response(subprocess.stderr).text(),
+      }
       children.push(child)
       return child
     }
     const read = async (child: ReturnType<typeof spawn>) => {
       const [exitCode, stdout, stderr] = await Promise.all([
-        child.exited,
-        new Response(child.stdout).text(),
-        new Response(child.stderr).text(),
+        child.process.exited,
+        child.stdout,
+        child.stderr,
       ])
       expect(exitCode, stderr).toBe(0)
       return JSON.parse(stdout.trim()) as any
     }
-    const waitFor = async (predicate: () => boolean | Promise<boolean>, message: string) => {
-      const deadline = Date.now() + 30_000
+    const waitFor = async (
+      predicate: () => boolean | Promise<boolean>,
+      message: string,
+      options?: { timeoutMilliseconds?: number; owner?: ReturnType<typeof spawn> },
+    ) => {
+      const deadline = Date.now() + (options?.timeoutMilliseconds ?? 30_000)
       while (!(await predicate())) {
+        if (options?.owner && options.owner.process.exitCode !== null) {
+          throw new Error(`${message}; owner process exited with code ${options.owner.process.exitCode}`)
+        }
         if (Date.now() >= deadline) throw new Error(message)
         await Bun.sleep(10)
       }
     }
 
+    let diagnosticSessionID: string | undefined
     try {
       const initialized = await read(spawn("init"))
       const sessionID = String(initialized.sessionID)
+      diagnosticSessionID = sessionID
       const firstMessageID = Identifier.ascending("message")
       const secondMessageID = Identifier.ascending("message")
       const owner = spawn("route", sessionID, firstMessageID, "owner", "first input", "hold")
@@ -148,9 +187,27 @@ describe("durable cross-process Session prompt ownership", () => {
         "First-turn owner and duplicate routes did not settle",
       )
       await waitFor(
-        async () => Boolean(await fs.stat(path.join(barrier, "owner.standby")).catch(() => undefined)),
-        "Owner did not publish its exact standby boundary",
+        async () => Boolean(await fs.stat(path.join(barrier, "owner.idle-dispatch.json")).catch(() => undefined)),
+        "Owner did not dispatch its exact idle lifecycle boundary",
+        { owner },
       )
+      const idleReceipt = JSON.parse(await fs.readFile(path.join(barrier, "owner.idle-dispatch.json"), "utf8"))
+      expect(idleReceipt).toEqual({
+        sessionID,
+        inputMessageID: firstMessageID,
+        owner: expect.objectContaining({ pid: owner.pid, observation: "exact_live" }),
+      })
+      await waitFor(
+        async () => Boolean(await fs.stat(path.join(barrier, "owner.standby")).catch(() => undefined)),
+        "Owner did not publish its exact standby boundary after idle dispatch",
+        { owner },
+      )
+      const standbyReceipt = JSON.parse(await fs.readFile(path.join(barrier, "owner.standby"), "utf8"))
+      expect(standbyReceipt).toEqual({
+        sessionID,
+        standbyCount: 1,
+        owner: expect.objectContaining({ pid: owner.pid, observation: "exact_live" }),
+      })
       expect({
         providerRequests: provider.promptRequests().length,
         standbyOwner: readPromptOwner(runtime, sessionID),
@@ -269,12 +326,52 @@ describe("durable cross-process Session prompt ownership", () => {
           expect.objectContaining({ parentID: secondMessageID, accepted: [secondMessageID], finish: "stop" }),
         ],
       })
+    } catch (error) {
+      const capture = <T>(read: () => T): T | { readError: string } => {
+        try {
+          return read()
+        } catch (failure) {
+          return { readError: failure instanceof Error ? failure.message : String(failure) }
+        }
+      }
+      const readBarrier = async (name: string) =>
+        await fs.readFile(path.join(barrier, name), "utf8").catch((failure: NodeJS.ErrnoException) =>
+          failure.code === "ENOENT" ? undefined : `read failed: ${String(failure)}`,
+        )
+      const snapshot = {
+        error: error instanceof Error ? error.message : String(error),
+        owner: diagnosticSessionID ? capture(() => readPromptOwner(runtime, diagnosticSessionID!)) : undefined,
+        lifecycle: diagnosticSessionID ? capture(() => readSessionLifecycle(runtime, diagnosticSessionID!)) : [],
+        receipts: Object.fromEntries(
+          await Promise.all(
+            [
+              "owner.response.json",
+              "duplicate.response.json",
+              "queued.response.json",
+              "owner.idle-dispatch.json",
+              "owner.standby",
+              "owner.route-error.txt",
+            ].map(async (name) => [name, await readBarrier(name)]),
+          ),
+        ),
+        children: children.map((child) => ({ label: child.label, exitCode: child.process.exitCode })),
+      }
+      for (const child of children) {
+        if (child.process.exitCode === null) child.process.kill()
+      }
+      await Promise.all(children.map((child) => child.process.exited))
+      const outputs = await Promise.all(
+        children
+          .filter((child) => child.label !== "-")
+          .map(async (child) => ({ label: child.label, stdout: await child.stdout, stderr: await child.stderr })),
+      )
+      throw new Error(`${JSON.stringify(snapshot, null, 2)}\n${JSON.stringify(outputs, null, 2)}`)
     } finally {
       for (const request of provider.requests) request.release()
       provider.server.stop(true)
       for (const child of children) {
-        child.kill()
-        await child.exited
+        if (child.process.exitCode === null) child.process.kill()
+        await child.process.exited
       }
       await removeManagedDirectoryTree(barrier)
       await removeManagedDirectoryTree(runtime)

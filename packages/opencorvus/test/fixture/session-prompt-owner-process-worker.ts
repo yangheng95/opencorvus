@@ -1,12 +1,14 @@
 import fs from "node:fs/promises"
 import fsSync from "node:fs"
 import path from "node:path"
+import { Bus } from "@/bus"
 import { Config } from "@/config/config"
 import { Identifier } from "@/id/id"
 import { Instance } from "@/project/instance"
 import { serverErrorResponse } from "@/server/error-handler"
 import { SessionRoutes } from "@/server/routes/session"
 import { Session } from "@/session"
+import { SessionStatus } from "@/session/status"
 import { SessionPromptOwner } from "@/session/prompt/owner"
 import { SessionLoop } from "@/session/loop"
 import { Database } from "@/storage/db"
@@ -136,6 +138,22 @@ async function run() {
       const app = new Hono().route("/session", SessionRoutes())
       let standbyCount = 0
       let observationBlocked = false
+      const idleCapture = Bus.subscribe(SessionStatus.Event.Status, async (event) => {
+        if (event.properties.sessionID !== sessionID || event.properties.status.type !== "idle") return
+        const owner = SessionPromptOwner.current(sessionID)
+        await publishJSONBarrier(path.join(barrierDirectory, `${label}.idle-dispatch.json`), {
+          sessionID,
+          inputMessageID: event.properties.inputMessageID,
+          owner: owner
+            ? {
+                generation: owner.generation,
+                pid: owner.owner_pid,
+                occurrenceID: owner.owner_occurrence_id,
+                observation: SessionPromptOwner.observation(owner),
+              }
+            : undefined,
+        })
+      })
       const observationCapture =
         ownerObservation === "block-once"
           ? SessionPromptOwner.TestHooks.installOwnerObservation((authority) => {
@@ -157,7 +175,19 @@ async function run() {
       const standbyCapture = SessionLoop.TestHooks.installStandbyObserver(async (standbySessionID) => {
         if (standbySessionID !== sessionID) return
         standbyCount += 1
-        await fs.writeFile(path.join(barrierDirectory, `${label}.standby`), "standby")
+        const owner = SessionPromptOwner.current(sessionID)
+        await publishJSONBarrier(path.join(barrierDirectory, `${label}.standby`), {
+          sessionID,
+          standbyCount,
+          owner: owner
+            ? {
+                generation: owner.generation,
+                pid: owner.owner_pid,
+                occurrenceID: owner.owner_occurrence_id,
+                observation: SessionPromptOwner.observation(owner),
+              }
+            : undefined,
+        })
         await fs.writeFile(path.join(barrierDirectory, `${label}.standby-${standbyCount}`), "standby")
       })
       app.onError((error, context) => {
@@ -218,6 +248,7 @@ async function run() {
         }
       }
       standbyCapture[Symbol.dispose]()
+      idleCapture()
       observationCapture?.[Symbol.dispose]()
       return result
     },
