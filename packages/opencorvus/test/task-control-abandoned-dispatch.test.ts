@@ -2031,10 +2031,11 @@ describe("abandoned dispatch recovery", () => {
           title: "Deleted paged-recovery Task",
           metadata: { configOverlay: { prompt_profile: { active: scheduler.packageRevision.id } } },
         })
+        const deletedTaskNow = Date.now()
         persistTask({
           taskID: deletedTaskID,
           rootSession: deletedRoot,
-          now: Date.now(),
+          now: deletedTaskNow,
           title: "Deleted paged-recovery Task",
           request: "Release process-local recovery state at the Task deletion boundary",
           productPillar: "code",
@@ -2049,7 +2050,7 @@ describe("abandoned dispatch recovery", () => {
             projectID: Instance.project.id,
             rootDirectory: Instance.directory,
             packageRevisionSHA256: scheduler.packageRevision.packageDigest,
-            timeCreated: Date.now(),
+            timeCreated: deletedTaskNow,
           }),
         })
         const deletedTask = requireTask(deletedTaskID)

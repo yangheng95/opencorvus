@@ -52,6 +52,12 @@ jobs:
         if: runner.os == 'macOS'
         run: brew install ripgrep
 
+      - name: Setup Windows Python test runtime
+        if: runner.os == 'Windows'
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+
       - name: Install Windows test runtime dependencies
         if: runner.os == 'Windows'
         shell: pwsh

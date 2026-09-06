@@ -258,7 +258,7 @@ describe("public Session shell identity", () => {
     const environment = { ...process.env, OPENCORVUS_HOME: runtime }
     const children: ReturnType<typeof Bun.spawn>[] = []
     const spawn = (
-      mode: "init" | "route" | "inspect",
+      mode: "init" | "route" | "route-after-owner-snapshot" | "route-after-shell-owner" | "inspect",
       sessionID = "-",
       messageID = "-",
       label = "-",
@@ -306,10 +306,15 @@ describe("public Session shell identity", () => {
       const messageID = Identifier.ascending("message")
       const effectFile = path.join(project.path, "cross-process-shell-route-effect.txt").replaceAll("\\", "/")
       const command = `bun -e "require('fs').appendFileSync('${effectFile}','ran;'); await Bun.sleep(2000)"`
-      const first = spawn("route", sessionID, messageID, "first-route", command)
-      const second = spawn("route", sessionID, messageID, "second-route", command)
-      await Promise.all([waitFor("first-route.ready"), waitFor("second-route.ready")])
+      const first = spawn("route-after-shell-owner", sessionID, messageID, "first-route", command)
+      await waitFor("first-route.ready")
       await writeFile(path.join(barrier, "release"), "release")
+      await waitFor("first-route.shell-owner")
+      const second = spawn("route-after-owner-snapshot", sessionID, messageID, "second-route", command)
+      await Promise.all([waitFor("second-route.ready"), waitFor("second-route.snapshot")])
+      await writeFile(path.join(barrier, "second-route.continue"), "continue")
+      await waitFor("second-route.busy")
+      await writeFile(path.join(barrier, "first-route.shell-owner.continue"), "continue")
       const results = await Promise.all([read(first), read(second)])
       const inspected = await read(spawn("inspect", sessionID, messageID))
       const effectRuns = ((await readFile(effectFile, "utf8").catch(() => "")).match(/ran;/g) ?? []).length

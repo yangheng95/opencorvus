@@ -60,6 +60,9 @@ export namespace SessionShell {
   const CHILD_PROCESS_OCCURRENCE_METADATA_KEY = "sessionShellChildProcessOccurrence"
   const SHELL_LEASE_MILLISECONDS = 30_000
   const SHELL_LEASE_RENEWAL_MILLISECONDS = 5_000
+  export const TestHooks: {
+    afterPromptOwnerAcquired?: (input: { sessionID: string }) => void | Promise<void>
+  } = {}
   const RuntimeProcessOccurrence = z
     .object({
       pid: z.number().int().positive(),
@@ -329,6 +332,7 @@ export namespace SessionShell {
         )
       }
     })
+    await TestHooks.afterPromptOwnerAcquired?.({ sessionID: input.sessionID })
 
     const occurrence = await (async () => {
       using _runtimeIdentity = SessionRuntimeContractStore.claimMessageWrite(input.sessionID, identity.runtimeContract)

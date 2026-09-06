@@ -90,7 +90,13 @@ async function run() {
         await SessionPromptState.release(sessionID, projectDirectory)
         return { result: "released", label }
       }
-      if ((mode !== "claim" && mode !== "route" && mode !== "route-after-owner-snapshot") || !label) {
+      if (
+        (mode !== "claim" &&
+          mode !== "route" &&
+          mode !== "route-after-owner-snapshot" &&
+          mode !== "route-after-shell-owner") ||
+        !label
+      ) {
         throw new Error(`Unknown Session Message pair worker mode: ${mode}`)
       }
 
@@ -101,10 +107,21 @@ async function run() {
             await Bun.sleep(5)
           }
         }
+        PublicSessionExecutionTestHooks.afterBusyBeforeConvergence = async () => {
+          await fs.writeFile(path.join(barrierDirectory, `${label}.busy`), "busy")
+        }
+      }
+      if (mode === "route-after-shell-owner") {
+        SessionShell.TestHooks.afterPromptOwnerAcquired = async () => {
+          await fs.writeFile(path.join(barrierDirectory, `${label}.shell-owner`), "owner")
+          while (!(await fs.stat(path.join(barrierDirectory, `${label}.shell-owner.continue`)).catch(() => undefined))) {
+            await Bun.sleep(5)
+          }
+        }
       }
       await fs.writeFile(path.join(barrierDirectory, `${label}.ready`), "ready")
       while (!(await fs.stat(path.join(barrierDirectory, "release")).catch(() => undefined))) await Bun.sleep(5)
-      if (mode === "route" || mode === "route-after-owner-snapshot") {
+      if (mode === "route" || mode === "route-after-owner-snapshot" || mode === "route-after-shell-owner") {
         if (!command) throw new Error("Session route worker requires a shell command")
         const app = new Hono().route("/session", SessionRoutes())
         app.onError(serverErrorResponse)

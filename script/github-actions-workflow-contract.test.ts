@@ -563,6 +563,21 @@ describe("GitHub Actions workflow contract", () => {
       name: "Install critical build runtime dependencies",
       ...boundedApt(aptRipgrep),
     })
+    const unitSteps = jobs.unit?.steps ?? []
+    const windowsPythonIndex = unitSteps.findIndex(({ name }) => name === "Setup Windows Python test runtime")
+    const unitExecutionIndex = unitSteps.findIndex(({ name }) => name === "Run unit tests")
+    expect({
+      step: unitSteps[windowsPythonIndex],
+      beforeUnitExecution: windowsPythonIndex >= 0 && windowsPythonIndex < unitExecutionIndex,
+    }).toEqual({
+      step: {
+        name: "Setup Windows Python test runtime",
+        if: "runner.os == 'Windows'",
+        uses: "actions/setup-python@v6",
+        with: { "python-version": "3.13" },
+      },
+      beforeUnitExecution: true,
+    })
     expect(jobs.unit?.steps?.filter(({ name }) => name?.startsWith("Install "))).toEqual([
       {
         name: "Install Linux test runtime dependencies",

@@ -278,6 +278,7 @@ const PUBLIC_SESSION_CLAIM_CONVERGENCE_MILLISECONDS = 5_000
 
 export const PublicSessionExecutionTestHooks: {
   afterInitialOwnerRead?: (input: { sessionID: string; messageID: string }) => void | Promise<void>
+  afterBusyBeforeConvergence?: (input: { sessionID: string; messageID: string }) => void | Promise<void>
 } = {}
 
 function publicSessionExecutionFingerprint(body: unknown): string {
@@ -300,6 +301,11 @@ async function executePublicSessionExecution(input: {
   converge: (existing: Message.WithParts) => Promise<Message.WithParts>
 }): Promise<Message.WithParts> {
   const { sessionID, messageID, fingerprint } = input
+  const readClaimedMessage = () =>
+    MessageStore.get({ sessionID, messageID }).catch((error) => {
+      if (NotFoundError.isInstance(error as Error)) return undefined
+      throw error
+    })
   const convergeExisting = async (existing: Message.WithParts) => {
     if (existing.info.role !== "user") {
       throw new PublicSessionPromptIdentityConflictError({
@@ -331,43 +337,35 @@ async function executePublicSessionExecution(input: {
     return active.operation
   }
   const operation = (async () => {
-    const ownerBeforeExecution = SessionPromptOwner.current(sessionID)
     await PublicSessionExecutionTestHooks.afterInitialOwnerRead?.({ sessionID, messageID })
-    const existing = await MessageStore.get({ sessionID, messageID }).catch((error) => {
-      if (NotFoundError.isInstance(error as Error)) return undefined
-      throw error
-    })
+    const existing = await readClaimedMessage()
     if (existing) return convergeExisting(existing)
     try {
       return await input.execute()
     } catch (error) {
       if (error instanceof Session.BusyError) {
-        if (!ownerBeforeExecution) {
-          const peerOwner = SessionPromptOwner.current(sessionID)
-          if (peerOwner) {
-            const deadline = Date.now() + PUBLIC_SESSION_CLAIM_CONVERGENCE_MILLISECONDS
-            while (true) {
-              const claimed = await MessageStore.get({ sessionID, messageID }).catch((cause) => {
-                if (NotFoundError.isInstance(cause as Error)) return undefined
-                throw cause
-              })
-              if (claimed) return convergeExisting(claimed)
-              const current = SessionPromptOwner.current(sessionID)
-              if (
-                !current ||
-                current.generation !== peerOwner.generation ||
-                SessionPromptOwner.observation(current) === "dead_or_reused"
-              ) {
-                break
-              }
-              const active = SessionPromptOwner.activeExecution(sessionID)
-              if (active) break
-              const remaining = deadline - Date.now()
-              if (remaining <= 0) break
-              await Bun.sleep(Math.min(25, remaining))
-            }
+        await PublicSessionExecutionTestHooks.afterBusyBeforeConvergence?.({ sessionID, messageID })
+        const claimedBeforeWait = await readClaimedMessage()
+        if (claimedBeforeWait) return convergeExisting(claimedBeforeWait)
+        const peerOwner = SessionPromptOwner.current(sessionID)
+        if (peerOwner) {
+          const deadline = Date.now() + PUBLIC_SESSION_CLAIM_CONVERGENCE_MILLISECONDS
+          while (true) {
+            const claimed = await readClaimedMessage()
+            if (claimed) return convergeExisting(claimed)
+            const current = SessionPromptOwner.current(sessionID)
+            const ownerChanged =
+              !current ||
+              current.generation !== peerOwner.generation ||
+              SessionPromptOwner.observation(current) === "dead_or_reused"
+            const active = ownerChanged ? undefined : SessionPromptOwner.activeExecution(sessionID)
+            const remaining = deadline - Date.now()
+            if (ownerChanged || active || remaining <= 0) break
+            await Bun.sleep(Math.min(25, remaining))
           }
         }
+        const claimedAfterWait = await readClaimedMessage()
+        if (claimedAfterWait) return convergeExisting(claimedAfterWait)
         throw new PublicSessionExecutionBusyError({
           sessionID,
           messageID,
