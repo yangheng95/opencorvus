@@ -256,15 +256,8 @@ describe("Task-control sweep scope", () => {
           },
         })
 
-        await reconcileTaskControlPlane()
-        await waitForRecovery(() => activatedSources.length === 1)
-
-        expect({
-          swept: taskControlDriverSnapshot()
-            .map((entry) => entry.taskID)
-            .toSorted(),
-          activatedSources,
-          equalBoundaryDisposition: Database.use(
+        const equalBoundaryDisposition = () =>
+          Database.use(
             (db) =>
               db
                 .select({ disposition: EngineArtifactTable.payload })
@@ -272,7 +265,22 @@ describe("Task-control sweep scope", () => {
                 .where(eq(EngineArtifactTable.kind, "task_root_ingress_disposition"))
                 .all()
                 .find((row) => row.disposition?.ingress_id === equalIngressID)?.disposition.disposition,
-          ),
+          )
+
+        await reconcileTaskControlPlane()
+        await waitForRecovery(
+          () =>
+            activatedSources.length === 1 &&
+            equalBoundaryDisposition() === "terminal_inapplicable" &&
+            !taskControlDriverSnapshot().some((entry) => entry.taskID === equalBoundary),
+        )
+
+        expect({
+          swept: taskControlDriverSnapshot()
+            .map((entry) => entry.taskID)
+            .toSorted(),
+          activatedSources,
+          equalBoundaryDisposition: equalBoundaryDisposition(),
         }).toEqual({
           // Equality stays a conservative discovery boundary. The exact
           // reducer then records it terminal-inapplicable without executing.
