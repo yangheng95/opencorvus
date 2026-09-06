@@ -24,13 +24,14 @@ export async function memoryProject(identitySeed?: string) {
     await runGit(directory, ["add", ".opencorvus-test-project-identity"])
   }
   await runGit(directory, ["commit", "--allow-empty", "--no-verify", "-m", "root"])
+  const physicalDirectory = await fs.realpath(directory)
   return {
-    path: await fs.realpath(directory),
+    path: physicalDirectory,
     async [Symbol.asyncDispose]() {
       await Instance.disposeAll()
       const { ProcessSupervisor } = await import("../../src/shell/process-supervisor")
-      await ProcessSupervisor.disposeLiveProcessesUnder(directory)
-      await removeManagedDirectoryTree(directory)
+      await ProcessSupervisor.disposeLiveProcessesUnder(physicalDirectory)
+      await removeManagedDirectoryTree(physicalDirectory)
     },
   }
 }
